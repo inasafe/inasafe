@@ -1,12 +1,9 @@
-adult ratio attribute: Global default
-adult ratio default: 0.66
-aggregation attribute: KAB_NAME
-elderly ratio attribute: Global default
-elderly ratio default: 0.08
-female ratio attribute: PEREMPUAN
+license: Open Data Commons Open Database License (ODbL)
+title: This is not valid keywords. For Testing purpose.
 keyword_version: 3.2
+source: OpenStreetMap - www.openstreetmap.org
+layer_geometry: line
+layer_purpose: exposure
 layer_mode: classified
-layer_purpose: aggregation
-title: Dístríct's of Jakarta
-youth ratio attribute: Global default
-youth ratio default: 0.26
+road_class_field: OSM_TYPE
+exposure: road

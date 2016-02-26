@@ -21,8 +21,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 
 class CharacterStringProperty(BaseProperty):
-    """
-    A property that accepts any type of input and stores it as string
+    """A property that accepts any type of input and stores it as string
     """
     # if you edit this you need to adapt accordingly xml_value and is_valid
     _allowed_python_types = [str, unicode, int, float, NoneType]
@@ -46,8 +45,11 @@ class CharacterStringProperty(BaseProperty):
     def xml_value(self):
         if self.python_type is NoneType:
             return ''
-        elif self.python_type in self.allowed_python_types:
+        elif (self.python_type in self.allowed_python_types and
+                      self.python_type != unicode):
             return str(self.value)
+        elif self.python_type == unicode:
+            return unicode(self.value)
         else:
             raise RuntimeError('self._allowed_python_types and self.xml_value'
                                'are out of sync. This should never happen')

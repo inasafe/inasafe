@@ -1,3 +1,4 @@
+/pycharm-debug.egg
 /docs/apidocs
 *~
 *.*~
@@ -13,12 +14,9 @@ docs/output
 docs/release-approval-docs
 *.DS_Store
 .idea
-.idea/inasafe-dev.iml
 .idea/inasafe-realtime.iml
-.idea/misc.xml
 .idea/runConfigurations/make_map.xml
 .idea/runConfigurations/NoseTests_Realtime.xml
-.idea/workspace.xml
 keywords.db
 libpeerconnection.log
 nohup.out
@@ -41,8 +39,11 @@ realtime/fixtures/context/Readme.txt
 realtime/fixtures/context/TM_WORLD_BORDERS-0.3*
 realtime/fixtures/exposure/IDN_mosaic/
 realtime/fixtures/exposure/population.*
+realtime/fixtures/settings/*
+!realtime/fixtures/settings/README
 realtime/fixtures/indonesia.sqlite
 realtime/server_config.py
+headless/celeryconfig.py
 safe/gui/ui/*.py
 result.txt
 riab_demo_data

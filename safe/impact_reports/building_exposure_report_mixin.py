@@ -75,6 +75,7 @@ class BuildingExposureReportMixin(ReportMixin):
         self.question = ''
         self.buildings = {}
         self.affected_buildings = {}
+        self.building_report_threshold = 25
 
     def generate_report(self):
         """Breakdown by building type.
@@ -102,14 +103,18 @@ class BuildingExposureReportMixin(ReportMixin):
         message = m.Message(style_class='container')
         message.add(m.Heading(tr('Action checklist'), **styles.INFO_STYLE))
         checklist = m.BulletedList()
-        checklist.add(tr('Are the critical facilities still open?'))
         checklist.add(tr(
             'Which structures have warning capacity (eg. sirens, speakers, '
             'etc.)?'))
+        checklist.add(
+            tr('Are the water and electricity services still operating?'))
+        checklist.add(tr('Are the health centres still open?'))
+        checklist.add(tr('Are the other public services accessible?'))
         checklist.add(tr('Which buildings will be evacuation centres?'))
         checklist.add(tr('Where will we locate the operations centre?'))
         checklist.add(
             tr('Where will we locate warehouse and/or distribution centres?'))
+        checklist.add(tr('Are the schools and hospitals still active?'))
         if schools_closed > 0:
             checklist.add(tr(
                 'Where will the students from the %s closed schools '
@@ -154,11 +159,14 @@ class BuildingExposureReportMixin(ReportMixin):
                 format_int(self.total_affected_buildings), align='right'))
             table.add(row)
 
-        row = m.Row()
-        row.add(m.Cell(tr('Unaffected buildings'), header=True))
-        row.add(m.Cell(
-            format_int(self.total_unaffected_buildings), align='right'))
-        table.add(row)
+        # Only show not affected building row if the IF does not use custom
+        # affected categories
+        if self._affected_categories == self.affected_buildings.keys():
+            row = m.Row()
+            row.add(m.Cell(tr('Not affected buildings'), header=True))
+            row.add(m.Cell(
+                format_int(self.total_unaffected_buildings), align='right'))
+            table.add(row)
 
         row = m.Row()
         row.add(m.Cell(tr('Total'), header=True))
@@ -183,6 +191,10 @@ class BuildingExposureReportMixin(ReportMixin):
         row.add(m.Cell('Building type', header=True))
         for name in impact_names:
             row.add(m.Cell(tr(name), header=True, align='right'))
+        # Only show not affected building row if the IF does not use custom
+        # affected categories
+        if self._affected_categories == self.affected_buildings.keys():
+            row.add(m.Cell(tr('Not Affected'), header=True, align='right'))
         row.add(m.Cell(tr('Total'), header=True, align='right'))
         table.add(row)
 
@@ -193,7 +205,12 @@ class BuildingExposureReportMixin(ReportMixin):
         # Initialise totals with zeros
         for _ in impact_names:
             impact_totals.append(0)
-        # And one extra total for the cumuluative total column
+        # Only show not affected building row if the IF does not use custom
+        # affected categories
+        if self._affected_categories == self.affected_buildings.keys():
+            # And one extra total for the unaffected column
+            impact_totals.append(0)
+        # And one extra total for the cumulative total column
         impact_totals.append(0)
         # Now build the main table
         for building_type in building_types:
@@ -208,9 +225,16 @@ class BuildingExposureReportMixin(ReportMixin):
                 else:
                     impact_subtotals.append(0)
             row.add(m.Cell(building_type_name.capitalize(), header=True))
+            # Only show not affected building row if the IF does not use custom
+            # affected categories
+            if self._affected_categories == self.affected_buildings.keys():
+                # Add not affected subtotals
+                impact_subtotals.append(
+                    self.buildings[building_type] - sum(impact_subtotals))
             # list out the subtotals for this category per impact type
             for value in impact_subtotals:
                 row.add(m.Cell(format_int(value), align='right'))
+
             # totals column
             line_total = format_int(self.buildings[building_type])
             impact_subtotals.append(self.buildings[building_type])
@@ -255,7 +279,7 @@ class BuildingExposureReportMixin(ReportMixin):
                 (dry, {residential: 50, school: 50})
             ])
         """
-        return self._count_usage('school')
+        return self._count_usage('school', self._affected_categories)
 
     @property
     def hospitals_closed(self):
@@ -274,11 +298,26 @@ class BuildingExposureReportMixin(ReportMixin):
                 (dry, {residential: 50, school: 50})
             ])
         """
-        return self._count_usage('hospital')
+        return self._count_usage('hospital', self._affected_categories)
 
-    def _count_usage(self, usage):
+    def _count_usage(self, usage, categories=None):
+        """Obtain the number of usage (building) that in categories.
+
+        If categories is None, get all categories.
+
+        :param usage: Building usage.
+        :type usage: str
+
+        :param categories: Categories that's requested.
+        :type categories: list
+
+        :returns: Number of building that is usage and fall in categories.
+        :rtype: int
+        """
         count = 0
-        for category_breakdown in self.affected_buildings.values():
+        for category, category_breakdown in self.affected_buildings.items():
+            if categories and category not in categories:
+                continue
             for current_usage in category_breakdown:
                 if current_usage.lower() == usage.lower():
                     count += category_breakdown[current_usage].values()[0]
@@ -336,11 +375,13 @@ class BuildingExposureReportMixin(ReportMixin):
         return sum(self.buildings.values())
 
     def _consolidate_to_other(self):
-        """Consolidate the small building usage groups < 25 to other."""
-        cutoff = 25
+        """Consolidate small building usage groups within self.threshold.
+
+        Small groups will be grouped together in the "other" group.
+        """
         other = tr('Other')
         for (usage, value) in self.buildings.items():
-            if value >= cutoff:
+            if value >= self.building_report_threshold:
                 continue
             if other not in self.buildings.keys():
                 self.buildings[other] = 0

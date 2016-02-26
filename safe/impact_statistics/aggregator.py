@@ -41,7 +41,6 @@ from qgis.analysis import QgsZonalStatistics
 # pylint: enable=no-name-in-module
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import QSettings
-
 from safe.storage.core import read_layer as safe_read_layer
 from safe.storage.utilities import (
     calculate_polygon_centroid,
@@ -63,10 +62,7 @@ from safe.common.utilities import (
 from safe.common.exceptions import ReadLayerError, PointsInputError
 from safe.gis.polygon import (
     in_and_outside_polygon as points_in_and_outside_polygon)
-from safe.common.signals import (
-    DYNAMIC_MESSAGE_SIGNAL,
-    STATIC_MESSAGE_SIGNAL,
-)
+from safe.common.signals import send_dynamic_message
 from safe import messaging as m
 from safe.definitions import global_default_attribute, do_not_use_attribute
 from safe.messaging import styles
@@ -79,8 +75,6 @@ from safe.common.exceptions import (
     UnsupportedProviderError,
     InvalidLayerError,
     InsufficientParametersError)
-from safe_extras.pydispatch import dispatcher
-
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 INFO_STYLE = styles.INFO_STYLE
@@ -92,6 +86,8 @@ LOGGER = logging.getLogger('InaSAFE')
 # it can import processing (from QGIS / sextante),
 # pylint: disable=F0401
 from processing.core.Processing import Processing
+
+
 # pylint: enable=F0401
 
 
@@ -342,8 +338,7 @@ class Aggregator(QtCore.QObject):
                 m.Paragraph(self.tr(
                     'Please select which attribute you want to use as ID for '
                     'the aggregated results')))
-            # noinspection PyTypeChecker
-            self._send_message(message)
+            send_dynamic_message(self, message)
 
             # keywords are already complete
             layer_purpose = keywords['layer_purpose']
@@ -523,8 +518,7 @@ class Aggregator(QtCore.QObject):
             m.Paragraph(self.tr(
                 'This may take a little while - we are aggregating the impact'
                 ' by %s' % self.layer.name())))
-        # noinspection PyTypeChecker
-        self._send_message(message)
+        send_dynamic_message(self, message)
 
         qgis_impact_layer = safe_to_qgis_layer(safe_impact_layer)
         if not qgis_impact_layer.isValid():
@@ -578,7 +572,7 @@ class Aggregator(QtCore.QObject):
         else:
             message = self.tr(
                 '%s is %s but it should be either vector or raster') % (
-                    qgis_impact_layer.name(), qgis_impact_layer.type())
+                          qgis_impact_layer.name(), qgis_impact_layer.type())
             # noinspection PyExceptionInherit
             raise ReadLayerError(message)
 
@@ -653,7 +647,7 @@ class Aggregator(QtCore.QObject):
             # An unexpected error occurs, skip postprocessing
             return
 
-        # Add fields for store aggregation atributes
+        # Add fields for storing aggregation attributes
         aggregation_provider = self.layer.dataProvider()
         if self.statistics_type == 'class_count':
             # add the class count fields to the layer
@@ -761,7 +755,7 @@ class Aggregator(QtCore.QObject):
                 QgsField(self._count_field_name(), QtCore.QVariant.Double),
                 QgsField(self.sum_field_name(), QtCore.QVariant.Double),
                 QgsField(self._mean_field_name(), QtCore.QVariant.Double)
-                ]
+            ]
             provider.addAttributes(fields)
             self.layer.updateFields()
 
@@ -1028,8 +1022,8 @@ class Aggregator(QtCore.QObject):
             # Total impacted length in the aggregation polygons:
             total = {
                 feature_id: 0 for feature_id, __ in enumerate(
-                    self.layer.getFeatures(request))
-            }
+                self.layer.getFeatures(request))
+                }
 
             # Create slots for dicts
             self.impact_layer_attributes = []
@@ -1126,8 +1120,7 @@ class Aggregator(QtCore.QObject):
                 self.tr('Preparing aggregation layer'),
                 **PROGRESS_UPDATE_STYLE),
             m.Paragraph(detail))
-        # noinspection PyTypeChecker
-        self._send_message(message)
+        send_dynamic_message(self, message)
 
         # This is used to hold an *in memory copy* of the aggregation layer
         # or a in memory layer with the clip extents as a feature.
@@ -1233,9 +1226,9 @@ class Aggregator(QtCore.QObject):
         self.attributes = {}
         self.attributes[self.get_default_keyword(
             'AGGR_ATTR_KEY')] = (
-                self.read_keywords(
-                    self.layer,
-                    self.get_default_keyword('AGGR_ATTR_KEY')))
+            self.read_keywords(
+                self.layer,
+                self.get_default_keyword('AGGR_ATTR_KEY')))
 
         female_ratio_key = self.get_default_keyword('FEMALE_RATIO_ATTR_KEY')
         female_ratio_attribute = self.read_keywords(
@@ -1301,8 +1294,7 @@ class Aggregator(QtCore.QObject):
                 'Modifying %s to avoid intersections with the aggregation '
                 'layer'
             ) % (layer.name())))
-        # noinspection PyTypeChecker
-        self._send_message(message)
+        send_dynamic_message(self, message)
 
         layer_filename = layer.source()
         postprocessing_polygons = self.safe_layer.get_geometry()
@@ -1659,38 +1651,20 @@ class Aggregator(QtCore.QObject):
         try:
             self.update_keywords(
                 self.layer,
-                {self.get_default_keyword('AGGR_ATTR_KEY'): attribute_name})
+                {
+                    self.get_default_keyword('AGGR_ATTR_KEY'): attribute_name,
+                    'layer_purpose': 'aggregation'
+                })
         except InvalidParameterError:
             self.write_keywords(
                 self.layer,
-                {self.get_default_keyword('AGGR_ATTR_KEY'): attribute_name})
+                {
+                    self.get_default_keyword('AGGR_ATTR_KEY'): attribute_name,
+                    'layer_purpose': 'aggregation'
+                })
         except (UnsupportedProviderError, KeywordDbError), e:
             raise e
         return self.layer
-
-    def _send_message(self, message, dynamic=True):
-        """Send a message using the messaging system.
-
-
-        :param message: A message to display to the user.
-        :type message: Message
-
-        :param dynamic: Whether the message should be appended to the message
-            queue or replace it.
-        :type dynamic: bool
-
-        .. seealso::  https://github.com/AIFDR/inasafe/issues/577
-
-        """
-
-        message_type = STATIC_MESSAGE_SIGNAL
-        if dynamic:
-            message_type = DYNAMIC_MESSAGE_SIGNAL
-
-        dispatcher.send(
-            signal=message_type,
-            sender=self,
-            message=message)
 
     def _setup_target_field(self, impact_layer):
         """Set up self.target_field
@@ -1711,7 +1685,7 @@ class Aggregator(QtCore.QObject):
                 self.tr(
                     'No "target_field" keyword found in the impact layer %s '
                     'keywords. The impact function should define this.') % (
-                        impact_layer.name()))
+                    impact_layer.name()))
             LOGGER.debug('Skipping postprocessing due to: %s' % message)
             self.error_message = message
             return False
@@ -1723,7 +1697,7 @@ class Aggregator(QtCore.QObject):
                 self.tr('No attribute "%s" was found in the attribute table '
                         'for layer "%s". The impact function must define this'
                         ' attribute for postprocessing to work.') % (
-                            self.target_field, impact_layer.name()))
+                    self.target_field, impact_layer.name()))
             LOGGER.debug('Skipping postprocessing due to: %s' % message)
             self.error_message = message
             return False

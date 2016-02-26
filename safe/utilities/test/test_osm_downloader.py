@@ -32,6 +32,7 @@ from PyQt4.QtNetwork import QNetworkReply
 from safe.utilities.osm_downloader import fetch_zip, extract_zip
 from safe.test.utilities import test_data_path, get_qgis_app
 from safe.common.version import get_version
+from safe.utilities.gis import qgis_version
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 LOGGER = logging.getLogger('InaSAFE')
@@ -138,8 +139,6 @@ class FakeQNetworkAccessManager:
         url = str(request_url.url().toString())
         reply = MockQNetworkReply()
 
-        version = get_version()
-
         if url == 'http://hot-export.geofabrik.de/newjob':
             reply.content = read_all('test-importdlg-newjob.html')
         elif url == 'http://hot-export.geofabrik.de/wizard_area':
@@ -152,9 +151,9 @@ class FakeQNetworkAccessManager:
         elif url == ('http://osm.inasafe.org/buildings-shp?'
                      'bbox=20.389938354492188,-34.10782492987083'
                      ',20.712661743164062,'
-                     '-34.008273470938335&qgis_version=2'
+                     '-34.008273470938335&qgis_version=%s'
                      '&inasafe_version=%s'
-                     '&lang=en' % version):
+                     '&lang=en' % (qgis_version(), get_version())):
             reply.content = read_all("test-importdlg-extractzip.zip")
 
         return reply

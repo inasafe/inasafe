@@ -76,7 +76,7 @@ def content():
             'choose (some Impact functions do not allow users to change the '
             'default parameters).')))
     bullets.add(m.Text(
-        m.ImportantText(tr('Postprocessors')),
+        m.ImportantText(tr('Post-processors')),
         tr(
             '- Takes the results from the impact function and calculates '
             'derivative indicators, for example if you have an affected '

@@ -20,6 +20,7 @@ __date__ = '12/10/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+import os
 import uuid
 from unittest import TestCase
 
@@ -28,7 +29,8 @@ from safe.metadata import GenericLayerMetadata
 from safe.metadata.test import (
     TEMP_DIR,
     EXISTING_GENERIC_FILE,
-    EXISTING_GENERIC_JSON)
+    EXISTING_GENERIC_JSON,
+    EXISTING_NO_METADATA)
 
 
 class TestGenericMetadata(TestCase):
@@ -44,6 +46,26 @@ class TestGenericMetadata(TestCase):
             written_json = f.read()
 
         self.assertEquals(expected_json, written_json)
+
+    def test_json_write_no_metadata(self):
+        """Test write metadata for no metadata layer file."""
+        with open(EXISTING_GENERIC_JSON) as f:
+            expected_json = f.read()
+        self.assertTrue(os.path.isfile(EXISTING_NO_METADATA))
+        self.assertFalse(os.path.isfile(EXISTING_NO_METADATA[:-3] + 'xml'))
+        self.assertFalse(os.path.isfile(EXISTING_NO_METADATA[:-3] + 'json'))
+        metadata = self.generate_test_metadata(EXISTING_NO_METADATA)
+        json_filename = unique_filename(suffix='.json', dir=TEMP_DIR)
+        metadata.write_to_file(json_filename)
+
+        with open(json_filename) as f:
+            written_json = f.read()
+
+        self.assertEquals(expected_json, written_json)
+
+        xml_filename = unique_filename(suffix='.xml', dir=TEMP_DIR)
+        metadata.write_to_file(xml_filename)
+        print xml_filename
 
     def test_json_read(self):
         metadata = GenericLayerMetadata(EXISTING_GENERIC_FILE)

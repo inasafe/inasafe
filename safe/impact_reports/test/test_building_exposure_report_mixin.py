@@ -90,21 +90,26 @@ class BuildingExposureReportMixinTest(unittest.TestCase):
     def test_0001_generate_report(self):
         """Generate a blank report."""
         blank_report = self.building_mixin_blank.generate_report().to_text()
-        self.assertIn('**Unaffected buildings**, 0', blank_report)
-        self.assertIn('**Building type**, **Total**', blank_report)
-        self.assertIn('**Unaffected buildings**, 0', blank_report)
+        self.assertIn('**Not affected buildings**, 0', blank_report)
+        self.assertIn(
+            '**Building type**, **Not Affected**, **Total**',
+            blank_report
+        )
 
     def test_0002_action_checklist(self):
         """The default action check list."""
         action_checklist = self.building_mixin_blank.action_checklist()
         action_checklist = action_checklist.to_text()
         self.assertIn(
-            u'Are the critical facilities still open?',
-            action_checklist)
-        self.assertIn(
             u'Which structures have warning capacity (eg. sirens, '
             u'speakers, etc.)?',
             action_checklist)
+        self.assertIn(
+            u'Are the water and electricity services still operating?',
+            action_checklist)
+        self.assertIn(u'Are the health centres still open?', action_checklist)
+        self.assertIn(
+                u'Are the other public services accessible', action_checklist)
         self.assertIn(
             u'Which buildings will be evacuation centres?',
             action_checklist)
@@ -136,18 +141,19 @@ class BuildingExposureReportMixinTest(unittest.TestCase):
         self.assertIn(
             u'**Hazard Level 1**, 1,027, 21,284,567,111', impact_summary)
         self.assertIn(u'**Affected buildings**, 13,077', impact_summary)
-        self.assertIn(u'**Unaffected buildings**, 7,036', impact_summary)
+        self.assertIn(u'**Not affected buildings**, 7,036', impact_summary)
         self.assertIn(u'**Total**, 20,113', impact_summary)
 
     def test_0004_buildings_breakdown(self):
         """Test the buildings breakdown."""
         buildings_breakdown = self.building_mixin.buildings_breakdown()
         buildings_breakdown = buildings_breakdown.to_text()
-        self.assertIn(u'**Religious**, 0, 1, **3**', buildings_breakdown)
+        self.assertIn(u'**Religious**, 0, 1, 2, **3**', buildings_breakdown)
         self.assertIn(
-            u'**Residential**, 12,000, 1,000, **20,000**', buildings_breakdown)
-        self.assertIn(u'**School**, 50, 25, **100**', buildings_breakdown)
-        self.assertIn(u'**University**, 0, 1, **10**', buildings_breakdown)
+            u'**Residential**, 12,000, 1,000, 7,000, **20,000**',
+            buildings_breakdown)
+        self.assertIn(u'**School**, 50, 25, 25, **100**', buildings_breakdown)
+        self.assertIn(u'**University**, 0, 1, 9, **10**', buildings_breakdown)
 
     def test_0005_schools_closed(self):
         """Test schools closed as expected."""

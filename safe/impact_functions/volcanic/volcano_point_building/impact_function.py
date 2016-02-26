@@ -45,6 +45,9 @@ class VolcanoPointBuildingFunction(
         self.volcano_names = tr('Not specified in data')
         self._affected_categories_volcano = []
 
+        # From BuildingExposureReportMixin
+        self.building_report_threshold = 25
+
     def notes(self):
         """Return the notes section of the report.
 
@@ -82,6 +85,10 @@ class VolcanoPointBuildingFunction(
         self.validate()
         self.prepare()
 
+        self.provenance.append_step(
+            'Calculating Step',
+            'Impact function is calculating the impact.')
+
         # Hazard Zone Attribute
         hazard_zone_attribute = 'radius'
 
@@ -109,16 +116,16 @@ class VolcanoPointBuildingFunction(
         # Make hazard layer by buffering the point
         centers = self.hazard.layer.get_geometry()
         features = self.hazard.layer.get_data()
-        radii_meter = [x * 1000 for x in radii]  # Convert to meters
         hazard_layer = buffer_points(
             centers,
-            radii_meter,
+            radii,
             hazard_zone_attribute,
             data_table=features)
         # Category names for the impact zone
-        category_names = radii_meter
-        self._affected_categories_volcano = radii_meter[:]
-        category_names.append(self._not_affected_value)
+        category_names = radii
+        # In kilometers
+        self._affected_categories_volcano = [
+            tr('Radius %.1f km') % key for key in radii[::]]
 
         # Get names of volcanoes considered
         if volcano_name_attribute in hazard_layer.get_attribute_names():
@@ -144,7 +151,7 @@ class VolcanoPointBuildingFunction(
 
         self.buildings = {}
         self.affected_buildings = OrderedDict()
-        for category in radii_meter:
+        for category in radii:
             self.affected_buildings[category] = {}
 
         # Iterate the interpolated building layer
@@ -176,7 +183,17 @@ class VolcanoPointBuildingFunction(
                 self.affected_buildings[hazard_value][usage][
                     tr('Buildings Affected')] += 1
 
+        # Adding 'km'
+        affected_building_keys = self.affected_buildings.keys()
+        for key in affected_building_keys:
+            self.affected_buildings[tr('Radius %.1f km' % key)] = \
+                self.affected_buildings.pop(key)
+
         # Lump small entries and 'unknown' into 'other' category
+        # Building threshold #2468
+        postprocessors = self.parameters['postprocessors']
+        building_postprocessors = postprocessors['BuildingType'][0]
+        self.building_report_threshold = building_postprocessors.value[0].value
         self._consolidate_to_other()
 
         # Generate simple impact report
@@ -192,7 +209,7 @@ class VolcanoPointBuildingFunction(
         i = 0
         for category_name in category_names:
             style_class = dict()
-            style_class['label'] = tr(category_name)
+            style_class['label'] = tr('Radius %s km') % tr(category_name)
             style_class['transparency'] = 0
             style_class['value'] = category_name
             style_class['size'] = 1
@@ -218,20 +235,27 @@ class VolcanoPointBuildingFunction(
             'Thousand separator is represented by %s' %
             get_thousand_separator())
 
+        extra_keywords = {
+            'impact_summary': impact_summary,
+            'impact_table': impact_table,
+            'target_field': target_field,
+            'map_title': map_title,
+            'legend_notes': legend_notes,
+            'legend_units': legend_units,
+            'legend_title': legend_title
+        }
+
+        self.set_if_provenance()
+
+        impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
+
         # Create vector layer and return
         impact_layer = Vector(
             data=features,
             projection=interpolated_layer.get_projection(),
             geometry=interpolated_layer.get_geometry(),
             name=tr('Buildings affected by volcanic buffered point'),
-            keywords={
-                'impact_summary': impact_summary,
-                'impact_table': impact_table,
-                'target_field': target_field,
-                'map_title': map_title,
-                'legend_notes': legend_notes,
-                'legend_units': legend_units,
-                'legend_title': legend_title},
+            keywords=impact_layer_keywords,
             style_info=style_info)
 
         self._impact = impact_layer

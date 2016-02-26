@@ -176,7 +176,7 @@ class ShakeGridTest(unittest.TestCase):
         expected_qml = raster_path.replace('tif', 'qml')
         self.assertTrue(os.path.exists(expected_qml))
         # Check the keywords file
-        expected_keywords = raster_path.replace('tif', 'keywords')
+        expected_keywords = raster_path.replace('tif', 'xml')
         self.assertTrue(os.path.exists(expected_keywords))
 
     def test_mmi_to_shapefile(self):

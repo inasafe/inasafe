@@ -24,10 +24,10 @@ echo "PYTHON PATH: $PYTHONPATH"
 if test -z "$1"
 then
   # latest event
-  python realtime/make_map.py
+  python realtime/earthquake/make_map.py
 else
   # User defined event
-  python realtime/make_map.py $1
+  python realtime/earthquake/make_map.py $1
 fi
 
 

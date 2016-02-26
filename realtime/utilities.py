@@ -11,6 +11,8 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+import logging
+
 __author__ = 'tim@kartoza.com'
 __version__ = '0.5.0'
 __date__ = '19/07/2012'
@@ -40,6 +42,14 @@ def data_dir():
     """Return the path to the standard data dir for e.g. geonames data."""
     dir_path = os.path.abspath(
         os.path.join(os.path.dirname(__file__), 'fixtures'))
+    make_directory(dir_path)
+    return dir_path
+
+
+def settings_dir():
+    """Return the path to the settings dir of realtime"""
+    dir_path = os.path.abspath(
+        os.path.join(os.path.dirname(__file__), 'settings'))
     make_directory(dir_path)
     return dir_path
 
@@ -113,8 +123,8 @@ def setup_logger():
     http://docs.python.org/howto/logging-cookbook.html
     """
     sentry_url = (
-        'http://fda607badbe440be9a2fa6b22e759c72'
-        ':5e871adb47ac4da1a1114b912deb274a@sentry.linfiniti.com/2')
+        'http://7674f55697ba4c0d81d12ac0efa82e7a'
+        ':b197c79de15045509f5f9a1bf97e09da@sentry.kartoza.com/2')
     setup_logger_safe(realtime_logger_name(), sentry_url=sentry_url)
 
 

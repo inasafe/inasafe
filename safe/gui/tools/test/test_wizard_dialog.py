@@ -68,7 +68,7 @@ from safe.gui.tools.wizard_dialog import (
     step_fc_agglayer_origin,
     step_fc_extent,
     step_fc_params)
-from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.keyword_io import KeywordIO, definition
 from safe.gui.widgets.dock import Dock
 
 DOCK = Dock(IFACE)
@@ -287,7 +287,7 @@ class WizardDialogTest(unittest.TestCase):
         scenario_index = -1
         for i in range(expected_hazard_category_count):
             key = dialog.lstHazardCategories.item(i).data(Qt.UserRole)
-            hazard_category_name = KeywordIO.definition(key)['name']
+            hazard_category_name = definition(key)['name']
             hazard_categories.append(hazard_category_name)
             if hazard_category_name == chosen_hazard_category:
                 scenario_index = i
@@ -390,10 +390,7 @@ class WizardDialogTest(unittest.TestCase):
         # noinspection PyTypeChecker
         keywords = keyword_io.read_keywords(layer)
 
-        message = 'Invalid metadata!\n Was: %s\n Should be: %s' % (
-            unicode(keywords), unicode(expected_keywords))
-
-        self.assertEqual(keywords, expected_keywords, message)
+        self.assertEqual(keywords, expected_keywords)
 
     def test_existing_keywords(self):
         """Test if keywords already exist."""
@@ -865,8 +862,8 @@ class WizardDialogTest(unittest.TestCase):
         message = 'It should auto select, but it does not.'
         self.assertTrue(dialog.lstSubcategories.currentRow() == 0, message)
         num_item = dialog.lstSubcategories.count()
-        message = 'There is should be only one item, I got %s' % num_item
-        self.assertTrue(num_item == 1, message)
+        message = 'There are should be only two items, I got %s' % num_item
+        self.assertTrue(num_item == 2, message)
 
     def test_integrated_point(self):
         """Test for point layer and all possibilities."""
@@ -992,12 +989,12 @@ class WizardDialogTest(unittest.TestCase):
         self.check_list(expected_layermodes, dialog.lstLayerModes)
 
         # check if the default option is selected
-        expected_layermode_index = 0
-        layermode_index = dialog.lstLayerModes.currentRow()
+        expected_layer_mode = 'Continuous'
+        layer_mode = dialog.lstLayerModes.currentItem().text()
         message = ('Expected %s, but I got %s' %
-                   (expected_layermode_index, layermode_index))
+                   (expected_layer_mode, layer_mode))
         self.assertEqual(
-            expected_layermode_index, layermode_index, message)
+            expected_layer_mode, layer_mode, message)
 
         dialog.pbnNext.click()  # Go to unit
 
@@ -1051,12 +1048,12 @@ class WizardDialogTest(unittest.TestCase):
         self.check_list(expected_layermodes, dialog.lstLayerModes)
 
         # check if the default option is selected
-        expected_layermode_index = 1
-        layermode_index = dialog.lstLayerModes.currentRow()
+        expected_layer_mode = 'Continuous'
+        layer_mode = dialog.lstLayerModes.currentItem().text()
         message = ('Expected %s, but I got %s' %
-                   (expected_layermode_index, layermode_index))
+                   (expected_layer_mode, layer_mode))
         self.assertEqual(
-            expected_layermode_index, layermode_index, message)
+            expected_layer_mode, layer_mode, message)
 
         dialog.pbnNext.click()  # Go to unit
 
@@ -1144,12 +1141,14 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # Go to subcategory
 
         # check number of subcategories
-        expected_subcategories = ['Structure']
+        expected_subcategories = ['Structure', 'Population']
         self.check_list(expected_subcategories, dialog.lstSubcategories)
 
         # check if automatically select the only option
-        self.check_current_text(
-            expected_subcategories[0], dialog.lstSubcategories)
+
+        self.select_from_list_widget('Structure', dialog.lstSubcategories)
+
+        self.check_current_text('Structure', dialog.lstSubcategories)
 
         dialog.pbnNext.click()  # Go to layer mode
 
@@ -1320,7 +1319,11 @@ class WizardDialogTest(unittest.TestCase):
 
         # check classified
         root = dialog.treeClasses.invisibleRootItem()
-        expected_classes = ['low', 'medium', 'high']
+        expected_classes = [
+            'Low Hazard Zone',
+            'Medium Hazard Zone',
+            'High Hazard Zone'
+        ]
         child_count = root.childCount()
         message = 'Child count must be %s' % len(expected_classes)
         self.assertEqual(len(expected_classes), child_count, message)
@@ -1397,6 +1400,7 @@ class WizardDialogTest(unittest.TestCase):
         expected_test_layer_count = 2
 
         expected_hazards_count = 5
+        # expected_exposures_count = 3
         expected_exposures_count = 3
         expected_flood_structure_functions_count = 4
         expected_raster_polygon_functions_count = 2
