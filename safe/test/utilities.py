@@ -26,11 +26,19 @@ from PyQt4 import QtGui  # pylint: disable=W0621
 # safe_qgis.__init__ to load all the configurations that we make for testing
 from safe.gis.numerics import axes_to_points
 from safe.impact_functions import register_impact_functions
-from safe.utilities.utilities import read_file_keywords
 from safe.common.utilities import unique_filename, temp_dir
-from safe.common.exceptions import NoKeywordsFoundError, KeywordNotFoundError
+from safe.common.exceptions import (
+    NoKeywordsFoundError,
+    MetadataReadError
+)
 from safe.utilities.clipper import extent_to_geoarray, clip_layer
 from safe.utilities.gis import get_wgs84_resolution
+from safe.utilities.metadata import (
+    read_iso19115_metadata,
+    write_read_iso_19115_metadata
+)
+from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.utilities import read_file_keywords
 
 QGIS_APP = None  # Static variable used to hold hand to running QGIS app
 CANVAS = None
@@ -70,7 +78,7 @@ def get_qgis_app():
 
     :returns: Handle to QGIS app, canvas, iface and parent. If there are any
         errors the tuple members will be returned as None.
-    :rtype: (QgsApplication, CANVAS, IFACE, PARENT)
+    :rtype: (QgsApplication, CANVAS, IFload_standard_layersACE, PARENT)
 
     If QGIS is already running the handle to that app will be returned.
     """
@@ -222,10 +230,17 @@ def load_layer(layer_path):
     # Determine if layer is hazard or exposure
     layer_purpose = 'undefined'
     try:
-        keywords = read_file_keywords(layer_path)
+        try:
+            keywords = read_iso19115_metadata(layer_path)
+        except:
+            try:
+                keywords = read_file_keywords(layer_path)
+                keywords = write_read_iso_19115_metadata(layer_path, keywords)
+            except NoKeywordsFoundError:
+                keywords = {}
         if 'layer_purpose' in keywords:
             layer_purpose = keywords['layer_purpose']
-    except (NoKeywordsFoundError, KeywordNotFoundError):
+    except NoKeywordsFoundError:
         pass
 
     # Create QGis Layer Instance
@@ -926,9 +941,11 @@ def load_standard_layers(dock=None):
         test_data_path('idp', 'potential-idp.shp'),
         test_data_path('exposure', 'building-points.shp'),
         test_data_path('exposure', 'buildings.shp'),
+        test_data_path('exposure', 'census.shp'),
         test_data_path('hazard', 'volcano_point.shp'),
         test_data_path('exposure', 'roads.shp'),
         test_data_path('hazard', 'flood_multipart_polygons.shp'),
+        test_data_path('hazard', 'floods.shp'),
         test_data_path('hazard', 'classified_generic_polygon.shp'),
         test_data_path('hazard', 'volcano_krb.shp'),
         test_data_path('exposure', 'pop_binary_raster_20_20.asc'),
@@ -944,12 +961,14 @@ def load_standard_layers(dock=None):
     # kabupaten_jakarta_singlepart not being either hazard nor exposure layer
     # potiential-idp not being either hazard nor exposure layer
 
-    if hazard_layer_count + exposure_layer_count != len(file_list) - 2:
+    number_exposure_hazard = hazard_layer_count + exposure_layer_count
+    expected_number_exposure_hazard = len(file_list) - 2
+    if number_exposure_hazard != expected_number_exposure_hazard:
         message = (
             'Loading standard layers failed. Expecting layer the number of '
             'hazard_layer and exposure_layer is equals to %d but got %d' % (
-                (len(file_list) - 1),
-                hazard_layer_count + exposure_layer_count))
+                (expected_number_exposure_hazard),
+                number_exposure_hazard))
         raise Exception(message)
 
     return hazard_layer_count, exposure_layer_count
@@ -1065,6 +1084,7 @@ def clone_shp_layer(
     extensions = ['.shp', '.shx', '.dbf', '.prj']
     if include_keywords:
         extensions.append('.keywords')
+        extensions.append('.xml')
     temp_path = unique_filename(dir=temp_dir(target_directory))
     # copy to temp file
     for ext in extensions:
@@ -1131,6 +1151,7 @@ def clone_raster_layer(
     extensions = ['.prj', '.sld', 'qml', '.prj', extension]
     if include_keywords:
         extensions.append('.keywords')
+        extensions.append('.xml')
     temp_path = unique_filename(dir=temp_dir(target_directory))
     # copy to temp file
     for ext in extensions:
@@ -1153,7 +1174,7 @@ def remove_vector_temp_file(file_path):
     :type file_path: str
     """
     file_path = file_path[:-4]
-    extensions = ['.shp', '.shx', '.dbf', '.prj', '.keywords']
+    extensions = ['.shp', '.shx', '.dbf', '.prj', '.keywords', '.xml']
     extensions.extend(['.prj', '.sld', 'qml'])
     for ext in extensions:
         if os.path.exists(file_path + ext):

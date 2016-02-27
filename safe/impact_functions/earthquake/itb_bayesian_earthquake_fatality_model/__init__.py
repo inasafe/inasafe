@@ -1,0 +1,5 @@
+__author__ = 'dynaryu@gmail.com'
+__project_name__ = 'inasafe'
+__filename__ = '__init__.py'
+__date__ = '24/03/15'
+__copyright__ = 'dynaryu@gmail.com'

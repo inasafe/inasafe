@@ -29,7 +29,7 @@ import re
 # noinspection PyPackageRequirements
 
 from safe.storage.utilities import read_keywords
-from safe.storage.utilities import write_keywords as safe_write_keywords
+from safe.storage.utilities import write_keywords
 from safe.common.exceptions import (
     InvalidParameterError,
     NoKeywordsFoundError,
@@ -40,8 +40,10 @@ from safe.defaults import disclaimer
 from safe import messaging as m
 from safe.messaging import styles, Message
 from safe.messaging.error_message import ErrorMessage
-from safe.utilities.unicode import get_unicode
+from safe.utilities.unicode import get_unicode, get_string
 from safe.utilities.i18n import tr
+from safe.definitions import inasafe_keyword_version
+
 
 INFO_STYLE = styles.INFO_STYLE
 
@@ -307,20 +309,12 @@ def read_file_keywords(layer_path, keyword=None):
     # priority for iso path first
     keyword_file_path = os.path.splitext(layer_path)[0]
     keyword_file_path += '.keywords'
-    keyword_iso_path = os.path.splitext(layer_path)[0]
-    keyword_iso_path += '.xml'
-    if not os.path.isfile(keyword_file_path)\
-            and not os.path.isfile(keyword_iso_path):
+    if not os.path.isfile(keyword_file_path):
         message = tr('No keywords file found for %s' % keyword_file_path)
         raise NoKeywordsFoundError(message)
-    elif os.path.isfile(keyword_file_path) \
-            and not os.path.isfile(keyword_iso_path):
-        # switch to .keywords file if iso xml file didn't exist
-        keyword_iso_path = keyword_file_path
-
     # now get the requested keyword using the inasafe library
     try:
-        dictionary = read_keywords(keyword_iso_path)
+        dictionary = read_keywords(keyword_file_path)
     except Exception, e:
         message = tr(
             'Keyword retrieval failed for %s (%s) \n %s' % (
@@ -329,6 +323,9 @@ def read_file_keywords(layer_path, keyword=None):
 
     # if no keyword was supplied, just return the dict
     if keyword is None:
+        if 'keyword_version' in dictionary.keys():
+            dictionary['keyword_version'] = get_string(
+                    dictionary['keyword_version'])
         return dictionary
     if keyword not in dictionary:
         message = tr('No value was found in file %s for keyword %s' % (
@@ -339,27 +336,9 @@ def read_file_keywords(layer_path, keyword=None):
         value = dictionary[keyword]
     except:
         raise
+    if 'keyword_version' == keyword:
+        value = get_string(value)
     return value
-
-
-def write_keywords_to_file(filename, keywords):
-    """Thin wrapper around the safe write_keywords function.
-
-    :param filename:  Path to layer that must be written.
-          If the file does not end in .keywords, its extension will be
-          stripped off and the basename + .keywords will be used as the file.
-    :type filename: str
-
-    :param keywords: A dictionary of keywords to be written
-    :type keywords: dict
-    """
-    basename, extension = os.path.splitext(filename)
-    if 'keywords' not in extension:
-        filename = basename + '.keywords'
-    try:
-        safe_write_keywords(keywords, filename)
-    except:
-        raise
 
 
 def replace_accentuated_characters(message):
@@ -376,33 +355,47 @@ def replace_accentuated_characters(message):
     return message.decode('utf-8')
 
 
-def compare_version(version1, version2):
-    """Compare between InaSAFE version.
+def is_keyword_version_supported(
+        keyword_version, inasafe_version=inasafe_keyword_version):
+    """Check if the keyword version is supported by this InaSAFE version.
 
-    .. versionadded: 3.2
+    .. versionadded: 3.3
 
-    Adapted from http://stackoverflow.com/a/1714190/1198772
+    :param keyword_version: String representation of the keyword version.
+    :type keyword_version: str
 
-    :param version1: String representation of version 1
-    :type version1: str
-    :param version2: String representation of version 1
-    :type version2: str
+    :param inasafe_version: String representation of InaSAFE's version.
+    :type inasafe_version: str
 
-    :returns: -1, 0, 1 if less, same, and more respectively.
-    :rtype: int
+    :returns: True if supported, otherwise False.
+    :rtype: bool
     """
-    def normalize(v):
-        """
-        :param v: Version string
-        :type v: str
+    def minor_version(version):
+        """Obtain minor version of a version (x.y)
+        :param version: Version string.
+        :type version: str
 
-        :returns: List of integer
-        :rtype: list
+        :returns: Minor version.
+        :rtype: str
         """
-        # Check only minor version
-        if v.count('.') > 1:
-            version_split = v.split('.')
-            v = version_split[0] + '.' + version_split[1]
+        version_split = version.split('.')
+        return version_split[0] + '.' + version_split[1]
 
-        return [int(x) for x in re.sub(r'(\.0+)*$', '', v).split(".")]
-    return cmp(normalize(version1), normalize(version2))
+    version_compatibilities = {
+        '3.3': ['3.2']
+    }
+
+    # Convert to minor version.
+    keyword_version = minor_version(keyword_version)
+    inasafe_version = minor_version(inasafe_version)
+
+    if inasafe_version == keyword_version:
+        return True
+
+    if inasafe_version in version_compatibilities.keys():
+        if keyword_version in version_compatibilities[inasafe_version]:
+            return True
+        else:
+            return False
+    else:
+        return False

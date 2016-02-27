@@ -16,11 +16,11 @@ __author__ = 'tim@kartoza.com'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
-import unittest
-import sys
-import os
-import logging
 import codecs
+import logging
+import os
+import sys
+import unittest
 from os.path import join
 from unittest import TestCase, skipIf
 
@@ -34,7 +34,6 @@ from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsProject)
 from PyQt4 import QtCore
-
 from safe.impact_functions import register_impact_functions
 from safe.common.utilities import format_int, unique_filename
 from safe.test.utilities import (
@@ -65,7 +64,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from safe.gui.widgets.dock import Dock
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.styling import setRasterStyle
-from safe.utilities.gis import read_impact_layer, qgis_version
+from safe.utilities.gis import read_impact_layer
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -251,7 +250,7 @@ class TestDock(TestCase):
         qgis_layer = read_impact_layer(safe_layer)
         style = safe_layer.get_style_info()
         setRasterStyle(qgis_layer, style)
-        # simple test for now - we could test explicity for style state
+        # simple test for now - we could test explicitly for style state
         # later if needed.
         message = (
             'Raster layer was not assigned a Singleband pseudocolor '
@@ -347,7 +346,7 @@ class TestDock(TestCase):
             function_id='FloodEvacuationRasterHazardFunction')
         layer = self.dock.get_exposure_layer()
         index = self.dock.layer_legend_index(layer)
-        self.assertEqual(index, 8)
+        self.assertEqual(index, 10)
 
     def test_add_above_layer(self):
         """Test we can add one layer above another - see #2322
@@ -735,12 +734,12 @@ class TestDock(TestCase):
         See also https://github.com/AIFDR/inasafe/issues/58
         """
         layer_path = os.path.join(TESTDATA, 'issue58.tif')
-        layer, layer_type = load_layer(layer_path)
+        layer, layer_purpose = load_layer(layer_path)
         message = (
             'Unexpected category for issue58.tif.\nGot:'
-            ' %s\nExpected: undefined' % layer_type)
+            ' %s\nExpected: undefined' % layer_purpose)
 
-        self.assertTrue(layer_type == 'undefined', message)
+        self.assertTrue(layer_purpose == 'impact', message)
         self.dock.layer_changed(layer)
         self.dock.save_state()
         html = self.dock.state['report']
@@ -764,18 +763,16 @@ class TestDock(TestCase):
             prefix='tsunami_building_assessment_saved_as_')
         self.dock.save_auxiliary_files(
             layer, join(TESTDATA, '%s.shp' % new_name))
-        new_keywords_filepath = os.path.join(
-            TESTDATA, '%s.keywords' % new_name)
+
         new_xml_filepath = os.path.join(TESTDATA, '%s.xml' % new_name)
 
         message = 'New auxiliary file does not exist : '
-        self.assertTrue(
-            os.path.isfile(new_keywords_filepath), '%s keywords' % message)
         self.assertTrue(os.path.isfile(new_xml_filepath), '%s xml' % message)
 
     def test_layer_saved_as_without_keywords_and_xml(self):
-        """Check that auxiliary files aren't created when they don't exist and
-        the 'saved as' is used.
+        """Check that auxiliary files aren't created when they don't exist.
+
+        ... and the 'saved as' is used.
         """
 
         layer_path = os.path.join(TESTDATA, 'kecamatan_jakarta_osm.shp')
@@ -793,7 +790,8 @@ class TestDock(TestCase):
         message = 'New auxiliary file exist : '
         self.assertFalse(
             os.path.isfile(new_keywords_file_path), '%s keywords' % message)
-        self.assertFalse(os.path.isfile(new_xml_file_path), '%s xml' % message)
+        # Will automatically add xml file for the metadata.
+        self.assertTrue(os.path.isfile(new_xml_file_path), '%s xml' % message)
 
     def test_new_layers_show_in_canvas(self):
         """Check that when we add a layer we can see it in the canvas list."""
@@ -1082,14 +1080,6 @@ class TestDock(TestCase):
         title = keyword_io.read_keywords(layer, 'title')
         self.assertEqual(title, original_title)
         self.dock.set_layer_from_title_flag = False
-
-    def test_future_keyword(self):
-        """Test if version 3.2 open future keywords."""
-        # Clear all loaded layers first.
-        file_list = [
-            test_data_path('exposure', 'buildings_keyword_3-3.shp')
-        ]
-        load_layers(file_list, clear_flag=True)
 
 
 if __name__ == '__main__':

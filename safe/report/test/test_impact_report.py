@@ -147,7 +147,7 @@ class ImpactReportTest(unittest.TestCase):
 
     def test_custom_logo(self):
         """Test that setting user-defined logo works."""
-        LOGGER.info('Testing custom_logo')
+        # LOGGER.info('Testing custom_logo')
         impact_layer_path = test_data_path(
             'impact', 'population_affected_entire_area.shp')
         layer, _ = load_layer(impact_layer_path)

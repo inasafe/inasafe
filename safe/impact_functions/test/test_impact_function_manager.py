@@ -25,6 +25,8 @@ from safe.impact_functions.earthquake.itb_earthquake_fatality_model\
     .impact_function import ITBFatalityFunction
 from safe.impact_functions.earthquake.pager_earthquake_fatality_model \
     .impact_function import PAGFatalityFunction
+from safe.impact_functions.earthquake.itb_bayesian_earthquake_fatality_model \
+    .impact_function import ITBBayesianFatalityFunction
 from safe.impact_functions.generic.continuous_hazard_population\
     .impact_function import ContinuousHazardPopulationFunction
 from safe.impact_functions.inundation.flood_vector_building_impact\
@@ -199,7 +201,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         impact_function_manager = ImpactFunctionManager()
         exposures = impact_function_manager.exposures_for_layer(
             'polygon')
-        expected = [exposure_structure]
+        expected = [exposure_structure, exposure_population]
         self.assertItemsEqual(exposures, expected)
 
         exposures = impact_function_manager.exposures_for_layer(
@@ -246,7 +248,9 @@ class TestImpactFunctionManager(unittest.TestCase):
         impact_function_manager = ImpactFunctionManager()
         result = impact_function_manager.available_exposures()
         expected_result = [
-            exposure_structure, exposure_road, exposure_population]
+            exposure_structure,
+            exposure_road,
+            exposure_population]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
@@ -263,6 +267,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         )
         expected = [
             ITBFatalityFunction.metadata().as_dict(),
+            ITBBayesianFatalityFunction.metadata().as_dict(),
             PAGFatalityFunction.metadata().as_dict(),
             ContinuousHazardPopulationFunction.metadata().as_dict()]
 
@@ -296,8 +301,8 @@ class TestImpactFunctionManager(unittest.TestCase):
             'population')
         expected = [
             (layer_mode_continuous, layer_geometry_raster),
+            (layer_mode_continuous, layer_geometry_polygon)
         ]
-
         self.assertItemsEqual(exposure_constraints, expected)
 
     def test_available_hazard_layer_modes(self):

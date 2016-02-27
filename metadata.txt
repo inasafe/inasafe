@@ -15,7 +15,7 @@ qgisMaximumVersion=2.99
 description=InaSAFE is free software that allows disaster managers to study realistic natural hazard impact scenarios for better planning, preparedness and response activities.
 about=Developed for the Indonesian Government - BNPB, Australian Government - AIFDR and DMInnovation and, and World Bank - GFDRR
 
-version=3.2.6
+version=3.3.0
 # alpha, beta, rc or final
 status=final
 
@@ -25,9 +25,56 @@ status=final
 # Optional items:
 
 changelog=
-        3.2.6
-        Add handler if found invalid xml file for version 3.2
-        Add test data for layer with keyword version 3.3 and add unit test for it.
+        Add parameter for minimum number to create group of building #2468
+        New default parameter for IF Tsunami Raster for Building (New IF) #1237
+        Use affected building value in action checklist #2410
+        Fix result on detail table in Earthquake population IF #2235
+        Make raster cell with zero value transparent #2529
+        Fix small bug showing QDateTime #2585
+        Add unaffected population in impact report #2530
+        Fix small bug showing QUrl #2569
+        Fix typo (apostrophes) in action check list #2571
+        Round number in action check list #2570
+        Fix InaSAFE OpenStreetMap Downloader cannot download relation #2576
+        Create a uniform order in impact report #2545
+        Update action check list #2389
+        Sort hazard classification on impact report (And make IF uses vector classification from hazard layer properly) #2385
+        Better impact report for IF volcano point #2390
+        Add unit in radius for IF Volcano point #2425
+        Migrating to metadata 3.3
+        Working implementation of on-the-fly-projection for polygon flood on building points/polys. fix #2475
+        Add new impact function Classified polygon hazard on polygon people
+        Add new impact function Earthquake ITB Bayesian Fatality
+        Add flood prone areas download support for the OSM downloader
+        Added support for downloading flood aggregates from PetaJakarta
+        Use date Picker in Keywords Wizard
+        (ismail/tsunami_raster_building_if) Merge branch 'develop' of github.com:inasafe/inasafe into tsunami_raster_building_if
+        Fix order by using Vector Classification in classified polygon population IF.
+        Use Vector Classification to sort the hazard level in report.
+        Add low, moderate, high threshold for tsunami raster building IF.
+        Add tsunami raster building IF based on flood one.
+        [Wizard] Use standard QDateTimeEdit instead of QgsDateTimeEdit. Fixes #2515
+        (charlotte/develop) Update default road action checklist
+        Update default population action checklist
+        Update default buildings action checklist
+        Update keywords for datatest.
+        Use read_iso19115_metadata to read metadata.
+        inform the user about the network status in the OSM downloader
+        [KeywordWizard] Use QDateTimeEdit for date keyword. Fixes #2499
+        Add target_field to impact layer metadata.
+        Add volcano_name_field to hazard layer metadata.
+        Add road_class_field to exposure metadata.
+        add flood prone to the OSM downloader
+        Migrate to use ISO 19115 metadata.
+        Add changelog: add new IF Classified polygon hazard on polygon people
+        [IFCW] After registering keywords in the KW sub-thread, don't display again the step from where it was called. Fixes #2347
+        Use wrap_slash for filename cells
+        Working implementation of on the fly projection for polygon flood on building points/polys. fix #2475
+        fix #2464 - support point buildings when doing polygon flood analysis
+        created new color symbology
+        (rizky/update-raven) Update sentry dsn for InaSAFE desktop and Realtime
+        added % symbol to all percentages in report
+        Added option to add OSM tile layer
 
 # tags are comma separated with spaces allowed
 tags=contingency planning, impact assessments, disaster scenarios, natural hazards

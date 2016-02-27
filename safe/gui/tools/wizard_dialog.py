@@ -74,14 +74,17 @@ from safe.definitions import (
     layer_mode_continuous,
     layer_mode_classified)
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
-from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.keyword_io import KeywordIO, definition
 from safe.utilities.analysis_handler import AnalysisHandler
 from safe.utilities.gis import (
     is_raster_layer,
     is_point_layer,
     is_polygon_layer,
     layer_attribute_names)
-from safe.utilities.utilities import get_error_message, compare_version
+from safe.utilities.utilities import (
+    get_error_message,
+    is_keyword_version_supported
+)
 from safe.defaults import get_defaults
 from safe.common.exceptions import (
     HashNotFoundError,
@@ -106,8 +109,10 @@ from safe.gui.tools.wizard_strings import (
     category_question_exposure,
     category_question_aggregation,
     hazard_category_question,
-    layermode_raster_question,
-    layermode_vector_question,
+    layer_mode_raster_question,
+    layer_mode_vector_question,
+    layer_mode_vector_classified_confirm,
+    layer_mode_vector_continuous_confirm,
     unit_question,
     allow_resampling_question,
     field_question_subcategory_unit,
@@ -129,7 +134,6 @@ from safe.gui.tools.wizard_strings import (
 LOGGER = logging.getLogger('InaSAFE')
 
 FORM_CLASS = get_ui_class('wizard_dialog_base.ui')
-
 
 # Constants: tab numbers for steps
 step_kw_category = 1
@@ -165,7 +169,6 @@ step_fc_extent_disjoint = 30
 step_fc_params = 31
 step_fc_summary = 32
 step_fc_analysis = 33
-
 
 # Aggregations' keywords
 DEFAULTS = get_defaults()
@@ -642,7 +645,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         item = self.lstCategories.currentItem()
         try:
-            return KeywordIO().definition(item.data(QtCore.Qt.UserRole))
+            return definition(item.data(QtCore.Qt.UserRole))
         except (AttributeError, NameError):
             return None
 
@@ -666,7 +669,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             categories += ['aggregation']
         for category in categories:
             if not isinstance(category, dict):
-                category = KeywordIO().definition(category)
+                category = definition(category)
             item = QListWidgetItem(category['name'], self.lstCategories)
             item.setData(QtCore.Qt.UserRole, category['key'])
             self.lstCategories.addItem(item)
@@ -735,7 +738,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         item = self.lstSubcategories.currentItem()
         try:
-            return KeywordIO().definition(item.data(QtCore.Qt.UserRole))
+            return definition(item.data(QtCore.Qt.UserRole))
         except (AttributeError, NameError):
             return None
 
@@ -815,7 +818,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         item = self.lstHazardCategories.currentItem()
         try:
-            return KeywordIO().definition(item.data(QtCore.Qt.UserRole))
+            return definition(item.data(QtCore.Qt.UserRole))
         except (AttributeError, NameError):
             return None
 
@@ -834,9 +837,10 @@ class WizardDialog(QDialog, FORM_CLASS):
         hazard_categories = self.hazard_categories_for_layer()
         for hazard_category in hazard_categories:
             if not isinstance(hazard_category, dict):
-                hazard_category = KeywordIO().definition(hazard_category)
-            item = QListWidgetItem(hazard_category['name'],
-                                   self.lstHazardCategories)
+                hazard_category = definition(hazard_category)
+            item = QListWidgetItem(
+                hazard_category['name'],
+                self.lstHazardCategories)
             item.setData(QtCore.Qt.UserRole, hazard_category['key'])
             self.lstHazardCategories.addItem(item)
 
@@ -886,7 +890,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         item = self.lstLayerModes.currentItem()
         try:
-            return KeywordIO().definition(item.data(QtCore.Qt.UserRole))
+            return definition(item.data(QtCore.Qt.UserRole))
         except (AttributeError, NameError):
             return None
 
@@ -900,16 +904,29 @@ class WizardDialog(QDialog, FORM_CLASS):
         category = self.selected_category()
         subcategory = self.selected_subcategory()
         layer_mode_question = (
-            layermode_raster_question
+            layer_mode_raster_question
             if is_raster_layer(self.layer)
-            else layermode_vector_question)
-        self.lblSelectLayerMode.setText(
-            layer_mode_question % (subcategory['name'], category['name']))
+            else layer_mode_vector_question)
+
         self.lblDescribeLayerMode.setText('')
         self.lstLayerModes.clear()
         self.lstUnits.clear()
         self.lstFields.clear()
         layer_modes = self.layermodes_for_layer()
+        if is_raster_layer(self.layer):
+            layer_mode_question = layer_mode_raster_question
+        else:
+            if len(layer_modes) == 2:
+                layer_mode_question = layer_mode_vector_question
+            elif len(layer_modes) == 1:
+                if layer_modes[0]['key'] == 'classified':
+                    layer_mode_question = layer_mode_vector_classified_confirm
+                elif layer_modes[0]['key'] == 'continuous':
+                    layer_mode_question = layer_mode_vector_continuous_confirm
+                else:
+                    layer_mode_question = layer_mode_vector_question
+        self.lblSelectLayerMode.setText(
+            layer_mode_question % (subcategory['name'], category['name']))
         for layer_mode in layer_modes:
             item = QListWidgetItem(layer_mode['name'], self.lstLayerModes)
             item.setData(QtCore.Qt.UserRole, layer_mode['key'])
@@ -960,7 +977,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         item = self.lstUnits.currentItem()
         try:
-            return KeywordIO().definition(item.data(QtCore.Qt.UserRole))
+            return definition(item.data(QtCore.Qt.UserRole))
         except (AttributeError, NameError):
             return None
 
@@ -1044,7 +1061,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         item = self.lstClassifications.currentItem()
         try:
-            return KeywordIO().definition(item.data(QtCore.Qt.UserRole))
+            return definition(item.data(QtCore.Qt.UserRole))
         except (AttributeError, NameError):
             return None
 
@@ -1061,9 +1078,10 @@ class WizardDialog(QDialog, FORM_CLASS):
         classifications = self.classifications_for_layer()
         for classification in classifications:
             if not isinstance(classification, dict):
-                classification = KeywordIO.definition(classification)
-            item = QListWidgetItem(classification['name'],
-                                   self.lstClassifications)
+                classification = definition(classification)
+            item = QListWidgetItem(
+                classification['name'],
+                self.lstClassifications)
             item.setData(QtCore.Qt.UserRole, classification['key'])
             self.lstClassifications.addItem(item)
 
@@ -1107,9 +1125,11 @@ class WizardDialog(QDialog, FORM_CLASS):
         if field_index < 0:
             return
         field_type = fields.field(field).typeName()
+        field_index = fields.indexFromName(self.selected_field())
         unique_values = self.layer.uniqueValues(field_index)[0:48]
-        unique_values_str = [i is not None and unicode(i) or 'NULL'
-                             for i in unique_values]
+        unique_values_str = [
+            i is not None and unicode(i) or 'NULL'
+            for i in unique_values]
         if unique_values != self.layer.uniqueValues(field_index):
             unique_values_str += ['...']
         desc = '<br/>%s: %s<br/><br/>' % (self.tr('Field type'), field_type)
@@ -1257,7 +1277,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             for tree_leaf in tree_branch.takeChildren():
                 value_list += [tree_leaf.data(0, QtCore.Qt.UserRole)]
             if value_list:
-                value_map[tree_branch.text(0)] = value_list
+                value_map[tree_branch.data(0, QtCore.Qt.UserRole)] = value_list
         return value_map
 
     def set_widgets_step_kw_classify(self):
@@ -1288,11 +1308,11 @@ class WizardDialog(QDialog, FORM_CLASS):
                 classification['name'], field.upper()))
             unique_values = self.layer.uniqueValues(field_index)
 
-        # Assign unique values to classes (according to defauls)
+        # Assign unique values to classes (according to default)
         unassigned_values = list()
         assigned_values = dict()
         for default_class in default_classes:
-            assigned_values[default_class['name']] = list()
+            assigned_values[default_class['key']] = list()
         for unique_value in unique_values:
             if unique_value is None or isinstance(
                     unique_value, QPyNullVariant):
@@ -1310,7 +1330,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                         default_class['numeric_default_min'] <= unique_value <=
                         default_class['numeric_default_max']))
                 if condition_1 or condition_2:
-                    assigned_values[default_class['name']] += [unique_value]
+                    assigned_values[default_class['key']] += [unique_value]
                     assigned = True
             if not assigned:
                 # add to unassigned values list otherwise
@@ -1335,7 +1355,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         unassigned_values = list()
         assigned_values = dict()
         for default_class in default_classes:
-            assigned_values[default_class['name']] = list()
+            assigned_values[default_class['key']] = list()
         if isinstance(value_map, str):
             try:
                 value_map = json.loads(value_map)
@@ -1378,9 +1398,10 @@ class WizardDialog(QDialog, FORM_CLASS):
         for value in unassigned_values:
             value_as_string = value is not None and unicode(value) or 'NULL'
             list_item = QtGui.QListWidgetItem(self.lstUniqueValues)
-            list_item.setFlags(QtCore.Qt.ItemIsEnabled |
-                               QtCore.Qt.ItemIsSelectable |
-                               QtCore.Qt.ItemIsDragEnabled)
+            list_item.setFlags(
+                QtCore.Qt.ItemIsEnabled |
+                QtCore.Qt.ItemIsSelectable |
+                QtCore.Qt.ItemIsDragEnabled)
             list_item.setData(QtCore.Qt.UserRole, value)
             list_item.setText(value_as_string)
             self.lstUniqueValues.addItem(list_item)
@@ -1395,20 +1416,22 @@ class WizardDialog(QDialog, FORM_CLASS):
         for default_class in default_classes:
             # Create branch for class
             tree_branch = QtGui.QTreeWidgetItem(self.treeClasses)
-            tree_branch.setFlags(QtCore.Qt.ItemIsDropEnabled |
-                                 QtCore.Qt.ItemIsEnabled)
+            tree_branch.setFlags(
+                QtCore.Qt.ItemIsDropEnabled | QtCore.Qt.ItemIsEnabled)
             tree_branch.setExpanded(True)
             tree_branch.setFont(0, bold_font)
             tree_branch.setText(0, default_class['name'])
+            tree_branch.setData(0, QtCore.Qt.UserRole, default_class['key'])
             if 'description' in default_class:
                 tree_branch.setToolTip(0, default_class['description'])
             # Assign known values
-            for value in assigned_values[default_class['name']]:
+            for value in assigned_values[default_class['key']]:
                 string_value = value is not None and unicode(value) or 'NULL'
                 tree_leaf = QtGui.QTreeWidgetItem(tree_branch)
-                tree_leaf.setFlags(QtCore.Qt.ItemIsEnabled |
-                                   QtCore.Qt.ItemIsSelectable |
-                                   QtCore.Qt.ItemIsDragEnabled)
+                tree_leaf.setFlags(
+                    QtCore.Qt.ItemIsEnabled |
+                    QtCore.Qt.ItemIsSelectable |
+                    QtCore.Qt.ItemIsDragEnabled)
                 tree_leaf.setData(0, QtCore.Qt.UserRole, value)
                 tree_leaf.setText(0, string_value)
 
@@ -1868,12 +1891,17 @@ class WizardDialog(QDialog, FORM_CLASS):
             self.ckbSource_date.setChecked(True)
             self.dtSource_date.setDateTime(
                 QDateTime.fromString(get_unicode(source_date),
-                                     'dd-MM-yyyy HH:mm'))
+                                     'yyyy-MM-dd HH:mm:ss'))
         else:
             self.ckbSource_date.setChecked(False)
             self.dtSource_date.clear()
 
         source_url = self.get_existing_keyword('url')
+        try:
+            source_url = source_url.toString()
+        except AttributeError:
+            pass
+
         if source_url or source_url == 0:
             self.leSource_url.setText(get_unicode(source_url))
         else:
@@ -1915,11 +1943,12 @@ class WizardDialog(QDialog, FORM_CLASS):
         current_keywords = self.get_keywords()
         current_keywords[inasafe_keyword_version_key] = inasafe_keyword_version
 
-        base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                                os.pardir,
-                                                os.pardir,
-                                                os.pardir,
-                                                'resources'))
+        base_dir = os.path.abspath(os.path.join(
+            os.path.dirname(__file__),
+            os.pardir,
+            os.pardir,
+            os.pardir,
+            'resources'))
         header_path = os.path.join(base_dir, 'header.html')
         footer_path = os.path.join(base_dir, 'footer.html')
         header_file = file(header_path)
@@ -1934,16 +1963,15 @@ class WizardDialog(QDialog, FORM_CLASS):
         #       It pops the dict elements damaging the function parameter
         body = self.keyword_io.to_message(dict(current_keywords)).to_html()
         # remove the branding div
-        body = re.sub(r'^.*div class="branding".*$', "",
-                      body, flags=re.MULTILINE)
+        body = re.sub(
+            r'^.*div class="branding".*$', '', body, flags=re.MULTILINE)
 
         if self.parent_step:
             # It's the KW mode embedded in IFCW mode,
             # so check if the layer is compatible
             im_func = self.selected_function()
-            if not self.is_layer_compatible(self.layer,
-                                            None,
-                                            current_keywords):
+            if not self.is_layer_compatible(
+                    self.layer, None, current_keywords):
                 msg = self.tr(
                     'The selected keywords don\'t match requirements of the '
                     'selected impact fuction (%s). You can confinue with '
@@ -2064,9 +2092,9 @@ class WizardDialog(QDialog, FORM_CLASS):
         for i in range(len(exposures)):
             e = exposures[i]
             item = QtGui.QTableWidgetItem()
-            item.setIcon(QtGui.QIcon(
-                resources_path('img', 'wizard', 'keyword-subcategory-%s.svg'
-                               % (e['key'] or 'notset'))))
+            item.setIcon(QtGui.QIcon(resources_path(
+                'img', 'wizard', 'keyword-subcategory-%s.svg'
+                % (e['key'] or 'notset'))))
             item.setText(e['name'].capitalize())
             self.tblFunctions1.setVerticalHeaderItem(i, item)
 
@@ -2087,8 +2115,8 @@ class WizardDialog(QDialog, FORM_CLASS):
                     item.setFlags(item.flags() & ~QtCore.Qt.ItemIsSelectable)
                 item.setBackground(QtGui.QBrush(background_colour))
                 item.setFont(big_font)
-                item.setTextAlignment(QtCore.Qt.AlignCenter |
-                                      QtCore.Qt.AlignHCenter)
+                item.setTextAlignment(
+                    QtCore.Qt.AlignCenter | QtCore.Qt.AlignHCenter)
                 item.setData(RoleFunctions, functions)
                 item.setData(RoleHazard, h)
                 item.setData(RoleExposure, e)
@@ -2233,8 +2261,8 @@ class WizardDialog(QDialog, FORM_CLASS):
                     item.setFlags(item.flags() & ~QtCore.Qt.ItemIsSelectable)
                 item.setBackground(QtGui.QBrush(bgcolor))
                 item.setFont(big_font)
-                item.setTextAlignment(QtCore.Qt.AlignCenter |
-                                      QtCore.Qt.AlignHCenter)
+                item.setTextAlignment(
+                    QtCore.Qt.AlignCenter | QtCore.Qt.AlignHCenter)
                 item.setData(RoleFunctions, functions)
                 item.setData(RoleHazard, h)
                 item.setData(RoleExposure, e)
@@ -2317,23 +2345,23 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.auto_select_one_item(self.lstFunctions)
 
         # Set hazard and exposure icons on next steps
-        icon_path = resources_path('img', 'wizard',
-                                   'keyword-subcategory-%s.svg'
-                                   % (h['key'] or 'notset'))
+        icon_path = resources_path(
+            'img', 'wizard', 'keyword-subcategory-%s.svg'
+            % (h['key'] or 'notset'))
         self.lblIconFunctionHazard.setPixmap(QPixmap(icon_path))
         self.lblIconIFCWHazardOrigin.setPixmap(QPixmap(icon_path))
         self.lblIconIFCWHazardFromCanvas.setPixmap(QPixmap(icon_path))
         self.lblIconIFCWHazardFromBrowser.setPixmap(QPixmap(icon_path))
-        icon_path = resources_path('img', 'wizard',
-                                   'keyword-subcategory-%s.svg'
-                                   % (e['key'] or 'notset'))
+        icon_path = resources_path(
+            'img', 'wizard', 'keyword-subcategory-%s.svg'
+            % (e['key'] or 'notset'))
         self.lblIconFunctionExposure.setPixmap(QPixmap(icon_path))
         self.lblIconIFCWExposureOrigin.setPixmap(QPixmap(icon_path))
         self.lblIconIFCWExposureFromCanvas.setPixmap(QPixmap(icon_path))
         self.lblIconIFCWExposureFromBrowser.setPixmap(QPixmap(icon_path))
 
-        icon_path = resources_path('img', 'wizard',
-                                   'keyword-category-aggregation.svg')
+        # icon_path = resources_path(
+        #     'img', 'wizard', 'keyword-category-aggregation.svg')
         # Temporarily hide aggregation icon until we have one suitable
         # (as requested in a comment to PR #2060)
         icon_path = None
@@ -2427,7 +2455,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         if not keywords or 'keyword_version' not in keywords:
             return True
         keyword_version = str(keywords['keyword_version'])
-        if compare_version(keyword_version, get_version()) != 0:
+        if not is_keyword_version_supported(keyword_version):
             return True
 
         # Compare layer keywords with explicitly set constraints
@@ -2643,8 +2671,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         # Check if the layer is keywordless
         if keywords and 'keyword_version' in keywords:
             kw_ver = str(keywords['keyword_version'])
-            self.is_selected_layer_keywordless = bool(
-                compare_version(kw_ver, get_version()) != 0)
+            self.is_selected_layer_keywordless = (
+                not is_keyword_version_supported(kw_ver))
         else:
             self.is_selected_layer_keywordless = True
 
@@ -2793,8 +2821,9 @@ class WizardDialog(QDialog, FORM_CLASS):
         else:
             keyword_version = None
 
-        if (keywords and keyword_version and
-                compare_version(keyword_version, get_version()) == 0):
+        if (keywords and
+                keyword_version and
+                    is_keyword_version_supported(keyword_version)):
             # The layer has valid keywords
             purpose = keywords.get('layer_purpose')
             if purpose == layer_purpose_hazard['key']:
@@ -2862,8 +2891,8 @@ class WizardDialog(QDialog, FORM_CLASS):
                            ' to assign keywords to this layer.'))
         return desc
 
-    def unsuitable_layer_description_html(self, layer, layer_purpose,
-                                          keywords=None):
+    def unsuitable_layer_description_html(
+            self, layer, layer_purpose, keywords=None):
         """Form a html description of a given non-matching layer based on
            the currently selected impact function requirements vs layer\'s
            parameters and keywords if provided, as
@@ -2883,7 +2912,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
 
         def emphasize(str1, str2):
-            ''' Compare two strings and emphasize both if differ '''
+            """ Compare two strings and emphasize both if differ """
             if str1 != str2:
                 str1 = '<i>%s</i>' % str1
                 str2 = '<i>%s</i>' % str2
@@ -2924,19 +2953,20 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         lay_geometry, req_geometry = emphasize(lay_geometry, req_geometry)
         lay_purpose, layer_purpose = emphasize(lay_purpose, layer_purpose)
-        lay_subcategory, req_subcategory = emphasize(lay_subcategory,
-                                                     req_subcategory)
-        lay_layer_mode, req_layer_mode = emphasize(lay_layer_mode,
-                                                   req_layer_mode)
+        lay_subcategory, req_subcategory = emphasize(
+            lay_subcategory, req_subcategory)
+        lay_layer_mode, req_layer_mode = emphasize(
+            lay_layer_mode, req_layer_mode)
 
         # Classification
         classification_row = ''
         if (lay_req['layer_mode'] == layer_mode_classified and
                 layer_purpose == layer_purpose_hazard['key']):
             # Determine the keyword key for the classification
-            classification_obj = (raster_hazard_classification
-                                  if is_raster_layer(layer)
-                                  else vector_hazard_classification)
+            classification_obj = (
+                raster_hazard_classification
+                if is_raster_layer(layer)
+                else vector_hazard_classification)
             classification_key = classification_obj['key']
             classification_key_name = classification_obj['name']
             classification_keys = classification_key + 's'
@@ -2951,23 +2981,27 @@ class WizardDialog(QDialog, FORM_CLASS):
                     lay_classification = keywords[classification_key]
 
                 if lay_classification not in allowed_classifications:
-                    # We already know we want to empasize them and the test
+                    # We already know we want to emphasize them and the test
                     # inside the function will always pass.
                     lay_classification, req_classifications = emphasize(
                         lay_classification, req_classifications)
-                classification_row = (('<tr><td><b>%s</b></td>' +
-                                       '<td>%s</td><td>%s</td></tr>')
-                                      % (classification_key_name,
-                                         lay_classification,
-                                         req_classifications))
+                classification_row = (
+                    (
+                        '<tr><td><b>%s</b></td>' +
+                        '<td>%s</td><td>%s</td></tr>')
+                    % (
+                        classification_key_name,
+                        lay_classification,
+                        req_classifications))
 
         # Unit
         units_row = ''
         if lay_req['layer_mode'] == layer_mode_continuous:
             # Determine the keyword key for the unit
-            unit_obj = (continuous_hazard_unit
-                        if layer_purpose == layer_purpose_hazard['key']
-                        else exposure_unit)
+            unit_obj = (
+                continuous_hazard_unit
+                if layer_purpose == layer_purpose_hazard['key']
+                else exposure_unit)
             unit_key = unit_obj['key']
             unit_key_name = unit_obj['name']
             unit_keys = unit_key + 's'
@@ -2981,12 +3015,14 @@ class WizardDialog(QDialog, FORM_CLASS):
                     lay_unit = keywords[unit_key]
 
                 if lay_unit not in allowed_units:
-                    # We already know we want to empasize them and the test
+                    # We already know we want to emphasize them and the test
                     # inside the function will always pass.
                     lay_unit, req_units = emphasize(lay_unit, req_units)
-                units_row = (('<tr><td><b>%s</b></td>' +
-                              '<td>%s</td><td>%s</td></tr>')
-                             % (unit_key_name, lay_unit, req_units))
+                units_row = (
+                    (
+                        '<tr><td><b>%s</b></td>' +
+                        '<td>%s</td><td>%s</td></tr>')
+                    % (unit_key_name, lay_unit, req_units))
 
         html = '''
             <table border="0" width="100%%" cellpadding="2">
@@ -3096,10 +3132,11 @@ class WizardDialog(QDialog, FORM_CLASS):
             layer.setLayerName(keywords.get('title'))
 
         if not self.is_layer_compatible(layer, category, keywords):
-            label_text = '%s<br/>%s' % (self.tr('This layer\'s keywords ' +
-                                                'or type are not suitable:'),
-                                        self.unsuitable_layer_description_html(
-                                            layer, category, keywords))
+            label_text = '%s<br/>%s' % (
+                self.tr(
+                    'This layer\'s keywords or type are not suitable:'),
+                self.unsuitable_layer_description_html(
+                    layer, category, keywords))
             return False, label_text
 
         # set the current layer (e.g. for the keyword creation sub-thread
@@ -3115,8 +3152,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         # Check if the layer is keywordless
         if keywords and 'keyword_version' in keywords:
             kw_ver = str(keywords['keyword_version'])
-            self.is_selected_layer_keywordless = bool(
-                compare_version(kw_ver, get_version()) != 0)
+            self.is_selected_layer_keywordless = (
+                not is_keyword_version_supported(kw_ver))
         else:
             self.is_selected_layer_keywordless = True
 
@@ -4430,7 +4467,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         :type keyword: str
 
         :returns: The value of the keyword.
-        :rtype: str
+        :rtype: str, QUrl
         """
         if self.existing_keywords is None:
             return None
@@ -4489,8 +4526,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         if self.leSource_scale.text():
             keywords['scale'] = get_unicode(self.leSource_scale.text())
         if self.ckbSource_date.isChecked():
-            keywords['date'] = get_unicode(
-                self.dtSource_date.dateTime().toString('dd-MM-yyyy HH:mm'))
+            keywords['date'] = self.dtSource_date.dateTime()
         if self.leSource_license.text():
             keywords['license'] = get_unicode(self.leSource_license.text())
         if self.leTitle.text():

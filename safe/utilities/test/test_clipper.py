@@ -38,6 +38,7 @@ from safe.common.exceptions import (
     InvalidProjectionError,
     CallGDALError,
     GetDataError)
+from safe.utilities.gis import get_optimal_extent
 from safe.utilities.clipper import (
     clip_layer,
     extent_to_kml,
@@ -60,8 +61,6 @@ from safe.test.utilities import (
 # AG: get_qgis_app() should be called before importing modules from
 # safe.utilities.analysis
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-
-from safe.utilities.analysis import Analysis
 
 # Setup path names for test data sets
 VECTOR_PATH = os.path.join(TESTDATA, 'Padang_WGS84.shp')
@@ -142,9 +141,13 @@ class ClipperTest(unittest.TestCase):
         shutil.copyfile(source_file, test_file)
 
         # Create a keywords file
-        source_file = test_data_path('other', 'tenbytenraster.keywords')
-        keywords_file = test_file + '.keywords'
+        source_file = test_data_path('other', 'tenbytenraster.xml')
+        keywords_file = test_file + '.xml'
         shutil.copyfile(source_file, keywords_file)
+
+        # source_file = test_data_path('other', 'tenbytenraster.keywords')
+        # keywords_file = test_file + '.keywords'
+        # shutil.copyfile(source_file, keywords_file)
 
         # Test the raster layer
         raster_layer = QgsRasterLayer(test_file, 'ten by ten')
@@ -255,8 +258,7 @@ class ClipperTest(unittest.TestCase):
         # the current view extent. The optimal extent is the intersection
         # between the two layers and the viewport.
         # Extent is returned as an array [xmin,ymin,xmax,ymax]
-        analysis = Analysis()
-        geo_extent = analysis.get_optimal_extent(
+        geo_extent = get_optimal_extent(
             hazard_geo_extent, exposure_geo_extent, view_port_geo_extent)
 
         # Clip the vector to the bbox
@@ -278,7 +280,7 @@ class ClipperTest(unittest.TestCase):
         # -------------------------------
         # Clip the vector to the bbox
         result = clip_layer(
-            vector_layer, geo_extent, extra_keywords={'kermit': 'piggy'})
+            vector_layer, geo_extent, extra_keywords={'title': 'piggy'})
 
         # Check the output is valid
         assert os.path.exists(result.source())
@@ -286,11 +288,11 @@ class ClipperTest(unittest.TestCase):
         keywords = safe_layer.get_keywords()
         # message = 'Extra keyword was not found in %s: %s' % (myResult,
         # keywords)
-        assert keywords['kermit'] == 'piggy'
+        assert keywords['title'] == 'piggy'
 
         # Clip the raster to the bbox
         result = clip_layer(
-            raster_layer, geo_extent, extra_keywords={'zoot': 'animal'})
+            raster_layer, geo_extent, extra_keywords={'email': 'animal'})
 
         # Check the output is valid
         assert os.path.exists(result.source())
@@ -299,7 +301,7 @@ class ClipperTest(unittest.TestCase):
 
         message = ('Extra keyword was not found in %s: %s' %
                    (result.source(), keywords))
-        assert keywords['zoot'] == 'animal', message
+        assert keywords['email'] == 'animal', message
 
     def test_raster_scaling(self):
         """Raster layers can be scaled when resampled.
