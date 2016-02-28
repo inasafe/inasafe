@@ -30,6 +30,26 @@
 	  "10": "Kebele"
 	}
   },
+  "France": {
+	"_comments": "Metropolitan France without Corsica, Corsica and Reunion Island",
+	"bbox": [
+		[-5.4, 51.1, 7.7, 42.2],
+		[8.5, 43, 9.85, 41.3],
+		[55, 20.6, 56, -21.6]
+	],
+	"levels": {
+	  "1": "",
+	  "2": "National Borders",
+	  "3": "",
+	  "4": "Régions",
+	  "5": "",
+	  "6": "Départements",
+	  "7": "Arrondissements",
+	  "8": "Communes",
+	  "9": "Arrondissements municipaux",
+	  "10": "Quartiers"
+	}
+  },
   "Indonesia": {
 	"bbox": [[94.96, 7.01, 141.54, -11.65]],
 	"levels": {
@@ -104,6 +124,21 @@
 	  "8": "Other administrative districts (if any)",
 	  "9": "Zones (if any)",
 	  "10": "Barangays"
+	}
+  },
+  "South Africa": {
+	"bbox": [[16.1, -22, 33.2, -35.2]],
+	"levels": {
+	  "1": "N/A",
+	  "2": "National Border",
+	  "3": "",
+	  "4": "Provinces",
+	  "5": "",
+	  "6": "District borders",
+	  "7": "",
+	  "8": "Municipal borders",
+	  "9": "",
+	  "10": "Ward borders"
 	}
   },
   "Thailand": {
