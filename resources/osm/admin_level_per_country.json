@@ -1,7 +1,7 @@
 {
   "Afghanistan": {
-	"_comments": "BBOX format : West, North, East, South",
-	"bbox": [60.33, 38.56, 75.03, 29.32],
+	"_comments": "BBOX format : West, North, East, South. It's a list of polygons.",
+	"bbox": [[60.33, 38.56, 75.03, 29.32]],
 	"levels": {
 	  "1": "N/A",
 	  "2": "National Border",
@@ -16,7 +16,7 @@
 	}
   },
   "Ethiopia": {
-	"bbox": [32.89, 14.95, 48.05, 3.29],
+	"bbox": [[32.89, 14.95, 48.05, 3.29]],
 	"levels": {
 	  "1": "",
 	  "2": "National Borders",
@@ -31,7 +31,7 @@
 	}
   },
   "Indonesia": {
-	"bbox": [94.96, 7.01, 141.54, -11.65],
+	"bbox": [[94.96, 7.01, 141.54, -11.65]],
 	"levels": {
 	  "1": "N/A",
 	  "2": "National Border",
@@ -46,7 +46,7 @@
 	}
   },
   "Madagascar": {
-	"bbox": [42.75, -11.69, 50.84, -25.74],
+	"bbox": [[42.75, -11.69, 50.84, -25.74]],
 	"levels": {
 	  "1": "",
 	  "2": "National Border",
@@ -61,7 +61,7 @@
 	}
   },
   "Malawi": {
-	"bbox": [32.59, -9.29, 35.95, -17.16],
+	"bbox": [[32.59, -9.29, 35.95, -17.16]],
 	"levels": {
 	  "1": "",
 	  "2": "National Border",
@@ -76,7 +76,7 @@
 	}
   },
   "Mozambique": {
-	"bbox": [30.08, -9.14, 41.04, -26.98],
+	"bbox": [[30.08, -9.14, 41.04, -26.98]],
 	"levels": {
 	  "1": "",
 	  "2": "National Border",
@@ -92,7 +92,7 @@
 	}
   },
   "Philippines": {
-	"bbox": [114, 21, 128, 5],
+	"bbox": [[114, 21, 128, 5]],
 	"levels": {
 	  "1": "N/A",
 	  "2": "National Border",
@@ -107,7 +107,7 @@
 	}
   },
   "Thailand": {
-	"bbox": [97.2, 20.5, 105.7, 5.4],
+	"bbox": [[97.2, 20.5, 105.7, 5.4]],
 	"levels": {
 	  "1": "N/A",
 	  "2": "National Border",
@@ -122,7 +122,7 @@
 	}
   },
   "Zimbabwe": {
-	"bbox": [24.65, -15.40, 33.18, -22.47],
+	"bbox": [[24.65, -15.40, 33.18, -22.47]],
 	"levels": {
 	  "1": "",
 	  "2": "",
