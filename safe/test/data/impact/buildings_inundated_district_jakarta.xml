@@ -181,9 +181,6 @@
           <map_title>
             <gco:CharacterString>Buildings inundated</gco:CharacterString>
           </map_title>
-          <statistics_classes>
-            <gco:List/>
-          </statistics_classes>
           <scale>
             <gco:CharacterString/>
           </scale>

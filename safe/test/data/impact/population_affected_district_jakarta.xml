@@ -181,9 +181,6 @@
           <map_title>
             <gco:CharacterString>People affected by flood prone areas</gco:CharacterString>
           </map_title>
-          <statistics_classes>
-            <gco:List/>
-          </statistics_classes>
           <scale>
             <gco:CharacterString/>
           </scale>

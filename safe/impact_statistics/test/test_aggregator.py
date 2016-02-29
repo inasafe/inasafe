@@ -448,67 +448,6 @@ class AggregatorTest(unittest.TestCase):
         ]
         self._aggregate(impact_layer, expected_results, use_aoi_mode=True)
 
-        # Aggregation in class_count mode
-        data_path = test_data_path(
-            'impact',
-            'aggregation_test_impact_vector_class_count.shp')
-        impact_layer = Vector(
-            data=data_path,
-            name='test vector impact')
-        expected_results = [
-            ['Entire area', '2', '3', '0']
-        ]
-        self._aggregate(impact_layer, expected_results, use_aoi_mode=True)
-        expected_results = [
-            ['JAKARTA BARAT', '1', '2', '0'],
-            ['JAKARTA PUSAT', '1', '0', '0'],
-            ['JAKARTA SELATAN', '0', '0', '0'],
-            ['JAKARTA UTARA', '0', '1', '0'],
-            ['JAKARTA TIMUR', '0', '0', '0']
-        ]
-        impact_layer_attributes = [
-            [   # JAKARTA BARAT
-                {'INUNDATED': 1,
-                 'depth': 2.0,
-                 'type': None,
-                 'name': None,
-                 'osm_id': None},
-                {'INUNDATED': 1,
-                 'depth': 2.0,
-                 'type': None,
-                 'name': None,
-                 'osm_id': None},
-                {'INUNDATED': 0,
-                 'depth': None,
-                 'type': None,
-                 'name': None,
-                 'osm_id': None}
-            ],
-            [   # JAKARTA PUSAT
-                {'INUNDATED': 0,
-                 'depth': None,
-                 'type': None,
-                 'name': None,
-                 'osm_id': None}
-            ],
-            [
-                # JAKARTA SELATAN
-            ],
-            [   # JAKARTA UTARA
-                {'INUNDATED': 1,
-                 'depth': None,
-                 'type': None,
-                 'name': None,
-                 'osm_id': None}
-            ],
-            [
-                # JAKARTA TIMUR
-            ]
-        ]
-        self._aggregate(impact_layer,
-                        expected_results,
-                        impact_layer_attributes=impact_layer_attributes)
-
     def test_line_aggregation(self):
         """Test if line aggregation works
         """
