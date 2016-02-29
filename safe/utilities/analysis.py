@@ -15,7 +15,7 @@ Contact : ole.moller.nielsen@gmail.com
 # noinspection PyPackageRequirements
 import logging
 
-from qgis.core import QgsMapLayer
+from qgis.core import QgsMapLayer, QgsRectangle
 
 from safe.impact_statistics.postprocessor_manager import (
     PostprocessorManager)
