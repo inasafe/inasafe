@@ -144,7 +144,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         except KeyError:
             content = self.tr('undefined')
         finally:
-            text = self.tr('which represents %s in') % (content)
+            text = self.tr('which represents %s in') % content
             self.boundary_helper.setText(text)
 
     def populate_countries(self):
@@ -162,9 +162,11 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
 
         self.bbox_countries = {}
         for country in list_countries:
-            coords = self.countries[country]['bbox']
-            self.bbox_countries[country] = QgsRectangle(
-                coords[0], coords[3], coords[2], coords[1])
+            multipolygons = self.countries[country]['bbox']
+            self.bbox_countries[country] = []
+            for coords in multipolygons:
+                bbox = QgsRectangle(coords[0], coords[3], coords[2], coords[1])
+                self.bbox_countries[country].append(bbox)
 
         self.update_helper_political_level()
 
@@ -236,11 +238,18 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         # Updating the country if possible.
         rectangle = QgsRectangle(extent[0], extent[1], extent[2], extent[3])
         center = rectangle.center()
+
         for country in self.bbox_countries:
-            if self.bbox_countries[country].contains(center):
-                index = self.country_comboBox.findText(country)
-                self.country_comboBox.setCurrentIndex(index)
-                break
+            for polygon in self.bbox_countries[country]:
+                if polygon.contains(center):
+                    index = self.country_comboBox.findText(country)
+                    self.country_comboBox.setCurrentIndex(index)
+                    break
+            else:
+                # Continue if the inner loop wasn't broken.
+                continue
+            # Inner loop was broken, break the outer.
+            break
         else:
             self.country_comboBox.setCurrentIndex(0)
 
@@ -359,6 +368,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
                 output_base_file_path = self.get_output_base_path(
                     output_directory, output_prefix, feature_type, overwrite)
 
+                # noinspection PyTypeChecker
                 download(
                     feature_type,
                     output_base_file_path,
@@ -538,7 +548,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
                         'Your current projection is different than EPSG:4326. '
                         'You should enable \'on the fly\' to display '
                         'correctly your layers')
-                    )
+                )
 
     def reject(self):
         """Redefinition of the reject() method
