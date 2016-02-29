@@ -4,7 +4,7 @@
     <gco:CharacterString>None</gco:CharacterString>
   </gmd:fileIdentifier>
   <gmd:language>
-    <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/" codeListValue="eng" codeSpace="ISO 639-2">English</gmd:LanguageCode>
+    <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/" codeListValue="eng" codeSpace="ISO 639-2">eng</gmd:LanguageCode>
   </gmd:language>
   <gmd:characterSet>
     <gmd:MD_CharacterSetCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_CharacterSetCode" codeListValue="utf8" codeSpace="ISOTC211/19115">utf8</gmd:MD_CharacterSetCode>
@@ -47,7 +47,7 @@
       <gmd:citation>
         <gmd:CI_Citation>
           <gmd:title>
-            <gco:CharacterString>census</gco:CharacterString>
+            <gco:CharacterString>Census</gco:CharacterString>
           </gmd:title>
           <gmd:date>
             <gmd:CI_Date>
@@ -160,7 +160,7 @@
         </gmd:MD_Constraints>
       </gmd:resourceConstraints>
       <gmd:language>
-        <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/" codeListValue="eng" codeSpace="ISO 639-2">English</gmd:LanguageCode>
+        <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/" codeListValue="eng" codeSpace="ISO 639-2">eng</gmd:LanguageCode>
       </gmd:language>
       <gmd:topicCategory>
         <gmd:MD_TopicCategoryCode>geoscientificInformation</gmd:MD_TopicCategoryCode>
@@ -179,11 +179,14 @@
             <gco:CharacterString>name</gco:CharacterString>
           </area_name_field>
           <area_population_field>
-            <gco:CharacterString>population</gco:CharacterString>
+            <gco:CharacterString/>
           </area_population_field>
           <exposure_unit>
-            <gco:CharacterString/>
+            <gco:CharacterString>count</gco:CharacterString>
           </exposure_unit>
+          <area_id_field>
+            <gco:CharacterString>id</gco:CharacterString>
+          </area_id_field>
           <source>
             <gco:CharacterString>NBS</gco:CharacterString>
           </source>
@@ -191,7 +194,7 @@
             <gco:CharacterString>polygon</gco:CharacterString>
           </layer_geometry>
           <field>
-            <gco:CharacterString>id</gco:CharacterString>
+            <gco:CharacterString>population</gco:CharacterString>
           </field>
           <scale>
             <gco:CharacterString/>
@@ -200,7 +203,7 @@
             <gco:CharacterString/>
           </report>
           <exposure>
-            <gco:CharacterString>area</gco:CharacterString>
+            <gco:CharacterString>population</gco:CharacterString>
           </exposure>
           <keyword_version>
             <gco:CharacterString>3.3</gco:CharacterString>
@@ -208,6 +211,9 @@
           <datatype>
             <gco:CharacterString/>
           </datatype>
+          <resolution>
+            <gco:FloatTuple/>
+          </resolution>
           <structure_class_field>
             <gco:CharacterString/>
           </structure_class_field>
@@ -217,11 +223,11 @@
           <layer_purpose>
             <gco:CharacterString>exposure</gco:CharacterString>
           </layer_purpose>
-          <resolution>
-            <gco:Tuple/>
-          </resolution>
+          <area_type_field>
+            <gco:CharacterString/>
+          </area_type_field>
           <layer_mode>
-            <gco:CharacterString>classified</gco:CharacterString>
+            <gco:CharacterString>continuous</gco:CharacterString>
           </layer_mode>
           <road_class_field>
             <gco:CharacterString/>

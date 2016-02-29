@@ -76,10 +76,21 @@ class Analysis(object):
         """Constructor."""
 
         # Impact Function
-        self.impact_function = None
+        self._impact_function = None
 
         self.aggregator = None
         self.postprocessor_manager = None
+
+    @property
+    def impact_function(self):
+        if not self._impact_function:
+            # RMN: need to put sane exception to easily identify errors
+            raise ValueError('Impact function property cannot be empty')
+        return self._impact_function
+
+    @impact_function.setter
+    def impact_function(self, impact_function):
+        self._impact_function = impact_function
 
     @property
     def clip_hard(self):
@@ -121,12 +132,18 @@ class Analysis(object):
     @user_extent.setter
     def user_extent(self, user_extent):
         # We transfer the extent to the IF as a list.
-        extent = [
-            user_extent.xMinimum(),
-            user_extent.yMinimum(),
-            user_extent.xMaximum(),
-            user_extent.yMaximum()]
-        self.impact_function.requested_extent = extent
+        if isinstance(user_extent, QgsRectangle):
+            extent = [
+                user_extent.xMinimum(),
+                user_extent.yMinimum(),
+                user_extent.xMaximum(),
+                user_extent.yMaximum()]
+            self.impact_function.requested_extent = extent
+        elif user_extent is None:
+            pass
+        else:
+            # This is a temporary hack, analysis.py will disappear soon.
+            raise Exception('The extent should be a QgsRectangle.')
 
     @property
     def user_extent_crs(self):

@@ -4,7 +4,7 @@
     <gco:CharacterString>None</gco:CharacterString>
   </gmd:fileIdentifier>
   <gmd:language>
-    <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/" codeListValue="eng" codeSpace="ISO 639-2">English</gmd:LanguageCode>
+    <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/" codeListValue="eng" codeSpace="ISO 639-2">eng</gmd:LanguageCode>
   </gmd:language>
   <gmd:characterSet>
     <gmd:MD_CharacterSetCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_CharacterSetCode" codeListValue="utf8" codeSpace="ISOTC211/19115">utf8</gmd:MD_CharacterSetCode>
@@ -160,7 +160,7 @@
         </gmd:MD_Constraints>
       </gmd:resourceConstraints>
       <gmd:language>
-        <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/" codeListValue="eng" codeSpace="ISO 639-2">English</gmd:LanguageCode>
+        <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/" codeListValue="eng" codeSpace="ISO 639-2">eng</gmd:LanguageCode>
       </gmd:language>
       <gmd:topicCategory>
         <gmd:MD_TopicCategoryCode>geoscientificInformation</gmd:MD_TopicCategoryCode>
@@ -184,6 +184,9 @@
           <exposure_unit>
             <gco:CharacterString/>
           </exposure_unit>
+          <area_id_field>
+            <gco:CharacterString/>
+          </area_id_field>
           <source>
             <gco:CharacterString>OpenStreetMap - www.openstreetmap.org</gco:CharacterString>
           </source>
@@ -208,6 +211,9 @@
           <datatype>
             <gco:CharacterString/>
           </datatype>
+          <resolution>
+            <gco:FloatTuple/>
+          </resolution>
           <structure_class_field>
             <gco:CharacterString/>
           </structure_class_field>
@@ -217,9 +223,9 @@
           <layer_purpose>
             <gco:CharacterString>exposure</gco:CharacterString>
           </layer_purpose>
-          <resolution>
-            <gco:Tuple/>
-          </resolution>
+          <area_type_field>
+            <gco:CharacterString/>
+          </area_type_field>
           <layer_mode>
             <gco:CharacterString>classified</gco:CharacterString>
           </layer_mode>

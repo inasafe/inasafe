@@ -27,8 +27,7 @@ from safe.metadata.property import BaseProperty
 
 
 class FloatProperty(BaseProperty):
-    """
-    A property that accepts date input
+    """A property that accepts float input
     """
     # if you edit this you need to adapt accordingly xml_value and is_valid
     _allowed_python_types = [float, NoneType]
@@ -39,7 +38,6 @@ class FloatProperty(BaseProperty):
 
     @classmethod
     def is_valid(cls, value):
-        # the date types constructors already complain if a date is not valid.
         return True
 
     def cast_from_str(self, value):

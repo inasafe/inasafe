@@ -78,7 +78,8 @@ class ImpactReport(object):
         """
         LOGGER.debug('InaSAFE Impact Report class initialised')
         self._iface = iface
-        self._template = template
+        self._template = None
+        self.template = template
         self._layer = layer
         self._extent = self._iface.mapCanvas().extent()
         self._page_dpi = 300.0
@@ -633,6 +634,10 @@ class ImpactReport(object):
             # noinspection PyUnresolvedReferences
             html_item.setResizeMode(QgsComposerHtml.RepeatUntilFinished)
             html_item.setHtml(html)
+            # RMN: This line below breaks in InaSAFE Headless after one
+            # successful call. This is because the function is not
+            # thread safe. Can't do anything about this, so avoid calling this
+            # function in multithreaded way.
             html_item.loadHtml()
 
         composition.exportAsPDF(output_path)

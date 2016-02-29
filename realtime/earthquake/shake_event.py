@@ -73,7 +73,7 @@ from safe.utilities.resources import resources_path
 from safe.common.exceptions import TranslationLoadError
 from safe.gui.tools.shake_grid.shake_grid import ShakeGrid
 import safe.messaging as m
-from realtime.shake_data import ShakeData
+from realtime.earthquake.shake_data import ShakeData
 from realtime.utilities import (
     shakemap_extract_dir,
     data_dir,
@@ -204,6 +204,7 @@ class ShakeEvent(QObject):
         # 'id': 57,
         # 'population': 33317}
         self.most_affected_city = None
+        self.shake_grid_location_city = None
         # for localization
         self.translator = None
         self.locale = locale
@@ -756,6 +757,9 @@ class ShakeEvent(QObject):
 
         .. note:: It is possible that there is no affected city! e.g. if
             all nearby cities fall outside of the shake raster.
+
+        .. note:: RMN: self.shake_grid_location_city will also be populated
+            with details.
         """
         layer = self.local_cities_memory_layer()
         fields = layer.dataProvider().fields()
@@ -821,6 +825,11 @@ class ShakeEvent(QObject):
             self.most_affected_city = sorted_cities[0]
         else:
             self.most_affected_city = None
+        # RMN: Fill in details for self.shake_grid_location_city
+        for c in sorted_cities:
+            if c['name'].strip() == self.shake_grid.location.strip():
+                self.shake_grid_location_city = c
+
         # Slice off just the top row_count records now
         if len(sorted_cities) > 5:
             sorted_cities = sorted_cities[0: row_count]
@@ -980,7 +989,7 @@ class ShakeEvent(QObject):
                 # noinspection PyTypeChecker
                 affected_row.add(m.Cell(0.00))
 
-            impact_row.append(m.Cell(self.mmi_shaking(mmi)))
+            impact_row.add(m.Cell(self.mmi_shaking(mmi)))
 
         table.add(header_row)
         table.add(affected_row)
@@ -1071,9 +1080,9 @@ class ShakeEvent(QObject):
         keywords_path = os.path.join(
             shakemap_extract_dir(),
             self.event_id,
-            'impact-%s.keywords' % algorithm)
+            'impact-%s.xml' % algorithm)
         keywords_source = os.path.splitext(result.filename)[0]
-        keywords_source = '%s.keywords' % keywords_source
+        keywords_source = '%s.xml' % keywords_source
         shutil.copyfile(keywords_source, keywords_path)
         LOGGER.debug('Copied impact keywords to:\n%s\n' % keywords_path)
 
@@ -1567,7 +1576,7 @@ class ShakeEvent(QObject):
             '%(depth-name)s: %(depth-value)s%(depth-unit)s '
             '%(located-label)s %(distance)s%(distance-unit)s '
             '%(bearing-compass)s '
-            '%(direction-relation)s %(place-name)s') % event_dict
+            '%(direction-relation)s %(shake-grid-location)s') % event_dict
         return event_string
 
     def event_dict(self):
@@ -1630,16 +1639,23 @@ class ShakeEvent(QObject):
         LOGGER.debug(longitude)
         LOGGER.debug(latitude)
         if self.most_affected_city is None:
-            # Check why we have this line - perhaps setting class state?
+            # RMN: sort impacted cities
             self.sorted_impacted_cities()
+
+        # RMN: for fix #2438
+        shake_grid_location = self.shake_grid.location
+        if self.shake_grid_location_city is None:
+            self.shake_grid_location_city = self.most_affected_city
+
+        if self.shake_grid_location_city is None:
             direction = 0
             distance = 0
             key_city_name = self.tr('n/a')
             bearing = self.tr('n/a')
         else:
-            direction = self.most_affected_city['dir_to']
-            distance = self.most_affected_city['dist_to']
-            key_city_name = self.most_affected_city['name']
+            direction = self.shake_grid_location_city['dir_to']
+            distance = self.shake_grid_location_city['dist_to']
+            key_city_name = self.shake_grid_location_city['name']
             bearing = self.bearing_to_cardinal(direction)
 
         elapsed_time_text = self.tr('Elapsed time since event')
@@ -1681,6 +1697,7 @@ class ShakeEvent(QObject):
             'bearing-compass': '%s' % bearing,
             'bearing-text': bearing_text,
             'place-name': key_city_name,
+            'shake-grid-location': shake_grid_location,
             'elapsed-time-name': elapsed_time_text,
             'elapsed-time': elapsed_time
         }
@@ -1742,13 +1759,14 @@ class ShakeEvent(QObject):
         # This is the topic of ticket:10
         # tz = pytz.timezone('Asia/Jakarta')  # Or 'Etc/GMT+7'
         # eq_date_jakarta = eq_date.replace(tzinfo=pytz.utc).astimezone(tz)
+        # RMN: convert the shakemap data to always point out in
         eq_date_jakarta = eq_date
 
         # The character %b will use the local word for month
         # However, setting the locale explicitly to test, does not work.
         # locale.setlocale(locale.LC_TIME, 'id_ID')
 
-        date_str = eq_date_jakarta.strftime('%d-%b-%y %H:%M:%S %Z')
+        date_str = eq_date_jakarta.strftime('%d-%b-%y %H:%M:%S %z')
         return date_str, lapse_string
 
     def version(self):
@@ -1859,6 +1877,7 @@ class ShakeEvent(QObject):
         root = os.path.abspath(
             os.path.join(
                 os.path.dirname(__file__),
+                os.pardir,
                 os.pardir))
         translation_path = os.path.join(
             root,

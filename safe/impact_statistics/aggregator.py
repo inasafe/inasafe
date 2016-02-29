@@ -647,7 +647,7 @@ class Aggregator(QtCore.QObject):
             # An unexpected error occurs, skip postprocessing
             return
 
-        # Add fields for store aggregation atributes
+        # Add fields for storing aggregation attributes
         aggregation_provider = self.layer.dataProvider()
         if self.statistics_type == 'class_count':
             # add the class count fields to the layer

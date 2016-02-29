@@ -21,26 +21,18 @@ import unittest
 import inspect
 
 from safe.impact_functions import register_impact_functions
-from safe.impact_functions.earthquake.earthquake_building.impact_function \
-    import EarthquakeBuildingFunction
-from safe.impact_functions.earthquake.itb_earthquake_fatality_model \
-    .impact_function import ITBFatalityFunction
-from safe.impact_functions.earthquake.pager_earthquake_fatality_model \
-    .impact_function import PAGFatalityFunction
-from safe.impact_functions.earthquake.itb_bayesian_earthquake_fatality_model \
-    .impact_function import ITBBayesianFatalityFunction
-from safe.impact_functions.inundation.flood_raster_osm_building_impact \
-    .impact_function import FloodRasterBuildingFunction
-from safe.impact_functions.generic.classified_polygon_building\
-    .impact_function import ClassifiedPolygonHazardBuildingFunction
-from safe.impact_functions.volcanic.volcano_polygon_building.impact_function \
-    import VolcanoPolygonBuildingFunction
-from safe.impact_functions.volcanic.volcano_point_building.impact_function \
-    import VolcanoPointBuildingFunction
-from safe.impact_functions.inundation.flood_vector_building_impact\
-    .impact_function import FloodPolygonBuildingFunction
-from safe.impact_functions.generic.classified_raster_building.impact_function\
-    import ClassifiedRasterHazardBuildingFunction
+from safe.impact_functions import EarthquakeBuildingFunction
+from safe.impact_functions import ITBFatalityFunction
+from safe.impact_functions import PAGFatalityFunction
+from safe.impact_functions import ITBBayesianFatalityFunction
+from safe.impact_functions import FloodRasterBuildingFunction
+from safe.impact_functions import TsunamiRasterBuildingFunction
+from safe.impact_functions import ClassifiedPolygonHazardBuildingFunction
+from safe.impact_functions import VolcanoPolygonBuildingFunction
+from safe.impact_functions import VolcanoPointBuildingFunction
+from safe.impact_functions import FloodPolygonBuildingFunction
+from safe.impact_functions import ClassifiedRasterHazardBuildingFunction
+
 from safe.impact_functions.registry import Registry
 from safe.definitions import (
     layer_mode_continuous,
@@ -92,6 +84,7 @@ class TestRegistry(unittest.TestCase):
             'Raster flood on buildings',
             'Raster flood on roads',
             'Tsunami evacuation',
+            'Raster tsunami on buildings',
             'Classified raster hazard on buildings',
             'Classified raster hazard on population',
             'Continuous raster hazard on population',
@@ -211,6 +204,7 @@ class TestRegistry(unittest.TestCase):
         expected = [
             FloodPolygonBuildingFunction,
             FloodRasterBuildingFunction,
+            TsunamiRasterBuildingFunction,
             ClassifiedRasterHazardBuildingFunction,
             ClassifiedPolygonHazardBuildingFunction,
             EarthquakeBuildingFunction,
@@ -235,6 +229,7 @@ class TestRegistry(unittest.TestCase):
         expected = [
             FloodPolygonBuildingFunction,
             FloodRasterBuildingFunction,
+            TsunamiRasterBuildingFunction,
             ClassifiedRasterHazardBuildingFunction,
             ClassifiedPolygonHazardBuildingFunction,
             EarthquakeBuildingFunction,

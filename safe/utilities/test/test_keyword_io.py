@@ -66,7 +66,7 @@ class KeywordIOTest(unittest.TestCase):
         vector_path = test_data_path('exposure', 'buildings_osm_4326.shp')
         self.vector_layer, _ = load_layer(vector_path)
         self.expected_vector_keywords = {
-            'keyword_version': '3.2',
+            'keyword_version': '3.3',
             'structure_class_field': 'FLOODED',
             'title': 'buildings_osm_4326',
             'layer_geometry': 'polygon',
@@ -77,6 +77,9 @@ class KeywordIOTest(unittest.TestCase):
         # Keyword less layer
         keywordless_path = test_data_path('other', 'keywordless_layer.shp')
         self.keywordless_layer, _ = load_layer(keywordless_path)
+        # Keyword file
+        self.keyword_path = test_data_path(
+            'exposure', 'buildings_osm_4326.xml')
 
     def tearDown(self):
         pass
@@ -259,6 +262,17 @@ class KeywordIOTest(unittest.TestCase):
         self.assertIn(
             u'\n---\n*high*, Kawasan Rawan Bencana III------',
             table.to_text())
+
+    def test_keyword_io(self):
+        """Test read keywords directly from keywords file
+
+        .. versionadded:: 3.2
+        """
+        keywords = self.keyword_io.read_keywords_file(self.keyword_path)
+        expected_keywords = self.expected_vector_keywords
+        message = 'Got:\n%s\nExpected:\n%s\nSource:\n%s' % (
+            keywords, expected_keywords, self.keyword_path)
+        self.assertDictEqual(keywords, expected_keywords, message)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(KeywordIOTest)
