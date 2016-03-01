@@ -19,7 +19,6 @@ from qgis.core import QgsMapLayer, QgsRectangle
 
 from safe.impact_statistics.postprocessor_manager import (
     PostprocessorManager)
-from safe.impact_statistics.aggregator import Aggregator
 from safe.common.exceptions import ZeroImpactException
 from safe.storage.utilities import safe_to_qgis_layer
 from safe.storage.safe_layer import SafeLayer
@@ -78,7 +77,6 @@ class Analysis(object):
         # Impact Function
         self._impact_function = None
 
-        self.aggregator = None
         self.postprocessor_manager = None
 
     @property
@@ -91,6 +89,10 @@ class Analysis(object):
     @impact_function.setter
     def impact_function(self, impact_function):
         self._impact_function = impact_function
+
+    @property
+    def aggregator(self):
+        return self.impact_function.aggregator
 
     @property
     def clip_hard(self):
@@ -241,28 +243,6 @@ class Analysis(object):
         # There is not setter for impact layer as we are outside of the IF.
         self.impact_function._impact = layer
 
-    def setup_aggregator(self):
-        """Create an aggregator for this analysis run."""
-        # Refactor from dock.prepare_aggregator
-        clip_parameters = self.impact_function.clip_parameters
-        try:
-            buffered_geo_extent = self.impact_layer.extent
-        except AttributeError:
-            # if we have no runner, set dummy extent
-            buffered_geo_extent = clip_parameters['adjusted_geo_extent']
-
-        if self.aggregation is not None:
-            qgis_layer = self.aggregation.qgis_layer()
-        else:
-            qgis_layer = None
-
-        # setup aggregator to use buffered_geo_extent to deal with #759
-        self.aggregator = Aggregator(
-            buffered_geo_extent, qgis_layer)
-
-        self.aggregator.show_intermediate_layers = \
-            self.show_intermediate_layers
-
     def setup_analysis(self):
         """Setup analysis so that it will be ready for running."""
         # Refactor from dock.accept()
@@ -292,7 +272,7 @@ class Analysis(object):
             if not result:
                 raise InsufficientMemoryWarning
 
-        self.setup_aggregator()
+        self.impact_function.setup_aggregator()
 
         # go check if our postprocessing layer has any keywords set and if not
         # prompt for them. if a prompt is shown run method is called by the
