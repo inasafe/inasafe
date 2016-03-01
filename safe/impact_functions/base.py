@@ -30,6 +30,8 @@ from PyQt4.QtCore import QT_VERSION_STR, QSettings
 from PyQt4.Qt import PYQT_VERSION_STR
 
 from safe.impact_statistics.aggregator import Aggregator
+from safe.impact_statistics.postprocessor_manager import (
+    PostprocessorManager)
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.common.exceptions import (
@@ -61,7 +63,12 @@ from safe.storage.utilities import (
 from safe.definitions import inasafe_keyword_version
 from safe.metadata.provenance import Provenance
 from safe.common.version import get_version
-from safe.common.signals import send_static_message, send_dynamic_message
+from safe.common.signals import (
+    send_static_message,
+    send_dynamic_message,
+    send_not_busy_signal,
+    send_analysis_done_signal
+)
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 WARNING_STYLE = styles.WARNING_STYLE
@@ -111,6 +118,8 @@ class ImpactFunction(object):
         self._aggregation = None
         # Aggregator
         self._aggregator = None
+        # Postprocessor manager
+        self._postprocessor_manager = None
         # The best extents to use for the assessment
         self._clip_parameters = None
         # Clip features that extend beyond the extents.
@@ -392,6 +401,15 @@ class ImpactFunction(object):
         :rtype: Aggregator
         """
         return self._aggregator
+
+    @property
+    def postprocessor_manager(self):
+        """Get the postprocessor manager.
+
+        :return: The postprocessor manager.
+        :rtype: PostprocessorManager
+        """
+        return self._postprocessor_manager
 
     @property
     def parameters(self):
@@ -1101,3 +1119,11 @@ class ImpactFunction(object):
 
         self._aggregator.show_intermediate_layers = \
             self.show_intermediate_layers
+
+    def run_post_processor(self):
+        """Carry out any postprocessing required for this impact layer."""
+        self._postprocessor_manager = PostprocessorManager(self.aggregator)
+        self.postprocessor_manager.function_parameters = self.parameters
+        self.postprocessor_manager.run()
+        send_not_busy_signal(self)
+        send_analysis_done_signal(self)
