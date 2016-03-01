@@ -12,7 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 __author__ = 'bungcip@gmail.com'
-__revision__ = '$Format:%H$'
+__revision__ = 'b9e2d7536ddcf682e32a156d6d8b0dbc0bb73cc4'
 __date__ = '4/12/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -301,10 +301,8 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
             feature_types.append('buildings')
         if self.building_points_flag.isChecked():
             feature_types.append('building-points')
-        if self.flood_prone_flag.isChecked():
-            feature_types.append('flood-prone')
-        if self.evacuation_centers_flag.isChecked():
-            feature_types.append('evacuation-centers')
+        if self.potential_idp_flag.isChecked():
+            feature_types.append('potential-idp')
         if self.boundary_flag.isChecked():
             level = self.admin_level_comboBox.currentIndex() + 1
             feature_types.append('boundary-%s' % level)

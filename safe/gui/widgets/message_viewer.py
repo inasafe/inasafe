@@ -10,7 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 """
 __author__ = 'tim@kartoza.com'
-__revision__ = '$Format:%H$'
+__revision__ = 'b9e2d7536ddcf682e32a156d6d8b0dbc0bb73cc4'
 __date__ = '27/05/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -198,7 +198,7 @@ class MessageViewer(QtWebKit.QWebView):
         :param message: A message to show in the viewer.
         :type message: Message
         """
-        # LOGGER.debug('Error message event')
+        LOGGER.debug('Error message event')
         self.dynamic_message_event(sender, message)
 
     def dynamic_message_event(self, sender, message):
@@ -212,7 +212,7 @@ class MessageViewer(QtWebKit.QWebView):
         :param message: A message to show in the viewer.
         :type message: Message
         """
-        # LOGGER.debug('Dynamic message event')
+        LOGGER.debug('Dynamic message event')
         _ = sender  # we arent using it
         self.dynamic_messages.append(message)
         self.dynamic_messages_log.append(message)

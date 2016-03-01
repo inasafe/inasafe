@@ -10,7 +10,7 @@ from safe_extras.parameters.boolean_parameter import BooleanParameter
 from safe_extras.parameters.group_parameter import GroupParameter
 
 __author__ = 'Marco Bernasocchi <marco@opengis.ch>'
-__revision__ = '$Format:%H$'
+__revision__ = 'b9e2d7536ddcf682e32a156d6d8b0dbc0bb73cc4'
 __date__ = '10/10/2012'
 __license__ = "GPL"
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '

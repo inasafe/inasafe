@@ -7,22 +7,22 @@
 
 """
 __author__ = 'tim@kartoza.com'
-__revision__ = '$Format:%H$'
+__revision__ = 'b9e2d7536ddcf682e32a156d6d8b0dbc0bb73cc4'
 __date__ = '29/01/2011'
 __license__ = "GPL"
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
+import json
 import os
 from os.path import expanduser
+from xml.etree import ElementTree
 from urlparse import urlparse
 import logging
 import sqlite3 as sqlite
 from sqlite3 import OperationalError
 from cPickle import loads, dumps, HIGHEST_PROTOCOL
 from ast import literal_eval
-from PyQt4.QtCore import QUrl, QDateTime
-from datetime import datetime
 
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
@@ -30,59 +30,29 @@ import qgis  # pylint: disable=unused-import
 from qgis.core import QgsDataSourceURI
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import QObject, QSettings
-
-import safe.definitions
+from safe.utilities.utilities import (
+    read_file_keywords,
+    write_keywords_to_file)
 from safe import messaging as m
 from safe.messaging import styles
 from safe.utilities.unicode import get_string
-from safe.utilities.utilities import read_file_keywords
-from safe.common.utilities import verify
 from safe.common.exceptions import (
     HashNotFoundError,
     KeywordNotFoundError,
     KeywordDbError,
     InvalidParameterError,
     NoKeywordsFoundError,
-    UnsupportedProviderError,
-    MetadataReadError
-)
-from safe.utilities.metadata import (
-    write_iso19115_metadata,
-    read_iso19115_metadata,
-    write_read_iso_19115_metadata
-)
+    UnsupportedProviderError)
+from safe.storage.metadata_utilities import (
+    generate_iso_metadata,
+    ISO_METADATA_KEYWORD_TAG)
+from safe.common.utilities import verify
+import safe.definitions
+from safe.definitions import (
+    inasafe_keyword_version, inasafe_keyword_version_key)
+
 
 LOGGER = logging.getLogger('InaSAFE')
-
-
-def definition(keyword):
-    """Given a keyword, try to get a definition dict for it.
-
-    .. versionadded:: 3.2
-
-    Definition dicts are defined in keywords.py. We try to return
-    one if present, otherwise we return none. Using this method you
-    can present rich metadata to the user e.g.
-
-    keyword = 'layer_purpose'
-    kio = safe.utilities.keyword_io.Keyword_IO()
-    definition = kio.definition(keyword)
-    print definition
-
-    :param keyword: A keyword key.
-    :type keyword: str
-
-    :returns: A dictionary containing the matched key definition
-        from definitions.py, otherwise None if no match was found.
-    :rtype: dict, None
-    """
-    for item in dir(safe.definitions):
-        if not item.startswith("__"):
-            var = getattr(safe.definitions, item)
-            if isinstance(var, dict):
-                if var.get('key') == keyword:
-                    return var
-    return None
 
 
 class KeywordIO(QObject):
@@ -146,13 +116,6 @@ class KeywordIO(QObject):
 
         """
         source = layer.source()
-
-        # Try to read from ISO metadata first.
-        try:
-            return read_iso19115_metadata(source, keyword)
-        except (MetadataReadError, NoKeywordsFoundError):
-            pass
-
         try:
             flag = self.are_keywords_file_based(layer)
         except UnsupportedProviderError:
@@ -160,20 +123,19 @@ class KeywordIO(QObject):
 
         try:
             if flag:
-                keywords = read_file_keywords(source)
+                keywords = read_file_keywords(source, keyword)
             else:
                 uri = self.normalize_uri(layer)
-                keywords = self.read_keyword_from_uri(uri)
-            return write_read_iso_19115_metadata(source, keywords, keyword)
-
+                keywords = self.read_keyword_from_uri(uri, keyword)
+            return keywords
         except (HashNotFoundError,
                 Exception,
                 OperationalError,
                 NoKeywordsFoundError,
                 KeywordNotFoundError,
                 InvalidParameterError,
-                UnsupportedProviderError):
-            raise
+                UnsupportedProviderError) as e:
+            raise e
 
     def write_keywords(self, layer, keywords):
         """Write keywords for a datasource.
@@ -192,28 +154,22 @@ class KeywordIO(QObject):
 
         :raises: UnsupportedProviderError
         """
+        try:
+            flag = self.are_keywords_file_based(layer)
+        except UnsupportedProviderError:
+            raise
+
         source = layer.source()
         try:
-            write_iso19115_metadata(source, keywords)
+            keywords[inasafe_keyword_version_key] = inasafe_keyword_version
+            if flag:
+                write_keywords_to_file(source, keywords)
+            else:
+                uri = self.normalize_uri(layer)
+                self.write_keywords_for_uri(uri, keywords)
             return
-        except Exception as e:
-            raise e
-        #
-        # try:
-        #     flag = self.are_keywords_file_based(layer)
-        # except UnsupportedProviderError:
-        #     raise
-
-        # try:
-        #     keywords[inasafe_keyword_version_key] = inasafe_keyword_version
-        #     if flag:
-        #         write_keywords_to_file(source, keywords)
-        #     else:
-        #         uri = self.normalize_uri(layer)
-        #         self.write_keywords_for_uri(uri, keywords)
-        #     return
-        # except:
-        #     raise
+        except:
+            raise
 
     def update_keywords(self, layer, keywords):
         """Update keywords for a datasource.
@@ -227,7 +183,12 @@ class KeywordIO(QObject):
         """
         try:
             existing_keywords = self.read_keywords(layer)
-        except (HashNotFoundError, OperationalError, InvalidParameterError):
+        except (
+            HashNotFoundError,
+            OperationalError,
+            InvalidParameterError,
+            KeywordNotFoundError):
+
             existing_keywords = {}
         existing_keywords.update(keywords)
         try:
@@ -260,7 +221,8 @@ class KeywordIO(QObject):
         :type source_layer: QgsMapLayer
 
         :param destination_file: The output filename that should be used
-            to store the keywords in. It's a path to a layer file.
+            to store the keywords in. It can be a .shp or a .keywords for
+            example since the suffix will always be replaced with .keywords.
         :type destination_file: str
 
         :param extra_keywords: A dict containing all the extra keywords
@@ -280,19 +242,54 @@ class KeywordIO(QObject):
         verify(isinstance(extra_keywords, dict), message)
         # compute the output keywords file name
         destination_base = os.path.splitext(destination_file)[0]
-        new_destination = destination_base + '.xml'
+        new_destination = destination_base + '.keywords'
         # write the extra keywords into the source dict
         try:
             for key in extra_keywords:
                 keywords[key] = extra_keywords[key]
-            write_iso19115_metadata(destination_file, keywords)
-            # write_keywords_to_file(new_destination, keywords)
+            write_keywords_to_file(new_destination, keywords)
         except Exception, e:
             message = self.tr(
                 'Failed to copy keywords file from : \n%s\nto\n%s: %s' % (
                     source_layer.source(), new_destination, str(e)))
             raise Exception(message)
         return
+
+    def clear_keywords(self, layer):
+        """Convenience method to clear a layer's keywords.
+
+        :param layer: A QGIS QgsMapLayer instance.
+        :type layer: QgsMapLayer
+        """
+
+        self.write_keywords(layer, dict())
+
+    def delete_keywords(self, layer, keyword):
+        """Delete the keyword for a given layer..
+
+        This is a wrapper method that will 'do the right thing' to fetch
+        keywords for the given datasource. In particular, if the datasource
+        is remote (e.g. a database connection) it will fetch the keywords from
+        the keywords store.
+
+        :param layer: A QGIS QgsMapLayer instance.
+        :type layer: QgsMapLayer
+
+        :param keyword: The specified keyword will be deleted
+              from the keywords dict.
+        :type keyword: str
+
+        :returns: True if the keyword was sucessfully delete. False otherwise.
+        :rtype: bool
+        """
+
+        try:
+            keywords = self.read_keywords(layer)
+            keywords.pop(keyword)
+            self.write_keywords(layer, keywords)
+            return True
+        except (HashNotFoundError, KeyError):
+            return False
 
 # methods below here should be considered private
 
@@ -455,6 +452,38 @@ class KeywordIO(QObject):
         hash_value = hash_value.hexdigest()
         return hash_value
 
+    def delete_keywords_for_uri(self, uri):
+        """Delete keywords for a URI in the keywords database.
+
+        A hash will be constructed from the supplied uri and a lookup made
+        in a local SQLITE database for the keywords. If there is an existing
+        record for the hash, the entire record will be erased.
+
+        .. seealso:: write_keywords_for_uri, read_keywords_for_uri
+
+        :param uri: A layer uri. e.g. ```dbname=\'osm\' host=localhost
+            port=5432 user=\'foo\'password=\'bar\' sslmode=disable key=\'id\'
+            srid=4326```
+
+        :type uri: str
+        """
+        hash_value = self.hash_for_datasource(uri)
+        try:
+            cursor = self.get_cursor()
+            # now see if we have any data for our hash
+            sql = 'delete from keyword where hash = \'' + hash_value + '\';'
+            cursor.execute(sql)
+            self.connection.commit()
+        except sqlite.Error, e:
+            LOGGER.debug("SQLITE Error %s:" % e.args[0])
+            self.connection.rollback()
+        except Exception, e:
+            LOGGER.debug("Error %s:" % e.args[0])
+            self.connection.rollback()
+            raise
+        finally:
+            self.close_connection()
+
     def normalize_uri(self, layer):
         """Normalize URI from layer source. URI can be in a form
         of QgsDataSourceURI which is related to RDBMS source or
@@ -525,7 +554,8 @@ class KeywordIO(QObject):
                 'select dict from keyword where hash = \'%s\';' % hash_value)
             cursor.execute(sql)
             data = cursor.fetchone()
-            pickle_dump = dumps(keywords, HIGHEST_PROTOCOL)
+            metadata_xml = generate_iso_metadata(keywords)
+            pickle_dump = dumps(metadata_xml, HIGHEST_PROTOCOL)
             if data is None:
                 # insert a new rec
                 # cursor.execute('insert into keyword(hash) values(:hash);',
@@ -550,7 +580,7 @@ class KeywordIO(QObject):
         finally:
             self.close_connection()
 
-        return keywords
+        return metadata_xml
 
     def read_keyword_from_uri(self, uri, keyword=None):
         """Get metadata from the keywords file associated with a URI.
@@ -601,22 +631,27 @@ class KeywordIO(QObject):
                 raise HashNotFoundError('No hash found for %s' % hash_value)
             data = data[0]  # first field
 
-            # get the keywords out of the DB
-            keywords = loads(str(data))
+            # get the ISO XML out of the DB
+            metadata = loads(str(data))
 
             # the uri already had a KW entry in the DB using the old KW system
             # we use that dictionary to update the entry to the new ISO based
             # metadata system
-            if isinstance(keywords, dict):
-                keywords = self.write_keywords_for_uri(uri, keywords)
+            if isinstance(metadata, dict):
+                metadata = self.write_keywords_for_uri(uri, metadata)
+
+            root = ElementTree.fromstring(metadata)
+            keyword_element = root.find(ISO_METADATA_KEYWORD_TAG)
+            dict_str = keyword_element.text
+            picked_dict = json.loads(dict_str)
 
             if keyword is None:
-                return keywords
-            if keyword in keywords:
-                return keywords[keyword]
+                return picked_dict
+            if keyword in picked_dict:
+                return picked_dict[keyword]
             else:
                 raise KeywordNotFoundError('Keyword "%s" not found in %s' % (
-                    keyword, keywords))
+                    keyword, picked_dict))
 
         except sqlite.Error, e:
             LOGGER.debug("Error %s:" % e.args[0])
@@ -650,6 +685,36 @@ class KeywordIO(QObject):
             statistics_classes = {}
 
         return statistics_type, statistics_classes
+
+    @staticmethod
+    def definition(keyword):
+        """Given a keyword, try to get a definition dict for it.
+
+        .. versionadded:: 3.2
+
+        Definition dicts are defined in keywords.py. We try to return
+        one if present, otherwise we return none. Using this method you
+        can present rich metadata to the user e.g.
+
+        keyword = 'layer_purpose'
+        kio = safe.utilities.keyword_io.Keyword_IO()
+        definition = kio.definition(keyword)
+        print definition
+
+        :param keyword: A keyword key.
+        :type keyword: str
+
+        :returns: A dictionary containing the matched key definition
+            from definitions.py, otherwise None if no match was found.
+        :rtype: dict, None
+        """
+        for item in dir(safe.definitions):
+            if not item.startswith("__"):
+                var = getattr(safe.definitions, item)
+                if isinstance(var, dict):
+                    if var.get('key') == keyword:
+                        return var
+        return None
 
     def to_message(self, keywords=None, show_header=True):
         """Format keywords as a message object.
@@ -769,23 +834,13 @@ class KeywordIO(QObject):
         # Translate titles explicitly if possible
         if keyword == 'title':
             value = self.tr(value)
-        # # See #2569
-        if keyword == 'url':
-            if isinstance(value, QUrl):
-                value = value.toString()
-        if keyword == 'date':
-            if isinstance(value, QDateTime):
-                value = value.toString('d MMM yyyy')
-            elif isinstance(value, datetime):
-                value = value.strftime('%d %b %Y')
         # we want to show the user the concept name rather than its key
         # if possible. TS
-        keyword_definition = definition(keyword)
-        if keyword_definition is None:
-            keyword_definition = self.tr(keyword.capitalize().replace(
-                '_', ' '))
+        definition = self.definition(keyword)
+        if definition is None:
+            definition = self.tr(keyword.capitalize().replace('_', ' '))
         else:
-            keyword_definition = keyword_definition['name']
+            definition = definition['name']
 
         # We deal with some special cases first:
 
@@ -793,21 +848,20 @@ class KeywordIO(QObject):
         if keyword == 'value_map':
             value = self._dict_to_row(value)
         # In these KEYWORD cases we show the DESCRIPTION for
-        # the VALUE keyword_definition
+        # the VALUE definition
         elif keyword in [
                 'vector_hazard_classification',
                 'raster_hazard_classification']:
-            # get the keyword_definition for this class from definitions.py
-            value = definition(value)
+            # get the definition for this class from definitions.py
+            value = self.definition(value)
             value = value['description']
         # In these VALUE cases we show the DESCRIPTION for
-        # the VALUE keyword_definition
+        # the VALUE definition
         elif value in []:
-            # get the keyword_definition for this class from definitions.py
-            value = definition(value)
+            # get the definition for this class from definitions.py
+            value = self.definition(value)
             value = value['description']
-        # In these VALUE cases we show the NAME for the VALUE
-        # keyword_definition
+        # In these VALUE cases we show the NAME for the VALUE definition
         elif value in [
                 'multiple_event',
                 'single_event',
@@ -816,14 +870,14 @@ class KeywordIO(QObject):
                 'polygon'
                 'field']:
             # get the name for this class from definitions.py
-            value = definition(value)
+            value = self.definition(value)
             value = value['name']
         # otherwise just treat the keyword as literal text
         else:
             # Otherwise just directly read the value
             value = get_string(value)
 
-        key = m.ImportantText(keyword_definition)
+        key = m.ImportantText(definition)
         row.add(m.Cell(key))
         row.add(m.Cell(value, wrap_slash=wrap_slash))
         return row
@@ -855,7 +909,7 @@ class KeywordIO(QObject):
         :returns: A table to be added into a cell in the keywords table.
         :rtype: safe.messaging.items.table
         """
-        # LOGGER.info('Converting to dict: %s' % keyword_value)
+        LOGGER.info('Converting to dict: %s' % keyword_value)
         if isinstance(keyword_value, basestring):
             keyword_value = literal_eval(keyword_value)
         table = m.Table(style_class='table table-condensed')

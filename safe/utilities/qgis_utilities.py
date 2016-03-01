@@ -4,7 +4,7 @@ QGIS utilities for InaSAFE
 """
 
 __author__ = 'etienne'
-__revision__ = '$Format:%H$'
+__revision__ = 'b9e2d7536ddcf682e32a156d6d8b0dbc0bb73cc4'
 __date__ = '17/02/2015'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'

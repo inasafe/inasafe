@@ -13,7 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 __author__ = 'qgis@borysjurgiel.pl'
-__revision__ = '$Format:%H$'
+__revision__ = 'b9e2d7536ddcf682e32a156d6d8b0dbc0bb73cc4'
 __date__ = '21/02/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -74,17 +74,14 @@ from safe.definitions import (
     layer_mode_continuous,
     layer_mode_classified)
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
-from safe.utilities.keyword_io import KeywordIO, definition
+from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.analysis_handler import AnalysisHandler
 from safe.utilities.gis import (
     is_raster_layer,
     is_point_layer,
     is_polygon_layer,
     layer_attribute_names)
-from safe.utilities.utilities import (
-    get_error_message,
-    is_keyword_version_supported
-)
+from safe.utilities.utilities import get_error_message, compare_version
 from safe.defaults import get_defaults
 from safe.common.exceptions import (
     HashNotFoundError,
@@ -645,7 +642,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         item = self.lstCategories.currentItem()
         try:
-            return definition(item.data(QtCore.Qt.UserRole))
+            return KeywordIO().definition(item.data(QtCore.Qt.UserRole))
         except (AttributeError, NameError):
             return None
 
@@ -669,7 +666,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             categories += ['aggregation']
         for category in categories:
             if not isinstance(category, dict):
-                category = definition(category)
+                category = KeywordIO().definition(category)
             item = QListWidgetItem(category['name'], self.lstCategories)
             item.setData(QtCore.Qt.UserRole, category['key'])
             self.lstCategories.addItem(item)
@@ -738,7 +735,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         item = self.lstSubcategories.currentItem()
         try:
-            return definition(item.data(QtCore.Qt.UserRole))
+            return KeywordIO().definition(item.data(QtCore.Qt.UserRole))
         except (AttributeError, NameError):
             return None
 
@@ -818,7 +815,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         item = self.lstHazardCategories.currentItem()
         try:
-            return definition(item.data(QtCore.Qt.UserRole))
+            return KeywordIO().definition(item.data(QtCore.Qt.UserRole))
         except (AttributeError, NameError):
             return None
 
@@ -837,7 +834,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         hazard_categories = self.hazard_categories_for_layer()
         for hazard_category in hazard_categories:
             if not isinstance(hazard_category, dict):
-                hazard_category = definition(hazard_category)
+                hazard_category = KeywordIO().definition(hazard_category)
             item = QListWidgetItem(hazard_category['name'],
                                    self.lstHazardCategories)
             item.setData(QtCore.Qt.UserRole, hazard_category['key'])
@@ -889,7 +886,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         item = self.lstLayerModes.currentItem()
         try:
-            return definition(item.data(QtCore.Qt.UserRole))
+            return KeywordIO().definition(item.data(QtCore.Qt.UserRole))
         except (AttributeError, NameError):
             return None
 
@@ -963,7 +960,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         item = self.lstUnits.currentItem()
         try:
-            return definition(item.data(QtCore.Qt.UserRole))
+            return KeywordIO().definition(item.data(QtCore.Qt.UserRole))
         except (AttributeError, NameError):
             return None
 
@@ -1047,7 +1044,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         item = self.lstClassifications.currentItem()
         try:
-            return definition(item.data(QtCore.Qt.UserRole))
+            return KeywordIO().definition(item.data(QtCore.Qt.UserRole))
         except (AttributeError, NameError):
             return None
 
@@ -1064,7 +1061,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         classifications = self.classifications_for_layer()
         for classification in classifications:
             if not isinstance(classification, dict):
-                classification = definition(classification)
+                classification = KeywordIO.definition(classification)
             item = QListWidgetItem(classification['name'],
                                    self.lstClassifications)
             item.setData(QtCore.Qt.UserRole, classification['key'])
@@ -1260,7 +1257,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             for tree_leaf in tree_branch.takeChildren():
                 value_list += [tree_leaf.data(0, QtCore.Qt.UserRole)]
             if value_list:
-                value_map[tree_branch.data(0, QtCore.Qt.UserRole)] = value_list
+                value_map[tree_branch.text(0)] = value_list
         return value_map
 
     def set_widgets_step_kw_classify(self):
@@ -1291,11 +1288,11 @@ class WizardDialog(QDialog, FORM_CLASS):
                 classification['name'], field.upper()))
             unique_values = self.layer.uniqueValues(field_index)
 
-        # Assign unique values to classes (according to default)
+        # Assign unique values to classes (according to defauls)
         unassigned_values = list()
         assigned_values = dict()
         for default_class in default_classes:
-            assigned_values[default_class['key']] = list()
+            assigned_values[default_class['name']] = list()
         for unique_value in unique_values:
             if unique_value is None or isinstance(
                     unique_value, QPyNullVariant):
@@ -1313,7 +1310,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                         default_class['numeric_default_min'] <= unique_value <=
                         default_class['numeric_default_max']))
                 if condition_1 or condition_2:
-                    assigned_values[default_class['key']] += [unique_value]
+                    assigned_values[default_class['name']] += [unique_value]
                     assigned = True
             if not assigned:
                 # add to unassigned values list otherwise
@@ -1338,7 +1335,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         unassigned_values = list()
         assigned_values = dict()
         for default_class in default_classes:
-            assigned_values[default_class['key']] = list()
+            assigned_values[default_class['name']] = list()
         if isinstance(value_map, str):
             try:
                 value_map = json.loads(value_map)
@@ -1403,11 +1400,10 @@ class WizardDialog(QDialog, FORM_CLASS):
             tree_branch.setExpanded(True)
             tree_branch.setFont(0, bold_font)
             tree_branch.setText(0, default_class['name'])
-            tree_branch.setData(0, QtCore.Qt.UserRole, default_class['key'])
             if 'description' in default_class:
                 tree_branch.setToolTip(0, default_class['description'])
             # Assign known values
-            for value in assigned_values[default_class['key']]:
+            for value in assigned_values[default_class['name']]:
                 string_value = value is not None and unicode(value) or 'NULL'
                 tree_leaf = QtGui.QTreeWidgetItem(tree_branch)
                 tree_leaf.setFlags(QtCore.Qt.ItemIsEnabled |
@@ -1872,17 +1868,12 @@ class WizardDialog(QDialog, FORM_CLASS):
             self.ckbSource_date.setChecked(True)
             self.dtSource_date.setDateTime(
                 QDateTime.fromString(get_unicode(source_date),
-                                     'yyyy-MM-dd HH:mm:ss'))
+                                     'dd-MM-yyyy HH:mm'))
         else:
             self.ckbSource_date.setChecked(False)
             self.dtSource_date.clear()
 
         source_url = self.get_existing_keyword('url')
-        try:
-            source_url = source_url.toString()
-        except AttributeError:
-            pass
-
         if source_url or source_url == 0:
             self.leSource_url.setText(get_unicode(source_url))
         else:
@@ -2436,7 +2427,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         if not keywords or 'keyword_version' not in keywords:
             return True
         keyword_version = str(keywords['keyword_version'])
-        if not is_keyword_version_supported(keyword_version):
+        if compare_version(keyword_version, get_version()) != 0:
             return True
 
         # Compare layer keywords with explicitly set constraints
@@ -2652,8 +2643,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         # Check if the layer is keywordless
         if keywords and 'keyword_version' in keywords:
             kw_ver = str(keywords['keyword_version'])
-            self.is_selected_layer_keywordless = (
-                not is_keyword_version_supported(kw_ver))
+            self.is_selected_layer_keywordless = bool(
+                compare_version(kw_ver, get_version()) != 0)
         else:
             self.is_selected_layer_keywordless = True
 
@@ -2802,9 +2793,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         else:
             keyword_version = None
 
-        if (keywords and
-                keyword_version and
-                    is_keyword_version_supported(keyword_version)):
+        if (keywords and keyword_version and
+                compare_version(keyword_version, get_version()) == 0):
             # The layer has valid keywords
             purpose = keywords.get('layer_purpose')
             if purpose == layer_purpose_hazard['key']:
@@ -3125,8 +3115,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         # Check if the layer is keywordless
         if keywords and 'keyword_version' in keywords:
             kw_ver = str(keywords['keyword_version'])
-            self.is_selected_layer_keywordless = (
-                not is_keyword_version_supported(kw_ver))
+            self.is_selected_layer_keywordless = bool(
+                compare_version(kw_ver, get_version()) != 0)
         else:
             self.is_selected_layer_keywordless = True
 
@@ -4440,7 +4430,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         :type keyword: str
 
         :returns: The value of the keyword.
-        :rtype: str, QUrl
+        :rtype: str
         """
         if self.existing_keywords is None:
             return None
@@ -4499,7 +4489,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         if self.leSource_scale.text():
             keywords['scale'] = get_unicode(self.leSource_scale.text())
         if self.ckbSource_date.isChecked():
-            keywords['date'] = self.dtSource_date.dateTime()
+            keywords['date'] = get_unicode(
+                self.dtSource_date.dateTime().toString('dd-MM-yyyy HH:mm'))
         if self.leSource_license.text():
             keywords['license'] = get_unicode(self.leSource_license.text())
         if self.leTitle.text():

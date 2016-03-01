@@ -12,7 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'qgis@borysjurgiel.pl'
-__revision__ = '$Format:%H$'
+__revision__ = 'b9e2d7536ddcf682e32a156d6d8b0dbc0bb73cc4'
 __date__ = '21/02/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -35,10 +35,7 @@ from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.utilities import (
     get_error_message,
     impact_attribution)
-from safe.utilities.gis import (
-    extent_string_to_array,
-    read_impact_layer,
-    viewport_geo_array)
+from safe.utilities.gis import extent_string_to_array, read_impact_layer
 from safe.utilities.resources import (
     resources_path,
     resource_url)
@@ -51,8 +48,6 @@ from safe.utilities.styling import (
 from safe.common.utilities import temp_dir
 from safe.common.exceptions import ReadLayerError
 from safe.common.signals import (
-    send_static_message,
-    send_error_message,
     DYNAMIC_MESSAGE_SIGNAL,
     STATIC_MESSAGE_SIGNAL,
     ERROR_MESSAGE_SIGNAL,
@@ -175,6 +170,23 @@ class AnalysisHandler(QObject):
             self.show_dynamic_message,
             signal=DYNAMIC_MESSAGE_SIGNAL)
 
+    def show_static_message(self, message):
+        """Send a static message to the message viewer.
+
+        Static messages cause any previous content in the MessageViewer to be
+        replaced with new content.
+
+        .. note:: Copied from the dock
+
+        :param message: An instance of our rich message class.
+        :type message: Message
+
+        """
+        dispatcher.send(
+            signal=STATIC_MESSAGE_SIGNAL,
+            sender=self,
+            message=message)
+
     def show_dynamic_message(self, sender, message):
         """Send a dynamic message to the message viewer.
 
@@ -195,6 +207,23 @@ class AnalysisHandler(QObject):
         self.parent.pbProgress.setValue(self.parent.pbProgress.value() + 15)
         # noinspection PyUnresolvedReferences
         self.parent.wvResults.dynamic_message_event(sender, message)
+
+    def show_error_message(self, error_message):
+        """Send an error message to the message viewer.
+
+        Error messages cause any previous content in the MessageViewer to be
+        replaced with new content.
+
+        .. note:: Copied from the dock
+
+        :param error_message: An instance of our rich error message class.
+        :type error_message: ErrorMessage
+        """
+        dispatcher.send(
+            signal=ERROR_MESSAGE_SIGNAL,
+            sender=self,
+            message=error_message)
+        self.hide_busy()
 
     def read_settings(self):
         """Restore settings from QSettings.
@@ -294,7 +323,7 @@ class AnalysisHandler(QObject):
         self.hide_busy()
         LOGGER.exception(message)
         message = get_error_message(exception, context=message)
-        send_error_message(self, message)
+        self.show_error_message(message)
         self.analysisDone.emit(False)
 
     def setup_and_run_analysis(self):
@@ -308,9 +337,8 @@ class AnalysisHandler(QObject):
         except InsufficientOverlapError as e:
             raise e
 
-        clip_parameters = self.analysis.impact_function.clip_parameters
         self.extent.show_last_analysis_extent(
-            clip_parameters['adjusted_geo_extent'])
+            self.analysis.clip_parameters[1])
 
         # Start the analysis
         self.analysis.run_analysis()
@@ -324,6 +352,21 @@ class AnalysisHandler(QObject):
         .. note:: Copied or adapted from the dock
         """
         self.analysis = Analysis()
+        # Layers
+        self.analysis.hazard_layer = self.parent.hazard_layer
+        self.analysis.exposure_layer = self.parent.exposure_layer
+        self.analysis.aggregation_layer = self.parent.aggregation_layer
+        # TODO test if the implement aggregation layer works!
+
+        # noinspection PyTypeChecker
+        self.analysis.hazard_keyword = self.keyword_io.read_keywords(
+            self.parent.hazard_layer)
+        self.analysis.exposure_keyword = self.keyword_io.read_keywords(
+            self.parent.exposure_layer)
+        # Need to check since aggregation layer is not mandatory
+        if self.analysis.aggregation_layer:
+            self.analysis.aggregation_keyword = self.keyword_io.read_keywords(
+                self.parent.aggregation_layer)
 
         # Impact Function
         impact_function = self.impact_function_manager.get(
@@ -331,17 +374,11 @@ class AnalysisHandler(QObject):
         impact_function.parameters = self.parent.if_params
         self.analysis.impact_function = impact_function
 
-        # Layers
-        self.analysis.hazard = self.parent.hazard_layer
-        self.analysis.exposure = self.parent.exposure_layer
-        self.analysis.aggregation = self.parent.aggregation_layer
-        # TODO test if the implement aggregation layer works!
-
         # Variables
         self.analysis.clip_hard = self.clip_hard
         self.analysis.show_intermediate_layers = self.show_intermediate_layers
-        viewport = viewport_geo_array(self.iface.mapCanvas())
-        self.analysis.viewport_extent = viewport
+        self.analysis.run_in_thread_flag = self.run_in_thread_flag
+        self.analysis.map_canvas = self.iface.mapCanvas()
 
         # Extent
         self.analysis.user_extent = self.extent.user_extent
@@ -379,7 +416,7 @@ class AnalysisHandler(QObject):
             #                      **INFO_STYLE))
             # message.add(m.Link('file://%s' % self.parent.wvResults.log_path))
             # noinspection PyTypeChecker
-            send_static_message(self, message)
+            self.show_static_message(message)
             self.parent.wvResults.impact_path = impact_path
 
         self.parent.pbProgress.hide()
@@ -618,8 +655,8 @@ class AnalysisHandler(QObject):
             default_file_name = map_title + '.pdf'
             default_file_name = default_file_name.replace(' ', '_')
         else:
-            send_error_message(
-                self, self.tr('Keyword "map_title" not found.'))
+            self.show_error_message(
+                self.tr('Keyword "map_title" not found.'))
             return
 
         # Get output path
@@ -668,9 +705,9 @@ class AnalysisHandler(QObject):
             # noinspection PyTypeChecker
             self.show_dynamic_message(self, status)
         except TemplateLoadingError, e:
-            send_error_message(self, get_error_message(e))
+            self.show_error_message(get_error_message(e))
         except Exception, e:  # pylint: disable=broad-except
-            send_error_message(self, get_error_message(e))
+            self.show_error_message(get_error_message(e))
 
     def open_map_in_composer(self, impact_report):
         """Open map in composer given MapReport instance.

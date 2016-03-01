@@ -62,17 +62,18 @@ class VolcanoPointBuildingFunctionMetadata(ImpactFunctionMetadata):
                 'To assess the impacts of volcano points on buildings.'),
             'detailed_description': '',
             'hazard_input': tr(
-                'The hazard layer must be a point layer. This point will be '
-                'buffered with the radii (in kilometer) specified in the '
-                'parameters as the hazard zone. If you want to see the name '
-                'of the volcano in the result, you need to specify the '
-                'volcano name attribute in the Impact Function option.'),
+                'The hazard layer must be a point layer. '
+                'This point will be buffered with the radii specified in '
+                'the parameters as the hazard zone. If you want to see '
+                'the name of the volcano in the result, you need to '
+                'specify the volcano name attribute in the Impact Function '
+                'option.'),
             'exposure_input': tr(
-                'Vector polygon layer extracted from OSM where each polygon '
-                'represents the footprint of a building.'),
+                'Vector polygon layer extracted from OSM where each '
+                'polygon represents the footprint of a building.'),
             'output': tr(
-                'Vector layer contains Map of building exposed to volcanic '
-                'hazard zones for each radius.'),
+                'Vector layer contains Map of building exposed to '
+                'volcanic hazard zones for each  radius.'),
             'actions': tr(
                 'Provide details about how many building would likely be '
                 'affected by each hazard zones.'),

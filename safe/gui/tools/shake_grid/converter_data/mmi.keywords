@@ -3,4 +3,3 @@ hazard: earthquake
 hazard_category: single_event
 layer_mode: continuous
 continuous_hazard_unit: mmi
-keyword_version: 3.2

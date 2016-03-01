@@ -12,7 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'marco@opengis.ch'
-__revision__ = '$Format:%H$'
+__revision__ = 'b9e2d7536ddcf682e32a156d6d8b0dbc0bb73cc4'
 __date__ = '27/05/2015'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -21,7 +21,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from datetime import datetime, date
 from types import NoneType
 
-from PyQt4.QtCore import QDate, Qt, QDateTime
+from PyQt4.QtCore import QDate, Qt
 
 from safe.common.exceptions import MetadataCastError
 from safe.metadata.property import BaseProperty
@@ -32,7 +32,7 @@ class DateProperty(BaseProperty):
     A property that accepts date input
     """
     # if you edit this you need to adapt accordingly xml_value and is_valid
-    _allowed_python_types = [QDate, datetime, date, NoneType, QDateTime]
+    _allowed_python_types = [QDate, datetime, date, NoneType]
 
     def __init__(self, name, value, xml_path):
         super(DateProperty, self).__init__(
@@ -46,17 +46,12 @@ class DateProperty(BaseProperty):
     def cast_from_str(self, value):
         try:
             return datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
-        except ValueError:
-            try:
-                return datetime.strptime(value, "%Y-%m-%dT%H:%M:%S")
-            except ValueError as e:
-                raise MetadataCastError(e)
+        except ValueError as e:
+            raise MetadataCastError(e)
 
     @property
     def xml_value(self):
         if self.python_type is QDate:
-            return self.value.toString(Qt.ISODate)
-        elif self.python_type is QDateTime:
             return self.value.toString(Qt.ISODate)
         elif self.python_type is date:
             return self.value.isoformat()

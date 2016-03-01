@@ -12,7 +12,7 @@ OGR C++ reference: http://www.gdal.org/ogr
 """
 
 __author__ = 'Ole Nielsen <ole.moller.nielsen@gmail.com>'
-__revision__ = '$Format:%H$'
+__revision__ = 'b9e2d7536ddcf682e32a156d6d8b0dbc0bb73cc4'
 __date__ = '01/11/2010'
 __license__ = "GPL"
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
@@ -31,14 +31,9 @@ except ImportError:
 
 import copy as copy_module
 from osgeo import ogr, gdal
-from safe.common.exceptions import (
-    ReadLayerError,
-    WriteLayerError,
-    GetDataError,
-    InaSAFEError,
-    NoKeywordsFoundError,
-    MetadataReadError
-)
+from safe.common.exceptions import ReadLayerError, WriteLayerError
+from safe.common.exceptions import GetDataError, InaSAFEError
+
 from layer import Layer
 from projection import Projection
 from geometry import Polygon
@@ -58,11 +53,7 @@ from utilities import safe_to_qgis_layer
 from safe.common.utilities import unique_filename
 from safe.utilities.unicode import get_string
 from safe.utilities.i18n import tr
-from safe.utilities.metadata import (
-    write_iso19115_metadata,
-    read_iso19115_metadata,
-    write_read_iso_19115_metadata
-)
+
 
 LOGGER = logging.getLogger('InaSAFE')
 _pseudo_inf = float(99999999)
@@ -431,11 +422,7 @@ class Vector(Layer):
         base_name = os.path.splitext(filename)[0]
 
         # Look for any keywords
-        try:
-            self.keywords = read_iso19115_metadata(filename)
-        except (NoKeywordsFoundError, MetadataReadError):
-            keywords = read_keywords(base_name + '.keywords')
-            self.keywords = write_read_iso_19115_metadata(filename, keywords)
+        self.keywords = read_keywords(base_name + '.keywords')
 
         # FIXME (Ole): Should also look for style file to populate style_info
 
@@ -555,7 +542,7 @@ class Vector(Layer):
                 # for more information
                 if fields[name] == _pseudo_inf:
                     fields[name] = float('nan')
-                    # print 'Field', name, feature_type, j, fields[name]
+                # print 'Field', name, feature_type, j, fields[name]
 
             data.append(fields)
         # Store geometry coordinates as a compact numeric array
@@ -594,8 +581,7 @@ class Vector(Layer):
             raise IOError(msg)
 
         # Write keywords if any
-        # write_keywords(self.keywords, base_name + '.keywords')
-        write_iso19115_metadata(file_name, self.keywords)
+        write_keywords(self.keywords, base_name + '.keywords')
         self.read_from_file(file_name)
 
     def as_qgis_native(self):
@@ -826,9 +812,7 @@ class Vector(Layer):
             feature.Destroy()
 
         # Write keywords if any
-        # write_keywords(self.keywords, base_name + '.keywords')
-        write_iso19115_metadata(filename, self.keywords)
-        self.keywords = read_iso19115_metadata(filename)
+        write_keywords(self.keywords, base_name + '.keywords')
 
         # FIXME (Ole): Maybe store style_info
 

@@ -83,10 +83,6 @@ class FloodRasterBuildingFunction(
         self.validate()
         self.prepare()
 
-        self.provenance.append_step(
-            'Calculating Step',
-            'Impact function is calculating the impact.')
-
         threshold = self.parameters['threshold'].value  # Flood threshold [m]
 
         verify(isinstance(threshold, float),
@@ -197,27 +193,20 @@ class FloodRasterBuildingFunction(
             style_classes=style_classes,
             style_type='categorizedSymbol')
 
-        extra_keywords = {
-            'impact_summary': impact_summary,
-            'impact_table': impact_table,
-            'target_field': self.target_field,
-            'map_title': map_title,
-            'legend_title': legend_title,
-            'legend_units': legend_units,
-            'buildings_total': total_features,
-            'buildings_affected': self.total_affected_buildings
-        }
-
-        self.set_if_provenance()
-
-        impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
-
         vector_layer = Vector(
             data=features,
             projection=interpolated_layer.get_projection(),
             geometry=interpolated_layer.get_geometry(),
             name=tr('Estimated buildings affected'),
-            keywords=impact_layer_keywords,
+            keywords={
+                'impact_summary': impact_summary,
+                'impact_table': impact_table,
+                'target_field': self.target_field,
+                'map_title': map_title,
+                'legend_title': legend_title,
+                'legend_units': legend_units,
+                'buildings_total': total_features,
+                'buildings_affected': self.total_affected_buildings},
             style_info=style_info)
         # Create vector layer and return
         self._impact = vector_layer

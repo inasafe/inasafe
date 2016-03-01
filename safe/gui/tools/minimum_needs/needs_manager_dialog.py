@@ -10,7 +10,7 @@ Impact Layer Merge Dialog.
 """
 
 __author__ = 'Christian Christelis christian@kartoza.com'
-__revision__ = '$Format:%H$'
+__revision__ = 'b9e2d7536ddcf682e32a156d6d8b0dbc0bb73cc4'
 __date__ = '27/10/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')

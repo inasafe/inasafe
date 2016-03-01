@@ -12,14 +12,13 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'marco@opengis.ch'
-__revision__ = '$Format:%H$'
+__revision__ = 'b9e2d7536ddcf682e32a156d6d8b0dbc0bb73cc4'
 __date__ = '27/05/2015'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 
 from safe.metadata.provenance import ProvenanceStep
-from safe.metadata.provenance import IFProvenanceStep
 
 
 class Provenance(object):
@@ -112,57 +111,19 @@ class Provenance(object):
         """
         return self._steps[index]
 
-    def append_step(self, title, description, timestamp=None, data=None):
+    def append_step(self, title, description, timestamp=None):
         """
         Append a new provenance step.
 
         :param title: the title of the ProvenanceStep
         :type title: str
-
         :param description: the description of the ProvenanceStep
         :type description: str
-
         :param timestamp: the time of the ProvenanceStep
-        :type timestamp: datetime, None, str
-
-        :param data: The data of the ProvenanceStep
-        :type data: dict
-
-        :returns: the time of the ProvenanceStep
+        :type timestamp: datetime
+        :return: the time of the ProvenanceStep
         :rtype: datetime
         """
-        step = ProvenanceStep(title, description, timestamp, data)
+        step = ProvenanceStep(title, description, timestamp)
         self._steps.append(step)
         return step.time
-
-    def append_if_provenance_step(
-            self, title, description, timestamp=None, data=None):
-        """Append a new IF provenance step.
-
-        :param title: the title of the IF ProvenanceStep
-        :type title: str
-
-        :param description: the description of the IF ProvenanceStep
-        :type description: str
-
-        :param timestamp: the time of the IF ProvenanceStep
-        :type timestamp: datetime, None
-
-        :param data: The data of the IF ProvenanceStep
-        :type data: dict
-
-        :returns: the time of the IF ProvenanceStep
-        :rtype: datetime
-        """
-        step = IFProvenanceStep(title, description, timestamp, data)
-        self._steps.append(step)
-        return step.time
-
-    def append_provenance_step(self, provenance):
-        """Append provenance object
-
-        :param provenance: ProvenanceStep object
-        :type provenance: ProvenanceStep
-        """
-
-        self._steps.append(provenance)

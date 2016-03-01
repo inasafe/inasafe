@@ -12,7 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'marco@opengis.ch'
-__revision__ = '$Format:%H$'
+__revision__ = 'b9e2d7536ddcf682e32a156d6d8b0dbc0bb73cc4'
 __date__ = '27/05/2015'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -63,35 +63,7 @@ class HazardLayerMetadata(GenericLayerMetadata):
             'gmd:supplementalInformation/'
             'inasafe/'
             'raster_hazard_classification/'
-            'gco:CharacterString'),
-        'field': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            'field/'
-            'gco:CharacterString'),
-        'value_map': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            'value_map/'
-            'gco:Dictionary'),
-        'volcano_name_field': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            'volcano_name_field/'
-            'gco:CharacterString'),
-        'prob_fatality_mag': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            'prob_fatality_mag/'
-            'gco:Tuple'),
+            'gco:CharacterString')
     }
     _standard_properties = merge_dictionaries(
         GenericLayerMetadata._standard_properties, _standard_properties)

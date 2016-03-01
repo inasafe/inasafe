@@ -12,7 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'marco@opengis.ch'
-__revision__ = '$Format:%H$'
+__revision__ = 'b9e2d7536ddcf682e32a156d6d8b0dbc0bb73cc4'
 __date__ = '27/05/2015'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -42,49 +42,7 @@ class ExposureLayerMetadata(GenericLayerMetadata):
             'gmd:supplementalInformation/'
             'inasafe/'
             'exposure_unit/'
-            'gco:CharacterString'),
-        'structure_class_field': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            'structure_class_field/'
-            'gco:CharacterString'),
-        'road_class_field': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            'road_class_field/'
-            'gco:CharacterString'),
-        'field': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            'field/'
-            'gco:CharacterString'),
-        'area_population_field': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            'area_population_field/'
-            'gco:CharacterString'),
-        'area_name_field': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            'area_name_field/'
-            'gco:CharacterString'),
-        'allow_resampling': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            'allow_resampling/'
-            'gco:CharacterString'),
+            'gco:CharacterString')
     }
     _standard_properties = merge_dictionaries(
-            GenericLayerMetadata._standard_properties, _standard_properties)
+        GenericLayerMetadata._standard_properties, _standard_properties)

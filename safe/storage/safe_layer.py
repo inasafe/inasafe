@@ -12,16 +12,15 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'imajimatika@gmail.com'
-__revision__ = '$Format:%H$'
+__revision__ = 'b9e2d7536ddcf682e32a156d6d8b0dbc0bb73cc4'
 __filename = 'safe_layer'
 __date__ = '7/14/15'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from qgis.core import QgsVectorLayer, QgsRasterLayer, QgsMapLayer
+from qgis.core import QgsVectorLayer, QgsMapLayer
 from safe.storage.layer import Layer
 from safe.storage.vector import Vector
-from safe.storage.raster import Raster
 from safe.common.exceptions import KeywordNotFoundError, InvalidLayerError
 from safe.utilities.keyword_io import KeywordIO
 
@@ -94,8 +93,8 @@ class SafeLayer(object):
     def keywords(self, keywords):
         """Setter for keywords property.
 
-        :param keywords: Keywords as a dictionary.
-        :type keywords: dict
+        :param keywords: The actual layer.
+        :type keywords: QgsMapLayer, Layer
         """
         self._keywords = keywords
 
@@ -151,96 +150,5 @@ class SafeLayer(object):
             return self.layer.as_qgis_native()
         elif isinstance(self.layer, QgsVectorLayer):
             return self.layer
-        else:
-            return None
-
-    def qgis_raster_layer(self):
-        """Get QgsRasterLayer representation of self.layer.
-
-        .. versionadded:: 3.3
-
-        :returns: A QgsRasterLayer if it's raster.
-        :rtype: QgsRasterLayer, None
-        """
-        if isinstance(self.layer, Raster):
-            return self.layer.as_qgis_native()
-        elif isinstance(self.layer, QgsRasterLayer):
-            return self.layer
-        else:
-            return None
-
-    def qgis_layer(self):
-        """Get the qgis layer representation of self.layer.
-
-        .. versionadded:: 3.3
-
-        :returns: The QGIS layer.
-        :rtype: QgsMapLayer, None
-        """
-        if isinstance(self.layer, Layer):
-            return self.layer.as_qgis_native()
-        elif isinstance(self.layer, QgsMapLayer):
-            return self.layer
-        else:
-            return None
-
-    def crs(self):
-        """Get the coordinate reference system of self.layer.
-
-        .. versionadded:: 3.3
-
-        :return: The coordinate reference system.
-        :rtype: QgsCoordinateReferenceSystem
-        """
-        if isinstance(self.layer, Layer):
-            qgis_layer = self.layer.as_qgis_native()
-            return qgis_layer.crs()
-        elif isinstance(self.layer, QgsMapLayer):
-            return self.layer.crs()
-
-    def extent(self):
-        """Get the extent of self.layer.
-
-        .. versionadded:: 3.3
-
-        :return: The extent as a QgsRectangle.
-        :rtype: QgsRectangle
-        """
-        if isinstance(self.layer, Layer):
-            qgis_layer = self.layer.as_qgis_native()
-            return qgis_layer.extent()
-        elif isinstance(self.layer, QgsMapLayer):
-            return self.layer.extent()
-
-    def layer_type(self):
-        """Get the type (raster or vector) of self.layer
-
-        .. versionadded:: 3.3
-
-        :return: The type.
-        :rtype: QgsMapLayer::LayerType
-        """
-        if isinstance(self.layer, Layer):
-            qgis_layer = self.layer.as_qgis_native()
-            return qgis_layer.type()
-        elif isinstance(self.layer, QgsMapLayer):
-            return self.layer.type()
-        else:
-            return None
-
-    def geometry_type(self):
-        """Get the geometry type if it's a vector layer.
-        If it's a raster layer, it returns None.
-
-        .. versionadded:: 3.3
-
-        :return: The geometry type.
-        :rtype: QGis::GeometryType
-        """
-        if isinstance(self.layer, Vector):
-            qgis_layer = self.layer.as_qgis_native()
-            return qgis_layer.geometryType()
-        elif isinstance(self.layer, QgsVectorLayer):
-            return self.layer.geometryType()
         else:
             return None

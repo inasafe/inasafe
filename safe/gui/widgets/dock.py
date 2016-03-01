@@ -13,7 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 __author__ = 'tim@kartoza.com'
-__revision__ = '$Format:%H$'
+__revision__ = 'b9e2d7536ddcf682e32a156d6d8b0dbc0bb73cc4'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -43,12 +43,11 @@ from safe.utilities.utilities import (
     get_error_message,
     impact_attribution,
     add_ordered_combo_item,
-    is_keyword_version_supported)
+    compare_version)
 from safe.defaults import (
     disclaimer,
     default_north_arrow_path)
 from safe.utilities.gis import (
-    viewport_geo_array,
     extent_string_to_array,
     read_impact_layer,
     vector_geometry_string)
@@ -77,10 +76,7 @@ from safe.common.signals import (
     ERROR_MESSAGE_SIGNAL,
     BUSY_SIGNAL,
     NOT_BUSY_SIGNAL,
-    ANALYSIS_DONE_SIGNAL,
-    send_static_message,
-    send_error_message,
-    send_dynamic_message)
+    ANALYSIS_DONE_SIGNAL)
 from safe import messaging as m
 from safe.messaging import styles
 from safe.common.exceptions import (
@@ -268,6 +264,51 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # noinspection PyTypeChecker
         dialog = AboutDialog(self)
         dialog.show()
+
+    def show_static_message(self, message):
+        """Send a static message to the message viewer.
+
+        Static messages cause any previous content in the MessageViewer to be
+        replaced with new content.
+
+        :param message: An instance of our rich message class.
+        :type message: Message
+
+        """
+        dispatcher.send(
+            signal=STATIC_MESSAGE_SIGNAL,
+            sender=self,
+            message=message)
+
+    def show_dynamic_message(self, message):
+        """Send a dynamic message to the message viewer.
+
+        Dynamic messages are appended to any existing content in the
+        MessageViewer.
+
+        :param message: An instance of our rich message class.
+        :type message: Message
+
+        """
+        dispatcher.send(
+            signal=DYNAMIC_MESSAGE_SIGNAL,
+            sender=self,
+            message=message)
+
+    def show_error_message(self, error_message):
+        """Send an error message to the message viewer.
+
+        Error messages cause any previous content in the MessageViewer to be
+        replaced with new content.
+
+        :param error_message: An instance of our rich error message class.
+        :type error_message: ErrorMessage
+        """
+        dispatcher.send(
+            signal=ERROR_MESSAGE_SIGNAL,
+            sender=self,
+            message=error_message)
+        self.hide_busy()
 
     def _show_organisation_logo(self):
         """Show the organisation logo in the dock if possible."""
@@ -788,7 +829,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         button.setEnabled(flag)
         if message is not None:
-            send_static_message(self, message)
+            self.show_static_message(message)
 
     def set_function_options_status(self):
         """Helper function to toggle the tool function button based on context.
@@ -882,7 +923,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         # For issue #618
         if len(layers) == 0:
-            send_static_message(self, self.getting_started_message())
+            self.show_static_message(self.getting_started_message())
             return
 
         self.get_layers_lock = True
@@ -956,7 +997,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     layer, 'layer_purpose')
                 keyword_version = str(self.keyword_io.read_keywords(
                     layer, 'keyword_version'))
-                if not is_keyword_version_supported(keyword_version):
+                if compare_version(keyword_version, self.inasafe_version) != 0:
                     continue
             except:  # pylint: disable=W0702
                 # continue ignoring this layer
@@ -1138,9 +1179,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.show_next_analysis_extent()  # green
             self.extent.show_user_analysis_extent()  # blue
             try:
-                clip_parameters = self.analysis.impact_function.clip_parameters
                 self.extent.show_last_analysis_extent(
-                    clip_parameters['adjusted_geo_extent'])  # red
+                    self.analysis.clip_parameters[1])  # red
             except (AttributeError, TypeError):
                 pass
 
@@ -1158,9 +1198,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.show_next_analysis_extent()
             self.analysis = self.prepare_analysis()
             self.analysis.setup_analysis()
-            clip_parameters = self.analysis.impact_function.clip_parameters
             self.extent.show_last_analysis_extent(
-                clip_parameters['adjusted_geo_extent'])
+                self.analysis.clip_parameters[1])
             # Start the analysis
             self.analysis.run_analysis()
         except InsufficientOverlapError as e:
@@ -1246,12 +1285,29 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.hide_busy()
         LOGGER.exception(message)
         message = get_error_message(exception, context=message)
-        send_error_message(self, message)
+        self.show_error_message(message)
         self.analysis_done.emit(False)
 
     def prepare_analysis(self):
         """Create analysis as a representation of current situation of dock."""
         analysis = Analysis()
+        analysis.map_canvas = self.iface.mapCanvas()
+
+        # Layers
+        analysis.hazard_layer = self.get_hazard_layer()
+        analysis.exposure_layer = self.get_exposure_layer()
+        analysis.aggregation_layer = self.get_aggregation_layer()
+
+        # noinspection PyTypeChecker
+        analysis.hazard_keyword = self.keyword_io.read_keywords(
+            self.get_hazard_layer())
+        # noinspection PyTypeChecker
+        analysis.exposure_keyword = self.keyword_io.read_keywords(
+            self.get_exposure_layer())
+        # Need to check since aggregation layer is not mandatory
+        if analysis.aggregation_layer:
+            analysis.aggregation_keyword = self.keyword_io.read_keywords(
+                self.get_aggregation_layer())
 
         # Impact Functions
         if self.get_function_id() != '':
@@ -1260,18 +1316,13 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             impact_function.parameters = self.impact_function_parameters
             analysis.impact_function = impact_function
 
-        # Layers
-        analysis.hazard = self.get_hazard_layer()
-        analysis.exposure = self.get_exposure_layer()
-        analysis.aggregation = self.get_aggregation_layer()
-
-        # Variables
-        analysis.clip_hard = self.clip_hard
-        analysis.show_intermediate_layers = self.show_intermediate_layers
-        viewport = viewport_geo_array(self.iface.mapCanvas())
-        analysis.viewport_extent = viewport
-        analysis.user_extent = self.extent.user_extent
-        analysis.user_extent_crs = self.extent.user_extent_crs
+            # Variables
+            analysis.clip_hard = self.clip_hard
+            analysis.show_intermediate_layers = self.show_intermediate_layers
+            analysis.run_in_thread_flag = self.run_in_thread_flag
+            analysis.map_canvas = self.iface.mapCanvas()
+            analysis.user_extent = self.extent.user_extent
+            analysis.user_extent_crs = self.extent.user_extent_crs
 
         return analysis
 
@@ -1309,8 +1360,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # False flag prevents layer being added to legend
         registry.addMapLayer(new_layer, False)
         index = self.layer_legend_index(existing_layer)
-        # LOGGER.info('Inserting layer %s at position %s' % (
-        #     new_layer.source(), index))
+        LOGGER.info('Inserting layer %s at position %s' % (
+            new_layer.source(), index))
         root = QgsProject.instance().layerTreeRoot()
         root.insertLayer(index, new_layer)
 
@@ -1365,7 +1416,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             # On success, display generated report
             # impact_path = qgis_impact_layer.source()
             message = m.Message(report)
-            send_static_message(self, message)
+            self.show_static_message(message)
             # self.wvResults.impact_path = impact_path
 
         self.save_state()
@@ -1523,7 +1574,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             report.add(keywords['postprocessing_report'])
         report.add(impact_attribution(keywords))
         self.pbnPrint.setEnabled(True)
-        send_static_message(self, report)
+        # noinspection PyTypeChecker
+        self.show_static_message(report)
         # also hide the question and show the show question button
         self.pbnShowQuestion.setVisible(True)
         self.grpQuestion.setEnabled(True)
@@ -1545,7 +1597,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         LOGGER.debug('Showing Generic Keywords')
         self.pbnPrint.setEnabled(False)
         message = keywords.to_message()
-        send_static_message(self, message)
+        # noinspection PyTypeChecker
+        self.show_static_message(message)
 
     def show_no_keywords_message(self):
         """Show a message indicating that no keywords are defined.
@@ -1571,7 +1624,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 ' icon in the toolbar.'))
         report.add(context)
         self.pbnPrint.setEnabled(False)
-        send_static_message(self, report)
+        # noinspection PyTypeChecker
+        self.show_static_message(report)
 
     def show_keyword_version_message(
             self, keyword_version, inasafe_version):
@@ -1608,7 +1662,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 ' icon in the toolbar.'))
         report.add(context)
         self.pbnPrint.setEnabled(False)
-        send_static_message(self, report)
+        # noinspection PyTypeChecker
+        self.show_static_message(report)
 
     @pyqtSlot('QgsMapLayer')
     def layer_changed(self, layer):
@@ -1628,14 +1683,13 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         # Do nothing if there is no active layer - see #1861
         if not self._has_active_layer():
-            send_static_message(self, self.getting_started_message())
+            self.show_static_message(self.getting_started_message())
 
         # Now try to read the keywords and show them in the dock
         try:
             keywords = self.keyword_io.read_keywords(layer)
 
-            # if 'impact_summary' in keywords:
-            if keywords['layer_purpose'] == 'impact':
+            if 'impact_summary' in keywords:
                 self.show_impact_keywords(keywords)
                 self.wvResults.impact_path = layer.source()
             else:
@@ -1644,12 +1698,16 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                         'No Version', self.inasafe_version)
                 else:
                     keyword_version = str(keywords['keyword_version'])
-                    supported = is_keyword_version_supported(
-                            keyword_version)
-                    if supported:
+                    compare_result = compare_version(
+                        keyword_version, self.inasafe_version)
+                    if compare_result == 0:
                         self.show_generic_keywords(layer)
-                    else:
-                        # Layer version is not supported
+                    elif compare_result > 0:
+                        # Layer has older version
+                        self.show_keyword_version_message(
+                            keyword_version, self.inasafe_version)
+                    elif compare_result < 0:
+                        # Layer has newer version
                         self.show_keyword_version_message(
                             keyword_version, self.inasafe_version)
 
@@ -1660,20 +1718,20 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 InvalidParameterError,
                 NoKeywordsFoundError,
                 AttributeError), e:
-            # LOGGER.info(e.message)
+            LOGGER.info(e.message)
             # Added this check in 3.2 for #1861
             active_layer = self.iface.activeLayer()
             if active_layer is None:
-                send_static_message(self, self.getting_started_message())
+                self.show_static_message(self.getting_started_message())
             else:
                 self.show_no_keywords_message()
             # Append the error message.
             # error_message = get_error_message(e)
-            # send_error_message(self, error_message)
+            # self.show_error_message(error_message)
             return
         except Exception, e:  # pylint: disable=broad-except
             error_message = get_error_message(e)
-            send_error_message(self, error_message)
+            self.show_error_message(error_message)
             return
 
     def save_state(self):
@@ -1742,8 +1800,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # Open Impact Report Dialog
         print_dialog = ImpactReportDialog(self.iface)
         if not print_dialog.exec_() == QtGui.QDialog.Accepted:
-            send_dynamic_message(
-                self,
+            # noinspection PyTypeChecker
+            self.show_dynamic_message(
                 m.Message(
                     m.Heading(self.tr('Map Creator'), **WARNING_STYLE),
                     m.Text(self.tr('Report generation cancelled!'))))
@@ -1782,8 +1840,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         create_pdf_flag = print_dialog.create_pdf
 
         # Instantiate and prepare Report
-        send_dynamic_message(
-            self,
+        # noinspection PyTypeChecker
+        self.show_dynamic_message(
             m.Message(
                 m.Heading(self.tr('Map Creator'), **PROGRESS_UPDATE_STYLE),
                 m.Text(self.tr('Preparing map and report'))))
@@ -1850,8 +1908,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             default_file_name = map_title + '.pdf'
             default_file_name = default_file_name.replace(' ', '_')
         else:
-            send_error_message(
-                self,
+            self.show_error_message(
                 self.tr('Keyword "map_title" not found.'))
             return
 
@@ -1866,8 +1923,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         if output_path is None or output_path == '':
             # noinspection PyTypeChecker
-            send_dynamic_message(
-                self,
+            self.show_dynamic_message(
                 m.Message(
                     m.Heading(self.tr('Map Creator'), **WARNING_STYLE),
                     m.Text(self.tr('Printing cancelled!'))))
@@ -1898,11 +1954,12 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             QtGui.QDesktopServices.openUrl(
                 QtCore.QUrl.fromLocalFile(map_pdf_path))
 
-            send_dynamic_message(self, status)
+            # noinspection PyTypeChecker
+            self.show_dynamic_message(status)
         except TemplateLoadingError, e:
-            send_error_message(self, get_error_message(e))
+            self.show_error_message(get_error_message(e))
         except Exception, e:  # pylint: disable=broad-except
-            send_error_message(self, get_error_message(e))
+            self.show_error_message(get_error_message(e))
 
     def open_map_in_composer(self, impact_report):
         """Open map in composer given MapReport instance.
@@ -2062,7 +2119,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 layer_count = self._layer_count()
 
             if layer_count == 0:
-                send_static_message(self, self.getting_started_message())
+                self.show_static_message(self.getting_started_message())
             else:
                 show_warnings = settings.value(
                     'inasafe/show_extent_warnings',
@@ -2086,7 +2143,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 message.add(m.Heading(self.tr(
                     'Insufficient overlap'), **WARNING_STYLE))
                 message.add(self.no_overlap_message())
-                send_static_message(self, message)
+                self.show_static_message(message)
 
     def validate_extents(self):
         """Check if the current extents are valid.
@@ -2106,7 +2163,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         try:
             # Temporary only, for checking the user extent
             analysis = self.prepare_analysis()
-            clip_parameters = analysis.impact_function.clip_parameters
-            return True, clip_parameters['adjusted_geo_extent']
+            clip_parameters = analysis.get_clip_parameters()
+            return True, clip_parameters[1]
         except (AttributeError, InsufficientOverlapError):
             return False, None

@@ -12,7 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@kartoza.com'
-__revision__ = '$Format:%H$'
+__revision__ = 'b9e2d7536ddcf682e32a156d6d8b0dbc0bb73cc4'
 __date__ = '10/01/2011'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
@@ -24,12 +24,7 @@ import logging
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
 # Import the PyQt and QGIS libraries
-from qgis.core import (
-    QGis,
-    QgsRectangle,
-    QgsRasterLayer,
-    QgsMapLayerRegistry,
-    QgsProject)
+from qgis.core import QgsRectangle
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import (
     QLocale,
@@ -318,20 +313,19 @@ class Plugin(object):
         self.action_import_dialog.triggered.connect(self.show_osm_downloader)
         self.add_action(self.action_import_dialog)
 
-    def _create_add_osm_layer_action(self):
-        """Create action for import OSM Dialog."""
-        icon = resources_path('img', 'icons', 'add-osm-tiles-layer.svg')
-        self.action_add_osm_layer = QAction(
+    def _create_population_downloader_action(self):
+        """Create action for import population Dialog."""
+        icon = resources_path('img', 'icons', 'show-global-minimum-needs.svg')
+        self.action_import_dialog = QAction(
             QIcon(icon),
-            self.tr('Add OpenStreetMap Tile Layer'),
+            self.tr('Population Downloader'),
             self.iface.mainWindow())
-        self.action_add_osm_layer.setStatusTip(self.tr(
-            'Add OpenStreetMap Tile Layer'))
-        self.action_add_osm_layer.setWhatsThis(self.tr(
-            'Use this to add an OSM layer to your map. '
-            'It needs internet access to function.'))
-        self.action_add_osm_layer.triggered.connect(self.add_osm_layer)
-        self.add_action(self.action_add_osm_layer)
+        self.action_import_dialog.setStatusTip(self.tr(
+            'Population Downloader'))
+        self.action_import_dialog.setWhatsThis(self.tr(
+            'Population Downloader'))
+        self.action_import_dialog.triggered.connect(self.show_population_downloader)
+        self.add_action(self.action_import_dialog)
 
     def _create_impact_merge_action(self):
         """Create action for impact layer merge Dialog."""
@@ -444,7 +438,7 @@ class Plugin(object):
         self._create_analysis_wizard_action()
         self._add_spacer_to_menu()
         self._create_osm_downloader_action()
-        self._create_add_osm_layer_action()
+        self._create_population_downloader_action()
         self._create_shakemap_converter_action()
         self._create_minimum_needs_action()
         self._create_test_layers_action()
@@ -667,37 +661,12 @@ class Plugin(object):
         dialog = OsmDownloaderDialog(self.iface.mainWindow(), self.iface)
         dialog.show()  # non modal
 
-    def show_osm_downloader(self):
-        """Show the OSM buildings downloader dialog."""
-        from safe.gui.tools.osm_downloader_dialog import OsmDownloaderDialog
+    def show_population_downloader(self):
+        """Show the Population downloader dialog."""
+        from safe.gui.tools.population_downloader_dialog import PopulationDownloaderDialog
 
-        dialog = OsmDownloaderDialog(self.iface.mainWindow(), self.iface)
+        dialog = PopulationDownloaderDialog(self.iface.mainWindow(), self.iface)
         dialog.show()  # non modal
-
-    def add_osm_layer(self):
-        """Add OSM tile layer to the map.
-
-        This uses a gdal wrapper around the OSM tile service - see the
-        WorldOSM.gdal file for how it is constructed.
-        """
-        path = resources_path('osm', 'WorldOSM.gdal')
-        layer = QgsRasterLayer(path, self.tr('OpenStreetMap'))
-        registry = QgsMapLayerRegistry.instance()
-
-        # For older versions we just add directly to the top of legend
-        if QGis.QGIS_VERSION_INT < 20400:
-            # True flag adds layer directly to legend
-            registry.addMapLayer(layer, True)
-            return
-        # Otherwise try to add it as the last layer in the list
-        # False flag prevents layer being added to legend
-        registry.addMapLayer(layer, False)
-        root = QgsProject.instance().layerTreeRoot()
-        index = len(root.findLayers()) + 1
-        # LOGGER.info('Inserting layer %s at position %s' % (
-        #    layer.source(), index))
-        root.insertLayer(index, layer)
-        QgsMapLayerRegistry.instance().addMapLayer(layer)
 
     def show_batch_runner(self):
         """Show the batch runner dialog."""

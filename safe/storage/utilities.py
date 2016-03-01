@@ -18,6 +18,8 @@ from safe.common.exceptions import (
     BoundingBoxError, InaSAFEError, MetadataReadError)
 from safe.utilities.i18n import tr
 from safe.utilities.unicode import get_string, get_unicode
+from safe.storage.metadata_utilities import (
+    write_keyword_in_iso_metadata, read_iso_metadata)
 
 # Default attribute to assign to vector layers
 DEFAULT_ATTRIBUTE = 'inapolygon'
@@ -188,10 +190,12 @@ def write_keywords(keywords, filename, sublayer=None):
             handle.write(_keywords_to_string(keywords))
     else:
         # currently a simple layer so replace it with our content
-        keywords = _keywords_to_string(keywords, sublayer=sublayer)
-        handle.write(get_string(keywords))
+        keywords = get_string(_keywords_to_string(keywords, sublayer=sublayer))
+        handle.write(keywords)
 
     handle.close()
+
+    write_keyword_in_iso_metadata(filename)
 
 
 def read_keywords(keyword_filename, sublayer=None, all_blocks=False):
@@ -255,16 +259,31 @@ def read_keywords(keyword_filename, sublayer=None, all_blocks=False):
            (keyword_filename, basename, basename))
     verify(ext == '.keywords' or ext == '.xml', msg)
 
+    metadata = False
     # check .keywords file exist
     keywords_file = os.path.isfile(keyword_filename) \
         and ext == '.keywords'
 
-    if not keywords_file:
+    try:
+        # read the xml metadata first
+        metadata = read_iso_metadata(keyword_filename)
+    except (IOError, MetadataReadError):
+        # error reading xml metadata or file not exist
+        if keywords_file:
+            # if there is a keyword file generate an xml file also
+            write_keyword_in_iso_metadata(keyword_filename)
+            metadata = read_iso_metadata(keyword_filename)
+
+    # we have no valid xml metadata nor a keyword file
+    if not metadata and not keywords_file:
         return {}
 
-    # Read all entries
-    with open(keyword_filename, 'r') as fid:
-        lines = fid.readlines()
+    if metadata:
+        lines = metadata['keywords']
+    else:
+        # Read all entries
+        with open(keyword_filename, 'r') as fid:
+            lines = fid.readlines()
 
     blocks = {}
     keywords = {}
@@ -275,7 +294,6 @@ def read_keywords(keyword_filename, sublayer=None, all_blocks=False):
         # Remove trailing (but not preceeding!) whitespace
         # FIXME: Can be removed altogether
         text = line.rstrip()
-        text = get_unicode(text)
 
         # Ignore blank lines
         if text == '':
@@ -343,9 +361,6 @@ def read_keywords(keyword_filename, sublayer=None, all_blocks=False):
         if sublayer in blocks:
             return blocks[sublayer]
     else:
-        if 'keyword_version' in first_keywords.keys():
-            first_keywords['keyword_version'] = str(
-                first_keywords['keyword_version'])
         return first_keywords
 
 

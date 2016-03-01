@@ -3,7 +3,7 @@
 GDAL/OGR utility tools
 """
 __author__ = 'Yewondwossen Assefa <assefay@gmail.com>'
-__revision__ = '$Format:%H$'
+__revision__ = 'b9e2d7536ddcf682e32a156d6d8b0dbc0bb73cc4'
 __date__ = '14/03/2014'
 __license__ = "GPL"
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '

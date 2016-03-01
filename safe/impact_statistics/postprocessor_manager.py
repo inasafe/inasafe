@@ -12,7 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 from safe.utilities.i18n import tr
 
 __author__ = 'marco@opengis.ch'
-__revision__ = '$Format:%H$'
+__revision__ = 'b9e2d7536ddcf682e32a156d6d8b0dbc0bb73cc4'
 __date__ = '19/05/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -36,7 +36,6 @@ from safe.postprocessors.postprocessor_factory import (
     get_postprocessor_human_name)
 from safe import messaging as m
 from safe.messaging import styles
-from safe.definitions import multipart_polygon_key
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -580,7 +579,7 @@ class PostprocessorManager(QtCore.QObject):
 
         try:
             if (self.keyword_io.read_keywords(
-                    self.aggregator.layer, multipart_polygon_key)):
+                    self.aggregator.layer, 'had multipart polygon')):
                 self._consolidate_multipart_stats()
         except KeywordNotFoundError:
             pass

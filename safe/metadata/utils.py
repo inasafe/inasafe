@@ -14,7 +14,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'marco@opengis.ch'
-__revision__ = '$Format:%H$'
+__revision__ = 'b9e2d7536ddcf682e32a156d6d8b0dbc0bb73cc4'
 __date__ = '27/05/2015'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -26,26 +26,14 @@ from xml.etree import ElementTree
 from safe.metadata.property import (
     CharacterStringProperty,
     DateProperty,
-    UrlProperty,
-    DictionaryProperty,
-    IntegerProperty,
-    BooleanProperty,
-    FloatProperty,
-    ListProperty,
-    TupleProperty,
-)
+    UrlProperty)
+
 
 # XML to python types conversions
 TYPE_CONVERSIONS = {
     'gco:CharacterString': CharacterStringProperty,
     'gco:Date': DateProperty,
-    'gmd:URL': UrlProperty,
-    'gco:Dictionary': DictionaryProperty,
-    'gco:Integer': IntegerProperty,
-    'gco:Boolean': BooleanProperty,
-    'gco:Float': FloatProperty,
-    'gco:List': ListProperty,
-    'gco:Tuple': TupleProperty,
+    'gmd:URL': UrlProperty
 }
 
 # XML Namespaces

@@ -12,7 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'marco@opengis.ch'
-__revision__ = '$Format:%H$'
+__revision__ = 'b9e2d7536ddcf682e32a156d6d8b0dbc0bb73cc4'
 __date__ = '27/05/2015'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -29,69 +29,69 @@ class AggregationLayerMetadata(GenericLayerMetadata):
     """
 
     _standard_properties = {
-        'aggregation attribute': (
+        'aggregation_attribute': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
             'inasafe/'
             'aggregation_attribute/'
             'gco:CharacterString'),
-        'adult ratio attribute': (
+        'adult_ratio_attribute': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
             'inasafe/'
             'adult_ratio_attribute/'
             'gco:CharacterString'),
-        'adult ratio default': (
+        'adult_ratio_default': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
             'inasafe/'
             'adult_ratio_default/'
-            'gco:Float'),
-        'elderly ratio attribute': (
+            'gco:CharacterString'),
+        'elderly_ratio_attribute': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
             'inasafe/'
             'elderly_ratio_attribute/'
             'gco:CharacterString'),
-        'elderly ratio default': (
+        'elderly_ratio_default': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
             'inasafe/'
             'elderly_ratio_default/'
-            'gco:Float'),
-        'female ratio attribute': (
+            'gco:CharacterString'),
+        'female_ratio_attribute': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
             'inasafe/'
             'female_ratio_attribute/'
             'gco:CharacterString'),
-        'female ratio default': (
+        'female_ratio_default': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
             'inasafe/'
             'female_ratio_default/'
-            'gco:Float'),
-        'youth ratio attribute': (
+            'gco:CharacterString'),
+        'youth_ratio_attribute': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
             'inasafe/'
             'youth_ratio_attribute/'
             'gco:CharacterString'),
-        'youth ratio default': (
+        'youth_ratio_default': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
             'inasafe/'
             'youth_ratio_default/'
-            'gco:Float')
+            'gco:CharacterString')
     }
     _standard_properties = merge_dictionaries(
         GenericLayerMetadata._standard_properties, _standard_properties)

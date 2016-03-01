@@ -13,7 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@kartoza.com'
-__revision__ = '$Format:%H$'
+__revision__ = 'b9e2d7536ddcf682e32a156d6d8b0dbc0bb73cc4'
 __date__ = '29/01/2011'
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
@@ -481,17 +481,6 @@ def set_raster_style(raster_layer, style):
             # noinspection PyPep8Naming
             pixel.percentTransparent = transparency_percent
             transparency_list.append(pixel)
-
-    # Always set transparent for value = 0. See #2529
-    zero_pixel = QgsRasterTransparency.TransparentSingleValuePixel()
-    zero_pixel.min = 0
-    zero_pixel.max = 0
-    zero_pixel.percentTransparent = 100
-    transparency_list.append(zero_pixel)
-
-    LOGGER.debug('Transparency list: (min, max, percentTransparent')
-    for t in transparency_list:
-        LOGGER.debug('%s %s %s' % (t.min, t.max, t.percentTransparent))
 
     band = 1  # gdal counts bands from base 1
     LOGGER.debug('Setting colour ramp list')

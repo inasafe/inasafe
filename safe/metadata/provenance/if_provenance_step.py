@@ -12,7 +12,7 @@ Contact: ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'marco@opengis.ch'
-__revision__ = '$Format:%H$'
+__revision__ = 'b9e2d7536ddcf682e32a156d6d8b0dbc0bb73cc4'
 __date__ = '27/05/2015'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -54,7 +54,7 @@ class IFProvenanceStep(ProvenanceStep):
         'parameter'
     ]
 
-    def __init__(self, title, description, timestamp=None, data=None):
+    def __init__(self, title, description, data, timestamp=None):
         for key in self.impact_functions_fields:
             # check we have all the wanted keys
             if key not in data:
@@ -63,7 +63,7 @@ class IFProvenanceStep(ProvenanceStep):
                 raise InvalidProvenanceDataError(message)
 
         super(IFProvenanceStep, self).__init__(
-            title, description, timestamp=timestamp, data=data)
+            title, description, timestamp, data)
 
     def __getattr__(self, key):
         """

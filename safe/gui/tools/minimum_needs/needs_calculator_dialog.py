@@ -7,7 +7,7 @@
 """
 
 __author__ = 'tim@kartoza.com, ole.moller.nielsen@gmail.com'
-__revision__ = '$Format:%H$'
+__revision__ = 'b9e2d7536ddcf682e32a156d6d8b0dbc0bb73cc4'
 __date__ = '20/1/2013'
 __license__ = "GPL"
 __copyright__ = 'Copyright 2013, Australia Indonesia Facility for '
@@ -164,7 +164,7 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         self.cboFields.clear()
         has_fields = False
         for field in fields:
-            # LOGGER.info(field.typeName())
+            LOGGER.info(field.typeName())
             # TODO exclude dates too? TS
             if field.typeName() != 'String':
                 has_fields = True

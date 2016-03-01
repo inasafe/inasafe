@@ -12,7 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 __author__ = 'tim@kartoza.com'
-__revision__ = '$Format:%H$'
+__revision__ = 'b9e2d7536ddcf682e32a156d6d8b0dbc0bb73cc4'
 __date__ = '22/05/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -27,7 +27,7 @@ from PyQt4.QtCore import QCoreApplication
 from safe.common.utilities import get_free_memory
 from safe import messaging as m
 from safe.messaging import styles
-from safe.common.signals import send_dynamic_message
+from safe.common.signals import DYNAMIC_MESSAGE_SIGNAL
 from safe_extras.pydispatch import dispatcher
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
@@ -49,6 +49,18 @@ def tr(string):
     :rtype: str
     """
     return QCoreApplication.translate('MemoryChecker', string)
+
+
+def send_message(message):
+    """Send a message using the dispatcher.
+
+    :param message: A Message object to be sent to a message viewer.
+    :type message: Message
+    """
+    dispatcher.send(
+        signal=DYNAMIC_MESSAGE_SIGNAL,
+        sender=dispatcher.Anonymous,
+        message=message)
 
 
 def check_memory_usage(buffered_geo_extent, cell_size):
@@ -91,7 +103,7 @@ def check_memory_usage(buffered_geo_extent, cell_size):
             'Computed cellsize was None. Memory check currently only works '
             'for raster input layers.')
         message.add(reason)
-        send_dynamic_message(dispatcher.Anonymous, message)
+        send_message(message)
         return True  # assume enough mem since we have no vector check logic
 
     bullet_list = m.BulletedList()
@@ -121,7 +133,7 @@ def check_memory_usage(buffered_geo_extent, cell_size):
         error_message = tr('Could not determine free memory')
         message.add(error_heading)
         message.add(error_message)
-        send_dynamic_message(dispatcher.Anonymous, message)
+        send_message(message)
         LOGGER.exception(message)
         return True  # still let the user try to run their analysis
 
@@ -159,10 +171,10 @@ def check_memory_usage(buffered_geo_extent, cell_size):
         message.add(warning_message)
         message.add(suggestion_heading)
         message.add(suggestion)
-        send_dynamic_message(dispatcher.Anonymous, message)
-        # LOGGER.info(message.to_text())
+        send_message(message)
+        LOGGER.info(message.to_text())
         return False
 
-    send_dynamic_message(dispatcher.Anonymous, message)
-    # LOGGER.info(message.to_text())
+    send_message(message)
+    LOGGER.info(message.to_text())
     return True

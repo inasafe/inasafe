@@ -14,7 +14,7 @@ See end of this file for documentation of the mathematical derivation used.
 """
 
 __author__ = 'Ole Nielsen <ole.moller.nielsen@gmail.com>'
-__revision__ = '$Format:%H$'
+__revision__ = 'b9e2d7536ddcf682e32a156d6d8b0dbc0bb73cc4'
 __date__ = '01/11/2010'
 __license__ = "GPL"
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '

@@ -2,7 +2,7 @@
 """**Convert QgsRasterLayer to QgsVectorLayer**
 """
 __author__ = 'Dmitry Kolesov <kolesov.dm@gmail.com>'
-__revision__ = '$Format:%H$'
+__revision__ = 'b9e2d7536ddcf682e32a156d6d8b0dbc0bb73cc4'
 __date__ = '14/01/2014'
 __license__ = "GPL"
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '

@@ -11,16 +11,17 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-__author__ = 'lucernae, dynaryu@gmail.com'
+__author__ = 'lucernae'
 __date__ = '24/03/15'
-__revision__ = '$Format:%H$'
+__revision__ = 'b9e2d7536ddcf682e32a156d6d8b0dbc0bb73cc4'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+import math
 import numpy
+import heapq
 
 from safe.common.utilities import OrderedDict
-from safe.gis.numerics import log_normal_cdf
 from safe.impact_functions.earthquake.\
     itb_earthquake_fatality_model.impact_function import ITBFatalityFunction
 from safe.impact_functions.earthquake\
@@ -67,28 +68,78 @@ class PAGFatalityFunction(ITBFatalityFunction):
             # Threshold below which layer should be transparent
             ('tolerance', 0.01),
             ('calculate_displaced_people', True),
-            ('magnitude_bin', numpy.power(10, range(1, 6), dtype=float))
+            ('magnitude_bin', numpy.power(10, range(0, 6), dtype=float))
         ])
 
-    def compute_fatality_rate(self):
+    # noinspection PyPep8Naming
+    def cdf_normal(self, x):
+        """Cumulative distribution function of standard normal distribution.
+
+        Logic based on http://en.wikipedia.org/wiki/Normal_distribution
+
+        :param x: random variable x
+        :type x: float
+
+        :returns: phi of (x)
+        :rtype: float
+        """
+        return (1.0 + math.erf(x / math.sqrt(2.0))) / 2.0
+
+    def fatality_rate(self, mmi):
         """Pager method to compute fatality rate.
+
+        :param mmi: MMI
+        :type mmi: float
 
         :returns: Fatality rate calculated as:
             lognorm.cdf(mmi, shape=Beta, scale=Theta)
-        :rtype: dic
+        :rtype: float
         """
-        mmi_range = self.hardcoded_parameters['mmi_range']
         theta = self.hardcoded_parameters['Theta']
         beta = self.hardcoded_parameters['Beta']
-        fatality_rate = {mmi: 0 if mmi < 4 else log_normal_cdf(
-            mmi, median=theta, sigma=beta) for mmi in mmi_range}
-        return fatality_rate
+        x = math.log(mmi / theta) / beta
+        return self.cdf_normal(x)
+
+    @staticmethod
+    def round_to_sum(l, r):
+        """
+        Round a list of numbers while maintaining the sum.
+
+        http://stackoverflow.com/questions/15769948/
+        round-a-python-list-of-numbers-and-maintain-the-sum
+
+        :param l: array
+        :type l: list(float)
+
+        :param r: decimal place
+        :type r: int
+
+        :returns: A list of rounded numbers whose sum is equal to the
+            sum of the list of input numbers.
+        :rtype: list
+        """
+        q = 10 ** (-r)
+        d = (round(sum(l), r) - sum([round(x, r) for x in l])) * (10 ** r)
+        d = int(d)
+        if d == 0:
+            return [round(x, r) for x in l]
+        elif d in [-1, 1]:
+            c, _ = max(enumerate(l), key=lambda x: math.copysign(
+                1, d) * math.fmod(x[1] - 0.5 * q, q))
+            return [round(x, r) + q * math.copysign(1, d) if i == c else round(
+                x, r) for (i, x) in enumerate(l)]
+        else:
+            c = [i for i, _ in heapq.nlargest(abs(d), enumerate(
+                l), key=lambda x: math.copysign(1, d) * math.fmod(
+                    x[1] - 0.5 * q, q))]
+            return [round(x, r) + q * math.copysign(
+                1, d) if i in c else round(x, r) for (i, x) in enumerate(l)]
 
     def compute_probability(self, total_fatalities):
         """Pager method compute probaility of fatality in each magnitude bin.
 
-        [0, 10), [10,10^2), [10^2,10^3), [10^3, 10^4), [10^4, 10^5),
-        [10^5,)
+        (0,1), (1,10), (10,10^2), (10^2,10^3), (10^3, 10^4),
+        (10^4, 10^5), (10^5, 10^6+)
 
         :param total_fatalities: List of total fatalities in each MMI class.
         :type total_fatalities: int, float
@@ -102,9 +153,11 @@ class PAGFatalityFunction(ITBFatalityFunction):
         cprob = numpy.ones_like(magnitude_bin, dtype=float)
 
         if total_fatalities > 1:
-            cprob = log_normal_cdf(
-                magnitude_bin, median=total_fatalities, sigma=zeta)
+            for (i, mbin) in enumerate(magnitude_bin):
+                x = math.log(mbin / total_fatalities) / zeta
+                cprob[i] = self.cdf_normal(x)
 
-        cprob = numpy.append(cprob, 1.0)
+        cprob = numpy.append(cprob, 1.0)  # 1000+
+        # percentage
         prob = numpy.hstack((cprob[0], numpy.diff(cprob))) * 100.0
-        return self.round_to_sum(prob)
+        return self.round_to_sum(prob, 0)  # rounding to decimal

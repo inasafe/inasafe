@@ -33,9 +33,8 @@ from safe.messaging import styles
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class EarthquakeBuildingFunction(
-        ContinuousRHClassifiedVE,
-        BuildingExposureReportMixin):
+class EarthquakeBuildingFunction(ContinuousRHClassifiedVE,
+                                 BuildingExposureReportMixin):
     # noinspection PyUnresolvedReferences
     """Earthquake impact on building data."""
 
@@ -88,10 +87,6 @@ class EarthquakeBuildingFunction(
         """Earthquake impact to buildings (e.g. from OpenStreetMap)."""
         self.validate()
         self.prepare()
-
-        self.provenance.append_step(
-            'Calculating Step',
-            'Impact function is calculating the impact.')
 
         LOGGER.debug('Running earthquake building impact')
 
@@ -148,7 +143,7 @@ class EarthquakeBuildingFunction(
         self.affected_buildings = OrderedDict([
             (tr('High'), {}),
             (tr('Medium'), {}),
-            (tr('Low'), {}),
+            (tr('Low'), {})
         ])
         removed = []
         for i in range(interpolate_size):
@@ -215,8 +210,8 @@ class EarthquakeBuildingFunction(
                 category = tr('High')
             else:
                 # Not reported for less than level t0
+                removed.append(i)
                 continue
-
             attributes[i][self.target_field] = cls
             self.affected_buildings[
                 category][usage][tr('Buildings Affected')] += 1
@@ -226,7 +221,7 @@ class EarthquakeBuildingFunction(
                 self.affected_buildings[category][usage][
                     tr('Contents value ($M)')] += contents_value / 1000000.0
 
-        # remove un-categorized element
+        # remove uncategorized element
         removed.reverse()
         geometry = interpolate_result.get_geometry()
         for i in range(0, len(removed)):
@@ -247,35 +242,16 @@ class EarthquakeBuildingFunction(
                               colour='#ffaa00', transparency=1),
                          dict(label=class_3['label'], value=class_3['class'],
                               colour='#ff0000', transparency=1)]
-        style_info = dict(
-            target_field=self.target_field,
-            style_classes=style_classes,
-            style_type='categorizedSymbol'
-        )
+        style_info = dict(target_field=self.target_field,
+                          style_classes=style_classes,
+                          style_type='categorizedSymbol')
 
         # For printing map purpose
         map_title = tr('Building affected by earthquake')
-        legend_notes = tr(
-            'The level of the impact is according to the threshold the user '
-            'input.')
+        legend_notes = tr('The level of the impact is according to the '
+                          'threshold the user input.')
         legend_units = tr('(mmi)')
         legend_title = tr('Impact level')
-
-        extra_keywords = {
-            'impact_summary': impact_summary,
-            'impact_table': impact_table,
-            'map_title': map_title,
-            'legend_notes': legend_notes,
-            'legend_units': legend_units,
-            'legend_title': legend_title,
-            'target_field': self.target_field,
-            'statistics_type': self.statistics_type,
-            'statistics_classes': self.statistics_classes
-        }
-
-        self.set_if_provenance()
-
-        impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 
         # Create vector layer and return
         result_layer = Vector(
@@ -283,7 +259,16 @@ class EarthquakeBuildingFunction(
             projection=interpolate_result.get_projection(),
             geometry=geometry,
             name=tr('Estimated buildings affected'),
-            keywords=impact_layer_keywords,
+            keywords={
+                'impact_summary': impact_summary,
+                'impact_table': impact_table,
+                'map_title': map_title,
+                'legend_notes': legend_notes,
+                'legend_units': legend_units,
+                'legend_title': legend_title,
+                'target_field': self.target_field,
+                'statistics_type': self.statistics_type,
+                'statistics_classes': self.statistics_classes},
             style_info=style_info)
 
         msg = 'Created vector layer %s' % str(result_layer)

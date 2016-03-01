@@ -101,10 +101,6 @@ class TsunamiEvacuationFunction(
         self.validate()
         self.prepare()
 
-        self.provenance.append_step(
-            'Calculating Step',
-            'Impact function is calculating the impact.')
-
         # Determine depths above which people are regarded affected [m]
         # Use thresholds from inundation layer if specified
         thresholds = self.parameters['thresholds'].value
@@ -143,9 +139,6 @@ class TsunamiEvacuationFunction(
             # Count
             val = int(numpy.nansum(medium))
             self.affected_population[thresholds_name] = val
-
-        # Put the deepest area in top #2385
-        self.impact_category_ordering.reverse()
 
         # Carry the no data values forward to the impact layer.
         impact = numpy.where(numpy.isnan(population), numpy.nan, impact)
@@ -191,7 +184,11 @@ class TsunamiEvacuationFunction(
                 label = create_label(interval_classes[i])
             style_class['label'] = label
             style_class['quantity'] = classes[i]
-            style_class['transparency'] = 0
+            if i == 0:
+                transparency = 100
+            else:
+                transparency = 0
+            style_class['transparency'] = transparency
             style_class['colour'] = colours[i]
             style_classes.append(style_class)
 
@@ -210,21 +207,6 @@ class TsunamiEvacuationFunction(
             'Thousand separator is represented by %s' %
             get_thousand_separator())
 
-        extra_keywords = {
-            'impact_summary': impact_summary,
-            'impact_table': impact_table,
-            'map_title': map_title,
-            'legend_notes': legend_notes,
-            'legend_units': legend_units,
-            'legend_title': legend_title,
-            'evacuated': self.total_evacuated,
-            'total_needs': self.total_needs
-        }
-
-        self.set_if_provenance()
-
-        impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
-
         # Create raster object and return
         raster = Raster(
             impact,
@@ -232,7 +214,15 @@ class TsunamiEvacuationFunction(
             geotransform=self.hazard.layer.get_geotransform(),
             name=tr('Population which %s') % (
                 self.impact_function_manager.get_function_title(self).lower()),
-            keywords=impact_layer_keywords,
+            keywords={
+                'impact_summary': impact_summary,
+                'impact_table': impact_table,
+                'map_title': map_title,
+                'legend_notes': legend_notes,
+                'legend_units': legend_units,
+                'legend_title': legend_title,
+                'evacuated': self.total_evacuated,
+                'total_needs': self.total_needs},
             style_info=style_info)
         self._impact = raster
         return raster

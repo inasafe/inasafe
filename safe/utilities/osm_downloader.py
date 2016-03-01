@@ -12,7 +12,7 @@ Contact : etienne@kartoza.com
 
 """
 __author__ = 'etienne@kartoza.com'
-__revision__ = '$Format:%H$'
+__revision__ = 'b9e2d7536ddcf682e32a156d6d8b0dbc0bb73cc4'
 __date__ = '25/06/2015'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -22,9 +22,10 @@ import os
 import logging
 import tempfile
 
-from PyQt4.QtNetwork import QNetworkReply
+from PyQt4.QtNetwork import QNetworkAccessManager, QNetworkReply
 from PyQt4.QtGui import QDialog
 
+from safe.utilities.proxy import get_proxy
 from safe.utilities.i18n import tr
 from safe.utilities.file_downloader import FileDownloader
 from safe.common.exceptions import DownloadError, CanceledImportDialogError
@@ -131,8 +132,15 @@ def fetch_zip(url, output_path, feature_type, progress_dialog=None):
         label_text = tr('Fetching %s' % label_feature_type)
         progress_dialog.setLabelText(label_text)
 
+    # Set Proxy in web page
+    proxy = get_proxy()
+    network_manager = QNetworkAccessManager()
+    if proxy is not None:
+        network_manager.setProxy(proxy)
+
     # Download Process
-    downloader = FileDownloader(url, output_path, progress_dialog)
+    downloader = FileDownloader(
+        network_manager, url, output_path, progress_dialog)
     try:
         result = downloader.download()
     except IOError as ex:
