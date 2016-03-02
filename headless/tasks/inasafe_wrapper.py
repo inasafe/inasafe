@@ -112,7 +112,7 @@ def read_keywords_iso_metadata(metadata_url, keyword=None):
     """Read xml metadata of a layer"""
     filename = download_file(metadata_url)
     # add xml extension
-    new_filename = filename+'.xml'
+    new_filename = filename + '.xml'
     shutil.move(filename, new_filename)
     keyword_io = KeywordIO()
     keywords = keyword_io.read_keywords_file(new_filename)

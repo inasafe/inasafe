@@ -446,12 +446,8 @@ class PostprocessorManager(QtCore.QObject):
                 'target_field': self.aggregator.target_field,
                 'function_params': self.function_parameters}
 
-            if self.aggregator.statistics_type == 'class_count':
-                general_params['impact_classes'] = (
-                    self.aggregator.statistics_classes)
-            elif self.aggregator.statistics_type == 'sum':
-                impact_total = feature[sum_field_index]
-                general_params['impact_total'] = impact_total
+            impact_total = feature[sum_field_index]
+            general_params['impact_total'] = impact_total
 
             try:
                 general_params['impact_attrs'] = (

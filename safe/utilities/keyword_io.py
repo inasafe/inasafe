@@ -688,31 +688,6 @@ class KeywordIO(QObject):
         finally:
             self.close_connection()
 
-    def get_statistics(self, layer):
-        """Get the statistics related keywords from a layer.
-
-        :param layer: A QGIS layer that represents an impact.
-        :type layer: QgsMapLayer
-
-        :returns: A two-tuple containing the values for the keywords
-            'statistics_type' and 'statistics_classes'.
-        :rtype: tuple(str, str)
-
-        """
-        # find needed statistics type
-        try:
-            statistics_type = self.read_keywords(
-                layer, 'statistics_type')
-            statistics_classes = self.read_keywords(
-                layer, 'statistics_classes')
-
-        except KeywordNotFoundError:
-            # default to summing
-            statistics_type = 'sum'
-            statistics_classes = {}
-
-        return statistics_type, statistics_classes
-
     def to_message(self, keywords=None, show_header=True):
         """Format keywords as a message object.
 

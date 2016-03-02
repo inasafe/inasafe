@@ -19,16 +19,23 @@ from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.definitions import (
     area_name_field,
-    area_type,
-    area_population_field,
-    exposure_area,
+    area_id_field,
+    exposure_population,
     hazard_all,
     hazard_category_single_event,
     hazard_category_multiple_event,
     generic_vector_hazard_classes,
+    flood_vector_hazard_classes,
     layer_mode_classified,
-    layer_geometry_polygon
+    layer_mode_continuous,
+    layer_geometry_polygon,
+    count_exposure_unit
 )
+from safe.defaults import (
+    default_minimum_needs,
+    default_gender_postprocessor,
+    age_postprocessor,
+    minimum_needs_selector)
 from safe.utilities.i18n import tr
 
 
@@ -83,23 +90,24 @@ class ClassifiedPolygonHazardPolygonPeopleFunctionMetadata(
                     'hazard_types': hazard_all,
                     'continuous_hazard_units': [],
                     'vector_hazard_classifications': [
-                        generic_vector_hazard_classes],
+                        generic_vector_hazard_classes,
+                        flood_vector_hazard_classes],
                     'raster_hazard_classifications': [],
                     'additional_keywords': []
                 },
                 'exposure': {
-                    'layer_mode': layer_mode_classified,
+                    'layer_mode': layer_mode_continuous,
                     'layer_geometries': [layer_geometry_polygon],
-                    'exposure_types': [exposure_area],
-                    'exposure_units': [],
+                    'exposure_types': [exposure_population],
+                    'exposure_units': [count_exposure_unit],
                     'exposure_class_fields': [],
                     'additional_keywords': [
-                        area_name_field,
-                        area_type,
-                        area_population_field
+                        area_id_field,
+                        area_name_field
                     ]
                 }
             },
-            'parameters': OrderedDict([])
+            'parameters': OrderedDict([
+                ('minimum needs', default_minimum_needs())])
         }
         return dict_meta
