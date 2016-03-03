@@ -109,7 +109,13 @@ def run_analysis(hazard, exposure, function, aggregation=None,
 
 @app.task(queue='inasafe-headless')
 def read_keywords_iso_metadata(metadata_url, keyword=None):
-    """Read xml metadata of a layer"""
+    """Read xml metadata of a layer
+
+    :param keyword: Can be string or tuple containing keywords to search for
+    :type keyword: str, (str, )
+
+    :return: the keywords, or a dictionary with key-value pair
+    """
     filename = download_file(metadata_url)
     # add xml extension
     new_filename = filename+'.xml'
@@ -117,5 +123,11 @@ def read_keywords_iso_metadata(metadata_url, keyword=None):
     keyword_io = KeywordIO()
     keywords = keyword_io.read_keywords_file(new_filename)
     if keyword:
-        return keywords.get(keyword, None)
+        if isinstance(keyword, tuple) or isinstance(keyword, list):
+            ret_val = {}
+            for key in keyword:
+                ret_val[key] = keywords.get(key, None)
+            return ret_val
+        else:
+            return keywords.get(keyword, None)
     return keywords
