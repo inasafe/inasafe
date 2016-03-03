@@ -240,6 +240,7 @@ def content():
         tr(
             'It indicates the hazard title used to generate the '
             'impact layer.')))
+    message.add(bullets)
 
     message.add(m.Paragraph(
         m.ImportantText(tr(
