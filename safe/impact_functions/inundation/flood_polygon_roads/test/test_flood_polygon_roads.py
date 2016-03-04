@@ -19,16 +19,13 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import unittest
 from qgis.core import QgsVectorLayer
+from safe.test.utilities import get_qgis_app, test_data_path
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.impact_functions.inundation.flood_polygon_roads\
     .impact_function import FloodPolygonRoadsFunction
-from safe.test.utilities import (
-    get_qgis_app,
-    test_data_path)
 from safe.storage.safe_layer import SafeLayer
-
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class TestFloodVectorPolygonRoadsFunction(unittest.TestCase):

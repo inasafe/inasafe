@@ -17,14 +17,15 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import unittest
 import numpy
 
+from safe.test.utilities import get_qgis_app, test_data_path, clip_layers
+
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.impact_functions.earthquake.itb_bayesian_earthquake_fatality_model\
     .impact_function import ITBBayesianFatalityFunction
-from safe.test.utilities import test_data_path, get_qgis_app, clip_layers
 from safe.storage.core import read_layer
 from safe.storage.safe_layer import SafeLayer
-
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class TestITBBayesianEarthquakeFatalityFunction(unittest.TestCase):
