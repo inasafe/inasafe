@@ -17,8 +17,6 @@ import logging
 
 from qgis.core import QgsMapLayer, QgsRectangle
 
-from safe.impact_statistics.postprocessor_manager import (
-    PostprocessorManager)
 from safe.common.exceptions import ZeroImpactException
 from safe.storage.utilities import safe_to_qgis_layer
 from safe.storage.safe_layer import SafeLayer
@@ -76,8 +74,6 @@ class Analysis(object):
 
         # Impact Function
         self._impact_function = None
-
-        self.postprocessor_manager = None
 
     @property
     def impact_function(self):
@@ -388,23 +384,12 @@ class Analysis(object):
 
         # TODO (MB) do we really want this check?
         if self.aggregator.error_message is None:
-            self.run_post_processor()
+            self.impact_function.run_post_processor()
         else:
             content = self.aggregator.error_message
             exception = AggregationError(tr(
                 'Aggregation error occurred.'))
             analysis_error(self, exception, content)
-
-    def run_post_processor(self):
-        """Carry out any postprocessing required for this impact layer.
-        """
-        LOGGER.debug('Do postprocessing')
-        self.postprocessor_manager = PostprocessorManager(self.aggregator)
-        self.postprocessor_manager.function_parameters = \
-            self.impact_function.parameters
-        self.postprocessor_manager.run()
-        send_not_busy_signal(self)
-        send_analysis_done_signal(self)
 
     def run_analysis(self):
         """It's similar with run function in previous dock.py"""
