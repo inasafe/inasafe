@@ -29,6 +29,9 @@ from osgeo import gdal
 from PyQt4.QtCore import QT_VERSION_STR, QSettings
 from PyQt4.Qt import PYQT_VERSION_STR
 
+from safe.impact_statistics.aggregator import Aggregator
+from safe.impact_statistics.postprocessor_manager import (
+    PostprocessorManager)
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.common.exceptions import (
@@ -60,7 +63,12 @@ from safe.storage.utilities import (
 from safe.definitions import inasafe_keyword_version
 from safe.metadata.provenance import Provenance
 from safe.common.version import get_version
-from safe.common.signals import send_static_message, send_dynamic_message
+from safe.common.signals import (
+    send_static_message,
+    send_dynamic_message,
+    send_not_busy_signal,
+    send_analysis_done_signal
+)
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 WARNING_STYLE = styles.WARNING_STYLE
@@ -108,6 +116,10 @@ class ImpactFunction(object):
         self._exposure = None
         # Layer used for aggregating results by area / district
         self._aggregation = None
+        # Aggregator
+        self._aggregator = None
+        # Postprocessor manager
+        self._postprocessor_manager = None
         # The best extents to use for the assessment
         self._clip_parameters = None
         # Clip features that extend beyond the extents.
@@ -382,6 +394,24 @@ class ImpactFunction(object):
             self._aggregation = None
 
     @property
+    def aggregator(self):
+        """Get the aggregator.
+
+        :return: The aggregator.
+        :rtype: Aggregator
+        """
+        return self._aggregator
+
+    @property
+    def postprocessor_manager(self):
+        """Get the postprocessor manager.
+
+        :return: The postprocessor manager.
+        :rtype: PostprocessorManager
+        """
+        return self._postprocessor_manager
+
+    @property
     def parameters(self):
         """Get the parameter."""
         return self._parameters
@@ -643,6 +673,7 @@ class ImpactFunction(object):
 
         # Fixme : When Analysis.py will not exist anymore, we will uncomment.
         # self.emit_pre_run_message()
+        # self.setup_aggregator()
 
         self.provenance.append_step(
             'Preparation Step',
@@ -1069,3 +1100,30 @@ class ImpactFunction(object):
             extra_keywords=extra_exposure_keywords,
             hard_clip_flag=self.clip_hard)
         return clipped_hazard, clipped_exposure
+
+    def setup_aggregator(self):
+        """Create an aggregator for this analysis run."""
+        try:
+            buffered_geo_extent = self.impact.extent
+        except AttributeError:
+            # if we have no runner, set dummy extent
+            buffered_geo_extent = self.clip_parameters['adjusted_geo_extent']
+
+        if self.aggregation is not None:
+            qgis_layer = self.aggregation.qgis_layer()
+        else:
+            qgis_layer = None
+
+        # setup aggregator to use buffered_geo_extent to deal with #759
+        self._aggregator = Aggregator(buffered_geo_extent, qgis_layer)
+
+        self._aggregator.show_intermediate_layers = \
+            self.show_intermediate_layers
+
+    def run_post_processor(self):
+        """Carry out any postprocessing required for this impact layer."""
+        self._postprocessor_manager = PostprocessorManager(self.aggregator)
+        self.postprocessor_manager.function_parameters = self.parameters
+        self.postprocessor_manager.run()
+        send_not_busy_signal(self)
+        send_analysis_done_signal(self)

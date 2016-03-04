@@ -20,17 +20,15 @@ __copyright__ = 'imajimatika@gmail.com'
 
 
 import unittest
+from safe.test.utilities import get_qgis_app, test_data_path
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.impact_functions.impact_function_manager\
     import ImpactFunctionManager
 from safe.impact_functions.inundation.tsunami_raster_building\
     .impact_function import TsunamiRasterBuildingFunction
 from safe.storage.core import read_layer
-from safe.test.utilities import get_qgis_app, test_data_path
 from safe.storage.safe_layer import SafeLayer
-
-
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class TsunamiRasterBuildingFunctionTest(unittest.TestCase):

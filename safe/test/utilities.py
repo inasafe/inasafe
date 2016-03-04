@@ -1,7 +1,6 @@
 # coding=utf-8
 """Helper module for gui test suite
 """
-
 import os
 import re
 import sys
@@ -11,7 +10,6 @@ import platform
 import glob
 import shutil
 from itertools import izip
-
 from qgis.core import (
     QgsVectorLayer,
     QgsRasterLayer,
@@ -21,23 +19,16 @@ from qgis.core import (
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui  # pylint: disable=W0621
 
-# For testing and demoing
-# In our tests, we need to have this line below before importing any other
-# safe_qgis.__init__ to load all the configurations that we make for testing
 from safe.gis.numerics import axes_to_points
-from safe.impact_functions import register_impact_functions
 from safe.common.utilities import unique_filename, temp_dir
-from safe.common.exceptions import (
-    NoKeywordsFoundError,
-    MetadataReadError
-)
+from safe.common.exceptions import NoKeywordsFoundError
+
 from safe.utilities.clipper import extent_to_geoarray, clip_layer
 from safe.utilities.gis import get_wgs84_resolution
 from safe.utilities.metadata import (
     read_iso19115_metadata,
     write_read_iso_19115_metadata
 )
-from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.utilities import read_file_keywords
 
 QGIS_APP = None  # Static variable used to hold hand to running QGIS app
@@ -143,6 +134,8 @@ def get_qgis_app():
         # QgisInterface is a stub implementation of the QGIS plugin interface
         # noinspection PyPep8Naming
         IFACE = QgisInterface(CANVAS)
+        # Note(IS): I put here since it needs QGIS apps instance first
+        from safe.impact_functions import register_impact_functions
         register_impact_functions()
 
     return QGIS_APP, CANVAS, IFACE, PARENT
