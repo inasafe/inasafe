@@ -14,6 +14,9 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
+from safe.utilities.unicode import get_unicode, get_string
+from safe.messaging.item.message_element import MessageElement
+
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '17/06/2011'
@@ -25,6 +28,27 @@ class InaSAFEError(RuntimeError):
     """Base class for all user defined exceptions"""
     suggestion = 'An unspecified error occurred.'
 
+    def __init__(self, message):
+
+        if isinstance(message, unicode):
+            super(InaSAFEError, self).__init__(get_string(message))
+            self.message = message
+
+        elif isinstance(message, str):
+            super(InaSAFEError, self).__init__(message)
+            self.message = get_unicode(message)
+
+        elif isinstance(message, MessageElement):
+            super(InaSAFEError, self).__init__(message.to_text())
+            self.message = get_unicode(message.to_text())
+
+        # This shouldn't happen...
+        else:
+            raise TypeError
+
+    def __unicode__(self):
+
+        return self.message
 
 class ReadLayerError(InaSAFEError):
     """When a layer can't be read"""

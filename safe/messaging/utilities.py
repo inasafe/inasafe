@@ -10,6 +10,7 @@ InaSAFE Disaster risk assessment tool by AusAid -**ImpactCalculator.**
 """
 
 from safe.utilities.i18n import tr
+from safe.utilities.unicode import get_unicode
 from safe import messaging as m
 LOGO_ELEMENT = m.Brand()
 
@@ -61,16 +62,16 @@ def generate_insufficient_overlap_message(
     analysis_inputs.add(tr('Exposure: %s') % (exposure_layer.source()))
     analysis_inputs.add(
         tr('Viewable area Geo Extent: %s') % (
-            str(viewport_geoextent)))
+            get_unicode(viewport_geoextent)))
     analysis_inputs.add(
         tr('Hazard Geo Extent: %s') % (
-            str(hazard_geoextent)))
+            get_unicode(hazard_geoextent)))
     analysis_inputs.add(
         tr('Exposure Geo Extent: %s') % (
-            str(exposure_geoextent)))
+            get_unicode(exposure_geoextent)))
     analysis_inputs.add(
         tr('Details: %s') % (
-            str(e)))
+            get_unicode(e)))
     message.add(analysis_inputs)
 
     return message
