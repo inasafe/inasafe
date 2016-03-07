@@ -24,6 +24,8 @@ from safe.metadata.provenance import Provenance
 from safe.metadata.utils import reading_ancillary_files, XML_NS, prettify_xml
 from safe.metadata.utils import merge_dictionaries
 
+from safe.metadata.encoder import MetadataEncoder
+
 
 class ImpactLayerMetadata(BaseMetadata):
     """
@@ -163,20 +165,6 @@ class ImpactLayerMetadata(BaseMetadata):
             'inasafe/'
             'impact_table/'
             'gco:CharacterString'),
-        'statistics_classes': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            'statistics_classes/'
-            'gco:List'),
-        'statistics_type': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            'statistics_type/'
-            'gco:CharacterString'),
     }
     _standard_properties = merge_dictionaries(
         BaseMetadata._standard_properties, _standard_properties)
@@ -237,8 +225,9 @@ class ImpactLayerMetadata(BaseMetadata):
         metadata = self.dict
 
         metadata['provenance'] = self.provenance.dict
-        json_dumps = json.dumps(metadata, indent=2, sort_keys=True,
-                          separators=(',', ': '))
+        json_dumps = json.dumps(
+                metadata, indent=2, sort_keys=True, separators=(',', ': '),
+                cls=MetadataEncoder)
         if not json_dumps.endswith('\n'):
             json_dumps += '\n'
         return json_dumps

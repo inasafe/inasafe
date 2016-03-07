@@ -32,11 +32,15 @@ from qgis.core import (
     QgsMapLayerRegistry,
     QgsCoordinateReferenceSystem)
 
+
+from safe.test.utilities import get_qgis_app
+# make sure this line executes first
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
 from safe.impact_functions import register_impact_functions
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.report.impact_report import ImpactReport
 from safe.storage.utilities import safe_to_qgis_layer
-from safe.test.utilities import get_qgis_app
 from safe.utilities.gis import qgis_version, validate_geo_array
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.osm_downloader import download
@@ -49,7 +53,6 @@ usage_file = file(os.path.join(usage_dir, 'usage.txt'))
 for delta in usage_file:
     usage += delta
 LOGGER = logging.getLogger('InaSAFE')
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class CommandLineArguments(object):

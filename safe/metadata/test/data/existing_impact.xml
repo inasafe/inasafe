@@ -34,7 +34,7 @@
     </gmd:CI_ResponsibleParty>
   </gmd:contact>
   <gmd:dateStamp>
-    <gco:Date/>
+    <gco:Date>2016-02-18</gco:Date>
   </gmd:dateStamp>
   <gmd:metadataStandardName>
     <gco:CharacterString>ISO 19115:2003 - Geographic information - Metadata</gco:CharacterString>
@@ -172,18 +172,12 @@
       <gmd:supplementalInformation>
         <inasafe_keywords/>
         <inasafe>
-          <statistics_type>
-            <gco:CharacterString/>
-          </statistics_type>
           <multipart_polygon>
             <gco:Boolean/>
           </multipart_polygon>
           <map_title>
             <gco:CharacterString/>
           </map_title>
-          <statistics_classes>
-            <gco:List/>
-          </statistics_classes>
           <scale>
             <gco:CharacterString/>
           </scale>
@@ -245,7 +239,7 @@
             <gco:CharacterString/>
           </impact_table>
           <resolution>
-            <gco:Tuple/>
+            <gco:FloatTuple/>
           </resolution>
           <layer_mode>
             <gco:CharacterString/>
@@ -314,7 +308,7 @@
           <gmd:onLine>
             <gmd:CI_OnlineResource>
               <gmd:linkage>
-                <gmd:URL/>
+                <gmd:URL>http://www.inasafe.org</gmd:URL>
               </gmd:linkage>
             </gmd:CI_OnlineResource>
           </gmd:onLine>

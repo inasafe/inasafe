@@ -200,7 +200,7 @@
             <gco:CharacterString/>
           </layer_purpose>
           <resolution>
-            <gco:Tuple/>
+            <gco:FloatTuple/>
           </resolution>
         </inasafe>
       </gmd:supplementalInformation>

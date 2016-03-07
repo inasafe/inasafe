@@ -17,13 +17,14 @@ __date__ = '23/03/15'
 
 import unittest
 import math
+from safe.test.utilities import test_data_path, get_qgis_app
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.impact_functions.generic.classified_raster_building\
     .impact_function import ClassifiedRasterHazardBuildingFunction
 from safe.impact_functions.impact_function_manager\
     import ImpactFunctionManager
 from safe.storage.core import read_layer
-from safe.test.utilities import test_data_path
 from safe.storage.safe_layer import SafeLayer
 
 

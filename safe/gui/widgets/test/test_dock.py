@@ -16,11 +16,11 @@ __author__ = 'tim@kartoza.com'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
-import unittest
-import sys
-import os
-import logging
 import codecs
+import logging
+import os
+import sys
+import unittest
 from os.path import join
 from unittest import TestCase, skipIf
 
@@ -34,7 +34,6 @@ from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsProject)
 from PyQt4 import QtCore
-
 from safe.impact_functions import register_impact_functions
 from safe.common.utilities import format_int, unique_filename
 from safe.test.utilities import (
@@ -65,7 +64,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from safe.gui.widgets.dock import Dock
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.styling import setRasterStyle
-from safe.utilities.gis import read_impact_layer, qgis_version
+from safe.utilities.gis import read_impact_layer
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -251,7 +250,7 @@ class TestDock(TestCase):
         qgis_layer = read_impact_layer(safe_layer)
         style = safe_layer.get_style_info()
         setRasterStyle(qgis_layer, style)
-        # simple test for now - we could test explicity for style state
+        # simple test for now - we could test explicitly for style state
         # later if needed.
         message = (
             'Raster layer was not assigned a Singleband pseudocolor '
@@ -771,8 +770,9 @@ class TestDock(TestCase):
         self.assertTrue(os.path.isfile(new_xml_filepath), '%s xml' % message)
 
     def test_layer_saved_as_without_keywords_and_xml(self):
-        """Check that auxiliary files aren't created when they don't exist and
-        the 'saved as' is used.
+        """Check that auxiliary files aren't created when they don't exist.
+
+        ... and the 'saved as' is used.
         """
 
         layer_path = os.path.join(TESTDATA, 'kecamatan_jakarta_osm.shp')

@@ -18,17 +18,17 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import unittest
+from safe.test.utilities import get_qgis_app, test_data_path
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
 
 from safe.storage.core import read_layer
 from safe.impact_functions.impact_function_manager \
     import ImpactFunctionManager
 from safe.impact_functions.inundation.flood_raster_population.impact_function\
     import FloodEvacuationRasterHazardFunction
-from safe.test.utilities import get_qgis_app, test_data_path
 from safe.common.utilities import OrderedDict
 from safe.storage.safe_layer import SafeLayer
-
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class TestFloodEvacuationFunctionRasterHazard(unittest.TestCase):

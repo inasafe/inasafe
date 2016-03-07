@@ -18,6 +18,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import unittest
+from safe.test.utilities import get_qgis_app
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.impact_functions import register_impact_functions
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
@@ -32,7 +34,6 @@ from safe.impact_functions.generic.continuous_hazard_population\
 from safe.impact_functions.inundation.flood_vector_building_impact\
     .impact_function import FloodPolygonBuildingFunction
 
-
 from safe.definitions import (
     layer_purpose_hazard,
     layer_purpose_exposure,
@@ -45,7 +46,6 @@ from safe.definitions import (
     hazard_volcanic_ash,
     hazard_volcano,
     exposure_structure,
-    exposure_area,
     exposure_road,
     exposure_population,
     count_exposure_unit,
@@ -202,7 +202,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         impact_function_manager = ImpactFunctionManager()
         exposures = impact_function_manager.exposures_for_layer(
             'polygon')
-        expected = [exposure_structure, exposure_area]
+        expected = [exposure_structure, exposure_population]
         self.assertItemsEqual(exposures, expected)
 
         exposures = impact_function_manager.exposures_for_layer(
@@ -249,8 +249,9 @@ class TestImpactFunctionManager(unittest.TestCase):
         impact_function_manager = ImpactFunctionManager()
         result = impact_function_manager.available_exposures()
         expected_result = [
-            exposure_area, exposure_structure,
-            exposure_road, exposure_population]
+            exposure_structure,
+            exposure_road,
+            exposure_population]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
@@ -301,8 +302,8 @@ class TestImpactFunctionManager(unittest.TestCase):
             'population')
         expected = [
             (layer_mode_continuous, layer_geometry_raster),
+            (layer_mode_continuous, layer_geometry_polygon)
         ]
-
         self.assertItemsEqual(exposure_constraints, expected)
 
     def test_available_hazard_layer_modes(self):
