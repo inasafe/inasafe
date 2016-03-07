@@ -49,6 +49,9 @@ class InaSAFEError(RuntimeError):
         elif message is None:
             pass
 
+        elif isinstance(message, BaseException):
+            super(InaSAFEError, self).__init__(unicode(message))
+            self.message = unicode(message)
         # This shouldn't happen...
         else:
             raise TypeError
