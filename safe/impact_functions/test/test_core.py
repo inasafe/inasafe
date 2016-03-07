@@ -23,6 +23,8 @@ import random
 import os
 import logging
 from collections import OrderedDict
+from safe.test.utilities import get_qgis_app, TESTDATA, HAZDATA
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.impact_functions.core import (
     population_rounding_full,
@@ -30,7 +32,6 @@ from safe.impact_functions.core import (
     evacuated_population_needs)
 from safe.common.resource_parameter import ResourceParameter
 from safe.defaults import default_minimum_needs
-from safe.test.utilities import TESTDATA, HAZDATA
 
 LOGGER = logging.getLogger('InaSAFE')
 

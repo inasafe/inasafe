@@ -13,15 +13,15 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 import unittest
+from safe.test.utilities import get_qgis_app, test_data_path
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
 from qgis.core import QgsVectorLayer
 
 from safe.impact_functions.generic.classified_polygon_people. \
     impact_function import ClassifiedPolygonHazardPolygonPeopleFunction
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
-from safe.test.utilities import get_qgis_app, test_data_path
 from safe.storage.utilities import safe_to_qgis_layer
-
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class TestClassifiedPolygonPeopleFunction(unittest.TestCase):

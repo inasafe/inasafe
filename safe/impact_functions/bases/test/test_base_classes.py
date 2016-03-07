@@ -1,5 +1,21 @@
 # coding=utf-8
+"""
+InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
+- **Impact Function Base Classes Test.**
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
+"""
+
+__author__ = 'Rizky Maulana Nugraha "lucernae" <lana.pcfre@gmail.com>'
+__date__ = '07/05/15'
+
 import unittest
+from safe.test.utilities import test_data_path, get_qgis_app
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.common.exceptions import NoAttributeInLayerError
 from safe.impact_functions.bases.layer_types.classified_vector_exposure \
@@ -11,13 +27,7 @@ from safe.impact_functions.bases.layer_types.continuous_vector_exposure \
 from safe.impact_functions.bases.layer_types.continuous_vector_hazard \
     import ContinuousVectorHazardMixin
 from safe.storage.core import read_layer
-from safe.test.utilities import test_data_path, get_qgis_app
 from safe.storage.safe_layer import SafeLayer
-
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-
-__author__ = 'Rizky Maulana Nugraha "lucernae" <lana.pcfre@gmail.com>'
-__date__ = '07/05/15'
 
 
 class TestBaseClassesMixin(unittest.TestCase):

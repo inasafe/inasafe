@@ -18,18 +18,14 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 import unittest
 from qgis.core import QgsVectorLayer
+from safe.test.utilities import get_qgis_app, test_data_path, clone_shp_layer
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.impact_functions.impact_function_manager\
     import ImpactFunctionManager
 from safe.impact_functions.inundation.flood_vector_building_impact\
     .impact_function import FloodPolygonBuildingFunction
-from safe.test.utilities import (
-    get_qgis_app,
-    test_data_path,
-    clone_shp_layer)
 from safe.storage.safe_layer import SafeLayer
-
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class TestFloodPolygonBuildingFunction(unittest.TestCase):
