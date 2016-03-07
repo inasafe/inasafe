@@ -25,11 +25,9 @@ __revision__ = '$Format:%H$'
 
 import logging
 import sqlite3
-
 # noinspection PyUnresolvedReferences
 # pylint: disable=unused-import
 from qgis.core import QGis  # force sip2 api
-
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import pyqtSignal, pyqtSlot, pyqtSignature, QSettings
 # noinspection PyPackageRequirements
@@ -41,7 +39,8 @@ from qgis.core import (
     QgsRectangle,
     QgsCoordinateReferenceSystem,
     QgsApplication,
-    QgsCoordinateTransform)
+    QgsCoordinateTransform,
+    QgsCsException)
 
 from safe.utilities.resources import html_header, html_footer, get_ui_class
 
@@ -424,9 +423,12 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
                 if srid != canvas_srid:
                     transform = QgsCoordinateTransform(
                         srid, canvas_srid)
-                    rectangle = transform.transform(rectangle)
+                    try:
+                        rectangle = transform.transform(rectangle)
+                    except QgsCsException:
+                        rectangle = None
 
-                if rectangle.isEmpty():
+                if rectangle is None or rectangle.isEmpty():
                     pass
 
                 self.bookmarks_list.addItem(name, rectangle)
