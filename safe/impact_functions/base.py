@@ -18,6 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import numpy
+import logging
 
 from socket import gethostname
 import getpass
@@ -36,6 +37,8 @@ from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.common.exceptions import (
     InvalidExtentError,
+    InvalidGeometryError,
+    AggregationError,
     CallGDALError,
     FunctionParametersError,
     NoValidLayerError,
@@ -47,6 +50,7 @@ from safe.postprocessors.postprocessor_factory import (
     get_postprocessors,
     get_postprocessor_human_name)
 from safe.common.utilities import get_non_conflicting_attribute_name
+from safe.utilities.utilities import get_error_message
 from safe.utilities.i18n import tr
 from safe.utilities.clipper import clip_layer
 from safe.utilities.gis import (
@@ -59,13 +63,16 @@ from safe.utilities.clipper import adjust_clip_extent
 from safe.storage.safe_layer import SafeLayer
 from safe.storage.utilities import (
     buffered_bounding_box as get_buffered_extent,
+    safe_to_qgis_layer,
     bbox_intersection)
 from safe.definitions import inasafe_keyword_version
 from safe.metadata.provenance import Provenance
 from safe.common.version import get_version
 from safe.common.signals import (
+    analysis_error,
     send_static_message,
     send_dynamic_message,
+    send_error_message,
     send_not_busy_signal,
     send_analysis_done_signal
 )
@@ -73,6 +80,7 @@ from safe.common.signals import (
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 WARNING_STYLE = styles.WARNING_STYLE
 LOGO_ELEMENT = m.Brand()
+LOGGER = logging.getLogger('InaSAFE')
 
 
 class ImpactFunction(object):
@@ -1119,6 +1127,42 @@ class ImpactFunction(object):
 
         self._aggregator.show_intermediate_layers = \
             self.show_intermediate_layers
+
+    def run_aggregator(self):
+        """Run all post processing steps."""
+        LOGGER.debug('Do aggregation')
+        if self.impact is None:
+            # Done was emitted, but no impact layer was calculated
+            message = tr('No impact layer was generated.\n')
+            send_not_busy_signal(self)
+            send_error_message(self, message)
+            send_analysis_done_signal(self)
+            return
+        try:
+            # TODO (ET) check if the aggregator can take a SafeLayer.
+            qgis_impact_layer = safe_to_qgis_layer(self.impact)
+            self.aggregator.extent = extent_to_array(
+                qgis_impact_layer.extent(),
+                qgis_impact_layer.crs())
+            self.aggregator.aggregate(self.impact)
+        except InvalidGeometryError, e:
+            message = get_error_message(e)
+            send_error_message(self, message)
+            # self.analysis_done.emit(False)
+            return
+        except Exception, e:  # pylint: disable=W0703
+            # noinspection PyPropertyAccess
+            e.args = (str(e.args[0]) + '\nAggregation error occurred',)
+            raise
+
+        # TODO (MB) do we really want this check?
+        if self.aggregator.error_message is None:
+            self.run_post_processor()
+        else:
+            content = self.aggregator.error_message
+            exception = AggregationError(tr(
+                'Aggregation error occurred.'))
+            analysis_error(self, exception, content)
 
     def run_post_processor(self):
         """Carry out any postprocessing required for this impact layer."""
