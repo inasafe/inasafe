@@ -82,12 +82,6 @@ class VolcanoPointBuildingFunction(
                   Table with number of buildings affected
         :rtype: dict
         """
-        self.validate()
-        self.prepare()
-
-        self.provenance.append_step(
-            'Calculating Step',
-            'Impact function is calculating the impact.')
 
         # Hazard Zone Attribute
         hazard_zone_attribute = 'radius'

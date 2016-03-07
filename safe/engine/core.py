@@ -173,7 +173,7 @@ def calculate_impact(impact_function):
     start_time = datetime.now()
 
     # Run IF
-    result_layer = impact_function.run()
+    result_layer = impact_function.run_analysis()
 
     # End time
     end_time = datetime.now()

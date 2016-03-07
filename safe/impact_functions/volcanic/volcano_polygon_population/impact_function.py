@@ -111,12 +111,6 @@ class VolcanoPolygonPopulationFunction(
             * RadiiException - When radii are not valid (they need to be
                 monotonically increasing)
         """
-        self.validate()
-        self.prepare()
-
-        self.provenance.append_step(
-            'Calculating Step',
-            'Impact function is calculating the impact.')
 
         # Parameters
         self.hazard_class_attribute = self.hazard.keyword('field')

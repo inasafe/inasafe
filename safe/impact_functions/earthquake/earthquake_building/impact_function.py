@@ -88,12 +88,6 @@ class EarthquakeBuildingFunction(
 
     def run(self):
         """Earthquake impact to buildings (e.g. from OpenStreetMap)."""
-        self.validate()
-        self.prepare()
-
-        self.provenance.append_step(
-            'Calculating Step',
-            'Impact function is calculating the impact.')
 
         LOGGER.debug('Running earthquake building impact')
 
