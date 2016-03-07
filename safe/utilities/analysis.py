@@ -20,13 +20,10 @@ from qgis.core import QgsMapLayer, QgsRectangle
 from safe.common.exceptions import ZeroImpactException
 from safe.storage.safe_layer import SafeLayer
 from safe.common.exceptions import (
-    KeywordDbError,
     InsufficientOverlapError,
-    InvalidLayerError,
     CallGDALError,
     NoFeaturesInExtentError,
     InvalidProjectionError,
-    UnsupportedProviderError,
     InvalidAggregationKeywords,
     InsufficientMemoryWarning)
 from safe import messaging as m
@@ -273,7 +270,7 @@ class Analysis(object):
             raise InvalidAggregationKeywords
 
         try:
-            self.setup_impact_function()
+            self.impact_function.setup_impact_function()
         except CallGDALError, e:
             analysis_error(self, e, tr(
                 'An error occurred when calling a GDAL command'))
@@ -312,42 +309,6 @@ class Analysis(object):
                     'area for your analysis, or using rasters with a larger '
                     'cell size.'))
             return
-
-    def setup_impact_function(self):
-        """Setup impact function."""
-        # Get the hazard and exposure layers selected in the combos
-        # and other related parameters needed for clipping.
-
-        if self.impact_function.requires_clipping:
-            # The impact function uses SAFE layers,
-            # clip them
-            hazard_layer, exposure_layer = self.impact_function.optimal_clip()
-            self.aggregator.set_layers(hazard_layer, exposure_layer)
-
-            # See if the inputs need further refinement for aggregations
-            try:
-                # This line is a fix for #997
-                self.aggregator.validate_keywords()
-                self.aggregator.deintersect()
-            except (InvalidLayerError,
-                    UnsupportedProviderError,
-                    KeywordDbError):
-                raise
-            # Get clipped layers
-            self.hazard = self.aggregator.hazard_layer
-            self.exposure = self.aggregator.exposure_layer
-        else:
-            # It is a QGIS impact function,
-            # clipping isn't needed, but we need to set up extent
-            self.aggregator.set_layers(
-                self.hazard.qgis_layer(), self.exposure.qgis_layer())
-            clip_parameters = self.impact_function.clip_parameters
-            adjusted_geo_extent = clip_parameters['adjusted_geo_extent']
-            self.impact_function.requested_extent = adjusted_geo_extent
-
-        # Set input layers
-        self.impact_function.hazard = self.hazard
-        self.impact_function.exposure = self.exposure
 
     def run_analysis(self):
         """It's similar with run function in previous dock.py"""

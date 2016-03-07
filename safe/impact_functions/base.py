@@ -39,6 +39,9 @@ from safe.common.exceptions import (
     InvalidExtentError,
     InvalidGeometryError,
     AggregationError,
+    KeywordDbError,
+    InvalidLayerError,
+    UnsupportedProviderError,
     CallGDALError,
     FunctionParametersError,
     NoValidLayerError,
@@ -1108,6 +1111,38 @@ class ImpactFunction(object):
             extra_keywords=extra_exposure_keywords,
             hard_clip_flag=self.clip_hard)
         return clipped_hazard, clipped_exposure
+
+    def setup_impact_function(self):
+        """Setup impact function."""
+        # FIXME, this function will be called from prepare() when analysis.py
+        # will be removed.
+        # Get the hazard and exposure layers selected in the combos
+        # and other related parameters needed for clipping.
+
+        if self.requires_clipping:
+            # The impact function uses SAFE layers, clip them.
+            hazard_layer, exposure_layer = self.optimal_clip()
+            self.aggregator.set_layers(hazard_layer, exposure_layer)
+
+            # See if the inputs need further refinement for aggregations
+            try:
+                # This line is a fix for #997
+                self.aggregator.validate_keywords()
+                self.aggregator.deintersect()
+            except (InvalidLayerError,
+                    UnsupportedProviderError,
+                    KeywordDbError):
+                raise
+            # Get clipped layers
+            self.hazard = self.aggregator.hazard_layer
+            self.exposure = self.aggregator.exposure_layer
+        else:
+            # It is a QGIS impact function,
+            # clipping isn't needed, but we need to set up extent
+            self.aggregator.set_layers(
+                self.hazard.qgis_layer(), self.exposure.qgis_layer())
+            adjusted_geo_extent = self.clip_parameters['adjusted_geo_extent']
+            self.requested_extent = adjusted_geo_extent
 
     def setup_aggregator(self):
         """Create an aggregator for this analysis run."""
