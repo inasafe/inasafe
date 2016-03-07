@@ -177,13 +177,16 @@ def join_if_relative(path_argument):
         return os.path.abspath(path_argument)
 
 
-def get_layer(layer_path):
+def get_layer(layer_path, layer_base=None):
     """Get layer from path.
 
-    .. versionadded:: 3.2
+    .. versionadded:: 3.3
 
-    :param layer_path: User inputs.
-    :type layer_path: CommandLineArguments
+    :param layer_path: layer full name
+    :type layer_path: str
+
+    :param layer_base: layer base name
+    :type layer_base: str
 
     :returns: Vector or Raster layer depending on input arguments.
     :rtype: QgsVectorLayer, QgsRasterLayer
@@ -192,13 +195,13 @@ def get_layer(layer_path):
     """
     layer = None
     try:
-        if os.path.splitext(layer_path)[1] == '.shp':
+        if not layer_base:
             layer_base = join_if_relative(layer_path)
+        if os.path.splitext(layer_path)[1] == '.shp':
             layer = QgsVectorLayer(
                 layer_base, 'cli_vector_hazard', 'ogr')
         elif os.path.splitext(layer_path)[1] in \
                 ['.asc', '.tif', '.tiff']:
-            layer_base = join_if_relative(layer_path)
             layer = QgsRasterLayer(
                 layer_base, 'cli_raster_hazard')
         else:

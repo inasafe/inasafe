@@ -11,7 +11,7 @@ from headless.celeryconfig import DEPLOY_OUTPUT_DIR, DEPLOY_OUTPUT_URL
 from headless.tasks.utilities import download_layer, archive_layer, \
     generate_styles, download_file
 from bin.inasafe import CommandLineArguments, get_impact_function_list, \
-    run_impact_function, build_report
+    run_impact_function, build_report, get_layer
 from safe.storage.utilities import safe_to_qgis_layer
 from safe.utilities.keyword_io import KeywordIO
 
@@ -92,7 +92,7 @@ def run_analysis(hazard, exposure, function, aggregation=None,
         build_report(arguments)
 
     # generating qml styles file
-    qgis_impact_layer = safe_to_qgis_layer(impact_layer)
+    qgis_impact_layer = get_layer(new_name)
     generate_styles(impact_layer, qgis_impact_layer)
 
     # archiving the layer
