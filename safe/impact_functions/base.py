@@ -626,6 +626,24 @@ class ImpactFunction(object):
             print message
         print 'Task progress: %i of %i' % (current, maximum)
 
+    def run_analysis(self):
+        """The whole analysis process.
+
+        This method will run 'validate', 'prepare' and will run the analysis.
+
+        This method mustn't be overridden in a child class.
+
+        :return: The result of the impact function.
+        :rtype: dict
+        """
+        self.validate()
+        self.prepare()
+
+        self.provenance.append_step(
+            'Calculating Step',
+            'Impact function is calculating the impact.')
+        return self.run()
+
     def validate(self):
         """Validate things needed before running the analysis."""
         # Set start time.
