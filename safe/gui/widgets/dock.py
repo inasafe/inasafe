@@ -151,7 +151,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # Impact Function Manager to deal with IF needs
         self.impact_function_manager = ImpactFunctionManager()
 
-        self.analysis = None
+        self.impact_function = None
         self.keyword_io = KeywordIO()
         self.active_impact_function = None
         self.impact_function_parameters = None
@@ -1138,7 +1138,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.show_next_analysis_extent()  # green
             self.extent.show_user_analysis_extent()  # blue
             try:
-                clip_parameters = self.analysis.impact_function.clip_parameters
+                clip_parameters = self.impact_function.clip_parameters
                 self.extent.show_last_analysis_extent(
                     clip_parameters['adjusted_geo_extent'])  # red
             except (AttributeError, TypeError):
@@ -1156,13 +1156,13 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         try:
             self.enable_busy_cursor()
             self.show_next_analysis_extent()
-            self.analysis = self.prepare_analysis()
-            self.analysis.setup_analysis()
-            clip_parameters = self.analysis.impact_function.clip_parameters
+            self.impact_function = self.prepare_impact_function()
+            self.impact_function.setup_analysis()
+            clip_parameters = self.impact_function.clip_parameters
             self.extent.show_last_analysis_extent(
                 clip_parameters['adjusted_geo_extent'])
             # Start the analysis
-            self.analysis.run_analysis()
+            self.impact_function.run_analysis()
         except InsufficientOverlapError as e:
             context = self.tr(
                 'A problem was encountered when trying to determine the '
@@ -1202,12 +1202,12 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 return
             elif result == QtGui.QMessageBox.Yes:
                 # Set analysis to ignore memory warning
-                self.analysis.force_memory = True
+                self.impact_function.force_memory = True
                 self.accept()
         finally:
             # Set back analysis to not ignore memory warning
-            if self.analysis:
-                self.analysis.force_memory = False
+            if self.impact_function:
+                self.impact_function.force_memory = False
             self.disable_signal_receiver()
 
     def accept_cancelled(self, old_keywords):
@@ -1218,7 +1218,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         """
         LOGGER.debug('Setting old dictionary: ' + str(old_keywords))
         self.keyword_io.write_keywords(
-            self.analysis.aggregator.layer, old_keywords)
+            self.impact_function.aggregator.layer, old_keywords)
         self.hide_busy()
         self.set_run_button_status()
 
@@ -1249,32 +1249,31 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         send_error_message(self, message)
         self.analysis_done.emit(False)
 
-    def prepare_analysis(self):
+    def prepare_impact_function(self):
         """Create analysis as a representation of current situation of dock."""
-        analysis = Analysis()
 
         # Impact Functions
-        if self.get_function_id() != '':
-            impact_function = self.impact_function_manager.get(
-                self.get_function_id())
-            impact_function.parameters = self.impact_function_parameters
-            analysis.impact_function = impact_function
+        #if self.get_function_id() != '':
+        impact_function = self.impact_function_manager.get(
+            self.get_function_id())
+        impact_function.parameters = self.impact_function_parameters
 
         # Layers
-        analysis.hazard = self.get_hazard_layer()
-        analysis.exposure = self.get_exposure_layer()
-        analysis.aggregation = self.get_aggregation_layer()
+        impact_function.hazard = self.get_hazard_layer()
+        impact_function.exposure = self.get_exposure_layer()
+        impact_function.aggregation = self.get_aggregation_layer()
 
         # Variables
-        analysis.clip_hard = self.clip_hard
-        analysis.show_intermediate_layers = self.show_intermediate_layers
+        impact_function.clip_hard = self.clip_hard
+        impact_function.show_intermediate_layers = \
+            self.show_intermediate_layers
         viewport = viewport_geo_array(self.iface.mapCanvas())
-        analysis.viewport_extent = viewport
+        impact_function.viewport_extent = viewport
         if self.extent.user_extent:
-            analysis.user_extent = self.extent.user_extent
-            analysis.user_extent_crs = self.extent.user_extent_crs
+            impact_function.user_extent = self.extent.user_extent
+            impact_function.user_extent_crs = self.extent.user_extent_crs
 
-        return analysis
+        return impact_function
 
     def add_above_layer(self, existing_layer, new_layer):
         """Add a layer (e.g. impact layer) above another layer in the legend.
@@ -1356,7 +1355,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # Try to run completion code
         try:
             LOGGER.debug(datetime.now())
-            LOGGER.debug(self.analysis is None)
+            LOGGER.debug(self.impact_function is None)
             report = self.show_results()
         except Exception, e:  # pylint: disable=W0703
 
@@ -1381,15 +1380,14 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         :returns: Provides a report for writing to the dock.
         :rtype: str
         """
-        safe_impact_layer = self.analysis.impact_layer
+        safe_impact_layer = self.impact_function.impact
         qgis_impact_layer = read_impact_layer(safe_impact_layer)
         # self.layer_changed(qgis_impact_layer)
         keywords = self.keyword_io.read_keywords(qgis_impact_layer)
 
         # write postprocessing report to keyword
-        impact_function = self.analysis.impact_function
-        output = impact_function.postprocessor_manager.get_output(
-            self.analysis.aggregator.aoi_mode)
+        output = self.impact_function.postprocessor_manager.get_output(
+            self.impact_function.aggregator.aoi_mode)
         keywords['postprocessing_report'] = output.to_html(
             suppress_newlines=True)
         self.keyword_io.write_keywords(qgis_impact_layer, keywords)
@@ -1437,7 +1435,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         if self.show_intermediate_layers:
             self.add_above_layer(
                 self.get_aggregation_layer(),
-                self.analysis.aggregator.layer)
+                self.impact_function.aggregator.layer)
 
         # Insert the impact above the exposure
         self.add_above_layer(
@@ -2107,8 +2105,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         try:
             # Temporary only, for checking the user extent
-            analysis = self.prepare_analysis()
-            clip_parameters = analysis.impact_function.clip_parameters
+            impact_function = self.prepare_impact_function()
+            clip_parameters = impact_function.clip_parameters
             return True, clip_parameters['adjusted_geo_extent']
         except (AttributeError, InsufficientOverlapError):
             return False, None

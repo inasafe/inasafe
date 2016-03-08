@@ -66,7 +66,6 @@ from safe.common.exceptions import (
 from safe.report.impact_report import ImpactReport
 from safe.gui.tools.impact_report_dialog import ImpactReportDialog
 from safe_extras.pydispatch import dispatcher
-from safe.utilities.analysis import Analysis
 from safe.utilities.extent import Extent
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 
@@ -102,7 +101,7 @@ class AnalysisHandler(QObject):
         self.keyword_io = KeywordIO()
         self.impact_function_manager = ImpactFunctionManager()
         self.extent = Extent(self.iface)
-        self.analysis = None
+        self.impact_function = None
         self.composer = None
 
         # Values for settings these get set in read_settings.
@@ -304,16 +303,16 @@ class AnalysisHandler(QObject):
         self.show_busy()
         self.init_analysis()
         try:
-            self.analysis.setup_analysis()
+            self.impact_function.setup_analysis()
         except InsufficientOverlapError as e:
             raise e
 
-        clip_parameters = self.analysis.impact_function.clip_parameters
+        clip_parameters = self.impact_function.clip_parameters
         self.extent.show_last_analysis_extent(
             clip_parameters['adjusted_geo_extent'])
 
         # Start the analysis
-        self.analysis.run_analysis()
+        self.impact_function.run_analysis()
 
         self.disable_signal_receiver()
 
@@ -323,30 +322,28 @@ class AnalysisHandler(QObject):
 
         .. note:: Copied or adapted from the dock
         """
-        self.analysis = Analysis()
-
         # Impact Function
-        impact_function = self.impact_function_manager.get(
+        self.impact_function = self.impact_function_manager.get(
             self.parent.selected_function()['id'])
-        impact_function.parameters = self.parent.if_params
-        self.analysis.impact_function = impact_function
+        self.impact_function.parameters = self.parent.if_params
 
         # Layers
-        self.analysis.hazard = self.parent.hazard_layer
-        self.analysis.exposure = self.parent.exposure_layer
-        self.analysis.aggregation = self.parent.aggregation_layer
+        self.impact_function.hazard = self.parent.hazard_layer
+        self.impact_function.exposure = self.parent.exposure_layer
+        self.impact_function.aggregation = self.parent.aggregation_layer
         # TODO test if the implement aggregation layer works!
 
         # Variables
-        self.analysis.clip_hard = self.clip_hard
-        self.analysis.show_intermediate_layers = self.show_intermediate_layers
+        self.impact_function.clip_hard = self.clip_hard
+        self.impact_function.show_intermediate_layers = \
+            self.show_intermediate_layers
         viewport = viewport_geo_array(self.iface.mapCanvas())
-        self.analysis.viewport_extent = viewport
+        self.impact_function.viewport_extent = viewport
 
         # Extent
-        if self.analysis.user_extent:
-            self.analysis.user_extent = self.extent.user_extent
-            self.analysis.user_extent_crs = self.extent.user_extent_crs
+        if self.impact_function.user_extent:
+            self.impact_function.user_extent = self.extent.user_extent
+            self.impact_function.user_extent_crs = self.extent.user_extent_crs
 
     # noinspection PyUnresolvedReferences
     def completed(self):
@@ -360,14 +357,13 @@ class AnalysisHandler(QObject):
             from datetime import datetime
             LOGGER.debug(datetime.now())
             LOGGER.debug('get engine impact layer')
-            LOGGER.debug(self.analysis is None)
-            engine_impact_layer = self.analysis.impact_layer
+            LOGGER.debug(self.impact_function is None)
 
             # Load impact layer into QGIS
-            qgis_impact_layer = read_impact_layer(engine_impact_layer)
+            qgis_impact_layer = read_impact_layer(self.impact_function.impact)
 
             report = self.show_results(
-                qgis_impact_layer, engine_impact_layer)
+                qgis_impact_layer, self.impact_function.impact)
 
         except Exception, e:  # pylint: disable=W0703
             # FIXME (Ole): This branch is not covered by the tests
@@ -408,9 +404,8 @@ class AnalysisHandler(QObject):
         keywords = self.keyword_io.read_keywords(qgis_impact_layer)
 
         # write postprocessing report to keyword
-        impact_function = self.analysis.impact_function
-        output = impact_function.postprocessor_manager.get_output(
-            self.analysis.aggregator.aoi_mode)
+        output = self.impact_function.postprocessor_manager.get_output(
+            self.impact_function.aggregator.aoi_mode)
         keywords['postprocessing_report'] = output.to_html(
             suppress_newlines=True)
         self.keyword_io.write_keywords(qgis_impact_layer, keywords)
@@ -459,7 +454,7 @@ class AnalysisHandler(QObject):
         # Add layers to QGIS
         layers_to_add = []
         if self.show_intermediate_layers:
-            layers_to_add.append(self.analysis.aggregator.layer)
+            layers_to_add.append(self.impact_function.aggregator.layer)
         layers_to_add.append(qgis_impact_layer)
         # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayers(layers_to_add)
@@ -469,7 +464,7 @@ class AnalysisHandler(QObject):
         if self.zoom_to_impact_flag:
             self.iface.zoomToActiveLayer()
         if self.hide_exposure_flag:
-            exposure_layer = self.analysis.exposure_layer
+            exposure_layer = self.impact_function.exposure
             legend = self.iface.legendInterface()
             legend.setLayerVisible(exposure_layer, False)
 

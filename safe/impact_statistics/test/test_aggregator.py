@@ -128,7 +128,7 @@ class AggregatorTest(unittest.TestCase):
         assert result, message
         # Press RUN
         self.DOCK.accept()
-        attribute = self.DOCK.analysis.aggregator.attributes[attribute_key]
+        attribute = self.DOCK.impact_function.aggregator.attributes[attribute_key]
         message = ('The aggregation should be KAB_NAME. Found: %s' % attribute)
         self.assertEqual(attribute, 'KAB_NAME', message)
 
@@ -156,8 +156,8 @@ class AggregatorTest(unittest.TestCase):
         # noinspection PyCallByClass,PyTypeChecker
         self.DOCK.accept()
         print attribute_key
-        print self.DOCK.analysis.aggregator.attributes
-        attribute = self.DOCK.analysis.aggregator.attributes[attribute_key]
+        print self.DOCK.impact_function.aggregator.attributes
+        attribute = self.DOCK.impact_function.aggregator.attributes[attribute_key]
         message = (
             'The aggregation should be KAB_NAME. Found: %s' % attribute)
         self.assertEqual(attribute, 'KAB_NAME', message)
@@ -183,7 +183,7 @@ class AggregatorTest(unittest.TestCase):
         assert result, message
         # Press RUN
         self.DOCK.accept()
-        attribute = self.DOCK.analysis.aggregator.attributes[attribute_key]
+        attribute = self.DOCK.impact_function.aggregator.attributes[attribute_key]
         message = (
             'The aggregation should be None. Found: %s' % attribute)
         assert attribute is None, message
@@ -209,7 +209,7 @@ class AggregatorTest(unittest.TestCase):
         assert result, message
         # Press RUN
         self.DOCK.accept()
-        attribute = self.DOCK.analysis.aggregator.attributes[attribute_key]
+        attribute = self.DOCK.impact_function.aggregator.attributes[attribute_key]
         message = ('The aggregation should be None. Found: %s' % attribute)
         assert attribute is None, message
 
@@ -262,10 +262,10 @@ class AggregatorTest(unittest.TestCase):
             'The preprocessing should have generated %s features, '
             'found %s' % (
                 expected_feature_count,
-                self.DOCK.analysis.aggregator.preprocessed_feature_count))
+                self.DOCK.impact_function.aggregator.preprocessed_feature_count))
         self.assertEqual(
             expected_feature_count,
-            self.DOCK.analysis.aggregator.preprocessed_feature_count, message)
+            self.DOCK.impact_function.aggregator.preprocessed_feature_count, message)
 
     def _create_aggregator(self,
                            use_aoi_mode,
