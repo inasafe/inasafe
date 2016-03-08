@@ -40,6 +40,7 @@ from safe.common.exceptions import (
     InvalidGeometryError,
     AggregationError,
     KeywordDbError,
+    ZeroImpactException,
     InvalidLayerError,
     UnsupportedProviderError,
     CallGDALError,
@@ -74,13 +75,17 @@ from safe.common.version import get_version
 from safe.common.signals import (
     analysis_error,
     send_static_message,
+    send_busy_signal,
     send_dynamic_message,
     send_error_message,
     send_not_busy_signal,
     send_analysis_done_signal
 )
+from safe.engine.core import calculate_impact
 
+INFO_STYLE = styles.INFO_STYLE
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
+SUGGESTION_STYLE = styles.SUGGESTION_STYLE
 WARNING_STYLE = styles.WARNING_STYLE
 LOGO_ELEMENT = m.Brand()
 LOGGER = logging.getLogger('InaSAFE')
@@ -637,7 +642,7 @@ class ImpactFunction(object):
             print message
         print 'Task progress: %i of %i' % (current, maximum)
 
-    def run_analysis(self):
+    def analysis_workflow(self):
         """The whole analysis process.
 
         This method will run 'validate', 'prepare' and will run the analysis.
@@ -653,7 +658,73 @@ class ImpactFunction(object):
         self.provenance.append_step(
             'Calculating Step',
             'Impact function is calculating the impact.')
+
+        send_busy_signal(self)
+
+        title = tr('Calculating impact')
+        detail = tr(
+            'This may take a little while - we are computing the areas that '
+            'will be impacted by the hazard and writing the result to a new '
+            'layer.')
+        message = m.Message(
+            m.Heading(title, **PROGRESS_UPDATE_STYLE),
+            m.Paragraph(detail))
+        send_dynamic_message(self, message)
+
         return self.run()
+
+    def run_analysis(self):
+        """It's similar with run function in previous dock.py"""
+
+        try:
+            self._impact = calculate_impact(self)
+            self.run_aggregator()
+        except ZeroImpactException, e:
+            report = m.Message()
+            report.add(LOGO_ELEMENT)
+            report.add(m.Heading(tr(
+                'Analysis Results'), **INFO_STYLE))
+            report.add(m.Text(e.message))
+            report.add(m.Heading(tr('Notes'), **SUGGESTION_STYLE))
+            exposure_layer_title = self.exposure.name
+            hazard_layer_title = self.hazard.name
+            report.add(m.Text(tr(
+                'It appears that no %s are affected by %s. You may want '
+                'to consider:') % (
+                    exposure_layer_title, hazard_layer_title)))
+            check_list = m.BulletedList()
+            check_list.add(tr(
+                'Check that you are not zoomed in too much and thus '
+                'excluding %s from your analysis area.') % (
+                    exposure_layer_title))
+            check_list.add(tr(
+                'Check that the exposure is not no-data or zero for the '
+                'entire area of your analysis.'))
+            check_list.add(tr(
+                'Check that your impact function thresholds do not '
+                'exclude all features unintentionally.'))
+            # See #2288 and 2293
+            check_list.add(tr(
+                'Check that your dataset coordinate reference system is '
+                'compatible with InaSAFE\'s current requirements.'))
+            report.add(check_list)
+            send_static_message(self, report)
+            send_analysis_done_signal(self)
+            return
+        except MemoryError, e:
+            message = tr(
+                'An error occurred because it appears that your system does '
+                'not have sufficient memory. Upgrading your computer so that '
+                'it has more memory may help. Alternatively, consider using a '
+                'smaller geographical area for your analysis, or using '
+                'rasters with a larger cell size.')
+            analysis_error(self, e, message)
+        except Exception, e:  # pylint: disable=W0703
+            # FIXME (Ole): This branch is not covered by the tests
+            analysis_error(
+                self,
+                e,
+                tr('An exception occurred when running the impact analysis.'))
 
     def validate(self):
         """Validate things needed before running the analysis."""

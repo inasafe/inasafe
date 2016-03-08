@@ -17,7 +17,6 @@ import logging
 
 from qgis.core import QgsMapLayer, QgsRectangle
 
-from safe.common.exceptions import ZeroImpactException
 from safe.storage.safe_layer import SafeLayer
 from safe.common.exceptions import (
     InsufficientOverlapError,
@@ -31,12 +30,7 @@ from safe.utilities.memory_checker import check_memory_usage
 from safe.utilities.i18n import tr
 from safe.messaging import styles
 from safe.common.signals import (
-    analysis_error,
-    send_static_message,
-    send_busy_signal,
-    send_dynamic_message,
-    send_analysis_done_signal)
-from safe.engine.core import calculate_impact
+    analysis_error)
 
 
 __author__ = 'ismail@kartoza.com'
@@ -229,6 +223,10 @@ class Analysis(object):
         # There is not setter for impact layer as we are outside of the IF.
         self.impact_function._impact = layer
 
+    def run_analysis(self):
+        """It's similar with run function in previous dock.py"""
+        self.impact_function.run_analysis()
+
     def setup_analysis(self):
         """Setup analysis so that it will be ready for running."""
         # Refactor from dock.accept()
@@ -309,67 +307,3 @@ class Analysis(object):
                     'area for your analysis, or using rasters with a larger '
                     'cell size.'))
             return
-
-    def run_analysis(self):
-        """It's similar with run function in previous dock.py"""
-        send_busy_signal(self)
-
-        title = tr('Calculating impact')
-        detail = tr(
-            'This may take a little while - we are computing the areas that '
-            'will be impacted by the hazard and writing the result to a new '
-            'layer.')
-        message = m.Message(
-            m.Heading(title, **PROGRESS_UPDATE_STYLE),
-            m.Paragraph(detail))
-        send_dynamic_message(self, message)
-
-        try:
-            self.impact_layer = calculate_impact(self.impact_function)
-            self.impact_function.run_aggregator()
-        except ZeroImpactException, e:
-            report = m.Message()
-            report.add(LOGO_ELEMENT)
-            report.add(m.Heading(tr(
-                'Analysis Results'), **INFO_STYLE))
-            report.add(m.Text(e.message))
-            report.add(m.Heading(tr('Notes'), **SUGGESTION_STYLE))
-            exposure_layer_title = self.exposure.name
-            hazard_layer_title = self.hazard.name
-            report.add(m.Text(tr(
-                'It appears that no %s are affected by %s. You may want '
-                'to consider:') % (
-                    exposure_layer_title, hazard_layer_title)))
-            check_list = m.BulletedList()
-            check_list.add(tr(
-                'Check that you are not zoomed in too much and thus '
-                'excluding %s from your analysis area.') % (
-                    exposure_layer_title))
-            check_list.add(tr(
-                'Check that the exposure is not no-data or zero for the '
-                'entire area of your analysis.'))
-            check_list.add(tr(
-                'Check that your impact function thresholds do not '
-                'exclude all features unintentionally.'))
-            # See #2288 and 2293
-            check_list.add(tr(
-                'Check that your dataset coordinate reference system is '
-                'compatible with InaSAFE\'s current requirements.'))
-            report.add(check_list)
-            send_static_message(self, report)
-            send_analysis_done_signal(self)
-            return
-        except MemoryError, e:
-            message = tr(
-                'An error occurred because it appears that your system does '
-                'not have sufficient memory. Upgrading your computer so that '
-                'it has more memory may help. Alternatively, consider using a '
-                'smaller geographical area for your analysis, or using '
-                'rasters with a larger cell size.')
-            analysis_error(self, e, message)
-        except Exception, e:  # pylint: disable=W0703
-            # FIXME (Ole): This branch is not covered by the tests
-            analysis_error(
-                self,
-                e,
-                tr('An exception occurred when running the impact analysis.'))
