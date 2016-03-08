@@ -110,12 +110,6 @@ class ClassifiedRasterHazardPopulationFunction(
           Map of population exposed to high class
           Table with number of people in each class
         """
-        self.validate()
-        self.prepare()
-
-        self.provenance.append_step(
-            'Calculating Step',
-            'Impact function is calculating the impact.')
 
         # The 3 classes
         # TODO (3.2): shouldnt these be defined in keywords rather? TS

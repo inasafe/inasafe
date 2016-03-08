@@ -108,12 +108,6 @@ class ContinuousHazardPopulationFunction(
           Map of population exposed to high category
           Table with number of people in each category
         """
-        self.validate()
-        self.prepare()
-
-        self.provenance.append_step(
-            'Calculating Step',
-            'Impact function is calculating the impact.')
 
         thresholds = [
             p.value for p in self.parameters['Categorical thresholds'].value]
