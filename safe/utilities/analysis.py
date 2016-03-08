@@ -15,14 +15,8 @@ Contact : ole.moller.nielsen@gmail.com
 # noinspection PyPackageRequirements
 import logging
 
-# noinspection PyPackageRequirements
-from PyQt4.QtCore import QSettings
-
 from qgis.core import QgsMapLayer, QgsRectangle
 
-from safe.impact_statistics.postprocessor_manager import (
-    PostprocessorManager)
-from safe.impact_statistics.aggregator import Aggregator
 from safe.common.exceptions import ZeroImpactException
 from safe.storage.utilities import safe_to_qgis_layer
 from safe.storage.safe_layer import SafeLayer
@@ -43,7 +37,6 @@ from safe.utilities.memory_checker import check_memory_usage
 from safe.utilities.gis import extent_to_array
 from safe.utilities.i18n import tr
 from safe.utilities.utilities import get_error_message
-from safe.utilities.clipper import clip_layer
 from safe.messaging import styles
 from safe.common.signals import (
     analysis_error,
@@ -82,9 +75,6 @@ class Analysis(object):
         # Impact Function
         self._impact_function = None
 
-        self.aggregator = None
-        self.postprocessor_manager = None
-
     @property
     def impact_function(self):
         if not self._impact_function:
@@ -95,6 +85,10 @@ class Analysis(object):
     @impact_function.setter
     def impact_function(self, impact_function):
         self._impact_function = impact_function
+
+    @property
+    def aggregator(self):
+        return self.impact_function.aggregator
 
     @property
     def clip_hard(self):
@@ -245,28 +239,6 @@ class Analysis(object):
         # There is not setter for impact layer as we are outside of the IF.
         self.impact_function._impact = layer
 
-    def setup_aggregator(self):
-        """Create an aggregator for this analysis run."""
-        # Refactor from dock.prepare_aggregator
-        clip_parameters = self.impact_function.clip_parameters
-        try:
-            buffered_geo_extent = self.impact_layer.extent
-        except AttributeError:
-            # if we have no runner, set dummy extent
-            buffered_geo_extent = clip_parameters['adjusted_geo_extent']
-
-        if self.aggregation is not None:
-            qgis_layer = self.aggregation.qgis_layer()
-        else:
-            qgis_layer = None
-
-        # setup aggregator to use buffered_geo_extent to deal with #759
-        self.aggregator = Aggregator(
-            buffered_geo_extent, qgis_layer)
-
-        self.aggregator.show_intermediate_layers = \
-            self.show_intermediate_layers
-
     def setup_analysis(self):
         """Setup analysis so that it will be ready for running."""
         # Refactor from dock.accept()
@@ -296,7 +268,7 @@ class Analysis(object):
             if not result:
                 raise InsufficientMemoryWarning
 
-        self.setup_aggregator()
+        self.impact_function.setup_aggregator()
 
         # go check if our postprocessing layer has any keywords set and if not
         # prompt for them. if a prompt is shown run method is called by the
@@ -348,110 +320,6 @@ class Analysis(object):
                     'cell size.'))
             return
 
-    def optimal_clip(self):
-        """ A helper function to perform an optimal clip of the input data.
-        Optimal extent should be considered as the intersection between
-        the three inputs. The InaSAFE library will perform various checks
-        to ensure that the extent is tenable, includes data from both
-        etc.
-
-        The result of this function will be two layers which are
-        clipped and re-sampled if needed, and in the EPSG:4326 geographic
-        coordinate reference system.
-
-        :returns: The clipped hazard and exposure layers.
-        :rtype: (QgsMapLayer, QgsMapLayer)
-        """
-
-        # Get the hazard and exposure layers selected in the combos
-        # and other related parameters needed for clipping.
-        try:
-            clip_parameters = self.impact_function.clip_parameters
-            extra_exposure_keywords = clip_parameters[
-                'extra_exposure_keywords']
-            adjusted_geo_extent = clip_parameters['adjusted_geo_extent']
-            cell_size = clip_parameters['cell_size']
-        except:
-            raise
-        # Find out what clipping behaviour we have - see #2210
-        settings = QSettings()
-        mode = settings.value(
-            'inasafe/analysis_extents_mode',
-            'HazardExposureView')
-        detail = None
-        if mode == 'HazardExposureView':
-            detail = tr(
-                'Resampling and clipping the hazard layer to match the '
-                'intersection of the exposure layer and the current view '
-                'extents.')
-        elif mode == 'HazardExposure':
-            detail = tr(
-                'Resampling and clipping the hazard layer to match the '
-                'intersection of the exposure layer extents.')
-        elif mode == 'HazardExposureBookmark':
-            detail = tr(
-                'Resampling and clipping the hazard layer to match the '
-                'bookmarked extents.')
-        elif mode == 'HazardExposureBoundingBox':
-            detail = tr(
-                'Resampling and clipping the hazard layer to match the '
-                'intersection of your preferred analysis area.')
-        # Make sure that we have EPSG:4326 versions of the input layers
-        # that are clipped and (in the case of two raster inputs) resampled to
-        # the best resolution.
-        title = tr('Preparing hazard data')
-
-        message = m.Message(
-            m.Heading(title, **PROGRESS_UPDATE_STYLE),
-            m.Paragraph(detail))
-        send_dynamic_message(self, message)
-        try:
-            clipped_hazard = clip_layer(
-                layer=self.hazard.qgis_layer(),
-                extent=adjusted_geo_extent,
-                cell_size=cell_size,
-                hard_clip_flag=self.clip_hard)
-        except CallGDALError, e:
-            raise e
-        except IOError, e:
-            raise e
-
-        title = tr('Preparing exposure data')
-        # Find out what clipping behaviour we have - see #2210
-        settings = QSettings()
-        mode = settings.value(
-            'inasafe/analysis_extents_mode',
-            'HazardExposureView')
-        if mode == 'HazardExposureView':
-            detail = tr(
-                'Resampling and clipping the exposure layer to match '
-                'the intersection of the hazard layer and the current view '
-                'extents.')
-        elif mode == 'HazardExposure':
-            detail = tr(
-                'Resampling and clipping the exposure layer to match '
-                'the intersection of the hazard layer extents.')
-        elif mode == 'HazardExposureBookmark':
-            detail = tr(
-                'Resampling and clipping the exposure layer to match '
-                'the bookmarked extents.')
-        elif mode == 'HazardExposureBoundingBox':
-            detail = tr(
-                'Resampling and clipping the exposure layer to match '
-                'the intersection of your preferred analysis area.')
-        message = m.Message(
-            m.Heading(title, **PROGRESS_UPDATE_STYLE),
-            m.Paragraph(detail))
-        send_dynamic_message(self, message)
-
-        clipped_exposure = clip_layer(
-            layer=self.exposure.qgis_layer(),
-            extent=adjusted_geo_extent,
-            cell_size=cell_size,
-            extra_keywords=extra_exposure_keywords,
-            hard_clip_flag=self.clip_hard)
-        return clipped_hazard, clipped_exposure
-
     def setup_impact_function(self):
         """Setup impact function."""
         # Get the hazard and exposure layers selected in the combos
@@ -460,7 +328,7 @@ class Analysis(object):
         if self.impact_function.requires_clipping:
             # The impact function uses SAFE layers,
             # clip them
-            hazard_layer, exposure_layer = self.optimal_clip()
+            hazard_layer, exposure_layer = self.impact_function.optimal_clip()
             self.aggregator.set_layers(hazard_layer, exposure_layer)
 
             # See if the inputs need further refinement for aggregations
@@ -516,23 +384,12 @@ class Analysis(object):
 
         # TODO (MB) do we really want this check?
         if self.aggregator.error_message is None:
-            self.run_post_processor()
+            self.impact_function.run_post_processor()
         else:
             content = self.aggregator.error_message
             exception = AggregationError(tr(
                 'Aggregation error occurred.'))
             analysis_error(self, exception, content)
-
-    def run_post_processor(self):
-        """Carry out any postprocessing required for this impact layer.
-        """
-        LOGGER.debug('Do postprocessing')
-        self.postprocessor_manager = PostprocessorManager(self.aggregator)
-        self.postprocessor_manager.function_parameters = \
-            self.impact_function.parameters
-        self.postprocessor_manager.run()
-        send_not_busy_signal(self)
-        send_analysis_done_signal(self)
 
     def run_analysis(self):
         """It's similar with run function in previous dock.py"""

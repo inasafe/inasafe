@@ -15,6 +15,9 @@ Contact : ole.moller.nielsen@gmail.com
 __author__ = 'lucernae'
 
 import unittest
+from safe.test.utilities import get_qgis_app, test_data_path
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
 
 from safe.impact_functions.impact_function_manager\
     import ImpactFunctionManager
@@ -22,11 +25,7 @@ from safe.impact_functions.inundation.flood_raster_osm_building_impact\
     .impact_function import \
     FloodRasterBuildingFunction
 from safe.storage.core import read_layer
-from safe.test.utilities import get_qgis_app, test_data_path
 from safe.storage.safe_layer import SafeLayer
-
-
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class TestFloodRasterBuildingFunction(unittest.TestCase):

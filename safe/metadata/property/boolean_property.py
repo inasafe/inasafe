@@ -27,8 +27,7 @@ from safe.metadata.property import BaseProperty
 
 
 class BooleanProperty(BaseProperty):
-    """
-    A property that accepts boolean
+    """A property that accepts boolean
     """
     # if you edit this you need to adapt accordingly xml_value and is_valid
     _allowed_python_types = [bool, NoneType]
@@ -39,7 +38,6 @@ class BooleanProperty(BaseProperty):
 
     @classmethod
     def is_valid(cls, value):
-        # the date types constructors already complain if a date is not valid.
         return True
 
     def cast_from_str(self, value):

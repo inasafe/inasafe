@@ -16,11 +16,12 @@ __filename__ = 'test_classified_hazard_building'
 __date__ = '24/03/15'
 
 import unittest
+from safe.test.utilities import test_data_path, get_qgis_app
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.impact_functions.impact_function_manager\
     import ImpactFunctionManager
 from safe.storage.core import read_layer
-from safe.test.utilities import test_data_path
 from safe.impact_functions.generic.classified_raster_population\
     .impact_function import ClassifiedRasterHazardPopulationFunction
 from safe.storage.safe_layer import SafeLayer

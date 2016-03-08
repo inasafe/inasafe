@@ -74,8 +74,8 @@
         "QDateTime"
       ],
       "name": "date",
-      "python_type": "NoneType",
-      "value": null,
+      "python_type": "datetime",
+      "value": "2016-02-18",
       "xml_path": "gmd:dateStamp/gco:Date"
     },
     "elapsed_time": {
@@ -360,13 +360,14 @@
     },
     "resolution": {
       "allowed_python_types": [
+        "float",
         "tuple",
         "NoneType"
       ],
       "name": "resolution",
       "python_type": "NoneType",
       "value": null,
-      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/resolution/gco:Tuple"
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/resolution/gco:FloatTuple"
     },
     "scale": {
       "allowed_python_types": [
@@ -393,29 +394,6 @@
       "python_type": "NoneType",
       "value": null,
       "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/source/gco:CharacterString"
-    },
-    "statistics_classes": {
-      "allowed_python_types": [
-        "list",
-        "NoneType"
-      ],
-      "name": "statistics_classes",
-      "python_type": "NoneType",
-      "value": null,
-      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/statistics_classes/gco:List"
-    },
-    "statistics_type": {
-      "allowed_python_types": [
-        "str",
-        "unicode",
-        "int",
-        "float",
-        "NoneType"
-      ],
-      "name": "statistics_type",
-      "python_type": "NoneType",
-      "value": null,
-      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/statistics_type/gco:CharacterString"
     },
     "target_field": {
       "allowed_python_types": [
@@ -462,8 +440,8 @@
         "NoneType"
       ],
       "name": "url",
-      "python_type": "NoneType",
-      "value": null,
+      "python_type": "QUrl",
+      "value": "http://inasafe.org",
       "xml_path": "gmd:distributionInfo/gmd:MD_Distribution/gmd:transferOptions/gmd:MD_DigitalTransferOptions/gmd:onLine/gmd:CI_OnlineResource/gmd:linkage/gmd:URL"
     },
     "user": {

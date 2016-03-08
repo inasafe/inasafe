@@ -33,6 +33,7 @@ from safe.metadata.property import (
     FloatProperty,
     ListProperty,
     TupleProperty,
+    FloatTupleProperty
 )
 
 # XML to python types conversions
@@ -46,6 +47,7 @@ TYPE_CONVERSIONS = {
     'gco:Float': FloatProperty,
     'gco:List': ListProperty,
     'gco:Tuple': TupleProperty,
+    'gco:FloatTuple': FloatTupleProperty,
 }
 
 # XML Namespaces

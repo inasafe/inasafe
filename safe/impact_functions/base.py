@@ -29,10 +29,14 @@ from osgeo import gdal
 from PyQt4.QtCore import QT_VERSION_STR, QSettings
 from PyQt4.Qt import PYQT_VERSION_STR
 
+from safe.impact_statistics.aggregator import Aggregator
+from safe.impact_statistics.postprocessor_manager import (
+    PostprocessorManager)
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.common.exceptions import (
     InvalidExtentError,
+    CallGDALError,
     FunctionParametersError,
     NoValidLayerError,
     InsufficientOverlapError)
@@ -44,6 +48,7 @@ from safe.postprocessors.postprocessor_factory import (
     get_postprocessor_human_name)
 from safe.common.utilities import get_non_conflicting_attribute_name
 from safe.utilities.i18n import tr
+from safe.utilities.clipper import clip_layer
 from safe.utilities.gis import (
     convert_to_safe_layer,
     get_wgs84_resolution,
@@ -58,7 +63,12 @@ from safe.storage.utilities import (
 from safe.definitions import inasafe_keyword_version
 from safe.metadata.provenance import Provenance
 from safe.common.version import get_version
-from safe.common.signals import send_static_message
+from safe.common.signals import (
+    send_static_message,
+    send_dynamic_message,
+    send_not_busy_signal,
+    send_analysis_done_signal
+)
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 WARNING_STYLE = styles.WARNING_STYLE
@@ -106,6 +116,10 @@ class ImpactFunction(object):
         self._exposure = None
         # Layer used for aggregating results by area / district
         self._aggregation = None
+        # Aggregator
+        self._aggregator = None
+        # Postprocessor manager
+        self._postprocessor_manager = None
         # The best extents to use for the assessment
         self._clip_parameters = None
         # Clip features that extend beyond the extents.
@@ -380,6 +394,24 @@ class ImpactFunction(object):
             self._aggregation = None
 
     @property
+    def aggregator(self):
+        """Get the aggregator.
+
+        :return: The aggregator.
+        :rtype: Aggregator
+        """
+        return self._aggregator
+
+    @property
+    def postprocessor_manager(self):
+        """Get the postprocessor manager.
+
+        :return: The postprocessor manager.
+        :rtype: PostprocessorManager
+        """
+        return self._postprocessor_manager
+
+    @property
     def parameters(self):
         """Get the parameter."""
         return self._parameters
@@ -641,6 +673,7 @@ class ImpactFunction(object):
 
         # Fixme : When Analysis.py will not exist anymore, we will uncomment.
         # self.emit_pre_run_message()
+        # self.setup_aggregator()
 
         self.provenance.append_step(
             'Preparation Step',
@@ -963,3 +996,134 @@ class ImpactFunction(object):
             }
 
         return self._clip_parameters
+
+    def optimal_clip(self):
+        """ A helper function to perform an optimal clip of the input data.
+        Optimal extent should be considered as the intersection between
+        the three inputs. The InaSAFE library will perform various checks
+        to ensure that the extent is tenable, includes data from both
+        etc.
+
+        The result of this function will be two layers which are
+        clipped and re-sampled if needed, and in the EPSG:4326 geographic
+        coordinate reference system.
+
+        :returns: The clipped hazard and exposure layers.
+        :rtype: (QgsMapLayer, QgsMapLayer)
+        """
+
+        # Get the hazard and exposure layers selected in the combos
+        # and other related parameters needed for clipping.
+        try:
+            clip_parameters = self.clip_parameters
+            extra_exposure_keywords = clip_parameters[
+                'extra_exposure_keywords']
+            adjusted_geo_extent = clip_parameters['adjusted_geo_extent']
+            cell_size = clip_parameters['cell_size']
+        except:
+            raise
+        # Find out what clipping behaviour we have - see #2210
+        settings = QSettings()
+        mode = settings.value(
+            'inasafe/analysis_extents_mode',
+            'HazardExposureView')
+        detail = None
+        if mode == 'HazardExposureView':
+            detail = tr(
+                'Resampling and clipping the hazard layer to match the '
+                'intersection of the exposure layer and the current view '
+                'extents.')
+        elif mode == 'HazardExposure':
+            detail = tr(
+                'Resampling and clipping the hazard layer to match the '
+                'intersection of the exposure layer extents.')
+        elif mode == 'HazardExposureBookmark':
+            detail = tr(
+                'Resampling and clipping the hazard layer to match the '
+                'bookmarked extents.')
+        elif mode == 'HazardExposureBoundingBox':
+            detail = tr(
+                'Resampling and clipping the hazard layer to match the '
+                'intersection of your preferred analysis area.')
+        # Make sure that we have EPSG:4326 versions of the input layers
+        # that are clipped and (in the case of two raster inputs) resampled to
+        # the best resolution.
+        title = tr('Preparing hazard data')
+
+        message = m.Message(
+            m.Heading(title, **PROGRESS_UPDATE_STYLE),
+            m.Paragraph(detail))
+        send_dynamic_message(self, message)
+        try:
+            clipped_hazard = clip_layer(
+                layer=self.hazard.qgis_layer(),
+                extent=adjusted_geo_extent,
+                cell_size=cell_size,
+                hard_clip_flag=self.clip_hard)
+        except CallGDALError, e:
+            raise e
+        except IOError, e:
+            raise e
+
+        title = tr('Preparing exposure data')
+        # Find out what clipping behaviour we have - see #2210
+        settings = QSettings()
+        mode = settings.value(
+            'inasafe/analysis_extents_mode',
+            'HazardExposureView')
+        if mode == 'HazardExposureView':
+            detail = tr(
+                'Resampling and clipping the exposure layer to match '
+                'the intersection of the hazard layer and the current view '
+                'extents.')
+        elif mode == 'HazardExposure':
+            detail = tr(
+                'Resampling and clipping the exposure layer to match '
+                'the intersection of the hazard layer extents.')
+        elif mode == 'HazardExposureBookmark':
+            detail = tr(
+                'Resampling and clipping the exposure layer to match '
+                'the bookmarked extents.')
+        elif mode == 'HazardExposureBoundingBox':
+            detail = tr(
+                'Resampling and clipping the exposure layer to match '
+                'the intersection of your preferred analysis area.')
+        message = m.Message(
+            m.Heading(title, **PROGRESS_UPDATE_STYLE),
+            m.Paragraph(detail))
+        send_dynamic_message(self, message)
+
+        clipped_exposure = clip_layer(
+            layer=self.exposure.qgis_layer(),
+            extent=adjusted_geo_extent,
+            cell_size=cell_size,
+            extra_keywords=extra_exposure_keywords,
+            hard_clip_flag=self.clip_hard)
+        return clipped_hazard, clipped_exposure
+
+    def setup_aggregator(self):
+        """Create an aggregator for this analysis run."""
+        try:
+            buffered_geo_extent = self.impact.extent
+        except AttributeError:
+            # if we have no runner, set dummy extent
+            buffered_geo_extent = self.clip_parameters['adjusted_geo_extent']
+
+        if self.aggregation is not None:
+            qgis_layer = self.aggregation.qgis_layer()
+        else:
+            qgis_layer = None
+
+        # setup aggregator to use buffered_geo_extent to deal with #759
+        self._aggregator = Aggregator(buffered_geo_extent, qgis_layer)
+
+        self._aggregator.show_intermediate_layers = \
+            self.show_intermediate_layers
+
+    def run_post_processor(self):
+        """Carry out any postprocessing required for this impact layer."""
+        self._postprocessor_manager = PostprocessorManager(self.aggregator)
+        self.postprocessor_manager.function_parameters = self.parameters
+        self.postprocessor_manager.run()
+        send_not_busy_signal(self)
+        send_analysis_done_signal(self)
