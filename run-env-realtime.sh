@@ -12,6 +12,10 @@ export QGIS_PATH=$QGIS_PREFIX_PATH
 export LD_LIBRARY_PATH=${QGIS_PREFIX_PATH}/lib
 export PYTHONPATH=${QGIS_PREFIX_PATH}/share/qgis/python:${QGIS_PREFIX_PATH}/share/qgis/python/plugins:${PYTHONPATH}
 
+# also export python path for necessary qgis plugins hosted in the same level
+# as this repo. Needed for InaSAFE Flood to render basemap.
+export PYTHONPATH=/home/realtime/src/qgis-openlayers-plugin:${PYTHONPATH}
+
 
 echo "QGIS PATH: $QGIS_PREFIX_PATH"
 echo "PYTHONPATH: $PYTHONPATH"
