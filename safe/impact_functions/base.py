@@ -37,6 +37,10 @@ from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.common.exceptions import (
     InvalidExtentError,
+    InsufficientMemoryWarning,
+    InvalidAggregationKeywords,
+    NoFeaturesInExtentError,
+    InvalidProjectionError,
     InvalidGeometryError,
     AggregationError,
     KeywordDbError,
@@ -55,6 +59,7 @@ from safe.postprocessors.postprocessor_factory import (
     get_postprocessor_human_name)
 from safe.common.utilities import get_non_conflicting_attribute_name
 from safe.utilities.utilities import get_error_message
+from safe.utilities.memory_checker import check_memory_usage
 from safe.utilities.i18n import tr
 from safe.utilities.clipper import clip_layer
 from safe.utilities.gis import (
@@ -645,6 +650,7 @@ class ImpactFunction(object):
     def analysis_workflow(self):
         """The whole analysis process.
 
+        This function is executed be calculate_impact in the core package.
         This method will run 'validate', 'prepare' and will run the analysis.
 
         This method mustn't be overridden in a child class.
@@ -1200,6 +1206,87 @@ class ImpactFunction(object):
             extra_keywords=extra_exposure_keywords,
             hard_clip_flag=self.clip_hard)
         return clipped_hazard, clipped_exposure
+
+    def setup_analysis(self):
+        """Setup analysis so that it will be ready for running."""
+        # Refactor from dock.accept()
+
+        # Fixme : temporary call from here until we delete this file.
+        self.emit_pre_run_message()
+
+        # Find out what the usable extent and cell size are
+        try:
+            clip_parameters = self.clip_parameters
+            adjusted_geo_extent = clip_parameters['adjusted_geo_extent']
+            cell_size = clip_parameters['cell_size']
+        except InsufficientOverlapError as e:
+            raise e
+        except (RuntimeError, AttributeError) as e:
+            LOGGER.exception('Error calculating extents. %s' % str(e.message))
+            context = tr(
+                'A problem was encountered when trying to determine the '
+                'analysis extents.'
+            )
+            analysis_error(self, e, context)
+            raise e
+
+        if not self.force_memory:
+            # Ensure there is enough memory
+            result = check_memory_usage(adjusted_geo_extent, cell_size)
+            if not result:
+                raise InsufficientMemoryWarning
+
+        self.setup_aggregator()
+
+        # go check if our postprocessing layer has any keywords set and if not
+        # prompt for them. if a prompt is shown run method is called by the
+        # accepted signal of the keywords dialog
+        self.aggregator.validate_keywords()
+        if self.aggregator.is_valid:
+            pass
+        else:
+            raise InvalidAggregationKeywords
+
+        try:
+            self.setup_impact_function()
+        except CallGDALError, e:
+            analysis_error(self, e, tr(
+                'An error occurred when calling a GDAL command'))
+            return
+        except IOError, e:
+            analysis_error(self, e, tr(
+                'An error occurred when writing clip file'))
+            return
+        except InsufficientOverlapError, e:
+            analysis_error(self, e, tr(
+                'An exception occurred when setting up the '
+                'impact calculator.'))
+            return
+        except NoFeaturesInExtentError, e:
+            analysis_error(self, e, tr(
+                'An error occurred because there are no features visible in '
+                'the current view. Try zooming out or panning until some '
+                'features become visible.'))
+            return
+        except InvalidProjectionError, e:
+            analysis_error(self, e, tr(
+                'An error occurred because you are using a layer containing '
+                'count data (e.g. population count) which will not '
+                'scale accurately if we re-project it from its native '
+                'coordinate reference system to WGS84/GeoGraphic.'))
+            return
+        except MemoryError, e:
+            analysis_error(
+                self,
+                e,
+                tr(
+                    'An error occurred because it appears that your '
+                    'system does not have sufficient memory. Upgrading '
+                    'your computer so that it has more memory may help. '
+                    'Alternatively, consider using a smaller geographical '
+                    'area for your analysis, or using rasters with a larger '
+                    'cell size.'))
+            return
 
     def setup_impact_function(self):
         """Setup impact function."""
