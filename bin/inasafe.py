@@ -246,8 +246,8 @@ def get_exposure(arguments):
     return get_layer(arguments.exposure)
 
 
-def impact_function_setup(command_line_arguments, hazard, exposure,
-                          aggregation=None):
+def impact_function_setup(
+        command_line_arguments, hazard, exposure, aggregation=None):
     """Sets up an analysis object.
 
     .. versionadded:: 3.2

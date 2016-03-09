@@ -1252,7 +1252,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         """Create analysis as a representation of current situation of dock."""
 
         # Impact Functions
-        # if self.get_function_id() != '': FIXME check if this line is usefull
         impact_function = self.impact_function_manager.get(
             self.get_function_id())
         impact_function.parameters = self.impact_function_parameters
