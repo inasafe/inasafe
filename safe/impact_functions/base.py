@@ -657,18 +657,14 @@ class ImpactFunction(object):
     def analysis_workflow(self):
         """The whole analysis process.
 
-        This function is executed be calculate_impact in the core package.
-        This method will run 'validate', 'prepare' and will run the analysis.
+        This function is executed be the calculate_impact in the core package.
+        This method will run the analysis.
 
         This method mustn't be overridden in a child class.
 
         :return: The result of the impact function.
         :rtype: dict
         """
-        self.validate()
-        self._emit_pre_run_message()
-        self.prepare()
-
         self.provenance.append_step(
             'Calculating Step',
             'Impact function is calculating the impact.')
@@ -689,7 +685,14 @@ class ImpactFunction(object):
         return self.run()
 
     def run_analysis(self):
-        """It runs the IF. The method must be called from a client class."""
+        """It runs the IF. The method must be called from a client class.
+
+        This method mustn't be overridden in a child class.
+        """
+
+        self.validate()
+        self._emit_pre_run_message()
+        self.prepare()
 
         try:
             self._impact = calculate_impact(self)
