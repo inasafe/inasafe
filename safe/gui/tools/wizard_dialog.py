@@ -3578,7 +3578,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         :rtype: boolean
         """
         self.analysis_handler = AnalysisHandler(self)
-        self.analysis_handler.init_analysis()
+        self.analysis_handler.setup_analysis()
         try:
             self.analysis_handler.impact_function.setup_analysis()
         except InsufficientOverlapError:

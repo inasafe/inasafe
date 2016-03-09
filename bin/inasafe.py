@@ -271,7 +271,6 @@ def impact_function_setup(
     impact_function = impact_function_manager.get(
         command_line_arguments.impact_function)
 
-    impact_function = impact_function
     impact_function.hazard = hazard
     impact_function.exposure = exposure
     impact_function.aggregation = aggregation
@@ -293,7 +292,6 @@ def impact_function_setup(
     except AttributeError:
         print "No extents"
         pass
-    impact_function.setup_analysis()
     return impact_function
 
 

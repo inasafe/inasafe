@@ -666,6 +666,7 @@ class ImpactFunction(object):
         :rtype: dict
         """
         self.validate()
+        self._emit_pre_run_message()
         self.prepare()
 
         self.provenance.append_step(
@@ -691,7 +692,7 @@ class ImpactFunction(object):
 
         try:
             self._impact = calculate_impact(self)
-            self.run_aggregator()
+            self._run_aggregator()
         except ZeroImpactException, e:
             report = m.Message()
             report.add(LOGO_ELEMENT)
@@ -760,6 +761,28 @@ class ImpactFunction(object):
                 'extent is provided.')
             raise InvalidExtentError(message)
 
+        # Find out what the usable extent and cell size are
+        try:
+            clip_parameters = self.clip_parameters
+            adjusted_geo_extent = clip_parameters['adjusted_geo_extent']
+            cell_size = clip_parameters['cell_size']
+        except InsufficientOverlapError as e:
+            raise e
+        except (RuntimeError, AttributeError) as e:
+            LOGGER.exception('Error calculating extents. %s' % str(e.message))
+            context = tr(
+                'A problem was encountered when trying to determine the '
+                'analysis extents.'
+            )
+            analysis_error(self, e, context)
+            raise e
+
+        if not self.force_memory:
+            # Ensure there is enough memory
+            result = check_memory_usage(adjusted_geo_extent, cell_size)
+            if not result:
+                raise InsufficientMemoryWarning
+
     def prepare(self):
         """Prepare this impact function for running the analysis.
 
@@ -784,13 +807,85 @@ class ImpactFunction(object):
             'qgis2.0', it needs to have the extent set.
         # """
 
-        # Fixme : When Analysis.py will not exist anymore, we will uncomment.
-        # self.emit_pre_run_message()
-        # self.setup_aggregator()
-
         self.provenance.append_step(
             'Preparation Step',
             'Impact function is being prepared to run the analysis.')
+
+        self._setup_aggregator()
+
+        # go check if our postprocessing layer has any keywords set and if not
+        # prompt for them. if a prompt is shown run method is called by the
+        # accepted signal of the keywords dialog
+        self.aggregator.validate_keywords()
+        if self.aggregator.is_valid:
+            pass
+        else:
+            raise InvalidAggregationKeywords
+
+        try:
+            if self.requires_clipping:
+                # The impact function uses SAFE layers, clip them.
+                hazard_layer, exposure_layer = self._optimal_clip()
+                self.aggregator.set_layers(hazard_layer, exposure_layer)
+
+                # See if the inputs need further refinement for aggregations
+                try:
+                    # This line is a fix for #997
+                    self.aggregator.validate_keywords()
+                    self.aggregator.deintersect()
+                except (InvalidLayerError,
+                        UnsupportedProviderError,
+                        KeywordDbError):
+                    raise
+                # Get clipped layers
+                self.hazard = self.aggregator.hazard_layer
+                self.exposure = self.aggregator.exposure_layer
+            else:
+                # It is a QGIS impact function,
+                # clipping isn't needed, but we need to set up extent
+                self.aggregator.set_layers(
+                    self.hazard.qgis_layer(), self.exposure.qgis_layer())
+                clip_parameters = self.clip_parameters
+                adjusted_geo_extent = clip_parameters['adjusted_geo_extent']
+                self.requested_extent = adjusted_geo_extent
+        except CallGDALError, e:
+            analysis_error(self, e, tr(
+                'An error occurred when calling a GDAL command'))
+            return
+        except IOError, e:
+            analysis_error(self, e, tr(
+                'An error occurred when writing clip file'))
+            return
+        except InsufficientOverlapError, e:
+            analysis_error(self, e, tr(
+                'An exception occurred when setting up the '
+                'impact calculator.'))
+            return
+        except NoFeaturesInExtentError, e:
+            analysis_error(self, e, tr(
+                'An error occurred because there are no features visible in '
+                'the current view. Try zooming out or panning until some '
+                'features become visible.'))
+            return
+        except InvalidProjectionError, e:
+            analysis_error(self, e, tr(
+                'An error occurred because you are using a layer containing '
+                'count data (e.g. population count) which will not '
+                'scale accurately if we re-project it from its native '
+                'coordinate reference system to WGS84/GeoGraphic.'))
+            return
+        except MemoryError, e:
+            analysis_error(
+                self,
+                e,
+                tr(
+                    'An error occurred because it appears that your '
+                    'system does not have sufficient memory. Upgrading '
+                    'your computer so that it has more memory may help. '
+                    'Alternatively, consider using a smaller geographical '
+                    'area for your analysis, or using rasters with a larger '
+                    'cell size.'))
+            return
 
     def generate_impact_keywords(self, extra_keywords=None):
         """Obtain keywords for the impact layer.
@@ -849,7 +944,7 @@ class ImpactFunction(object):
             data=data
         )
 
-    def emit_pre_run_message(self):
+    def _emit_pre_run_message(self):
         """Inform the user about parameters before starting the processing."""
         title = tr('Processing started')
         details = tr(
@@ -1110,7 +1205,7 @@ class ImpactFunction(object):
 
         return self._clip_parameters
 
-    def optimal_clip(self):
+    def _optimal_clip(self):
         """ A helper function to perform an optimal clip of the input data.
         Optimal extent should be considered as the intersection between
         the three inputs. The InaSAFE library will perform various checks
@@ -1214,120 +1309,7 @@ class ImpactFunction(object):
             hard_clip_flag=self.clip_hard)
         return clipped_hazard, clipped_exposure
 
-    def setup_analysis(self):
-        """Setup analysis so that it will be ready for running."""
-        # Refactor from dock.accept()
-
-        # Fixme : temporary call from here until we delete this file.
-        self.emit_pre_run_message()
-
-        # Find out what the usable extent and cell size are
-        try:
-            clip_parameters = self.clip_parameters
-            adjusted_geo_extent = clip_parameters['adjusted_geo_extent']
-            cell_size = clip_parameters['cell_size']
-        except InsufficientOverlapError as e:
-            raise e
-        except (RuntimeError, AttributeError) as e:
-            LOGGER.exception('Error calculating extents. %s' % str(e.message))
-            context = tr(
-                'A problem was encountered when trying to determine the '
-                'analysis extents.'
-            )
-            analysis_error(self, e, context)
-            raise e
-
-        if not self.force_memory:
-            # Ensure there is enough memory
-            result = check_memory_usage(adjusted_geo_extent, cell_size)
-            if not result:
-                raise InsufficientMemoryWarning
-
-        self.setup_aggregator()
-
-        # go check if our postprocessing layer has any keywords set and if not
-        # prompt for them. if a prompt is shown run method is called by the
-        # accepted signal of the keywords dialog
-        self.aggregator.validate_keywords()
-        if self.aggregator.is_valid:
-            pass
-        else:
-            raise InvalidAggregationKeywords
-
-        try:
-            self.setup_impact_function()
-        except CallGDALError, e:
-            analysis_error(self, e, tr(
-                'An error occurred when calling a GDAL command'))
-            return
-        except IOError, e:
-            analysis_error(self, e, tr(
-                'An error occurred when writing clip file'))
-            return
-        except InsufficientOverlapError, e:
-            analysis_error(self, e, tr(
-                'An exception occurred when setting up the '
-                'impact calculator.'))
-            return
-        except NoFeaturesInExtentError, e:
-            analysis_error(self, e, tr(
-                'An error occurred because there are no features visible in '
-                'the current view. Try zooming out or panning until some '
-                'features become visible.'))
-            return
-        except InvalidProjectionError, e:
-            analysis_error(self, e, tr(
-                'An error occurred because you are using a layer containing '
-                'count data (e.g. population count) which will not '
-                'scale accurately if we re-project it from its native '
-                'coordinate reference system to WGS84/GeoGraphic.'))
-            return
-        except MemoryError, e:
-            analysis_error(
-                self,
-                e,
-                tr(
-                    'An error occurred because it appears that your '
-                    'system does not have sufficient memory. Upgrading '
-                    'your computer so that it has more memory may help. '
-                    'Alternatively, consider using a smaller geographical '
-                    'area for your analysis, or using rasters with a larger '
-                    'cell size.'))
-            return
-
-    def setup_impact_function(self):
-        """Setup impact function."""
-        # FIXME, this function will be called from prepare() when analysis.py
-        # will be removed.
-        # Get the hazard and exposure layers selected in the combos
-        # and other related parameters needed for clipping.
-
-        if self.requires_clipping:
-            # The impact function uses SAFE layers, clip them.
-            hazard_layer, exposure_layer = self.optimal_clip()
-            self.aggregator.set_layers(hazard_layer, exposure_layer)
-
-            # See if the inputs need further refinement for aggregations
-            try:
-                # This line is a fix for #997
-                self.aggregator.validate_keywords()
-                self.aggregator.deintersect()
-            except (InvalidLayerError,
-                    UnsupportedProviderError,
-                    KeywordDbError):
-                raise
-            # Get clipped layers
-            self.hazard = self.aggregator.hazard_layer
-            self.exposure = self.aggregator.exposure_layer
-        else:
-            # It is a QGIS impact function,
-            # clipping isn't needed, but we need to set up extent
-            self.aggregator.set_layers(
-                self.hazard.qgis_layer(), self.exposure.qgis_layer())
-            adjusted_geo_extent = self.clip_parameters['adjusted_geo_extent']
-            self.requested_extent = adjusted_geo_extent
-
-    def setup_aggregator(self):
+    def _setup_aggregator(self):
         """Create an aggregator for this analysis run."""
         try:
             buffered_geo_extent = self.impact.extent
@@ -1346,7 +1328,7 @@ class ImpactFunction(object):
         self._aggregator.show_intermediate_layers = \
             self.show_intermediate_layers
 
-    def run_aggregator(self):
+    def _run_aggregator(self):
         """Run all post processing steps."""
         LOGGER.debug('Do aggregation')
         if self.impact is None:
@@ -1375,14 +1357,14 @@ class ImpactFunction(object):
 
         # TODO (MB) do we really want this check?
         if self.aggregator.error_message is None:
-            self.run_post_processor()
+            self._run_post_processor()
         else:
             content = self.aggregator.error_message
             exception = AggregationError(tr(
                 'Aggregation error occurred.'))
             analysis_error(self, exception, content)
 
-    def run_post_processor(self):
+    def _run_post_processor(self):
         """Carry out any postprocessing required for this impact layer."""
         self._postprocessor_manager = PostprocessorManager(self.aggregator)
         self.postprocessor_manager.function_parameters = self.parameters

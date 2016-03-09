@@ -301,23 +301,22 @@ class AnalysisHandler(QObject):
         self.enable_signal_receiver()
 
         self.show_busy()
-        self.init_analysis()
+        self.setup_analysis()
+
         try:
-            self.impact_function.setup_analysis()
+            clip_parameters = self.impact_function.clip_parameters
+            self.extent.show_last_analysis_extent(
+                clip_parameters['adjusted_geo_extent'])
+
+            # Start the analysis
+            self.impact_function.run_analysis()
         except InsufficientOverlapError as e:
             raise e
-
-        clip_parameters = self.impact_function.clip_parameters
-        self.extent.show_last_analysis_extent(
-            clip_parameters['adjusted_geo_extent'])
-
-        # Start the analysis
-        self.impact_function.run_analysis()
 
         self.disable_signal_receiver()
 
     # noinspection PyUnresolvedReferences
-    def init_analysis(self):
+    def setup_analysis(self):
         """Setup analysis to make it ready to work.
 
         .. note:: Copied or adapted from the dock
