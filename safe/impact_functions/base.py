@@ -229,7 +229,7 @@ class ImpactFunction(object):
                 extent.yMinimum(),
                 extent.xMaximum(),
                 extent.yMaximum()]
-            self.requested_extent = extent
+            self._requested_extent = extent
         elif len(extent) == 4:
             self._requested_extent = extent
         else:
@@ -685,10 +685,11 @@ class ImpactFunction(object):
             m.Paragraph(detail))
         send_dynamic_message(self, message)
 
+        # self.run() is defined the IF.
         return self.run()
 
     def run_analysis(self):
-        """It's similar with run function in previous dock.py"""
+        """It runs the IF. The method must be called from a client class."""
 
         try:
             self._impact = calculate_impact(self)
