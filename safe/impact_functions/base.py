@@ -25,7 +25,7 @@ import getpass
 import platform
 from datetime import datetime
 from qgis.utils import QGis
-from qgis.core import QgsMapLayer, QgsCoordinateReferenceSystem
+from qgis.core import QgsMapLayer, QgsCoordinateReferenceSystem, QgsRectangle
 from osgeo import gdal
 from PyQt4.QtCore import QT_VERSION_STR, QSettings
 from PyQt4.Qt import PYQT_VERSION_STR
@@ -219,14 +219,21 @@ class ImpactFunction(object):
         """Setter for extent property.
 
         :param extent: Analysis boundaries expressed as
-            [xmin, ymin, xmax, ymax]. The extent CRS should match the
-            extent_crs property of this IF instance.
-        :type extent: list
+            [xmin, ymin, xmax, ymax] or a QgsRectangle. The extent CRS should
+            match the extent_crs property of this IF instance.
+        :type extent: list, QgsRectangle
         """
-        # add more robust checks here
-        if len(extent) != 4:
+        if isinstance(extent, QgsRectangle):
+            extent = [
+                extent.xMinimum(),
+                extent.yMinimum(),
+                extent.xMaximum(),
+                extent.yMaximum()]
+            self.requested_extent = extent
+        elif len(extent) == 4:
+            self._requested_extent = extent
+        else:
             raise InvalidExtentError('%s is not a valid extent.' % extent)
-        self._requested_extent = extent
 
     @property
     def requested_extent_crs(self):

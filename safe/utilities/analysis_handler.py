@@ -341,9 +341,10 @@ class AnalysisHandler(QObject):
         self.impact_function.viewport_extent = viewport
 
         # Extent
-        if self.impact_function.user_extent:
-            self.impact_function.user_extent = self.extent.user_extent
-            self.impact_function.user_extent_crs = self.extent.user_extent_crs
+        if self.impact_function.requested_extent:
+            extent = self.extent
+            self.impact_function.requested_extent = extent.user_extent
+            self.impact_function.requested_extent_crs = extent.user_extent_crs
 
     # noinspection PyUnresolvedReferences
     def completed(self):

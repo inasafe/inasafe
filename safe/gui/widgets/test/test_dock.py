@@ -245,7 +245,6 @@ class TestDock(TestCase):
         set_jakarta_extent(self.dock)
 
         self.dock.accept()
-        # self.dock.analysis.get_impact_layer()
         safe_layer = self.dock.impact_function.impact
         qgis_layer = read_impact_layer(safe_layer)
         style = safe_layer.get_style_info()

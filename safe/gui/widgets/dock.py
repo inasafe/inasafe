@@ -1269,8 +1269,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         viewport = viewport_geo_array(self.iface.mapCanvas())
         impact_function.viewport_extent = viewport
         if self.extent.user_extent:
-            impact_function.user_extent = self.extent.user_extent
-            impact_function.user_extent_crs = self.extent.user_extent_crs
+            impact_function.requested_extent = self.extent.user_extent
+            impact_function.requested_extent_crs = self.extent.user_extent_crs
 
         return impact_function
 

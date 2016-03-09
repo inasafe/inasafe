@@ -282,9 +282,9 @@ def impact_function_setup(command_line_arguments, hazard, exposure,
     # QSetting context
     settings = QSettings()
     crs = settings.value('inasafe/analysis_extent_crs', '', type=str)
-    impact_function.user_extent_crs = QgsCoordinateReferenceSystem(crs)
+    impact_function.requested_extent_crs = QgsCoordinateReferenceSystem(crs)
     try:
-        impact_function.user_extent = QgsRectangle(
+        impact_function.requested_extent = QgsRectangle(
             float(command_line_arguments.extent[0]),
             float(command_line_arguments.extent[1]),
             float(command_line_arguments.extent[2]),
