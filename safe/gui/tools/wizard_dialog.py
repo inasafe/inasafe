@@ -3580,7 +3580,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.analysis_handler = AnalysisHandler(self)
         self.analysis_handler.init_analysis()
         try:
-            self.analysis_handler.analysis.setup_analysis()
+            self.analysis_handler.impact_function.setup_analysis()
         except InsufficientOverlapError:
             self.analysis_handler = None
             return False
