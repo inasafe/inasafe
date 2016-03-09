@@ -18,7 +18,7 @@ LOGGER = logging.getLogger(realtime_logger_name())
 
 @app.task(
     name='realtime.tasks.flood.process_flood', queue='inasafe-realtime')
-def process_flood():
+def process_flood(event_folder=None):
     LOGGER.info('-------------------------------------------')
 
     if 'INASAFE_LOCALE' in os.environ:
@@ -28,7 +28,8 @@ def process_flood():
 
     working_directory = FLOOD_WORKING_DIRECTORY
     try:
-        process_event(working_directory, locale_option)
+        process_event(
+            working_directory, locale_option, dummy_folder=event_folder)
         LOGGER.info('Process event end.')
         return True
     except Exception as e:

@@ -5,6 +5,7 @@ import datetime
 from requests import codes
 
 from realtime.earthquake.push_shake import notify_realtime_rest
+from realtime.earthquake.shake_event import ShakeEvent
 from realtime.push_rest import InaSAFEDjangoREST
 
 __author__ = 'Rizky Maulana Nugraha <lana.pcfre@gmail.com>'

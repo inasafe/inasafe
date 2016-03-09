@@ -60,10 +60,12 @@ from PyQt4.QtCore import (
 # noinspection PyPackageRequirements
 from PyQt4.QtXml import QDomDocument
 
+from safe.test.utilities import get_qgis_app
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.storage.core import read_layer as safe_read_layer
 from safe.engine.core import calculate_impact as safe_calculate_impact
-from safe.test.utilities import get_qgis_app
 from safe.common.version import get_version
 from safe.common.utilities import romanise
 from safe.utilities.clipper import extent_to_geoarray, clip_layer
@@ -89,8 +91,8 @@ from realtime.exceptions import (
     EmptyShakeDirectoryError,
     EventIdError)
 
+
 LOGGER = logging.getLogger(realtime_logger_name())
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class ShakeEvent(QObject):

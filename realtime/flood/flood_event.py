@@ -28,6 +28,10 @@ from realtime.exceptions import PetaJakartaAPIError, MapComposerError
 from realtime.flood.dummy_source_api import DummySourceAPI
 from realtime.flood.peta_jakarta_api import PetaJakartaAPI
 from realtime.utilities import realtime_logger_name
+
+from safe.test.utilities import get_qgis_app
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
 from safe.common.exceptions import ZeroImpactException, TranslationLoadError
 from safe.engine.core import calculate_impact as safe_calculate_impact
 from safe.impact_functions.impact_function_manager import \
@@ -35,7 +39,6 @@ from safe.impact_functions.impact_function_manager import \
 from safe.report.impact_report import ImpactReport
 from safe.storage.safe_layer import SafeLayer
 from safe.storage.core import read_layer, read_qgis_layer
-from safe.test.utilities import get_qgis_app
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.styling import set_vector_categorized_style, \
     set_vector_graduated_style, setRasterStyle
@@ -46,7 +49,6 @@ __date__ = '11/24/15'
 
 
 LOGGER = logging.getLogger(realtime_logger_name())
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class FloodEvent(QObject):
