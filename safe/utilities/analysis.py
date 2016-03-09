@@ -18,32 +18,22 @@ import logging
 from qgis.core import QgsMapLayer, QgsRectangle
 
 from safe.common.exceptions import ZeroImpactException
-from safe.storage.utilities import safe_to_qgis_layer
 from safe.storage.safe_layer import SafeLayer
 from safe.common.exceptions import (
-    KeywordDbError,
     InsufficientOverlapError,
-    InvalidLayerError,
     CallGDALError,
     NoFeaturesInExtentError,
     InvalidProjectionError,
-    InvalidGeometryError,
-    AggregationError,
-    UnsupportedProviderError,
     InvalidAggregationKeywords,
     InsufficientMemoryWarning)
 from safe import messaging as m
 from safe.utilities.memory_checker import check_memory_usage
-from safe.utilities.gis import extent_to_array
 from safe.utilities.i18n import tr
-from safe.utilities.utilities import get_error_message
 from safe.messaging import styles
 from safe.common.signals import (
     analysis_error,
     send_static_message,
     send_busy_signal,
-    send_not_busy_signal,
-    send_error_message,
     send_dynamic_message,
     send_analysis_done_signal)
 from safe.engine.core import calculate_impact
@@ -280,7 +270,7 @@ class Analysis(object):
             raise InvalidAggregationKeywords
 
         try:
-            self.setup_impact_function()
+            self.impact_function.setup_impact_function()
         except CallGDALError, e:
             analysis_error(self, e, tr(
                 'An error occurred when calling a GDAL command'))
@@ -320,77 +310,6 @@ class Analysis(object):
                     'cell size.'))
             return
 
-    def setup_impact_function(self):
-        """Setup impact function."""
-        # Get the hazard and exposure layers selected in the combos
-        # and other related parameters needed for clipping.
-
-        if self.impact_function.requires_clipping:
-            # The impact function uses SAFE layers,
-            # clip them
-            hazard_layer, exposure_layer = self.impact_function.optimal_clip()
-            self.aggregator.set_layers(hazard_layer, exposure_layer)
-
-            # See if the inputs need further refinement for aggregations
-            try:
-                # This line is a fix for #997
-                self.aggregator.validate_keywords()
-                self.aggregator.deintersect()
-            except (InvalidLayerError,
-                    UnsupportedProviderError,
-                    KeywordDbError):
-                raise
-            # Get clipped layers
-            self.hazard = self.aggregator.hazard_layer
-            self.exposure = self.aggregator.exposure_layer
-        else:
-            # It is a QGIS impact function,
-            # clipping isn't needed, but we need to set up extent
-            self.aggregator.set_layers(
-                self.hazard.qgis_layer(), self.exposure.qgis_layer())
-            clip_parameters = self.impact_function.clip_parameters
-            adjusted_geo_extent = clip_parameters['adjusted_geo_extent']
-            self.impact_function.requested_extent = adjusted_geo_extent
-
-        # Set input layers
-        self.impact_function.hazard = self.hazard
-        self.impact_function.exposure = self.exposure
-
-    def run_aggregator(self):
-        """Run all post processing steps."""
-        LOGGER.debug('Do aggregation')
-        if self.impact_layer is None:
-            # Done was emitted, but no impact layer was calculated
-            message = tr('No impact layer was generated.\n')
-            send_not_busy_signal(self)
-            send_error_message(self, message)
-            send_analysis_done_signal(self)
-            return
-        try:
-            qgis_impact_layer = safe_to_qgis_layer(self.impact_layer)
-            self.aggregator.extent = extent_to_array(
-                qgis_impact_layer.extent(),
-                qgis_impact_layer.crs())
-            self.aggregator.aggregate(self.impact_layer)
-        except InvalidGeometryError, e:
-            message = get_error_message(e)
-            send_error_message(self, message)
-            # self.analysis_done.emit(False)
-            return
-        except Exception, e:  # pylint: disable=W0703
-            # noinspection PyPropertyAccess
-            e.args = (str(e.args[0]) + '\nAggregation error occurred',)
-            raise
-
-        # TODO (MB) do we really want this check?
-        if self.aggregator.error_message is None:
-            self.impact_function.run_post_processor()
-        else:
-            content = self.aggregator.error_message
-            exception = AggregationError(tr(
-                'Aggregation error occurred.'))
-            analysis_error(self, exception, content)
-
     def run_analysis(self):
         """It's similar with run function in previous dock.py"""
         send_busy_signal(self)
@@ -407,7 +326,7 @@ class Analysis(object):
 
         try:
             self.impact_layer = calculate_impact(self.impact_function)
-            self.run_aggregator()
+            self.impact_function.run_aggregator()
         except ZeroImpactException, e:
             report = m.Message()
             report.add(LOGO_ELEMENT)
