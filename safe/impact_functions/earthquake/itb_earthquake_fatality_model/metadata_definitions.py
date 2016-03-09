@@ -74,7 +74,7 @@ class ITBFatalityMetadata(ImpactFunctionMetadata):
                 'Australia\n'
                 'Algorithm:\n'
                 'In this study, the same functional form as Allen (2009) '
-                'is adopted o express fatality rate as a function of '
+                'is adopted to express fatality rate as a function of '
                 'intensity (see Eq. 10 in the report). The Matlab '
                 'built-in function (fminsearch) for Nelder-Mead algorithm '
                 'was used to estimate the model parameters. The objective '

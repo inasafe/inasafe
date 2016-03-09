@@ -18,6 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import numpy
+import logging
 
 from socket import gethostname
 import getpass
@@ -34,10 +35,18 @@ from osgeo import gdal
 from PyQt4.QtCore import QT_VERSION_STR, QSettings
 from PyQt4.Qt import PYQT_VERSION_STR
 
+from safe.impact_statistics.aggregator import Aggregator
+from safe.impact_statistics.postprocessor_manager import (
+    PostprocessorManager)
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.common.exceptions import (
     InvalidExtentError,
+    InvalidGeometryError,
+    AggregationError,
+    KeywordDbError,
+    InvalidLayerError,
+    UnsupportedProviderError,
     CallGDALError,
     FunctionParametersError,
     NoValidLayerError,
@@ -49,6 +58,7 @@ from safe.postprocessors.postprocessor_factory import (
     get_postprocessors,
     get_postprocessor_human_name)
 from safe.common.utilities import get_non_conflicting_attribute_name
+from safe.utilities.utilities import get_error_message
 from safe.utilities.i18n import tr
 from safe.utilities.clipper import clip_layer
 from safe.utilities.gis import (
@@ -61,15 +71,24 @@ from safe.utilities.clipper import adjust_clip_extent
 from safe.storage.safe_layer import SafeLayer
 from safe.storage.utilities import (
     buffered_bounding_box as get_buffered_extent,
+    safe_to_qgis_layer,
     bbox_intersection)
 from safe.definitions import inasafe_keyword_version
 from safe.metadata.provenance import Provenance
 from safe.common.version import get_version
-from safe.common.signals import send_static_message, send_dynamic_message
+from safe.common.signals import (
+    analysis_error,
+    send_static_message,
+    send_dynamic_message,
+    send_error_message,
+    send_not_busy_signal,
+    send_analysis_done_signal
+)
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 WARNING_STYLE = styles.WARNING_STYLE
 LOGO_ELEMENT = m.Brand()
+LOGGER = logging.getLogger('InaSAFE')
 
 
 class ImpactFunction(object):
@@ -113,6 +132,10 @@ class ImpactFunction(object):
         self._exposure = None
         # Layer used for aggregating results by area / district
         self._aggregation = None
+        # Aggregator
+        self._aggregator = None
+        # Postprocessor manager
+        self._postprocessor_manager = None
         # The best extents to use for the assessment
         self._clip_parameters = None
         # Clip features that extend beyond the extents.
@@ -385,6 +408,24 @@ class ImpactFunction(object):
             self._aggregation = SafeLayer(layer)
         else:
             self._aggregation = None
+
+    @property
+    def aggregator(self):
+        """Get the aggregator.
+
+        :return: The aggregator.
+        :rtype: Aggregator
+        """
+        return self._aggregator
+
+    @property
+    def postprocessor_manager(self):
+        """Get the postprocessor manager.
+
+        :return: The postprocessor manager.
+        :rtype: PostprocessorManager
+        """
+        return self._postprocessor_manager
 
     @property
     def parameters(self):
@@ -681,6 +722,7 @@ class ImpactFunction(object):
 
         # Fixme : When Analysis.py will not exist anymore, we will uncomment.
         # self.emit_pre_run_message()
+        # self.setup_aggregator()
 
         self.provenance.append_step(
             'Preparation Step',
@@ -1107,3 +1149,98 @@ class ImpactFunction(object):
             extra_keywords=extra_exposure_keywords,
             hard_clip_flag=self.clip_hard)
         return clipped_hazard, clipped_exposure
+
+    def setup_impact_function(self):
+        """Setup impact function."""
+        # FIXME, this function will be called from prepare() when analysis.py
+        # will be removed.
+        # Get the hazard and exposure layers selected in the combos
+        # and other related parameters needed for clipping.
+
+        if self.requires_clipping:
+            # The impact function uses SAFE layers, clip them.
+            hazard_layer, exposure_layer = self.optimal_clip()
+            self.aggregator.set_layers(hazard_layer, exposure_layer)
+
+            # See if the inputs need further refinement for aggregations
+            try:
+                # This line is a fix for #997
+                self.aggregator.validate_keywords()
+                self.aggregator.deintersect()
+            except (InvalidLayerError,
+                    UnsupportedProviderError,
+                    KeywordDbError):
+                raise
+            # Get clipped layers
+            self.hazard = self.aggregator.hazard_layer
+            self.exposure = self.aggregator.exposure_layer
+        else:
+            # It is a QGIS impact function,
+            # clipping isn't needed, but we need to set up extent
+            self.aggregator.set_layers(
+                self.hazard.qgis_layer(), self.exposure.qgis_layer())
+            adjusted_geo_extent = self.clip_parameters['adjusted_geo_extent']
+            self.requested_extent = adjusted_geo_extent
+
+    def setup_aggregator(self):
+        """Create an aggregator for this analysis run."""
+        try:
+            buffered_geo_extent = self.impact.extent
+        except AttributeError:
+            # if we have no runner, set dummy extent
+            buffered_geo_extent = self.clip_parameters['adjusted_geo_extent']
+
+        if self.aggregation is not None:
+            qgis_layer = self.aggregation.qgis_layer()
+        else:
+            qgis_layer = None
+
+        # setup aggregator to use buffered_geo_extent to deal with #759
+        self._aggregator = Aggregator(buffered_geo_extent, qgis_layer)
+
+        self._aggregator.show_intermediate_layers = \
+            self.show_intermediate_layers
+
+    def run_aggregator(self):
+        """Run all post processing steps."""
+        LOGGER.debug('Do aggregation')
+        if self.impact is None:
+            # Done was emitted, but no impact layer was calculated
+            message = tr('No impact layer was generated.\n')
+            send_not_busy_signal(self)
+            send_error_message(self, message)
+            send_analysis_done_signal(self)
+            return
+        try:
+            # TODO (ET) check if the aggregator can take a SafeLayer.
+            qgis_impact_layer = safe_to_qgis_layer(self.impact)
+            self.aggregator.extent = extent_to_array(
+                qgis_impact_layer.extent(),
+                qgis_impact_layer.crs())
+            self.aggregator.aggregate(self.impact)
+        except InvalidGeometryError, e:
+            message = get_error_message(e)
+            send_error_message(self, message)
+            # self.analysis_done.emit(False)
+            return
+        except Exception, e:  # pylint: disable=W0703
+            # noinspection PyPropertyAccess
+            e.args = (str(e.args[0]) + '\nAggregation error occurred',)
+            raise
+
+        # TODO (MB) do we really want this check?
+        if self.aggregator.error_message is None:
+            self.run_post_processor()
+        else:
+            content = self.aggregator.error_message
+            exception = AggregationError(tr(
+                'Aggregation error occurred.'))
+            analysis_error(self, exception, content)
+
+    def run_post_processor(self):
+        """Carry out any postprocessing required for this impact layer."""
+        self._postprocessor_manager = PostprocessorManager(self.aggregator)
+        self.postprocessor_manager.function_parameters = self.parameters
+        self.postprocessor_manager.run()
+        send_not_busy_signal(self)
+        send_analysis_done_signal(self)

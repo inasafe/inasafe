@@ -57,8 +57,7 @@ def content():
     tips = m.BulletedList()
     tips.add(tr(
         'Check the output directory is correct. Note that the saved '
-        'dataset will be called jakarta_flood.shp (and '
-        'associated files).'
+        'dataset will be called jakarta_flood.shp (and associated files).'
     ))
     tips.add(tr(
         'If you wish you can specify a prefix to '

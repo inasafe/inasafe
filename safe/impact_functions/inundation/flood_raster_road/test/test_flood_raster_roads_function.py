@@ -23,10 +23,6 @@ __copyright__ = 'lana.pcfre@gmail.com'
 import unittest
 
 from safe.test.utilities import get_qgis_app, test_data_path
-from safe.storage.safe_layer import SafeLayer
-# In our tests, we need to have this line below before importing any other
-# safe_qgis.__init__ to load all the configurations that we make for testing
-# from PyQt4.QtCore import QVariant must be put below it
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from PyQt4.QtCore import QVariant
@@ -37,6 +33,8 @@ from qgis.core import (
     QgsRectangle,
     QgsVectorLayer
 )
+
+from safe.storage.safe_layer import SafeLayer
 
 # noinspection PyProtectedMember
 from safe.impact_functions.inundation.flood_raster_road.impact_function \

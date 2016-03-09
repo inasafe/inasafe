@@ -23,6 +23,11 @@ import logging
 # noinspection PyUnresolvedReferences
 # pylint: disable=unused-import
 from qgis.core import QGis, QgsRectangle  # force sip2 api
+try:
+    from qgis.core import QgsExpressionContextUtils
+except ImportError:
+    # We don't need this class if QGIS < 2.14. We'll check later.
+    pass
 from qgis.gui import QgsMapToolPan
 # pylint: enable=unused-import
 
@@ -36,6 +41,7 @@ from PyQt4.QtGui import (
 
 import json
 
+from safe.utilities.gis import qgis_version
 from safe.common.exceptions import (
     CanceledImportDialogError,
     FileMissingError)
@@ -533,7 +539,17 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
                 'this extent.' % path)
             raise FileMissingError(message)
 
-        self.iface.addVectorLayer(path, feature_type, 'ogr')
+        layer = self.iface.addVectorLayer(path, feature_type, 'ogr')
+
+        # Check if it's a building layer and if it's QGIS 2.14 about the 2.5D
+        if qgis_version() >= 21400 and feature_type == 'buildings':
+            layer_scope = QgsExpressionContextUtils.layerScope(layer)
+            if not layer_scope.variable('qgis_25d_height'):
+                QgsExpressionContextUtils.setLayerVariable(
+                    layer, 'qgis_25d_height', 0.0002)
+            if not layer_scope.variable('qgis_25d_angle'):
+                QgsExpressionContextUtils.setLayerVariable(
+                    layer, 'qgis_25d_angle', 70)
 
         canvas_srid = self.canvas.mapRenderer().destinationCrs().srsid()
         on_the_fly_projection = self.canvas.hasCrsTransformEnabled()
