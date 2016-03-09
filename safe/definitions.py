@@ -84,7 +84,7 @@ layer_mode_continuous = {
     'name': tr('Continuous'),
     'description': tr(
         '<b>Continuous</b> data can be used in raster hazard or exposure data '
-        'where the values in the data are are either integers or decimal  '
+        'where the values in the data are either integers or decimal '
         'values representing a continuously varying phenomenon. '
         'For example flood depth is a continuous value from 0 to the maximum '
         'reported depth during a flood. '
