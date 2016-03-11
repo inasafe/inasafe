@@ -57,7 +57,7 @@ def content():
     """
     message = m.Message()
     paragraph = m.Paragraph(tr(
-        'This document describes the usage of the InaSAFE \'dock panel\''
+        'This document describes the usage of the InaSAFE \'dock panel\' '
         '- which is an interface for running hazard scenarios within the QGIS '
         'environment. If you are a new user, you may also consider using the '
         '\'Impact Function Centric Wizard\' to run the analysis. You can '
