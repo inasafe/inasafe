@@ -60,3 +60,83 @@ class RoadTypePostprocessor(BuildingTypePostprocessor):
         """Describe briefly what the post processor does.
         """
         return tr('Calculates road types related statistics.')
+
+    def _calculate_total(self):
+        """Indicator that shows total temporarily closed roads.
+
+        This indicator reports the temporarily closed roads in this region.
+
+        :note: This is copy/paste from the building_type_postprocessor,
+            except that the indicator counts the length of the road.
+        """
+
+        name = tr('Temporarily closed (m)')
+        result = 0
+        if self.type_fields is not None:
+            try:
+                for road in self.impact_attrs:
+                    field_value = road[self.target_field]
+                    if isinstance(field_value, basestring):
+                        if field_value != 'Not Affected':
+                            result += road['aggr_sum']
+                    else:
+                        if field_value:
+                            # See issue #2258. Since we are only working with
+                            # one road at a time we should only add 1.
+                            result += road['aggr_sum']
+                result = int(round(result))
+            except (ValueError, KeyError):
+                result = self.NO_DATA_TEXT
+        else:
+            if self.no_features:
+                result = 0
+            else:
+                result = self.NO_DATA_TEXT
+        self._append_result(name, result)
+
+    def _calculate_type(self, title, fields_values):
+        """Indicator that shows total population.
+
+        this indicator reports the road by type. the logic is:
+        - look for the fields that occurs with a name included in
+        self.valid_type_fields
+        - look in those fields for any of the values of self.fields_values
+        - if a record has one of the valid fields with one of the valid
+        fields_values then it is considered affected
+
+        :note: This is copy/paste from the building_type_postprocessor,
+            except that indicator counts the length of the road.
+        """
+
+        title = tr(title)
+
+        result = 0
+        if self.type_fields is not None:
+            try:
+                for road in self.impact_attrs:
+                    for type_field in self.type_fields:
+                        building_type = road[type_field]
+                        if building_type in fields_values:
+                            field_value = road[self.target_field]
+                            if isinstance(field_value, basestring):
+                                if field_value != 'Not Affected':
+                                    result += road['aggr_sum']
+                            else:
+                                if field_value:
+                                    # See issue #2258. Since we are only
+                                    # working with one road at a time we
+                                    # should only add 1.
+                                    result += road['aggr_sum']
+                            break
+                        elif self._is_unknown_type(building_type):
+                            self._update_known_types(building_type)
+
+                result = int(round(result))
+            except (ValueError, KeyError):
+                result = self.NO_DATA_TEXT
+        else:
+            if self.no_features:
+                result = 0
+            else:
+                result = self.NO_DATA_TEXT
+        self._append_result(title, result)
