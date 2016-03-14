@@ -34,7 +34,7 @@ from safe.definitions import (
     layer_geometry_raster,
     hazard_category_single_event,
     hazard_category_multiple_event,
-    exposure_structure,
+    exposure_road,
     unit_metres,
     unit_feet,
     hazard_tsunami,
@@ -67,7 +67,7 @@ class TsunamiRasterRoadMetadata(ImpactFunctionMetadata):
             'name': tr('Raster tsunami on roads'),
             'impact': tr('Be inundated'),
             'title': tr('Be inundated'),
-            'function_type': 'old-style',
+            'function_type': 'qgis2.0',
             # should be a list, but we can do it later.
             'author': 'Ole Nielsen, Kristy van Putten, and Ismail Sunni',
             'date_implemented': 'N/A',
@@ -112,7 +112,7 @@ class TsunamiRasterRoadMetadata(ImpactFunctionMetadata):
                 'exposure': {
                     'layer_mode': layer_mode_classified,
                     'layer_geometries': [layer_geometry_line],
-                    'exposure_types': [exposure_structure],
+                    'exposure_types': [exposure_road],
                     'exposure_units': [],
                     'exposure_class_fields': [structure_class_field],
                     'additional_keywords': []
