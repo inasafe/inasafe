@@ -20,12 +20,27 @@ __copyright__ = 'etienne@kartoza.com'
 
 
 import unittest
+from collections import OrderedDict
+from qgis.core import (
+    QgsFeatureRequest,
+    QgsField,
+    QgsRasterLayer,
+    QgsRectangle,
+    QgsVectorLayer
+)
+from PyQt4.QtCore import QVariant
 
 from safe.impact_functions.impact_function_manager\
     import ImpactFunctionManager
+# noinspection PyProtectedMember
 from safe.impact_functions.inundation.tsunami_raster_road\
-    .impact_function import TsunamiRasterRoadsFunction
+    .impact_function import (
+        TsunamiRasterRoadsFunction,
+        _raster_to_vector_cells,
+        _intersect_lines_with_vector_cells
+    )
 from safe.storage.core import read_layer
+from safe.gis.qgis_vector_tools import create_layer
 from safe.test.utilities import get_qgis_app, test_data_path
 from safe.storage.safe_layer import SafeLayer
 
@@ -44,13 +59,20 @@ class TsunamiRasterRoadsFunctionTest(unittest.TestCase):
     def test_run(self):
         impact_function = TsunamiRasterRoadsFunction.instance()
 
-        hazard_path = test_data_path('hazard', 'continuous_flood_20_20.asc')
+        hazard_path = test_data_path('hazard', 'tsunami_wgs84.tif')
         exposure_path = test_data_path('exposure', 'roads.shp')
         hazard_layer = read_layer(hazard_path)
         exposure_layer = read_layer(exposure_path)
 
         impact_function.hazard = SafeLayer(hazard_layer)
         impact_function.exposure = SafeLayer(exposure_layer)
+
+        # Let's set the extent to the hazard extent
+        extent = impact_function.hazard.layer.extent()
+        rect_extent = [
+            extent.xMinimum(), extent.yMaximum(),
+            extent.xMaximum(), extent.yMinimum()]
+        impact_function.requested_extent = rect_extent
         impact_function.run()
         impact_layer = impact_function.impact
 
@@ -60,10 +82,10 @@ class TsunamiRasterRoadsFunctionTest(unittest.TestCase):
 
         # 1 = inundated, 2 = wet, 3 = dry
         expected_result = {
-            0: 1,
-            1: 116,
-            2: 64,
-            3: 0,
+            0: 0,
+            1: 3286,
+            2: 107,
+            3: 114,
             4: 0
         }
 
@@ -110,3 +132,55 @@ class TsunamiRasterRoadsFunctionTest(unittest.TestCase):
         message = 'Expecting %s, but getting %s instead' % (
             expected, retrieved_if)
         self.assertEqual(expected, retrieved_if, message)
+
+    def test_raster_to_vector_and_line_intersection(self):
+        """Test the core part of the analysis.
+
+        1. Test creation of spatial index of flood cells
+        2. Test intersection of flood cells with roads layer
+        """
+
+        raster_name = test_data_path(
+            'hazard',
+            'tsunami_wgs84.tif')
+        exposure_name = test_data_path(
+            'exposure',
+            'roads_osm_4326.shp')
+
+        raster = QgsRasterLayer(raster_name, 'Flood')
+        exposure = QgsVectorLayer(exposure_name, 'Exposure', 'ogr')
+
+        ranges = OrderedDict()
+        ranges[0] = [0, 1]
+        ranges[1] = [1, 2]
+        ranges[2] = [2, 100]
+        index, flood_cells_map = _raster_to_vector_cells(
+            raster, ranges, exposure.crs())
+
+        self.assertTrue(False)
+        # self.assertEqual(len(flood_cells_map), 221)
+        rect_with_all_cells = raster.extent()
+        rect_with_4_cells = QgsRectangle(106.824, -6.177, 106.825, -6.179)
+        rect_with_0_cells = QgsRectangle(106.818, -6.168, 106.828, -6.175)
+        self.assertEqual(len(index.intersects(rect_with_all_cells)), 221)
+        self.assertEqual(len(index.intersects(rect_with_4_cells)), 4)
+        self.assertEqual(len(index.intersects(rect_with_0_cells)), 0)
+
+        layer = create_layer(exposure)
+        new_field = QgsField('flooded', QVariant.Int)
+        layer.dataProvider().addAttributes([new_field])
+
+        request = QgsFeatureRequest()
+        _intersect_lines_with_vector_cells(
+            exposure, request, index, flood_cells_map, layer, 'flooded')
+
+        feature_count = layer.featureCount()
+        self.assertEqual(feature_count, 184)
+
+        flooded = 0
+        iterator = layer.getFeatures()
+        for feature in iterator:
+            attributes = feature.attributes()
+            if attributes[3] == 1:
+                flooded += 1
+        self.assertEqual(flooded, 25)

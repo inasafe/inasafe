@@ -26,7 +26,6 @@ from safe.impact_functions.inundation.tsunami_raster_road\
 from safe.utilities.i18n import tr
 from safe.storage.vector import Vector
 from safe.common.utilities import get_utm_epsg, unique_filename
-from safe.common.exceptions import GetDataError
 from safe.gis.qgis_raster_tools import clip_raster
 from safe.gis.qgis_vector_tools import (
     extent_to_geo_array,
@@ -43,19 +42,15 @@ __date__ = '11/03/16'
 __copyright__ = 'etienne@kartoza.com'
 
 
-def _raster_to_vector_cells(
-        raster, minimum_threshold, maximum_threshold, output_crs):
+def _raster_to_vector_cells(raster, ranges, output_crs):
     """Generate vectors features (rectangles) for raster cells.
 
-     Cells which are not within threshold (threshold_min < V < threshold_max)
-     will be excluded. The provided CRS will be used to determine the
-     CRS of the output vector cells layer.
+     Cells which are not within one of the ranges will be excluded.
+     The provided CRS will be used to determine the CRS of the output
+     vector cells layer.
 
-    :param minimum_threshold: The minimum threshold for pixels to be included.
-    :type minimum_threshold: float
-
-    :param maximum_threshold: The maximum threshold for pixels to be included.
-    :type maximum_threshold: float
+    :param ranges: A dictionary of ranges. The key will be the id the range.
+    :type ranges: OrderedDict
 
     :param raster: A raster layer that will be vectorised.
     :type raster: QgsRasterLayer
@@ -81,6 +76,8 @@ def _raster_to_vector_cells(
 
     uri = "Polygon?crs=" + output_crs.authid()
     vl = QgsVectorLayer(uri, "cells", "memory")
+    vl.dataProvider().addAttributes([QgsField('affected', QVariant.Int)])
+    vl.updateFields()
     features = []
 
     # prepare coordinate transform to reprojection
@@ -90,24 +87,26 @@ def _raster_to_vector_cells(
         for x in xrange(raster_cols):
             # only use cells that are within the specified threshold
             value = block.value(y, x)
-            if value < minimum_threshold or value > maximum_threshold:
-                continue
 
-            # construct rectangular polygon feature for the cell
-            x0 = raster_xmin + (x * cell_width)
-            x1 = raster_xmin + ((x + 1) * cell_width)
-            y0 = raster_ymax - (y * cell_height)
-            y1 = raster_ymax - ((y + 1) * cell_height)
-            outer_ring = [
-                QgsPoint(x0, y0), QgsPoint(x1, y0),
-                QgsPoint(x1, y1), QgsPoint(x0, y1),
-                QgsPoint(x0, y0)]
-            # noinspection PyCallByClass
-            geometry = QgsGeometry.fromPolygon([outer_ring])
-            geometry.transform(ct)
-            f = QgsFeature()
-            f.setGeometry(geometry)
-            features.append(f)
+            for threshold_id, threshold in ranges.iteritems():
+                if threshold[0] <= value < threshold[1]:
+                    # construct rectangular polygon feature for the cell
+                    x0 = raster_xmin + (x * cell_width)
+                    x1 = raster_xmin + ((x + 1) * cell_width)
+                    y0 = raster_ymax - (y * cell_height)
+                    y1 = raster_ymax - ((y + 1) * cell_height)
+                    outer_ring = [
+                        QgsPoint(x0, y0), QgsPoint(x1, y0),
+                        QgsPoint(x1, y1), QgsPoint(x0, y1),
+                        QgsPoint(x0, y0)]
+                    # noinspection PyCallByClass
+                    geometry = QgsGeometry.fromPolygon([outer_ring])
+                    geometry.transform(ct)
+                    f = QgsFeature()
+                    f.setGeometry(geometry)
+                    f.setAttributes([threshold_id])
+                    features.append(f)
+                    break
 
     _, features = vl.dataProvider().addFeatures(features)
 
@@ -133,7 +132,7 @@ def _raster_to_vector_cells(
 def _add_output_feature(
         features,
         geometry,
-        is_flooded,
+        affected_class,
         fields,
         original_attributes,
         target_field):
@@ -149,9 +148,8 @@ def _add_output_feature(
         multi-part, it will be exploded into several single-part features.
     :type geometry: QgsGeometry
 
-    :param is_flooded: Flag indicating whether the feature should be marked
-        as flooded.
-    :type is_flooded: bool
+    :param affected_class: Affected class, 0 is not affected by a range.
+    :type affected_class: int
 
     :param fields: Fields that should be assigned to the new feature.
     :type fields: list
@@ -173,7 +171,7 @@ def _add_output_feature(
         f.setGeometry(g)
         for attr_no, attr_val in enumerate(original_attributes):
             f.setAttribute(attr_no, attr_val)
-        f.setAttribute(target_field, is_flooded)
+        f.setAttribute(target_field, affected_class)
         features.append(f)
 
 
@@ -246,25 +244,29 @@ def _intersect_lines_with_vector_cells(
         # query flood cells located in the area of the road and build
         # a (multi-)polygon geometry with flooded area relevant to this road
         ids = index.intersects(f.geometry().boundingBox())
-        geoms = [flood_cells_map[i].geometry() for i in ids]
-        flood_geom = _union_geometries(geoms)
-
-        # find out which parts of the road are flooded
-        in_geom = f.geometry().intersection(flood_geom)
-        if in_geom and (in_geom.wkbType() == QGis.WKBLineString or
-                        in_geom.wkbType() == QGis.WKBMultiLineString):
-            _add_output_feature(
-                features, in_geom, 1,
-                fields, f.attributes(), target_field)
-
-        # find out which parts of the road are not flooded
-        out_geom = f.geometry().difference(flood_geom)
-        if out_geom and (out_geom.wkbType() == QGis.WKBLineString or
-                         out_geom.wkbType() == QGis.WKBMultiLineString):
-            _add_output_feature(
-                features, out_geom, 0,
-                fields, f.attributes(), target_field)
-
+        flood_features = [flood_cells_map[i] for i in ids]
+        #flooded = False
+        for feature in flood_features:
+            # find out which parts of the road are flooded
+            in_geom = f.geometry().intersection(feature.geometry())
+            if in_geom and (in_geom.wkbType() == QGis.WKBLineString or
+                            in_geom.wkbType() == QGis.WKBMultiLineString):
+                affected_value = feature.attributes()[0]
+                _add_output_feature(
+                    features, in_geom, affected_value,
+                    fields, f.attributes(), target_field)
+        #        flooded = True
+        """
+        if not flooded:
+            # find out which parts of the road are not flooded
+            geoms = [f.geometry() for f in features]
+            out_geom = f.geometry().difference(_union_geometries(geoms))
+            if out_geom and (out_geom.wkbType() == QGis.WKBLineString or
+                             out_geom.wkbType() == QGis.WKBMultiLineString):
+                _add_output_feature(
+                    features, out_geom, 0,
+                    fields, f.attributes(), target_field)
+        """
         # every once in a while commit the created features to the output layer
         rd += 1
         if rd % 1000 == 0:
@@ -278,12 +280,19 @@ class TsunamiRasterRoadsFunction(
         ContinuousRHClassifiedVE,
         RoadExposureReportMixin):
     # noinspection PyUnresolvedReferences
-    """Simple impact function for inundation for road."""
+    """Simple impact function for tsunami on roads."""
     _metadata = TsunamiRasterRoadMetadata()
 
     def __init__(self):
         """Constructor."""
         super(TsunamiRasterRoadsFunction, self).__init__()
+        self.hazard_classes = [
+            tr('Dry Zone'),
+            tr('Low Hazard Zone'),
+            tr('Medium Hazard Zone'),
+            tr('High Hazard Zone'),
+            tr('Very High Hazard Zone'),
+        ]
 
     def notes(self):
         """Return the notes section of the report.
@@ -387,12 +396,6 @@ class TsunamiRasterRoadsFunction(
             clip_xmin = viewport_extent[0]
         if viewport_extent[1] > clip_ymin:
             clip_ymin = viewport_extent[1]
-        # TODO: Why have these two clauses when they are not used?
-        # Commenting out for now.
-        # if viewport_extent[2] < clip_xmax:
-        #     clip_xmax = viewport_extent[2]
-        # if viewport_extent[3] < clip_ymax:
-        #     clip_ymax = viewport_extent[3]
 
         height = ((viewport_extent[3] - viewport_extent[1]) /
                   self.hazard.layer.rasterUnitsPerPixelY())
@@ -432,10 +435,16 @@ class TsunamiRasterRoadsFunction(
         # Create vector features from the flood raster
         # For each raster cell there is one rectangular polygon
         # Data also get spatially indexed for faster operation
+        ranges = OrderedDict()
+        ranges[0] = [0, 0.1]
+        ranges[1] = [0.1, low_max]
+        ranges[2] = [low_max, medium_max]
+        ranges[3] = [medium_max, high_max]
+        ranges[4] = [high_max, 10000]
+
         index, flood_cells_map = _raster_to_vector_cells(
             small_raster,
-            low_max,
-            threshold_max,
+            ranges,
             self.exposure.layer.crs())
 
         # Filter geometry and data using the extent
@@ -446,12 +455,17 @@ class TsunamiRasterRoadsFunction(
         request = QgsFeatureRequest()
         request.setFilterRect(extent)
 
-        if len(flood_cells_map) == 0:
+        """
+        if len(low_max_flood_cells_map) == 0 and \
+            len(medium_max_flood_cells_map) == 0 and \
+            len(high_max_flood_cells_map) == 0 and \
+            len(high_min_flood_cells_map) == 0:
             message = tr(
-                'There are no objects in the hazard layer with "value" > %s. '
+                'There are no objects in the hazard layer with "value" > 0. '
                 'Please check the value or use other extent.' % (
                     threshold_min, ))
             raise GetDataError(message)
+        """
 
         # create template for the output layer
         line_layer_tmp = create_layer(self.exposure.layer)
@@ -519,12 +533,46 @@ class TsunamiRasterRoadsFunction(
         legend_title = tr('Road inundated status')
 
         style_classes = [
+            # FIXME 0 - 0.1
             dict(
-                label=tr('Not Inundated'), value=0,
-                colour='#1EFC7C', transparency=0, size=0.5),
+                label=self.hazard_classes[0] + ': 0 - 0.1 m (hard coded)',
+                value=0,
+                colour='#00FF00',
+                transparency=0,
+                size=1
+            ),
             dict(
-                label=tr('Inundated'), value=1,
-                colour='#F31A1C', transparency=0, size=0.5)]
+                label=self.hazard_classes[1] + ': 0.1 - %.1f m' % low_max,
+                value=1,
+                colour='#FFFF00',
+                transparency=0,
+                size=1
+            ),
+            dict(
+                label=self.hazard_classes[2] + ': %.1f - %.1f m' % (
+                    low_max + 0.1, medium_max),
+                value=2,
+                colour='#FFB700',
+                transparency=0,
+                size=1
+            ),
+            dict(
+                label=self.hazard_classes[3] + ': %.1f - %.1f m' % (
+                    medium_max + 0.1, high_max),
+                value=3,
+                colour='#FF6F00',
+                transparency=0,
+                size=1
+            ),
+
+            dict(
+                label=self.hazard_classes[4] + ' > %.1f m' % high_max,
+                value=4,
+                colour='#FF0000',
+                transparency=0,
+                size=1
+            ),
+        ]
         style_info = dict(
             target_field=target_field,
             style_classes=style_classes,
