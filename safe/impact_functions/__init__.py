@@ -53,6 +53,8 @@ from safe.impact_functions.inundation\
     TsunamiEvacuationFunction
 from safe.impact_functions.inundation.tsunami_raster_building.impact_function \
     import TsunamiRasterBuildingFunction
+from safe.impact_functions.inundation.tsunami_raster_road.impact_function \
+    import TsunamiRasterRoadsFunction
 
 # Volcanic
 from safe.impact_functions.volcanic.volcano_point_building.impact_function \
@@ -97,6 +99,7 @@ def register_impact_functions():
     impact_function_registry.register(TsunamiEvacuationFunction)
     # Added in 3.3
     impact_function_registry.register(TsunamiRasterBuildingFunction)
+    impact_function_registry.register(TsunamiRasterRoadsFunction)
 
     # Volcanic IF's
     impact_function_registry.register(VolcanoPointBuildingFunction)
