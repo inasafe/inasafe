@@ -87,9 +87,28 @@ def _raster_to_vector_cells(raster, ranges, output_crs):
         for x in xrange(raster_cols):
             # only use cells that are within the specified threshold
             value = block.value(y, x)
+            current_threshold = None
 
             for threshold_id, threshold in ranges.iteritems():
-                if threshold[0] <= value < threshold[1]:
+
+                # If, eg [0, 0], the value must be equal to 0.
+                if threshold[0] == threshold[1] and threshold[0] == value:
+                    current_threshold = threshold_id
+
+                # If, eg [None, 0], the value must be less than 0.
+                if threshold[0] is None and value <= threshold[1]:
+                    current_threshold = threshold_id
+
+                # If, eg [0, None], the value must be greater than 0.
+                if threshold[1] is None and threshold[0] < value:
+                    current_threshold = threshold_id
+
+                # If, eg [0, 1], the value must be
+                # between 0 excluded and 1 included.
+                if threshold[0] < value <= threshold[1]:
+                    current_threshold = threshold_id
+
+                if current_threshold is not None:
                     # construct rectangular polygon feature for the cell
                     x0 = raster_xmin + (x * cell_width)
                     x1 = raster_xmin + ((x + 1) * cell_width)
@@ -104,7 +123,7 @@ def _raster_to_vector_cells(raster, ranges, output_crs):
                     geometry.transform(ct)
                     f = QgsFeature()
                     f.setGeometry(geometry)
-                    f.setAttributes([threshold_id])
+                    f.setAttributes([current_threshold])
                     features.append(f)
                     break
 
@@ -245,7 +264,7 @@ def _intersect_lines_with_vector_cells(
         # a (multi-)polygon geometry with flooded area relevant to this road
         ids = index.intersects(f.geometry().boundingBox())
         flood_features = [flood_cells_map[i] for i in ids]
-        #flooded = False
+
         for feature in flood_features:
             # find out which parts of the road are flooded
             in_geom = f.geometry().intersection(feature.geometry())
@@ -255,17 +274,17 @@ def _intersect_lines_with_vector_cells(
                 _add_output_feature(
                     features, in_geom, affected_value,
                     fields, f.attributes(), target_field)
-        #        flooded = True
+
         """
-        if not flooded:
-            # find out which parts of the road are not flooded
-            geoms = [f.geometry() for f in features]
-            out_geom = f.geometry().difference(_union_geometries(geoms))
-            if out_geom and (out_geom.wkbType() == QGis.WKBLineString or
-                             out_geom.wkbType() == QGis.WKBMultiLineString):
-                _add_output_feature(
-                    features, out_geom, 0,
-                    fields, f.attributes(), target_field)
+        # find out which parts of the road are not flooded
+        geoms = [f.geometry() for f in flood_features]
+        out_geom = f.geometry().difference(_union_geometries(geoms))
+        print out_geom
+        if out_geom and (out_geom.wkbType() == QGis.WKBLineString or
+                         out_geom.wkbType() == QGis.WKBMultiLineString):
+            _add_output_feature(
+                features, out_geom, 0,
+                fields, f.attributes(), target_field)
         """
         # every once in a while commit the created features to the output layer
         rd += 1
@@ -436,11 +455,11 @@ class TsunamiRasterRoadsFunction(
         # For each raster cell there is one rectangular polygon
         # Data also get spatially indexed for faster operation
         ranges = OrderedDict()
-        ranges[0] = [0, 0.1]
-        ranges[1] = [0.1, low_max]
+        ranges[0] = [0.0, 0.0]
+        ranges[1] = [0.0, low_max]
         ranges[2] = [low_max, medium_max]
         ranges[3] = [medium_max, high_max]
-        ranges[4] = [high_max, 10000]
+        ranges[4] = [high_max, None]
 
         index, flood_cells_map = _raster_to_vector_cells(
             small_raster,
@@ -497,11 +516,18 @@ class TsunamiRasterRoadsFunction(
         output_crs = QgsCoordinateReferenceSystem(epsg)
         transform = QgsCoordinateTransform(
             self.exposure.layer.crs(), output_crs)
-        flooded_keyword = tr('Flooded in the threshold (m)')
-        self.affected_road_categories = [flooded_keyword]
-        self.affected_road_lengths = OrderedDict([
-            (flooded_keyword, {})])
+
+        # Roads breakdown
         self.road_lengths = OrderedDict()
+        self.affected_road_categories = self.hazard_classes
+        # Impacted roads breakdown
+        self.affected_road_lengths = OrderedDict([
+            (self.hazard_classes[0], {}),
+            (self.hazard_classes[1], {}),
+            (self.hazard_classes[2], {}),
+            (self.hazard_classes[3], {}),
+            (self.hazard_classes[4], {}),
+        ])
 
         if line_layer.featureCount() < 1:
             raise ZeroImpactException()
@@ -510,6 +536,8 @@ class TsunamiRasterRoadsFunction(
         road_type_field_index = line_layer.fieldNameIndex(road_class_field)
         for road in roads_data:
             attributes = road.attributes()
+            affected = attributes[target_field_index]
+            hazard_zone = self.hazard_classes[affected]
             road_type = attributes[road_type_field_index]
             if road_type.__class__.__name__ == 'QPyNullVariant':
                 road_type = tr('Other')
@@ -518,13 +546,18 @@ class TsunamiRasterRoadsFunction(
             length = geom.length()
 
             if road_type not in self.road_lengths:
-                self.affected_road_lengths[flooded_keyword][road_type] = 0
                 self.road_lengths[road_type] = 0
 
+            if hazard_zone not in self.affected_road_lengths:
+                self.affected_road_lengths[hazard_zone] = {}
+
+            if road_type not in self.affected_road_lengths[hazard_zone]:
+                self.affected_road_lengths[hazard_zone][road_type] = 0
+
             self.road_lengths[road_type] += length
-            if attributes[target_field_index] == 1:
-                self.affected_road_lengths[
-                    flooded_keyword][road_type] += length
+            num_classes = len(self.hazard_classes)
+            if attributes[target_field_index] in range(num_classes):
+                self.affected_road_lengths[hazard_zone][road_type] += length
 
         impact_summary = self.html_report()
 
@@ -535,14 +568,14 @@ class TsunamiRasterRoadsFunction(
         style_classes = [
             # FIXME 0 - 0.1
             dict(
-                label=self.hazard_classes[0] + ': 0 - 0.1 m (hard coded)',
+                label=self.hazard_classes[0] + ': 0m',
                 value=0,
                 colour='#00FF00',
                 transparency=0,
                 size=1
             ),
             dict(
-                label=self.hazard_classes[1] + ': 0.1 - %.1f m' % low_max,
+                label=self.hazard_classes[1] + ': <0 - %.1f m' % low_max,
                 value=1,
                 colour='#FFFF00',
                 transparency=0,
