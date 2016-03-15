@@ -464,7 +464,7 @@ class AnalysisHandler(QObject):
         if self.zoom_to_impact_flag:
             self.iface.zoomToActiveLayer()
         if self.hide_exposure_flag:
-            exposure_layer = self.impact_function.exposure
+            exposure_layer = self.impact_function.exposure.qgis_layer()
             legend = self.iface.legendInterface()
             legend.setLayerVisible(exposure_layer, False)
 
