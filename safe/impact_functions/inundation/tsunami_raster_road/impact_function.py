@@ -83,6 +83,7 @@ def _raster_to_vector_cells(raster, ranges, output_crs):
     # prepare coordinate transform to reprojection
     ct = QgsCoordinateTransform(raster.crs(), output_crs)
 
+    rd = 0
     for y in xrange(raster_rows):
         for x in xrange(raster_cols):
             # only use cells that are within the specified threshold
@@ -127,12 +128,19 @@ def _raster_to_vector_cells(raster, ranges, output_crs):
                     features.append(f)
                     break
 
-    _, features = vl.dataProvider().addFeatures(features)
+            # every once in a while, add the created features to the output.
+            rd += 1
+            if rd % 1000 == 0:
+                vl.dataProvider().addFeatures(features)
+                features = []
+
+    # Add the latest features
+    vl.dataProvider().addFeatures(features)
 
     # construct a temporary map for fast access to features by their IDs
     # (we will be getting feature IDs from spatial index)
     flood_cells_map = {}
-    for f in features:
+    for f in vl.getFeatures():
         flood_cells_map[f.id()] = f
 
     # build a spatial index so we can quickly identify
@@ -292,6 +300,7 @@ def _intersect_lines_with_vector_cells(
             output_layer.dataProvider().addFeatures(features)
             features = []
 
+    # Add the latest features
     output_layer.dataProvider().addFeatures(features)
 
 
