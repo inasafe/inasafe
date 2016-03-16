@@ -39,10 +39,8 @@ from safe.impact_functions.inundation.tsunami_raster_road\
         _raster_to_vector_cells,
         _intersect_lines_with_vector_cells
     )
-from safe.storage.core import read_layer
 from safe.gis.qgis_vector_tools import create_layer
 from safe.test.utilities import get_qgis_app, test_data_path
-from safe.storage.safe_layer import SafeLayer
 
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -57,18 +55,19 @@ class TsunamiRasterRoadsFunctionTest(unittest.TestCase):
         registry.register(TsunamiRasterRoadsFunction)
 
     def test_run(self):
+        """Test the tsunami on roads IF"""
         impact_function = TsunamiRasterRoadsFunction.instance()
 
         hazard_path = test_data_path('hazard', 'tsunami_wgs84.tif')
         exposure_path = test_data_path('exposure', 'roads.shp')
-        hazard_layer = read_layer(hazard_path)
-        exposure_layer = read_layer(exposure_path)
+        hazard_layer = QgsRasterLayer(hazard_path, 'Tsunami')
+        exposure_layer = QgsVectorLayer(exposure_path, 'Roads', 'ogr')
 
-        impact_function.hazard = SafeLayer(hazard_layer)
-        impact_function.exposure = SafeLayer(exposure_layer)
+        impact_function.hazard = hazard_layer
+        impact_function.exposure = exposure_layer
 
         # Let's set the extent to the hazard extent
-        extent = impact_function.hazard.layer.extent()
+        extent = hazard_layer.extent()
         rect_extent = [
             extent.xMinimum(), extent.yMaximum(),
             extent.xMaximum(), extent.yMinimum()]
@@ -78,15 +77,15 @@ class TsunamiRasterRoadsFunctionTest(unittest.TestCase):
 
         # Extract calculated result
         impact_data = impact_layer.get_data()
-        self.assertEqual(len(impact_data), 181)
+        self.assertEqual(len(impact_data), 3580)
 
         # 1 = inundated, 2 = wet, 3 = dry
         expected_result = {
-            0: 0,
-            1: 3286,
+            0: 3218,
+            1: 88,
             2: 107,
             3: 114,
-            4: 0
+            4: 53
         }
 
         result = {
@@ -157,14 +156,13 @@ class TsunamiRasterRoadsFunctionTest(unittest.TestCase):
         index, flood_cells_map = _raster_to_vector_cells(
             raster, ranges, exposure.crs())
 
-        self.assertTrue(False)
-        # self.assertEqual(len(flood_cells_map), 221)
+        self.assertEqual(len(flood_cells_map), 4198)
         rect_with_all_cells = raster.extent()
         rect_with_4_cells = QgsRectangle(106.824, -6.177, 106.825, -6.179)
         rect_with_0_cells = QgsRectangle(106.818, -6.168, 106.828, -6.175)
-        self.assertEqual(len(index.intersects(rect_with_all_cells)), 221)
-        self.assertEqual(len(index.intersects(rect_with_4_cells)), 4)
-        self.assertEqual(len(index.intersects(rect_with_0_cells)), 0)
+        self.assertEqual(len(index.intersects(rect_with_all_cells)), 4198)
+        self.assertEqual(len(index.intersects(rect_with_4_cells)), 43)
+        self.assertEqual(len(index.intersects(rect_with_0_cells)), 504)
 
         layer = create_layer(exposure)
         new_field = QgsField('flooded', QVariant.Int)
@@ -175,7 +173,7 @@ class TsunamiRasterRoadsFunctionTest(unittest.TestCase):
             exposure, request, index, flood_cells_map, layer, 'flooded')
 
         feature_count = layer.featureCount()
-        self.assertEqual(feature_count, 184)
+        self.assertEqual(feature_count, 388)
 
         flooded = 0
         iterator = layer.getFeatures()
@@ -183,4 +181,4 @@ class TsunamiRasterRoadsFunctionTest(unittest.TestCase):
             attributes = feature.attributes()
             if attributes[3] == 1:
                 flooded += 1
-        self.assertEqual(flooded, 25)
+        self.assertEqual(flooded, 40)
