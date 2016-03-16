@@ -34,7 +34,6 @@ from safe.definitions import (
     exposure_road,
     unit_metres,
     unit_feet,
-    hazard_tsunami,
     road_class_field
 )
 
@@ -83,7 +82,7 @@ class FloodRasterRoadsMetadata(ImpactFunctionMetadata):
                         hazard_category_single_event,
                         hazard_category_multiple_event
                     ],
-                    'hazard_types': [hazard_flood, hazard_tsunami],
+                    'hazard_types': [hazard_flood],
                     'continuous_hazard_units': [unit_feet, unit_metres],
                     'vector_hazard_classifications': [],
                     'raster_hazard_classifications': [],
