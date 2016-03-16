@@ -283,17 +283,14 @@ def _intersect_lines_with_vector_cells(
                     features, in_geom, affected_value,
                     fields, f.attributes(), target_field)
 
-        """
         # find out which parts of the road are not flooded
-        geoms = [f.geometry() for f in flood_features]
+        geoms = [j.geometry() for j in flood_features]
         out_geom = f.geometry().difference(_union_geometries(geoms))
-        print out_geom
         if out_geom and (out_geom.wkbType() == QGis.WKBLineString or
                          out_geom.wkbType() == QGis.WKBMultiLineString):
             _add_output_feature(
                 features, out_geom, 0,
                 fields, f.attributes(), target_field)
-        """
         # every once in a while commit the created features to the output layer
         rd += 1
         if rd % 1000 == 0:
