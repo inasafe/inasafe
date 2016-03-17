@@ -70,7 +70,7 @@ class RoadTypePostprocessor(BuildingTypePostprocessor):
             except that the indicator counts the length of the road.
         """
 
-        name = tr('Temporarily closed (m)')
+        name = tr('Total affected (m)')
         result = 0
         if self.type_fields is not None:
             try:
