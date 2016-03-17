@@ -311,6 +311,8 @@ class TsunamiRasterRoadsFunction(
     def __init__(self):
         """Constructor."""
         super(TsunamiRasterRoadsFunction, self).__init__()
+        RoadExposureReportMixin.__init__(self)
+        self.add_unaffected_column = False
         self.hazard_classes = [
             tr('Dry Zone'),
             tr('Low Hazard Zone'),

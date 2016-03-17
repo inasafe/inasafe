@@ -278,6 +278,7 @@ class FloodRasterRoadsFunction(
     def __init__(self):
         """Constructor."""
         super(FloodRasterRoadsFunction, self).__init__()
+        RoadExposureReportMixin.__init__(self)
 
     def notes(self):
         """Return the notes section of the report.
