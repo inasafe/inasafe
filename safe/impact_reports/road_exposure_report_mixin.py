@@ -34,6 +34,7 @@ class RoadExposureReportMixin(ReportMixin):
         self.road_lengths = {}
         self.affected_road_lengths = {}
         self.affected_road_categories = []
+        self.add_unaffected_column = True
 
     def generate_report(self):
         """Breakdown by road type.
@@ -66,8 +67,11 @@ class RoadExposureReportMixin(ReportMixin):
         for _ in affected_categories:
             # Add empty cell as many as affected_categories
             row.add(m.Cell('', header=True))
-        # Add empty cell for un-affected road
-        row.add(m.Cell('', header=True))
+
+        if self.add_unaffected_column:
+            # Add empty cell for un-affected road
+            row.add(m.Cell('', header=True))
+
         # Add empty cell for total column
         row.add(m.Cell('', header=True))
         table.add(row)
@@ -76,7 +80,10 @@ class RoadExposureReportMixin(ReportMixin):
         row.add(m.Cell(tr('Road Type'), header=True))
         for affected_category in affected_categories:
             row.add(m.Cell(affected_category, header=True, align='right'))
-        row.add(m.Cell(tr('Unaffected (m)'), header=True, align='right'))
+
+        if self.add_unaffected_column:
+            row.add(m.Cell(tr('Unaffected (m)'), header=True, align='right'))
+
         row.add(m.Cell(tr('Total (m)'), header=True, align='right'))
         table.add(row)
 
@@ -90,9 +97,11 @@ class RoadExposureReportMixin(ReportMixin):
         row.add(m.Cell(tr('All')))
         for total_affected_value in total_affected:
             row.add(m.Cell(
-            format_int(int(total_affected_value)), align='right'))
-        row.add(m.Cell(format_int(
-            int(self.total_road_length - sum(total_affected))), align='right'))
+                format_int(int(total_affected_value)), align='right'))
+        if self.add_unaffected_column:
+            row.add(m.Cell(format_int(int(
+                self.total_road_length - sum(total_affected))), align='right'))
+
         row.add(m.Cell(format_int(int(self.total_road_length)), align='right'))
         table.add(row)
 
@@ -118,8 +127,11 @@ class RoadExposureReportMixin(ReportMixin):
         for _ in affected_categories:
             # Add empty cell as many as affected_categories
             row.add(m.Cell('', header=True))
-        # Add empty cell for un-affected road
-        row.add(m.Cell('', header=True))
+
+        if self.add_unaffected_column:
+            # Add empty cell for un-affected road
+            row.add(m.Cell('', header=True))
+
         # Add empty cell for total column
         row.add(m.Cell('', header=True))
         table.add(row)
@@ -128,7 +140,10 @@ class RoadExposureReportMixin(ReportMixin):
         row.add(m.Cell(tr('Road Type'), header=True))
         for affected_category in affected_categories:
             row.add(m.Cell(affected_category, header=True, align='right'))
-        row.add(m.Cell(tr('Unaffected (m)'), header=True, align='right'))
+
+        if self.add_unaffected_column:
+            row.add(m.Cell(tr('Unaffected (m)'), header=True, align='right'))
+
         row.add(m.Cell(tr('Total (m)'), header=True, align='right'))
         table.add(row)
 
@@ -146,10 +161,12 @@ class RoadExposureReportMixin(ReportMixin):
             for affected_by_usage_value in affected_by_usage:
                 row.add(m.Cell(
                     format_int(int(affected_by_usage_value)), align='right'))
-            # Unaffected
-            row.add(m.Cell(format_int(
-                int(self.road_lengths[road_type] - sum(affected_by_usage))),
-                    align='right'))
+
+            if self.add_unaffected_column:
+                row.add(m.Cell(format_int(
+                    int(self.road_lengths[road_type] -
+                        sum(affected_by_usage))), align='right'))
+
             # Total for the road type
             row.add(m.Cell(
                 format_int(int(self.road_lengths[road_type])), align='right'))
@@ -169,10 +186,13 @@ class RoadExposureReportMixin(ReportMixin):
                 format_int(int(total_affected_value)),
                 align='right',
                 header=True))
-        row.add(m.Cell(
-            format_int(int(self.total_road_length - sum(total_affected))),
-            align='right',
-            header=True))
+
+        if self.add_unaffected_column:
+            row.add(m.Cell(
+                format_int(int(self.total_road_length - sum(total_affected))),
+                align='right',
+                header=True))
+
         row.add(m.Cell(
             format_int(int(self.total_road_length)),
             align='right',
