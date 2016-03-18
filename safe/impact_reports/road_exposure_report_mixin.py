@@ -63,7 +63,7 @@ class RoadExposureReportMixin(ReportMixin):
         table.caption = None
 
         row = m.Row()
-        row.add(m.Cell(tr('Breakdown by road type'), header=True))
+        row.add(m.Cell(tr('Summary by road type'), header=True))
         for _ in affected_categories:
             # Add empty cell as many as affected_categories
             row.add(m.Cell('', header=True))
@@ -82,9 +82,9 @@ class RoadExposureReportMixin(ReportMixin):
             row.add(m.Cell(affected_category, header=True, align='right'))
 
         if self.add_unaffected_column:
-            row.add(m.Cell(tr('Unaffected (m)'), header=True, align='right'))
+            row.add(m.Cell(tr('Unaffected'), header=True, align='right'))
 
-        row.add(m.Cell(tr('Total (m)'), header=True, align='right'))
+        row.add(m.Cell(tr('Total'), header=True, align='right'))
         table.add(row)
 
         total_affected = [0] * len(affected_categories)
@@ -94,7 +94,7 @@ class RoadExposureReportMixin(ReportMixin):
             total_affected[count] = number_affected
 
         row = m.Row()
-        row.add(m.Cell(tr('All')))
+        row.add(m.Cell(tr('All (m)')))
         for total_affected_value in total_affected:
             row.add(m.Cell(
                 format_int(int(total_affected_value)), align='right'))
@@ -142,9 +142,9 @@ class RoadExposureReportMixin(ReportMixin):
             row.add(m.Cell(affected_category, header=True, align='right'))
 
         if self.add_unaffected_column:
-            row.add(m.Cell(tr('Unaffected (m)'), header=True, align='right'))
+            row.add(m.Cell(tr('Unaffected'), header=True, align='right'))
 
-        row.add(m.Cell(tr('Total (m)'), header=True, align='right'))
+        row.add(m.Cell(tr('Total'), header=True, align='right'))
         table.add(row)
 
         for road_type in self.road_lengths:
@@ -157,7 +157,7 @@ class RoadExposureReportMixin(ReportMixin):
                 else:
                     affected_by_usage.append(0)
             row = m.Row()
-            row.add(m.Cell(road_type.capitalize()))
+            row.add(m.Cell('%s (m)' % road_type.capitalize()))
             for affected_by_usage_value in affected_by_usage:
                 row.add(m.Cell(
                     format_int(int(affected_by_usage_value)), align='right'))
@@ -180,7 +180,7 @@ class RoadExposureReportMixin(ReportMixin):
             total_affected[count] = number_affected
 
         row = m.Row()
-        row.add(m.Cell(tr('Total'), header=True))
+        row.add(m.Cell(tr('Total (m)'), header=True))
         for total_affected_value in total_affected:
             row.add(m.Cell(
                 format_int(int(total_affected_value)),
