@@ -50,7 +50,7 @@ class FloodPolygonRoadsFunction(
     def __init__(self):
         """Constructor."""
         super(FloodPolygonRoadsFunction, self).__init__()
-
+        RoadExposureReportMixin.__init__(self)
         # The 'wet' variable
         self.wet = 'wet'
 
