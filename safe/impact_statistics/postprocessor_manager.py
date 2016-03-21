@@ -192,6 +192,9 @@ class PostprocessorManager(QtCore.QObject):
                     # run method. But just in case there is something wrong.
                     zone_name = 'Unnamed Area %s' % null_index
                     null_index += 1
+                if name == 'road type':
+                    # We add the unit 'meter' as we are counting roads.
+                    zone_name = '%s (m)' % zone_name
                 row = m.Row(zone_name)
 
                 for indicator, calculation_data in calc.iteritems():
