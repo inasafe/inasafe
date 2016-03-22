@@ -50,7 +50,7 @@ class FloodPolygonRoadsFunction(
     def __init__(self):
         """Constructor."""
         super(FloodPolygonRoadsFunction, self).__init__()
-
+        RoadExposureReportMixin.__init__(self)
         # The 'wet' variable
         self.wet = 'wet'
 
@@ -88,12 +88,6 @@ class FloodPolygonRoadsFunction(
 
     def run(self):
         """Experimental impact function for flood polygons on roads."""
-        self.validate()
-        self.prepare()
-
-        self.provenance.append_step(
-            'Calculating Step',
-            'Impact function is calculating the impact.')
 
         # Get parameters from layer's keywords
         self.hazard_class_attribute = self.hazard.keyword('field')

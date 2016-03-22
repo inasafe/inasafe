@@ -3578,10 +3578,12 @@ class WizardDialog(QDialog, FORM_CLASS):
         :rtype: boolean
         """
         self.analysis_handler = AnalysisHandler(self)
-        self.analysis_handler.init_analysis()
+        self.analysis_handler.setup_analysis()
         try:
-            self.analysis_handler.analysis.setup_analysis()
-        except InsufficientOverlapError:
+            impact_function = self.analysis_handler.impact_function
+            clip_parameters = impact_function.clip_parameters
+            adjusted_geo_extent = clip_parameters['adjusted_geo_extent']
+        except (AttributeError, InsufficientOverlapError):
             self.analysis_handler = None
             return False
 

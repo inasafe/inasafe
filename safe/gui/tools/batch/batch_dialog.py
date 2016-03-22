@@ -496,7 +496,7 @@ class BatchDialog(QDialog, FORM_CLASS):
                 # Usually after analysis is done, the impact layer
                 # become the active layer. <--- WRONG
                 # noinspection PyUnresolvedReferences
-                impact_layer = self.dock.analysis.impact_layer
+                impact_layer = self.dock.impact_function.impact
 
                 # Load impact layer into QGIS
                 qgis_layer = read_impact_layer(impact_layer)

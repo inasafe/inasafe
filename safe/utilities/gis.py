@@ -4,12 +4,18 @@ import uuid
 
 from qgis.core import (
     QgsMapLayer,
+    QgsField,
+    QgsFeature,
+    QgsPoint,
+    QgsGeometry,
+    QgsSpatialIndex,
     QgsCoordinateReferenceSystem,
     QgsCoordinateTransform,
     QGis,
     QgsRectangle,
     QgsVectorLayer,
     QgsRasterLayer)
+from PyQt4.QtCore import QVariant
 from safe.common.exceptions import \
     MemoryLayerCreationError, BoundingBoxError, InsufficientOverlapError
 from safe.storage.core import read_layer as safe_read_layer
@@ -541,3 +547,71 @@ def get_optimal_extent(
         raise InsufficientOverlapError(message)
 
     return optimal_extent
+
+
+def add_output_feature(
+        features,
+        geometry,
+        affected_class,
+        fields,
+        original_attributes,
+        target_field):
+    """ Utility function to construct road features from geometry.
+
+    Newly created features get the attributes from the original feature.
+
+    :param features: A collection of features that the new feature will
+        be added to.
+    :type features: list
+
+    :param geometry: The geometry for the new feature. If the geometry is
+        multi-part, it will be exploded into several single-part features.
+    :type geometry: QgsGeometry
+
+    :param affected_class: Affected class, 0 is not affected by a range.
+    :type affected_class: int
+
+    :param fields: Fields that should be assigned to the new feature.
+    :type fields: list
+
+    :param original_attributes: Attributes for the feature before the new
+        target field (see below) is added.
+    :type original_attributes: list
+
+    :param target_field: Output field used to indicate if the road segment
+        is flooded.
+    :type target_field: QgsField
+
+    :returns: None
+    """
+    geometries = geometry.asGeometryCollection() if geometry.isMultipart() \
+        else [geometry]
+    for g in geometries:
+        f = QgsFeature(fields)
+        f.setGeometry(g)
+        for attr_no, attr_val in enumerate(original_attributes):
+            f.setAttribute(attr_no, attr_val)
+        f.setAttribute(target_field, affected_class)
+        features.append(f)
+
+
+def union_geometries(geometries):
+    """ Return a geometry which is union of the passed list of geometries.
+
+    :param geometries: Geometries for the union operation.
+    :type geometries: list
+
+    :returns: union of geometries
+    :rtype: QgsGeometry
+    """
+    if QGis.QGIS_VERSION_INT >= 20400:
+        # woohoo we can use fast union (needs GEOS >= 3.3)
+        return QgsGeometry.unaryUnion(geometries)
+    else:
+        # uhh we need to use slow iterative union
+        if len(geometries) == 0:
+            return QgsGeometry()
+        result_geometry = QgsGeometry(geometries[0])
+        for g in geometries[1:]:
+            result_geometry = result_geometry.combine(g)
+        return result_geometry
