@@ -11,11 +11,11 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-__author__ = 'ismailsunni'
-__project_name__ = 'inasafe'
-__filename__ = 'parameter_definitions'
-__date__ = '12/31/15'
-__copyright__ = 'imajimatika@gmail.com'
+__author__ = 'etiennetrimaille'
+__project_name__ = 'inasafe-dev'
+__filename__ = 'parameter_definitions.py'
+__date__ = '11/03/16'
+__copyright__ = 'etienne@kartoza.com'
 
 from safe.impact_functions.unit_definitions import parameter_unit_metres
 from safe_extras.parameters.float_parameter import FloatParameter
@@ -92,7 +92,7 @@ def high_threshold():
         'The threshold of hazard categorized as High Hazard Zone in '
         'meter. A zone is categorized as High Hazard Zone if the depth of '
         'tsunami inundation is more than Medium Hazard Zone Threshold and '
-        'less than High Hazard Zone Threshold. '
+        'less than High Hazard Zone Threshold.'
         'A zone that has more than High Hazard Zone Threshold is categorized '
         'as Very High Hazard Zone.')
     return field

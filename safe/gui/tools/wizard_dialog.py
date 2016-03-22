@@ -1974,7 +1974,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                     self.layer, None, current_keywords):
                 msg = self.tr(
                     'The selected keywords don\'t match requirements of the '
-                    'selected impact fuction (%s). You can confinue with '
+                    'selected impact function (%s). You can continue with '
                     'registering the layer, however, you\'ll need to choose '
                     'another layer for that function.') % im_func['name']
                 body = '<br/><h5 class="problem">%s</h5> %s' % (msg, body)

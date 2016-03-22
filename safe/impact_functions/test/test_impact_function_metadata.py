@@ -60,6 +60,8 @@ from safe.impact_functions.inundation.flood_vector_building_impact\
     .impact_function import FloodPolygonBuildingFunction
 from safe.impact_functions.inundation.tsunami_population_evacuation_raster\
     .impact_function import TsunamiEvacuationFunction
+from safe.impact_functions.inundation.tsunami_raster_road\
+    .impact_function import TsunamiRasterRoadsFunction
 
 # Volcanic IFs
 from safe.impact_functions.volcanic.volcano_point_building.impact_function\
@@ -121,6 +123,7 @@ class TestImpactFunctionMetadata(unittest.TestCase):
             FloodRasterRoadsFunction(),
             FloodPolygonBuildingFunction(),
             TsunamiEvacuationFunction(),
+            TsunamiRasterRoadsFunction(),
             # Volcanic
             VolcanoPointBuildingFunction(),
             VolcanoPointPopulationFunction(),
