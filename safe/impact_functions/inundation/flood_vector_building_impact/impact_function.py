@@ -78,9 +78,6 @@ class FloodPolygonBuildingFunction(
 
     def run(self):
         """Experimental impact function."""
-        self.validate()
-        self.prepare()
-
         if self.aggregation is not None:
             # To be sure we are not using the user extent anymore.
             # (without using the setter):
@@ -121,10 +118,6 @@ class FloodPolygonBuildingFunction(
                 flood_result, self.hazard.name, 'ogr')
             self.exposure = QgsVectorLayer(
                 building_result, self.exposure.name, 'ogr')
-
-        self.provenance.append_step(
-            'Calculating Step',
-            'Impact function is calculating the impact.')
 
         # Get parameters from layer's keywords
         self.hazard_class_attribute = self.hazard.keyword('field')
