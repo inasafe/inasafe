@@ -24,7 +24,7 @@ from safe.impact_functions.bases.continuous_rh_classified_ve import \
 from safe.impact_functions.inundation.flood_raster_road\
     .metadata_definitions import FloodRasterRoadsMetadata
 from safe.utilities.i18n import tr
-from safe.utilities.gis import intersect_lines_with_vector_cells
+from safe.utilities.gis import add_output_feature, union_geometries
 from safe.storage.vector import Vector
 from safe.common.utilities import get_utm_epsg, unique_filename
 from safe.common.exceptions import GetDataError
@@ -123,6 +123,81 @@ def _raster_to_vector_cells(
             index.insertFeature(f)
 
     return index, flood_cells_map
+
+
+def _intersect_lines_with_vector_cells(
+        line_layer,
+        request,
+        index,
+        flood_cells_map,
+        output_layer,
+        target_field):
+    """
+    A helper function to find all vector cells that intersect with lines.
+
+    In typical usage, you will have a roads layer and polygon cells from
+    vectorising a raster layer. The goal is to obtain a subset of cells
+    which intersect with the roads. This will then be used to determine
+    if any given road segment is flooded.
+
+    :param line_layer: Vector layer with containing linear features
+        such as roads.
+    :type line_layer: QgsVectorLayer
+
+    :param request: Request for fetching features from lines layer.
+    :type request: QgsFeatureRequest
+
+    :param index: Spatial index with flood features.
+    :type index: QgsSpatialIndex
+
+    :param flood_cells_map: Map from flood feature IDs to actual features.
+        See :func:`_raster_to_vector_cells` for more details.
+    :type flood_cells_map: dict
+
+    :param output_layer: Layer to which features will be written.
+    :type output_layer: QgsVectorLayer
+
+    :param target_field: Name of the field in output_layer which will receive
+        information whether the feature is flooded or not.
+    :type target_field: basestring
+
+    :return: None
+    """
+
+    features = []
+    fields = output_layer.dataProvider().fields()
+
+    rd = 0
+    for f in line_layer.getFeatures(request):
+        # query flood cells located in the area of the road and build
+        # a (multi-)polygon geometry with flooded area relevant to this road
+        ids = index.intersects(f.geometry().boundingBox())
+        geoms = [flood_cells_map[i].geometry() for i in ids]
+        flood_geom = union_geometries(geoms)
+
+        # find out which parts of the road are flooded
+        in_geom = f.geometry().intersection(flood_geom)
+        if in_geom and (in_geom.wkbType() == QGis.WKBLineString or
+                        in_geom.wkbType() == QGis.WKBMultiLineString):
+            add_output_feature(
+                features, in_geom, 1,
+                fields, f.attributes(), target_field)
+
+        # find out which parts of the road are not flooded
+        out_geom = f.geometry().difference(flood_geom)
+        if out_geom and (out_geom.wkbType() == QGis.WKBLineString or
+                         out_geom.wkbType() == QGis.WKBMultiLineString):
+            add_output_feature(
+                features, out_geom, 0,
+                fields, f.attributes(), target_field)
+
+        # every once in a while commit the created features to the output layer
+        rd += 1
+        if rd % 1000 == 0:
+            output_layer.dataProvider().addFeatures(features)
+            features = []
+
+    output_layer.dataProvider().addFeatures(features)
 
 
 class FloodRasterRoadsFunction(
@@ -301,7 +376,7 @@ class FloodRasterRoadsFunction(
 
         # Do the heavy work - for each road get flood polygon for that area and
         # do the intersection/difference to find out which parts are flooded
-        intersect_lines_with_vector_cells(
+        _intersect_lines_with_vector_cells(
             self.exposure.layer,
             request,
             index,

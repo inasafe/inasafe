@@ -38,8 +38,10 @@ from safe.storage.safe_layer import SafeLayer
 
 # noinspection PyProtectedMember
 from safe.impact_functions.inundation.flood_raster_road.impact_function \
-    import FloodRasterRoadsFunction, _raster_to_vector_cells
-from safe.utilities.gis import intersect_lines_with_vector_cells
+    import (
+        FloodRasterRoadsFunction,
+        _raster_to_vector_cells,
+        _intersect_lines_with_vector_cells)
 from safe.gis.qgis_vector_tools import create_layer
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 
@@ -144,7 +146,7 @@ class TestFloodRasterRoadsFunction(unittest.TestCase):
         layer.dataProvider().addAttributes([new_field])
 
         request = QgsFeatureRequest()
-        intersect_lines_with_vector_cells(
+        _intersect_lines_with_vector_cells(
             exposure, request, index, flood_cells_map, layer, 'flooded')
 
         feature_count = layer.featureCount()
