@@ -190,7 +190,7 @@ class PostprocessorManager(QtCore.QObject):
                 if isinstance(zone_name, QPyNullVariant):
                     # I have made sure that the zone_name won't be Null in
                     # run method. But just in case there is something wrong.
-                    zone_name = 'Unnamed Area %s' % null_index
+                    zone_name = tr('Unnamed Area %s' % null_index)
                     null_index += 1
                 if name == 'road type':
                     # We add the unit 'meter' as we are counting roads.
@@ -443,7 +443,9 @@ class PostprocessorManager(QtCore.QObject):
             else:
                 zone_name = feature[name_filed_index]
             if isinstance(zone_name, QPyNullVariant):
-                zone_name = 'Unnamed Area %s' % str(feature.id())
+                zone_name = tr(
+                    'Unnamed Area %(feature_id)s' %
+                    {'feature_id': str(feature.id())})
 
             # create dictionary of attributes to pass to postprocessor
             general_params = {
