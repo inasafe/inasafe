@@ -75,9 +75,8 @@ class TsunamiRasterRoadMetadata(ImpactFunctionMetadata):
                 'To assess the impacts of tsunami inundation on roads in '
                 'vector format with hazard in raster format.'),
             'detailed_description': tr(
-                'FIXME The inundation status is calculated for each building '
-                '(using the centroid if it is a polygon) based on the '
-                'tsunami threshold. The threshold can be configured in '
+                'The inundation status is calculated for each roads based on '
+                'the tsunami threshold. The threshold can be configured in '
                 'impact function options.'),
             'hazard_input': tr(
                 'A hazard raster layer where each cell represents tsunami '
@@ -88,12 +87,9 @@ class TsunamiRasterRoadMetadata(ImpactFunctionMetadata):
                 'Vector layer contains road is estimated to be '
                 'inundated and the breakdown of the road by type.'),
             'actions': tr(
-                'Provide details about where critical infrastructure '
+                'Provide details about where critical road '
                 'might be inundated.'),
-            'limitations': [tr(
-                'This function only flags buildings as impacted or not either '
-                'based on a fixed threshold')
-            ],
+            'limitations': [],
             'citations': [],
             'layer_requirements': {
                 'hazard': {
