@@ -178,18 +178,6 @@ class FloodRasterRoadsFunction(
         small_raster = clip_raster(
             self.hazard.layer, width, height, QgsRectangle(*clip_extent))
 
-        # Create vector features from the flood raster
-        # For each raster cell there is one rectangular polygon
-        # Data also get spatially indexed for faster operation
-
-        ranges = OrderedDict()
-        ranges[0] = [threshold_min, threshold_max]
-
-        index, flood_cells_map = raster_to_vector_cells(
-            small_raster,
-            ranges,
-            self.exposure.layer.crs())
-
         # Filter geometry and data using the extent
         ct = QgsCoordinateTransform(
             QgsCoordinateReferenceSystem("EPSG:4326"),
@@ -197,13 +185,6 @@ class FloodRasterRoadsFunction(
         extent = ct.transformBoundingBox(QgsRectangle(*self.requested_extent))
         request = QgsFeatureRequest()
         request.setFilterRect(extent)
-
-        if len(flood_cells_map) == 0:
-            message = tr(
-                'There are no objects in the hazard layer with "value" > %s. '
-                'Please check the value or use other extent.' % (
-                    threshold_min, ))
-            raise GetDataError(message)
 
         # create template for the output layer
         line_layer_tmp = create_layer(self.exposure.layer)
@@ -216,6 +197,23 @@ class FloodRasterRoadsFunction(
         QgsVectorFileWriter.writeAsVectorFormat(
             line_layer_tmp, filename, "utf-8", None, "ESRI Shapefile")
         line_layer = QgsVectorLayer(filename, "flooded roads", "ogr")
+
+        # Create vector features from the flood raster
+        # For each raster cell there is one rectangular polygon
+        # Data also get spatially indexed for faster operation
+        ranges = OrderedDict()
+        ranges[0] = [threshold_min, threshold_max]
+        index, flood_cells_map = raster_to_vector_cells(
+            small_raster,
+            ranges,
+            self.exposure.layer.crs())
+
+        if len(flood_cells_map) == 0:
+            message = tr(
+                'There are no objects in the hazard layer with "value" > %s. '
+                'Please check the value or use other extent.' % (
+                    threshold_min, ))
+            raise GetDataError(message)
 
         # Do the heavy work - for each road get flood polygon for that area and
         # do the intersection/difference to find out which parts are flooded
