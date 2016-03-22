@@ -4,12 +4,18 @@ import uuid
 
 from qgis.core import (
     QgsMapLayer,
+    QgsField,
+    QgsFeature,
+    QgsPoint,
+    QgsGeometry,
+    QgsSpatialIndex,
     QgsCoordinateReferenceSystem,
     QgsCoordinateTransform,
     QGis,
     QgsRectangle,
     QgsVectorLayer,
     QgsRasterLayer)
+from PyQt4.QtCore import QVariant
 from safe.common.exceptions import \
     MemoryLayerCreationError, BoundingBoxError, InsufficientOverlapError
 from safe.storage.core import read_layer as safe_read_layer
@@ -541,3 +547,262 @@ def get_optimal_extent(
         raise InsufficientOverlapError(message)
 
     return optimal_extent
+
+
+def raster_to_vector_cells(raster, ranges, output_crs):
+    """Generate vectors features (rectangles) for raster cells.
+
+     Cells which are not within one of the ranges will be excluded.
+     The provided CRS will be used to determine the CRS of the output
+     vector cells layer.
+
+    :param ranges: A dictionary of ranges. The key will be the id the range.
+    :type ranges: OrderedDict
+
+    :param raster: A raster layer that will be vectorised.
+    :type raster: QgsRasterLayer
+
+    :param output_crs: The CRS to use for the output vector cells layer.
+    :type output_crs: QgsCoordinateReferenceSystem
+
+    :returns: A two-tuple containing a spatial index and a map (dict) where
+        map keys are feature id's and the value is the feature for that id.
+    :rtype: (QgsSpatialIndex, dict)
+    """
+
+    # get raster data
+    provider = raster.dataProvider()
+    extent = provider.extent()
+    raster_cols = provider.xSize()
+    raster_rows = provider.ySize()
+    block = provider.block(1, extent, raster_cols, raster_rows)
+    raster_xmin = extent.xMinimum()
+    raster_ymax = extent.yMaximum()
+    cell_width = extent.width() / raster_cols
+    cell_height = extent.height() / raster_rows
+
+    uri = "Polygon?crs=" + output_crs.authid()
+    vl = QgsVectorLayer(uri, "cells", "memory")
+    vl.dataProvider().addAttributes([QgsField('affected', QVariant.Int)])
+    vl.updateFields()
+    features = []
+
+    # prepare coordinate transform to reprojection
+    ct = QgsCoordinateTransform(raster.crs(), output_crs)
+
+    rd = 0
+    for y in xrange(raster_rows):
+        for x in xrange(raster_cols):
+            # only use cells that are within the specified threshold
+            value = block.value(y, x)
+            current_threshold = None
+
+            for threshold_id, threshold in ranges.iteritems():
+
+                # If, eg [0, 0], the value must be equal to 0.
+                if threshold[0] == threshold[1] and threshold[0] == value:
+                    current_threshold = threshold_id
+
+                # If, eg [None, 0], the value must be less than 0.
+                if threshold[0] is None and value <= threshold[1]:
+                    current_threshold = threshold_id
+
+                # If, eg [0, None], the value must be greater than 0.
+                if threshold[1] is None and threshold[0] < value:
+                    current_threshold = threshold_id
+
+                # If, eg [0, 1], the value must be
+                # between 0 excluded and 1 included.
+                if threshold[0] < value <= threshold[1]:
+                    current_threshold = threshold_id
+
+                if current_threshold is not None:
+                    # construct rectangular polygon feature for the cell
+                    x0 = raster_xmin + (x * cell_width)
+                    x1 = raster_xmin + ((x + 1) * cell_width)
+                    y0 = raster_ymax - (y * cell_height)
+                    y1 = raster_ymax - ((y + 1) * cell_height)
+                    outer_ring = [
+                        QgsPoint(x0, y0), QgsPoint(x1, y0),
+                        QgsPoint(x1, y1), QgsPoint(x0, y1),
+                        QgsPoint(x0, y0)]
+                    # noinspection PyCallByClass
+                    geometry = QgsGeometry.fromPolygon([outer_ring])
+                    geometry.transform(ct)
+                    f = QgsFeature()
+                    f.setGeometry(geometry)
+                    f.setAttributes([current_threshold])
+                    features.append(f)
+                    break
+
+            # every once in a while, add the created features to the output.
+            rd += 1
+            if rd % 1000 == 0:
+                vl.dataProvider().addFeatures(features)
+                features = []
+
+    # Add the latest features
+    vl.dataProvider().addFeatures(features)
+
+    # construct a temporary map for fast access to features by their IDs
+    # (we will be getting feature IDs from spatial index)
+    flood_cells_map = {}
+    for f in vl.getFeatures():
+        flood_cells_map[f.id()] = f
+
+    # build a spatial index so we can quickly identify
+    # flood cells overlapping roads
+    if QGis.QGIS_VERSION_INT >= 20800:
+        # woohoo we can use bulk insert (much faster)
+        index = QgsSpatialIndex(vl.getFeatures())
+    else:
+        index = QgsSpatialIndex()
+        for f in vl.getFeatures():
+            index.insertFeature(f)
+
+    return index, flood_cells_map
+
+
+def add_output_feature(
+        features,
+        geometry,
+        affected_class,
+        fields,
+        original_attributes,
+        target_field):
+    """ Utility function to construct road features from geometry.
+
+    Newly created features get the attributes from the original feature.
+
+    :param features: A collection of features that the new feature will
+        be added to.
+    :type features: list
+
+    :param geometry: The geometry for the new feature. If the geometry is
+        multi-part, it will be exploded into several single-part features.
+    :type geometry: QgsGeometry
+
+    :param affected_class: Affected class, 0 is not affected by a range.
+    :type affected_class: int
+
+    :param fields: Fields that should be assigned to the new feature.
+    :type fields: list
+
+    :param original_attributes: Attributes for the feature before the new
+        target field (see below) is added.
+    :type original_attributes: list
+
+    :param target_field: Output field used to indicate if the road segment
+        is flooded.
+    :type target_field: QgsField
+
+    :returns: None
+    """
+    geometries = geometry.asGeometryCollection() if geometry.isMultipart() \
+        else [geometry]
+    for g in geometries:
+        f = QgsFeature(fields)
+        f.setGeometry(g)
+        for attr_no, attr_val in enumerate(original_attributes):
+            f.setAttribute(attr_no, attr_val)
+        f.setAttribute(target_field, affected_class)
+        features.append(f)
+
+
+def union_geometries(geometries):
+    """ Return a geometry which is union of the passed list of geometries.
+
+    :param geometries: Geometries for the union operation.
+    :type geometries: list
+
+    :returns: union of geometries
+    :rtype: QgsGeometry
+    """
+    if QGis.QGIS_VERSION_INT >= 20400:
+        # woohoo we can use fast union (needs GEOS >= 3.3)
+        return QgsGeometry.unaryUnion(geometries)
+    else:
+        # uhh we need to use slow iterative union
+        if len(geometries) == 0:
+            return QgsGeometry()
+        result_geometry = QgsGeometry(geometries[0])
+        for g in geometries[1:]:
+            result_geometry = result_geometry.combine(g)
+        return result_geometry
+
+
+def intersect_lines_with_vector_cells(
+        line_layer,
+        request,
+        index,
+        flood_cells_map,
+        output_layer,
+        target_field):
+    """
+    A helper function to find all vector cells that intersect with lines.
+
+    In typical usage, you will have a roads layer and polygon cells from
+    vectorising a raster layer. The goal is to obtain a subset of cells
+    which intersect with the roads. This will then be used to determine
+    if any given road segment is flooded.
+
+    :param line_layer: Vector layer with containing linear features
+        such as roads.
+    :type line_layer: QgsVectorLayer
+
+    :param request: Request for fetching features from lines layer.
+    :type request: QgsFeatureRequest
+
+    :param index: Spatial index with flood features.
+    :type index: QgsSpatialIndex
+
+    :param flood_cells_map: Map from flood feature IDs to actual features.
+        See :func:`_raster_to_vector_cells` for more details.
+    :type flood_cells_map: dict
+
+    :param output_layer: Layer to which features will be written.
+    :type output_layer: QgsVectorLayer
+
+    :param target_field: Name of the field in output_layer which will receive
+        information whether the feature is flooded or not.
+    :type target_field: basestring
+
+    :return: None
+    """
+
+    features = []
+    fields = output_layer.dataProvider().fields()
+
+    rd = 0
+    for f in line_layer.getFeatures(request):
+        # query flood cells located in the area of the road and build
+        # a (multi-)polygon geometry with flooded area relevant to this road
+        ids = index.intersects(f.geometry().boundingBox())
+        flood_features = [flood_cells_map[i] for i in ids]
+
+        for feature in flood_features:
+            # find out which parts of the road are flooded
+            in_geom = f.geometry().intersection(feature.geometry())
+            if in_geom and (in_geom.wkbType() == QGis.WKBLineString or
+                            in_geom.wkbType() == QGis.WKBMultiLineString):
+                affected_value = feature.attributes()[0]
+                add_output_feature(
+                    features, in_geom, affected_value,
+                    fields, f.attributes(), target_field)
+
+        # find out which parts of the road are not flooded
+        geoms = [j.geometry() for j in flood_features]
+        out_geom = f.geometry().difference(union_geometries(geoms))
+        if out_geom and (out_geom.wkbType() == QGis.WKBLineString or
+                         out_geom.wkbType() == QGis.WKBMultiLineString):
+            add_output_feature(
+                features, out_geom, 0,
+                fields, f.attributes(), target_field)
+        # every once in a while commit the created features to the output layer
+        rd += 1
+        if rd % 1000 == 0:
+            output_layer.dataProvider().addFeatures(features)
+            features = []
+
+    # Add the latest features
+    output_layer.dataProvider().addFeatures(features)
