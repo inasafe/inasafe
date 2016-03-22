@@ -201,8 +201,7 @@ class FloodRasterRoadsFunction(
         # Create vector features from the flood raster
         # For each raster cell there is one rectangular polygon
         # Data also get spatially indexed for faster operation
-        ranges = OrderedDict()
-        ranges[0] = [threshold_min, threshold_max]
+        ranges = {0: [threshold_min, threshold_max]}
         index, flood_cells_map = raster_to_vector_cells(
             small_raster,
             ranges,

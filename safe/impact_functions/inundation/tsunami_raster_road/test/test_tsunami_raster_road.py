@@ -34,11 +34,9 @@ from safe.impact_functions.impact_function_manager\
     import ImpactFunctionManager
 # noinspection PyProtectedMember
 from safe.impact_functions.inundation.tsunami_raster_road\
-    .impact_function import (
-        TsunamiRasterRoadsFunction,
-        _raster_to_vector_cells,
-        _intersect_lines_with_vector_cells
-    )
+    .impact_function import TsunamiRasterRoadsFunction
+from safe.utilities.gis import (
+    raster_to_vector_cells, intersect_lines_with_vector_cells)
 from safe.gis.qgis_vector_tools import create_layer
 from safe.test.utilities import get_qgis_app, test_data_path
 
@@ -153,7 +151,7 @@ class TsunamiRasterRoadsFunctionTest(unittest.TestCase):
         ranges[0] = [0, 1]
         ranges[1] = [1, 2]
         ranges[2] = [2, 100]
-        index, flood_cells_map = _raster_to_vector_cells(
+        index, flood_cells_map = raster_to_vector_cells(
             raster, ranges, exposure.crs())
 
         self.assertEqual(len(flood_cells_map), 4198)
@@ -169,7 +167,7 @@ class TsunamiRasterRoadsFunctionTest(unittest.TestCase):
         layer.dataProvider().addAttributes([new_field])
 
         request = QgsFeatureRequest()
-        _intersect_lines_with_vector_cells(
+        intersect_lines_with_vector_cells(
             exposure, request, index, flood_cells_map, layer, 'flooded')
 
         feature_count = layer.featureCount()
