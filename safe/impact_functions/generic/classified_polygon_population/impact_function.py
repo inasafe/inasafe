@@ -100,12 +100,6 @@ class ClassifiedPolygonHazardPopulationFunction(
         :raises:
             * Exception - When hazard layer is not vector layer
         """
-        self.validate()
-        self.prepare()
-
-        self.provenance.append_step(
-            'Calculating Step',
-            'Impact function is calculating the impact.')
 
         # Value from layer's keywords
         self.hazard_class_attribute = self.hazard.keyword('field')

@@ -317,13 +317,6 @@ class TsunamiRasterRoadsFunction(
         :returns: A new line layer with inundated roads marked.
         :type: safe_layer
         """
-        self.validate()
-        self.prepare()
-
-        self.provenance.append_step(
-            'Calculating Step',
-            'Impact function is calculating the impact.')
-
         # Thresholds for tsunami hazard zone breakdown.
         low_max = self.parameters['low_threshold'].value
         medium_max = self.parameters['medium_threshold'].value

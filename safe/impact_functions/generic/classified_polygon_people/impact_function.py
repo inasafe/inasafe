@@ -115,12 +115,6 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         :returns: Impact layer
         :rtype: Vector
         """
-        self.validate()
-        self.prepare()
-
-        self.provenance.append_step(
-            'Calculating Step',
-            'Impact function is calculating the impact.')
 
         # Identify hazard and exposure layers
         hazard = self.hazard.layer

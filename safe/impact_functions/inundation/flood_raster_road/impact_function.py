@@ -253,12 +253,6 @@ class FloodRasterRoadsFunction(
         :returns: A new line layer with inundated roads marked.
         :type: safe_layer
         """
-        self.validate()
-        self.prepare()
-
-        self.provenance.append_step(
-            'Calculating Step',
-            'Impact function is calculating the impact.')
 
         target_field = self.target_field
         # Get parameters from layer's keywords

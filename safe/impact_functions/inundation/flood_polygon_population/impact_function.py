@@ -119,12 +119,6 @@ class FloodEvacuationVectorHazardFunction(
             people evacuated and supplies required.
         :rtype: tuple
         """
-        self.validate()
-        self.prepare()
-
-        self.provenance.append_step(
-            'Calculating Step',
-            'Impact function is calculating the impact.')
 
         # Get parameters from layer's keywords
         self.hazard_class_attribute = self.hazard.keyword('field')
