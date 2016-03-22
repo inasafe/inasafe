@@ -24,9 +24,7 @@ from safe.impact_functions.bases.continuous_rh_classified_ve import \
 from safe.impact_functions.inundation.flood_raster_road\
     .metadata_definitions import FloodRasterRoadsMetadata
 from safe.utilities.i18n import tr
-from safe.utilities.gis import (
-    raster_to_vector_cells,
-    intersect_lines_with_vector_cells)
+from safe.utilities.gis import intersect_lines_with_vector_cells
 from safe.storage.vector import Vector
 from safe.common.utilities import get_utm_epsg, unique_filename
 from safe.common.exceptions import GetDataError
@@ -38,6 +36,93 @@ from safe.impact_reports.road_exposure_report_mixin import\
     RoadExposureReportMixin
 import safe.messaging as m
 from safe.messaging import styles
+
+
+def _raster_to_vector_cells(
+        raster, minimum_threshold, maximum_threshold, output_crs):
+    """Generate vectors features (rectangles) for raster cells.
+
+     Cells which are not within threshold (threshold_min < V < threshold_max)
+     will be excluded. The provided CRS will be used to determine the
+     CRS of the output vector cells layer.
+
+    :param minimum_threshold: The minimum threshold for pixels to be included.
+    :type minimum_threshold: float
+
+    :param maximum_threshold: The maximum threshold for pixels to be included.
+    :type maximum_threshold: float
+
+    :param raster: A raster layer that will be vectorised.
+    :type raster: QgsRasterLayer
+
+    :param output_crs: The CRS to use for the output vector cells layer.
+    :type output_crs: QgsCoordinateReferenceSystem
+
+    :returns: A two-tuple containing a spatial index and a map (dict) where
+        map keys are feature id's and the value is the feature for that id.
+    :rtype: (QgsSpatialIndex, dict)
+    """
+
+    # get raster data
+    provider = raster.dataProvider()
+    extent = provider.extent()
+    raster_cols = provider.xSize()
+    raster_rows = provider.ySize()
+    block = provider.block(1, extent, raster_cols, raster_rows)
+    raster_xmin = extent.xMinimum()
+    raster_ymax = extent.yMaximum()
+    cell_width = extent.width() / raster_cols
+    cell_height = extent.height() / raster_rows
+
+    uri = "Polygon?crs=" + output_crs.authid()
+    vl = QgsVectorLayer(uri, "cells", "memory")
+    features = []
+
+    # prepare coordinate transform to reprojection
+    ct = QgsCoordinateTransform(raster.crs(), output_crs)
+
+    for y in xrange(raster_rows):
+        for x in xrange(raster_cols):
+            # only use cells that are within the specified threshold
+            value = block.value(y, x)
+            if value < minimum_threshold or value > maximum_threshold:
+                continue
+
+            # construct rectangular polygon feature for the cell
+            x0 = raster_xmin + (x * cell_width)
+            x1 = raster_xmin + ((x + 1) * cell_width)
+            y0 = raster_ymax - (y * cell_height)
+            y1 = raster_ymax - ((y + 1) * cell_height)
+            outer_ring = [
+                QgsPoint(x0, y0), QgsPoint(x1, y0),
+                QgsPoint(x1, y1), QgsPoint(x0, y1),
+                QgsPoint(x0, y0)]
+            # noinspection PyCallByClass
+            geometry = QgsGeometry.fromPolygon([outer_ring])
+            geometry.transform(ct)
+            f = QgsFeature()
+            f.setGeometry(geometry)
+            features.append(f)
+
+    _, features = vl.dataProvider().addFeatures(features)
+
+    # construct a temporary map for fast access to features by their IDs
+    # (we will be getting feature IDs from spatial index)
+    flood_cells_map = {}
+    for f in features:
+        flood_cells_map[f.id()] = f
+
+    # build a spatial index so we can quickly identify
+    # flood cells overlapping roads
+    if QGis.QGIS_VERSION_INT >= 20800:
+        # woohoo we can use bulk insert (much faster)
+        index = QgsSpatialIndex(vl.getFeatures())
+    else:
+        index = QgsSpatialIndex()
+        for f in vl.getFeatures():
+            index.insertFeature(f)
+
+    return index, flood_cells_map
 
 
 class FloodRasterRoadsFunction(
@@ -201,10 +286,10 @@ class FloodRasterRoadsFunction(
         # Create vector features from the flood raster
         # For each raster cell there is one rectangular polygon
         # Data also get spatially indexed for faster operation
-        ranges = {0: [threshold_min, threshold_max]}
-        index, flood_cells_map = raster_to_vector_cells(
+        index, flood_cells_map = _raster_to_vector_cells(
             small_raster,
-            ranges,
+            threshold_min,
+            threshold_max,
             self.exposure.layer.crs())
 
         if len(flood_cells_map) == 0:

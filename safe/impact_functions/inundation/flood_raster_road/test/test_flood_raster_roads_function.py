@@ -38,9 +38,8 @@ from safe.storage.safe_layer import SafeLayer
 
 # noinspection PyProtectedMember
 from safe.impact_functions.inundation.flood_raster_road.impact_function \
-    import FloodRasterRoadsFunction
-from safe.utilities.gis import (
-    intersect_lines_with_vector_cells, raster_to_vector_cells)
+    import FloodRasterRoadsFunction, _raster_to_vector_cells
+from safe.utilities.gis import intersect_lines_with_vector_cells
 from safe.gis.qgis_vector_tools import create_layer
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 
@@ -128,8 +127,8 @@ class TestFloodRasterRoadsFunction(unittest.TestCase):
         raster = QgsRasterLayer(raster_name, 'Flood')
         exposure = QgsVectorLayer(exposure_name, 'Exposure', 'ogr')
 
-        index, flood_cells_map = raster_to_vector_cells(
-            raster, {0: [0.1, 1e10]}, exposure.crs())
+        index, flood_cells_map = _raster_to_vector_cells(
+            raster, 0.1, 1e10, exposure.crs())
 
         self.assertEqual(len(flood_cells_map), 221)
 
