@@ -157,7 +157,9 @@ class RoadExposureReportMixin(ReportMixin):
                 else:
                     affected_by_usage.append(0)
             row = m.Row()
-            row.add(m.Cell('%s (m)' % road_type.capitalize()))
+
+            row.add(m.Cell(tr('%(road_type)s (m)' % {
+                'road_type': road_type.capitalize()})))
             for affected_by_usage_value in affected_by_usage:
                 row.add(m.Cell(
                     format_int(int(affected_by_usage_value)), align='right'))
