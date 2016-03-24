@@ -49,7 +49,8 @@ from safe.utilities.resources import (
 
 from safe.utilities.qgis_utilities import (
     display_warning_message_box,
-    display_warning_message_bar)
+    display_warning_message_bar,)
+
 from safe.gui.tools.rectangle_map_tool import RectangleMapTool
 from safe.gui.tools.help.population_downloader_help import osm_downloader_help####last to deal with
 
@@ -239,7 +240,7 @@ class PopulationDownloaderDialog(QDialog, FORM_CLASS):
 
     def accept(self):
         """Do osm download and display it in QGIS."""
-        error_dialog_title = self.tr('InaSAFE OpenStreetMap Downloader Error')
+        error_dialog_title = self.tr('InaSAFE worldpop Downloader Error')
 
         # Lock the bounding_box_group
         self.bounding_box_group.setDisabled(True)
@@ -346,15 +347,15 @@ class PopulationDownloaderDialog(QDialog, FORM_CLASS):
 
         if overwrite:
 
-            # If a shapefile exists, we must remove it (only the .shp)
-            shp = '%s.shp' % path
-            if os.path.isfile(shp):
-                os.remove(shp)
+            # If a shapefile exists, we must remove it (only the .geojson)
+            geojson = '%s.geojson' % path
+            if os.path.isfile(json):
+                os.remove(geojson)
 
         else:
             separator = '-'
             suffix = self.get_unique_file_path_suffix(
-                '%s.shp' % path, separator)
+                '%s.geojson' % path, separator)
 
             if suffix:
                 path = os.path.join(output_directory, '%s%s%s%s' % (
@@ -390,7 +391,7 @@ class PopulationDownloaderDialog(QDialog, FORM_CLASS):
             file_path_test = file_path
 
         if os.path.isfile(file_path_test):
-            return OsmDownloaderDialog.get_unique_file_path_suffix(
+            return PopulationDownloaderDialog.get_unique_file_path_suffix(
                 file_path, separator, i + 1)
         else:
             return i
@@ -442,30 +443,13 @@ class PopulationDownloaderDialog(QDialog, FORM_CLASS):
         :raises: FileMissingError - when buildings.shp not exist
         """
 
-        path = '%s.shp' % base_path
+        path = '%s.geojson' % base_path
 
-        if not os.path.exists(path):
-            message = self.tr(
-                '%s does not exist. The server does not have any data for '
-                'this extent.' % path)
-            raise FileMissingError(message)
 
-        self.iface.addVectorLayer(path, feature_type, 'ogr')
 
-        canvas_srid = self.canvas.mapRenderer().destinationCrs().srsid()
-        on_the_fly_projection = self.canvas.hasCrsTransformEnabled()
-        if canvas_srid != 4326 and not on_the_fly_projection:
-            if QGis.QGIS_VERSION_INT >= 20400:
-                self.canvas.setCrsTransformEnabled(True)
-            else:
-                display_warning_message_bar(
-                    self.iface,
-                    self.tr('Enable \'on the fly\''),
-                    self.tr(
-                        'Your current projection is different than EPSG:4326. '
-                        'You should enable \'on the fly\' to display '
-                        'correctly your layers')
-                    )
+        self.iface.QMessageBox(path, string_pop_data, 'ogr')
+
+
 
     def reject(self):
         """Redefinition of the reject() method
