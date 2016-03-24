@@ -21,9 +21,11 @@ import zipfile
 import os
 import logging
 import tempfile
+import requests
+import simplejson
 
 from PyQt4.QtNetwork import QNetworkAccessManager, QNetworkReply
-from PyQt4.QtGui import QDialog
+from PyQt4.QtGui import QDialog, QMessageBox
 
 from safe.utilities.proxy import get_proxy
 from safe.utilities.i18n import tr
@@ -31,8 +33,6 @@ from safe.utilities.file_downloader import FileDownloader
 from safe.common.exceptions import DownloadError, CanceledImportDialogError
 from safe.common.version import get_version
 
-URL_OSM_PREFIX = 'http://osm.inasafe.org/'
-URL_OSM_SUFFIX = '-shp'
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -74,17 +74,22 @@ def download(feature_type, output_base_path, extent, progress_dialog=None):
             max_latitude=max_latitude
         )
 
-    url = URL_OSM_PREFIX + feature_type + URL_OSM_SUFFIX
-    url = '{url}?bbox={box}&qgis_version=2'.format(
-        url=url, box=box)
 
-    url += '&inasafe_version=%s' % get_version()
+    url = 'https://worldpop-api.herokuapp.com/'
+    response = requests.get(url)
+    response.content
+    pop_data = response.content
+    simplejson.loads(pop_data)["totalPopulation"]
+    population_data = simplejson.loads(pop_data)["totalPopulation"]
+    string_pop_data = str(population_data)
 
-    if 'LANG' in os.environ:
-        env_lang = os.environ['LANG']
-        url += '&lang=%s' % env_lang
 
-    path = tempfile.mktemp('.shp.zip')
+    msgBox = QMessageBox()
+    msgBox.setText(string_pop_data)
+
+
+
+    path = tempfile.mktemp('.geojson')
 
     # download and extract it
     fetch_zip(url, path, feature_type, progress_dialog)
@@ -190,3 +195,5 @@ def extract_zip(zip_path, destination_base_path):
         output_file.close()
 
     handle.close()
+
+
