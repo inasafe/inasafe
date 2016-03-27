@@ -318,6 +318,20 @@ class Plugin(object):
         self.action_import_dialog.triggered.connect(self.show_osm_downloader)
         self.add_action(self.action_import_dialog)
 
+    def _create_population_downloader_action(self):
+        """Create action for import population Dialog."""
+        icon = resources_path('img', 'icons', 'show-population-download.svg')
+        self.action_import_dialog = QAction(
+            QIcon(icon),
+            self.tr('Population Downloader'),
+            self.iface.mainWindow())
+        self.action_import_dialog.setStatusTip(self.tr(
+            'Population Downloader'))
+        self.action_import_dialog.setWhatsThis(self.tr(
+            'Population Downloader'))
+        self.action_import_dialog.triggered.connect(self.show_population_downloader)
+        self.add_action(self.action_import_dialog)
+
     def _create_add_osm_layer_action(self):
         """Create action for import OSM Dialog."""
         icon = resources_path('img', 'icons', 'add-osm-tiles-layer.svg')
@@ -444,6 +458,7 @@ class Plugin(object):
         self._create_analysis_wizard_action()
         self._add_spacer_to_menu()
         self._create_osm_downloader_action()
+        self._create_population_downloader_action()
         self._create_add_osm_layer_action()
         self._create_shakemap_converter_action()
         self._create_minimum_needs_action()
@@ -672,6 +687,13 @@ class Plugin(object):
         from safe.gui.tools.osm_downloader_dialog import OsmDownloaderDialog
 
         dialog = OsmDownloaderDialog(self.iface.mainWindow(), self.iface)
+        dialog.show()  # non modal
+
+    def show_population_downloader(self):
+        """Show the Population downloader dialog."""
+        from safe.gui.tools.population_downloader_dialog import PopulationDownloaderDialog
+
+        dialog = PopulationDownloaderDialog(self.iface.mainWindow(), self.iface)
         dialog.show()  # non modal
 
     def add_osm_layer(self):
