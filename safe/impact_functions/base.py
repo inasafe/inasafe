@@ -28,6 +28,7 @@ from qgis.utils import QGis
 from qgis.core import (
     QgsMapLayer,
     QgsRectangle,
+    QgsVectorLayer,
     QgsCoordinateReferenceSystem,
     QgsFeatureRequest,
     QgsCoordinateTransform)
@@ -47,6 +48,7 @@ from safe.common.exceptions import (
     NoFeaturesInExtentError,
     InvalidProjectionError,
     InvalidGeometryError,
+    ProcessingExecutionError,
     AggregationError,
     KeywordDbError,
     ZeroImpactException,
@@ -62,7 +64,8 @@ from safe.messaging.utilities import generate_insufficient_overlap_message
 from safe.postprocessors.postprocessor_factory import (
     get_postprocessors,
     get_postprocessor_human_name)
-from safe.common.utilities import get_non_conflicting_attribute_name
+from safe.common.utilities import \
+    get_non_conflicting_attribute_name, unique_filename
 from safe.utilities.utilities import get_error_message
 from safe.utilities.memory_checker import check_memory_usage
 from safe.utilities.i18n import tr
@@ -74,6 +77,9 @@ from safe.utilities.gis import (
     extent_to_array,
     get_optimal_extent)
 from safe.utilities.clipper import adjust_clip_extent
+from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.processing_model import ModelExecutor
+from safe.utilities.resources import resources_path
 from safe.storage.safe_layer import SafeLayer
 from safe.storage.utilities import (
     buffered_bounding_box as get_buffered_extent,
@@ -99,6 +105,9 @@ SUGGESTION_STYLE = styles.SUGGESTION_STYLE
 WARNING_STYLE = styles.WARNING_STYLE
 LOGO_ELEMENT = m.Brand()
 LOGGER = logging.getLogger('InaSAFE')
+
+import pydevd
+pydevd.settrace('localhost', port=8888, stdoutToServer=True, stderrToServer=True, suspend=False)
 
 
 class ImpactFunction(object):
@@ -890,6 +899,63 @@ class ImpactFunction(object):
                 clip_parameters = self.clip_parameters
                 adjusted_geo_extent = clip_parameters['adjusted_geo_extent']
                 self.requested_extent = adjusted_geo_extent
+
+                # FIXME Whitelist of IF which works with processing.
+                processing_clipping = {
+                    'FloodPolygonBuildingFunction':
+                        'inasafe-building-flood-aggr.model'
+                }
+                impact_function_id = self.metadata().as_dict()['id']
+                if impact_function_id in processing_clipping.keys():
+                    # Experimental clipping with the Processing framework
+                    if self.aggregation is not None:
+                        # To be sure we are not using the user extent anymore.
+                        # (without using the setter):
+                        self._requested_extent = None
+
+                        model_path = resources_path(
+                            'models', processing_clipping[impact_function_id])
+                        model = ModelExecutor(model_path)
+
+                        hazard_result = unique_filename(
+                            suffix='-clipped-hazard.shp')
+                        exposure_result = unique_filename(
+                            suffix='-clipped-exposure.shp')
+
+                        parameters = (
+                            self.aggregation.qgis_layer().source(),
+                            self.hazard.qgis_layer().source(),
+                            self.exposure.qgis_layer().source(),
+                            exposure_result,
+                            hazard_result
+                        )
+                        model.set_parameters(parameters)
+
+                        # status, msg = model.validate_parameters()
+                        # if not status:
+                        #    raise ProcessingExecutionError(msg)
+
+                        result, msg = model.run()
+                        if not result:
+                            raise ProcessingExecutionError(msg)
+
+                        keyword_io = KeywordIO()
+                        keyword_io.copy_keywords(
+                            self.hazard.qgis_layer(), hazard_result)
+                        keyword_io.copy_keywords(
+                            self.exposure.qgis_layer(), exposure_result)
+
+                        self.hazard = QgsVectorLayer(
+                            hazard_result, self.hazard.name, 'ogr')
+                        self.exposure = QgsVectorLayer(
+                            exposure_result, self.exposure.name, 'ogr')
+
+        except ProcessingExecutionError, e:
+            analysis_error(self, e, tr(
+                'An error occurred when using the Processing framework.'
+            ))
+            return
+
         except CallGDALError, e:
             analysis_error(self, e, tr(
                 'An error occurred when calling a GDAL command'))
@@ -928,6 +994,8 @@ class ImpactFunction(object):
                     'area for your analysis, or using rasters with a larger '
                     'cell size.'))
             return
+        except Exception, e:
+            raise e
 
     def generate_impact_keywords(self, extra_keywords=None):
         """Obtain keywords for the impact layer.

@@ -22,8 +22,8 @@ from qgis.core import (
     QgsGeometry)
 
 import safe.messaging as m
-from safe.common.exceptions import GetDataError, ZeroImpactException
-from safe.common.utilities import unique_filename
+from safe.common.exceptions import \
+    GetDataError, ZeroImpactException
 from safe.impact_functions.bases.classified_vh_classified_ve import \
     ClassifiedVHClassifiedVE
 from safe.impact_functions.inundation.flood_vector_building_impact.\
@@ -34,9 +34,6 @@ from safe.messaging import styles
 from safe.storage.vector import Vector
 from safe.utilities.gis import is_point_layer
 from safe.utilities.i18n import tr
-from safe.utilities.keyword_io import KeywordIO
-from safe.utilities.processing_model import ModelExecutor
-from safe.utilities.resources import resources_path
 
 
 class FloodPolygonBuildingFunction(
@@ -78,47 +75,6 @@ class FloodPolygonBuildingFunction(
 
     def run(self):
         """Experimental impact function."""
-        if self.aggregation is not None:
-            # To be sure we are not using the user extent anymore.
-            # (without using the setter):
-            self._requested_extent = None
-
-            model_path = resources_path(
-                'models', 'inasafe-building-flood-aggr.model')
-            model = ModelExecutor(model_path)
-
-            flood_result = unique_filename(suffix='-clipped-flood.shp')
-            building_result = unique_filename(suffix='-clipped-buildings.shp')
-
-            parameters = (
-                self.aggregation.qgis_layer().source(),
-                self.hazard.qgis_layer().source(),
-                self.exposure.qgis_layer().source(),
-                building_result,
-                flood_result
-            )
-            model.set_parameters(parameters)
-
-            status, msg = model.validate_parameters()
-            if not status:
-                #TODO, improve exception
-                raise Exception(msg)
-
-            result, msg = model.run()
-            if not result:
-                raise Exception(msg)
-
-            keyword_io = KeywordIO()
-            keyword_io.copy_keywords(
-                self.hazard.qgis_layer(), flood_result)
-            keyword_io.copy_keywords(
-                self.exposure.qgis_layer(), building_result)
-
-            self.hazard = QgsVectorLayer(
-                flood_result, self.hazard.name, 'ogr')
-            self.exposure = QgsVectorLayer(
-                building_result, self.exposure.name, 'ogr')
-
         # Get parameters from layer's keywords
         self.hazard_class_attribute = self.hazard.keyword('field')
         self.hazard_class_mapping = self.hazard.keyword('value_map')
