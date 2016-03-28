@@ -106,9 +106,6 @@ WARNING_STYLE = styles.WARNING_STYLE
 LOGO_ELEMENT = m.Brand()
 LOGGER = logging.getLogger('InaSAFE')
 
-import pydevd
-pydevd.settrace('localhost', port=8888, stdoutToServer=True, stderrToServer=True, suspend=False)
-
 
 class ImpactFunction(object):
     """Abstract base class for all impact functions."""
