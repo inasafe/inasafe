@@ -757,13 +757,6 @@ class ImpactFunction(object):
                 'trying to run the impact function.')
             raise FunctionParametersError(message)
 
-        # Validate extent, with the QGIS IF, we need requested_extent set
-        if self.function_type() == 'qgis2.0' and self.requested_extent is None:
-            message = tr(
-                'Impact Function with QGIS function type is used, but no '
-                'extent is provided.')
-            raise InvalidExtentError(message)
-
         # Find out what the usable extent and cell size are
         try:
             clip_parameters = self.clip_parameters
