@@ -79,19 +79,31 @@ def content():
     message.add(m.Paragraph(tr(
         'There are three main areas to the dock panel:')))
     bullets = m.BulletedList()
-    bullets.add(tr('the Questions area'))
-    bullets.add(tr('the Results area'))
-    bullets.add(tr('the Buttons area'))
+    bullets.add(m.Text(
+        tr('the '),
+        m.ImportantText(tr(
+            'questions ')),
+        tr('area')))
+    bullets.add(m.Text(
+        tr('the '),
+        m.ImportantText(tr(
+            'results ')),
+        tr('area')))
+    bullets.add(m.Text(
+        tr('the '),
+        m.ImportantText(tr(
+            'buttons ')),
+        tr('area')))
     message.add(bullets)
     message.add(m.Paragraph(tr(
         'At any time you can obtain help in InaSAFE by clicking on the '
         'help buttons provided on each dock and dialog.')))
 
-    header = m.Heading(tr('The Questions area'), **INFO_STYLE)
+    header = m.Heading(tr('The questions area'), **INFO_STYLE)
     message.add(header)
     message.add(m.Paragraph(tr(
         'The intention of InaSAFE is to make it really simple and easy to '
-        'perform your impact analysis. We start the analysis in the Questions '
+        'perform your impact analysis. We start the analysis in the questions '
         'area. In this area, you create your question by using the drop down '
         'menus to select the hazard and exposure you wish to perform the '
         'analysis on. All questions are expressed in the following form:'),
@@ -160,7 +172,7 @@ def content():
         'were probably affected in that area.'
     )))
 
-    header = m.Heading(tr('The Results area'), **INFO_STYLE)
+    header = m.Heading(tr('The results area'), **INFO_STYLE)
     message.add(header)
 
     message.add(m.Paragraph(tr(
@@ -170,7 +182,7 @@ def content():
         'form\' button.')))
 
     message.add(m.Paragraph(tr(
-        'The Results area is used to display various useful feedback items to '
+        'The results area is used to display various useful feedback items to '
         'the user. Once an impact scenario has been run, a summary table will '
         'be shown.')))
 
@@ -179,11 +191,11 @@ def content():
         'an InaSAFE Impact Function), in the QGIS layers list, this summary '
         'will also be displayed in the results area. When you select a hazard '
         'or exposure layer in the QGIS layers list, the keywords for that '
-        'layer will be shown in the Results area, making it easy to '
+        'layer will be shown in the results area, making it easy to '
         'understand what metadata exists for that layer.')))
 
     message.add(m.Paragraph(tr(
-        'The Results area is also used to display status information. For '
+        'The results area is also used to display status information. For '
         'example, when a suitable combination of hazard, exposure and impact '
         'function are selected, the results area will be updated to indicate '
         'that you can now run the impact scenario calculation. The \'Run\' '
@@ -191,7 +203,7 @@ def content():
     )))
 
     message.add(m.Paragraph(tr(
-        'Finally, the Results area is also used to display any error messages '
+        'Finally, the results area is also used to display any error messages '
         'so that the user knows what went wrong and why. You may need to '
         'scroll down to view the message completely.'
     )))
@@ -200,7 +212,7 @@ def content():
         'After running the impact scenario calculation, our Question is '
         'automatically hidden to make the results area as large as possible. '
         'If you want to see what the question used in the analysis was, click '
-        'on the \'Show question form\' button at the top of the Results area.'
+        'on the \'Show question form\' button at the top of the results area.'
     )))
 
     message.add(m.Paragraph(tr(
@@ -209,11 +221,11 @@ def content():
         'with InaSAFE in the Layers list of QGIS to make it active.'
     )))
 
-    header = m.Heading(tr('The Buttons area'), **INFO_STYLE)
+    header = m.Heading(tr('The buttons area'), **INFO_STYLE)
     message.add(header)
 
     message.add(m.Paragraph(tr(
-        'The Buttons area contains four buttons:')))
+        'The buttons area contains four buttons:')))
     bullets = m.BulletedList()
     bullets.add(m.Text(
         m.ImportantText(tr('Help')),
@@ -235,7 +247,7 @@ def content():
         m.ImportantText(tr('Run')),
         tr(
             '- this button is enabled when the combination of hazard and '
-            'exposure selected in the Questions area\'s drop down menus will '
+            'exposure selected in the questions area\'s drop down menus will '
             'allow you to run a scenario.')))
     message.add(bullets)
 
