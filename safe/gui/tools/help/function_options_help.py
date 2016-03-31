@@ -62,7 +62,7 @@ def content():
         'configurable Options than others. To open the Impact Function '
         'Configuration Dialog you need to click on the "Options ..." '
         'button next to the selected impact function paragraph in the '
-        'InaSAFE dock. You might have up to 3 tabs visible:'
+        'InaSAFE dock. You can have up to 3 tabs visible:'
     )))
 
     bullets = m.BulletedList()
