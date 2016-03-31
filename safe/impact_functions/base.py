@@ -886,54 +886,56 @@ class ImpactFunction(object):
                 self.requested_extent = adjusted_geo_extent
 
                 # FIXME Whitelist of IF which works with processing.
-                processing_clipping = {
-                    'FloodPolygonBuildingFunction':
-                        'inasafe-building-flood-aggr.model'
-                }
+                processing_clipping = [
+                    'FloodPolygonBuildingFunction',
+                ]
                 impact_function_id = self.metadata().as_dict()['id']
-                if impact_function_id in processing_clipping.keys():
-                    # Experimental clipping with the Processing framework
-                    if self.aggregation is not None:
-                        # To be sure we are not using the user extent anymore.
-                        # (without using the setter):
-                        self._requested_extent = None
+                if impact_function_id in processing_clipping:
+                    # Experimental clipping with the Processing framework.
+                    hazard_result = unique_filename(
+                        suffix='-clipped-hazard.shp')
+                    exposure_result = unique_filename(
+                        suffix='-clipped-exposure.shp')
 
-                        model_path = resources_path(
-                            'models', processing_clipping[impact_function_id])
-                        model = ModelExecutor(model_path)
+                    processing_models = {
+                        'FloodPolygonBuildingFunction': {
+                            'model': 'inasafe-building-flood-aggr.model',
+                            'parameters': [
+                                self.aggregation.qgis_layer().source(),
+                                self.hazard.qgis_layer().source(),
+                                self.exposure.qgis_layer().source(),
+                                exposure_result,
+                                hazard_result
+                            ]
+                        },
+                    }
 
-                        hazard_result = unique_filename(
-                            suffix='-clipped-hazard.shp')
-                        exposure_result = unique_filename(
-                            suffix='-clipped-exposure.shp')
+                    processing_if = processing_models[impact_function_id]
+                    model_path = resources_path(
+                        'models', processing_if['model'])
+                    model = ModelExecutor(model_path)
 
-                        parameters = (
-                            self.aggregation.qgis_layer().source(),
-                            self.hazard.qgis_layer().source(),
-                            self.exposure.qgis_layer().source(),
-                            exposure_result,
-                            hazard_result
-                        )
-                        model.set_parameters(parameters)
+                    # noinspection PyTypeChecker
+                    model.set_parameters(processing_if['parameters'])
 
-                        # status, msg = model.validate_parameters()
-                        # if not status:
-                        #    raise ProcessingExecutionError(msg)
+                    # status, msg = model.validate_parameters()
+                    # if not status:
+                    #    raise ProcessingExecutionError(msg)
 
-                        result, msg = model.run()
-                        if not result:
-                            raise ProcessingExecutionError(msg)
+                    result, msg = model.run()
+                    if not result:
+                        raise ProcessingExecutionError(msg)
 
-                        keyword_io = KeywordIO()
-                        keyword_io.copy_keywords(
-                            self.hazard.qgis_layer(), hazard_result)
-                        keyword_io.copy_keywords(
-                            self.exposure.qgis_layer(), exposure_result)
+                    keyword_io = KeywordIO()
+                    keyword_io.copy_keywords(
+                        self.hazard.qgis_layer(), hazard_result)
+                    keyword_io.copy_keywords(
+                        self.exposure.qgis_layer(), exposure_result)
 
-                        self.hazard = QgsVectorLayer(
-                            hazard_result, self.hazard.name, 'ogr')
-                        self.exposure = QgsVectorLayer(
-                            exposure_result, self.exposure.name, 'ogr')
+                    self.hazard = QgsVectorLayer(
+                        hazard_result, self.hazard.name, 'ogr')
+                    self.exposure = QgsVectorLayer(
+                        exposure_result, self.exposure.name, 'ogr')
 
         except ProcessingExecutionError, e:
             analysis_error(self, e, tr(
