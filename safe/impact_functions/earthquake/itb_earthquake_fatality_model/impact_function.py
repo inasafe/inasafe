@@ -261,13 +261,6 @@ class ITBFatalityFunction(
 
     def run(self):
         """Indonesian Earthquake Fatality Model."""
-        self.validate()
-        self.prepare()
-
-        self.provenance.append_step(
-            'Calculating Step',
-            'Impact function is calculating the impact.')
-
         displacement_rate = self.hardcoded_parameters['displacement_rate']
         fatality_rate = self.compute_fatality_rate()
 
@@ -397,8 +390,6 @@ class ITBFatalityFunction(
             'total_needs': total_needs,
             'prob_fatality_mag': prob_fatality_mag,
         }
-
-        self.set_if_provenance()
 
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 

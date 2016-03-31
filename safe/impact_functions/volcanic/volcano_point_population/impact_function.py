@@ -245,8 +245,6 @@ class VolcanoPointPopulationFunction(
             'total_needs': self.total_needs
         }
 
-        self.set_if_provenance()
-
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 
         impact_layer = Raster(
