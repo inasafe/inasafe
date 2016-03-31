@@ -682,7 +682,9 @@ class ImpactFunction(object):
         send_dynamic_message(self, message)
 
         # self.run() is defined the IF.
-        return self.run()
+        impact = self.run()
+        self.set_if_provenance()
+        return impact
 
     def run_analysis(self):
         """It runs the IF. The method must be called from a client class.
