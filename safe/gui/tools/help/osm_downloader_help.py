@@ -68,8 +68,8 @@ def content():
         'reappear.'))
     tips.add(tr(
         'Check the output directory is correct. Note that the saved '
-        'dataset will be called either roads.shp or buildings.shp (and '
-        'associated files).'
+        'dataset will be named after the type of data being downloaded'
+        'e.g. roads.shp or buildings.shp (and associated files).'
     ))
     tips.add(tr(
         'By default simple file names will be used (e.g. roads.shp, '
@@ -91,9 +91,33 @@ def content():
     tips.add(m.Link(
         'http://www.openstreetmap.org/copyright',
         text=tr(
-            'Downloaded data is copyright OpenStreetMap contributors'
-            ' (click for more info).')
+            'Downloaded data is copyright OpenStreetMap contributors '
+            '(click for more info).')
     ))
     message.add(body)
     message.add(tips)
+
+    message.add(m.Paragraph(
+        tr('When the'),
+        m.ImportantText(tr(' Political boundaries ')),
+        tr(
+            'box in the Feature types menu is ticked, the Political boundary '
+            'options panel will be enabled. The panel lets you select which '
+            'admin level you wish to download. The admin levels are country '
+            'specific. When you select an admin level, the local name for '
+            'that admin level will be shown. You can change which country '
+            'is used for the admin level description using the country drop '
+            'down menu. The country will be automatically set to coincide '
+            'with the view extent if a matching country can be found.')))
+    message.add(m.Paragraph(
+        m.ImportantText(tr('Note: ')),
+        tr(
+            'We have only provide presets for a subset of the available '
+            'countries. If you want to know what the levels are for your '
+            'country, please check on the following web page: '),
+        m.Link(
+            'http://wiki.openstreetmap.org/wiki/Tag:boundary%3Dadministrative',
+        text=tr(
+            'List of OSM Admin Boundary definitions '))))
+
     return message

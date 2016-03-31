@@ -726,7 +726,9 @@ class ImpactFunction(object):
         send_dynamic_message(self, message)
 
         # self.run() is defined the IF.
-        return self.run()
+        impact = self.run()
+        self.set_if_provenance()
+        return impact
 
     def run_analysis(self):
         """It runs the IF. The method must be called from a client class.
@@ -734,11 +736,10 @@ class ImpactFunction(object):
         This method mustn't be overridden in a child class.
         """
 
-        self.validate()
-        self._emit_pre_run_message()
-        self.prepare()
-
         try:
+            self._validate()
+            self._emit_pre_run_message()
+            self._prepare()
             self._impact = calculate_impact(self)
             self._run_aggregator()
         except ZeroImpactException, e:
@@ -788,7 +789,7 @@ class ImpactFunction(object):
                 e,
                 tr('An exception occurred when running the impact analysis.'))
 
-    def validate(self):
+    def _validate(self):
         """Validate things needed before running the analysis."""
         # Set start time.
         self._start_time = datetime.now()
@@ -801,13 +802,6 @@ class ImpactFunction(object):
                 'Ensure that hazard and exposure layers are all set before '
                 'trying to run the impact function.')
             raise FunctionParametersError(message)
-
-        # Validate extent, with the QGIS IF, we need requested_extent set
-        if self.function_type() == 'qgis2.0' and self.requested_extent is None:
-            message = tr(
-                'Impact Function with QGIS function type is used, but no '
-                'extent is provided.')
-            raise InvalidExtentError(message)
 
         # Find out what the usable extent and cell size are
         try:
@@ -831,12 +825,10 @@ class ImpactFunction(object):
             if not result:
                 raise InsufficientMemoryWarning
 
-    def prepare(self):
+    def _prepare(self):
         """Prepare this impact function for running the analysis.
 
-        This method should normally be called in your concrete class's
-        run method before it attempts to do any real processing. This
-        method will do any needed house keeping such as:
+        This method will do any needed house keeping such as:
 
             * checking that the exposure and hazard layers sufficiently
             overlap (post 3.1)
@@ -849,11 +841,7 @@ class ImpactFunction(object):
         We suggest to overload this method in your concrete class
         implementation so that it includes any impact function specific checks
         too.
-
-        ..note: For 3.1, we will still do those preprocessing in analysis
-            class. We will just need to check if the function_type is
-            'qgis2.0', it needs to have the extent set.
-        # """
+        """
 
         self.provenance.append_step(
             'Preparation Step',
@@ -1434,6 +1422,8 @@ class ImpactFunction(object):
 
         self._aggregator.show_intermediate_layers = \
             self.show_intermediate_layers
+
+        self.aggregation = self.aggregator.layer
 
     def _run_aggregator(self):
         """Run all post processing steps."""

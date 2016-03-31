@@ -264,8 +264,6 @@ class FloodPolygonBuildingFunction(
             'buildings_affected': self.total_affected_buildings
         }
 
-        self.set_if_provenance()
-
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 
         building_layer = Vector(
