@@ -54,17 +54,33 @@ def content():
     """
     message = m.Message()
     paragraph = m.Paragraph(tr(
-        'This tool allows you to specify exactly which geographical '
-        'region should be used for your analysis. You can either '
-        'enter the coordinates directly into the input boxes below '
-        '(using the same CRS as the canvas is currently set to), or '
-        'you can interactively select the area by using the \'select '
-        'on map\' button - which will temporarily hide this window and '
-        'allow you to drag a rectangle on the map. After you have '
-        'finished dragging the rectangle, this window will reappear. '))
+        'This tool allows you to specify which geographical region should be '
+        'used for your analysis. The largest area that can be analysed is the'
+        'intersection of the hazard and exposure layers you have added.'
+        'Sometimes it is more useful to analyse a smaller area. This could be '
+        'to reduce processing time (smaller areas with process faster) or '
+        'because information is only needed in a certain area (e.g. if a '
+        'district only wants information for their district, not for the '
+        'entire city. If you want to analyse a smaller area, there are a few '
+        'different ways to do this.'))
     message.add(paragraph)
     paragraph = m.Paragraph(tr(
-        'You can also use one of your bookmarks to set the region. '
+        'If you wish to conduct the analysis on the area currently shown in '
+        'the window, you can set the analysis area to \'Use intersection of '
+        'hazard, exposure and current view extent\'. You can also choose the '
+        'analysis area interactively by clicking \'Use intersection of hazard, exposure and '
+        'this bounding box\' and clicking \'Drag on map\' which will '
+        'temporarily hide this window and allow you to drag a rectangle on '
+        'the map. After you have finished dragging the rectangle, this window '
+        'will reappear with values in the North, South, East and West boxes. '
+        'Alternatively you can enter the coordinates directly into the boxes '
+        'once the \'Use intersection of hazard, exposure and this bounding '
+        'box\' is selected (using the same coordinate reference system, or '
+        'CRS, as the map is currently set to).'))
+    message.add(paragraph)
+    paragraph = m.Paragraph(tr(
+        'You can also use one of your QGIS bookmarks to set the region. This '
+        'option will be greyed out if you have no bookmarks. '
         'If you enable the \'Toggle scenario outlines\' tool on the '
         'InaSAFE toolbar, your user defined extent will be shown on '
         'the map as a blue rectangle. Please note that when running '
