@@ -103,7 +103,7 @@ def content():
         'affected?"')))
     message.add(m.Paragraph(tr(
         'In order to answer such questions, the InaSAFE developers have '
-        'built a number of impact functions that cover scenarios such as '
+        'built a number of Impact Functions that cover scenarios such as '
         'flood, tsunami, volcanic ash fall and earthquake.')))
     message.add(m.Paragraph(tr(
         'The first step in answering these questions is to load layers that '
@@ -115,12 +115,12 @@ def content():
         'building outlines, or a raster outline where each pixel represents '
         'the number of people thought to be living in that cell.')))
     message.add(m.Paragraph(tr(
-        'The impact function will combine these two layers in a '
+        'The Impact Function will combine these two layers in a '
         'mathematical model. The results of this model will show what the '
         'effect of the hazard will be on the exposed infrastructure or '
         'people. When a combination of hazard and exposure data are selected '
-        'in the form, an appropriate set of impact functions will be listed '
-        'under \'Might\'. An example representation of an impact function in '
+        'in the form, an appropriate set of Impact Functions will be listed '
+        'under \'Might\'. An example representation of an Impact Function in '
         'the form is \'Be flooded\'. You may be wondering how the InaSAFE '
         'plugin determines whether a layer should be listed in the hazard or '
         'exposure combo boxes. The plugin relies on simple keyword metadata '
@@ -136,13 +136,13 @@ def content():
             'keywords for that layer.')))
     message.add(m.Paragraph(tr(
         'Based on the combination of hazard and exposure layers that are '
-        'selected, the impact function list (shown in the drop down menu under '
+        'selected, the Impact Function list (shown in the drop down menu under '
         '\'Might\' in the InaSAFE dock panel)  will be updated. Each impact '
         'function can only work with specific combinations of hazard and '
         'exposure types, so the options shown here will be limited '
-        'accordingly. The chosen impact function can be configured (if '
+        'accordingly. The chosen Impact Function can be configured (if '
         'applicable) by pressing the small ellipses (...) button next to '
-        'the chosen impact function. This is explained in more detail below '
+        'the chosen Impact Function. This is explained in more detail below '
         'under the heading \'Setting Analysis Parameters\'.')))
     message.add(m.Paragraph(tr(
         'Aggregation is the process whereby we group the analysis results '
@@ -176,7 +176,7 @@ def content():
 
     message.add(m.Paragraph(tr(
         'If you select an impact layer (i.e. a layer that was produced using '
-        'an InaSAFE impact function), in the QGIS layers list, this summary '
+        'an InaSAFE Impact Function), in the QGIS layers list, this summary '
         'will also be displayed in the results area. When you select a hazard '
         'or exposure layer in the QGIS layers list, the keywords for that '
         'layer will be shown in the Results area, making it easy to '
@@ -244,7 +244,7 @@ def content():
 
     message.add(m.Paragraph(tr(
         'When running a scenario, the data being used needs to be processed '
-        'into a state where it is acceptable for use by the impact function. '
+        'into a state where it is acceptable for use by the Impact Function. '
         'In particular it should be noted that:')))
 
     bullets = m.BulletedList()
