@@ -4,8 +4,9 @@
 from safe.utilities.i18n import tr
 from safe import messaging as m
 from safe.messaging import styles
-
+from safe.utilities.resources import resources_path
 INFO_STYLE = styles.INFO_STYLE
+SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
 
 __author__ = 'ismailsunni'
 
@@ -90,24 +91,26 @@ def content():
     paragraph = m.Paragraph(tr(
         'If you wish to conduct the analysis on the area currently shown in '
         'the window, you can set the analysis area to \'Use intersection of '
-        'hazard, exposure and current view extent\'.'))
+        'hazard, exposure and current view extent\'. If the extents of the '
+        'datasets are smaller than the view extent, the analysis area will be '
+        'reduced to the extents of the datasets.'))
     message.add(paragraph)
     header = m.Heading(tr('Use intersection of hazard, exposure and this '
                           'bookmark'), **INFO_STYLE)
     message.add(header)
     paragraph = m.Paragraph(tr(
-        'You can also use one of your QGIS bookmarks to set the region. This '
-        'option will be greyed out if you have no bookmarks.'))
-    message.add(header)
+        'You can also use one of your QGIS bookmarks to set the analysis '
+        'area. This option will be greyed out if you have no bookmarks.'))
+    message.add(paragraph)
     paragraph = m.Paragraph(tr(
         'To create a bookmark, zoom to the area you want to create a bookmark '
         'for. When you are happy with the extent, click the \'New bookmark\' '
         'button in the QGIS toolbar.'))
-    message.add(header)
+    message.add(paragraph)
     paragraph = m.Paragraph(tr(
         'The drop down menu in the InaSAFE Analysis Area window should now be '
         'activated. When you choose a bookmark from the drop down menu it '
-        'will zoom to the area selected by the bookmark.'))
+        'will zoom to the analysis area selected by the bookmark.'))
     message.add(paragraph)
     header = m.Heading(tr('Use intersection of hazard, exposure and this '
                           'bounding box'), **INFO_STYLE)
@@ -118,13 +121,15 @@ def content():
         'will allow you to click \'Drag on map\' which will temporarily hide '
         'this window and allow you to drag a rectangle on the map. After you '
         'have finished dragging the rectangle, this window will reappear with '
-        'values in the North, South, East and West boxes. '))
+        'values in the North, South, East and West boxes. If the extents of '
+        'the datasets are smaller than the user defined analysis area, the '
+        'analysis area will be reduced to the extents of the datasets.'))
     message.add(paragraph)
     paragraph = m.Paragraph(tr(
-        'Alternatively you can enter the coordinates directly into the boxes '
-        'once the \'Use intersection of hazard, exposure and this bounding '
-        'box\' is selected (using the same coordinate reference system, or '
-        'CRS, as the map is currently set to).'))
+        'Alternatively, you can enter the coordinates directly into the '
+        'N/S/E/W boxes once the \'Use intersection of hazard, exposure and '
+        'this bounding box\' option is selected (using the same coordinate '
+        'reference system, or CRS, as the map is currently set).'))
     message.add(paragraph)
 
 
