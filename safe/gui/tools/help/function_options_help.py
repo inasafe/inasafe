@@ -72,13 +72,13 @@ def content():
             '- Depending in the Impact function you selected, you can '
             'influence the result of your question here (the Impact Function) '
             'by setting different values to the defaults that will be loaded. '
-            'The options available will depend on the impact function you '
-            'choose (some Impact functions do not allow users to change the '
+            'The options available will depend on the Impact Function you '
+            'choose (some Impact Functions do not allow users to change the '
             'default parameters).')))
     bullets.add(m.Text(
         m.ImportantText(tr('Post-processors')),
         tr(
-            '- Takes the results from the impact function and calculates '
+            '- Takes the results from the Impact Function and calculates '
             'derivative indicators, for example if you have an affected '
             'population total, the Gender postprocessor will calculate gender '
             'specific indicators such as additional nutritional requirements '
