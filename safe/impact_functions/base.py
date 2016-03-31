@@ -1318,6 +1318,8 @@ class ImpactFunction(object):
         self._aggregator.show_intermediate_layers = \
             self.show_intermediate_layers
 
+        self.aggregation = self.aggregator.layer
+
     def _run_aggregator(self):
         """Run all post processing steps."""
         LOGGER.debug('Do aggregation')
