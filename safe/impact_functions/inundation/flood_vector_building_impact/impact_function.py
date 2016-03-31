@@ -136,15 +136,11 @@ class FloodPolygonBuildingFunction(
         #   1) Filter from H inundated features
         #   2) Mark buildings as inundated (1) or not inundated (0)
 
-        request = None
-        if not self.aggregation:
-            request = self.hazard_filter_request()
-
         # make spatial index of affected polygons
         hazard_index = QgsSpatialIndex()
         hazard_geometries = {}  # key = feature id, value = geometry
         has_hazard_objects = False
-        for feature in self.hazard.get_features(request):
+        for feature in self.hazard.layer.getFeatures():
             value = feature[affected_field_index]
             if value not in self.hazard_class_mapping[self.wet]:
                 continue
@@ -161,15 +157,12 @@ class FloodPolygonBuildingFunction(
                     ', '.join(self.hazard_class_mapping[self.wet]))
             raise GetDataError(message)
 
-        request = None
-        if not self.aggregation:
-            request = self.exposure_filter_request()
         # We will use this transform to project each exposure feature into
         # the CRS of the Hazard.
         transform = QgsCoordinateTransform(
             self.exposure.crs(), self.hazard.crs())
         features = []
-        for feature in self.exposure.get_features(request):
+        for feature in self.exposure.layer.getFeatures():
             # Make a deep copy as the geometry is passed by reference
             # If we don't do this, subsequent operations will affect the
             # original feature geometry as well as the copy TS

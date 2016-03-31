@@ -82,20 +82,6 @@ class SafeLayer(object):
         else:
             self.keywords = {}
 
-    def get_features(self, request=None):
-        """Query the provider for features specified in the request.
-
-        :param request: The specific request.
-        :type request: QgsFeatureRequest
-
-        :return The iterator.
-        :rtype QgsFeatureIterator
-        """
-        if request:
-            return self.layer.getFeatures(request)
-        else:
-            return self.layer.getFeatures()
-
     @property
     def keywords(self):
         """Property for the layer's keywords.

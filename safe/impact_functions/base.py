@@ -665,39 +665,6 @@ class ImpactFunction(object):
             print message
         print 'Task progress: %i of %i' % (current, maximum)
 
-    def exposure_filter_request(self):
-        """Get the exposure filter request specific to the requested extent.
-
-        :return: The qgis feature request for the exposure layer.
-        :rtype: QgsFeatureRequest
-        """
-        transform = QgsCoordinateTransform(
-            self.requested_extent_crs, self.exposure.layer.crs())
-        requested_extent = QgsRectangle(*self.requested_extent)
-        projected_extent = transform.transformBoundingBox(requested_extent)
-        request = QgsFeatureRequest()
-        request.setFilterRect(projected_extent)
-        return request
-
-    def hazard_filter_request(self):
-        """Get the hazard filter request specific to the requested extent.
-
-        :return: The qgis feature request for the hazard layer.
-        :rtype: QgsFeatureRequest
-        """
-        # This is a hack - we should be setting the extent CRS
-        # in the IF base class via safe/engine/core.py:calculate_impact
-        # for now we assume the extent is in 4326 because it
-        # is set to that from geo_extent
-        # See issue #1857
-        transform = QgsCoordinateTransform(
-            self.requested_extent_crs, self.exposure.layer.crs())
-        requested_extent = QgsRectangle(*self.requested_extent)
-        projected_extent = transform.transformBoundingBox(requested_extent)
-        request = QgsFeatureRequest()
-        request.setFilterRect(projected_extent)
-        return request
-
     def analysis_workflow(self):
         """The whole analysis process.
 
@@ -910,13 +877,13 @@ class ImpactFunction(object):
                         },
                     }
 
-                    processing_if = processing_models[impact_function_id]
+                    model_metadata = processing_models[impact_function_id]
                     model_path = resources_path(
-                        'models', processing_if['model'])
+                        'models', model_metadata['model'])
                     model = ModelExecutor(model_path)
 
                     # noinspection PyTypeChecker
-                    model.set_parameters(processing_if['parameters'])
+                    model.set_parameters(model_metadata['parameters'])
 
                     # status, msg = model.validate_parameters()
                     # if not status:
