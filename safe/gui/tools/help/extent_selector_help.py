@@ -55,7 +55,18 @@ def content():
     message = m.Message()
     paragraph = m.Paragraph(tr(
         'This tool allows you to specify which geographical region should be '
-        'used for your analysis.'))
+        'used for your analysis. If you want to check what area will be '
+        'included in your analysis, enable the \'Toggle scenario outlines\' '
+        'tool on the InaSAFE toolbar:'),
+        m.Image(
+            'file:///%s/img/icons/'
+            'toggle-rubber-bands.svg' % resources_path(),
+            **SMALL_ICON_STYLE),
+
+    )
+    message.add(paragraph)
+    paragraph = m.Paragraph(tr(
+        'Your user defined extent will be shown on the map as a rectangle.'))
     message.add(paragraph)
     header = m.Heading(tr('Use intersection of hazard and exposure layers'),
                        **INFO_STYLE)
@@ -79,20 +90,24 @@ def content():
     paragraph = m.Paragraph(tr(
         'If you wish to conduct the analysis on the area currently shown in '
         'the window, you can set the analysis area to \'Use intersection of '
-        'hazard, exposure and current view extent\'. '))
+        'hazard, exposure and current view extent\'.'))
     message.add(paragraph)
     header = m.Heading(tr('Use intersection of hazard, exposure and this '
                           'bookmark'), **INFO_STYLE)
     message.add(header)
     paragraph = m.Paragraph(tr(
         'You can also use one of your QGIS bookmarks to set the region. This '
-        'option will be greyed out if you have no bookmarks. MORE ON '
-        'BOOKMARKS HERE '))
-    message.add(paragraph)
+        'option will be greyed out if you have no bookmarks.'))
+    message.add(header)
     paragraph = m.Paragraph(tr(
-        'If you enable the \'Toggle scenario outlines\' tool on the '
-        'InaSAFE toolbar, your user defined extent will be shown on '
-        'the map as a blue rectangle.'))
+        'To create a bookmark, zoom to the area you want to create a bookmark '
+        'for. When you are happy with the extent, click the \'New bookmark\' '
+        'button in the QGIS toolbar.'))
+    message.add(header)
+    paragraph = m.Paragraph(tr(
+        'The drop down menu in the InaSAFE Analysis Area window should now be '
+        'activated. When you choose a bookmark from the drop down menu it '
+        'will zoom to the area selected by the bookmark.'))
     message.add(paragraph)
     header = m.Heading(tr('Use intersection of hazard, exposure and this '
                           'bounding box'), **INFO_STYLE)
