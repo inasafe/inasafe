@@ -55,6 +55,11 @@ from safe.messaging import styles
 
 from safe.utilities.keyword_io import definition
 
+import logging
+
+
+LOGGER = logging.getLogger('InaSAFE')
+
 
 class ClassifiedPolygonHazardPolygonPeopleFunction(
         ClassifiedVHContinuousVE, PolygonPopulationExposureReportMixin):
@@ -154,8 +159,10 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         filename = unique_filename(suffix='.shp')
         impact_fields = exposure.dataProvider().fields()
         impact_fields.append(QgsField(self.target_field, QVariant.Int))
+        # impact_fields.append(QgsField(self.people_field, QVariant.Int))
         unaffected_fields = exposure.dataProvider().fields()
         unaffected_fields.append(QgsField(self.target_field, QVariant.Int))
+        # unaffected_fields.append(QgsField(self.people_field, QVariant.Int))
 
         writer = QgsVectorFileWriter(
             filename, "utf-8", impact_fields, QGis.WKBPolygon, exposure.crs())
@@ -362,6 +369,11 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
                 if not impact_geometry.wkbType() == QGis.WKBPolygon and \
                    not impact_geometry.wkbType() == QGis.WKBMultiPolygon:
                     continue  # no intersection found
+
+                if not impact_geometry.asPolygon():
+                    # impact_geometry is actually an empty polygon
+                    # so there is no impact
+                    continue
                 hazard = hazard_features[hazard_id]
                 hazard_attribute_key = self.get_hazard_class_field_key(hazard)
 
@@ -388,6 +400,14 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
                     area = impact_geometry.area()
 
                     self.all_affected_areas[area_id] += area
+
+                # LOGGER.info('Hazard/Exposure id: %s, %s' % (hazard_id, feature.id()))
+                # if len(impact_geometry.asPolygon()) == 0:
+                #     LOGGER.info('Impact Geometry empty')
+                # if not unaffected_geometry:
+                #     LOGGER.info('Unaffected Geometry None')
+                # elif len(unaffected_geometry.asPolygon()) == 0:
+                #     LOGGER.info('Unaffected Geometry empty')
 
                 all_affected_geometry.append(impact_geometry)
                 self.assign_impact_level(
@@ -452,7 +472,11 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         unaffected_feature = QgsFeature(unaffected_fields)
         impacted_feature = QgsFeature(impact_fields)
 
-        unaffected_feature.setGeometry(unaffected_geometry)
+        try:
+            unaffected_feature.setGeometry(unaffected_geometry)
+        except Exception as e:
+            LOGGER.info('Hazard Id: %s' % hazard_id)
+            # raise e
         impacted_feature.setGeometry(impact_geometry)
 
         hazard = hazard_features[hazard_id]

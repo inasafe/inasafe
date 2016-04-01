@@ -79,7 +79,7 @@ def process_event(working_directory, locale_option='en', dummy_folder=None):
         event = FloodEvent(
             working_dir=working_directory,
             locale=locale,
-            population_raster_path=population_path,
+            population_path=population_path,
             duration=duration,
             level=level,
             year=now.year,

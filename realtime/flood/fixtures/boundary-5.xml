@@ -224,7 +224,7 @@
             <gco:Float>0.5</gco:Float>
           </female_ratio_default>
           <resolution>
-            <gco:Tuple/>
+            <gco:FloatTuple/>
           </resolution>
           <layer_mode>
             <gco:CharacterString/>

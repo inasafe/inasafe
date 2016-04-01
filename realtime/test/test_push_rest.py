@@ -27,4 +27,4 @@ class TestPushREST(unittest.TestCase):
 
     def test_notify_realtime_rest(self):
         timestamp = datetime.datetime.utcnow()
-        notify_realtime_rest()
+        notify_realtime_rest(timestamp)
