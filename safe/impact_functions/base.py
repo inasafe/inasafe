@@ -816,15 +816,6 @@ class ImpactFunction(object):
 
         self._setup_aggregator()
 
-        # go check if our postprocessing layer has any keywords set and if not
-        # prompt for them. if a prompt is shown run method is called by the
-        # accepted signal of the keywords dialog
-        self.aggregator.validate_keywords()
-        if self.aggregator.is_valid:
-            pass
-        else:
-            raise InvalidAggregationKeywords
-
         try:
             if self.requires_clipping:
                 # The impact function uses SAFE layers, clip them.
@@ -1394,6 +1385,15 @@ class ImpactFunction(object):
             self.show_intermediate_layers
 
         self.aggregation = self.aggregator.layer
+
+        # go check if our postprocessing layer has any keywords set and if not
+        # prompt for them. if a prompt is shown run method is called by the
+        # accepted signal of the keywords dialog
+        self.aggregator.validate_keywords()
+        if self.aggregator.is_valid:
+            pass
+        else:
+            raise InvalidAggregationKeywords
 
     def _run_aggregator(self):
         """Run all post processing steps."""
