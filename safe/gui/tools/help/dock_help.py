@@ -57,11 +57,22 @@ def content():
     """
     message = m.Message()
     paragraph = m.Paragraph(tr(
-        'This document describes the usage of the InaSAFE \'dock panel\' '
-        '- which is an interface for running hazard scenarios within the QGIS '
-        'environment. If you are a new user, you may also consider using the '
-        '\'Impact Function Centric Wizard\' to run the analysis. You can '
-        'launch the wizard by clicking on this icon in the toolbar:'),
+        'InaSAFE is free software that produces realistic natural hazard '
+        'impact scenarios for better planning, preparedness and response '
+        'activities. It provides a simple but rigourous way to combine data '
+        'from scientists, local governments and communities to provide '
+        'insights into the likely impacts of future disaster events.'
+    ))
+    message.add(paragraph)
+    paragraph = m.Paragraph(tr(
+        'The InaSAFE \'dock panel\' helps you to run hazard impact analysis '
+        'within the QGIS environment. It helps you create your hazard impact '
+        'analysis question and shows the results of this analysis. If you are '
+        'a new user, you may also consider using the \'Impact Function '
+        'Centric Wizard\' to run the analysis. This wizard will guide you '
+        'through the process of running an InaSAFE assessment, with '
+        'interactive step by step instructions. You can launch the wizard '
+        'by clicking on this icon in the toolbar:'),
         m.Image(
             'file:///%s/img/icons/'
             'show-wizard.svg' % resources_path(),
@@ -70,9 +81,9 @@ def content():
     )
     message.add(paragraph)
     paragraph = m.Paragraph(tr(
-        'You can drag and drop the dock panel to reposition it in the user '
-        'interface. For example, dragging the panel towards the right margin '
-        'of the QGIS application will dock it to the right side of the screen.'
+        'You can drag and drop the dock panel to reposition on the screen. '
+        'For example, dragging the panel towards the right margin of the QGIS '
+        'application will dock it to the right side of the screen.'
     ))
     message.add(paragraph)
 
@@ -96,23 +107,24 @@ def content():
         tr('area')))
     message.add(bullets)
     message.add(m.Paragraph(tr(
-        'At any time you can obtain help in InaSAFE by clicking on the '
+        'You can get help at any time in InaSAFE by clicking on the '
         'help buttons provided on each dock and dialog.')))
 
     header = m.Heading(tr('The questions area'), **INFO_STYLE)
     message.add(header)
     message.add(m.Paragraph(tr(
-        'The intention of InaSAFE is to make it really simple and easy to '
-        'perform your impact analysis. We start the analysis in the questions '
-        'area. In this area, you create your question by using the drop down '
-        'menus to select the hazard and exposure you wish to perform the '
-        'analysis on. All questions are expressed in the following form:'),
+        'The intention of InaSAFE is to make it easy to perform your impact '
+        'analysis. We start the analysis in the questions area. This area '
+        'contains four drop down menus. You create your question by using '
+        'these drop down menus to select the hazard and exposure data you '
+        'wish to perform the analysis on. You must also select an impact '
+        'function  All questions follow this form:'),
         m.EmphasizedText(tr(
             'In the event of a [hazard], how many [exposure] might be '
-            'affected?'))))
+            '[impact]?'))))
     message.add(m.Paragraph(tr(
         'For example: "If there is a flood, how many buildings might be '
-        'affected?"')))
+        'flooded?"')))
     message.add(m.Paragraph(tr(
         'In order to answer such questions, the InaSAFE developers have '
         'built a number of Impact Functions that cover scenarios such as '
