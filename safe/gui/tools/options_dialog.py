@@ -119,6 +119,10 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         self.cbxHideExposure.setChecked(flag)
 
         flag = bool(settings.value(
+            'inasafe/useSelectedFeaturesOnly', False, type=bool))
+        self.cbxUseSelectedFeaturesOnly.setChecked(flag)
+
+        flag = bool(settings.value(
             'inasafe/clip_hard', False, type=bool))
         self.cbxClipHard.setChecked(flag)
 
@@ -237,6 +241,9 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         settings.setValue(
             'inasafe/useSentry',
             self.cbxUseSentry.isChecked())
+        settings.setValue(
+            'inasafe/useSelectedFeaturesOnly',
+            self.cbxUseSelectedFeaturesOnly.isChecked())
         settings.setValue(
             'inasafe/show_intermediate_layers',
             self.cbxShowPostprocessingLayers.isChecked())

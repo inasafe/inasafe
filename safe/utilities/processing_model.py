@@ -1,5 +1,7 @@
 # coding=utf-8
 
+from PyQt4.QtCore import QSettings
+from processing.core.ProcessingConfig import ProcessingConfig
 from processing.core.GeoAlgorithmExecutionException import (
     GeoAlgorithmExecutionException)
 from processing.modeler import ModelerAlgorithm
@@ -65,11 +67,27 @@ class ModelExecutor(object):
          indicating why Processing failed or the raw result from Processing.
         :rtype: tuple
         """
+        settings = QSettings()
+        inasafe_flag = bool(settings.value(
+            'inasafe/useSelectedFeaturesOnly', False, type=bool))
+        processing_flag = ProcessingConfig.getSetting(
+            ProcessingConfig.USE_SELECTED)
+
+        # We use the InaSAFE settings instead of the Processing one.
+        if inasafe_flag != processing_flag:
+            ProcessingConfig.setSettingValue(
+                ProcessingConfig.USE_SELECTED, inasafe_flag)
+
         try:
             # Add progress if available.
             result = runalg(self.model, None)
         # pylint: disable=catching-non-exception
         except GeoAlgorithmExecutionException as e:
             return False, e.msg
+
+        # We restore the old behaviour from Processing.
+        if inasafe_flag != processing_flag:
+            ProcessingConfig.setSettingValue(
+                ProcessingConfig.USE_SELECTED, processing_flag)
 
         return True, result
