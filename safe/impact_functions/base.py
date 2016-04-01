@@ -852,57 +852,7 @@ class ImpactFunction(object):
                 adjusted_geo_extent = clip_parameters['adjusted_geo_extent']
                 self.requested_extent = adjusted_geo_extent
 
-                # FIXME Whitelist of IF which works with processing.
-                processing_clipping = [
-                    'FloodPolygonBuildingFunction',
-                ]
-                impact_function_id = self.metadata().as_dict()['id']
-                if impact_function_id in processing_clipping:
-                    # Experimental clipping with the Processing framework.
-                    hazard_result = unique_filename(
-                        suffix='-clipped-hazard.shp')
-                    exposure_result = unique_filename(
-                        suffix='-clipped-exposure.shp')
-
-                    processing_models = {
-                        'FloodPolygonBuildingFunction': {
-                            'model': 'inasafe-building-flood-aggr.model',
-                            'parameters': [
-                                self.aggregation.qgis_layer().source(),
-                                self.hazard.qgis_layer().source(),
-                                self.exposure.qgis_layer().source(),
-                                exposure_result,
-                                hazard_result
-                            ]
-                        },
-                    }
-
-                    model_metadata = processing_models[impact_function_id]
-                    model_path = resources_path(
-                        'models', model_metadata['model'])
-                    model = ModelExecutor(model_path)
-
-                    # noinspection PyTypeChecker
-                    model.set_parameters(model_metadata['parameters'])
-
-                    # status, msg = model.validate_parameters()
-                    # if not status:
-                    #    raise ProcessingExecutionError(msg)
-
-                    result, msg = model.run()
-                    if not result:
-                        raise ProcessingExecutionError(msg)
-
-                    keyword_io = KeywordIO()
-                    keyword_io.copy_keywords(
-                        self.hazard.qgis_layer(), hazard_result)
-                    keyword_io.copy_keywords(
-                        self.exposure.qgis_layer(), exposure_result)
-
-                    self.hazard = QgsVectorLayer(
-                        hazard_result, self.hazard.name, 'ogr')
-                    self.exposure = QgsVectorLayer(
-                        exposure_result, self.exposure.name, 'ogr')
+                self._processing_clipping()
 
         except ProcessingExecutionError, e:
             analysis_error(self, e, tr(
@@ -950,6 +900,57 @@ class ImpactFunction(object):
             return
         except Exception, e:
             raise e
+
+    def _processing_clipping(self):
+        # FIXME Whitelist of IF which works with processing.
+        processing_clipping = [
+            'FloodPolygonBuildingFunction',
+            'VolcanoPolygonBuildingFunction'
+        ]
+        impact_function_id = self.metadata().as_dict()['id']
+        if impact_function_id in processing_clipping:
+            # Experimental clipping with the Processing framework.
+            hazard_result = unique_filename(suffix='-clipped-hazard.shp')
+            exposure_result = unique_filename(suffix='-clipped-exposure.shp')
+
+            processing_models = {
+                'FloodPolygonBuildingFunction': {
+                    'model': 'inasafe-building-flood-aggr.model',
+                    'parameters': [
+                        self.aggregation.qgis_layer().source(),
+                        self.hazard.qgis_layer().source(),
+                        self.exposure.qgis_layer().source(),
+                        exposure_result,
+                        hazard_result
+                    ]
+                },
+            }
+
+            model_metadata = processing_models[impact_function_id]
+            model_path = resources_path('models', model_metadata['model'])
+            model = ModelExecutor(model_path)
+
+            # noinspection PyTypeChecker
+            model.set_parameters(model_metadata['parameters'])
+
+            # status, msg = model.validate_parameters()
+            # if not status:
+            #    raise ProcessingExecutionError(msg)
+
+            result, msg = model.run()
+            if not result:
+                raise ProcessingExecutionError(msg)
+
+            keyword_io = KeywordIO()
+            keyword_io.copy_keywords(
+                self.hazard.qgis_layer(), hazard_result)
+            keyword_io.copy_keywords(
+                self.exposure.qgis_layer(), exposure_result)
+
+            self.hazard = QgsVectorLayer(
+                hazard_result, self.hazard.name, 'ogr')
+            self.exposure = QgsVectorLayer(
+                exposure_result, self.exposure.name, 'ogr')
 
     def generate_impact_keywords(self, extra_keywords=None):
         """Obtain keywords for the impact layer.
