@@ -38,7 +38,7 @@ def heading():
     :returns: A heading object.
     :rtype: safe.messaging.heading.Heading
     """
-    message = m.Heading(tr('Extent selector help'), **INFO_STYLE)
+    message = m.Heading(tr('Analysis extent selector help'), **INFO_STYLE)
     return message
 
 
@@ -100,7 +100,9 @@ def content():
     message.add(header)
     paragraph = m.Paragraph(tr(
         'You can also use one of your QGIS bookmarks to set the analysis '
-        'area. This option will be greyed out if you have no bookmarks.'))
+        'area.'),
+        m.ImportantText(tr('This option will be greyed out if you have no '
+                           'bookmarks.')))
     message.add(paragraph)
     paragraph = m.Paragraph(tr(
         'To create a bookmark, zoom to the area you want to create a bookmark '
