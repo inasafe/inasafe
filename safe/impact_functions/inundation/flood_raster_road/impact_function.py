@@ -212,7 +212,7 @@ class FloodRasterRoadsFunction(
         super(FloodRasterRoadsFunction, self).__init__()
         RoadExposureReportMixin.__init__(self)
 
-    def notes(self):
+    def format_notes(self):
         """Return the notes section of the report.
 
         .. versionadded: 3.2.1

@@ -37,7 +37,7 @@ class ReportMixin(object):
         """
         return m.Message()
 
-    def action_checklist(self):
+    def format_action_checklist(self):
         """The actions to be taken in for the impact on this exposure type.
 
         :returns: The action checklist.
@@ -45,7 +45,7 @@ class ReportMixin(object):
         """
         return m.Message()
 
-    def impact_summary(self):
+    def format_impact_summary(self):
         """The impact summary.
 
         :returns: The action checklist.
@@ -53,7 +53,7 @@ class ReportMixin(object):
         """
         return m.Message()
 
-    def notes(self):
+    def format_notes(self):
         """Additional notes to be used.
 
         :return: The notes to be added to this report

@@ -44,13 +44,13 @@ class RoadExposureReportMixin(ReportMixin):
         """
         message = m.Message()
         message.add(m.Paragraph(self.question))
-        message.add(self.impact_summary())
+        message.add(self.format_impact_summary())
         message.add(self.roads_breakdown())
-        message.add(self.action_checklist())
-        message.add(self.notes())
+        message.add(self.format_action_checklist())
+        message.add(self.format_notes())
         return message
 
-    def impact_summary(self):
+    def format_impact_summary(self):
         """The impact summary as per category
 
         :returns: The impact summary.
@@ -205,7 +205,7 @@ class RoadExposureReportMixin(ReportMixin):
 
         return message
 
-    def action_checklist(self):
+    def format_action_checklist(self):
         """Action checklist for the itb earthquake fatality report.
 
         .. versionadded:: 3.2.1

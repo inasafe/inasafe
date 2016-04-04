@@ -98,7 +98,7 @@ class BuildingExposureReportMixinTest(unittest.TestCase):
 
     def test_0002_action_checklist(self):
         """The default action check list."""
-        action_checklist = self.building_mixin_blank.action_checklist()
+        action_checklist = self.building_mixin_blank.format_action_checklist()
         action_checklist = action_checklist.to_text()
         self.assertIn(
             u'Which structures have warning capacity (eg. sirens, '
@@ -133,7 +133,7 @@ class BuildingExposureReportMixinTest(unittest.TestCase):
 
     def test_0003_impact_summary(self):
         """Test the buildings impact summary."""
-        impact_summary = self.building_mixin.impact_summary()
+        impact_summary = self.building_mixin.format_impact_summary()
         impact_summary = impact_summary.to_text()
 
         self.assertIn(
@@ -146,7 +146,7 @@ class BuildingExposureReportMixinTest(unittest.TestCase):
 
     def test_0004_buildings_breakdown(self):
         """Test the buildings breakdown."""
-        buildings_breakdown = self.building_mixin.buildings_breakdown()
+        buildings_breakdown = self.building_mixin.format_buildings_breakdown()
         buildings_breakdown = buildings_breakdown.to_text()
         self.assertIn(u'**Religious**, 0, 1, 2, **3**', buildings_breakdown)
         self.assertIn(

@@ -53,7 +53,7 @@ class FloodEvacuationRasterHazardFunction(
         # Initialize instance attributes for readability (pylint)
         self.no_data_warning = False
 
-    def notes(self):
+    def format_notes(self):
         """Return the notes section of the report.
 
         :return: The notes that should be attached to this impact report.

@@ -77,6 +77,8 @@ class BuildingExposureReportMixin(ReportMixin):
         self.affected_buildings = {}
         self.building_report_threshold = 25
 
+        self.impact_data = {}
+
     def generate_report(self):
         """Breakdown by building type.
 
@@ -85,13 +87,13 @@ class BuildingExposureReportMixin(ReportMixin):
         """
         message = m.Message()
         message.add(m.Paragraph(self.question))
-        message.add(self.impact_summary())
-        message.add(self.buildings_breakdown())
-        message.add(self.action_checklist())
-        message.add(self.notes())
+        message.add(self.format_impact_summary())
+        message.add(self.format_buildings_breakdown())
+        message.add(self.format_action_checklist())
+        message.add(self.format_notes())
         return message
 
-    def action_checklist(self):
+    def format_action_checklist(self):
         """Breakdown by building type.
 
         :returns: The buildings breakdown report.
@@ -127,7 +129,7 @@ class BuildingExposureReportMixin(ReportMixin):
         message.add(checklist)
         return message
 
-    def impact_summary(self):
+    def format_impact_summary(self):
         """The impact summary as per category.
 
         :returns: The impact summary.
@@ -176,7 +178,7 @@ class BuildingExposureReportMixin(ReportMixin):
         message.add(table)
         return message
 
-    def buildings_breakdown(self):
+    def format_buildings_breakdown(self):
         """Breakdown by building type.
 
         :returns: The buildings breakdown report.

@@ -69,13 +69,13 @@ class PopulationExposureReportMixin(ReportMixin):
         """
         message = m.Message()
         message.add(m.Paragraph(self.question))
-        message.add(self.impact_summary())
+        message.add(self.format_impact_summary())
         message.add(self.minimum_needs_breakdown())
-        message.add(self.action_checklist())
-        message.add(self.notes())
+        message.add(self.format_action_checklist())
+        message.add(self.format_notes())
         return message
 
-    def action_checklist(self):
+    def format_action_checklist(self):
         """Population action.
 
         :returns: The population breakdown report.
@@ -116,7 +116,7 @@ class PopulationExposureReportMixin(ReportMixin):
         message.add(checklist)
         return message
 
-    def impact_summary(self):
+    def format_impact_summary(self):
         """The impact summary as per category
 
         :returns: The impact summary.

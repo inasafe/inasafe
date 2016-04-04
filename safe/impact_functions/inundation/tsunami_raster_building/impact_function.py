@@ -62,7 +62,7 @@ class TsunamiRasterBuildingFunction(
         # From BuildingExposureReportMixin
         self.building_report_threshold = 25
 
-    def notes(self):
+    def format_notes(self):
         """Return the notes section of the report.
 
         :return: The notes that should be attached to this impact report.

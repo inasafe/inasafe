@@ -54,7 +54,7 @@ class FloodPolygonRoadsFunction(
         # The 'wet' variable
         self.wet = 'wet'
 
-    def notes(self):
+    def format_notes(self):
         """Return the notes section of the report.
 
         .. versionadded:: 3.2.1
