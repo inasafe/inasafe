@@ -37,12 +37,12 @@ from safe.impact_functions.generic.classified_polygon_landcover\
     .metadata_definitions \
     import ClassifiedPolygonHazardLandCoverFunctionMetadata
 from safe.impact_reports.landcover_exposure_report_mixin import (
-    LandcoverExposureReportMixin)
+    LandCoverExposureReportMixin)
 
 
 class ClassifiedPolygonHazardLandCoverFunction(
     ClassifiedVHClassifiedVE,
-    LandcoverExposureReportMixin):
+    LandCoverExposureReportMixin):
 
     _metadata = ClassifiedPolygonHazardLandCoverFunctionMetadata()
 

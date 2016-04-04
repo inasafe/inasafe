@@ -18,7 +18,7 @@ from safe.impact_reports.report_mixin_base import ReportMixin
 import safe.messaging as m
 
 
-class LandcoverExposureReportMixin(ReportMixin):
+class LandCoverExposureReportMixin(ReportMixin):
     """Land cover specific report.
 
     .. versionadded:: 3.3
@@ -51,6 +51,8 @@ class LandcoverExposureReportMixin(ReportMixin):
 
         total_affected_area = round(sum(self.imp_landcovers.values()), 1)
         total_area = round(sum(self.all_landcovers.values()), 1)
+        percent_affected_area = round(total_affected_area / total_area * 100) if total_area != 0 else 0
+
 
         message = m.Message(style_class='container')
         table = m.Table(style_class='table table-condensed table-striped')
@@ -65,7 +67,7 @@ class LandcoverExposureReportMixin(ReportMixin):
         row = m.Row()
         row.add(m.Cell(tr('All')))
         row.add(m.Cell(format_decimal(0.1, total_affected_area), align='right'))
-        row.add(m.Cell(format_decimal(1, round(total_affected_area / total_area * 100))+"%", align='right'))
+        row.add(m.Cell(format_decimal(1, percent_affected_area)+"%", align='right'))
         row.add(m.Cell(format_decimal(0.1, total_area), align='right'))
         table.add(row)
 
@@ -80,7 +82,7 @@ class LandcoverExposureReportMixin(ReportMixin):
             affected = self.imp_landcovers[t] if t in self.imp_landcovers else 0.
             affected_area = round(affected, 1)
             area = round(v, 1)
-            percent_affected = affected_area / area * 100
+            percent_affected = affected_area / area * 100 if area != 0 else 0
             row = m.Row()
             row.add(m.Cell(t))
             row.add(m.Cell(format_decimal(0.1, affected_area), align='right'))

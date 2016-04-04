@@ -852,7 +852,7 @@ class WizardDialogTest(unittest.TestCase):
     def test_auto_select_one_item(self):
         """Test auto select if there is only one item in a list."""
         layer = clone_shp_layer(
-            name='roads',
+            name='buildings',
             include_keywords=True,
             source_directory=test_data_path('exposure'))
         dialog = WizardDialog()
@@ -862,8 +862,8 @@ class WizardDialogTest(unittest.TestCase):
         message = 'It should auto select, but it does not.'
         self.assertTrue(dialog.lstSubcategories.currentRow() == 0, message)
         num_item = dialog.lstSubcategories.count()
-        message = 'There are should be only two items, I got %s' % num_item
-        self.assertTrue(num_item == 2, message)
+        message = 'There are should be only three items, I got %s' % num_item
+        self.assertTrue(num_item == 3, message)
 
     def test_integrated_point(self):
         """Test for point layer and all possibilities."""
@@ -1400,7 +1400,7 @@ class WizardDialogTest(unittest.TestCase):
 
         expected_hazards_count = 5
         # expected_exposures_count = 3
-        expected_exposures_count = 3
+        expected_exposures_count = 4
         expected_flood_structure_functions_count = 4
         expected_raster_polygon_functions_count = 2
         expected_functions_count = 2
