@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='iso-8859-1'?>
+<ga_license_file>
+  <metadata>
+    <author>Dmitry Kolesov</author>
+  </metadata>
+
+  <datafile>
+    <filename>aggregation_test_roads.shp</filename>
+    <checksum>788327514</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Dmitry Kolesov</accountable>
+    <source>Dmitry Kolesov</source>
+    <IP_owner>Dmitry Kolesov</IP_owner>
+    <IP_info>This data was created for the InaSAFE project.</IP_info>
+  </datafile>
+
+  <datafile>
+    <filename>aggregation_test_roads.shx</filename>
+    <checksum>1436021631</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Dmitry Kolesov</accountable>
+    <source>Dmitry Kolesov</source>
+    <IP_owner>Dmitry Kolesov</IP_owner>
+    <IP_info>This data was created for the InaSAFE project.</IP_info>
+  </datafile>
+
+  <datafile>
+    <filename>aggregation_test_roads.dbf</filename>
+    <checksum>2424356326</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Dmitry Kolesov</accountable>
+    <source>Dmitry Kolesov</source>
+    <IP_owner>Dmitry Kolesov</IP_owner>
+    <IP_info>This data was created for the InaSAFE project.</IP_info>
+  </datafile>
+
+</ga_license_file>
+

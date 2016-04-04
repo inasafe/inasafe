@@ -1,0 +1,15 @@
+Detailed gender report
+Name Total Female population (affected) Weekly hygiene packs Additional weekly rice kg for pregnant and lactating women
+dd_test2 19,881 0 0 0
+dd_test1 1,426 998 792 93
+Total in aggregation areas 21,307 998 792 93
+Detailed age report
+Name Total Youth count (affected) Adult count (affected) Elderly count (affected)
+dd_test2 19,881 9,941 0 19,881
+dd_test1 1,426 713 0 1,426
+Total in aggregation areas 21,307 10,654 0 21,307
+Detailed minimum needs report
+Name Rice Drinking Water Water Family Kits Toilets
+dd_test2 55,667 347,918 2,087,505 3,976 994
+dd_test1 3,993 24,955 149,730 285 71
+Total in aggregation areas 59,660 372,873 2,237,235 4,261 1,065

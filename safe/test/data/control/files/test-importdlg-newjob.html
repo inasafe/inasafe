@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HotExports | New Export Job</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/assets/layout/favicon-504cac551cfee12db58f441e99301217.ico">
+    <link href="/assets/application-1f14ca07a84dfec13f8326fa162ae3c6.css" media="screen" rel="stylesheet" type="text/css" />
+    <script src="/assets/application-adb945dc94aef3a9f8815d35a1ba590d.js" type="text/javascript"></script>
+    <meta content="authenticity_token" name="csrf-param" />
+    <meta content="cX0+IuzRZn1UjFBI94kqR4JpaZoBRM+SOhFlUSPerBE=" name="csrf-token" />
+</head>
+<body>
+<div id="header" style="background-image: url(/assets/layout/red-header-c82760e6760c02af7fc2d1b6d3c50fdb.png);">
+    <div class="nav">
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/uploads">Configuration</a></li>
+            <li><a href="/jobs">Jobs</a></li>
+            <li><a href="/jobs/new">New Job</a></li>
+        </ul>
+    </div>
+    <div class="logo">
+        <img src="/assets/layout/logo-650056578f17b49a8cf6ea154f5aeb05.png" class="logo">
+        <h1>HOT Exports</h1>
+    </div>
+</div>
+
+
+
+<div id="content">
+<script type="text/javascript" src="/assets/jquery-validation-1.9.0/jquery.validate.min-4d75658e4d5bf659e020a487e1d5f861.js"></script>
+<script type="text/javascript" src="/assets/OpenLayers-2.11/OpenLayers-b69d8c2366ea6e4a2ea16656f3b2d7ff.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#new_job").validate();
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        var proj4326;
+        var projmerc;
+        var map;
+        var mapnik_layer;
+        var vectors;
+        var box;
+        var transform;
+
+        init_map();
+
+        $(".select_area").click(function() {
+            init_drawfeature();
+        });
+
+        $("input").filter(".latlon").change(function() {
+            lonmin = $("#job_lonmin").val();
+            latmin = $("#job_latmin").val();
+            lonmax = $("#job_lonmax").val();
+            latmax = $("#job_latmax").val();
+            values2box(lonmin, latmin, lonmax, latmax);
+        });
+
+
+
+        function init_map(){
+            proj4326 = new OpenLayers.Projection("EPSG:4326");
+            projmerc = new OpenLayers.Projection("EPSG:900913");
+
+            map = new OpenLayers.Map("map", {
+                controls: [
+                    // new OpenLayers.Control.KeyboardDefaults(),
+                    new OpenLayers.Control.Navigation(),
+                    new OpenLayers.Control.ZoomPanel(),
+                    new OpenLayers.Control.MousePosition()
+                ],
+                maxExtent:  new OpenLayers.Bounds(-20037508.34,-20037508.34,
+                        20037508.34, 20037508.34),
+                numZoomLevels: 18,
+                maxResolution: 156543,
+                units: 'm',
+                projection: projmerc,
+                displayProjection: proj4326,
+                theme: "/assets/OpenLayers-2.11/theme/default/style-65f789b417994102968f4193cf37e3f6.css"
+            } );
+
+            mapnik_layer = new OpenLayers.Layer.XYZ('OSM Mapnik', 'http://tile.openstreetmap.org/${z}/${x}/${y}.png'); /*, {
+             sphericalMercator: true
+             });*/
+
+            map.addLayers([mapnik_layer]);
+            map.events.register("moveend", map, move_end);
+
+
+            extent = new OpenLayers.Bounds(-74.82529, 17.38275, -68.16174, 20.46002);
+            extent.transform(proj4326,projmerc);
+            map.zoomToExtent(extent)
+            set_bounds(map.getExtent());
+
+
+            var region = new Array();
+            region[0] = new Object();
+            region[0]["left"]      = -74.82529;
+            region[0]["bottom"]    = 17.38275;
+            region[0]["right"]     = -68.16174;
+            region[0]["top"]       = 20.46002;
+            region[1] = new Object();
+            region[1]["left"]      = 92.76481;
+            region[1]["bottom"]    = -11.60655;
+            region[1]["right"]     = 141.0126;
+            region[1]["top"]       = 6.519293;
+            region[2] = new Object();
+            region[2]["left"]      = -30.8;
+            region[2]["bottom"]    = -35.9;
+            region[2]["right"]     = 61.62;
+            region[2]["top"]       = 38.349;
+            region[4] = new Object();
+            region[4]["left"]      = 115.6329;
+            region[4]["bottom"]    = 4.424338;
+            region[4]["right"]     = 127.8003;
+            region[4]["top"]       = 21.55277;
+            region[3] = new Object();
+            region[3]["left"]      = 24.5;
+            region[3]["bottom"]    = 11.8;
+            region[3]["right"]     = 88.6;
+            region[3]["top"]       = 56.3;
+
+            // change extent with change event of dropdown
+            $("#job_region_id").change(function () {
+                $("#job_region_id option:selected").each(function () {
+                    rid = $(this).attr('value');
+                });
+
+                extent = new OpenLayers.Bounds(region[rid]["left"], region[rid]["bottom"], region[rid]["right"], region[rid]["top"]);
+                extent.transform(proj4326,projmerc);
+                map.zoomToExtent(extent)
+                set_bounds(map.getExtent());
+            });
+
+        }
+
+        function move_end() {
+            if (!vectors) {
+                set_bounds(map.getExtent());
+            }
+        }
+
+        function init_drawfeature() {
+
+            if (vectors) {
+                vectors.destroy();
+            }
+
+            vectors = new OpenLayers.Layer.Vector("Box", {
+                displayInLayerSwitcher: false
+            });
+            map.addLayers([vectors]);
+
+            box = new OpenLayers.Control.DrawFeature(vectors, OpenLayers.Handler.RegularPolygon, {
+                handlerOptions: {
+                    sides: 4,
+                    snapAngle: 90,
+                    irregular: true,
+                    persist: true
+                }
+            });
+            box.handler.callbacks.done = draw_end;
+            map.addControl(box);
+            //activate_drawfeature();
+
+            transform = new OpenLayers.Control.TransformFeature(vectors, {
+                rotate: false,
+                irregular: true
+            });
+            transform.events.register("transformcomplete", transform, transformComplete);
+            map.addControl(transform);
+
+            box.activate();
+        }
+
+        function transformComplete(event) {
+            set_bounds(event.feature.geometry.bounds);
+        }
+
+        function draw_end(bbox) {
+            bounds = bbox.getBounds();
+            draw_box(bounds);
+            set_bounds(bounds);
+            box.deactivate();
+        }
+
+        function draw_box(bounds) {
+            var feature = new OpenLayers.Feature.Vector(bounds.toGeometry());
+            vectors.addFeatures(feature);
+            transform.setFeature(feature);
+        }
+
+
+        function set_bounds(bounds) {
+            bounds.transform(projmerc,proj4326);
+
+            z = 10000
+
+            var left    = Math.round(bounds.left   * z) / z;
+            var bottom  = Math.round(bounds.bottom * z) / z;
+            var right   = Math.round(bounds.right  * z) / z;
+            var top     = Math.round(bounds.top    * z) / z;
+
+            $("#job_lonmin").val(left);
+            $("#job_latmin").val(bottom);
+            $("#job_lonmax").val(right);
+            $("#job_latmax").val(top);
+        }
+
+        function values2box(xminlon, xminlat, xmaxlon, xmaxlat) {
+            bounds = new OpenLayers.Bounds(xminlon, xminlat, xmaxlon, xmaxlat);
+            bounds.transform(proj4326,projmerc);
+            draw_box(bounds);
+        }
+
+        function init_values2box() {
+
+
+        }
+
+    });
+</script>
+<h1>New Export Job</h1>
+
+<div class="wizard">
+    <form accept-charset="UTF-8" action="/wizard_area" class="new_job" id="new_job" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /><input name="authenticity_token" type="hidden" value="cX0+IuzRZn1UjFBI94kqR4JpaZoBRM+SOhFlUSPerBE=" /></div>
+        <input id="old_job_id" name="old_job_id" type="hidden" />
+
+
+        <table class="wizard">
+            <tr>
+                <th><label for="job_region">Region</label></th>
+                <th><select class="change_project" id="job_region_id" name="job[region_id]"><option value="0">Haiti</option>
+                    <option value="1">Indonesia</option>
+                    <option value="2">Africa</option>
+                    <option value="4">Philippines</option>
+                    <option value="3">Central Asia/Middle East</option></select></th>
+            </tr>
+            <tr>
+                <th><label for="job_name">Job Name</label></th>
+                <td><input class="required" id="job_name" name="job[name]" size="30" type="text" /></td>
+            </tr>
+            <tr>
+                <th><label for="job_description">Description</label></th>
+                <td><textarea cols="40" id="job_description" name="job[description]" rows="20">
+                </textarea></td>
+            </tr>
+        </table>
+
+        <div id="map"></div>
+
+        <div id="latlon">
+            <p><img src="/assets/Pointer.png" style="width:20px;" class="select_area"><a href="#" class="select_area">Select smaller Area</a></p>
+            <table class="latlon">
+                <tr>
+                    <th><label for="job_lonmin">Min. Longitude</label></th>
+                    <td><input class="latlon" id="job_lonmin" name="job[lonmin]" size="30" type="text" /></td>
+                </tr>
+                <tr>
+                    <th><label for="job_latmin">Min. Latitude</label></th>
+                    <td><input class="latlon" id="job_latmin" name="job[latmin]" size="30" type="text" /></td>
+                </tr>
+                <tr>
+                    <th><label for="job_lonmax">Max. Longitude</label></th>
+                    <td><input class="latlon" id="job_lonmax" name="job[lonmax]" size="30" type="text" /></td>
+                </tr>
+                <tr>
+                    <th><label for="job_latmax">Max. Latitude</label></th>
+                    <td><input class="latlon" id="job_latmax" name="job[latmax]" size="30" type="text" /></td>
+                </tr>
+            </table>
+        </div>
+
+        <div style="clear: left;">
+            <input name="commit" type="submit" value="Save" />
+        </div>
+    </form></div>
+
+</div>
+<div id="footer">
+
+    <p>Copyright&copy; 2013 Humanitarian OpenStreetMap Team
+        &middot; Map data from OpenStreetMap, ODbL 1.0 license
+</div>
+
+
+</body>
+</html>

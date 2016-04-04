@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='iso-8859-1'?>
+<ga_license_file>
+  <metadata>
+    <author>Dmitry Kolesov</author>
+  </metadata>
+
+  <datafile>
+    <filename>roads_osm_4326.shp</filename>
+    <checksum>3358375828</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Dmitry Kolesov</accountable>
+    <source>Open Street Map (OSM)</source>
+    <IP_owner>OSM</IP_owner>
+    <IP_info>This data is publicly available from the OSM website. It was derived by clipping a small section from the OSM Roads dataset.</IP_info>
+  </datafile>
+
+  <datafile>
+    <filename>roads_osm_4326.shx</filename>
+    <checksum>152127158</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Dmitry Kolesov</accountable>
+    <source>Open Street Map (OSM)</source>
+    <IP_owner>OSM</IP_owner>
+    <IP_info>This data is publicly available from the OSM website. It was derived by clipping a small section from the OSM Roads dataset.</IP_info>
+  </datafile>
+
+  <datafile>
+    <filename>roads_osm_4326.dbf</filename>
+    <checksum>594242379</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Dmitry Kolesov</accountable>
+    <source>Open Street Map (OSM)</source>
+    <IP_owner>OSM</IP_owner>
+    <IP_info>This data is publicly available from the OSM website. It was derived by clipping a small section from the OSM Roads dataset.</IP_info>
+  </datafile>
+
+</ga_license_file>

@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='iso-8859-1'?>
+<ga_license_file>
+  <metadata>
+    <author>Kristy Van Putten, AIFDR</author>
+  </metadata>
+
+  <datafile>
+    <filename>district_osm_jakarta.shp</filename>
+    <checksum>1231005636</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Kristy Van Putten</accountable>
+    <source>Open Street Map (OSM)</source>
+    <IP_owner>ODbL</IP_owner>
+    <IP_info>This data is publicly available from the OSM website. It was
+    changed to contain some accent characters for InaSAFE testing purposes.
+    </IP_info>
+  </datafile>
+
+  <datafile>
+    <filename>district_osm_jakarta.shx</filename>
+    <checksum>976051007</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Kristy Van Putten</accountable>
+    <source>Open Street Map (OSM)</source>
+    <IP_owner>ODbL</IP_owner>
+    <IP_info>This data is publicly available from the OSM website. It was
+    changed to contain some accent characters for InaSAFE testing purposes.
+    </IP_info>
+  </datafile>
+
+  <datafile>
+    <filename>district_osm_jakarta.dbf</filename>
+    <checksum>4167342930</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Kristy Van Putten</accountable>
+    <source>Open Street Map (OSM)</source>
+    <IP_owner>ODbL</IP_owner>
+    <IP_info>This data is publicly available from the OSM website. It was
+    changed to contain some accent characters for InaSAFE testing purposes.
+    </IP_info>
+  </datafile>
+
+</ga_license_file>

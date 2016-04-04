@@ -1,0 +1,25 @@
+{
+  invalid_item: "edg",
+  "provenance": [
+    {
+      "description": "Description of step 1",
+      "time": "2015-06-25T13:14:24.508974",
+      "title": "Title 1"
+    },
+    {
+      "description": "Description of step 2",
+      "time": "2015-06-25T13:14:24.508980",
+      "title": "Title 2"
+    },
+    {
+      "description": "Description of step 3",
+      "time": "2015-06-25T13:14:24.508984",
+      "title": "Title 3"
+    }
+  ],
+  "report": "My super report",
+  "summary_data": {
+    "res1": 1234,
+    "res2": 4321
+  }
+}

@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HotExports | depok test</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/assets/layout/favicon-504cac551cfee12db58f441e99301217.ico">
+    <link href="/assets/application-1f14ca07a84dfec13f8326fa162ae3c6.css" media="screen" rel="stylesheet" type="text/css" />
+    <script src="/assets/application-adb945dc94aef3a9f8815d35a1ba590d.js" type="text/javascript"></script>
+    <meta content="authenticity_token" name="csrf-param" />
+    <meta content="cX0+IuzRZn1UjFBI94kqR4JpaZoBRM+SOhFlUSPerBE=" name="csrf-token" />
+</head>
+<body>
+<div id="header" style="background-image: url(/assets/layout/red-header-c82760e6760c02af7fc2d1b6d3c50fdb.png);">
+    <div class="nav">
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/uploads">Configuration</a></li>
+            <li><a href="/jobs">Jobs</a></li>
+            <li><a href="/jobs/new">New Job</a></li>
+        </ul>
+    </div>
+    <div class="logo">
+        <img src="/assets/layout/logo-650056578f17b49a8cf6ea154f5aeb05.png" class="logo">
+        <h1>HOT Exports</h1>
+    </div>
+</div>
+
+
+
+<div id="content">
+<script type="text/javascript" src="/assets/OpenLayers-2.11/OpenLayers-b69d8c2366ea6e4a2ea16656f3b2d7ff.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        $("img.state").each(function() {
+            var state = $(this).attr('src');
+            if (state.match(/new/)) {
+                setInterval( "reloadRuns();", 30000 );
+            } else if (state.match(/running/)) {
+                setInterval( "reloadRuns();", 30000 );
+            }
+        });
+    });
+
+    function reloadRuns() {
+        window.location.reload();
+    }
+
+</script>
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        var proj4326;
+        var projmerc;
+        var map;
+        var mapnik_layer;
+        var vectors;
+        var box;
+
+        init_map();
+        init_drawfeature();
+        init_values2box();
+
+    });
+
+    function init_map(){
+        proj4326 = new OpenLayers.Projection("EPSG:4326");
+        projmerc = new OpenLayers.Projection("EPSG:900913");
+
+        map = new OpenLayers.Map("map", {
+            controls: [
+                // new OpenLayers.Control.KeyboardDefaults(),
+                new OpenLayers.Control.Navigation(),
+                new OpenLayers.Control.ZoomPanel(),
+                new OpenLayers.Control.MousePosition()
+            ],
+            maxExtent:  new OpenLayers.Bounds(-20037508.34,-20037508.34,
+                    20037508.34, 20037508.34),
+            numZoomLevels: 18,
+            maxResolution: 156543,
+            units: 'm',
+            projection: projmerc,
+            displayProjection: proj4326,
+            theme: "/assets/OpenLayers-2.11/theme/default/style-65f789b417994102968f4193cf37e3f6.css"
+        } );
+
+        mapnik_layer = new OpenLayers.Layer.XYZ('OSM Mapnik', 'http://tile.openstreetmap.org/${z}/${x}/${y}.png'); /*, {
+         sphericalMercator: true
+         });*/
+        map.addLayers([mapnik_layer]);
+
+        extent = new OpenLayers.Bounds(106.35933252, -6.62957885267, 107.183160645, -5.97051635267);
+        extent.transform(proj4326,projmerc);
+        map.zoomToExtent(extent.scale(2))
+    }
+
+    function init_drawfeature() {
+        vectors = new OpenLayers.Layer.Vector("Box");
+        map.addLayers([vectors]);
+
+        box = new OpenLayers.Control.DrawFeature(vectors, OpenLayers.Handler.RegularPolygon, {
+            handlerOptions: {
+                sides: 4,
+                snapAngle: 90,
+                irregular: true,
+                persist: true
+            }
+        });
+        map.addControl(box);
+    }
+
+    function draw_box(bounds) {
+        var feature = new OpenLayers.Feature.Vector(bounds.toGeometry());
+        vectors.removeAllFeatures();
+        vectors.addFeatures(feature);
+    }
+
+    function init_values2box() {
+        bounds = new OpenLayers.Bounds(106.35933252, -6.62957885267, 107.183160645, -5.97051635267);
+        bounds.transform(proj4326,projmerc);
+        draw_box(bounds);
+    }
+
+</script>
+<h1>Job <i>depok test</i></h1>
+<p><p>depok test area</p></p>
+<h2>Runs</h2>
+<table class="jobindex">
+    <tr>
+        <th width="30">State</th>
+        <th width="520">Download</th>
+        <th width="120">Created At</th>
+    </tr>
+    <tr>
+        <td>
+            <img src="/assets/status/success-abd3e1cbfdb79bf7185193114c5d5542.png" class="state" title="success">
+        </td>
+        <td>
+            <ul>
+                <li><a href="/download/006113/log.txt">job log file (log.txt)</a> <span class="size">[31.7KB]</span></li>
+                <li><a href="/download/006113/extract.shp.zip">ESRI Shapefile (zipped)</a> <span class="size">[24.6MB]</span></li>
+                <li><a href="/download/006113/extract.spatiallite">Spatiallite file</a> <span class="size">[51.2MB]</span></li>
+                <li><a href="/download/006113/extract.sql">PostGIS dump file (.sql)</a> <span class="size">[88.6MB]</span></li>
+                <li><a href="/download/006113/extract.sqlite">SQLite file</a> <span class="size">[67.1MB]</span></li>
+                <li><a href="/download/006113/rawdata.osm.pbf">OSM source file (.pbf)</a> <span class="size">[8.3MB]</span></li>
+            </ul>
+        </td>
+        <td>2013-02-05 05:37</td>
+    </tr>
+
+
+</table>
+
+<form accept-charset="UTF-8" action="/newrun" method="get"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /></div>
+    <input id="job_id" name="job_id" type="hidden" value="1985" />
+    <p><input type="submit" value="Start new run" name="commit"></p>
+</form>
+
+
+<h2>Area</h2>
+<div id="map"></div>
+
+<div id="latlon">
+    <table class="latlon">
+        <tr><th>Min. Longitude</th><td id="job_lonmin">106.35933252</td></tr>
+        <tr><th>Min. Latitude </th><td id="job_latmin">-6.62957885267</td></tr>
+        <tr><th>Max. Longitude</th><td id="job_lonmax">107.183160645</td></tr>
+        <tr><th>Max. Latitude </th><td id="job_latmax">-5.97051635267</td></tr>
+    </table>
+</div>
+
+
+<h2 style="clear: left; padding-top: 40px;">Tags</h2>
+
+<p>
+    The job is based upon the preset file <span class="marker">Presets from Mapping Jakarta (2013-02-02 07:35)</span>.
+</p>
+
+<select>
+    <option>access [point]</option>
+    <option>access [line]</option>
+    <option>access:roof [line]</option>
+    <option>access:roof [polygon]</option>
+    <option>access:roof [point]</option>
+    <option>addr:full [point]</option>
+    <option>addr:full [line]</option>
+    <option>addr:full [polygon]</option>
+    <option>addr:housename [point]</option>
+    <option>addr:housename [line]</option>
+    <option>addr:housenumber [point]</option>
+    <option>addr:housenumber [line]</option>
+    <option>addr:interpolation [line]</option>
+    <option>addr:interpolation [point]</option>
+    <option>admin_level [polygon]</option>
+    <option>admin_level [line]</option>
+    <option>admin_level [point]</option>
+    <option>aerialway [line]</option>
+    <option>aerialway [point]</option>
+    <option>aeroway [polygon]</option>
+    <option>aeroway [point]</option>
+    <option>amenity [line]</option>
+    <option>amenity [polygon]</option>
+    <option>amenity [point]</option>
+    <option>area [point]</option>
+    <option>area [line]</option>
+    <option>area [polygon]</option>
+    <option>barrier [point]</option>
+    <option>barrier [line]</option>
+    <option>bicycle [point]</option>
+    <option>boundary [point]</option>
+    <option>boundary [line]</option>
+    <option>boundary [polygon]</option>
+    <option>bridge [point]</option>
+    <option>bridge [line]</option>
+    <option>building [polygon]</option>
+    <option>building [point]</option>
+    <option>building:levels [line]</option>
+    <option>building:levels [polygon]</option>
+    <option>building:levels [point]</option>
+    <option>building:roof [polygon]</option>
+    <option>building:roof [line]</option>
+    <option>building:roof [point]</option>
+    <option>building:structure [point]</option>
+    <option>building:structure [polygon]</option>
+    <option>building:structure [line]</option>
+    <option>building:walls [polygon]</option>
+    <option>building:walls [point]</option>
+    <option>building:walls [line]</option>
+    <option>capacity:persons [point]</option>
+    <option>capacity:persons [line]</option>
+    <option>capacity:persons [polygon]</option>
+    <option>capital [point]</option>
+    <option>construction [line]</option>
+    <option>construction [point]</option>
+    <option>covered [line]</option>
+    <option>covered [point]</option>
+    <option>cutting [point]</option>
+    <option>cutting [line]</option>
+    <option>denomination [point]</option>
+    <option>denomination [line]</option>
+    <option>disused [point]</option>
+    <option>disused [line]</option>
+    <option>ele [point]</option>
+    <option>embankment [point]</option>
+    <option>embankment [line]</option>
+    <option>flood_prone [polygon]</option>
+    <option>flood_prone [point]</option>
+    <option>flood_prone [line]</option>
+    <option>foot [point]</option>
+    <option>foot [line]</option>
+    <option>generator:source [point]</option>
+    <option>generator:source [line]</option>
+    <option>harbour [point]</option>
+    <option>harbour [polygon]</option>
+    <option>highway [line]</option>
+    <option>highway [point]</option>
+    <option>historic [polygon]</option>
+    <option>historic [point]</option>
+    <option>industrial [point]</option>
+    <option>industrial [line]</option>
+    <option>industrial [polygon]</option>
+    <option>is_in:district [polygon]</option>
+    <option>is_in:district [line]</option>
+    <option>is_in:district [point]</option>
+    <option>is_in:hamlet [point]</option>
+    <option>is_in:hamlet [polygon]</option>
+    <option>is_in:hamlet [line]</option>
+    <option>is_in:province [line]</option>
+    <option>is_in:province [point]</option>
+    <option>is_in:province [polygon]</option>
+    <option>is_in:subdistrict [polygon]</option>
+    <option>is_in:subdistrict [point]</option>
+    <option>is_in:subdistrict [line]</option>
+    <option>junction [point]</option>
+    <option>junction [line]</option>
+    <option>landuse [polygon]</option>
+    <option>landuse [line]</option>
+    <option>landuse [point]</option>
+    <option>layer [point]</option>
+    <option>layer [line]</option>
+    <option>leisure [polygon]</option>
+    <option>leisure [line]</option>
+    <option>leisure [point]</option>
+    <option>lock [point]</option>
+    <option>lock [line]</option>
+    <option>man_made [point]</option>
+    <option>man_made [polygon]</option>
+    <option>military [point]</option>
+    <option>military [polygon]</option>
+    <option>motorcar [point]</option>
+    <option>motorcar [line]</option>
+    <option>name [point]</option>
+    <option>name [polygon]</option>
+    <option>name [line]</option>
+    <option>natural [polygon]</option>
+    <option>natural [point]</option>
+    <option>office [polygon]</option>
+    <option>office [point]</option>
+    <option>office [line]</option>
+    <option>oneway [point]</option>
+    <option>oneway [line]</option>
+    <option>operator:type [point]</option>
+    <option>operator:type [polygon]</option>
+    <option>operator:type [line]</option>
+    <option>place [point]</option>
+    <option>place [polygon]</option>
+    <option>poi [point]</option>
+    <option>population [line]</option>
+    <option>population [point]</option>
+    <option>power [point]</option>
+    <option>power [polygon]</option>
+    <option>railway [point]</option>
+    <option>railway [line]</option>
+    <option>ref [line]</option>
+    <option>ref [point]</option>
+    <option>religion [point]</option>
+    <option>religion [line]</option>
+    <option>religion [polygon]</option>
+    <option>rooms [point]</option>
+    <option>rooms [polygon]</option>
+    <option>rooms [line]</option>
+    <option>route [point]</option>
+    <option>route [line]</option>
+    <option>service [line]</option>
+    <option>service [point]</option>
+    <option>shop [polygon]</option>
+    <option>shop [point]</option>
+    <option>sport [polygon]</option>
+    <option>sport [point]</option>
+    <option>surface [line]</option>
+    <option>surface [point]</option>
+    <option>toll [point]</option>
+    <option>toll [line]</option>
+    <option>tourism [polygon]</option>
+    <option>tourism [point]</option>
+    <option>tower:type [line]</option>
+    <option>tower:type [point]</option>
+    <option>tracktype [line]</option>
+    <option>tunnel [line]</option>
+    <option>tunnel [point]</option>
+    <option>type:id [polygon]</option>
+    <option>type:id [point]</option>
+    <option>type:id [line]</option>
+    <option>water [point]</option>
+    <option>water [polygon]</option>
+    <option>waterway [point]</option>
+    <option>waterway [polygon]</option>
+    <option>wetland [polygon]</option>
+    <option>wetland [point]</option>
+    <option>width [line]</option>
+    <option>width [point]</option>
+    <option>wood [point]</option>
+    <option>wood [line]</option>
+</select>
+<p>
+<form accept-charset="UTF-8" action="/newwithtags" method="get"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="&#x2713;" /></div>
+    <input id="job_id" name="job_id" type="hidden" value="1985" />
+    <input type="submit" value="Create Job" name="commit">
+    Create a new job with a new area but the same tags as this job.
+</form></p>
+
+</div>
+<div id="footer">
+
+    <p>Copyright&copy; 2013 Humanitarian OpenStreetMap Team
+        &middot; Map data from OpenStreetMap, ODbL 1.0 license
+</div>
+
+
+</body>
+</html>

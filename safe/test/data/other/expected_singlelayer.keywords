@@ -1,0 +1,5 @@
+[osm]
+datatype: flood
+category: hazard
+subcategory: structure
+title: flood_osm_4326

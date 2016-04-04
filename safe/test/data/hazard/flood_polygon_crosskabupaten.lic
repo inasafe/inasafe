@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='iso-8859-1'?>
+<ga_license_file>
+  <metadata>
+    <author>Marco Bernasocchi, opengis.ch</author>
+  </metadata>
+
+  <datafile>
+    <filename>flood_polygon_crosskabupaten.shp</filename>
+    <checksum>1620562646</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Marco Bernasocchi</accountable>
+    <source>AIFDR</source>
+    <IP_owner>AIFDR</IP_owner>
+    <IP_info>Polygons created at AIFDR for test purposes</IP_info>
+  </datafile>
+
+  <datafile>
+    <filename>flood_polygon_crosskabupaten.shx</filename>
+    <checksum>1599125537</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Marco Bernasocchi</accountable>
+    <source>AIFDR</source>
+    <IP_owner>AIFDR</IP_owner>
+    <IP_info>Polygons created at AIFDR for test purposes</IP_info>
+  </datafile>
+
+  <datafile>
+    <filename>flood_polygon_crosskabupaten.dbf</filename>
+    <checksum>1653956669</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Marco Bernasocchi</accountable>
+    <source>AIFDR</source>
+    <IP_owner>AIFDR</IP_owner>
+    <IP_info>Polygons created at AIFDR for test purposes</IP_info>
+  </datafile>
+
+</ga_license_file>

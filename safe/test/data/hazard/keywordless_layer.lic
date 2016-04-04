@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='iso-8859-1'?>
+<ga_license_file>
+  <metadata>
+    <author>Tim Sutton</author>
+  </metadata>
+
+  <datafile>
+    <filename>keywordless_layer.tif</filename>
+    <checksum>3568618247</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Ole Nielsen</accountable>
+    <source>USGS</source>
+    <IP_owner>USGS</IP_owner>
+    <IP_info>Shakemaps are publicly available from the USGS website. This dataset is a small clip from the original shakemap padang 2009 dataset for testing purposes.</IP_info>
+  </datafile>
+
+</ga_license_file>

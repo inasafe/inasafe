@@ -1,0 +1,9 @@
+InaSAFE Batch Report File
+-----------------------------
+F: dummy test
+F: multipart_polygons_osm_4326
+-----------------------------
+Total passed: 0
+Total failed: 2
+Total tasks: 2
+-----------------------------
