@@ -79,6 +79,37 @@ class BuildingExposureReportMixin(ReportMixin):
 
         self.impact_data = {}
 
+    def action_checklist(self):
+        """Action Checklist Data.
+        """
+        title = tr('Action checklist')
+        fields =  [
+            tr('Which structures have warning capacity (eg. sirens, speakers, '
+               'etc.)?'),
+            tr('Are the water and electricity services still operating?'),
+            tr('Are the health centres still open?'),
+            tr('Are the other public services accessible?'),
+            tr('Which buildings will be evacuation centres?'),
+            tr('Where will we locate the operations centre?'),
+            tr('Where will we locate warehouse and/or distribution centres?'),
+            tr('Are the schools and hospitals still active?'),
+        ]
+        if self.schools_closed > 0:
+            fields.append(tr(
+                'Where will the students from the %s closed schools go to '
+                'study?') % format_int(self.schools_closed))
+        if self.hospitals_closed > 0:
+            fields.append(tr(
+                'Where will the patients from the %s closed hospitals go '
+                'for treatment and how will we transport them?') % format_int(
+                self.hospitals_closed))
+
+        return {
+            'title': title,
+            'fields': fields
+        }
+
+
     def generate_report(self):
         """Breakdown by building type.
 
@@ -99,33 +130,12 @@ class BuildingExposureReportMixin(ReportMixin):
         :returns: The buildings breakdown report.
         :rtype: safe.messaging.Message
         """
-        schools_closed = self.schools_closed
-        hospitals_closed = self.hospitals_closed
-
         message = m.Message(style_class='container')
-        message.add(m.Heading(tr('Action checklist'), **styles.INFO_STYLE))
+        message.add(m.Heading(
+            self.action_checklist()['title'], **styles.INFO_STYLE))
         checklist = m.BulletedList()
-        checklist.add(tr(
-            'Which structures have warning capacity (eg. sirens, speakers, '
-            'etc.)?'))
-        checklist.add(
-            tr('Are the water and electricity services still operating?'))
-        checklist.add(tr('Are the health centres still open?'))
-        checklist.add(tr('Are the other public services accessible?'))
-        checklist.add(tr('Which buildings will be evacuation centres?'))
-        checklist.add(tr('Where will we locate the operations centre?'))
-        checklist.add(
-            tr('Where will we locate warehouse and/or distribution centres?'))
-        checklist.add(tr('Are the schools and hospitals still active?'))
-        if schools_closed > 0:
-            checklist.add(tr(
-                'Where will the students from the %s closed schools '
-                'go to study?') % format_int(schools_closed))
-        if hospitals_closed > 0:
-            checklist.add(tr(
-                'Where will the patients from the %s closed hospitals go '
-                'for treatment and how will we transport them?') % format_int(
-                    hospitals_closed))
+        for text in self.action_checklist()['fields']:
+            checklist.add(text)
         message.add(checklist)
         return message
 
