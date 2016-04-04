@@ -66,12 +66,6 @@ class ClassifiedRasterHazardBuildingFunction(
     def run(self):
         """Classified hazard impact to buildings (e.g. from Open Street Map).
         """
-        self.validate()
-        self.prepare()
-
-        self.provenance.append_step(
-            'Calculating Step',
-            'Impact function is calculating the impact.')
 
         # Value from layer's keywords
         # Try to get the value from keyword, if not exist, it will not fail,
@@ -212,8 +206,6 @@ class ClassifiedRasterHazardBuildingFunction(
             'buildings_total': buildings_total,
             'buildings_affected': self.total_affected_buildings
         }
-
-        self.set_if_provenance()
 
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 

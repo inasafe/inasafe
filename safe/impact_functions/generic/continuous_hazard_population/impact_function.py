@@ -108,12 +108,6 @@ class ContinuousHazardPopulationFunction(
           Map of population exposed to high category
           Table with number of people in each category
         """
-        self.validate()
-        self.prepare()
-
-        self.provenance.append_step(
-            'Calculating Step',
-            'Impact function is calculating the impact.')
 
         thresholds = [
             p.value for p in self.parameters['Categorical thresholds'].value]
@@ -236,8 +230,6 @@ class ContinuousHazardPopulationFunction(
             'legend_title': legend_title,
             'total_needs': total_needs
         }
-
-        self.set_if_provenance()
 
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 

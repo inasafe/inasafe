@@ -88,12 +88,6 @@ class EarthquakeBuildingFunction(
 
     def run(self):
         """Earthquake impact to buildings (e.g. from OpenStreetMap)."""
-        self.validate()
-        self.prepare()
-
-        self.provenance.append_step(
-            'Calculating Step',
-            'Impact function is calculating the impact.')
 
         LOGGER.debug('Running earthquake building impact')
 
@@ -276,8 +270,6 @@ class EarthquakeBuildingFunction(
             'legend_title': legend_title,
             'target_field': self.target_field,
         }
-
-        self.set_if_provenance()
 
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 

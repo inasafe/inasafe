@@ -82,12 +82,6 @@ class ClassifiedPolygonHazardBuildingFunction(
             Table with number of buildings affected
         :rtype: Vector
         """
-        self.validate()
-        self.prepare()
-
-        self.provenance.append_step(
-            'Calculating Step',
-            'Impact function is calculating the impact.')
 
         # Value from layer's keywords
         self.hazard_class_attribute = self.hazard.keyword('field')
@@ -241,8 +235,6 @@ class ClassifiedPolygonHazardBuildingFunction(
             'legend_units': legend_units,
             'legend_title': legend_title
         }
-
-        self.set_if_provenance()
 
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 

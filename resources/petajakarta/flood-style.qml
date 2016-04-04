@@ -1,10 +1,13 @@
 <!DOCTYPE qgis PUBLIC 'http://mrcc.com/qgis.dtd' 'SYSTEM'>
-<qgis version="2.13.0-Master" minimumScale="-4.65661e-10" maximumScale="1e+08" simplifyDrawingHints="1" minLabelScale="0" maxLabelScale="1e+08" simplifyDrawingTol="1" simplifyMaxScale="1" hasScaleBasedVisibilityFlag="0" simplifyLocal="0" scaleBasedLabelVisibilityFlag="0">
+<qgis version="2.13.0-Master" minimumScale="0" maximumScale="1e+08" simplifyDrawingHints="1" minLabelScale="0" maxLabelScale="1e+08" simplifyDrawingTol="1" simplifyMaxScale="1" hasScaleBasedVisibilityFlag="0" simplifyLocal="0" scaleBasedLabelVisibilityFlag="0">
   <edittypes>
     <edittype widgetv2type="TextEdit" name="level_name">
       <widgetv2config IsMultiline="0" fieldEditable="1" UseHtml="0" labelOnTop="0"/>
     </edittype>
     <edittype widgetv2type="TextEdit" name="state">
+      <widgetv2config IsMultiline="0" fieldEditable="1" UseHtml="0" labelOnTop="0"/>
+    </edittype>
+    <edittype widgetv2type="TextEdit" name="last_updat">
       <widgetv2config IsMultiline="0" fieldEditable="1" UseHtml="0" labelOnTop="0"/>
     </edittype>
     <edittype widgetv2type="TextEdit" name="parent_nam">
@@ -17,34 +20,19 @@
       <widgetv2config IsMultiline="0" fieldEditable="1" UseHtml="0" labelOnTop="0"/>
     </edittype>
   </edittypes>
-  <renderer-v2 attr="state" forceraster="0" symbollevels="0" type="graduatedSymbol" graduatedMethod="GraduatedColor">
+  <renderer-v2 attr="state" forceraster="0" symbollevels="0" type="graduatedSymbol" graduatedMethod="GraduatedColor" enableorderby="0">
     <ranges>
-      <range render="true" symbol="0" lower="0.000000000000000" upper="1.000000000000000" label="No Flooding"/>
-      <range render="true" symbol="1" lower="1.000000000000000" upper="2.000000000000000" label="Use caution"/>
+      <range render="true" symbol="0" lower="4.000000000000000" upper="4.000000000000000" label="> 150cm"/>
+      <range render="true" symbol="1" lower="3.000000000000000" upper="4.000000000000000" label="71 - 150cm"/>
       <range render="true" symbol="2" lower="2.000000000000000" upper="3.000000000000000" label="10 - 70cm"/>
-      <range render="true" symbol="3" lower="3.000000000000000" upper="4.000000000000000" label="71 - 150cm"/>
-      <range render="true" symbol="4" lower="4.000000000000000" upper="4.000000000000000" label="> 150cm"/>
+      <range render="true" symbol="3" lower="1.000000000000000" upper="2.000000000000000" label="Use caution"/>
+      <range render="true" symbol="4" lower="0.000000000000000" upper="1.000000000000000" label="No Flooding"/>
     </ranges>
     <symbols>
-      <symbol alpha="0.0588235" clip_to_extent="1" type="fill" name="0">
+      <symbol alpha="0.4" clip_to_extent="1" type="fill" name="0">
         <layer pass="0" class="SimpleFill" locked="0">
           <prop k="border_width_map_unit_scale" v="0,0,0,0,0,0"/>
-          <prop k="color" v="186,221,105,255"/>
-          <prop k="joinstyle" v="bevel"/>
-          <prop k="offset" v="0,0"/>
-          <prop k="offset_map_unit_scale" v="0,0,0,0,0,0"/>
-          <prop k="offset_unit" v="MM"/>
-          <prop k="outline_color" v="128,152,72,255"/>
-          <prop k="outline_style" v="solid"/>
-          <prop k="outline_width" v="0.26"/>
-          <prop k="outline_width_unit" v="MM"/>
-          <prop k="style" v="solid"/>
-        </layer>
-      </symbol>
-      <symbol alpha="0.4" clip_to_extent="1" type="fill" name="1">
-        <layer pass="0" class="SimpleFill" locked="0">
-          <prop k="border_width_map_unit_scale" v="0,0,0,0,0,0"/>
-          <prop k="color" v="199,220,239,255"/>
+          <prop k="color" v="223,103,121,255"/>
           <prop k="joinstyle" v="bevel"/>
           <prop k="offset" v="0,0"/>
           <prop k="offset_map_unit_scale" v="0,0,0,0,0,0"/>
@@ -57,7 +45,39 @@
         </layer>
         <layer pass="0" class="ShapeburstFill" locked="0">
           <prop k="blur_radius" v="0"/>
-          <prop k="color" v="151,204,232,255"/>
+          <prop k="color" v="149,69,81,255"/>
+          <prop k="color1" v="0,0,255,255"/>
+          <prop k="color2" v="0,255,0,255"/>
+          <prop k="color_type" v="0"/>
+          <prop k="discrete" v="0"/>
+          <prop k="distance_map_unit_scale" v="0,0,0,0,0,0"/>
+          <prop k="distance_unit" v="MM"/>
+          <prop k="gradient_color2" v="255,255,255,0"/>
+          <prop k="ignore_rings" v="0"/>
+          <prop k="max_distance" v="5"/>
+          <prop k="offset" v="0,0"/>
+          <prop k="offset_map_unit_scale" v="0,0,0,0,0,0"/>
+          <prop k="offset_unit" v="MM"/>
+          <prop k="use_whole_shape" v="1"/>
+        </layer>
+      </symbol>
+      <symbol alpha="0.4" clip_to_extent="1" type="fill" name="1">
+        <layer pass="0" class="SimpleFill" locked="0">
+          <prop k="border_width_map_unit_scale" v="0,0,0,0,0,0"/>
+          <prop k="color" v="255,165,85,255"/>
+          <prop k="joinstyle" v="bevel"/>
+          <prop k="offset" v="0,0"/>
+          <prop k="offset_map_unit_scale" v="0,0,0,0,0,0"/>
+          <prop k="offset_unit" v="MM"/>
+          <prop k="outline_color" v="0,0,0,255"/>
+          <prop k="outline_style" v="no"/>
+          <prop k="outline_width" v="0.26"/>
+          <prop k="outline_width_unit" v="MM"/>
+          <prop k="style" v="solid"/>
+        </layer>
+        <layer pass="0" class="ShapeburstFill" locked="0">
+          <prop k="blur_radius" v="0"/>
+          <prop k="color" v="176,113,58,255"/>
           <prop k="color1" v="0,0,255,255"/>
           <prop k="color2" v="0,255,0,255"/>
           <prop k="color_type" v="0"/>
@@ -76,7 +96,7 @@
       <symbol alpha="0.4" clip_to_extent="1" type="fill" name="2">
         <layer pass="0" class="SimpleFill" locked="0">
           <prop k="border_width_map_unit_scale" v="0,0,0,0,0,0"/>
-          <prop k="color" v="95,149,193,255"/>
+          <prop k="color" v="255,253,95,255"/>
           <prop k="joinstyle" v="bevel"/>
           <prop k="offset" v="0,0"/>
           <prop k="offset_map_unit_scale" v="0,0,0,0,0,0"/>
@@ -89,7 +109,7 @@
         </layer>
         <layer pass="0" class="ShapeburstFill" locked="0">
           <prop k="blur_radius" v="0"/>
-          <prop k="color" v="95,149,193,255"/>
+          <prop k="color" v="203,200,19,255"/>
           <prop k="color1" v="0,0,255,255"/>
           <prop k="color2" v="0,255,0,255"/>
           <prop k="color_type" v="0"/>
@@ -108,7 +128,7 @@
       <symbol alpha="0.4" clip_to_extent="1" type="fill" name="3">
         <layer pass="0" class="SimpleFill" locked="0">
           <prop k="border_width_map_unit_scale" v="0,0,0,0,0,0"/>
-          <prop k="color" v="40,120,184,255"/>
+          <prop k="color" v="183,195,246,255"/>
           <prop k="joinstyle" v="bevel"/>
           <prop k="offset" v="0,0"/>
           <prop k="offset_map_unit_scale" v="0,0,0,0,0,0"/>
@@ -121,7 +141,7 @@
         </layer>
         <layer pass="0" class="ShapeburstFill" locked="0">
           <prop k="blur_radius" v="0"/>
-          <prop k="color" v="40,120,184,255"/>
+          <prop k="color" v="107,121,176,255"/>
           <prop k="color1" v="0,0,255,255"/>
           <prop k="color2" v="0,255,0,255"/>
           <prop k="color_type" v="0"/>
@@ -137,36 +157,19 @@
           <prop k="use_whole_shape" v="1"/>
         </layer>
       </symbol>
-      <symbol alpha="0.4" clip_to_extent="1" type="fill" name="4">
+      <symbol alpha="0.0588235" clip_to_extent="1" type="fill" name="4">
         <layer pass="0" class="SimpleFill" locked="0">
           <prop k="border_width_map_unit_scale" v="0,0,0,0,0,0"/>
-          <prop k="color" v="8,48,107,255"/>
+          <prop k="color" v="186,221,105,255"/>
           <prop k="joinstyle" v="bevel"/>
           <prop k="offset" v="0,0"/>
           <prop k="offset_map_unit_scale" v="0,0,0,0,0,0"/>
           <prop k="offset_unit" v="MM"/>
-          <prop k="outline_color" v="0,0,0,255"/>
-          <prop k="outline_style" v="no"/>
+          <prop k="outline_color" v="128,152,72,255"/>
+          <prop k="outline_style" v="solid"/>
           <prop k="outline_width" v="0.26"/>
           <prop k="outline_width_unit" v="MM"/>
           <prop k="style" v="solid"/>
-        </layer>
-        <layer pass="0" class="ShapeburstFill" locked="0">
-          <prop k="blur_radius" v="0"/>
-          <prop k="color" v="8,48,107,255"/>
-          <prop k="color1" v="0,0,255,255"/>
-          <prop k="color2" v="0,255,0,255"/>
-          <prop k="color_type" v="0"/>
-          <prop k="discrete" v="0"/>
-          <prop k="distance_map_unit_scale" v="0,0,0,0,0,0"/>
-          <prop k="distance_unit" v="MM"/>
-          <prop k="gradient_color2" v="255,255,255,0"/>
-          <prop k="ignore_rings" v="0"/>
-          <prop k="max_distance" v="5"/>
-          <prop k="offset" v="0,0"/>
-          <prop k="offset_map_unit_scale" v="0,0,0,0,0,0"/>
-          <prop k="offset_unit" v="MM"/>
-          <prop k="use_whole_shape" v="1"/>
         </layer>
       </symbol>
     </symbols>
@@ -378,7 +381,7 @@
     <selectedonly on=""/>
   </labelattributes>
   <SingleCategoryDiagramRenderer diagramType="Pie">
-    <DiagramCategory penColor="#000000" labelPlacementMethod="XHeight" penWidth="0" diagramOrientation="Up" minimumSize="0" barWidth="5" penAlpha="255" maxScaleDenominator="1e+08" backgroundColor="#ffffff" transparency="0" width="15" scaleDependency="Area" backgroundAlpha="255" angleOffset="1440" scaleBasedVisibility="0" enabled="0" height="15" sizeType="MM" minScaleDenominator="-4.65661e-10">
+    <DiagramCategory penColor="#000000" labelPlacementMethod="XHeight" penWidth="0" diagramOrientation="Up" minimumSize="0" barWidth="5" penAlpha="255" maxScaleDenominator="1e+08" backgroundColor="#ffffff" transparency="0" width="15" scaleDependency="Area" backgroundAlpha="255" angleOffset="1440" scaleBasedVisibility="0" enabled="0" height="15" sizeType="MM" minScaleDenominator="0">
       <fontProperties description="AvantGarde Bk BT,12,-1,5,50,0,0,0,0,0" style=""/>
       <attribute field="" color="#000000" label=""/>
     </DiagramCategory>

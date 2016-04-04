@@ -114,12 +114,6 @@ class VolcanoPointPopulationFunction(
             * RadiiException - When radii are not valid (they need to be
                 monotonically increasing)
         """
-        self.validate()
-        self.prepare()
-
-        self.provenance.append_step(
-            'Calculating Step',
-            'Impact function is calculating the impact.')
 
         # Parameters
         radii = self.parameters['distances'].value
@@ -250,8 +244,6 @@ class VolcanoPointPopulationFunction(
             'legend_title': legend_title,
             'total_needs': self.total_needs
         }
-
-        self.set_if_provenance()
 
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 

@@ -120,12 +120,6 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         :returns: Impact layer
         :rtype: Vector
         """
-        self.validate()
-        self.prepare()
-
-        self.provenance.append_step(
-            'Calculating Step',
-            'Impact function is calculating the impact.')
 
         # Identify hazard and exposure layers
         hazard = self.hazard.layer
@@ -262,8 +256,6 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
             'target_field': self.target_field,
             'map_title': tr('Affected People'),
         }
-
-        self.set_if_provenance()
 
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 

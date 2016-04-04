@@ -84,8 +84,7 @@ class BatchDialogTest(unittest.TestCase):
         self.assertEqual(status, expected_status, message)
 
     def test_run_all_scenario(self):
-        """Test run single scenario.
-        """
+        """Test run all scenarii."""
         scenarios_dir = test_data_path('control', 'scenarios')
         dialog = BatchDialog(PARENT, IFACE, DOCK)
         dialog.show_results_popup = False

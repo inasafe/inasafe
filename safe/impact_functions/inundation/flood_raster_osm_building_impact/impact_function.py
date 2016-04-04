@@ -83,12 +83,6 @@ class FloodRasterBuildingFunction(
 
     def run(self):
         """Flood impact to buildings (e.g. from Open Street Map)."""
-        self.validate()
-        self.prepare()
-
-        self.provenance.append_step(
-            'Calculating Step',
-            'Impact function is calculating the impact.')
 
         threshold = self.parameters['threshold'].value  # Flood threshold [m]
 
@@ -214,8 +208,6 @@ class FloodRasterBuildingFunction(
             'buildings_total': total_features,
             'buildings_affected': self.total_affected_buildings
         }
-
-        self.set_if_provenance()
 
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 

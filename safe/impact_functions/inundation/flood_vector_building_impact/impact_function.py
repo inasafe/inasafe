@@ -78,12 +78,6 @@ class FloodPolygonBuildingFunction(
 
     def run(self):
         """Experimental impact function."""
-        self.validate()
-        self.prepare()
-
-        self.provenance.append_step(
-            'Calculating Step',
-            'Impact function is calculating the impact.')
 
         # Get parameters from layer's keywords
         self.hazard_class_attribute = self.hazard.keyword('field')
@@ -287,8 +281,6 @@ class FloodPolygonBuildingFunction(
             'buildings_total': self.total_buildings,
             'buildings_affected': self.total_affected_buildings
         }
-
-        self.set_if_provenance()
 
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 

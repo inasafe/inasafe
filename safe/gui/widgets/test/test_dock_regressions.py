@@ -136,7 +136,7 @@ class TestDockRegressions(TestCase):
         # Press RUN
         self.dock.accept()
 
-        safe_layer = self.dock.analysis.impact_layer
+        safe_layer = self.dock.impact_function.impact
         keywords = safe_layer.get_keywords()
         evacuated = float(keywords['evacuated'])
         self.assertLess(evacuated, total_population)
@@ -214,7 +214,7 @@ class TestDockRegressions(TestCase):
         # Press RUN
         self.dock.accept()
 
-        safe_layer = self.dock.analysis.impact_layer
+        safe_layer = self.dock.impact_function.impact
         keywords = safe_layer.get_keywords()
         evacuated = float(keywords['evacuated'])
         self.assertLess(evacuated, total_population)

@@ -110,12 +110,6 @@ class ClassifiedRasterHazardPopulationFunction(
           Map of population exposed to high class
           Table with number of people in each class
         """
-        self.validate()
-        self.prepare()
-
-        self.provenance.append_step(
-            'Calculating Step',
-            'Impact function is calculating the impact.')
 
         # The 3 classes
         # TODO (3.2): shouldnt these be defined in keywords rather? TS
@@ -242,8 +236,6 @@ class ClassifiedRasterHazardPopulationFunction(
             'legend_title': legend_title,
             'total_needs': total_needs
         }
-
-        self.set_if_provenance()
 
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 

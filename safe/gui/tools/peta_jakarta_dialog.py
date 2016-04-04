@@ -195,7 +195,7 @@ class PetaJakartaDialog(QDialog, FORM_CLASS):
         source = (
             'https://rem.petajakarta.org/banjir/data/api/v2/rem/flooded')
         layer = QgsVectorLayer(source, 'flood', 'ogr', False)
-        self.time_stamp = time.strftime('%d-%b-%G %H:%M:%S')
+        self.time_stamp = time.strftime('%d-%b-%Y %H:%M:%S')
         # Now save as shp
         name = 'jakarta_flood.shp'
         output_directory = self.output_directory.text()
