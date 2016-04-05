@@ -83,7 +83,7 @@ class BuildingExposureReportMixin(ReportMixin):
         """Action Checklist Data.
         """
         title = tr('Action checklist')
-        fields =  [
+        fields = [
             tr('Which structures have warning capacity (eg. sirens, speakers, '
                'etc.)?'),
             tr('Are the water and electricity services still operating?'),
@@ -153,8 +153,7 @@ class BuildingExposureReportMixin(ReportMixin):
                 for affect_type, number_affected in affected_breakdown.items():
                     count = affect_types.index(affect_type)
                     total_affected[count] += number_affected
-            field = []
-            field.append(tr(category))
+            field = [tr(category)]
             for affected in total_affected:
                 field.append(affected)
             fields.append(field)
@@ -193,27 +192,23 @@ class BuildingExposureReportMixin(ReportMixin):
         message.add(table)
         return message
 
-    def format_buildings_breakdown(self):
-        """Breakdown by building type.
+    def buildings_breakdown(self):
+        """Create building breakdown as data.
 
-        :returns: The buildings breakdown report.
-        :rtype: safe.messaging.Message
+        :returns: Building Breakdown in dictionary format.
+        :rtype: dict
         """
-        message = m.Message(style_class='container')
-        table = m.Table(style_class='table table-condensed table-striped')
-        table.caption = None
         impact_names = self.affected_buildings.keys()  # e.g. flooded, wet, dry
-
-        row = m.Row()
-        row.add(m.Cell('Building type', header=True))
+        attributes = ['Building Type']
         for name in impact_names:
-            row.add(m.Cell(tr(name), header=True, align='right'))
+            attributes.append(tr(name))
         # Only show not affected building row if the IF does not use custom
         # affected categories
         if self._affected_categories == self.affected_buildings.keys():
-            row.add(m.Cell(tr('Not Affected'), header=True, align='right'))
-        row.add(m.Cell(tr('Total'), header=True, align='right'))
-        table.add(row)
+            attributes.append(tr('Not Affected'))
+        attributes.append(tr('Total'))
+
+        fields = []
 
         # Let's sort alphabetically first
         building_types = [building_type for building_type in self.buildings]
@@ -231,7 +226,7 @@ class BuildingExposureReportMixin(ReportMixin):
         impact_totals.append(0)
         # Now build the main table
         for building_type in building_types:
-            row = m.Row()
+            row = []
             building_type_name = building_type.replace('_', ' ')
             impact_subtotals = []
             for name in impact_names:
@@ -241,7 +236,7 @@ class BuildingExposureReportMixin(ReportMixin):
                             building_type].values()[0])
                 else:
                     impact_subtotals.append(0)
-            row.add(m.Cell(building_type_name.capitalize(), header=True))
+            row.append(building_type_name.capitalize())
             # Only show not affected building row if the IF does not use custom
             # affected categories
             if self._affected_categories == self.affected_buildings.keys():
@@ -250,16 +245,13 @@ class BuildingExposureReportMixin(ReportMixin):
                     self.buildings[building_type] - sum(impact_subtotals))
             # list out the subtotals for this category per impact type
             for value in impact_subtotals:
-                row.add(m.Cell(format_int(value), align='right'))
+                row.append(value)
 
             # totals column
             line_total = format_int(self.buildings[building_type])
             impact_subtotals.append(self.buildings[building_type])
-            row.add(m.Cell(
-                line_total,
-                header=True,
-                align='right'))
-            table.add(row)
+            row.append(line_total)
+            fields.append(row)
             # add the subtotal to the cumulative total
             # see http://stackoverflow.com/questions/18713321/element
             #     -wise-addition-of-2-lists-in-python
@@ -267,10 +259,48 @@ class BuildingExposureReportMixin(ReportMixin):
             impact_totals = map(add, impact_totals, impact_subtotals)
 
         # list out the TOTALS for this category per impact type
-        row = m.Row()
-        row.add(m.Cell(tr('Total'), header=True))
+        row = []
+        row.append(tr('Total'))
         for value in impact_totals:
-            row.add(m.Cell(format_int(value), align='right', header=True))
+            row.append(format_int(value))
+        fields.append(row)
+
+        return {
+            'attributes': attributes,
+            'fields': fields
+        }
+
+    def format_buildings_breakdown(self):
+        """Breakdown by building type.
+
+        :returns: The buildings breakdown report.
+        :rtype: safe.messaging.Message
+        """
+        building_breakdowns = self.buildings_breakdown()
+
+        message = m.Message(style_class='container')
+        table = m.Table(style_class='table table-condensed table-striped')
+        table.caption = None
+
+        # Table header
+        row = m.Row()
+        for attribute in building_breakdowns['attributes']:
+            row.add(m.Cell(tr(attribute), header=True, align='right'))
+        table.add(row)
+
+        # Fields
+        for record in building_breakdowns['fields'][:-1]:
+            row = m.Row()
+            # Bold the 1st one
+            row.add(m.Cell(tr(record[0]), header=True, align='right'))
+            for content in record[1:]:
+                row.add(m.Cell(tr(content), align='right'))
+            table.add(row)
+
+        # Total Row
+        row = m.Row()
+        for content in building_breakdowns['fields'][-1]:
+            row.add(m.Cell(tr(content), header=True, align='right'))
         table.add(row)
 
         message.add(table)
