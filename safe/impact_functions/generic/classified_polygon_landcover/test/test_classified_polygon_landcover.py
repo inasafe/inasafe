@@ -56,7 +56,7 @@ class TestClassifiedPolygonLandCoverFunction(unittest.TestCase):
         self.assertEqual(impact.dataProvider().featureCount(), 7)
         features = {}
         for f in impact.getFeatures():
-            type_tuple = f['FCODE'], f["hazard"]
+            type_tuple = f['FCODE'], f[function.target_field]
             features[type_tuple] = round(f.geometry().area(), 1)
         expected_features = {
             (u'Meadow', u'high'): 250000.,

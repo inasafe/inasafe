@@ -109,8 +109,7 @@ class ClassifiedPolygonHazardLandCoverFunction(
         # create impact layer
         filename = unique_filename(suffix='.shp')
         impact_fields = exposure.dataProvider().fields()
-        impact_fields.append(QgsField(self.target_field, QVariant.Int))
-        impact_fields.append(QgsField("hazard", QVariant.String))
+        impact_fields.append(QgsField(self.target_field, QVariant.String))
         writer = QgsVectorFileWriter(
             filename, "utf-8", impact_fields, QGis.WKBPolygon, exposure.crs())
 
@@ -159,7 +158,7 @@ class ClassifiedPolygonHazardLandCoverFunction(
                 # write the impacted geometry
                 f_impact = QgsFeature(impact_fields)
                 f_impact.setGeometry(impact_geometry)
-                f_impact.setAttributes(f.attributes()+[1, hazard_type])
+                f_impact.setAttributes(f.attributes()+[hazard_type])
                 writer.addFeature(f_impact)
 
                 impacted_geometries.append(impact_geometry)
@@ -179,7 +178,7 @@ class ClassifiedPolygonHazardLandCoverFunction(
             #         geometry_out.wkbType() == QGis.WKBMultiPolygon):
             #     f_out = QgsFeature(impact_fields)
             #     f_out.setGeometry(geometry_out)
-            #     f_out.setAttributes(f.attributes()+[0, self._not_affected_value])
+            #     f_out.setAttributes(f.attributes()+[self._not_affected_value])
             #     writer.addFeature(f_out)
 
         del writer
@@ -193,8 +192,16 @@ class ClassifiedPolygonHazardLandCoverFunction(
         transparent_color.setAlpha(0)
         style_classes = [
             dict(
-                label=tr('Affected'), value=1,
-                colour=transparent_color, border_color='#F31A1C',
+                label=tr('High'), value='high',
+                colour='#F31A1C', border_color='#000000',
+                transparency=0, size=0.5),
+            dict(
+                label=tr('Medium'), value='medium',
+                colour='#ffe691', border_color='#000000',
+                transparency=0, size=0.5),
+            dict(
+                label=tr('Low'), value='low',
+                colour='#acffb6', border_color='#000000',
                 transparency=0, size=0.5)]
         style_info = dict(
             target_field=self.target_field,
