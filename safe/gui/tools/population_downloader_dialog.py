@@ -9,7 +9,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 """
 __author__ = 'oscar mbita (mgwetam@gmail.com)'
-__revision__ = 'b9e2d7536ddcf682e32a156d6d8b0dbc0bb73cc4'
 __date__ = '8/2/2016'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
@@ -171,8 +170,6 @@ class PopulationDownloaderDialog(QDialog, FORM_CLASS):
         self.x_maximum.setValue(extent[2])
         self.y_maximum.setValue(extent[3])
 
-
-
     def update_extent_from_map_canvas(self):
         """Update extent value in GUI based from value in map.
         .. note:: Delegates to update_extent()
@@ -311,7 +308,7 @@ class PopulationDownloaderDialog(QDialog, FORM_CLASS):
             output_prefix,
             feature_type,
             overwrite):
-        """Get a full base name path to save the shapefile.
+        """Get a full base name path to save the geojson.
         :param output_directory: The directory where to put results.
         :type output_directory: str
         :param output_prefix: The prefix to add for the file.
@@ -416,15 +413,7 @@ class PopulationDownloaderDialog(QDialog, FORM_CLASS):
         """
 
         path = '%s.geojson' % base_path
-
-        uri = "file:///home/samweli/Desktop/WB/OPENDATA/SOFTWARES/DOCS/worldpop/test.csv?delimiter=%s&x=%s&y=%s" % (",", "x", "y")
-        layer = QgsVectorLayer(uri, "test", "delimitedtext")
-
-        if not layer.isValid():
-            print "Layer failed to load!"
-
-        # self.iface.addVectorLayer('', 'test', 'delimitedtext')
-
+        
     def reject(self):
         """Redefinition of the reject() method
         to remove the rectangle selection tool.
