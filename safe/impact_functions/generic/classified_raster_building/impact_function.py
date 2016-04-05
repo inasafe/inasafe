@@ -49,19 +49,22 @@ class ClassifiedRasterHazardBuildingFunction(
         # From BuildingExposureReportMixin
         self.building_report_threshold = 25
 
-    def format_notes(self):
-        """Return the notes section of the report.
+    def notes(self):
+        """Return the notes section of the report as dict.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: safe.messaging.Message
+        :rtype: dict
         """
-        message = m.Message()
-        message.add(m.Heading(
-            tr('Notes and assumptions'), **styles.INFO_STYLE))
-        message.add(tr(
-            'Map shows buildings affected in low, medium and '
-            'high hazard class areas.'))
-        return message
+        title = tr('Notes and assumptions')
+        fields = [
+            tr('Map shows buildings affected in low, medium and high hazard '
+               'class areas.')
+        ]
+
+        return {
+            'title': title,
+            'fields': fields
+        }
 
     def run(self):
         """Classified hazard impact to buildings (e.g. from Open Street Map).

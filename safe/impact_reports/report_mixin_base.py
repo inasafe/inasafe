@@ -64,3 +64,11 @@ class ReportMixin(object):
         is overwritten in the IF if needed.
         """
         return m.Message()
+
+    def notes(self):
+        """
+        """
+        return {
+            'title': '',
+            'fields': []
+        }

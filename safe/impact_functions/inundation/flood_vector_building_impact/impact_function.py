@@ -55,26 +55,25 @@ class FloodPolygonBuildingFunction(
         # From BuildingExposureReportMixin
         self.building_report_threshold = 25
 
-    def format_notes(self):
-        """Return the notes section of the report.
+    def notes(self):
+        """Return the notes section of the report as dict.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: safe.messaging.Message
+        :rtype: dict
         """
-        message = m.Message(style_class='container')
-        message.add(m.Heading(
-            tr('Notes and assumptions'), **styles.INFO_STYLE))
-        checklist = m.BulletedList()
-        checklist.add(tr(
-            'Buildings are flooded when in a region with '
-            'field "%s" in "%s".') % (
-                self.hazard_class_attribute,
-                ', '.join([
-                    unicode(hazard_class) for
-                    hazard_class in self.hazard_class_mapping[self.wet]
-                ])))
-        message.add(checklist)
-        return message
+        title = tr('Notes and assumptions')
+        hazard_classes_string = ', '.join(
+            [unicode(hazard_class) for hazard_class in
+             self.hazard_class_mapping[self.wet]])
+        fields = [
+            tr('Buildings are flooded when in a region with field "%s" in '
+               '"%s".') % (self.hazard_class_attribute, hazard_classes_string)
+        ]
+
+        return {
+            'title': title,
+            'fields': fields
+        }
 
     def run(self):
         """Experimental impact function."""

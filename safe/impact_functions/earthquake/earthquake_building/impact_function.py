@@ -50,41 +50,36 @@ class EarthquakeBuildingFunction(
         # This value will not be overwrite by a parameter. #2468
         self.building_report_threshold = 25
 
-    def format_notes(self):
-        """Return the notes section of the report.
+    def notes(self):
+        """Return the notes section of the report as dict.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: safe.messaging.Message
+        :rtype: dict
         """
-        message = m.Message(style_class='container')
-        message.add(
-            m.Heading(tr('Notes and assumptions'), **styles.INFO_STYLE))
-        checklist = m.BulletedList()
-
+        title = tr('Notes and assumptions')
         # Thresholds for mmi breakdown.
         t0 = self.parameters['low_threshold'].value
         t1 = self.parameters['medium_threshold'].value
         t2 = self.parameters['high_threshold'].value
         is_nexis = self.is_nexis
 
-        checklist.add(tr(
-            'High hazard is defined as shake levels greater '
-            'than %i on the MMI scale.') % t2)
-
-        checklist.add(tr(
-            'Medium hazard is defined as shake levels '
-            'between %i and %i on the MMI scale.') % (t1, t2))
-
-        checklist.add(tr(
-            'Low hazard is defined as shake levels '
-            'between %i and %i on the MMI scale.') % (t0, t1))
+        fields = [
+            tr('High hazard is defined as shake levels greater than %i on '
+               'the MMI scale.') % t2,
+            tr('Medium hazard is defined as shake levels between %i and %i on '
+               'the MMI scale.') % (t1, t2),
+            tr('Low hazard is defined as shake levels between %i and %i on '
+               'the MMI scale.') % (t0, t1)
+        ]
 
         if is_nexis:
-            checklist.add(tr(
+            fields.append(tr(
                 'Values are in units of 1 million Australian Dollars'))
 
-        message.add(checklist)
-        return message
+        return {
+            'title': title,
+            'fields': fields
+        }
 
     def run(self):
         """Earthquake impact to buildings (e.g. from OpenStreetMap)."""

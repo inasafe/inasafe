@@ -272,6 +272,22 @@ class BuildingExposureReportMixin(ReportMixin):
 
         return message
 
+    def format_notes(self):
+        """
+        """
+        notes = self.notes()
+
+        message = m.Message(style_class='container')
+        message.add(
+            m.Heading(notes['title'], **styles.INFO_STYLE))
+        checklist = m.BulletedList()
+
+        for field in notes['fields']:
+            checklist.add(field)
+
+        message.add(checklist)
+        return message
+
     @property
     def schools_closed(self):
         """Get the number of schools

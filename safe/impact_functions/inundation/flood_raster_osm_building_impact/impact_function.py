@@ -47,30 +47,28 @@ class FloodRasterBuildingFunction(
         # From BuildingExposureReportMixin
         self.building_report_threshold = 25
 
-    def format_notes(self):
-        """Return the notes section of the report.
+    def notes(self):
+        """Return the notes section of the report as dict.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: safe.messaging.Message
+        :rtype: dict
         """
-        message = m.Message(style_class='container')
+        title = tr('Notes and assumptions')
         threshold = self.parameters['threshold'].value
-        message.add(
-            m.Heading(tr('Notes and assumptions'), **styles.INFO_STYLE))
-        checklist = m.BulletedList()
-        checklist.add(tr(
-            'Buildings are flooded when flood levels '
-            'exceed %.1f m') % threshold)
-        checklist.add(tr(
-            'Buildings are wet when flood levels '
-            'are greater than 0 m but less than %.1f m') % threshold)
-        checklist.add(tr(
-            'Buildings are dry when flood levels are 0 m.'))
-        checklist.add(tr(
-            'Buildings are closed if they are flooded or wet.'))
-        checklist.add(tr('Buildings are open if they are dry.'))
-        message.add(checklist)
-        return message
+        fields = [
+            tr('Buildings are flooded when flood levels exceed %.1f m')
+            % threshold,
+            tr('Buildings are wet when flood levels are greater than 0 m but '
+               'less than %.1f m') % threshold,
+            tr('Buildings are dry when flood levels are 0 m.'),
+            tr('Buildings are closed if they are flooded or wet.'),
+            tr('Buildings are open if they are dry.')
+        ]
+
+        return {
+            'title': title,
+            'fields': fields
+        }
 
     @property
     def _affected_categories(self):

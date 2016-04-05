@@ -62,62 +62,51 @@ class TsunamiRasterBuildingFunction(
         # From BuildingExposureReportMixin
         self.building_report_threshold = 25
 
-    def format_notes(self):
-        """Return the notes section of the report.
+    def notes(self):
+        """Return the notes section of the report as dict.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: safe.messaging.Message
+        :rtype: dict
         """
-        message = m.Message(style_class='container')
-        message.add(
-            m.Heading(tr('Notes and assumptions'), **styles.INFO_STYLE))
-        checklist = m.BulletedList()
+        title = tr('Notes and assumptions')
 
         # Thresholds for tsunami hazard zone breakdown.
         low_max = self.parameters['low_threshold']
         medium_max = self.parameters['medium_threshold']
         high_max = self.parameters['high_threshold']
 
-        checklist.add(tr(
-            'Dry zone is defined as non-inundated area or has inundation '
-            'depth is 0 %s') % (low_max.unit.abbreviation)
-        )
+        fields = [
+            tr('Dry zone is defined as non-inundated area or has inundation '
+               'depth is 0 %s') % (low_max.unit.abbreviation),
+            tr('Low tsunami hazard zone is defined as inundation depth is '
+               'more than 0 %s but less than %.1f %s') % (
+                low_max.unit.abbreviation,
+                low_max.value,
+                low_max.unit.abbreviation),
+            tr('Moderate tsunami hazard zone is defined as inundation depth '
+               'is more than %.1f %s but less than %.1f %s') % (
+                low_max.value,
+                low_max.unit.abbreviation,
+                medium_max.value,
+                medium_max.unit.abbreviation),
+            tr('High tsunami hazard zone is defined as inundation depth is '
+               'more than %.1f %s but less than %.1f %s') % (
+                medium_max.value,
+                medium_max.unit.abbreviation,
+                high_max.value,
+                high_max.unit.abbreviation),
+            tr('Very high tsunami hazard zone is defined as inundation depth '
+               'is more than %.1f %s') % (
+                high_max.value, high_max.unit.abbreviation),
+            tr('Buildings are closed if they are in low, moderate, high, or '
+               'very high tsunami hazard zone.'),
+            tr('Buildings are opened if they are in dry zone.')
+        ]
 
-        checklist.add(tr(
-            'Low tsunami hazard zone is defined as inundation depth is more '
-            'than 0 %s but less than %.1f %s') % (
-            low_max.unit.abbreviation,
-            low_max.value,
-            low_max.unit.abbreviation)
-        )
-        checklist.add(tr(
-            'Moderate tsunami hazard zone is defined as inundation depth is '
-            'more than %.1f %s but less than %.1f %s') % (
-            low_max.value,
-            low_max.unit.abbreviation,
-            medium_max.value,
-            medium_max.unit.abbreviation)
-        )
-        checklist.add(tr(
-            'High tsunami hazard zone is defined as inundation depth is '
-            'more than %.1f %s but less than %.1f %s') % (
-            medium_max.value,
-            medium_max.unit.abbreviation,
-            high_max.value,
-            high_max.unit.abbreviation)
-        )
-        checklist.add(tr(
-            'Very high tsunami hazard zone is defined as inundation depth is '
-            'more than %.1f %s') % (
-            high_max.value, high_max.unit.abbreviation))
-
-        checklist.add(tr(
-            'Buildings are closed if they are in low, moderate, high, or very '
-            'high tsunami hazard zone.'))
-        checklist.add(tr(
-            'Buildings are opened if they are in dry zone.'))
-        message.add(checklist)
-        return message
+        return {
+            'title': title,
+            'fields': fields
+        }
 
     @property
     def _affected_categories(self):
