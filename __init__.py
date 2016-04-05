@@ -84,7 +84,4 @@ if os.path.exists(translation_path):
 def classFactory(iface):
     """Load Plugin class from file Plugin."""
     from safe.plugin import Plugin
-    sys.path.append('/home/samweli/Setups/pycharm-5.0.1/debug-eggs/pycharm-debug.egg')
-    import pydevd
-    pydevd.settrace('localhost', port=5678, stdoutToServer=True, stderrToServer=True)
     return Plugin(iface)
