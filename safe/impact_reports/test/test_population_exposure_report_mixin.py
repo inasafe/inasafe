@@ -18,7 +18,9 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import unittest
-import safe.impact_functions.core  # pylint: disable=unused-import
+from safe.test.utilities import get_qgis_app
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
 from safe.impact_reports.population_exposure_report_mixin import (
     PopulationExposureReportMixin)
 
