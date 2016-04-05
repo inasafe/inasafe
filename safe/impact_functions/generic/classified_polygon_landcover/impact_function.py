@@ -76,6 +76,12 @@ class ClassifiedPolygonHazardLandCoverFunction(
 
         type_attr = self.parameters['land_cover_type_field'].value
 
+        hazard_class_attribute = self.hazard.keyword('field')
+        hazard_value_to_class = {}
+        for key, values in self.hazard.keyword('value_map').iteritems():
+            for value in values:
+                hazard_value_to_class[value] = key
+
         # prepare objects for re-projection of geometries
         crs_wgs84 = QgsCoordinateReferenceSystem("EPSG:4326")
         hazard_to_exposure = QgsCoordinateTransform(
@@ -104,6 +110,7 @@ class ClassifiedPolygonHazardLandCoverFunction(
         filename = unique_filename(suffix='.shp')
         impact_fields = exposure.dataProvider().fields()
         impact_fields.append(QgsField(self.target_field, QVariant.Int))
+        impact_fields.append(QgsField("hazard", QVariant.String))
         writer = QgsVectorFileWriter(
             filename, "utf-8", impact_fields, QGis.WKBPolygon, exposure.crs())
 
@@ -139,16 +146,20 @@ class ClassifiedPolygonHazardLandCoverFunction(
                    not impact_geometry.wkbType() == QGis.WKBMultiPolygon:
                     continue   # no intersection found
 
+                hazard_value = hazard_features[hazard_id][hazard_class_attribute]
+                hazard_type = hazard_value_to_class.get(hazard_value)
+                landcover_hazard_type = (landcover_type, hazard_type)
+
                 # add to the affected area of this land cover type
-                if landcover_type not in self.imp_landcovers:
-                    self.imp_landcovers[landcover_type] = 0.
+                if landcover_hazard_type not in self.imp_landcovers:
+                    self.imp_landcovers[landcover_hazard_type] = 0.
                 area = area_calc.measure(impact_geometry) / 1e4
-                self.imp_landcovers[landcover_type] += area
+                self.imp_landcovers[landcover_hazard_type] += area
 
                 # write the impacted geometry
                 f_impact = QgsFeature(impact_fields)
                 f_impact.setGeometry(impact_geometry)
-                f_impact.setAttributes(f.attributes()+[1])
+                f_impact.setAttributes(f.attributes()+[1, hazard_type])
                 writer.addFeature(f_impact)
 
                 impacted_geometries.append(impact_geometry)
@@ -168,7 +179,7 @@ class ClassifiedPolygonHazardLandCoverFunction(
             #         geometry_out.wkbType() == QGis.WKBMultiPolygon):
             #     f_out = QgsFeature(impact_fields)
             #     f_out.setGeometry(geometry_out)
-            #     f_out.setAttributes(f.attributes()+[0])
+            #     f_out.setAttributes(f.attributes()+[0, self._not_affected_value])
             #     writer.addFeature(f_out)
 
         del writer

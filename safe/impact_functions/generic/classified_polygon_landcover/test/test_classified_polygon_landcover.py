@@ -53,14 +53,19 @@ class TestClassifiedPolygonLandCoverFunction(unittest.TestCase):
 
         impact = safe_to_qgis_layer(impact)
 
-        self.assertEqual(impact.dataProvider().featureCount(), 3)
+        self.assertEqual(impact.dataProvider().featureCount(), 7)
         features = {}
         for f in impact.getFeatures():
-            features[f['FCODE']] = round(f.geometry().area(), 1)
+            type_tuple = f['FCODE'], f["hazard"]
+            features[type_tuple] = round(f.geometry().area(), 1)
         expected_features = {
-            u'Meadow': 500000.,
-            u'Population': 2000000.,
-            u'Forest': 500000.
+            (u'Meadow', u'high'): 250000.,
+            (u'Meadow', u'medium'): 250000.,
+            (u'Population', u'high'): 1000000.,
+            (u'Population', u'medium'): 500000.,
+            (u'Population', u'low'): 500000.,
+            (u'Forest', u'high'): 250000.,
+            (u'Forest', u'low'): 250000.,
         }
         self.assertEqual(features, expected_features)
 

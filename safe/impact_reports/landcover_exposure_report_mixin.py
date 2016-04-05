@@ -49,45 +49,49 @@ class LandCoverExposureReportMixin(ReportMixin):
         :rtype: safe.messaging.Message
         """
 
-        total_affected_area = round(sum(self.imp_landcovers.values()), 1)
-        total_area = round(sum(self.all_landcovers.values()), 1)
-        percent_affected_area = round(total_affected_area / total_area * 100) if total_area != 0 else 0
+        impact_per_landcover = {}
+        impact_per_hazard = {}
+        for key, area in self.imp_landcovers.iteritems():
+            landcover_type, hazard_type = key
 
+            if landcover_type not in impact_per_landcover:
+                impact_per_landcover[landcover_type] = 0
+            impact_per_landcover[landcover_type] += area
+
+            if hazard_type not in impact_per_hazard:
+                impact_per_hazard[hazard_type] = 0
+            impact_per_hazard[hazard_type] += area
+
+        hazard_classes = [u'high', u'medium', u'low']
 
         message = m.Message(style_class='container')
         table = m.Table(style_class='table table-condensed table-striped')
         table.caption = None
         row = m.Row()
-        row.add(m.Cell(tr('Land Cover Type'), header=True))  # intentionally empty top left cell
         row.add(m.Cell(tr('Affected Area (ha)'), header=True))
-        row.add(m.Cell(tr('Affected Area (%)'), header=True))
-        row.add(m.Cell(tr('Total (ha)'), header=True))
+        for cls in hazard_classes:
+            row.add(m.Cell(cls, header=True))
         table.add(row)
 
         row = m.Row()
         row.add(m.Cell(tr('All')))
-        row.add(m.Cell(format_decimal(0.1, total_affected_area), align='right'))
-        row.add(m.Cell(format_decimal(1, percent_affected_area)+"%", align='right'))
-        row.add(m.Cell(format_decimal(0.1, total_area), align='right'))
-        table.add(row)
-
-        row = m.Row()
-        row.add(m.Cell(tr('Breakdown by land cover type'), header=True))
-        row.add(m.Cell(tr('Affected Area (ha)'), header=True))
-        row.add(m.Cell(tr('Affected Area (%)'), header=True))
-        row.add(m.Cell(tr('Total (ha)'), header=True))
-        table.add(row)
-
-        for t, v in self.all_landcovers.iteritems():
-            affected = self.imp_landcovers[t] if t in self.imp_landcovers else 0.
-            affected_area = round(affected, 1)
-            area = round(v, 1)
-            percent_affected = affected_area / area * 100 if area != 0 else 0
-            row = m.Row()
-            row.add(m.Cell(t))
-            row.add(m.Cell(format_decimal(0.1, affected_area), align='right'))
-            row.add(m.Cell(format_decimal(1, percent_affected)+"%", align='right'))
+        for cls in hazard_classes:
+            area = impact_per_hazard.get(cls, 0)
             row.add(m.Cell(format_decimal(0.1, area), align='right'))
+        table.add(row)
+
+        #row = m.Row()
+        #row.add(m.Cell(tr('Breakdown by land cover type'), header=True))
+        #for cls in hazard_classes:
+        #    row.add(m.Cell(cls, header=True))
+        #table.add(row)
+
+        for landcover_type in sorted(impact_per_landcover.keys()):
+            row = m.Row()
+            row.add(m.Cell(landcover_type))
+            for cls in hazard_classes:
+                area = self.imp_landcovers.get((landcover_type,cls), 0)
+                row.add(m.Cell(format_decimal(0.1, area), align='right'))
             table.add(row)
 
         message.add(table)
