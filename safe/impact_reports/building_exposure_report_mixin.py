@@ -109,7 +109,6 @@ class BuildingExposureReportMixin(ReportMixin):
             'fields': fields
         }
 
-
     def generate_report(self):
         """Breakdown by building type.
 
@@ -139,52 +138,58 @@ class BuildingExposureReportMixin(ReportMixin):
         message.add(checklist)
         return message
 
-    def format_impact_summary(self):
-        """The impact summary as per category.
+    def impact_summary(self):
+        """Create impact summary as data.
 
-        :returns: The impact summary.
-        :rtype: safe.messaging.Message
+        :returns: Impact Summary in dictionary format.
+        :rtype: dict
         """
         affect_types = self._impact_breakdown
-        message = m.Message(style_class='container')
-        table = m.Table(style_class='table table-condensed table-striped')
-        table.caption = None
-        row = m.Row()
-        row.add(m.Cell('', header=True))  # intentionally empty top left cell
-        row.add(m.Cell('Buildings affected', header=True))
+        attributes = ['category', 'value']
+        fields = []
         for (category, building_breakdown) in self.affected_buildings.items():
             total_affected = [0] * len(affect_types)
             for affected_breakdown in building_breakdown.values():
                 for affect_type, number_affected in affected_breakdown.items():
                     count = affect_types.index(affect_type)
                     total_affected[count] += number_affected
-            row = m.Row()
-            row.add(m.Cell(tr(category), header=True))
+            field = []
+            field.append(tr(category))
             for affected in total_affected:
-                row.add(m.Cell(format_int(affected), align='right'))
-            table.add(row)
+                field.append(affected)
+            fields.append(field)
 
         if len(self._affected_categories) > 1:
-            row = m.Row()
-            row.add(m.Cell(tr('Affected buildings'), header=True))
-            row.add(m.Cell(
-                format_int(self.total_affected_buildings), align='right'))
-            table.add(row)
+            fields.append(
+                [tr('Affected buildings'), self.total_affected_buildings])
 
-        # Only show not affected building row if the IF does not use custom
-        # affected categories
         if self._affected_categories == self.affected_buildings.keys():
-            row = m.Row()
-            row.add(m.Cell(tr('Not affected buildings'), header=True))
-            row.add(m.Cell(
-                format_int(self.total_unaffected_buildings), align='right'))
-            table.add(row)
+            fields.append(
+                [tr('Affected buildings'), self.total_unaffected_buildings])
 
-        row = m.Row()
-        row.add(m.Cell(tr('Total'), header=True))
-        row.add(m.Cell(
-            format_int(self.total_buildings), align='right'))
-        table.add(row)
+        fields.append([tr('Total'), self.total_buildings])
+
+        return {
+            'attributes': attributes,
+            'fields': fields
+        }
+
+    def format_impact_summary(self):
+        """The impact summary as per category.
+
+        :returns: The impact summary.
+        :rtype: safe.messaging.Message
+        """
+        impact_summary = self.impact_summary()
+
+        message = m.Message(style_class='container')
+        table = m.Table(style_class='table table-condensed table-striped')
+        table.caption = None
+        for category in impact_summary['fields']:
+            row = m.Row()
+            row.add(m.Cell(category[0], header=True))
+            row.add(m.Cell(category[1], align='right'))
+            table.add(row)
         message.add(table)
         return message
 
@@ -273,7 +278,10 @@ class BuildingExposureReportMixin(ReportMixin):
         return message
 
     def format_notes(self):
-        """
+        """Format notes to be shown to the user.
+
+        :returns: Message object that will be rendered.
+        :rtype: safe.messaging.Message
         """
         notes = self.notes()
 
