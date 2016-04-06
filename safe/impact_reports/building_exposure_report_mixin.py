@@ -79,65 +79,6 @@ class BuildingExposureReportMixin(ReportMixin):
 
         self.impact_data = {}
 
-    def action_checklist(self):
-        """Action Checklist Data.
-        """
-        title = tr('Action checklist')
-        fields = [
-            tr('Which structures have warning capacity (eg. sirens, speakers, '
-               'etc.)?'),
-            tr('Are the water and electricity services still operating?'),
-            tr('Are the health centres still open?'),
-            tr('Are the other public services accessible?'),
-            tr('Which buildings will be evacuation centres?'),
-            tr('Where will we locate the operations centre?'),
-            tr('Where will we locate warehouse and/or distribution centres?'),
-            tr('Are the schools and hospitals still active?'),
-        ]
-        if self.schools_closed > 0:
-            fields.append(tr(
-                'Where will the students from the %s closed schools go to '
-                'study?') % format_int(self.schools_closed))
-        if self.hospitals_closed > 0:
-            fields.append(tr(
-                'Where will the patients from the %s closed hospitals go '
-                'for treatment and how will we transport them?') % format_int(
-                self.hospitals_closed))
-
-        return {
-            'title': title,
-            'fields': fields
-        }
-
-    def generate_report(self):
-        """Breakdown by building type.
-
-        :returns: The report.
-        :rtype: safe.messaging.Message
-        """
-        message = m.Message()
-        message.add(m.Paragraph(self.question))
-        message.add(self.format_impact_summary())
-        message.add(self.format_buildings_breakdown())
-        message.add(self.format_action_checklist())
-        message.add(self.format_notes())
-        return message
-
-    def format_action_checklist(self):
-        """Breakdown by building type.
-
-        :returns: The buildings breakdown report.
-        :rtype: safe.messaging.Message
-        """
-        message = m.Message(style_class='container')
-        message.add(m.Heading(
-            self.action_checklist()['title'], **styles.INFO_STYLE))
-        checklist = m.BulletedList()
-        for text in self.action_checklist()['fields']:
-            checklist.add(text)
-        message.add(checklist)
-        return message
-
     def impact_summary(self):
         """Create impact summary as data.
 
@@ -172,27 +113,6 @@ class BuildingExposureReportMixin(ReportMixin):
             'attributes': attributes,
             'fields': fields
         }
-
-    def format_impact_summary(self):
-        """The impact summary as per category.
-
-        :returns: The impact summary.
-        :rtype: safe.messaging.Message
-        """
-        impact_summary = self.impact_summary()
-        message = m.Message(style_class='container')
-        table = m.Table(style_class='table table-condensed table-striped')
-        table.caption = None
-        for category in impact_summary['fields']:
-            row = m.Row()
-            row.add(m.Cell(category[0], header=True))
-            row.add(m.Cell(format_int(category[1]), align='right'))
-            # For value field, if existed
-            if len(category) > 2:
-                row.add(m.Cell(format_int(category[2]), align='right'))
-            table.add(row)
-        message.add(table)
-        return message
 
     def buildings_breakdown(self):
         """Create building breakdown as data.
@@ -272,6 +192,75 @@ class BuildingExposureReportMixin(ReportMixin):
             'fields': fields
         }
 
+    def action_checklist(self):
+        """Action Checklist Data.
+
+        :returns: An action list in dictionary format.
+        :rtype: dict
+
+        """
+        title = tr('Action checklist')
+        fields = [
+            tr('Which structures have warning capacity (eg. sirens, speakers, '
+               'etc.)?'),
+            tr('Are the water and electricity services still operating?'),
+            tr('Are the health centres still open?'),
+            tr('Are the other public services accessible?'),
+            tr('Which buildings will be evacuation centres?'),
+            tr('Where will we locate the operations centre?'),
+            tr('Where will we locate warehouse and/or distribution centres?'),
+            tr('Are the schools and hospitals still active?'),
+        ]
+        if self.schools_closed > 0:
+            fields.append(tr(
+                'Where will the students from the %s closed schools go to '
+                'study?') % format_int(self.schools_closed))
+        if self.hospitals_closed > 0:
+            fields.append(tr(
+                'Where will the patients from the %s closed hospitals go '
+                'for treatment and how will we transport them?') % format_int(
+                self.hospitals_closed))
+
+        return {
+            'title': title,
+            'fields': fields
+        }
+
+    def generate_report(self):
+        """Breakdown by building type.
+
+        :returns: The report.
+        :rtype: safe.messaging.Message
+        """
+        message = m.Message()
+        message.add(m.Paragraph(self.question))
+        message.add(self.format_impact_summary())
+        message.add(self.format_buildings_breakdown())
+        message.add(self.format_action_checklist())
+        message.add(self.format_notes())
+        return message
+
+    def format_impact_summary(self):
+        """The impact summary as per category.
+
+        :returns: The impact summary.
+        :rtype: safe.messaging.Message
+        """
+        impact_summary = self.impact_summary()
+        message = m.Message(style_class='container')
+        table = m.Table(style_class='table table-condensed table-striped')
+        table.caption = None
+        for category in impact_summary['fields']:
+            row = m.Row()
+            row.add(m.Cell(category[0], header=True))
+            row.add(m.Cell(format_int(category[1]), align='right'))
+            # For value field, if existed
+            if len(category) > 2:
+                row.add(m.Cell(format_int(category[2]), align='right'))
+            table.add(row)
+        message.add(table)
+        return message
+
     def format_buildings_breakdown(self):
         """Breakdown by building type.
 
@@ -308,6 +297,21 @@ class BuildingExposureReportMixin(ReportMixin):
 
         message.add(table)
 
+        return message
+
+    def format_action_checklist(self):
+        """Breakdown by building type.
+
+        :returns: The buildings breakdown report.
+        :rtype: safe.messaging.Message
+        """
+        message = m.Message(style_class='container')
+        message.add(m.Heading(
+            self.action_checklist()['title'], **styles.INFO_STYLE))
+        checklist = m.BulletedList()
+        for text in self.action_checklist()['fields']:
+            checklist.add(text)
+        message.add(checklist)
         return message
 
     def format_notes(self):
