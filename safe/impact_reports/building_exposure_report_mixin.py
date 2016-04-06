@@ -180,7 +180,6 @@ class BuildingExposureReportMixin(ReportMixin):
         :rtype: safe.messaging.Message
         """
         impact_summary = self.impact_summary()
-
         message = m.Message(style_class='container')
         table = m.Table(style_class='table table-condensed table-striped')
         table.caption = None
@@ -188,6 +187,9 @@ class BuildingExposureReportMixin(ReportMixin):
             row = m.Row()
             row.add(m.Cell(category[0], header=True))
             row.add(m.Cell(format_int(category[1]), align='right'))
+            # For value field, if existed
+            if len(category) > 2:
+                row.add(m.Cell(format_int(category[2]), align='right'))
             table.add(row)
         message.add(table)
         return message
