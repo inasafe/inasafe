@@ -27,6 +27,8 @@ export PATH=${QGIS_PREFIX_PATH}/bin:$PATH
 
 export INASAFE_WORK_DIR=/home/realtime
 export INASAFE_LOCALE=id
+export INASAFE_REALTIME_PROJECT=/home/realtime/analysis_data/realtime.qgs
+export INASAFE_REALTIME_TEMPLATE=/home/realtime/analysis_data/realtime-template.qpt
 # if the parameter is set in production mode, do not overwrite the variable
 # if it is not, we can put test variable here
 if [ -z "$INASAFE_REALTIME_REST_URL" ];

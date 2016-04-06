@@ -381,7 +381,7 @@ class TestShakeEvent(unittest.TestCase):
             'elapsed-time-name': u'Elapsed time since event',
             'exposure-table-name': u'Estimated number of people '
                                    u'affected by each MMI level',
-            'longitude-value': u'140\xb037\'12.00"E',
+            'longitude-value': u'140\xb037\u203212.00\u2033E',
             'city-table-name': u'Nearby Places',
             'bearing-text': u'bearing',
             'limitations': (
@@ -406,15 +406,15 @@ class TestShakeEvent(unittest.TestCase):
             'mmi': '3.6',
             'map-name': u'Estimated Earthquake Impact',
             'date': '5-11-2013',
-            'bearing-degrees': '0.00\xb0',
+            'bearing-degrees': '-37.75\xb0',
             'formatted-date-time': '05-Nov-13 06:08:09 +0707',
-            'distance': '0.00',
+            'distance': '0.02',
             'direction-relation': u'of',
             'software-tag': software_tag,
             'credits': (
                 u'Supported by the Australian Government, Geoscience '
                 u'Australia and the World Bank-GFDRR.'),
-            'latitude-value': u'2\xb025\'48.00"S',
+            'latitude-value': u'2\xb025\u203248.00\u2033S',
             'time': '6:8:9',
             'depth-value': '10.0'}
         result['elapsed-time'] = u''

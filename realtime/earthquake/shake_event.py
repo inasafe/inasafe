@@ -11,6 +11,8 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+import time
+
 __author__ = 'tim@kartoza.com'
 __version__ = '0.5.0'
 __date__ = '1/08/2012'
@@ -59,6 +61,9 @@ from PyQt4.QtCore import (
     QTranslator)
 # noinspection PyPackageRequirements
 from PyQt4.QtXml import QDomDocument
+from PyQt4.QtGui import (
+    QPainter,
+    QImage)
 
 from safe.test.utilities import get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -495,7 +500,7 @@ class ShakeEvent(QObject):
         uri = QgsDataSourceURI()
         uri.setDatabase(db_path)
         table = 'geonames'
-        geometry_column = 'geom'
+        geometry_column = 'geometry'
         schema = ''
         uri.setDataSource(schema, table, geometry_column)
         layer = QgsVectorLayer(uri.uri(), 'Towns', 'spatialite')
@@ -1340,8 +1345,8 @@ class ShakeEvent(QObject):
         logging.info('Created: %s', impacts_html_path)
 
         # Load our project
-        if 'INSAFE_REALTIME_PROJECT' in os.environ:
-            project_path = os.environ['INSAFE_REALTIME_PROJECT']
+        if 'INASAFE_REALTIME_PROJECT' in os.environ:
+            project_path = os.environ['INASAFE_REALTIME_PROJECT']
         else:
             project_path = os.path.join(data_dir(), 'realtime.qgs')
         # noinspection PyArgumentList
@@ -1367,8 +1372,8 @@ class ShakeEvent(QObject):
         QgsMapLayerRegistry.instance().addMapLayers(layers_to_add)
 
         # Load our template
-        if 'INSAFE_REALTIME_TEMPLATE' in os.environ:
-            template_path = os.environ['INSAFE_REALTIME_TEMPLATE']
+        if 'INASAFE_REALTIME_TEMPLATE' in os.environ:
+            template_path = os.environ['INASAFE_REALTIME_TEMPLATE']
         else:
             template_path = os.path.join(data_dir(), 'realtime-template.qpt')
 
@@ -1457,6 +1462,22 @@ class ShakeEvent(QObject):
             # no nearby cities with a valid mmi value are found - e.g.
             # if the event is way out in the ocean.
             LOGGER.info('No nearby cities found.')
+
+        # redraw things
+        # dpi = composition.printResolution()
+        # dpmm = dpi / 25.4
+        # width = int(dpmm * composition.paperWidth())
+        # height = int(dpmm * composition.paperHeight())
+        #
+        # image = QImage(QSize(width, height), QImage.Format_ARGB32)
+        # image.setDotsPerMeterX(dpmm * 1000)
+        # image.setDotsPerMeterY(dpmm * 1000)
+        # image.fill(0)
+        #
+        # image_painter = QPainter(image)
+        # composition.renderPage(image_painter, 0)
+        # image_painter.end()
+        # image.save(image_path)
 
         # Save a pdf.
         composition.exportAsPDF(pdf_path)
