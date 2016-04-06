@@ -164,7 +164,7 @@ class BuildingExposureReportMixin(ReportMixin):
 
         if self._affected_categories == self.affected_buildings.keys():
             fields.append(
-                [tr('Affected buildings'), self.total_unaffected_buildings])
+                [tr('Not affected buildings'), self.total_unaffected_buildings])
 
         fields.append([tr('Total'), self.total_buildings])
 
@@ -187,7 +187,7 @@ class BuildingExposureReportMixin(ReportMixin):
         for category in impact_summary['fields']:
             row = m.Row()
             row.add(m.Cell(category[0], header=True))
-            row.add(m.Cell(category[1], align='right'))
+            row.add(m.Cell(format_int(category[1]), align='right'))
             table.add(row)
         message.add(table)
         return message
@@ -199,7 +199,7 @@ class BuildingExposureReportMixin(ReportMixin):
         :rtype: dict
         """
         impact_names = self.affected_buildings.keys()  # e.g. flooded, wet, dry
-        attributes = ['Building Type']
+        attributes = ['Building type']
         for name in impact_names:
             attributes.append(tr(name))
         # Only show not affected building row if the IF does not use custom
