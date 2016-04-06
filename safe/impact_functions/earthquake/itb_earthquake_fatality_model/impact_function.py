@@ -182,28 +182,31 @@ class ITBFatalityFunction(
         total_fatalities = self.total_fatalities
         total_displaced = self.total_evacuated
         rounded_displaced = format_int(population_rounding(total_displaced))
-        message = m.Message(style_class='container')
-        message.add(m.Heading(tr('Action checklist'), **styles.INFO_STYLE))
-        checklist = m.BulletedList()
+
+        title = 'Action checklist'
+        fields = []
         if total_fatalities:
-            checklist.add(tr(
+            fields.append(tr(
                 'Are there enough victim identification units available '
                 'for %s people?') % (
                     format_int(population_rounding(total_fatalities))))
         if total_displaced:
-            checklist.add(tr(
+            fields.append(tr(
                 'Are there enough shelters and relief items available for '
                 '%s people?') % rounded_displaced)
         if rounded_displaced:
-            checklist.add(tr(
+            fields.append(tr(
                 'If yes, where are they located and how will we '
                 'distribute them?'))
         if total_displaced:
-            checklist.add(tr(
+            fields.append(tr(
                 'If no, where can we obtain additional relief items '
                 'from and how will we transport them?'))
-        message.add(checklist)
-        return message
+
+        return {
+            'title': title,
+            'fields': fields
+        }
 
     def format_notes(self):
         """Notes and caveats for the IF report.

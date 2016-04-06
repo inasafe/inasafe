@@ -108,21 +108,6 @@ class PopulationExposureReportMixin(ReportMixin):
             'fields': fields
         }
 
-    def format_action_checklist(self):
-        """Breakdown by building type.
-
-        :returns: The buildings breakdown report.
-        :rtype: safe.messaging.Message
-        """
-        message = m.Message(style_class='container')
-        message.add(m.Heading(
-            self.action_checklist()['title'], **styles.INFO_STYLE))
-        checklist = m.BulletedList()
-        for text in self.action_checklist()['fields']:
-            checklist.add(text)
-        message.add(checklist)
-        return message
-
     def impact_summary(self):
         """
         """

@@ -299,40 +299,6 @@ class BuildingExposureReportMixin(ReportMixin):
 
         return message
 
-    def format_action_checklist(self):
-        """Breakdown by building type.
-
-        :returns: The buildings breakdown report.
-        :rtype: safe.messaging.Message
-        """
-        message = m.Message(style_class='container')
-        message.add(m.Heading(
-            self.action_checklist()['title'], **styles.INFO_STYLE))
-        checklist = m.BulletedList()
-        for text in self.action_checklist()['fields']:
-            checklist.add(text)
-        message.add(checklist)
-        return message
-
-    def format_notes(self):
-        """Format notes to be shown to the user.
-
-        :returns: Message object that will be rendered.
-        :rtype: safe.messaging.Message
-        """
-        notes = self.notes()
-
-        message = m.Message(style_class='container')
-        message.add(
-            m.Heading(notes['title'], **styles.INFO_STYLE))
-        checklist = m.BulletedList()
-
-        for field in notes['fields']:
-            checklist.add(field)
-
-        message.add(checklist)
-        return message
-
     @property
     def schools_closed(self):
         """Get the number of schools

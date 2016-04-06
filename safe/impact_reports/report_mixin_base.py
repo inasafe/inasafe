@@ -37,14 +37,6 @@ class ReportMixin(object):
         """
         return m.Message()
 
-    def format_action_checklist(self):
-        """The actions to be taken in for the impact on this exposure type.
-
-        :returns: The action checklist.
-        :rtype: safe.messaging.Message
-        """
-        return m.Message()
-
     def format_impact_summary(self):
         """The impact summary.
 
@@ -53,17 +45,39 @@ class ReportMixin(object):
         """
         return m.Message()
 
-    def format_notes(self):
-        """Additional notes to be used.
+    def format_action_checklist(self):
+        """Breakdown by building type.
 
-        :return: The notes to be added to this report
+        :returns: The buildings breakdown report.
         :rtype: safe.messaging.Message
-
-        ..Notes:
-        Notes are very much specific to IFs so it is expected that this method
-        is overwritten in the IF if needed.
         """
-        return m.Message()
+        message = m.Message(style_class='container')
+        message.add(m.Heading(
+            self.action_checklist()['title'], **styles.INFO_STYLE))
+        checklist = m.BulletedList()
+        for text in self.action_checklist()['fields']:
+            checklist.add(text)
+        message.add(checklist)
+        return message
+
+    def format_notes(self):
+        """Format notes to be shown to the user.
+
+        :returns: Message object that will be rendered.
+        :rtype: safe.messaging.Message
+        """
+        notes = self.notes()
+
+        message = m.Message(style_class='container')
+        message.add(
+            m.Heading(notes['title'], **styles.INFO_STYLE))
+        checklist = m.BulletedList()
+
+        for field in notes['fields']:
+            checklist.add(field)
+
+        message.add(checklist)
+        return message
 
     def notes(self):
         """
