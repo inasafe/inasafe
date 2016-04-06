@@ -295,8 +295,9 @@ class BuildingExposureReportMixin(ReportMixin):
             row = m.Row()
             # Bold the 1st one
             row.add(m.Cell(tr(record[0]), header=True, align='right'))
-            for content in record[1:]:
-                row.add(m.Cell(tr(content), align='right'))
+            for content in record[1:-1]:
+                row.add(m.Cell(format_int(content), align='right'))
+            row.add(m.Cell(format_int(record[-1]), header=True, align='right'))
             table.add(row)
 
         # Total Row
