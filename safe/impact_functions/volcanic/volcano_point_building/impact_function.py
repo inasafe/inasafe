@@ -43,7 +43,7 @@ class VolcanoPointBuildingFunction(
         super(VolcanoPointBuildingFunction, self).__init__()
         self.volcano_names = tr('Not specified in data')
         self._affected_categories_volcano = []
-
+        self.hazard_zone_attribute = 'radius'
         # From BuildingExposureReportMixin
         self.building_report_threshold = 25
 
@@ -130,8 +130,7 @@ class VolcanoPointBuildingFunction(
 
         # Iterate the interpolated building layer
         for i in range(len(features)):
-            hazard_zone_attribute = 'radius'
-            hazard_value = features[i][hazard_zone_attribute]
+            hazard_value = features[i][self.hazard_zone_attribute]
             if not hazard_value:
                 hazard_value = self._not_affected_value
             features[i][target_field] = hazard_value

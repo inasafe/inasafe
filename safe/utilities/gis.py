@@ -662,7 +662,7 @@ def buffer_points(point_layer, radii, hazard_zone_attribute, output_crs):
 
     hazard_file_path = unique_filename(suffix='-polygon-volcano.shp')
     fields = point_layer.fields()
-    fields.append(QgsField(hazard_zone_attribute, QVariant.Int))
+    fields.append(QgsField(hazard_zone_attribute, QVariant.Double))
     writer = QgsVectorFileWriter(
         hazard_file_path,
         'utf-8',

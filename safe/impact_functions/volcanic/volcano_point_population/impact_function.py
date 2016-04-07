@@ -54,6 +54,7 @@ class VolcanoPointPopulationFunction(
         )
         self.no_data_warning = False
         self.volcano_names = tr('Not specified in data')
+        self.hazard_zone_attribute = 'radius'
 
     def notes(self):
         """Return the notes section of the report.
@@ -122,13 +123,8 @@ class VolcanoPointPopulationFunction(
 
         data_table = self.hazard.layer.get_data()
 
-        # Use concentric circles
-        category_title = 'Radius'
-
-        hazard_layer = self.hazard.qgis_layer()
-
         # Get names of volcanoes considered
-        if volcano_name_attribute in hazard_layer.get_attribute_names():
+        if volcano_name_attribute in self.hazard.layer.get_attribute_names():
             volcano_name_list = []
             # Run through all polygons and get unique names
             for row in data_table:
@@ -142,7 +138,7 @@ class VolcanoPointPopulationFunction(
         # Run interpolation function for polygon2raster
         interpolated_layer, covered_exposure_layer = \
             assign_hazard_values_to_exposure_data(
-                hazard_layer,
+                self.hazard.layer,
                 self.exposure.layer,
                 attribute_name=self.target_field
             )
@@ -162,7 +158,7 @@ class VolcanoPointPopulationFunction(
                 population = float(population)
                 # Update population count for this category
                 category = 'Radius %s km ' % format_int(
-                    row[category_title])
+                    row[self.hazard_zone_attribute])
                 self.affected_population[category] += population
 
         # Count totals
