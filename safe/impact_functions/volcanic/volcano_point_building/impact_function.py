@@ -94,7 +94,6 @@ class VolcanoPointBuildingFunction(
         except KeywordNotFoundError:
             self.exposure_class_attribute = None
 
-        hazard_layer = self.hazard.layer
         # Category names for the impact zone
         category_names = radii
         # In kilometers
@@ -102,22 +101,22 @@ class VolcanoPointBuildingFunction(
             tr('Radius %.1f km') % key for key in radii[::]]
 
         # Get names of volcanoes considered
-        if volcano_name_attribute in hazard_layer.get_attribute_names():
+        if volcano_name_attribute in self.hazard.layer.get_attribute_names():
             volcano_name_list = set()
-            for row in hazard_layer.get_data():
+            for row in self.hazard.layer.get_data():
                 # Run through all polygons and get unique names
                 volcano_name_list.add(row[volcano_name_attribute])
             self.volcano_names = ', '.join(volcano_name_list)
 
         # Find the target field name that has no conflict with the attribute
         # names in the hazard layer
-        hazard_attribute_names = hazard_layer.get_attribute_names()
+        hazard_attribute_names = self.hazard.layer.get_attribute_names()
         target_field = get_non_conflicting_attribute_name(
             self.target_field, hazard_attribute_names)
 
         # Run interpolation function for polygon2polygon
         interpolated_layer = assign_hazard_values_to_exposure_data(
-            hazard_layer, self.exposure.layer)
+            self.hazard.layer, self.exposure.layer)
 
         # Extract relevant interpolated layer data
         attribute_names = interpolated_layer.get_attribute_names()
