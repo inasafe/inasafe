@@ -366,7 +366,7 @@ class TestShakeEvent(unittest.TestCase):
 
         # noinspection PyUnresolvedReferences
         expected_dict = {
-            'place-name': u'n/a',
+            'place-name': u'Jayapura',
             'shake-grid-location': u'Papua',
             'depth-name': u'Depth',
             'fatalities-name': u'Estimated fatalities',
@@ -377,11 +377,11 @@ class TestShakeEvent(unittest.TestCase):
             'longitude-name': u'Longitude',
             'located-label': u'Located',
             'distance-unit': u'km',
-            'bearing-compass': u'n/a',
+            'bearing-compass': u'NW',
             'elapsed-time-name': u'Elapsed time since event',
             'exposure-table-name': u'Estimated number of people '
                                    u'affected by each MMI level',
-            'longitude-value': u'140\xb037\'12.00"E',
+            'longitude-value': u'140\xb037\u203212.00\u2033E',
             'city-table-name': u'Nearby Places',
             'bearing-text': u'bearing',
             'limitations': (
@@ -406,15 +406,15 @@ class TestShakeEvent(unittest.TestCase):
             'mmi': '3.6',
             'map-name': u'Estimated Earthquake Impact',
             'date': '5-11-2013',
-            'bearing-degrees': '0.00\xb0',
+            'bearing-degrees': '-37.75\xb0',
             'formatted-date-time': '05-Nov-13 06:08:09 +0707',
-            'distance': '0.00',
+            'distance': '0.02',
             'direction-relation': u'of',
             'software-tag': software_tag,
             'credits': (
                 u'Supported by the Australian Government, Geoscience '
                 u'Australia and the World Bank-GFDRR.'),
-            'latitude-value': u'2\xb025\'48.00"S',
+            'latitude-value': u'2\xb025\u203248.00\u2033S',
             'time': '6:8:9',
             'depth-value': '10.0'}
         result['elapsed-time'] = u''
@@ -432,10 +432,10 @@ class TestShakeEvent(unittest.TestCase):
             event_id=SHAKE_ID,
             data_is_local_flag=True)
         expected_result = (
-            u"M 3.6 5-11-2013 6:8:9 Latitude: 2°25'48.00"
-            u'"S Longitude: 140°37'
-            u"'"
-            u'12.00"E Depth: 10.0km Located 0.00km n/a of Papua')
+            u"M 3.6 5-11-2013 6:8:9 "
+            u"Latitude: 2°25′48.00″S "
+            u"Longitude: 140°37′12.00″E "
+            u"Depth: 10.0km Located 0.02km NW of Papua")
         result = shake_event.event_info()
         message = ('Got:\n%s\nExpected:\n%s\n' %
                    (result, expected_result))
