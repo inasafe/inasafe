@@ -208,52 +208,40 @@ class ITBFatalityFunction(
             'fields': fields
         }
 
-    def format_notes(self):
+    def notes(self):
         """Notes and caveats for the IF report.
 
-        :returns: List of dicts containing notes.
-        :rtype: list
+        :returns: Dicts containing notes.
+        :rtype: dict
         """
-        message = m.Message(style_class='container')
-        message.add(
-            m.Heading(tr('Notes and assumptions'), **styles.INFO_STYLE))
-
-        checklist = m.BulletedList()
-
-        checklist.add(tr(
-            'Total population in the analysis area: %s'
-            ) % format_int(population_rounding(self.total_population)))
-
-        checklist.add(tr(
-            '<sup>1</sup>People are displaced if '
-            'they experience and survive a shake level'
-            'of more than 5 on the MMI scale.'))
-
-        checklist.add(tr(
-            'The fatality calculation assumes that '
-            'no fatalities occur for shake levels below 4 '
-            'and fatality counts of less than 50 are '
-            'disregarded.'))
-
+        title = tr('Notes and assumptions')
+        fields = [
+            tr('Total population in the analysis area: %s') %
+            format_int(population_rounding(self.total_population)),
+            tr('<sup>1</sup>People are displaced if they experience and '
+               'survive a shake level of more than 5 on the MMI scale.'),
+            tr('The fatality calculation assumes that no fatalities occur for '
+               'shake levels below 4 and fatality counts of less than 50 are '
+               'disregarded.')
+        ]
         if self.__class__ != ITBFatalityFunction:
-            checklist.add(tr(
+            fields.append(tr(
                 'Fatality model is from Institut Teknologi Bandung 2012.'))
-            checklist.add(tr(
+            fields.append(tr(
                 'Fatality model is from the Population Vulnerability '
                 'Pager Model.'))
+        fields.extend([
+            tr('Map shows the estimation of displaced population.'),
+            tr('All values are rounded up to the nearest integer in order to '
+               'avoid representing human lives as fractions.'),
+            tr('Population rounding is applied to all population values, '
+               'which may cause discrepancies when adding values.')
+        ])
 
-        checklist.add(tr('Map shows the estimation of displaced population.'))
-
-        checklist.add(tr(get_needs_provenance_value(self.parameters)))
-        checklist.add(tr(
-            'All values are rounded up to the nearest integer in '
-            'order to avoid representing human lives as fractions.'))
-        checklist.add(tr(
-            'Population rounding is applied to all population '
-            'values, which may cause discrepancies when adding values.'))
-
-        message.add(checklist)
-        return message
+        return {
+            'title': title,
+            'fields': fields
+        }
 
     def compute_probability(self, total_fatalities_raw):
         """

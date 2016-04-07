@@ -56,48 +56,48 @@ class VolcanoPointPopulationFunction(
         self.no_data_warning = False
         self.volcano_names = tr('Not specified in data')
 
-    def format_notes(self):
+    def notes(self):
         """Return the notes section of the report.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: safe.messaging.Message
+        :rtype: dict
         """
+        title = tr('Notes and assumptions')
+
         if get_needs_provenance_value(self.parameters) is None:
             needs_provenance = ''
         else:
             needs_provenance = tr(get_needs_provenance_value(self.parameters))
+        fields = [
+            tr('Map shows buildings affected in each of the volcano buffered '
+               'zones.'),
+            tr('Total population in the analysis area: %s') %
+            population_rounding(self.total_population),
+            tr('<sup>1</sup>People need evacuation if they are within the '
+               'volcanic hazard zones.'),
+            tr('Volcanoes considered: %s.') % self.volcano_names,
+            needs_provenance
+        ]
 
-        message = m.Message(style_class='container')
-        message.add(
-            m.Heading(tr('Notes and assumptions'), **styles.INFO_STYLE))
-        checklist = m.BulletedList()
-        checklist.add(tr(
-            'Map shows buildings affected in each of the volcano buffered '
-            'zones.'))
-        checklist.add(tr(
-            'Total population in the analysis area: %s'
-            ) % population_rounding(self.total_population))
-        checklist.add(tr(
-            '<sup>1</sup>People need evacuation if they are within '
-            'the volcanic hazard zones.'))
-        names = tr('Volcanoes considered: %s.') % self.volcano_names
-        checklist.add(names)
-        checklist.add(needs_provenance)
         if self.no_data_warning:
-            checklist.add(tr(
+            fields.append(tr(
                 'The layers contained "no data" values. This missing data '
                 'was carried through to the impact layer.'))
-            checklist.add(tr(
+            fields.append(tr(
                 '"No data" values in the impact layer were treated as 0 '
                 'when counting the affected or total population.'))
-        checklist.add(tr(
-            'All values are rounded up to the nearest integer in '
-            'order to avoid representing human lives as fractions.'))
-        checklist.add(tr(
-            'Population rounding is applied to all population '
-            'values, which may cause discrepancies when adding value.'))
-        message.add(checklist)
-        return message
+
+        fields.extend([
+            tr('All values are rounded up to the nearest integer in order to '
+               'avoid representing human lives as fractions.'),
+            tr('Population rounding is applied to all population values, '
+               'which may cause discrepancies when adding value.')
+        ])
+
+        return {
+            'title': title,
+            'fields': fields
+        }
 
     def run(self):
         """Run volcano point population evacuation Impact Function.

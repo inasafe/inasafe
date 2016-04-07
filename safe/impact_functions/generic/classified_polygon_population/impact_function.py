@@ -59,33 +59,30 @@ class ClassifiedPolygonHazardPopulationFunction(
         self.question = tr(
             'In each of the hazard zones how many people might be impacted.')
 
-    def format_notes(self):
+    def notes(self):
         """Return the notes section of the report.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: safe.messaging.Message
+        :rtype: dict
         """
-        message = m.Message(style_class='container')
-        message.add(m.Heading(
-            tr('Notes and assumptions'), **styles.INFO_STYLE))
-        checklist = m.BulletedList()
+        title = tr('Notes and assumptions')
         population = format_int(population_rounding(self.total_population))
-        checklist.add(tr(
-            'Total population in the analysis area: %s') % population)
-        checklist.add(tr(
-            '<sup>1</sup>People need evacuation if they are in a '
-            'hazard zone.'))
-        checklist.add(tr(
-            'Map shows population count in high, medium, and low '
-            'hazard areas.'))
-        checklist.add(tr(
-            'All values are rounded up to the nearest integer in '
-            'order to avoid representing human lives as fractions.'))
-        checklist.add(tr(
-            'Population rounding is applied to all population '
-            'values, which may cause discrepancies when adding values.'))
-        message.add(checklist)
-        return message
+        fields = [
+            tr('Total population in the analysis area: %s') % population,
+            tr('<sup>1</sup>People need evacuation if they are in a hazard '
+               'zone.'),
+            tr('Map shows population count in high, medium, and low hazard '
+               'areas.'),
+            tr('All values are rounded up to the nearest integer in order to '
+               'avoid representing human lives as fractions.'),
+            tr('Population rounding is applied to all population values, '
+               'which may cause discrepancies when adding values.')
+        ]
+
+        return {
+            'title': title,
+            'fields': fields
+        }
 
     def run(self):
         """Run classified population evacuation Impact Function.

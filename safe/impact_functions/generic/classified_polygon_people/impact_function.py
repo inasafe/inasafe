@@ -79,30 +79,27 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         self.hazard_class_mapping = {}
         self.hazard_class_field = None
 
-    def format_notes(self):
+    def notes(self):
         """Return the notes section of the report.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: safe.messaging.Message
+        :rtype: dict
         """
-        message = m.Message(style_class='container')
-
-        message.add(
-            m.Heading(tr('Notes and assumptions'), **styles.INFO_STYLE))
-        checklist = m.BulletedList()
+        title = tr('Notes and assumptions')
         population = format_int(population_rounding(self.total_population))
-        checklist.add(tr(
-            'The total people in the area is %s') % population)
-        checklist.add(tr(
-            'All values are rounded up to the nearest integer in order to '
-            'avoid representing human lives as fractions.'))
-        checklist.add(tr(
-            'People rounding is applied to all population values, which '
-            'may cause discrepancies when adding values.'))
-        checklist.add(tr('Null value will be considered as zero.'))
+        fields = [
+            tr('The total people in the area is %s') % population,
+            tr('All values are rounded up to the nearest integer in order to '
+               'avoid representing human lives as fractions.'),
+            tr('People rounding is applied to all population values, which '
+               'may cause discrepancies when adding values.'),
+            tr('Null value will be considered as zero.')
+        ]
 
-        message.add(checklist)
-        return message
+        return {
+            'title': title,
+            'fields': fields
+        }
 
     def run(self):
         """Risk plugin for classified polygon hazard on polygon population.
