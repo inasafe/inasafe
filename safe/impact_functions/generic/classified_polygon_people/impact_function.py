@@ -201,8 +201,10 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         # Retrieve the classification that is used by the hazard layer.
         vector_hazard_classification = self.hazard.keyword(
             'vector_hazard_classification')
-        # Get the dictionary that contains the definition of the classification
-        vector_hazard_classification = definition(vector_hazard_classification)
+        # Get the dictionary that contains the definition of the
+        # classification
+        vector_hazard_classification = definition(
+            vector_hazard_classification)
         # Get the list classes in the classification
         vector_hazard_classes = vector_hazard_classification['classes']
 
@@ -244,7 +246,7 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
             style_class['transparency'] = transparency
             style_classes.append(style_class)
 
-            index = index + 1
+            index += 1
 
         style_info = dict(
             target_field=self.target_field,
@@ -325,6 +327,8 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
                 bbox = geometry.boundingBox()
                 geometry_area = geometry.area()
             else:
+                # Skip if it is an empty geometry
+                # Nothing we can do
                 continue
 
             # clip the exposure geometry to requested extent if necessary
@@ -346,7 +350,8 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
             self.all_areas_ids[area_id] += geometry_area
 
             # storing area id with its respective area name in
-            # self.areas_names this will help us in later in showing user names
+            # self.areas_names this will help us in later in
+            # showing user names
             #  and not ids
             if area_id not in self.areas_names:
                 self.areas_names[area_id] = feature[area_name_attribute]
@@ -392,14 +397,6 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
                     area = impact_geometry.area()
 
                     self.all_affected_areas[area_id] += area
-
-                # LOGGER.info('Hazard/Exposure id: %s, %s' % (hazard_id, feature.id()))
-                # if len(impact_geometry.asPolygon()) == 0:
-                #     LOGGER.info('Impact Geometry empty')
-                # if not unaffected_geometry:
-                #     LOGGER.info('Unaffected Geometry None')
-                # elif len(unaffected_geometry.asPolygon()) == 0:
-                #     LOGGER.info('Unaffected Geometry empty')
 
                 all_affected_geometry.append(impact_geometry)
                 self.assign_impact_level(
@@ -464,11 +461,7 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         unaffected_feature = QgsFeature(unaffected_fields)
         impacted_feature = QgsFeature(impact_fields)
 
-        try:
-            unaffected_feature.setGeometry(unaffected_geometry)
-        except Exception as e:
-            LOGGER.info('Hazard Id: %s' % hazard_id)
-            # raise e
+        unaffected_feature.setGeometry(unaffected_geometry)
         impacted_feature.setGeometry(impact_geometry)
 
         hazard = hazard_features[hazard_id]
