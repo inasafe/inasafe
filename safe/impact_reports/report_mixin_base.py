@@ -13,6 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
 __author__ = 'Christian Christelis <christian@kartoza.com>'
 
 import safe.messaging as m
+from safe.messaging import styles
 
 
 class ReportMixin(object):
