@@ -805,13 +805,14 @@ class ImpactFunction(object):
             'Preparation Step',
             'Impact function is being prepared to run the analysis.')
 
-        if is_point_layer(self.hazard.qgis_layer()):
+        qgis_layer = self.hazard.qgis_layer()
+        if is_point_layer(qgis_layer):
             # If the hazard is a point layer, it's a volcano hazard.
             # Make hazard layer by buffering the point.
             # noinspection PyTypeChecker
             radii = self.parameters['distances'].value
             self.hazard = buffer_points(
-                self.hazard.qgis_layer(),
+                qgis_layer,
                 radii,
                 self.hazard_zone_attribute,
                 self.exposure.crs()
