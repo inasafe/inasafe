@@ -19,7 +19,6 @@ from safe.impact_functions.volcanic.volcano_point_population\
 from safe.impact_functions.core import (
     population_rounding,
     has_no_data)
-from safe.engine.core import buffer_points
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.storage.raster import Raster
 from safe.utilities.i18n import tr
@@ -121,22 +120,12 @@ class VolcanoPointPopulationFunction(
         # Get parameters from layer's keywords
         volcano_name_attribute = self.hazard.keyword('volcano_name_field')
 
-        # Input checks
-        if not self.hazard.layer.is_point_data:
-            msg = (
-                'Input hazard must be a polygon or point layer. I got %s with '
-                'layer type %s' % (
-                    self.hazard.name, self.hazard.layer.get_geometry_name()))
-            raise Exception(msg)
-
         data_table = self.hazard.layer.get_data()
 
         # Use concentric circles
         category_title = 'Radius'
 
-        centers = self.hazard.layer.get_geometry()
-        hazard_layer = buffer_points(
-            centers, radii, category_title, data_table=data_table)
+        hazard_layer = self.hazard.qgis_layer()
 
         # Get names of volcanoes considered
         if volcano_name_attribute in hazard_layer.get_attribute_names():

@@ -10,13 +10,9 @@ import logging
 
 from PyQt4.QtCore import QSettings
 
-from safe.common.exceptions import RadiiException
-from safe.gis.geodesy import Point
-from safe.storage.geometry import Polygon
 from safe.storage.projection import Projection
 from safe.storage.projection import DEFAULT_PROJECTION
 from safe.common.utilities import unique_filename, verify
-from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
 from safe.utilities.utilities import replace_accentuated_characters
 
@@ -269,67 +265,3 @@ def calculate_impact(impact_function):
 
     # Return layer object
     return result_layer
-
-
-def buffer_points(centers, radii, hazard_zone_attribute, data_table=None):
-    """Buffer points for each center with defined radii.
-
-    If the data_table is defined, then the data will also be copied to the
-    result. This function is used for making buffer of volcano point hazard.
-
-    :param centers: All center of each point (longitude, latitude)
-    :type centers: list
-
-    :param radii: Desired approximate radii in kilometers (must be
-        monotonically ascending). Can be either one number or list of numbers
-    :type radii: int, list
-
-    :param hazard_zone_attribute: The name of the attributes representing
-        hazard zone.
-    :type hazard_zone_attribute: str
-
-    :param data_table: Data for each center (optional)
-    :type data_table: list
-
-    :return: Vector polygon layer representing circle in WGS84
-    :rtype: Vector
-    """
-    if not isinstance(radii, list):
-        radii = [radii]
-
-    # Check that radii are monotonically increasing
-    monotonically_increasing_flag = all(
-        x < y for x, y in zip(radii, radii[1:]))
-    if not monotonically_increasing_flag:
-        raise RadiiException(RadiiException.suggestion)
-
-    circles = []
-    new_data_table = []
-    for i, center in enumerate(centers):
-        p = Point(longitude=center[0], latitude=center[1])
-        inner_rings = None
-        for radius in radii:
-            # Generate circle polygon
-            circle = p.generate_circle(radius * 1000)
-            circles.append(Polygon(outer_ring=circle, inner_rings=inner_rings))
-
-            # Store current circle and inner ring for next poly
-            inner_rings = [circle]
-
-            # Carry attributes for center forward (deep copy)
-            row = {}
-            if data_table is not None:
-                for key in data_table[i]:
-                    row[key] = data_table[i][key]
-
-            # Add radius to this ring
-            row[hazard_zone_attribute] = radius
-
-            new_data_table.append(row)
-
-    circular_polygon = Vector(
-        geometry=circles,  # List with circular polygons
-        data=new_data_table,  # Associated attributes
-        geometry_type='polygon')
-
-    return circular_polygon

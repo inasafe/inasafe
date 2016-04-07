@@ -64,6 +64,8 @@ from safe.utilities.i18n import tr
 from safe.utilities.clipper import clip_layer
 from safe.utilities.gis import (
     convert_to_safe_layer,
+    is_point_layer,
+    buffer_points,
     get_wgs84_resolution,
     array_to_geo_array,
     extent_to_array,
@@ -803,6 +805,18 @@ class ImpactFunction(object):
             'Preparation Step',
             'Impact function is being prepared to run the analysis.')
 
+        if is_point_layer(self.hazard.qgis_layer()):
+            # If the hazard is a point layer, it's a volcano hazard.
+            # Make hazard layer by buffering the point.
+            hazard_zone_attribute = 'radius'
+            # noinspection PyTypeChecker
+            radii = self.parameters['distances'].value
+            self.hazard = buffer_points(
+                self.hazard.qgis_layer(),
+                radii,
+                hazard_zone_attribute,
+                self.exposure.crs()
+            )
         self._setup_aggregator()
 
         # go check if our postprocessing layer has any keywords set and if not

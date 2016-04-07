@@ -19,7 +19,6 @@ from safe.impact_functions.volcanic.volcano_point_building\
     .metadata_definitions import VolcanoPointBuildingFunctionMetadata
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
-from safe.engine.core import buffer_points
 from safe.common.utilities import (
     get_thousand_separator,
     get_non_conflicting_attribute_name,
@@ -82,10 +81,6 @@ class VolcanoPointBuildingFunction(
                   Table with number of buildings affected
         :rtype: dict
         """
-
-        # Hazard Zone Attribute
-        hazard_zone_attribute = 'radius'
-
         # Parameters
         radii = self.parameters['distances'].value
 
@@ -99,22 +94,7 @@ class VolcanoPointBuildingFunction(
         except KeywordNotFoundError:
             self.exposure_class_attribute = None
 
-        # Input checks
-        if not self.hazard.layer.is_point_data:
-            message = (
-                'Input hazard must be a vector point layer. I got %s '
-                'with layer type %s' % (
-                    self.hazard.name, self.hazard.layer.get_geometry_name()))
-            raise Exception(message)
-
-        # Make hazard layer by buffering the point
-        centers = self.hazard.layer.get_geometry()
-        features = self.hazard.layer.get_data()
-        hazard_layer = buffer_points(
-            centers,
-            radii,
-            hazard_zone_attribute,
-            data_table=features)
+        hazard_layer = self.hazard.layer
         # Category names for the impact zone
         category_names = radii
         # In kilometers
@@ -150,6 +130,7 @@ class VolcanoPointBuildingFunction(
 
         # Iterate the interpolated building layer
         for i in range(len(features)):
+            hazard_zone_attribute = 'radius'
             hazard_value = features[i][hazard_zone_attribute]
             if not hazard_value:
                 hazard_value = self._not_affected_value
