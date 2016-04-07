@@ -52,12 +52,15 @@ class ReportMixin(object):
         :returns: The buildings breakdown report.
         :rtype: safe.messaging.Message
         """
+        action_checklist = self.action_checklist()
+
         message = m.Message(style_class='container')
-        message.add(m.Heading(
-            self.action_checklist()['title'], **styles.INFO_STYLE))
+        message.add(m.Heading(action_checklist['title'], **styles.INFO_STYLE))
+
         checklist = m.BulletedList()
-        for text in self.action_checklist()['fields']:
+        for text in action_checklist ['fields']:
             checklist.add(text)
+
         message.add(checklist)
         return message
 
@@ -70,10 +73,9 @@ class ReportMixin(object):
         notes = self.notes()
 
         message = m.Message(style_class='container')
-        message.add(
-            m.Heading(notes['title'], **styles.INFO_STYLE))
-        checklist = m.BulletedList()
+        message.add(m.Heading(notes['title'], **styles.INFO_STYLE))
 
+        checklist = m.BulletedList()
         for field in notes['fields']:
             checklist.add(field)
 
@@ -81,9 +83,18 @@ class ReportMixin(object):
         return message
 
     def notes(self):
+        """Return the notes section of the report.
+
+        :return: The notes that should be attached to this impact report.
+        :rtype: dict
         """
+        raise NotImplementedError('Need to be implemented in child class.')
+
+
+    def action_checklist(self):
+        """Return the action check list section of the report.
+
+        :return: The action check list as dict.
+        :rtype: dict
         """
-        return {
-            'title': '',
-            'fields': []
-        }
+        raise NotImplementedError('Need to be implemented in child class.')

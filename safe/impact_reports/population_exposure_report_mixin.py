@@ -76,7 +76,10 @@ class PopulationExposureReportMixin(ReportMixin):
         return message
 
     def action_checklist(self):
-        """
+        """Return the action check list section of the report.
+
+        :return: The action check list as dict.
+        :rtype: dict
         """
         title = tr('Action checklist')
         evacuated_people = format_int(
