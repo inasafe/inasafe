@@ -173,7 +173,7 @@ class ITBFatalityFunction(
         assert(array_sum == int(numpy.sum(floor_array)))
         return list(floor_array)
 
-    def format_action_checklist(self):
+    def action_checklist(self):
         """Action checklist for the itb earthquake fatality report.
 
         :returns: The action checklist
