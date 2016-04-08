@@ -1187,6 +1187,7 @@ class WizardDialogTest(unittest.TestCase):
         # check if in source step
         self.check_current_step(step_kw_source, dialog)
 
+        dialog.pbnBack.click()  # back to classify step
         dialog.pbnBack.click()  # back to field step
         dialog.pbnBack.click()  # back to layer_mode step
         dialog.pbnBack.click()  # back to subcategory step
