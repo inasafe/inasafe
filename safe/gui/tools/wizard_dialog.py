@@ -60,6 +60,8 @@ from safe.definitions import (
     global_default_attribute,
     do_not_use_attribute,
     continuous_hazard_unit,
+    exposure_road,
+    exposure_structure,
     exposure_unit,
     raster_hazard_classification,
     vector_hazard_classification,
@@ -97,6 +99,9 @@ from safe.common.exceptions import (
 from safe.common.resource_parameter import ResourceParameter
 from safe.common.version import get_version
 from safe_extras.parameters.group_parameter import GroupParameter
+from safe.postprocessors.building_type_postprocessor import (
+    BuildingTypePostprocessor)
+from safe.postprocessors.road_type_postprocessor import RoadTypePostprocessor
 from safe.utilities.resources import get_ui_class, resources_path
 from safe.gui.tools.function_options_dialog import (
     FunctionOptionsDialog)
@@ -121,6 +126,7 @@ from safe.gui.tools.wizard_strings import (
     classification_question,
     classify_vector_question,
     classify_raster_question,
+    classify_vector_for_postprocessor_question,
     select_function_constraints2_question,
     select_function_question,
     select_hazard_origin_question,
@@ -528,8 +534,53 @@ class WizardDialog(QDialog, FORM_CLASS):
                         layer_mode_id,
                         hazard_category_id)
         else:
-            # There are no classifications for exposures defined yet
+            # There are no classifications for exposures defined yet, apart
+            # from postprocessor_classification, processed paralelly
             return []
+
+    def postprocessor_classification_for_layer(self):
+        """Returns a postprocessor classification if available for the
+           current layer.
+
+           It is parallel to classifications_for_layer(), with some
+           differences:
+
+           The classifications_for_layer returns a list of classifications
+           obtained from ImpactFuctionManager and is currently available
+           for hazards only.
+
+           The postprocessor_classification_for_layer returns just one
+           classification, based on information obtained from
+           Type Postprocessors. Currently, only structure and road exposure
+           are supported.
+
+           Because there is at most one classification available, the returned
+           value is just a list of classes. Also, the postprocessor
+           classification doesn't cause displaying the classification
+           selection step (unlike the hazard classifications)
+
+        :returns: A list where each value represents a classification category.
+        :rtype: list
+
+        """
+        if self.selected_subcategory()['key'] == exposure_road['key']:
+            mapping = RoadTypePostprocessor().fields_values
+        elif self.selected_subcategory()['key'] == exposure_structure['key']:
+            mapping = BuildingTypePostprocessor().fields_values
+        else:
+            return None
+
+        return [
+            {
+                'key': key,
+                'name': key,
+                'string_defaults': ([]
+                                    if mapping[key] == [None]
+                                    else mapping[key]),
+                'numeric_default_min': None,
+                'numeric_default_max': None
+            } for key in mapping
+        ]
 
     def additional_keywords_for_the_layer(self):
         """Return a list of valid additional keywords for the current layer.
@@ -1284,11 +1335,17 @@ class WizardDialog(QDialog, FORM_CLASS):
         """Set widgets on the Classify tab."""
         category = self.selected_category()
         subcategory = self.selected_subcategory()
-        classification = self.selected_classification()
-        default_classes = classification['classes']
+        # There may be two cases this tab is displayed: either
+        # a classification or postprocessor_classification is available
+        if self.selected_classification():
+            default_classes = self.selected_classification()['classes']
+            classification_name = self.selected_classification()['name']
+        else:
+            default_classes = self.postprocessor_classification_for_layer()
+            classification_name = ''
         if is_raster_layer(self.layer):
             self.lblClassify.setText(classify_raster_question % (
-                subcategory['name'], category['name'], classification['name']))
+                subcategory['name'], category['name'], classification_name))
             ds = gdal.Open(self.layer.source(), GA_ReadOnly)
             unique_values = numpy.unique(numpy.array(
                 ds.GetRasterBand(1).ReadAsArray()))
@@ -1303,9 +1360,14 @@ class WizardDialog(QDialog, FORM_CLASS):
             field_index = self.layer.dataProvider().fields().indexFromName(
                 self.selected_field())
             field_type = self.layer.dataProvider().fields()[field_index].type()
-            self.lblClassify.setText(classify_vector_question % (
-                subcategory['name'], category['name'],
-                classification['name'], field.upper()))
+            if classification_name:
+                self.lblClassify.setText(classify_vector_question % (
+                    subcategory['name'], category['name'],
+                    classification_name, field.upper()))
+            else:
+                self.lblClassify.setText(
+                    classify_vector_for_postprocessor_question % (
+                        subcategory['name'], category['name'], field.upper()))
             unique_values = self.layer.uniqueValues(field_index)
 
         # Assign unique values to classes (according to default)
@@ -2823,7 +2885,7 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         if (keywords and
                 keyword_version and
-                    is_keyword_version_supported(keyword_version)):
+                is_keyword_version_supported(keyword_version)):
             # The layer has valid keywords
             purpose = keywords.get('layer_purpose')
             if purpose == layer_purpose_hazard['key']:
@@ -4165,8 +4227,9 @@ class WizardDialog(QDialog, FORM_CLASS):
         elif current_step == step_kw_field:
             if self.selected_category() == layer_purpose_aggregation:
                 new_step = step_kw_aggregation
-            elif self.selected_layermode() == layer_mode_classified and \
-                    self.classifications_for_layer():
+            elif self.selected_layermode() == layer_mode_classified and (
+                    self.classifications_for_layer() or
+                    self.postprocessor_classification_for_layer()):
                 new_step = step_kw_classify
             else:
                 new_step = step_kw_extrakeywords
@@ -4354,7 +4417,8 @@ class WizardDialog(QDialog, FORM_CLASS):
             new_step = step_kw_field
         elif current_step == step_kw_extrakeywords:
             if self.selected_layermode() == layer_mode_classified:
-                if self.selected_classification():
+                if self.selected_classification() \
+                        or self.postprocessor_classification_for_layer():
                     new_step = step_kw_classify
                 elif self.selected_field():
                     new_step = step_kw_field
@@ -4372,7 +4436,8 @@ class WizardDialog(QDialog, FORM_CLASS):
                 new_step = step_kw_extrakeywords
             # otherwise behave like it was step_kw_extrakeywords
             elif self.selected_layermode() == layer_mode_classified:
-                if self.selected_classification():
+                if self.selected_classification() \
+                        or self.postprocessor_classification_for_layer():
                     new_step = step_kw_classify
                 elif self.selected_field():
                     new_step = step_kw_field
