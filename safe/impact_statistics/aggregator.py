@@ -476,6 +476,19 @@ class Aggregator(QtCore.QObject):
                     self.exposure_layer = self._prepare_polygon_layer(
                         self.exposure_layer)
 
+    def deintersect_exposure(self):
+        """ If necessary, cut the exposure features according to aggregation
+        layer. Does nothing if no aggregation layer is specified.
+        """
+        if self.aoi_mode:
+            return  # nothing to do
+
+        # TODO: support other layer types + add attribute which zone is that
+        # TODO: support case when exposure is not in WGS 84 coordinates
+        if is_polygon_layer(self.exposure_layer):
+            self.exposure_layer = self._prepare_polygon_layer(
+                self.exposure_layer)
+
     def aggregate(self, safe_impact_layer):
         """Do any requested aggregation post processing.
 
@@ -1240,7 +1253,6 @@ class Aggregator(QtCore.QObject):
         temporary_dir = temp_dir(sub_dir='pre-process')
         out_filename = unique_filename(suffix='.shp', dir=temporary_dir)
 
-        self.copy_keywords(layer, out_filename)
         shape_writer = QgsVectorFileWriter(
             out_filename,
             'UTF-8',
@@ -1469,6 +1481,8 @@ class Aggregator(QtCore.QObject):
 
         del shape_writer
         # LOGGER.debug('Created: %s' % self.preprocessed_feature_count)
+
+        self.copy_keywords(layer, out_filename)
 
         name = '%s %s' % (layer.name(), self.tr('preprocessed'))
         output_layer = QgsVectorLayer(out_filename, name, 'ogr')
