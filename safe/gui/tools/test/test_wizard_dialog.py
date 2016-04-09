@@ -33,7 +33,6 @@ pardir = os.path.abspath(
     os.path.join(os.path.dirname(__file__), '../../..///'))
 sys.path.append(pardir)
 
-from safe.impact_functions import register_impact_functions
 from safe.common.utilities import temp_dir
 from safe.test.utilities import (
     clone_raster_layer,
@@ -45,6 +44,7 @@ from safe.test.utilities import (
 # safe.gui.tools.wizard_dialog
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
+from safe.impact_functions import register_impact_functions
 from safe.definitions import inasafe_keyword_version
 from safe.gui.tools.wizard_dialog import (
     WizardDialog,
