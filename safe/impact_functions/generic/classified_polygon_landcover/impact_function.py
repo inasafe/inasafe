@@ -184,6 +184,8 @@ class ClassifiedPolygonHazardLandCoverFunction(
         del writer
         impact_layer = QgsVectorLayer(filename, "Impacted Land Cover", "ogr")
 
+        # TODO: use self.aggregator.exposure_aggregation_field
+
         # Generate the report of affected areas
         impact_summary = impact_table = self.html_report()
 

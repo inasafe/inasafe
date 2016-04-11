@@ -110,6 +110,12 @@ class Aggregator(QtCore.QObject):
         self.exposure_layer = None  # Used in deintersect() method
         self.safe_layer = None  # Aggregation layer in SAFE format
 
+        # For new-style IF, when aggregation is used, only exposure layer
+        # is intersected with aggregation layer (see deintersect_exposure()),
+        # and the aggregation zone field name is stored, so that it can
+        # be used later in the body of IF
+        self.exposure_aggregation_field = None
+
         self.prefix = 'aggr_'
         self.attributes = {}
         self.attribute_title = None
@@ -483,11 +489,29 @@ class Aggregator(QtCore.QObject):
         if self.aoi_mode:
             return  # nothing to do
 
-        # TODO: support other layer types + add attribute which zone is that
         # TODO: support case when exposure is not in WGS 84 coordinates
-        if is_polygon_layer(self.exposure_layer):
-            self.exposure_layer = self._prepare_polygon_layer(
-                self.exposure_layer)
+
+        temporary_dir = temp_dir(sub_dir='pre-process')
+        out_filename = unique_filename(suffix='.shp', dir=temporary_dir)
+
+        self.run_processing_algorithm("qgis:intersection", self.exposure_layer, self.layer, out_filename)
+
+        self.copy_keywords(self.exposure_layer, out_filename)
+
+        name = '%s %s' % (self.exposure_layer.name(), self.tr('preprocessed'))
+        output_layer = QgsVectorLayer(out_filename, name, 'ogr')
+        if not output_layer.isValid():
+            raise Exception('Pre-processing of exposure: Intersection Failed')
+
+        self.exposure_layer = output_layer
+
+        # keep then aggregation field name in exposure layer
+        # (wanted to use a keyword in exposure layer, but it would not be saved)
+        # TODO: handle name collision in case qgis:intersection renames original zone name field
+        agg_keyword = self.get_default_keyword('AGGR_ATTR_KEY')
+        agg_attribute = self.read_keywords(self.layer)[agg_keyword]
+        self.exposure_aggregation_field = agg_attribute
+
 
     def aggregate(self, safe_impact_layer):
         """Do any requested aggregation post processing.
