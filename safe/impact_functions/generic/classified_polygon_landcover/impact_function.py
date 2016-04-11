@@ -223,9 +223,9 @@ def _svg_bar_chart_hazard(levels, max_level):
     levels_percent = [ round(level * 100. / max_level) for level in levels ]
     return """
     <svg width="100%%" height="16">
-      <rect x="0" y="0" width="%d%%" height="4" style="fill:rgb(255,180,180)" />
-      <rect x="0" y="6" width="%d%%" height="4" style="fill:rgb(240,240,50)" />
-      <rect x="0" y="12" width="%d%%" height="4" style="fill:rgb(180,255,180)" />
+      <rect x="0" y="0" width="%.0f%%" height="4" style="fill:rgb(255,180,180)" />
+      <rect x="0" y="6" width="%.0f%%" height="4" style="fill:rgb(240,240,50)" />
+      <rect x="0" y="12" width="%.0f%%" height="4" style="fill:rgb(180,255,180)" />
     </svg>""" % (levels_percent[0], levels_percent[1], levels_percent[2])
 
 
