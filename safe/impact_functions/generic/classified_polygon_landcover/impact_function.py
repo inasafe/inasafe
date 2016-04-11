@@ -30,19 +30,17 @@ from PyQt4.QtGui import QColor
 
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
-from safe.common.utilities import unique_filename
+from safe.common.utilities import unique_filename, format_decimal
+import safe.messaging as m
 from safe.impact_functions.bases.classified_vh_classified_ve import \
     ClassifiedVHClassifiedVE
 from safe.impact_functions.generic.classified_polygon_landcover\
     .metadata_definitions \
     import ClassifiedPolygonHazardLandCoverFunctionMetadata
-from safe.impact_reports.landcover_exposure_report_mixin import (
-    LandCoverExposureReportMixin)
 
 
 class ClassifiedPolygonHazardLandCoverFunction(
-    ClassifiedVHClassifiedVE,
-    LandCoverExposureReportMixin):
+    ClassifiedVHClassifiedVE):
 
     _metadata = ClassifiedPolygonHazardLandCoverFunctionMetadata()
 
@@ -113,15 +111,7 @@ class ClassifiedPolygonHazardLandCoverFunction(
         writer = QgsVectorFileWriter(
             filename, "utf-8", impact_fields, QGis.WKBPolygon, exposure.crs())
 
-        # prepare area calculator object
-        area_calc = QgsDistanceArea()
-        area_calc.setSourceCrs(exposure.crs())
-        area_calc.setEllipsoid("WGS84")
-        area_calc.setEllipsoidalMode(True)
-
         # iterate over all exposure polygons and calculate the impact
-        self.all_landcovers = {}
-        self.imp_landcovers = {}
         for f in exposure.getFeatures(QgsFeatureRequest(extent_exposure)):
             geometry = f.geometry()
             bbox = geometry.boundingBox()
@@ -129,12 +119,6 @@ class ClassifiedPolygonHazardLandCoverFunction(
             if not extent_exposure.contains(bbox):
                 geometry = geometry.intersection(extent_exposure_geom)
             landcover_type = f[type_attr]
-
-            # add to the total area of this land cover type
-            if landcover_type not in self.all_landcovers:
-                self.all_landcovers[landcover_type] = 0.
-            area = area_calc.measure(geometry) / 1e4
-            self.all_landcovers[landcover_type] += area
 
             # find possible intersections with hazard layer
             impacted_geometries = []
@@ -147,13 +131,6 @@ class ClassifiedPolygonHazardLandCoverFunction(
 
                 hazard_value = hazard_features[hazard_id][hazard_class_attribute]
                 hazard_type = hazard_value_to_class.get(hazard_value)
-                landcover_hazard_type = (landcover_type, hazard_type)
-
-                # add to the affected area of this land cover type
-                if landcover_hazard_type not in self.imp_landcovers:
-                    self.imp_landcovers[landcover_hazard_type] = 0.
-                area = area_calc.measure(impact_geometry) / 1e4
-                self.imp_landcovers[landcover_hazard_type] += area
 
                 # write the impacted geometry
                 f_impact = QgsFeature(impact_fields)
@@ -185,9 +162,10 @@ class ClassifiedPolygonHazardLandCoverFunction(
         impact_layer = QgsVectorLayer(filename, "Impacted Land Cover", "ogr")
 
         # TODO: use self.aggregator.exposure_aggregation_field
+        report_data = _report_data(impact_layer, self.target_field, type_attr)
 
         # Generate the report of affected areas
-        impact_summary = impact_table = self.html_report()
+        impact_summary = impact_table = _format_report(report_data)
 
         # Define style for the impact layer
         transparent_color = QColor()
@@ -228,3 +206,111 @@ class ClassifiedPolygonHazardLandCoverFunction(
 
         self._impact = impact_layer
         return impact_layer
+
+
+# non-member private functions used within this module
+
+def _report_data(impact_layer, target_field, land_cover_field):
+    """
+    Prepare report data dictionary that will be used in the final report
+
+    :param impact_layer: Output impact layer from the IF
+    :param target_field: Field name in impact layer with hazard type
+    :param land_cover_field: Field name in impact layer with land cover
+    :return: dict
+    """
+
+    all_landcovers = {}
+    imp_landcovers = {}
+
+    # prepare area calculator object
+    area_calc = QgsDistanceArea()
+    area_calc.setSourceCrs(impact_layer.crs())
+    area_calc.setEllipsoid("WGS84")
+    area_calc.setEllipsoidalMode(True)
+
+    for f in impact_layer.getFeatures():
+
+        landcover_type = f[land_cover_field]
+        hazard_type = f[target_field]
+        landcover_hazard_type = (landcover_type, hazard_type)
+
+        # add to the total area of this land cover type
+        if landcover_type not in all_landcovers:
+            all_landcovers[landcover_type] = 0.
+        area = area_calc.measure(f.geometry()) / 1e4
+        all_landcovers[landcover_type] += area
+
+        if hazard_type is not None:
+            # add to the affected area of this land cover type
+            if landcover_hazard_type not in imp_landcovers:
+                imp_landcovers[landcover_hazard_type] = 0.
+            area = area_calc.measure(f.geometry()) / 1e4
+            imp_landcovers[landcover_hazard_type] += area
+
+
+    impact_per_landcover = {}
+    impact_per_hazard = {}
+    for key, area in imp_landcovers.iteritems():
+        landcover_type, hazard_type = key
+
+        if landcover_type not in impact_per_landcover:
+            impact_per_landcover[landcover_type] = 0
+        impact_per_landcover[landcover_type] += area
+
+        if hazard_type not in impact_per_hazard:
+            impact_per_hazard[hazard_type] = 0
+        impact_per_hazard[hazard_type] += area
+
+    return { 'areas_landcover': all_landcovers,
+             'impacted_landcover_hazard': imp_landcovers,
+             'impacted_landcover_totals': impact_per_landcover,
+             'impacted_hazard_totals': impact_per_hazard }
+
+
+def _format_report(report_data):
+    """
+    Convert dictionary with report data to formatted report
+
+    :param report_data: dict
+    :return: m.Message
+    """
+
+    imp_landcovers = report_data['impacted_landcover_hazard']
+    impact_per_landcover = report_data['impacted_landcover_totals']
+    impact_per_hazard = report_data['impacted_hazard_totals']
+
+    hazard_classes = [u'high', u'medium', u'low']
+
+    message = m.Message(style_class='container')
+    table = m.Table(style_class='table table-condensed table-striped')
+    table.caption = None
+    row = m.Row()
+    row.add(m.Cell(tr('Affected Area (ha)'), header=True))
+    for cls in hazard_classes:
+        row.add(m.Cell(cls, header=True))
+    table.add(row)
+
+    row = m.Row()
+    row.add(m.Cell(tr('All')))
+    for cls in hazard_classes:
+        area = impact_per_hazard.get(cls, 0)
+        row.add(m.Cell(format_decimal(0.1, area), align='right'))
+    table.add(row)
+
+    #row = m.Row()
+    #row.add(m.Cell(tr('Breakdown by land cover type'), header=True))
+    #for cls in hazard_classes:
+    #    row.add(m.Cell(cls, header=True))
+    #table.add(row)
+
+    for landcover_type in sorted(impact_per_landcover.keys()):
+        row = m.Row()
+        row.add(m.Cell(landcover_type))
+        for cls in hazard_classes:
+            area = imp_landcovers.get((landcover_type,cls), 0)
+            row.add(m.Cell(format_decimal(0.1, area), align='right'))
+        table.add(row)
+
+    message.add(table)
+    return message.to_html(suppress_newlines=True)
