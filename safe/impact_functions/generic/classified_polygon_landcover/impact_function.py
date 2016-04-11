@@ -33,6 +33,7 @@ from safe.utilities.i18n import tr
 from safe.common.utilities import unique_filename, format_decimal
 from safe.utilities.pivot_table import FlatTable, PivotTable
 import safe.messaging as m
+from safe.messaging.styles import INFO_STYLE
 from safe.impact_functions.bases.classified_vh_classified_ve import \
     ClassifiedVHClassifiedVE
 from safe.impact_functions.generic.classified_polygon_landcover\
@@ -227,20 +228,26 @@ def format_pivot_table(pivot_table, caption=None, header_text='', total_columns=
     row.add(m.Cell(header_text, header=True))
     for column_name in pivot_table.columns:
         row.add(m.Cell(column_name, header=True))
+    if total_rows:
+        row.add(m.Cell(tr('All'), header=True))
     table.add(row)
 
-    for row_name, data_row in zip(pivot_table.rows, pivot_table.data):
+    for row_name, data_row, total_row in zip(pivot_table.rows, pivot_table.data, pivot_table.total_rows):
         row = m.Row()
         row.add(m.Cell(row_name))
         for column_value in data_row:
             row.add(m.Cell(format_decimal(0.1, column_value), align='right'))
+        if total_rows:
+            row.add(m.Cell(format_decimal(0.1, total_row), align='right', header=True))
         table.add(row)
 
     if total_columns:
         row = m.Row()
-        row.add(m.Cell(tr('All')))
+        row.add(m.Cell(tr('All'), header=True))
         for column_value in pivot_table.total_columns:
-            row.add(m.Cell(format_decimal(0.1, column_value), align='right'))
+            row.add(m.Cell(format_decimal(0.1, column_value), align='right', header=True))
+        if total_rows:
+            row.add(m.Cell(format_decimal(0.1, pivot_table.total), align='right', header=True))
         table.add(row)
 
     return table
@@ -279,7 +286,20 @@ def _report_data(impact_layer, target_field, land_cover_field, zone_field):
                              row_field="landcover",
                              column_field="hazard")
 
-    return { 'impacted': pivot_table }
+    report = { 'impacted': pivot_table }
+
+    # breakdown by zones
+    if zone_field is not None:
+        report['impacted_zones'] = {}
+        for zone in my_table.group_values('zone'):
+            table = PivotTable(my_table,
+                               row_field="landcover",
+                               column_field="hazard",
+                               filter_field="zone",
+                               filter_value=zone)
+            report['impacted_zones'][zone] = table
+
+    return report
 
 
 def _format_report(report_data):
@@ -291,10 +311,19 @@ def _format_report(report_data):
     """
 
     message = m.Message(style_class='container')
+    affected_text = tr('Affected Area (ha)')
 
     table = format_pivot_table(report_data['impacted'],
-                               header_text=tr('Affected Area (ha)'),
+                               header_text=affected_text,
                                total_columns=True)
-
     message.add(table)
+
+    if 'impacted_zones' in report_data:
+        for zone, table in report_data['impacted_zones'].iteritems():
+            message.add(m.Heading(zone, **INFO_STYLE))
+            m_table = format_pivot_table(table,
+                                         header_text=affected_text,
+                                         total_columns=True)
+            message.add(m_table)
+
     return message.to_html(suppress_newlines=True)

@@ -33,18 +33,41 @@ class FlatTable(object):
 
 class PivotTable(object):
 
-    def __init__(self, flat_table, row_field=None, column_field=None, filter_field=None, filter_value=None, order=None):
+    def __init__(self, flat_table,
+                 row_field=None, column_field=None,
+                 filter_field=None, filter_value=None):
         """ Make a pivot table out of the source data """
 
-        flat_row_index = flat_table.groups.index(row_field)
-        flat_column_index = flat_table.groups.index(column_field)
+        if row_field is not None:
+            flat_row_index = flat_table.groups.index(row_field)
+        if column_field is not None:
+            flat_column_index = flat_table.groups.index(column_field)
+        if filter_field is not None:
+            flat_filter_index =flat_table.groups.index(filter_field)
 
         sums = {} # key = (row, column), value = sum
         for flat_key, flat_value in flat_table.data.iteritems():
-            key = flat_key[flat_row_index], flat_key[flat_column_index]
+            # apply filtering
+            if filter_field is not None:
+                if flat_key[flat_filter_index] != filter_value:
+                    continue
+
+            if column_field is not None and row_field is not None:
+                key = flat_key[flat_row_index], flat_key[flat_column_index]
+            elif row_field is not None:
+                key = (flat_key[flat_row_index], '')
+            elif column_field is not None:
+                key = ('', flat_key[flat_column_index])
+
             if key not in sums:
                 sums[key] = 0
             sums[key] += flat_value
+
+        # TODO: configurable order of rows
+        # - undefined
+        # - using row label
+        # - using column's values
+        # - custom (using function)
 
         # determine rows
         if row_field is None:
