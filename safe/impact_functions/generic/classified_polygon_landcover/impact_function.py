@@ -210,6 +210,38 @@ class ClassifiedPolygonHazardLandCoverFunction(
 
 # non-member private functions used within this module
 
+class Sum(object):
+    """ Generic helper class to sum values while grouping them"""
+    def __init__(self, *args):
+        self.groups = args
+        self.result = {}
+
+    def add_value(self, value, **kwargs):
+        key = tuple(kwargs[group] for group in self.groups)
+        if key not in self.result:
+            self.result[key] = 0
+        self.result[key] += value
+
+    def aggregate_by(self, group_name):
+        group_index = self.groups.index(group_name)
+        agg = {}
+        for key, value in self.result.iteritems():
+            if len(self.groups) == 1:
+                agg_key = None
+            elif len(self.groups) == 2:
+                agg_key = key[group_index]
+            else:
+                agg_key = tuple(key_part for i, key_part in enumerate(key) if i != group_index)
+            if agg_key not in agg:
+                agg[agg_key] = 0
+            agg[agg_key] += value
+
+        if len(self.groups) == 1:
+            return agg[None]
+        else:
+            return agg
+
+
 def _report_data(impact_layer, target_field, land_cover_field):
     """
     Prepare report data dictionary that will be used in the final report
@@ -220,52 +252,23 @@ def _report_data(impact_layer, target_field, land_cover_field):
     :return: dict
     """
 
-    all_landcovers = {}
-    imp_landcovers = {}
-
     # prepare area calculator object
     area_calc = QgsDistanceArea()
     area_calc.setSourceCrs(impact_layer.crs())
     area_calc.setEllipsoid("WGS84")
     area_calc.setEllipsoidalMode(True)
 
+    s = Sum('landcover', 'hazard')
     for f in impact_layer.getFeatures():
 
-        landcover_type = f[land_cover_field]
-        hazard_type = f[target_field]
-        landcover_hazard_type = (landcover_type, hazard_type)
-
-        # add to the total area of this land cover type
-        if landcover_type not in all_landcovers:
-            all_landcovers[landcover_type] = 0.
         area = area_calc.measure(f.geometry()) / 1e4
-        all_landcovers[landcover_type] += area
+        s.add_value(area,
+                    landcover=f[land_cover_field],
+                    hazard=f[target_field])
 
-        if hazard_type is not None:
-            # add to the affected area of this land cover type
-            if landcover_hazard_type not in imp_landcovers:
-                imp_landcovers[landcover_hazard_type] = 0.
-            area = area_calc.measure(f.geometry()) / 1e4
-            imp_landcovers[landcover_hazard_type] += area
-
-
-    impact_per_landcover = {}
-    impact_per_hazard = {}
-    for key, area in imp_landcovers.iteritems():
-        landcover_type, hazard_type = key
-
-        if landcover_type not in impact_per_landcover:
-            impact_per_landcover[landcover_type] = 0
-        impact_per_landcover[landcover_type] += area
-
-        if hazard_type not in impact_per_hazard:
-            impact_per_hazard[hazard_type] = 0
-        impact_per_hazard[hazard_type] += area
-
-    return { 'areas_landcover': all_landcovers,
-             'impacted_landcover_hazard': imp_landcovers,
-             'impacted_landcover_totals': impact_per_landcover,
-             'impacted_hazard_totals': impact_per_hazard }
+    return { 'impacted': s.result,
+             'impacted_landcover_totals': s.aggregate_by('landcover'),
+             'impacted_hazard_totals': s.aggregate_by('hazard') }
 
 
 def _format_report(report_data):
@@ -276,7 +279,7 @@ def _format_report(report_data):
     :return: m.Message
     """
 
-    imp_landcovers = report_data['impacted_landcover_hazard']
+    imp_landcovers = report_data['impacted']
     impact_per_landcover = report_data['impacted_landcover_totals']
     impact_per_hazard = report_data['impacted_hazard_totals']
 
