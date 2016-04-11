@@ -31,6 +31,7 @@ from PyQt4.QtGui import QColor
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
 from safe.common.utilities import unique_filename, format_decimal
+from safe.utilities.pivot_table import FlatTable, PivotTable
 import safe.messaging as m
 from safe.impact_functions.bases.classified_vh_classified_ve import \
     ClassifiedVHClassifiedVE
@@ -161,8 +162,14 @@ class ClassifiedPolygonHazardLandCoverFunction(
         del writer
         impact_layer = QgsVectorLayer(filename, "Impacted Land Cover", "ogr")
 
-        # TODO: use self.aggregator.exposure_aggregation_field
-        report_data = _report_data(impact_layer, self.target_field, type_attr)
+        zone_field = None
+        if self.aggregator:
+            zone_field = self.aggregator.exposure_aggregation_field
+
+        report_data = _report_data(impact_layer,
+                                   self.target_field,
+                                   type_attr,
+                                   zone_field)
 
         # Generate the report of affected areas
         impact_summary = impact_table = _format_report(report_data)
@@ -210,45 +217,44 @@ class ClassifiedPolygonHazardLandCoverFunction(
 
 # non-member private functions used within this module
 
-class Sum(object):
-    """ Generic helper class to sum values while grouping them"""
-    def __init__(self, *args):
-        self.groups = args
-        self.result = {}
 
-    def add_value(self, value, **kwargs):
-        key = tuple(kwargs[group] for group in self.groups)
-        if key not in self.result:
-            self.result[key] = 0
-        self.result[key] += value
+def format_pivot_table(pivot_table, caption=None, header_text='', total_columns=False, total_rows=False):
 
-    def aggregate_by(self, group_name):
-        group_index = self.groups.index(group_name)
-        agg = {}
-        for key, value in self.result.iteritems():
-            if len(self.groups) == 1:
-                agg_key = None
-            elif len(self.groups) == 2:
-                agg_key = key[group_index]
-            else:
-                agg_key = tuple(key_part for i, key_part in enumerate(key) if i != group_index)
-            if agg_key not in agg:
-                agg[agg_key] = 0
-            agg[agg_key] += value
+    table = m.Table(style_class='table table-condensed table-striped')
+    table.caption = caption
 
-        if len(self.groups) == 1:
-            return agg[None]
-        else:
-            return agg
+    row = m.Row()
+    row.add(m.Cell(header_text, header=True))
+    for column_name in pivot_table.columns:
+        row.add(m.Cell(column_name, header=True))
+    table.add(row)
+
+    for row_name, data_row in zip(pivot_table.rows, pivot_table.data):
+        row = m.Row()
+        row.add(m.Cell(row_name))
+        for column_value in data_row:
+            row.add(m.Cell(format_decimal(0.1, column_value), align='right'))
+        table.add(row)
+
+    if total_columns:
+        row = m.Row()
+        row.add(m.Cell(tr('All')))
+        for column_value in pivot_table.total_columns:
+            row.add(m.Cell(format_decimal(0.1, column_value), align='right'))
+        table.add(row)
+
+    return table
 
 
-def _report_data(impact_layer, target_field, land_cover_field):
+def _report_data(impact_layer, target_field, land_cover_field, zone_field):
     """
     Prepare report data dictionary that will be used in the final report
 
     :param impact_layer: Output impact layer from the IF
     :param target_field: Field name in impact layer with hazard type
     :param land_cover_field: Field name in impact layer with land cover
+    :param zone_field: Field name in impact layer with aggregation zone
+                       (None if aggregation is not being done)
     :return: dict
     """
 
@@ -258,17 +264,22 @@ def _report_data(impact_layer, target_field, land_cover_field):
     area_calc.setEllipsoid("WGS84")
     area_calc.setEllipsoidalMode(True)
 
-    s = Sum('landcover', 'hazard')
+    my_table = FlatTable('landcover', 'hazard', 'zone')
     for f in impact_layer.getFeatures():
 
         area = area_calc.measure(f.geometry()) / 1e4
-        s.add_value(area,
-                    landcover=f[land_cover_field],
-                    hazard=f[target_field])
+        zone = f[zone_field] if zone_field is not None else None
 
-    return { 'impacted': s.result,
-             'impacted_landcover_totals': s.aggregate_by('landcover'),
-             'impacted_hazard_totals': s.aggregate_by('hazard') }
+        my_table.add_value(area,
+                    landcover=f[land_cover_field],
+                    hazard=f[target_field],
+                    zone=zone)
+
+    pivot_table = PivotTable(my_table,
+                             row_field="landcover",
+                             column_field="hazard")
+
+    return { 'impacted': pivot_table }
 
 
 def _format_report(report_data):
@@ -279,41 +290,11 @@ def _format_report(report_data):
     :return: m.Message
     """
 
-    imp_landcovers = report_data['impacted']
-    impact_per_landcover = report_data['impacted_landcover_totals']
-    impact_per_hazard = report_data['impacted_hazard_totals']
-
-    hazard_classes = [u'high', u'medium', u'low']
-
     message = m.Message(style_class='container')
-    table = m.Table(style_class='table table-condensed table-striped')
-    table.caption = None
-    row = m.Row()
-    row.add(m.Cell(tr('Affected Area (ha)'), header=True))
-    for cls in hazard_classes:
-        row.add(m.Cell(cls, header=True))
-    table.add(row)
 
-    row = m.Row()
-    row.add(m.Cell(tr('All')))
-    for cls in hazard_classes:
-        area = impact_per_hazard.get(cls, 0)
-        row.add(m.Cell(format_decimal(0.1, area), align='right'))
-    table.add(row)
-
-    #row = m.Row()
-    #row.add(m.Cell(tr('Breakdown by land cover type'), header=True))
-    #for cls in hazard_classes:
-    #    row.add(m.Cell(cls, header=True))
-    #table.add(row)
-
-    for landcover_type in sorted(impact_per_landcover.keys()):
-        row = m.Row()
-        row.add(m.Cell(landcover_type))
-        for cls in hazard_classes:
-            area = imp_landcovers.get((landcover_type,cls), 0)
-            row.add(m.Cell(format_decimal(0.1, area), align='right'))
-        table.add(row)
+    table = format_pivot_table(report_data['impacted'],
+                               header_text=tr('Affected Area (ha)'),
+                               total_columns=True)
 
     message.add(table)
     return message.to_html(suppress_newlines=True)
