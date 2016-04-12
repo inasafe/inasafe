@@ -33,7 +33,6 @@ pardir = os.path.abspath(
     os.path.join(os.path.dirname(__file__), '../../..///'))
 sys.path.append(pardir)
 
-from safe.impact_functions import register_impact_functions
 from safe.common.utilities import temp_dir
 from safe.test.utilities import (
     clone_raster_layer,
@@ -45,6 +44,7 @@ from safe.test.utilities import (
 # safe.gui.tools.wizard_dialog
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
+from safe.impact_functions import register_impact_functions
 from safe.definitions import inasafe_keyword_version
 from safe.gui.tools.wizard_dialog import (
     WizardDialog,
@@ -730,6 +730,10 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # go to field
 
         self.check_current_step(step_kw_field, dialog)
+        dialog.pbnNext.click()  # go to classify
+
+        # check if in step classify
+        self.check_current_step(step_kw_classify, dialog)
         dialog.pbnNext.click()  # go to source
 
         # check if in step source
@@ -1114,6 +1118,11 @@ class WizardDialogTest(unittest.TestCase):
         self.check_list(expected_fields, dialog.lstFields)
         self.select_from_list_widget('TYPE', dialog.lstFields)
 
+        dialog.pbnNext.click()  # go to classify
+
+        # check if in step classify
+        self.check_current_step(step_kw_classify, dialog)
+
         dialog.pbnNext.click()  # go to source
 
         # check if in step source
@@ -1168,11 +1177,17 @@ class WizardDialogTest(unittest.TestCase):
         self.check_current_step(step_kw_field, dialog)
         self.select_from_list_widget('FLOODPRONE', dialog.lstFields)
 
+        dialog.pbnNext.click()  # go to classify
+
+        # check if in step classify
+        self.check_current_step(step_kw_classify, dialog)
+
         dialog.pbnNext.click()  # Go to source
 
         # check if in source step
         self.check_current_step(step_kw_source, dialog)
 
+        dialog.pbnBack.click()  # back to classify step
         dialog.pbnBack.click()  # back to field step
         dialog.pbnBack.click()  # back to layer_mode step
         dialog.pbnBack.click()  # back to subcategory step
