@@ -99,9 +99,6 @@ from safe.common.exceptions import (
 from safe.common.resource_parameter import ResourceParameter
 from safe.common.version import get_version
 from safe_extras.parameters.group_parameter import GroupParameter
-from safe.postprocessors.building_type_postprocessor import (
-    BuildingTypePostprocessor)
-from safe.postprocessors.road_type_postprocessor import RoadTypePostprocessor
 from safe.utilities.resources import get_ui_class, resources_path
 from safe.gui.tools.function_options_dialog import (
     FunctionOptionsDialog)
@@ -136,6 +133,10 @@ from safe.gui.tools.wizard_strings import (
     select_explayer_from_canvas_question,
     select_explayer_from_browser_question,
     create_postGIS_connection_first)
+
+from safe.gui.tools.wizard_metadata import (
+    road_class_mapping,
+    structure_class_mapping)
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -550,9 +551,8 @@ class WizardDialog(QDialog, FORM_CLASS):
            for hazards only.
 
            The postprocessor_classification_for_layer returns just one
-           classification, based on information obtained from
-           Type Postprocessors. Currently, only structure and road exposure
-           are supported.
+           classification, suitable for relevant Type Postprocessor.
+           Currently, only structure and road exposure are supported.
 
            Because there is at most one classification available, the returned
            value is just a list of classes. Also, the postprocessor
@@ -564,26 +564,15 @@ class WizardDialog(QDialog, FORM_CLASS):
         :rtype: (str, list)
 
         """
-        if self.selected_subcategory()['key'] == exposure_road['key']:
-            mapping = RoadTypePostprocessor().fields_values
+        if self.selected_subcategory() == exposure_road:
+            mapping = road_class_mapping
             keyword = 'road_class_mapping'
-        elif self.selected_subcategory()['key'] == exposure_structure['key']:
-            mapping = BuildingTypePostprocessor().fields_values
+        elif self.selected_subcategory() == exposure_structure:
+            mapping = structure_class_mapping
             keyword = 'structure_class_mapping'
         else:
             return None
-
-        return (keyword, [
-            {
-                'key': key,
-                'name': key,
-                'string_defaults': ([]
-                                    if mapping[key] == [None]
-                                    else mapping[key]),
-                'numeric_default_min': None,
-                'numeric_default_max': None
-            } for key in mapping
-        ])
+        return (keyword, mapping)
 
     def additional_keywords_for_the_layer(self):
         """Return a list of valid additional keywords for the current layer.
@@ -1393,7 +1382,8 @@ class WizardDialog(QDialog, FORM_CLASS):
                     value_as_string.upper() in [
                         c.upper() for c in default_class['string_defaults']])
                 condition_2 = (
-                    field_type < 10 and (
+                    field_type < 10 and 'numeric_default_min' in default_class
+                    and 'numeric_default_max' in default_class and (
                         default_class['numeric_default_min'] <= unique_value <=
                         default_class['numeric_default_max']))
                 if condition_1 or condition_2:
@@ -1487,7 +1477,11 @@ class WizardDialog(QDialog, FORM_CLASS):
                 QtCore.Qt.ItemIsDropEnabled | QtCore.Qt.ItemIsEnabled)
             tree_branch.setExpanded(True)
             tree_branch.setFont(0, bold_font)
-            tree_branch.setText(0, default_class['name'])
+            if 'name' in default_class:
+                default_class_name = default_class['name']
+            else:
+                default_class_name = default_class['key']
+            tree_branch.setText(0, default_class_name)
             tree_branch.setData(0, QtCore.Qt.UserRole, default_class['key'])
             if 'description' in default_class:
                 tree_branch.setToolTip(0, default_class['description'])
@@ -3649,7 +3643,9 @@ class WizardDialog(QDialog, FORM_CLASS):
         try:
             impact_function = self.analysis_handler.impact_function
             clip_parameters = impact_function.clip_parameters
+            # pylint: disable=unused-variable
             adjusted_geo_extent = clip_parameters['adjusted_geo_extent']
+            # pylint: enable=unused-variable
         except (AttributeError, InsufficientOverlapError):
             self.analysis_handler = None
             return False
