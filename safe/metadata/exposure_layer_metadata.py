@@ -99,6 +99,20 @@ class ExposureLayerMetadata(GenericLayerMetadata):
             'inasafe/'
             'allow_resampling/'
             'gco:CharacterString'),
+        'structure_class_mapping': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'structure_class_mapping/'
+            'gco:Dictionary'),
+        'road_class_mapping': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'road_class_mapping/'
+            'gco:Dictionary'),
     }
     _standard_properties = merge_dictionaries(
             GenericLayerMetadata._standard_properties, _standard_properties)
