@@ -57,17 +57,17 @@ layer_mode_raster_question = tr(
     'You have selected <b>%s %s</b> for this raster layer. '
     '<p>We need to know whether each cell in this raster represents '
     '<b>continuous</b> data or if the data have been <b>classified</b>.</p>'
-    )  # (subcategory, category)
+)  # (subcategory, category)
 layer_mode_vector_question = tr(
     'You have selected <b>%s</b> for this <b>%s</b> layer. '
     '<p>We need to confirm that attribute values represents <b>continuous</b> '
     'data or if the data have been <b>classified</b>.</p>'
-    )  # (subcategory, category)
+)  # (subcategory, category)
 layer_mode_vector_classified_confirm = tr(
     'You have selected <b>%s</b> for this <b>%s</b> layer. '
     '<p>We need to confirm that attribute values in this vector layer have '
     'been <b>classified</b> and are represented by a code.</p>'
-    )  # (subcategory, category)
+)  # (subcategory, category)
 layer_mode_vector_continuous_confirm = tr(
     'You have selected <b>%s</b> for this <b>%s</b> layer. '
     '<p>We need to confirm that attribute values represents '
@@ -140,6 +140,13 @@ classify_raster_question = tr(
     'Please drag unique values from the list on the left '
     'into the panel on the right and place them in the appropriate categories.'
 )  # (subcategory, category, classification)
+classify_vector_for_postprocessor_question = tr(
+    'You have selected <b>%s %s</b>, and the attribute is <b>%s</b>. The '
+    'aggregation postprocessor will need to know mapping of the attribute '
+    'values to known categories. Please drag unique values from the list '
+    'on the left into the panel on the right and place them in the '
+    'appropriate categories.'
+)      # (subcategory, category, field)
 select_function_constraints2_question = tr(
     'You selected <b>%s</b> hazard and <b>%s</b> exposure. Now, select the '
     '<b>geometry types</b> for the hazard and exposure layers you want to '
