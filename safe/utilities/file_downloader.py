@@ -115,7 +115,8 @@ class FileDownloader(object):
             # cancel
             def cancel_action():
                 """Cancel download."""
-                self.manager.deleteReply(self.reply)
+                self.reply.abort()
+                self.reply.deleteLater()
 
             self.reply.downloadProgress.connect(progress_event)
             self.progress_dialog.canceled.connect(cancel_action)
@@ -130,8 +131,8 @@ class FileDownloader(object):
 
         result = self.reply.error()
 
-        if qgis_version() >= 21100:
-            self.manager.deleteReply(self.reply)
+        self.reply.abort()
+        self.reply.deleteLater()
 
         if result == QNetworkReply.NoError:
             return True, None
