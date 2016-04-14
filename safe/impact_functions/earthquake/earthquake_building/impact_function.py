@@ -256,6 +256,8 @@ class EarthquakeBuildingFunction(
         legend_units = tr('(mmi)')
         legend_title = tr('Impact level')
 
+        impact_data = self.generate_data()
+
         extra_keywords = {
             'impact_summary': impact_summary,
             'impact_table': impact_table,
@@ -279,5 +281,6 @@ class EarthquakeBuildingFunction(
 
         msg = 'Created vector layer %s' % str(result_layer)
         LOGGER.debug(msg)
+        result_layer.impact_data = impact_data
         self._impact = result_layer
         return result_layer

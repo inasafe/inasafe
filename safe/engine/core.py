@@ -7,6 +7,7 @@ Provides the function calculate_impact()
 import numpy
 from datetime import datetime
 import logging
+import json
 
 from PyQt4.QtCore import QSettings
 
@@ -252,6 +253,11 @@ def calculate_impact(impact_function):
 
     result_layer.filename = output_filename
     result_layer.write_to_file(output_filename)
+    if hasattr(result_layer, 'impact_data'):
+        impact_data = result_layer.impact_data
+        json_file_name = output_filename[:-3] + 'json'
+        with open(json_file_name, 'w') as json_file:
+            json.dump(impact_data, json_file)
 
     # Establish default name (layer1 X layer1 x impact_function)
     if not result_layer.get_name():
