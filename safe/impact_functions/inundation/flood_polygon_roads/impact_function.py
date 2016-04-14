@@ -54,37 +54,30 @@ class FloodPolygonRoadsFunction(
         # The 'wet' variable
         self.wet = 'wet'
 
-    def format_notes(self):
+    def notes(self):
         """Return the notes section of the report.
 
-        .. versionadded:: 3.2.1
-
         :return: The notes that should be attached to this impact report.
-        :rtype: safe.messaging.Message
+        :rtype: dict
         """
-
+        title = tr('Notes and assumptions')
         hazard_terminology = tr('inundated')
         flood_value = [unicode(hazard_class)
                        for hazard_class in self.hazard_class_mapping[self.wet]]
-
-        message = m.Message(style_class='container')
-        message.add(
-            m.Heading(tr('Notes and assumptions'), **styles.INFO_STYLE))
-
-        checklist = m.BulletedList()
-        checklist.add(tr(
-            'Roads are said to be %s when in a region with field "%s" in '
-            '"%s" .' % (
+        fields = [
+            tr('Roads are said to be %s when in a region with field "%s" in '
+               '"%s" .' % (
                 hazard_terminology,
                 self.hazard_class_attribute,
-                ', '.join(flood_value))))
-        checklist.add(tr(
-            'Roads are closed if they are %s.' % hazard_terminology))
-        checklist.add(tr(
-            'Roads are open if they are not %s.' % hazard_terminology))
+                ', '.join(flood_value))),
+            tr('Roads are closed if they are %s.' % hazard_terminology),
+            tr('Roads are open if they are not %s.' % hazard_terminology)
+        ]
 
-        message.add(checklist)
-        return message
+        return {
+            'title': title,
+            'fields': fields
+        }
 
     def run(self):
         """Experimental impact function for flood polygons on roads."""

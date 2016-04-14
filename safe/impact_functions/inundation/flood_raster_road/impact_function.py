@@ -212,7 +212,7 @@ class FloodRasterRoadsFunction(
         super(FloodRasterRoadsFunction, self).__init__()
         RoadExposureReportMixin.__init__(self)
 
-    def format_notes(self):
+    def notes(self):
         """Return the notes section of the report.
 
         .. versionadded: 3.2.1
@@ -220,6 +220,10 @@ class FloodRasterRoadsFunction(
         :return: The notes that should be attached to this impact report.
         :rtype: safe.messaging.Message
         """
+
+        title = tr('Notes and assumptions')
+
+
 
         threshold = self.parameters['min threshold'].value
         hazard = self.hazard.keyword('hazard')
@@ -232,20 +236,17 @@ class FloodRasterRoadsFunction(
             hazard_terminology = tr('inundated')
             hazard_object = tr('water')
 
-        message = m.Message(style_class='container')
-        message.add(
-            m.Heading(tr('Notes and assumptions'), **styles.INFO_STYLE))
-        checklist = m.BulletedList()
-        checklist.add(tr(
-            'Roads are %s when %s levels exceed %.2f m.' %
-            (hazard_terminology, hazard_object, threshold)))
-        checklist.add(tr(
-            'Roads are closed if they are %s.' % hazard_terminology))
-        checklist.add(tr(
-            'Roads are open if they are not %s.' % hazard_terminology))
+        fields = [
+            tr('Roads are %s when %s levels exceed %.2f m.' %
+               (hazard_terminology, hazard_object, threshold)),
+            tr('Roads are closed if they are %s.' % hazard_terminology),
+            tr('Roads are open if they are not %s.' % hazard_terminology)
+        ]
 
-        message.add(checklist)
-        return message
+        return {
+            'title': title,
+            'fields': fields
+        }
 
     def run(self):
         """Run the impact function.

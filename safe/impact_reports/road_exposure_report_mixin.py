@@ -205,30 +205,27 @@ class RoadExposureReportMixin(ReportMixin):
 
         return message
 
-    def format_action_checklist(self):
-        """Action checklist for the itb earthquake fatality report.
+    def action_checklist(self):
+        """Return the action check list section of the report.
 
-        .. versionadded:: 3.2.1
-
-        :returns: The action checklist
-        :rtype: safe.messaging.Message
+        :return: The action check list as dict.
+        :rtype: dict
         """
-        message = m.Message(style_class='container')
-        message.add(m.Heading(tr('Action checklist'), **styles.INFO_STYLE))
-        checklist = m.BulletedList()
-        checklist.add(tr(
-            'Which roads can be used to evacuate people or to '
-            'distribute logistics?'))
-        checklist.add(tr(
-            'What type of vehicles can use the unaffected roads?'))
-        checklist.add(tr(
-            'What sort of equipment will be needed to reopen roads & '
-            'where will we get it?'))
-        checklist.add(tr(
-            'Which government department is responsible for supplying '
-            'equipment ?'))
-        message.add(checklist)
-        return message
+        title = tr('Action checklist')
+        fields = [
+            tr('Which roads can be used to evacuate people or to distribute '
+               'logistics?'),
+            tr('What type of vehicles can use the unaffected roads?'),
+            tr('What sort of equipment will be needed to reopen roads & where '
+               'will we get it?'),
+            tr('Which government department is responsible for supplying '
+               'equipment ?')
+        ]
+
+        return {
+            'title': title,
+            'fields': fields
+        }
 
     @property
     def total_road_length(self):
