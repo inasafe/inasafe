@@ -194,8 +194,7 @@ class PopulationExposureReportMixin(ReportMixin):
         table = m.Table(
             style_class='table table-condensed table-striped')
         table.caption = None
-        total_needs = self.total_needs
-        for frequency, needs in total_needs.items():
+        for frequency, needs in self.total_needs.items():
             row = m.Row()
             row.add(m.Cell(
                 tr('Relief items to be provided %s' % frequency),

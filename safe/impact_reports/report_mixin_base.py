@@ -88,8 +88,10 @@ class ReportMixin(object):
         :return: The notes that should be attached to this impact report.
         :rtype: dict
         """
-        raise NotImplementedError('Need to be implemented in child class.')
-
+        return {
+            'title': '',
+            'fields': []
+        }
 
     def action_checklist(self):
         """Return the action check list section of the report.
@@ -97,4 +99,7 @@ class ReportMixin(object):
         :return: The action check list as dict.
         :rtype: dict
         """
-        raise NotImplementedError('Need to be implemented in child class.')
+        return {
+            'title': '',
+            'fields': []
+        }
