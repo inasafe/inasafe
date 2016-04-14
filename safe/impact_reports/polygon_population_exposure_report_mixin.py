@@ -70,48 +70,43 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
 
         return message
 
-    def format_action_checklist(self):
-        """Polygon Population action.
+    def action_checklist(self):
+        """Return the action check list section of the report.
 
-        :returns: The population breakdown report.
-        :rtype: safe.messaging.Message
+        :return: The action check list as dict.
+        :rtype: dict
         """
-        message = m.Message(style_class='container')
-        message.add(m.Heading(tr('Action checklist'), **styles.INFO_STYLE))
+        title = tr('Action checklist')
+
         population = population_rounding(
             sum(self.affected_population.values()))
-        checklist = m.BulletedList()
-        checklist.add(tr('Which group or people is most affected?'))
-        checklist.add(
-            tr('Who are the vulnerable people in the population and why?'))
-        checklist.add(tr('How will warnings be disseminated?'))
-        checklist.add(tr('What are people\'s likely movements?'))
-        checklist.add(
-            tr('What are the security factors for the affected people?'))
-        checklist.add(
-            tr('What are the security factors for relief responders?'))
-        checklist.add(tr('How will we reach evacuated people?'))
-        checklist.add(
-            tr('What kind of food does the people normally consume?'))
-        checklist.add(
+
+        fields = [
+            tr('Which group or people is most affected?'),
+            tr('Who are the vulnerable people in the population and why?'),
+            tr('How will warnings be disseminated?'),
+            tr('What are people\'s likely movements?'),
+            tr('What are the security factors for the affected people?'),
+            tr('What are the security factors for relief responders?'),
+            tr('How will we reach evacuated people?'),
+            tr('What kind of food does the people normally consume?'),
             tr('What are the critical non-food items required by the affected '
-               'people?'))
-        checklist.add(tr(
-            'Are there enough water supply, sanitation, hygiene, food, '
-            'shelter, medicines and relief items available for %s people?'
-            % format_int(population)))
+               'people?'),
+            tr('Are there enough water supply, sanitation, hygiene, food, '
+               'shelter, medicines and relief items available for %s people?'
+                % format_int(population)),
+            tr('If yes, where are they located and how will we distribute '
+               'them?'),
+            tr('If no, where can we obtain additional relief items and how '
+               'will we distribute them?'),
+            tr('What are the related health risks?'),
+            tr('Who are the key people responsible for coordination?')
+        ]
 
-        checklist.add(tr(
-            'If yes, where are they located and how will we distribute them?'))
-        checklist.add(tr(
-            'If no, where can we obtain additional relief items and how will '
-            'we distribute them?'))
-        checklist.add(tr('What are the related health risks?'))
-        checklist.add(
-            tr('Who are the key people responsible for coordination?'))
-        message.add(checklist)
-
-        return message
+        return {
+            'title': title,
+            'fields': fields
+        }
 
     def minimum_needs_breakdown(self):
         """Breakdown by polygon population.
