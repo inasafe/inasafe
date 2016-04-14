@@ -30,7 +30,7 @@ road_class_mapping = [{
     'string_defaults': ['Motorway or highway']
 }, {
     'key': 'Motorway link',
-    'nam': 'Motorway link',
+    'name': tr('Motorway link'),
     'description': tr('Motorway link'),
     'string_defaults': ['Motorway link']
 }, {
