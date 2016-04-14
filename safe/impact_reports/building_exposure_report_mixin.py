@@ -240,6 +240,26 @@ class BuildingExposureReportMixin(ReportMixin):
         message.add(self.format_notes())
         return message
 
+    def generate_data(self):
+        """Create a dictionary contains impact data.
+
+        :returns: The impact report data.
+        :rtype: dict
+        """
+        question = self.question
+        impact_summary = self.impact_summary()
+        impact_table = self.buildings_breakdown()
+        action_checklist = self.action_checklist()
+        notes = self.notes()
+
+        return {
+            'question': question,
+            'impact summary': impact_summary,
+            'impact table': impact_table,
+            'action check list': action_checklist,
+            'notes': notes
+        }
+
     def format_impact_summary(self):
         """The impact summary as per category.
 
