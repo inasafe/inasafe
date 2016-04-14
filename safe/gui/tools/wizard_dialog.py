@@ -1327,9 +1327,11 @@ class WizardDialog(QDialog, FORM_CLASS):
         # a classification or postprocessor_classification is available
         if self.selected_classification():
             default_classes = self.selected_classification()['classes']
+            mapping_keyword = 'value_map'
             classification_name = self.selected_classification()['name']
         else:
             default_classes = self.postprocessor_classification_for_layer()
+            mapping_keyword = 'value_mapping'
             classification_name = ''
         if is_raster_layer(self.layer):
             self.lblClassify.setText(classify_raster_question % (
@@ -1392,7 +1394,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         # Overwrite assigned values according to existing keyword (if present).
         # Note the default_classes and unique_values are already loaded!
 
-        value_map = self.get_existing_keyword('value_map')
+        value_map = self.get_existing_keyword(mapping_keyword)
         # Do not continue if there is no value_map in existing keywords
         if value_map is None:
             return
@@ -4577,7 +4579,13 @@ class WizardDialog(QDialog, FORM_CLASS):
             keywords[key] = self.selected_classification()['key']
         value_map = self.selected_mapping()
         if value_map:
-            keywords['value_map'] = json.dumps(value_map)
+            if self.selected_classification():
+                # hazard mapping
+                keyword = 'value_map'
+            else:
+                # exposure mapping
+                keyword = 'value_mapping'
+            keywords[keyword] = json.dumps(value_map)
         extra_keywords = self.selected_extra_keywords()
         for key in extra_keywords:
             keywords[key] = extra_keywords[key]

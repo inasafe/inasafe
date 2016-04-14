@@ -99,7 +99,7 @@ class ExposureLayerMetadata(GenericLayerMetadata):
             'inasafe/'
             'allow_resampling/'
             'gco:CharacterString'),
-        'value_map': (
+        'value_mapping': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
