@@ -9,6 +9,9 @@ __copyright__ = 'imajimatika@gmail.com'
 
 
 import unittest
+from safe.test.utilities import get_qgis_app, test_data_path
+
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.impact_functions.earthquake.earthquake_building.\
     impact_function import EarthquakeBuildingFunction
