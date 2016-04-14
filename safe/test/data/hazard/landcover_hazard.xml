@@ -47,7 +47,7 @@
       <gmd:citation>
         <gmd:CI_Citation>
           <gmd:title>
-            <gco:CharacterString>People never resample</gco:CharacterString>
+            <gco:CharacterString>Godzilla</gco:CharacterString>
           </gmd:title>
           <gmd:date>
             <gmd:CI_Date>
@@ -172,66 +172,63 @@
       <gmd:supplementalInformation>
         <inasafe_keywords/>
         <inasafe>
+          <hazard_category>
+            <gco:CharacterString>multiple_event</gco:CharacterString>
+          </hazard_category>
+          <raster_hazard_classification>
+            <gco:CharacterString/>
+          </raster_hazard_classification>
           <multipart_polygon>
             <gco:Boolean/>
           </multipart_polygon>
-          <area_name_field>
+          <prob_fatality_mag>
+            <gco:Tuple/>
+          </prob_fatality_mag>
+          <volcano_name_field>
             <gco:CharacterString/>
-          </area_name_field>
-          <area_population_field>
-            <gco:CharacterString/>
-          </area_population_field>
-          <exposure_unit>
-            <gco:CharacterString>count</gco:CharacterString>
-          </exposure_unit>
-          <area_id_field>
-            <gco:CharacterString/>
-          </area_id_field>
-          <source>
-            <gco:CharacterString>HKV</gco:CharacterString>
-          </source>
-          <layer_geometry>
-            <gco:CharacterString>raster</gco:CharacterString>
-          </layer_geometry>
+          </volcano_name_field>
           <field>
-            <gco:CharacterString/>
+            <gco:CharacterString>Type</gco:CharacterString>
           </field>
+          <value_map>
+            <gco:Dictionary>{&quot;high&quot;: [&quot;Godzilla&quot;]}</gco:Dictionary>
+          </value_map>
+          <vector_hazard_classification>
+            <gco:CharacterString>generic_vector_hazard_classes</gco:CharacterString>
+          </vector_hazard_classification>
+          <layer_geometry>
+            <gco:CharacterString>polygon</gco:CharacterString>
+          </layer_geometry>
+          <hazard>
+            <gco:CharacterString>generic</gco:CharacterString>
+          </hazard>
           <scale>
             <gco:CharacterString/>
           </scale>
           <report>
             <gco:CharacterString/>
           </report>
-          <exposure>
-            <gco:CharacterString>population</gco:CharacterString>
-          </exposure>
+          <continuous_hazard_unit>
+            <gco:CharacterString/>
+          </continuous_hazard_unit>
           <keyword_version>
             <gco:CharacterString>3.3</gco:CharacterString>
           </keyword_version>
           <datatype>
             <gco:CharacterString/>
           </datatype>
+          <source>
+            <gco:CharacterString/>
+          </source>
+          <layer_purpose>
+            <gco:CharacterString>hazard</gco:CharacterString>
+          </layer_purpose>
           <resolution>
             <gco:FloatTuple/>
           </resolution>
-          <structure_class_field>
-            <gco:CharacterString/>
-          </structure_class_field>
-          <allow_resampling>
-            <gco:CharacterString>false</gco:CharacterString>
-          </allow_resampling>
-          <layer_purpose>
-            <gco:CharacterString>exposure</gco:CharacterString>
-          </layer_purpose>
-          <area_type_field>
-            <gco:CharacterString/>
-          </area_type_field>
           <layer_mode>
-            <gco:CharacterString>continuous</gco:CharacterString>
+            <gco:CharacterString>classified</gco:CharacterString>
           </layer_mode>
-          <road_class_field>
-            <gco:CharacterString/>
-          </road_class_field>
         </inasafe>
       </gmd:supplementalInformation>
     </gmd:MD_DataIdentification>
