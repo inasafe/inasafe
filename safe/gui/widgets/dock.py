@@ -1395,8 +1395,19 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         report.add(LOGO_ELEMENT)
         report.add(m.Heading(self.tr(
             'Analysis Results'), **INFO_STYLE))
-        report.add(self.keyword_io.read_keywords(
-            qgis_impact_layer, 'impact_summary'))
+        # If JSON Impact Data Exist, use JSON
+        json_path = qgis_impact_layer.source()[:-3] + 'json'
+        LOGGER.debug('JSON Path %s' % json_path)
+        if os.path.exists(json_path):
+            # FIXME (IS) Move up the import and check for different case.
+            from safe.impact_template.building_report_template import (
+                BuildingReportTemplate)
+            impact_report = BuildingReportTemplate(json_path).\
+                generate_message_report()
+            report.add(impact_report)
+        else:
+            report.add(self.keyword_io.read_keywords(
+                qgis_impact_layer, 'impact_summary'))
 
         # Get requested style for impact layer of either kind
         style = safe_impact_layer.get_style_info()
