@@ -311,7 +311,8 @@ class FloodEvent(QObject):
     def calculate_aggregate_impact(self, impact_function):
 
         # total affected population only calculated for hazard class >=2
-        # total minimum needs should be recalculated with new affected population
+        # total minimum needs should be recalculated with new affected
+        # population
         total_affected = 0
         needs_dict = {}
 
@@ -488,7 +489,7 @@ class FloodEvent(QObject):
                     "set_color_part(" \
                     "set_color_part('0,0,255','saturation', %d ), 'alpha', " \
                     "if(attribute($currentfeature, '%s') = 0, " \
-                    "0, 255))" % (i * 20,  self.affect_field)
+                    "0, 255))" % (i * 20, self.affect_field)
                 marker_border = \
                     "set_color_part(" \
                     "'0,0,0','alpha', " \
