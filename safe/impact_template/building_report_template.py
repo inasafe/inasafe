@@ -27,13 +27,14 @@ class BuildingReportTemplate(TemplateBase):
 
     ..versionadded: 3.4
     """
-    def __init__(self, impact_data):
+    def __init__(self, json_file=None, impact_data=None):
         """Initialize Template.
 
         :param impact_data: Dictionary that represent impact data.
         :type impact_data: dict
         """
-        super(BuildingReportTemplate, self).__init__(impact_data)
+        super(BuildingReportTemplate, self).__init__(
+            json_file=json_file, impact_data=impact_data)
         self.impact_table = self.impact_data.get('impact table')
 
     def generate_message_report(self):

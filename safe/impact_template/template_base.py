@@ -17,6 +17,8 @@ __filename__ = 'template_base.py'
 __date__ = '4/15/16'
 __copyright__ = 'imajimatika@gmail.com'
 
+import os
+import json
 import safe.messaging as m
 from safe.messaging import styles
 
@@ -27,12 +29,21 @@ class TemplateBase(object):
     ..versionadded: 3.4
     """
 
-    def __init__(self, impact_data):
+    def __init__(self, json_file=None, impact_data=None):
         """Initialize Template.
 
         :param impact_data: Dictionary that represent impact data.
         :type impact_data: dict
         """
+        json_impact_data = None
+        if json_file:
+            if os.path.exists(json_file):
+                with open(json_file) as json_file:
+                    json_impact_data = json.load(json_file)
+
+        if json_impact_data:
+            impact_data = json_impact_data
+
         self.impact_data = impact_data
         self.question = impact_data.get('question')
         self.impact_summary = impact_data.get('impact summary')

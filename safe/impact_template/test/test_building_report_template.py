@@ -33,7 +33,8 @@ class TestBuildingReportTemplate(unittest.TestCase):
         with open(JSON_FILE) as json_file:
             impact_data = json.load(json_file)
 
-        building_report_template = BuildingReportTemplate(impact_data)
+        building_report_template = BuildingReportTemplate(
+            impact_data=impact_data)
         report = building_report_template.generate_message_report()
         self.assertIn(
             impact_data['question'], report.message[0].to_text())
