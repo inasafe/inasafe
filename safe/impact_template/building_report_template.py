@@ -36,8 +36,8 @@ class BuildingReportTemplate(TemplateBase):
         super(BuildingReportTemplate, self).__init__(impact_data)
         self.impact_table = self.impact_data.get('impact table')
 
-    def generate_html_report(self):
-        """Generate HTML impact report.
+    def generate_message_report(self):
+        """Generate impact report as message object.
 
         :returns: The report.
         :rtype: safe.messaging.Message

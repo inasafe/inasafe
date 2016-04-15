@@ -34,18 +34,26 @@ class TemplateBase(object):
         :type impact_data: dict
         """
         self.impact_data = impact_data
-        self.question = impact_data.get('questions', '')
+        self.question = impact_data.get('question')
         self.impact_summary = impact_data.get('impact summary')
         self.action_check_list = impact_data.get('action check list')
         self.notes = impact_data.get('notes')
 
-    def generate_html_report(self):
-        """Generate HTML impact report.
+    def generate_message_report(self):
+        """Generate impact report as message object.
 
         :returns: The report.
         :rtype: safe.messaging.Message
         """
         raise NotImplementedError('Need to be implemented in child class')
+
+    def generate_html_report(self):
+        """Generate HTML impact report.
+
+        :returns: The report as HTML string.
+        :rtype: unicode
+        """
+        self.generate_message_report().to_html()
 
     def format_question(self):
         """Format question.

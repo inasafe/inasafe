@@ -34,9 +34,20 @@ class TestBuildingReportTemplate(unittest.TestCase):
             impact_data = json.load(json_file)
 
         building_report_template = BuildingReportTemplate(impact_data)
-        html_report = building_report_template.generate_html_report()
-        print html_report
-        # self.assertEqual(True, False)
+        report = building_report_template.generate_message_report()
+        self.assertIn(
+            impact_data['question'], report.message[0].to_text())
+        text = '''
+---
+**High**, 0------
+**Medium**, 181------
+**Low**, 0------
+**Affected buildings**, 181------
+**Not affected buildings**, 0------
+**Total**, 181---
+'''
+
+        self.assertIn(text, report.message[1].to_text())
 
 
 if __name__ == '__main__':
