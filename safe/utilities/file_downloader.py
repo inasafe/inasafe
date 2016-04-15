@@ -130,6 +130,8 @@ class FileDownloader(object):
             QCoreApplication.processEvents()
 
         result = self.reply.error()
+        http_code = int(self.reply.attribute(
+            QNetworkRequest.HttpStatusCodeAttribute))
 
         self.reply.abort()
         self.reply.deleteLater()
@@ -141,6 +143,13 @@ class FileDownloader(object):
             return False, tr(
                 'The network is unreachable. Please check your internet '
                 'connection.')
+
+        elif http_code == 408:
+            msg = tr(
+                'Sorry, the server aborted your request. '
+                'Please try a smaller area.')
+            LOGGER.debug(msg)
+            return False, msg
 
         elif result == QNetworkReply.ProtocolUnknownError or \
                 result == QNetworkReply.HostNotFoundError:
