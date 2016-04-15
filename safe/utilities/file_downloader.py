@@ -130,8 +130,12 @@ class FileDownloader(object):
             QCoreApplication.processEvents()
 
         result = self.reply.error()
-        http_code = int(self.reply.attribute(
-            QNetworkRequest.HttpStatusCodeAttribute))
+        try:
+            http_code = int(self.reply.attribute(
+                QNetworkRequest.HttpStatusCodeAttribute))
+        except TypeError:
+            # If the user cancels the request, the HTTP response will be None.
+            http_code = None
 
         self.reply.abort()
         self.reply.deleteLater()
