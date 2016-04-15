@@ -151,6 +151,13 @@ class FileDownloader(object):
             LOGGER.debug(msg)
             return False, msg
 
+        elif http_code == 509:
+            msg = tr(
+                'Sorry, the server is currently busy with another request. '
+                'Please try again in a few minutes.')
+            LOGGER.debug(msg)
+            return False, msg
+
         elif result == QNetworkReply.ProtocolUnknownError or \
                 result == QNetworkReply.HostNotFoundError:
             LOGGER.exception('Host not found : %s' % self.url.encodedHost())
