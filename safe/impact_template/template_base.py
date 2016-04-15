@@ -34,7 +34,7 @@ class TemplateBase(object):
         :type impact_data: dict
         """
         self.impact_data = impact_data
-        self.question = impact_data.get('questions')
+        self.question = impact_data.get('questions', '')
         self.impact_summary = impact_data.get('impact summary')
         self.action_check_list = impact_data.get('action check list')
         self.notes = impact_data.get('notes')

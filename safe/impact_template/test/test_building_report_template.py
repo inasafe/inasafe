@@ -16,11 +16,27 @@ __date__ = '4/15/16'
 __copyright__ = 'imajimatika@gmail.com'
 
 import unittest
+import os
+import json
+from pprint import pprint
+
+from safe.impact_template.building_report_template import (
+    BuildingReportTemplate)
+
+JSON_FILE = os.path.join('data', 'building_impact.json')
 
 
-class TestBuildingReportTempalet(unittest.TestCase):
-    def test_something(self):
-        self.assertEqual(True, False)
+class TestBuildingReportTemplate(unittest.TestCase):
+    def test_building_report_template(self):
+        """Test Building Report Template
+        """
+        with open(JSON_FILE) as json_file:
+            impact_data = json.load(json_file)
+
+        building_report_template = BuildingReportTemplate(impact_data)
+        html_report = building_report_template.generate_html_report()
+        print html_report
+        # self.assertEqual(True, False)
 
 
 if __name__ == '__main__':
