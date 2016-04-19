@@ -1,3 +1,17 @@
+Changelog for version 3.3.2
+================================
+
+afed399 (HEAD -> master, upstream/master) Merge pull request #2727 from Gustry/timeout
+9645fef Merge pull request #2729 from ismailsunni/fix_2720
+45eae08 Fix issue #2720
+96f3c24 fix if the request is cancelled, the http response is none
+8b44d90 handle HTTP 509 if the overpass is busy
+e820ad7 manage a timeout error from the overpass in the OSM Downloader
+431c4a4 Merge pull request #2722 from Gustry/fix-network-master
+bafaca7 fix delete network reply after a download
+9f610ef Merge pull request #2708 from timlinux/master
+24b79c3 (libby/master) Merge pull request #2701 from timlinux/master
+
 Changelog for version 3.3.1
 ================================
 
