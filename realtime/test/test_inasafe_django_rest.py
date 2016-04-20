@@ -2,7 +2,6 @@
 import unittest
 
 from hammock import Hammock
-from requests.models import Response
 from requests import codes
 
 from realtime.push_rest import INASAFE_REALTIME_REST_URL, InaSAFEDjangoREST

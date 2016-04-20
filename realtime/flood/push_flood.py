@@ -77,7 +77,7 @@ def push_flood_event_to_rest(flood_event, fail_silent=True):
         }
         flood_data_file = {
             'hazard_layer': open(flood_event.hazard_zip_path),
-            # 'impact_layer': open(impact_zip_path)
+            'impact_layer': open(impact_zip_path)
         }
 
         # modify headers
@@ -125,7 +125,7 @@ def push_flood_event_to_rest(flood_event, fail_silent=True):
         }
         event_report_files = {
             'impact_map': open(map_report_path),
-            'impact_report': open(table_report_path)
+            # 'impact_report': open(table_report_path)
         }
         # check report exists
 
