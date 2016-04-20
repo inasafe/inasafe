@@ -7,17 +7,22 @@ from os.path import join
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
 from PyQt4.QtCore import QVariant
+from os.path import join
 
 from safe.utilities.gis import (
     layer_attribute_names,
     is_polygon_layer,
+    buffer_points,
     validate_geo_array)
+from safe.common.exceptions import RadiiException
 from safe.test.utilities import (
     TESTDATA,
     HAZDATA,
     clone_shp_layer,
+    compare_two_vector_layers,
     clone_raster_layer,
     test_data_path,
+    load_layer,
     get_qgis_app)
 from safe.utilities.gis import get_optimal_extent
 from safe.common.exceptions import BoundingBoxError, InsufficientOverlapError
@@ -288,6 +293,31 @@ class TestQGIS(unittest.TestCase):
         else:
             message = 'Wrong input data should have raised an exception'
             raise Exception(message)
+
+    def test_buffer_points(self):
+
+        data_path = test_data_path('other', 'buffer_points_3857.shp')
+        layer, _ = load_layer(data_path)
+
+        output_crs = qgis.core.QgsCoordinateReferenceSystem('EPSG:4326')
+
+        radii = [1, 5, 3]
+        self.assertRaises(
+            RadiiException, buffer_points, layer, radii, 'test', output_crs)
+
+        radii = [1, 2, 3]
+        result = buffer_points(layer, radii, 'test', output_crs)
+        data_path = test_data_path('other', 'buffer_points_expected_4326.shp')
+        control_layer, _ = load_layer(data_path)
+        is_equal, msg = compare_two_vector_layers(control_layer, result)
+        self.assertTrue(is_equal, msg)
+
+        output_crs = qgis.core.QgsCoordinateReferenceSystem('EPSG:3857')
+        result = buffer_points(layer, radii, 'test', output_crs)
+        data_path = test_data_path('other', 'buffer_points_expected_3857.shp')
+        control_layer, _ = load_layer(data_path)
+        is_equal, msg = compare_two_vector_layers(control_layer, result)
+        self.assertTrue(is_equal, msg)
 
 if __name__ == '__main__':
     unittest.main()

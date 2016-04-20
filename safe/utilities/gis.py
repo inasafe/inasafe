@@ -20,6 +20,7 @@ from PyQt4.QtCore import QVariant
 from safe.common.exceptions import (
     MemoryLayerCreationError,
     BoundingBoxError,
+    NoKeywordsFoundError,
     InsufficientOverlapError,
     RadiiException)
 from safe.storage.core import read_layer as safe_read_layer
@@ -670,18 +671,20 @@ def buffer_points(point_layer, radii, hazard_zone_attribute, output_crs):
         QGis.WKBPolygon,
         output_crs,
         'ESRI Shapefile')
+    input_crs = point_layer.crs()
+
+    center = point_layer.extent().center()
+    utm = None
+    if output_crs.authid() == 'EPSG:4326':
+        utm = QgsCoordinateReferenceSystem(
+            get_utm_epsg(center.x(), center.y(), input_crs))
+        transform = QgsCoordinateTransform(point_layer.crs(), utm)
+
+    else:
+        transform = QgsCoordinateTransform(point_layer.crs(), output_crs)
 
     for point in point_layer.getFeatures():
         geom = point.geometry()
-
-        utm = None
-        if output_crs.authid() == 'EPSG:4326':
-            utm = QgsCoordinateReferenceSystem(
-                get_utm_epsg(geom.asPoint().x(), geom.asPoint().y()))
-            transform = QgsCoordinateTransform(point_layer.crs(), utm)
-        else:
-            transform = QgsCoordinateTransform(point_layer.crs(), output_crs)
-
         geom.transform(transform)
 
         inner_rings = None
@@ -698,8 +701,7 @@ def buffer_points(point_layer, radii, hazard_zone_attribute, output_crs):
             new_buffer = QgsFeature()
 
             if output_crs.authid() == 'EPSG:4326':
-                transform = QgsCoordinateTransform(utm, output_crs)
-                circle.transform(transform)
+                circle.transform(QgsCoordinateTransform(utm, output_crs))
 
             new_buffer.setGeometry(circle)
             attributes.append(radius)
@@ -711,6 +713,9 @@ def buffer_points(point_layer, radii, hazard_zone_attribute, output_crs):
     vector_layer = QgsVectorLayer(hazard_file_path, 'Polygons', 'ogr')
 
     keyword_io = KeywordIO()
-    keywords = keyword_io.read_keywords(point_layer)
-    keyword_io.write_keywords(vector_layer, keywords)
+    try:
+        keywords = keyword_io.read_keywords(point_layer)
+        keyword_io.write_keywords(vector_layer, keywords)
+    except NoKeywordsFoundError:
+        pass
     return vector_layer
