@@ -74,7 +74,7 @@ class ClassifiedPolygonHazardLandCoverFunction(
         hazard = self.hazard.layer
         exposure = self.exposure.layer
 
-        type_attr = self.parameters['land_cover_type_field'].value
+        type_attr = self.exposure.keyword('field')
 
         hazard_class_attribute = self.hazard.keyword('field')
         hazard_value_to_class = {}
