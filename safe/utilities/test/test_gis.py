@@ -295,7 +295,7 @@ class TestQGIS(unittest.TestCase):
             raise Exception(message)
 
     def test_buffer_points(self):
-
+        """Test if we can make buffers correctly, whatever the projection."""
         data_path = test_data_path('other', 'buffer_points_3857.shp')
         layer, _ = load_layer(data_path)
 

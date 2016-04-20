@@ -600,7 +600,8 @@ def get_utm_zone(longitude):
 def get_utm_epsg(longitude, latitude, crs=None):
     """Return epsg code of the utm zone according to X, Y coordinates.
 
-    By default, the CRS is EPSG:4326.
+    By default, the CRS is EPSG:4326. If the CRS is provided, first X,Y will
+    be reprojected from the input CRS to WGS84.
 
     The code is based on the code:
     http://gis.stackexchange.com/questions/34401
