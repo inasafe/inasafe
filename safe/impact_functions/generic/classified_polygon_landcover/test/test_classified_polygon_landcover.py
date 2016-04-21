@@ -55,8 +55,9 @@ class TestClassifiedPolygonLandCoverFunction(unittest.TestCase):
 
         self.assertEqual(impact.dataProvider().featureCount(), 7)
         features = {}
+        exposure_field = function.exposure.keyword('field')
         for f in impact.getFeatures():
-            type_tuple = f['FCODE'], f[function.target_field]
+            type_tuple = f[exposure_field], f[function.target_field]
             features[type_tuple] = round(f.geometry().area(), 1)
         expected_features = {
             (u'Meadow', u'high'): 250000.,
@@ -76,7 +77,7 @@ class TestClassifiedPolygonLandCoverFunction(unittest.TestCase):
             'layer_mode': 'classified',
             'layer_geometry': 'polygon',
             'exposure': 'land_cover',
-            'structure_class_field': 'FCODE',
+            'field': 'FCODE',
         }
 
         hazard_keywords = {

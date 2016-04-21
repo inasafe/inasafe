@@ -96,3 +96,9 @@ class PivotTable(object):
             self.total_rows[sum_row_index] += sum_value
             self.total_columns[sum_column_index] += sum_value
             self.total += sum_value
+
+    def __repr__(self):
+        return "<PivotTable total=%f\n  total_rows=%s\n  total_columns=%s\n" \
+            "  rows=%s\n  columns=%s\n  data=%s>" % (
+            self.total, repr(self.total_rows), repr(self.total_columns),
+            repr(self.rows), repr(self.columns), repr(self.data))

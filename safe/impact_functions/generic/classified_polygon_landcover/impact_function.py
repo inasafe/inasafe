@@ -172,6 +172,8 @@ class ClassifiedPolygonHazardLandCoverFunction(
                                    type_attr,
                                    zone_field)
 
+        print "LAND COVER REPORT DATA:\n" + str(report_data)  # for debugging
+
         # Generate the report of affected areas
         impact_summary = impact_table = _format_report(report_data)
 
@@ -219,6 +221,9 @@ class ClassifiedPolygonHazardLandCoverFunction(
 # non-member private functions used within this module
 
 def _svg_bar_chart_hazard(levels, max_level):
+
+    if max_level == 0:
+        return ""  # no data -> empty chart
 
     levels_percent = [ round(level * 100. / max_level) for level in levels ]
     return """
