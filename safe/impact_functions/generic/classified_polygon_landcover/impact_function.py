@@ -173,7 +173,7 @@ class ClassifiedPolygonHazardLandCoverFunction(
                                    zone_field)
 
         import sys
-        sys.stderr.write("LAND COVER REPORT DATA:\n" + \
+        sys.__stderr__.write("LAND COVER REPORT DATA:\n" + \
           str(report_data) + "\n")  # for debugging
 
         # Generate the report of affected areas
