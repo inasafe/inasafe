@@ -296,22 +296,35 @@ class TestQGIS(unittest.TestCase):
 
     def test_buffer_points(self):
         """Test if we can make buffers correctly, whatever the projection."""
+        # Original data in 3857.
         data_path = test_data_path('other', 'buffer_points_3857.shp')
         layer, _ = load_layer(data_path)
 
         output_crs = qgis.core.QgsCoordinateReferenceSystem('EPSG:4326')
 
+        # Wrong radii order.
         radii = [1, 5, 3]
         self.assertRaises(
             RadiiException, buffer_points, layer, radii, 'test', output_crs)
 
+        # Wrong projection
         radii = [1, 2, 3]
+        output_crs = qgis.core.QgsCoordinateReferenceSystem('EPSG:3857')
+        result = buffer_points(layer, radii, 'test', output_crs)
+        data_path = test_data_path('other', 'buffer_points_expected_4326.shp')
+        control_layer, _ = load_layer(data_path)
+        is_equal, msg = compare_two_vector_layers(control_layer, result)
+        self.assertFalse(is_equal, msg)
+
+        # Expected result in 4326.
+        output_crs = qgis.core.QgsCoordinateReferenceSystem('EPSG:4326')
         result = buffer_points(layer, radii, 'test', output_crs)
         data_path = test_data_path('other', 'buffer_points_expected_4326.shp')
         control_layer, _ = load_layer(data_path)
         is_equal, msg = compare_two_vector_layers(control_layer, result)
         self.assertTrue(is_equal, msg)
 
+        # Expected result in 3857.
         output_crs = qgis.core.QgsCoordinateReferenceSystem('EPSG:3857')
         result = buffer_points(layer, radii, 'test', output_crs)
         data_path = test_data_path('other', 'buffer_points_expected_3857.shp')
