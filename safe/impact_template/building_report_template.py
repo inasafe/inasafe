@@ -27,14 +27,23 @@ class BuildingReportTemplate(TemplateBase):
 
     ..versionadded: 3.4
     """
-    def __init__(self, json_file=None, impact_data=None):
+    def __init__(
+            self, impact_layer_path=None, json_file=None, impact_data=None):
         """Initialize Template.
+
+        :param impact_layer_path: Path to impact layer.
+        :type impact_layer_path: str
+
+        :param json_file: Path to json impact data.
+        :type json_file: str
 
         :param impact_data: Dictionary that represent impact data.
         :type impact_data: dict
         """
         super(BuildingReportTemplate, self).__init__(
-            json_file=json_file, impact_data=impact_data)
+            impact_layer_path=impact_layer_path,
+            json_file=json_file,
+            impact_data=impact_data)
         self.impact_table = self.impact_data.get('impact table')
 
     def generate_message_report(self):

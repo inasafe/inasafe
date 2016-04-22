@@ -21,6 +21,7 @@ import os
 import json
 import safe.messaging as m
 from safe.messaging import styles
+from safe.common.exceptions import MissingImpactReport
 
 
 class TemplateBase(object):
@@ -29,20 +30,30 @@ class TemplateBase(object):
     ..versionadded: 3.4
     """
 
-    def __init__(self, json_file=None, impact_data=None):
+    def __init__(
+            self, impact_layer_path=None, json_file=None, impact_data=None):
         """Initialize Template.
+
+        :param impact_layer_path: Path to impact layer.
+        :type impact_layer_path: str
+
+        :param json_file: Path to json impact data.
+        :type json_file: str
 
         :param impact_data: Dictionary that represent impact data.
         :type impact_data: dict
         """
-        json_impact_data = None
+        # Check for impact layer path first
+        if impact_layer_path:
+            impact_data_path = os.path.splitext(impact_layer_path)[0] + '.json'
+            json_file = impact_data_path
         if json_file:
             if os.path.exists(json_file):
                 with open(json_file) as json_file:
-                    json_impact_data = json.load(json_file)
+                    impact_data = json.load(json_file)
 
-        if json_impact_data:
-            impact_data = json_impact_data
+        if not impact_data:
+            raise MissingImpactReport
 
         self.impact_data = impact_data
         self.question = impact_data.get('question')

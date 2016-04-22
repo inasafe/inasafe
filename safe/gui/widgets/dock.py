@@ -92,7 +92,9 @@ from safe.common.exceptions import (
     InvalidGeometryError,
     UnsupportedProviderError,
     InvalidAggregationKeywords,
-    InsufficientMemoryWarning)
+    InsufficientMemoryWarning,
+    MissingImpactReport
+)
 from safe.report.impact_report import ImpactReport
 from safe.gui.tools.about_dialog import AboutDialog
 from safe.gui.tools.help_dialog import HelpDialog
@@ -1393,8 +1395,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # Get tabular information from impact layer
         report = m.Message()
         report.add(LOGO_ELEMENT)
-        report.add(m.Heading(self.tr(
-            'Analysis Results'), **INFO_STYLE))
+        report.add(m.Heading(self.tr('Analysis Results'), **INFO_STYLE))
         # If JSON Impact Data Exist, use JSON
         json_path = qgis_impact_layer.source()[:-3] + 'json'
         LOGGER.debug('JSON Path %s' % json_path)
@@ -1508,6 +1509,45 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         while QtGui.qApp.overrideCursor() is not None and \
                 QtGui.qApp.overrideCursor().shape() == QtCore.Qt.WaitCursor:
             QtGui.qApp.restoreOverrideCursor()
+
+    def show_impact_report(self, layer, keywords):
+        """Show the report for an impact layer.
+
+        .. versionadded: 3.4
+
+        .. note:: The print button will be enabled if this method is called.
+            Also, the question group box will be hidden and the 'show
+            question' button will be shown.
+
+        :param layer: QgsMapLayer instance that is now active
+        :type layer: QgsMapLayer, QgsRasterLayer, QgsVectorLayer
+
+        :param keywords: A keywords dictionary.
+        :type keywords: dict
+        """
+        LOGGER.debug('Showing Impact Report')
+        LOGGER.debug(layer)
+        # Init report
+        report = m.Message()
+        report.add(LOGO_ELEMENT)
+        report.add(m.Heading(self.tr('Analysis Results'), **INFO_STYLE))
+
+        from safe.impact_template.building_report_template import (
+            BuildingReportTemplate)
+        impact_report = BuildingReportTemplate(
+            impact_layer_path=layer.source()). \
+            generate_message_report()
+        report.add(impact_report)
+
+        if 'postprocessing_report' in keywords:
+            report.add(keywords['postprocessing_report'])
+        report.add(impact_attribution(keywords))
+        self.pbnPrint.setEnabled(True)
+        send_static_message(self, report)
+        # also hide the question and show the show question button
+        self.pbnShowQuestion.setVisible(True)
+        self.grpQuestion.setEnabled(True)
+        self.grpQuestion.setVisible(False)
 
     def show_impact_keywords(self, keywords):
         """Show the keywords for an impact layer.
@@ -1645,8 +1685,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
             # if 'impact_summary' in keywords:
             if keywords['layer_purpose'] == 'impact':
-                self.show_impact_keywords(keywords)
-                self.wvResults.impact_path = layer.source()
+                try:
+                    self.show_impact_report(layer, keywords)
+                except MissingImpactReport:
+                    self.show_impact_keywords(keywords)
             else:
                 if 'keyword_version' not in keywords.keys():
                     self.show_keyword_version_message(
