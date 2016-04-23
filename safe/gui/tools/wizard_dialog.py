@@ -134,7 +134,7 @@ from safe.gui.tools.wizard_strings import (
     select_explayer_from_browser_question,
     create_postGIS_connection_first)
 
-from safe.gui.tools.wizard_metadata import (
+from safe.definitions import (
     road_class_mapping,
     structure_class_mapping)
 
