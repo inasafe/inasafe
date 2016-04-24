@@ -233,8 +233,6 @@ class EarthquakeBuildingFunction(
         self.building_report_threshold = building_postprocessors.value[0].value
         self._consolidate_to_other()
 
-        impact_table = impact_summary = self.html_report()
-
         # Create style
         style_classes = [dict(label=class_1['label'], value=class_1['class'],
                               colour='#ffff00', transparency=1),
@@ -259,8 +257,6 @@ class EarthquakeBuildingFunction(
         impact_data = self.generate_data()
 
         extra_keywords = {
-            'impact_summary': impact_summary,
-            'impact_table': impact_table,
             'map_title': map_title,
             'legend_notes': legend_notes,
             'legend_units': legend_units,

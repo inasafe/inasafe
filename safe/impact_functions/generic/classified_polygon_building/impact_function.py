@@ -192,9 +192,6 @@ class ClassifiedPolygonHazardBuildingFunction(
         self.building_report_threshold = building_postprocessors.value[0].value
         self._consolidate_to_other()
 
-        # Generate simple impact report
-        impact_summary = impact_table = self.html_report()
-
         # Create style
         categories = self.affected_buildings.keys()
         categories.append(self._not_affected_value)
@@ -230,8 +227,6 @@ class ClassifiedPolygonHazardBuildingFunction(
         impact_data = self.generate_data()
 
         extra_keywords = {
-            'impact_summary': impact_summary,
-            'impact_table': impact_table,
             'target_field': self.target_field,
             'map_title': map_title,
             'legend_notes': legend_notes,

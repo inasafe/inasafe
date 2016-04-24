@@ -253,9 +253,10 @@ def calculate_impact(impact_function):
 
     result_layer.filename = output_filename
     if hasattr(result_layer, 'impact_data'):
-        result_layer.keywords.pop('impact_summary')
-        result_layer.keywords.pop('impact_table')
-        pass
+        if 'impact_summary' in result_layer.keywords:
+            result_layer.keywords.pop('impact_summary')
+        if 'impact_table' in result_layer.keywords:
+            result_layer.keywords.pop('impact_table')
     result_layer.write_to_file(output_filename)
     if hasattr(result_layer, 'impact_data'):
         impact_data = result_layer.impact_data
