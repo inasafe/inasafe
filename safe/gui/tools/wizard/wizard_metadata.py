@@ -2,7 +2,7 @@
 """
 InaSAFE Disaster risk assessment tool by AusAid **GUI InaSAFE Wizard Metadata.**
 
- ** NOTE This file meant for temporary storing metadata to be later moved
+ ** NOTE This file is meant for temporary storing metadata to be later moved
          to proper places.
 
 

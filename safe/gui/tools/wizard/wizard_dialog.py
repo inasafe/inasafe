@@ -758,7 +758,13 @@ class WizardDialog(QDialog, FORM_CLASS):
             keywords[key] = self.step_kw_classification.selected_classification()['key']
         value_map = self.step_kw_classify.selected_mapping()
         if value_map:
-            keywords['value_map'] = json.dumps(value_map)
+            if self.selected_classification():
+                # hazard mapping
+                keyword = 'value_map'
+            else:
+                # exposure mapping
+                keyword = 'value_mapping'
+            keywords[keyword] = json.dumps(value_map)
         extra_keywords = self.step_kw_extrakeywords.selected_extra_keywords()
         for key in extra_keywords:
             keywords[key] = extra_keywords[key]

@@ -13,10 +13,6 @@ from safe.definitions import (
     exposure_road,
     exposure_structure)
 
-from safe.postprocessors.building_type_postprocessor import (
-    BuildingTypePostprocessor)
-from safe.postprocessors.road_type_postprocessor import RoadTypePostprocessor
-
 from safe.utilities.gis import is_raster_layer
 
 from safe.gui.tools.wizard.wizard_strings import (
@@ -26,6 +22,9 @@ from safe.gui.tools.wizard.wizard_strings import (
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step import WizardStep
 
+from safe.gui.tools.wizard.wizard_metadata import (
+    road_class_mapping,
+    structure_class_mapping)
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
@@ -98,26 +97,14 @@ class StepKwClassify(WizardStep, FORM_CLASS):
         :rtype: list
 
         """
-        subcategory_key = self.parent.step_kw_subcategory.\
-            selected_subcategory()['key']
-        if subcategory_key == exposure_road['key']:
-            mapping = RoadTypePostprocessor().fields_values
-        elif subcategory_key == exposure_structure['key']:
-            mapping = BuildingTypePostprocessor().fields_values
+        selected_subcategory = self.parent.step_kw_subcategory.\
+            selected_subcategory()
+        if selected_subcategory == exposure_road:
+             return road_class_mapping
+        elif selected_subcategory == exposure_structure:
+            return structure_class_mapping
         else:
             return None
-
-        return [
-            {
-                'key': key,
-                'name': key,
-                'string_defaults': ([]
-                                    if mapping[key] == [None]
-                                    else mapping[key]),
-                'numeric_default_min': None,
-                'numeric_default_max': None
-            } for key in mapping
-        ]
 
     # noinspection PyMethodMayBeStatic
     def update_dragged_item_flags(self, item, column):
@@ -166,9 +153,11 @@ class StepKwClassify(WizardStep, FORM_CLASS):
         sel_cl = self.parent.step_kw_classification.selected_classification()
         if sel_cl:
             default_classes = sel_cl['classes']
+            mapping_keyword = 'value_map'
             classification_name = sel_cl['name']
         else:
             default_classes = self.postprocessor_classification_for_layer()
+            mapping_keyword = 'value_mapping'
             classification_name = ''
         if is_raster_layer(self.parent.layer):
             self.lblClassify.setText(classify_raster_question % (
@@ -216,7 +205,8 @@ class StepKwClassify(WizardStep, FORM_CLASS):
                     value_as_string.upper() in [
                         c.upper() for c in default_class['string_defaults']])
                 condition_2 = (
-                    field_type < 10 and (
+                    field_type < 10 and 'numeric_default_min' in default_class
+                    and 'numeric_default_max' in default_class and (
                         default_class['numeric_default_min'] <= unique_value <=
                         default_class['numeric_default_max']))
                 if condition_1 or condition_2:
@@ -231,7 +221,7 @@ class StepKwClassify(WizardStep, FORM_CLASS):
         # Overwrite assigned values according to existing keyword (if present).
         # Note the default_classes and unique_values are already loaded!
 
-        value_map = self.parent.get_existing_keyword('value_map')
+        value_map = self.parent.get_existing_keyword(mapping_keyword)
         # Do not continue if there is no value_map in existing keywords
         if value_map is None:
             return
@@ -311,7 +301,11 @@ class StepKwClassify(WizardStep, FORM_CLASS):
                 QtCore.Qt.ItemIsDropEnabled | QtCore.Qt.ItemIsEnabled)
             tree_branch.setExpanded(True)
             tree_branch.setFont(0, bold_font)
-            tree_branch.setText(0, default_class['name'])
+            if 'name' in default_class:
+                default_class_name = default_class['name']
+            else:
+                default_class_name = default_class['key']
+            tree_branch.setText(0, default_class_name)
             tree_branch.setData(0, QtCore.Qt.UserRole, default_class['key'])
             if 'description' in default_class:
                 tree_branch.setToolTip(0, default_class['description'])
