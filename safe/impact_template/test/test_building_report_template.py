@@ -18,12 +18,15 @@ __copyright__ = 'imajimatika@gmail.com'
 import unittest
 import os
 import json
-from pprint import pprint
+from safe.common.utilities import temp_dir
 
 from safe.impact_template.building_report_template import (
     BuildingReportTemplate)
 
-JSON_FILE = os.path.join('data', 'building_impact.json')
+TEMP_DIR = temp_dir(sub_dir='test/template')
+TEST_DIR = os.path.dirname(__file__)
+
+JSON_FILE = os.path.join(TEST_DIR, 'data', 'building_impact.json')
 
 
 class TestBuildingReportTemplate(unittest.TestCase):
