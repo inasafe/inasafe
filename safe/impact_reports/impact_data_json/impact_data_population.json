@@ -1,0 +1,38 @@
+{
+  "question": "Question",
+  "impact summary": {
+    "attributes": ["category", "value"],
+    "fields": [
+      ["High Hazard Zone", 11],
+      ["Medium Hazard Zone", 161],
+      ["Low Hazard Zone", 2],
+      ["Affected Building", 174],
+      ["Not Affected Building", 7],
+      ["Total", 181]
+    ]
+  },
+  "minimum needs": {
+    "weekly": [
+
+    ],
+    "once": [
+
+    ]
+  },
+  "action list": {
+    "title": "Action Check List Title",
+    "content": [
+      "Action check list content 1",
+      "Action check list content 2"
+    ]
+  },
+  "notes": {
+    "title": "Notes Title",
+    "content": [
+      "Notes content 1",
+      "Notes content 2"
+    ]
+  },
+  "aggregation": {
+  }
+}
