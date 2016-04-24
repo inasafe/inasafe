@@ -62,7 +62,7 @@ from safe.common.signals import (
 from safe import messaging as m
 from safe.messaging import styles
 from safe.common.exceptions import (
-    InsufficientOverlapError, TemplateLoadingError)
+    InsufficientOverlapError, TemplateLoadingError, MissingImpactReport)
 from safe.report.impact_report import ImpactReport
 from safe.gui.tools.impact_report_dialog import ImpactReportDialog
 from safe_extras.pydispatch import dispatcher
@@ -387,6 +387,9 @@ class AnalysisHandler(QObject):
         self.hide_busy()
         self.analysisDone.emit(True)
 
+    def show_impact_report(self, qgis_impact_layer):
+        pass
+
     def show_results(self, qgis_impact_layer, engine_impact_layer):
         """Helper function for slot activated when the process is done.
 
@@ -415,8 +418,17 @@ class AnalysisHandler(QObject):
         report.add(LOGO_ELEMENT)
         report.add(m.Heading(self.tr(
             'Analysis Results'), **INFO_STYLE))
-        report.add(self.keyword_io.read_keywords(
-            qgis_impact_layer, 'impact_summary'))
+        try:
+            from safe.impact_template.building_report_template import (
+                BuildingReportTemplate)
+            impact_report = BuildingReportTemplate(
+                impact_layer_path=qgis_impact_layer.source()). \
+                generate_message_report()
+            report.add(impact_report)
+        except MissingImpactReport:
+            report.add(self.keyword_io.read_keywords(
+                qgis_impact_layer, 'impact_summary'))
+
 
         # Get requested style for impact layer of either kind
         style = engine_impact_layer.get_style_info()

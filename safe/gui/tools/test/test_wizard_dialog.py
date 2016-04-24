@@ -33,17 +33,15 @@ pardir = os.path.abspath(
     os.path.join(os.path.dirname(__file__), '../../..///'))
 sys.path.append(pardir)
 
+from safe.test.utilities import get_qgis_app
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
 from safe.impact_functions import register_impact_functions
 from safe.common.utilities import temp_dir
 from safe.test.utilities import (
     clone_raster_layer,
     clone_shp_layer,
-    get_qgis_app,
     test_data_path)
-
-# AG: get_qgis_app() should be called before importing modules from
-# safe.gui.tools.wizard_dialog
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.definitions import inasafe_keyword_version
 from safe.gui.tools.wizard_dialog import (
@@ -1608,18 +1606,19 @@ class WizardDialogTest(unittest.TestCase):
         # step_fc_summary: run analysis
         dialog.pbnNext.click()
 
+        # No longer valid for impact data.
         # step_fc_analysis: test the html output
-        report_path = dialog.wvResults.report_path
-        size = os.stat(report_path).st_size
-        message = (
-            'Expected generated report to be %d +- %dBytes, got %d. '
-            'Please update expected_size if the generated output '
-            'is acceptable on your system.'
-            % (expected_report_size, tolerance, size))
-        self.assertTrue(
-            (expected_report_size - tolerance < size < expected_report_size +
-             tolerance),
-            message)
+        # report_path = dialog.wvResults.report_path
+        # size = os.stat(report_path).st_size
+        # message = (
+        #     'Expected generated report to be %d +- %dBytes, got %d. '
+        #     'Please update expected_size if the generated output '
+        #     'is acceptable on your system.'
+        #     % (expected_report_size, tolerance, size))
+        # self.assertTrue(
+        #     (expected_report_size - tolerance < size < expected_report_size +
+        #      tolerance),
+        #     message)
 
         # close the wizard
         dialog.pbnNext.click()
