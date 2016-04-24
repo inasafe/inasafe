@@ -290,6 +290,8 @@ class ITBFatalityFunction(
 
             # Sum up numbers for map
             # We need to use matrices here and not just numbers #2235
+            # filter out NaN to avoid overflow additions
+            mmi_matches = numpy.nan_to_num(mmi_matches)
             mask += mmi_matches   # Displaced
 
             # Generate text with result for this study

@@ -55,6 +55,11 @@ from safe.messaging import styles
 
 from safe.utilities.keyword_io import definition
 
+import logging
+
+
+LOGGER = logging.getLogger('InaSAFE')
+
 
 class ClassifiedPolygonHazardPolygonPeopleFunction(
         ClassifiedVHContinuousVE, PolygonPopulationExposureReportMixin):
@@ -145,8 +150,10 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         filename = unique_filename(suffix='.shp')
         impact_fields = exposure.dataProvider().fields()
         impact_fields.append(QgsField(self.target_field, QVariant.Int))
+        # impact_fields.append(QgsField(self.people_field, QVariant.Int))
         unaffected_fields = exposure.dataProvider().fields()
         unaffected_fields.append(QgsField(self.target_field, QVariant.Int))
+        # unaffected_fields.append(QgsField(self.people_field, QVariant.Int))
 
         writer = QgsVectorFileWriter(
             filename, "utf-8", impact_fields, QGis.WKBPolygon, exposure.crs())
@@ -191,8 +198,10 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         # Retrieve the classification that is used by the hazard layer.
         vector_hazard_classification = self.hazard.keyword(
             'vector_hazard_classification')
-        # Get the dictionary that contains the definition of the classification
-        vector_hazard_classification = definition(vector_hazard_classification)
+        # Get the dictionary that contains the definition of the
+        # classification
+        vector_hazard_classification = definition(
+            vector_hazard_classification)
         # Get the list classes in the classification
         vector_hazard_classes = vector_hazard_classification['classes']
 
@@ -234,7 +243,7 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
             style_class['transparency'] = transparency
             style_classes.append(style_class)
 
-            index = index + 1
+            index += 1
 
         style_info = dict(
             target_field=self.target_field,
@@ -315,6 +324,8 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
                 bbox = geometry.boundingBox()
                 geometry_area = geometry.area()
             else:
+                # Skip if it is an empty geometry
+                # Nothing we can do
                 continue
 
             # clip the exposure geometry to requested extent if necessary
@@ -336,7 +347,8 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
             self.all_areas_ids[area_id] += geometry_area
 
             # storing area id with its respective area name in
-            # self.areas_names this will help us in later in showing user names
+            # self.areas_names this will help us in later in
+            # showing user names
             #  and not ids
             if area_id not in self.areas_names:
                 self.areas_names[area_id] = feature[area_name_attribute]
@@ -351,6 +363,11 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
                 if not impact_geometry.wkbType() == QGis.WKBPolygon and \
                    not impact_geometry.wkbType() == QGis.WKBMultiPolygon:
                     continue  # no intersection found
+
+                if not impact_geometry.asPolygon():
+                    # impact_geometry is actually an empty polygon
+                    # so there is no impact
+                    continue
                 hazard = hazard_features[hazard_id]
                 hazard_attribute_key = self.get_hazard_class_field_key(hazard)
 

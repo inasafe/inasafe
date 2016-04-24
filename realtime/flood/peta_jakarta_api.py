@@ -17,14 +17,11 @@ class PetaJakartaAPI(object):
 
     @classmethod
     def get_aggregate_report(cls, duration, level):
-        rest_point = 'https://petajakarta.org/banjir/data/api/v2/' \
-                     'aggregates/live'
+        rest_point = 'https://rem.petajakarta.org/banjir/data/api/v2/rem/flooded'
         params = {
-            'hours': duration,
-            'level': level,
             'format': 'geojson'
         }
-        r = requests.get(rest_point, params=params)
+        r = requests.get(rest_point, params=params, verify=False)
         if not r.status_code == requests.codes.ok:
             LOGGER.error("Can't access API")
             return

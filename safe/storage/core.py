@@ -34,7 +34,7 @@ def read_layer(filename):
         raise ReadLayerError(msg)
 
 
-def read_qgis_layer(filename):
+def read_qgis_layer(filename, base_name=None):
     """Read layer from file and return as QgsMapLayer
 
     :param filename: the layer filename
@@ -43,7 +43,10 @@ def read_qgis_layer(filename):
     :return: QGIS Layer
     :rtype: QgsMapLayer
     """
-    base_name, ext = os.path.splitext(filename)
+    if base_name:
+        _, ext = os.path.splitext(filename)
+    else:
+        base_name, ext = os.path.splitext(filename)
     vector_extension = [
         '.shp', '.sqlite', '.json']
     raster_extension = ['.asc', '.tif', '.nc']
