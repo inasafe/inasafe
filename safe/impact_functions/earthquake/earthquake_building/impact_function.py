@@ -271,7 +271,7 @@ class EarthquakeBuildingFunction(
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 
         # Create vector layer and return
-        result_layer = Vector(
+        impact_layer = Vector(
             data=attributes,
             projection=interpolate_result.get_projection(),
             geometry=geometry,
@@ -279,8 +279,6 @@ class EarthquakeBuildingFunction(
             keywords=impact_layer_keywords,
             style_info=style_info)
 
-        msg = 'Created vector layer %s' % str(result_layer)
-        LOGGER.debug(msg)
-        result_layer.impact_data = impact_data
-        self._impact = result_layer
-        return result_layer
+        impact_layer.impact_data = impact_data
+        self._impact = impact_layer
+        return impact_layer

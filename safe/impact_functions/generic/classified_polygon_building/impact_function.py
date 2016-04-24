@@ -227,6 +227,8 @@ class ClassifiedPolygonHazardBuildingFunction(
             'Thousand separator is represented by %s' %
             get_thousand_separator())
 
+        impact_data = self.generate_data()
+
         extra_keywords = {
             'impact_summary': impact_summary,
             'impact_table': impact_table,
@@ -246,5 +248,6 @@ class ClassifiedPolygonHazardBuildingFunction(
             keywords=impact_layer_keywords,
             style_info=style_info)
 
+        impact_layer.impact_data = impact_data
         self._impact = impact_layer
         return impact_layer
