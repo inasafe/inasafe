@@ -192,16 +192,14 @@ class ClassifiedRasterHazardBuildingFunction(
                           style_classes=style_classes,
                           style_type='categorizedSymbol')
 
-        impact_table = impact_summary = self.html_report()
-
         # For printing map purpose
         map_title = tr('Buildings affected')
         legend_title = tr('Structure inundated status')
         legend_units = tr('(Low, Medium, High)')
 
+        impact_data = self.generate_data()
+
         extra_keywords = {
-            'impact_summary': impact_summary,
-            'impact_table': impact_table,
             'target_field': self.affected_field,
             'map_title': map_title,
             'legend_units': legend_units,
@@ -212,13 +210,15 @@ class ClassifiedRasterHazardBuildingFunction(
 
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 
-        # Create vector layer and return
-        vector_layer = Vector(
+        # Create impact layer and return
+        impact_layer = Vector(
             data=attributes,
             projection=self.exposure.layer.get_projection(),
             geometry=self.exposure.layer.get_geometry(),
             name=tr('Estimated buildings affected'),
             keywords=impact_layer_keywords,
             style_info=style_info)
-        self._impact = vector_layer
-        return vector_layer
+
+        impact_layer.impact_data = impact_data
+        self._impact = impact_layer
+        return impact_layer
