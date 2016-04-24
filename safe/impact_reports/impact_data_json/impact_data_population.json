@@ -1,4 +1,5 @@
 {
+  "exposure": "population",
   "question": "Question",
   "impact summary": {
     "attributes": ["category", "value"],
@@ -13,10 +14,13 @@
   },
   "minimum needs": {
     "weekly": [
-
+      ["Rice", 334],
+      ["Drinking Water [l]", 2083],
+      ["Clean Water [l]", 7973],
+      ["Family Kits", 24]
     ],
     "once": [
-
+      ["Toilets", 6]
     ]
   },
   "action list": {

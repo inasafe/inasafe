@@ -253,6 +253,7 @@ class BuildingExposureReportMixin(ReportMixin):
         notes = self.notes()
 
         return {
+            'exposure': 'building',
             'question': question,
             'impact summary': impact_summary,
             'impact table': impact_table,

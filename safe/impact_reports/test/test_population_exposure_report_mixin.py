@@ -97,7 +97,7 @@ class PopulationExposureReportMixinTest(unittest.TestCase):
 
     def test_0003_minimum_needs_breakdown(self):
         """Test minimum needs breakdown."""
-        needs_breakdown = self.population_mixin.minimum_needs_breakdown()
+        needs_breakdown = self.population_mixin.format_minimum_needs_breakdown()
         needs_breakdown = needs_breakdown.to_text()
 
         expected_needs = [

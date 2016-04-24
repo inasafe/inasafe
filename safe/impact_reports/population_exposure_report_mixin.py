@@ -70,10 +70,31 @@ class PopulationExposureReportMixin(ReportMixin):
         message = m.Message()
         message.add(m.Paragraph(self.question))
         message.add(self.format_impact_summary())
-        message.add(self.minimum_needs_breakdown())
+        message.add(self.format_minimum_needs_breakdown())
         message.add(self.format_action_checklist())
         message.add(self.format_notes())
         return message
+
+    def generate_data(self):
+        """Create a dictionary contains impact data.
+
+        :returns: The impact report data.
+        :rtype: dict
+        """
+        question = self.question
+        impact_summary = self.impact_summary()
+        impact_table = self.total_needs
+        action_checklist = self.action_checklist()
+        notes = self.notes()
+
+        return {
+            'exposure': 'building',
+            'question': question,
+            'impact summary': impact_summary,
+            'impact table': impact_table,
+            'action check list': action_checklist,
+            'notes': notes
+        }
 
     def action_checklist(self):
         """Return the action check list section of the report.
@@ -181,7 +202,7 @@ class PopulationExposureReportMixin(ReportMixin):
         message.add(table)
         return message
 
-    def minimum_needs_breakdown(self):
+    def format_minimum_needs_breakdown(self):
         """Breakdown by population.
 
         :returns: The population breakdown report.

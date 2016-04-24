@@ -1,4 +1,5 @@
 {
+  "exposure": "building",
   "question": "Question",
   "impact summary": {
     "attributes": ["category", "value"],
