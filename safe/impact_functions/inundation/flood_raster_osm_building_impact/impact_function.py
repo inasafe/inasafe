@@ -160,8 +160,6 @@ class FloodRasterBuildingFunction(
         building_postprocessors = postprocessors['BuildingType'][0]
         self.building_report_threshold = building_postprocessors.value[0].value
         self._consolidate_to_other()
-        # Generate simple impact report
-        impact_table = impact_summary = self.html_report()
 
         # For printing map purpose
         map_title = tr('Flooded buildings')
@@ -196,9 +194,9 @@ class FloodRasterBuildingFunction(
             style_classes=style_classes,
             style_type='categorizedSymbol')
 
+        impact_data = self.generate_data()
+
         extra_keywords = {
-            'impact_summary': impact_summary,
-            'impact_table': impact_table,
             'target_field': self.target_field,
             'map_title': map_title,
             'legend_title': legend_title,
@@ -209,13 +207,14 @@ class FloodRasterBuildingFunction(
 
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 
-        vector_layer = Vector(
+        impact_layer = Vector(
             data=features,
             projection=interpolated_layer.get_projection(),
             geometry=interpolated_layer.get_geometry(),
             name=tr('Estimated buildings affected'),
             keywords=impact_layer_keywords,
             style_info=style_info)
-        # Create vector layer and return
-        self._impact = vector_layer
-        return vector_layer
+
+        impact_layer.impact_data = impact_data
+        self._impact = impact_layer
+        return impact_layer
