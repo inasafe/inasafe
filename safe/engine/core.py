@@ -261,6 +261,7 @@ def calculate_impact(impact_function):
     if hasattr(result_layer, 'impact_data'):
         impact_data = result_layer.impact_data
         json_file_name = output_filename[:-3] + 'json'
+        LOGGER.debug(impact_data)
         with open(json_file_name, 'w') as json_file:
             json.dump(impact_data, json_file)
 

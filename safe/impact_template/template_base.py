@@ -19,6 +19,7 @@ __copyright__ = 'imajimatika@gmail.com'
 
 import os
 import json
+from collections import OrderedDict
 import safe.messaging as m
 from safe.messaging import styles
 from safe.common.exceptions import MissingImpactReport
@@ -50,7 +51,8 @@ class TemplateBase(object):
         if json_file:
             if os.path.exists(json_file):
                 with open(json_file) as json_file:
-                    impact_data = json.load(json_file)
+                    impact_data = json.load(
+                        json_file, object_pairs_hook=OrderedDict)
 
         if not impact_data:
             raise MissingImpactReport

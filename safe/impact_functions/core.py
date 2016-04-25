@@ -101,7 +101,18 @@ def evacuated_population_needs(population, minimum_needs):
         amount_pp = resource['value']
         resource['amount'] = int(ceil(population * float(amount_pp)))
         resource['table name'] = resource_name
+        # Cleaning NULL
+        from PyQt4.QtCore import QPyNullVariant
+        for k, v in resource.items():
+            if isinstance(v, QPyNullVariant):
+                resource[k] = None
+            if isinstance(v, dict):
+                for i, j in v.items():
+                    if isinstance(j, QPyNullVariant):
+                        v[i] = None
         population_needs_by_frequency[resource['frequency']].append(resource)
+
+
 
     return population_needs_by_frequency
 

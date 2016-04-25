@@ -337,10 +337,6 @@ class ITBFatalityFunction(
         ]
         total_needs = self.total_needs
 
-        # Result
-        impact_summary = self.html_report()
-        impact_table = impact_summary
-
         # Create style
         colours = ['#EEFFEE', '#FFFF7F', '#E15500', '#E4001B', '#730000']
         classes = create_classes(mask.flat[:], len(colours))
@@ -366,8 +362,9 @@ class ITBFatalityFunction(
             'Thousand separator is represented by %s' %
             get_thousand_separator())
 
+        impact_data = self.generate_data()
+
         extra_keywords = {
-            'impact_summary': impact_summary,
             'exposed_per_mmi': number_of_exposed,
             'total_population': self.total_population,
             'total_fatalities': population_rounding(self.total_fatalities),
@@ -375,7 +372,6 @@ class ITBFatalityFunction(
             'fatalities_per_mmi': number_of_fatalities,
             'total_displaced': population_rounding(total_displaced),
             'displaced_per_mmi': number_of_displaced,
-            'impact_table': impact_table,
             'map_title': map_title,
             'legend_notes': legend_notes,
             'legend_units': legend_units,
@@ -387,12 +383,14 @@ class ITBFatalityFunction(
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 
         # Create raster object and return
-        raster = Raster(
+        impact_layer = Raster(
             mask,
             projection=self.exposure.layer.get_projection(),
             geotransform=self.exposure.layer.get_geotransform(),
             keywords=impact_layer_keywords,
             name=tr('Estimated displaced population per cell'),
             style_info=style_info)
-        self._impact = raster
-        return raster
+
+        impact_layer.impact_data = impact_data
+        self._impact = impact_layer
+        return impact_layer

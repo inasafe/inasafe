@@ -1530,11 +1530,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         report.add(LOGO_ELEMENT)
         report.add(m.Heading(self.tr('Analysis Results'), **INFO_STYLE))
 
-        from safe.impact_template.building_report_template import (
-            BuildingReportTemplate)
-        impact_report = BuildingReportTemplate(
-            impact_layer_path=layer.source()). \
-            generate_message_report()
+        impact_template = get_report_template(impact_layer_path=layer.source())
+        impact_report = impact_template.generate_message_report()
         report.add(impact_report)
 
         if 'postprocessing_report' in keywords:

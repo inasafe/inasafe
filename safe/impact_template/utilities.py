@@ -22,9 +22,11 @@ import json
 
 from safe.common.exceptions import MissingImpactReport
 
-from safe.impact_template.template_base import TemplateBase
 from safe.impact_template.building_report_template import (
     BuildingReportTemplate)
+from safe.impact_template.population_report_template import (
+    PopulationReportTemplate)
+
 
 def get_report_template(
         impact_layer_path=None, json_file=None, impact_data=None):
@@ -56,4 +58,5 @@ def get_report_template(
 
     if impact_data['exposure'] == 'building':
         return BuildingReportTemplate(impact_data=impact_data)
-    
+    elif impact_data['exposure'] == 'population':
+        return PopulationReportTemplate(impact_data=impact_data)

@@ -83,15 +83,15 @@ class PopulationExposureReportMixin(ReportMixin):
         """
         question = self.question
         impact_summary = self.impact_summary()
-        impact_table = self.total_needs
+        minimum_needs = self.total_needs.copy()
         action_checklist = self.action_checklist()
         notes = self.notes()
 
         return {
-            'exposure': 'building',
+            'exposure': 'population',
             'question': question,
             'impact summary': impact_summary,
-            'impact table': impact_table,
+            'minimum needs': minimum_needs,
             'action check list': action_checklist,
             'notes': notes
         }
