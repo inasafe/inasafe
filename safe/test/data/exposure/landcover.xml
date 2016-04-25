@@ -188,7 +188,7 @@
             <gco:CharacterString/>
           </area_id_field>
           <source>
-            <gco:CharacterString/>
+            <gco:CharacterString>My data</gco:CharacterString>
           </source>
           <layer_geometry>
             <gco:CharacterString>polygon</gco:CharacterString>

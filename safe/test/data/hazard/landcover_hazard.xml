@@ -191,7 +191,7 @@
             <gco:CharacterString>Type</gco:CharacterString>
           </field>
           <value_map>
-            <gco:Dictionary>{&quot;high&quot;: [&quot;Run for life&quot;], &quot;medium&quot;: [&quot;Kinda bad&quot;], &quot;low&quot;: [&quot;No worries&quot;]}</gco:Dictionary>
+            <gco:Dictionary>{&quot;high&quot;: [&quot;High&quot;], &quot;medium&quot;: [&quot;Medium&quot;], &quot;low&quot;: [&quot;Low&quot;]}</gco:Dictionary>
           </value_map>
           <vector_hazard_classification>
             <gco:CharacterString>generic_vector_hazard_classes</gco:CharacterString>
@@ -218,7 +218,7 @@
             <gco:CharacterString/>
           </datatype>
           <source>
-            <gco:CharacterString/>
+            <gco:CharacterString>My data</gco:CharacterString>
           </source>
           <layer_purpose>
             <gco:CharacterString>hazard</gco:CharacterString>

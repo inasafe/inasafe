@@ -44,7 +44,7 @@ class TestClassifiedPolygonLandCoverFunction(unittest.TestCase):
         self.assertEqual(hazard_layer.isValid(), True)
         self.assertEqual(exposure_layer.isValid(), True)
 
-        rect_extent = [-1., 51., 0., 52.]
+        rect_extent = [106.5, -6.5, 107, -6]
         function.hazard = hazard_layer
         function.exposure = exposure_layer
         function.requested_extent = rect_extent
@@ -60,13 +60,13 @@ class TestClassifiedPolygonLandCoverFunction(unittest.TestCase):
             type_tuple = f[exposure_field], f[function.target_field]
             features[type_tuple] = round(f.geometry().area(), 1)
         expected_features = {
-            (u'Meadow', u'high'): 250000.,
-            (u'Meadow', u'medium'): 250000.,
-            (u'Population', u'high'): 1000000.,
-            (u'Population', u'medium'): 500000.,
-            (u'Population', u'low'): 500000.,
-            (u'Forest', u'high'): 250000.,
-            (u'Forest', u'low'): 250000.,
+            (u'Meadow', u'high'): 52000000.0,
+            (u'Meadow', u'medium'): 52000000.0,
+            (u'Population', u'high'): 208000000.0,
+            (u'Population', u'medium'): 104000000.0,
+            (u'Population', u'low'): 104000000.0,
+            (u'Forest', u'high'): 52000000.0,
+            (u'Forest', u'low'): 52000000.0,
         }
         self.assertEqual(features, expected_features)
 

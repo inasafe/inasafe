@@ -1,7 +1,0 @@
-exposure: land_cover
-field: FCODE
-keyword_version: 3.2
-layer_geometry: polygon
-layer_mode: classified
-layer_purpose: exposure
-title: Land Cover
