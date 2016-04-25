@@ -103,6 +103,7 @@ from safe_extras.pydispatch import dispatcher
 from safe.utilities.extent import Extent
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.utilities.unicode import get_unicode
+from safe.impact_template.utilities import get_report_template
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 INFO_STYLE = styles.INFO_STYLE
@@ -1400,11 +1401,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         json_path = qgis_impact_layer.source()[:-3] + 'json'
         LOGGER.debug('JSON Path %s' % json_path)
         if os.path.exists(json_path):
-            # FIXME (IS) Move up the import and check for different case.
-            from safe.impact_template.building_report_template import (
-                BuildingReportTemplate)
-            impact_report = BuildingReportTemplate(json_path).\
-                generate_message_report()
+            impact_template = get_report_template(json_file=json_path)
+            impact_report = impact_template.generate_message_report()
             report.add(impact_report)
         else:
             report.add(self.keyword_io.read_keywords(

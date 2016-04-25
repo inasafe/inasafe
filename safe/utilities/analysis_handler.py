@@ -68,6 +68,7 @@ from safe.gui.tools.impact_report_dialog import ImpactReportDialog
 from safe_extras.pydispatch import dispatcher
 from safe.utilities.extent import Extent
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
+from safe.impact_template.utilities import get_report_template
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 INFO_STYLE = styles.INFO_STYLE
@@ -419,11 +420,9 @@ class AnalysisHandler(QObject):
         report.add(m.Heading(self.tr(
             'Analysis Results'), **INFO_STYLE))
         try:
-            from safe.impact_template.building_report_template import (
-                BuildingReportTemplate)
-            impact_report = BuildingReportTemplate(
-                impact_layer_path=qgis_impact_layer.source()). \
-                generate_message_report()
+            impact_template = get_report_template(
+                impact_layer_path=qgis_impact_layer.source())
+            impact_report = impact_template.generate_message_report()
             report.add(impact_report)
         except MissingImpactReport:
             report.add(self.keyword_io.read_keywords(
