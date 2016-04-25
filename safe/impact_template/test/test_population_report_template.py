@@ -26,7 +26,7 @@ from safe.impact_template.population_report_template import (
 TEMP_DIR = temp_dir(sub_dir='test/template')
 TEST_DIR = os.path.dirname(__file__)
 
-JSON_FILE = os.path.join(TEST_DIR, 'data', 'building_impact.json')
+JSON_FILE = os.path.join(TEST_DIR, 'data', 'population_impact.json')
 
 
 class TestBuildingReportTemplate(unittest.TestCase):
@@ -36,19 +36,19 @@ class TestBuildingReportTemplate(unittest.TestCase):
         with open(JSON_FILE) as json_file:
             impact_data = json.load(json_file)
 
-        building_report_template = PopulationReportTemplate(
+        population_report_template = PopulationReportTemplate(
             impact_data=impact_data)
-        report = building_report_template.generate_message_report()
+        report = population_report_template.generate_message_report()
         self.assertIn(
             impact_data['question'], report.message[0].to_text())
         text = '''
 ---
-**High**, 0------
-**Medium**, 181------
-**Low**, 0------
-**Affected buildings**, 181------
-**Not affected buildings**, 0------
-**Total**, 181---
+**Number of fatalities**, 0------
+**Number of people displaced**, 130------
+**Total affected population**, 130------
+**Unaffected population**, 10------
+**Total population**, 130------
+**Population needing evacuation <sup>1</sup>**, 130---
 '''
 
         self.assertIn(text, report.message[1].to_text())
