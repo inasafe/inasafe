@@ -494,7 +494,8 @@ class Aggregator(QtCore.QObject):
         temporary_dir = temp_dir(sub_dir='pre-process')
         out_filename = unique_filename(suffix='.shp', dir=temporary_dir)
 
-        self.run_processing_algorithm("qgis:intersection", self.exposure_layer, self.layer, out_filename)
+        self.run_processing_algorithm(
+            'qgis:intersection', self.exposure_layer, self.layer, out_filename)
 
         self.copy_keywords(self.exposure_layer, out_filename)
 
@@ -506,12 +507,12 @@ class Aggregator(QtCore.QObject):
         self.exposure_layer = output_layer
 
         # keep then aggregation field name in exposure layer
-        # (wanted to use a keyword in exposure layer, but it would not be saved)
-        # TODO: handle name collision in case qgis:intersection renames original zone name field
+        # Wanted to use a keyword in exposure layer, but it would not be saved
+        # TODO: handle name collision in case qgis:intersection renames
+        # original zone name field
         agg_keyword = self.get_default_keyword('AGGR_ATTR_KEY')
         agg_attribute = self.read_keywords(self.layer)[agg_keyword]
         self.exposure_aggregation_field = agg_attribute
-
 
     def aggregate(self, safe_impact_layer):
         """Do any requested aggregation post processing.
@@ -588,7 +589,7 @@ class Aggregator(QtCore.QObject):
         else:
             message = self.tr(
                 '%s is %s but it should be either vector or raster') % (
-                          qgis_impact_layer.name(), qgis_impact_layer.type())
+                qgis_impact_layer.name(), qgis_impact_layer.type())
             # noinspection PyExceptionInherit
             raise ReadLayerError(message)
 

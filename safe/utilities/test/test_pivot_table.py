@@ -4,9 +4,9 @@ import unittest
 
 from safe.utilities.pivot_table import FlatTable, PivotTable
 
+
 class PivotTableTest(unittest.TestCase):
-    """Tests for reading and writing of raster and vector data
-    """
+    """Tests for reading and writing of raster and vector data."""
 
     def setUp(self):
 
@@ -19,22 +19,24 @@ class PivotTableTest(unittest.TestCase):
 
     def test_basic(self):
 
-        pivot_table = PivotTable(self.flat_table,
-                                 row_field="road_type",
-                                 column_field="hazard")
+        pivot_table = PivotTable(
+            self.flat_table, row_field="road_type", column_field="hazard")
 
-        self.assertEqual(pivot_table.rows, ['residential', 'primary', 'secondary'])
+        self.assertEqual(
+            pivot_table.rows, ['residential', 'primary', 'secondary'])
         self.assertEqual(pivot_table.columns, ['high', 'medium', 'low'])
-        self.assertEqual(pivot_table.data, [[0, 30, 50], [10, 20, 0], [0, 0, 40]])
+        self.assertEqual(
+            pivot_table.data, [[0, 30, 50], [10, 20, 0], [0, 0, 40]])
         self.assertEqual(pivot_table.total, 150)
         self.assertEqual(pivot_table.total_rows, [80, 30, 40])
         self.assertEqual(pivot_table.total_columns, [10, 50, 90])
 
     def test_one_column(self):
 
-        pivot_table = PivotTable(self.flat_table, row_field="road_type")
+        pivot_table = PivotTable(self.flat_table, row_field='road_type')
 
-        self.assertEqual(pivot_table.rows, ['residential', 'primary', 'secondary'])
+        self.assertEqual(
+            pivot_table.rows, ['residential', 'primary', 'secondary'])
         self.assertEqual(pivot_table.columns, [''])
         self.assertEqual(pivot_table.data, [[80], [30], [40]])
         self.assertEqual(pivot_table.total, 150)
@@ -43,7 +45,7 @@ class PivotTableTest(unittest.TestCase):
 
     def test_one_row(self):
 
-        pivot_table = PivotTable(self.flat_table, column_field="hazard")
+        pivot_table = PivotTable(self.flat_table, column_field='hazard')
 
         self.assertEqual(pivot_table.rows, [''])
         self.assertEqual(pivot_table.columns, ['high', 'medium', 'low'])
@@ -54,10 +56,11 @@ class PivotTableTest(unittest.TestCase):
 
     def test_filter(self):
 
-        pivot_table = PivotTable(self.flat_table,
-                                 column_field="hazard",
-                                 filter_field="road_type",
-                                 filter_value="primary")
+        pivot_table = PivotTable(
+            self.flat_table,
+            column_field='hazard',
+            filter_field='road_type',
+            filter_value='primary')
 
         self.assertEqual(pivot_table.rows, [''])
         self.assertEqual(pivot_table.columns, ['high', 'medium', 'low'])

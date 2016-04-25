@@ -30,6 +30,7 @@ from PyQt4.QtGui import QColor
 
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
+from safe.utilities.unicode import get_string
 from safe.common.utilities import unique_filename, format_decimal
 from safe.utilities.pivot_table import FlatTable, PivotTable
 import safe.messaging as m
@@ -41,8 +42,7 @@ from safe.impact_functions.generic.classified_polygon_landcover\
     import ClassifiedPolygonHazardLandCoverFunctionMetadata
 
 
-class ClassifiedPolygonHazardLandCoverFunction(
-    ClassifiedVHClassifiedVE):
+class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
 
     _metadata = ClassifiedPolygonHazardLandCoverFunctionMetadata()
 
@@ -120,24 +120,24 @@ class ClassifiedPolygonHazardLandCoverFunction(
             # clip the exposure geometry to requested extent if necessary
             if not extent_exposure.contains(bbox):
                 geometry = geometry.intersection(extent_exposure_geom)
-            landcover_type = f[type_attr]
 
             # find possible intersections with hazard layer
             impacted_geometries = []
             for hazard_id in hazard_index.intersects(bbox):
-                hazard_geometry = hazard_features[hazard_id].geometry()
+                hazard_id = hazard_features[hazard_id]
+                hazard_geometry = hazard_id.geometry()
                 impact_geometry = geometry.intersection(hazard_geometry)
                 if not impact_geometry.wkbType() == QGis.WKBPolygon and \
                    not impact_geometry.wkbType() == QGis.WKBMultiPolygon:
                     continue   # no intersection found
 
-                hazard_value = hazard_features[hazard_id][hazard_class_attribute]
+                hazard_value = hazard_id[hazard_class_attribute]
                 hazard_type = hazard_value_to_class.get(hazard_value)
 
                 # write the impacted geometry
                 f_impact = QgsFeature(impact_fields)
                 f_impact.setGeometry(impact_geometry)
-                f_impact.setAttributes(f.attributes()+[hazard_type])
+                f_impact.setAttributes(f.attributes() + [hazard_type])
                 writer.addFeature(f_impact)
 
                 impacted_geometries.append(impact_geometry)
@@ -173,8 +173,8 @@ class ClassifiedPolygonHazardLandCoverFunction(
                                    zone_field)
 
         import sys
-        sys.__stderr__.write("LAND COVER REPORT DATA:\n" + \
-          str(report_data) + "\n")  # for debugging
+        msg = 'LAND COVER REPORT DATA:\n %s \n' % get_string(report_data)
+        sys.__stderr__.write(msg)  # for debugging
 
         # Generate the report of affected areas
         impact_summary = impact_table = _format_report(report_data)
@@ -227,16 +227,24 @@ def _svg_bar_chart_hazard(levels, max_level):
     if max_level == 0:
         return ""  # no data -> empty chart
 
-    levels_percent = [ round(level * 100. / max_level) for level in levels ]
-    return """
-    <svg width="100%%" height="16">
-      <rect x="0" y="0" width="%.0f%%" height="4" style="fill:rgb(255,180,180)" />
-      <rect x="0" y="6" width="%.0f%%" height="4" style="fill:rgb(240,240,50)" />
-      <rect x="0" y="12" width="%.0f%%" height="4" style="fill:rgb(180,255,180)" />
-    </svg>""" % (levels_percent[0], levels_percent[1], levels_percent[2])
+    levels_percent = [round(level * 100. / max_level) for level in levels]
+    return '<svg width="100%%" height="16">' \
+           '<rect x="0" y="0" width="%.0f%%" height="4" ' \
+           'style="fill:rgb(255,180,180)" />' \
+           '<rect x="0" y="6" width="%.0f%%" height="4" ' \
+           'style="fill:rgb(240,240,50)" />' \
+           '<rect x="0" y="12" width="%.0f%%" height="4" ' \
+           'style="fill:rgb(180,255,180)" />' \
+           '</svg>' % (levels_percent[0], levels_percent[1], levels_percent[2])
 
 
-def format_pivot_table(pivot_table, caption=None, header_text='', total_columns=False, total_rows=False, bar_chart=False):
+def format_pivot_table(
+        pivot_table,
+        caption=None,
+        header_text='',
+        total_columns=False,
+        total_rows=False,
+        bar_chart=False):
 
     table = m.Table(style_class='table table-condensed table-striped')
     table.caption = caption
@@ -253,7 +261,8 @@ def format_pivot_table(pivot_table, caption=None, header_text='', total_columns=
 
     max_value = max(max(row) for row in pivot_table.data)
 
-    for row_name, data_row, total_row in zip(pivot_table.rows, pivot_table.data, pivot_table.total_rows):
+    for row_name, data_row, total_row in zip(
+            pivot_table.rows, pivot_table.data, pivot_table.total_rows):
         row = m.Row()
         row.add(m.Cell(row_name))
         if bar_chart:
@@ -262,7 +271,8 @@ def format_pivot_table(pivot_table, caption=None, header_text='', total_columns=
         for column_value in data_row:
             row.add(m.Cell(format_decimal(0.1, column_value), align='right'))
         if total_rows:
-            row.add(m.Cell(format_decimal(0.1, total_row), align='right', header=True))
+            row.add(m.Cell(
+                format_decimal(0.1, total_row), align='right', header=True))
         table.add(row)
 
     if total_columns:
@@ -271,9 +281,11 @@ def format_pivot_table(pivot_table, caption=None, header_text='', total_columns=
         if bar_chart:
             row.add(m.Cell('', header=False))
         for column_value in pivot_table.total_columns:
-            row.add(m.Cell(format_decimal(0.1, column_value), align='right', header=True))
+            row.add(m.Cell(
+                format_decimal(0.1, column_value), align='right', header=True))
         if total_rows:
-            row.add(m.Cell(format_decimal(0.1, pivot_table.total), align='right', header=True))
+            row.add(m.Cell(format_decimal(
+                0.1, pivot_table.total), align='right', header=True))
         table.add(row)
 
     return table
@@ -294,7 +306,7 @@ def _report_data(impact_layer, target_field, land_cover_field, zone_field):
     # prepare area calculator object
     area_calc = QgsDistanceArea()
     area_calc.setSourceCrs(impact_layer.crs())
-    area_calc.setEllipsoid("WGS84")
+    area_calc.setEllipsoid('WGS84')
     area_calc.setEllipsoidalMode(True)
 
     my_table = FlatTable('landcover', 'hazard', 'zone')
@@ -303,26 +315,29 @@ def _report_data(impact_layer, target_field, land_cover_field, zone_field):
         area = area_calc.measure(f.geometry()) / 1e4
         zone = f[zone_field] if zone_field is not None else None
 
-        my_table.add_value(area,
-                    landcover=f[land_cover_field],
-                    hazard=f[target_field],
-                    zone=zone)
+        my_table.add_value(
+            area,
+            landcover=f[land_cover_field],
+            hazard=f[target_field],
+            zone=zone)
 
-    pivot_table = PivotTable(my_table,
-                             row_field="landcover",
-                             column_field="hazard")
+    pivot_table = PivotTable(
+        my_table,
+        row_field='landcover',
+        column_field='hazard')
 
-    report = { 'impacted': pivot_table }
+    report = {'impacted': pivot_table}
 
     # breakdown by zones
     if zone_field is not None:
         report['impacted_zones'] = {}
         for zone in my_table.group_values('zone'):
-            table = PivotTable(my_table,
-                               row_field="landcover",
-                               column_field="hazard",
-                               filter_field="zone",
-                               filter_value=zone)
+            table = PivotTable(
+                my_table,
+                row_field="landcover",
+                column_field="hazard",
+                filter_field="zone",
+                filter_value=zone)
             report['impacted_zones'][zone] = table
 
     return report
@@ -339,19 +354,21 @@ def _format_report(report_data):
     message = m.Message(style_class='container')
     affected_text = tr('Affected Area (ha)')
 
-    table = format_pivot_table(report_data['impacted'],
-                               header_text=affected_text,
-                               total_columns=True,
-                               bar_chart=True)
+    table = format_pivot_table(
+        report_data['impacted'],
+        header_text=affected_text,
+        total_columns=True,
+        bar_chart=True)
     message.add(table)
 
     if 'impacted_zones' in report_data:
         for zone, table in report_data['impacted_zones'].iteritems():
             message.add(m.Heading(zone, **INFO_STYLE))
-            m_table = format_pivot_table(table,
-                                         header_text=affected_text,
-                                         total_columns=True,
-                                         bar_chart=True)
+            m_table = format_pivot_table(
+                table,
+                header_text=affected_text,
+                total_columns=True,
+                bar_chart=True)
             message.add(m_table)
 
     return message.to_html(suppress_newlines=True)

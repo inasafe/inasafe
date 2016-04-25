@@ -10,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
+
 class FlatTable(object):
 
     def __init__(self, *args):
@@ -43,9 +44,9 @@ class PivotTable(object):
         if column_field is not None:
             flat_column_index = flat_table.groups.index(column_field)
         if filter_field is not None:
-            flat_filter_index =flat_table.groups.index(filter_field)
+            flat_filter_index = flat_table.groups.index(filter_field)
 
-        sums = {} # key = (row, column), value = sum
+        sums = {}  # key = (row, column), value = sum
         for flat_key, flat_value in flat_table.data.iteritems():
             # apply filtering
             if filter_field is not None:
@@ -71,20 +72,20 @@ class PivotTable(object):
 
         # determine rows
         if row_field is None:
-            self.rows = [ '' ]
+            self.rows = ['']
         else:
             self.rows = list(flat_table.group_values(row_field))
 
         # determine columns
         if column_field is None:
-            self.columns = [ '' ]
+            self.columns = ['']
         else:
             self.columns = list(flat_table.group_values(column_field))
 
         self.total = 0
         self.total_rows = [0] * len(self.rows)
         self.total_columns = [0] * len(self.columns)
-        self.data = [ [] for i in xrange(len(self.rows)) ]
+        self.data = [[] for i in xrange(len(self.rows))]
         for i in xrange(len(self.rows)):
             self.data[i] = [0] * len(self.columns)
 
@@ -98,7 +99,12 @@ class PivotTable(object):
             self.total += sum_value
 
     def __repr__(self):
-        return "<PivotTable total=%f\n  total_rows=%s\n  total_columns=%s\n" \
-            "  rows=%s\n  columns=%s\n  data=%s>" % (
-            self.total, repr(self.total_rows), repr(self.total_columns),
-            repr(self.rows), repr(self.columns), repr(self.data))
+        pivot = '<PivotTable total=%f\n total_rows=%s\n total_columns=%s\n ' \
+                'rows=%s\n columns=%s\n data=%s>' % (
+                    self.total,
+                    repr(self.total_rows),
+                    repr(self.total_columns),
+                    repr(self.rows),
+                    repr(self.columns),
+                    repr(self.data))
+        return pivot
