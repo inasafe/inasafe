@@ -18,7 +18,9 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import unittest
+from collections import OrderedDict
 from safe.test.utilities import get_qgis_app
+
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.impact_reports.population_exposure_report_mixin import (
@@ -163,6 +165,63 @@ class PopulationExposureReportMixinTest(unittest.TestCase):
         self.assertEqual(total, 300, message)
         message = 'Non-existent category should not have anything.'
         self.assertIsNone(nothing, message)
+
+    def test_0006_generate_data(self):
+        """Test generating data."""
+        data = self.population_mixin.generate_data()
+        expected = {
+            'action check list': {
+                'fields': [
+                    u'Which group or population is most affected?',
+                    u'Who are the vulnerable people in the population and '
+                    u'why?',
+                    u'How will warnings be disseminated?',
+                    u"What are people's likely movements?",
+                    u'What are the security factors for the affected '
+                    u'population?',
+                    u'What are the security factors for relief responders?',
+                    u'How will we reach evacuated people?',
+                    u'What kind of food does the population normally consume?',
+                    u'What are the critical non-food items required by the '
+                    u'affected population?',
+                    u'Are there enough water supply, sanitation, hygiene, '
+                    u'food, shelter, medicines and relief items available for '
+                    u'300 people?',
+                    u'If yes, where are they located and how will we '
+                    u'distribute them?',
+                    u'If no, where can we obtain additional relief items and '
+                    u'how will we distribute them?',
+                    u'What are the related health risks?',
+                    u'Who are the key people responsible for coordination?'],
+                'title': u'Action checklist'},
+            'exposure': 'population',
+            'impact summary': {
+                'attributes': ['category', 'value'],
+                'fields': [
+                    [u'High', '100'],
+                    [u'Medium', '100'],
+                    [u'Low', '100'],
+                    [u'Total affected population', '300'],
+                    [u'Unaffected population', '100'],
+                    [u'Total population', '400'],
+                    [
+                        u'Population needing evacuation <sup>1</sup>',
+                        '300'
+                    ]
+                ]
+            },
+            'minimum needs': OrderedDict([('test frequency', [
+                {'name': 'test name 1', 'value': '1', 'amount': 300,
+                 'frequency': 'test frequency',
+                 'table name': 'test name 1 [u]',
+                 'unit': {'abbreviation': 'u'}},
+                {'name': 'test name 2', 'value': '2', 'amount': 600,
+                 'frequency': 'test frequency',
+                 'table name': 'test name 2 [u]',
+                 'unit': {'abbreviation': 'u'}}])]),
+            'notes': {'fields': [], 'title': ''},
+            'question': ''}
+        self.assertEquals(data, expected)
 
 
 if __name__ == '__main__':

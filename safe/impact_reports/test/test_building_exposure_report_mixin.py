@@ -259,10 +259,7 @@ class BuildingExposureReportMixinTest(unittest.TestCase):
 
     def test_0010_generate_data(self):
         """Test generating data."""
-        self.maxDiff = None
         data = self.building_mixin.generate_data()
-        from pprint import pprint
-        pprint(data)
         expected = {
             'exposure': 'building',
             'action check list': {'fields': [
