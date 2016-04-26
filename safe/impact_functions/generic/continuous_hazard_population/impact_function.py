@@ -42,8 +42,6 @@ from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
     filter_needs_parameters
 from safe.impact_reports.population_exposure_report_mixin import \
     PopulationExposureReportMixin
-import safe.messaging as m
-from safe.messaging import styles
 
 
 class ContinuousHazardPopulationFunction(
@@ -177,8 +175,6 @@ class ContinuousHazardPopulationFunction(
         ]
         total_needs = self.total_needs
 
-        impact_table = impact_summary = self.html_report()
-
         # Style for impact layer
         colours = [
             '#FFFFFF', '#38A800', '#79C900', '#CEED00',
@@ -222,9 +218,9 @@ class ContinuousHazardPopulationFunction(
             'Thousand separator is represented by %s' %
             get_thousand_separator())
 
+        impact_data = self.generate_data()
+
         extra_keywords = {
-            'impact_summary': impact_summary,
-            'impact_table': impact_table,
             'map_title': map_title,
             'legend_notes': legend_notes,
             'legend_units': legend_units,
@@ -235,7 +231,7 @@ class ContinuousHazardPopulationFunction(
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 
         # Create raster object and return
-        raster_layer = Raster(
+        impact_layer = Raster(
             data=impacted_exposure,
             projection=self.hazard.layer.get_projection(),
             geotransform=self.hazard.layer.get_geotransform(),
@@ -244,5 +240,7 @@ class ContinuousHazardPopulationFunction(
                 get_function_title(self).lower()),
             keywords=impact_layer_keywords,
             style_info=style_info)
-        self._impact = raster_layer
-        return raster_layer
+
+        impact_layer.impact_data = impact_data
+        self._impact = impact_layer
+        return impact_layer
