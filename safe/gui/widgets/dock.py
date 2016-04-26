@@ -193,7 +193,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         canvas = self.iface.mapCanvas()
 
         # Enable on the fly projection by default
-        canvas.mapRenderer().setProjectionsEnabled(True)
+        canvas.setCrsTransformEnabled(True)
         self.connect_layer_listener()
         self.grpQuestion.setEnabled(False)
         self.grpQuestion.setVisible(False)

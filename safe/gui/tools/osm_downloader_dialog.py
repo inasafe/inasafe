@@ -551,7 +551,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
                 QgsExpressionContextUtils.setLayerVariable(
                     layer, 'qgis_25d_angle', 70)
 
-        canvas_srid = self.canvas.mapRenderer().destinationCrs().srsid()
+        canvas_srid = self.canvas.mapSettings().destinationCrs().srsid()
         on_the_fly_projection = self.canvas.hasCrsTransformEnabled()
         if canvas_srid != 4326 and not on_the_fly_projection:
             if QGis.QGIS_VERSION_INT >= 20400:
