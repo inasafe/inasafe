@@ -34,6 +34,7 @@ class TestBuildingTypePostprocessor(unittest.TestCase):
             'key_attribute': 'type',
             u'Building type': True,
             'target_field': 'safe_ag__4',
+            'value_mapping': {u'Government': [u'Government']},
             'impact_attrs': [
                 {'TYPE': 'Government', 'safe_ag__4': 1},
                 {'TYPE': 'Government', 'safe_ag__4': 0},
@@ -59,6 +60,7 @@ class TestBuildingTypePostprocessor(unittest.TestCase):
             'key_attribute': 'type',
             u'Building type': True,
             'target_field': 'safe_ag__4',
+            'value_mapping': {u'Government': [u'Government']},
             'impact_attrs': [
                 {'TYPE': 'Government', 'safe_ag__4': 'Zone 1'},
                 {'TYPE': 'Government', 'safe_ag__4': 'Not Affected'},
@@ -84,6 +86,10 @@ class TestBuildingTypePostprocessor(unittest.TestCase):
             'key_attribute': 'type',
             u'Building type': True,
             'target_field': 'safe_ag__4',
+            'value_mapping': {
+                u'Government': [u'Government'],
+                u'Other': [u'Museum']
+            },
             'impact_attrs': [
                 {'TYPE': 'Government', 'safe_ag__4': 'Zone 1'},
                 {'TYPE': 'Museum', 'safe_ag__4': 'Zone 2'},
