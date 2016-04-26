@@ -46,6 +46,9 @@ class PivotTable(object):
         if filter_field is not None:
             flat_filter_index = flat_table.groups.index(filter_field)
 
+        if len(flat_table.data) == 0:
+            raise ValueError("no input data")
+
         sums = {}  # key = (row, column), value = sum
         for flat_key, flat_value in flat_table.data.iteritems():
             # apply filtering

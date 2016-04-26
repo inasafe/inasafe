@@ -31,6 +31,7 @@ from PyQt4.QtGui import QColor
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
 from safe.utilities.unicode import get_string
+from safe.common.exceptions import ZeroImpactException
 from safe.common.utilities import unique_filename, format_decimal
 from safe.utilities.pivot_table import FlatTable, PivotTable
 import safe.messaging as m
@@ -162,6 +163,9 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
 
         del writer
         impact_layer = QgsVectorLayer(filename, "Impacted Land Cover", "ogr")
+
+        if impact_layer.featureCount() == 0:
+            raise ZeroImpactException()
 
         zone_field = None
         if self.aggregator:
