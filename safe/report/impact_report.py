@@ -45,10 +45,10 @@ from safe.common.exceptions import (
 from safe import messaging as m
 from safe.messaging import styles
 from safe.utilities.keyword_io import KeywordIO
-from safe.utilities.resources import resources_path
 from safe.utilities.gis import qgis_version
 from safe.utilities.utilities import impact_attribution, html_to_file
-from safe.utilities.resources import html_footer, html_header, resource_url
+from safe.utilities.resources import (
+    html_footer, html_header, resource_url, resources_path)
 from safe.utilities.i18n import tr
 from safe.defaults import (
     white_inasafe_logo_path,
@@ -56,6 +56,7 @@ from safe.defaults import (
     supporters_logo_path,
     default_north_arrow_path)
 from safe.report.template_composition import TemplateComposition
+from safe.impact_template.utilities import get_report_template
 
 INFO_STYLE = styles.INFO_STYLE
 LOGO_ELEMENT = m.Image(
@@ -559,7 +560,11 @@ class ImpactReport(object):
         if output_path is None:
             output_path = unique_filename(suffix='.pdf', dir=temp_dir())
 
-        summary_table = keywords.get('impact_summary', None)
+        try:
+            impact_template = get_report_template(self.layer.source())
+            summary_table = impact_template.generate_html_report()
+        except:
+            summary_table = keywords.get('impact_summary', None)
         full_table = keywords.get('impact_table', None)
         aggregation_table = keywords.get('postprocessing_report', None)
         attribution_table = impact_attribution(keywords)

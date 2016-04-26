@@ -77,7 +77,7 @@ class TemplateBase(object):
         :returns: The report as HTML string.
         :rtype: unicode
         """
-        self.generate_message_report().to_html()
+        return self.generate_message_report().to_html()
 
     def format_question(self):
         """Format question.
