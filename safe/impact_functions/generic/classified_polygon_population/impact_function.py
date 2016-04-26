@@ -37,8 +37,6 @@ from safe.gui.tools.minimum_needs.needs_profile import (
     filter_needs_parameters)
 from safe.impact_reports.population_exposure_report_mixin import \
     PopulationExposureReportMixin
-import safe.messaging as m
-from safe.messaging import styles
 from safe.utilities.keyword_io import definition
 
 
@@ -112,9 +110,10 @@ class ClassifiedPolygonHazardPopulationFunction(
         # Check if hazard_class_attribute exists in hazard_layer
         if (self.hazard_class_attribute not in
                 self.hazard.layer.get_attribute_names()):
-            message = ('Hazard data %s does not contain expected hazard '
-                   'zone attribute "%s". Please change it in the option. ' %
-                   (self.hazard.name, self.hazard_class_attribute))
+            message = tr(
+                'Hazard data %s does not contain expected hazard '
+                'zone attribute "%s". Please change it in the option. '
+                % (self.hazard.name, self.hazard_class_attribute))
             # noinspection PyExceptionInherit
             raise InaSAFEError(message)
 
@@ -179,8 +178,6 @@ class ClassifiedPolygonHazardPopulationFunction(
             message = no_population_impact_message(self.question)
             raise ZeroImpactException(message)
 
-        impact_table = impact_summary = self.html_report()
-
         # Create style
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
                    '#FFCC00', '#FF6600', '#FF0000', '#7A0000']
@@ -227,9 +224,9 @@ class ClassifiedPolygonHazardPopulationFunction(
             'Thousand separator is represented by  %s' %
             get_thousand_separator())
 
+        impact_data = self.generate_data()
+
         extra_keywords = {
-            'impact_summary': impact_summary,
-            'impact_table': impact_table,
             'target_field': self.target_field,
             'map_title': map_title,
             'legend_notes': legend_notes,
@@ -248,5 +245,6 @@ class ClassifiedPolygonHazardPopulationFunction(
             keywords=impact_layer_keywords,
             style_info=style_info)
 
+        impact_layer.impact_data = impact_data
         self._impact = impact_layer
         return impact_layer
