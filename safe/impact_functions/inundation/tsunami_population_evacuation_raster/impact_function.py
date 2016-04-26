@@ -1,5 +1,15 @@
 # coding=utf-8
-"""Tsunami Evacuation Impact Function."""
+"""InaSAFE Disaster risk tool by Australian Aid - Tsunami Impact Function
+on Population.
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
+"""
 import numpy
 
 from safe.impact_functions.bases.continuous_rh_continuous_re import \

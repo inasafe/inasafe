@@ -27,8 +27,6 @@ from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
 from safe.common.exceptions import KeywordNotFoundError, ZeroImpactException
-import safe.messaging as m
-from safe.messaging import styles
 
 LOGGER = logging.getLogger('InaSAFE')
 
