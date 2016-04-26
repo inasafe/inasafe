@@ -46,8 +46,6 @@ from safe.common.exceptions import (
     FunctionParametersError, ZeroImpactException)
 from safe.impact_reports.population_exposure_report_mixin import \
     PopulationExposureReportMixin
-import safe.messaging as m
-from safe.messaging import styles
 
 
 class ClassifiedRasterHazardPopulationFunction(
@@ -181,7 +179,6 @@ class ClassifiedRasterHazardPopulationFunction(
         ]
 
         total_needs = self.total_needs
-        impact_table = impact_summary = self.html_report()
 
         # Create style
         colours = [
@@ -226,9 +223,9 @@ class ClassifiedRasterHazardPopulationFunction(
             'Thousand separator is represented by %s' %
             get_thousand_separator())
 
+        impact_data = self.generate_data()
+
         extra_keywords = {
-            'impact_summary': impact_summary,
-            'impact_table': impact_table,
             'map_title': map_title,
             'legend_notes': legend_notes,
             'legend_units': legend_units,
@@ -239,7 +236,7 @@ class ClassifiedRasterHazardPopulationFunction(
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 
         # Create raster object and return
-        raster_layer = Raster(
+        impact_layer = Raster(
             data=affected_population,
             projection=self.exposure.layer.get_projection(),
             geotransform=self.exposure.layer.get_geotransform(),
@@ -248,5 +245,7 @@ class ClassifiedRasterHazardPopulationFunction(
                 .get_function_title(self).lower()),
             keywords=impact_layer_keywords,
             style_info=style_info)
-        self._impact = raster_layer
-        return raster_layer
+
+        impact_layer.impact_data = impact_data
+        self._impact = impact_layer
+        return impact_layer
