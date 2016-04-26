@@ -10,7 +10,6 @@ __license__ = "GPL"
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
-from collections import OrderedDict
 import itertools
 
 from safe.postprocessors.abstract_postprocessor import AbstractPostprocessor
@@ -37,24 +36,7 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
         self.no_features = None
         self.type_fields = None
         self.valid_type_fields = None
-        self.fields_values = OrderedDict([
-            ('Medical', ['Clinic/Doctor', 'Hospital']),
-            ('Schools', ['School', 'University/College', ]),
-            ('Places of worship', ['Place of Worship - Unitarian',
-                                   'Place of Worship - Islam',
-                                   'Place of Worship - Buddhist',
-                                   'Place of Worship']),
-            ('Residential', ['Residential']),
-            ('Government', ['Government']),
-            ('Public Building', ['Public Building']),
-            ('Fire Station', ['Fire Station']),
-            ('Police Station', ['Police Station']),
-            ('Supermarket', ['Supermarket']),
-            ('Commercial', ['Commercial']),
-            ('Industrial', ['Industrial']),
-            ('Utility', ['Utility']),
-            ('Sports Facility', ['Sports Facility']),
-            ('Other', [])])
+        self.value_mapping = None
 
         self.known_types = []
         self._update_known_types()
@@ -78,12 +60,14 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
                 self.impact_attrs is not None or
                 self.target_field is not None or
                 self.valid_type_fields is not None or
+                self.value_mapping is not None or
                 self.type_fields is not None):
             self._raise_error('clear needs to be called before setup')
 
         self.impact_total = params['impact_total']
         self.impact_attrs = params['impact_attrs']
         self.target_field = params['target_field']
+        self.value_mapping = params['value_mapping']
         self.valid_type_fields = params['key_attribute']
 
         # find which attribute field has to be used
@@ -110,6 +94,7 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
 
         if (self.impact_total is None or
                 self.impact_attrs is None or
+                self.value_mapping is None or
                 self.target_field is None):
             self._log_message('%s not all params have been correctly '
                               'initialized, setup needs to be called before '
@@ -117,7 +102,7 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
                               % self.__class__.__name__)
         else:
             self._calculate_total()
-            for title, field_values in self.fields_values.iteritems():
+            for title, field_values in self.value_mapping.iteritems():
                 self._calculate_type(title, field_values)
 
     def clear(self):
@@ -128,6 +113,7 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
         self.impact_attrs = None
         self.target_field = None
         self.type_fields = None
+        self.value_mapping = None
         self.valid_type_fields = None
 
     def _calculate_total(self):
@@ -228,6 +214,8 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
         :param building_type: the name of the type to add to the known types
         :type building_type: str
         """
+        # Fixme, as we use a mapping to classify values, do we need this ?
+        """
         if type is not None:
             self.fields_values['Other'].append(building_type)
 
@@ -236,3 +224,5 @@ class BuildingTypePostprocessor(AbstractPostprocessor):
         self.known_types = list(itertools.chain.from_iterable(
             itertools.repeat(x, 1) if isinstance(x, str) else x for x in
             self.fields_values.values()))
+        """
+        return
