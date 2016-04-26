@@ -489,13 +489,24 @@ class Aggregator(QtCore.QObject):
         if self.aoi_mode:
             return  # nothing to do
 
-        # TODO: support case when exposure is not in WGS 84 coordinates
-
         temporary_dir = temp_dir(sub_dir='pre-process')
+
+        # reproject aggregation layer if not in the same CRS as exposure
+        if self.exposure_layer.crs() != self.layer.crs():
+            agg_filename = unique_filename(suffix='.shp', dir=temporary_dir)
+            self.run_processing_algorithm(
+                'qgis:reprojectlayer',
+                self.layer,
+                self.exposure_layer.crs().authid(),
+                agg_filename)
+            agg_layer = QgsVectorLayer(agg_filename, "Reprojected agg", "ogr")
+        else:
+            agg_layer = self.layer
+
         out_filename = unique_filename(suffix='.shp', dir=temporary_dir)
 
         self.run_processing_algorithm(
-            'qgis:intersection', self.exposure_layer, self.layer, out_filename)
+            'qgis:intersection', self.exposure_layer, agg_layer, out_filename)
 
         self.copy_keywords(self.exposure_layer, out_filename)
 
