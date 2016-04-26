@@ -27,7 +27,6 @@ from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
 from safe.impact_reports.population_exposure_report_mixin import \
     PopulationExposureReportMixin
 import safe.messaging as m
-from safe.messaging import styles
 
 
 # noinspection PyClassHasNoInit
@@ -156,8 +155,6 @@ class TsunamiEvacuationFunction(
             filter_needs_parameters(self.parameters['minimum needs'])
         ]
 
-        impact_table = impact_summary = self.html_report()
-
         # check for zero impact
         if numpy.nanmax(impact) == 0 == numpy.nanmin(impact):
             message = m.Message()
@@ -196,8 +193,6 @@ class TsunamiEvacuationFunction(
             style_type='rasterStyle')
 
         # For printing map purpose
-
-        # For printing map purpose
         map_title = tr('People in need of evacuation')
         legend_title = tr('Population')
         legend_units = tr('(people per cell)')
@@ -205,9 +200,9 @@ class TsunamiEvacuationFunction(
             'Thousand separator is represented by %s' %
             get_thousand_separator())
 
+        impact_data = self.generate_data()
+
         extra_keywords = {
-            'impact_summary': impact_summary,
-            'impact_table': impact_table,
             'map_title': map_title,
             'legend_notes': legend_notes,
             'legend_units': legend_units,
@@ -219,7 +214,7 @@ class TsunamiEvacuationFunction(
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 
         # Create raster object and return
-        raster = Raster(
+        impact_layer = Raster(
             impact,
             projection=self.hazard.layer.get_projection(),
             geotransform=self.hazard.layer.get_geotransform(),
@@ -227,5 +222,7 @@ class TsunamiEvacuationFunction(
                 self.impact_function_manager.get_function_title(self).lower()),
             keywords=impact_layer_keywords,
             style_info=style_info)
-        self._impact = raster
-        return raster
+
+        impact_layer.impact_data = impact_data
+        self._impact = impact_layer
+        return impact_layer
