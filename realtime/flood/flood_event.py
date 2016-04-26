@@ -34,7 +34,6 @@ from safe.test.utilities import get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.common.exceptions import ZeroImpactException, TranslationLoadError
-from safe.engine.core import calculate_impact as safe_calculate_impact
 from safe.impact_functions.impact_function_manager import \
     ImpactFunctionManager
 from safe.storage.core import read_layer, read_qgis_layer
@@ -278,7 +277,7 @@ class FloodEvent(QObject):
             if skip_process:
                 return
 
-            self.impact_layer = safe_calculate_impact(impact_function)
+            self.impact_layer = impact_function.calculate_impact()
             # impact_function.aggregator.set_layers(
             #     self.hazard_layer.as_qgis_native(),
             #     self.exposure_layer.as_qgis_native())

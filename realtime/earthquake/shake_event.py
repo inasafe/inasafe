@@ -70,7 +70,6 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.storage.core import read_layer as safe_read_layer
-from safe.engine.core import calculate_impact as safe_calculate_impact
 from safe.common.version import get_version
 from safe.common.utilities import romanise
 from safe.utilities.clipper import extent_to_geoarray, clip_layer
@@ -1066,7 +1065,7 @@ class ShakeEvent(QObject):
         function = ImpactFunctionManager().get(function_id)
         function.hazard = clipped_hazard_layer
         function.exposure = clipped_exposure_layer
-        result = safe_calculate_impact(function)
+        result = function.calculate_impact()
         try:
             fatalities = result.keywords['fatalities_per_mmi']
             affected = result.keywords['exposed_per_mmi']
