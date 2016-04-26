@@ -12,8 +12,28 @@ Contact : ole.moller.nielsen@gmail.com
 
 
 class FlatTable(object):
+    """ Flat table object - used as a source of data for pivot tables.
+    After constructing the object, repeatedly call "add_value" method
+    for each row of the input table. FlatTable stores only fields
+    that are important for the creation of pivot tables later. It also
+    aggregates values of rows where specified fields have the same value,
+    saving memory by not storing all source data.
+
+    An example of use for the flat table - afterwards it can be converted
+    into a pivot table:
+
+    flat_table = FlatTable('hazard_type', 'road_type', 'district')
+
+    for f in layer.getFeatures():
+        flat_table.add_value(
+            f.geometry().length(),
+            hazard_type=f['hazard'],
+            road_type=f['road'],
+            zone=f['zone'])
+    """
 
     def __init__(self, *args):
+        """ Construct flat table, fields are passe"""
         self.groups = args
         self.data = {}
 
@@ -33,11 +53,74 @@ class FlatTable(object):
 
 
 class PivotTable(object):
+    """ Pivot tables as known from spreadsheet software.
+
+    Pivot table restructures the input data table. For example,
+    a table with fields "hazard_type", "road_type", "district", "length"
+    and rows where each row tells length of roads of particular road type
+    affected by a particular hazard in a particular district. Now if we
+    need any kind of summary table from these data, we use create a pivot
+    table:
+
+    PivotTable(flat_table, row_field="road_type", column_field="hazard_type")
+
+    This will generate a table like this:
+                    High   Medium   Low    Total
+    Highway          3.5    4.3     0.2     8.0
+    Residential      1.2    2.2     1.0     4.4
+    Total            4.7    6.5     1.2    12.4
+
+    The returned pivot table will have attributes defined as follows (assuming
+    "t" is the returned table):
+
+    >>> t.total
+    12.4
+    >>> t.total_rows
+    [8.0, 4.4]
+    >>> t.total_columns
+    [4.7, 6.5, 1.2]
+    >>> t.rows
+    ["Highway", "Residential"]
+    >>> t.columns
+    ["High", "Medium", "Low"]
+    >>> t.data
+    [[3.5, 4.3, 0.2], [1.2, 2.2, 1.0]]
+
+    The summary table includes data from all districts. If we wanted to focus
+    only on district named "West Side":
+
+    PivotTable(flat_table, row_field="road_type", column_field="hazard_type",
+               filter_field="district", filter_value="West Side")
+
+    """
 
     def __init__(self, flat_table,
                  row_field=None, column_field=None,
-                 filter_field=None, filter_value=None):
-        """ Make a pivot table out of the source data """
+                 filter_field=None, filter_value=None,
+                 columns=None):
+        """ Make a pivot table out of the source data
+
+        :param flat_table: Flat table with input data for pivot table
+        :type flat_table: FlatTable
+        :param row_field: Field name from flat table to use for rows.
+            If None, there will be just one row in the pivot table
+        :type row_field: str
+        :param column_field: Field name from flat table to use for columns.
+            If None, there will be just one column in the pivot table
+        :type column_field: str
+        :param filter_field: Field name from flat table which will be
+            used for filtering. To be used together with filter_value.
+            If None, no filtering will be applied.
+        :type filter_field: str
+        :param filter_value: Value of filter_field that will pass filtering,
+            all other values will be skipped for pivot table
+        :type filter_value: any
+        :param columns: List of columns to be present. If not defined,
+            the list of columns will be determined from unique column_field
+            values. If defined, it explicitly defines order of columns
+            and it includes columns even if they were not in input data.
+        :param columns: list
+        """
 
         if row_field is not None:
             flat_row_index = flat_table.groups.index(row_field)
@@ -80,7 +163,9 @@ class PivotTable(object):
             self.rows = list(flat_table.group_values(row_field))
 
         # determine columns
-        if column_field is None:
+        if columns is not None:
+            self.columns = columns
+        elif column_field is None:
             self.columns = ['']
         else:
             self.columns = list(flat_table.group_values(column_field))
@@ -102,6 +187,7 @@ class PivotTable(object):
             self.total += sum_value
 
     def __repr__(self):
+        """ Dump object content in a readable format """
         pivot = '<PivotTable total=%f\n total_rows=%s\n total_columns=%s\n ' \
                 'rows=%s\n columns=%s\n data=%s>' % (
                     self.total,

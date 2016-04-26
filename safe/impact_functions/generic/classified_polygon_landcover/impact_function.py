@@ -324,7 +324,8 @@ def _report_data(impact_layer, target_field, land_cover_field, zone_field):
     pivot_table = PivotTable(
         my_table,
         row_field='landcover',
-        column_field='hazard')
+        column_field='hazard',
+        columns=['high', 'medium', 'low'])
 
     report = {'impacted': pivot_table}
 
@@ -335,7 +336,8 @@ def _report_data(impact_layer, target_field, land_cover_field, zone_field):
             table = PivotTable(
                 my_table,
                 row_field="landcover",
-                column_field="hazard",
+                column_field='hazard',
+                columns=['high', 'medium', 'low'],
                 filter_field="zone",
                 filter_value=zone)
             report['impacted_zones'][zone] = table
