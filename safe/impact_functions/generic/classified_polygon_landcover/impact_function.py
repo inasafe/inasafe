@@ -172,10 +172,6 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
                                    type_attr,
                                    zone_field)
 
-        import sys
-        msg = 'LAND COVER REPORT DATA:\n %s \n' % get_string(report_data)
-        sys.__stderr__.write(msg)  # for debugging
-
         # Generate the report of affected areas
         impact_summary = impact_table = _format_report(report_data)
 
