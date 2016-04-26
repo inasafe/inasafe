@@ -20,6 +20,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import numpy
 import logging
 import json
+import os
 
 from socket import gethostname
 import getpass
@@ -1374,13 +1375,7 @@ class ImpactFunction(object):
         send_analysis_done_signal(self)
 
     def calculate_impact(self):
-        """Calculate impact.
-
-        This method will do several things:
-        - check data integrity
-        - do analysis workflow
-
-        """
+        """Calculate impact."""
         layers = [self.hazard, self.exposure]
         # Input checks
         if self.requires_clipping:
@@ -1400,7 +1395,7 @@ class ImpactFunction(object):
         # Don's use this - see https://github.com/AIFDR/inasafe/issues/394
         # elapsed_time_sec = elapsed_time.total_seconds()
         elapsed_time_sec = elapsed_time.seconds + (
-        elapsed_time.days * 24 * 3600)
+            elapsed_time.days * 24 * 3600)
 
         # Eet current time stamp
         # Need to change : to _ because : is forbidden in keywords
@@ -1469,6 +1464,7 @@ class ImpactFunction(object):
                 prefix=prefix, suffix=extension)
 
         result_layer.filename = output_filename
+
         if hasattr(result_layer, 'impact_data'):
             if 'impact_summary' in result_layer.keywords:
                 result_layer.keywords.pop('impact_summary')
@@ -1477,7 +1473,7 @@ class ImpactFunction(object):
         result_layer.write_to_file(output_filename)
         if hasattr(result_layer, 'impact_data'):
             impact_data = result_layer.impact_data
-            json_file_name = output_filename[:-3] + 'json'
+            json_file_name = os.path.splitext(output_filename)[0] + '.json'
             LOGGER.debug(impact_data)
             with open(json_file_name, 'w') as json_file:
                 json.dump(impact_data, json_file)

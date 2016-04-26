@@ -202,8 +202,6 @@ class VolcanoPolygonPopulationFunction(
             filter_needs_parameters(self.parameters['minimum needs'])
         ]
 
-        impact_table = impact_summary = self.html_report()
-
         # check for zero impact
         if self.total_affected_population == 0:
             message = no_population_impact_message(self.question)
@@ -255,9 +253,9 @@ class VolcanoPolygonPopulationFunction(
             'Thousand separator is represented by  %s' %
             get_thousand_separator())
 
+        impact_data = self.generate_data()
+
         extra_keywords = {
-            'impact_summary': impact_summary,
-            'impact_table': impact_table,
             'target_field': self.target_field,
             'map_title': map_title,
             'legend_notes': legend_notes,
@@ -278,5 +276,6 @@ class VolcanoPolygonPopulationFunction(
             style_info=style_info
         )
 
+        impact_layer.impact_data = impact_data
         self._impact = impact_layer
         return impact_layer
