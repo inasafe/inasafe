@@ -706,8 +706,8 @@ class TestDock(TestCase):
             'inasafe/use_native_zonal_stats', False, type=bool))
         QtCore.QSettings().setValue('inasafe/use_native_zonal_stats', True)
         self.dock.accept()
-        QtCore.QSettings().setValue('inasafe/use_native_zonal_stats',
-                                    qgis_zonal_flag)
+        QtCore.QSettings().setValue(
+            'inasafe/use_native_zonal_stats', qgis_zonal_flag)
 
         result = self.dock.wvResults.page_to_text()
 

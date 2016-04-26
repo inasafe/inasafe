@@ -1,5 +1,5 @@
 Rice [kg], 280
-Drinking Water, [l] 1,750
+Drinking Water [l], 1,750
 Clean Water [l], 6,700
 Family Kits, 20
 Toilets, 5
