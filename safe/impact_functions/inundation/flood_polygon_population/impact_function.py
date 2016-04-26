@@ -39,8 +39,6 @@ from safe.common.exceptions import ZeroImpactException
 from safe.impact_functions.core import get_key_for_value
 from safe.impact_reports.population_exposure_report_mixin import \
     PopulationExposureReportMixin
-import safe.messaging as m
-from safe.messaging import styles
 
 __author__ = 'Rizky Maulana Nugraha'
 
@@ -213,8 +211,6 @@ class FloodEvacuationVectorHazardFunction(
             filter_needs_parameters(self.parameters['minimum needs'])
         ]
 
-        impact_table = impact_summary = self.html_report()
-
         # Create style
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
                    '#FFCC00', '#FF6600', '#FF0000', '#7A0000']
@@ -267,9 +263,9 @@ class FloodEvacuationVectorHazardFunction(
             'Thousand separator is represented by %s' %
             get_thousand_separator())
 
+        impact_data = self.generate_data()
+
         extra_keywords = {
-            'impact_summary': impact_summary,
-            'impact_table': impact_table,
             'target_field': self.target_field,
             'map_title': map_title,
             'legend_notes': legend_notes,
@@ -282,7 +278,7 @@ class FloodEvacuationVectorHazardFunction(
 
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 
-        # Create vector layer and return
+        # Create raster layer and return
         impact_layer = Raster(
             data=new_covered_exposure_data,
             projection=covered_exposure.get_projection(),
@@ -290,5 +286,7 @@ class FloodEvacuationVectorHazardFunction(
             name=tr('People affected by flood prone areas'),
             keywords=impact_layer_keywords,
             style_info=style_info)
+
+        impact_layer.impact_data = impact_data
         self._impact = impact_layer
         return impact_layer
