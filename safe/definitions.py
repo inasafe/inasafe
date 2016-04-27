@@ -818,31 +818,33 @@ road_class_mapping = [
     {
         'key': 'primary',
         'name': tr('Primary'),
-        'description': tr('A road that service the main transportation with a '
-                          'long distance travel characteristic and high '
-                          'average velocity.'),
+        'description': tr(
+            'A road that service the main transportation with a long distance '
+            'travel characteristic and high average velocity.'),
         'string_defaults': ['Primary']
     },
     {
         'key': 'secondary',
         'name': tr('Secondary'),
-        'description': tr('A road that service the transportation with a '
-                          'medium distance travel characteristic and medium '
-                          'average velocity.'),
+        'description': tr(
+            'A road that service the transportation with a medium distance '
+            'travel characteristic and medium average velocity.'),
         'string_defaults': ['Secondary']
     },
     {
         'key': 'local',
         'name': tr('Local'),
-        'description': tr('A road that service the transportation with short '
-                          'distance travel and low average velocity.'),
+        'description': tr(
+            'A road that service the transportation with short distance '
+            'travel and low average velocity.'),
         'string_defaults': ['Local']
     },
     {
         'key': 'other',
         'name': tr('Other'),
-        'description': tr('A road that service the transportation with short '
-                          'travel and low average velocity.'),
+        'description': tr(
+            'A road that service the transportation with short travel and '
+            'low average velocity.'),
         'string_defaults': ['Other']
     },
     {
@@ -945,6 +947,13 @@ structure_class_mapping = [
             'An object that provide an accommodation / lodging or food '
             'services.'),
         'string_defaults': ['restaurant', 'cafe', 'fast food', 'hotel']
+    },
+    {
+        'key': 'residence',
+        'name': tr('Residence'),
+        'description': tr(
+            'An object that people use to live daily.'),
+        'string_defaults': ['house', 'dorm']
     },
     {
         'key': 'other',
