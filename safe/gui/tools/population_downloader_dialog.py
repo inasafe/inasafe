@@ -13,6 +13,7 @@ __date__ = '8/2/2016'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+import json
 import os
 import logging
 
@@ -20,17 +21,13 @@ import logging
 # pylint: disable=unused-import
 from qgis.core import QGis, QgsRectangle, QgsVectorLayer  # force sip2 api
 from qgis.gui import QgsMapToolPan
-# pylint: enable=unused-import
 
-# noinspection PyPackageRequirements
 from PyQt4 import QtGui
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import QSettings, pyqtSignature, QRegExp, pyqtSlot
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import (
     QDialog, QProgressDialog, QMessageBox, QFileDialog, QRegExpValidator)
-
-import json
 
 from safe.common.exceptions import (
     CanceledImportDialogError,
@@ -41,11 +38,10 @@ from safe.utilities.gis import (
     rectangle_geo_array,
     validate_geo_array)
 from safe.utilities.resources import (
-    html_footer, html_header, get_ui_class, resources_path)
+    html_footer, html_header, get_ui_class)
 
 from safe.utilities.qgis_utilities import (
-    display_warning_message_box,
-    display_warning_message_bar,)
+    display_warning_message_box)
 
 from safe.gui.tools.rectangle_map_tool import RectangleMapTool
 from safe.gui.tools.help.population_downloader_help import population_downloader_help
@@ -107,7 +103,6 @@ class PopulationDownloaderDialog(QDialog, FORM_CLASS):
         # Setup pan tool
         self.pan_tool = QgsMapToolPan(self.canvas)
         self.canvas.setMapTool(self.pan_tool)
-
 
     @pyqtSlot()
     @pyqtSignature('bool')  # prevents actions being handled twice
@@ -263,6 +258,7 @@ class PopulationDownloaderDialog(QDialog, FORM_CLASS):
         try:
             self.save_state()
             self.require_directory()
+            rectangle = self.rectangle_map_tool.rectangle()
             for feature_type in feature_types:
 
                 output_directory = self.output_directory.text()
@@ -275,6 +271,7 @@ class PopulationDownloaderDialog(QDialog, FORM_CLASS):
                     feature_type,
                     output_base_file_path,
                     extent,
+                    rectangle,
                     self.progress_dialog)
 
                 try:

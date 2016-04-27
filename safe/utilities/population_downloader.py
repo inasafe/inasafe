@@ -12,33 +12,61 @@ __author__ = 'oscar mbita (mgwetam@gmail.com)'
 __date__ = '8/02/2016'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
+from qgis.core import (
+    QGis,
+    QgsFeature,
+    QgsField,
+    QgsFields,
+    QgsPoint,
+    QgsGeometry,
+    QgsRectangle,
+    QgsVectorLayer,
+    QgsMapLayerRegistry,
+    QgsCoordinateReferenceSystem,
+    QgsVectorFileWriter
+)
 
+from qgis.utils import iface
+
+from safe.common.utilities import (
+    format_int,
+    unique_filename
+)
+
+from PyQt4.QtCore import QVariant
 import logging
-import tempfile
 import requests
+import json
 
 # from PyQt4.QtGui import QDialog, QMessageBox
 
-
 LOGGER = logging.getLogger('InaSAFE')
 
-def download(feature_type, output_base_path, extent, progress_dialog=None):
-    """Download shapefiles from Kartoza server.
-    .. versionadded:: 3.2
+
+def download(
+        feature_type,
+        output_base_path,
+        extent,
+        rectangle,
+        progress_dialog=None):
+    """Download worldpop data
+
     :param feature_type: What kind of features should be downloaded.
-        Currently 'buildings', 'building-points' or 'roads' are supported.
     :type feature_type: str
     :param output_base_path: The base path of the shape file.
     :type output_base_path: str
     :param extent: A list in the form [xmin, ymin, xmax, ymax] where all
     coordinates provided are in Geographic / EPSG:4326.
     :type extent: list
+    :param rectangle: Bounding box rectangle
+    coordinates provided are in Geographic / EPSG:4326.
+    :type rectangle: QgsRectangle
     :param progress_dialog: A progress dialog.
     :type progress_dialog: QProgressDialog
     :raises: ImportDialogError, CanceledImportDialogError
     """
 
-    # preparing coordinates of the Area to be dragged
+    # preparing coordinates of the dragged area
     min_longitude = extent[0]
     min_latitude = extent[1]
     max_longitude = extent[2]
@@ -49,6 +77,12 @@ def download(feature_type, output_base_path, extent, progress_dialog=None):
     max_long_min_lat = [max_longitude, min_latitude]
     min_long_min_lat = [min_longitude, min_latitude]
 
+    points = [
+        min_long_max_lat,
+        max_long_max_lat,
+        max_long_min_lat,
+        min_long_min_lat]
+
     coordinates = '[[' + str(min_long_max_lat) + ',' + \
                   str(max_long_max_lat) + ',' + \
                   str(max_long_min_lat) + ',' + \
@@ -57,17 +91,93 @@ def download(feature_type, output_base_path, extent, progress_dialog=None):
 
     data = {'coordinates': coordinates}
 
-    # python requests to fetch json data from Api
+    # python requests to fetch json data from api
     url = 'https://worldpop-api-server.herokuapp.com/api'
     response = requests.post(url, data)
-    response.content
-    population_data = response.content
+    if response.status_code is 200:
+        population_data = response.content
+        file_path = output_base_path + '.geojson'
 
-    # msgBox = QMessageBox()
-    # msgBox.setText(population_data)
+        with open(file_path, 'w+') as outfile:
+            outfile.write(population_data)
+        create_layer(population_data, points)
+    else:
+        message = "Server not responding, check your " \
+                  "internet connection and try again. "
+        message = message, response.status_code
+        raise Exception(message)
 
-    path = tempfile.mktemp('.geojson')
-    file_path = output_base_path + '.geojson'
 
-    with open(file_path, 'w+') as outfile:
-        outfile.write(population_data)
+def create_layer(data, points):
+    """  Create vector layer from given data with a polygon
+    from the given rectangle
+
+    :param data: population data
+    :param points: population area coordinate points
+    :return:
+
+    """
+    filename = unique_filename(suffix='.shp')
+    layer_crs = QgsCoordinateReferenceSystem("EPSG:4326")
+
+    fields = QgsFields()
+    fields.append(QgsField("pixelCount", QVariant.String))
+    fields.append(QgsField("population",  QVariant.String))
+    fields.append(QgsField("area", QVariant.String))
+
+    writer = QgsVectorFileWriter(
+        filename,
+        "utf-8",
+        fields,
+        QGis.WKBPolygon,
+        layer_crs)
+
+    # Adding new feature
+
+    data = json.loads(data)
+    population = int(data["totalPopulation"])
+    # Correcting population value to right density
+    # as the api return value exceeds by 10000
+
+    population = population / 10000
+    population = int(population)
+    population = format_int(population)
+
+    qgs_points = []
+    qgs_points.append(QgsPoint(points[0][0], points[0][1]))
+    qgs_points.append(QgsPoint(points[1][0], points[1][1]))
+    qgs_points.append(QgsPoint(points[2][0], points[2][1]))
+    qgs_points.append(QgsPoint(points[3][0], points[3][1]))
+
+    new_feature = QgsFeature(fields)
+    geom = QgsGeometry.fromPolygon([qgs_points])
+    new_feature.setGeometry(geom)
+
+    new_feature.setAttribute('pixelCount', str(data["count"]))
+    new_feature.setAttribute('population', str(population))
+    new_feature.setAttribute('area', str(data["totalArea"]))
+
+    writer.addFeature(new_feature)
+
+    # Load layer into Qgis
+    del writer
+
+    layer = QgsVectorLayer(filename, 'Population Data', 'ogr')
+    QgsMapLayerRegistry.instance().addMapLayers([layer])
+
+    active_layer = iface.activeLayer()
+    active_layer.setCustomProperty("labeling", "pal")
+    active_layer.setCustomProperty("labeling/enabled", "true")
+    active_layer.setCustomProperty("labeling/fontFamily", "Arial")
+    active_layer.setCustomProperty("labeling/fontSize", "10")
+    active_layer.setCustomProperty("labeling/fieldName", "population")
+    active_layer.setCustomProperty("labeling/placement", "0")
+
+    active_layer.setCustomProperty('transparency', '50')
+
+    iface.mapCanvas().refresh()
+
+    iface.zoomToActiveLayer()
+
+
+
