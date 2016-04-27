@@ -19,7 +19,6 @@ from safe.impact_functions.volcanic.volcano_point_population\
 from safe.impact_functions.core import (
     population_rounding,
     has_no_data)
-from safe.engine.core import buffer_points
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.storage.raster import Raster
 from safe.utilities.i18n import tr
@@ -55,6 +54,7 @@ class VolcanoPointPopulationFunction(
         )
         self.no_data_warning = False
         self.volcano_names = tr('Not specified in data')
+        self.hazard_zone_attribute = 'radius'
 
     def notes(self):
         """Return the notes section of the report.
@@ -121,25 +121,10 @@ class VolcanoPointPopulationFunction(
         # Get parameters from layer's keywords
         volcano_name_attribute = self.hazard.keyword('volcano_name_field')
 
-        # Input checks
-        if not self.hazard.layer.is_point_data:
-            msg = (
-                'Input hazard must be a polygon or point layer. I got %s with '
-                'layer type %s' % (
-                    self.hazard.name, self.hazard.layer.get_geometry_name()))
-            raise Exception(msg)
-
         data_table = self.hazard.layer.get_data()
 
-        # Use concentric circles
-        category_title = 'Radius'
-
-        centers = self.hazard.layer.get_geometry()
-        hazard_layer = buffer_points(
-            centers, radii, category_title, data_table=data_table)
-
         # Get names of volcanoes considered
-        if volcano_name_attribute in hazard_layer.get_attribute_names():
+        if volcano_name_attribute in self.hazard.layer.get_attribute_names():
             volcano_name_list = []
             # Run through all polygons and get unique names
             for row in data_table:
@@ -153,7 +138,7 @@ class VolcanoPointPopulationFunction(
         # Run interpolation function for polygon2raster
         interpolated_layer, covered_exposure_layer = \
             assign_hazard_values_to_exposure_data(
-                hazard_layer,
+                self.hazard.layer,
                 self.exposure.layer,
                 attribute_name=self.target_field
             )
@@ -173,7 +158,7 @@ class VolcanoPointPopulationFunction(
                 population = float(population)
                 # Update population count for this category
                 category = 'Radius %s km ' % format_int(
-                    row[category_title])
+                    row[self.hazard_zone_attribute])
                 self.affected_population[category] += population
 
         # Count totals

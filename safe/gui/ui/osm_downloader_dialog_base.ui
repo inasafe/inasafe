@@ -6,15 +6,24 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>642</width>
-    <height>494</height>
+    <width>742</width>
+    <height>563</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>OSM Downloader</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_5">
-   <property name="margin">
+   <property name="leftMargin">
+    <number>12</number>
+   </property>
+   <property name="topMargin">
+    <number>12</number>
+   </property>
+   <property name="rightMargin">
+    <number>12</number>
+   </property>
+   <property name="bottomMargin">
     <number>12</number>
    </property>
    <item row="0" column="0">
@@ -24,7 +33,16 @@
      </property>
      <widget class="QWidget" name="page">
       <layout class="QGridLayout" name="gridLayout_8">
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item row="0" column="0">
@@ -52,7 +70,16 @@
      </widget>
      <widget class="QWidget" name="page_1">
       <layout class="QGridLayout" name="gridLayout_2">
-       <property name="margin">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
         <number>0</number>
        </property>
        <item row="0" column="0">
@@ -79,7 +106,7 @@
              <string>Roads</string>
             </property>
             <property name="checked">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
            </widget>
           </item>
@@ -89,7 +116,7 @@
              <string>Building polygons</string>
             </property>
             <property name="checked">
-             <bool>true</bool>
+             <bool>false</bool>
             </property>
            </widget>
           </item>
@@ -247,7 +274,16 @@
             <property name="sizeConstraint">
              <enum>QLayout::SetDefaultConstraint</enum>
             </property>
-            <property name="margin">
+            <property name="leftMargin">
+             <number>1</number>
+            </property>
+            <property name="topMargin">
+             <number>1</number>
+            </property>
+            <property name="rightMargin">
+             <number>1</number>
+            </property>
+            <property name="bottomMargin">
              <number>1</number>
             </property>
             <property name="spacing">
@@ -270,7 +306,7 @@
                <string>North: </string>
               </property>
               <property name="decimals">
-               <number>7</number>
+               <number>5</number>
               </property>
               <property name="minimum">
                <double>-999999999.000000000000000</double>
@@ -297,7 +333,7 @@
                <string>West: </string>
               </property>
               <property name="decimals">
-               <number>7</number>
+               <number>5</number>
               </property>
               <property name="minimum">
                <double>-999999999.000000000000000</double>
@@ -331,7 +367,7 @@
                <string>East: </string>
               </property>
               <property name="decimals">
-               <number>7</number>
+               <number>5</number>
               </property>
               <property name="minimum">
                <double>-999999999.000000000000000</double>
@@ -358,7 +394,7 @@
                <string>South: </string>
               </property>
               <property name="decimals">
-               <number>7</number>
+               <number>5</number>
               </property>
               <property name="minimum">
                <double>-999999999.000000000000000</double>

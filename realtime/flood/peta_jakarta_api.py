@@ -17,7 +17,8 @@ class PetaJakartaAPI(object):
 
     @classmethod
     def get_aggregate_report(cls, duration, level):
-        rest_point = 'https://rem.petajakarta.org/banjir/data/api/v2/rem/flooded'
+        rest_point = (
+            'https://rem.petajakarta.org/banjir/data/api/v2/rem/flooded')
         params = {
             'format': 'geojson'
         }
