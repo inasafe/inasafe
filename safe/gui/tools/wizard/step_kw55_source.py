@@ -1,3 +1,23 @@
+# coding=utf-8
+"""
+InaSAFE Disaster risk assessment tool by AusAid -**InaSAFE Wizard**
+
+This module provides: Keyword Wizard Step: Source
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
+"""
+__author__ = 'qgis@borysjurgiel.pl'
+__revision__ = '$Format:%H$'
+__date__ = '16/03/2016'
+__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
+                 'Disaster Reduction')
+
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import QDateTime
 
@@ -13,7 +33,7 @@ FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
 class StepKwSource(WizardStep, FORM_CLASS):
-    """A docstring."""
+    """Keyword Wizard Step: Source"""
 
     def __init__(self, parent=None):
         """Constructor for the tab.
@@ -63,10 +83,11 @@ class StepKwSource(WizardStep, FORM_CLASS):
         if self.parent.step_kw_purpose.selected_purpose()\
                 == layer_purpose_aggregation:
             new_step = self.parent.step_kw_aggregation
-        elif self.parent.step_kw_.selected_extra_keywords():
+        elif self.parent.step_kw_extrakeywords.selected_extra_keywords():
             new_step = self.parent.step_kw_extrakeywords
         # otherwise behave like it was step_kw_extrakeywords
-        elif self.parent.step_kw_.selected_layermode() == layer_mode_classified:
+        elif self.parent.step_kw_layermode.\
+                selected_layermode() == layer_mode_classified:
             if self.parent.step_kw_classification.selected_classification() \
                     or self.parent.step_kw_classify.\
                     postprocessor_classification_for_layer():

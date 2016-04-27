@@ -8,9 +8,6 @@ Contact : ole.moller.nielsen@gmail.com
      it under the terms of the GNU General Public License as published by
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
-
-.. todo:: Check raster is single band
-
 """
 
 from safe.utilities.i18n import tr

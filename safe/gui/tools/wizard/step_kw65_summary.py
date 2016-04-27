@@ -1,3 +1,23 @@
+# coding=utf-8
+"""
+InaSAFE Disaster risk assessment tool by AusAid -**InaSAFE Wizard**
+
+This module provides: Keyword Wizard Step: Summary
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
+"""
+__author__ = 'qgis@borysjurgiel.pl'
+__revision__ = '$Format:%H$'
+__date__ = '16/03/2016'
+__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
+                 'Disaster Reduction')
+
 import os
 import re
 
@@ -16,7 +36,7 @@ FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
 class StepKwSummary(WizardStep, FORM_CLASS):
-    """A docstring."""
+    """Keyword Wizard Step: Summary"""
 
     def is_ready_to_next_step(self):
         """Check if the step is complete. If so, there is
@@ -70,13 +90,13 @@ class StepKwSummary(WizardStep, FORM_CLASS):
                 exp = layer_purpose_exposure['key']
                 agg = layer_purpose_aggregation['key']
                 if (parent_step == self.parent.step_fc_hazlayer_from_canvas
-                        and not self.get_compatible_layers_from_canvas(haz)):
+                        and not self.parent.get_compatible_canvas_layers(haz)):
                     new_step = self.parent.step_fc_hazlayer_origin
                 elif (parent_step == self.parent.step_fc_explayer_from_canvas
-                      and not self.get_compatible_layers_from_canvas(exp)):
+                      and not self.parent.get_compatible_canvas_layers(exp)):
                     new_step = self.parent.step_fc_explayer_origin
                 elif (parent_step == self.parent.step_fc_agglayer_from_canvas
-                      and not self.get_compatible_layers_from_canvas(agg)):
+                      and not self.parent.get_compatible_canvas_layers(agg)):
                     new_step = self.parent.step_fc_agglayer_origin
             self.parent.parent_step = None
             self.parent.is_selected_layer_keywordless = False
@@ -94,6 +114,7 @@ class StepKwSummary(WizardStep, FORM_CLASS):
 
         base_dir = os.path.abspath(os.path.join(
             os.path.dirname(__file__),
+            os.pardir,
             os.pardir,
             os.pardir,
             os.pardir,

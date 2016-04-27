@@ -1,3 +1,22 @@
+# coding=utf-8
+"""
+InaSAFE Disaster risk assessment tool by AusAid -**InaSAFE Wizard**
+
+This module provides: Function Centric Wizard Step: Hazard Layer From Browser
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
+"""
+__author__ = 'qgis@borysjurgiel.pl'
+__revision__ = '$Format:%H$'
+__date__ = '16/03/2016'
+__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
+                 'Disaster Reduction')
 
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step_browser import WizardStepBrowser
@@ -7,7 +26,7 @@ FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
 class StepFcHazLayerFromBrowser(WizardStepBrowser, FORM_CLASS):
-    """A docstring."""
+    """Function Centric Wizard Step: Hazard Layer From Browser"""
 
     def __init__(self, parent=None):
         """Constructor for the tab.
@@ -29,7 +48,6 @@ class StepFcHazLayerFromBrowser(WizardStepBrowser, FORM_CLASS):
         :returns: True if new step may be enabled.
         :rtype: bool
         """
-        ## TODO move that method!
         return self.get_layer_description_from_browser('hazard')[0]
 
     def get_previous_step(self):

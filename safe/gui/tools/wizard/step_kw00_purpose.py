@@ -1,3 +1,23 @@
+# coding=utf-8
+"""
+InaSAFE Disaster risk assessment tool by AusAid -**InaSAFE Wizard**
+
+This module provides: Keyword Wizard Step: Layer Purpose
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
+"""
+__author__ = 'qgis@borysjurgiel.pl'
+__revision__ = '$Format:%H$'
+__date__ = '16/03/2016'
+__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
+                 'Disaster Reduction')
+
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore
 # noinspection PyPackageRequirements
@@ -21,7 +41,7 @@ FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
 class StepKwPurpose(WizardStep, FORM_CLASS):
-    """#TODO A docstring."""
+    """Keyword Wizard Step: Layer Purpose"""
 
     def is_ready_to_next_step(self):
         """Check if the step is complete. If so, there is

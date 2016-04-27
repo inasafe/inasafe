@@ -1,3 +1,23 @@
+# coding=utf-8
+"""
+InaSAFE Disaster risk assessment tool by AusAid -**InaSAFE Wizard**
+
+This module provides: Function Centric Wizard Step: Extent
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
+"""
+__author__ = 'qgis@borysjurgiel.pl'
+__revision__ = '$Format:%H$'
+__date__ = '16/03/2016'
+__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
+                 'Disaster Reduction')
+
 from safe.common.exceptions import InsufficientOverlapError
 from safe.utilities.analysis_handler import AnalysisHandler
 
@@ -9,7 +29,7 @@ FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
 class StepFcExtent(WizardStep, FORM_CLASS):
-    """A docstring."""
+    """Function Centric Wizard Step: Extent"""
 
     def __init__(self, parent=None):
         """Constructor for the tab.
@@ -63,7 +83,7 @@ class StepFcExtent(WizardStep, FORM_CLASS):
         :returns: true if extent intersects both layers, false if is disjoint
         :rtype: boolean
         """
-        _analysis_handler = AnalysisHandler(self)
+        _analysis_handler = AnalysisHandler(self.parent)
         _analysis_handler.setup_analysis()
         try:
             impact_function = _analysis_handler.impact_function
@@ -122,9 +142,9 @@ class StepFcExtent(WizardStep, FORM_CLASS):
         """
         self.extent_dialog.accept()
         self.extent_dialog.clear_extent.disconnect(
-            self.dock.extent.clear_user_analysis_extent)
+            self.parent.dock.extent.clear_user_analysis_extent)
         self.extent_dialog.extent_defined.disconnect(
-            self.dock.define_user_analysis_extent)
+            self.parent.dock.define_user_analysis_extent)
         self.extent_dialog.capture_button.clicked.disconnect(
             self.start_capture_coordinates)
         self.extent_dialog.tool.rectangle_created.disconnect(
@@ -142,9 +162,9 @@ class StepFcExtent(WizardStep, FORM_CLASS):
         self.extent_dialog.tool.rectangle_created.disconnect(
             self.extent_dialog.stop_capture)
         self.extent_dialog.clear_extent.connect(
-            self.dock.extent.clear_user_analysis_extent)
+            self.parent.dock.extent.clear_user_analysis_extent)
         self.extent_dialog.extent_defined.connect(
-            self.dock.define_user_analysis_extent)
+            self.parent.dock.define_user_analysis_extent)
         self.extent_dialog.capture_button.clicked.connect(
             self.start_capture_coordinates)
         self.extent_dialog.tool.rectangle_created.connect(

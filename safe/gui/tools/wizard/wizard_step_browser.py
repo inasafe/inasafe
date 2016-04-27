@@ -1,4 +1,23 @@
-import re
+# coding=utf-8
+"""
+InaSAFE Disaster risk assessment tool by AusAid -**InaSAFE Wizard**
+
+This module provides a base class for steps containing a QGIS Browser
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
+"""
+__author__ = 'qgis@borysjurgiel.pl'
+__revision__ = '$Format:%H$'
+__date__ = '16/03/2016'
+__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
+                 'Disaster Reduction')
+
 import os
 from sqlite3 import OperationalError
 
@@ -21,10 +40,10 @@ from safe.common.exceptions import (
     InaSAFEError,
     InvalidParameterError,
     KeywordNotFoundError,
+    MissingMetadata,
     NoKeywordsFoundError,
     UnsupportedProviderError)
 
-from safe.common.version import get_version
 import safe.definitions
 from safe.definitions import (
     continuous_hazard_unit,
@@ -38,10 +57,7 @@ from safe.definitions import (
     layer_mode_continuous,
     layer_mode_classified)
 
-from safe.utilities.gis import (
-    is_raster_layer,
-    is_point_layer,
-    is_polygon_layer)
+from safe.utilities.gis import is_raster_layer
 from safe.utilities.utilities import (
     is_keyword_version_supported)
 
@@ -50,9 +66,11 @@ from safe.gui.tools.wizard.wizard_strings import (
 from safe.gui.tools.wizard.layer_browser_proxy_model import (
     LayerBrowserProxyModel)
 from safe.gui.tools.wizard.wizard_step import WizardStep
+from safe.gui.tools.wizard.wizard_utils import layer_description_html
 
 
 class WizardStepBrowser(WizardStep):
+    """A base class for steps containing a QGIS Browser"""
 
     def __init__(self, parent=None):
         """Constructor for the tab.
@@ -161,96 +179,6 @@ class WizardStepBrowser(WizardStep):
         uri.setDataSource(schema, table, geom_col)
         return uri
 
-    def layer_description_html(self, layer, keywords=None):
-        """Form a html description of a given layer based on the layer
-           parameters and keywords if provided
-
-        :param layer: The layer to get the description
-        :type layer: QgsMapLayer
-
-        :param keywords: The layer keywords
-        :type keywords: None, dict
-
-        :returns: The html description in tabular format,
-            ready to use in a label or tool tip.
-        :rtype: str
-        """
-
-        if keywords and 'keyword_version' in keywords:
-            keyword_version = str(keywords['keyword_version'])
-        else:
-            keyword_version = None
-
-        if (keywords and
-                keyword_version and
-                is_keyword_version_supported(keyword_version)):
-            # The layer has valid keywords
-            purpose = keywords.get('layer_purpose')
-            if purpose == layer_purpose_hazard['key']:
-                subcategory = '<tr><td><b>%s</b>: </td><td>%s</td></tr>' % (
-                    self.tr('Hazard'), keywords.get(purpose))
-                unit = keywords.get('continuous_hazard_unit')
-            elif purpose == layer_purpose_exposure['key']:
-                subcategory = '<tr><td><b>%s</b>: </td><td>%s</td></tr>' % (
-                    self.tr('Exposure'), keywords.get(purpose))
-                unit = keywords.get('exposure_unit')
-            else:
-                subcategory = ''
-                unit = None
-            if keywords.get('layer_mode') == layer_mode_classified['key']:
-                unit = self.tr('classified data')
-            if unit:
-                unit = '<tr><td><b>%s</b>: </td><td>%s</td></tr>' % (
-                    self.tr('Unit'), unit)
-
-            desc = """
-                <table border="0" width="100%%">
-                <tr><td><b>%s</b>: </td><td>%s</td></tr>
-                <tr><td><b>%s</b>: </td><td>%s</td></tr>
-                %s
-                %s
-                <tr><td><b>%s</b>: </td><td>%s</td></tr>
-                </table>
-            """ % (self.tr('Title'), keywords.get('title'),
-                   self.tr('Purpose'), keywords.get('layer_purpose'),
-                   subcategory,
-                   unit,
-                   self.tr('Source'), keywords.get('source'))
-        elif keywords:
-            # The layer has keywords, but the version is wrong
-            desc = self.tr(
-                'Your layer\'s keyword\'s version (%s) does not match with '
-                'your InaSAFE version (%s). If you wish to use it as an '
-                'exposure, hazard, or aggregation layer in an analysis, '
-                'please update the keywords. Click Next if you want to assign '
-                'keywords now.' % (keyword_version or 'No Version',
-                                   get_version()))
-        else:
-            # The layer is keywordless
-            if is_point_layer(layer):
-                geom_type = 'point'
-            elif is_polygon_layer(layer):
-                geom_type = 'polygon'
-            else:
-                geom_type = 'line'
-
-            # hide password in the layer source
-            source = re.sub(
-                r'password=\'.*\'', r'password=*****', layer.source())
-
-            desc = """
-                %s<br/><br/>
-                <b>%s</b>: %s<br/>
-                <b>%s</b>: %s<br/><br/>
-                %s
-            """ % (self.tr('This layer has no valid keywords assigned'),
-                   self.tr('SOURCE'), source,
-                   self.tr('TYPE'), is_raster_layer(layer) and 'raster' or
-                   'vector (%s)' % geom_type,
-                   self.tr('In the next step you will be able' +
-                           ' to assign keywords to this layer.'))
-        return desc
-
     def unsuitable_layer_description_html(
             self, layer, layer_purpose, keywords=None):
         """Form a html description of a given non-matching layer based on
@@ -279,8 +207,8 @@ class WizardStepBrowser(WizardStep):
             return (str1, str2)
 
         # Get allowed subcategory and layer_geometry from IF constraints
-        h, e, hc, ec = self.selected_impact_function_constraints()
-        imfunc = self.selected_function()
+        h, e, hc, ec = self.parent.selected_impact_function_constraints()
+        imfunc = self.parent.step_fc_function.selected_function()
         lay_req = imfunc['layer_requirements'][layer_purpose]
 
         if layer_purpose == layer_purpose_hazard['key']:
@@ -484,7 +412,8 @@ class WizardStepBrowser(WizardStep):
                 NoKeywordsFoundError,
                 KeywordNotFoundError,
                 InvalidParameterError,
-                UnsupportedProviderError):
+                UnsupportedProviderError,
+                MissingMetadata):
             keywords = None
 
         # set the layer name for further use in the step_fc_summary
@@ -517,5 +446,5 @@ class WizardStepBrowser(WizardStep):
         else:
             self.parent.is_selected_layer_keywordless = True
 
-        desc = self.layer_description_html(layer, keywords)
+        desc = layer_description_html(layer, keywords)
         return True, desc

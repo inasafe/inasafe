@@ -1,10 +1,31 @@
+# coding=utf-8
+"""
+InaSAFE Disaster risk assessment tool by AusAid -**InaSAFE Wizard**
+
+This module provides: Function Centric Wizard Step: Hazard Layer From Canvas
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
+"""
+__author__ = 'qgis@borysjurgiel.pl'
+__revision__ = '$Format:%H$'
+__date__ = '16/03/2016'
+__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
+                 'Disaster Reduction')
+
 # noinspection PyPackageRequirements
-from PyQt4 import QtCore
+from PyQt4 import QtCore, QtGui
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import pyqtSignature
+# noinspection PyPackageRequirements
+from PyQt4.QtGui import QListWidgetItem
 
-from qgis.core import (
-    QgsMapLayerRegistry)
+from qgis.core import QgsMapLayerRegistry
 
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step import WizardStep
@@ -14,7 +35,7 @@ FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
 class StepFcHazLayerFromCanvas(WizardStep, FORM_CLASS):
-    """A docstring."""
+    """Function Centric Wizard Step: Hazard Layer From Canvas"""
 
     def is_ready_to_next_step(self):
         """Check if the step is complete. If so, there is
@@ -23,7 +44,6 @@ class StepFcHazLayerFromCanvas(WizardStep, FORM_CLASS):
         :returns: True if new step may be enabled.
         :rtype: bool
         """
-        ## TODO move that method!
         return bool(self.selected_canvas_hazlayer())
 
     def get_previous_step(self):
@@ -86,6 +106,24 @@ class StepFcHazLayerFromCanvas(WizardStep, FORM_CLASS):
         layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
         return layer
 
+    def list_compatible_canvas_layers(self):
+        """Fill the list widget with compatible layers.
+
+        :returns: Metadata of found layers.
+        :rtype: list of dicts
+        """
+        italic_font = QtGui.QFont()
+        italic_font.setItalic(True)
+        list_widget = self.lstCanvasHazLayers
+        # Add compatible layers
+        list_widget.clear()
+        for layer in self.parent.get_compatible_canvas_layers('hazard'):
+            item = QListWidgetItem(layer['name'], list_widget)
+            item.setData(QtCore.Qt.UserRole, layer['id'])
+            if not layer['keywords']:
+                item.setFont(italic_font)
+            list_widget.addItem(item)
+
     def set_widgets(self):
         """Set widgets on the Hazard Layer From TOC tab"""
         # The list is already populated in the previous step, but now we
@@ -93,8 +131,7 @@ class StepFcHazLayerFromCanvas(WizardStep, FORM_CLASS):
         # First, preserve self.parent.layer before clearing the list
         last_layer = self.parent.layer and self.parent.layer.id() or None
         self.lblDescribeCanvasHazLayer.clear()
-        self.list_compatible_layers_from_canvas(
-            'hazard', self.lstCanvasHazLayers)
+        self.list_compatible_canvas_layers()
         self.auto_select_one_item(self.lstCanvasHazLayers)
         # Try to select the last_layer, if found:
         if last_layer:

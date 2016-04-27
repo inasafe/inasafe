@@ -1,3 +1,23 @@
+# coding=utf-8
+"""
+InaSAFE Disaster risk assessment tool by AusAid -**InaSAFE Wizard**
+
+This module provides: Keyword Wizard Step: Field
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
+"""
+__author__ = 'qgis@borysjurgiel.pl'
+__revision__ = '$Format:%H$'
+__date__ = '16/03/2016'
+__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
+                 'Disaster Reduction')
+
 import re
 
 # noinspection PyPackageRequirements
@@ -12,35 +32,20 @@ from safe.definitions import (
 
 from safe.utilities.gis import is_raster_layer
 
-import safe.gui.tools.wizard.wizard_strings
 from safe.gui.tools.wizard.wizard_strings import (
     field_question_subcategory_unit,
     field_question_subcategory_classified,
     field_question_aggregation)
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step import WizardStep
-
-
-def get_question_text(constant):
-    """Find a constant by name and return its value.
-
-    :param constant: The name of the constant to look for.
-    :type constant: string
-
-    :returns: The value of the constant or red error message.
-    :rtype: string
-    """
-    if constant in dir(safe.gui.tools.wizard.wizard_strings):
-        return getattr(safe.gui.tools.wizard.wizard_strings, constant)
-    else:
-        return '<b>MISSING CONSTANT: %s</b>' % constant
+from safe.gui.tools.wizard.wizard_utils import get_question_text
 
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
 class StepKwField(WizardStep, FORM_CLASS):
-    """A docstring."""
+    """Keyword Wizard Step: Field"""
 
     def is_ready_to_next_step(self):
         """Check if the step is complete. If so, there is

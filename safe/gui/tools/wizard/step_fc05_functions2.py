@@ -1,3 +1,23 @@
+# coding=utf-8
+"""
+InaSAFE Disaster risk assessment tool by AusAid -**InaSAFE Wizard**
+
+This module provides: Function Centric Wizard Step: IF Constraint Selector 2
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
+"""
+__author__ = 'qgis@borysjurgiel.pl'
+__revision__ = '$Format:%H$'
+__date__ = '16/03/2016'
+__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
+                 'Disaster Reduction')
+
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore, QtGui
 # noinspection PyPackageRequirements
@@ -13,20 +33,19 @@ from safe.gui.tools.wizard.wizard_strings import (
     select_function_constraints2_question)
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step import WizardStep
+from safe.gui.tools.wizard.wizard_utils import (
+    RoleFunctions,
+    RoleHazard,
+    RoleExposure,
+    RoleHazardConstraint,
+    RoleExposureConstraint)
 
-
-# Data roles
-RoleFunctions = QtCore.Qt.UserRole
-RoleHazard = QtCore.Qt.UserRole + 1
-RoleExposure = QtCore.Qt.UserRole + 2
-RoleHazardConstraint = QtCore.Qt.UserRole + 3
-RoleExposureConstraint = QtCore.Qt.UserRole + 4
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
 class StepFcFunctions2(WizardStep, FORM_CLASS):
-    """A docstring."""
+    """Function Centric Wizard Step: IF Constraint Selector 2"""
 
     def is_ready_to_next_step(self):
         """Check if the step is complete. If so, there is
@@ -113,8 +132,7 @@ class StepFcFunctions2(WizardStep, FORM_CLASS):
     def set_widgets(self):
         """Set widgets on the Impact Functions Table 2 tab."""
         self.tblFunctions2.clear()
-        h, e, _hc, _ec = self.parent.step_fc_functions1.\
-            selected_impact_function_constraints()
+        h, e, _hc, _ec = self.parent.selected_impact_function_constraints()
         hazard_layer_geometries = [
             layer_geometry_raster,
             layer_geometry_point,

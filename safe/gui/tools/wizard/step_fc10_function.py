@@ -1,3 +1,23 @@
+# coding=utf-8
+"""
+InaSAFE Disaster risk assessment tool by AusAid -**InaSAFE Wizard**
+
+This module provides: Function Centric Wizard Step: Impact Function Selector
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
+"""
+__author__ = 'qgis@borysjurgiel.pl'
+__revision__ = '$Format:%H$'
+__date__ = '16/03/2016'
+__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
+                 'Disaster Reduction')
+
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore, QtGui
 # noinspection PyPackageRequirements
@@ -14,7 +34,7 @@ FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
 class StepFcFunction(WizardStep, FORM_CLASS):
-    """A docstring."""
+    """Function Centric Wizard Step: Impact Function Selector"""
 
     def is_ready_to_next_step(self):
         """Check if the step is complete. If so, there is
@@ -90,8 +110,7 @@ class StepFcFunction(WizardStep, FORM_CLASS):
         self.lstFunctions.clear()
         self.lblDescribeFunction.setText('')
 
-        h, e, hc, ec = self.parent.step_fc_functions1.\
-            selected_impact_function_constraints()
+        h, e, hc, ec = self.parent.selected_impact_function_constraints()
         functions = self.impact_function_manager.functions_for_constraint(
             h['key'], e['key'], hc['key'], ec['key'])
         self.lblSelectFunction.setText(

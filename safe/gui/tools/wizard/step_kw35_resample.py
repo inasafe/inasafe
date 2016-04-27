@@ -1,3 +1,23 @@
+# coding=utf-8
+"""
+InaSAFE Disaster risk assessment tool by AusAid -**InaSAFE Wizard**
+
+This module provides: Keyword Wizard Step: Allow Resample
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
+"""
+__author__ = 'qgis@borysjurgiel.pl'
+__revision__ = '$Format:%H$'
+__date__ = '16/03/2016'
+__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
+                 'Disaster Reduction')
+
 from safe.definitions import layer_purpose_exposure
 
 from safe.utilities.gis import is_raster_layer
@@ -11,7 +31,7 @@ FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
 class StepKwResample(WizardStep, FORM_CLASS):
-    """A docstring."""
+    """Keyword Wizard Step: Allow Resample"""
 
     def is_ready_to_next_step(self):
         """Check if the step is complete. If so, there is
@@ -51,7 +71,8 @@ class StepKwResample(WizardStep, FORM_CLASS):
         if not is_raster_layer(self.parent.layer):
             return None
 
-        if self.parent.step_kw_purpose.selected_purpose() != layer_purpose_exposure:
+        if self.parent.step_kw_purpose.\
+                selected_purpose() != layer_purpose_exposure:
             return None
 
         # Only return false if checked, otherwise None for not-set.

@@ -1,3 +1,23 @@
+# coding=utf-8
+"""
+InaSAFE Disaster risk assessment tool by AusAid -**InaSAFE Wizard**
+
+This module provides: Function Centric Wizard Step: Aggregation Layer Origin
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
+"""
+__author__ = 'qgis@borysjurgiel.pl'
+__revision__ = '$Format:%H$'
+__date__ = '16/03/2016'
+__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
+                 'Disaster Reduction')
+
 from safe.utilities.i18n import tr
 
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
@@ -8,7 +28,7 @@ FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
 class StepFcAggLayerOrigin(WizardStep, FORM_CLASS):
-    """A docstring."""
+    """Function Centric Wizard Step: Aggregation Layer Origin"""
 
     def is_ready_to_next_step(self):
         """Check if the step is complete. If so, there is
@@ -80,8 +100,9 @@ class StepFcAggLayerOrigin(WizardStep, FORM_CLASS):
         # any available layers. Note This will be repeated in
         # set_widgets_step_fc_agglayer_from_canvas because we need
         # to list them again after coming back from the Keyword Wizard.
+        self.parent.step_fc_agglayer_from_canvas.\
+            list_compatible_canvas_layers()
         lst_wdg = self.parent.step_fc_agglayer_from_canvas.lstCanvasAggLayers
-        self.list_compatible_layers_from_canvas('aggregation', lst_wdg)
         if lst_wdg.count():
             self.rbAggLayerFromCanvas.setText(tr(
                 'I would like to use an aggregation layer already loaded in '

@@ -1,3 +1,23 @@
+# coding=utf-8
+"""
+InaSAFE Disaster risk assessment tool by AusAid -**InaSAFE Wizard**
+
+This module provides: Function Centric Wizard Step: IF Constraint Selector 1
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
+"""
+__author__ = 'qgis@borysjurgiel.pl'
+__revision__ = '$Format:%H$'
+__date__ = '16/03/2016'
+__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
+                 'Disaster Reduction')
+
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore, QtGui
 # noinspection PyPackageRequirements
@@ -11,20 +31,17 @@ from safe.utilities.resources import resources_path
 
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step import WizardStep
+from safe.gui.tools.wizard.wizard_utils import (
+    RoleFunctions,
+    RoleHazard,
+    RoleExposure)
 
-
-# Data roles
-RoleFunctions = QtCore.Qt.UserRole
-RoleHazard = QtCore.Qt.UserRole + 1
-RoleExposure = QtCore.Qt.UserRole + 2
-RoleHazardConstraint = QtCore.Qt.UserRole + 3
-RoleExposureConstraint = QtCore.Qt.UserRole + 4
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
 class StepFcFunctions1(WizardStep, FORM_CLASS):
-    """A docstring."""
+    """Function Centric Wizard Step: IF Constraint Selector 1"""
 
     def is_ready_to_next_step(self):
         """Check if the step is complete. If so, there is
@@ -65,29 +82,6 @@ class StepFcFunctions1(WizardStep, FORM_CLASS):
             return selection[0].data(RoleFunctions)
         except (AttributeError, NameError):
             return None
-
-    def selected_impact_function_constraints(self):
-        """Obtain impact function constraints selected by user.
-
-        :returns: Tuple of metadata of hazard, exposure,
-            hazard layer constraints and exposure layer constraints
-        :rtype: tuple
-        """
-        selection = self.tblFunctions1.selectedItems()
-        if len(selection) != 1:
-            return None, None, None, None
-
-        h = selection[0].data(RoleHazard)
-        e = selection[0].data(RoleExposure)
-
-        selection = \
-            self.parent.step_fc_functions2.tblFunctions2.selectedItems()
-        if len(selection) != 1:
-            return h, e, None, None
-
-        hc = selection[0].data(RoleHazardConstraint)
-        ec = selection[0].data(RoleExposureConstraint)
-        return h, e, hc, ec
 
     # prevents actions being handled twice
     # noinspection PyPep8Naming
