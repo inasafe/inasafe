@@ -1,33 +1,26 @@
 {
+  "exposure": "road",
   "question": "Question",
   "impact summary": {
-    "attributes": ["category", "value"],
+    "attributes": ["Road Type", "Temporarily closed (m)", "Unaffected", "Total"],
     "fields": [
-      ["High Hazard Zone", 11],
-      ["Medium Hazard Zone", 161],
-      ["Low Hazard Zone", 2],
-      ["Affected Building", 174],
-      ["Not Affected Building", 7],
-      ["Total", 181]
+      ["All (m)", 17459, 41116, 58756]
     ]
   },
   "impact table": {
-    "attributes": [
-      "Building type",
-      "High Hazard Zone",
-      "Medium Hazard Zone",
-      "Low Hazard Zone",
-      "Affected Building",
-      "Not Affected Building",
-      "Total"],
+  "attributes": ["Road Type", "Temporarily closed (m)", "Unaffected", "Total"],
     "fields": [
-      ["Commercial", 6, 25, 0, 0, 31],
-      ["Other", 0, 31, 2, 7, 40],
-      ["Residential", 5, 105, 0, 0, 110],
-      ["Total", 11, 161, 2, 7, 181]
+      ["Other (m)", 341, 4868, 5,210],
+      ["Road, residential, living street, etc. (m)", 8598, 15564, 24163],
+      ["Tertiary (m)", 663, 2295, 2959],
+      ["Secondary (m)", 2429, 4395, 6824],
+      ["Primary road (m)", 3535, 10983, 14518],
+      ["Primary link (m)", 1891, 504, 2396],
+      ["Cycleway, footpath, etc. (m)", 0, 2504, 2504],
+      ["Total (m)", 17459, 41116, 58,576]
     ]
   },
-  "action list": {
+  "action check list": {
     "title": "Action Check List Title",
     "content": [
       "Action check list content 1",
