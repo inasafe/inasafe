@@ -69,7 +69,7 @@ class TestClassifiedPolygonPeopleFunction(unittest.TestCase):
         # Asserting for the number of features in the impact
         # layer
 
-        self.assertEqual(impact.dataProvider().featureCount(), 5L)
+        self.assertEqual(impact.dataProvider().featureCount(), 6L)
 
         # 4. Asserting about the results found
         features = {}
