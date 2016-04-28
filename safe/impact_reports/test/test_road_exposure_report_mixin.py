@@ -63,7 +63,7 @@ class RoadExposureReportMixinTest(unittest.TestCase):
 
     def test_0002_road_breakdown(self):
         """Test the buildings breakdown."""
-        roads_breakdown = self.road_mixin.roads_breakdown().to_text()
+        roads_breakdown = self.road_mixin.format_roads_breakdown().to_text()
 
         self.assertIn('**Breakdown by road type**', roads_breakdown)
         self.assertIn('Main', roads_breakdown)

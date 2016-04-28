@@ -8,7 +8,7 @@
     ]
   },
   "impact table": {
-  "attributes": ["Road Type", "Temporarily closed (m)", "Unaffected", "Total"],
+    "attributes": ["Road Type", "Temporarily closed (m)", "Unaffected", "Total"],
     "fields": [
       ["Other (m)", 341, 4868, 5,210],
       ["Road, residential, living street, etc. (m)", 8598, 15564, 24163],
