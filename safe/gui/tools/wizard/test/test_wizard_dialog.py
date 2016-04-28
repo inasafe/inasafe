@@ -1420,6 +1420,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog = WizardDialog(iface=IFACE)
         dialog.dock = DOCK
         dialog.set_function_centric_mode()
+        QgsMapLayerRegistry.instance().removeAllMapLayers()
 
         # Load test layers
         layer = clone_raster_layer(
