@@ -44,16 +44,6 @@ road_class_mapping = [{
     'description': tr('Primary link'),
     'string_defaults': ['Primary link']
 }, {
-    'key': 'Tertiary',
-    'name': tr('Tertiary'),
-    'description': tr('Tertiary'),
-    'string_defaults': ['Tertiary']
-}, {
-    'key': 'Tertiary link',
-    'name': tr('Tertiary link'),
-    'description': tr('Tertiary link'),
-    'string_defaults': ['Tertiary link']
-}, {
     'key': 'Secondary',
     'name': tr('Secondary'),
     'description': tr('Secondary'),
@@ -63,6 +53,16 @@ road_class_mapping = [{
     'name': tr('Secondary link'),
     'description': tr('Secondary link'),
     'string_defaults': ['Secondary link']
+}, {
+    'key': 'Tertiary',
+    'name': tr('Tertiary'),
+    'description': tr('Tertiary'),
+    'string_defaults': ['Tertiary']
+}, {
+    'key': 'Tertiary link',
+    'name': tr('Tertiary link'),
+    'description': tr('Tertiary link'),
+    'string_defaults': ['Tertiary link']
 }, {
     'key': 'Road, residential, living street, etc.',
     'name': tr('Road, residential, living street, etc.'),
