@@ -32,26 +32,22 @@ from PyQt4.QtGui import QColor
 
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
-from safe.common.utilities import unique_filename
+from safe.common.utilities import unique_filename, format_int
 from safe.impact_functions.bases.classified_vh_continuous_ve import \
     ClassifiedVHContinuousVE
 from safe.impact_functions.generic.classified_polygon_people\
     .metadata_definitions \
     import ClassifiedPolygonHazardPolygonPeopleFunctionMetadata
 
-from safe.impact_reports.polygon_population_exposure_report_mixin import \
+from safe.impact_reports.polygon_people_exposure_report_mixin import \
     PolygonPeopleExposureReportMixin
-from safe.impact_functions.core import no_population_impact_message
-from safe.common.exceptions import InaSAFEError, ZeroImpactException
-import safe.messaging as m
-from safe.common.utilities import (
-    format_int,
-)
+
+from safe.common.exceptions import ZeroImpactException
 from safe.impact_functions.core import (
-    population_rounding
+    population_rounding,
+    no_population_impact_message
 )
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
-from safe.messaging import styles
 
 from safe.utilities.keyword_io import definition
 
