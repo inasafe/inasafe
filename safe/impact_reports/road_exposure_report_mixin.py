@@ -185,13 +185,9 @@ class RoadExposureReportMixin(ReportMixin):
         :returns: The roads breakdown report.
         :rtype: safe.message.Message
         """
-
         road_breakdown = self.roads_breakdown()
         attributes = road_breakdown['attributes']
         fields = road_breakdown['fields']
-
-        category_names = self.affected_road_categories
-        affected_categories = self.affected_road_categories
 
         message = m.Message(style_class='container')
         table = m.Table(style_class='table table-condensed table-striped')
@@ -199,7 +195,7 @@ class RoadExposureReportMixin(ReportMixin):
 
         row = m.Row()
         row.add(m.Cell(tr('Breakdown by road type'), header=True))
-        for _ in affected_categories:
+        for _ in attributes:
             # Add empty cell as many as affected_categories
             row.add(m.Cell('', header=True))
 

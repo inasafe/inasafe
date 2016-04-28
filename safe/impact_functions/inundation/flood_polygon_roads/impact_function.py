@@ -208,8 +208,6 @@ class FloodPolygonRoadsFunction(
                 self.affected_road_lengths[
                     flooded_keyword][road_type] += length
 
-        impact_summary = self.html_report()
-
         # For printing map purpose
         map_title = tr('Roads inundated')
         legend_title = tr('Road inundated status')
@@ -229,8 +227,9 @@ class FloodPolygonRoadsFunction(
             raise ZeroImpactException(
                 tr('No roads are flooded in this scenario.'))
 
+        impact_data = self.generate_data()
+
         extra_keywords = {
-            'impact_summary': impact_summary,
             'map_title': map_title,
             'legend_title': legend_title,
             'target_field': self.target_field
@@ -238,13 +237,13 @@ class FloodPolygonRoadsFunction(
 
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 
-        line_layer = Vector(
+        impact_layer = Vector(
             data=line_layer,
             name=tr('Flooded roads'),
             keywords=impact_layer_keywords,
             style_info=style_info
         )
 
-        self._impact = line_layer
-
-        return line_layer
+        impact_layer.impact_data = impact_data
+        self._impact = impact_layer
+        return impact_layer
