@@ -39,9 +39,6 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
 
         .. versionadded:: 3.2
 
-        ..Notes::
-
-
         """
         self._question = ''
         self._areas = {}
@@ -245,16 +242,12 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
 
         return message
 
-    def format_breakdown(self):
-        """
-        """
-        message = m.Message(style_class='container')
+    def breakdown(self):
+        """Create breakdown as data.
 
-        table = m.Table(
-            style_class='table table-condensed table-striped')
-        table.caption = None
-
-        row = m.Row()
+        :returns: Breakdown in dictionary format.
+        :rtype: dict
+        """
         attributes = [
             tr('Area Name'),
             tr('Affected Area (ha)'),
@@ -265,28 +258,83 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
             tr('Total Number of People'),
         ]
 
+        fields = []
+
+        areas = self.areas
+        affected_areas = self.affected_areas
+        for area_id, value in areas.iteritems():
+            if area_id in affected_areas:
+                affected = affected_areas[area_id]
+            else:
+                affected = 0.0
+            single_total_area = value
+
+            if value:
+                affected_area_ratio = affected / single_total_area
+            else:
+                affected_area_ratio = 0.0
+            percent_affected = affected_area_ratio * 100
+            percent_affected = round(percent_affected, 1)
+            number_people_affected = (
+                affected_area_ratio * self.areas_population[area_id])
+
+            # rounding to float without decimal, we can't have number
+            #  of people with decimal
+            number_people_affected = round(number_people_affected, 0)
+
+            if self.areas_population[area_id] != 0:
+                percent_people_affected = (
+                    (number_people_affected / self.areas_population[area_id]) *
+                    100)
+            else:
+                percent_people_affected = 0
+            affected *= 1e8
+            single_total_area *= 1e8
+
+            fields.append([
+                self.area_name(area_id),
+                affected,
+                percent_affected,
+                single_total_area,
+                number_people_affected,
+                percent_people_affected,
+                self.areas_population[area_id]
+            ])
+
+        return {
+            'attributes': attributes,
+            'fields': fields
+        }
+
+    def format_breakdown(self):
+        """
+        """
+        breakdown = self.breakdown()
+        attributes = breakdown['attributes']
+        fields = breakdown['fields']
+
+        message = m.Message(style_class='container')
+
+        table = m.Table(
+            style_class='table table-condensed table-striped')
+        table.caption = None
+
+        row = m.Row()
         for attribute in attributes:
             row.add(m.Cell(attribute, header=True, align='right'))
-
         table.add(row)
 
-        second_row = m.Row()
-        second_row.add(m.Cell(tr('All')))
-        second_row = self.total_row(second_row)
-        table.add(second_row)
+        for field in fields:
+            table.add(self.impact_row(
+                field[0],
+                field[1],
+                field[2],
+                field[3],
+                field[4],
+                field[5],
+                field[6],
+            ))
 
-        break_row = m.Row()
-        break_row.add(m.Cell(
-            tr('Breakdown by Area'),
-            header=True,
-            align='right'))
-        # intentionally empty right cells
-        for _ in attributes[:-1]:
-            break_row.add(m.Cell('', header=True))
-
-        table.add(break_row)
-
-        table = self.impact_calculation(table)
         last_row = m.Row()
         last_row.add(m.Cell(
             tr('Total')))
@@ -337,9 +385,14 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
             single_total_area *= 1e8
 
             impact_row = self.impact_row(
-                area_id, affected, percent_affected,
-                single_total_area, number_people_affected,
-                percent_people_affected)
+                self.area_name(area_id),
+                affected,
+                percent_affected,
+                single_total_area,
+                number_people_affected,
+                percent_people_affected,
+                self.areas_population[area_id]
+            )
 
             table.add(impact_row)
 
@@ -436,37 +489,41 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
 
     def impact_row(
             self,
-            area_id,
+            area_name,
             affected,
             percent_affected,
             single_total_area,
             number_people_affected,
-            percent_people_affected):
+            percent_people_affected,
+            area_population
+            ):
         """Adds the calculated results into respective impact row
 
-        :param area_id: Area id
-        :type area_id: int
+        :param area_name: Area Name
+        :type area_name: str
 
         :param affected: table with first and second row
         :type affected: Table
 
         :param percent_affected: percentage of affected area
-        :type percent_affected:float
+        :type percent_affected: float
 
         :param single_total_area: total area of the land
-        :type single_total_area:float
+        :type single_total_area: float
 
         :param number_people_affected: number of people affected
-        :type number_people_affected:float
+        :type number_people_affected: float
 
         :param percent_people_affected: percentage of people affected
         in the area
-        :type percent_people_affected:float
+        :type percent_people_affected: float
+
+        :param area_population: Population of the area
+        :type area_population: float
 
         :return row: the new impact row
         :rtype row: Row
         """
-        area_name = self.area_name(area_id)
         row = m.Row()
         row.add(m.Cell(area_name))
         row.add(m.Cell(format_int(int(affected)), align='right'))
@@ -479,7 +536,7 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
             align='right'))
         row.add(m.Cell("%.1f%%" % percent_people_affected, align='right'))
         row.add(m.Cell(
-            format_int(int(self.areas_population[area_id])),
+            format_int(int(area_population)),
             align='right'))
 
         return row
