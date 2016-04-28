@@ -17,8 +17,9 @@ __license__ = "GPL"
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
-
+import itertools
 from safe.postprocessors.abstract_postprocessor import AbstractPostprocessor
+from safe.utilities.i18n import tr
 
 
 class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
@@ -35,6 +36,10 @@ class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
         It takes care of defining self.impact_total
         """
         AbstractPostprocessor.__init__(self)
+
+        # Type of the post processor defined in child class.
+        self.type = None
+
         self.impact_total = None
         self.impact_attrs = None
         self.target_field = None
@@ -44,7 +49,6 @@ class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
         self.value_mapping = None
 
         self.known_types = []
-        self._update_known_types()
 
     def description(self):
         """
@@ -96,6 +100,7 @@ class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
         AbstractPostprocessor.process(self)
 
         if (self.impact_total is None or
+                self.type is None or
                 self.impact_attrs is None or
                 self.value_mapping is None or
                 self.target_field is None):
@@ -107,6 +112,100 @@ class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
             self._calculate_total()
             for title, field_values in self.value_mapping.iteritems():
                 self._calculate_type(title, field_values)
+
+    def _calculate_total(self):
+        """Indicator that shows total temporarily closed roads."""
+
+        name = tr('Temporarily closed')
+        result = 0
+        if self.type_fields is not None:
+            try:
+                for road in self.impact_attrs:
+                    field_value = road[self.target_field]
+                    if isinstance(field_value, basestring):
+                        if field_value != 'Not Affected':
+                            if self.type == 'RoadTypePostprocessor':
+                                result += road['aggr_sum']
+                            else:
+                                # BuildingTypePostprocessor
+                                # See issue #2258. Since we are only
+                                # working with one road at a time we
+                                # should only add 1.
+                                result += 1
+                    else:
+                        if field_value:
+                            if self.type == 'RoadTypePostprocessor':
+                                result += road['aggr_sum']
+                            else:
+                                # BuildingTypePostprocessor
+                                # See issue #2258. Since we are only
+                                # working with one road at a time we
+                                # should only add 1.
+                                result += 1
+                result = int(round(result))
+            except (ValueError, KeyError):
+                result = self.NO_DATA_TEXT
+        else:
+            if self.no_features:
+                result = 0
+            else:
+                result = self.NO_DATA_TEXT
+        self._append_result(name, result)
+
+    def _calculate_type(self, title, fields_values):
+        """Indicator that shows total features impacted.
+
+        This indicator reports the features by type. The logic is:
+        - look for the fields that occurs with a name included in
+            self.valid_type_fields
+        - look in those fields for any of the values of self.fields_values
+        - if a record has one of the valid fields with one of the valid
+        fields_values then it is considered affected
+        """
+
+        title = tr(title)
+
+        result = 0
+        if self.type_fields is not None:
+            try:
+                for feature in self.impact_attrs:
+                    for type_field in self.type_fields:
+                        feature_type = feature[type_field]
+                        if feature_type in fields_values:
+                            field_value = feature[self.target_field]
+                            if isinstance(field_value, basestring):
+                                if field_value != 'Not Affected':
+                                    if self.type == 'RoadTypePostprocessor':
+                                        result += feature['aggr_sum']
+                                    else:
+                                        # BuildingTypePostprocessor
+                                        # See issue #2258. Since we are only
+                                        # working with one road at a time we
+                                        # should only add 1.
+                                        result += 1
+                            else:
+                                if field_value:
+                                    if self.type == 'RoadTypePostprocessor':
+                                        result += feature['aggr_sum']
+                                    else:
+                                        # BuildingTypePostprocessor
+                                        # See issue #2258. Since we are only
+                                        # working with one road at a time we
+                                        # should only add 1.
+                                        result += 1
+                            break
+                        elif self._is_unknown_type(feature_type):
+                            self._update_known_types(feature_type)
+
+                result = int(round(result))
+            except (ValueError, KeyError):
+                result = self.NO_DATA_TEXT
+        else:
+            if self.no_features:
+                result = 0
+            else:
+                result = self.NO_DATA_TEXT
+        self._append_result(title, result)
 
     def clear(self):
         """concrete implementation that ensures needed parameters are cleared.
