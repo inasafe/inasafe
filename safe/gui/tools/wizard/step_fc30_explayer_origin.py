@@ -50,7 +50,8 @@ class StepFcExpLayerOrigin(WizardStep, FORM_CLASS):
         :returns: The step to be switched to
         :rtype: WizardStep instance or None
         """
-        if self.parent.step_fc_hazlayer_origin.rbHazLayerFromCanvas.isChecked():
+        if self.parent.step_fc_hazlayer_origin.rbHazLayerFromCanvas.\
+                isChecked():
             new_step = self.parent.step_fc_hazlayer_from_canvas
         else:
             new_step = self.parent.step_fc_hazlayer_from_browser
@@ -67,8 +68,6 @@ class StepFcExpLayerOrigin(WizardStep, FORM_CLASS):
         else:
             new_step = self.parent.step_fc_explayer_from_browser
         return new_step
-
-
 
     # noinspection PyPep8Naming
     def on_rbExpLayerFromCanvas_toggled(self):

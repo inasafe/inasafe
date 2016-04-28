@@ -68,7 +68,6 @@ class StepFcFunctions1(WizardStep, FORM_CLASS):
         """
         return self.parent.step_fc_functions2
 
-
     def selected_functions_1(self):
         """Obtain functions available for hazard an exposure selected by user.
 

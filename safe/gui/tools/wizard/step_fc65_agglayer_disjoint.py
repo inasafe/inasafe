@@ -48,7 +48,8 @@ class StepFcAggLayerDisjoint(WizardStep, FORM_CLASS):
         :returns: The step to be switched to
         :rtype: WizardStep instance or None
         """
-        if self.parent.step_fc_agglayer_origin.rbAggLayerFromCanvas.isChecked():
+        if self.parent.step_fc_agglayer_origin.rbAggLayerFromCanvas.\
+                isChecked():
             new_step = self.parent.step_fc_agglayer_from_canvas
         else:
             new_step = self.parent.step_fc_agglayer_from_browser

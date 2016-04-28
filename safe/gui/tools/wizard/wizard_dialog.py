@@ -1,4 +1,4 @@
-## coding=utf-8
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool by AusAid **GUI InaSAFE Wizard Dialog.**
 
@@ -235,7 +235,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.stackedWidget.addWidget(self.step_fc_summary)
         self.stackedWidget.addWidget(self.step_fc_analysis)
 
-
     def set_mode_label_to_keywords_creation(self):
         """Set the mode label to the Keywords Creation/Update mode
         """
@@ -316,7 +315,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         :rtype: string
         """
 
-        if self.step_kw_purpose.selected_purpose() == layer_purpose_aggregation:
+        if self.step_kw_purpose.selected_purpose() == \
+                layer_purpose_aggregation:
             # purpose: aggregation
             return 'aggregation attribute'
         elif self.step_kw_purpose.selected_purpose() == layer_purpose_hazard:
@@ -726,7 +726,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         # Determine the new step to be switched
         new_step = current_step.get_next_step()
         if (new_step == self.step_kw_extrakeywords and not
-                self.step_kw_extrakeywords.additional_keywords_for_the_layer()):
+                self.step_kw_extrakeywords.
+                additional_keywords_for_the_layer()):
             # Skip the extra_keywords tab if no extra keywords available:
             new_step = self.step_kw_source
 
@@ -764,7 +765,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.pbnNext.setEnabled(True)
         self.go_to_step(new_step)
 
-
     def get_current_step(self):
         """Return current step of the wizard.
 
@@ -792,7 +792,8 @@ class WizardDialog(QDialog, FORM_CLASS):
                 selected_subcategory()['key']
         if self.step_kw_hazard_category.selected_hazard_category():
             keywords['hazard_category'] \
-                = self.step_kw_hazard_category.selected_hazard_category()['key']
+                = self.step_kw_hazard_category.\
+                selected_hazard_category()['key']
         if self.step_kw_layermode.selected_layermode():
             keywords['layer_mode'] = self.step_kw_layermode.\
                 selected_layermode()['key']

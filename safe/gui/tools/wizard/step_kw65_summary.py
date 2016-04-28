@@ -73,11 +73,13 @@ class StepKwSummary(WizardStep, FORM_CLASS):
                     new_step = self.parent.step_fc_explayer_origin
 
                 elif parent_step in [self.parent.step_fc_explayer_from_canvas,
-                                     self.parent.step_fc_explayer_from_browser]:
+                                     self.parent.
+                                     step_fc_explayer_from_browser]:
                     new_step = self.parent.step_fc_disjoint_layers
 
                 elif parent_step in [self.parent.step_fc_agglayer_from_canvas,
-                                     self.parent.step_fc_agglayer_from_browser]:
+                                     self.parent.
+                                     step_fc_agglayer_from_browser]:
                     new_step = self.parent.step_fc_agglayer_disjoint
                 else:
                     raise Exception('No such step')

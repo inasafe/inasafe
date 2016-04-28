@@ -40,7 +40,6 @@ class StepFcHazLayerFromBrowser(WizardStepBrowser, FORM_CLASS):
         self.tvBrowserHazard.selectionModel().selectionChanged.connect(
             self.tvBrowserHazard_selection_changed)
 
-
     def is_ready_to_next_step(self):
         """Check if the step is complete. If so, there is
             no reason to block the Next button.

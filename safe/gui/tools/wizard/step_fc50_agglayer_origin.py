@@ -47,7 +47,8 @@ class StepFcAggLayerOrigin(WizardStep, FORM_CLASS):
         :returns: The step to be switched to
         :rtype: WizardStep instance or None
         """
-        if self.parent.step_fc_explayer_origin.rbExpLayerFromCanvas.isChecked():
+        if self.parent.step_fc_explayer_origin.rbExpLayerFromCanvas.\
+                isChecked():
             new_step = self.parent.step_fc_explayer_from_canvas
         else:
             new_step = self.parent.step_fc_explayer_from_browser

@@ -53,7 +53,6 @@ class WizardStep(QWidget):
         self.keyword_io = KeywordIO()
         self.impact_function_manager = ImpactFunctionManager()
 
-
     # noinspection PyUnresolvedReferences,PyMethodMayBeStatic
     def auto_select_one_item(self, list_widget):
         """Select item in the list in list_widget if it's the only item.

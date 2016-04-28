@@ -97,7 +97,6 @@ class StepKwField(WizardStep, FORM_CLASS):
         # Any other case
         return self.parent.step_kw_extrakeywords
 
-
     # noinspection PyPep8Naming
     def on_lstFields_itemSelectionChanged(self):
         """Update field description label and unlock the Next button.

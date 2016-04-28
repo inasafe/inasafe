@@ -59,7 +59,6 @@ class StepFcExtentDisjoint(WizardStep, FORM_CLASS):
         """
         return None
 
-
     def set_widgets(self):
         """Set widgets on the Extent Disjoint tab"""
         self.lblIconDisjoint_3.setPixmap(

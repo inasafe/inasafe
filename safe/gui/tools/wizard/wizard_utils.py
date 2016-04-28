@@ -61,10 +61,9 @@ def get_question_text(constant):
     else:
         return '<b>MISSING CONSTANT: %s</b>' % constant
 
+
 def layers_intersect(layer_a, layer_b):
     """Check if extents of two layers intersect.
-
-        A helper function, useful in a number of derived classes.
 
     :param layer_a: One of the two layers to test overlapping
     :type layer_a: QgsMapLayer
