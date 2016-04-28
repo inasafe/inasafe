@@ -1,0 +1,250 @@
+{
+  "breakdown": {
+    "attributes": [
+      "Area Name",
+      "Affected Area (ha)",
+      "Affected Area (%)",
+      "Total (ha)",
+      "Affected People",
+      "Affected People(%)",
+      "Total Number of People"
+    ],
+    "fields": [
+      [
+        "Magomeni",
+        6257.915649190141,
+        70.3,
+        8899.23218186657,
+        0.0,
+        0,
+        0
+      ],
+      [
+        "Makurumula",
+        6459.1909182111585,
+        51.1,
+        12649.65908431018,
+        27468.0,
+        51.06145666802989,
+        53794
+      ],
+      [
+        "Tandale",
+        9482.722924684389,
+        100.0,
+        9482.722924684396,
+        45058.0,
+        100.0,
+        45058
+      ]
+    ]
+  },
+  "action check list": {
+    "fields": [
+      "Which group or people is most affected?",
+      "Who are the vulnerable people in the population and why?",
+      "How will warnings be disseminated?",
+      "What are people's likely movements?",
+      "What are the security factors for the affected people?",
+      "What are the security factors for relief responders?",
+      "How will we reach evacuated people?",
+      "What kind of food does the people normally consume?",
+      "What are the critical non-food items required by the affected people?",
+      "Are there enough water supply, sanitation, hygiene, food, shelter, medicines and relief items available for 72,600 people?",
+      "If yes, where are they located and how will we distribute them?",
+      "If no, where can we obtain additional relief items and how will we distribute them?",
+      "What are the related health risks?",
+      "Who are the key people responsible for coordination?"
+    ],
+    "title": "Action checklist"
+  },
+  "minimum needs": {
+    "weekly": [
+      {
+        "maximum_allowed_value": 100.0,
+        "guid": "1efd62f1-07ce-4d32-a960-d9e7cfdaecf4",
+        "name": "Rice",
+        "precision": 1,
+        "value": 2.8,
+        "allowed_units": [
+          
+        ],
+        "amount": 203073,
+        "frequency": "weekly",
+        "unit": {
+          "abbreviation": "kg",
+          "help_text": null,
+          "plural": "kilograms",
+          "name": "kilogram",
+          "description": null
+        },
+        "table name": "Rice [kg]",
+        "help_text": "Basic food",
+        "expected_type": [
+          "<type 'float'>",
+          "<type 'int'>"
+        ],
+        "is_required": true,
+        "minimum_allowed_value": 0.0,
+        "description": "Each person should be provided with 2.8  kilograms of  Rice  weekly."
+      },
+      {
+        "maximum_allowed_value": 100.0,
+        "guid": "29c05bb0-b3f6-4308-aeaa-3035fc7f2153",
+        "name": "Drinking Water",
+        "precision": 1,
+        "value": 17.5,
+        "allowed_units": [
+          
+        ],
+        "amount": 1269205,
+        "frequency": "weekly",
+        "unit": {
+          "abbreviation": "l",
+          "help_text": null,
+          "plural": "litres",
+          "name": "litre",
+          "description": null
+        },
+        "table name": "Drinking Water [l]",
+        "help_text": "For drinking",
+        "expected_type": [
+          "<type 'float'>",
+          "<type 'int'>"
+        ],
+        "is_required": true,
+        "minimum_allowed_value": 0.0,
+        "description": "Each person should be provided with 17.5  litres of  Drinking Water  weekly for drinking."
+      },
+      {
+        "maximum_allowed_value": 100.0,
+        "guid": "cc0be63e-bddf-4f63-b310-16c7d947d268",
+        "name": "Clean Water",
+        "precision": 1,
+        "value": 67.0,
+        "allowed_units": [
+          
+        ],
+        "amount": 4859242,
+        "frequency": "weekly",
+        "unit": {
+          "abbreviation": "l",
+          "help_text": null,
+          "plural": "litres",
+          "name": "litre",
+          "description": null
+        },
+        "table name": "Clean Water [l]",
+        "help_text": "For washing",
+        "expected_type": [
+          "<type 'float'>",
+          "<type 'int'>"
+        ],
+        "is_required": true,
+        "minimum_allowed_value": 10.0,
+        "description": "Each person should be provided with 67  litres of  Clean Water  weekly for washing."
+      },
+      {
+        "maximum_allowed_value": 0.2,
+        "guid": "67799a69-8acf-4399-b34a-7fdb1dcf5b95",
+        "name": "Family Kits",
+        "precision": 1,
+        "value": 0.2,
+        "allowed_units": [
+          
+        ],
+        "amount": 14506,
+        "frequency": "weekly",
+        "unit": {
+          "abbreviation": null,
+          "help_text": null,
+          "plural": null,
+          "name": null,
+          "description": null
+        },
+        "table name": "Family Kits",
+        "help_text": "Hygiene kits",
+        "expected_type": [
+          "<type 'float'>",
+          "<type 'int'>"
+        ],
+        "is_required": true,
+        "minimum_allowed_value": 0.2,
+        "description": "Each family of 5 persons should be provided with 1 Family Kit per week."
+      }
+    ],
+    "single": [
+      {
+        "maximum_allowed_value": 0.05,
+        "guid": "40f384be-6e15-45eb-a2d0-d5c3fe9e1a0b",
+        "name": "Toilets",
+        "precision": 2,
+        "value": 0.05,
+        "allowed_units": [
+          
+        ],
+        "amount": 3627,
+        "frequency": "single",
+        "unit": {
+          "abbreviation": null,
+          "help_text": null,
+          "plural": null,
+          "name": null,
+          "description": null
+        },
+        "table name": "Toilets",
+        "help_text": null,
+        "expected_type": [
+          "<type 'float'>",
+          "<type 'int'>"
+        ],
+        "is_required": true,
+        "minimum_allowed_value": 0.02,
+        "description": "A toilet should be provided for every 20 persons."
+      }
+    ]
+  },
+  "impact summary": {
+    "attributes": [
+      "category",
+      "value"
+    ],
+    "fields": [
+      [
+        "High Hazard Zone",
+        4506.358124442367
+      ],
+      [
+        "Medium Hazard Zone",
+        65617.12422162906
+      ],
+      [
+        "Low Hazard Zone",
+        2402.9034766915615
+      ],
+      [
+        "Total affected people",
+        72526.0
+      ],
+      [
+        "Unaffected people",
+        26326.0
+      ],
+      [
+        "Total people",
+        98852
+      ]
+    ]
+  },
+  "notes": {
+    "fields": [
+      "The total people in the area is 98,900",
+      "All values are rounded up to the nearest integer in order to avoid representing human lives as fractions.",
+      "People rounding is applied to all population values, which may cause discrepancies when adding values.",
+      "Null value will be considered as zero."
+    ],
+    "title": "Notes and assumptions"
+  },
+  "question": "In each of the hazard zones which areas might be affected.",
+  "exposure": "polygon population"
+}

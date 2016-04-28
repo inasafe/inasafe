@@ -24,9 +24,7 @@ from safe.impact_functions.core import (
     evacuated_population_needs
 )
 from safe.gui.tools.minimum_needs.needs_profile import filter_needs_parameters
-from safe.impact_functions.core import (
-    population_rounding
-)
+from safe.impact_functions.core import population_rounding
 from safe.messaging import styles
 
 
@@ -51,10 +49,10 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
         self._minimum_needs = []
 
     def generate_report(self):
-        """Breakdown by building type.
+        """Generate impact report as message object.
 
         :returns: The report.
-        :rtype: list
+        :rtype: safe.messaging.Message
         """
         message = m.Message()
         message.add(m.Paragraph(self.question))
