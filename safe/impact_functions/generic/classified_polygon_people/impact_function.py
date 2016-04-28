@@ -189,8 +189,6 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
 
         self.evaluate_affected_people()
 
-        impact_summary = self.html_report()
-
         # Define style for the impact layer
         transparent_color = QColor()
         transparent_color.setAlpha(0)
@@ -250,8 +248,9 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
             style_classes=style_classes,
             style_type='categorizedSymbol')
 
+        impact_data = self.generate_data()
+
         extra_keywords = {
-            'impact_summary': impact_summary,
             'target_field': self.target_field,
             'map_title': tr('Affected People'),
         }
@@ -265,6 +264,7 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
             keywords=impact_layer_keywords,
             style_info=style_info)
 
+        impact_layer.impact_data = impact_data
         self._impact = impact_layer
         return impact_layer
 
