@@ -26,7 +26,8 @@ from safe.impact_template.building_report_template import (
     BuildingReportTemplate)
 from safe.impact_template.population_report_template import (
     PopulationReportTemplate)
-
+from safe.impact_template.road_report_template import (
+    RoadReportTemplate)
 
 def get_report_template(
         impact_layer_path=None, json_file=None, impact_data=None):
@@ -60,3 +61,5 @@ def get_report_template(
         return BuildingReportTemplate(impact_data=impact_data)
     elif impact_data['exposure'] == 'population':
         return PopulationReportTemplate(impact_data=impact_data)
+    elif impact_data['exposure'] == 'road':
+        return RoadReportTemplate(impact_data=impact_data)
