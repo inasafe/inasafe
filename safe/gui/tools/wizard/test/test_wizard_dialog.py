@@ -1442,8 +1442,9 @@ class WizardDialogTest(unittest.TestCase):
         self.assertIsNotNone(layer.dataProvider(), message)
 
         count = len(dialog.iface.mapCanvas().layers())
-        message = ('Loaded %d test layers while %d expected.'
-                   % (count, expected_test_layer_count))
+        names = ','.join([l.name() for l in dialog.iface.mapCanvas().layers()])
+        message = ('Loaded %d test layers while %d expected: %s'
+                   % (count, expected_test_layer_count, names))
         self.assertEqual(count, expected_test_layer_count, message)
 
         # step_fc_functions1: test function matrix dimensions
