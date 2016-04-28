@@ -82,6 +82,43 @@ class RoadExposureReportMixinTest(unittest.TestCase):
         message = 'Real length is not as expected.'
         self.assertEqual(length, 144.5, message)
 
+    def test_0004_generate_data(self):
+        """Test generating data."""
+        self.maxDiff = None
+        data = self.road_mixin.generate_data()
+        from pprint import pprint
+        pprint(data)
+        expected = {
+            'action check list': {
+                'fields': [
+                    u'Which roads can be used to evacuate people or to '
+                    u'distribute logistics?',
+                    u'What type of vehicles can use the unaffected roads?',
+                    u'What sort of equipment will be needed to reopen roads & '
+                    u'where will we get it?',
+                    u'Which government department is responsible for '
+                    u'supplying equipment ?'
+                ],
+                'title': u'Action checklist'
+            },
+                'exposure': 'road',
+                'impact summary': {
+                    'attributes': ['Flooded', 'Unaffected', 'Total'],
+                    'fields': [[8.7, 135.8, 144.5]]},
+                'impact table': {
+                    'attributes': [
+                        'Road Type', 'Flooded', 'Unaffected', 'Total'],
+                        'fields': [
+                            ['Main', 2, 131.3, 133.3],
+                            ['Side', 5.5, 4.5, 10],
+                            ['Bike', 1.2, 0.0, 1.2]]},
+                'notes': {
+                    'fields': [],
+                    'title': ''
+                },
+                'question': ''}
+        self.assertEquals(data, expected)
+
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(RoadExposureReportMixinTest)
