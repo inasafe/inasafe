@@ -394,6 +394,39 @@ def set_geo_extent(bounding_box, dock=None):
         print dock.extent.user_extent.toString(), 'set geo extent'
 
 
+def compare_two_vector_layers(control_layer, test_layer):
+    """Compare two vector layers (same geometries and same attributes)
+
+    :param control_layer: The control layer.
+    :type control_layer: QgsVectorLayer
+
+    :param test_layer: The layer being checked.
+    :type test_layer: QgsVectorLayer
+
+    :returns: Success or failure indicator, message providing notes.
+    :rtype: bool, str
+    """
+
+    if test_layer.geometryType() != control_layer.geometryType():
+        return False, 'These two layers are not using the same geometry type.'
+
+    if test_layer.crs().authid() != control_layer.crs().authid():
+        return False, 'These two layers are not using the same CRS.'
+
+    if test_layer.featureCount() != control_layer.featureCount():
+        return False, 'These two layers haven\'t the same number of features'
+
+    for feature in test_layer.getFeatures():
+        for expected in control_layer.getFeatures():
+            if feature.attributes() == expected.attributes():
+                if feature.geometry().isGeosEqual(expected.geometry()):
+                    break
+        else:
+            return False, 'A feature could not be found in the control layer.'
+    else:
+        return True, None
+
+
 def check_images(control_image, test_image_path, tolerance=1000):
     r"""Compare a test image against a collection of known good images.
 

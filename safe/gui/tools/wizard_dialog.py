@@ -134,7 +134,7 @@ from safe.gui.tools.wizard_strings import (
     select_explayer_from_browser_question,
     create_postGIS_connection_first)
 
-from safe.gui.tools.wizard_metadata import (
+from safe.definitions import (
     road_class_mapping,
     structure_class_mapping)
 
@@ -1378,9 +1378,10 @@ class WizardDialog(QDialog, FORM_CLASS):
                     value_as_string.upper() in [
                         c.upper() for c in default_class['string_defaults']])
                 condition_2 = (
-                    field_type < 10 and 'numeric_default_min' in default_class
-                    and 'numeric_default_max' in default_class and (
-                        default_class['numeric_default_min'] <= unique_value <=
+                    field_type < 10 and
+                    'numeric_default_min' in default_class and
+                    'numeric_default_max' in default_class and
+                    (default_class['numeric_default_min'] <= unique_value <=
                         default_class['numeric_default_max']))
                 if condition_1 or condition_2:
                     assigned_values[default_class['key']] += [unique_value]
