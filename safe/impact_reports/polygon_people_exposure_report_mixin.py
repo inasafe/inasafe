@@ -1,7 +1,7 @@
 # coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid -
-**Building Exposure Report Mixin Class**
+**Polygon People Exposure Report Mixin Class**
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -28,7 +28,7 @@ from safe.impact_functions.core import population_rounding
 from safe.messaging import styles
 
 
-class PolygonPopulationExposureReportMixin(ReportMixin):
+class PolygonPeopleExposureReportMixin(ReportMixin):
     """Population specific report.
     """
 
@@ -78,7 +78,7 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
         notes = self.notes()
 
         return {
-            'exposure': 'polygon population',
+            'exposure': 'polygon people',
             'question': question,
             'impact summary': impact_summary,
             'breakdown': breakdown,

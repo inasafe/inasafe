@@ -40,7 +40,7 @@ from safe.impact_functions.generic.classified_polygon_people\
     import ClassifiedPolygonHazardPolygonPeopleFunctionMetadata
 
 from safe.impact_reports.polygon_population_exposure_report_mixin import \
-    PolygonPopulationExposureReportMixin
+    PolygonPeopleExposureReportMixin
 from safe.impact_functions.core import no_population_impact_message
 from safe.common.exceptions import InaSAFEError, ZeroImpactException
 import safe.messaging as m
@@ -62,7 +62,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 class ClassifiedPolygonHazardPolygonPeopleFunction(
-        ClassifiedVHContinuousVE, PolygonPopulationExposureReportMixin):
+        ClassifiedVHContinuousVE, PolygonPeopleExposureReportMixin):
 
     _metadata = ClassifiedPolygonHazardPolygonPeopleFunctionMetadata()
 

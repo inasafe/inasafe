@@ -1,7 +1,7 @@
 # coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid -
-**Impact People Polygon Template Class**
+**Impact Polygon People Template Class**
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -25,8 +25,8 @@ from safe.impact_template.template_base import TemplateBase
 from safe.impact_functions.core import population_rounding
 
 
-class PeoplePolygonReportTemplate(TemplateBase):
-    """Report Template for People Polygon.
+class PolygonPeopleReportTemplate(TemplateBase):
+    """Report Template for Polygon People.
 
     ..versionadded: 3.4
     """
@@ -43,7 +43,7 @@ class PeoplePolygonReportTemplate(TemplateBase):
         :param impact_data: Dictionary that represent impact data.
         :type impact_data: dict
         """
-        super(PeoplePolygonReportTemplate, self).__init__(
+        super(PolygonPeopleReportTemplate, self).__init__(
             impact_layer_path=impact_layer_path,
             json_file=json_file,
             impact_data=impact_data)
