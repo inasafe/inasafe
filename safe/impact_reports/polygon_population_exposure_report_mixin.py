@@ -64,11 +64,42 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
         message = m.Message()
         message.add(m.Paragraph(self.question))
         message.add(self.format_impact_summary())
+        message.add(self.format_breakdown())
         message.add(self.minimum_needs_breakdown())
         message.add(self.format_action_checklist())
         message.add(self.format_notes())
 
         return message
+
+    def generate_data(self):
+        """Create a dictionary contains impact data.
+
+        :returns: The impact report data.
+        :rtype: dict
+        """
+        question = self.question
+        impact_summary = self.impact_summary()
+        breakdown = ''
+        minimum_needs = self.total_needs.copy()
+        action_checklist = self.action_checklist()
+        notes = self.notes()
+
+        return {
+            'exposure': 'polygon population',
+            'question': question,
+            'impact summary': impact_summary,
+            'minimum needs': minimum_needs,
+            'action check list': action_checklist,
+            'notes': notes
+        }
+
+    def impact_summary(self):
+        """Create impact summary as data.
+
+        :returns: Impact Summary in dictionary format.
+        :rtype: dict
+        """
+        pass
 
     def action_checklist(self):
         """Return the action check list section of the report.
@@ -164,6 +195,20 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
         :rtype: safe.messaging.Message
         """
         message = m.Message(style_class='container')
+
+        hazard_table = m.Table(
+            style_class='table table-condensed table-striped')
+        hazard_table = self.hazard_table(hazard_table)
+
+        message.add(hazard_table)
+
+        return message
+
+    def format_breakdown(self):
+        """
+        """
+        message = m.Message(style_class='container')
+
         table = m.Table(
             style_class='table table-condensed table-striped')
         table.caption = None
@@ -197,11 +242,6 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
             tr('Total')))
         table.add(self.total_row(last_row))
 
-        hazard_table = m.Table(
-            style_class='table table-condensed table-striped')
-        hazard_table = self.hazard_table(hazard_table)
-
-        message.add(hazard_table)
         message.add(table)
 
         return message
@@ -618,7 +658,7 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
         return area_name
 
     def hazard_table(self, hazard_table):
-        """ Return updated hazard table.
+        """Return updated hazard table.
 
         :param hazard_table: hazard table.
         :type hazard_table: Table

@@ -133,7 +133,10 @@ class PopulationExposureReportMixin(ReportMixin):
         }
 
     def impact_summary(self):
-        """
+        """Create impact summary as data.
+
+        :returns: Impact Summary in dictionary format.
+        :rtype: dict
         """
         attributes = ['category', 'value']
         fields = []
