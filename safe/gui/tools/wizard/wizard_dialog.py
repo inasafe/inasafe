@@ -150,9 +150,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.lblMainIcon.setPixmap(
             QPixmap(resources_path('img', 'icons', 'icon-white.svg')))
 
-        self.parameter_dialog = None
-        self.extent_dialog = None
-
         self.keyword_io = KeywordIO()
         self.impact_function_manager = ImpactFunctionManager()
 
@@ -701,7 +698,8 @@ class WizardDialog(QDialog, FORM_CLASS):
             self.save_current_keywords()
 
         if current_step == self.step_kw_aggregation:
-            good_age_ratio, sum_age_ratios = self.age_ratios_are_valid()
+            good_age_ratio, sum_age_ratios = self.step_kw_aggregation.\
+                age_ratios_are_valid()
             if not good_age_ratio:
                 message = self.tr(
                     'The sum of age ratio default is %s and it is more '
@@ -771,7 +769,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         """Return current step of the wizard.
 
         :returns: Current step of the wizard.
-        :rtype: int
+        :rtype: WizardStep instance
         """
         return self.stackedWidget.currentWidget()
 

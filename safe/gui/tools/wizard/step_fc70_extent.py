@@ -40,6 +40,7 @@ class StepFcExtent(WizardStep, FORM_CLASS):
         """
         WizardStep.__init__(self, parent)
         self.swExtent = None
+        self.extent_dialog = None
 
     def is_ready_to_next_step(self):
         """Check if the step is complete. If so, there is

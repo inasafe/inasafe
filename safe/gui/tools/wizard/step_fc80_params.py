@@ -79,9 +79,9 @@ class StepFcParams(WizardStep, FORM_CLASS):
             impact_function_id)
         if not impact_function:
             return
-        self.if_params = None
+        if_params = None
         if hasattr(impact_function, 'parameters'):
-            self.if_params = impact_function.parameters
+            if_params = impact_function.parameters
 
         text = self.tr(
             'Please set impact functions parameters.<br/>Parameters for '
@@ -91,7 +91,7 @@ class StepFcParams(WizardStep, FORM_CLASS):
 
         self.parameter_dialog = FunctionOptionsDialog(self)
         self.parameter_dialog.set_dialog_info(impact_function_id)
-        self.parameter_dialog.build_form(self.if_params)
+        self.parameter_dialog.build_form(if_params)
 
         if self.twParams:
             self.twParams.hide()
