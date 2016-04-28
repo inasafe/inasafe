@@ -33,8 +33,6 @@ from safe.gis.qgis_vector_tools import (
     create_layer)
 from safe.impact_reports.road_exposure_report_mixin import\
     RoadExposureReportMixin
-import safe.messaging as m
-from safe.messaging import styles
 
 __author__ = 'etiennetrimaille'
 __project_name__ = 'inasafe-dev'
@@ -469,8 +467,6 @@ class TsunamiRasterRoadsFunction(
             if attributes[target_field_index] in range(num_classes):
                 self.affected_road_lengths[hazard_zone][road_type] += length
 
-        impact_summary = self.html_report()
-
         # For printing map purpose
         map_title = tr('Roads inundated')
         legend_title = tr('Road inundated status')
@@ -521,8 +517,9 @@ class TsunamiRasterRoadsFunction(
             style_classes=style_classes,
             style_type='categorizedSymbol')
 
+        impact_data = self.generate_data()
+
         extra_keywords = {
-            'impact_summary': impact_summary,
             'map_title': map_title,
             'legend_title': legend_title,
             'target_field': target_field
@@ -531,10 +528,12 @@ class TsunamiRasterRoadsFunction(
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 
         # Convert QgsVectorLayer to inasafe layer and return it
-        line_layer = Vector(
+        impact_layer = Vector(
             data=line_layer,
             name=tr('Flooded roads'),
             keywords=impact_layer_keywords,
             style_info=style_info)
-        self._impact = line_layer
-        return line_layer
+
+        impact_layer.impact_data = impact_data
+        self._impact = impact_layer
+        return impact_layer
