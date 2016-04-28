@@ -1,6 +1,13 @@
 # -*- coding: utf-8 -*-
-"""**Postprocessors package.**
+"""
+InaSAFE Disaster risk assessment tool developed by AusAid.
 
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
 """
 
 __author__ = 'Dmitry Kolesov <kolesov.dm@google.com>'
@@ -10,16 +17,12 @@ __license__ = "GPL"
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
-from safe.postprocessors.building_type_postprocessor import \
-    BuildingTypePostprocessor
+from safe.postprocessors.abstract_building_road_type_postprocessor import \
+    AbstractBuildingRoadTypePostprocessor
 from safe.utilities.i18n import tr
 
 
-# The road postprocessing is the same workflow as Building postprocessing
-# So we can redefine field values and call BuildingTypePostprocessor
-# That is why I define RoadTypePostprocessor
-# as descendant of BuildingTypePostprocessor
-class RoadTypePostprocessor(BuildingTypePostprocessor):
+class RoadTypePostprocessor(AbstractBuildingRoadTypePostprocessor):
     """
     Postprocessor that calculates road types related statistics.
     see the _calculate_* methods to see indicator specific documentation
@@ -34,10 +37,7 @@ class RoadTypePostprocessor(BuildingTypePostprocessor):
         It takes care of defining self.impact_total
         """
 
-        BuildingTypePostprocessor.__init__(self)
-        self.value_mapping = None
-        self.known_types = []
-        self._update_known_types()
+        AbstractBuildingRoadTypePostprocessor.__init__(self)
 
     def description(self):
         """Describe briefly what the post processor does.
@@ -98,8 +98,8 @@ class RoadTypePostprocessor(BuildingTypePostprocessor):
             try:
                 for road in self.impact_attrs:
                     for type_field in self.type_fields:
-                        building_type = road[type_field]
-                        if building_type in fields_values:
+                        road_type = road[type_field]
+                        if road_type in fields_values:
                             field_value = road[self.target_field]
                             if isinstance(field_value, basestring):
                                 if field_value != 'Not Affected':
@@ -111,8 +111,8 @@ class RoadTypePostprocessor(BuildingTypePostprocessor):
                                     # should only add 1.
                                     result += road['aggr_sum']
                             break
-                        elif self._is_unknown_type(building_type):
-                            self._update_known_types(building_type)
+                        elif self._is_unknown_type(road_type):
+                            self._update_known_types(road_type)
 
                 result = int(round(result))
             except (ValueError, KeyError):
