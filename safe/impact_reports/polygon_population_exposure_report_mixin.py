@@ -1,5 +1,3 @@
-
-
 # coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid -
@@ -79,7 +77,7 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
         """
         question = self.question
         impact_summary = self.impact_summary()
-        breakdown = ''
+        breakdown = ""
         minimum_needs = self.total_needs.copy()
         action_checklist = self.action_checklist()
         notes = self.notes()
@@ -88,6 +86,7 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
             'exposure': 'polygon population',
             'question': question,
             'impact summary': impact_summary,
+            'breakdown': breakdown,
             'minimum needs': minimum_needs,
             'action check list': action_checklist,
             'notes': notes
@@ -99,7 +98,38 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
         :returns: Impact Summary in dictionary format.
         :rtype: dict
         """
-        pass
+        attributes = ['category', 'value']
+        fields = []
+
+        for key, value in self.hazard_levels.iteritems():
+            name = self.hazard_class_mapping[key][0]
+            # This skips reporting people not affected in No zone
+            if key == 'wet':
+                row = []
+                row.append(tr(
+                    'People within hazard field ("%s") of value "%s"')
+                               % (self.hazard_class_field, name))
+                row.append(value)
+            elif key == 'dry':
+                continue
+            else:
+                row = []
+                row.append(name)
+                row.append(value)
+            fields.append(row)
+
+        # Total affected population
+        fields.append(
+            [tr('Total affected people'), self.total_affected_population])
+        # Non affected population
+        fields.append([tr('Unaffected people'), self.unaffected_population])
+        # Total Population
+        fields.append([tr('Total people'), self.total_population])
+
+        return {
+            'attributes': attributes,
+            'fields': fields
+        }
 
     def action_checklist(self):
         """Return the action check list section of the report.
@@ -194,13 +224,24 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
         :returns: The impact summary.
         :rtype: safe.messaging.Message
         """
+        impact_summary = self.impact_summary()
+
         message = m.Message(style_class='container')
 
-        hazard_table = m.Table(
+        table = m.Table(
             style_class='table table-condensed table-striped')
-        hazard_table = self.hazard_table(hazard_table)
+        table.caption = None
+        for category in impact_summary['fields']:
+            row = m.Row()
+            row.add(m.Cell(category[0], header=True))
+            row.add(m.Cell(
+                format_int(population_rounding(category[1])), align='right'))
+            # For value field, if existed
+            if len(category) > 2:
+                row.add(m.Cell(format_int(category[2]), align='right'))
+            table.add(row)
 
-        message.add(hazard_table)
+        message.add(table)
 
         return message
 
@@ -214,7 +255,19 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
         table.caption = None
 
         row = m.Row()
-        row = self.head_row(row)
+        attributes = [
+            tr('Area Name'),
+            tr('Affected Area (ha)'),
+            tr('Affected Area (%)'),
+            tr('Total (ha)'),
+            tr('Affected People'),
+            tr('Affected People(%)'),
+            tr('Total Number of People'),
+        ]
+
+        for attribute in attributes:
+            row.add(m.Cell(attribute, header=True, align='right'))
+
         table.add(row)
 
         second_row = m.Row()
@@ -228,12 +281,9 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
             header=True,
             align='right'))
         # intentionally empty right cells
-        break_row.add(m.Cell('', header=True))
-        break_row.add(m.Cell('', header=True))
-        break_row.add(m.Cell('', header=True))
-        break_row.add(m.Cell('', header=True))
-        break_row.add(m.Cell('', header=True))
-        break_row.add(m.Cell('', header=True))
+        for _ in attributes[:-1]:
+            break_row.add(m.Cell('', header=True))
+
         table.add(break_row)
 
         table = self.impact_calculation(table)
@@ -294,46 +344,6 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
             table.add(impact_row)
 
         return table
-
-    def head_row(self, row):
-        """Set and return header row in impact summary
-
-        :param row: The empty header row
-        :type row: Row
-
-        :return Header row with content
-        :rtype Row
-        """
-        row.add(m.Cell(
-            tr('Area Name'),
-            header=True,
-            align='right'))
-        row.add(m.Cell(
-            tr('Affected Area (ha)'),
-            header=True,
-            align='right'))
-        row.add(m.Cell(
-            tr('Affected Area (%)'),
-            header=True,
-            align='right'))
-        row.add(m.Cell(
-            tr('Total (ha)'),
-            header=True,
-            align='right'))
-        row.add(m.Cell(
-            tr('Affected People'),
-            header=True,
-            align='right'))
-        row.add(m.Cell(
-            tr('Affected People(%)'),
-            header=True,
-            align='right'))
-        row.add(m.Cell(
-            tr('Total Number of People'),
-            header=True,
-            align='right'))
-
-        return row
 
     def row(
             self,
@@ -656,66 +666,6 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
         area_name = self.areas_names[area_id]
 
         return area_name
-
-    def hazard_table(self, hazard_table):
-        """Return updated hazard table.
-
-        :param hazard_table: hazard table.
-        :type hazard_table: Table
-
-        :returns hazard_table: Updated Hazard Table
-        :rtype area_name: Table
-        """
-        hazard_table.caption = None
-
-        for key, value in self.hazard_levels.iteritems():
-
-            name = self.hazard_class_mapping[key][0]
-            # This skips reporting people not affected in No zone
-            if key == 'wet':
-                row = m.Row()
-                row.add(m.Cell(tr(
-                    'People within hazard field ("%s") of value "%s"')
-                               % (self.hazard_class_field, name),
-                               header=True))
-                value = format_int(population_rounding(value))
-                row.add(m.Cell(value, align='right'))
-            elif key == 'dry':
-                continue
-            else:
-                row = m.Row()
-                row.add(m.Cell(name, header=True))
-                value = format_int(population_rounding(value))
-                row.add(m.Cell(value, align='right'))
-            hazard_table.add(row)
-
-        # Total affected population
-        row = m.Row()
-        row.add(m.Cell(
-            tr('Total affected people'),
-            header=True))
-        affected = format_int(
-            population_rounding(self.total_affected_population))
-        row.add(m.Cell(affected, align='right'))
-        hazard_table.add(row)
-
-        # Non affected population
-        row = m.Row()
-        unaffected = format_int(
-            population_rounding(self.unaffected_population))
-        row.add(m.Cell(tr('Unaffected people'), header=True))
-        row.add(m.Cell(unaffected, align='right'))
-        hazard_table.add(row)
-
-        # Total Population
-        row = m.Row()
-        total_population = format_int(
-            population_rounding(self.total_population))
-        row.add(m.Cell(tr('Total people'), header=True))
-        row.add(m.Cell(total_population, align='right'))
-        hazard_table.add(row)
-
-        return hazard_table
 
     def hazard_level_name(self, id):
         """ Return name of level corresponding the id.
