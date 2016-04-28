@@ -60,7 +60,7 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
         message.add(m.Paragraph(self.question))
         message.add(self.format_impact_summary())
         message.add(self.format_breakdown())
-        message.add(self.minimum_needs_breakdown())
+        message.add(self.format_minimum_needs_breakdown())
         message.add(self.format_action_checklist())
         message.add(self.format_notes())
 
@@ -74,7 +74,7 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
         """
         question = self.question
         impact_summary = self.impact_summary()
-        breakdown = ""
+        breakdown = self.breakdown()
         minimum_needs = self.total_needs.copy()
         action_checklist = self.action_checklist()
         notes = self.notes()
@@ -166,7 +166,7 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
             'fields': fields
         }
 
-    def minimum_needs_breakdown(self):
+    def format_minimum_needs_breakdown(self):
         """Breakdown by polygon population.
 
         :returns: The population breakdown report.
@@ -723,26 +723,6 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
         area_name = self.areas_names[area_id]
 
         return area_name
-
-    def hazard_level_name(self, id):
-        """ Return name of level corresponding the id.
-
-        :param id: hazard level id.
-        :type id: int
-
-        :returns level_name:Name of the hazard level
-        :rtype level_name: string
-        """
-        if id is 1:
-            level_name = "Low"
-        elif id is 2:
-            level_name = "Medium"
-        elif id is 3:
-            level_name = "High"
-        else:
-            level_name = None
-
-        return level_name
 
     @property
     def minimum_needs(self):
