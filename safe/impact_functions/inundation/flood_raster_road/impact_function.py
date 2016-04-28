@@ -221,8 +221,6 @@ class FloodRasterRoadsFunction(
 
         title = tr('Notes and assumptions')
 
-
-
         threshold = self.parameters['min threshold'].value
         hazard = self.hazard.keyword('hazard')
         hazard_terminology = tr('flooded')

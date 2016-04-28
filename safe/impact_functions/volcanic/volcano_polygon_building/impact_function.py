@@ -27,8 +27,6 @@ from safe.engine.interpolation import (
     assign_hazard_values_to_exposure_data)
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
-import safe.messaging as m
-from safe.messaging import styles
 from safe.utilities.keyword_io import definition
 from safe.impact_functions.core import get_key_for_value
 from safe.utilities.unicode import get_string
@@ -217,7 +215,6 @@ class VolcanoPolygonBuildingFunction(
         legend_units = tr('(building)')
         legend_notes = tr('Thousand separator is represented by %s' %
                           get_thousand_separator())
-
 
         impact_data = self.generate_data()
 

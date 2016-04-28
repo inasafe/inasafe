@@ -35,8 +35,6 @@ from safe.storage.vector import Vector
 from safe.common.exceptions import GetDataError, ZeroImpactException
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
-import safe.messaging as m
-from safe.messaging import styles
 
 
 class FloodPolygonBuildingFunction(

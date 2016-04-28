@@ -28,12 +28,12 @@ from safe.common.utilities import (
     create_label,
     get_thousand_separator)
 from safe.utilities.i18n import tr
-from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
-    get_needs_provenance_value, filter_needs_parameters
+from safe.gui.tools.minimum_needs.needs_profile import (
+    add_needs_parameters,
+    filter_needs_parameters
+)
 from safe.impact_reports.population_exposure_report_mixin import \
     PopulationExposureReportMixin
-import safe.messaging as m
-from safe.messaging import styles
 
 __author__ = 'lucernae'
 __date__ = '24/03/15'

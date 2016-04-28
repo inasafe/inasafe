@@ -31,6 +31,7 @@ from safe.impact_template.road_report_template import (
 from safe.impact_template.polygon_people_report_template import (
     PolygonPeopleReportTemplate)
 
+
 def get_report_template(
         impact_layer_path=None, json_file=None, impact_data=None):
     """Return matching report template object.

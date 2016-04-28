@@ -20,12 +20,12 @@ from safe.utilities.i18n import tr
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.impact_functions.core import (
     population_rounding,
-    has_no_data)
+    has_no_data,
+    no_population_impact_message)
 from safe.impact_functions.inundation.flood_polygon_population \
     .metadata_definitions import FloodEvacuationVectorHazardMetadata
 from safe.impact_functions.bases.classified_vh_continuous_re import \
     ClassifiedVHContinuousRE
-from safe.impact_functions.core import no_population_impact_message
 from safe.storage.raster import Raster
 from safe.common.utilities import (
     format_int,

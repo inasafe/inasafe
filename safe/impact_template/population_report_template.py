@@ -23,6 +23,7 @@ from safe.utilities.utilities import tr
 from safe.common.utilities import format_int
 from safe.impact_template.template_base import TemplateBase
 
+
 class PopulationReportTemplate(TemplateBase):
     """Report Template for Population.
 
@@ -46,7 +47,6 @@ class PopulationReportTemplate(TemplateBase):
             json_file=json_file,
             impact_data=impact_data)
         self.minimum_needs = self.impact_data.get('minimum needs')
-
 
     def generate_message_report(self):
         """Generate impact report as message object.

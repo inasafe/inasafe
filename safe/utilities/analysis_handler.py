@@ -428,7 +428,6 @@ class AnalysisHandler(QObject):
             report.add(self.keyword_io.read_keywords(
                 qgis_impact_layer, 'impact_summary'))
 
-
         # Get requested style for impact layer of either kind
         style = engine_impact_layer.get_style_info()
         style_type = engine_impact_layer.get_style_type()

@@ -1,5 +1,15 @@
 # coding=utf-8
-"""Impact of flood on roads."""
+"""InaSAFE Disaster risk tool by Australian Aid - Tsunami Raster Impact on
+Road
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
+"""
 from collections import OrderedDict
 
 from qgis.core import (

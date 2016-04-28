@@ -30,16 +30,20 @@ from safe.impact_functions.bases.continuous_rh_continuous_re import \
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.impact_functions.core import (
     population_rounding,
-    has_no_data)
+    has_no_data,
+    no_population_impact_message
+)
 from safe.storage.raster import Raster
 from safe.utilities.i18n import tr
-from safe.common.utilities import get_thousand_separator
-from safe.impact_functions.core import no_population_impact_message
-from safe.common.utilities import create_classes, create_label, humanize_class
+from safe.common.utilities import (
+    create_classes,
+    create_label,
+    humanize_class,
+    get_thousand_separator)
 from safe.common.exceptions import (
     FunctionParametersError, ZeroImpactException)
-from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
-    filter_needs_parameters
+from safe.gui.tools.minimum_needs.needs_profile import (
+    add_needs_parameters, filter_needs_parameters)
 from safe.impact_reports.population_exposure_report_mixin import \
     PopulationExposureReportMixin
 

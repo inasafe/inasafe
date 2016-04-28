@@ -23,6 +23,7 @@ from safe.utilities.i18n import tr
 from safe.common.utilities import format_int
 from safe.impact_template.template_base import TemplateBase
 
+
 class RoadReportTemplate(TemplateBase):
     """Report Template for Road.
 

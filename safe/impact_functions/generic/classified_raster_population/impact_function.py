@@ -26,8 +26,7 @@ import itertools
 from safe.impact_functions.bases.classified_rh_continuous_re import \
     ClassifiedRHContinuousRE
 from safe.impact_functions.core import (
-    population_rounding,
-    has_no_data)
+    population_rounding, has_no_data, no_population_impact_message)
 from safe.storage.raster import Raster
 from safe.common.utilities import (
     humanize_class,
@@ -35,7 +34,6 @@ from safe.common.utilities import (
     create_label,
     get_thousand_separator)
 from safe.utilities.i18n import tr
-from safe.impact_functions.core import no_population_impact_message
 from safe.impact_functions.generic.\
     classified_raster_population.metadata_definitions import \
     ClassifiedRasterHazardPopulationMetadata

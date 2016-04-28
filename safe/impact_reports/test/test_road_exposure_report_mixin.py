@@ -101,22 +101,27 @@ class RoadExposureReportMixinTest(unittest.TestCase):
                 ],
                 'title': u'Action checklist'
             },
-                'exposure': 'road',
-                'impact summary': {
-                    'attributes': ['Flooded', 'Unaffected', 'Total'],
-                    'fields': [[8.7, 135.8, 144.5]]},
-                'impact table': {
-                    'attributes': [
-                        'Road Type', 'Flooded', 'Unaffected', 'Total'],
-                        'fields': [
-                            ['Main', 2, 131.3, 133.3],
-                            ['Side', 5.5, 4.5, 10],
-                            ['Bike', 1.2, 0.0, 1.2]]},
-                'notes': {
-                    'fields': [],
-                    'title': ''
-                },
-                'question': ''}
+            'exposure': 'road',
+            'impact summary': {
+                'attributes': ['Flooded', 'Unaffected', 'Total'],
+                'fields': [[8.7, 135.8, 144.5]]
+            },
+            'impact table': {
+                'attributes': [
+                    'Road Type', 'Flooded', 'Unaffected', 'Total'
+                ],
+                'fields': [
+                    ['Main', 2, 131.3, 133.3],
+                    ['Side', 5.5, 4.5, 10],
+                    ['Bike', 1.2, 0.0, 1.2]
+                ]
+            },
+            'notes': {
+                'fields': [],
+                'title': ''
+            },
+            'question': ''
+        }
         self.assertEquals(data, expected)
 
 

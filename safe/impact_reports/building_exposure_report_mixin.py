@@ -104,8 +104,9 @@ class BuildingExposureReportMixin(ReportMixin):
                 [tr('Affected buildings'), self.total_affected_buildings])
 
         if self._affected_categories == self.affected_buildings.keys():
-            fields.append(
-                [tr('Not affected buildings'), self.total_unaffected_buildings])
+            fields.append([
+                tr('Not affected buildings'), self.total_unaffected_buildings]
+            )
 
         fields.append([tr('Total'), self.total_buildings])
 

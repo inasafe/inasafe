@@ -22,6 +22,7 @@ import safe.messaging as m
 from safe.common.utilities import format_int
 from safe.impact_template.template_base import TemplateBase
 
+
 class BuildingReportTemplate(TemplateBase):
     """Report Template for Building.
 

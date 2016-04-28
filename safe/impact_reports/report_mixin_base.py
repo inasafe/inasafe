@@ -58,7 +58,7 @@ class ReportMixin(object):
         message.add(m.Heading(action_checklist['title'], **styles.INFO_STYLE))
 
         checklist = m.BulletedList()
-        for text in action_checklist ['fields']:
+        for text in action_checklist['fields']:
             checklist.add(text)
 
         message.add(checklist)

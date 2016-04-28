@@ -14,6 +14,7 @@ Contact : ole.moller.nielsen@gmail.com
 from collections import OrderedDict
 from qgis.core import QgsField, QgsRectangle
 from PyQt4.QtCore import QVariant
+
 from safe.impact_functions.bases.classified_vh_classified_ve import \
     ClassifiedVHClassifiedVE
 from safe.storage.vector import Vector
@@ -21,8 +22,8 @@ from safe.utilities.i18n import tr
 from safe.impact_functions.generic.classified_polygon_building \
     .metadata_definitions \
     import ClassifiedPolygonHazardBuildingFunctionMetadata
-from safe.common.exceptions import InaSAFEError, KeywordNotFoundError, \
-    ZeroImpactException
+from safe.common.exceptions import (
+    InaSAFEError, KeywordNotFoundError, ZeroImpactException)
 from safe.common.utilities import (
     get_thousand_separator,
     get_osm_building_usage,
@@ -30,8 +31,6 @@ from safe.common.utilities import (
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
 from safe.engine.interpolation_qgis import interpolate_polygon_polygon
-import safe.messaging as m
-from safe.messaging import styles
 from safe.impact_functions.core import get_key_for_value
 from safe.utilities.keyword_io import definition
 from safe.utilities.unicode import get_unicode

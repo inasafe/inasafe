@@ -38,15 +38,11 @@ from safe.impact_functions.bases.classified_vh_continuous_ve import \
 from safe.impact_functions.generic.classified_polygon_people\
     .metadata_definitions \
     import ClassifiedPolygonHazardPolygonPeopleFunctionMetadata
-
 from safe.impact_reports.polygon_people_exposure_report_mixin import \
     PolygonPeopleExposureReportMixin
-
 from safe.common.exceptions import ZeroImpactException
 from safe.impact_functions.core import (
-    population_rounding,
-    no_population_impact_message
-)
+    population_rounding, no_population_impact_message)
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 
 from safe.utilities.keyword_io import definition

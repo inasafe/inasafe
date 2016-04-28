@@ -28,8 +28,6 @@ from safe.engine.interpolation import (
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
 from safe.common.exceptions import KeywordNotFoundError
-import safe.messaging as m
-from safe.messaging import styles
 
 
 class VolcanoPointBuildingFunction(
