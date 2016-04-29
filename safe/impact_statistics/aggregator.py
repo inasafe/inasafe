@@ -21,6 +21,7 @@ import time
 import numpy
 from collections import OrderedDict
 from qgis.core import (
+    QgsCoordinateTransform,
     QgsMapLayer,
     QgsGeometry,
     QgsMapLayerRegistry,
@@ -30,6 +31,7 @@ from qgis.core import (
     QgsPoint,
     QgsField,
     QgsFields,
+    QgsSpatialIndex,
     QgsVectorLayer,
     QgsVectorFileWriter,
     QGis,
@@ -40,7 +42,7 @@ from qgis.core import (
 from qgis.analysis import QgsZonalStatistics
 # pylint: enable=no-name-in-module
 from PyQt4 import QtGui, QtCore
-from PyQt4.QtCore import QSettings
+from PyQt4.QtCore import QSettings, QVariant
 from safe.storage.core import read_layer as safe_read_layer
 from safe.storage.utilities import (
     calculate_polygon_centroid,
@@ -109,6 +111,12 @@ class Aggregator(QtCore.QObject):
         self.hazard_layer = None  # Used in deintersect() method
         self.exposure_layer = None  # Used in deintersect() method
         self.safe_layer = None  # Aggregation layer in SAFE format
+
+        # For new-style IF, when aggregation is used, only exposure layer
+        # is intersected with aggregation layer (see deintersect_exposure()),
+        # and the aggregation zone field name is stored, so that it can
+        # be used later in the body of IF
+        self.exposure_aggregation_field = None
 
         self.prefix = 'aggr_'
         self.attributes = {}
@@ -476,6 +484,39 @@ class Aggregator(QtCore.QObject):
                     self.exposure_layer = self._prepare_polygon_layer(
                         self.exposure_layer)
 
+    def deintersect_exposure(self):
+        """ If necessary, cut the exposure features according to aggregation
+        layer. Does nothing if no aggregation layer is specified.
+        """
+        if self.aoi_mode:
+            return  # nothing to do
+
+        agg_keyword = self.get_default_keyword('AGGR_ATTR_KEY')
+        agg_attribute = self.read_keywords(self.layer)[agg_keyword]
+
+        out_filename = _intersect_exposure_with_aggregation(
+            self.exposure_layer,
+            self.layer,
+            agg_attribute)
+
+        self.copy_keywords(self.exposure_layer, out_filename)
+
+        name = '%s %s' % (self.exposure_layer.name(), self.tr('preprocessed'))
+        output_layer = QgsVectorLayer(out_filename, name, 'ogr')
+        if not output_layer.isValid():
+            raise Exception('Pre-processing of exposure: Intersection Failed')
+
+        if self.show_intermediate_layers:
+            QgsMapLayerRegistry.instance().addMapLayer(output_layer)
+
+        self.exposure_layer = output_layer
+
+        # keep then aggregation field name in exposure layer
+        # Wanted to use a keyword in exposure layer, but it would not be saved
+        # TODO: handle name collision in case qgis:intersection renames
+        # original zone name field
+        self.exposure_aggregation_field = agg_attribute
+
     def aggregate(self, safe_impact_layer):
         """Do any requested aggregation post processing.
 
@@ -551,7 +592,7 @@ class Aggregator(QtCore.QObject):
         else:
             message = self.tr(
                 '%s is %s but it should be either vector or raster') % (
-                          qgis_impact_layer.name(), qgis_impact_layer.type())
+                qgis_impact_layer.name(), qgis_impact_layer.type())
             # noinspection PyExceptionInherit
             raise ReadLayerError(message)
 
@@ -1240,7 +1281,6 @@ class Aggregator(QtCore.QObject):
         temporary_dir = temp_dir(sub_dir='pre-process')
         out_filename = unique_filename(suffix='.shp', dir=temporary_dir)
 
-        self.copy_keywords(layer, out_filename)
         shape_writer = QgsVectorFileWriter(
             out_filename,
             'UTF-8',
@@ -1470,6 +1510,8 @@ class Aggregator(QtCore.QObject):
         del shape_writer
         # LOGGER.debug('Created: %s' % self.preprocessed_feature_count)
 
+        self.copy_keywords(layer, out_filename)
+
         name = '%s %s' % (layer.name(), self.tr('preprocessed'))
         output_layer = QgsVectorLayer(out_filename, name, 'ogr')
         if not output_layer.isValid():
@@ -1628,3 +1670,65 @@ class Aggregator(QtCore.QObject):
         algorithm = self.processing.runAlgorithm(algorithm_name, None, *args)
         if algorithm is not None:
             return algorithm.getOutputValuesAsDictionary()
+
+
+# private functions used in the module
+
+def _intersect_exposure_with_aggregation(exposure_layer, agg_layer, agg_field_name):
+    """ Make a new layer that is intersection of exposure and aggregation
+    layers and add aggregation zone name.
+
+    Aggregation zones are reprojected to exposure layer if necessary.
+
+    Note: tried to use qgis:intersection (with qgis:reprojectlayer)
+    from Processing, however that lead to poor results with missing features.
+    """
+
+    temporary_dir = temp_dir(sub_dir='pre-process')
+    out_filename = unique_filename(suffix='.shp', dir=temporary_dir)
+
+    # reproject aggregation layer if not in the same CRS as exposure
+    if exposure_layer.crs() != agg_layer.crs():
+        ct = QgsCoordinateTransform(agg_layer.crs(), exposure_layer.crs())
+    else:
+        ct = None
+
+    out_fields = exposure_layer.pendingFields()
+    out_fields.append(QgsField(agg_field_name, QVariant.String))
+
+    writer = QgsVectorFileWriter(
+        out_filename, "utf-8", out_fields,
+        exposure_layer.wkbType(), exposure_layer.crs())
+
+    # build index for exposure
+    exp_index = QgsSpatialIndex()
+    exp_features = {}
+    for f in exposure_layer.getFeatures():
+        exp_index.insertFeature(f)
+        exp_features[f.id()] = QgsFeature(f)
+
+    for agg_feature in agg_layer.getFeatures():
+        geom = QgsGeometry(agg_feature.geometry())
+        agg_name = agg_feature[agg_field_name]
+        if ct is not None:
+            geom.transform(ct)
+
+        for exp_fid in exp_index.intersects(geom.boundingBox()):
+            exp_feature = exp_features[exp_fid]
+            exp_geom = QgsGeometry(exp_feature.geometry())
+            if geom.contains(exp_geom):
+                # write feature as is
+                out_feature = QgsFeature(out_fields)
+                out_feature.setGeometry(exp_geom)
+                out_feature.setAttributes(exp_feature.attributes() + [agg_name])
+                writer.addFeature(out_feature)
+            elif geom.intersects(exp_geom):
+                # need to do intersection
+                out_geom = geom.intersection(exp_geom)
+                out_feature = QgsFeature(out_fields)
+                out_feature.setGeometry(out_geom)
+                out_feature.setAttributes(exp_feature.attributes() + [agg_name])
+                writer.addFeature(out_feature)
+
+    del writer
+    return out_filename

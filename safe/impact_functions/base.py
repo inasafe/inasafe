@@ -854,6 +854,10 @@ class ImpactFunction(object):
                 clip_parameters = self.clip_parameters
                 adjusted_geo_extent = clip_parameters['adjusted_geo_extent']
                 self.requested_extent = adjusted_geo_extent
+                # Cut the exposure according to aggregation layer if necessary
+                self.aggregator.validate_keywords()
+                self.aggregator.deintersect_exposure()
+                self.exposure = self.aggregator.exposure_layer
         except CallGDALError, e:
             analysis_error(self, e, tr(
                 'An error occurred when calling a GDAL command'))
