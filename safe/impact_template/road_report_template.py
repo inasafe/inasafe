@@ -60,6 +60,8 @@ class RoadReportTemplate(TemplateBase):
         message.add(self.format_roads_breakdown())
         message.add(self.format_action_check_list())
         message.add(self.format_notes())
+        if self.postprocessing:
+            message.add(self.format_postprocessing())
         return message
 
     def format_impact_summary(self):

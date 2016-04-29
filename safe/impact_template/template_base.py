@@ -23,6 +23,9 @@ from collections import OrderedDict
 import safe.messaging as m
 from safe.messaging import styles
 from safe.common.exceptions import MissingImpactReport
+from safe.common.utilities import (
+    unhumanize_number,
+    format_int)
 
 
 class TemplateBase(object):
@@ -62,6 +65,7 @@ class TemplateBase(object):
         self.impact_summary = impact_data.get('impact summary')
         self.action_check_list = impact_data.get('action check list')
         self.notes = impact_data.get('notes')
+        self.postprocessing = impact_data.get('post processing')
 
     def generate_message_report(self):
         """Generate impact report as message object.
@@ -129,4 +133,25 @@ class TemplateBase(object):
         :returns: The postprocessing.
         :rtype: safe.messaging.Message
         """
+        if not self.postprocessing:
+            return False
         message = m.Message()
+        for k, v in self.postprocessing.items():
+            table = m.Table(
+                style_class='table table-condensed table-striped')
+            table.caption = v['caption']
+            header = m.Row()
+            for attribute in v['attributes']:
+                header.add(attribute)
+            table.add(header)
+
+            for field in v['fields']:
+                row = m.Row()
+                # First column is string
+                row.add(m.Cell(field[0]))
+                for value in field[1:]:
+                    row.add(m.Cell(format_int(int(value))))
+                table.add(row)
+            message.add(table)
+
+        return message

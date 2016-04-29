@@ -60,6 +60,8 @@ class PopulationReportTemplate(TemplateBase):
         message.add(self.format_minimum_needs_breakdown())
         message.add(self.format_action_check_list())
         message.add(self.format_notes())
+        if self.postprocessing:
+            message.add(self.format_postprocessing())
         return message
 
     def format_impact_summary(self):
