@@ -40,9 +40,10 @@ from safe.impact_functions.generic.classified_polygon_people\
     import ClassifiedPolygonHazardPolygonPeopleFunctionMetadata
 from safe.impact_reports.polygon_people_exposure_report_mixin import \
     PolygonPeopleExposureReportMixin
-from safe.common.exceptions import ZeroImpactException
+
 from safe.impact_functions.core import (
-    population_rounding, no_population_impact_message)
+    no_population_impact_message, population_rounding)
+from safe.common.exceptions import ZeroImpactException
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 
 from safe.utilities.keyword_io import definition
@@ -339,9 +340,8 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
             self.all_areas_ids[area_id] += geometry_area
 
             # storing area id with its respective area name in
-            # self.areas_names this will help us in later in
-            # showing user names
-            #  and not ids
+            # self.areas_names this will help us in later in showing
+            # user names and not ids
             if area_id not in self.areas_names:
                 self.areas_names[area_id] = feature[area_name_attribute]
 
@@ -356,7 +356,9 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
                    not impact_geometry.wkbType() == QGis.WKBMultiPolygon:
                     continue  # no intersection found
 
-                if not impact_geometry.asPolygon():
+                # See #2744
+                if (not impact_geometry.asPolygon() and
+                        not impact_geometry.asMultiPolygon()):
                     # impact_geometry is actually an empty polygon
                     # so there is no impact
                     continue
