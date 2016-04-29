@@ -7,6 +7,10 @@ import os
 from os.path import join
 from tempfile import mkdtemp
 
+from safe.test.utilities import get_qgis_app
+
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
 from safe.engine.interpolation import (
     interpolate_polygon_raster,
     interpolate_raster_vector_points,
