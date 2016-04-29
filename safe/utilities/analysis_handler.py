@@ -18,7 +18,9 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import os
+import json
 import logging
+from collections import OrderedDict
 
 # noinspection PyPackageRequirements
 from qgis.core import (
@@ -406,13 +408,26 @@ class AnalysisHandler(QObject):
         :rtype: str
         """
         keywords = self.keyword_io.read_keywords(qgis_impact_layer)
+        json_path = qgis_impact_layer.source()[:-3] + 'json'
 
-        # write postprocessing report to keyword
-        output = self.impact_function.postprocessor_manager.get_output(
-            self.impact_function.aggregator.aoi_mode)
-        keywords['postprocessing_report'] = output.to_html(
-            suppress_newlines=True)
-        self.keyword_io.write_keywords(qgis_impact_layer, keywords)
+        postprocessor_data = self.impact_function.postprocessor_manager.\
+            get_json_data(self.impact_function.aggregator.aoi_mode)
+        post_processing_report = m.Message()
+        if os.path.exists(json_path):
+            with open(json_path) as json_file:
+                impact_data = json.load(
+                    json_file, object_pairs_hook=OrderedDict)
+                impact_data['post processing'] = postprocessor_data
+                with open(json_path, 'w') as json_file_2:
+                    json.dump(impact_data, json_file_2)
+        else:
+            # write postprocessing report to keyword
+            post_processing_report = self.impact_function.\
+                postprocessor_manager.get_output(
+                self.impact_function.aggregator.aoi_mode)
+            keywords['postprocessing_report'] = post_processing_report.to_html(
+                suppress_newlines=True)
+            self.keyword_io.write_keywords(qgis_impact_layer, keywords)
 
         # Get tabular information from impact layer
         report = m.Message()
@@ -427,6 +442,12 @@ class AnalysisHandler(QObject):
         except MissingImpactReport:
             report.add(self.keyword_io.read_keywords(
                 qgis_impact_layer, 'impact_summary'))
+
+            # append postprocessing report
+            report.add(post_processing_report.to_html())
+
+        # Layer attribution comes last
+        report.add(impact_attribution(keywords).to_html(True))
 
         # Get requested style for impact layer of either kind
         style = engine_impact_layer.get_style_info()
@@ -478,10 +499,6 @@ class AnalysisHandler(QObject):
             legend = self.iface.legendInterface()
             legend.setLayerVisible(exposure_layer, False)
 
-        # append postprocessing report
-        report.add(output.to_html())
-        # Layer attribution comes last
-        report.add(impact_attribution(keywords).to_html(True))
         # Return text to display in report panel
         return report
 

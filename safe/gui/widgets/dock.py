@@ -1392,8 +1392,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # write postprocessing report to keyword
         postprocessor_data = self.impact_function.postprocessor_manager.\
             get_json_data(self.impact_function.aggregator.aoi_mode)
+        post_processing_report = m.Message()
         if os.path.exists(json_path):
-            LOGGER.debug('YEAYYYYYY')
             with open(json_path) as json_file:
                 impact_data = json.load(
                     json_file, object_pairs_hook=OrderedDict)
@@ -1401,10 +1401,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 with open(json_path, 'w') as json_file_2:
                     json.dump(impact_data, json_file_2)
         else:
-            LOGGER.debug('NOOOOOOOOOO')
-            output = self.impact_function.postprocessor_manager.get_output(
+            post_processing_report = self.impact_function.\
+                postprocessor_manager.get_output(
                 self.impact_function.aggregator.aoi_mode)
-            keywords['postprocessing_report'] = output.to_html(
+            keywords['postprocessing_report'] = post_processing_report.to_html(
                 suppress_newlines=True)
             self.keyword_io.write_keywords(qgis_impact_layer, keywords)
 
@@ -1422,6 +1422,11 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         else:
             report.add(self.keyword_io.read_keywords(
                 qgis_impact_layer, 'impact_summary'))
+            # append postprocessing report
+            report.add(post_processing_report.to_html())
+
+        # Layer attribution comes last
+        report.add(impact_attribution(keywords).to_html(True))
 
         # Get requested style for impact layer of either kind
         style = safe_impact_layer.get_style_info()
@@ -1481,10 +1486,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         self.restore_state()
 
-        # append postprocessing report
-        report.add(output.to_html())
-        # Layer attribution comes last
-        report.add(impact_attribution(keywords).to_html(True))
         # Return text to display in report panel
         return report
 
