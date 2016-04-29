@@ -11,20 +11,19 @@ import unittest
 import os
 import logging
 
-LOGGER = logging.getLogger('InaSAFE')
+from qgis.core import (QgsMapLayerRegistry, QgsRectangle)
 
-from safe.common.utilities import temp_dir, unique_filename
-from safe.utilities.resources import resources_path
-from safe.test.utilities import load_layer, get_qgis_app, test_data_path
-from safe.report.impact_report import ImpactReport
-from safe.utilities.gis import qgis_version
-
-from qgis.core import (
-    QgsMapLayerRegistry,
-    QgsRectangle)
+from safe.test.utilities import get_qgis_app
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
+from safe.common.utilities import temp_dir, unique_filename
+from safe.utilities.resources import resources_path
+from safe.test.utilities import load_layer, test_data_path
+from safe.report.impact_report import ImpactReport
+from safe.utilities.gis import qgis_version
+
+LOGGER = logging.getLogger('InaSAFE')
 
 class ImpactReportTest(unittest.TestCase):
     """Test the InaSAFE Map generator"""
