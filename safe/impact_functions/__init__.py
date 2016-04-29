@@ -33,6 +33,8 @@ from safe.impact_functions.generic.classified_polygon_building\
     .impact_function import ClassifiedPolygonHazardBuildingFunction
 from safe.impact_functions.generic.classified_polygon_people\
     .impact_function import ClassifiedPolygonHazardPolygonPeopleFunction
+from safe.impact_functions.generic.classified_polygon_landcover\
+    .impact_function import ClassifiedPolygonHazardLandCoverFunction
 
 # Inundation
 from safe.impact_functions.inundation.flood_raster_osm_building_impact\
@@ -88,6 +90,7 @@ def register_impact_functions():
     # Added in 3.3
     impact_function_registry.register(
         ClassifiedPolygonHazardPolygonPeopleFunction)
+    impact_function_registry.register(ClassifiedPolygonHazardLandCoverFunction)
 
     # Inundation IF's
     impact_function_registry.register(FloodPolygonBuildingFunction)
