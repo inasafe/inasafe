@@ -21,6 +21,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import shutil
 import logging
+import json
+from collections import OrderedDict
 from datetime import datetime
 
 # noinspection PyPackageRequirements
@@ -1385,13 +1387,26 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         qgis_impact_layer = read_impact_layer(safe_impact_layer)
         # self.layer_changed(qgis_impact_layer)
         keywords = self.keyword_io.read_keywords(qgis_impact_layer)
+        json_path = qgis_impact_layer.source()[:-3] + 'json'
 
         # write postprocessing report to keyword
-        output = self.impact_function.postprocessor_manager.get_output(
-            self.impact_function.aggregator.aoi_mode)
-        keywords['postprocessing_report'] = output.to_html(
-            suppress_newlines=True)
-        self.keyword_io.write_keywords(qgis_impact_layer, keywords)
+        postprocessor_data = self.impact_function.postprocessor_manager.\
+            get_json_data(self.impact_function.aggregator.aoi_mode)
+        if os.path.exists(json_path):
+            LOGGER.debug('YEAYYYYYY')
+            with open(json_path) as json_file:
+                impact_data = json.load(
+                    json_file, object_pairs_hook=OrderedDict)
+                impact_data['post processing'] = postprocessor_data
+                with open(json_path, 'w') as json_file_2:
+                    json.dump(impact_data, json_file_2)
+        else:
+            LOGGER.debug('NOOOOOOOOOO')
+            output = self.impact_function.postprocessor_manager.get_output(
+                self.impact_function.aggregator.aoi_mode)
+            keywords['postprocessing_report'] = output.to_html(
+                suppress_newlines=True)
+            self.keyword_io.write_keywords(qgis_impact_layer, keywords)
 
         # Get tabular information from impact layer
         report = m.Message()
@@ -1524,7 +1539,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         :type keywords: dict
         """
         LOGGER.debug('Showing Impact Report')
-        LOGGER.debug(layer)
         # Init report
         report = m.Message()
         report.add(LOGO_ELEMENT)

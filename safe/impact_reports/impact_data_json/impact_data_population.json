@@ -39,7 +39,7 @@
   },
   "post processing": {
     "gender": {
-      "title": "Detailed gender report (affected people)",
+      "caption": "Detailed gender report (affected people)",
       "attributes": [
         "Kab_name",
         "Total",
@@ -54,7 +54,7 @@
       ]
     },
     "age": {
-      "title": "Detailed age report (affected people)",
+      "caption": "Detailed age report (affected people)",
       "attributes": [
         "Kab_name",
         "Total",
@@ -69,7 +69,7 @@
       ]
     },
     "minimum needs": {
-      "title": "Detailed minimum needs report (affected people)",
+      "caption": "Detailed minimum needs report (affected people)",
       "attributes": [
         "Kab_name",
         "Rice [kg]",

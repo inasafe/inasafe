@@ -122,3 +122,11 @@ class TemplateBase(object):
 
         message.add(checklist)
         return message
+
+    def format_postprocessing(self):
+        """Format postprocessing.
+
+        :returns: The postprocessing.
+        :rtype: safe.messaging.Message
+        """
+        message = m.Message()
