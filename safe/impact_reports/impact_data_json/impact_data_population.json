@@ -37,6 +37,52 @@
       "Notes content 2"
     ]
   },
-  "aggregation": {
+  "post processing": {
+    "gender": {
+      "title": "Detailed gender report (affected people)",
+      "attributes": [
+        "Kab_name",
+        "Total",
+        "Female count (affected)",
+        "Weekly hygiene packs",
+        "Additional weekly rice kg for pregnant and lactating women"
+      ],
+      "fields": [
+        ["JAKARTA PúSAT", 128, 63, 50, 6],
+        ["JAKARTA BARAT", 0, 0, 0, 0],
+        ["Total in aggregation areas", 128, 63, 50, 6]
+      ]
+    },
+    "age": {
+      "title": "Detailed age report (affected people)",
+      "attributes": [
+        "Kab_name",
+        "Total",
+        "Youth count (affected)",
+        "Adult count (affected)",
+        "Elderly count (affected)"
+      ],
+      "fields": [
+        ["JAKARTA PúSAT", 128, 33, 84, 10],
+        ["JAKARTA BARAT", 0, 0, 0, 0],
+        ["Total in aggregation areas", 128, 33, 84, 10]
+      ]
+    },
+    "minimum needs": {
+      "title": "Detailed minimum needs report (affected people)",
+      "attributes": [
+        "Kab_name",
+        "Rice [kg]",
+        "Drinking Water [l]",
+        "Clean Water [l]",
+        "Family Kits",
+        "Toilets"
+      ],
+      "fields": [
+        ["JAKARTA PúSAT", 358, 2240, 8576, 26, 6],
+        ["JAKARTA BARAT", 0, 0, 0, 0],
+        ["Total in aggregation areas", 358, 2240, 8576, 26, 6]
+      ]
+    }
   }
 }
