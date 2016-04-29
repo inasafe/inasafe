@@ -47,7 +47,7 @@
       <gmd:citation>
         <gmd:CI_Citation>
           <gmd:title>
-            <gco:CharacterString>Godzilla</gco:CharacterString>
+            <gco:CharacterString>Grid</gco:CharacterString>
           </gmd:title>
           <gmd:date>
             <gmd:CI_Date>
@@ -172,62 +172,62 @@
       <gmd:supplementalInformation>
         <inasafe_keywords/>
         <inasafe>
-          <hazard_category>
-            <gco:CharacterString>multiple_event</gco:CharacterString>
-          </hazard_category>
-          <raster_hazard_classification>
-            <gco:CharacterString/>
-          </raster_hazard_classification>
           <multipart_polygon>
             <gco:Boolean/>
           </multipart_polygon>
-          <prob_fatality_mag>
-            <gco:Tuple/>
-          </prob_fatality_mag>
-          <volcano_name_field>
-            <gco:CharacterString/>
-          </volcano_name_field>
-          <field>
-            <gco:CharacterString>Type</gco:CharacterString>
-          </field>
-          <value_map>
-            <gco:Dictionary>{&quot;high&quot;: [&quot;High&quot;], &quot;medium&quot;: [&quot;Medium&quot;], &quot;low&quot;: [&quot;Low&quot;]}</gco:Dictionary>
-          </value_map>
-          <vector_hazard_classification>
-            <gco:CharacterString>generic_vector_hazard_classes</gco:CharacterString>
-          </vector_hazard_classification>
-          <layer_geometry>
-            <gco:CharacterString>polygon</gco:CharacterString>
-          </layer_geometry>
-          <hazard>
-            <gco:CharacterString>generic</gco:CharacterString>
-          </hazard>
+          <adult_ratio_attribute>
+            <gco:CharacterString>Global default</gco:CharacterString>
+          </adult_ratio_attribute>
+          <youth_ratio_attribute>
+            <gco:CharacterString>Global default</gco:CharacterString>
+          </youth_ratio_attribute>
           <scale>
             <gco:CharacterString/>
           </scale>
+          <elderly_ratio_attribute>
+            <gco:CharacterString>Global default</gco:CharacterString>
+          </elderly_ratio_attribute>
+          <source>
+            <gco:CharacterString>My data</gco:CharacterString>
+          </source>
+          <layer_geometry>
+            <gco:CharacterString>polygon</gco:CharacterString>
+          </layer_geometry>
+          <youth_ratio_default>
+            <gco:Float>0.26</gco:Float>
+          </youth_ratio_default>
+          <female_ratio_attribute>
+            <gco:CharacterString>Global default</gco:CharacterString>
+          </female_ratio_attribute>
           <report>
             <gco:CharacterString/>
           </report>
-          <continuous_hazard_unit>
-            <gco:CharacterString/>
-          </continuous_hazard_unit>
+          <aggregation_attribute>
+            <gco:CharacterString>name</gco:CharacterString>
+          </aggregation_attribute>
           <keyword_version>
             <gco:CharacterString>3.3</gco:CharacterString>
           </keyword_version>
           <datatype>
             <gco:CharacterString/>
           </datatype>
-          <source>
-            <gco:CharacterString>My data</gco:CharacterString>
-          </source>
+          <adult_ratio_default>
+            <gco:Float>0.66</gco:Float>
+          </adult_ratio_default>
+          <elderly_ratio_default>
+            <gco:Float>0.08</gco:Float>
+          </elderly_ratio_default>
           <layer_purpose>
-            <gco:CharacterString>hazard</gco:CharacterString>
+            <gco:CharacterString>aggregation</gco:CharacterString>
           </layer_purpose>
+          <female_ratio_default>
+            <gco:Float>0.5</gco:Float>
+          </female_ratio_default>
           <resolution>
             <gco:FloatTuple/>
           </resolution>
           <layer_mode>
-            <gco:CharacterString>classified</gco:CharacterString>
+            <gco:CharacterString/>
           </layer_mode>
         </inasafe>
       </gmd:supplementalInformation>

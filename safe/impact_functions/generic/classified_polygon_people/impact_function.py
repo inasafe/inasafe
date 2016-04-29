@@ -32,7 +32,7 @@ from PyQt4.QtGui import QColor
 
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
-from safe.common.utilities import unique_filename
+from safe.common.utilities import unique_filename, format_int
 from safe.impact_functions.bases.classified_vh_continuous_ve import \
     ClassifiedVHContinuousVE
 from safe.impact_functions.generic.classified_polygon_people\
@@ -41,15 +41,10 @@ from safe.impact_functions.generic.classified_polygon_people\
 
 from safe.impact_reports.polygon_population_exposure_report_mixin import \
     PolygonPopulationExposureReportMixin
-from safe.impact_functions.core import no_population_impact_message
-from safe.common.exceptions import InaSAFEError, ZeroImpactException
-import safe.messaging as m
-from safe.common.utilities import (
-    format_int,
-)
 from safe.impact_functions.core import (
-    population_rounding
-)
+    no_population_impact_message, population_rounding)
+from safe.common.exceptions import ZeroImpactException
+import safe.messaging as m
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 from safe.messaging import styles
 
@@ -350,9 +345,8 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
             self.all_areas_ids[area_id] += geometry_area
 
             # storing area id with its respective area name in
-            # self.areas_names this will help us in later in
-            # showing user names
-            #  and not ids
+            # self.areas_names this will help us in later in showing
+            # user names and not ids
             if area_id not in self.areas_names:
                 self.areas_names[area_id] = feature[area_name_attribute]
 
@@ -367,7 +361,9 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
                    not impact_geometry.wkbType() == QGis.WKBMultiPolygon:
                     continue  # no intersection found
 
-                if not impact_geometry.asPolygon():
+                # See #2744
+                if (not impact_geometry.asPolygon() and
+                        not impact_geometry.asMultiPolygon()):
                     # impact_geometry is actually an empty polygon
                     # so there is no impact
                     continue
