@@ -86,8 +86,6 @@ class RoadExposureReportMixinTest(unittest.TestCase):
         """Test generating data."""
         self.maxDiff = None
         data = self.road_mixin.generate_data()
-        from pprint import pprint
-        pprint(data)
         expected = {
             'action check list': {
                 'fields': [
