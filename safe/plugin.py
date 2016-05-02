@@ -633,7 +633,7 @@ class Plugin(object):
     def show_keywords_wizard(self):
         """Show the keywords creation wizard."""
         # import here only so that it is AFTER i18n set up
-        from safe.gui.tools.wizard_dialog import WizardDialog
+        from safe.gui.tools.wizard.wizard_dialog import WizardDialog
 
         if self.iface.activeLayer() is None:
             return
@@ -654,7 +654,7 @@ class Plugin(object):
     def show_function_centric_wizard(self):
         """Show the function centric wizard."""
         # import here only so that it is AFTER i18n set up
-        from safe.gui.tools.wizard_dialog import WizardDialog
+        from safe.gui.tools.wizard.wizard_dialog import WizardDialog
 
         # Don't break an existing wizard session if accidentally clicked
         if self.wizard and self.wizard.isVisible():

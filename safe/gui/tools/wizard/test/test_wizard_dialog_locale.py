@@ -16,9 +16,14 @@ __date__ = '24/02/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+# pylint: disable=no-member
 import unittest
 import os
 import sys
+# Import qgis in order to set SIP API.
+# pylint: disable=unused-import
+import qgis
+# pylint: enable=unused-import
 from PyQt4.QtCore import QDateTime
 
 skipped_reason = (
@@ -106,7 +111,6 @@ class TestWizardDialogLocale(unittest.TestCase):
 
     def test_translation(self):
         """Test for metadata translation."""
-        from safe.gui.tools.wizard_dialog import WizardDialog
         from safe.test.utilities import (
             clone_shp_layer, remove_vector_temp_file)
         from safe.test.utilities import BOUNDDATA
@@ -116,6 +120,8 @@ class TestWizardDialogLocale(unittest.TestCase):
         # noinspection PyPep8Naming
         _, _, IFACE, PARENT = get_qgis_app()
 
+        from safe.gui.tools.wizard.wizard_dialog import WizardDialog
+
         layer = clone_shp_layer(
             name='kabupaten_jakarta',
             include_keywords=True,
@@ -123,11 +129,12 @@ class TestWizardDialogLocale(unittest.TestCase):
         # noinspection PyTypeChecker
         dialog = WizardDialog(PARENT, IFACE)
         dialog.set_keywords_creation_mode(layer)
-        expected_categories = ['keterpaparan', 'ancaman', 'agregasi']
+        expected_categories = ['ancaman']
         # noinspection PyTypeChecker
-        self.check_list(expected_categories, dialog.lstCategories)
+        self.check_list(expected_categories,
+                        dialog.step_kw_purpose.lstCategories)
 
-        self.check_current_text('agregasi', dialog.lstCategories)
+        self.check_current_text('ancaman', dialog.step_kw_purpose.lstCategories)
 
         dialog.pbnNext.click()
 
@@ -135,7 +142,6 @@ class TestWizardDialogLocale(unittest.TestCase):
 
     def test_existing_complex_keywords(self):
         """Test for existing complex keywords in wizard in locale mode."""
-        from safe.gui.tools.wizard_dialog import WizardDialog
         from safe.test.utilities import (
             clone_shp_layer, remove_vector_temp_file)
         layer = clone_shp_layer(
@@ -145,27 +151,33 @@ class TestWizardDialogLocale(unittest.TestCase):
         # Get QGis app handle
         # noinspection PyPep8Naming
         _, _, IFACE, PARENT = get_qgis_app()
+
+        from safe.gui.tools.wizard.wizard_dialog import WizardDialog
+
         # noinspection PyTypeChecker
         dialog = WizardDialog(PARENT, IFACE)
         dialog.set_keywords_creation_mode(layer)
 
         # select hazard
-        self.select_from_list_widget('ancaman', dialog.lstCategories)
+        self.select_from_list_widget('ancaman',
+                                     dialog.step_kw_purpose.lstCategories)
         dialog.pbnNext.click()
 
         # select volcano
-        self.select_from_list_widget('gunung berapi', dialog.lstSubcategories)
+        self.select_from_list_widget('gunung berapi', dialog.
+                                     step_kw_subcategory.lstSubcategories)
         dialog.pbnNext.click()
 
         # select volcano categorical unit
-        self.select_from_list_widget('Kategori gunung berapi', dialog.lstUnits)
+        self.select_from_list_widget('Kategori gunung berapi',
+                                     dialog.step_kw_unit.lstUnits)
         dialog.pbnNext.click()
 
         # select GRIDCODE
-        self.select_from_list_widget('GRIDCODE', dialog.lstFields)
+        self.select_from_list_widget('GRIDCODE', dialog.step_kw_field.lstFields)
         dialog.pbnNext.click()
 
-        unit = dialog.selected_unit()
+        unit = dialog.step_kw_unit.selected_unit()
         default_classes = unit['classes']
         unassigned_values = []  # no need to check actually, not save in file
         assigned_values = {
@@ -173,7 +185,7 @@ class TestWizardDialogLocale(unittest.TestCase):
             'medium': ['3.0', '4.0'],
             'high': ['2.0']
         }
-        dialog.populate_classified_values(
+        dialog.step_kw_classify.populate_classified_values(
             unassigned_values, assigned_values, default_classes)
         dialog.pbnNext.click()
 
@@ -184,10 +196,10 @@ class TestWizardDialogLocale(unittest.TestCase):
             '06-12-2015 12:30',
             'dd-MM-yyyy HH:mm')
 
-        dialog.leSource.setText(source)
-        dialog.leSource_scale.setText(source_scale)
-        dialog.leSource_url.setText(source_url)
-        dialog.leSource_date.seDateTime(source_date)
+        dialog.step_kw_source.leSource.setText(source)
+        dialog.step_kw_source.leSource_scale.setText(source_scale)
+        dialog.step_kw_source.leSource_url.setText(source_url)
+        dialog.step_kw_source.leSource_date.seDateTime(source_date)
         dialog.pbnNext.click()  # next
         dialog.pbnNext.click()  # finish
 
@@ -196,38 +208,40 @@ class TestWizardDialogLocale(unittest.TestCase):
         dialog.set_keywords_creation_mode(layer)
 
         # step 1 of 7 - select category
-        self.check_current_text('ancaman', dialog.lstCategories)
+        self.check_current_text('ancaman', dialog.step_kw_purpose.lstCategories)
 
         # Click Next
         dialog.pbnNext.click()
 
         # step 2 of 7 - select subcategory
         # noinspection PyTypeChecker
-        self.check_current_text('gunung berapi', dialog.lstSubcategories)
+        self.check_current_text('gunung berapi',
+                                dialog.step_kw_subcategory.lstSubcategories)
 
         # Click Next
         dialog.pbnNext.click()
 
         # step 3 of 7 - select volcano units
-        self.check_current_text('Kategori gunung berapi', dialog.lstUnits)
+        self.check_current_text('Kategori gunung berapi',
+                                dialog.step_kw_unit.lstUnits)
 
         # Click Next
         dialog.pbnNext.click()
 
         # step 4 of 7 - select field
-        self.check_current_text('GRIDCODE', dialog.lstFields)
+        self.check_current_text('GRIDCODE', dialog.step_kw_field.lstFields)
 
         # Click Next
         dialog.pbnNext.click()
 
-        for index in range(dialog.lstUniqueValues.count()):
+        for index in range(dialog.step_classify.lstUniqueValues.count()):
             message = ('%s Should be in unassigned values' %
-                       dialog.lstUniqueValues.item(index).text())
+                       dialog.step_classify.lstUniqueValues.item(index).text())
             self.assertIn(
-                dialog.lstUniqueValues.item(index).text(),
+                dialog.step_classify.lstUniqueValues.item(index).text(),
                 unassigned_values,
                 message)
-        real_assigned_values = dialog.selected_mapping()
+        real_assigned_values = dialog.step_classify.selected_mapping()
         self.assertDictEqual(real_assigned_values, assigned_values)
 
         # Click Next
@@ -239,14 +253,17 @@ class TestWizardDialogLocale(unittest.TestCase):
         self.assertTrue(dialog.pbnNext.isEnabled(), message)
 
         message = 'Source should be %s' % source
-        self.assertEqual(dialog.leSource.text(), source, message)
+        self.assertEqual(dialog.step_kw_source.leSource.text(), source, message)
         message = 'Source Url should be %s' % source_url
-        self.assertEqual(dialog.leSource_url.text(), source_url, message)
+        self.assertEqual(dialog.step_kw_source.leSource_url.text(),
+                         source_url, message)
         message = 'Source Date should be %s' % source_date.toString(
             'dd-MM-yyyy HH:mm')
-        self.assertEqual(dialog.leSource_date.dateTime(), source_date, message)
+        self.assertEqual(dialog.step_kw_source.leSource_date.dateTime(),
+                         source_date, message)
         message = 'Source Scale should be %s' % source_scale
-        self.assertEqual(dialog.leSource_scale.text(), source_scale, message)
+        self.assertEqual(dialog.step_kw_source.leSource_scale.text(),
+                         source_scale, message)
         dialog.pbnNext.click()
 
         dialog.pbnCancel.click()

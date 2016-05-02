@@ -22,6 +22,10 @@ import sys
 import os
 import shutil
 
+# Import qgis in order to set SIP API.
+# pylint: disable=unused-import
+import qgis
+# pylint: enable=unused-import
 from qgis.core import QgsMapLayerRegistry
 from PyQt4 import QtCore
 # noinspection PyPackageRequirements
@@ -41,35 +45,14 @@ from safe.test.utilities import (
     test_data_path)
 
 # AG: get_qgis_app() should be called before importing modules from
-# safe.gui.tools.wizard_dialog
+# safe.gui.tools.wizard
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe.impact_functions import register_impact_functions
 from safe.definitions import inasafe_keyword_version
-from safe.gui.tools.wizard_dialog import (
-    WizardDialog,
-    step_kw_source,
-    step_kw_layermode,
-    step_kw_title,
-    step_kw_classification,
-    step_kw_classify,
-    step_kw_hazard_category,
-    step_kw_subcategory,
-    step_kw_unit,
-    step_kw_extrakeywords,
-    step_kw_aggregation,
-    step_kw_field,
-    step_fc_function_2,
-    step_fc_function_3,
-    step_fc_hazlayer_origin,
-    step_fc_hazlayer_from_canvas,
-    step_fc_explayer_origin,
-    step_fc_explayer_from_canvas,
-    step_fc_agglayer_origin,
-    step_fc_extent,
-    step_fc_params)
-from safe.utilities.keyword_io import KeywordIO, definition
+from safe.impact_functions import register_impact_functions
+from safe.gui.tools.wizard.wizard_dialog import WizardDialog
 from safe.gui.widgets.dock import Dock
+from safe.utilities.keyword_io import KeywordIO, definition
 
 DOCK = Dock(IFACE)
 
@@ -101,16 +84,13 @@ class WizardDialogTest(unittest.TestCase):
         message = ('Expected %s but I got %s' % (expected_list, real_list))
         self.assertItemsEqual(expected_list, real_list, message)
 
-    def check_current_step(self, expected_step, dialog):
+    def check_current_step(self, expected_step):
         """Helper function to check the current step is expected_step
 
         :param expected_step: The expected current step.
-        :type expected_step: int
-
-        :param dialog: The dialog that contains a wizard.
-        :type dialog: WizardDialog
+        :type expected_step: WizardStep instance
         """
-        current_step = dialog.get_current_step()
+        current_step = expected_step.parent.get_current_step()
         message = ('Expected %s but I got %s' % (expected_step, current_step))
         self.assertEqual(expected_step, current_step, message)
 
@@ -208,7 +188,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.set_keywords_creation_mode(layer)
 
         # step 1 of 9 - select category
-        count = dialog.lstCategories.count()
+        count = dialog.step_kw_purpose.lstCategories.count()
         message = ('Invalid category count! There should be %d while there '
                    'were: %d') % (expected_category_count, count)
         self.assertEqual(count, expected_category_count, message)
@@ -217,7 +197,7 @@ class WizardDialogTest(unittest.TestCase):
         categories = []
         hazard_index = -1
         for i in range(expected_category_count):
-            category_name = dialog.lstCategories.item(i).data(Qt.UserRole)
+            category_name = dialog.step_kw_purpose.lstCategories.item(i).data(Qt.UserRole)
             categories.append(category_name)
             if category_name == chosen_category:
                 hazard_index = i
@@ -231,9 +211,9 @@ class WizardDialogTest(unittest.TestCase):
                    'there\'s nothing selected yet')
         self.assertTrue(
             not dialog.pbnNext.isEnabled() or
-            len(dialog.lstCategories.selectedItems()), message)
+            len(dialog.step_kw_purpose.lstCategories.selectedItems()), message)
         # Select hazard one
-        dialog.lstCategories.setCurrentRow(hazard_index)
+        dialog.step_kw_purpose.lstCategories.setCurrentRow(hazard_index)
         message = ('Invalid Next button state in step 1! Still disabled after '
                    'an item selected')
         self.assertTrue(
@@ -243,7 +223,7 @@ class WizardDialogTest(unittest.TestCase):
 
         # step 2 of 9 - select subcategory
         # Check the number of sub categories
-        count = dialog.lstSubcategories.count()
+        count = dialog.step_kw_subcategory.lstSubcategories.count()
         message = ('Invalid subcategory count! There should be %d and there '
                    'were: %d') % (expected_subcategory_count, count)
         self.assertEqual(count, expected_subcategory_count, message)
@@ -252,8 +232,8 @@ class WizardDialogTest(unittest.TestCase):
         subcategories = []
         tsunami_index = -1
         for i in range(expected_subcategory_count):
-            subcategory_name = dialog.lstSubcategories.item(i).data(
-                    Qt.UserRole)
+            subcategory_name = dialog.step_kw_subcategory.lstSubcategories.item(i).data(
+                Qt.UserRole)
             subcategories.append(subcategory_name)
             if subcategory_name == chosen_subcategory:
                 tsunami_index = i
@@ -265,11 +245,11 @@ class WizardDialogTest(unittest.TestCase):
         # are already assigned
         self.assertTrue(
             not dialog.pbnNext.isEnabled() or
-            len(dialog.lstSubcategories.selectedItems()),
+            len(dialog.step_kw_subcategory.lstSubcategories.selectedItems()),
             'Invalid Next button state in step 3! '
             'Enabled while there\'s nothing selected yet')
         # Set to tsunami subcategories
-        dialog.lstSubcategories.setCurrentRow(tsunami_index)
+        dialog.step_kw_subcategory.lstSubcategories.setCurrentRow(tsunami_index)
         message = ('Invalid Next button state in step 3! Still disabled after '
                    'an item selected')
         self.assertTrue(dialog.pbnNext.isEnabled(), message)
@@ -277,7 +257,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()
 
         # step 3 of 9 - select hazard category
-        count = dialog.lstHazardCategories.count()
+        count = dialog.step_kw_hazard_category.lstHazardCategories.count()
         message = ('Invalid hazard category count! There should be %d while '
                    'there were: %d') % (expected_hazard_category_count, count)
         self.assertEqual(count, expected_hazard_category_count, message)
@@ -286,7 +266,7 @@ class WizardDialogTest(unittest.TestCase):
         hazard_categories = []
         scenario_index = -1
         for i in range(expected_hazard_category_count):
-            key = dialog.lstHazardCategories.item(i).data(Qt.UserRole)
+            key = dialog.step_kw_hazard_category.lstHazardCategories.item(i).data(Qt.UserRole)
             hazard_category_name = definition(key)['name']
             hazard_categories.append(hazard_category_name)
             if hazard_category_name == chosen_hazard_category:
@@ -302,9 +282,9 @@ class WizardDialogTest(unittest.TestCase):
                    'there\'s nothing selected yet')
         self.assertTrue(
             not dialog.pbnNext.isEnabled() or
-            len(dialog.lstHazardCategories.selectedItems()), message)
+            len(dialog.step_kw_hazard_category.lstHazardCategories.selectedItems()), message)
         # Select hazard one
-        dialog.lstHazardCategories.setCurrentRow(scenario_index)
+        dialog.step_kw_hazard_category.lstHazardCategories.setCurrentRow(scenario_index)
         message = ('Invalid Next button state in step 2! Still disabled after '
                    'an item selected')
         self.assertTrue(
@@ -314,15 +294,15 @@ class WizardDialogTest(unittest.TestCase):
 
         # step 4 of 9 - select classified mode
         # Check if the number of modes is 2
-        self.check_current_step(step_kw_layermode, dialog)
-        count = dialog.lstLayerModes.count()
+        self.check_current_step(dialog.step_kw_layermode)
+        count = dialog.step_kw_layermode.lstLayerModes.count()
         message = ('Invalid layer modes count! There should be %d while '
                    'there were: %d') % (expected_mode_count, count)
         self.assertEqual(count, expected_mode_count, message)
         # Get all the modes given and save the classified index
         modes = []
         for i in range(expected_mode_count):
-            mode_name = dialog.lstLayerModes.item(i).data(Qt.UserRole)
+            mode_name = dialog.step_kw_layermode.lstLayerModes.item(i).data(Qt.UserRole)
             modes.append(mode_name)
         # Check if units is the same with expected_units
         message = ('Invalid modes! It should be "%s" while it was '
@@ -333,18 +313,18 @@ class WizardDialogTest(unittest.TestCase):
 
         # step 5 of 9 - select classification scheme
         # Check if the number of classifications is 2
-        count = dialog.lstClassifications.count()
+        count = dialog.step_kw_classification.lstClassifications.count()
         message = ('Invalid classification count! There should be %d while '
                    'there were: %d') % (expected_classification_count, count)
         self.assertEqual(count, expected_classification_count, message)
         self.check_current_text(expected_classification,
-                                dialog.lstClassifications)
+                                dialog.step_kw_classification.lstClassifications)
         # Click next
         dialog.pbnNext.click()
 
         # step 6 of 9 - select data field for flood
-        self.check_current_step(step_kw_field, dialog)
-        count = dialog.lstFields.count()
+        self.check_current_step(dialog.step_kw_field)
+        count = dialog.step_kw_field.lstFields.count()
         message = ('Invalid field count! There should be %d while there were: '
                    '%d') % (expected_field_count, count)
         self.assertEqual(count, expected_field_count, message)
@@ -352,7 +332,7 @@ class WizardDialogTest(unittest.TestCase):
         fields = []
         floodprone_index = -1
         for i in range(expected_field_count):
-            field_name = dialog.lstFields.item(i).text()
+            field_name = dialog.step_kw_field.lstFields.item(i).text()
             fields.append(field_name)
             if field_name == expected_chosen_field:
                 floodprone_index = i
@@ -360,7 +340,7 @@ class WizardDialogTest(unittest.TestCase):
         message = ('Invalid fields! It should be "%s" while it was '
                    '%s') % (expected_fields, fields)
         self.assertItemsEqual(expected_fields, fields, message)
-        dialog.lstFields.setCurrentRow(floodprone_index)
+        dialog.step_kw_field.lstFields.setCurrentRow(floodprone_index)
         message = ('Invalid Next button state in step 5! Still disabled after '
                    'an item selected')
         self.assertTrue(dialog.pbnNext.isEnabled(), message)
@@ -374,11 +354,11 @@ class WizardDialogTest(unittest.TestCase):
         message = ('Invalid Next button state in step 8! Disabled while '
                    'source is optional')
         self.assertTrue(dialog.pbnNext.isEnabled(), message)
-        dialog.leSource.setText('some source')
+        dialog.step_kw_source.leSource.setText('some source')
         dialog.pbnNext.click()
 
         # step 9 of 9 - enter title
-        dialog.leTitle.setText('some title')
+        dialog.step_kw_title.leTitle.setText('some title')
         message = ('Invalid Next button state in step 9! Still disabled '
                    'after a text entered')
         self.assertTrue(dialog.pbnNext.isEnabled(), message)
@@ -411,7 +391,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.set_keywords_creation_mode(layer)
 
         # step 1 - select layer purpose
-        self.check_current_text('Hazard', dialog.lstCategories)
+        self.check_current_text('Hazard', dialog.step_kw_purpose.lstCategories)
 
         message = ('Invalid Next button state in step 1! Still disabled after '
                    'an item selected')
@@ -421,7 +401,7 @@ class WizardDialogTest(unittest.TestCase):
 
         # step 2 - select subcategory
         # noinspection PyTypeChecker
-        self.check_current_text('Flood', dialog.lstSubcategories)
+        self.check_current_text('Flood', dialog.step_kw_subcategory.lstSubcategories)
 
         message = ('Invalid Next button state in step 3! Still disabled after '
                    'an item selected')
@@ -430,7 +410,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()
 
         # step 3 - select hazard category
-        self.check_current_text('Single event', dialog.lstHazardCategories)
+        self.check_current_text('Single event', dialog.step_kw_hazard_category.lstHazardCategories)
 
         message = ('Invalid Next button state in step 2! Still disabled after '
                    'an item selected')
@@ -440,7 +420,7 @@ class WizardDialogTest(unittest.TestCase):
 
         # step 4 - select layer mode
         # noinspection PyTypeChecker
-        self.check_current_text('Classified', dialog.lstLayerModes)
+        self.check_current_text('Classified', dialog.step_kw_layermode.lstLayerModes)
 
         message = ('Invalid Next button state in step 4! Still disabled after '
                    'an item selected')
@@ -450,7 +430,7 @@ class WizardDialogTest(unittest.TestCase):
 
         # step 5 - select flood classification
         self.check_current_text('Flood classes',
-                                dialog.lstClassifications)
+                                dialog.step_kw_classification.lstClassifications)
 
         message = ('Invalid Next button state in step 6! Still disabled after '
                    'an item selected')
@@ -460,13 +440,13 @@ class WizardDialogTest(unittest.TestCase):
 
         # step 6 - select field
         # noinspection PyTypeChecker
-        self.check_current_text('FLOODPRONE', dialog.lstFields)
+        self.check_current_text('FLOODPRONE', dialog.step_kw_field.lstFields)
 
         message = ('Invalid Next button state in step 5! Still disabled after '
                    'an item selected')
         self.assertTrue(dialog.pbnNext.isEnabled(), message)
 
-        count = dialog.lstFields.count()
+        count = dialog.step_kw_field.lstFields.count()
         message = ('Invalid field count! There should be %d while there were: '
                    '%d') % (expected_field_count, count)
         self.assertEqual(count, expected_field_count, message)
@@ -482,19 +462,19 @@ class WizardDialogTest(unittest.TestCase):
                    'source is optional')
         self.assertTrue(dialog.pbnNext.isEnabled(), message)
         message = 'Source should be empty'
-        self.assertEqual(dialog.leSource.text(), '', message)
+        self.assertEqual(dialog.step_kw_source.leSource.text(), '', message)
         message = 'Source Url should be empty'
-        self.assertEqual(dialog.leSource_url.text(), '', message)
+        self.assertEqual(dialog.step_kw_source.leSource_url.text(), '', message)
         message = 'Source Date checkbox should be toggled off'
-        self.assertFalse(dialog.ckbSource_date.isChecked(), message)
+        self.assertFalse(dialog.step_kw_source.ckbSource_date.isChecked(), message)
         message = 'Source Scale should be empty'
-        self.assertEqual(dialog.leSource_scale.text(), '', message)
+        self.assertEqual(dialog.step_kw_source.leSource_scale.text(), '', message)
         dialog.pbnNext.click()
 
         # step 8 - enter title
         message = 'Title should be %s but I got %s' % (
-            dialog.layer.name(), dialog.leTitle.text())
-        self.assertEqual(dialog.layer.name(), dialog.leTitle.text(), message)
+            dialog.layer.name(), dialog.step_kw_title.leTitle.text())
+        self.assertEqual(dialog.layer.name(), dialog.step_kw_title.leTitle.text(), message)
         message = ('Invalid Next button state in step 9! Still disabled '
                    'after a text entered')
         self.assertTrue(dialog.pbnNext.isEnabled(), message)
@@ -510,34 +490,34 @@ class WizardDialogTest(unittest.TestCase):
         dialog.set_keywords_creation_mode(layer)
 
         # select hazard
-        self.select_from_list_widget('Hazard', dialog.lstCategories)
+        self.select_from_list_widget('Hazard', dialog.step_kw_purpose.lstCategories)
         dialog.pbnNext.click()
 
         # select volcano
-        self.select_from_list_widget('Volcano', dialog.lstSubcategories)
+        self.select_from_list_widget('Volcano', dialog.step_kw_subcategory.lstSubcategories)
         dialog.pbnNext.click()
 
         # select multiple_event
         self.select_from_list_widget(
             'Multiple event',
-            dialog.lstHazardCategories)
+            dialog.step_kw_hazard_category.lstHazardCategories)
         dialog.pbnNext.click()
 
         # select volcano classified mode
-        self.select_from_list_widget('Classified', dialog.lstLayerModes)
+        self.select_from_list_widget('Classified', dialog.step_kw_layermode.lstLayerModes)
         dialog.pbnNext.click()
 
         # select volcano vector hazard classes classification
         self.select_from_list_widget('Volcano classes',
-                                     dialog.lstClassifications)
+                                     dialog.step_kw_classification.lstClassifications)
         dialog.pbnNext.click()
 
         # select KRB field
-        self.select_from_list_widget('KRB', dialog.lstFields)
+        self.select_from_list_widget('KRB', dialog.step_kw_field.lstFields)
         dialog.pbnNext.click()
 
         # select mapping
-        classification = dialog.selected_classification()
+        classification = dialog.step_kw_classification.selected_classification()
         default_classes = classification['classes']
         unassigned_values = []  # no need to check actually, not save in file
         assigned_values = {
@@ -545,27 +525,27 @@ class WizardDialogTest(unittest.TestCase):
             'medium': ['Kawasan Rawan Bencana II'],
             'high': ['Kawasan Rawan Bencana III']
         }
-        dialog.populate_classified_values(
+        dialog.step_kw_classify.populate_classified_values(
             unassigned_values, assigned_values, default_classes)
         dialog.pbnNext.click()
 
         # select additional keywords
-        self.check_current_step(step_kw_extrakeywords, dialog)
+        self.check_current_step(dialog.step_kw_extrakeywords)
         first_field = 'KRB'
-        indx = dialog.cboExtraKeyword1.findData(first_field, Qt.UserRole)
-        dialog.cboExtraKeyword1.setCurrentIndex(indx)
+        indx = dialog.step_kw_extrakeywords.cboExtraKeyword1.findData(first_field, Qt.UserRole)
+        dialog.step_kw_extrakeywords.cboExtraKeyword1.setCurrentIndex(indx)
         message = 'The first field shoud be %s' % first_field
         self.assertEqual(indx, 0, message)
 
         third_field = 'volcano'
-        indx = dialog.cboExtraKeyword1.findData(third_field, Qt.UserRole)
-        dialog.cboExtraKeyword1.setCurrentIndex(indx)
+        indx = dialog.step_kw_extrakeywords.cboExtraKeyword1.findData(third_field, Qt.UserRole)
+        dialog.step_kw_extrakeywords.cboExtraKeyword1.setCurrentIndex(indx)
         message = 'The third field shoud be %s' % third_field
         self.assertEqual(indx, 2, message)
 
         dialog.pbnNext.click()
 
-        self.check_current_step(step_kw_source, dialog)
+        self.check_current_step(dialog.step_kw_source)
         source = 'Source'
         source_scale = 'Source Scale'
         source_url = 'Source Url'
@@ -574,12 +554,12 @@ class WizardDialogTest(unittest.TestCase):
             'dd-MM-yyyy HH:mm')
         source_license = 'Source License'
 
-        dialog.leSource.setText(source)
-        dialog.leSource_scale.setText(source_scale)
-        dialog.leSource_url.setText(source_url)
-        dialog.ckbSource_date.setChecked(True)
-        dialog.dtSource_date.setDateTime(source_date)
-        dialog.leSource_license.setText(source_license)
+        dialog.step_kw_source.leSource.setText(source)
+        dialog.step_kw_source.leSource_scale.setText(source_scale)
+        dialog.step_kw_source.leSource_url.setText(source_url)
+        dialog.step_kw_source.ckbSource_date.setChecked(True)
+        dialog.step_kw_source.dtSource_date.setDateTime(source_date)
+        dialog.step_kw_source.leSource_license.setText(source_license)
         dialog.pbnNext.click()  # next
         dialog.pbnNext.click()  # next
         dialog.pbnNext.click()  # finish
@@ -589,52 +569,52 @@ class WizardDialogTest(unittest.TestCase):
         dialog.set_keywords_creation_mode(layer)
 
         # step 1 - select layer purpose
-        self.check_current_text('Hazard', dialog.lstCategories)
+        self.check_current_text('Hazard', dialog.step_kw_purpose.lstCategories)
 
         # Click Next
         dialog.pbnNext.click()
 
         # step 2 - select subcategory
         # noinspection PyTypeChecker
-        self.check_current_text('Volcano', dialog.lstSubcategories)
+        self.check_current_text('Volcano', dialog.step_kw_subcategory.lstSubcategories)
 
         # Click Next
         dialog.pbnNext.click()
 
         # step 3 - select hazard category
-        self.check_current_text('Multiple event', dialog.lstHazardCategories)
+        self.check_current_text('Multiple event', dialog.step_kw_hazard_category.lstHazardCategories)
 
         # Click Next
         dialog.pbnNext.click()
 
         # step 4 - select layer mode
-        self.check_current_text('Classified', dialog.lstLayerModes)
+        self.check_current_text('Classified', dialog.step_kw_layermode.lstLayerModes)
 
         # Click Next
         dialog.pbnNext.click()
 
         # step 5 - select classification
         self.check_current_text('Volcano classes',
-                                dialog.lstClassifications)
+                                dialog.step_kw_classification.lstClassifications)
 
         # Click Next
         dialog.pbnNext.click()
 
         # step 6 - select field
-        self.check_current_text('KRB', dialog.lstFields)
+        self.check_current_text('KRB', dialog.step_kw_field.lstFields)
 
         # Click Next
         dialog.pbnNext.click()
 
         # step 7 - select mapping
-        for index in range(dialog.lstUniqueValues.count()):
+        for index in range(dialog.step_kw_classify.lstUniqueValues.count()):
             message = ('%s Should be in unassigned values' %
-                       dialog.lstUniqueValues.item(index).text())
+                       dialog.step_kw_classify.lstUniqueValues.item(index).text())
             self.assertIn(
-                dialog.lstUniqueValues.item(index).text(),
+                dialog.step_kw_classify.lstUniqueValues.item(index).text(),
                 unassigned_values,
                 message)
-        real_assigned_values = dialog.selected_mapping()
+        real_assigned_values = dialog.step_kw_classify.selected_mapping()
         self.assertDictEqual(real_assigned_values, assigned_values)
 
         # Click Next
@@ -649,16 +629,16 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()
 
         # step 9 - enter source
-        self.check_current_step(step_kw_source, dialog)
+        self.check_current_step(dialog.step_kw_source)
         message = ('Invalid Next button state in step 9! Disabled while '
                    'source is optional')
         self.assertTrue(dialog.pbnNext.isEnabled(), message)
 
-        self.assertEqual(dialog.leSource.text(), source)
-        self.assertEqual(dialog.leSource_url.text(), source_url)
-        self.assertEqual(dialog.leSource_scale.text(), source_scale)
-        self.assertEqual(dialog.dtSource_date.dateTime(), source_date)
-        self.assertEqual(dialog.leSource_license.text(), source_license)
+        self.assertEqual(dialog.step_kw_source.leSource.text(), source)
+        self.assertEqual(dialog.step_kw_source.leSource_url.text(), source_url)
+        self.assertEqual(dialog.step_kw_source.leSource_scale.text(), source_scale)
+        self.assertEqual(dialog.step_kw_source.dtSource_date.dateTime(), source_date)
+        self.assertEqual(dialog.step_kw_source.leSource_license.text(), source_license)
         dialog.pbnNext.click()
 
         dialog.pbnCancel.click()
@@ -673,14 +653,14 @@ class WizardDialogTest(unittest.TestCase):
         dialog = WizardDialog()
         dialog.set_keywords_creation_mode(layer)
 
-        category = dialog.lstCategories.currentItem().text()
+        category = dialog.step_kw_purpose.lstCategories.currentItem().text()
         expected_category = 'Aggregation'
         message = 'Expected %s but I got %s.' % (expected_category, category)
         self.assertEqual(expected_category, category, message)
 
         dialog.pbnNext.click()
 
-        self.check_current_text('KAB_NAME', dialog.lstFields)
+        self.check_current_text('KAB_NAME', dialog.step_kw_field.lstFields)
 
         dialog.pbnNext.click()
 
@@ -694,20 +674,20 @@ class WizardDialogTest(unittest.TestCase):
             'female ratio default': 0.5,
             'adult ratio default': 0.66
         }
-        aggregation_attributes = dialog.get_aggregation_attributes()
+        aggregation_attributes = dialog.step_kw_aggregation.get_aggregation_attributes()
         message = 'Expected %s but I got %s.' % (
             expected_aggregation_attributes, aggregation_attributes)
         self.assertDictEqual(
             expected_aggregation_attributes, aggregation_attributes, message)
 
-        dialog.cboFemaleRatioAttribute.setCurrentIndex(2)
+        dialog.step_kw_aggregation.cboFemaleRatioAttribute.setCurrentIndex(2)
         expected_female_attribute_key = 'PEREMPUAN'
-        female_attribute_key = dialog.cboFemaleRatioAttribute.currentText()
+        female_attribute_key = dialog.step_kw_aggregation.cboFemaleRatioAttribute.currentText()
         message = 'Expected %s but I got %s.' % (
             expected_female_attribute_key, female_attribute_key)
         self.assertEqual(
             expected_female_attribute_key, female_attribute_key, message)
-        is_enabled = dialog.dsbFemaleRatioDefault.isEnabled()
+        is_enabled = dialog.step_kw_aggregation.dsbFemaleRatioDefault.isEnabled()
         message = 'Expected disabled but I got enabled.'
         self.assertEqual(is_enabled, False, message)
 
@@ -723,25 +703,25 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnNext.click()  # go to subcategory
 
-        self.check_current_step(step_kw_subcategory, dialog)
+        self.check_current_step(dialog.step_kw_subcategory)
         dialog.pbnNext.click()  # go to layer mode
 
-        self.check_current_step(step_kw_layermode, dialog)
+        self.check_current_step(dialog.step_kw_layermode)
         dialog.pbnNext.click()  # go to field
 
-        self.check_current_step(step_kw_field, dialog)
+        self.check_current_step(dialog.step_kw_field)
         dialog.pbnNext.click()  # go to classify
 
         # check if in step classify
-        self.check_current_step(step_kw_classify, dialog)
+        self.check_current_step(dialog.step_kw_classify)
         dialog.pbnNext.click()  # go to source
 
         # check if in step source
-        self.check_current_step(step_kw_source, dialog)
+        self.check_current_step(dialog.step_kw_source)
         dialog.pbnNext.click()  # go to title
 
         # check if in step title
-        self.check_current_step(step_kw_title, dialog)
+        self.check_current_step(dialog.step_kw_title)
 
         dialog.pbnNext.click()  # finishing
 
@@ -757,31 +737,31 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # choose aggregation go to field step
         dialog.pbnNext.click()  # choose KAB_NAME go to aggregation step
 
-        ratio_attribute = dialog.cboElderlyRatioAttribute.currentText()
+        ratio_attribute = dialog.step_kw_aggregation.cboElderlyRatioAttribute.currentText()
         message = 'Expected Global default but I got %s' % ratio_attribute
         self.assertEqual('Global default', ratio_attribute, message)
 
-        ratio_attribute = dialog.cboAdultRatioAttribute.currentText()
+        ratio_attribute = dialog.step_kw_aggregation.cboAdultRatioAttribute.currentText()
         message = 'Expected Global default but I got %s' % ratio_attribute
         self.assertEqual('Global default', ratio_attribute, message)
 
-        ratio_attribute = dialog.cboYouthRatioAttribute.currentText()
+        ratio_attribute = dialog.step_kw_aggregation.cboYouthRatioAttribute.currentText()
         message = 'Expected Global default but I got %s' % ratio_attribute
         self.assertEqual('Global default', ratio_attribute, message)
 
-        default_value = dialog.dsbYouthRatioDefault.value()
+        default_value = dialog.step_kw_aggregation.dsbYouthRatioDefault.value()
         expected_default_value = 0.26
         message = ('Expected %s but I got %s' % (
             expected_default_value, default_value))
         self.assertEqual(expected_default_value, default_value, message)
 
-        default_value = dialog.dsbAdultRatioDefault.value()
+        default_value = dialog.step_kw_aggregation.dsbAdultRatioDefault.value()
         expected_default_value = 0.66
         message = ('Expected %s but I got %s' % (
             expected_default_value, default_value))
         self.assertEqual(expected_default_value, default_value, message)
 
-        default_value = dialog.dsbElderlyRatioDefault.value()
+        default_value = dialog.step_kw_aggregation.dsbElderlyRatioDefault.value()
         expected_default_value = 0.08
         message = ('Expected %s but I got %s' % (
             expected_default_value, default_value))
@@ -799,33 +779,33 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # choose hazard
         dialog.pbnNext.click()  # choose volcano
         dialog.pbnNext.click()  # choose Multiple event
-        dialog.lstUnits.setCurrentRow(1)
-        self.check_current_text('Classified', dialog.lstLayerModes)
+        dialog.step_kw_unit.lstUnits.setCurrentRow(1)
+        self.check_current_text('Classified', dialog.step_kw_layermode.lstLayerModes)
         dialog.pbnNext.click()  # choose classified
 
         # check if in step classification
-        self.check_current_step(step_kw_classification, dialog)
+        self.check_current_step(dialog.step_kw_classification)
         dialog.pbnNext.click()  # accept classification
 
-        dialog.lstFields.setCurrentRow(0)  # Choose KRB
-        self.check_current_text('KRB', dialog.lstFields)
+        dialog.step_kw_field.lstFields.setCurrentRow(0)  # Choose KRB
+        self.check_current_text('KRB', dialog.step_kw_field.lstFields)
         dialog.pbnNext.click()  # choose KRB
 
         # check if in step classify
-        self.check_current_step(step_kw_classify, dialog)
+        self.check_current_step(dialog.step_kw_classify)
         dialog.pbnNext.click()  # accept mapping
 
         # check if in step extra keywords
-        self.check_current_step(step_kw_extrakeywords, dialog)
-        dialog.cboExtraKeyword1.setCurrentIndex(2)
+        self.check_current_step(dialog.step_kw_extrakeywords)
+        dialog.step_kw_extrakeywords.cboExtraKeyword1.setCurrentIndex(2)
         dialog.pbnNext.click()  # accept extra keywords
 
         # check if in step source
-        self.check_current_step(step_kw_source, dialog)
+        self.check_current_step(dialog.step_kw_source)
         dialog.pbnNext.click()  # accept source
 
         # check if in step title
-        self.check_current_step(step_kw_title, dialog)
+        self.check_current_step(dialog.step_kw_title)
 
     def test_point_layer(self):
         """Wizard for point layer."""
@@ -839,18 +819,18 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # choose hazard
         dialog.pbnNext.click()  # choose Multiple event
         dialog.pbnNext.click()  # choose volcano
-        dialog.lstLayerModes.setCurrentRow(0)  # choose none
+        dialog.step_kw_layermode.lstLayerModes.setCurrentRow(0)  # choose none
         dialog.pbnNext.click()  # choose none
-        dialog.cboExtraKeyword1.setCurrentIndex(4)  # choose NAME
+        dialog.step_kw_extrakeywords.cboExtraKeyword1.setCurrentIndex(4)  # choose NAME
         dialog.pbnNext.click()  # choose NAME
 
         # check if in step source
-        self.check_current_step(step_kw_source, dialog)
+        self.check_current_step(dialog.step_kw_source)
 
         dialog.pbnNext.click()  # choose volcano  go to title step
 
         # check if in step title
-        self.check_current_step(step_kw_title, dialog)
+        self.check_current_step(dialog.step_kw_title)
         dialog.accept()
 
     def test_auto_select_one_item(self):
@@ -864,8 +844,8 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnNext.click()  # choose exposure
         message = 'It should auto select, but it does not.'
-        self.assertTrue(dialog.lstSubcategories.currentRow() == 0, message)
-        num_item = dialog.lstSubcategories.count()
+        self.assertTrue(dialog.step_kw_subcategory.lstSubcategories.currentRow() == 0, message)
+        num_item = dialog.step_kw_subcategory.lstSubcategories.count()
         message = 'There are should be only three items, I got %s' % num_item
         self.assertTrue(num_item == 3, message)
 
@@ -879,39 +859,39 @@ class WizardDialogTest(unittest.TestCase):
         dialog.set_keywords_creation_mode(layer)
 
         expected_categories = ['Hazard', 'Exposure']
-        self.check_list(expected_categories, dialog.lstCategories)
+        self.check_list(expected_categories, dialog.step_kw_purpose.lstCategories)
 
-        self.select_from_list_widget('Hazard', dialog.lstCategories)
+        self.select_from_list_widget('Hazard', dialog.step_kw_purpose.lstCategories)
 
-        self.check_current_text('Hazard', dialog.lstCategories)
+        self.check_current_text('Hazard', dialog.step_kw_purpose.lstCategories)
 
         dialog.pbnNext.click()  # go to subcategory
 
         # check if in step subcategory
-        self.check_current_step(step_kw_subcategory, dialog)
+        self.check_current_step(dialog.step_kw_subcategory)
 
         expected_subcategories = ['Volcano']
-        self.check_list(expected_subcategories, dialog.lstSubcategories)
+        self.check_list(expected_subcategories, dialog.step_kw_subcategory.lstSubcategories)
 
-        self.check_current_text('Volcano', dialog.lstSubcategories)
+        self.check_current_text('Volcano', dialog.step_kw_subcategory.lstSubcategories)
 
         dialog.pbnNext.click()  # go to hazard category
 
         expected_hazard_categories = ['Multiple event', 'Single event']
-        self.check_list(expected_hazard_categories, dialog.lstHazardCategories)
+        self.check_list(expected_hazard_categories, dialog.step_kw_hazard_category.lstHazardCategories)
 
-        self.check_current_text('Multiple event', dialog.lstHazardCategories)
+        self.check_current_text('Multiple event', dialog.step_kw_hazard_category.lstHazardCategories)
 
         dialog.pbnNext.click()  # go to layer mode
 
-        self.check_current_step(step_kw_layermode, dialog)
-        dialog.lstLayerModes.setCurrentRow(0)  # select the Classified mode
+        self.check_current_step(dialog.step_kw_layermode)
+        dialog.step_kw_layermode.lstLayerModes.setCurrentRow(0)  # select the Classified mode
 
         dialog.pbnNext.click()  # go to extra keywords
-        self.check_current_step(step_kw_extrakeywords, dialog)
-        dialog.cboExtraKeyword1.setCurrentIndex(4)
+        self.check_current_step(dialog.step_kw_extrakeywords)
+        dialog.step_kw_extrakeywords.cboExtraKeyword1.setCurrentIndex(4)
         expected_field = 'NAME (String)'
-        actual_field = dialog.cboExtraKeyword1.currentText()
+        actual_field = dialog.step_kw_extrakeywords.cboExtraKeyword1.currentText()
         message = ('Invalid volcano name field! There should be '
                    '%s while there were: %s') % (expected_field, actual_field)
         self.assertEqual(actual_field, expected_field, message)
@@ -919,12 +899,12 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # go to source
 
         # check if in step source
-        self.check_current_step(step_kw_source, dialog)
+        self.check_current_step(dialog.step_kw_source)
 
         dialog.pbnNext.click()  # go to title
 
         # check if in step title
-        self.check_current_step(step_kw_title, dialog)
+        self.check_current_step(dialog.step_kw_title)
 
         dialog.pbnCancel.click()
 
@@ -939,22 +919,22 @@ class WizardDialogTest(unittest.TestCase):
         dialog.set_keywords_creation_mode(layer)
 
         expected_categories = ['Hazard', 'Exposure']
-        self.check_list(expected_categories, dialog.lstCategories)
+        self.check_list(expected_categories, dialog.step_kw_purpose.lstCategories)
 
         # check if hazard option is selected
         expected_category = -1
-        category_index = dialog.lstCategories.currentRow()
+        category_index = dialog.step_kw_purpose.lstCategories.currentRow()
         message = ('Expected %s, but I got %s' %
                    (expected_category, category_index))
         self.assertEqual(expected_category, category_index, message)
 
         # choosing hazard
-        self.select_from_list_widget('Hazard', dialog.lstCategories)
+        self.select_from_list_widget('Hazard', dialog.step_kw_purpose.lstCategories)
 
         dialog.pbnNext.click()  # Go to subcategory
 
         # check if in step subcategory
-        self.check_current_step(step_kw_subcategory, dialog)
+        self.check_current_step(dialog.step_kw_subcategory)
 
         # check the values of subcategories options
         expected_subcategories = [
@@ -964,37 +944,37 @@ class WizardDialogTest(unittest.TestCase):
             u'Tsunami',
             u'Volcano',
             u'Generic']
-        self.check_list(expected_subcategories, dialog.lstSubcategories)
+        self.check_list(expected_subcategories, dialog.step_kw_subcategory.lstSubcategories)
 
         # check if no option is selected
         expected_subcategory_index = -1
-        subcategory_index = dialog.lstSubcategories.currentRow()
+        subcategory_index = dialog.step_kw_subcategory.lstSubcategories.currentRow()
         message = ('Expected %s, but I got %s' %
                    (expected_subcategory_index, subcategory_index))
         self.assertEqual(
             expected_subcategory_index, subcategory_index, message)
 
         # choosing flood
-        self.select_from_list_widget('Flood', dialog.lstSubcategories)
+        self.select_from_list_widget('Flood', dialog.step_kw_subcategory.lstSubcategories)
 
         dialog.pbnNext.click()  # Go to hazard category
 
-        self.check_current_step(step_kw_hazard_category, dialog)
+        self.check_current_step(dialog.step_kw_hazard_category)
         self.select_from_list_widget('Single event',
-                                     dialog.lstHazardCategories)
+                                     dialog.step_kw_hazard_category.lstHazardCategories)
 
         dialog.pbnNext.click()  # Go to layer mode
 
         # check if in step layer mode
-        self.check_current_step(step_kw_layermode, dialog)
+        self.check_current_step(dialog.step_kw_layermode)
 
         # check the values of subcategories options
         expected_layermodes = ['Continuous', 'Classified']
-        self.check_list(expected_layermodes, dialog.lstLayerModes)
+        self.check_list(expected_layermodes, dialog.step_kw_layermode.lstLayerModes)
 
         # check if the default option is selected
         expected_layer_mode = 'Continuous'
-        layer_mode = dialog.lstLayerModes.currentItem().text()
+        layer_mode = dialog.step_kw_layermode.lstLayerModes.currentItem().text()
         message = ('Expected %s, but I got %s' %
                    (expected_layer_mode, layer_mode))
         self.assertEqual(
@@ -1003,19 +983,19 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # Go to unit
 
         # check if in step unit
-        self.check_current_step(step_kw_unit, dialog)
+        self.check_current_step(dialog.step_kw_unit)
 
         # check the values of units options
         expected_units = [u'Feet', u'Metres', u'Generic']
-        self.check_list(expected_units, dialog.lstUnits)
+        self.check_list(expected_units, dialog.step_kw_unit.lstUnits)
 
         # choosing metres
-        self.select_from_list_widget('Metres', dialog.lstUnits)
+        self.select_from_list_widget('Metres', dialog.step_kw_unit.lstUnits)
 
         dialog.pbnNext.click()  # Go to source
 
         # check if in step source
-        self.check_current_step(step_kw_source, dialog)
+        self.check_current_step(dialog.step_kw_source)
 
         dialog.pbnBack.click()  # back to step unit
         dialog.pbnBack.click()  # back to step data_type
@@ -1023,37 +1003,37 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnBack.click()  # back to step subcategory
 
         # check if in step subcategory
-        self.check_current_step(step_kw_subcategory, dialog)
+        self.check_current_step(dialog.step_kw_subcategory)
 
         # check if flood is selected
         expected_subcategory = 'Flood'
-        subcategory = dialog.lstSubcategories.currentItem().text()
+        subcategory = dialog.step_kw_subcategory.lstSubcategories.currentItem().text()
         message = ('Expected %s, but I got %s' %
                    (expected_subcategory, subcategory))
         self.assertEqual(
             expected_subcategory, subcategory, message)
 
         # choosing earthquake
-        self.select_from_list_widget('Earthquake', dialog.lstSubcategories)
+        self.select_from_list_widget('Earthquake', dialog.step_kw_subcategory.lstSubcategories)
 
         dialog.pbnNext.click()  # Go to hazard category
 
         # choosing Single event
         self.select_from_list_widget('Single event',
-                                     dialog.lstHazardCategories)
+                                     dialog.step_kw_hazard_category.lstHazardCategories)
 
         dialog.pbnNext.click()  # Go to layer mode
 
         # check if in step layer mode
-        self.check_current_step(step_kw_layermode, dialog)
+        self.check_current_step(dialog.step_kw_layermode)
 
         # check the values of subcategories options
         expected_layermodes = ['Continuous', 'Classified']
-        self.check_list(expected_layermodes, dialog.lstLayerModes)
+        self.check_list(expected_layermodes, dialog.step_kw_layermode.lstLayerModes)
 
         # check if the default option is selected
         expected_layer_mode = 'Continuous'
-        layer_mode = dialog.lstLayerModes.currentItem().text()
+        layer_mode = dialog.step_kw_layermode.lstLayerModes.currentItem().text()
         message = ('Expected %s, but I got %s' %
                    (expected_layer_mode, layer_mode))
         self.assertEqual(
@@ -1062,22 +1042,22 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # Go to unit
 
         # check if in step unit
-        self.check_current_step(step_kw_unit, dialog)
+        self.check_current_step(dialog.step_kw_unit)
 
         # check the values of units options
         # Notes, I changed this because this is how the metadata works. We
         # should find another method to filter the unit based on hazard type
         # or change the data test keywords. Ismail.
         expected_units = [u'Generic', u'MMI']
-        self.check_list(expected_units, dialog.lstUnits)
+        self.check_list(expected_units, dialog.step_kw_unit.lstUnits)
 
         # choosing MMI
-        self.select_from_list_widget('MMI', dialog.lstUnits)
+        self.select_from_list_widget('MMI', dialog.step_kw_unit.lstUnits)
 
         dialog.pbnNext.click()  # Go to source
 
         # check if in step source
-        self.check_current_step(step_kw_source, dialog)
+        self.check_current_step(dialog.step_kw_source)
 
     def test_integrated_line(self):
         """Test for line layer and all possibilities."""
@@ -1089,44 +1069,44 @@ class WizardDialogTest(unittest.TestCase):
         dialog.set_keywords_creation_mode(layer)
 
         expected_categories = ['Exposure']
-        self.check_list(expected_categories, dialog.lstCategories)
+        self.check_list(expected_categories, dialog.step_kw_purpose.lstCategories)
 
-        self.check_current_text('Exposure', dialog.lstCategories)
+        self.check_current_text('Exposure', dialog.step_kw_purpose.lstCategories)
 
         dialog.pbnNext.click()  # go to subcategory
 
         # check if in step subcategory
-        self.check_current_step(step_kw_subcategory, dialog)
+        self.check_current_step(dialog.step_kw_subcategory)
 
         expected_subcategories = ['Road']
-        self.check_list(expected_subcategories, dialog.lstSubcategories)
+        self.check_list(expected_subcategories, dialog.step_kw_subcategory.lstSubcategories)
 
-        self.check_current_text('Road', dialog.lstSubcategories)
+        self.check_current_text('Road', dialog.step_kw_subcategory.lstSubcategories)
 
         dialog.pbnNext.click()  # go to laywr mode
 
         # check if in step layer mode
-        self.check_current_step(step_kw_layermode, dialog)
+        self.check_current_step(dialog.step_kw_layermode)
 
         expected_modes = ['Classified']
-        self.check_list(expected_modes, dialog.lstLayerModes)
+        self.check_list(expected_modes, dialog.step_kw_layermode.lstLayerModes)
 
-        self.check_current_text(expected_modes[0], dialog.lstLayerModes)
+        self.check_current_text(expected_modes[0], dialog.step_kw_layermode.lstLayerModes)
 
         dialog.pbnNext.click()  # go to fields
         expected_fields = ['NAME', 'OSM_TYPE', 'TYPE']
-        self.check_list(expected_fields, dialog.lstFields)
-        self.select_from_list_widget('TYPE', dialog.lstFields)
+        self.check_list(expected_fields, dialog.step_kw_field.lstFields)
+        self.select_from_list_widget('TYPE', dialog.step_kw_field.lstFields)
 
         dialog.pbnNext.click()  # go to classify
 
         # check if in step classify
-        self.check_current_step(step_kw_classify, dialog)
+        self.check_current_step(dialog.step_kw_classify)
 
         dialog.pbnNext.click()  # go to source
 
         # check if in step source
-        self.check_current_step(step_kw_source, dialog)
+        self.check_current_step(dialog.step_kw_source)
 
         dialog.pbnNext.click()  # go to title step
 
@@ -1142,49 +1122,50 @@ class WizardDialogTest(unittest.TestCase):
         dialog.set_keywords_creation_mode(layer)
 
         expected_categories = ['Hazard', 'Exposure', 'Aggregation']
-        self.check_list(expected_categories, dialog.lstCategories)
+        self.check_list(expected_categories, dialog.step_kw_purpose.lstCategories)
 
         # choosing exposure
-        self.select_from_list_widget('Exposure', dialog.lstCategories)
+        self.select_from_list_widget('Exposure', dialog.step_kw_purpose.lstCategories)
 
         dialog.pbnNext.click()  # Go to subcategory
 
         # check number of subcategories
-        expected_subcategories = ['Structure', 'Population', 'Land Cover']
+        expected_subcategories = ['Structure', 'Population', 'Land cover']
+        self.check_list(expected_subcategories, dialog.step_kw_subcategory.lstSubcategories)
 
         # check if automatically select the only option
 
-        self.select_from_list_widget('Structure', dialog.lstSubcategories)
+        self.select_from_list_widget('Structure', dialog.step_kw_subcategory.lstSubcategories)
 
-        self.check_current_text('Structure', dialog.lstSubcategories)
+        self.check_current_text('Structure', dialog.step_kw_subcategory.lstSubcategories)
 
         dialog.pbnNext.click()  # Go to layer mode
 
         # check if in step layer mode
-        self.check_current_step(step_kw_layermode, dialog)
+        self.check_current_step(dialog.step_kw_layermode)
 
         # check the values of modes options
         expected_modes = ['Classified']
-        self.check_list(expected_modes, dialog.lstLayerModes)
+        self.check_list(expected_modes, dialog.step_kw_layermode.lstLayerModes)
 
         # choosing classified
-        self.select_from_list_widget('Classified', dialog.lstLayerModes)
+        self.select_from_list_widget('Classified', dialog.step_kw_layermode.lstLayerModes)
 
         dialog.pbnNext.click()  # Go to field
 
         # check if in step extrakeywords
-        self.check_current_step(step_kw_field, dialog)
-        self.select_from_list_widget('FLOODPRONE', dialog.lstFields)
+        self.check_current_step(dialog.step_kw_field)
+        self.select_from_list_widget('FLOODPRONE', dialog.step_kw_field.lstFields)
 
         dialog.pbnNext.click()  # go to classify
 
         # check if in step classify
-        self.check_current_step(step_kw_classify, dialog)
+        self.check_current_step(dialog.step_kw_classify)
 
         dialog.pbnNext.click()  # Go to source
 
         # check if in source step
-        self.check_current_step(step_kw_source, dialog)
+        self.check_current_step(dialog.step_kw_source)
 
         dialog.pbnBack.click()  # back to classify step
         dialog.pbnBack.click()  # back to field step
@@ -1193,7 +1174,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnBack.click()  # back to category step
 
         # choosing hazard
-        self.select_from_list_widget('Hazard', dialog.lstCategories)
+        self.select_from_list_widget('Hazard', dialog.step_kw_purpose.lstCategories)
         dialog.pbnNext.click()  # Go to subcategory
 
         # check the values of subcategories options
@@ -1206,50 +1187,50 @@ class WizardDialogTest(unittest.TestCase):
             'Volcano',
             'Volcanic ash',
             'Generic']
-        self.check_list(expected_subcategories, dialog.lstSubcategories)
+        self.check_list(expected_subcategories, dialog.step_kw_subcategory.lstSubcategories)
 
         # select flood
-        self.select_from_list_widget('Flood', dialog.lstSubcategories)
+        self.select_from_list_widget('Flood', dialog.step_kw_subcategory.lstSubcategories)
         dialog.pbnNext.click()  # go to hazard category
 
         # choosing Single event scenario
         self.select_from_list_widget('Single event',
-                                     dialog.lstHazardCategories)
+                                     dialog.step_kw_hazard_category.lstHazardCategories)
         dialog.pbnNext.click()  # Go to mode
 
         # select classified
-        self.check_current_step(step_kw_layermode, dialog)
-        self.select_from_list_widget('Classified', dialog.lstLayerModes)
+        self.check_current_step(dialog.step_kw_layermode)
+        self.select_from_list_widget('Classified', dialog.step_kw_layermode.lstLayerModes)
         dialog.pbnNext.click()  # go to classifications
 
-        self.check_current_step(step_kw_classification, dialog)
+        self.check_current_step(dialog.step_kw_classification)
 
         expected_values = ['Flood classes', 'Generic classes']
-        self.check_list(expected_values, dialog.lstClassifications)
+        self.check_list(expected_values, dialog.step_kw_classification.lstClassifications)
         self.select_from_list_widget('Flood classes',
-                                     dialog.lstClassifications)
+                                     dialog.step_kw_classification.lstClassifications)
 
         dialog.pbnNext.click()  # go to field
 
-        self.check_current_step(step_kw_field, dialog)
+        self.check_current_step(dialog.step_kw_field)
         expected_fields = [
             'OBJECTID', 'KAB_NAME', 'KEC_NAME', 'KEL_NAME', 'RW',
             'FLOODPRONE']
-        self.check_list(expected_fields, dialog.lstFields)
+        self.check_list(expected_fields, dialog.step_kw_field.lstFields)
 
         # select FLOODPRONE
-        self.select_from_list_widget('FLOODPRONE', dialog.lstFields)
+        self.select_from_list_widget('FLOODPRONE', dialog.step_kw_field.lstFields)
 
         dialog.pbnNext.click()  # go to classify
 
-        self.check_current_step(step_kw_classify, dialog)
+        self.check_current_step(dialog.step_kw_classify)
 
         # check unclassified
         expected_unique_values = []  # no unclassified values
-        self.check_list(expected_unique_values, dialog.lstUniqueValues)
+        self.check_list(expected_unique_values, dialog.step_kw_classify.lstUniqueValues)
 
         # check classified
-        root = dialog.treeClasses.invisibleRootItem()
+        root = dialog.step_kw_classify.treeClasses.invisibleRootItem()
         expected_classes = ['wet', 'dry']
         child_count = root.childCount()
         message = 'Child count must be %s' % len(expected_classes)
@@ -1271,7 +1252,7 @@ class WizardDialogTest(unittest.TestCase):
                 self.assertEqual(expected_num_child, num_child, message)
 
         dialog.pbnNext.click()  # Go to source
-        self.check_current_step(step_kw_source, dialog)
+        self.check_current_step(dialog.step_kw_source)
 
         dialog.pbnBack.click()  # back to classify
         dialog.pbnBack.click()  # back to field
@@ -1281,58 +1262,58 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnBack.click()  # back to subcategory
 
         # Currently we don't have any continuous units for polygons to test.
-        # self.select_from_list_widget('metres', dialog.lstUnits)
+        # self.select_from_list_widget('metres', dialog.step_kw_unit.lstUnits)
         # dialog.pbnNext.click()  # go to field
 
         # check in field step
-        # self.check_current_step(step_kw_field, dialog)
+        # self.check_current_step(dialog.step_kw_field)
 
         # check if all options are disabled
-        # for i in range(dialog.lstFields.count()):
-        #    item_flag = dialog.lstFields.item(i).flags()
+        # for i in range(dialog.step_kw_field.lstFields.count()):
+        #    item_flag = dialog.step_kw_field.lstFields.item(i).flags()
         #    message = 'Item should be disabled'
         #    self.assertTrue(item_flag & ~QtCore.Qt.ItemIsEnabled, message)
 
         # dialog.pbnBack.click()  # back to unit
         # dialog.pbnBack.click()  # back to subcategory
 
-        # self.select_from_list_widget('tsunami', dialog.lstSubcategories)
+        # self.select_from_list_widget('tsunami', dialog.step_kw_subcategory.lstSubcategories)
         # dialog.pbnNext.click()  # go to unit
-        # self.check_current_step(step_kw_unit, dialog)
+        # self.check_current_step(dialog.step_kw_unit)
 
         # back again since tsunami similar to flood
         # dialog.pbnBack.click()  # back to subcategory
 
-        self.check_current_step(step_kw_subcategory, dialog)
-        self.select_from_list_widget('Volcano', dialog.lstSubcategories)
+        self.check_current_step(dialog.step_kw_subcategory)
+        self.select_from_list_widget('Volcano', dialog.step_kw_subcategory.lstSubcategories)
         dialog.pbnNext.click()  # go to hazard category
 
-        self.check_current_step(step_kw_hazard_category, dialog)
+        self.check_current_step(dialog.step_kw_hazard_category)
         self.select_from_list_widget('Multiple event',
-                                     dialog.lstHazardCategories)
+                                     dialog.step_kw_hazard_category.lstHazardCategories)
         dialog.pbnNext.click()  # go to mode
 
-        self.check_current_step(step_kw_layermode, dialog)
-        self.select_from_list_widget('Classified', dialog.lstLayerModes)
+        self.check_current_step(dialog.step_kw_layermode)
+        self.select_from_list_widget('Classified', dialog.step_kw_layermode.lstLayerModes)
         dialog.pbnNext.click()  # go to classifications
 
-        self.check_current_step(step_kw_classification, dialog)
+        self.check_current_step(dialog.step_kw_classification)
         self.select_from_list_widget(
-            'Volcano classes', dialog.lstClassifications)
+            'Volcano classes', dialog.step_kw_classification.lstClassifications)
         dialog.pbnNext.click()  # go to field
 
-        self.check_current_step(step_kw_field, dialog)
-        self.select_from_list_widget('FLOODPRONE', dialog.lstFields)
+        self.check_current_step(dialog.step_kw_field)
+        self.select_from_list_widget('FLOODPRONE', dialog.step_kw_field.lstFields)
         dialog.pbnNext.click()  # go to classify
 
-        self.check_current_step(step_kw_classify, dialog)
+        self.check_current_step(dialog.step_kw_classify)
 
         # check unclassified
         expected_unique_values = ['NO', 'YES']  # Unclassified value
-        self.check_list(expected_unique_values, dialog.lstUniqueValues)
+        self.check_list(expected_unique_values, dialog.step_kw_classify.lstUniqueValues)
 
         # check classified
-        root = dialog.treeClasses.invisibleRootItem()
+        root = dialog.step_kw_classify.treeClasses.invisibleRootItem()
         expected_classes = [
             'Low Hazard Zone',
             'Medium Hazard Zone',
@@ -1352,12 +1333,12 @@ class WizardDialogTest(unittest.TestCase):
             self.assertEqual(expected_num_child, num_child, message)
 
         dialog.pbnNext.click()  # go to extra keywords
-        self.check_current_step(step_kw_extrakeywords, dialog)
-        dialog.cboExtraKeyword1.setCurrentIndex(5)
-        dialog.cboExtraKeyword2.setCurrentIndex(1)
+        self.check_current_step(dialog.step_kw_extrakeywords)
+        dialog.step_kw_extrakeywords.cboExtraKeyword1.setCurrentIndex(5)
+        dialog.step_kw_extrakeywords.cboExtraKeyword2.setCurrentIndex(1)
 
         dialog.pbnNext.click()  # go to source
-        self.check_current_step(step_kw_source, dialog)
+        self.check_current_step(dialog.step_kw_source)
 
         dialog.pbnCancel.click()
 
@@ -1371,40 +1352,40 @@ class WizardDialogTest(unittest.TestCase):
         dialog.set_keywords_creation_mode(layer)
         dialog.suppress_warning_dialog = True
 
-        self.check_current_text('Aggregation', dialog.lstCategories)
+        self.check_current_text('Aggregation', dialog.step_kw_purpose.lstCategories)
 
-        dialog.pbnNext.click()  # Go to unit step
+        dialog.pbnNext.click()  # Go to field step
 
-        self.check_current_text('KAB_NAME', dialog.lstFields)
+        self.check_current_text('KAB_NAME', dialog.step_kw_field.lstFields)
 
         dialog.pbnNext.click()  # Go to aggregation step
 
-        dialog.dsbYouthRatioDefault.setValue(1.0)
+        dialog.step_kw_aggregation.dsbYouthRatioDefault.setValue(1.0)
 
-        dialog.pbnNext.click()  # Try to go to  source step
+        dialog.pbnNext.click()  # Try to go to source step
 
         # check if still in aggregation step
-        self.check_current_step(step_kw_aggregation, dialog)
+        self.check_current_step(dialog.step_kw_aggregation)
 
-        dialog.cboYouthRatioAttribute.setCurrentIndex(1)  # set don't use
+        dialog.step_kw_aggregation.cboYouthRatioAttribute.setCurrentIndex(1)  # set don't use
 
         dialog.pbnNext.click()  # Try to go to  source step
 
         # check if in source step
-        self.check_current_step(step_kw_source, dialog)
+        self.check_current_step(dialog.step_kw_source)
 
         dialog.pbnBack.click()  # Go to aggregation step
 
         # check if in aggregation step
-        self.check_current_step(step_kw_aggregation, dialog)
-        dialog.cboYouthRatioAttribute.setCurrentIndex(0)  # set global default
+        self.check_current_step(dialog.step_kw_aggregation)
+        dialog.step_kw_aggregation.cboYouthRatioAttribute.setCurrentIndex(0)  # set global default
 
-        dialog.dsbYouthRatioDefault.setValue(0.0)
+        dialog.step_kw_aggregation.dsbYouthRatioDefault.setValue(0.0)
 
         dialog.pbnNext.click()  # Try to go to source step
 
         # check if in source step
-        self.check_current_step(step_kw_source, dialog)
+        self.check_current_step(dialog.step_kw_source)
 
         dialog.pbnCancel.click()
 
@@ -1440,6 +1421,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog = WizardDialog(iface=IFACE)
         dialog.dock = DOCK
         dialog.set_function_centric_mode()
+        QgsMapLayerRegistry.instance().removeAllMapLayers()
 
         # Load test layers
         layer = clone_raster_layer(
@@ -1462,39 +1444,41 @@ class WizardDialogTest(unittest.TestCase):
         self.assertIsNotNone(layer.dataProvider(), message)
 
         count = len(dialog.iface.mapCanvas().layers())
-        message = 'Test layers are not loaded.'
+        names = ','.join([l.name() for l in dialog.iface.mapCanvas().layers()])
+        message = ('Loaded %d test layers while %d expected: %s'
+                   % (count, expected_test_layer_count, names))
         self.assertEqual(count, expected_test_layer_count, message)
 
-        # step_fc_function_1: test function matrix dimensions
-        col_count = dialog.tblFunctions1.columnCount()
+        # step_fc_functions1: test function matrix dimensions
+        col_count = dialog.step_fc_functions1.tblFunctions1.columnCount()
         message = ('Invalid hazard count in the IF matrix! There should be '
                    '%d while there were: %d') % (expected_hazards_count,
                                                  col_count)
         self.assertEqual(col_count, expected_hazards_count, message)
-        row_count = dialog.tblFunctions1.rowCount()
+        row_count = dialog.step_fc_functions1.tblFunctions1.rowCount()
         message = ('Invalid exposures count in the IF matrix! There should be '
                    '%d while there were: %d') % (expected_exposures_count,
                                                  row_count)
         self.assertEqual(row_count, expected_exposures_count, message)
 
-        # step_fc_function_1: test number of functions for flood x structure
-        dialog.tblFunctions1.setCurrentCell(3, 1)
-        count = len(dialog.selected_functions_1())
+        # step_fc_functions1: test number of functions for flood x structure
+        dialog.step_fc_functions1.tblFunctions1.setCurrentCell(3, 1)
+        count = len(dialog.step_fc_functions1.selected_functions_1())
         message = ('Invalid functions count in the IF matrix 1! For flood '
                    'and structure there should be %d while there were: '
                    '%d') % (expected_flood_structure_functions_count, count)
         self.assertEqual(count, expected_flood_structure_functions_count,
                          message)
 
-        # step_fc_function_1: press ok
+        # step_fc_functions1: press ok
         dialog.pbnNext.click()
 
-        # step_fc_function_2: test number of functions for raster flood
+        # step_fc_functions2: test number of functions for raster flood
         # and polygon structure
-        self.check_current_step(step_fc_function_2, dialog)
-        dialog.tblFunctions2.setCurrentCell(3, 0)
+        self.check_current_step(dialog.step_fc_functions2)
+        dialog.step_fc_functions2.tblFunctions2.setCurrentCell(3, 0)
 
-        count = len(dialog.selected_functions_2())
+        count = len(dialog.step_fc_functions2.selected_functions_2())
         message = ('Invalid functions count in the IF matrix 2! For '
                    ' raster and polygon there should be %d while there'
                    ' were: %d') % (expected_raster_polygon_functions_count,
@@ -1502,33 +1486,33 @@ class WizardDialogTest(unittest.TestCase):
         self.assertEqual(count, expected_raster_polygon_functions_count,
                          message)
 
-        # step_fc_function_2: press ok
+        # step_fc_functions2: press ok
         dialog.pbnNext.click()
 
-        # step_fc_function_3: test number of available functions
-        self.check_current_step(step_fc_function_3, dialog)
-        count = dialog.lstFunctions.count()
+        # step_fc_function: test number of available functions
+        self.check_current_step(dialog.step_fc_function)
+        count = dialog.step_fc_function.lstFunctions.count()
         message = ('Invalid functions count on the list! There should be %d '
                    'while there were: %d') % (expected_functions_count, count)
         self.assertEqual(count, expected_functions_count, message)
 
-        # step_fc_function_3: test if chosen_if is on the list
+        # step_fc_function: test if chosen_if is on the list
         role = QtCore.Qt.UserRole
-        flood_ifs = [dialog.lstFunctions.item(row).data(role)['id']
+        flood_ifs = [dialog.step_fc_function.lstFunctions.item(row).data(role)['id']
                      for row in range(count)]
         message = 'Expected flood impact function not found: %s' % chosen_if
         self.assertTrue(chosen_if in flood_ifs, message)
 
-        # step_fc_function_3: select FloodRasterBuildingImpactFunction and
+        # step_fc_function: select FloodRasterBuildingImpactFunction and
         # press ok
         chosen_if_row = flood_ifs.index(chosen_if)
-        dialog.lstFunctions.setCurrentRow(chosen_if_row)
+        dialog.step_fc_function.lstFunctions.setCurrentRow(chosen_if_row)
         dialog.pbnNext.click()
 
         # step_fc_hazlayer_from_canvas: test the lstCanvasHazLayers state
         # Note this step is tested prior to step_fc_hazlayer_origin
         # as the list is prepared prior to autoselecting the radiobuttons
-        count = dialog.lstCanvasHazLayers.count()
+        count = dialog.step_fc_hazlayer_from_canvas.lstCanvasHazLayers.count()
         message = ('Invalid hazard layers count! There should be %d while '
                    'there were: %d') % (expected_hazard_layers_count, count)
         self.assertEqual(count, expected_hazard_layers_count, message)
@@ -1537,23 +1521,23 @@ class WizardDialogTest(unittest.TestCase):
         # enabled and selected
         message = ('The rbHazLayerFromCanvas radio button has been not '
                    'automatically enabled')
-        self.assertTrue(dialog.rbHazLayerFromCanvas.isEnabled(), message)
+        self.assertTrue(dialog.step_fc_hazlayer_origin.rbHazLayerFromCanvas.isEnabled(), message)
         message = ('The rbHazLayerFromCanvas radio button has been not '
                    'automatically selected')
-        self.assertTrue(dialog.rbHazLayerFromCanvas.isChecked(), message)
+        self.assertTrue(dialog.step_fc_hazlayer_origin.rbHazLayerFromCanvas.isChecked(), message)
 
         # step_fc_hazlayer_origin: press ok
-        self.check_current_step(step_fc_hazlayer_origin, dialog)
+        self.check_current_step(dialog.step_fc_hazlayer_origin)
         dialog.pbnNext.click()
 
         # step_fc_hazlayer_from_canvas: press ok
-        self.check_current_step(step_fc_hazlayer_from_canvas, dialog)
+        self.check_current_step(dialog.step_fc_hazlayer_from_canvas)
         dialog.pbnNext.click()
 
         # step_fc_explayer_from_canvas: test the lstCanvasExpLayers state
         # Note this step is tested prior to step_fc_explayer_origin
         # as the list is prepared prior to autoselecting the radiobuttons
-        count = dialog.lstCanvasExpLayers.count()
+        count = dialog.step_fc_explayer_from_canvas.lstCanvasExpLayers.count()
         message = ('Invalid exposure layers count! There should be %d while '
                    'there were: %d') % (expected_exposure_layers_count, count)
         self.assertEqual(count, expected_exposure_layers_count, message)
@@ -1562,23 +1546,23 @@ class WizardDialogTest(unittest.TestCase):
         # enabled and selected
         message = ('The rbExpLayerFromCanvas radio button has been not '
                    'automatically enabled')
-        self.assertTrue(dialog.rbExpLayerFromCanvas.isEnabled(), message)
+        self.assertTrue(dialog.step_fc_explayer_origin.rbExpLayerFromCanvas.isEnabled(), message)
         message = ('The rbExpLayerFromCanvas radio button has been not '
                    'automatically selected')
-        self.assertTrue(dialog.rbExpLayerFromCanvas.isChecked(), message)
+        self.assertTrue(dialog.step_fc_explayer_origin.rbExpLayerFromCanvas.isChecked(), message)
 
         # step_fc_explayer_origin: press ok
-        self.check_current_step(step_fc_explayer_origin, dialog)
+        self.check_current_step(dialog.step_fc_explayer_origin)
         dialog.pbnNext.click()
 
         # step_fc_explayer_from_canvas: press ok
-        self.check_current_step(step_fc_explayer_from_canvas, dialog)
+        self.check_current_step(dialog.step_fc_explayer_from_canvas)
         dialog.pbnNext.click()
 
         # step_fc_explayer_from_canvas: test the lstCanvasAggLayers state
         # Note this step is tested prior to step_fc_agglayer_origin
         # as the list is prepared prior to auto selecting the radio buttons
-        count = dialog.lstCanvasAggLayers.count()
+        count = dialog.step_fc_agglayer_from_canvas.lstCanvasAggLayers.count()
         message = ('Invalid aggregation layers count! There should be %d '
                    'while there were: '
                    '%d') % (expected_aggregation_layers_count, count)
@@ -1588,23 +1572,23 @@ class WizardDialogTest(unittest.TestCase):
         # enabled and selected
         message = ('The rbAggLayerFromCanvas radio button has been not '
                    'automatically disabled')
-        self.assertTrue(not dialog.rbAggLayerFromCanvas.isEnabled(), message)
+        self.assertTrue(not dialog.step_fc_agglayer_origin.rbAggLayerFromCanvas.isEnabled(), message)
         message = ('The rbAggLayerFromBrowser radio button has been not '
                    'automatically selected')
-        self.assertTrue(dialog.rbAggLayerFromBrowser.isChecked(), message)
+        self.assertTrue(dialog.step_fc_agglayer_origin.rbAggLayerFromBrowser.isChecked(), message)
 
         # step_fc_agglayer_origin: switch to no aggregation and press ok
-        self.check_current_step(step_fc_agglayer_origin, dialog)
-        dialog.rbAggLayerNoAggregation.click()
+        self.check_current_step(dialog.step_fc_agglayer_origin)
+        dialog.step_fc_agglayer_origin.rbAggLayerNoAggregation.click()
         dialog.pbnNext.click()
 
         # step_fc_extent: switch to layer's extent and press ok
-        self.check_current_step(step_fc_extent, dialog)
-        dialog.extent_dialog.hazard_exposure_only.click()
+        self.check_current_step(dialog.step_fc_extent)
+        dialog.step_fc_extent.extent_dialog.hazard_exposure_only.click()
         dialog.pbnNext.click()
 
         # step_fc_params: press ok (already covered by the relevant test)
-        self.check_current_step(step_fc_params, dialog)
+        self.check_current_step(dialog.step_fc_params)
         dialog.pbnNext.click()
 
         # step_fc_summary: test minimum needs text
@@ -1624,7 +1608,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()
 
         # step_fc_analysis: test the html output
-        report_path = dialog.wvResults.report_path
+        report_path = dialog.step_fc_analysis.wvResults.report_path
         size = os.stat(report_path).st_size
         message = (
             'Expected generated report to be %d +- %dBytes, got %d. '

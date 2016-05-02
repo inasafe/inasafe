@@ -8,9 +8,6 @@ Contact : ole.moller.nielsen@gmail.com
      it under the terms of the GNU General Public License as published by
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
-
-.. todo:: Check raster is single band
-
 """
 
 from safe.utilities.i18n import tr
@@ -57,17 +54,17 @@ layer_mode_raster_question = tr(
     'You have selected <b>%s %s</b> for this raster layer. '
     '<p>We need to know whether each cell in this raster represents '
     '<b>continuous</b> data or if the data have been <b>classified</b>.</p>'
-    )  # (subcategory, category)
+)  # (subcategory, category)
 layer_mode_vector_question = tr(
     'You have selected <b>%s</b> for this <b>%s</b> layer. '
     '<p>We need to confirm that attribute values represents <b>continuous</b> '
     'data or if the data have been <b>classified</b>.</p>'
-    )  # (subcategory, category)
+)  # (subcategory, category)
 layer_mode_vector_classified_confirm = tr(
     'You have selected <b>%s</b> for this <b>%s</b> layer. '
     '<p>We need to confirm that attribute values in this vector layer have '
     'been <b>classified</b> and are represented by a code.</p>'
-    )  # (subcategory, category)
+)  # (subcategory, category)
 layer_mode_vector_continuous_confirm = tr(
     'You have selected <b>%s</b> for this <b>%s</b> layer. '
     '<p>We need to confirm that attribute values represents '
