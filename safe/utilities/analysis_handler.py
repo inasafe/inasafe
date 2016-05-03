@@ -146,13 +146,13 @@ class AnalysisHandler(QObject):
 
         # noinspection PyArgumentEqualDefault,PyUnresolvedReferences
         dispatcher.connect(
-            self.parent.wvResults.static_message_event,
+            self.parent.step_fc_analysis.wvResults.static_message_event,
             signal=STATIC_MESSAGE_SIGNAL,
             sender=dispatcher.Any)
 
         # noinspection PyArgumentEqualDefault,PyUnresolvedReferences
         dispatcher.connect(
-            self.parent.wvResults.error_message_event,
+            self.parent.step_fc_analysis.wvResults.error_message_event,
             signal=ERROR_MESSAGE_SIGNAL,
             sender=dispatcher.Any)
 
@@ -194,9 +194,11 @@ class AnalysisHandler(QObject):
         """
         # TODO Hardcoded step - may overflow, if number of messages increase
         # noinspection PyUnresolvedReferences
-        self.parent.pbProgress.setValue(self.parent.pbProgress.value() + 15)
+        self.parent.step_fc_analysis.pbProgress.setValue(
+            self.parent.step_fc_analysis.pbProgress.value() + 15)
         # noinspection PyUnresolvedReferences
-        self.parent.wvResults.dynamic_message_event(sender, message)
+        self.parent.step_fc_analysis.wvResults.dynamic_message_event(
+            sender, message)
 
     def read_settings(self):
         """Restore settings from QSettings.
@@ -326,8 +328,8 @@ class AnalysisHandler(QObject):
         """
         # Impact Function
         self.impact_function = self.impact_function_manager.get(
-            self.parent.selected_function()['id'])
-        self.impact_function.parameters = self.parent.if_params
+            self.parent.step_fc_function.selected_function()['id'])
+        self.impact_function.parameters = self.parent.step_fc_summary.if_params
 
         # Layers
         self.impact_function.hazard = self.parent.hazard_layer
@@ -380,13 +382,14 @@ class AnalysisHandler(QObject):
             # message.add(m.Link('file://%s' % self.parent.wvResults.log_path))
             # noinspection PyTypeChecker
             send_static_message(self, message)
-            self.parent.wvResults.impact_path = impact_path
+            self.parent.step_fc_analysis.wvResults.impact_path = impact_path
 
-        self.parent.pbProgress.hide()
-        self.parent.lblAnalysisStatus.setText('Analysis done.')
-        self.parent.pbnReportWeb.show()
-        self.parent.pbnReportPDF.show()
-        self.parent.pbnReportComposer.show()
+        self.parent.step_fc_analysis.pbProgress.hide()
+        self.parent.step_fc_analysis.lblAnalysisStatus.setText(
+            'Analysis done.')
+        self.parent.step_fc_analysis.pbnReportWeb.show()
+        self.parent.step_fc_analysis.pbnReportPDF.show()
+        self.parent.step_fc_analysis.pbnReportComposer.show()
         self.hide_busy()
         self.analysisDone.emit(True)
 
