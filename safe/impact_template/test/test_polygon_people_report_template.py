@@ -30,7 +30,7 @@ from safe.impact_template.polygon_people_report_template import (
 TEMP_DIR = temp_dir(sub_dir='test/template')
 TEST_DIR = os.path.dirname(__file__)
 
-JSON_FILE = os.path.join(TEST_DIR, 'data', 'polygon_people.json')
+JSON_FILE = os.path.join(TEST_DIR, 'data', 'polygon_people_impact.json')
 
 
 class TestBuildingReportTemplate(unittest.TestCase):
@@ -47,12 +47,12 @@ class TestBuildingReportTemplate(unittest.TestCase):
             impact_data['question'], report.message[0].to_text())
         text = '''
 ---
-**Number of fatalities**, 0------
-**Number of people displaced**, 130------
-**Total affected population**, 130------
-**Unaffected population**, 10------
-**Total population**, 130------
-**Population needing evacuation <sup>1</sup>**, 130---
+**High Hazard Zone**, 4,600------
+**Medium Hazard Zone**, 65,700------
+**Low Hazard Zone**, 2,500------
+**Total affected people**, 72,600------
+**Unaffected people**, 26,400------
+**Total people**, 98,900---
 '''
 
         self.assertIn(text, report.message[1].to_text())
