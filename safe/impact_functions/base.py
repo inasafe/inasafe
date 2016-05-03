@@ -1494,7 +1494,7 @@ class ImpactFunction(object):
             json_file_name = os.path.splitext(output_filename)[0] + '.json'
             LOGGER.debug(impact_data)
             with open(json_file_name, 'w') as json_file:
-                json.dump(impact_data, json_file)
+                json.dump(impact_data, json_file, indent=2)
 
         # Establish default name (layer1 X layer1 x impact_function)
         if not result_layer.get_name():

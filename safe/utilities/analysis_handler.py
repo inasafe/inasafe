@@ -411,7 +411,7 @@ class AnalysisHandler(QObject):
         :rtype: str
         """
         keywords = self.keyword_io.read_keywords(qgis_impact_layer)
-        json_path = qgis_impact_layer.source()[:-3] + 'json'
+        json_path = os.path.splitext(qgis_impact_layer.source())[0] + '.json'
 
         postprocessor_data = self.impact_function.postprocessor_manager.\
             get_json_data(self.impact_function.aggregator.aoi_mode)
@@ -422,7 +422,7 @@ class AnalysisHandler(QObject):
                     json_file, object_pairs_hook=OrderedDict)
                 impact_data['post processing'] = postprocessor_data
                 with open(json_path, 'w') as json_file_2:
-                    json.dump(impact_data, json_file_2)
+                    json.dump(impact_data, json_file_2, indent=2)
         else:
             # write postprocessing report to keyword
             post_processing_report = self.impact_function.\
