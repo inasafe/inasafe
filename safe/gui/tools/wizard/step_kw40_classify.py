@@ -225,8 +225,9 @@ class StepKwClassify(WizardStep, FORM_CLASS):
                     value_as_string.upper() in [
                         c.upper() for c in default_class['string_defaults']])
                 condition_2 = (
-                    field_type < 10 and 'numeric_default_min' in default_class
-                    and 'numeric_default_max' in default_class and (
+                    field_type < 10 and
+                    'numeric_default_min' in default_class and
+                    'numeric_default_max' in default_class and (
                         default_class['numeric_default_min'] <= unique_value <=
                         default_class['numeric_default_max']))
                 if condition_1 or condition_2:
@@ -249,8 +250,8 @@ class StepKwClassify(WizardStep, FORM_CLASS):
         # Do not continue if user selected different field
         field_keyword = self.parent.field_keyword_for_the_layer()
         field = self.parent.get_existing_keyword(field_keyword)
-        if (not is_raster_layer(self.parent.layer)
-                and field != self.parent.step_kw_field.selected_field()):
+        if (not is_raster_layer(self.parent.layer) and
+                field != self.parent.step_kw_field.selected_field()):
             return
 
         unassigned_values = list()

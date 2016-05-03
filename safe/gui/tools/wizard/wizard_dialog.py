@@ -321,8 +321,8 @@ class WizardDialog(QDialog, FORM_CLASS):
             return 'aggregation attribute'
         elif self.step_kw_purpose.selected_purpose() == layer_purpose_hazard:
             # purpose: hazard
-            if (self.step_kw_layermode.selected_layermode()
-                    == layer_mode_classified and
+            if (self.step_kw_layermode.selected_layermode() ==
+                    layer_mode_classified and
                     is_point_layer(self.layer)):
                 # No field for classified point hazards
                 return ''
@@ -805,8 +805,8 @@ class WizardDialog(QDialog, FORM_CLASS):
             keywords[key] = self.step_kw_unit.selected_unit()['key']
         if self.step_kw_resample.selected_allowresampling() is not None:
             keywords['allow_resampling'] = (
-                self.step_kw_resample.selected_allowresampling()
-                and 'true' or 'false')
+                self.step_kw_resample.selected_allowresampling() and
+                'true' or 'false')
         if self.step_kw_field.lstFields.currentItem():
             field_keyword = self.field_keyword_for_the_layer()
             keywords[field_keyword] = self.step_kw_field.\
