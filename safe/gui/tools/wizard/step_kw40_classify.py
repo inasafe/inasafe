@@ -42,9 +42,7 @@ from safe.gui.tools.wizard.wizard_strings import (
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step import WizardStep
 
-from safe.gui.tools.wizard.wizard_metadata import (
-    road_class_mapping,
-    structure_class_mapping)
+from safe.definitions import road_class_mapping, structure_class_mapping
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
