@@ -785,7 +785,8 @@ class WizardDialog(QDialog, FORM_CLASS):
             keywords['layer_purpose'] = self.step_kw_purpose.\
                 selected_purpose()['key']
             if keywords['layer_purpose'] == 'aggregation':
-                keywords.update(self.get_aggregation_attributes())
+                keywords.update(
+                    self.step_kw_aggregation.get_aggregation_attributes())
         if self.step_kw_subcategory.selected_subcategory():
             key = self.step_kw_purpose.selected_purpose()['key']
             keywords[key] = self.step_kw_subcategory.\
