@@ -156,13 +156,13 @@ class AggregatorTest(unittest.TestCase):
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
         self.DOCK.accept()
-        print attribute_key
         aggregator = self.DOCK.impact_function.aggregator
-        print aggregator.attributes
         attribute = aggregator.attributes[attribute_key]
         message = (
             'The aggregation should be KAB_NAME. Found: %s' % attribute)
         self.assertEqual(attribute, 'KAB_NAME', message)
+
+    test_check_aggregation_single_attribute.slow = True
 
     # noinspection PyMethodMayBeStatic
     def test_check_aggregation_no_attributes(self):
@@ -182,14 +182,16 @@ class AggregatorTest(unittest.TestCase):
             function_id='FloodEvacuationRasterHazardFunction',
             aggregation_layer='kabupaten jakarta singlepart 0 good attr')
         set_jakarta_extent(dock=self.DOCK)
-        assert result, message
+        self.assertTrue(result, message)
         # Press RUN
         self.DOCK.accept()
         aggregator = self.DOCK.impact_function.aggregator
         attribute = aggregator.attributes[attribute_key]
         message = (
             'The aggregation should be None. Found: %s' % attribute)
-        assert attribute is None, message
+        self.assertIsNone(attribute, message)
+
+    test_check_aggregation_no_attributes.slow = True
 
     # noinspection PyMethodMayBeStatic
     def test_check_aggregation_none_in_keywords(self):
@@ -209,13 +211,15 @@ class AggregatorTest(unittest.TestCase):
             function_id='FloodEvacuationRasterHazardFunction',
             aggregation_layer='kabupaten jakarta singlepart with None keyword')
         set_jakarta_extent(dock=self.DOCK)
-        assert result, message
+        self.assertTrue(result, message)
         # Press RUN
         self.DOCK.accept()
         aggregator = self.DOCK.impact_function.aggregator
         attribute = aggregator.attributes[attribute_key]
         message = ('The aggregation should be None. Found: %s' % attribute)
-        assert attribute is None, message
+        self.assertIsNone(attribute, message)
+
+    test_check_aggregation_none_in_keywords.slow = True
 
     def test_setup_target_field(self):
         """Test setup up target field is correct.
@@ -271,6 +275,8 @@ class AggregatorTest(unittest.TestCase):
         self.assertEqual(
             expected_feature_count,
             aggregator.preprocessed_feature_count, message)
+
+    test_preprocessing.slow = True
 
     def _create_aggregator(self,
                            use_aoi_mode,
