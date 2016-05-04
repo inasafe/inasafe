@@ -19,6 +19,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import numpy
 import logging
+import json
+import os
 
 from socket import gethostname
 import getpass
@@ -57,11 +59,17 @@ from safe.messaging.utilities import generate_insufficient_overlap_message
 from safe.postprocessors.postprocessor_factory import (
     get_postprocessors,
     get_postprocessor_human_name)
-from safe.common.utilities import get_non_conflicting_attribute_name
-from safe.utilities.utilities import get_error_message
+from safe.common.utilities import (
+    get_non_conflicting_attribute_name,
+    unique_filename,
+    verify
+)
+from safe.utilities.utilities import (
+    get_error_message,
+    replace_accentuated_characters
+)
 from safe.utilities.memory_checker import check_memory_usage
 from safe.utilities.i18n import tr
-from safe.utilities.clipper import clip_layer
 from safe.utilities.gis import (
     convert_to_safe_layer,
     is_point_layer,
@@ -70,7 +78,7 @@ from safe.utilities.gis import (
     array_to_geo_array,
     extent_to_array,
     get_optimal_extent)
-from safe.utilities.clipper import adjust_clip_extent
+from safe.utilities.clipper import adjust_clip_extent, clip_layer
 from safe.storage.safe_layer import SafeLayer
 from safe.storage.utilities import (
     buffered_bounding_box as get_buffered_extent,
@@ -88,7 +96,7 @@ from safe.common.signals import (
     send_not_busy_signal,
     send_analysis_done_signal
 )
-from safe.engine.core import calculate_impact
+from safe.engine.core import check_data_integrity
 
 INFO_STYLE = styles.INFO_STYLE
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
@@ -665,7 +673,7 @@ class ImpactFunction(object):
         This method mustn't be overridden in a child class.
 
         :return: The result of the impact function.
-        :rtype: dict
+        :rtype: Raster, Vector
         """
         self.provenance.append_step(
             'Calculating Step',
@@ -698,7 +706,7 @@ class ImpactFunction(object):
             self._validate()
             self._emit_pre_run_message()
             self._prepare()
-            self._impact = calculate_impact(self)
+            self._impact = self.calculate_impact()
             self._run_aggregator()
         except ZeroImpactException, e:
             report = m.Message()
@@ -1383,3 +1391,124 @@ class ImpactFunction(object):
         self.postprocessor_manager.run()
         send_not_busy_signal(self)
         send_analysis_done_signal(self)
+
+    def calculate_impact(self):
+        """Calculate impact."""
+        layers = [self.hazard, self.exposure]
+        # Input checks
+        if self.requires_clipping:
+            check_data_integrity(layers)
+
+        # Start time
+        start_time = datetime.now()
+
+        # Run IF
+        result_layer = self.analysis_workflow()
+
+        # End time
+        end_time = datetime.now()
+
+        # Elapsed time
+        elapsed_time = end_time - start_time
+        # Don's use this - see https://github.com/AIFDR/inasafe/issues/394
+        # elapsed_time_sec = elapsed_time.total_seconds()
+        elapsed_time_sec = elapsed_time.seconds + (
+            elapsed_time.days * 24 * 3600)
+
+        # Eet current time stamp
+        # Need to change : to _ because : is forbidden in keywords
+        time_stamp = end_time.isoformat('_')
+
+        # Get input layer sources
+        # NOTE: We assume here that there is only one of each
+        #       If there are more only the first one is used
+        for layer in layers:
+            keywords = layer.keywords
+            not_specified = tr('Not specified')
+
+            layer_purpose = keywords.get('layer_purpose', not_specified)
+            title = keywords.get('title', not_specified)
+            source = keywords.get('source', not_specified)
+
+            if layer_purpose == 'hazard':
+                category = keywords['hazard']
+            elif layer_purpose == 'exposure':
+                category = keywords['exposure']
+            else:
+                category = not_specified
+
+            result_layer.keywords['%s_title' % layer_purpose] = title
+            result_layer.keywords['%s_source' % layer_purpose] = source
+            result_layer.keywords['%s' % layer_purpose] = category
+
+        result_layer.keywords['elapsed_time'] = elapsed_time_sec
+        result_layer.keywords['time_stamp'] = time_stamp[:19]  # remove decimal
+        result_layer.keywords['host_name'] = self.host_name
+        result_layer.keywords['user'] = self.user
+
+        msg = 'Impact function %s returned None' % str(self)
+        verify(result_layer is not None, msg)
+
+        # Set the filename : issue #1648
+        # EXP + On + Haz + DDMMMMYYYY + HHhMM.SS.EXT
+        # FloodOnBuildings_12March2015_10h22.04.shp
+        exp = result_layer.keywords['exposure'].title()
+        haz = result_layer.keywords['hazard'].title()
+        date = end_time.strftime('%d%B%Y').decode('utf8')
+        time = end_time.strftime('%Hh%M.%S').decode('utf8')
+        prefix = u'%sOn%s_%s_%s-' % (haz, exp, date, time)
+        prefix = replace_accentuated_characters(prefix)
+
+        # Write result and return filename
+        if result_layer.is_raster:
+            extension = '.tif'
+            # use default style for raster
+        else:
+            extension = '.shp'
+            # use default style for vector
+
+        # Check if user directory is specified
+        settings = QSettings()
+        default_user_directory = settings.value(
+            'inasafe/defaultUserDirectory', defaultValue='')
+
+        if default_user_directory:
+            output_filename = unique_filename(
+                dir=default_user_directory,
+                prefix=prefix,
+                suffix=extension)
+        else:
+            output_filename = unique_filename(
+                prefix=prefix, suffix=extension)
+
+        result_layer.filename = output_filename
+
+        if hasattr(result_layer, 'impact_data'):
+            if 'impact_summary' in result_layer.keywords:
+                result_layer.keywords.pop('impact_summary')
+            if 'impact_table' in result_layer.keywords:
+                result_layer.keywords.pop('impact_table')
+        result_layer.write_to_file(output_filename)
+        if hasattr(result_layer, 'impact_data'):
+            impact_data = result_layer.impact_data
+            json_file_name = os.path.splitext(output_filename)[0] + '.json'
+            LOGGER.debug(impact_data)
+            with open(json_file_name, 'w') as json_file:
+                json.dump(impact_data, json_file, indent=2)
+
+        # Establish default name (layer1 X layer1 x impact_function)
+        if not result_layer.get_name():
+            default_name = ''
+            for layer in layers:
+                default_name += layer.name + ' X '
+
+            if hasattr(self, 'plugin_name'):
+                default_name += self.plugin_name
+            else:
+                # Strip trailing 'X'
+                default_name = default_name[:-2]
+
+            result_layer.set_name(default_name)
+
+        # Return layer object
+        return result_layer

@@ -94,7 +94,7 @@ class TestClassifiedPolygonPeopleFunction(unittest.TestCase):
             '**Total people**, 109,000---'
         ]
         for row in expected_impact_summary:
-            self.assertIn(row, function.impact_summary().to_text())
+            self.assertIn(row, function.format_impact_summary().to_text())
 
     def test_keywords(self):
         """TestClassifiedPolygonPeopleFunction: Test keywords IF"""

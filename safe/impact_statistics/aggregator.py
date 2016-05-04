@@ -1674,7 +1674,8 @@ class Aggregator(QtCore.QObject):
 
 # private functions used in the module
 
-def _intersect_exposure_with_aggregation(exposure_layer, agg_layer, agg_field_name):
+def _intersect_exposure_with_aggregation(
+        exposure_layer, agg_layer, agg_field_name):
     """ Make a new layer that is intersection of exposure and aggregation
     layers and add aggregation zone name.
 
@@ -1720,14 +1721,16 @@ def _intersect_exposure_with_aggregation(exposure_layer, agg_layer, agg_field_na
                 # write feature as is
                 out_feature = QgsFeature(out_fields)
                 out_feature.setGeometry(exp_geom)
-                out_feature.setAttributes(exp_feature.attributes() + [agg_name])
+                out_feature.setAttributes(
+                    exp_feature.attributes() + [agg_name])
                 writer.addFeature(out_feature)
             elif geom.intersects(exp_geom):
                 # need to do intersection
                 out_geom = geom.intersection(exp_geom)
                 out_feature = QgsFeature(out_fields)
                 out_feature.setGeometry(out_geom)
-                out_feature.setAttributes(exp_feature.attributes() + [agg_name])
+                out_feature.setAttributes(
+                    exp_feature.attributes() + [agg_name])
                 writer.addFeature(out_feature)
 
     del writer

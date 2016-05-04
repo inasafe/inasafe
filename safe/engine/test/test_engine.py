@@ -7,7 +7,10 @@ import os
 from os.path import join
 from tempfile import mkdtemp
 
-from safe.engine.core import calculate_impact
+from safe.test.utilities import get_qgis_app
+
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
 from safe.engine.interpolation import (
     interpolate_polygon_raster,
     interpolate_raster_vector_points,
@@ -444,7 +447,7 @@ class TestEngine(unittest.TestCase):
         IF = plugin_list[0].instance()
         IF.hazard = H
         IF.exposure = E
-        calculate_impact(impact_function=IF)
+        IF.calculate_impact()
 
         message = 'The user directory is empty : %s' % temp_directory
         assert os.listdir(temp_directory) != [], message
@@ -470,7 +473,7 @@ class TestEngine(unittest.TestCase):
         impact_function = self.impact_function_manager.get(function_id)
         impact_function.hazard = hazard_layer
         impact_function.exposure = exposure_layer
-        impact_vector = calculate_impact(impact_function=impact_function)
+        impact_vector = impact_function.calculate_impact()
 
         self.assertEqual(
             impact_vector.get_keywords()['hazard_title'], hazard_title)
@@ -1717,13 +1720,13 @@ class TestEngine(unittest.TestCase):
             impact_function.hazard = hazard_layer
             impact_function.exposure = exposure_layer
             # Call impact calculation engine normally
-            calculate_impact(impact_function=impact_function)
+            impact_function.calculate_impact()
 
             # Make keyword value empty and verify exception is raised
             expected_layer_purpose = exposure_layer.keywords['layer_purpose']
             exposure_layer.keywords['layer_purpose'] = ''
             try:
-                calculate_impact(impact_function=impact_function)
+                impact_function.calculate_impact()
             except VerificationError, e:
                 # Check expected error message
                 assert 'No value found' in str(e)
@@ -1741,7 +1744,7 @@ class TestEngine(unittest.TestCase):
                 del hazard_layer.keywords['layer_mode']
 
             try:
-                calculate_impact(impact_function=impact_function)
+                impact_function.calculate_impact()
             except VerificationError, e:
                 # Check expected error message
                 assert 'did not have required keyword' in str(e)

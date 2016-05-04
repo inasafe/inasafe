@@ -1,5 +1,15 @@
 # coding=utf-8
-"""Impact of flood on roads."""
+"""InaSAFE Disaster risk tool by Australian Aid - Tsunami Raster Impact on
+Road
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
+"""
 from collections import OrderedDict
 
 from qgis.core import (
@@ -33,8 +43,6 @@ from safe.gis.qgis_vector_tools import (
     create_layer)
 from safe.impact_reports.road_exposure_report_mixin import\
     RoadExposureReportMixin
-import safe.messaging as m
-from safe.messaging import styles
 
 __author__ = 'etiennetrimaille'
 __project_name__ = 'inasafe-dev'
@@ -260,56 +268,44 @@ class TsunamiRasterRoadsFunction(
         :return: The notes that should be attached to this impact report.
         :rtype: safe.messaging.Message
         """
-        message = m.Message(style_class='container')
-        message.add(
-            m.Heading(tr('Notes and assumptions'), **styles.INFO_STYLE))
-        checklist = m.BulletedList()
-
+        title = tr('Notes and assumptions')
         # Thresholds for tsunami hazard zone breakdown.
         low_max = self.parameters['low_threshold']
         medium_max = self.parameters['medium_threshold']
         high_max = self.parameters['high_threshold']
 
-        checklist.add(tr(
-            'Dry zone is defined as non-inundated area or has inundation '
-            'depth is 0 %s') % low_max.unit.abbreviation
-        )
+        fields = [
+            tr('Dry zone is defined as non-inundated area or has inundation '
+               'depth is 0 %s') % low_max.unit.abbreviation,
+            tr('Low tsunami hazard zone is defined as inundation depth is '
+               'more than 0 %s but less than %.1f %s') % (
+                low_max.unit.abbreviation,
+                low_max.value,
+                low_max.unit.abbreviation),
+            tr('Moderate tsunami hazard zone is defined as inundation depth '
+               'is more than %.1f %s but less than %.1f %s') % (
+                low_max.value,
+                low_max.unit.abbreviation,
+                medium_max.value,
+                medium_max.unit.abbreviation),
+            tr('High tsunami hazard zone is defined as inundation depth is '
+               'more than %.1f %s but less than %.1f %s') % (
+                medium_max.value,
+                medium_max.unit.abbreviation,
+                high_max.value,
+                high_max.unit.abbreviation),
+            tr('Very high tsunami hazard zone is defined as inundation depth '
+               'is more than %.1f %s') % (
+                high_max.value, high_max.unit.abbreviation),
+            tr('Roads are closed if they are in low, moderate, high, or very '
+               'high tsunami hazard zone.'),
+            tr('Roads are opened if they are in dry zone.')
+        ]
 
-        checklist.add(tr(
-            'Low tsunami hazard zone is defined as inundation depth is more '
-            'than 0 %s but less than %.1f %s') % (
-            low_max.unit.abbreviation,
-            low_max.value,
-            low_max.unit.abbreviation)
-        )
-        checklist.add(tr(
-            'Moderate tsunami hazard zone is defined as inundation depth is '
-            'more than %.1f %s but less than %.1f %s') % (
-            low_max.value,
-            low_max.unit.abbreviation,
-            medium_max.value,
-            medium_max.unit.abbreviation)
-        )
-        checklist.add(tr(
-            'High tsunami hazard zone is defined as inundation depth is '
-            'more than %.1f %s but less than %.1f %s') % (
-            medium_max.value,
-            medium_max.unit.abbreviation,
-            high_max.value,
-            high_max.unit.abbreviation)
-        )
-        checklist.add(tr(
-            'Very high tsunami hazard zone is defined as inundation depth is '
-            'more than %.1f %s') % (
-            high_max.value, high_max.unit.abbreviation))
-
-        checklist.add(tr(
-            'Roads are closed if they are in low, moderate, high, or very '
-            'high tsunami hazard zone.'))
-        checklist.add(tr(
-            'Roads are opened if they are in dry zone.'))
-        message.add(checklist)
-        return message
+        return {
+            'title': title,
+            'fields': fields
+        }
 
     def run(self):
         """Run the impact function.
@@ -481,8 +477,6 @@ class TsunamiRasterRoadsFunction(
             if attributes[target_field_index] in range(num_classes):
                 self.affected_road_lengths[hazard_zone][road_type] += length
 
-        impact_summary = self.html_report()
-
         # For printing map purpose
         map_title = tr('Roads inundated')
         legend_title = tr('Road inundated status')
@@ -533,8 +527,9 @@ class TsunamiRasterRoadsFunction(
             style_classes=style_classes,
             style_type='categorizedSymbol')
 
+        impact_data = self.generate_data()
+
         extra_keywords = {
-            'impact_summary': impact_summary,
             'map_title': map_title,
             'legend_title': legend_title,
             'target_field': target_field
@@ -543,10 +538,12 @@ class TsunamiRasterRoadsFunction(
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 
         # Convert QgsVectorLayer to inasafe layer and return it
-        line_layer = Vector(
+        impact_layer = Vector(
             data=line_layer,
             name=tr('Flooded roads'),
             keywords=impact_layer_keywords,
             style_info=style_info)
-        self._impact = line_layer
-        return line_layer
+
+        impact_layer.impact_data = impact_data
+        self._impact = impact_layer
+        return impact_layer

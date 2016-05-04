@@ -405,3 +405,8 @@ class InvalidProvenanceDataError(InaSAFEError):
 class MissingMetadata(InaSAFEError):
     """When old version of metadata is not properly read."""
     pass
+
+
+class MissingImpactReport(InaSAFEError):
+    """When Impact Report do not have proper input.."""
+    pass

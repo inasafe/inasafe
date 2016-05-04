@@ -1,9 +1,7 @@
-
-
 # coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid -
-**Building Exposure Report Mixin Class**
+**Polygon People Exposure Report Mixin Class**
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -26,13 +24,11 @@ from safe.impact_functions.core import (
     evacuated_population_needs
 )
 from safe.gui.tools.minimum_needs.needs_profile import filter_needs_parameters
-from safe.impact_functions.core import (
-    population_rounding
-)
+from safe.impact_functions.core import population_rounding
 from safe.messaging import styles
 
 
-class PolygonPopulationExposureReportMixin(ReportMixin):
+class PolygonPeopleExposureReportMixin(ReportMixin):
     """Population specific report.
     """
 
@@ -40,9 +36,6 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
         """Area specific report mixin.
 
         .. versionadded:: 3.2
-
-        ..Notes::
-
 
         """
         self._question = ''
@@ -56,64 +49,122 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
         self._minimum_needs = []
 
     def generate_report(self):
-        """Breakdown by building type.
+        """Generate impact report as message object.
 
         :returns: The report.
-        :rtype: list
+        :rtype: safe.messaging.Message
         """
         message = m.Message()
         message.add(m.Paragraph(self.question))
-        message.add(self.impact_summary())
-        message.add(self.minimum_needs_breakdown())
-        message.add(self.action_checklist())
-        message.add(self.notes())
+        message.add(self.format_impact_summary())
+        message.add(self.format_breakdown())
+        message.add(self.format_minimum_needs_breakdown())
+        message.add(self.format_action_checklist())
+        message.add(self.format_notes())
 
         return message
+
+    def generate_data(self):
+        """Create a dictionary contains impact data.
+
+        :returns: The impact report data.
+        :rtype: dict
+        """
+        question = self.question
+        impact_summary = self.impact_summary()
+        breakdown = self.breakdown()
+        minimum_needs = self.total_needs.copy()
+        action_checklist = self.action_checklist()
+        notes = self.notes()
+
+        return {
+            'exposure': 'polygon people',
+            'question': question,
+            'impact summary': impact_summary,
+            'breakdown': breakdown,
+            'minimum needs': minimum_needs,
+            'action check list': action_checklist,
+            'notes': notes
+        }
+
+    def impact_summary(self):
+        """Create impact summary as data.
+
+        :returns: Impact Summary in dictionary format.
+        :rtype: dict
+        """
+        attributes = ['category', 'value']
+        fields = []
+
+        for key, value in self.hazard_levels.iteritems():
+            name = self.hazard_class_mapping[key][0]
+            # This skips reporting people not affected in No zone
+            if key == 'wet':
+                row = []
+                row.append(tr(
+                    'People within hazard field ("%s") of value "%s"')
+                               % (self.hazard_class_field, name))
+                row.append(value)
+            elif key == 'dry':
+                continue
+            else:
+                row = []
+                row.append(name)
+                row.append(value)
+            fields.append(row)
+
+        # Total affected population
+        fields.append(
+            [tr('Total affected people'), self.total_affected_population])
+        # Non affected population
+        fields.append([tr('Unaffected people'), self.unaffected_population])
+        # Total Population
+        fields.append([tr('Total people'), self.total_population])
+
+        return {
+            'attributes': attributes,
+            'fields': fields
+        }
 
     def action_checklist(self):
-        """Polygon Population action.
+        """Return the action check list section of the report.
 
-        :returns: The population breakdown report.
-        :rtype: safe.messaging.Message
+        :return: The action check list as dict.
+        :rtype: dict
         """
-        message = m.Message(style_class='container')
-        message.add(m.Heading(tr('Action checklist'), **styles.INFO_STYLE))
+        title = tr('Action checklist')
+
         population = population_rounding(
             sum(self.affected_population.values()))
-        checklist = m.BulletedList()
-        checklist.add(tr('Which group or people is most affected?'))
-        checklist.add(
-            tr('Who are the vulnerable people in the population and why?'))
-        checklist.add(tr('How will warnings be disseminated?'))
-        checklist.add(tr('What are people\'s likely movements?'))
-        checklist.add(
-            tr('What are the security factors for the affected people?'))
-        checklist.add(
-            tr('What are the security factors for relief responders?'))
-        checklist.add(tr('How will we reach evacuated people?'))
-        checklist.add(
-            tr('What kind of food does the people normally consume?'))
-        checklist.add(
+
+        fields = [
+            tr('Which group or people is most affected?'),
+            tr('Who are the vulnerable people in the population and why?'),
+            tr('How will warnings be disseminated?'),
+            tr('What are people\'s likely movements?'),
+            tr('What are the security factors for the affected people?'),
+            tr('What are the security factors for relief responders?'),
+            tr('How will we reach evacuated people?'),
+            tr('What kind of food does the people normally consume?'),
             tr('What are the critical non-food items required by the affected '
-               'people?'))
-        checklist.add(tr(
-            'Are there enough water supply, sanitation, hygiene, food, '
-            'shelter, medicines and relief items available for %s people?'
-            % format_int(population)))
+               'people?'),
+            tr('Are there enough water supply, sanitation, hygiene, food, '
+               'shelter, medicines and relief items available for %s people?'
+                % format_int(population)),
+            tr('If yes, where are they located and how will we distribute '
+               'them?'),
+            tr('If no, where can we obtain additional relief items and how '
+               'will we distribute them?'),
+            tr('What are the related health risks?'),
+            tr('Who are the key people responsible for coordination?')
+        ]
 
-        checklist.add(tr(
-            'If yes, where are they located and how will we distribute them?'))
-        checklist.add(tr(
-            'If no, where can we obtain additional relief items and how will '
-            'we distribute them?'))
-        checklist.add(tr('What are the related health risks?'))
-        checklist.add(
-            tr('Who are the key people responsible for coordination?'))
-        message.add(checklist)
+        return {
+            'title': title,
+            'fields': fields
+        }
 
-        return message
-
-    def minimum_needs_breakdown(self):
+    def format_minimum_needs_breakdown(self):
         """Breakdown by polygon population.
 
         :returns: The population breakdown report.
@@ -162,51 +213,131 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
         return evacuated_population_needs(
             total_population_evacuated, self.minimum_needs)
 
-    def impact_summary(self):
+    def format_impact_summary(self):
         """The impact summary as per category
 
         :returns: The impact summary.
         :rtype: safe.messaging.Message
         """
+        impact_summary = self.impact_summary()
+
         message = m.Message(style_class='container')
+
+        table = m.Table(
+            style_class='table table-condensed table-striped')
+        table.caption = None
+        for category in impact_summary['fields']:
+            row = m.Row()
+            row.add(m.Cell(category[0], header=True))
+            row.add(m.Cell(
+                format_int(population_rounding(category[1])), align='right'))
+            # For value field, if existed
+            if len(category) > 2:
+                row.add(m.Cell(format_int(category[2]), align='right'))
+            table.add(row)
+
+        message.add(table)
+
+        return message
+
+    def breakdown(self):
+        """Create breakdown as data.
+
+        :returns: Breakdown in dictionary format.
+        :rtype: dict
+        """
+        attributes = [
+            tr('Area Name'),
+            tr('Affected Area (ha)'),
+            tr('Affected Area (%)'),
+            tr('Total (ha)'),
+            tr('Affected People'),
+            tr('Affected People(%)'),
+            tr('Total Number of People'),
+        ]
+
+        fields = []
+
+        areas = self.areas
+        affected_areas = self.affected_areas
+        for area_id, value in areas.iteritems():
+            if area_id in affected_areas:
+                affected = affected_areas[area_id]
+            else:
+                affected = 0.0
+            single_total_area = value
+
+            if value:
+                affected_area_ratio = affected / single_total_area
+            else:
+                affected_area_ratio = 0.0
+            percent_affected = affected_area_ratio * 100
+            percent_affected = round(percent_affected, 1)
+            number_people_affected = (
+                affected_area_ratio * self.areas_population[area_id])
+
+            # rounding to float without decimal, we can't have number
+            #  of people with decimal
+            number_people_affected = round(number_people_affected, 0)
+
+            if self.areas_population[area_id] != 0:
+                percent_people_affected = (
+                    (number_people_affected / self.areas_population[area_id]) *
+                    100)
+            else:
+                percent_people_affected = 0
+            affected *= 1e8
+            single_total_area *= 1e8
+
+            fields.append([
+                self.area_name(area_id),
+                affected,
+                percent_affected,
+                single_total_area,
+                number_people_affected,
+                percent_people_affected,
+                self.areas_population[area_id]
+            ])
+
+        return {
+            'attributes': attributes,
+            'fields': fields
+        }
+
+    def format_breakdown(self):
+        """
+        """
+        breakdown = self.breakdown()
+        attributes = breakdown['attributes']
+        fields = breakdown['fields']
+
+        message = m.Message(style_class='container')
+
         table = m.Table(
             style_class='table table-condensed table-striped')
         table.caption = None
 
         row = m.Row()
-        row = self.head_row(row)
+        for attribute in attributes:
+            row.add(m.Cell(attribute, header=True, align='right'))
         table.add(row)
 
-        second_row = m.Row()
-        second_row.add(m.Cell(tr('All')))
-        second_row = self.total_row(second_row)
-        table.add(second_row)
+        for field in fields:
+            table.add(self.impact_row(
+                field[0],
+                field[1],
+                field[2],
+                field[3],
+                field[4],
+                field[5],
+                field[6],
+            ))
 
-        break_row = m.Row()
-        break_row.add(m.Cell(
-            tr('Breakdown by Area'),
-            header=True,
-            align='right'))
-        # intentionally empty right cells
-        break_row.add(m.Cell('', header=True))
-        break_row.add(m.Cell('', header=True))
-        break_row.add(m.Cell('', header=True))
-        break_row.add(m.Cell('', header=True))
-        break_row.add(m.Cell('', header=True))
-        break_row.add(m.Cell('', header=True))
-        table.add(break_row)
-
-        table = self.impact_calculation(table)
         last_row = m.Row()
         last_row.add(m.Cell(
             tr('Total')))
         table.add(self.total_row(last_row))
 
-        hazard_table = m.Table(
-            style_class='table table-condensed table-striped')
-        hazard_table = self.hazard_table(hazard_table)
-
-        message.add(hazard_table)
         message.add(table)
 
         return message
@@ -252,53 +383,18 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
             single_total_area *= 1e8
 
             impact_row = self.impact_row(
-                area_id, affected, percent_affected,
-                single_total_area, number_people_affected,
-                percent_people_affected)
+                self.area_name(area_id),
+                affected,
+                percent_affected,
+                single_total_area,
+                number_people_affected,
+                percent_people_affected,
+                self.areas_population[area_id]
+            )
 
             table.add(impact_row)
 
         return table
-
-    def head_row(self, row):
-        """Set and return header row in impact summary
-
-        :param row: The empty header row
-        :type row: Row
-
-        :return Header row with content
-        :rtype Row
-        """
-        row.add(m.Cell(
-            tr('Area Name'),
-            header=True,
-            align='right'))
-        row.add(m.Cell(
-            tr('Affected Area (ha)'),
-            header=True,
-            align='right'))
-        row.add(m.Cell(
-            tr('Affected Area (%)'),
-            header=True,
-            align='right'))
-        row.add(m.Cell(
-            tr('Total (ha)'),
-            header=True,
-            align='right'))
-        row.add(m.Cell(
-            tr('Affected People'),
-            header=True,
-            align='right'))
-        row.add(m.Cell(
-            tr('Affected People(%)'),
-            header=True,
-            align='right'))
-        row.add(m.Cell(
-            tr('Total Number of People'),
-            header=True,
-            align='right'))
-
-        return row
 
     def row(
             self,
@@ -391,37 +487,41 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
 
     def impact_row(
             self,
-            area_id,
+            area_name,
             affected,
             percent_affected,
             single_total_area,
             number_people_affected,
-            percent_people_affected):
+            percent_people_affected,
+            area_population
+            ):
         """Adds the calculated results into respective impact row
 
-        :param area_id: Area id
-        :type area_id: int
+        :param area_name: Area Name
+        :type area_name: str
 
         :param affected: table with first and second row
         :type affected: Table
 
         :param percent_affected: percentage of affected area
-        :type percent_affected:float
+        :type percent_affected: float
 
         :param single_total_area: total area of the land
-        :type single_total_area:float
+        :type single_total_area: float
 
         :param number_people_affected: number of people affected
-        :type number_people_affected:float
+        :type number_people_affected: float
 
         :param percent_people_affected: percentage of people affected
         in the area
-        :type percent_people_affected:float
+        :type percent_people_affected: float
+
+        :param area_population: Population of the area
+        :type area_population: float
 
         :return row: the new impact row
         :rtype row: Row
         """
-        area_name = self.area_name(area_id)
         row = m.Row()
         row.add(m.Cell(area_name))
         row.add(m.Cell(format_int(int(affected)), align='right'))
@@ -434,7 +534,7 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
             align='right'))
         row.add(m.Cell("%.1f%%" % percent_people_affected, align='right'))
         row.add(m.Cell(
-            format_int(int(self.areas_population[area_id])),
+            format_int(int(area_population)),
             align='right'))
 
         return row
@@ -621,86 +721,6 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
         area_name = self.areas_names[area_id]
 
         return area_name
-
-    def hazard_table(self, hazard_table):
-        """ Return updated hazard table.
-
-        :param hazard_table: hazard table.
-        :type hazard_table: Table
-
-        :returns hazard_table: Updated Hazard Table
-        :rtype area_name: Table
-        """
-        hazard_table.caption = None
-
-        for key, value in self.hazard_levels.iteritems():
-
-            name = self.hazard_class_mapping[key][0]
-            # This skips reporting people not affected in No zone
-            if key == 'wet':
-                row = m.Row()
-                row.add(m.Cell(tr(
-                    'People within hazard field ("%s") of value "%s"')
-                               % (self.hazard_class_field, name),
-                               header=True))
-                value = format_int(population_rounding(value))
-                row.add(m.Cell(value, align='right'))
-            elif key == 'dry':
-                continue
-            else:
-                row = m.Row()
-                row.add(m.Cell(name, header=True))
-                value = format_int(population_rounding(value))
-                row.add(m.Cell(value, align='right'))
-            hazard_table.add(row)
-
-        # Total affected population
-        row = m.Row()
-        row.add(m.Cell(
-            tr('Total affected people'),
-            header=True))
-        affected = format_int(
-            population_rounding(self.total_affected_population))
-        row.add(m.Cell(affected, align='right'))
-        hazard_table.add(row)
-
-        # Non affected population
-        row = m.Row()
-        unaffected = format_int(
-            population_rounding(self.unaffected_population))
-        row.add(m.Cell(tr('Unaffected people'), header=True))
-        row.add(m.Cell(unaffected, align='right'))
-        hazard_table.add(row)
-
-        # Total Population
-        row = m.Row()
-        total_population = format_int(
-            population_rounding(self.total_population))
-        row.add(m.Cell(tr('Total people'), header=True))
-        row.add(m.Cell(total_population, align='right'))
-        hazard_table.add(row)
-
-        return hazard_table
-
-    def hazard_level_name(self, id):
-        """ Return name of level corresponding the id.
-
-        :param id: hazard level id.
-        :type id: int
-
-        :returns level_name:Name of the hazard level
-        :rtype level_name: string
-        """
-        if id is 1:
-            level_name = "Low"
-        elif id is 2:
-            level_name = "Medium"
-        elif id is 3:
-            level_name = "High"
-        else:
-            level_name = None
-
-        return level_name
 
     @property
     def minimum_needs(self):

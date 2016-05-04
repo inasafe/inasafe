@@ -134,7 +134,8 @@ class TestWizardDialogLocale(unittest.TestCase):
         self.check_list(expected_categories,
                         dialog.step_kw_purpose.lstCategories)
 
-        self.check_current_text('ancaman', dialog.step_kw_purpose.lstCategories)
+        self.check_current_text(
+            'ancaman', dialog.step_kw_purpose.lstCategories)
 
         dialog.pbnNext.click()
 
@@ -174,7 +175,8 @@ class TestWizardDialogLocale(unittest.TestCase):
         dialog.pbnNext.click()
 
         # select GRIDCODE
-        self.select_from_list_widget('GRIDCODE', dialog.step_kw_field.lstFields)
+        self.select_from_list_widget(
+            'GRIDCODE', dialog.step_kw_field.lstFields)
         dialog.pbnNext.click()
 
         unit = dialog.step_kw_unit.selected_unit()
@@ -208,7 +210,8 @@ class TestWizardDialogLocale(unittest.TestCase):
         dialog.set_keywords_creation_mode(layer)
 
         # step 1 of 7 - select category
-        self.check_current_text('ancaman', dialog.step_kw_purpose.lstCategories)
+        self.check_current_text(
+            'ancaman', dialog.step_kw_purpose.lstCategories)
 
         # Click Next
         dialog.pbnNext.click()
@@ -253,7 +256,8 @@ class TestWizardDialogLocale(unittest.TestCase):
         self.assertTrue(dialog.pbnNext.isEnabled(), message)
 
         message = 'Source should be %s' % source
-        self.assertEqual(dialog.step_kw_source.leSource.text(), source, message)
+        self.assertEqual(
+            dialog.step_kw_source.leSource.text(), source, message)
         message = 'Source Url should be %s' % source_url
         self.assertEqual(dialog.step_kw_source.leSource_url.text(),
                          source_url, message)
