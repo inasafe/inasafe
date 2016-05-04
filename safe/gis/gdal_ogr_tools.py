@@ -154,6 +154,8 @@ def polygonize_band(raster_file_name, band=1, name_field='DN'):
     32bit integer buffer, so floating point or complex bands will be implicitly
     truncated before processing.
 
+    .. versionadded:: 3.4
+
     :param raster_file_name: The raster file path to polygonize.
     :type raster_file_name: str
 
