@@ -23,7 +23,7 @@ from gdalconst import (
     GDT_Float32,
     GDT_Float64)
 
-from safe.gis.gdal_ogr_tools import polygonize_band
+from safe.gis.gdal_ogr_tools import polygonize
 from safe.common.utilities import temp_dir, unique_filename
 from safe.common.exceptions import FileNotFoundError, ReadLayerError
 
@@ -220,6 +220,14 @@ def _process_reclassify(
 
 
 def _classes_to_string(ranges):
+    """Function to transform the ranges dictionary as comma-delimited string.
+
+    :param ranges: The ranges.
+    :type ranges: OrderedDict
+
+    :return: List(output classes, input classes).
+    :rtype: list
+    """
     output_ranges = []
     for interval in ranges.itervalues():
         if interval[0] is None:
@@ -234,11 +242,31 @@ def _classes_to_string(ranges):
     return ranges.keys(), output_ranges
 
 
-def reclassify(input_raster, ranges):
+def reclassify(input_raster, ranges, no_data=0):
     """Reclassify a raster according to some ranges.
 
     This function is a wrapper for the code from
     https://github.com/chiatt/gdal_reclassify
+
+    For instance if you want to classify like this table :
+        Original Value    | Class
+            0             |   1
+            0.01 - 0.2    |   2
+            0.2 - 2       |   3
+            2.1 - 5       |   4
+            5.1 - 10      |   5
+            10 - 99       |   6
+
+    You need a dictionary :
+        ranges = OrderedDict()
+        ranges[1] = [None, 0]
+        ranges[2] = [0.01, 0.2]
+        ranges[3] = [0.2, 2]
+        ranges[4] = [2.1, 5]
+        ranges[5] = [5.1, 10]
+        ranges[6] = [10, None]
+
+    You shouldn't use 0 for the class, as it's the no data value by default.
 
     .. versionadded:: 3.4
 
@@ -248,6 +276,9 @@ def reclassify(input_raster, ranges):
     :param ranges: The ranges as a OrderedDict.
     :type ranges: OrderedDict
 
+    :param no_data: The no data value. Default to 0 for the output.
+    :type no_data: int
+
     :return: The file path to the reclassified raster.
     :rtype: str
     """
@@ -256,7 +287,6 @@ def reclassify(input_raster, ranges):
         suffix='-reclassified.tiff', dir=temporary_dir)
 
     output_classes, input_classes = _classes_to_string(ranges)
-    default = 0
     value = 'True'
     output_format = 'GTiff'
     compression = ['COMPRESS=NONE']
@@ -265,7 +295,7 @@ def reclassify(input_raster, ranges):
         output_raster,
         input_classes,
         output_classes,
-        default,
+        no_data,
         value,
         output_format,
         compression)
@@ -280,7 +310,7 @@ def reclassify_polygonize(input_raster, ranges):
     """Reclassify and polygonize a raster according to some ranges.
 
     .. note:: Delegates to reclassify() and
-     safe.gis.gdal_ogr_tools.polygonize_band()
+     safe.gis.gdal_ogr_tools.polygonize()
 
      .. versionadded:: 3.4
 
@@ -293,4 +323,4 @@ def reclassify_polygonize(input_raster, ranges):
     :return: The file path to shapefile.
     :rtype: str
     """
-    return polygonize_band(reclassify(input_raster, ranges))
+    return polygonize(reclassify(input_raster, ranges))

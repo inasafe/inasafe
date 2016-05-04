@@ -20,7 +20,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import unittest
 from osgeo import ogr
 
-from safe.gis.gdal_ogr_tools import polygonize_thresholds, polygonize_band
+from safe.gis.gdal_ogr_tools import polygonize_thresholds, polygonize
 from safe.test.utilities import test_data_path
 
 
@@ -53,14 +53,14 @@ class TestGDALOGRTools(unittest.TestCase):
         # print 'outside %s' % (outside_file_name)
         self.assertEquals(feature_count2, 1)
 
-    def test_polygonize_band(self):
+    def test_polygonize(self):
         """Test if we can polygonize a raster using GDAL."""
 
         raster_path = test_data_path('hazard', 'classified_flood_20_20.asc')
         driver = ogr.GetDriverByName('ESRI Shapefile')
         expected_field_name = 'my_field'
 
-        shapefile = polygonize_band(raster_path, 1, expected_field_name)
+        shapefile = polygonize(raster_path, 1, expected_field_name)
         data_source = driver.Open(shapefile, 0)
         layer = data_source.GetLayer()
 

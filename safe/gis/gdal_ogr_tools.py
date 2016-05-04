@@ -147,7 +147,7 @@ def polygonize_thresholds(
         outside_layer_name)
 
 
-def polygonize_band(raster_file_name, band=1, name_field='DN'):
+def polygonize(raster_file_name, band=1, name_field='DN'):
     """Polygonize one band from a raster file.
 
     Note that currently the source pixel band values are read into a signed
