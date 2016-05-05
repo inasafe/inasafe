@@ -31,12 +31,7 @@ class MinimumNeedsPostprocessor(AbstractPostprocessor):
         AbstractPostprocessor.__init__(self)
         self.impact_total = None
         self.minimum_needs = None
-
-    def description(self):
-        """Describe briefly what the post processor does.
-            Errors are propagated
-        """
-        return tr('Aggregates minimum needs.')
+        self._description = tr('Aggregates minimum needs.')
 
     def setup(self, params):
         """concrete implementation it takes care of the needed parameters being

@@ -39,4 +39,4 @@ class BuildingTypePostprocessor(AbstractBuildingRoadTypePostprocessor):
         AbstractBuildingRoadTypePostprocessor.__init__(self)
         self.type = self.__class__.__name__
         self.label_affected = tr('Total affected')
-        self.description = tr('Calculates building types related statistics.')
+        self._description = tr('Calculates building types related statistics.')

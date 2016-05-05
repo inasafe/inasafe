@@ -30,20 +30,7 @@ class AggregationPostprocessor(AbstractPostprocessor):
         """
         AbstractPostprocessor.__init__(self)
         self.impact_total = None
-
-    def description(self):
-        """Describe briefly what the post processor does.
-
-        Args:
-            None
-
-        Returns:
-            Str the translated description
-
-        Raises:
-            Errors are propagated
-        """
-        return tr('Calculates generic aggregation statistics')
+        self._description = tr('Calculates generic aggregation statistics')
 
     def setup(self, params):
         """concrete implementation it takes care of the needed parameters being

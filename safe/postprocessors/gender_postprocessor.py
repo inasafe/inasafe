@@ -30,12 +30,7 @@ class GenderPostprocessor(AbstractPostprocessor):
         AbstractPostprocessor.__init__(self)
         self.impact_total = None
         self.female_ratio = None
-
-    def description(self):
-        """Describe briefly what the post processor does.
-
-        """
-        return tr('Calculates gender related statistics.')
+        self._description = tr('Calculates gender related statistics.')
 
     def setup(self, params):
         """Initialise parameters.

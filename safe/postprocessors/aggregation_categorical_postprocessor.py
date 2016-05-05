@@ -31,11 +31,7 @@ class AggregationCategoricalPostprocessor(AbstractPostprocessor):
         self.impact_classes = None
         self.impact_attrs = None
         self.target_field = None
-
-    def description(self):
-        """Describe briefly what the post processor does.
-        """
-        return tr('Calculates generic categorical statistics.')
+        self._description = tr('Calculates generic categorical statistics.')
 
     def setup(self, params):
         """Initialise needed parameters.

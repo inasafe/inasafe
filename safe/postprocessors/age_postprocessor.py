@@ -35,14 +35,7 @@ class AgePostprocessor(AbstractPostprocessor):
         self.adult_ratio = None
         self.elderly_ratio = None
         self.impact_total = None
-
-    def description(self):
-        """Describe briefly what the post processor does.
-
-        :returns: The translated description.
-        :rtype: str
-        """
-        return tr('Calculates age related statistics.')
+        self._description = tr('Calculates age related statistics.')
 
     def setup(self, params):
         """Concrete implementation to ensure needed parameters are initialized.
