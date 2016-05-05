@@ -17,8 +17,6 @@ from operator import add
 from safe.utilities.i18n import tr
 from safe.common.utilities import format_int
 from safe.impact_reports.report_mixin_base import ReportMixin
-import safe.messaging as m
-from safe.messaging import styles
 
 
 class BuildingExposureReportMixin(ReportMixin):
@@ -171,7 +169,7 @@ class BuildingExposureReportMixin(ReportMixin):
                 row.append(value)
 
             # totals column
-            line_total = format_int(self.buildings[building_type])
+            line_total = self.buildings[building_type]
             impact_subtotals.append(self.buildings[building_type])
             row.append(line_total)
             fields.append(row)
@@ -182,10 +180,9 @@ class BuildingExposureReportMixin(ReportMixin):
             impact_totals = map(add, impact_totals, impact_subtotals)
 
         # list out the TOTALS for this category per impact type
-        row = []
-        row.append(tr('Total'))
+        row = [tr('Total')]
         for value in impact_totals:
-            row.append(format_int(value))
+            row.append(value)
         fields.append(row)
 
         return {
@@ -247,65 +244,6 @@ class BuildingExposureReportMixin(ReportMixin):
             'action check list': action_checklist,
             'notes': notes
         }
-
-    def format_impact_summary(self):
-        """The impact summary as per category.
-
-        :returns: The impact summary.
-        :rtype: safe.messaging.Message
-        """
-        impact_summary = self.impact_summary()
-        message = m.Message(style_class='container')
-        table = m.Table(style_class='table table-condensed table-striped')
-        table.caption = None
-        for category in impact_summary['fields']:
-            row = m.Row()
-            row.add(m.Cell(category[0], header=True))
-            row.add(m.Cell(format_int(category[1]), align='right'))
-            # For value field, if existed
-            if len(category) > 2:
-                row.add(m.Cell(format_int(category[2]), align='right'))
-            table.add(row)
-        message.add(table)
-        return message
-
-    def format_buildings_breakdown(self):
-        """Breakdown by building type.
-
-        :returns: The buildings breakdown report.
-        :rtype: safe.messaging.Message
-        """
-        building_breakdowns = self.buildings_breakdown()
-
-        message = m.Message(style_class='container')
-        table = m.Table(style_class='table table-condensed table-striped')
-        table.caption = None
-
-        # Table header
-        row = m.Row()
-        for attribute in building_breakdowns['attributes']:
-            row.add(m.Cell(tr(attribute), header=True, align='right'))
-        table.add(row)
-
-        # Fields
-        for record in building_breakdowns['fields'][:-1]:
-            row = m.Row()
-            # Bold the 1st one
-            row.add(m.Cell(tr(record[0]), header=True, align='right'))
-            for content in record[1:-1]:
-                row.add(m.Cell(format_int(content), align='right'))
-            row.add(m.Cell(format_int(record[-1]), header=True, align='right'))
-            table.add(row)
-
-        # Total Row
-        row = m.Row()
-        for content in building_breakdowns['fields'][-1]:
-            row.add(m.Cell(tr(content), header=True, align='right'))
-        table.add(row)
-
-        message.add(table)
-
-        return message
 
     @property
     def schools_closed(self):

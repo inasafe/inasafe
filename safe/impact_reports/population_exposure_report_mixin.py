@@ -21,12 +21,9 @@ from collections import OrderedDict
 from safe.utilities.i18n import tr
 from safe.common.utilities import format_int
 from safe.impact_reports.report_mixin_base import ReportMixin
-
 from safe.impact_functions.core import (
     evacuated_population_needs,
     population_rounding)
-import safe.messaging as m
-from safe.messaging import styles
 
 
 class PopulationExposureReportMixin(ReportMixin):
@@ -169,59 +166,6 @@ class PopulationExposureReportMixin(ReportMixin):
             'attributes': attributes,
             'fields': fields
         }
-
-    def format_impact_summary(self):
-        """The impact summary as per category.
-
-        :returns: The impact summary.
-        :rtype: safe.messaging.Message
-        """
-        impact_summary = self.impact_summary()
-        message = m.Message(style_class='container')
-        table = m.Table(style_class='table table-condensed table-striped')
-        table.caption = None
-        for category in impact_summary['fields']:
-            row = m.Row()
-            row.add(m.Cell(category[0], header=True))
-            row.add(m.Cell(format_int(category[1]), align='right'))
-            # For value field, if existed
-            if len(category) > 2:
-                row.add(m.Cell(format_int(category[2]), align='right'))
-            table.add(row)
-        message.add(table)
-        return message
-
-    def format_minimum_needs_breakdown(self):
-        """Breakdown by population.
-
-        :returns: The population breakdown report.
-        :rtype: list
-        """
-        message = m.Message(style_class='container')
-        message.add(m.Heading(
-            tr('Evacuated population minimum needs'),
-            **styles.INFO_STYLE))
-        table = m.Table(
-            style_class='table table-condensed table-striped')
-        table.caption = None
-        for frequency, needs in self.total_needs.items():
-            row = m.Row()
-            row.add(m.Cell(
-                tr('Relief items to be provided %s' % frequency),
-                header=True
-            ))
-            row.add(m.Cell(tr('Total'), header=True, align='right'))
-            table.add(row)
-            for resource in needs:
-                row = m.Row()
-                row.add(m.Cell(tr(resource['table name'])))
-                row.add(m.Cell(
-                    tr(format_int(resource['amount'])),
-                    align='right'
-                ))
-                table.add(row)
-        message.add(table)
-        return message
 
     @property
     def impact_category_ordering(self):
