@@ -664,38 +664,6 @@ class ImpactFunction(object):
             print message
         print 'Task progress: %i of %i' % (current, maximum)
 
-    def analysis_workflow(self):
-        """The whole analysis process.
-
-        This function is executed be the calculate_impact in the core package.
-        This method will run the analysis.
-
-        This method mustn't be overridden in a child class.
-
-        :return: The result of the impact function.
-        :rtype: Raster, Vector
-        """
-        self.provenance.append_step(
-            'Calculating Step',
-            'Impact function is calculating the impact.')
-
-        send_busy_signal(self)
-
-        title = tr('Calculating impact')
-        detail = tr(
-            'This may take a little while - we are computing the areas that '
-            'will be impacted by the hazard and writing the result to a new '
-            'layer.')
-        message = m.Message(
-            m.Heading(title, **PROGRESS_UPDATE_STYLE),
-            m.Paragraph(detail))
-        send_dynamic_message(self, message)
-
-        # self.run() is defined the IF.
-        impact = self.run()
-        self.set_if_provenance()
-        return impact
-
     def run_analysis(self):
         """It runs the IF. The method must be called from a client class.
 
@@ -706,7 +674,7 @@ class ImpactFunction(object):
             self._validate()
             self._emit_pre_run_message()
             self._prepare()
-            self._impact = self.calculate_impact()
+            self._impact = self._calculate_impact()
             self._run_aggregator()
         except ZeroImpactException, e:
             report = m.Message()
@@ -929,10 +897,10 @@ class ImpactFunction(object):
         """Get the provenances"""
         return self._provenances
 
-    def set_if_provenance(self):
+    def _set_if_provenance(self):
         """Set IF provenance step for the IF."""
         data = {
-            'start_time': self._start_time ,
+            'start_time': self._start_time,
             'finish_time': datetime.now(),
             'hazard_layer': self.hazard.keywords['title'],
             'exposure_layer': self.exposure.keywords['title'],
@@ -1392,8 +1360,29 @@ class ImpactFunction(object):
         send_not_busy_signal(self)
         send_analysis_done_signal(self)
 
-    def calculate_impact(self):
-        """Calculate impact."""
+    def _calculate_impact(self):
+        """Calculate impact.
+
+        :return: The result of the impact function.
+        :rtype: Raster, Vector
+        """
+
+        self.provenance.append_step(
+            'Calculating Step',
+            'Impact function is calculating the impact.')
+
+        send_busy_signal(self)
+
+        title = tr('Calculating impact')
+        detail = tr(
+            'This may take a little while - we are computing the areas that '
+            'will be impacted by the hazard and writing the result to a new '
+            'layer.')
+        message = m.Message(
+            m.Heading(title, **PROGRESS_UPDATE_STYLE),
+            m.Paragraph(detail))
+        send_dynamic_message(self, message)
+
         layers = [self.hazard, self.exposure]
         # Input checks
         if self.requires_clipping:
@@ -1402,8 +1391,10 @@ class ImpactFunction(object):
         # Start time
         start_time = datetime.now()
 
-        # Run IF
-        result_layer = self.analysis_workflow()
+        # Run the IF. self.run() is defined in each IF.
+        result_layer = self.run()
+
+        self._set_if_provenance()
 
         # End time
         end_time = datetime.now()
