@@ -87,15 +87,6 @@ class BuildingExposureReportMixinTest(unittest.TestCase):
         del self.building_mixin_blank
         del self.building_mixin
 
-    def test_0001_generate_report(self):
-        """Generate a blank report."""
-        blank_report = self.building_mixin_blank.generate_report().to_text()
-        self.assertIn('**Not affected buildings**, 0', blank_report)
-        self.assertIn(
-            '**Building type**, **Not Affected**, **Total**',
-            blank_report
-        )
-
     def test_0002_action_checklist(self):
         """The default action check list."""
         action_checklist = self.building_mixin_blank.format_action_checklist()

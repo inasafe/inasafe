@@ -48,22 +48,6 @@ class PolygonPeopleExposureReportMixin(ReportMixin):
         self._other_population_counts = {}
         self._minimum_needs = []
 
-    def generate_report(self):
-        """Generate impact report as message object.
-
-        :returns: The report.
-        :rtype: safe.messaging.Message
-        """
-        message = m.Message()
-        message.add(m.Paragraph(self.question))
-        message.add(self.format_impact_summary())
-        message.add(self.format_breakdown())
-        message.add(self.format_minimum_needs_breakdown())
-        message.add(self.format_action_checklist())
-        message.add(self.format_notes())
-
-        return message
-
     def generate_data(self):
         """Create a dictionary contains impact data.
 

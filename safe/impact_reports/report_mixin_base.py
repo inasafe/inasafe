@@ -22,14 +22,6 @@ class ReportMixin(object):
     .. versionadded:: 3.1
     """
 
-    def html_report(self):
-        """Generate an HTML report.
-
-        :returns: The report in html format.
-        :rtype: basestring
-        """
-        return self.generate_report().to_html(suppress_newlines=True)
-
     def generate_report(self):
         """Defining the interface.
 

@@ -66,26 +66,6 @@ class PopulationExposureReportMixinTest(unittest.TestCase):
         del self.population_mixin_blank
         del self.population_mixin
 
-    def test_0001_generate_report(self):
-        """Generate a blank report."""
-        blank_report = self.population_mixin_blank.generate_report()
-        blank_report = blank_report.to_text()
-        expected_strings = [
-            u'**Population needing evacuation <sup>1</sup>**, 0',
-            u'**Unaffected population**, 0',
-            u'Evacuated population minimum needs',
-            u'Action checklist',
-            u'How will warnings be disseminated?',
-            u'How will we reach evacuated people?',
-            (u'If yes, where are they located and how will we '
-             u'distribute them?'),
-            (u'If no, where can we obtain additional relief items and how '
-             u'will we distribute them?'),
-            u'What are the related health risks?',
-            u'Who are the key people responsible for coordination?',
-        ]
-        for item in expected_strings:
-            self.assertIn(item, blank_report)
 
     def test_0002_category_ordering(self):
         """Test correct category ordering."""

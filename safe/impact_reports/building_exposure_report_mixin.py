@@ -227,20 +227,6 @@ class BuildingExposureReportMixin(ReportMixin):
             'fields': fields
         }
 
-    def generate_report(self):
-        """Breakdown by building type.
-
-        :returns: The report.
-        :rtype: safe.messaging.Message
-        """
-        message = m.Message()
-        message.add(m.Paragraph(self.question))
-        message.add(self.format_impact_summary())
-        message.add(self.format_buildings_breakdown())
-        message.add(self.format_action_checklist())
-        message.add(self.format_notes())
-        return message
-
     def generate_data(self):
         """Create a dictionary contains impact data.
 
