@@ -160,10 +160,10 @@ def content():
             'keywords for that layer.')))
     message.add(m.Paragraph(tr(
         'Based on the combination of hazard and exposure layers that are '
-        'selected, the Impact Function list (shown in the drop down menu under '
-        '\'Might\' in the InaSAFE dock panel)  will be updated. Each impact '
-        'function can only work with specific combinations of hazard and '
-        'exposure types, so the options shown here will be limited '
+        'selected, the Impact Function list (shown in the drop down menu '
+        'under \'Might\' in the InaSAFE dock panel) will be updated. '
+        'Each impact function can only work with specific combinations of '
+        'hazard and exposure types, so the options shown here will be limited '
         'accordingly. The chosen Impact Function can be configured (if '
         'applicable) by pressing the small ellipses (...) button next to '
         'the chosen Impact Function. This is explained in more detail below '
@@ -190,8 +190,8 @@ def content():
     message.add(m.Paragraph(tr(
         'After running an analysis, the question area is hidden to maximise '
         'the amount of space allocated to the results area. You can '
-        're-open the question area at any time by pressing the \'show question '
-        'form\' button.')))
+        're-open the question area at any time by pressing the \'show '
+        'question form\' button.')))
 
     message.add(m.Paragraph(tr(
         'The results area is used to display various useful feedback items to '
