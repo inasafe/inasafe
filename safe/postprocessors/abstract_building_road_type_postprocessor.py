@@ -19,7 +19,6 @@ __copyright__ += 'Disaster Reduction'
 
 import itertools
 from safe.postprocessors.abstract_postprocessor import AbstractPostprocessor
-from safe.utilities.i18n import tr
 
 
 class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
@@ -40,21 +39,34 @@ class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
         # Type of the post processor defined in child class.
         self.type = None
 
+        # Label for the column. Defined in child class.
+        self.label_affected = None
+
+        # Integer with total number of features/meters affected.
         self.impact_total = None
+
+        # List of features
         self.impact_attrs = None
+
+        # Name the field in the impact layer for the result.
         self.target_field = None
-        self.no_features = None
-        self.type_fields = None
+
+        # The name of field in the exposure layer.
         self.valid_type_fields = None
+
+        # The value mapping for the exposure layer.
         self.value_mapping = None
 
+        # Bool to know if there are some features. We will be computed later.
+        self.no_features = None
+
+        # Find which attribute field has to be used
+        self.type_fields = None
+
+        # List that will be updated dynamically.
         self.known_types = []
 
-    def description(self):
-        """
-        Describe briefly what the post processor does.
-        """
-        raise NotImplementedError('Please don\'t use this class directly')
+        self._update_known_types()
 
     def setup(self, params):
         """concrete implementation it takes care of the needed parameters being
@@ -77,7 +89,6 @@ class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
         self.value_mapping = params['value_mapping']
         self.valid_type_fields = params['key_attribute']
 
-        # find which attribute field has to be used
         self.type_fields = []
         try:
             for key in self.impact_attrs[0].iterkeys():
@@ -89,8 +100,8 @@ class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
         if len(self.type_fields) == 0:
             self.type_fields = None
 
-        self.no_features = False
         # there are no features in this postprocessing polygon
+        self.no_features = None
         if len(self.impact_attrs):
             self.no_features = True
 
@@ -101,6 +112,7 @@ class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
 
         if (self.impact_total is None or
                 self.type is None or
+                self.label_affected is None or
                 self.impact_attrs is None or
                 self.value_mapping is None or
                 self.target_field is None):
@@ -116,16 +128,15 @@ class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
     def _calculate_total(self):
         """Indicator that shows total temporarily closed roads."""
 
-        name = tr('Temporarily closed')
         result = 0
         if self.type_fields is not None:
             try:
-                for road in self.impact_attrs:
-                    field_value = road[self.target_field]
+                for feature in self.impact_attrs:
+                    field_value = feature[self.target_field]
                     if isinstance(field_value, basestring):
                         if field_value != 'Not Affected':
                             if self.type == 'RoadTypePostprocessor':
-                                result += road['aggr_sum']
+                                result += feature['aggr_sum']
                             else:
                                 # BuildingTypePostprocessor
                                 # See issue #2258. Since we are only
@@ -135,7 +146,7 @@ class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
                     else:
                         if field_value:
                             if self.type == 'RoadTypePostprocessor':
-                                result += road['aggr_sum']
+                                result += feature['aggr_sum']
                             else:
                                 # BuildingTypePostprocessor
                                 # See issue #2258. Since we are only
@@ -150,7 +161,7 @@ class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
                 result = 0
             else:
                 result = self.NO_DATA_TEXT
-        self._append_result(name, result)
+        self._append_result(self.label_affected, result)
 
     def _calculate_type(self, title, fields_values):
         """Indicator that shows total features impacted.
@@ -162,8 +173,6 @@ class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
         - if a record has one of the valid fields with one of the valid
         fields_values then it is considered affected
         """
-
-        title = tr(title)
 
         result = 0
         if self.type_fields is not None:

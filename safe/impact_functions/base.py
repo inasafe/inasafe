@@ -1018,7 +1018,7 @@ class ImpactFunction(object):
             for name, post_processor in post_processors.iteritems():
                 bullet_list.add('%s: %s' % (
                     get_postprocessor_human_name(name),
-                    post_processor.description()))
+                    post_processor.description))
             message.add(bullet_list)
 
         except (TypeError, KeyError):

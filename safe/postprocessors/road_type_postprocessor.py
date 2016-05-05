@@ -38,8 +38,5 @@ class RoadTypePostprocessor(AbstractBuildingRoadTypePostprocessor):
         """
         AbstractBuildingRoadTypePostprocessor.__init__(self)
         self.type = self.__class__.__name__
-
-    def description(self):
-        """Describe briefly what the post processor does.
-        """
-        return tr('Calculates road types related statistics.')
+        self.label_affected = tr('Temporarily closed')
+        self.description = tr('Calculates road types related statistics.')

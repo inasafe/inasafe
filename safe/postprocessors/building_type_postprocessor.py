@@ -38,11 +38,5 @@ class BuildingTypePostprocessor(AbstractBuildingRoadTypePostprocessor):
         """
         AbstractBuildingRoadTypePostprocessor.__init__(self)
         self.type = self.__class__.__name__
-
-    def description(self):
-        """Describe briefly what the post processor does.
-
-        :returns: The translated description.
-        :rtype: str
-        """
-        return tr('Calculates building types related statistics.')
+        self.label_affected = tr('Total affected')
+        self.description = tr('Calculates building types related statistics.')

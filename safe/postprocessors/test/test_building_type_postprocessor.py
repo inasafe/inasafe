@@ -103,7 +103,7 @@ class TestBuildingTypePostprocessor(unittest.TestCase):
             'Expecting exactly 3 buildings have been affected. ',
             'In Zone 1 and Zone 2.')
         self.assertEqual(
-            results[u'Total Affected']['value'],
+            results[u'Total affected']['value'],
             '3',
             message)
 
