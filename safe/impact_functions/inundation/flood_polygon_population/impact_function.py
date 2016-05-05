@@ -20,12 +20,12 @@ from safe.utilities.i18n import tr
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.impact_functions.core import (
     population_rounding,
-    has_no_data)
+    has_no_data,
+    no_population_impact_message)
 from safe.impact_functions.inundation.flood_polygon_population \
     .metadata_definitions import FloodEvacuationVectorHazardMetadata
 from safe.impact_functions.bases.classified_vh_continuous_re import \
     ClassifiedVHContinuousRE
-from safe.impact_functions.core import no_population_impact_message
 from safe.storage.raster import Raster
 from safe.common.utilities import (
     format_int,
@@ -39,8 +39,6 @@ from safe.common.exceptions import ZeroImpactException
 from safe.impact_functions.core import get_key_for_value
 from safe.impact_reports.population_exposure_report_mixin import \
     PopulationExposureReportMixin
-import safe.messaging as m
-from safe.messaging import styles
 
 __author__ = 'Rizky Maulana Nugraha'
 
@@ -72,43 +70,43 @@ class FloodEvacuationVectorHazardFunction(
         """Return the notes section of the report.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: safe.messaging.Message
+        :rtype: dict
         """
+        title = tr('Notes and assumptions')
+
+        population = format_int(population_rounding(self.total_population))
+        threshold = format_int(self.parameters['evacuation_percentage'].value)
+
         if get_needs_provenance_value(self.parameters) is None:
             needs_provenance = ''
         else:
             needs_provenance = tr(get_needs_provenance_value(self.parameters))
 
-        message = m.Message(style_class='container')
+        fields = [
+            tr('Total population in the analysis area: %s') % population,
+            tr('<sup>1</sup>The evacuation threshold used to determine '
+               'population needing evacuation is %s%%.') % threshold,
+            needs_provenance,
+        ]
 
-        message.add(
-            m.Heading(tr('Notes and assumptions'), **styles.INFO_STYLE))
-        checklist = m.BulletedList()
-        population = format_int(population_rounding(self.total_population))
-        checklist.add(tr(
-            'Total population in the analysis area: %s') % population)
-        threshold = format_int(self.parameters['evacuation_percentage'].value)
-        checklist.add(tr(
-            '<sup>1</sup>The evacuation threshold used to determine '
-            'population needing evacuation is %s%%.') % threshold)
-
-        checklist.add(needs_provenance)
         if self.no_data_warning:
-            checklist.add(tr(
+            fields.append(tr(
                 'The layers contained "no data" values. This missing data '
                 'was carried through to the impact layer.'))
-            checklist.add(tr(
+            fields.append(tr(
                 '"No data" values in the impact layer were treated as 0 '
                 'when counting the affected or total population.'))
-        checklist.add(tr(
-            'All values are rounded up to the nearest integer in '
-            'order to avoid representing human lives as fractions.'))
-        checklist.add(tr(
-            'Population rounding is applied to all population '
-            'values, which may cause discrepancies when adding values.'))
+        fields.extend([
+            tr('All values are rounded up to the nearest integer in order to '
+               'avoid representing human lives as fractions.'),
+            tr('Population rounding is applied to all population values, '
+               'which may cause discrepancies when adding values.')
+        ])
 
-        message.add(checklist)
-        return message
+        return {
+            'title': title,
+            'fields': fields
+        }
 
     def run(self):
         """Risk plugin for flood population evacuation.
@@ -213,8 +211,6 @@ class FloodEvacuationVectorHazardFunction(
             filter_needs_parameters(self.parameters['minimum needs'])
         ]
 
-        impact_table = impact_summary = self.html_report()
-
         # Create style
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
                    '#FFCC00', '#FF6600', '#FF0000', '#7A0000']
@@ -267,9 +263,9 @@ class FloodEvacuationVectorHazardFunction(
             'Thousand separator is represented by %s' %
             get_thousand_separator())
 
+        impact_data = self.generate_data()
+
         extra_keywords = {
-            'impact_summary': impact_summary,
-            'impact_table': impact_table,
             'target_field': self.target_field,
             'map_title': map_title,
             'legend_notes': legend_notes,
@@ -282,7 +278,7 @@ class FloodEvacuationVectorHazardFunction(
 
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 
-        # Create vector layer and return
+        # Create raster layer and return
         impact_layer = Raster(
             data=new_covered_exposure_data,
             projection=covered_exposure.get_projection(),
@@ -290,5 +286,7 @@ class FloodEvacuationVectorHazardFunction(
             name=tr('People affected by flood prone areas'),
             keywords=impact_layer_keywords,
             style_info=style_info)
+
+        impact_layer.impact_data = impact_data
         self._impact = impact_layer
         return impact_layer

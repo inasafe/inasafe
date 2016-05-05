@@ -27,8 +27,6 @@ from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
 from safe.common.exceptions import KeywordNotFoundError, ZeroImpactException
-import safe.messaging as m
-from safe.messaging import styles
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -51,40 +49,35 @@ class EarthquakeBuildingFunction(
         self.building_report_threshold = 25
 
     def notes(self):
-        """Return the notes section of the report.
+        """Return the notes section of the report as dict.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: safe.messaging.Message
+        :rtype: dict
         """
-        message = m.Message(style_class='container')
-        message.add(
-            m.Heading(tr('Notes and assumptions'), **styles.INFO_STYLE))
-        checklist = m.BulletedList()
-
+        title = tr('Notes and assumptions')
         # Thresholds for mmi breakdown.
         t0 = self.parameters['low_threshold'].value
         t1 = self.parameters['medium_threshold'].value
         t2 = self.parameters['high_threshold'].value
         is_nexis = self.is_nexis
 
-        checklist.add(tr(
-            'High hazard is defined as shake levels greater '
-            'than %i on the MMI scale.') % t2)
-
-        checklist.add(tr(
-            'Medium hazard is defined as shake levels '
-            'between %i and %i on the MMI scale.') % (t1, t2))
-
-        checklist.add(tr(
-            'Low hazard is defined as shake levels '
-            'between %i and %i on the MMI scale.') % (t0, t1))
+        fields = [
+            tr('High hazard is defined as shake levels greater than %i on '
+               'the MMI scale.') % t2,
+            tr('Medium hazard is defined as shake levels between %i and %i on '
+               'the MMI scale.') % (t1, t2),
+            tr('Low hazard is defined as shake levels between %i and %i on '
+               'the MMI scale.') % (t0, t1)
+        ]
 
         if is_nexis:
-            checklist.add(tr(
+            fields.append(tr(
                 'Values are in units of 1 million Australian Dollars'))
 
-        message.add(checklist)
-        return message
+        return {
+            'title': title,
+            'fields': fields
+        }
 
     def run(self):
         """Earthquake impact to buildings (e.g. from OpenStreetMap)."""
@@ -238,8 +231,6 @@ class EarthquakeBuildingFunction(
         self.building_report_threshold = building_postprocessors.value[0].value
         self._consolidate_to_other()
 
-        impact_table = impact_summary = self.html_report()
-
         # Create style
         style_classes = [dict(label=class_1['label'], value=class_1['class'],
                               colour='#ffff00', transparency=1),
@@ -261,9 +252,9 @@ class EarthquakeBuildingFunction(
         legend_units = tr('(mmi)')
         legend_title = tr('Impact level')
 
+        impact_data = self.generate_data()
+
         extra_keywords = {
-            'impact_summary': impact_summary,
-            'impact_table': impact_table,
             'map_title': map_title,
             'legend_notes': legend_notes,
             'legend_units': legend_units,
@@ -274,7 +265,7 @@ class EarthquakeBuildingFunction(
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 
         # Create vector layer and return
-        result_layer = Vector(
+        impact_layer = Vector(
             data=attributes,
             projection=interpolate_result.get_projection(),
             geometry=geometry,
@@ -282,7 +273,6 @@ class EarthquakeBuildingFunction(
             keywords=impact_layer_keywords,
             style_info=style_info)
 
-        msg = 'Created vector layer %s' % str(result_layer)
-        LOGGER.debug(msg)
-        self._impact = result_layer
-        return result_layer
+        impact_layer.impact_data = impact_data
+        self._impact = impact_layer
+        return impact_layer

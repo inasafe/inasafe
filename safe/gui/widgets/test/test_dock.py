@@ -34,6 +34,10 @@ from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsProject)
 from PyQt4 import QtCore
+
+from safe.test.utilities import get_qgis_app
+
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from safe.impact_functions import register_impact_functions
 from safe.common.utilities import format_int, unique_filename
 from safe.test.utilities import (
@@ -53,13 +57,12 @@ from safe.test.utilities import (
     set_yogya_extent,
     get_ui_state,
     set_small_jakarta_extent,
-    get_qgis_app,
     TESTDATA,
     clone_shp_layer)
 
 # AG: get_qgis_app() should be called before importing modules from
 # safe.gui.widgets.dock
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
 
 from safe.gui.widgets.dock import Dock
 from safe.utilities.keyword_io import KeywordIO
@@ -703,8 +706,8 @@ class TestDock(TestCase):
             'inasafe/use_native_zonal_stats', False, type=bool))
         QtCore.QSettings().setValue('inasafe/use_native_zonal_stats', True)
         self.dock.accept()
-        QtCore.QSettings().setValue('inasafe/use_native_zonal_stats',
-                                    qgis_zonal_flag)
+        QtCore.QSettings().setValue(
+            'inasafe/use_native_zonal_stats', qgis_zonal_flag)
 
         result = self.dock.wvResults.page_to_text()
 

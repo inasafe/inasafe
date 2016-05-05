@@ -215,7 +215,7 @@
             <gco:CharacterString/>
           </datatype>
           <value_map>
-            <gco:Dictionary>{&quot;Primary road&quot;: [&quot;Primary road&quot;], &quot;Road, residential, living street, etc.&quot;: [&quot;Road, residential, living street, etc.&quot;], &quot;Primary link&quot;: [&quot;Primary link&quot;], &quot;Cycleway, footpath, etc.&quot;: [&quot;Cycleway, footpath, etc.&quot;], &quot;Tertiary&quot;: [&quot;Tertiary&quot;], &quot;Secondary&quot;: [&quot;Secondary&quot;]}</gco:Dictionary>
+            <gco:Dictionary/>
           </value_map>
           <structure_class_field>
             <gco:CharacterString/>
