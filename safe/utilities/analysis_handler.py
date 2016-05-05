@@ -18,7 +18,9 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import os
+import json
 import logging
+from collections import OrderedDict
 
 # noinspection PyPackageRequirements
 from qgis.core import (
@@ -62,12 +64,13 @@ from safe.common.signals import (
 from safe import messaging as m
 from safe.messaging import styles
 from safe.common.exceptions import (
-    InsufficientOverlapError, TemplateLoadingError)
+    InsufficientOverlapError, TemplateLoadingError, MissingImpactReport)
 from safe.report.impact_report import ImpactReport
 from safe.gui.tools.impact_report_dialog import ImpactReportDialog
 from safe_extras.pydispatch import dispatcher
 from safe.utilities.extent import Extent
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
+from safe.impact_template.utilities import get_report_template
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 INFO_STYLE = styles.INFO_STYLE
@@ -143,13 +146,13 @@ class AnalysisHandler(QObject):
 
         # noinspection PyArgumentEqualDefault,PyUnresolvedReferences
         dispatcher.connect(
-            self.parent.wvResults.static_message_event,
+            self.parent.step_fc_analysis.wvResults.static_message_event,
             signal=STATIC_MESSAGE_SIGNAL,
             sender=dispatcher.Any)
 
         # noinspection PyArgumentEqualDefault,PyUnresolvedReferences
         dispatcher.connect(
-            self.parent.wvResults.error_message_event,
+            self.parent.step_fc_analysis.wvResults.error_message_event,
             signal=ERROR_MESSAGE_SIGNAL,
             sender=dispatcher.Any)
 
@@ -191,9 +194,11 @@ class AnalysisHandler(QObject):
         """
         # TODO Hardcoded step - may overflow, if number of messages increase
         # noinspection PyUnresolvedReferences
-        self.parent.pbProgress.setValue(self.parent.pbProgress.value() + 15)
+        self.parent.step_fc_analysis.pbProgress.setValue(
+            self.parent.step_fc_analysis.pbProgress.value() + 15)
         # noinspection PyUnresolvedReferences
-        self.parent.wvResults.dynamic_message_event(sender, message)
+        self.parent.step_fc_analysis.wvResults.dynamic_message_event(
+            sender, message)
 
     def read_settings(self):
         """Restore settings from QSettings.
@@ -323,8 +328,8 @@ class AnalysisHandler(QObject):
         """
         # Impact Function
         self.impact_function = self.impact_function_manager.get(
-            self.parent.selected_function()['id'])
-        self.impact_function.parameters = self.parent.if_params
+            self.parent.step_fc_function.selected_function()['id'])
+        self.impact_function.parameters = self.parent.step_fc_summary.if_params
 
         # Layers
         self.impact_function.hazard = self.parent.hazard_layer
@@ -377,15 +382,19 @@ class AnalysisHandler(QObject):
             # message.add(m.Link('file://%s' % self.parent.wvResults.log_path))
             # noinspection PyTypeChecker
             send_static_message(self, message)
-            self.parent.wvResults.impact_path = impact_path
+            self.parent.step_fc_analysis.wvResults.impact_path = impact_path
 
-        self.parent.pbProgress.hide()
-        self.parent.lblAnalysisStatus.setText('Analysis done.')
-        self.parent.pbnReportWeb.show()
-        self.parent.pbnReportPDF.show()
-        self.parent.pbnReportComposer.show()
+        self.parent.step_fc_analysis.pbProgress.hide()
+        self.parent.step_fc_analysis.lblAnalysisStatus.setText(
+            'Analysis done.')
+        self.parent.step_fc_analysis.pbnReportWeb.show()
+        self.parent.step_fc_analysis.pbnReportPDF.show()
+        self.parent.step_fc_analysis.pbnReportComposer.show()
         self.hide_busy()
         self.analysisDone.emit(True)
+
+    def show_impact_report(self, qgis_impact_layer):
+        pass
 
     def show_results(self, qgis_impact_layer, engine_impact_layer):
         """Helper function for slot activated when the process is done.
@@ -402,21 +411,46 @@ class AnalysisHandler(QObject):
         :rtype: str
         """
         keywords = self.keyword_io.read_keywords(qgis_impact_layer)
+        json_path = os.path.splitext(qgis_impact_layer.source())[0] + '.json'
 
-        # write postprocessing report to keyword
-        output = self.impact_function.postprocessor_manager.get_output(
-            self.impact_function.aggregator.aoi_mode)
-        keywords['postprocessing_report'] = output.to_html(
-            suppress_newlines=True)
-        self.keyword_io.write_keywords(qgis_impact_layer, keywords)
+        postprocessor_data = self.impact_function.postprocessor_manager.\
+            get_json_data(self.impact_function.aggregator.aoi_mode)
+        post_processing_report = m.Message()
+        if os.path.exists(json_path):
+            with open(json_path) as json_file:
+                impact_data = json.load(
+                    json_file, object_pairs_hook=OrderedDict)
+                impact_data['post processing'] = postprocessor_data
+                with open(json_path, 'w') as json_file_2:
+                    json.dump(impact_data, json_file_2, indent=2)
+        else:
+            # write postprocessing report to keyword
+            post_processing_report = self.impact_function.\
+                postprocessor_manager.get_output(
+                self.impact_function.aggregator.aoi_mode)
+            keywords['postprocessing_report'] = post_processing_report.to_html(
+                suppress_newlines=True)
+            self.keyword_io.write_keywords(qgis_impact_layer, keywords)
 
         # Get tabular information from impact layer
         report = m.Message()
         report.add(LOGO_ELEMENT)
         report.add(m.Heading(self.tr(
             'Analysis Results'), **INFO_STYLE))
-        report.add(self.keyword_io.read_keywords(
-            qgis_impact_layer, 'impact_summary'))
+        try:
+            impact_template = get_report_template(
+                impact_layer_path=qgis_impact_layer.source())
+            impact_report = impact_template.generate_message_report()
+            report.add(impact_report)
+        except MissingImpactReport:
+            report.add(self.keyword_io.read_keywords(
+                qgis_impact_layer, 'impact_summary'))
+
+            # append postprocessing report
+            report.add(post_processing_report.to_html())
+
+        # Layer attribution comes last
+        report.add(impact_attribution(keywords).to_html(True))
 
         # Get requested style for impact layer of either kind
         style = engine_impact_layer.get_style_info()
@@ -468,10 +502,6 @@ class AnalysisHandler(QObject):
             legend = self.iface.legendInterface()
             legend.setLayerVisible(exposure_layer, False)
 
-        # append postprocessing report
-        report.add(output.to_html())
-        # Layer attribution comes last
-        report.add(impact_attribution(keywords).to_html(True))
         # Return text to display in report panel
         return report
 

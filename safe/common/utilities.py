@@ -19,6 +19,11 @@ from collections import OrderedDict
 # pylint: enable=unused-import
 
 from PyQt4.QtCore import QPyNullVariant
+from qgis.core import (
+    QgsCoordinateReferenceSystem,
+    QgsCoordinateTransform,
+    QgsGeometry,
+    QgsPoint)
 
 from safe.common.exceptions import VerificationError
 from safe.utilities.i18n import locale
@@ -592,17 +597,38 @@ def get_utm_zone(longitude):
     return zone
 
 
-def get_utm_epsg(longitude, latitude):
-    """Return epsg code of the utm zone.
+def get_utm_epsg(longitude, latitude, crs=None):
+    """Return epsg code of the utm zone according to X, Y coordinates.
+
+    By default, the CRS is EPSG:4326. If the CRS is provided, first X,Y will
+    be reprojected from the input CRS to WGS84.
 
     The code is based on the code:
     http://gis.stackexchange.com/questions/34401
+
+    :param longitude: The longitude.
+    :type longitude: float
+
+    :param latitude: The latitude.
+    :type latitude: float
+
+    :param crs: The coordinate reference system of the latitude, longitude.
+    :type crs: QgsCoordinateReferenceSystem
     """
-    epsg = 32600
-    if latitude < 0.0:
-        epsg += 100
-    epsg += get_utm_zone(longitude)
-    return epsg
+    if crs is None or crs.authid() == 'EPSG:4326':
+        epsg = 32600
+        if latitude < 0.0:
+            epsg += 100
+        epsg += get_utm_zone(longitude)
+        return epsg
+    else:
+        epsg_4326 = QgsCoordinateReferenceSystem('EPSG:4326')
+        transform = QgsCoordinateTransform(crs, epsg_4326)
+        geom = QgsGeometry.fromPoint(QgsPoint(longitude, latitude))
+        geom.transform(transform)
+        point = geom.asPoint()
+        # The point is now in 4326, we can call the function again.
+        return get_utm_epsg(point.x(), point.y())
 
 
 def feature_attributes_as_dict(field_map, attributes):

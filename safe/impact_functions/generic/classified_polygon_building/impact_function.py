@@ -14,6 +14,7 @@ Contact : ole.moller.nielsen@gmail.com
 from collections import OrderedDict
 from qgis.core import QgsField, QgsRectangle
 from PyQt4.QtCore import QVariant
+
 from safe.impact_functions.bases.classified_vh_classified_ve import \
     ClassifiedVHClassifiedVE
 from safe.storage.vector import Vector
@@ -21,8 +22,8 @@ from safe.utilities.i18n import tr
 from safe.impact_functions.generic.classified_polygon_building \
     .metadata_definitions \
     import ClassifiedPolygonHazardBuildingFunctionMetadata
-from safe.common.exceptions import InaSAFEError, KeywordNotFoundError, \
-    ZeroImpactException
+from safe.common.exceptions import (
+    InaSAFEError, KeywordNotFoundError, ZeroImpactException)
 from safe.common.utilities import (
     get_thousand_separator,
     get_osm_building_usage,
@@ -30,8 +31,6 @@ from safe.common.utilities import (
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
 from safe.engine.interpolation_qgis import interpolate_polygon_polygon
-import safe.messaging as m
-from safe.messaging import styles
 from safe.impact_functions.core import get_key_for_value
 from safe.utilities.keyword_io import definition
 from safe.utilities.unicode import get_unicode
@@ -58,20 +57,21 @@ class ClassifiedPolygonHazardBuildingFunction(
         self.building_report_threshold = 25
 
     def notes(self):
-        """Return the notes section of the report.
+        """Return the notes section of the report as dict.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: safe.messaging.Message
+        :rtype: dict
         """
-        message = m.Message(style_class='container')
-        message.add(m.Heading(
-            tr('Notes and assumptions'), **styles.INFO_STYLE))
-        checklist = m.BulletedList()
-        checklist.add(tr(
-            'Map shows buildings affected in each of these hazard '
-            'zones: %s') % ', '.join(self.hazard_zones))
-        message.add(checklist)
-        return message
+        title = tr('Notes and assumptions')
+        fields = [
+            tr('Map shows buildings affected in each of these hazard zones: '
+               '%s') % ', '.join(self.hazard_zones)
+        ]
+
+        return {
+            'title': title,
+            'fields': fields
+        }
 
     def run(self):
         """Risk plugin for classified polygon hazard on building/structure.
@@ -191,9 +191,6 @@ class ClassifiedPolygonHazardBuildingFunction(
         self.building_report_threshold = building_postprocessors.value[0].value
         self._consolidate_to_other()
 
-        # Generate simple impact report
-        impact_summary = impact_table = self.html_report()
-
         # Create style
         categories = self.affected_buildings.keys()
         categories.append(self._not_affected_value)
@@ -226,9 +223,9 @@ class ClassifiedPolygonHazardBuildingFunction(
             'Thousand separator is represented by %s' %
             get_thousand_separator())
 
+        impact_data = self.generate_data()
+
         extra_keywords = {
-            'impact_summary': impact_summary,
-            'impact_table': impact_table,
             'target_field': self.target_field,
             'map_title': map_title,
             'legend_notes': legend_notes,
@@ -245,5 +242,6 @@ class ClassifiedPolygonHazardBuildingFunction(
             keywords=impact_layer_keywords,
             style_info=style_info)
 
+        impact_layer.impact_data = impact_data
         self._impact = impact_layer
         return impact_layer

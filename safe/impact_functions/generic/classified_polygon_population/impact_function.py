@@ -13,8 +13,8 @@ Contact : ole.moller.nielsen@gmail.com
 import numpy
 from collections import OrderedDict
 
-from safe.impact_functions.bases.classified_vh_continuous_re import \
-    ClassifiedVHContinuousRE
+from safe.impact_functions.bases.classified_vh_continuous_re import (
+    ClassifiedVHContinuousRE)
 from safe.impact_functions.generic.classified_polygon_population\
     .metadata_definitions import \
     ClassifiedPolygonHazardPopulationFunctionMetadata
@@ -35,10 +35,8 @@ from safe.common.exceptions import InaSAFEError, ZeroImpactException
 from safe.gui.tools.minimum_needs.needs_profile import (
     add_needs_parameters,
     filter_needs_parameters)
-from safe.impact_reports.population_exposure_report_mixin import \
-    PopulationExposureReportMixin
-import safe.messaging as m
-from safe.messaging import styles
+from safe.impact_reports.population_exposure_report_mixin import (
+    PopulationExposureReportMixin)
 from safe.utilities.keyword_io import definition
 
 
@@ -63,29 +61,26 @@ class ClassifiedPolygonHazardPopulationFunction(
         """Return the notes section of the report.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: safe.messaging.Message
+        :rtype: dict
         """
-        message = m.Message(style_class='container')
-        message.add(m.Heading(
-            tr('Notes and assumptions'), **styles.INFO_STYLE))
-        checklist = m.BulletedList()
+        title = tr('Notes and assumptions')
         population = format_int(population_rounding(self.total_population))
-        checklist.add(tr(
-            'Total population in the analysis area: %s') % population)
-        checklist.add(tr(
-            '<sup>1</sup>People need evacuation if they are in a '
-            'hazard zone.'))
-        checklist.add(tr(
-            'Map shows population count in high, medium, and low '
-            'hazard areas.'))
-        checklist.add(tr(
-            'All values are rounded up to the nearest integer in '
-            'order to avoid representing human lives as fractions.'))
-        checklist.add(tr(
-            'Population rounding is applied to all population '
-            'values, which may cause discrepancies when adding values.'))
-        message.add(checklist)
-        return message
+        fields = [
+            tr('Total population in the analysis area: %s') % population,
+            tr('<sup>1</sup>People need evacuation if they are in a hazard '
+               'zone.'),
+            tr('Map shows population count in high, medium, and low hazard '
+               'areas.'),
+            tr('All values are rounded up to the nearest integer in order to '
+               'avoid representing human lives as fractions.'),
+            tr('Population rounding is applied to all population values, '
+               'which may cause discrepancies when adding values.')
+        ]
+
+        return {
+            'title': title,
+            'fields': fields
+        }
 
     def run(self):
         """Run classified population evacuation Impact Function.
@@ -115,9 +110,10 @@ class ClassifiedPolygonHazardPopulationFunction(
         # Check if hazard_class_attribute exists in hazard_layer
         if (self.hazard_class_attribute not in
                 self.hazard.layer.get_attribute_names()):
-            message = ('Hazard data %s does not contain expected hazard '
-                   'zone attribute "%s". Please change it in the option. ' %
-                   (self.hazard.name, self.hazard_class_attribute))
+            message = tr(
+                'Hazard data %s does not contain expected hazard '
+                'zone attribute "%s". Please change it in the option. '
+                % (self.hazard.name, self.hazard_class_attribute))
             # noinspection PyExceptionInherit
             raise InaSAFEError(message)
 
@@ -182,8 +178,6 @@ class ClassifiedPolygonHazardPopulationFunction(
             message = no_population_impact_message(self.question)
             raise ZeroImpactException(message)
 
-        impact_table = impact_summary = self.html_report()
-
         # Create style
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
                    '#FFCC00', '#FF6600', '#FF0000', '#7A0000']
@@ -230,9 +224,9 @@ class ClassifiedPolygonHazardPopulationFunction(
             'Thousand separator is represented by  %s' %
             get_thousand_separator())
 
+        impact_data = self.generate_data()
+
         extra_keywords = {
-            'impact_summary': impact_summary,
-            'impact_table': impact_table,
             'target_field': self.target_field,
             'map_title': map_title,
             'legend_notes': legend_notes,
@@ -251,5 +245,6 @@ class ClassifiedPolygonHazardPopulationFunction(
             keywords=impact_layer_keywords,
             style_info=style_info)
 
+        impact_layer.impact_data = impact_data
         self._impact = impact_layer
         return impact_layer

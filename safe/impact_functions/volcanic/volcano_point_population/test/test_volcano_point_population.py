@@ -48,6 +48,7 @@ class TestVolcanoPointPopulationFunction(unittest.TestCase):
         # Run merapi point
         impact_function.hazard = SafeLayer(merapi_point_layer)
         impact_function.exposure = SafeLayer(population_layer)
+        impact_function._prepare()
         impact_function.run()
         impact_layer = impact_function.impact
         # Check the question

@@ -29,6 +29,8 @@ from math import ceil
 import numpy
 from collections import OrderedDict
 
+from PyQt4.QtCore import QPyNullVariant
+
 from safe.defaults import default_minimum_needs
 from safe.gui.tools.minimum_needs.needs_profile import filter_needs_parameters
 import safe.messaging as m
@@ -101,6 +103,14 @@ def evacuated_population_needs(population, minimum_needs):
         amount_pp = resource['value']
         resource['amount'] = int(ceil(population * float(amount_pp)))
         resource['table name'] = resource_name
+        # Cleaning NULL
+        for key, value in resource.items():
+            if isinstance(value, QPyNullVariant):
+                resource[key] = None
+            if isinstance(value, dict):
+                for inner_key, inner_value in value.items():
+                    if isinstance(inner_value, QPyNullVariant):
+                        value[inner_key] = None
         population_needs_by_frequency[resource['frequency']].append(resource)
 
     return population_needs_by_frequency

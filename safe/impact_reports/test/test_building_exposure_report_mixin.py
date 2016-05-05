@@ -98,7 +98,7 @@ class BuildingExposureReportMixinTest(unittest.TestCase):
 
     def test_0002_action_checklist(self):
         """The default action check list."""
-        action_checklist = self.building_mixin_blank.action_checklist()
+        action_checklist = self.building_mixin_blank.format_action_checklist()
         action_checklist = action_checklist.to_text()
         self.assertIn(
             u'Which structures have warning capacity (eg. sirens, '
@@ -133,7 +133,7 @@ class BuildingExposureReportMixinTest(unittest.TestCase):
 
     def test_0003_impact_summary(self):
         """Test the buildings impact summary."""
-        impact_summary = self.building_mixin.impact_summary()
+        impact_summary = self.building_mixin.format_impact_summary()
         impact_summary = impact_summary.to_text()
 
         self.assertIn(
@@ -146,7 +146,7 @@ class BuildingExposureReportMixinTest(unittest.TestCase):
 
     def test_0004_buildings_breakdown(self):
         """Test the buildings breakdown."""
-        buildings_breakdown = self.building_mixin.buildings_breakdown()
+        buildings_breakdown = self.building_mixin.format_buildings_breakdown()
         buildings_breakdown = buildings_breakdown.to_text()
         self.assertIn(u'**Religious**, 0, 1, 2, **3**', buildings_breakdown)
         self.assertIn(
@@ -256,6 +256,53 @@ class BuildingExposureReportMixinTest(unittest.TestCase):
             'The total number of other after consolidation is '
             'not as expected.')
         self.assertEqual(total_other_after, 13, message)
+
+    def test_0010_generate_data(self):
+        """Test generating data."""
+        data = self.building_mixin.generate_data()
+        expected = {
+            'exposure': 'building',
+            'action check list': {'fields': [
+                u'Which structures have warning capacity (eg. sirens, '
+                u'speakers, etc.)?',
+                u'Are the water and electricity services still operating?',
+                u'Are the health centres still open?',
+                u'Are the other public services accessible?',
+                u'Which buildings will be evacuation centres?',
+                u'Where will we locate the operations centre?',
+                u'Where will we locate warehouse and/or distribution centres?',
+                u'Are the schools and hospitals still active?',
+                u'Where will the students from the 75 closed schools go to '
+                u'study?'],
+                'title': u'Action checklist'},
+            'impact summary': {'attributes': ['category', 'value'],
+                               'fields': [[u'Hazard Level 2', 12050,
+                                           1324567000],
+                                          [u'Hazard Level 1', 1027,
+                                           21284567111],
+                                          [u'Affected buildings',
+                                           13077],
+                                          [u'Not affected buildings',
+                                           7036],
+                                          [u'Total', 20113]]},
+            'impact table': {'attributes': ['Building type',
+                                            u'Hazard Level 2',
+                                            u'Hazard Level 1',
+                                            u'Not Affected',
+                                            u'Total'],
+                             'fields': [['Religious', 0, 1, 2, '3'],
+                                        ['Residential', 12000, 1000,
+                                         7000, '20,000'],
+                                        ['School', 50, 25, 25, '100'],
+                                        ['University', 0, 1, 9, '10'],
+                                        [u'Total',
+                                         '12,050',
+                                         '1,027',
+                                         '7,036',
+                                         '20,113']]},
+            'notes': {'fields': [], 'title': ''},
+            'question': ''}
+        self.assertEquals(data, expected)
 
 
 if __name__ == '__main__':

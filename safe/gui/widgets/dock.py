@@ -21,6 +21,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import shutil
 import logging
+import json
+from collections import OrderedDict
 from datetime import datetime
 
 # noinspection PyPackageRequirements
@@ -92,7 +94,9 @@ from safe.common.exceptions import (
     InvalidGeometryError,
     UnsupportedProviderError,
     InvalidAggregationKeywords,
-    InsufficientMemoryWarning)
+    InsufficientMemoryWarning,
+    MissingImpactReport
+)
 from safe.report.impact_report import ImpactReport
 from safe.gui.tools.about_dialog import AboutDialog
 from safe.gui.tools.help_dialog import HelpDialog
@@ -101,6 +105,7 @@ from safe_extras.pydispatch import dispatcher
 from safe.utilities.extent import Extent
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.utilities.unicode import get_unicode
+from safe.impact_template.utilities import get_report_template
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 INFO_STYLE = styles.INFO_STYLE
@@ -190,7 +195,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         canvas = self.iface.mapCanvas()
 
         # Enable on the fly projection by default
-        canvas.mapRenderer().setProjectionsEnabled(True)
+        canvas.setCrsTransformEnabled(True)
         self.connect_layer_listener()
         self.grpQuestion.setEnabled(False)
         self.grpQuestion.setVisible(False)
@@ -1382,21 +1387,46 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         qgis_impact_layer = read_impact_layer(safe_impact_layer)
         # self.layer_changed(qgis_impact_layer)
         keywords = self.keyword_io.read_keywords(qgis_impact_layer)
+        json_path = os.path.splitext(qgis_impact_layer.source())[0] + '.json'
 
         # write postprocessing report to keyword
-        output = self.impact_function.postprocessor_manager.get_output(
-            self.impact_function.aggregator.aoi_mode)
-        keywords['postprocessing_report'] = output.to_html(
-            suppress_newlines=True)
-        self.keyword_io.write_keywords(qgis_impact_layer, keywords)
+        postprocessor_data = self.impact_function.postprocessor_manager.\
+            get_json_data(self.impact_function.aggregator.aoi_mode)
+        post_processing_report = m.Message()
+        if os.path.exists(json_path):
+            with open(json_path) as json_file:
+                impact_data = json.load(
+                    json_file, object_pairs_hook=OrderedDict)
+                impact_data['post processing'] = postprocessor_data
+                with open(json_path, 'w') as json_file_2:
+                    json.dump(impact_data, json_file_2, indent=2)
+        else:
+            post_processing_report = self.impact_function.\
+                postprocessor_manager.get_output(
+                self.impact_function.aggregator.aoi_mode)
+            keywords['postprocessing_report'] = post_processing_report.to_html(
+                suppress_newlines=True)
+            self.keyword_io.write_keywords(qgis_impact_layer, keywords)
 
         # Get tabular information from impact layer
         report = m.Message()
         report.add(LOGO_ELEMENT)
-        report.add(m.Heading(self.tr(
-            'Analysis Results'), **INFO_STYLE))
-        report.add(self.keyword_io.read_keywords(
-            qgis_impact_layer, 'impact_summary'))
+        report.add(m.Heading(self.tr('Analysis Results'), **INFO_STYLE))
+        # If JSON Impact Data Exist, use JSON
+        json_path = qgis_impact_layer.source()[:-3] + 'json'
+        LOGGER.debug('JSON Path %s' % json_path)
+        if os.path.exists(json_path):
+            impact_template = get_report_template(json_file=json_path)
+            impact_report = impact_template.generate_message_report()
+            report.add(impact_report)
+        else:
+            report.add(self.keyword_io.read_keywords(
+                qgis_impact_layer, 'impact_summary'))
+            # append postprocessing report
+            report.add(post_processing_report.to_html())
+
+        # Layer attribution comes last
+        report.add(impact_attribution(keywords).to_html(True))
 
         # Get requested style for impact layer of either kind
         style = safe_impact_layer.get_style_info()
@@ -1456,10 +1486,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         self.restore_state()
 
-        # append postprocessing report
-        report.add(output.to_html())
-        # Layer attribution comes last
-        report.add(impact_attribution(keywords).to_html(True))
         # Return text to display in report panel
         return report
 
@@ -1497,6 +1523,41 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         while QtGui.qApp.overrideCursor() is not None and \
                 QtGui.qApp.overrideCursor().shape() == QtCore.Qt.WaitCursor:
             QtGui.qApp.restoreOverrideCursor()
+
+    def show_impact_report(self, layer, keywords):
+        """Show the report for an impact layer.
+
+        .. versionadded: 3.4
+
+        .. note:: The print button will be enabled if this method is called.
+            Also, the question group box will be hidden and the 'show
+            question' button will be shown.
+
+        :param layer: QgsMapLayer instance that is now active
+        :type layer: QgsMapLayer, QgsRasterLayer, QgsVectorLayer
+
+        :param keywords: A keywords dictionary.
+        :type keywords: dict
+        """
+        LOGGER.debug('Showing Impact Report')
+        # Init report
+        report = m.Message()
+        report.add(LOGO_ELEMENT)
+        report.add(m.Heading(self.tr('Analysis Results'), **INFO_STYLE))
+
+        impact_template = get_report_template(impact_layer_path=layer.source())
+        impact_report = impact_template.generate_message_report()
+        report.add(impact_report)
+
+        if 'postprocessing_report' in keywords:
+            report.add(keywords['postprocessing_report'])
+        report.add(impact_attribution(keywords))
+        self.pbnPrint.setEnabled(True)
+        send_static_message(self, report)
+        # also hide the question and show the show question button
+        self.pbnShowQuestion.setVisible(True)
+        self.grpQuestion.setEnabled(True)
+        self.grpQuestion.setVisible(False)
 
     def show_impact_keywords(self, keywords):
         """Show the keywords for an impact layer.
@@ -1634,8 +1695,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
             # if 'impact_summary' in keywords:
             if keywords['layer_purpose'] == 'impact':
-                self.show_impact_keywords(keywords)
-                self.wvResults.impact_path = layer.source()
+                try:
+                    self.show_impact_report(layer, keywords)
+                except MissingImpactReport:
+                    self.show_impact_keywords(keywords)
             else:
                 if 'keyword_version' not in keywords.keys():
                     self.show_keyword_version_message(

@@ -172,9 +172,6 @@
       <gmd:supplementalInformation>
         <inasafe_keywords/>
         <inasafe>
-          <statistics_type>
-            <gco:CharacterString/>
-          </statistics_type>
           <multipart_polygon>
             <gco:Boolean/>
           </multipart_polygon>
