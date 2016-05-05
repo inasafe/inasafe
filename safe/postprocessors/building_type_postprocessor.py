@@ -37,6 +37,17 @@ class BuildingTypePostprocessor(AbstractBuildingRoadTypePostprocessor):
         It takes care of defining self.impact_total
         """
         AbstractBuildingRoadTypePostprocessor.__init__(self)
-        self.type = self.__class__.__name__
         self.label_affected = tr('Total affected')
         self._description = tr('Calculates building types related statistics.')
+
+    @staticmethod
+    def feature_value(feature):
+        """ Return the value to add in the statistics. For a building, it's 1.
+
+        :note: See issue #2258.
+        :param feature: The feature is not used.
+
+        :return: The value to add in the postprocessing.
+        :rtype: int
+        """
+        return 1

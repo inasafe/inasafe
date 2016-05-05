@@ -35,9 +35,6 @@ class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
         """
         AbstractPostprocessor.__init__(self)
 
-        # Type of the post processor defined in child class.
-        self.type = None
-
         # Label for the column. Defined in child class.
         self.label_affected = None
 
@@ -66,6 +63,14 @@ class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
         self.known_types = []
 
         self._update_known_types()
+
+    @staticmethod
+    def feature_value(feature):
+        """Return the value to add in the statistics.
+
+        :param feature: The feature.
+        """
+        raise NotImplementedError
 
     def setup(self, params):
         """concrete implementation it takes care of the needed parameters being
@@ -110,7 +115,6 @@ class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
         AbstractPostprocessor.process(self)
 
         if (self.impact_total is None or
-                self.type is None or
                 self.label_affected is None or
                 self.impact_attrs is None or
                 self.value_mapping is None or
@@ -134,24 +138,10 @@ class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
                     field_value = feature[self.target_field]
                     if isinstance(field_value, basestring):
                         if field_value != 'Not Affected':
-                            if self.type == 'RoadTypePostprocessor':
-                                result += feature['aggr_sum']
-                            else:
-                                # BuildingTypePostprocessor
-                                # See issue #2258. Since we are only
-                                # working with one road at a time we
-                                # should only add 1.
-                                result += 1
+                            result += self.feature_value(feature)
                     else:
                         if field_value:
-                            if self.type == 'RoadTypePostprocessor':
-                                result += feature['aggr_sum']
-                            else:
-                                # BuildingTypePostprocessor
-                                # See issue #2258. Since we are only
-                                # working with one road at a time we
-                                # should only add 1.
-                                result += 1
+                            result += self.feature_value(feature)
                 result = int(round(result))
             except (ValueError, KeyError):
                 result = self.NO_DATA_TEXT
@@ -183,24 +173,10 @@ class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
                             field_value = feature[self.target_field]
                             if isinstance(field_value, basestring):
                                 if field_value != 'Not Affected':
-                                    if self.type == 'RoadTypePostprocessor':
-                                        result += feature['aggr_sum']
-                                    else:
-                                        # BuildingTypePostprocessor
-                                        # See issue #2258. Since we are only
-                                        # working with one road at a time we
-                                        # should only add 1.
-                                        result += 1
+                                    result += self.feature_value(feature)
                             else:
                                 if field_value:
-                                    if self.type == 'RoadTypePostprocessor':
-                                        result += feature['aggr_sum']
-                                    else:
-                                        # BuildingTypePostprocessor
-                                        # See issue #2258. Since we are only
-                                        # working with one road at a time we
-                                        # should only add 1.
-                                        result += 1
+                                    result += self.feature_value(feature)
                             break
                         elif self._is_unknown_type(feature_type):
                             self._update_known_types(feature_type)

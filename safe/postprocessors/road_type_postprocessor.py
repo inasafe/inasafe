@@ -37,6 +37,17 @@ class RoadTypePostprocessor(AbstractBuildingRoadTypePostprocessor):
         It takes care of defining self.impact_total
         """
         AbstractBuildingRoadTypePostprocessor.__init__(self)
-        self.type = self.__class__.__name__
         self.label_affected = tr('Temporarily closed')
         self._description = tr('Calculates road types related statistics.')
+
+    @staticmethod
+    def feature_value(feature):
+        """Return the value to add in the statistics. For a road, it's length.
+
+        :param feature: The feature is not used.
+        :type feature: QgsFeature
+
+        :return: The value to add in the postprocessing.
+        :rtype: float
+        """
+        return feature['aggr_sum']
