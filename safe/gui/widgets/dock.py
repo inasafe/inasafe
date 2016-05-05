@@ -1560,10 +1560,12 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             'Layer keywords missing:'), **WARNING_STYLE))
         context = m.Paragraph(
             self.tr(
-                'No keywords have been defined for this layer yet. If you '
-                'wish to use it as an exposure, hazard, or aggregation layer '
-                'in an analysis, please use the keyword wizard to update the '
-                'keywords. You can open the wizard by clicking on the '),
+                'No keywords have been defined for this layer yet or there is'
+                'an issue with the currently defined keywords and they need '
+                'to be reviewed. If you wish to use this layer as an '
+                'exposure, hazard, or aggregation layer in an analysis, '
+                'please use the keyword wizard to update the keywords. You '
+                'can open the wizard by clicking on the '),
             m.Image(
                 'file:///%s/img/icons/'
                 'show-keyword-wizard.svg' % resources_path(),
@@ -1656,7 +1658,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         # TODO: maybe we need to split these apart more to give mode
         # TODO: granular error messages TS
-        except (KeywordNotFoundError,
+        except (KeyError,
+                KeywordNotFoundError,
                 HashNotFoundError,
                 InvalidParameterError,
                 NoKeywordsFoundError,
