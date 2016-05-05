@@ -69,8 +69,8 @@ def content():
     paragraph = m.Paragraph(tr(
         'Your user defined extent will be shown on the map as a rectangle.'))
     message.add(paragraph)
-    header = m.Heading(tr('Use intersection of hazard and exposure layers'),
-                       **INFO_STYLE)
+    header = m.Heading(tr(
+        'Use intersection of hazard and exposure layers'), **INFO_STYLE)
     message.add(header)
     paragraph = m.Paragraph(tr(
         'The largest area that can be analysed is the intersection of the '
@@ -85,8 +85,9 @@ def content():
         'entire city). If you want to analyse a smaller area, there are a few '
         'different ways to do this.'))
     message.add(paragraph)
-    header = m.Heading(tr('Use intersection of hazard, exposure and current '
-                          'view extent'), **INFO_STYLE)
+    header = m.Heading(tr(
+        'Use intersection of hazard, exposure and current view extent'),
+        **INFO_STYLE)
     message.add(header)
     paragraph = m.Paragraph(tr(
         'If you wish to conduct the analysis on the area currently shown in '
@@ -95,14 +96,15 @@ def content():
         'datasets are smaller than the view extent, the analysis area will be '
         'reduced to the extents of the datasets.'))
     message.add(paragraph)
-    header = m.Heading(tr('Use intersection of hazard, exposure and this '
-                          'bookmark'), **INFO_STYLE)
+    header = m.Heading(tr(
+        'Use intersection of hazard, exposure and this bookmark'),
+        **INFO_STYLE)
     message.add(header)
     paragraph = m.Paragraph(tr(
         'You can also use one of your QGIS bookmarks to set the analysis '
         'area.'),
-        m.ImportantText(tr('This option will be greyed out if you have no '
-                           'bookmarks.')))
+        m.ImportantText(tr(
+            'This option will be greyed out if you have no bookmarks.')))
     message.add(paragraph)
     paragraph = m.Paragraph(tr(
         'To create a bookmark, zoom to the area you want to create a bookmark '
@@ -114,8 +116,9 @@ def content():
         'activated. When you choose a bookmark from the drop down menu it '
         'will zoom to the analysis area selected by the bookmark.'))
     message.add(paragraph)
-    header = m.Heading(tr('Use intersection of hazard, exposure and this '
-                          'bounding box'), **INFO_STYLE)
+    header = m.Heading(tr(
+        'Use intersection of hazard, exposure and this bounding box'),
+        **INFO_STYLE)
     message.add(header)
     paragraph = m.Paragraph(tr(
         'You can also choose the analysis area interactively by clicking '
@@ -133,6 +136,5 @@ def content():
         'this bounding box\' option is selected (using the same coordinate '
         'reference system, or CRS, as the map is currently set).'))
     message.add(paragraph)
-
 
     return message

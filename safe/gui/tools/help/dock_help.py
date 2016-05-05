@@ -81,7 +81,7 @@ def content():
     )
     message.add(paragraph)
     paragraph = m.Paragraph(tr(
-        'You can drag and drop the dock panel to reposition on the screen. '
+        'You can drag and drop the dock panel to reposition it on the screen. '
         'For example, dragging the panel towards the right margin of the QGIS '
         'application will dock it to the right side of the screen.'
     ))
@@ -121,7 +121,7 @@ def content():
         'function  All questions follow this form:'),
         m.EmphasizedText(tr(
             'In the event of a [hazard], how many [exposure] might be '
-            '[impact]?'))))
+            '[impacted]?'))))
     message.add(m.Paragraph(tr(
         'For example: "If there is a flood, how many buildings might be '
         'flooded?"')))
