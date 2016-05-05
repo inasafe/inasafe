@@ -12,6 +12,10 @@ export QGIS_PATH=$QGIS_PREFIX_PATH
 export LD_LIBRARY_PATH=${QGIS_PREFIX_PATH}/lib
 export PYTHONPATH=${QGIS_PREFIX_PATH}/share/qgis/python:${QGIS_PREFIX_PATH}/share/qgis/python/plugins:${PYTHONPATH}
 
+# also export python path for necessary qgis plugins hosted in the same level
+# as this repo. Needed for InaSAFE Flood to render basemap.
+export PYTHONPATH=/home/realtime/src/qgis-openlayers-plugin:${PYTHONPATH}
+
 
 echo "QGIS PATH: $QGIS_PREFIX_PATH"
 echo "PYTHONPATH: $PYTHONPATH"
@@ -23,6 +27,8 @@ export PATH=${QGIS_PREFIX_PATH}/bin:$PATH
 
 export INASAFE_WORK_DIR=/home/realtime
 export INASAFE_LOCALE=id
+export INASAFE_REALTIME_PROJECT=/home/realtime/analysis_data/realtime.qgs
+export INASAFE_REALTIME_TEMPLATE=/home/realtime/analysis_data/realtime-template.qpt
 # if the parameter is set in production mode, do not overwrite the variable
 # if it is not, we can put test variable here
 if [ -z "$INASAFE_REALTIME_REST_URL" ];

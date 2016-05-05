@@ -468,9 +468,6 @@ class ClipperTest(unittest.TestCase):
         min_value, max_value = safe_layer.get_extrema()
         native_resolution = safe_layer.get_resolution()
 
-        print min_value, max_value
-        print native_resolution
-
         # Define bounding box in EPSG:4326
         bounding_box = [106.61, -6.38, 107.05, -6.07]
 

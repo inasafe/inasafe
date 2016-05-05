@@ -29,7 +29,6 @@ from safe.storage.safe_layer import SafeLayer
 from safe.storage.core import read_layer
 
 
-
 class TestContinuousHazardPopulationFunction(unittest.TestCase):
     """Test for ContinuousHazardPopulationFunction."""
 

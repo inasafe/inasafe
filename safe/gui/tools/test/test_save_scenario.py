@@ -22,6 +22,9 @@ import unittest
 
 from qgis.core import QgsMapLayerRegistry
 
+from safe.test.utilities import get_qgis_app
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
 from safe.impact_functions import register_impact_functions
 from safe.utilities.gis import qgis_version
 from safe.gui.tools.save_scenario import SaveScenarioDialog
@@ -31,14 +34,9 @@ from safe.test.utilities import (
     set_jakarta_extent,
     load_standard_layers,
     GEOCRS,
-    get_qgis_app,
     test_data_path)
 from safe.common.utilities import unique_filename, temp_dir
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
-
-# AG: get_qgis_app() should be called before importing modules from
-# safe.gui.widgets.dock
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.gui.widgets.dock import Dock
 

@@ -34,8 +34,6 @@ from safe.gis.qgis_vector_tools import (
     create_layer)
 from safe.impact_reports.road_exposure_report_mixin import\
     RoadExposureReportMixin
-import safe.messaging as m
-from safe.messaging import styles
 
 
 def _raster_to_vector_cells(
@@ -221,6 +219,8 @@ class FloodRasterRoadsFunction(
         :rtype: safe.messaging.Message
         """
 
+        title = tr('Notes and assumptions')
+
         threshold = self.parameters['min threshold'].value
         hazard = self.hazard.keyword('hazard')
         hazard_terminology = tr('flooded')
@@ -232,20 +232,17 @@ class FloodRasterRoadsFunction(
             hazard_terminology = tr('inundated')
             hazard_object = tr('water')
 
-        message = m.Message(style_class='container')
-        message.add(
-            m.Heading(tr('Notes and assumptions'), **styles.INFO_STYLE))
-        checklist = m.BulletedList()
-        checklist.add(tr(
-            'Roads are %s when %s levels exceed %.2f m.' %
-            (hazard_terminology, hazard_object, threshold)))
-        checklist.add(tr(
-            'Roads are closed if they are %s.' % hazard_terminology))
-        checklist.add(tr(
-            'Roads are open if they are not %s.' % hazard_terminology))
+        fields = [
+            tr('Roads are %s when %s levels exceed %.2f m.' %
+               (hazard_terminology, hazard_object, threshold)),
+            tr('Roads are closed if they are %s.' % hazard_terminology),
+            tr('Roads are open if they are not %s.' % hazard_terminology)
+        ]
 
-        message.add(checklist)
-        return message
+        return {
+            'title': title,
+            'fields': fields
+        }
 
     def run(self):
         """Run the impact function.
@@ -415,8 +412,6 @@ class FloodRasterRoadsFunction(
                 self.affected_road_lengths[
                     flooded_keyword][road_type] += length
 
-        impact_summary = self.html_report()
-
         # For printing map purpose
         map_title = tr('Roads inundated')
         legend_title = tr('Road inundated status')
@@ -433,22 +428,23 @@ class FloodRasterRoadsFunction(
             style_classes=style_classes,
             style_type='categorizedSymbol')
 
+        impact_data = self.generate_data()
+
         extra_keywords = {
-            'impact_summary': impact_summary,
             'map_title': map_title,
             'legend_title': legend_title,
             'target_field': target_field
         }
 
-        self.set_if_provenance()
-
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 
         # Convert QgsVectorLayer to inasafe layer and return it
-        line_layer = Vector(
+        impact_layer = Vector(
             data=line_layer,
             name=tr('Flooded roads'),
             keywords=impact_layer_keywords,
             style_info=style_info)
-        self._impact = line_layer
-        return line_layer
+
+        impact_layer.impact_data = impact_data
+        self._impact = impact_layer
+        return impact_layer

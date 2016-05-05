@@ -9,6 +9,7 @@ from qgis.core import (
     QgsPoint,
     QgsGeometry,
     QgsSpatialIndex,
+    QgsVectorFileWriter,
     QgsCoordinateReferenceSystem,
     QgsCoordinateTransform,
     QGis,
@@ -16,13 +17,19 @@ from qgis.core import (
     QgsVectorLayer,
     QgsRasterLayer)
 from PyQt4.QtCore import QVariant
-from safe.common.exceptions import \
-    MemoryLayerCreationError, BoundingBoxError, InsufficientOverlapError
+from safe.common.exceptions import (
+    MemoryLayerCreationError,
+    BoundingBoxError,
+    NoKeywordsFoundError,
+    InsufficientOverlapError,
+    RadiiException)
 from safe.storage.core import read_layer as safe_read_layer
 from safe.storage.layer import Layer
 from safe.storage.utilities import bbox_intersection
 from safe.utilities.i18n import tr
 from safe.utilities.utilities import LOGGER
+from safe.common.utilities import get_utm_epsg, unique_filename
+from safe.utilities.keyword_io import KeywordIO
 
 
 def is_raster_layer(layer):
@@ -149,7 +156,7 @@ def rectangle_geo_array(rectangle, map_canvas):
     destination_crs = QgsCoordinateReferenceSystem()
     destination_crs.createFromSrid(4326)
 
-    source_crs = map_canvas.mapRenderer().destinationCrs()
+    source_crs = map_canvas.mapSettings().destinationCrs()
 
     return extent_to_array(rectangle, source_crs, destination_crs)
 
@@ -615,3 +622,100 @@ def union_geometries(geometries):
         for g in geometries[1:]:
             result_geometry = result_geometry.combine(g)
         return result_geometry
+
+
+def buffer_points(point_layer, radii, hazard_zone_attribute, output_crs):
+    """Buffer points for each point with defined radii.
+
+    This function is used for making buffer of volcano point hazard.
+
+    :param point_layer: A point layer to buffer.
+    :type point_layer: QgsVectorLayer
+
+    :param radii: Desired approximate radii in kilometers (must be
+        monotonically ascending). Can be either one number or list of numbers
+    :type radii: int, list
+
+    :param hazard_zone_attribute: The name of the attributes representing
+        hazard zone.
+    :type hazard_zone_attribute: str
+
+    :param output_crs: The output CRS.
+    :type output_crs: QgsCoordinateReferenceSystem
+
+    :return: Vector polygon layer representing circle in point layer CRS.
+    :rtype: QgsVectorLayer
+    """
+    if not isinstance(radii, list):
+        radii = [radii]
+
+    if not is_point_layer(point_layer):
+        message = (
+            'Input hazard must be a vector point layer. I got %s '
+            'with layer type %s' % (point_layer.name(), point_layer.type()))
+        raise Exception(message)
+
+    # Check that radii are monotonically increasing
+    monotonically_increasing_flag = all(
+        x < y for x, y in zip(radii, radii[1:]))
+    if not monotonically_increasing_flag:
+        raise RadiiException(RadiiException.suggestion)
+
+    hazard_file_path = unique_filename(suffix='-polygon-volcano.shp')
+    fields = point_layer.pendingFields()
+    fields.append(QgsField(hazard_zone_attribute, QVariant.Double))
+    writer = QgsVectorFileWriter(
+        hazard_file_path,
+        'utf-8',
+        fields,
+        QGis.WKBPolygon,
+        output_crs,
+        'ESRI Shapefile')
+    input_crs = point_layer.crs()
+
+    center = point_layer.extent().center()
+    utm = None
+    if output_crs.authid() == 'EPSG:4326':
+        utm = QgsCoordinateReferenceSystem(
+            get_utm_epsg(center.x(), center.y(), input_crs))
+        transform = QgsCoordinateTransform(point_layer.crs(), utm)
+
+    else:
+        transform = QgsCoordinateTransform(point_layer.crs(), output_crs)
+
+    for point in point_layer.getFeatures():
+        geom = point.geometry()
+        geom.transform(transform)
+
+        inner_rings = None
+        for radius in radii:
+            attributes = point.attributes()
+            # Generate circle polygon
+
+            circle = geom.buffer(radius * 1000.0, 30)
+
+            if inner_rings:
+                circle.addRing(inner_rings)
+            inner_rings = circle.asPolygon()[0]
+
+            new_buffer = QgsFeature()
+
+            if output_crs.authid() == 'EPSG:4326':
+                circle.transform(QgsCoordinateTransform(utm, output_crs))
+
+            new_buffer.setGeometry(circle)
+            attributes.append(radius)
+            new_buffer.setAttributes(attributes)
+
+            writer.addFeature(new_buffer)
+
+    del writer
+    vector_layer = QgsVectorLayer(hazard_file_path, 'Polygons', 'ogr')
+
+    keyword_io = KeywordIO()
+    try:
+        keywords = keyword_io.read_keywords(point_layer)
+        keyword_io.write_keywords(vector_layer, keywords)
+    except NoKeywordsFoundError:
+        pass
+    return vector_layer

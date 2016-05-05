@@ -86,15 +86,15 @@ class TestClassifiedPolygonPeopleFunction(unittest.TestCase):
         }
         self.assertEqual(features, expected_features)
         expected_impact_summary = [
-            '**High Hazard Zone**, 4,600------',
-            '**Medium Hazard Zone**, 65,700------',
+            '**High Hazard Zone**, 7,300------',
+            '**Medium Hazard Zone**, 72,900------',
             '**Low Hazard Zone**, 11,500------',
-            '**Total affected people**, 81,600------',
+            '**Total affected people**, 91,600------',
             '**Unaffected people**, 17,300------',
-            '**Total people**, 98,900---'
+            '**Total people**, 109,000---'
         ]
         for row in expected_impact_summary:
-            self.assertIn(row, function.impact_summary().to_text())
+            self.assertIn(row, function.format_impact_summary().to_text())
 
     def test_keywords(self):
         """TestClassifiedPolygonPeopleFunction: Test keywords IF"""

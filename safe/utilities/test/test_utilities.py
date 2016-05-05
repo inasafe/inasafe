@@ -123,7 +123,6 @@ class UtilitiesTest(unittest.TestCase):
             'exposure_title': 'People in Jakarta',
             'exposure_source': 'Sample Exposure Source'}
         html = impact_attribution(keywords, True)
-        print html
         assert html == '11'
 
         # Set back to en

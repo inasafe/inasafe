@@ -19,6 +19,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import numpy
 import logging
+import json
+import os
 
 from socket import gethostname
 import getpass
@@ -57,18 +59,26 @@ from safe.messaging.utilities import generate_insufficient_overlap_message
 from safe.postprocessors.postprocessor_factory import (
     get_postprocessors,
     get_postprocessor_human_name)
-from safe.common.utilities import get_non_conflicting_attribute_name
-from safe.utilities.utilities import get_error_message
+from safe.common.utilities import (
+    get_non_conflicting_attribute_name,
+    unique_filename,
+    verify
+)
+from safe.utilities.utilities import (
+    get_error_message,
+    replace_accentuated_characters
+)
 from safe.utilities.memory_checker import check_memory_usage
 from safe.utilities.i18n import tr
-from safe.utilities.clipper import clip_layer
 from safe.utilities.gis import (
     convert_to_safe_layer,
+    is_point_layer,
+    buffer_points,
     get_wgs84_resolution,
     array_to_geo_array,
     extent_to_array,
     get_optimal_extent)
-from safe.utilities.clipper import adjust_clip_extent
+from safe.utilities.clipper import adjust_clip_extent, clip_layer
 from safe.storage.safe_layer import SafeLayer
 from safe.storage.utilities import (
     buffered_bounding_box as get_buffered_extent,
@@ -86,7 +96,7 @@ from safe.common.signals import (
     send_not_busy_signal,
     send_analysis_done_signal
 )
-from safe.engine.core import calculate_impact
+from safe.engine.core import check_data_integrity
 
 INFO_STYLE = styles.INFO_STYLE
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
@@ -654,48 +664,17 @@ class ImpactFunction(object):
             print message
         print 'Task progress: %i of %i' % (current, maximum)
 
-    def analysis_workflow(self):
-        """The whole analysis process.
-
-        This function is executed be the calculate_impact in the core package.
-        This method will run the analysis.
-
-        This method mustn't be overridden in a child class.
-
-        :return: The result of the impact function.
-        :rtype: dict
-        """
-        self.provenance.append_step(
-            'Calculating Step',
-            'Impact function is calculating the impact.')
-
-        send_busy_signal(self)
-
-        title = tr('Calculating impact')
-        detail = tr(
-            'This may take a little while - we are computing the areas that '
-            'will be impacted by the hazard and writing the result to a new '
-            'layer.')
-        message = m.Message(
-            m.Heading(title, **PROGRESS_UPDATE_STYLE),
-            m.Paragraph(detail))
-        send_dynamic_message(self, message)
-
-        # self.run() is defined the IF.
-        return self.run()
-
     def run_analysis(self):
         """It runs the IF. The method must be called from a client class.
 
         This method mustn't be overridden in a child class.
         """
 
-        self.validate()
-        self._emit_pre_run_message()
-        self.prepare()
-
         try:
-            self._impact = calculate_impact(self)
+            self._validate()
+            self._emit_pre_run_message()
+            self._prepare()
+            self._impact = self._calculate_impact()
             self._run_aggregator()
         except ZeroImpactException, e:
             report = m.Message()
@@ -744,7 +723,7 @@ class ImpactFunction(object):
                 e,
                 tr('An exception occurred when running the impact analysis.'))
 
-    def validate(self):
+    def _validate(self):
         """Validate things needed before running the analysis."""
         # Set start time.
         self._start_time = datetime.now()
@@ -757,13 +736,6 @@ class ImpactFunction(object):
                 'Ensure that hazard and exposure layers are all set before '
                 'trying to run the impact function.')
             raise FunctionParametersError(message)
-
-        # Validate extent, with the QGIS IF, we need requested_extent set
-        if self.function_type() == 'qgis2.0' and self.requested_extent is None:
-            message = tr(
-                'Impact Function with QGIS function type is used, but no '
-                'extent is provided.')
-            raise InvalidExtentError(message)
 
         # Find out what the usable extent and cell size are
         try:
@@ -787,12 +759,10 @@ class ImpactFunction(object):
             if not result:
                 raise InsufficientMemoryWarning
 
-    def prepare(self):
+    def _prepare(self):
         """Prepare this impact function for running the analysis.
 
-        This method should normally be called in your concrete class's
-        run method before it attempts to do any real processing. This
-        method will do any needed house keeping such as:
+        This method will do any needed house keeping such as:
 
             * checking that the exposure and hazard layers sufficiently
             overlap (post 3.1)
@@ -805,16 +775,24 @@ class ImpactFunction(object):
         We suggest to overload this method in your concrete class
         implementation so that it includes any impact function specific checks
         too.
-
-        ..note: For 3.1, we will still do those preprocessing in analysis
-            class. We will just need to check if the function_type is
-            'qgis2.0', it needs to have the extent set.
-        # """
+        """
 
         self.provenance.append_step(
             'Preparation Step',
             'Impact function is being prepared to run the analysis.')
 
+        qgis_layer = self.hazard.qgis_layer()
+        if is_point_layer(qgis_layer):
+            # If the hazard is a point layer, it's a volcano hazard.
+            # Make hazard layer by buffering the point.
+            # noinspection PyTypeChecker
+            radii = self.parameters['distances'].value
+            self.hazard = buffer_points(
+                qgis_layer,
+                radii,
+                self.hazard_zone_attribute,
+                self.exposure.crs()
+            )
         self._setup_aggregator()
 
         # go check if our postprocessing layer has any keywords set and if not
@@ -852,6 +830,10 @@ class ImpactFunction(object):
                 clip_parameters = self.clip_parameters
                 adjusted_geo_extent = clip_parameters['adjusted_geo_extent']
                 self.requested_extent = adjusted_geo_extent
+                # Cut the exposure according to aggregation layer if necessary
+                self.aggregator.validate_keywords()
+                self.aggregator.deintersect_exposure()
+                self.exposure = self.aggregator.exposure_layer
         except CallGDALError, e:
             analysis_error(self, e, tr(
                 'An error occurred when calling a GDAL command'))
@@ -915,10 +897,10 @@ class ImpactFunction(object):
         """Get the provenances"""
         return self._provenances
 
-    def set_if_provenance(self):
+    def _set_if_provenance(self):
         """Set IF provenance step for the IF."""
         data = {
-            'start_time': self._start_time ,
+            'start_time': self._start_time,
             'finish_time': datetime.now(),
             'hazard_layer': self.hazard.keywords['title'],
             'exposure_layer': self.exposure.keywords['title'],
@@ -1332,6 +1314,8 @@ class ImpactFunction(object):
         self._aggregator.show_intermediate_layers = \
             self.show_intermediate_layers
 
+        self.aggregation = self.aggregator.layer
+
     def _run_aggregator(self):
         """Run all post processing steps."""
         LOGGER.debug('Do aggregation')
@@ -1375,3 +1359,147 @@ class ImpactFunction(object):
         self.postprocessor_manager.run()
         send_not_busy_signal(self)
         send_analysis_done_signal(self)
+
+    def _calculate_impact(self):
+        """Calculate impact.
+
+        :return: The result of the impact function.
+        :rtype: Raster, Vector
+        """
+
+        self.provenance.append_step(
+            'Calculating Step',
+            'Impact function is calculating the impact.')
+
+        send_busy_signal(self)
+
+        title = tr('Calculating impact')
+        detail = tr(
+            'This may take a little while - we are computing the areas that '
+            'will be impacted by the hazard and writing the result to a new '
+            'layer.')
+        message = m.Message(
+            m.Heading(title, **PROGRESS_UPDATE_STYLE),
+            m.Paragraph(detail))
+        send_dynamic_message(self, message)
+
+        layers = [self.hazard, self.exposure]
+        # Input checks
+        if self.requires_clipping:
+            check_data_integrity(layers)
+
+        # Start time
+        start_time = datetime.now()
+
+        # Run the IF. self.run() is defined in each IF.
+        result_layer = self.run()
+
+        self._set_if_provenance()
+
+        # End time
+        end_time = datetime.now()
+
+        # Elapsed time
+        elapsed_time = end_time - start_time
+        # Don's use this - see https://github.com/AIFDR/inasafe/issues/394
+        # elapsed_time_sec = elapsed_time.total_seconds()
+        elapsed_time_sec = elapsed_time.seconds + (
+            elapsed_time.days * 24 * 3600)
+
+        # Eet current time stamp
+        # Need to change : to _ because : is forbidden in keywords
+        time_stamp = end_time.isoformat('_')
+
+        # Get input layer sources
+        # NOTE: We assume here that there is only one of each
+        #       If there are more only the first one is used
+        for layer in layers:
+            keywords = layer.keywords
+            not_specified = tr('Not specified')
+
+            layer_purpose = keywords.get('layer_purpose', not_specified)
+            title = keywords.get('title', not_specified)
+            source = keywords.get('source', not_specified)
+
+            if layer_purpose == 'hazard':
+                category = keywords['hazard']
+            elif layer_purpose == 'exposure':
+                category = keywords['exposure']
+            else:
+                category = not_specified
+
+            result_layer.keywords['%s_title' % layer_purpose] = title
+            result_layer.keywords['%s_source' % layer_purpose] = source
+            result_layer.keywords['%s' % layer_purpose] = category
+
+        result_layer.keywords['elapsed_time'] = elapsed_time_sec
+        result_layer.keywords['time_stamp'] = time_stamp[:19]  # remove decimal
+        result_layer.keywords['host_name'] = self.host_name
+        result_layer.keywords['user'] = self.user
+
+        msg = 'Impact function %s returned None' % str(self)
+        verify(result_layer is not None, msg)
+
+        # Set the filename : issue #1648
+        # EXP + On + Haz + DDMMMMYYYY + HHhMM.SS.EXT
+        # FloodOnBuildings_12March2015_10h22.04.shp
+        exp = result_layer.keywords['exposure'].title()
+        haz = result_layer.keywords['hazard'].title()
+        date = end_time.strftime('%d%B%Y').decode('utf8')
+        time = end_time.strftime('%Hh%M.%S').decode('utf8')
+        prefix = u'%sOn%s_%s_%s-' % (haz, exp, date, time)
+        prefix = replace_accentuated_characters(prefix)
+
+        # Write result and return filename
+        if result_layer.is_raster:
+            extension = '.tif'
+            # use default style for raster
+        else:
+            extension = '.shp'
+            # use default style for vector
+
+        # Check if user directory is specified
+        settings = QSettings()
+        default_user_directory = settings.value(
+            'inasafe/defaultUserDirectory', defaultValue='')
+
+        if default_user_directory:
+            output_filename = unique_filename(
+                dir=default_user_directory,
+                prefix=prefix,
+                suffix=extension)
+        else:
+            output_filename = unique_filename(
+                prefix=prefix, suffix=extension)
+
+        result_layer.filename = output_filename
+
+        if hasattr(result_layer, 'impact_data'):
+            if 'impact_summary' in result_layer.keywords:
+                result_layer.keywords.pop('impact_summary')
+            if 'impact_table' in result_layer.keywords:
+                result_layer.keywords.pop('impact_table')
+        result_layer.write_to_file(output_filename)
+        if hasattr(result_layer, 'impact_data'):
+            impact_data = result_layer.impact_data
+            json_file_name = os.path.splitext(output_filename)[0] + '.json'
+            LOGGER.debug(impact_data)
+            with open(json_file_name, 'w') as json_file:
+                json.dump(impact_data, json_file, indent=2)
+
+        # Establish default name (layer1 X layer1 x impact_function)
+        if not result_layer.get_name():
+            default_name = ''
+            for layer in layers:
+                default_name += layer.name + ' X '
+
+            if hasattr(self, 'plugin_name'):
+                default_name += self.plugin_name
+            else:
+                # Strip trailing 'X'
+                default_name = default_name[:-2]
+
+            result_layer.set_name(default_name)
+
+        # Return layer object
+        return result_layer

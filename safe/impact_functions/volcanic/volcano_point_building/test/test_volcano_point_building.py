@@ -44,6 +44,7 @@ class TestVolcanoPointBuildingFunction(unittest.TestCase):
         impact_function = VolcanoPointBuildingFunction.instance()
         impact_function.hazard = SafeLayer(hazard_layer)
         impact_function.exposure = SafeLayer(exposure_layer)
+        impact_function._prepare()
         impact_function.run()
         impact_layer = impact_function.impact
 

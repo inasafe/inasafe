@@ -1,5 +1,15 @@
 # coding=utf-8
-"""Flood Evacuation Impact Function."""
+"""InaSAFE Disaster risk tool by Australian Aid - Flood Raster Impact Function
+on Population.
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
+"""
 __author__ = 'Rizky Maulana Nugraha'
 
 import logging
@@ -30,7 +40,6 @@ from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
 from safe.impact_reports.population_exposure_report_mixin import \
     PopulationExposureReportMixin
 import safe.messaging as m
-from safe.messaging import styles
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -57,42 +66,43 @@ class FloodEvacuationRasterHazardFunction(
         """Return the notes section of the report.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: safe.messaging.Message
+        :rtype: dict
         """
+        title = tr('Notes and assumptions')
+
+        population = format_int(population_rounding(self.total_population))
         thresholds = self.parameters['thresholds'].value
+
         if get_needs_provenance_value(self.parameters) is None:
             needs_provenance = ''
         else:
             needs_provenance = tr(get_needs_provenance_value(self.parameters))
 
-        message = m.Message(style_class='container')
+        fields = [
+            tr('Total population in the analysis area: %s') % population,
+            tr('<sup>1</sup>People need evacuation if flood levels exceed '
+               '%(eps).1f m.') % {'eps': thresholds[-1]},
+            needs_provenance,
+        ]
 
-        message.add(
-            m.Heading(tr('Notes and assumptions'), **styles.INFO_STYLE))
-        checklist = m.BulletedList()
-        checklist.add(tr(
-            'Total population in the analysis area: %s'
-            ) % population_rounding(self.total_population))
-        checklist.add(tr(
-            '<sup>1</sup>People need evacuation if flood levels '
-            'exceed %(eps).1f m.') % {'eps': thresholds[-1]})
-        checklist.add(needs_provenance)
         if self.no_data_warning:
-            checklist.add(tr(
+            fields.append(tr(
                 'The layers contained "no data" values. This missing data '
                 'was carried through to the impact layer.'))
-            checklist.add(tr(
+            fields.append(tr(
                 '"No data" values in the impact layer were treated as 0 '
                 'when counting the affected or total population.'))
-        checklist.add(tr(
-            'All values are rounded up to the nearest integer in '
-            'order to avoid representing human lives as fractions.'))
-        checklist.add(tr(
-            'Population rounding is applied to all population '
-            'values, which may cause discrepancies when adding values.'))
+        fields.extend([
+            tr('All values are rounded up to the nearest integer in order to '
+               'avoid representing human lives as fractions.'),
+            tr('Population rounding is applied to all population values, '
+               'which may cause discrepancies when adding values.')
+        ])
 
-        message.add(checklist)
-        return message
+        return {
+            'title': title,
+            'fields': fields
+        }
 
     def _tabulate_zero_impact(self):
         thresholds = self.parameters['thresholds'].value
@@ -184,10 +194,6 @@ class FloodEvacuationRasterHazardFunction(
             self.parameters['minimum needs']
         ]
 
-        # Result
-        impact_summary = self.html_report()
-        impact_table = impact_summary
-
         total_needs = self.total_needs
 
         # check for zero impact
@@ -225,8 +231,6 @@ class FloodEvacuationRasterHazardFunction(
             style_type='rasterStyle')
 
         # For printing map purpose
-
-        # For printing map purpose
         map_title = tr('People in need of evacuation')
         legend_title = tr('Population Count')
         legend_units = tr('(people per cell)')
@@ -234,9 +238,9 @@ class FloodEvacuationRasterHazardFunction(
             'Thousand separator is represented by %s' %
             get_thousand_separator())
 
+        impact_data = self.generate_data()
+
         extra_keywords = {
-            'impact_summary': impact_summary,
-            'impact_table': impact_table,
             'map_title': map_title,
             'legend_notes': legend_notes,
             'legend_units': legend_units,
@@ -245,12 +249,10 @@ class FloodEvacuationRasterHazardFunction(
             'total_needs': total_needs
         }
 
-        self.set_if_provenance()
-
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 
         # Create raster object and return
-        raster = Raster(
+        impact_layer = Raster(
             impact,
             projection=self.hazard.layer.get_projection(),
             geotransform=self.hazard.layer.get_geotransform(),
@@ -259,5 +261,7 @@ class FloodEvacuationRasterHazardFunction(
                 .get_function_title(self).lower()),
             keywords=impact_layer_keywords,
             style_info=style_info)
-        self._impact = raster
-        return raster
+
+        impact_layer.impact_data = impact_data
+        self._impact = impact_layer
+        return impact_layer

@@ -38,7 +38,7 @@ from safe.definitions import (
     unit_metres,
     unit_feet,
     hazard_tsunami,
-    structure_class_field
+    road_class_field
 )
 
 
@@ -110,7 +110,7 @@ class TsunamiRasterRoadMetadata(ImpactFunctionMetadata):
                     'layer_geometries': [layer_geometry_line],
                     'exposure_types': [exposure_road],
                     'exposure_units': [],
-                    'exposure_class_fields': [structure_class_field],
+                    'exposure_class_fields': [road_class_field],
                     'additional_keywords': []
                 }
             },

@@ -19,7 +19,6 @@ from safe.impact_functions.volcanic.volcano_point_building\
     .metadata_definitions import VolcanoPointBuildingFunctionMetadata
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
-from safe.engine.core import buffer_points
 from safe.common.utilities import (
     get_thousand_separator,
     get_non_conflicting_attribute_name,
@@ -29,8 +28,6 @@ from safe.engine.interpolation import (
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
 from safe.common.exceptions import KeywordNotFoundError
-import safe.messaging as m
-from safe.messaging import styles
 
 
 class VolcanoPointBuildingFunction(
@@ -44,27 +41,26 @@ class VolcanoPointBuildingFunction(
         super(VolcanoPointBuildingFunction, self).__init__()
         self.volcano_names = tr('Not specified in data')
         self._affected_categories_volcano = []
-
+        self.hazard_zone_attribute = 'radius'
         # From BuildingExposureReportMixin
         self.building_report_threshold = 25
 
     def notes(self):
-        """Return the notes section of the report.
+        """Return the notes section of the report as dict.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: safe.messaging.Message
+        :rtype: dict
         """
-        message = m.Message(style_class='container')
-        message.add(m.Heading(
-            tr('Notes and assumptions'), **styles.INFO_STYLE))
-        checklist = m.BulletedList()
-        checklist.add(tr(
-            'Map shows buildings affected in each of the volcano buffered '
-            'zones.'))
-        names = tr('Volcanoes considered: %s.') % self.volcano_names
-        checklist.add(names)
-        message.add(checklist)
-        return message
+        title = tr('Notes and assumptions')
+        fields = [
+            tr('Map shows buildings affected in each of the volcano buffered '
+               'zones.'),
+            tr(tr('Volcanoes considered: %s.') % self.volcano_names)
+        ]
+        return {
+            'title': title,
+            'fields': fields
+        }
 
     @property
     def _affected_categories(self):
@@ -82,10 +78,6 @@ class VolcanoPointBuildingFunction(
                   Table with number of buildings affected
         :rtype: dict
         """
-
-        # Hazard Zone Attribute
-        hazard_zone_attribute = 'radius'
-
         # Parameters
         radii = self.parameters['distances'].value
 
@@ -99,22 +91,6 @@ class VolcanoPointBuildingFunction(
         except KeywordNotFoundError:
             self.exposure_class_attribute = None
 
-        # Input checks
-        if not self.hazard.layer.is_point_data:
-            message = (
-                'Input hazard must be a vector point layer. I got %s '
-                'with layer type %s' % (
-                    self.hazard.name, self.hazard.layer.get_geometry_name()))
-            raise Exception(message)
-
-        # Make hazard layer by buffering the point
-        centers = self.hazard.layer.get_geometry()
-        features = self.hazard.layer.get_data()
-        hazard_layer = buffer_points(
-            centers,
-            radii,
-            hazard_zone_attribute,
-            data_table=features)
         # Category names for the impact zone
         category_names = radii
         # In kilometers
@@ -122,22 +98,22 @@ class VolcanoPointBuildingFunction(
             tr('Radius %.1f km') % key for key in radii[::]]
 
         # Get names of volcanoes considered
-        if volcano_name_attribute in hazard_layer.get_attribute_names():
+        if volcano_name_attribute in self.hazard.layer.get_attribute_names():
             volcano_name_list = set()
-            for row in hazard_layer.get_data():
+            for row in self.hazard.layer.get_data():
                 # Run through all polygons and get unique names
                 volcano_name_list.add(row[volcano_name_attribute])
             self.volcano_names = ', '.join(volcano_name_list)
 
         # Find the target field name that has no conflict with the attribute
         # names in the hazard layer
-        hazard_attribute_names = hazard_layer.get_attribute_names()
+        hazard_attribute_names = self.hazard.layer.get_attribute_names()
         target_field = get_non_conflicting_attribute_name(
             self.target_field, hazard_attribute_names)
 
         # Run interpolation function for polygon2polygon
         interpolated_layer = assign_hazard_values_to_exposure_data(
-            hazard_layer, self.exposure.layer)
+            self.hazard.layer, self.exposure.layer)
 
         # Extract relevant interpolated layer data
         attribute_names = interpolated_layer.get_attribute_names()
@@ -150,7 +126,7 @@ class VolcanoPointBuildingFunction(
 
         # Iterate the interpolated building layer
         for i in range(len(features)):
-            hazard_value = features[i][hazard_zone_attribute]
+            hazard_value = features[i][self.hazard_zone_attribute]
             if not hazard_value:
                 hazard_value = self._not_affected_value
             features[i][target_field] = hazard_value
@@ -190,9 +166,6 @@ class VolcanoPointBuildingFunction(
         self.building_report_threshold = building_postprocessors.value[0].value
         self._consolidate_to_other()
 
-        # Generate simple impact report
-        impact_summary = impact_table = self.html_report()
-
         # Create style
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
                    '#FFCC00', '#FF6600', '#FF0000', '#7A0000']
@@ -229,17 +202,15 @@ class VolcanoPointBuildingFunction(
             'Thousand separator is represented by %s' %
             get_thousand_separator())
 
+        impact_data = self.generate_data()
+
         extra_keywords = {
-            'impact_summary': impact_summary,
-            'impact_table': impact_table,
             'target_field': target_field,
             'map_title': map_title,
             'legend_notes': legend_notes,
             'legend_units': legend_units,
             'legend_title': legend_title
         }
-
-        self.set_if_provenance()
 
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 
@@ -252,5 +223,6 @@ class VolcanoPointBuildingFunction(
             keywords=impact_layer_keywords,
             style_info=style_info)
 
+        impact_layer.impact_data = impact_data
         self._impact = impact_layer
         return impact_layer
