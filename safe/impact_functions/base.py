@@ -897,10 +897,10 @@ class ImpactFunction(object):
         """Get the provenances"""
         return self._provenances
 
-    def set_if_provenance(self):
+    def _set_if_provenance(self):
         """Set IF provenance step for the IF."""
         data = {
-            'start_time': self._start_time ,
+            'start_time': self._start_time,
             'finish_time': datetime.now(),
             'hazard_layer': self.hazard.keywords['title'],
             'exposure_layer': self.exposure.keywords['title'],
@@ -1394,7 +1394,7 @@ class ImpactFunction(object):
         # Run the IF. self.run() is defined in each IF.
         result_layer = self.run()
 
-        self.set_if_provenance()
+        self._set_if_provenance()
 
         # End time
         end_time = datetime.now()
