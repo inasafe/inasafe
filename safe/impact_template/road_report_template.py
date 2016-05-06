@@ -125,8 +125,10 @@ class RoadReportTemplate(TemplateBase):
         table.add(row)
 
         row = m.Row()
-        for attribute in attributes:
-            row.add(m.Cell(tr(attribute), header=True))
+        # We align left the first column, then right.
+        row.add(m.Cell(tr(attributes[0]), header=True))
+        for attribute in attributes[1:]:
+            row.add(m.Cell(tr(attribute), header=True, align='right'))
         table.add(row)
 
         for field in fields:
