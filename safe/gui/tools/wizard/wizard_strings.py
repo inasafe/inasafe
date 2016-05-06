@@ -142,7 +142,8 @@ classify_vector_for_postprocessor_question = tr(
     'aggregation postprocessor will need to know mapping of the attribute '
     'values to known categories. Please drag unique values from the list '
     'on the left into the panel on the right and place them in the '
-    'appropriate categories.'
+    'appropriate categories. Un-mapped values will go automatically in the '
+    '\'Other\' group on runtime.'
 )      # (subcategory, category, field)
 select_function_constraints2_question = tr(
     'You selected <b>%s</b> hazard and <b>%s</b> exposure. Now, select the '
