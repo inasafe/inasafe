@@ -67,7 +67,6 @@ class AggregationPostprocessor(AbstractPostprocessor):
         AbstractPostprocessor.process(self)
         if self.impact_total is None:
             self._raise_error('setup needs to be called before process')
-        self._calculate_total()
 
     def clear(self):
         """concrete implementation it takes care of the needed parameters being
@@ -82,27 +81,3 @@ class AggregationPostprocessor(AbstractPostprocessor):
         """
         AbstractPostprocessor.clear(self)
         self.impact_total = None
-
-    def _calculate_total(self):
-        """Indicator that shows total population.
-
-        this indicator reports the total population
-
-        Args:
-            None
-        Returns:
-            None
-        Raises:
-            None
-        """
-
-        myName = tr('Total')
-        if self.target_field is not None:
-            myName = '%s %s' % (myName, tr(self.target_field).lower())
-
-        myResult = self.impact_total
-        try:
-            myResult = int(round(myResult))
-        except ValueError:
-            myResult = self.NO_DATA_TEXT
-        self._append_result(myName, myResult)

@@ -58,7 +58,6 @@ class GenderPostprocessor(AbstractPostprocessor):
                 'process. Skipping this postprocessor'
                 % self.__class__.__name__)
         else:
-            self._calculate_total()
             self._calculate_females()
             self._calculate_weekly_hygene_packs()
             self._calculate_weekly_increased_calories()
@@ -70,20 +69,6 @@ class GenderPostprocessor(AbstractPostprocessor):
         AbstractPostprocessor.clear(self)
         self.impact_total = None
         self.female_ratio = None
-
-    def _calculate_total(self):
-        """Total population indicator.
-
-        This indicator reports the total population.
-        """
-        name = tr('Total')
-        # LOGGER.info(self.impact_total)
-        try:
-            result = self.impact_total
-            result = int(round(result))
-        except ValueError:
-            result = self.NO_DATA_TEXT
-        self._append_result(name, result)
 
     def _calculate_females(self):
         """Female population count indicator.

@@ -124,33 +124,8 @@ class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
                               'process. Skipping this postprocessor'
                               % self.__class__.__name__)
         else:
-            self._calculate_total()
             for title, field_values in self.value_mapping.iteritems():
                 self._calculate_type(title, field_values)
-
-    def _calculate_total(self):
-        """Indicator that shows total temporarily closed roads."""
-
-        result = 0
-        if self.type_fields is not None:
-            try:
-                for feature in self.impact_attrs:
-                    field_value = feature[self.target_field]
-                    if isinstance(field_value, basestring):
-                        if field_value != 'Not Affected':
-                            result += self.feature_value(feature)
-                    else:
-                        if field_value:
-                            result += self.feature_value(feature)
-                result = int(round(result))
-            except (ValueError, KeyError):
-                result = self.NO_DATA_TEXT
-        else:
-            if self.no_features:
-                result = 0
-            else:
-                result = self.NO_DATA_TEXT
-        self._append_result(self.label_affected, result)
 
     def _calculate_type(self, title, fields_values):
         """Indicator that shows total features impacted.

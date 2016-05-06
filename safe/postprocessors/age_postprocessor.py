@@ -85,7 +85,6 @@ class AgePostprocessor(AbstractPostprocessor):
                 'process. Skipping this postprocessor'
                 % self.__class__.__name__)
         else:
-            self._calculate_total()
             self._calculate_youth()
             self._calculate_adult()
             self._calculate_elderly()
@@ -95,20 +94,6 @@ class AgePostprocessor(AbstractPostprocessor):
         """
         AbstractPostprocessor.clear(self)
         self.impact_total = None
-
-    def _calculate_total(self):
-        """Indicator that shows total population.
-
-        This indicator reports the total population.
-        """
-        name = tr('Total')
-
-        result = self.impact_total
-        try:
-            result = int(round(result))
-        except ValueError:
-            result = self.NO_DATA_TEXT
-        self._append_result(name, result)
 
     def _calculate_youth(self):
         """Indicator that shows population below 15 years old.
