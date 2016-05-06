@@ -17,6 +17,7 @@ __license__ = "GPL"
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
+import itertools
 from safe.postprocessors.abstract_postprocessor import AbstractPostprocessor
 
 
@@ -61,8 +62,6 @@ class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
 
         # Dictionary key - display name for the mapping.
         self._labels = {}
-
-        self._update_known_types()
 
     @staticmethod
     def feature_value(feature):
@@ -109,6 +108,11 @@ class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
         if len(self.impact_attrs):
             self.no_features = True
 
+        self._update_known_types()
+
+        if 'other' not in self.value_mapping.keys():
+            self.value_mapping['other'] = []
+
     def process(self):
         """Concrete implementation that performs all indicators calculations.
         """
@@ -118,13 +122,14 @@ class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
                 self.impact_attrs is None or
                 self.value_mapping is None or
                 self.target_field is None):
-            self._log_message('%s not all params have been correctly '
-                              'initialized, setup needs to be called before '
-                              'process. Skipping this postprocessor'
-                              % self.__class__.__name__)
+            self._log_message(
+                '%s not all params have been correctly initialized, setup '
+                'needs to be called before process. Skipping this '
+                'postprocessor.' % self.__class__.__name__)
         else:
             for title, field_values in self.value_mapping.iteritems():
                 self._calculate_type(title, field_values)
+            self.translate_results()
 
     def _calculate_type(self, title, fields_values):
         """Indicator that shows total features impacted.
@@ -142,18 +147,22 @@ class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
             try:
                 for feature in self.impact_attrs:
                     for type_field in self.type_fields:
-                        feature_type = feature[type_field]
-                        if feature_type in fields_values:
-                            field_value = feature[self.target_field]
-                            if isinstance(field_value, basestring):
-                                if field_value != 'Not Affected':
-                                    result += self.feature_value(feature)
-                            else:
-                                if field_value:
-                                    result += self.feature_value(feature)
-                            break
-                        elif self._is_unknown_type(feature_type):
-                            self._update_known_types(feature_type)
+                        field_value = feature[self.target_field]
+                        val = 0
+                        if isinstance(field_value, basestring):
+                            if field_value != 'Not Affected':
+                                val += self.feature_value(feature)
+                        else:
+                            if field_value:
+                                val += self.feature_value(feature)
+
+                        if val:
+                            feature_type = feature[type_field]
+                            if feature_type in fields_values:
+                                result += val
+                                break
+                            elif self._is_unknown_type(feature_type):
+                                self._update_known_types(feature_type)
 
                 result = int(round(result))
             except (ValueError, KeyError):
@@ -163,7 +172,7 @@ class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
                 result = 0
             else:
                 result = self.NO_DATA_TEXT
-        self._append_result(self._labels[title], result)
+        self._append_result(title, result)
 
     def clear(self):
         """concrete implementation that ensures needed parameters are cleared.
@@ -176,13 +185,22 @@ class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
         self.value_mapping = None
         self.valid_type_fields = None
 
-    def _is_unknown_type(self, feature_type):
-        """Check if the given type is in any of the known_types dictionary.
+    def translate_results(self):
+        """Replace keys in the result table by the beautiful translated name.
+        """
+        for key in self._results:
+            if key in self._labels:
+                translation = self._labels[key]
+                self._results[translation] = self._results[key]
+                del self._results[key]
 
-        :param feature_type: The name of the type.
+    def _is_unknown_type(self, feature_type):
+        """Check if the given type is in any of the known_types dictionary
+
+        :param feature_type: the name of the type
         :type feature_type: str
 
-        :returns: Flag indicating if the feature_type is unknown.
+        :returns: Flag indicating if the feature_type is unknown
         :rtype: boolean
         """
 
@@ -200,15 +218,11 @@ class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
         :param feature_type: the name of the type to add to the known types.
         :type feature_type: str
         """
-        # Fixme, as we use a mapping to classify values, do we need this ?
-        """
-        if type is not None:
-            self.fields_values['Other'].append(building_type)
+        if feature_type is not None:
+            self.value_mapping['other'].append(feature_type)
 
         # flatten self.fields_values.values()
         # using http://stackoverflow.com/questions/5286541/#5286614
         self.known_types = list(itertools.chain.from_iterable(
             itertools.repeat(x, 1) if isinstance(x, str) else x for x in
-            self.fields_values.values()))
-        """
-        return
+            self.value_mapping.values()))

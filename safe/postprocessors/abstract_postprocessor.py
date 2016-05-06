@@ -164,5 +164,5 @@ class AbstractPostprocessor(object):
             except ValueError as e:
                 LOGGER.debug(e)
                 result = result
-        self._results[name] = {'value': result,
-                               'metadata': metadata}
+        self._results[name] = {
+            'value': result, 'metadata': metadata}
