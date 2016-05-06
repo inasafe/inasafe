@@ -35,9 +35,6 @@ class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
         """
         AbstractPostprocessor.__init__(self)
 
-        # Label for the column. Defined in child class.
-        self.label_affected = None
-
         # Integer with total number of features/meters affected.
         self.impact_total = None
 
@@ -61,6 +58,9 @@ class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
 
         # List that will be updated dynamically.
         self.known_types = []
+
+        # Dictionary key - display name for the mapping.
+        self._labels = {}
 
         self._update_known_types()
 
@@ -115,7 +115,6 @@ class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
         AbstractPostprocessor.process(self)
 
         if (self.impact_total is None or
-                self.label_affected is None or
                 self.impact_attrs is None or
                 self.value_mapping is None or
                 self.target_field is None):
@@ -164,7 +163,7 @@ class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
                 result = 0
             else:
                 result = self.NO_DATA_TEXT
-        self._append_result(title, result)
+        self._append_result(self._labels[title], result)
 
     def clear(self):
         """concrete implementation that ensures needed parameters are cleared.

@@ -19,6 +19,7 @@ __copyright__ += 'Disaster Reduction'
 
 from safe.postprocessors.abstract_building_road_type_postprocessor import \
     AbstractBuildingRoadTypePostprocessor
+from safe.definitions import road_class_mapping
 from safe.utilities.i18n import tr
 
 
@@ -37,8 +38,9 @@ class RoadTypePostprocessor(AbstractBuildingRoadTypePostprocessor):
         It takes care of defining self.impact_total
         """
         AbstractBuildingRoadTypePostprocessor.__init__(self)
-        self.label_affected = tr('Temporarily closed')
         self._description = tr('Calculates road types related statistics.')
+        self._labels = {
+            item['key']: item['name'] for item in road_class_mapping}
 
     @staticmethod
     def feature_value(feature):
