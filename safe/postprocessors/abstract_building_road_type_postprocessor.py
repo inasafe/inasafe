@@ -18,6 +18,7 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import itertools
+from collections import OrderedDict
 from safe.postprocessors.abstract_postprocessor import AbstractPostprocessor
 
 
@@ -63,6 +64,8 @@ class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
         # Dictionary key - display name for the mapping.
         self._labels = {}
 
+        self._structure = None
+
     @staticmethod
     def feature_value(feature):
         """Return the value to add in the statistics.
@@ -89,7 +92,13 @@ class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
         self.impact_total = params['impact_total']
         self.impact_attrs = params['impact_attrs']
         self.target_field = params['target_field']
-        self.value_mapping = params['value_mapping']
+
+        self.value_mapping = OrderedDict()
+        order = [item['key'] for item in self._structure]
+        for item in order:
+            if item in params['value_mapping']:
+                self.value_mapping[item] = params['value_mapping'][item]
+
         self.valid_type_fields = params['key_attribute']
 
         self.type_fields = []

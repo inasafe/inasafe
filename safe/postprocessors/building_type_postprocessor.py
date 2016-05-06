@@ -41,6 +41,7 @@ class BuildingTypePostprocessor(AbstractBuildingRoadTypePostprocessor):
         self._description = tr('Calculates building types related statistics.')
         self._labels = {
             item['key']: item['name'] for item in structure_class_mapping}
+        self._structure = structure_class_mapping
 
     @staticmethod
     def feature_value(feature):

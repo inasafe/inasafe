@@ -34,6 +34,7 @@ from safe.common.exceptions import GetDataError
 from safe.gis.qgis_vector_tools import split_by_polygon, clip_by_polygon
 from safe.impact_reports.road_exposure_report_mixin import\
     RoadExposureReportMixin
+from safe.definitions import road_class_mapping
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -51,6 +52,7 @@ class FloodPolygonRoadsFunction(
         RoadExposureReportMixin.__init__(self)
         # The 'wet' variable
         self.wet = 'wet'
+        self.exposure_value_mapping = None
 
     def notes(self):
         """Return the notes section of the report.
@@ -85,6 +87,7 @@ class FloodPolygonRoadsFunction(
         self.hazard_class_mapping = self.hazard.keyword('value_map')
         self.exposure_class_attribute = self.exposure.keyword(
             'road_class_field')
+        self.exposure_value_mapping = self.exposure.keyword('value_mapping')
 
         hazard_provider = self.hazard.layer.dataProvider()
         affected_field_index = hazard_provider.fieldNameIndex(
@@ -184,9 +187,8 @@ class FloodPolygonRoadsFunction(
         target_field_index = line_layer.fieldNameIndex(self.target_field)
         flooded_keyword = tr('Temporarily closed')
         self.affected_road_categories = [flooded_keyword]
-        self.affected_road_lengths = OrderedDict([
-            (flooded_keyword, {})])
-        self.road_lengths = OrderedDict()
+        affected_road_lengths = {flooded_keyword: {}}
+        road_lengths = {}
 
         for road in roads_data:
             attributes = road.attributes()
@@ -197,14 +199,36 @@ class FloodPolygonRoadsFunction(
             geom.transform(transform)
             length = geom.length()
 
-            if road_type not in self.road_lengths:
-                self.affected_road_lengths[flooded_keyword][road_type] = 0
-                self.road_lengths[road_type] = 0
+            for road_class, values in self.exposure_value_mapping.iteritems():
+                if road_type in values:
+                    feature_class = road_class
+                    break
+            else:
+                feature_class = 'other'
 
-            self.road_lengths[road_type] += length
+            if feature_class not in road_lengths:
+                wet_roads = affected_road_lengths[flooded_keyword]
+                wet_roads[feature_class] = 0
+                road_lengths[feature_class] = 0
+
+            road_lengths[feature_class] += length
+
             if attributes[target_field_index] == 1:
-                self.affected_road_lengths[
-                    flooded_keyword][road_type] += length
+                affected_road_lengths[flooded_keyword][feature_class] += length
+
+        # Let's re-order the list according to the definitions.
+        order = [item['key'] for item in road_class_mapping]
+        self.road_lengths = OrderedDict()
+        for item in order:
+            if item in road_lengths:
+                self.road_lengths[item] = road_lengths[item]
+
+        self.affected_road_lengths = OrderedDict([
+            (flooded_keyword, {})])
+        for item in order:
+            if item in affected_road_lengths[flooded_keyword]:
+                self.affected_road_lengths[flooded_keyword][item] =\
+                    affected_road_lengths[flooded_keyword][item]
 
         # For printing map purpose
         map_title = tr('Roads inundated')
