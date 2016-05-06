@@ -840,18 +840,18 @@ road_class_mapping = [
         'string_defaults': ['Local']
     },
     {
+        'key': 'path',
+        'name': tr('Path'),
+        'description': tr('A road to walk on foot aim.'),
+        'string_defaults': ['Path', 'Track']
+    },
+    {
         'key': 'other',
         'name': tr('Other'),
         'description': tr(
             'A road that service the transportation with short travel and '
             'low average velocity.'),
         'string_defaults': ['Other']
-    },
-    {
-        'key': 'path',
-        'name': tr('Path'),
-        'description': tr('A road to walk on foot aim.'),
-        'string_defaults': ['Path', 'Track']
     }
 ]
 
