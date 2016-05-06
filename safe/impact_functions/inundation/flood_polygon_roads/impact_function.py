@@ -116,7 +116,7 @@ class FloodPolygonRoadsFunction(
 
         # Split line_layer by hazard and save as result:
         # 1) Filter from hazard inundated features
-        #   2) Mark roads as inundated (1) or not inundated (0)
+        # 2) Mark roads as inundated (1) or not inundated (0)
 
         #################################
         #           REMARK 1
@@ -129,6 +129,7 @@ class FloodPolygonRoadsFunction(
         #
         ################################
 
+        # Create a union of all floods
         hazard_features = self.hazard.layer.getFeatures(request)
         hazard_poly = None
         for feature in hazard_features:
