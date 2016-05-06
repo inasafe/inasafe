@@ -182,7 +182,7 @@ class FloodPolygonRoadsFunction(
         road_type_field_index = line_layer.fieldNameIndex(
             self.exposure_class_attribute)
         target_field_index = line_layer.fieldNameIndex(self.target_field)
-        flooded_keyword = tr('Temporarily closed (m)')
+        flooded_keyword = tr('Temporarily closed')
         self.affected_road_categories = [flooded_keyword]
         self.affected_road_lengths = OrderedDict([
             (flooded_keyword, {})])
