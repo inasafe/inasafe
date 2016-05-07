@@ -617,7 +617,7 @@ class WizardDialogTest(unittest.TestCase):
 
         # step 4 - select layer mode
         self.check_current_text(
-             'Classified', dialog.step_kw_layermode.lstLayerModes)
+            'Classified', dialog.step_kw_layermode.lstLayerModes)
 
         # Click Next
         dialog.pbnNext.click()
@@ -1575,8 +1575,8 @@ class WizardDialogTest(unittest.TestCase):
         count = len(dialog.step_fc_functions1.selected_functions_1())
         message = (
             'Invalid functions count in the IF matrix 1! For flood and '
-            'structure there should be %d while there were: %d') % (
-            expected_flood_structure_functions_count, count)
+            'structure there should be %d while there were: %d') \
+            % (expected_flood_structure_functions_count, count)
         self.assertEqual(
             count, expected_flood_structure_functions_count, message)
 
@@ -1591,8 +1591,8 @@ class WizardDialogTest(unittest.TestCase):
         count = len(dialog.step_fc_functions2.selected_functions_2())
         message = (
             'Invalid functions count in the IF matrix 2! For raster and '
-            'polygon there should be %d while there were: %d') % (
-            expected_raster_polygon_functions_count, count)
+            'polygon there should be %d while there were: %d') \
+            % (expected_raster_polygon_functions_count, count)
         self.assertEqual(
             count, expected_raster_polygon_functions_count, message)
 
@@ -1755,6 +1755,200 @@ class WizardDialogTest(unittest.TestCase):
         #     message)
         # close the wizard
         dialog.pbnNext.click()
+
+    def test_input_function_centric_wizard_test_2(self):
+        """Test an attempt of work on keywordless layer
+           and then test a second attempt for disjoint layers."""
+
+        chosen_if1 = 'FloodRasterBuildingFunction'
+        chosen_if2 = 'ClassifiedRasterHazardBuildingFunction'
+
+        expected_hazard_layers_count = 2
+        expected_exposure_layers_count = 1
+
+        # Initialize dialog
+        # noinspection PyTypeChecker
+        dialog = WizardDialog(iface=IFACE)
+        dialog.dock = DOCK
+        dialog.set_function_centric_mode()
+        QgsMapLayerRegistry.instance().removeAllMapLayers()
+
+        # Load test layers
+        layer = clone_raster_layer(
+            name='keywordless_layer',
+            extension='.tif',
+            include_keywords=False,
+            source_directory=test_data_path('hazard'))
+        # noinspection PyArgumentList
+        QgsMapLayerRegistry.instance().addMapLayers([layer])
+
+        layer = clone_raster_layer(
+            name='continuous_flood_unaligned_big_size',
+            extension='.tif',
+            include_keywords=True,
+            source_directory=test_data_path('hazard'))
+        # noinspection PyArgumentList
+        QgsMapLayerRegistry.instance().addMapLayers([layer])
+
+        layer = clone_raster_layer(
+            name='classified_flood_20_20',
+            extension='.asc',
+            include_keywords=True,
+            source_directory=test_data_path('hazard'))
+        # noinspection PyArgumentList
+        QgsMapLayerRegistry.instance().addMapLayers([layer])
+
+        layer = clone_shp_layer(
+            name='building-points',
+            include_keywords=True,
+            source_directory=test_data_path('exposure'))
+        # noinspection PyArgumentList
+        QgsMapLayerRegistry.instance().addMapLayers([layer])
+
+        layer = clone_shp_layer(
+            name='district_osm_jakarta',
+            include_keywords=True,
+            source_directory=test_data_path('boundaries'))
+        # noinspection PyArgumentList
+        QgsMapLayerRegistry.instance().addMapLayers([layer])
+
+        # step_fc_functions1: select functions for flood x structure
+        self.check_current_step(dialog.step_fc_functions1)
+        dialog.step_fc_functions1.tblFunctions1.setCurrentCell(3, 1)
+        dialog.pbnNext.click()
+
+        # step_fc_functions2: select functions for raster x point
+        self.check_current_step(dialog.step_fc_functions2)
+        dialog.step_fc_functions2.tblFunctions2.setCurrentCell(1, 0)
+        dialog.pbnNext.click()
+
+        # step_fc_function: test if FloodRasterBuildingFunction is on the list
+        role = QtCore.Qt.UserRole
+        flood_ifs = [
+            dialog.step_fc_function.lstFunctions.item(row).data(role)['id']
+            for row in range(dialog.step_fc_function.lstFunctions.count())]
+        message = 'Expected flood impact function not found: %s' % chosen_if1
+        self.assertTrue(chosen_if1 in flood_ifs, message)
+
+        # step_fc_function: select FloodRasterBuildingFunction and
+        # press ok
+        self.check_current_step(dialog.step_fc_function)
+        chosen_if_row = flood_ifs.index(chosen_if1)
+        dialog.step_fc_function.lstFunctions.setCurrentRow(chosen_if_row)
+        dialog.pbnNext.click()
+
+        # step_fc_hazlayer_origin:
+        self.check_current_step(dialog.step_fc_hazlayer_origin)
+
+        # step_fc_hazlayer_from_canvas: test the lstCanvasHazLayers state
+        # Note this step is tested prior to step_fc_hazlayer_origin
+        # as the list is prepared prior to autoselecting the radiobuttons
+        count = dialog.step_fc_hazlayer_from_canvas.lstCanvasHazLayers.count()
+        message = (
+            'Invalid hazard layers count! There should be %d while there '
+            'were: %d') % (expected_hazard_layers_count, count)
+        self.assertEqual(count, expected_hazard_layers_count, message)
+
+        # test if hazard browser works
+        dialog.step_fc_hazlayer_origin.rbHazLayerFromBrowser.click()
+        dialog.pbnNext.click()
+        self.check_current_step(dialog.step_fc_hazlayer_from_browser)
+        # step back and continue with hazard from canvas
+        dialog.pbnBack.click()
+        dialog.step_fc_hazlayer_origin.rbHazLayerFromCanvas.click()
+        dialog.pbnNext.click()
+
+        # step_fc_hazlayer_from_canvas
+        self.check_current_step(dialog.step_fc_hazlayer_from_canvas)
+        # Select the second (keywordless) layer in order to trigger preparing
+        # the 'missing keywords' description.
+        dialog.step_fc_hazlayer_from_canvas.lstCanvasHazLayers.setCurrentRow(1)
+        # Now select the first (proper) layer and press ok
+        dialog.step_fc_hazlayer_from_canvas.lstCanvasHazLayers.setCurrentRow(0)
+        dialog.pbnNext.click()
+
+        # step_fc_explayer_origin
+        self.check_current_step(dialog.step_fc_explayer_origin)
+        count = dialog.step_fc_explayer_from_canvas.lstCanvasExpLayers.count()
+        message = (
+            'Invalid exposure layers count! There should be %d while there '
+            'were: %d') % (expected_exposure_layers_count, count)
+        self.assertEqual(count, expected_exposure_layers_count, message)
+
+        # test if exposure browser works
+        dialog.step_fc_explayer_origin.rbExpLayerFromBrowser.click()
+        dialog.pbnNext.click()
+        self.check_current_step(dialog.step_fc_explayer_from_browser)
+        # step back and continue with exposure from canvas
+        dialog.pbnBack.click()
+        dialog.step_fc_explayer_origin.rbExpLayerFromCanvas.click()
+        dialog.pbnNext.click()
+
+        # step_fc_explayer_from_canvas
+        self.check_current_step(dialog.step_fc_explayer_from_canvas)
+
+        dialog.pbnNext.click()
+
+        # step_fc_disjoint_layers
+        self.check_current_step(dialog.step_fc_disjoint_layers)
+        dialog.pbnBack.click()
+        self.check_current_step(dialog.step_fc_explayer_from_canvas)
+        dialog.pbnBack.click()
+        self.check_current_step(dialog.step_fc_explayer_origin)
+        dialog.pbnBack.click()
+        self.check_current_step(dialog.step_fc_hazlayer_from_canvas)
+        dialog.pbnBack.click()
+        self.check_current_step(dialog.step_fc_hazlayer_origin)
+        dialog.pbnBack.click()
+        self.check_current_step(dialog.step_fc_function)
+
+        # Select ClassifiedRasterHazardBuildingFunction
+        chosen_if_row = flood_ifs.index(chosen_if2)
+        dialog.step_fc_function.lstFunctions.setCurrentRow(chosen_if_row)
+        dialog.pbnNext.click()
+        self.check_current_step(dialog.step_fc_hazlayer_origin)
+        dialog.pbnNext.click()
+        self.check_current_step(dialog.step_fc_hazlayer_from_canvas)
+        # Select the first (proper) layer and press ok
+        dialog.step_fc_hazlayer_from_canvas.lstCanvasHazLayers.setCurrentRow(0)
+        dialog.pbnNext.click()
+        self.check_current_step(dialog.step_fc_explayer_origin)
+        dialog.pbnNext.click()
+        self.check_current_step(dialog.step_fc_explayer_from_canvas)
+        dialog.pbnNext.click()
+        self.check_current_step(dialog.step_fc_agglayer_origin)
+
+        # test if aggregation browser works
+        dialog.step_fc_agglayer_origin.rbAggLayerFromBrowser.click()
+        dialog.pbnNext.click()
+        self.check_current_step(dialog.step_fc_agglayer_from_browser)
+
+        # step back and continue with aggregation from canvas
+        dialog.pbnBack.click()
+        dialog.step_fc_agglayer_origin.rbAggLayerFromCanvas.click()
+        dialog.pbnNext.click()
+        self.check_current_step(dialog.step_fc_agglayer_from_canvas)
+        dialog.pbnNext.click()
+        self.check_current_step(dialog.step_fc_extent)
+
+        dialog.pbnBack.click()
+        self.check_current_step(dialog.step_fc_agglayer_from_canvas)
+        dialog.pbnBack.click()
+        self.check_current_step(dialog.step_fc_agglayer_origin)
+        dialog.pbnBack.click()
+        self.check_current_step(dialog.step_fc_explayer_from_canvas)
+        dialog.pbnBack.click()
+        self.check_current_step(dialog.step_fc_explayer_origin)
+        dialog.pbnBack.click()
+        self.check_current_step(dialog.step_fc_hazlayer_from_canvas)
+        dialog.pbnBack.click()
+        self.check_current_step(dialog.step_fc_hazlayer_origin)
+        dialog.pbnBack.click()
+        self.check_current_step(dialog.step_fc_function)
+        dialog.pbnBack.click()
+        self.check_current_step(dialog.step_fc_functions2)
+        dialog.pbnBack.click()
+        self.check_current_step(dialog.step_fc_functions1)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(WizardDialogTest)
