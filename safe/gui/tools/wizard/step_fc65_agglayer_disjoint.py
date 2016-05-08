@@ -61,8 +61,7 @@ class StepFcAggLayerDisjoint(WizardStep, FORM_CLASS):
         :returns: The step to be switched to
         :rtype: WizardStep instance or None
         """
-        new_step = self.parent.step_fc_extent
-        return new_step
+        return None
 
     def set_widgets(self):
         """Set widgets on the Aggregation Layer Disjoint tab"""

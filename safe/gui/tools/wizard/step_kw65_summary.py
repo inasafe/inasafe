@@ -102,6 +102,8 @@ class StepKwSummary(WizardStep, FORM_CLASS):
                           self.parent.step_fc_agglayer_from_canvas and
                           not self.parent.get_compatible_canvas_layers(agg)):
                     new_step = self.parent.step_fc_agglayer_origin
+                else:
+                    new_step = parent_step
             self.parent.parent_step = None
             self.parent.is_selected_layer_keywordless = False
             self.parent.set_mode_label_to_ifcw()

@@ -131,6 +131,8 @@ class StepFcSummary(WizardStep, FORM_CLASS):
                 if subparams:
                     subparams = ''.join(subparams)
                     subparams = '<table border="0">%s</table>' % subparams
+            elif isinstance(self.if_params[p], GroupParameter):
+                subparams = format_postprocessor([self.if_params[p]])
             elif isinstance(self.if_params[p], list) and p == 'minimum needs':
                 subparams = ''
                 for need in self.if_params[p]:
