@@ -1,6 +1,7 @@
 # coding=utf-8
 """Tests for pivot table implementation."""
 import unittest
+import json
 
 from safe.utilities.pivot_table import FlatTable, PivotTable
 
@@ -68,3 +69,28 @@ class PivotTableTest(unittest.TestCase):
         self.assertEqual(pivot_table.total, 30)
         self.assertEqual(pivot_table.total_rows, [30])
         self.assertEqual(pivot_table.total_columns, [10, 20, 0])
+
+    def test_to_json(self):
+        """Test for JSON-fy the flat table"""
+        json_string = self.flat_table.to_json()
+        object = json.loads(json_string)
+        self.assertEquals(tuple(object['groups']), self.flat_table.groups)
+        self.assertEquals(len(object['data']), len(self.flat_table.data))
+        print json_string
+
+    def test_from_json(self):
+        json_string = (
+            '{"data": [["residential", "low", 50], '
+            '["residential", "medium", 30], ["secondary", "low", 40], '
+            '["primary", "high", 10], ["primary", "medium", 20]], '
+            '"groups": ["road_type", "hazard"]}')
+        flat_table = FlatTable()
+        flat_table.from_json(json_string)
+        expected_groups = ["road_type", "hazard"]
+        for i in range(len(flat_table.groups)):
+            self.assertEquals(expected_groups[i], flat_table.groups[i])
+        self.assertEquals(flat_table.data[('residential', 'low')], 50)
+        self.assertEquals(flat_table.data[('residential', 'medium')], 30)
+        self.assertEquals(flat_table.data[('secondary', 'low')], 40)
+        self.assertEquals(flat_table.data[('primary', 'high')], 10)
+        self.assertEquals(flat_table.data[('primary', 'medium')], 20)

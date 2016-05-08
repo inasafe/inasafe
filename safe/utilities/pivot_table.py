@@ -10,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
+import json
 
 class FlatTable(object):
     """ Flat table object - used as a source of data for pivot tables.
@@ -50,6 +51,38 @@ class FlatTable(object):
         for key in self.data:
             values.add(key[group_index])
         return values
+
+    def to_json(self):
+        """Return json representation of FlatTable
+
+        :returns: JSON string.
+        :rtype: str
+        """
+        list_data = []
+        for key, value in self.data.items():
+            row = list(key)
+            row.append(value)
+            list_data.append(row)
+        raw_data ={
+            'groups': self.groups,
+            'data': list_data
+        }
+        return json.dumps(raw_data)
+
+    def from_json(self, json_string):
+        """Override current FlatTable using data from json.
+
+        :param json_string: JSON String
+        :type json_string: str
+        """
+
+        object = json.loads(json_string)
+        self.groups = tuple(object['groups'])
+        for item in object['data']:
+            kwargs = {}
+            for i in range(len(self.groups)):
+                kwargs[self.groups[i]] = item[i]
+            self.add_value(item[-1], **kwargs)
 
 
 class PivotTable(object):
