@@ -34,14 +34,14 @@
      <widget class="QWidget" name="page">
       <layout class="QGridLayout" name="gridLayout_4">
        <item row="0" column="0">
-        <widget class="QWebView" name="help_web_view" native="true">
+        <widget class="QWebView" name="help_web_view">
          <property name="minimumSize">
           <size>
            <width>200</width>
            <height>200</height>
           </size>
          </property>
-         <property name="url" stdset="0">
+         <property name="url">
           <url>
            <string>about:blank</string>
           </url>
@@ -62,13 +62,6 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
-        <widget class="QRadioButton" name="hazard_exposure_view_extent">
-         <property name="text">
-          <string>Use intersection of hazard, exposure and current view extent</string>
-         </property>
-        </widget>
-       </item>
        <item row="2" column="0">
         <widget class="QRadioButton" name="hazard_exposure_only">
          <property name="text">
@@ -76,21 +69,21 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="0">
+       <item row="4" column="0">
         <widget class="QRadioButton" name="hazard_exposure_bookmark">
          <property name="text">
           <string>Use intersection of hazard, exposure and this bookmark</string>
          </property>
         </widget>
        </item>
-       <item row="4" column="0">
+       <item row="5" column="0">
         <widget class="QComboBox" name="bookmarks_list">
          <property name="enabled">
           <bool>false</bool>
          </property>
         </widget>
        </item>
-       <item row="6" column="0">
+       <item row="7" column="0">
         <widget class="QRadioButton" name="hazard_exposure_user_extent">
          <property name="text">
           <string>Use intersection of hazard, exposure and this bounding box</string>
@@ -100,7 +93,7 @@
          </property>
         </widget>
        </item>
-       <item row="7" column="0">
+       <item row="8" column="0">
         <layout class="QGridLayout" name="gridLayout_2">
          <property name="sizeConstraint">
           <enum>QLayout::SetDefaultConstraint</enum>
@@ -228,27 +221,34 @@
          </item>
         </layout>
        </item>
-       <item row="8" column="0">
+       <item row="9" column="0">
         <widget class="QCheckBox" name="show_warnings">
          <property name="text">
           <string>Show warning when analysis extent is invalid</string>
          </property>
         </widget>
        </item>
-       <item row="9" column="0">
+       <item row="10" column="0">
         <widget class="QCheckBox" name="show_confirmations">
          <property name="text">
           <string>Show confirmation message when extents are valid</string>
          </property>
         </widget>
        </item>
-       <item row="5" column="0">
+       <item row="6" column="0">
         <widget class="QLabel" name="create_bookmarks_label">
          <property name="text">
           <string>To use a bookmark, first create one using the QGIS bookmark tool</string>
          </property>
          <property name="wordWrap">
           <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QRadioButton" name="hazard_exposure_view_extent">
+         <property name="text">
+          <string>Use intersection of hazard, exposure and current view extent</string>
          </property>
         </widget>
        </item>
@@ -269,12 +269,12 @@
   <customwidget>
    <class>QWebView</class>
    <extends>QWidget</extends>
-   <header>QtWebKitWidgets/QWebView</header>
+   <header>QtWebKit/QWebView</header>
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>hazard_exposure_view_extent</tabstop>
   <tabstop>hazard_exposure_only</tabstop>
+  <tabstop>hazard_exposure_view_extent</tabstop>
   <tabstop>hazard_exposure_bookmark</tabstop>
   <tabstop>bookmarks_list</tabstop>
   <tabstop>hazard_exposure_user_extent</tabstop>
@@ -285,6 +285,7 @@
   <tabstop>capture_button</tabstop>
   <tabstop>show_warnings</tabstop>
   <tabstop>show_confirmations</tabstop>
+  <tabstop>button_box</tabstop>
   <tabstop>help_web_view</tabstop>
  </tabstops>
  <resources/>
