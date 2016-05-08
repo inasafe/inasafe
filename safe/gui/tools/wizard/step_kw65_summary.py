@@ -95,12 +95,12 @@ class StepKwSummary(WizardStep, FORM_CLASS):
                         not self.parent.get_compatible_canvas_layers(haz)):
                     new_step = self.parent.step_fc_hazlayer_origin
                 elif (parent_step ==
-                          self.parent.step_fc_explayer_from_canvas and
-                          not self.parent.get_compatible_canvas_layers(exp)):
+                      self.parent.step_fc_explayer_from_canvas and
+                      not self.parent.get_compatible_canvas_layers(exp)):
                     new_step = self.parent.step_fc_explayer_origin
                 elif (parent_step ==
-                          self.parent.step_fc_agglayer_from_canvas and
-                          not self.parent.get_compatible_canvas_layers(agg)):
+                      self.parent.step_fc_agglayer_from_canvas and
+                      not self.parent.get_compatible_canvas_layers(agg)):
                     new_step = self.parent.step_fc_agglayer_origin
                 else:
                     new_step = parent_step
