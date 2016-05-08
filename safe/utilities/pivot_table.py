@@ -58,16 +58,7 @@ class FlatTable(object):
         :returns: JSON string.
         :rtype: str
         """
-        list_data = []
-        for key, value in self.data.items():
-            row = list(key)
-            row.append(value)
-            list_data.append(row)
-        raw_data ={
-            'groups': self.groups,
-            'data': list_data
-        }
-        return json.dumps(raw_data)
+        return json.dumps(self.to_dict())
 
     def from_json(self, json_string):
         """Override current FlatTable using data from json.
@@ -77,13 +68,47 @@ class FlatTable(object):
         """
 
         object = json.loads(json_string)
-        self.groups = tuple(object['groups'])
-        for item in object['data']:
+        self.from_dict(object['groups'], object['data'])
+
+    def to_dict(self):
+        """Return common list python object.
+        :returns: Dictionary of groups and data
+        :rtype: dict
+        """
+        list_data = []
+        for key, value in self.data.items():
+            row = list(key)
+            row.append(value)
+            list_data.append(row)
+        return {
+            'groups': self.groups,
+            'data': list_data
+        }
+
+    def from_dict(self, groups, data):
+        """Populate FlatTable based on groups and data.
+
+        :param groups: List of group name.
+        :type groups: list
+
+        :param data: Dictionary of raw table.
+        :type data: list
+
+        example of groups: ["road_type", "hazard"]
+        example of data: [
+            ["residential", "low", 50],
+            ["residential", "medium", 30],
+            ["secondary", "low", 40],
+            ["primary", "high", 10],
+            ["primary", "medium", 20]
+            ]
+        """
+        self.groups = tuple(groups)
+        for item in data:
             kwargs = {}
             for i in range(len(self.groups)):
                 kwargs[self.groups[i]] = item[i]
             self.add_value(item[-1], **kwargs)
-
 
 class PivotTable(object):
     """ Pivot tables as known from spreadsheet software.
