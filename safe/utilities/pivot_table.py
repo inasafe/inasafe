@@ -70,6 +70,8 @@ class FlatTable(object):
         object = json.loads(json_string)
         self.from_dict(object['groups'], object['data'])
 
+        return self
+
     def to_dict(self):
         """Return common list python object.
         :returns: Dictionary of groups and data
@@ -109,6 +111,8 @@ class FlatTable(object):
             for i in range(len(self.groups)):
                 kwargs[self.groups[i]] = item[i]
             self.add_value(item[-1], **kwargs)
+
+        return self
 
 class PivotTable(object):
     """ Pivot tables as known from spreadsheet software.

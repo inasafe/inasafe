@@ -19,7 +19,7 @@ __copyright__ = 'imajimatika@gmail.com'
 
 from qgis.core import QgsDistanceArea
 
-from safe.utilities.pivot_table import FlatTable, PivotTable
+from safe.utilities.pivot_table import FlatTable
 from safe.impact_reports.report_mixin_base import ReportMixin
 
 
@@ -71,7 +71,8 @@ class LandCoverReportMixin(ReportMixin):
         return {
             'exposure': 'land cover',
             'question': question,
-            # 'impact summary': impact_summary,
+            'impact summary': '',  # Set this as empty string
+            'zone field': self.zone_field,
             'impact table': impact_table,
             'action check list': action_checklist,
             'notes': notes
