@@ -12,6 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 import json
 
+
 class FlatTable(object):
     """ Flat table object - used as a source of data for pivot tables.
     After constructing the object, repeatedly call "add_value" method
@@ -113,6 +114,7 @@ class FlatTable(object):
             self.add_value(item[-1], **kwargs)
 
         return self
+
 
 class PivotTable(object):
     """ Pivot tables as known from spreadsheet software.

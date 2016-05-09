@@ -155,7 +155,6 @@ def format_pivot_table(
         total_rows=False,
         bar_chart=False):
 
-
     table = m.Table(style_class='table table-condensed table-striped')
     table.caption = caption
 

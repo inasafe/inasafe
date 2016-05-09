@@ -14,6 +14,7 @@ __author__ = 'Christian Christelis <christian@kartoza.com>'
 
 from safe.utilities.i18n import tr
 
+
 class ReportMixin(object):
     """Report Mixin Interface.
 
