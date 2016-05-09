@@ -44,6 +44,7 @@ from safe.common.exceptions import (
     NoFeaturesInExtentError,
     InvalidProjectionError,
     InvalidGeometryError,
+    KeywordNotFoundError,
     AggregationError,
     KeywordDbError,
     ZeroImpactException,
@@ -70,6 +71,7 @@ from safe.utilities.utilities import (
 )
 from safe.utilities.memory_checker import check_memory_usage
 from safe.utilities.i18n import tr
+from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.gis import (
     convert_to_safe_layer,
     is_point_layer,
@@ -825,6 +827,20 @@ class ImpactFunction(object):
                 self.hazard_zone_attribute,
                 self.exposure.crs()
             )
+
+        # Special process if the exposure is a road or building layer, we need
+        # to check the for the value_mapping keyword.
+        if self.exposure.keyword('exposure') in ['road', 'structure']:
+            try:
+                self.exposure.keyword('value_mapping')
+            except KeywordNotFoundError:
+                LOGGER.debug(
+                    'value_mapping not found in the aggregation layer, using '
+                    'an empty value_mapping.')
+                keyword_io = KeywordIO()
+                keyword_io.update_keywords(
+                    self.exposure.qgis_layer(), {'value_mapping': {}})
+
         self._setup_aggregator()
 
         # go check if our postprocessing layer has any keywords set and if not

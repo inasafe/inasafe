@@ -654,8 +654,6 @@ class PostprocessorManager(QtCore.QObject):
                         key_attribute = 'type'
                     parameters['key_attribute'] = key_attribute
 
-                    # This might raise an exception if the layer hasn't been
-                    # updated with the new value_mapping keyword.
                     value_map = self.keyword_io.read_keywords(
                         self.aggregator.exposure_layer, 'value_mapping')
                     parameters['value_mapping'] = value_map
