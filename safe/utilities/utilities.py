@@ -176,12 +176,20 @@ def main_type(feature_type, value_mapping):
     :return: The main class name, if not found, it will return 'other'.
     :rtype: str
     """
+    other = 'other'
+
+    if feature_type in [None, 'NULL', 'null', 'Null', 0]:
+        return other
+
+    if feature_type.__class__.__name__ == 'QPyNullVariant':
+        return other
+
     for key, values in value_mapping.iteritems():
         if feature_type in values:
             feature_class = key
             break
     else:
-        feature_class = 'other'
+        feature_class = other
 
     return feature_class
 

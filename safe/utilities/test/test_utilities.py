@@ -189,7 +189,8 @@ class UtilitiesTest(unittest.TestCase):
         new_dict = reorder_dictionary(unordered, expected)
         self.assertItemsEqual(expected, new_dict.keys())
 
-        expected = ['a', 'b', 'c']
+        # These keys don't exist, we expect an empty dictionary.
+        expected = ['Z', 'X', 'Y']
         new_dict = reorder_dictionary(unordered, expected)
         self.assertEqual(len(new_dict), 0)
 
@@ -203,6 +204,8 @@ class UtilitiesTest(unittest.TestCase):
         self.assertEqual(main_type('house', mapping), 'residential')
         self.assertEqual(main_type('apartments', mapping), 'residential')
         self.assertEqual(main_type('warehouse', mapping), 'other')
+        self.assertEqual(main_type(None, mapping), 'other')
+        self.assertEqual(main_type('null', mapping), 'other')
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(UtilitiesTest)
