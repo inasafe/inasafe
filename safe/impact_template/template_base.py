@@ -143,24 +143,20 @@ class TemplateBase(object):
             header = m.Row()
             for attribute in v['attributes']:
                 header.add(m.Cell(attribute, header=True))
-            header.add(m.Cell('Total', header=True))
             table.add(header)
 
             for field in v['fields']:
                 row = m.Row()
                 # First column is string
                 row.add(m.Cell(field[0]))
-                total = 0
                 for value in field[1:]:
                     try:
                         val = int(value)
-                        total += val
                         row.add(m.Cell(format_int(val)))
                     except ValueError:
                         # Catch no data value
                         row.add(m.Cell(value))
 
-                row.add(m.Cell(format_int(int(round(total)))))
                 table.add(row)
             message.add(table)
 

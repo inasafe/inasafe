@@ -13,10 +13,11 @@ __copyright__ += 'Disaster Reduction'
 
 
 from safe.defaults import get_defaults
-from safe.postprocessors.abstract_postprocessor import AbstractPostprocessor
+from safe.postprocessors.abstract_population_postprocessor import \
+    AbstractPopulationPostprocessor
 
 
-class AgePostprocessor(AbstractPostprocessor):
+class AgePostprocessor(AbstractPopulationPostprocessor):
     """
     Postprocessor that calculates age related statistics.
     see the _calculate_* methods to see indicator specific documentation
@@ -30,7 +31,7 @@ class AgePostprocessor(AbstractPostprocessor):
 
         It takes care of defining self.impact_total
         """
-        AbstractPostprocessor.__init__(self)
+        AbstractPopulationPostprocessor.__init__(self)
         self.youth_ratio = None
         self.adult_ratio = None
         self.elderly_ratio = None
@@ -44,7 +45,7 @@ class AgePostprocessor(AbstractPostprocessor):
         :type params: dict
 
         """
-        AbstractPostprocessor.setup(self, None)
+        AbstractPopulationPostprocessor.setup(self, None)
         if self.impact_total is not None:
             self._raise_error('clear needs to be called before setup')
 
@@ -77,7 +78,7 @@ class AgePostprocessor(AbstractPostprocessor):
     def process(self):
         """Performs all the indicator calculations.
         """
-        AbstractPostprocessor.process(self)
+        AbstractPopulationPostprocessor.process(self)
         if self.impact_total is None:
             self._log_message(
                 '%s not all params have been correctly '
@@ -85,6 +86,7 @@ class AgePostprocessor(AbstractPostprocessor):
                 'process. Skipping this postprocessor'
                 % self.__class__.__name__)
         else:
+            self._calculate_total()
             self._calculate_youth()
             self._calculate_adult()
             self._calculate_elderly()
@@ -92,8 +94,22 @@ class AgePostprocessor(AbstractPostprocessor):
     def clear(self):
         """Clear postprocessor state.
         """
-        AbstractPostprocessor.clear(self)
+        AbstractPopulationPostprocessor.clear(self)
         self.impact_total = None
+
+    def _calculate_total(self):
+        """Indicator that shows total population.
+
+        This indicator reports the total population.
+        """
+        name = tr('Total')
+
+        result = self.impact_total
+        try:
+            result = int(round(result))
+        except ValueError:
+            result = self.NO_DATA_TEXT
+        self._append_result(name, result)
 
     def _calculate_youth(self):
         """Indicator that shows population below 15 years old.
