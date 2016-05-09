@@ -12,6 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 __author__ = 'Christian Christelis <christian@kartoza.com>'
 
+from safe.utilities.i18n import tr
 
 class ReportMixin(object):
     """Report Mixin Interface.
@@ -26,7 +27,7 @@ class ReportMixin(object):
         :rtype: dict
         """
         return {
-            'title': '',
+            'title': tr('Notes'),
             'fields': []
         }
 
@@ -37,6 +38,6 @@ class ReportMixin(object):
         :rtype: dict
         """
         return {
-            'title': '',
+            'title': tr('Action checklist'),
             'fields': []
         }

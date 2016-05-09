@@ -30,7 +30,6 @@ from PyQt4.QtGui import QColor
 
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
-from safe.utilities.unicode import get_string
 from safe.common.exceptions import ZeroImpactException
 from safe.common.utilities import unique_filename, format_decimal
 from safe.utilities.pivot_table import FlatTable, PivotTable
@@ -41,6 +40,7 @@ from safe.impact_functions.bases.classified_vh_classified_ve import \
 from safe.impact_functions.generic.classified_polygon_landcover\
     .metadata_definitions \
     import ClassifiedPolygonHazardLandCoverFunctionMetadata
+from safe.impact_reports.land_cover_report_mixin import LandCoverReportMixin
 
 
 class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
@@ -171,13 +171,13 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
         if self.aggregator:
             zone_field = self.aggregator.exposure_aggregation_field
 
-        report_data = _report_data(impact_layer,
-                                   self.target_field,
-                                   type_attr,
-                                   zone_field)
-
-        # Generate the report of affected areas
-        impact_summary = impact_table = _format_report(report_data)
+        impact_data = LandCoverReportMixin(
+            question=self.question,
+            impact_layer=impact_layer,
+            target_field=self.target_field,
+            land_cover_field=type_attr,
+            zone_field=zone_field
+        ).generate_data()
 
         # Define style for the impact layer
         transparent_color = QColor()
@@ -201,8 +201,6 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
             style_type='categorizedSymbol')
 
         extra_keywords = {
-            'impact_summary': impact_summary,
-            'impact_table': impact_table,
             'map_title': tr('Affected Land Cover'),
             'target_field': self.target_field
         }
@@ -216,6 +214,7 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
             keywords=impact_layer_keywords,
             style_info=style_info)
 
+        impact_layer.impact_data = impact_data
         self._impact = impact_layer
         return impact_layer
 
