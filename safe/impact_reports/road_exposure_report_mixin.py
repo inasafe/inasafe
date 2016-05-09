@@ -32,9 +32,9 @@ class RoadExposureReportMixin(ReportMixin):
         .. versionadded:: 3.2
         """
         self.question = ''
-        self.road_lengths = None
-        self.affected_road_lengths = None
-        self.affected_road_categories = None
+        self.road_lengths = {}
+        self.affected_road_lengths = {}
+        self.affected_road_categories = {}
         self.add_unaffected_column = True
 
     def init_report_var(self, categories):
