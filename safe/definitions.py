@@ -851,7 +851,7 @@ road_class_mapping = [
         'description': tr(
             'A road that service the transportation with short travel and '
             'low average velocity.'),
-        'string_defaults': ['Other']
+        'string_defaults': ['Other', 'other']
     }
 ]
 # List to keep the order of the keys.
@@ -962,7 +962,9 @@ structure_class_mapping = [
         'name': tr('Other'),
         'description': tr(
             'An object that be found in Indonesia, and frequently mapped.'),
-        'string_defaults': ['Animal Boarding', 'Water Well', 'Lighthouse']
+        'string_defaults': [
+            'Animal Boarding', 'Water Well', 'Lighthouse', 'other'
+        ]
     }
 ]
 # List to keep the order of the keys.

@@ -15,6 +15,7 @@ from safe.utilities.utilities import (
     replace_accentuated_characters,
     read_file_keywords,
     reorder_dictionary,
+    main_type,
     is_keyword_version_supported
 )
 from safe.utilities.gis import qgis_version
@@ -192,6 +193,16 @@ class UtilitiesTest(unittest.TestCase):
         new_dict = reorder_dictionary(unordered, expected)
         self.assertEqual(len(new_dict), 0)
 
+    def test_main_type(self):
+        """Test the good feature type according to the value mapping."""
+        mapping = {
+            'residential': ['house', 'apartments', 'residential'],
+            'industrial': ['commercial', 'retail']
+        }
+        self.assertEqual(main_type('residential', mapping), 'residential')
+        self.assertEqual(main_type('house', mapping), 'residential')
+        self.assertEqual(main_type('apartments', mapping), 'residential')
+        self.assertEqual(main_type('warehouse', mapping), 'other')
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(UtilitiesTest)
