@@ -21,7 +21,6 @@ import logging
 # pylint: disable=unused-import
 from gender_postprocessor import GenderPostprocessor
 from age_postprocessor import AgePostprocessor
-from aggregation_postprocessor import AggregationPostprocessor
 from building_type_postprocessor import BuildingTypePostprocessor
 from road_type_postprocessor import RoadTypePostprocessor
 from aggregation_categorical_postprocessor import \
