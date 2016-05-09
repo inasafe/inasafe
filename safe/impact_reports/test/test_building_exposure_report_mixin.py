@@ -268,7 +268,7 @@ class BuildingExposureReportMixinTest(unittest.TestCase):
                                  ['School', 50, 25, 25, 100],
                                  ['University', 0, 1, 9, 10],
                                  [u'Total', 12050, 1027, 7036, 20113]]},
-            'notes': {'fields': [], 'title': ''},
+            'notes': {'fields': [], 'title': 'Notes'},
             'question': ''}
         self.assertEquals(data, expected)
 

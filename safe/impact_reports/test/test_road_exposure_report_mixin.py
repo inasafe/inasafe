@@ -79,7 +79,7 @@ class RoadExposureReportMixinTest(unittest.TestCase):
                     'Road Type', 'Unaffected', 'Total'],
                 'fields': []
             },
-            'notes': {'fields': [], 'title': ''},
+            'notes': {'fields': [], 'title': 'Notes'},
             'question': ''}
         self.assertEquals(expected, blank_data)
 
@@ -138,7 +138,7 @@ class RoadExposureReportMixinTest(unittest.TestCase):
             },
             'notes': {
                 'fields': [],
-                'title': ''
+                'title': 'Notes'
             },
             'question': ''
         }
