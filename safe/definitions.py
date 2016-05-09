@@ -854,6 +854,8 @@ road_class_mapping = [
         'string_defaults': ['Other']
     }
 ]
+# List to keep the order of the keys.
+road_class_order = [item['key'] for item in road_class_mapping]
 
 structure_class_mapping = [
     {
@@ -963,3 +965,5 @@ structure_class_mapping = [
         'string_defaults': ['Animal Boarding', 'Water Well', 'Lighthouse']
     }
 ]
+# List to keep the order of the keys.
+structure_class_order = [item['key'] for item in structure_class_mapping]
