@@ -10,6 +10,8 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
+import json
+
 
 class FlatTable(object):
     """ Flat table object - used as a source of data for pivot tables.
@@ -50,6 +52,68 @@ class FlatTable(object):
         for key in self.data:
             values.add(key[group_index])
         return values
+
+    def to_json(self):
+        """Return json representation of FlatTable
+
+        :returns: JSON string.
+        :rtype: str
+        """
+        return json.dumps(self.to_dict())
+
+    def from_json(self, json_string):
+        """Override current FlatTable using data from json.
+
+        :param json_string: JSON String
+        :type json_string: str
+        """
+
+        object = json.loads(json_string)
+        self.from_dict(object['groups'], object['data'])
+
+        return self
+
+    def to_dict(self):
+        """Return common list python object.
+        :returns: Dictionary of groups and data
+        :rtype: dict
+        """
+        list_data = []
+        for key, value in self.data.items():
+            row = list(key)
+            row.append(value)
+            list_data.append(row)
+        return {
+            'groups': self.groups,
+            'data': list_data
+        }
+
+    def from_dict(self, groups, data):
+        """Populate FlatTable based on groups and data.
+
+        :param groups: List of group name.
+        :type groups: list
+
+        :param data: Dictionary of raw table.
+        :type data: list
+
+        example of groups: ["road_type", "hazard"]
+        example of data: [
+            ["residential", "low", 50],
+            ["residential", "medium", 30],
+            ["secondary", "low", 40],
+            ["primary", "high", 10],
+            ["primary", "medium", 20]
+            ]
+        """
+        self.groups = tuple(groups)
+        for item in data:
+            kwargs = {}
+            for i in range(len(self.groups)):
+                kwargs[self.groups[i]] = item[i]
+            self.add_value(item[-1], **kwargs)
+
+        return self
 
 
 class PivotTable(object):

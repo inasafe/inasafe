@@ -30,17 +30,14 @@ from PyQt4.QtGui import QColor
 
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
-from safe.utilities.unicode import get_string
 from safe.common.exceptions import ZeroImpactException
-from safe.common.utilities import unique_filename, format_decimal
-from safe.utilities.pivot_table import FlatTable, PivotTable
-import safe.messaging as m
-from safe.messaging.styles import INFO_STYLE
+from safe.common.utilities import unique_filename
 from safe.impact_functions.bases.classified_vh_classified_ve import \
     ClassifiedVHClassifiedVE
 from safe.impact_functions.generic.classified_polygon_landcover\
     .metadata_definitions \
     import ClassifiedPolygonHazardLandCoverFunctionMetadata
+from safe.impact_reports.land_cover_report_mixin import LandCoverReportMixin
 
 
 class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
@@ -171,13 +168,13 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
         if self.aggregator:
             zone_field = self.aggregator.exposure_aggregation_field
 
-        report_data = _report_data(impact_layer,
-                                   self.target_field,
-                                   type_attr,
-                                   zone_field)
-
-        # Generate the report of affected areas
-        impact_summary = impact_table = _format_report(report_data)
+        impact_data = LandCoverReportMixin(
+            question=self.question,
+            impact_layer=impact_layer,
+            target_field=self.target_field,
+            land_cover_field=type_attr,
+            zone_field=zone_field
+        ).generate_data()
 
         # Define style for the impact layer
         transparent_color = QColor()
@@ -201,8 +198,6 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
             style_type='categorizedSymbol')
 
         extra_keywords = {
-            'impact_summary': impact_summary,
-            'impact_table': impact_table,
             'map_title': tr('Affected Land Cover'),
             'target_field': self.target_field
         }
@@ -216,161 +211,6 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
             keywords=impact_layer_keywords,
             style_info=style_info)
 
+        impact_layer.impact_data = impact_data
         self._impact = impact_layer
         return impact_layer
-
-
-# non-member private functions used within this module
-
-def _svg_bar_chart_hazard(levels, max_level):
-
-    if max_level == 0:
-        return ""  # no data -> empty chart
-
-    levels_percent = [round(level * 100. / max_level) for level in levels]
-    return '<svg width="100%%" height="16">' \
-           '<rect x="0" y="0" width="%.0f%%" height="4" ' \
-           'style="fill:rgb(255,180,180)" />' \
-           '<rect x="0" y="6" width="%.0f%%" height="4" ' \
-           'style="fill:rgb(240,240,50)" />' \
-           '<rect x="0" y="12" width="%.0f%%" height="4" ' \
-           'style="fill:rgb(180,255,180)" />' \
-           '</svg>' % (levels_percent[0], levels_percent[1], levels_percent[2])
-
-
-def format_pivot_table(
-        pivot_table,
-        caption=None,
-        header_text='',
-        total_columns=False,
-        total_rows=False,
-        bar_chart=False):
-
-    table = m.Table(style_class='table table-condensed table-striped')
-    table.caption = caption
-
-    row = m.Row()
-    row.add(m.Cell(header_text, header=True))
-    if bar_chart:
-        row.add(m.Cell('', header=True, attributes='width="100%"'))
-    for column_name in pivot_table.columns:
-        row.add(m.Cell(column_name, header=True))
-    if total_rows:
-        row.add(m.Cell(tr('All'), header=True))
-    table.add(row)
-
-    max_value = max(max(row) for row in pivot_table.data)
-
-    for row_name, data_row, total_row in zip(
-            pivot_table.rows, pivot_table.data, pivot_table.total_rows):
-        row = m.Row()
-        row.add(m.Cell(row_name))
-        if bar_chart:
-            svg = _svg_bar_chart_hazard(data_row, max_value)
-            row.add(m.Cell(svg, header=False))
-        for column_value in data_row:
-            row.add(m.Cell(format_decimal(0.1, column_value), align='right'))
-        if total_rows:
-            row.add(m.Cell(
-                format_decimal(0.1, total_row), align='right', header=True))
-        table.add(row)
-
-    if total_columns:
-        row = m.Row()
-        row.add(m.Cell(tr('All'), header=True))
-        if bar_chart:
-            row.add(m.Cell('', header=False))
-        for column_value in pivot_table.total_columns:
-            row.add(m.Cell(
-                format_decimal(0.1, column_value), align='right', header=True))
-        if total_rows:
-            row.add(m.Cell(format_decimal(
-                0.1, pivot_table.total), align='right', header=True))
-        table.add(row)
-
-    return table
-
-
-def _report_data(impact_layer, target_field, land_cover_field, zone_field):
-    """
-    Prepare report data dictionary that will be used in the final report
-
-    :param impact_layer: Output impact layer from the IF
-    :param target_field: Field name in impact layer with hazard type
-    :param land_cover_field: Field name in impact layer with land cover
-    :param zone_field: Field name in impact layer with aggregation zone
-                       (None if aggregation is not being done)
-    :return: dict
-    """
-
-    # prepare area calculator object
-    area_calc = QgsDistanceArea()
-    area_calc.setSourceCrs(impact_layer.crs())
-    area_calc.setEllipsoid('WGS84')
-    area_calc.setEllipsoidalMode(True)
-
-    my_table = FlatTable('landcover', 'hazard', 'zone')
-    for f in impact_layer.getFeatures():
-
-        area = area_calc.measure(f.geometry()) / 1e4
-        zone = f[zone_field] if zone_field is not None else None
-
-        my_table.add_value(
-            area,
-            landcover=f[land_cover_field],
-            hazard=f[target_field],
-            zone=zone)
-
-    pivot_table = PivotTable(
-        my_table,
-        row_field='landcover',
-        column_field='hazard',
-        columns=['high', 'medium', 'low'])
-
-    report = {'impacted': pivot_table}
-
-    # breakdown by zones
-    if zone_field is not None:
-        report['impacted_zones'] = {}
-        for zone in my_table.group_values('zone'):
-            table = PivotTable(
-                my_table,
-                row_field="landcover",
-                column_field='hazard',
-                columns=['high', 'medium', 'low'],
-                filter_field="zone",
-                filter_value=zone)
-            report['impacted_zones'][zone] = table
-
-    return report
-
-
-def _format_report(report_data):
-    """
-    Convert dictionary with report data to formatted report
-
-    :param report_data: dict
-    :return: m.Message
-    """
-
-    message = m.Message(style_class='container')
-    affected_text = tr('Affected Area (ha)')
-
-    table = format_pivot_table(
-        report_data['impacted'],
-        header_text=affected_text,
-        total_columns=True,
-        bar_chart=True)
-    message.add(table)
-
-    if 'impacted_zones' in report_data:
-        for zone, table in report_data['impacted_zones'].iteritems():
-            message.add(m.Heading(zone, **INFO_STYLE))
-            m_table = format_pivot_table(
-                table,
-                header_text=affected_text,
-                total_columns=True,
-                bar_chart=True)
-            message.add(m_table)
-
-    return message.to_html(suppress_newlines=True)

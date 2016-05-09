@@ -85,16 +85,19 @@ class TestClassifiedPolygonPeopleFunction(unittest.TestCase):
             3: 8534.3
         }
         self.assertEqual(features, expected_features)
-        expected_impact_summary = [
-            '**High Hazard Zone**, 7,300------',
-            '**Medium Hazard Zone**, 72,900------',
-            '**Low Hazard Zone**, 11,500------',
-            '**Total affected people**, 91,600------',
-            '**Unaffected people**, 17,300------',
-            '**Total people**, 109,000---'
+        expected_results = [
+            [u'High Hazard Zone', 7271.431538053051],
+            [u'Medium Hazard Zone', 72852.05080801852],
+            [u'Low Hazard Zone', 11459.170311153292],
+            [u'Total affected people', 91583.0],
+            [u'Unaffected people', 17269.0],
+            [u'Total people', 108852]
         ]
-        for row in expected_impact_summary:
-            self.assertIn(row, function.format_impact_summary().to_text())
+
+        result = function.generate_data()['impact summary']['fields']
+
+        for expected_result in expected_results:
+            self.assertIn(expected_result, result)
 
     def test_keywords(self):
         """TestClassifiedPolygonPeopleFunction: Test keywords IF"""

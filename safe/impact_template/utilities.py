@@ -30,6 +30,8 @@ from safe.impact_template.road_report_template import (
     RoadReportTemplate)
 from safe.impact_template.polygon_people_report_template import (
     PolygonPeopleReportTemplate)
+from safe.impact_template.land_cover_report_template import (
+    LandCoverReportTemplate)
 
 
 def get_report_template(
@@ -68,6 +70,8 @@ def get_report_template(
         return RoadReportTemplate(impact_data=impact_data)
     elif impact_data['exposure'] == 'polygon people':
         return PolygonPeopleReportTemplate(impact_data=impact_data)
+    elif impact_data['exposure'] == 'land cover':
+        return LandCoverReportTemplate(impact_data=impact_data)
     else:
         raise MissingImpactReport(
             'The exposure %s is not recognized' % impact_data.get('exposure'))

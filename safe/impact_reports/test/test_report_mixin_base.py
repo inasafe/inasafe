@@ -38,10 +38,6 @@ class ReportMixinTest(unittest.TestCase):
         """Run after each test."""
         del self.mixin
 
-    def test_0001_interface(self):
-        """Test all interface methods give default blanks."""
-        blank_table = ''
-        self.assertEqual(self.mixin.html_report(), blank_table)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(ReportMixinTest)
