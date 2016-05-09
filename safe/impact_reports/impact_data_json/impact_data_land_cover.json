@@ -1,0 +1,39 @@
+{
+  "exposure": "land cover",
+  "question": "Question",
+  "impact summary": {
+    "attributes": ["Affected Area (ha)", "high", "medium", "low"],
+    "fields": [
+      ["Meadow", 5172.8, 5173.5, 0],
+      ["Forest", 5172.1, 0, 5171.3],
+      ["Population", 20689.8, 10347, 10342.7],
+      ["All", 31034.7, 15520.5, 15514.1]
+    ]
+  },
+  "impact table": {
+    "attributes": [
+
+    ],
+    "fields": [
+      [],
+      [],
+      []
+    ]
+  },
+  "action check list": {
+    "title": "Action Check List Title",
+    "content": [
+      "Action check list content 1",
+      "Action check list content 2"
+    ]
+  },
+  "notes": {
+    "title": "Notes Title",
+    "content": [
+      "Notes content 1",
+      "Notes content 2"
+    ]
+  },
+  "aggregation": {
+  }
+}

@@ -15,7 +15,7 @@ qgisMaximumVersion=2.99
 description=InaSAFE is free software that allows disaster managers to study realistic natural hazard impact scenarios for better planning, preparedness and response activities.
 about=Developed for the Indonesian Government - BNPB, Australian Government - AIFDR and DMInnovation and, and World Bank - GFDRR
 
-version=3.3.0
+version=3.4.0
 # alpha, beta, rc or final
 status=alpha
 
@@ -25,6 +25,12 @@ status=alpha
 # Optional items:
 
 changelog=
+        3.3.3 Fix issue #2759 - Exception when keyword missing from keywords
+        3.3.2 Fix issue #2720 - Fix incorrect keyword requirements for tsunami impact on roads
+        3.3.2 Fix if the OSM downloader issue - if request is cancelled, the http response is none
+        3.3.2 Handle HTTP 509 if the overpass is busy
+        3.3.2 Fix #2722 fix QGIS 2.14 issue with delete network reply after a download
+        3.3.1: Fix python error with PetaJakarta downloader
         Add parameter for minimum number to create group of building #2468
         New default parameter for IF Tsunami Raster for Building (New IF) #1237
         Use affected building value in action checklist #2410

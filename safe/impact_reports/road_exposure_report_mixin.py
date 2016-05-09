@@ -13,10 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
 __author__ = 'Christian Christelis <christian@kartoza.com>'
 
 from safe.utilities.i18n import tr
-from safe.common.utilities import format_int
-import safe.messaging as m
 from safe.impact_reports.report_mixin_base import ReportMixin
-from safe.messaging import styles
 
 
 class RoadExposureReportMixin(ReportMixin):
@@ -35,20 +32,6 @@ class RoadExposureReportMixin(ReportMixin):
         self.affected_road_lengths = {}
         self.affected_road_categories = []
         self.add_unaffected_column = True
-
-    def generate_report(self):
-        """Breakdown by road type.
-
-        :returns: The report.
-        :rtype: safe.message.Message
-        """
-        message = m.Message()
-        message.add(m.Paragraph(self.question))
-        message.add(self.format_impact_summary())
-        message.add(self.format_roads_breakdown())
-        message.add(self.format_action_checklist())
-        message.add(self.format_notes())
-        return message
 
     def generate_data(self):
         """Create a dictionary contains impact data.
@@ -100,43 +83,6 @@ class RoadExposureReportMixin(ReportMixin):
             'fields': fields
         }
 
-    def format_impact_summary(self):
-        """The impact summary as per category
-
-        :returns: The impact summary.
-        :rtype: safe.message.Message
-        """
-        impact_summary = self.impact_summary()
-        attributes = impact_summary['attributes']
-        fields = impact_summary['fields']
-
-        message = m.Message(style_class='container')
-        table = m.Table(style_class='table table-condensed table-striped')
-        table.caption = None
-
-        row = m.Row()
-        row.add(m.Cell(tr('Summary by road type'), header=True))
-        for _ in attributes:
-            row.add(m.Cell('', header=True))
-
-        row = m.Row()
-        row.add(m.Cell(tr('Road Type'), header=True))
-        for affected_category in attributes:
-            row.add(m.Cell(tr(affected_category), header=True, align='right'))
-        table.add(row)
-
-        row = m.Row()
-        row.add(m.Cell(tr('All (m)')))
-        for total_affected_value in fields[0]:
-            row.add(m.Cell(
-                format_int(int(total_affected_value)), align='right'))
-
-        table.add(row)
-
-        message.add(table)
-
-        return message
-
     def roads_breakdown(self):
         """Create road breakdown as data.
 
@@ -178,67 +124,6 @@ class RoadExposureReportMixin(ReportMixin):
             'attributes': attributes,
             'fields': fields
         }
-
-    def format_roads_breakdown(self):
-        """Breakdown by road type.
-
-        :returns: The roads breakdown report.
-        :rtype: safe.message.Message
-        """
-        road_breakdown = self.roads_breakdown()
-        attributes = road_breakdown['attributes']
-        fields = road_breakdown['fields']
-
-        message = m.Message(style_class='container')
-        table = m.Table(style_class='table table-condensed table-striped')
-        table.caption = None
-
-        row = m.Row()
-        row.add(m.Cell(tr('Breakdown by road type'), header=True))
-        for _ in attributes:
-            # Add empty cell as many as affected_categories
-            row.add(m.Cell('', header=True))
-
-        if self.add_unaffected_column:
-            # Add empty cell for un-affected road
-            row.add(m.Cell('', header=True))
-
-        # Add empty cell for total column
-        row.add(m.Cell('', header=True))
-        table.add(row)
-
-        row = m.Row()
-        for attribute in attributes:
-            row.add(m.Cell(tr(attribute), header=True))
-        table.add(row)
-
-        for field in fields:
-            row = m.Row()
-            # First column
-            row.add(m.Cell(tr('%(road_type)s (m)' % {
-                'road_type': field[0].capitalize()})))
-            # Start from second column
-            for value in field[1:]:
-                row.add(m.Cell(
-                    format_int(int(value)), align='right'))
-            table.add(row)
-
-        impact_summary_fields = self.impact_summary()['fields']
-
-        row = m.Row()
-        row.add(m.Cell(tr('Total (m)'), header=True))
-        for field in impact_summary_fields:
-            for value in field[1:]:
-                row.add(m.Cell(
-                    format_int(int(value)),
-                    align='right',
-                    header=True))
-
-        table.add(row)
-
-        message.add(table)
-
-        return message
 
     def action_checklist(self):
         """Return the action check list section of the report.

@@ -60,10 +60,6 @@ from safe.test.utilities import (
     TESTDATA,
     clone_shp_layer)
 
-# AG: get_qgis_app() should be called before importing modules from
-# safe.gui.widgets.dock
-
-
 from safe.gui.widgets.dock import Dock
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.styling import setRasterStyle

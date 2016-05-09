@@ -12,8 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 __author__ = 'Christian Christelis <christian@kartoza.com>'
 
-import safe.messaging as m
-from safe.messaging import styles
+from safe.utilities.i18n import tr
 
 
 class ReportMixin(object):
@@ -22,66 +21,6 @@ class ReportMixin(object):
     .. versionadded:: 3.1
     """
 
-    def html_report(self):
-        """Generate an HTML report.
-
-        :returns: The report in html format.
-        :rtype: basestring
-        """
-        return self.generate_report().to_html(suppress_newlines=True)
-
-    def generate_report(self):
-        """Defining the interface.
-
-        :returns: An itemized breakdown of the report.
-        :rtype: safe.messaging.Message
-        """
-        return m.Message()
-
-    def format_impact_summary(self):
-        """The impact summary.
-
-        :returns: The action checklist.
-        :rtype: safe.messaging.Message
-        """
-        return m.Message()
-
-    def format_action_checklist(self):
-        """Breakdown by building type.
-
-        :returns: The buildings breakdown report.
-        :rtype: safe.messaging.Message
-        """
-        action_checklist = self.action_checklist()
-
-        message = m.Message(style_class='container')
-        message.add(m.Heading(action_checklist['title'], **styles.INFO_STYLE))
-
-        checklist = m.BulletedList()
-        for text in action_checklist['fields']:
-            checklist.add(text)
-
-        message.add(checklist)
-        return message
-
-    def format_notes(self):
-        """Format notes to be shown to the user.
-
-        :returns: Message object that will be rendered.
-        :rtype: safe.messaging.Message
-        """
-        notes = self.notes()
-
-        message = m.Message(style_class='container')
-        message.add(m.Heading(notes['title'], **styles.INFO_STYLE))
-
-        checklist = m.BulletedList()
-        for field in notes['fields']:
-            checklist.add(field)
-
-        message.add(checklist)
-        return message
-
     def notes(self):
         """Return the notes section of the report.
 
@@ -89,7 +28,7 @@ class ReportMixin(object):
         :rtype: dict
         """
         return {
-            'title': '',
+            'title': tr('Notes'),
             'fields': []
         }
 
@@ -100,6 +39,6 @@ class ReportMixin(object):
         :rtype: dict
         """
         return {
-            'title': '',
+            'title': tr('Action checklist'),
             'fields': []
         }
