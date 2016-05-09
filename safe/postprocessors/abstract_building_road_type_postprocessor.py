@@ -20,6 +20,7 @@ __copyright__ += 'Disaster Reduction'
 import itertools
 from collections import OrderedDict
 from safe.postprocessors.abstract_postprocessor import AbstractPostprocessor
+from safe.utilities.utilities import reorder_dictionary
 
 
 class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
@@ -65,6 +66,7 @@ class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
         self._labels = {}
 
         self._structure = None
+        self._order = None
 
     @staticmethod
     def feature_value(feature):
@@ -93,11 +95,8 @@ class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
         self.impact_attrs = params['impact_attrs']
         self.target_field = params['target_field']
 
-        self.value_mapping = OrderedDict()
-        order = [item['key'] for item in self._structure]
-        for item in order:
-            if item in params['value_mapping']:
-                self.value_mapping[item] = params['value_mapping'][item]
+        self.value_mapping = reorder_dictionary(
+            params['value_mapping'], self._order)
 
         self.valid_type_fields = params['key_attribute']
 

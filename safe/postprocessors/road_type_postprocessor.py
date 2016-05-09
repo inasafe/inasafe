@@ -19,7 +19,7 @@ __copyright__ += 'Disaster Reduction'
 
 from safe.postprocessors.abstract_building_road_type_postprocessor import \
     AbstractBuildingRoadTypePostprocessor
-from safe.definitions import road_class_mapping
+from safe.definitions import road_class_mapping, road_class_order
 from safe.utilities.i18n import tr
 
 
@@ -42,6 +42,7 @@ class RoadTypePostprocessor(AbstractBuildingRoadTypePostprocessor):
         self._labels = {
             item['key']: item['name'] for item in road_class_mapping}
         self._structure = road_class_mapping
+        self._order = road_class_order
 
     @staticmethod
     def feature_value(feature):
