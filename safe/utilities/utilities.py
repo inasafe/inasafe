@@ -25,6 +25,7 @@ import webbrowser
 import unicodedata
 import codecs
 import re
+from collections import OrderedDict
 
 # noinspection PyPackageRequirements
 
@@ -133,6 +134,28 @@ def humanise_seconds(seconds):
         # If all else fails...
         return tr('%i days, %i hours and %i minutes' % (
             days, hours, minutes))
+
+
+def reorder_dictionary(unordered_dictionary, expected_key_order):
+    """Reorder a dictionary according to a list of keys.
+
+    :param unordered_dictionary: The dictionary to reorder.
+    :type unordered_dictionary: dict
+
+    :param expected_key_order: The list of keys.
+    :type expected_key_order: list
+
+    :return: The new ordered dictionary.
+    :type: OrderedDict
+    """
+
+    ordered_dictionary = OrderedDict()
+
+    for item in expected_key_order:
+        if item in unordered_dictionary:
+            ordered_dictionary[item] = unordered_dictionary[item]
+
+    return ordered_dictionary
 
 
 def impact_attribution(keywords, inasafe_flag=False):

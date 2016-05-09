@@ -14,6 +14,7 @@ from safe.utilities.utilities import (
     impact_attribution,
     replace_accentuated_characters,
     read_file_keywords,
+    reorder_dictionary,
     is_keyword_version_supported
 )
 from safe.utilities.gis import qgis_version
@@ -172,6 +173,24 @@ class UtilitiesTest(unittest.TestCase):
         self.assertTrue(is_keyword_version_supported('3.2.1-alpha', '3.2'))
         self.assertTrue(is_keyword_version_supported('3.2.1', '3.3'))
         self.assertFalse(is_keyword_version_supported('3.02.1', '3.2'))
+
+    def test_order_dictionary(self):
+        """Test if we can reorder a dictionary correctly."""
+        unordered = {
+            1: 'a',
+            2: 'b',
+            3: 'c',
+            4: 'd',
+            5: 'e'
+        }
+        expected = [5, 4, 3, 2, 1]
+
+        new_dict = reorder_dictionary(unordered, expected)
+        self.assertItemsEqual(expected, new_dict.keys())
+
+        expected = ['a', 'b', 'c']
+        new_dict = reorder_dictionary(unordered, expected)
+        self.assertEqual(len(new_dict), 0)
 
 
 if __name__ == '__main__':
