@@ -185,39 +185,27 @@ class FloodPolygonRoadsFunction(
         road_type_field_index = line_layer.fieldNameIndex(
             self.exposure_class_attribute)
         target_field_index = line_layer.fieldNameIndex(self.target_field)
-        flooded_keyword = tr('Temporarily closed')
-        self.affected_road_categories = [flooded_keyword]
-        affected_road_lengths = {flooded_keyword: {}}
-        road_lengths = {}
+
+        classes = [tr('Temporarily closed')]
+        self.init_report_var(classes)
 
         for road in roads_data:
             attributes = road.attributes()
+
             usage = attributes[road_type_field_index]
-            if usage.__class__.__name__ == 'QPyNullVariant':
-                usage = 'other'
+            usage = main_type(usage, exposure_value_mapping)
+
             geom = road.geometry()
             geom.transform(transform)
             length = geom.length()
 
-            main_usage = main_type(usage, exposure_value_mapping)
-
-            if main_usage not in road_lengths:
-                wet_roads = affected_road_lengths[flooded_keyword]
-                wet_roads[main_usage] = 0
-                road_lengths[main_usage] = 0
-
-            road_lengths[main_usage] += length
-
+            affected = False
             if attributes[target_field_index] == 1:
-                affected_road_lengths[flooded_keyword][main_usage] += length
+                affected = True
 
-        self.road_lengths = reorder_dictionary(road_lengths, road_class_order)
-        self.affected_road_lengths = reorder_dictionary(
-            affected_road_lengths, road_class_order)
+            self.classify_feature(classes[0], usage, length, affected)
 
-        self.affected_road_lengths = OrderedDict([
-            (flooded_keyword, reorder_dictionary(
-                affected_road_lengths[flooded_keyword], road_class_order))])
+        self.reorder_dictionaries()
 
         # For printing map purpose
         map_title = tr('Roads inundated')
