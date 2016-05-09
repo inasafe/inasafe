@@ -142,7 +142,7 @@ class TemplateBase(object):
             table.caption = v['caption']
             header = m.Row()
             for attribute in v['attributes']:
-                header.add(m.Cell(attribute, header=True))
+                header.add(attribute)
             table.add(header)
 
             for field in v['fields']:

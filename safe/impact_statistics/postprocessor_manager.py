@@ -220,7 +220,7 @@ class PostprocessorManager(QtCore.QObject):
 
             if not aoi_mode:
                 # add the totals row
-                row = [self.tr('Total in aggregation areas (m)')]
+                row = [self.tr('Total in aggregation areas')]
                 for _, total in postprocessor_totals.iteritems():
                     row.append(total)
                 fields.append(row)
