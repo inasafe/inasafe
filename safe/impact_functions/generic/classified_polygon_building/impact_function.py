@@ -23,10 +23,9 @@ from safe.impact_functions.generic.classified_polygon_building \
     .metadata_definitions \
     import ClassifiedPolygonHazardBuildingFunctionMetadata
 from safe.common.exceptions import (
-    InaSAFEError, KeywordNotFoundError, ZeroImpactException)
+    InaSAFEError, ZeroImpactException)
 from safe.common.utilities import (
     get_thousand_separator,
-    get_osm_building_usage,
     color_ramp)
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
@@ -34,6 +33,8 @@ from safe.engine.interpolation_qgis import interpolate_polygon_polygon
 from safe.impact_functions.core import get_key_for_value
 from safe.utilities.keyword_io import definition
 from safe.utilities.unicode import get_unicode
+from safe.utilities.utilities import reorder_dictionary, main_type
+from safe.definitions import structure_class_order
 
 
 class ClassifiedPolygonHazardBuildingFunction(
@@ -86,13 +87,9 @@ class ClassifiedPolygonHazardBuildingFunction(
         # Value from layer's keywords
         self.hazard_class_attribute = self.hazard.keyword('field')
         self.hazard_class_mapping = self.hazard.keyword('value_map')
-        # Try to get the value from keyword, if not exist, it will not fail,
-        # but use the old get_osm_building_usage
-        try:
-            self.exposure_class_attribute = self.exposure.keyword(
-                'structure_class_field')
-        except KeywordNotFoundError:
-            self.exposure_class_attribute = None
+        self.exposure_class_attribute = self.exposure.keyword(
+            'structure_class_field')
+        exposure_value_mapping = self.exposure.keyword('value_mapping')
 
         # Retrieve the classification that is used by the hazard layer.
         vector_hazard_classification = self.hazard.keyword(
@@ -102,7 +99,7 @@ class ClassifiedPolygonHazardBuildingFunction(
         # Get the list classes in the classification
         vector_hazard_classes = vector_hazard_classification['classes']
         # Initialize OrderedDict of affected buildings
-        self.affected_buildings = OrderedDict()
+        affected_buildings = OrderedDict()
         # Iterate over vector hazard classes
         for vector_hazard_class in vector_hazard_classes:
             # Check if the key of class exist in hazard_class_mapping
@@ -112,7 +109,7 @@ class ClassifiedPolygonHazardBuildingFunction(
                 self.hazard_class_mapping[vector_hazard_class['name']] = \
                     self.hazard_class_mapping.pop(vector_hazard_class['key'])
                 # Adding the class name as a key in affected_building
-                self.affected_buildings[vector_hazard_class['name']] = {}
+                affected_buildings[vector_hazard_class['name']] = {}
 
         hazard_zone_attribute_index = self.hazard.layer.fieldNameIndex(
             self.hazard_class_attribute)
@@ -145,8 +142,6 @@ class ClassifiedPolygonHazardBuildingFunction(
         interpolated_layer.dataProvider().addAttributes([new_field])
         interpolated_layer.updateFields()
 
-        attribute_names = [
-            field.name() for field in interpolated_layer.pendingFields()]
         target_field_index = interpolated_layer.fieldNameIndex(
             self.target_field)
         changed_values = {}
@@ -164,25 +159,27 @@ class ClassifiedPolygonHazardBuildingFunction(
                 hazard_value = self._not_affected_value
             changed_values[feature.id()] = {target_field_index: hazard_value}
 
-            if (self.exposure_class_attribute and
-                        self.exposure_class_attribute in attribute_names):
-                usage = feature[self.exposure_class_attribute]
-            else:
-                usage = get_osm_building_usage(attribute_names, feature)
+            usage = feature[self.exposure_class_attribute]
 
-            if usage is None:
-                usage = tr('Unknown')
+            usage = main_type(usage, exposure_value_mapping)
+
             if usage not in self.buildings:
                 self.buildings[usage] = 0
                 for category in self.hazard_class_mapping.keys():
-                    self.affected_buildings[category][usage] = OrderedDict(
+                    affected_buildings[category][usage] = OrderedDict(
                         [(tr('Buildings Affected'), 0)])
             self.buildings[usage] += 1
             if hazard_value in self.hazard_class_mapping.keys():
-                self.affected_buildings[hazard_value][usage][
+                affected_buildings[hazard_value][usage][
                     tr('Buildings Affected')] += 1
 
         interpolated_layer.dataProvider().changeAttributeValues(changed_values)
+
+        self.affected_buildings = OrderedDict()
+        for key in affected_buildings:
+            affected = affected_buildings[key]
+            self.affected_buildings[key] = reorder_dictionary(
+                affected, structure_class_order)
 
         # Lump small entries and 'unknown' into 'other' category
         # Building threshold #2468

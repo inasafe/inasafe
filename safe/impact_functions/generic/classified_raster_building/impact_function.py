@@ -23,12 +23,12 @@ from safe.impact_functions.bases.classified_rh_classified_ve import \
 from safe.storage.vector import Vector
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.utilities.i18n import tr
-from safe.common.utilities import get_osm_building_usage
+from safe.utilities.utilities import reorder_dictionary, main_type
+from safe.definitions import structure_class_order
 from safe.impact_functions.generic.classified_raster_building\
     .metadata_definitions import ClassifiedRasterHazardBuildingMetadata
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
-from safe.common.exceptions import KeywordNotFoundError
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -69,13 +69,9 @@ class ClassifiedRasterHazardBuildingFunction(
         """
 
         # Value from layer's keywords
-        # Try to get the value from keyword, if not exist, it will not fail,
-        # but use the old get_osm_building_usage
-        try:
-            structure_class_field = self.exposure.keyword(
-                'structure_class_field')
-        except KeywordNotFoundError:
-            structure_class_field = None
+
+        structure_class_field = self.exposure.keyword('structure_class_field')
+        exposure_value_mapping = self.exposure.keyword('value_mapping')
 
         # The 3 classes
         categorical_hazards = self.parameters['Categorical hazards'].value
@@ -96,36 +92,30 @@ class ClassifiedRasterHazardBuildingFunction(
             mode='constant')
 
         # Extract relevant exposure data
-        attribute_names = interpolated_result.get_attribute_names()
         attributes = interpolated_result.get_data()
 
         buildings_total = len(interpolated_result)
+
         # Calculate building impact
-        self.buildings = {}
-        self.affected_buildings = OrderedDict([
+        buildings = {}
+        affected_buildings = OrderedDict([
             (tr('High Hazard Class'), {}),
             (tr('Medium Hazard Class'), {}),
             (tr('Low Hazard Class'), {})
         ])
         for i in range(buildings_total):
+            usage = attributes[i][structure_class_field]
 
-            if (structure_class_field and
-                    structure_class_field in attribute_names):
-                usage = attributes[i][structure_class_field]
-            else:
-                usage = get_osm_building_usage(attribute_names, attributes[i])
+            usage = main_type(usage, exposure_value_mapping)
 
-            if usage is None or usage == 0:
-                usage = 'unknown'
-
-            if usage not in self.buildings:
-                self.buildings[usage] = 0
-                for category in self.affected_buildings.keys():
-                    self.affected_buildings[category][usage] = OrderedDict([
+            if usage not in buildings:
+                buildings[usage] = 0
+                for category in affected_buildings.keys():
+                    affected_buildings[category][usage] = OrderedDict([
                         (tr('Buildings Affected'), 0)])
 
             # Count all buildings by type
-            self.buildings[usage] += 1
+            buildings[usage] += 1
             attributes[i][self.target_field] = 0
             attributes[i][self.affected_field] = 0
             level = float(attributes[i]['level'])
@@ -147,8 +137,15 @@ class ClassifiedRasterHazardBuildingFunction(
             }[impact_level]
             attributes[i][self.affected_field] = 1
             # Count affected buildings by type
-            self.affected_buildings[impact_level][usage][
+            affected_buildings[impact_level][usage][
                 tr('Buildings Affected')] += 1
+
+        self.buildings = reorder_dictionary(buildings, structure_class_order)
+        self.affected_buildings = OrderedDict()
+        for key in affected_buildings:
+            affected = affected_buildings[key]
+            self.affected_buildings[key] = reorder_dictionary(
+                affected, structure_class_order)
 
         # Consolidate the small building usage groups < 25 to other
         # Building threshold #2468
