@@ -1329,7 +1329,6 @@ class Aggregator(QtCore.QObject):
         temporary_dir = temp_dir(sub_dir='pre-process')
         out_filename = unique_filename(suffix='.shp', dir=temporary_dir)
 
-        self.copy_keywords(layer, out_filename)
         shape_writer = QgsVectorFileWriter(
             out_filename,
             'UTF-8',
@@ -1338,6 +1337,11 @@ class Aggregator(QtCore.QObject):
             polygons_provider.crs())
         if shape_writer.hasError():
             raise InvalidParameterError(shape_writer.errorMessage())
+        # Notes (Ismail) for issue #2724
+        # Copy keyword after creating the layer file.
+        # If we copy the keyword first, it will make InaSAFE assumes the
+        # layer is not file based, and it will fail to retrieve the keyword
+        self.copy_keywords(layer, out_filename)
         # end TODO
 
         for (polygon_index, postprocessing_polygon) in enumerate(
