@@ -6676,7 +6676,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="dock.py" line="1564"/>
-        <source>No keywords have been defined for this layer yet or there isan issue with the currently defined keywords and they need to be reviewed. If you wish to use this layer as an exposure, hazard, or aggregation layer in an analysis, please use the keyword wizard to update the keywords. You can open the wizard by clicking on the </source>
+        <source>No keywords have been defined for this layer yet or there is an issue with the currently defined keywords and they need to be reviewed. If you wish to use this layer as an exposure, hazard, or aggregation layer in an analysis, please use the keyword wizard to update the keywords. You can open the wizard by clicking on the </source>
         <translation type="unfinished"></translation>
     </message>
 </context>
