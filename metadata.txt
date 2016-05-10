@@ -25,6 +25,7 @@ status=alpha
 # Optional items:
 
 changelog=
+        3.3.3 Fix issue #2724 - InaSAFE Intermediate Ex. errors: Python error
         3.3.3 Fix issue #2759 - Exception when keyword missing from keywords
         3.3.2 Fix issue #2720 - Fix incorrect keyword requirements for tsunami impact on roads
         3.3.2 Fix if the OSM downloader issue - if request is cancelled, the http response is none
