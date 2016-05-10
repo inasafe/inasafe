@@ -21,6 +21,7 @@ from numpy import round as numpy_round
 from safe.impact_functions.bases.classified_rh_classified_ve import \
     ClassifiedRHClassifiedVE
 from safe.storage.vector import Vector
+from safe.common.exceptions import KeywordNotFoundError
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.utilities.i18n import tr
 from safe.utilities.utilities import reorder_dictionary, main_type
@@ -71,7 +72,11 @@ class ClassifiedRasterHazardBuildingFunction(
         # Value from layer's keywords
 
         structure_class_field = self.exposure.keyword('structure_class_field')
-        exposure_value_mapping = self.exposure.keyword('value_mapping')
+        try:
+            exposure_value_mapping = self.exposure.keyword('value_mapping')
+        except KeywordNotFoundError:
+            # Generic IF, the keyword might not be defined base.py
+            exposure_value_mapping = {}
 
         # The 3 classes
         categorical_hazards = self.parameters['Categorical hazards'].value

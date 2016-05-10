@@ -23,7 +23,7 @@ from safe.impact_functions.generic.classified_polygon_building \
     .metadata_definitions \
     import ClassifiedPolygonHazardBuildingFunctionMetadata
 from safe.common.exceptions import (
-    InaSAFEError, ZeroImpactException)
+    InaSAFEError, ZeroImpactException, KeywordNotFoundError)
 from safe.common.utilities import (
     get_thousand_separator,
     color_ramp)
@@ -89,7 +89,11 @@ class ClassifiedPolygonHazardBuildingFunction(
         self.hazard_class_mapping = self.hazard.keyword('value_map')
         self.exposure_class_attribute = self.exposure.keyword(
             'structure_class_field')
-        exposure_value_mapping = self.exposure.keyword('value_mapping')
+        try:
+            exposure_value_mapping = self.exposure.keyword('value_mapping')
+        except KeywordNotFoundError:
+            # Generic IF, the keyword might not be defined base.py
+            exposure_value_mapping = {}
 
         # Retrieve the classification that is used by the hazard layer.
         vector_hazard_classification = self.hazard.keyword(
