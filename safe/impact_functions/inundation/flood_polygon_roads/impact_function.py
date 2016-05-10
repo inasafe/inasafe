@@ -11,7 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 import logging
-from collections import OrderedDict
 
 from qgis.core import (
     QgsRectangle,
@@ -28,14 +27,13 @@ from safe.impact_functions.inundation. \
     FloodPolygonRoadsMetadata
 from safe.common.exceptions import ZeroImpactException
 from safe.utilities.i18n import tr
-from safe.utilities.utilities import reorder_dictionary, main_type
+from safe.utilities.utilities import main_type
 from safe.storage.vector import Vector
 from safe.common.utilities import get_utm_epsg
 from safe.common.exceptions import GetDataError
 from safe.gis.qgis_vector_tools import split_by_polygon, clip_by_polygon
 from safe.impact_reports.road_exposure_report_mixin import\
     RoadExposureReportMixin
-from safe.definitions import road_class_order
 
 LOGGER = logging.getLogger('InaSAFE')
 

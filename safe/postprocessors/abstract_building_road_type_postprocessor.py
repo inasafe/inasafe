@@ -10,15 +10,14 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 """
 
-__author__ = 'Marco Bernasocchi <marco@opengis.ch>'
+__author__ = 'Etienne Trimaille'
 __revision__ = '$Format:%H$'
-__date__ = '10/10/2012'
+__date__ = '10/05/2016'
 __license__ = "GPL"
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import itertools
-from collections import OrderedDict
 from safe.postprocessors.abstract_postprocessor import AbstractPostprocessor
 from safe.utilities.utilities import reorder_dictionary
 

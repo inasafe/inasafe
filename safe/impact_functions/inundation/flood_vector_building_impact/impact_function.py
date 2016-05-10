@@ -11,7 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-from collections import OrderedDict
 from qgis.core import (
     QgsField,
     QgsSpatialIndex,
@@ -31,6 +30,7 @@ from safe.impact_functions.inundation.flood_vector_building_impact.\
     metadata_definitions import FloodPolygonBuildingFunctionMetadata
 from safe.utilities.i18n import tr
 from safe.utilities.gis import is_point_layer
+from safe.utilities.utilities import main_type
 from safe.storage.vector import Vector
 from safe.common.exceptions import GetDataError, ZeroImpactException
 from safe.impact_reports.building_exposure_report_mixin import (
@@ -81,6 +81,7 @@ class FloodPolygonBuildingFunction(
         self.hazard_class_mapping = self.hazard.keyword('value_map')
         self.exposure_class_attribute = self.exposure.keyword(
             'structure_class_field')
+        exposure_value_mapping = self.exposure.keyword('value_mapping')
 
         # Prepare Hazard Layer
         hazard_provider = self.hazard.layer.dataProvider()
@@ -218,29 +219,25 @@ class FloodPolygonBuildingFunction(
         building_layer.updateExtents()
 
         # Generate simple impact report
-        self.buildings = {}
-        self.affected_buildings = OrderedDict([
-            (tr('Flooded'), {})
-        ])
+        hazard_classes = [tr('Flooded')]
+        self.init_report_var(hazard_classes)
+
         buildings_data = building_layer.getFeatures()
         building_type_field_index = building_layer.fieldNameIndex(
             self.exposure_class_attribute)
         for building in buildings_data:
             record = building.attributes()
-            building_type = record[building_type_field_index]
-            if building_type in [None, 'NULL', 'null', 'Null']:
-                building_type = 'Unknown type'
-            if building_type not in self.buildings:
-                self.buildings[building_type] = 0
-                for category in self.affected_buildings.keys():
-                    self.affected_buildings[category][
-                        building_type] = OrderedDict([
-                            (tr('Buildings Affected'), 0)])
-            self.buildings[building_type] += 1
 
+            usage = record[building_type_field_index]
+            usage = main_type(usage, exposure_value_mapping)
+
+            affected = False
             if record[target_field_index] == 1:
-                self.affected_buildings[tr('Flooded')][building_type][
-                    tr('Buildings Affected')] += 1
+                affected = True
+
+            self.classify_feature(hazard_classes[1], usage, affected)
+
+        self.reorder_dictionaries()
 
         # Lump small entries and 'unknown' into 'other' category
         # Building threshold #2468

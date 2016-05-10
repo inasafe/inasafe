@@ -11,7 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-from collections import OrderedDict
 from qgis.core import QgsField, QgsRectangle
 from PyQt4.QtCore import QVariant
 
@@ -33,8 +32,7 @@ from safe.engine.interpolation_qgis import interpolate_polygon_polygon
 from safe.impact_functions.core import get_key_for_value
 from safe.utilities.keyword_io import definition
 from safe.utilities.unicode import get_unicode
-from safe.utilities.utilities import reorder_dictionary, main_type
-from safe.definitions import structure_class_order
+from safe.utilities.utilities import main_type
 
 
 class ClassifiedPolygonHazardBuildingFunction(
@@ -102,9 +100,8 @@ class ClassifiedPolygonHazardBuildingFunction(
         vector_hazard_classification = definition(vector_hazard_classification)
         # Get the list classes in the classification
         vector_hazard_classes = vector_hazard_classification['classes']
-        # Initialize OrderedDict of affected buildings
-        affected_buildings = OrderedDict()
         # Iterate over vector hazard classes
+        hazard_classes = []
         for vector_hazard_class in vector_hazard_classes:
             # Check if the key of class exist in hazard_class_mapping
             if vector_hazard_class['key'] in self.hazard_class_mapping.keys():
@@ -113,7 +110,7 @@ class ClassifiedPolygonHazardBuildingFunction(
                 self.hazard_class_mapping[vector_hazard_class['name']] = \
                     self.hazard_class_mapping.pop(vector_hazard_class['key'])
                 # Adding the class name as a key in affected_building
-                affected_buildings[vector_hazard_class['name']] = {}
+                hazard_classes.append(vector_hazard_class['name'])
 
         hazard_zone_attribute_index = self.hazard.layer.fieldNameIndex(
             self.hazard_class_attribute)
@@ -132,7 +129,7 @@ class ClassifiedPolygonHazardBuildingFunction(
         # Values might be integer or float, we should have unicode. #2626
         self.hazard_zones = [get_unicode(val) for val in unique_values]
 
-        self.buildings = {}
+        self.init_report_var(hazard_classes)
 
         wgs84_extent = QgsRectangle(
             self.requested_extent[0], self.requested_extent[1],
@@ -164,26 +161,17 @@ class ClassifiedPolygonHazardBuildingFunction(
             changed_values[feature.id()] = {target_field_index: hazard_value}
 
             usage = feature[self.exposure_class_attribute]
-
             usage = main_type(usage, exposure_value_mapping)
 
-            if usage not in self.buildings:
-                self.buildings[usage] = 0
-                for category in self.hazard_class_mapping.keys():
-                    affected_buildings[category][usage] = OrderedDict(
-                        [(tr('Buildings Affected'), 0)])
-            self.buildings[usage] += 1
+            affected = False
             if hazard_value in self.hazard_class_mapping.keys():
-                affected_buildings[hazard_value][usage][
-                    tr('Buildings Affected')] += 1
+                affected = True
+
+            self.classify_feature(hazard_value, usage, affected)
 
         interpolated_layer.dataProvider().changeAttributeValues(changed_values)
 
-        self.affected_buildings = OrderedDict()
-        for key in affected_buildings:
-            affected = affected_buildings[key]
-            self.affected_buildings[key] = reorder_dictionary(
-                affected, structure_class_order)
+        self.reorder_dictionaries()
 
         # Lump small entries and 'unknown' into 'other' category
         # Building threshold #2468

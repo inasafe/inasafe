@@ -764,56 +764,6 @@ def color_ramp(number_of_colour):
     return colors
 
 
-def get_osm_building_usage(attribute_names, feature):
-    """Get the usage of a row of OSM building data.
-
-    :param attribute_names: The list of attribute of the OSM building data.
-    :type attribute_names: list
-
-    :param feature: A row of data representing an OSM building.
-    :type feature: dict
-
-    :returns: The usage of the feature. Return None if it does not find any.
-    :rtype: str
-    """
-    attribute_names_lower = [
-        attribute_name.lower() for attribute_name in attribute_names]
-
-    # if the feature is from QGIS layer, NULL values are represented
-    # by QPyNullVariant instead of None, so we handle that explicitly
-
-    usage = None
-    # Prioritize 'type' attribute
-    if 'type' in attribute_names_lower:
-        attribute_index = attribute_names_lower.index('type')
-        field_name = attribute_names[attribute_index]
-        if not isinstance(feature[field_name], QPyNullVariant):
-            usage = feature[field_name]
-
-    # Get the usage from other attribute names
-    building_type_attributes = ['amenity', 'building_t', 'office', 'tourism',
-                                'leisure', 'use']
-    for type_attribute in building_type_attributes:
-        if (type_attribute in attribute_names_lower) and usage is None:
-            attribute_index = attribute_names_lower.index(
-                type_attribute)
-            field_name = attribute_names[attribute_index]
-            if not isinstance(feature[field_name], QPyNullVariant):
-                usage = feature[field_name]
-
-    # The last one is to get it from 'building' attribute
-    if 'building' in attribute_names_lower and usage is None:
-        attribute_index = attribute_names_lower.index('building')
-        field_name = attribute_names[attribute_index]
-        if not isinstance(feature[field_name], QPyNullVariant):
-            usage = feature[field_name]
-
-        if usage is not None and usage.lower() == 'yes':
-            usage = 'building'
-
-    return usage
-
-
 def log_file_path():
     """Get InaSAFE log file path.
 
