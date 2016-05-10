@@ -73,9 +73,9 @@ class BuildingExposureReportMixin(ReportMixin):
             buildings = {residential: 1062, school: 52 ...}
         """
         self.question = ''
-        self.buildings = None
+        self.buildings = {}
         self.categories = None
-        self.affected_buildings = None
+        self.affected_buildings = {}
         self.building_report_threshold = 25
 
         self.impact_data = {}
@@ -110,7 +110,7 @@ class BuildingExposureReportMixin(ReportMixin):
         if usage not in self.buildings:
             self.buildings[usage] = 0
 
-            for category in self.categories.keys():
+            for category in self.categories:
                 self.affected_buildings[category][usage] = OrderedDict()
                 self.affected_buildings[category][usage][building_affected] = 0
 

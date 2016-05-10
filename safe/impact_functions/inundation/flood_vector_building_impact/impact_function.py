@@ -235,7 +235,7 @@ class FloodPolygonBuildingFunction(
             if record[target_field_index] == 1:
                 affected = True
 
-            self.classify_feature(hazard_classes[1], usage, affected)
+            self.classify_feature(hazard_classes[0], usage, affected)
 
         self.reorder_dictionaries()
 
