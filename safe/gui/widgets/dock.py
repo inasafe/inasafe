@@ -1560,7 +1560,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             'Layer keywords missing:'), **WARNING_STYLE))
         context = m.Paragraph(
             self.tr(
-                'No keywords have been defined for this layer yet or there is'
+                'No keywords have been defined for this layer yet or there is '
                 'an issue with the currently defined keywords and they need '
                 'to be reviewed. If you wish to use this layer as an '
                 'exposure, hazard, or aggregation layer in an analysis, '
