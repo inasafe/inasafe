@@ -54,24 +54,46 @@ class RoadExposureReportMixinTest(unittest.TestCase):
         del self.road_mixin_blank
         del self.road_mixin
 
-    def test_0001_generate_report(self):
-        """Generate a blank report."""
-        blank_report = self.road_mixin_blank.generate_report().to_text()
-        # self.assertListEqual(blank_report, expected_blank_report, message)
-        self.assertIn('**Road Type**', blank_report)
-        self.assertIn('**Total (m)**', blank_report)
+    def test_0001_generate_blank_data(self):
+        """Generate a blank data."""
+        blank_data = self.road_mixin_blank.generate_data()
+        expected = {
+            'action check list': {
+                'fields': [
+                    'Which roads can be used to evacuate people or to '
+                    'distribute logistics?',
+                    'What type of vehicles can use the unaffected roads?',
+                    'What sort of equipment will be needed to reopen roads & '
+                    'where will we get it?',
+                    'Which government department is responsible for '
+                    'supplying equipment ?'
+                ],
+                'title': 'Action checklist'
+            },
+            'exposure': 'road',
+            'impact summary': {
+                'attributes': ['Unaffected', 'Total'],
+                'fields': [[0, 0]]},
+            'impact table': {
+                'attributes': [
+                    'Road Type', 'Unaffected', 'Total'],
+                'fields': []
+            },
+            'notes': {'fields': [], 'title': 'Notes'},
+            'question': ''}
+        self.assertEquals(expected, blank_data)
 
     def test_0002_road_breakdown(self):
         """Test the buildings breakdown."""
-        roads_breakdown = self.road_mixin.format_roads_breakdown().to_text()
+        roads_breakdown = self.road_mixin.roads_breakdown()['fields']
 
-        self.assertIn('**Breakdown by road type**', roads_breakdown)
-        self.assertIn('Main', roads_breakdown)
-        self.assertIn('133', roads_breakdown)
-        self.assertIn('Side', roads_breakdown)
-        self.assertIn('10', roads_breakdown)
-        self.assertIn('Bike', roads_breakdown)
-        self.assertIn('1', roads_breakdown)
+        expected = [
+            ['Main', 2, 131.3, 133.3],
+            ['Side', 5.5, 4.5, 10],
+            ['Bike', 1.2, 0.0, 1.2]
+        ]
+
+        self.assertEquals(roads_breakdown, expected)
 
     def test_0003_total(self):
         """Test general methods."""
@@ -89,15 +111,15 @@ class RoadExposureReportMixinTest(unittest.TestCase):
         expected = {
             'action check list': {
                 'fields': [
-                    u'Which roads can be used to evacuate people or to '
-                    u'distribute logistics?',
-                    u'What type of vehicles can use the unaffected roads?',
-                    u'What sort of equipment will be needed to reopen roads & '
-                    u'where will we get it?',
-                    u'Which government department is responsible for '
-                    u'supplying equipment ?'
+                    'Which roads can be used to evacuate people or to '
+                    'distribute logistics?',
+                    'What type of vehicles can use the unaffected roads?',
+                    'What sort of equipment will be needed to reopen roads & '
+                    'where will we get it?',
+                    'Which government department is responsible for '
+                    'supplying equipment ?'
                 ],
-                'title': u'Action checklist'
+                'title': 'Action checklist'
             },
             'exposure': 'road',
             'impact summary': {
@@ -116,7 +138,7 @@ class RoadExposureReportMixinTest(unittest.TestCase):
             },
             'notes': {
                 'fields': [],
-                'title': ''
+                'title': 'Notes'
             },
             'question': ''
         }

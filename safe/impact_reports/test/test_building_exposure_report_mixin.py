@@ -87,73 +87,44 @@ class BuildingExposureReportMixinTest(unittest.TestCase):
         del self.building_mixin_blank
         del self.building_mixin
 
-    def test_0001_generate_report(self):
-        """Generate a blank report."""
-        blank_report = self.building_mixin_blank.generate_report().to_text()
-        self.assertIn('**Not affected buildings**, 0', blank_report)
-        self.assertIn(
-            '**Building type**, **Not Affected**, **Total**',
-            blank_report
-        )
-
     def test_0002_action_checklist(self):
         """The default action check list."""
-        action_checklist = self.building_mixin_blank.format_action_checklist()
-        action_checklist = action_checklist.to_text()
-        self.assertIn(
-            u'Which structures have warning capacity (eg. sirens, '
-            u'speakers, etc.)?',
-            action_checklist)
-        self.assertIn(
-            u'Are the water and electricity services still operating?',
-            action_checklist)
-        self.assertIn(u'Are the health centres still open?', action_checklist)
-        self.assertIn(
-                u'Are the other public services accessible', action_checklist)
-        self.assertIn(
-            u'Which buildings will be evacuation centres?',
-            action_checklist)
-        self.assertIn(
-            u'Where will we locate the operations centre?',
-            action_checklist
-        )
-        self.assertIn(
-            u'Where will we locate warehouse and/or distribution '
-            u'centres?',
-            action_checklist
-        )
-        self.assertNotIn(
-            u'Where will the students from the 0 closed schools go to study?',
-            action_checklist
-        )
-        self.assertNotIn(
-            u'Where will the patients from the %s closed hospitals '
-            u'go for treatment and how will we transport them?',
-            action_checklist)
+        action_checklist = self.building_mixin_blank.action_checklist()[
+            'fields']
+        expected = [
+            'Which structures have warning capacity (eg. sirens, speakers, '
+            'etc.)?',
+            'Are the water and electricity services still operating?',
+            'Are the health centres still open?',
+            'Are the other public services accessible?',
+            'Which buildings will be evacuation centres?',
+            'Where will we locate the operations centre?',
+            'Where will we locate warehouse and/or distribution centres?',
+        ]
+        for item in expected:
+            self.assertIn(item, action_checklist)
 
-    def test_0003_impact_summary(self):
-        """Test the buildings impact summary."""
-        impact_summary = self.building_mixin.format_impact_summary()
-        impact_summary = impact_summary.to_text()
-
-        self.assertIn(
-            u'**Hazard Level 2**, 12,050, 1,324,567,000', impact_summary)
-        self.assertIn(
-            u'**Hazard Level 1**, 1,027, 21,284,567,111', impact_summary)
-        self.assertIn(u'**Affected buildings**, 13,077', impact_summary)
-        self.assertIn(u'**Not affected buildings**, 7,036', impact_summary)
-        self.assertIn(u'**Total**, 20,113', impact_summary)
+        not_expected = [
+            'Where will the students from the 0 closed schools go to study?',
+            'Where will the patients from the 0 closed hospitals go for '
+            'treatment and how will we transport them?',
+        ]
+        for item in not_expected:
+            self.assertNotIn(item, action_checklist)
 
     def test_0004_buildings_breakdown(self):
         """Test the buildings breakdown."""
-        buildings_breakdown = self.building_mixin.format_buildings_breakdown()
-        buildings_breakdown = buildings_breakdown.to_text()
-        self.assertIn(u'**Religious**, 0, 1, 2, **3**', buildings_breakdown)
-        self.assertIn(
-            u'**Residential**, 12,000, 1,000, 7,000, **20,000**',
-            buildings_breakdown)
-        self.assertIn(u'**School**, 50, 25, 25, **100**', buildings_breakdown)
-        self.assertIn(u'**University**, 0, 1, 9, **10**', buildings_breakdown)
+        buildings_breakdown = self.building_mixin.buildings_breakdown()[
+            'fields']
+        expected_results = [
+            ['Religious', 0, 1, 2, 3],
+            ['Residential', 12000, 1000, 7000, 20000],
+            ['School', 50, 25, 25, 100],
+            ['University', 0, 1, 9, 10],
+            ['Total', 12050, 1027, 7036, 20113]
+        ]
+        for expected_result in expected_results:
+            self.assertIn(expected_result, buildings_breakdown)
 
     def test_0005_schools_closed(self):
         """Test schools closed as expected."""
@@ -259,6 +230,7 @@ class BuildingExposureReportMixinTest(unittest.TestCase):
 
     def test_0010_generate_data(self):
         """Test generating data."""
+        self.maxDiff = None
         data = self.building_mixin.generate_data()
         expected = {
             'exposure': 'building',
@@ -290,17 +262,13 @@ class BuildingExposureReportMixinTest(unittest.TestCase):
                                             u'Hazard Level 1',
                                             u'Not Affected',
                                             u'Total'],
-                             'fields': [['Religious', 0, 1, 2, '3'],
-                                        ['Residential', 12000, 1000,
-                                         7000, '20,000'],
-                                        ['School', 50, 25, 25, '100'],
-                                        ['University', 0, 1, 9, '10'],
-                                        [u'Total',
-                                         '12,050',
-                                         '1,027',
-                                         '7,036',
-                                         '20,113']]},
-            'notes': {'fields': [], 'title': ''},
+                             'fields': [
+                                 ['Religious', 0, 1, 2, 3],
+                                 ['Residential', 12000, 1000, 7000, 20000],
+                                 ['School', 50, 25, 25, 100],
+                                 ['University', 0, 1, 9, 10],
+                                 [u'Total', 12050, 1027, 7036, 20113]]},
+            'notes': {'fields': [], 'title': 'Notes'},
             'question': ''}
         self.assertEquals(data, expected)
 

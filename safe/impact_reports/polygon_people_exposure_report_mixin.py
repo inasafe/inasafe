@@ -18,14 +18,10 @@ from collections import OrderedDict
 from safe.utilities.i18n import tr
 from safe.impact_reports.report_mixin_base import ReportMixin
 
-import safe.messaging as m
 from safe.common.utilities import format_int
-from safe.impact_functions.core import (
-    evacuated_population_needs
-)
+from safe.impact_functions.core import evacuated_population_needs
 from safe.gui.tools.minimum_needs.needs_profile import filter_needs_parameters
 from safe.impact_functions.core import population_rounding
-from safe.messaging import styles
 
 
 class PolygonPeopleExposureReportMixin(ReportMixin):
@@ -47,22 +43,6 @@ class PolygonPeopleExposureReportMixin(ReportMixin):
         self._affected_population = {}
         self._other_population_counts = {}
         self._minimum_needs = []
-
-    def generate_report(self):
-        """Generate impact report as message object.
-
-        :returns: The report.
-        :rtype: safe.messaging.Message
-        """
-        message = m.Message()
-        message.add(m.Paragraph(self.question))
-        message.add(self.format_impact_summary())
-        message.add(self.format_breakdown())
-        message.add(self.format_minimum_needs_breakdown())
-        message.add(self.format_action_checklist())
-        message.add(self.format_notes())
-
-        return message
 
     def generate_data(self):
         """Create a dictionary contains impact data.
@@ -164,39 +144,6 @@ class PolygonPeopleExposureReportMixin(ReportMixin):
             'fields': fields
         }
 
-    def format_minimum_needs_breakdown(self):
-        """Breakdown by polygon population.
-
-        :returns: The population breakdown report.
-        :rtype: list
-        """
-        message = m.Message(style_class='container')
-        message.add(m.Heading(
-            tr('Evacuated people minimum needs'),
-            **styles.INFO_STYLE))
-        table = m.Table(
-            style_class='table table-condensed table-striped')
-        table.caption = None
-        total_needs = self.total_needs
-        for frequency, needs in total_needs.items():
-            row = m.Row()
-            row.add(m.Cell(
-                tr('Relief items to be provided %s' % frequency),
-                header=True
-            ))
-            row.add(m.Cell(tr('Total'), header=True, align='right'))
-            table.add(row)
-            for resource in needs:
-                row = m.Row()
-                row.add(m.Cell(tr(resource['table name'])))
-                row.add(m.Cell(
-                    tr(format_int(resource['amount'])),
-                    align='right'
-                ))
-                table.add(row)
-        message.add(table)
-        return message
-
     @property
     def total_needs(self):
         """Get the total minimum needs based on the total evacuated.
@@ -212,33 +159,6 @@ class PolygonPeopleExposureReportMixin(ReportMixin):
 
         return evacuated_population_needs(
             total_population_evacuated, self.minimum_needs)
-
-    def format_impact_summary(self):
-        """The impact summary as per category
-
-        :returns: The impact summary.
-        :rtype: safe.messaging.Message
-        """
-        impact_summary = self.impact_summary()
-
-        message = m.Message(style_class='container')
-
-        table = m.Table(
-            style_class='table table-condensed table-striped')
-        table.caption = None
-        for category in impact_summary['fields']:
-            row = m.Row()
-            row.add(m.Cell(category[0], header=True))
-            row.add(m.Cell(
-                format_int(population_rounding(category[1])), align='right'))
-            # For value field, if existed
-            if len(category) > 2:
-                row.add(m.Cell(format_int(category[2]), align='right'))
-            table.add(row)
-
-        message.add(table)
-
-        return message
 
     def breakdown(self):
         """Create breakdown as data.
@@ -303,241 +223,6 @@ class PolygonPeopleExposureReportMixin(ReportMixin):
             'attributes': attributes,
             'fields': fields
         }
-
-    def format_breakdown(self):
-        """
-        """
-        breakdown = self.breakdown()
-        attributes = breakdown['attributes']
-        fields = breakdown['fields']
-
-        message = m.Message(style_class='container')
-
-        table = m.Table(
-            style_class='table table-condensed table-striped')
-        table.caption = None
-
-        row = m.Row()
-        for attribute in attributes:
-            row.add(m.Cell(attribute, header=True, align='right'))
-        table.add(row)
-
-        for field in fields:
-            table.add(self.impact_row(
-                field[0],
-                field[1],
-                field[2],
-                field[3],
-                field[4],
-                field[5],
-                field[6],
-            ))
-
-        last_row = m.Row()
-        last_row.add(m.Cell(
-            tr('Total')))
-        table.add(self.total_row(last_row))
-
-        message.add(table)
-
-        return message
-
-    def impact_calculation(self, table):
-        """ Calculates impact on each area
-
-        :param table: A table with first and second row
-        :type table:Table
-
-        :return A table with impact on each area
-        :rtype Table
-        """
-        areas = self.areas
-        affected_areas = self.affected_areas
-        for area_id, value in areas.iteritems():
-            if area_id in affected_areas:
-                affected = affected_areas[area_id]
-            else:
-                affected = 0.0
-            single_total_area = value
-
-            if value:
-                affected_area_ratio = affected / single_total_area
-            else:
-                affected_area_ratio = 0.0
-            percent_affected = affected_area_ratio * 100
-            percent_affected = round(percent_affected, 1)
-            number_people_affected = (
-                affected_area_ratio * self.areas_population[area_id])
-
-            # rounding to float without decimal, we can't have number
-            #  of people with decimal
-            number_people_affected = round(number_people_affected, 0)
-
-            if self.areas_population[area_id] != 0:
-                percent_people_affected = (
-                    (number_people_affected / self.areas_population[area_id]) *
-                    100)
-            else:
-                percent_people_affected = 0
-            affected *= 1e8
-            single_total_area *= 1e8
-
-            impact_row = self.impact_row(
-                self.area_name(area_id),
-                affected,
-                percent_affected,
-                single_total_area,
-                number_people_affected,
-                percent_people_affected,
-                self.areas_population[area_id]
-            )
-
-            table.add(impact_row)
-
-        return table
-
-    def row(
-            self,
-            row,
-            total_affected_area,
-            percentage_affected_area,
-            total_area,
-            total_affected_population,
-            total_population):
-        """Adds values to the second row columns
-
-        :param row: an empty row
-        :type row: Row
-
-        :param total_affected_area: total affected area
-        :type total_affected_area: float
-
-        :param percentage_affected_area: percentage of
-        affected area
-        :type percentage_affected_area: float
-
-        :param total_area: total area
-        :type total_area: float
-
-        :param total_affected_population: total affected
-        population
-        :type total_affected_population: float
-
-        :param total_population: total population
-        :type total_population:float
-
-        :return row
-        :rtype Row
-        """
-        row.add(m.Cell(
-            format_int(int(total_affected_area)), align='right'))
-        row.add(m.Cell(
-            "%.0f%%" % percentage_affected_area, align='right'))
-        row.add(m.Cell(
-            format_int(int(total_area)), align='right'))
-        row.add(m.Cell(
-            format_int(int(total_affected_population)), align='right'))
-        row.add(m.Cell(
-            "%.0f%%" % percentage_affected_area, align='right'))
-        row.add(m.Cell(
-            format_int(int(total_population)), align='right'))
-
-        return row
-
-    def total_row(self, row):
-        """Calculates the total of each single column
-
-        :param row: row in the summary
-        :type row: Row
-
-        :return row:  row with total contents
-        :rtype: row: Row
-        """
-
-        total_affected_area = self.total_affected_areas
-        total_area = self.total_areas
-
-        if total_area != 0:
-            percentage_affected_area = (
-                (total_affected_area / total_area) *
-                100)
-        else:
-            percentage_affected_area = 0
-        percentage_affected_area = round(percentage_affected_area, 1)
-
-        total_affected_population = self.total_affected_population
-        total_population = self.total_population
-
-        total_affected_area *= 1e8
-        total_affected_area = round(total_affected_area, 1)
-        total_area *= 1e8
-        total_area = round(total_area, 0)
-        total_affected_population = round(total_affected_population, 0)
-        total_population = round(total_population, 0)
-
-        row = self.row(
-            row,
-            total_affected_area,
-            percentage_affected_area,
-            total_area,
-            total_affected_population,
-            total_population)
-
-        return row
-
-    def impact_row(
-            self,
-            area_name,
-            affected,
-            percent_affected,
-            single_total_area,
-            number_people_affected,
-            percent_people_affected,
-            area_population
-            ):
-        """Adds the calculated results into respective impact row
-
-        :param area_name: Area Name
-        :type area_name: str
-
-        :param affected: table with first and second row
-        :type affected: Table
-
-        :param percent_affected: percentage of affected area
-        :type percent_affected: float
-
-        :param single_total_area: total area of the land
-        :type single_total_area: float
-
-        :param number_people_affected: number of people affected
-        :type number_people_affected: float
-
-        :param percent_people_affected: percentage of people affected
-        in the area
-        :type percent_people_affected: float
-
-        :param area_population: Population of the area
-        :type area_population: float
-
-        :return row: the new impact row
-        :rtype row: Row
-        """
-        row = m.Row()
-        row.add(m.Cell(area_name))
-        row.add(m.Cell(format_int(int(affected)), align='right'))
-        row.add(m.Cell(
-            "%.1f%%" % percent_affected, align='right'))
-        row.add(m.Cell(
-            format_int(int(single_total_area)), align='right'))
-        row.add(m.Cell(
-            format_int(int(number_people_affected)),
-            align='right'))
-        row.add(m.Cell("%.1f%%" % percent_people_affected, align='right'))
-        row.add(m.Cell(
-            format_int(int(area_population)),
-            align='right'))
-
-        return row
 
     @property
     def affected_population(self):

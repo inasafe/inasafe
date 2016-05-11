@@ -180,7 +180,7 @@ def _process_reclassify(
     dst_ds = driver.Create(
         output_file, cols, rows, 1, gdal_dtype, options=compress_type)
     # dst_ds = driver.Create(
-    #   outfile, cols, rows, 1, 6, options = compress_type)
+    # outfile, cols, rows, 1, 6, options = compress_type)
     out_band = dst_ds.GetRasterBand(1)
     x_block_size = block_size[0]
     y_block_size = block_size[1]

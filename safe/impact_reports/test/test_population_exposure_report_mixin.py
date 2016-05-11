@@ -66,27 +66,6 @@ class PopulationExposureReportMixinTest(unittest.TestCase):
         del self.population_mixin_blank
         del self.population_mixin
 
-    def test_0001_generate_report(self):
-        """Generate a blank report."""
-        blank_report = self.population_mixin_blank.generate_report()
-        blank_report = blank_report.to_text()
-        expected_strings = [
-            u'**Population needing evacuation <sup>1</sup>**, 0',
-            u'**Unaffected population**, 0',
-            u'Evacuated population minimum needs',
-            u'Action checklist',
-            u'How will warnings be disseminated?',
-            u'How will we reach evacuated people?',
-            (u'If yes, where are they located and how will we '
-             u'distribute them?'),
-            (u'If no, where can we obtain additional relief items and how '
-             u'will we distribute them?'),
-            u'What are the related health risks?',
-            u'Who are the key people responsible for coordination?',
-        ]
-        for item in expected_strings:
-            self.assertIn(item, blank_report)
-
     def test_0002_category_ordering(self):
         """Test correct category ordering."""
         category_ordering = self.population_mixin.impact_category_ordering
@@ -99,19 +78,9 @@ class PopulationExposureReportMixinTest(unittest.TestCase):
 
     def test_0003_minimum_needs_breakdown(self):
         """Test minimum needs breakdown."""
-        needs_breakdown = self.population_mixin.\
-            format_minimum_needs_breakdown()
-        needs_breakdown = needs_breakdown.to_text()
-
-        expected_needs = [
-            u'Evacuated population minimum needs',
-            u'**Relief items to be provided test frequency**',
-            u'test name 1 [u], 300',
-            u'test name 2 [u], 600'
-        ]
-
-        for item in expected_needs:
-            self.assertIn(item, needs_breakdown)
+        needs_breakdown = self.population_mixin.minimum_needs
+        expected_needs = self.population_mixin.minimum_needs
+        self.assertEquals(expected_needs, needs_breakdown)
 
     def test_0004_population_counts(self):
         """Test correct category ordering."""
@@ -173,40 +142,39 @@ class PopulationExposureReportMixinTest(unittest.TestCase):
         expected = {
             'action check list': {
                 'fields': [
-                    u'Which group or population is most affected?',
-                    u'Who are the vulnerable people in the population and '
-                    u'why?',
-                    u'How will warnings be disseminated?',
-                    u"What are people's likely movements?",
-                    u'What are the security factors for the affected '
-                    u'population?',
-                    u'What are the security factors for relief responders?',
-                    u'How will we reach evacuated people?',
-                    u'What kind of food does the population normally consume?',
-                    u'What are the critical non-food items required by the '
-                    u'affected population?',
-                    u'Are there enough water supply, sanitation, hygiene, '
-                    u'food, shelter, medicines and relief items available for '
-                    u'300 people?',
-                    u'If yes, where are they located and how will we '
-                    u'distribute them?',
-                    u'If no, where can we obtain additional relief items and '
-                    u'how will we distribute them?',
-                    u'What are the related health risks?',
-                    u'Who are the key people responsible for coordination?'],
-                'title': u'Action checklist'},
+                    'Which group or population is most affected?',
+                    'Who are the vulnerable people in the population and why?',
+                    'How will warnings be disseminated?',
+                    'What are people\'s likely movements?',
+                    'What are the security factors for the affected '
+                    'population?',
+                    'What are the security factors for relief responders?',
+                    'How will we reach evacuated people?',
+                    'What kind of food does the population normally consume?',
+                    'What are the critical non-food items required by the '
+                    'affected population?',
+                    'Are there enough water supply, sanitation, hygiene, '
+                    'food, shelter, medicines and relief items available for '
+                    '300 people?',
+                    'If yes, where are they located and how will we '
+                    'distribute them?',
+                    'If no, where can we obtain additional relief items and '
+                    'how will we distribute them?',
+                    'What are the related health risks?',
+                    'Who are the key people responsible for coordination?'],
+                'title': 'Action checklist'},
             'exposure': 'population',
             'impact summary': {
                 'attributes': ['category', 'value'],
                 'fields': [
-                    [u'High', '100'],
-                    [u'Medium', '100'],
-                    [u'Low', '100'],
-                    [u'Total affected population', '300'],
-                    [u'Unaffected population', '100'],
-                    [u'Total population', '400'],
+                    ['High', '100'],
+                    ['Medium', '100'],
+                    ['Low', '100'],
+                    ['Total affected population', '300'],
+                    ['Unaffected population', '100'],
+                    ['Total population', '400'],
                     [
-                        u'Population needing evacuation <sup>1</sup>',
+                        'Population needing evacuation <sup>1</sup>',
                         '300'
                     ]
                 ]
@@ -220,7 +188,7 @@ class PopulationExposureReportMixinTest(unittest.TestCase):
                  'frequency': 'test frequency',
                  'table name': 'test name 2 [u]',
                  'unit': {'abbreviation': 'u'}}])]),
-            'notes': {'fields': [], 'title': ''},
+            'notes': {'fields': [], 'title': 'Notes'},
             'question': ''}
         self.assertEquals(data, expected)
 
