@@ -35,6 +35,7 @@ from safe.impact_functions.inundation.tsunami_raster_road\
     .metadata_definitions import TsunamiRasterRoadMetadata
 from safe.utilities.i18n import tr
 from safe.utilities.gis import add_output_feature, union_geometries
+from safe.utilities.utilities import ranges_according_thresholds
 from safe.storage.vector import Vector
 from safe.common.utilities import get_utm_epsg, unique_filename
 from safe.gis.qgis_raster_tools import clip_raster
@@ -384,12 +385,7 @@ class TsunamiRasterRoadsFunction(
         # Create vector features from the flood raster
         # For each raster cell there is one rectangular polygon
         # Data also get spatially indexed for faster operation
-        ranges = OrderedDict()
-        ranges[0] = [0.0, 0.0]
-        ranges[1] = [0.0, low_max]
-        ranges[2] = [low_max, medium_max]
-        ranges[3] = [medium_max, high_max]
-        ranges[4] = [high_max, None]
+        ranges = ranges_according_thresholds(low_max, medium_max, high_max)
 
         index, flood_cells_map = _raster_to_vector_cells(
             small_raster,
