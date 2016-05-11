@@ -79,8 +79,7 @@ class WizardDialogTest(unittest.TestCase):
         :type expected_step: WizardStep instance
         """
         current_step = expected_step.parent.get_current_step()
-        message = ('Expected %s but I got %s' % (expected_step, current_step))
-        self.assertEqual(expected_step, current_step, message)
+        self.assertEqual(expected_step, current_step)
 
     # noinspection PyUnresolvedReferences
     def select_from_list_widget(self, option, list_widget):
@@ -150,37 +149,22 @@ class WizardDialogTest(unittest.TestCase):
         QgsMapLayerRegistry.instance().addMapLayers([layer])
 
         # Check the environment first
-        message = 'Test layers are not readable. Check environment variables.'
-        self.assertIsNotNone(layer.dataProvider(), message)
+        self.assertIsNotNone(layer.dataProvider())
 
         count = len(dialog.iface.mapCanvas().layers())
         names = ','.join([l.name() for l in dialog.iface.mapCanvas().layers()])
-        message = (
-            'Loaded %d test layers while %d expected: %s' % (
-                count, expected_test_layer_count, names))
-        self.assertEqual(count, expected_test_layer_count, message)
+        self.assertEqual(count, expected_test_layer_count)
 
         # step_fc_functions1: test function matrix dimensions
         col_count = dialog.step_fc_functions1.tblFunctions1.columnCount()
-        message = (
-            'Invalid hazard count in the IF matrix! There should be %d while '
-            'there were: %d') % (expected_hazards_count, col_count)
-        self.assertEqual(col_count, expected_hazards_count, message)
+        self.assertEqual(col_count, expected_hazards_count)
         row_count = dialog.step_fc_functions1.tblFunctions1.rowCount()
-        message = (
-            'Invalid exposures count in the IF matrix! There should be %d '
-            'while there were: %d') % (expected_exposures_count, row_count)
-        self.assertEqual(row_count, expected_exposures_count, message)
+        self.assertEqual(row_count, expected_exposures_count)
 
         # step_fc_functions1: test number of functions for flood x structure
         dialog.step_fc_functions1.tblFunctions1.setCurrentCell(3, 1)
         count = len(dialog.step_fc_functions1.selected_functions_1())
-        message = (
-            'Invalid functions count in the IF matrix 1! For flood and '
-            'structure there should be %d while there were: %d') \
-            % (expected_flood_structure_functions_count, count)
-        self.assertEqual(
-            count, expected_flood_structure_functions_count, message)
+        self.assertEqual(count, expected_flood_structure_functions_count)
 
         # step_fc_functions1: press ok
         dialog.pbnNext.click()
@@ -191,12 +175,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.step_fc_functions2.tblFunctions2.setCurrentCell(3, 0)
 
         count = len(dialog.step_fc_functions2.selected_functions_2())
-        message = (
-            'Invalid functions count in the IF matrix 2! For raster and '
-            'polygon there should be %d while there were: %d') \
-            % (expected_raster_polygon_functions_count, count)
-        self.assertEqual(
-            count, expected_raster_polygon_functions_count, message)
+        self.assertEqual(count, expected_raster_polygon_functions_count)
 
         # step_fc_functions2: press ok
         dialog.pbnNext.click()
@@ -204,18 +183,14 @@ class WizardDialogTest(unittest.TestCase):
         # step_fc_function: test number of available functions
         self.check_current_step(dialog.step_fc_function)
         count = dialog.step_fc_function.lstFunctions.count()
-        message = (
-            'Invalid functions count on the list! There should be %d while '
-            'there were: %d') % (expected_functions_count, count)
-        self.assertEqual(count, expected_functions_count, message)
+        self.assertEqual(count, expected_functions_count)
 
         # step_fc_function: test if chosen_if is on the list
         role = QtCore.Qt.UserRole
         flood_ifs = [
             dialog.step_fc_function.lstFunctions.item(row).data(role)['id']
             for row in range(count)]
-        message = 'Expected flood impact function not found: %s' % chosen_if
-        self.assertTrue(chosen_if in flood_ifs, message)
+        self.assertTrue(chosen_if in flood_ifs)
 
         # step_fc_function: select FloodRasterBuildingImpactFunction and
         # press ok
@@ -227,27 +202,14 @@ class WizardDialogTest(unittest.TestCase):
         # Note this step is tested prior to step_fc_hazlayer_origin
         # as the list is prepared prior to autoselecting the radiobuttons
         count = dialog.step_fc_hazlayer_from_canvas.lstCanvasHazLayers.count()
-        message = (
-            'Invalid hazard layers count! There should be %d while there '
-            'were: %d') % (expected_hazard_layers_count, count)
-        self.assertEqual(count, expected_hazard_layers_count, message)
+        self.assertEqual(count, expected_hazard_layers_count)
 
         # step_fc_hazlayer_origin: test if the radiobuttons are autmatically
         # enabled and selected
-        message = (
-            'The rbHazLayerFromCanvas radio button has been not automatically '
-            'enabled')
         self.assertTrue(
-            dialog.step_fc_hazlayer_origin.rbHazLayerFromCanvas.isEnabled(),
-            message
-        )
-        message = (
-            'The rbHazLayerFromCanvas radio button has been not automatically '
-            'selected')
+            dialog.step_fc_hazlayer_origin.rbHazLayerFromCanvas.isEnabled())
         self.assertTrue(
-            dialog.step_fc_hazlayer_origin.rbHazLayerFromCanvas.isChecked(),
-            message
-        )
+            dialog.step_fc_hazlayer_origin.rbHazLayerFromCanvas.isChecked())
 
         # step_fc_hazlayer_origin: press ok
         self.check_current_step(dialog.step_fc_hazlayer_origin)
@@ -261,24 +223,14 @@ class WizardDialogTest(unittest.TestCase):
         # Note this step is tested prior to step_fc_explayer_origin
         # as the list is prepared prior to autoselecting the radiobuttons
         count = dialog.step_fc_explayer_from_canvas.lstCanvasExpLayers.count()
-        message = ('Invalid exposure layers count! There should be %d while '
-                   'there were: %d') % (expected_exposure_layers_count, count)
-        self.assertEqual(count, expected_exposure_layers_count, message)
+        self.assertEqual(count, expected_exposure_layers_count)
 
         # step_fc_explayer_origin: test if the radiobuttons are automatically
         # enabled and selected
-        message = (
-            'The rbExpLayerFromCanvas radio button has been not automatically '
-            'enabled')
         self.assertTrue(
-            dialog.step_fc_explayer_origin.rbExpLayerFromCanvas.isEnabled(),
-            message)
-        message = (
-            'The rbExpLayerFromCanvas radio button has been not automatically '
-            'selected')
+            dialog.step_fc_explayer_origin.rbExpLayerFromCanvas.isEnabled())
         self.assertTrue(
-            dialog.step_fc_explayer_origin.rbExpLayerFromCanvas.isChecked(),
-            message)
+            dialog.step_fc_explayer_origin.rbExpLayerFromCanvas.isChecked())
 
         # step_fc_explayer_origin: press ok
         self.check_current_step(dialog.step_fc_explayer_origin)
@@ -292,25 +244,14 @@ class WizardDialogTest(unittest.TestCase):
         # Note this step is tested prior to step_fc_agglayer_origin
         # as the list is prepared prior to auto selecting the radio buttons
         count = dialog.step_fc_agglayer_from_canvas.lstCanvasAggLayers.count()
-        message = ('Invalid aggregation layers count! There should be %d '
-                   'while there were: '
-                   '%d') % (expected_aggregation_layers_count, count)
-        self.assertEqual(count, expected_aggregation_layers_count, message)
+        self.assertEqual(count, expected_aggregation_layers_count)
 
         # step_fc_agglayer_origin: test if the radio buttons are automatically
         # enabled and selected
-        message = (
-            'The rbAggLayerFromCanvas radio button has been not automatically '
-            'disabled')
         self.assertFalse(
-            dialog.step_fc_agglayer_origin.rbAggLayerFromCanvas.isEnabled(),
-            message)
-        message = (
-            'The rbAggLayerFromBrowser radio button has been not '
-            'automatically selected')
+            dialog.step_fc_agglayer_origin.rbAggLayerFromCanvas.isEnabled())
         self.assertTrue(
-            dialog.step_fc_agglayer_origin.rbAggLayerFromBrowser.isChecked(),
-            message)
+            dialog.step_fc_agglayer_origin.rbAggLayerFromBrowser.isChecked())
 
         # step_fc_agglayer_origin: switch to no aggregation and press ok
         self.check_current_step(dialog.step_fc_agglayer_origin)
@@ -333,11 +274,9 @@ class WizardDialogTest(unittest.TestCase):
         # #te be removed from params
         # minneeds = [s for s in summaries
         #            if expected_summary_key.upper() in s.upper()]
-        # message = 'No minimum needs found in the summary text'
-        # self.assertTrue(minneeds, message)
-        # message = 'No rice found in the minimum needs in the summary text'
+        # self.assertTrue(minneeds)
         # self.assertTrue(expected_summary_value_fragment.upper()
-        #                in minneeds[0].upper(), message)
+        #                in minneeds[0].upper())
 
         # step_fc_summary: run analysis
         dialog.pbnNext.click()
@@ -346,15 +285,9 @@ class WizardDialogTest(unittest.TestCase):
         # step_fc_analysis: test the html output
         # report_path = dialog.wvResults.report_path
         # size = os.stat(report_path).st_size
-        # message = (
-        #     'Expected generated report to be %d +- %dBytes, got %d. '
-        #     'Please update expected_size if the generated output '
-        #     'is acceptable on your system.'
-        #     % (expected_report_size, tolerance, size))
         # self.assertTrue(
         #     (expected_report_size - tolerance < size < expected_report_size +
-        #      tolerance),
-        #     message)
+        #      tolerance))
         # close the wizard
         dialog.pbnNext.click()
 
@@ -405,8 +338,7 @@ class WizardDialogTest(unittest.TestCase):
         flood_ifs = [
             dialog.step_fc_function.lstFunctions.item(row).data(role)['id']
             for row in range(dialog.step_fc_function.lstFunctions.count())]
-        message = 'Expected flood impact function not found: %s' % chosen_if
-        self.assertTrue(chosen_if in flood_ifs, message)
+        self.assertTrue(chosen_if in flood_ifs)
 
         # step_fc_function: select FloodEvacuationRasterHazardFunction and
         # press ok
@@ -569,8 +501,7 @@ class WizardDialogTest(unittest.TestCase):
         flood_ifs = [
             dialog.step_fc_function.lstFunctions.item(row).data(role)['id']
             for row in range(dialog.step_fc_function.lstFunctions.count())]
-        message = 'Expected flood impact function not found: %s' % chosen_if1
-        self.assertTrue(chosen_if1 in flood_ifs, message)
+        self.assertTrue(chosen_if1 in flood_ifs)
 
         # step_fc_function: select FloodRasterBuildingFunction and
         # press ok
@@ -586,10 +517,7 @@ class WizardDialogTest(unittest.TestCase):
         # Note this step is tested prior to step_fc_hazlayer_origin
         # as the list is prepared prior to autoselecting the radiobuttons
         count = dialog.step_fc_hazlayer_from_canvas.lstCanvasHazLayers.count()
-        message = (
-            'Invalid hazard layers count! There should be %d while there '
-            'were: %d') % (expected_hazard_layers_count, count)
-        self.assertEqual(count, expected_hazard_layers_count, message)
+        self.assertEqual(count, expected_hazard_layers_count)
 
         # test if hazard browser works
         dialog.step_fc_hazlayer_origin.rbHazLayerFromBrowser.click()
@@ -615,10 +543,7 @@ class WizardDialogTest(unittest.TestCase):
         # step_fc_explayer_origin
         self.check_current_step(dialog.step_fc_explayer_origin)
         count = dialog.step_fc_explayer_from_canvas.lstCanvasExpLayers.count()
-        message = (
-            'Invalid exposure layers count! There should be %d while there '
-            'were: %d') % (expected_exposure_layers_count, count)
-        self.assertEqual(count, expected_exposure_layers_count, message)
+        self.assertEqual(count, expected_exposure_layers_count)
 
         # test if exposure browser works
         dialog.step_fc_explayer_origin.rbExpLayerFromBrowser.click()
@@ -687,10 +612,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()
         self.check_current_step(dialog.step_fc_agglayer_from_canvas)
         count = dialog.step_fc_agglayer_from_canvas.lstCanvasAggLayers.count()
-        message = (
-            'Invalid aggregtion layers count! There should be %d while there '
-            'were: %d') % (expected_aggregation_layers_count, count)
-        self.assertEqual(count, expected_aggregation_layers_count, message)
+        self.assertEqual(count, expected_aggregation_layers_count)
         # Select the second (keywordless) layer in order to trigger preparing
         # the 'missing keywords' description.
         dialog.step_fc_agglayer_from_canvas.lstCanvasAggLayers.setCurrentRow(1)
@@ -771,8 +693,7 @@ class WizardDialogTest(unittest.TestCase):
         flood_ifs = [
             dialog.step_fc_function.lstFunctions.item(row).data(role)['id']
             for row in range(dialog.step_fc_function.lstFunctions.count())]
-        message = 'Expected flood impact function not found: %s' % chosen_if
-        self.assertTrue(chosen_if in flood_ifs, message)
+        self.assertTrue(chosen_if in flood_ifs)
 
         # step_fc_function: select FloodEvacuationRasterHazardFunction and
         # press ok
