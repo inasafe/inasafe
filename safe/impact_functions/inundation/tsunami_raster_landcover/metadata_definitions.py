@@ -1,0 +1,110 @@
+# coding=utf-8
+"""InaSAFE Disaster risk tool by Australian Aid - Tsunami Raster Impact on
+Buildings
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
+"""
+__author__ = 'etiennetrimaille'
+__project_name__ = 'inasafe'
+__filename__ = 'metadata_definitions'
+__date__ = '10/05/16'
+__copyright__ = 'etienne@kartoza.com'
+
+from safe.common.utilities import OrderedDict
+from safe.definitions import (
+    layer_mode_classified,
+    layer_mode_continuous,
+    layer_geometry_polygon,
+    layer_geometry_raster,
+    hazard_category_single_event,
+    hazard_category_multiple_event,
+    exposure_land_cover,
+    unit_metres,
+    unit_feet,
+    hazard_tsunami
+)
+from safe.impact_functions.inundation.tsunami_raster_building.\
+    metadata_definitions import (
+        low_threshold,
+        medium_threshold,
+        high_threshold
+    )
+from safe.impact_functions.impact_function_metadata import \
+    ImpactFunctionMetadata
+from safe.utilities.i18n import tr
+
+
+class TsunamiRasterHazardLandCoverFunctionMetadata(ImpactFunctionMetadata):
+
+    @staticmethod
+    def as_dict():
+        """Return metadata as a dictionary.
+
+        This is a static method. You can use it to get the metadata in
+        dictionary format for an impact function.
+
+        :returns: A dictionary representing all the metadata for the
+            concrete impact function.
+        :rtype: dict
+        """
+        dict_meta = {
+            'id': 'ContinuousRasterHazardLandCoverFunction',
+            'name': tr('Continuous raster hazard on land cover'),
+            'impact': tr('Be affected'),
+            'title': tr('Be affected'),
+            'function_type': 'qgis2.0',
+            'author': 'Martin Dobias (wonder.sk@gmail.com)',
+            'date_implemented': '10/05/2016',
+            'overview': tr(
+                'To assess the impact of each hazard zone on land cover.'),
+            'detailed_description': '',
+            'hazard_input': tr(
+                'The hazard layer must be a raster layer.'),
+            'exposure_input': tr(
+                'Vector polygon layer where each polygon represents a type of '
+                'land cover.'),
+            'output': tr(
+                'A vector layer of land cover polygons with each tagged '
+                'according to the hazard zone in which it falls.'),
+            'actions': tr(
+                'Provide details about how big area fall within '
+                'each hazard zone.'),
+            'limitations': [],
+            'citations': [],
+            'layer_requirements': {
+                'hazard': {
+                    'layer_mode': layer_mode_continuous,
+                    'layer_geometries': [layer_geometry_raster],
+                    'hazard_categories': [
+                        hazard_category_single_event,
+                        hazard_category_multiple_event
+                    ],
+                    'hazard_types': [hazard_tsunami],
+                    'continuous_hazard_units': [unit_feet, unit_metres],
+                    'vector_hazard_classifications': [],
+                    'raster_hazard_classifications': [],
+                    'additional_keywords': []
+                },
+                'exposure': {
+                    'layer_mode': layer_mode_classified,
+                    'layer_geometries': [layer_geometry_polygon],
+                    'exposure_types': [exposure_land_cover],
+                    'exposure_units': [],
+                    'exposure_class_fields': [],
+                    'additional_keywords': []
+                }
+            },
+            'parameters': OrderedDict(
+                [
+                    ('low_threshold', low_threshold()),
+                    ('medium_threshold', medium_threshold()),
+                    ('high_threshold', high_threshold())
+                ])
+        }
+        return dict_meta
