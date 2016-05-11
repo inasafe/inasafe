@@ -28,8 +28,6 @@ import qgis
 # pylint: enable=unused-import
 from qgis.core import QgsMapLayerRegistry
 from PyQt4 import QtCore
-# noinspection PyPackageRequirements
-from PyQt4.QtCore import Qt
 
 # noinspection PyPackageRequirements
 # Add PARENT directory to path to make test aware of other modules
@@ -48,11 +46,9 @@ from safe.test.utilities import (
 # safe.gui.tools.wizard
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe.definitions import inasafe_keyword_version
 from safe.impact_functions import register_impact_functions
 from safe.gui.tools.wizard.wizard_dialog import WizardDialog
 from safe.gui.widgets.dock import Dock
-from safe.utilities.keyword_io import KeywordIO, definition
 
 
 # noinspection PyTypeChecker
@@ -118,12 +114,12 @@ class WizardDialogTest(unittest.TestCase):
         # expected_summary_key = 'minimum needs'
         # expected_summary_value_fragment = 'rice'
 
-        expected_report_size = 4055  # as saved on Ubuntu
+        # expected_report_size = 4055  # as saved on Ubuntu
         # TS : changed tolerance from 120 to 160 because above change
         # causes fail on fedora
         # AG: updated the tolerance from 160 to 190
         # MD: more tolerance please! 190 -> 200
-        tolerance = 200  # windows EOL etc
+        # tolerance = 200  # windows EOL etc
 
         # Initialize dialog
         # noinspection PyTypeChecker
@@ -152,7 +148,6 @@ class WizardDialogTest(unittest.TestCase):
         self.assertIsNotNone(layer.dataProvider())
 
         count = len(dialog.iface.mapCanvas().layers())
-        names = ','.join([l.name() for l in dialog.iface.mapCanvas().layers()])
         self.assertEqual(count, expected_test_layer_count)
 
         # step_fc_functions1: test function matrix dimensions
