@@ -52,10 +52,7 @@ from safe.definitions import inasafe_keyword_version
 from safe.impact_functions import register_impact_functions
 from safe.gui.tools.wizard.wizard_dialog import WizardDialog
 from safe.gui.tools.wizard.wizard_utils import get_question_text
-from safe.gui.widgets.dock import Dock
 from safe.utilities.keyword_io import KeywordIO, definition
-
-DOCK = Dock(IFACE)
 
 
 # noinspection PyTypeChecker

@@ -54,12 +54,15 @@ from safe.gui.tools.wizard.wizard_dialog import WizardDialog
 from safe.gui.widgets.dock import Dock
 from safe.utilities.keyword_io import KeywordIO, definition
 
-DOCK = Dock(IFACE)
-
 
 # noinspection PyTypeChecker
 class WizardDialogTest(unittest.TestCase):
     """Test the InaSAFE wizard GUI"""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.dock = Dock(IFACE)
+
     def setUp(self):
         # register impact functions
         register_impact_functions()
@@ -126,7 +129,7 @@ class WizardDialogTest(unittest.TestCase):
         # Initialize dialog
         # noinspection PyTypeChecker
         dialog = WizardDialog(iface=IFACE)
-        dialog.dock = DOCK
+        dialog.dock = self.dock
         dialog.set_function_centric_mode()
         QgsMapLayerRegistry.instance().removeAllMapLayers()
 
@@ -363,7 +366,7 @@ class WizardDialogTest(unittest.TestCase):
         # Initialize dialog
         # noinspection PyTypeChecker
         dialog = WizardDialog(iface=IFACE)
-        dialog.dock = DOCK
+        dialog.dock = self.dock
         dialog.set_function_centric_mode()
         QgsMapLayerRegistry.instance().removeAllMapLayers()
 
@@ -487,7 +490,7 @@ class WizardDialogTest(unittest.TestCase):
         # Initialize dialog
         # noinspection PyTypeChecker
         dialog = WizardDialog(iface=IFACE)
-        dialog.dock = DOCK
+        dialog.dock = self.dock
         dialog.set_function_centric_mode()
         QgsMapLayerRegistry.instance().removeAllMapLayers()
 
@@ -730,7 +733,7 @@ class WizardDialogTest(unittest.TestCase):
         # Initialize dialog
         # noinspection PyTypeChecker
         dialog = WizardDialog(iface=IFACE)
-        dialog.dock = DOCK
+        dialog.dock = self.dock
         dialog.set_function_centric_mode()
         QgsMapLayerRegistry.instance().removeAllMapLayers()
 
