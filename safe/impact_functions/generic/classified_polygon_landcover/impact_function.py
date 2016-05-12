@@ -49,6 +49,7 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
         # Set the question of the IF (as the hazard data is not an event)
         self.question = ('In each of the hazard zones which land cover types '
                          'might be affected.')
+        self.hazard_columns = ['High', 'Medium', 'Low']
 
     def notes(self):
         """Return the notes section of the report.
@@ -171,6 +172,7 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
             question=self.question,
             impact_layer=impact_layer,
             target_field=self.target_field,
+            hazard_columns=self.hazard_columns,
             land_cover_field=type_attr,
             zone_field=zone_field
         ).generate_data()

@@ -52,6 +52,7 @@ class LandCoverReportTemplate(TemplateBase):
             impact_layer_path=impact_layer_path,
             json_file=json_file,
             impact_data=impact_data)
+        self.hazard_columns = None
         self.impact_table = self.impact_data.get('impact table')
         self.zone_field = self.impact_data.get('zone field')
 
@@ -91,7 +92,7 @@ class LandCoverReportTemplate(TemplateBase):
             flat_table,
             row_field='landcover',
             column_field='hazard',
-            columns=['high', 'medium', 'low'])
+            columns=self.hazard_columns)
 
         report = {'impacted': pivot_table}
 
@@ -103,7 +104,7 @@ class LandCoverReportTemplate(TemplateBase):
                     flat_table,
                     row_field="landcover",
                     column_field='hazard',
-                    columns=['high', 'medium', 'low'],
+                    columns=self.hazard_columns,
                     filter_field="zone",
                     filter_value=zone)
                 report['impacted_zones'][zone] = table
@@ -115,7 +116,7 @@ class LandCoverReportTemplate(TemplateBase):
             report['impacted'],
             header_text=affected_text,
             total_columns=True,
-            bar_chart=True)
+            bar_chart=False)
         message.add(table)
 
         if 'impacted_zones' in report:
@@ -125,7 +126,7 @@ class LandCoverReportTemplate(TemplateBase):
                     table,
                     header_text=affected_text,
                     total_columns=True,
-                    bar_chart=True)
+                    bar_chart=False)
                 message.add(m_table)
 
         return message.to_html(suppress_newlines=True)
@@ -163,9 +164,9 @@ def format_pivot_table(
     if bar_chart:
         row.add(m.Cell('', header=True, attributes='width="100%"'))
     for column_name in pivot_table.columns:
-        row.add(m.Cell(column_name, header=True))
+        row.add(m.Cell(column_name, header=True, align='right'))
     if total_rows:
-        row.add(m.Cell(tr('All'), header=True))
+        row.add(m.Cell(tr('All'), header=True, align='right'))
     table.add(row)
 
     max_value = max(max(row) for row in pivot_table.data)
