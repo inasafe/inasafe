@@ -100,33 +100,6 @@ class StepFcExtent(WizardStep, FORM_CLASS):
         _analysis_handler = None
         return True
 
-    # noinspection PyPep8Naming
-    def on_rbExtentUser_toggled(self):
-        """Unlock the Next button
-
-        .. note:: This is an automatic Qt slot
-           executed when the radiobutton is activated.
-        """
-        self.parent.pbnNext.setEnabled(True)
-
-    # noinspection PyPep8Naming
-    def on_rbExtentLayer_toggled(self):
-        """Unlock the Next button
-
-        .. note:: This is an automatic Qt slot
-           executed when the radiobutton is activated.
-        """
-        self.parent.pbnNext.setEnabled(True)
-
-    # noinspection PyPep8Naming
-    def on_rbExtentScreen_toggled(self):
-        """Unlock the Next button
-
-        .. note:: This is an automatic Qt slot
-           executed when the radiobutton is activated.
-        """
-        self.parent.pbnNext.setEnabled(True)
-
     def start_capture_coordinates(self):
         """Enter the coordinate capture mode"""
         self.parent.hide()
