@@ -159,5 +159,7 @@ class TemplateBase(object):
 
                 table.add(row)
             message.add(table)
+            for note in v['notes']:
+                message.add(m.EmphasizedText(note))
 
         return message

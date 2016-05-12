@@ -1499,7 +1499,6 @@ class ImpactFunction(object):
         if hasattr(result_layer, 'impact_data'):
             impact_data = result_layer.impact_data
             json_file_name = os.path.splitext(output_filename)[0] + '.json'
-            LOGGER.debug(impact_data)
             with open(json_file_name, 'w') as json_file:
                 json.dump(impact_data, json_file, indent=2)
 
