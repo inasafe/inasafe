@@ -10,7 +10,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-import logging
 
 from qgis.core import (
     QGis,
@@ -49,8 +48,7 @@ __date__ = '11/03/16'
 __copyright__ = 'etienne@kartoza.com'
 
 
-class TsunamiRasterLandcoverFunction(
-        ContinuousRHClassifiedVE, LandCoverReportMixin):
+class TsunamiRasterLandcoverFunction(ContinuousRHClassifiedVE):
     # noinspection PyUnresolvedReferences
     """Simple impact function for tsunami on roads."""
     _metadata = TsunamiRasterHazardLandCoverFunctionMetadata()
@@ -58,7 +56,6 @@ class TsunamiRasterLandcoverFunction(
     def __init__(self):
         """Constructor."""
         super(TsunamiRasterLandcoverFunction, self).__init__()
-        super(LandCoverReportMixin, self).__init__()
 
         self.hazard_classes = [
             tr('Dry Zone'),
@@ -200,8 +197,8 @@ class TsunamiRasterLandcoverFunction(
         del writer
         impact_layer = QgsVectorLayer(filename, 'Impacted Land Cover', 'ogr')
 
-        #from safe.test.debug_helper import show_qgis_layer
-        #show_qgis_layer(impact_layer)
+        # from safe.test.debug_helper import show_qgis_layer
+        # show_qgis_layer(impact_layer)
 
         if impact_layer.featureCount() == 0:
             raise ZeroImpactException()
@@ -214,6 +211,7 @@ class TsunamiRasterLandcoverFunction(
             question=self.question,
             impact_layer=impact_layer,
             target_field=self.target_field,
+            hazard_columns=self.hazard_classes,
             land_cover_field=class_field,
             zone_field=zone_field
         ).generate_data()
@@ -221,17 +219,38 @@ class TsunamiRasterLandcoverFunction(
         # Define style for the impact layer
         style_classes = [
             dict(
-                label=tr('High'), value='high',
-                colour='#F31A1C', border_color='#000000',
-                transparency=0, size=0.5),
+                label=self.hazard_classes[0] + ': 0m',
+                value=self.hazard_classes[0],
+                colour='#00FF00',
+                border_color='#000000',
+                transparency=0),
             dict(
-                label=tr('Medium'), value='medium',
-                colour='#ffe691', border_color='#000000',
-                transparency=0, size=0.5),
+                label=self.hazard_classes[1] + ': <0 - %.1f m' % low_max,
+                value=self.hazard_classes[1],
+                colour='#FFFF00',
+                border_color='#000000',
+                transparency=0),
             dict(
-                label=tr('Low'), value='low',
-                colour='#acffb6', border_color='#000000',
-                transparency=0, size=0.5)]
+                label=self.hazard_classes[2] + ': %.1f - %.1f m' % (
+                    low_max + 0.1, medium_max),
+                value=self.hazard_classes[2],
+                colour='#FFB700',
+                border_color='#000000',
+                transparency=0),
+            dict(
+                label=self.hazard_classes[3] + ': %.1f - %.1f m' % (
+                    medium_max + 0.1, high_max),
+                value=self.hazard_classes[3],
+                colour='#FF6F00',
+                border_color='#000000',
+                transparency=0),
+            dict(
+                label=self.hazard_classes[4] + ' > %.1f m' % high_max,
+                value=self.hazard_classes[4],
+                colour='#FF0000',
+                border_color='#000000',
+                transparency=0),
+        ]
         style_info = dict(
             target_field=self.target_field,
             style_classes=style_classes,
