@@ -54,8 +54,8 @@ class TsunamiRasterHazardLandCoverFunctionMetadata(ImpactFunctionMetadata):
         :rtype: dict
         """
         dict_meta = {
-            'id': 'ContinuousRasterHazardLandCoverFunction',
-            'name': tr('Continuous raster hazard on land cover'),
+            'id': 'RasterTsunamiHazardLandCoverFunction',
+            'name': tr('Raster tsunami on land cover'),
             'impact': tr('Be affected'),
             'title': tr('Be affected'),
             'function_type': 'qgis2.0',
@@ -65,7 +65,7 @@ class TsunamiRasterHazardLandCoverFunctionMetadata(ImpactFunctionMetadata):
                 'To assess the impact of each hazard zone on land cover.'),
             'detailed_description': '',
             'hazard_input': tr(
-                'The hazard layer must be a raster layer.'),
+                'The hazard layer must be a tsunami raster layer.'),
             'exposure_input': tr(
                 'Vector polygon layer where each polygon represents a type of '
                 'land cover.'),
