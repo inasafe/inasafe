@@ -288,7 +288,7 @@ def ranges_according_thresholds(low_max, medium_max, high_max):
     :rtype OrderedDict
     """
     ranges = OrderedDict()
-    ranges[0] = [0.0, 0.0]
+    ranges[0] = [None, 0.0]
     ranges[1] = [0.0, low_max]
     ranges[2] = [low_max, medium_max]
     ranges[3] = [medium_max, high_max]
