@@ -26,7 +26,6 @@ from qgis.core import (
     QgsVectorLayer,
 )
 from PyQt4.QtCore import QVariant
-from PyQt4.QtGui import QColor
 
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr

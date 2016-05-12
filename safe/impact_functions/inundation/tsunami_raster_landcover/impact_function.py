@@ -10,7 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from collections import OrderedDict
+import logging
 
 from qgis.core import (
     QGis,
@@ -34,14 +34,12 @@ from safe.impact_functions.bases.continuous_rh_classified_ve import \
 from safe.impact_functions.inundation.tsunami_raster_landcover.\
     metadata_definitions import (TsunamiRasterHazardLandCoverFunctionMetadata)
 from safe.utilities.i18n import tr
-from safe.utilities.gis import add_output_feature, union_geometries
+from safe.gis.reclassify_gdal import reclassify_polygonize
 from safe.utilities.utilities import ranges_according_thresholds
 from safe.storage.vector import Vector
-from safe.common.utilities import get_utm_epsg, unique_filename
+from safe.common.utilities import unique_filename
 from safe.gis.qgis_raster_tools import align_clip_raster
-from safe.gis.qgis_vector_tools import (
-    extent_to_geo_array,
-    create_layer)
+from safe.gis.qgis_vector_tools import extent_to_geo_array
 from safe.impact_reports.land_cover_report_mixin import LandCoverReportMixin
 
 __author__ = 'etiennetrimaille'
@@ -49,197 +47,6 @@ __project_name__ = 'inasafe-dev'
 __filename__ = 'impact_function.py'
 __date__ = '11/03/16'
 __copyright__ = 'etienne@kartoza.com'
-
-
-def _raster_to_vector_cells(raster, ranges, output_crs):
-    """Generate vectors features (rectangles) for raster cells.
-
-     Cells which are not within one of the ranges will be excluded.
-     The provided CRS will be used to determine the CRS of the output
-     vector cells layer.
-
-    :param ranges: A dictionary of ranges. The key will be the id the range.
-    :type ranges: OrderedDict
-
-    :param raster: A raster layer that will be vectorised.
-    :type raster: QgsRasterLayer
-
-    :param output_crs: The CRS to use for the output vector cells layer.
-    :type output_crs: QgsCoordinateReferenceSystem
-
-    :returns: A two-tuple containing a spatial index and a map (dict) where
-        map keys are feature id's and the value is the feature for that id.
-    :rtype: (QgsSpatialIndex, dict)
-    """
-
-    # get raster data
-    provider = raster.dataProvider()
-    extent = provider.extent()
-    raster_cols = provider.xSize()
-    raster_rows = provider.ySize()
-    block = provider.block(1, extent, raster_cols, raster_rows)
-    raster_xmin = extent.xMinimum()
-    raster_ymax = extent.yMaximum()
-    cell_width = extent.width() / raster_cols
-    cell_height = extent.height() / raster_rows
-
-    uri = "Polygon?crs=" + output_crs.authid()
-    vl = QgsVectorLayer(uri, "cells", "memory")
-    vl.dataProvider().addAttributes([QgsField('affected', QVariant.Int)])
-    vl.updateFields()
-    features = []
-
-    # prepare coordinate transform to reprojection
-    ct = QgsCoordinateTransform(raster.crs(), output_crs)
-
-    rd = 0
-    for y in xrange(raster_rows):
-        for x in xrange(raster_cols):
-            # only use cells that are within the specified threshold
-            value = block.value(y, x)
-            current_threshold = None
-
-            for threshold_id, threshold in ranges.iteritems():
-
-                # If, eg [0, 0], the value must be equal to 0.
-                if threshold[0] == threshold[1] and threshold[0] == value:
-                    current_threshold = threshold_id
-
-                # If, eg [None, 0], the value must be less than 0.
-                if threshold[0] is None and value <= threshold[1]:
-                    current_threshold = threshold_id
-
-                # If, eg [0, None], the value must be greater than 0.
-                if threshold[1] is None and threshold[0] < value:
-                    current_threshold = threshold_id
-
-                # If, eg [0, 1], the value must be
-                # between 0 excluded and 1 included.
-                if threshold[0] < value <= threshold[1]:
-                    current_threshold = threshold_id
-
-                if current_threshold is not None:
-                    # construct rectangular polygon feature for the cell
-                    x0 = raster_xmin + (x * cell_width)
-                    x1 = raster_xmin + ((x + 1) * cell_width)
-                    y0 = raster_ymax - (y * cell_height)
-                    y1 = raster_ymax - ((y + 1) * cell_height)
-                    outer_ring = [
-                        QgsPoint(x0, y0), QgsPoint(x1, y0),
-                        QgsPoint(x1, y1), QgsPoint(x0, y1),
-                        QgsPoint(x0, y0)]
-                    # noinspection PyCallByClass
-                    geometry = QgsGeometry.fromPolygon([outer_ring])
-                    geometry.transform(ct)
-                    f = QgsFeature()
-                    f.setGeometry(geometry)
-                    f.setAttributes([current_threshold])
-                    features.append(f)
-                    break
-
-            # every once in a while, add the created features to the output.
-            rd += 1
-            if rd % 1000 == 0:
-                vl.dataProvider().addFeatures(features)
-                features = []
-
-    # Add the latest features
-    vl.dataProvider().addFeatures(features)
-
-    # construct a temporary map for fast access to features by their IDs
-    # (we will be getting feature IDs from spatial index)
-    flood_cells_map = {}
-    for f in vl.getFeatures():
-        flood_cells_map[f.id()] = f
-
-    # build a spatial index so we can quickly identify
-    # flood cells overlapping roads
-    if QGis.QGIS_VERSION_INT >= 20800:
-        # woohoo we can use bulk insert (much faster)
-        index = QgsSpatialIndex(vl.getFeatures())
-    else:
-        index = QgsSpatialIndex()
-        for f in vl.getFeatures():
-            index.insertFeature(f)
-
-    return index, flood_cells_map
-
-
-def _intersect_lines_with_vector_cells(
-        line_layer,
-        request,
-        index,
-        flood_cells_map,
-        output_layer,
-        target_field):
-    """
-    A helper function to find all vector cells that intersect with lines.
-
-    In typical usage, you will have a roads layer and polygon cells from
-    vectorising a raster layer. The goal is to obtain a subset of cells
-    which intersect with the roads. This will then be used to determine
-    if any given road segment is flooded.
-
-    :param line_layer: Vector layer with containing linear features
-        such as roads.
-    :type line_layer: QgsVectorLayer
-
-    :param request: Request for fetching features from lines layer.
-    :type request: QgsFeatureRequest
-
-    :param index: Spatial index with flood features.
-    :type index: QgsSpatialIndex
-
-    :param flood_cells_map: Map from flood feature IDs to actual features.
-        See :func:`_raster_to_vector_cells` for more details.
-    :type flood_cells_map: dict
-
-    :param output_layer: Layer to which features will be written.
-    :type output_layer: QgsVectorLayer
-
-    :param target_field: Name of the field in output_layer which will receive
-        information whether the feature is flooded or not.
-    :type target_field: basestring
-
-    :return: None
-    """
-
-    features = []
-    fields = output_layer.dataProvider().fields()
-
-    rd = 0
-    for f in line_layer.getFeatures(request):
-        # query flood cells located in the area of the road and build
-        # a (multi-)polygon geometry with flooded area relevant to this road
-        ids = index.intersects(f.geometry().boundingBox())
-        flood_features = [flood_cells_map[i] for i in ids]
-
-        for feature in flood_features:
-            # find out which parts of the road are flooded
-            in_geom = f.geometry().intersection(feature.geometry())
-            if in_geom and (in_geom.wkbType() == QGis.WKBLineString or
-                            in_geom.wkbType() == QGis.WKBMultiLineString):
-                affected_value = feature.attributes()[0]
-                add_output_feature(
-                    features, in_geom, affected_value,
-                    fields, f.attributes(), target_field)
-
-        # find out which parts of the road are not flooded
-        geoms = [j.geometry() for j in flood_features]
-        out_geom = f.geometry().difference(union_geometries(geoms))
-        if out_geom and (out_geom.wkbType() == QGis.WKBLineString or
-                         out_geom.wkbType() == QGis.WKBMultiLineString):
-            add_output_feature(
-                features, out_geom, 0,
-                fields, f.attributes(), target_field)
-        # every once in a while commit the created features to the output layer
-        rd += 1
-        if rd % 1000 == 0:
-            output_layer.dataProvider().addFeatures(features)
-            features = []
-
-    # Add the latest features
-    output_layer.dataProvider().addFeatures(features)
 
 
 class TsunamiRasterLandcoverFunction(
@@ -276,11 +83,17 @@ class TsunamiRasterLandcoverFunction(
         :type: safe_layer
         """
         hazard_layer = self.hazard.layer
+        exposure = self.exposure.layer
+
         # Thresholds for tsunami hazard zone breakdown.
         low_max = self.parameters['low_threshold'].value
         medium_max = self.parameters['medium_threshold'].value
         high_max = self.parameters['high_threshold'].value
         ranges = ranges_according_thresholds(low_max, medium_max, high_max)
+
+        hazard_value_to_class = {}
+        for i, interval in enumerate(ranges):
+            hazard_value_to_class[interval] = self.hazard_classes[i]
 
         # Get parameters from layer's keywords
         class_field = self.exposure.keyword('field')
@@ -300,165 +113,141 @@ class TsunamiRasterLandcoverFunction(
         small_raster = align_clip_raster(hazard_layer, viewport_extent)
 
         # Create vector features from the flood raster
-        # For each raster cell there is one rectangular polygon
-        # Data also get spatially indexed for faster operation
-        ranges = OrderedDict()
-        ranges[0] = [0.0, 0.0]
-        ranges[1] = [0.0, low_max]
-        ranges[2] = [low_max, medium_max]
-        ranges[3] = [medium_max, high_max]
-        ranges[4] = [high_max, None]
+        hazard_class_attribute = 'hazard'
+        vector_file_path = reclassify_polygonize(
+            small_raster.source(), ranges, name_field=hazard_class_attribute)
 
-        index, flood_cells_map = _raster_to_vector_cells(
-            small_raster,
-            ranges,
-            self.exposure.layer.crs())
+        hazard = QgsVectorLayer(vector_file_path, 'tsunami', 'ogr')
 
-        # Filter geometry and data using the extent
-        ct = QgsCoordinateTransform(
-            QgsCoordinateReferenceSystem("EPSG:4326"),
-            self.exposure.layer.crs())
-        extent = ct.transformBoundingBox(QgsRectangle(*self.requested_extent))
-        request = QgsFeatureRequest()
-        request.setFilterRect(extent)
+        # prepare objects for re-projection of geometries
+        crs_wgs84 = QgsCoordinateReferenceSystem('EPSG:4326')
+        hazard_to_exposure = QgsCoordinateTransform(
+            hazard.crs(), exposure.crs())
+        wgs84_to_hazard = QgsCoordinateTransform(
+            crs_wgs84, hazard.crs())
+        wgs84_to_exposure = QgsCoordinateTransform(
+            crs_wgs84, exposure.crs())
 
-        # create template for the output layer
-        line_layer_tmp = create_layer(self.exposure.layer)
-        new_field = QgsField(target_field, QVariant.Int)
-        line_layer_tmp.dataProvider().addAttributes([new_field])
-        line_layer_tmp.updateFields()
+        extent = QgsRectangle(
+            self.requested_extent[0], self.requested_extent[1],
+            self.requested_extent[2], self.requested_extent[3])
+        extent_hazard = wgs84_to_hazard.transformBoundingBox(extent)
+        extent_exposure = wgs84_to_exposure.transformBoundingBox(extent)
+        extent_exposure_geom = QgsGeometry.fromRect(extent_exposure)
 
-        # create empty output layer and load it
+        # make spatial index of hazard
+        hazard_index = QgsSpatialIndex()
+        hazard_features = {}
+        for f in hazard.getFeatures(QgsFeatureRequest(extent_hazard)):
+            f.geometry().transform(hazard_to_exposure)
+            hazard_index.insertFeature(f)
+            hazard_features[f.id()] = QgsFeature(f)
+
+        # create impact layer
         filename = unique_filename(suffix='.shp')
-        QgsVectorFileWriter.writeAsVectorFormat(
-            line_layer_tmp, filename, "utf-8", None, "ESRI Shapefile")
-        line_layer = QgsVectorLayer(filename, "flooded roads", "ogr")
+        impact_fields = exposure.dataProvider().fields()
+        impact_fields.append(QgsField(self.target_field, QVariant.String))
+        writer = QgsVectorFileWriter(
+            filename, 'utf-8', impact_fields, QGis.WKBPolygon, exposure.crs())
 
-        # Do the heavy work - for each road get flood polygon for that area and
-        # do the intersection/difference to find out which parts are flooded
-        _intersect_lines_with_vector_cells(
-            self.exposure.layer,
-            request,
-            index,
-            flood_cells_map,
-            line_layer,
-            target_field)
+        # iterate over all exposure polygons and calculate the impact
+        for f in exposure.getFeatures(QgsFeatureRequest(extent_exposure)):
+            geometry = f.geometry()
+            bbox = geometry.boundingBox()
+            # clip the exposure geometry to requested extent if necessary
+            if not extent_exposure.contains(bbox):
+                geometry = geometry.intersection(extent_exposure_geom)
 
-        target_field_index = line_layer.dataProvider().\
-            fieldNameIndex(target_field)
+            # find possible intersections with hazard layer
+            impacted_geometries = []
+            for hazard_id in hazard_index.intersects(bbox):
+                hazard_id = hazard_features[hazard_id]
+                hazard_geometry = hazard_id.geometry()
+                impact_geometry = geometry.intersection(hazard_geometry)
+                if not impact_geometry.wkbType() == QGis.WKBPolygon and \
+                   not impact_geometry.wkbType() == QGis.WKBMultiPolygon:
+                    continue   # no intersection found
 
-        # Generate simple impact report
-        epsg = get_utm_epsg(self.requested_extent[0], self.requested_extent[1])
-        output_crs = QgsCoordinateReferenceSystem(epsg)
-        transform = QgsCoordinateTransform(
-            self.exposure.layer.crs(), output_crs)
+                hazard_value = hazard_id[hazard_class_attribute]
+                hazard_type = hazard_value_to_class.get(hazard_value)
 
-        # Roads breakdown
-        self.road_lengths = OrderedDict()
-        self.affected_road_categories = self.hazard_classes
-        # Impacted roads breakdown
-        self.affected_road_lengths = OrderedDict([
-            (self.hazard_classes[0], {}),
-            (self.hazard_classes[1], {}),
-            (self.hazard_classes[2], {}),
-            (self.hazard_classes[3], {}),
-            (self.hazard_classes[4], {}),
-        ])
+                # write the impacted geometry
+                f_impact = QgsFeature(impact_fields)
+                f_impact.setGeometry(impact_geometry)
+                f_impact.setAttributes(f.attributes() + [hazard_type])
+                writer.addFeature(f_impact)
 
-        if line_layer.featureCount() < 1:
+                impacted_geometries.append(impact_geometry)
+
+            # TODO: uncomment if not affected polygons should be written
+            # # Make sure the geometry we work with is valid, otherwise geom.
+            # # processing operations (especially difference) may fail.
+            # # Validity checking is a slow operation, it would be better if we
+            # # could assume that all geometries are valid...
+            # if not geometry.isGeosValid():
+            #     geometry = geometry.buffer(0, 0)
+            #
+            # # write also not affected part of the exposure's feature
+            # geometry_out = geometry.difference(
+            #     QgsGeometry.unaryUnion(impacted_geometries))
+            # if geometry_out and (geometry_out.wkbType() == QGis.WKBPolygon or
+            #         geometry_out.wkbType() == QGis.WKBMultiPolygon):
+            #     f_out = QgsFeature(impact_fields)
+            #     f_out.setGeometry(geometry_out)
+            #     f_out.setAttributes(f.attributes()+[self._not_affected_value])
+            #     writer.addFeature(f_out)
+
+        del writer
+        impact_layer = QgsVectorLayer(filename, 'Impacted Land Cover', 'ogr')
+
+        #from safe.test.debug_helper import show_qgis_layer
+        #show_qgis_layer(impact_layer)
+
+        if impact_layer.featureCount() == 0:
             raise ZeroImpactException()
 
-        roads_data = line_layer.getFeatures()
-        road_type_field_index = line_layer.fieldNameIndex(road_class_field)
-        for road in roads_data:
-            attributes = road.attributes()
-            affected = attributes[target_field_index]
-            hazard_zone = self.hazard_classes[affected]
-            road_type = attributes[road_type_field_index]
-            if road_type.__class__.__name__ == 'QPyNullVariant':
-                road_type = tr('Other')
-            geom = road.geometry()
-            geom.transform(transform)
-            length = geom.length()
+        zone_field = None
+        if self.aggregator:
+            zone_field = self.aggregator.exposure_aggregation_field
 
-            if road_type not in self.road_lengths:
-                self.road_lengths[road_type] = 0
+        impact_data = LandCoverReportMixin(
+            question=self.question,
+            impact_layer=impact_layer,
+            target_field=self.target_field,
+            land_cover_field=class_field,
+            zone_field=zone_field
+        ).generate_data()
 
-            if hazard_zone not in self.affected_road_lengths:
-                self.affected_road_lengths[hazard_zone] = {}
-
-            if road_type not in self.affected_road_lengths[hazard_zone]:
-                self.affected_road_lengths[hazard_zone][road_type] = 0
-
-            self.road_lengths[road_type] += length
-            num_classes = len(self.hazard_classes)
-            if attributes[target_field_index] in range(num_classes):
-                self.affected_road_lengths[hazard_zone][road_type] += length
-
-        # For printing map purpose
-        map_title = tr('Roads inundated')
-        legend_title = tr('Road inundated status')
-
+        # Define style for the impact layer
         style_classes = [
-            # FIXME 0 - 0.1
             dict(
-                label=self.hazard_classes[0] + ': 0m',
-                value=0,
-                colour='#00FF00',
-                transparency=0,
-                size=1
-            ),
+                label=tr('High'), value='high',
+                colour='#F31A1C', border_color='#000000',
+                transparency=0, size=0.5),
             dict(
-                label=self.hazard_classes[1] + ': <0 - %.1f m' % low_max,
-                value=1,
-                colour='#FFFF00',
-                transparency=0,
-                size=1
-            ),
+                label=tr('Medium'), value='medium',
+                colour='#ffe691', border_color='#000000',
+                transparency=0, size=0.5),
             dict(
-                label=self.hazard_classes[2] + ': %.1f - %.1f m' % (
-                    low_max + 0.1, medium_max),
-                value=2,
-                colour='#FFB700',
-                transparency=0,
-                size=1
-            ),
-            dict(
-                label=self.hazard_classes[3] + ': %.1f - %.1f m' % (
-                    medium_max + 0.1, high_max),
-                value=3,
-                colour='#FF6F00',
-                transparency=0,
-                size=1
-            ),
-
-            dict(
-                label=self.hazard_classes[4] + ' > %.1f m' % high_max,
-                value=4,
-                colour='#FF0000',
-                transparency=0,
-                size=1
-            ),
-        ]
+                label=tr('Low'), value='low',
+                colour='#acffb6', border_color='#000000',
+                transparency=0, size=0.5)]
         style_info = dict(
-            target_field=target_field,
+            target_field=self.target_field,
             style_classes=style_classes,
             style_type='categorizedSymbol')
 
-        impact_data = self.generate_data()
-
         extra_keywords = {
-            'map_title': map_title,
-            'legend_title': legend_title,
-            'target_field': target_field
+            'map_title': tr('Affected Land Cover'),
+            'target_field': self.target_field
         }
 
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 
-        # Convert QgsVectorLayer to inasafe layer and return it
+        # Create vector layer and return
         impact_layer = Vector(
-            data=line_layer,
-            name=tr('Flooded roads'),
+            data=impact_layer,
+            name=tr('Land cover affected by each hazard zone'),
             keywords=impact_layer_keywords,
             style_info=style_info)
 

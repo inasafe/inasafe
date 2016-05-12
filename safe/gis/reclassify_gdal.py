@@ -101,7 +101,7 @@ def reclassify(input_raster, ranges):
     return output_raster
 
 
-def reclassify_polygonize(input_raster, ranges):
+def reclassify_polygonize(input_raster, ranges, name_field='DN'):
     """Reclassify and polygonize a raster according to some ranges.
 
     .. note:: Delegates to reclassify() and
@@ -115,7 +115,10 @@ def reclassify_polygonize(input_raster, ranges):
     :param ranges: The ranges as a OrderedDict.
     :type ranges: OrderedDict
 
+    :param name_field: The name of the field with the cell value.
+    :type name_field: str
+
     :return: The file path to shapefile.
     :rtype: str
     """
-    return polygonize(reclassify(input_raster, ranges))
+    return polygonize(reclassify(input_raster, ranges), name_field=name_field)
