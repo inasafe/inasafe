@@ -27,7 +27,13 @@ import getpass
 import platform
 from datetime import datetime
 from qgis.utils import QGis
-from qgis.core import QgsMapLayer, QgsCoordinateReferenceSystem, QgsRectangle
+from qgis.core import (
+    QgsMapLayer,
+    QgsRectangle,
+    QgsVectorLayer,
+    QgsCoordinateReferenceSystem,
+    QgsFeatureRequest,
+    QgsCoordinateTransform)
 from osgeo import gdal
 from PyQt4.QtCore import QT_VERSION_STR, QSettings
 from PyQt4.Qt import PYQT_VERSION_STR
@@ -44,6 +50,7 @@ from safe.common.exceptions import (
     NoFeaturesInExtentError,
     InvalidProjectionError,
     InvalidGeometryError,
+    ProcessingExecutionError,
     AggregationError,
     KeywordDbError,
     ZeroImpactException,
@@ -79,6 +86,9 @@ from safe.utilities.gis import (
     extent_to_array,
     get_optimal_extent)
 from safe.utilities.clipper import adjust_clip_extent, clip_layer
+from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.processing_model import ModelExecutor
+from safe.utilities.resources import resources_path
 from safe.storage.safe_layer import SafeLayer
 from safe.storage.utilities import (
     buffered_bounding_box as get_buffered_extent,
@@ -795,15 +805,6 @@ class ImpactFunction(object):
             )
         self._setup_aggregator()
 
-        # go check if our postprocessing layer has any keywords set and if not
-        # prompt for them. if a prompt is shown run method is called by the
-        # accepted signal of the keywords dialog
-        self.aggregator.validate_keywords()
-        if self.aggregator.is_valid:
-            pass
-        else:
-            raise InvalidAggregationKeywords
-
         try:
             if self.requires_clipping:
                 # The impact function uses SAFE layers, clip them.
@@ -830,10 +831,20 @@ class ImpactFunction(object):
                 clip_parameters = self.clip_parameters
                 adjusted_geo_extent = clip_parameters['adjusted_geo_extent']
                 self.requested_extent = adjusted_geo_extent
+
                 # Cut the exposure according to aggregation layer if necessary
                 self.aggregator.validate_keywords()
                 self.aggregator.deintersect_exposure()
                 self.exposure = self.aggregator.exposure_layer
+
+                self._processing_clipping()
+
+        except ProcessingExecutionError, e:
+            analysis_error(self, e, tr(
+                'An error occurred when using the Processing framework.'
+            ))
+            return
+
         except CallGDALError, e:
             analysis_error(self, e, tr(
                 'An error occurred when calling a GDAL command'))
@@ -872,6 +883,59 @@ class ImpactFunction(object):
                     'area for your analysis, or using rasters with a larger '
                     'cell size.'))
             return
+        except Exception, e:
+            raise e
+
+    def _processing_clipping(self):
+        # FIXME Whitelist of IF which works with processing.
+        processing_clipping = [
+            'FloodPolygonBuildingFunction',
+            'VolcanoPolygonBuildingFunction'
+        ]
+        impact_function_id = self.metadata().as_dict()['id']
+        if impact_function_id in processing_clipping:
+            # Experimental clipping with the Processing framework.
+            hazard_result = unique_filename(suffix='-clipped-hazard.shp')
+            exposure_result = unique_filename(suffix='-clipped-exposure.shp')
+
+            processing_models = {
+                'FloodPolygonBuildingFunction': {
+                    'model': 'inasafe-building-flood-aggr.model',
+                    'parameters': [
+                        self.aggregation.qgis_layer().source(),
+                        self.hazard.qgis_layer().source(),
+                        self.exposure.qgis_layer().source(),
+                        exposure_result,
+                        hazard_result
+                    ]
+                },
+            }
+
+            model_metadata = processing_models[impact_function_id]
+            model_path = resources_path('models', model_metadata['model'])
+            model = ModelExecutor(model_path)
+
+            # noinspection PyTypeChecker
+            model.set_parameters(model_metadata['parameters'])
+
+            # status, msg = model.validate_parameters()
+            # if not status:
+            #    raise ProcessingExecutionError(msg)
+
+            result, msg = model.run()
+            if not result:
+                raise ProcessingExecutionError(msg)
+
+            keyword_io = KeywordIO()
+            keyword_io.copy_keywords(
+                self.hazard.qgis_layer(), hazard_result)
+            keyword_io.copy_keywords(
+                self.exposure.qgis_layer(), exposure_result)
+
+            self.hazard = QgsVectorLayer(
+                hazard_result, self.hazard.name, 'ogr')
+            self.exposure = QgsVectorLayer(
+                exposure_result, self.exposure.name, 'ogr')
 
     def generate_impact_keywords(self, extra_keywords=None):
         """Obtain keywords for the impact layer.
@@ -1315,6 +1379,15 @@ class ImpactFunction(object):
             self.show_intermediate_layers
 
         self.aggregation = self.aggregator.layer
+
+        # go check if our postprocessing layer has any keywords set and if not
+        # prompt for them. if a prompt is shown run method is called by the
+        # accepted signal of the keywords dialog
+        self.aggregator.validate_keywords()
+        if self.aggregator.is_valid:
+            pass
+        else:
+            raise InvalidAggregationKeywords
 
     def _run_aggregator(self):
         """Run all post processing steps."""

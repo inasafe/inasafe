@@ -407,6 +407,11 @@ class MissingMetadata(InaSAFEError):
     pass
 
 
+class ProcessingExecutionError(InaSAFEError):
+    """When Processing is raising a GeoAlgorithmExecutionException."""
+    pass
+
+
 class MissingImpactReport(InaSAFEError):
     """When Impact Report do not have proper input.."""
     pass
