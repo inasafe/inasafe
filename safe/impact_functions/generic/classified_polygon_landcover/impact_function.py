@@ -81,7 +81,7 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
                 hazard_value_to_class[value] = key
 
         # prepare objects for re-projection of geometries
-        crs_wgs84 = QgsCoordinateReferenceSystem("EPSG:4326")
+        crs_wgs84 = QgsCoordinateReferenceSystem('EPSG:4326')
         hazard_to_exposure = QgsCoordinateTransform(
             hazard.crs(), exposure.crs())
         wgs84_to_hazard = QgsCoordinateTransform(
@@ -109,7 +109,7 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
         impact_fields = exposure.dataProvider().fields()
         impact_fields.append(QgsField(self.target_field, QVariant.String))
         writer = QgsVectorFileWriter(
-            filename, "utf-8", impact_fields, QGis.WKBPolygon, exposure.crs())
+            filename, 'utf-8', impact_fields, QGis.WKBPolygon, exposure.crs())
 
         # iterate over all exposure polygons and calculate the impact
         for f in exposure.getFeatures(QgsFeatureRequest(extent_exposure)):
@@ -159,7 +159,7 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
             #     writer.addFeature(f_out)
 
         del writer
-        impact_layer = QgsVectorLayer(filename, "Impacted Land Cover", "ogr")
+        impact_layer = QgsVectorLayer(filename, 'Impacted Land Cover', 'ogr')
 
         if impact_layer.featureCount() == 0:
             raise ZeroImpactException()
@@ -177,8 +177,6 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
         ).generate_data()
 
         # Define style for the impact layer
-        transparent_color = QColor()
-        transparent_color.setAlpha(0)
         style_classes = [
             dict(
                 label=tr('High'), value='high',
