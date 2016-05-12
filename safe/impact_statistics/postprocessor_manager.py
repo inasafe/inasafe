@@ -130,9 +130,7 @@ class PostprocessorManager(QtCore.QObject):
 
             # init table
             has_no_data = False
-            table = {
-
-            }
+            table = {'notes': []}
             name = get_postprocessor_human_name(processor).lower()
 
             if name == 'building type':
@@ -171,9 +169,9 @@ class PostprocessorManager(QtCore.QObject):
                 # Due to an error? The table is empty.
                 table['attributes'] = []
                 table['fields'] = []
-                table['notes'] = [self.tr(
+                table['notes'].append(self.tr(
                     'Could not compute the %s report.' %
-                    tr(get_postprocessor_human_name(processor)).lower())]
+                    tr(get_postprocessor_human_name(processor)).lower()))
                 result['processor'] = table
                 continue
 
@@ -228,16 +226,16 @@ class PostprocessorManager(QtCore.QObject):
             table['fields'] = fields
 
             if has_no_data:
-                table['notes'] = (self.tr(
+                table['notes'].append(self.tr(
                     '* "%s" values mean that there where some problems while '
                     'calculating them. This did not affect the other '
                     'values.') % (
                     self.aggregator.get_default_keyword('NO_DATA')))
 
-            table['notes 2'] = self.tr(
+            table['notes'].append(self.tr(
                 'Columns containing exclusively 0 and "%s" '
                 'have not been shown in the table.' %
-                self.aggregator.get_default_keyword('NO_DATA'))
+                self.aggregator.get_default_keyword('NO_DATA')))
             result[processor] = table
 
         return result

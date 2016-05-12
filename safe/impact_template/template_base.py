@@ -153,5 +153,7 @@ class TemplateBase(object):
                     row.add(m.Cell(format_int(int(value))))
                 table.add(row)
             message.add(table)
+            for note in v['notes']:
+                message.add(m.EmphasizedText(note))
 
         return message
