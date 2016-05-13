@@ -28,7 +28,7 @@ class LandCoverReportMixin(ReportMixin):
     """
 
     def __init__(
-            self, question, impact_layer, target_field, hazard_columns,
+            self, question, impact_layer, target_field, columns_order,
             land_cover_field, zone_field):
         """Initialize method.
 
@@ -41,8 +41,8 @@ class LandCoverReportMixin(ReportMixin):
         :param target_field: Field name in impact layer with hazard type
         :type target_field: basestring
 
-        :param hazard_columns: TOTO
-        :type hazard_columns: list
+        :param columns_order: The columns order in the report.
+        :type columns_order: list
 
         :param land_cover_field: Field name in impact layer with land cover
         :type land_cover_field: str
@@ -54,7 +54,7 @@ class LandCoverReportMixin(ReportMixin):
         """
         self.impact_layer = impact_layer
         self.target_field = target_field
-        self.hazard_columns = hazard_columns
+        self.columns_order = columns_order
         self.land_cover_field = land_cover_field
         self.zone_field = zone_field
         self.question = question
@@ -71,6 +71,7 @@ class LandCoverReportMixin(ReportMixin):
             'question': self.question,
             'impact summary': '',  # Set this as empty string
             'zone field': self.zone_field,
+            'columns order': self.columns_order,
             'impact table': self.impact_table(),
             'action check list': self.action_checklist(),
             'notes': self.notes()

@@ -50,7 +50,7 @@ __copyright__ = 'etienne@kartoza.com'
 
 class TsunamiRasterLandcoverFunction(ContinuousRHClassifiedVE):
     # noinspection PyUnresolvedReferences
-    """Simple impact function for tsunami on roads."""
+    """Simple impact function for tsunami on landcover."""
     _metadata = TsunamiRasterHazardLandCoverFunctionMetadata()
 
     def __init__(self):
@@ -211,7 +211,7 @@ class TsunamiRasterLandcoverFunction(ContinuousRHClassifiedVE):
             question=self.question,
             impact_layer=impact_layer,
             target_field=self.target_field,
-            hazard_columns=self.hazard_classes,
+            columns_order=self.hazard_classes,
             land_cover_field=class_field,
             zone_field=zone_field
         ).generate_data()

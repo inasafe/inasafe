@@ -49,7 +49,8 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
         # Set the question of the IF (as the hazard data is not an event)
         self.question = ('In each of the hazard zones which land cover types '
                          'might be affected.')
-        self.hazard_columns = ['High', 'Medium', 'Low']
+        # Don't put capital letters as the value in the attribute should match.
+        self.hazard_columns = ['low', 'medium', 'high']
 
     def notes(self):
         """Return the notes section of the report.
@@ -172,7 +173,7 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
             question=self.question,
             impact_layer=impact_layer,
             target_field=self.target_field,
-            hazard_columns=self.hazard_columns,
+            columns_order=self.hazard_columns,
             land_cover_field=type_attr,
             zone_field=zone_field
         ).generate_data()
@@ -180,17 +181,27 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
         # Define style for the impact layer
         style_classes = [
             dict(
-                label=tr('High'), value='high',
-                colour='#F31A1C', border_color='#000000',
-                transparency=0, size=0.5),
+                label=self.hazard_columns[0],
+                value='low',
+                colour='#acffb6',
+                border_color='#000000',
+                transparency=0,
+                size=0.5),
             dict(
-                label=tr('Medium'), value='medium',
-                colour='#ffe691', border_color='#000000',
-                transparency=0, size=0.5),
+                label=self.hazard_columns[0],
+                value='medium',
+                colour='#ffe691',
+                border_color='#000000',
+                transparency=0,
+                size=0.5),
             dict(
-                label=tr('Low'), value='low',
-                colour='#acffb6', border_color='#000000',
-                transparency=0, size=0.5)]
+                label=self.hazard_columns[0],
+                value='high',
+                colour='#F31A1C',
+                border_color='#000000',
+                transparency=0,
+                size=0.5),
+        ]
         style_info = dict(
             target_field=self.target_field,
             style_classes=style_classes,

@@ -52,7 +52,7 @@ class LandCoverReportTemplate(TemplateBase):
             impact_layer_path=impact_layer_path,
             json_file=json_file,
             impact_data=impact_data)
-        self.hazard_columns = None
+        self.columns_order = self.impact_data.get('columns order')
         self.impact_table = self.impact_data.get('impact table')
         self.zone_field = self.impact_data.get('zone field')
 
@@ -92,7 +92,7 @@ class LandCoverReportTemplate(TemplateBase):
             flat_table,
             row_field='landcover',
             column_field='hazard',
-            columns=self.hazard_columns)
+            columns=self.columns_order)
 
         report = {'impacted': pivot_table}
 
@@ -104,7 +104,7 @@ class LandCoverReportTemplate(TemplateBase):
                     flat_table,
                     row_field="landcover",
                     column_field='hazard',
-                    columns=self.hazard_columns,
+                    columns=self.columns_order,
                     filter_field="zone",
                     filter_value=zone)
                 report['impacted_zones'][zone] = table
