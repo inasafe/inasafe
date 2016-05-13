@@ -166,19 +166,24 @@ class PivotTable(object):
 
         :param flat_table: Flat table with input data for pivot table
         :type flat_table: FlatTable
+
         :param row_field: Field name from flat table to use for rows.
             If None, there will be just one row in the pivot table
         :type row_field: str
+
         :param column_field: Field name from flat table to use for columns.
             If None, there will be just one column in the pivot table
         :type column_field: str
+
         :param filter_field: Field name from flat table which will be
             used for filtering. To be used together with filter_value.
             If None, no filtering will be applied.
         :type filter_field: str
+
         :param filter_value: Value of filter_field that will pass filtering,
             all other values will be skipped for pivot table
         :type filter_value: any
+
         :param columns: List of columns to be present. If not defined,
             the list of columns will be determined from unique column_field
             values. If defined, it explicitly defines order of columns

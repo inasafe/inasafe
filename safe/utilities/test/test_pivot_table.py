@@ -138,7 +138,7 @@ class PivotTableTest(unittest.TestCase):
             self.assertEquals(groups[i], flat_table.groups[i])
 
         self.assertEquals(flat_table.data[
-                              ('Forest', 'high', None)], 5172.100048073517)
+            ('Forest', 'high', None)], 5172.100048073517)
 
     def test_to_from_json(self):
         """Test FlatTable from_dict method"""
