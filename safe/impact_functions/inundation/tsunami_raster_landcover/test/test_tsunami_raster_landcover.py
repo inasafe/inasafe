@@ -13,13 +13,13 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 import unittest
-from qgis.core import QgsVectorLayer
+from qgis.core import QgsVectorLayer, QgsRasterLayer
 
 from safe.test.utilities import get_qgis_app, test_data_path
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe.impact_functions.generic.classified_polygon_landcover. \
-    impact_function import ClassifiedPolygonHazardLandCoverFunction
+from safe.impact_functions.inundation.tsunami_raster_landcover. \
+    impact_function import TsunamiRasterLandcoverFunction
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.storage.utilities import safe_to_qgis_layer
 
@@ -30,15 +30,15 @@ class TestClassifiedPolygonLandCoverFunction(unittest.TestCase):
     def setUp(self):
         registry = ImpactFunctionManager().registry
         registry.clear()
-        registry.register(ClassifiedPolygonHazardLandCoverFunction)
+        registry.register(TsunamiRasterLandcoverFunction)
 
     def test_run(self):
-        function = ClassifiedPolygonHazardLandCoverFunction.instance()
+        function = TsunamiRasterLandcoverFunction.instance()
 
-        hazard_path = test_data_path('hazard', 'landcover_hazard.shp')
+        hazard_path = test_data_path('hazard', 'tsunami_wgs84.tif')
         exposure_path = test_data_path('exposure', 'landcover.shp')
         # noinspection PyCallingNonCallable
-        hazard_layer = QgsVectorLayer(hazard_path, 'Hazard', 'ogr')
+        hazard_layer = QgsRasterLayer(hazard_path, 'Tsunami')
         # noinspection PyCallingNonCallable
         exposure_layer = QgsVectorLayer(exposure_path, 'Land Cover', 'ogr')
         self.assertEqual(hazard_layer.isValid(), True)
@@ -53,20 +53,26 @@ class TestClassifiedPolygonLandCoverFunction(unittest.TestCase):
 
         impact = safe_to_qgis_layer(impact)
 
-        self.assertEqual(impact.dataProvider().featureCount(), 7)
+        self.assertEqual(impact.dataProvider().featureCount(), 72)
         features = {}
         exposure_field = function.exposure.keyword('field')
         for f in impact.getFeatures():
             type_tuple = f[exposure_field], f[function.target_field]
             features[type_tuple] = round(f.geometry().area(), 1)
+
         expected_features = {
-            (u'Water', u'high'): 500000.0,
-            (u'Water', u'medium'): 500000.0,
-            (u'Population', u'high'): 3000000.0,
-            (u'Population', u'medium'): 1500000.0,
-            (u'Population', u'low'): 1500000.0,
-            (u'Forest', u'high'): 500000.0,
-            (u'Forest', u'low'): 500000.0,
+            (u'Population', u'Dry Zone'): 7977390.3,
+            (u'Population', u'Low Hazard Zone'): 403.8,
+            (u'Population', u'Medium Hazard Zone'): 156692.3,
+            (u'Population', u'High Hazard Zone'): 298791.1,
+            (u'Population', u'Very High Hazard Zone'): 8884.6,
+            (u'Water', u'Dry Zone'): 403.8,
+            (u'Water', u'Low Hazard Zone'): 65836.7,
+            (u'Water', u'Medium Hazard Zone'): 34746.7,
+            (u'Water', u'High Hazard Zone'): 9310.4,
+            (u'Water', u'Very High Hazard Zone'): 807.7,
+            (u'Meadow', u'Dry Zone'): 2512444.0,
+            (u'Forest', u'Dry Zone'): 1000000.0
         }
         self.assertEqual(len(expected_features.keys()), len(features.keys()))
         for key, value in expected_features.iteritems():
@@ -86,12 +92,11 @@ class TestClassifiedPolygonLandCoverFunction(unittest.TestCase):
 
         hazard_keywords = {
             'layer_purpose': 'hazard',
-            'layer_mode': 'classified',
-            'layer_geometry': 'polygon',
-            'hazard': 'generic',
-            'hazard_category': 'multiple_event',
-            'field': 'level',
-            'vector_hazard_classification': 'generic_vector_hazard_classes',
+            'layer_mode': 'continuous',
+            'layer_geometry': 'raster',
+            'hazard': 'tsunami',
+            'hazard_category': 'single_event',
+            'continuous_hazard_unit': 'metres'
         }
 
         impact_functions = ImpactFunctionManager().filter_by_keywords(
