@@ -32,6 +32,8 @@ from safe.impact_functions.bases.continuous_rh_classified_ve import \
     ContinuousRHClassifiedVE
 from safe.impact_functions.inundation.tsunami_raster_landcover.\
     metadata_definitions import (TsunamiRasterHazardLandCoverFunctionMetadata)
+from safe.impact_functions.generic.classified_polygon_landcover.\
+    impact_function import _calculate_landcover_impact
 from safe.utilities.i18n import tr
 from safe.gis.reclassify_gdal import reclassify_polygonize
 from safe.utilities.utilities import ranges_according_thresholds
@@ -148,57 +150,13 @@ class TsunamiRasterLandcoverFunction(ContinuousRHClassifiedVE):
             filename, 'utf-8', impact_fields, QGis.WKBPolygon, exposure.crs())
 
         # iterate over all exposure polygons and calculate the impact
-        for f in exposure.getFeatures(QgsFeatureRequest(extent_exposure)):
-            geometry = f.geometry()
-            bbox = geometry.boundingBox()
-            # clip the exposure geometry to requested extent if necessary
-            if not extent_exposure.contains(bbox):
-                geometry = geometry.intersection(extent_exposure_geom)
-
-            # find possible intersections with hazard layer
-            impacted_geometries = []
-            for hazard_id in hazard_index.intersects(bbox):
-                hazard_id = hazard_features[hazard_id]
-                hazard_geometry = hazard_id.geometry()
-                impact_geometry = geometry.intersection(hazard_geometry)
-                if not impact_geometry.wkbType() == QGis.WKBPolygon and \
-                   not impact_geometry.wkbType() == QGis.WKBMultiPolygon:
-                    continue   # no intersection found
-
-                hazard_value = hazard_id[hazard_class_attribute]
-                hazard_type = hazard_value_to_class.get(hazard_value)
-
-                # write the impacted geometry
-                f_impact = QgsFeature(impact_fields)
-                f_impact.setGeometry(impact_geometry)
-                f_impact.setAttributes(f.attributes() + [hazard_type])
-                writer.addFeature(f_impact)
-
-                impacted_geometries.append(impact_geometry)
-
-            # TODO: uncomment if not affected polygons should be written
-            # # Make sure the geometry we work with is valid, otherwise geom.
-            # # processing operations (especially difference) may fail.
-            # # Validity checking is a slow operation, it would be better if we
-            # # could assume that all geometries are valid...
-            # if not geometry.isGeosValid():
-            #     geometry = geometry.buffer(0, 0)
-            #
-            # # write also not affected part of the exposure's feature
-            # geometry_out = geometry.difference(
-            #     QgsGeometry.unaryUnion(impacted_geometries))
-            # if geometry_out and (geometry_out.wkbType() == QGis.WKBPolygon or
-            #         geometry_out.wkbType() == QGis.WKBMultiPolygon):
-            #     f_out = QgsFeature(impact_fields)
-            #     f_out.setGeometry(geometry_out)
-            #     f_out.setAttributes(f.attributes()+[self._not_affected_value])
-            #     writer.addFeature(f_out)
+        _calculate_landcover_impact(
+            exposure, extent_exposure, extent_exposure_geom,
+            hazard_class_attribute, hazard_features, hazard_index,
+            hazard_value_to_class, impact_fields, writer)
 
         del writer
         impact_layer = QgsVectorLayer(filename, 'Impacted Land Cover', 'ogr')
-
-        # from safe.test.debug_helper import show_qgis_layer
-        # show_qgis_layer(impact_layer)
 
         if impact_layer.featureCount() == 0:
             raise ZeroImpactException()
