@@ -200,14 +200,14 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
                 transparency=0,
                 size=0.5),
             dict(
-                label=self.hazard_columns[0],
+                label=self.hazard_columns[1],
                 value='medium',
                 colour='#ffe691',
                 border_color='#000000',
                 transparency=0,
                 size=0.5),
             dict(
-                label=self.hazard_columns[0],
+                label=self.hazard_columns[2],
                 value='high',
                 colour='#F31A1C',
                 border_color='#000000',
