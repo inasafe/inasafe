@@ -46,7 +46,11 @@ def filter_impact_function(hazard=None, exposure=None):
         arguments.hazard = None
         arguments.exposure = None
     ifs = get_impact_function_list(arguments)
-    result = [f.metadata().as_dict()['id'] for f in ifs]
+    result = [
+        {
+            'id': f.metadata().as_dict()['id'],
+            'name': f.metadata().as_dict()['name']
+        } for f in ifs]
     LOGGER.debug(result)
     return result
 
