@@ -22,11 +22,11 @@ from safe.impact_functions.earthquake.earthquake_building \
     .metadata_definitions import EarthquakeBuildingMetadata
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
-from safe.common.utilities import get_osm_building_usage
+from safe.utilities.utilities import main_type
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
-from safe.common.exceptions import KeywordNotFoundError, ZeroImpactException
+from safe.common.exceptions import ZeroImpactException
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -35,7 +35,10 @@ class EarthquakeBuildingFunction(
         ContinuousRHClassifiedVE,
         BuildingExposureReportMixin):
     # noinspection PyUnresolvedReferences
-    """Earthquake impact on building data."""
+    """Earthquake impact on building data.
+
+    This IF is the only Building ong which doesn't use
+    """
 
     _metadata = EarthquakeBuildingMetadata()
 
@@ -43,7 +46,6 @@ class EarthquakeBuildingFunction(
         super(EarthquakeBuildingFunction, self).__init__()
         self.is_nexis = False
         self.structure_class_field = None
-
         # From BuildingExposureReportMixin
         # This value will not be overwrite by a parameter. #2468
         self.building_report_threshold = 25
@@ -94,7 +96,6 @@ class EarthquakeBuildingFunction(
         t2 = self.parameters['high_threshold'].value
 
         # Class Attribute and Label.
-
         class_1 = {'label': tr('Low'), 'class': 1}
         class_2 = {'label': tr('Medium'), 'class': 2}
         class_3 = {'label': tr('High'), 'class': 3}
@@ -119,26 +120,16 @@ class EarthquakeBuildingFunction(
             attribute_name=hazard_attribute
         )
 
-        # Extract relevant exposure data
-        # Try to get the value from keyword, if not exist, it will not fail,
-        # but use the old get_osm_building_usage
-        try:
-            structure_class_field = self.exposure.keyword(
-                'structure_class_field')
-        except KeywordNotFoundError:
-            structure_class_field = None
+        # Get parameters from layer's keywords
+        structure_class_field = self.exposure.keyword('structure_class_field')
+        exposure_value_mapping = self.exposure.keyword('value_mapping')
         attributes = interpolate_result.get_data()
 
         interpolate_size = len(interpolate_result)
 
-        # Building breakdown
-        self.buildings = {}
-        # Impacted building breakdown
-        self.affected_buildings = OrderedDict([
-            (tr('High'), {}),
-            (tr('Medium'), {}),
-            (tr('Low'), {}),
-        ])
+        hazard_classes = [tr('High'), tr('Medium'), tr('Low')]
+        self.init_report_var(hazard_classes)
+
         removed = []
         for i in range(interpolate_size):
             # Classify building according to shake level
@@ -166,15 +157,8 @@ class EarthquakeBuildingFunction(
                 building_value = building_value_density * area
                 contents_value = contents_value_density * area
 
-            if (structure_class_field in attribute_names and
-                    structure_class_field):
-                usage = attributes[i].get(structure_class_field, None)
-            else:
-                usage = get_osm_building_usage(
-                    attribute_names, attributes[i])
-
-            if usage is None or usage == 0:
-                usage = 'unknown'
+            usage = attributes[i].get(structure_class_field, None)
+            usage = main_type(usage, exposure_value_mapping)
 
             if usage not in self.buildings:
                 self.buildings[usage] = 0
@@ -232,12 +216,22 @@ class EarthquakeBuildingFunction(
         self._consolidate_to_other()
 
         # Create style
-        style_classes = [dict(label=class_1['label'], value=class_1['class'],
-                              colour='#ffff00', transparency=1),
-                         dict(label=class_2['label'], value=class_2['class'],
-                              colour='#ffaa00', transparency=1),
-                         dict(label=class_3['label'], value=class_3['class'],
-                              colour='#ff0000', transparency=1)]
+        style_classes = [
+            dict(
+                label=class_1['label'],
+                value=class_1['class'],
+                colour='#ffff00',
+                transparency=1),
+            dict(
+                label=class_2['label'],
+                value=class_2['class'],
+                colour='#ffaa00',
+                transparency=1),
+            dict(
+                label=class_3['label'],
+                value=class_3['class'],
+                colour='#ff0000',
+                transparency=1)]
         style_info = dict(
             target_field=self.target_field,
             style_classes=style_classes,

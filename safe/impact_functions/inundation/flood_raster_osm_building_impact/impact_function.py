@@ -14,7 +14,6 @@ Contact : ole.moller.nielsen@gmail.com
 __author__ = 'lucernae'
 
 import logging
-from collections import OrderedDict
 
 from safe.impact_functions.inundation\
     .flood_raster_osm_building_impact.metadata_definitions import \
@@ -23,11 +22,11 @@ from safe.impact_functions.bases.continuous_rh_classified_ve import \
     ContinuousRHClassifiedVE
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
-from safe.common.utilities import get_osm_building_usage, verify
+from safe.common.utilities import verify
+from safe.utilities.utilities import main_type
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
-from safe.common.exceptions import KeywordNotFoundError
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -72,7 +71,7 @@ class FloodRasterBuildingFunction(
     def _affected_categories(self):
         """Overwriting the affected categories, since 'unaffected' are counted.
 
-        :returns: The categories that equal effected.
+        :returns: The categories that equal affected.
         :rtype: list
         """
         return [tr('Flooded'), tr('Wet')]
@@ -95,25 +94,15 @@ class FloodRasterBuildingFunction(
             attribute_name=hazard_attribute)
 
         # Extract relevant exposure data
-        attribute_names = interpolated_layer.get_attribute_names()
         features = interpolated_layer.get_data()
         total_features = len(interpolated_layer)
 
-        # but use the old get_osm_building_usage
-        try:
-            structure_class_field = self.exposure.keyword(
-                'structure_class_field')
-        except KeywordNotFoundError:
-            structure_class_field = None
+        structure_class_field = self.exposure.keyword('structure_class_field')
+        exposure_value_mapping = self.exposure.keyword('value_mapping')
 
-        # Building breakdown
-        self.buildings = {}
-        # Impacted building breakdown
-        self.affected_buildings = OrderedDict([
-            (tr('Flooded'), {}),
-            (tr('Wet'), {}),
-            (tr('Dry'), {})
-        ])
+        hazard_classes = [tr('Flooded'), tr('Wet'), tr('Dry')]
+        self.init_report_var(hazard_classes)
+
         for i in range(total_features):
             # Get the interpolated depth
             water_depth = float(features[i]['depth'])
@@ -124,33 +113,18 @@ class FloodRasterBuildingFunction(
             else:
                 inundated_status = 2  # wet
 
-            # Count affected buildings by usage type if available
-            if (structure_class_field in attribute_names and
-                    structure_class_field):
-                usage = features[i].get(structure_class_field, None)
-            else:
-                usage = get_osm_building_usage(
-                    attribute_names, features[i])
+            usage = features[i].get(structure_class_field, None)
+            usage = main_type(usage, exposure_value_mapping)
 
-            if usage is None or usage == 0:
-                usage = 'unknown'
-
-            if usage not in self.buildings:
-                self.buildings[usage] = 0
-                for category in self.affected_buildings.keys():
-                    self.affected_buildings[category][usage] = OrderedDict([
-                        (tr('Buildings Affected'), 0)])
-
-            # Count all buildings by type
-            self.buildings[usage] += 1
             # Add calculated impact to existing attributes
             features[i][self.target_field] = inundated_status
             category = [
                 tr('Dry'),
                 tr('Flooded'),
                 tr('Wet')][inundated_status]
-            self.affected_buildings[category][usage][
-                tr('Buildings Affected')] += 1
+            self.classify_feature(category, usage, True)
+
+        self.reorder_dictionaries()
 
         # Lump small entries and 'unknown' into 'other' category
         # Building threshold #2468

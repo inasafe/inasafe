@@ -15,20 +15,19 @@ __author__ = 'lucernae'
 __date__ = '23/03/15'
 
 import logging
-from collections import OrderedDict
 from numpy import round as numpy_round
 
 from safe.impact_functions.bases.classified_rh_classified_ve import \
     ClassifiedRHClassifiedVE
 from safe.storage.vector import Vector
+from safe.common.exceptions import KeywordNotFoundError
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.utilities.i18n import tr
-from safe.common.utilities import get_osm_building_usage
+from safe.utilities.utilities import main_type
 from safe.impact_functions.generic.classified_raster_building\
     .metadata_definitions import ClassifiedRasterHazardBuildingMetadata
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
-from safe.common.exceptions import KeywordNotFoundError
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -69,13 +68,13 @@ class ClassifiedRasterHazardBuildingFunction(
         """
 
         # Value from layer's keywords
-        # Try to get the value from keyword, if not exist, it will not fail,
-        # but use the old get_osm_building_usage
+
+        structure_class_field = self.exposure.keyword('structure_class_field')
         try:
-            structure_class_field = self.exposure.keyword(
-                'structure_class_field')
+            exposure_value_mapping = self.exposure.keyword('value_mapping')
         except KeywordNotFoundError:
-            structure_class_field = None
+            # Generic IF, the keyword might not be defined base.py
+            exposure_value_mapping = {}
 
         # The 3 classes
         categorical_hazards = self.parameters['Categorical hazards'].value
@@ -96,36 +95,22 @@ class ClassifiedRasterHazardBuildingFunction(
             mode='constant')
 
         # Extract relevant exposure data
-        attribute_names = interpolated_result.get_attribute_names()
         attributes = interpolated_result.get_data()
 
         buildings_total = len(interpolated_result)
-        # Calculate building impact
-        self.buildings = {}
-        self.affected_buildings = OrderedDict([
-            (tr('High Hazard Class'), {}),
-            (tr('Medium Hazard Class'), {}),
-            (tr('Low Hazard Class'), {})
-        ])
+
+        hazard_classes = [
+            tr('High Hazard Class'),
+            tr('Medium Hazard Class'),
+            tr('Low Hazard Class')
+        ]
+        self.init_report_var(hazard_classes)
+
         for i in range(buildings_total):
-
-            if (structure_class_field and
-                    structure_class_field in attribute_names):
-                usage = attributes[i][structure_class_field]
-            else:
-                usage = get_osm_building_usage(attribute_names, attributes[i])
-
-            if usage is None or usage == 0:
-                usage = 'unknown'
-
-            if usage not in self.buildings:
-                self.buildings[usage] = 0
-                for category in self.affected_buildings.keys():
-                    self.affected_buildings[category][usage] = OrderedDict([
-                        (tr('Buildings Affected'), 0)])
+            usage = attributes[i][structure_class_field]
+            usage = main_type(usage, exposure_value_mapping)
 
             # Count all buildings by type
-            self.buildings[usage] += 1
             attributes[i][self.target_field] = 0
             attributes[i][self.affected_field] = 0
             level = float(attributes[i]['level'])
@@ -147,8 +132,9 @@ class ClassifiedRasterHazardBuildingFunction(
             }[impact_level]
             attributes[i][self.affected_field] = 1
             # Count affected buildings by type
-            self.affected_buildings[impact_level][usage][
-                tr('Buildings Affected')] += 1
+            self.classify_feature(impact_level, usage, True)
+
+        self.reorder_dictionaries()
 
         # Consolidate the small building usage groups < 25 to other
         # Building threshold #2468
@@ -158,37 +144,43 @@ class ClassifiedRasterHazardBuildingFunction(
         self._consolidate_to_other()
 
         # Create style
-        style_classes = [dict(label=tr('High'),
-                              value=3,
-                              colour='#F31A1C',
-                              transparency=0,
-                              size=2,
-                              border_color='#969696',
-                              border_width=0.2),
-                         dict(label=tr('Medium'),
-                              value=2,
-                              colour='#F4A442',
-                              transparency=0,
-                              size=2,
-                              border_color='#969696',
-                              border_width=0.2),
-                         dict(label=tr('Low'),
-                              value=1,
-                              colour='#EBF442',
-                              transparency=0,
-                              size=2,
-                              border_color='#969696',
-                              border_width=0.2),
-                         dict(label=tr('Not Affected'),
-                              value=None,
-                              colour='#1EFC7C',
-                              transparency=0,
-                              size=2,
-                              border_color='#969696',
-                              border_width=0.2)]
-        style_info = dict(target_field=self.target_field,
-                          style_classes=style_classes,
-                          style_type='categorizedSymbol')
+        style_classes = [
+            dict(
+                label=tr('High'),
+                value=3,
+                colour='#F31A1C',
+                transparency=0,
+                size=2,
+                border_color='#969696',
+                border_width=0.2),
+            dict(
+                label=tr('Medium'),
+                value=2,
+                colour='#F4A442',
+                transparency=0,
+                size=2,
+                border_color='#969696',
+                border_width=0.2),
+            dict(
+                label=tr('Low'),
+                value=1,
+                colour='#EBF442',
+                transparency=0,
+                size=2,
+                border_color='#969696',
+                border_width=0.2),
+            dict(
+                label=tr('Not Affected'),
+                value=None,
+                colour='#1EFC7C',
+                transparency=0,
+                size=2,
+                border_color='#969696',
+                border_width=0.2)]
+        style_info = dict(
+            target_field=self.target_field,
+            style_classes=style_classes,
+            style_type='categorizedSymbol')
 
         # For printing map purpose
         map_title = tr('Buildings affected')

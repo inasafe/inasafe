@@ -34,6 +34,7 @@ class TestBuildingTypePostprocessor(unittest.TestCase):
             'key_attribute': 'type',
             u'Building type': True,
             'target_field': 'safe_ag__4',
+            'value_mapping': {u'government': [u'Government']},
             'impact_attrs': [
                 {'TYPE': 'Government', 'safe_ag__4': 1},
                 {'TYPE': 'Government', 'safe_ag__4': 0},
@@ -59,6 +60,7 @@ class TestBuildingTypePostprocessor(unittest.TestCase):
             'key_attribute': 'type',
             u'Building type': True,
             'target_field': 'safe_ag__4',
+            'value_mapping': {u'government': [u'Government']},
             'impact_attrs': [
                 {'TYPE': 'Government', 'safe_ag__4': 'Zone 1'},
                 {'TYPE': 'Government', 'safe_ag__4': 'Not Affected'},
@@ -84,22 +86,46 @@ class TestBuildingTypePostprocessor(unittest.TestCase):
             'key_attribute': 'type',
             u'Building type': True,
             'target_field': 'safe_ag__4',
+            'value_mapping': {
+                u'government': [u'Government'],
+                u'economy': [u'Economy'],
+            },
             'impact_attrs': [
                 {'TYPE': 'Government', 'safe_ag__4': 'Zone 1'},
                 {'TYPE': 'Museum', 'safe_ag__4': 'Zone 2'},
                 {'TYPE': 'Government', 'safe_ag__4': 'Zone 1'},
                 {'TYPE': 'Government', 'safe_ag__4': 'Not Affected'},
+                {'TYPE': 'School', 'safe_ag__4': 'Zone 3'},
             ]}
         POSTPROCESSOR.setup(params)
         POSTPROCESSOR.process()
         results = POSTPROCESSOR.results()
-        message = (
-            'Expecting exactly 3 buildings have been affected. ',
-            'In Zone 1 and Zone 2.')
-        self.assertEqual(
-            results[u'Total Affected']['value'],
-            '3',
-            message)
+        self.assertEqual(results[u'Government']['value'], '2')
+        self.assertEqual(results[u'Other']['value'], '2')
+
+        POSTPROCESSOR.clear()
+        # Same as above, but we add the school in the value mapping.
+        params = {
+            'impact_total': 0,
+            'key_attribute': 'type',
+            u'Building type': True,
+            'target_field': 'safe_ag__4',
+            'value_mapping': {
+                u'government': [u'Government', u'School'],
+                u'economy': [u'Economy'],
+            },
+            'impact_attrs': [
+                {'TYPE': 'Government', 'safe_ag__4': 'Zone 1'},
+                {'TYPE': 'Museum', 'safe_ag__4': 'Zone 2'},
+                {'TYPE': 'Government', 'safe_ag__4': 'Zone 1'},
+                {'TYPE': 'Government', 'safe_ag__4': 'Not Affected'},
+                {'TYPE': 'School', 'safe_ag__4': 'Zone 3'},
+            ]}
+        POSTPROCESSOR.setup(params)
+        POSTPROCESSOR.process()
+        results = POSTPROCESSOR.results()
+        self.assertEqual(results[u'Government']['value'], '3')
+        self.assertEqual(results[u'Other']['value'], '1')
 
 
 if __name__ == '__main__':

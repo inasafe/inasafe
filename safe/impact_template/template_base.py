@@ -150,7 +150,13 @@ class TemplateBase(object):
                 # First column is string
                 row.add(m.Cell(field[0]))
                 for value in field[1:]:
-                    row.add(m.Cell(format_int(int(value))))
+                    try:
+                        val = int(value)
+                        row.add(m.Cell(format_int(val)))
+                    except ValueError:
+                        # Catch no data value
+                        row.add(m.Cell(value))
+
                 table.add(row)
             message.add(table)
             for note in v['notes']:

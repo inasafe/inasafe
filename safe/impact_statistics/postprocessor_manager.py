@@ -560,14 +560,6 @@ class PostprocessorManager(QtCore.QObject):
                     elderly_ratio = \
                         self.aggregator.get_default_keyword('ELDERLY_RATIO')
 
-        if 'BuildingType' or 'RoadType' in postprocessors:
-            try:
-                key_attribute = self.keyword_io.read_keywords(
-                    self.aggregator.exposure_layer, 'key_attribute')
-            except KeywordNotFoundError:
-                # use 'type' as default
-                key_attribute = 'type'
-
         # iterate zone features
         request = QgsFeatureRequest()
         request.setFlags(QgsFeatureRequest.NoGeometry)
@@ -652,8 +644,18 @@ class PostprocessorManager(QtCore.QObject):
                     parameters['elderly_ratio'] = elderly_ratio
 
                 if key == 'BuildingType' or key == 'RoadType':
-                    # TODO: Fix this might be referenced before assignment
+                    try:
+                        key_attribute = self.keyword_io.read_keywords(
+                            self.aggregator.exposure_layer, 'key_attribute')
+                    except KeywordNotFoundError:
+                        # use 'type' as default
+                        key_attribute = 'type'
                     parameters['key_attribute'] = key_attribute
+
+                    value_map = self.keyword_io.read_keywords(
+                        self.aggregator.exposure_layer, 'value_mapping')
+                    parameters['value_mapping'] = value_map
+
                 try:
                     value.setup(parameters)
                     value.process()
