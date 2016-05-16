@@ -14,6 +14,8 @@ from safe.utilities.utilities import (
     impact_attribution,
     replace_accentuated_characters,
     read_file_keywords,
+    reorder_dictionary,
+    main_type,
     is_keyword_version_supported
 )
 from safe.utilities.gis import qgis_version
@@ -123,7 +125,6 @@ class UtilitiesTest(unittest.TestCase):
             'exposure_title': 'People in Jakarta',
             'exposure_source': 'Sample Exposure Source'}
         html = impact_attribution(keywords, True)
-        print html
         assert html == '11'
 
         # Set back to en
@@ -174,6 +175,37 @@ class UtilitiesTest(unittest.TestCase):
         self.assertTrue(is_keyword_version_supported('3.2.1', '3.3'))
         self.assertFalse(is_keyword_version_supported('3.02.1', '3.2'))
 
+    def test_order_dictionary(self):
+        """Test if we can reorder a dictionary correctly."""
+        unordered = {
+            1: 'a',
+            2: 'b',
+            3: 'c',
+            4: 'd',
+            5: 'e'
+        }
+        expected = [5, 4, 3, 2, 1]
+
+        new_dict = reorder_dictionary(unordered, expected)
+        self.assertItemsEqual(expected, new_dict.keys())
+
+        # These keys don't exist, we expect an empty dictionary.
+        expected = ['Z', 'X', 'Y']
+        new_dict = reorder_dictionary(unordered, expected)
+        self.assertEqual(len(new_dict), 0)
+
+    def test_main_type(self):
+        """Test the good feature type according to the value mapping."""
+        mapping = {
+            'residential': ['house', 'apartments', 'residential'],
+            'industrial': ['commercial', 'retail']
+        }
+        self.assertEqual(main_type('residential', mapping), 'residential')
+        self.assertEqual(main_type('house', mapping), 'residential')
+        self.assertEqual(main_type('apartments', mapping), 'residential')
+        self.assertEqual(main_type('warehouse', mapping), 'other')
+        self.assertEqual(main_type(None, mapping), 'other')
+        self.assertEqual(main_type('null', mapping), 'other')
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(UtilitiesTest)

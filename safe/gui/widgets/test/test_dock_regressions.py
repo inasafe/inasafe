@@ -7,19 +7,18 @@ from qgis.core import QgsMapLayerRegistry
 
 from PyQt4 import QtCore
 
+from safe.test.utilities import get_qgis_app
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
 from safe.impact_functions import register_impact_functions
 from safe.test.utilities import (
     test_data_path,
     load_layer,
     set_canvas_crs,
     GEOCRS,
-    setup_scenario,
-    get_qgis_app)
+    setup_scenario)
 from safe.utilities.keyword_io import KeywordIO
 
-# AG: get_qgis_app() should be called before importing modules from
-# safe.gui.widgets.dock
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.gui.widgets.dock import Dock
 
@@ -136,7 +135,7 @@ class TestDockRegressions(TestCase):
         # Press RUN
         self.dock.accept()
 
-        safe_layer = self.dock.analysis.impact_layer
+        safe_layer = self.dock.impact_function.impact
         keywords = safe_layer.get_keywords()
         evacuated = float(keywords['evacuated'])
         self.assertLess(evacuated, total_population)
@@ -214,7 +213,7 @@ class TestDockRegressions(TestCase):
         # Press RUN
         self.dock.accept()
 
-        safe_layer = self.dock.analysis.impact_layer
+        safe_layer = self.dock.impact_function.impact
         keywords = safe_layer.get_keywords()
         evacuated = float(keywords['evacuated'])
         self.assertLess(evacuated, total_population)

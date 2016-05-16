@@ -175,6 +175,9 @@
           <multipart_polygon>
             <gco:Boolean/>
           </multipart_polygon>
+          <resolution>
+            <gco:FloatTuple/>
+          </resolution>
           <area_name_field>
             <gco:CharacterString/>
           </area_name_field>
@@ -211,9 +214,9 @@
           <datatype>
             <gco:CharacterString/>
           </datatype>
-          <resolution>
-            <gco:FloatTuple/>
-          </resolution>
+          <value_map>
+            <gco:Dictionary>{&quot;other&quot;: [&quot;Cycleway, footpath, etc.&quot;], &quot;local&quot;: [&quot;Road, residential, living street, etc.&quot;], &quot;primary&quot;: [&quot;Primary road&quot;, &quot;Primary link&quot;], &quot;secondary&quot;: [&quot;Secondary&quot;, &quot;Tertiary&quot;]}</gco:Dictionary>
+          </value_map>
           <structure_class_field>
             <gco:CharacterString/>
           </structure_class_field>

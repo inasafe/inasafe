@@ -14,6 +14,9 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
+from safe.utilities.unicode import get_unicode, get_string
+from safe.messaging.item.message_element import MessageElement
+
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '17/06/2011'
@@ -24,6 +27,38 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 class InaSAFEError(RuntimeError):
     """Base class for all user defined exceptions"""
     suggestion = 'An unspecified error occurred.'
+
+    def __init__(self, message=None):
+        """"General constructor.
+
+        :param message: The optional error message.
+        :type message: str, unicode, MessageElement
+        """""
+        if isinstance(message, unicode):
+            super(InaSAFEError, self).__init__(get_string(message))
+            self.message = message
+
+        elif isinstance(message, str):
+            super(InaSAFEError, self).__init__(message)
+            self.message = get_unicode(message)
+
+        elif isinstance(message, MessageElement):
+            super(InaSAFEError, self).__init__(message.to_text())
+            self.message = get_unicode(message.to_text())
+
+        elif message is None:
+            pass
+
+        elif isinstance(message, BaseException):
+            super(InaSAFEError, self).__init__(unicode(message))
+            self.message = unicode(message)
+        # This shouldn't happen...
+        else:
+            raise TypeError
+
+    def __unicode__(self):
+        """Get the error message as unicode."""
+        return self.message
 
 
 class ReadLayerError(InaSAFEError):
@@ -369,4 +404,9 @@ class InvalidProvenanceDataError(InaSAFEError):
 
 class MissingMetadata(InaSAFEError):
     """When old version of metadata is not properly read."""
+    pass
+
+
+class MissingImpactReport(InaSAFEError):
+    """When Impact Report do not have proper input.."""
     pass

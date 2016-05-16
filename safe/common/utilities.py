@@ -19,6 +19,11 @@ from collections import OrderedDict
 # pylint: enable=unused-import
 
 from PyQt4.QtCore import QPyNullVariant
+from qgis.core import (
+    QgsCoordinateReferenceSystem,
+    QgsCoordinateTransform,
+    QgsGeometry,
+    QgsPoint)
 
 from safe.common.exceptions import VerificationError
 from safe.utilities.i18n import locale
@@ -592,17 +597,38 @@ def get_utm_zone(longitude):
     return zone
 
 
-def get_utm_epsg(longitude, latitude):
-    """Return epsg code of the utm zone.
+def get_utm_epsg(longitude, latitude, crs=None):
+    """Return epsg code of the utm zone according to X, Y coordinates.
+
+    By default, the CRS is EPSG:4326. If the CRS is provided, first X,Y will
+    be reprojected from the input CRS to WGS84.
 
     The code is based on the code:
     http://gis.stackexchange.com/questions/34401
+
+    :param longitude: The longitude.
+    :type longitude: float
+
+    :param latitude: The latitude.
+    :type latitude: float
+
+    :param crs: The coordinate reference system of the latitude, longitude.
+    :type crs: QgsCoordinateReferenceSystem
     """
-    epsg = 32600
-    if latitude < 0.0:
-        epsg += 100
-    epsg += get_utm_zone(longitude)
-    return epsg
+    if crs is None or crs.authid() == 'EPSG:4326':
+        epsg = 32600
+        if latitude < 0.0:
+            epsg += 100
+        epsg += get_utm_zone(longitude)
+        return epsg
+    else:
+        epsg_4326 = QgsCoordinateReferenceSystem('EPSG:4326')
+        transform = QgsCoordinateTransform(crs, epsg_4326)
+        geom = QgsGeometry.fromPoint(QgsPoint(longitude, latitude))
+        geom.transform(transform)
+        point = geom.asPoint()
+        # The point is now in 4326, we can call the function again.
+        return get_utm_epsg(point.x(), point.y())
 
 
 def feature_attributes_as_dict(field_map, attributes):
@@ -736,56 +762,6 @@ def color_ramp(number_of_colour):
         hex_color = '#%02x%02x%02x' % (rgb[0], rgb[1], rgb[2])
         colors.append(hex_color)
     return colors
-
-
-def get_osm_building_usage(attribute_names, feature):
-    """Get the usage of a row of OSM building data.
-
-    :param attribute_names: The list of attribute of the OSM building data.
-    :type attribute_names: list
-
-    :param feature: A row of data representing an OSM building.
-    :type feature: dict
-
-    :returns: The usage of the feature. Return None if it does not find any.
-    :rtype: str
-    """
-    attribute_names_lower = [
-        attribute_name.lower() for attribute_name in attribute_names]
-
-    # if the feature is from QGIS layer, NULL values are represented
-    # by QPyNullVariant instead of None, so we handle that explicitly
-
-    usage = None
-    # Prioritize 'type' attribute
-    if 'type' in attribute_names_lower:
-        attribute_index = attribute_names_lower.index('type')
-        field_name = attribute_names[attribute_index]
-        if not isinstance(feature[field_name], QPyNullVariant):
-            usage = feature[field_name]
-
-    # Get the usage from other attribute names
-    building_type_attributes = ['amenity', 'building_t', 'office', 'tourism',
-                                'leisure', 'use']
-    for type_attribute in building_type_attributes:
-        if (type_attribute in attribute_names_lower) and usage is None:
-            attribute_index = attribute_names_lower.index(
-                type_attribute)
-            field_name = attribute_names[attribute_index]
-            if not isinstance(feature[field_name], QPyNullVariant):
-                usage = feature[field_name]
-
-    # The last one is to get it from 'building' attribute
-    if 'building' in attribute_names_lower and usage is None:
-        attribute_index = attribute_names_lower.index('building')
-        field_name = attribute_names[attribute_index]
-        if not isinstance(feature[field_name], QPyNullVariant):
-            usage = feature[field_name]
-
-        if usage is not None and usage.lower() == 'yes':
-            usage = 'building'
-
-    return usage
 
 
 def log_file_path():

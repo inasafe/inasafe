@@ -70,7 +70,7 @@ def content():
     message.add(m.Paragraph(tr(
         'Minimum needs are grouped into regional or linguistic \'profiles\'. '
         'The default profile is \'BNPB_en\' - the english profile for the '
-        'national disaster agency in Indonesia.'
+        'national disaster agency in Indonesia. '
         'You will see that this profile defines requirements for displaced '
         'persons in terms of Rice, Drinking Water, Clean Water (for bathing '
         'etc.), Family Kits (with personal hygiene items) and provision of '
@@ -79,7 +79,7 @@ def content():
     message.add(m.Paragraph(tr(
         'Each item in the profile can be customised or removed. For example '
         'selecting the first item in the list and then clicking on the '
-        '\'pencil\' icon will show the details of how it was defined.'
+        '\'pencil\' icon will show the details of how it was defined. '
         'If you scroll up and down in the panel you will see that for each '
         'item, you can set a name, description, units (in singular, '
         'plural and abbreviated forms), specify maxima and minima for the '
@@ -90,10 +90,10 @@ def content():
         'providing humanitarian relief.'
     )))
     message.add(m.Paragraph(tr(
-        'The final item in the item configuration is the \'readable sentence\''
-        'which bears special discussion. Using a simple system of tokens you '
-        'can construct a sentence that will be used in the generated needs '
-        'report.'
+        'The final item in the item configuration is the \'readable '
+        'sentence\' which bears special discussion. Using a simple system of '
+        'tokens you can construct a sentence that will be used in the '
+        'generated needs report.'
     )))
     message.add(m.Heading(tr('Minimum needs profiles'), **INFO_STYLE))
     message.add(m.Paragraph(tr(

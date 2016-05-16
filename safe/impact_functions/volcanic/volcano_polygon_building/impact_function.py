@@ -11,25 +11,20 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-from collections import OrderedDict
-
 from safe.impact_functions.bases.classified_vh_classified_ve import \
     ClassifiedVHClassifiedVE
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
 from safe.impact_functions.volcanic.volcano_polygon_building\
     .metadata_definitions import VolcanoPolygonBuildingFunctionMetadata
-from safe.common.exceptions import InaSAFEError, KeywordNotFoundError
-from safe.common.utilities import (
-    get_thousand_separator,
-    get_osm_building_usage)
+from safe.common.exceptions import InaSAFEError
+from safe.common.utilities import get_thousand_separator
 from safe.engine.interpolation import (
     assign_hazard_values_to_exposure_data)
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
-import safe.messaging as m
-from safe.messaging import styles
 from safe.utilities.keyword_io import definition
+from safe.utilities.utilities import main_type
 from safe.impact_functions.core import get_key_for_value
 from safe.utilities.unicode import get_string
 
@@ -50,22 +45,21 @@ class VolcanoPolygonBuildingFunction(
         self.building_report_threshold = 25
 
     def notes(self):
-        """Return the notes section of the report.
+        """Return the notes section of the report as dict.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: safe.messaging.Message
+        :rtype: dict
         """
-        message = m.Message(style_class='container')
-        message.add(m.Heading(
-            tr('Notes and assumptions'), **styles.INFO_STYLE))
-        checklist = m.BulletedList()
-        checklist.add(tr(
-            'Map shows buildings affected in each of the volcano hazard '
-            'polygons.'))
-        names = tr('Volcanoes considered: %s.') % self.volcano_names
-        checklist.add(names)
-        message.add(checklist)
-        return message
+        title = tr('Notes and assumptions')
+        fields = [
+            tr('Map shows buildings affected in each of the volcano hazard '
+               'polygons.'),
+            tr('Volcanoes considered: %s.') % self.volcano_names
+        ]
+        return {
+            'title': title,
+            'fields': fields
+        }
 
     def run(self):
         """Risk plugin for volcano hazard on building/structure.
@@ -76,24 +70,14 @@ class VolcanoPolygonBuildingFunction(
                   Table with number of buildings affected
         :rtype: dict
         """
-        self.validate()
-        self.prepare()
-
-        self.provenance.append_step(
-            'Calculating Step',
-            'Impact function is calculating the impact.')
 
         # Get parameters from layer's keywords
         self.hazard_class_attribute = self.hazard.keyword('field')
         self.name_attribute = self.hazard.keyword('volcano_name_field')
         self.hazard_class_mapping = self.hazard.keyword('value_map')
-        # Try to get the value from keyword, if not exist, it will not fail,
-        # but use the old get_osm_building_usage
-        try:
-            self.exposure_class_attribute = self.exposure.keyword(
-                'structure_class_field')
-        except KeywordNotFoundError:
-            self.exposure_class_attribute = None
+        self.exposure_class_attribute = self.exposure.keyword(
+            'structure_class_field')
+        exposure_value_mapping = self.exposure.keyword('value_mapping')
 
         # Input checks
         if not self.hazard.layer.is_polygon_data:
@@ -130,7 +114,7 @@ class VolcanoPolygonBuildingFunction(
         # Get the list classes in the classification
         vector_hazard_classes = vector_hazard_classification['classes']
         # Initialize OrderedDict of affected buildings
-        self.affected_buildings = OrderedDict()
+        hazard_class = []
         # Iterate over vector hazard classes
         for vector_hazard_class in vector_hazard_classes:
             # Check if the key of class exist in hazard_class_mapping
@@ -140,17 +124,16 @@ class VolcanoPolygonBuildingFunction(
                 self.hazard_class_mapping[vector_hazard_class['name']] = \
                     self.hazard_class_mapping.pop(vector_hazard_class['key'])
                 # Adding the class name as a key in affected_building
-                self.affected_buildings[vector_hazard_class['name']] = {}
+                hazard_class.append(vector_hazard_class['name'])
 
         # Run interpolation function for polygon2raster
         interpolated_layer = assign_hazard_values_to_exposure_data(
             self.hazard.layer, self.exposure.layer)
 
         # Extract relevant exposure data
-        attribute_names = interpolated_layer.get_attribute_names()
         features = interpolated_layer.get_data()
 
-        self.buildings = {}
+        self.init_report_var(hazard_class)
 
         for i in range(len(features)):
             # Get the hazard value based on the value mapping in keyword
@@ -161,26 +144,16 @@ class VolcanoPolygonBuildingFunction(
                 hazard_value = self._not_affected_value
             features[i][self.target_field] = get_string(hazard_value)
 
-            if (self.exposure_class_attribute and
-                    self.exposure_class_attribute in attribute_names):
-                usage = features[i][self.exposure_class_attribute]
-            else:
-                usage = get_osm_building_usage(attribute_names, features[i])
+            usage = features[i][self.exposure_class_attribute]
+            usage = main_type(usage, exposure_value_mapping)
 
-            if usage in [None, 'NULL', 'null', 'Null', 0]:
-                usage = tr('Unknown')
-
-            if usage not in self.buildings:
-                self.buildings[usage] = 0
-                for category in self.affected_buildings.keys():
-                    self.affected_buildings[category][
-                        usage] = OrderedDict([
-                            (tr('Buildings Affected'), 0)])
-
-            self.buildings[usage] += 1
+            affected = False
             if hazard_value in self.affected_buildings.keys():
-                self.affected_buildings[hazard_value][usage][
-                    tr('Buildings Affected')] += 1
+                affected = True
+
+            self.classify_feature(hazard_value, usage, affected)
+
+        self.reorder_dictionaries()
 
         # Lump small entries and 'unknown' into 'other' category
         # Building threshold #2468
@@ -188,9 +161,6 @@ class VolcanoPolygonBuildingFunction(
         building_postprocessors = postprocessors['BuildingType'][0]
         self.building_report_threshold = building_postprocessors.value[0].value
         self._consolidate_to_other()
-
-        # Generate simple impact report
-        impact_summary = impact_table = self.html_report()
 
         # Create style
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
@@ -228,17 +198,15 @@ class VolcanoPolygonBuildingFunction(
         legend_notes = tr('Thousand separator is represented by %s' %
                           get_thousand_separator())
 
+        impact_data = self.generate_data()
+
         extra_keywords = {
-            'impact_summary': impact_summary,
-            'impact_table': impact_table,
             'target_field': self.target_field,
             'map_title': map_title,
             'legend_notes': legend_notes,
             'legend_units': legend_units,
             'legend_title': legend_title
         }
-
-        self.set_if_provenance()
 
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 
@@ -252,5 +220,6 @@ class VolcanoPolygonBuildingFunction(
             style_info=style_info
         )
 
+        impact_layer.impact_data = impact_data
         self._impact = impact_layer
         return impact_layer

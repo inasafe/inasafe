@@ -57,11 +57,22 @@ def content():
     """
     message = m.Message()
     paragraph = m.Paragraph(tr(
-        'This document describes the usage of the InaSAFE \'dock panel\''
-        '- which is an interface for running hazard scenarios within the QGIS '
-        'environment. If you are a new user, you may also consider using the '
-        '\'Impact Function Centric Wizard\' to run the analysis. You can '
-        'launch the wizard by clicking on this icon in the toolbar:'),
+        'InaSAFE is free software that produces realistic natural hazard '
+        'impact scenarios for better planning, preparedness and response '
+        'activities. It provides a simple but rigourous way to combine data '
+        'from scientists, local governments and communities to provide '
+        'insights into the likely impacts of future disaster events.'
+    ))
+    message.add(paragraph)
+    paragraph = m.Paragraph(tr(
+        'The InaSAFE \'dock panel\' helps you to run hazard impact analysis '
+        'within the QGIS environment. It helps you create your hazard impact '
+        'analysis question and shows the results of this analysis. If you are '
+        'a new user, you may also consider using the \'Impact Function '
+        'Centric Wizard\' to run the analysis. This wizard will guide you '
+        'through the process of running an InaSAFE assessment, with '
+        'interactive step by step instructions. You can launch the wizard '
+        'by clicking on this icon in the toolbar:'),
         m.Image(
             'file:///%s/img/icons/'
             'show-wizard.svg' % resources_path(),
@@ -70,60 +81,76 @@ def content():
     )
     message.add(paragraph)
     paragraph = m.Paragraph(tr(
-        'You can drag and drop the dock panel to reposition it in the user '
-        'interface. For example, dragging the panel towards the right margin '
-        'of the QGIS application will dock it to the right side of the screen.'
+        'You can drag and drop the dock panel to reposition it on the screen. '
+        'For example, dragging the panel towards the right margin of the QGIS '
+        'application will dock it to the right side of the screen.'
     ))
     message.add(paragraph)
 
     message.add(m.Paragraph(tr(
         'There are three main areas to the dock panel:')))
     bullets = m.BulletedList()
-    bullets.add(tr('the Questions area'))
-    bullets.add(tr('the Results area'))
-    bullets.add(tr('the Buttons area'))
+    bullets.add(m.Text(
+        tr('the '),
+        m.ImportantText(tr(
+            'questions ')),
+        tr('area')))
+    bullets.add(m.Text(
+        tr('the '),
+        m.ImportantText(tr(
+            'results ')),
+        tr('area')))
+    bullets.add(m.Text(
+        tr('the '),
+        m.ImportantText(tr(
+            'buttons ')),
+        tr('area')))
     message.add(bullets)
     message.add(m.Paragraph(tr(
-        'At any time you can obtain help in InaSAFE by clicking on the '
+        'You can get help at any time in InaSAFE by clicking on the '
         'help buttons provided on each dock and dialog.')))
 
     header = m.Heading(tr('The questions area'), **INFO_STYLE)
     message.add(header)
     message.add(m.Paragraph(tr(
-        'The intention of InaSAFE is to make it really simple and easy to '
-        'perform your impact analysis. The question area provides a simple '
-        'way for you to formulate what it is you want to find out? All '
-        'questions are formulated in the form:'),
+        'The intention of InaSAFE is to make it easy to perform your impact '
+        'analysis. We start the analysis in the questions area. This area '
+        'contains four drop down menus. You create your question by using '
+        'these drop down menus to select the hazard and exposure data you '
+        'wish to perform the analysis on. You must also select an impact '
+        'function  All questions follow this form:'),
         m.EmphasizedText(tr(
             'In the event of a [hazard], how many [exposure] might be '
-            'affected?'))))
+            '[impacted]?'))))
     message.add(m.Paragraph(tr(
         'For example: "If there is a flood, how many buildings might be '
-        'affected?"')))
+        'flooded?"')))
     message.add(m.Paragraph(tr(
         'In order to answer such questions, the InaSAFE developers have '
         'built a number of Impact Functions that cover scenarios such as '
-        'flood, tsunami, volcanic fall, earthquake and so on.')))
+        'flood, tsunami, volcanic ash fall and earthquake.')))
     message.add(m.Paragraph(tr(
-        'The formulation of these questions if carried out by loading layers '
-        'into QGIS that represent either hazard scenarios or exposure data. '
-        'A hazard, for example, may be represented as, a raster layer in '
-        'QGIS where each pixel in the raster represents the current flood '
-        'depth following an inundation event. An exposure layer could be '
+        'The first step in answering these questions is to load layers that '
+        'represent either hazard scenarios or exposure data into QGIS. '
+        'A hazard, for example, may be represented as a raster layer in '
+        'QGIS where each pixel in the raster represents the flood depth '
+        'following an inundation event. An exposure layer could be '
         'represented, for example, as vector polygon data representing '
         'building outlines, or a raster outline where each pixel represents '
-        'the number of people thought to be resident in that cell.')))
+        'the number of people thought to be living in that cell.')))
     message.add(m.Paragraph(tr(
-        'The impact function will combine these two input layers in a '
-        'mathematical model in order to derive what the impacts of the '
-        'hazard will be on the exposed infrastructure or people. By '
-        'selecting a combination from the hazard and exposure combo boxes, '
-        'an appropriate set of impact functions will be listed in the '
-        'combo box. You may be wondering how the InaSAFE plugin determines '
-        'whether a layer should be listed in the hazard or exposure combo '
-        'boxes? The plugin relies on simple keyword metadata to be associated '
-        'with each layer. You can define these keywords by selecting a layer '
-        'and then clicking the InaSAFE Keywords Wizard icon on the toolbar: '),
+        'The Impact Function will combine these two layers in a '
+        'mathematical model. The results of this model will show what the '
+        'effect of the hazard will be on the exposed infrastructure or '
+        'people. When a combination of hazard and exposure data are selected '
+        'in the form, an appropriate set of Impact Functions will be listed '
+        'under \'Might\'. An example representation of an Impact Function in '
+        'the form is \'Be flooded\'. You may be wondering how the InaSAFE '
+        'plugin determines whether a layer should be listed in the hazard or '
+        'exposure combo boxes. The plugin relies on simple keyword metadata '
+        'to be associated with each layer. You can define these keywords by '
+        'selecting a layer and then clicking the InaSAFE Keywords Wizard icon '
+        'on the toolbar: '),
         m.Image(
             'file:///%s/img/icons/'
             'show-keyword-wizard.svg' % resources_path(),
@@ -133,14 +160,14 @@ def content():
             'keywords for that layer.')))
     message.add(m.Paragraph(tr(
         'Based on the combination of hazard and exposure layers that are '
-        'selected, the Impact Function list (shown in the combo box under '
-        '"Might" in the InaSAFE dock panel)  will be updated. Each impact '
-        'function can only work with specific combinations of hazard and '
-        'exposure types, so the options shown here will be limited '
-        'accordingly. The chosen impact function can be configured (if '
+        'selected, the Impact Function list (shown in the drop down menu '
+        'under \'Might\' in the InaSAFE dock panel) will be updated. '
+        'Each impact function can only work with specific combinations of '
+        'hazard and exposure types, so the options shown here will be limited '
+        'accordingly. The chosen Impact Function can be configured (if '
         'applicable) by pressing the small ellipses (...) button next to '
-        'the chosen impact function. This is explained in more detail below '
-        'under the heading "Setting Analysis Parameters".')))
+        'the chosen Impact Function. This is explained in more detail below '
+        'under the heading \'Setting Analysis Parameters\'.')))
     message.add(m.Paragraph(tr(
         'Aggregation is the process whereby we group the analysis results '
         'by district so that you can see how many people, roads or '
@@ -153,7 +180,7 @@ def content():
         'attributes to indicate the ratio of men and women; youth, adults '
         'and elderly living in each area. Where these are provided and the '
         'exposure layer is population, InaSAFE will provide a demographic '
-        'breakdown per aggregation area indicating how many men, women etc. '
+        'breakdown per aggregation area indicating how many men, women, etc. '
         'were probably affected in that area.'
     )))
 
@@ -163,52 +190,50 @@ def content():
     message.add(m.Paragraph(tr(
         'After running an analysis, the question area is hidden to maximise '
         'the amount of space allocated to the results area. You can '
-        're-open the question area at any time by pressing the "show question '
-        'form" button.')))
+        're-open the question area at any time by pressing the \'show '
+        'question form\' button.')))
 
     message.add(m.Paragraph(tr(
-        'The Results area is used to display various useful feedback items to '
+        'The results area is used to display various useful feedback items to '
         'the user. Once an impact scenario has been run, a summary table will '
         'be shown.')))
 
     message.add(m.Paragraph(tr(
         'If you select an impact layer (i.e. a layer that was produced using '
-        'an InaSAFE impact function), in the QGIS layers list, this summary '
+        'an InaSAFE Impact Function), in the QGIS layers list, this summary '
         'will also be displayed in the results area. When you select a hazard '
         'or exposure layer in the QGIS layers list, the keywords for that '
-        'layer will be shown in the Results area, making it easy to '
+        'layer will be shown in the results area, making it easy to '
         'understand what metadata exists for that layer.')))
 
     message.add(m.Paragraph(tr(
-        'The Results area is also used to display status information. For '
+        'The results area is also used to display status information. For '
         'example, when a suitable combination of hazard, exposure and impact '
         'function are selected, the results area will be updated to indicate '
-        'that you can proceed to run the impact scenario calculation. The Run '
-        'Button will be activated.'
+        'that you can now run the impact scenario calculation. The \'Run\' '
+        'button will be activated.'
     )))
 
     message.add(m.Paragraph(tr(
-        'Finally, the Results area is also used to display any error messages '
-        'so that the user is informed as to what went wrong and why. You '
-        'might want to scroll down a bit in the messaging window to view the '
-        'message completely.'
+        'Finally, the results area is also used to display any error messages '
+        'so that the user knows what went wrong and why. You may need to '
+        'scroll down to view the message completely.'
     )))
 
     message.add(m.Paragraph(tr(
-        'To have more space for the results available your Question is '
-        'automatically hidden to make the results area as large as possible '
-        'to display the results. If you want to have a look again what the '
-        'question was that you formulated click on the Show question form '
-        'button on top of the result area.'
+        'After running the impact scenario calculation, our Question is '
+        'automatically hidden to make the results area as large as possible. '
+        'If you want to see what the question used in the analysis was, click '
+        'on the \'Show question form\' button at the top of the results area.'
     )))
 
     message.add(m.Paragraph(tr(
         'If you want to hide the question area again to have more space to '
-        'display the results again, just make the Layer you just calculated '
-        'with InaSAFE active again in the Layers list of QGIS.'
+        'display the results, click on the layer you just calculated '
+        'with InaSAFE in the Layers list of QGIS to make it active.'
     )))
 
-    header = m.Heading(tr('The Buttons Area'), **INFO_STYLE)
+    header = m.Heading(tr('The buttons area'), **INFO_STYLE)
     message.add(header)
 
     message.add(m.Paragraph(tr(
@@ -227,15 +252,15 @@ def content():
         m.ImportantText(tr('Print')),
         tr(
             '... - click on this if you wish to create a pdf of your '
-            'impact scenario project or just generate a report and open it in '
+            'impact scenario project or generate a report to open in '
             'composer for further tuning. An impact layer must be active '
-            'before the Print button will be enabled.')))
+            'before the \'Print\' button will be enabled.')))
     bullets.add(m.Text(
         m.ImportantText(tr('Run')),
         tr(
-            '- if the combination of options in the Questions area\'s '
-            'combo boxes will allow you to run a scenario, this button is '
-            'enabled.')))
+            '- this button is enabled when the combination of hazard and '
+            'exposure selected in the questions area\'s drop down menus will '
+            'allow you to run a scenario.')))
     message.add(bullets)
 
     header = m.Heading(tr('Data conversions'), **INFO_STYLE)
@@ -243,7 +268,7 @@ def content():
 
     message.add(m.Paragraph(tr(
         'When running a scenario, the data being used needs to be processed '
-        'into a state where it is acceptable for use by the impact function. '
+        'into a state where it is acceptable for use by the Impact Function. '
         'In particular it should be noted that:')))
 
     bullets = m.BulletedList()
@@ -275,7 +300,7 @@ def content():
 
     message.add(m.Paragraph(tr(
         'When the impact analysis has completed you may want to generate a '
-        'report. Usually the "Print..."  button will be enabled immediately '
+        'report. Usually the \'Print...\'  button will be enabled immediately '
         'after analysis. Selecting an InaSAFE impact layer in QGIS Layers '
         'panel will also enable it.'
     )))

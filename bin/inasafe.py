@@ -252,8 +252,8 @@ def get_exposure(arguments):
     return get_layer(arguments.exposure)
 
 
-def analysis_setup(command_line_arguments, hazard, exposure,
-                   aggregation=None):
+def impact_function_setup(
+        command_line_arguments, hazard, exposure, aggregation=None):
     """Sets up an analysis object.
 
     .. versionadded:: 3.2
@@ -276,31 +276,20 @@ def analysis_setup(command_line_arguments, hazard, exposure,
     impact_function_manager = ImpactFunctionManager()
     impact_function = impact_function_manager.get(
         command_line_arguments.impact_function)
-    keyword_io = KeywordIO()
 
-    try:
-        from safe.utilities.analysis import Analysis
-    except ImportError as ie:
-        LOGGER.debug('Import error for Analysis module')
-        print ie.message
-        raise ImportError
-    analysis = Analysis()
-    analysis.impact_function = impact_function
-    analysis.hazard = hazard
-    analysis.exposure = exposure
-    analysis.aggregation = aggregation
-    # analysis.hazard_keyword = keyword_io.read_keywords(hazard)
-    # analysis.exposure_keyword = keyword_io.read_keywords(exposure)
-    analysis.clip_hard = False
-    analysis.show_intermediate_layers = False
-    analysis.run_in_thread_flag = False
-    analysis.map_canvas = CANVAS
+    impact_function.hazard = hazard
+    impact_function.exposure = exposure
+    impact_function.aggregation = aggregation
+    impact_function.clip_hard = False
+    impact_function.show_intermediate_layers = False
+    impact_function.run_in_thread_flag = False
+    impact_function.map_canvas = CANVAS
     # QSetting context
     settings = QSettings()
     crs = settings.value('inasafe/analysis_extent_crs', '', type=str)
-    analysis.user_extent_crs = QgsCoordinateReferenceSystem(crs)
+    impact_function.requested_extent_crs = QgsCoordinateReferenceSystem(crs)
     try:
-        analysis.user_extent = QgsRectangle(
+        impact_function.requested_extent = QgsRectangle(
             float(command_line_arguments.extent[0]),
             float(command_line_arguments.extent[1]),
             float(command_line_arguments.extent[2]),
@@ -309,8 +298,7 @@ def analysis_setup(command_line_arguments, hazard, exposure,
     except AttributeError:
         print "No extents"
         pass
-    analysis.setup_analysis()
-    return analysis
+    return impact_function
 
 
 def run_impact_function(command_line_arguments):
@@ -328,11 +316,10 @@ def run_impact_function(command_line_arguments):
     hazard = get_hazard(command_line_arguments)
     exposure = get_exposure(command_line_arguments)
     aggregation = get_layer(command_line_arguments.aggregation)
-    analysis = analysis_setup(
+    impact_function = impact_function_setup(
         command_line_arguments, hazard, exposure, aggregation)
-    analysis.run_analysis()
-    impact_layer = analysis.impact_layer
-    qgis_impact_layer = safe_to_qgis_layer(impact_layer)
+    impact_function.run_analysis()
+    impact_layer = impact_function.impact
     write_results(command_line_arguments, impact_layer)
 
     return impact_layer

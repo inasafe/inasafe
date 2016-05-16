@@ -12,7 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 __author__ = 'Christian Christelis <christian@kartoza.com>'
 
-import safe.messaging as m
+from safe.utilities.i18n import tr
 
 
 class ReportMixin(object):
@@ -21,46 +21,24 @@ class ReportMixin(object):
     .. versionadded:: 3.1
     """
 
-    def html_report(self):
-        """Generate an HTML report.
+    def notes(self):
+        """Return the notes section of the report.
 
-        :returns: The report in html format.
-        :rtype: basestring
+        :return: The notes that should be attached to this impact report.
+        :rtype: dict
         """
-        return self.generate_report().to_html(suppress_newlines=True)
-
-    def generate_report(self):
-        """Defining the interface.
-
-        :returns: An itemized breakdown of the report.
-        :rtype: safe.messaging.Message
-        """
-        return m.Message()
+        return {
+            'title': tr('Notes'),
+            'fields': []
+        }
 
     def action_checklist(self):
-        """The actions to be taken in for the impact on this exposure type.
+        """Return the action check list section of the report.
 
-        :returns: The action checklist.
-        :rtype: safe.messaging.Message
+        :return: The action check list as dict.
+        :rtype: dict
         """
-        return m.Message()
-
-    def impact_summary(self):
-        """The impact summary.
-
-        :returns: The action checklist.
-        :rtype: safe.messaging.Message
-        """
-        return m.Message()
-
-    def notes(self):
-        """Additional notes to be used.
-
-        :return: The notes to be added to this report
-        :rtype: safe.messaging.Message
-
-        ..Notes:
-        Notes are very much specific to IFs so it is expected that this method
-        is overwritten in the IF if needed.
-        """
-        return m.Message()
+        return {
+            'title': tr('Action checklist'),
+            'fields': []
+        }

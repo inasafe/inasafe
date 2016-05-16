@@ -44,6 +44,7 @@ realtime/fixtures/settings/*
 realtime/fixtures/indonesia.sqlite
 realtime/server_config.py
 headless/celeryconfig.py
+realtime/celeryconfig.py
 safe/gui/ui/*.py
 result.txt
 riab_demo_data
@@ -57,4 +58,4 @@ setup.cfg
 venv
 # This is a temporary working file for building the windows installer that does string replacement on version name
 scripts/build.nsi
-
+gdalwmscache

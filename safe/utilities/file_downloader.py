@@ -29,7 +29,6 @@ from PyQt4.QtNetwork import QNetworkRequest, QNetworkReply
 
 from safe.common.utilities import humanize_file_size
 from safe.utilities.i18n import tr
-from safe.utilities.gis import qgis_version
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -115,7 +114,8 @@ class FileDownloader(object):
             # cancel
             def cancel_action():
                 """Cancel download."""
-                self.manager.deleteReply(self.reply)
+                self.reply.abort()
+                self.reply.deleteLater()
 
             self.reply.downloadProgress.connect(progress_event)
             self.progress_dialog.canceled.connect(cancel_action)
@@ -129,9 +129,15 @@ class FileDownloader(object):
             QCoreApplication.processEvents()
 
         result = self.reply.error()
+        try:
+            http_code = int(self.reply.attribute(
+                QNetworkRequest.HttpStatusCodeAttribute))
+        except TypeError:
+            # If the user cancels the request, the HTTP response will be None.
+            http_code = None
 
-        if qgis_version() >= 21100:
-            self.manager.deleteReply(self.reply)
+        self.reply.abort()
+        self.reply.deleteLater()
 
         if result == QNetworkReply.NoError:
             return True, None
@@ -140,6 +146,20 @@ class FileDownloader(object):
             return False, tr(
                 'The network is unreachable. Please check your internet '
                 'connection.')
+
+        elif http_code == 408:
+            msg = tr(
+                'Sorry, the server aborted your request. '
+                'Please try a smaller area.')
+            LOGGER.debug(msg)
+            return False, msg
+
+        elif http_code == 509:
+            msg = tr(
+                'Sorry, the server is currently busy with another request. '
+                'Please try again in a few minutes.')
+            LOGGER.debug(msg)
+            return False, msg
 
         elif result == QNetworkReply.ProtocolUnknownError or \
                 result == QNetworkReply.HostNotFoundError:
