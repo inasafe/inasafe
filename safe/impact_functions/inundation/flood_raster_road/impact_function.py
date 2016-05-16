@@ -25,6 +25,7 @@ from safe.impact_functions.inundation.flood_raster_road\
     .metadata_definitions import FloodRasterRoadsMetadata
 from safe.utilities.i18n import tr
 from safe.utilities.gis import add_output_feature, union_geometries
+from safe.utilities.utilities import reorder_dictionary, main_type
 from safe.storage.vector import Vector
 from safe.common.utilities import get_utm_epsg, unique_filename
 from safe.common.exceptions import GetDataError
@@ -34,6 +35,7 @@ from safe.gis.qgis_vector_tools import (
     create_layer)
 from safe.impact_reports.road_exposure_report_mixin import\
     RoadExposureReportMixin
+from safe.definitions import structure_class_order
 
 
 def _raster_to_vector_cells(
@@ -252,8 +254,11 @@ class FloodRasterRoadsFunction(
         """
 
         target_field = self.target_field
+
         # Get parameters from layer's keywords
         road_class_field = self.exposure.keyword('road_class_field')
+        exposure_value_mapping = self.exposure.keyword('value_mapping')
+
         # Get parameters from IF parameter
         threshold_min = self.parameters['min threshold'].value
         threshold_max = self.parameters['max threshold'].value
@@ -333,34 +338,33 @@ class FloodRasterRoadsFunction(
         output_crs = QgsCoordinateReferenceSystem(epsg)
         transform = QgsCoordinateTransform(
             self.exposure.layer.crs(), output_crs)
-        flooded_keyword = tr('Flooded in the threshold (m)')
-        self.affected_road_categories = [flooded_keyword]
-        self.affected_road_lengths = OrderedDict([
-            (flooded_keyword, {})])
-        self.road_lengths = OrderedDict()
+
+        classes = [tr('Flooded in the threshold (m)')]
+        self.init_report_var(classes)
 
         if line_layer.featureCount() < 1:
             raise ZeroImpactException()
 
         roads_data = line_layer.getFeatures()
         road_type_field_index = line_layer.fieldNameIndex(road_class_field)
+
         for road in roads_data:
             attributes = road.attributes()
-            road_type = attributes[road_type_field_index]
-            if road_type.__class__.__name__ == 'QPyNullVariant':
-                road_type = tr('Other')
+
+            usage = attributes[road_type_field_index]
+            usage = main_type(usage, exposure_value_mapping)
+
             geom = road.geometry()
             geom.transform(transform)
             length = geom.length()
 
-            if road_type not in self.road_lengths:
-                self.affected_road_lengths[flooded_keyword][road_type] = 0
-                self.road_lengths[road_type] = 0
-
-            self.road_lengths[road_type] += length
+            affected = False
             if attributes[target_field_index] == 1:
-                self.affected_road_lengths[
-                    flooded_keyword][road_type] += length
+                affected = True
+
+            self.classify_feature(classes[0], usage, length, affected)
+
+        self.reorder_dictionaries()
 
         # For printing map purpose
         map_title = tr('Roads inundated')

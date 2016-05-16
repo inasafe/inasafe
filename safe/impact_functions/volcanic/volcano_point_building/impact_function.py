@@ -11,23 +11,20 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-from collections import OrderedDict
-
 from safe.impact_functions.bases.classified_vh_classified_ve import \
     ClassifiedVHClassifiedVE
 from safe.impact_functions.volcanic.volcano_point_building\
     .metadata_definitions import VolcanoPointBuildingFunctionMetadata
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
+from safe.utilities.utilities import main_type
 from safe.common.utilities import (
     get_thousand_separator,
-    get_non_conflicting_attribute_name,
-    get_osm_building_usage)
+    get_non_conflicting_attribute_name)
 from safe.engine.interpolation import (
     assign_hazard_values_to_exposure_data)
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
-from safe.common.exceptions import KeywordNotFoundError
 
 
 class VolcanoPointBuildingFunction(
@@ -83,13 +80,9 @@ class VolcanoPointBuildingFunction(
 
         # Get parameters from layer's keywords
         volcano_name_attribute = self.hazard.keyword('volcano_name_field')
-        # Try to get the value from keyword, if not exist, it will not fail,
-        # but use the old get_osm_building_usage
-        try:
-            self.exposure_class_attribute = self.exposure.keyword(
-                'structure_class_field')
-        except KeywordNotFoundError:
-            self.exposure_class_attribute = None
+        self.exposure_class_attribute = self.exposure.keyword(
+            'structure_class_field')
+        exposure_value_mapping = self.exposure.keyword('value_mapping')
 
         # Category names for the impact zone
         category_names = radii
@@ -116,13 +109,9 @@ class VolcanoPointBuildingFunction(
             self.hazard.layer, self.exposure.layer)
 
         # Extract relevant interpolated layer data
-        attribute_names = interpolated_layer.get_attribute_names()
         features = interpolated_layer.get_data()
 
-        self.buildings = {}
-        self.affected_buildings = OrderedDict()
-        for category in radii:
-            self.affected_buildings[category] = {}
+        self.init_report_var(radii)
 
         # Iterate the interpolated building layer
         for i in range(len(features)):
@@ -132,28 +121,18 @@ class VolcanoPointBuildingFunction(
             features[i][target_field] = hazard_value
 
             # Count affected buildings by usage type if available
-            if (self.exposure_class_attribute and
-                    self.exposure_class_attribute in attribute_names):
-                usage = features[i][self.exposure_class_attribute]
-            else:
-                usage = get_osm_building_usage(attribute_names, features[i])
+            usage = features[i][self.exposure_class_attribute]
+            usage = main_type(usage, exposure_value_mapping)
 
-            if usage is [None, 'NULL', 'null', 'Null', 0]:
-                usage = tr('Unknown')
-
-            if usage not in self.buildings:
-                self.buildings[usage] = 0
-                for category in self.affected_buildings.keys():
-                    self.affected_buildings[category][
-                        usage] = OrderedDict([
-                            (tr('Buildings Affected'), 0)])
-
-            self.buildings[usage] += 1
+            affected = False
             if hazard_value in self.affected_buildings.keys():
-                self.affected_buildings[hazard_value][usage][
-                    tr('Buildings Affected')] += 1
+                affected = True
 
-        # Adding 'km'
+            self.classify_feature(hazard_value, usage, affected)
+
+        self.reorder_dictionaries()
+
+        # Adding 'km'.
         affected_building_keys = self.affected_buildings.keys()
         for key in affected_building_keys:
             self.affected_buildings[tr('Radius %.1f km' % key)] = \

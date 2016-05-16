@@ -11,7 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 import logging
-from collections import OrderedDict
 
 from qgis.core import (
     QgsRectangle,
@@ -28,6 +27,7 @@ from safe.impact_functions.inundation. \
     FloodPolygonRoadsMetadata
 from safe.common.exceptions import ZeroImpactException
 from safe.utilities.i18n import tr
+from safe.utilities.utilities import main_type
 from safe.storage.vector import Vector
 from safe.common.utilities import get_utm_epsg
 from safe.common.exceptions import GetDataError
@@ -85,6 +85,7 @@ class FloodPolygonRoadsFunction(
         self.hazard_class_mapping = self.hazard.keyword('value_map')
         self.exposure_class_attribute = self.exposure.keyword(
             'road_class_field')
+        exposure_value_mapping = self.exposure.keyword('value_mapping')
 
         hazard_provider = self.hazard.layer.dataProvider()
         affected_field_index = hazard_provider.fieldNameIndex(
@@ -182,29 +183,27 @@ class FloodPolygonRoadsFunction(
         road_type_field_index = line_layer.fieldNameIndex(
             self.exposure_class_attribute)
         target_field_index = line_layer.fieldNameIndex(self.target_field)
-        flooded_keyword = tr('Temporarily closed (m)')
-        self.affected_road_categories = [flooded_keyword]
-        self.affected_road_lengths = OrderedDict([
-            (flooded_keyword, {})])
-        self.road_lengths = OrderedDict()
+
+        classes = [tr('Temporarily closed')]
+        self.init_report_var(classes)
 
         for road in roads_data:
             attributes = road.attributes()
-            road_type = attributes[road_type_field_index]
-            if road_type.__class__.__name__ == 'QPyNullVariant':
-                road_type = tr('Other')
+
+            usage = attributes[road_type_field_index]
+            usage = main_type(usage, exposure_value_mapping)
+
             geom = road.geometry()
             geom.transform(transform)
             length = geom.length()
 
-            if road_type not in self.road_lengths:
-                self.affected_road_lengths[flooded_keyword][road_type] = 0
-                self.road_lengths[road_type] = 0
-
-            self.road_lengths[road_type] += length
+            affected = False
             if attributes[target_field_index] == 1:
-                self.affected_road_lengths[
-                    flooded_keyword][road_type] += length
+                affected = True
+
+            self.classify_feature(classes[0], usage, length, affected)
+
+        self.reorder_dictionaries()
 
         # For printing map purpose
         map_title = tr('Roads inundated')

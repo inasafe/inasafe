@@ -20,10 +20,11 @@ __copyright__ = 'imajimatika@gmail.com'
 
 import safe.messaging as m
 from safe.common.utilities import format_int
-from safe.impact_template.template_base import TemplateBase
+from safe.impact_template.abstract_road_building_report_template import \
+    AbstractRoadBuildingReportTemplate
 
 
-class BuildingReportTemplate(TemplateBase):
+class BuildingReportTemplate(AbstractRoadBuildingReportTemplate):
     """Report Template for Building.
 
     ..versionadded: 3.4
@@ -47,22 +48,6 @@ class BuildingReportTemplate(TemplateBase):
             impact_data=impact_data)
         self.impact_table = self.impact_data.get('impact table')
 
-    def generate_message_report(self):
-        """Generate impact report as message object.
-
-        :returns: The report.
-        :rtype: safe.messaging.Message
-        """
-        message = m.Message()
-        message.add(self.format_question())
-        message.add(self.format_impact_summary())
-        message.add(self.format_building_break_down())
-        message.add(self.format_action_check_list())
-        message.add(self.format_notes())
-        if self.postprocessing:
-            message.add(self.format_postprocessing())
-        return message
-
     def format_impact_summary(self):
         """Format impact summary.
 
@@ -83,7 +68,7 @@ class BuildingReportTemplate(TemplateBase):
         message.add(table)
         return message
 
-    def format_building_break_down(self):
+    def format_breakdown(self):
         """Breakdown by building type.
 
         :returns: The buildings breakdown report.

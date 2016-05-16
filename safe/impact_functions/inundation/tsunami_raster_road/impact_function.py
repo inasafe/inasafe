@@ -35,7 +35,7 @@ from safe.impact_functions.inundation.tsunami_raster_road\
     .metadata_definitions import TsunamiRasterRoadMetadata
 from safe.utilities.i18n import tr
 from safe.utilities.gis import add_output_feature, union_geometries
-from safe.utilities.utilities import ranges_according_thresholds
+from safe.utilities.utilities import main_type, ranges_according_thresholds
 from safe.storage.vector import Vector
 from safe.common.utilities import get_utm_epsg, unique_filename
 from safe.gis.qgis_raster_tools import align_clip_raster
@@ -322,6 +322,7 @@ class TsunamiRasterRoadsFunction(
         target_field = self.target_field
         # Get parameters from layer's keywords
         road_class_field = self.exposure.keyword('road_class_field')
+        exposure_value_mapping = self.exposure.keyword('value_mapping')
 
         # reproject self.extent to the hazard projection
         hazard_crs = self.hazard.layer.crs()
@@ -388,46 +389,34 @@ class TsunamiRasterRoadsFunction(
             self.exposure.layer.crs(), output_crs)
 
         # Roads breakdown
-        self.road_lengths = OrderedDict()
-        self.affected_road_categories = self.hazard_classes
-        # Impacted roads breakdown
-        self.affected_road_lengths = OrderedDict([
-            (self.hazard_classes[0], {}),
-            (self.hazard_classes[1], {}),
-            (self.hazard_classes[2], {}),
-            (self.hazard_classes[3], {}),
-            (self.hazard_classes[4], {}),
-        ])
+        self.init_report_var(self.hazard_classes)
 
         if line_layer.featureCount() < 1:
             raise ZeroImpactException()
 
         roads_data = line_layer.getFeatures()
         road_type_field_index = line_layer.fieldNameIndex(road_class_field)
+
         for road in roads_data:
             attributes = road.attributes()
+
             affected = attributes[target_field_index]
             hazard_zone = self.hazard_classes[affected]
-            road_type = attributes[road_type_field_index]
-            if road_type.__class__.__name__ == 'QPyNullVariant':
-                road_type = tr('Other')
+
+            usage = attributes[road_type_field_index]
+            usage = main_type(usage, exposure_value_mapping)
+
             geom = road.geometry()
             geom.transform(transform)
             length = geom.length()
 
-            if road_type not in self.road_lengths:
-                self.road_lengths[road_type] = 0
-
-            if hazard_zone not in self.affected_road_lengths:
-                self.affected_road_lengths[hazard_zone] = {}
-
-            if road_type not in self.affected_road_lengths[hazard_zone]:
-                self.affected_road_lengths[hazard_zone][road_type] = 0
-
-            self.road_lengths[road_type] += length
+            affected = False
             num_classes = len(self.hazard_classes)
             if attributes[target_field_index] in range(num_classes):
-                self.affected_road_lengths[hazard_zone][road_type] += length
+                affected = True
+            self.classify_feature(hazard_zone, usage, length, affected)
+
+        self.reorder_dictionaries()
 
         # For printing map purpose
         map_title = tr('Roads inundated')

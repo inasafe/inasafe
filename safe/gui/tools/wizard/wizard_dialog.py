@@ -287,26 +287,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         step.set_widgets()
         self.go_to_step(step)
 
-    def update_MessageViewer_size(self):
-        """Update maximumHeight size of the MessageViewer to fit its parent tab
-
-        This is a workaround for a bug that makes MessageViewer
-        flooding up to maximumHeight on Windows.
-        """
-        self.step_fc_analysis.wvResults.setMaximumHeight(
-            self.pgF25Progress.height() - 90)
-
-    # pylint: disable=unused-argument
-    def resizeEvent(self, ev):
-        """Trigger MessageViewer size update on window resize
-
-        .. note:: This is an automatic Qt slot
-           executed when the window size changes.
-        """
-        pass
-        # self.update_MessageViewer_size()
-    # pylint: disable=unused-argument
-
     def field_keyword_for_the_layer(self):
         """Return the proper keyword for field for the current layer.
         Expected values are: 'field', 'structure_class_field', road_class_field
@@ -666,7 +646,6 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         # Run analysis after switching to the new step
         if step == self.step_fc_analysis:
-            # self.update_MessageViewer_size()
             self.step_fc_analysis.setup_and_run_analysis()
 
         # Set lblSelectCategory label if entering the kw mode
