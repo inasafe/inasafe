@@ -12,7 +12,6 @@ from headless.tasks.utilities import download_layer, archive_layer, \
     generate_styles, download_file
 from bin.inasafe import CommandLineArguments, get_impact_function_list, \
     run_impact_function, build_report, get_layer
-from safe.storage.utilities import safe_to_qgis_layer
 from safe.utilities.keyword_io import KeywordIO
 
 __author__ = 'Rizky Maulana Nugraha <lana.pcfre@gmail.com>'
@@ -89,15 +88,15 @@ def run_analysis(hazard, exposure, function, aggregation=None,
     else:
         new_name = '%s.shp' % tmp
 
+    # generating qml styles file
+    qgis_impact_layer = get_layer(new_name)
+    generate_styles(impact_layer, qgis_impact_layer)
+
     # if asked to generate report
     if generate_report:
         arguments.report_template = ''
         arguments.output_file = new_name
         build_report(arguments)
-
-    # generating qml styles file
-    qgis_impact_layer = get_layer(new_name)
-    generate_styles(impact_layer, qgis_impact_layer)
 
     # archiving the layer
     new_name = archive_layer(new_name)

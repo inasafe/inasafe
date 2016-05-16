@@ -15,6 +15,7 @@ Contact : jannes@kartoza.com
         cli: command line interface
     .. versionadded:: 3.2
 """
+import shutil
 
 __author__ = 'Jannes Engelbrecht'
 __date__ = '16/04/15'
@@ -188,7 +189,7 @@ def get_layer(layer_path, layer_base=None):
     :param layer_path: layer full name
     :type layer_path: str
 
-    :param layer_base: layer base name
+    :param layer_base: layer base name (title)
     :type layer_base: str
 
     :returns: Vector or Raster layer depending on input arguments.
@@ -198,17 +199,18 @@ def get_layer(layer_path, layer_base=None):
     """
     layer = None
     try:
+        layer_path = join_if_relative(layer_path)
+        basename, ext = os.path.splitext(os.path.basename(layer_path))
         if not layer_base:
-            layer_base = join_if_relative(layer_path)
-        if os.path.splitext(layer_path)[1] == '.shp':
+            layer_base = basename
+        if ext == '.shp':
             layer = QgsVectorLayer(
-                layer_base, 'cli_vector_hazard', 'ogr')
-        elif os.path.splitext(layer_path)[1] in \
-                ['.asc', '.tif', '.tiff']:
+                layer_path, layer_base, 'ogr')
+        elif ext in ['.asc', '.tif', '.tiff']:
             layer = QgsRasterLayer(
-                layer_base, 'cli_raster_hazard')
+                layer_path, layer_base)
         else:
-            print "Unknown filetype " + layer_path
+            print "Unknown filetype " + layer_base
         if layer is not None and layer.isValid():
             print "layer is VALID"
         else:
@@ -233,7 +235,7 @@ def get_hazard(arguments):
 
     :raises: Exception
     """
-    return get_layer(arguments.hazard)
+    return get_layer(arguments.hazard, 'Hazard Layer')
 
 
 def get_exposure(arguments):
@@ -249,7 +251,7 @@ def get_exposure(arguments):
 
     :raises: Exception
     """
-    return get_layer(arguments.exposure)
+    return get_layer(arguments.exposure, 'Exposure Layer')
 
 
 def impact_function_setup(
@@ -340,20 +342,19 @@ def build_report(cli_arguments):
     """
     try:
         LOGGER.info('Building a report')
-        basename, ext = os.path.splitext(cli_arguments.output_file)
-        if ext == '.shp':
-            impact_layer = QgsVectorLayer(
-                cli_arguments.output_file, 'Impact Layer', 'ogr')
-        elif ext == '.tif':
-            impact_layer = QgsRasterLayer(
-                cli_arguments.output_file, 'Impact Layer')
+        impact_layer = get_layer(cli_arguments.output_file, 'Impact Layer')
+        hazard_layer = get_layer(cli_arguments.hazard, 'Hazard Layer')
         layer_registry = QgsMapLayerRegistry.instance()
         layer_registry.removeAllMapLayers()
+        extra_layers = [hazard_layer]
         layer_registry.addMapLayer(impact_layer)
+        layer_registry.addMapLayers(extra_layers)
         CANVAS.setExtent(impact_layer.extent())
         CANVAS.refresh()
         report = ImpactReport(
-            IFACE, cli_arguments.report_template, impact_layer)
+            IFACE, cli_arguments.report_template, impact_layer,
+            extra_layers=extra_layers)
+        report.extent = CANVAS.fullExtent()
         LOGGER.debug(os.path.splitext(cli_arguments.output_file)[0] + '.pdf')
         map_path = report.print_map_to_pdf(
             os.path.splitext(cli_arguments.output_file)[0] + '.pdf')
@@ -378,7 +379,7 @@ def write_results(cli_arguments, impact_layer):
     :type cli_arguments: CommandLineArguments
 
     :param impact_layer: Analysis result used to produce file.
-    :type impact_layer: QgsVectorLayer
+    :type impact_layer: Vector
 
     :raises: Exception
     """
@@ -395,6 +396,14 @@ def write_results(cli_arguments, impact_layer):
                 ext = '.shp'
             abs_path += ext
         impact_layer.write_to_file(abs_path)
+
+        # RMN: copy impact data json
+        # new feature in InaSAFE 3.4
+        source_base_name, _ = os.path.splitext(impact_layer.filename)
+        shutil.copy(
+            '%s.json' % source_base_name,
+            '%s.json' % basename)
+
     except Exception as exception:
         print exception.message
         raise RuntimeError(exception.message)

@@ -68,7 +68,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 class ImpactReport(object):
     """A class for creating report using QgsComposition."""
-    def __init__(self, iface, template, layer):
+    def __init__(self, iface, template, layer, extra_layers=[]):
         """Constructor for the Composition Report class.
 
         :param iface: Reference to the QGIS iface object.
@@ -82,6 +82,7 @@ class ImpactReport(object):
         self._template = None
         self.template = template
         self._layer = layer
+        self._extra_layers = extra_layers
         self._extent = self._iface.mapCanvas().extent()
         self._page_dpi = 300.0
         self._black_inasafe_logo = black_inasafe_logo_path()
@@ -140,6 +141,24 @@ class ImpactReport(object):
         :type layer: QgsMapLayer, QgsRasterLayer, QgsVectorLayer
         """
         self._layer = layer
+
+    @property
+    def extra_layers(self):
+        """Getter to extra layers
+
+        extra layers will be rendered alongside impact layer
+        """
+        return self._extra_layers
+
+    @extra_layers.setter
+    def extra_layers(self, extra_layers):
+        """Set extra layers
+
+        extra layers will be rendered alongside impact layer
+        :param extra_layers: List of QgsMapLayer
+        :type extra_layers: list(QgsMapLayer)
+        """
+        self._extra_layers = extra_layers
 
     @property
     def composition(self):
@@ -438,9 +457,7 @@ class ImpactReport(object):
             canvas_extent = self.extent
             width = canvas_extent.width()
             height = canvas_extent.height()
-            longest_width = width
-            if width < height:
-                longest_width = height
+            longest_width = width if width > height else height
             half_length = longest_width / 2
             center = canvas_extent.center()
             min_x = center.x() - half_length
@@ -483,11 +500,15 @@ class ImpactReport(object):
             # Set Legend
             # Since QGIS 2.6, legend.model() is obsolete
             if qgis_version() < 20600:
-                legend.model().setLayerSet([self.layer.id()])
+                layer_set = [self.layer.id()]
+                layer_set += [l.id() for l in self.extra_layers]
+                legend.model().setLayerSet(layer_set)
                 legend.synchronizeWithModel()
             else:
                 root_group = legend.modelV2().rootGroup()
                 root_group.addLayer(self.layer)
+                for l in self.extra_layers:
+                    root_group.addLayer(l)
                 legend.synchronizeWithModel()
 
     def print_to_pdf(self, output_path):
