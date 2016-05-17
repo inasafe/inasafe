@@ -394,20 +394,22 @@ class ImpactReport(object):
 
     @staticmethod
     def symbol_count(layer):
-        symbol_count = 1
-        if layer.type() == QgsMapLayer.VectorLayer:
-            renderer = layer.rendererV2()
-            if renderer.type() in ['']:
-                symbol_count = len(layer.legendSymbologyItems())
-            elif 'legendSymbolItemsV2' in dir(renderer):
-                symbol_count = len(renderer.legendSymbolItemsV2())
-        else:
-            renderer = layer.renderer()
-            if renderer.type() in ['']:
-                symbol_count = len(layer.legendSymbologyItems())
-            elif 'legendSymbolItemsV2' in dir(renderer):
-                symbol_count = len(renderer.legendSymbolItemsV2())
-        return symbol_count
+        """Get symbol count from whatever method we can get
+
+        :param layer: QgsMapLayer
+        :return: QgsMapLayer
+        """
+        try:
+            return len(layer.legendSymbologyItems())
+        except:
+            pass
+
+        try:
+            return len(layer.rendererV2().legendSymbolItemsV2())
+        except:
+            pass
+
+        return 1
 
     def draw_composition(self):
         """Draw all the components in the composition."""
