@@ -395,14 +395,17 @@ def write_results(cli_arguments, impact_layer):
             else:
                 ext = '.shp'
             abs_path += ext
-        impact_layer.write_to_file(abs_path)
 
         # RMN: copy impact data json
         # new feature in InaSAFE 3.4
         source_base_name, _ = os.path.splitext(impact_layer.filename)
-        shutil.copy(
-            '%s.json' % source_base_name,
-            '%s.json' % basename)
+        impact_data_json_source = '%s.json' % source_base_name
+        if os.path.exists(impact_data_json_source):
+            shutil.copy(
+                impact_data_json_source,
+                '%s.json' % basename)
+
+        impact_layer.write_to_file(abs_path)
 
     except Exception as exception:
         print exception.message

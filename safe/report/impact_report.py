@@ -392,6 +392,23 @@ class ImpactReport(object):
         except TemplateLoadingError:
             raise
 
+    @staticmethod
+    def symbol_count(layer):
+        symbol_count = 1
+        if layer.type() == QgsMapLayer.VectorLayer:
+            renderer = layer.rendererV2()
+            if renderer.type() in ['']:
+                symbol_count = len(layer.legendSymbologyItems())
+            elif 'legendSymbolItemsV2' in dir(renderer):
+                symbol_count = len(renderer.legendSymbolItemsV2())
+        else:
+            renderer = layer.renderer()
+            if renderer.type() in ['']:
+                symbol_count = len(layer.legendSymbologyItems())
+            elif 'legendSymbolItemsV2' in dir(renderer):
+                symbol_count = len(renderer.legendSymbolItemsV2())
+        return symbol_count
+
     def draw_composition(self):
         """Draw all the components in the composition."""
         # This is deprecated - use inasafe-logo-<colour> rather
@@ -478,16 +495,11 @@ class ImpactReport(object):
         legend = self.composition.getComposerItemById('impact-legend')
         if legend is not None:
 
-            symbol_count = 1
-            # noinspection PyUnresolvedReferences
-            if self.layer.type() == QgsMapLayer.VectorLayer:
-                renderer = self.layer.rendererV2()
-                if renderer.type() in ['', '']:
-                    symbol_count = len(self.layer.legendSymbologyItems())
-            else:
-                renderer = self.layer.renderer()
-                if renderer.type() in ['']:
-                    symbol_count = len(self.layer.legendSymbologyItems())
+            symbol_count = ImpactReport.symbol_count(self.layer)
+
+            # add legend symbol count from extra_layers
+            for l in self.extra_layers:
+                symbol_count += ImpactReport.symbol_count(l)
 
             if symbol_count <= 5:
                 legend.setColumnCount(1)
