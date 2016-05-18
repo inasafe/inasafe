@@ -394,7 +394,7 @@ unit_generic = {
     'description': tr(
         'A generic unit for value that does not have unit or we do not know '
         'about the unit. It also can be used for normalised values.'),
-    }
+}
 
 unit_kilogram_per_meter_square = {
     'key': 'kilogram_per_meter_square',
@@ -415,7 +415,7 @@ unit_kilometres = {
     'description': tr(
         '<b>Kilometres</b> are a metric unit of measure. There are 1000 '
         'metres in 1 kilometre (km).'),
-    }
+}
 
 unit_metres = {
     'key': 'metres',
@@ -435,7 +435,7 @@ unit_millimetres = {
     'description': tr(
         '<b>Millimetres</b> are a metric unit of measure. There are 1000 '
         'millimetres in 1 metre.'),
-    }
+}
 
 unit_mmi = {
     'key': 'mmi',
