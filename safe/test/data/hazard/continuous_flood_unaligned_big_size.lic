@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='iso-8859-1'?>
+<ga_license_file>
+  <metadata>
+    <author>Ismail Sunni</author>
+  </metadata>
+
+  <datafile>
+    <filename>continuous_flood_unaligned_big_size.tif</filename>
+    <checksum>27169049</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Ismail Sunni</accountable>
+    <source>DMInnovation</source>
+    <IP_owner>DMInnovation</IP_owner>
+    <IP_info>Raster created at DMInnovation for test purposes</IP_info>
+  </datafile>
+
+</ga_license_file>
