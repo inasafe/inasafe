@@ -5,7 +5,7 @@
   </metadata>
 
   <datafile>
-    <filename>buildings.shp</filename>
+    <filename>buildings_keyword_3-3.shp</filename>
     <checksum>2129393271</checksum>
     <publishable>Yes</publishable>
     <accountable>Tim Sutton</accountable>
@@ -15,7 +15,7 @@
   </datafile>
 
   <datafile>
-    <filename>buildings.shx</filename>
+    <filename>buildings_keyword_3-3.shx</filename>
     <checksum>3398749823</checksum>
     <publishable>Yes</publishable>
     <accountable>Tim Sutton</accountable>
@@ -25,7 +25,7 @@
   </datafile>
 
   <datafile>
-    <filename>buildings.dbf</filename>
+    <filename>buildings_keyword_3-3.dbf</filename>
     <checksum>4131450525</checksum>
     <publishable>Yes</publishable>
     <accountable>Tim Sutton</accountable>
@@ -35,7 +35,7 @@
   </datafile>
 
  <datafile>
-    <filename>buildings.license</filename>
+    <filename>buildings_keyword_3-3.license</filename>
     <checksum>1940204668</checksum>
     <publishable>Yes</publishable>
     <accountable>Tim Sutton</accountable>
