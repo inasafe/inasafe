@@ -10,7 +10,7 @@ import datetime
 
 import re
 from PyQt4.QtCore import QObject, QFileInfo, QVariant, QTranslator, \
-    QCoreApplication
+    QCoreApplication, QUrl
 from PyQt4.QtXml import QDomDocument
 from qgis.core import QgsMapLayerRegistry
 from qgis.core import (
@@ -22,7 +22,8 @@ from qgis.core import (
     QgsPalLabeling,
     QgsComposition,
     QgsCoordinateReferenceSystem,
-    QgsProject)
+    QgsProject,
+    QgsComposerHtml)
 from openlayers_plugin.openlayers_plugin import OpenlayersPlugin
 from openlayers_plugin.weblayers.map_quest import OlMapQuestOSMLayer
 from realtime.exceptions import PetaJakartaAPIError, MapComposerError
@@ -43,6 +44,8 @@ from safe.utilities.styling import set_vector_categorized_style, \
     set_vector_graduated_style, setRasterStyle
 from safe.common.utilities import format_int
 from safe.impact_functions.core import population_rounding
+from safe import messaging as m
+
 
 __author__ = 'Rizky Maulana Nugraha <lana.pcfre@gmail.com>'
 
@@ -220,7 +223,9 @@ class FloodEvent(QObject):
             'layer_mode': 'classified',
             'layer_purpose': 'hazard',
             'title': 'Flood',
-            'value_map': '{"high": [4], "medium": [2,3], "low": [0,1]}',
+            'value_map': '{"high": [4], "medium": [3], '
+                         '"low": [2], '
+                         '"unaffected": ["None","","NULL",0,1]}',
             'vector_hazard_classification': 'generic_vector_hazard_classes'
         }
 
@@ -272,11 +277,21 @@ class FloodEvent(QObject):
             hazard_attribute_key = keyword_io.read_keywords(
                 qgis_hazard_layer, 'field')
 
+            # Do not skip if there are significant hazard class (2,3,4)
             for f in qgis_hazard_layer.getFeatures():
-                if f[hazard_attribute_key] >= 2:
-                    skip_process = False
-            if skip_process:
-                return
+                try:
+                    # try cast to int
+                    hazard_state = f[hazard_attribute_key]
+                    hazard_state = int(str(hazard_state))
+                    if hazard_state >= 2:
+                        skip_process = False
+                        break
+                except ValueError:
+                    # this is expected
+                    pass
+
+            # if skip_process:
+            #     return
 
             self.impact_layer = safe_calculate_impact(impact_function)
             # impact_function.aggregator.set_layers(
@@ -511,37 +526,31 @@ class FloodEvent(QObject):
             with open(target_style_path, mode='w') as target_f:
                 target_f.write(str_template)
 
-        # qml_path = self.flood_fixtures_dir(
-        #     'impact-default.qml')
-        # target_style_path = os.path.join(
-        #     self.report_path, 'impact.qml')
-        # shutil.copy(qml_path, target_style_path)
-
         # Get requested style for impact layer of either kind
-        # impact = self.impact_layer
-        # style = impact.get_style_info()
-        # style_type = impact.get_style_type()
-        #
-        # # Determine styling for QGIS layer
-        # qgis_impact_layer = impact.as_qgis_native()
-        # if impact.is_vector:
-        #     LOGGER.debug('myEngineImpactLayer.is_vector')
-        #     if not style:
-        #         # Set default style if possible
-        #         pass
-        #     elif style_type == 'categorizedSymbol':
-        #         LOGGER.debug('use categorized')
-        #         set_vector_categorized_style(qgis_impact_layer, style)
-        #     elif style_type == 'graduatedSymbol':
-        #         LOGGER.debug('use graduated')
-        #         set_vector_graduated_style(qgis_impact_layer, style)
-        #
-        # elif impact.is_raster:
-        #     LOGGER.debug('myEngineImpactLayer.is_raster')
-        #     if not style:
-        #         qgis_impact_layer.setDrawingStyle("SingleBandPseudoColor")
-        #     else:
-        #         setRasterStyle(qgis_impact_layer, style)
+        impact = self.impact_layer
+        style = impact.get_style_info()
+        style_type = impact.get_style_type()
+
+        # Determine styling for QGIS layer
+        qgis_impact_layer = impact.as_qgis_native()
+        if impact.is_vector:
+            LOGGER.debug('myEngineImpactLayer.is_vector')
+            if not style:
+                # Set default style if possible
+                pass
+            elif style_type == 'categorizedSymbol':
+                LOGGER.debug('use categorized')
+                set_vector_categorized_style(qgis_impact_layer, style)
+            elif style_type == 'graduatedSymbol':
+                LOGGER.debug('use graduated')
+                set_vector_graduated_style(qgis_impact_layer, style)
+
+        elif impact.is_raster:
+            LOGGER.debug('myEngineImpactLayer.is_raster')
+            if not style:
+                qgis_impact_layer.setDrawingStyle("SingleBandPseudoColor")
+            else:
+                setRasterStyle(qgis_impact_layer, style)
 
     @classmethod
     def flood_fixtures_dir(cls, fixtures_path=None):
@@ -593,7 +602,6 @@ REGIONAL DISASTER MANAGEMENT AGENCY
                 'and should always be verified with other reliable '
                 'information sources.'
             ),
-            'content-analysis-result': self.generate_analysis_result_text(),
             'content-contact': self.tr("""Pusat Pengendalian Operasi (Pusdalops)
 BPBD Provinsi DKI Jakarta
 Jl. Medan Merdeka Selatan No. 8-9 Blok F lantai 3
@@ -602,35 +610,135 @@ Telp. (021)164
         }
         return event
 
-    def generate_analysis_result_text(self):
-        data = ()
-        data += (
-            format_int(population_rounding(
-                self.impact_data.total_affected_population)),
-            format_int(population_rounding(
-                self.impact_data.estimates_idp)))
+    def generate_analysis_result_html(self):
+        """Return a HTML table of the analysis result
+
+        :return: A file path to the html file saved to disk.
+        """
+        message = m.Message(style_class='report')
+        # Table for affected population
+        table = m.Table(style_class='table table-condensed table-striped')
+        row = m.Row()
+        total_people = self.tr('%s') % format_int(population_rounding(
+            self.impact_data.total_affected_population))
+        estimates_idp = self.tr('%s') % format_int(population_rounding(
+            self.impact_data.estimates_idp))
+        row.add(m.Cell(self.tr('Total affected population (people)'), header=True))
+        row.add(m.Cell(total_people, style_class="text-right"))
+        table.add(row)
+        row = m.Row()
+        row.add(m.Cell(self.tr('Estimates of IDP (people)'), header=True))
+        row.add(m.Cell(estimates_idp, style_class="text-right"))
+        table.add(row)
+        message.add(table)
+        # Table for minimum needs
         for k, v in self.impact_data.minimum_needs.iteritems():
-            entries = ''
-            for m in v:
-                entry = '- %s : %s %s\n' % (
-                    m['name'],
-                    format_int(
-                        population_rounding(m['amount'])),
-                    m['unit']['plural']
-                )
-                entries += entry
+            section = self.tr('Relief items to be provided %s :') % k
+            # text = m.Text(section)
+            row = m.Row(style_class='alert-info')
+            row.add(m.Cell(section, header=True, attributes='colspan=2'))
+            # message.add(text)
+            table = m.Table(
+                header=row,
+                style_class='table table-condensed table-striped')
+            for e in v:
+                row = m.Row()
+                need_name = self.tr(e['name'])
+                need_number = format_int(
+                    population_rounding(e['amount']))
+                need_unit = self.tr(e['unit']['abbreviation'])
+                if need_unit:
+                    need_string = '%s (%s)' % (need_name, need_unit)
+                else:
+                    need_string = need_name
+                row.add(m.Cell(need_string, header=True))
+                row.add(m.Cell(need_number, style_class="text-right"))
+                table.add(row)
+            message.add(table)
 
-            data += (k, entries)
-        base_text = self.tr("""Total affected population : %s people
-Estimates of IDP          : %s people
+        path = self.write_html_table('impact_analysis_report.html', message)
+        return path
 
-Relief items to be provided %s :
-%s
+    def write_html_table(self, file_name, message):
+        """Writing a Table object to report folder
 
-Relief items to be provided %s :
-%s
-        """) % data
-        return base_text
+        The table will be wrapped by HTML header and footer.
+        This file will be rendered by QgsComposer in a HTML Frame
+
+        :param file_name: file name of the html file output
+        :param message: the Message object to write
+        :return:
+        """
+        path = os.path.join(
+            self.report_path, file_name)
+        header_file = self.flood_fixtures_dir('header.html')
+        footer_file = self.flood_fixtures_dir('footer.html')
+
+        with open(header_file) as f:
+            header = f.read()
+
+        with open(footer_file) as f:
+            footer = f.read()
+
+        with open(path, 'w') as html_file:
+            html_file.write(header)
+            html_file.write(message.to_html(in_div_flag=True))
+            html_file.write(footer)
+
+        return path
+
+#     def generate_analysis_result_html(self):
+#         """Return a HTML table of the analysis result
+#
+#         :return:
+#             two tuple of:
+#                     A Table object (see :func:`safe.impact_functions.tables.Table`)
+#                     A file path to the html file saved to disk.
+#         """
+#         data = ()
+#         data += (
+#             format_int(population_rounding(
+#                 self.impact_data.total_affected_population)),
+#             format_int(population_rounding(
+#                 self.impact_data.estimates_idp)))
+#         for k, v in self.impact_data.minimum_needs.iteritems():
+#             entries = ''
+#             for m in v:
+#                 entry = '<tr><th>%s</th><td>%s %s</td></tr>' % (
+#                     m['name'],
+#                     format_int(
+#                         population_rounding(m['amount'])),
+#                     m['unit']['plural']
+#                 )
+#                 entries += entry
+#
+#             data += (k, entries)
+#         base_text = self.tr("""<table class="table table-condensed
+# table-striped">
+# <tbody>
+# <tr>
+#     <th>Total affected population</th><td>%s people</td>
+# </tr>
+# <tr>
+#     <th>Estimates of IDP</th><td>%s people</td>
+# </tr>
+# </tbody>
+# </table>
+# Relief items to be provided %s :
+# <table class="table table-condensed table-striped">
+# <tbody>
+# %s
+# </tbody>
+# </table>
+#
+# Relief items to be provided %s :
+# <table class="table table-condensed table-striped">
+# <tbody>
+# %s
+# </tbody>
+# </table>
+#         """) % data
+#         return base_text
 
     def generate_report(self):
         # Generate pdf report from impact/hazard
@@ -746,6 +854,27 @@ Relief items to be provided %s :
             LOGGER.exception('Map legend could not be found in template %s',
                              template_path)
             raise MapComposerError
+
+        content_analysis = composition.getComposerItemById(
+            'content-analysis-result')
+        if not content_analysis:
+            message = 'Content analysis composer item could not be found'
+            LOGGER.exception(message)
+            raise MapComposerError(message)
+        content_analysis_html = content_analysis.multiFrame()
+        if content_analysis_html:
+            # set url to generated html
+            analysis_html_path = self.generate_analysis_result_html()
+            # We're using manual HTML to avoid memory leak and segfault
+            # happened when using Url Mode
+            content_analysis_html.setContentMode(QgsComposerHtml.ManualHtml)
+            with open(analysis_html_path) as f:
+                content_analysis_html.setHtml(f.read())
+                content_analysis_html.loadHtml()
+        else:
+            message = 'Content analysis HTML not found in template'
+            LOGGER.exception(message)
+            raise MapComposerError(message)
 
         # save a pdf
         composition.exportAsPDF(self.map_report_path)

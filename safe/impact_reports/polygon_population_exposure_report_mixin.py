@@ -635,7 +635,7 @@ class PolygonPopulationExposureReportMixin(ReportMixin):
 
         for key, value in self.hazard_levels.iteritems():
 
-            name = self.hazard_class_mapping[key][0]
+            name = key
             # This skips reporting people not affected in No zone
             if key == 'wet':
                 row = m.Row()
