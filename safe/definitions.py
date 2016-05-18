@@ -815,7 +815,7 @@ road_class_mapping = [
         'key': 'motorway',
         'name': tr('Motorway'),
         'description': tr('A road to solve the traffic and have a fare.'),
-        'osm_downloader': ['Motorway', 'Motorway link'],
+        'osm_downloader': ['Motorway or highway', 'Motorway link'],
         'string_defaults': ['motorway', 'trunk', 'motorway link', 'trunk link']
     },
     {
