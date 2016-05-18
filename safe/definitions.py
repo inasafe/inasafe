@@ -813,7 +813,7 @@ road_class_mapping = [
         'key': 'motorway',
         'name': tr('Motorway'),
         'description': tr('A road to solve the traffic and have a fare.'),
-        'string_defaults': ['motorway', 'trunk', 'motorway_link', 'trunk_link']
+        'string_defaults': ['motorway', 'trunk', 'motorway link', 'trunk link']
     },
     {
         'key': 'primary',
@@ -821,7 +821,7 @@ road_class_mapping = [
         'description': tr(
             'A road that service the main transportation with a long distance '
             'travel characteristic and high average velocity.'),
-        'string_defaults': ['primary', 'primary_link']
+        'string_defaults': ['primary', 'primary link', 'primary road']
     },
     {
         'key': 'secondary',
@@ -829,7 +829,7 @@ road_class_mapping = [
         'description': tr(
             'A road that service the transportation with a medium distance '
             'travel characteristic and medium average velocity.'),
-        'string_defaults': ['secondary', 'secondary_link']
+        'string_defaults': ['secondary', 'secondary link']
     },
     {
         'key': 'local',
@@ -838,14 +838,15 @@ road_class_mapping = [
             'A road that service the transportation with short distance '
             'travel and low average velocity.'),
         'string_defaults': [
-            'local', 'tertiary', 'tertiary', 'tertiary_link', 'unclassified'
+            'local', 'tertiary', 'tertiary', 'tertiary link', 'unclassified'
         ]
     },
     {
         'key': 'path',
         'name': tr('Path'),
         'description': tr('A road to walk on foot aim.'),
-        'string_defaults': ['path', 'track', 'footway']
+        'string_defaults': [
+            'path', 'track', 'footway', 'cycleway', 'cycleway, footpath, etc.']
     },
     {
         'key': 'other',
@@ -854,8 +855,8 @@ road_class_mapping = [
             'A road that service the transportation with short travel and '
             'low average velocity.'),
         'string_defaults': [
-            'other', 'residential', 'service', 'living_street', 'pedestrian',
-            'road'
+            'other', 'residential', 'service', 'living street', 'pedestrian',
+            'road', 'road, residential, living street, etc.'
         ]
     }
 ]
@@ -868,7 +869,8 @@ structure_class_mapping = [
         'name': tr('Education'),
         'description': tr('An object that has a service in education sector.'),
         'string_defaults': [
-            'kindergarten', 'college', 'school', 'university', 'education'
+            'kindergarten', 'college', 'school', 'university', 'education',
+            'university/college'
         ]
     },
     {
@@ -877,7 +879,8 @@ structure_class_mapping = [
         'description': tr(
             'An object that has a service and facility in health sector.'),
         'string_defaults': [
-            'clinic', 'doctor', 'hospital', 'dentist', 'pharmacy', 'health'
+            'clinic', 'doctor', 'hospital', 'dentist', 'pharmacy', 'health',
+            'clinic/doctor'
         ]
     },
     {
@@ -920,7 +923,7 @@ structure_class_mapping = [
         'string_defaults': [
             'supermarket', 'shop', 'market', 'tailor', 'warehouse', 'works',
             'convenience', 'seafood', 'atm', 'mall', 'clothes', 'shoes',
-            'economy'
+            'commercial', 'industrial', 'economy'
         ]
     },
     {
@@ -939,7 +942,8 @@ structure_class_mapping = [
         'name': tr('Sport'),
         'description': tr(
             'An object that has a sport facility and people can use it.'),
-        'string_defaults': ['stadium', 'sport centre', 'pitch', 'sport']
+        'string_defaults': [
+            'stadium', 'sport centre', 'pitch', 'sports facility', 'sport']
     },
     {
         'key': 'public facility',
@@ -948,7 +952,8 @@ structure_class_mapping = [
             'An object that provide a service or facility to public like '
             'toilet, library, convention hall, etc.'),
         'string_defaults': [
-            'library', 'toiler', 'convention hall', 'prison', 'public facility'
+            'library', 'toiler', 'convention hall', 'prison', 'police station',
+            'public facility', 'public building', 'fire station'
         ]
     },
     {
@@ -966,7 +971,7 @@ structure_class_mapping = [
         'name': tr('Residence'),
         'description': tr(
             'An object that people use to live daily.'),
-        'string_defaults': ['house', 'dorm', 'residence']
+        'string_defaults': ['house', 'dorm', 'residential' 'residence']
     },
     {
         'key': 'other',
@@ -974,7 +979,7 @@ structure_class_mapping = [
         'description': tr(
             'An object that be found in Indonesia, and frequently mapped.'),
         'string_defaults': [
-            'animal boarding', 'water well', 'lighthouse', 'other'
+            'animal boarding', 'water well', 'lighthouse', 'utility', 'other'
         ]
     }
 ]
