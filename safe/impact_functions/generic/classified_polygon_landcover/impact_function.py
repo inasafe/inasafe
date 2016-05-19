@@ -104,6 +104,7 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
                          'might be affected.')
         # Don't put capital letters as the value in the attribute should match.
         self.hazard_columns = ['low', 'medium', 'high']
+        self.affected_hazard_columns = []
 
     def notes(self):
         """Return the notes section of the report.
@@ -185,7 +186,8 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
             question=self.question,
             impact_layer=impact_layer,
             target_field=self.target_field,
-            columns_order=self.hazard_columns,
+            ordered_columns=self.hazard_columns,
+            affected_columns=self.affected_hazard_columns,
             land_cover_field=type_attr,
             zone_field=zone_field
         ).generate_data()

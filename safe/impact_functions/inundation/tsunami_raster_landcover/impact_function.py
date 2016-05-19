@@ -66,6 +66,8 @@ class TsunamiRasterLandcoverFunction(ContinuousRHClassifiedVE):
             tr('High Hazard Zone'),
             tr('Very High Hazard Zone'),
         ]
+        # Only dry zone is not affected.
+        self.affected_hazard_columns = self.hazard_classes[1:]
 
     def notes(self):
         """Return the notes section of the report.
@@ -169,7 +171,8 @@ class TsunamiRasterLandcoverFunction(ContinuousRHClassifiedVE):
             question=self.question,
             impact_layer=impact_layer,
             target_field=self.target_field,
-            columns_order=self.hazard_classes,
+            ordered_columns=self.hazard_classes,
+            affected_columns=self.affected_hazard_columns,
             land_cover_field=class_field,
             zone_field=zone_field
         ).generate_data()

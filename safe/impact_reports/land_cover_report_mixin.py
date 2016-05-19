@@ -28,8 +28,8 @@ class LandCoverReportMixin(ReportMixin):
     """
 
     def __init__(
-            self, question, impact_layer, target_field, columns_order,
-            land_cover_field, zone_field):
+            self, question, impact_layer, target_field, ordered_columns,
+            affected_columns, land_cover_field, zone_field):
         """Initialize method.
 
         :param question: Question for this IF.
@@ -41,8 +41,11 @@ class LandCoverReportMixin(ReportMixin):
         :param target_field: Field name in impact layer with hazard type
         :type target_field: basestring
 
-        :param columns_order: The columns order in the report.
-        :type columns_order: list
+        :param ordered_columns: The columns order in the report.
+        :type ordered_columns: list
+
+        :param affected_columns: A subset of ordered_columns for affected.
+        :type affected_columns: list
 
         :param land_cover_field: Field name in impact layer with land cover
         :type land_cover_field: str
@@ -54,7 +57,8 @@ class LandCoverReportMixin(ReportMixin):
         """
         self.impact_layer = impact_layer
         self.target_field = target_field
-        self.columns_order = columns_order
+        self.ordered_columns = ordered_columns
+        self.affected_columns = affected_columns
         self.land_cover_field = land_cover_field
         self.zone_field = zone_field
         self.question = question
@@ -71,7 +75,8 @@ class LandCoverReportMixin(ReportMixin):
             'question': self.question,
             'impact summary': '',  # Set this as empty string
             'zone field': self.zone_field,
-            'columns order': self.columns_order,
+            'ordered columns': self.ordered_columns,
+            'affected columns': self.affected_columns,
             'impact table': self.impact_table(),
             'action check list': self.action_checklist(),
             'notes': self.notes()
