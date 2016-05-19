@@ -161,7 +161,7 @@ class PivotTable(object):
     def __init__(self, flat_table,
                  row_field=None, column_field=None,
                  filter_field=None, filter_value=None,
-                 columns=None):
+                 columns=None, affected_columns=[]):
         """ Make a pivot table out of the source data
 
         :param flat_table: Flat table with input data for pivot table
@@ -189,7 +189,14 @@ class PivotTable(object):
             values. If defined, it explicitly defines order of columns
             and it includes columns even if they were not in input data.
         :param columns: list
+
+        :param affected_columns: List of columns which are considered affected.
+            It has to used with column_field.
+        :type affected_columns: list
         """
+
+        if len(flat_table.data) == 0:
+            raise ValueError('No input data')
 
         if row_field is not None:
             flat_row_index = flat_table.groups.index(row_field)
@@ -198,15 +205,25 @@ class PivotTable(object):
         if filter_field is not None:
             flat_filter_index = flat_table.groups.index(filter_field)
 
-        if len(flat_table.data) == 0:
-            raise ValueError("no input data")
-
         sums = {}  # key = (row, column), value = sum
+        sums_affected = {}  # key = row, value = sum
         for flat_key, flat_value in flat_table.data.iteritems():
             # apply filtering
             if filter_field is not None:
                 if flat_key[flat_filter_index] != filter_value:
                     continue
+
+            if column_field is not None:
+                current_value = flat_key[flat_column_index]
+                if current_value in affected_columns:
+                    if row_field is not None:
+                        row_key = flat_key[flat_row_index]
+                    else:
+                        row_key = ''
+
+                    if row_key not in sums_affected.keys():
+                        sums_affected[row_key] = 0
+                    sums_affected[row_key] += flat_value
 
             if column_field is not None and row_field is not None:
                 key = flat_key[flat_row_index], flat_key[flat_column_index]
@@ -239,12 +256,14 @@ class PivotTable(object):
         else:
             self.columns = list(flat_table.group_values(column_field))
 
-        self.total = 0
-        self.total_rows = [0] * len(self.rows)
-        self.total_columns = [0] * len(self.columns)
+        self.affected_columns = affected_columns
+
+        self.total = 0.0
+        self.total_rows = [0.0] * len(self.rows)
+        self.total_columns = [0.0] * len(self.columns)
         self.data = [[] for i in xrange(len(self.rows))]
         for i in xrange(len(self.rows)):
-            self.data[i] = [0] * len(self.columns)
+            self.data[i] = [0.0] * len(self.columns)
 
         for (sum_row, sum_column), sum_value in sums.iteritems():
             sum_row_index = self.rows.index(sum_row)
@@ -255,14 +274,38 @@ class PivotTable(object):
             self.total_columns[sum_column_index] += sum_value
             self.total += sum_value
 
+        self.total_rows_affected = [0.0] * len(self.rows)
+        self.total_affected = 0.0
+        for row, value in sums_affected.iteritems():
+            self.total_affected += value
+            sum_row_index = self.rows.index(row)
+            self.total_rows_affected[sum_row_index] = value
+
+        self.total_percent_rows_affected = [0.0] * len(self.rows)
+        for row, value in enumerate(self.total_rows_affected):
+            percent = value * 100 / self.total_rows[row]
+            self.total_percent_rows_affected[row] = percent
+        self.total_percent_affected = self.total_affected * 100 / self.total
+
     def __repr__(self):
         """ Dump object content in a readable format """
-        pivot = '<PivotTable total=%f\n total_rows=%s\n total_columns=%s\n ' \
-                'rows=%s\n columns=%s\n data=%s>' % (
+        pivot = '<PivotTable ' \
+                'total=%f\n ' \
+                'total_rows=%s\n ' \
+                'total_columns=%s\n ' \
+                'total_rows_affected=%s\n ' \
+                'total_affected=%s\n ' \
+                'rows=%s\n ' \
+                'columns=%s\n ' \
+                'affected columns=%s\n' \
+                'data=%s>' % (
                     self.total,
                     repr(self.total_rows),
                     repr(self.total_columns),
+                    repr(self.total_rows_affected),
+                    repr(self.total_affected),
                     repr(self.rows),
                     repr(self.columns),
+                    repr(self.affected_columns),
                     repr(self.data))
         return pivot
