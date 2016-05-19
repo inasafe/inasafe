@@ -283,9 +283,16 @@ class PivotTable(object):
 
         self.total_percent_rows_affected = [0.0] * len(self.rows)
         for row, value in enumerate(self.total_rows_affected):
-            percent = value * 100 / self.total_rows[row]
-            self.total_percent_rows_affected[row] = percent
-        self.total_percent_affected = self.total_affected * 100 / self.total
+            try:
+                percent = value * 100 / self.total_rows[row]
+                self.total_percent_rows_affected[row] = percent
+            except ZeroDivisionError:
+                pass
+        try:
+            percent = self.total_affected * 100 / self.total
+            self.total_percent_affected = percent
+        except ZeroDivisionError:
+            self.total_percent_affected = None
 
     def __repr__(self):
         """ Dump object content in a readable format """
