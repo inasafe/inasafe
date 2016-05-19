@@ -127,11 +127,12 @@ class LandCoverReportTemplate(TemplateBase):
         message.add(table)
 
         if 'impacted_zones' in report:
+            message.add(m.Heading(
+                tr('Analysis Results by Aggregation Area'), **INFO_STYLE))
             for zone, table in report['impacted_zones'].items():
-                message.add(m.Heading(zone, **INFO_STYLE))
                 m_table = format_pivot_table(
                     table,
-                    header_text=affected_text,
+                    header_text='%s - %s' % (zone, affected_text),
                     total_columns=True,
                     total_affected=show_affected,
                     total_percent_affected=show_affected,
