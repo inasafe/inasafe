@@ -394,7 +394,7 @@ unit_generic = {
     'description': tr(
         'A generic unit for value that does not have unit or we do not know '
         'about the unit. It also can be used for normalised values.'),
-    }
+}
 
 unit_kilogram_per_meter_square = {
     'key': 'kilogram_per_meter_square',
@@ -415,7 +415,7 @@ unit_kilometres = {
     'description': tr(
         '<b>Kilometres</b> are a metric unit of measure. There are 1000 '
         'metres in 1 kilometre (km).'),
-    }
+}
 
 unit_metres = {
     'key': 'metres',
@@ -435,7 +435,7 @@ unit_millimetres = {
     'description': tr(
         '<b>Millimetres</b> are a metric unit of measure. There are 1000 '
         'millimetres in 1 metre.'),
-    }
+}
 
 unit_mmi = {
     'key': 'mmi',
@@ -808,12 +808,15 @@ value_map = {
 multipart_polygon_key = 'multipart_polygon'
 
 # Value mapping for exposure (structure and road)
+# The osm_downloader key is used OSM-Reporter to generate the keywords.
+# See https://github.com/kartoza/osm-reporter/wiki
 road_class_mapping = [
     {
         'key': 'motorway',
         'name': tr('Motorway'),
         'description': tr('A road to solve the traffic and have a fare.'),
-        'string_defaults': ['Motorway']
+        'osm_downloader': ['Motorway or highway', 'Motorway link'],
+        'string_defaults': ['motorway', 'trunk', 'motorway link', 'trunk link']
     },
     {
         'key': 'primary',
@@ -821,7 +824,8 @@ road_class_mapping = [
         'description': tr(
             'A road that service the main transportation with a long distance '
             'travel characteristic and high average velocity.'),
-        'string_defaults': ['Primary']
+        'string_defaults': ['primary', 'primary link', 'primary road'],
+        'osm_downloader': ['Primary road', 'Primary link']
     },
     {
         'key': 'secondary',
@@ -829,7 +833,8 @@ road_class_mapping = [
         'description': tr(
             'A road that service the transportation with a medium distance '
             'travel characteristic and medium average velocity.'),
-        'string_defaults': ['Secondary']
+        'string_defaults': ['secondary', 'secondary link'],
+        'osm_downloader': ['Secondary', 'Secondary link']
     },
     {
         'key': 'local',
@@ -837,13 +842,18 @@ road_class_mapping = [
         'description': tr(
             'A road that service the transportation with short distance '
             'travel and low average velocity.'),
-        'string_defaults': ['Local']
+        'string_defaults': [
+            'local', 'tertiary', 'tertiary', 'tertiary link', 'unclassified'
+        ],
+        'osm_downloader': ['Tertiary', 'Tertiary link']
     },
     {
         'key': 'path',
         'name': tr('Path'),
         'description': tr('A road to walk on foot aim.'),
-        'string_defaults': ['Path', 'Track']
+        'osm_downloader': ['Track', 'Cycleway, footpath, etc.'],
+        'string_defaults': [
+            'path', 'track', 'footway', 'cycleway', 'cycleway, footpath, etc.']
     },
     {
         'key': 'other',
@@ -851,7 +861,11 @@ road_class_mapping = [
         'description': tr(
             'A road that service the transportation with short travel and '
             'low average velocity.'),
-        'string_defaults': ['Other', 'other']
+        'string_defaults': [
+            'other', 'residential', 'service', 'living street', 'pedestrian',
+            'road', 'road, residential, living street, etc.'
+        ],
+        'osm_downloader': ['Road, residential, living street, etc.']
     }
 ]
 # List to keep the order of the keys.
@@ -863,8 +877,10 @@ structure_class_mapping = [
         'name': tr('Education'),
         'description': tr('An object that has a service in education sector.'),
         'string_defaults': [
-            'Kindergarten', 'College', 'School', 'University'
-        ]
+            'kindergarten', 'college', 'school', 'university', 'education',
+            'university/college'
+        ],
+        'osm_downloader': ['School', 'University/College']
     },
     {
         'key': 'health',
@@ -872,8 +888,10 @@ structure_class_mapping = [
         'description': tr(
             'An object that has a service and facility in health sector.'),
         'string_defaults': [
-            'Clinic', 'Doctor', 'Hospital', 'Dentist', 'Pharmacy'
-        ]
+            'clinic', 'doctor', 'hospital', 'dentist', 'pharmacy', 'health',
+            'clinic/doctor'
+        ],
+        'osm_downloader': ['Clinic/Doctor', 'Hospital']
     },
     {
         'key': 'transportation',
@@ -883,7 +901,8 @@ structure_class_mapping = [
             'transportation.'),
         'string_defaults': [
             'bus stop', 'bus station', 'station', 'ferry terminal',
-            'aerodrome', 'airport', 'terminal']
+            'aerodrome', 'airport', 'terminal', 'transportation'],
+        'osm_downloader': []
     },
     {
         'key': 'place of worship',
@@ -891,11 +910,15 @@ structure_class_mapping = [
         'description': tr(
             'An object that used to pray or related to religion activity.'),
         'string_defaults': [
-            'Place of Worship - Islam',
-            'Place of Worship - Buddhist',
-            'Place of Worship - Christian',
-            'Place of Worship - Hindu',
-            'Place of Worship'
+            'place of worship - islam',
+            'place of worship - buddhist',
+            'place of worship - christian',
+            'place of worship - hindu',
+            'place of worship'
+        ],
+        'osm_downloader': [
+            'Place of Worship - Islam', 'Place of Worship - Unitarian',
+            'Place of Worship - Buddhist', 'Place of Worship'
         ]
     },
     {
@@ -904,7 +927,8 @@ structure_class_mapping = [
         'description': tr(
             'A building that used to doing government activity in public '
             'service or the other government activity.'),
-        'string_defaults': ['Government']
+        'string_defaults': ['government'],
+        'osm_downloader': ['Government']
     },
     {
         'key': 'economy',
@@ -913,9 +937,11 @@ structure_class_mapping = [
             'A building that used to trade / buy and sell activity or an '
             'object that has an economy activity.'),
         'string_defaults': [
-            'Supermarket', 'shop', 'market', 'tailor', 'warehouse', 'works',
-            'convenience', 'seafood', 'atm', 'mall', 'clothes', 'shoes'
-        ]
+            'supermarket', 'shop', 'market', 'tailor', 'warehouse', 'works',
+            'convenience', 'seafood', 'atm', 'mall', 'clothes', 'shoes',
+            'commercial', 'industrial', 'economy'
+        ],
+        'osm_downloader': ['Supermarket', 'Commercial', 'Industrial']
     },
     {
         'key': 'recreation and entertainment',
@@ -924,15 +950,19 @@ structure_class_mapping = [
             'An Object that provide an entertainment or recreation '
             'facilities.'),
         'string_defaults': [
-            'amusement arcade', 'cinema', 'zoo', 'museum', 'theatre'
-        ]
+            'amusement arcade', 'cinema', 'zoo', 'museum', 'theatre',
+            'recreation and entertainment'
+        ],
+        'osm_downloader': []
     },
     {
         'key': 'sport',
         'name': tr('Sport'),
         'description': tr(
             'An object that has a sport facility and people can use it.'),
-        'string_defaults': ['stadium', 'sport centre', 'pitch']
+        'string_defaults': [
+            'stadium', 'sport centre', 'pitch', 'sports facility', 'sport'],
+        'osm_downloader': ['Sports Facility']
     },
     {
         'key': 'public facility',
@@ -940,7 +970,11 @@ structure_class_mapping = [
         'description': tr(
             'An object that provide a service or facility to public like '
             'toilet, library, convention hall, etc.'),
-        'string_defaults': ['library', 'toiler', 'convention hall', 'prison']
+        'string_defaults': [
+            'library', 'toiler', 'convention hall', 'prison', 'police station',
+            'public facility', 'public building', 'fire station'
+        ],
+        'osm_downloader': ['Fire Station', 'Police Station', 'Public Building']
     },
     {
         'key': 'accommodation',
@@ -948,14 +982,18 @@ structure_class_mapping = [
         'description': tr(
             'An object that provide an accommodation / lodging or food '
             'services.'),
-        'string_defaults': ['restaurant', 'cafe', 'fast food', 'hotel']
+        'string_defaults': [
+            'restaurant', 'cafe', 'fast food', 'hotel', 'accommodation'
+        ],
+        'osm_downloader': []
     },
     {
         'key': 'residence',
         'name': tr('Residence'),
         'description': tr(
             'An object that people use to live daily.'),
-        'string_defaults': ['house', 'dorm']
+        'string_defaults': ['house', 'dorm', 'residential' 'residence'],
+        'osm_downloader': ['Residential']
     },
     {
         'key': 'other',
@@ -963,8 +1001,9 @@ structure_class_mapping = [
         'description': tr(
             'An object that be found in Indonesia, and frequently mapped.'),
         'string_defaults': [
-            'Animal Boarding', 'Water Well', 'Lighthouse', 'other'
-        ]
+            'animal boarding', 'water well', 'lighthouse', 'utility', 'other'
+        ],
+        'osm_downloader': ['Utility']
     }
 ]
 # List to keep the order of the keys.
