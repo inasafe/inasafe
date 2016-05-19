@@ -215,12 +215,13 @@ class StepKwClassify(WizardStep, FORM_CLASS):
                     unique_value, QPyNullVariant):
                 # Don't classify features with NULL value
                 continue
-            value_as_string = unicode(unique_value)
+            # Capitalization of the value and removing '_' (raw OSM data).
+            value_as_string = unicode(unique_value).upper().replace('_', ' ')
             assigned = False
             for default_class in default_classes:
                 condition_1 = (
                     field_type > 9 and
-                    value_as_string.upper() in [
+                    value_as_string in [
                         c.upper() for c in default_class['string_defaults']])
                 condition_2 = (
                     field_type < 10 and
