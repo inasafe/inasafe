@@ -1484,6 +1484,13 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             legend = self.iface.legendInterface()
             legend.setLayerVisible(exposure_layer, False)
 
+        # In QGIS 2.14.2 and GDAL 1.11.3, if the exposure is in 3857,
+        # the impact layer is in 54004, we need to change it. See issue #2790.
+        if self.get_exposure_layer().crs().authid() == 'EPSG:3857':
+            if qgis_impact_layer.crs().authid() != 'EPSG:3857':
+                epsg_3857 = QgsCoordinateReferenceSystem(3857)
+                qgis_impact_layer.setCrs(epsg_3857)
+
         self.restore_state()
 
         # Return text to display in report panel
