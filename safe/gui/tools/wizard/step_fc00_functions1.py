@@ -37,6 +37,9 @@ from safe.gui.tools.wizard.wizard_utils import (
     RoleExposure)
 
 
+import logging
+LOGGER  = logging.getLogger('InaSAFE')
+
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
@@ -147,14 +150,20 @@ class StepFcFunctions1(WizardStep, FORM_CLASS):
             item.setIcon(QtGui.QIcon(
                 resources_path('img', 'wizard', 'keyword-subcategory-%s.svg'
                                % (h['key'] or 'notset'))))
+            LOGGER.debug(resources_path('img', 'wizard', 'keyword-subcategory-%s.svg'
+                               % (h['key'] or 'notset')))
             item.setText(h['name'].capitalize())
             self.tblFunctions1.setHorizontalHeaderItem(i, item)
         for i in range(len(exposures)):
             e = exposures[i]
             item = QtGui.QTableWidgetItem()
+
             item.setIcon(QtGui.QIcon(resources_path(
                 'img', 'wizard', 'keyword-subcategory-%s.svg'
                 % (e['key'] or 'notset'))))
+            LOGGER.debug(resources_path(
+                'img', 'wizard', 'keyword-subcategory-%s.svg'
+                % (e['key'] or 'notset')))
             item.setText(e['name'].capitalize())
             self.tblFunctions1.setVerticalHeaderItem(i, item)
 
