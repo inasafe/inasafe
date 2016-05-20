@@ -116,6 +116,11 @@ class LandCoverReportTemplate(TemplateBase):
         affected_text = tr('Affected Area (ha)')
 
         show_affected = True if len(self.affected_columns) else False
+        if show_affected:
+            msg = tr(
+                '* Percentage of affected area compare to the total area for '
+                'the land cover type.')
+            self.notes['fields'].append(msg)
 
         table = format_pivot_table(
             report['impacted'],
@@ -183,7 +188,7 @@ def format_pivot_table(
     if total_affected:
         row.add(m.Cell(tr('Affected'), header=True, align='right'))
     if total_percent_affected:
-        row.add(m.Cell(tr('Affected (%)'), header=True, align='right'))
+        row.add(m.Cell(tr('Affected (%) *'), header=True, align='right'))
     table.add(row)
 
     max_value = max(max(row) for row in pivot_table.data)
