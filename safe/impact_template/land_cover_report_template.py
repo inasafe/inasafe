@@ -21,7 +21,7 @@ import logging
 from safe import messaging as m
 from safe.common.utilities import format_decimal
 from safe.utilities.i18n import tr
-from safe.messaging.styles import INFO_STYLE
+from safe.messaging.styles import INFO_STYLE, SUB_INFO_STYLE
 from safe.utilities.pivot_table import FlatTable, PivotTable
 from safe.impact_template.template_base import TemplateBase
 
@@ -130,9 +130,10 @@ class LandCoverReportTemplate(TemplateBase):
             message.add(m.Heading(
                 tr('Analysis Results by Aggregation Area'), **INFO_STYLE))
             for zone, table in report['impacted_zones'].items():
+                message.add(m.Heading(zone.lower().title(), **SUB_INFO_STYLE))
                 m_table = format_pivot_table(
                     table,
-                    header_text='%s - %s' % (zone, affected_text),
+                    header_text=affected_text,
                     total_columns=True,
                     total_affected=show_affected,
                     total_percent_affected=show_affected,
