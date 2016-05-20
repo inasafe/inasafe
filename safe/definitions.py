@@ -88,13 +88,13 @@ layer_mode_continuous = {
         'values representing a continuously varying phenomenon. '
         'For example flood depth is a continuous value from 0 to the maximum '
         'reported depth during a flood. '
-        'Raster exposure data such as population data are also continuous. '
+        '<p>Raster exposure data such as population data are also continuous. '
         'In this example the cell values represent the number of people in '
-        'cell.\n'
-        'Raster data is considered to be continuous by default and you '
+        'cell.</p>'
+        '<p>Raster data is considered to be continuous by default and you '
         'should explicitly indicate that it is classified if each cell in the '
         'raster represents a discrete class (e.g. low depth = 1, medium depth '
-        '= 2, high depth = 3).'
+        '= 2, high depth = 3).</p>'
     ),
 }
 layer_mode_classified = {
@@ -103,20 +103,20 @@ layer_mode_classified = {
     'description': tr(
         '<b>Classified</b> data can be used for either hazard or exposure '
         'data and can be used for both raster and vector layer types where '
-        'the attribute values represent a classified or coded value. \n'
-        'For example, classified values in a flood raster data set might '
+        'the attribute values represent a classified or coded value.'
+        '<p>For example, classified values in a flood raster data set might '
         'represent discrete classes where a value of 1 might represent the '
         'low inundation class, a value of 2 might represent the medium '
         'inundation class and a value of 3 might represent the '
-        'high inundation class.\n'
-        'Classified values in a vector (polygon) Volcano data set might '
+        'high inundation class.</p>'
+        '<p>Classified values in a vector (polygon) Volcano data set might '
         'represent discrete classes where a value of I might represent low '
         'volcanic hazard, a value of II might represent medium volcanic '
-        'hazard and a value of III  might represent a high volcanic hazard. \n'
-        'In a vector (point) Volcano data the user specified buffer distances '
-        'will be used to classify the data. '
-        'Classified values in a vector exposure data set might include '
-        'building type or road type. '
+        'hazard and a value of III  might represent a high volcanic hazard.</p>'
+        '<p>In a vector (point) Volcano data the user specified buffer distances '
+        'will be used to classify the data.</p>'
+        '<p>Classified values in a vector exposure data set might include '
+        'building type or road type.</p>'
     ),
 }
 
@@ -195,8 +195,8 @@ hazard_category_single_event = {
     'description': tr(
         '<b>Single event</b> hazard data can be based on either a specific  '
         'event that has happened in the past, for example a flood like '
-        'Jakarta 2013, or a possible event such as the tsunami that results '
-        'from an earthquake near Bima that might happen in the future.')
+        'Jakarta 2013, or a possible event, such as the tsunami that results '
+        'from an earthquake near Bima, that might happen in the future.')
 }
 
 hazard_category_multiple_event = {
@@ -205,11 +205,11 @@ hazard_category_multiple_event = {
     'description': tr(
         '<b>Multiple event</b> hazard data can be based on historical '
         'observations such as a hazard map of all observed volcanic '
-        'deposits around a volcano. \n'
-        'This type of hazard data shows those locations that might be '
+        'deposits around a volcano.'
+        '<p>This type of hazard data shows those locations that might be '
         'impacted by a volcanic eruption in the future. Another example '
         'might be a probabilistic hazard model that shows the likelihood of a '
-        'magnitude 7 earthquake happening in the next 50 years.')
+        'magnitude 7 earthquake happening in the next 50 years.</p>')
 }
 
 hazard_category = {
@@ -262,7 +262,7 @@ hazard_volcanic_ash = {
     'description': tr(
         '<b>Volcanic ash</b> describes fragments of pulverized rock, minerals '
         'and volcanic glass, created during volcanic eruptions, less than '
-        '2 mm (0.079 inches) in diameter')
+        '2 mm (0.079 inches) in diameter.')
 }
 
 hazard_tsunami = {
@@ -270,7 +270,7 @@ hazard_tsunami = {
     'name': tr('Tsunami'),
     'description': tr(
         'A <b>tsunami</b> describes a large ocean wave or series or '
-        'waves usually caused by an under water earthquake or volcano. '
+        'waves usually caused by an underwater earthquake or volcano. '
         'A <b>tsunami</b> at sea may go unnoticed but a <b>tsunami</b> '
         'wave that strikes land may cause massive destruction and '
         'flooding.')
@@ -324,10 +324,10 @@ exposure_people_in_building = {
     'description': tr(
         'The <b>people in buildings</b> exposure data is an experimental '
         'data set that assigns the population of a specific administrative '
-        'area to the buildings with a residential function in that area.\n'
-        'The process of assigning people to buildings assumes that all people '
+        'area to the buildings with a residential function in that area.'
+        '<p>The process of assigning people to buildings assumes that all people '
         'and buildings in the area are mapped. There are no InaSAFE impact '
-        'functions that use this exposure data yet.')
+        'functions that use this exposure data yet.</p>')
 }
 
 exposure_population = {
@@ -352,7 +352,7 @@ exposure_structure = {
     'description': tr(
         'A <b>structure</b> can be any relatively permanent man '
         'made feature such as a building (an enclosed structure '
-        'with walls and a roof) or a telecommunications facility or a '
+        'with walls and a roof), telecommunications facility or '
         'bridge.')
 }
 
