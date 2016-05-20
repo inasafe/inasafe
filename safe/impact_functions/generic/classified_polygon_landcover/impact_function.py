@@ -74,9 +74,10 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
 
         type_attr = self.exposure.keyword('field')
 
-        hazard_class_attribute = self.hazard.keyword('field')
+        self.hazard_class_attribute = self.hazard.keyword('field')
         hazard_value_to_class = {}
-        for key, values in self.hazard.keyword('value_map').iteritems():
+        self.hazard_class_mapping = self.hazard.keyword('value_map')
+        for key, values in self.hazard_class_mapping:
             for value in values:
                 hazard_value_to_class[value] = key
 
@@ -129,7 +130,7 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
                    not impact_geometry.wkbType() == QGis.WKBMultiPolygon:
                     continue   # no intersection found
 
-                hazard_value = hazard_id[hazard_class_attribute]
+                hazard_value = hazard_id[self.hazard_class_attribute]
                 hazard_type = hazard_value_to_class.get(hazard_value)
 
                 # write the impacted geometry
