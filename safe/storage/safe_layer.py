@@ -116,7 +116,7 @@ class SafeLayer(object):
             return self.keywords[key]
         except KeyError:
             message = tr(
-                'Keyword %s is not found in layer %s, please add it to your '
+                'Keyword "%s" is not found in layer %s, please add it to your '
                 'layer' % (key, self.name))
             raise KeywordNotFoundError(message)
 
