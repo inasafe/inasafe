@@ -60,13 +60,13 @@ class TestClassifiedPolygonLandCoverFunction(unittest.TestCase):
             type_tuple = f[exposure_field], f[function.target_field]
             features[type_tuple] = round(f.geometry().area(), 1)
         expected_features = {
-            (u'Water', u'high'): 500000.0,
-            (u'Water', u'medium'): 500000.0,
-            (u'Population', u'high'): 3000000.0,
-            (u'Population', u'medium'): 1500000.0,
-            (u'Population', u'low'): 1500000.0,
-            (u'Forest', u'high'): 500000.0,
-            (u'Forest', u'low'): 500000.0,
+            (u'Water', u'High Hazard Zone'): 500000.0,
+            (u'Water', u'Medium Hazard Zone'): 500000.0,
+            (u'Population', u'High Hazard Zone'): 3000000.0,
+            (u'Population', u'Medium Hazard Zone'): 1500000.0,
+            (u'Population', u'Low Hazard Zone'): 1500000.0,
+            (u'Forest', u'High Hazard Zone'): 500000.0,
+            (u'Forest', u'Low Hazard Zone'): 500000.0,
         }
         self.assertEqual(len(expected_features.keys()), len(features.keys()))
         for key, value in expected_features.iteritems():
