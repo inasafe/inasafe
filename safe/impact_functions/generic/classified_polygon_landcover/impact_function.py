@@ -26,6 +26,7 @@ from qgis.core import (
     QgsVectorLayer,
 )
 from PyQt4.QtCore import QVariant
+from collections import OrderedDict
 
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
@@ -103,7 +104,10 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
         self.question = ('In each of the hazard zones which land cover types '
                          'might be affected.')
         # Don't put capital letters as the value in the attribute should match.
-        self.hazard_columns = ['low', 'medium', 'high']
+        self.hazard_columns = OrderedDict()
+        self.hazard_columns['low'] = tr('Low Hazard Zone')
+        self.hazard_columns['medium'] = tr('Medium Hazard Zone')
+        self.hazard_columns['high'] = tr('High Hazard Zone')
         self.affected_hazard_columns = []
 
     def notes(self):
@@ -133,7 +137,7 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
         hazard_value_to_class = {}
         for key, values in self.hazard.keyword('value_map').iteritems():
             for value in values:
-                hazard_value_to_class[value] = key
+                hazard_value_to_class[value] = self.hazard_columns[key]
 
         # prepare objects for re-projection of geometries
         crs_wgs84 = QgsCoordinateReferenceSystem('EPSG:4326')
@@ -186,7 +190,7 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
             question=self.question,
             impact_layer=impact_layer,
             target_field=self.target_field,
-            ordered_columns=self.hazard_columns,
+            ordered_columns=self.hazard_columns.values(),
             affected_columns=self.affected_hazard_columns,
             land_cover_field=type_attr,
             zone_field=zone_field
@@ -195,22 +199,22 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
         # Define style for the impact layer
         style_classes = [
             dict(
-                label=self.hazard_columns[0],
-                value='low',
+                label=self.hazard_columns['low'],
+                value=self.hazard_columns['low'],
                 colour='#acffb6',
                 border_color='#000000',
                 transparency=0,
                 size=0.5),
             dict(
-                label=self.hazard_columns[1],
-                value='medium',
+                label=self.hazard_columns['medium'],
+                value=self.hazard_columns['medium'],
                 colour='#ffe691',
                 border_color='#000000',
                 transparency=0,
                 size=0.5),
             dict(
-                label=self.hazard_columns[2],
-                value='high',
+                label=self.hazard_columns['high'],
+                value=self.hazard_columns['high'],
                 colour='#F31A1C',
                 border_color='#000000',
                 transparency=0,
