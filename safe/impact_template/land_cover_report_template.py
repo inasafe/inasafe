@@ -118,7 +118,7 @@ class LandCoverReportTemplate(TemplateBase):
         show_affected = True if len(self.affected_columns) else False
         if show_affected:
             msg = tr(
-                '* Percentage of affected area compare to the total area for '
+                '* Percentage of affected area compared to the total area for '
                 'the land cover type.')
             self.notes['fields'].append(msg)
 
