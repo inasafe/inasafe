@@ -1408,10 +1408,7 @@ class ImpactFunction(object):
         start_time = datetime.now()
 
         # Run the IF. self.run() is defined in each IF.
-        try:
-            result_layer = self.run()
-        except KeywordNotFoundError as e:
-            raise KeywordNotFoundError(e)
+        result_layer = self.run()
 
         self._set_if_provenance()
 
