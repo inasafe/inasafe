@@ -44,6 +44,7 @@ class SafeLayer(object):
         self._layer = None
         self._keywords = {}
         self.layer = layer
+        self._name = None
 
         if name:
             self._name = name

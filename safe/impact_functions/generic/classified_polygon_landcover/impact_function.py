@@ -77,7 +77,7 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
         self.hazard_class_attribute = self.hazard.keyword('field')
         hazard_value_to_class = {}
         self.hazard_class_mapping = self.hazard.keyword('value_map')
-        for key, values in self.hazard_class_mapping:
+        for key, values in self.hazard_class_mapping.items():
             for value in values:
                 hazard_value_to_class[value] = key
 
