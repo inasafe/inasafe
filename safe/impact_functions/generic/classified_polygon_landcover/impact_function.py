@@ -26,7 +26,7 @@ from qgis.core import (
     QgsVectorLayer,
 )
 from PyQt4.QtCore import QVariant
-from PyQt4.QtGui import QColor
+from collections import OrderedDict
 
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
@@ -40,6 +40,59 @@ from safe.impact_functions.generic.classified_polygon_landcover\
 from safe.impact_reports.land_cover_report_mixin import LandCoverReportMixin
 
 
+def _calculate_landcover_impact(
+        exposure, extent_exposure, extent_exposure_geom,
+        hazard_class_attribute, hazard_features, hazard_index,
+        hazard_value_to_class, impact_fields, writer):
+    """This function is used by GenericOnLandcover and TsunamiOnLandcover."""
+
+    for f in exposure.getFeatures(QgsFeatureRequest(extent_exposure)):
+        geometry = f.geometry()
+        bbox = geometry.boundingBox()
+        # clip the exposure geometry to requested extent if necessary
+        if not extent_exposure.contains(bbox):
+            geometry = geometry.intersection(extent_exposure_geom)
+
+        # find possible intersections with hazard layer
+        impacted_geometries = []
+        for hazard_id in hazard_index.intersects(bbox):
+            hazard_id = hazard_features[hazard_id]
+            hazard_geometry = hazard_id.geometry()
+            impact_geometry = geometry.intersection(hazard_geometry)
+            if not impact_geometry.wkbType() == QGis.WKBPolygon and \
+                    not impact_geometry.wkbType() == QGis.WKBMultiPolygon:
+                continue  # no intersection found
+
+            hazard_value = hazard_id[hazard_class_attribute]
+            hazard_type = hazard_value_to_class.get(hazard_value)
+
+            # write the impacted geometry
+            f_impact = QgsFeature(impact_fields)
+            f_impact.setGeometry(impact_geometry)
+            f_impact.setAttributes(f.attributes() + [hazard_type])
+            writer.addFeature(f_impact)
+
+            impacted_geometries.append(impact_geometry)
+
+            # TODO: uncomment if not affected polygons should be written
+            # # Make sure the geometry we work with is valid, otherwise geom.
+            # # processing operations (especially difference) may fail.
+            # # Validity checking is a slow operation, it would be better if we
+            # # could assume that all geometries are valid...
+            # if not geometry.isGeosValid():
+            #     geometry = geometry.buffer(0, 0)
+            #
+            # # write also not affected part of the exposure's feature
+            # geometry_out = geometry.difference(
+            #     QgsGeometry.unaryUnion(impacted_geometries))
+            # if geometry_out and (geometry_out.wkbType() == QGis.WKBPolygon or
+            #         geometry_out.wkbType() == QGis.WKBMultiPolygon):
+            #     f_out = QgsFeature(impact_fields)
+            #     f_out.setGeometry(geometry_out)
+            #     f_out.setAttributes(f.attributes()+[self._not_affected_value])
+            #     writer.addFeature(f_out)
+
+
 class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
 
     _metadata = ClassifiedPolygonHazardLandCoverFunctionMetadata()
@@ -50,6 +103,12 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
         # Set the question of the IF (as the hazard data is not an event)
         self.question = ('In each of the hazard zones which land cover types '
                          'might be affected.')
+        # Don't put capital letters as the value in the attribute should match.
+        self.hazard_columns = OrderedDict()
+        self.hazard_columns['low'] = tr('Low Hazard Zone')
+        self.hazard_columns['medium'] = tr('Medium Hazard Zone')
+        self.hazard_columns['high'] = tr('High Hazard Zone')
+        self.affected_hazard_columns = []
 
     def notes(self):
         """Return the notes section of the report.
@@ -78,10 +137,10 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
         hazard_value_to_class = {}
         for key, values in self.hazard.keyword('value_map').iteritems():
             for value in values:
-                hazard_value_to_class[value] = key
+                hazard_value_to_class[value] = self.hazard_columns[key]
 
         # prepare objects for re-projection of geometries
-        crs_wgs84 = QgsCoordinateReferenceSystem("EPSG:4326")
+        crs_wgs84 = QgsCoordinateReferenceSystem('EPSG:4326')
         hazard_to_exposure = QgsCoordinateTransform(
             hazard.crs(), exposure.crs())
         wgs84_to_hazard = QgsCoordinateTransform(
@@ -109,57 +168,16 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
         impact_fields = exposure.dataProvider().fields()
         impact_fields.append(QgsField(self.target_field, QVariant.String))
         writer = QgsVectorFileWriter(
-            filename, "utf-8", impact_fields, QGis.WKBPolygon, exposure.crs())
+            filename, 'utf-8', impact_fields, QGis.WKBPolygon, exposure.crs())
 
-        # iterate over all exposure polygons and calculate the impact
-        for f in exposure.getFeatures(QgsFeatureRequest(extent_exposure)):
-            geometry = f.geometry()
-            bbox = geometry.boundingBox()
-            # clip the exposure geometry to requested extent if necessary
-            if not extent_exposure.contains(bbox):
-                geometry = geometry.intersection(extent_exposure_geom)
-
-            # find possible intersections with hazard layer
-            impacted_geometries = []
-            for hazard_id in hazard_index.intersects(bbox):
-                hazard_id = hazard_features[hazard_id]
-                hazard_geometry = hazard_id.geometry()
-                impact_geometry = geometry.intersection(hazard_geometry)
-                if not impact_geometry.wkbType() == QGis.WKBPolygon and \
-                   not impact_geometry.wkbType() == QGis.WKBMultiPolygon:
-                    continue   # no intersection found
-
-                hazard_value = hazard_id[hazard_class_attribute]
-                hazard_type = hazard_value_to_class.get(hazard_value)
-
-                # write the impacted geometry
-                f_impact = QgsFeature(impact_fields)
-                f_impact.setGeometry(impact_geometry)
-                f_impact.setAttributes(f.attributes() + [hazard_type])
-                writer.addFeature(f_impact)
-
-                impacted_geometries.append(impact_geometry)
-
-            # TODO: uncomment if not affected polygons should be written
-            # # Make sure the geometry we work with is valid, otherwise geom.
-            # # processing operations (especially difference) may fail.
-            # # Validity checking is a slow operation, it would be better if we
-            # # could assume that all geometries are valid...
-            # if not geometry.isGeosValid():
-            #     geometry = geometry.buffer(0, 0)
-            #
-            # # write also not affected part of the exposure's feature
-            # geometry_out = geometry.difference(
-            #     QgsGeometry.unaryUnion(impacted_geometries))
-            # if geometry_out and (geometry_out.wkbType() == QGis.WKBPolygon or
-            #         geometry_out.wkbType() == QGis.WKBMultiPolygon):
-            #     f_out = QgsFeature(impact_fields)
-            #     f_out.setGeometry(geometry_out)
-            #     f_out.setAttributes(f.attributes()+[self._not_affected_value])
-            #     writer.addFeature(f_out)
+        # Iterate over all exposure polygons and calculate the impact.
+        _calculate_landcover_impact(
+            exposure, extent_exposure, extent_exposure_geom,
+            hazard_class_attribute, hazard_features, hazard_index,
+            hazard_value_to_class, impact_fields, writer)
 
         del writer
-        impact_layer = QgsVectorLayer(filename, "Impacted Land Cover", "ogr")
+        impact_layer = QgsVectorLayer(filename, 'Impacted Land Cover', 'ogr')
 
         if impact_layer.featureCount() == 0:
             raise ZeroImpactException()
@@ -172,26 +190,36 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
             question=self.question,
             impact_layer=impact_layer,
             target_field=self.target_field,
+            ordered_columns=self.hazard_columns.values(),
+            affected_columns=self.affected_hazard_columns,
             land_cover_field=type_attr,
             zone_field=zone_field
         ).generate_data()
 
         # Define style for the impact layer
-        transparent_color = QColor()
-        transparent_color.setAlpha(0)
         style_classes = [
             dict(
-                label=tr('High'), value='high',
-                colour='#F31A1C', border_color='#000000',
-                transparency=0, size=0.5),
+                label=self.hazard_columns['low'],
+                value=self.hazard_columns['low'],
+                colour='#acffb6',
+                border_color='#000000',
+                transparency=0,
+                size=0.5),
             dict(
-                label=tr('Medium'), value='medium',
-                colour='#ffe691', border_color='#000000',
-                transparency=0, size=0.5),
+                label=self.hazard_columns['medium'],
+                value=self.hazard_columns['medium'],
+                colour='#ffe691',
+                border_color='#000000',
+                transparency=0,
+                size=0.5),
             dict(
-                label=tr('Low'), value='low',
-                colour='#acffb6', border_color='#000000',
-                transparency=0, size=0.5)]
+                label=self.hazard_columns['high'],
+                value=self.hazard_columns['high'],
+                colour='#F31A1C',
+                border_color='#000000',
+                transparency=0,
+                size=0.5),
+        ]
         style_info = dict(
             target_field=self.target_field,
             style_classes=style_classes,

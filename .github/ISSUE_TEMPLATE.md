@@ -9,6 +9,6 @@
 * Data used :
   * Exposure : 
   * Hazard : 
-  * Aggregagtion :
+  * Aggregation :
 
 ### Proposed Solution
