@@ -88,6 +88,7 @@ class TestRegistry(unittest.TestCase):
             'Tsunami evacuation',
             'Raster tsunami on buildings',
             'Raster tsunami on roads',
+            'Raster tsunami on land cover',
             'Classified raster hazard on buildings',
             'Classified raster hazard on population',
             'Continuous raster hazard on population',

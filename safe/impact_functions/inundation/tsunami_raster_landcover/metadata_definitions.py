@@ -1,6 +1,6 @@
 # coding=utf-8
-"""InaSAFE Disaster risk tool by Australian Aid - Classified Polygon on
-Land Cover Metadata Definitions.
+"""InaSAFE Disaster risk tool by Australian Aid - Tsunami Raster Impact on
+Buildings
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -10,23 +10,37 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+__author__ = 'etiennetrimaille'
+__project_name__ = 'inasafe'
+__filename__ = 'metadata_definitions'
+__date__ = '10/05/16'
+__copyright__ = 'etienne@kartoza.com'
 
 from safe.common.utilities import OrderedDict
-from safe.impact_functions.impact_function_metadata import \
-    ImpactFunctionMetadata
 from safe.definitions import (
     layer_mode_classified,
+    layer_mode_continuous,
     layer_geometry_polygon,
-    hazard_all,
-    hazard_category_multiple_event,
+    layer_geometry_raster,
     hazard_category_single_event,
+    hazard_category_multiple_event,
     exposure_land_cover,
-    generic_vector_hazard_classes,
+    unit_metres,
+    unit_feet,
+    hazard_tsunami
 )
+from safe.impact_functions.inundation.tsunami_raster_building.\
+    metadata_definitions import (
+        low_threshold,
+        medium_threshold,
+        high_threshold
+    )
+from safe.impact_functions.impact_function_metadata import \
+    ImpactFunctionMetadata
 from safe.utilities.i18n import tr
 
 
-class ClassifiedPolygonHazardLandCoverFunctionMetadata(ImpactFunctionMetadata):
+class TsunamiRasterHazardLandCoverFunctionMetadata(ImpactFunctionMetadata):
 
     @staticmethod
     def as_dict():
@@ -40,23 +54,21 @@ class ClassifiedPolygonHazardLandCoverFunctionMetadata(ImpactFunctionMetadata):
         :rtype: dict
         """
         dict_meta = {
-            'id': 'ClassifiedPolygonHazardLandCoverFunction',
-            'name': tr('Classified polygon hazard on land cover'),
+            'id': 'RasterTsunamiHazardLandCoverFunction',
+            'name': tr('Raster tsunami on land cover'),
             'impact': tr('Be affected'),
             'title': tr('Be affected'),
             'function_type': 'qgis2.0',
             'author': 'Martin Dobias (wonder.sk@gmail.com)',
-            'date_implemented': '15/06/2015',
+            'date_implemented': '10/05/2016',
             'overview': tr(
                 'To assess the impact of each hazard zone on land cover.'),
             'detailed_description': '',
             'hazard_input': tr(
-                'The hazard layer must be a polygon layer. This layer '
-                'must have an attribute representing the hazard '
-                'zone that can be specified in the impact function options.'),
+                'The hazard layer must be a tsunami raster layer.'),
             'exposure_input': tr(
-                'Vector polygon layer where each '
-                'polygon represents a type of land cover.'),
+                'Vector polygon layer where each polygon represents a type of '
+                'land cover.'),
             'output': tr(
                 'A vector layer of land cover polygons with each tagged '
                 'according to the hazard zone in which it falls.'),
@@ -67,16 +79,15 @@ class ClassifiedPolygonHazardLandCoverFunctionMetadata(ImpactFunctionMetadata):
             'citations': [],
             'layer_requirements': {
                 'hazard': {
-                    'layer_mode': layer_mode_classified,
-                    'layer_geometries': [layer_geometry_polygon],
+                    'layer_mode': layer_mode_continuous,
+                    'layer_geometries': [layer_geometry_raster],
                     'hazard_categories': [
                         hazard_category_single_event,
                         hazard_category_multiple_event
                     ],
-                    'hazard_types': hazard_all,
-                    'continuous_hazard_units': [],
-                    'vector_hazard_classifications': [
-                        generic_vector_hazard_classes],
+                    'hazard_types': [hazard_tsunami],
+                    'continuous_hazard_units': [unit_feet, unit_metres],
+                    'vector_hazard_classifications': [],
                     'raster_hazard_classifications': [],
                     'additional_keywords': []
                 },
@@ -89,6 +100,11 @@ class ClassifiedPolygonHazardLandCoverFunctionMetadata(ImpactFunctionMetadata):
                     'additional_keywords': []
                 }
             },
-            'parameters': OrderedDict([])
+            'parameters': OrderedDict(
+                [
+                    ('low_threshold', low_threshold()),
+                    ('medium_threshold', medium_threshold()),
+                    ('high_threshold', high_threshold())
+                ])
         }
         return dict_meta

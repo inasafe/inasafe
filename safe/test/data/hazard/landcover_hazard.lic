@@ -6,7 +6,7 @@
 
   <datafile>
     <filename>landcover_hazard.shp</filename>
-    <checksum>76485831</checksum>
+    <checksum>4215651718</checksum>
     <publishable>Yes</publishable>
     <accountable>Martin Dobias</accountable>
     <source>DMInnovation</source>
@@ -16,7 +16,7 @@
 
   <datafile>
     <filename>landcover_hazard.dbf</filename>
-    <checksum>490334057</checksum>
+    <checksum>3720532413</checksum>
     <publishable>Yes</publishable>
     <accountable>Martin Dobias</accountable>
     <source>DMInnovation</source>
@@ -26,7 +26,7 @@
 
   <datafile>
     <filename>landcover_hazard.shx</filename>
-    <checksum>2651990106</checksum>
+    <checksum>1459392259</checksum>
     <publishable>Yes</publishable>
     <accountable>Martin Dobias</accountable>
     <source>DMInnovation</source>

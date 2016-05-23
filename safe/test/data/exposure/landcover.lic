@@ -6,7 +6,7 @@
 
   <datafile>
     <filename>landcover.shp</filename>
-    <checksum>1335963579</checksum>
+    <checksum>2489397254</checksum>
     <publishable>Yes</publishable>
     <accountable>Martin Dobias</accountable>
     <source>DMInnovation</source>
@@ -16,7 +16,7 @@
 
   <datafile>
     <filename>landcover.dbf</filename>
-    <checksum>681963845</checksum>
+    <checksum>976894014</checksum>
     <publishable>Yes</publishable>
     <accountable>Martin Dobias</accountable>
     <source>DMInnovation</source>
@@ -26,7 +26,7 @@
 
   <datafile>
     <filename>landcover.shx</filename>
-    <checksum>2196888411</checksum>
+    <checksum>1229365098</checksum>
     <publishable>Yes</publishable>
     <accountable>Martin Dobias</accountable>
     <source>DMInnovation</source>

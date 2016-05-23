@@ -75,11 +75,11 @@ class TsunamiRasterRoadsFunctionTest(unittest.TestCase):
 
         # Extract calculated result
         impact_data = impact_layer.get_data()
-        self.assertEqual(len(impact_data), 3580)
+        self.assertEqual(len(impact_data), 3968)
 
         # 1 = inundated, 2 = wet, 3 = dry
         expected_result = {
-            0: 3218,
+            0: 3606,
             1: 88,
             2: 107,
             3: 114,

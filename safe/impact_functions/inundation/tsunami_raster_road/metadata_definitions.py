@@ -20,7 +20,7 @@ from safe.common.utilities import OrderedDict
 from safe.defaults import road_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
-from safe.impact_functions.inundation.tsunami_raster_road \
+from safe.impact_functions.inundation.tsunami_raster_building \
     .parameter_definitions import (
         low_threshold,
         medium_threshold,
