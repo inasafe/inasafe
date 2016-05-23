@@ -19,7 +19,7 @@ __copyright__ += 'Disaster Reduction'
 
 import itertools
 from safe.postprocessors.abstract_postprocessor import AbstractPostprocessor
-from safe.utilities.utilities import reorder_dictionary
+from safe.utilities.utilities import reorder_dictionary, main_type
 
 
 class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
@@ -134,17 +134,16 @@ class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
                 'needs to be called before process. Skipping this '
                 'postprocessor.' % self.__class__.__name__)
         else:
-            for title, field_values in self.value_mapping.iteritems():
-                self._calculate_type(title, field_values)
+            for title in self.value_mapping:
+                self._calculate_type(title)
             self.translate_results()
 
-    def _calculate_type(self, title, fields_values):
+    def _calculate_type(self, title):
         """Indicator that shows total features impacted.
 
         This indicator reports the features by type. The logic is:
         - look for the fields that occurs with a name included in
             self.valid_type_fields
-        - look in those fields for any of the values of self.fields_values
         - if a record has one of the valid fields with one of the valid
         fields_values then it is considered affected
         """
@@ -165,11 +164,11 @@ class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
 
                         if val:
                             feature_type = feature[type_field]
-                            if feature_type in fields_values:
+                            main_feature_type = main_type(
+                                feature_type, self.value_mapping)
+                            if main_feature_type == title:
                                 result += val
                                 break
-                            elif self._is_unknown_type(feature_type):
-                                self._update_known_types(feature_type)
 
                 result = int(round(result))
             except (ValueError, KeyError):
@@ -200,36 +199,3 @@ class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
                 translation = self._labels[key]
                 self._results[translation] = self._results[key]
                 del self._results[key]
-
-    def _is_unknown_type(self, feature_type):
-        """Check if the given type is in any of the known_types dictionary
-
-        :param feature_type: the name of the type
-        :type feature_type: str
-
-        :returns: Flag indicating if the feature_type is unknown
-        :rtype: boolean
-        """
-
-        is_unknown = feature_type not in self.known_types
-        return is_unknown
-
-    def _update_known_types(self, feature_type=None):
-        """
-        Adds a feature_type (if passed) and updates the known_types list
-
-        This is called each time a new unknown type is found and is needed so
-        that self._is_unknown_type (which is called many times) to perform
-        only a simple 'in' check
-
-        :param feature_type: the name of the type to add to the known types.
-        :type feature_type: str
-        """
-        if feature_type is not None:
-            self.value_mapping['other'].append(feature_type)
-
-        # flatten self.fields_values.values()
-        # using http://stackoverflow.com/questions/5286541/#5286614
-        self.known_types = list(itertools.chain.from_iterable(
-            itertools.repeat(x, 1) if isinstance(x, str) else x for x in
-            self.value_mapping.values()))
