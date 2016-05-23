@@ -112,9 +112,10 @@ layer_mode_classified = {
         '<p>Classified values in a vector (polygon) Volcano data set might '
         'represent discrete classes where a value of I might represent low '
         'volcanic hazard, a value of II might represent medium volcanic '
-        'hazard and a value of III  might represent a high volcanic hazard.</p>'
-        '<p>In a vector (point) Volcano data the user specified buffer distances '
-        'will be used to classify the data.</p>'
+        'hazard and a value of III  might represent a high volcanic hazard.'
+        '</p>'
+        '<p>In a vector (point) Volcano data the user specified buffer '
+        'distances will be used to classify the data.</p>'
         '<p>Classified values in a vector exposure data set might include '
         'building type or road type.</p>'
     ),
@@ -325,9 +326,9 @@ exposure_people_in_building = {
         'The <b>people in buildings</b> exposure data is an experimental '
         'data set that assigns the population of a specific administrative '
         'area to the buildings with a residential function in that area.'
-        '<p>The process of assigning people to buildings assumes that all people '
-        'and buildings in the area are mapped. There are no InaSAFE impact '
-        'functions that use this exposure data yet.</p>')
+        '<p>The process of assigning people to buildings assumes that all '
+        'people and buildings in the area are mapped. There are no InaSAFE '
+        'impact functions that use this exposure data yet.</p>')
 }
 
 exposure_population = {

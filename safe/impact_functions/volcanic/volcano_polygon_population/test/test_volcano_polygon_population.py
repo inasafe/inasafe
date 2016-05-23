@@ -19,6 +19,7 @@ import numpy
 from safe.test.utilities import test_data_path, get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
+from safe.common.exceptions import KeywordNotFoundError
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.impact_functions.volcanic.volcano_polygon_population\
     .impact_function import VolcanoPolygonPopulationFunction
@@ -60,6 +61,24 @@ class TestVolcanoPolygonPopulationFunction(unittest.TestCase):
         expected_affected_population = 181
         result = numpy.nansum(impact_layer.get_data())
         self.assertEqual(expected_affected_population, result, message)
+
+    def test_run_failed(self):
+        """Test run IF with missing keywords."""
+        merapi_krb_path = test_data_path('hazard', 'volcano_krb.shp')
+        population_path = test_data_path(
+            'exposure', 'pop_binary_raster_20_20.asc')
+
+        merapi_krb_layer = read_layer(merapi_krb_path)
+        population_layer = read_layer(population_path)
+
+        impact_function = VolcanoPolygonPopulationFunction.instance()
+
+        # 2. Run merapi krb
+        layer = SafeLayer(merapi_krb_layer)
+        layer.keywords = {}
+        impact_function.hazard = layer
+        impact_function.exposure = SafeLayer(population_layer)
+        self.assertRaises(KeywordNotFoundError, impact_function.run)
 
     def test_filter(self):
         """TestVolcanoPolygonPopulationFunction: Test filtering IF"""

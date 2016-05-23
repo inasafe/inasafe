@@ -133,9 +133,10 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
 
         type_attr = self.exposure.keyword('field')
 
-        hazard_class_attribute = self.hazard.keyword('field')
+        self.hazard_class_attribute = self.hazard.keyword('field')
         hazard_value_to_class = {}
-        for key, values in self.hazard.keyword('value_map').iteritems():
+        self.hazard_class_mapping = self.hazard.keyword('value_map')
+        for key, values in self.hazard_class_mapping.items():
             for value in values:
                 hazard_value_to_class[value] = self.hazard_columns[key]
 
@@ -168,12 +169,13 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
         impact_fields = exposure.dataProvider().fields()
         impact_fields.append(QgsField(self.target_field, QVariant.String))
         writer = QgsVectorFileWriter(
+
             filename, 'utf-8', impact_fields, QGis.WKBPolygon, exposure.crs())
 
         # Iterate over all exposure polygons and calculate the impact.
         _calculate_landcover_impact(
             exposure, extent_exposure, extent_exposure_geom,
-            hazard_class_attribute, hazard_features, hazard_index,
+            self.hazard_class_attribute, hazard_features, hazard_index,
             hazard_value_to_class, impact_fields, writer)
 
         del writer

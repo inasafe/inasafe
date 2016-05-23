@@ -918,8 +918,8 @@ class ImpactFunction(object):
         data = {
             'start_time': self._start_time,
             'finish_time': datetime.now(),
-            'hazard_layer': self.hazard.keywords['title'],
-            'exposure_layer': self.exposure.keywords['title'],
+            'hazard_layer': self.hazard.keyword('title'),
+            'exposure_layer': self.exposure.keyword('title'),
             'impact_function_id': self.metadata().as_dict()['id'],
             'impact_function_version': '1.0',  # TODO: Add IF version.
             'host_name': self.host_name,
