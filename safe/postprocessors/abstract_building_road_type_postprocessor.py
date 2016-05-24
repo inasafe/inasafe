@@ -17,7 +17,6 @@ __license__ = "GPL"
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
-import itertools
 from safe.postprocessors.abstract_postprocessor import AbstractPostprocessor
 from safe.utilities.utilities import reorder_dictionary, main_type
 
@@ -58,13 +57,10 @@ class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
         # Find which attribute field has to be used
         self.type_fields = None
 
-        # List that will be updated dynamically.
-        self.known_types = []
-
         # Dictionary key - display name for the mapping.
         self._labels = {}
 
-        self._structure = None
+        # The categories order.
         self._order = None
 
     @staticmethod
@@ -136,14 +132,16 @@ class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
                 self._calculate_type(title)
             self.translate_results()
 
-    def _calculate_type(self, title):
-        """Indicator that shows total features impacted.
+    def _calculate_type(self, category):
+        """Indicator that shows total features impacted for one category.
 
-        This indicator reports the features by type. The logic is:
+        This indicator reports the features by category. The logic is:
         - look for the fields that occurs with a name included in
             self.valid_type_fields
-        - if a record has one of the valid fields with one of the valid
-        fields_values then it is considered affected
+        - if the main usage from a record is equal to the category then it is
+            considered affected.
+
+        This function uses safe.utilities.utilities.main_type
         """
 
         result = 0
@@ -164,7 +162,7 @@ class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
                             feature_type = feature[type_field]
                             main_feature_type = main_type(
                                 feature_type, self.value_mapping)
-                            if main_feature_type == title:
+                            if main_feature_type == category:
                                 result += val
                                 break
 
@@ -176,7 +174,7 @@ class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
                 result = 0
             else:
                 result = self.NO_DATA_TEXT
-        self._append_result(title, result)
+        self._append_result(category, result)
 
     def clear(self):
         """concrete implementation that ensures needed parameters are cleared.
