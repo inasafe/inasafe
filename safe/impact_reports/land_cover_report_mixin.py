@@ -19,6 +19,7 @@ __copyright__ = 'imajimatika@gmail.com'
 
 from qgis.core import QgsDistanceArea
 
+from safe.utilities.i18n import tr
 from safe.utilities.pivot_table import FlatTable
 from safe.impact_reports.report_mixin_base import ReportMixin
 
@@ -80,6 +81,38 @@ class LandCoverReportMixin(ReportMixin):
             'impact table': self.impact_table(),
             'action check list': self.action_checklist(),
             'notes': self.notes()
+        }
+
+    def action_checklist(self):
+        """Return the action check list section of the report.
+
+        :return: The action check list as dict.
+        :rtype: dict
+        """
+        title = tr('Action checklist')
+        fields = [
+            tr('What type of vegetation is planted in affected crops/fields ?'),
+            tr('How long (duration) will the activity or function of the land '
+               'cover will be disturbed?'),
+            tr('How severe is the land cover damage? '
+               '(percentage affected area from total area)'),
+            tr('What potential losses will be incurred by the land cover '
+               'damage? ( e.g 1 Ha rice field = 30 ton rice/one harvest '
+               'period)'),
+            tr('How much productivity in the crops/fields will be lost during '
+               'this event?'),
+            tr('Which crops were in harvest period during this event?'),
+            tr('What is the ownership system of the land/crops/field?'),
+            tr('Are the land/crops/field accessible after the event?'),
+            tr('What urgent actions can be taken to normalize the land/crops/'
+               'field?'),
+            tr('What tools or equipment are needed for early recovery of the '
+               'land/crops/field?')
+        ]
+
+        return {
+            'title': title,
+            'fields': fields
         }
 
     def impact_table(self):
