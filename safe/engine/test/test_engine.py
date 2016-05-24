@@ -17,7 +17,7 @@ from safe.engine.interpolation import (
     interpolate_polygon_points,
     assign_hazard_values_to_exposure_data,
     tag_polygons_by_grid)
-from safe.impact_functions import register_impact_functions
+from safe.impact_functions.loader import register_impact_functions
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.storage.core import (
     read_layer,

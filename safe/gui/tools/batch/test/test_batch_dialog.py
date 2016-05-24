@@ -29,7 +29,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from safe.gui.tools.batch.batch_dialog import BatchDialog
 from safe.common.utilities import temp_dir
 from safe.gui.widgets.dock import Dock
-from safe.impact_functions import register_impact_functions
+from safe.impact_functions.loader import register_impact_functions
 
 
 class BatchDialogTest(unittest.TestCase):

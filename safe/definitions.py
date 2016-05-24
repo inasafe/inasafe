@@ -438,6 +438,16 @@ unit_millimetres = {
         'millimetres in 1 metre.'),
 }
 
+unit_centimetres = {
+    'key': 'centimetres',
+    'name': tr('Centimetres'),
+    'plural_name': tr('centimetres'),
+    'abbreviation': tr('cm'),
+    'description': tr(
+        '<b>Centimetres</b> are a metric unit of measure. There are 100 '
+        'centimetres in 1 metre.'),
+}
+
 unit_mmi = {
     'key': 'mmi',
     'name': tr('MMI'),
@@ -472,6 +482,7 @@ continuous_hazard_unit = {
         unit_kilometres,
         unit_metres,
         unit_millimetres,
+        unit_centimetres,
         unit_mmi
     ]
 }

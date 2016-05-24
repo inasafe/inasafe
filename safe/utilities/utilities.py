@@ -328,10 +328,17 @@ def html_to_file(html, file_path=None, open_browser=False):
         open_in_browser(file_path)
 
 
-def ranges_according_thresholds(low_max, medium_max, high_max):
+def ranges_according_thresholds(
+        unaffected_max, very_low_max, low_max, medium_max, high_max):
     """Return an ordered dictionary with the ranges according to thresholds.
 
     This used to classify a raster according three thresholds.
+
+    :param unaffected_max: Unaffected threshold
+    :type unaffected_max: float
+
+    :param very_low_max: The very low threshold
+    :type very_low_max: float
 
     :param low_max: The low threshold.
     :type low_max: float
@@ -346,8 +353,8 @@ def ranges_according_thresholds(low_max, medium_max, high_max):
     :rtype OrderedDict
     """
     ranges = OrderedDict()
-    ranges[0] = [None, 0.0]
-    ranges[1] = [0.0, low_max]
+    ranges[0] = [unaffected_max, very_low_max]
+    ranges[1] = [very_low_max, low_max]
     ranges[2] = [low_max, medium_max]
     ranges[3] = [medium_max, high_max]
     ranges[4] = [high_max, None]
