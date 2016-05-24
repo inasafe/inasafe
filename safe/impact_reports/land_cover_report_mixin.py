@@ -91,17 +91,13 @@ class LandCoverReportMixin(ReportMixin):
         """
         title = tr('Action checklist')
         fields = [
-            tr('What type of vegetation is planted in affected crops/fields ?'),
-            tr('How long (duration) will the activity or function of the land '
-               'cover will be disturbed?'),
-            tr('How severe is the land cover damage? '
-               '(percentage affected area from total area)'),
-            tr('What potential losses will be incurred by the land cover '
-               'damage? ( e.g 1 Ha rice field = 30 ton rice/one harvest '
-               'period)'),
-            tr('How much productivity in the crops/fields will be lost during '
-               'this event?'),
-            tr('Which crops were in harvest period during this event?'),
+            tr('What type of crops are planted in the affected fields?'),
+            tr('How long will the activity or function of the land cover be '
+               'disturbed?'),
+            tr('What proportion of the land cover is damaged?'),
+            tr('What potential losses will result from the land cover damage?'),
+            tr('How much productivity will be lost during this event?'),
+            tr('Which crops were ready for harvest during this event?'),
             tr('What is the ownership system of the land/crops/field?'),
             tr('Are the land/crops/field accessible after the event?'),
             tr('What urgent actions can be taken to normalize the land/crops/'
