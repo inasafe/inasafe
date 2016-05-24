@@ -91,20 +91,23 @@ def content():
         'There are three main areas to the dock panel:')))
     bullets = m.BulletedList()
     bullets.add(m.Text(
-        tr('the '),
-        m.ImportantText(tr(
-            'questions ')),
-        tr('area')))
+        # format 'the __questions__ area' for proper i18n
+        tr('the %s area') % (
+            m.ImportantText(tr(
+                'questions')).to_html(),
+        )))
     bullets.add(m.Text(
-        tr('the '),
-        m.ImportantText(tr(
-            'results ')),
-        tr('area')))
+        # format 'the __results__ area' for proper i18n
+        tr('the %s area') % (
+            m.ImportantText(tr(
+                'results')).to_html(),
+        )))
     bullets.add(m.Text(
-        tr('the '),
-        m.ImportantText(tr(
-            'buttons ')),
-        tr('area')))
+        # format 'the __buttons__ area' for proper i18n
+        tr('the %s area') % (
+            m.ImportantText(tr(
+                'buttons')).to_html(),
+        )))
     message.add(bullets)
     message.add(m.Paragraph(tr(
         'You can get help at any time in InaSAFE by clicking on the '
@@ -118,7 +121,7 @@ def content():
         'contains four drop down menus. You create your question by using '
         'these drop down menus to select the hazard and exposure data you '
         'wish to perform the analysis on. You must also select an impact '
-        'function  All questions follow this form:'),
+        'function. All questions follow this form:'),
         m.EmphasizedText(tr(
             'In the event of a [hazard], how many [exposure] might be '
             '[impacted]?'))))

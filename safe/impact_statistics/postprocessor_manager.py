@@ -324,8 +324,9 @@ class PostprocessorManager(QtCore.QObject):
                     null_index += 1
                 if name == 'road type':
                     # We add the unit 'meter' as we are counting roads.
+                    # proper format for i186
                     zone_name = tr(
-                        '%(zone_name)s (m)' % {'zone_name': zone_name})
+                        '%(zone_name)s (m)') % {'zone_name': zone_name}
                 row = m.Row(zone_name)
 
                 for indicator, calculation_data in calc.iteritems():
@@ -565,9 +566,10 @@ class PostprocessorManager(QtCore.QObject):
             else:
                 zone_name = feature[name_filed_index]
             if isinstance(zone_name, QPyNullVariant):
+                # proper format for i186
                 zone_name = tr(
-                    'Unnamed Area %(feature_id)s' %
-                    {'feature_id': str(feature.id())})
+                    'Unnamed Area %(feature_id)s') % {
+                    'feature_id': str(feature.id())}
 
             # create dictionary of attributes to pass to postprocessor
             general_params = {
