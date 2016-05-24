@@ -515,7 +515,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         """Generate a message for initial application state.
 
         :returns: Information for the user on how to get started.
-        :rtype: Message
+        :rtype: safe.messaging.Message
         """
         message = m.Message()
         message.add(LOGO_ELEMENT)
@@ -581,16 +581,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         .. note:: Assumes a valid hazard and exposure layer are loaded.
 
         :returns: A localised message indicating we are not ready.
-        :rtype: Message
+        :rtype: safe.messaging.Message
         """
-        # myHazardFilename = self.getHazardLayer().source()
-        # noinspection PyTypeChecker
-        hazard_keywords = self.keyword_io.read_keywords(
-            self.get_hazard_layer())
-        # myExposureFilename = self.getExposureLayer().source()
-        # noinspection PyTypeChecker
-        exposure_keywords = self.keyword_io.read_keywords(
-            self.get_exposure_layer())
         heading = m.Heading(
             self.tr('No valid functions'), **WARNING_STYLE)
         notes = m.Paragraph(self.tr(
@@ -638,7 +630,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         :returns: A two-tuple where the first element is a Boolean reflecting
          the results of the validation tests and the second is a message
          indicating any reason why the validation may have failed.
-        :rtype: (Boolean, Message)
+        :rtype: (Boolean, safe.messaging.Message)
 
         Example::
 
@@ -1406,7 +1398,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         else:
             post_processing_report = self.impact_function.\
                 postprocessor_manager.get_output(
-                self.impact_function.aggregator.aoi_mode)
+                    self.impact_function.aggregator.aoi_mode)
             keywords['postprocessing_report'] = post_processing_report.to_html(
                 suppress_newlines=True)
             self.keyword_io.write_keywords(qgis_impact_layer, keywords)
@@ -1731,7 +1723,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 HashNotFoundError,
                 InvalidParameterError,
                 NoKeywordsFoundError,
-                AttributeError), e:
+                AttributeError):
             # LOGGER.info(e.message)
             # Added this check in 3.2 for #1861
             active_layer = self.iface.activeLayer()

@@ -196,7 +196,7 @@ class MessageViewer(QtWebKit.QWebView):
         :type sender: Object, None
 
         :param message: A message to show in the viewer.
-        :type message: Message
+        :type message: safe.messaging.Message
         """
         # LOGGER.debug('Error message event')
         self.dynamic_message_event(sender, message)
@@ -210,7 +210,7 @@ class MessageViewer(QtWebKit.QWebView):
         :type sender: Object, None
 
         :param message: A message to show in the viewer.
-        :type message: Message
+        :type message: safe.messaging.Message
         """
         # LOGGER.debug('Dynamic message event')
         _ = sender  # we arent using it

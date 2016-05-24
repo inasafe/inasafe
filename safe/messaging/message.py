@@ -60,7 +60,7 @@ class Message(MessageElement):
         item.Text()
 
         :param message: An element to add to the message queue.
-        :type message: Message, MessageElement, str
+        :type message: safe.messaging.Message, MessageElement, str
 
         """
         if self._is_stringable(message) or self._is_qstring(message):
