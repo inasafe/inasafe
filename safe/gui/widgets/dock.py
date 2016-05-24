@@ -930,7 +930,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 continue
             except KeywordNotFoundError:
                 # There is a missing mandatory keyword, ignore it
-                return
+                continue
             except:  # pylint: disable=W0702
                 # automatically adding file name to title in keywords
                 # See #575
