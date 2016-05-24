@@ -928,6 +928,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             except NoKeywordsFoundError:
                 # Skip if there are no keywords at all
                 continue
+            except KeywordNotFoundError:
+                # There is a missing mandatory keyword, ignore it
+                return
             except:  # pylint: disable=W0702
                 # automatically adding file name to title in keywords
                 # See #575
@@ -1702,7 +1705,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         try:
             keywords = self.keyword_io.read_keywords(layer)
 
-            # if 'impact_summary' in keywords:
             if keywords['layer_purpose'] == 'impact':
                 try:
                     self.show_impact_report(layer, keywords)
@@ -1725,8 +1727,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         # TODO: maybe we need to split these apart more to give mode
         # TODO: granular error messages TS
-        except (KeyError,
-                KeywordNotFoundError,
+        except (KeywordNotFoundError,
                 HashNotFoundError,
                 InvalidParameterError,
                 NoKeywordsFoundError,
