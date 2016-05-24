@@ -115,8 +115,6 @@ class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
         if len(self.impact_attrs):
             self.no_features = True
 
-        self._update_known_types()
-
         if 'other' not in self.value_mapping.keys():
             self.value_mapping['other'] = []
 
