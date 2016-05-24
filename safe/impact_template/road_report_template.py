@@ -122,7 +122,7 @@ class RoadReportTemplate(AbstractRoadBuildingReportTemplate):
             # proper format for i186
             row.add(m.Cell(
                 tr('%(road_type)s (m)') % {
-                    'road_type': field[0].capitalize()}))
+                    'road_type': tr(field[0].capitalize())}))
             # Start from second column
             for value in field[1:]:
                 row.add(m.Cell(
