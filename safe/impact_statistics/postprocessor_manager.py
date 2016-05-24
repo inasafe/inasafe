@@ -326,7 +326,7 @@ class PostprocessorManager(QtCore.QObject):
                     # We add the unit 'meter' as we are counting roads.
                     # proper format for i186
                     zone_name = tr(
-                        '%(zone_name)s (m)') % {'zone_name': zone_name}
+                        '%(zone_name)s (m)') % {'zone_name': tr(zone_name)}
                 row = m.Row(zone_name)
 
                 for indicator, calculation_data in calc.iteritems():
