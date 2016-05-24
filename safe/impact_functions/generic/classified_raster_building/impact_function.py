@@ -100,9 +100,9 @@ class ClassifiedRasterHazardBuildingFunction(
         buildings_total = len(interpolated_result)
 
         hazard_classes = [
-            tr('High Hazard Class'),
+            tr('Low Hazard Class'),
             tr('Medium Hazard Class'),
-            tr('Low Hazard Class')
+            tr('High Hazard Class')
         ]
         self.init_report_var(hazard_classes)
 
