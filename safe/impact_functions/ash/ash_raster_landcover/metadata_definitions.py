@@ -10,14 +10,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.impact_functions.ash.ash_raster_landcover.parameter_definitions \
-    import \
-    moderate_threshold, low_threshold, very_low_threshold, high_threshold, \
-    unaffected_threshold
-
-__author__ = 'Rizky Maulana Nugraha <lana.pcfre@gmail.com>'
-__date__ = '5/24/16'
-
 from safe.common.utilities import OrderedDict
 from safe.definitions import (
     layer_mode_classified,
@@ -28,14 +20,16 @@ from safe.definitions import (
     hazard_category_multiple_event,
     exposure_land_cover,
     hazard_volcanic_ash, unit_centimetres)
-from safe.impact_functions.inundation.tsunami_raster_building.\
-    metadata_definitions import (
-        low_threshold,
-        high_threshold
-    )
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
+from safe.impact_functions.ash.ash_raster_landcover.parameter_definitions \
+    import (
+        moderate_threshold, low_threshold, very_low_threshold,
+        high_threshold, unaffected_threshold)
+
+__author__ = 'Rizky Maulana Nugraha <lana.pcfre@gmail.com>'
+__date__ = '5/24/16'
 
 
 class AshRasterHazardLandCoverFunctionMetadata(ImpactFunctionMetadata):

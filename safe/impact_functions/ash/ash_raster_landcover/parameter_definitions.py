@@ -10,7 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.impact_functions.unit_definitions import parameter_unit_metres, \
+from safe.impact_functions.unit_definitions import \
     parameter_unit_centimetres
 from safe_extras.parameters.float_parameter import FloatParameter
 from safe.utilities.i18n import tr
