@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="id" sourcelanguage="">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="id" sourcelanguage="" version="2.0">
 <context>
     <name>@default</name>
     <message>
@@ -5481,6 +5480,461 @@ Unsur-unsur tersebut adalah:</translation>
         <translation>Jika dataset sudah ada di direktori output maka dataset tersebut akan ditimpa jika cek box &quot;Tulis ulang apabila file ada&quot; dicentang.</translation>
     </message>
     <message>
+        <location filename="definitions.py" line="85"/>
+        <source>&lt;b&gt;Continuous&lt;/b&gt; data can be used in raster hazard or exposure data where the values in the data are either integers or decimal values representing a continuously varying phenomenon. For example flood depth is a continuous value from 0 to the maximum reported depth during a flood. &lt;p&gt;Raster exposure data such as population data are also continuous. In this example the cell values represent the number of people in cell.&lt;/p&gt;&lt;p&gt;Raster data is considered to be continuous by default and you should explicitly indicate that it is classified if each cell in the raster represents a discrete class (e.g. low depth = 1, medium depth = 2, high depth = 3).&lt;/p&gt;</source>
+        <translation>Data &lt;b&gt;kontinyu&lt;/b&gt; dapat digunakan pada data ancaman atau keterpaparan yang setiap nilainya merupakan bilangan bulat atau desimal yang mewakili fenomena kontinyu. Sebagai contoh kedalaman banjir merupakan nilai kontinyu dari 0 hingga kedalaman maksimal yang dilaporkan selama banjir. &lt;p&gt;Data raster seperti populasi juga merupakan data kontinyu. Dalam contoh ini nilai sel mewakili jumlah orang dalam sel.&lt;/p&gt; &lt;p&gt;Data raster dianggap kontinyu secara default dan Anda perlu secara eksplisit mengindikasikan bahwa itu terklasifikasi jika tiap sel di raster merepresentasikan kelas diskrit (misalnya kedalaman rendah = 1, kedalaman menengah = 2, kedalaman tinggi = 3).&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="103"/>
+        <source>&lt;b&gt;Classified&lt;/b&gt; data can be used for either hazard or exposure data and can be used for both raster and vector layer types where the attribute values represent a classified or coded value.&lt;p&gt;For example, classified values in a flood raster data set might represent discrete classes where a value of 1 might represent the low inundation class, a value of 2 might represent the medium inundation class and a value of 3 might represent the high inundation class.&lt;/p&gt;&lt;p&gt;Classified values in a vector (polygon) Volcano data set might represent discrete classes where a value of I might represent low volcanic hazard, a value of II might represent medium volcanic hazard and a value of III  might represent a high volcanic hazard.&lt;/p&gt;&lt;p&gt;In a vector (point) Volcano data the user specified buffer distances will be used to classify the data.&lt;/p&gt;&lt;p&gt;Classified values in a vector exposure data set might include building type or road type.&lt;/p&gt;</source>
+        <translation>Data yang &lt;b&gt;terklasifikasi&lt;/b&gt; dapat digunakan untuk data ancaman maupun paparan dan dapat digunakan untuk tipe lapisan raster dan vektor dengan nilai atribut yang mewakili sebuah klasifikasi atau nilai yang terkode. &lt;p&gt;Sebagai contoh, nilai yang terklasifikasi dalam himpunan data raster banjir dapat mewakili kelas diskrit dimana nilai 1 dapat mewakili kelas dengan kerendaman rendah, nilai 2 dapat mewakili kelas dengan kerendaman sedang dan nilai 3 mewakili kelas dengan tingkat kerendaman tinggi.&lt;/p&gt;&lt;p&gt;Nilai yang terklasifikasi dalam himpunan data gunung api vektor (poligon) dapat mewakili kelas diskrit dimana nilai I mewakili ancaman gunung api tingkat rendah, nilai II mewakili ancaman gunung api tingkat menengah dan nilai III mewakili ancaman gunung api tingkat tinggi.&lt;/p&gt;&lt;p&gt;Dalam  data gunung api vektor (titik), pengguna menentukan jarak sangga yang akan digunakan untuk mengklasifikasikan data. Nilai yang terklasifikasi dalam himpunan data paparan vektor dapat berisi tipe bangunan atau tipe jalan.&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="196"/>
+        <source>&lt;b&gt;Single event&lt;/b&gt; hazard data can be based on either a specific  event that has happened in the past, for example a flood like Jakarta 2013, or a possible event, such as the tsunami that results from an earthquake near Bima, that might happen in the future.</source>
+        <translation>Data ancaman &lt;b&gt;Peristiwa tunggal&lt;/b&gt; dapat berdasarkan peristiwa spesifik yang telah terjadi di masa lampau, sebagai contoh banjir seperti Jakarta 2014, atau peristiwa lain yang mungkin, seperti tsunami yang diakibatkan oleh gempa bumi di sekitar Bima, yang mungkin dapat terjadi lagi di masa yang akan datang.</translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="206"/>
+        <source>&lt;b&gt;Multiple event&lt;/b&gt; hazard data can be based on historical observations such as a hazard map of all observed volcanic deposits around a volcano.&lt;p&gt;This type of hazard data shows those locations that might be impacted by a volcanic eruption in the future. Another example might be a probabilistic hazard model that shows the likelihood of a magnitude 7 earthquake happening in the next 50 years.&lt;/p&gt;</source>
+        <translation>Data ancaman &lt;b&gt;peristiwa berlipat&lt;/b&gt; dapat berdasarkan pengamatan historis seperti peta ancaman dari semua simpanan vulkanik yang diamati di sekitar gunung berapi.&lt;p&gt;Tipe data ancaman ini menunjukkan lokasi-lokasi yang mungkin terdampak oleh letusan gunung berapi di masa yang akan datang. Contoh lainnya mungkin berupa model ancaman probabilistik yang menunjukkan kecenderungan gempa bumi bermagnitudo 7 terjadi dalam jangka waktu 50 tahun ke depan.&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="263"/>
+        <source>&lt;b&gt;Volcanic ash&lt;/b&gt; describes fragments of pulverized rock, minerals and volcanic glass, created during volcanic eruptions, less than 2 mm (0.079 inches) in diameter.</source>
+        <translation>&lt;b&gt;Abu vulkanik&lt;/b&gt; mendeskripsikan pecahan dari batuan bubuk, mineral, dan kaca vulkanik, yang dibuat selama letusan gunung berapi, dan memiliki diameter kurang dari 2 mm (0.0079) inchi.</translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="272"/>
+        <source>A &lt;b&gt;tsunami&lt;/b&gt; describes a large ocean wave or series or waves usually caused by an underwater earthquake or volcano. A &lt;b&gt;tsunami&lt;/b&gt; at sea may go unnoticed but a &lt;b&gt;tsunami&lt;/b&gt; wave that strikes land may cause massive destruction and flooding.</source>
+        <translation>&lt;b&gt;Tsunami&lt;/b&gt; mendeskripsikan sebuah atau beberapa seri gelombang laut yang besar, atau gelombang yang biasanya disebabkan oleh gempa bumi bawah laut atau gunung berapi. &lt;b&gt;Tsunami&lt;/b&gt; di laut mungkin tidak dapat terdeteksi tetapi gelombang &lt;b&gt;tsunami&lt;/b&gt;  yang menghantam daratan dapat menyebabkan kerusakan yang besar dan banjir. </translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="325"/>
+        <source>The &lt;b&gt;people in buildings&lt;/b&gt; exposure data is an experimental data set that assigns the population of a specific administrative area to the buildings with a residential function in that area.&lt;p&gt;The process of assigning people to buildings assumes that all people and buildings in the area are mapped. There are no InaSAFE impact functions that use this exposure data yet.&lt;/p&gt;</source>
+        <translation>Data paparan &lt;b&gt;orang di bangunan&lt;/b&gt; adalah himpunan data eksperimen yang mencantumkan populasi wilayah administratif tertentu pada bangunan yang dapat dihuni dalam suatu wilayah. &lt;p&gt;Proses pencantuman orang-orang ke bangunan dilakukan dengan asumsi bahwa semua orang dan bangunan di wilayah tersebut telah dipetakan. Tidak ada fungsi dampak InaSAFE yang bisa menggunakan data paparan ini untuk saat ini.&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="353"/>
+        <source>A &lt;b&gt;structure&lt;/b&gt; can be any relatively permanent man made feature such as a building (an enclosed structure with walls and a roof), telecommunications facility or bridge.</source>
+        <translation>&lt;b&gt;Struktur&lt;/b&gt; dapat berupa apapun yang berhubungan dengan buatan manusia yang sifatnya permanen misalnya sebuah bangunan (sebuah struktur tertutup dengan dinding dan atap), atau sebuah fasilitas komunikasi atau sebuah jembatan. </translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="817"/>
+        <source>Motorway</source>
+        <translation>Jalan tol</translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="818"/>
+        <source>A road to solve the traffic and have a fare.</source>
+        <translation>Jalan untuk mengatasi kemacetan dan untuk melewatinya harus membayar sesuai tarif yang berlaku.</translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="824"/>
+        <source>Primary</source>
+        <translation>Jalan arteri</translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="825"/>
+        <source>A road that service the main transportation with a long distance travel characteristic and high average velocity.</source>
+        <translation>Jalan yang melayani angkutan utama dengan ciri-ciri perjalanan jarak jauh dan kecepatan rata-rata tinggi.</translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="833"/>
+        <source>Secondary</source>
+        <translation>Jalan Kolektor</translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="834"/>
+        <source>A road that service the transportation with a medium distance travel characteristic and medium average velocity.</source>
+        <translation>Jalan yang melayani angkutan dengan ciri-ciri perjalanan jarak sedang dan kecepatan rata-rata sedang.</translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="842"/>
+        <source>Local</source>
+        <translation>Jalan Lokal</translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="843"/>
+        <source>A road that service the transportation with short distance travel and low average velocity.</source>
+        <translation>Jalan yang melayani angkutan setempat dengan ciri-ciri perjalanan jarak dekat dan kecepatan rata-rata rendah.</translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="853"/>
+        <source>Path</source>
+        <translation>Jalan Setapak</translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="854"/>
+        <source>A road to walk on foot aim.</source>
+        <translation>Jalan khusus pejalan kaki.</translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="862"/>
+        <source>A road that service the transportation with short travel and low average velocity.</source>
+        <translation>Jalan yang melayani angkutan setempat dengan ciri-ciri perjalanan dekat and kecepatan rata-rata rendah.</translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="878"/>
+        <source>Education</source>
+        <translation>Education</translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="879"/>
+        <source>An object that has a service in education sector.</source>
+        <translation>Ini merupakan objek-objek yang memberikan fasilitas pelayanan pendidikan khususnya pendidikan formal.</translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="888"/>
+        <source>Health</source>
+        <translation>Kesehatan</translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="889"/>
+        <source>An object that has a service and facility in health sector.</source>
+        <translation>Objek yang memberikan pelayanan dan fasilitas di bidang kesehatan.</translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="899"/>
+        <source>Transportation</source>
+        <translation>Transportasi</translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="900"/>
+        <source>An object that has a service and facility in public transportation.</source>
+        <translation>Objek yang memberikan pelayanan dan fasilitas transportasi seperti transportasi umum.</translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="910"/>
+        <source>Place of Worship</source>
+        <translation>Tempat Ibadah</translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="911"/>
+        <source>An object that used to pray or related to religion activity.</source>
+        <translation>Objek yang digunakan untuk melakukan peribadatan ataupun kegiatan yang berkaitan dengan agama dan keyakinan masyarakat.</translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="927"/>
+        <source>Government</source>
+        <translation>Kantor Pemerintahan</translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="928"/>
+        <source>A building that used to doing government activity in public service or the other government activity.</source>
+        <translation>Bangunan yang digunakan untuk kegiatan pemerintah baik dalam bentuk pelayanan masyarakat maupun kegiatan pemerintahan yang lain.</translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="936"/>
+        <source>Economy</source>
+        <translation>Ekonomi</translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="937"/>
+        <source>A building that used to trade / buy and sell activity or an object that has an economy activity.</source>
+        <translation>Bangunan yang digunakan untuk kegiatan jual beli terhadap suatu produk/jasa ataupun objek yang didalamnya terdapat aktivitas ekonomi.</translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="949"/>
+        <source>Recreation and Entertainment</source>
+        <translation>Rekreasi dan Hiburan</translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="950"/>
+        <source>An Object that provide an entertainment or recreation facilities.</source>
+        <translation>Objek yang menyediakan hiburan dan juga fasilitas rekreasi.</translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="961"/>
+        <source>Sport</source>
+        <translation>Olahraga</translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="962"/>
+        <source>An object that has a sport facility and people can use it.</source>
+        <translation>Objek yang menyediakan fasilitas olahraga dan masyarakat bisa menggunakannya untuk kegiatan olahraga.</translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="970"/>
+        <source>Public Facility</source>
+        <translation>Fasilitas Publik</translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="971"/>
+        <source>An object that provide a service or facility to public like toilet, library, convention hall, etc.</source>
+        <translation>Objek yang menyediakan fasilitas ataupun layanan untuk kegiatan masyarakat. Beberapa contohnya seperti toilet umum, gedung pertemuan, perpustakaan dan lain-lain.</translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="982"/>
+        <source>Accommodation</source>
+        <translation>Akomodasi</translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="983"/>
+        <source>An object that provide an accommodation / lodging or food services.</source>
+        <translation>Objek yang menyediakan fasilitas penginapan ataupun makanan dan minuman.</translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="993"/>
+        <source>Residence</source>
+        <translation>Tempat Tinggal</translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="994"/>
+        <source>An object that people use to live daily.</source>
+        <translation>Objek yang digunakan penduduk untuk hidup sehari-hari.</translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="1002"/>
+        <source>An object that be found in Indonesia, and frequently mapped.</source>
+        <translation>Objek lain yang terdapat di Indonesia dan seringkali butuh untuk dipetakan.</translation>
+    </message>
+    <message>
+        <location filename="dock_help.py" line="59"/>
+        <source>InaSAFE is free software that produces realistic natural hazard impact scenarios for better planning, preparedness and response activities. It provides a simple but rigourous way to combine data from scientists, local governments and communities to provide insights into the likely impacts of future disaster events.</source>
+        <translation>InaSAFE merupakan perangkat lunak bebas yang menghasilkan skenario dampak bencana alam yang realistis untuk aktivitas perencanaan, persiapan dan tanggapan yang lebih baik. InaSAFE menyediakan cara yang mudah namun teliti untuk menggabungkan data dari ilmuwan, pemerintah lokal dan komunitas untuk mencari tahu kemungkinan dampak dari bencana di masa yang akan datang. </translation>
+    </message>
+    <message>
+        <location filename="dock_help.py" line="67"/>
+        <source>The InaSAFE &apos;dock panel&apos; helps you to run hazard impact analysis within the QGIS environment. It helps you create your hazard impact analysis question and shows the results of this analysis. If you are a new user, you may also consider using the &apos;Impact Function Centric Wizard&apos; to run the analysis. This wizard will guide you through the process of running an InaSAFE assessment, with interactive step by step instructions. You can launch the wizard by clicking on this icon in the toolbar:</source>
+        <translation>&apos;Panel dek&apos; InaSAFE membantu Anda untuk menjalankan analisis dampak ancaman dalam lingkungan QGIS. Panel ini membantu Anda menyusun pertanyaan analisis dampak ancaman dan  menunjukkan hasil analisis tersebut. Jika Anda pengguna baru, Anda juga dapat menggunakan &apos;Wizard Fungsi Dampak Terpusat&apos; untuk menjalankan analisis. Wizard ini akan menuntun Anda melalui serangkaian proses untuk menjalankan penaksiran InaSAFE, dengan instruksi langkah per langkah yang interaktif. Anda dapat meluncurkan Wizard ini dengan mengklik tombol berikut di toolbar:</translation>
+    </message>
+    <message>
+        <location filename="dock_help.py" line="83"/>
+        <source>You can drag and drop the dock panel to reposition it on the screen. For example, dragging the panel towards the right margin of the QGIS application will dock it to the right side of the screen.</source>
+        <translation>Anda dapat melakukan drag and drop panel dock untuk mengubah posisinya pada layar. Sebagai contoh, menggeser panel ke batas kanan dari aplikasi QGIS akan menempelkannya di sebelah kanan layar.</translation>
+    </message>
+    <message>
+        <location filename="dock_help.py" line="103"/>
+        <source>the </source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="dock_help.py" line="93"/>
+        <source>questions </source>
+        <translation>pertanyaan</translation>
+    </message>
+    <message>
+        <location filename="dock_help.py" line="103"/>
+        <source>area</source>
+        <translation>daerah</translation>
+    </message>
+    <message>
+        <location filename="dock_help.py" line="98"/>
+        <source>results </source>
+        <translation>hasil</translation>
+    </message>
+    <message>
+        <location filename="dock_help.py" line="103"/>
+        <source>buttons </source>
+        <translation>tombol</translation>
+    </message>
+    <message>
+        <location filename="dock_help.py" line="109"/>
+        <source>You can get help at any time in InaSAFE by clicking on the help buttons provided on each dock and dialog.</source>
+        <translation>Anda dapat mencari bantuan kapanpun di InaSAFE dengan cara menekan tombol bantuan yang telah disediakan di tiap dek dan dialog.</translation>
+    </message>
+    <message>
+        <location filename="dock_help.py" line="115"/>
+        <source>The intention of InaSAFE is to make it easy to perform your impact analysis. We start the analysis in the questions area. This area contains four drop down menus. You create your question by using these drop down menus to select the hazard and exposure data you wish to perform the analysis on. You must also select an impact function  All questions follow this form:</source>
+        <translation>InaSAFE bertujuan mempermudah Anda melakukan analisis dampak. Kita memulai analisis di daerah pertanyaan. Daerah ini memiliki empat menu drop down. Anda dapat menyusun pertanyaan dengan menggunakan menu drop down untuk memilih data ancaman dan keterpaparan yang Anda inginkan untuk analisis ini. Anda juga harus memilih fungsi dampak. Semua pertanyaan mengikuti bentuk sebagai berikut:</translation>
+    </message>
+    <message>
+        <location filename="dock_help.py" line="115"/>
+        <source>In the event of a [hazard], how many [exposure] might be [impacted]?</source>
+        <translation>Dalam peristiwa [ancaman], berapa banyak [keterpaparan] yang mungkin [terdampak]?</translation>
+    </message>
+    <message>
+        <location filename="dock_help.py" line="125"/>
+        <source>For example: &quot;If there is a flood, how many buildings might be flooded?&quot;</source>
+        <translation>Sebagai contoh: &quot;Apabila terjadi banjir, berapa banyak bangunan yang mungkin terrendam?&quot;</translation>
+    </message>
+    <message>
+        <location filename="dock_help.py" line="128"/>
+        <source>In order to answer such questions, the InaSAFE developers have built a number of Impact Functions that cover scenarios such as flood, tsunami, volcanic ash fall and earthquake.</source>
+        <translation>Untuk menjawab pertanyaan tersebut, pengembang InaSAFE telah membuat sejumlah Fungsi Dampak yang meliputi skenario seperti banjir, tsunami, guguran letusan gunung berapi dan gempa bumi.</translation>
+    </message>
+    <message>
+        <location filename="dock_help.py" line="132"/>
+        <source>The first step in answering these questions is to load layers that represent either hazard scenarios or exposure data into QGIS. A hazard, for example, may be represented as a raster layer in QGIS where each pixel in the raster represents the flood depth following an inundation event. An exposure layer could be represented, for example, as vector polygon data representing building outlines, or a raster outline where each pixel represents the number of people thought to be living in that cell.</source>
+        <translation>Langkah yang pertama untuk menjawab pertanyaan tersebut yaitu dengan cara memuat lapisan-lapisan yang mewakili skenario ancaman atau keterpaparan pada QGIS. Ancaman, sebagai contoh, dapat diwakili sebagai lapisan raster di QGIS, di mana tiap pixel di raster mewakili ketinggian banjir pada suatu peristiwa rendaman. Sebuah lapisan keterpaparan juga dapat mewakili, sebagai contoh, sebagai data vektor poligon yang mewakili garis luar bangunan atau sebagai raster di mana tiap pixel mewakili jumlah orang yang diperkirakan menetap dalam sel tersebut.</translation>
+    </message>
+    <message>
+        <location filename="dock_help.py" line="141"/>
+        <source>The Impact Function will combine these two layers in a mathematical model. The results of this model will show what the effect of the hazard will be on the exposed infrastructure or people. When a combination of hazard and exposure data are selected in the form, an appropriate set of Impact Functions will be listed under &apos;Might&apos;. An example representation of an Impact Function in the form is &apos;Be flooded&apos;. You may be wondering how the InaSAFE plugin determines whether a layer should be listed in the hazard or exposure combo boxes. The plugin relies on simple keyword metadata to be associated with each layer. You can define these keywords by selecting a layer and then clicking the InaSAFE Keywords Wizard icon on the toolbar: </source>
+        <translation>Fungsi dampak akan menggabungkan dua lapisan ini ke dalam model matematis. Hasil dari model ini akan menunjukkan efek dari ancaman yang mungkin terjadi pada infrastruktur atau penduduk yang terpapar. Pada saat kombinasi ancaman dan keterpaparan dipilih pada form, sekumpulan Fungsi Dampak yang bersesuaian akan terdaftar di bawah kata &apos;Mungkin&apos;. Contoh representasi dari Fungsi Dampak dalam form misalnya &apos;terkena banjir&apos;. Anda mungkin mempertanyakan bagaimana plugin InaSAFE menentukan lapisan mana yang harus didaftarkan pada kombo ancaman atau keterpaparan? lugin ini mengandalkan metadata kata kunci sederhana yang terkait dengan tiap lapisan. Anda dapat menentukan kata kunci ini dengan cara memilih sebuah lapisan kemudian klik lambang Wizard Kata Kunci InaSAFE pada toolbar:</translation>
+    </message>
+    <message>
+        <location filename="dock_help.py" line="161"/>
+        <source>Based on the combination of hazard and exposure layers that are selected, the Impact Function list (shown in the drop down menu under &apos;Might&apos; in the InaSAFE dock panel) will be updated. Each impact function can only work with specific combinations of hazard and exposure types, so the options shown here will be limited accordingly. The chosen Impact Function can be configured (if applicable) by pressing the small ellipses (...) button next to the chosen Impact Function. This is explained in more detail below under the heading &apos;Setting Analysis Parameters&apos;.</source>
+        <translation>Berdasarkan kombinasi lapisan ancaman dan keterpaparan yang dipilih, daftar Fungsi Dampak (yang dimunculkan di dalam kotak kombo &apos;Mungkin&apos; di dek InaSAFE) akan diperbarui. Setiap fungsi dampak hanya bisa bekerja pada kombinasi tertentu dari tipe ancaman dan keterpaparan, sehingga pilihan yang ditampilkan di sini telah dibatasi menurut aturan tersebut. Fungsi dampak yang terpilih dapat dikonfigurasi (apabila memungkinkan) dengan cara menekan tombol elipsis kecil (...) di samping fungsi dampak yang dipilih. Proses ini dijelaskan lebih rinci di bawah, dalam judul &apos;Mengubah Parameter Analisis&apos;</translation>
+    </message>
+    <message>
+        <location filename="dock_help.py" line="171"/>
+        <source>Aggregation is the process whereby we group the analysis results by district so that you can see how many people, roads or buildings were affected in each area. This will help you to understand where the most critical needs are.  Aggregation is optional in InaSAFE - if you do not use aggregation, the entire analysis area will be used for the data summaries. Typically aggregation layers in InaSAFE have as attributes the name of the district or reporting area. It is also possible to use extended attributes to indicate the ratio of men and women; youth, adults and elderly living in each area. Where these are provided and the exposure layer is population, InaSAFE will provide a demographic breakdown per aggregation area indicating how many men, women, etc. were probably affected in that area.</source>
+        <translation>Agregasi adalah proses pengelompokan hasil analisis ke dalam distrik-distrik sehingga Anda dapat melihat berapa banyak orang, jalan, ataupun bangunan yang terdampak di tiap daerah. Ini akan membantu Anda untuk memahami di mana kebutuhan yang kritis berada. Agregasi adalah proses ikhtiari di dalam InaSAFE - Apabila Anda tidak menggunakan agregasi, seluruh daerah analisis akan digunakan untuk rangkuman data. Biasanya lapisan agregasi di InaSAFE memiliki atribut nama distrik atau daerah. Penggunaan atribut tambahan juga dimungkinkan untuk menandakan nisbah pria dan wanita; pemuda, dewasa, dan orang tua yang tinggal di tiap daerah. Pada saat atribut tersebut disediakan dan lapisan keterpaparannya merupakan kependudukan, InaSAFE akan menyediakan perincian demografik per daerah agregasi yang menandakan jumlah pria, wanita, dan lain-lain yang mungkin terdampak di area tersebut.</translation>
+    </message>
+    <message>
+        <location filename="dock_help.py" line="190"/>
+        <source>After running an analysis, the question area is hidden to maximise the amount of space allocated to the results area. You can re-open the question area at any time by pressing the &apos;show question form&apos; button.</source>
+        <translation>Setelah menjalankan analisis, daerah pertanyaan akan disembunyikan untuk memaksimalkan jumlah ruang yang disediakan untuk daerah hasil. Anda dapat membuka kembali daerah pertanyaan kapan pun dengan cara menekan tombol &apos;tampilkan form pertanyaan&apos;.</translation>
+    </message>
+    <message>
+        <location filename="dock_help.py" line="196"/>
+        <source>The results area is used to display various useful feedback items to the user. Once an impact scenario has been run, a summary table will be shown.</source>
+        <translation>Tempat hasil digunakan untuk menunjukkan berbagai macam umpan balik yang berguna untuk pengguna. Saat skenario dampak selesai dijalankan, tabel rangkuman akan dimunculkan.</translation>
+    </message>
+    <message>
+        <location filename="dock_help.py" line="201"/>
+        <source>If you select an impact layer (i.e. a layer that was produced using an InaSAFE Impact Function), in the QGIS layers list, this summary will also be displayed in the results area. When you select a hazard or exposure layer in the QGIS layers list, the keywords for that layer will be shown in the results area, making it easy to understand what metadata exists for that layer.</source>
+        <translation>Apabila Anda memilih lapisan dampak (yaitu, lapisan yang diproduksi menggunakan fungsi dampak InaSAFE), di daftar lapisan QGIS, rangkuman akan ditampilkan di daerah hasil. Saat Anda memilih lapisan ancaman atau paparan di daftar lapisan QGIS, kata kunci untuk lapisan tersebut akan ditampilkan di daerah hasil, sehingga lebih mudah dimengerti metadata apa yang ada untuk lapisan tersebut.  </translation>
+    </message>
+    <message>
+        <location filename="dock_help.py" line="209"/>
+        <source>The results area is also used to display status information. For example, when a suitable combination of hazard, exposure and impact function are selected, the results area will be updated to indicate that you can now run the impact scenario calculation. The &apos;Run&apos; button will be activated.</source>
+        <translation>Daerah hasil juga digunakan untuk menampilkan informasi status. Sebagai contoh, pada saat kombinasi ancaman, keterpaparan dan fungsi dampak telah dipilih, daerah hasil akan diperbarui untuk menandakan bahwa Anda dapat melanjutkan perhitungan skenario dampak. Tombol &apos;Jalan&apos; akan diaktifkan.</translation>
+    </message>
+    <message>
+        <location filename="dock_help.py" line="217"/>
+        <source>Finally, the results area is also used to display any error messages so that the user knows what went wrong and why. You may need to scroll down to view the message completely.</source>
+        <translation>Terakhir, dearah hasil juga digunakan untuk menampilkan pesan kesalahan sehingga pengguna dapat mengetahui apa yang salah dan mengapa. Anda mungkin ingin menggulirkan jendela pesan sedikit ke bawah untuk dapat melihat keseluruhan pesan.</translation>
+    </message>
+    <message>
+        <location filename="dock_help.py" line="223"/>
+        <source>After running the impact scenario calculation, our Question is automatically hidden to make the results area as large as possible. If you want to see what the question used in the analysis was, click on the &apos;Show question form&apos; button at the top of the results area.</source>
+        <translation>Setelah menjalankan perhitungan skenario dampak, pertanyaan Anda akan secara otomatis disembunyikan untuk menampilkan daerah hasil sebesar mungkin. Apabila Anda ingin melihat kembali pertanyaan yang Anda buat, klik tombol &apos;Tampilkan form pertanyaan&apos; di atas daerah hasil.</translation>
+    </message>
+    <message>
+        <location filename="dock_help.py" line="230"/>
+        <source>If you want to hide the question area again to have more space to display the results, click on the layer you just calculated with InaSAFE in the Layers list of QGIS to make it active.</source>
+        <translation>Apabila Anda ingin menyembunyikan pertanyaan lagi untuk mendapatkan ruang tambahan untuk hasilnya, klik pada lapisan yang baru saja dihitung oleh InaSAFE pada daftar lapisan QGIS untuk membuatnya aktif kembali.</translation>
+    </message>
+    <message>
+        <location filename="dock_help.py" line="236"/>
+        <source>The buttons area</source>
+        <translation>Wilayah tombol</translation>
+    </message>
+    <message>
+        <location filename="dock_help.py" line="251"/>
+        <source>... - click on this if you wish to create a pdf of your impact scenario project or generate a report to open in composer for further tuning. An impact layer must be active before the &apos;Print&apos; button will be enabled.</source>
+        <translation>... - klik ini apabila Anda ingin membuat pdf untuk proyek skenario dampak atau apabila Anda hanya ingin untuk membangkitkan laporan untuk membukanya di penyusun untuk penyeteman lebih lanjut. Lapisan dampak harus aktif sebelum tombol &apos;Cetak&apos; diaktifkan.</translation>
+    </message>
+    <message>
+        <location filename="dock_help.py" line="258"/>
+        <source>- this button is enabled when the combination of hazard and exposure selected in the questions area&apos;s drop down menus will allow you to run a scenario.</source>
+        <translation>- tombol ini diaktifkan saat kombinasi ancaman dan keterpaparan yang dipilih pada menu drop down daerah pertanyaan memungkinkan Anda untuk menjalankan skenario.</translation>
+    </message>
+    <message>
+        <location filename="dock_help.py" line="269"/>
+        <source>When running a scenario, the data being used needs to be processed into a state where it is acceptable for use by the Impact Function. In particular it should be noted that:</source>
+        <translation>Ketika menjalankan skenario, data yang digunakan perlu diproses ke dalam kondisi dimana data bisa diterima untuk digunakan oleh Fungsi Dampak. Secara khusus perlu dicatat bahwa:</translation>
+    </message>
+    <message>
+        <location filename="dock_help.py" line="301"/>
+        <source>When the impact analysis has completed you may want to generate a report. Usually the &apos;Print...&apos;  button will be enabled immediately after analysis. Selecting an InaSAFE impact layer in QGIS Layers panel will also enable it.</source>
+        <translation>Saat analisa dampak telah selesai, Anda mungkin ingin membangkitkan laporan. Biasanya tombol &apos;Print...&apos; akan segera diaktifkan setelah analisa. Pemilihan lapisan dampak InaSAFE di panel lapisan QGIS juga akan mengaktifkan tombol ini.</translation>
+    </message>
+    <message>
+        <location filename="extent_selector_help.py" line="41"/>
+        <source>Analysis extent selector help</source>
+        <translation>Bantuan pemilih luasan analisis</translation>
+    </message>
+    <message>
+        <location filename="extent_selector_help.py" line="57"/>
+        <source>This tool allows you to specify which geographical region should be used for your analysis. If you want to check what area will be included in your analysis, enable the &apos;Toggle scenario outlines&apos; tool on the InaSAFE toolbar:</source>
+        <translation>Kakas ini memungkinkan Anda untuk memilih daerah geografis mana yang akan digunakan untuk analisis. Apabila Anda ingin mengecek daerah mana yang termasuk analisis, aktifkan kakas &apos;Tombol untuk beralih ke garis bantu skenario&apos; pada toolbar InaSAFE:</translation>
+    </message>
+    <message>
+        <location filename="extent_selector_help.py" line="69"/>
+        <source>Your user defined extent will be shown on the map as a rectangle.</source>
+        <translation>Luasan pengguna Anda akan ditampilkan pada peta sebagai persegi panjang.</translation>
+    </message>
+    <message>
+        <location filename="extent_selector_help.py" line="72"/>
+        <source>Use intersection of hazard and exposure layers</source>
+        <translation>Gunakan perpotongan dari lapisan ancaman dan keterpaparan</translation>
+    </message>
+    <message>
+        <location filename="extent_selector_help.py" line="75"/>
+        <source>The largest area that can be analysed is the intersection of the hazard and exposure layers you have added. To choose this option, click &apos;Use intersection of hazard and exposure layers&apos;. </source>
+        <translation>Area terbesar yang dapat dianalisis adalah irisan dari ancaman dan keterpaparan yang Anda pilih. Untuk memilih ini, klik &apos;Gunakan irisan lapisan ancaman dan keterpaparan&apos;.</translation>
+    </message>
+    <message>
+        <location filename="extent_selector_help.py" line="80"/>
+        <source>Sometimes it is more useful to analyse a smaller area. This could be to reduce processing time (smaller areas with process faster) or because information is only needed in a certain area (e.g. if a district only wants information for their district, not for the entire city). If you want to analyse a smaller area, there are a few different ways to do this.</source>
+        <translation>Terkadang cukup membantu jika analisis dilakukan pada daerah yang lebih kecil. Ini dapat mengurangi waktu pemrosesan (daerah yang lebih kecil lebih cepat diproses) atau karena informasi hanya dibutuhkan di daerah tertentu saja (contohnya, apabila hanya informasi kabupaten saja yang dibutuhkan, bukan keseluruhan kota). Apabila Anda ingin menganalisis daerah yang lebih kecil, ada beberapa cara yang bisa dilakukan.</translation>
+    </message>
+    <message>
+        <location filename="extent_selector_help.py" line="88"/>
+        <source>Use intersection of hazard, exposure and current view extent</source>
+        <translation>Gunakan perpotongan dari ancaman, keterpaparan, dan luasan tampilan sekarang</translation>
+    </message>
+    <message>
+        <location filename="extent_selector_help.py" line="92"/>
+        <source>If you wish to conduct the analysis on the area currently shown in the window, you can set the analysis area to &apos;Use intersection of hazard, exposure and current view extent&apos;. If the extents of the datasets are smaller than the view extent, the analysis area will be reduced to the extents of the datasets.</source>
+        <translation>Apabila Anda ingin melakukan analisis pada daerah yang sedang ditampilkan di layar, Anda dapat memilih daerah analisis ke &apos;Gunakan irisan ancaman, keterpaparan dan luasan saat ini&apos;. Apabila luasan dari himpunan data lebih kecil daripada luasan layar, daerah analisis akan dikurangi hingga luasan himpunan data.</translation>
+    </message>
+    <message>
+        <location filename="extent_selector_help.py" line="99"/>
+        <source>Use intersection of hazard, exposure and this bookmark</source>
+        <translation>Gunakan perpotongan dari ancaman, keterpaparan, dan bookmark ini</translation>
+    </message>
+    <message>
+        <location filename="extent_selector_help.py" line="103"/>
+        <source>You can also use one of your QGIS bookmarks to set the analysis area.</source>
+        <translation>Anda juga dapat menggunakan salah satu tandabuku QGIS untuk memilih daerah analisis.</translation>
+    </message>
+    <message>
+        <location filename="extent_selector_help.py" line="103"/>
+        <source>This option will be greyed out if you have no bookmarks.</source>
+        <translation>Pilihan ini akan diabu-abukan apabila Anda tidak memiliki tandabuku.</translation>
+    </message>
+    <message>
+        <location filename="extent_selector_help.py" line="109"/>
+        <source>To create a bookmark, zoom to the area you want to create a bookmark for. When you are happy with the extent, click the &apos;New bookmark&apos; button in the QGIS toolbar.</source>
+        <translation>Buat tandabuku dengan cara memperbesar ke daerah yang Anda inginkan. Setelah Anda puas dengan luasannya, klik tombol &apos;Tandabuku baru&apos; di toolbar QGIS.</translation>
+    </message>
+    <message>
+        <location filename="extent_selector_help.py" line="114"/>
+        <source>The drop down menu in the InaSAFE Analysis Area window should now be activated. When you choose a bookmark from the drop down menu it will zoom to the analysis area selected by the bookmark.</source>
+        <translation>Menu drop down di jendela Daerah Analisis InaSAFE bisa diaktifkan saat ini. Setelah Anda memilih tandabuku dari menu drop down, jendela akan memperbesar hingga daerah analisis yang dipilih oleh tandabuku.</translation>
+    </message>
+    <message>
+        <location filename="extent_selector_help.py" line="119"/>
+        <source>Use intersection of hazard, exposure and this bounding box</source>
+        <translation>Gunakan perpotongan dari ancaman, keterpaparan, dan kotak batas ini</translation>
+    </message>
+    <message>
+        <location filename="extent_selector_help.py" line="123"/>
+        <source>You can also choose the analysis area interactively by clicking &apos;Use intersection of hazard, exposure and this bounding box&apos;. This will allow you to click &apos;Drag on map&apos; which will temporarily hide this window and allow you to drag a rectangle on the map. After you have finished dragging the rectangle, this window will reappear with values in the North, South, East and West boxes. If the extents of the datasets are smaller than the user defined analysis area, the analysis area will be reduced to the extents of the datasets.</source>
+        <translation>Anda juga dapat memilih daerah analisis secara interaktif dengan cara menekan &apos;Gunakan irisan ancaman, keterpaparan dan kotak batas&apos;. Ini akan mengizinkan Anda menekan tombol &apos;Geser di peta&apos; yang akan menutup jendela ini untuk sementara hingga Anda dapat menggeser daerah persegi panjang di peta. Setelah Anda selesai, jendela ini akan muncul kembali dengan nilai Utara, Selatan, Timur dan Barat yang bersesuaian di kotaknya. Apabila luasan dari himpunan data lebih kecil daripada daerah analisis pengguna, daerah analisis akan dikurangi hingga luasan himpunan data.</translation>
+    </message>
+    <message>
+        <location filename="extent_selector_help.py" line="133"/>
+        <source>Alternatively, you can enter the coordinates directly into the N/S/E/W boxes once the &apos;Use intersection of hazard, exposure and this bounding box&apos; option is selected (using the same coordinate reference system, or CRS, as the map is currently set).</source>
+        <translation>Pilihan lainnya, Anda dapat memasukkan koordinat secara langsung pada kotak U/S/T/B hingga tombol &apos;Gunakan irisan ancaman, keterpaparan dan kotak batas&apos; dipilih (dengan menggunakan sistem referensi koordinat atau CRS yang sama dengan yang peta gunakan).</translation>
+    </message>
+    <message>
+        <location filename="function_options_help.py" line="58"/>
+        <source>Depending on which Impact Function you have chosen you have different options available for adjusting the parameters of the question you are asking. Some Impact Functions have more configurable Options than others. To open the Impact Function Configuration Dialog you need to click on the &quot;Options ...&quot; button next to the selected impact function paragraph in the InaSAFE dock. You can have up to 3 tabs visible:</source>
+        <translation>Tergantung dari Fungsi Dampak yang telah dipilih, Anda dapat diberikan pilihan yang berbeda-beda untuk menyesuaikan parameter dari pertanyaan yang Anda buat. Beberapa Fungsi Dampak memiliki pilihan yang lebih banyak dibanding yang lainnya. Untuk membuka Dialog Penyusunan Fungsi Dampak, Anda perlu klik tombol &quot;Pilihan...&quot; di samping fungsi dampak yang di pilih di dek InaSAFE. Anda mungkin dapat melihat hingga 3 tab:</translation>
+    </message>
+    <message>
+        <location filename="function_options_help.py" line="69"/>
+        <source>- Depending in the Impact function you selected, you can influence the result of your question here (the Impact Function) by setting different values to the defaults that will be loaded. The options available will depend on the Impact Function you choose (some Impact Functions do not allow users to change the default parameters).</source>
+        <translation>- Tergantung dari Fungsi dampak yang dipilih, Anda dapat mempengaruhi hasil dari pertanyaan di sini (fungsi dampaknya) dengan menyetel nilai yang berbeda dari default yang dimuat. Pilihan yang tersedia akan bergantung dari Fungsi Dampak yang dipilih (beberapa fungsi dampak tidak mengizinkan pengguna untuk mengganti parameter default).</translation>
+    </message>
+    <message>
+        <location filename="function_options_help.py" line="78"/>
+        <source>- Takes the results from the Impact Function and calculates derivative indicators, for example if you have an affected population total, the Gender postprocessor will calculate gender specific indicators such as additional nutritional requirements for pregnant women.</source>
+        <translation>- Mengambil hasil dari Fungsi Dampak dan menghitung penanda turunan, sebagai contoh apabila Anda memiliki total penduduk terdampak, pasca pemrosesan Jenis Kelamin akan menghitung penanda tertentu jenis kelamin seperti kebutuhan nutrisi tambahan bagi ibu hamil.</translation>
+    </message>
+    <message>
+        <location filename="impact_merge_help.py" line="57"/>
+        <source>In some cases you may wish to create a report containing the combined output of two Impact Functions for the same area for the same hazard, different exposures. For example you may carry out an assessment of the impact of a flood on population and on buildings and combine the results into a single report. The impact layer merge tool allows you to do this.</source>
+        <translation>Pada beberapa kasus Anda dapat membuat laporan yang berisi gabungan keluaran dari dua Fungsi Dampak pada daerah yang sama untuk ancaman yang sama, namun berbeda keterpaparan. Sebagai contoh Anda dapat menaksir dampak dari banjir pada penduduk dan bangunan kemudian menggabungkan hasilnya menjadi satu laporan. Kakas penggabungan lapisan dampak dapat melakukan hal ini. </translation>
+    </message>
+    <message>
         <location filename="needs_manager_help.py" line="70"/>
         <source>Minimum needs are grouped into regional or linguistic &apos;profiles&apos;. The default profile is &apos;BNPB_en&apos; - the english profile for the national disaster agency in Indonesia. You will see that this profile defines requirements for displaced persons in terms of Rice, Drinking Water, Clean Water (for bathing etc.), Family Kits (with personal hygiene items) and provision of toilets.</source>
         <translation>Kebutuhan minimal dikelompokkan ke dalam &apos;profil&apos; kedaerahan atau linguistik. Profil default adalah &apos;BNPB_en&apos; - profil berbahasa Inggris untuk Badan Nasional Penanggulangan Bencana di Indonesia. Anda juga dapat melihat bahwa profil ini berisi kebutuhan untuk pengungsi dalam bentuk Beras, Air Minum, Air Bersih (untuk mandi, dsb), Perlengkapan Rumah Tangga (dengan alat kebersihan pribadi) dan persediaan toilet.</translation>
@@ -5494,6 +5948,11 @@ Unsur-unsur tersebut adalah:</translation>
         <location filename="needs_manager_help.py" line="92"/>
         <source>The final item in the item configuration is the &apos;readable sentence&apos; which bears special discussion. Using a simple system of tokens you can construct a sentence that will be used in the generated needs report.</source>
         <translation>Item terakhir dalam pengaturan item adalah &apos;kalimat yang mudah dipahami&apos; yang membutuhkan penjelasan khusus. Dengan menggunakan sistem sederhana dari penanda-penanda, Anda dapat membentuk kalimat yang akan digunakan pada pembangkitan laporan kebutuhan. </translation>
+    </message>
+    <message>
+        <location filename="options_help.py" line="58"/>
+        <source>The InaSAFE options dialog is used to control various aspects of the InaSAFE analysis and reporting environment. Here are brief descriptions of all the options available, grouped by the tab page on which they occur.</source>
+        <translation>Dialog pilihan InaSAFE digunakan untuk mengontrol berbagai aspek dari analisis dan lingkungan laporan InaSAFE. Berikut deskripsi singkat dari semua pilihan yang tersedia, dikelompokan berdasarkan halaman tab dimana mereka muncul.</translation>
     </message>
     <message>
         <location filename="options_help.py" line="89"/>
@@ -5511,6 +5970,91 @@ Unsur-unsur tersebut adalah:</translation>
         <translation>- Pada saat InaSAFE digunakan pada lapisan jarak jauh (sebagai contoh pada lapisan basis data atau WFS), tidak dimungkinkan untuk menyimpan kata kunci lapisan pada lapisan tersebut. Untuk mendukung tipe lapisan seperti ini, InaSAFE menulis kata kunci pada basis data file kecil (menggunakan sqlite) dan kemudian mengambilnya kembali berdasarkan rincian koneksi unik yang digunakan pada lapisan tersebut. Anda dapat menentukan path sendiri yang akan digunakan untuk menyimpan kata kunci basis data menggunakan pilihan ini.</translation>
     </message>
     <message>
+        <location filename="osm_downloader_help.py" line="69"/>
+        <source>Check the output directory is correct. Note that the saved dataset will be named after the type of data being downloadede.g. roads.shp or buildings.shp (and associated files).</source>
+        <translation>Perikasa direktori keluaran telah benar. Perhatikan bahwa himpunan data yang tersimpan akan dinamakan sesuai dengan tipe data yang diunduh. Contohnya, roads.shp atau buildings.shp (dan file terkait lainnya).</translation>
+    </message>
+    <message>
+        <location filename="osm_downloader_help.py" line="100"/>
+        <source>When the</source>
+        <translation>Pada saat</translation>
+    </message>
+    <message>
+        <location filename="osm_downloader_help.py" line="100"/>
+        <source> Political boundaries </source>
+        <translation>Batas politik</translation>
+    </message>
+    <message>
+        <location filename="osm_downloader_help.py" line="100"/>
+        <source>box in the Feature types menu is ticked, the Political boundary options panel will be enabled. The panel lets you select which admin level you wish to download. The admin levels are country specific. When you select an admin level, the local name for that admin level will be shown. You can change which country is used for the admin level description using the country drop down menu. The country will be automatically set to coincide with the view extent if a matching country can be found.</source>
+        <translation>kotak di menu tipe Fitur dicentang, panel pilihan batas politik akan diaktifkan. Panel ini membolehkan Anda memilih level administrasi mana yang ingin Anda unduh. Level administrasi tergantung dari negaranya. Apabila Anda memilih level administrasi tertentu, nama lokal untuk level tersebut akan ditunjukkan. Anda dapat mengganti negara mana yang digunakan untuk deskripsi level administrasi, menggunakan menu drop down negara. Negara tertentu akan secara otomatis dipilih apabila ada negara yang sesuai dengan luasan tampilan.</translation>
+    </message>
+    <message>
+        <location filename="osm_downloader_help.py" line="112"/>
+        <source>Note: </source>
+        <translation>Catatan:</translation>
+    </message>
+    <message>
+        <location filename="osm_downloader_help.py" line="112"/>
+        <source>We have only provide presets for a subset of the available countries. If you want to know what the levels are for your country, please check on the following web page: </source>
+        <translation>Kami hanya menyediakan sebagian negara saja. Apabila Anda ingin mengetahui level apa yang dimiliki negara Anda, silahkan cek halaman web berikut ini:</translation>
+    </message>
+    <message>
+        <location filename="osm_downloader_help.py" line="112"/>
+        <source>List of OSM Admin Boundary definitions </source>
+        <translation>Daftar definisi Batas Administrasi OSM</translation>
+    </message>
+    <message>
+        <location filename="wizard_strings.py" line="140"/>
+        <source>You have selected &lt;b&gt;%s %s&lt;/b&gt;, and the attribute is &lt;b&gt;%s&lt;/b&gt;. The aggregation postprocessor will need to know mapping of the attribute values to known categories. Please drag unique values from the list on the left into the panel on the right and place them in the appropriate categories. Un-mapped values will go automatically in the &apos;Other&apos; group on runtime.</source>
+        <translation>Anda telah memilih &lt;b&gt;%s %s&lt;/b&gt;, dan atributnya adalah &lt;b&gt;%s&lt;/b&gt;. Pasca pemroses agregasi harus mengetahui pemetaan nilai atribut ke kategori yang telah diketahui. Silahkan geser nilai-nilai yang unik dari daftar di kiri ke panel di kanan dan letakkan di kategori yang sesuai. Nilai yang tidak dipetakan akan secara otomatis masuk ke grup &apos;Lainnya&apos; pada saat dijalankan.</translation>
+    </message>
+    <message>
+        <location filename="wizard_utils.py" line="125"/>
+        <source>classified data</source>
+        <translation>data terklasifikasi</translation>
+    </message>
+    <message>
+        <location filename="wizard_utils.py" line="138"/>
+        <source>Title</source>
+        <translation>Judul</translation>
+    </message>
+    <message>
+        <location filename="wizard_utils.py" line="138"/>
+        <source>Source</source>
+        <translation>Sumber</translation>
+    </message>
+    <message>
+        <location filename="wizard_utils.py" line="145"/>
+        <source>Your layer&apos;s keyword&apos;s version (%s) does not match with your InaSAFE version (%s). If you wish to use it as an exposure, hazard, or aggregation layer in an analysis, please update the keywords. Click Next if you want to assign keywords now.</source>
+        <translation>Versi kata kunci lapisan Anda (%s) tidak cocok dengan versi InaSAFE Anda (%s). Jika Anda ingin menggunakannya sebagai lapisan keterpaparan, ancaman, atau agregasi di analisis, silahkan perbarui kata kuncinya. Klik Lanjut untuk memberikan kata kunci sekarang.</translation>
+    </message>
+    <message>
+        <location filename="wizard_utils.py" line="170"/>
+        <source>This layer has no valid keywords assigned</source>
+        <translation>Lapisan ini tidak memiliki kata kunci yang valid</translation>
+    </message>
+    <message>
+        <location filename="wizard_utils.py" line="170"/>
+        <source>SOURCE</source>
+        <translation>SUMBER</translation>
+    </message>
+    <message>
+        <location filename="wizard_utils.py" line="170"/>
+        <source>TYPE</source>
+        <translation>TIPE</translation>
+    </message>
+    <message>
+        <location filename="wizard_utils.py" line="170"/>
+        <source>In the next step you will be able to assign keywords to this layer.</source>
+        <translation>Di langkah selanjutnya Anda akan bisa memberikan kata kunci untuk lapisan ini.</translation>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="221"/>
+        <source>&lt;sup&gt;1&lt;/sup&gt;People are displaced if they experience and survive a shake level of more than 5 on the MMI scale.</source>
+        <translation>&lt;sup&gt;1&lt;/sup&gt;Penduduk akan diungsikan jika mereka mengalami dan selamat dari getaran tanah melebihi 5 skala MMI</translation>
+    </message>
+    <message>
         <location filename="metadata_definitions.py" line="71"/>
         <source>This model was developed by Institut Teknologi Bandung (ITB) and implemented by Dr. Hadi Ghasemi, Geoscience Australia
 Algorithm:
@@ -5521,9 +6065,74 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
 Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk menyatakan laju kematian sebagai fungsi dari intensitas (lihat Eq. 10 dalam laporan). Fungsi Matlab yang telah tersedia (fminsearch) untuk algoritma Nelder-Mead digunakan untuk memperkirakan parameter model. Fungsi obyektif (L2G norm) yang diminimasi pada tahap optimasi sama dengan yang digunakan oleh Jaiswal et al. (2010). Koefisien yang digunakan di model Indonesia adalah x=0.62275231, y=8.03314466, zeta=2.15</translation>
     </message>
     <message>
+        <location filename="impact_function.py" line="221"/>
+        <source>Affected Land Cover</source>
+        <translation>Selimut Lahan yang Terdampak</translation>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="228"/>
+        <source>Land cover affected by each hazard zone</source>
+        <translation>Selimut lahan yang terdampak tiap kelas ancaman</translation>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="44"/>
+        <source>Classified polygon hazard on land cover</source>
+        <translation>Ancaman poligon terklasifikasi pada selimut lahan</translation>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="64"/>
+        <source>To assess the impact of each hazard zone on land cover.</source>
+        <translation>Untuk menghitung dampak tiap kelas ancaman pada selimut lahan</translation>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="69"/>
+        <source>Vector polygon layer where each polygon represents a type of land cover.</source>
+        <translation>Lapisan poligon vektor di mana tiap poligon mewakili tipe selimut lahan</translation>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="72"/>
+        <source>A vector layer of land cover polygons with each tagged according to the hazard zone in which it falls.</source>
+        <translation>Sebuah lapisan vektor dari poligon selimut lahan yang ditandai menurut kelas ancaman yang meliputinya.</translation>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="113"/>
+        <source>Hazard data %s does not contain expected hazard zone attribute &quot;%s&quot;. Please change it in the option. </source>
+        <translation>Data ancaman %s tidak memiliki atribut &quot;%s&quot; yang diinginkan. Silahkan ganti di pilihan.</translation>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="187"/>
+        <source>Temporarily closed</source>
+        <translation>Ditutup untuk sementara</translation>
+    </message>
+    <message>
+        <location filename="parameter_definitions.py" line="35"/>
+        <source>Low Hazard Zone Threshold</source>
+        <translation>Ambang Batas Wilayah Ancaman Rendah</translation>
+    </message>
+    <message>
+        <location filename="parameter_definitions.py" line="59"/>
+        <source>Moderate Hazard Zone Threshold</source>
+        <translation>Ambang Batas Wilayah Ancaman Menengah.</translation>
+    </message>
+    <message>
+        <location filename="parameter_definitions.py" line="84"/>
+        <source>High Hazard Zone Threshold</source>
+        <translation>Ambang Batas Wilayah Ancaman Tinggi.</translation>
+    </message>
+    <message>
         <location filename="parameter_definitions.py" line="93"/>
         <source>The threshold of hazard categorized as High Hazard Zone in meter. A zone is categorized as High Hazard Zone if the depth of tsunami inundation is more than Medium Hazard Zone Threshold and less than High Hazard Zone Threshold. A zone that has more than High Hazard Zone Threshold is categorized as Very High Hazard Zone.</source>
         <translation>Ambang batas ancaman yang dikategorikan sebagai Wilayah Ancaman Tinggi dalam meter. Sebuah wilayah dikategorikan sebagai Wilayah Ancaman Tinggi jika kedalaman dari genangan tsunami lebih dari Ambang Batas Wilayah Ancaman Menengah dan kurang dari Ambang Batas Wilayah Ancaman Tinggi.</translation>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="58"/>
+        <source>Raster tsunami on land cover</source>
+        <translation>Tsunami raster pada selimut lahan</translation>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="67"/>
+        <source>The hazard layer must be a tsunami raster layer.</source>
+        <translation>Lapisan ancaman harus berupa lapisan raster tsunami</translation>
     </message>
     <message>
         <location filename="impact_function.py" line="301"/>
@@ -5566,6 +6175,71 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
         <translation>Berikan detail di tempat mana jalanan kritis mungkin tergenang.</translation>
     </message>
     <message>
+        <location filename="postprocessor_manager.py" line="277"/>
+        <source>Closed buildings</source>
+        <translation>Bangunan ditutup</translation>
+    </message>
+    <message>
+        <location filename="postprocessor_manager.py" line="279"/>
+        <source>Closed roads</source>
+        <translation>Jalan ditutup</translation>
+    </message>
+    <message>
+        <location filename="postprocessor_manager.py" line="281"/>
+        <source>Affected people</source>
+        <translation>Penduduk terdampak</translation>
+    </message>
+    <message>
+        <location filename="postprocessor_manager.py" line="288"/>
+        <source>Detailed %s report (for people needing evacuation)</source>
+        <translation>Laporan %s lebih rinci (penduduk perlu evakuasi)</translation>
+    </message>
+    <message>
+        <location filename="postprocessor_manager.py" line="297"/>
+        <source>Detailed %s report (affected people)</source>
+        <translation>Laporan %s lebih rinci (penduduk terdampak)</translation>
+    </message>
+    <message>
+        <location filename="postprocessor_manager.py" line="305"/>
+        <source>Could not compute the %s report.</source>
+        <translation>Tidak dapat menghitung laporan %s.</translation>
+    </message>
+    <message>
+        <location filename="postprocessor_manager.py" line="323"/>
+        <source>Unnamed Area %s</source>
+        <translation>Daerah tak bernama %s</translation>
+    </message>
+    <message>
+        <location filename="postprocessor_manager.py" line="327"/>
+        <source>%(zone_name)s (m)zone_name</source>
+        <translation>%(zone_name)s (m)zone_name</translation>
+    </message>
+    <message>
+        <location filename="postprocessor_manager.py" line="568"/>
+        <source>Unnamed Area %(feature_id)sfeature_id</source>
+        <translation>Daerah tak bernama %(feature_id)sfeature_id</translation>
+    </message>
+    <message>
+        <location filename="land_cover_report_template.py" line="120"/>
+        <source>* Percentage of affected area compared to the total area for the land cover type.</source>
+        <translation>* Persentase daerah terdampak dibandingkan dengan total daerah untuk tipe selimut lahan.</translation>
+    </message>
+    <message>
+        <location filename="land_cover_report_template.py" line="135"/>
+        <source>Analysis Results by Aggregation Area</source>
+        <translation>Hasil Analisis Berdasarkan Daerah Agregasi</translation>
+    </message>
+    <message>
+        <location filename="land_cover_report_template.py" line="189"/>
+        <source>Affected</source>
+        <translation>Terdampak</translation>
+    </message>
+    <message>
+        <location filename="land_cover_report_template.py" line="191"/>
+        <source>Affected (%) *</source>
+        <translation>Terdampak (%) *</translation>
+    </message>
+    <message>
         <location filename="road_report_template.py" line="66"/>
         <source>Summary by road type</source>
         <translation>Ringkasan berdasarkan tipe jalan</translation>
@@ -5574,6 +6248,21 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
         <location filename="road_report_template.py" line="77"/>
         <source>All (m)</source>
         <translation>Semua (m)</translation>
+    </message>
+    <message>
+        <location filename="road_report_template.py" line="122"/>
+        <source>%(road_type)s (m)road_type</source>
+        <translation>%(road_type)s (m)road_type</translation>
+    </message>
+    <message>
+        <location filename="safe_layer.py" line="77"/>
+        <source>SafeLayer only accept QgsMapLayer or safe.storage.layer.Layer.</source>
+        <translation>SafeLayer hanya menerima QgsMapLayer atay safe.storage.layer.Layer.</translation>
+    </message>
+    <message>
+        <location filename="safe_layer.py" line="120"/>
+        <source>Keyword &quot;%s&quot; is not found in layer %s, please add it to your layer</source>
+        <translation>Kata kunci &quot;%s&quot; tidak ditemukan pada lapisan %s, silahkan tambahkan ke lapisan Anda</translation>
     </message>
     <message>
         <location filename="file_downloader.py" line="151"/>
@@ -5585,696 +6274,6 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
         <source>Sorry, the server is currently busy with another request. Please try again in a few minutes.</source>
         <translation>Maaf, server sedang sibuk dengan request yang lain. Silakan coba lagi nanti.</translation>
     </message>
-    <message>
-        <location filename="definitions.py" line="85"/>
-        <source>&lt;b&gt;Continuous&lt;/b&gt; data can be used in raster hazard or exposure data where the values in the data are either integers or decimal values representing a continuously varying phenomenon. For example flood depth is a continuous value from 0 to the maximum reported depth during a flood. &lt;p&gt;Raster exposure data such as population data are also continuous. In this example the cell values represent the number of people in cell.&lt;/p&gt;&lt;p&gt;Raster data is considered to be continuous by default and you should explicitly indicate that it is classified if each cell in the raster represents a discrete class (e.g. low depth = 1, medium depth = 2, high depth = 3).&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="103"/>
-        <source>&lt;b&gt;Classified&lt;/b&gt; data can be used for either hazard or exposure data and can be used for both raster and vector layer types where the attribute values represent a classified or coded value.&lt;p&gt;For example, classified values in a flood raster data set might represent discrete classes where a value of 1 might represent the low inundation class, a value of 2 might represent the medium inundation class and a value of 3 might represent the high inundation class.&lt;/p&gt;&lt;p&gt;Classified values in a vector (polygon) Volcano data set might represent discrete classes where a value of I might represent low volcanic hazard, a value of II might represent medium volcanic hazard and a value of III  might represent a high volcanic hazard.&lt;/p&gt;&lt;p&gt;In a vector (point) Volcano data the user specified buffer distances will be used to classify the data.&lt;/p&gt;&lt;p&gt;Classified values in a vector exposure data set might include building type or road type.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="196"/>
-        <source>&lt;b&gt;Single event&lt;/b&gt; hazard data can be based on either a specific  event that has happened in the past, for example a flood like Jakarta 2013, or a possible event, such as the tsunami that results from an earthquake near Bima, that might happen in the future.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="206"/>
-        <source>&lt;b&gt;Multiple event&lt;/b&gt; hazard data can be based on historical observations such as a hazard map of all observed volcanic deposits around a volcano.&lt;p&gt;This type of hazard data shows those locations that might be impacted by a volcanic eruption in the future. Another example might be a probabilistic hazard model that shows the likelihood of a magnitude 7 earthquake happening in the next 50 years.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="263"/>
-        <source>&lt;b&gt;Volcanic ash&lt;/b&gt; describes fragments of pulverized rock, minerals and volcanic glass, created during volcanic eruptions, less than 2 mm (0.079 inches) in diameter.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="272"/>
-        <source>A &lt;b&gt;tsunami&lt;/b&gt; describes a large ocean wave or series or waves usually caused by an underwater earthquake or volcano. A &lt;b&gt;tsunami&lt;/b&gt; at sea may go unnoticed but a &lt;b&gt;tsunami&lt;/b&gt; wave that strikes land may cause massive destruction and flooding.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="325"/>
-        <source>The &lt;b&gt;people in buildings&lt;/b&gt; exposure data is an experimental data set that assigns the population of a specific administrative area to the buildings with a residential function in that area.&lt;p&gt;The process of assigning people to buildings assumes that all people and buildings in the area are mapped. There are no InaSAFE impact functions that use this exposure data yet.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="353"/>
-        <source>A &lt;b&gt;structure&lt;/b&gt; can be any relatively permanent man made feature such as a building (an enclosed structure with walls and a roof), telecommunications facility or bridge.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="817"/>
-        <source>Motorway</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="818"/>
-        <source>A road to solve the traffic and have a fare.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="824"/>
-        <source>Primary</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="825"/>
-        <source>A road that service the main transportation with a long distance travel characteristic and high average velocity.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="833"/>
-        <source>Secondary</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="834"/>
-        <source>A road that service the transportation with a medium distance travel characteristic and medium average velocity.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="842"/>
-        <source>Local</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="843"/>
-        <source>A road that service the transportation with short distance travel and low average velocity.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="853"/>
-        <source>Path</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="854"/>
-        <source>A road to walk on foot aim.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="862"/>
-        <source>A road that service the transportation with short travel and low average velocity.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="878"/>
-        <source>Education</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="879"/>
-        <source>An object that has a service in education sector.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="888"/>
-        <source>Health</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="889"/>
-        <source>An object that has a service and facility in health sector.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="899"/>
-        <source>Transportation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="900"/>
-        <source>An object that has a service and facility in public transportation.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="910"/>
-        <source>Place of Worship</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="911"/>
-        <source>An object that used to pray or related to religion activity.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="927"/>
-        <source>Government</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="928"/>
-        <source>A building that used to doing government activity in public service or the other government activity.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="936"/>
-        <source>Economy</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="937"/>
-        <source>A building that used to trade / buy and sell activity or an object that has an economy activity.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="949"/>
-        <source>Recreation and Entertainment</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="950"/>
-        <source>An Object that provide an entertainment or recreation facilities.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="961"/>
-        <source>Sport</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="962"/>
-        <source>An object that has a sport facility and people can use it.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="970"/>
-        <source>Public Facility</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="971"/>
-        <source>An object that provide a service or facility to public like toilet, library, convention hall, etc.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="982"/>
-        <source>Accommodation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="983"/>
-        <source>An object that provide an accommodation / lodging or food services.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="993"/>
-        <source>Residence</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="994"/>
-        <source>An object that people use to live daily.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="1002"/>
-        <source>An object that be found in Indonesia, and frequently mapped.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock_help.py" line="59"/>
-        <source>InaSAFE is free software that produces realistic natural hazard impact scenarios for better planning, preparedness and response activities. It provides a simple but rigourous way to combine data from scientists, local governments and communities to provide insights into the likely impacts of future disaster events.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock_help.py" line="67"/>
-        <source>The InaSAFE &apos;dock panel&apos; helps you to run hazard impact analysis within the QGIS environment. It helps you create your hazard impact analysis question and shows the results of this analysis. If you are a new user, you may also consider using the &apos;Impact Function Centric Wizard&apos; to run the analysis. This wizard will guide you through the process of running an InaSAFE assessment, with interactive step by step instructions. You can launch the wizard by clicking on this icon in the toolbar:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock_help.py" line="83"/>
-        <source>You can drag and drop the dock panel to reposition it on the screen. For example, dragging the panel towards the right margin of the QGIS application will dock it to the right side of the screen.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock_help.py" line="103"/>
-        <source>the </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock_help.py" line="93"/>
-        <source>questions </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock_help.py" line="103"/>
-        <source>area</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock_help.py" line="98"/>
-        <source>results </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock_help.py" line="103"/>
-        <source>buttons </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock_help.py" line="109"/>
-        <source>You can get help at any time in InaSAFE by clicking on the help buttons provided on each dock and dialog.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock_help.py" line="115"/>
-        <source>The intention of InaSAFE is to make it easy to perform your impact analysis. We start the analysis in the questions area. This area contains four drop down menus. You create your question by using these drop down menus to select the hazard and exposure data you wish to perform the analysis on. You must also select an impact function  All questions follow this form:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock_help.py" line="115"/>
-        <source>In the event of a [hazard], how many [exposure] might be [impacted]?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock_help.py" line="125"/>
-        <source>For example: &quot;If there is a flood, how many buildings might be flooded?&quot;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock_help.py" line="128"/>
-        <source>In order to answer such questions, the InaSAFE developers have built a number of Impact Functions that cover scenarios such as flood, tsunami, volcanic ash fall and earthquake.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock_help.py" line="132"/>
-        <source>The first step in answering these questions is to load layers that represent either hazard scenarios or exposure data into QGIS. A hazard, for example, may be represented as a raster layer in QGIS where each pixel in the raster represents the flood depth following an inundation event. An exposure layer could be represented, for example, as vector polygon data representing building outlines, or a raster outline where each pixel represents the number of people thought to be living in that cell.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock_help.py" line="141"/>
-        <source>The Impact Function will combine these two layers in a mathematical model. The results of this model will show what the effect of the hazard will be on the exposed infrastructure or people. When a combination of hazard and exposure data are selected in the form, an appropriate set of Impact Functions will be listed under &apos;Might&apos;. An example representation of an Impact Function in the form is &apos;Be flooded&apos;. You may be wondering how the InaSAFE plugin determines whether a layer should be listed in the hazard or exposure combo boxes. The plugin relies on simple keyword metadata to be associated with each layer. You can define these keywords by selecting a layer and then clicking the InaSAFE Keywords Wizard icon on the toolbar: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock_help.py" line="161"/>
-        <source>Based on the combination of hazard and exposure layers that are selected, the Impact Function list (shown in the drop down menu under &apos;Might&apos; in the InaSAFE dock panel) will be updated. Each impact function can only work with specific combinations of hazard and exposure types, so the options shown here will be limited accordingly. The chosen Impact Function can be configured (if applicable) by pressing the small ellipses (...) button next to the chosen Impact Function. This is explained in more detail below under the heading &apos;Setting Analysis Parameters&apos;.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock_help.py" line="171"/>
-        <source>Aggregation is the process whereby we group the analysis results by district so that you can see how many people, roads or buildings were affected in each area. This will help you to understand where the most critical needs are.  Aggregation is optional in InaSAFE - if you do not use aggregation, the entire analysis area will be used for the data summaries. Typically aggregation layers in InaSAFE have as attributes the name of the district or reporting area. It is also possible to use extended attributes to indicate the ratio of men and women; youth, adults and elderly living in each area. Where these are provided and the exposure layer is population, InaSAFE will provide a demographic breakdown per aggregation area indicating how many men, women, etc. were probably affected in that area.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock_help.py" line="190"/>
-        <source>After running an analysis, the question area is hidden to maximise the amount of space allocated to the results area. You can re-open the question area at any time by pressing the &apos;show question form&apos; button.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock_help.py" line="196"/>
-        <source>The results area is used to display various useful feedback items to the user. Once an impact scenario has been run, a summary table will be shown.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock_help.py" line="201"/>
-        <source>If you select an impact layer (i.e. a layer that was produced using an InaSAFE Impact Function), in the QGIS layers list, this summary will also be displayed in the results area. When you select a hazard or exposure layer in the QGIS layers list, the keywords for that layer will be shown in the results area, making it easy to understand what metadata exists for that layer.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock_help.py" line="209"/>
-        <source>The results area is also used to display status information. For example, when a suitable combination of hazard, exposure and impact function are selected, the results area will be updated to indicate that you can now run the impact scenario calculation. The &apos;Run&apos; button will be activated.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock_help.py" line="217"/>
-        <source>Finally, the results area is also used to display any error messages so that the user knows what went wrong and why. You may need to scroll down to view the message completely.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock_help.py" line="223"/>
-        <source>After running the impact scenario calculation, our Question is automatically hidden to make the results area as large as possible. If you want to see what the question used in the analysis was, click on the &apos;Show question form&apos; button at the top of the results area.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock_help.py" line="230"/>
-        <source>If you want to hide the question area again to have more space to display the results, click on the layer you just calculated with InaSAFE in the Layers list of QGIS to make it active.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock_help.py" line="236"/>
-        <source>The buttons area</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock_help.py" line="251"/>
-        <source>... - click on this if you wish to create a pdf of your impact scenario project or generate a report to open in composer for further tuning. An impact layer must be active before the &apos;Print&apos; button will be enabled.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock_help.py" line="258"/>
-        <source>- this button is enabled when the combination of hazard and exposure selected in the questions area&apos;s drop down menus will allow you to run a scenario.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock_help.py" line="269"/>
-        <source>When running a scenario, the data being used needs to be processed into a state where it is acceptable for use by the Impact Function. In particular it should be noted that:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="dock_help.py" line="301"/>
-        <source>When the impact analysis has completed you may want to generate a report. Usually the &apos;Print...&apos;  button will be enabled immediately after analysis. Selecting an InaSAFE impact layer in QGIS Layers panel will also enable it.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="extent_selector_help.py" line="41"/>
-        <source>Analysis extent selector help</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="extent_selector_help.py" line="57"/>
-        <source>This tool allows you to specify which geographical region should be used for your analysis. If you want to check what area will be included in your analysis, enable the &apos;Toggle scenario outlines&apos; tool on the InaSAFE toolbar:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="extent_selector_help.py" line="69"/>
-        <source>Your user defined extent will be shown on the map as a rectangle.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="extent_selector_help.py" line="72"/>
-        <source>Use intersection of hazard and exposure layers</source>
-        <translation type="unfinished">Gunakan perpotongan dari lapisan ancaman dan keterpaparan</translation>
-    </message>
-    <message>
-        <location filename="extent_selector_help.py" line="75"/>
-        <source>The largest area that can be analysed is the intersection of the hazard and exposure layers you have added. To choose this option, click &apos;Use intersection of hazard and exposure layers&apos;. </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="extent_selector_help.py" line="80"/>
-        <source>Sometimes it is more useful to analyse a smaller area. This could be to reduce processing time (smaller areas with process faster) or because information is only needed in a certain area (e.g. if a district only wants information for their district, not for the entire city). If you want to analyse a smaller area, there are a few different ways to do this.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="extent_selector_help.py" line="88"/>
-        <source>Use intersection of hazard, exposure and current view extent</source>
-        <translation type="unfinished">Gunakan perpotongan dari ancaman, keterpaparan, dan luasan tampilan sekarang</translation>
-    </message>
-    <message>
-        <location filename="extent_selector_help.py" line="92"/>
-        <source>If you wish to conduct the analysis on the area currently shown in the window, you can set the analysis area to &apos;Use intersection of hazard, exposure and current view extent&apos;. If the extents of the datasets are smaller than the view extent, the analysis area will be reduced to the extents of the datasets.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="extent_selector_help.py" line="99"/>
-        <source>Use intersection of hazard, exposure and this bookmark</source>
-        <translation type="unfinished">Gunakan perpotongan dari ancaman, keterpaparan, dan bookmark ini</translation>
-    </message>
-    <message>
-        <location filename="extent_selector_help.py" line="103"/>
-        <source>You can also use one of your QGIS bookmarks to set the analysis area.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="extent_selector_help.py" line="103"/>
-        <source>This option will be greyed out if you have no bookmarks.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="extent_selector_help.py" line="109"/>
-        <source>To create a bookmark, zoom to the area you want to create a bookmark for. When you are happy with the extent, click the &apos;New bookmark&apos; button in the QGIS toolbar.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="extent_selector_help.py" line="114"/>
-        <source>The drop down menu in the InaSAFE Analysis Area window should now be activated. When you choose a bookmark from the drop down menu it will zoom to the analysis area selected by the bookmark.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="extent_selector_help.py" line="119"/>
-        <source>Use intersection of hazard, exposure and this bounding box</source>
-        <translation type="unfinished">Gunakan perpotongan dari ancaman, keterpaparan, dan kotak batas ini</translation>
-    </message>
-    <message>
-        <location filename="extent_selector_help.py" line="123"/>
-        <source>You can also choose the analysis area interactively by clicking &apos;Use intersection of hazard, exposure and this bounding box&apos;. This will allow you to click &apos;Drag on map&apos; which will temporarily hide this window and allow you to drag a rectangle on the map. After you have finished dragging the rectangle, this window will reappear with values in the North, South, East and West boxes. If the extents of the datasets are smaller than the user defined analysis area, the analysis area will be reduced to the extents of the datasets.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="extent_selector_help.py" line="133"/>
-        <source>Alternatively, you can enter the coordinates directly into the N/S/E/W boxes once the &apos;Use intersection of hazard, exposure and this bounding box&apos; option is selected (using the same coordinate reference system, or CRS, as the map is currently set).</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="function_options_help.py" line="58"/>
-        <source>Depending on which Impact Function you have chosen you have different options available for adjusting the parameters of the question you are asking. Some Impact Functions have more configurable Options than others. To open the Impact Function Configuration Dialog you need to click on the &quot;Options ...&quot; button next to the selected impact function paragraph in the InaSAFE dock. You can have up to 3 tabs visible:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="function_options_help.py" line="69"/>
-        <source>- Depending in the Impact function you selected, you can influence the result of your question here (the Impact Function) by setting different values to the defaults that will be loaded. The options available will depend on the Impact Function you choose (some Impact Functions do not allow users to change the default parameters).</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="function_options_help.py" line="78"/>
-        <source>- Takes the results from the Impact Function and calculates derivative indicators, for example if you have an affected population total, the Gender postprocessor will calculate gender specific indicators such as additional nutritional requirements for pregnant women.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="impact_merge_help.py" line="57"/>
-        <source>In some cases you may wish to create a report containing the combined output of two Impact Functions for the same area for the same hazard, different exposures. For example you may carry out an assessment of the impact of a flood on population and on buildings and combine the results into a single report. The impact layer merge tool allows you to do this.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="options_help.py" line="58"/>
-        <source>The InaSAFE options dialog is used to control various aspects of the InaSAFE analysis and reporting environment. Here are brief descriptions of all the options available, grouped by the tab page on which they occur.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="osm_downloader_help.py" line="69"/>
-        <source>Check the output directory is correct. Note that the saved dataset will be named after the type of data being downloadede.g. roads.shp or buildings.shp (and associated files).</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="osm_downloader_help.py" line="100"/>
-        <source>When the</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="osm_downloader_help.py" line="100"/>
-        <source> Political boundaries </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="osm_downloader_help.py" line="100"/>
-        <source>box in the Feature types menu is ticked, the Political boundary options panel will be enabled. The panel lets you select which admin level you wish to download. The admin levels are country specific. When you select an admin level, the local name for that admin level will be shown. You can change which country is used for the admin level description using the country drop down menu. The country will be automatically set to coincide with the view extent if a matching country can be found.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="osm_downloader_help.py" line="112"/>
-        <source>Note: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="osm_downloader_help.py" line="112"/>
-        <source>We have only provide presets for a subset of the available countries. If you want to know what the levels are for your country, please check on the following web page: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="osm_downloader_help.py" line="112"/>
-        <source>List of OSM Admin Boundary definitions </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="wizard_strings.py" line="140"/>
-        <source>You have selected &lt;b&gt;%s %s&lt;/b&gt;, and the attribute is &lt;b&gt;%s&lt;/b&gt;. The aggregation postprocessor will need to know mapping of the attribute values to known categories. Please drag unique values from the list on the left into the panel on the right and place them in the appropriate categories. Un-mapped values will go automatically in the &apos;Other&apos; group on runtime.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="wizard_utils.py" line="125"/>
-        <source>classified data</source>
-        <translation type="unfinished">data terklasifikasi</translation>
-    </message>
-    <message>
-        <location filename="wizard_utils.py" line="138"/>
-        <source>Title</source>
-        <translation type="unfinished">Judul</translation>
-    </message>
-    <message>
-        <location filename="wizard_utils.py" line="138"/>
-        <source>Source</source>
-        <translation type="unfinished">Sumber</translation>
-    </message>
-    <message>
-        <location filename="wizard_utils.py" line="145"/>
-        <source>Your layer&apos;s keyword&apos;s version (%s) does not match with your InaSAFE version (%s). If you wish to use it as an exposure, hazard, or aggregation layer in an analysis, please update the keywords. Click Next if you want to assign keywords now.</source>
-        <translation type="unfinished">Versi kata kunci lapisan Anda (%s) tidak cocok dengan versi InaSAFE Anda (%s). Jika Anda ingin menggunakannya sebagai lapisan keterpaparan, ancaman, atau agregasi di analisis, silahkan perbarui kata kuncinya. Klik Lanjut untuk memberikan kata kunci sekarang.</translation>
-    </message>
-    <message>
-        <location filename="wizard_utils.py" line="170"/>
-        <source>This layer has no valid keywords assigned</source>
-        <translation type="unfinished">Lapisan ini tidak memiliki kata kunci yang valid</translation>
-    </message>
-    <message>
-        <location filename="wizard_utils.py" line="170"/>
-        <source>SOURCE</source>
-        <translation type="unfinished">SUMBER</translation>
-    </message>
-    <message>
-        <location filename="wizard_utils.py" line="170"/>
-        <source>TYPE</source>
-        <translation type="unfinished">TIPE</translation>
-    </message>
-    <message>
-        <location filename="wizard_utils.py" line="170"/>
-        <source>In the next step you will be able to assign keywords to this layer.</source>
-        <translation type="unfinished">Di langkah selanjutnya Anda akan bisa memberikan kata kunci untuk lapisan ini.</translation>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="221"/>
-        <source>&lt;sup&gt;1&lt;/sup&gt;People are displaced if they experience and survive a shake level of more than 5 on the MMI scale.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="221"/>
-        <source>Affected Land Cover</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="228"/>
-        <source>Land cover affected by each hazard zone</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="44"/>
-        <source>Classified polygon hazard on land cover</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="64"/>
-        <source>To assess the impact of each hazard zone on land cover.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="69"/>
-        <source>Vector polygon layer where each polygon represents a type of land cover.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="72"/>
-        <source>A vector layer of land cover polygons with each tagged according to the hazard zone in which it falls.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="113"/>
-        <source>Hazard data %s does not contain expected hazard zone attribute &quot;%s&quot;. Please change it in the option. </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="187"/>
-        <source>Temporarily closed</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="parameter_definitions.py" line="35"/>
-        <source>Low Hazard Zone Threshold</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="parameter_definitions.py" line="59"/>
-        <source>Moderate Hazard Zone Threshold</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="parameter_definitions.py" line="84"/>
-        <source>High Hazard Zone Threshold</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="58"/>
-        <source>Raster tsunami on land cover</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="67"/>
-        <source>The hazard layer must be a tsunami raster layer.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="postprocessor_manager.py" line="277"/>
-        <source>Closed buildings</source>
-        <translation type="unfinished">Bangunan ditutup</translation>
-    </message>
-    <message>
-        <location filename="postprocessor_manager.py" line="279"/>
-        <source>Closed roads</source>
-        <translation type="unfinished">Jalan ditutup</translation>
-    </message>
-    <message>
-        <location filename="postprocessor_manager.py" line="281"/>
-        <source>Affected people</source>
-        <translation type="unfinished">Penduduk terdampak</translation>
-    </message>
-    <message>
-        <location filename="postprocessor_manager.py" line="288"/>
-        <source>Detailed %s report (for people needing evacuation)</source>
-        <translation type="unfinished">Laporan %s lebih rinci (penduduk perlu evakuasi)</translation>
-    </message>
-    <message>
-        <location filename="postprocessor_manager.py" line="297"/>
-        <source>Detailed %s report (affected people)</source>
-        <translation type="unfinished">Laporan %s lebih rinci (penduduk terdampak)</translation>
-    </message>
-    <message>
-        <location filename="postprocessor_manager.py" line="305"/>
-        <source>Could not compute the %s report.</source>
-        <translation type="unfinished">Tidak dapat menghitung laporan %s.</translation>
-    </message>
-    <message>
-        <location filename="postprocessor_manager.py" line="323"/>
-        <source>Unnamed Area %s</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="postprocessor_manager.py" line="327"/>
-        <source>%(zone_name)s (m)zone_name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="postprocessor_manager.py" line="568"/>
-        <source>Unnamed Area %(feature_id)sfeature_id</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="land_cover_report_template.py" line="120"/>
-        <source>* Percentage of affected area compared to the total area for the land cover type.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="land_cover_report_template.py" line="135"/>
-        <source>Analysis Results by Aggregation Area</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="land_cover_report_template.py" line="189"/>
-        <source>Affected</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="land_cover_report_template.py" line="191"/>
-        <source>Affected (%) *</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="road_report_template.py" line="122"/>
-        <source>%(road_type)s (m)road_type</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="safe_layer.py" line="77"/>
-        <source>SafeLayer only accept QgsMapLayer or safe.storage.layer.Layer.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="safe_layer.py" line="120"/>
-        <source>Keyword &quot;%s&quot; is not found in layer %s, please add it to your layer</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>AboutDialog</name>
@@ -6285,7 +6284,7 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
     </message>
     <message>
         <location filename="about_dialog.py" line="76"/>
-        <source>Edit by Hugo Gardu&#xc3;&#xb1;o from The Noun Project</source>
+        <source>Edit by Hugo GarduÃ±o from The Noun Project</source>
         <translation>Tombol Edit oleh Hugo GarduÃ±o dari The Noun Project</translation>
     </message>
     <message>
@@ -6346,8 +6345,8 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Helvetica Neue,Helvetica,Segoe UI,Arial,freesans,sans-serif&apos;; font-size:14px; color:#333333; background-color:#ffffff;&quot;&gt;InaSAFE is free software that provides a simple but rigorous way to combine data from communities, local governments and scientists to help assess the possible impact of future disaster events on communities, assets and infrastructure. It uses innovative science and crowd sourcing techniques (OpenStreetMap, OSM) to create realistic disaster scenarios for better planning, preparedness and response activities. It is in demand by disaster managers across Indonesia and around the world. &lt;/span&gt;&lt;/p&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Helvetica Neue,Helvetica,Segoe UI,Arial,freesans,sans-serif'; font-size:14px; color:#333333; background-color:#ffffff;&quot;&gt;InaSAFE is free software that provides a simple but rigorous way to combine data from communities, local governments and scientists to help assess the possible impact of future disaster events on communities, assets and infrastructure. It uses innovative science and crowd sourcing techniques (OpenStreetMap, OSM) to create realistic disaster scenarios for better planning, preparedness and response activities. It is in demand by disaster managers across Indonesia and around the world. &lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Helvetica Neue,Helvetica,Segoe UI,Arial,freesans,sans-serif&apos;; font-size:14px; color:#333333; background-color:#ffffff;&quot;&gt;InaSAFE was developed jointly by the Indonesia&apos;s National Disaster Management Agency (BNPB), the Australian Government and the World Bank - Global Facility for Disaster Reduction and Recovery (World Bank-GFDRR).&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -6361,12 +6360,12 @@ p, li { white-space: pre-wrap; }
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;These are the minimum steps you need to follow in order to use InaSAFE:&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;1. Add at least one hazard layer (e.g. earthquake MMI) to QGIS.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;2. Add at least one exposure layer (e.g. structures) to QGIS.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;3. Make sure you have defined keywords for your hazard and exposure layers. You can do this using the keywords icon in the InaSAFE toolbar.&lt;/span&gt;&lt;/p&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;These are the minimum steps you need to follow in order to use InaSAFE:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Cantarell'; font-size:11pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;1. Add at least one hazard layer (e.g. earthquake MMI) to QGIS.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;2. Add at least one exposure layer (e.g. structures) to QGIS.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;3. Make sure you have defined keywords for your hazard and exposure layers. You can do this using the keywords icon in the InaSAFE toolbar.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;4. Click on the Run button in the InaSAFE panel.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -6384,7 +6383,7 @@ p, li { white-space: pre-wrap; }
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Sans&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -6397,7 +6396,7 @@ p, li { white-space: pre-wrap; }
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Sans&apos;; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -6410,7 +6409,7 @@ p, li { white-space: pre-wrap; }
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://www.bnpb.go.id/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Indonesia’s National Disaster Management Agency (BNPB)&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://dfat.gov.au/geo/indonesia/development-assistance/Pages/disaster-risk-management-in-indonesia.aspx&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Australian Government – Disaster Risk Management in Indonesia&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://www.gfdrr.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;World Bank - Global Facility for Disaster Reductions and Recovery&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
@@ -7292,47 +7291,48 @@ p, li { white-space: pre-wrap; }
         <source>THE GOVERNMENT OF DKI JAKARTA PROVINCE
 REGIONAL DISASTER MANAGEMENT AGENCY
 </source>
-        <translation type="unfinished"></translation>
+        <translation>PEMERINTAH PROVINSI DKI JAKARTA
+BADAN PENANGGULANGAN BENCANA DAERAH</translation>
     </message>
     <message>
         <location filename="flood_event.py" line="579"/>
         <source>FLOOD IMPACT REPORT FOR POPULATION</source>
-        <translation type="unfinished"></translation>
+        <translation>LAPORAN DAMPAK BANJIR PADA PENDUDUK</translation>
     </message>
     <message>
         <location filename="flood_event.py" line="580"/>
         <source>Based on flood %s</source>
-        <translation type="unfinished"></translation>
+        <translation>Berdasarkan banjir %s</translation>
     </message>
     <message>
         <location filename="flood_event.py" line="583"/>
         <source>Legend</source>
-        <translation type="unfinished">Legenda</translation>
+        <translation>Legenda</translation>
     </message>
     <message>
         <location filename="flood_event.py" line="584"/>
         <source>InaSAFE Analysis Result</source>
-        <translation type="unfinished"></translation>
+        <translation>Hasil Analisis InaSAFE</translation>
     </message>
     <message>
         <location filename="flood_event.py" line="585"/>
         <source>Data Source</source>
-        <translation type="unfinished"></translation>
+        <translation>Sumber Data</translation>
     </message>
     <message>
         <location filename="flood_event.py" line="586"/>
         <source>Contact</source>
-        <translation type="unfinished"></translation>
+        <translation>Kontak</translation>
     </message>
     <message>
         <location filename="flood_event.py" line="587"/>
         <source>Supported by</source>
-        <translation type="unfinished"></translation>
+        <translation>Didukung oleh</translation>
     </message>
     <message>
         <location filename="flood_event.py" line="588"/>
         <source>Disclaimer</source>
-        <translation type="unfinished"></translation>
+        <translation>Ketentuan</translation>
     </message>
     <message>
         <location filename="flood_event.py" line="589"/>
@@ -7342,12 +7342,17 @@ REGIONAL DISASTER MANAGEMENT AGENCY
 2. Exposure Data
    Population: Population Agency DKI Jakarta Prov.
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Sumber Data:
+1. Data Ancaman
+Banjir: BPBD DKI Jakarta / PetaJakarta.org
+2. Data Keterpaparan
+Penduduk: Dinas Kependudukan DKI Jakarta.
+</translation>
     </message>
     <message>
         <location filename="flood_event.py" line="595"/>
         <source>This impact estimate is automatically generated and only takes into account the population affected by flood hazard in Jakarta. The estimate is based on flood hazard data from BPBD DKI Jakarta and population exposure data from the Population Agency, DKI Jakarta Province. Limitations in the estimates of flood hazard and population may result in significant misrepresentation of the on-the-surface situation in the figures shown here. Consequently, decisions should not be made solely on the information presented here and should always be verified with other reliable information sources.</source>
-        <translation type="unfinished"></translation>
+        <translation>Perkiraan dampak ini secara otomatis dibangkitkan dan hanya memperhitungkan penduduk dan kota yang terdampak banjir di Jakarta. Perkiraan ini berdasarkan data banjir dari BPBD DKI Jakarta dan data penduduk dari Dinas Kependudukan DKI Jakarta. Batasan dalam perkiraan banjir dan penduduk dapat menyebabkan kesalahan representasi dari situasi yang sebenarnya terjadi. Oleh karena itu, keputusan tidak seharusnya diambil semata-mata berdasarkan informasi yang tertera di sini dan harus selalu diverifikasi dengan sumber terpercaya lainnya.</translation>
     </message>
     <message>
         <location filename="flood_event.py" line="610"/>
@@ -7356,7 +7361,11 @@ BPBD Provinsi DKI Jakarta
 Jl. Medan Merdeka Selatan No. 8-9 Blok F lantai 3
 Telp. (021)164
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Pusat Pengendalian Operasi (Pusdalops)
+BPBD Provinsi DKI Jakarta
+Jl. Medan Merdeka Selatan No. 8-9 Blok F lantai 3
+Telp. (021)164
+</translation>
     </message>
     <message>
         <location filename="flood_event.py" line="638"/>
@@ -7369,17 +7378,24 @@ Relief items to be provided %s :
 Relief items to be provided %s :
 %s
         </source>
-        <translation type="unfinished"></translation>
+        <translation>Total penduduk terdampak : %s jiwa
+Perkiraan IDP : %s jiwa
+
+Barang bantuan yang disediakan %s:
+%s
+
+Barang bantuan yang disediakan %s:
+%s</translation>
     </message>
     <message>
         <location filename="flood_event.py" line="678"/>
         <source>People Affected</source>
-        <translation type="unfinished"></translation>
+        <translation>Penduduk Terdampak</translation>
     </message>
     <message>
         <location filename="flood_event.py" line="686"/>
         <source>Flood Depth (cm)</source>
-        <translation type="unfinished"></translation>
+        <translation>Kedalaman Banjir (cm)</translation>
     </message>
 </context>
 <context>
@@ -8217,7 +8233,7 @@ ke
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;.Helvetica Neue DeskInterface&apos;; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'.Helvetica Neue DeskInterface'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:12pt; font-weight:600; color:#f50000;&quot;&gt;Note:&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:12pt;&quot;&gt; The above setting requires a QGIS restart to disable / enable. Error messages and diagnostic information will be posted to http://sentry.linfiniti.com/inasafe-desktop/. Some institutions may not allow you to enable this feature - check with your network administrator if unsure. Although the data is submitted anonymously, the information contained in tracebacks may contain file system paths which reveal your identity or other information from your system.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -9156,7 +9172,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="step_fc90_analysis.py" line="108"/>
         <source>Running analysis...</source>
-        <translation type="unfinished">Menjalankan analisis...</translation>
+        <translation>Menjalankan analisis...</translation>
     </message>
 </context>
 <context>
@@ -9164,7 +9180,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="step_fc70_extent.py" line="148"/>
         <source>Please specify extent of your analysis:</source>
-        <translation type="unfinished">Mohon tentukan luasan analisis Anda:</translation>
+        <translation>Mohon tentukan luasan analisis Anda:</translation>
     </message>
 </context>
 <context>
@@ -9172,12 +9188,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="step_fc10_function.py" line="81"/>
         <source>Function</source>
-        <translation type="unfinished">Fungsi</translation>
+        <translation>Fungsi</translation>
     </message>
     <message>
         <location filename="step_fc10_function.py" line="84"/>
         <source>Overview</source>
-        <translation type="unfinished">Ikhtisar</translation>
+        <translation>Ikhtisar</translation>
     </message>
 </context>
 <context>
@@ -9185,7 +9201,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="step_fc00_functions1.py" line="98"/>
         <source>Available functions:</source>
-        <translation type="unfinished">Fungsi yang tersedia:</translation>
+        <translation>Fungsi yang tersedia:</translation>
     </message>
 </context>
 <context>
@@ -9193,7 +9209,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="step_fc05_functions2.py" line="101"/>
         <source>Available functions:</source>
-        <translation type="unfinished">Fungsi yang tersedia:</translation>
+        <translation>Fungsi yang tersedia:</translation>
     </message>
 </context>
 <context>
@@ -9201,7 +9217,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="step_fc80_params.py" line="86"/>
         <source>Please set impact functions parameters.&lt;br/&gt;Parameters for impact function &quot;%s&quot; that can be modified are:</source>
-        <translation type="unfinished">Silahkan set parameter fungsi dampak.&lt;br/&gt;Parameter untuk fungsi dampak &quot;%s&quot; yang dapat dimodifikasi adalah:</translation>
+        <translation>Silahkan set parameter fungsi dampak.&lt;br/&gt;Parameter untuk fungsi dampak &quot;%s&quot; yang dapat dimodifikasi adalah:</translation>
     </message>
 </context>
 <context>
@@ -9209,42 +9225,42 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="step_fc85_summary.py" line="93"/>
         <source>Enabled</source>
-        <translation type="unfinished">Aktif</translation>
+        <translation>Aktif</translation>
     </message>
     <message>
         <location filename="step_fc85_summary.py" line="93"/>
         <source>Disabled</source>
-        <translation type="unfinished">Tidak aktif</translation>
+        <translation>Tidak aktif</translation>
     </message>
     <message>
         <location filename="step_fc85_summary.py" line="162"/>
         <source>no aggregation</source>
-        <translation type="unfinished">tanpa agregasi</translation>
+        <translation>tanpa agregasi</translation>
     </message>
     <message>
         <location filename="step_fc85_summary.py" line="164"/>
         <source>Please ensure the following information is correct and press Run.</source>
-        <translation type="unfinished">Pastikan informasi berikut benar dan tekan Jalan.</translation>
+        <translation>Pastikan informasi berikut benar dan tekan Jalan.</translation>
     </message>
     <message>
         <location filename="step_fc85_summary.py" line="169"/>
         <source>impact function</source>
-        <translation type="unfinished">fungsi dampak</translation>
+        <translation>fungsi dampak</translation>
     </message>
     <message>
         <location filename="step_fc85_summary.py" line="169"/>
         <source>hazard layer</source>
-        <translation type="unfinished">layer ancaman</translation>
+        <translation>layer ancaman</translation>
     </message>
     <message>
         <location filename="step_fc85_summary.py" line="169"/>
         <source>exposure layer</source>
-        <translation type="unfinished">layer keterpaparan</translation>
+        <translation>layer keterpaparan</translation>
     </message>
     <message>
         <location filename="step_fc85_summary.py" line="169"/>
         <source>aggregation layer</source>
-        <translation type="unfinished">layer agregasi</translation>
+        <translation>layer agregasi</translation>
     </message>
 </context>
 <context>
@@ -9252,7 +9268,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="step_kw50_aggregation.py" line="246"/>
         <source>Use default</source>
-        <translation type="unfinished">Pergunakan default</translation>
+        <translation>Pergunakan default</translation>
     </message>
 </context>
 <context>
@@ -9260,12 +9276,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="step_kw30_field.py" line="128"/>
         <source>Field type</source>
-        <translation type="unfinished">Tipe field</translation>
+        <translation>Tipe field</translation>
     </message>
     <message>
         <location filename="step_kw30_field.py" line="129"/>
         <source>Unique values: %s</source>
-        <translation type="unfinished">Nilai unik: %s</translation>
+        <translation>Nilai unik: %s</translation>
     </message>
 </context>
 <context>
@@ -9273,22 +9289,22 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="step_kw55_source.py" line="47"/>
         <source>Please record who is the custodian of this layer i.e. OpenStreetMap</source>
-        <translation type="unfinished">Silahkan catat siapa yang memiliki layer ini, misalnya OpenStreetMap</translation>
+        <translation>Silahkan catat siapa yang memiliki layer ini, misalnya OpenStreetMap</translation>
     </message>
     <message>
         <location filename="step_kw55_source.py" line="53"/>
         <source>When was this data collected or downloaded i.e. 1-May-2014</source>
-        <translation type="unfinished">Kapan data ini dikumpulkan atau didownload, misalnya 1-Mei-2014</translation>
+        <translation>Kapan data ini dikumpulkan atau didownload, misalnya 1-Mei-2014</translation>
     </message>
     <message>
         <location filename="step_kw55_source.py" line="58"/>
         <source>What is the scale of this layer?</source>
-        <translation type="unfinished">Apa skala dari layer ini?</translation>
+        <translation>Apa skala dari layer ini?</translation>
     </message>
     <message>
         <location filename="step_kw55_source.py" line="62"/>
         <source>Does the custodians have their own website i.e. www.openstreetmap.org</source>
-        <translation type="unfinished">Apakah pemilik layer memiliki situs sendiri misalnya www.openstreetmap.org</translation>
+        <translation>Apakah pemilik layer memiliki situs sendiri misalnya www.openstreetmap.org</translation>
     </message>
 </context>
 <context>
@@ -9296,7 +9312,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="step_kw65_summary.py" line="152"/>
         <source>The selected keywords don&apos;t match requirements of the selected impact function (%s). You can continue with registering the layer, however, you&apos;ll need to choose another layer for that function.</source>
-        <translation type="unfinished">Kata kunci yand dipilih tidak sesuai dengan kebutuhan fungsi dampak yang dipilih (%s). Anda dapat melanjutkan pendaftaran lapisan, tetapi Anda harus memilih lapisan lain untuk fungsi tersebut.</translation>
+        <translation>Kata kunci yand dipilih tidak sesuai dengan kebutuhan fungsi dampak yang dipilih (%s). Anda dapat melanjutkan pendaftaran lapisan, tetapi Anda harus memilih lapisan lain untuk fungsi tersebut.</translation>
     </message>
 </context>
 <context>
@@ -9304,7 +9320,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="step_kw60_title.py" line="39"/>
         <source>Title of the layer.</source>
-        <translation type="unfinished">Judul layer.</translation>
+        <translation>Judul layer.</translation>
     </message>
 </context>
 <context>
@@ -9400,22 +9416,22 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="wizard_step_browser.py" line="333"/>
         <source>Layer</source>
-        <translation type="unfinished">Lapisan</translation>
+        <translation>Lapisan</translation>
     </message>
     <message>
         <location filename="wizard_step_browser.py" line="333"/>
         <source>Required</source>
-        <translation type="unfinished">Diperlukan</translation>
+        <translation>Diperlukan</translation>
     </message>
     <message>
         <location filename="wizard_step_browser.py" line="413"/>
         <source>Not a valid layer.</source>
-        <translation type="unfinished">Tidak ada lapisan yang valid.</translation>
+        <translation>Tidak ada lapisan yang valid.</translation>
     </message>
     <message>
         <location filename="wizard_step_browser.py" line="434"/>
         <source>This layer&apos;s keywords or type are not suitable:</source>
-        <translation type="unfinished">Kata kunci  atau tipe lapisan ini tidak sesuai:</translation>
+        <translation>Kata kunci  atau tipe lapisan ini tidak sesuai:</translation>
     </message>
 </context>
 <context>
@@ -9423,21 +9439,22 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="step_fc60_agglayer_from_browser.ui" line="26"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Please choose one &lt;span style=&quot; font-weight:600;&quot;&gt;aggregation&lt;/span&gt; layer that you would like to use for your assessment.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Silahkan pilih salah satu lapisan &lt;span style=&quot;font-weight:600;&quot;&gt;agregasi&lt;/span&gt; yang Anda ingin gunakan untuk perhitungan.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Silahkan pilih salah satu lapisan &lt;span style=&quot;font-weight:600;&quot;&gt;agregasi&lt;/span&gt; yang Anda ingin gunakan untuk perhitungan.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="step_fc60_agglayer_from_browser.ui" line="88"/>
         <source>icon</source>
-        <translation type="unfinished">ikon</translation>
+        <translation>ikon</translation>
     </message>
 </context>
 <context>
     <name>pgFcAggLayerDisjoint</name>
     <message>
         <location filename="step_fc65_agglayer_disjoint.ui" line="65"/>
-        <source>The aggregation layer and hazard layer don&apos;t intersect, i.e. they cover disjoint areas.
+        <source>The aggregation layer and hazard layer don't intersect, i.e. they cover disjoint areas.
  Please step back and select another layer.</source>
-        <translation type="unfinished"></translation>
+        <translation>Lapisan agregasi dan ancaman tidak berpotongan, misalnya mereka tidak menutupi area yang sama.
+Mohon kembali ke tahap sebelumnya dan pilih lapisan lain.</translation>
     </message>
 </context>
 <context>
@@ -9445,29 +9462,31 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="step_fc50_agglayer_origin.ui" line="26"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Would you like to &lt;span style=&quot; font-weight:600;&quot;&gt;aggregate&lt;/span&gt; the results of your analysis by sub-regions? Aggregation will break down the analysis results for each area in the specified aggregation layer. Aggregation is optional. Please select from an option below in order to indicate how you would like to go about aggregating the results.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Apakaha Anda ingin melakukan &lt;span style=&quot; font-weight:600;&quot;&gt;agregasi&lt;/span&gt; hasil analisis Anda berdasarkan sub wilayah? Agregasi akan memecah hasil analisis untuk setiap wilayah di lapisan agregasi yang dipilih. Agregasi tidak wajib dilakukan. Silahkan plih dari pilihan di bawah ini untuk mengindikasikan apa yang akan Anda lakukan mengenai agregasi hasil.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Apakaha Anda ingin melakukan &lt;span style=&quot; font-weight:600;&quot;&gt;agregasi&lt;/span&gt; hasil analisis Anda berdasarkan sub wilayah? Agregasi akan memecah hasil analisis untuk setiap wilayah di lapisan agregasi yang dipilih. Agregasi tidak wajib dilakukan. Silahkan plih dari pilihan di bawah ini untuk mengindikasikan apa yang akan Anda lakukan mengenai agregasi hasil.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="step_fc50_agglayer_origin.ui" line="57"/>
         <source>icon</source>
-        <translation type="unfinished">ikon</translation>
+        <translation>ikon</translation>
     </message>
     <message>
         <location filename="step_fc50_agglayer_origin.ui" line="70"/>
         <source>I would like to pick an aggregation layer from disk
  (launches the InaSAFE Keywords Creation Wizard for aggregation if needed)</source>
-        <translation type="unfinished"></translation>
+        <translation>Saya ingin memilih lapisan agregasi dari disk
+(menampilkan Wizard Pembuatan Kata Kunci InaSAFE apabila diperlukan)</translation>
     </message>
     <message>
         <location filename="step_fc50_agglayer_origin.ui" line="78"/>
         <source>I would like to use an aggregation layer already loaded in QGIS
  (launches the InaSAFE Keywords Creation Wizard for aggregation if needed)</source>
-        <translation type="unfinished"></translation>
+        <translation>Saya ingin menggunakan lapisan agregasi yang telah dibuka di QGIS
+(meluncurkan Wizard Pembuatan Kata Kunci InaSAFE untuk agregasi apabila diperlukan)</translation>
     </message>
     <message>
         <location filename="step_fc50_agglayer_origin.ui" line="86"/>
         <source>No thanks, I am happy to aggregate results for the entire analysis window</source>
-        <translation type="unfinished">Tidak, terima kasih, saya cukup dengan agregasi hasil untuk seluruh tampilan analisis</translation>
+        <translation>Tidak, terima kasih, saya cukup dengan agregasi hasil untuk seluruh tampilan analisis</translation>
     </message>
 </context>
 <context>
@@ -9475,12 +9494,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="step_fc55_agglayer_from_canvas.ui" line="26"/>
         <source>&lt;p&gt;These are the layers currently loaded in QGIS. Please choose one &lt;b&gt;aggregation&lt;/b&gt; layer that you would like to use for your assessment.&lt;/p&gt;</source>
-        <translation type="unfinished">&lt;p&gt;Ini adalah lapisan-lapisan yang sedang dimuat di QGIS. Silahkan pilih salah satu lapisan &lt;b&gt;agregasi&lt;/b&gt; yang ingin Anda gunakan untuk perhitungan.&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;Ini adalah lapisan-lapisan yang sedang dimuat di QGIS. Silahkan pilih salah satu lapisan &lt;b&gt;agregasi&lt;/b&gt; yang ingin Anda gunakan untuk perhitungan.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="step_fc55_agglayer_from_canvas.ui" line="91"/>
         <source>icon</source>
-        <translation type="unfinished">ikon</translation>
+        <translation>ikon</translation>
     </message>
 </context>
 <context>
@@ -9488,42 +9507,42 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="step_fc00_functions1.ui" line="38"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This wizard will guide you through the process of running an InaSAFE assessment. The assessment will combine hazard data (such as a flood layer) with exposure data (such as population, roads or buildings) to help you to understand the potential impact of such an event. To start, please select the &lt;b&gt;hazard&lt;/b&gt; and &lt;b&gt;exposure&lt;/b&gt; you want to use by clicking a cell in the matrix below.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Wizard ini akan memandu Anda melewati proses dari menjalankan perhitungan InaSAFE. Perhitungan akan mengombinasikan data ancaman (seperti lapisan banjir) dengan data keterpaparan (seperti penduduk, jalan, atau bangunan) untuk membantu Anda memahami potensi dampak dari kejadian tersebut. Sebagai permulaan, silahkan pilih &lt;b&gt;ancaman&lt;/b&gt; dan &lt;b&gt;keterpaparan&lt;/b&gt; yang ingin Anda gunakan dengan menglik kotak pada matriks di bawah ini.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Wizard ini akan memandu Anda melewati proses dari menjalankan perhitungan InaSAFE. Perhitungan akan mengombinasikan data ancaman (seperti lapisan banjir) dengan data keterpaparan (seperti penduduk, jalan, atau bangunan) untuk membantu Anda memahami potensi dampak dari kejadian tersebut. Sebagai permulaan, silahkan pilih &lt;b&gt;ancaman&lt;/b&gt; dan &lt;b&gt;keterpaparan&lt;/b&gt; yang ingin Anda gunakan dengan menglik kotak pada matriks di bawah ini.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="step_fc00_functions1.ui" line="51"/>
         <source>&lt;b&gt;Hazard&lt;/b&gt;</source>
-        <translation type="unfinished">&lt;b&gt;Ancaman&lt;/b&gt;</translation>
+        <translation>&lt;b&gt;Ancaman&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="step_fc00_functions1.ui" line="73"/>
         <source>&lt;b&gt;E&lt;br/&gt;x&lt;br/&gt;p&lt;br/&gt;o&lt;br/&gt;s&lt;br/&gt;u&lt;br/&gt;r&lt;br/&gt;e&lt;/b&gt;</source>
-        <translation type="unfinished">&lt;b&gt;E&lt;br/&gt;x&lt;br/&gt;p&lt;br/&gt;o&lt;br/&gt;s&lt;br/&gt;u&lt;br/&gt;r&lt;br/&gt;e&lt;/b&gt;</translation>
+        <translation>&lt;b&gt;E&lt;br/&gt;x&lt;br/&gt;p&lt;br/&gt;o&lt;br/&gt;s&lt;br/&gt;u&lt;br/&gt;r&lt;br/&gt;e&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="step_fc00_functions1.ui" line="102"/>
         <source>People</source>
-        <translation type="unfinished">Orang</translation>
+        <translation>Orang</translation>
     </message>
     <message>
         <location filename="step_fc00_functions1.ui" line="107"/>
         <source>Construction</source>
-        <translation type="unfinished">Konstruksi</translation>
+        <translation>Konstruksi</translation>
     </message>
     <message>
         <location filename="step_fc00_functions1.ui" line="112"/>
         <source>Flood</source>
-        <translation type="unfinished">Banjir</translation>
+        <translation>Banjir</translation>
     </message>
     <message>
         <location filename="step_fc00_functions1.ui" line="117"/>
         <source>Tsunami</source>
-        <translation type="unfinished">Tsunami</translation>
+        <translation>Tsunami</translation>
     </message>
     <message>
         <location filename="step_fc00_functions1.ui" line="137"/>
         <source>Available functions:</source>
-        <translation type="unfinished">Fungsi yang tersedia:</translation>
+        <translation>Fungsi yang tersedia:</translation>
     </message>
 </context>
 <context>
@@ -9531,51 +9550,52 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="step_fc05_functions2.ui" line="38"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="step_fc05_functions2.ui" line="53"/>
         <source>&lt;b&gt;Hazard&lt;/b&gt;</source>
-        <translation type="unfinished">&lt;b&gt;Ancaman&lt;/b&gt;</translation>
+        <translation>&lt;b&gt;Ancaman&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="step_fc05_functions2.ui" line="63"/>
         <source>&lt;b&gt;E&lt;br/&gt;x&lt;br/&gt;p&lt;br/&gt;o&lt;br/&gt;s&lt;br/&gt;u&lt;br/&gt;r&lt;br/&gt;e&lt;/b&gt;</source>
-        <translation type="unfinished">&lt;b&gt;E&lt;br/&gt;x&lt;br/&gt;p&lt;br/&gt;o&lt;br/&gt;s&lt;br/&gt;u&lt;br/&gt;r&lt;br/&gt;e&lt;/b&gt;</translation>
+        <translation>&lt;b&gt;E&lt;br/&gt;x&lt;br/&gt;p&lt;br/&gt;o&lt;br/&gt;s&lt;br/&gt;u&lt;br/&gt;r&lt;br/&gt;e&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="step_fc05_functions2.ui" line="124"/>
         <source>Point</source>
-        <translation type="unfinished">Titik</translation>
+        <translation>Titik</translation>
     </message>
     <message>
         <location filename="step_fc05_functions2.ui" line="132"/>
         <source>Line</source>
-        <translation type="unfinished">Garis</translation>
+        <translation>Garis</translation>
     </message>
     <message>
         <location filename="step_fc05_functions2.ui" line="140"/>
         <source>Polygon</source>
-        <translation type="unfinished">Poligon</translation>
+        <translation>Poligon</translation>
     </message>
     <message>
         <location filename="step_fc05_functions2.ui" line="148"/>
         <source>Raster</source>
-        <translation type="unfinished">Raster</translation>
+        <translation>Raster</translation>
     </message>
     <message>
         <location filename="step_fc05_functions2.ui" line="165"/>
         <source>Available functions:</source>
-        <translation type="unfinished">Fungsi yang tersedia:</translation>
+        <translation>Fungsi yang tersedia:</translation>
     </message>
 </context>
 <context>
     <name>pgFcDisJointLayers</name>
     <message>
         <location filename="step_fc45_disjoint_layers.ui" line="65"/>
-        <source>The hazard layer and exposure layer don&apos;t intersect, i.e. they cover disjoint areas.
+        <source>The hazard layer and exposure layer don't intersect, i.e. they cover disjoint areas.
  Please step back and select another layer.</source>
-        <translation type="unfinished"></translation>
+        <translation>Lapisan ancaman dan keterpaparan tidak berpotongan, misalnya mereka tidak menutupi area yang sama.
+Mohon kembali ke tahap sebelumnya dan pilih lapisan lain.</translation>
     </message>
 </context>
 <context>
@@ -9583,12 +9603,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="step_fc40_explayer_from_browser.ui" line="26"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="step_fc40_explayer_from_browser.ui" line="88"/>
         <source>icon</source>
-        <translation type="unfinished">ikon</translation>
+        <translation>ikon</translation>
     </message>
 </context>
 <context>
@@ -9596,24 +9616,26 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="step_fc30_explayer_origin.ui" line="26"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="step_fc30_explayer_origin.ui" line="39"/>
         <source>I would like to pick an exposure layer from disk
  (launches the InaSAFE Keywords Creation Wizard for exposure if needed)</source>
-        <translation type="unfinished"></translation>
+        <translation>Saya ingin memilih lapisan paparan dari disk
+(menampilkan Wizard Pembuatan Kata Kunci InaSAFE apabila diperlukan)</translation>
     </message>
     <message>
         <location filename="step_fc30_explayer_origin.ui" line="89"/>
         <source>I would like to use an exposure layer already loaded in QGIS
  (launches the InaSAFE Keywords Creation Wizard for exposure if needed)</source>
-        <translation type="unfinished"></translation>
+        <translation>Saya ingin menggunakan lapisan paparan yang telah dibuka di QGIS
+(meluncurkan Wizard Pembuatan Kata Kunci InaSAFE untuk paparan apabila diperlukan)</translation>
     </message>
     <message>
         <location filename="step_fc30_explayer_origin.ui" line="115"/>
         <source>icon</source>
-        <translation type="unfinished">ikon</translation>
+        <translation>ikon</translation>
     </message>
 </context>
 <context>
@@ -9621,21 +9643,22 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="step_fc35_explayer_from_canvas.ui" line="26"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="step_fc35_explayer_from_canvas.ui" line="91"/>
         <source>icon</source>
-        <translation type="unfinished">ikon</translation>
+        <translation>ikon</translation>
     </message>
 </context>
 <context>
     <name>pgFcExtentDisjoint</name>
     <message>
         <location filename="step_fc75_extent_disjoint.ui" line="68"/>
-        <source>The selected extent doesn&apos;t intersect input layers.
+        <source>The selected extent doesn't intersect input layers.
  Please step back and select another layer.</source>
-        <translation type="unfinished"></translation>
+        <translation>Cakupan yang dipilih tidak berpotongan dengan lapisan-lapisan masukan.
+Silahkan mundur ke belakangan dan pilih lapisan lainnya.</translation>
     </message>
 </context>
 <context>
@@ -9643,17 +9666,17 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="step_fc10_function.ui" line="38"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="step_fc10_function.ui" line="127"/>
         <source>icon</source>
-        <translation type="unfinished">ikon</translation>
+        <translation>ikon</translation>
     </message>
     <message>
         <location filename="step_fc10_function.ui" line="193"/>
         <source>[placeholder]</source>
-        <translation type="unfinished">[placeholder]</translation>
+        <translation>[placeholder]</translation>
     </message>
 </context>
 <context>
@@ -9661,12 +9684,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="step_fc25_hazlayer_from_browser.ui" line="26"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="step_fc25_hazlayer_from_browser.ui" line="56"/>
         <source>icon</source>
-        <translation type="unfinished">ikon</translation>
+        <translation>ikon</translation>
     </message>
 </context>
 <context>
@@ -9675,23 +9698,25 @@ p, li { white-space: pre-wrap; }
         <location filename="step_fc15_hazlayer_origin.ui" line="36"/>
         <source>I would like to use a hazard layer already loaded in QGIS
  (launches the InaSAFE Keywords Creation Wizard for hazard if needed)</source>
-        <translation type="unfinished"></translation>
+        <translation>Saya ingin menggunakan lapisan ancaman yang telah dibuka di QGIS
+(meluncurkan Wizard Pembuatan Kata Kunci InaSAFE untuk ancaman apabila diperlukan)</translation>
     </message>
     <message>
         <location filename="step_fc15_hazlayer_origin.ui" line="73"/>
         <source>I would like to pick a hazard layer from disk
  (launches the InaSAFE Keywords Creation Wizard for hazard if needed)</source>
-        <translation type="unfinished"></translation>
+        <translation>Saya ingin memilih lapisan ancaman dari disk
+(menampilkan Wizard Pembuatan Kata Kunci InaSAFE apabila diperlukan)</translation>
     </message>
     <message>
         <location filename="step_fc15_hazlayer_origin.ui" line="99"/>
         <source>icon</source>
-        <translation type="unfinished">ikon</translation>
+        <translation>ikon</translation>
     </message>
     <message>
         <location filename="step_fc15_hazlayer_origin.ui" line="121"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
@@ -9699,12 +9724,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="step_fc20_hazlayer_from_canvas.ui" line="26"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="step_fc20_hazlayer_from_canvas.ui" line="59"/>
         <source>icon</source>
-        <translation type="unfinished">ikon</translation>
+        <translation>ikon</translation>
     </message>
 </context>
 <context>
@@ -9712,7 +9737,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="step_fc80_params.ui" line="25"/>
         <source>TextLabel</source>
-        <translation type="unfinished">TextLabel</translation>
+        <translation>TextLabel</translation>
     </message>
 </context>
 <context>
@@ -9720,27 +9745,27 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="step_fc90_analysis.ui" line="28"/>
         <source>Running analysis...</source>
-        <translation type="unfinished">Menjalankan analisis...</translation>
+        <translation>Menjalankan analisis...</translation>
     </message>
     <message>
         <location filename="step_fc90_analysis.ui" line="66"/>
         <source>about:blank</source>
-        <translation type="unfinished"></translation>
+        <translation>perihal:kosong</translation>
     </message>
     <message>
         <location filename="step_fc90_analysis.ui" line="76"/>
         <source>Open in web browser</source>
-        <translation type="unfinished">Buka di browser internet</translation>
+        <translation>Buka di browser internet</translation>
     </message>
     <message>
         <location filename="step_fc90_analysis.ui" line="83"/>
         <source>Generate PDF</source>
-        <translation type="unfinished">Membuat PDF</translation>
+        <translation>Membuat PDF</translation>
     </message>
     <message>
         <location filename="step_fc90_analysis.ui" line="90"/>
         <source>Open in composer</source>
-        <translation type="unfinished">Membuka di penyusun</translation>
+        <translation>Membuka di penyusun</translation>
     </message>
 </context>
 <context>
@@ -9748,7 +9773,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="step_fc85_summary.ui" line="41"/>
         <source>Here goes the summary...</source>
-        <translation type="unfinished">Inilah ringkasannya...</translation>
+        <translation>Inilah ringkasannya...</translation>
     </message>
 </context>
 <context>
@@ -9758,47 +9783,49 @@ p, li { white-space: pre-wrap; }
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;
  &lt;p&gt;Please input these ratio attributes below for aggregation. For each attribute you can choose whether it should be:&lt;/p&gt;
  &lt;ol&gt;&lt;li&gt;defined in an attribute of the aggregation polygon (so that you can for example have different ratios per aggregation area)&lt;/li&gt;&lt;li&gt;defined as a global default for the aggregation layer, or&lt;/li&gt;&lt;li&gt;ignored&lt;/li&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;
+&lt;p&gt;Silahkan masukan rasio atribut di bawah ini untuk agregasi. Untuk setiap atribut Anda dapat memilih apakah:&lt;/p&gt;
+&lt;ol&gt;&lt;li&gt;terdefinisi di atribut dari poligon agregasi (sehingga Anda dapat sebagai contoh memiliki rasio yang berbeda untuk setiap wilayah agregasi)&lt;/li&gt;&lt;li&gt;terdefinisi sebagai default umum untuk lapisan agregasi, atau&lt;/li&gt;&lt;li&gt;diabaikan&lt;/li&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="step_kw50_aggregation.ui" line="55"/>
         <source>Youth ratio attribute</source>
-        <translation type="unfinished">Atribut perbandingan anak muda</translation>
+        <translation>Atribut perbandingan anak muda</translation>
     </message>
     <message>
         <location filename="step_kw50_aggregation.ui" line="85"/>
         <source>Adult ratio attribute</source>
-        <translation type="unfinished">Atribut perbandingan orang dewasa</translation>
+        <translation>Atribut perbandingan orang dewasa</translation>
     </message>
     <message>
         <location filename="step_kw50_aggregation.ui" line="122"/>
         <source>Female ratio default</source>
-        <translation type="unfinished">Nilai default perbandingan wanita</translation>
+        <translation>Nilai default perbandingan wanita</translation>
     </message>
     <message>
         <location filename="step_kw50_aggregation.ui" line="132"/>
         <source>Adult ratio default</source>
-        <translation type="unfinished">Perbandingan orang dewasa default</translation>
+        <translation>Perbandingan orang dewasa default</translation>
     </message>
     <message>
         <location filename="step_kw50_aggregation.ui" line="142"/>
         <source>Elderly ratio attribute</source>
-        <translation type="unfinished">Atribut perbandingan orang tua</translation>
+        <translation>Atribut perbandingan orang tua</translation>
     </message>
     <message>
         <location filename="step_kw50_aggregation.ui" line="172"/>
         <source>Female ratio attribute</source>
-        <translation type="unfinished">Atribut perbandingan wanita</translation>
+        <translation>Atribut perbandingan wanita</translation>
     </message>
     <message>
         <location filename="step_kw50_aggregation.ui" line="182"/>
         <source>Elderly ratio default</source>
-        <translation type="unfinished">Perbandingan orang tua default</translation>
+        <translation>Perbandingan orang tua default</translation>
     </message>
     <message>
         <location filename="step_kw50_aggregation.ui" line="205"/>
         <source>Youth ratio default</source>
-        <translation type="unfinished">Perbandingan anak muda default</translation>
+        <translation>Perbandingan anak muda default</translation>
     </message>
 </context>
 <context>
@@ -9806,7 +9833,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="step_kw25_classification.ui" line="60"/>
         <source>[placeholder]</source>
-        <translation type="unfinished">[placeholder]</translation>
+        <translation>[placeholder]</translation>
     </message>
 </context>
 <context>
@@ -9814,22 +9841,22 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="step_kw40_classify.ui" line="26"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="step_kw40_classify.ui" line="81"/>
         <source>Classes</source>
-        <translation type="unfinished">Kelas-kelas</translation>
+        <translation>Kelas-kelas</translation>
     </message>
     <message>
         <location filename="step_kw40_classify.ui" line="92"/>
         <source>Classified unique values</source>
-        <translation type="unfinished">Nilai unik terkelompokan</translation>
+        <translation>Nilai unik terkelompokan</translation>
     </message>
     <message>
         <location filename="step_kw40_classify.ui" line="105"/>
         <source>Unclassified unique values</source>
-        <translation type="unfinished">Nilai unik belum terkelompokan</translation>
+        <translation>Nilai unik belum terkelompokan</translation>
     </message>
 </context>
 <context>
@@ -9837,47 +9864,47 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="step_kw45_extrakeywords.ui" line="26"/>
         <source>Please input attribute(s) in this layer that represents specified parameters:</source>
-        <translation type="unfinished">Silahkan masukan atribut dari layer ini yang merepresentasikan parameter yang disebutkan:</translation>
+        <translation>Silahkan masukan atribut dari layer ini yang merepresentasikan parameter yang disebutkan:</translation>
     </message>
     <message>
         <location filename="step_kw45_extrakeywords.ui" line="65"/>
         <source>Attribute 1</source>
-        <translation type="unfinished">Atribut 1</translation>
+        <translation>Atribut 1</translation>
     </message>
     <message>
         <location filename="step_kw45_extrakeywords.ui" line="75"/>
         <source>Attribute 2</source>
-        <translation type="unfinished">Atribut 2</translation>
+        <translation>Atribut 2</translation>
     </message>
     <message>
         <location filename="step_kw45_extrakeywords.ui" line="85"/>
         <source>Attribute 3</source>
-        <translation type="unfinished">Atribut 3</translation>
+        <translation>Atribut 3</translation>
     </message>
     <message>
         <location filename="step_kw45_extrakeywords.ui" line="95"/>
         <source>Attribute 4</source>
-        <translation type="unfinished">Atribut 4</translation>
+        <translation>Atribut 4</translation>
     </message>
     <message>
         <location filename="step_kw45_extrakeywords.ui" line="105"/>
         <source>Attribute 5</source>
-        <translation type="unfinished">Atribut 5</translation>
+        <translation>Atribut 5</translation>
     </message>
     <message>
         <location filename="step_kw45_extrakeywords.ui" line="115"/>
         <source>Attribute 6</source>
-        <translation type="unfinished">Atribut 6</translation>
+        <translation>Atribut 6</translation>
     </message>
     <message>
         <location filename="step_kw45_extrakeywords.ui" line="125"/>
         <source>Attribute 7</source>
-        <translation type="unfinished">Atribut 7</translation>
+        <translation>Atribut 7</translation>
     </message>
     <message>
         <location filename="step_kw45_extrakeywords.ui" line="135"/>
         <source>Attribute 8</source>
-        <translation type="unfinished">Atribut 8</translation>
+        <translation>Atribut 8</translation>
     </message>
 </context>
 <context>
@@ -9885,7 +9912,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="step_kw30_field.ui" line="60"/>
         <source>[placeholder]</source>
-        <translation type="unfinished">[placeholder]</translation>
+        <translation>[placeholder]</translation>
     </message>
 </context>
 <context>
@@ -9893,12 +9920,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="step_kw10_hazard_category.ui" line="26"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="step_kw10_hazard_category.ui" line="50"/>
         <source>[placeholder]</source>
-        <translation type="unfinished">[placeholder]</translation>
+        <translation>[placeholder]</translation>
     </message>
 </context>
 <context>
@@ -9906,7 +9933,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="step_kw15_layermode.ui" line="50"/>
         <source>[placeholder]</source>
-        <translation type="unfinished">[placeholder]</translation>
+        <translation>[placeholder]</translation>
     </message>
 </context>
 <context>
@@ -9914,12 +9941,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="step_kw00_purpose.ui" line="29"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;[placeholder]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="step_kw00_purpose.ui" line="116"/>
         <source>[placeholder]</source>
-        <translation type="unfinished">[placeholder]</translation>
+        <translation>[placeholder]</translation>
     </message>
 </context>
 <context>
@@ -9927,12 +9954,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="step_kw35_resample.ui" line="26"/>
         <source>[placeholder]</source>
-        <translation type="unfinished">[placeholder]</translation>
+        <translation>[placeholder]</translation>
     </message>
     <message>
         <location filename="step_kw35_resample.ui" line="39"/>
         <source>Never resample this layer to the hazard layer resolution</source>
-        <translation type="unfinished">Jangan pernah melakukan resampe pada lapisan ini ke resolusi lapisan ancaman</translation>
+        <translation>Jangan pernah melakukan resampe pada lapisan ini ke resolusi lapisan ancaman</translation>
     </message>
 </context>
 <context>
@@ -9940,37 +9967,37 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="step_kw55_source.ui" line="26"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Where does the data come from? You may want to write more or less short comment about its source.&lt;/p&gt;&lt;p&gt;This step is optional.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Dari mana data ini berasal? Anda mungkin ingin menulis sedikit komentar mengenai sumbernya&lt;/p&gt;&lt;p&gt;Langkah ini opsional.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Dari mana data ini berasal? Anda mungkin ingin menulis sedikit komentar mengenai sumbernya&lt;/p&gt;&lt;p&gt;Langkah ini opsional.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="step_kw55_source.ui" line="56"/>
         <source>Date</source>
-        <translation type="unfinished">Tanggal</translation>
+        <translation>Tanggal</translation>
     </message>
     <message>
         <location filename="step_kw55_source.ui" line="85"/>
         <source>d MMM yyyy</source>
-        <translation type="unfinished">d MMM yyyy</translation>
+        <translation>d MMM yyyy</translation>
     </message>
     <message>
         <location filename="step_kw55_source.ui" line="105"/>
         <source>Scale</source>
-        <translation type="unfinished">Skala</translation>
+        <translation>Skala</translation>
     </message>
     <message>
         <location filename="step_kw55_source.ui" line="118"/>
         <source>URL</source>
-        <translation type="unfinished">Pranala</translation>
+        <translation>Pranala</translation>
     </message>
     <message>
         <location filename="step_kw55_source.ui" line="131"/>
         <source>Source</source>
-        <translation type="unfinished">Sumber</translation>
+        <translation>Sumber</translation>
     </message>
     <message>
         <location filename="step_kw55_source.ui" line="148"/>
         <source>License</source>
-        <translation type="unfinished">Lisensi</translation>
+        <translation>Lisensi</translation>
     </message>
 </context>
 <context>
@@ -9978,7 +10005,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="step_kw05_subcategory.ui" line="132"/>
         <source>[placeholder]</source>
-        <translation type="unfinished">[placeholder]</translation>
+        <translation>[placeholder]</translation>
     </message>
 </context>
 <context>
@@ -9986,12 +10013,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="step_kw60_title.ui" line="26"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;What is the title for this dataset? A title provides you with a way to give a dataset a more user friendly name than its filename. The title can include spaces. An example of a good title might be &apos;A flood in Jakarta&apos; (for a hazard layer) or &apos;People living in jakarta&apos; (for an exposure layer).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Apa judul dataset ini? Sebuah judul memberikan membuat pengguna lebih nyaman daripada nama filenya. Judul dapat memiliki spasi. Sebagai contoh sebuah judul yang bagus &apos;Banjir di Jakarta&apos; (untuk lapisan ancaman) atau &apos;Penduduk yang tinggal di Jakarta&apos; (untuk lapisan keterpaparan).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Apa judul dataset ini? Sebuah judul memberikan membuat pengguna lebih nyaman daripada nama filenya. Judul dapat memiliki spasi. Sebagai contoh sebuah judul yang bagus &apos;Banjir di Jakarta&apos; (untuk lapisan ancaman) atau &apos;Penduduk yang tinggal di Jakarta&apos; (untuk lapisan keterpaparan).&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="step_kw60_title.ui" line="44"/>
         <source>Title</source>
-        <translation type="unfinished">Judul</translation>
+        <translation>Judul</translation>
     </message>
 </context>
 <context>
@@ -9999,7 +10026,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="step_kw20_unit.ui" line="50"/>
         <source>[placeholder]</source>
-        <translation type="unfinished">[placeholder]</translation>
+        <translation>[placeholder]</translation>
     </message>
 </context>
 <context>
@@ -10011,7 +10038,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="test_aggregator.py" line="104"/>
-        <source>D&#xed;str&#xdc;t&apos;s of Jakarta</source>
+        <source>DístrÜt&apos;s of Jakarta</source>
         <translation>DístrÜt&apos;s Jakarta</translation>
     </message>
 </context>
