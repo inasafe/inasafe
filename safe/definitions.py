@@ -874,9 +874,18 @@ road_class_order = [item['key'] for item in road_class_mapping]
 
 structure_class_mapping = [
     {
+        'key': 'residential',
+        'name': tr('Residential'),
+        'description': tr(
+            'A structure used to provide shelter for people.'),
+        'string_defaults': ['house', 'dorm', 'residential' 'residence'],
+        'osm_downloader': ['Residential']
+    },
+    {
         'key': 'education',
         'name': tr('Education'),
-        'description': tr('An object that has a service in education sector.'),
+        'description': tr('A structure that provides a service in the '
+                          'education sector.'),
         'string_defaults': [
             'kindergarten', 'college', 'school', 'university', 'education',
             'university/college'
@@ -887,7 +896,8 @@ structure_class_mapping = [
         'key': 'health',
         'name': tr('Health'),
         'description': tr(
-            'An object that has a service and facility in health sector.'),
+            'A structure that provides a service or facility in the '
+            'health sector.'),
         'string_defaults': [
             'clinic', 'doctor', 'hospital', 'dentist', 'pharmacy', 'health',
             'clinic/doctor'
@@ -895,11 +905,11 @@ structure_class_mapping = [
         'osm_downloader': ['Clinic/Doctor', 'Hospital']
     },
     {
-        'key': 'transportation',
-        'name': tr('Transportation'),
+        'key': 'transport',
+        'name': tr('Transport'),
         'description': tr(
-            'An object that has a service and facility in public '
-            'transportation.'),
+            'An structure that provides a service or facility in the '
+            'transport sector.'),
         'string_defaults': [
             'bus stop', 'bus station', 'station', 'ferry terminal',
             'aerodrome', 'airport', 'terminal', 'transportation'],
@@ -909,7 +919,8 @@ structure_class_mapping = [
         'key': 'place of worship',
         'name': tr('Place of Worship'),
         'description': tr(
-            'An object that used to pray or related to religion activity.'),
+            'A structure or facility that is used for prayer or related '
+            'religion activity.'),
         'string_defaults': [
             'place of worship - islam',
             'place of worship - buddhist',
@@ -926,81 +937,55 @@ structure_class_mapping = [
         'key': 'government',
         'name': tr('Government'),
         'description': tr(
-            'A building that used to doing government activity in public '
-            'service or the other government activity.'),
+            'A structure or facility that is used to provide a public service '
+            'or other government activity.'),
         'string_defaults': ['government'],
         'osm_downloader': ['Government']
     },
     {
-        'key': 'economy',
-        'name': tr('Economy'),
+        'key': 'commercial',
+        'name': tr('Commercial'),
         'description': tr(
-            'A building that used to trade / buy and sell activity or an '
-            'object that has an economy activity.'),
+            'A structure or facility that is used for commercial or industrial '
+            'purposes.'),
         'string_defaults': [
             'supermarket', 'shop', 'market', 'tailor', 'warehouse', 'works',
             'convenience', 'seafood', 'atm', 'mall', 'clothes', 'shoes',
-            'commercial', 'industrial', 'economy'
+            'commercial', 'industrial', 'economy', 'restaurant', 'cafe',
+            'fast food', 'hotel', 'accommodation'
         ],
         'osm_downloader': ['Supermarket', 'Commercial', 'Industrial']
     },
     {
-        'key': 'recreation and entertainment',
-        'name': tr('Recreation and Entertainment'),
+        'key': 'recreation',
+        'name': tr('Recreation'),
         'description': tr(
-            'An Object that provide an entertainment or recreation '
-            'facilities.'),
+            'A structure or facility that is used for entertainment, sporting '
+            'or recreation purposes.'),
         'string_defaults': [
             'amusement arcade', 'cinema', 'zoo', 'museum', 'theatre',
-            'recreation and entertainment'
+            'recreation and entertainment' 'stadium', 'sport centre', 'pitch',
+            'sports facility', 'sport'
         ],
-        'osm_downloader': []
-    },
-    {
-        'key': 'sport',
-        'name': tr('Sport'),
-        'description': tr(
-            'An object that has a sport facility and people can use it.'),
-        'string_defaults': [
-            'stadium', 'sport centre', 'pitch', 'sports facility', 'sport'],
         'osm_downloader': ['Sports Facility']
     },
     {
         'key': 'public facility',
         'name': tr('Public Facility'),
         'description': tr(
-            'An object that provide a service or facility to public like '
-            'toilet, library, convention hall, etc.'),
+            'A structure or facility that provides a service or facility to the'
+            'public including emergency services.'),
         'string_defaults': [
-            'library', 'toiler', 'convention hall', 'prison', 'police station',
+            'library', 'toilet', 'convention hall', 'prison', 'police station',
             'public facility', 'public building', 'fire station'
         ],
         'osm_downloader': ['Fire Station', 'Police Station', 'Public Building']
     },
     {
-        'key': 'accommodation',
-        'name': tr('Accommodation'),
-        'description': tr(
-            'An object that provide an accommodation / lodging or food '
-            'services.'),
-        'string_defaults': [
-            'restaurant', 'cafe', 'fast food', 'hotel', 'accommodation'
-        ],
-        'osm_downloader': []
-    },
-    {
-        'key': 'residence',
-        'name': tr('Residence'),
-        'description': tr(
-            'An object that people use to live daily.'),
-        'string_defaults': ['house', 'dorm', 'residential' 'residence'],
-        'osm_downloader': ['Residential']
-    },
-    {
         'key': 'other',
         'name': tr('Other'),
         'description': tr(
-            'An object that be found in Indonesia, and frequently mapped.'),
+            'Any other structure frequently mapped.'),
         'string_defaults': [
             'animal boarding', 'water well', 'lighthouse', 'utility', 'other'
         ],
@@ -1009,3 +994,8 @@ structure_class_mapping = [
 ]
 # List to keep the order of the keys.
 structure_class_order = [item['key'] for item in structure_class_mapping]
+
+# Reference for structure_class_mapping. Structure class mapping is based on
+# OSM wiki map features building and Australian building classification
+# standards in @charlotte_morgan head. This list attempts to be generic and
+# not location specific. It should be reviewed. 25 May 2016.
