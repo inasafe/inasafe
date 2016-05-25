@@ -70,10 +70,10 @@ class ITBBayesianFatalityFunction(ITBFatalityFunction):
         :rtype: dic
         """
         mmi_range = self.hardcoded_parameters['mmi_range']
-        path_ = inspect.getfile(ITBBayesianFatalityMetadata)
-        path_ = '/'.join(path_.split('/')[:-1])
+        metadata_file_path = inspect.getfile(ITBBayesianFatalityMetadata)
+        parent_directory, _ = os.path.split(metadata_file_path)
         file_ = os.path.join(
-            path_, self.hardcoded_parameters['fatality_rate_file'])
+            parent_directory, self.hardcoded_parameters['fatality_rate_file'])
         fatality_ = numpy.loadtxt(file_, dtype=float, delimiter=',')
         nsims = len(fatality_)
         fatality_rate = {}

@@ -189,7 +189,7 @@ class AnalysisHandler(QObject):
         :type sender: Object, None
 
         :param message: An instance of our rich message class.
-        :type message: Message
+        :type message: safe.messaging.Message
 
         """
         # TODO Hardcoded step - may overflow, if number of messages increase

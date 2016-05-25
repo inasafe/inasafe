@@ -127,7 +127,7 @@ class EarthquakeBuildingFunction(
 
         interpolate_size = len(interpolate_result)
 
-        hazard_classes = [tr('High'), tr('Medium'), tr('Low')]
+        hazard_classes = [tr('Low'), tr('Medium'), tr('High')]
         self.init_report_var(hazard_classes)
 
         removed = []
@@ -198,6 +198,8 @@ class EarthquakeBuildingFunction(
                     tr('Buildings value ($M)')] += building_value / 1000000.0
                 self.affected_buildings[category][usage][
                     tr('Contents value ($M)')] += contents_value / 1000000.0
+
+        self.reorder_dictionaries()
 
         # remove un-categorized element
         removed.reverse()
