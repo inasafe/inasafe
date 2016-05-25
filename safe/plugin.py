@@ -44,7 +44,7 @@ from safe.common.version import release_status
 from safe.common.exceptions import TranslationLoadError
 from safe.utilities.resources import resources_path
 from safe.utilities.gis import is_raster_layer
-from safe.impact_functions import register_impact_functions
+from safe.impact_functions.loader import register_impact_functions
 LOGGER = logging.getLogger('InaSAFE')
 
 

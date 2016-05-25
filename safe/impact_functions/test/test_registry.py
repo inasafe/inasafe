@@ -22,18 +22,20 @@ import inspect
 from safe.test.utilities import get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe.impact_functions import register_impact_functions
-from safe.impact_functions import EarthquakeBuildingFunction
-from safe.impact_functions import ITBFatalityFunction
-from safe.impact_functions import PAGFatalityFunction
-from safe.impact_functions import ITBBayesianFatalityFunction
-from safe.impact_functions import FloodRasterBuildingFunction
-from safe.impact_functions import TsunamiRasterBuildingFunction
-from safe.impact_functions import ClassifiedPolygonHazardBuildingFunction
-from safe.impact_functions import VolcanoPolygonBuildingFunction
-from safe.impact_functions import VolcanoPointBuildingFunction
-from safe.impact_functions import FloodPolygonBuildingFunction
-from safe.impact_functions import ClassifiedRasterHazardBuildingFunction
+from safe.impact_functions.loader import register_impact_functions
+from safe.impact_functions.loader import EarthquakeBuildingFunction
+from safe.impact_functions.loader import ITBFatalityFunction
+from safe.impact_functions.loader import PAGFatalityFunction
+from safe.impact_functions.loader import ITBBayesianFatalityFunction
+from safe.impact_functions.loader import FloodRasterBuildingFunction
+from safe.impact_functions.loader import TsunamiRasterBuildingFunction
+from safe.impact_functions.loader import \
+    ClassifiedPolygonHazardBuildingFunction
+from safe.impact_functions.loader import VolcanoPolygonBuildingFunction
+from safe.impact_functions.loader import VolcanoPointBuildingFunction
+from safe.impact_functions.loader import FloodPolygonBuildingFunction
+from safe.impact_functions.loader import \
+    ClassifiedRasterHazardBuildingFunction
 
 from safe.impact_functions.registry import Registry
 from safe.definitions import (

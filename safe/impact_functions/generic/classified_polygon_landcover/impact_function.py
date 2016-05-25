@@ -44,7 +44,9 @@ def _calculate_landcover_impact(
         exposure, extent_exposure, extent_exposure_geom,
         hazard_class_attribute, hazard_features, hazard_index,
         hazard_value_to_class, impact_fields, writer):
-    """This function is used by GenericOnLandcover and TsunamiOnLandcover."""
+    """This function is used by GenericOnLandcover, TsunamiOnLandcover and
+    AshOnLandcover.
+    """
 
     for f in exposure.getFeatures(QgsFeatureRequest(extent_exposure)):
         geometry = f.geometry()
