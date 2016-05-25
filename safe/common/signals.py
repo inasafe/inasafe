@@ -49,7 +49,7 @@ def send_static_message(sender, message):
     :type sender: object
 
     :param message: An instance of our rich message class.
-    :type message: Message
+    :type message: safe.messaging.Message
 
     """
     dispatcher.send(
@@ -70,7 +70,7 @@ def send_dynamic_message(sender, message):
     :type sender: object
 
     :param message: An instance of our rich message class.
-    :type message: Message
+    :type message: safe.messaging.Message
 
     """
     dispatcher.send(
