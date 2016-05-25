@@ -124,11 +124,6 @@ class Aggregator(QtCore.QObject):
         self._sum_field_name = None
         self.set_sum_field_name()
 
-        # use qgis or inasafe zonal stats
-        flag = bool(QtCore.QSettings().value(
-            'inasafe/use_native_zonal_stats', False, type=bool))
-        self.use_native_zonal_stats = flag
-
         self._extent = extent
         self._keyword_io = KeywordIO()
         self._defaults = get_defaults()
@@ -687,102 +682,24 @@ class Aggregator(QtCore.QObject):
         :param impact_layer: A raster impact layer.
         :type impact_layer: QgsRasterLayer
         """
-        if self.use_native_zonal_stats:
-            zonal_statistics = QgsZonalStatistics(
-                self.layer,
-                impact_layer.dataProvider().dataSourceUri(),
-                self.prefix)
-            progress_dialog = QtGui.QProgressDialog(
-                self.tr('Calculating zonal statistics'),
-                self.tr('Abort...'),
-                0,
-                0)
-            start_time = time.clock()
-            zonal_statistics.calculateStatistics(progress_dialog)
-            if progress_dialog.wasCanceled():
-                QtGui.QMessageBox.error(
-                    self, self.tr('ZonalStats: Error'),
-                    self.tr('You aborted aggregation, '
-                            'so there are no data for analysis. Exiting...'))
-            cpp_duration = time.clock() - start_time
-            LOGGER.debug('Native zonal stats duration: %ss' % cpp_duration)
-        else:
-            # new way
-            # zonal_statistics = {
-            # 0L: {'count': 50539,
-            # 'sum': 12015061.876953125,
-            #      'mean': 237.73841739949594},
-            # 1L: {
-            #   'count': 19492,
-            #   'sum': 2945658.1220703125,
-            #   'mean': 151.12138939412642},
-            # 2L: {
-            #   'count': 57372,
-            #   'sum': 1643522.3984985352, 'mean': 28.6467684323108},
-            # 3L: {
-            #   'count': 0.00013265823369700314,
-            #   'sum': 0.24983273179242008,
-            #   'mean': 1883.2810058593748},
-            # 4L: {
-            #   'count': 1.8158245316933218e-05,
-            #   'sum': 0.034197078505115275,
-            #   'mean': 1883.281005859375},
-            # 5L: {
-            #   'count': 73941,
-            #   'sum': 10945062.435424805,
-            #   'mean': 148.024268476553},
-            # 6L: {
-            #   'count': 54998,
-            #   'sum': 11330910.488220215,
-            #   'mean': 206.02404611477172}}
-            start_time = time.clock()
-            zonal_statistics = calculate_zonal_stats(impact_layer, self.layer)
-            python_duration = time.clock() - start_time
-            LOGGER.debug('Python zonal stats duration: %ss' % python_duration)
-
-            provider = self.layer.dataProvider()
-
-            # add fields for stats to aggregation layer
-            # { 1: {'sum': 10, 'count': 20, 'min': 1, 'max': 4, 'mean': 2},
-            #             QgsField(self._minFieldName(),
-            #                      QtCore.QVariant.Double),
-            #             QgsField(self._maxFieldName(),
-            #                      QtCore.QVariant.Double)]
-            fields = [
-                QgsField(self._count_field_name(), QtCore.QVariant.Double),
-                QgsField(self.sum_field_name(), QtCore.QVariant.Double),
-                QgsField(self._mean_field_name(), QtCore.QVariant.Double)
-            ]
-            provider.addAttributes(fields)
-            self.layer.updateFields()
-
-            sum_index = provider.fieldNameIndex(self.sum_field_name())
-            count_index = provider.fieldNameIndex(self._count_field_name())
-            mean_index = provider.fieldNameIndex(self._mean_field_name())
-            # minIndex = provider.fieldNameIndex(self._minFieldName())
-            # maxIndex = provider.fieldNameIndex(self._maxFieldName())
-
-            update_map = {}
-            for myFeature in provider.getFeatures():
-                feature_id = myFeature.id()
-                if feature_id not in zonal_statistics:
-                    # Blindly ignoring - @mbernasocchi can you review? TS
-                    # (YA: see #877)
-                    attributes = {
-                        sum_index: 0,
-                        count_index: 0,
-                        mean_index: 0
-                    }
-                else:
-                    statistics = zonal_statistics[feature_id]
-                    attributes = {
-                        sum_index: statistics['sum'],
-                        count_index: statistics['count'],
-                        mean_index: statistics['mean']
-                    }
-                update_map[feature_id] = attributes
-
-            provider.changeAttributeValues(update_map)
+        zonal_statistics = QgsZonalStatistics(
+            self.layer,
+            impact_layer.dataProvider().dataSourceUri(),
+            self.prefix)
+        progress_dialog = QtGui.QProgressDialog(
+            self.tr('Calculating zonal statistics'),
+            self.tr('Abort...'),
+            0,
+            0)
+        start_time = time.clock()
+        zonal_statistics.calculateStatistics(progress_dialog)
+        if progress_dialog.wasCanceled():
+            QtGui.QMessageBox.error(
+                self, self.tr('ZonalStats: Error'),
+                self.tr('You aborted aggregation, '
+                        'so there are no data for analysis. Exiting...'))
+        cpp_duration = time.clock() - start_time
+        LOGGER.debug('Native zonal stats duration: %ss' % cpp_duration)
 
     def _aggregate_polygon_impact(self, safe_impact_layer):
         """Aggregation of polygons in polygons

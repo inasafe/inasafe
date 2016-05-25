@@ -35,6 +35,8 @@ class RoadExposureReportMixin(ReportMixin):
         self.road_lengths = {}
         self.affected_road_lengths = {}
         self.affected_road_categories = {}
+        # By default it's true.
+        # But for the Tsunami raster on Roads, we already have the dry column.
         self.add_unaffected_column = True
 
     def init_report_var(self, categories):
@@ -125,7 +127,8 @@ class RoadExposureReportMixin(ReportMixin):
 
         for affected_category in self.affected_road_categories:
             attributes.append(affected_category)
-        attributes.append('Unaffected')
+        if self.add_unaffected_column:
+            attributes.append('Unaffected')
         attributes.append('Total')
 
         all_field = [0] * len(self.affected_road_lengths)
@@ -133,7 +136,8 @@ class RoadExposureReportMixin(ReportMixin):
             number_affected = sum(road_breakdown.values())
             count = self.affected_road_categories.index(category)
             all_field[count] = number_affected
-        all_field.append(self.total_road_length - sum(all_field))
+        if self.add_unaffected_column:
+            all_field.append(self.total_road_length - sum(all_field))
         all_field.append(self.total_road_length)
 
         fields.append(all_field)
@@ -154,7 +158,8 @@ class RoadExposureReportMixin(ReportMixin):
 
         for affected_category in self.affected_road_categories:
             attributes.append(affected_category)
-        attributes.append('Unaffected')
+        if self.add_unaffected_column:
+            attributes.append('Unaffected')
         attributes.append('Total')
 
         for road_type in self.road_lengths:
@@ -173,7 +178,9 @@ class RoadExposureReportMixin(ReportMixin):
                 row.append(affected_by_usage_value)
 
             # Unaffected
-            row.append(self.road_lengths[road_type] - sum(affected_by_usage))
+            if self.add_unaffected_column:
+                row.append(
+                    self.road_lengths[road_type] - sum(affected_by_usage))
 
             # Total for the road type
             row.append(self.road_lengths[road_type])

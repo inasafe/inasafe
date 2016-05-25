@@ -278,9 +278,7 @@ class AggregatorTest(unittest.TestCase):
 
     test_preprocessing.slow = True
 
-    def _create_aggregator(self,
-                           use_aoi_mode,
-                           use_native_zonal_stats):
+    def _create_aggregator(self, use_aoi_mode):
         """Helper to create aggregator"""
 
         aggregation_layer = QgsVectorLayer(
@@ -297,7 +295,6 @@ class AggregatorTest(unittest.TestCase):
             aggregator = Aggregator(self.extent, None)
         aggregator.set_layers(hazard_layer, exposure_layer)
         aggregator.validate_keywords()
-        aggregator.use_native_zonal_stats = use_native_zonal_stats
 
         return aggregator
 
@@ -305,7 +302,6 @@ class AggregatorTest(unittest.TestCase):
             self,
             impact_layer,
             expected_results,
-            use_native_zonal_stats=False,
             use_aoi_mode=False,
             impact_layer_attributes=None):
         """Helper to calculate aggregation.
@@ -334,9 +330,7 @@ class AggregatorTest(unittest.TestCase):
             expected_numeric_results.append(numeric_results)
             expected_string_results.append(string_results)
 
-        aggregator = self._create_aggregator(
-            use_aoi_mode, use_native_zonal_stats
-        )
+        aggregator = self._create_aggregator(use_aoi_mode)
         aggregator.aggregate(impact_layer)
 
         provider = aggregator.layer.dataProvider()
@@ -370,22 +364,16 @@ class AggregatorTest(unittest.TestCase):
                 impact_layer_attributes
             )
 
-    def test_aggregate_raster_impact_python(self):
-        """Check aggregation on raster impact using python zonal stats"""
-        self._aggregate_raster_impact()
-
     def test_aggregate_raster_impact_native(self):
         """Check aggregation on raster impact using native qgis zonal stats.
 
         TODO: this fails on Tim's machine but not on MB or Jenkins.
 
         """
-        self._aggregate_raster_impact(use_native_zonal_stats=True)
+        self._aggregate_raster_impact()
 
-    def _aggregate_raster_impact(self, use_native_zonal_stats=False):
+    def _aggregate_raster_impact(self):
         """Check aggregation on raster impact.
-
-        :param use_native_zonal_stats:
 
         Created from loadStandardLayers.qgs with:
         - a flood in Jakarta like in 2007
@@ -420,7 +408,7 @@ class AggregatorTest(unittest.TestCase):
              '10943934.3182373',
              '147.992999475819']]
 
-        self._aggregate(impact_layer, expected_results, use_native_zonal_stats)
+        self._aggregate(impact_layer, expected_results)
 
     def test_aggregate_vector_impact(self):
         """Test aggregation results on a vector layer.
@@ -584,7 +572,7 @@ class AggregatorTest(unittest.TestCase):
     def test_set_sum_field_name(self):
         """Test sum_field_name work
         """
-        aggregator = self._create_aggregator(False, False)
+        aggregator = self._create_aggregator(False)
         self.assertEquals(aggregator.sum_field_name(), 'aggr_sum')
 
         aggregator.set_sum_field_name('SUMM_AGGR')
@@ -593,7 +581,7 @@ class AggregatorTest(unittest.TestCase):
 
     def test_get_centroids(self):
         """Test get_centroids work"""
-        aggregator = self._create_aggregator(False, False)
+        aggregator = self._create_aggregator(False)
 
         polygon1 = numpy.array([[0, 0], [0, 1], [1, 0], [0, 0]])
         polygon2 = numpy.array([[0, 0], [1, 1], [1, 0], [0, 0]])

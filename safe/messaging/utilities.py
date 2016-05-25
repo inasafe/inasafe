@@ -46,7 +46,7 @@ def generate_insufficient_overlap_message(
     :type viewport_geoextent: list
 
     :return: An InaSAFE message object.
-    :rtype: Message
+    :rtype: safe.messaging.Message
     """
     description = tr(
         'There was insufficient overlap between the input layers and / or the '
