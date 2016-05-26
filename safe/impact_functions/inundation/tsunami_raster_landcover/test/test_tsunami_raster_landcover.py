@@ -23,8 +23,8 @@ from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.storage.utilities import safe_to_qgis_layer
 
 
-class TestClassifiedPolygonLandCoverFunction(unittest.TestCase):
-    """Test for Classified Polygon Land Cover Impact Function."""
+class TestTsunamiRasterLandCoverFunction(unittest.TestCase):
+    """Test for Tsunami Raster Land Cover Impact Function."""
 
     def setUp(self):
         registry = ImpactFunctionManager().registry

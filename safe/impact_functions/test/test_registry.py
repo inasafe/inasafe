@@ -105,7 +105,8 @@ class TestRegistry(unittest.TestCase):
             'Point volcano on buildings',
             'Polygon volcano on buildings',
             'Point volcano on population',
-            'Polygon volcano on population']
+            'Polygon volcano on population',
+            'Ash raster on land cover']
         self.assertItemsEqual(expected, impact_functions)
 
     def test_get_impact_function_instance(self):

@@ -328,17 +328,46 @@ def html_to_file(html, file_path=None, open_browser=False):
         open_in_browser(file_path)
 
 
-def ranges_according_thresholds(
-        unaffected_max, very_low_max, low_max, medium_max, high_max):
+def ranges_according_thresholds_list(list_of_thresholds):
+    """Return an ordered dictionary with the ranges according to thresholds.
+
+    This used to classify a raster according to arbitrary number of thresholds
+
+    Given input: [A, B, C, D]
+    it will produce ranges:
+
+    {
+        0: [A, B],
+        1: [B, C],
+        2: [C, D]
+    }
+
+    If you want to list infinite interval, you can set A or D as None. To
+    indicate the interval is open till infinity.
+
+    :param list_of_thresholds:
+    :type list_of_thresholds: list(float)
+    :return:
+    """
+    ranges = OrderedDict()
+    for i, threshold in enumerate(list_of_thresholds):
+        if i >= len(list_of_thresholds) - 1:
+            break
+        threshold_min = list_of_thresholds[i]
+        try:
+            threshold_max = list_of_thresholds[i+1]
+        except IndexError:
+            threshold_max = None
+        ranges.update({
+            i: [threshold_min, threshold_max]
+        })
+    return ranges
+
+
+def ranges_according_thresholds(low_max, medium_max, high_max):
     """Return an ordered dictionary with the ranges according to thresholds.
 
     This used to classify a raster according three thresholds.
-
-    :param unaffected_max: Unaffected threshold
-    :type unaffected_max: float
-
-    :param very_low_max: The very low threshold
-    :type very_low_max: float
 
     :param low_max: The low threshold.
     :type low_max: float
@@ -352,13 +381,8 @@ def ranges_according_thresholds(
     :return The ranges.
     :rtype OrderedDict
     """
-    ranges = OrderedDict()
-    ranges[0] = [unaffected_max, very_low_max]
-    ranges[1] = [very_low_max, low_max]
-    ranges[2] = [low_max, medium_max]
-    ranges[3] = [medium_max, high_max]
-    ranges[4] = [high_max, None]
-    return ranges
+    return ranges_according_thresholds_list(
+        [None, 0.0, low_max, medium_max, high_max, None])
 
 
 def read_file_keywords(layer_path, keyword=None):

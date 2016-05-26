@@ -37,7 +37,7 @@ from safe.impact_functions.generic.classified_polygon_landcover.\
     impact_function import _calculate_landcover_impact
 from safe.utilities.i18n import tr
 from safe.gis.reclassify_gdal import reclassify_polygonize
-from safe.utilities.utilities import ranges_according_thresholds
+from safe.utilities.utilities import ranges_according_thresholds_list
 from safe.storage.vector import Vector
 from safe.common.utilities import unique_filename
 from safe.gis.qgis_raster_tools import align_clip_raster
@@ -52,7 +52,7 @@ class AshRasterLandcoverFunction(
         ContinuousRHClassifiedVE,
         LandCoverReportMixin):
     # noinspection PyUnresolvedReferences
-    """Simple impact function for tsunami on landcover."""
+    """Simple impact function for ash raster on landcover."""
     _metadata = AshRasterHazardLandCoverFunctionMetadata()
 
     def __init__(self):
@@ -92,8 +92,9 @@ class AshRasterLandcoverFunction(
         low_max = self.parameters['low_threshold'].value
         medium_max = self.parameters['moderate_threshold'].value
         high_max = self.parameters['high_threshold'].value
-        ranges = ranges_according_thresholds(
-            unaffected_max, very_low_max, low_max, medium_max, high_max)
+        ranges = ranges_according_thresholds_list(
+            [unaffected_max, very_low_max, low_max,
+             medium_max, high_max, None])
 
         hazard_value_to_class = {}
         for i, interval in enumerate(ranges):
