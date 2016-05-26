@@ -908,7 +908,7 @@ structure_class_mapping = [
         'key': 'transport',
         'name': tr('Transport'),
         'description': tr(
-            'An structure that provides a service or facility in the '
+            'A structure that provides a service or facility in the '
             'transport sector.'),
         'string_defaults': [
             'bus stop', 'bus station', 'station', 'ferry terminal',
@@ -973,8 +973,8 @@ structure_class_mapping = [
         'key': 'public facility',
         'name': tr('Public Facility'),
         'description': tr(
-            'A structure or facility that provides a service or facility to the'
-            'public including emergency services.'),
+            'A structure or facility that provides a service or facility to '
+            'the public including emergency services.'),
         'string_defaults': [
             'library', 'toilet', 'convention hall', 'prison', 'police station',
             'public facility', 'public building', 'fire station'
