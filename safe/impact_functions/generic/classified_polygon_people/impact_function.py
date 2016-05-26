@@ -352,6 +352,11 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
                 hazard_geometry = hazard_features[hazard_id].geometry()
                 impact_geometry = geometry.intersection(hazard_geometry)
 
+                if not impact_geometry:
+                    LOGGER.warning(
+                        'Impact geometry is None for hazard_id %s' % hazard_id)
+                    continue
+
                 if not impact_geometry.wkbType() == QGis.WKBPolygon and \
                    not impact_geometry.wkbType() == QGis.WKBMultiPolygon:
                     continue  # no intersection found
