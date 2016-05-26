@@ -47,7 +47,6 @@ from safe.storage.core import read_layer as safe_read_layer
 from safe.storage.utilities import (
     calculate_polygon_centroid,
     safe_to_qgis_layer)
-from safe.impact_statistics.zonal_stats import calculate_zonal_stats
 from safe.utilities.clipper import clip_layer
 from safe.defaults import get_defaults
 from safe.utilities.keyword_io import KeywordIO

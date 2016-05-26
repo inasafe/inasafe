@@ -75,7 +75,42 @@ class TsunamiRasterLandcoverFunction(ContinuousRHClassifiedVE):
         :return: The notes that should be attached to this impact report.
         :rtype: safe.messaging.Message
         """
-        return []   # TODO: what to put here?
+        title = tr('Notes and assumptions')
+
+        # Thresholds for tsunami hazard zone breakdown.
+        low_max = self.parameters['low_threshold']
+        medium_max = self.parameters['medium_threshold']
+        high_max = self.parameters['high_threshold']
+
+        fields = [
+            tr('Dry zone is defined as non-inundated area or has inundation '
+               'depth is 0 %s') % low_max.unit.abbreviation,
+            tr('Low tsunami hazard zone is defined as inundation depth is '
+               'more than 0 %s but less than %.1f %s') % (
+                low_max.unit.abbreviation,
+                low_max.value,
+                low_max.unit.abbreviation),
+            tr('Moderate tsunami hazard zone is defined as inundation depth '
+               'is more than %.1f %s but less than %.1f %s') % (
+                low_max.value,
+                low_max.unit.abbreviation,
+                medium_max.value,
+                medium_max.unit.abbreviation),
+            tr('High tsunami hazard zone is defined as inundation depth is '
+               'more than %.1f %s but less than %.1f %s') % (
+                medium_max.value,
+                medium_max.unit.abbreviation,
+                high_max.value,
+                high_max.unit.abbreviation),
+            tr('Very high tsunami hazard zone is defined as inundation depth '
+               'is more than %.1f %s') % (
+                high_max.value, high_max.unit.abbreviation)
+        ]
+
+        return {
+            'title': title,
+            'fields': fields
+        }
 
     def run(self):
         """Run the impact function.
