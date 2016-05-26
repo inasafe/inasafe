@@ -283,7 +283,7 @@ class TsunamiRasterRoadsFunction(
                 low_max.unit.abbreviation,
                 low_max.value,
                 low_max.unit.abbreviation),
-            tr('Moderate tsunami hazard zone is defined as inundation depth '
+            tr('Medium tsunami hazard zone is defined as inundation depth '
                'is more than %.1f %s but less than %.1f %s') % (
                 low_max.value,
                 low_max.unit.abbreviation,
