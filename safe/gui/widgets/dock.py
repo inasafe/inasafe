@@ -568,8 +568,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         title = m.Heading(
             self.tr('Ready'), **PROGRESS_UPDATE_STYLE)
         notes = m.Paragraph(
-            self.tr('You can now proceed to run your analysis by clicking '
-                    'the'),
+            self.tr(
+                'You can now proceed to run your analysis by clicking the '),
             m.EmphasizedText(self.tr('Run'), **KEYWORD_STYLE),
             self.tr('button.'))
         message = m.Message(LOGO_ELEMENT, title, notes)
@@ -2142,7 +2142,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             # For #2077 somewhat kludgy hack to prevent positive
             # message when we cant actually run
             match = self.tr(
-                'You can now proceed to run your analysis by clicking the')
+                'You can now proceed to run your analysis by clicking the ')
             current_text = self.wvResults.page_to_text()
             if match in current_text:
                 message = m.Message()
