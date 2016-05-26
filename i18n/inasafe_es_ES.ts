@@ -5197,7 +5197,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="287"/>
+        <location filename="impact_function.py" line="94"/>
         <source>Moderate tsunami hazard zone is defined as inundation depth is more than %.1f %s but less than %.1f %s</source>
         <translation type="unfinished"/>
     </message>
@@ -5542,118 +5542,28 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="878"/>
+        <location filename="definitions.py" line="886"/>
         <source>Education</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="879"/>
-        <source>An object that has a service in education sector.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="888"/>
+        <location filename="definitions.py" line="897"/>
         <source>Health</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="889"/>
-        <source>An object that has a service and facility in health sector.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="899"/>
-        <source>Transportation</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="900"/>
-        <source>An object that has a service and facility in public transportation.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="910"/>
+        <location filename="definitions.py" line="920"/>
         <source>Place of Worship</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="911"/>
-        <source>An object that used to pray or related to religion activity.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="927"/>
+        <location filename="definitions.py" line="938"/>
         <source>Government</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="928"/>
-        <source>A building that used to doing government activity in public service or the other government activity.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="936"/>
-        <source>Economy</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="937"/>
-        <source>A building that used to trade / buy and sell activity or an object that has an economy activity.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="949"/>
-        <source>Recreation and Entertainment</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="950"/>
-        <source>An Object that provide an entertainment or recreation facilities.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="961"/>
-        <source>Sport</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="962"/>
-        <source>An object that has a sport facility and people can use it.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="970"/>
+        <location filename="definitions.py" line="974"/>
         <source>Public Facility</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="971"/>
-        <source>An object that provide a service or facility to public like toilet, library, convention hall, etc.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="982"/>
-        <source>Accommodation</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="983"/>
-        <source>An object that provide an accommodation / lodging or food services.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="993"/>
-        <source>Residence</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="994"/>
-        <source>An object that people use to live daily.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="1002"/>
-        <source>An object that be found in Indonesia, and frequently mapped.</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -5975,12 +5885,12 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="221"/>
+        <location filename="impact_function.py" line="256"/>
         <source>Affected Land Cover</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="228"/>
+        <location filename="impact_function.py" line="263"/>
         <source>Land cover affected by each hazard zone</source>
         <translation type="unfinished"/>
     </message>
@@ -6293,6 +6203,81 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
     <message>
         <location filename="keyword_io.py" line="232"/>
         <source>The layer does not have keyword %s in its keywords.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="878"/>
+        <source>Residential</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="879"/>
+        <source>A structure used to provide shelter for people.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="887"/>
+        <source>A structure that provides a service in the education sector.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="898"/>
+        <source>A structure that provides a service or facility in the health sector.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="909"/>
+        <source>Transport</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="910"/>
+        <source>An structure that provides a service or facility in the transport sector.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="921"/>
+        <source>A structure or facility that is used for prayer or related religion activity.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="939"/>
+        <source>A structure or facility that is used to provide a public service or other government activity.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="947"/>
+        <source>Commercial</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="948"/>
+        <source>A structure or facility that is used for commercial or industrial purposes.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="961"/>
+        <source>Recreation</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="962"/>
+        <source>A structure or facility that is used for entertainment, sporting or recreation purposes.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="975"/>
+        <source>A structure or facility that provides a service or facility to thepublic including emergency services.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="987"/>
+        <source>Any other structure frequently mapped.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="287"/>
+        <source>Medium tsunami hazard zone is defined as inundation depth is more than %.1f %s but less than %.1f %s</source>
         <translation type="unfinished"/>
     </message>
 </context>
