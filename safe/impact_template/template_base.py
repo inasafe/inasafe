@@ -140,9 +140,13 @@ class TemplateBase(object):
             table = m.Table(
                 style_class='table table-condensed table-striped')
             table.caption = v['caption']
+            attributes = v['attributes']
             header = m.Row()
-            for attribute in v['attributes']:
-                header.add(attribute)
+            # Bold and align left the 1st one.
+            header.add(m.Cell(attributes[0], header=True, align='left'))
+            for attribute in attributes[1:]:
+                # Bold and align right.
+                header.add(m.Cell(attribute, header=True, align='right'))
             table.add(header)
 
             for field in v['fields']:
@@ -152,10 +156,11 @@ class TemplateBase(object):
                 for value in field[1:]:
                     try:
                         val = int(value)
-                        row.add(m.Cell(format_int(val)))
+                        # Align right integers.
+                        row.add(m.Cell(format_int(val), align='right'))
                     except ValueError:
-                        # Catch no data value
-                        row.add(m.Cell(value))
+                        # Catch no data value. Align left strings.
+                        row.add(m.Cell(value, align='left'))
 
                 table.add(row)
             message.add(table)

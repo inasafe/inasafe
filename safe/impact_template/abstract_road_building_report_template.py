@@ -79,10 +79,15 @@ class AbstractRoadBuildingReportTemplate(TemplateBase):
             table = m.Table(
                 style_class='table table-condensed table-striped')
             table.caption = v['caption']
+            attributes = v['attributes']
+
             header = m.Row()
-            for attribute in v['attributes']:
-                header.add(m.Cell(attribute, header=True))
-            header.add(m.Cell('Total', header=True))
+            # Bold and align left the 1st one.
+            header.add(m.Cell(attributes[0], header=True, align='left'))
+            for attribute in attributes[1:]:
+                # Bold and align right.
+                header.add(m.Cell(attribute, header=True, align='right'))
+            header.add(m.Cell('Total', header=True, align='right'))
             table.add(header)
 
             for field in v['fields']:
@@ -94,12 +99,13 @@ class AbstractRoadBuildingReportTemplate(TemplateBase):
                     try:
                         val = int(value)
                         total += val
-                        row.add(m.Cell(format_int(val)))
+                        # Align right integers.
+                        row.add(m.Cell(format_int(val), align='right'))
                     except ValueError:
-                        # Catch no data value
-                        row.add(m.Cell(value))
+                        # Catch no data value. Align left strings.
+                        row.add(m.Cell(value, align='left'))
 
-                row.add(m.Cell(format_int(int(round(total)))))
+                row.add(m.Cell(format_int(int(round(total))), align='right'))
                 table.add(row)
             message.add(table)
 
