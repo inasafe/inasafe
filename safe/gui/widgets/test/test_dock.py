@@ -82,7 +82,7 @@ class TestDock(TestCase):
 
         self.dock.show_only_visible_layers_flag = True
         load_standard_layers(self.dock)
-        self.dock.cboHazard.setCurrentIndex(0)
+        self.dock.cboHazard.setCurrentIndex(1)
         self.dock.cboExposure.setCurrentIndex(0)
         self.dock.cboFunction.setCurrentIndex(0)
         self.dock.run_in_thread_flag = False
@@ -121,7 +121,7 @@ class TestDock(TestCase):
     def test_defaults(self):
         """Test the GUI in its default state"""
         print combos_to_string(self.dock)
-        self.assertEqual(self.dock.cboHazard.currentIndex(), 0)
+        self.assertEqual(self.dock.cboHazard.currentIndex(), 1)
         self.assertEqual(self.dock.cboExposure.currentIndex(), 0)
         self.assertEqual(self.dock.cboFunction.currentIndex(), 0)
         self.assertEqual(self.dock.cboAggregation.currentIndex(), 0)
@@ -344,7 +344,7 @@ class TestDock(TestCase):
             function_id='FloodEvacuationRasterHazardFunction')
         layer = self.dock.get_exposure_layer()
         index = self.dock.layer_legend_index(layer)
-        self.assertEqual(index, 10)
+        self.assertEqual(index, 15)
 
     def test_add_above_layer(self):
         """Test we can add one layer above another - see #2322

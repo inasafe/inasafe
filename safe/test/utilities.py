@@ -967,7 +967,6 @@ def load_standard_layers(dock=None):
     #
     # WARNING: Please keep test/data/project/load_standard_layers.qgs in sync
     file_list = [
-        test_data_path('hazard', 'ash_raster_wgs84.tif'),
         test_data_path('hazard', 'flood_multipart_polygons.shp'),
         test_data_path('hazard', 'floods.shp'),
         test_data_path('hazard', 'classified_generic_polygon.shp'),
@@ -977,6 +976,7 @@ def load_standard_layers(dock=None):
         test_data_path('hazard', 'continuous_flood_20_20.asc'),
         test_data_path('hazard', 'tsunami_wgs84.tif'),
         test_data_path('hazard', 'earthquake.tif'),
+        test_data_path('hazard', 'ash_raster_wgs84.tif'),
         test_data_path('exposure', 'landcover.shp'),
         test_data_path('exposure', 'building-points.shp'),
         test_data_path('exposure', 'buildings.shp'),
