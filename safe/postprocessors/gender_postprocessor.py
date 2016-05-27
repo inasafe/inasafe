@@ -78,12 +78,16 @@ class GenderPostprocessor(AbstractPopulationPostprocessor):
         This indicator reports the total population.
         """
         name = tr('Total')
-        # LOGGER.info(self.impact_total)
-        try:
-            result = self.impact_total
-            result = int(round(result))
-        except ValueError:
+        LOGGER.debug('ABRAKADABRA')
+        LOGGER.info(self.impact_total)
+        if not self.impact_total:
             result = self.NO_DATA_TEXT
+        else
+            try:
+                result = self.impact_total
+                result = int(round(result))
+            except ValueError:
+                result = self.NO_DATA_TEXT
         self._append_result(name, result)
 
     def _calculate_females(self):
