@@ -82,7 +82,7 @@ class GenderPostprocessor(AbstractPopulationPostprocessor):
         LOGGER.info(self.impact_total)
         if not self.impact_total:
             result = self.NO_DATA_TEXT
-        else
+        else:
             try:
                 result = self.impact_total
                 result = int(round(result))
