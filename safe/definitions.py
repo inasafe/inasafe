@@ -695,7 +695,7 @@ tsunami_raster_hazard_classes = {
             'flee to higher elevation. Felt by most people on large ship, '
             'observed from shore. Small vessels drift and collide and some '
             'turn over. Sand is deposited and there is flooding of areas '
-            ' close to the shore.'),
+            'close to the shore.'),
             'numeric_default_min': 0,
             'numeric_default_max': 1,
             'optional': True
@@ -723,7 +723,7 @@ tsunami_raster_hazard_classes = {
             'VII or even more (Papadoupulos and Imamura, 2001). Tsunami wave '
             'with 4 m inundation depth cause damage to small vessel, a few '
             'ships are drifted inland, severe damage on most wooden houses. '
-            'Boulderz are deposited on shore. If tsunami height reaches 8 m, '
+            'Boulders are deposited on shore. If tsunami height reaches 8 m, '
             'it will cause severe damage. Dykes, wave breaker, tsunami '
             'protection walls and green belts will be washed away.'),
             'numeric_default_min': 3,
