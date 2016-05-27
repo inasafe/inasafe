@@ -78,7 +78,6 @@ class GenderPostprocessor(AbstractPopulationPostprocessor):
         This indicator reports the total population.
         """
         name = tr('Total')
-        LOGGER.debug('ABRAKADABRA')
         LOGGER.info(self.impact_total)
         if not self.impact_total:
             result = self.NO_DATA_TEXT
@@ -98,11 +97,14 @@ class GenderPostprocessor(AbstractPopulationPostprocessor):
 
         """
         name = tr('Female count (affected)')
-        result = self.impact_total * self.female_ratio
-        try:
-            result = int(round(result))
-        except ValueError:
+        if not self.impact_total:
             result = self.NO_DATA_TEXT
+        else:
+            result = self.impact_total * self.female_ratio
+            try:
+                result = int(round(result))
+            except ValueError:
+                result = self.NO_DATA_TEXT
         self._append_result(name, result)
 
     def _calculate_weekly_hygene_packs(self):
@@ -117,11 +119,14 @@ class GenderPostprocessor(AbstractPopulationPostprocessor):
 
         # weekly hygene packs =
         # affected pop * fem_ratio * 0.7937 * week / intended day-of-use
-        result = self.impact_total * self.female_ratio * 0.7937 * (7 / 7)
-        try:
-            result = int(round(result))
-        except ValueError:
+        if not self.impact_total:
             result = self.NO_DATA_TEXT
+        else:
+            result = self.impact_total * self.female_ratio * 0.7937 * (7 / 7)
+            try:
+                result = int(round(result))
+            except ValueError:
+                result = self.NO_DATA_TEXT
         self._append_result(name, result, meta)
 
     def _calculate_weekly_increased_calories(self):
@@ -140,11 +145,14 @@ class GenderPostprocessor(AbstractPopulationPostprocessor):
 
         # weekly Kg rice =
         # affected pop * fem_ratio * 0.7937 * week / intended day-of-use
-        lact_kg = self.impact_total * self.female_ratio * 2 * 0.033782
-        preg_kg = self.impact_total * self.female_ratio * 2 * 0.01281
-        result = lact_kg + preg_kg
-        try:
-            result = int(round(result))
-        except ValueError:
+        if not self.impact_total:
             result = self.NO_DATA_TEXT
+        else:
+            lact_kg = self.impact_total * self.female_ratio * 2 * 0.033782
+            preg_kg = self.impact_total * self.female_ratio * 2 * 0.01281
+            result = lact_kg + preg_kg
+            try:
+                result = int(round(result))
+            except ValueError:
+                result = self.NO_DATA_TEXT
         self._append_result(name, result, meta)
