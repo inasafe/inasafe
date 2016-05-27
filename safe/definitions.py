@@ -641,7 +641,7 @@ generic_raster_hazard_classes = {
     'classes': [
         {
             'key': 'high',
-            'name': tr('high'),
+            'name': tr('High hazard zone'),
             'description': tr('The highest hazard classification.'),
             'numeric_default_min': 3,
             'numeric_default_max': 3,
@@ -649,7 +649,7 @@ generic_raster_hazard_classes = {
         },
         {
             'key': 'medium',
-            'name': tr('medium'),
+            'name': tr('Medium hazard zone'),
             'description': tr('The middle hazard classification.'),
             'numeric_default_min': 2,
             'numeric_default_max': 2,
@@ -657,7 +657,7 @@ generic_raster_hazard_classes = {
         },
         {
             'key': 'low',
-            'name': tr('low'),
+            'name': tr('Low hazard zone'),
             'description': tr('The lowest hazard classification.'),
             'numeric_default_min': 1,
             'numeric_default_max': 1,
@@ -670,27 +670,51 @@ tsunami_raster_hazard_classes = {
     'key': 'tsunami_raster_hazard_classes',
     'name': tr('Tsunami classes'),
     'description': tr(
-        'This is a binary description for an area. The area is either '
-        '<b>wet</b> (affected by tsunami) or <b>dry</b> (not affected '
-        'by tsunami). This unit does not describe how <b>wet</b> or '
-        '<b>dry</b> an area is.'),
+        'This is a quinary description for an area. The area is either '
+        '<b>dry</b>, <b>low</b>, <b>medium</b>, <b>high</b>, or '
+        '<b>very high</b> for tsunami hazard classification. '),
     'classes': [
         {
-            'key': 'wet',
-            'name': tr('wet'),
-            'description': tr('Water above ground height.'),
-            'numeric_default_min': 1,
-            'numeric_default_max': 9999999999,
-            'optional': True
-        },
-        {
             'key': 'dry',
-            'name': tr('dry'),
+            'name': tr('Dry Zone'),
             'description': tr('No water above ground height.'),
             'numeric_default_min': 0,
             'numeric_default_max': (1 - small_number),
             'optional': True
+        },
+        {
+            'key': 'low',
+            'name': tr('Low hazard zone'),
+            'description': tr('Water above ground height and less than 1.0m.'),
+            'numeric_default_min': 0,
+            'numeric_default_max': 1,
+            'optional': True
+        },
+        {
+            'key': 'medium',
+            'name': tr('Medium hazard zone'),
+            'description': tr('Water above 1.1m and less than 3.0m.'),
+            'numeric_default_min': 1,
+            'numeric_default_max': 3,
+            'optional': True
+        },
+        {
+            'key': 'high',
+            'name': tr('High hazard zone'),
+            'description': tr('Water above 3.1m and less than 8.0m.'),
+            'numeric_default_min': 3,
+            'numeric_default_max': 8,
+            'optional': True
+        },
+        {
+            'key': 'very high',
+            'name': tr('Very high hazard zone'),
+            'description': tr('Water above 8.0m.'),
+            'numeric_default_min': 8,
+            'numeric_default_max': 9999999999,
+            'optional': True
         }
+
     ]
 }
 
