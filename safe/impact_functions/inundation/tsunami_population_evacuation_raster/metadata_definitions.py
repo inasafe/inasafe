@@ -110,7 +110,7 @@ class TsunamiEvacuationMetadata(ImpactFunctionMetadata):
                    'ITS 2001 proceedings, no. 5-1, pp. 569-577. 2001.'),
                 tr('Hamza Latief. pers com. Default impact threshold for tsunami'
                    'impact on people should be 0.7m. This is less than a flood '
-                   'threshold because in a tsunami, the water is movign with '
+                   'threshold because in a tsunami, the water is moving with '
                    'force.'),
             ],
             'layer_requirements': {
