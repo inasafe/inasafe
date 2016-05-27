@@ -672,11 +672,13 @@ tsunami_raster_hazard_classes = {
     'description': tr(
         'This is a quinary description for an area. The area is either '
         '<b>dry</b>, <b>low</b>, <b>medium</b>, <b>high</b>, or '
-        '<b>very high</b> for tsunami hazard classification. '),
+        '<b>very high</b> for tsunami hazard classification. '
+        'The following description for these classes is provided by Badan '
+        'Geologi based on BNPB Perka 2/2012'),
     'classes': [
         {
             'key': 'dry',
-            'name': tr('Dry Zone'),
+            'name': tr('Dry zone'),
             'description': tr('No water above ground height.'),
             'numeric_default_min': 0,
             'numeric_default_max': (1 - small_number),
@@ -685,7 +687,15 @@ tsunami_raster_hazard_classes = {
         {
             'key': 'low',
             'name': tr('Low hazard zone'),
-            'description': tr('Water above ground height and less than 1.0m.'),
+            'description': tr('Water above ground height and less than 1.0m.'
+            'The area is potentially hit by a tsunami wave with an inundation '
+            'depth less than 1 m or similar to tsunami intensity scale of V '
+            'or less in (Papadoupulos and Imamura, 2001). '
+            'Tsunami wave of 1 m height causes few people to be frightened and '
+            'flee to higher elevation. Felt by most people on large ship, '
+            'observed from shore. Small vessels drift and collide and some '
+            'turn over. Sand is deposited and there is flooding of areas close '
+            'to the shore.'),
             'numeric_default_min': 0,
             'numeric_default_max': 1,
             'optional': True
@@ -693,7 +703,13 @@ tsunami_raster_hazard_classes = {
         {
             'key': 'medium',
             'name': tr('Medium hazard zone'),
-            'description': tr('Water above 1.1m and less than 3.0m.'),
+            'description': tr('Water above 1.1m and less than 3.0m.'
+            'The area is potentially hit by a tsunami wave with an inundation '
+            'depth of 1 - 3 m or equal to V-VI tsunami intensity scale '
+            '(Papadoupulos and Imamura, 2001). Tsunami wave with 3 m inundation '
+            'depth causes most people frightened and to flee to higher ground. '
+            'Small vessels drift and collid. Damage occurs to some wooden '
+            'houses, while most of them are safe.'),
             'numeric_default_min': 1,
             'numeric_default_max': 3,
             'optional': True
@@ -701,7 +717,15 @@ tsunami_raster_hazard_classes = {
         {
             'key': 'high',
             'name': tr('High hazard zone'),
-            'description': tr('Water above 3.1m and less than 8.0m.'),
+            'description': tr('Water above 3.1m and less than 8.0m.'
+            'The area is potentially hit by a tsunami wave with an inundation '
+            'depth > 3 m or reach a tsunami intensity scale of VII or even '
+            'more (Papadoupulos and Imamura, 2001). Tsunami wave with 4 m '
+            'inundation depth cause damage to small vessel, a few ships are '
+            'drifted inland, severe damage on most wooden houses. Boulder are '
+            'deposited on shore. If tsunami height reaches 8 m, it will cause '
+            'severe damage. Dykes, wave breaker, tsunami protection walls and '
+            'green belts will be washed away.'),
             'numeric_default_min': 3,
             'numeric_default_max': 8,
             'optional': True
