@@ -11,6 +11,9 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
+import logging
+LOGGER = logging.getLogger('InaSAFE')
+
 from qgis.core import (
     QGis,
     QgsCoordinateReferenceSystem,
@@ -59,6 +62,10 @@ def _calculate_landcover_impact(
             hazard_id = hazard_features[hazard_id]
             hazard_geometry = hazard_id.geometry()
             impact_geometry = geometry.intersection(hazard_geometry)
+            if not impact_geometry:
+                LOGGER.warning(
+                    'Impact geometry is None for hazard_id %s' % hazard_id)
+                continue
             if not impact_geometry.wkbType() == QGis.WKBPolygon and \
                     not impact_geometry.wkbType() == QGis.WKBMultiPolygon:
                 continue  # no intersection found
