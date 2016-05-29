@@ -687,15 +687,16 @@ tsunami_raster_hazard_classes = {
         {
             'key': 'low',
             'name': tr('Low hazard zone'),
-            'description': tr('Water above ground height and less than 1.0m.'
-            'The area is potentially hit by a tsunami wave with an inundation '
-            'depth less than 1 m or similar to tsunami intensity scale of V '
-            'or less in (Papadoupulos and Imamura, 2001). '
-            'Tsunami wave of 1m height causes few people to be frightened and '
-            'flee to higher elevation. Felt by most people on large ship, '
-            'observed from shore. Small vessels drift and collide and some '
-            'turn over. Sand is deposited and there is flooding of areas '
-            'close to the shore.'),
+            'description': tr(
+                'Water above ground height and less than 1.0m.'
+                'The area is potentially hit by a tsunami wave with an '
+                'inundation depth less than 1 m or similar to tsunami '
+                'intensity scale of V or less in (Papadoupulos and Imamura, '
+                '2001). Tsunami wave of 1m height causes few people to be '
+                'frightened and flee to higher elevation. Felt by most people '
+                'on large ship, observed from shore. Small vessels drift and '
+                'collide and some turn over. Sand is deposited and there is '
+                'flooding of areas close to the shore.'),
             'numeric_default_min': 0,
             'numeric_default_max': 1,
             'optional': True
@@ -703,13 +704,14 @@ tsunami_raster_hazard_classes = {
         {
             'key': 'medium',
             'name': tr('Medium hazard zone'),
-            'description': tr('Water above 1.1m and less than 3.0m.'
-            'The area is potentially hit by a tsunami wave with an inundation '
-            'depth of 1 - 3 m or equal to V-VI tsunami intensity scale '
-            '(Papadoupulos and Imamura, 2001). Tsunami wave with a 3m '
-            'inundation depth causes most people frightened and to flee to '
-            'higher ground. Small vessels drift and collid. Damage occurs to '
-            'some wooden houses, while most of them are safe.'),
+            'description': tr(
+                'Water above 1.1m and less than 3.0m. The area is potentially '
+                'hit by a tsunami wave with an inundation depth of 1 - 3 m or '
+                'equal to V-VI tsunami intensity scale (Papadoupulos and '
+                'Imamura, 2001). Tsunami wave with a 3m inundation depth '
+                'causes most people frightened and to flee to higher ground. '
+                'Small vessels drift and collid. Damage occurs to some wooden '
+                'houses, while most of them are safe.'),
             'numeric_default_min': 1,
             'numeric_default_max': 3,
             'optional': True
@@ -717,15 +719,17 @@ tsunami_raster_hazard_classes = {
         {
             'key': 'high',
             'name': tr('High hazard zone'),
-            'description': tr('Water above 3.1m and less than 8.0m.'
-            'The area is potentially hit by a tsunami wave with an '
-            'inundation depth > 3 m or reach a tsunami intensity scale of '
-            'VII or even more (Papadoupulos and Imamura, 2001). Tsunami wave '
-            'with 4 m inundation depth cause damage to small vessel, a few '
-            'ships are drifted inland, severe damage on most wooden houses. '
-            'Boulders are deposited on shore. If tsunami height reaches 8 m, '
-            'it will cause severe damage. Dykes, wave breaker, tsunami '
-            'protection walls and green belts will be washed away.'),
+            'description': tr(
+                'Water above 3.1m and less than 8.0m. The area is potentially '
+                'hit by a tsunami wave with an inundation depth > 3 m or '
+                'reach a tsunami intensity scale of VII or even more '
+                '(Papadoupulos and Imamura, 2001). Tsunami wave with 4 m '
+                'inundation depth cause damage to small vessel, a few ships '
+                'are drifted inland, severe damage on most wooden houses. '
+                'Boulders are deposited on shore. If tsunami height reaches '
+                '8 m, it will cause severe damage. Dykes, wave breaker, '
+                'tsunami 1protection walls and green belts will be washed '
+                'away.'),
             'numeric_default_min': 3,
             'numeric_default_max': 8,
             'optional': True
