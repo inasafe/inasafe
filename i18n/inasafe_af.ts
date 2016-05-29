@@ -1798,11 +1798,6 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="89"/>
-        <source>An exposure raster layer where each cell represents thepopulation count for that cell.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="metadata_definitions.py" line="59"/>
         <source>Classified polygon hazard on population</source>
         <translation type="unfinished"/>
@@ -1813,7 +1808,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="68"/>
+        <location filename="metadata_definitions.py" line="89"/>
         <source>An exposure raster layer where each cell represents the population count for that cell.</source>
         <translation type="unfinished"/>
     </message>
@@ -6229,11 +6224,6 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="910"/>
-        <source>An structure that provides a service or facility in the transport sector.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="definitions.py" line="921"/>
         <source>A structure or facility that is used for prayer or related religion activity.</source>
         <translation type="unfinished"/>
@@ -6264,11 +6254,6 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="975"/>
-        <source>A structure or facility that provides a service or facility to thepublic including emergency services.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="definitions.py" line="987"/>
         <source>Any other structure frequently mapped.</source>
         <translation type="unfinished"/>
@@ -6276,6 +6261,16 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
     <message>
         <location filename="impact_function.py" line="287"/>
         <source>Medium tsunami hazard zone is defined as inundation depth is more than %.1f %s but less than %.1f %s</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="910"/>
+        <source>A structure that provides a service or facility in the transport sector.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="975"/>
+        <source>A structure or facility that provides a service or facility to the public including emergency services.</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -7021,11 +7016,6 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="2147"/>
-        <source>You can now proceed to run your analysis by clicking the</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="dock.py" line="615"/>
         <source>Currently there are no overlapping extents between the hazard layer, the exposure layer and the user defined analysis area. Try zooming to the analysis area, clearing the analysis area or defining a new one using the analysis area definition tool.</source>
         <translation type="unfinished"/>
@@ -7093,6 +7083,11 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="dock.py" line="1624"/>
         <source>No keywords have been defined for this layer yet or there is an issue with the currently defined keywords and they need to be reviewed. If you wish to use this layer as an exposure, hazard, or aggregation layer in an analysis, please use the keyword wizard to update the keywords. You can open the wizard by clicking on the </source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="dock.py" line="2147"/>
+        <source>You can now proceed to run your analysis by clicking the </source>
         <translation type="unfinished"/>
     </message>
 </context>
