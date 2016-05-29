@@ -19,6 +19,7 @@ __copyright__ = 'imajimatika@gmail.com'
 
 from qgis.core import QgsDistanceArea
 
+from safe.utilities.i18n import tr
 from safe.utilities.pivot_table import FlatTable
 from safe.impact_reports.report_mixin_base import ReportMixin
 
@@ -28,9 +29,8 @@ class LandCoverReportMixin(ReportMixin):
     """
 
     def __init__(
-            self,
-            question,
-            impact_layer, target_field, land_cover_field, zone_field):
+            self, question, impact_layer, target_field, ordered_columns,
+            affected_columns, land_cover_field, zone_field):
         """Initialize method.
 
         :param question: Question for this IF.
@@ -42,6 +42,12 @@ class LandCoverReportMixin(ReportMixin):
         :param target_field: Field name in impact layer with hazard type
         :type target_field: basestring
 
+        :param ordered_columns: The columns order in the report.
+        :type ordered_columns: list
+
+        :param affected_columns: A subset of ordered_columns for affected.
+        :type affected_columns: list
+
         :param land_cover_field: Field name in impact layer with land cover
         :type land_cover_field: str
 
@@ -52,6 +58,8 @@ class LandCoverReportMixin(ReportMixin):
         """
         self.impact_layer = impact_layer
         self.target_field = target_field
+        self.ordered_columns = ordered_columns
+        self.affected_columns = affected_columns
         self.land_cover_field = land_cover_field
         self.zone_field = zone_field
         self.question = question
@@ -62,20 +70,45 @@ class LandCoverReportMixin(ReportMixin):
         :returns: The impact report data.
         :rtype: dict
         """
-        question = self.question
-        # impact_summary = self.impact_summary()  # I don't think we need this
-        impact_table = self.impact_table()
-        action_checklist = self.action_checklist()
-        notes = self.notes()
 
         return {
             'exposure': 'land cover',
-            'question': question,
+            'question': self.question,
             'impact summary': '',  # Set this as empty string
             'zone field': self.zone_field,
-            'impact table': impact_table,
-            'action check list': action_checklist,
-            'notes': notes
+            'ordered columns': self.ordered_columns,
+            'affected columns': self.affected_columns,
+            'impact table': self.impact_table(),
+            'action check list': self.action_checklist(),
+            'notes': self.notes()
+        }
+
+    def action_checklist(self):
+        """Return the action check list section of the report.
+
+        :return: The action check list as dict.
+        :rtype: dict
+        """
+        title = tr('Action checklist')
+        fields = [
+            tr('What type of crops are planted in the affected fields?'),
+            tr('How long will the activity or function of the land cover be '
+               'disturbed?'),
+            tr('What proportion of the land cover is damaged?'),
+            tr('What potential losses will result from the land cover damage?'),
+            tr('How much productivity will be lost during this event?'),
+            tr('Which crops were ready for harvest during this event?'),
+            tr('What is the ownership system of the land/crops/field?'),
+            tr('Are the land/crops/field accessible after the event?'),
+            tr('What urgent actions can be taken to normalize the land/crops/'
+               'field?'),
+            tr('What tools or equipment are needed for early recovery of the '
+               'land/crops/field?')
+        ]
+
+        return {
+            'title': title,
+            'fields': fields
         }
 
     def impact_table(self):

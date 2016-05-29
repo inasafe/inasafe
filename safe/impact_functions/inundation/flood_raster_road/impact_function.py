@@ -29,7 +29,7 @@ from safe.utilities.utilities import reorder_dictionary, main_type
 from safe.storage.vector import Vector
 from safe.common.utilities import get_utm_epsg, unique_filename
 from safe.common.exceptions import GetDataError
-from safe.gis.qgis_raster_tools import clip_raster
+from safe.gis.qgis_raster_tools import align_clip_raster
 from safe.gis.qgis_vector_tools import (
     extent_to_geo_array,
     create_layer)
@@ -281,58 +281,8 @@ class FloodRasterRoadsFunction(
             viewport_extent = extent_to_geo_array(
                 QgsRectangle(*self.requested_extent), geo_crs, hazard_crs)
 
-        # Align raster extent and viewport
-        # assuming they are both in the same projection
-        raster_extent = self.hazard.layer.dataProvider().extent()
-        clip_xmin = raster_extent.xMinimum()
-        # clip_xmax = raster_extent.xMaximum()
-        clip_ymin = raster_extent.yMinimum()
-        # clip_ymax = raster_extent.yMaximum()
-        if viewport_extent[0] > clip_xmin:
-            clip_xmin = viewport_extent[0]
-        if viewport_extent[1] > clip_ymin:
-            clip_ymin = viewport_extent[1]
-        # TODO: Why have these two clauses when they are not used?
-        # Commenting out for now.
-        # if viewport_extent[2] < clip_xmax:
-        #     clip_xmax = viewport_extent[2]
-        # if viewport_extent[3] < clip_ymax:
-        #     clip_ymax = viewport_extent[3]
-
-        height = ((viewport_extent[3] - viewport_extent[1]) /
-                  self.hazard.layer.rasterUnitsPerPixelY())
-        height = int(height)
-        width = ((viewport_extent[2] - viewport_extent[0]) /
-                 self.hazard.layer.rasterUnitsPerPixelX())
-        width = int(width)
-
-        raster_extent = self.hazard.layer.dataProvider().extent()
-        xmin = raster_extent.xMinimum()
-        xmax = raster_extent.xMaximum()
-        ymin = raster_extent.yMinimum()
-        ymax = raster_extent.yMaximum()
-
-        x_delta = (xmax - xmin) / self.hazard.layer.width()
-        x = xmin
-        for i in range(self.hazard.layer.width()):
-            if abs(x - clip_xmin) < x_delta:
-                # We have found the aligned raster boundary
-                break
-            x += x_delta
-            _ = i
-
-        y_delta = (ymax - ymin) / self.hazard.layer.height()
-        y = ymin
-        for i in range(self.hazard.layer.width()):
-            if abs(y - clip_ymin) < y_delta:
-                # We have found the aligned raster boundary
-                break
-            y += y_delta
-        clip_extent = [x, y, x + width * x_delta, y + height * y_delta]
-
         # Clip hazard raster
-        small_raster = clip_raster(
-            self.hazard.layer, width, height, QgsRectangle(*clip_extent))
+        small_raster = align_clip_raster(self.hazard.layer, viewport_extent)
 
         # Filter geometry and data using the extent
         ct = QgsCoordinateTransform(

@@ -1,6 +1,6 @@
 # coding=utf-8
-"""InaSAFE Disaster risk tool by Australian Aid - Generic Impact function on
-Land Cover for Classified Hazard.
+"""InaSAFE Disaster risk tool by Australian Aid - Tsunami Raster Impact on
+Road
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -15,106 +15,65 @@ from qgis.core import (
     QGis,
     QgsCoordinateReferenceSystem,
     QgsCoordinateTransform,
-    QgsDistanceArea,
     QgsFeature,
     QgsFeatureRequest,
     QgsField,
     QgsGeometry,
+    QgsPoint,
     QgsRectangle,
     QgsSpatialIndex,
     QgsVectorFileWriter,
-    QgsVectorLayer,
+    QgsVectorLayer
 )
 from PyQt4.QtCore import QVariant
-from collections import OrderedDict
 
-from safe.storage.vector import Vector
-from safe.utilities.i18n import tr
 from safe.common.exceptions import ZeroImpactException
+from safe.impact_functions.bases.continuous_rh_classified_ve import \
+    ContinuousRHClassifiedVE
+from safe.impact_functions.inundation.tsunami_raster_landcover.\
+    metadata_definitions import (TsunamiRasterHazardLandCoverFunctionMetadata)
+from safe.impact_functions.generic.classified_polygon_landcover.\
+    impact_function import _calculate_landcover_impact
+from safe.utilities.i18n import tr
+from safe.gis.reclassify_gdal import reclassify_polygonize
+from safe.utilities.utilities import ranges_according_thresholds
+from safe.storage.vector import Vector
 from safe.common.utilities import unique_filename
-from safe.impact_functions.bases.classified_vh_classified_ve import \
-    ClassifiedVHClassifiedVE
-from safe.impact_functions.generic.classified_polygon_landcover\
-    .metadata_definitions \
-    import ClassifiedPolygonHazardLandCoverFunctionMetadata
+from safe.gis.qgis_raster_tools import align_clip_raster
+from safe.gis.qgis_vector_tools import extent_to_geo_array
 from safe.impact_reports.land_cover_report_mixin import LandCoverReportMixin
 
-
-def _calculate_landcover_impact(
-        exposure, extent_exposure, extent_exposure_geom,
-        hazard_class_attribute, hazard_features, hazard_index,
-        hazard_value_to_class, impact_fields, writer):
-    """This function is used by GenericOnLandcover and TsunamiOnLandcover."""
-
-    for f in exposure.getFeatures(QgsFeatureRequest(extent_exposure)):
-        geometry = f.geometry()
-        bbox = geometry.boundingBox()
-        # clip the exposure geometry to requested extent if necessary
-        if not extent_exposure.contains(bbox):
-            geometry = geometry.intersection(extent_exposure_geom)
-
-        # find possible intersections with hazard layer
-        impacted_geometries = []
-        for hazard_id in hazard_index.intersects(bbox):
-            hazard_id = hazard_features[hazard_id]
-            hazard_geometry = hazard_id.geometry()
-            impact_geometry = geometry.intersection(hazard_geometry)
-            if not impact_geometry.wkbType() == QGis.WKBPolygon and \
-                    not impact_geometry.wkbType() == QGis.WKBMultiPolygon:
-                continue  # no intersection found
-
-            hazard_value = hazard_id[hazard_class_attribute]
-            hazard_type = hazard_value_to_class.get(hazard_value)
-
-            # write the impacted geometry
-            f_impact = QgsFeature(impact_fields)
-            f_impact.setGeometry(impact_geometry)
-            f_impact.setAttributes(f.attributes() + [hazard_type])
-            writer.addFeature(f_impact)
-
-            impacted_geometries.append(impact_geometry)
-
-            # TODO: uncomment if not affected polygons should be written
-            # # Make sure the geometry we work with is valid, otherwise geom.
-            # # processing operations (especially difference) may fail.
-            # # Validity checking is a slow operation, it would be better if we
-            # # could assume that all geometries are valid...
-            # if not geometry.isGeosValid():
-            #     geometry = geometry.buffer(0, 0)
-            #
-            # # write also not affected part of the exposure's feature
-            # geometry_out = geometry.difference(
-            #     QgsGeometry.unaryUnion(impacted_geometries))
-            # if geometry_out and (geometry_out.wkbType() == QGis.WKBPolygon or
-            #         geometry_out.wkbType() == QGis.WKBMultiPolygon):
-            #     f_out = QgsFeature(impact_fields)
-            #     f_out.setGeometry(geometry_out)
-            #     f_out.setAttributes(f.attributes()+[self._not_affected_value])
-            #     writer.addFeature(f_out)
+__author__ = 'etiennetrimaille'
+__project_name__ = 'inasafe-dev'
+__filename__ = 'impact_function.py'
+__date__ = '11/03/16'
+__copyright__ = 'etienne@kartoza.com'
 
 
-class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
-
-    _metadata = ClassifiedPolygonHazardLandCoverFunctionMetadata()
+class TsunamiRasterLandcoverFunction(ContinuousRHClassifiedVE):
+    # noinspection PyUnresolvedReferences
+    """Simple impact function for tsunami on landcover."""
+    _metadata = TsunamiRasterHazardLandCoverFunctionMetadata()
 
     def __init__(self):
-        super(ClassifiedPolygonHazardLandCoverFunction, self).__init__()
+        """Constructor."""
+        super(TsunamiRasterLandcoverFunction, self).__init__()
 
-        # Set the question of the IF (as the hazard data is not an event)
-        self.question = ('In each of the hazard zones which land cover types '
-                         'might be affected.')
-        # Don't put capital letters as the value in the attribute should match.
-        self.hazard_columns = OrderedDict()
-        self.hazard_columns['low'] = tr('Low Hazard Zone')
-        self.hazard_columns['medium'] = tr('Medium Hazard Zone')
-        self.hazard_columns['high'] = tr('High Hazard Zone')
-        self.affected_hazard_columns = []
+        self.hazard_classes = [
+            tr('Dry Zone'),
+            tr('Low Hazard Zone'),
+            tr('Medium Hazard Zone'),
+            tr('High Hazard Zone'),
+            tr('Very High Hazard Zone'),
+        ]
+        # Only dry zone is not affected.
+        self.affected_hazard_columns = self.hazard_classes[1:]
 
     def notes(self):
         """Return the notes section of the report.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: list
+        :rtype: safe.messaging.Message
         """
         title = tr('Notes and assumptions')
 
@@ -131,7 +90,7 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
                 low_max.unit.abbreviation,
                 low_max.value,
                 low_max.unit.abbreviation),
-            tr('Medium tsunami hazard zone is defined as inundation depth '
+            tr('Moderate tsunami hazard zone is defined as inundation depth '
                'is more than %.1f %s but less than %.1f %s') % (
                 low_max.value,
                 low_max.unit.abbreviation,
@@ -145,35 +104,56 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
                 high_max.unit.abbreviation),
             tr('Very high tsunami hazard zone is defined as inundation depth '
                'is more than %.1f %s') % (
-                high_max.value, high_max.unit.abbreviation),
+                high_max.value, high_max.unit.abbreviation)
         ]
 
         return {
             'title': title,
             'fields': fields
-        }  # TODO: what to put here?
+        }
 
     def run(self):
-        """Risk plugin for classified polygon hazard on land cover.
+        """Run the impact function.
 
-        Counts area of land cover types exposed to hazard zones.
-
-        :returns: Impact layer
-        :rtype: Vector
+        :returns: A vector layer with affected areas marked.
+        :type: safe_layer
         """
-
-        # Identify hazard and exposure layers
-        hazard = self.hazard.layer
+        hazard_layer = self.hazard.layer
         exposure = self.exposure.layer
 
-        type_attr = self.exposure.keyword('field')
+        # Thresholds for tsunami hazard zone breakdown.
+        low_max = self.parameters['low_threshold'].value
+        medium_max = self.parameters['medium_threshold'].value
+        high_max = self.parameters['high_threshold'].value
+        ranges = ranges_according_thresholds(low_max, medium_max, high_max)
 
-        self.hazard_class_attribute = self.hazard.keyword('field')
         hazard_value_to_class = {}
-        self.hazard_class_mapping = self.hazard.keyword('value_map')
-        for key, values in self.hazard_class_mapping.items():
-            for value in values:
-                hazard_value_to_class[value] = self.hazard_columns[key]
+        for i, interval in enumerate(ranges):
+            hazard_value_to_class[interval] = self.hazard_classes[i]
+
+        # Get parameters from layer's keywords
+        class_field = self.exposure.keyword('field')
+
+        # reproject self.extent to the hazard projection
+        hazard_crs = hazard_layer.crs()
+        hazard_authid = hazard_crs.authid()
+
+        if hazard_authid == 'EPSG:4326':
+            viewport_extent = self.requested_extent
+        else:
+            geo_crs = QgsCoordinateReferenceSystem()
+            geo_crs.createFromSrid(4326)
+            viewport_extent = extent_to_geo_array(
+                QgsRectangle(*self.requested_extent), geo_crs, hazard_crs)
+
+        small_raster = align_clip_raster(hazard_layer, viewport_extent)
+
+        # Create vector features from the flood raster
+        hazard_class_attribute = 'hazard'
+        vector_file_path = reclassify_polygonize(
+            small_raster.source(), ranges, name_field=hazard_class_attribute)
+
+        hazard = QgsVectorLayer(vector_file_path, 'tsunami', 'ogr')
 
         # prepare objects for re-projection of geometries
         crs_wgs84 = QgsCoordinateReferenceSystem('EPSG:4326')
@@ -204,13 +184,12 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
         impact_fields = exposure.dataProvider().fields()
         impact_fields.append(QgsField(self.target_field, QVariant.String))
         writer = QgsVectorFileWriter(
-
             filename, 'utf-8', impact_fields, QGis.WKBPolygon, exposure.crs())
 
-        # Iterate over all exposure polygons and calculate the impact.
+        # iterate over all exposure polygons and calculate the impact
         _calculate_landcover_impact(
             exposure, extent_exposure, extent_exposure_geom,
-            self.hazard_class_attribute, hazard_features, hazard_index,
+            hazard_class_attribute, hazard_features, hazard_index,
             hazard_value_to_class, impact_fields, writer)
 
         del writer
@@ -227,35 +206,46 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
             question=self.question,
             impact_layer=impact_layer,
             target_field=self.target_field,
-            ordered_columns=self.hazard_columns.values(),
+            ordered_columns=self.hazard_classes,
             affected_columns=self.affected_hazard_columns,
-            land_cover_field=type_attr,
+            land_cover_field=class_field,
             zone_field=zone_field
         ).generate_data()
 
         # Define style for the impact layer
         style_classes = [
             dict(
-                label=self.hazard_columns['low'],
-                value=self.hazard_columns['low'],
-                colour='#acffb6',
+                label=self.hazard_classes[0] + ': 0m',
+                value=self.hazard_classes[0],
+                colour='#00FF00',
                 border_color='#000000',
-                transparency=0,
-                size=0.5),
+                transparency=0),
             dict(
-                label=self.hazard_columns['medium'],
-                value=self.hazard_columns['medium'],
-                colour='#ffe691',
+                label=self.hazard_classes[1] + ': <0 - %.1f m' % low_max,
+                value=self.hazard_classes[1],
+                colour='#FFFF00',
                 border_color='#000000',
-                transparency=0,
-                size=0.5),
+                transparency=0),
             dict(
-                label=self.hazard_columns['high'],
-                value=self.hazard_columns['high'],
-                colour='#F31A1C',
+                label=self.hazard_classes[2] + ': %.1f - %.1f m' % (
+                    low_max + 0.1, medium_max),
+                value=self.hazard_classes[2],
+                colour='#FFB700',
                 border_color='#000000',
-                transparency=0,
-                size=0.5),
+                transparency=0),
+            dict(
+                label=self.hazard_classes[3] + ': %.1f - %.1f m' % (
+                    medium_max + 0.1, high_max),
+                value=self.hazard_classes[3],
+                colour='#FF6F00',
+                border_color='#000000',
+                transparency=0),
+            dict(
+                label=self.hazard_classes[4] + ' > %.1f m' % high_max,
+                value=self.hazard_classes[4],
+                colour='#FF0000',
+                border_color='#000000',
+                transparency=0),
         ]
         style_info = dict(
             target_field=self.target_field,

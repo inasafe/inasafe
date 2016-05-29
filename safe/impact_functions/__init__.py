@@ -57,6 +57,8 @@ from safe.impact_functions.inundation.tsunami_raster_building.impact_function \
     import TsunamiRasterBuildingFunction
 from safe.impact_functions.inundation.tsunami_raster_road.impact_function \
     import TsunamiRasterRoadsFunction
+from safe.impact_functions.inundation.tsunami_raster_landcover.impact_function\
+    import TsunamiRasterLandcoverFunction
 
 # Volcanic
 from safe.impact_functions.volcanic.volcano_point_building.impact_function \
@@ -90,6 +92,7 @@ def register_impact_functions():
     # Added in 3.3
     impact_function_registry.register(
         ClassifiedPolygonHazardPolygonPeopleFunction)
+    # Added in 3.4
     impact_function_registry.register(ClassifiedPolygonHazardLandCoverFunction)
 
     # Inundation IF's
@@ -103,6 +106,8 @@ def register_impact_functions():
     # Added in 3.3
     impact_function_registry.register(TsunamiRasterBuildingFunction)
     impact_function_registry.register(TsunamiRasterRoadsFunction)
+    # Added in 3.4
+    impact_function_registry.register(TsunamiRasterLandcoverFunction)
 
     # Volcanic IF's
     impact_function_registry.register(VolcanoPointBuildingFunction)

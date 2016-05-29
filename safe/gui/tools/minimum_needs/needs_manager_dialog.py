@@ -329,11 +329,20 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         parameter_widgets[7].set_value(100)
         parameter_widgets[8].set_text(tr('weekly'))
         parameter_widgets[9].set_text(tr(
-            "A displaced person should be provided with "
-            "{{ Default }} {{ Unit }}/{{ Units }}/{{ Unit abbreviation }} of "
-            "{{ Resource name }}. Though no less than {{ Minimum allowed }} "
-            "and no more than {{ Maximum allowed }}. This should be provided "
-            "{{ Frequency }}."))
+            'A displaced person should be provided with '
+            '%(default)s %(unit)s/%(units)s/ of %(unit abbreviation)s '
+            '%(resource name)s. Though no less than %(minimum allowed)s '
+            'and no more than %(maximum allowed)s. This should be provided '
+            '%(frequency)s.' % {
+                'default': '{{ Default }}',
+                'unit': '{{ Unit }}',
+                'units': '{{ Units }}',
+                'unit abbreviation': '{{ Unit abbreviation }}',
+                'resource name': '{{ Resource name }}',
+                'minimum allowed': '{{ Minimum allowed }}',
+                'maximum allowed': '{{ Maximum allowed }}',
+                'frequency': '{{ Frequency }}'
+            }))
         self.stacked_widget.setCurrentWidget(self.resource_edit_page)
         # hide the close button
         self.button_box.button(QDialogButtonBox.Close).setHidden(True)
@@ -384,7 +393,8 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         name_parameter.value = ''
 
         description_parameter = StringParameter('UUID-2')
-        description_parameter.name = self.resource_parameters['Resource description']
+        description_parameter.name = self.resource_parameters[
+            'Resource description']
         description_parameter.help_text = tr(
             'Description of the resource that will be provided as part of '
             'minimum needs.')
@@ -498,11 +508,20 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
             "achieved by including e.g. {{ Resource name }}")
         sentence_parameter.is_required = True
         sentence_parameter.value = tr(
-            "A displaced person should be provided with "
-            "{{ Default }} {{ Unit }}/{{ Units }}/{{ Unit abbreviation }} of "
-            "{{ Resource name }}. Though no less than {{ Minimum allowed }} "
-            "and no more than {{ Maximum allowed }}. This should be provided "
-            "{{ Frequency }}.")
+            'A displaced person should be provided with '
+            '%(default)s %(unit)s/%(units)s/ of %(unit abbreviation)s '
+            '%(resource name)s. Though no less than %(minimum allowed)s '
+            'and no more than %(maximum allowed)s. This should be provided '
+            '%(frequency)s.' % {
+                'default': '{{ Default }}',
+                'unit': '{{ Unit }}',
+                'units': '{{ Units }}',
+                'unit abbreviation': '{{ Unit abbreviation }}',
+                'resource name': '{{ Resource name }}',
+                'minimum allowed': '{{ Minimum allowed }}',
+                'maximum allowed': '{{ Maximum allowed }}',
+                'frequency': '{{ Frequency }}'
+            })
 
         parameters = [
             name_parameter,

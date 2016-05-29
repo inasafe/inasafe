@@ -80,23 +80,33 @@ class BuildingReportTemplate(AbstractRoadBuildingReportTemplate):
 
         # Table header
         row = m.Row()
-        for attribute in self.impact_table['attributes']:
+        attributes = self.impact_table['attributes']
+        # Bold and align left the 1st one.
+        row.add(m.Cell(attributes[0], header=True, align='left'))
+        for attribute in attributes[1:]:
+            # Bold and align right.
             row.add(m.Cell(attribute, header=True, align='right'))
         table.add(row)
 
         # Fields
         for record in self.impact_table['fields'][:-1]:
             row = m.Row()
-            # Bold the 1st one
-            row.add(m.Cell(record[0], header=True, align='right'))
+            # Bold and align left the 1st one.
+            row.add(m.Cell(record[0], header=True, align='left'))
             for content in record[1:-1]:
+                # Align right.
                 row.add(m.Cell(format_int(content), align='right'))
+            # Bold and align right the last one.
             row.add(m.Cell(format_int(record[-1]), header=True, align='right'))
             table.add(row)
 
         # Total Row
         row = m.Row()
-        for content in self.impact_table['fields'][-1]:
+        last_row = self.impact_table['fields'][-1]
+        # Bold and align left the 1st one.
+        row.add(m.Cell(last_row[0], header=True, align='left'))
+        for content in last_row[1:]:
+            # Bold and align right.
             row.add(m.Cell(content, header=True, align='right'))
         table.add(row)
 

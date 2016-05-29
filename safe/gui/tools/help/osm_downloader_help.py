@@ -68,7 +68,7 @@ def content():
         'reappear.'))
     tips.add(tr(
         'Check the output directory is correct. Note that the saved '
-        'dataset will be named after the type of data being downloaded'
+        'dataset will be named after the type of data being downloaded '
         'e.g. roads.shp or buildings.shp (and associated files).'
     ))
     tips.add(tr(
@@ -98,9 +98,8 @@ def content():
     message.add(tips)
 
     message.add(m.Paragraph(
-        tr('When the'),
-        m.ImportantText(tr(' Political boundaries ')),
-        tr(
+        # format 'When the __Political boundaries__' for proper i18n
+        tr('When the %s '
             'box in the Feature types menu is ticked, the Political boundary '
             'options panel will be enabled. The panel lets you select which '
             'admin level you wish to download. The admin levels are country '
@@ -108,7 +107,10 @@ def content():
             'that admin level will be shown. You can change which country '
             'is used for the admin level description using the country drop '
             'down menu. The country will be automatically set to coincide '
-            'with the view extent if a matching country can be found.')))
+            'with the view extent if a matching country can be found.') %
+        (
+            m.ImportantText(tr('Political boundaries')).to_html(),
+        )))
     message.add(m.Paragraph(
         m.ImportantText(tr('Note: ')),
         tr(

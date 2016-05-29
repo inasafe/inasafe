@@ -21,6 +21,8 @@ from safe.impact_functions.unit_definitions import parameter_unit_metres
 from safe_extras.parameters.float_parameter import FloatParameter
 from safe.utilities.i18n import tr
 
+# This file should be used in each tsunami IF.
+
 
 def low_threshold():
     """Generate low hazard zone threshold parameter
@@ -30,7 +32,7 @@ def low_threshold():
     """
     field = FloatParameter()
     field.is_required = True
-    field.name = 'Low Hazard Zone Threshold'
+    field.name = tr('Low Hazard Zone Threshold')
     field.precision = 2
     field.value = 1
     field.minimum_allowed_value = 0
@@ -54,7 +56,7 @@ def medium_threshold():
     """
     field = FloatParameter()
     field.is_required = True
-    field.name = 'Moderate Hazard Zone Threshold'
+    field.name = tr('Moderate Hazard Zone Threshold')
     field.precision = 2
     field.value = 3
     field.minimum_allowed_value = 0
@@ -79,7 +81,7 @@ def high_threshold():
     """
     field = FloatParameter()
     field.is_required = True
-    field.name = 'High Hazard Zone Threshold'
+    field.name = tr('High Hazard Zone Threshold')
     field.precision = 2
     field.value = 8
     field.minimum_allowed_value = 0

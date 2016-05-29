@@ -35,10 +35,10 @@ from safe.impact_functions.inundation.tsunami_raster_road\
     .metadata_definitions import TsunamiRasterRoadMetadata
 from safe.utilities.i18n import tr
 from safe.utilities.gis import add_output_feature, union_geometries
-from safe.utilities.utilities import main_type
+from safe.utilities.utilities import main_type, ranges_according_thresholds
 from safe.storage.vector import Vector
 from safe.common.utilities import get_utm_epsg, unique_filename
-from safe.gis.qgis_raster_tools import clip_raster
+from safe.gis.qgis_raster_tools import align_clip_raster
 from safe.gis.qgis_vector_tools import (
     extent_to_geo_array,
     create_layer)
@@ -283,7 +283,7 @@ class TsunamiRasterRoadsFunction(
                 low_max.unit.abbreviation,
                 low_max.value,
                 low_max.unit.abbreviation),
-            tr('Moderate tsunami hazard zone is defined as inundation depth '
+            tr('Medium tsunami hazard zone is defined as inundation depth '
                'is more than %.1f %s but less than %.1f %s') % (
                 low_max.value,
                 low_max.unit.abbreviation,
@@ -336,62 +336,13 @@ class TsunamiRasterRoadsFunction(
             viewport_extent = extent_to_geo_array(
                 QgsRectangle(*self.requested_extent), geo_crs, hazard_crs)
 
-        # Align raster extent and viewport
-        # assuming they are both in the same projection
-        raster_extent = self.hazard.layer.dataProvider().extent()
-        clip_xmin = raster_extent.xMinimum()
-        # clip_xmax = raster_extent.xMaximum()
-        clip_ymin = raster_extent.yMinimum()
-        # clip_ymax = raster_extent.yMaximum()
-        if viewport_extent[0] > clip_xmin:
-            clip_xmin = viewport_extent[0]
-        if viewport_extent[1] > clip_ymin:
-            clip_ymin = viewport_extent[1]
-
-        height = ((viewport_extent[3] - viewport_extent[1]) /
-                  self.hazard.layer.rasterUnitsPerPixelY())
-        height = int(height)
-        width = ((viewport_extent[2] - viewport_extent[0]) /
-                 self.hazard.layer.rasterUnitsPerPixelX())
-        width = int(width)
-
-        raster_extent = self.hazard.layer.dataProvider().extent()
-        xmin = raster_extent.xMinimum()
-        xmax = raster_extent.xMaximum()
-        ymin = raster_extent.yMinimum()
-        ymax = raster_extent.yMaximum()
-
-        x_delta = (xmax - xmin) / self.hazard.layer.width()
-        x = xmin
-        for i in range(self.hazard.layer.width()):
-            if abs(x - clip_xmin) < x_delta:
-                # We have found the aligned raster boundary
-                break
-            x += x_delta
-            _ = i
-
-        y_delta = (ymax - ymin) / self.hazard.layer.height()
-        y = ymin
-        for i in range(self.hazard.layer.width()):
-            if abs(y - clip_ymin) < y_delta:
-                # We have found the aligned raster boundary
-                break
-            y += y_delta
-        clip_extent = [x, y, x + width * x_delta, y + height * y_delta]
-
         # Clip hazard raster
-        small_raster = clip_raster(
-            self.hazard.layer, width, height, QgsRectangle(*clip_extent))
+        small_raster = align_clip_raster(self.hazard.layer, viewport_extent)
 
         # Create vector features from the flood raster
         # For each raster cell there is one rectangular polygon
         # Data also get spatially indexed for faster operation
-        ranges = OrderedDict()
-        ranges[0] = [0.0, 0.0]
-        ranges[1] = [0.0, low_max]
-        ranges[2] = [low_max, medium_max]
-        ranges[3] = [medium_max, high_max]
-        ranges[4] = [high_max, None]
+        ranges = ranges_according_thresholds(low_max, medium_max, high_max)
 
         index, flood_cells_map = _raster_to_vector_cells(
             small_raster,

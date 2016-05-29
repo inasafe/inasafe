@@ -11,6 +11,7 @@ __copyright__ += 'Disaster Reduction'
 
 from qgis.core import (
     QgsRasterLayer,
+    QgsRectangle,
     QgsField,
     QgsVectorLayer,
     QgsFeature,
@@ -149,6 +150,64 @@ def polygonize(raster, threshold_min=0.0, threshold_max=float('inf')):
         raster.rasterUnitsPerPixelY())
     polygons = union_geometry(polygons)
     return polygons
+
+
+def align_clip_raster(hazard_layer, extent):
+    """Align raster extent and the given extent.
+
+    Both layers should be in the same projection.
+
+    .. versionadded:: 3.4
+    .. note:: Delegates to clip_raster()
+
+    :param hazard_layer: The raster layer.
+    :type hazard_layer: QgsRasterLayer
+
+    :param extent: The extent in the form [xmin, ymin, xmax, ymax]
+    :type extent: list
+
+    :returns: Clipped region of the raster
+    :rtype: QgsRasterLayer
+    """
+    raster_extent = hazard_layer.dataProvider().extent()
+    clip_xmin = raster_extent.xMinimum()
+    clip_ymin = raster_extent.yMinimum()
+
+    if extent[0] > clip_xmin:
+        clip_xmin = extent[0]
+    if extent[1] > clip_ymin:
+        clip_ymin = extent[1]
+    height = ((extent[3] - extent[1]) /
+              hazard_layer.rasterUnitsPerPixelY())
+    height = int(height)
+    width = ((extent[2] - extent[0]) /
+             hazard_layer.rasterUnitsPerPixelX())
+    width = int(width)
+    raster_extent = hazard_layer.dataProvider().extent()
+    xmin = raster_extent.xMinimum()
+    xmax = raster_extent.xMaximum()
+    ymin = raster_extent.yMinimum()
+    ymax = raster_extent.yMaximum()
+    x_delta = (xmax - xmin) / hazard_layer.width()
+    x = xmin
+    for i in range(hazard_layer.width()):
+        if abs(x - clip_xmin) < x_delta:
+            # We have found the aligned raster boundary
+            break
+        x += x_delta
+        _ = i
+    y_delta = (ymax - ymin) / hazard_layer.height()
+    y = ymin
+    for i in range(hazard_layer.width()):
+        if abs(y - clip_ymin) < y_delta:
+            # We have found the aligned raster boundary
+            break
+        y += y_delta
+    clip_extent = [x, y, x + width * x_delta, y + height * y_delta]
+    # Clip hazard raster
+    small_raster = clip_raster(
+        hazard_layer, width, height, QgsRectangle(*clip_extent))
+    return small_raster
 
 
 def clip_raster(raster, column_count, row_count, output_extent):

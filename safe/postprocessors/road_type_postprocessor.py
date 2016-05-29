@@ -41,7 +41,6 @@ class RoadTypePostprocessor(AbstractBuildingRoadTypePostprocessor):
         self._description = tr('Calculates road types related statistics.')
         self._labels = {
             item['key']: item['name'] for item in road_class_mapping}
-        self._structure = road_class_mapping
         self._order = road_class_order
 
     @staticmethod

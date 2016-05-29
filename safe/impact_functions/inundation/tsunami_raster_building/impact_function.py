@@ -55,9 +55,6 @@ class TsunamiRasterBuildingFunction(
         # From BuildingExposureReportMixin
         self.building_report_threshold = 25
 
-        # From BuildingExposureReportMixin
-        self.building_report_threshold = 25
-
     def notes(self):
         """Return the notes section of the report as dict.
 
@@ -73,13 +70,13 @@ class TsunamiRasterBuildingFunction(
 
         fields = [
             tr('Dry zone is defined as non-inundated area or has inundation '
-               'depth is 0 %s') % (low_max.unit.abbreviation),
+               'depth is 0 %s') % low_max.unit.abbreviation,
             tr('Low tsunami hazard zone is defined as inundation depth is '
                'more than 0 %s but less than %.1f %s') % (
                 low_max.unit.abbreviation,
                 low_max.value,
                 low_max.unit.abbreviation),
-            tr('Moderate tsunami hazard zone is defined as inundation depth '
+            tr('Medium tsunami hazard zone is defined as inundation depth '
                'is more than %.1f %s but less than %.1f %s') % (
                 low_max.value,
                 low_max.unit.abbreviation,
@@ -136,7 +133,6 @@ class TsunamiRasterBuildingFunction(
 
         self.init_report_var(self.hazard_classes)
 
-        categories = self.affected_buildings.keys()
         for i in range(total_features):
             # Get the interpolated depth
             water_depth = float(features[i][self.target_field])
@@ -159,7 +155,7 @@ class TsunamiRasterBuildingFunction(
 
             # Add calculated impact to existing attributes
             features[i][self.target_field] = inundated_status
-            category = categories[inundated_status]
+            category = self.categories[inundated_status]
 
             self.classify_feature(category, usage, True)
 
