@@ -384,7 +384,8 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         name_parameter.value = ''
 
         description_parameter = StringParameter('UUID-2')
-        description_parameter.name = self.resource_parameters['Resource description']
+        description_parameter.name = self.resource_parameters[
+            'Resource description']
         description_parameter.help_text = tr(
             'Description of the resource that will be provided as part of '
             'minimum needs.')
