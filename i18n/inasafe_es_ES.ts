@@ -939,11 +939,6 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="styles.py" line="126"/>
-        <source>Category</source>
-        <translation>Categoría</translation>
-    </message>
-    <message>
         <location filename="impact_function.py" line="57"/>
         <source>Not specified in data</source>
         <translation>No especificado en la información</translation>
@@ -1074,17 +1069,17 @@
         <translation>Muerto o ha ser desplazado de acuerdo al modelo Pager</translation>
     </message>
     <message>
-        <location filename="styles.py" line="70"/>
+        <location filename="impact_function.py" line="180"/>
         <source>Low</source>
         <translation>Bajo</translation>
     </message>
     <message>
-        <location filename="styles.py" line="32"/>
+        <location filename="impact_function.py" line="173"/>
         <source>Medium</source>
         <translation>Medio</translation>
     </message>
     <message>
-        <location filename="styles.py" line="79"/>
+        <location filename="impact_function.py" line="166"/>
         <source>High</source>
         <translation>Alto</translation>
     </message>
@@ -1147,11 +1142,6 @@
         <location filename="impact_function.py" line="288"/>
         <source>Estimated buildings affected</source>
         <translation>Estimado de edificios afectados</translation>
-    </message>
-    <message>
-        <location filename="styles.py" line="74"/>
-        <source>Mid</source>
-        <translation>Mid</translation>
     </message>
     <message>
         <location filename="metadata_definitions.py" line="62"/>
@@ -1234,42 +1224,42 @@
         <translation>Población la cual %s</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="66"/>
+        <location filename="metadata_definitions.py" line="65"/>
         <source>Be flooded in given thresholds</source>
         <translation>Estando inundado dados estos umbrales</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="70"/>
+        <location filename="metadata_definitions.py" line="69"/>
         <source>N/A</source>
         <translation>S/A</translation>
     </message>
     <message>
-        <location filename="road_exposure_report_mixin.py" line="129"/>
+        <location filename="road_exposure_report_mixin.py" line="141"/>
         <source>Road Type</source>
         <translation>Tipo de camino</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="462"/>
+        <location filename="impact_function.py" line="463"/>
         <source>Flooded in the threshold (m)</source>
         <translation>Inundado en el umbral (m)</translation>
     </message>
     <message>
-        <location filename="road_exposure_report_mixin.py" line="133"/>
+        <location filename="road_exposure_report_mixin.py" line="184"/>
         <source>Total (m)</source>
         <translation>Total (m)</translation>
     </message>
     <message>
-        <location filename="road_exposure_report_mixin.py" line="91"/>
+        <location filename="polygon_population_exposure_report_mixin.py" line="181"/>
         <source>All</source>
         <translation>Todo</translation>
     </message>
     <message>
-        <location filename="road_exposure_report_mixin.py" line="118"/>
+        <location filename="road_exposure_report_mixin.py" line="127"/>
         <source>Breakdown by road type</source>
         <translation>Colapso por tipo de camino</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="494"/>
+        <location filename="impact_function.py" line="573"/>
         <source>Roads inundated</source>
         <translation>Caminos inundados</translation>
     </message>
@@ -1284,7 +1274,7 @@
         <translation>Inundado</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="521"/>
+        <location filename="impact_function.py" line="634"/>
         <source>Flooded roads</source>
         <translation>Caminos inundados</translation>
     </message>
@@ -1612,14 +1602,6 @@
         <location filename="metadata_definitions.py" line="76"/>
         <source>Vector layer contains Map of building exposed to volcanic hazard zones for each Kawasan Rawan Bencana.</source>
         <translation>Capa vectorial que contiene un mapa de edificios expuestos en cada una de las zonas de peligro volcánicas en cada Kawasan Rawan Bencana.</translation>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="71"/>
-        <source>This model was developed by Institut Teknologi Bandung (ITB) and implemented by Dr. Hadi Ghasemi, Geoscience Australia
-Algorithm:
-In this study, the same functional form as Allen (2009) is adopted o express fatality rate as a function of intensity (see Eq. 10 in the report). The Matlab built-in function (fminsearch) for Nelder-Mead algorithm was used to estimate the model parameters. The objective function (L2G norm) that is minimized during the optimisation is the same as the one used by Jaiswal et al. (2010).
-The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, zeta=2.15</source>
-        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="metadata_definitions.py" line="95"/>
@@ -2437,12 +2419,6 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation>Continuo</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="85"/>
-        <source>&lt;b&gt;Continuous&lt;/b&gt; data can be used in raster hazard or exposure data where the values in the data are are either integers or decimal  values representing a continuously varying phenomenon. For example flood depth is a continuous value from 0 to the maximum reported depth during a flood. Raster exposure data such as population data are also continuous. In this example the cell values represent the number of people in cell.
-Raster data is considered to be continuous by default and you should explicitly indicate that it is classified if each cell in the raster represents a discrete class (e.g. low depth = 1, medium depth = 2, high depth = 3).</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="definitions.py" line="102"/>
         <source>Classified</source>
         <translation>Clasificado</translation>
@@ -2822,7 +2798,7 @@ The process of assigning people to buildings assumes that all people and buildin
         <translation>Personas afectadas en las zonas de peligro de volcanes</translation>
     </message>
     <message>
-        <location filename="road_exposure_report_mixin.py" line="196"/>
+        <location filename="road_exposure_report_mixin.py" line="216"/>
         <source>Action checklist</source>
         <translation>Lista de comprobación de acciones</translation>
     </message>
@@ -3007,7 +2983,7 @@ The process of assigning people to buildings assumes that all people and buildin
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="64"/>
+        <location filename="metadata_definitions.py" line="63"/>
         <source>Raster flood on roads</source>
         <translation>Trama de inundación en caminos</translation>
     </message>
@@ -3423,7 +3399,7 @@ The process of assigning people to buildings assumes that all people and buildin
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="495"/>
+        <location filename="impact_function.py" line="574"/>
         <source>Road inundated status</source>
         <translation>Estado del camino inundado</translation>
     </message>
@@ -3524,62 +3500,62 @@ This type of hazard data shows those locations that might be impacted by a volca
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="293"/>
+        <location filename="impact_function.py" line="294"/>
         <source>flooded</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="294"/>
+        <location filename="impact_function.py" line="295"/>
         <source>flood</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="299"/>
+        <location filename="impact_function.py" line="300"/>
         <source>inundated</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="300"/>
+        <location filename="impact_function.py" line="301"/>
         <source>water</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="306"/>
+        <location filename="impact_function.py" line="307"/>
         <source>Roads are %s when %s levels exceed %.2f m.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="309"/>
+        <location filename="impact_function.py" line="310"/>
         <source>Roads are closed if they are %s.</source>
         <translation>Caminos están cerrados si están %s.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="311"/>
+        <location filename="impact_function.py" line="312"/>
         <source>Roads are open if they are not %s.</source>
         <translation>Caminos están abiertos si no están %s.</translation>
     </message>
     <message>
-        <location filename="road_exposure_report_mixin.py" line="198"/>
+        <location filename="road_exposure_report_mixin.py" line="218"/>
         <source>Which roads can be used to evacuate people or to distribute logistics?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="road_exposure_report_mixin.py" line="201"/>
+        <location filename="road_exposure_report_mixin.py" line="221"/>
         <source>What type of vehicles can use the unaffected roads?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="road_exposure_report_mixin.py" line="203"/>
+        <location filename="road_exposure_report_mixin.py" line="223"/>
         <source>What sort of equipment will be needed to reopen roads &amp; where will we get it?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="road_exposure_report_mixin.py" line="206"/>
+        <location filename="road_exposure_report_mixin.py" line="226"/>
         <source>Which government department is responsible for supplying equipment ?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="426"/>
+        <location filename="impact_function.py" line="427"/>
         <source>There are no objects in the hazard layer with &quot;value&quot; &gt; %s. Please check the value or use other extent.</source>
         <translation type="unfinished"/>
     </message>
@@ -3734,7 +3710,7 @@ This type of hazard data shows those locations that might be impacted by a volca
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="338"/>
+        <location filename="impact_function.py" line="339"/>
         <source>The minimal threshold is greater than the maximal specified threshold. Please check the values.</source>
         <translation type="unfinished"/>
     </message>
@@ -3999,11 +3975,6 @@ This type of hazard data shows those locations that might be impacted by a volca
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_merge_help.py" line="57"/>
-        <source>In some cases you may wish to create a report containing the combined output of two impact functions for the same area for the same hazard, different exposures. For example You may carry out an assessment of the impact of a flood on population and on buildings and combine the results into a single report. The impact layer merge tool allows you to do this.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="impact_merge_help.py" line="66"/>
         <source>Prerequisites</source>
         <translation type="unfinished"/>
@@ -4244,42 +4215,42 @@ This type of hazard data shows those locations that might be impacted by a volca
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_merge_help.py" line="244"/>
+        <location filename="impact_merge_help.py" line="245"/>
         <source>Elements that are directly updated by the renderer</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_merge_help.py" line="244"/>
+        <location filename="impact_merge_help.py" line="245"/>
         <source>- all of these elements below are generated automatically by the tool.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_merge_help.py" line="252"/>
+        <location filename="impact_merge_help.py" line="253"/>
         <source> - contains the map of two impact layers.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_merge_help.py" line="256"/>
+        <location filename="impact_merge_help.py" line="257"/>
         <source> - contains the summary of the impact from two impact layers.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_merge_help.py" line="260"/>
+        <location filename="impact_merge_help.py" line="261"/>
         <source> - contains the name of the aggregation area.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_merge_help.py" line="264"/>
+        <location filename="impact_merge_help.py" line="265"/>
         <source> - indicates the scale of the map. To work with any layer projection preferences, we encourage you to use a numeric scale bar.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_merge_help.py" line="270"/>
+        <location filename="impact_merge_help.py" line="271"/>
         <source> - shows the legend of merged impact layers. The map legend on default template is set to have two columns showing each impact layer legend.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_merge_help.py" line="276"/>
+        <location filename="impact_merge_help.py" line="277"/>
         <source>- contains the detailed information of each impact.</source>
         <translation type="unfinished"/>
     </message>
@@ -4366,21 +4337,6 @@ This type of hazard data shows those locations that might be impacted by a volca
     <message>
         <location filename="needs_manager_help.py" line="64"/>
         <source>By default InaSAFE uses minimum needs defined for Indonesia - and ships with additional profiles for the Philippines and Tanzania. You can customise these or add your own region-specific profiles too.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="needs_manager_help.py" line="70"/>
-        <source>Minimum needs are grouped into regional or linguistic &apos;profiles&apos;. The default profile is &apos;BNPB_en&apos; - the english profile for the national disaster agency in Indonesia.You will see that this profile defines requirements for displaced persons in terms of Rice, Drinking Water, Clean Water (for bathing etc.), Family Kits (with personal hygiene items) and provision of toilets.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="needs_manager_help.py" line="79"/>
-        <source>Each item in the profile can be customised or removed. For example selecting the first item in the list and then clicking on the &apos;pencil&apos; icon will show the details of how it was defined.If you scroll up and down in the panel you will see that for each item, you can set a name, description, units (in singular, plural and abbreviated forms), specify maxima and minima for the quantity of item allowed, a default and a frequency. You would use the maxima and minima to ensure that disaster managers never allocate amounts that will not be sufficient for human livelihood, and also that will not overtax the logistics operation for those providing humanitarian relief.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="needs_manager_help.py" line="92"/>
-        <source>The final item in the item configuration is the &apos;readable sentence&apos;which bears special discussion. Using a simple system of tokens you can construct a sentence that will be used in the generated needs report.</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -4614,11 +4570,6 @@ This type of hazard data shows those locations that might be impacted by a volca
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="options_help.py" line="89"/>
-        <source> - If this option is enabled, the InaSAFE keywords title attribute will be used for the layer name in the QGIS Layers listwhen adding a layer.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="options_help.py" line="95"/>
         <source>Zoom to impact layer on scenario estimate completion</source>
         <translation type="unfinished"/>
@@ -4651,11 +4602,6 @@ This type of hazard data shows those locations that might be impacted by a volca
     <message>
         <location filename="options_help.py" line="116"/>
         <source>Show intermediate layers generated by post processing</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="options_help.py" line="116"/>
-        <source> - When enabled, the working layer used for doing by-area breakdowns of impact results will be added to the current QGISproject. You can generally leave this option disabled. </source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -4814,11 +4760,6 @@ This type of hazard data shows those locations that might be impacted by a volca
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="options_help.py" line="238"/>
-        <source> - When InaSAFE is used with remote layers (for example a database layer or a WFS layer), it is not possible to store the keywords for the layer with the layer itself. To accommodate for these types of layers, InaSAFE writes the keywords to a small file based database (using sqlite) and then retrieves them basedon unique connection details used for that layer. You can specify a custom path to be used for storing the keywords database using this option.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="options_help.py" line="249"/>
         <source>Help to improve InaSAFE by submitting errors to a remote server</source>
         <translation type="unfinished"/>
@@ -4914,11 +4855,6 @@ This type of hazard data shows those locations that might be impacted by a volca
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock_help.py" line="59"/>
-        <source>This document describes the usage of the InaSAFE &apos;dock panel&apos;- which is an interface for running hazard scenarios within the QGIS environment. If you are a new user, you may also consider using the &apos;Impact Function Centric Wizard&apos; to run the analysis. You can launch the wizard by clicking on this icon in the toolbar:</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="dock_help.py" line="107"/>
         <source>The formulation of these questions if carried out by loading layers into QGIS that represent either hazard scenarios or exposure data. A hazard, for example, may be represented as, a raster layer in QGIS where each pixel in the raster represents the current flood depth following an inundation event. An exposure layer could be represented, for example, as vector polygon data representing building outlines, or a raster outline where each pixel represents the number of people thought to be resident in that cell.</source>
         <translation type="unfinished"/>
@@ -4999,17 +4935,17 @@ This type of hazard data shows those locations that might be impacted by a volca
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="56"/>
+        <location filename="impact_function.py" line="320"/>
         <source>High Hazard Zone</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="55"/>
+        <location filename="impact_function.py" line="319"/>
         <source>Medium Hazard Zone</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="54"/>
+        <location filename="impact_function.py" line="318"/>
         <source>Low Hazard Zone</source>
         <translation type="unfinished"/>
     </message>
@@ -5229,47 +5165,42 @@ This type of hazard data shows those locations that might be impacted by a volca
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="road_exposure_report_mixin.py" line="132"/>
-        <source>Unaffected (m)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="utilities.py" line="50"/>
+        <location filename="utilities.py" line="51"/>
         <source>There was insufficient overlap between the input layers and / or the layers and the viewable area. Please select two overlapping layers and zoom or pan to them or disable viewable area clipping in the options dialog. Full details follow:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="56"/>
+        <location filename="utilities.py" line="57"/>
         <source>Failed to obtain the optimal extent given:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="60"/>
+        <location filename="utilities.py" line="61"/>
         <source>Hazard: %s</source>
         <translation>Peligro: %s</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="61"/>
+        <location filename="utilities.py" line="62"/>
         <source>Exposure: %s</source>
         <translation>Exposición: %s</translation>
     </message>
     <message>
-        <location filename="utilities.py" line="62"/>
+        <location filename="utilities.py" line="63"/>
         <source>Viewable area Geo Extent: %s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="65"/>
+        <location filename="utilities.py" line="66"/>
         <source>Hazard Geo Extent: %s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="68"/>
+        <location filename="utilities.py" line="69"/>
         <source>Exposure Geo Extent: %s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="utilities.py" line="71"/>
+        <location filename="utilities.py" line="72"/>
         <source>Details: %s</source>
         <translation>Detalles: %s</translation>
     </message>
@@ -5461,17 +5392,17 @@ This type of hazard data shows those locations that might be impacted by a volca
         <translation>Se produjo una excepción cuando se ejecutaba el análisis del impacto.</translation>
     </message>
     <message>
-        <location filename="file_downloader.py" line="140"/>
+        <location filename="file_downloader.py" line="147"/>
         <source>The network is unreachable. Please check your internet connection.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="file_downloader.py" line="147"/>
+        <location filename="file_downloader.py" line="168"/>
         <source>Sorry, the server is unreachable. Please try again later.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="file_downloader.py" line="152"/>
+        <location filename="file_downloader.py" line="173"/>
         <source>Sorry, the layer was not found on the server.</source>
         <translation type="unfinished"/>
     </message>
@@ -5521,37 +5452,37 @@ This type of hazard data shows those locations that might be impacted by a volca
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="53"/>
+        <location filename="impact_function.py" line="317"/>
         <source>Dry Zone</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="57"/>
+        <location filename="impact_function.py" line="321"/>
         <source>Very High Hazard Zone</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="78"/>
+        <location filename="impact_function.py" line="340"/>
         <source>Dry zone is defined as non-inundated area or has inundation depth is 0 %s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="83"/>
+        <location filename="impact_function.py" line="345"/>
         <source>Low tsunami hazard zone is defined as inundation depth is more than 0 %s but less than %.1f %s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="90"/>
+        <location filename="impact_function.py" line="352"/>
         <source>Moderate tsunami hazard zone is defined as inundation depth is more than %.1f %s but less than %.1f %s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="98"/>
+        <location filename="impact_function.py" line="360"/>
         <source>High tsunami hazard zone is defined as inundation depth is more than %.1f %s but less than %.1f %s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="106"/>
+        <location filename="impact_function.py" line="368"/>
         <source>Very high tsunami hazard zone is defined as inundation depth is more than %.1f %s</source>
         <translation type="unfinished"/>
     </message>
@@ -5586,7 +5517,7 @@ This type of hazard data shows those locations that might be impacted by a volca
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="70"/>
+        <location filename="metadata_definitions.py" line="69"/>
         <source>Be inundated</source>
         <translation type="unfinished"/>
     </message>
@@ -5601,7 +5532,7 @@ This type of hazard data shows those locations that might be impacted by a volca
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="83"/>
+        <location filename="metadata_definitions.py" line="81"/>
         <source>A hazard raster layer where each cell represents tsunami inundation depth (in meters).</source>
         <translation type="unfinished"/>
     </message>
@@ -5776,28 +5707,157 @@ This type of hazard data shows those locations that might be impacted by a volca
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="peta_jakarta_help.py" line="63"/>
+        <location filename="peta_jakarta_help.py" line="62"/>
         <source>If you wish you can specify a prefix to add in front of this default name. For example using a prefix of &apos;foo-&apos; will cause the downloaded files to be saved as e.g. &apos;foo-rw-jakarta-flood.shp&apos;. Note that the only allowed prefix characters are A-Z, a-z, 0-9 and the characters &apos;-&apos; and &apos;_&apos;. You can leave this blank if you prefer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="peta_jakarta_help.py" line="75"/>
+        <location filename="peta_jakarta_help.py" line="74"/>
         <source>If the &quot;include date/time in output filename&quot; option is ticked, the filename will be prefixed with a time stamp e.g. &apos;foo-22-Mar-2015-08-01-2015-rw-jakarta-flood.shp&apos; where the date timestamp is in the form DD-MMM-YYYY.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="peta_jakarta_help.py" line="81"/>
+        <location filename="peta_jakarta_help.py" line="80"/>
         <source>This tool requires a working internet connection and fetching data will consume your bandwidth.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="peta_jakarta_help.py" line="84"/>
+        <location filename="peta_jakarta_help.py" line="83"/>
         <source>Downloaded data is copyright the PetaJakarta contributors (click for more info).</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="peta_jakarta_help.py" line="71"/>
+        <location filename="peta_jakarta_help.py" line="70"/>
         <source>If a dataset already exists in the output directory it will be overwritten if the &quot;overwrite existing files&quot; checkbox is ticked.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="85"/>
+        <source>&lt;b&gt;Continuous&lt;/b&gt; data can be used in raster hazard or exposure data where the values in the data are either integers or decimal values representing a continuously varying phenomenon. For example flood depth is a continuous value from 0 to the maximum reported depth during a flood. Raster exposure data such as population data are also continuous. In this example the cell values represent the number of people in cell.
+Raster data is considered to be continuous by default and you should explicitly indicate that it is classified if each cell in the raster represents a discrete class (e.g. low depth = 1, medium depth = 2, high depth = 3).</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="dock_help.py" line="59"/>
+        <source>This document describes the usage of the InaSAFE &apos;dock panel&apos; - which is an interface for running hazard scenarios within the QGIS environment. If you are a new user, you may also consider using the &apos;Impact Function Centric Wizard&apos; to run the analysis. You can launch the wizard by clicking on this icon in the toolbar:</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_merge_help.py" line="57"/>
+        <source>In some cases you may wish to create a report containing the combined output of two impact functions for the same area for the same hazard, different exposures. For example you may carry out an assessment of the impact of a flood on population and on buildings and combine the results into a single report. The impact layer merge tool allows you to do this.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="needs_manager_help.py" line="70"/>
+        <source>Minimum needs are grouped into regional or linguistic &apos;profiles&apos;. The default profile is &apos;BNPB_en&apos; - the english profile for the national disaster agency in Indonesia. You will see that this profile defines requirements for displaced persons in terms of Rice, Drinking Water, Clean Water (for bathing etc.), Family Kits (with personal hygiene items) and provision of toilets.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="needs_manager_help.py" line="79"/>
+        <source>Each item in the profile can be customised or removed. For example selecting the first item in the list and then clicking on the &apos;pencil&apos; icon will show the details of how it was defined. If you scroll up and down in the panel you will see that for each item, you can set a name, description, units (in singular, plural and abbreviated forms), specify maxima and minima for the quantity of item allowed, a default and a frequency. You would use the maxima and minima to ensure that disaster managers never allocate amounts that will not be sufficient for human livelihood, and also that will not overtax the logistics operation for those providing humanitarian relief.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="needs_manager_help.py" line="92"/>
+        <source>The final item in the item configuration is the &apos;readable sentence&apos; which bears special discussion. Using a simple system of tokens you can construct a sentence that will be used in the generated needs report.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="options_help.py" line="89"/>
+        <source> - If this option is enabled, the InaSAFE keywords title attribute will be used for the layer name in the QGIS Layers list when adding a layer.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="options_help.py" line="116"/>
+        <source> - When enabled, the working layer used for doing by-area breakdowns of impact results will be added to the current QGIS project. You can generally leave this option disabled.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="options_help.py" line="238"/>
+        <source> - When InaSAFE is used with remote layers (for example a database layer or a WFS layer), it is not possible to store the keywords for the layer with the layer itself. To accommodate for these types of layers, InaSAFE writes the keywords to a small file based database (using sqlite) and then retrieves them based on unique connection details used for that layer. You can specify a custom path to be used for storing the keywords database using this option.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="71"/>
+        <source>This model was developed by Institut Teknologi Bandung (ITB) and implemented by Dr. Hadi Ghasemi, Geoscience Australia
+Algorithm:
+In this study, the same functional form as Allen (2009) is adopted to express fatality rate as a function of intensity (see Eq. 10 in the report). The Matlab built-in function (fminsearch) for Nelder-Mead algorithm was used to estimate the model parameters. The objective function (L2G norm) that is minimized during the optimisation is the same as the one used by Jaiswal et al. (2010).
+The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, zeta=2.15</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="parameter_definitions.py" line="91"/>
+        <source>The threshold of hazard categorized as High Hazard Zone in meter. A zone is categorized as High Hazard Zone if the depth of tsunami inundation is more than Medium Hazard Zone Threshold and less than High Hazard Zone Threshold. A zone that has more than High Hazard Zone Threshold is categorized as Very High Hazard Zone.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="373"/>
+        <source>Roads are closed if they are in low, moderate, high, or very high tsunami hazard zone.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="376"/>
+        <source>Roads are opened if they are in dry zone.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="67"/>
+        <source>Raster tsunami on roads</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="74"/>
+        <source>To assess the impacts of tsunami inundation on roads in vector format with hazard in raster format.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="77"/>
+        <source>The inundation status is calculated for each roads based on the tsunami threshold. The threshold can be configured in impact function options.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="84"/>
+        <source>Vector line where each feature represents the road.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="86"/>
+        <source>Vector layer contains road is estimated to be inundated and the breakdown of the road by type.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="89"/>
+        <source>Provide details about where critical road might be inundated.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="road_exposure_report_mixin.py" line="67"/>
+        <source>Summary by road type</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="road_exposure_report_mixin.py" line="146"/>
+        <source>Unaffected</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="road_exposure_report_mixin.py" line="98"/>
+        <source>All (m)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="road_type_postprocessor.py" line="73"/>
+        <source>Total affected</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="file_downloader.py" line="152"/>
+        <source>Sorry, the server aborted your request. Please try a smaller area.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="file_downloader.py" line="159"/>
+        <source>Sorry, the server is currently busy with another request. Please try again in a few minutes.</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -5994,22 +6054,22 @@ p, li { white-space: pre-wrap; }
         <translation>agregado</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="1562"/>
+        <location filename="aggregator.py" line="1566"/>
         <source>preprocessed</source>
         <translation>preprocesado</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="1643"/>
+        <location filename="aggregator.py" line="1647"/>
         <source>Entire area</source>
         <translation>Toda el área</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="1622"/>
+        <location filename="aggregator.py" line="1626"/>
         <source>An exception occurred when creating the entire area layer.</source>
         <translation>Un error ocurrió cuando se creaba la capa de toda el área.</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="1628"/>
+        <location filename="aggregator.py" line="1632"/>
         <source>Area</source>
         <translation>Area</translation>
     </message>
@@ -6054,12 +6114,12 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="aggregator.py" line="1684"/>
+        <location filename="aggregator.py" line="1688"/>
         <source>No &quot;target_field&quot; keyword found in the impact layer %s keywords. The impact function should define this.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="aggregator.py" line="1696"/>
+        <location filename="aggregator.py" line="1700"/>
         <source>No attribute &quot;%s&quot; was found in the attribute table for layer &quot;%s&quot;. The impact function must define this attribute for postprocessing to work.</source>
         <translation type="unfinished"/>
     </message>
@@ -6343,7 +6403,7 @@ p, li { white-space: pre-wrap; }
         <translation>Toda el área</translation>
     </message>
     <message>
-        <location filename="dock.py" line="2077"/>
+        <location filename="dock.py" line="2080"/>
         <source>InaSAFE</source>
         <translation>InaSAFE</translation>
     </message>
@@ -6353,32 +6413,32 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1739"/>
+        <location filename="dock.py" line="1742"/>
         <source>Please select a valid impact layer before trying to print.</source>
         <translation>Por favor seleccione una capa de impacto válida antes de intentar una impresión.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1888"/>
+        <location filename="dock.py" line="1891"/>
         <source>Map Creator</source>
         <translation>Creador de mapa</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1789"/>
+        <location filename="dock.py" line="1792"/>
         <source>Preparing map and report</source>
         <translation>Preparando mapa e informe</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1864"/>
+        <location filename="dock.py" line="1867"/>
         <source>Write to PDF</source>
         <translation>Guardarlo en PDF</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1864"/>
+        <location filename="dock.py" line="1867"/>
         <source>Pdf File (*.pdf)</source>
         <translation>Archivo Pdf (*.pdf)</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1873"/>
+        <location filename="dock.py" line="1876"/>
         <source>Printing cancelled!</source>
         <translation>Impresión cancelada!</translation>
     </message>
@@ -6428,12 +6488,12 @@ p, li { white-space: pre-wrap; }
         <translation>Palabras clave de capa ausente:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1888"/>
+        <location filename="dock.py" line="1891"/>
         <source>Your PDF was created....opening using the default PDF viewer on your system. The generated pdfs were saved as:</source>
         <translation>Su archivo PDF fue creado... abriéndolo utilizando el visualizador predeterminado para este tipo de archivos en su sistema. Los pdfs generados fueron guardados como:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1888"/>
+        <location filename="dock.py" line="1891"/>
         <source>and</source>
         <translation>y</translation>
     </message>
@@ -6443,12 +6503,12 @@ p, li { white-space: pre-wrap; }
         <translation>La plantilla de impacto %s no fue una capa vectorial ni de mapa de bits </translation>
     </message>
     <message>
-        <location filename="dock.py" line="1749"/>
+        <location filename="dock.py" line="1752"/>
         <source>Report generation cancelled!</source>
         <translation>Generación del informe cancelado!</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1857"/>
+        <location filename="dock.py" line="1860"/>
         <source>Keyword &quot;map_title&quot; not found.</source>
         <translation>Palabra clave &quot;map_title&quot; no se encuentra.</translation>
     </message>
@@ -6483,12 +6543,12 @@ p, li { white-space: pre-wrap; }
         <translation>siguiente botón.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1821"/>
+        <location filename="dock.py" line="1824"/>
         <source>Template is missing some elements</source>
         <translation>La plantilla le faltan algunos elementos</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1824"/>
+        <location filename="dock.py" line="1827"/>
         <source>The composer template you are printing to is missing these elements: %s. Do you still want to continue</source>
         <translation type="unfinished"/>
     </message>
@@ -6498,7 +6558,7 @@ p, li { white-space: pre-wrap; }
         <translation>InaSAFE %s</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1778"/>
+        <location filename="dock.py" line="1781"/>
         <source>Please select a valid template before printing. The template you choose does not exist.</source>
         <translation>Por favor seleccione una plantilla válida antes de la impresión. La plantilla que eligió no existe.</translation>
     </message>
@@ -6518,7 +6578,7 @@ p, li { white-space: pre-wrap; }
         <translation>en la barra de tareas.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1599"/>
+        <location filename="dock.py" line="1601"/>
         <source> icon in the toolbar.</source>
         <translation>ícono en la barra de tareas.</translation>
     </message>
@@ -6563,7 +6623,7 @@ p, li { white-space: pre-wrap; }
         <translation>Descargo de responsabilidad</translation>
     </message>
     <message>
-        <location filename="dock.py" line="2084"/>
+        <location filename="dock.py" line="2087"/>
         <source>You can now proceed to run your analysis by clicking the</source>
         <translation>Ahora puede proceder a ejecutar su análisis haciendo clic en el</translation>
     </message>
@@ -6583,42 +6643,37 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1564"/>
-        <source>No keywords have been defined for this layer yet. If you wish to use it as an exposure, hazard, or aggregation layer in an analysis, please use the keyword wizard to update the keywords. You can open the wizard by clicking on the </source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="dock.py" line="1597"/>
+        <location filename="dock.py" line="1599"/>
         <source>Layer Keyword&apos;s Version Mismatch:</source>
         <translation>La versión de palabras clave de la capa no coincide:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1599"/>
+        <location filename="dock.py" line="1601"/>
         <source>Your layer&apos;s keyword&apos;s version (%s) does not match with your InaSAFE version (%s). If you wish to use it as an exposure, hazard, or aggregation layer in an analysis, please use the keyword wizard to update the keywords. You can open the wizard by clicking on the </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="2049"/>
+        <location filename="dock.py" line="2052"/>
         <source>The hazard layer, exposure layer and your defined analysis area extents all overlap. Press the run button below to continue with the analysis.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="2054"/>
+        <location filename="dock.py" line="2057"/>
         <source>Analysis environment ready</source>
         <translation>Análisis del medio ambiente listo</translation>
     </message>
     <message>
-        <location filename="dock.py" line="2054"/>
+        <location filename="dock.py" line="2057"/>
         <source>More info ...</source>
         <translation>Más información ...</translation>
     </message>
     <message>
-        <location filename="dock.py" line="2077"/>
+        <location filename="dock.py" line="2080"/>
         <source>No overlapping extents</source>
         <translation>No hay extensiones superpuestas</translation>
     </message>
     <message>
-        <location filename="dock.py" line="2090"/>
+        <location filename="dock.py" line="2093"/>
         <source>Insufficient overlap</source>
         <translation>Solapamiento insuficiente</translation>
     </message>
@@ -6635,6 +6690,11 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="dock.py" line="604"/>
         <source>Exposure keywords</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="dock.py" line="1564"/>
+        <source>No keywords have been defined for this layer yet or there is an issue with the currently defined keywords and they need to be reviewed. If you wish to use this layer as an exposure, hazard, or aggregation layer in an analysis, please use the keyword wizard to update the keywords. You can open the wizard by clicking on the </source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -8140,32 +8200,32 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>PostprocessorManager</name>
     <message>
-        <location filename="postprocessor_manager.py" line="324"/>
+        <location filename="postprocessor_manager.py" line="327"/>
         <source>Aggregation unit</source>
         <translation>Unidad de agregación</translation>
     </message>
     <message>
-        <location filename="postprocessor_manager.py" line="218"/>
+        <location filename="postprocessor_manager.py" line="221"/>
         <source>Total in aggregation areas</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="postprocessor_manager.py" line="226"/>
+        <location filename="postprocessor_manager.py" line="229"/>
         <source>* &quot;%s&quot; values mean that there where some problems while calculating them. This did not affect the other values.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="postprocessor_manager.py" line="527"/>
+        <location filename="postprocessor_manager.py" line="530"/>
         <source>%s postprocessor problem</source>
         <translation>problema del postprocesador %s</translation>
     </message>
     <message>
-        <location filename="postprocessor_manager.py" line="571"/>
+        <location filename="postprocessor_manager.py" line="574"/>
         <source>Postprocessing report partially skipped</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="postprocessor_manager.py" line="575"/>
+        <location filename="postprocessor_manager.py" line="578"/>
         <source>Due to a problem while processing the results, part of the detailed postprocessing report is unavailable:</source>
         <translation type="unfinished"/>
     </message>
@@ -8200,7 +8260,7 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="postprocessor_manager.py" line="232"/>
+        <location filename="postprocessor_manager.py" line="235"/>
         <source>Columns containing exclusively 0 and &quot;%s&quot; have not been shown in the table.</source>
         <translation type="unfinished"/>
     </message>
@@ -8832,7 +8892,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="wizard_dialog.py" line="1976"/>
-        <source>The selected keywords don&apos;t match requirements of the selected impact fuction (%s). You can confinue with registering the layer, however, you&apos;ll need to choose another layer for that function.</source>
+        <source>The selected keywords don&apos;t match requirements of the selected impact function (%s). You can continue with registering the layer, however, you&apos;ll need to choose another layer for that function.</source>
         <translation type="unfinished"/>
     </message>
 </context>
