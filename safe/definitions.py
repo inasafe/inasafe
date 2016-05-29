@@ -994,8 +994,8 @@ structure_class_mapping = [
         'key': 'commercial',
         'name': tr('Commercial'),
         'description': tr(
-            'A structure or facility that is used for commercial or industrial '
-            'purposes.'),
+            'A structure or facility that is used for commercial or '
+            'industrial purposes.'),
         'string_defaults': [
             'supermarket', 'shop', 'market', 'tailor', 'warehouse', 'works',
             'convenience', 'seafood', 'atm', 'mall', 'clothes', 'shoes',

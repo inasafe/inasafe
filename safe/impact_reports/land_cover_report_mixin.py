@@ -95,7 +95,8 @@ class LandCoverReportMixin(ReportMixin):
             tr('How long will the activity or function of the land cover be '
                'disturbed?'),
             tr('What proportion of the land cover is damaged?'),
-            tr('What potential losses will result from the land cover damage?'),
+            tr('What potential losses will result from the land cover '
+               'damage?'),
             tr('How much productivity will be lost during this event?'),
             tr('Which crops were ready for harvest during this event?'),
             tr('What is the ownership system of the land/crops/field?'),
