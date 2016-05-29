@@ -120,7 +120,7 @@ class SafeLayer(object):
         """Property for the actual layer.
 
         :returns: A layer's name.
-        :rtype: basestring
+        :rtype: str, unicodeß
         """
         return self._name
 

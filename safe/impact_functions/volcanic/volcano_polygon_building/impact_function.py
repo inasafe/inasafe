@@ -27,8 +27,6 @@ from safe.engine.interpolation import (
     assign_hazard_values_to_exposure_data)
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
-import safe.messaging as m
-from safe.messaging import styles
 from safe.utilities.keyword_io import definition
 from safe.impact_functions.core import get_key_for_value
 from safe.utilities.unicode import get_string
@@ -50,22 +48,21 @@ class VolcanoPolygonBuildingFunction(
         self.building_report_threshold = 25
 
     def notes(self):
-        """Return the notes section of the report.
+        """Return the notes section of the report as dict.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: safe.messaging.Message
+        :rtype: dict
         """
-        message = m.Message(style_class='container')
-        message.add(m.Heading(
-            tr('Notes and assumptions'), **styles.INFO_STYLE))
-        checklist = m.BulletedList()
-        checklist.add(tr(
-            'Map shows buildings affected in each of the volcano hazard '
-            'polygons.'))
-        names = tr('Volcanoes considered: %s.') % self.volcano_names
-        checklist.add(names)
-        message.add(checklist)
-        return message
+        title = tr('Notes and assumptions')
+        fields = [
+            tr('Map shows buildings affected in each of the volcano hazard '
+               'polygons.'),
+            tr('Volcanoes considered: %s.') % self.volcano_names
+        ]
+        return {
+            'title': title,
+            'fields': fields
+        }
 
     def run(self):
         """Risk plugin for volcano hazard on building/structure.
@@ -76,12 +73,6 @@ class VolcanoPolygonBuildingFunction(
                   Table with number of buildings affected
         :rtype: dict
         """
-        self.validate()
-        self.prepare()
-
-        self.provenance.append_step(
-            'Calculating Step',
-            'Impact function is calculating the impact.')
 
         # Get parameters from layer's keywords
         self.hazard_class_attribute = self.hazard.keyword('field')
@@ -189,9 +180,6 @@ class VolcanoPolygonBuildingFunction(
         self.building_report_threshold = building_postprocessors.value[0].value
         self._consolidate_to_other()
 
-        # Generate simple impact report
-        impact_summary = impact_table = self.html_report()
-
         # Create style
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
                    '#FFCC00', '#FF6600', '#FF0000', '#7A0000']
@@ -228,17 +216,15 @@ class VolcanoPolygonBuildingFunction(
         legend_notes = tr('Thousand separator is represented by %s' %
                           get_thousand_separator())
 
+        impact_data = self.generate_data()
+
         extra_keywords = {
-            'impact_summary': impact_summary,
-            'impact_table': impact_table,
             'target_field': self.target_field,
             'map_title': map_title,
             'legend_notes': legend_notes,
             'legend_units': legend_units,
             'legend_title': legend_title
         }
-
-        self.set_if_provenance()
 
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 
@@ -252,5 +238,6 @@ class VolcanoPolygonBuildingFunction(
             style_info=style_info
         )
 
+        impact_layer.impact_data = impact_data
         self._impact = impact_layer
         return impact_layer

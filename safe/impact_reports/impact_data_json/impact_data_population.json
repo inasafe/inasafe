@@ -1,0 +1,88 @@
+{
+  "exposure": "population",
+  "question": "Question",
+  "impact summary": {
+    "attributes": ["category", "value"],
+    "fields": [
+      ["High Hazard Zone", 11],
+      ["Medium Hazard Zone", 161],
+      ["Low Hazard Zone", 2],
+      ["Affected Building", 174],
+      ["Not Affected Building", 7],
+      ["Total", 181]
+    ]
+  },
+  "minimum needs": {
+    "weekly": [
+      ["Rice", 334],
+      ["Drinking Water [l]", 2083],
+      ["Clean Water [l]", 7973],
+      ["Family Kits", 24]
+    ],
+    "once": [
+      ["Toilets", 6]
+    ]
+  },
+  "action list": {
+    "title": "Action Check List Title",
+    "content": [
+      "Action check list content 1",
+      "Action check list content 2"
+    ]
+  },
+  "notes": {
+    "title": "Notes Title",
+    "content": [
+      "Notes content 1",
+      "Notes content 2"
+    ]
+  },
+  "post processing": {
+    "gender": {
+      "caption": "Detailed gender report (affected people)",
+      "attributes": [
+        "Kab_name",
+        "Total",
+        "Female count (affected)",
+        "Weekly hygiene packs",
+        "Additional weekly rice kg for pregnant and lactating women"
+      ],
+      "fields": [
+        ["JAKARTA PúSAT", 128, 63, 50, 6],
+        ["JAKARTA BARAT", 0, 0, 0, 0],
+        ["Total in aggregation areas", 128, 63, 50, 6]
+      ]
+    },
+    "age": {
+      "caption": "Detailed age report (affected people)",
+      "attributes": [
+        "Kab_name",
+        "Total",
+        "Youth count (affected)",
+        "Adult count (affected)",
+        "Elderly count (affected)"
+      ],
+      "fields": [
+        ["JAKARTA PúSAT", 128, 33, 84, 10],
+        ["JAKARTA BARAT", 0, 0, 0, 0],
+        ["Total in aggregation areas", 128, 33, 84, 10]
+      ]
+    },
+    "minimum needs": {
+      "caption": "Detailed minimum needs report (affected people)",
+      "attributes": [
+        "Kab_name",
+        "Rice [kg]",
+        "Drinking Water [l]",
+        "Clean Water [l]",
+        "Family Kits",
+        "Toilets"
+      ],
+      "fields": [
+        ["JAKARTA PúSAT", 358, 2240, 8576, 26, 6],
+        ["JAKARTA BARAT", 0, 0, 0, 0],
+        ["Total in aggregation areas", 358, 2240, 8576, 26, 6]
+      ]
+    }
+  }
+}

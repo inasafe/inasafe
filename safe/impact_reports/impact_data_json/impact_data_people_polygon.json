@@ -1,0 +1,60 @@
+{
+  "exposure": "polygon population",
+  "question": "Question",
+  "impact summary": {
+    "attributes": ["category", "value"],
+    "fields": [
+      ["High Hazard Zone", 4600],
+      ["Medium Hazard Zone", 65700],
+      ["Low Hazard Zone", 2500],
+      ["Total affected building", 72600],
+      ["Unaffected people", 26400],
+      ["Total", 98900]
+    ]
+  },
+  "breakdown": {
+    "attributes": [
+      "Area Name",
+      "Affected Area (ha)",
+      "Affected Area (%)",
+      "Total (ha)",
+      "Affected People",
+      "Affected People(%)",
+      "Total Number of People"
+    ],
+    "fields": [
+      ["All", 2219, 0.72, 31032, 72526, 0.72, 98852],
+      ["Magomeni", 6257, 0.703, 8899, 0, 0.0, 0],
+      ["Makurumula", 6459, 0.511, 12649, 27468, 0.511, 53794],
+      ["Tandale", 9482, 1.00, 9482, 45058, 1.00, 45058],
+      ["Total", 2219, 0.72, 31032, 72526, 0.72, 98852]
+    ]
+  },
+  "minimum needs": {
+    "weekly": [
+      ["Rice", 203073],
+      ["Drinking Water [l]", 1269205],
+      ["Clean Water [l]", 4859242],
+      ["Family Kits", 14506]
+    ],
+    "once": [
+      ["Toilets", 3627]
+    ]
+  },
+  "action list": {
+    "title": "Action Check List Title",
+    "content": [
+      "Action check list content 1",
+      "Action check list content 2"
+    ]
+  },
+  "notes": {
+    "title": "Notes Title",
+    "content": [
+      "Notes content 1",
+      "Notes content 2"
+    ]
+  },
+  "aggregation": {
+  }
+}

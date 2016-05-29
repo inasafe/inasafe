@@ -24,6 +24,7 @@ from safe.impact_functions.bases.continuous_rh_classified_ve import \
 from safe.impact_functions.inundation.flood_raster_road\
     .metadata_definitions import FloodRasterRoadsMetadata
 from safe.utilities.i18n import tr
+from safe.utilities.gis import add_output_feature, union_geometries
 from safe.storage.vector import Vector
 from safe.common.utilities import get_utm_epsg, unique_filename
 from safe.common.exceptions import GetDataError
@@ -33,8 +34,6 @@ from safe.gis.qgis_vector_tools import (
     create_layer)
 from safe.impact_reports.road_exposure_report_mixin import\
     RoadExposureReportMixin
-import safe.messaging as m
-from safe.messaging import styles
 
 
 def _raster_to_vector_cells(
@@ -124,75 +123,6 @@ def _raster_to_vector_cells(
     return index, flood_cells_map
 
 
-def _add_output_feature(
-        features,
-        geometry,
-        is_flooded,
-        fields,
-        original_attributes,
-        target_field):
-    """ Utility function to construct road features from geometry.
-
-    Newly created features get the attributes from the original feature.
-
-    :param features: A collection of features that the new feature will
-        be added to.
-    :type features: list
-
-    :param geometry: The geometry for the new feature. If the geometry is
-        multi-part, it will be exploded into several single-part features.
-    :type geometry: QgsGeometry
-
-    :param is_flooded: Flag indicating whether the feature should be marked
-        as flooded.
-    :type is_flooded: bool
-
-    :param fields: Fields that should be assigned to the new feature.
-    :type fields: list
-
-    :param original_attributes: Attributes for the feature before the new
-        target field (see below) is added.
-    :type original_attributes: list
-
-    :param target_field: Output field used to indicate if the road segment
-        is flooded.
-    :type target_field: QgsField
-
-    :returns: None
-    """
-    geometries = geometry.asGeometryCollection() if geometry.isMultipart() \
-        else [geometry]
-    for g in geometries:
-        f = QgsFeature(fields)
-        f.setGeometry(g)
-        for attr_no, attr_val in enumerate(original_attributes):
-            f.setAttribute(attr_no, attr_val)
-        f.setAttribute(target_field, is_flooded)
-        features.append(f)
-
-
-def _union_geometries(geometries):
-    """ Return a geometry which is union of the passed list of geometries.
-
-    :param geometries: Geometries for the union operation.
-    :type geometries: list
-
-    :returns: union of geometries
-    :rtype: QgsGeometry
-    """
-    if QGis.QGIS_VERSION_INT >= 20400:
-        # woohoo we can use fast union (needs GEOS >= 3.3)
-        return QgsGeometry.unaryUnion(geometries)
-    else:
-        # uhh we need to use slow iterative union
-        if len(geometries) == 0:
-            return QgsGeometry()
-        result_geometry = QgsGeometry(geometries[0])
-        for g in geometries[1:]:
-            result_geometry = result_geometry.combine(g)
-        return result_geometry
-
-
 def _intersect_lines_with_vector_cells(
         line_layer,
         request,
@@ -241,13 +171,13 @@ def _intersect_lines_with_vector_cells(
         # a (multi-)polygon geometry with flooded area relevant to this road
         ids = index.intersects(f.geometry().boundingBox())
         geoms = [flood_cells_map[i].geometry() for i in ids]
-        flood_geom = _union_geometries(geoms)
+        flood_geom = union_geometries(geoms)
 
         # find out which parts of the road are flooded
         in_geom = f.geometry().intersection(flood_geom)
         if in_geom and (in_geom.wkbType() == QGis.WKBLineString or
                         in_geom.wkbType() == QGis.WKBMultiLineString):
-            _add_output_feature(
+            add_output_feature(
                 features, in_geom, 1,
                 fields, f.attributes(), target_field)
 
@@ -255,7 +185,7 @@ def _intersect_lines_with_vector_cells(
         out_geom = f.geometry().difference(flood_geom)
         if out_geom and (out_geom.wkbType() == QGis.WKBLineString or
                          out_geom.wkbType() == QGis.WKBMultiLineString):
-            _add_output_feature(
+            add_output_feature(
                 features, out_geom, 0,
                 fields, f.attributes(), target_field)
 
@@ -289,6 +219,8 @@ class FloodRasterRoadsFunction(
         :rtype: safe.messaging.Message
         """
 
+        title = tr('Notes and assumptions')
+
         threshold = self.parameters['min threshold'].value
         hazard = self.hazard.keyword('hazard')
         hazard_terminology = tr('flooded')
@@ -300,20 +232,17 @@ class FloodRasterRoadsFunction(
             hazard_terminology = tr('inundated')
             hazard_object = tr('water')
 
-        message = m.Message(style_class='container')
-        message.add(
-            m.Heading(tr('Notes and assumptions'), **styles.INFO_STYLE))
-        checklist = m.BulletedList()
-        checklist.add(tr(
-            'Roads are %s when %s levels exceed %.2f m.' %
-            (hazard_terminology, hazard_object, threshold)))
-        checklist.add(tr(
-            'Roads are closed if they are %s.' % hazard_terminology))
-        checklist.add(tr(
-            'Roads are open if they are not %s.' % hazard_terminology))
+        fields = [
+            tr('Roads are %s when %s levels exceed %.2f m.' %
+               (hazard_terminology, hazard_object, threshold)),
+            tr('Roads are closed if they are %s.' % hazard_terminology),
+            tr('Roads are open if they are not %s.' % hazard_terminology)
+        ]
 
-        message.add(checklist)
-        return message
+        return {
+            'title': title,
+            'fields': fields
+        }
 
     def run(self):
         """Run the impact function.
@@ -321,12 +250,6 @@ class FloodRasterRoadsFunction(
         :returns: A new line layer with inundated roads marked.
         :type: safe_layer
         """
-        self.validate()
-        self.prepare()
-
-        self.provenance.append_step(
-            'Calculating Step',
-            'Impact function is calculating the impact.')
 
         target_field = self.target_field
         # Get parameters from layer's keywords
@@ -406,15 +329,6 @@ class FloodRasterRoadsFunction(
         small_raster = clip_raster(
             self.hazard.layer, width, height, QgsRectangle(*clip_extent))
 
-        # Create vector features from the flood raster
-        # For each raster cell there is one rectangular polygon
-        # Data also get spatially indexed for faster operation
-        index, flood_cells_map = _raster_to_vector_cells(
-            small_raster,
-            threshold_min,
-            threshold_max,
-            self.exposure.layer.crs())
-
         # Filter geometry and data using the extent
         ct = QgsCoordinateTransform(
             QgsCoordinateReferenceSystem("EPSG:4326"),
@@ -422,13 +336,6 @@ class FloodRasterRoadsFunction(
         extent = ct.transformBoundingBox(QgsRectangle(*self.requested_extent))
         request = QgsFeatureRequest()
         request.setFilterRect(extent)
-
-        if len(flood_cells_map) == 0:
-            message = tr(
-                'There are no objects in the hazard layer with "value" > %s. '
-                'Please check the value or use other extent.' % (
-                    threshold_min, ))
-            raise GetDataError(message)
 
         # create template for the output layer
         line_layer_tmp = create_layer(self.exposure.layer)
@@ -441,6 +348,22 @@ class FloodRasterRoadsFunction(
         QgsVectorFileWriter.writeAsVectorFormat(
             line_layer_tmp, filename, "utf-8", None, "ESRI Shapefile")
         line_layer = QgsVectorLayer(filename, "flooded roads", "ogr")
+
+        # Create vector features from the flood raster
+        # For each raster cell there is one rectangular polygon
+        # Data also get spatially indexed for faster operation
+        index, flood_cells_map = _raster_to_vector_cells(
+            small_raster,
+            threshold_min,
+            threshold_max,
+            self.exposure.layer.crs())
+
+        if len(flood_cells_map) == 0:
+            message = tr(
+                'There are no objects in the hazard layer with "value" > %s. '
+                'Please check the value or use other extent.' % (
+                    threshold_min, ))
+            raise GetDataError(message)
 
         # Do the heavy work - for each road get flood polygon for that area and
         # do the intersection/difference to find out which parts are flooded
@@ -489,8 +412,6 @@ class FloodRasterRoadsFunction(
                 self.affected_road_lengths[
                     flooded_keyword][road_type] += length
 
-        impact_summary = self.html_report()
-
         # For printing map purpose
         map_title = tr('Roads inundated')
         legend_title = tr('Road inundated status')
@@ -507,22 +428,23 @@ class FloodRasterRoadsFunction(
             style_classes=style_classes,
             style_type='categorizedSymbol')
 
+        impact_data = self.generate_data()
+
         extra_keywords = {
-            'impact_summary': impact_summary,
             'map_title': map_title,
             'legend_title': legend_title,
             'target_field': target_field
         }
 
-        self.set_if_provenance()
-
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 
         # Convert QgsVectorLayer to inasafe layer and return it
-        line_layer = Vector(
+        impact_layer = Vector(
             data=line_layer,
             name=tr('Flooded roads'),
             keywords=impact_layer_keywords,
             style_info=style_info)
-        self._impact = line_layer
-        return line_layer
+
+        impact_layer.impact_data = impact_data
+        self._impact = impact_layer
+        return impact_layer

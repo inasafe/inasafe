@@ -12,6 +12,12 @@ packages = (
     'headless',
 )
 
+
+# initialize qgis_app
+from safe.test.utilities import get_qgis_app
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
+
 app.autodiscover_tasks(packages)
 
 if __name__ == '__main__':

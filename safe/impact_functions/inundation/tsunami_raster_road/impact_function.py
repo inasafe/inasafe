@@ -1,5 +1,15 @@
 # coding=utf-8
-"""Impact of flood on roads."""
+"""InaSAFE Disaster risk tool by Australian Aid - Tsunami Raster Impact on
+Road
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+
+"""
 from collections import OrderedDict
 
 from qgis.core import (
@@ -24,6 +34,7 @@ from safe.impact_functions.bases.continuous_rh_classified_ve import \
 from safe.impact_functions.inundation.tsunami_raster_road\
     .metadata_definitions import TsunamiRasterRoadMetadata
 from safe.utilities.i18n import tr
+from safe.utilities.gis import add_output_feature, union_geometries
 from safe.storage.vector import Vector
 from safe.common.utilities import get_utm_epsg, unique_filename
 from safe.gis.qgis_raster_tools import clip_raster
@@ -32,8 +43,6 @@ from safe.gis.qgis_vector_tools import (
     create_layer)
 from safe.impact_reports.road_exposure_report_mixin import\
     RoadExposureReportMixin
-import safe.messaging as m
-from safe.messaging import styles
 
 __author__ = 'etiennetrimaille'
 __project_name__ = 'inasafe-dev'
@@ -156,74 +165,6 @@ def _raster_to_vector_cells(raster, ranges, output_crs):
     return index, flood_cells_map
 
 
-def _add_output_feature(
-        features,
-        geometry,
-        affected_class,
-        fields,
-        original_attributes,
-        target_field):
-    """ Utility function to construct road features from geometry.
-
-    Newly created features get the attributes from the original feature.
-
-    :param features: A collection of features that the new feature will
-        be added to.
-    :type features: list
-
-    :param geometry: The geometry for the new feature. If the geometry is
-        multi-part, it will be exploded into several single-part features.
-    :type geometry: QgsGeometry
-
-    :param affected_class: Affected class, 0 is not affected by a range.
-    :type affected_class: int
-
-    :param fields: Fields that should be assigned to the new feature.
-    :type fields: list
-
-    :param original_attributes: Attributes for the feature before the new
-        target field (see below) is added.
-    :type original_attributes: list
-
-    :param target_field: Output field used to indicate if the road segment
-        is flooded.
-    :type target_field: QgsField
-
-    :returns: None
-    """
-    geometries = geometry.asGeometryCollection() if geometry.isMultipart() \
-        else [geometry]
-    for g in geometries:
-        f = QgsFeature(fields)
-        f.setGeometry(g)
-        for attr_no, attr_val in enumerate(original_attributes):
-            f.setAttribute(attr_no, attr_val)
-        f.setAttribute(target_field, affected_class)
-        features.append(f)
-
-
-def _union_geometries(geometries):
-    """ Return a geometry which is union of the passed list of geometries.
-
-    :param geometries: Geometries for the union operation.
-    :type geometries: list
-
-    :returns: union of geometries
-    :rtype: QgsGeometry
-    """
-    if QGis.QGIS_VERSION_INT >= 20400:
-        # woohoo we can use fast union (needs GEOS >= 3.3)
-        return QgsGeometry.unaryUnion(geometries)
-    else:
-        # uhh we need to use slow iterative union
-        if len(geometries) == 0:
-            return QgsGeometry()
-        result_geometry = QgsGeometry(geometries[0])
-        for g in geometries[1:]:
-            result_geometry = result_geometry.combine(g)
-        return result_geometry
-
-
 def _intersect_lines_with_vector_cells(
         line_layer,
         request,
@@ -279,16 +220,16 @@ def _intersect_lines_with_vector_cells(
             if in_geom and (in_geom.wkbType() == QGis.WKBLineString or
                             in_geom.wkbType() == QGis.WKBMultiLineString):
                 affected_value = feature.attributes()[0]
-                _add_output_feature(
+                add_output_feature(
                     features, in_geom, affected_value,
                     fields, f.attributes(), target_field)
 
         # find out which parts of the road are not flooded
         geoms = [j.geometry() for j in flood_features]
-        out_geom = f.geometry().difference(_union_geometries(geoms))
+        out_geom = f.geometry().difference(union_geometries(geoms))
         if out_geom and (out_geom.wkbType() == QGis.WKBLineString or
                          out_geom.wkbType() == QGis.WKBMultiLineString):
-            _add_output_feature(
+            add_output_feature(
                 features, out_geom, 0,
                 fields, f.attributes(), target_field)
         # every once in a while commit the created features to the output layer
@@ -327,56 +268,44 @@ class TsunamiRasterRoadsFunction(
         :return: The notes that should be attached to this impact report.
         :rtype: safe.messaging.Message
         """
-        message = m.Message(style_class='container')
-        message.add(
-            m.Heading(tr('Notes and assumptions'), **styles.INFO_STYLE))
-        checklist = m.BulletedList()
-
+        title = tr('Notes and assumptions')
         # Thresholds for tsunami hazard zone breakdown.
         low_max = self.parameters['low_threshold']
         medium_max = self.parameters['medium_threshold']
         high_max = self.parameters['high_threshold']
 
-        checklist.add(tr(
-            'Dry zone is defined as non-inundated area or has inundation '
-            'depth is 0 %s') % low_max.unit.abbreviation
-        )
+        fields = [
+            tr('Dry zone is defined as non-inundated area or has inundation '
+               'depth is 0 %s') % low_max.unit.abbreviation,
+            tr('Low tsunami hazard zone is defined as inundation depth is '
+               'more than 0 %s but less than %.1f %s') % (
+                low_max.unit.abbreviation,
+                low_max.value,
+                low_max.unit.abbreviation),
+            tr('Moderate tsunami hazard zone is defined as inundation depth '
+               'is more than %.1f %s but less than %.1f %s') % (
+                low_max.value,
+                low_max.unit.abbreviation,
+                medium_max.value,
+                medium_max.unit.abbreviation),
+            tr('High tsunami hazard zone is defined as inundation depth is '
+               'more than %.1f %s but less than %.1f %s') % (
+                medium_max.value,
+                medium_max.unit.abbreviation,
+                high_max.value,
+                high_max.unit.abbreviation),
+            tr('Very high tsunami hazard zone is defined as inundation depth '
+               'is more than %.1f %s') % (
+                high_max.value, high_max.unit.abbreviation),
+            tr('Roads are closed if they are in low, moderate, high, or very '
+               'high tsunami hazard zone.'),
+            tr('Roads are opened if they are in dry zone.')
+        ]
 
-        checklist.add(tr(
-            'Low tsunami hazard zone is defined as inundation depth is more '
-            'than 0 %s but less than %.1f %s') % (
-            low_max.unit.abbreviation,
-            low_max.value,
-            low_max.unit.abbreviation)
-        )
-        checklist.add(tr(
-            'Moderate tsunami hazard zone is defined as inundation depth is '
-            'more than %.1f %s but less than %.1f %s') % (
-            low_max.value,
-            low_max.unit.abbreviation,
-            medium_max.value,
-            medium_max.unit.abbreviation)
-        )
-        checklist.add(tr(
-            'High tsunami hazard zone is defined as inundation depth is '
-            'more than %.1f %s but less than %.1f %s') % (
-            medium_max.value,
-            medium_max.unit.abbreviation,
-            high_max.value,
-            high_max.unit.abbreviation)
-        )
-        checklist.add(tr(
-            'Very high tsunami hazard zone is defined as inundation depth is '
-            'more than %.1f %s') % (
-            high_max.value, high_max.unit.abbreviation))
-
-        checklist.add(tr(
-            'Roads are closed if they are in low, moderate, high, or very '
-            'high tsunami hazard zone.'))
-        checklist.add(tr(
-            'Roads are opened if they are in dry zone.'))
-        message.add(checklist)
-        return message
+        return {
+            'title': title,
+            'fields': fields
+        }
 
     def run(self):
         """Run the impact function.
@@ -384,13 +313,6 @@ class TsunamiRasterRoadsFunction(
         :returns: A new line layer with inundated roads marked.
         :type: safe_layer
         """
-        self.validate()
-        self.prepare()
-
-        self.provenance.append_step(
-            'Calculating Step',
-            'Impact function is calculating the impact.')
-
         # Thresholds for tsunami hazard zone breakdown.
         low_max = self.parameters['low_threshold'].value
         medium_max = self.parameters['medium_threshold'].value
@@ -482,18 +404,6 @@ class TsunamiRasterRoadsFunction(
         request = QgsFeatureRequest()
         request.setFilterRect(extent)
 
-        """
-        if len(low_max_flood_cells_map) == 0 and \
-            len(medium_max_flood_cells_map) == 0 and \
-            len(high_max_flood_cells_map) == 0 and \
-            len(high_min_flood_cells_map) == 0:
-            message = tr(
-                'There are no objects in the hazard layer with "value" > 0. '
-                'Please check the value or use other extent.' % (
-                    threshold_min, ))
-            raise GetDataError(message)
-        """
-
         # create template for the output layer
         line_layer_tmp = create_layer(self.exposure.layer)
         new_field = QgsField(target_field, QVariant.Int)
@@ -567,8 +477,6 @@ class TsunamiRasterRoadsFunction(
             if attributes[target_field_index] in range(num_classes):
                 self.affected_road_lengths[hazard_zone][road_type] += length
 
-        impact_summary = self.html_report()
-
         # For printing map purpose
         map_title = tr('Roads inundated')
         legend_title = tr('Road inundated status')
@@ -619,22 +527,23 @@ class TsunamiRasterRoadsFunction(
             style_classes=style_classes,
             style_type='categorizedSymbol')
 
+        impact_data = self.generate_data()
+
         extra_keywords = {
-            'impact_summary': impact_summary,
             'map_title': map_title,
             'legend_title': legend_title,
             'target_field': target_field
         }
 
-        self.set_if_provenance()
-
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 
         # Convert QgsVectorLayer to inasafe layer and return it
-        line_layer = Vector(
+        impact_layer = Vector(
             data=line_layer,
             name=tr('Flooded roads'),
             keywords=impact_layer_keywords,
             style_info=style_info)
-        self._impact = line_layer
-        return line_layer
+
+        impact_layer.impact_data = impact_data
+        self._impact = impact_layer
+        return impact_layer

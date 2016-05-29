@@ -11,22 +11,22 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.impact_functions.generic.continuous_hazard_population\
-    .impact_function import ContinuousHazardPopulationFunction
-from safe.storage.safe_layer import SafeLayer
 
 __author__ = 'lucernae'
 __filename__ = 'test_classified_hazard_building'
 __date__ = '24/03/15'
 
-
 import unittest
+from safe.test.utilities import test_data_path, get_qgis_app
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
+from safe.common.utilities import OrderedDict
 from safe.impact_functions.impact_function_manager\
     import ImpactFunctionManager
+from safe.impact_functions.generic.continuous_hazard_population\
+    .impact_function import ContinuousHazardPopulationFunction
+from safe.storage.safe_layer import SafeLayer
 from safe.storage.core import read_layer
-from safe.test.utilities import test_data_path
-from safe.common.utilities import OrderedDict
 
 
 class TestContinuousHazardPopulationFunction(unittest.TestCase):

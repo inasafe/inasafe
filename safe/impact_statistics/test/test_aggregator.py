@@ -128,7 +128,8 @@ class AggregatorTest(unittest.TestCase):
         assert result, message
         # Press RUN
         self.DOCK.accept()
-        attribute = self.DOCK.analysis.aggregator.attributes[attribute_key]
+        aggregator = self.DOCK.impact_function.aggregator
+        attribute = aggregator.attributes[attribute_key]
         message = ('The aggregation should be KAB_NAME. Found: %s' % attribute)
         self.assertEqual(attribute, 'KAB_NAME', message)
 
@@ -155,12 +156,13 @@ class AggregatorTest(unittest.TestCase):
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
         self.DOCK.accept()
-        print attribute_key
-        print self.DOCK.analysis.aggregator.attributes
-        attribute = self.DOCK.analysis.aggregator.attributes[attribute_key]
+        aggregator = self.DOCK.impact_function.aggregator
+        attribute = aggregator.attributes[attribute_key]
         message = (
             'The aggregation should be KAB_NAME. Found: %s' % attribute)
         self.assertEqual(attribute, 'KAB_NAME', message)
+
+    test_check_aggregation_single_attribute.slow = True
 
     # noinspection PyMethodMayBeStatic
     def test_check_aggregation_no_attributes(self):
@@ -180,13 +182,16 @@ class AggregatorTest(unittest.TestCase):
             function_id='FloodEvacuationRasterHazardFunction',
             aggregation_layer='kabupaten jakarta singlepart 0 good attr')
         set_jakarta_extent(dock=self.DOCK)
-        assert result, message
+        self.assertTrue(result, message)
         # Press RUN
         self.DOCK.accept()
-        attribute = self.DOCK.analysis.aggregator.attributes[attribute_key]
+        aggregator = self.DOCK.impact_function.aggregator
+        attribute = aggregator.attributes[attribute_key]
         message = (
             'The aggregation should be None. Found: %s' % attribute)
-        assert attribute is None, message
+        self.assertIsNone(attribute, message)
+
+    test_check_aggregation_no_attributes.slow = True
 
     # noinspection PyMethodMayBeStatic
     def test_check_aggregation_none_in_keywords(self):
@@ -206,12 +211,15 @@ class AggregatorTest(unittest.TestCase):
             function_id='FloodEvacuationRasterHazardFunction',
             aggregation_layer='kabupaten jakarta singlepart with None keyword')
         set_jakarta_extent(dock=self.DOCK)
-        assert result, message
+        self.assertTrue(result, message)
         # Press RUN
         self.DOCK.accept()
-        attribute = self.DOCK.analysis.aggregator.attributes[attribute_key]
+        aggregator = self.DOCK.impact_function.aggregator
+        attribute = aggregator.attributes[attribute_key]
         message = ('The aggregation should be None. Found: %s' % attribute)
-        assert attribute is None, message
+        self.assertIsNone(attribute, message)
+
+    test_check_aggregation_none_in_keywords.slow = True
 
     def test_setup_target_field(self):
         """Test setup up target field is correct.
@@ -258,14 +266,17 @@ class AggregatorTest(unittest.TestCase):
         self.DOCK.accept()
 
         expected_feature_count = 5
+        aggregator = self.DOCK.impact_function.aggregator
         message = (
             'The preprocessing should have generated %s features, '
             'found %s' % (
                 expected_feature_count,
-                self.DOCK.analysis.aggregator.preprocessed_feature_count))
+                aggregator.preprocessed_feature_count))
         self.assertEqual(
             expected_feature_count,
-            self.DOCK.analysis.aggregator.preprocessed_feature_count, message)
+            aggregator.preprocessed_feature_count, message)
+
+    test_preprocessing.slow = True
 
     def _create_aggregator(self,
                            use_aoi_mode,
@@ -447,67 +458,6 @@ class AggregatorTest(unittest.TestCase):
             ['Entire area', '3']
         ]
         self._aggregate(impact_layer, expected_results, use_aoi_mode=True)
-
-        # Aggregation in class_count mode
-        data_path = test_data_path(
-            'impact',
-            'aggregation_test_impact_vector_class_count.shp')
-        impact_layer = Vector(
-            data=data_path,
-            name='test vector impact')
-        expected_results = [
-            ['Entire area', '2', '3', '0']
-        ]
-        self._aggregate(impact_layer, expected_results, use_aoi_mode=True)
-        expected_results = [
-            ['JAKARTA BARAT', '1', '2', '0'],
-            ['JAKARTA PUSAT', '1', '0', '0'],
-            ['JAKARTA SELATAN', '0', '0', '0'],
-            ['JAKARTA UTARA', '0', '1', '0'],
-            ['JAKARTA TIMUR', '0', '0', '0']
-        ]
-        impact_layer_attributes = [
-            [   # JAKARTA BARAT
-                {'INUNDATED': 1,
-                 'depth': 2.0,
-                 'type': None,
-                 'name': None,
-                 'osm_id': None},
-                {'INUNDATED': 1,
-                 'depth': 2.0,
-                 'type': None,
-                 'name': None,
-                 'osm_id': None},
-                {'INUNDATED': 0,
-                 'depth': None,
-                 'type': None,
-                 'name': None,
-                 'osm_id': None}
-            ],
-            [   # JAKARTA PUSAT
-                {'INUNDATED': 0,
-                 'depth': None,
-                 'type': None,
-                 'name': None,
-                 'osm_id': None}
-            ],
-            [
-                # JAKARTA SELATAN
-            ],
-            [   # JAKARTA UTARA
-                {'INUNDATED': 1,
-                 'depth': None,
-                 'type': None,
-                 'name': None,
-                 'osm_id': None}
-            ],
-            [
-                # JAKARTA TIMUR
-            ]
-        ]
-        self._aggregate(impact_layer,
-                        expected_results,
-                        impact_layer_attributes=impact_layer_attributes)
 
     def test_line_aggregation(self):
         """Test if line aggregation works

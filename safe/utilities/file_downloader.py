@@ -29,7 +29,6 @@ from PyQt4.QtNetwork import QNetworkRequest, QNetworkReply
 
 from safe.common.utilities import humanize_file_size
 from safe.utilities.i18n import tr
-from safe.utilities.gis import qgis_version
 
 LOGGER = logging.getLogger('InaSAFE')
 

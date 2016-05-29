@@ -15,7 +15,7 @@ qgisMaximumVersion=2.99
 description=InaSAFE is free software that allows disaster managers to study realistic natural hazard impact scenarios for better planning, preparedness and response activities.
 about=Developed for the Indonesian Government - BNPB, Australian Government - AIFDR and DMInnovation and, and World Bank - GFDRR
 
-version=3.3.3
+version=3.4.0
 # alpha, beta, rc or final
 status=final
 
@@ -25,63 +25,164 @@ status=final
 # Optional items:
 
 changelog=
-        3.3.3 Fix issue #2724 - InaSAFE Intermediate Ex. errors: Python error
-        3.3.3 Fix issue #2759 - Exception when keyword missing from keywords
-        3.3.2 Fix issue #2720 - Fix incorrect keyword requirements for tsunami impact on roads
-        3.3.2 Fix if the OSM downloader issue - if request is cancelled, the http response is none
-        3.3.2 Handle HTTP 509 if the overpass is busy
-        3.3.2 Fix #2722 fix QGIS 2.14 issue with delete network reply after a download
-        3.3.1: Fix python error with PetaJakarta downloader
-        Add parameter for minimum number to create group of building #2468
-        New default parameter for IF Tsunami Raster for Building (New IF) #1237
-        Use affected building value in action checklist #2410
-        Fix result on detail table in Earthquake population IF #2235
-        Make raster cell with zero value transparent #2529
-        Fix small bug showing QDateTime #2585
-        Add unaffected population in impact report #2530
-        Fix small bug showing QUrl #2569
-        Fix typo (apostrophes) in action check list #2571
-        Round number in action check list #2570
-        Fix InaSAFE OpenStreetMap Downloader cannot download relation #2576
-        Create a uniform order in impact report #2545
-        Update action check list #2389
-        Sort hazard classification on impact report (And make IF uses vector classification from hazard layer properly) #2385
-        Better impact report for IF volcano point #2390
-        Add unit in radius for IF Volcano point #2425
-        Migrating to metadata 3.3
-        Working implementation of on-the-fly-projection for polygon flood on building points/polys. fix #2475
-        Add new impact function Classified polygon hazard on polygon people
-        Add new impact function Earthquake ITB Bayesian Fatality
-        Add flood prone areas download support for the OSM downloader
-        Added support for downloading flood aggregates from PetaJakarta
-        Use date Picker in Keywords Wizard
-        (ismail/tsunami_raster_building_if) Merge branch 'develop' of github.com:inasafe/inasafe into tsunami_raster_building_if
-        Fix order by using Vector Classification in classified polygon population IF.
-        Use Vector Classification to sort the hazard level in report.
-        Add low, moderate, high threshold for tsunami raster building IF.
-        Add tsunami raster building IF based on flood one.
-        [Wizard] Use standard QDateTimeEdit instead of QgsDateTimeEdit. Fixes #2515
-        (charlotte/develop) Update default road action checklist
-        Update default population action checklist
-        Update default buildings action checklist
-        Update keywords for datatest.
-        Use read_iso19115_metadata to read metadata.
-        inform the user about the network status in the OSM downloader
-        [KeywordWizard] Use QDateTimeEdit for date keyword. Fixes #2499
-        Add target_field to impact layer metadata.
-        Add volcano_name_field to hazard layer metadata.
-        Add road_class_field to exposure metadata.
-        add flood prone to the OSM downloader
-        Migrate to use ISO 19115 metadata.
-        Add changelog: add new IF Classified polygon hazard on polygon people
-        [IFCW] After registering keywords in the KW sub-thread, don't display again the step from where it was called. Fixes #2347
-        Use wrap_slash for filename cells
-        Working implementation of on the fly projection for polygon flood on building points/polys. fix #2475
-        fix #2464 - support point buildings when doing polygon flood analysis
-        created new color symbology
-        (rizky/update-raven) Update sentry dsn for InaSAFE desktop and Realtime
-        added % symbol to all percentages in report
-        Added option to add OSM tile layer
+	Add missing note in post processing table.
+	Add LandCover Report template.
+	Add impact data to LandCover IF.
+	Add land cover report/data mixin.
+	Make FlatTable converter to dict.
+	Add read and write to json for FlatTable.
+	[Wizard] Improve test coverage
+	Merge pull request #2768 from timlinux/fix-2704
+	Minor formatting tweaks to help doc modules
+	Add json data sample for land cover IF.
+	Fix for missing keyword in layer raising error
+	merge analysis_workflow in calculate_impact
+	Add reclassify methods using GDAL
+	Add a polygonize function with GDAL
+	Fix #2754, failed to set keyword for aggregation layer.
+	Change flood event to use json impact data.
+	Remove duplicate metadata in the wizard
+	Merge pull request #2747 from borysiasty/wizard2
+	Fix test save scenario.
+	Fix test minimum needs.
+	Fix test in test engine
+	Fix failed test in test impact report.
+	Fix post processing report in dock and wizard.
+	Impact Data for PostProcessing works.
+	Able to generate json for postprocessing.
+	Add sample of post processing.
+	Fix test impact function for land cover.
+	Add test for polygon people template.
+	Rename all to polygon people
+	Add Impact Data for polygon population.
+	Merge pull request #2748 from Gustry/grid-jakarta
+	Add aggregation grid on Jakarta
+	Impact Data in ClassifiedPolygonPeople IF.
+	Add impact data people polygon sample.
+	[Wizard] bugfixes
+	Separate impact summary and breakdown
+	Impact Data for FloodRasterRoadsFunction and TsunamiRasterRoadsFunction
+	Add impact data for FloodPolygonRoadsFunction.
+	Add template for road.
+	Add impact data to road report mixin.
+	Refactored wizard cleanups
+	Add residence and reformat dictionary
+	Add road sample impact data
+	Add asMultiPolygon in checker. Fix #2744.
+	Update expected result in test for #2744
+	Reproject aggregation layer before doing intersection with exposure
+	Support also single event hazards in land cover IF
+	Docs for pivot table + fix if not all columns are present in data
+	Impact Data for ClassifiedPolygonHazardPopulationFunction.
+	Impact Data for ContinuousHazardPopulationFunction.
+	Impact Data for ClassifiedRasterHazardPopulationFunction.
+	Impact Data for FloodEvacuationVectorHazardFunction.
+	Impact Data for FloodEvacuationRasterHazardFunction.
+	Impact Data for TsunamiEvacuationFunction
+	Impact Data for VolcanoPointPopulationFunction.
+	Impact Data for VolcanoPolygonPopulationFunction.
+	Move calculate impact to IF base.
+	Impact Data work for Population IF.
+	Add generate data for population IF
+	Impact Data for VolcanoPolygonBuildingFunction.
+	Impact Data for VolcanoPointBuildingFunction.
+	Impact Data for TsunamiRasterBuildingFunction.
+	Impact Data for FloodRasterBuildingFunction.
+	Impact Data for FloodPolygonBuildingFunction.
+	Impact Data for ClassifiedRasterHazardBuildingFunction
+	Remove html report generation from IF.
+	Impact Data for ClassifiedPolygonHazardBuildingFunction
+	Move wizard metadata to definitions.
+	Update structure and road value mapping.
+	Fix failed to run the test in test dock.
+	Add method to handle template from layer, not json only.
+	Fix tests, add debugging statement
+	Fix if the request is cancelled, the http response is none
+	Handle HTTP 509 if the overpass is busy
+	Manage a timeout error from the overpass in the OSM Downloader
+	Fix issue #2720
+	Create HTML from JSON for EQ building works in Dock.
+	Make template able to read from JSON file directly.
+	Return html and message object. Add unit test also.
+	Minor changes in the OSM Downloader UI
+	Add report templating package.
+	Write json on EQ building IF.
+	Rename exposure's value_map to value_mapping
+	Add name and description placeholders to the wizard's temporary metadata
+	Action list for polygon population.
+	Action List and Notes for road IF.
+	Add road and structure mapping
+	Experimental bar chart for each land cover class in report
+	Reporting of impact per each aggregation zone, improved pivot table
+	Initial implementation of pivot tables for IF reports
+	Helper class for calculation of aggregates of tabular data
+	Land cover report in two steps (1. get data, 2. format) without mixin
+	Use QGIS intersection alg for interestion of exposure vs aggregation layer
+	Initial support for aggregation for new-style IF
+	Fix tests about volcanos
+	Separating format and data in IF population.
+	Removing geodesy module
+	Polygonize volcanos point, use QGIS api in buffering
+	Fix issues in shake template with new placename
+	Move action list and notes formating to base mixin class.
+	Move action checklist and impact summary for population mixin
+	Fix failed test on building breakdown.
+	Add value for fields.
+	Separate building breakdown formating and the data.
+	Styling for impact layer - high/medium/low
+	Take into hazard classes into account
+	Separate impact_summary formating and the data.
+	Add classes to godzilla hazard
+	Change format notes to notes method in IF building.
+	Fix delete network reply after a download
+	Fixed report generation for land cover
+	Update metadata of landcover exposure
+	Update metadata of test landcover hazard layer
+	Make action list in better structure.
+	Add percentage of affected area for each land cover type
+	Unit test fixes after addition of new impact function
+	Added unit test data for land cover impact function
+	Added classified hazard vs land cover impact function
+	Refactor method name in impact report.
+	Merge branch 'develop' of http://github.com/AIFDR/inasafe into realtime-flood
+	Merge pull request #2707 from easmetz/develop
+	First half of dock help being polished. In progress.
+	Corrected capitalisation of "questions", "results" and "buttons" in Dock Help. - Bolded "questions", "results" and "buttons" in Dock Help.
+	Corrected capitalisation of "Impact Function"
+	Fix import icon. Changed order of options in Analysis Area window.
+	Reviewed extent selector help.
+	set the aggregation layer from the aggregator
+	Reviewed dock help. Still in progress.
+	Removing check user_extent, clip_parameters will set the value
+	Fix catch exceptions in IF
+	Update tsunami on roads IF
+	Fix metadata tsunami on roads IF
+	Add flag for add unaffected column in the road report
+	Disable Flood On Raster IF for a tsunami hazard
+	Fix tests tsunami on roads IF
+	Fix roads which intersect partially the hazard raster
+	Commit to the output every 1000 features
+	Impact report tsunami IF
+	Update tsunami on buildings IF
+	Add tsunami IF init
+	Merge pull request #2690 from timlinux/fix-2689
+	Merge pull request #2668 from Gustry/fix-2361-roads-postprocessing
+	Update to "total affected" in the road type postprocessor
+	Fix hide exposure layer after an IF in develop
+	Merge pull request #2655 from Gustry/unicode
+	Fix #2361 count roads length in post processing instead of features
+	Merge branch 'develop' of http://github.com/AIFDR/inasafe into realtime-flood
+	Fix #2652: fix impact function addition over NaN values
+	Add realtime flood template
+	Fix issue if bookmark cannot be reprojected in extent selector
+	Move setup_impact_function in IF
+	Fix unicode error if layers do not overlap in French
+	Move postprocessor_manager in IF
+	Move setup aggregator to IF
+	Use staging osm-reporter if developer mode is ON and if it is not a final release
+	Add South Africa and France to the OSM downloader
+	Add multipolygons support in the OSM Downloader
+	Fix test tsunami_raster_building
 
 # tags are comma separated with spaces allowed
 tags=contingency planning, impact assessments, disaster scenarios, natural hazards

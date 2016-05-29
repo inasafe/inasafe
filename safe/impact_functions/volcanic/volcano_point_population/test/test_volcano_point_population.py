@@ -16,11 +16,12 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import unittest
 import numpy
+from safe.test.utilities import get_qgis_app, test_data_path
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.impact_functions.volcanic.volcano_point_population\
     .impact_function import VolcanoPointPopulationFunction
-from safe.test.utilities import test_data_path
 from safe.storage.core import read_layer
 from safe.storage.safe_layer import SafeLayer
 
@@ -47,6 +48,7 @@ class TestVolcanoPointPopulationFunction(unittest.TestCase):
         # Run merapi point
         impact_function.hazard = SafeLayer(merapi_point_layer)
         impact_function.exposure = SafeLayer(population_layer)
+        impact_function._prepare()
         impact_function.run()
         impact_layer = impact_function.impact
         # Check the question

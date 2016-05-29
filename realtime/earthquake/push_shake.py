@@ -104,6 +104,11 @@ def push_shake_event_to_rest(shake_event, fail_silent=True):
             },
             'location_description': event_dict.get('shake-grid-location')
         }
+        earthquake_file = {
+            'shake_grid': (
+                '%s-grid.xml' % shake_event.event_id,
+                open(shake_event.grid_file_path())),
+        }
         # check does the shake event already exists?
         response = session.earthquake(
             earthquake_data['shake_id']).GET()
@@ -111,11 +116,23 @@ def push_shake_event_to_rest(shake_event, fail_silent=True):
             # event exists, we should update using PUT Url
             response = session.earthquake(
                 earthquake_data['shake_id']).PUT(
-                data=json.dumps(earthquake_data), headers=headers)
+                data=json.dumps(earthquake_data),
+                headers=headers)
         elif response.status_code == requests.codes.not_found:
             # event does not exists, create using POST url
             response = session.earthquake.POST(
-                data=json.dumps(earthquake_data), headers=headers)
+                data=json.dumps(earthquake_data),
+                headers=headers)
+
+        # upload grid.xml
+        headers = {
+            'X-CSRFTOKEN': inasafe_django.csrf_token,
+        }
+        if response.status_code == requests.codes.ok:
+            response = session.earthquake(
+                earthquake_data['shake_id']).PUT(
+                files=earthquake_file,
+                headers=headers)
 
         if not (response.status_code == requests.codes.ok or
                 response.status_code == requests.codes.created):

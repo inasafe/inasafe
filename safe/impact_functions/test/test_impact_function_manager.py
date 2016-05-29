@@ -18,6 +18,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import unittest
+from safe.test.utilities import get_qgis_app
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.impact_functions import register_impact_functions
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
@@ -31,7 +33,6 @@ from safe.impact_functions.generic.continuous_hazard_population\
     .impact_function import ContinuousHazardPopulationFunction
 from safe.impact_functions.inundation.flood_vector_building_impact\
     .impact_function import FloodPolygonBuildingFunction
-
 
 from safe.definitions import (
     layer_purpose_hazard,
@@ -47,12 +48,15 @@ from safe.definitions import (
     exposure_structure,
     exposure_road,
     exposure_population,
+    exposure_land_cover,
     count_exposure_unit,
     density_exposure_unit,
     layer_mode_classified,
     layer_mode_continuous,
     layer_geometry_polygon,
+    layer_mode_classified,
     layer_geometry_raster,
+    layer_geometry_polygon,
     structure_class_field,
     unit_metres,
     unit_generic,
@@ -201,7 +205,9 @@ class TestImpactFunctionManager(unittest.TestCase):
         impact_function_manager = ImpactFunctionManager()
         exposures = impact_function_manager.exposures_for_layer(
             'polygon')
-        expected = [exposure_structure, exposure_population]
+        expected = [exposure_structure,
+                    exposure_population,
+                    exposure_land_cover]
         self.assertItemsEqual(exposures, expected)
 
         exposures = impact_function_manager.exposures_for_layer(
@@ -250,7 +256,8 @@ class TestImpactFunctionManager(unittest.TestCase):
         expected_result = [
             exposure_structure,
             exposure_road,
-            exposure_population]
+            exposure_population,
+            exposure_land_cover]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 

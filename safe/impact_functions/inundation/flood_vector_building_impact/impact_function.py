@@ -35,8 +35,6 @@ from safe.storage.vector import Vector
 from safe.common.exceptions import GetDataError, ZeroImpactException
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
-import safe.messaging as m
-from safe.messaging import styles
 
 
 class FloodPolygonBuildingFunction(
@@ -56,34 +54,27 @@ class FloodPolygonBuildingFunction(
         self.building_report_threshold = 25
 
     def notes(self):
-        """Return the notes section of the report.
+        """Return the notes section of the report as dict.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: safe.messaging.Message
+        :rtype: dict
         """
-        message = m.Message(style_class='container')
-        message.add(m.Heading(
-            tr('Notes and assumptions'), **styles.INFO_STYLE))
-        checklist = m.BulletedList()
-        checklist.add(tr(
-            'Buildings are flooded when in a region with '
-            'field "%s" in "%s".') % (
-                self.hazard_class_attribute,
-                ', '.join([
-                    unicode(hazard_class) for
-                    hazard_class in self.hazard_class_mapping[self.wet]
-                ])))
-        message.add(checklist)
-        return message
+        title = tr('Notes and assumptions')
+        hazard_classes_string = ', '.join(
+            [unicode(hazard_class) for hazard_class in
+             self.hazard_class_mapping[self.wet]])
+        fields = [
+            tr('Buildings are flooded when in a region with field "%s" in '
+               '"%s".') % (self.hazard_class_attribute, hazard_classes_string)
+        ]
+
+        return {
+            'title': title,
+            'fields': fields
+        }
 
     def run(self):
         """Experimental impact function."""
-        self.validate()
-        self.prepare()
-
-        self.provenance.append_step(
-            'Calculating Step',
-            'Impact function is calculating the impact.')
 
         # Get parameters from layer's keywords
         self.hazard_class_attribute = self.hazard.keyword('field')
@@ -258,8 +249,6 @@ class FloodPolygonBuildingFunction(
         self.building_report_threshold = building_postprocessors.value[0].value
         self._consolidate_to_other()
 
-        impact_summary = self.html_report()
-
         # For printing map purpose
         map_title = tr('Buildings inundated')
         legend_title = tr('Structure inundated status')
@@ -279,8 +268,9 @@ class FloodPolygonBuildingFunction(
             raise ZeroImpactException(tr(
                 'No buildings were impacted by this flood.'))
 
+        impact_data = self.generate_data()
+
         extra_keywords = {
-            'impact_summary': impact_summary,
             'map_title': map_title,
             'legend_title': legend_title,
             'target_field': self.target_field,
@@ -288,14 +278,14 @@ class FloodPolygonBuildingFunction(
             'buildings_affected': self.total_affected_buildings
         }
 
-        self.set_if_provenance()
-
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 
-        building_layer = Vector(
+        impact_layer = Vector(
             data=building_layer,
             name=tr('Flooded buildings'),
             keywords=impact_layer_keywords,
             style_info=style_info)
-        self._impact = building_layer
-        return building_layer
+
+        impact_layer.impact_data = impact_data
+        self._impact = impact_layer
+        return impact_layer

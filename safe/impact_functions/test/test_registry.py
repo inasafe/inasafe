@@ -19,6 +19,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import unittest
 import inspect
+from safe.test.utilities import get_qgis_app
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.impact_functions import register_impact_functions
 from safe.impact_functions import EarthquakeBuildingFunction
@@ -92,6 +94,7 @@ class TestRegistry(unittest.TestCase):
             'Classified polygon hazard on population',
             'Classified polygon hazard on buildings',
             'Classified polygon hazard on polygon people',
+            'Classified polygon hazard on land cover',
             'Earthquake on buildings',
             'Earthquake ITB fatality function',
             'Earthquake PAGER fatality function',
