@@ -1,4 +1,5 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="id" sourcelanguage="" version="2.0">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS><TS version="2.0" language="id" sourcelanguage="">
 <context>
     <name>@default</name>
     <message>
@@ -1404,12 +1405,12 @@
         <translation>Ini adalah deskripsi biner untuk wilayah. Wilayah bisa berupa &lt;b&gt;basah&lt;/b&gt; (terdampak oleh air banjir) atau &lt;b&gt;kering&lt;/b&gt; (tidak terdampak oleh air banjir). Unit ini tidak mendeskripsikan seberapa &lt;b&gt;basah&lt;/b&gt; atau &lt;b&gt;kering&lt;/b&gt; wilayah tersebut.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="681"/>
+        <location filename="definitions.py" line="619"/>
         <source>Water above ground height.</source>
         <translation>Air di atas ketinggian tanah.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="689"/>
+        <location filename="definitions.py" line="682"/>
         <source>No water above ground height.</source>
         <translation>Tidak ada air pada ketinggian air tanah.</translation>
     </message>
@@ -2559,29 +2560,14 @@
         <translation>Ini merupakan deskripsi ternari untuk wilayah. Suatu wilayah dapat memiliki klasifikasi ancaman &lt;b&gt;rendah&lt;/b&gt;, &lt;b&gt;menengah&lt;/b&gt;, atau &lt;b&gt;tinggi&lt;/b&gt;.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="644"/>
-        <source>high</source>
-        <translation>tinggi</translation>
-    </message>
-    <message>
         <location filename="definitions.py" line="494"/>
         <source>The location that has highest impact.</source>
         <translation>Lokasi dengan dampak tertinggi</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="652"/>
-        <source>medium</source>
-        <translation>menengah</translation>
-    </message>
-    <message>
         <location filename="definitions.py" line="503"/>
         <source>The location that has medium impact.</source>
         <translation>Lokasi dengan dampak menengah</translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="660"/>
-        <source>low</source>
-        <translation>rendah</translation>
     </message>
     <message>
         <location filename="definitions.py" line="512"/>
@@ -2619,12 +2605,12 @@
         <translation>Kelas banjir</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="680"/>
+        <location filename="definitions.py" line="618"/>
         <source>wet</source>
         <translation>basah</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="688"/>
+        <location filename="definitions.py" line="626"/>
         <source>dry</source>
         <translation>kering</translation>
     </message>
@@ -2649,42 +2635,37 @@
         <translation>Kelas-kelas tsunami</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="672"/>
-        <source>This is a binary description for an area. The area is either &lt;b&gt;wet&lt;/b&gt; (affected by tsunami) or &lt;b&gt;dry&lt;/b&gt; (not affected by tsunami). This unit does not describe how &lt;b&gt;wet&lt;/b&gt; or &lt;b&gt;dry&lt;/b&gt; an area is.</source>
-        <translation>Ini adalah deskripsi biner untuk wilayah. Wilayah bisa berupa &lt;b&gt;basah&lt;/b&gt; (terdampak oleh tsunami) atau &lt;b&gt;kering&lt;/b&gt; (tidak terdampak oleh tsunami). Satuan ini tidak mendeskripsikan seberapa &lt;b&gt;basah&lt;/b&gt; atau &lt;b&gt;kering&lt;/b&gt; wilayah tersebut.</translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="715"/>
+        <location filename="definitions.py" line="767"/>
         <source>Count</source>
         <translation>Jumlah</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="722"/>
+        <location filename="definitions.py" line="774"/>
         <source>Density</source>
         <translation>Kepadatan</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="723"/>
+        <location filename="definitions.py" line="775"/>
         <source>Number of people (or any other object) in a specific area.</source>
         <translation>Jumlah orang (atau objek lain) dalam wilayah tertentu.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="730"/>
+        <location filename="definitions.py" line="782"/>
         <source>Exposure unit defines the unit for the exposure, for example people can either be measured as count or density (count per area.</source>
         <translation>Satuan paparan menentukan satuan dari paparannya, sebagai contoh, orang dapat diukur sebagai jumlah ataupun (kepadatan per wilayah).</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="743"/>
+        <location filename="definitions.py" line="795"/>
         <source>Attribute where the structure type is defined.</source>
         <translation>Atribut tempat tipe struktur didefinisikan.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="749"/>
+        <location filename="definitions.py" line="801"/>
         <source>Attribute where the road type is defined.</source>
         <translation>Atribut tempat tipe jalan didefinisikan.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="758"/>
+        <location filename="definitions.py" line="810"/>
         <source>Attribute where the volcano name is located.</source>
         <translation>Atribut tempat nama gunung berapi berada.</translation>
     </message>
@@ -3257,7 +3238,7 @@
         <translation>Satuan ancama digunakan untuk data kontinyu. Contoh satuan ancaman meliputi meter dan kaki.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="699"/>
+        <location filename="definitions.py" line="751"/>
         <source>Classes</source>
         <translation>Kelas-kelas</translation>
     </message>
@@ -3272,17 +3253,17 @@
         <translation>Klasifikasi ancaman menengah</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="700"/>
+        <location filename="definitions.py" line="752"/>
         <source>Hazard classes are a way to classify the cell values in a raster layer.</source>
         <translation>Kelas-kelas ancaman adalah sebuah cara untuk mengklasifikasikan nilai sel dari lapisan raster.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="783"/>
+        <location filename="definitions.py" line="835"/>
         <source>Attribute field</source>
         <translation>Field atribute</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="763"/>
+        <location filename="definitions.py" line="815"/>
         <source>Name field</source>
         <translation>Field nama</translation>
     </message>
@@ -3292,27 +3273,27 @@
         <translation>&lt;p&gt;Anda telah memilih &lt;b&gt;%s %s&lt;/b&gt; sebagai masukan ancaman untuk fungsi &lt;b&gt;%s&lt;/b&gt;.&lt;/p&gt; &lt;p&gt; Mohon bantu kami untuk menemukan lapisan &lt;b&gt;ancaman&lt;/b&gt; Anda. Lapisan ancaman mewakili sesuatu yang akan berdampak pada penduduk atau infrastruktur di suatu wilayah. Sebagai contoh, banjir, gempa bumi dan rendaman tsunami adalah beberapa jenis ancaman. Pilih opsi yang sesuai di bawah ini untuk memberitahukan di mana data Anda berada:&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="784"/>
+        <location filename="definitions.py" line="836"/>
         <source>The attribute field identifies a field in the attribute table used to identify the function of a feature e.g.  a road type, building type, hazard zone etc.</source>
         <translation>Field atribut mengidentifikasikan sebuah field di dalam tabel atribut yang digunakan untuk mengidentifikasikan kegunaan dari sebuah fitur seperti tipe jalan, tipe bangunan, wilayah ancaman, dan lain-lain.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="792"/>
+        <location filename="definitions.py" line="844"/>
         <source>Attribute value</source>
         <translation>Nilai atribute</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="793"/>
+        <location filename="definitions.py" line="845"/>
         <source>The attribute value identifies features with similar meanings. For example building attributes may include schools and hospitals. </source>
         <translation>Nilai atribut mengidentifikasikan fitur dengan makna yang sama. Sebagai contoh, atribut bangunan mencakup sekolah dan rumah sakit.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="800"/>
+        <location filename="definitions.py" line="852"/>
         <source>Attribute value map</source>
         <translation>Pemetaan nilai atribut</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="801"/>
+        <location filename="definitions.py" line="853"/>
         <source>Attribute value maps are used to group related attribute values. For example flooded polygons with attribute values of &quot;yes&quot; , &quot;YES&quot;, &quot;1&quot; and &quot;Flooded&quot; might all be grouped together as &quot;FLOODPRONE&quot;.</source>
         <translation>Pemetaan nilai atribut digunakan untuk mengelompokan nilai atribut yang berkaitan. Sebagai contoh banjir poligon dengan nilai atribut &quot;yes&quot;, &quot;YES&quot;, &quot;1&quot; dan &quot;Flooded&quot; bisa dikelompokan bersama sebagai &quot;FLOODPRONE&quot;.</translation>
     </message>
@@ -5320,22 +5301,22 @@ Unsur-unsur tersebut adalah:</translation>
         <translation>Jumlah penduduk</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="716"/>
+        <location filename="definitions.py" line="768"/>
         <source>Number of people (or any other object) per pixel, building or area.</source>
         <translation>Jumlah orang (atau objek lain) per pixel, bangunan, atau wilayah.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="765"/>
+        <location filename="definitions.py" line="817"/>
         <source>Attribute for the area name. We will show the name for each area by using this attribute.</source>
         <translation>Atribut untuk nama wilayah. Kami akan menampilkan nama dari setiap wilayah dengan menggunakan atribut ini.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="772"/>
+        <location filename="definitions.py" line="824"/>
         <source>Id field</source>
         <translation>Field ID</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="774"/>
+        <location filename="definitions.py" line="826"/>
         <source>Attribute for the id on the area. We will group the result by this attribute</source>
         <translation>Atribut untuk ID pada wilayah. Kami akan mengelompokan hasil berdasarkan atribut ini.</translation>
     </message>
@@ -5495,82 +5476,82 @@ Unsur-unsur tersebut adalah:</translation>
         <translation>&lt;b&gt;Struktur&lt;/b&gt; dapat berupa apapun yang berhubungan dengan buatan manusia yang sifatnya permanen misalnya sebuah bangunan (sebuah struktur tertutup dengan dinding dan atap), atau sebuah fasilitas komunikasi atau sebuah jembatan. </translation>
     </message>
     <message>
-        <location filename="definitions.py" line="817"/>
+        <location filename="definitions.py" line="869"/>
         <source>Motorway</source>
         <translation>Jalan tol</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="818"/>
+        <location filename="definitions.py" line="870"/>
         <source>A road to solve the traffic and have a fare.</source>
         <translation>Jalan untuk mengatasi kemacetan dan untuk melewatinya harus membayar sesuai tarif yang berlaku.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="824"/>
+        <location filename="definitions.py" line="876"/>
         <source>Primary</source>
         <translation>Jalan arteri</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="825"/>
+        <location filename="definitions.py" line="877"/>
         <source>A road that service the main transportation with a long distance travel characteristic and high average velocity.</source>
         <translation>Jalan yang melayani angkutan utama dengan ciri-ciri perjalanan jarak jauh dan kecepatan rata-rata tinggi.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="833"/>
+        <location filename="definitions.py" line="885"/>
         <source>Secondary</source>
         <translation>Jalan Kolektor</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="834"/>
+        <location filename="definitions.py" line="886"/>
         <source>A road that service the transportation with a medium distance travel characteristic and medium average velocity.</source>
         <translation>Jalan yang melayani angkutan dengan ciri-ciri perjalanan jarak sedang dan kecepatan rata-rata sedang.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="842"/>
+        <location filename="definitions.py" line="894"/>
         <source>Local</source>
         <translation>Jalan Lokal</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="843"/>
+        <location filename="definitions.py" line="895"/>
         <source>A road that service the transportation with short distance travel and low average velocity.</source>
         <translation>Jalan yang melayani angkutan setempat dengan ciri-ciri perjalanan jarak dekat dan kecepatan rata-rata rendah.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="853"/>
+        <location filename="definitions.py" line="905"/>
         <source>Path</source>
         <translation>Jalan Setapak</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="854"/>
+        <location filename="definitions.py" line="906"/>
         <source>A road to walk on foot aim.</source>
         <translation>Jalan khusus pejalan kaki.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="862"/>
+        <location filename="definitions.py" line="914"/>
         <source>A road that service the transportation with short travel and low average velocity.</source>
         <translation>Jalan yang melayani angkutan setempat dengan ciri-ciri perjalanan dekat and kecepatan rata-rata rendah.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="886"/>
+        <location filename="definitions.py" line="938"/>
         <source>Education</source>
         <translation>Education</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="897"/>
+        <location filename="definitions.py" line="949"/>
         <source>Health</source>
         <translation>Kesehatan</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="920"/>
+        <location filename="definitions.py" line="972"/>
         <source>Place of Worship</source>
         <translation>Tempat Ibadah</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="938"/>
+        <location filename="definitions.py" line="990"/>
         <source>Government</source>
         <translation>Kantor Pemerintahan</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="974"/>
+        <location filename="definitions.py" line="1026"/>
         <source>Public Facility</source>
         <translation>Fasilitas Publik</translation>
     </message>
@@ -6138,7 +6119,9 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
         <location filename="needs_manager_dialog.py" line="515"/>
         <source>A displaced person should be provided with %(default)s %(unit)s/%(units)s/ of %(unit abbreviation)s %(resource name)s. Though no less than %(minimum allowed)s and no more than %(maximum allowed)s. This should be provided %(frequency)s.default{{ Default }}</source>
         <comment>unit{{ Unit }}</comment>
-        <translation><numerusform>Penduduk yang diungsikan dapat diberikan %(default)s  %(unit)s/%(units)s/ %(unit abbreviation)s %(resource name)s. Meskipun begitu, tidak boleh kurang dari %(minimum allowed)s dan tidak lebih dari %(maximum allowed)s. Bantuan ini harus disediakan %(frequency)s.default{{ Default }}</numerusform></translation>
+        <translation>
+            <numerusform>Penduduk yang diungsikan dapat diberikan %(default)s  %(unit)s/%(units)s/ %(unit abbreviation)s %(resource name)s. Meskipun begitu, tidak boleh kurang dari %(minimum allowed)s dan tidak lebih dari %(maximum allowed)s. Bantuan ini harus disediakan %(frequency)s.default{{ Default }}</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="wizard_strings.py" line="140"/>
@@ -6166,32 +6149,32 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
         <translation>Apa potensi kerugian sebagai akibat dari kerusakan penutup lahan?</translation>
     </message>
     <message>
-        <location filename="land_cover_report_mixin.py" line="99"/>
+        <location filename="land_cover_report_mixin.py" line="100"/>
         <source>How much productivity will be lost during this event?</source>
         <translation>Berapa banyak produktivitas yang hilang selama kejadian?</translation>
     </message>
     <message>
-        <location filename="land_cover_report_mixin.py" line="100"/>
+        <location filename="land_cover_report_mixin.py" line="101"/>
         <source>Which crops were ready for harvest during this event?</source>
         <translation>Tanaman mana yang sudah siap dipanen selama kejadian?</translation>
     </message>
     <message>
-        <location filename="land_cover_report_mixin.py" line="101"/>
+        <location filename="land_cover_report_mixin.py" line="102"/>
         <source>What is the ownership system of the land/crops/field?</source>
         <translation>Sistem kepemilikan apa yang digunakan untuk lahan / tanaman / ladang?</translation>
     </message>
     <message>
-        <location filename="land_cover_report_mixin.py" line="102"/>
+        <location filename="land_cover_report_mixin.py" line="103"/>
         <source>Are the land/crops/field accessible after the event?</source>
         <translation>Apakah pakah lahan / tumbuhan / ladang masih bisa diakses setelah kejadian?</translation>
     </message>
     <message>
-        <location filename="land_cover_report_mixin.py" line="103"/>
+        <location filename="land_cover_report_mixin.py" line="104"/>
         <source>What urgent actions can be taken to normalize the land/crops/field?</source>
         <translation>Langkah penting apa yang bisa diambil untuk menormalkan lahan / tumbuhan / ladang?</translation>
     </message>
     <message>
-        <location filename="land_cover_report_mixin.py" line="105"/>
+        <location filename="land_cover_report_mixin.py" line="106"/>
         <source>What tools or equipment are needed for early recovery of the land/crops/field?</source>
         <translation>Alat atau peralatan apa saja yang diperlukan untuk pemulihan awal lahan / tumbuhan / ladang ?</translation>
     </message>
@@ -6216,62 +6199,62 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
         <translation>Lapisan tidak memiliki kata kunci %s di kata kuncinya.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="878"/>
+        <location filename="definitions.py" line="930"/>
         <source>Residential</source>
         <translation>Permukiman</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="879"/>
+        <location filename="definitions.py" line="931"/>
         <source>A structure used to provide shelter for people.</source>
         <translation>Bangunan yang digunakan untuk menyediakan tempat berlindung untuk penduduk.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="887"/>
+        <location filename="definitions.py" line="939"/>
         <source>A structure that provides a service in the education sector.</source>
         <translation>Bangunan yang menyediakan pelayanan di bidang pendidikan.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="898"/>
+        <location filename="definitions.py" line="950"/>
         <source>A structure that provides a service or facility in the health sector.</source>
         <translation>Bangunan yang menyediakan pelayanan atau fasilitas di bidang kesehatan.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="909"/>
+        <location filename="definitions.py" line="961"/>
         <source>Transport</source>
         <translation>Transportasi</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="921"/>
+        <location filename="definitions.py" line="973"/>
         <source>A structure or facility that is used for prayer or related religion activity.</source>
         <translation>Bangunan atau fasilitas yang digunakan untuk berdoa atau kegiatan beragama.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="939"/>
+        <location filename="definitions.py" line="991"/>
         <source>A structure or facility that is used to provide a public service or other government activity.</source>
         <translation>Bangunan atau fasilitas yang digunakan untuk menyediakan pelayanan publik atau kegiatan pemerintahan lainnya.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="947"/>
+        <location filename="definitions.py" line="999"/>
         <source>Commercial</source>
         <translation>Komersil</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="948"/>
+        <location filename="definitions.py" line="1000"/>
         <source>A structure or facility that is used for commercial or industrial purposes.</source>
         <translation>Bangunan atau fasilitas yang digunakan untuk tujuan komersil atau industri.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="961"/>
+        <location filename="definitions.py" line="1013"/>
         <source>Recreation</source>
         <translation>Rekreasi</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="962"/>
+        <location filename="definitions.py" line="1014"/>
         <source>A structure or facility that is used for entertainment, sporting or recreation purposes.</source>
         <translation>Bangunan atau fasilitas yang digunakan untuk tujuan hiburan, olahraga dan rekreasi.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="987"/>
+        <location filename="definitions.py" line="1039"/>
         <source>Any other structure frequently mapped.</source>
         <translation>Bangunan lainnya yang sering dipetakan.</translation>
     </message>
@@ -6281,14 +6264,74 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
         <translation>Wilayah ancaman tsunami menengah didefinisikan dengan kedalaman genangan lebih dari %.1f %s tetapi kurang dari %.1f %s</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="910"/>
+        <location filename="definitions.py" line="962"/>
         <source>A structure that provides a service or facility in the transport sector.</source>
         <translation>Bangunan yang menyediakan pelayanan atau fasilitas di bidang transportasi.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="975"/>
+        <location filename="definitions.py" line="1027"/>
         <source>A structure or facility that provides a service or facility to the public including emergency services.</source>
         <translation>Bangunan atau fasilitas yang menyediakan layanan atau memfasilitasi publik termasuk layanan darurat.</translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="721"/>
+        <source>High hazard zone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="706"/>
+        <source>Medium hazard zone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="689"/>
+        <source>Low hazard zone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="672"/>
+        <source>This is a quinary description for an area. The area is either &lt;b&gt;dry&lt;/b&gt;, &lt;b&gt;low&lt;/b&gt;, &lt;b&gt;medium&lt;/b&gt;, &lt;b&gt;high&lt;/b&gt;, or &lt;b&gt;very high&lt;/b&gt; for tsunami hazard classification. The following description for these classes is provided by Badan Geologi based on BNPB Perka 2/2012</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="681"/>
+        <source>Dry zone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="690"/>
+        <source>Water above ground height and less than 1.0m.The area is potentially hit by a tsunami wave with an inundation depth less than 1 m or similar to tsunami intensity scale of V or less in (Papadoupulos and Imamura, 2001). Tsunami wave of 1m height causes few people to be frightened and flee to higher elevation. Felt by most people on large ship, observed from shore. Small vessels drift and collide and some turn over. Sand is deposited and there is flooding of areas close to the shore.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="707"/>
+        <source>Water above 1.1m and less than 3.0m. The area is potentially hit by a tsunami wave with an inundation depth of 1 - 3 m or equal to V-VI tsunami intensity scale (Papadoupulos and Imamura, 2001). Tsunami wave with a 3m inundation depth causes most people frightened and to flee to higher ground. Small vessels drift and collid. Damage occurs to some wooden houses, while most of them are safe.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="722"/>
+        <source>Water above 3.1m and less than 8.0m. The area is potentially hit by a tsunami wave with an inundation depth &gt; 3 m or reach a tsunami intensity scale of VII or even more (Papadoupulos and Imamura, 2001). Tsunami wave with 4 m inundation depth cause damage to small vessel, a few ships are drifted inland, severe damage on most wooden houses. Boulders are deposited on shore. If tsunami height reaches 8 m, it will cause severe damage. Dykes, wave breaker, tsunami 1protection walls and green belts will be washed away.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="739"/>
+        <source>Very high hazard zone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="740"/>
+        <source>Water above 8.0m.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="80"/>
+        <source>Papadopoulos, Gerassimos A., and Fumihiko Imamura. &quot;A proposal for a new tsunami intensity scale.&quot; ITS 2001 proceedings, no. 5-1, pp. 569-577. 2001.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="111"/>
+        <source>Hamza Latief. pers com. Default impact threshold for tsunami impact on people should be 0.7m. This is less than a flood threshold because in a tsunami, the water is moving with force.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -6300,7 +6343,7 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
     </message>
     <message>
         <location filename="about_dialog.py" line="76"/>
-        <source>Edit by Hugo GarduÃ±o from The Noun Project</source>
+        <source>Edit by Hugo Gardu&#xc3;&#xb1;o from The Noun Project</source>
         <translation>Tombol Edit oleh Hugo GarduÃ±o dari The Noun Project</translation>
     </message>
     <message>
@@ -6361,8 +6404,8 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Helvetica Neue,Helvetica,Segoe UI,Arial,freesans,sans-serif'; font-size:14px; color:#333333; background-color:#ffffff;&quot;&gt;InaSAFE is free software that provides a simple but rigorous way to combine data from communities, local governments and scientists to help assess the possible impact of future disaster events on communities, assets and infrastructure. It uses innovative science and crowd sourcing techniques (OpenStreetMap, OSM) to create realistic disaster scenarios for better planning, preparedness and response activities. It is in demand by disaster managers across Indonesia and around the world. &lt;/span&gt;&lt;/p&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Helvetica Neue,Helvetica,Segoe UI,Arial,freesans,sans-serif&apos;; font-size:14px; color:#333333; background-color:#ffffff;&quot;&gt;InaSAFE is free software that provides a simple but rigorous way to combine data from communities, local governments and scientists to help assess the possible impact of future disaster events on communities, assets and infrastructure. It uses innovative science and crowd sourcing techniques (OpenStreetMap, OSM) to create realistic disaster scenarios for better planning, preparedness and response activities. It is in demand by disaster managers across Indonesia and around the world. &lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Helvetica Neue,Helvetica,Segoe UI,Arial,freesans,sans-serif&apos;; font-size:14px; color:#333333; background-color:#ffffff;&quot;&gt;InaSAFE was developed jointly by the Indonesia&apos;s National Disaster Management Agency (BNPB), the Australian Government and the World Bank - Global Facility for Disaster Reduction and Recovery (World Bank-GFDRR).&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -6376,12 +6419,12 @@ p, li { white-space: pre-wrap; }
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;These are the minimum steps you need to follow in order to use InaSAFE:&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Cantarell'; font-size:11pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;1. Add at least one hazard layer (e.g. earthquake MMI) to QGIS.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;2. Add at least one exposure layer (e.g. structures) to QGIS.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;3. Make sure you have defined keywords for your hazard and exposure layers. You can do this using the keywords icon in the InaSAFE toolbar.&lt;/span&gt;&lt;/p&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;These are the minimum steps you need to follow in order to use InaSAFE:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;1. Add at least one hazard layer (e.g. earthquake MMI) to QGIS.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;2. Add at least one exposure layer (e.g. structures) to QGIS.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;3. Make sure you have defined keywords for your hazard and exposure layers. You can do this using the keywords icon in the InaSAFE toolbar.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;4. Click on the Run button in the InaSAFE panel.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -6399,7 +6442,7 @@ p, li { white-space: pre-wrap; }
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Sans&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -6412,7 +6455,7 @@ p, li { white-space: pre-wrap; }
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Sans&apos;; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -6425,7 +6468,7 @@ p, li { white-space: pre-wrap; }
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://www.bnpb.go.id/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Indonesia’s National Disaster Management Agency (BNPB)&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://dfat.gov.au/geo/indonesia/development-assistance/Pages/disaster-risk-management-in-indonesia.aspx&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Australian Government – Disaster Risk Management in Indonesia&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://www.gfdrr.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;World Bank - Global Facility for Disaster Reductions and Recovery&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
@@ -8254,7 +8297,7 @@ ke
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'.SF NS Text'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;.SF NS Text&apos;; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:12pt; font-weight:600; color:#f50000;&quot;&gt;Note:&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:12pt;&quot;&gt; The above setting requires a QGIS restart to disable / enable. Error messages and diagnostic information will be posted to http://sentry.linfiniti.com/inasafe-desktop/. Some institutions may not allow you to enable this feature - check with your network administrator if unsure. Although the data is submitted anonymously, the information contained in tracebacks may contain file system paths which reveal your identity or other information from your system.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -9462,7 +9505,7 @@ p, li { white-space: pre-wrap; }
     <name>pgFcAggLayerDisjoint</name>
     <message>
         <location filename="step_fc65_agglayer_disjoint.ui" line="65"/>
-        <source>The aggregation layer and hazard layer don't intersect, i.e. they cover disjoint areas.
+        <source>The aggregation layer and hazard layer don&apos;t intersect, i.e. they cover disjoint areas.
  Please step back and select another layer.</source>
         <translation>Lapisan agregasi dan ancaman tidak berpotongan, misalnya mereka tidak menutupi area yang sama.
 Mohon kembali ke tahap sebelumnya dan pilih lapisan lain.</translation>
@@ -9603,7 +9646,7 @@ Mohon kembali ke tahap sebelumnya dan pilih lapisan lain.</translation>
     <name>pgFcDisJointLayers</name>
     <message>
         <location filename="step_fc45_disjoint_layers.ui" line="65"/>
-        <source>The hazard layer and exposure layer don't intersect, i.e. they cover disjoint areas.
+        <source>The hazard layer and exposure layer don&apos;t intersect, i.e. they cover disjoint areas.
  Please step back and select another layer.</source>
         <translation>Lapisan ancaman dan keterpaparan tidak berpotongan, misalnya mereka tidak menutupi area yang sama.
 Mohon kembali ke tahap sebelumnya dan pilih lapisan lain.</translation>
@@ -9666,7 +9709,7 @@ Mohon kembali ke tahap sebelumnya dan pilih lapisan lain.</translation>
     <name>pgFcExtentDisjoint</name>
     <message>
         <location filename="step_fc75_extent_disjoint.ui" line="68"/>
-        <source>The selected extent doesn't intersect input layers.
+        <source>The selected extent doesn&apos;t intersect input layers.
  Please step back and select another layer.</source>
         <translation>Cakupan yang dipilih tidak berpotongan dengan lapisan-lapisan masukan.
 Silahkan mundur ke belakangan dan pilih lapisan lainnya.</translation>
@@ -10049,7 +10092,7 @@ Silahkan mundur ke belakangan dan pilih lapisan lainnya.</translation>
     </message>
     <message>
         <location filename="test_aggregator.py" line="104"/>
-        <source>DístrÜt&apos;s of Jakarta</source>
+        <source>D&#xed;str&#xdc;t&apos;s of Jakarta</source>
         <translation>DístrÜt&apos;s Jakarta</translation>
     </message>
 </context>
