@@ -76,7 +76,10 @@ class TsunamiRasterHazardLandCoverFunctionMetadata(ImpactFunctionMetadata):
                 'Provide details about how big area fall within '
                 'each hazard zone.'),
             'limitations': [],
-            'citations': [],
+            'citations': [
+                tr('Papadopoulos, Gerassimos A., and Fumihiko Imamura. '
+                   '"A proposal for a new tsunami intensity scale." '
+                   'ITS 2001 proceedings, no. 5-1, pp. 569-577. 2001.')],
             'layer_requirements': {
                 'hazard': {
                     'layer_mode': layer_mode_continuous,

@@ -152,10 +152,11 @@ class TemplateBase(object):
                 for value in field[1:]:
                     try:
                         val = int(value)
-                        row.add(m.Cell(format_int(val)))
+                        # Align right integers.
+                        row.add(m.Cell(format_int(val), align='right'))
                     except ValueError:
-                        # Catch no data value
-                        row.add(m.Cell(value))
+                        # Catch no data value. Align left strings.
+                        row.add(m.Cell(value, align='left'))
 
                 table.add(row)
             message.add(table)
