@@ -688,15 +688,15 @@ tsunami_raster_hazard_classes = {
             'key': 'low',
             'name': tr('Low hazard zone'),
             'description': tr(
-                'Water above ground height and less than 1.0m.'
-                'The area is potentially hit by a tsunami wave with an '
-                'inundation depth less than 1 m or similar to tsunami '
-                'intensity scale of V or less in (Papadoupulos and Imamura, '
-                '2001). Tsunami wave of 1m height causes few people to be '
-                'frightened and flee to higher elevation. Felt by most people '
-                'on large ship, observed from shore. Small vessels drift and '
-                'collide and some turn over. Sand is deposited and there is '
-                'flooding of areas close to the shore.'),
+                'Water above ground height and less than 1.0m. The area is '
+                'potentially hit by a tsunami wave with an inundation depth '
+                'less than 1 m or similar to tsunami intensity scale of V or '
+                'less in (Papadoupulos and Imamura, 2001). Tsunami wave of 1m '
+                'height causes few people to be frightened and flee to higher '
+                'elevation. Felt by most people on large ship, observed from '
+                'shore. Small vessels drift and collide and some turn over. '
+                'Sand is deposited and there is flooding of areas close to '
+                'the shore.'),
             'numeric_default_min': 0,
             'numeric_default_max': 1,
             'optional': True

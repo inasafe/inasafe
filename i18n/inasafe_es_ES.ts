@@ -1404,12 +1404,12 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="681"/>
+        <location filename="definitions.py" line="619"/>
         <source>Water above ground height.</source>
         <translation>Agua por encima de la altura del suelo.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="689"/>
+        <location filename="definitions.py" line="682"/>
         <source>No water above ground height.</source>
         <translation>Sin agua por encima de la altura del suelo.</translation>
     </message>
@@ -2549,29 +2549,14 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="644"/>
-        <source>high</source>
-        <translation>alto</translation>
-    </message>
-    <message>
         <location filename="definitions.py" line="494"/>
         <source>The location that has highest impact.</source>
         <translation>El sitio que posee el más alto impacto.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="652"/>
-        <source>medium</source>
-        <translation>medio</translation>
-    </message>
-    <message>
         <location filename="definitions.py" line="503"/>
         <source>The location that has medium impact.</source>
         <translation>El sitio que posee un impacto medio.</translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="660"/>
-        <source>low</source>
-        <translation>bajo</translation>
     </message>
     <message>
         <location filename="definitions.py" line="512"/>
@@ -2609,12 +2594,12 @@
         <translation>Clases de inundación</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="680"/>
+        <location filename="definitions.py" line="618"/>
         <source>wet</source>
         <translation>húmedo</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="688"/>
+        <location filename="definitions.py" line="626"/>
         <source>dry</source>
         <translation>seco</translation>
     </message>
@@ -2639,42 +2624,37 @@
         <translation>Clases de tsunami</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="672"/>
-        <source>This is a binary description for an area. The area is either &lt;b&gt;wet&lt;/b&gt; (affected by tsunami) or &lt;b&gt;dry&lt;/b&gt; (not affected by tsunami). This unit does not describe how &lt;b&gt;wet&lt;/b&gt; or &lt;b&gt;dry&lt;/b&gt; an area is.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="715"/>
+        <location filename="definitions.py" line="767"/>
         <source>Count</source>
         <translation>Recuento</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="722"/>
+        <location filename="definitions.py" line="774"/>
         <source>Density</source>
         <translation>Densidad</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="723"/>
+        <location filename="definitions.py" line="775"/>
         <source>Number of people (or any other object) in a specific area.</source>
         <translation>Número de personas (o cualquier otro objeto) en un área específica.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="730"/>
+        <location filename="definitions.py" line="782"/>
         <source>Exposure unit defines the unit for the exposure, for example people can either be measured as count or density (count per area.</source>
         <translation>Unidad de exposición define la unidad de exposición, por ejemplo gente puede ser mensurada como un recuento o densidad (recuento por área.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="743"/>
+        <location filename="definitions.py" line="795"/>
         <source>Attribute where the structure type is defined.</source>
         <translation>Atributo donde el tipo de estructura es definido.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="749"/>
+        <location filename="definitions.py" line="801"/>
         <source>Attribute where the road type is defined.</source>
         <translation>Atributo donde el tipo de camino es definido.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="758"/>
+        <location filename="definitions.py" line="810"/>
         <source>Attribute where the volcano name is located.</source>
         <translation>Atributo donde el nombre del volcán es ubicado.</translation>
     </message>
@@ -3245,7 +3225,7 @@
         <translation>Unidades de peligro son usados para datos continuos. Ejemplos de unidades de peligro incluye metros y pies.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="699"/>
+        <location filename="definitions.py" line="751"/>
         <source>Classes</source>
         <translation>Clases</translation>
     </message>
@@ -3260,17 +3240,17 @@
         <translation>La clasificación de mediano peligro.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="700"/>
+        <location filename="definitions.py" line="752"/>
         <source>Hazard classes are a way to classify the cell values in a raster layer.</source>
         <translation>Las clases de peligro son una manera de clasificar los valores de celda en una capa de mapa de bits.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="783"/>
+        <location filename="definitions.py" line="835"/>
         <source>Attribute field</source>
         <translation>campo Atributo</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="763"/>
+        <location filename="definitions.py" line="815"/>
         <source>Name field</source>
         <translation>campo Nombre</translation>
     </message>
@@ -3280,27 +3260,27 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="784"/>
+        <location filename="definitions.py" line="836"/>
         <source>The attribute field identifies a field in the attribute table used to identify the function of a feature e.g.  a road type, building type, hazard zone etc.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="792"/>
+        <location filename="definitions.py" line="844"/>
         <source>Attribute value</source>
         <translation>Valor del atributo</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="793"/>
+        <location filename="definitions.py" line="845"/>
         <source>The attribute value identifies features with similar meanings. For example building attributes may include schools and hospitals. </source>
         <translation>El valor del atributo identifica funciones con significados similares. Por ejemplo atributos de edificios pueden incluir escuelas y hospitales.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="800"/>
+        <location filename="definitions.py" line="852"/>
         <source>Attribute value map</source>
         <translation>Atributo del valor de mapa</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="801"/>
+        <location filename="definitions.py" line="853"/>
         <source>Attribute value maps are used to group related attribute values. For example flooded polygons with attribute values of &quot;yes&quot; , &quot;YES&quot;, &quot;1&quot; and &quot;Flooded&quot; might all be grouped together as &quot;FLOODPRONE&quot;.</source>
         <translation type="unfinished"/>
     </message>
@@ -5307,22 +5287,22 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="716"/>
+        <location filename="definitions.py" line="768"/>
         <source>Number of people (or any other object) per pixel, building or area.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="765"/>
+        <location filename="definitions.py" line="817"/>
         <source>Attribute for the area name. We will show the name for each area by using this attribute.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="772"/>
+        <location filename="definitions.py" line="824"/>
         <source>Id field</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="774"/>
+        <location filename="definitions.py" line="826"/>
         <source>Attribute for the id on the area. We will group the result by this attribute</source>
         <translation type="unfinished"/>
     </message>
@@ -5482,82 +5462,82 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="817"/>
+        <location filename="definitions.py" line="869"/>
         <source>Motorway</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="818"/>
+        <location filename="definitions.py" line="870"/>
         <source>A road to solve the traffic and have a fare.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="824"/>
+        <location filename="definitions.py" line="876"/>
         <source>Primary</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="825"/>
+        <location filename="definitions.py" line="877"/>
         <source>A road that service the main transportation with a long distance travel characteristic and high average velocity.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="833"/>
+        <location filename="definitions.py" line="885"/>
         <source>Secondary</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="834"/>
+        <location filename="definitions.py" line="886"/>
         <source>A road that service the transportation with a medium distance travel characteristic and medium average velocity.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="842"/>
+        <location filename="definitions.py" line="894"/>
         <source>Local</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="843"/>
+        <location filename="definitions.py" line="895"/>
         <source>A road that service the transportation with short distance travel and low average velocity.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="853"/>
+        <location filename="definitions.py" line="905"/>
         <source>Path</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="854"/>
+        <location filename="definitions.py" line="906"/>
         <source>A road to walk on foot aim.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="862"/>
+        <location filename="definitions.py" line="914"/>
         <source>A road that service the transportation with short travel and low average velocity.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="886"/>
+        <location filename="definitions.py" line="938"/>
         <source>Education</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="897"/>
+        <location filename="definitions.py" line="949"/>
         <source>Health</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="920"/>
+        <location filename="definitions.py" line="972"/>
         <source>Place of Worship</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="938"/>
+        <location filename="definitions.py" line="990"/>
         <source>Government</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="974"/>
+        <location filename="definitions.py" line="1026"/>
         <source>Public Facility</source>
         <translation type="unfinished"/>
     </message>
@@ -6151,32 +6131,32 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="land_cover_report_mixin.py" line="99"/>
+        <location filename="land_cover_report_mixin.py" line="100"/>
         <source>How much productivity will be lost during this event?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="land_cover_report_mixin.py" line="100"/>
+        <location filename="land_cover_report_mixin.py" line="101"/>
         <source>Which crops were ready for harvest during this event?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="land_cover_report_mixin.py" line="101"/>
+        <location filename="land_cover_report_mixin.py" line="102"/>
         <source>What is the ownership system of the land/crops/field?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="land_cover_report_mixin.py" line="102"/>
+        <location filename="land_cover_report_mixin.py" line="103"/>
         <source>Are the land/crops/field accessible after the event?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="land_cover_report_mixin.py" line="103"/>
+        <location filename="land_cover_report_mixin.py" line="104"/>
         <source>What urgent actions can be taken to normalize the land/crops/field?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="land_cover_report_mixin.py" line="105"/>
+        <location filename="land_cover_report_mixin.py" line="106"/>
         <source>What tools or equipment are needed for early recovery of the land/crops/field?</source>
         <translation type="unfinished"/>
     </message>
@@ -6201,62 +6181,62 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="878"/>
+        <location filename="definitions.py" line="930"/>
         <source>Residential</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="879"/>
+        <location filename="definitions.py" line="931"/>
         <source>A structure used to provide shelter for people.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="887"/>
+        <location filename="definitions.py" line="939"/>
         <source>A structure that provides a service in the education sector.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="898"/>
+        <location filename="definitions.py" line="950"/>
         <source>A structure that provides a service or facility in the health sector.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="909"/>
+        <location filename="definitions.py" line="961"/>
         <source>Transport</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="921"/>
+        <location filename="definitions.py" line="973"/>
         <source>A structure or facility that is used for prayer or related religion activity.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="939"/>
+        <location filename="definitions.py" line="991"/>
         <source>A structure or facility that is used to provide a public service or other government activity.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="947"/>
+        <location filename="definitions.py" line="999"/>
         <source>Commercial</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="948"/>
+        <location filename="definitions.py" line="1000"/>
         <source>A structure or facility that is used for commercial or industrial purposes.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="961"/>
+        <location filename="definitions.py" line="1013"/>
         <source>Recreation</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="962"/>
+        <location filename="definitions.py" line="1014"/>
         <source>A structure or facility that is used for entertainment, sporting or recreation purposes.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="987"/>
+        <location filename="definitions.py" line="1039"/>
         <source>Any other structure frequently mapped.</source>
         <translation type="unfinished"/>
     </message>
@@ -6266,13 +6246,73 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="910"/>
+        <location filename="definitions.py" line="962"/>
         <source>A structure that provides a service or facility in the transport sector.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="975"/>
+        <location filename="definitions.py" line="1027"/>
         <source>A structure or facility that provides a service or facility to the public including emergency services.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="721"/>
+        <source>High hazard zone</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="706"/>
+        <source>Medium hazard zone</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="689"/>
+        <source>Low hazard zone</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="672"/>
+        <source>This is a quinary description for an area. The area is either &lt;b&gt;dry&lt;/b&gt;, &lt;b&gt;low&lt;/b&gt;, &lt;b&gt;medium&lt;/b&gt;, &lt;b&gt;high&lt;/b&gt;, or &lt;b&gt;very high&lt;/b&gt; for tsunami hazard classification. The following description for these classes is provided by Badan Geologi based on BNPB Perka 2/2012</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="681"/>
+        <source>Dry zone</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="690"/>
+        <source>Water above ground height and less than 1.0m.The area is potentially hit by a tsunami wave with an inundation depth less than 1 m or similar to tsunami intensity scale of V or less in (Papadoupulos and Imamura, 2001). Tsunami wave of 1m height causes few people to be frightened and flee to higher elevation. Felt by most people on large ship, observed from shore. Small vessels drift and collide and some turn over. Sand is deposited and there is flooding of areas close to the shore.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="707"/>
+        <source>Water above 1.1m and less than 3.0m. The area is potentially hit by a tsunami wave with an inundation depth of 1 - 3 m or equal to V-VI tsunami intensity scale (Papadoupulos and Imamura, 2001). Tsunami wave with a 3m inundation depth causes most people frightened and to flee to higher ground. Small vessels drift and collid. Damage occurs to some wooden houses, while most of them are safe.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="722"/>
+        <source>Water above 3.1m and less than 8.0m. The area is potentially hit by a tsunami wave with an inundation depth &gt; 3 m or reach a tsunami intensity scale of VII or even more (Papadoupulos and Imamura, 2001). Tsunami wave with 4 m inundation depth cause damage to small vessel, a few ships are drifted inland, severe damage on most wooden houses. Boulders are deposited on shore. If tsunami height reaches 8 m, it will cause severe damage. Dykes, wave breaker, tsunami 1protection walls and green belts will be washed away.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="739"/>
+        <source>Very high hazard zone</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="740"/>
+        <source>Water above 8.0m.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="80"/>
+        <source>Papadopoulos, Gerassimos A., and Fumihiko Imamura. &quot;A proposal for a new tsunami intensity scale.&quot; ITS 2001 proceedings, no. 5-1, pp. 569-577. 2001.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="111"/>
+        <source>Hamza Latief. pers com. Default impact threshold for tsunami impact on people should be 0.7m. This is less than a flood threshold because in a tsunami, the water is moving with force.</source>
         <translation type="unfinished"/>
     </message>
 </context>
