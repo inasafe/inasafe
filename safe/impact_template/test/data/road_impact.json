@@ -1,0 +1,87 @@
+{
+  "action check list": {
+    "fields": [
+      "Which roads can be used to evacuate people or to distribute logistics?",
+      "What type of vehicles can use the unaffected roads?",
+      "What sort of equipment will be needed to reopen roads & where will we get it?",
+      "Which government department is responsible for supplying equipment ?"
+    ],
+    "title": "Action checklist"
+  },
+  "impact summary": {
+    "attributes": [
+      "Temporarily closed (m)",
+      "Unaffected",
+      "Total"
+    ],
+    "fields": [
+      [
+        17459.736594547714,
+        41116.854788747616,
+        58576.59138329533
+      ]
+    ]
+  },
+  "notes": {
+    "fields": [
+      "Roads are said to be inundated when in a region with field \"FLOODPRONE\" in \"YES\" .",
+      "Roads are closed if they are inundated.",
+      "Roads are open if they are not inundated."
+    ],
+    "title": "Notes and assumptions"
+  },
+  "question": "",
+  "impact table": {
+    "attributes": [
+      "Road Type",
+      "Temporarily closed (m)",
+      "Unaffected",
+      "Total"
+    ],
+    "fields": [
+      [
+        "Other",
+        341.1439238776554,
+        4868.885107932234,
+        5210.02903180989
+      ],
+      [
+        "Road, residential, living street, etc.",
+        8598.62429152018,
+        15564.744989602037,
+        24163.369281122217
+      ],
+      [
+        "Tertiary",
+        663.891845121541,
+        2295.4541038890366,
+        2959.3459490105774
+      ],
+      [
+        "Secondary",
+        2429.1945918684014,
+        4395.046800820376,
+        6824.2413926887775
+      ],
+      [
+        "Primary road",
+        3535.3530206100545,
+        10983.280729554432,
+        14518.633750164487
+      ],
+      [
+        "Primary link",
+        1891.5289215498792,
+        504.82625539903256,
+        2396.355176948912
+      ],
+      [
+        "Cycleway, footpath, etc.",
+        0,
+        2504.6168015504654,
+        2504.6168015504654
+      ]
+    ]
+  },
+  "exposure": "road"
+}

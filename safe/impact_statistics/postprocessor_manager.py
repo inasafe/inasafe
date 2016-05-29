@@ -99,6 +99,147 @@ class PostprocessorManager(QtCore.QObject):
 
         return position
 
+    def _generate_data(self, aoi_mode=True):
+        """Parses the postprocessing output as dictionary.
+
+        :param aoi_mode: adds a Total in aggregation areas
+        row to the calculated table
+        :type aoi_mode: bool
+
+        :returns: The dictionary of postprocessing.
+        :rtype: dict
+        """
+        result = {}
+
+        for processor, results_list in self.output.iteritems():
+            self.current_output_postprocessor = processor
+            # results_list is for example:
+            # [
+            # (PyQt4.QtCore.QString(u'Entire area'), OrderedDict([
+            #        (u'Total', {'value': 977536, 'metadata': {}}),
+            #        (u'Female population', {'value': 508319, 'metadata': {}}),
+            #        (u'Weekly hygiene packs', {'value': 403453, 'metadata': {
+            #         'description': 'Females hygiene packs for weekly use'}})
+            #    ]))
+            # ]
+            # sorting using the first indicator of a postprocessor
+            sorted_results = sorted(
+                results_list,
+                key=self._sort_no_data,
+                reverse=True)
+
+            # init table
+            has_no_data = False
+            table = {'notes': []}
+            name = get_postprocessor_human_name(processor).lower()
+
+            if name == 'building type':
+                table['caption'] = self.tr('Closed buildings')
+            elif name == 'road type':
+                table['caption'] = self.tr('Closed roads')
+            elif name == 'people':
+                table['caption'] = self.tr('Affected people')
+
+            # Dirty hack to make "evacuated" come out in the report.
+            # Currently only MinimumNeeds that calculate from evacuation
+            # percentage.
+            if processor == 'MinimumNeeds':
+                if 'evacuation_percentage' in self.function_parameters.keys():
+                    table['caption'] = self.tr(
+                        'Detailed %s report (for people needing '
+                        'evacuation)') % (
+                                        tr(get_postprocessor_human_name(
+                                            processor)).lower()
+                                    )
+                else:
+                    table['caption'] = self.tr(
+                        'Detailed %s report (affected people)') % (
+                                        tr(get_postprocessor_human_name(
+                                            processor)).lower()
+                                    )
+
+            if processor in ['Gender', 'Age']:
+                table['caption'] = self.tr(
+                    'Detailed %s report (affected people)') % (
+                                    tr(get_postprocessor_human_name(
+                                        processor)).lower())
+
+            empty_table = not sorted_results[0][1]
+            if empty_table:
+                # Due to an error? The table is empty.
+                table['attributes'] = []
+                table['fields'] = []
+                table['notes'].append(self.tr(
+                    'Could not compute the %s report.' %
+                    tr(get_postprocessor_human_name(processor)).lower()))
+                result['processor'] = table
+                continue
+
+            header = [str(self.attribute_title).capitalize()]
+            for calculation_name in sorted_results[0][1]:
+                header.append(self.tr(calculation_name))
+            table['attributes'] = header
+
+            # used to calculate the totals row as per issue #690
+            postprocessor_totals = OrderedDict()
+
+            null_index = 0  # counting how many null value in the data
+            fields = []
+            for zone_name, calc in sorted_results:
+                if isinstance(zone_name, QPyNullVariant):
+                    # I have made sure that the zone_name won't be Null in
+                    # run method. But just in case there is something wrong.
+                    zone_name = tr('Unnamed Area %s' % null_index)
+                    null_index += 1
+                if name == 'road type':
+                    # We add the unit 'meter' as we are counting roads.
+                    zone_name = tr(
+                        '%(zone_name)s (m)' % {'zone_name': zone_name})
+                row = [zone_name]
+
+                for indicator, calculation_data in calc.iteritems():
+                    value = calculation_data['value']
+                    value = str(unhumanize_number(value))
+                    if value == self.aggregator.get_default_keyword('NO_DATA'):
+                        has_no_data = True
+                        value += ' *'
+                        try:
+                            postprocessor_totals[indicator] += 0
+                        except KeyError:
+                            postprocessor_totals[indicator] = 0
+                    else:
+                        value = int(value)
+                        try:
+                            postprocessor_totals[indicator] += value
+                        except KeyError:
+                            postprocessor_totals[indicator] = value
+                    row.append(value)
+                fields.append(row)
+
+            if not aoi_mode:
+                # add the totals row
+                row = [self.tr('Total in aggregation areas')]
+                for _, total in postprocessor_totals.iteritems():
+                    row.append(total)
+                fields.append(row)
+
+            table['fields'] = fields
+
+            if has_no_data:
+                table['notes'].append(self.tr(
+                    '* "%s" values mean that there where some problems while '
+                    'calculating them. This did not affect the other '
+                    'values.') % (
+                    self.aggregator.get_default_keyword('NO_DATA')))
+
+            table['notes'].append(self.tr(
+                'Columns containing exclusively 0 and "%s" '
+                'have not been shown in the table.' %
+                self.aggregator.get_default_keyword('NO_DATA')))
+            result[processor] = table
+
+        return result
+
     def _generate_tables(self, aoi_mode=True):
         """Parses the postprocessing output as one table per postprocessor.
 
@@ -115,7 +256,6 @@ class PostprocessorManager(QtCore.QObject):
         message = m.Message()
 
         for processor, results_list in self.output.iteritems():
-
             self.current_output_postprocessor = processor
             # results_list is for example:
             # [
@@ -126,7 +266,6 @@ class PostprocessorManager(QtCore.QObject):
             #         'description': 'Females hygiene packs for weekly use'}})
             #    ]))
             # ]
-
             # sorting using the first indicator of a postprocessor
             sorted_results = sorted(
                 results_list,
@@ -190,11 +329,12 @@ class PostprocessorManager(QtCore.QObject):
                 if isinstance(zone_name, QPyNullVariant):
                     # I have made sure that the zone_name won't be Null in
                     # run method. But just in case there is something wrong.
-                    zone_name = 'Unnamed Area %s' % null_index
+                    zone_name = tr('Unnamed Area %s' % null_index)
                     null_index += 1
                 if name == 'road type':
                     # We add the unit 'meter' as we are counting roads.
-                    zone_name = '%s (m)' % zone_name
+                    zone_name = tr(
+                        '%(zone_name)s (m)' % {'zone_name': zone_name})
                 row = m.Row(zone_name)
 
                 for indicator, calculation_data in calc.iteritems():
@@ -442,19 +582,17 @@ class PostprocessorManager(QtCore.QObject):
             else:
                 zone_name = feature[name_filed_index]
             if isinstance(zone_name, QPyNullVariant):
-                zone_name = 'Unnamed Area %s' % str(feature.id())
+                zone_name = tr(
+                    'Unnamed Area %(feature_id)s' %
+                    {'feature_id': str(feature.id())})
 
             # create dictionary of attributes to pass to postprocessor
             general_params = {
                 'target_field': self.aggregator.target_field,
                 'function_params': self.function_parameters}
 
-            if self.aggregator.statistics_type == 'class_count':
-                general_params['impact_classes'] = (
-                    self.aggregator.statistics_classes)
-            elif self.aggregator.statistics_type == 'sum':
-                impact_total = feature[sum_field_index]
-                general_params['impact_total'] = impact_total
+            impact_total = feature[sum_field_index]
+            general_params['impact_total'] = impact_total
 
             try:
                 general_params['impact_attrs'] = (
@@ -590,3 +728,14 @@ class PostprocessorManager(QtCore.QObject):
 
         message.add(self._generate_tables(aoi_mode))
         return message
+
+    def get_json_data(self, aoi_mode):
+        """Returns the results of the post processing as a dict.
+
+        :param aoi_mode: aoi mode of the aggregator.
+        :type aoi_mode: bool
+
+        :returns: dictionary representing the post processing result.
+        :rtype: dict
+        """
+        return self._generate_data(aoi_mode)

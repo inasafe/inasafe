@@ -30,6 +30,9 @@ from qgis.core import (
 )
 from PyQt4.QtCore import QVariant
 
+from safe.test.utilities import get_qgis_app, test_data_path
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
 from safe.impact_functions.impact_function_manager\
     import ImpactFunctionManager
 # noinspection PyProtectedMember
@@ -37,13 +40,8 @@ from safe.impact_functions.inundation.tsunami_raster_road\
     .impact_function import (
         TsunamiRasterRoadsFunction,
         _raster_to_vector_cells,
-        _intersect_lines_with_vector_cells
-    )
+        _intersect_lines_with_vector_cells)
 from safe.gis.qgis_vector_tools import create_layer
-from safe.test.utilities import get_qgis_app, test_data_path
-
-
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class TsunamiRasterRoadsFunctionTest(unittest.TestCase):

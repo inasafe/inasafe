@@ -17,8 +17,6 @@ from operator import add
 from safe.utilities.i18n import tr
 from safe.common.utilities import format_int
 from safe.impact_reports.report_mixin_base import ReportMixin
-import safe.messaging as m
-from safe.messaging import styles
 
 
 class BuildingExposureReportMixin(ReportMixin):
@@ -77,126 +75,61 @@ class BuildingExposureReportMixin(ReportMixin):
         self.affected_buildings = {}
         self.building_report_threshold = 25
 
-    def generate_report(self):
-        """Breakdown by building type.
-
-        :returns: The report.
-        :rtype: safe.messaging.Message
-        """
-        message = m.Message()
-        message.add(m.Paragraph(self.question))
-        message.add(self.impact_summary())
-        message.add(self.buildings_breakdown())
-        message.add(self.action_checklist())
-        message.add(self.notes())
-        return message
-
-    def action_checklist(self):
-        """Breakdown by building type.
-
-        :returns: The buildings breakdown report.
-        :rtype: safe.messaging.Message
-        """
-        schools_closed = self.schools_closed
-        hospitals_closed = self.hospitals_closed
-
-        message = m.Message(style_class='container')
-        message.add(m.Heading(tr('Action checklist'), **styles.INFO_STYLE))
-        checklist = m.BulletedList()
-        checklist.add(tr(
-            'Which structures have warning capacity (eg. sirens, speakers, '
-            'etc.)?'))
-        checklist.add(
-            tr('Are the water and electricity services still operating?'))
-        checklist.add(tr('Are the health centres still open?'))
-        checklist.add(tr('Are the other public services accessible?'))
-        checklist.add(tr('Which buildings will be evacuation centres?'))
-        checklist.add(tr('Where will we locate the operations centre?'))
-        checklist.add(
-            tr('Where will we locate warehouse and/or distribution centres?'))
-        checklist.add(tr('Are the schools and hospitals still active?'))
-        if schools_closed > 0:
-            checklist.add(tr(
-                'Where will the students from the %s closed schools '
-                'go to study?') % format_int(schools_closed))
-        if hospitals_closed > 0:
-            checklist.add(tr(
-                'Where will the patients from the %s closed hospitals go '
-                'for treatment and how will we transport them?') % format_int(
-                    hospitals_closed))
-        message.add(checklist)
-        return message
+        self.impact_data = {}
 
     def impact_summary(self):
-        """The impact summary as per category.
+        """Create impact summary as data.
 
-        :returns: The impact summary.
-        :rtype: safe.messaging.Message
+        :returns: Impact Summary in dictionary format.
+        :rtype: dict
         """
         affect_types = self._impact_breakdown
-        message = m.Message(style_class='container')
-        table = m.Table(style_class='table table-condensed table-striped')
-        table.caption = None
-        row = m.Row()
-        row.add(m.Cell('', header=True))  # intentionally empty top left cell
-        row.add(m.Cell('Buildings affected', header=True))
+        attributes = ['category', 'value']
+        fields = []
         for (category, building_breakdown) in self.affected_buildings.items():
             total_affected = [0] * len(affect_types)
             for affected_breakdown in building_breakdown.values():
                 for affect_type, number_affected in affected_breakdown.items():
                     count = affect_types.index(affect_type)
                     total_affected[count] += number_affected
-            row = m.Row()
-            row.add(m.Cell(tr(category), header=True))
+            field = [tr(category)]
             for affected in total_affected:
-                row.add(m.Cell(format_int(affected), align='right'))
-            table.add(row)
+                field.append(affected)
+            fields.append(field)
 
         if len(self._affected_categories) > 1:
-            row = m.Row()
-            row.add(m.Cell(tr('Affected buildings'), header=True))
-            row.add(m.Cell(
-                format_int(self.total_affected_buildings), align='right'))
-            table.add(row)
+            fields.append(
+                [tr('Affected buildings'), self.total_affected_buildings])
 
-        # Only show not affected building row if the IF does not use custom
-        # affected categories
         if self._affected_categories == self.affected_buildings.keys():
-            row = m.Row()
-            row.add(m.Cell(tr('Not affected buildings'), header=True))
-            row.add(m.Cell(
-                format_int(self.total_unaffected_buildings), align='right'))
-            table.add(row)
+            fields.append([
+                tr('Not affected buildings'), self.total_unaffected_buildings]
+            )
 
-        row = m.Row()
-        row.add(m.Cell(tr('Total'), header=True))
-        row.add(m.Cell(
-            format_int(self.total_buildings), align='right'))
-        table.add(row)
-        message.add(table)
-        return message
+        fields.append([tr('Total'), self.total_buildings])
+
+        return {
+            'attributes': attributes,
+            'fields': fields
+        }
 
     def buildings_breakdown(self):
-        """Breakdown by building type.
+        """Create building breakdown as data.
 
-        :returns: The buildings breakdown report.
-        :rtype: safe.messaging.Message
+        :returns: Building Breakdown in dictionary format.
+        :rtype: dict
         """
-        message = m.Message(style_class='container')
-        table = m.Table(style_class='table table-condensed table-striped')
-        table.caption = None
         impact_names = self.affected_buildings.keys()  # e.g. flooded, wet, dry
-
-        row = m.Row()
-        row.add(m.Cell('Building type', header=True))
+        attributes = ['Building type']
         for name in impact_names:
-            row.add(m.Cell(tr(name), header=True, align='right'))
+            attributes.append(tr(name))
         # Only show not affected building row if the IF does not use custom
         # affected categories
         if self._affected_categories == self.affected_buildings.keys():
-            row.add(m.Cell(tr('Not Affected'), header=True, align='right'))
-        row.add(m.Cell(tr('Total'), header=True, align='right'))
-        table.add(row)
+            attributes.append(tr('Not Affected'))
+        attributes.append(tr('Total'))
+
+        fields = []
 
         # Let's sort alphabetically first
         building_types = [building_type for building_type in self.buildings]
@@ -214,7 +147,7 @@ class BuildingExposureReportMixin(ReportMixin):
         impact_totals.append(0)
         # Now build the main table
         for building_type in building_types:
-            row = m.Row()
+            row = []
             building_type_name = building_type.replace('_', ' ')
             impact_subtotals = []
             for name in impact_names:
@@ -224,7 +157,7 @@ class BuildingExposureReportMixin(ReportMixin):
                             building_type].values()[0])
                 else:
                     impact_subtotals.append(0)
-            row.add(m.Cell(building_type_name.capitalize(), header=True))
+            row.append(building_type_name.capitalize())
             # Only show not affected building row if the IF does not use custom
             # affected categories
             if self._affected_categories == self.affected_buildings.keys():
@@ -233,16 +166,13 @@ class BuildingExposureReportMixin(ReportMixin):
                     self.buildings[building_type] - sum(impact_subtotals))
             # list out the subtotals for this category per impact type
             for value in impact_subtotals:
-                row.add(m.Cell(format_int(value), align='right'))
+                row.append(value)
 
             # totals column
-            line_total = format_int(self.buildings[building_type])
+            line_total = self.buildings[building_type]
             impact_subtotals.append(self.buildings[building_type])
-            row.add(m.Cell(
-                line_total,
-                header=True,
-                align='right'))
-            table.add(row)
+            row.append(line_total)
+            fields.append(row)
             # add the subtotal to the cumulative total
             # see http://stackoverflow.com/questions/18713321/element
             #     -wise-addition-of-2-lists-in-python
@@ -250,15 +180,70 @@ class BuildingExposureReportMixin(ReportMixin):
             impact_totals = map(add, impact_totals, impact_subtotals)
 
         # list out the TOTALS for this category per impact type
-        row = m.Row()
-        row.add(m.Cell(tr('Total'), header=True))
+        row = [tr('Total')]
         for value in impact_totals:
-            row.add(m.Cell(format_int(value), align='right', header=True))
-        table.add(row)
+            row.append(value)
+        fields.append(row)
 
-        message.add(table)
+        return {
+            'attributes': attributes,
+            'fields': fields
+        }
 
-        return message
+    def action_checklist(self):
+        """Action Checklist Data.
+
+        :returns: An action list in dictionary format.
+        :rtype: dict
+
+        """
+        title = tr('Action checklist')
+        fields = [
+            tr('Which structures have warning capacity (eg. sirens, speakers, '
+               'etc.)?'),
+            tr('Are the water and electricity services still operating?'),
+            tr('Are the health centres still open?'),
+            tr('Are the other public services accessible?'),
+            tr('Which buildings will be evacuation centres?'),
+            tr('Where will we locate the operations centre?'),
+            tr('Where will we locate warehouse and/or distribution centres?'),
+            tr('Are the schools and hospitals still active?'),
+        ]
+        if self.schools_closed > 0:
+            fields.append(tr(
+                'Where will the students from the %s closed schools go to '
+                'study?') % format_int(self.schools_closed))
+        if self.hospitals_closed > 0:
+            fields.append(tr(
+                'Where will the patients from the %s closed hospitals go '
+                'for treatment and how will we transport them?') % format_int(
+                self.hospitals_closed))
+
+        return {
+            'title': title,
+            'fields': fields
+        }
+
+    def generate_data(self):
+        """Create a dictionary contains impact data.
+
+        :returns: The impact report data.
+        :rtype: dict
+        """
+        question = self.question
+        impact_summary = self.impact_summary()
+        impact_table = self.buildings_breakdown()
+        action_checklist = self.action_checklist()
+        notes = self.notes()
+
+        return {
+            'exposure': 'building',
+            'question': question,
+            'impact summary': impact_summary,
+            'impact table': impact_table,
+            'action check list': action_checklist,
+            'notes': notes
+        }
 
     @property
     def schools_closed(self):

@@ -56,7 +56,7 @@ def content():
 
     message.add(m.Paragraph(tr(
         'In some cases you may wish to create a report containing the '
-        'combined output of two impact functions for the same area for the '
+        'combined output of two Impact Functions for the same area for the '
         'same hazard, different exposures. For example you may carry out an '
         'assessment of the impact of a flood on population and on buildings '
         'and combine the results into a single report. The impact layer '

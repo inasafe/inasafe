@@ -1,0 +1,201 @@
+{
+  "action check list": {
+    "fields": [
+      "Are there enough shelters and relief items available for 130 people?",
+      "If yes, where are they located and how will we distribute them?",
+      "If no, where can we obtain additional relief items from and how will we transport them?"
+    ],
+    "title": "Action checklist"
+  },
+  "minimum needs": {
+    "weekly": [
+      {
+        "maximum_allowed_value": 100.0,
+        "guid": "bf808d0d-d089-4168-9572-aa94393b109b",
+        "name": "Rice",
+        "precision": 1,
+        "value": 2.8,
+        "allowed_units": [
+
+        ],
+        "amount": 356,
+        "frequency": "weekly",
+        "unit": {
+          "abbreviation": "kg",
+          "help_text": null,
+          "plural": "kilograms",
+          "name": "kilogram",
+          "description": null
+        },
+        "table name": "Rice [kg]",
+        "help_text": "Basic food",
+        "expected_type": [
+          "<type 'float'>",
+          "<type 'int'>"
+        ],
+        "is_required": true,
+        "minimum_allowed_value": 0.0,
+        "description": "Each person should be provided with 2.8  kilograms of  Rice  weekly."
+      },
+      {
+        "maximum_allowed_value": 100.0,
+        "guid": "99fa381b-a7df-447f-92e7-99fbe3ae854c",
+        "name": "Drinking Water",
+        "precision": 1,
+        "value": 17.5,
+        "allowed_units": [
+
+        ],
+        "amount": 2223,
+        "frequency": "weekly",
+        "unit": {
+          "abbreviation": "l",
+          "help_text": null,
+          "plural": "litres",
+          "name": "litre",
+          "description": null
+        },
+        "table name": "Drinking Water [l]",
+        "help_text": "For drinking",
+        "expected_type": [
+          "<type 'float'>",
+          "<type 'int'>"
+        ],
+        "is_required": true,
+        "minimum_allowed_value": 0.0,
+        "description": "Each person should be provided with 17.5  litres of  Drinking Water  weekly for drinking."
+      },
+      {
+        "maximum_allowed_value": 100.0,
+        "guid": "643bf618-3142-4fb0-9837-12beb7b5d9aa",
+        "name": "Clean Water",
+        "precision": 1,
+        "value": 67.0,
+        "allowed_units": [
+
+        ],
+        "amount": 8509,
+        "frequency": "weekly",
+        "unit": {
+          "abbreviation": "l",
+          "help_text": null,
+          "plural": "litres",
+          "name": "litre",
+          "description": null
+        },
+        "table name": "Clean Water [l]",
+        "help_text": "For washing",
+        "expected_type": [
+          "<type 'float'>",
+          "<type 'int'>"
+        ],
+        "is_required": true,
+        "minimum_allowed_value": 10.0,
+        "description": "Each person should be provided with 67  litres of  Clean Water  weekly for washing."
+      },
+      {
+        "maximum_allowed_value": 0.2,
+        "guid": "10d2da15-3712-4613-93be-4ef2ca6d9aa2",
+        "name": "Family Kits",
+        "precision": 1,
+        "value": 0.2,
+        "allowed_units": [
+
+        ],
+        "amount": 26,
+        "frequency": "weekly",
+        "unit": {
+          "abbreviation": null,
+          "help_text": null,
+          "plural": null,
+          "name": null,
+          "description": null
+        },
+        "table name": "Family Kits",
+        "help_text": "Hygiene kits",
+        "expected_type": [
+          "<type 'float'>",
+          "<type 'int'>"
+        ],
+        "is_required": true,
+        "minimum_allowed_value": 0.2,
+        "description": "Each family of 5 persons should be provided with 1 Family Kit per week."
+      }
+    ],
+    "single": [
+      {
+        "maximum_allowed_value": 0.05,
+        "guid": "d07b36f2-96cb-463d-b10f-04c56624a123",
+        "name": "Toilets",
+        "precision": 2,
+        "value": 0.05,
+        "allowed_units": [
+
+        ],
+        "amount": 7,
+        "frequency": "single",
+        "unit": {
+          "abbreviation": null,
+          "help_text": null,
+          "plural": null,
+          "name": null,
+          "description": null
+        },
+        "table name": "Toilets",
+        "help_text": null,
+        "expected_type": [
+          "<type 'float'>",
+          "<type 'int'>"
+        ],
+        "is_required": true,
+        "minimum_allowed_value": 0.02,
+        "description": "A toilet should be provided for every 20 persons."
+      }
+    ]
+  },
+  "impact summary": {
+    "attributes": [
+      "category",
+      "value"
+    ],
+    "fields": [
+      [
+        "Number of fatalities",
+        "0"
+      ],
+      [
+        "Number of people displaced",
+        "130"
+      ],
+      [
+        "Total affected population",
+        "130"
+      ],
+      [
+        "Unaffected population",
+        "10"
+      ],
+      [
+        "Total population",
+        "130"
+      ],
+      [
+        "Population needing evacuation <sup>1</sup>",
+        "130"
+      ]
+    ]
+  },
+  "notes": {
+    "fields": [
+      "Total population in the analysis area: 130",
+      "<sup>1</sup>People are displaced if they experience and survive a shake level of more than 5 on the MMI scale.",
+      "The fatality calculation assumes that no fatalities occur for shake levels below 4 and fatality counts of less than 50 are disregarded.",
+      "Map shows the estimation of displaced population.",
+      "All values are rounded up to the nearest integer in order to avoid representing human lives as fractions.",
+      "Population rounding is applied to all population values, which may cause discrepancies when adding values."
+    ],
+    "title": "Notes and assumptions"
+  },
+  "question": "In the event of earthquake how many population might die or be displaced",
+  "exposure": "population"
+}

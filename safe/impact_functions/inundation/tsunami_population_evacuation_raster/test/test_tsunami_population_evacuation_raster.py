@@ -7,6 +7,8 @@ __date__ = '23/03/15'
 __copyright__ = 'lana.pcfre@gmail.com'
 
 import unittest
+from safe.test.utilities import test_data_path, get_qgis_app, clip_layers
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.storage.core import read_layer
 from safe.impact_functions.impact_function_manager\
@@ -14,11 +16,8 @@ from safe.impact_functions.impact_function_manager\
 from safe.impact_functions.inundation\
     .tsunami_population_evacuation_raster.impact_function import \
     TsunamiEvacuationFunction
-from safe.test.utilities import test_data_path, get_qgis_app, clip_layers
 from safe.common.utilities import OrderedDict
 from safe.storage.safe_layer import SafeLayer
-
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class TestTsunamiEvacuationRaster(unittest.TestCase):

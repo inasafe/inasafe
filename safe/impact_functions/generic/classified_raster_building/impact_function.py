@@ -29,8 +29,6 @@ from safe.impact_functions.generic.classified_raster_building\
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
 from safe.common.exceptions import KeywordNotFoundError
-import safe.messaging as m
-from safe.messaging import styles
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -50,28 +48,25 @@ class ClassifiedRasterHazardBuildingFunction(
         self.building_report_threshold = 25
 
     def notes(self):
-        """Return the notes section of the report.
+        """Return the notes section of the report as dict.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: safe.messaging.Message
+        :rtype: dict
         """
-        message = m.Message()
-        message.add(m.Heading(
-            tr('Notes and assumptions'), **styles.INFO_STYLE))
-        message.add(tr(
-            'Map shows buildings affected in low, medium and '
-            'high hazard class areas.'))
-        return message
+        title = tr('Notes and assumptions')
+        fields = [
+            tr('Map shows buildings affected in low, medium and high hazard '
+               'class areas.')
+        ]
+
+        return {
+            'title': title,
+            'fields': fields
+        }
 
     def run(self):
         """Classified hazard impact to buildings (e.g. from Open Street Map).
         """
-        self.validate()
-        self.prepare()
-
-        self.provenance.append_step(
-            'Calculating Step',
-            'Impact function is calculating the impact.')
 
         # Value from layer's keywords
         # Try to get the value from keyword, if not exist, it will not fail,
@@ -195,16 +190,14 @@ class ClassifiedRasterHazardBuildingFunction(
                           style_classes=style_classes,
                           style_type='categorizedSymbol')
 
-        impact_table = impact_summary = self.html_report()
-
         # For printing map purpose
         map_title = tr('Buildings affected')
         legend_title = tr('Structure inundated status')
         legend_units = tr('(Low, Medium, High)')
 
+        impact_data = self.generate_data()
+
         extra_keywords = {
-            'impact_summary': impact_summary,
-            'impact_table': impact_table,
             'target_field': self.affected_field,
             'map_title': map_title,
             'legend_units': legend_units,
@@ -213,17 +206,17 @@ class ClassifiedRasterHazardBuildingFunction(
             'buildings_affected': self.total_affected_buildings
         }
 
-        self.set_if_provenance()
-
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 
-        # Create vector layer and return
-        vector_layer = Vector(
+        # Create impact layer and return
+        impact_layer = Vector(
             data=attributes,
             projection=self.exposure.layer.get_projection(),
             geometry=self.exposure.layer.get_geometry(),
             name=tr('Estimated buildings affected'),
             keywords=impact_layer_keywords,
             style_info=style_info)
-        self._impact = vector_layer
-        return vector_layer
+
+        impact_layer.impact_data = impact_data
+        self._impact = impact_layer
+        return impact_layer

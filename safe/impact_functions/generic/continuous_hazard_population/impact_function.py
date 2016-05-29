@@ -30,20 +30,22 @@ from safe.impact_functions.bases.continuous_rh_continuous_re import \
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.impact_functions.core import (
     population_rounding,
-    has_no_data)
+    has_no_data,
+    no_population_impact_message
+)
 from safe.storage.raster import Raster
 from safe.utilities.i18n import tr
-from safe.common.utilities import get_thousand_separator
-from safe.impact_functions.core import no_population_impact_message
-from safe.common.utilities import create_classes, create_label, humanize_class
+from safe.common.utilities import (
+    create_classes,
+    create_label,
+    humanize_class,
+    get_thousand_separator)
 from safe.common.exceptions import (
     FunctionParametersError, ZeroImpactException)
-from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
-    filter_needs_parameters
+from safe.gui.tools.minimum_needs.needs_profile import (
+    add_needs_parameters, filter_needs_parameters)
 from safe.impact_reports.population_exposure_report_mixin import \
     PopulationExposureReportMixin
-import safe.messaging as m
-from safe.messaging import styles
 
 
 class ContinuousHazardPopulationFunction(
@@ -65,36 +67,37 @@ class ContinuousHazardPopulationFunction(
         """Return the notes section of the report.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: safe.messaging.Message
+        :rtype: dict
         """
-        message = m.Message(style_class='container')
-        message.add(
-            m.Heading(tr('Notes and assumptions'), **styles.INFO_STYLE))
-        checklist = m.BulletedList()
-        checklist.add(tr(
-            'Total population in the analysis area: %s'
-            ) % population_rounding(self.total_population))
-        checklist.add(tr(
-            '<sup>1</sup>People need evacuation if they are in a '
-            'hazard zone.'))
-        checklist.add(tr(
-            'Map shows the numbers of people in high, medium, '
-            'and low hazard class areas.'))
+        title = tr('Notes and assumptions')
+        fields = [
+            tr('Total population in the analysis area: %s') %
+            population_rounding(self.total_population),
+            tr('<sup>1</sup>People need evacuation if they are in a hazard '
+               'zone.'),
+            tr('Map shows the numbers of people in high, medium, and low '
+               'hazard class areas.')
+        ]
+
         if self.no_data_warning:
-            checklist.add(tr(
+            fields.append(tr(
                 'The layers contained "no data" values. This missing data '
                 'was carried through to the impact layer.'))
-            checklist.add(tr(
+            fields.append(tr(
                 '"No data" values in the impact layer were treated as 0 '
                 'when counting the affected or total population.'))
-        checklist.add(tr(
-            'All values are rounded up to the nearest integer in '
-            'order to avoid representing human lives as fractions.'))
-        checklist.add(tr(
-            'Population rounding is applied to all population '
-            'values, which may cause discrepancies when adding value.'))
-        message.add(checklist)
-        return message
+
+        fields.extend([
+            tr('All values are rounded up to the nearest integer in order to '
+               'avoid representing human lives as fractions.'),
+            tr('Population rounding is applied to all population values, '
+               'which may cause discrepancies when adding value.')
+        ])
+
+        return {
+            'title': title,
+            'fields': fields
+        }
 
     def run(self):
         """Plugin for impact of population as derived by continuous hazard.
@@ -108,12 +111,6 @@ class ContinuousHazardPopulationFunction(
           Map of population exposed to high category
           Table with number of people in each category
         """
-        self.validate()
-        self.prepare()
-
-        self.provenance.append_step(
-            'Calculating Step',
-            'Impact function is calculating the impact.')
 
         thresholds = [
             p.value for p in self.parameters['Categorical thresholds'].value]
@@ -182,8 +179,6 @@ class ContinuousHazardPopulationFunction(
         ]
         total_needs = self.total_needs
 
-        impact_table = impact_summary = self.html_report()
-
         # Style for impact layer
         colours = [
             '#FFFFFF', '#38A800', '#79C900', '#CEED00',
@@ -227,9 +222,9 @@ class ContinuousHazardPopulationFunction(
             'Thousand separator is represented by %s' %
             get_thousand_separator())
 
+        impact_data = self.generate_data()
+
         extra_keywords = {
-            'impact_summary': impact_summary,
-            'impact_table': impact_table,
             'map_title': map_title,
             'legend_notes': legend_notes,
             'legend_units': legend_units,
@@ -237,12 +232,10 @@ class ContinuousHazardPopulationFunction(
             'total_needs': total_needs
         }
 
-        self.set_if_provenance()
-
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 
         # Create raster object and return
-        raster_layer = Raster(
+        impact_layer = Raster(
             data=impacted_exposure,
             projection=self.hazard.layer.get_projection(),
             geotransform=self.hazard.layer.get_geotransform(),
@@ -251,5 +244,7 @@ class ContinuousHazardPopulationFunction(
                 get_function_title(self).lower()),
             keywords=impact_layer_keywords,
             style_info=style_info)
-        self._impact = raster_layer
-        return raster_layer
+
+        impact_layer.impact_data = impact_data
+        self._impact = impact_layer
+        return impact_layer

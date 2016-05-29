@@ -317,7 +317,6 @@ class StylingTest(unittest.TestCase):
              'transparency': 22, 'quantity': 300}]
 
         myActualClasses = add_extrema_to_style(myClasses)
-        print myActualClasses
         self.maxDiff = None
         self.assertListEqual(myExpectedClasses, myActualClasses)
 
