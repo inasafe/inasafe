@@ -465,7 +465,8 @@ def is_keyword_version_supported(
         return version_split[0] + '.' + version_split[1]
 
     version_compatibilities = {
-        '3.3': ['3.2']
+        '3.3': ['3.2'],
+        '3.4': ['3.3']
     }
 
     # Convert to minor version.
