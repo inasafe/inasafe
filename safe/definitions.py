@@ -710,8 +710,8 @@ tsunami_raster_hazard_classes = {
                 'equal to V-VI tsunami intensity scale (Papadoupulos and '
                 'Imamura, 2001). Tsunami wave with a 3m inundation depth '
                 'causes most people frightened and to flee to higher ground. '
-                'Small vessels drift and collide. Damage occurs to some wooden '
-                'houses, while most of them are safe.'),
+                'Small vessels drift and collide. Damage occurs to some '
+                'wooden houses, while most of them are safe.'),
             'numeric_default_min': 1,
             'numeric_default_max': 3,
             'optional': True
