@@ -352,6 +352,11 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
                 hazard_geometry = hazard_features[hazard_id].geometry()
                 impact_geometry = geometry.intersection(hazard_geometry)
 
+                if not impact_geometry:
+                    LOGGER.warning(
+                        'Impact geometry is None for hazard_id %s' % hazard_id)
+                    continue
+
                 if not impact_geometry.wkbType() == QGis.WKBPolygon and \
                    not impact_geometry.wkbType() == QGis.WKBMultiPolygon:
                     continue  # no intersection found
@@ -373,6 +378,14 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
                     # the flood column
                     unaffected_geometry = geometry.symDifference(
                         impact_geometry)
+                    if not unaffected_geometry:
+                        LOGGER.debug('None result symDif')
+                        LOGGER.debug(
+                            'Geometry: %s' %
+                            geometry.exportToWkt())
+                        LOGGER.debug(
+                            'Impact Geometry: %s' %
+                            impact_geometry.exportToWkt())
                     if area_id not in self.all_affected_areas:
                         self.all_affected_areas[area_id] = 0.
                     area = 0
@@ -381,6 +394,14 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
                 else:
                     unaffected_geometry = geometry.symDifference(
                         impact_geometry)
+                    if not unaffected_geometry:
+                        LOGGER.debug('None result symDif')
+                        LOGGER.debug(
+                            'Geometry: %s' %
+                            geometry.exportToWkt())
+                        LOGGER.debug(
+                            'Impact Geometry: %s' %
+                            impact_geometry.exportToWkt())
                     # add to the affected area of this area type
 
                     if area_id not in self.all_affected_areas:
@@ -452,6 +473,10 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         unaffected_feature = QgsFeature(unaffected_fields)
         impacted_feature = QgsFeature(impact_fields)
 
+        if not unaffected_geometry:
+            LOGGER.warning(
+                'Unaffected geometry %s is None' % unaffected_geometry)
+            return
         unaffected_feature.setGeometry(unaffected_geometry)
         impacted_feature.setGeometry(impact_geometry)
 

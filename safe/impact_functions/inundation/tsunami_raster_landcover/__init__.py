@@ -1,0 +1,5 @@
+__author__ = 'etiennetrimaille'
+__project_name__ = 'inasafe-dev'
+__filename__ = '__init__.py'
+__date__ = '10/05/16'
+__copyright__ = 'etienne@kartoza.com'

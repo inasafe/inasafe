@@ -130,8 +130,10 @@ class BuildingExposureReportMixinTest(unittest.TestCase):
         """Test schools closed as expected."""
         schools_closed_default = self.building_mixin_blank.schools_closed
         schools_closed = self.building_mixin.schools_closed
+
         message = 'Default should not have any closed schools.'
         self.assertEqual(schools_closed_default, 0, message)
+
         message = 'Schools closed in scenario not as expected.'
         self.assertEqual(schools_closed, 75, message)
 
@@ -149,18 +151,23 @@ class BuildingExposureReportMixinTest(unittest.TestCase):
         default_count_usage = self.building_mixin_blank._count_usage('School')
         message = 'Default count is not as expected.'
         self.assertEqual(default_count_usage, 0, message)
+
         count_usage = self.building_mixin._count_usage('School')
         message = 'Count is not as expected.'
         self.assertEqual(count_usage, 75, message)
+
         default_impact_breakdown = self.building_mixin_blank._impact_breakdown
         message = 'The default impact breakdown should be empty.'
         self.assertListEqual(default_impact_breakdown, [], message)
+
         impact_breakdown = self.building_mixin._impact_breakdown
         message = 'The default impact breakdown should be empty.'
         self.assertListEqual(impact_breakdown, ['Affected', 'Value'], message)
+
         default_categories = self.building_mixin_blank._affected_categories
         message = 'The default categories should be empty.'
         self.assertListEqual(default_categories, [], message)
+
         categories = self.building_mixin._affected_categories
         message = 'The categories are not as expected.'
         self.assertListEqual(
@@ -174,13 +181,16 @@ class BuildingExposureReportMixinTest(unittest.TestCase):
         default_unaffected = (
             self.building_mixin_blank.total_unaffected_buildings)
         default_total = self.building_mixin_blank.total_buildings
+
         message = 'Defaults counts should be 0.'
         self.assertEqual(default_total, 0, message)
         self.assertEqual(default_unaffected, 0, message)
         self.assertEqual(default_affected, 0, message)
+
         affected = self.building_mixin.total_affected_buildings
         unaffected = self.building_mixin.total_unaffected_buildings
         total = self.building_mixin.total_buildings
+
         message = (
             'The total number of buildings should equal the sum of affected '
             'and unaffected.')

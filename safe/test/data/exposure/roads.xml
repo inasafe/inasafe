@@ -209,13 +209,13 @@
             <gco:CharacterString>road</gco:CharacterString>
           </exposure>
           <keyword_version>
-            <gco:CharacterString>3.3</gco:CharacterString>
+            <gco:CharacterString>3.4</gco:CharacterString>
           </keyword_version>
           <datatype>
             <gco:CharacterString/>
           </datatype>
           <value_map>
-            <gco:Dictionary/>
+            <gco:Dictionary>{&quot;other&quot;: [&quot;Cycleway, footpath, etc.&quot;], &quot;local&quot;: [&quot;Road, residential, living street, etc.&quot;], &quot;primary&quot;: [&quot;Primary road&quot;, &quot;Primary link&quot;], &quot;secondary&quot;: [&quot;Secondary&quot;, &quot;Tertiary&quot;]}</gco:Dictionary>
           </value_map>
           <structure_class_field>
             <gco:CharacterString/>

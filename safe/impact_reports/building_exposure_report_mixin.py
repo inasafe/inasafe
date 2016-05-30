@@ -15,8 +15,10 @@ __author__ = 'Christian Christelis <christian@kartoza.com>'
 from collections import OrderedDict
 from operator import add
 from safe.utilities.i18n import tr
+from safe.utilities.utilities import reorder_dictionary
 from safe.common.utilities import format_int
 from safe.impact_reports.report_mixin_base import ReportMixin
+from safe.definitions import structure_class_order
 
 
 class BuildingExposureReportMixin(ReportMixin):
@@ -72,10 +74,60 @@ class BuildingExposureReportMixin(ReportMixin):
         """
         self.question = ''
         self.buildings = {}
+        self.categories = None
         self.affected_buildings = {}
         self.building_report_threshold = 25
 
         self.impact_data = {}
+
+    def init_report_var(self, categories):
+        """Create tables for the report according to the classes.
+
+        .. versionadded:: 3.4
+
+        :param categories: The list of classes to use.
+        :type categories: list
+        """
+        self.categories = categories
+        self.buildings = {}
+        self.affected_buildings = {}
+        for category in categories:
+            self.affected_buildings[category] = {}
+
+    def classify_feature(self, hazard_class, usage, affected):
+        """Fill the report variables with the feature.
+
+        :param hazard_class: The hazard class of the building.
+        :type hazard_class: str
+
+        :param usage: The main usage of the building.
+        :type usage: str
+
+        :param affected: If the building is affected or not.
+        :type affected: bool
+        """
+        building_affected = tr('Buildings Affected')
+        if usage not in self.buildings:
+            self.buildings[usage] = 0
+
+            for category in self.categories:
+                self.affected_buildings[category][usage] = OrderedDict()
+                self.affected_buildings[category][usage][building_affected] = 0
+
+        self.buildings[usage] += 1
+        if affected:
+            self.affected_buildings[hazard_class][usage][building_affected]\
+                += 1
+
+    def reorder_dictionaries(self):
+        """Reorder every dictionaries so as to generate the report properly."""
+
+        buildings = self.buildings.copy()
+        self.buildings = reorder_dictionary(buildings, structure_class_order)
+
+        affected_buildings = self.affected_buildings.copy()
+        self.affected_buildings = reorder_dictionary(
+            affected_buildings, self.categories)
 
     def impact_summary(self):
         """Create impact summary as data.

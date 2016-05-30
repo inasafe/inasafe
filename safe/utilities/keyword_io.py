@@ -223,6 +223,16 @@ class KeywordIO(QObject):
         try:
             if flag:
                 keywords = read_file_keywords(source)
+                mandatory_keywords = [
+                    'layer_purpose',
+                    'keyword_version'
+                ]
+                for mandatory_keyword in mandatory_keywords:
+                    if mandatory_keyword not in keywords.keys():
+                        message = tr(
+                            'The layer does not have keyword %s in its '
+                            'keywords.' % mandatory_keyword)
+                        raise KeywordNotFoundError(message)
             else:
                 uri = self.normalize_uri(layer)
                 keywords = self.read_keyword_from_uri(uri)

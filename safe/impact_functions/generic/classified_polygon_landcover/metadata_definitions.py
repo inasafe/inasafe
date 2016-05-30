@@ -24,7 +24,6 @@ from safe.definitions import (
     generic_vector_hazard_classes,
 )
 from safe.utilities.i18n import tr
-from safe_extras.parameters.string_parameter import StringParameter
 
 
 class ClassifiedPolygonHazardLandCoverFunctionMetadata(ImpactFunctionMetadata):

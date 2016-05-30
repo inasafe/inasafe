@@ -447,6 +447,7 @@ class TestEngine(unittest.TestCase):
         IF = plugin_list[0].instance()
         IF.hazard = H
         IF.exposure = E
+        IF._prepare()
         IF._calculate_impact()
 
         message = 'The user directory is empty : %s' % temp_directory

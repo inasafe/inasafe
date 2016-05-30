@@ -13,10 +13,11 @@ __copyright__ += 'Disaster Reduction'
 
 
 from safe.defaults import get_defaults
-from safe.postprocessors.abstract_postprocessor import AbstractPostprocessor
+from safe.postprocessors.abstract_population_postprocessor import \
+    AbstractPopulationPostprocessor
 
 
-class AgePostprocessor(AbstractPostprocessor):
+class AgePostprocessor(AbstractPopulationPostprocessor):
     """
     Postprocessor that calculates age related statistics.
     see the _calculate_* methods to see indicator specific documentation
@@ -30,19 +31,12 @@ class AgePostprocessor(AbstractPostprocessor):
 
         It takes care of defining self.impact_total
         """
-        AbstractPostprocessor.__init__(self)
+        AbstractPopulationPostprocessor.__init__(self)
         self.youth_ratio = None
         self.adult_ratio = None
         self.elderly_ratio = None
         self.impact_total = None
-
-    def description(self):
-        """Describe briefly what the post processor does.
-
-        :returns: The translated description.
-        :rtype: str
-        """
-        return tr('Calculates age related statistics.')
+        self._description = tr('Calculates age related statistics.')
 
     def setup(self, params):
         """Concrete implementation to ensure needed parameters are initialized.
@@ -51,7 +45,7 @@ class AgePostprocessor(AbstractPostprocessor):
         :type params: dict
 
         """
-        AbstractPostprocessor.setup(self, None)
+        AbstractPopulationPostprocessor.setup(self, None)
         if self.impact_total is not None:
             self._raise_error('clear needs to be called before setup')
 
@@ -84,7 +78,7 @@ class AgePostprocessor(AbstractPostprocessor):
     def process(self):
         """Performs all the indicator calculations.
         """
-        AbstractPostprocessor.process(self)
+        AbstractPopulationPostprocessor.process(self)
         if self.impact_total is None:
             self._log_message(
                 '%s not all params have been correctly '
@@ -100,7 +94,7 @@ class AgePostprocessor(AbstractPostprocessor):
     def clear(self):
         """Clear postprocessor state.
         """
-        AbstractPostprocessor.clear(self)
+        AbstractPopulationPostprocessor.clear(self)
         self.impact_total = None
 
     def _calculate_total(self):
@@ -113,7 +107,7 @@ class AgePostprocessor(AbstractPostprocessor):
         result = self.impact_total
         try:
             result = int(round(result))
-        except ValueError:
+        except (ValueError, TypeError):
             result = self.NO_DATA_TEXT
         self._append_result(name, result)
 
@@ -125,10 +119,10 @@ class AgePostprocessor(AbstractPostprocessor):
 
         """
         name = tr('Youth count (affected)')
-        result = self.impact_total * self.youth_ratio
         try:
+            result = self.impact_total * self.youth_ratio
             result = int(round(result))
-        except ValueError:
+        except (ValueError, TypeError):
             result = self.NO_DATA_TEXT
         self._append_result(name, result)
 
@@ -140,10 +134,10 @@ class AgePostprocessor(AbstractPostprocessor):
 
         """
         name = tr('Adult count (affected)')
-        result = self.impact_total * self.adult_ratio
         try:
+            result = self.impact_total * self.adult_ratio
             result = int(round(result))
-        except ValueError:
+        except (ValueError, TypeError):
             result = self.NO_DATA_TEXT
         self._append_result(name, result)
 
@@ -161,9 +155,9 @@ class AgePostprocessor(AbstractPostprocessor):
             self._append_result(name, self.NO_DATA_TEXT)
             return
 
-        result = self.impact_total * self.elderly_ratio
         try:
+            result = self.impact_total * self.elderly_ratio
             result = int(round(result))
-        except ValueError:
+        except (ValueError, TypeError):
             result = self.NO_DATA_TEXT
         self._append_result(name, result)

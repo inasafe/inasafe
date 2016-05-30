@@ -19,7 +19,6 @@ __copyright__ = 'imajimatika@gmail.com'
 
 
 import logging
-from collections import OrderedDict
 
 from safe.impact_functions.inundation\
     .tsunami_raster_building.metadata_definitions import \
@@ -28,11 +27,10 @@ from safe.impact_functions.bases.continuous_rh_classified_ve import \
     ContinuousRHClassifiedVE
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
-from safe.common.utilities import get_osm_building_usage
+from safe.utilities.utilities import main_type
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
-from safe.common.exceptions import KeywordNotFoundError
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -57,9 +55,6 @@ class TsunamiRasterBuildingFunction(
         # From BuildingExposureReportMixin
         self.building_report_threshold = 25
 
-        # From BuildingExposureReportMixin
-        self.building_report_threshold = 25
-
     def notes(self):
         """Return the notes section of the report as dict.
 
@@ -75,13 +70,13 @@ class TsunamiRasterBuildingFunction(
 
         fields = [
             tr('Dry zone is defined as non-inundated area or has inundation '
-               'depth is 0 %s') % (low_max.unit.abbreviation),
+               'depth is 0 %s') % low_max.unit.abbreviation,
             tr('Low tsunami hazard zone is defined as inundation depth is '
                'more than 0 %s but less than %.1f %s') % (
                 low_max.unit.abbreviation,
                 low_max.value,
                 low_max.unit.abbreviation),
-            tr('Moderate tsunami hazard zone is defined as inundation depth '
+            tr('Medium tsunami hazard zone is defined as inundation depth '
                'is more than %.1f %s but less than %.1f %s') % (
                 low_max.value,
                 low_max.unit.abbreviation,
@@ -130,28 +125,14 @@ class TsunamiRasterBuildingFunction(
             attribute_name=self.target_field)
 
         # Extract relevant exposure data
-        attribute_names = interpolated_layer.get_attribute_names()
         features = interpolated_layer.get_data()
         total_features = len(interpolated_layer)
 
-        # but use the old get_osm_building_usage
-        try:
-            structure_class_field = self.exposure.keyword(
-                'structure_class_field')
-        except KeywordNotFoundError:
-            structure_class_field = None
+        structure_class_field = self.exposure.keyword('structure_class_field')
+        exposure_value_mapping = self.exposure.keyword('value_mapping')
 
-        # Building breakdown
-        self.buildings = {}
-        # Impacted building breakdown
-        self.affected_buildings = OrderedDict([
-            (self.hazard_classes[0], {}),
-            (self.hazard_classes[1], {}),
-            (self.hazard_classes[2], {}),
-            (self.hazard_classes[3], {}),
-            (self.hazard_classes[4], {})
-        ])
-        categories = self.affected_buildings.keys()
+        self.init_report_var(self.hazard_classes)
+
         for i in range(total_features):
             # Get the interpolated depth
             water_depth = float(features[i][self.target_field])
@@ -169,30 +150,16 @@ class TsunamiRasterBuildingFunction(
             else:
                 inundated_status = 0
 
-            # Count affected buildings by usage type if available
-            if (structure_class_field in attribute_names and
-                    structure_class_field):
-                usage = features[i].get(structure_class_field, None)
-            else:
-                usage = get_osm_building_usage(
-                    attribute_names, features[i])
+            usage = features[i].get(structure_class_field, None)
+            usage = main_type(usage, exposure_value_mapping)
 
-            if usage is None or usage == 0:
-                usage = 'unknown'
-
-            if usage not in self.buildings:
-                self.buildings[usage] = 0
-                for category in self.affected_buildings.keys():
-                    self.affected_buildings[category][usage] = OrderedDict([
-                        (tr('Buildings Affected'), 0)])
-
-            # Count all buildings by type
-            self.buildings[usage] += 1
             # Add calculated impact to existing attributes
             features[i][self.target_field] = inundated_status
-            category = categories[inundated_status]
-            self.affected_buildings[category][usage][
-                tr('Buildings Affected')] += 1
+            category = self.categories[inundated_status]
+
+            self.classify_feature(category, usage, True)
+
+        self.reorder_dictionaries()
 
         # Lump small entries and 'unknown' into 'other' category
         # Building threshold #2468

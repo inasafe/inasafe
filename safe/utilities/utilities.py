@@ -24,12 +24,11 @@ import logging
 import webbrowser
 import unicodedata
 import codecs
-import re
+from collections import OrderedDict
 
 # noinspection PyPackageRequirements
 
 from safe.storage.utilities import read_keywords
-from safe.storage.utilities import write_keywords
 from safe.common.exceptions import (
     InvalidParameterError,
     NoKeywordsFoundError,
@@ -133,6 +132,64 @@ def humanise_seconds(seconds):
         # If all else fails...
         return tr('%i days, %i hours and %i minutes' % (
             days, hours, minutes))
+
+
+def reorder_dictionary(unordered_dictionary, expected_key_order):
+    """Reorder a dictionary according to a list of keys.
+
+    .. versionadded: 3.4
+
+    :param unordered_dictionary: The dictionary to reorder.
+    :type unordered_dictionary: dict
+
+    :param expected_key_order: The list of keys.
+    :type expected_key_order: list
+
+    :return: The new ordered dictionary.
+    :type: OrderedDict
+    """
+
+    ordered_dictionary = OrderedDict()
+
+    for item in expected_key_order:
+        if item in unordered_dictionary:
+            ordered_dictionary[item] = unordered_dictionary[item]
+
+    return ordered_dictionary
+
+
+def main_type(feature_type, value_mapping):
+    """Return the the main class from a feature by reading the mapping.
+
+    This function is used by buildings/roads IF.
+
+    .. versionadded: 3.4
+
+    :param feature_type: The type of the feature to test.
+    :type feature_type: str
+
+    :param value_mapping: The value mapping.
+    :type value_mapping: dict
+
+    :return: The main class name, if not found, it will return 'other'.
+    :rtype: str
+    """
+    other = 'other'
+
+    if feature_type in [None, 'NULL', 'null', 'Null', 0]:
+        return other
+
+    if feature_type.__class__.__name__ == 'QPyNullVariant':
+        return other
+
+    for key, values in value_mapping.iteritems():
+        if feature_type in values:
+            feature_class = key
+            break
+    else:
+        feature_class = other
+
+    return feature_class
 
 
 def impact_attribution(keywords, inasafe_flag=False):
@@ -271,6 +328,32 @@ def html_to_file(html, file_path=None, open_browser=False):
         open_in_browser(file_path)
 
 
+def ranges_according_thresholds(low_max, medium_max, high_max):
+    """Return an ordered dictionary with the ranges according to thresholds.
+
+    This used to classify a raster according three thresholds.
+
+    :param low_max: The low threshold.
+    :type low_max: float
+
+    :param medium_max: The medium threshold.
+    :type medium_max: float
+
+    :param high_max: The high threshold.
+    :type high_max: float
+
+    :return The ranges.
+    :rtype OrderedDict
+    """
+    ranges = OrderedDict()
+    ranges[0] = [None, 0.0]
+    ranges[1] = [0.0, low_max]
+    ranges[2] = [low_max, medium_max]
+    ranges[3] = [medium_max, high_max]
+    ranges[4] = [high_max, None]
+    return ranges
+
+
 def read_file_keywords(layer_path, keyword=None):
     """Get metadata from the keywords file associated with a local
      file in the file system.
@@ -382,7 +465,8 @@ def is_keyword_version_supported(
         return version_split[0] + '.' + version_split[1]
 
     version_compatibilities = {
-        '3.3': ['3.2']
+        '3.3': ['3.2'],
+        '3.4': ['3.2', '3.3']
     }
 
     # Convert to minor version.

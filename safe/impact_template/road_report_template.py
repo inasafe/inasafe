@@ -21,10 +21,11 @@ __copyright__ = 'imajimatika@gmail.com'
 import safe.messaging as m
 from safe.utilities.i18n import tr
 from safe.common.utilities import format_int
-from safe.impact_template.template_base import TemplateBase
+from safe.impact_template.abstract_road_building_report_template import \
+    AbstractRoadBuildingReportTemplate
 
 
-class RoadReportTemplate(TemplateBase):
+class RoadReportTemplate(AbstractRoadBuildingReportTemplate):
     """Report Template for Road.
 
     ..versionadded: 3.4
@@ -47,22 +48,6 @@ class RoadReportTemplate(TemplateBase):
             json_file=json_file,
             impact_data=impact_data)
         self.roads_breakdown = self.impact_data.get('impact table')
-
-    def generate_message_report(self):
-        """Generate impact report as message object.
-
-        :returns: The report.
-        :rtype: safe.messaging.Message
-        """
-        message = m.Message()
-        message.add(self.format_question())
-        message.add(self.format_impact_summary())
-        message.add(self.format_roads_breakdown())
-        message.add(self.format_action_check_list())
-        message.add(self.format_notes())
-        if self.postprocessing:
-            message.add(self.format_postprocessing())
-        return message
 
     def format_impact_summary(self):
         """The impact summary as per category
@@ -100,7 +85,7 @@ class RoadReportTemplate(TemplateBase):
 
         return message
 
-    def format_roads_breakdown(self):
+    def format_breakdown(self):
         """Breakdown by road type.
 
         :returns: The roads breakdown report.
@@ -125,15 +110,19 @@ class RoadReportTemplate(TemplateBase):
         table.add(row)
 
         row = m.Row()
-        for attribute in attributes:
-            row.add(m.Cell(tr(attribute), header=True))
+        # We align left the first column, then right.
+        row.add(m.Cell(tr(attributes[0]), header=True))
+        for attribute in attributes[1:]:
+            row.add(m.Cell(tr(attribute), header=True, align='right'))
         table.add(row)
 
         for field in fields:
             row = m.Row()
             # First column
-            row.add(m.Cell(tr('%(road_type)s (m)' % {
-                'road_type': field[0].capitalize()})))
+            # proper format for i186
+            row.add(m.Cell(
+                tr('%(road_type)s (m)') % {
+                    'road_type': tr(field[0].capitalize())}))
             # Start from second column
             for value in field[1:]:
                 row.add(m.Cell(

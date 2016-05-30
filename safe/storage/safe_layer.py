@@ -24,6 +24,8 @@ from safe.storage.vector import Vector
 from safe.storage.raster import Raster
 from safe.common.exceptions import KeywordNotFoundError, InvalidLayerError
 from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.i18n import tr
+from safe.utilities.unicode import get_unicode
 
 
 class SafeLayer(object):
@@ -42,13 +44,14 @@ class SafeLayer(object):
         self._layer = None
         self._keywords = {}
         self.layer = layer
+        self._name = None
 
         if name:
             self._name = name
         else:
             try:
                 # RM: convert title to string. Makes sure it is str
-                self._name = unicode(self.keyword('title'))
+                self._name = get_unicode(self.keyword('title'))
             except KeywordNotFoundError:
                 self._name = ''
 
@@ -70,7 +73,7 @@ class SafeLayer(object):
         if isinstance(layer, QgsMapLayer) or isinstance(layer, Layer):
             self._layer = layer
         else:
-            message = (
+            message = tr(
                 'SafeLayer only accept QgsMapLayer or '
                 'safe.storage.layer.Layer.')
             raise InvalidLayerError(message)
@@ -112,15 +115,18 @@ class SafeLayer(object):
         """
         try:
             return self.keywords[key]
-        except KeyError as e:
-            raise KeywordNotFoundError(e)
+        except KeyError:
+            message = tr(
+                'Keyword "%s" is not found in layer %s, please add it to your '
+                'layer' % (key, self.name))
+            raise KeywordNotFoundError(message)
 
     @property
     def name(self):
         """Property for the actual layer.
 
         :returns: A layer's name.
-        :rtype: str, unicodeß
+        :rtype: str, unicode
         """
         return self._name
 
