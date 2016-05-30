@@ -6279,11 +6279,6 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="690"/>
-        <source>Water above ground height and less than 1.0m.The area is potentially hit by a tsunami wave with an inundation depth less than 1 m or similar to tsunami intensity scale of V or less in (Papadoupulos and Imamura, 2001). Tsunami wave of 1m height causes few people to be frightened and flee to higher elevation. Felt by most people on large ship, observed from shore. Small vessels drift and collide and some turn over. Sand is deposited and there is flooding of areas close to the shore.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="definitions.py" line="707"/>
         <source>Water above 1.1m and less than 3.0m. The area is potentially hit by a tsunami wave with an inundation depth of 1 - 3 m or equal to V-VI tsunami intensity scale (Papadoupulos and Imamura, 2001). Tsunami wave with a 3m inundation depth causes most people frightened and to flee to higher ground. Small vessels drift and collid. Damage occurs to some wooden houses, while most of them are safe.</source>
         <translation type="unfinished"/>
@@ -6311,6 +6306,11 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
     <message>
         <location filename="metadata_definitions.py" line="111"/>
         <source>Hamza Latief. pers com. Default impact threshold for tsunami impact on people should be 0.7m. This is less than a flood threshold because in a tsunami, the water is moving with force.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="690"/>
+        <source>Water above ground height and less than 1.0m. The area is potentially hit by a tsunami wave with an inundation depth less than 1 m or similar to tsunami intensity scale of V or less in (Papadoupulos and Imamura, 2001). Tsunami wave of 1m height causes few people to be frightened and flee to higher elevation. Felt by most people on large ship, observed from shore. Small vessels drift and collide and some turn over. Sand is deposited and there is flooding of areas close to the shore.</source>
         <translation type="unfinished"/>
     </message>
 </context>
