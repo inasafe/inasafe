@@ -4,7 +4,7 @@
     <gco:CharacterString>None</gco:CharacterString>
   </gmd:fileIdentifier>
   <gmd:language>
-    <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/" codeListValue="eng" codeSpace="ISO 639-2">eng</gmd:LanguageCode>
+    <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/" codeListValue="eng" codeSpace="ISO 639-2">English</gmd:LanguageCode>
   </gmd:language>
   <gmd:characterSet>
     <gmd:MD_CharacterSetCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_CharacterSetCode" codeListValue="utf8" codeSpace="ISOTC211/19115">utf8</gmd:MD_CharacterSetCode>
@@ -47,7 +47,7 @@
       <gmd:citation>
         <gmd:CI_Citation>
           <gmd:title>
-            <gco:CharacterString>Continuous Flood</gco:CharacterString>
+            <gco:CharacterString>Buildings</gco:CharacterString>
           </gmd:title>
           <gmd:date>
             <gmd:CI_Date>
@@ -155,12 +155,12 @@
       <gmd:resourceConstraints>
         <gmd:MD_Constraints>
           <gmd:useLimitation>
-            <gco:CharacterString/>
+            <gco:CharacterString>Open Data Commons Open Database License (ODbL)</gco:CharacterString>
           </gmd:useLimitation>
         </gmd:MD_Constraints>
       </gmd:resourceConstraints>
       <gmd:language>
-        <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/" codeListValue="eng" codeSpace="ISO 639-2">eng</gmd:LanguageCode>
+        <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/" codeListValue="eng" codeSpace="ISO 639-2">English</gmd:LanguageCode>
       </gmd:language>
       <gmd:topicCategory>
         <gmd:MD_TopicCategoryCode>geoscientificInformation</gmd:MD_TopicCategoryCode>
@@ -172,63 +172,60 @@
       <gmd:supplementalInformation>
         <inasafe_keywords/>
         <inasafe>
-          <hazard_category>
-            <gco:CharacterString>single_event</gco:CharacterString>
-          </hazard_category>
-          <raster_hazard_classification>
-            <gco:CharacterString/>
-          </raster_hazard_classification>
           <multipart_polygon>
             <gco:Boolean/>
           </multipart_polygon>
-          <prob_fatality_mag>
-            <gco:Tuple/>
-          </prob_fatality_mag>
-          <volcano_name_field>
+          <area_name_field>
             <gco:CharacterString/>
-          </volcano_name_field>
+          </area_name_field>
+          <area_population_field>
+            <gco:CharacterString/>
+          </area_population_field>
+          <exposure_unit>
+            <gco:CharacterString/>
+          </exposure_unit>
+          <source>
+            <gco:CharacterString>OpenStreetMap - www.openstreetmap.org</gco:CharacterString>
+          </source>
+          <layer_geometry>
+            <gco:CharacterString>polygon</gco:CharacterString>
+          </layer_geometry>
           <field>
             <gco:CharacterString/>
           </field>
-          <value_map>
-            <gco:Dictionary/>
-          </value_map>
-          <vector_hazard_classification>
-            <gco:CharacterString/>
-          </vector_hazard_classification>
-          <layer_geometry>
-            <gco:CharacterString>raster</gco:CharacterString>
-          </layer_geometry>
-          <hazard>
-            <gco:CharacterString>flood</gco:CharacterString>
-          </hazard>
           <scale>
             <gco:CharacterString/>
           </scale>
           <report>
             <gco:CharacterString/>
           </report>
-          <continuous_hazard_unit>
-            <gco:CharacterString>metres</gco:CharacterString>
-          </continuous_hazard_unit>
+          <exposure>
+            <gco:CharacterString>structure</gco:CharacterString>
+          </exposure>
           <keyword_version>
-            <gco:CharacterString>3.4</gco:CharacterString>
+            <gco:CharacterString>3.3</gco:CharacterString>
           </keyword_version>
           <datatype>
             <gco:CharacterString/>
           </datatype>
-          <source>
-            <gco:CharacterString>Akbar Gumbira</gco:CharacterString>
-          </source>
+          <structure_class_field>
+            <gco:CharacterString>TYPE</gco:CharacterString>
+          </structure_class_field>
+          <allow_resampling>
+            <gco:CharacterString/>
+          </allow_resampling>
           <layer_purpose>
-            <gco:CharacterString>hazard</gco:CharacterString>
+            <gco:CharacterString>exposure</gco:CharacterString>
           </layer_purpose>
           <resolution>
-            <gco:FloatTuple/>
+            <gco:Tuple/>
           </resolution>
           <layer_mode>
-            <gco:CharacterString>continuous</gco:CharacterString>
+            <gco:CharacterString>classified</gco:CharacterString>
           </layer_mode>
+          <road_class_field>
+            <gco:CharacterString/>
+          </road_class_field>
         </inasafe>
       </gmd:supplementalInformation>
     </gmd:MD_DataIdentification>

@@ -163,5 +163,6 @@ class RectangleMapTool(QgsMapToolEmitPoint):
         """
         Disable the tool.
         """
+        self.rubber_band.reset(QGis.Polygon)
         QgsMapTool.deactivate(self)
         self.deactivated.emit()
