@@ -197,10 +197,6 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             settings.value('inasafe/developer_mode', False, type=bool))
         self.cbxDevMode.setChecked(flag)
 
-        flag = bool(
-            settings.value('inasafe/use_native_zonal_stats', False, type=bool))
-        self.cbxNativeZonalStats.setChecked(flag)
-
         # Restore ISO19115 metadata tab
         value = self.defaults['ISO19115_ORGANIZATION']
         self.iso19115_organization_le.setText(value)
@@ -267,9 +263,6 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         settings.setValue(
             'inasafe/developer_mode',
             self.cbxDevMode.isChecked())
-        settings.setValue(
-            'inasafe/use_native_zonal_stats',
-            self.cbxNativeZonalStats.isChecked())
         settings.setValue(
             'inasafe/defaultUserDirectory',
             self.leUserDirectoryPath.text())

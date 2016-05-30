@@ -215,7 +215,7 @@
             <gco:CharacterString/>
           </datatype>
           <value_map>
-            <gco:Dictionary/>
+            <gco:Dictionary>{&quot;government&quot;: [&quot;Government&quot;], &quot;residence&quot;: [&quot;Residential&quot;], &quot;health&quot;: [&quot;Clinic/Doctor&quot;], &quot;education&quot;: [&quot;School&quot;], &quot;place of worship&quot;: [&quot;Place of Worship - Islam&quot;], &quot;economy&quot;: [&quot;Industrial&quot;, &quot;Commercial&quot;]}</gco:Dictionary>
           </value_map>
           <structure_class_field>
             <gco:CharacterString>TYPE</gco:CharacterString>

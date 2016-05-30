@@ -87,7 +87,7 @@ class ClassifiedRasterHazardPopulationMetadata(ImpactFunctionMetadata):
                 'class of the hazard. There should be three classes: e.g. '
                 '1, 2, and 3.'),
             'exposure_input': tr(
-                'An exposure raster layer where each cell represents the'
+                'An exposure raster layer where each cell represents the '
                 'population count for that cell.'),
             'output': tr(
                 'Map of population exposed to the highest class and a table '

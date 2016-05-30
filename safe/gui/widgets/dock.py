@@ -515,7 +515,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         """Generate a message for initial application state.
 
         :returns: Information for the user on how to get started.
-        :rtype: Message
+        :rtype: safe.messaging.Message
         """
         message = m.Message()
         message.add(LOGO_ELEMENT)
@@ -568,8 +568,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         title = m.Heading(
             self.tr('Ready'), **PROGRESS_UPDATE_STYLE)
         notes = m.Paragraph(
-            self.tr('You can now proceed to run your analysis by clicking '
-                    'the'),
+            self.tr(
+                'You can now proceed to run your analysis by clicking the '),
             m.EmphasizedText(self.tr('Run'), **KEYWORD_STYLE),
             self.tr('button.'))
         message = m.Message(LOGO_ELEMENT, title, notes)
@@ -581,16 +581,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         .. note:: Assumes a valid hazard and exposure layer are loaded.
 
         :returns: A localised message indicating we are not ready.
-        :rtype: Message
+        :rtype: safe.messaging.Message
         """
-        # myHazardFilename = self.getHazardLayer().source()
-        # noinspection PyTypeChecker
-        hazard_keywords = self.keyword_io.read_keywords(
-            self.get_hazard_layer())
-        # myExposureFilename = self.getExposureLayer().source()
-        # noinspection PyTypeChecker
-        exposure_keywords = self.keyword_io.read_keywords(
-            self.get_exposure_layer())
         heading = m.Heading(
             self.tr('No valid functions'), **WARNING_STYLE)
         notes = m.Paragraph(self.tr(
@@ -638,7 +630,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         :returns: A two-tuple where the first element is a Boolean reflecting
          the results of the validation tests and the second is a message
          indicating any reason why the validation may have failed.
-        :rtype: (Boolean, Message)
+        :rtype: (Boolean, safe.messaging.Message)
 
         Example::
 
@@ -927,6 +919,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 title = self.keyword_io.read_keywords(layer, 'title')
             except NoKeywordsFoundError:
                 # Skip if there are no keywords at all
+                continue
+            except KeywordNotFoundError:
+                # There is a missing mandatory keyword, ignore it
                 continue
             except:  # pylint: disable=W0702
                 # automatically adding file name to title in keywords
@@ -1403,7 +1398,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         else:
             post_processing_report = self.impact_function.\
                 postprocessor_manager.get_output(
-                self.impact_function.aggregator.aoi_mode)
+                    self.impact_function.aggregator.aoi_mode)
             keywords['postprocessing_report'] = post_processing_report.to_html(
                 suppress_newlines=True)
             self.keyword_io.write_keywords(qgis_impact_layer, keywords)
@@ -1483,6 +1478,13 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             exposure_layer = self.get_exposure_layer()
             legend = self.iface.legendInterface()
             legend.setLayerVisible(exposure_layer, False)
+
+        # In QGIS 2.14.2 and GDAL 1.11.3, if the exposure is in 3857,
+        # the impact layer is in 54004, we need to change it. See issue #2790.
+        if self.get_exposure_layer().crs().authid() == 'EPSG:3857':
+            if qgis_impact_layer.crs().authid() != 'EPSG:3857':
+                epsg_3857 = QgsCoordinateReferenceSystem(3857)
+                qgis_impact_layer.setCrs(epsg_3857)
 
         self.restore_state()
 
@@ -1618,7 +1620,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             'Layer keywords missing:'), **WARNING_STYLE))
         context = m.Paragraph(
             self.tr(
-                'No keywords have been defined for this layer yet or there is'
+                'No keywords have been defined for this layer yet or there is '
                 'an issue with the currently defined keywords and they need '
                 'to be reviewed. If you wish to use this layer as an '
                 'exposure, hazard, or aggregation layer in an analysis, '
@@ -1695,7 +1697,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         try:
             keywords = self.keyword_io.read_keywords(layer)
 
-            # if 'impact_summary' in keywords:
             if keywords['layer_purpose'] == 'impact':
                 try:
                     self.show_impact_report(layer, keywords)
@@ -1718,12 +1719,11 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         # TODO: maybe we need to split these apart more to give mode
         # TODO: granular error messages TS
-        except (KeyError,
-                KeywordNotFoundError,
+        except (KeywordNotFoundError,
                 HashNotFoundError,
                 InvalidParameterError,
                 NoKeywordsFoundError,
-                AttributeError), e:
+                AttributeError):
             # LOGGER.info(e.message)
             # Added this check in 3.2 for #1861
             active_layer = self.iface.activeLayer()
@@ -2142,7 +2142,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             # For #2077 somewhat kludgy hack to prevent positive
             # message when we cant actually run
             match = self.tr(
-                'You can now proceed to run your analysis by clicking the')
+                'You can now proceed to run your analysis by clicking the ')
             current_text = self.wvResults.page_to_text()
             if match in current_text:
                 message = m.Message()

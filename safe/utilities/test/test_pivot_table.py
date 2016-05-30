@@ -10,6 +10,20 @@ class PivotTableTest(unittest.TestCase):
     """Tests for reading and writing of raster and vector data."""
 
     def setUp(self):
+        """
+        This will generate a table like this:
+        Affected columns : high and medium
+
+        road_type     |         hazard        |             Totals
+                      |                       |             Total     Percent
+                      |  high   medium  low   |  Total     affected  affected
+        residential   |    0      30     50   |    80         30        37.5
+        primary       |   10      20      0   |    30         30         100
+        secondary     |    0       0     40   |    40          0           0
+
+        Total         |   10      50     90   |   150         60          40
+        """
+        self.affected_columns = ['medium', 'high']
         self.flat_table = FlatTable("road_type", "hazard")
         self.flat_table.add_value(10, road_type="primary", hazard="high")
         self.flat_table.add_value(20, road_type="primary", hazard="medium")
@@ -29,6 +43,8 @@ class PivotTableTest(unittest.TestCase):
         self.assertEqual(pivot_table.total, 150)
         self.assertEqual(pivot_table.total_rows, [80, 30, 40])
         self.assertEqual(pivot_table.total_columns, [10, 50, 90])
+        self.assertEqual(pivot_table.total_affected, 0)
+        self.assertEqual(pivot_table.total_rows_affected, [0, 0, 0])
 
     def test_one_column(self):
         pivot_table = PivotTable(self.flat_table, row_field='road_type')
@@ -40,6 +56,8 @@ class PivotTableTest(unittest.TestCase):
         self.assertEqual(pivot_table.total, 150)
         self.assertEqual(pivot_table.total_rows, [80, 30, 40])
         self.assertEqual(pivot_table.total_columns, [150])
+        self.assertEqual(pivot_table.total_affected, 0)
+        self.assertEqual(pivot_table.total_rows_affected, [0, 0, 0])
 
     def test_one_row(self):
         pivot_table = PivotTable(self.flat_table, column_field='hazard')
@@ -50,6 +68,27 @@ class PivotTableTest(unittest.TestCase):
         self.assertEqual(pivot_table.total, 150)
         self.assertEqual(pivot_table.total_rows, [150])
         self.assertEqual(pivot_table.total_columns, [10, 50, 90])
+
+        pivot_table = PivotTable(
+            self.flat_table, column_field='hazard',
+            affected_columns=self.affected_columns)
+        self.assertEqual(pivot_table.total_rows_affected, [60])
+        self.assertEqual(pivot_table.total_affected, 60)
+        self.assertEqual(pivot_table.total_percent_affected, 40)
+        self.assertEqual(pivot_table.total_percent_rows_affected, [40])
+
+    def test_affected(self):
+        pivot_table = PivotTable(
+            self.flat_table,
+            row_field='road_type',
+            column_field='hazard',
+            affected_columns=self.affected_columns)
+        self.assertEqual(pivot_table.total_affected, 60)
+        self.assertEqual(pivot_table.total_rows_affected, [30, 30, 0])
+        self.assertEqual(pivot_table.affected_columns, ['medium', 'high'])
+        self.assertEqual(pivot_table.total_percent_affected, 40)
+        self.assertEqual(
+            pivot_table.total_percent_rows_affected, [37.5, 100.0, 0])
 
     def test_filter(self):
         pivot_table = PivotTable(
@@ -64,6 +103,15 @@ class PivotTableTest(unittest.TestCase):
         self.assertEqual(pivot_table.total, 30)
         self.assertEqual(pivot_table.total_rows, [30])
         self.assertEqual(pivot_table.total_columns, [10, 20, 0])
+
+        pivot_table = PivotTable(
+            self.flat_table,
+            column_field='hazard',
+            filter_field='road_type',
+            filter_value='primary',
+            affected_columns=self.affected_columns)
+        self.assertEqual(pivot_table.total_affected, 30)
+        self.assertEqual(pivot_table.total_rows_affected, [30])
 
     def test_to_dict(self):
         """Test for to_dict the FlatTable"""
@@ -138,7 +186,7 @@ class PivotTableTest(unittest.TestCase):
             self.assertEquals(groups[i], flat_table.groups[i])
 
         self.assertEquals(flat_table.data[
-                              ('Forest', 'high', None)], 5172.100048073517)
+            ('Forest', 'high', None)], 5172.100048073517)
 
     def test_to_from_json(self):
         """Test FlatTable from_dict method"""

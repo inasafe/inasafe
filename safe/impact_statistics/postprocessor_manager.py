@@ -132,46 +132,40 @@ class PostprocessorManager(QtCore.QObject):
             has_no_data = False
             table = {'notes': []}
             name = get_postprocessor_human_name(processor).lower()
+            translated_name = tr(name)
 
             if name == 'building type':
-                table['caption'] = self.tr('Closed buildings')
+                table['caption'] = tr('Closed buildings')
             elif name == 'road type':
-                table['caption'] = self.tr('Closed roads')
+                table['caption'] = tr('Closed roads')
             elif name == 'people':
-                table['caption'] = self.tr('Affected people')
+                table['caption'] = tr('Affected people')
 
             # Dirty hack to make "evacuated" come out in the report.
             # Currently only MinimumNeeds that calculate from evacuation
             # percentage.
             if processor == 'MinimumNeeds':
                 if 'evacuation_percentage' in self.function_parameters.keys():
-                    table['caption'] = self.tr(
-                        'Detailed %s report (for people needing '
-                        'evacuation)') % (
-                                        tr(get_postprocessor_human_name(
-                                            processor)).lower()
-                                    )
+                    table['caption'] = tr(
+                        'Detailed %s report '
+                        '(for people needing evacuation)') % translated_name
                 else:
-                    table['caption'] = self.tr(
-                        'Detailed %s report (affected people)') % (
-                                        tr(get_postprocessor_human_name(
-                                            processor)).lower()
-                                    )
+                    table['caption'] = tr(
+                        'Detailed %s report '
+                        '(affected people)') % translated_name
 
             if processor in ['Gender', 'Age']:
-                table['caption'] = self.tr(
-                    'Detailed %s report (affected people)') % (
-                                    tr(get_postprocessor_human_name(
-                                        processor)).lower())
+                table['caption'] = tr(
+                    'Detailed %s report '
+                    '(affected people)') % translated_name
 
             empty_table = not sorted_results[0][1]
             if empty_table:
                 # Due to an error? The table is empty.
                 table['attributes'] = []
                 table['fields'] = []
-                table['notes'].append(self.tr(
-                    'Could not compute the %s report.' %
-                    tr(get_postprocessor_human_name(processor)).lower()))
+                table['notes'].append(
+                    tr('Could not compute the %s report.') % translated_name)
                 result['processor'] = table
                 continue
 
@@ -277,42 +271,39 @@ class PostprocessorManager(QtCore.QObject):
             table = m.Table(
                 style_class='table table-condensed table-striped')
             name = get_postprocessor_human_name(processor).lower()
+            translated_name = tr(name)
 
             if name == 'building type':
-                table.caption = self.tr('Closed buildings')
+                table.caption = tr('Closed buildings')
             elif name == 'road type':
-                table.caption = self.tr('Closed roads')
+                table.caption = tr('Closed roads')
             elif name == 'people':
-                table.caption = self.tr('Affected people')
+                table.caption = tr('Affected people')
 
             # Dirty hack to make "evacuated" come out in the report.
             # Currently only MinimumNeeds that calculate from evacuation
             # percentage.
             if processor == 'MinimumNeeds':
                 if 'evacuation_percentage' in self.function_parameters.keys():
-                    table.caption = self.tr(
-                        'Detailed %s report (for people needing '
-                        'evacuation)') % (
-                            tr(get_postprocessor_human_name(processor)).lower()
-                        )
+                    table.caption = tr(
+                        'Detailed %s report '
+                        '(for people needing evacuation)') % translated_name
                 else:
-                    table.caption = self.tr(
-                        'Detailed %s report (affected people)') % (
-                            tr(get_postprocessor_human_name(processor)).lower()
-                        )
+                    table.caption = tr(
+                        'Detailed %s report '
+                        '(affected people)') % translated_name
 
             if processor in ['Gender', 'Age']:
-                table.caption = self.tr(
-                    'Detailed %s report (affected people)') % (
-                        tr(get_postprocessor_human_name(processor)).lower())
+                table.caption = tr(
+                    'Detailed %s report '
+                    '(affected people)') % translated_name
 
             empty_table = not sorted_results[0][1]
             if empty_table:
                 # Due to an error? The table is empty.
                 message.add(table)
-                message.add(m.EmphasizedText(self.tr(
-                    'Could not compute the %s report.' %
-                    tr(get_postprocessor_human_name(processor)).lower())))
+                message.add(m.EmphasizedText(
+                    tr('Could not compute the %s report.') % translated_name))
                 continue
 
             header = m.Row()
@@ -333,8 +324,9 @@ class PostprocessorManager(QtCore.QObject):
                     null_index += 1
                 if name == 'road type':
                     # We add the unit 'meter' as we are counting roads.
+                    # proper format for i186
                     zone_name = tr(
-                        '%(zone_name)s (m)' % {'zone_name': zone_name})
+                        '%(zone_name)s (m)') % {'zone_name': tr(zone_name)}
                 row = m.Row(zone_name)
 
                 for indicator, calculation_data in calc.iteritems():
@@ -560,14 +552,6 @@ class PostprocessorManager(QtCore.QObject):
                     elderly_ratio = \
                         self.aggregator.get_default_keyword('ELDERLY_RATIO')
 
-        if 'BuildingType' or 'RoadType' in postprocessors:
-            try:
-                key_attribute = self.keyword_io.read_keywords(
-                    self.aggregator.exposure_layer, 'key_attribute')
-            except KeywordNotFoundError:
-                # use 'type' as default
-                key_attribute = 'type'
-
         # iterate zone features
         request = QgsFeatureRequest()
         request.setFlags(QgsFeatureRequest.NoGeometry)
@@ -582,9 +566,10 @@ class PostprocessorManager(QtCore.QObject):
             else:
                 zone_name = feature[name_filed_index]
             if isinstance(zone_name, QPyNullVariant):
+                # proper format for i186
                 zone_name = tr(
-                    'Unnamed Area %(feature_id)s' %
-                    {'feature_id': str(feature.id())})
+                    'Unnamed Area %(feature_id)s') % {
+                    'feature_id': str(feature.id())}
 
             # create dictionary of attributes to pass to postprocessor
             general_params = {
@@ -652,8 +637,18 @@ class PostprocessorManager(QtCore.QObject):
                     parameters['elderly_ratio'] = elderly_ratio
 
                 if key == 'BuildingType' or key == 'RoadType':
-                    # TODO: Fix this might be referenced before assignment
+                    try:
+                        key_attribute = self.keyword_io.read_keywords(
+                            self.aggregator.exposure_layer, 'key_attribute')
+                    except KeywordNotFoundError:
+                        # use 'type' as default
+                        key_attribute = 'type'
                     parameters['key_attribute'] = key_attribute
+
+                    value_map = self.keyword_io.read_keywords(
+                        self.aggregator.exposure_layer, 'value_mapping')
+                    parameters['value_mapping'] = value_map
+
                 try:
                     value.setup(parameters)
                     value.process()

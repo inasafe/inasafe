@@ -98,10 +98,11 @@ class RoadExposureReportMixinTest(unittest.TestCase):
     def test_0003_total(self):
         """Test general methods."""
         default_length = self.road_mixin_blank.total_road_length
-        length = self.road_mixin.total_road_length
         message = 'Default length is not as expected.'
         self.assertEqual(default_length, 0, message)
+
         message = 'Real length is not as expected.'
+        length = self.road_mixin.total_road_length
         self.assertEqual(length, 144.5, message)
 
     def test_0004_generate_data(self):

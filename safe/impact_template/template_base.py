@@ -150,7 +150,14 @@ class TemplateBase(object):
                 # First column is string
                 row.add(m.Cell(field[0]))
                 for value in field[1:]:
-                    row.add(m.Cell(format_int(int(value))))
+                    try:
+                        val = int(value)
+                        # Align right integers.
+                        row.add(m.Cell(format_int(val), align='right'))
+                    except ValueError:
+                        # Catch no data value. Align left strings.
+                        row.add(m.Cell(value, align='left'))
+
                 table.add(row)
             message.add(table)
             for note in v['notes']:

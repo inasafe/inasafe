@@ -88,13 +88,13 @@ layer_mode_continuous = {
         'values representing a continuously varying phenomenon. '
         'For example flood depth is a continuous value from 0 to the maximum '
         'reported depth during a flood. '
-        'Raster exposure data such as population data are also continuous. '
+        '<p>Raster exposure data such as population data are also continuous. '
         'In this example the cell values represent the number of people in '
-        'cell.\n'
-        'Raster data is considered to be continuous by default and you '
+        'cell.</p>'
+        '<p>Raster data is considered to be continuous by default and you '
         'should explicitly indicate that it is classified if each cell in the '
         'raster represents a discrete class (e.g. low depth = 1, medium depth '
-        '= 2, high depth = 3).'
+        '= 2, high depth = 3).</p>'
     ),
 }
 layer_mode_classified = {
@@ -103,20 +103,21 @@ layer_mode_classified = {
     'description': tr(
         '<b>Classified</b> data can be used for either hazard or exposure '
         'data and can be used for both raster and vector layer types where '
-        'the attribute values represent a classified or coded value. \n'
-        'For example, classified values in a flood raster data set might '
+        'the attribute values represent a classified or coded value.'
+        '<p>For example, classified values in a flood raster data set might '
         'represent discrete classes where a value of 1 might represent the '
         'low inundation class, a value of 2 might represent the medium '
         'inundation class and a value of 3 might represent the '
-        'high inundation class.\n'
-        'Classified values in a vector (polygon) Volcano data set might '
+        'high inundation class.</p>'
+        '<p>Classified values in a vector (polygon) Volcano data set might '
         'represent discrete classes where a value of I might represent low '
         'volcanic hazard, a value of II might represent medium volcanic '
-        'hazard and a value of III  might represent a high volcanic hazard. \n'
-        'In a vector (point) Volcano data the user specified buffer distances '
-        'will be used to classify the data. '
-        'Classified values in a vector exposure data set might include '
-        'building type or road type. '
+        'hazard and a value of III  might represent a high volcanic hazard.'
+        '</p>'
+        '<p>In a vector (point) Volcano data the user specified buffer '
+        'distances will be used to classify the data.</p>'
+        '<p>Classified values in a vector exposure data set might include '
+        'building type or road type.</p>'
     ),
 }
 
@@ -195,8 +196,8 @@ hazard_category_single_event = {
     'description': tr(
         '<b>Single event</b> hazard data can be based on either a specific  '
         'event that has happened in the past, for example a flood like '
-        'Jakarta 2013, or a possible event such as the tsunami that results '
-        'from an earthquake near Bima that might happen in the future.')
+        'Jakarta 2013, or a possible event, such as the tsunami that results '
+        'from an earthquake near Bima, that might happen in the future.')
 }
 
 hazard_category_multiple_event = {
@@ -205,11 +206,11 @@ hazard_category_multiple_event = {
     'description': tr(
         '<b>Multiple event</b> hazard data can be based on historical '
         'observations such as a hazard map of all observed volcanic '
-        'deposits around a volcano. \n'
-        'This type of hazard data shows those locations that might be '
+        'deposits around a volcano.'
+        '<p>This type of hazard data shows those locations that might be '
         'impacted by a volcanic eruption in the future. Another example '
         'might be a probabilistic hazard model that shows the likelihood of a '
-        'magnitude 7 earthquake happening in the next 50 years.')
+        'magnitude 7 earthquake happening in the next 50 years.</p>')
 }
 
 hazard_category = {
@@ -262,7 +263,7 @@ hazard_volcanic_ash = {
     'description': tr(
         '<b>Volcanic ash</b> describes fragments of pulverized rock, minerals '
         'and volcanic glass, created during volcanic eruptions, less than '
-        '2 mm (0.079 inches) in diameter')
+        '2 mm (0.079 inches) in diameter.')
 }
 
 hazard_tsunami = {
@@ -270,7 +271,7 @@ hazard_tsunami = {
     'name': tr('Tsunami'),
     'description': tr(
         'A <b>tsunami</b> describes a large ocean wave or series or '
-        'waves usually caused by an under water earthquake or volcano. '
+        'waves usually caused by an underwater earthquake or volcano. '
         'A <b>tsunami</b> at sea may go unnoticed but a <b>tsunami</b> '
         'wave that strikes land may cause massive destruction and '
         'flooding.')
@@ -324,10 +325,10 @@ exposure_people_in_building = {
     'description': tr(
         'The <b>people in buildings</b> exposure data is an experimental '
         'data set that assigns the population of a specific administrative '
-        'area to the buildings with a residential function in that area.\n'
-        'The process of assigning people to buildings assumes that all people '
-        'and buildings in the area are mapped. There are no InaSAFE impact '
-        'functions that use this exposure data yet.')
+        'area to the buildings with a residential function in that area.'
+        '<p>The process of assigning people to buildings assumes that all '
+        'people and buildings in the area are mapped. There are no InaSAFE '
+        'impact functions that use this exposure data yet.</p>')
 }
 
 exposure_population = {
@@ -352,7 +353,7 @@ exposure_structure = {
     'description': tr(
         'A <b>structure</b> can be any relatively permanent man '
         'made feature such as a building (an enclosed structure '
-        'with walls and a roof) or a telecommunications facility or a '
+        'with walls and a roof), telecommunications facility or '
         'bridge.')
 }
 
@@ -394,7 +395,7 @@ unit_generic = {
     'description': tr(
         'A generic unit for value that does not have unit or we do not know '
         'about the unit. It also can be used for normalised values.'),
-    }
+}
 
 unit_kilogram_per_meter_square = {
     'key': 'kilogram_per_meter_square',
@@ -415,7 +416,7 @@ unit_kilometres = {
     'description': tr(
         '<b>Kilometres</b> are a metric unit of measure. There are 1000 '
         'metres in 1 kilometre (km).'),
-    }
+}
 
 unit_metres = {
     'key': 'metres',
@@ -435,7 +436,7 @@ unit_millimetres = {
     'description': tr(
         '<b>Millimetres</b> are a metric unit of measure. There are 1000 '
         'millimetres in 1 metre.'),
-    }
+}
 
 unit_mmi = {
     'key': 'mmi',
@@ -640,7 +641,7 @@ generic_raster_hazard_classes = {
     'classes': [
         {
             'key': 'high',
-            'name': tr('high'),
+            'name': tr('High hazard zone'),
             'description': tr('The highest hazard classification.'),
             'numeric_default_min': 3,
             'numeric_default_max': 3,
@@ -648,7 +649,7 @@ generic_raster_hazard_classes = {
         },
         {
             'key': 'medium',
-            'name': tr('medium'),
+            'name': tr('Medium hazard zone'),
             'description': tr('The middle hazard classification.'),
             'numeric_default_min': 2,
             'numeric_default_max': 2,
@@ -656,7 +657,7 @@ generic_raster_hazard_classes = {
         },
         {
             'key': 'low',
-            'name': tr('low'),
+            'name': tr('Low hazard zone'),
             'description': tr('The lowest hazard classification.'),
             'numeric_default_min': 1,
             'numeric_default_max': 1,
@@ -669,27 +670,79 @@ tsunami_raster_hazard_classes = {
     'key': 'tsunami_raster_hazard_classes',
     'name': tr('Tsunami classes'),
     'description': tr(
-        'This is a binary description for an area. The area is either '
-        '<b>wet</b> (affected by tsunami) or <b>dry</b> (not affected '
-        'by tsunami). This unit does not describe how <b>wet</b> or '
-        '<b>dry</b> an area is.'),
+        'This is a quinary description for an area. The area is either '
+        '<b>dry</b>, <b>low</b>, <b>medium</b>, <b>high</b>, or '
+        '<b>very high</b> for tsunami hazard classification. '
+        'The following description for these classes is provided by Badan '
+        'Geologi based on BNPB Perka 2/2012'),
     'classes': [
         {
-            'key': 'wet',
-            'name': tr('wet'),
-            'description': tr('Water above ground height.'),
-            'numeric_default_min': 1,
-            'numeric_default_max': 9999999999,
-            'optional': True
-        },
-        {
             'key': 'dry',
-            'name': tr('dry'),
+            'name': tr('Dry zone'),
             'description': tr('No water above ground height.'),
             'numeric_default_min': 0,
             'numeric_default_max': (1 - small_number),
             'optional': True
+        },
+        {
+            'key': 'low',
+            'name': tr('Low hazard zone'),
+            'description': tr(
+                'Water above ground height and less than 1.0m. The area is '
+                'potentially hit by a tsunami wave with an inundation depth '
+                'less than 1 m or similar to tsunami intensity scale of V or '
+                'less in (Papadoupulos and Imamura, 2001). Tsunami wave of 1m '
+                'height causes few people to be frightened and flee to higher '
+                'elevation. Felt by most people on large ship, observed from '
+                'shore. Small vessels drift and collide and some turn over. '
+                'Sand is deposited and there is flooding of areas close to '
+                'the shore.'),
+            'numeric_default_min': 0,
+            'numeric_default_max': 1,
+            'optional': True
+        },
+        {
+            'key': 'medium',
+            'name': tr('Medium hazard zone'),
+            'description': tr(
+                'Water above 1.1m and less than 3.0m. The area is potentially '
+                'hit by a tsunami wave with an inundation depth of 1 - 3 m or '
+                'equal to V-VI tsunami intensity scale (Papadoupulos and '
+                'Imamura, 2001). Tsunami wave with a 3m inundation depth '
+                'causes most people frightened and to flee to higher ground. '
+                'Small vessels drift and collide. Damage occurs to some '
+                'wooden houses, while most of them are safe.'),
+            'numeric_default_min': 1,
+            'numeric_default_max': 3,
+            'optional': True
+        },
+        {
+            'key': 'high',
+            'name': tr('High hazard zone'),
+            'description': tr(
+                'Water above 3.1m and less than 8.0m. The area is potentially '
+                'hit by a tsunami wave with an inundation depth > 3 m or '
+                'reach a tsunami intensity scale of VII or even more '
+                '(Papadoupulos and Imamura, 2001). Tsunami wave with 4 m '
+                'inundation depth cause damage to small vessel, a few ships '
+                'are drifted inland, severe damage on most wooden houses. '
+                'Boulders are deposited on shore. If tsunami height reaches '
+                '8 m, it will cause severe damage. Dykes, wave breaker, '
+                'tsunami protection walls and green belts will be washed '
+                'away.'),
+            'numeric_default_min': 3,
+            'numeric_default_max': 8,
+            'optional': True
+        },
+        {
+            'key': 'very high',
+            'name': tr('Very high hazard zone'),
+            'description': tr('Water above 8.0m.'),
+            'numeric_default_min': 8,
+            'numeric_default_max': 9999999999,
+            'optional': True
         }
+
     ]
 }
 
@@ -808,12 +861,15 @@ value_map = {
 multipart_polygon_key = 'multipart_polygon'
 
 # Value mapping for exposure (structure and road)
+# The osm_downloader key is used OSM-Reporter to generate the keywords.
+# See https://github.com/kartoza/osm-reporter/wiki
 road_class_mapping = [
     {
         'key': 'motorway',
         'name': tr('Motorway'),
         'description': tr('A road to solve the traffic and have a fare.'),
-        'string_defaults': ['Motorway']
+        'osm_downloader': ['Motorway or highway', 'Motorway link'],
+        'string_defaults': ['motorway', 'trunk', 'motorway link', 'trunk link']
     },
     {
         'key': 'primary',
@@ -821,7 +877,8 @@ road_class_mapping = [
         'description': tr(
             'A road that service the main transportation with a long distance '
             'travel characteristic and high average velocity.'),
-        'string_defaults': ['Primary']
+        'string_defaults': ['primary', 'primary link', 'primary road'],
+        'osm_downloader': ['Primary road', 'Primary link']
     },
     {
         'key': 'secondary',
@@ -829,7 +886,8 @@ road_class_mapping = [
         'description': tr(
             'A road that service the transportation with a medium distance '
             'travel characteristic and medium average velocity.'),
-        'string_defaults': ['Secondary']
+        'string_defaults': ['secondary', 'secondary link'],
+        'osm_downloader': ['Secondary', 'Secondary link']
     },
     {
         'key': 'local',
@@ -837,7 +895,18 @@ road_class_mapping = [
         'description': tr(
             'A road that service the transportation with short distance '
             'travel and low average velocity.'),
-        'string_defaults': ['Local']
+        'string_defaults': [
+            'local', 'tertiary', 'tertiary', 'tertiary link', 'unclassified'
+        ],
+        'osm_downloader': ['Tertiary', 'Tertiary link']
+    },
+    {
+        'key': 'path',
+        'name': tr('Path'),
+        'description': tr('A road to walk on foot aim.'),
+        'osm_downloader': ['Track', 'Cycleway, footpath, etc.'],
+        'string_defaults': [
+            'path', 'track', 'footway', 'cycleway', 'cycleway, footpath, etc.']
     },
     {
         'key': 'other',
@@ -845,121 +914,140 @@ road_class_mapping = [
         'description': tr(
             'A road that service the transportation with short travel and '
             'low average velocity.'),
-        'string_defaults': ['Other']
-    },
-    {
-        'key': 'path',
-        'name': tr('Path'),
-        'description': tr('A road to walk on foot aim.'),
-        'string_defaults': ['Path', 'Track']
+        'string_defaults': [
+            'other', 'residential', 'service', 'living street', 'pedestrian',
+            'road', 'road, residential, living street, etc.'
+        ],
+        'osm_downloader': ['Road, residential, living street, etc.']
     }
 ]
+# List to keep the order of the keys.
+road_class_order = [item['key'] for item in road_class_mapping]
 
 structure_class_mapping = [
     {
+        'key': 'residential',
+        'name': tr('Residential'),
+        'description': tr(
+            'A structure used to provide shelter for people.'),
+        'string_defaults': ['house', 'dorm', 'residential' 'residence'],
+        'osm_downloader': ['Residential']
+    },
+    {
         'key': 'education',
         'name': tr('Education'),
-        'description': tr('An object that has a service in education sector.'),
+        'description': tr('A structure that provides a service in the '
+                          'education sector.'),
         'string_defaults': [
-            'Kindergarten', 'College', 'School', 'University'
-        ]
+            'kindergarten', 'college', 'school', 'university', 'education',
+            'university/college'
+        ],
+        'osm_downloader': ['School', 'University/College']
     },
     {
         'key': 'health',
         'name': tr('Health'),
         'description': tr(
-            'An object that has a service and facility in health sector.'),
+            'A structure that provides a service or facility in the '
+            'health sector.'),
         'string_defaults': [
-            'Clinic', 'Doctor', 'Hospital', 'Dentist', 'Pharmacy'
-        ]
+            'clinic', 'doctor', 'hospital', 'dentist', 'pharmacy', 'health',
+            'clinic/doctor'
+        ],
+        'osm_downloader': ['Clinic/Doctor', 'Hospital']
     },
     {
-        'key': 'transportation',
-        'name': tr('Transportation'),
+        'key': 'transport',
+        'name': tr('Transport'),
         'description': tr(
-            'An object that has a service and facility in public '
-            'transportation.'),
+            'A structure that provides a service or facility in the '
+            'transport sector.'),
         'string_defaults': [
             'bus stop', 'bus station', 'station', 'ferry terminal',
-            'aerodrome', 'airport', 'terminal']
+            'aerodrome', 'airport', 'terminal', 'transportation'],
+        'osm_downloader': []
     },
     {
         'key': 'place of worship',
         'name': tr('Place of Worship'),
         'description': tr(
-            'An object that used to pray or related to religion activity.'),
+            'A structure or facility that is used for prayer or related '
+            'religion activity.'),
         'string_defaults': [
-            'Place of Worship - Islam',
-            'Place of Worship - Buddhist',
-            'Place of Worship - Christian',
-            'Place of Worship - Hindu',
-            'Place of Worship'
+            'place of worship - islam',
+            'place of worship - buddhist',
+            'place of worship - christian',
+            'place of worship - hindu',
+            'place of worship'
+        ],
+        'osm_downloader': [
+            'Place of Worship - Islam', 'Place of Worship - Unitarian',
+            'Place of Worship - Buddhist', 'Place of Worship'
         ]
     },
     {
         'key': 'government',
         'name': tr('Government'),
         'description': tr(
-            'A building that used to doing government activity in public '
-            'service or the other government activity.'),
-        'string_defaults': ['Government']
+            'A structure or facility that is used to provide a public service '
+            'or other government activity.'),
+        'string_defaults': ['government'],
+        'osm_downloader': ['Government']
     },
     {
-        'key': 'economy',
-        'name': tr('Economy'),
+        'key': 'commercial',
+        'name': tr('Commercial'),
         'description': tr(
-            'A building that used to trade / buy and sell activity or an '
-            'object that has an economy activity.'),
+            'A structure or facility that is used for commercial or '
+            'industrial purposes.'),
         'string_defaults': [
-            'Supermarket', 'shop', 'market', 'tailor', 'warehouse', 'works',
-            'convenience', 'seafood', 'atm', 'mall', 'clothes', 'shoes'
-        ]
+            'supermarket', 'shop', 'market', 'tailor', 'warehouse', 'works',
+            'convenience', 'seafood', 'atm', 'mall', 'clothes', 'shoes',
+            'commercial', 'industrial', 'economy', 'restaurant', 'cafe',
+            'fast food', 'hotel', 'accommodation'
+        ],
+        'osm_downloader': ['Supermarket', 'Commercial', 'Industrial']
     },
     {
-        'key': 'recreation and entertainment',
-        'name': tr('Recreation and Entertainment'),
+        'key': 'recreation',
+        'name': tr('Recreation'),
         'description': tr(
-            'An Object that provide an entertainment or recreation '
-            'facilities.'),
+            'A structure or facility that is used for entertainment, sporting '
+            'or recreation purposes.'),
         'string_defaults': [
-            'amusement arcade', 'cinema', 'zoo', 'museum', 'theatre'
-        ]
-    },
-    {
-        'key': 'sport',
-        'name': tr('Sport'),
-        'description': tr(
-            'An object that has a sport facility and people can use it.'),
-        'string_defaults': ['stadium', 'sport centre', 'pitch']
+            'amusement arcade', 'cinema', 'zoo', 'museum', 'theatre',
+            'recreation and entertainment' 'stadium', 'sport centre', 'pitch',
+            'sports facility', 'sport'
+        ],
+        'osm_downloader': ['Sports Facility']
     },
     {
         'key': 'public facility',
         'name': tr('Public Facility'),
         'description': tr(
-            'An object that provide a service or facility to public like '
-            'toilet, library, convention hall, etc.'),
-        'string_defaults': ['library', 'toiler', 'convention hall', 'prison']
-    },
-    {
-        'key': 'accommodation',
-        'name': tr('Accommodation'),
-        'description': tr(
-            'An object that provide an accommodation / lodging or food '
-            'services.'),
-        'string_defaults': ['restaurant', 'cafe', 'fast food', 'hotel']
-    },
-    {
-        'key': 'residence',
-        'name': tr('Residence'),
-        'description': tr(
-            'An object that people use to live daily.'),
-        'string_defaults': ['house', 'dorm']
+            'A structure or facility that provides a service or facility to '
+            'the public including emergency services.'),
+        'string_defaults': [
+            'library', 'toilet', 'convention hall', 'prison', 'police station',
+            'public facility', 'public building', 'fire station'
+        ],
+        'osm_downloader': ['Fire Station', 'Police Station', 'Public Building']
     },
     {
         'key': 'other',
         'name': tr('Other'),
         'description': tr(
-            'An object that be found in Indonesia, and frequently mapped.'),
-        'string_defaults': ['Animal Boarding', 'Water Well', 'Lighthouse']
+            'Any other structure frequently mapped.'),
+        'string_defaults': [
+            'animal boarding', 'water well', 'lighthouse', 'utility', 'other'
+        ],
+        'osm_downloader': ['Utility']
     }
 ]
+# List to keep the order of the keys.
+structure_class_order = [item['key'] for item in structure_class_mapping]
+
+# Reference for structure_class_mapping. Structure class mapping is based on
+# OSM wiki map features building and Australian building classification
+# standards in @charlotte_morgan head. This list attempts to be generic and
+# not location specific. It should be reviewed. 25 May 2016.

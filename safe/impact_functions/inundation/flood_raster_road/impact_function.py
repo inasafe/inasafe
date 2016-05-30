@@ -25,15 +25,17 @@ from safe.impact_functions.inundation.flood_raster_road\
     .metadata_definitions import FloodRasterRoadsMetadata
 from safe.utilities.i18n import tr
 from safe.utilities.gis import add_output_feature, union_geometries
+from safe.utilities.utilities import reorder_dictionary, main_type
 from safe.storage.vector import Vector
 from safe.common.utilities import get_utm_epsg, unique_filename
 from safe.common.exceptions import GetDataError
-from safe.gis.qgis_raster_tools import clip_raster
+from safe.gis.qgis_raster_tools import align_clip_raster
 from safe.gis.qgis_vector_tools import (
     extent_to_geo_array,
     create_layer)
 from safe.impact_reports.road_exposure_report_mixin import\
     RoadExposureReportMixin
+from safe.definitions import structure_class_order
 
 
 def _raster_to_vector_cells(
@@ -252,8 +254,11 @@ class FloodRasterRoadsFunction(
         """
 
         target_field = self.target_field
+
         # Get parameters from layer's keywords
         road_class_field = self.exposure.keyword('road_class_field')
+        exposure_value_mapping = self.exposure.keyword('value_mapping')
+
         # Get parameters from IF parameter
         threshold_min = self.parameters['min threshold'].value
         threshold_max = self.parameters['max threshold'].value
@@ -276,58 +281,8 @@ class FloodRasterRoadsFunction(
             viewport_extent = extent_to_geo_array(
                 QgsRectangle(*self.requested_extent), geo_crs, hazard_crs)
 
-        # Align raster extent and viewport
-        # assuming they are both in the same projection
-        raster_extent = self.hazard.layer.dataProvider().extent()
-        clip_xmin = raster_extent.xMinimum()
-        # clip_xmax = raster_extent.xMaximum()
-        clip_ymin = raster_extent.yMinimum()
-        # clip_ymax = raster_extent.yMaximum()
-        if viewport_extent[0] > clip_xmin:
-            clip_xmin = viewport_extent[0]
-        if viewport_extent[1] > clip_ymin:
-            clip_ymin = viewport_extent[1]
-        # TODO: Why have these two clauses when they are not used?
-        # Commenting out for now.
-        # if viewport_extent[2] < clip_xmax:
-        #     clip_xmax = viewport_extent[2]
-        # if viewport_extent[3] < clip_ymax:
-        #     clip_ymax = viewport_extent[3]
-
-        height = ((viewport_extent[3] - viewport_extent[1]) /
-                  self.hazard.layer.rasterUnitsPerPixelY())
-        height = int(height)
-        width = ((viewport_extent[2] - viewport_extent[0]) /
-                 self.hazard.layer.rasterUnitsPerPixelX())
-        width = int(width)
-
-        raster_extent = self.hazard.layer.dataProvider().extent()
-        xmin = raster_extent.xMinimum()
-        xmax = raster_extent.xMaximum()
-        ymin = raster_extent.yMinimum()
-        ymax = raster_extent.yMaximum()
-
-        x_delta = (xmax - xmin) / self.hazard.layer.width()
-        x = xmin
-        for i in range(self.hazard.layer.width()):
-            if abs(x - clip_xmin) < x_delta:
-                # We have found the aligned raster boundary
-                break
-            x += x_delta
-            _ = i
-
-        y_delta = (ymax - ymin) / self.hazard.layer.height()
-        y = ymin
-        for i in range(self.hazard.layer.width()):
-            if abs(y - clip_ymin) < y_delta:
-                # We have found the aligned raster boundary
-                break
-            y += y_delta
-        clip_extent = [x, y, x + width * x_delta, y + height * y_delta]
-
         # Clip hazard raster
-        small_raster = clip_raster(
-            self.hazard.layer, width, height, QgsRectangle(*clip_extent))
+        small_raster = align_clip_raster(self.hazard.layer, viewport_extent)
 
         # Filter geometry and data using the extent
         ct = QgsCoordinateTransform(
@@ -383,34 +338,33 @@ class FloodRasterRoadsFunction(
         output_crs = QgsCoordinateReferenceSystem(epsg)
         transform = QgsCoordinateTransform(
             self.exposure.layer.crs(), output_crs)
-        flooded_keyword = tr('Flooded in the threshold (m)')
-        self.affected_road_categories = [flooded_keyword]
-        self.affected_road_lengths = OrderedDict([
-            (flooded_keyword, {})])
-        self.road_lengths = OrderedDict()
+
+        classes = [tr('Flooded in the threshold (m)')]
+        self.init_report_var(classes)
 
         if line_layer.featureCount() < 1:
             raise ZeroImpactException()
 
         roads_data = line_layer.getFeatures()
         road_type_field_index = line_layer.fieldNameIndex(road_class_field)
+
         for road in roads_data:
             attributes = road.attributes()
-            road_type = attributes[road_type_field_index]
-            if road_type.__class__.__name__ == 'QPyNullVariant':
-                road_type = tr('Other')
+
+            usage = attributes[road_type_field_index]
+            usage = main_type(usage, exposure_value_mapping)
+
             geom = road.geometry()
             geom.transform(transform)
             length = geom.length()
 
-            if road_type not in self.road_lengths:
-                self.affected_road_lengths[flooded_keyword][road_type] = 0
-                self.road_lengths[road_type] = 0
-
-            self.road_lengths[road_type] += length
+            affected = False
             if attributes[target_field_index] == 1:
-                self.affected_road_lengths[
-                    flooded_keyword][road_type] += length
+                affected = True
+
+            self.classify_feature(classes[0], usage, length, affected)
+
+        self.reorder_dictionaries()
 
         # For printing map purpose
         map_title = tr('Roads inundated')
