@@ -107,7 +107,7 @@ class AgePostprocessor(AbstractPopulationPostprocessor):
         result = self.impact_total
         try:
             result = int(round(result))
-        except ValueError:
+        except (ValueError, TypeError):
             result = self.NO_DATA_TEXT
         self._append_result(name, result)
 
@@ -119,10 +119,10 @@ class AgePostprocessor(AbstractPopulationPostprocessor):
 
         """
         name = tr('Youth count (affected)')
-        result = self.impact_total * self.youth_ratio
         try:
+            result = self.impact_total * self.youth_ratio
             result = int(round(result))
-        except ValueError:
+        except (ValueError, TypeError):
             result = self.NO_DATA_TEXT
         self._append_result(name, result)
 
@@ -134,10 +134,10 @@ class AgePostprocessor(AbstractPopulationPostprocessor):
 
         """
         name = tr('Adult count (affected)')
-        result = self.impact_total * self.adult_ratio
         try:
+            result = self.impact_total * self.adult_ratio
             result = int(round(result))
-        except ValueError:
+        except (ValueError, TypeError):
             result = self.NO_DATA_TEXT
         self._append_result(name, result)
 
@@ -155,9 +155,9 @@ class AgePostprocessor(AbstractPopulationPostprocessor):
             self._append_result(name, self.NO_DATA_TEXT)
             return
 
-        result = self.impact_total * self.elderly_ratio
         try:
+            result = self.impact_total * self.elderly_ratio
             result = int(round(result))
-        except ValueError:
+        except (ValueError, TypeError):
             result = self.NO_DATA_TEXT
         self._append_result(name, result)
