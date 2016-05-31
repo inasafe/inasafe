@@ -221,7 +221,7 @@ class TsunamiRasterLandcoverFunction(ContinuousRHClassifiedVE):
                 border_color='#000000',
                 transparency=0),
             dict(
-                label=self.hazard_classes[1] + ': <0 - %.1f m' % low_max,
+                label=self.hazard_classes[1] + ': >0 - %.1f m' % low_max,
                 value=self.hazard_classes[1],
                 colour='#FFFF00',
                 border_color='#000000',

@@ -182,7 +182,7 @@ class TsunamiRasterBuildingFunction(
                 size=1
             ),
             dict(
-                label=self.hazard_classes[1] + ': 0.1 - %.1f m' % low_max,
+                label=self.hazard_classes[1] + ': >0 - %.1f m' % low_max,
                 value=1,
                 colour='#FFFF00',
                 transparency=0,
