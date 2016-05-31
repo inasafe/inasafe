@@ -86,12 +86,13 @@ class AshRasterLandcoverFunction(
         exposure = self.exposure.layer
 
         # Thresholds for tsunami hazard zone breakdown.
-        unit_abbrev = self.parameters['very_low_threshold'].unit.abbreviation
-        unaffected_max = self.parameters['unaffected_threshold'].value
-        very_low_max = self.parameters['very_low_threshold'].value
-        low_max = self.parameters['low_threshold'].value
-        medium_max = self.parameters['moderate_threshold'].value
-        high_max = self.parameters['high_threshold'].value
+        group_parameters = self.parameters['group_threshold']
+        unit_abbrev = group_parameters.value_map['very_low_threshold'].unit.abbreviation
+        unaffected_max = group_parameters.value_map['unaffected_threshold'].value
+        very_low_max = group_parameters.value_map['very_low_threshold'].value
+        low_max = group_parameters.value_map['low_threshold'].value
+        medium_max = group_parameters.value_map['moderate_threshold'].value
+        high_max = group_parameters.value_map['high_threshold'].value
         ranges = ranges_according_thresholds_list(
             [unaffected_max, very_low_max, low_max,
              medium_max, high_max, None])

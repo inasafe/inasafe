@@ -14,7 +14,7 @@ from safe.impact_functions.unit_definitions import \
     parameter_unit_centimetres
 from safe_extras.parameters.float_parameter import FloatParameter
 from safe.utilities.i18n import tr
-
+from safe_extras.parameters.group_parameter import GroupParameter
 
 __author__ = 'Rizky Maulana Nugraha <lana.pcfre@gmail.com>'
 __date__ = '5/24/16'
@@ -144,4 +144,74 @@ def high_threshold():
         'thickness of ash is more than Moderate Hazard Zone Threshold and '
         'less than High Hazard Zone Threshold. If it is more than High Hazard '
         'Threshold then it was considered as Very High Hazard Zone')
+    return field
+
+
+def threshold_group_parameter():
+    """Generate group parameter of threshold to define constraints.
+
+    :return: a group parameter
+    :rtype: GroupParameter
+    """
+    field = GroupParameter()
+    field.name = 'Hazard Threshold'
+    field.is_required = True
+    field.help_text = tr('Define thresholds for Ash hazard zones.')
+    field.description = tr('Define thresholds for Ash hazard zones.')
+    unaffected = unaffected_threshold()
+    very_low = very_low_threshold()
+    low = low_threshold()
+    moderate = moderate_threshold()
+    high = high_threshold()
+    field.value_map = {
+        'unaffected_threshold': unaffected,
+        'very_low_threshold': very_low,
+        'low_threshold': low,
+        'moderate_threshold': moderate,
+        'high_threshold': high
+    }
+    field.value = [
+        unaffected,
+        very_low,
+        low,
+        moderate,
+        high
+    ]
+
+    def threshold_validator(param):
+        """Inspect the value of the parameter
+
+        :param param: FloatParameter in validation
+        :type param: FloatParameter
+        :return: True if valid
+        """
+        valid = True
+        message = None
+
+        if ((param == unaffected and param.value >= very_low.value)
+            or (param == very_low and param.value < unaffected.value)):
+            message = tr(
+                'Unaffected threshold must less than Very Low threshold')
+            valid = False
+        if ((param == very_low and param.value >= low.value)
+            or (param == low and param.value < very_low.value)):
+            message = tr(
+                'Very Low threshold must less than Low threshold')
+            valid = False
+        if ((param == low and param.value >= moderate.value)
+            or (param == moderate and param.value < low.value)):
+            message = tr(
+                'Low threshold must less than Moderate threshold')
+            valid = False
+        if ((param == moderate and param.value >= high.value)
+            or (param == high and param.value < moderate.value)):
+            message = tr(
+                'Moderate threshold must less than High threshold')
+            valid = False
+
+        if not valid:
+            raise ValueError(message)
+        return valid
+
+    field.custom_validator = threshold_validator
     return field

@@ -25,8 +25,8 @@ from safe.impact_functions.impact_function_metadata import \
 from safe.utilities.i18n import tr
 from safe.impact_functions.ash.ash_raster_landcover.parameter_definitions \
     import (
-        moderate_threshold, low_threshold, very_low_threshold,
-        high_threshold, unaffected_threshold)
+    moderate_threshold, low_threshold, very_low_threshold,
+    high_threshold, unaffected_threshold, threshold_group_parameter)
 
 __author__ = 'Rizky Maulana Nugraha <lana.pcfre@gmail.com>'
 __date__ = '5/24/16'
@@ -94,11 +94,12 @@ class AshRasterHazardLandCoverFunctionMetadata(ImpactFunctionMetadata):
             },
             'parameters': OrderedDict(
                 [
-                    ('unaffected_threshold', unaffected_threshold()),
-                    ('very_low_threshold', very_low_threshold()),
-                    ('low_threshold', low_threshold()),
-                    ('moderate_threshold', moderate_threshold()),
-                    ('high_threshold', high_threshold())
+                    # ('unaffected_threshold', unaffected_threshold()),
+                    # ('very_low_threshold', very_low_threshold()),
+                    # ('low_threshold', low_threshold()),
+                    # ('moderate_threshold', moderate_threshold()),
+                    # ('high_threshold', high_threshold())
+                    ('group_threshold', threshold_group_parameter())
                 ])
         }
         return dict_meta
