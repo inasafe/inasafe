@@ -298,7 +298,7 @@ class TsunamiRasterRoadsFunction(
             tr('Very high tsunami hazard zone is defined as inundation depth '
                'is more than %.1f %s') % (
                 high_max.value, high_max.unit.abbreviation),
-            tr('Roads are closed if they are in low, moderate, high, or very '
+            tr('Roads are closed if they are in low, medium, high, or very '
                'high tsunami hazard zone.'),
             tr('Roads are opened if they are in dry zone.')
         ]

@@ -854,17 +854,17 @@
         <translation>Perhitungan statistik berdasarkan jenis kelamin.</translation>
     </message>
     <message>
-        <location filename="gender_postprocessor.py" line="96"/>
+        <location filename="gender_postprocessor.py" line="99"/>
         <source>Female count (affected)</source>
         <translation>Jumlah penduduk wanita (terdampak)</translation>
     </message>
     <message>
-        <location filename="gender_postprocessor.py" line="111"/>
+        <location filename="gender_postprocessor.py" line="117"/>
         <source>Weekly hygiene packs</source>
         <translation>Paket kebersihan mingguan</translation>
     </message>
     <message>
-        <location filename="gender_postprocessor.py" line="133"/>
+        <location filename="gender_postprocessor.py" line="142"/>
         <source>Additional weekly rice kg for pregnant and lactating women</source>
         <translation>Tambahan kilogram beras mingguan untuk ibu hamil dan menyusui</translation>
     </message>
@@ -5185,11 +5185,6 @@ Unsur-unsur tersebut adalah:</translation>
         <translation>Wilayah ancaman tsunami rendah didefinisikan dengan kedalaman genangan lebih dari 0 %s tetapi kurang dari %.1f %s</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="94"/>
-        <source>Moderate tsunami hazard zone is defined as inundation depth is more than %.1f %s but less than %.1f %s</source>
-        <translation>Wilayah ancaman tsunami menengah didefinisikan dengan kedalaman genangan lebih dari %.1f %s tetapi kurang dari %.1f %s</translation>
-    </message>
-    <message>
         <location filename="impact_function.py" line="293"/>
         <source>High tsunami hazard zone is defined as inundation depth is more than %.1f %s but less than %.1f %s</source>
         <translation>Wilayah ancaman tsunami tinggi didefinisikan dengan kedalaman genangan lebih dari %.1f %s tetapi kurang dari %.1f %s</translation>
@@ -5198,11 +5193,6 @@ Unsur-unsur tersebut adalah:</translation>
         <location filename="impact_function.py" line="299"/>
         <source>Very high tsunami hazard zone is defined as inundation depth is more than %.1f %s</source>
         <translation>Wilayah ancaman tsunami sangat tinggi didefinisikan dengan kedalaman genangan lebih dari %.1f %s</translation>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="94"/>
-        <source>Buildings are closed if they are in low, moderate, high, or very high tsunami hazard zone.</source>
-        <translation>Bangunan ditutup apabila berada di wilayah ancaman tsunami rendah, menengah, tinggi, atau sangat tinggi.</translation>
     </message>
     <message>
         <location filename="impact_function.py" line="96"/>
@@ -5273,16 +5263,6 @@ Unsur-unsur tersebut adalah:</translation>
         <location filename="parameter_definitions.py" line="44"/>
         <source>The threshold of hazard categorized as Low Hazard Zone in meter. A zone is categorized as Low Hazard Zone if the depth of tsunami inundation is less than Low Hazard Zone Threshold.</source>
         <translation>Ambang batas ancaman yang dikategorikan sebagai Wilayah Ancaman Rendah dalam meter. Sebuah wilayah dikategorikan sebagai Wilayah Ancaman Rendah jika kedalaman dari genangan tsunami kurang dari Ambang Batas Wilayah Ancaman Rendah.</translation>
-    </message>
-    <message>
-        <location filename="parameter_definitions.py" line="67"/>
-        <source>Moderate Hazard Zone threshold.</source>
-        <translation>Ambang Batas Wilayah Ancaman Menengah.</translation>
-    </message>
-    <message>
-        <location filename="parameter_definitions.py" line="68"/>
-        <source>The threshold of hazard categorized as Moderate Hazard Zone in meter. A zone is categorized as Medium Hazard Zone if the depth of tsunami inundation is more than Low Hazard Zone Threshold and less than Medium Hazard Zone Threshold.</source>
-        <translation>Ambang batas ancaman yang dikategorikan sebagai Wilayah Ancaman Menengah dalam meter. Sebuah wilayah dikategorikan sebagai Wilayah Ancaman Menengah jika kedalaman dari genangan tsunami lebih dari Ambang Batas Wilayah Ancaman Rendah dan kurang dari Ambang Batas Wilayah Ancaman Menengah.</translation>
     </message>
     <message>
         <location filename="parameter_definitions.py" line="92"/>
@@ -5920,11 +5900,6 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
         <translation>Ambang Batas Wilayah Ancaman Rendah</translation>
     </message>
     <message>
-        <location filename="parameter_definitions.py" line="59"/>
-        <source>Moderate Hazard Zone Threshold</source>
-        <translation>Ambang Batas Wilayah Ancaman Menengah.</translation>
-    </message>
-    <message>
         <location filename="parameter_definitions.py" line="84"/>
         <source>High Hazard Zone Threshold</source>
         <translation>Ambang Batas Wilayah Ancaman Tinggi.</translation>
@@ -5943,11 +5918,6 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
         <location filename="metadata_definitions.py" line="67"/>
         <source>The hazard layer must be a tsunami raster layer.</source>
         <translation>Lapisan ancaman harus berupa lapisan raster tsunami</translation>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="301"/>
-        <source>Roads are closed if they are in low, moderate, high, or very high tsunami hazard zone.</source>
-        <translation>Jalan ditutup apabila berada di wilayah ancaman tsunami rendah, menengah, tinggi, atau sangat tinggi.</translation>
     </message>
     <message>
         <location filename="impact_function.py" line="303"/>
@@ -6329,6 +6299,31 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
         <location filename="definitions.py" line="722"/>
         <source>Water above 3.1m and less than 8.0m. The area is potentially hit by a tsunami wave with an inundation depth &gt; 3 m or reach a tsunami intensity scale of VII or even more (Papadoupulos and Imamura, 2001). Tsunami wave with 4 m inundation depth cause damage to small vessel, a few ships are drifted inland, severe damage on most wooden houses. Boulders are deposited on shore. If tsunami height reaches 8 m, it will cause severe damage. Dykes, wave breaker, tsunami protection walls and green belts will be washed away.</source>
         <translation>Air di atas 3.1m dan kurang dari 8.0m. Wilayah berpotensi diterjang gelombang tsunami dengan kedalaman &gt;  3 m atau mencapai VII atau bahkan lebih skala intensitas tsunami (Papadoupulos dan Imamura, 2001). Gelombang tsunami dengan kedalaman genangan 4 m menyebabkan kerusakan pada kapal kecil, dan beberapa kapal besar hanyut ke daratan, kerusakan parah pada rumah kayu. Batu besar terhampar di pantai. Jika ketinggian tsunami mencapai 8  akan menyebabkan kerusakan parah. Tanggul, pemecah gelombang, dinding pelindung tsunami dan sabuk hijau akan hanyut.</translation>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="94"/>
+        <source>Buildings are closed if they are in low, medium, high, or very high tsunami hazard zone.</source>
+        <translation>Bangunan ditutup apabila berada di wilayah ancaman tsunami rendah, menengah, tinggi, atau sangat tinggi.</translation>
+    </message>
+    <message>
+        <location filename="parameter_definitions.py" line="59"/>
+        <source>Medium Hazard Zone Threshold</source>
+        <translation>Ambang Batas Wilayah Ancaman Menengah.</translation>
+    </message>
+    <message>
+        <location filename="parameter_definitions.py" line="67"/>
+        <source>Medium Hazard Zone threshold.</source>
+        <translation>Ambang Batas Wilayah Ancaman Menengah.</translation>
+    </message>
+    <message>
+        <location filename="parameter_definitions.py" line="68"/>
+        <source>The threshold of hazard categorized as Medium Hazard Zone in meter. A zone is categorized as Medium Hazard Zone if the depth of tsunami inundation is more than Low Hazard Zone Threshold and less than Medium Hazard Zone Threshold.</source>
+        <translation>Ambang batas ancaman yang dikategorikan sebagai Wilayah Ancaman Menengah dalam meter. Sebuah wilayah dikategorikan sebagai Wilayah Ancaman Menengah jika kedalaman dari genangan tsunami lebih dari Ambang Batas Wilayah Ancaman Rendah dan kurang dari Ambang Batas Wilayah Ancaman Menengah.</translation>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="301"/>
+        <source>Roads are closed if they are in low, medium, high, or very high tsunami hazard zone.</source>
+        <translation>Bangunan ditutup apabila berada di wilayah ancaman tsunami rendah, menengah, tinggi, atau sangat tinggi.</translation>
     </message>
 </context>
 <context>
@@ -6886,7 +6881,7 @@ p, li { white-space: pre-wrap; }
         <translation>Area keseluruhan</translation>
     </message>
     <message>
-        <location filename="dock.py" line="2140"/>
+        <location filename="dock.py" line="2139"/>
         <source>InaSAFE</source>
         <translation>InaSAFE</translation>
     </message>
@@ -6896,32 +6891,32 @@ p, li { white-space: pre-wrap; }
         <translation>Anda mungkin tidak memiliki memori bebas yang cukup untuk menjalankan analisis. Lihatlah panel pesan (dock) untuk informasi lebih lanjut. Apakah Anda yakin untuk melanjutkan?</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1802"/>
+        <location filename="dock.py" line="1801"/>
         <source>Please select a valid impact layer before trying to print.</source>
         <translation>Silakan pilih layer dampak yang valid sebelum mencoba untuk mencetaknya.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1951"/>
+        <location filename="dock.py" line="1950"/>
         <source>Map Creator</source>
         <translation>Pembuat Peta</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1852"/>
+        <location filename="dock.py" line="1851"/>
         <source>Preparing map and report</source>
         <translation>Mempersiapkan peta dan laporan</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1927"/>
+        <location filename="dock.py" line="1926"/>
         <source>Write to PDF</source>
         <translation>Membuat dalam format PDF</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1927"/>
+        <location filename="dock.py" line="1926"/>
         <source>Pdf File (*.pdf)</source>
         <translation>Dokumen PDF (*.pdf)</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1936"/>
+        <location filename="dock.py" line="1935"/>
         <source>Printing cancelled!</source>
         <translation>Pencetakan dibatalkan!</translation>
     </message>
@@ -6966,17 +6961,17 @@ p, li { white-space: pre-wrap; }
         <translation>Hasil Analisis</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1622"/>
+        <location filename="dock.py" line="1621"/>
         <source>Layer keywords missing:</source>
         <translation>Kata kunci layer hilang:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1951"/>
+        <location filename="dock.py" line="1950"/>
         <source>Your PDF was created....opening using the default PDF viewer on your system. The generated pdfs were saved as:</source>
         <translation>PDF Anda telah selesai dibuat....buka dengan menggunakan pembaca berkas PDF pada sistem komputer Anda. Berkas PDF Anda disimpan di:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1951"/>
+        <location filename="dock.py" line="1950"/>
         <source>and</source>
         <translation>dan</translation>
     </message>
@@ -6986,12 +6981,12 @@ p, li { white-space: pre-wrap; }
         <translation>Layer dampak %s bukan berupa layer raster ataupun vektor</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1812"/>
+        <location filename="dock.py" line="1811"/>
         <source>Report generation cancelled!</source>
         <translation>Pembuatan laporan dibatalkan!</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1920"/>
+        <location filename="dock.py" line="1919"/>
         <source>Keyword &quot;map_title&quot; not found.</source>
         <translation>Kata kunci &quot;map_title&quot; tidak ditemukan.</translation>
     </message>
@@ -7026,12 +7021,12 @@ p, li { white-space: pre-wrap; }
         <translation>di bawah ini.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1884"/>
+        <location filename="dock.py" line="1883"/>
         <source>Template is missing some elements</source>
         <translation>Template kehilangan beberapa element</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1887"/>
+        <location filename="dock.py" line="1886"/>
         <source>The composer template you are printing to is missing these elements: %s. Do you still want to continue</source>
         <translation>Template komposer yang akan Anda cetak kehilangan bagian-bagian berikut: %s. Apakah anda masih ingin melanjutkan</translation>
     </message>
@@ -7041,7 +7036,7 @@ p, li { white-space: pre-wrap; }
         <translation>InaSAFE %s</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1841"/>
+        <location filename="dock.py" line="1840"/>
         <source>Please select a valid template before printing. The template you choose does not exist.</source>
         <translation>Silahakan pilih template yang sah sebelum mencetak. Template yang Anda pilih tidak ada.</translation>
     </message>
@@ -7061,7 +7056,7 @@ p, li { white-space: pre-wrap; }
         <translation>di toolbar.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1661"/>
+        <location filename="dock.py" line="1660"/>
         <source> icon in the toolbar.</source>
         <translation>di toolbar.</translation>
     </message>
@@ -7121,37 +7116,37 @@ p, li { white-space: pre-wrap; }
         <translation>Masalah ditemukan karena lapisan agregasi tidak memiliki kata kunci yang sesuai untuk lapisan agregasi.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1659"/>
+        <location filename="dock.py" line="1658"/>
         <source>Layer Keyword&apos;s Version Mismatch:</source>
         <translation>Ketidakcocokan Versi Kata kunci Lapisan:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1661"/>
+        <location filename="dock.py" line="1660"/>
         <source>Your layer&apos;s keyword&apos;s version (%s) does not match with your InaSAFE version (%s). If you wish to use it as an exposure, hazard, or aggregation layer in an analysis, please use the keyword wizard to update the keywords. You can open the wizard by clicking on the </source>
         <translation>Versi kata kunci lapisan Anda (%s) tidak cocok dengan versi InaSAFE (%s) Anda. Apabila Anda menginginkan untuk menggunakan lapisan ini sebagai lapisan paparan, ancaman, atau agregasi pada analisis, mohon gunakan wizard kata kunci untuk memperbarui kata kunci. Anda dapat membuka wizard dengan melakukan klik pada</translation>
     </message>
     <message>
-        <location filename="dock.py" line="2112"/>
+        <location filename="dock.py" line="2111"/>
         <source>The hazard layer, exposure layer and your defined analysis area extents all overlap. Press the run button below to continue with the analysis.</source>
         <translation>Lapisan ancaman, paparan dan wilayah luasan analisis yang Anda tetapkan telah tumpang tindih. Tekan tombol jalankan di bawah untuk melanjutkan analisis.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="2117"/>
+        <location filename="dock.py" line="2116"/>
         <source>Analysis environment ready</source>
         <translation>Lingkungan analisis telah siap</translation>
     </message>
     <message>
-        <location filename="dock.py" line="2117"/>
+        <location filename="dock.py" line="2116"/>
         <source>More info ...</source>
         <translation>Info lebih lanjut ...</translation>
     </message>
     <message>
-        <location filename="dock.py" line="2140"/>
+        <location filename="dock.py" line="2139"/>
         <source>No overlapping extents</source>
         <translation>Tidak ada luasan perpotongan</translation>
     </message>
     <message>
-        <location filename="dock.py" line="2153"/>
+        <location filename="dock.py" line="2152"/>
         <source>Insufficient overlap</source>
         <translation>Perpotongan tidak mencukupi</translation>
     </message>
@@ -7171,12 +7166,12 @@ p, li { white-space: pre-wrap; }
         <translation>Kata kunci keterpaparan</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1624"/>
+        <location filename="dock.py" line="1623"/>
         <source>No keywords have been defined for this layer yet or there is an issue with the currently defined keywords and they need to be reviewed. If you wish to use this layer as an exposure, hazard, or aggregation layer in an analysis, please use the keyword wizard to update the keywords. You can open the wizard by clicking on the </source>
         <translation>Tidak ada kata kunci yang ditetapkan untuk lapisan ini pada saat ini atau ada masalah dengan kata kunci yang didefinisikan sekarang dan perlu dicek. Jika Anda ingin menggunakannya sebagai lapisan paparan, ancaman, atau agregasi pada analisis, tolong gunakan wizard kata kunci untuk memperbarui kata kunci. Anda dapat membuka wizard dengan melakukan klik pada</translation>
     </message>
     <message>
-        <location filename="dock.py" line="2147"/>
+        <location filename="dock.py" line="2146"/>
         <source>You can now proceed to run your analysis by clicking the </source>
         <translation>Anda dapat melanjutkan menjalankan analisis Anda dengan menekan</translation>
     </message>

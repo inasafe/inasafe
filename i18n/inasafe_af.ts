@@ -853,17 +853,17 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="gender_postprocessor.py" line="96"/>
+        <location filename="gender_postprocessor.py" line="99"/>
         <source>Female count (affected)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="gender_postprocessor.py" line="111"/>
+        <location filename="gender_postprocessor.py" line="117"/>
         <source>Weekly hygiene packs</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="gender_postprocessor.py" line="133"/>
+        <location filename="gender_postprocessor.py" line="142"/>
         <source>Additional weekly rice kg for pregnant and lactating women</source>
         <translation type="unfinished"/>
     </message>
@@ -5170,11 +5170,6 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="94"/>
-        <source>Moderate tsunami hazard zone is defined as inundation depth is more than %.1f %s but less than %.1f %s</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="impact_function.py" line="293"/>
         <source>High tsunami hazard zone is defined as inundation depth is more than %.1f %s but less than %.1f %s</source>
         <translation type="unfinished"/>
@@ -5182,11 +5177,6 @@
     <message>
         <location filename="impact_function.py" line="299"/>
         <source>Very high tsunami hazard zone is defined as inundation depth is more than %.1f %s</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="94"/>
-        <source>Buildings are closed if they are in low, moderate, high, or very high tsunami hazard zone.</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -5257,16 +5247,6 @@
     <message>
         <location filename="parameter_definitions.py" line="44"/>
         <source>The threshold of hazard categorized as Low Hazard Zone in meter. A zone is categorized as Low Hazard Zone if the depth of tsunami inundation is less than Low Hazard Zone Threshold.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="parameter_definitions.py" line="67"/>
-        <source>Moderate Hazard Zone threshold.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="parameter_definitions.py" line="68"/>
-        <source>The threshold of hazard categorized as Moderate Hazard Zone in meter. A zone is categorized as Medium Hazard Zone if the depth of tsunami inundation is more than Low Hazard Zone Threshold and less than Medium Hazard Zone Threshold.</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -5903,11 +5883,6 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="parameter_definitions.py" line="59"/>
-        <source>Moderate Hazard Zone Threshold</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="parameter_definitions.py" line="84"/>
         <source>High Hazard Zone Threshold</source>
         <translation type="unfinished"/>
@@ -5925,11 +5900,6 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
     <message>
         <location filename="metadata_definitions.py" line="67"/>
         <source>The hazard layer must be a tsunami raster layer.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="301"/>
-        <source>Roads are closed if they are in low, moderate, high, or very high tsunami hazard zone.</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -6311,6 +6281,31 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
     <message>
         <location filename="definitions.py" line="722"/>
         <source>Water above 3.1m and less than 8.0m. The area is potentially hit by a tsunami wave with an inundation depth &gt; 3 m or reach a tsunami intensity scale of VII or even more (Papadoupulos and Imamura, 2001). Tsunami wave with 4 m inundation depth cause damage to small vessel, a few ships are drifted inland, severe damage on most wooden houses. Boulders are deposited on shore. If tsunami height reaches 8 m, it will cause severe damage. Dykes, wave breaker, tsunami protection walls and green belts will be washed away.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="94"/>
+        <source>Buildings are closed if they are in low, medium, high, or very high tsunami hazard zone.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="parameter_definitions.py" line="59"/>
+        <source>Medium Hazard Zone Threshold</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="parameter_definitions.py" line="67"/>
+        <source>Medium Hazard Zone threshold.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="parameter_definitions.py" line="68"/>
+        <source>The threshold of hazard categorized as Medium Hazard Zone in meter. A zone is categorized as Medium Hazard Zone if the depth of tsunami inundation is more than Low Hazard Zone Threshold and less than Medium Hazard Zone Threshold.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="301"/>
+        <source>Roads are closed if they are in low, medium, high, or very high tsunami hazard zone.</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -6836,7 +6831,7 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="2140"/>
+        <location filename="dock.py" line="2139"/>
         <source>InaSAFE</source>
         <translation type="unfinished"/>
     </message>
@@ -6846,32 +6841,32 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1802"/>
+        <location filename="dock.py" line="1801"/>
         <source>Please select a valid impact layer before trying to print.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1951"/>
+        <location filename="dock.py" line="1950"/>
         <source>Map Creator</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1852"/>
+        <location filename="dock.py" line="1851"/>
         <source>Preparing map and report</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1927"/>
+        <location filename="dock.py" line="1926"/>
         <source>Write to PDF</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1927"/>
+        <location filename="dock.py" line="1926"/>
         <source>Pdf File (*.pdf)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1936"/>
+        <location filename="dock.py" line="1935"/>
         <source>Printing cancelled!</source>
         <translation type="unfinished"/>
     </message>
@@ -6916,17 +6911,17 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1622"/>
+        <location filename="dock.py" line="1621"/>
         <source>Layer keywords missing:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1951"/>
+        <location filename="dock.py" line="1950"/>
         <source>Your PDF was created....opening using the default PDF viewer on your system. The generated pdfs were saved as:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1951"/>
+        <location filename="dock.py" line="1950"/>
         <source>and</source>
         <translation type="unfinished"/>
     </message>
@@ -6936,12 +6931,12 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1812"/>
+        <location filename="dock.py" line="1811"/>
         <source>Report generation cancelled!</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1920"/>
+        <location filename="dock.py" line="1919"/>
         <source>Keyword &quot;map_title&quot; not found.</source>
         <translation type="unfinished"/>
     </message>
@@ -6976,12 +6971,12 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1884"/>
+        <location filename="dock.py" line="1883"/>
         <source>Template is missing some elements</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1887"/>
+        <location filename="dock.py" line="1886"/>
         <source>The composer template you are printing to is missing these elements: %s. Do you still want to continue</source>
         <translation type="unfinished"/>
     </message>
@@ -6991,7 +6986,7 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1841"/>
+        <location filename="dock.py" line="1840"/>
         <source>Please select a valid template before printing. The template you choose does not exist.</source>
         <translation type="unfinished"/>
     </message>
@@ -7011,7 +7006,7 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1661"/>
+        <location filename="dock.py" line="1660"/>
         <source> icon in the toolbar.</source>
         <translation type="unfinished"/>
     </message>
@@ -7071,37 +7066,37 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1659"/>
+        <location filename="dock.py" line="1658"/>
         <source>Layer Keyword&apos;s Version Mismatch:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1661"/>
+        <location filename="dock.py" line="1660"/>
         <source>Your layer&apos;s keyword&apos;s version (%s) does not match with your InaSAFE version (%s). If you wish to use it as an exposure, hazard, or aggregation layer in an analysis, please use the keyword wizard to update the keywords. You can open the wizard by clicking on the </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="2112"/>
+        <location filename="dock.py" line="2111"/>
         <source>The hazard layer, exposure layer and your defined analysis area extents all overlap. Press the run button below to continue with the analysis.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="2117"/>
+        <location filename="dock.py" line="2116"/>
         <source>Analysis environment ready</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="2117"/>
+        <location filename="dock.py" line="2116"/>
         <source>More info ...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="2140"/>
+        <location filename="dock.py" line="2139"/>
         <source>No overlapping extents</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="2153"/>
+        <location filename="dock.py" line="2152"/>
         <source>Insufficient overlap</source>
         <translation type="unfinished"/>
     </message>
@@ -7121,12 +7116,12 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="1624"/>
+        <location filename="dock.py" line="1623"/>
         <source>No keywords have been defined for this layer yet or there is an issue with the currently defined keywords and they need to be reviewed. If you wish to use this layer as an exposure, hazard, or aggregation layer in an analysis, please use the keyword wizard to update the keywords. You can open the wizard by clicking on the </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="dock.py" line="2147"/>
+        <location filename="dock.py" line="2146"/>
         <source>You can now proceed to run your analysis by clicking the </source>
         <translation type="unfinished"/>
     </message>
