@@ -44,12 +44,15 @@ from safe.gis.qgis_vector_tools import (
     create_layer)
 from safe.impact_reports.road_exposure_report_mixin import\
     RoadExposureReportMixin
+import logging
 
 __author__ = 'etiennetrimaille'
 __project_name__ = 'inasafe-dev'
 __filename__ = 'impact_function.py'
 __date__ = '11/03/16'
 __copyright__ = 'etienne@kartoza.com'
+
+LOGGER = logging.getLogger('InaSAFE')
 
 
 def _raster_to_vector_cells(raster, ranges, output_crs):
@@ -94,12 +97,27 @@ def _raster_to_vector_cells(raster, ranges, output_crs):
     ct = QgsCoordinateTransform(raster.crs(), output_crs)
 
     rd = 0
+    from datetime import datetime, timedelta
+    time_assign = timedelta()
+    time_writing = timedelta()
+    time_get_value = timedelta()
+    write_count = 0
+    a = datetime.now()
+    y_cell_height = - cell_height
     for y in xrange(raster_rows):
+        LOGGER.debug('rows %s' % y)
+        y_cell_height += cell_height
+        y0 = raster_ymax - y_cell_height
+        y1 = y0 - cell_height
+
         for x in xrange(raster_cols):
             # only use cells that are within the specified threshold
+            start = datetime.now()
             value = block.value(y, x)
             current_threshold = None
+            time_get_value += datetime.now() - start
 
+            start = datetime.now()
             for threshold_id, threshold in ranges.iteritems():
 
                 # If, eg [0, 0], the value must be equal to 0.
@@ -121,10 +139,9 @@ def _raster_to_vector_cells(raster, ranges, output_crs):
 
                 if current_threshold is not None:
                     # construct rectangular polygon feature for the cell
-                    x0 = raster_xmin + (x * cell_width)
-                    x1 = raster_xmin + ((x + 1) * cell_width)
-                    y0 = raster_ymax - (y * cell_height)
-                    y1 = raster_ymax - ((y + 1) * cell_height)
+                    x_cell_width = x * cell_width
+                    x0 = raster_xmin + x_cell_width
+                    x1 = x0 + cell_width
                     outer_ring = [
                         QgsPoint(x0, y0), QgsPoint(x1, y0),
                         QgsPoint(x1, y1), QgsPoint(x0, y1),
@@ -137,13 +154,25 @@ def _raster_to_vector_cells(raster, ranges, output_crs):
                     f.setAttributes([current_threshold])
                     features.append(f)
                     break
+            time_assign += datetime.now() - start
 
             # every once in a while, add the created features to the output.
+            start = datetime.now()
             rd += 1
             if rd % 1000 == 0:
+                LOGGER.debug('Writing %s %s' % (y, x))
                 vl.dataProvider().addFeatures(features)
                 features = []
-
+                write_count += 1
+            time_writing += datetime.now() - start
+    b = datetime.now()
+    print a
+    print b
+    print b - a
+    print ('get value time %s ' % time_get_value)
+    print ('assign time %s ' % time_assign)
+    print ('writing time %s ' % time_writing)
+    print ('write count %s' % write_count)
     # Add the latest features
     vl.dataProvider().addFeatures(features)
 
