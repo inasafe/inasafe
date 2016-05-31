@@ -91,7 +91,7 @@ class TsunamiRasterBuildingFunction(
             tr('Very high tsunami hazard zone is defined as inundation depth '
                'is more than %.1f %s') % (
                 high_max.value, high_max.unit.abbreviation),
-            tr('Buildings are closed if they are in low, moderate, high, or '
+            tr('Buildings are closed if they are in low, medium, high, or '
                'very high tsunami hazard zone.'),
             tr('Buildings are opened if they are in dry zone.')
         ]

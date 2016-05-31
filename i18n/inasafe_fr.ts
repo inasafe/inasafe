@@ -854,17 +854,17 @@
         <translation>Calcule des statistiques liées au genre des populations.</translation>
     </message>
     <message>
-        <location filename="gender_postprocessor.py" line="96"/>
+        <location filename="gender_postprocessor.py" line="99"/>
         <source>Female count (affected)</source>
         <translation>Effectif de femmes (affectées)</translation>
     </message>
     <message>
-        <location filename="gender_postprocessor.py" line="111"/>
+        <location filename="gender_postprocessor.py" line="117"/>
         <source>Weekly hygiene packs</source>
         <translation>Packs hebdomadaires d&apos;hygiène </translation>
     </message>
     <message>
-        <location filename="gender_postprocessor.py" line="133"/>
+        <location filename="gender_postprocessor.py" line="142"/>
         <source>Additional weekly rice kg for pregnant and lactating women</source>
         <translation>Kilo de riz supplémentaire par semaine pour les femmes enceintes ou allaitantes</translation>
     </message>
@@ -5186,11 +5186,6 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
         <translation>La zone de danger tsunami faible est définie avec une profondeur d&apos;inondation supérieur à 0 %s mais moins que %.1f %s</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="94"/>
-        <source>Moderate tsunami hazard zone is defined as inundation depth is more than %.1f %s but less than %.1f %s</source>
-        <translation>La zone de danger tsunami moyen est définie avec une profondeur d&apos;inondation supérieur à %.1f %s mais moins que %.1f %s</translation>
-    </message>
-    <message>
         <location filename="impact_function.py" line="293"/>
         <source>High tsunami hazard zone is defined as inundation depth is more than %.1f %s but less than %.1f %s</source>
         <translation>La zone de danger tsunami élevée est définie avec une profondeur d&apos;inondation supérieur à %.1f %s mais moins que %.1f %s</translation>
@@ -5199,11 +5194,6 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
         <location filename="impact_function.py" line="299"/>
         <source>Very high tsunami hazard zone is defined as inundation depth is more than %.1f %s</source>
         <translation>La zone de danger tsunami très élevée est définie avec une profondeur d&apos;inondation supérieur à %.1f %s</translation>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="94"/>
-        <source>Buildings are closed if they are in low, moderate, high, or very high tsunami hazard zone.</source>
-        <translation>Les bâtiments sont fermés si ils sont dans une zone tsunami avec un risque faible, moyen, élevé ou très élevé.</translation>
     </message>
     <message>
         <location filename="impact_function.py" line="96"/>
@@ -5274,16 +5264,6 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
         <location filename="parameter_definitions.py" line="44"/>
         <source>The threshold of hazard categorized as Low Hazard Zone in meter. A zone is categorized as Low Hazard Zone if the depth of tsunami inundation is less than Low Hazard Zone Threshold.</source>
         <translation>Le pallier de l&apos;aléa catégorisé comme Zone de Danger Faible en mètre. La zone est catégorisée comme Zone de Danger Faible si la profondeur d&apos;inondation est inférieur au Pallier de Zone de Danger Faible.</translation>
-    </message>
-    <message>
-        <location filename="parameter_definitions.py" line="67"/>
-        <source>Moderate Hazard Zone threshold.</source>
-        <translation>Seuil de la zone d&apos;aléa moyen</translation>
-    </message>
-    <message>
-        <location filename="parameter_definitions.py" line="68"/>
-        <source>The threshold of hazard categorized as Moderate Hazard Zone in meter. A zone is categorized as Medium Hazard Zone if the depth of tsunami inundation is more than Low Hazard Zone Threshold and less than Medium Hazard Zone Threshold.</source>
-        <translation>Le pallier de l&apos;aléa catégorisé comme Zone de Danger Moyen en mètre. La zone est catégorisée comme Zone de Danger Moyen si la profondeur d&apos;inondation est supérieur au Pallier de Zone de Danger Faible et inférieur au Pallier de Zone de Danger Moyen.</translation>
     </message>
     <message>
         <location filename="parameter_definitions.py" line="92"/>
@@ -5924,11 +5904,6 @@ Les coefficients utilisés dans le modèle Indonésien sont x=0.62275231, y=8.03
         <translation>Seuil de la zone d&apos;aléa faible</translation>
     </message>
     <message>
-        <location filename="parameter_definitions.py" line="59"/>
-        <source>Moderate Hazard Zone Threshold</source>
-        <translation>Seuil de la zone d&apos;aléa moyen</translation>
-    </message>
-    <message>
         <location filename="parameter_definitions.py" line="84"/>
         <source>High Hazard Zone Threshold</source>
         <translation>Seuil de la zone d&apos;aléa élevé</translation>
@@ -5947,11 +5922,6 @@ Les coefficients utilisés dans le modèle Indonésien sont x=0.62275231, y=8.03
         <location filename="metadata_definitions.py" line="67"/>
         <source>The hazard layer must be a tsunami raster layer.</source>
         <translation>La couche d&apos;aléa doit être une couche tsunami raster.</translation>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="301"/>
-        <source>Roads are closed if they are in low, moderate, high, or very high tsunami hazard zone.</source>
-        <translation>Les routes sont fermées si elles sont dans une zone tsunami avec un risque faible, moyen, élevé ou très élevé.</translation>
     </message>
     <message>
         <location filename="impact_function.py" line="303"/>
@@ -6332,6 +6302,31 @@ Les coefficients utilisés dans le modèle Indonésien sont x=0.62275231, y=8.03
     <message>
         <location filename="definitions.py" line="722"/>
         <source>Water above 3.1m and less than 8.0m. The area is potentially hit by a tsunami wave with an inundation depth &gt; 3 m or reach a tsunami intensity scale of VII or even more (Papadoupulos and Imamura, 2001). Tsunami wave with 4 m inundation depth cause damage to small vessel, a few ships are drifted inland, severe damage on most wooden houses. Boulders are deposited on shore. If tsunami height reaches 8 m, it will cause severe damage. Dykes, wave breaker, tsunami protection walls and green belts will be washed away.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="94"/>
+        <source>Buildings are closed if they are in low, medium, high, or very high tsunami hazard zone.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="parameter_definitions.py" line="59"/>
+        <source>Medium Hazard Zone Threshold</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="parameter_definitions.py" line="67"/>
+        <source>Medium Hazard Zone threshold.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="parameter_definitions.py" line="68"/>
+        <source>The threshold of hazard categorized as Medium Hazard Zone in meter. A zone is categorized as Medium Hazard Zone if the depth of tsunami inundation is more than Low Hazard Zone Threshold and less than Medium Hazard Zone Threshold.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="301"/>
+        <source>Roads are closed if they are in low, medium, high, or very high tsunami hazard zone.</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -6888,7 +6883,7 @@ p, li { white-space: pre-wrap; }
         <translation>Zone entière</translation>
     </message>
     <message>
-        <location filename="dock.py" line="2140"/>
+        <location filename="dock.py" line="2139"/>
         <source>InaSAFE</source>
         <translation>InaSAFE</translation>
     </message>
@@ -6898,32 +6893,32 @@ p, li { white-space: pre-wrap; }
         <translation>Il est possible que vous n&apos;ayiez pas suffisamment de mémoire système disponible pour mener à bien l&apos;analyse. Consultez le message dans le panneau pour plus d&apos;information. Voulez-vous quand même continuer ?  </translation>
     </message>
     <message>
-        <location filename="dock.py" line="1802"/>
+        <location filename="dock.py" line="1801"/>
         <source>Please select a valid impact layer before trying to print.</source>
         <translation>Sélectionnez une couche d&apos;impact valide avant d&apos;essayer d&apos;imprimer.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1951"/>
+        <location filename="dock.py" line="1950"/>
         <source>Map Creator</source>
         <translation>Créateur de carte</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1852"/>
+        <location filename="dock.py" line="1851"/>
         <source>Preparing map and report</source>
         <translation>Carte et rapport en cours de préparation</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1927"/>
+        <location filename="dock.py" line="1926"/>
         <source>Write to PDF</source>
         <translation>Créer sous forme de PDF</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1927"/>
+        <location filename="dock.py" line="1926"/>
         <source>Pdf File (*.pdf)</source>
         <translation>Fichier pdf (*.pdf)</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1936"/>
+        <location filename="dock.py" line="1935"/>
         <source>Printing cancelled!</source>
         <translation>Impression annulée !</translation>
     </message>
@@ -6968,17 +6963,17 @@ p, li { white-space: pre-wrap; }
         <translation>Résultats de l&apos;analyse</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1622"/>
+        <location filename="dock.py" line="1621"/>
         <source>Layer keywords missing:</source>
         <translation>Absence de mot-clés pour la couche :</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1951"/>
+        <location filename="dock.py" line="1950"/>
         <source>Your PDF was created....opening using the default PDF viewer on your system. The generated pdfs were saved as:</source>
         <translation>Votre pdf a été créé... ouverture en cours avec le visualisateur PDF par défaut de votre système. Les PDF sont sauvegardés sous : </translation>
     </message>
     <message>
-        <location filename="dock.py" line="1951"/>
+        <location filename="dock.py" line="1950"/>
         <source>and</source>
         <translation>et</translation>
     </message>
@@ -6988,12 +6983,12 @@ p, li { white-space: pre-wrap; }
         <translation>La couche d&apos;impact %s n&apos;est ni une couche raster, ni une couche vecteur </translation>
     </message>
     <message>
-        <location filename="dock.py" line="1812"/>
+        <location filename="dock.py" line="1811"/>
         <source>Report generation cancelled!</source>
         <translation>Création du rapport annulée !</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1920"/>
+        <location filename="dock.py" line="1919"/>
         <source>Keyword &quot;map_title&quot; not found.</source>
         <translation>Le mot-clé &quot;map_title&quot; n&apos;a pas été trouvé. </translation>
     </message>
@@ -7028,12 +7023,12 @@ p, li { white-space: pre-wrap; }
         <translation>ci-dessous.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1884"/>
+        <location filename="dock.py" line="1883"/>
         <source>Template is missing some elements</source>
         <translation>Eléments manquants dans le modèle</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1887"/>
+        <location filename="dock.py" line="1886"/>
         <source>The composer template you are printing to is missing these elements: %s. Do you still want to continue</source>
         <translation>Il manque des éléments au modèle de composeur d&apos;impression que vous voulez imprimer. Voulez-vous continuer ? </translation>
     </message>
@@ -7043,7 +7038,7 @@ p, li { white-space: pre-wrap; }
         <translation>InaSAFE %s</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1841"/>
+        <location filename="dock.py" line="1840"/>
         <source>Please select a valid template before printing. The template you choose does not exist.</source>
         <translation>Sélectionnez un modèle valide avant d&apos;imprimer. Le modèle que vous avez choisi n&apos;existe pas.</translation>
     </message>
@@ -7063,7 +7058,7 @@ p, li { white-space: pre-wrap; }
         <translation>dans la barre d&apos;outils.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1661"/>
+        <location filename="dock.py" line="1660"/>
         <source> icon in the toolbar.</source>
         <translation>dans la barre d&apos;outils.</translation>
     </message>
@@ -7123,37 +7118,37 @@ p, li { white-space: pre-wrap; }
         <translation>Un problème est survenu car la couche d&apos;agrégation ne possède pas de mots-clés adaptés à une couche d&apos;agrégation. </translation>
     </message>
     <message>
-        <location filename="dock.py" line="1659"/>
+        <location filename="dock.py" line="1658"/>
         <source>Layer Keyword&apos;s Version Mismatch:</source>
         <translation>Incohérence des versions des mots-clés:</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1661"/>
+        <location filename="dock.py" line="1660"/>
         <source>Your layer&apos;s keyword&apos;s version (%s) does not match with your InaSAFE version (%s). If you wish to use it as an exposure, hazard, or aggregation layer in an analysis, please use the keyword wizard to update the keywords. You can open the wizard by clicking on the </source>
         <translation>La version (%s) des mots-clés de votre couche ne fonctionne pas avec votre version d&apos;InaSAFE (%s). Si vous souhaitez utiliser cette couche en tant que couche d&apos;aléas, enjeux ou agrégation dans une analyse InaSAFE, veuillez mettre à jour les mots-clés en utilisant l&apos;assistant de création de mots-clés. Vous pouvez l&apos;ouvrir en cliquant sur </translation>
     </message>
     <message>
-        <location filename="dock.py" line="2112"/>
+        <location filename="dock.py" line="2111"/>
         <source>The hazard layer, exposure layer and your defined analysis area extents all overlap. Press the run button below to continue with the analysis.</source>
         <translation>La couche d&apos;aléa, d&apos;enjeu et votre emprise d&apos;analyse se superposent. Pressez le bouton &quot;lancer&quot; afin de continuer l&apos;analyse.</translation>
     </message>
     <message>
-        <location filename="dock.py" line="2117"/>
+        <location filename="dock.py" line="2116"/>
         <source>Analysis environment ready</source>
         <translation>Environnement d&apos;analyse prêt</translation>
     </message>
     <message>
-        <location filename="dock.py" line="2117"/>
+        <location filename="dock.py" line="2116"/>
         <source>More info ...</source>
         <translation>Plus d&apos;informations ...</translation>
     </message>
     <message>
-        <location filename="dock.py" line="2140"/>
+        <location filename="dock.py" line="2139"/>
         <source>No overlapping extents</source>
         <translation>Pas de chevauchements dans l&apos;étendue des couches</translation>
     </message>
     <message>
-        <location filename="dock.py" line="2153"/>
+        <location filename="dock.py" line="2152"/>
         <source>Insufficient overlap</source>
         <translation>Chevauchement insuffisant</translation>
     </message>
@@ -7173,12 +7168,12 @@ p, li { white-space: pre-wrap; }
         <translation>Mots-clés pour les enjeux</translation>
     </message>
     <message>
-        <location filename="dock.py" line="1624"/>
+        <location filename="dock.py" line="1623"/>
         <source>No keywords have been defined for this layer yet or there is an issue with the currently defined keywords and they need to be reviewed. If you wish to use this layer as an exposure, hazard, or aggregation layer in an analysis, please use the keyword wizard to update the keywords. You can open the wizard by clicking on the </source>
         <translation>Aucun mot-clé n&apos;a encore été défini pour cette couche ou il y a un problème avec les mots-clés courants et ils doivent être vérifiés. SI vous souhaitez l&apos;utiliser comme couche d&apos;enjeux, d&apos;aléas ou d&apos;agrégation dans une analyse, veuillez utiliser l’assistant de création pour modifier les mots-clés.  Vous pouvez ouvrir l’assistant en cliquant sur l&apos;icône </translation>
     </message>
     <message>
-        <location filename="dock.py" line="2147"/>
+        <location filename="dock.py" line="2146"/>
         <source>You can now proceed to run your analysis by clicking the </source>
         <translation>Vous pouvez désormais lancer votre analyse en cliquant sur</translation>
     </message>
