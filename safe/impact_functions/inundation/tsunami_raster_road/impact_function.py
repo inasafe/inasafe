@@ -26,7 +26,7 @@ from qgis.core import (
     QgsVectorFileWriter,
     QgsVectorLayer
 )
-from PyQt4.QtCore import QVariant
+from PyQt4.QtCore import QVariant, QPyNullVariant
 
 from safe.common.exceptions import ZeroImpactException
 from safe.impact_functions.bases.continuous_rh_classified_ve import \
@@ -44,12 +44,15 @@ from safe.gis.qgis_vector_tools import (
     create_layer)
 from safe.impact_reports.road_exposure_report_mixin import\
     RoadExposureReportMixin
+import logging
 
 __author__ = 'etiennetrimaille'
 __project_name__ = 'inasafe-dev'
 __filename__ = 'impact_function.py'
 __date__ = '11/03/16'
 __copyright__ = 'etienne@kartoza.com'
+
+LOGGER = logging.getLogger('InaSAFE')
 
 
 def _raster_to_vector_cells(raster, ranges, output_crs):
@@ -94,7 +97,14 @@ def _raster_to_vector_cells(raster, ranges, output_crs):
     ct = QgsCoordinateTransform(raster.crs(), output_crs)
 
     rd = 0
+    y_cell_height = - cell_height
+    LOGGER.debug('num row: %s' % raster_rows)
+    LOGGER.debug('num column: %s' % raster_cols)
     for y in xrange(raster_rows):
+        y_cell_height += cell_height
+        y0 = raster_ymax - y_cell_height
+        y1 = y0 - cell_height
+
         for x in xrange(raster_cols):
             # only use cells that are within the specified threshold
             value = block.value(y, x)
@@ -121,10 +131,9 @@ def _raster_to_vector_cells(raster, ranges, output_crs):
 
                 if current_threshold is not None:
                     # construct rectangular polygon feature for the cell
-                    x0 = raster_xmin + (x * cell_width)
-                    x1 = raster_xmin + ((x + 1) * cell_width)
-                    y0 = raster_ymax - (y * cell_height)
-                    y1 = raster_ymax - ((y + 1) * cell_height)
+                    x_cell_width = x * cell_width
+                    x0 = raster_xmin + x_cell_width
+                    x1 = x0 + cell_width
                     outer_ring = [
                         QgsPoint(x0, y0), QgsPoint(x1, y0),
                         QgsPoint(x1, y1), QgsPoint(x0, y1),
@@ -143,7 +152,6 @@ def _raster_to_vector_cells(raster, ranges, output_crs):
             if rd % 1000 == 0:
                 vl.dataProvider().addFeatures(features)
                 features = []
-
     # Add the latest features
     vl.dataProvider().addFeatures(features)
 
@@ -221,6 +229,8 @@ def _intersect_lines_with_vector_cells(
             if in_geom and (in_geom.wkbType() == QGis.WKBLineString or
                             in_geom.wkbType() == QGis.WKBMultiLineString):
                 affected_value = feature.attributes()[0]
+                if isinstance(affected_value, QPyNullVariant):
+                    affected_value = 0
                 add_output_feature(
                     features, in_geom, affected_value,
                     fields, f.attributes(), target_field)
@@ -401,7 +411,10 @@ class TsunamiRasterRoadsFunction(
             attributes = road.attributes()
 
             affected = attributes[target_field_index]
-            hazard_zone = self.hazard_classes[affected]
+            if isinstance(affected, QPyNullVariant):
+                continue
+            else:
+                hazard_zone = self.hazard_classes[affected]
 
             usage = attributes[road_type_field_index]
             usage = main_type(usage, exposure_value_mapping)
