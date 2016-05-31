@@ -734,8 +734,8 @@ def get_non_conflicting_attribute_name(default_name, attribute_names):
 def color_ramp(number_of_colour):
     """Generate list of color in hexadecimal.
 
-    This will generate colors using hsv model by playing around with the hue
-    (the saturation and the value are all set to 1).
+    This will generate colors using hsl model by playing around with the hue
+    see: https://coderwall.com/p/dvsxwg/smoothly-transition-from-green-to-red
 
     :param number_of_colour: The number of intervals between R and G spectrum.
     :type number_of_colour: int
@@ -747,18 +747,15 @@ def color_ramp(number_of_colour):
         raise Exception('The number of colours should be > 0')
 
     colors = []
-    hue_interval = 1.0 / number_of_colour
+    if number_of_colour == 1:
+        hue_interval = 1
+    else:
+        hue_interval = 1.0 / (number_of_colour - 1)
     for i in range(number_of_colour):
-        hue = i * hue_interval
-        saturation = 1
-        value = 1
-        # pylint: disable=bad-builtin
-        # pylint: disable=deprecated-lambda
-        rgb = map(
-            lambda x: int(x * 255), colorsys.hsv_to_rgb(
-                hue, saturation, value))
-        # pylint: enable=deprecated-lambda
-        # pylint: enable=bad-builtin
+        hue = (i * hue_interval) / 3
+        light = 127.5
+        saturation = -1.007905138339921
+        rgb = colorsys.hls_to_rgb(hue, light, saturation)
         hex_color = '#%02x%02x%02x' % (rgb[0], rgb[1], rgb[2])
         colors.append(hex_color)
     return colors
