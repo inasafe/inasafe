@@ -26,7 +26,7 @@ from qgis.core import (
     QgsVectorFileWriter,
     QgsVectorLayer
 )
-from PyQt4.QtCore import QVariant
+from PyQt4.QtCore import QVariant, QPyNullVariant
 
 from safe.common.exceptions import ZeroImpactException
 from safe.impact_functions.bases.continuous_rh_classified_ve import \
@@ -97,27 +97,19 @@ def _raster_to_vector_cells(raster, ranges, output_crs):
     ct = QgsCoordinateTransform(raster.crs(), output_crs)
 
     rd = 0
-    from datetime import datetime, timedelta
-    time_assign = timedelta()
-    time_writing = timedelta()
-    time_get_value = timedelta()
-    write_count = 0
-    a = datetime.now()
     y_cell_height = - cell_height
+    LOGGER.debug('num row: %s' % raster_rows)
+    LOGGER.debug('num column: %s' % raster_cols)
     for y in xrange(raster_rows):
-        LOGGER.debug('rows %s' % y)
         y_cell_height += cell_height
         y0 = raster_ymax - y_cell_height
         y1 = y0 - cell_height
 
         for x in xrange(raster_cols):
             # only use cells that are within the specified threshold
-            start = datetime.now()
             value = block.value(y, x)
             current_threshold = None
-            time_get_value += datetime.now() - start
 
-            start = datetime.now()
             for threshold_id, threshold in ranges.iteritems():
 
                 # If, eg [0, 0], the value must be equal to 0.
@@ -154,25 +146,12 @@ def _raster_to_vector_cells(raster, ranges, output_crs):
                     f.setAttributes([current_threshold])
                     features.append(f)
                     break
-            time_assign += datetime.now() - start
 
             # every once in a while, add the created features to the output.
-            start = datetime.now()
             rd += 1
             if rd % 1000 == 0:
-                LOGGER.debug('Writing %s %s' % (y, x))
                 vl.dataProvider().addFeatures(features)
                 features = []
-                write_count += 1
-            time_writing += datetime.now() - start
-    b = datetime.now()
-    print a
-    print b
-    print b - a
-    print ('get value time %s ' % time_get_value)
-    print ('assign time %s ' % time_assign)
-    print ('writing time %s ' % time_writing)
-    print ('write count %s' % write_count)
     # Add the latest features
     vl.dataProvider().addFeatures(features)
 
@@ -430,7 +409,10 @@ class TsunamiRasterRoadsFunction(
             attributes = road.attributes()
 
             affected = attributes[target_field_index]
-            hazard_zone = self.hazard_classes[affected]
+            if isinstance(affected, QPyNullVariant):
+                hazard_zone = self.hazard_classes[0]
+            else:
+                hazard_zone = self.hazard_classes[affected]
 
             usage = attributes[road_type_field_index]
             usage = main_type(usage, exposure_value_mapping)
