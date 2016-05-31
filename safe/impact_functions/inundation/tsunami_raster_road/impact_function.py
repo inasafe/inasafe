@@ -229,6 +229,8 @@ def _intersect_lines_with_vector_cells(
             if in_geom and (in_geom.wkbType() == QGis.WKBLineString or
                             in_geom.wkbType() == QGis.WKBMultiLineString):
                 affected_value = feature.attributes()[0]
+                if isinstance(affected_value, QPyNullVariant):
+                    affected_value = 0
                 add_output_feature(
                     features, in_geom, affected_value,
                     fields, f.attributes(), target_field)
@@ -410,7 +412,7 @@ class TsunamiRasterRoadsFunction(
 
             affected = attributes[target_field_index]
             if isinstance(affected, QPyNullVariant):
-                hazard_zone = self.hazard_classes[0]
+                continue
             else:
                 hazard_zone = self.hazard_classes[affected]
 
