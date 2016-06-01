@@ -2,7 +2,6 @@
 """Tests for keyword io class."""
 import unittest
 import os
-import tempfile
 import shutil
 
 from qgis.core import QgsDataSourceURI, QgsVectorLayer
@@ -56,21 +55,21 @@ class KeywordIOTest(unittest.TestCase):
             'layer_geometry': 'raster',
             'layer_purpose': 'hazard',
             'layer_mode': 'continuous',
-            'keyword_version': '3.2'
+            'keyword_version': '3.5'
         }
 
         # Vector Layer keywords
         vector_path = test_data_path('exposure', 'buildings_osm_4326.shp')
         self.vector_layer, _ = load_layer(vector_path)
         self.expected_vector_keywords = {
-            'keyword_version': '3.4',
+            'keyword_version': '3.3',
             'structure_class_field': 'FLOODED',
-            'value_mapping': {},
+            # 'value_mapping': {},
             'title': 'buildings_osm_4326',
             'layer_geometry': 'polygon',
             'layer_purpose': 'exposure',
             'layer_mode': 'classified',
-            'exposure': 'structure'
+            'exposure': 'structure',
         }
         # Keyword less layer
         keywordless_path = test_data_path('other', 'keywordless_layer.shp')
@@ -88,13 +87,6 @@ class KeywordIOTest(unittest.TestCase):
         expected_hash = '7cc153e1b119ca54a91ddb98a56ea95e'
         message = "Got: %s\nExpected: %s" % (hash_value, expected_hash)
         self.assertEqual(hash_value, expected_hash, message)
-
-    def test_are_keywords_file_based(self):
-        """Can we correctly determine if keywords should be written to file or
-        to database?"""
-        assert not self.keyword_io.are_keywords_file_based(self.sqlite_layer)
-        assert self.keyword_io.are_keywords_file_based(self.raster_layer)
-        assert self.keyword_io.are_keywords_file_based(self.vector_layer)
 
     def test_read_raster_file_keywords(self):
         """Can we read raster file keywords using generic readKeywords method
@@ -268,9 +260,7 @@ class KeywordIOTest(unittest.TestCase):
         """
         keywords = self.keyword_io.read_keywords_file(self.keyword_path)
         expected_keywords = self.expected_vector_keywords
-        message = 'Got:\n%s\nExpected:\n%s\nSource:\n%s' % (
-            keywords, expected_keywords, self.keyword_path)
-        self.assertDictEqual(keywords, expected_keywords, message)
+        self.assertDictEqual(keywords, expected_keywords)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(KeywordIOTest)

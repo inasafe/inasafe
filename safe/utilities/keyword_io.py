@@ -402,44 +402,6 @@ class KeywordIO(QObject):
             LOGGER.debug("Error %s:" % e.args[0])
             raise
 
-    def are_keywords_file_based(self, layer):
-        """Check if keywords should be read/written to file or our keywords db.
-
-        Determine which keyword lookup system to use (file base or cache db)
-        based on the layer's provider type. True indicates we should use the
-        datasource as a file and look for a keywords file, False and we look
-        in the keywords db.
-
-        :param layer: The layer which want to know how the keywords are stored.
-        :type layer: QgsMapLayer
-
-        :returns: True if keywords are stored in a file next to the dataset,
-            else False if the dataset is remove e.g. a database.
-        :rtype: bool
-
-        :raises: UnsupportedProviderError
-        """
-
-        try:
-            provider_type = str(layer.providerType())
-        except AttributeError:
-            raise UnsupportedProviderError(
-                'Could not determine type for provider: %s' %
-                layer.__class__.__name__)
-
-        provider_dict = {
-            'ogr': True,
-            'gdal': True,
-            'gpx': False,
-            'wms': False,
-            'spatialite': False,
-            'delimitedtext': False,
-            'postgres': False}
-        file_based_keywords = False
-        if provider_type in provider_dict:
-            file_based_keywords = provider_dict[provider_type]
-        return file_based_keywords
-
     def hash_for_datasource(self, data_source):
         """Given a data_source, return its hash.
 
@@ -454,46 +416,6 @@ class KeywordIO(QObject):
         hash_value.update(data_source)
         hash_value = hash_value.hexdigest()
         return hash_value
-
-    def normalize_uri(self, layer):
-        """Normalize URI from layer source. URI can be in a form
-        of QgsDataSourceURI which is related to RDBMS source or
-        general URI like CSV URI
-
-        :param layer : A layer
-        :type layer : QgsMapLayer
-
-        :return: normalized URI to be hashed
-        :raise: AttributeError if providerType not recognized
-        """
-        # there are different method to extract unique uri based on
-        # layer type
-        try:
-            provider_type = str(layer.providerType())
-        except AttributeError:
-            raise UnsupportedProviderError(
-                'Could not determine type for provider: %s' %
-                layer.__class__.__name__)
-        source = layer.source()
-        if provider_type == 'postgres':
-            # Use QgsDataSourceURI to parse RDBMS datasource
-            # create unique uri based on host, schema, and tablename
-            datasource_uri = QgsDataSourceURI(source)
-            normalized_uri = ':'.join([
-                datasource_uri.host(),
-                datasource_uri.schema(),
-                datasource_uri.table()])
-        elif provider_type == 'delimitedtext':
-            # Use urlparse to parse delimitedtext uri
-            # create unique uri based on protocol, host, and path
-            general_uri = urlparse(source)
-            normalized_uri = ':'.join([
-                general_uri.scheme,
-                general_uri.netloc,
-                general_uri.path])
-        else:
-            normalized_uri = source
-        return normalized_uri
 
     def write_keywords_for_uri(self, uri, keywords):
         """Write keywords for a URI into the keywords database. All the
@@ -551,80 +473,6 @@ class KeywordIO(QObject):
             self.close_connection()
 
         return keywords
-
-    def read_keyword_from_uri(self, uri, keyword=None):
-        """Get metadata from the keywords file associated with a URI.
-
-        This is used for layers that are non local layer (e.g. postgresql
-        connection) and so we need to retrieve the keywords from the sqlite
-        keywords db.
-
-        A hash will be constructed from the supplied uri and a lookup made
-        in a local SQLITE database for the keywords. If there is an existing
-        record it will be returned, if not and error will be thrown.
-
-        If the record is a dictionary, it means that it was inserted into the
-        DB in a pre 2.2 version which had no ISO metadata. In this case, we use
-        that dictionary to update the entry to the new ISO based metadata
-
-        .. seealso:: write_keywords_for_uri, delete_keywords_for_uri
-
-        :param uri: A layer uri. e.g. ```dbname=\'osm\' host=localhost
-            port=5432 user=\'foo\' password=\'bar\' sslmode=disable
-            key=\'id\' srid=4326```
-        :type uri: str
-
-        :param keyword: The metadata keyword to retrieve. If none,
-            all keywords are returned.
-        :type keyword: str
-
-        :returns: A string containing the retrieved value for the keyword if
-           the keyword argument is specified, otherwise the
-           complete keywords dictionary is returned.
-
-        :raises: KeywordNotFoundError if the keyword is not found.
-        """
-        hash_value = self.hash_for_datasource(uri)
-        try:
-            self.open_connection()
-        except OperationalError:
-            raise
-        try:
-            cursor = self.get_cursor()
-            # now see if we have any data for our hash
-            sql = (
-                'select dict from keyword where hash = \'%s\';' % hash_value)
-            cursor.execute(sql)
-            data = cursor.fetchone()
-            # unpickle it to get our dict back
-            if data is None:
-                raise HashNotFoundError('No hash found for %s' % hash_value)
-            data = data[0]  # first field
-
-            # get the keywords out of the DB
-            keywords = loads(str(data))
-
-            # the uri already had a KW entry in the DB using the old KW system
-            # we use that dictionary to update the entry to the new ISO based
-            # metadata system
-            if isinstance(keywords, dict):
-                keywords = self.write_keywords_for_uri(uri, keywords)
-
-            if keyword is None:
-                return keywords
-            if keyword in keywords:
-                return keywords[keyword]
-            else:
-                raise KeywordNotFoundError('Keyword "%s" not found in %s' % (
-                    keyword, keywords))
-
-        except sqlite.Error, e:
-            LOGGER.debug("Error %s:" % e.args[0])
-        except Exception, e:
-            LOGGER.debug("Error %s:" % e.args[0])
-            raise
-        finally:
-            self.close_connection()
 
     def to_message(self, keywords=None, show_header=True):
         """Format keywords as a message object.
