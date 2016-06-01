@@ -16,10 +16,6 @@ from safe.utilities.i18n import tr
 # Default attribute to assign to vector layers
 DEFAULT_ATTRIBUTE = 'inapolygon'
 
-# Spatial layer file extensions that are recognised in Risiko
-# FIXME: Perhaps add '.gml', '.zip', ...
-LAYER_TYPES = ['.shp', '.asc', '.tif', '.tiff', '.geotif', '.geotiff']
-
 # Map between extensions and ORG drivers
 DRIVER_MAP = {'.sqlite': 'SQLITE',
               '.shp': 'ESRI Shapefile',
