@@ -50,7 +50,7 @@ pardir = os.path.abspath(os.path.join(
     '..'))
 
 # Location of test data
-DATANAME = 'inasafe_data'
+DATANAME = '_inasafe_data'
 DATADIR = os.path.join(pardir, DATANAME)
 
 # Bundled test data
