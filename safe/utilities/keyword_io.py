@@ -101,7 +101,7 @@ class KeywordIO(QObject):
         self.connection = None
         self.layer = layer
 
-    #TODO(IS) can be removed
+    # TODO(IS) can be removed
     @classmethod
     def read_keywords_file(cls, filename, keyword=None):
         """Read keywords from a keywords file and return as dictionary

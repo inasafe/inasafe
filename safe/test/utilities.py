@@ -922,7 +922,7 @@ class FakeLayer(object):
         return self.layer_source
 
 
-#TODO(IS): This method doesn't belong to this file.
+# TODO(IS): This method doesn't belong to this file.
 def clip_layers(first_layer_path, second_layer_path):
     """Clip and resample layers with the reference to the first layer.
 

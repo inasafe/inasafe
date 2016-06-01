@@ -54,6 +54,7 @@ def linear_function(x, y):
     """
     return x + y / 2.0
 
+
 def write_vector_data(data, projection, geometry, filename, keywords=None):
     """Write point data and any associated attributes to vector file
 

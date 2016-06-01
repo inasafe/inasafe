@@ -63,6 +63,7 @@ def linear_function(x, y):
 
     return x + y / 2.
 
+
 def bboxlist2string(bbox, decimals=6):
     """Convert bounding box list to comma separated string
 
