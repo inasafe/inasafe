@@ -62,9 +62,9 @@ class KeywordIOTest(unittest.TestCase):
         vector_path = test_data_path('exposure', 'buildings_osm_4326.shp')
         self.vector_layer, _ = load_layer(vector_path)
         self.expected_vector_keywords = {
-            'keyword_version': '3.3',
+            'keyword_version': '3.5',
             'structure_class_field': 'FLOODED',
-            # 'value_mapping': {},
+            'value_mapping': {},
             'title': 'buildings_osm_4326',
             'layer_geometry': 'polygon',
             'layer_purpose': 'exposure',
@@ -77,9 +77,6 @@ class KeywordIOTest(unittest.TestCase):
         # Keyword file
         self.keyword_path = test_data_path(
             'exposure', 'buildings_osm_4326.xml')
-
-    def tearDown(self):
-        pass
 
     def test_get_hash_for_datasource(self):
         """Test we can reliably get a hash for a uri"""
@@ -104,6 +101,7 @@ class KeywordIOTest(unittest.TestCase):
     def test_read_vector_file_keywords(self):
         """Test read vector file keywords with the generic readKeywords method.
          """
+        self.maxDiff = None
         keywords = self.keyword_io.read_keywords(self.vector_layer)
         expected_keywords = self.expected_vector_keywords
 
@@ -120,6 +118,7 @@ class KeywordIOTest(unittest.TestCase):
 
     def test_update_keywords(self):
         """Test append file keywords with update_keywords method."""
+        self.maxDiff = None
         layer = clone_raster_layer(
             name='tsunami_wgs84',
             extension='.tif',
@@ -143,7 +142,6 @@ class KeywordIOTest(unittest.TestCase):
         expected_keywords = {
             k: get_unicode(v) for k, v in expected_keywords.iteritems()
         }
-        self.maxDiff = None
         self.assertDictEqual(keywords, expected_keywords)
 
     @unittest.skip('No longer used in the new metadata.')
@@ -185,6 +183,7 @@ class KeywordIOTest(unittest.TestCase):
 
     def test_copy_keywords(self):
         """Test we can copy the keywords."""
+        self.maxDiff = None
         out_path = unique_filename(
             prefix='test_copy_keywords', suffix='.shp')
         layer = clone_raster_layer(
@@ -198,7 +197,6 @@ class KeywordIOTest(unittest.TestCase):
         expected_keywords = self.expected_raster_keywords
         expected_keywords['keyword_version'] = inasafe_keyword_version
 
-        self.maxDiff = None
         self.assertDictEqual(copied_keywords, expected_keywords)
 
     def test_definition(self):
@@ -258,6 +256,7 @@ class KeywordIOTest(unittest.TestCase):
 
         .. versionadded:: 3.2
         """
+        self.maxDiff = None
         keywords = self.keyword_io.read_keywords_file(self.keyword_path)
         expected_keywords = self.expected_vector_keywords
         self.assertDictEqual(keywords, expected_keywords)

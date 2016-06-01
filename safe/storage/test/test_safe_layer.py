@@ -23,6 +23,7 @@ from safe.common.exceptions import InvalidLayerError, KeywordNotFoundError
 class SafeLayerTest(unittest.TestCase):
     def test_safe_layer_attributes(self):
         """Test creating safe layer."""
+        self.maxDiff = None
         building_path = test_data_path('exposure', 'buildings.shp')
 
         building_layer = read_layer(building_path)
