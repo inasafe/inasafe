@@ -20,11 +20,6 @@ from safe.utilities.metadata import read_iso19115_metadata
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-# Don't change this, not even formatting, you will break tests!
-PG_URI = """'dbname=\'osm\' host=localhost port=5432 user=\'foo\'
-         password=\'bar\' sslmode=disable key=\'id\' srid=4326
-         type=MULTIPOLYGON table="valuations_parcel" (geometry) sql='"""
-
 
 class KeywordIOTest(unittest.TestCase):
     """Tests for reading and writing of raster and vector data
@@ -77,13 +72,6 @@ class KeywordIOTest(unittest.TestCase):
         # Keyword file
         self.keyword_path = test_data_path(
             'exposure', 'buildings_osm_4326.xml')
-
-    def test_get_hash_for_datasource(self):
-        """Test we can reliably get a hash for a uri"""
-        hash_value = self.keyword_io.hash_for_datasource(PG_URI)
-        expected_hash = '7cc153e1b119ca54a91ddb98a56ea95e'
-        message = "Got: %s\nExpected: %s" % (hash_value, expected_hash)
-        self.assertEqual(hash_value, expected_hash, message)
 
     def test_read_raster_file_keywords(self):
         """Can we read raster file keywords using generic readKeywords method
@@ -143,43 +131,6 @@ class KeywordIOTest(unittest.TestCase):
             k: get_unicode(v) for k, v in expected_keywords.iteritems()
         }
         self.assertDictEqual(keywords, expected_keywords)
-
-    @unittest.skip('No longer used in the new metadata.')
-    def test_read_db_keywords(self):
-        """Can we read sqlite kw with the generic read_keywords method
-        """
-        db_path = test_data_path('other', 'test_keywords.db')
-        self.read_db_keywords(db_path)
-
-    def read_db_keywords(self, db_path):
-        """Can we read sqlite keywords with the generic readKeywords method
-        """
-        self.keyword_io.set_keyword_db_path(db_path)
-
-        # We need to use relative path so that the hash from URI will match
-        local_path = os.path.join(
-            os.path.dirname(__file__), 'exposure.sqlite')
-        sqlite_building_path = test_data_path('exposure', 'exposure.sqlite')
-        shutil.copy2(sqlite_building_path, local_path)
-        uri = QgsDataSourceURI()
-        uri.setDatabase('exposure.sqlite')
-        uri.setDataSource('', 'buildings_osm_4326', 'Geometry')
-        sqlite_layer = QgsVectorLayer(uri.uri(), 'OSM Buildings', 'spatialite')
-
-        expected_source = (
-            'dbname=\'exposure.sqlite\' table="buildings_osm_4326" ('
-            'Geometry) sql=')
-
-        self.assertEqual(sqlite_layer.source(), expected_source)
-
-        keywords = self.keyword_io.read_keywords(sqlite_layer)
-        expected_keywords = self.expected_sqlite_keywords
-
-        self.assertDictEqual(keywords, expected_keywords)
-
-        # Delete SQL Layer so that we can delete the file
-        del sqlite_layer
-        os.remove(local_path)
 
     def test_copy_keywords(self):
         """Test we can copy the keywords."""

@@ -16,11 +16,8 @@ __copyright__ += 'Disaster Reduction'
 
 import os
 from os.path import expanduser
-from urlparse import urlparse
 import logging
-import sqlite3 as sqlite
 from sqlite3 import OperationalError
-from cPickle import loads, dumps, HIGHEST_PROTOCOL
 from ast import literal_eval
 from PyQt4.QtCore import QUrl, QDateTime
 from datetime import datetime
@@ -44,7 +41,6 @@ from safe.common.exceptions import (
     KeywordDbError,
     InvalidParameterError,
     NoKeywordsFoundError,
-    UnsupportedProviderError,
     MetadataReadError
 )
 from safe.utilities.metadata import (
@@ -105,18 +101,7 @@ class KeywordIO(QObject):
         self.connection = None
         self.layer = layer
 
-    def set_keyword_db_path(self, path):
-        """Set the path for the keyword database (sqlite).
-
-        The file will be used to search for keywords for non local datasets.
-
-        :param path: A valid path to a sqlite database. The database does
-            not need to exist already, but the user should be able to write
-            to the path provided.
-        :type path: str
-        """
-        self.keyword_db_path = str(path)
-
+    #TODO(IS) can be removed
     @classmethod
     def read_keywords_file(cls, filename, keyword=None):
         """Read keywords from a keywords file and return as dictionary
@@ -325,97 +310,6 @@ class KeywordIO(QObject):
             'inasafe/keywordCachePath',
             self.default_keyword_db_path(), type=str)
         self.keyword_db_path = str(path)
-
-    def open_connection(self):
-        """Open an sqlite connection to the keywords database.
-
-        By default the keywords database will be used in the plugin dir,
-        unless an explicit path has been set using setKeywordDbPath, or
-        overridden in QSettings. If the db does not exist it will
-        be created.
-
-        :raises: An sqlite.Error is raised if anything goes wrong
-        """
-        self.connection = None
-        base_directory = os.path.dirname(self.keyword_db_path)
-        if not os.path.exists(base_directory):
-            try:
-                os.mkdir(base_directory)
-            except IOError:
-                LOGGER.exception(
-                    'Could not create directory for keywords cache.')
-                raise
-
-        try:
-            self.connection = sqlite.connect(self.keyword_db_path)
-        except (OperationalError, sqlite.Error):
-            LOGGER.exception('Failed to open keywords cache database.')
-            raise
-
-    def close_connection(self):
-        """Close the active sqlite3 connection."""
-        if self.connection is not None:
-            self.connection.close()
-            self.connection = None
-
-    def get_cursor(self):
-        """Get a cursor for the active connection.
-
-        The cursor can be used to execute arbitrary queries against the
-        database. This method also checks that the keywords table exists in
-        the schema, and if not, it creates it.
-
-        :returns: A valid cursor opened against the connection.
-        :rtype: sqlite.
-
-        :raises: An sqlite.Error will be raised if anything goes wrong.
-        """
-        if self.connection is None:
-            try:
-                self.open_connection()
-            except OperationalError:
-                raise
-        try:
-            cursor = self.connection.cursor()
-            cursor.execute('SELECT SQLITE_VERSION()')
-            data = cursor.fetchone()
-            LOGGER.debug("SQLite version: %s" % data)
-            # Check if we have some tables, if not create them
-            sql = 'select sql from sqlite_master where type = \'table\';'
-            cursor.execute(sql)
-            data = cursor.fetchone()
-            LOGGER.debug("Tables: %s" % data)
-            if data is None:
-                LOGGER.debug('No tables found')
-                sql = (
-                    'create table keyword (hash varchar(32) primary key,'
-                    'dict text);')
-                LOGGER.debug(sql)
-                cursor.execute(sql)
-                # data = cursor.fetchone()
-                cursor.fetchone()
-            else:
-                LOGGER.debug('Keywords table already exists')
-
-            return cursor
-        except sqlite.Error, e:
-            LOGGER.debug("Error %s:" % e.args[0])
-            raise
-
-    def hash_for_datasource(self, data_source):
-        """Given a data_source, return its hash.
-
-        :param data_source: The data_source name from a layer.
-        :type data_source: str
-
-        :returns: An md5 hash for the data source name.
-        :rtype: str
-        """
-        import hashlib
-        hash_value = hashlib.md5()
-        hash_value.update(data_source)
-        hash_value = hash_value.hexdigest()
-        return hash_value
 
     def to_message(self, keywords=None, show_header=True):
         """Format keywords as a message object.
