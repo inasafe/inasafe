@@ -5,6 +5,7 @@ import numpy
 import os
 from osgeo import gdal
 
+from safe.common.utilities import verify
 from safe.storage.raster import Raster
 from safe.storage.vector import Vector, convert_polygons_to_centroids
 from safe.storage.projection import Projection, DEFAULT_PROJECTION
@@ -21,11 +22,7 @@ from safe.storage.utilities import (
     raster_geometry_to_geotransform)
 from safe.storage.core import (
     read_layer,
-    write_raster_data,
-    get_bounding_box,
-    bboxlist2string,
-    bboxstring2list,
-    check_bbox_string)
+    write_raster_data)
 from safe.storage.test.utilities import same_API
 from safe.storage.geometry import Polygon
 from safe.gis.numerics import nan_allclose
@@ -65,6 +62,119 @@ def linear_function(x, y):
     """
 
     return x + y / 2.
+
+def bboxlist2string(bbox, decimals=6):
+    """Convert bounding box list to comma separated string
+
+    Args:
+        * bbox: List of coordinates of the form [W, S, E, N]
+
+    Returns:
+        * bbox_string: Format 'W,S,E,N' - each will have 6 decimal points
+    """
+
+    msg = 'Got string %s, but expected bounding box as a list' % str(bbox)
+    verify(not isinstance(bbox, basestring), msg)
+
+    try:
+        bbox = list(bbox)
+    except:
+        msg = 'Could not coerce bbox %s into a list' % str(bbox)
+        raise BoundingBoxError(msg)
+
+    msg = ('Bounding box must have 4 coordinates [W, S, E, N]. '
+           'I got %s' % str(bbox))
+    try:
+        verify(len(bbox) == 4, msg)
+    except VerificationError:
+        raise BoundingBoxError(msg)
+
+    for x in bbox:
+        try:
+            float(x)
+        except ValueError, e:
+            msg = ('Bounding box %s contained non-numeric entry %s, '
+                   'original error was "%s".' % (bbox, x, e))
+            raise BoundingBoxError(msg)
+
+    # Make template of the form '%.5f,%.5f,%.5f,%.5f'
+    template = (('%%.%if,' % decimals) * 4)[:-1]
+
+    # Assign numbers and return
+    return template % tuple(bbox)
+
+
+def bboxstring2list(bbox_string):
+    """Convert bounding box string to list
+
+    Args:
+        * bbox_string: String of bounding box coordinates of the form 'W,S,E,N'
+
+    Returns:
+        * bbox: List of floating point numbers with format [W, S, E, N]
+    """
+
+    msg = ('Bounding box must be a string with coordinates following the '
+           'format 105.592,-7.809,110.159,-5.647\n'
+           'Instead I got %s of type %s.' % (str(bbox_string),
+                                             type(bbox_string)))
+    verify(isinstance(bbox_string, basestring), msg)
+
+    fields = bbox_string.split(',')
+    msg = ('Bounding box string must have 4 coordinates in the form '
+           '"W,S,E,N". I got bbox == "%s"' % bbox_string)
+    try:
+        verify(len(fields) == 4, msg)
+    except VerificationError:
+        raise BoundingBoxError(msg)
+
+    for x in fields:
+        try:
+            float(x)
+        except ValueError, e:
+            msg = ('Bounding box %s contained non-numeric entry %s, '
+                   'original error was "%s".' % (bbox_string, x, e))
+            raise BoundingBoxError(msg)
+
+    return [float(x) for x in fields]
+
+
+def check_bbox_string(bbox_string):
+    """Check that bbox string is valid
+    """
+
+    msg = 'Expected bbox as a string with format "W,S,E,N"'
+    verify(isinstance(bbox_string, basestring), msg)
+
+    # Use checks from string to list conversion
+    # FIXME (Ole): Would be better to separate the checks from the conversion
+    # and use those checks directly.
+    minx, miny, maxx, maxy = bboxstring2list(bbox_string)
+
+    # Check semantic integrity
+    msg = ('Western border %.5f of bounding box %s was out of range '
+           'for longitudes ([-180:180])' % (minx, bbox_string))
+    verify(-180 <= minx <= 180, msg)
+
+    msg = ('Eastern border %.5f of bounding box %s was out of range '
+           'for longitudes ([-180:180])' % (maxx, bbox_string))
+    verify(-180 <= maxx <= 180, msg)
+
+    msg = ('Southern border %.5f of bounding box %s was out of range '
+           'for latitudes ([-90:90])' % (miny, bbox_string))
+    verify(-90 <= miny <= 90, msg)
+
+    msg = ('Northern border %.5f of bounding box %s was out of range '
+           'for latitudes ([-90:90])' % (maxy, bbox_string))
+    verify(-90 <= maxy <= 90, msg)
+
+    msg = ('Western border %.5f was greater than or equal to eastern border '
+           '%.5f of bounding box %s' % (minx, maxx, bbox_string))
+    verify(minx < maxx, msg)
+
+    msg = ('Southern border %.5f was greater than or equal to northern border '
+           '%.5f of bounding box %s' % (miny, maxy, bbox_string))
+    verify(miny < maxy, msg)
 
 
 class TestIO(unittest.TestCase):
@@ -1618,130 +1728,6 @@ class TestIO(unittest.TestCase):
                                       A[m, n], rtol=1.0e-6)
 
                 i += 1
-
-    def test_get_bounding_box(self):
-        """Bounding box is correctly extracted from file.
-
-        Reference data::
-
-            gdalinfo Earthquake_Ground_Shaking_clip.tif
-            Driver: GTiff/GeoTIFF
-            Files: Earthquake_Ground_Shaking_clip.tif
-            Size is 345, 263
-            Coordinate System is:
-            GEOGCS["WGS 84",
-                DATUM["WGS_1984",
-                    SPHEROID["WGS 84",6378137,298.2572235630016,
-                        AUTHORITY["EPSG","7030"]],
-                    AUTHORITY["EPSG","6326"]],
-                PRIMEM["Greenwich",0],
-                UNIT["degree",0.0174532925199433],
-                AUTHORITY["EPSG","4326"]]
-            Origin = (99.364169565217395,-0.004180608365019)
-            Pixel Size = (0.008339130434783,-0.008361216730038)
-            Metadata:
-            AREA_OR_POINT=Point
-            TIFFTAG_XRESOLUTION=1
-            TIFFTAG_YRESOLUTION=1
-            TIFFTAG_RESOLUTIONUNIT=1 (unitless)
-            Image Structure Metadata:
-            COMPRESSION=LZW
-            INTERLEAVE=BAND
-            Corner Coordinates:
-            Upper Left  (  99.3641696,  -0.0041806)
-                        ( 99d21'51.01"E,  0d 0'15.05"S)
-            Lower Left  (  99.3641696,  -2.2031806)
-                        ( 99d21'51.01"E,  2d12'11.45"S)
-            Upper Right ( 102.2411696,  -0.0041806)
-                        (102d14'28.21"E,  0d 0'15.05"S)
-            Lower Right ( 102.2411696,  -2.2031806)
-                        (102d14'28.21"E,  2d12'11.45"S)
-            Center      ( 100.8026696,  -1.1036806)
-                        (100d48'9.61"E,  1d 6'13.25"S)
-            Band 1 Block=256x256 Type=Float64, ColorInterp=Gray
-
-
-        Note post gdal 1.8 it is::
-            Upper Left  (  99.3600000,   0.0000000)
-                        ( 99d21'36.00"E,  0d 0' 0.01"N)
-            Lower Left  (  99.3600000,  -2.1990000)
-                        ( 99d21'36.00"E,  2d11'56.40"S)
-            Upper Right ( 102.2370000,   0.0000000)
-                        (102d14'13.20"E,  0d 0' 0.01"N)
-            Lower Right ( 102.2370000,  -2.1990000)
-                        (102d14'13.20"E,  2d11'56.40"S)
-            Center      ( 100.7985000,  -1.0995000)
-                        (100d47'54.60"E,  1d 5'58.20"S)
-        """
-
-        # Note there are two possible correct values of bbox depending on
-        # the version of gdal:
-        # http://trac.osgeo.org/gdal/wiki/rfc33_gtiff_pixelispoint
-
-        # Get gdal version number
-        x = gdal.VersionInfo('').replace('dev', '').split()
-        y = x[1].split('.')[:2]
-        z = ''.join(y)  # Turn into number and
-        if z.endswith(','):
-            z = z[:-1]  # Remove trailing comma
-
-        # Reference bbox for vector data
-        ref_bbox = {'tsunami_building_exposure.shp': [150.15238387897742,
-                                                      -35.71084183517241,
-                                                      150.18779267086208,
-                                                      -35.70131768155173]}
-
-        # Select correct reference bbox for rasters
-        if float(z) < 17:
-            ref_bbox['Earthquake_Ground_Shaking_clip.tif'] = [99.3641696,
-                                                              -2.2031806,
-                                                              102.2411696,
-                                                              -0.0041806]
-        else:
-            ref_bbox['Earthquake_Ground_Shaking_clip.tif'] = [99.36,
-                                                              -2.199,
-                                                              102.237,
-                                                              0.0]
-
-        for filename in ['Earthquake_Ground_Shaking_clip.tif',
-                         'tsunami_building_exposure.shp']:
-            abspath = os.path.join(TESTDATA, filename)
-            bbox = get_bounding_box(abspath)
-            msg = ('Got bbox %s from filename %s, but expected %s '
-                   % (str(bbox), filename, str(ref_bbox[filename])))
-            assert numpy.allclose(bbox, ref_bbox[filename]), msg
-
-            # Check the conversions
-            bbox_string = bboxlist2string(bbox)
-
-            # Check the check :-)
-            check_bbox_string(bbox_string)
-
-            # Check that it works for layer objects instantiated from file
-            L = read_layer(abspath)
-            L_bbox = L.get_bounding_box()
-            msg = ('Got bbox %s from filename %s, but expected %s '
-                   % (str(L_bbox), filename, str(ref_bbox[filename])))
-            assert numpy.allclose(L_bbox, ref_bbox[filename]), msg
-
-            # Check that it works for layer objects instantiated from data
-            if L.is_raster:
-                D = Raster(data=L.get_data(),
-                           projection=L.get_projection(),
-                           geotransform=L.get_geotransform())
-            elif L.is_vector:
-                D = Vector(data=L.get_data(),
-                           projection=L.get_projection(),
-                           geometry=L.get_geometry())
-            else:
-                msg = 'Unexpected layer object: %s' % str(L)
-                raise RuntimeError(msg)
-
-            # Check that get_bounding_box works for data instantiated layers
-            D_bbox = D.get_bounding_box()
-            msg = ('Got bbox %s from layer %s, but expected %s '
-                   % (str(D_bbox), str(D), str(L_bbox)))
-            assert numpy.allclose(D_bbox, L_bbox), msg
 
     def test_layer_API(self):
         """Vector and Raster instances have a similar API
