@@ -1083,50 +1083,6 @@ class Vector(Layer):
         return self.is_vector and self.geometry_type == ogr.wkbMultiPolygon
 
 
-# ----------------------------------
-# Helper functions for class Vector
-# ----------------------------------
-def convert_line_to_points(V, delta):
-    """Convert line vector data to point vector data
-
-    :param V: Vector layer with line data
-    :type V: Vector
-
-    :param delta: Incremental step to find the points
-    :type delta: float
-
-    :returns: Vector layer with point data and the same attributes as V
-    :rtype: Vector
-    """
-
-    msg = 'Input data %s must be line vector data' % V
-    verify(V.is_line_data, msg)
-
-    geometry = V.get_geometry()
-    data = V.get_data()
-    N = len(V)
-
-    # Calculate centroids for each polygon
-    points = []
-    new_data = []
-    for i in range(N):
-        c = points_along_line(geometry[i], delta)
-        # We need to create a data entry for each point.
-        # FIXME (Ole): What on earth is this?
-        # pylint: disable=W0621
-        new_data.extend([data[i] for _ in c])
-        # pylint: enable=W0621
-        points.extend(c)
-
-    # Create new point vector layer with same attributes and return
-    V = Vector(data=new_data,
-               projection=V.get_projection(),
-               geometry=points,
-               name='%s_point_data' % V.get_name(),
-               keywords=V.get_keywords())
-    return V
-
-
 def convert_polygons_to_centroids(V):
     """Convert polygon vector data to point vector data
 

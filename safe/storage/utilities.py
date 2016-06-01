@@ -789,22 +789,6 @@ def points_along_line(line, delta):
     return C
 
 
-def combine_polygon_and_point_layers(layers):
-    """Combine polygon and point layers
-
-    :param layers: List of vector layers of type polygon or point
-    :type layers: list
-
-    :returns: One point layer with all input point layers and centroids from
-        all input polygon layers.
-    :rtype: numpy.ndarray
-    :raises: InaSAFEError (in case attribute names are not the same.)
-    """
-
-    # This is to implement issue #276
-    print layers
-
-
 def get_ring_data(ring):
     """Extract coordinates from OGR ring object
 

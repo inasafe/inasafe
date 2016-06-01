@@ -417,63 +417,6 @@ class KeywordIO(QObject):
         hash_value = hash_value.hexdigest()
         return hash_value
 
-    def write_keywords_for_uri(self, uri, keywords):
-        """Write keywords for a URI into the keywords database. All the
-        keywords for the uri should be written in a single operation.
-        A hash will be constructed from the supplied uri and a lookup made
-        in a local SQLite database for the keywords. If there is an existing
-        record it will be updated, if not, a new one will be created.
-
-        .. seealso:: read_keyword_from_uri, delete_keywords_for_uri
-
-        :param uri: A layer uri. e.g. ```dbname=\'osm\' host=localhost
-            port=5432 user=\'foo\' password=\'bar\' sslmode=disable
-            key=\'id\' srid=4326```
-        :type uri: str
-
-        :param keywords: The metadata keywords to write (which should be
-            provided as a dict of key value pairs).
-        :type keywords: dict
-
-        :returns: The XML written to the DB
-
-        :raises: KeywordNotFoundError if the keyword is not recognised.
-        """
-        hash_value = self.hash_for_datasource(uri)
-        try:
-            cursor = self.get_cursor()
-            # now see if we have any data for our hash
-            sql = (
-                'select dict from keyword where hash = \'%s\';' % hash_value)
-            cursor.execute(sql)
-            data = cursor.fetchone()
-            pickle_dump = dumps(keywords, HIGHEST_PROTOCOL)
-            if data is None:
-                # insert a new rec
-                # cursor.execute('insert into keyword(hash) values(:hash);',
-                #             {'hash': hash_value})
-                cursor.execute(
-                    'insert into keyword(hash, dict) values(:hash, :dict);',
-                    {'hash': hash_value, 'dict': sqlite.Binary(pickle_dump)})
-                self.connection.commit()
-            else:
-                # update existing rec
-                cursor.execute(
-                    'update keyword set dict=? where hash = ?;',
-                    (sqlite.Binary(pickle_dump), hash_value))
-                self.connection.commit()
-        except sqlite.Error:
-            LOGGER.exception('Error writing keywords to SQLite db %s' %
-                             self.keyword_db_path)
-            # See if we can roll back.
-            if self.connection is not None:
-                self.connection.rollback()
-            raise
-        finally:
-            self.close_connection()
-
-        return keywords
-
     def to_message(self, keywords=None, show_header=True):
         """Format keywords as a message object.
 
