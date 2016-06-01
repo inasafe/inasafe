@@ -62,7 +62,7 @@ class Raster(Layer):
         * name: Optional name for layer. If None, basename is used.
         * keywords: Optional dictionary with keywords that describe the
             layer. When the layer is stored, these keywords will
-            be written into an associated file with extension .keywords.
+            be written into an associated file with extension .xml.
             Keywords can for example be used to display text
             about the layer in a web application.
         * style_info: Dictionary with information about how this layer
@@ -320,7 +320,6 @@ class Raster(Layer):
 
         # Write keywords if any
         write_iso19115_metadata(filename, self.keywords)
-        # write_keywords(self.keywords, basename + '.keywords')
 
     def read_from_qgis_native(self, qgis_layer):
         """Read raster data from qgis layer QgsRasterLayer.
@@ -353,7 +352,6 @@ class Raster(Layer):
             provider.crs())
 
         # Write keywords if any
-        # write_keywords(self.keywords, base_name + '.keywords')
         write_iso19115_metadata(file_name, self.keywords)
         self.read_from_file(file_name)
 

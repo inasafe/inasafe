@@ -17,7 +17,6 @@ import unittest
 
 from qgis.core import QgsRasterLayer
 
-from safe.storage.utilities import read_keywords
 from safe.storage.raster import Raster
 from safe.test.utilities import test_data_path, get_qgis_app
 

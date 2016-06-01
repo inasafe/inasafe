@@ -28,18 +28,13 @@ from collections import OrderedDict
 
 # noinspection PyPackageRequirements
 
-from safe.storage.utilities import read_keywords
-from safe.common.exceptions import (
-    InvalidParameterError,
-    NoKeywordsFoundError,
-    KeywordNotFoundError)
 from safe.common.utilities import unique_filename
 from safe.common.version import get_version
 from safe.defaults import disclaimer
 from safe import messaging as m
 from safe.messaging import styles, Message
 from safe.messaging.error_message import ErrorMessage
-from safe.utilities.unicode import get_unicode, get_string
+from safe.utilities.unicode import get_unicode
 from safe.utilities.i18n import tr
 from safe.definitions import inasafe_keyword_version
 

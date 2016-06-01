@@ -177,8 +177,6 @@ def write_read_iso_19115_metadata(layer_uri, keywords, keyword=None):
             message += 'new - %s - %s - type: %s\n' % (
                 key, value[1], type(value[1]))
         raise MissingMetadata(message)
-    if os.path.exists(os.path.splitext(layer_uri)[0] + '.keywords'):
-        os.remove(os.path.splitext(layer_uri)[0] + '.keywords')
     if keyword:
         if keyword in iso_19115_keywords.keys():
             return iso_19115_keywords[keyword]

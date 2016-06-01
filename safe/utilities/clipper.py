@@ -43,14 +43,8 @@ from safe.common.exceptions import (
     CallGDALError,
     InvalidProjectionError,
     InvalidClipGeometryError,
-    MetadataReadError,
-    NoKeywordsFoundError
 )
-from safe.storage.utilities import read_keywords
-from safe.utilities.metadata import (
-    read_iso19115_metadata,
-    write_read_iso_19115_metadata
-)
+from safe.utilities.metadata import read_iso19115_metadata
 from safe.definitions import multipart_polygon_key
 
 LOGGER = logging.getLogger(name='InaSAFE')

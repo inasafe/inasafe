@@ -89,8 +89,7 @@ class Vector(Layer):
             * name: Optional name for layer. If None, basename is used.
             * keywords: Optional dictionary with keywords that describe the
                 layer. When the layer is stored, these keywords will
-                be written into an associated file with extension
-                '.keywords'.
+                be written into an associated file with extension '.xml'.
 
                 Keywords can for example be used to display text about the
                 layer in an application.
@@ -587,7 +586,6 @@ class Vector(Layer):
             raise IOError(msg)
 
         # Write keywords if any
-        # write_keywords(self.keywords, base_name + '.keywords')
         write_iso19115_metadata(file_name, self.keywords)
         self.read_from_file(file_name)
 
@@ -819,7 +817,6 @@ class Vector(Layer):
             feature.Destroy()
 
         # Write keywords if any
-        # write_keywords(self.keywords, base_name + '.keywords')
         write_iso19115_metadata(filename, self.keywords)
         self.keywords = read_iso19115_metadata(filename)
 
