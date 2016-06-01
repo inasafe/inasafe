@@ -30,8 +30,6 @@ from vector import Vector
 from projection import Projection
 
 from utilities import DRIVER_MAP
-from utilities import read_keywords
-from utilities import write_keywords
 from utilities import (
     geotransform_to_bbox,
     geotransform_to_resolution,
@@ -42,7 +40,6 @@ from safe.utilities.unicode import get_string
 from safe.utilities.metadata import (
     write_iso19115_metadata,
     read_iso19115_metadata,
-    write_read_iso_19115_metadata
 )
 
 
@@ -211,11 +208,7 @@ class Raster(Layer):
                 raise ReadLayerError(msg)
 
         # Look for any keywords
-        try:
-            self.keywords = read_iso19115_metadata(filename)
-        except (MetadataReadError, NoKeywordsFoundError):
-            keywords = read_keywords(basename + '.keywords')
-            self.keywords = write_read_iso_19115_metadata(filename, keywords)
+        self.keywords = read_iso19115_metadata(filename)
 
         # Determine name
         if 'title' in self.keywords:

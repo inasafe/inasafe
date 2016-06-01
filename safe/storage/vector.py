@@ -44,8 +44,6 @@ from projection import Projection
 from geometry import Polygon
 from utilities import verify
 from utilities import DRIVER_MAP, TYPE_MAP
-from utilities import read_keywords
-from utilities import write_keywords
 from utilities import get_geometry_type
 from utilities import is_sequence
 from utilities import array_to_line
@@ -61,7 +59,6 @@ from safe.utilities.i18n import tr
 from safe.utilities.metadata import (
     write_iso19115_metadata,
     read_iso19115_metadata,
-    write_read_iso_19115_metadata
 )
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -431,11 +428,7 @@ class Vector(Layer):
         base_name = os.path.splitext(filename)[0]
 
         # Look for any keywords
-        try:
-            self.keywords = read_iso19115_metadata(filename)
-        except (NoKeywordsFoundError, MetadataReadError):
-            keywords = read_keywords(base_name + '.keywords')
-            self.keywords = write_read_iso_19115_metadata(filename, keywords)
+        self.keywords = read_iso19115_metadata(filename)
 
         # FIXME (Ole): Should also look for style file to populate style_info
 

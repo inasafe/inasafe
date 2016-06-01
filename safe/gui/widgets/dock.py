@@ -668,19 +668,13 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         """
 
         source_basename = os.path.splitext(layer.source())[0]
-        source_keywords = "%s.keywords" % source_basename
         source_xml = "%s.xml" % source_basename
 
         destination_basename = os.path.splitext(destination)[0]
-        destination_keywords = "%s.keywords" % destination_basename
         destination_xml = "%s.xml" % destination_basename
 
         # noinspection PyBroadException,PyBroadException
         try:
-            # Keywords
-            if os.path.isfile(source_keywords):
-                shutil.copy(source_keywords, destination_keywords)
-
             # XML
             if os.path.isfile(source_xml):
                 shutil.copy(source_xml, destination_xml)

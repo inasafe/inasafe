@@ -9,15 +9,12 @@ from qgis.core import QgsDataSourceURI, QgsVectorLayer
 
 from safe.definitions import inasafe_keyword_version
 from safe.common.utilities import unique_filename
-from safe.utilities.utilities import read_file_keywords
 from safe.test.utilities import (
     load_layer,
     get_qgis_app,
     test_data_path,
     clone_raster_layer)
 from safe.utilities.keyword_io import KeywordIO, definition
-from safe.common.exceptions import HashNotFoundError
-from safe.common.utilities import temp_dir
 from safe.common.exceptions import NoKeywordsFoundError
 from safe.utilities.unicode import get_unicode
 from safe.utilities.metadata import read_iso19115_metadata

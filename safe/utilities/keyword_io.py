@@ -35,10 +35,8 @@ from PyQt4.QtCore import QObject, QSettings
 import safe.definitions
 from safe import messaging as m
 from safe.messaging import styles
-from safe.storage.utilities import read_keywords
 from safe.utilities.i18n import tr
 from safe.utilities.unicode import get_string
-from safe.utilities.utilities import read_file_keywords
 from safe.common.utilities import verify
 from safe.common.exceptions import (
     HashNotFoundError,
@@ -52,7 +50,6 @@ from safe.common.exceptions import (
 from safe.utilities.metadata import (
     write_iso19115_metadata,
     read_iso19115_metadata,
-    write_read_iso_19115_metadata
 )
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -151,23 +148,9 @@ class KeywordIO(QObject):
                 dictionary = read_iso19115_metadata(filename)
             except (MetadataReadError, NoKeywordsFoundError):
                 pass
-        elif ext == '.keywords':
-            try:
-                dictionary = read_file_keywords(filename)
-                # update to xml based metadata
-                write_read_iso_19115_metadata(filename, dictionary)
-
-            except (HashNotFoundError,
-                    Exception,
-                    OperationalError,
-                    NoKeywordsFoundError,
-                    KeywordNotFoundError,
-                    InvalidParameterError,
-                    UnsupportedProviderError):
-                raise
         else:
             raise InvalidParameterError(
-                'Keywords file have .xml or .keywords extension')
+                'Keywords file have .xml or extension')
 
         # if no keyword was supplied, just return the dict
         if keyword is None:
@@ -210,42 +193,7 @@ class KeywordIO(QObject):
         source = layer.source()
 
         # Try to read from ISO metadata first.
-        try:
-            return read_iso19115_metadata(source, keyword)
-        except (MetadataReadError, NoKeywordsFoundError):
-            pass
-
-        try:
-            flag = self.are_keywords_file_based(layer)
-        except UnsupportedProviderError:
-            raise
-
-        try:
-            if flag:
-                keywords = read_file_keywords(source)
-                mandatory_keywords = [
-                    'layer_purpose',
-                    'keyword_version'
-                ]
-                for mandatory_keyword in mandatory_keywords:
-                    if mandatory_keyword not in keywords.keys():
-                        message = tr(
-                            'The layer does not have keyword %s in its '
-                            'keywords.' % mandatory_keyword)
-                        raise KeywordNotFoundError(message)
-            else:
-                uri = self.normalize_uri(layer)
-                keywords = self.read_keyword_from_uri(uri)
-            return write_read_iso_19115_metadata(source, keywords, keyword)
-
-        except (HashNotFoundError,
-                Exception,
-                OperationalError,
-                NoKeywordsFoundError,
-                KeywordNotFoundError,
-                InvalidParameterError,
-                UnsupportedProviderError):
-            raise
+        return read_iso19115_metadata(source, keyword)
 
     def write_keywords(self, layer, keywords):
         """Write keywords for a datasource.
@@ -265,27 +213,7 @@ class KeywordIO(QObject):
         :raises: UnsupportedProviderError
         """
         source = layer.source()
-        try:
-            write_iso19115_metadata(source, keywords)
-            return
-        except Exception as e:
-            raise e
-        #
-        # try:
-        #     flag = self.are_keywords_file_based(layer)
-        # except UnsupportedProviderError:
-        #     raise
-
-        # try:
-        #     keywords[inasafe_keyword_version_key] = inasafe_keyword_version
-        #     if flag:
-        #         write_keywords_to_file(source, keywords)
-        #     else:
-        #         uri = self.normalize_uri(layer)
-        #         self.write_keywords_for_uri(uri, keywords)
-        #     return
-        # except:
-        #     raise
+        write_iso19115_metadata(source, keywords)
 
     def update_keywords(self, layer, keywords):
         """Update keywords for a datasource.
