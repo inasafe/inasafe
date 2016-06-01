@@ -37,7 +37,7 @@ class SafeLayerTest(unittest.TestCase):
         self.assertEquals(exposure.name, 'Buildings')
         expected_keywords = {
             'license': u'Open Data Commons Open Database License (ODbL)',
-            'keyword_version': u'3.4',
+            'keyword_version': u'3.5',
             'value_mapping': {u'government': [u'Government'],
                               u'residence': [u'Residential'],
                               u'health': [u'Clinic/Doctor'],
