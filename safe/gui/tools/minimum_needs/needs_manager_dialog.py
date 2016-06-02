@@ -330,11 +330,11 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         parameter_widgets[8].set_text(tr('weekly'))
         parameter_widgets[9].set_text(tr(
             'A displaced person should be provided with '
-            '%(default)s %(unit)s/%(units)s/ of %(unit abbreviation)s '
+            '%(default value)s %(unit)s/%(units)s/%(unit abbreviation)s of '
             '%(resource name)s. Though no less than %(minimum allowed)s '
             'and no more than %(maximum allowed)s. This should be provided '
             '%(frequency)s.' % {
-                'default': '{{ Default }}',
+                'default value': '{{ Default }}',
                 'unit': '{{ Unit }}',
                 'units': '{{ Units }}',
                 'unit abbreviation': '{{ Unit abbreviation }}',
@@ -509,11 +509,11 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         sentence_parameter.is_required = True
         sentence_parameter.value = tr(
             'A displaced person should be provided with '
-            '%(default)s %(unit)s/%(units)s/ of %(unit abbreviation)s '
+            '%(default value)s %(unit)s/%(units)s/%(unit abbreviation)s of '
             '%(resource name)s. Though no less than %(minimum allowed)s '
             'and no more than %(maximum allowed)s. This should be provided '
             '%(frequency)s.' % {
-                'default': '{{ Default }}',
+                'default value': '{{ Default }}',
                 'unit': '{{ Unit }}',
                 'units': '{{ Units }}',
                 'unit abbreviation': '{{ Unit abbreviation }}',
