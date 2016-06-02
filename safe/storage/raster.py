@@ -19,10 +19,8 @@ from safe.gis.numerics import (
 from safe.common.exceptions import (
     GetDataError,
     InaSAFEError,
-    MetadataReadError,
     ReadLayerError,
-    WriteLayerError,
-    NoKeywordsFoundError
+    WriteLayerError
 )
 
 from layer import Layer

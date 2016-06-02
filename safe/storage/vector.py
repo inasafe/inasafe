@@ -35,9 +35,7 @@ from safe.common.exceptions import (
     ReadLayerError,
     WriteLayerError,
     GetDataError,
-    InaSAFEError,
-    NoKeywordsFoundError,
-    MetadataReadError
+    InaSAFEError
 )
 from layer import Layer
 from projection import Projection
@@ -48,7 +46,6 @@ from utilities import get_geometry_type
 from utilities import is_sequence
 from utilities import array_to_line
 from utilities import calculate_polygon_centroid
-from utilities import points_along_line
 from utilities import geometry_type_to_string
 from utilities import get_ring_data, get_polygon_data
 from utilities import rings_equal
