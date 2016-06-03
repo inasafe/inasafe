@@ -226,7 +226,7 @@ class PostprocessorManager(QtCore.QObject):
                     self.aggregator.get_default_keyword('NO_DATA')))
 
             table['notes'].append(self.tr(
-                'Columns containing exclusively 0 and "%s" '
+                'Columns or lines containing exclusively 0 and "%s" '
                 'have not been shown in the table.' %
                 self.aggregator.get_default_keyword('NO_DATA')))
             result[processor] = table
@@ -333,7 +333,6 @@ class PostprocessorManager(QtCore.QObject):
                     value = str(unhumanize_number(value))
                     if value == self.aggregator.get_default_keyword('NO_DATA'):
                         has_no_data = True
-                        value += ' *'
                         try:
                             postprocessor_totals[indicator] += 0
                         except KeyError:
@@ -358,13 +357,13 @@ class PostprocessorManager(QtCore.QObject):
             message.add(table)
             if has_no_data:
                 message.add(m.EmphasizedText(self.tr(
-                    '* "%s" values mean that there where some problems while '
+                    '"%s" values mean that there where some problems while '
                     'calculating them. This did not affect the other '
                     'values.') % (
                         self.aggregator.get_default_keyword(
                             'NO_DATA'))))
             caption = m.EmphasizedText(self.tr(
-                'Columns containing exclusively 0 and "%s" '
+                'Columns or lines containing exclusively 0 and "%s" '
                 'have not been shown in the table.' %
                 self.aggregator.get_default_keyword('NO_DATA')))
             message.add(
