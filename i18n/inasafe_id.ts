@@ -2086,7 +2086,7 @@
     <message>
         <location filename="needs_manager_dialog.py" line="85"/>
         <source>Units</source>
-        <translation>Satuan</translation>
+        <translation>Satuan jamak</translation>
     </message>
     <message>
         <location filename="needs_manager_dialog.py" line="423"/>
