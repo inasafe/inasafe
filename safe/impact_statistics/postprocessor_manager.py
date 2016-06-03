@@ -159,13 +159,17 @@ class PostprocessorManager(QtCore.QObject):
                     'Detailed %s report '
                     '(affected people)') % translated_name
 
-            empty_table = not sorted_results[0][1]
+            try:
+                empty_table = not sorted_results[0][1]
+            except IndexError:
+                empty_table = True
             if empty_table:
-                # Due to an error? The table is empty.
+                # The table is empty.
+                # Due to an error or because every lines were removed.
                 table['attributes'] = []
                 table['fields'] = []
                 table['notes'].append(
-                    tr('Could not compute the %s report.') % translated_name)
+                    tr('The report "%s" is empty.') % translated_name)
                 result['processor'] = table
                 continue
 
