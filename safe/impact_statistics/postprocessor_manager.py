@@ -196,7 +196,6 @@ class PostprocessorManager(QtCore.QObject):
                     value = str(unhumanize_number(value))
                     if value == self.aggregator.get_default_keyword('NO_DATA'):
                         has_no_data = True
-                        value += ' *'
                         try:
                             postprocessor_totals[indicator] += 0
                         except KeyError:
@@ -221,7 +220,7 @@ class PostprocessorManager(QtCore.QObject):
 
             if has_no_data:
                 table['notes'].append(self.tr(
-                    '* "%s" values mean that there where some problems while '
+                    '"%s" values mean that there where some problems while '
                     'calculating them. This did not affect the other '
                     'values.') % (
                     self.aggregator.get_default_keyword('NO_DATA')))
@@ -656,8 +655,7 @@ class PostprocessorManager(QtCore.QObject):
                     value.clear()
                     if key not in self.output:
                         self.output[key] = []
-                    self.output[key].append(
-                        (zone_name, results))
+                    self.output[key].append([zone_name, results])
 
                 except PostProcessorError as e:
                     message = m.Message(
@@ -668,9 +666,12 @@ class PostprocessorManager(QtCore.QObject):
             # increment the index
             polygon_index += 1
         self.remove_empty_columns()
+        self.remove_empty_lines()
 
     def remove_empty_columns(self):
         """Removes empty columns from output, to reduce table width.
+
+        Columns containing exclusively 0 and "No data" are removed.
 
         .. note:: This is intended to be a temporary solution to the excessive
         amount of data in some of the postprocessors.
@@ -692,6 +693,46 @@ class PostprocessorManager(QtCore.QObject):
                 if total_for_type == 0:
                     for _area, breakdown in output:
                         breakdown.pop(key)
+
+    def remove_empty_lines(self):
+        """Remove empty lines from output, to reduce table height.
+
+        Lines containing exclusively 0 and "No data" are removed.
+        """
+
+        def keep_area(row, elements):
+            """Internal function to know if we should keep the row.
+
+            :param row: The row
+            :param elements : Columns heading.
+
+            :return: Boolean if we should keep the row.
+            """
+            for element in elements:
+                value = row[element]['value']
+                try:
+                    if int(value.replace(',', '')) != 0:
+                        # If there is one integer, different than 0, we keep it
+                        return True
+                except ValueError:
+                    pass
+            else:
+                # Only no data or zero values has been found, we remove it.
+                return False
+
+        index_to_remove = {}
+        for (postprocessor_type, output) in self.output.items():
+            index_to_remove[postprocessor_type] = []
+            keys = output[0][1].keys()
+            for i, line in enumerate(output):
+                if not keep_area(line[1], keys):
+                    index_to_remove[postprocessor_type].append(i)
+
+        for postprocessor in index_to_remove:
+            # As we are removing many indexes in the list,
+            # we need to reverse the order to not disturb the lower indexes.
+            for i in sorted(index_to_remove[postprocessor], reverse=True):
+                del self.output[postprocessor][i]
 
     def get_output(self, aoi_mode):
         """Returns the results of the post processing as a table.
