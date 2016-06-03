@@ -412,30 +412,6 @@ class ShakeGrid(object):
 
         return vrt_path
 
-    def _add_executable_prefix(self, command):
-        """Add the executable prefix for gdal binaries.
-
-        This is primarily needed for OSX where gdal tools are tucked away in
-        the Library path.
-
-        :param command: A string containing the command to
-        which the prefix will be prepended
-        :type command: str
-
-        :return: A copy of the command with the prefix added.
-        :rtype: str
-
-        :raises: None
-        """
-
-        executable_prefix = ''
-        if sys.platform == 'darwin':  # Mac OS X
-            # .. todo:: FIXME - softcode gdal version in this path
-            executable_prefix = ('/Library/Frameworks/GDAL.framework/'
-                                 'Versions/1.9/Programs/')
-        command = executable_prefix + command
-        return command
-
     def _run_command(self, command):
         """Run a command and raise any error as needed.
 
@@ -446,7 +422,6 @@ class ShakeGrid(object):
 
         :raises: Any exceptions will be propagated.
         """
-        command = self._add_executable_prefix(command)
         try:
             my_result = call(command, shell=True)
             del my_result
