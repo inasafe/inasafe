@@ -135,9 +135,9 @@ def unique_filename(**kwargs):
     Example usage:
 
     tempdir = temp_dir(sub_dir='test')
-    filename = unique_filename(suffix='.keywords', dir=tempdir)
+    filename = unique_filename(suffix='.foo', dir=tempdir)
     print filename
-    /tmp/inasafe/23-08-2012/timlinux/test/tmpyeO5VR.keywords
+    /tmp/inasafe/23-08-2012/timlinux/test/tmpyeO5VR.foo
 
     Or with no preferred subdir, a default subdir of 'impacts' is used:
 

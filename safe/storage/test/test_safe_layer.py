@@ -23,6 +23,7 @@ from safe.common.exceptions import InvalidLayerError, KeywordNotFoundError
 class SafeLayerTest(unittest.TestCase):
     def test_safe_layer_attributes(self):
         """Test creating safe layer."""
+        self.maxDiff = None
         building_path = test_data_path('exposure', 'buildings.shp')
 
         building_layer = read_layer(building_path)
@@ -36,7 +37,7 @@ class SafeLayerTest(unittest.TestCase):
         self.assertEquals(exposure.name, 'Buildings')
         expected_keywords = {
             'license': u'Open Data Commons Open Database License (ODbL)',
-            'keyword_version': u'3.4',
+            'keyword_version': u'3.5',
             'value_mapping': {u'government': [u'Government'],
                               u'residence': [u'Residential'],
                               u'health': [u'Clinic/Doctor'],
