@@ -20,6 +20,7 @@ from safe.common.resource_parameter import ResourceParameter
 from safe.common.minimum_needs import MinimumNeeds
 from safe.utilities.resources import resources_path
 from safe.utilities.i18n import tr
+from safe.utilities.qgis_utilities import display_critical_message_box
 from safe_extras.parameters.text_parameter import TextParameter
 
 
@@ -320,11 +321,20 @@ class NeedsProfile(MinimumNeeds):
         for part in sentence[1:]:
             replace, keep = part.split('}}')
             replace = replace.strip()
-            updated_sentence = "%s %s%s" % (
-                updated_sentence,
-                resource[replace],
-                keep
-            )
+            try:
+                updated_sentence = "%s %s%s" % (
+                    updated_sentence,
+                    resource[replace],
+                    keep
+                )
+            except KeyError:
+                # Improving the error message.
+                # See issue https://github.com/inasafe/inasafe/issues/2676
+                title = '%s not found in the resource.' % replace
+                msg = '%s has not been found in : \n' \
+                      '%s \n' \
+                      'Please, report this error.' % (replace, resource)
+                display_critical_message_box(title=title, message=msg)
         return updated_sentence
 
     def remove_profile(self, profile):
