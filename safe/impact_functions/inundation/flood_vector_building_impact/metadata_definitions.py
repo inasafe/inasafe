@@ -80,6 +80,9 @@ class FloodPolygonBuildingFunctionMetadata(ImpactFunctionMetadata):
             'actions': '',
             'limitations': [],
             'citations': [],
+            'map_title': tr('Buildings inundated'),
+            'legend_title': tr('Structure inundated status'),
+            'layer_name': tr('Flooded buildings'),
             'layer_requirements': {
                 'hazard': {
                     'layer_mode': layer_mode_classified,

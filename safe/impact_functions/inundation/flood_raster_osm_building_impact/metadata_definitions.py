@@ -92,6 +92,10 @@ class FloodRasterBuildingMetadata(ImpactFunctionMetadata):
                    'either based on a fixed threshold')
             ],
             'citations': [],
+            'map_title': tr('Flooded buildings'),
+            'legend_title': tr('Flooded structure status'),
+            'legend_units': tr('(flooded, wet, or dry)'),
+            'layer_name': tr('Estimated buildings affected'),
             'layer_requirements': {
                 'hazard': {
                     'layer_mode': layer_mode_continuous,
