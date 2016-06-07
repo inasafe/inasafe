@@ -80,6 +80,9 @@ class TsunamiRasterHazardLandCoverFunctionMetadata(ImpactFunctionMetadata):
                 tr('Papadopoulos, Gerassimos A., and Fumihiko Imamura. '
                    '"A proposal for a new tsunami intensity scale." '
                    'ITS 2001 proceedings, no. 5-1, pp. 569-577. 2001.')],
+            'legend_title': '',
+            'legend_units': '',
+            'legend_notes': '',
             'map_title': tr('Affected Land Cover'),
             'layer_name': tr('Land cover affected'),
             'layer_requirements': {

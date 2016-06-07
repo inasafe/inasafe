@@ -72,6 +72,11 @@ class PAGFatalityMetadata(ITBFatalityMetadata):
             'output': '',
             'actions': '',
             'limitations': [],
+            'map_title': '',
+            'legend_title': '',
+            'legend_units': '',
+            'legend_notes': '',
+            'layer_name': '',
             'citations': [
                 tr('Jaiswal, K. S., Wald, D. J., and Hearne, M. (2009a). '
                    'Estimating casualties for large worldwide earthquakes '
