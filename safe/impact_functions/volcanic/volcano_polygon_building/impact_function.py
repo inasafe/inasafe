@@ -18,7 +18,6 @@ from safe.utilities.i18n import tr
 from safe.impact_functions.volcanic.volcano_polygon_building\
     .metadata_definitions import VolcanoPolygonBuildingFunctionMetadata
 from safe.common.exceptions import InaSAFEError
-from safe.common.utilities import get_thousand_separator
 from safe.engine.interpolation import (
     assign_hazard_values_to_exposure_data)
 from safe.impact_reports.building_exposure_report_mixin import (
@@ -171,8 +170,7 @@ class VolcanoPolygonBuildingFunction(
 
         style_classes = []
 
-        i = 0
-        for category_name in self.affected_buildings.keys():
+        for i, category_name in enumerate(self.affected_buildings.keys()):
             style_class = dict()
             style_class['label'] = tr(category_name)
             style_class['transparency'] = 0
@@ -182,7 +180,6 @@ class VolcanoPolygonBuildingFunction(
             if i >= len(self.affected_buildings.keys()):
                 i = len(self.affected_buildings.keys()) - 1
             style_class['colour'] = colours[i]
-            i += 1
 
             style_classes.append(style_class)
 
@@ -191,21 +188,14 @@ class VolcanoPolygonBuildingFunction(
                           style_classes=style_classes,
                           style_type='categorizedSymbol')
 
-        # For printing map purpose
-        map_title = tr('Buildings affected by volcanic hazard zone')
-        legend_title = tr('Building count')
-        legend_units = tr('(building)')
-        legend_notes = tr('Thousand separator is represented by %s' %
-                          get_thousand_separator())
-
         impact_data = self.generate_data()
 
         extra_keywords = {
             'target_field': self.target_field,
-            'map_title': map_title,
-            'legend_notes': legend_notes,
-            'legend_units': legend_units,
-            'legend_title': legend_title
+            'map_title': self.metadata().key('map_title'),
+            'legend_notes': self.metadata().key('legend_notes'),
+            'legend_units': self.metadata().key('legend_units'),
+            'legend_title': self.metadata().key('legend_title')
         }
 
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
@@ -215,7 +205,7 @@ class VolcanoPolygonBuildingFunction(
             data=features,
             projection=interpolated_layer.get_projection(),
             geometry=interpolated_layer.get_geometry(),
-            name=tr('Buildings affected by volcanic hazard zone'),
+            name=self.metadata().key('layer_name'),
             keywords=impact_layer_keywords,
             style_info=style_info
         )
