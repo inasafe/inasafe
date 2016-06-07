@@ -342,6 +342,18 @@ class ImpactFunctionMetadata(object):
         return cls.as_dict().get('name', '')
 
     @classmethod
+    def key(cls, key):
+        """Return the IF metadata value according to the key specified.
+
+        :param key: The metadata key to retrieve.
+        :type key: str
+
+        :return: The metadata value or None.
+        :rtype: str, list, dict
+        """
+        return cls.as_dict().get(key, None)
+
+    @classmethod
     def get_hazard_requirements(cls):
         """Get hazard layer requirements."""
         return cls.get_layer_requirements()['hazard']
