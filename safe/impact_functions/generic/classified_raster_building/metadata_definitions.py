@@ -95,6 +95,7 @@ class ClassifiedRasterHazardBuildingMetadata(ImpactFunctionMetadata):
                 'within each hazard class.'),
             'limitations': [tr('The number of classes is three.')],
             'citations': [],
+            'legend_notes': '',
             'map_title': tr('Buildings affected'),
             'legend_units': tr('(Low, Medium, High)'),
             'legend_title': tr('Structure inundated status'),

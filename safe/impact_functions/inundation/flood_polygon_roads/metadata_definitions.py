@@ -64,6 +64,8 @@ class FloodPolygonRoadsMetadata(ImpactFunctionMetadata):
             'actions': tr(''),
             'limitations': [],
             'citations': [],
+            'legend_units': '',
+            'legend_notes': '',
             'map_title': tr('Roads inundated'),
             'legend_title': tr('Road inundated status'),
             'layer_name': tr('Flooded roads'),
