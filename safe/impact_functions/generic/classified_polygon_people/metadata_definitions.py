@@ -79,6 +79,9 @@ class ClassifiedPolygonHazardPolygonPeopleFunctionMetadata(
                 'each hazard zone.'),
             'limitations': [],
             'citations': [],
+            'legend_title': '',
+            'legend_units': '',
+            'legend_notes': '',
             'map_title': tr('Affected People'),
             'layer_name': tr('People affected'),
             'layer_requirements': {
