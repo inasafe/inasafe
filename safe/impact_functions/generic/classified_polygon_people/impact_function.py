@@ -253,7 +253,7 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         # Create vector layer and return
         impact_layer = Vector(
             data=impact_layer,
-            name=tr('People affected by each hazard zone'),
+            name=tr('People affected'),
             keywords=impact_layer_keywords,
             style_info=style_info)
 

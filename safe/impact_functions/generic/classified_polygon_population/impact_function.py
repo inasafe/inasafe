@@ -217,7 +217,7 @@ class ClassifiedPolygonHazardPopulationFunction(
             style_type='rasterStyle')
 
         # For printing map purpose
-        map_title = tr('People impacted by each hazard zone')
+        map_title = tr('People impacted')
         legend_title = tr('Population')
         legend_units = tr('(people per cell)')
         legend_notes = tr(
@@ -241,7 +241,7 @@ class ClassifiedPolygonHazardPopulationFunction(
             data=covered_exposure_layer.get_data(),
             projection=covered_exposure_layer.get_projection(),
             geotransform=covered_exposure_layer.get_geotransform(),
-            name=tr('People impacted by each hazard zone'),
+            name=tr('People impacted'),
             keywords=impact_layer_keywords,
             style_info=style_info)
 
