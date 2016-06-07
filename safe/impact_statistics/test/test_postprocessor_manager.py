@@ -29,7 +29,6 @@ from safe.test.utilities import (
     GEOCRS,
     load_standard_layers,
     setup_scenario,
-    canvas_list,
     get_qgis_app)
 
 # AG: get_qgis_app() should be called before importing modules from

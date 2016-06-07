@@ -13,7 +13,6 @@ import logging
 import unittest
 
 from safe.common.utilities import temp_dir, unique_filename
-from safe.storage.utilities import read_keywords
 from safe.storage.vector import Vector, QGIS_IS_AVAILABLE
 from safe.test.utilities import test_data_path, get_qgis_app
 
@@ -41,7 +40,7 @@ class VectorTest(unittest.TestCase):
 
     def test_sublayer_loading(self):
         """Test if we can load sublayers."""
-        keywords = read_keywords(KEYWORD_PATH, EXPOSURE_SUBLAYER_NAME)
+        keywords = {}
         layer = Vector(data=SQLITE_PATH, keywords=keywords,
                        sublayer=EXPOSURE_SUBLAYER_NAME)
         msg = ('Expected layer to be a polygon layer, got a %s' %
@@ -52,7 +51,7 @@ class VectorTest(unittest.TestCase):
 
     def test_shapefile_loading(self):
         """Test that loading a dataset with no sublayers works."""
-        keywords = read_keywords(SHP_BASE + '.keywords')
+        keywords = {}
         layer = Vector(data=SHP_BASE + '.shp', keywords=keywords)
         msg = ('Expected layer to be a polygon layer, got a %s' %
                layer.geometry_type)
@@ -62,7 +61,7 @@ class VectorTest(unittest.TestCase):
 
     def test_sqlite_writing(self):
         """Test that writing a dataset to sqlite works."""
-        keywords = read_keywords(SHP_BASE + '.keywords')
+        keywords = {}
         layer = Vector(data=SHP_BASE + '.shp', keywords=keywords)
         test_dir = temp_dir(sub_dir='test')
         test_file = unique_filename(suffix='.sqlite', dir=test_dir)
@@ -72,7 +71,7 @@ class VectorTest(unittest.TestCase):
 
     def test_qgis_vector_layer_loading(self):
         """Test that reading from QgsVectorLayer works."""
-        keywords = read_keywords(KEYWORD_PATH, EXPOSURE_SUBLAYER_NAME)
+        keywords = {}
         if QGIS_IS_AVAILABLE:
             qgis_layer = QgsVectorLayer(SHP_BASE + '.shp', 'test', 'ogr')
 
@@ -88,7 +87,7 @@ class VectorTest(unittest.TestCase):
         """Test that converting to QgsVectorLayer works."""
         if QGIS_IS_AVAILABLE:
             # Create vector layer
-            keywords = read_keywords(SHP_BASE + '.keywords')
+            keywords = {}
             layer = Vector(data=SHP_BASE + '.shp', keywords=keywords)
 
             # Convert to QgsVectorLayer
