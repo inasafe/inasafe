@@ -13,7 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 __author__ = 'Rizky Maulana Nugraha'
 
-from safe.common.utilities import OrderedDict
+from safe.common.utilities import OrderedDict, get_thousand_separator
 
 from safe.defaults import (
     default_minimum_needs,
@@ -103,6 +103,13 @@ class FloodEvacuationRasterHazardMetadata(ImpactFunctionMetadata):
                    'on consensus, not hard evidence.')
             ],
             'citations': [],
+            'map_title': tr('People in need of evacuation'),
+            'legend_title': tr('Population Count'),
+            'legend_units': tr('(people per cell)'),
+            'legend_notes': tr(
+                'Thousand separator is represented by %s' %
+                get_thousand_separator()),
+            'layer_name': tr('Population which need evacuation'),
             'layer_requirements': {
                 'hazard': {
                     'layer_mode': layer_mode_continuous,
