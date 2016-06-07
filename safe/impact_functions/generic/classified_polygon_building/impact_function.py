@@ -205,7 +205,7 @@ class ClassifiedPolygonHazardBuildingFunction(
         )
 
         # For printing map purpose
-        map_title = tr('Buildings affected by each hazard zone')
+        map_title = tr('Buildings affected')
         legend_title = tr('Building count')
         legend_units = tr('(building)')
         legend_notes = tr(
@@ -227,7 +227,7 @@ class ClassifiedPolygonHazardBuildingFunction(
         # Create vector layer and return
         impact_layer = Vector(
             data=interpolated_layer,
-            name=tr('Buildings affected by each hazard zone'),
+            name=tr('Buildings affected'),
             keywords=impact_layer_keywords,
             style_info=style_info)
 
