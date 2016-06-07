@@ -253,7 +253,7 @@ class TsunamiRasterLandcoverFunction(ContinuousRHClassifiedVE):
             style_type='categorizedSymbol')
 
         extra_keywords = {
-            'map_title': tr('Affected Land Cover'),
+            'map_title': self.metadata().key('map_title'),
             'target_field': self.target_field
         }
 
@@ -262,7 +262,7 @@ class TsunamiRasterLandcoverFunction(ContinuousRHClassifiedVE):
         # Create vector layer and return
         impact_layer = Vector(
             data=impact_layer,
-            name=tr('Land cover affected'),
+            name=self.metadata().key('layer_name'),
             keywords=impact_layer_keywords,
             style_info=style_info)
 
