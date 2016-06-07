@@ -65,6 +65,8 @@ class ClassifiedPolygonHazardLandCoverFunctionMetadata(ImpactFunctionMetadata):
                 'each hazard zone.'),
             'limitations': [],
             'citations': [],
+            'map_title': tr('Affected Land Cover'),
+            'layer_name': tr('Land cover affected'),
             'layer_requirements': {
                 'hazard': {
                     'layer_mode': layer_mode_classified,
