@@ -875,6 +875,8 @@ class TestDock(TestCase):
         wkt = wkt.replace('LINESTRING(', '').replace(')', '')
         # QGIS 2.10 replaced LINESTRING with LineString in WKT
         wkt = wkt.replace('LineString(', '').replace(')', '')
+        # And in 2.16 (maybe earlier too?) it have a space before the bracket
+        wkt = wkt.replace('LineString (', '')
         coords = wkt.split(',')
         for item in coords:
             item = item.strip()
