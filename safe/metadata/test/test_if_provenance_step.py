@@ -46,30 +46,32 @@ class TestImpactFunctionProvenanceStep(TestCase):
         'parameter': {},
     }
 
-    good_data_xml = ('<provenance_step '
-                     'timestamp="2015-08-13T20:20:48.178268">'
-                     '<title>TEST title</title>'
-                     '<description>TEST description</description>'
-                     '<start_time>20140714_060955</start_time>'
-                     '<finish_time>20140714_061255</finish_time>'
-                     '<hazard_layer>path/to/hazard/layer</hazard_layer>'
-                     '<exposure_layer>path/to/exposure/layer</exposure_layer>'
-                     '<impact_function_id>IF_id</impact_function_id>'
-                     '<impact_function_version>2.1</impact_function_version>'
-                     '<host_name>my_computer</host_name>'
-                     '<user>my_user</user>'
-                     '<qgis_version>2.4</qgis_version>'
-                     '<gdal_version>1.9.1</gdal_version>'
-                     '<qt_version>4.5</qt_version>'
-                     '<pyqt_version>5.1</pyqt_version>'
-                     '<os>ubuntu 12.04</os>'
-                     '<inasafe_version>2.1</inasafe_version>'
-                     '<exposure_pixel_size>0.1</exposure_pixel_size>'
-                     '<hazard_pixel_size>0.2</hazard_pixel_size>'
-                     '<impact_pixel_size>0.1</impact_pixel_size>'
-                     '<analysis_extent>[0, 1, 2, 2]</analysis_extent>'
-                     '<parameter>{}</parameter>'
-                     '</provenance_step>')
+    good_data_xml = (
+        '<provenance_step '
+        'timestamp="2015-08-13T20:20:48.178268">'
+        '<title>TEST title</title>'
+        '<description>TEST &amp;" \' &lt; &gt; description</description>'
+        '<start_time>20140714_060955</start_time>'
+        '<finish_time>20140714_061255</finish_time>'
+        '<hazard_layer>path/to/hazard/layer</hazard_layer>'
+        '<exposure_layer>path/to/exposure/layer</exposure_layer>'
+        '<impact_function_id>IF_id</impact_function_id>'
+        '<impact_function_version>2.1</impact_function_version>'
+        '<host_name>my_computer</host_name>'
+        '<user>my_user</user>'
+        '<qgis_version>2.4</qgis_version>'
+        '<gdal_version>1.9.1</gdal_version>'
+        '<qt_version>4.5</qt_version>'
+        '<pyqt_version>5.1</pyqt_version>'
+        '<os>ubuntu 12.04</os>'
+        '<inasafe_version>2.1</inasafe_version>'
+        '<exposure_pixel_size>0.1</exposure_pixel_size>'
+        '<hazard_pixel_size>0.2</hazard_pixel_size>'
+        '<impact_pixel_size>0.1</impact_pixel_size>'
+        '<analysis_extent>[0, 1, 2, 2]</analysis_extent>'
+        '<parameter>{}</parameter>'
+        '</provenance_step>'
+    )
 
     def test_invalid_data(self):
         with self.assertRaises(InvalidProvenanceDataError):
@@ -94,7 +96,7 @@ class TestImpactFunctionProvenanceStep(TestCase):
     def test_xml(self):
         step = IFProvenanceStep(
             'TEST title',
-            'TEST description',
+            'TEST &" \' < > description',
             data=self.good_data,
             timestamp='2015-08-13T20:20:48.178268')
         self.assertEquals(self.good_data_xml, step.xml)
