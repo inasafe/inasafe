@@ -1690,7 +1690,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         try:
             keywords = self.keyword_io.read_keywords(layer)
 
-            if keywords['layer_purpose'] == 'impact':
+            if keywords.get('layer_purpose') == 'impact':
                 try:
                     self.show_impact_report(layer, keywords)
                 except MissingImpactReport:
@@ -1700,7 +1700,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     self.show_keyword_version_message(
                         'No Version', self.inasafe_version)
                 else:
-                    keyword_version = str(keywords['keyword_version'])
+                    keyword_version = str(keywords.get('keyword_version'))
                     supported = is_keyword_version_supported(
                             keyword_version)
                     if supported:
