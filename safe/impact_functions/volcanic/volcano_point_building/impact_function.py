@@ -18,9 +18,7 @@ from safe.impact_functions.volcanic.volcano_point_building\
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
 from safe.utilities.utilities import main_type
-from safe.common.utilities import (
-    get_thousand_separator,
-    get_non_conflicting_attribute_name)
+from safe.common.utilities import get_non_conflicting_attribute_name
 from safe.engine.interpolation import (
     assign_hazard_values_to_exposure_data)
 from safe.impact_reports.building_exposure_report_mixin import (
@@ -152,8 +150,7 @@ class VolcanoPointBuildingFunction(
         colours = colours[:len(category_names)]
         style_classes = []
 
-        i = 0
-        for category_name in category_names:
+        for i, category_name in enumerate(category_names):
             style_class = dict()
             style_class['label'] = tr('Radius %s km') % tr(category_name)
             style_class['transparency'] = 0
@@ -163,7 +160,6 @@ class VolcanoPointBuildingFunction(
             if i >= len(category_names):
                 i = len(category_names) - 1
             style_class['colour'] = colours[i]
-            i += 1
 
             style_classes.append(style_class)
 
@@ -173,22 +169,14 @@ class VolcanoPointBuildingFunction(
             style_classes=style_classes,
             style_type='categorizedSymbol')
 
-        # For printing map purpose
-        map_title = tr('Buildings affected by volcanic buffered point')
-        legend_title = tr('Building count')
-        legend_units = tr('(building)')
-        legend_notes = tr(
-            'Thousand separator is represented by %s' %
-            get_thousand_separator())
-
         impact_data = self.generate_data()
 
         extra_keywords = {
             'target_field': target_field,
-            'map_title': map_title,
-            'legend_notes': legend_notes,
-            'legend_units': legend_units,
-            'legend_title': legend_title
+            'map_title': self.metadata().key('map_title'),
+            'legend_notes': self.metadata().key('legend_notes'),
+            'legend_units': self.metadata().key('legend_units'),
+            'legend_title': self.metadata().key('legend_title')
         }
 
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
@@ -198,7 +186,7 @@ class VolcanoPointBuildingFunction(
             data=features,
             projection=interpolated_layer.get_projection(),
             geometry=interpolated_layer.get_geometry(),
-            name=tr('Buildings affected by volcanic buffered point'),
+            name=self.metadata().key('layer_name'),
             keywords=impact_layer_keywords,
             style_info=style_info)
 

@@ -431,10 +431,6 @@ class TsunamiRasterRoadsFunction(
 
         self.reorder_dictionaries()
 
-        # For printing map purpose
-        map_title = tr('Roads inundated')
-        legend_title = tr('Road inundated status')
-
         style_classes = [
             # FIXME 0 - 0.1
             dict(
@@ -484,8 +480,8 @@ class TsunamiRasterRoadsFunction(
         impact_data = self.generate_data()
 
         extra_keywords = {
-            'map_title': map_title,
-            'legend_title': legend_title,
+            'map_title': self.metadata().key('map_title'),
+            'legend_title': self.metadata().key('legend_title'),
             'target_field': target_field
         }
 
@@ -494,7 +490,7 @@ class TsunamiRasterRoadsFunction(
         # Convert QgsVectorLayer to inasafe layer and return it
         impact_layer = Vector(
             data=line_layer,
-            name=tr('Flooded roads'),
+            name=self.metadata().key('layer_name'),
             keywords=impact_layer_keywords,
             style_info=style_info)
 

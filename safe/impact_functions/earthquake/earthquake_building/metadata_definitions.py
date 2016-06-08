@@ -79,6 +79,13 @@ class EarthquakeBuildingMetadata(ImpactFunctionMetadata):
             'actions': '',
             'limitations': [],
             'citations': [],
+            'map_title': tr('Building affected by earthquake'),
+            'legend_notes': tr(
+                'The level of the impact is according to the threshold the '
+                'user input.'),
+            'legend_units': tr('(mmi)'),
+            'legend_title': tr('Impact level'),
+            'layer_name': tr('Estimated buildings affected'),
             'layer_requirements': {
                 'hazard': {
                     'layer_mode': layer_mode_continuous,

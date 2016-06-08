@@ -168,11 +168,6 @@ class TsunamiRasterBuildingFunction(
         self.building_report_threshold = building_postprocessors.value[0].value
         self._consolidate_to_other()
 
-        # For printing map purpose
-        map_title = tr('Inundated buildings')
-        legend_title = tr('Inundated structure status')
-        legend_units = tr('(low, medium, high, and very high)')
-
         style_classes = [
             dict(
                 label=self.hazard_classes[0] + ': 0 m',
@@ -223,9 +218,9 @@ class TsunamiRasterBuildingFunction(
 
         extra_keywords = {
             'target_field': self.target_field,
-            'map_title': map_title,
-            'legend_title': legend_title,
-            'legend_units': legend_units,
+            'map_title': self.metadata().key('map_title'),
+            'legend_title': self.metadata().key('legend_title'),
+            'legend_units': self.metadata().key('legend_units'),
             'buildings_total': total_features,
             'buildings_affected': self.total_affected_buildings
         }
@@ -236,7 +231,7 @@ class TsunamiRasterBuildingFunction(
             data=features,
             projection=interpolated_layer.get_projection(),
             geometry=interpolated_layer.get_geometry(),
-            name=tr('Estimated buildings affected'),
+            name=self.metadata().key('layer_name'),
             keywords=impact_layer_keywords,
             style_info=style_info)
 
