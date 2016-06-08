@@ -80,7 +80,7 @@ class ITBBayesianFatalityMetadata(ITBFatalityMetadata):
                    'a Bayesian approach. Submitted for Journal of the '
                    'Geological Society')  # FIXME
             ],
-            'map_title': '',
+            'map_title': 'Earthquake impact to population',
             'legend_title': '',
             'legend_units': '',
             'legend_notes': '',

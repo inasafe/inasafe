@@ -72,7 +72,7 @@ class PAGFatalityMetadata(ITBFatalityMetadata):
             'output': '',
             'actions': '',
             'limitations': [],
-            'map_title': '',
+            'map_title': 'Earthquake impact to population',
             'legend_title': '',
             'legend_units': '',
             'legend_notes': '',
