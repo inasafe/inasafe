@@ -656,7 +656,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
     def save_auxiliary_files(self, layer, destination):
         """Save auxiliary files when using the 'save as' function.
 
-        If some auxiliary files (.xml or .keywords) exist, this function will
+        If some auxiliary files (.xml) exist, this function will
         copy them when the 'save as' function is used on the layer.
 
         :param layer: The layer which has been saved as.
@@ -668,19 +668,13 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         """
 
         source_basename = os.path.splitext(layer.source())[0]
-        source_keywords = "%s.keywords" % source_basename
         source_xml = "%s.xml" % source_basename
 
         destination_basename = os.path.splitext(destination)[0]
-        destination_keywords = "%s.keywords" % destination_basename
         destination_xml = "%s.xml" % destination_basename
 
         # noinspection PyBroadException,PyBroadException
         try:
-            # Keywords
-            if os.path.isfile(source_keywords):
-                shutil.copy(source_keywords, destination_keywords)
-
             # XML
             if os.path.isfile(source_xml):
                 shutil.copy(source_xml, destination_xml)
@@ -1603,7 +1597,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         :type layer: QgsMapLayer
         """
         keywords = KeywordIO(layer)
-        LOGGER.debug('Showing Generic Keywords')
         self.pbnPrint.setEnabled(False)
         message = keywords.to_message()
         send_static_message(self, message)

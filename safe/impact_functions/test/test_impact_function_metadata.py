@@ -21,6 +21,7 @@ import unittest
 from safe.test.utilities import get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
+from safe.impact_functions.test.test_registry import EXPECTED_IF
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
 
@@ -32,12 +33,18 @@ from safe.impact_functions.earthquake.itb_earthquake_fatality_model. \
     impact_function import ITBFatalityFunction
 from safe.impact_functions.earthquake.pager_earthquake_fatality_model. \
     impact_function import PAGFatalityFunction
+from safe.impact_functions.earthquake.itb_bayesian_earthquake_fatality_model.\
+    impact_function import ITBBayesianFatalityFunction
 
 # Generic IFs
 from safe.impact_functions.generic.classified_polygon_building\
     .impact_function import ClassifiedPolygonHazardBuildingFunction
 from safe.impact_functions.generic.classified_polygon_population \
     .impact_function import ClassifiedPolygonHazardPopulationFunction
+from safe.impact_functions.generic.classified_polygon_people\
+    .impact_function import ClassifiedPolygonHazardPolygonPeopleFunction
+from safe.impact_functions.generic.classified_polygon_landcover\
+    .impact_function import ClassifiedPolygonHazardLandCoverFunction
 from safe.impact_functions.generic.classified_raster_building \
     .impact_function import ClassifiedRasterHazardBuildingFunction
 from safe.impact_functions.generic.classified_raster_population \
@@ -58,10 +65,16 @@ from safe.impact_functions.inundation.flood_raster_road\
     .impact_function import FloodRasterRoadsFunction
 from safe.impact_functions.inundation.flood_vector_building_impact\
     .impact_function import FloodPolygonBuildingFunction
+
+# Tsunami
 from safe.impact_functions.inundation.tsunami_population_evacuation_raster\
     .impact_function import TsunamiEvacuationFunction
 from safe.impact_functions.inundation.tsunami_raster_road\
     .impact_function import TsunamiRasterRoadsFunction
+from safe.impact_functions.inundation.tsunami_raster_landcover\
+    .impact_function import TsunamiRasterLandcoverFunction
+from safe.impact_functions.inundation.tsunami_raster_building\
+    .impact_function import TsunamiRasterBuildingFunction
 
 # Volcanic IFs
 from safe.impact_functions.volcanic.volcano_point_building.impact_function\
@@ -109,12 +122,17 @@ class TestImpactFunctionMetadata(unittest.TestCase):
             EarthquakeBuildingFunction(),
             ITBFatalityFunction(),
             PAGFatalityFunction(),
+            ITBBayesianFatalityFunction(),
+
             # Generic
             ClassifiedPolygonHazardBuildingFunction(),
+            ClassifiedPolygonHazardLandCoverFunction(),
             ClassifiedPolygonHazardPopulationFunction(),
+            ClassifiedPolygonHazardPolygonPeopleFunction(),
             ClassifiedRasterHazardBuildingFunction(),
             ClassifiedRasterHazardPopulationFunction(),
             ContinuousHazardPopulationFunction(),
+
             # Inundation
             FloodEvacuationVectorHazardFunction(),
             FloodPolygonRoadsFunction(),
@@ -122,14 +140,21 @@ class TestImpactFunctionMetadata(unittest.TestCase):
             FloodEvacuationRasterHazardFunction(),
             FloodRasterRoadsFunction(),
             FloodPolygonBuildingFunction(),
+
+            # Tsunami
             TsunamiEvacuationFunction(),
             TsunamiRasterRoadsFunction(),
+            TsunamiRasterLandcoverFunction(),
+            TsunamiRasterBuildingFunction(),
+
             # Volcanic
             VolcanoPointBuildingFunction(),
             VolcanoPointPopulationFunction(),
             VolcanoPolygonBuildingFunction(),
             VolcanoPolygonPopulationFunction()
         ]
+        self.assertEqual(len(impact_functions), len(EXPECTED_IF))
+
         for impact_function in impact_functions:
             valid = impact_function.metadata().is_valid()
             impact_function_name = impact_function.__class__.__name__

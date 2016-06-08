@@ -2,32 +2,23 @@
 """Tests for keyword io class."""
 import unittest
 import os
-import tempfile
 import shutil
 
 from qgis.core import QgsDataSourceURI, QgsVectorLayer
 
 from safe.definitions import inasafe_keyword_version
 from safe.common.utilities import unique_filename
-from safe.utilities.utilities import read_file_keywords
 from safe.test.utilities import (
     load_layer,
     get_qgis_app,
     test_data_path,
     clone_raster_layer)
 from safe.utilities.keyword_io import KeywordIO, definition
-from safe.common.exceptions import HashNotFoundError
-from safe.common.utilities import temp_dir
 from safe.common.exceptions import NoKeywordsFoundError
 from safe.utilities.unicode import get_unicode
 from safe.utilities.metadata import read_iso19115_metadata
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-
-# Don't change this, not even formatting, you will break tests!
-PG_URI = """'dbname=\'osm\' host=localhost port=5432 user=\'foo\'
-         password=\'bar\' sslmode=disable key=\'id\' srid=4326
-         type=MULTIPOLYGON table="valuations_parcel" (geometry) sql='"""
 
 
 class KeywordIOTest(unittest.TestCase):
@@ -59,21 +50,21 @@ class KeywordIOTest(unittest.TestCase):
             'layer_geometry': 'raster',
             'layer_purpose': 'hazard',
             'layer_mode': 'continuous',
-            'keyword_version': '3.2'
+            'keyword_version': '3.5'
         }
 
         # Vector Layer keywords
         vector_path = test_data_path('exposure', 'buildings_osm_4326.shp')
         self.vector_layer, _ = load_layer(vector_path)
         self.expected_vector_keywords = {
-            'keyword_version': '3.3',
+            'keyword_version': '3.5',
             'structure_class_field': 'FLOODED',
             'value_mapping': {},
             'title': 'buildings_osm_4326',
             'layer_geometry': 'polygon',
             'layer_purpose': 'exposure',
             'layer_mode': 'classified',
-            'exposure': 'structure'
+            'exposure': 'structure',
         }
         # Keyword less layer
         keywordless_path = test_data_path('other', 'keywordless_layer.shp')
@@ -81,23 +72,6 @@ class KeywordIOTest(unittest.TestCase):
         # Keyword file
         self.keyword_path = test_data_path(
             'exposure', 'buildings_osm_4326.xml')
-
-    def tearDown(self):
-        pass
-
-    def test_get_hash_for_datasource(self):
-        """Test we can reliably get a hash for a uri"""
-        hash_value = self.keyword_io.hash_for_datasource(PG_URI)
-        expected_hash = '7cc153e1b119ca54a91ddb98a56ea95e'
-        message = "Got: %s\nExpected: %s" % (hash_value, expected_hash)
-        self.assertEqual(hash_value, expected_hash, message)
-
-    def test_are_keywords_file_based(self):
-        """Can we correctly determine if keywords should be written to file or
-        to database?"""
-        assert not self.keyword_io.are_keywords_file_based(self.sqlite_layer)
-        assert self.keyword_io.are_keywords_file_based(self.raster_layer)
-        assert self.keyword_io.are_keywords_file_based(self.vector_layer)
 
     def test_read_raster_file_keywords(self):
         """Can we read raster file keywords using generic readKeywords method
@@ -115,6 +89,7 @@ class KeywordIOTest(unittest.TestCase):
     def test_read_vector_file_keywords(self):
         """Test read vector file keywords with the generic readKeywords method.
          """
+        self.maxDiff = None
         keywords = self.keyword_io.read_keywords(self.vector_layer)
         expected_keywords = self.expected_vector_keywords
 
@@ -131,6 +106,7 @@ class KeywordIOTest(unittest.TestCase):
 
     def test_update_keywords(self):
         """Test append file keywords with update_keywords method."""
+        self.maxDiff = None
         layer = clone_raster_layer(
             name='tsunami_wgs84',
             extension='.tif',
@@ -154,48 +130,11 @@ class KeywordIOTest(unittest.TestCase):
         expected_keywords = {
             k: get_unicode(v) for k, v in expected_keywords.iteritems()
         }
-        self.maxDiff = None
         self.assertDictEqual(keywords, expected_keywords)
-
-    @unittest.skip('No longer used in the new metadata.')
-    def test_read_db_keywords(self):
-        """Can we read sqlite kw with the generic read_keywords method
-        """
-        db_path = test_data_path('other', 'test_keywords.db')
-        self.read_db_keywords(db_path)
-
-    def read_db_keywords(self, db_path):
-        """Can we read sqlite keywords with the generic readKeywords method
-        """
-        self.keyword_io.set_keyword_db_path(db_path)
-
-        # We need to use relative path so that the hash from URI will match
-        local_path = os.path.join(
-            os.path.dirname(__file__), 'exposure.sqlite')
-        sqlite_building_path = test_data_path('exposure', 'exposure.sqlite')
-        shutil.copy2(sqlite_building_path, local_path)
-        uri = QgsDataSourceURI()
-        uri.setDatabase('exposure.sqlite')
-        uri.setDataSource('', 'buildings_osm_4326', 'Geometry')
-        sqlite_layer = QgsVectorLayer(uri.uri(), 'OSM Buildings', 'spatialite')
-
-        expected_source = (
-            'dbname=\'exposure.sqlite\' table="buildings_osm_4326" ('
-            'Geometry) sql=')
-
-        self.assertEqual(sqlite_layer.source(), expected_source)
-
-        keywords = self.keyword_io.read_keywords(sqlite_layer)
-        expected_keywords = self.expected_sqlite_keywords
-
-        self.assertDictEqual(keywords, expected_keywords)
-
-        # Delete SQL Layer so that we can delete the file
-        del sqlite_layer
-        os.remove(local_path)
 
     def test_copy_keywords(self):
         """Test we can copy the keywords."""
+        self.maxDiff = None
         out_path = unique_filename(
             prefix='test_copy_keywords', suffix='.shp')
         layer = clone_raster_layer(
@@ -209,7 +148,6 @@ class KeywordIOTest(unittest.TestCase):
         expected_keywords = self.expected_raster_keywords
         expected_keywords['keyword_version'] = inasafe_keyword_version
 
-        self.maxDiff = None
         self.assertDictEqual(copied_keywords, expected_keywords)
 
     def test_definition(self):
@@ -269,11 +207,10 @@ class KeywordIOTest(unittest.TestCase):
 
         .. versionadded:: 3.2
         """
+        self.maxDiff = None
         keywords = self.keyword_io.read_keywords_file(self.keyword_path)
         expected_keywords = self.expected_vector_keywords
-        message = 'Got:\n%s\nExpected:\n%s\nSource:\n%s' % (
-            keywords, expected_keywords, self.keyword_path)
-        self.assertDictEqual(keywords, expected_keywords, message)
+        self.assertDictEqual(keywords, expected_keywords)
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(KeywordIOTest)

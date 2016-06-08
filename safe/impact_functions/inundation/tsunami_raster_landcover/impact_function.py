@@ -90,7 +90,7 @@ class TsunamiRasterLandcoverFunction(ContinuousRHClassifiedVE):
                 low_max.unit.abbreviation,
                 low_max.value,
                 low_max.unit.abbreviation),
-            tr('Moderate tsunami hazard zone is defined as inundation depth '
+            tr('Medium tsunami hazard zone is defined as inundation depth '
                'is more than %.1f %s but less than %.1f %s') % (
                 low_max.value,
                 low_max.unit.abbreviation,
@@ -221,7 +221,7 @@ class TsunamiRasterLandcoverFunction(ContinuousRHClassifiedVE):
                 border_color='#000000',
                 transparency=0),
             dict(
-                label=self.hazard_classes[1] + ': <0 - %.1f m' % low_max,
+                label=self.hazard_classes[1] + ': >0 - %.1f m' % low_max,
                 value=self.hazard_classes[1],
                 colour='#FFFF00',
                 border_color='#000000',
@@ -253,7 +253,7 @@ class TsunamiRasterLandcoverFunction(ContinuousRHClassifiedVE):
             style_type='categorizedSymbol')
 
         extra_keywords = {
-            'map_title': tr('Affected Land Cover'),
+            'map_title': self.metadata().key('map_title'),
             'target_field': self.target_field
         }
 
@@ -262,7 +262,7 @@ class TsunamiRasterLandcoverFunction(ContinuousRHClassifiedVE):
         # Create vector layer and return
         impact_layer = Vector(
             data=impact_layer,
-            name=tr('Land cover affected by each hazard zone'),
+            name=self.metadata().key('layer_name'),
             keywords=impact_layer_keywords,
             style_info=style_info)
 

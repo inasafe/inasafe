@@ -21,7 +21,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from safe.utilities.i18n import tr
 
 inasafe_keyword_version_key = 'keyword_version'
-inasafe_keyword_version = '3.3'
+inasafe_keyword_version = '3.5'
 
 # constants
 small_number = 2 ** -53  # I think this is small enough
@@ -652,7 +652,7 @@ generic_raster_hazard_classes = {
     'classes': [
         {
             'key': 'high',
-            'name': tr('high'),
+            'name': tr('High hazard zone'),
             'description': tr('The highest hazard classification.'),
             'numeric_default_min': 3,
             'numeric_default_max': 3,
@@ -660,7 +660,7 @@ generic_raster_hazard_classes = {
         },
         {
             'key': 'medium',
-            'name': tr('medium'),
+            'name': tr('Medium hazard zone'),
             'description': tr('The middle hazard classification.'),
             'numeric_default_min': 2,
             'numeric_default_max': 2,
@@ -668,7 +668,7 @@ generic_raster_hazard_classes = {
         },
         {
             'key': 'low',
-            'name': tr('low'),
+            'name': tr('Low hazard zone'),
             'description': tr('The lowest hazard classification.'),
             'numeric_default_min': 1,
             'numeric_default_max': 1,
@@ -681,27 +681,79 @@ tsunami_raster_hazard_classes = {
     'key': 'tsunami_raster_hazard_classes',
     'name': tr('Tsunami classes'),
     'description': tr(
-        'This is a binary description for an area. The area is either '
-        '<b>wet</b> (affected by tsunami) or <b>dry</b> (not affected '
-        'by tsunami). This unit does not describe how <b>wet</b> or '
-        '<b>dry</b> an area is.'),
+        'This is a quinary description for an area. The area is either '
+        '<b>dry</b>, <b>low</b>, <b>medium</b>, <b>high</b>, or '
+        '<b>very high</b> for tsunami hazard classification. '
+        'The following description for these classes is provided by Badan '
+        'Geologi based on BNPB Perka 2/2012'),
     'classes': [
         {
-            'key': 'wet',
-            'name': tr('wet'),
-            'description': tr('Water above ground height.'),
-            'numeric_default_min': 1,
-            'numeric_default_max': 9999999999,
-            'optional': True
-        },
-        {
             'key': 'dry',
-            'name': tr('dry'),
+            'name': tr('Dry zone'),
             'description': tr('No water above ground height.'),
             'numeric_default_min': 0,
             'numeric_default_max': (1 - small_number),
             'optional': True
+        },
+        {
+            'key': 'low',
+            'name': tr('Low hazard zone'),
+            'description': tr(
+                'Water above ground height and less than 1.0m. The area is '
+                'potentially hit by a tsunami wave with an inundation depth '
+                'less than 1 m or similar to tsunami intensity scale of V or '
+                'less in (Papadoupulos and Imamura, 2001). Tsunami wave of 1m '
+                'height causes few people to be frightened and flee to higher '
+                'elevation. Felt by most people on large ship, observed from '
+                'shore. Small vessels drift and collide and some turn over. '
+                'Sand is deposited and there is flooding of areas close to '
+                'the shore.'),
+            'numeric_default_min': 0,
+            'numeric_default_max': 1,
+            'optional': True
+        },
+        {
+            'key': 'medium',
+            'name': tr('Medium hazard zone'),
+            'description': tr(
+                'Water above 1.1m and less than 3.0m. The area is potentially '
+                'hit by a tsunami wave with an inundation depth of 1 - 3 m or '
+                'equal to V-VI tsunami intensity scale (Papadoupulos and '
+                'Imamura, 2001). Tsunami wave with a 3m inundation depth '
+                'causes most people frightened and to flee to higher ground. '
+                'Small vessels drift and collide. Damage occurs to some '
+                'wooden houses, while most of them are safe.'),
+            'numeric_default_min': 1,
+            'numeric_default_max': 3,
+            'optional': True
+        },
+        {
+            'key': 'high',
+            'name': tr('High hazard zone'),
+            'description': tr(
+                'Water above 3.1m and less than 8.0m. The area is potentially '
+                'hit by a tsunami wave with an inundation depth > 3 m or '
+                'reach a tsunami intensity scale of VII or even more '
+                '(Papadoupulos and Imamura, 2001). Tsunami wave with 4 m '
+                'inundation depth cause damage to small vessel, a few ships '
+                'are drifted inland, severe damage on most wooden houses. '
+                'Boulders are deposited on shore. If tsunami height reaches '
+                '8 m, it will cause severe damage. Dykes, wave breaker, '
+                'tsunami protection walls and green belts will be washed '
+                'away.'),
+            'numeric_default_min': 3,
+            'numeric_default_max': 8,
+            'optional': True
+        },
+        {
+            'key': 'very high',
+            'name': tr('Very high hazard zone'),
+            'description': tr('Water above 8.0m.'),
+            'numeric_default_min': 8,
+            'numeric_default_max': 9999999999,
+            'optional': True
         }
+
     ]
 }
 
@@ -957,8 +1009,8 @@ structure_class_mapping = [
         'key': 'commercial',
         'name': tr('Commercial'),
         'description': tr(
-            'A structure or facility that is used for commercial or industrial '
-            'purposes.'),
+            'A structure or facility that is used for commercial or '
+            'industrial purposes.'),
         'string_defaults': [
             'supermarket', 'shop', 'market', 'tailor', 'warehouse', 'works',
             'convenience', 'seafood', 'atm', 'mall', 'clothes', 'shoes',

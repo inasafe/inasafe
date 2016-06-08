@@ -726,13 +726,9 @@ class TestDock(TestCase):
         new_name = unique_filename(prefix='kecamatan_jakarta_osm_saved_as')
         self.dock.save_auxiliary_files(
             layer, join(TESTDATA, '%s.shp' % new_name))
-        new_keywords_file_path = os.path.join(
-            TESTDATA, '%s.keywords' % new_name)
         new_xml_file_path = os.path.join(TESTDATA, '%s.xml' % new_name)
 
         message = 'New auxiliary file exist : '
-        self.assertFalse(
-            os.path.isfile(new_keywords_file_path), '%s keywords' % message)
         # Will automatically add xml file for the metadata.
         self.assertTrue(os.path.isfile(new_xml_file_path), '%s xml' % message)
 

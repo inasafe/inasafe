@@ -49,14 +49,14 @@ def low_threshold():
 
 
 def medium_threshold():
-    """Generate moderate hazard zone threshold parameter
+    """Generate medium hazard zone threshold parameter
 
     :return: list of FloatParameter
     :rtype: list[FloatParameter]
     """
     field = FloatParameter()
     field.is_required = True
-    field.name = tr('Moderate Hazard Zone Threshold')
+    field.name = tr('Medium Hazard Zone Threshold')
     field.precision = 2
     field.value = 3
     field.minimum_allowed_value = 0
@@ -64,9 +64,9 @@ def medium_threshold():
     unit_metres = parameter_unit_metres()
     field.unit = unit_metres
     field.allowed_units = [unit_metres]
-    field.help_text = tr('Moderate Hazard Zone threshold.')
+    field.help_text = tr('Medium Hazard Zone threshold.')
     field.description = tr(
-        'The threshold of hazard categorized as Moderate Hazard Zone in '
+        'The threshold of hazard categorized as Medium Hazard Zone in '
         'meter. A zone is categorized as Medium Hazard Zone if the depth of '
         'tsunami inundation is more than Low Hazard Zone Threshold and less '
         'than Medium Hazard Zone Threshold.')

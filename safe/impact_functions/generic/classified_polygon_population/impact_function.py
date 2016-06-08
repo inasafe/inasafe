@@ -26,8 +26,7 @@ from safe.common.utilities import (
     format_int,
     humanize_class,
     create_classes,
-    create_label,
-    get_thousand_separator)
+    create_label)
 from safe.impact_functions.core import (
     no_population_impact_message,
     get_key_for_value)
@@ -216,22 +215,14 @@ class ClassifiedPolygonHazardPopulationFunction(
             style_classes=style_classes,
             style_type='rasterStyle')
 
-        # For printing map purpose
-        map_title = tr('People impacted by each hazard zone')
-        legend_title = tr('Population')
-        legend_units = tr('(people per cell)')
-        legend_notes = tr(
-            'Thousand separator is represented by  %s' %
-            get_thousand_separator())
-
         impact_data = self.generate_data()
 
         extra_keywords = {
             'target_field': self.target_field,
-            'map_title': map_title,
-            'legend_notes': legend_notes,
-            'legend_units': legend_units,
-            'legend_title': legend_title
+            'map_title': self.metadata().key('map_title'),
+            'legend_notes': self.metadata().key('legend_notes'),
+            'legend_units': self.metadata().key('legend_units'),
+            'legend_title': self.metadata().key('legend_title')
         }
 
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
@@ -241,7 +232,7 @@ class ClassifiedPolygonHazardPopulationFunction(
             data=covered_exposure_layer.get_data(),
             projection=covered_exposure_layer.get_projection(),
             geotransform=covered_exposure_layer.get_geotransform(),
-            name=tr('People impacted by each hazard zone'),
+            name=self.metadata().key('layer_name'),
             keywords=impact_layer_keywords,
             style_info=style_info)
 

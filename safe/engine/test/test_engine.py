@@ -21,7 +21,6 @@ from safe.impact_functions.loader import register_impact_functions
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.storage.core import (
     read_layer,
-    write_vector_data,
     write_raster_data)
 from safe.storage.vector import Vector, convert_polygons_to_centroids
 from safe.storage.utilities import DEFAULT_ATTRIBUTE
@@ -54,6 +53,35 @@ def linear_function(x, y):
     :returns: Average
     """
     return x + y / 2.0
+
+
+def write_vector_data(data, projection, geometry, filename, keywords=None):
+    """Write point data and any associated attributes to vector file
+
+    Args:
+        * data: List of N dictionaries each with M fields where
+                M is the number of attributes.
+                A value of None is acceptable.
+        * projection: WKT projection information
+        * geometry: List of points or polygons.
+        * filename: Output filename
+        * keywords: Optional dictionary
+
+    Note
+        The only format implemented is GML and SHP so the extension
+        must be either .gml or .shp
+
+    # FIXME (Ole): When the GML driver is used,
+    #              the spatial reference is not stored.
+    #              I suspect this is a bug in OGR.
+
+    Background:
+        * http://www.gdal.org/ogr/ogr_apitut.html (last example)
+        * http://invisibleroads.com/tutorials/gdal-shapefile-points-save.html
+    """
+
+    V = Vector(data, projection, geometry, keywords=keywords)
+    V.write_to_file(filename)
 
 
 class TestEngine(unittest.TestCase):
@@ -411,8 +439,6 @@ class TestEngine(unittest.TestCase):
         assert attributes['KRB'] == 'Kawasan Rawan Bencana I'
         assert attributes['polygon_id'] == 4
 
-    test_polygon_hazard_with_holes_and_raster_exposure.slow = True
-
     def test_user_directory_when_saving(self):
         # These imports must be inside the test.
         from PyQt4.QtCore import QCoreApplication, QSettings
@@ -455,8 +481,6 @@ class TestEngine(unittest.TestCase):
 
         settings.remove('inasafe/defaultUserDirectory')
 
-    test_user_directory_when_saving.slow = False
-
     def test_data_sources_are_carried_forward(self):
         """Data sources are carried forward to impact layer."""
         hazard_filepath = test_data_path(
@@ -474,7 +498,7 @@ class TestEngine(unittest.TestCase):
         impact_function = self.impact_function_manager.get(function_id)
         impact_function.hazard = hazard_layer
         impact_function.exposure = exposure_layer
-        impact_vector = impact_function.calculate_impact()
+        impact_vector = impact_function._calculate_impact()
 
         self.assertEqual(
             impact_vector.get_keywords()['hazard_title'], hazard_title)
@@ -484,8 +508,6 @@ class TestEngine(unittest.TestCase):
             impact_vector.get_keywords()['hazard_source'], hazard_source)
         self.assertEqual(
             impact_vector.get_keywords()['exposure_source'], exposure_source)
-
-    test_data_sources_are_carried_forward.slow = True
 
     def test_raster_vector_interpolation_exception(self):
         """Exceptions are caught by interpolate_raster_points."""
@@ -557,8 +579,6 @@ class TestEngine(unittest.TestCase):
                 assert numpy.allclose(val,
                                       linear_function(xi, eta),
                                       rtol=1e-12, atol=1e-12)
-
-    test_interpolation_wrapper.slow = True
 
     def test_interpolation_functions(self):
         """Interpolation using Raster and Vector objects
@@ -730,8 +750,6 @@ class TestEngine(unittest.TestCase):
                 except AssertionError:
                     assert numpy.allclose(Ival, val, rtol=1.0e-6), msg
 
-    test_interpolation_lembang.slow = True
-
     def test_interpolation_tsunami(self):
         """Interpolation using tsunami data set works
 
@@ -854,8 +872,6 @@ class TestEngine(unittest.TestCase):
             if not numpy.isnan(interpolated_depth):
                 assert depth_min <= interpolated_depth <= depth_max, msg
 
-    test_interpolation_tsunami_maumere.slow = True
-
     def test_polygon_clipping(self):
         """Clipping using real polygon and point data from Maumere
         """
@@ -899,8 +915,6 @@ class TestEngine(unittest.TestCase):
             Vector(geometry=pts_inside).write_to_file('test_points_in.shp')
             pts_outside = points[outside]
             Vector(geometry=pts_outside).write_to_file('test_points_out.shp')
-
-    test_polygon_clipping.slow = True
 
     def test_interpolation_from_polygons_one_poly(self):
         """Point interpolation using one polygon from Maumere works
@@ -1721,13 +1735,13 @@ class TestEngine(unittest.TestCase):
             impact_function.hazard = hazard_layer
             impact_function.exposure = exposure_layer
             # Call impact calculation engine normally
-            impact_function.calculate_impact()
+            impact_function._calculate_impact()
 
             # Make keyword value empty and verify exception is raised
             expected_layer_purpose = exposure_layer.keywords['layer_purpose']
             exposure_layer.keywords['layer_purpose'] = ''
             try:
-                impact_function.calculate_impact()
+                impact_function._calculate_impact()
             except VerificationError, e:
                 # Check expected error message
                 assert 'No value found' in str(e)
@@ -1745,15 +1759,13 @@ class TestEngine(unittest.TestCase):
                 del hazard_layer.keywords['layer_mode']
 
             try:
-                impact_function.calculate_impact()
+                impact_function._calculate_impact()
             except VerificationError, e:
                 # Check expected error message
                 assert 'did not have required keyword' in str(e)
             else:
                 msg = 'Missing keyword should have raised exception'
                 raise Exception(msg)
-
-    test_layer_integrity_raises_exception.slow = True
 
     def test_erf(self):
         """Test ERF approximation
@@ -1921,6 +1933,7 @@ class TestEngine(unittest.TestCase):
             len(interpolated_attributes),
             message)
 
+    test_conflicting_attribute_names.slow = True
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestEngine, 'test')

@@ -91,7 +91,7 @@ class TsunamiRasterBuildingFunction(
             tr('Very high tsunami hazard zone is defined as inundation depth '
                'is more than %.1f %s') % (
                 high_max.value, high_max.unit.abbreviation),
-            tr('Buildings are closed if they are in low, moderate, high, or '
+            tr('Buildings are closed if they are in low, medium, high, or '
                'very high tsunami hazard zone.'),
             tr('Buildings are opened if they are in dry zone.')
         ]
@@ -168,11 +168,6 @@ class TsunamiRasterBuildingFunction(
         self.building_report_threshold = building_postprocessors.value[0].value
         self._consolidate_to_other()
 
-        # For printing map purpose
-        map_title = tr('Inundated buildings')
-        legend_title = tr('Inundated structure status')
-        legend_units = tr('(low, medium, high, and very high)')
-
         style_classes = [
             dict(
                 label=self.hazard_classes[0] + ': 0 m',
@@ -182,7 +177,7 @@ class TsunamiRasterBuildingFunction(
                 size=1
             ),
             dict(
-                label=self.hazard_classes[1] + ': 0.1 - %.1f m' % low_max,
+                label=self.hazard_classes[1] + ': >0 - %.1f m' % low_max,
                 value=1,
                 colour='#FFFF00',
                 transparency=0,
@@ -223,9 +218,9 @@ class TsunamiRasterBuildingFunction(
 
         extra_keywords = {
             'target_field': self.target_field,
-            'map_title': map_title,
-            'legend_title': legend_title,
-            'legend_units': legend_units,
+            'map_title': self.metadata().key('map_title'),
+            'legend_title': self.metadata().key('legend_title'),
+            'legend_units': self.metadata().key('legend_units'),
             'buildings_total': total_features,
             'buildings_affected': self.total_affected_buildings
         }
@@ -236,7 +231,7 @@ class TsunamiRasterBuildingFunction(
             data=features,
             projection=interpolated_layer.get_projection(),
             geometry=interpolated_layer.get_geometry(),
-            name=tr('Estimated buildings affected'),
+            name=self.metadata().key('layer_name'),
             keywords=impact_layer_keywords,
             style_info=style_info)
 
