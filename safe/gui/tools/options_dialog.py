@@ -361,7 +361,8 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
     def set_organisation_logo(self):
         """Auto-connect slot activated when org logo checkbox is toggled."""
         settings = QtCore.QSettings()
-        if self.custom_org_logo_checkbox.isChecked():
+        is_checked = self.custom_org_logo_checkbox.isChecked()
+        if is_checked:
             # Use previous org logo path
             path = settings.value(
                 'inasafe/organisation_logo_path',
@@ -372,11 +373,13 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             path = supporters_logo_path()
 
         self.leOrganisationLogoPath.setText(path)
+        self.splitter_org_logo.setEnabled(is_checked)
 
     def set_north_arrow(self):
         """Auto-connect slot activated when north arrow checkbox is toggled."""
         settings = QtCore.QSettings()
-        if self.custom_north_arrow_checkbox.isChecked():
+        is_checked = self.custom_north_arrow_checkbox.isChecked()
+        if is_checked:
             # Show previous north arrow path
             path = settings.value(
                 'inasafe/north_arrow_path',
@@ -387,12 +390,14 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             path = default_north_arrow_path()
 
         self.leNorthArrowPath.setText(path)
+        self.splitter_north_arrow.setEnabled(is_checked)
 
     def set_user_dir(self):
         """Auto-connect slot activated when user dir checkbox is toggled.
         """
         settings = QtCore.QSettings()
-        if self.custom_UseUserDirectory_checkbox.isChecked():
+        is_checked = self.custom_UseUserDirectory_checkbox.isChecked()
+        if is_checked:
             # Show previous templates dir
             path = settings.value(
                 'inasafe/defaultUserDirectory',
@@ -403,12 +408,14 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             path = temp_dir('impacts')
 
         self.leUserDirectoryPath.setText(path)
+        self.splitter_user_directory.setEnabled(is_checked)
 
     def set_templates_dir(self):
         """Auto-connect slot activated when templates dir checkbox is toggled.
         """
         settings = QtCore.QSettings()
-        if self.custom_templates_dir_checkbox.isChecked():
+        is_checked = self.custom_templates_dir_checkbox.isChecked()
+        if is_checked:
             # Show previous templates dir
             path = settings.value(
                 'inasafe/reportTemplatePath',
@@ -419,12 +426,14 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             path = ''
 
         self.leReportTemplatePath.setText(path)
+        self.splitter_custom_report.setEnabled(is_checked)
 
     def set_org_disclaimer(self):
         """Auto-connect slot activated when org disclaimer checkbox is toggled.
         """
         settings = QtCore.QSettings()
-        if self.custom_org_disclaimer_checkbox.isChecked():
+        is_checked = self.custom_org_disclaimer_checkbox.isChecked()
+        if is_checked:
             # Show previous organisation disclaimer
             org_disclaimer = settings.value(
                 'inasafe/reportDisclaimer',
@@ -435,6 +444,7 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             org_disclaimer = disclaimer()
 
         self.txtDisclaimer.setPlainText(org_disclaimer)
+        self.txtDisclaimer.setEnabled(is_checked)
 
     @pyqtSlot()
     @pyqtSignature('bool')  # prevents actions being handled twice
