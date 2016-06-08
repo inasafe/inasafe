@@ -65,7 +65,6 @@ class LayerBrowserProxyModel(QSortFilterProxyModel):
                 'QgsLayerItem',
                 'QgsGdalLayerItem',
                 'QgsOgrLayerItem']:
-            print '-------', item.metaObject().className(), item.path()
             return False
 
         if item.path().endswith('.xml'):
