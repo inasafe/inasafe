@@ -34,7 +34,7 @@ def read_layer(filename):
         raise ReadLayerError(msg)
 
 
-def read_qgis_layer(filename):
+def read_qgis_layer(filename, base_name=None):
     """Read layer from file and return as QgsMapLayer
 
     :param filename: the layer filename
@@ -43,7 +43,10 @@ def read_qgis_layer(filename):
     :return: QGIS Layer
     :rtype: QgsMapLayer
     """
-    base_name, ext = os.path.splitext(filename)
+    if base_name:
+        _, ext = os.path.splitext(filename)
+    else:
+        base_name, ext = os.path.splitext(filename)
     vector_extension = [
         '.shp', '.sqlite', '.json']
     raster_extension = ['.asc', '.tif', '.nc']
@@ -122,47 +125,6 @@ def get_bounding_box(filename):
     return layer.get_bounding_box()
 
 
-def bboxlist2string(bbox, decimals=6):
-    """Convert bounding box list to comma separated string
-
-    Args:
-        * bbox: List of coordinates of the form [W, S, E, N]
-
-    Returns:
-        * bbox_string: Format 'W,S,E,N' - each will have 6 decimal points
-    """
-
-    msg = 'Got string %s, but expected bounding box as a list' % str(bbox)
-    verify(not isinstance(bbox, basestring), msg)
-
-    try:
-        bbox = list(bbox)
-    except:
-        msg = 'Could not coerce bbox %s into a list' % str(bbox)
-        raise BoundingBoxError(msg)
-
-    msg = ('Bounding box must have 4 coordinates [W, S, E, N]. '
-           'I got %s' % str(bbox))
-    try:
-        verify(len(bbox) == 4, msg)
-    except VerificationError:
-        raise BoundingBoxError(msg)
-
-    for x in bbox:
-        try:
-            float(x)
-        except ValueError, e:
-            msg = ('Bounding box %s contained non-numeric entry %s, '
-                   'original error was "%s".' % (bbox, x, e))
-            raise BoundingBoxError(msg)
-
-    # Make template of the form '%.5f,%.5f,%.5f,%.5f'
-    template = (('%%.%if,' % decimals) * 4)[:-1]
-
-    # Assign numbers and return
-    return template % tuple(bbox)
-
-
 def bboxstring2list(bbox_string):
     """Convert bounding box string to list
 
@@ -196,54 +158,3 @@ def bboxstring2list(bbox_string):
             raise BoundingBoxError(msg)
 
     return [float(x) for x in fields]
-
-
-def get_bounding_box_string(filename):
-    """Get bounding box for specified raster or vector file
-
-    Args:
-        * filename
-
-    Returns:
-        * bounding box as python string 'West, South, East, North'
-    """
-
-    return bboxlist2string(get_bounding_box(filename))
-
-
-def check_bbox_string(bbox_string):
-    """Check that bbox string is valid
-    """
-
-    msg = 'Expected bbox as a string with format "W,S,E,N"'
-    verify(isinstance(bbox_string, basestring), msg)
-
-    # Use checks from string to list conversion
-    # FIXME (Ole): Would be better to separate the checks from the conversion
-    # and use those checks directly.
-    minx, miny, maxx, maxy = bboxstring2list(bbox_string)
-
-    # Check semantic integrity
-    msg = ('Western border %.5f of bounding box %s was out of range '
-           'for longitudes ([-180:180])' % (minx, bbox_string))
-    verify(-180 <= minx <= 180, msg)
-
-    msg = ('Eastern border %.5f of bounding box %s was out of range '
-           'for longitudes ([-180:180])' % (maxx, bbox_string))
-    verify(-180 <= maxx <= 180, msg)
-
-    msg = ('Southern border %.5f of bounding box %s was out of range '
-           'for latitudes ([-90:90])' % (miny, bbox_string))
-    verify(-90 <= miny <= 90, msg)
-
-    msg = ('Northern border %.5f of bounding box %s was out of range '
-           'for latitudes ([-90:90])' % (maxy, bbox_string))
-    verify(-90 <= maxy <= 90, msg)
-
-    msg = ('Western border %.5f was greater than or equal to eastern border '
-           '%.5f of bounding box %s' % (minx, maxx, bbox_string))
-    verify(minx < maxx, msg)
-
-    msg = ('Southern border %.5f was greater than or equal to northern border '
-           '%.5f of bounding box %s' % (miny, maxy, bbox_string))
-    verify(miny < maxy, msg)

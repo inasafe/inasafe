@@ -56,11 +56,10 @@ class TestAgePostprocessor(unittest.TestCase):
         """Test for Postprocessor's process."""
         POSTPROCESSOR.process()
         results = POSTPROCESSOR.results()
-        from pprint import pprint
-        pprint(results)
-        assert results['Youth count (affected)']['value'] == '38,518'
-        assert results['Adult count (affected)']['value'] == '96,516'
-        assert results['Elderly count (affected)']['value'] == '11,424'
+        self.assertEquals(results['Youth count (affected)']['value'], '38,518')
+        self.assertEquals(results['Adult count (affected)']['value'], '96,516')
+        self.assertEquals(
+            results['Elderly count (affected)']['value'], '11,424')
 
 
 if __name__ == '__main__':

@@ -1,6 +1,13 @@
 # -*- coding: utf-8 -*-
-"""**Postprocessors package.**
+"""
+InaSAFE Disaster risk assessment tool developed by AusAid.
 
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
 """
 
 __author__ = 'Dmitry Kolesov <kolesov.dm@google.com>'
@@ -10,17 +17,13 @@ __license__ = "GPL"
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
-from collections import OrderedDict
-from safe.postprocessors.building_type_postprocessor import \
-    BuildingTypePostprocessor
+from safe.postprocessors.abstract_building_road_type_postprocessor import \
+    AbstractBuildingRoadTypePostprocessor
+from safe.definitions import road_class_mapping, road_class_order
 from safe.utilities.i18n import tr
 
 
-# The road postprocessing is the same workflow as Building postprocessing
-# So we can redefine field values and call BuildingTypePostprocessor
-# That is why I define RoadTypePostprocessor
-# as descendant of BuildingTypePostprocessor
-class RoadTypePostprocessor(BuildingTypePostprocessor):
+class RoadTypePostprocessor(AbstractBuildingRoadTypePostprocessor):
     """
     Postprocessor that calculates road types related statistics.
     see the _calculate_* methods to see indicator specific documentation
@@ -34,29 +37,20 @@ class RoadTypePostprocessor(BuildingTypePostprocessor):
 
         It takes care of defining self.impact_total
         """
+        AbstractBuildingRoadTypePostprocessor.__init__(self)
+        self._description = tr('Calculates road types related statistics.')
+        self._labels = {
+            item['key']: item['name'] for item in road_class_mapping}
+        self._order = road_class_order
 
-        BuildingTypePostprocessor.__init__(self)
-        # Note: Do we need these explicityl defined? With new osm-reporter
-        # changes you already get a nicely named list in the 'type' field
-        self.fields_values = OrderedDict([
-            ('Motorway / highway', ['Motorway or highway']),
-            ('Motorway link', ['Motorway link']),
-            ('Primary road', ['Primary road']),
-            ('Primary link', ['Primary link']),
-            ('Tertiary', ['Tertiary']),
-            ('Tertiary link', ['Tertiary link']),
-            ('Secondary', ['Secondary']),
-            ('Secondary link', ['Secondary link']),
-            ('Road, residential, living street, etc.', [
-                'Road, residential, living street, etc.']),
-            ('Track', ['Track']),
-            ('Cycleway, footpath, etc.', ['Cycleway, footpath, etc.']),
-            ('Other', [])
-        ])
-        self.known_types = []
-        self._update_known_types()
+    @staticmethod
+    def feature_value(feature):
+        """Return the value to add in the statistics. For a road, it's length.
 
-    def description(self):
-        """Describe briefly what the post processor does.
+        :param feature: The feature is not used.
+        :type feature: QgsFeature
+
+        :return: The value to add in the postprocessing.
+        :rtype: float
         """
-        return tr('Calculates road types related statistics.')
+        return feature['aggr_sum']

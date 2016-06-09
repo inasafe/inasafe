@@ -22,6 +22,9 @@ import unittest
 import os
 import numpy
 
+from qgis.core import QgsCoordinateReferenceSystem
+
+from safe.test.utilities import get_qgis_app
 from safe.common.utilities import (
     get_significant_decimal,
     humanize_class,
@@ -39,6 +42,8 @@ from safe.common.utilities import (
     humanize_file_size,
     add_to_list,
     color_ramp)
+
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 def print_class(array, result_class, expected_result):
@@ -288,14 +293,18 @@ class TestUtilities(unittest.TestCase):
 
     def test_get_utm_epsg(self):
         """Test we can get correct epsg code"""
-        # North semisphere
+        # North semisphere in geographic coordinates:
         self.assertEqual(get_utm_epsg(-178, 10), 32601)
         self.assertEqual(get_utm_epsg(178, 20), 32660)
         self.assertEqual(get_utm_epsg(-3, 30), 32630)
-        # South semisphere:
+        # South semisphere in geographic coordinates:
         self.assertEqual(get_utm_epsg(-178, -10), 32701)
         self.assertEqual(get_utm_epsg(178, -20), 32760)
         self.assertEqual(get_utm_epsg(-3, -30), 32730)
+
+        # North semisphere not in geographic coordinates:
+        epsg = QgsCoordinateReferenceSystem('EPSG:2154')
+        self.assertEqual(get_utm_epsg(573593, 6330659, epsg), 32631)
 
     def test_get_non_conflicting_attribute_name(self):
         """Test we can get a non conflicting attribute name."""
@@ -359,7 +368,17 @@ class TestUtilities(unittest.TestCase):
         self.assertEqual(colors, expected_colors)
 
         number_of_colours = 2
-        expected_colors = ['#ff0000', '#00ffff']
+        expected_colors = ['#ff0000', '#00ff00']
+        colors = color_ramp(number_of_colours)
+        self.assertEqual(colors, expected_colors)
+
+        number_of_colours = 3
+        expected_colors = ['#ff0000', '#feff00', '#00ff00']
+        colors = color_ramp(number_of_colours)
+        self.assertEqual(colors, expected_colors)
+
+        number_of_colours = 4
+        expected_colors = ['#ff0000', '#ffaa00', '#a9ff00', '#00ff00']
         colors = color_ramp(number_of_colours)
         self.assertEqual(colors, expected_colors)
 

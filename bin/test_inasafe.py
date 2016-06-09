@@ -19,7 +19,7 @@ from inasafe import (
     get_impact_function_list,
     run_impact_function,
     build_report,
-    analysis_setup,
+    impact_function_setup,
     CommandLineArguments)
 
 
@@ -62,7 +62,7 @@ class TestInasafeCommandLine(unittest.TestCase):
     def test_analysis_setup(self):
         exposure = get_exposure(self.args)
         hazard = get_hazard(self.args)
-        analysis = analysis_setup(self.args, hazard, exposure)
+        analysis = impact_function_setup(self.args, hazard, exposure)
         self.assertEqual(
             str(type(analysis)),
             "<class 'inasafe.safe.utilities.analysis.Analysis'>")

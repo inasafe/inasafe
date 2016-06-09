@@ -145,10 +145,6 @@ class ClipperTest(unittest.TestCase):
         keywords_file = test_file + '.xml'
         shutil.copyfile(source_file, keywords_file)
 
-        # source_file = test_data_path('other', 'tenbytenraster.keywords')
-        # keywords_file = test_file + '.keywords'
-        # shutil.copyfile(source_file, keywords_file)
-
         # Test the raster layer
         raster_layer = QgsRasterLayer(test_file, 'ten by ten')
         # Create a bounding box
@@ -467,9 +463,6 @@ class ClipperTest(unittest.TestCase):
         safe_layer = read_safe_layer(raster_path)
         min_value, max_value = safe_layer.get_extrema()
         native_resolution = safe_layer.get_resolution()
-
-        print min_value, max_value
-        print native_resolution
 
         # Define bounding box in EPSG:4326
         bounding_box = [106.61, -6.38, 107.05, -6.07]

@@ -21,6 +21,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import shutil
 import logging
+import json
+from collections import OrderedDict
 from datetime import datetime
 
 # noinspection PyPackageRequirements
@@ -92,16 +94,18 @@ from safe.common.exceptions import (
     InvalidGeometryError,
     UnsupportedProviderError,
     InvalidAggregationKeywords,
-    InsufficientMemoryWarning)
+    InsufficientMemoryWarning,
+    MissingImpactReport
+)
 from safe.report.impact_report import ImpactReport
 from safe.gui.tools.about_dialog import AboutDialog
 from safe.gui.tools.help_dialog import HelpDialog
 from safe.gui.tools.impact_report_dialog import ImpactReportDialog
 from safe_extras.pydispatch import dispatcher
-from safe.utilities.analysis import Analysis
 from safe.utilities.extent import Extent
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.utilities.unicode import get_unicode
+from safe.impact_template.utilities import get_report_template
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 INFO_STYLE = styles.INFO_STYLE
@@ -151,7 +155,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # Impact Function Manager to deal with IF needs
         self.impact_function_manager = ImpactFunctionManager()
 
-        self.analysis = None
+        self.impact_function = None
         self.keyword_io = KeywordIO()
         self.active_impact_function = None
         self.impact_function_parameters = None
@@ -191,7 +195,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         canvas = self.iface.mapCanvas()
 
         # Enable on the fly projection by default
-        canvas.mapRenderer().setProjectionsEnabled(True)
+        canvas.setCrsTransformEnabled(True)
         self.connect_layer_listener()
         self.grpQuestion.setEnabled(False)
         self.grpQuestion.setVisible(False)
@@ -511,7 +515,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         """Generate a message for initial application state.
 
         :returns: Information for the user on how to get started.
-        :rtype: Message
+        :rtype: safe.messaging.Message
         """
         message = m.Message()
         message.add(LOGO_ELEMENT)
@@ -564,8 +568,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         title = m.Heading(
             self.tr('Ready'), **PROGRESS_UPDATE_STYLE)
         notes = m.Paragraph(
-            self.tr('You can now proceed to run your analysis by clicking '
-                    'the'),
+            self.tr(
+                'You can now proceed to run your analysis by clicking the '),
             m.EmphasizedText(self.tr('Run'), **KEYWORD_STYLE),
             self.tr('button.'))
         message = m.Message(LOGO_ELEMENT, title, notes)
@@ -577,16 +581,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         .. note:: Assumes a valid hazard and exposure layer are loaded.
 
         :returns: A localised message indicating we are not ready.
-        :rtype: Message
+        :rtype: safe.messaging.Message
         """
-        # myHazardFilename = self.getHazardLayer().source()
-        # noinspection PyTypeChecker
-        hazard_keywords = self.keyword_io.read_keywords(
-            self.get_hazard_layer())
-        # myExposureFilename = self.getExposureLayer().source()
-        # noinspection PyTypeChecker
-        exposure_keywords = self.keyword_io.read_keywords(
-            self.get_exposure_layer())
         heading = m.Heading(
             self.tr('No valid functions'), **WARNING_STYLE)
         notes = m.Paragraph(self.tr(
@@ -634,7 +630,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         :returns: A two-tuple where the first element is a Boolean reflecting
          the results of the validation tests and the second is a message
          indicating any reason why the validation may have failed.
-        :rtype: (Boolean, Message)
+        :rtype: (Boolean, safe.messaging.Message)
 
         Example::
 
@@ -660,7 +656,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
     def save_auxiliary_files(self, layer, destination):
         """Save auxiliary files when using the 'save as' function.
 
-        If some auxiliary files (.xml or .keywords) exist, this function will
+        If some auxiliary files (.xml) exist, this function will
         copy them when the 'save as' function is used on the layer.
 
         :param layer: The layer which has been saved as.
@@ -672,19 +668,13 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         """
 
         source_basename = os.path.splitext(layer.source())[0]
-        source_keywords = "%s.keywords" % source_basename
         source_xml = "%s.xml" % source_basename
 
         destination_basename = os.path.splitext(destination)[0]
-        destination_keywords = "%s.keywords" % destination_basename
         destination_xml = "%s.xml" % destination_basename
 
         # noinspection PyBroadException,PyBroadException
         try:
-            # Keywords
-            if os.path.isfile(source_keywords):
-                shutil.copy(source_keywords, destination_keywords)
-
             # XML
             if os.path.isfile(source_xml):
                 shutil.copy(source_xml, destination_xml)
@@ -924,6 +914,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             except NoKeywordsFoundError:
                 # Skip if there are no keywords at all
                 continue
+            except KeywordNotFoundError:
+                # There is a missing mandatory keyword, ignore it
+                continue
             except:  # pylint: disable=W0702
                 # automatically adding file name to title in keywords
                 # See #575
@@ -1138,7 +1131,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.show_next_analysis_extent()  # green
             self.extent.show_user_analysis_extent()  # blue
             try:
-                clip_parameters = self.analysis.impact_function.clip_parameters
+                clip_parameters = self.impact_function.clip_parameters
                 self.extent.show_last_analysis_extent(
                     clip_parameters['adjusted_geo_extent'])  # red
             except (AttributeError, TypeError):
@@ -1156,13 +1149,13 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         try:
             self.enable_busy_cursor()
             self.show_next_analysis_extent()
-            self.analysis = self.prepare_analysis()
-            self.analysis.setup_analysis()
-            clip_parameters = self.analysis.impact_function.clip_parameters
+            self.impact_function = self.prepare_impact_function()
+            clip_parameters = self.impact_function.clip_parameters
             self.extent.show_last_analysis_extent(
                 clip_parameters['adjusted_geo_extent'])
+
             # Start the analysis
-            self.analysis.run_analysis()
+            self.impact_function.run_analysis()
         except InsufficientOverlapError as e:
             context = self.tr(
                 'A problem was encountered when trying to determine the '
@@ -1202,12 +1195,12 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 return
             elif result == QtGui.QMessageBox.Yes:
                 # Set analysis to ignore memory warning
-                self.analysis.force_memory = True
+                self.impact_function.force_memory = True
                 self.accept()
         finally:
             # Set back analysis to not ignore memory warning
-            if self.analysis:
-                self.analysis.force_memory = False
+            if self.impact_function:
+                self.impact_function.force_memory = False
             self.disable_signal_receiver()
 
     def accept_cancelled(self, old_keywords):
@@ -1218,7 +1211,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         """
         LOGGER.debug('Setting old dictionary: ' + str(old_keywords))
         self.keyword_io.write_keywords(
-            self.analysis.aggregator.layer, old_keywords)
+            self.impact_function.aggregator.layer, old_keywords)
         self.hide_busy()
         self.set_run_button_status()
 
@@ -1249,34 +1242,32 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         send_error_message(self, message)
         self.analysis_done.emit(False)
 
-    def prepare_analysis(self):
+    def prepare_impact_function(self):
         """Create analysis as a representation of current situation of dock."""
-        analysis = Analysis()
 
         # Impact Functions
-        if self.get_function_id() != '':
-            impact_function = self.impact_function_manager.get(
-                self.get_function_id())
-            impact_function.parameters = self.impact_function_parameters
-            analysis.impact_function = impact_function
+        impact_function = self.impact_function_manager.get(
+            self.get_function_id())
+        impact_function.parameters = self.impact_function_parameters
 
         # Layers
-        analysis.hazard = self.get_hazard_layer()
-        analysis.exposure = self.get_exposure_layer()
-        analysis.aggregation = self.get_aggregation_layer()
+        impact_function.hazard = self.get_hazard_layer()
+        impact_function.exposure = self.get_exposure_layer()
+        impact_function.aggregation = self.get_aggregation_layer()
 
         # Variables
-        analysis.clip_hard = self.clip_hard
-        analysis.show_intermediate_layers = self.show_intermediate_layers
+        impact_function.clip_hard = self.clip_hard
+        impact_function.show_intermediate_layers = \
+            self.show_intermediate_layers
         viewport = viewport_geo_array(self.iface.mapCanvas())
-        analysis.viewport_extent = viewport
+        impact_function.viewport_extent = viewport
         if self.extent.user_extent:
-            analysis.user_extent = self.extent.user_extent
-            analysis.user_extent_crs = self.extent.user_extent_crs
+            impact_function.requested_extent = self.extent.user_extent
+            impact_function.requested_extent_crs = self.extent.user_extent_crs
 
-        return analysis
+        return impact_function
 
-    def add_above_layer(self, existing_layer, new_layer):
+    def add_above_layer(self, new_layer, *existing_layers):
         """Add a layer (e.g. impact layer) above another layer in the legend.
 
         .. versionadded:: 3.2
@@ -1287,9 +1278,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         .. seealso:: issue #2322
 
-        :param existing_layer: The layer which the new layer
+        :param existing_layers: Layers which the new layer
             should be added above.
-        :type existing_layer: QgsMapLayer
+        :type existing_layers: QgsMapLayer
 
         :param new_layer: The new layer being added. An assumption is made
             that the newly added layer is not already loaded in the legend
@@ -1297,7 +1288,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         :type new_layer: QgsMapLayer
 
         """
-        if existing_layer is None or new_layer is None:
+        if len(existing_layers) is None or new_layer is None:
             return
 
         registry = QgsMapLayerRegistry.instance()
@@ -1309,11 +1300,13 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         # False flag prevents layer being added to legend
         registry.addMapLayer(new_layer, False)
-        index = self.layer_legend_index(existing_layer)
-        # LOGGER.info('Inserting layer %s at position %s' % (
-        #     new_layer.source(), index))
+        minimum_index = len(QgsProject.instance().layerTreeRoot().children())
+        for layer in existing_layers:
+            index = self.layer_legend_index(layer)
+            if index < minimum_index:
+                minimum_index = index
         root = QgsProject.instance().layerTreeRoot()
-        root.insertLayer(index, new_layer)
+        root.insertLayer(minimum_index, new_layer)
 
     @staticmethod
     def layer_legend_index(layer):
@@ -1356,7 +1349,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # Try to run completion code
         try:
             LOGGER.debug(datetime.now())
-            LOGGER.debug(self.analysis is None)
+            LOGGER.debug(self.impact_function is None)
             report = self.show_results()
         except Exception, e:  # pylint: disable=W0703
 
@@ -1381,26 +1374,50 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         :returns: Provides a report for writing to the dock.
         :rtype: str
         """
-        safe_impact_layer = self.analysis.impact_layer
+        safe_impact_layer = self.impact_function.impact
         qgis_impact_layer = read_impact_layer(safe_impact_layer)
         # self.layer_changed(qgis_impact_layer)
         keywords = self.keyword_io.read_keywords(qgis_impact_layer)
+        json_path = os.path.splitext(qgis_impact_layer.source())[0] + '.json'
 
         # write postprocessing report to keyword
-        impact_function = self.analysis.impact_function
-        output = impact_function.postprocessor_manager.get_output(
-            self.analysis.aggregator.aoi_mode)
-        keywords['postprocessing_report'] = output.to_html(
-            suppress_newlines=True)
-        self.keyword_io.write_keywords(qgis_impact_layer, keywords)
+        postprocessor_data = self.impact_function.postprocessor_manager.\
+            get_json_data(self.impact_function.aggregator.aoi_mode)
+        post_processing_report = m.Message()
+        if os.path.exists(json_path):
+            with open(json_path) as json_file:
+                impact_data = json.load(
+                    json_file, object_pairs_hook=OrderedDict)
+                impact_data['post processing'] = postprocessor_data
+                with open(json_path, 'w') as json_file_2:
+                    json.dump(impact_data, json_file_2, indent=2)
+        else:
+            post_processing_report = self.impact_function.\
+                postprocessor_manager.get_output(
+                    self.impact_function.aggregator.aoi_mode)
+            keywords['postprocessing_report'] = post_processing_report.to_html(
+                suppress_newlines=True)
+            self.keyword_io.write_keywords(qgis_impact_layer, keywords)
 
         # Get tabular information from impact layer
         report = m.Message()
         report.add(LOGO_ELEMENT)
-        report.add(m.Heading(self.tr(
-            'Analysis Results'), **INFO_STYLE))
-        report.add(self.keyword_io.read_keywords(
-            qgis_impact_layer, 'impact_summary'))
+        report.add(m.Heading(self.tr('Analysis Results'), **INFO_STYLE))
+        # If JSON Impact Data Exist, use JSON
+        json_path = qgis_impact_layer.source()[:-3] + 'json'
+        LOGGER.debug('JSON Path %s' % json_path)
+        if os.path.exists(json_path):
+            impact_template = get_report_template(json_file=json_path)
+            impact_report = impact_template.generate_message_report()
+            report.add(impact_report)
+        else:
+            report.add(self.keyword_io.read_keywords(
+                qgis_impact_layer, 'impact_summary'))
+            # append postprocessing report
+            report.add(post_processing_report.to_html())
+
+        # Layer attribution comes last
+        report.add(impact_attribution(keywords).to_html(True))
 
         # Get requested style for impact layer of either kind
         style = safe_impact_layer.get_style_info()
@@ -1436,18 +1453,32 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # Insert the aggregation output above the input aggregation layer
         if self.show_intermediate_layers:
             self.add_above_layer(
-                self.get_aggregation_layer(),
-                self.analysis.aggregator.layer)
+                self.impact_function.aggregator.layer,
+                self.get_aggregation_layer())
 
-        # Insert the impact above the exposure
-        self.add_above_layer(
-            self.get_exposure_layer(),
-            qgis_impact_layer)
+        if self.hide_exposure_flag:
+            # Insert the impact always above the hazard
+            self.add_above_layer(qgis_impact_layer, self.get_hazard_layer())
+        else:
+            # Insert the impact above the hazard and the exposure if
+            # we don't hide the exposure. See #2899
+            self.add_above_layer(
+                qgis_impact_layer,
+                self.get_exposure_layer(),
+                self.get_hazard_layer())
 
         active_function = self.active_impact_function
         self.active_impact_function = active_function
         self.impact_function_parameters = \
             self.active_impact_function.parameters
+
+        # In QGIS 2.14.2 and GDAL 1.11.3, if the exposure is in 3857,
+        # the impact layer is in 54004, we need to change it. See issue #2790.
+        if self.get_exposure_layer().crs().authid() == 'EPSG:3857':
+            if qgis_impact_layer.crs().authid() != 'EPSG:3857':
+                epsg_3857 = QgsCoordinateReferenceSystem(3857)
+                qgis_impact_layer.setCrs(epsg_3857)
+
         # make sure it is active in the legend - needed since QGIS 2.4
         self.iface.setActiveLayer(qgis_impact_layer)
         # then zoom to it
@@ -1460,10 +1491,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         self.restore_state()
 
-        # append postprocessing report
-        report.add(output.to_html())
-        # Layer attribution comes last
-        report.add(impact_attribution(keywords).to_html(True))
         # Return text to display in report panel
         return report
 
@@ -1501,6 +1528,41 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         while QtGui.qApp.overrideCursor() is not None and \
                 QtGui.qApp.overrideCursor().shape() == QtCore.Qt.WaitCursor:
             QtGui.qApp.restoreOverrideCursor()
+
+    def show_impact_report(self, layer, keywords):
+        """Show the report for an impact layer.
+
+        .. versionadded: 3.4
+
+        .. note:: The print button will be enabled if this method is called.
+            Also, the question group box will be hidden and the 'show
+            question' button will be shown.
+
+        :param layer: QgsMapLayer instance that is now active
+        :type layer: QgsMapLayer, QgsRasterLayer, QgsVectorLayer
+
+        :param keywords: A keywords dictionary.
+        :type keywords: dict
+        """
+        LOGGER.debug('Showing Impact Report')
+        # Init report
+        report = m.Message()
+        report.add(LOGO_ELEMENT)
+        report.add(m.Heading(self.tr('Analysis Results'), **INFO_STYLE))
+
+        impact_template = get_report_template(impact_layer_path=layer.source())
+        impact_report = impact_template.generate_message_report()
+        report.add(impact_report)
+
+        if 'postprocessing_report' in keywords:
+            report.add(keywords['postprocessing_report'])
+        report.add(impact_attribution(keywords))
+        self.pbnPrint.setEnabled(True)
+        send_static_message(self, report)
+        # also hide the question and show the show question button
+        self.pbnShowQuestion.setVisible(True)
+        self.grpQuestion.setEnabled(True)
+        self.grpQuestion.setVisible(False)
 
     def show_impact_keywords(self, keywords):
         """Show the keywords for an impact layer.
@@ -1544,7 +1606,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         :type layer: QgsMapLayer
         """
         keywords = KeywordIO(layer)
-        LOGGER.debug('Showing Generic Keywords')
         self.pbnPrint.setEnabled(False)
         message = keywords.to_message()
         send_static_message(self, message)
@@ -1561,10 +1622,12 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             'Layer keywords missing:'), **WARNING_STYLE))
         context = m.Paragraph(
             self.tr(
-                'No keywords have been defined for this layer yet. If you '
-                'wish to use it as an exposure, hazard, or aggregation layer '
-                'in an analysis, please use the keyword wizard to update the '
-                'keywords. You can open the wizard by clicking on the '),
+                'No keywords have been defined for this layer yet or there is '
+                'an issue with the currently defined keywords and they need '
+                'to be reviewed. If you wish to use this layer as an '
+                'exposure, hazard, or aggregation layer in an analysis, '
+                'please use the keyword wizard to update the keywords. You '
+                'can open the wizard by clicking on the '),
             m.Image(
                 'file:///%s/img/icons/'
                 'show-keyword-wizard.svg' % resources_path(),
@@ -1636,16 +1699,17 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         try:
             keywords = self.keyword_io.read_keywords(layer)
 
-            # if 'impact_summary' in keywords:
-            if keywords['layer_purpose'] == 'impact':
-                self.show_impact_keywords(keywords)
-                self.wvResults.impact_path = layer.source()
+            if keywords.get('layer_purpose') == 'impact':
+                try:
+                    self.show_impact_report(layer, keywords)
+                except MissingImpactReport:
+                    self.show_impact_keywords(keywords)
             else:
                 if 'keyword_version' not in keywords.keys():
                     self.show_keyword_version_message(
                         'No Version', self.inasafe_version)
                 else:
-                    keyword_version = str(keywords['keyword_version'])
+                    keyword_version = str(keywords.get('keyword_version'))
                     supported = is_keyword_version_supported(
                             keyword_version)
                     if supported:
@@ -1661,7 +1725,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 HashNotFoundError,
                 InvalidParameterError,
                 NoKeywordsFoundError,
-                AttributeError), e:
+                AttributeError):
             # LOGGER.info(e.message)
             # Added this check in 3.2 for #1861
             active_layer = self.iface.activeLayer()
@@ -2080,7 +2144,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             # For #2077 somewhat kludgy hack to prevent positive
             # message when we cant actually run
             match = self.tr(
-                'You can now proceed to run your analysis by clicking the')
+                'You can now proceed to run your analysis by clicking the ')
             current_text = self.wvResults.page_to_text()
             if match in current_text:
                 message = m.Message()
@@ -2107,8 +2171,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         try:
             # Temporary only, for checking the user extent
-            analysis = self.prepare_analysis()
-            clip_parameters = analysis.impact_function.clip_parameters
+            impact_function = self.prepare_impact_function()
+            clip_parameters = impact_function.clip_parameters
             return True, clip_parameters['adjusted_geo_extent']
         except (AttributeError, InsufficientOverlapError):
             return False, None

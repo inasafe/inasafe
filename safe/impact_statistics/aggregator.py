@@ -21,6 +21,7 @@ import time
 import numpy
 from collections import OrderedDict
 from qgis.core import (
+    QgsCoordinateTransform,
     QgsMapLayer,
     QgsGeometry,
     QgsMapLayerRegistry,
@@ -30,6 +31,7 @@ from qgis.core import (
     QgsPoint,
     QgsField,
     QgsFields,
+    QgsSpatialIndex,
     QgsVectorLayer,
     QgsVectorFileWriter,
     QGis,
@@ -40,12 +42,11 @@ from qgis.core import (
 from qgis.analysis import QgsZonalStatistics
 # pylint: enable=no-name-in-module
 from PyQt4 import QtGui, QtCore
-from PyQt4.QtCore import QSettings
+from PyQt4.QtCore import QSettings, QVariant
 from safe.storage.core import read_layer as safe_read_layer
 from safe.storage.utilities import (
     calculate_polygon_centroid,
     safe_to_qgis_layer)
-from safe.impact_statistics.zonal_stats import calculate_zonal_stats
 from safe.utilities.clipper import clip_layer
 from safe.defaults import get_defaults
 from safe.utilities.keyword_io import KeywordIO
@@ -110,16 +111,17 @@ class Aggregator(QtCore.QObject):
         self.exposure_layer = None  # Used in deintersect() method
         self.safe_layer = None  # Aggregation layer in SAFE format
 
+        # For new-style IF, when aggregation is used, only exposure layer
+        # is intersected with aggregation layer (see deintersect_exposure()),
+        # and the aggregation zone field name is stored, so that it can
+        # be used later in the body of IF
+        self.exposure_aggregation_field = None
+
         self.prefix = 'aggr_'
         self.attributes = {}
         self.attribute_title = None
         self._sum_field_name = None
         self.set_sum_field_name()
-
-        # use qgis or inasafe zonal stats
-        flag = bool(QtCore.QSettings().value(
-            'inasafe/use_native_zonal_stats', False, type=bool))
-        self.use_native_zonal_stats = flag
 
         self._extent = extent
         self._keyword_io = KeywordIO()
@@ -476,6 +478,39 @@ class Aggregator(QtCore.QObject):
                     self.exposure_layer = self._prepare_polygon_layer(
                         self.exposure_layer)
 
+    def deintersect_exposure(self):
+        """ If necessary, cut the exposure features according to aggregation
+        layer. Does nothing if no aggregation layer is specified.
+        """
+        if self.aoi_mode:
+            return  # nothing to do
+
+        agg_keyword = self.get_default_keyword('AGGR_ATTR_KEY')
+        agg_attribute = self.read_keywords(self.layer)[agg_keyword]
+
+        out_filename = _intersect_exposure_with_aggregation(
+            self.exposure_layer,
+            self.layer,
+            agg_attribute)
+
+        self.copy_keywords(self.exposure_layer, out_filename)
+
+        name = '%s %s' % (self.exposure_layer.name(), self.tr('preprocessed'))
+        output_layer = QgsVectorLayer(out_filename, name, 'ogr')
+        if not output_layer.isValid():
+            raise Exception('Pre-processing of exposure: Intersection Failed')
+
+        if self.show_intermediate_layers:
+            QgsMapLayerRegistry.instance().addMapLayer(output_layer)
+
+        self.exposure_layer = output_layer
+
+        # keep then aggregation field name in exposure layer
+        # Wanted to use a keyword in exposure layer, but it would not be saved
+        # TODO: handle name collision in case qgis:intersection renames
+        # original zone name field
+        self.exposure_aggregation_field = agg_attribute
+
     def aggregate(self, safe_impact_layer):
         """Do any requested aggregation post processing.
 
@@ -551,7 +586,7 @@ class Aggregator(QtCore.QObject):
         else:
             message = self.tr(
                 '%s is %s but it should be either vector or raster') % (
-                          qgis_impact_layer.name(), qgis_impact_layer.type())
+                qgis_impact_layer.name(), qgis_impact_layer.type())
             # noinspection PyExceptionInherit
             raise ReadLayerError(message)
 
@@ -646,102 +681,24 @@ class Aggregator(QtCore.QObject):
         :param impact_layer: A raster impact layer.
         :type impact_layer: QgsRasterLayer
         """
-        if self.use_native_zonal_stats:
-            zonal_statistics = QgsZonalStatistics(
-                self.layer,
-                impact_layer.dataProvider().dataSourceUri(),
-                self.prefix)
-            progress_dialog = QtGui.QProgressDialog(
-                self.tr('Calculating zonal statistics'),
-                self.tr('Abort...'),
-                0,
-                0)
-            start_time = time.clock()
-            zonal_statistics.calculateStatistics(progress_dialog)
-            if progress_dialog.wasCanceled():
-                QtGui.QMessageBox.error(
-                    self, self.tr('ZonalStats: Error'),
-                    self.tr('You aborted aggregation, '
-                            'so there are no data for analysis. Exiting...'))
-            cpp_duration = time.clock() - start_time
-            LOGGER.debug('Native zonal stats duration: %ss' % cpp_duration)
-        else:
-            # new way
-            # zonal_statistics = {
-            # 0L: {'count': 50539,
-            # 'sum': 12015061.876953125,
-            #      'mean': 237.73841739949594},
-            # 1L: {
-            #   'count': 19492,
-            #   'sum': 2945658.1220703125,
-            #   'mean': 151.12138939412642},
-            # 2L: {
-            #   'count': 57372,
-            #   'sum': 1643522.3984985352, 'mean': 28.6467684323108},
-            # 3L: {
-            #   'count': 0.00013265823369700314,
-            #   'sum': 0.24983273179242008,
-            #   'mean': 1883.2810058593748},
-            # 4L: {
-            #   'count': 1.8158245316933218e-05,
-            #   'sum': 0.034197078505115275,
-            #   'mean': 1883.281005859375},
-            # 5L: {
-            #   'count': 73941,
-            #   'sum': 10945062.435424805,
-            #   'mean': 148.024268476553},
-            # 6L: {
-            #   'count': 54998,
-            #   'sum': 11330910.488220215,
-            #   'mean': 206.02404611477172}}
-            start_time = time.clock()
-            zonal_statistics = calculate_zonal_stats(impact_layer, self.layer)
-            python_duration = time.clock() - start_time
-            LOGGER.debug('Python zonal stats duration: %ss' % python_duration)
-
-            provider = self.layer.dataProvider()
-
-            # add fields for stats to aggregation layer
-            # { 1: {'sum': 10, 'count': 20, 'min': 1, 'max': 4, 'mean': 2},
-            #             QgsField(self._minFieldName(),
-            #                      QtCore.QVariant.Double),
-            #             QgsField(self._maxFieldName(),
-            #                      QtCore.QVariant.Double)]
-            fields = [
-                QgsField(self._count_field_name(), QtCore.QVariant.Double),
-                QgsField(self.sum_field_name(), QtCore.QVariant.Double),
-                QgsField(self._mean_field_name(), QtCore.QVariant.Double)
-            ]
-            provider.addAttributes(fields)
-            self.layer.updateFields()
-
-            sum_index = provider.fieldNameIndex(self.sum_field_name())
-            count_index = provider.fieldNameIndex(self._count_field_name())
-            mean_index = provider.fieldNameIndex(self._mean_field_name())
-            # minIndex = provider.fieldNameIndex(self._minFieldName())
-            # maxIndex = provider.fieldNameIndex(self._maxFieldName())
-
-            update_map = {}
-            for myFeature in provider.getFeatures():
-                feature_id = myFeature.id()
-                if feature_id not in zonal_statistics:
-                    # Blindly ignoring - @mbernasocchi can you review? TS
-                    # (YA: see #877)
-                    attributes = {
-                        sum_index: 0,
-                        count_index: 0,
-                        mean_index: 0
-                    }
-                else:
-                    statistics = zonal_statistics[feature_id]
-                    attributes = {
-                        sum_index: statistics['sum'],
-                        count_index: statistics['count'],
-                        mean_index: statistics['mean']
-                    }
-                update_map[feature_id] = attributes
-
-            provider.changeAttributeValues(update_map)
+        zonal_statistics = QgsZonalStatistics(
+            self.layer,
+            impact_layer.dataProvider().dataSourceUri(),
+            self.prefix)
+        progress_dialog = QtGui.QProgressDialog(
+            self.tr('Calculating zonal statistics'),
+            self.tr('Abort...'),
+            0,
+            0)
+        start_time = time.clock()
+        zonal_statistics.calculateStatistics(progress_dialog)
+        if progress_dialog.wasCanceled():
+            QtGui.QMessageBox.error(
+                self, self.tr('ZonalStats: Error'),
+                self.tr('You aborted aggregation, '
+                        'so there are no data for analysis. Exiting...'))
+        cpp_duration = time.clock() - start_time
+        LOGGER.debug('Native zonal stats duration: %ss' % cpp_duration)
 
     def _aggregate_polygon_impact(self, safe_impact_layer):
         """Aggregation of polygons in polygons
@@ -1240,7 +1197,6 @@ class Aggregator(QtCore.QObject):
         temporary_dir = temp_dir(sub_dir='pre-process')
         out_filename = unique_filename(suffix='.shp', dir=temporary_dir)
 
-        self.copy_keywords(layer, out_filename)
         shape_writer = QgsVectorFileWriter(
             out_filename,
             'UTF-8',
@@ -1249,6 +1205,11 @@ class Aggregator(QtCore.QObject):
             polygons_provider.crs())
         if shape_writer.hasError():
             raise InvalidParameterError(shape_writer.errorMessage())
+        # Notes (Ismail) for issue #2724
+        # Copy keyword after creating the layer file.
+        # If we copy the keyword first, it will make InaSAFE assumes the
+        # layer is not file based, and it will fail to retrieve the keyword
+        self.copy_keywords(layer, out_filename)
         # end TODO
 
         for (polygon_index, postprocessing_polygon) in enumerate(
@@ -1470,6 +1431,8 @@ class Aggregator(QtCore.QObject):
         del shape_writer
         # LOGGER.debug('Created: %s' % self.preprocessed_feature_count)
 
+        self.copy_keywords(layer, out_filename)
+
         name = '%s %s' % (layer.name(), self.tr('preprocessed'))
         output_layer = QgsVectorLayer(out_filename, name, 'ogr')
         if not output_layer.isValid():
@@ -1628,3 +1591,74 @@ class Aggregator(QtCore.QObject):
         algorithm = self.processing.runAlgorithm(algorithm_name, None, *args)
         if algorithm is not None:
             return algorithm.getOutputValuesAsDictionary()
+
+
+# private functions used in the module
+
+def _intersect_exposure_with_aggregation(
+        exposure_layer, agg_layer, agg_field_name):
+    """ Make a new layer that is intersection of exposure and aggregation
+    layers and add aggregation zone name.
+
+    Aggregation zones are reprojected to exposure layer if necessary.
+
+    Note: tried to use qgis:intersection (with qgis:reprojectlayer)
+    from Processing, however that lead to poor results with missing features.
+    """
+
+    temporary_dir = temp_dir(sub_dir='pre-process')
+    out_filename = unique_filename(suffix='.shp', dir=temporary_dir)
+
+    # reproject aggregation layer if not in the same CRS as exposure
+    if exposure_layer.crs() != agg_layer.crs():
+        ct = QgsCoordinateTransform(agg_layer.crs(), exposure_layer.crs())
+    else:
+        ct = None
+
+    out_fields = exposure_layer.pendingFields()
+    out_fields.append(QgsField(agg_field_name, QVariant.String))
+
+    writer = QgsVectorFileWriter(
+        out_filename, "utf-8", out_fields,
+        exposure_layer.wkbType(), exposure_layer.crs())
+
+    # build index for exposure
+    exp_index = QgsSpatialIndex()
+    exp_features = {}
+    for f in exposure_layer.getFeatures():
+        exp_index.insertFeature(f)
+        exp_features[f.id()] = QgsFeature(f)
+
+    for agg_feature in agg_layer.getFeatures():
+        geom = QgsGeometry(agg_feature.geometry())
+        agg_name = agg_feature[agg_field_name]
+        if ct is not None:
+            geom.transform(ct)
+
+        for exp_fid in exp_index.intersects(geom.boundingBox()):
+            exp_feature = exp_features[exp_fid]
+            exp_geom = QgsGeometry(exp_feature.geometry())
+            if geom.contains(exp_geom):
+                # write feature as is
+                out_feature = QgsFeature(out_fields)
+                out_feature.setGeometry(exp_geom)
+                out_feature.setAttributes(
+                    exp_feature.attributes() + [agg_name])
+                writer.addFeature(out_feature)
+            elif geom.intersects(exp_geom):
+                # need to do intersection
+                out_geom = geom.intersection(exp_geom)
+                out_feature = QgsFeature(out_fields)
+                if not out_geom:
+                    LOGGER.warning('out_geom is None')
+                    continue
+                if not out_feature:
+                    LOGGER.warning('out_feature is None')
+                    continue
+                out_feature.setGeometry(out_geom)
+                out_feature.setAttributes(
+                    exp_feature.attributes() + [agg_name])
+                writer.addFeature(out_feature)
+
+    del writer
+    return out_filename

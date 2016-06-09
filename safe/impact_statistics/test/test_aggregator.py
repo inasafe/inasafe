@@ -128,7 +128,8 @@ class AggregatorTest(unittest.TestCase):
         assert result, message
         # Press RUN
         self.DOCK.accept()
-        attribute = self.DOCK.analysis.aggregator.attributes[attribute_key]
+        aggregator = self.DOCK.impact_function.aggregator
+        attribute = aggregator.attributes[attribute_key]
         message = ('The aggregation should be KAB_NAME. Found: %s' % attribute)
         self.assertEqual(attribute, 'KAB_NAME', message)
 
@@ -155,12 +156,13 @@ class AggregatorTest(unittest.TestCase):
         # Press RUN
         # noinspection PyCallByClass,PyTypeChecker
         self.DOCK.accept()
-        print attribute_key
-        print self.DOCK.analysis.aggregator.attributes
-        attribute = self.DOCK.analysis.aggregator.attributes[attribute_key]
+        aggregator = self.DOCK.impact_function.aggregator
+        attribute = aggregator.attributes[attribute_key]
         message = (
             'The aggregation should be KAB_NAME. Found: %s' % attribute)
         self.assertEqual(attribute, 'KAB_NAME', message)
+
+    test_check_aggregation_single_attribute.slow = True
 
     # noinspection PyMethodMayBeStatic
     def test_check_aggregation_no_attributes(self):
@@ -180,13 +182,16 @@ class AggregatorTest(unittest.TestCase):
             function_id='FloodEvacuationRasterHazardFunction',
             aggregation_layer='kabupaten jakarta singlepart 0 good attr')
         set_jakarta_extent(dock=self.DOCK)
-        assert result, message
+        self.assertTrue(result, message)
         # Press RUN
         self.DOCK.accept()
-        attribute = self.DOCK.analysis.aggregator.attributes[attribute_key]
+        aggregator = self.DOCK.impact_function.aggregator
+        attribute = aggregator.attributes[attribute_key]
         message = (
             'The aggregation should be None. Found: %s' % attribute)
-        assert attribute is None, message
+        self.assertIsNone(attribute, message)
+
+    test_check_aggregation_no_attributes.slow = True
 
     # noinspection PyMethodMayBeStatic
     def test_check_aggregation_none_in_keywords(self):
@@ -206,12 +211,15 @@ class AggregatorTest(unittest.TestCase):
             function_id='FloodEvacuationRasterHazardFunction',
             aggregation_layer='kabupaten jakarta singlepart with None keyword')
         set_jakarta_extent(dock=self.DOCK)
-        assert result, message
+        self.assertTrue(result, message)
         # Press RUN
         self.DOCK.accept()
-        attribute = self.DOCK.analysis.aggregator.attributes[attribute_key]
+        aggregator = self.DOCK.impact_function.aggregator
+        attribute = aggregator.attributes[attribute_key]
         message = ('The aggregation should be None. Found: %s' % attribute)
-        assert attribute is None, message
+        self.assertIsNone(attribute, message)
+
+    test_check_aggregation_none_in_keywords.slow = True
 
     def test_setup_target_field(self):
         """Test setup up target field is correct.
@@ -258,18 +266,19 @@ class AggregatorTest(unittest.TestCase):
         self.DOCK.accept()
 
         expected_feature_count = 5
+        aggregator = self.DOCK.impact_function.aggregator
         message = (
             'The preprocessing should have generated %s features, '
             'found %s' % (
                 expected_feature_count,
-                self.DOCK.analysis.aggregator.preprocessed_feature_count))
+                aggregator.preprocessed_feature_count))
         self.assertEqual(
             expected_feature_count,
-            self.DOCK.analysis.aggregator.preprocessed_feature_count, message)
+            aggregator.preprocessed_feature_count, message)
 
-    def _create_aggregator(self,
-                           use_aoi_mode,
-                           use_native_zonal_stats):
+    test_preprocessing.slow = True
+
+    def _create_aggregator(self, use_aoi_mode):
         """Helper to create aggregator"""
 
         aggregation_layer = QgsVectorLayer(
@@ -286,7 +295,6 @@ class AggregatorTest(unittest.TestCase):
             aggregator = Aggregator(self.extent, None)
         aggregator.set_layers(hazard_layer, exposure_layer)
         aggregator.validate_keywords()
-        aggregator.use_native_zonal_stats = use_native_zonal_stats
 
         return aggregator
 
@@ -294,7 +302,6 @@ class AggregatorTest(unittest.TestCase):
             self,
             impact_layer,
             expected_results,
-            use_native_zonal_stats=False,
             use_aoi_mode=False,
             impact_layer_attributes=None):
         """Helper to calculate aggregation.
@@ -323,9 +330,7 @@ class AggregatorTest(unittest.TestCase):
             expected_numeric_results.append(numeric_results)
             expected_string_results.append(string_results)
 
-        aggregator = self._create_aggregator(
-            use_aoi_mode, use_native_zonal_stats
-        )
+        aggregator = self._create_aggregator(use_aoi_mode)
         aggregator.aggregate(impact_layer)
 
         provider = aggregator.layer.dataProvider()
@@ -359,22 +364,16 @@ class AggregatorTest(unittest.TestCase):
                 impact_layer_attributes
             )
 
-    def test_aggregate_raster_impact_python(self):
-        """Check aggregation on raster impact using python zonal stats"""
-        self._aggregate_raster_impact()
-
     def test_aggregate_raster_impact_native(self):
         """Check aggregation on raster impact using native qgis zonal stats.
 
         TODO: this fails on Tim's machine but not on MB or Jenkins.
 
         """
-        self._aggregate_raster_impact(use_native_zonal_stats=True)
+        self._aggregate_raster_impact()
 
-    def _aggregate_raster_impact(self, use_native_zonal_stats=False):
+    def _aggregate_raster_impact(self):
         """Check aggregation on raster impact.
-
-        :param use_native_zonal_stats:
 
         Created from loadStandardLayers.qgs with:
         - a flood in Jakarta like in 2007
@@ -409,7 +408,7 @@ class AggregatorTest(unittest.TestCase):
              '10943934.3182373',
              '147.992999475819']]
 
-        self._aggregate(impact_layer, expected_results, use_native_zonal_stats)
+        self._aggregate(impact_layer, expected_results)
 
     def test_aggregate_vector_impact(self):
         """Test aggregation results on a vector layer.
@@ -573,7 +572,7 @@ class AggregatorTest(unittest.TestCase):
     def test_set_sum_field_name(self):
         """Test sum_field_name work
         """
-        aggregator = self._create_aggregator(False, False)
+        aggregator = self._create_aggregator(False)
         self.assertEquals(aggregator.sum_field_name(), 'aggr_sum')
 
         aggregator.set_sum_field_name('SUMM_AGGR')
@@ -582,7 +581,7 @@ class AggregatorTest(unittest.TestCase):
 
     def test_get_centroids(self):
         """Test get_centroids work"""
-        aggregator = self._create_aggregator(False, False)
+        aggregator = self._create_aggregator(False)
 
         polygon1 = numpy.array([[0, 0], [0, 1], [1, 0], [0, 0]])
         polygon2 = numpy.array([[0, 0], [1, 1], [1, 0], [0, 0]])

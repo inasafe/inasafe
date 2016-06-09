@@ -48,12 +48,19 @@ class AbstractPostprocessor(object):
         AbstractPostprocessor.__init__(self)
         """
         self._results = None
+        self._description = None
 
+    @property
     def description(self):
+        """Describe briefly what the post processor does.
+
+        :return: The description.
+        :rtype: str
         """
-        Describe briefly what the post processor does.
-        """
-        raise NotImplementedError('Please don\'t use this class directly')
+        if self._description is None:
+            raise NotImplementedError
+        else:
+            return self._description
 
     def setup(self, params):
         """
@@ -157,5 +164,5 @@ class AbstractPostprocessor(object):
             except ValueError as e:
                 LOGGER.debug(e)
                 result = result
-        self._results[name] = {'value': result,
-                               'metadata': metadata}
+        self._results[name] = {
+            'value': result, 'metadata': metadata}

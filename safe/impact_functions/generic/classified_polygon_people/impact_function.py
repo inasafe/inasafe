@@ -32,32 +32,30 @@ from PyQt4.QtGui import QColor
 
 from safe.storage.vector import Vector
 from safe.utilities.i18n import tr
-from safe.common.utilities import unique_filename
+from safe.common.utilities import unique_filename, format_int
 from safe.impact_functions.bases.classified_vh_continuous_ve import \
     ClassifiedVHContinuousVE
 from safe.impact_functions.generic.classified_polygon_people\
     .metadata_definitions \
     import ClassifiedPolygonHazardPolygonPeopleFunctionMetadata
+from safe.impact_reports.polygon_people_exposure_report_mixin import \
+    PolygonPeopleExposureReportMixin
 
-from safe.impact_reports.polygon_population_exposure_report_mixin import \
-    PolygonPopulationExposureReportMixin
-from safe.impact_functions.core import no_population_impact_message
-from safe.common.exceptions import InaSAFEError, ZeroImpactException
-import safe.messaging as m
-from safe.common.utilities import (
-    format_int,
-)
 from safe.impact_functions.core import (
-    population_rounding
-)
+    no_population_impact_message, population_rounding)
+from safe.common.exceptions import ZeroImpactException
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
-from safe.messaging import styles
 
 from safe.utilities.keyword_io import definition
 
+import logging
+
+
+LOGGER = logging.getLogger('InaSAFE')
+
 
 class ClassifiedPolygonHazardPolygonPeopleFunction(
-        ClassifiedVHContinuousVE, PolygonPopulationExposureReportMixin):
+        ClassifiedVHContinuousVE, PolygonPeopleExposureReportMixin):
 
     _metadata = ClassifiedPolygonHazardPolygonPeopleFunctionMetadata()
 
@@ -83,26 +81,23 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         """Return the notes section of the report.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: safe.messaging.Message
+        :rtype: dict
         """
-        message = m.Message(style_class='container')
-
-        message.add(
-            m.Heading(tr('Notes and assumptions'), **styles.INFO_STYLE))
-        checklist = m.BulletedList()
+        title = tr('Notes and assumptions')
         population = format_int(population_rounding(self.total_population))
-        checklist.add(tr(
-            'The total people in the area is %s') % population)
-        checklist.add(tr(
-            'All values are rounded up to the nearest integer in order to '
-            'avoid representing human lives as fractions.'))
-        checklist.add(tr(
-            'People rounding is applied to all population values, which '
-            'may cause discrepancies when adding values.'))
-        checklist.add(tr('Null value will be considered as zero.'))
+        fields = [
+            tr('The total people in the area is %s') % population,
+            tr('All values are rounded up to the nearest integer in order to '
+               'avoid representing human lives as fractions.'),
+            tr('People rounding is applied to all population values, which '
+               'may cause discrepancies when adding values.'),
+            tr('Null value will be considered as zero.')
+        ]
 
-        message.add(checklist)
-        return message
+        return {
+            'title': title,
+            'fields': fields
+        }
 
     def run(self):
         """Risk plugin for classified polygon hazard on polygon population.
@@ -115,12 +110,6 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         :returns: Impact layer
         :rtype: Vector
         """
-        self.validate()
-        self.prepare()
-
-        self.provenance.append_step(
-            'Calculating Step',
-            'Impact function is calculating the impact.')
 
         # Identify hazard and exposure layers
         hazard = self.hazard.layer
@@ -154,8 +143,10 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         filename = unique_filename(suffix='.shp')
         impact_fields = exposure.dataProvider().fields()
         impact_fields.append(QgsField(self.target_field, QVariant.Int))
+        # impact_fields.append(QgsField(self.people_field, QVariant.Int))
         unaffected_fields = exposure.dataProvider().fields()
         unaffected_fields.append(QgsField(self.target_field, QVariant.Int))
+        # unaffected_fields.append(QgsField(self.people_field, QVariant.Int))
 
         writer = QgsVectorFileWriter(
             filename, "utf-8", impact_fields, QGis.WKBPolygon, exposure.crs())
@@ -191,8 +182,6 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
 
         self.evaluate_affected_people()
 
-        impact_summary = self.html_report()
-
         # Define style for the impact layer
         transparent_color = QColor()
         transparent_color.setAlpha(0)
@@ -200,8 +189,10 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         # Retrieve the classification that is used by the hazard layer.
         vector_hazard_classification = self.hazard.keyword(
             'vector_hazard_classification')
-        # Get the dictionary that contains the definition of the classification
-        vector_hazard_classification = definition(vector_hazard_classification)
+        # Get the dictionary that contains the definition of the
+        # classification
+        vector_hazard_classification = definition(
+            vector_hazard_classification)
         # Get the list classes in the classification
         vector_hazard_classes = vector_hazard_classification['classes']
 
@@ -243,30 +234,30 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
             style_class['transparency'] = transparency
             style_classes.append(style_class)
 
-            index = index + 1
+            index += 1
 
         style_info = dict(
             target_field=self.target_field,
             style_classes=style_classes,
             style_type='categorizedSymbol')
 
-        extra_keywords = {
-            'impact_summary': impact_summary,
-            'target_field': self.target_field,
-            'map_title': tr('Affected People'),
-        }
+        impact_data = self.generate_data()
 
-        self.set_if_provenance()
+        extra_keywords = {
+            'target_field': self.target_field,
+            'map_title': self.metadata().key('map_title'),
+        }
 
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 
         # Create vector layer and return
         impact_layer = Vector(
             data=impact_layer,
-            name=tr('People affected by each hazard zone'),
+            name=self.metadata().key('layer_name'),
             keywords=impact_layer_keywords,
             style_info=style_info)
 
+        impact_layer.impact_data = impact_data
         self._impact = impact_layer
         return impact_layer
 
@@ -326,6 +317,8 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
                 bbox = geometry.boundingBox()
                 geometry_area = geometry.area()
             else:
+                # Skip if it is an empty geometry
+                # Nothing we can do
                 continue
 
             # clip the exposure geometry to requested extent if necessary
@@ -347,8 +340,8 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
             self.all_areas_ids[area_id] += geometry_area
 
             # storing area id with its respective area name in
-            # self.areas_names this will help us in later in showing user names
-            #  and not ids
+            # self.areas_names this will help us in later in showing
+            # user names and not ids
             if area_id not in self.areas_names:
                 self.areas_names[area_id] = feature[area_name_attribute]
 
@@ -359,9 +352,21 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
                 hazard_geometry = hazard_features[hazard_id].geometry()
                 impact_geometry = geometry.intersection(hazard_geometry)
 
+                if not impact_geometry:
+                    LOGGER.warning(
+                        'Impact geometry is None for hazard_id %s' % hazard_id)
+                    continue
+
                 if not impact_geometry.wkbType() == QGis.WKBPolygon and \
                    not impact_geometry.wkbType() == QGis.WKBMultiPolygon:
                     continue  # no intersection found
+
+                # See #2744
+                if (not impact_geometry.asPolygon() and
+                        not impact_geometry.asMultiPolygon()):
+                    # impact_geometry is actually an empty polygon
+                    # so there is no impact
+                    continue
                 hazard = hazard_features[hazard_id]
                 hazard_attribute_key = self.get_hazard_class_field_key(hazard)
 
@@ -373,6 +378,14 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
                     # the flood column
                     unaffected_geometry = geometry.symDifference(
                         impact_geometry)
+                    if not unaffected_geometry:
+                        LOGGER.debug('None result symDif')
+                        LOGGER.debug(
+                            'Geometry: %s' %
+                            geometry.exportToWkt())
+                        LOGGER.debug(
+                            'Impact Geometry: %s' %
+                            impact_geometry.exportToWkt())
                     if area_id not in self.all_affected_areas:
                         self.all_affected_areas[area_id] = 0.
                     area = 0
@@ -381,6 +394,14 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
                 else:
                     unaffected_geometry = geometry.symDifference(
                         impact_geometry)
+                    if not unaffected_geometry:
+                        LOGGER.debug('None result symDif')
+                        LOGGER.debug(
+                            'Geometry: %s' %
+                            geometry.exportToWkt())
+                        LOGGER.debug(
+                            'Impact Geometry: %s' %
+                            impact_geometry.exportToWkt())
                     # add to the affected area of this area type
 
                     if area_id not in self.all_affected_areas:
@@ -452,6 +473,10 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         unaffected_feature = QgsFeature(unaffected_fields)
         impacted_feature = QgsFeature(impact_fields)
 
+        if not unaffected_geometry:
+            LOGGER.warning(
+                'Unaffected geometry %s is None' % unaffected_geometry)
+            return
         unaffected_feature.setGeometry(unaffected_geometry)
         impacted_feature.setGeometry(impact_geometry)
 

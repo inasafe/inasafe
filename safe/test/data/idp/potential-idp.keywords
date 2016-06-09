@@ -1,8 +1,0 @@
-idp_class_field: TYPE
-keyword_version: 3.2
-layer_geometry: point
-layer_mode: classified
-layer_purpose: idp
-license: Open Data Commons Open Database License (ODbL)
-source: OpenStreetMap - www.openstreetmap.org
-title: Potential IDP

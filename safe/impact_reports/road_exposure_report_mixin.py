@@ -1,7 +1,7 @@
 # coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid -
-**Building Exposure Report Mixin Class**
+**Road Exposure Report Mixin Class**
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -12,11 +12,12 @@ Contact : ole.moller.nielsen@gmail.com
 """
 __author__ = 'Christian Christelis <christian@kartoza.com>'
 
+from collections import OrderedDict
+
 from safe.utilities.i18n import tr
-from safe.common.utilities import format_int
-import safe.messaging as m
 from safe.impact_reports.report_mixin_base import ReportMixin
-from safe.messaging import styles
+from safe.definitions import road_class_order
+from safe.utilities.utilities import reorder_dictionary
 
 
 class RoadExposureReportMixin(ReportMixin):
@@ -33,180 +34,185 @@ class RoadExposureReportMixin(ReportMixin):
         self.question = ''
         self.road_lengths = {}
         self.affected_road_lengths = {}
-        self.affected_road_categories = []
+        self.affected_road_categories = {}
+        # By default it's true.
+        # But for the Tsunami raster on Roads, we already have the dry column.
+        self.add_unaffected_column = True
 
-    def generate_report(self):
-        """Breakdown by road type.
+    def init_report_var(self, categories):
+        """Create tables for the report according to the classes.
 
-        :returns: The report.
-        :rtype: safe.message.Message
+        .. versionadded:: 3.4
+
+        :param categories: The list of classes to use.
+        :type categories: list
         """
-        message = m.Message()
-        message.add(m.Paragraph(self.question))
-        message.add(self.impact_summary())
-        message.add(self.roads_breakdown())
-        message.add(self.action_checklist())
-        message.add(self.notes())
-        return message
+        self.road_lengths = {}
+        self.affected_road_categories = categories
+
+        self.affected_road_lengths = OrderedDict()
+        for category in categories:
+            self.affected_road_lengths[category] = {}
+
+    def classify_feature(self, hazard_class, usage, length, affected):
+        """Fill the report variables with the feature.
+
+        :param hazard_class: The hazard class of the road.
+        :type hazard_class: str
+
+        :param usage: The main usage of the road.
+        :type usage: str
+
+        :param length: The length of the road, in meters.
+        :type length: float
+
+        :param affected: If the road is affected or not.
+        :type affected: bool
+        """
+        if usage not in self.road_lengths:
+            self.road_lengths[usage] = 0
+
+        if hazard_class not in self.affected_road_categories:
+            self.affected_road_lengths[hazard_class] = {}
+
+        if usage not in self.affected_road_lengths[hazard_class]:
+            self.affected_road_lengths[hazard_class][usage] = 0
+
+        self.road_lengths[usage] += length
+
+        if affected:
+            self.affected_road_lengths[hazard_class][usage] += length
+
+    def reorder_dictionaries(self):
+        """Reorder every dictionaries so as to generate the report properly."""
+        road_lengths = self.road_lengths.copy()
+        self.road_lengths = reorder_dictionary(road_lengths, road_class_order)
+
+        affected_road_lengths = self.affected_road_lengths.copy()
+        self.affected_road_lengths = OrderedDict()
+        for key in affected_road_lengths:
+            item = affected_road_lengths[key]
+            self.affected_road_lengths[key] = reorder_dictionary(
+                item, road_class_order)
+
+    def generate_data(self):
+        """Create a dictionary contains impact data.
+
+        :returns: The impact report data.
+        :rtype: dict
+        """
+        question = self.question
+        impact_summary = self.impact_summary()
+        impact_table = self.roads_breakdown()
+        action_checklist = self.action_checklist()
+        notes = self.notes()
+
+        return {
+            'exposure': 'road',
+            'question': question,
+            'impact summary': impact_summary,
+            'impact table': impact_table,
+            'action check list': action_checklist,
+            'notes': notes
+        }
 
     def impact_summary(self):
-        """The impact summary as per category
+        """Create impact summary as data.
 
-        :returns: The impact summary.
-        :rtype: safe.message.Message
+        :returns: Impact Summary in dictionary format.
+        :rtype: dict
         """
-        affected_categories = self.affected_road_categories
+        attributes = []
+        fields = []
 
-        message = m.Message(style_class='container')
-        table = m.Table(style_class='table table-condensed table-striped')
-        table.caption = None
+        for affected_category in self.affected_road_categories:
+            attributes.append(affected_category)
+        if self.add_unaffected_column:
+            attributes.append('Unaffected')
+        attributes.append('Total')
 
-        row = m.Row()
-        row.add(m.Cell(tr('Breakdown by road type'), header=True))
-        for _ in affected_categories:
-            # Add empty cell as many as affected_categories
-            row.add(m.Cell('', header=True))
-        # Add empty cell for un-affected road
-        row.add(m.Cell('', header=True))
-        # Add empty cell for total column
-        row.add(m.Cell('', header=True))
-        table.add(row)
-
-        row = m.Row()
-        row.add(m.Cell(tr('Road Type'), header=True))
-        for affected_category in affected_categories:
-            row.add(m.Cell(affected_category, header=True, align='right'))
-        row.add(m.Cell(tr('Unaffected (m)'), header=True, align='right'))
-        row.add(m.Cell(tr('Total (m)'), header=True, align='right'))
-        table.add(row)
-
-        total_affected = [0] * len(affected_categories)
+        all_field = [0] * len(self.affected_road_lengths)
         for (category, road_breakdown) in self.affected_road_lengths.items():
             number_affected = sum(road_breakdown.values())
-            count = affected_categories.index(category)
-            total_affected[count] = number_affected
+            count = self.affected_road_categories.index(category)
+            all_field[count] = number_affected
+        if self.add_unaffected_column:
+            all_field.append(self.total_road_length - sum(all_field))
+        all_field.append(self.total_road_length)
 
-        row = m.Row()
-        row.add(m.Cell(tr('All')))
-        for total_affected_value in total_affected:
-            row.add(m.Cell(
-            format_int(int(total_affected_value)), align='right'))
-        row.add(m.Cell(format_int(
-            int(self.total_road_length - sum(total_affected))), align='right'))
-        row.add(m.Cell(format_int(int(self.total_road_length)), align='right'))
-        table.add(row)
+        fields.append(all_field)
 
-        message.add(table)
-
-        return message
+        return {
+            'attributes': attributes,
+            'fields': fields
+        }
 
     def roads_breakdown(self):
-        """Breakdown by road type.
+        """Create road breakdown as data.
 
-        :returns: The roads breakdown report.
-        :rtype: safe.message.Message
+        :returns: Road Breakdown in dictionary format.
+        :rtype: dict
         """
-        category_names = self.affected_road_categories
-        affected_categories = self.affected_road_categories
+        attributes = ['Road Type']
+        fields = []
 
-        message = m.Message(style_class='container')
-        table = m.Table(style_class='table table-condensed table-striped')
-        table.caption = None
-
-        row = m.Row()
-        row.add(m.Cell(tr('Breakdown by road type'), header=True))
-        for _ in affected_categories:
-            # Add empty cell as many as affected_categories
-            row.add(m.Cell('', header=True))
-        # Add empty cell for un-affected road
-        row.add(m.Cell('', header=True))
-        # Add empty cell for total column
-        row.add(m.Cell('', header=True))
-        table.add(row)
-
-        row = m.Row()
-        row.add(m.Cell(tr('Road Type'), header=True))
-        for affected_category in affected_categories:
-            row.add(m.Cell(affected_category, header=True, align='right'))
-        row.add(m.Cell(tr('Unaffected (m)'), header=True, align='right'))
-        row.add(m.Cell(tr('Total (m)'), header=True, align='right'))
-        table.add(row)
+        for affected_category in self.affected_road_categories:
+            attributes.append(affected_category)
+        if self.add_unaffected_column:
+            attributes.append('Unaffected')
+        attributes.append('Total')
 
         for road_type in self.road_lengths:
             affected_by_usage = []
-            for category in category_names:
+            for category in self.affected_road_categories:
                 if road_type in self.affected_road_lengths[category]:
                     affected_by_usage.append(
                         self.affected_road_lengths[category][
                             road_type])
                 else:
                     affected_by_usage.append(0)
-            row = m.Row()
-            row.add(m.Cell(road_type.capitalize()))
+            row = []
+
+            row.append(road_type)
             for affected_by_usage_value in affected_by_usage:
-                row.add(m.Cell(
-                    format_int(int(affected_by_usage_value)), align='right'))
+                row.append(affected_by_usage_value)
+
             # Unaffected
-            row.add(m.Cell(format_int(
-                int(self.road_lengths[road_type] - sum(affected_by_usage))),
-                    align='right'))
+            if self.add_unaffected_column:
+                row.append(
+                    self.road_lengths[road_type] - sum(affected_by_usage))
+
             # Total for the road type
-            row.add(m.Cell(
-                format_int(int(self.road_lengths[road_type])), align='right'))
-            table.add(row)
+            row.append(self.road_lengths[road_type])
 
-        # adding total (copied from impact summary
-        total_affected = [0] * len(affected_categories)
-        for (category, road_breakdown) in self.affected_road_lengths.items():
-            number_affected = sum(road_breakdown.values())
-            count = affected_categories.index(category)
-            total_affected[count] = number_affected
+            fields.append(row)
 
-        row = m.Row()
-        row.add(m.Cell(tr('Total'), header=True))
-        for total_affected_value in total_affected:
-            row.add(m.Cell(
-                format_int(int(total_affected_value)),
-                align='right',
-                header=True))
-        row.add(m.Cell(
-            format_int(int(self.total_road_length - sum(total_affected))),
-            align='right',
-            header=True))
-        row.add(m.Cell(
-            format_int(int(self.total_road_length)),
-            align='right',
-            header=True))
-        table.add(row)
-
-        message.add(table)
-
-        return message
+        return {
+            'attributes': attributes,
+            'fields': fields
+        }
 
     def action_checklist(self):
-        """Action checklist for the itb earthquake fatality report.
+        """Return the action check list section of the report.
 
-        .. versionadded:: 3.2.1
-
-        :returns: The action checklist
-        :rtype: safe.messaging.Message
+        :return: The action check list as dict.
+        :rtype: dict
         """
-        message = m.Message(style_class='container')
-        message.add(m.Heading(tr('Action checklist'), **styles.INFO_STYLE))
-        checklist = m.BulletedList()
-        checklist.add(tr(
-            'Which roads can be used to evacuate people or to '
-            'distribute logistics?'))
-        checklist.add(tr(
-            'What type of vehicles can use the unaffected roads?'))
-        checklist.add(tr(
-            'What sort of equipment will be needed to reopen roads & '
-            'where will we get it?'))
-        checklist.add(tr(
-            'Which government department is responsible for supplying '
-            'equipment ?'))
-        message.add(checklist)
-        return message
+        title = tr('Action checklist')
+        fields = [
+            tr('Which roads can be used to evacuate people or to distribute '
+               'logistics?'),
+            tr('What type of vehicles can use the unaffected roads?'),
+            tr('What sort of equipment will be needed to reopen roads & where '
+               'will we get it?'),
+            tr('Which government department is responsible for supplying '
+               'equipment ?')
+        ]
+
+        return {
+            'title': title,
+            'fields': fields
+        }
 
     @property
     def total_road_length(self):
