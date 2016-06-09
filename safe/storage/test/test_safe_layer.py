@@ -39,11 +39,11 @@ class SafeLayerTest(unittest.TestCase):
             'license': u'Open Data Commons Open Database License (ODbL)',
             'keyword_version': u'3.5',
             'value_mapping': {u'government': [u'Government'],
-                              u'residence': [u'Residential'],
+                              u'residential': [u'Residential', u'Commercial'],
                               u'health': [u'Clinic/Doctor'],
-                              u'education': [u'School'], u'place of worship': [
-                    u'Place of Worship - Islam'],
-                              u'economy': [u'Industrial', u'Commercial']},
+                              u'education': [u'School'],
+                              u'place of worship': [
+                                  u'Place of Worship - Islam']},
             'structure_class_field': u'TYPE', 'title': u'Buildings',
             'source': u'OpenStreetMap - www.openstreetmap.org',
             'layer_geometry': u'polygon', 'layer_purpose': u'exposure',
