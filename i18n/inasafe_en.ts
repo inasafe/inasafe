@@ -1225,7 +1225,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="422"/>
+        <location filename="impact_function.py" line="435"/>
         <source>Roads inundated</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1240,7 +1240,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="482"/>
+        <location filename="impact_function.py" line="495"/>
         <source>Flooded roads</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3286,7 +3286,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="423"/>
+        <location filename="impact_function.py" line="436"/>
         <source>Road inundated status</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4646,17 +4646,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="262"/>
+        <location filename="impact_function.py" line="272"/>
         <source>High Hazard Zone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="261"/>
+        <location filename="impact_function.py" line="271"/>
         <source>Medium Hazard Zone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="260"/>
+        <location filename="impact_function.py" line="270"/>
         <source>Low Hazard Zone</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5152,32 +5152,32 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="259"/>
+        <location filename="impact_function.py" line="269"/>
         <source>Dry Zone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="263"/>
+        <location filename="impact_function.py" line="273"/>
         <source>Very High Hazard Zone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="279"/>
+        <location filename="impact_function.py" line="289"/>
         <source>Dry zone is defined as non-inundated area or has inundation depth is 0 %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="282"/>
+        <location filename="impact_function.py" line="292"/>
         <source>Low tsunami hazard zone is defined as inundation depth is more than 0 %s but less than %.1f %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="293"/>
+        <location filename="impact_function.py" line="303"/>
         <source>High tsunami hazard zone is defined as inundation depth is more than %.1f %s but less than %.1f %s</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="299"/>
+        <location filename="impact_function.py" line="309"/>
         <source>Very high tsunami hazard zone is defined as inundation depth is more than %.1f %s</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5905,7 +5905,7 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="303"/>
+        <location filename="impact_function.py" line="313"/>
         <source>Roads are opened if they are in dry zone.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6214,7 +6214,7 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="287"/>
+        <location filename="impact_function.py" line="297"/>
         <source>Medium tsunami hazard zone is defined as inundation depth is more than %.1f %s but less than %.1f %s</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6309,7 +6309,7 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="301"/>
+        <location filename="impact_function.py" line="311"/>
         <source>Roads are closed if they are in low, medium, high, or very high tsunami hazard zone.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9405,12 +9405,12 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_step_browser.py" line="413"/>
+        <location filename="wizard_step_browser.py" line="414"/>
         <source>Not a valid layer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="wizard_step_browser.py" line="434"/>
+        <location filename="wizard_step_browser.py" line="435"/>
         <source>This layer&apos;s keywords or type are not suitable:</source>
         <translation type="unfinished"></translation>
     </message>
