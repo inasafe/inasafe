@@ -378,12 +378,13 @@ class WizardStepBrowser(WizardStep):
                 return False, ''
 
         if item_class_name not in [
-                'QgsOgrLayerItem', 'QgsLayerItem', 'QgsPGLayerItem']:
+                'QgsOgrLayerItem', 'QgsGdalLayerItem', 'QgsPGLayerItem',
+                'QgsLayerItem', ]:
             return False, ''
 
         path = item.path()
 
-        if item_class_name in ['QgsOgrLayerItem',
+        if item_class_name in ['QgsOgrLayerItem', 'QgsGdalLayerItem',
                                'QgsLayerItem'] and not os.path.exists(path):
             return False, ''
 
