@@ -1450,11 +1450,14 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             # noinspection PyExceptionInherit
             raise ReadLayerError(message)
 
+        legend = self.iface.legendInterface()
+
         # Insert the aggregation output above the input aggregation layer
         if self.show_intermediate_layers:
             self.add_above_layer(
                 self.impact_function.aggregator.layer,
                 self.get_aggregation_layer())
+            legend.setLayerVisible(self.get_aggregation_layer(), True)
 
         if self.hide_exposure_flag:
             # Insert the impact always above the hazard
@@ -1486,8 +1489,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.iface.zoomToActiveLayer()
         if self.hide_exposure_flag:
             exposure_layer = self.get_exposure_layer()
-            legend = self.iface.legendInterface()
             legend.setLayerVisible(exposure_layer, False)
+
+        # Make the layer visible. Might be hidden by default. See #2925
+        legend.setLayerVisible(qgis_impact_layer, True)
 
         self.restore_state()
 
