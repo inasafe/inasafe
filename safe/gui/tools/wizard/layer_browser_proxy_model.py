@@ -55,19 +55,19 @@ class LayerBrowserProxyModel(QSortFilterProxyModel):
         source_index = self.sourceModel().index(source_row, 0, source_parent)
         item = self.sourceModel().dataItem(source_index)
 
-        if item.metaObject().className() in [
-                'QgsMssqlRootItem',
-                'QgsSLRootItem',
-                'QgsOWSRootItem',
-                'QgsWCSRootItem',
-                'QgsWFSRootItem',
-                'QgsWMSRootItem']:
+        if item.metaObject().className() not in [
+                'QgsPGRootItem',
+                'QgsPGConnectionItem',
+                'QgsPGSchemaItem',
+                'QgsPGLayerItem',
+                'QgsFavouritesItem',
+                'QgsDirectoryItem',
+                'QgsLayerItem',
+                'QgsGdalLayerItem',
+                'QgsOgrLayerItem']:
             return False
 
-        if (item.metaObject().className() in [
-                'QgsLayerItem',
-                'QgsOgrLayerItem'] and
-                item.path().endswith('.xml')):
+        if item.path().endswith('.xml'):
             return False
 
         return True
