@@ -368,7 +368,17 @@ class TestUtilities(unittest.TestCase):
         self.assertEqual(colors, expected_colors)
 
         number_of_colours = 2
-        expected_colors = ['#ff0000', '#00ffff']
+        expected_colors = ['#ff0000', '#00ff00']
+        colors = color_ramp(number_of_colours)
+        self.assertEqual(colors, expected_colors)
+
+        number_of_colours = 3
+        expected_colors = ['#ff0000', '#feff00', '#00ff00']
+        colors = color_ramp(number_of_colours)
+        self.assertEqual(colors, expected_colors)
+
+        number_of_colours = 4
+        expected_colors = ['#ff0000', '#ffaa00', '#a9ff00', '#00ff00']
         colors = color_ramp(number_of_colours)
         self.assertEqual(colors, expected_colors)
 

@@ -24,24 +24,17 @@ import logging
 import webbrowser
 import unicodedata
 import codecs
-import re
 from collections import OrderedDict
 
 # noinspection PyPackageRequirements
 
-from safe.storage.utilities import read_keywords
-from safe.storage.utilities import write_keywords
-from safe.common.exceptions import (
-    InvalidParameterError,
-    NoKeywordsFoundError,
-    KeywordNotFoundError)
 from safe.common.utilities import unique_filename
 from safe.common.version import get_version
 from safe.defaults import disclaimer
 from safe import messaging as m
 from safe.messaging import styles, Message
 from safe.messaging.error_message import ErrorMessage
-from safe.utilities.unicode import get_unicode, get_string
+from safe.utilities.unicode import get_unicode
 from safe.utilities.i18n import tr
 from safe.definitions import inasafe_keyword_version
 
@@ -330,74 +323,30 @@ def html_to_file(html, file_path=None, open_browser=False):
         open_in_browser(file_path)
 
 
-def read_file_keywords(layer_path, keyword=None):
-    """Get metadata from the keywords file associated with a local
-     file in the file system.
+def ranges_according_thresholds(low_max, medium_max, high_max):
+    """Return an ordered dictionary with the ranges according to thresholds.
 
-    .. note:: Requires a str representing a file path instance
-              as parameter As opposed to read_keywords_from_layer which
-              takes a inasafe file object as parameter.
+    This used to classify a raster according three thresholds.
 
-    .. seealso:: read_keywords_from_layer
+    :param low_max: The low threshold.
+    :type low_max: float
 
-    :param: layer_path: a string representing a path to a layer
-           (e.g. '/tmp/foo.shp', '/tmp/foo.tif')
-    :type layer_path: str
+    :param medium_max: The medium threshold.
+    :type medium_max: float
 
-    :param keyword: optional - the metadata keyword to retrieve e.g. 'title'
-    :type keyword: str
+    :param high_max: The high threshold.
+    :type high_max: float
 
-    :return: A string containing the retrieved value for the keyword if
-             the keyword argument is specified, otherwise the
-             complete keywords dictionary is returned.
-
-    :raises: KeywordNotFoundError, NoKeywordsFoundError, InvalidParameterError
-
-    Note:
-        * KeywordNotFoundError - occurs when the keyword is not recognised.
-        * NoKeywordsFoundError - occurs when no keyword file exists.
-        * InvalidParameterError - occurs when the layer does not exist.
+    :return The ranges.
+    :rtype OrderedDict
     """
-    # check the source layer path is valid
-    if not os.path.isfile(layer_path):
-        message = tr('Cannot get keywords from a non-existent file. File '
-                     '%s does not exist.' % layer_path)
-        raise InvalidParameterError(message)
-
-    # check there really is a keywords file for this layer
-    # priority for iso path first
-    keyword_file_path = os.path.splitext(layer_path)[0]
-    keyword_file_path += '.keywords'
-    if not os.path.isfile(keyword_file_path):
-        message = tr('No keywords file found for %s' % keyword_file_path)
-        raise NoKeywordsFoundError(message)
-    # now get the requested keyword using the inasafe library
-    try:
-        dictionary = read_keywords(keyword_file_path)
-    except Exception, e:
-        message = tr(
-            'Keyword retrieval failed for %s (%s) \n %s' % (
-                keyword_file_path, keyword, str(e)))
-        raise KeywordNotFoundError(message)
-
-    # if no keyword was supplied, just return the dict
-    if keyword is None:
-        if 'keyword_version' in dictionary.keys():
-            dictionary['keyword_version'] = get_string(
-                    dictionary['keyword_version'])
-        return dictionary
-    if keyword not in dictionary:
-        message = tr('No value was found in file %s for keyword %s' % (
-            keyword_file_path, keyword))
-        raise KeywordNotFoundError(message)
-
-    try:
-        value = dictionary[keyword]
-    except:
-        raise
-    if 'keyword_version' == keyword:
-        value = get_string(value)
-    return value
+    ranges = OrderedDict()
+    ranges[0] = [None, 0.0]
+    ranges[1] = [0.0, low_max]
+    ranges[2] = [low_max, medium_max]
+    ranges[3] = [medium_max, high_max]
+    ranges[4] = [high_max, None]
+    return ranges
 
 
 def replace_accentuated_characters(message):
@@ -441,7 +390,9 @@ def is_keyword_version_supported(
         return version_split[0] + '.' + version_split[1]
 
     version_compatibilities = {
-        '3.3': ['3.2']
+        '3.3': ['3.2'],
+        '3.4': ['3.2', '3.3'],
+        '3.5': ['3.4', '3.3']
     }
 
     # Convert to minor version.

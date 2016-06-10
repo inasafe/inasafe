@@ -24,7 +24,6 @@ from safe.definitions import (
     generic_vector_hazard_classes,
 )
 from safe.utilities.i18n import tr
-from safe_extras.parameters.string_parameter import StringParameter
 
 
 class ClassifiedPolygonHazardLandCoverFunctionMetadata(ImpactFunctionMetadata):
@@ -66,6 +65,11 @@ class ClassifiedPolygonHazardLandCoverFunctionMetadata(ImpactFunctionMetadata):
                 'each hazard zone.'),
             'limitations': [],
             'citations': [],
+            'legend_title': '',
+            'legend_units': '',
+            'legend_notes': '',
+            'map_title': tr('Affected Land Cover'),
+            'layer_name': tr('Land cover affected'),
             'layer_requirements': {
                 'hazard': {
                     'layer_mode': layer_mode_classified,

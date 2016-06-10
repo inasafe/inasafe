@@ -26,8 +26,7 @@ from safe.common.utilities import (
     format_int,
     humanize_class,
     create_classes,
-    create_label,
-    get_thousand_separator)
+    create_label)
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
     filter_needs_parameters, get_needs_provenance_value
 from safe.impact_reports.population_exposure_report_mixin import \
@@ -206,23 +205,15 @@ class VolcanoPointPopulationFunction(
             style_classes=style_classes,
             style_type='rasterStyle')
 
-        # For printing map purpose
-        map_title = tr('People affected by the buffered point volcano')
-        legend_title = tr('Population')
-        legend_units = tr('(people per cell)')
-        legend_notes = tr(
-            'Thousand separator is represented by  %s' %
-            get_thousand_separator())
-
         impact_data = self.generate_data()
 
         # Create vector layer and return
         extra_keywords = {
             'target_field': self.target_field,
-            'map_title': map_title,
-            'legend_notes': legend_notes,
-            'legend_units': legend_units,
-            'legend_title': legend_title,
+            'map_title': self.metadata().key('map_title'),
+            'legend_notes': self.metadata().key('legend_notes'),
+            'legend_units': self.metadata().key('legend_units'),
+            'legend_title': self.metadata().key('legend_title'),
             'total_needs': self.total_needs
         }
 
@@ -232,7 +223,7 @@ class VolcanoPointPopulationFunction(
             data=covered_exposure_layer.get_data(),
             projection=covered_exposure_layer.get_projection(),
             geotransform=covered_exposure_layer.get_geotransform(),
-            name=tr('People affected by the buffered point volcano'),
+            name=self.metadata().key('layer_name'),
             keywords=impact_layer_keywords,
             style_info=style_info)
 

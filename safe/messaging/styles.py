@@ -43,6 +43,11 @@ INFO_STYLE = {
     'icon': 'icon-info-sign icon-white',
     'style_class': 'info'}
 
+SUB_INFO_STYLE = {
+    'level': 5,
+    'icon': 'icon-info-sign icon-white',
+    'style_class': 'sub_info'}
+
 WARNING_STYLE = {
     'level': 5,
     'icon': 'icon-warning-sign icon-white',

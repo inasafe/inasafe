@@ -515,7 +515,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         """Generate a message for initial application state.
 
         :returns: Information for the user on how to get started.
-        :rtype: Message
+        :rtype: safe.messaging.Message
         """
         message = m.Message()
         message.add(LOGO_ELEMENT)
@@ -568,8 +568,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         title = m.Heading(
             self.tr('Ready'), **PROGRESS_UPDATE_STYLE)
         notes = m.Paragraph(
-            self.tr('You can now proceed to run your analysis by clicking '
-                    'the'),
+            self.tr(
+                'You can now proceed to run your analysis by clicking the '),
             m.EmphasizedText(self.tr('Run'), **KEYWORD_STYLE),
             self.tr('button.'))
         message = m.Message(LOGO_ELEMENT, title, notes)
@@ -581,16 +581,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         .. note:: Assumes a valid hazard and exposure layer are loaded.
 
         :returns: A localised message indicating we are not ready.
-        :rtype: Message
+        :rtype: safe.messaging.Message
         """
-        # myHazardFilename = self.getHazardLayer().source()
-        # noinspection PyTypeChecker
-        hazard_keywords = self.keyword_io.read_keywords(
-            self.get_hazard_layer())
-        # myExposureFilename = self.getExposureLayer().source()
-        # noinspection PyTypeChecker
-        exposure_keywords = self.keyword_io.read_keywords(
-            self.get_exposure_layer())
         heading = m.Heading(
             self.tr('No valid functions'), **WARNING_STYLE)
         notes = m.Paragraph(self.tr(
@@ -638,7 +630,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         :returns: A two-tuple where the first element is a Boolean reflecting
          the results of the validation tests and the second is a message
          indicating any reason why the validation may have failed.
-        :rtype: (Boolean, Message)
+        :rtype: (Boolean, safe.messaging.Message)
 
         Example::
 
@@ -664,7 +656,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
     def save_auxiliary_files(self, layer, destination):
         """Save auxiliary files when using the 'save as' function.
 
-        If some auxiliary files (.xml or .keywords) exist, this function will
+        If some auxiliary files (.xml) exist, this function will
         copy them when the 'save as' function is used on the layer.
 
         :param layer: The layer which has been saved as.
@@ -676,19 +668,13 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         """
 
         source_basename = os.path.splitext(layer.source())[0]
-        source_keywords = "%s.keywords" % source_basename
         source_xml = "%s.xml" % source_basename
 
         destination_basename = os.path.splitext(destination)[0]
-        destination_keywords = "%s.keywords" % destination_basename
         destination_xml = "%s.xml" % destination_basename
 
         # noinspection PyBroadException,PyBroadException
         try:
-            # Keywords
-            if os.path.isfile(source_keywords):
-                shutil.copy(source_keywords, destination_keywords)
-
             # XML
             if os.path.isfile(source_xml):
                 shutil.copy(source_xml, destination_xml)
@@ -927,6 +913,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 title = self.keyword_io.read_keywords(layer, 'title')
             except NoKeywordsFoundError:
                 # Skip if there are no keywords at all
+                continue
+            except KeywordNotFoundError:
+                # There is a missing mandatory keyword, ignore it
                 continue
             except:  # pylint: disable=W0702
                 # automatically adding file name to title in keywords
@@ -1278,7 +1267,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         return impact_function
 
-    def add_above_layer(self, existing_layer, new_layer):
+    def add_above_layer(self, new_layer, *existing_layers):
         """Add a layer (e.g. impact layer) above another layer in the legend.
 
         .. versionadded:: 3.2
@@ -1289,9 +1278,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         .. seealso:: issue #2322
 
-        :param existing_layer: The layer which the new layer
+        :param existing_layers: Layers which the new layer
             should be added above.
-        :type existing_layer: QgsMapLayer
+        :type existing_layers: QgsMapLayer
 
         :param new_layer: The new layer being added. An assumption is made
             that the newly added layer is not already loaded in the legend
@@ -1299,7 +1288,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         :type new_layer: QgsMapLayer
 
         """
-        if existing_layer is None or new_layer is None:
+        if len(existing_layers) is None or new_layer is None:
             return
 
         registry = QgsMapLayerRegistry.instance()
@@ -1311,11 +1300,13 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         # False flag prevents layer being added to legend
         registry.addMapLayer(new_layer, False)
-        index = self.layer_legend_index(existing_layer)
-        # LOGGER.info('Inserting layer %s at position %s' % (
-        #     new_layer.source(), index))
+        minimum_index = len(QgsProject.instance().layerTreeRoot().children())
+        for layer in existing_layers:
+            index = self.layer_legend_index(layer)
+            if index < minimum_index:
+                minimum_index = index
         root = QgsProject.instance().layerTreeRoot()
-        root.insertLayer(index, new_layer)
+        root.insertLayer(minimum_index, new_layer)
 
     @staticmethod
     def layer_legend_index(layer):
@@ -1403,7 +1394,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         else:
             post_processing_report = self.impact_function.\
                 postprocessor_manager.get_output(
-                self.impact_function.aggregator.aoi_mode)
+                    self.impact_function.aggregator.aoi_mode)
             keywords['postprocessing_report'] = post_processing_report.to_html(
                 suppress_newlines=True)
             self.keyword_io.write_keywords(qgis_impact_layer, keywords)
@@ -1459,21 +1450,38 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             # noinspection PyExceptionInherit
             raise ReadLayerError(message)
 
+        legend = self.iface.legendInterface()
+
         # Insert the aggregation output above the input aggregation layer
         if self.show_intermediate_layers:
             self.add_above_layer(
-                self.get_aggregation_layer(),
-                self.impact_function.aggregator.layer)
+                self.impact_function.aggregator.layer,
+                self.get_aggregation_layer())
+            legend.setLayerVisible(self.get_aggregation_layer(), True)
 
-        # Insert the impact above the exposure
-        self.add_above_layer(
-            self.get_exposure_layer(),
-            qgis_impact_layer)
+        if self.hide_exposure_flag:
+            # Insert the impact always above the hazard
+            self.add_above_layer(qgis_impact_layer, self.get_hazard_layer())
+        else:
+            # Insert the impact above the hazard and the exposure if
+            # we don't hide the exposure. See #2899
+            self.add_above_layer(
+                qgis_impact_layer,
+                self.get_exposure_layer(),
+                self.get_hazard_layer())
 
         active_function = self.active_impact_function
         self.active_impact_function = active_function
         self.impact_function_parameters = \
             self.active_impact_function.parameters
+
+        # In QGIS 2.14.2 and GDAL 1.11.3, if the exposure is in 3857,
+        # the impact layer is in 54004, we need to change it. See issue #2790.
+        if self.get_exposure_layer().crs().authid() == 'EPSG:3857':
+            if qgis_impact_layer.crs().authid() != 'EPSG:3857':
+                epsg_3857 = QgsCoordinateReferenceSystem(3857)
+                qgis_impact_layer.setCrs(epsg_3857)
+
         # make sure it is active in the legend - needed since QGIS 2.4
         self.iface.setActiveLayer(qgis_impact_layer)
         # then zoom to it
@@ -1481,8 +1489,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.iface.zoomToActiveLayer()
         if self.hide_exposure_flag:
             exposure_layer = self.get_exposure_layer()
-            legend = self.iface.legendInterface()
             legend.setLayerVisible(exposure_layer, False)
+
+        # Make the layer visible. Might be hidden by default. See #2925
+        legend.setLayerVisible(qgis_impact_layer, True)
 
         self.restore_state()
 
@@ -1601,7 +1611,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         :type layer: QgsMapLayer
         """
         keywords = KeywordIO(layer)
-        LOGGER.debug('Showing Generic Keywords')
         self.pbnPrint.setEnabled(False)
         message = keywords.to_message()
         send_static_message(self, message)
@@ -1695,8 +1704,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         try:
             keywords = self.keyword_io.read_keywords(layer)
 
-            # if 'impact_summary' in keywords:
-            if keywords['layer_purpose'] == 'impact':
+            if keywords.get('layer_purpose') == 'impact':
                 try:
                     self.show_impact_report(layer, keywords)
                 except MissingImpactReport:
@@ -1706,7 +1714,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     self.show_keyword_version_message(
                         'No Version', self.inasafe_version)
                 else:
-                    keyword_version = str(keywords['keyword_version'])
+                    keyword_version = str(keywords.get('keyword_version'))
                     supported = is_keyword_version_supported(
                             keyword_version)
                     if supported:
@@ -1718,12 +1726,11 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         # TODO: maybe we need to split these apart more to give mode
         # TODO: granular error messages TS
-        except (KeyError,
-                KeywordNotFoundError,
+        except (KeywordNotFoundError,
                 HashNotFoundError,
                 InvalidParameterError,
                 NoKeywordsFoundError,
-                AttributeError), e:
+                AttributeError):
             # LOGGER.info(e.message)
             # Added this check in 3.2 for #1861
             active_layer = self.iface.activeLayer()
@@ -2142,7 +2149,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             # For #2077 somewhat kludgy hack to prevent positive
             # message when we cant actually run
             match = self.tr(
-                'You can now proceed to run your analysis by clicking the')
+                'You can now proceed to run your analysis by clicking the ')
             current_text = self.wvResults.page_to_text()
             if match in current_text:
                 message = m.Message()

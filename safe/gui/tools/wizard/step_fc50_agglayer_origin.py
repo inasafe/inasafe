@@ -89,10 +89,12 @@ class StepFcAggLayerOrigin(WizardStep, FORM_CLASS):
     # noinspection PyPep8Naming
     def on_rbAggLayerNoAggregation_toggled(self):
         """Unlock the Next button
+           Also, clear any previously set aggregation layer
 
         .. note:: This is an automatic Qt slot
            executed when the radiobutton is activated.
         """
+        self.parent.aggregation_layer = None
         self.parent.pbnNext.setEnabled(True)
 
     def set_widgets(self):

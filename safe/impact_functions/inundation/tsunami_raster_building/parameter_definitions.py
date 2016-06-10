@@ -21,6 +21,8 @@ from safe.impact_functions.unit_definitions import parameter_unit_metres
 from safe_extras.parameters.float_parameter import FloatParameter
 from safe.utilities.i18n import tr
 
+# This file should be used in each tsunami IF.
+
 
 def low_threshold():
     """Generate low hazard zone threshold parameter
@@ -30,7 +32,7 @@ def low_threshold():
     """
     field = FloatParameter()
     field.is_required = True
-    field.name = 'Low Hazard Zone Threshold'
+    field.name = tr('Low Hazard Zone Threshold')
     field.precision = 2
     field.value = 1
     field.minimum_allowed_value = 0
@@ -47,14 +49,14 @@ def low_threshold():
 
 
 def medium_threshold():
-    """Generate moderate hazard zone threshold parameter
+    """Generate medium hazard zone threshold parameter
 
     :return: list of FloatParameter
     :rtype: list[FloatParameter]
     """
     field = FloatParameter()
     field.is_required = True
-    field.name = 'Moderate Hazard Zone Threshold'
+    field.name = tr('Medium Hazard Zone Threshold')
     field.precision = 2
     field.value = 3
     field.minimum_allowed_value = 0
@@ -62,9 +64,9 @@ def medium_threshold():
     unit_metres = parameter_unit_metres()
     field.unit = unit_metres
     field.allowed_units = [unit_metres]
-    field.help_text = tr('Moderate Hazard Zone threshold.')
+    field.help_text = tr('Medium Hazard Zone threshold.')
     field.description = tr(
-        'The threshold of hazard categorized as Moderate Hazard Zone in '
+        'The threshold of hazard categorized as Medium Hazard Zone in '
         'meter. A zone is categorized as Medium Hazard Zone if the depth of '
         'tsunami inundation is more than Low Hazard Zone Threshold and less '
         'than Medium Hazard Zone Threshold.')
@@ -79,7 +81,7 @@ def high_threshold():
     """
     field = FloatParameter()
     field.is_required = True
-    field.name = 'High Hazard Zone Threshold'
+    field.name = tr('High Hazard Zone Threshold')
     field.precision = 2
     field.value = 8
     field.minimum_allowed_value = 0

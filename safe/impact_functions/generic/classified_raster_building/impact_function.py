@@ -100,9 +100,9 @@ class ClassifiedRasterHazardBuildingFunction(
         buildings_total = len(interpolated_result)
 
         hazard_classes = [
-            tr('High Hazard Class'),
+            tr('Low Hazard Class'),
             tr('Medium Hazard Class'),
-            tr('Low Hazard Class')
+            tr('High Hazard Class')
         ]
         self.init_report_var(hazard_classes)
 
@@ -182,18 +182,13 @@ class ClassifiedRasterHazardBuildingFunction(
             style_classes=style_classes,
             style_type='categorizedSymbol')
 
-        # For printing map purpose
-        map_title = tr('Buildings affected')
-        legend_title = tr('Structure inundated status')
-        legend_units = tr('(Low, Medium, High)')
-
         impact_data = self.generate_data()
 
         extra_keywords = {
             'target_field': self.affected_field,
-            'map_title': map_title,
-            'legend_units': legend_units,
-            'legend_title': legend_title,
+            'map_title': self.metadata().key('map_title'),
+            'legend_units': self.metadata().key('legend_units'),
+            'legend_title': self.metadata().key('legend_title'),
             'buildings_total': buildings_total,
             'buildings_affected': self.total_affected_buildings
         }
@@ -205,7 +200,7 @@ class ClassifiedRasterHazardBuildingFunction(
             data=attributes,
             projection=self.exposure.layer.get_projection(),
             geometry=self.exposure.layer.get_geometry(),
-            name=tr('Estimated buildings affected'),
+            name=self.metadata().key('layer_name'),
             keywords=impact_layer_keywords,
             style_info=style_info)
 

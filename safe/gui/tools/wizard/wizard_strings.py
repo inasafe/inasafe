@@ -138,11 +138,10 @@ classify_raster_question = tr(
     'into the panel on the right and place them in the appropriate categories.'
 )  # (subcategory, category, classification)
 classify_vector_for_postprocessor_question = tr(
-    'You have selected <b>%s %s</b>, and the attribute is <b>%s</b>. The '
-    'aggregation postprocessor will need to know mapping of the attribute '
-    'values to known categories. Please drag unique values from the list '
-    'on the left into the panel on the right and place them in the '
-    'appropriate categories. Un-mapped values will go automatically in the '
+    'You have selected <b>%s %s</b>, and the attribute is <b>%s</b>. We need '
+    'to map these values to known categories. Please drag unique values from '
+    'the list on the left into the panel on the right and place them in the '
+    'appropriate categories. Unclassified values will go automatically in the '
     '\'Other\' group on runtime.'
 )      # (subcategory, category, field)
 select_function_constraints2_question = tr(

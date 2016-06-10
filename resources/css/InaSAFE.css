@@ -57,6 +57,12 @@ h5 {
   line-height: 2;
 }
 
+.sub_info {
+  color: #fff;
+  background-color: #6ec5e6;
+  line-height: 2;
+}
+
 .suggestion {
   color: #fff;
   background-color: #50CF5C;

@@ -205,10 +205,6 @@ class FloodPolygonRoadsFunction(
 
         self.reorder_dictionaries()
 
-        # For printing map purpose
-        map_title = tr('Roads inundated')
-        legend_title = tr('Road inundated status')
-
         style_classes = [dict(label=tr('Not Inundated'), value=0,
                               colour='#1EFC7C', transparency=0, size=0.5),
                          dict(label=tr('Inundated'), value=1,
@@ -227,8 +223,8 @@ class FloodPolygonRoadsFunction(
         impact_data = self.generate_data()
 
         extra_keywords = {
-            'map_title': map_title,
-            'legend_title': legend_title,
+            'map_title': self.metadata().key('map_title'),
+            'legend_title': self.metadata().key('legend_title'),
             'target_field': self.target_field
         }
 
@@ -236,7 +232,7 @@ class FloodPolygonRoadsFunction(
 
         impact_layer = Vector(
             data=line_layer,
-            name=tr('Flooded roads'),
+            name=self.metadata().key('layer_name'),
             keywords=impact_layer_keywords,
             style_info=style_info
         )

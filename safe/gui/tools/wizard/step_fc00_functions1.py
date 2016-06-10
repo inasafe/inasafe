@@ -152,6 +152,7 @@ class StepFcFunctions1(WizardStep, FORM_CLASS):
         for i in range(len(exposures)):
             e = exposures[i]
             item = QtGui.QTableWidgetItem()
+
             item.setIcon(QtGui.QIcon(resources_path(
                 'img', 'wizard', 'keyword-subcategory-%s.svg'
                 % (e['key'] or 'notset'))))

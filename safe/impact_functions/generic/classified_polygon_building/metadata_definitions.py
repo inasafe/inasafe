@@ -10,7 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.common.utilities import OrderedDict
+from safe.common.utilities import OrderedDict, get_thousand_separator
 from safe.defaults import building_type_postprocessor
 from safe.definitions import (
     layer_mode_classified,
@@ -74,6 +74,13 @@ class ClassifiedPolygonHazardBuildingFunctionMetadata(ImpactFunctionMetadata):
                 'each hazard zone.'),
             'limitations': [],
             'citations': [],
+            'map_title': tr('Buildings affected'),
+            'legend_title': tr('Building count'),
+            'legend_units': tr('(building)'),
+            'legend_notes': tr(
+                'Thousand separator is represented by %s' %
+                get_thousand_separator()),
+            'layer_name': tr('Buildings affected'),
             'layer_requirements': {
                 'hazard': {
                     'layer_mode': layer_mode_classified,

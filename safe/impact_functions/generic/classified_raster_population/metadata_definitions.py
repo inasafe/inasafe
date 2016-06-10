@@ -17,7 +17,7 @@ __filename__ = 'metadata_definitions'
 __date__ = '24/03/15'
 __copyright__ = 'lana.pcfre@gmail.com'
 
-from safe.common.utilities import OrderedDict
+from safe.common.utilities import OrderedDict, get_thousand_separator
 from safe.defaults import default_minimum_needs
 from safe.defaults import (
     default_gender_postprocessor,
@@ -65,8 +65,8 @@ class ClassifiedRasterHazardPopulationMetadata(ImpactFunctionMetadata):
         dict_meta = {
             'id': 'ClassifiedRasterHazardPopulationFunction',
             'name': tr('Classified raster hazard on population'),
-            'impact': tr('Be affected in each class'),
-            'title': tr('Be affected in each hazard class'),
+            'impact': tr('Be affected'),
+            'title': tr('Be affected'),
             'function_type': 'old-style',
             'author': 'Dianne Bencito',
             'date_implemented': 'N/A',
@@ -87,7 +87,7 @@ class ClassifiedRasterHazardPopulationMetadata(ImpactFunctionMetadata):
                 'class of the hazard. There should be three classes: e.g. '
                 '1, 2, and 3.'),
             'exposure_input': tr(
-                'An exposure raster layer where each cell represents the'
+                'An exposure raster layer where each cell represents the '
                 'population count for that cell.'),
             'output': tr(
                 'Map of population exposed to the highest class and a table '
@@ -97,6 +97,13 @@ class ClassifiedRasterHazardPopulationMetadata(ImpactFunctionMetadata):
                 'affected for each hazard class.'),
             'limitations': [tr('The number of classes is three.')],
             'citations': [],
+            'map_title': tr('Number of people affected in each class'),
+            'legend_title': tr('Number of People'),
+            'legend_units': tr('(people per cell)'),
+            'legend_notes': tr(
+                'Thousand separator is represented by %s' %
+                get_thousand_separator()),
+            'layer_name': tr('People that might be affected'),
             'layer_requirements': {
                 'hazard': {
                     'layer_mode': layer_mode_classified,

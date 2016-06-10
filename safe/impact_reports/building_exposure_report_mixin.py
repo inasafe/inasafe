@@ -125,6 +125,10 @@ class BuildingExposureReportMixin(ReportMixin):
         buildings = self.buildings.copy()
         self.buildings = reorder_dictionary(buildings, structure_class_order)
 
+        affected_buildings = self.affected_buildings.copy()
+        self.affected_buildings = reorder_dictionary(
+            affected_buildings, self.categories)
+
     def impact_summary(self):
         """Create impact summary as data.
 

@@ -20,7 +20,7 @@ from safe.common.utilities import OrderedDict
 from safe.defaults import road_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
-from safe.impact_functions.inundation.tsunami_raster_road \
+from safe.impact_functions.inundation.tsunami_raster_building \
     .parameter_definitions import (
         low_threshold,
         medium_threshold,
@@ -91,6 +91,11 @@ class TsunamiRasterRoadMetadata(ImpactFunctionMetadata):
                 'might be inundated.'),
             'limitations': [],
             'citations': [],
+            'legend_units': '',
+            'legend_notes': '',
+            'map_title': tr('Roads inundated'),
+            'legend_title': tr('Road inundated status'),
+            'layer_name': tr('Flooded roads'),
             'layer_requirements': {
                 'hazard': {
                     'layer_mode': layer_mode_continuous,

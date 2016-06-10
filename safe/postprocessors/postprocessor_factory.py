@@ -122,6 +122,4 @@ def get_postprocessor_human_name(postprocessor):
     :returns: The human readable name
     :rtype: str
     """
-    # Sunni : translete it first
-    human_name_translated = tr(AVAILABLE_POSTPTOCESSORS[postprocessor])
-    return human_name_translated
+    return AVAILABLE_POSTPTOCESSORS[postprocessor]
