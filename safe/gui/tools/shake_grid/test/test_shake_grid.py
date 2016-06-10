@@ -183,7 +183,6 @@ class ShakeGridTest(unittest.TestCase):
         """Check we can convert the shake event to a shapefile."""
         # Check the shp file
         file_path = SHAKE_GRID.mmi_to_shapefile(force_flag=True)
-        print file_path
         self.assertTrue(os.path.exists(file_path))
         # Check the qml file
         expected_qml = file_path.replace('shp', 'qml')
