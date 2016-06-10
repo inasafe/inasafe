@@ -226,8 +226,8 @@ class PostprocessorManager(QtCore.QObject):
                     self.aggregator.get_default_keyword('NO_DATA')))
 
             table['notes'].append(self.tr(
-                'Columns or lines containing exclusively 0 and "%s" '
-                'have not been shown in the table.' %
+                'Columns and rows containing only 0 or "%s" values are '
+                'excluded from the tables.' %
                 self.aggregator.get_default_keyword('NO_DATA')))
             result[processor] = table
 
@@ -363,8 +363,8 @@ class PostprocessorManager(QtCore.QObject):
                         self.aggregator.get_default_keyword(
                             'NO_DATA'))))
             caption = m.EmphasizedText(self.tr(
-                'Columns or lines containing exclusively 0 and "%s" '
-                'have not been shown in the table.' %
+                'Columns and rows containing only 0 or "%s" values are '
+                'excluded from the tables.' %
                 self.aggregator.get_default_keyword('NO_DATA')))
             message.add(
                 m.Paragraph(
