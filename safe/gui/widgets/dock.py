@@ -1294,7 +1294,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         :type new_layer: QgsMapLayer
 
         """
-        if len(existing_layers) is None or new_layer is None:
+        # Some existing layers might be None, ie the aggregation layer #2948.
+        existing_layers = [l for l in existing_layers if l is not None]
+        if not len(existing_layers) or new_layer is None:
             return
 
         registry = QgsMapLayerRegistry.instance()
@@ -1463,7 +1465,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.add_above_layer(
                 self.impact_function.aggregator.layer,
                 self.get_aggregation_layer())
-            legend.setLayerVisible(self.get_aggregation_layer(), True)
+            legend.setLayerVisible(self.impact_function.aggregator.layer, True)
 
         if self.hide_exposure_flag:
             # Insert the impact always above the hazard
@@ -1722,7 +1724,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 else:
                     keyword_version = str(keywords.get('keyword_version'))
                     supported = is_keyword_version_supported(
-                            keyword_version)
+                        keyword_version)
                     if supported:
                         self.show_generic_keywords(layer)
                     else:
