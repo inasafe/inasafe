@@ -35,22 +35,17 @@ from safe.common.exceptions import (
     ReadLayerError,
     WriteLayerError,
     GetDataError,
-    InaSAFEError,
-    NoKeywordsFoundError,
-    MetadataReadError
+    InaSAFEError
 )
 from layer import Layer
 from projection import Projection
 from geometry import Polygon
 from utilities import verify
 from utilities import DRIVER_MAP, TYPE_MAP
-from utilities import read_keywords
-from utilities import write_keywords
 from utilities import get_geometry_type
 from utilities import is_sequence
 from utilities import array_to_line
 from utilities import calculate_polygon_centroid
-from utilities import points_along_line
 from utilities import geometry_type_to_string
 from utilities import get_ring_data, get_polygon_data
 from utilities import rings_equal
@@ -61,7 +56,6 @@ from safe.utilities.i18n import tr
 from safe.utilities.metadata import (
     write_iso19115_metadata,
     read_iso19115_metadata,
-    write_read_iso_19115_metadata
 )
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -92,8 +86,7 @@ class Vector(Layer):
             * name: Optional name for layer. If None, basename is used.
             * keywords: Optional dictionary with keywords that describe the
                 layer. When the layer is stored, these keywords will
-                be written into an associated file with extension
-                '.keywords'.
+                be written into an associated file with extension '.xml'.
 
                 Keywords can for example be used to display text about the
                 layer in an application.
@@ -431,11 +424,7 @@ class Vector(Layer):
         base_name = os.path.splitext(filename)[0]
 
         # Look for any keywords
-        try:
-            self.keywords = read_iso19115_metadata(filename)
-        except (NoKeywordsFoundError, MetadataReadError):
-            keywords = read_keywords(base_name + '.keywords')
-            self.keywords = write_read_iso_19115_metadata(filename, keywords)
+        self.keywords = read_iso19115_metadata(filename)
 
         # FIXME (Ole): Should also look for style file to populate style_info
 
@@ -594,7 +583,6 @@ class Vector(Layer):
             raise IOError(msg)
 
         # Write keywords if any
-        # write_keywords(self.keywords, base_name + '.keywords')
         write_iso19115_metadata(file_name, self.keywords)
         self.read_from_file(file_name)
 
@@ -826,7 +814,6 @@ class Vector(Layer):
             feature.Destroy()
 
         # Write keywords if any
-        # write_keywords(self.keywords, base_name + '.keywords')
         write_iso19115_metadata(filename, self.keywords)
         self.keywords = read_iso19115_metadata(filename)
 
@@ -1091,50 +1078,6 @@ class Vector(Layer):
         """
 
         return self.is_vector and self.geometry_type == ogr.wkbMultiPolygon
-
-
-# ----------------------------------
-# Helper functions for class Vector
-# ----------------------------------
-def convert_line_to_points(V, delta):
-    """Convert line vector data to point vector data
-
-    :param V: Vector layer with line data
-    :type V: Vector
-
-    :param delta: Incremental step to find the points
-    :type delta: float
-
-    :returns: Vector layer with point data and the same attributes as V
-    :rtype: Vector
-    """
-
-    msg = 'Input data %s must be line vector data' % V
-    verify(V.is_line_data, msg)
-
-    geometry = V.get_geometry()
-    data = V.get_data()
-    N = len(V)
-
-    # Calculate centroids for each polygon
-    points = []
-    new_data = []
-    for i in range(N):
-        c = points_along_line(geometry[i], delta)
-        # We need to create a data entry for each point.
-        # FIXME (Ole): What on earth is this?
-        # pylint: disable=W0621
-        new_data.extend([data[i] for _ in c])
-        # pylint: enable=W0621
-        points.extend(c)
-
-    # Create new point vector layer with same attributes and return
-    V = Vector(data=new_data,
-               projection=V.get_projection(),
-               geometry=points,
-               name='%s_point_data' % V.get_name(),
-               keywords=V.get_keywords())
-    return V
 
 
 def convert_polygons_to_centroids(V):

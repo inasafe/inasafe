@@ -10,7 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.common.utilities import OrderedDict
+from safe.common.utilities import OrderedDict, get_thousand_separator
 from safe.defaults import default_minimum_needs
 from safe.defaults import (
     default_gender_postprocessor,
@@ -117,6 +117,13 @@ class ITBFatalityMetadata(ImpactFunctionMetadata):
                    'for global earthquake fatality estimation, Earthq. '
                    'Spectra 26, 1017-1037.')
             ],
+            'map_title': tr('Earthquake impact to population'),
+            'legend_title': tr('Population Count'),
+            'legend_units': tr('(people per cell)'),
+            'legend_notes': tr(
+                'Thousand separator is represented by %s' %
+                get_thousand_separator()),
+            'layer_name': tr('Estimated displaced population per cell'),
             'layer_requirements': {
                 'hazard': {
                     'layer_mode': layer_mode_continuous,

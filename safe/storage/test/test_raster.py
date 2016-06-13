@@ -17,7 +17,6 @@ import unittest
 
 from qgis.core import QgsRasterLayer
 
-from safe.storage.utilities import read_keywords
 from safe.storage.raster import Raster
 from safe.test.utilities import test_data_path, get_qgis_app
 
@@ -39,18 +38,21 @@ class RasterTest(unittest.TestCase):
         qgis_layer = QgsRasterLayer(RASTER_BASE + '.tif', 'test')
         layer = Raster(data=qgis_layer)
         qgis_extent = qgis_layer.dataProvider().extent()
-        qgis_extent = [qgis_extent.xMinimum(), qgis_extent.yMinimum(),
-                       qgis_extent.xMaximum(), qgis_extent.yMaximum()]
-        layer_exent = layer.get_bounding_box()
+        qgis_extent = [
+            qgis_extent.xMinimum(),
+            qgis_extent.yMinimum(),
+            qgis_extent.xMaximum(),
+            qgis_extent.yMaximum()
+        ]
+        layer_extent = layer.get_bounding_box()
         self.assertListEqual(
-            layer_exent, qgis_extent,
-            'Expected %s extent, got %s' % (qgis_extent, layer_exent))
+            layer_extent, qgis_extent,
+            'Expected %s extent, got %s' % (qgis_extent, layer_extent))
 
     def test_convert_to_qgis_raster_layer(self):
         """Test that converting to QgsVectorLayer works."""
         # Create vector layer
-        keywords = read_keywords(RASTER_BASE + '.keywords')
-        layer = Raster(data=RASTER_BASE + '.tif', keywords=keywords)
+        layer = Raster(data=RASTER_BASE + '.tif')
 
         # Convert to QgsRasterLayer
         qgis_layer = layer.as_qgis_native()
@@ -58,9 +60,7 @@ class RasterTest(unittest.TestCase):
         qgis_extent = [qgis_extent.xMinimum(), qgis_extent.yMinimum(),
                        qgis_extent.xMaximum(), qgis_extent.yMaximum()]
         layer_exent = layer.get_bounding_box()
-        self.assertListEqual(
-            layer_exent, qgis_extent,
-            'Expected %s extent, got %s' % (qgis_extent, layer_exent))
+        self.assertListEqual(layer_exent, qgis_extent)
 
 
 if __name__ == '__main__':

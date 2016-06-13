@@ -133,11 +133,6 @@ class FloodRasterBuildingFunction(
         self.building_report_threshold = building_postprocessors.value[0].value
         self._consolidate_to_other()
 
-        # For printing map purpose
-        map_title = tr('Flooded buildings')
-        legend_title = tr('Flooded structure status')
-        legend_units = tr('(flooded, wet, or dry)')
-
         style_classes = [
             dict(
                 label=tr('Dry (<= 0 m)'),
@@ -170,9 +165,9 @@ class FloodRasterBuildingFunction(
 
         extra_keywords = {
             'target_field': self.target_field,
-            'map_title': map_title,
-            'legend_title': legend_title,
-            'legend_units': legend_units,
+            'map_title': self.metadata().key('map_title'),
+            'legend_title': self.metadata().key('legend_title'),
+            'legend_units': self.metadata().key('legend_units'),
             'buildings_total': total_features,
             'buildings_affected': self.total_affected_buildings
         }
@@ -183,7 +178,7 @@ class FloodRasterBuildingFunction(
             data=features,
             projection=interpolated_layer.get_projection(),
             geometry=interpolated_layer.get_geometry(),
-            name=tr('Estimated buildings affected'),
+            name=self.metadata().key('layer_name'),
             keywords=impact_layer_keywords,
             style_info=style_info)
 

@@ -10,7 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.common.utilities import OrderedDict
+from safe.common.utilities import OrderedDict, get_thousand_separator
 from safe.defaults import (
     default_minimum_needs,
     default_gender_postprocessor,
@@ -76,6 +76,13 @@ class VolcanoPointPopulationFunctionMetadata(ImpactFunctionMetadata):
                 'be affected by each hazard zone.'),
             'limitations': [],
             'citations': [],
+            'map_title': tr('People affected by the buffered point volcano'),
+            'legend_title': tr('Population'),
+            'legend_units': tr('(people per cell)'),
+            'legend_notes': tr(
+                'Thousand separator is represented by  %s' %
+                get_thousand_separator()),
+            'layer_name': tr('People affected by the buffered point volcano'),
             'overview': tr(
                 'To assess the impacts of volcano eruption on '
                 'population.'),

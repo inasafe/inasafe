@@ -17,7 +17,7 @@ __filename__ = 'metadata_definitions'
 __date__ = '24/03/15'
 __copyright__ = 'lana.pcfre@gmail.com'
 
-from safe.common.utilities import OrderedDict
+from safe.common.utilities import OrderedDict, get_thousand_separator
 from safe.defaults import default_minimum_needs
 from safe.defaults import (
     default_gender_postprocessor,
@@ -97,6 +97,13 @@ class ClassifiedRasterHazardPopulationMetadata(ImpactFunctionMetadata):
                 'affected for each hazard class.'),
             'limitations': [tr('The number of classes is three.')],
             'citations': [],
+            'map_title': tr('Number of people affected in each class'),
+            'legend_title': tr('Number of People'),
+            'legend_units': tr('(people per cell)'),
+            'legend_notes': tr(
+                'Thousand separator is represented by %s' %
+                get_thousand_separator()),
+            'layer_name': tr('People that might be affected'),
             'layer_requirements': {
                 'hazard': {
                     'layer_mode': layer_mode_classified,
