@@ -110,6 +110,11 @@ def _raster_to_vector_cells(raster, ranges, output_crs):
             value = block.value(y, x)
             current_threshold = None
 
+            # Performance optimisation added in 3.4.1 - dont
+            # waste time processing cells that have no data
+            if value == no_data:
+                continue
+
             for threshold_id, threshold in ranges.iteritems():
 
                 # If, eg [0, 0], the value must be equal to 0.
@@ -152,6 +157,7 @@ def _raster_to_vector_cells(raster, ranges, output_crs):
             if rd % 1000 == 0:
                 vl.dataProvider().addFeatures(features)
                 features = []
+
     # Add the latest features
     vl.dataProvider().addFeatures(features)
 
