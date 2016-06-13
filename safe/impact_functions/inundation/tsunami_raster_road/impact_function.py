@@ -102,7 +102,7 @@ def _raster_to_vector_cells(raster, ranges, output_crs):
     # nodata value from the dataset properly in the python API
     dataset = gdal.Open(raster.source())
     no_data = dataset.GetRasterBand(1).GetNoDataValue()
-    dataset = None  # close the dataset
+    del dataset  # close the dataset
     y_cell_height = - cell_height
     LOGGER.debug('num row: %s' % raster_rows)
     LOGGER.debug('num column: %s' % raster_cols)
