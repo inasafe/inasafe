@@ -97,6 +97,8 @@ def _raster_to_vector_cells(raster, ranges, output_crs):
     ct = QgsCoordinateTransform(raster.crs(), output_crs)
 
     rd = 0
+    no_data = raster.dataProvider().srcNoDataValue(0)
+
     y_cell_height = - cell_height
     LOGGER.debug('num row: %s' % raster_rows)
     LOGGER.debug('num column: %s' % raster_cols)
@@ -109,6 +111,11 @@ def _raster_to_vector_cells(raster, ranges, output_crs):
             # only use cells that are within the specified threshold
             value = block.value(y, x)
             current_threshold = None
+
+            # Performance optimisation added in 3.4.1 - dont
+            # waste time processing cells that have no data
+            if value == no_data:
+                continue
 
             for threshold_id, threshold in ranges.iteritems():
 
@@ -152,6 +159,7 @@ def _raster_to_vector_cells(raster, ranges, output_crs):
             if rd % 1000 == 0:
                 vl.dataProvider().addFeatures(features)
                 features = []
+
     # Add the latest features
     vl.dataProvider().addFeatures(features)
 
