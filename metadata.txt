@@ -15,9 +15,9 @@ qgisMaximumVersion=2.99
 description=InaSAFE is free software that allows disaster managers to study realistic natural hazard impact scenarios for better planning, preparedness and response activities.
 about=Developed for the Indonesian Government - BNPB, Australian Government - AIFDR and DMInnovation and, and World Bank - GFDRR
 
-version=3.5.0
+version=3.4.0
 # alpha, beta, rc or final
-status=alpha
+status=final
 
 
 # end of mandatory metadata
@@ -37,6 +37,11 @@ changelog=
 	3.4.1 - fix sentence about no data in the report
 	3.4.1 - add missing thousands separator
 	3.4.1 - fix legend order when layer is None
+	3.4.1 - fix wizard compatibility with recent QGIS versions. Issue #2906
+    3.4.1 - Handle KeyError in keywords. Issue #2908
+    3.4.1 - Handle special character in XML. Issue #2898
+    3.4.1 - Fix failing dock test on QGIS 2.15 (and possibly earlier versions)
+    3.4.1 - Fix mistake in the tsunami legend. Issue #2884
 	Add missing note in post processing table.
 	Add LandCover Report template.
 	Add impact data to LandCover IF.
