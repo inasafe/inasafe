@@ -26,7 +26,7 @@ from qgis.core import (
     QgsVectorFileWriter,
     QgsVectorLayer
 )
-from PyQt4.QtCore import QVariant
+from PyQt4.QtCore import QVariant, QPyNullVariant
 
 from safe.common.exceptions import ZeroImpactException
 from safe.impact_functions.bases.continuous_rh_classified_ve import \
@@ -44,12 +44,15 @@ from safe.gis.qgis_vector_tools import (
     create_layer)
 from safe.impact_reports.road_exposure_report_mixin import\
     RoadExposureReportMixin
+import logging
 
 __author__ = 'etiennetrimaille'
 __project_name__ = 'inasafe-dev'
 __filename__ = 'impact_function.py'
 __date__ = '11/03/16'
 __copyright__ = 'etienne@kartoza.com'
+
+LOGGER = logging.getLogger('InaSAFE')
 
 
 def _raster_to_vector_cells(raster, ranges, output_crs):
@@ -95,8 +98,14 @@ def _raster_to_vector_cells(raster, ranges, output_crs):
 
     rd = 0
     no_data = raster.dataProvider().srcNoDataValue(0)
-
+    y_cell_height = - cell_height
+    LOGGER.debug('num row: %s' % raster_rows)
+    LOGGER.debug('num column: %s' % raster_cols)
     for y in xrange(raster_rows):
+        y_cell_height += cell_height
+        y0 = raster_ymax - y_cell_height
+        y1 = y0 - cell_height
+
         for x in xrange(raster_cols):
             # only use cells that are within the specified threshold
             value = block.value(y, x)
@@ -128,10 +137,9 @@ def _raster_to_vector_cells(raster, ranges, output_crs):
 
                 if current_threshold is not None:
                     # construct rectangular polygon feature for the cell
-                    x0 = raster_xmin + (x * cell_width)
-                    x1 = raster_xmin + ((x + 1) * cell_width)
-                    y0 = raster_ymax - (y * cell_height)
-                    y1 = raster_ymax - ((y + 1) * cell_height)
+                    x_cell_width = x * cell_width
+                    x0 = raster_xmin + x_cell_width
+                    x1 = x0 + cell_width
                     outer_ring = [
                         QgsPoint(x0, y0), QgsPoint(x1, y0),
                         QgsPoint(x1, y1), QgsPoint(x0, y1),
@@ -150,7 +158,6 @@ def _raster_to_vector_cells(raster, ranges, output_crs):
             if rd % 1000 == 0:
                 vl.dataProvider().addFeatures(features)
                 features = []
-
     # Add the latest features
     vl.dataProvider().addFeatures(features)
 
@@ -228,6 +235,8 @@ def _intersect_lines_with_vector_cells(
             if in_geom and (in_geom.wkbType() == QGis.WKBLineString or
                             in_geom.wkbType() == QGis.WKBMultiLineString):
                 affected_value = feature.attributes()[0]
+                if isinstance(affected_value, QPyNullVariant):
+                    affected_value = 0
                 add_output_feature(
                     features, in_geom, affected_value,
                     fields, f.attributes(), target_field)
@@ -305,7 +314,7 @@ class TsunamiRasterRoadsFunction(
             tr('Very high tsunami hazard zone is defined as inundation depth '
                'is more than %.1f %s') % (
                 high_max.value, high_max.unit.abbreviation),
-            tr('Roads are closed if they are in low, moderate, high, or very '
+            tr('Roads are closed if they are in low, medium, high, or very '
                'high tsunami hazard zone.'),
             tr('Roads are opened if they are in dry zone.')
         ]
@@ -408,7 +417,10 @@ class TsunamiRasterRoadsFunction(
             attributes = road.attributes()
 
             affected = attributes[target_field_index]
-            hazard_zone = self.hazard_classes[affected]
+            if isinstance(affected, QPyNullVariant):
+                continue
+            else:
+                hazard_zone = self.hazard_classes[affected]
 
             usage = attributes[road_type_field_index]
             usage = main_type(usage, exposure_value_mapping)
@@ -425,10 +437,6 @@ class TsunamiRasterRoadsFunction(
 
         self.reorder_dictionaries()
 
-        # For printing map purpose
-        map_title = tr('Roads inundated')
-        legend_title = tr('Road inundated status')
-
         style_classes = [
             # FIXME 0 - 0.1
             dict(
@@ -439,7 +447,7 @@ class TsunamiRasterRoadsFunction(
                 size=1
             ),
             dict(
-                label=self.hazard_classes[1] + ': <0 - %.1f m' % low_max,
+                label=self.hazard_classes[1] + ': >0 - %.1f m' % low_max,
                 value=1,
                 colour='#FFFF00',
                 transparency=0,
@@ -478,8 +486,8 @@ class TsunamiRasterRoadsFunction(
         impact_data = self.generate_data()
 
         extra_keywords = {
-            'map_title': map_title,
-            'legend_title': legend_title,
+            'map_title': self.metadata().key('map_title'),
+            'legend_title': self.metadata().key('legend_title'),
             'target_field': target_field
         }
 
@@ -488,7 +496,7 @@ class TsunamiRasterRoadsFunction(
         # Convert QgsVectorLayer to inasafe layer and return it
         impact_layer = Vector(
             data=line_layer,
-            name=tr('Flooded roads'),
+            name=self.metadata().key('layer_name'),
             keywords=impact_layer_keywords,
             style_info=style_info)
 

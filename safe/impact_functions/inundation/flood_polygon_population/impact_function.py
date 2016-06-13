@@ -31,8 +31,7 @@ from safe.common.utilities import (
     format_int,
     create_classes,
     humanize_class,
-    create_label,
-    get_thousand_separator)
+    create_label)
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
     get_needs_provenance_value, filter_needs_parameters
 from safe.common.exceptions import ZeroImpactException
@@ -255,22 +254,14 @@ class FloodEvacuationVectorHazardFunction(
             style_classes=style_classes,
             style_type='rasterStyle')
 
-        # For printing map purpose
-        map_title = tr('People affected by flood prone areas')
-        legend_title = tr('Population Count')
-        legend_units = tr('(people per polygon)')
-        legend_notes = tr(
-            'Thousand separator is represented by %s' %
-            get_thousand_separator())
-
         impact_data = self.generate_data()
 
         extra_keywords = {
             'target_field': self.target_field,
-            'map_title': map_title,
-            'legend_notes': legend_notes,
-            'legend_units': legend_units,
-            'legend_title': legend_title,
+            'map_title': self.metadata().key('map_title'),
+            'legend_notes': self.metadata().key('legend_notes'),
+            'legend_units': self.metadata().key('legend_units'),
+            'legend_title': self.metadata().key('legend_title'),
             'affected_population': total_affected_population,
             'total_population': self.total_population,
             'total_needs': self.total_needs
@@ -283,7 +274,7 @@ class FloodEvacuationVectorHazardFunction(
             data=new_covered_exposure_data,
             projection=covered_exposure.get_projection(),
             geotransform=covered_exposure.get_geotransform(),
-            name=tr('People affected by flood prone areas'),
+            name=self.metadata().key('layer_name'),
             keywords=impact_layer_keywords,
             style_info=style_info)
 

@@ -246,10 +246,6 @@ class FloodPolygonBuildingFunction(
         self.building_report_threshold = building_postprocessors.value[0].value
         self._consolidate_to_other()
 
-        # For printing map purpose
-        map_title = tr('Buildings inundated')
-        legend_title = tr('Structure inundated status')
-
         style_classes = [
             dict(label=tr('Not Inundated'), value=0, colour='#1EFC7C',
                  transparency=0, size=0.5),
@@ -268,8 +264,8 @@ class FloodPolygonBuildingFunction(
         impact_data = self.generate_data()
 
         extra_keywords = {
-            'map_title': map_title,
-            'legend_title': legend_title,
+            'map_title': self.metadata().key('map_title'),
+            'legend_title': self.metadata().key('legend_title'),
             'target_field': self.target_field,
             'buildings_total': self.total_buildings,
             'buildings_affected': self.total_affected_buildings
@@ -279,7 +275,7 @@ class FloodPolygonBuildingFunction(
 
         impact_layer = Vector(
             data=building_layer,
-            name=tr('Flooded buildings'),
+            name=self.metadata().key('layer_name'),
             keywords=impact_layer_keywords,
             style_info=style_info)
 

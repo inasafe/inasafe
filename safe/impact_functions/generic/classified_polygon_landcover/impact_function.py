@@ -11,6 +11,9 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
+import logging
+LOGGER = logging.getLogger('InaSAFE')
+
 from qgis.core import (
     QGis,
     QgsCoordinateReferenceSystem,
@@ -59,6 +62,10 @@ def _calculate_landcover_impact(
             hazard_id = hazard_features[hazard_id]
             hazard_geometry = hazard_id.geometry()
             impact_geometry = geometry.intersection(hazard_geometry)
+            if not impact_geometry:
+                LOGGER.warning(
+                    'Impact geometry is None for hazard_id %s' % hazard_id)
+                continue
             if not impact_geometry.wkbType() == QGis.WKBPolygon and \
                     not impact_geometry.wkbType() == QGis.WKBMultiPolygon:
                 continue  # no intersection found
@@ -263,7 +270,7 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
             style_type='categorizedSymbol')
 
         extra_keywords = {
-            'map_title': tr('Affected Land Cover'),
+            'map_title': self.metadata().key('map_title'),
             'target_field': self.target_field
         }
 
@@ -272,7 +279,7 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
         # Create vector layer and return
         impact_layer = Vector(
             data=impact_layer,
-            name=tr('Land cover affected by each hazard zone'),
+            name=self.metadata().key('layer_name'),
             keywords=impact_layer_keywords,
             style_info=style_info)
 

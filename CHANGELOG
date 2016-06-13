@@ -1,10 +1,613 @@
+Changelog for version 3.4.0
+================================
+
+0864ba5 (HEAD -> master, origin/master) Merged in changes from develop branch
+2ac0e5b (origin/develop, origin/HEAD) Merge pull request #2786 from ismailsunni/fix_missing_note
+9ad3885 Add missing note in post processing table.
+baeb749 Merge pull request #2771 from borysiasty/develop
+d9e397b pylint fixes
+ec82e72 [Wizard test] Use default assertion messages
+ea87623 [Wizard test] Put the Dock object inside the class
+6e97cd8 Merge branch 'develop' of github.com:AIFDR/inasafe into develop
+2c3d626 Merge pull request #2776 from ismailsunni/backport_2724
+2467791 Update metadata's changelog.
+bbd6fb1 Fix #2724.
+6a8ccb1 Merge pull request #2767 from ismailsunni/land_cover_impact_data
+3fa1d7a Fix failed test in travis.
+31b10f2 Cleaning up code.
+8392ac1 Add LandCover Report template.
+eab45ca Add impact data to LandCover IF.
+879d871 Add land cover report/data mixin.
+baeb52c [Wizard] split test file into two smaller
+89e2fe3 [Wizard] Improve test coverage
+104d4a5 Pylint
+68c1c51 [Wizard] Bugfixes
+e1ed6c7 Make FlatTable converter to dict.
+155283d Add read and write to json for FlatTable.
+f750174 Fix merge conflict.
+eb054e6 [Wizard] Improve test coverage
+1185405 Merge pull request #2766 from timlinux/develop
+0dd43a8 Merge pull request #2768 from timlinux/fix-2704
+d795e1c PEP8. Merely triggering the travis.
+c4e9ee9 Merge branch 'develop' of github.com:inasafe/inasafe into land_cover_impact_data
+1224a2e Cleaning up code.
+a10b608 (origin/fix-2704, fix-2704) Fix pep8
+7a2f7d7 Minor formatting tweaks to help doc modules
+ce07bd5 Merge remote-tracking branch 'upstream/develop' into fix-2704
+87f3990 Merge pull request #2757 from Gustry/raster
+765196b Remove unused code, update test in impact report.
+2f625d7 Remove generate html and report from report mixin.
+5fa75f7 Add json data sample for land cover IF.
+d3bd0ae Resolved merge conflicts, backported fix for #2759
+bfdc0e9 Fix for missing keyword in layer raising error
+f49189f Merge pull request #2763 from Gustry/if-refactoring
+e25316b fix test
+11ebd31 small changes
+9bc129e merge analysis_workflow in calculate_impact
+c781712 add docstrings
+23722ec add reclassify methods using GDAL
+4f393ca add a polygonize function with GDAL
+4974ec0 Merge pull request #2758 from ismailsunni/travis_cache
+e02a8c3 Cache directory
+544db4e Add cache in travis configuration.
+c5067c0 Merge pull request #2756 from ismailsunni/fix_2754_error_aggregation_keywords
+4582b8d Fix #2754, failed to set keyword for aggregation layer.
+8af918f Merge pull request #2742 from ismailsunni/json_impact_data
+55a2296 Mark some test as slow. I propose a unit test should be less than 10s.
+ea7292d Change flood event to use json impact data.
+dc20a65 Merge branch 'develop' of github.com:inasafe/inasafe into json_impact_data
+eee2e79 PEP8.
+b48ff05 Format generated json file.
+6b76b6d Merge pull request #2753 from Gustry/metadata
+6bb695c remove duplicate metadata in the wizard
+c327ad2 Fix typo in file name.
+1c73426 Fix merged conflict.
+47e8001 Make test works on test_dock_regressions.
+d45c311 Cleaning up code.
+e5f5613 Update wrong test control.
+0ab1f6f Merge pull request #2747 from borysiasty/wizard2
+5c7ef08 Fix test save scenario.
+5b1b28d Fix test minimum needs.
+661f32e Fix test in test engine
+b55bdd6 Fix failed test in test impact report.
+0df7cbc Fix post processing report in dock and wizard.
+fc03099 Merge branch 'develop' of github.com:AIFDR/inasafe into wizard2
+fa4c1d3 Fix merged conflict.
+38fb59b Impact Data for PostProcessing works.
+0970a30 Able to generate json for postprocessing.
+4a051a1 Merge pull request #2745 from ismailsunni/fix_2744_regression_people_polygon
+dcf5ab4 Add sample of post processing.
+4b0e903 Fix test impact function for land cover.
+581adb3 Merge branch 'develop' of github.com:inasafe/inasafe into json_impact_data
+b1d5c1c Merge pull request #2709 from wonder-sk/landcover_impact_function
+50e7210 [Wizard] Try to fix the failing test
+0683270 [Wizard] Make the test yet more verbose
+66279ae [Wizard] More verbose test
+39fb9d6 Better code style, PEP8.
+95c44b4 Merge branch 'develop' of github.com:inasafe/inasafe into json_impact_data
+b2a279d Fix another failure in refactor.
+01f1523 Fix typo.
+82d755b Add test for polygon people template.
+c95ca2f Rename all to polygon people
+48653a7 Add Impact Data for polygon population.
+8fef48e Merge pull request #2748 from Gustry/grid-jakarta
+e7f56ba (etienne/grid-jakarta) add licence files for test data
+7903c32 add aggregation grid on Jakarta
+abbabfb Impact Data in ClassifiedPolygonPeople IF.
+e3824d0 Add impact data people polygon sample.
+096c90b Format minimum needs.
+45578ae Format impact breakdown for people polygon.
+3524115 Format impact summary for people polygon.
+da59567 More pep8 fixes
+601051d [Wizard] Update tests
+4012dd7 [Wizard] bugfixes
+fe5944d Separate impact summary and breakdown
+488b974 Fix merge conflict.
+bb90872 Impact Data for FloodRasterRoadsFunction and TsunamiRasterRoadsFunction
+bb94c75 Add test for generate data road IF.
+066dd0a Add impact data for FloodPolygonRoadsFunction.
+5bb7c7b Add template for road.
+a5d283d Add impact data to road report mixin.
+ad8d8cc Merge branch 'develop' of github.com:AIFDR/inasafe into wizard2
+e3e21d6 Refactored wizard cleanups
+e73073a Merge pull request #2741 from ismailsunni/fix_2740_update_exposure_map
+96bbafa Add residence and reformat dictionary
+b8fec15 Add road sample impact data
+d49713c Add asMultiPolygon in checker. Fix #2744.
+8da9206 Merge pull request #2716 from Gustry/volcano
+5640b78 Merge pull request #2732 from Gustry/helper
+60a9b62 Update expected result in test for #2744
+23949ac Update data test to make it the regression clearer.
+b8094a7 (martin/landcover_impact_function) Replaced Processing routines with own intersection implementation
+c0e1f95 Better code style.
+4f41178 Reproject aggregation layer before doing intersection with exposure
+60e0ea6 Support also single event hazards in land cover IF
+ac0c87f Docs for pivot table + fix if not all columns are present in data
+807c0e2 Fix small typo to make Travis passing.
+7a13c9f Fail early - raise exceptions where necessary
+204bad4 Fix failed test in batch runner.
+6c864ee Remove debug statements
+657d257 Update control file to make the test pass.
+dfcb905 Impact Data for ClassifiedPolygonHazardPopulationFunction.
+430d498 Impact Data for ContinuousHazardPopulationFunction.
+883186f Impact Data for ClassifiedRasterHazardPopulationFunction.
+4c83788 Impact Data for FloodEvacuationVectorHazardFunction.
+4e4d9e4 Impact Data for FloodEvacuationRasterHazardFunction.
+132f404 Impact Data for TsunamiEvacuationFunction
+6d11835 Impact Data for VolcanoPointPopulationFunction.
+409ae55 Impact Data for VolcanoPolygonPopulationFunction.
+5cc8502 Remove calculate impact.
+7cb71fa Move calculate impact to IF base.
+e6bd43c Merge branch 'develop' of github.com:inasafe/inasafe into json_impact_data
+fb3bbb3 Better naming. Coding standard.
+47b497b Add unit test for generate data for population.
+67bb468 Fix failed unit test.
+641ec01 Add unit test for population report template.
+6f097b6 update the landcover in Jakarta instead of London
+da3f666 fix pep8
+36c39aa Impact Data work for Population IF.
+ee92e97 Merge pull request #2733 from Gustry/timeout
+8c2be9a Merge pull request #2726 from Gustry/osm-downloader
+0448a67 Add proxy method to get proper template object.
+27e2079 Add generate data for population IF
+b098ead Backport recent changes in wizard to the refactored version
+af5f92c Merge branch 'develop' into wizard2
+cf02534 Fix merge conflict in test_wizard.
+4cf1b04 Impact Data for VolcanoPolygonBuildingFunction.
+fda6115 Impact Data for VolcanoPointBuildingFunction.
+8a50c75 Hot fix for failed test in wizard.
+945d3c7 Better path for test files.
+3a2197f JSON file for testing impact report.
+135736a Impact Data for TsunamiRasterBuildingFunction.
+e041e90 Impact Data for FloodRasterBuildingFunction.
+a56a845 Impact Data for FloodPolygonBuildingFunction.
+4980b4f Impact Data for ClassifiedRasterHazardBuildingFunction
+f0f4458 Remove html report generation from IF.
+543ddd0 Impact Data for ClassifiedPolygonHazardBuildingFunction
+b364c5f Fix PEP8 in wizard dialog.
+2cccaaf Move wizard metadata to definitions.
+d4c4846 Update structure and road value mapping.
+d620d5b Fix failed to run the test in test dock.
+145a779 Add method to handle template from layer, not json only.
+071bc48 pep8
+63557a3 Merge pull request #2721 from borysiasty/develop
+f1583c2 Maybe this will make nosetests show the debug output
+baeb372 use stderr to hopefully get the output shown in travis
+6b04257 Fix tests, add debugging statement
+1987e38 improve test buffer
+4cf3d31 fix if the request is cancelled, the http response is none
+23cd8d7 handle HTTP 509 if the overpass is busy
+16badaf manage a timeout error from the overpass in the OSM Downloader
+78f2b75 add debug helper functions
+4041e5e comment
+b3d6681 add some unit tests
+a46cd75 Merge remote-tracking branch 'upstream/develop' into landcover_impact_function
+754e498 Remove landcover IF parameter (replaced by exposure's keyword)
+3f654ae Merge pull request #2730 from ismailsunni/fix_2720_develop
+bc4ab16 Fix issue #2720
+3f96a41 Create HTML from JSON for EQ building works in Dock.
+1f62d7b Make template able to read from JSON file directly.
+1c9f3fe Return html and message object. Add unit test also.
+2f9f606 remove deprecated functions from QGIS
+0d94b81 fix pep8
+3716c53 minor changes in the OSM Downloader UI
+25ae17c First unit test for generating report.
+5ef3bfa Add report templating package.
+085af3a Typo fix
+ca987af Merge branch 'develop' of github.com:AIFDR/inasafe into develop
+731c7c1 Write json on EQ building IF.
+292774f Fix test in test_core
+f4e814f Generate data for building IF.
+995962e Rename exposure's value_map to value_mapping
+44716b9 Add name and description placeholders to the wizard's temporary metadata
+830327a Action list for polygon population.
+1cb636e Action List and Notes for road IF.
+b185ced Remove not needed variable.
+709b78e Merge pull request #2710 from wonder-sk/metadata_changes_after_tests
+4794f8f Merge pull request #2712 from Gustry/fix-network
+d24b75e Wizard v2
+92c1edf Add road and structure mapping
+112f2c1 Fix test
+6509640 Experimental bar chart for each land cover class in report
+dae7f6d Reporting of impact per each aggregation zone, improved pivot table
+ebad04d Initial implementation of pivot tables for IF reports
+481dfca Helper class for calculation of aggregates of tabular data
+e3bdbf4 Land cover report in two steps (1. get data, 2. format) without mixin
+9cd71bf Use QGIS intersection alg for interestion of exposure vs aggregation layer
+966e061 Initial support for aggregation for new-style IF
+241b2f9 fix tests
+b95e6eb Merge pull request #2659 from lucernae/realtime-flood
+6a524e1 fix tests
+3a2305a Fix failed test.
+7f9b894 remove unused var
+c4e70d3 Better code formatting.
+e3442ae fix tests about volcanos
+818f083 Fix failed test.
+98a8d05 Separating format and data in IF population.
+23ad31d removing geodesy module
+20f5080 polygonize volcanos point, use QGIS api in buffering
+7f14932 fix issues in shake template with new placename
+a11742f Move action list and notes formating to base mixin class.
+962b6e7 Move action checklist and impact summary for population mixin
+bd8c963 Tidy up code.
+e2da44c Fix failed test on building breakdown.
+73dff97 Add value for fields.
+8dfbb33 Fix test due to typos.
+693d120 Fix QPaint device error.
+0dab81d Separate building breakdown formating and the data.
+94bc208 Styling for impact layer - high/medium/low
+e8f4ef4 Take into hazard classes into account
+8944d42 Separate impact_summary formating and the data.
+c9b1209 Add classes to godzilla hazard
+ee82204 Change format notes to notes method in IF building.
+0e87e2c Fix tests
+2f080f7 fix delete network reply after a download
+d6f6ed1 Fixed report generation for land cover
+121fe86 Update metadata of landcover exposure
+e6c35b1 Update metadata of test landcover hazard layer
+bdb2d83 (martin/metadata_changes_after_tests) These are automatic changes to files after tests are run
+3e29add Make action list in better structure.
+f62e987 Fix unit tests
+22b44bc Add percentage of affected area for each land cover type
+7c4352e Unit test fixes after addition of new impact function
+425d647 Added unit test data for land cover impact function
+960baa0 Added classified hazard vs land cover impact function
+a1c91e0 Refactor method name in impact report.
+b9000ef Merge branch 'develop' of http://github.com/AIFDR/inasafe into realtime-flood
+a8a85f3 Merge pull request #2707 from easmetz/develop
+ab00d75 (libby/develop) Merge remote-tracking branch 'upstream/develop' into develop
+1816ffe ###Problem Peta Jakarta delivering python error
+d2146c3 (libby/fix-2704) Changed name of help topic to match icon and gui title.
+f43d5c9 ###Problem
+8b1e7b5 Major feature Add:
+1f8c453 First half of dock help being polished. In progress.
+de0f1cd - Corrected capitalisation of "questions", "results" and "buttons" in Dock Help. - Bolded "questions", "results" and "buttons" in Dock Help.
+5fb3c76 Corrected capitalisation of "Impact Function"
+f755684 Corrected capitalisation of "Impact Function"
+8c529c7 Fix import icon. Changed order of options in Analysis Area window.
+c5d96fe Merge pull request #2705 from Gustry/if-refactoring
+c3eb02d Reviewed extent selector help. Still in progress v3. Added information about bookmarks and Toggle Scenario Outlines
+60b4ada Reviewed extent selector help. Still in progress v2.
+d131d7a (etienne/if-refactoring) moving call to set_if_provenance in base.py
+a1408f8 fix IF refactoring
+d85339a Reviewed extent selector help. Still in progress.
+9fa6e47 set the aggregation layer from the aggregator
+c72664a Reviewed dock help. Still in progress.
+10f84f0 removing check user_extent, clip_parameters will set the value
+c43eda9 fix catch exceptions in IF
+3b601c3 Merge pull request #2703 from easmetz/fix-2702
+89b38b3 (libby/fix-2702) fix #2702 Review context help for OSM downloader dialog. Added new information about Political boundaries.
+be9c3ee Merge pull request #2661 from Gustry/refactoring-if
+19139e4 update tsunami on roads IF
+38351f5 Merge remote-tracking branch 'upstream/develop' into refactoring-if
+dabb8b2 Merge pull request #2695 from Gustry/tsunami-if-develop
+87b14d3 revert refactoring intersect_lines_with_vector_cells
+afadf04 revert refactoring flood_cells_map
+f6063c4 add missing translations
+13136d7 add translation about meter
+a37d398 fix tests
+4096e12 fix metadata tsunami on roads IF
+3d132d5 moving call methods in tsunami if
+6c115c7 refactoring tsunami IF (roads and buildings)
+009cdce unit in road postprocessor
+e2e4d71 add units on each rows, not on columns in the road report
+8ce4df1 call mixin init in IF
+8207092 add flag for add unaffected column in the road report
+9fd02ea disable Flood On Raster IF for a tsunami hazard
+354ce4f fix tests tsunami on roads IF
+3c2f62d fix roads which intersect partially the hazard raster
+7fe4c98 commit to the output every 1000 features
+3ce82f3 impact report tsunami IF
+1339811 update tsunami on buildings IF
+ee91870 add tsunami IF init
+46d0e56 Merge pull request #2690 from timlinux/fix-2689
+4024dcc (origin/fix-2689) Fix PetaJakarta flood style to be consistent with PJ website
+9b29875 Merge pull request #2668 from Gustry/fix-2361-roads-postprocessing
+9f26536 update to "total affected" in the road type postprocessor
+90ee863 fix hide exposure layer after an IF in develop
+e554000 Merge branch 'develop' of http://github.com/AIFDR/inasafe into realtime-flood
+144e4ba Merge pull request #2655 from Gustry/unicode
+ab79f89 fix #2361 count roads length in post processing instead of features
+a80eda3 (rizky/realtime-flood) Merge branch 'develop' of http://github.com/AIFDR/inasafe into realtime-flood
+4702407 fix tests
+46623c9 add small comments
+dba7c81 revert builds.dbf to the previous commit 611d7b6
+1a0373e refactoring the way we launch the IF
+dfd799d cleaning some comments
+001796f fix analysis in wizard
+f6637c3 fix extent in IF setting
+38094d1 (borys/develop) Merge pull request #2647 from Gustry/mistakes
+cd98a1f pep8 and fix tests
+7943239 remove import Analysis
+7377395 Merge branch 'develop' of http://github.com/AIFDR/inasafe into realtime-flood
+fb1bdf5 Major feature addition:
+46f29bc remove analysis.py
+af4f104 move setup_analysis
+23348b3 Merge pull request #2656 from Gustry/aggregator
+dcf0f1b Merge branch 'develop' of http://github.com/AIFDR/inasafe into realtime-flood
+0686ed5 fix #2652: fix impact function addition over NaN values
+3e2dc95 add realtime flood template
+e7fd1f9 move run_analyse into IF
+936fef2 create run_analysis method in base.py
+bb942db Merge pull request #2658 from timlinux/develop
+1f6d96a Fix issue if bookmark cannot be reprojected in extent selector
+452cfd9 move setup_impact_function in IF
+ad0f759 check if the excpetion got an exception parameter
+5b88a33 move aggregator in IF
+397c4b1 (rizky/develop) Merge pull request #2654 from Gustry/osm-buildings
+935ed67 Merge pull request #2650 from Gustry/analysis
+7db617d fix tests
+b164727 unicode error if layers do not overlap in French
+f321bf4 buildings 2.5D if qgis >= 2.14
+a25ab6b Merge pull request #9 from ismailsunni/gustry_analysis
+2a33d92 Merge pull request #2649 from Gustry/staging-osm
+e3d48d5 (ismail/gustry_analysis) Import get_qgis_app for fixing test in IF package.
+39ec83a Merge branch 'analysis' of https://github.com/Gustry/inasafe into gustry_analysis
+907a11b Fix problem : QPixmap: Must construct a QApplication before a QPaintDevice.
+d90f77a move postprocessor_manager in IF
+16e6bec move setup aggregator
+dee5df5 use staging osm-reporter if developer mode is ON and if it is not a final release
+2790c49 Merge pull request #2584 from Gustry/optimal_clip
+7807275 Merge pull request #2593 from Gustry/class-count
+2223e92 fix test
+5fc6324 Merge pull request #2646 from Gustry/multipolygons-osm
+a895543 Merge remote-tracking branch 'upstream/develop' into optimal_clip
+331d082 add South Africa and France to the OSM downloader
+3595320 add multipolygons support in the OSM Downloader
+3b3850c develop: add feature
+57e684b Merge branch 'develop' of http://github.com/AIFDR/inasafe into realtime-flood
+48bf35e Add celery deployment for realtime-flood
+21f5a71 remove aggregation_test_impact_vector_class_count.xml
+3ccdc70 Merge branch 'develop' into class-count
+e94dde3 remove test about class_count and test data
+1f377fb fix test tsunami_raster_building
+b44b8e8 Merge branch 'develop' into class-count
+6521e9e remove statistics in test files
+5cd173f remove statistics_type in python
+e61df6d move optimal_clip
+
+Changelog for version 3.3.2
+================================
+
+afed399 (HEAD -> master, upstream/master) Merge pull request #2727 from Gustry/timeout
+9645fef Merge pull request #2729 from ismailsunni/fix_2720
+45eae08 Fix issue #2720
+96f3c24 fix if the request is cancelled, the http response is none
+8b44d90 handle HTTP 509 if the overpass is busy
+e820ad7 manage a timeout error from the overpass in the OSM Downloader
+431c4a4 Merge pull request #2722 from Gustry/fix-network-master
+bafaca7 fix delete network reply after a download
+9f610ef Merge pull request #2708 from timlinux/master
+24b79c3 (libby/master) Merge pull request #2701 from timlinux/master
+
+Changelog for version 3.3.1
+================================
+
+c3211e6 (HEAD -> master) ###Problem Peta Jakarta delivering python error
+
 Changelog for version 3.3.0
 ================================
 
-759fde8 (HEAD -> develop, upstream/develop, origin/develop, origin/HEAD) Merge pull request #2595 from ismailsunni/fix_failing_test
+28318d2 (HEAD -> master, origin/master) Updated changelog for 3.3.0 to include tsunami on roads changes
+988a12b (upstream/master) Merge pull request #2694 from Gustry/unit-master
+2894f66 fix metadata tsunami on roads IF
+9fc441c Merge pull request #2693 from timlinux/master
+0b3fa7a unit in road postprocessor
+6981387 Fix PetaJakarta flood style to be consistent with PJ website
+c9697b2 Merge pull request #2692 from ismailsunni/translation-3.3.1
+c6d9649 compile translation.
+654c50c Update translation from transifex.
+5f6bda5 Merge pull request #2680 from Gustry/tsunami-if
+4351c9c Merge branch 'master' into tsunami-if
+56a7ef1 add units on each rows, not on columns in the road report
+c412d06 Merge pull request #2688 from Gustry/backport-2361
+9686bf0 update to "total affected" in the road type postprocessor
+a7a734d fix #2361 count roads length in post processing instead of features
+2db13f1 call mixin init in IF
+bcc8508 add flag for add unaffected column in the road report
+0df0558 disable Flood On Raster IF for a tsunami hazard
+a7a1b0d fix tests tsunami on roads IF
+d85be58 fix roads which intersect partially the hazard raster
+92459fc Merge pull request #2683 from Gustry/fix-exposure-layer
+3e272d6 commit to the output every 1000 features
+fd59cc5 fix hide exposure layer after an IF
+f4533b7 impact report tsunami IF
+6d6df96 update tsunami on buildings IF
+b8d057b Merge pull request #2678 from Gustry/fix-unicode-exceptions
+5a13373 add tsunami IF init
+1e322e5 check if the excpetion got an exception parameter
+c2abaf8 fix tests
+333765d unicode error if layers do not overlap in French
+5e58529 Merge pull request #2665 from Gustry/mistakes
+ecaf13d Merge pull request #2667 from Gustry/fix-master-2663
+30eb5aa fix 2663 in master
+9b377e4 Typographicals errors
+4e6d0e2 add missing bullets
+cb21121 fix spaces in help
+1a3d02f mistake
+b695b9d mistakes in wizard dialog
+91dc508 Merge pull request #2645 from timlinux/master
+311820d Merge remote-tracking branch 'upstream/develop'
+ab7f485 Merge pull request #2644 from ismailsunni/translation-3.3
+3e3e866 Updated metadata.txt to final
+748e78f Resolved merge conflicts with develop
+ffe878a Compile translation strings.
+0258e92 Update translation.
+6941c8b Merge branch 'develop' of github.com:inasafe/inasafe into translation-3.3
+a897f46 (develop) Merge pull request #2641 from ismailsunni/remove_death_code
+169b645 Update string.
+a777b48 Update translation from transifex.
+d27bf4e Merge branch 'develop' of github.com:inasafe/inasafe into translation-3.3
+5ea1cb3 Remove dead code. Styles.py.
+a13105f Merge pull request #2640 from timlinux/develop
+e4fb933 Small typo fix in petajakarta help
+9c9e1e1 Fix issue with styles for flood on polygon pop when class field is an int
+b4715a1 Merge pull request #2638 from timlinux/develop
+21f77c0 Merge pull request #2639 from ismailsunni/update_data_test
+3c1d3f5 Remove unused method. Trigerring travis.
+a8c7f5e Update strings.
+f37c3de Update translation from transifex
+c32f659 Merge branch 'develop' of github.com:inasafe/inasafe into translation-3.3
+2cdf084 Use FloatTuple for resolution in data test metadata xml.
+d5a8f4f Merge pull request #2472 from timlinux/fix-2471
+91771f1 (origin/fix-2471, fix-2471) Updated style and XML template for PetaJakarta
+602577a Fixups for petajakarta flood styles
+f1b8c82 Revert changes diverging from upstream
+b01c57c Merge changes from upstream
+4b9428d Metadata updates
+b7b4d19 Update strings.
+d1b6886 Update translation from transifex.
+c2ed2c6 Merge remote-tracking branch 'inasafe/develop' into translation-3.3
+6c30014 Merge pull request #2551 from Samweli/develop
+8694c26 Merge pull request #2634 from ismailsunni/fix_2553_hair_loss
+5656613 Fix docstring for classes.
+4bdd1f5 Remove misleading comments.
+3b3d1a4 Merge pull request #2635 from inasafe/issue-template-2
+2d53e23 (upstream/issue-template-2) Create ISSUE_TEMPLATE.md
+b208e96 PEP8
+df05ca7 Add FloatTuple property for resolutions.
+9c8c029 Update data test from tuple to float (resolution)
+24d0880 Fix merged conflict.
+3e7f60b Use resolution as float, not tuple.
+40f8260 Add project for the issue.
+1c84f91 Fix expected values.
+4c67b81 Move test dock regression to separated file.
+b2f20bb Remove unused test data.
+5b3cc26 Merge pull request #2627 from Gustry/type-error
+1afc59e Updated PJ downloader to work with new API. Removed date and area level options
+9f75b4e Resolved merge conflicts
+37d2e6e Resolved merge conflicts
+e38f5da A little formatting change to wizard
+5e70990 Merge pull request #2633 from ismailsunni/fix_2623_json_seriazible
+d5db6ed Remove unused code.
+81ab832 Move encoder to different file and pep8.
+22bbf48 Add more cases for encoder.
+a4b6c37 Make the metadata json work for date.
+d2eb7ea Add case for QUrl for json metadata writing.
+b261b60 Make metadata able to read datetime from json.
+3cd36c2 Add more case for json write.
+7ddb2ca Merge pull request #2601 from lucernae/develop_functionality
+defefad Add special encoder class for inasafe metadata
+121d57d Add url and date in the xml
+6012e3c Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop_functionality
+c20625b fix #2626 be sure that we have unicode for unique values from a layer
+6c7379b Merge pull request #2621 from Gustry/extent
+d4cff80 Merge pull request #2622 from ismailsunni/fix_legend
+2b80262 Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop_functionality
+121010f Major configuration update:
+fdf22c9 Add Readme for InaSAFE-Headless
+e0097f1 Uses python requests to download file
+c0775e4 check if user_extent is None
+7cdb135 Add more suitable data test.
+56f94ac Fix legend to use greater number than preious range.
+ccc0474 fix #2604 check if the user_extent is well defined
+14c1fa0 Merge pull request #2620 from Gustry/osm
+a3af306 Merge branch 'develop' into osm
+1e6d414 Move celeryconfig declaration
+9956c57 Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop_functionality
+0c188d4 Merge pull request #2616 from ismailsunni/fix_2603_update_LanguageCode
+f61b724 Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop_functionality
+478a8c7 update keywords for the OSM tile layer
+6806b19 updated test with new changes
+eaf3e92 Merge pull request #2619 from Gustry/fix-2618-extent
+0d5f06b fix 2618 : x min and x max in GUI
+3585976 Merge branch 'develop' of github.com:AIFDR/inasafe into develop
+1dafc0d impact layer now showing YES zone only
+6b26997 Merge pull request #2608 from Gustry/network
+a69537d (origin/inasafe-2553) Merge remote-tracking branch 'upstream/develop' into inasafe-2553
+e178a69 Update string.
+e361bb4 Update from transifex.
+9f2110c Merge branch 'develop' of github.com:inasafe/inasafe into translation-3.3
+00efde9 Merge pull request #2614 from ismailsunni/fix_2612
+6815434 Merge pull request #2617 from ismailsunni/develop
+940a74b Merge branch 'develop' of github.com:inasafe/inasafe into develop
+1418f67 Fix typo.
+f7d2a0b Update translation.
+28481f5 Update translation from transifex.
+da5980b Merge branch 'develop' of github.com:inasafe/inasafe into translation-3.3
+24ad164 Add new end line if not exist in metadata.
+c89a6f1 removed no zone featurea in impact layer
+9d871d6 Merge pull request #2615 from Gustry/qgis_version
+f81ea1c Update LanguageCode to English
+a01e238 qgis version and language in osm downloader url
+5da9d0e fix test for <2.11
+2513c3e Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop_functionality
+efe9b1c fix empty environment variable cases
+ba89edc fix test
+8182d77 Change single to once, and reformat Tanzani minimum needs to be more readable.
+093420a Add values to map legend. Fix #2612
+0ba6fb9 Merge pull request #2611 from ismailsunni/fix_2609_target_field
+56c6484 PEP8
+f263dd2 Add missing keyword in IF Raster Tsunami #2609.
+cd7c751 Merge pull request #2606 from ismailsunni/fix_2605
+6f775c6 fix #2588 remove the URL request if we get the data
+e73b809 Merged ismailsunni:Samweli-develop
+53ee3fe returned test data state
+38ddf93 returned deleted exposure.sqlite file
+4ab8bd9 Merge branch 'develop' of github.com:AIFDR/inasafe into develop
+8bc5d19 Fix typo that make the calculation weird.
+98fafa2 Update test control.
+73b2668 Merge remote-tracking branch 'ismail/Samweli-develop' into Samweli-develop
+310c58e Update unit test.
+3a9c82e Add Null value in the data test.
+4e4ff92 Merge branch 'develop' of https://github.com/Samweli/inasafe into develop
+a3435e4 Changed population to people
+cdd472c Fix #2605. Read from xml first then from keywords.
+d578633 Add invalid .keywords file for testing #2605. It will fail on test_dock.py:test_validate.
+ed3b8f6 Fix misleading exception message.
+0453e33 More change from population to people.
+d7ae9bc For #2554 - explicitly test with resampling enabled and disabled
+040ecb1 Merge branch 'develop' of github.com:ismailsunni/inasafe into develop
+e8d1869 resolving conflicts
+a9355d5 Working test for 2553 when resampling is off
+dbec594 (inasafe-2553) Fix error trying to compare message in test because it is not text
+c2570ad Added also test to check that keywords have not been sideloaded from another layer
+b64f9f0 Merge remote-tracking branch 'upstream/develop' into inasafe-2553
+669ab24 Updated test datasets to fix keywords and ensure allow resampling and not allow resampling are set properly
+fab9718 Update test file metadata, add read iso metadata tasks
+dee103c Change population to people.
+86fbdac Add notes in the report about Null value
+29bdf6b Add Null value in the data test.
+6a3940f Accept Null as zero.
+b2828e3 Merge branch 'develop' of github.com:inasafe/inasafe into Samweli-develop
+ec0cd70 Merge pull request #2602 from Gustry/tr
+b563201 remove translation in the OSM downloader test file
+a6868b7 refactor analysis changes of inasafe 3.3
+41549b0 Updated tests for 2553
+0deea81 Merge pull request #2444 from lucernae/develop_functionality
+df2ac50 Fix tests: update keyword file read tests
+7c052e4 PEP8 in wizard.
+8ca7245 Refactor variable name.
+536f73f Add new string for wizard per #2596
+7e087d1 Add more explanation for extra keywords.
+de7d7b6 For #2596, fix missing constant question and add area in population.
+0014ab6 Use title case for layer name.
+e9e8f2f Merge branch 'develop' of https://github.com/Samweli/inasafe into Samweli-develop
+60a9cf2 Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop_functionality
+ce9d08e Merge pull request #2536 from lucernae/realtime-flood
+351ccd2 Merge branch 'realtime-flood' of github.com:lucernae/inasafe into realtime-flood
+6c6d6e0 Merge branch 'develop' of http://github.com/AIFDR/inasafe into realtime-flood
+0a0fe6e Merge pull request #2492 from timlinux/standards
+da77d6c (origin/standards) Fix unintended indent
+840f0de Fixed indentation error
+0259dca Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop_functionality
+1e694c7 develop headless celery based task
+7321b56 (standards) Merge remote-tracking branch 'upstream/develop' into standards
+4c8c9aa Small typo fix
+f0bc833 Merge remote-tracking branch 'upstream/develop' into inasafe-2553
+b90ec4f Merge pull request #2597 from timlinux/develop
+498856e Updates inasafe_data sha to use qmls tagged as version 2.8.1 Wien
+476a9b6 Fix formatting in metadata.txt
+313ffd2 Standardise style version in all qmls
+2b16341 Merged changes from develop and resolved conflicts
+759fde8 Merge pull request #2595 from ismailsunni/fix_failing_test
 8485a67 PEP8
 51bc9d8 Fix failed test.
 42b4463 Merge pull request #2564 from Gustry/fix-2468
+8ef57db (ismail/translation-3.3) Update translation strings.
+6ffaa94 Update translation from transifex on 25 Jan 2016.
+af41f83 (rizky/realtime-flood) Merge branch 'develop' of github.com:AIFDR/inasafe into realtime-flood
+4de0caa Update keyword version to 3.3, and uses .xml keywords file
 63e3696 (etienne/develop) Merge pull request #2542 from ismailsunni/tsunami_raster_building_if
 b1dcf1c Merge pull request #2591 from ismailsunni/fix_2410_error_report
 083c2b9 (ismail/tsunami_raster_building_if) Merge branch 'develop' of github.com:inasafe/inasafe into tsunami_raster_building_if
@@ -13,14 +616,24 @@ af9d701 (ismail/fix_2410_error_report) Better building usage count. Add categori
 4fe001e (ismail/fix_2235_huge_difference) Add more detail in unit test
 1a6ef37 Add the matrix not the number of displacement. Fix #2235
 9d904a0 Tidy up code.
+320c0bc Moved #2553 test to dock
+3aeef46 Merge remote-tracking branch 'upstream/develop' into inasafe-2553
 0ba5f8f (ismail/develop) Merge pull request #2580 from ismailsunni/fix_2529_zero_transparent
 35442b6 (ismail/fix_2529_zero_transparent) Merge branch 'develop' of github.com:inasafe/inasafe into fix_2529_zero_transparent
 bfd5ef0 Merge pull request #2586 from ismailsunni/fix_2585_qdate
 58803ea Fix typo that makes the problem before.
 1a7ee4e (ismail/fix_2585_qdate) Show only date in keyword wizard date selection.
 7806efa Show proper format of date in dock and wizard.
+485d354 Add notify REST API when new shakemap is pushed
+c438037 Add error checker for incomplete grid.xml
+2cc1bc3 Merge branch 'realtime-flood' of github.com:lucernae/inasafe into realtime-flood
+4672133 Merge branch 'develop' of http://github.com/AIFDR/inasafe into realtime-flood
+868d5e5 issue #2438: add tests for issue
+71ed12d Merge branch 'develop' of github.com:AIFDR/inasafe into develop
+2a6692f corrected values in impact layer style
 efda664 Fix merged conflict.
 16b2ecf Merge pull request #2582 from Gustry/clip_parameters
+e913246 changed the way of creating impact layer style
 cbfc4e3 (etienne/clip_parameters) pep8
 53a1fe6 store the viewport extent instead of the map canvas
 58f8b8d Merge branch 'develop' of github.com:inasafe/inasafe into fix_2529_zero_transparent
@@ -29,13 +642,19 @@ faf9cfa Set all transparency to 0 if not value = 0
 27d04f7 (etienne/fix-2468) add threshold to earthquake
 4eacdb6 move var in base.py
 bcf789d fix clip_parameters in analysis_handler
+2a3331d Merge branch 'develop' of github.com:AIFDR/inasafe into develop
+de7d7e3 changed impact layer style creation
 6962546 revert wrong commit on test data
 ea580ca fix aggregation layer setter
 31c9616 fix errors
 a34c7e0 move clip_parameters
 bf69f4b Merge pull request #2581 from ismailsunni/fix_2530_no_unaffected
+8ba064d added checker for population number
 125395e fix DOCK test init
 a70108e disable building threshold in earthquake
+a14a6cb Merge branch 'develop' of github.com:AIFDR/inasafe into develop
+358100f updated comment on the new function
+f65cb35 fixed logic for querying hazard levels
 7080c04 fix docstring and typo
 16ed41a Merge pull request #2579 from Gustry/crs
 d20904e Merge branch 'develop' of github.com:inasafe/inasafe into tsunami_raster_building_if
@@ -45,6 +664,8 @@ a3ff9d8 Update data test.
 394c622 Set transparent for raster value = 0. Per #2529.
 c6cd621 move clip_parameters function in IF
 1b47004 use QgsCoordinateReferenceSystem instead of integer EPSG code
+a95bc0f Merge branch 'develop' of github.com:AIFDR/inasafe into develop
+c55f123 refactored code in the new IF
 4383b98 Merge pull request #2578 from Gustry/message
 7faaeb8 move message prerun
 4f54274 Merge pull request #2577 from ismailsunni/fix_2569_url_field
@@ -55,6 +676,8 @@ f9c7879 (ismail/fix_2569_url_field) Clean up unused code in keyword_io.
 cef1a5f fix test, change AggregationCategorical to BuildingType postprocessing
 139a696 add building_report_threshold in every IF using building mixin
 63506e4 add maximum value
+66d2423 Merge branch 'develop' of github.com:AIFDR/inasafe into develop
+88d555b changed new IF exposure unit to count
 0d9e9fa Merge branch 'develop' into fix-2468
 94f508f fix text : set self.building.report_threshold
 62db93d use SafeLayer in Analysis
@@ -75,6 +698,8 @@ e30ff1d (ismail/fix_apostrof) Fix apostrof.
 707b667 Merge pull request #2563 from Gustry/space
 ea4c0d5 fix missing space
 d10d4d2 Merge pull request #2557 from Gustry/safe-layers
+6852bef Update strings.
+f011732 Pull translation from transifex.
 3015911 fix missing spaces
 5d861db downgrade versionadded in safe_layer
 d5ae660 Merge pull request #2559 from Gustry/clip-param
@@ -83,17 +708,26 @@ d5ae660 Merge pull request #2559 from Gustry/clip-param
 ab7dfca (ismail/value_mapping_key) Fix test.
 3b1e574 Use definition's key as key in value_map keyword not definition's name.
 6f5745e clip_parameters : replace the list by a dictionary
+661c68f Use unaligned clips for test data for 2553
 39f90cd add docstrings to generate_insufficient_overlap_message
 a763fac add methods to safeLayer
 01c315e refactoring signals in safe
+2879139 added minimum needs function in the IF
 6e59f43 refactoring signals
 5d059d7 use safe.utilities.i18n.tr() instead self.tr
+df04100 Merge branch 'develop' of github.com:AIFDR/inasafe into develop
+e5d3d91 removed usage of area_type in IF analysis
 a06019a Merge pull request #2554 from Gustry/etienne
 9dc1b85 add myself to travis
+28fead4 fixed test_run in new IF
+971a021 updated the test for IFCW
 5db8f80 Merge pull request #2550 from ismailsunni/revert_deleted
 d4fd93b (ismail/revert_deleted) Update data test.
 7e460c3 Update data test.
 68dbe88 Revert accidentally delete.
+a8d0c81 fixed 5 travis fails
+45da907 fixed conflicts with develop branch
+4edc8e7 changes according to #2543
 08960bc Merge pull request #2546 from ismailsunni/fix_2385_sorting_hazard_classification
 d91ab1f (ismail/fix_2385_sorting_hazard_classification) Fix failed test in test_wizard_dialog.
 edf8442 Change to High, Medium, Low Hazard Zone
@@ -162,10 +796,15 @@ e42c31f Add test_core.py
 0298f65 Make metadata able to write IF provenance.
 d4c46f6 Fix test due to update if provenance.
 637ed81 Adding method to save provenance to metadata object from dictionary.
+8dfd8d2 issue #2438: add tests for issue
+f03600c issue #2438: fix location source to come from BMKG
+5e8d555 Merge branch 'realtime-flood' of github.com:lucernae/inasafe into realtime-flood
+0c3e8b7 fix tests and refactoring
 6e81b69 Adding if provenance step.
 2aeeb1b Merge branch 'iso_keywords_2' into if_provenance
 6e9a9a3 Merge branch 'develop' of github.com:inasafe/inasafe into iso_keywords_2
 ef0fd19 Merge branch 'iso_keywords_2' into if_provenance
+8b12b37 Merge branch 'develop' of github.com:AIFDR/inasafe into realtime-flood
 6dab88c Use clone layer also for another failed test.
 3ee8147 Add new xml file for data test.
 4c39bb9 Use clone layer to avoid modifying test data.
@@ -205,6 +844,7 @@ e0adfa0 set the floodprone in blue
 3eb5730 Update hash value for inasafe_data
 a676b53 Merge pull request #2520 from Gustry/network
 0a18144 fix error message if the server is down
+b7a70de (rizky/develop_functionality) add generate report function
 a9d69b5 Skip test since it's not used anymore in the new metadata.
 c8963a6 Merge branch 'develop' of github.com:inasafe/inasafe into iso_keywords_2
 8ca8508 Merge pull request #2518 from ismailsunni/Charlotte-Morgan-develop
@@ -214,6 +854,7 @@ c8963a6 Merge branch 'develop' of github.com:inasafe/inasafe into iso_keywords_2
 7e3663e more fixes
 846b74e remove file not used
 d9feee7 ISO template fixes first pass
+2c4d918 Merge branch 'develop' of github.com:AIFDR/inasafe into develop_functionality
 9cb1233 PEP8.
 1970d54 (ismail/Charlotte-Morgan-develop) Update test for @Charlotte-Morgan's PR.
 b02e1da Merge branch 'develop' of https://github.com/Charlotte-Morgan/inasafe into Charlotte-Morgan-develop
@@ -273,6 +914,8 @@ b879727 Add keyword version to metadata if not found.
 cc8d440 Add duct type to for aggregation attribute to return None.
 5ff7094 Use default value in metadata as None.
 3191a00 Merge pull request #2512 from timlinux/less-noisy
+0924aa2 Merge branch 'develop' of http://github.com/AIFDR/inasafe into realtime-flood
+9e08a6a develop #2476: Update tests and push flood logic
 c80b5e8 Merge pull request #2511 from Gustry/network
 d8802d5 (origin/less-noisy, less-noisy) Comment out many debug messages that don't contribute much and add a lot of noise to travis logs
 889a742 Update keyword for aggregation.
@@ -291,13 +934,18 @@ cceff90 Fix for changing key in aggregation.
 5805081 Update metadata for aggregstion layer.
 14b3d90 Add FloatProperty for metadata.
 2f68c30 Update keywords for aggregation.
+9b94c60 Resolved merge conflicts
 3db5354 replace potential IDP by evacuation center
+04cee5d Merge remote-tracking branch 'origin/develop' into standards
 0745de6 Added note about using date picker for date in keywords editor.
 bbe7182 Merge pull request #2509 from borysiasty/develop
 cef742d Added flood prone areas change to metadata
 0fd0703 Merge pull request #2501 from Gustry/floodprone
+e51122a Merge branch 'develop' of github.com:AIFDR/inasafe into realtime-flood
+9219279 Resolved merge conflicts with master
 da783ea Change key for metadata in test.
 8ec2bce Add boolean property
+3a03795 Merge branch 'develop' into standards
 47e2099 Merge pull request #2498 from timlinux/develop
 69ce4a5 Update data test keyword
 6327e0a update metadata
@@ -359,8 +1007,12 @@ bc28009 Fix for failing test with ITB Bayes eq function introduction
 2f21e24 Update keywords file.
 de1f217 Merge pull request #2493 from ismailsunni/changelog-3.2.4
 4739796 Fix unicode reading.
+d4ee522 Nicer asserts for wizard dialog
+3bdd18f Dont use message param for unittest builtins as you get better diagnostics if you leave it out
 26ebea9 (ismail/changelog-3.2.4) Fix travis and pypi link in README.
 cd29284 Add changelog: add new IF Classified polygon hazard on polygon people
+3c3bed5 develop #2476: major proper refactor and add realtime flood
+e29fb0e Formatting cleanups to wizard
 fd68360 Merge pull request #2487 from borysiasty/develop
 2cabd21 Merge pull request #2483 from timlinux/keywords
 148acd5 Temporary skip unit test.
@@ -382,6 +1034,7 @@ fb9fd86 Always return keyword version as string.
 548edb5 Add update_from_dict method for metadata.
 95254f1 Fix unit test.
 31a1db5 Add unit test
+0d1f4be develop #2476: refactor realtime
 3839486 Comment --with-id that makes the problem in ubuntu nosetests.
 9b1951d Fix tests for test_clip_vector_with_unicode
 d67bac1 Fix failed test: test_read_keywordless_layer.
@@ -391,12 +1044,16 @@ d67bac1 Fix failed test: test_read_keywordless_layer.
 897f584 Merge branch 'develop' of github.com:inasafe/inasafe into develop
 22c1fe1 Remove old xml metadata.
 0459e99 Merge pull request #2486 from ismailsunni/wizard_additional_keywords
+b4c711c develop #2476: support for PetaJakarta Floodmap
 797aec1 [IFCW] After registering keywords in the KW sub-thread, don't display again the step from where it was called. Fixes #2347
 0e1ba07 pep8 and Pylint fixes
 6660f30 [Wizard] Add Keywords Creation Wizard confirmation step. Fixes #2422
 ca08c97 Merge branch 'develop' of github.com:AIFDR/inasafe into develop
 c3a093d passed pep8
+db1d325 Dont crash PJ downloader when @charlotte-morgan says she does not wish to create the non-existing download directory.
+e3dfead Refactor PetaJakarta downloader to accommodate requests from @charlotte-morgan. See https://github.com/inasafe/inasafe/pull/2472
 bb849bf (ismail/wizard_additional_keywords) Merge branch 'develop' of github.com:inasafe/inasafe into wizard_additional_keywords
+069fa03 Resolved merge conflicts
 8c3ed16 Add test for additional keywords.
 f611e13 Merge pull request #2478 from timlinux/fix-2475
 fa49b9f (origin/keywords, keywords) Fix for failing keywords tests
@@ -407,6 +1064,9 @@ b9e7942 Added wrap slash functions in messaging so that long filename cells can 
 964917d Working implementation of on the fly projection for polygon flood on building points/polys. fix #2475
 2d87c4d Merge branch 'develop' into fix-2475
 fd925f9 Initial implementation for #2475 - support On the fly projection in IF
+0acd4d5 Added an entry for PetaJakarta downloader to metadata.txt
+a38e216 Implementation for #2471 - add support for loading PetaJakarta data in QGIS
+c471a96 First order implementation prototype for adding petajakarta data to InaSAFE
 dc2433e refactored run function in the new IF
 489bbad added icon for area
 1aead6b (ismail/master) Merge pull request #2466 from timlinux/master
@@ -439,6 +1099,8 @@ de81ae4 Fix strings issues.
 df5f474 Update translation.
 7ac7137 Update strings.
 c7f4ecc Merge branch 'develop' of github.com:AIFDR/inasafe into translation-3.2.2
+cb81a44 Fix returning IF ids in list-function in inasafe
+fe9c8c0 Modify inasafe-cli to return filtered IF list
 6f40753 edited tests to comply with travis
 95a53e1 a fix for one travis failure
 c29bceb added check for area geometry before any calculation
@@ -463,6 +1125,8 @@ adcff11 added % symbol to all percentages in report
 b52fcc3 Merge branch 'develop' of github.com:AIFDR/inasafe into develop
 56750c1 (inasafe-2446) Put the OSM layer always to the bottom of the legend.
 00bd2e6 Added option to add OSM tile layer
+f71c7e7 Move misplaced import
+ed5340c Wrap function to read keyword file in KeywordIO
 1c090af change on test layer legend index on dock
 eb5cb4b updated test_run on the new IF
 bfc2cef added licences for sample data

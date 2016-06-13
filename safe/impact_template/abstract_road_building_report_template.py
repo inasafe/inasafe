@@ -81,32 +81,39 @@ class AbstractRoadBuildingReportTemplate(TemplateBase):
             table.caption = v['caption']
             attributes = v['attributes']
 
-            header = m.Row()
-            # Bold and align left the 1st one.
-            header.add(m.Cell(attributes[0], header=True, align='left'))
-            for attribute in attributes[1:]:
-                # Bold and align right.
-                header.add(m.Cell(attribute, header=True, align='right'))
-            header.add(m.Cell('Total', header=True, align='right'))
-            table.add(header)
+            if attributes:
+                header = m.Row()
+                # Bold and align left the 1st one.
 
-            for field in v['fields']:
-                row = m.Row()
-                # First column is string
-                row.add(m.Cell(field[0]))
-                total = 0
-                for value in field[1:]:
-                    try:
-                        val = int(value)
-                        total += val
-                        # Align right integers.
-                        row.add(m.Cell(format_int(val), align='right'))
-                    except ValueError:
-                        # Catch no data value. Align left strings.
-                        row.add(m.Cell(value, align='left'))
+                header.add(m.Cell(attributes[0], header=True, align='left'))
+                for attribute in attributes[1:]:
+                    # Bold and align right.
+                    header.add(m.Cell(attribute, header=True, align='right'))
+                header.add(m.Cell('Total', header=True, align='right'))
+                table.add(header)
 
-                row.add(m.Cell(format_int(int(round(total))), align='right'))
-                table.add(row)
+                for field in v['fields']:
+                    row = m.Row()
+                    # First column is string
+                    row.add(m.Cell(field[0]))
+                    total = 0
+                    for value in field[1:]:
+                        try:
+                            val = int(value)
+                            total += val
+                            # Align right integers.
+                            row.add(m.Cell(format_int(val), align='right'))
+                        except ValueError:
+                            # Catch no data value. Align left strings.
+                            row.add(m.Cell(value, align='left'))
+
+                    row.add(m.Cell(
+                        format_int(int(round(total))), align='right'))
+                    table.add(row)
+
             message.add(table)
+
+            for note in v['notes']:
+                message.add(m.EmphasizedText(note))
 
         return message

@@ -1649,6 +1649,12 @@ def _intersect_exposure_with_aggregation(
                 # need to do intersection
                 out_geom = geom.intersection(exp_geom)
                 out_feature = QgsFeature(out_fields)
+                if not out_geom:
+                    LOGGER.warning('out_geom is None')
+                    continue
+                if not out_feature:
+                    LOGGER.warning('out_feature is None')
+                    continue
                 out_feature.setGeometry(out_geom)
                 out_feature.setAttributes(
                     exp_feature.attributes() + [agg_name])

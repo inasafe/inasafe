@@ -10,7 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.common.utilities import OrderedDict
+from safe.common.utilities import OrderedDict, get_thousand_separator
 from safe.defaults import building_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
@@ -78,6 +78,13 @@ class VolcanoPointBuildingFunctionMetadata(ImpactFunctionMetadata):
                 'affected by each hazard zones.'),
             'limitations': [],
             'citations': [],
+            'map_title': tr('Buildings affected by volcanic buffered point'),
+            'legend_title': tr('Building count'),
+            'legend_units': tr('(building)'),
+            'legend_notes': tr(
+                'Thousand separator is represented by %s' %
+                get_thousand_separator()),
+            'layer_name': tr('Buildings affected by volcanic buffered point'),
             'layer_requirements': {
                 'hazard': {
                     'layer_mode': layer_mode_classified,
