@@ -270,7 +270,7 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
             style_type='categorizedSymbol')
 
         extra_keywords = {
-            'map_title': self.metadata().key('map_title'),
+            'map_title': tr('Affected Land Cover'),
             'target_field': self.target_field
         }
 
@@ -279,7 +279,7 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
         # Create vector layer and return
         impact_layer = Vector(
             data=impact_layer,
-            name=self.metadata().key('layer_name'),
+            name=tr('Land cover affected'),
             keywords=impact_layer_keywords,
             style_info=style_info)
 

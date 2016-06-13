@@ -23,7 +23,9 @@ from safe.impact_functions.generic.classified_polygon_building \
     import ClassifiedPolygonHazardBuildingFunctionMetadata
 from safe.common.exceptions import (
     InaSAFEError, ZeroImpactException, KeywordNotFoundError)
-from safe.common.utilities import color_ramp
+from safe.common.utilities import (
+    get_thousand_separator,
+    color_ramp)
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
 from safe.engine.interpolation_qgis import interpolate_polygon_polygon
@@ -184,7 +186,8 @@ class ClassifiedPolygonHazardBuildingFunction(
         colours = color_ramp(len(categories))
         style_classes = []
 
-        for i, hazard_zone in enumerate(self.affected_buildings.keys()):
+        i = 0
+        for hazard_zone in self.affected_buildings.keys():
             style_class = dict()
             style_class['label'] = tr(hazard_zone)
             style_class['transparency'] = 0
@@ -192,6 +195,7 @@ class ClassifiedPolygonHazardBuildingFunction(
             style_class['size'] = 1
             style_class['colour'] = colours[i]
             style_classes.append(style_class)
+            i += 1
 
         # Override style info with new classes and name
         style_info = dict(
@@ -200,14 +204,22 @@ class ClassifiedPolygonHazardBuildingFunction(
             style_type='categorizedSymbol'
         )
 
+        # For printing map purpose
+        map_title = tr('Buildings affected')
+        legend_title = tr('Building count')
+        legend_units = tr('(building)')
+        legend_notes = tr(
+            'Thousand separator is represented by %s' %
+            get_thousand_separator())
+
         impact_data = self.generate_data()
 
         extra_keywords = {
             'target_field': self.target_field,
-            'map_title': self.metadata().key('map_title'),
-            'legend_notes': self.metadata().key('legend_notes'),
-            'legend_units': self.metadata().key('legend_units'),
-            'legend_title': self.metadata().key('legend_title')
+            'map_title': map_title,
+            'legend_notes': legend_notes,
+            'legend_units': legend_units,
+            'legend_title': legend_title
         }
 
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
@@ -215,7 +227,7 @@ class ClassifiedPolygonHazardBuildingFunction(
         # Create vector layer and return
         impact_layer = Vector(
             data=interpolated_layer,
-            name=self.metadata().key('layer_name'),
+            name=tr('Buildings affected'),
             keywords=impact_layer_keywords,
             style_info=style_info)
 
