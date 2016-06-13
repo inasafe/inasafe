@@ -14,7 +14,7 @@ Contact : ole.moller.nielsen@gmail.com
 __author__ = 'lucernae'
 __date__ = '24/03/15'
 
-from safe.common.utilities import OrderedDict
+from safe.common.utilities import OrderedDict, get_thousand_separator
 from safe.defaults import default_minimum_needs
 from safe.defaults import (
     default_gender_postprocessor,
@@ -90,6 +90,13 @@ class ContinuousHazardPopulationMetadata(ImpactFunctionMetadata):
                 'be impacted in each category.'),
             'limitations': [tr('Only three categories can be used.')],
             'citations': [],
+            'map_title': tr('People in each hazard areas (low, medium, high)'),
+            'legend_title': tr('Number of People'),
+            'legend_units': tr('(people per cell)'),
+            'legend_notes': tr(
+                'Thousand separator is represented by %s' %
+                get_thousand_separator()),
+            'layer_name': tr('Population might be impacted'),
             'layer_requirements': {
                 'hazard': {
                     'layer_mode': layer_mode_continuous,

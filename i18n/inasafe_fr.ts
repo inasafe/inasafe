@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="2.0" language="fr" sourcelanguage="">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="fr" sourcelanguage="" version="2.0">
 <context>
     <name>@default</name>
     <message>
@@ -1225,7 +1224,7 @@
         <translation>Décomposition par type de route</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="435"/>
+        <location filename="impact_function.py" line="422"/>
         <source>Roads inundated</source>
         <translation>Routes inondées</translation>
     </message>
@@ -1240,7 +1239,7 @@
         <translation>Inondé</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="495"/>
+        <location filename="impact_function.py" line="482"/>
         <source>Flooded roads</source>
         <translation>Routes inondées</translation>
     </message>
@@ -3298,7 +3297,7 @@ Vous devez tout d&apos;abord définir la catégorie à laquelle appartient votre
         <translation>Les tables de correspondance des valeurs attributaires sont utilisées pour regrouper les valeurs équivalentes. Par exemple, les polygones d&apos;inondations ayant &apos;oui&apos;, &apos;OUI&apos;, &apos;1&apos; et &apos;inondé&apos; peuvent tous être regroupés ensemble.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="436"/>
+        <location filename="impact_function.py" line="423"/>
         <source>Road inundated status</source>
         <translation>Statut des routes inondées</translation>
     </message>
@@ -4660,17 +4659,17 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
         <translation>Une personne déplacée doit être fourni avec {{ %s }} {{ %s }}/{{ %s }}/{{ %s }} de {{ %s }}. Cependant, pas moins que {{ %s }} et pas plus que {{ %s }}. Cela doit être fourni {{ %s }}.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="272"/>
+        <location filename="impact_function.py" line="262"/>
         <source>High Hazard Zone</source>
         <translation>Zone d&apos;aléas élevés</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="271"/>
+        <location filename="impact_function.py" line="261"/>
         <source>Medium Hazard Zone</source>
         <translation>Zone d&apos;aléas modérés</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="270"/>
+        <location filename="impact_function.py" line="260"/>
         <source>Low Hazard Zone</source>
         <translation>Zone d&apos;aléas faibles</translation>
     </message>
@@ -5167,32 +5166,32 @@ Notez que les caractères admis pour le préfixe sont A-Z, a-z, 0-9 et les carac
         <translation>Le pallier est utilisé pour regrouper les petits groupes de bâtiment qui sont inférieurs à ce pallier.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="269"/>
+        <location filename="impact_function.py" line="259"/>
         <source>Dry Zone</source>
         <translation>Zone sèche</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="273"/>
+        <location filename="impact_function.py" line="263"/>
         <source>Very High Hazard Zone</source>
         <translation>Zone d&apos;aléas très élevées</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="289"/>
+        <location filename="impact_function.py" line="279"/>
         <source>Dry zone is defined as non-inundated area or has inundation depth is 0 %s</source>
         <translation>Une zone sèche est définie comme non inondée ou à une profondeur d&apos;inondation entre 0 et %s</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="292"/>
+        <location filename="impact_function.py" line="282"/>
         <source>Low tsunami hazard zone is defined as inundation depth is more than 0 %s but less than %.1f %s</source>
         <translation>La zone de danger tsunamique faible est définie avec une profondeur d&apos;inondation supérieur à 0 %s mais moins que %.1f %s</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="303"/>
+        <location filename="impact_function.py" line="293"/>
         <source>High tsunami hazard zone is defined as inundation depth is more than %.1f %s but less than %.1f %s</source>
         <translation>La zone de danger tsunamique élevée est définie avec une profondeur d&apos;inondation supérieur à %.1f %s mais moins que %.1f %s</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="309"/>
+        <location filename="impact_function.py" line="299"/>
         <source>Very high tsunami hazard zone is defined as inundation depth is more than %.1f %s</source>
         <translation>La zone de danger tsunamique très élevée est définie avec une profondeur d&apos;inondation supérieur à %.1f %s</translation>
     </message>
@@ -5925,7 +5924,7 @@ Les coefficients utilisés dans le modèle Indonésien sont x=0.62275231, y=8.03
         <translation>La couche d&apos;aléa doit être une couche tsunami raster.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="313"/>
+        <location filename="impact_function.py" line="303"/>
         <source>Roads are opened if they are in dry zone.</source>
         <translation>Les routes sont ouvertes si elles sont au sec.</translation>
     </message>
@@ -6093,10 +6092,7 @@ Les coefficients utilisés dans le modèle Indonésien sont x=0.62275231, y=8.03
         <location filename="needs_manager_dialog.py" line="515"/>
         <source>A displaced person should be provided with %(default)s %(unit)s/%(units)s/ of %(unit abbreviation)s %(resource name)s. Though no less than %(minimum allowed)s and no more than %(maximum allowed)s. This should be provided %(frequency)s.default{{ Default }}</source>
         <comment>unit{{ Unit }}</comment>
-        <translation>
-            <numerusform>Une personne déplacée doit être fourni avec %(default)s %(unit)s/%(units)s/ de %(unit abbreviation)s %(resource name)s. Cependant, pas moins que %(minimum allowed)s et pas plus que %(maximum allowed)s. Cela doit être fourni %(frequency)s.default{{ Default }}</numerusform>
-            <numerusform>Une personne déplacée doit être fourni avec %(default)s %(unit)s/%(units)s/ de %(unit abbreviation)s %(resource name)s. Cependant, pas moins que %(minimum allowed)s et pas plus que %(maximum allowed)s. Cela doit être fourni %(frequency)s.default{{ Default }}</numerusform>
-        </translation>
+        <translation><numerusform>Une personne déplacée doit être fourni avec %(default)s %(unit)s/%(units)s/ de %(unit abbreviation)s %(resource name)s. Cependant, pas moins que %(minimum allowed)s et pas plus que %(maximum allowed)s. Cela doit être fourni %(frequency)s.default{{ Default }}</numerusform><numerusform>Une personne déplacée doit être fourni avec %(default)s %(unit)s/%(units)s/ de %(unit abbreviation)s %(resource name)s. Cependant, pas moins que %(minimum allowed)s et pas plus que %(maximum allowed)s. Cela doit être fourni %(frequency)s.default{{ Default }}</numerusform></translation>
     </message>
     <message>
         <location filename="wizard_strings.py" line="140"/>
@@ -6234,7 +6230,7 @@ Les coefficients utilisés dans le modèle Indonésien sont x=0.62275231, y=8.03
         <translation>Autre type de structure fréquemment cartographié.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="297"/>
+        <location filename="impact_function.py" line="287"/>
         <source>Medium tsunami hazard zone is defined as inundation depth is more than %.1f %s but less than %.1f %s</source>
         <translation>La zone de danger tsunamique médium est définie quand la profondeur d&apos;inondation est supérieur à %.1f %s mais moi que %.1f %s</translation>
     </message>
@@ -6329,7 +6325,7 @@ Les coefficients utilisés dans le modèle Indonésien sont x=0.62275231, y=8.03
         <translation>Le pallier de l&apos;aléa catégorisé comme Zone de Danger Moyen en mètre. La zone est catégorisée comme Zone de Danger Moyen si la profondeur d&apos;inondation est supérieur au Pallier de Zone de Danger Faible et inférieur au Pallier de Zone de Danger Moyen.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="311"/>
+        <location filename="impact_function.py" line="301"/>
         <source>Roads are closed if they are in low, medium, high, or very high tsunami hazard zone.</source>
         <translation>Les routes sont fermées si elles sont dans une zone tsunamique avec un risque faible, moyen, élevé ou très élevé.</translation>
     </message>
@@ -6343,7 +6339,7 @@ Les coefficients utilisés dans le modèle Indonésien sont x=0.62275231, y=8.03
     </message>
     <message>
         <location filename="about_dialog.py" line="76"/>
-        <source>Edit by Hugo Gardu&#xc3;&#xb1;o from The Noun Project</source>
+        <source>Edit by Hugo GarduÃ±o from The Noun Project</source>
         <translation>Édité par Hugo Garduño de The Noun Project</translation>
     </message>
     <message>
@@ -6404,8 +6400,8 @@ Les coefficients utilisés dans le modèle Indonésien sont x=0.62275231, y=8.03
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Helvetica Neue,Helvetica,Segoe UI,Arial,freesans,sans-serif&apos;; font-size:14px; color:#333333; background-color:#ffffff;&quot;&gt;InaSAFE is free software that provides a simple but rigorous way to combine data from communities, local governments and scientists to help assess the possible impact of future disaster events on communities, assets and infrastructure. It uses innovative science and crowd sourcing techniques (OpenStreetMap, OSM) to create realistic disaster scenarios for better planning, preparedness and response activities. It is in demand by disaster managers across Indonesia and around the world. &lt;/span&gt;&lt;/p&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Helvetica Neue,Helvetica,Segoe UI,Arial,freesans,sans-serif'; font-size:14px; color:#333333; background-color:#ffffff;&quot;&gt;InaSAFE is free software that provides a simple but rigorous way to combine data from communities, local governments and scientists to help assess the possible impact of future disaster events on communities, assets and infrastructure. It uses innovative science and crowd sourcing techniques (OpenStreetMap, OSM) to create realistic disaster scenarios for better planning, preparedness and response activities. It is in demand by disaster managers across Indonesia and around the world. &lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Helvetica Neue,Helvetica,Segoe UI,Arial,freesans,sans-serif&apos;; font-size:14px; color:#333333; background-color:#ffffff;&quot;&gt;InaSAFE was developed jointly by the Indonesia&apos;s National Disaster Management Agency (BNPB), the Australian Government and the World Bank - Global Facility for Disaster Reduction and Recovery (World Bank-GFDRR).&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -6419,12 +6415,12 @@ p, li { white-space: pre-wrap; }
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;These are the minimum steps you need to follow in order to use InaSAFE:&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;1. Add at least one hazard layer (e.g. earthquake MMI) to QGIS.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;2. Add at least one exposure layer (e.g. structures) to QGIS.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;3. Make sure you have defined keywords for your hazard and exposure layers. You can do this using the keywords icon in the InaSAFE toolbar.&lt;/span&gt;&lt;/p&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;These are the minimum steps you need to follow in order to use InaSAFE:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Cantarell'; font-size:11pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;1. Add at least one hazard layer (e.g. earthquake MMI) to QGIS.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;2. Add at least one exposure layer (e.g. structures) to QGIS.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;3. Make sure you have defined keywords for your hazard and exposure layers. You can do this using the keywords icon in the InaSAFE toolbar.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;4. Click on the Run button in the InaSAFE panel.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -6442,7 +6438,7 @@ p, li { white-space: pre-wrap; }
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Sans&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -6455,7 +6451,7 @@ p, li { white-space: pre-wrap; }
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Sans&apos;; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -6468,7 +6464,7 @@ p, li { white-space: pre-wrap; }
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://www.bnpb.go.id/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Indonesia’s National Disaster Management Agency (BNPB)&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://dfat.gov.au/geo/indonesia/development-assistance/Pages/disaster-risk-management-in-indonesia.aspx&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Australian Government – Disaster Risk Management in Indonesia&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://www.gfdrr.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;World Bank - Global Facility for Disaster Reductions and Recovery&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
@@ -8297,7 +8293,7 @@ to
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;.SF NS Text&apos;; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'.SF NS Text'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:12pt; font-weight:600; color:#f50000;&quot;&gt;Note:&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:12pt;&quot;&gt; The above setting requires a QGIS restart to disable / enable. Error messages and diagnostic information will be posted to http://sentry.linfiniti.com/inasafe-desktop/. Some institutions may not allow you to enable this feature - check with your network administrator if unsure. Although the data is submitted anonymously, the information contained in tracebacks may contain file system paths which reveal your identity or other information from your system.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -9478,12 +9474,12 @@ p, li { white-space: pre-wrap; }
         <translation>Requis</translation>
     </message>
     <message>
-        <location filename="wizard_step_browser.py" line="414"/>
+        <location filename="wizard_step_browser.py" line="413"/>
         <source>Not a valid layer.</source>
         <translation>Pas une couche valide.</translation>
     </message>
     <message>
-        <location filename="wizard_step_browser.py" line="435"/>
+        <location filename="wizard_step_browser.py" line="434"/>
         <source>This layer&apos;s keywords or type are not suitable:</source>
         <translation>Les mots-clés ou les types de cette couche ne sont pas appropriés : </translation>
     </message>
@@ -9505,7 +9501,7 @@ p, li { white-space: pre-wrap; }
     <name>pgFcAggLayerDisjoint</name>
     <message>
         <location filename="step_fc65_agglayer_disjoint.ui" line="65"/>
-        <source>The aggregation layer and hazard layer don&apos;t intersect, i.e. they cover disjoint areas.
+        <source>The aggregation layer and hazard layer don't intersect, i.e. they cover disjoint areas.
  Please step back and select another layer.</source>
         <translation>La couche d&apos;agrégation et la couche d&apos;aléas ne se chevauchent pas, c&apos;est-à-dire qu&apos;elles couvrent des zones disjointes.
 Veuillez revenir en arrière et choisir une autre couche. </translation>
@@ -9646,7 +9642,7 @@ Veuillez revenir en arrière et choisir une autre couche. </translation>
     <name>pgFcDisJointLayers</name>
     <message>
         <location filename="step_fc45_disjoint_layers.ui" line="65"/>
-        <source>The hazard layer and exposure layer don&apos;t intersect, i.e. they cover disjoint areas.
+        <source>The hazard layer and exposure layer don't intersect, i.e. they cover disjoint areas.
  Please step back and select another layer.</source>
         <translation>Les couches d&apos;aléa et d&apos;enjeu ne s&apos;intersectent pas, par exemple elles couvrent des espaces disjoints.
 Veuillez revenir en arrière et sélectionner une autre couche.</translation>
@@ -9709,7 +9705,7 @@ Veuillez revenir en arrière et sélectionner une autre couche.</translation>
     <name>pgFcExtentDisjoint</name>
     <message>
         <location filename="step_fc75_extent_disjoint.ui" line="68"/>
-        <source>The selected extent doesn&apos;t intersect input layers.
+        <source>The selected extent doesn't intersect input layers.
  Please step back and select another layer.</source>
         <translation>L&apos;étendue sélectionnée n&apos;intersecte pas les couches de travail. 
 Revenez en arrière et sélectionnez une autre couche.</translation>
@@ -10092,7 +10088,7 @@ Revenez en arrière et sélectionnez une autre couche.</translation>
     </message>
     <message>
         <location filename="test_aggregator.py" line="104"/>
-        <source>D&#xed;str&#xdc;t&apos;s of Jakarta</source>
+        <source>DístrÜt&apos;s of Jakarta</source>
         <translation>Districts de Jakarta</translation>
     </message>
 </context>
