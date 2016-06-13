@@ -25,6 +25,7 @@ status=final
 # Optional items:
 
 changelog=
+	3.4.1 - Speed improvements for tsunami and flood impacts on roads
 	Add missing note in post processing table.
 	Add LandCover Report template.
 	Add impact data to LandCover IF.
