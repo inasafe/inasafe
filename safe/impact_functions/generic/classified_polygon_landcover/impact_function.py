@@ -279,7 +279,7 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
         # Create vector layer and return
         impact_layer = Vector(
             data=impact_layer,
-            name=tr('Land cover affected by each hazard zone'),
+            name=tr('Land cover affected'),
             keywords=impact_layer_keywords,
             style_info=style_info)
 
