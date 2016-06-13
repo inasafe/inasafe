@@ -146,17 +146,9 @@ class ClassifiedRasterHazardBuildingFunction(
         # Create style
         style_classes = [
             dict(
-                label=tr('High'),
-                value=3,
-                colour='#F31A1C',
-                transparency=0,
-                size=2,
-                border_color='#969696',
-                border_width=0.2),
-            dict(
-                label=tr('Medium'),
-                value=2,
-                colour='#F4A442',
+                label=tr('Not Affected'),
+                value=None,
+                colour='#1EFC7C',
                 transparency=0,
                 size=2,
                 border_color='#969696',
@@ -170,13 +162,22 @@ class ClassifiedRasterHazardBuildingFunction(
                 border_color='#969696',
                 border_width=0.2),
             dict(
-                label=tr('Not Affected'),
-                value=None,
-                colour='#1EFC7C',
+                label=tr('Medium'),
+                value=2,
+                colour='#F4A442',
                 transparency=0,
                 size=2,
                 border_color='#969696',
-                border_width=0.2)]
+                border_width=0.2),
+            dict(
+                label=tr('High'),
+                value=3,
+                colour='#F31A1C',
+                transparency=0,
+                size=2,
+                border_color='#969696',
+                border_width=0.2),
+        ]
         style_info = dict(
             target_field=self.target_field,
             style_classes=style_classes,
