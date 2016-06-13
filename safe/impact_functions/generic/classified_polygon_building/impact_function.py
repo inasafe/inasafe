@@ -23,7 +23,9 @@ from safe.impact_functions.generic.classified_polygon_building \
     import ClassifiedPolygonHazardBuildingFunctionMetadata
 from safe.common.exceptions import (
     InaSAFEError, ZeroImpactException, KeywordNotFoundError)
-from safe.common.utilities import color_ramp
+from safe.common.utilities import (
+    get_thousand_separator,
+    color_ramp)
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
 from safe.engine.interpolation_qgis import interpolate_polygon_polygon
@@ -200,6 +202,14 @@ class ClassifiedPolygonHazardBuildingFunction(
             style_type='categorizedSymbol'
         )
 
+        # For printing map purpose
+        map_title = tr('Buildings affected')
+        legend_title = tr('Building count')
+        legend_units = tr('(building)')
+        legend_notes = tr(
+            'Thousand separator is represented by %s' %
+            get_thousand_separator())
+
         impact_data = self.generate_data()
 
         extra_keywords = {
@@ -215,7 +225,7 @@ class ClassifiedPolygonHazardBuildingFunction(
         # Create vector layer and return
         impact_layer = Vector(
             data=interpolated_layer,
-            name=self.metadata().key('layer_name'),
+            name=tr('Buildings affected'),
             keywords=impact_layer_keywords,
             style_info=style_info)
 

@@ -26,7 +26,8 @@ from safe.common.utilities import (
     format_int,
     humanize_class,
     create_classes,
-    create_label)
+    create_label,
+    get_thousand_separator)
 from safe.impact_functions.core import (
     no_population_impact_message,
     get_key_for_value)
