@@ -121,7 +121,7 @@ def _raster_to_vector_cells(raster, ranges, output_crs):
 
             # Performance optimisation added in 3.4.1 - dont
             # waste time processing cells that have no data
-            if value == no_data or value == 0:
+            if value == no_data or value <= 0:
                 continue
 
             for threshold_id, threshold in ranges.iteritems():
