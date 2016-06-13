@@ -11,14 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-
-__author__ = 'etiennetrimaille'
-__project_name__ = 'inasafe-dev'
-__filename__ = 'test_tsunami_raster_road.py'
-__date__ = '11/03/16'
-__copyright__ = 'etienne@kartoza.com'
-
-
 import unittest
 from collections import OrderedDict
 from qgis.core import (
@@ -29,12 +21,8 @@ from qgis.core import (
     QgsVectorLayer
 )
 from PyQt4.QtCore import QVariant
-
 from safe.test.utilities import get_qgis_app, test_data_path
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-
-from safe.impact_functions.impact_function_manager\
-    import ImpactFunctionManager
+from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 # noinspection PyProtectedMember
 from safe.impact_functions.inundation.tsunami_raster_road\
     .impact_function import (
@@ -42,6 +30,14 @@ from safe.impact_functions.inundation.tsunami_raster_road\
         _raster_to_vector_cells,
         _intersect_lines_with_vector_cells)
 from safe.gis.qgis_vector_tools import create_layer
+
+__author__ = 'etiennetrimaille'
+__project_name__ = 'inasafe-dev'
+__filename__ = 'test_tsunami_raster_road.py'
+__date__ = '11/03/16'
+__copyright__ = 'etienne@kartoza.com'
+
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class TsunamiRasterRoadsFunctionTest(unittest.TestCase):
@@ -78,7 +74,7 @@ class TsunamiRasterRoadsFunctionTest(unittest.TestCase):
 
         # 1 = inundated, 2 = wet, 3 = dry
         expected_result = {
-            0: 3606,
+            0: 193,  # changed from 3606 in 3.4.1
             1: 88,
             2: 107,
             3: 114,
@@ -95,9 +91,7 @@ class TsunamiRasterRoadsFunctionTest(unittest.TestCase):
         for feature in impact_data:
             inundated_status = feature[impact_function.target_field]
             result[inundated_status] += 1
-
-        message = 'Expecting %s, but it returns %s' % (expected_result, result)
-        self.assertEqual(expected_result, result, message)
+        self.assertDictEqual(expected_result, result)
 
     def test_filter(self):
         hazard_keywords = {
