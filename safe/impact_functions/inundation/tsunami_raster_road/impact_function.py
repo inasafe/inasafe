@@ -104,7 +104,7 @@ def _raster_to_vector_cells(raster, ranges, output_crs):
     # nodata value from the dataset properly in the python API
     dataset = gdal.Open(raster.source())
     no_data = dataset.GetRasterBand(1).GetNoDataValue()
-    dataset = None  # close the dataset
+    del dataset  # close the dataset
     y_cell_height = - cell_height
     LOGGER.debug('num row: %s' % raster_rows)
     LOGGER.debug('num column: %s' % raster_cols)
@@ -167,9 +167,6 @@ def _raster_to_vector_cells(raster, ranges, output_crs):
                 features = []
     # Add the latest features
     vl.dataProvider().addFeatures(features)
-    # For debugging
-    # from qgis.core import QgsMapLayerRegistry
-    # QgsMapLayerRegistry.instance().addMapLayer(vl)
 
     # construct a temporary map for fast access to features by their IDs
     # (we will be getting feature IDs from spatial index)
