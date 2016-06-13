@@ -12,6 +12,8 @@ Contact : ole.moller.nielsen@gmail.com
 """
 from collections import OrderedDict
 
+# Temporary hack until QGIS returns nodata values nicely
+from osgeo import gdal
 from qgis.core import (
     QGis,
     QgsCoordinateReferenceSystem,
@@ -45,6 +47,9 @@ from safe.gis.qgis_vector_tools import (
 from safe.impact_reports.road_exposure_report_mixin import\
     RoadExposureReportMixin
 import logging
+
+# Part of the temporary gdal transparency hack
+gdal.UseExceptions()
 
 __author__ = 'etiennetrimaille'
 __project_name__ = 'inasafe-dev'
@@ -95,10 +100,12 @@ def _raster_to_vector_cells(raster, ranges, output_crs):
 
     # prepare coordinate transform to reprojection
     ct = QgsCoordinateTransform(raster.crs(), output_crs)
-
     rd = 0
-    no_data = raster.dataProvider().srcNoDataValue(0)
-
+    # Hack because QGIS does not return the
+    # nodata value from the dataset properly in the python API
+    dataset = gdal.Open(raster.source())
+    no_data = dataset.GetRasterBand(1).GetNoDataValue()
+    dataset = None  # close the dataset
     y_cell_height = - cell_height
     LOGGER.debug('num row: %s' % raster_rows)
     LOGGER.debug('num column: %s' % raster_cols)
@@ -114,7 +121,7 @@ def _raster_to_vector_cells(raster, ranges, output_crs):
 
             # Performance optimisation added in 3.4.1 - dont
             # waste time processing cells that have no data
-            if value == no_data:
+            if value == no_data or value == 0:
                 continue
 
             for threshold_id, threshold in ranges.iteritems():
