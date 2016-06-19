@@ -2196,7 +2196,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         def my_accept_begin_hook(dock):
             print "my new dock_accept_begin_hook()"
 
-        safe.gui.widgets.dock.Dock.dock_accept_begin_hook = my_accept_begin_hook
+        safe.gui.widgets.dock.Dock.dock_accept_begin_hook=my_accept_begin_hook
 
         .. versionadded:: 3.5
 
