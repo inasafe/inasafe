@@ -25,6 +25,8 @@ status=final
 # Optional items:
 
 changelog=
+        3.4.2 - fixed regression with legacy keywords not being migrated
+        3.4.2 - fixed tests failing because of gdal python exception handler
 	3.4.1 - Speed improvements for tsunami and flood impacts on roads
 	3.4.1 - fix #2884 mistake in the tsunami legend
 	3.4.1 - fix #2899 impact layer should draw over the hazard layer
