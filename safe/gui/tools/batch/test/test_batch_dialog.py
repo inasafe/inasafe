@@ -78,7 +78,7 @@ class BatchDialogTest(unittest.TestCase):
         message = 'Expected %s but got %s' % (expected_status, status)
         self.assertEqual(status, expected_status, message)
 
-    def test_run_all_scenario(self):
+    def Xtest_run_all_scenario(self):
         """Test run all scenarii."""
         scenarios_dir = test_data_path('control', 'scenarios')
         dialog = BatchDialog(PARENT, IFACE, self.dock)
