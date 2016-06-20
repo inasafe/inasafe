@@ -16,7 +16,9 @@ from qgis.core import (
     QgsMapLayerRegistry)
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui  # pylint: disable=W0621
+from qgis.utils import iface
 
+from safe.gui.widgets.dock import Dock
 from safe.gis.numerics import axes_to_points
 from safe.common.utilities import unique_filename, temp_dir
 from safe.common.exceptions import NoKeywordsFoundError
@@ -66,6 +68,17 @@ def get_qgis_app():
     If QGIS is already running the handle to that app will be returned.
     """
 
+    global QGIS_APP, PARENT, IFACE, CANVAS  # pylint: disable=W0603
+
+    if iface:
+        from qgis.core import QgsApplication
+        QGIS_APP = QgsApplication
+        CANVAS = iface.mapCanvas()
+        PARENT = iface.mainWindow()
+        IFACE = iface
+
+        return QGIS_APP, CANVAS, IFACE, PARENT
+
     try:
         from qgis.core import QgsApplication
         from qgis.gui import QgsMapCanvas  # pylint: disable=no-name-in-module
@@ -76,8 +89,6 @@ def get_qgis_app():
         from safe.gis.qgis_interface import QgisInterface
     except ImportError:
         return None, None, None, None
-
-    global QGIS_APP  # pylint: disable=W0603
 
     if QGIS_APP is None:
         gui_flag = True  # All test will run qgis in gui mode
@@ -110,18 +121,15 @@ def get_qgis_app():
         settings.setValue('inasafe/showRubberBands', True)
         settings.setValue('inasafe/analysis_extents_mode', 'HazardExposure')
 
-    global PARENT  # pylint: disable=W0603
     if PARENT is None:
         # noinspection PyPep8Naming
         PARENT = QtGui.QWidget()
 
-    global CANVAS  # pylint: disable=W0603
     if CANVAS is None:
         # noinspection PyPep8Naming
         CANVAS = QgsMapCanvas(PARENT)
         CANVAS.resize(QtCore.QSize(400, 400))
 
-    global IFACE  # pylint: disable=W0603
     if IFACE is None:
         # QgisInterface is a stub implementation of the QGIS plugin interface
         # noinspection PyPep8Naming
@@ -970,3 +978,15 @@ def clip_layers(first_layer_path, second_layer_path):
         cell_size=cell_size)
 
     return clipped_first_layer, clipped_second_layer
+
+
+def get_dock():
+    if iface:
+        docks = iface.mainWindow().findChildren(QtGui.QDockWidget)
+        for dock in docks:
+            if isinstance(dock, Dock):
+                return dock
+        else:
+            return False
+    else:
+        return Dock(IFACE)

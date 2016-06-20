@@ -21,13 +21,26 @@ import unittest
 
 
 def suite():
+    """ Full test """
     test_loader = unittest.defaultTestLoader
     test_suite = test_loader.discover('safe')
     return test_suite
 
 
+def test_manually():
+    from safe.impact_statistics.test.test_postprocessor_manager import PostprocessorManagerTest
+
+    test_suite = unittest.makeSuite(PostprocessorManagerTest, 'test')
+    return test_suite
+
+
 def run_all():
-    unittest.TextTestRunner(verbosity=3, stream=sys.stdout).run(suite())
+    test_suite = suite()
+    # test_suite = test_manually()
+    print '########'
+    print '%s tests has been discovered.' % test_suite.countTestCases()
+    print '########'
+    unittest.TextTestRunner(verbosity=3, stream=sys.stdout).run(test_suite)
 
 if __name__ == '__main__':
     run_all()

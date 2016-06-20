@@ -21,14 +21,13 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 # noinspection PyUnresolvedReferences
 import unittest
 
-from safe.test.utilities import test_data_path, get_qgis_app
+from safe.test.utilities import test_data_path, get_qgis_app, get_dock
 # In our tests, we need to have this line below before importing any other
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.gui.tools.batch.batch_dialog import BatchDialog
 from safe.common.utilities import temp_dir
-from safe.gui.widgets.dock import Dock
 from safe.impact_functions import register_impact_functions
 
 
@@ -37,7 +36,7 @@ class BatchDialogTest(unittest.TestCase):
 
     def setUp(self):
         register_impact_functions()
-        self.dock = Dock(IFACE)
+        self.dock = get_dock()
 
     def test_load_batch_dialog(self):
         """Test for BatchDialog behaviour.

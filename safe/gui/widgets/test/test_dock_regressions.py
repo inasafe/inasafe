@@ -7,7 +7,7 @@ from qgis.core import QgsMapLayerRegistry
 
 from PyQt4 import QtCore
 
-from safe.test.utilities import get_qgis_app
+from safe.test.utilities import get_qgis_app, get_dock
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.impact_functions import register_impact_functions
@@ -20,16 +20,13 @@ from safe.test.utilities import (
 from safe.utilities.keyword_io import KeywordIO
 
 
-from safe.gui.widgets.dock import Dock
-
-
 # noinspection PyArgumentList
 class TestDockRegressions(TestCase):
     """Regression tests for the InaSAFE GUI."""
 
     @classmethod
     def setUpClass(cls):
-        cls.dock = Dock(IFACE)
+        cls.dock = get_dock()
 
     def setUp(self):
         """Fixture run before all tests.
