@@ -26,10 +26,14 @@ from safe.test.utilities import test_data_path, get_qgis_app
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
+import logging
+
 from safe.gui.tools.batch.batch_dialog import BatchDialog
 from safe.common.utilities import temp_dir
 from safe.gui.widgets.dock import Dock
 from safe.impact_functions import register_impact_functions
+
+LOGGER = logging.getLogger('InaSAFE')
 
 
 class BatchDialogTest(unittest.TestCase):
@@ -71,9 +75,9 @@ class BatchDialogTest(unittest.TestCase):
         out_path = temp_dir()
         dialog.output_directory.setText(out_path)
         dialog.table.selectRow(1)
-        print 'test 1'
+        LOGGER.debug('Line 78')
         dialog.run_selected_clicked()
-        print 'test 2'
+        LOGGER.debug('Line 80')
         # button = dialog.run_selected_button
         # button.click()
         status = dialog.table.item(1, 1).text()
