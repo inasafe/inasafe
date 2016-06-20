@@ -631,31 +631,22 @@ class BatchDialog(QDialog, FORM_CLASS):
     # noinspection PyMethodMayBeStatic
     def enable_busy_cursor(self):
         """Set the hourglass enabled."""
-        # QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
-        pass
+        QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
 
     # noinspection PyMethodMayBeStatic
     def disable_busy_cursor(self):
         """Disable the hourglass cursor."""
-        # QtGui.qApp.restoreOverrideCursor()
-        pass
+        QtGui.qApp.restoreOverrideCursor()
 
     @pyqtSignature('')
     def run_selected_clicked(self):
         """Run the selected scenario. """
-        LOGGER.debug('A')
         self.enable_busy_cursor()
-        LOGGER.debug('B')
         current_row = self.table.currentRow()
-        LOGGER.debug('C')
         item = self.table.item(current_row, 0)
-        LOGGER.debug('D')
         status_item = self.table.item(current_row, 1)
-        LOGGER.debug('E')
         self.run_task(item, status_item)
-        LOGGER.debug('F')
         self.disable_busy_cursor()
-        LOGGER.debug('G')
 
     @pyqtSignature('bool')
     def on_scenario_directory_radio_toggled(self, flag):
