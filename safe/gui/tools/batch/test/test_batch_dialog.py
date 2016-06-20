@@ -97,12 +97,12 @@ class BatchDialogTest(unittest.TestCase):
         dialog.output_directory.setText(out_path)
         # dialog.run_all_clicked()
 
-        # button = dialog.run_all_button
-        # button.click()
-        # status0 = dialog.table.item(0, 1).text()
-        # status1 = dialog.table.item(1, 1).text()
-        # self.assertEquals(status0, 'Analysis Fail')
-        # self.assertEquals(status1, 'Report Ok')
+        button = dialog.run_all_button
+        button.click()
+        status0 = dialog.table.item(0, 1).text()
+        status1 = dialog.table.item(1, 1).text()
+        self.assertEquals(status0, 'Analysis Fail')
+        self.assertEquals(status1, 'Report Ok')
 
 
 if __name__ == '__main__':
