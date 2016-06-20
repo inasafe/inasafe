@@ -165,6 +165,7 @@ def _raster_to_vector_cells(raster, ranges, output_crs):
             if rd % 1000 == 0:
                 vl.dataProvider().addFeatures(features)
                 features = []
+
     # Add the latest features
     vl.dataProvider().addFeatures(features)
 
