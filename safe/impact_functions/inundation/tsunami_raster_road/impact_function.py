@@ -48,7 +48,7 @@ from safe.impact_reports.road_exposure_report_mixin import\
 import logging
 
 # Part of the temporary gdal transparency hack
-gdal.UseExceptions()
+# gdal.UseExceptions()
 
 __author__ = 'etiennetrimaille'
 __project_name__ = 'inasafe-dev'
