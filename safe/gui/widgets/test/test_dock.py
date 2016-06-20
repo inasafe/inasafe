@@ -361,7 +361,7 @@ class TestDock(TestCase):
         layer_path = join(TESTDATA, 'polygon_0.shp')
         new_layer = QgsVectorLayer(layer_path, 'foo', 'ogr')
         exposure_layer = self.dock.get_exposure_layer()
-        self.dock.add_above_layer(exposure_layer, new_layer)
+        self.dock.add_above_layer(new_layer, exposure_layer)
         root = QgsProject.instance().layerTreeRoot()
         id_list = root.findLayerIds()
         self.assertIn(new_layer.id(), id_list)
@@ -871,6 +871,8 @@ class TestDock(TestCase):
         wkt = wkt.replace('LINESTRING(', '').replace(')', '')
         # QGIS 2.10 replaced LINESTRING with LineString in WKT
         wkt = wkt.replace('LineString(', '').replace(')', '')
+        # And in 2.16 (maybe earlier too?) it have a space before the bracket
+        wkt = wkt.replace('LineString (', '')
         coords = wkt.split(',')
         for item in coords:
             item = item.strip()
