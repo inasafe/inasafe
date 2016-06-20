@@ -37,7 +37,7 @@ from safe.gis.qgis_vector_tools import (
 from safe.impact_reports.road_exposure_report_mixin import\
     RoadExposureReportMixin
 # Part of the temporary gdal transparency hack
-gdal.UseExceptions()
+# gdal.UseExceptions()
 
 
 def _raster_to_vector_cells(
