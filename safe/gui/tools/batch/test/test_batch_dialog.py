@@ -71,12 +71,13 @@ class BatchDialogTest(unittest.TestCase):
         out_path = temp_dir()
         dialog.output_directory.setText(out_path)
         dialog.table.selectRow(1)
-        button = dialog.run_selected_button
+        dialog.run_selected_clicked()
+        # button = dialog.run_selected_button
         # button.click()
-        # status = dialog.table.item(1, 1).text()
-        # expected_status = 'Report Ok'
-        # message = 'Expected %s but got %s' % (expected_status, status)
-        # self.assertEqual(status, expected_status, message)
+        status = dialog.table.item(1, 1).text()
+        expected_status = 'Report Ok'
+        message = 'Expected %s but got %s' % (expected_status, status)
+        self.assertEqual(status, expected_status, message)
 
     def test_run_all_scenario(self):
         """Test run all scenarii."""
@@ -88,12 +89,14 @@ class BatchDialogTest(unittest.TestCase):
         dialog.source_directory.textChanged.emit(scenarios_dir)
         out_path = temp_dir()
         dialog.output_directory.setText(out_path)
-        button = dialog.run_all_button
+        dialog.run_all_clicked()
+
+        # button = dialog.run_all_button
         # button.click()
-        # status0 = dialog.table.item(0, 1).text()
-        # status1 = dialog.table.item(1, 1).text()
-        # self.assertEquals(status0, 'Analysis Fail')
-        # self.assertEquals(status1, 'Report Ok')
+        status0 = dialog.table.item(0, 1).text()
+        status1 = dialog.table.item(1, 1).text()
+        self.assertEquals(status0, 'Analysis Fail')
+        self.assertEquals(status1, 'Report Ok')
 
 
 if __name__ == '__main__':
