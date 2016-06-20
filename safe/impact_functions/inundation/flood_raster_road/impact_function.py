@@ -1,7 +1,8 @@
 # coding=utf-8
 """Impact of flood on roads."""
-from collections import OrderedDict
 
+# Temporary hack until QGIS returns nodata values nicely
+from osgeo import gdal
 from qgis.core import (
     QGis,
     QgsCoordinateReferenceSystem,
@@ -25,7 +26,7 @@ from safe.impact_functions.inundation.flood_raster_road\
     .metadata_definitions import FloodRasterRoadsMetadata
 from safe.utilities.i18n import tr
 from safe.utilities.gis import add_output_feature, union_geometries
-from safe.utilities.utilities import reorder_dictionary, main_type
+from safe.utilities.utilities import main_type
 from safe.storage.vector import Vector
 from safe.common.utilities import get_utm_epsg, unique_filename
 from safe.common.exceptions import GetDataError
@@ -35,7 +36,8 @@ from safe.gis.qgis_vector_tools import (
     create_layer)
 from safe.impact_reports.road_exposure_report_mixin import\
     RoadExposureReportMixin
-from safe.definitions import structure_class_order
+# Part of the temporary gdal transparency hack
+gdal.UseExceptions()
 
 
 def _raster_to_vector_cells(
@@ -74,6 +76,12 @@ def _raster_to_vector_cells(
     cell_width = extent.width() / raster_cols
     cell_height = extent.height() / raster_rows
 
+    # Hack because QGIS does not return the
+    # nodata value from the dataset properly in the python API
+    dataset = gdal.Open(raster.source())
+    no_data = dataset.GetRasterBand(1).GetNoDataValue()
+    del dataset
+
     uri = "Polygon?crs=" + output_crs.authid()
     vl = QgsVectorLayer(uri, "cells", "memory")
     features = []
@@ -86,6 +94,11 @@ def _raster_to_vector_cells(
             # only use cells that are within the specified threshold
             value = block.value(y, x)
             if value < minimum_threshold or value > maximum_threshold:
+                continue
+
+            # Performance optimisation added in 3.4.1
+            # Don't waste time processing cells that have no data
+            if value == no_data or value <= 0:
                 continue
 
             # construct rectangular polygon feature for the cell
@@ -366,10 +379,6 @@ class FloodRasterRoadsFunction(
 
         self.reorder_dictionaries()
 
-        # For printing map purpose
-        map_title = tr('Roads inundated')
-        legend_title = tr('Road inundated status')
-
         style_classes = [
             dict(
                 label=tr('Not Inundated'), value=0,
@@ -385,8 +394,8 @@ class FloodRasterRoadsFunction(
         impact_data = self.generate_data()
 
         extra_keywords = {
-            'map_title': map_title,
-            'legend_title': legend_title,
+            'map_title': self.metadata().key('map_title'),
+            'legend_title': self.metadata().key('legend_title'),
             'target_field': target_field
         }
 
@@ -395,7 +404,7 @@ class FloodRasterRoadsFunction(
         # Convert QgsVectorLayer to inasafe layer and return it
         impact_layer = Vector(
             data=line_layer,
-            name=tr('Flooded roads'),
+            name=self.metadata().key('layer_name'),
             keywords=impact_layer_keywords,
             style_info=style_info)
 

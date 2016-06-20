@@ -101,6 +101,11 @@ class TsunamiRasterBuildingMetadata(ImpactFunctionMetadata):
                    '"A proposal for a new tsunami intensity scale." '
                    'ITS 2001 proceedings, no. 5-1, pp. 569-577. 2001.')
             ],
+            'legend_notes': '',
+            'map_title': tr('Inundated buildings'),
+            'legend_title': tr('Inundated structure status'),
+            'legend_units': tr('(low, medium, high, and very high)'),
+            'layer_name': tr('Estimated buildings affected'),
             'layer_requirements': {
                 'hazard': {
                     'layer_mode': layer_mode_continuous,

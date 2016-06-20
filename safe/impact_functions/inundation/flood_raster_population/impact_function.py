@@ -33,8 +33,7 @@ from safe.common.utilities import (
     create_classes,
     humanize_class,
     create_label,
-    verify,
-    get_thousand_separator)
+    verify)
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
     get_needs_provenance_value
 from safe.impact_reports.population_exposure_report_mixin import \
@@ -230,21 +229,13 @@ class FloodEvacuationRasterHazardFunction(
             style_classes=style_classes,
             style_type='rasterStyle')
 
-        # For printing map purpose
-        map_title = tr('People in need of evacuation')
-        legend_title = tr('Population Count')
-        legend_units = tr('(people per cell)')
-        legend_notes = tr(
-            'Thousand separator is represented by %s' %
-            get_thousand_separator())
-
         impact_data = self.generate_data()
 
         extra_keywords = {
-            'map_title': map_title,
-            'legend_notes': legend_notes,
-            'legend_units': legend_units,
-            'legend_title': legend_title,
+            'map_title': self.metadata().key('map_title'),
+            'legend_notes': self.metadata().key('legend_notes'),
+            'legend_units': self.metadata().key('legend_units'),
+            'legend_title': self.metadata().key('legend_title'),
             'evacuated': evacuated,
             'total_needs': total_needs
         }
@@ -256,9 +247,7 @@ class FloodEvacuationRasterHazardFunction(
             impact,
             projection=self.hazard.layer.get_projection(),
             geotransform=self.hazard.layer.get_geotransform(),
-            name=tr('Population which %s') % (
-                self.impact_function_manager
-                .get_function_title(self).lower()),
+            name=self.metadata().key('layer_name'),
             keywords=impact_layer_keywords,
             style_info=style_info)
 

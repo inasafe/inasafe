@@ -25,8 +25,7 @@ from safe.common.utilities import (
     humanize_class,
     format_int,
     create_classes,
-    create_label,
-    get_thousand_separator)
+    create_label)
 from safe.utilities.i18n import tr
 from safe.gui.tools.minimum_needs.needs_profile import (
     add_needs_parameters,
@@ -354,14 +353,6 @@ class ITBFatalityFunction(
                           style_classes=style_classes,
                           style_type='rasterStyle')
 
-        # For printing map purpose
-        map_title = tr('Earthquake impact to population')
-        legend_title = tr('Population Count')
-        legend_units = tr('(people per cell)')
-        legend_notes = tr(
-            'Thousand separator is represented by %s' %
-            get_thousand_separator())
-
         impact_data = self.generate_data()
 
         extra_keywords = {
@@ -372,10 +363,10 @@ class ITBFatalityFunction(
             'fatalities_per_mmi': number_of_fatalities,
             'total_displaced': population_rounding(total_displaced),
             'displaced_per_mmi': number_of_displaced,
-            'map_title': map_title,
-            'legend_notes': legend_notes,
-            'legend_units': legend_units,
-            'legend_title': legend_title,
+            'map_title': self.metadata().key('map_title'),
+            'legend_notes': self.metadata().key('legend_notes'),
+            'legend_units': self.metadata().key('legend_units'),
+            'legend_title': self.metadata().key('legend_title'),
             'total_needs': total_needs,
             'prob_fatality_mag': prob_fatality_mag,
         }
@@ -388,7 +379,7 @@ class ITBFatalityFunction(
             projection=self.exposure.layer.get_projection(),
             geotransform=self.exposure.layer.get_geotransform(),
             keywords=impact_layer_keywords,
-            name=tr('Estimated displaced population per cell'),
+            name=self.metadata().key('layer_name'),
             style_info=style_info)
 
         impact_layer.impact_data = impact_data

@@ -222,10 +222,10 @@ class ShakeGridTest(unittest.TestCase):
             'Result path not as expected')
         exists = os.path.exists(result)
         self.assertTrue(exists, 'File result : %s does not exist' % result)
-        exists = os.path.exists(result[:-3] + 'keywords')
+        exists = os.path.exists(result[:-3] + 'xml')
         self.assertTrue(
             exists,
-            'File result : %s does not exist' % result[:-3] + 'keywords')
+            'File result : %s does not exist' % result[:-3] + 'xml')
         exists = os.path.exists(result[:-3] + 'qml')
         self.assertTrue(
             exists,

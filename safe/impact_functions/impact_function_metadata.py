@@ -248,6 +248,11 @@ class ImpactFunctionMetadata(object):
             'actions': basestring,
             'limitations': list,  # list of string
             'citations': list,  # list of string
+            'map_title': basestring,
+            'legend_title': basestring,
+            'legend_units': basestring,
+            'legend_notes': basestring,
+            'layer_name': basestring,
             'layer_requirements': dict
         }
 
@@ -340,6 +345,18 @@ class ImpactFunctionMetadata(object):
 
         """
         return cls.as_dict().get('name', '')
+
+    @classmethod
+    def key(cls, key):
+        """Return the IF metadata value according to the key specified.
+
+        :param key: The metadata key to retrieve.
+        :type key: str
+
+        :return: The metadata value or None.
+        :rtype: str, list, dict
+        """
+        return cls.as_dict().get(key, None)
 
     @classmethod
     def get_hazard_requirements(cls):

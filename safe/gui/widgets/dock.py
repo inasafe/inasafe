@@ -1267,7 +1267,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         return impact_function
 
-    def add_above_layer(self, existing_layer, new_layer):
+    def add_above_layer(self, new_layer, *existing_layers):
         """Add a layer (e.g. impact layer) above another layer in the legend.
 
         .. versionadded:: 3.2
@@ -1278,9 +1278,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         .. seealso:: issue #2322
 
-        :param existing_layer: The layer which the new layer
+        :param existing_layers: Layers which the new layer
             should be added above.
-        :type existing_layer: QgsMapLayer
+        :type existing_layers: QgsMapLayer
 
         :param new_layer: The new layer being added. An assumption is made
             that the newly added layer is not already loaded in the legend
@@ -1288,7 +1288,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         :type new_layer: QgsMapLayer
 
         """
-        if existing_layer is None or new_layer is None:
+        # Some existing layers might be None, ie the aggregation layer #2948.
+        existing_layers = [l for l in existing_layers if l is not None]
+        if not len(existing_layers) or new_layer is None:
             return
 
         registry = QgsMapLayerRegistry.instance()
@@ -1300,11 +1302,13 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         # False flag prevents layer being added to legend
         registry.addMapLayer(new_layer, False)
-        index = self.layer_legend_index(existing_layer)
-        # LOGGER.info('Inserting layer %s at position %s' % (
-        #     new_layer.source(), index))
+        minimum_index = len(QgsProject.instance().layerTreeRoot().children())
+        for layer in existing_layers:
+            index = self.layer_legend_index(layer)
+            if index < minimum_index:
+                minimum_index = index
         root = QgsProject.instance().layerTreeRoot()
-        root.insertLayer(index, new_layer)
+        root.insertLayer(minimum_index, new_layer)
 
     @staticmethod
     def layer_legend_index(layer):
@@ -1448,30 +1452,30 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             # noinspection PyExceptionInherit
             raise ReadLayerError(message)
 
+        legend = self.iface.legendInterface()
+
         # Insert the aggregation output above the input aggregation layer
         if self.show_intermediate_layers:
             self.add_above_layer(
-                self.get_aggregation_layer(),
-                self.impact_function.aggregator.layer)
+                self.impact_function.aggregator.layer,
+                self.get_aggregation_layer())
+            legend.setLayerVisible(self.impact_function.aggregator.layer, True)
 
-        # Insert the impact above the exposure
-        self.add_above_layer(
-            self.get_exposure_layer(),
-            qgis_impact_layer)
+        if self.hide_exposure_flag:
+            # Insert the impact always above the hazard
+            self.add_above_layer(qgis_impact_layer, self.get_hazard_layer())
+        else:
+            # Insert the impact above the hazard and the exposure if
+            # we don't hide the exposure. See #2899
+            self.add_above_layer(
+                qgis_impact_layer,
+                self.get_exposure_layer(),
+                self.get_hazard_layer())
 
         active_function = self.active_impact_function
         self.active_impact_function = active_function
         self.impact_function_parameters = \
             self.active_impact_function.parameters
-        # make sure it is active in the legend - needed since QGIS 2.4
-        self.iface.setActiveLayer(qgis_impact_layer)
-        # then zoom to it
-        if self.zoom_to_impact_flag:
-            self.iface.zoomToActiveLayer()
-        if self.hide_exposure_flag:
-            exposure_layer = self.get_exposure_layer()
-            legend = self.iface.legendInterface()
-            legend.setLayerVisible(exposure_layer, False)
 
         # In QGIS 2.14.2 and GDAL 1.11.3, if the exposure is in 3857,
         # the impact layer is in 54004, we need to change it. See issue #2790.
@@ -1479,6 +1483,18 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             if qgis_impact_layer.crs().authid() != 'EPSG:3857':
                 epsg_3857 = QgsCoordinateReferenceSystem(3857)
                 qgis_impact_layer.setCrs(epsg_3857)
+
+        # make sure it is active in the legend - needed since QGIS 2.4
+        self.iface.setActiveLayer(qgis_impact_layer)
+        # then zoom to it
+        if self.zoom_to_impact_flag:
+            self.iface.zoomToActiveLayer()
+        if self.hide_exposure_flag:
+            exposure_layer = self.get_exposure_layer()
+            legend.setLayerVisible(exposure_layer, False)
+
+        # Make the layer visible. Might be hidden by default. See #2925
+        legend.setLayerVisible(qgis_impact_layer, True)
 
         self.restore_state()
 
@@ -1690,7 +1706,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         try:
             keywords = self.keyword_io.read_keywords(layer)
 
-            if keywords['layer_purpose'] == 'impact':
+            if keywords.get('layer_purpose') == 'impact':
                 try:
                     self.show_impact_report(layer, keywords)
                 except MissingImpactReport:
@@ -1700,9 +1716,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     self.show_keyword_version_message(
                         'No Version', self.inasafe_version)
                 else:
-                    keyword_version = str(keywords['keyword_version'])
+                    keyword_version = str(keywords.get('keyword_version'))
                     supported = is_keyword_version_supported(
-                            keyword_version)
+                        keyword_version)
                     if supported:
                         self.show_generic_keywords(layer)
                     else:

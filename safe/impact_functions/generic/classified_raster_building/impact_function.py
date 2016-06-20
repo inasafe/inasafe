@@ -146,17 +146,9 @@ class ClassifiedRasterHazardBuildingFunction(
         # Create style
         style_classes = [
             dict(
-                label=tr('High'),
-                value=3,
-                colour='#F31A1C',
-                transparency=0,
-                size=2,
-                border_color='#969696',
-                border_width=0.2),
-            dict(
-                label=tr('Medium'),
-                value=2,
-                colour='#F4A442',
+                label=tr('Not Affected'),
+                value=None,
+                colour='#1EFC7C',
                 transparency=0,
                 size=2,
                 border_color='#969696',
@@ -170,30 +162,34 @@ class ClassifiedRasterHazardBuildingFunction(
                 border_color='#969696',
                 border_width=0.2),
             dict(
-                label=tr('Not Affected'),
-                value=None,
-                colour='#1EFC7C',
+                label=tr('Medium'),
+                value=2,
+                colour='#F4A442',
                 transparency=0,
                 size=2,
                 border_color='#969696',
-                border_width=0.2)]
+                border_width=0.2),
+            dict(
+                label=tr('High'),
+                value=3,
+                colour='#F31A1C',
+                transparency=0,
+                size=2,
+                border_color='#969696',
+                border_width=0.2),
+        ]
         style_info = dict(
             target_field=self.target_field,
             style_classes=style_classes,
             style_type='categorizedSymbol')
 
-        # For printing map purpose
-        map_title = tr('Buildings affected')
-        legend_title = tr('Structure inundated status')
-        legend_units = tr('(Low, Medium, High)')
-
         impact_data = self.generate_data()
 
         extra_keywords = {
             'target_field': self.affected_field,
-            'map_title': map_title,
-            'legend_units': legend_units,
-            'legend_title': legend_title,
+            'map_title': self.metadata().key('map_title'),
+            'legend_units': self.metadata().key('legend_units'),
+            'legend_title': self.metadata().key('legend_title'),
             'buildings_total': buildings_total,
             'buildings_affected': self.total_affected_buildings
         }
@@ -205,7 +201,7 @@ class ClassifiedRasterHazardBuildingFunction(
             data=attributes,
             projection=self.exposure.layer.get_projection(),
             geometry=self.exposure.layer.get_geometry(),
-            name=tr('Estimated buildings affected'),
+            name=self.metadata().key('layer_name'),
             keywords=impact_layer_keywords,
             style_info=style_info)
 

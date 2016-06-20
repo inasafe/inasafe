@@ -18,6 +18,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 
+from xml.etree.ElementTree import Element, tostring
+
 from safe.common.exceptions import InvalidProvenanceDataError
 from safe.metadata.provenance.provenance_step import ProvenanceStep
 
@@ -87,7 +89,10 @@ class IFProvenanceStep(ProvenanceStep):
         xml = self._get_xml(False)
         for key in self.impact_functions_fields:
             value = self.data(key)
-            xml += '<{0}>{1}</{0}>\n'.format(key, value)
+            element = Element(key)
+            element.text = str(value)
 
-        xml += '</provenance_step>\n'
+            xml += tostring(element)
+
+        xml += '</provenance_step>'
         return xml
