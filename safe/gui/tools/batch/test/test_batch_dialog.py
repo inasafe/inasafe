@@ -26,10 +26,14 @@ from safe.test.utilities import test_data_path, get_qgis_app
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
+import logging
+
 from safe.gui.tools.batch.batch_dialog import BatchDialog
 from safe.common.utilities import temp_dir
 from safe.gui.widgets.dock import Dock
 from safe.impact_functions import register_impact_functions
+
+LOGGER = logging.getLogger('InaSAFE')
 
 
 class BatchDialogTest(unittest.TestCase):
