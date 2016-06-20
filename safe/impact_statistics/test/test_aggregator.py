@@ -279,7 +279,7 @@ class AggregatorTest(unittest.TestCase):
     test_preprocessing.slow = True
 
     def _create_aggregator(self, use_aoi_mode):
-        """Helper to create aggregator"""
+        """Helper to create aggregator."""
 
         aggregation_layer = QgsVectorLayer(
             os.path.join(BOUNDDATA, 'kabupaten_jakarta.shp'),
