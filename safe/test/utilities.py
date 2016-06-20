@@ -76,7 +76,7 @@ def get_qgis_app():
         CANVAS = iface.mapCanvas()
         PARENT = iface.mainWindow()
         IFACE = iface
-
+        LOGGER.exception('Make travis happy')
         return QGIS_APP, CANVAS, IFACE, PARENT
 
     try:
