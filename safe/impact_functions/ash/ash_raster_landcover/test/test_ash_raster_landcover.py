@@ -55,7 +55,7 @@ class TestAshRasterPolygonLandCoverFunction(unittest.TestCase):
 
         impact = safe_to_qgis_layer(impact)
 
-        self.assertEqual(impact.dataProvider().featureCount(), 51)
+        self.assertEqual(impact.dataProvider().featureCount(), 7L)
         features = {}
         exposure_field = function.exposure.keyword('field')
         for f in impact.getFeatures():
@@ -63,17 +63,13 @@ class TestAshRasterPolygonLandCoverFunction(unittest.TestCase):
             features[type_tuple] = round(f.geometry().area(), 1)
 
         expected_features = {
-            (u'Population', u'Very Low'): 8026546.1,
-            (u'Population', u'Low'): 448036.9,
-            (u'Population', u'Moderate'): 6461.6,
-            (u'Population', u'High'): 72293.4,
-            (u'Population', u'Very High'): 1211.5,
-            (u'Water', u'Very Low'): 1671765.2,
-            (u'Water', u'Low'): 224410.1,
-            (u'Water', u'Moderate'): 25037.6,
-            (u'Water', u'High'): 10095.9,
-            (u'Meadow', u'Very Low'): 2512444.0,
-            (u'Forest', u'Very Low'): 1000000.0
+            (u'Forest', u'Low'): 1000000.0,
+            (u'Population', u'High'): 18721.0,
+            (u'Population', u'Moderate'): 589677.8,
+            (u'Water', u'Low'): 2000000.0,
+            (u'Meadow', u'Low'): 3971158.6,
+            (u'Meadow', u'Moderate'): 28841.4,
+            (u'Population', u'Low'): 8391601.2
         }
         self.assertEqual(len(expected_features.keys()), len(features.keys()))
         for key, value in expected_features.iteritems():
