@@ -75,11 +75,8 @@ class BatchDialogTest(unittest.TestCase):
         out_path = temp_dir()
         dialog.output_directory.setText(out_path)
         dialog.table.selectRow(1)
-        LOGGER.debug('Line 78')
-        dialog.run_selected_clicked()
-        LOGGER.debug('Line 80')
-        # button = dialog.run_selected_button
-        # button.click()
+        button = dialog.run_selected_button
+        button.click()
         status = dialog.table.item(1, 1).text()
         expected_status = 'Report Ok'
         message = 'Expected %s but got %s' % (expected_status, status)
@@ -95,8 +92,6 @@ class BatchDialogTest(unittest.TestCase):
         dialog.source_directory.textChanged.emit(scenarios_dir)
         out_path = temp_dir()
         dialog.output_directory.setText(out_path)
-        # dialog.run_all_clicked()
-
         button = dialog.run_all_button
         button.click()
         status0 = dialog.table.item(0, 1).text()
