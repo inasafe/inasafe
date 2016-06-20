@@ -56,7 +56,7 @@ before_script:
 script:
   - make pep8
 #  - make pylint  # disable it until we make it works in Travis.
-  - xvfb-run --server-args="-screen 0, 1024x768x24" nosetests -A 'not slow' -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=safe safe/gui
+  - xvfb-run --server-args="-screen 0, 1024x768x24" nosetests -A 'not slow' -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=safe safe/gui/batch
 # disable below tests until we make headless works in Travis
 #  - xvfb-run --server-args="-screen 0, 1024x768x24" nosetests --with-id --verbose headless
 
