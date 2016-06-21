@@ -76,7 +76,6 @@ def get_qgis_app():
         CANVAS = iface.mapCanvas()
         PARENT = iface.mainWindow()
         IFACE = iface
-        LOGGER.exception('Make travis happy')
         return QGIS_APP, CANVAS, IFACE, PARENT
 
     try:
@@ -139,6 +138,26 @@ def get_qgis_app():
         register_impact_functions()
 
     return QGIS_APP, CANVAS, IFACE, PARENT
+
+
+def get_dock():
+    """Get a dock for testing.
+
+    If you call this function from a QGIS Desktop, you will get the real dock,
+    however, you use a fake QGIS interface, it will create a fake dock for you.
+
+    :returns: A dock.
+    :rtype: QDockWidget
+    """
+    if iface:
+        docks = iface.mainWindow().findChildren(QtGui.QDockWidget)
+        for dock in docks:
+            if isinstance(dock, Dock):
+                return dock
+        else:
+            return False
+    else:
+        return Dock(IFACE)
 
 
 def assert_hash_for_file(hash_string, filename):
@@ -978,15 +997,3 @@ def clip_layers(first_layer_path, second_layer_path):
         cell_size=cell_size)
 
     return clipped_first_layer, clipped_second_layer
-
-
-def get_dock():
-    if iface:
-        docks = iface.mainWindow().findChildren(QtGui.QDockWidget)
-        for dock in docks:
-            if isinstance(dock, Dock):
-                return dock
-        else:
-            return False
-    else:
-        return Dock(IFACE)

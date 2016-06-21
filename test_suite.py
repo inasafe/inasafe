@@ -20,22 +20,24 @@ import sys
 import unittest
 
 
-def suite():
-    """ Full test """
+def full_test_suite():
+    """Full test suite."""
     test_loader = unittest.defaultTestLoader
     test_suite = test_loader.discover('safe')
     return test_suite
 
 
 def test_manually():
-    from safe.impact_statistics.test.test_postprocessor_manager import PostprocessorManagerTest
-
+    """Run a test module."""
+    from safe.impact_statistics.test.test_postprocessor_manager import \
+        PostprocessorManagerTest
     test_suite = unittest.makeSuite(PostprocessorManagerTest, 'test')
     return test_suite
 
 
 def run_all():
-    test_suite = suite()
+    """Run tests."""
+    test_suite = full_test_suite()
     # test_suite = test_manually()
     print '########'
     print '%s tests has been discovered.' % test_suite.countTestCases()
