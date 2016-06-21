@@ -18,7 +18,6 @@ from qgis.core import (
 from PyQt4 import QtGui  # pylint: disable=W0621
 from qgis.utils import iface
 
-from safe.gui.widgets.dock import Dock
 from safe.gis.numerics import axes_to_points
 from safe.common.utilities import unique_filename, temp_dir
 from safe.common.exceptions import NoKeywordsFoundError
@@ -157,6 +156,8 @@ def get_dock():
         else:
             return False
     else:
+        # Don't move this import.
+        from safe.gui.widgets.dock import Dock
         return Dock(IFACE)
 
 
