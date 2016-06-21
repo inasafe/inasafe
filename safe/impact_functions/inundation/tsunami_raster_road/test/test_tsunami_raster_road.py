@@ -22,6 +22,8 @@ from qgis.core import (
 )
 from PyQt4.QtCore import QVariant
 from safe.test.utilities import get_qgis_app, test_data_path
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 # noinspection PyProtectedMember
 from safe.impact_functions.inundation.tsunami_raster_road\
@@ -36,8 +38,6 @@ __project_name__ = 'inasafe-dev'
 __filename__ = 'test_tsunami_raster_road.py'
 __date__ = '11/03/16'
 __copyright__ = 'etienne@kartoza.com'
-
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class TsunamiRasterRoadsFunctionTest(unittest.TestCase):
