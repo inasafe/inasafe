@@ -38,7 +38,14 @@ from PyQt4.QtCore import (
     Qt,
     QSettings)
 # noinspection PyPackageRequirements
-from PyQt4.QtGui import QAction, QIcon, QApplication
+from PyQt4.QtGui import (
+    QAction,
+    QIcon,
+    QApplication,
+    QToolButton,
+    QMenu,
+    QLineEdit,
+    QInputDialog)
 
 from safe.common.version import release_status
 from safe.common.exceptions import TranslationLoadError
@@ -429,18 +436,45 @@ class Plugin(object):
         self.developer_mode = settings.value(
             'inasafe/developer_mode', False, type=bool)
         if not final_release and self.developer_mode:
+
+            default_package = unicode(settings.value(
+                'inasafe/testPackage', 'safe', type=str))
+            msg = self.tr('Run tests in %s' % default_package)
+
+            self.test_button = QToolButton()
+            self.test_button.setMenu(QMenu())
+            self.test_button.setPopupMode(QToolButton.MenuButtonPopup)
+
             icon = resources_path('img', 'icons', 'run-tests.svg')
             self.action_run_tests = QAction(
                 QIcon(icon),
-                self.tr('Run Tests'),
+                msg,
                 self.iface.mainWindow())
-            self.action_run_tests.setStatusTip(self.tr(
-                'Run Tests'))
-            self.action_run_tests.setWhatsThis(self.tr(
-                'Run Tests'))
+
+            self.action_run_tests.setStatusTip(msg)
+            self.action_run_tests.setWhatsThis(msg)
             self.action_run_tests.triggered.connect(
                 self.run_tests)
-            self.add_action(self.action_run_tests)
+
+            self.test_button.menu().addAction(self.action_run_tests)
+            self.test_button.setDefaultAction(self.action_run_tests)
+
+            self.action_select_package = QAction(
+                QIcon(icon),
+                self.tr('Select package'),
+                self.iface.mainWindow())
+
+            self.action_select_package.setStatusTip(self.tr(
+                'Select Test Package'))
+            self.action_select_package.setWhatsThis(self.tr(
+                'Select Test Package'))
+            self.action_select_package.triggered.connect(
+                self.select_test_package)
+            self.test_button.menu().addAction(self.action_select_package)
+            self.toolbar.addWidget(self.test_button)
+
+            self.add_action(self.action_run_tests, add_to_toolbar=False)
+            self.add_action(self.action_select_package, add_to_toolbar=False)
 
     def _create_dock(self):
         """Create dockwidget and tabify it with the legend."""
@@ -591,12 +625,37 @@ class Plugin(object):
         rect = QgsRectangle(106.806, -6.195, 106.837, -6.167)
         self.iface.mapCanvas().setExtent(rect)
 
+    def select_test_package(self):
+        """Select the test package."""
+        settings = QSettings()
+        default_package = 'safe'
+        user_package = unicode(settings.value(
+            'inasafe/testPackage', default_package, type=str))
+
+        test_package, _ = QInputDialog.getText(
+            self.iface.mainWindow(),
+            self.tr('Select the python test package'),
+            self.tr('Select the python test package'),
+            QLineEdit.Normal,
+            user_package)
+
+        if test_package == '':
+            test_package = default_package
+
+        settings.setValue('inasafe/testPackage', test_package)
+        msg = self.tr('Run tests in %s' % test_package)
+        self.action_run_tests.setWhatsThis(msg)
+        self.action_run_tests.setText(msg)
+
     def run_tests(self):
         """Run unit tests in the python console."""
         from PyQt4.QtGui import QDockWidget
         main_window = self.iface.mainWindow()
         action = main_window.findChild(QAction, 'mActionShowPythonDialog')
         action.trigger()
+        settings = QSettings()
+        package = unicode(settings.value(
+            'inasafe/testPackage', 'safe', type=str))
         for child in main_window.findChildren(QDockWidget, 'PythonConsole'):
             if child.objectName() == 'PythonConsole':
                 child.show()
@@ -605,8 +664,8 @@ class Plugin(object):
                         # print "Console widget found"
                         shell = widget.shell
                         shell.runCommand(
-                            'from inasafe.test_suite import run_all')
-                        shell.runCommand('run_all()')
+                            'from inasafe.test_suite import run')
+                        shell.runCommand('run(\'%s\')' % package)
                         break
 
     def show_extent_selector(self):
