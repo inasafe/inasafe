@@ -188,23 +188,23 @@ def threshold_group_parameter():
         valid = True
         message = None
 
-        if ((param == unaffected and param.value >= very_low.value)
-            or (param == very_low and param.value < unaffected.value)):
+        if ((param == unaffected and param.value >= very_low.value) or
+                (param == very_low and param.value < unaffected.value)):
             message = tr(
                 'Unaffected threshold must less than Very Low threshold')
             valid = False
-        if ((param == very_low and param.value >= low.value)
-            or (param == low and param.value < very_low.value)):
+        if ((param == very_low and param.value >= low.value) or
+                (param == low and param.value < very_low.value)):
             message = tr(
                 'Very Low threshold must less than Low threshold')
             valid = False
-        if ((param == low and param.value >= moderate.value)
-            or (param == moderate and param.value < low.value)):
+        if ((param == low and param.value >= moderate.value) or
+                (param == moderate and param.value < low.value)):
             message = tr(
                 'Low threshold must less than Moderate threshold')
             valid = False
-        if ((param == moderate and param.value >= high.value)
-            or (param == high and param.value < moderate.value)):
+        if ((param == moderate and param.value >= high.value) or
+                (param == high and param.value < moderate.value)):
             message = tr(
                 'Moderate threshold must less than High threshold')
             valid = False

@@ -753,7 +753,8 @@ class Plugin(object):
 
         This will convert Raster Layer to Vector Layer
         """
-        from safe.gui.tools.raster_reclassify_dialog import RasterReclassifyDialog
+        from safe.gui.tools.raster_reclassify_dialog import \
+            RasterReclassifyDialog
         dialog = RasterReclassifyDialog(self.iface.mainWindow(), self.iface)
         dialog.show()  # non modal
 

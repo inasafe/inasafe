@@ -80,7 +80,8 @@ class RasterReclassifyDialog(QDialog, FORM_CLASS):
         # self.input_list_parameter.minimum_item_count = 1
         # self.input_list_parameter.element_type = float
         # self.input_list_parameter.value = [0.0, 1.0]
-        # self.input_list_parameter.ordering = InputListParameter.AscendingOrder
+        # self.input_list_parameter.ordering = \
+        #     InputListParameter.AscendingOrder
         # self.thresholds_widget = InputListParameterWidget(
         #     self.input_list_parameter)
 

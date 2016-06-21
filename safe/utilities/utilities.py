@@ -350,7 +350,7 @@ def ranges_according_thresholds_list(list_of_thresholds):
             break
         threshold_min = list_of_thresholds[i]
         try:
-            threshold_max = list_of_thresholds[i+1]
+            threshold_max = list_of_thresholds[i + 1]
         except IndexError:
             threshold_max = None
         ranges.update({
