@@ -29,13 +29,12 @@ from safe.test.utilities import (
     GEOCRS,
     load_standard_layers,
     setup_scenario,
+    get_dock,
     get_qgis_app)
 
 # AG: get_qgis_app() should be called before importing modules from
 # safe.gui.widgets.dock
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-
-from safe.gui.widgets.dock import Dock
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -46,7 +45,7 @@ class PostprocessorManagerTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.DOCK = Dock(IFACE)
+        cls.DOCK = get_dock()
 
     # noinspection PyPep8Naming
     def setUp(self):

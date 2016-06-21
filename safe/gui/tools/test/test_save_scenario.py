@@ -22,7 +22,7 @@ import unittest
 
 from qgis.core import QgsMapLayerRegistry
 
-from safe.test.utilities import get_qgis_app
+from safe.test.utilities import get_qgis_app, get_dock
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.impact_functions import register_impact_functions
@@ -38,15 +38,13 @@ from safe.test.utilities import (
 from safe.common.utilities import unique_filename, temp_dir
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 
-from safe.gui.widgets.dock import Dock
-
 
 class SaveScenarioTest(unittest.TestCase):
     """Test save scenario tool."""
 
     @classmethod
     def setUpClass(cls):
-        cls.DOCK = Dock(IFACE)
+        cls.DOCK = get_dock()
 
     def setUp(self):
         """Fixture run before all tests."""
