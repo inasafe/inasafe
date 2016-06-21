@@ -422,6 +422,26 @@ class Plugin(object):
 
             self.add_action(self.action_add_layers)
 
+    def _create_run_test_action(self):
+        """Create action for running tests (developer mode, non final only)."""
+        final_release = release_status() == 'final'
+        settings = QSettings()
+        self.developer_mode = settings.value(
+            'inasafe/developer_mode', False, type=bool)
+        if not final_release and self.developer_mode:
+            icon = resources_path('img', 'icons', 'run-tests.svg')
+            self.action_run_tests = QAction(
+                QIcon(icon),
+                self.tr('Run Tests'),
+                self.iface.mainWindow())
+            self.action_run_tests.setStatusTip(self.tr(
+                'Run Tests'))
+            self.action_run_tests.setWhatsThis(self.tr(
+                'Run Tests'))
+            self.action_run_tests.triggered.connect(
+                self.run_tests)
+            self.add_action(self.action_run_tests)
+
     def _create_dock(self):
         """Create dockwidget and tabify it with the legend."""
         # Import dock here as it needs to be imported AFTER i18n is set up
@@ -467,6 +487,7 @@ class Plugin(object):
         self._create_shakemap_converter_action()
         self._create_minimum_needs_action()
         self._create_test_layers_action()
+        self._create_run_test_action()
         self._add_spacer_to_menu()
         self._create_batch_runner_action()
         self._create_impact_merge_action()
@@ -569,6 +590,22 @@ class Plugin(object):
         load_standard_layers()
         rect = QgsRectangle(106.806, -6.195, 106.837, -6.167)
         self.iface.mapCanvas().setExtent(rect)
+
+    def run_tests(self):
+        """Run unit tests in the python console."""
+        from PyQt4.QtGui import QDockWidget
+        main_window = self.iface.mainWindow()
+        for child in main_window.findChildren(QDockWidget, 'PythonConsole'):
+            if child.objectName() == 'PythonConsole':
+                child.show()
+                for widget in child.children():
+                    if 'PythonConsoleWidget' in str(widget.__class__):
+                        # print "Console widget found"
+                        shell = widget.shell
+                        shell.runCommand(
+                            'from inasafe.test_suite import run_all')
+                        shell.runCommand('run_all()')
+                        break
 
     def show_extent_selector(self):
         """Show the extent selector widget for defining analysis extents."""
