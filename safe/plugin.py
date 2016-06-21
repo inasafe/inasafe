@@ -595,6 +595,8 @@ class Plugin(object):
         """Run unit tests in the python console."""
         from PyQt4.QtGui import QDockWidget
         main_window = self.iface.mainWindow()
+        action = main_window.findChild(QAction, 'mActionShowPythonDialog')
+        action.trigger()
         for child in main_window.findChildren(QDockWidget, 'PythonConsole'):
             if child.objectName() == 'PythonConsole':
                 child.show()
