@@ -58,5 +58,9 @@ def run(package='safe'):
     print '########'
     unittest.TextTestRunner(verbosity=3, stream=sys.stdout).run(test_suite)
 
+
+def run_utilities():
+    run('safe.utilities')
+
 if __name__ == '__main__':
     run()
