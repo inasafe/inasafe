@@ -152,16 +152,16 @@ def get_dock():
     :rtype: QDockWidget
     """
     # Don't move this import.
-    from safe.gui.widgets.dock import Dock
+    from safe.gui.widgets.dock import Dock as DockObject
     if iface:
         docks = iface.mainWindow().findChildren(QtGui.QDockWidget)
         for dock in docks:
-            if isinstance(dock, Dock):
+            if isinstance(dock, DockObject):
                 return dock
         else:
-            return False
+            return DockObject(iface)
     else:
-        return Dock(IFACE)
+        return DockObject(IFACE)
 
 
 def assert_hash_for_file(hash_string, filename):
