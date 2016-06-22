@@ -101,7 +101,10 @@ def get_qgis_app():
         QCoreApplication.setApplicationName('QGIS2InaSAFETesting')
 
         # noinspection PyPep8Naming
-        QGIS_APP = QgsApplication(sys.argv, gui_flag)
+        if 'argv' in dir(sys):
+            QGIS_APP = QgsApplication(sys.argv, gui_flag)
+        else:
+            QGIS_APP = QgsApplication([], gui_flag)
 
         # Make sure QGIS_PREFIX_PATH is set in your env if needed!
         QGIS_APP.initQgis()
@@ -133,7 +136,7 @@ def get_qgis_app():
         # noinspection PyPep8Naming
         IFACE = QgisInterface(CANVAS)
         # Note(IS): I put here since it needs QGIS apps instance first
-        from safe.impact_functions import register_impact_functions
+        from safe.impact_functions.loader import register_impact_functions
         register_impact_functions()
 
     return QGIS_APP, CANVAS, IFACE, PARENT
@@ -685,21 +688,23 @@ def load_standard_layers(dock=None):
     #
     # WARNING: Please keep test/data/project/load_standard_layers.qgs in sync
     file_list = [
-        test_data_path('idp', 'potential-idp.shp'),
-        test_data_path('exposure', 'building-points.shp'),
-        test_data_path('exposure', 'buildings.shp'),
-        test_data_path('exposure', 'census.shp'),
-        test_data_path('hazard', 'volcano_point.shp'),
-        test_data_path('exposure', 'roads.shp'),
         test_data_path('hazard', 'flood_multipart_polygons.shp'),
         test_data_path('hazard', 'floods.shp'),
         test_data_path('hazard', 'classified_generic_polygon.shp'),
         test_data_path('hazard', 'volcano_krb.shp'),
-        test_data_path('exposure', 'pop_binary_raster_20_20.asc'),
+        test_data_path('hazard', 'volcano_point.shp'),
         test_data_path('hazard', 'classified_flood_20_20.asc'),
         test_data_path('hazard', 'continuous_flood_20_20.asc'),
         test_data_path('hazard', 'tsunami_wgs84.tif'),
         test_data_path('hazard', 'earthquake.tif'),
+        test_data_path('hazard', 'ash_raster_wgs84.tif'),
+        test_data_path('exposure', 'landcover.shp'),
+        test_data_path('exposure', 'building-points.shp'),
+        test_data_path('exposure', 'buildings.shp'),
+        test_data_path('exposure', 'census.shp'),
+        test_data_path('exposure', 'roads.shp'),
+        test_data_path('exposure', 'pop_binary_raster_20_20.asc'),
+        test_data_path('idp', 'potential-idp.shp'),
         test_data_path('boundaries', 'district_osm_jakarta.shp'),
     ]
     hazard_layer_count, exposure_layer_count = load_layers(

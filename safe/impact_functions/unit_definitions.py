@@ -1,6 +1,6 @@
 # coding=utf-8
 from safe.definitions import unit_generic, unit_metres, unit_mmi, \
-    unit_percentage
+    unit_percentage, unit_centimetres
 from safe_extras.parameters.unit import Unit
 
 __author__ = 'Rizky Maulana Nugraha "lucernae" <lana.pcfre@gmail.com>'
@@ -30,3 +30,7 @@ def parameter_unit_mmi():
 
 def parameter_unit_percentage():
     return convert_to_parameter_unit(unit_percentage)
+
+
+def parameter_unit_centimetres():
+    return convert_to_parameter_unit(unit_centimetres)

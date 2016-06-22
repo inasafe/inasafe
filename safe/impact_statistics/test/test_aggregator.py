@@ -49,7 +49,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.impact_statistics.aggregator import Aggregator
 from safe.utilities.keyword_io import KeywordIO
-from safe.impact_functions import register_impact_functions
+from safe.impact_functions.loader import register_impact_functions
 
 
 LOGGER = logging.getLogger('InaSAFE')

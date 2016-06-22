@@ -10,7 +10,7 @@ from PyQt4 import QtCore
 from safe.test.utilities import get_qgis_app, get_dock
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe.impact_functions import register_impact_functions
+from safe.impact_functions.loader import register_impact_functions
 from safe.test.utilities import (
     test_data_path,
     load_layer,
