@@ -913,6 +913,35 @@ class ImpactFunction(object):
         """Get the provenances"""
         return self._provenances
 
+    def parameters_value(self):
+        parameters = {}
+        for parameter_name, parameter in self.parameters.items():
+            try:
+                if parameter_name == 'postprocessors':
+                    postprocessor_dict = parameter
+                    parameters['postprocessors'] = {}
+                    for postprocessor_name, postprocessors in \
+                            postprocessor_dict.items():
+                        parameters['postprocessors'][postprocessor_name] = {}
+                        for postprocessor in postprocessors:
+                            if isinstance(postprocessor.value, list):
+                                parameters['postprocessors'][
+                                    postprocessor_name][
+                                    postprocessor.name] = {}
+                                for v in postprocessor.value:
+                                    parameters['postprocessors'][
+                                        postprocessor_name][
+                                        postprocessor.name][v.name] = v.value
+                            else:
+                                parameters['postprocessors'][
+                                    postprocessor_name][
+                                    postprocessor.name] = postprocessor.value
+                else:
+                    parameters[parameter_name] = parameter.value
+            except AttributeError:
+                LOGGER.debug('Parameter is missing for %s' % parameter_name)
+        return parameters
+
     def _set_if_provenance(self):
         """Set IF provenance step for the IF."""
         data = {
@@ -930,13 +959,15 @@ class ImpactFunction(object):
             'pyqt_version': PYQT_VERSION_STR,
             'os': platform.version(),
             'inasafe_version': get_version(),
-            # Temporary.
-            # TODO: Update it later.
-            'exposure_pixel_size': '',
-            'hazard_pixel_size': '',
-            'impact_pixel_size': '',
-            'analysis_extent': '',
-            'parameter': ''
+            # TODO(IS): Update later
+            # 'exposure_pixel_size': '',
+            # 'hazard_pixel_size': '',
+            # 'impact_pixel_size': '',
+            'actual_extent': self.actual_extent,
+            'requested_extent': self.requested_extent,
+            'actual_extent_crs': self.actual_extent_crs.authid(),
+            'requested_extent_crs': self.requested_extent_crs.authid(),
+            'parameter': self.parameters_value()
         }
 
         self.provenance.append_if_provenance_step(
