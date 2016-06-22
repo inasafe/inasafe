@@ -960,9 +960,9 @@ class ImpactFunction(object):
             'os': platform.version(),
             'inasafe_version': get_version(),
             # TODO(IS): Update later
-            # 'exposure_pixel_size': '',
-            # 'hazard_pixel_size': '',
-            # 'impact_pixel_size': '',
+            'exposure_pixel_size': '',
+            'hazard_pixel_size': '',
+            'impact_pixel_size': '',
             'actual_extent': self.actual_extent,
             'requested_extent': self.requested_extent,
             'actual_extent_crs': self.actual_extent_crs.authid(),
