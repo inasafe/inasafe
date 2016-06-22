@@ -36,6 +36,7 @@ from safe.test.utilities import (
     GEOCRS,
     test_data_path,
     get_qgis_app,
+    get_dock,
     load_standard_layers,
     setup_scenario,
     load_layers,
@@ -46,7 +47,6 @@ from safe.test.utilities import (
 # safe.gui.widgets.dock
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe.gui.widgets.dock import Dock
 from safe.impact_statistics.aggregator import Aggregator
 from safe.utilities.keyword_io import KeywordIO
 from safe.impact_functions.loader import register_impact_functions
@@ -61,7 +61,7 @@ class AggregatorTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.DOCK = Dock(IFACE)
+        cls.DOCK = get_dock()
 
     # noinspection PyPep8Naming
     def setUp(self):

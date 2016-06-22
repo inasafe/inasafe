@@ -40,6 +40,7 @@ from safe.test.utilities import (
     clone_raster_layer,
     clone_shp_layer,
     get_qgis_app,
+    get_dock,
     test_data_path)
 
 # AG: get_qgis_app() should be called before importing modules from
@@ -48,7 +49,6 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.impact_functions.loader import register_impact_functions
 from safe.gui.tools.wizard.wizard_dialog import WizardDialog
-from safe.gui.widgets.dock import Dock
 
 
 # noinspection PyTypeChecker
@@ -57,7 +57,7 @@ class WizardDialogTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.dock = Dock(IFACE)
+        cls.dock = get_dock()
 
     def setUp(self):
         # register impact functions

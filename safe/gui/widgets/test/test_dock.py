@@ -35,7 +35,7 @@ from qgis.core import (
     QgsProject)
 from PyQt4 import QtCore
 
-from safe.test.utilities import get_qgis_app
+from safe.test.utilities import get_qgis_app, get_dock
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from safe.impact_functions.loader import register_impact_functions
@@ -60,7 +60,6 @@ from safe.test.utilities import (
     TESTDATA,
     clone_shp_layer)
 
-from safe.gui.widgets.dock import Dock
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.styling import setRasterStyle
 from safe.utilities.gis import read_impact_layer
@@ -74,7 +73,7 @@ class TestDock(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.dock = Dock(IFACE)
+        cls.dock = get_dock()
 
     def setUp(self):
         """Fixture run before all tests"""
