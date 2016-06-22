@@ -20,11 +20,18 @@ import sys
 import unittest
 
 
-def full_test_suite():
-    """Full test suite."""
+def test_package(package='safe'):
+    """Test package.
+
+    :param package: The package to test.
+    :type package: str
+    """
     test_loader = unittest.defaultTestLoader
-    test_suite = test_loader.discover('safe')
-    return test_suite
+    try:
+        test_suite = test_loader.discover(package)
+        return test_suite
+    except ImportError:
+        return unittest.TestSuite()
 
 
 def test_manually():
@@ -35,14 +42,21 @@ def test_manually():
     return test_suite
 
 
-def run_all():
-    """Run tests."""
-    test_suite = full_test_suite()
+def run(package='safe'):
+    """Run tests.
+
+    :param package: The package to test.
+    :type package: str
+    """
+    test_suite = test_package(package)
     # test_suite = test_manually()
+    # package = 'PostprocessorManagerTest'
+
+    count = test_suite.countTestCases()
     print '########'
-    print '%s tests has been discovered.' % test_suite.countTestCases()
+    print '%s tests has been discovered in %s' % (count, package)
     print '########'
     unittest.TextTestRunner(verbosity=3, stream=sys.stdout).run(test_suite)
 
 if __name__ == '__main__':
-    run_all()
+    run()
