@@ -53,6 +53,9 @@ install:
   - docker exec -it qgis-testing-environment sh -c "qgis_setup.sh inasafe"
   # If needd additional steps (for example make or paver setup, place it here)
   # Link the plugin to the tests_directory
+  # TEMPORARY HACK
+  - docker exec -it qgis-testing-environment sh -c "cp /tests_directory/qgis_testrunner.sh /usr/bin/qgis_testrunner.sh"
+  - docker exec -it qgis-testing-environment sh -c "chmod 777 /usr/bin/qgis_testrunner.sh"
   - docker exec -it qgis-testing-environment sh -c "ln -s /tests_directory /root/.qgis2/python/plugins/inasafe"
 
 script:
