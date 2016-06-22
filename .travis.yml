@@ -1,6 +1,11 @@
 services:
     - docker
 
+env:
+  matrix:
+    - QGIS_VERSION_TAG=release-2_8
+    - QGIS_VERSION_TAG=release-2_14
+
 language: python
 
 cache:
@@ -29,7 +34,9 @@ before_install:
   #- sudo apt-get -qq -y update
   #- docker pull elpaso/qgis-testing-environment:latest
   #- docker pull elpaso/qgis-testing-environment:release-2_8
-  - docker pull elpaso/qgis-testing-environment:release-2_14
+  #- docker pull elpaso/qgis-testing-environment:release-2_14
+  - docker pull elpaso/qgis-testing-environment:${QGIS_VERSION_TAG}
+  - docker tag elpaso/qgis-testing-environment:${QGIS_VERSION_TAG} qgis-testing-environment
 
 install:
 #  - sudo apt-get install -y software-properties-common
