@@ -22,7 +22,7 @@ import logging
 
 from qgis.core import QgsMapLayerRegistry
 
-from safe.impact_functions import register_impact_functions
+from safe.impact_functions.loader import register_impact_functions
 from safe.test.utilities import (
     set_canvas_crs,
     set_jakarta_extent,

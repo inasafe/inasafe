@@ -25,7 +25,7 @@ from qgis.core import QgsMapLayerRegistry
 from safe.test.utilities import get_qgis_app, get_dock
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe.impact_functions import register_impact_functions
+from safe.impact_functions.loader import register_impact_functions
 from safe.utilities.gis import qgis_version
 from safe.gui.tools.save_scenario import SaveScenarioDialog
 from safe.test.utilities import (

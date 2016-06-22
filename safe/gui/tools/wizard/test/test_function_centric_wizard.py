@@ -47,7 +47,7 @@ from safe.test.utilities import (
 # safe.gui.tools.wizard
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe.impact_functions import register_impact_functions
+from safe.impact_functions.loader import register_impact_functions
 from safe.gui.tools.wizard.wizard_dialog import WizardDialog
 
 
