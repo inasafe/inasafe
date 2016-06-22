@@ -151,6 +151,8 @@ def get_dock():
     :returns: A dock.
     :rtype: QDockWidget
     """
+    # Don't move this import.
+    from safe.gui.widgets.dock import Dock
     if iface:
         docks = iface.mainWindow().findChildren(QtGui.QDockWidget)
         for dock in docks:
@@ -159,8 +161,6 @@ def get_dock():
         else:
             return False
     else:
-        # Don't move this import.
-        from safe.gui.widgets.dock import Dock
         return Dock(IFACE)
 
 
