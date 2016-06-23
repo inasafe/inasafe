@@ -3,7 +3,7 @@ services:
 
 env:
   matrix:
-#    - QGIS_VERSION_TAG=release-2_8
+    - QGIS_VERSION_TAG=release-2_8
     - QGIS_VERSION_TAG=release-2_14
 
 language: python
