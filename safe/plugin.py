@@ -684,8 +684,8 @@ class Plugin(object):
                         # print "Console widget found"
                         shell = widget.shell
                         shell.runCommand(
-                            'from inasafe.test_suite import run')
-                        shell.runCommand('run(\'%s\')' % package)
+                            'from inasafe.test_suite import test_package')
+                        shell.runCommand('test_package(\'%s\')' % package)
                         break
 
     def show_extent_selector(self):

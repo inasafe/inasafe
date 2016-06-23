@@ -52,7 +52,7 @@ install:
 
 script:
   - make pep8
-  - docker exec -it qgis-testing-environment sh -c "qgis_testrunner.sh test_suite.run"
+  - docker exec -it qgis-testing-environment sh -c "qgis_testrunner.sh test_suite.test_package"
   #- xvfb-run --server-args="-screen 0, 1024x768x24" nosetests -A 'not slow' -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=safe safe
 
 notifications:
