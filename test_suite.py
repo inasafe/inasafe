@@ -18,6 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import sys
 import unittest
+from safe.utilities.gis import qgis_version
 
 
 def test_package(package='safe'):
@@ -55,6 +56,7 @@ def run(package='safe'):
     count = test_suite.countTestCases()
     print '########'
     print '%s tests has been discovered in %s' % (count, package)
+    print 'QGIS : %s' % qgis_version()
     print '########'
     unittest.TextTestRunner(verbosity=3, stream=sys.stdout).run(test_suite)
 
