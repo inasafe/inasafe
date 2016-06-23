@@ -52,7 +52,10 @@ class IFProvenanceStep(ProvenanceStep):
         'exposure_pixel_size',
         'hazard_pixel_size',
         'impact_pixel_size',
-        'analysis_extent',
+        'actual_extent',
+        'requested_extent',
+        'actual_extent_crs',
+        'requested_extent_crs',
         'parameter'
     ]
 
