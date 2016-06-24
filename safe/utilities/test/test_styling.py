@@ -288,7 +288,7 @@ class StylingTest(unittest.TestCase):
             print str(e)
         assert False, 'Incorrect handling of broken styles'
 
-    def testAddMinMaxToStyle(self):
+    def test_add_min_max_to_style(self):
         """Test our add min max to style function."""
         myClasses = [dict(colour='#38A800', quantity=2, transparency=0),
                      dict(colour='#38A800', quantity=5, transparency=50),
@@ -320,7 +320,7 @@ class StylingTest(unittest.TestCase):
         self.maxDiff = None
         self.assertListEqual(myExpectedClasses, myActualClasses)
 
-    def testMmiColour(self):
+    def test_mmi_colour(self):
         """Test that we can get a colour given an mmi number."""
         values = range(0, 12)
         myExpectedResult = ['#FFFFFF', '#FFFFFF', '#209fff', '#00cfff',
