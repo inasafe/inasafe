@@ -17,7 +17,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import unittest
 import numpy
 
-from safe.test.utilities import get_qgis_app, test_data_path, clip_layers
+from safe.test.utilities import get_qgis_app, standard_data_path, clip_layers
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -47,8 +47,8 @@ class TestITBBayesianEarthquakeFatalityFunction(unittest.TestCase):
     def test_run(self):
         """TestITBBayesianEarthquakeFatalityFunction: Test running the IF."""
         # FIXME(Hyeuk): test requires more realistic hazard and population data
-        eq_path = test_data_path('hazard', 'earthquake.tif')
-        population_path = test_data_path(
+        eq_path = standard_data_path('hazard', 'earthquake.tif')
+        population_path = standard_data_path(
             'exposure', 'pop_binary_raster_20_20.asc')
 
         # For EQ on Pops we need to clip the hazard and exposure first to the
@@ -160,8 +160,8 @@ class TestITBBayesianEarthquakeFatalityFunction(unittest.TestCase):
 
     def test_parameter(self):
         """Test for checking parameter is carried out"""
-        eq_path = test_data_path('hazard', 'earthquake.tif')
-        population_path = test_data_path(
+        eq_path = standard_data_path('hazard', 'earthquake.tif')
+        population_path = standard_data_path(
             'exposure', 'pop_binary_raster_20_20.asc')
 
         # For EQ on Pops we need to clip the hazard and exposure first to the

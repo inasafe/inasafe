@@ -21,7 +21,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 # noinspection PyUnresolvedReferences
 import unittest
 
-from safe.test.utilities import test_data_path, get_qgis_app, get_dock
+from safe.test.utilities import standard_data_path, get_qgis_app, get_dock
 # In our tests, we need to have this line below before importing any other
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -45,7 +45,7 @@ class BatchDialogTest(unittest.TestCase):
     def test_load_batch_dialog(self):
         """Test for BatchDialog behaviour.
         """
-        scenarios_dir = test_data_path('control', 'scenarios')
+        scenarios_dir = standard_data_path('control', 'scenarios')
         dialog = BatchDialog(PARENT, IFACE, self.dock)
         dialog.show_results_popup = False
         dialog.scenario_directory_radio.setChecked(True)
@@ -65,7 +65,7 @@ class BatchDialogTest(unittest.TestCase):
 
     def test_run_single_scenario(self):
         """Test run single scenario."""
-        scenarios_dir = test_data_path('control', 'scenarios')
+        scenarios_dir = standard_data_path('control', 'scenarios')
         dialog = BatchDialog(PARENT, IFACE, self.dock)
         dialog.show_results_popup = False
         dialog.scenario_directory_radio.setChecked(False)
@@ -83,7 +83,7 @@ class BatchDialogTest(unittest.TestCase):
 
     def test_run_all_scenario(self):
         """Test run all scenarii."""
-        scenarios_dir = test_data_path('control', 'scenarios')
+        scenarios_dir = standard_data_path('control', 'scenarios')
         dialog = BatchDialog(PARENT, IFACE, self.dock)
         dialog.show_results_popup = False
         dialog.scenario_directory_radio.setChecked(False)

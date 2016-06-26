@@ -40,7 +40,7 @@ from realtime.utilities import (
     realtime_logger_name)
 from safe.common.utilities import temp_dir, unique_filename
 from safe.common.version import get_version
-from safe.test.utilities import test_data_path, get_qgis_app
+from safe.test.utilities import standard_data_path, get_qgis_app
 
 # The logger is initialised in realtime.__init__
 LOGGER = logging.getLogger(realtime_logger_name())
@@ -60,7 +60,7 @@ class TestShakeEvent(unittest.TestCase):
         # Since ShakeEvent will be using sftp_shake_data, we'll copy the grid
         # file inside 20131105060809 folder to
         # shakemap_extract_dir/20131105060809/grid.xml
-        shake_path = test_data_path('hazard', 'shake_data')
+        shake_path = standard_data_path('hazard', 'shake_data')
 
         for shake_id in shakes_id:
             input_path = os.path.abspath(

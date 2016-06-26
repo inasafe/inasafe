@@ -16,7 +16,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import unittest
 import numpy
-from safe.test.utilities import test_data_path, get_qgis_app
+from safe.test.utilities import standard_data_path, get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.common.exceptions import KeywordNotFoundError
@@ -37,8 +37,8 @@ class TestVolcanoPolygonPopulationFunction(unittest.TestCase):
 
     def test_run(self):
         """TestVolcanoPolygonPopulationFunction: Test running the IF."""
-        merapi_krb_path = test_data_path('hazard', 'volcano_krb.shp')
-        population_path = test_data_path(
+        merapi_krb_path = standard_data_path('hazard', 'volcano_krb.shp')
+        population_path = standard_data_path(
             'exposure', 'pop_binary_raster_20_20.asc')
 
         merapi_krb_layer = read_layer(merapi_krb_path)
@@ -64,8 +64,8 @@ class TestVolcanoPolygonPopulationFunction(unittest.TestCase):
 
     def test_run_failed(self):
         """Test run IF with missing keywords."""
-        merapi_krb_path = test_data_path('hazard', 'volcano_krb.shp')
-        population_path = test_data_path(
+        merapi_krb_path = standard_data_path('hazard', 'volcano_krb.shp')
+        population_path = standard_data_path(
             'exposure', 'pop_binary_raster_20_20.asc')
 
         merapi_krb_layer = read_layer(merapi_krb_path)

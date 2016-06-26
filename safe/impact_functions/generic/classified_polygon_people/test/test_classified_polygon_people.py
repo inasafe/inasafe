@@ -13,7 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 import unittest
-from safe.test.utilities import get_qgis_app, test_data_path
+from safe.test.utilities import get_qgis_app, standard_data_path
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from qgis.core import QgsVectorLayer
@@ -38,9 +38,9 @@ class TestClassifiedPolygonPeopleFunction(unittest.TestCase):
         # 1. Initializing function with necessary data
         function = ClassifiedPolygonHazardPolygonPeopleFunction.instance()
 
-        hazard_path = test_data_path(
+        hazard_path = standard_data_path(
                 'hazard', 'classified_generic_polygon.shp')
-        exposure_path = test_data_path('exposure', 'census.shp')
+        exposure_path = standard_data_path('exposure', 'census.shp')
         # noinspection PyCallingNonCallable
         hazard_layer = QgsVectorLayer(hazard_path, 'Hazard', 'ogr')
         # noinspection PyCallingNonCallable

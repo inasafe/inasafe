@@ -13,7 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 import unittest
-from safe.test.utilities import get_qgis_app, test_data_path
+from safe.test.utilities import get_qgis_app, standard_data_path
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from qgis.core import QgsVectorLayer, QgsRasterLayer
 from safe.impact_functions.ash.ash_raster_landcover.impact_function import \
@@ -37,8 +37,8 @@ class TestAshRasterPolygonLandCoverFunction(unittest.TestCase):
     def test_run(self):
         function = AshRasterLandcoverFunction.instance()
 
-        hazard_path = test_data_path('hazard', 'ash_raster_wgs84.tif')
-        exposure_path = test_data_path('exposure', 'landcover.shp')
+        hazard_path = standard_data_path('hazard', 'ash_raster_wgs84.tif')
+        exposure_path = standard_data_path('exposure', 'landcover.shp')
         # noinspection PyCallingNonCallable
         hazard_layer = QgsRasterLayer(hazard_path, 'Ash')
         # noinspection PyCallingNonCallable
