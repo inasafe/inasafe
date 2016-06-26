@@ -41,7 +41,7 @@ from safe.test.utilities import (
     clone_shp_layer,
     get_qgis_app,
     get_dock,
-    test_data_path)
+    standard_data_path)
 
 # AG: get_qgis_app() should be called before importing modules from
 # safe.gui.tools.wizard
@@ -133,14 +133,14 @@ class WizardDialogTest(unittest.TestCase):
             name='continuous_flood_20_20',
             extension='.asc',
             include_keywords=True,
-            source_directory=test_data_path('hazard'))
+            source_directory=standard_data_path('hazard'))
         # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayers([layer])
 
         layer = clone_shp_layer(
             name='buildings',
             include_keywords=True,
-            source_directory=test_data_path('exposure'))
+            source_directory=standard_data_path('exposure'))
         # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayers([layer])
 
@@ -304,7 +304,7 @@ class WizardDialogTest(unittest.TestCase):
             name='continuous_flood_20_20',
             extension='.asc',
             include_keywords=True,
-            source_directory=test_data_path('hazard'))
+            source_directory=standard_data_path('hazard'))
         # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayers([layer])
 
@@ -313,7 +313,7 @@ class WizardDialogTest(unittest.TestCase):
             name='people_allow_resampling_true',
             extension='.tif',
             include_keywords=True,
-            source_directory=test_data_path('exposure'))
+            source_directory=standard_data_path('exposure'))
         # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayers([layer])
 
@@ -427,7 +427,7 @@ class WizardDialogTest(unittest.TestCase):
             name='keywordless_layer',
             extension='.tif',
             include_keywords=False,
-            source_directory=test_data_path('hazard'))
+            source_directory=standard_data_path('hazard'))
         # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayers([layer])
 
@@ -436,7 +436,7 @@ class WizardDialogTest(unittest.TestCase):
             name='continuous_flood_unaligned_big_size',
             extension='.tif',
             include_keywords=True,
-            source_directory=test_data_path('hazard'))
+            source_directory=standard_data_path('hazard'))
         # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayers([layer])
 
@@ -445,7 +445,7 @@ class WizardDialogTest(unittest.TestCase):
             name='classified_flood_20_20',
             extension='.asc',
             include_keywords=True,
-            source_directory=test_data_path('hazard'))
+            source_directory=standard_data_path('hazard'))
         # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayers([layer])
 
@@ -453,7 +453,7 @@ class WizardDialogTest(unittest.TestCase):
         layer = clone_shp_layer(
             name='building-points',
             include_keywords=True,
-            source_directory=test_data_path('exposure'))
+            source_directory=standard_data_path('exposure'))
         # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayers([layer])
 
@@ -461,7 +461,7 @@ class WizardDialogTest(unittest.TestCase):
         layer = clone_shp_layer(
             name='building-points',
             include_keywords=False,
-            source_directory=test_data_path('exposure'))
+            source_directory=standard_data_path('exposure'))
         # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayers([layer])
 
@@ -469,7 +469,7 @@ class WizardDialogTest(unittest.TestCase):
         layer = clone_shp_layer(
             name='district_osm_jakarta',
             include_keywords=True,
-            source_directory=test_data_path('boundaries'))
+            source_directory=standard_data_path('boundaries'))
         # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayers([layer])
 
@@ -477,7 +477,7 @@ class WizardDialogTest(unittest.TestCase):
         layer = clone_shp_layer(
             name='grid_jakarta',
             include_keywords=False,
-            source_directory=test_data_path('boundaries'))
+            source_directory=standard_data_path('boundaries'))
         # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayers([layer])
 
@@ -660,7 +660,7 @@ class WizardDialogTest(unittest.TestCase):
             name='continuous_flood_20_20',
             extension='.asc',
             include_keywords=False,
-            source_directory=test_data_path('hazard'))
+            source_directory=standard_data_path('hazard'))
         # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayers([layer])
 
@@ -668,7 +668,7 @@ class WizardDialogTest(unittest.TestCase):
             name='continuous_flood_20_20',
             extension='.asc',
             include_keywords=False,
-            source_directory=test_data_path('hazard'))
+            source_directory=standard_data_path('hazard'))
         # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayers([layer])
 

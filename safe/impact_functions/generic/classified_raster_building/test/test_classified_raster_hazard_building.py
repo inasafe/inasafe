@@ -17,7 +17,7 @@ __date__ = '23/03/15'
 
 import unittest
 import math
-from safe.test.utilities import test_data_path, get_qgis_app
+from safe.test.utilities import standard_data_path, get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.impact_functions.generic.classified_raster_building\
@@ -39,8 +39,9 @@ class TestClassifiedHazardBuildingFunction(unittest.TestCase):
     def test_run(self):
         function = ClassifiedRasterHazardBuildingFunction.instance()
 
-        hazard_path = test_data_path('hazard', 'classified_flood_20_20.asc')
-        exposure_path = test_data_path('exposure', 'buildings.shp')
+        hazard_path = standard_data_path(
+            'hazard', 'classified_flood_20_20.asc')
+        exposure_path = standard_data_path('exposure', 'buildings.shp')
         hazard_layer = read_layer(hazard_path)
         exposure_layer = read_layer(exposure_path)
 

@@ -804,13 +804,6 @@ class Plugin(object):
         dialog = OsmDownloaderDialog(self.iface.mainWindow(), self.iface)
         dialog.show()  # non modal
 
-    def show_osm_downloader(self):
-        """Show the OSM buildings downloader dialog."""
-        from safe.gui.tools.osm_downloader_dialog import OsmDownloaderDialog
-
-        dialog = OsmDownloaderDialog(self.iface.mainWindow(), self.iface)
-        dialog.show()  # non modal
-
     def add_osm_layer(self):
         """Add OSM tile layer to the map.
 

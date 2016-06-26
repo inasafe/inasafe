@@ -95,7 +95,8 @@ from safe.common.exceptions import (
     UnsupportedProviderError,
     InvalidAggregationKeywords,
     InsufficientMemoryWarning,
-    MissingImpactReport
+    MissingImpactReport,
+    MetadataReadError
 )
 from safe.report.impact_report import ImpactReport
 from safe.gui.tools.about_dialog import AboutDialog
@@ -916,6 +917,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 continue
             except KeywordNotFoundError:
                 # There is a missing mandatory keyword, ignore it
+                continue
+            except MetadataReadError:
                 continue
             except:  # pylint: disable=W0702
                 # automatically adding file name to title in keywords

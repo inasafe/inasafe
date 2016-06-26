@@ -14,7 +14,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 import unittest
 from qgis.core import QgsVectorLayer, QgsRasterLayer
-from safe.test.utilities import get_qgis_app, test_data_path
+from safe.test.utilities import get_qgis_app, standard_data_path
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.impact_functions.inundation.tsunami_raster_landcover. \
@@ -34,8 +34,8 @@ class TestTsunamiRasterLandCoverFunction(unittest.TestCase):
     def test_run(self):
         function = TsunamiRasterLandcoverFunction.instance()
 
-        hazard_path = test_data_path('hazard', 'tsunami_wgs84.tif')
-        exposure_path = test_data_path('exposure', 'landcover.shp')
+        hazard_path = standard_data_path('hazard', 'tsunami_wgs84.tif')
+        exposure_path = standard_data_path('exposure', 'landcover.shp')
         # noinspection PyCallingNonCallable
         hazard_layer = QgsRasterLayer(hazard_path, 'Tsunami')
         # noinspection PyCallingNonCallable

@@ -52,7 +52,7 @@ from safe.test.utilities import (
     GEOCRS,
     set_jakarta_extent,
     compare_wkt,
-    test_data_path,
+    standard_data_path,
     get_qgis_app,
     HAZDATA,
     TESTDATA,
@@ -65,7 +65,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 # Setup path names for test data sets
 VECTOR_PATH = os.path.join(TESTDATA, 'Padang_WGS84.shp')
 VECTOR_PATH2 = os.path.join(TESTDATA, 'OSM_subset_google_mercator.shp')
-VECTOR_PATH3 = test_data_path('exposure', 'buildings_osm_4326.shp')
+VECTOR_PATH3 = standard_data_path('exposure', 'buildings_osm_4326.shp')
 
 RASTERPATH = os.path.join(HAZDATA, 'Shakemap_Padang_2009.asc')
 RASTERPATH2 = os.path.join(TESTDATA, 'population_padang_1.asc')
@@ -137,12 +137,12 @@ class ClipperTest(unittest.TestCase):
         # DISABLED for now because of the CRS prompt in QGIS Desktop.
         """Test we can clip a raster with no extension - see #659."""
         # Create a raster layer
-        source_file = test_data_path('other', 'tenbytenraster.asc')
+        source_file = standard_data_path('other', 'tenbytenraster.asc')
         test_file = unique_filename(prefix='tenbytenraster-')
         shutil.copyfile(source_file, test_file)
 
         # Create a keywords file
-        source_file = test_data_path('other', 'tenbytenraster.xml')
+        source_file = standard_data_path('other', 'tenbytenraster.xml')
         keywords_file = test_file + '.xml'
         shutil.copyfile(source_file, keywords_file)
 
@@ -675,7 +675,8 @@ class ClipperTest(unittest.TestCase):
         QgsVectorFileWriter
         """
         # this layer contains unicode values in the
-        layer_path = test_data_path('boundaries', 'district_osm_jakarta.shp')
+        layer_path = standard_data_path(
+            'boundaries', 'district_osm_jakarta.shp')
         vector_layer = QgsVectorLayer(layer_path, 'District Jakarta', 'ogr')
         keyword_io = KeywordIO()
         aggregation_keyword = get_defaults()['AGGR_ATTR_KEY']

@@ -34,7 +34,7 @@ from safe.test.utilities import (
     set_canvas_crs,
     set_jakarta_extent,
     GEOCRS,
-    test_data_path,
+    standard_data_path,
     get_qgis_app,
     get_dock,
     load_standard_layers,
@@ -247,7 +247,7 @@ class AggregatorTest(unittest.TestCase):
         TODO - this needs to be fixed post dock refactor.
 
         """
-        layer_path = test_data_path(
+        layer_path = standard_data_path(
             'hazard', 'flood_polygon_crosskabupaten.shp')
         # See qgis project in test data: vector_preprocessing_test.qgs
         # add additional layers
@@ -456,7 +456,7 @@ class AggregatorTest(unittest.TestCase):
         """Test if line aggregation works
         """
 
-        data_path = test_data_path(
+        data_path = standard_data_path(
             'impact',
             'aggregation_test_roads.shp')
         impact_layer = Vector(
@@ -535,14 +535,14 @@ class AggregatorTest(unittest.TestCase):
         """
 
         hazard = QgsVectorLayer(
-            test_data_path(
+            standard_data_path(
                 'hazard',
                 'multipart_polygons_osm_4326.shp'),
             'hazard',
             'ogr'
         )
         exposure = QgsVectorLayer(
-            test_data_path(
+            standard_data_path(
                 'exposure',
                 'buildings_osm_4326.shp'),
             'impact',

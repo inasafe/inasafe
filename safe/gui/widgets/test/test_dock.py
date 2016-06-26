@@ -41,7 +41,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from safe.impact_functions.loader import register_impact_functions
 from safe.common.utilities import format_int, unique_filename
 from safe.test.utilities import (
-    test_data_path,
+    standard_data_path,
     load_standard_layers,
     setup_scenario,
     set_canvas_crs,
@@ -401,8 +401,8 @@ class TestDock(TestCase):
         button = self.dock.pbnRunStop
         # First part of scenario should have enabled run
         file_list = [
-            test_data_path('hazard', 'continuous_flood_20_20.asc'),
-            test_data_path('exposure', 'pop_binary_raster_20_20.asc')
+            standard_data_path('hazard', 'continuous_flood_20_20.asc'),
+            standard_data_path('exposure', 'pop_binary_raster_20_20.asc')
         ]
         hazard_layer_count, exposure_layer_count = load_layers(file_list)
 
@@ -461,12 +461,12 @@ class TestDock(TestCase):
         exposure_layer = clone_shp_layer(
             name='buildings',
             include_keywords=True,
-            source_directory=test_data_path('exposure'))
+            source_directory=standard_data_path('exposure'))
 
         hazard_layer = clone_shp_layer(
             name='flood_multipart_polygons',
             include_keywords=True,
-            source_directory=test_data_path('hazard'))
+            source_directory=standard_data_path('hazard'))
 
         exposure_path = exposure_layer.source()
         hazard_path = hazard_layer.source()
@@ -580,9 +580,9 @@ class TestDock(TestCase):
         # remain unchanged
         self.tearDown()
         file_list = [
-            test_data_path('hazard', 'jakarta_flood_design.tif'),
-            test_data_path('hazard', 'continuous_flood_20_20.asc'),
-            test_data_path('exposure', 'pop_binary_raster_20_20.asc')
+            standard_data_path('hazard', 'jakarta_flood_design.tif'),
+            standard_data_path('hazard', 'continuous_flood_20_20.asc'),
+            standard_data_path('exposure', 'pop_binary_raster_20_20.asc')
         ]
         hazard_layer_count, exposure_layer_count = load_layers(file_list)
         message = 'Expecting 2 hazard layers, got %s' % hazard_layer_count
@@ -661,7 +661,7 @@ class TestDock(TestCase):
 
         result = self.dock.wvResults.page_to_text()
 
-        control_file_path = test_data_path(
+        control_file_path = standard_data_path(
             'control',
             'files',
             'test-full-run-results-qgis.txt')
