@@ -26,7 +26,7 @@ from qgis.core import (
     QgsVectorLayer,
     QgsRectangle)
 
-from safe.test.utilities import test_data_path, get_qgis_app
+from safe.test.utilities import standard_data_path, get_qgis_app
 from safe.gis.qgis_raster_tools import (
     pixels_to_points,
     polygonize,
@@ -34,8 +34,8 @@ from safe.gis.qgis_raster_tools import (
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-RASTER_BASE = test_data_path('hazard', 'jakarta_flood_design')
-VECTOR_BASE = test_data_path('other', 'polygonization_result')
+RASTER_BASE = standard_data_path('hazard', 'jakarta_flood_design')
+VECTOR_BASE = standard_data_path('other', 'polygonization_result')
 
 
 class TestQGISRasterTools(unittest.TestCase):

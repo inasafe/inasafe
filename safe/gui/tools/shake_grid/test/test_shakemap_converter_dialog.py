@@ -30,7 +30,7 @@ from PyQt4.QtGui import QDialogButtonBox
 from safe.gui.tools.shake_grid.shakemap_converter_dialog import (
     ShakemapConverterDialog)
 from safe.common.utilities import unique_filename, temp_dir
-from safe.test.utilities import test_data_path, get_qgis_app, TESTDATA
+from safe.test.utilities import standard_data_path, get_qgis_app, TESTDATA
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -65,7 +65,7 @@ class ShakemapImporterTest(unittest.TestCase):
         """Test converting grif file to tiff."""
         dialog = ShakemapConverterDialog(PARENT)
         dialog.use_output_default.setEnabled(False)
-        grid_path = test_data_path(
+        grid_path = standard_data_path(
             'hazard',
             'shake_data',
             '20131105060809',

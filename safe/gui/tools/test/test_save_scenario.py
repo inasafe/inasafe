@@ -34,7 +34,7 @@ from safe.test.utilities import (
     set_jakarta_extent,
     load_standard_layers,
     GEOCRS,
-    test_data_path)
+    standard_data_path)
 from safe.common.utilities import unique_filename, temp_dir
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 
@@ -166,7 +166,7 @@ class SaveScenarioTest(unittest.TestCase):
             function='Be affected',
             function_id='ClassifiedRasterHazardPopulationFunction')
         self.assertTrue(result, message)
-        fake_dir = test_data_path()
+        fake_dir = standard_data_path()
         scenario_file = unique_filename(
             prefix='scenarioTest', suffix='.txt', dir=fake_dir)
         exposure_layer = str(self.DOCK.get_exposure_layer().publicSource())

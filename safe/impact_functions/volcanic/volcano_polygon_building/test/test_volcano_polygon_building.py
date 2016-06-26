@@ -15,7 +15,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import unittest
-from safe.test.utilities import test_data_path, get_qgis_app
+from safe.test.utilities import standard_data_path, get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
@@ -35,8 +35,8 @@ class TestVolcanoPolygonBuildingFunction(unittest.TestCase):
 
     def test_run(self):
         """TestVolcanoPolygonBuildingFunction: Test running the IF."""
-        volcano_path = test_data_path('hazard', 'volcano_krb.shp')
-        building_path = test_data_path('exposure', 'buildings.shp')
+        volcano_path = standard_data_path('hazard', 'volcano_krb.shp')
+        building_path = standard_data_path('exposure', 'buildings.shp')
 
         hazard_layer = read_layer(volcano_path)
         exposure_layer = read_layer(building_path)
