@@ -67,6 +67,7 @@ class TestInterpolationQGIS(unittest.TestCase):
                'but got only %i' % count)
         assert count == 453, msg
 
+    @unittest.skip('Slow test')
     def test_interpolation_from_polygons_multiple(self):
         """Point interpolation using multiple polygons from Maumere works
 
@@ -135,5 +136,3 @@ class TestInterpolationQGIS(unittest.TestCase):
         msg = ('Expected 76 points tagged with no category '
                'but got only %i' % counts[None])
         assert counts[None] == 76, msg
-
-    test_interpolation_from_polygons_multiple.slow = True

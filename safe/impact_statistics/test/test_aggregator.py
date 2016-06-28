@@ -133,6 +133,7 @@ class AggregatorTest(unittest.TestCase):
         message = ('The aggregation should be KAB_NAME. Found: %s' % attribute)
         self.assertEqual(attribute, 'KAB_NAME', message)
 
+    @unittest.skip('Slow test')
     def test_check_aggregation_single_attribute(self):
         """Aggregation attribute is chosen correctly when there is only
         one attr available."""
@@ -162,9 +163,8 @@ class AggregatorTest(unittest.TestCase):
             'The aggregation should be KAB_NAME. Found: %s' % attribute)
         self.assertEqual(attribute, 'KAB_NAME', message)
 
-    test_check_aggregation_single_attribute.slow = True
-
     # noinspection PyMethodMayBeStatic
+    @unittest.skip('Slow test')
     def test_check_aggregation_no_attributes(self):
         """Aggregation attribute chosen correctly when no attr available."""
         layer_path = os.path.join(
@@ -191,9 +191,8 @@ class AggregatorTest(unittest.TestCase):
             'The aggregation should be None. Found: %s' % attribute)
         self.assertIsNone(attribute, message)
 
-    test_check_aggregation_no_attributes.slow = True
-
     # noinspection PyMethodMayBeStatic
+    @unittest.skip('Slow test')
     def test_check_aggregation_none_in_keywords(self):
         """Aggregation attribute is chosen correctly when None in keywords."""
         layer_path = os.path.join(
@@ -219,8 +218,6 @@ class AggregatorTest(unittest.TestCase):
         message = ('The aggregation should be None. Found: %s' % attribute)
         self.assertIsNone(attribute, message)
 
-    test_check_aggregation_none_in_keywords.slow = True
-
     def test_setup_target_field(self):
         """Test setup up target field is correct.
         """
@@ -237,6 +234,7 @@ class AggregatorTest(unittest.TestCase):
                                       'test', 'ogr')
         self.assertTrue(aggregator._setup_target_field(impact_layer))
 
+    @unittest.skip('Slow test')
     def test_preprocessing(self):
         """Preprocessing results are correct.
 
@@ -275,8 +273,6 @@ class AggregatorTest(unittest.TestCase):
         self.assertEqual(
             expected_feature_count,
             aggregator.preprocessed_feature_count, message)
-
-    test_preprocessing.slow = True
 
     def _create_aggregator(self, use_aoi_mode):
         """Helper to create aggregator"""

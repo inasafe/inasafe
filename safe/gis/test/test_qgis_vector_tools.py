@@ -124,6 +124,7 @@ class TestQGISVectorTools(unittest.TestCase):
         new_fields = new_layer.dataProvider().fields()
         self.assertEquals(new_fields.toList(), fields.toList())
 
+    @unittest.skip('Slow test')
     def test_clip_by_polygon(self):
         """Test clip_by_polygon work"""
         line_before = QgsVectorLayer(
@@ -154,8 +155,8 @@ class TestQGISVectorTools(unittest.TestCase):
                     found = True
                     break
             self.assertTrue(found)
-    test_clip_by_polygon.slow = True
 
+    @unittest.skip('Slow test')
     def test_split_by_polygon(self):
         """Test split_by_polygon work"""
         line_before = QgsVectorLayer(
@@ -214,7 +215,6 @@ class TestQGISVectorTools(unittest.TestCase):
                     found = True
                     break
             self.assertTrue(found)
-    test_split_by_polygon.slow = True
 
     def _create_points(self):
         """Create points for testing"""

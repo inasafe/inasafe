@@ -28,6 +28,7 @@ class Test_Clipping(unittest.TestCase):
     def tearDown(self):
         pass
 
+    @unittest.skip('Slow test')
     def test_clip_points_by_polygons(self):
         """Points can be clipped by polygons (real data)
         """
@@ -76,8 +77,6 @@ class Test_Clipping(unittest.TestCase):
                 assert len(indices) == 8
             elif filename == 'polygon_6.shp':
                 assert len(indices) == 6
-
-    test_clip_points_by_polygons.slow = True
 
     def test_clip_points_by_polygons_with_holes0(self):
         """Points can be clipped by polygons with holes
@@ -145,6 +144,7 @@ class Test_Clipping(unittest.TestCase):
             pts.write_to_file(tmp_filename)
             print 'Clipped points written to %s' % tmp_filename
 
+    @unittest.skip('Slow test')
     def test_clip_points_by_polygons_with_holes_real(self):
         """Points can be clipped by polygons with holes (real data)
         """
@@ -215,8 +215,6 @@ class Test_Clipping(unittest.TestCase):
         pts.write_to_file(tmp_filename)
         # print 'Clipped points written to %s' % tmp_filename
         os.remove(tmp_filename)
-
-    test_clip_points_by_polygons_with_holes_real.slow = True
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(Test_Clipping, 'test')

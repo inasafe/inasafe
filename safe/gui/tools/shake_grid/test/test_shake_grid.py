@@ -206,6 +206,7 @@ class ShakeGridTest(unittest.TestCase):
             force_flag=True, algorithm='average')
         self.assertTrue(self.check_feature_count(file_path, 132))
 
+    @unittest.skip('Slow test')
     def test_convert_grid_to_raster(self):
         """Test converting grid.xml to raster (tif file)"""
         grid_title = 'Earthquake'
@@ -230,8 +231,6 @@ class ShakeGridTest(unittest.TestCase):
         self.assertTrue(
             exists,
             'File result : %s does not exist' % result[:-3] + 'qml')
-
-    test_convert_grid_to_raster.slow = True
 
 
 if __name__ == '__main__':

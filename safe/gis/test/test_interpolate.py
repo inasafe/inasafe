@@ -112,6 +112,7 @@ class TestInterpolate(unittest.TestCase):
 
         assert numpy.allclose(vals, refs, rtol=1e-12, atol=1e-12)
 
+    @unittest.skip('Slow test')
     def test_linear_interpolation_range(self):
         """Interpolation library works for linear function - a range of cases
         """
@@ -135,8 +136,6 @@ class TestInterpolate(unittest.TestCase):
                 vals = interpolate2d(x, y, A, points, mode='linear')
                 refs = linear_function(points[:, 0], points[:, 1])
                 assert numpy.allclose(vals, refs, rtol=1e-12, atol=1e-12)
-
-    test_linear_interpolation_range.slow = True
 
     def test_linear_interpolation_nan_points(self):
         """Interpolation library works with interpolation points being NaN
@@ -200,6 +199,7 @@ class TestInterpolate(unittest.TestCase):
 
         assert nan_allclose(vals, refs, rtol=1e-12, atol=1e-12)
 
+    @unittest.skip('Slow test')
     def test_interpolation_random_array_and_nan(self):
         """Interpolation library (constant and linear) works with NaN
         """
@@ -282,8 +282,7 @@ class TestInterpolate(unittest.TestCase):
                     # print i, j, xi, eta, alpha, beta, vals[k], ref
                     assert nan_allclose(vals[k], ref, rtol=1e-12, atol=1e-12)
 
-    test_interpolation_random_array_and_nan.slow = True
-
+    @unittest.skip('Slow test')
     def test_linear_interpolation_outside_domain(self):
         """Interpolation library sensibly handles values outside the domain
         """
@@ -372,8 +371,6 @@ class TestInterpolate(unittest.TestCase):
                                 assert numpy.allclose(vals[i], refs[i],
                                                       rtol=1.0e-12,
                                                       atol=1.0e-12), msg
-
-    test_linear_interpolation_outside_domain.slow = True
 
     def test_interpolation_corner_cases(self):
         """Interpolation library returns NaN for incomplete grid points
