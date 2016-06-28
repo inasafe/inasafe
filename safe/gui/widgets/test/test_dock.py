@@ -35,13 +35,13 @@ from qgis.core import (
     QgsProject)
 from PyQt4 import QtCore
 
-from safe.test.utilities import get_qgis_app
+from safe.test.utilities import get_qgis_app, get_dock
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-from safe.impact_functions import register_impact_functions
+from safe.impact_functions.loader import register_impact_functions
 from safe.common.utilities import format_int, unique_filename
 from safe.test.utilities import (
-    test_data_path,
+    standard_data_path,
     load_standard_layers,
     setup_scenario,
     set_canvas_crs,
@@ -60,7 +60,6 @@ from safe.test.utilities import (
     TESTDATA,
     clone_shp_layer)
 
-from safe.gui.widgets.dock import Dock
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.styling import setRasterStyle
 from safe.utilities.gis import read_impact_layer
@@ -74,7 +73,7 @@ class TestDock(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.dock = Dock(IFACE)
+        cls.dock = get_dock()
 
     def setUp(self):
         """Fixture run before all tests"""
@@ -82,7 +81,7 @@ class TestDock(TestCase):
 
         self.dock.show_only_visible_layers_flag = True
         load_standard_layers(self.dock)
-        self.dock.cboHazard.setCurrentIndex(0)
+        self.dock.cboHazard.setCurrentIndex(1)
         self.dock.cboExposure.setCurrentIndex(0)
         self.dock.cboFunction.setCurrentIndex(0)
         self.dock.run_in_thread_flag = False
@@ -121,7 +120,7 @@ class TestDock(TestCase):
     def test_defaults(self):
         """Test the GUI in its default state"""
         print combos_to_string(self.dock)
-        self.assertEqual(self.dock.cboHazard.currentIndex(), 0)
+        self.assertEqual(self.dock.cboHazard.currentIndex(), 1)
         self.assertEqual(self.dock.cboExposure.currentIndex(), 0)
         self.assertEqual(self.dock.cboFunction.currentIndex(), 0)
         self.assertEqual(self.dock.cboAggregation.currentIndex(), 0)
@@ -344,7 +343,7 @@ class TestDock(TestCase):
             function_id='FloodEvacuationRasterHazardFunction')
         layer = self.dock.get_exposure_layer()
         index = self.dock.layer_legend_index(layer)
-        self.assertEqual(index, 10)
+        self.assertEqual(index, 15)
 
     def test_add_above_layer(self):
         """Test we can add one layer above another - see #2322
@@ -394,8 +393,8 @@ class TestDock(TestCase):
         button = self.dock.pbnRunStop
         # First part of scenario should have enabled run
         file_list = [
-            test_data_path('hazard', 'continuous_flood_20_20.asc'),
-            test_data_path('exposure', 'pop_binary_raster_20_20.asc')
+            standard_data_path('hazard', 'continuous_flood_20_20.asc'),
+            standard_data_path('exposure', 'pop_binary_raster_20_20.asc')
         ]
         hazard_layer_count, exposure_layer_count = load_layers(file_list)
 
@@ -454,12 +453,12 @@ class TestDock(TestCase):
         exposure_layer = clone_shp_layer(
             name='buildings',
             include_keywords=True,
-            source_directory=test_data_path('exposure'))
+            source_directory=standard_data_path('exposure'))
 
         hazard_layer = clone_shp_layer(
             name='flood_multipart_polygons',
             include_keywords=True,
-            source_directory=test_data_path('hazard'))
+            source_directory=standard_data_path('hazard'))
 
         exposure_path = exposure_layer.source()
         hazard_path = hazard_layer.source()
@@ -572,9 +571,9 @@ class TestDock(TestCase):
         # remain unchanged
         self.tearDown()
         file_list = [
-            test_data_path('hazard', 'jakarta_flood_design.tif'),
-            test_data_path('hazard', 'continuous_flood_20_20.asc'),
-            test_data_path('exposure', 'pop_binary_raster_20_20.asc')
+            standard_data_path('hazard', 'jakarta_flood_design.tif'),
+            standard_data_path('hazard', 'continuous_flood_20_20.asc'),
+            standard_data_path('exposure', 'pop_binary_raster_20_20.asc')
         ]
         hazard_layer_count, exposure_layer_count = load_layers(file_list)
         message = 'Expecting 2 hazard layers, got %s' % hazard_layer_count
@@ -652,7 +651,7 @@ class TestDock(TestCase):
 
         result = self.dock.wvResults.page_to_text()
 
-        control_file_path = test_data_path(
+        control_file_path = standard_data_path(
             'control',
             'files',
             'test-full-run-results-qgis.txt')

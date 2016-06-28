@@ -22,7 +22,7 @@ __copyright__ = 'lana.pcfre@gmail.com'
 
 import unittest
 
-from safe.test.utilities import get_qgis_app, test_data_path
+from safe.test.utilities import get_qgis_app, standard_data_path
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from PyQt4.QtCore import QVariant
@@ -57,8 +57,9 @@ class TestFloodRasterRoadsFunction(unittest.TestCase):
     def test_run(self):
         function = FloodRasterRoadsFunction.instance()
 
-        hazard_path = test_data_path('hazard', 'continuous_flood_20_20.asc')
-        exposure_path = test_data_path('exposure', 'roads.shp')
+        hazard_path = standard_data_path(
+            'hazard', 'continuous_flood_20_20.asc')
+        exposure_path = standard_data_path('exposure', 'roads.shp')
         # noinspection PyCallingNonCallable
         hazard_layer = QgsRasterLayer(hazard_path, 'Flood')
         # noinspection PyCallingNonCallable
@@ -119,10 +120,10 @@ class TestFloodRasterRoadsFunction(unittest.TestCase):
         2. Test intersection of flood cells with roads layer
         """
 
-        raster_name = test_data_path(
+        raster_name = standard_data_path(
             'hazard',
             'jakarta_flood_design.tif')
-        exposure_name = test_data_path(
+        exposure_name = standard_data_path(
             'exposure',
             'roads_osm_4326.shp')
 
@@ -161,10 +162,10 @@ class TestFloodRasterRoadsFunction(unittest.TestCase):
         self.assertEqual(flooded, 25)
 
     def test_zero_intersection(self):
-        hazard_path = test_data_path(
+        hazard_path = standard_data_path(
             'hazard',
             'continuous_flood_20_20.asc')
-        exposure_path = test_data_path(
+        exposure_path = standard_data_path(
             'exposure',
             'roads.shp')
 

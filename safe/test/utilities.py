@@ -16,6 +16,7 @@ from qgis.core import (
     QgsMapLayerRegistry)
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui  # pylint: disable=W0621
+from qgis.utils import iface
 
 from safe.gis.numerics import axes_to_points
 from safe.common.utilities import unique_filename, temp_dir
@@ -35,7 +36,7 @@ GOOGLECRS = 3857  # constant for EPSG:GOOGLECRS Google Mercator id
 DEVNULL = open(os.devnull, 'w')
 
 # FIXME AG: We are going to remove the usage of all the data from
-# inasafe_data and just use data in test_data_path. But until that is done,
+# inasafe_data and just use data in standard_data_path. But until that is done,
 # we still keep TESTDATA, HAZDATA, EXPDATA, and BOUNDATA below
 
 # Assuming test data three lvls up
@@ -66,6 +67,16 @@ def get_qgis_app():
     If QGIS is already running the handle to that app will be returned.
     """
 
+    global QGIS_APP, PARENT, IFACE, CANVAS  # pylint: disable=W0603
+
+    if iface:
+        from qgis.core import QgsApplication
+        QGIS_APP = QgsApplication
+        CANVAS = iface.mapCanvas()
+        PARENT = iface.mainWindow()
+        IFACE = iface
+        return QGIS_APP, CANVAS, IFACE, PARENT
+
     try:
         from qgis.core import QgsApplication
         from qgis.gui import QgsMapCanvas  # pylint: disable=no-name-in-module
@@ -76,8 +87,6 @@ def get_qgis_app():
         from safe.gis.qgis_interface import QgisInterface
     except ImportError:
         return None, None, None, None
-
-    global QGIS_APP  # pylint: disable=W0603
 
     if QGIS_APP is None:
         gui_flag = True  # All test will run qgis in gui mode
@@ -92,7 +101,10 @@ def get_qgis_app():
         QCoreApplication.setApplicationName('QGIS2InaSAFETesting')
 
         # noinspection PyPep8Naming
-        QGIS_APP = QgsApplication(sys.argv, gui_flag)
+        if 'argv' in dir(sys):
+            QGIS_APP = QgsApplication(sys.argv, gui_flag)
+        else:
+            QGIS_APP = QgsApplication([], gui_flag)
 
         # Make sure QGIS_PREFIX_PATH is set in your env if needed!
         QGIS_APP.initQgis()
@@ -110,27 +122,46 @@ def get_qgis_app():
         settings.setValue('inasafe/showRubberBands', True)
         settings.setValue('inasafe/analysis_extents_mode', 'HazardExposure')
 
-    global PARENT  # pylint: disable=W0603
     if PARENT is None:
         # noinspection PyPep8Naming
         PARENT = QtGui.QWidget()
 
-    global CANVAS  # pylint: disable=W0603
     if CANVAS is None:
         # noinspection PyPep8Naming
         CANVAS = QgsMapCanvas(PARENT)
         CANVAS.resize(QtCore.QSize(400, 400))
 
-    global IFACE  # pylint: disable=W0603
     if IFACE is None:
         # QgisInterface is a stub implementation of the QGIS plugin interface
         # noinspection PyPep8Naming
         IFACE = QgisInterface(CANVAS)
         # Note(IS): I put here since it needs QGIS apps instance first
-        from safe.impact_functions import register_impact_functions
+        from safe.impact_functions.loader import register_impact_functions
         register_impact_functions()
 
     return QGIS_APP, CANVAS, IFACE, PARENT
+
+
+def get_dock():
+    """Get a dock for testing.
+
+    If you call this function from a QGIS Desktop, you will get the real dock,
+    however, you use a fake QGIS interface, it will create a fake dock for you.
+
+    :returns: A dock.
+    :rtype: QDockWidget
+    """
+    # Don't move this import.
+    from safe.gui.widgets.dock import Dock as DockObject
+    if iface:
+        docks = iface.mainWindow().findChildren(QtGui.QDockWidget)
+        for dock in docks:
+            if isinstance(dock, DockObject):
+                return dock
+        else:
+            return DockObject(iface)
+    else:
+        return DockObject(IFACE)
 
 
 def assert_hash_for_file(hash_string, filename):
@@ -159,7 +190,7 @@ def hash_for_file(filename):
     return data_hash
 
 
-def test_data_path(*args):
+def standard_data_path(*args):
     """Return the absolute path to the InaSAFE test data or directory path.
 
     .. versionadded:: 3.0
@@ -657,22 +688,24 @@ def load_standard_layers(dock=None):
     #
     # WARNING: Please keep test/data/project/load_standard_layers.qgs in sync
     file_list = [
-        test_data_path('idp', 'potential-idp.shp'),
-        test_data_path('exposure', 'building-points.shp'),
-        test_data_path('exposure', 'buildings.shp'),
-        test_data_path('exposure', 'census.shp'),
-        test_data_path('hazard', 'volcano_point.shp'),
-        test_data_path('exposure', 'roads.shp'),
-        test_data_path('hazard', 'flood_multipart_polygons.shp'),
-        test_data_path('hazard', 'floods.shp'),
-        test_data_path('hazard', 'classified_generic_polygon.shp'),
-        test_data_path('hazard', 'volcano_krb.shp'),
-        test_data_path('exposure', 'pop_binary_raster_20_20.asc'),
-        test_data_path('hazard', 'classified_flood_20_20.asc'),
-        test_data_path('hazard', 'continuous_flood_20_20.asc'),
-        test_data_path('hazard', 'tsunami_wgs84.tif'),
-        test_data_path('hazard', 'earthquake.tif'),
-        test_data_path('boundaries', 'district_osm_jakarta.shp'),
+        standard_data_path('hazard', 'flood_multipart_polygons.shp'),
+        standard_data_path('hazard', 'floods.shp'),
+        standard_data_path('hazard', 'classified_generic_polygon.shp'),
+        standard_data_path('hazard', 'volcano_krb.shp'),
+        standard_data_path('hazard', 'volcano_point.shp'),
+        standard_data_path('hazard', 'classified_flood_20_20.asc'),
+        standard_data_path('hazard', 'continuous_flood_20_20.asc'),
+        standard_data_path('hazard', 'tsunami_wgs84.tif'),
+        standard_data_path('hazard', 'earthquake.tif'),
+        standard_data_path('hazard', 'ash_raster_wgs84.tif'),
+        standard_data_path('exposure', 'landcover.shp'),
+        standard_data_path('exposure', 'building-points.shp'),
+        standard_data_path('exposure', 'buildings.shp'),
+        standard_data_path('exposure', 'census.shp'),
+        standard_data_path('exposure', 'roads.shp'),
+        standard_data_path('exposure', 'pop_binary_raster_20_20.asc'),
+        standard_data_path('idp', 'potential-idp.shp'),
+        standard_data_path('boundaries', 'district_osm_jakarta.shp'),
     ]
     hazard_layer_count, exposure_layer_count = load_layers(
         file_list, dock=dock)

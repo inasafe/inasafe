@@ -15,7 +15,7 @@ Contact : ole.moller.nielsen@gmail.com
 import unittest
 from qgis.core import QgsVectorLayer
 
-from safe.test.utilities import get_qgis_app, test_data_path
+from safe.test.utilities import get_qgis_app, standard_data_path
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.impact_functions.generic.classified_polygon_landcover. \
@@ -35,8 +35,8 @@ class TestClassifiedPolygonLandCoverFunction(unittest.TestCase):
     def test_run(self):
         function = ClassifiedPolygonHazardLandCoverFunction.instance()
 
-        hazard_path = test_data_path('hazard', 'landcover_hazard.shp')
-        exposure_path = test_data_path('exposure', 'landcover.shp')
+        hazard_path = standard_data_path('hazard', 'landcover_hazard.shp')
+        exposure_path = standard_data_path('exposure', 'landcover.shp')
         # noinspection PyCallingNonCallable
         hazard_layer = QgsVectorLayer(hazard_path, 'Hazard', 'ogr')
         # noinspection PyCallingNonCallable

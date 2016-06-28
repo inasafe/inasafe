@@ -17,7 +17,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import unittest
 import numpy
 
-from safe.test.utilities import get_qgis_app, test_data_path, clip_layers
+from safe.test.utilities import get_qgis_app, standard_data_path, clip_layers
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -47,8 +47,8 @@ class TestITBBayesianEarthquakeFatalityFunction(unittest.TestCase):
     def test_run(self):
         """TestITBBayesianEarthquakeFatalityFunction: Test running the IF."""
         # FIXME(Hyeuk): test requires more realistic hazard and population data
-        eq_path = test_data_path('hazard', 'earthquake.tif')
-        population_path = test_data_path(
+        eq_path = standard_data_path('hazard', 'earthquake.tif')
+        population_path = standard_data_path(
             'exposure', 'pop_binary_raster_20_20.asc')
 
         # For EQ on Pops we need to clip the hazard and exposure first to the
@@ -157,6 +157,44 @@ class TestITBBayesianEarthquakeFatalityFunction(unittest.TestCase):
         message = 'Expecting %s, but getting %s instead' % (
             expected, retrieved_if)
         self.assertEqual(expected, retrieved_if, message)
+
+    def test_parameter(self):
+        """Test for checking parameter is carried out"""
+        eq_path = standard_data_path('hazard', 'earthquake.tif')
+        population_path = standard_data_path(
+            'exposure', 'pop_binary_raster_20_20.asc')
+
+        # For EQ on Pops we need to clip the hazard and exposure first to the
+        # same dimension
+        clipped_hazard, clipped_exposure = clip_layers(
+            eq_path, population_path)
+
+        # noinspection PyUnresolvedReferences
+        eq_layer = read_layer(
+            str(clipped_hazard.source()))
+        # noinspection PyUnresolvedReferences
+        population_layer = read_layer(
+            str(clipped_exposure.source()))
+
+        impact_function = ITBBayesianFatalityFunction.instance()
+        impact_function.hazard = SafeLayer(eq_layer)
+        impact_function.exposure = SafeLayer(population_layer)
+
+        expected = {
+            'postprocessors': {
+                'Age': {
+                    'Age': {
+                        'Adult ratio': 0.659,
+                        'Elderly ratio': 0.078,
+                        'Youth ratio': 0.263
+                    }
+                },
+            'Gender': {'Gender': True},
+            'MinimumNeeds': {'MinimumNeeds': True}
+            }
+        }
+        self.assertDictEqual(expected, impact_function.parameters_value())
+
 
 if __name__ == '__main__':
     unittest.main()

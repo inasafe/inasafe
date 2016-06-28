@@ -21,7 +21,7 @@ import unittest
 from osgeo import ogr
 
 from safe.gis.gdal_ogr_tools import polygonize_thresholds, polygonize
-from safe.test.utilities import test_data_path
+from safe.test.utilities import standard_data_path
 
 
 class TestGDALOGRTools(unittest.TestCase):
@@ -29,7 +29,7 @@ class TestGDALOGRTools(unittest.TestCase):
     def test_polygonize_thresholds(self):
         """Test polygonize raster using gdal with some thresholds."""
 
-        raster_path = test_data_path('hazard', 'jakarta_flood_design.tif')
+        raster_path = standard_data_path('hazard', 'jakarta_flood_design.tif')
 
         inside_file_name, inside_layer_name, outside_file_name, \
             outside_layer_name = polygonize_thresholds(
@@ -56,7 +56,8 @@ class TestGDALOGRTools(unittest.TestCase):
     def test_polygonize(self):
         """Test if we can polygonize a raster using GDAL."""
 
-        raster_path = test_data_path('hazard', 'classified_flood_20_20.asc')
+        raster_path = standard_data_path(
+            'hazard', 'classified_flood_20_20.asc')
         driver = ogr.GetDriverByName('ESRI Shapefile')
         expected_field_name = 'my_field'
 

@@ -19,7 +19,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.common.utilities import temp_dir, unique_filename
 from safe.utilities.resources import resources_path
-from safe.test.utilities import load_layer, test_data_path
+from safe.test.utilities import load_layer, standard_data_path
 from safe.report.impact_report import ImpactReport
 from safe.utilities.gis import qgis_version
 
@@ -37,7 +37,7 @@ class ImpactReportTest(unittest.TestCase):
 
     def test_get_map_title(self):
         """Getting the map title from the keywords"""
-        impact_layer_path = test_data_path(
+        impact_layer_path = standard_data_path(
             'impact', 'population_affected_entire_area.shp')
         layer, _ = load_layer(impact_layer_path)
 
@@ -52,7 +52,7 @@ class ImpactReportTest(unittest.TestCase):
     def test_handle_missing_map_title(self):
         """Missing map title from the keywords fails gracefully"""
         # Use hazard layer as it won't have 'map_title' keyword
-        layer_path = test_data_path('hazard', 'tsunami_wgs84.tif')
+        layer_path = standard_data_path('hazard', 'tsunami_wgs84.tif')
         layer, _ = load_layer(layer_path)
         template = resources_path(
             'qgis-composer-templates', 'a4-portrait-blue.qpt')
@@ -64,7 +64,7 @@ class ImpactReportTest(unittest.TestCase):
 
     def test_missing_elements(self):
         """Test missing elements set correctly."""
-        impact_layer_path = test_data_path(
+        impact_layer_path = standard_data_path(
             'impact', 'population_affected_entire_area.shp')
         layer, _ = load_layer(impact_layer_path)
 
@@ -84,7 +84,7 @@ class ImpactReportTest(unittest.TestCase):
 
     def test_print_default_template(self):
         """Test printing report to pdf using default template works."""
-        impact_layer_path = test_data_path(
+        impact_layer_path = standard_data_path(
             'impact', 'population_affected_entire_area.shp')
         layer, _ = load_layer(impact_layer_path)
         # noinspection PyUnresolvedReferences,PyArgumentList
@@ -148,7 +148,7 @@ class ImpactReportTest(unittest.TestCase):
     def test_custom_logo(self):
         """Test that setting user-defined logo works."""
         # LOGGER.info('Testing custom_logo')
-        impact_layer_path = test_data_path(
+        impact_layer_path = standard_data_path(
             'impact', 'population_affected_entire_area.shp')
         layer, _ = load_layer(impact_layer_path)
         # noinspection PyUnresolvedReferences,PyArgumentList
@@ -193,7 +193,7 @@ class ImpactReportTest(unittest.TestCase):
 
     def Xtest_print_impact_table(self):
         """Test print impact table to pdf."""
-        impact_layer_path = test_data_path(
+        impact_layer_path = standard_data_path(
             'impact', 'population_affected_entire_area.shp')
         layer, _ = load_layer(impact_layer_path)
         # noinspection PyUnresolvedReferences,PyArgumentList

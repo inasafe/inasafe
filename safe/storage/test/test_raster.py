@@ -18,12 +18,12 @@ import unittest
 from qgis.core import QgsRasterLayer
 
 from safe.storage.raster import Raster
-from safe.test.utilities import test_data_path, get_qgis_app
+from safe.test.utilities import standard_data_path, get_qgis_app
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 LOGGER = logging.getLogger('InaSAFE')
-KEYWORD_PATH = test_data_path('hazard', 'jakarta_flood_design.xml')
-RASTER_BASE = test_data_path('hazard', 'jakarta_flood_design')
+KEYWORD_PATH = standard_data_path('hazard', 'jakarta_flood_design.xml')
+RASTER_BASE = standard_data_path('hazard', 'jakarta_flood_design')
 
 
 class RasterTest(unittest.TestCase):
