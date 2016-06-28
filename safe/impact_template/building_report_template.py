@@ -107,7 +107,7 @@ class BuildingReportTemplate(AbstractRoadBuildingReportTemplate):
         row.add(m.Cell(last_row[0], header=True, align='left'))
         for content in last_row[1:]:
             # Bold and align right.
-            row.add(m.Cell(content, header=True, align='right'))
+            row.add(m.Cell(format_int(content), header=True, align='right'))
         table.add(row)
 
         message.add(table)

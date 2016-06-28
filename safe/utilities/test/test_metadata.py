@@ -1,6 +1,6 @@
 import unittest
 
-from safe.test.utilities import test_data_path, clone_shp_layer
+from safe.test.utilities import standard_data_path, clone_shp_layer
 from safe.utilities.metadata import (
     write_iso19115_metadata,
     read_iso19115_metadata
@@ -16,7 +16,7 @@ class TestMetadataUtilities(unittest.TestCase):
         exposure_layer = clone_shp_layer(
             name='buildings',
             include_keywords=False,
-            source_directory=test_data_path('exposure'))
+            source_directory=standard_data_path('exposure'))
         keywords = {
             'date': '26-03-2015 14:03',
             'exposure': 'structure',
@@ -37,7 +37,7 @@ class TestMetadataUtilities(unittest.TestCase):
         exposure_layer = clone_shp_layer(
             name='buildings',
             include_keywords=False,
-            source_directory=test_data_path('exposure'))
+            source_directory=standard_data_path('exposure'))
         keywords = {
             # 'date': '26-03-2015 14:03',
             'exposure': 'structure',
@@ -80,7 +80,7 @@ class TestMetadataUtilities(unittest.TestCase):
         layer = clone_shp_layer(
             name='buildings',
             include_keywords=False,
-            source_directory=test_data_path('exposure'))
+            source_directory=standard_data_path('exposure'))
         write_iso19115_metadata(layer.source(), keywords)
 
 if __name__ == '__main__':

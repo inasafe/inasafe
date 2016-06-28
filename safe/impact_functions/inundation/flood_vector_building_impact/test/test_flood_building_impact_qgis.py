@@ -18,7 +18,10 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 import unittest
 from qgis.core import QgsVectorLayer
-from safe.test.utilities import get_qgis_app, test_data_path, clone_shp_layer
+from safe.test.utilities import (
+    get_qgis_app,
+    standard_data_path,
+    clone_shp_layer)
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.impact_functions.impact_function_manager\
@@ -39,8 +42,9 @@ class TestFloodPolygonBuildingFunction(unittest.TestCase):
     def test_run(self):
         function = FloodPolygonBuildingFunction.instance()
 
-        hazard_path = test_data_path('hazard', 'flood_multipart_polygons.shp')
-        # exposure_path = test_data_path('exposure', 'buildings.shp')
+        hazard_path = standard_data_path(
+            'hazard', 'flood_multipart_polygons.shp')
+        # exposure_path = standard_data_path('exposure', 'buildings.shp')
         # noinspection PyCallingNonCallable
         hazard_layer = QgsVectorLayer(hazard_path, 'Flood', 'ogr')
         # noinspection PyCallingNonCallable
@@ -49,7 +53,7 @@ class TestFloodPolygonBuildingFunction(unittest.TestCase):
         exposure_layer = clone_shp_layer(
             name='buildings',
             include_keywords=True,
-            source_directory=test_data_path('exposure'))
+            source_directory=standard_data_path('exposure'))
         # Let's set the extent to the hazard extent
         extent = hazard_layer.extent()
         rect_extent = [

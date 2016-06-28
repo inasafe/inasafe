@@ -17,7 +17,7 @@ from safe.engine.interpolation import (
     interpolate_polygon_points,
     assign_hazard_values_to_exposure_data,
     tag_polygons_by_grid)
-from safe.impact_functions import register_impact_functions
+from safe.impact_functions.loader import register_impact_functions
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.storage.core import (
     read_layer,
@@ -41,7 +41,7 @@ from safe.common.utilities import (
     VerificationError,
     unique_filename,
     temp_dir)
-from safe.test.utilities import TESTDATA, HAZDATA, EXPDATA, test_data_path
+from safe.test.utilities import TESTDATA, HAZDATA, EXPDATA, standard_data_path
 from safe.common.exceptions import InaSAFEError
 
 
@@ -165,6 +165,7 @@ class TestEngine(unittest.TestCase):
                    'and full grids, Got %s and %s' % (x, y))
             assert numpy.allclose(x, y)
 
+    @unittest.skip('Slow test')
     def test_polygon_hazard_and_raster_exposure_big(self):
         """Rasters can be converted to points and clipped by polygons
 
@@ -264,8 +265,6 @@ class TestEngine(unittest.TestCase):
 
         assert numpy.allclose(geometry[0], 106.9675237)  # LON
         assert numpy.allclose(geometry[1], -6.16468982)  # LAT
-
-    test_polygon_hazard_and_raster_exposure_big.slow = True
 
     def test_polygon_hazard_and_raster_exposure_small(self):
         """Exposure rasters can be clipped by polygon exposure
@@ -459,8 +458,9 @@ class TestEngine(unittest.TestCase):
             'inasafe/defaultUserDirectory', temp_directory.encode('utf-8'))
 
         # Setting layers
-        hazard_filename = test_data_path('hazard', 'jakarta_flood_design.tif')
-        exposure_filename = test_data_path(
+        hazard_filename = standard_data_path(
+            'hazard', 'jakarta_flood_design.tif')
+        exposure_filename = standard_data_path(
             'exposure', 'buildings_osm_4326.shp')
 
         # Calculate impact using API
@@ -483,9 +483,9 @@ class TestEngine(unittest.TestCase):
 
     def test_data_sources_are_carried_forward(self):
         """Data sources are carried forward to impact layer."""
-        hazard_filepath = test_data_path(
+        hazard_filepath = standard_data_path(
             'hazard', 'continuous_flood_20_20.asc')
-        exposure_filepath = test_data_path('exposure', 'buildings.shp')
+        exposure_filepath = standard_data_path('exposure', 'buildings.shp')
 
         hazard_layer = read_layer(hazard_filepath)
         exposure_layer = read_layer(exposure_filepath)
@@ -916,6 +916,7 @@ class TestEngine(unittest.TestCase):
             pts_outside = points[outside]
             Vector(geometry=pts_outside).write_to_file('test_points_out.shp')
 
+    @unittest.skip('Slow test')
     def test_interpolation_from_polygons_one_poly(self):
         """Point interpolation using one polygon from Maumere works
 
@@ -975,8 +976,7 @@ class TestEngine(unittest.TestCase):
                'but got only %i' % count)
         assert count == 458, msg
 
-    test_interpolation_from_polygons_one_poly.slow = True
-
+    @unittest.skip('Slow test')
     def test_interpolation_from_polygons_multiple(self):
         """Point interpolation using multiple polygons from Maumere works
 
@@ -1098,8 +1098,7 @@ class TestEngine(unittest.TestCase):
         # for key in counts:
         #    print key, counts[key]
 
-    test_interpolation_from_polygons_multiple.slow = True
-
+    @unittest.skip('Slow test')
     def test_interpolation_from_polygons_error_handling(self):
         """Interpolation using polygons handles input errors as expected
 
@@ -1126,8 +1125,7 @@ class TestEngine(unittest.TestCase):
             msg = 'Should have raised error about projection mismatch'
             raise Exception(msg)
 
-    test_interpolation_from_polygons_error_handling.slow = True
-
+    @unittest.skip('Slow test')
     def test_line_clipping_by_polygon(self):
         """Multiple lines are clipped correctly by complex polygon
         """
@@ -1228,8 +1226,7 @@ class TestEngine(unittest.TestCase):
                                [122.18457453, -8.58798668],
                                [122.18466284, -8.5878697]])
 
-    test_line_clipping_by_polygon.slow = True
-
+    @unittest.skip('Slow test')
     def test_line_interpolation_from_polygons_one_poly(self):
         """Line clipping and interpolation using one polygon works
 
@@ -1336,8 +1333,7 @@ class TestEngine(unittest.TestCase):
         assert I_attributes[13]['polygon_id'] == 0
         assert I_attributes[13]['parent_line_id'] == 131
 
-    test_line_interpolation_from_polygons_one_poly.slow = True
-
+    @unittest.skip('Slow test')
     def test_line_interpolation_from_multiple_polygons(self):
         """Line interpolation using multiple polygons works
 
@@ -1463,8 +1459,7 @@ class TestEngine(unittest.TestCase):
         assert I_attributes[85]['polygon_id'] == 453
         assert I_attributes[85]['parent_line_id'] == 133
 
-    test_line_interpolation_from_multiple_polygons.slow = True
-
+    @unittest.skip('Slow test')
     def test_polygon_to_roads_interpolation_flood_example(self):
         """Roads can be tagged with values from flood polygons
 
@@ -1549,8 +1544,7 @@ class TestEngine(unittest.TestCase):
         # assert I_attributes[]['polygon_id'] ==
         # assert I_attributes[]['parent_line_id'] ==
 
-    test_polygon_to_roads_interpolation_flood_example.slow = True
-
+    @unittest.skip('Skipped by default')
     def Xtest_polygon_to_roads_interpolation_jakarta_flood_example1(self):
         """Roads can be tagged with values from flood polygons
 
@@ -1637,9 +1631,8 @@ class TestEngine(unittest.TestCase):
         assert I_attributes[198]['polygon_id'] == 235
         assert I_attributes[198]['parent_line_id'] == 333
 
-    Xtest_polygon_to_roads_interpolation_jakarta_flood_example1.slow = True
-
-    def Xtest_polygon_to_roads_interpolation_jakarta_flood_merged(self):
+    @unittest.skip('Skipped by default')
+    def test_polygon_to_roads_interpolation_jakarta_flood_merged(self):
         """Roads can be tagged with values from flood polygons
 
         This is a test for road interpolation (issue #55)
@@ -1711,8 +1704,6 @@ class TestEngine(unittest.TestCase):
         # assert I_attributes[198]['KEL_NAME'] == 'KUNINGAN TIMUR'
         # assert I_attributes[198]['polygon_id'] == 235
         # assert I_attributes[198]['parent_line_id'] == 333
-
-    Xtest_polygon_to_roads_interpolation_jakarta_flood_merged.slow = True
 
     def test_layer_integrity_raises_exception(self):
         """Layers without keywords raise exception."""
@@ -1893,6 +1884,7 @@ class TestEngine(unittest.TestCase):
         msg = 'Expected %.12f, but got %.12f' % (r, x)
         assert numpy.allclose(x, r, rtol=1.0e-6, atol=1.0e-6), msg
 
+    @unittest.skip('Slow test')
     def test_conflicting_attribute_names(self):
         """Test that hazard layer attribute names do not mask exposure layer.
 
@@ -1933,7 +1925,6 @@ class TestEngine(unittest.TestCase):
             len(interpolated_attributes),
             message)
 
-    test_conflicting_attribute_names.slow = True
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestEngine, 'test')

@@ -25,7 +25,7 @@ from safe.utilities.styling import (
     mmi_colour)
 from safe.utilities.utilities import get_error_message
 from safe.test.utilities import (
-    test_data_path,
+    standard_data_path,
     load_layer,
     get_qgis_app,
     clone_shp_layer)
@@ -50,7 +50,7 @@ class StylingTest(unittest.TestCase):
         .. seealso:: https://github.com/AIFDR/inasafe/issues/126
         """
         # This dataset has all cells with value 1.3
-        data_path = test_data_path('other', 'issue126.tif')
+        data_path = standard_data_path('other', 'issue126.tif')
         layer, _ = load_layer(data_path)
 
         # Note the float quantity values below
@@ -118,7 +118,7 @@ class StylingTest(unittest.TestCase):
         """Test that transparency of minimum value works when set to 100%
         """
         # This dataset has all cells with value 1.3
-        data_path = test_data_path('other', 'issue126.tif')
+        data_path = standard_data_path('other', 'issue126.tif')
         layer, _ = load_layer(data_path)
 
         # Note the float quantity values below
@@ -163,7 +163,7 @@ class StylingTest(unittest.TestCase):
         layer = clone_shp_layer(
             name='volcano_point',
             include_keywords=True,
-            source_directory=test_data_path('hazard'))
+            source_directory=standard_data_path('hazard'))
 
         # Note the float quantity values below
         style_info = {
@@ -216,7 +216,7 @@ class StylingTest(unittest.TestCase):
         vector_layer = clone_shp_layer(
             name='polygons_for_styling',
             include_keywords=True,
-            source_directory=test_data_path('impact'))
+            source_directory=standard_data_path('impact'))
 
         style = {
             'legend_title': u'Population Count',

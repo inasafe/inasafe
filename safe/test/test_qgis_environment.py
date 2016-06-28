@@ -23,7 +23,7 @@ from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsRasterLayer)
 
-from safe.test.utilities import get_qgis_app, test_data_path
+from safe.test.utilities import get_qgis_app, standard_data_path
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -59,7 +59,7 @@ class QGISTest(unittest.TestCase):
         self.assertEqual(auth_id, expected_auth_id)
 
         # now test for a loaded layer
-        path = test_data_path('hazard', 'jakarta_flood_design.tif')
+        path = standard_data_path('hazard', 'jakarta_flood_design.tif')
         title = 'Jakarta Flood'
         # noinspection PyCallingNonCallable
         layer = QgsRasterLayer(path, title)

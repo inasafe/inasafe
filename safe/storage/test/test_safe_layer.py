@@ -9,7 +9,7 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import unittest
-from safe.test.utilities import get_qgis_app, test_data_path
+from safe.test.utilities import get_qgis_app, standard_data_path
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -24,7 +24,7 @@ class SafeLayerTest(unittest.TestCase):
     def test_safe_layer_attributes(self):
         """Test creating safe layer."""
         self.maxDiff = None
-        building_path = test_data_path('exposure', 'buildings.shp')
+        building_path = standard_data_path('exposure', 'buildings.shp')
 
         building_layer = read_layer(building_path)
 
@@ -39,11 +39,11 @@ class SafeLayerTest(unittest.TestCase):
             'license': u'Open Data Commons Open Database License (ODbL)',
             'keyword_version': u'3.5',
             'value_mapping': {u'government': [u'Government'],
-                              u'residence': [u'Residential'],
+                              u'residential': [u'Residential', u'Commercial'],
                               u'health': [u'Clinic/Doctor'],
-                              u'education': [u'School'], u'place of worship': [
-                    u'Place of Worship - Islam'],
-                              u'economy': [u'Industrial', u'Commercial']},
+                              u'education': [u'School'],
+                              u'place of worship': [
+                                  u'Place of Worship - Islam']},
             'structure_class_field': u'TYPE', 'title': u'Buildings',
             'source': u'OpenStreetMap - www.openstreetmap.org',
             'layer_geometry': u'polygon', 'layer_purpose': u'exposure',
