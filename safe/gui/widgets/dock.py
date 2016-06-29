@@ -1148,6 +1148,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             of the web view after model completion are asynchronous (when
             threading mode is enabled especially)
         """
+        self.dock_accept_begin_hook()
         self.enable_signal_receiver()
         try:
             self.enable_busy_cursor()
@@ -1159,6 +1160,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
             # Start the analysis
             self.impact_function.run_analysis()
+            self.dock_accept_end_hook()
         except InsufficientOverlapError as e:
             context = self.tr(
                 'A problem was encountered when trying to determine the '
@@ -2186,3 +2188,45 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             return True, clip_parameters['adjusted_geo_extent']
         except (AttributeError, InsufficientOverlapError):
             return False, None
+
+    def dock_accept_begin_hook(self):
+        """Hook at the beginning of Dock.accept()
+
+        This hook can be used by external plugins to add functionality to
+        inaSAFE by overriding them like this:
+
+        import safe.gui.widgets.dock
+        def my_accept_begin_hook(dock):
+            print "my new dock_accept_begin_hook()"
+
+        safe.gui.widgets.dock.Dock.dock_accept_begin_hook=my_accept_begin_hook
+
+        .. versionadded:: 3.5
+
+        :param dock: The inaSAFE dock
+        :type dock: safe.gui.widgets.dock.Dock
+
+        """
+        print "dock_accept_begin_hook()"
+        # print dock.inasafe_version
+
+    def dock_accept_end_hook(self):
+        """Hook at the end of Dock.accept()
+
+        This hook can be used by external plugins to add functionality to
+        inaSAFE by overriding them like this:
+
+        import safe.gui.widgets.dock
+        def dock_accept_end_hook(dock):
+            print "my new dock_accept_end_hook()"
+
+        safe.gui.widgets.dock.Dock.dock_accept_end_hook = dock_accept_end_hook
+
+        .. versionadded:: 3.5
+
+        :param dock: The inaSAFE dock
+        :type dock: safe.gui.widgets.dock.Dock
+
+        """
+        print "dock_accept_end_hook()"
+        # print dock.inasafe_version
