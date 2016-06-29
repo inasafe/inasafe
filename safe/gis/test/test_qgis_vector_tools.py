@@ -66,7 +66,6 @@ class TestQGISVectorTools(unittest.TestCase):
             x, y = [attr[index] for index in [x_index, y_index]]
             self.assertLess(abs(p.x() - x), dx)
             self.assertLess(abs(p.y() - y), dy)
-    test_points_to_rectangles.slow = False
 
     def test_union_geometry(self):
         """Test union_geometry work"""
@@ -96,7 +95,6 @@ class TestQGISVectorTools(unittest.TestCase):
         # The union is 9 squares
         self.assertAlmostEquals(geom.area(), 1.5 * dx * 1.5 * dy)
         self.assertTrue(geom.isMultipart())
-    test_union_geometry.slow = False
 
     def test_create_layer(self):
         """Test create layer work"""

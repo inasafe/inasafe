@@ -573,7 +573,6 @@ class AggregatorTest(unittest.TestCase):
 
         aggregator.set_sum_field_name('SUMM_AGGR')
         self.assertEquals(aggregator.sum_field_name(), 'SUMM_AGGR')
-    test_set_sum_field_name.slow = False
 
     def test_get_centroids(self):
         """Test get_centroids work"""
@@ -590,8 +589,6 @@ class AggregatorTest(unittest.TestCase):
         centroids = aggregator._get_centroids([polygon1])
         # noinspection PyTypeChecker
         self.assertEquals(len(centroids), 1)
-    test_get_centroids.slow = False
-
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(AggregatorTest)
