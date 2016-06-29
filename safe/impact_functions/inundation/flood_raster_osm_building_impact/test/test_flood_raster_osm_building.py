@@ -15,7 +15,7 @@ Contact : ole.moller.nielsen@gmail.com
 __author__ = 'lucernae'
 
 import unittest
-from safe.test.utilities import get_qgis_app, test_data_path
+from safe.test.utilities import get_qgis_app, standard_data_path
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
@@ -39,8 +39,9 @@ class TestFloodRasterBuildingFunction(unittest.TestCase):
     def test_run(self):
         impact_function = FloodRasterBuildingFunction.instance()
 
-        hazard_path = test_data_path('hazard', 'continuous_flood_20_20.asc')
-        exposure_path = test_data_path('exposure', 'buildings.shp')
+        hazard_path = standard_data_path(
+            'hazard', 'continuous_flood_20_20.asc')
+        exposure_path = standard_data_path('exposure', 'buildings.shp')
         hazard_layer = read_layer(hazard_path)
         exposure_layer = read_layer(exposure_path)
 

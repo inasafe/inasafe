@@ -7,7 +7,7 @@ __date__ = '23/03/15'
 __copyright__ = 'lana.pcfre@gmail.com'
 
 import unittest
-from safe.test.utilities import test_data_path, get_qgis_app, clip_layers
+from safe.test.utilities import standard_data_path, get_qgis_app, clip_layers
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.storage.core import read_layer
@@ -31,8 +31,8 @@ class TestTsunamiEvacuationRaster(unittest.TestCase):
     def test_run(self):
         function = TsunamiEvacuationFunction.instance()
 
-        hazard_path = test_data_path('hazard', 'tsunami_wgs84.tif')
-        exposure_path = test_data_path(
+        hazard_path = standard_data_path('hazard', 'tsunami_wgs84.tif')
+        exposure_path = standard_data_path(
             'exposure', 'pop_binary_raster_20_20.asc')
         # We need clipping for both layers to be in the same dimension
         clipped_hazard, clipped_exposure = clip_layers(

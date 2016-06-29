@@ -23,7 +23,7 @@ import shutil
 import ogr
 
 from safe.common.utilities import unique_filename, temp_dir
-from safe.test.utilities import test_data_path, get_qgis_app
+from safe.test.utilities import standard_data_path, get_qgis_app
 from safe.gui.tools.shake_grid.shake_grid import (
     ShakeGrid,
     convert_mmi_data)
@@ -31,7 +31,7 @@ from safe.gui.tools.shake_grid.shake_grid import (
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 # Parse the grid once and use it for all tests to fasten the tests
 # Use temp directory to do the testing
-SOURCE_PATH = test_data_path(
+SOURCE_PATH = standard_data_path(
     'hazard',
     'shake_data',
     '20131105060809',
@@ -222,10 +222,10 @@ class ShakeGridTest(unittest.TestCase):
             'Result path not as expected')
         exists = os.path.exists(result)
         self.assertTrue(exists, 'File result : %s does not exist' % result)
-        exists = os.path.exists(result[:-3] + 'keywords')
+        exists = os.path.exists(result[:-3] + 'xml')
         self.assertTrue(
             exists,
-            'File result : %s does not exist' % result[:-3] + 'keywords')
+            'File result : %s does not exist' % result[:-3] + 'xml')
         exists = os.path.exists(result[:-3] + 'qml')
         self.assertTrue(
             exists,

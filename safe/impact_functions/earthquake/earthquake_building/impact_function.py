@@ -188,6 +188,9 @@ class EarthquakeBuildingFunction(
                 category = tr('High')
             else:
                 # Not reported for less than level t0
+                # RMN: We still need to add target_field attribute
+                # So, set it to None
+                attributes[i][self.target_field] = None
                 continue
 
             attributes[i][self.target_field] = cls

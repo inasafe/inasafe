@@ -7,7 +7,7 @@ import codecs
 from unittest import expectedFailure
 
 from safe.test.utilities import (
-    test_data_path,
+    standard_data_path,
     get_qgis_app,
 )
 
@@ -62,7 +62,7 @@ class UtilitiesTest(unittest.TestCase):
             assert str(e) in message
 
             message = message.decode('string_escape')
-            control_file_path = test_data_path(
+            control_file_path = standard_data_path(
                 'control',
                 'files',
                 'test-stacktrace-html.txt')
@@ -99,7 +99,7 @@ class UtilitiesTest(unittest.TestCase):
             'exposure_title': 'Sample Exposure Title',
             'exposure_source': 'Sample Exposure Source'}
         attribution = impact_attribution(keywords)
-        control_file_path = test_data_path(
+        control_file_path = standard_data_path(
             'control',
             'files',
             'impact-layer-attribution.txt')

@@ -17,7 +17,7 @@ from safe.engine.interpolation import (
     interpolate_polygon_points,
     assign_hazard_values_to_exposure_data,
     tag_polygons_by_grid)
-from safe.impact_functions import register_impact_functions
+from safe.impact_functions.loader import register_impact_functions
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.storage.core import (
     read_layer,
@@ -41,7 +41,7 @@ from safe.common.utilities import (
     VerificationError,
     unique_filename,
     temp_dir)
-from safe.test.utilities import TESTDATA, HAZDATA, EXPDATA, test_data_path
+from safe.test.utilities import TESTDATA, HAZDATA, EXPDATA, standard_data_path
 from safe.common.exceptions import InaSAFEError
 
 
@@ -459,8 +459,9 @@ class TestEngine(unittest.TestCase):
             'inasafe/defaultUserDirectory', temp_directory.encode('utf-8'))
 
         # Setting layers
-        hazard_filename = test_data_path('hazard', 'jakarta_flood_design.tif')
-        exposure_filename = test_data_path(
+        hazard_filename = standard_data_path(
+            'hazard', 'jakarta_flood_design.tif')
+        exposure_filename = standard_data_path(
             'exposure', 'buildings_osm_4326.shp')
 
         # Calculate impact using API
@@ -483,9 +484,9 @@ class TestEngine(unittest.TestCase):
 
     def test_data_sources_are_carried_forward(self):
         """Data sources are carried forward to impact layer."""
-        hazard_filepath = test_data_path(
+        hazard_filepath = standard_data_path(
             'hazard', 'continuous_flood_20_20.asc')
-        exposure_filepath = test_data_path('exposure', 'buildings.shp')
+        exposure_filepath = standard_data_path('exposure', 'buildings.shp')
 
         hazard_layer = read_layer(hazard_filepath)
         exposure_layer = read_layer(exposure_filepath)

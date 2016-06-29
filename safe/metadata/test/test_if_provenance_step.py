@@ -42,7 +42,10 @@ class TestImpactFunctionProvenanceStep(TestCase):
         'exposure_pixel_size': '0.1',
         'hazard_pixel_size': '0.2',
         'impact_pixel_size': '0.1',
-        'analysis_extent': [0, 1, 2, 2],
+        'actual_extent': [0, 1, 2, 2],
+        'requested_extent': [0, 1, 2, 2],
+        'actual_extent_crs': 'EPSG: 4326',
+        'requested_extent_crs': 'EPSG: 4326',
         'parameter': {},
     }
 
@@ -68,7 +71,10 @@ class TestImpactFunctionProvenanceStep(TestCase):
         '<exposure_pixel_size>0.1</exposure_pixel_size>'
         '<hazard_pixel_size>0.2</hazard_pixel_size>'
         '<impact_pixel_size>0.1</impact_pixel_size>'
-        '<analysis_extent>[0, 1, 2, 2]</analysis_extent>'
+        '<actual_extent>[0, 1, 2, 2]</actual_extent>'
+        '<requested_extent>[0, 1, 2, 2]</requested_extent>'
+        '<actual_extent_crs>EPSG: 4326</actual_extent_crs>'
+        '<requested_extent_crs>EPSG: 4326</requested_extent_crs>'
         '<parameter>{}</parameter>'
         '</provenance_step>'
     )

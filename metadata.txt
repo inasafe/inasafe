@@ -25,6 +25,18 @@ status=alpha
 # Optional items:
 
 changelog=
+	3.4.1 - Speed improvements for tsunami and flood impacts on roads
+	3.4.1 - fix #2884 mistake in the tsunami legend
+	3.4.1 - fix #2899 impact layer should draw over the hazard layer
+	3.4.1 - remove 'by each hazard zone'
+	3.4.1 - fix #2927 enable lineEdit if the checkbox is toggled in settings
+	3.4.1 - fix #2925 set the layer visible when we add it the map canvas
+	3.4.1 - remove empty lines from postprocessing outputs #2318
+	3.4.1 - update notes about no data and 0
+	3.4.1 - add setLayerVisible to the fake qgis legend interface
+	3.4.1 - fix sentence about no data in the report
+	3.4.1 - add missing thousands separator
+	3.4.1 - fix legend order when layer is None
 	Add missing note in post processing table.
 	Add LandCover Report template.
 	Add impact data to LandCover IF.

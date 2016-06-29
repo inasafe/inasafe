@@ -6,7 +6,7 @@ from collections import OrderedDict
 from qgis.core import QgsVectorLayer, QgsFeatureRequest
 
 from safe.gis.reclassify_gdal import reclassify_polygonize
-from safe.test.utilities import test_data_path, get_qgis_app
+from safe.test.utilities import standard_data_path, get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
@@ -22,7 +22,8 @@ class ReclassifyTest(unittest.TestCase):
     def test_reclassify_polygonize(self):
         """Test if we can reclassify a raster according to some thresholds."""
 
-        raster_path = test_data_path('hazard', 'continuous_flood_20_20.asc')
+        raster_path = standard_data_path(
+            'hazard', 'continuous_flood_20_20.asc')
 
         ranges = OrderedDict()
 

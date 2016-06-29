@@ -14,7 +14,7 @@ import unittest
 
 from safe.common.utilities import temp_dir, unique_filename
 from safe.storage.vector import Vector, QGIS_IS_AVAILABLE
-from safe.test.utilities import test_data_path, get_qgis_app
+from safe.test.utilities import standard_data_path, get_qgis_app
 
 if QGIS_IS_AVAILABLE:   # Import QgsVectorLayer if qgis is available
     QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -22,9 +22,9 @@ if QGIS_IS_AVAILABLE:   # Import QgsVectorLayer if qgis is available
 
 
 LOGGER = logging.getLogger('InaSAFE')
-KEYWORD_PATH = test_data_path('exposure', 'exposure.xml')
-SQLITE_PATH = test_data_path('exposure', 'exposure.sqlite')
-SHP_BASE = test_data_path('exposure', 'buildings_osm_4326')
+KEYWORD_PATH = standard_data_path('exposure', 'exposure.xml')
+SQLITE_PATH = standard_data_path('exposure', 'exposure.sqlite')
+SHP_BASE = standard_data_path('exposure', 'buildings_osm_4326')
 EXPOSURE_SUBLAYER_NAME = 'buildings_osm_4326'
 
 

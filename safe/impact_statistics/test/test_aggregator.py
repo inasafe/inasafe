@@ -34,8 +34,9 @@ from safe.test.utilities import (
     set_canvas_crs,
     set_jakarta_extent,
     GEOCRS,
-    test_data_path,
+    standard_data_path,
     get_qgis_app,
+    get_dock,
     load_standard_layers,
     setup_scenario,
     load_layers,
@@ -46,10 +47,9 @@ from safe.test.utilities import (
 # safe.gui.widgets.dock
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe.gui.widgets.dock import Dock
 from safe.impact_statistics.aggregator import Aggregator
 from safe.utilities.keyword_io import KeywordIO
-from safe.impact_functions import register_impact_functions
+from safe.impact_functions.loader import register_impact_functions
 
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -61,7 +61,7 @@ class AggregatorTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.DOCK = Dock(IFACE)
+        cls.DOCK = get_dock()
 
     # noinspection PyPep8Naming
     def setUp(self):
@@ -243,7 +243,7 @@ class AggregatorTest(unittest.TestCase):
         TODO - this needs to be fixed post dock refactor.
 
         """
-        layer_path = test_data_path(
+        layer_path = standard_data_path(
             'hazard', 'flood_polygon_crosskabupaten.shp')
         # See qgis project in test data: vector_preprocessing_test.qgs
         # add additional layers
@@ -451,7 +451,7 @@ class AggregatorTest(unittest.TestCase):
         """Test if line aggregation works
         """
 
-        data_path = test_data_path(
+        data_path = standard_data_path(
             'impact',
             'aggregation_test_roads.shp')
         impact_layer = Vector(
@@ -530,14 +530,14 @@ class AggregatorTest(unittest.TestCase):
         """
 
         hazard = QgsVectorLayer(
-            test_data_path(
+            standard_data_path(
                 'hazard',
                 'multipart_polygons_osm_4326.shp'),
             'hazard',
             'ogr'
         )
         exposure = QgsVectorLayer(
-            test_data_path(
+            standard_data_path(
                 'exposure',
                 'buildings_osm_4326.shp'),
             'impact',
