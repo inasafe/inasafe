@@ -285,8 +285,7 @@ class TestInterpolate(unittest.TestCase):
     test_interpolation_random_array_and_nan.slow = True
 
     def test_linear_interpolation_outside_domain(self):
-        """Interpolation library sensibly handles values outside the domain
-        """
+        """Interpolation library sensibly handles values outside the domain."""
 
         # Define pixel centers along each direction
         x = [1.0, 2.0, 4.0]
