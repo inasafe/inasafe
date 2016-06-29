@@ -169,7 +169,8 @@ class TestImpactFunctionMetadata(unittest.TestCase):
                 impact_function_name, valid[1])
             self.assertTrue(valid[0], message)
             if valid[0]:
-                print '%s has a valid metadata.' % impact_function_name
+                # print '%s has a valid metadata.' % impact_function_name
+                continue
 
     def test_is_subset(self):
         """Test for is_subset function."""
@@ -350,8 +351,9 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         ]
         self.assertItemsEqual(result, expected)
 
+    @unittest.skip('Test without assert.')
     def test_valid_layer_keywords(self):
-        """Test for valid_layer_keywords. For development."""
+        """Test for valid_layer_keywords."""
         impact_function = VolcanoPointPopulationFunction()
         layer_keywords = impact_function.metadata().valid_layer_keywords()
         from pprint import pprint

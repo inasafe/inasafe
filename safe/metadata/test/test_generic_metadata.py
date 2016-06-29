@@ -63,9 +63,9 @@ class TestGenericMetadata(TestCase):
 
         self.assertEquals(expected_json, written_json)
 
-        xml_filename = unique_filename(suffix='.xml', dir=TEMP_DIR)
-        metadata.write_to_file(xml_filename)
-        print xml_filename
+        # xml_filename = unique_filename(suffix='.xml', dir=TEMP_DIR)
+        # metadata.write_to_file(xml_filename)
+        # print xml_filename
 
     def test_json_read(self):
         metadata = GenericLayerMetadata(EXISTING_GENERIC_FILE)
