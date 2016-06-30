@@ -59,6 +59,8 @@ class VectorTest(unittest.TestCase):
         count = len(layer)
         self.assertEqual(count, 250, 'Expected 250 features, got %s' % count)
 
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_sqlite_writing(self):
         """Test that writing a dataset to sqlite works."""
         keywords = {}
@@ -67,7 +69,6 @@ class VectorTest(unittest.TestCase):
         test_file = unique_filename(suffix='.sqlite', dir=test_dir)
         layer.write_to_file(test_file, sublayer='foo')
         self.assertTrue(os.path.exists(test_file))
-    test_sqlite_writing.slow = True
 
     def test_qgis_vector_layer_loading(self):
         """Test that reading from QgsVectorLayer works."""
