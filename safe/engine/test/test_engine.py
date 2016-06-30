@@ -861,7 +861,7 @@ class TestEngine(unittest.TestCase):
                 # safe test is 3.62477202599, while it is 3.62477204455 when
                 # we do single test (computer also needs to rest?). The rtol
                 # and atol was 1.0e-12
-                print 'Interpolated depth is: %.12f' % interpolated_depth
+                # print 'Interpolated depth is: %.12f' % interpolated_depth
                 assert numpy.allclose([interpolated_depth], [3.62477204455],
                                       rtol=1.0e-8, atol=1.0e-8)
 
@@ -1657,7 +1657,7 @@ class TestEngine(unittest.TestCase):
         H = read_layer(hazard_filename)  # Polygons
         # H_attributes = H.get_data()
         # H_geometries = H.get_geometry()
-        print len(H)
+        # print len(H)
         assert len(H) == 35
 
         E = read_layer(exposure_filename)
@@ -1698,11 +1698,11 @@ class TestEngine(unittest.TestCase):
         # Test interpolation function
         import time
         t0 = time.time()
-        print
-        print 'start'
-        I = assign_hazard_values_to_exposure_data(H, E,
-                                                  layer_name='depth')
-        print 'Using merged polygon took %f seconds' % (time.time() - t0)
+        # print
+        # print 'start'
+        I = assign_hazard_values_to_exposure_data(
+            H, E, layer_name='depth')
+        # print 'Using merged polygon took %f seconds' % (time.time() - t0)
         I.write_to_file('flood_prone_roads_jakarta_merged.shp')
 
         # Check against correctness verified in QGIS

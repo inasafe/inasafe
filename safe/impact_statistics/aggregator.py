@@ -1407,7 +1407,7 @@ class Aggregator(QtCore.QObject):
                 remaining_indexes = remaining_indexes[next_iteration_index]
                 LOGGER.debug('Remaining: %s' % len(remaining_polygons))
             else:
-                print 'no more polygons to be checked'
+                # print 'no more polygons to be checked'
                 break
                 # del tmpWriter
 

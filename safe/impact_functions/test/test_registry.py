@@ -308,7 +308,8 @@ class TestRegistry(unittest.TestCase):
         self.assertTrue(len(impact_functions) > 0, message)
 
         for i in impact_functions:
-            print i.__name__
+            # print i.__name__
+            continue
 
         for impact_function in impact_functions:
             result = impact_function.metadata().as_dict()[
@@ -355,7 +356,8 @@ class TestRegistry(unittest.TestCase):
         impact_functions = registry.filter_by_keyword_string(
             hazard_keywords, exposure_keywords)
 
-        print len(impact_functions)
+        # print len(impact_functions)
 
         for i in impact_functions:
-            print i.__name__
+            # print i.__name__
+            continue
