@@ -17,6 +17,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import sys
+import os
 import unittest
 from safe.utilities.gis import qgis_version
 
@@ -27,6 +28,7 @@ def _run_tests(test_suite, package_name):
     print '########'
     print '%s tests has been discovered in %s' % (count, package_name)
     print 'QGIS : %s' % qgis_version()
+    print 'Run slow tests : %s' % (not os.environ.get('ON_TRAVIS', False))
     print '########'
     unittest.TextTestRunner(verbosity=3, stream=sys.stdout).run(test_suite)
 
