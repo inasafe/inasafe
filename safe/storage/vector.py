@@ -704,8 +704,12 @@ class Vector(Layer):
                     for name in fields:
                         att = data[0][name]
                         py_type = type(att)
-                        msg = ('Unknown type for storing vector '
-                               'data: %s, %s' % (name, str(py_type)[1:-1]))
+                        if py_type == type(u''):
+                            att = get_string(att)
+                            py_type = type(att)
+                        msg = (
+                            'Unknown type for storing vector data: %s, %s, '
+                            '%s' % (name, str(py_type)[1:-1], att))
                         verify(py_type in TYPE_MAP, msg)
                         ogr_types[name] = TYPE_MAP[py_type]
 
@@ -791,6 +795,8 @@ class Vector(Layer):
                         # in SetField with error: NotImplementedError:
                         # Wrong number of arguments for overloaded function
                         val = float(val)
+                    if isinstance(val, unicode):
+                        val = get_string(val)
                     elif val is None:
                         val = ''
 
