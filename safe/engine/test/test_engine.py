@@ -1545,7 +1545,7 @@ class TestEngine(unittest.TestCase):
         # assert I_attributes[]['parent_line_id'] ==
 
     @unittest.skip('Skipped by default')
-    def Xtest_polygon_to_roads_interpolation_jakarta_flood_example1(self):
+    def test_polygon_to_roads_interpolation_jakarta_flood_example1(self):
         """Roads can be tagged with values from flood polygons
 
         This is a test for road interpolation (issue #55)
@@ -1554,8 +1554,8 @@ class TestEngine(unittest.TestCase):
         """
 
         # Name file names for hazard level and exposure
-        hazard_filename = ('%s/rw_jakarta_singlepart.shp' % TESTDATA)
-        exposure_filename = ('%s/jakarta_roads.shp' % EXPDATA)
+        hazard_filename = os.path.join(TESTDATA, 'rw_jakarta_singlepart.shp')
+        exposure_filename = os.path.join(EXPDATA, 'jakarta_roads.shp')
 
         # Read all input data
         H = read_layer(hazard_filename)  # Polygons
