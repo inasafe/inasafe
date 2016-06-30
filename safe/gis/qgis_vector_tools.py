@@ -371,7 +371,6 @@ def reproject_vector_layer(layer, crs):
 
     base_name = unique_filename()
     file_name = base_name + '.shp'
-    print "reprojected layer1 %s" % file_name
     QgsVectorFileWriter.writeAsVectorFormat(
         layer, file_name, "utf-8", crs, "ESRI Shapefile")
 

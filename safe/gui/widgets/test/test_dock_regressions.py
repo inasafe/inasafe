@@ -116,8 +116,8 @@ class TestDockRegressions(TestCase):
                     total_population += value
                 column += 1
             row += 1
-        print "Total value of all cells is: %d" % total_population
-        print "Number of cells counted: %d" % cell_count
+        # print "Total value of all cells is: %d" % total_population
+        # print "Number of cells counted: %d" % cell_count
 
         # 131 computed using r.sum
         self.assertAlmostEqual(total_population, 131.0177006121)
@@ -197,8 +197,8 @@ class TestDockRegressions(TestCase):
                     total_population += value
                 column += 1
             row += 1
-        print "Total value of all cells is: %d" % total_population
-        print "Number of cells counted: %d" % cell_count
+        # print "Total value of all cells is: %d" % total_population
+        # print "Number of cells counted: %d" % cell_count
 
         result, message = setup_scenario(
             self.dock,

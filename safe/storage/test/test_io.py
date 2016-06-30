@@ -355,7 +355,7 @@ class TestIO(unittest.TestCase):
         # First test that some error conditions are caught
         filename = '%s/%s' % (TESTDATA, 'lembang_osm_20121003.sqlite')
         L = read_layer(filename)
-        print L.get_attribute_names()
+        # print L.get_attribute_names()
 
     @unittest.skip('Slow test')
     def test_donut_polygons(self):
@@ -1054,8 +1054,7 @@ class TestIO(unittest.TestCase):
             c_layer.write_to_file(out_filename)
 
     def test_rasters_and_arrays(self):
-        """Consistency of rasters and associated arrays.
-        """
+        """Consistency of rasters and associated arrays."""
 
         # Create test data
         lon_ul = 100  # Longitude of upper left corner
@@ -1188,7 +1187,8 @@ class TestIO(unittest.TestCase):
         try:
             R1.projection == 234
         except TypeError:
-            print 'You can ignore the ERROR 1 message it is intentional - Tim'
+            # You can ignore the ERROR 1 message it is intentional - Tim
+            pass
         else:
             msg = 'Should have raised TypeError'
             raise Exception(msg)
@@ -1405,7 +1405,7 @@ class TestIO(unittest.TestCase):
 
     @unittest.skip('Slow test')
     def test_bad_ascii_data(self):
-        """ASC raster files with bad data causes good error message
+        """ASC raster files with bad data causes good error message.
 
         This example is courtesy of Hyeuk Ryu
         """

@@ -284,8 +284,7 @@ class TestInterpolate(unittest.TestCase):
 
     @unittest.skip('Slow test')
     def test_linear_interpolation_outside_domain(self):
-        """Interpolation library sensibly handles values outside the domain
-        """
+        """Interpolation library sensibly handles values outside the domain."""
 
         # Define pixel centers along each direction
         x = [1.0, 2.0, 4.0]

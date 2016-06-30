@@ -236,11 +236,9 @@ class AggregatorTest(unittest.TestCase):
 
     @unittest.skip('Slow test')
     def test_preprocessing(self):
-        """Preprocessing results are correct.
+        """Preprocessing results are correct."""
+        # TODO - this needs to be fixed post dock refactor.
 
-        TODO - this needs to be fixed post dock refactor.
-
-        """
         layer_path = standard_data_path(
             'hazard', 'flood_polygon_crosskabupaten.shp')
         # See qgis project in test data: vector_preprocessing_test.qgs
