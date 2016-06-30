@@ -47,7 +47,7 @@
       <gmd:citation>
         <gmd:CI_Citation>
           <gmd:title>
-            <gco:CharacterString>Buildings</gco:CharacterString>
+            <gco:CharacterString>Small Buildings</gco:CharacterString>
           </gmd:title>
           <gmd:date>
             <gmd:CI_Date>
@@ -215,7 +215,7 @@
             <gco:CharacterString/>
           </datatype>
           <value_map>
-            <gco:Dictionary>{&quot;sport&quot;: [&quot;Sports Facility&quot;], &quot;public facility&quot;: [&quot;Fire Station&quot;, &quot;Police Station&quot;, &quot;Public Building&quot;], &quot;government&quot;: [&quot;Government&quot;], &quot;residence&quot;: [&quot;Residential&quot;], &quot;other&quot;: [&quot;Utility&quot;], &quot;health&quot;: [&quot;Clinic/Doctor&quot;, &quot;Hospital&quot;], &quot;education&quot;: [&quot;School&quot;, &quot;University/College&quot;], &quot;place of worship&quot;: [&quot;Place of Worship - Islam&quot;, &quot;Place of Worship - Unitarian&quot;, &quot;Place of Worship - Buddhist&quot;, &quot;Place of Worship&quot;], &quot;economy&quot;: [&quot;Supermarket&quot;, &quot;Commercial&quot;, &quot;Industrial&quot;]}</gco:Dictionary>
+            <gco:Dictionary>{&quot;residential&quot;: [&quot;Residential&quot;], &quot;education&quot;: [&quot;School&quot;], &quot;commercial&quot;: [&quot;Commercial&quot;], &quot;place of worship&quot;: [&quot;Place of Worship - Islam&quot;], &quot;government&quot;: [&quot;Government&quot;]}</gco:Dictionary>
           </value_map>
           <structure_class_field>
             <gco:CharacterString>TYPE</gco:CharacterString>
