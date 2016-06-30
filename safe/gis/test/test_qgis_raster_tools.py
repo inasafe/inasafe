@@ -18,6 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import unittest
+import os
 
 from qgis.core import (
     QgsRasterLayer,
@@ -47,7 +48,8 @@ class TestQGISRasterTools(unittest.TestCase):
         self.x_res = self.raster.rasterUnitsPerPixelX()
         self.y_res = self.raster.rasterUnitsPerPixelY()
 
-    @unittest.skip('Slow test')
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_pixels_to_points(self):
         points = pixels_to_points(
             self.raster, threshold_min=1.0, threshold_max=1.5)
@@ -84,7 +86,8 @@ class TestQGISRasterTools(unittest.TestCase):
             value = value.results()[1]
             self.assertGreater(value, 1.1)
 
-    @unittest.skip('Slow test')
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_polygonize(self):
         """Test if polygonize works"""
         geometry = polygonize(
@@ -105,7 +108,8 @@ class TestQGISRasterTools(unittest.TestCase):
             expected_geom = feature.geometry()
             self.assertTrue((geometry.isGeosEqual(expected_geom)))
 
-    @unittest.skip('Slow test')
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_clip_raster(self):
         """Test clip_raster work"""
         new_raster = clip_raster(

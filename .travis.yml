@@ -10,6 +10,9 @@ python:
 virtualenv:
   system_site_packages: true
 
+env:
+- ON_TRAVIS=true
+
 branches:
   only:
     - master

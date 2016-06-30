@@ -133,7 +133,8 @@ class AggregatorTest(unittest.TestCase):
         message = ('The aggregation should be KAB_NAME. Found: %s' % attribute)
         self.assertEqual(attribute, 'KAB_NAME', message)
 
-    @unittest.skip('Slow test')
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_check_aggregation_single_attribute(self):
         """Aggregation attribute is chosen correctly when there is only
         one attr available."""
@@ -164,7 +165,8 @@ class AggregatorTest(unittest.TestCase):
         self.assertEqual(attribute, 'KAB_NAME', message)
 
     # noinspection PyMethodMayBeStatic
-    @unittest.skip('Slow test')
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_check_aggregation_no_attributes(self):
         """Aggregation attribute chosen correctly when no attr available."""
         layer_path = os.path.join(
@@ -192,7 +194,8 @@ class AggregatorTest(unittest.TestCase):
         self.assertIsNone(attribute, message)
 
     # noinspection PyMethodMayBeStatic
-    @unittest.skip('Slow test')
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_check_aggregation_none_in_keywords(self):
         """Aggregation attribute is chosen correctly when None in keywords."""
         layer_path = os.path.join(
@@ -234,7 +237,8 @@ class AggregatorTest(unittest.TestCase):
                                       'test', 'ogr')
         self.assertTrue(aggregator._setup_target_field(impact_layer))
 
-    @unittest.skip('Slow test')
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_preprocessing(self):
         """Preprocessing results are correct."""
         # TODO - this needs to be fixed post dock refactor.

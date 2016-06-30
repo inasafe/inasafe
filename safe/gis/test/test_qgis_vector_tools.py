@@ -18,6 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import unittest
+import os
 from qgis.core import (
     QgsVectorLayer,
     QgsPoint,
@@ -122,7 +123,8 @@ class TestQGISVectorTools(unittest.TestCase):
         new_fields = new_layer.dataProvider().fields()
         self.assertEquals(new_fields.toList(), fields.toList())
 
-    @unittest.skip('Slow test')
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_clip_by_polygon(self):
         """Test clip_by_polygon work"""
         line_before = QgsVectorLayer(
@@ -154,7 +156,8 @@ class TestQGISVectorTools(unittest.TestCase):
                     break
             self.assertTrue(found)
 
-    @unittest.skip('Slow test')
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_split_by_polygon(self):
         """Test split_by_polygon work"""
         line_before = QgsVectorLayer(

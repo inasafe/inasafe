@@ -28,7 +28,8 @@ class Test_Clipping(unittest.TestCase):
     def tearDown(self):
         pass
 
-    @unittest.skip('Slow test')
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_clip_points_by_polygons(self):
         """Points can be clipped by polygons (real data)
         """
@@ -144,7 +145,8 @@ class Test_Clipping(unittest.TestCase):
             pts.write_to_file(tmp_filename)
             # print 'Clipped points written to %s' % tmp_filename
 
-    @unittest.skip('Slow test')
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_clip_points_by_polygons_with_holes_real(self):
         """Points can be clipped by polygons with holes (real data)
         """

@@ -206,7 +206,8 @@ class ShakeGridTest(unittest.TestCase):
             force_flag=True, algorithm='average')
         self.assertTrue(self.check_feature_count(file_path, 132))
 
-    @unittest.skip('Slow test')
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_convert_grid_to_raster(self):
         """Test converting grid.xml to raster (tif file)"""
         grid_title = 'Earthquake'

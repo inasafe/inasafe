@@ -1,6 +1,7 @@
 # coding=utf-8
 import numpy
 import unittest
+import os
 
 # Import InaSAFE modules
 from safe.gis.interpolation2d import interpolate2d, interpolate_raster
@@ -112,7 +113,8 @@ class TestInterpolate(unittest.TestCase):
 
         assert numpy.allclose(vals, refs, rtol=1e-12, atol=1e-12)
 
-    @unittest.skip('Slow test')
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_linear_interpolation_range(self):
         """Interpolation library works for linear function - a range of cases
         """
@@ -199,7 +201,8 @@ class TestInterpolate(unittest.TestCase):
 
         assert nan_allclose(vals, refs, rtol=1e-12, atol=1e-12)
 
-    @unittest.skip('Slow test')
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_interpolation_random_array_and_nan(self):
         """Interpolation library (constant and linear) works with NaN
         """
@@ -282,7 +285,8 @@ class TestInterpolate(unittest.TestCase):
                     # print i, j, xi, eta, alpha, beta, vals[k], ref
                     assert nan_allclose(vals[k], ref, rtol=1e-12, atol=1e-12)
 
-    @unittest.skip('Slow test')
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_linear_interpolation_outside_domain(self):
         """Interpolation library sensibly handles values outside the domain."""
 

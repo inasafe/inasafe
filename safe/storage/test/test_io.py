@@ -202,7 +202,8 @@ class TestIO(unittest.TestCase):
         assert r.is_inasafe_spatial_object
         assert str(r).startswith('Raster data')
 
-    @unittest.skip('Slow test')
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_vector_feature_count(self):
         """Number of features read from vector data is as expected
         """
@@ -225,7 +226,8 @@ class TestIO(unittest.TestCase):
             assert len(attributes) == n
             assert FEATURE_COUNTS[vectorname] == n
 
-    @unittest.skip('Slow test')
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_reading_and_writing_of_vector_point_data(self):
         """Vector point data can be read and written correctly
         """
@@ -357,7 +359,8 @@ class TestIO(unittest.TestCase):
         L = read_layer(filename)
         # print L.get_attribute_names()
 
-    @unittest.skip('Slow test')
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_donut_polygons(self):
         """Donut polygon can be read, interpreted and written correctly
         """
@@ -892,7 +895,8 @@ class TestIO(unittest.TestCase):
         assert v_tmp == v_new
         assert not v_tmp != v_new
 
-    @unittest.skip('Slow test')
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_reading_and_writing_of_vector_polygon_data(self):
         """Vector polygon data can be read and written correctly
         """
@@ -990,7 +994,8 @@ class TestIO(unittest.TestCase):
             for key in attributes_new[i]:
                 assert attributes_new[i][key] == attributes[i][key]
 
-    @unittest.skip('Slow test')
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_centroids_from_polygon_data(self):
         """Centroid point data can be derived from polygon data
 
@@ -1283,7 +1288,8 @@ class TestIO(unittest.TestCase):
         assert nan_allclose(r1.get_geotransform(), geotransform, rtol=1.0e-12)
         assert 'DGN95' in r1.get_projection()
 
-    @unittest.skip('Slow test')
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_reading_and_writing_of_real_rasters(self):
         """Rasters can be read and written correctly in different formats
         """
@@ -1403,7 +1409,8 @@ class TestIO(unittest.TestCase):
             msg = 'Should have raised RuntimeError'
             raise Exception(msg)
 
-    @unittest.skip('Slow test')
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_bad_ascii_data(self):
         """ASC raster files with bad data causes good error message.
 
@@ -1435,7 +1442,8 @@ class TestIO(unittest.TestCase):
             msg = 'Unexpected error message for non existing asc file: %s' % e
             assert 'Could not find file' in str(e), msg
 
-    @unittest.skip('Slow test')
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_nodata_value(self):
         """NODATA value is correctly handled for GDAL layers
         """
@@ -1521,7 +1529,8 @@ class TestIO(unittest.TestCase):
                            'raised RuntimeError')
                     raise Exception(msg)
 
-    @unittest.skip('Slow test')
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_raster_extrema(self):
         """Raster extrema (including NAN's) are correct.
         """
@@ -1559,7 +1568,8 @@ class TestIO(unittest.TestCase):
             msg = '-9999 should have been replaced by 0.0 in %s' % rastername
             assert min(c.flat[:]) != -9999, msg
 
-    @unittest.skip('Slow test')
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_bins(self):
         """Linear and quantile bins are correct
         """
@@ -2291,7 +2301,8 @@ class TestIO(unittest.TestCase):
             for key in attributes_new[i]:
                 assert attributes_new[i][key] == attributes[i][key]
 
-    @unittest.skip('Slow test')
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_multipart_polygon_can_be_read(self):
         """Multipart polygons are be converted to singlepart
         """
@@ -2341,7 +2352,8 @@ class TestIO(unittest.TestCase):
         L1.keywords['keyword_version'] = L0.keywords['keyword_version']
         assert L0 == L1
 
-    @unittest.skip('Slow test')
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_projection_comparisons(self):
         """Projection information can be correctly compared
         """

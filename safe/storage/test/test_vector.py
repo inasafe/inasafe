@@ -59,7 +59,8 @@ class VectorTest(unittest.TestCase):
         count = len(layer)
         self.assertEqual(count, 250, 'Expected 250 features, got %s' % count)
 
-    @unittest.skip('Slow test')
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_sqlite_writing(self):
         """Test that writing a dataset to sqlite works."""
         keywords = {}
