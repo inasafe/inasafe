@@ -191,7 +191,8 @@ class ImpactReportTest(unittest.TestCase):
         message = 'The custom logo path is not set correctly'
         self.assertEqual(custom_logo_path, custom_img_path, message)
 
-    def Xtest_print_impact_table(self):
+    @unittest.skip('Not included in Travis')
+    def test_print_impact_table(self):
         """Test print impact table to pdf."""
         impact_layer_path = standard_data_path(
             'impact', 'population_affected_entire_area.shp')
@@ -222,8 +223,6 @@ class ImpactReportTest(unittest.TestCase):
         out_size = os.stat(out_path).st_size
         self.assertTrue(out_size > 0, message)
 
-    # This a dirty hack to exclude from Travis test.
-    Xtest_print_impact_table.slow = True
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(ImpactReport)

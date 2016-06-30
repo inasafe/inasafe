@@ -2,6 +2,8 @@ services:
     - docker
 
 env:
+  global:
+    - ON_TRAVIS=true
   matrix:
     #- QGIS_VERSION_TAG=release-2_8
     - QGIS_VERSION_TAG=release-2_14
@@ -41,7 +43,7 @@ install:
   - pip install --upgrade pep8
   - echo "Checking out test data at" `date`
   - make testdata
-  - docker run -d --name qgis-testing-environment -v ${TRAVIS_BUILD_DIR}_data:/inasafe_data -v ${TRAVIS_BUILD_DIR}:/tests_directory -e DISPLAY=:99 elpaso/qgis-testing-environment:${QGIS_VERSION_TAG}
+  - docker run -d --name qgis-testing-environment -v ${TRAVIS_BUILD_DIR}_data:/inasafe_data -v ${TRAVIS_BUILD_DIR}:/tests_directory -e ON_TRAVIS=${ON_TRAVIS} -e DISPLAY=:99 elpaso/qgis-testing-environment:${QGIS_VERSION_TAG}
   - sleep 10
   - docker exec -it qgis-testing-environment sh -c "qgis_setup.sh inasafe"
   # TEMPORARY HACK
@@ -53,7 +55,7 @@ install:
 script:
   - make pep8
   - docker exec -it qgis-testing-environment sh -c "qgis_testrunner.sh test_suite.test_package"
-  #- xvfb-run --server-args="-screen 0, 1024x768x24" nosetests -A 'not slow' -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=safe safe
+  #- xvfb-run --server-args="-screen 0, 1024x768x24" nosetests -v --with-id --with-xcoverage --with-xunit --verbose --cover-package=safe safe
 
 notifications:
   irc:

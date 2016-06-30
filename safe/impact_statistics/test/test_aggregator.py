@@ -135,7 +135,8 @@ class AggregatorTest(unittest.TestCase):
         message = ('The aggregation should be KAB_NAME. Found: %s' % attribute)
         self.assertEqual(attribute, 'KAB_NAME', message)
 
-    @unittest.expectedFailure
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_check_aggregation_single_attribute(self):
         """Aggregation attribute is chosen correctly when there is only
         one attr available."""
@@ -165,10 +166,9 @@ class AggregatorTest(unittest.TestCase):
             'The aggregation should be KAB_NAME. Found: %s' % attribute)
         self.assertEqual(attribute, 'KAB_NAME', message)
 
-    test_check_aggregation_single_attribute.slow = True
-
     # noinspection PyMethodMayBeStatic
-    @unittest.expectedFailure
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_check_aggregation_no_attributes(self):
         """Aggregation attribute chosen correctly when no attr available."""
         layer_path = os.path.join(
@@ -195,9 +195,9 @@ class AggregatorTest(unittest.TestCase):
             'The aggregation should be None. Found: %s' % attribute)
         self.assertIsNone(attribute, message)
 
-    test_check_aggregation_no_attributes.slow = True
-
     # noinspection PyMethodMayBeStatic
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_check_aggregation_none_in_keywords(self):
         """Aggregation attribute is chosen correctly when None in keywords."""
         layer_path = os.path.join(
@@ -223,8 +223,6 @@ class AggregatorTest(unittest.TestCase):
         message = ('The aggregation should be None. Found: %s' % attribute)
         self.assertIsNone(attribute, message)
 
-    test_check_aggregation_none_in_keywords.slow = True
-
     def test_setup_target_field(self):
         """Test setup up target field is correct.
         """
@@ -241,12 +239,12 @@ class AggregatorTest(unittest.TestCase):
                                       'test', 'ogr')
         self.assertTrue(aggregator._setup_target_field(impact_layer))
 
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_preprocessing(self):
-        """Preprocessing results are correct.
+        """Preprocessing results are correct."""
+        # TODO - this needs to be fixed post dock refactor.
 
-        TODO - this needs to be fixed post dock refactor.
-
-        """
         layer_path = standard_data_path(
             'hazard', 'flood_polygon_crosskabupaten.shp')
         # See qgis project in test data: vector_preprocessing_test.qgs
@@ -279,8 +277,6 @@ class AggregatorTest(unittest.TestCase):
         self.assertEqual(
             expected_feature_count,
             aggregator.preprocessed_feature_count, message)
-
-    test_preprocessing.slow = True
 
     def _create_aggregator(self, use_aoi_mode):
         """Helper to create aggregator"""
@@ -582,7 +578,6 @@ class AggregatorTest(unittest.TestCase):
 
         aggregator.set_sum_field_name('SUMM_AGGR')
         self.assertEquals(aggregator.sum_field_name(), 'SUMM_AGGR')
-    test_set_sum_field_name.slow = False
 
     def test_get_centroids(self):
         """Test get_centroids work"""
@@ -599,8 +594,6 @@ class AggregatorTest(unittest.TestCase):
         centroids = aggregator._get_centroids([polygon1])
         # noinspection PyTypeChecker
         self.assertEquals(len(centroids), 1)
-    test_get_centroids.slow = False
-
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(AggregatorTest)

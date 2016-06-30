@@ -86,7 +86,7 @@ class ExtentSelectorTest(unittest.TestCase):
 
     def canvas_mouse_moved(self, point):
         """Slot for when the mouse moves on the canvas."""
-        print point.toString()
+        # print point.toString()
 
     def test_spinboxes(self):
         """Test validate extent method."""
