@@ -72,14 +72,12 @@ class ClassifiedRasterHazardBuildingFunction(
         """
 
         # Value from layer's keywords
-
         structure_class_field = self.exposure.keyword('structure_class_field')
         try:
             exposure_value_mapping = self.exposure.keyword('value_mapping')
         except KeywordNotFoundError:
             # Generic IF, the keyword might not be defined base.py
             exposure_value_mapping = {}
-
         self.hazard_class_mapping = self.hazard.keyword('value_map')
 
         keys = [x['key'] for x in generic_raster_hazard_classes['classes']]
@@ -94,7 +92,6 @@ class ClassifiedRasterHazardBuildingFunction(
             [x.keys() for x in self.exposure.layer.data][0]
         )
 
-
         interpolated_result = assign_hazard_values_to_exposure_data(
             self.hazard.layer,
             self.exposure.layer,
@@ -104,26 +101,32 @@ class ClassifiedRasterHazardBuildingFunction(
         # Extract relevant exposure data
         attributes = interpolated_result.get_data()
 
+        # Number of building in the interpolated layer
         buildings_total = len(interpolated_result)
 
         # Inverse the order from low to high
         self.init_report_var(classes.values()[::-1])
 
         for i in range(buildings_total):
+            # Get the usage of the building
             usage = attributes[i][structure_class_field]
             usage = main_type(usage, exposure_value_mapping)
 
             # Initialize value as Not affected
             attributes[i][self.target_field] = tr('Not affected')
             attributes[i][self.affected_field] = 0
+
             # Get the hazard level of the building
             level = float(attributes[i][hazard_class_attribute])
             level = float(numpy_round(level))
+
+            # Find the class according the building's level
             for k, v in self.hazard_class_mapping.items():
                 if level in v:
-                    impact_level = classes[k]
-                    # Add calculated impact to existing attributes
-                    attributes[i][self.target_field] = impact_level
+                    impact_class = classes[k]
+                    # Set the impact level
+                    attributes[i][self.target_field] = impact_class
+                    # Set to affected
                     attributes[i][self.affected_field] = 1
                     break
 

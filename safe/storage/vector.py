@@ -704,7 +704,8 @@ class Vector(Layer):
                     for name in fields:
                         att = data[0][name]
                         py_type = type(att)
-                        if py_type == type(u''):
+                        # If unicode, convert to string
+                        if isinstance(py_type, unicode):
                             att = get_string(att)
                             py_type = type(att)
                         msg = (
