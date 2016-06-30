@@ -71,6 +71,42 @@ class TestClassifiedHazardBuildingFunction(unittest.TestCase):
             expected_impact, result_impact)
         self.assertEqual(expected_impact, result_impact, message)
 
+    def test_run_2(self):
+        function = ClassifiedRasterHazardBuildingFunction.instance()
+
+        hazard_path = standard_data_path(
+            'hazard', 'classified_hazard.tif')
+        exposure_path = standard_data_path(
+            'exposure', 'small_building.shp')
+        hazard_layer = read_layer(hazard_path)
+        exposure_layer = read_layer(exposure_path)
+
+        function.hazard = SafeLayer(hazard_layer)
+        function.exposure = SafeLayer(exposure_layer)
+        function.run()
+        impact_layer = function.impact
+        impact_data = impact_layer.get_data()
+
+        # Count
+        expected_impact = {
+            1.0: 67,
+            2.0: 49,
+            3.0: 64
+        }
+
+        result_impact = {
+            1.0: 0,
+            2.0: 0,
+            3.0: 0
+        }
+        for impact_feature in impact_data:
+            level = impact_feature['level']
+            if not math.isnan(level):
+                result_impact[level] += 1
+        message = 'Expecting %s, but it returns %s' % (
+            expected_impact, result_impact)
+        self.assertEqual(expected_impact, result_impact, message)
+
     def test_filter(self):
         """Test filtering IF from layer keywords"""
         hazard_keywords = {

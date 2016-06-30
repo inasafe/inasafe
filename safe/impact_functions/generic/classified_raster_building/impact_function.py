@@ -16,11 +16,13 @@ __date__ = '23/03/15'
 
 import logging
 from numpy import round as numpy_round
+from collections import OrderedDict
 
 from safe.impact_functions.bases.classified_rh_classified_ve import \
     ClassifiedRHClassifiedVE
 from safe.storage.vector import Vector
 from safe.common.exceptions import KeywordNotFoundError
+from safe.common.utilities import get_non_conflicting_attribute_name
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.utilities.i18n import tr
 from safe.utilities.utilities import main_type
@@ -28,6 +30,7 @@ from safe.impact_functions.generic.classified_raster_building\
     .metadata_definitions import ClassifiedRasterHazardBuildingMetadata
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
+from safe.definitions import generic_raster_hazard_classes
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -42,6 +45,7 @@ class ClassifiedRasterHazardBuildingFunction(
     def __init__(self):
         super(ClassifiedRasterHazardBuildingFunction, self).__init__()
         self.affected_field = 'affected'
+        self.target_field = 'hazard'
 
         # From BuildingExposureReportMixin
         self.building_report_threshold = 25
@@ -76,22 +80,25 @@ class ClassifiedRasterHazardBuildingFunction(
             # Generic IF, the keyword might not be defined base.py
             exposure_value_mapping = {}
 
-        # The 3 classes
-        categorical_hazards = self.parameters['Categorical hazards'].value
-        low_t = categorical_hazards[0].value
-        medium_t = categorical_hazards[1].value
-        high_t = categorical_hazards[2].value
+        self.hazard_class_mapping = self.hazard.keyword('value_map')
 
-        # Determine attribute name for hazard levels
-        if self.hazard.layer.is_raster:
-            hazard_attribute = 'level'
-        else:
-            hazard_attribute = None
+        keys = [x['key'] for x in generic_raster_hazard_classes['classes']]
+        names = [x['name'] for x in generic_raster_hazard_classes['classes']]
+        classes = OrderedDict()
+        for i in range(len(keys)):
+            classes[keys[i]] = names[i]
+
+        # Determine attribute name for hazard class
+        hazard_class_attribute = get_non_conflicting_attribute_name(
+            'haz_class',
+            [x.keys() for x in self.exposure.layer.data][0]
+        )
+
 
         interpolated_result = assign_hazard_values_to_exposure_data(
             self.hazard.layer,
             self.exposure.layer,
-            attribute_name=hazard_attribute,
+            attribute_name=hazard_class_attribute,
             mode='constant')
 
         # Extract relevant exposure data
@@ -99,40 +106,33 @@ class ClassifiedRasterHazardBuildingFunction(
 
         buildings_total = len(interpolated_result)
 
-        hazard_classes = [
-            tr('Low Hazard Class'),
-            tr('Medium Hazard Class'),
-            tr('High Hazard Class')
-        ]
-        self.init_report_var(hazard_classes)
+        # Inverse the order from low to high
+        self.init_report_var(classes.values()[::-1])
 
         for i in range(buildings_total):
             usage = attributes[i][structure_class_field]
             usage = main_type(usage, exposure_value_mapping)
 
-            # Count all buildings by type
-            attributes[i][self.target_field] = 0
+            # Initialize value as Not affected
+            attributes[i][self.target_field] = tr('Not affected')
             attributes[i][self.affected_field] = 0
-            level = float(attributes[i]['level'])
+            # Get the hazard level of the building
+            level = float(attributes[i][hazard_class_attribute])
             level = float(numpy_round(level))
-            if level == high_t:
-                impact_level = tr('High Hazard Class')
-            elif level == medium_t:
-                impact_level = tr('Medium Hazard Class')
-            elif level == low_t:
-                impact_level = tr('Low Hazard Class')
-            else:
-                continue
+            for k, v in self.hazard_class_mapping.items():
+                if level in v:
+                    impact_level = classes[k]
+                    # Add calculated impact to existing attributes
+                    attributes[i][self.target_field] = impact_level
+                    attributes[i][self.affected_field] = 1
+                    break
 
-            # Add calculated impact to existing attributes
-            attributes[i][self.target_field] = {
-                tr('High Hazard Class'): 3,
-                tr('Medium Hazard Class'): 2,
-                tr('Low Hazard Class'): 1
-            }[impact_level]
-            attributes[i][self.affected_field] = 1
             # Count affected buildings by type
-            self.classify_feature(impact_level, usage, True)
+            self.classify_feature(
+                attributes[i][self.target_field],
+                usage,
+                bool(attributes[i][self.affected_field])
+            )
 
         self.reorder_dictionaries()
 
@@ -155,7 +155,7 @@ class ClassifiedRasterHazardBuildingFunction(
                 border_width=0.2),
             dict(
                 label=tr('Low'),
-                value=1,
+                value='Low hazard zone',
                 colour='#EBF442',
                 transparency=0,
                 size=2,
@@ -163,7 +163,7 @@ class ClassifiedRasterHazardBuildingFunction(
                 border_width=0.2),
             dict(
                 label=tr('Medium'),
-                value=2,
+                value='Medium hazard zone',
                 colour='#F4A442',
                 transparency=0,
                 size=2,
@@ -171,7 +171,7 @@ class ClassifiedRasterHazardBuildingFunction(
                 border_width=0.2),
             dict(
                 label=tr('High'),
-                value=3,
+                value='High hazard zone',
                 colour='#F31A1C',
                 transparency=0,
                 size=2,
@@ -182,6 +182,7 @@ class ClassifiedRasterHazardBuildingFunction(
             target_field=self.target_field,
             style_classes=style_classes,
             style_type='categorizedSymbol')
+        LOGGER.debug('target field : ' + self.target_field)
 
         impact_data = self.generate_data()
 
