@@ -2105,9 +2105,8 @@ class TestPolygon(unittest.TestCase):
         """Real roads are clipped by complex polygon
         """
 
-        inside_lines, outside_lines = \
-            clip_lines_by_polygon(TEST_LINES, TEST_POLYGON,
-                                  check_input=True)
+        inside_lines, outside_lines = clip_lines_by_polygon(
+            TEST_LINES, TEST_POLYGON, check_input=True)
 
         # Convert dictionaries to lists of lines
         inside_line_segments = line_dictionary_to_geometry(inside_lines)
