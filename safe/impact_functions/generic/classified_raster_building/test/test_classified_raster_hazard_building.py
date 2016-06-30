@@ -89,23 +89,20 @@ class TestClassifiedHazardBuildingFunction(unittest.TestCase):
 
         # Count
         expected_impact = {
-            1.0: 67,
-            2.0: 49,
-            3.0: 64
+            'Not affected': 10,
+            'Low hazard zone': 2,
+            'Medium hazard zone': 9,
+            'High hazard zone': 5
         }
 
-        result_impact = {
-            1.0: 0,
-            2.0: 0,
-            3.0: 0
-        }
+        result_impact = {}
         for impact_feature in impact_data:
-            level = impact_feature['level']
-            if not math.isnan(level):
-                result_impact[level] += 1
-        message = 'Expecting %s, but it returns %s' % (
-            expected_impact, result_impact)
-        self.assertEqual(expected_impact, result_impact, message)
+            hazard_class = impact_feature[function.target_field]
+            if hazard_class in result_impact:
+                result_impact[hazard_class] += 1
+            else:
+                result_impact[hazard_class] = 1
+        self.assertDictEqual(expected_impact, result_impact)
 
     def test_filter(self):
         """Test filtering IF from layer keywords"""

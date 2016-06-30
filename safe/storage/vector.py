@@ -705,7 +705,7 @@ class Vector(Layer):
                         att = data[0][name]
                         py_type = type(att)
                         # If unicode, convert to string
-                        if isinstance(py_type, unicode):
+                        if isinstance(att, unicode):
                             att = get_string(att)
                             py_type = type(att)
                         msg = (
