@@ -33,6 +33,7 @@ ERROR_MESSAGE_SIGNAL = 'ErrorMessage'
 BUSY_SIGNAL = 'BusySignal'
 NOT_BUSY_SIGNAL = 'NotBusySignal'
 ANALYSIS_DONE_SIGNAL = 'AnalysisDone'
+ZERO_IMPACT_SIGNAL = 'ZeroImpact'  # Signal when analysis done but no impact
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -127,18 +128,22 @@ def send_not_busy_signal(sender):
         message='')
 
 
-def send_analysis_done_signal(sender):
+def send_analysis_done_signal(sender, zero_impact=False):
     """Send an analysis done signal to the listeners.
 
     .. versionadded:: 3.3
 
     :param sender: The sender.
     :type sender: object
+
+    :param zero_impact: Flag for zero impact in the result
+    :type zero_impact: bool
     """
     dispatcher.send(
         signal=ANALYSIS_DONE_SIGNAL,
         sender=sender,
-        message='')
+        message='',
+        zero_impact=zero_impact)
 
 
 def analysis_error(sender, exception, message):

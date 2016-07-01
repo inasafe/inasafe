@@ -1345,27 +1345,30 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             current_index += 1
         return current_index
 
-    def completed(self):
+    def completed(self, zero_impact):
         """Slot activated when the process is done.
+
+        :param zero_impact: Flag for zero impact.
+        :type zero_impact: bool
         """
         # save the ID of the function that just ran
         self.last_used_function = self.get_function_id()
 
-        # Try to run completion code
-        try:
-            LOGGER.debug(datetime.now())
-            LOGGER.debug(self.impact_function is None)
-            report = self.show_results()
-        except Exception, e:  # pylint: disable=W0703
+        # Show the result in the dock from layer if there is an impact.
+        if not zero_impact:
+            # Try to run completion code
+            try:
+                LOGGER.debug(datetime.now())
+                LOGGER.debug(self.impact_function is None)
+                report = self.show_results()
+            except Exception, e:  # pylint: disable=W0703
 
-            # FIXME (Ole): This branch is not covered by the tests
-            self.analysis_error(e, self.tr('Error loading impact layer.'))
-        else:
-            # On success, display generated report
-            # impact_path = qgis_impact_layer.source()
-            message = m.Message(report)
-            send_static_message(self, message)
-            # self.wvResults.impact_path = impact_path
+                # FIXME (Ole): This branch is not covered by the tests
+                self.analysis_error(e, self.tr('Error loading impact layer.'))
+            else:
+                # On success, display generated report
+                message = m.Message(report)
+                send_static_message(self, message)
 
         self.save_state()
         self.hide_busy()

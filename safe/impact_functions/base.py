@@ -717,7 +717,7 @@ class ImpactFunction(object):
                 'compatible with InaSAFE\'s current requirements.'))
             report.add(check_list)
             send_static_message(self, report)
-            send_analysis_done_signal(self)
+            send_analysis_done_signal(self, zero_impact=True)
             return
         except MemoryError, e:
             message = tr(
