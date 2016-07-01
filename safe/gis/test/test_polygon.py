@@ -1,6 +1,7 @@
 # coding=utf-8
 import unittest
 import numpy
+import os
 
 from safe.storage.vector import Vector
 from safe.storage.raster import Raster
@@ -1246,6 +1247,8 @@ class TestPolygon(unittest.TestCase):
         for point in points:
             assert is_inside_polygon(point, polygon)
 
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_populate_polygon_with_exclude(self):
         """Polygon with hole can be populated by random points
         """
@@ -1293,8 +1296,8 @@ class TestPolygon(unittest.TestCase):
             assert is_inside_polygon(point, polygon)
             assert not is_inside_polygon(point, ex_poly), '%s' % str(point)
 
-    test_populate_polygon_with_exclude.slow = True
-
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_populate_polygon_with_exclude2(self):
         """Polygon with hole can be populated by random points (2)
         """
@@ -1336,8 +1339,8 @@ class TestPolygon(unittest.TestCase):
             assert is_inside_polygon(point, polygon)
             assert not is_inside_polygon(point, ex_poly), '%s' % str(point)
 
-    test_populate_polygon_with_exclude2.slow = True
-
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_large_example(self):
         """Large polygon clipping example works
         """
@@ -1389,8 +1392,8 @@ class TestPolygon(unittest.TestCase):
         for point in all_points[outside]:
             assert not is_inside_polygon(point, main_polygon)
 
-    test_large_example.slow = True
-
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_large_convoluted_example(self):
         """Large convoluted polygon clipping example works
         """
@@ -1444,8 +1447,8 @@ class TestPolygon(unittest.TestCase):
         for point in all_points[outside]:
             assert not is_inside_polygon(point, main_polygon)
 
-    test_large_convoluted_example.slow = True
-
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_large_convoluted_example_random(self):
         """Large convoluted polygon clipping example works (random points)
         """
@@ -1486,8 +1489,6 @@ class TestPolygon(unittest.TestCase):
 
         for point in all_points[outside]:
             assert not is_inside_polygon(point, main_polygon)
-
-    test_large_convoluted_example_random.slow = True
 
     def test_in_and_outside_polygon_main(self):
         """Set of points is correctly separated according to polygon (2)
@@ -1530,6 +1531,8 @@ class TestPolygon(unittest.TestCase):
         assert numpy.alltrue(inside == [1, 3])
         assert numpy.alltrue(outside == [0, 2, 4, 5])
 
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_clip_points_by_polygons_with_holes(self):
         """Points can be separated by polygons with holes
         """
@@ -1580,8 +1583,6 @@ class TestPolygon(unittest.TestCase):
             assert (is_outside_polygon(point, outer_ring) or
                     is_inside_polygon(point, inner_rings[0]) or
                     is_inside_polygon(point, inner_rings[1]))
-
-    test_clip_points_by_polygons_with_holes.slow = True
 
     def test_intersection1(self):
         """Intersection of two simple lines works
@@ -1651,6 +1652,8 @@ class TestPolygon(unittest.TestCase):
         value = intersection(line0, line1)
         assert numpy.allclose(value, [1.0, 1.0])
 
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_intersection_direction_invariance(self):
         """Intersection is direction invariant
 
@@ -1682,8 +1685,6 @@ class TestPolygon(unittest.TestCase):
             p3 = intersection(line1, line0)
             msg = 'Order of lines gave different results'
             assert numpy.allclose(p1, p3), msg
-
-    test_intersection_direction_invariance.slow = True
 
     def test_no_intersection(self):
         """Lines that don't intersect return None as expected
@@ -2098,13 +2099,14 @@ class TestPolygon(unittest.TestCase):
                               [[0.3, 0.2],
                                [0.31666667, 0.31666667]])
 
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_clip_lines_by_polygon_real_data(self):
         """Real roads are clipped by complex polygon
         """
 
-        inside_lines, outside_lines = \
-            clip_lines_by_polygon(TEST_LINES, TEST_POLYGON,
-                                  check_input=True)
+        inside_lines, outside_lines = clip_lines_by_polygon(
+            TEST_LINES, TEST_POLYGON, check_input=True)
 
         # Convert dictionaries to lists of lines
         inside_line_segments = line_dictionary_to_geometry(inside_lines)
@@ -2199,8 +2201,6 @@ class TestPolygon(unittest.TestCase):
                               [[122.24793987, -8.63351817],
                                [122.24794, -8.63356],
                                [122.24739, -8.63622]])
-
-    test_clip_lines_by_polygon_real_data.slow = True
 
     def test_join_segments(self):
         """Consecutive line segments can be joined into continuous line

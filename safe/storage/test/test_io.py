@@ -202,6 +202,8 @@ class TestIO(unittest.TestCase):
         assert r.is_inasafe_spatial_object
         assert str(r).startswith('Raster data')
 
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_vector_feature_count(self):
         """Number of features read from vector data is as expected
         """
@@ -224,8 +226,8 @@ class TestIO(unittest.TestCase):
             assert len(attributes) == n
             assert FEATURE_COUNTS[vectorname] == n
 
-    test_vector_feature_count.slow = True
-
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_reading_and_writing_of_vector_point_data(self):
         """Vector point data can be read and written correctly
         """
@@ -348,8 +350,6 @@ class TestIO(unittest.TestCase):
             lon = layer.get_data(attribute='LONGITUDE')
             assert numpy.allclose(lon, coords[:, 0])
 
-    test_reading_and_writing_of_vector_point_data.slow = True
-
     def Xtest_reading_and_writing_of_sqlite_vector_data(self):
         """SQLite vector data can be read and written correctly
         """
@@ -357,8 +357,10 @@ class TestIO(unittest.TestCase):
         # First test that some error conditions are caught
         filename = '%s/%s' % (TESTDATA, 'lembang_osm_20121003.sqlite')
         L = read_layer(filename)
-        print L.get_attribute_names()
+        # print L.get_attribute_names()
 
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_donut_polygons(self):
         """Donut polygon can be read, interpreted and written correctly
         """
@@ -378,8 +380,6 @@ class TestIO(unittest.TestCase):
 
         # Check
         assert R == L, msg
-
-    test_donut_polygons.slow = True
 
     def test_3d_polygon(self):
         """3D polygons can be read correctly with z component dismissed
@@ -895,6 +895,8 @@ class TestIO(unittest.TestCase):
         assert v_tmp == v_new
         assert not v_tmp != v_new
 
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_reading_and_writing_of_vector_polygon_data(self):
         """Vector polygon data can be read and written correctly
         """
@@ -992,8 +994,8 @@ class TestIO(unittest.TestCase):
             for key in attributes_new[i]:
                 assert attributes_new[i][key] == attributes[i][key]
 
-    test_reading_and_writing_of_vector_polygon_data.slow = True
-
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_centroids_from_polygon_data(self):
         """Centroid point data can be derived from polygon data
 
@@ -1056,11 +1058,8 @@ class TestIO(unittest.TestCase):
             # print 'writing to', out_filename
             c_layer.write_to_file(out_filename)
 
-    test_centroids_from_polygon_data.slow = True
-
     def test_rasters_and_arrays(self):
-        """Consistency of rasters and associated arrays.
-        """
+        """Consistency of rasters and associated arrays."""
 
         # Create test data
         lon_ul = 100  # Longitude of upper left corner
@@ -1193,7 +1192,8 @@ class TestIO(unittest.TestCase):
         try:
             R1.projection == 234
         except TypeError:
-            print 'You can ignore the ERROR 1 message it is intentional - Tim'
+            # You can ignore the ERROR 1 message it is intentional - Tim
+            pass
         else:
             msg = 'Should have raised TypeError'
             raise Exception(msg)
@@ -1288,6 +1288,8 @@ class TestIO(unittest.TestCase):
         assert nan_allclose(r1.get_geotransform(), geotransform, rtol=1.0e-12)
         assert 'DGN95' in r1.get_projection()
 
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_reading_and_writing_of_real_rasters(self):
         """Rasters can be read and written correctly in different formats
         """
@@ -1393,8 +1395,6 @@ class TestIO(unittest.TestCase):
                     msg = 'Should have raised TypeError'
                     raise Exception(msg)
 
-    test_reading_and_writing_of_real_rasters.slow = True
-
     def test_no_projection(self):
         """Raster layers with no projection causes Exception to be raised
         """
@@ -1409,8 +1409,10 @@ class TestIO(unittest.TestCase):
             msg = 'Should have raised RuntimeError'
             raise Exception(msg)
 
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_bad_ascii_data(self):
-        """ASC raster files with bad data causes good error message
+        """ASC raster files with bad data causes good error message.
 
         This example is courtesy of Hyeuk Ryu
         """
@@ -1440,8 +1442,8 @@ class TestIO(unittest.TestCase):
             msg = 'Unexpected error message for non existing asc file: %s' % e
             assert 'Could not find file' in str(e), msg
 
-    test_bad_ascii_data.slow = True
-
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_nodata_value(self):
         """NODATA value is correctly handled for GDAL layers
         """
@@ -1481,8 +1483,6 @@ class TestIO(unittest.TestCase):
                     msg = ('Illegal nan value %s should have raised '
                            'exception' % illegal)
                     raise RuntimeError(msg)
-
-    test_nodata_value.slow = True
 
     def test_vector_extrema(self):
         """Vector extremum calculation works
@@ -1529,6 +1529,8 @@ class TestIO(unittest.TestCase):
                            'raised RuntimeError')
                     raise Exception(msg)
 
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_raster_extrema(self):
         """Raster extrema (including NAN's) are correct.
         """
@@ -1566,8 +1568,8 @@ class TestIO(unittest.TestCase):
             msg = '-9999 should have been replaced by 0.0 in %s' % rastername
             assert min(c.flat[:]) != -9999, msg
 
-    test_raster_extrema.slow = True
-
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_bins(self):
         """Linear and quantile bins are correct
         """
@@ -1624,8 +1626,6 @@ class TestIO(unittest.TestCase):
                         pass
 
                     i0 = i1
-
-    test_bins.slow = True
 
     def test_raster_to_vector_points(self):
         """Raster layers can be converted to vector point layers
@@ -2301,6 +2301,8 @@ class TestIO(unittest.TestCase):
             for key in attributes_new[i]:
                 assert attributes_new[i][key] == attributes[i][key]
 
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_multipart_polygon_can_be_read(self):
         """Multipart polygons are be converted to singlepart
         """
@@ -2350,8 +2352,8 @@ class TestIO(unittest.TestCase):
         L1.keywords['keyword_version'] = L0.keywords['keyword_version']
         assert L0 == L1
 
-    test_multipart_polygon_can_be_read.slow = True
-
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_projection_comparisons(self):
         """Projection information can be correctly compared
         """
@@ -2384,8 +2386,6 @@ class TestIO(unittest.TestCase):
         Ep = E.projection
         msg = 'Projections did not match: %s != %s' % (Hp, Ep)
         assert Hp == Ep, msg
-
-    test_projection_comparisons.slow = True
 
     def Xtest_reading_and_writing_of_multiband_rasters(self):
         """Multiband rasters can be read and written correctly

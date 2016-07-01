@@ -176,7 +176,7 @@ class StylingTest(unittest.TestCase):
                 {'opacity': 1, 'max': 539, 'colour': '#f31a1c',
                  'min': 351, 'label': 'High', 'size': 3}]}
 
-        print 'Setting style with point sizes should work.'
+        # print 'Setting style with point sizes should work.'
         set_vector_graduated_style(layer, style_info)
 
         # Now validate the size values were set as expected
