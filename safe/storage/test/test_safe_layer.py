@@ -39,7 +39,8 @@ class SafeLayerTest(unittest.TestCase):
             'license': u'Open Data Commons Open Database License (ODbL)',
             'keyword_version': u'3.5',
             'value_mapping': {u'government': [u'Government'],
-                              u'residential': [u'Residential', u'Commercial'],
+                              u'residential': [u'Residential'],
+                              u'commercial': [u'Commercial'],
                               u'health': [u'Clinic/Doctor'],
                               u'education': [u'School'],
                               u'place of worship': [

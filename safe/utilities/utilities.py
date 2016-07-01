@@ -150,6 +150,12 @@ def reorder_dictionary(unordered_dictionary, expected_key_order):
         if item in unordered_dictionary:
             ordered_dictionary[item] = unordered_dictionary[item]
 
+    # Check if something is missing see #2969
+    if len(unordered_dictionary) != len(ordered_dictionary):
+        for key, value in unordered_dictionary.items():
+            if key not in ordered_dictionary.keys():
+                ordered_dictionary[key] = value
+
     return ordered_dictionary
 
 

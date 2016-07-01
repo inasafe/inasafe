@@ -47,7 +47,7 @@
       <gmd:citation>
         <gmd:CI_Citation>
           <gmd:title>
-            <gco:CharacterString>Buildings</gco:CharacterString>
+            <gco:CharacterString>Small Buildings</gco:CharacterString>
           </gmd:title>
           <gmd:date>
             <gmd:CI_Date>
@@ -191,7 +191,7 @@
             <gco:CharacterString/>
           </area_id_field>
           <source>
-            <gco:CharacterString>OpenStreetMap - www.openstreetmap.org</gco:CharacterString>
+            <gco:CharacterString>OpenStreetMap.org</gco:CharacterString>
           </source>
           <layer_geometry>
             <gco:CharacterString>polygon</gco:CharacterString>
@@ -215,7 +215,7 @@
             <gco:CharacterString/>
           </datatype>
           <value_map>
-            <gco:Dictionary>{&quot;government&quot;: [&quot;Government&quot;], &quot;residential&quot;: [&quot;Residential&quot;], &quot;commercial&quot;: [&quot;Commercial&quot;], &quot;health&quot;: [&quot;Clinic/Doctor&quot;], &quot;education&quot;: [&quot;School&quot;], &quot;place of worship&quot;: [&quot;Place of Worship - Islam&quot;]}</gco:Dictionary>
+            <gco:Dictionary>{&quot;residential&quot;: [&quot;Residential&quot;], &quot;education&quot;: [&quot;School&quot;], &quot;commercial&quot;: [&quot;Commercial&quot;], &quot;place of worship&quot;: [&quot;Place of Worship - Islam&quot;], &quot;government&quot;: [&quot;Government&quot;]}</gco:Dictionary>
           </value_map>
           <structure_class_field>
             <gco:CharacterString>TYPE</gco:CharacterString>
@@ -256,7 +256,7 @@
           <gmd:onLine>
             <gmd:CI_OnlineResource>
               <gmd:linkage>
-                <gmd:URL/>
+                <gmd:URL>http://www.openstreetmap.org</gmd:URL>
               </gmd:linkage>
             </gmd:CI_OnlineResource>
           </gmd:onLine>

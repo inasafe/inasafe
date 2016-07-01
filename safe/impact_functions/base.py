@@ -370,7 +370,7 @@ class ImpactFunction(object):
 
         # Update the target field to a non-conflicting one
         if self._hazard.is_qgsvectorlayer():
-            self._target_field = get_non_conflicting_attribute_name(
+            self.target_field = get_non_conflicting_attribute_name(
                 self.target_field,
                 self._hazard.layer.dataProvider().fieldNameMap().keys()
             )
@@ -563,9 +563,18 @@ class ImpactFunction(object):
         """Property for the target_field of the impact layer.
 
         :returns: The target field in the impact layer in case it's a vector.
-        :rtype: basestring
+        :rtype: unicode, str
         """
         return self._target_field
+
+    @target_field.setter
+    def target_field(self, target_field):
+        """Setter for the target_field of the impact laye.
+
+        :param target_field: Field name.
+        :type target_field: str
+        """
+        self._target_field = target_field
 
     @property
     def tabulated_impact(self):
