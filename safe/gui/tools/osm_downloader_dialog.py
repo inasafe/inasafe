@@ -156,12 +156,13 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
     def populate_countries(self):
         """Populate the combobox about countries and levels."""
         for i in range(1, 12):
-            self.admin_level_comboBox.addItem(self.tr("Level %s" % i), i)
+            self.admin_level_comboBox.addItem(self.tr('Level %s') % i, i)
 
         # Set current index to admin_level 8, the most common one
         self.admin_level_comboBox.setCurrentIndex(7)
 
-        list_countries = self.countries.keys()
+        list_countries = [
+            self.tr(country) for country in self.countries.keys()]
         list_countries.sort()
         for country in list_countries:
             self.country_comboBox.addItem(country)
