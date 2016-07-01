@@ -12,8 +12,6 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 from safe.common.utilities import OrderedDict
-from safe.impact_functions.generic.parameter_definitions import \
-    categorical_hazards
 from safe.utilities.i18n import tr
 from safe.defaults import building_type_postprocessor
 from safe.impact_functions.impact_function_metadata import (
@@ -130,7 +128,6 @@ class ClassifiedRasterHazardBuildingMetadata(ImpactFunctionMetadata):
             },
             # parameters
             'parameters': OrderedDict([
-                ('Categorical hazards', categorical_hazards()),
                 ('postprocessors', OrderedDict([
                     ('BuildingType', building_type_postprocessor())
                 ]))

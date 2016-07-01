@@ -18,7 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import unittest
-from safe.test.utilities import get_qgis_app, test_data_path
+from safe.test.utilities import get_qgis_app, standard_data_path
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
@@ -42,8 +42,9 @@ class TestFloodEvacuationFunctionRasterHazard(unittest.TestCase):
     def test_run(self):
         function = FloodEvacuationRasterHazardFunction.instance()
 
-        hazard_path = test_data_path('hazard', 'continuous_flood_20_20.asc')
-        exposure_path = test_data_path(
+        hazard_path = standard_data_path(
+            'hazard', 'continuous_flood_20_20.asc')
+        exposure_path = standard_data_path(
             'exposure', 'pop_binary_raster_20_20.asc')
         hazard_layer = read_layer(hazard_path)
         exposure_layer = read_layer(exposure_path)

@@ -14,7 +14,7 @@ import unittest
 
 from safe.common.utilities import temp_dir, unique_filename
 from safe.storage.vector import Vector, QGIS_IS_AVAILABLE
-from safe.test.utilities import test_data_path, get_qgis_app
+from safe.test.utilities import standard_data_path, get_qgis_app
 
 if QGIS_IS_AVAILABLE:   # Import QgsVectorLayer if qgis is available
     QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -22,9 +22,9 @@ if QGIS_IS_AVAILABLE:   # Import QgsVectorLayer if qgis is available
 
 
 LOGGER = logging.getLogger('InaSAFE')
-KEYWORD_PATH = test_data_path('exposure', 'exposure.xml')
-SQLITE_PATH = test_data_path('exposure', 'exposure.sqlite')
-SHP_BASE = test_data_path('exposure', 'buildings_osm_4326')
+KEYWORD_PATH = standard_data_path('exposure', 'exposure.xml')
+SQLITE_PATH = standard_data_path('exposure', 'exposure.sqlite')
+SHP_BASE = standard_data_path('exposure', 'buildings_osm_4326')
 EXPOSURE_SUBLAYER_NAME = 'buildings_osm_4326'
 
 
@@ -59,6 +59,8 @@ class VectorTest(unittest.TestCase):
         count = len(layer)
         self.assertEqual(count, 250, 'Expected 250 features, got %s' % count)
 
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_sqlite_writing(self):
         """Test that writing a dataset to sqlite works."""
         keywords = {}
@@ -67,7 +69,6 @@ class VectorTest(unittest.TestCase):
         test_file = unique_filename(suffix='.sqlite', dir=test_dir)
         layer.write_to_file(test_file, sublayer='foo')
         self.assertTrue(os.path.exists(test_file))
-    test_sqlite_writing.slow = True
 
     def test_qgis_vector_layer_loading(self):
         """Test that reading from QgsVectorLayer works."""

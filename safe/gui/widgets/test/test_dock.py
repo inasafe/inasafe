@@ -41,7 +41,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from safe.impact_functions.loader import register_impact_functions
 from safe.common.utilities import format_int, unique_filename
 from safe.test.utilities import (
-    test_data_path,
+    standard_data_path,
     load_standard_layers,
     setup_scenario,
     set_canvas_crs,
@@ -119,7 +119,7 @@ class TestDock(TestCase):
 
     def test_defaults(self):
         """Test the GUI in its default state"""
-        print combos_to_string(self.dock)
+        # print combos_to_string(self.dock)
         self.assertEqual(self.dock.cboHazard.currentIndex(), 1)
         self.assertEqual(self.dock.cboExposure.currentIndex(), 0)
         self.assertEqual(self.dock.cboFunction.currentIndex(), 0)
@@ -311,7 +311,7 @@ class TestDock(TestCase):
             function='Need evacuation',
             function_id='FloodEvacuationRasterHazardFunction')
         self.assertTrue(result, message)
-        LOGGER.info("Canvas list before:\n%s" % canvas_list())
+        # LOGGER.info("Canvas list before:\n%s" % canvas_list())
         # Enable on-the-fly reprojection
         set_canvas_crs(GOOGLECRS, True)
         set_jakarta_google_extent(self.dock)
@@ -322,7 +322,7 @@ class TestDock(TestCase):
 
         # test issue #306
         after_count = len(CANVAS.layers())
-        LOGGER.info("Canvas list after:\n%s" % canvas_list())
+        # LOGGER.info("Canvas list after:\n%s" % canvas_list())
         message = ('Layer was not added to canvas (%s before, %s after)' % (
             before_count, after_count))
         # print 'After count %s' % after_count
@@ -393,8 +393,8 @@ class TestDock(TestCase):
         button = self.dock.pbnRunStop
         # First part of scenario should have enabled run
         file_list = [
-            test_data_path('hazard', 'continuous_flood_20_20.asc'),
-            test_data_path('exposure', 'pop_binary_raster_20_20.asc')
+            standard_data_path('hazard', 'continuous_flood_20_20.asc'),
+            standard_data_path('exposure', 'pop_binary_raster_20_20.asc')
         ]
         hazard_layer_count, exposure_layer_count = load_layers(file_list)
 
@@ -448,17 +448,16 @@ class TestDock(TestCase):
         self.assertTrue(button.isEnabled(), message)
 
     def test_issue160(self):
-        """Test that multipart features can be used in a scenario - issue #160
-        """
+        """Test that multipart features can be used in a scenario - GH #160"""
         exposure_layer = clone_shp_layer(
             name='buildings',
             include_keywords=True,
-            source_directory=test_data_path('exposure'))
+            source_directory=standard_data_path('exposure'))
 
         hazard_layer = clone_shp_layer(
             name='flood_multipart_polygons',
             include_keywords=True,
-            source_directory=test_data_path('hazard'))
+            source_directory=standard_data_path('hazard'))
 
         exposure_path = exposure_layer.source()
         hazard_path = hazard_layer.source()
@@ -515,9 +514,7 @@ class TestDock(TestCase):
         self.assertTrue(format_int(33) in result, message)
 
     def test_issue581(self):
-        """Test issue #581 in github - Humanize can produce IndexError : list
-        index out of range
-        """
+        """Test issue #581 in github - Humanize can produce IndexError."""
         # See https://github.com/AIFDR/inasafe/issues/581
 
         settings = QtCore.QSettings()
@@ -571,9 +568,9 @@ class TestDock(TestCase):
         # remain unchanged
         self.tearDown()
         file_list = [
-            test_data_path('hazard', 'jakarta_flood_design.tif'),
-            test_data_path('hazard', 'continuous_flood_20_20.asc'),
-            test_data_path('exposure', 'pop_binary_raster_20_20.asc')
+            standard_data_path('hazard', 'jakarta_flood_design.tif'),
+            standard_data_path('hazard', 'continuous_flood_20_20.asc'),
+            standard_data_path('exposure', 'pop_binary_raster_20_20.asc')
         ]
         hazard_layer_count, exposure_layer_count = load_layers(file_list)
         message = 'Expecting 2 hazard layers, got %s' % hazard_layer_count
@@ -651,7 +648,7 @@ class TestDock(TestCase):
 
         result = self.dock.wvResults.page_to_text()
 
-        control_file_path = test_data_path(
+        control_file_path = standard_data_path(
             'control',
             'files',
             'test-full-run-results-qgis.txt')
@@ -939,7 +936,7 @@ class TestDock(TestCase):
         actual_list = self.wkt_to_coordinates(geometry)
 
         for item in xrange(0, len(expected_list)):
-            print item, expected_list[item], actual_list[item]
+            # print item, expected_list[item], actual_list[item]
             self.assertAlmostEqual(
                 expected_list[item][0],
                 actual_list[item][0])

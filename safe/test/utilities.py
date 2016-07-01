@@ -36,7 +36,7 @@ GOOGLECRS = 3857  # constant for EPSG:GOOGLECRS Google Mercator id
 DEVNULL = open(os.devnull, 'w')
 
 # FIXME AG: We are going to remove the usage of all the data from
-# inasafe_data and just use data in test_data_path. But until that is done,
+# inasafe_data and just use data in standard_data_path. But until that is done,
 # we still keep TESTDATA, HAZDATA, EXPDATA, and BOUNDATA below
 
 # Assuming test data three lvls up
@@ -190,7 +190,7 @@ def hash_for_file(filename):
     return data_hash
 
 
-def test_data_path(*args):
+def standard_data_path(*args):
     """Return the absolute path to the InaSAFE test data or directory path.
 
     .. versionadded:: 3.0
@@ -248,7 +248,7 @@ def load_layer(layer_path):
     message = 'Layer "%s" is not valid' % layer.source()
     # noinspection PyUnresolvedReferences
     if not layer.isValid():
-        print message
+        LOGGER.log(message)
     # noinspection PyUnresolvedReferences
     if not layer.isValid():
         raise Exception(message)
@@ -688,24 +688,24 @@ def load_standard_layers(dock=None):
     #
     # WARNING: Please keep test/data/project/load_standard_layers.qgs in sync
     file_list = [
-        test_data_path('hazard', 'flood_multipart_polygons.shp'),
-        test_data_path('hazard', 'floods.shp'),
-        test_data_path('hazard', 'classified_generic_polygon.shp'),
-        test_data_path('hazard', 'volcano_krb.shp'),
-        test_data_path('hazard', 'volcano_point.shp'),
-        test_data_path('hazard', 'classified_flood_20_20.asc'),
-        test_data_path('hazard', 'continuous_flood_20_20.asc'),
-        test_data_path('hazard', 'tsunami_wgs84.tif'),
-        test_data_path('hazard', 'earthquake.tif'),
-        test_data_path('hazard', 'ash_raster_wgs84.tif'),
-        test_data_path('exposure', 'landcover.shp'),
-        test_data_path('exposure', 'building-points.shp'),
-        test_data_path('exposure', 'buildings.shp'),
-        test_data_path('exposure', 'census.shp'),
-        test_data_path('exposure', 'roads.shp'),
-        test_data_path('exposure', 'pop_binary_raster_20_20.asc'),
-        test_data_path('idp', 'potential-idp.shp'),
-        test_data_path('boundaries', 'district_osm_jakarta.shp'),
+        standard_data_path('hazard', 'flood_multipart_polygons.shp'),
+        standard_data_path('hazard', 'floods.shp'),
+        standard_data_path('hazard', 'classified_generic_polygon.shp'),
+        standard_data_path('hazard', 'volcano_krb.shp'),
+        standard_data_path('hazard', 'volcano_point.shp'),
+        standard_data_path('hazard', 'classified_flood_20_20.asc'),
+        standard_data_path('hazard', 'continuous_flood_20_20.asc'),
+        standard_data_path('hazard', 'tsunami_wgs84.tif'),
+        standard_data_path('hazard', 'earthquake.tif'),
+        standard_data_path('hazard', 'ash_raster_wgs84.tif'),
+        standard_data_path('exposure', 'landcover.shp'),
+        standard_data_path('exposure', 'building-points.shp'),
+        standard_data_path('exposure', 'buildings.shp'),
+        standard_data_path('exposure', 'census.shp'),
+        standard_data_path('exposure', 'roads.shp'),
+        standard_data_path('exposure', 'pop_binary_raster_20_20.asc'),
+        standard_data_path('idp', 'potential-idp.shp'),
+        standard_data_path('boundaries', 'district_osm_jakarta.shp'),
     ]
     hazard_layer_count, exposure_layer_count = load_layers(
         file_list, dock=dock)

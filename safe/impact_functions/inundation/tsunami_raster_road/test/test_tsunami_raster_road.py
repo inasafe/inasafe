@@ -21,7 +21,7 @@ from qgis.core import (
     QgsVectorLayer
 )
 from PyQt4.QtCore import QVariant
-from safe.test.utilities import get_qgis_app, test_data_path
+from safe.test.utilities import get_qgis_app, standard_data_path
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
@@ -52,8 +52,8 @@ class TsunamiRasterRoadsFunctionTest(unittest.TestCase):
         """Test the tsunami on roads IF"""
         impact_function = TsunamiRasterRoadsFunction.instance()
 
-        hazard_path = test_data_path('hazard', 'tsunami_wgs84.tif')
-        exposure_path = test_data_path('exposure', 'roads.shp')
+        hazard_path = standard_data_path('hazard', 'tsunami_wgs84.tif')
+        exposure_path = standard_data_path('exposure', 'roads.shp')
         hazard_layer = QgsRasterLayer(hazard_path, 'Tsunami')
         exposure_layer = QgsVectorLayer(exposure_path, 'Roads', 'ogr')
 
@@ -130,10 +130,10 @@ class TsunamiRasterRoadsFunctionTest(unittest.TestCase):
         2. Test intersection of flood cells with roads layer
         """
 
-        raster_name = test_data_path(
+        raster_name = standard_data_path(
             'hazard',
             'tsunami_wgs84.tif')
-        exposure_name = test_data_path(
+        exposure_name = standard_data_path(
             'exposure',
             'roads_osm_4326.shp')
 

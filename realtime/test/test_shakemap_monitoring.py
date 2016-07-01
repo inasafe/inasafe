@@ -14,7 +14,7 @@ from realtime.earthquake.notify_new_shake import watch_shakemaps_push, \
     ShakemapPushHandler
 from realtime.utilities import realtime_logger_name
 from safe.common.utilities import temp_dir
-from safe.test.utilities import test_data_path
+from safe.test.utilities import standard_data_path
 
 __author__ = 'Rizky Maulana Nugraha <lana.pcfre@gmail.com>'
 __date__ = '12/9/15'
@@ -44,7 +44,7 @@ class EventHandler(pyinotify.ProcessEvent):
 class TestShakemapMonitoring(unittest.TestCase):
 
     local_path = os.path.join(temp_dir('realtime-test'))
-    shake_data = test_data_path('hazard', 'shake_data', SHAKE_ID)
+    shake_data = standard_data_path('hazard', 'shake_data', SHAKE_ID)
 
     def setUp(self):
         # Delete the files that we make in the init for the shake data

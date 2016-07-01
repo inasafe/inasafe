@@ -31,7 +31,7 @@ from qgis.core import (
 from PyQt4 import QtCore
 
 from safe.gui.tools.impact_merge_dialog import ImpactMergeDialog
-from safe.test.utilities import load_layer, test_data_path, get_qgis_app
+from safe.test.utilities import load_layer, standard_data_path, get_qgis_app
 from safe.common.exceptions import (
     ReportCreationError,
     KeywordNotFoundError,
@@ -42,19 +42,19 @@ from safe.utilities.unicode import get_string
 LOGGER = logging.getLogger('InaSAFE')
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-population_entire_jakarta_impact_path = test_data_path(
+population_entire_jakarta_impact_path = standard_data_path(
     'impact',
     'population_affected_entire_area.shp')
-population_district_jakarta_impact_path = test_data_path(
+population_district_jakarta_impact_path = standard_data_path(
     'impact',
     'population_affected_district_jakarta.shp')
-building_entire_jakarta_impact_path = test_data_path(
+building_entire_jakarta_impact_path = standard_data_path(
     'impact',
     'buildings_inundated_entire_area.shp')
-building_district_jakarta_impact_path = test_data_path(
+building_district_jakarta_impact_path = standard_data_path(
     'impact',
     'buildings_inundated_district_jakarta.shp')
-district_jakarta_boundary_path = test_data_path(
+district_jakarta_boundary_path = standard_data_path(
     'boundaries',
     'district_osm_jakarta.shp')
 

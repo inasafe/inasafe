@@ -11,7 +11,7 @@ from safe.common.utilities import unique_filename
 from safe.test.utilities import (
     load_layer,
     get_qgis_app,
-    test_data_path,
+    standard_data_path,
     clone_raster_layer)
 from safe.utilities.keyword_io import KeywordIO, definition
 from safe.common.exceptions import NoKeywordsFoundError
@@ -30,7 +30,8 @@ class KeywordIOTest(unittest.TestCase):
 
         # SQLite Layer
         uri = QgsDataSourceURI()
-        sqlite_building_path = test_data_path('exposure', 'exposure.sqlite')
+        sqlite_building_path = standard_data_path(
+            'exposure', 'exposure.sqlite')
         uri.setDatabase(sqlite_building_path)
         uri.setDataSource('', 'buildings_osm_4326', 'Geometry')
         self.sqlite_layer = QgsVectorLayer(
@@ -40,7 +41,7 @@ class KeywordIOTest(unittest.TestCase):
         }
 
         # Raster Layer keywords
-        hazard_path = test_data_path('hazard', 'tsunami_wgs84.tif')
+        hazard_path = standard_data_path('hazard', 'tsunami_wgs84.tif')
         self.raster_layer, _ = load_layer(hazard_path)
         self.expected_raster_keywords = {
             'hazard_category': 'single_event',
@@ -54,7 +55,7 @@ class KeywordIOTest(unittest.TestCase):
         }
 
         # Vector Layer keywords
-        vector_path = test_data_path('exposure', 'buildings_osm_4326.shp')
+        vector_path = standard_data_path('exposure', 'buildings_osm_4326.shp')
         self.vector_layer, _ = load_layer(vector_path)
         self.expected_vector_keywords = {
             'keyword_version': '3.5',
@@ -67,10 +68,10 @@ class KeywordIOTest(unittest.TestCase):
             'exposure': 'structure',
         }
         # Keyword less layer
-        keywordless_path = test_data_path('other', 'keywordless_layer.shp')
+        keywordless_path = standard_data_path('other', 'keywordless_layer.shp')
         self.keywordless_layer, _ = load_layer(keywordless_path)
         # Keyword file
-        self.keyword_path = test_data_path(
+        self.keyword_path = standard_data_path(
             'exposure', 'buildings_osm_4326.xml')
 
     def test_read_raster_file_keywords(self):
@@ -80,7 +81,7 @@ class KeywordIOTest(unittest.TestCase):
             name='generic_continuous_flood',
             extension='.asc',
             include_keywords=True,
-            source_directory=test_data_path('hazard'))
+            source_directory=standard_data_path('hazard'))
         keywords = self.keyword_io.read_keywords(layer)
         expected_keywords = self.expected_raster_keywords
 
@@ -111,7 +112,7 @@ class KeywordIOTest(unittest.TestCase):
             name='tsunami_wgs84',
             extension='.tif',
             include_keywords=True,
-            source_directory=test_data_path('hazard'))
+            source_directory=standard_data_path('hazard'))
         new_keywords = {
             'hazard_category': 'multiple_event'
         }
@@ -141,7 +142,7 @@ class KeywordIOTest(unittest.TestCase):
             name='generic_continuous_flood',
             extension='.asc',
             include_keywords=True,
-            source_directory=test_data_path('hazard'))
+            source_directory=standard_data_path('hazard'))
         self.keyword_io.copy_keywords(layer, out_path)
         # copied_keywords = read_file_keywords(out_path.split('.')[0] + 'xml')
         copied_keywords = read_iso19115_metadata(out_path)

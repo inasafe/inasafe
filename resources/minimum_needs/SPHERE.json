@@ -1,0 +1,163 @@
+{
+  "profile": "SPHERE.json",
+  "provenance": "The minimum needs are based on SPHERE.",
+  "resources": [
+    {
+      "Resource name": "washing",
+      "Frequency": "once",
+      "Default": 0.01,
+      "Maximum allowed": 1.0,
+      "Unit abbreviation": "places",
+      "Resource description": "A place for washing",
+      "Units": "places",
+      "Readable sentence": "A displaced person should be provided with {{ Default }} {{ Units }} for {{ Resource name }}.  The rate is fractional as allocation is per 10 people.  Though no less than {{ Minimum allowed }} and no more than {{ Maximum allowed }}. This should be provided {{ Frequency }}.",
+      "Minimum allowed": 0.01,
+      "Unit": "place"
+    },
+    {
+      "Resource name": "100 litre trash bags",
+      "Frequency": "daily",
+      "Default": 0.02,
+      "Maximum allowed": 1.0,
+      "Unit abbreviation": "bags",
+      "Resource description": "A 100 litre trash bag for persons to dispose of waste",
+      "Units": "bags",
+      "Readable sentence": "A displaced person should be provided with {{ Default }} {{ Resource name }}. The rate is fractional as allocation is per family calculated as 5 people per family.  Though no less than {{ Minimum allowed }} and no more than {{ Maximum allowed }}. This should be provided {{ Frequency }}.",
+      "Minimum allowed": 0.01,
+      "Unit": "bag"
+    },
+    {
+      "Resource name": "Food",
+      "Frequency": "daily",
+      "Default": 2100.0,
+      "Maximum allowed": 10000.0,
+      "Unit abbreviation": "Kcal",
+      "Resource description": "Daily food requirements",
+      "Units": "Kcal",
+      "Readable sentence": "A displaced person should be provided with {{ Default }} {{ Unit }} of {{ Resource name }}. Though no less than {{ Minimum allowed }} and no more than {{ Maximum allowed }}. This should be provided {{ Frequency }}.",
+      "Minimum allowed": 2100.0,
+      "Unit": "Kcal"
+    },
+    {
+      "Resource name": "water buckets",
+      "Frequency": "once",
+      "Default": 0.2,
+      "Maximum allowed": 2.0,
+      "Unit abbreviation": "",
+      "Resource description": "A bucket for carrying potable water",
+      "Units": "",
+      "Readable sentence": "A displaced person should be provided with {{ Default }} {{ Resource name }}. The rate is fractional as allocation is per family calculated as 5 people per family.  Though no less than {{ Minimum allowed }} and no more than {{ Maximum allowed }}. This should be provided once.",
+      "Minimum allowed": 0.2,
+      "Unit": ""
+    },
+    {
+      "Resource name": "20 litre water bucket with cover",
+      "Frequency": "once",
+      "Default": 0.02,
+      "Maximum allowed": 1.0,
+      "Unit abbreviation": "bucket",
+      "Resource description": "A water bucket for storing potable water.",
+      "Units": "buckets",
+      "Readable sentence": "A displaced person should be provided with {{ Default }} {{ Resource name }}. The rate is fractional as allocation is per family calculated as 5 people per family.  Though no less than {{ Minimum allowed }} and no more than {{ Maximum allowed }}. This should be provided {{ Frequency }}.",
+      "Minimum allowed": 0.02,
+      "Unit": "bucket"
+    },
+    {
+      "Resource name": "saucepan",
+      "Frequency": "once",
+      "Default": 0.2,
+      "Maximum allowed": 1.0,
+      "Unit abbreviation": "",
+      "Resource description": "Saucepan for cooking",
+      "Units": "",
+      "Readable sentence": "A displaced person should be provided with {{ Default }}  {{ Resource name }}. The rate is fractional as allocation is per family calculated as 5 people per family. Though no less than {{ Minimum allowed }} and no more than {{ Maximum allowed }}. This should be provided {{ Frequency }}.",
+      "Minimum allowed": 0.2,
+      "Unit": ""
+    },
+    {
+      "Resource name": "basin",
+      "Frequency": "once",
+      "Default": 0.2,
+      "Maximum allowed": 1.0,
+      "Unit abbreviation": "",
+      "Resource description": "basin for washing",
+      "Units": "",
+      "Readable sentence": "A displaced person should be provided with {{ Default }}  {{ Resource name }}. The rate is fractional as allocation is per family calculated as 5 people per family. Though no less than {{ Minimum allowed }} and no more than {{ Maximum allowed }}. This should be provided {{ Frequency }}.",
+      "Minimum allowed": 0.2,
+      "Unit": ""
+    },
+    {
+      "Resource name": "knife",
+      "Frequency": "once",
+      "Default": 0.2,
+      "Maximum allowed": 1.0,
+      "Unit abbreviation": "",
+      "Resource description": "Knife for cooking",
+      "Units": "",
+      "Readable sentence": "A displaced person should be provided with {{ Default }}  {{ Resource name }}. The rate is fractional as allocation is per family calculated as 5 people per family. Though no less than {{ Minimum allowed }} and no more than {{ Maximum allowed }}. This should be provided {{ Frequency }}.",
+      "Minimum allowed": 0.2,
+      "Unit": ""
+    },
+    {
+      "Resource name": "rice ladle",
+      "Frequency": "once",
+      "Default": 0.1,
+      "Maximum allowed": 1.0,
+      "Unit abbreviation": "",
+      "Resource description": "Rice ladle for cooking",
+      "Units": "",
+      "Readable sentence": "A displaced person should be provided with {{ Default }}  {{ Resource name }}. The rate is fractional as allocation is per family calculated as 5 people per family. Though no less than {{ Minimum allowed }} and no more than {{ Maximum allowed }}. This should be provided {{ Frequency }}.",
+      "Minimum allowed": 0.1,
+      "Unit": ""
+    },
+    {
+      "Resource name": "plate",
+      "Frequency": "once",
+      "Default": 1,
+      "Maximum allowed": 10.0,
+      "Unit abbreviation": "",
+      "Resource description": "Plate for eating",
+      "Units": "",
+      "Readable sentence": "A displaced person should be provided with {{ Default }}  {{ Resource name }}. The allocation is calculated per person. Though no less than {{ Minimum allowed }} and no more than {{ Maximum allowed }}. This should be provided {{ Frequency }}.",
+      "Minimum allowed": 0.2,
+      "Unit": ""
+    },
+    {
+      "Resource name": "spoon",
+      "Frequency": "once",
+      "Default": 1,
+      "Maximum allowed": 10.0,
+      "Unit abbreviation": "",
+      "Resource description": "Spoon for eating",
+      "Units": "",
+      "Readable sentence": "A displaced person should be provided with {{ Default }}  {{ Resource name }}. The allocation is calculated per person. Though no less than {{ Minimum allowed }} and no more than {{ Maximum allowed }}. This should be provided {{ Frequency }}.",
+      "Minimum allowed": 0.2,
+      "Unit": ""
+    },
+    {
+      "Resource name": "mug",
+      "Frequency": "once",
+      "Default": 1,
+      "Maximum allowed": 10.0,
+      "Unit abbreviation": "",
+      "Resource description": "Mug for drinking",
+      "Units": "",
+      "Readable sentence": "A displaced person should be provided with {{ Default }}  {{ Resource name }}. The allocation is calculated per person. Though no less than {{ Minimum allowed }} and no more than {{ Maximum allowed }}. This should be provided {{ Frequency }}.",
+      "Minimum allowed": 0.2,
+      "Unit": ""
+    },
+    {
+      "Resource name": "blanket (100x70cm)",
+      "Frequency": "once",
+      "Default": 0.2,
+      "Maximum allowed": 10.0,
+      "Unit abbreviation": "",
+      "Resource description": "Infant's blanket",
+      "Units": "",
+      "Readable sentence": "A displaced person should be provided with {{ Default }}  {{ Resource name }}. The allocation is fractional as it is based on one infant per family. Though no less than {{ Minimum allowed }} and no more than {{ Maximum allowed }}. This should be provided {{ Frequency }}.",
+      "Minimum allowed": 0.2,
+      "Unit": ""
+    }
+
+  ]
+}
