@@ -47,13 +47,13 @@ class TestClassifiedHazardBuildingFunction(unittest.TestCase):
 
         function.hazard = SafeLayer(hazard_layer)
         function.exposure = SafeLayer(exposure_layer)
-        function.run()
+        function.run_analysis()
         impact_layer = function.impact
         impact_data = impact_layer.get_data()
 
         # Count
         expected_impact = {
-            'Not affected': 10,
+            'Not affected': 5,
             'Low hazard zone': 2,
             'Medium hazard zone': 9,
             'High hazard zone': 5
