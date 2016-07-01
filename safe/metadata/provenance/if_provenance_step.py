@@ -22,6 +22,7 @@ from xml.etree.ElementTree import Element, tostring
 
 from safe.common.exceptions import InvalidProvenanceDataError
 from safe.metadata.provenance.provenance_step import ProvenanceStep
+from safe.utilities.unicode import get_unicode
 
 
 class IFProvenanceStep(ProvenanceStep):
@@ -93,7 +94,7 @@ class IFProvenanceStep(ProvenanceStep):
         for key in self.impact_functions_fields:
             value = self.data(key)
             element = Element(key)
-            element.text = str(value)
+            element.text = get_unicode(value)
 
             xml += tostring(element)
 
