@@ -50,6 +50,14 @@ class TestQGISRasterTools(unittest.TestCase):
 
     @unittest.skipIf(
         os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
+    def test_fake_unit_test_skipped(self):
+        self.assertTrue(True)
+
+    def test_fake_unit_test(self):
+        self.assertTrue(True)
+
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_pixels_to_points(self):
         points = pixels_to_points(
             self.raster, threshold_min=1.0, threshold_max=1.5)
