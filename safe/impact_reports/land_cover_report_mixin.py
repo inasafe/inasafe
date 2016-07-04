@@ -104,8 +104,8 @@ class LandCoverReportMixin(ReportMixin):
         area_calc.setEllipsoidalMode(True)
 
         hazard_dict = OrderedDict()
-        if self.hazard_classes:
-            for h_class in self.hazard_classes:
+        if self.ordered_columns:
+            for h_class in self.ordered_columns:
                 hazard_dict[h_class] = 0
 
         for f in self.impact_layer.getFeatures():
