@@ -42,6 +42,7 @@ class ClassifiedPolygonHazardBuildingFunction(
 
     def __init__(self):
         super(ClassifiedPolygonHazardBuildingFunction, self).__init__()
+        BuildingExposureReportMixin.__init__(self)
 
         # Hazard zones are all unique values from the hazard zone attribute
         self.hazard_zones = []

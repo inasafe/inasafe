@@ -56,6 +56,7 @@ class ContinuousHazardPopulationFunction(
 
     def __init__(self):
         super(ContinuousHazardPopulationFunction, self).__init__()
+        PopulationExposureReportMixin.__init__(self)
         self.impact_function_manager = ImpactFunctionManager()
 
         # AG: Use the proper minimum needs, update the parameters
