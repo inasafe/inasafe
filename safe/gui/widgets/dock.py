@@ -61,6 +61,7 @@ from safe.utilities.qgis_utilities import (
     display_critical_message_bar,
     display_warning_message_bar,
     display_information_message_bar)
+from safe.utilities.memory_checker import memory_error
 from safe.defaults import (
     limitations,
     supporters_logo_path)
@@ -1181,6 +1182,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 'does not have proper keywords for aggregation layer.'
             )
             self.analysis_error(e, context)
+            self.disable_busy_cursor()
+            return
+        except MemoryError as e:
+            memory_error()
             self.disable_busy_cursor()
             return
         except InsufficientMemoryWarning:
