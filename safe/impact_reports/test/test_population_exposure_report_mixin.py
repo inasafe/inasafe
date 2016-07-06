@@ -190,7 +190,7 @@ class PopulationExposureReportMixinTest(unittest.TestCase):
                  'unit': {'abbreviation': 'u'}}])]),
             'notes': {'fields': [], 'title': 'Notes'},
             'question': ''}
-        self.assertEquals(data, expected)
+        self.assertDictEqual(data, expected)
 
 
 if __name__ == '__main__':

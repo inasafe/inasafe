@@ -20,6 +20,10 @@ class ReportMixin(object):
 
     .. versionadded:: 3.1
     """
+    def __init__(self):
+        super(ReportMixin, self).__init__()
+        self.exposure_report = None
+        self.question_report = None
 
     def notes(self):
         """Return the notes section of the report.
@@ -41,4 +45,22 @@ class ReportMixin(object):
         return {
             'title': tr('Action checklist'),
             'fields': []
+        }
+
+    def impact_summary(self):
+        """Create impact summary as data."""
+        raise NotImplementedError
+
+    def generate_data(self):
+        """Create a dictionary contains impact data.
+
+        :returns: The impact report data.
+        :rtype: dict
+        """
+        return {
+            'exposure': self.exposure_report,
+            'question': self.question_report,
+            'impact summary': self.impact_summary(),
+            'action check list': self.action_checklist(),
+            'notes': self.notes()
         }

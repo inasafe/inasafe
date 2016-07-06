@@ -34,6 +34,8 @@ class PolygonPeopleExposureReportMixin(ReportMixin):
         .. versionadded:: 3.2
 
         """
+        super(PolygonPeopleExposureReportMixin, self).__init__()
+        self.exposure_report = 'polygon people'
         self._question = ''
         self._areas = {}
         self._affected_areas = {}
@@ -50,22 +52,13 @@ class PolygonPeopleExposureReportMixin(ReportMixin):
         :returns: The impact report data.
         :rtype: dict
         """
-        question = self.question
-        impact_summary = self.impact_summary()
-        breakdown = self.breakdown()
-        minimum_needs = self.total_needs.copy()
-        action_checklist = self.action_checklist()
-        notes = self.notes()
-
-        return {
-            'exposure': 'polygon people',
-            'question': question,
-            'impact summary': impact_summary,
-            'breakdown': breakdown,
-            'minimum needs': minimum_needs,
-            'action check list': action_checklist,
-            'notes': notes
+        extra_data = {
+            'minimum needs': self.total_needs.copy(),
+            'breakdown': self.impact_table(),  # TODO, need to update breakdown
         }
+        data = super(PolygonPeopleExposureReportMixin, self).generate_data()
+        data.update(extra_data)
+        return data
 
     def impact_summary(self):
         """Create impact summary as data.
@@ -160,7 +153,7 @@ class PolygonPeopleExposureReportMixin(ReportMixin):
         return evacuated_population_needs(
             total_population_evacuated, self.minimum_needs)
 
-    def breakdown(self):
+    def impact_table(self):
         """Create breakdown as data.
 
         :returns: Breakdown in dictionary format.

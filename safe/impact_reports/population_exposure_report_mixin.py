@@ -48,6 +48,8 @@ class PopulationExposureReportMixin(ReportMixin):
             )]
 
         """
+        super(PopulationExposureReportMixin, self).__init__()
+        self.exposure_report = 'population'
         self._question = ''
         self._total_population = 0
         self._unaffected_population = 0
@@ -64,20 +66,12 @@ class PopulationExposureReportMixin(ReportMixin):
         :returns: The impact report data.
         :rtype: dict
         """
-        question = self.question
-        impact_summary = self.impact_summary()
-        minimum_needs = self.total_needs.copy()
-        action_checklist = self.action_checklist()
-        notes = self.notes()
-
-        return {
-            'exposure': 'population',
-            'question': question,
-            'impact summary': impact_summary,
-            'minimum needs': minimum_needs,
-            'action check list': action_checklist,
-            'notes': notes
+        extra_data = {
+            'minimum needs': self.total_needs.copy(),
         }
+        data = super(PopulationExposureReportMixin, self).generate_data()
+        data.update(extra_data)
+        return data
 
     def action_checklist(self):
         """Return the action check list section of the report.
