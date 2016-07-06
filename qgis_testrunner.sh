@@ -13,7 +13,7 @@ if [ -z "$OUTPUT" ]; then
     echo "ERROR: no output from the test runner! (exit code: ${EXIT_CODE})"
     exit 1
 fi
-echo $OUTPUT | grep -q "FAILED (failures"
+echo $OUTPUT | grep -q "FAILED ("
 RESULT_CODE="$?"
 echo "Finished running test $1."
 if [ "$RESULT_CODE" != "0" ];
