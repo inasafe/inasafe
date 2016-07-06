@@ -23,7 +23,6 @@ class ReportMixin(object):
     def __init__(self):
         super(ReportMixin, self).__init__()
         self.exposure_report = None
-        self.question_report = None
 
     def notes(self):
         """Return the notes section of the report.
@@ -59,7 +58,7 @@ class ReportMixin(object):
         """
         return {
             'exposure': self.exposure_report,
-            'question': self.question_report,
+            'question': self.question,  # The question is defined in the IF.
             'impact summary': self.impact_summary(),
             'action check list': self.action_checklist(),
             'notes': self.notes()

@@ -37,6 +37,7 @@ class BuildingExposureReportMixinTest(unittest.TestCase):
         """Fixture run before all tests."""
         self.building_mixin_blank = BuildingExposureReportMixin()
         self.building_mixin = BuildingExposureReportMixin()
+        self.building_mixin.question = ''
         self.building_mixin.buildings = {
             'School': 100,
             'University': 10,

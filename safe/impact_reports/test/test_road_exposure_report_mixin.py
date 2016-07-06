@@ -37,6 +37,8 @@ class RoadExposureReportMixinTest(unittest.TestCase):
         """Fixture run before all tests."""
         self.road_mixin_blank = RoadExposureReportMixin()
         self.road_mixin = RoadExposureReportMixin()
+        self.road_mixin_blank.question = ''
+        self.road_mixin.question = ''
         self.road_mixin.road_lengths = OrderedDict([
             ('Main', 133.3),
             ('Side', 10),

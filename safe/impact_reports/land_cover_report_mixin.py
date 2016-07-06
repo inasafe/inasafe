@@ -63,7 +63,7 @@ class LandCoverReportMixin(ReportMixin):
         self.affected_columns = affected_columns
         self.land_cover_field = land_cover_field
         self.zone_field = zone_field
-        self.question_report = question
+        self.question = question
 
     def impact_summary(self):
         # Set this as empty string

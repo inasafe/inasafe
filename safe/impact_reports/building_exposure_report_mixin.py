@@ -74,7 +74,6 @@ class BuildingExposureReportMixin(ReportMixin):
         """
         super(BuildingExposureReportMixin, self).__init__()
         self.exposure_report = 'building'
-        self.question_report = ''
         self.buildings = {}
         self.categories = None
         self.affected_buildings = {}

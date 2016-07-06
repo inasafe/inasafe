@@ -36,7 +36,6 @@ class PolygonPeopleExposureReportMixin(ReportMixin):
         """
         super(PolygonPeopleExposureReportMixin, self).__init__()
         self.exposure_report = 'polygon people'
-        self._question = ''
         self._areas = {}
         self._affected_areas = {}
         self._areas_population = {}
@@ -235,26 +234,6 @@ class PolygonPeopleExposureReportMixin(ReportMixin):
         :type affected_population: dict
         """
         self._affected_population = affected_population
-
-    @property
-    def question(self):
-        """Get the impact function question.
-
-        :returns: The impact function question.
-        :rtype: basestring
-        """
-        if not hasattr(self, '_question'):
-            self._question = ''
-        return self._question
-
-    @question.setter
-    def question(self, question):
-        """Set the impact function question.
-
-        :param question: The question.
-        :type question: basestring
-        """
-        self._question = question
 
     @property
     def unaffected_population(self):

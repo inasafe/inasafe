@@ -33,7 +33,6 @@ class RoadExposureReportMixin(ReportMixin):
         """
         super(RoadExposureReportMixin, self).__init__()
         self.exposure_report = 'road'
-        self.question_report = ''
         self.road_lengths = {}
         self.affected_road_lengths = {}
         self.affected_road_categories = {}

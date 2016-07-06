@@ -50,7 +50,6 @@ class PopulationExposureReportMixin(ReportMixin):
         """
         super(PopulationExposureReportMixin, self).__init__()
         self.exposure_report = 'population'
-        self._question = ''
         self._total_population = 0
         self._unaffected_population = 0
         self._evacuation_category = 0
@@ -222,26 +221,6 @@ class PopulationExposureReportMixin(ReportMixin):
         :type affected_population: dict
         """
         self._affected_population = affected_population
-
-    @property
-    def question(self):
-        """Get the impact function question.
-
-        :returns: The impact function question.
-        :rtype: basestring
-        """
-        if not hasattr(self, '_question'):
-            self._question = ''
-        return self._question
-
-    @question.setter
-    def question(self, question):
-        """Set the impact function question.
-
-        :param question: The question.
-        :type question: basestring
-        """
-        self._question = question
 
     @property
     def unaffected_population(self):
