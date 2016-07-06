@@ -18,6 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import unittest
+import os
 from qgis.core import (
     QgsVectorLayer,
     QgsPoint,
@@ -66,7 +67,6 @@ class TestQGISVectorTools(unittest.TestCase):
             x, y = [attr[index] for index in [x_index, y_index]]
             self.assertLess(abs(p.x() - x), dx)
             self.assertLess(abs(p.y() - y), dy)
-    test_points_to_rectangles.slow = False
 
     def test_union_geometry(self):
         """Test union_geometry work"""
@@ -96,7 +96,6 @@ class TestQGISVectorTools(unittest.TestCase):
         # The union is 9 squares
         self.assertAlmostEquals(geom.area(), 1.5 * dx * 1.5 * dy)
         self.assertTrue(geom.isMultipart())
-    test_union_geometry.slow = False
 
     def test_create_layer(self):
         """Test create layer work"""
@@ -124,6 +123,8 @@ class TestQGISVectorTools(unittest.TestCase):
         new_fields = new_layer.dataProvider().fields()
         self.assertEquals(new_fields.toList(), fields.toList())
 
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_clip_by_polygon(self):
         """Test clip_by_polygon work"""
         line_before = QgsVectorLayer(
@@ -154,8 +155,9 @@ class TestQGISVectorTools(unittest.TestCase):
                     found = True
                     break
             self.assertTrue(found)
-    test_clip_by_polygon.slow = True
 
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_split_by_polygon(self):
         """Test split_by_polygon work"""
         line_before = QgsVectorLayer(
@@ -214,7 +216,6 @@ class TestQGISVectorTools(unittest.TestCase):
                     found = True
                     break
             self.assertTrue(found)
-    test_split_by_polygon.slow = True
 
     def _create_points(self):
         """Create points for testing"""

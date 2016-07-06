@@ -176,7 +176,7 @@ class StylingTest(unittest.TestCase):
                 {'opacity': 1, 'max': 539, 'colour': '#f31a1c',
                  'min': 351, 'label': 'High', 'size': 3}]}
 
-        print 'Setting style with point sizes should work.'
+        # print 'Setting style with point sizes should work.'
         set_vector_graduated_style(layer, style_info)
 
         # Now validate the size values were set as expected
@@ -288,7 +288,7 @@ class StylingTest(unittest.TestCase):
             print str(e)
         assert False, 'Incorrect handling of broken styles'
 
-    def testAddMinMaxToStyle(self):
+    def test_add_min_max_to_style(self):
         """Test our add min max to style function."""
         myClasses = [dict(colour='#38A800', quantity=2, transparency=0),
                      dict(colour='#38A800', quantity=5, transparency=50),
@@ -320,7 +320,7 @@ class StylingTest(unittest.TestCase):
         self.maxDiff = None
         self.assertListEqual(myExpectedClasses, myActualClasses)
 
-    def testMmiColour(self):
+    def test_mmi_colour(self):
         """Test that we can get a colour given an mmi number."""
         values = range(0, 12)
         myExpectedResult = ['#FFFFFF', '#FFFFFF', '#209fff', '#00cfff',

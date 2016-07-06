@@ -269,7 +269,7 @@ class FunctionOptionsDialogTest(unittest.TestCase):
 
         dialog = FunctionOptionsDialog()
         result = dialog.parse_input(function_input)
-        print result
+        # print result
         expected = OrderedDict([
             ('thresholds', [1.0]),
             ('postprocessors', OrderedDict([

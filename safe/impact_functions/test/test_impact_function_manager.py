@@ -78,11 +78,13 @@ class TestImpactFunctionManager(unittest.TestCase):
         impact_function_manager = ImpactFunctionManager()
         expected_result = len(impact_function_manager.registry.list())
         i = 0
+        '''
         print 'Your impact functions:'
         for impact_function in \
                 impact_function_manager.registry.impact_functions:
             i += 1
             print i, impact_function.metadata().as_dict()['name']
+        '''
         result = len(impact_function_manager.registry.list())
         message = (
             'I expect %s but I got %s, please check the number of current '
@@ -99,6 +101,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         self.assertEqual(
             impact_function_title, expected_title, message)
 
+    @unittest.skip('This test is not a test.')
     def test_get_all_layer_requirements(self):
         """Test to generate all layer requirements from all IFs."""
         impact_function_manager = ImpactFunctionManager()
@@ -179,7 +182,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         impact_function_manager = ImpactFunctionManager()
         hazards = impact_function_manager.hazards_for_layer(
             'polygon', 'single_event')
-        print [x['key'] for x in hazards]
+        # print [x['key'] for x in hazards]
         expected = [
             hazard_flood,
             hazard_tsunami,
@@ -229,7 +232,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         continuous_hazards_units = impact_function_manager.\
             continuous_hazards_units_for_layer(
                 'tsunami', 'raster', 'continuous', 'single_event')
-        print [x['key'] for x in continuous_hazards_units]
+        # print [x['key'] for x in continuous_hazards_units]
         expected = [unit_metres, unit_feet, unit_generic]
         self.assertItemsEqual(continuous_hazards_units, expected)
 
@@ -239,7 +242,7 @@ class TestImpactFunctionManager(unittest.TestCase):
 
         result = impact_function_manager.available_hazards(
             'single_event')
-        print [x['key'] for x in result]
+        # print [x['key'] for x in result]
         expected_result = [hazard_flood,
                            hazard_tsunami,
                            hazard_earthquake,
@@ -298,7 +301,7 @@ class TestImpactFunctionManager(unittest.TestCase):
             (layer_mode_classified, layer_geometry_polygon),
         ]
 
-        print [(x[0]['key'], x[1]['key']) for x in hazard_constraints]
+        # print [(x[0]['key'], x[1]['key']) for x in hazard_constraints]
         self.assertItemsEqual(hazard_constraints, expected)
 
     def test_available_exposure_constraints(self):
