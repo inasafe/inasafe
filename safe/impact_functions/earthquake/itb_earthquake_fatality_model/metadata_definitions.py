@@ -66,8 +66,10 @@ class ITBFatalityMetadata(ImpactFunctionMetadata):
             'author': 'Hadi Ghasemi',
             'date_implemented': 'N/A',
             'overview': tr(
-                'To assess the impact of earthquake on population based '
-                'on the earthquake model for Indonesia developed by ITB.'),
+                'Estimates the number of fatalities resulting from an '
+                'earthquake. Uses data from an Indonesian database of '
+                'earthquake events to calculate fatality rates. Based on the '
+                'earthquake model for Indonesia developed by ITB.'),
             'detailed_description': tr(
                 'This model was developed by Institut Teknologi Bandung '
                 '(ITB) and implemented by Dr. Hadi Ghasemi, Geoscience '
@@ -88,7 +90,7 @@ class ITBFatalityMetadata(ImpactFunctionMetadata):
             'output': '',
             'actions': tr(
                 'Provide details about the population including '
-                'estimates for mortalities and displaced persons.'),
+                'estimates for mortalities.'),
             'limitations': [
                 tr('The model is based on a limited number of observed '
                    'fatality rates during four previous fatal events.'),

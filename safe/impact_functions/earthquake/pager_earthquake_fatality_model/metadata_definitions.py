@@ -64,8 +64,10 @@ class PAGFatalityMetadata(ITBFatalityMetadata):
             'author': 'Helen Crowley',
             'date_implemented': 'N/A',
             'overview': tr(
-                'To assess the impact of an earthquake on population based '
-                'on the Population Vulnerability Pager Model.'),
+                'Estimates the number of fatalities resulting from an '
+                'earthquake. Uses data from a global database of earthquake '
+                'events to calculate fatality rates. Based on the '
+                'Population Vulnerability PAGER Model.'),
             'detailed_description': '',
             'hazard_input': '',
             'exposure_input': '',
