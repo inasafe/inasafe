@@ -191,7 +191,7 @@
             <gco:CharacterString>FLOODPRONE</gco:CharacterString>
           </field>
           <value_map>
-            <gco:Dictionary/>
+            <gco:Dictionary>{&quot;high&quot;: [&quot;YES&quot;]}</gco:Dictionary>
           </value_map>
           <vector_hazard_classification>
             <gco:CharacterString>generic_vector_hazard_classes</gco:CharacterString>

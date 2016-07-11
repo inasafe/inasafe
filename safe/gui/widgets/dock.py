@@ -1320,7 +1320,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         .. note:: This function requires QGIS 2.4 or greater to work. In older
             versions it will simply return 0.
 
-        .. version_added:: 3.2
+        .. versionadded:: 3.2
 
         :param layer: A map layer currently loaded in the legend.
         :type layer: QgsMapLayer

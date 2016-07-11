@@ -70,8 +70,8 @@ class LandCoverReportMixin(ReportMixin):
         :returns: The impact report data.
         :rtype: dict
         """
-
-        return {
+        notes = self.notes()
+        data = {
             'exposure': 'land cover',
             'question': self.question,
             'impact summary': '',  # Set this as empty string
@@ -80,8 +80,9 @@ class LandCoverReportMixin(ReportMixin):
             'affected columns': self.affected_columns,
             'impact table': self.impact_table(),
             'action check list': self.action_checklist(),
-            'notes': self.notes()
+            'notes': notes
         }
+        return data
 
     def action_checklist(self):
         """Return the action check list section of the report.

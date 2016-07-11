@@ -11,11 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 """
 
-__author__ = 'akbargumbira@gmail.com'
-__revision__ = '$Format:%H$'
-__date__ = '15/03/15'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
 
 import numpy
 import logging
@@ -86,7 +81,7 @@ from safe.storage.utilities import (
     buffered_bounding_box as get_buffered_extent,
     safe_to_qgis_layer,
     bbox_intersection)
-from safe.definitions import inasafe_keyword_version
+from safe.definitions import inasafe_keyword_version, exposure_all
 from safe.metadata.provenance import Provenance
 from safe.common.version import get_version
 from safe.common.signals import (
@@ -106,6 +101,12 @@ SUGGESTION_STYLE = styles.SUGGESTION_STYLE
 WARNING_STYLE = styles.WARNING_STYLE
 LOGO_ELEMENT = m.Brand()
 LOGGER = logging.getLogger('InaSAFE')
+
+__author__ = 'akbargumbira@gmail.com'
+__revision__ = '$Format:%H$'
+__date__ = '15/03/15'
+__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
+                 'Disaster Reduction')
 
 
 class ImpactFunction(object):
@@ -409,6 +410,24 @@ class ImpactFunction(object):
                 self.target_field,
                 self.exposure.layer.dataProvider().fieldNameMap().keys()
             )
+
+    def exposure_definition(self):
+        """Get the metadata for the type of exposure that has been provided.
+
+        This method will do a lookup in definitions.py and return the
+        exposure definition dictionary. This is a helper function to make it
+        easy to get exposure specific notes from the definitions metadata.
+
+        .. versionadded:: 3.5
+
+        :returns: A dictionary like e.g. safe.definitions.exposure_land_cover
+        :rtype: str, None
+        """
+        exposure_name = self.exposure.keyword('exposure')
+        for exposure in exposure_all:
+            if exposure['key'] == exposure_name:
+                return exposure
+        return None
 
     @property
     def aggregation(self):

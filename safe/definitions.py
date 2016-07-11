@@ -316,7 +316,10 @@ exposure_land_cover = {
     'description': tr(
         'The <b>land cover</b> exposure data describes features on '
         'the surface of the earth that might be exposed to a particular '
-        ' hazard. This might include crops, forest and urban areas. ')
+        ' hazard. This might include crops, forest and urban areas. '),
+    'notes': [  # these are additional generic notes for people - IF has more
+        tr('Areas reported for landcover counts have not been rounded.')
+    ]
 }
 
 exposure_people_in_building = {
@@ -328,7 +331,13 @@ exposure_people_in_building = {
         'area to the buildings with a residential function in that area.'
         '<p>The process of assigning people to buildings assumes that all '
         'people and buildings in the area are mapped. There are no InaSAFE '
-        'impact functions that use this exposure data yet.</p>')
+        'impact functions that use this exposure data yet.</p>'),
+    'notes': [  # these are additional generic notes for people - IF has more
+        tr('Numbers reported for population counts have been rounded to the '
+           'nearest 10 persons if the total is less than 1,000; nearest 100 '
+           'people if more than 1,000 and less than 100,000; and nearest '
+           '1000 if more than 100,000.')
+    ]
 }
 
 exposure_population = {
@@ -336,7 +345,8 @@ exposure_population = {
     'name': tr('Population'),
     'description': tr(
         'The <b>population</b> describes the people that might be '
-        'exposed to a particular hazard.')
+        'exposed to a particular hazard.'),
+    'notes': exposure_people_in_building['notes']
 }
 
 exposure_road = {
@@ -344,7 +354,11 @@ exposure_road = {
     'name': tr('Road'),
     'description': tr(
         'A <b>road</b> is a defined route used by a vehicle or people to '
-        'travel between two or more points.')
+        'travel between two or more points.'),
+    'notes': [  # these are additional generic notes for roads - IF has more
+        tr('Numbers reported for road lengths have been rounded to the '
+           'nearest meter.')
+    ]
 }
 
 exposure_structure = {
@@ -354,7 +368,10 @@ exposure_structure = {
         'A <b>structure</b> can be any relatively permanent man '
         'made feature such as a building (an enclosed structure '
         'with walls and a roof), telecommunications facility or '
-        'bridge.')
+        'bridge.'),
+    'notes': [  # additional generic notes for buildings - IF has more
+        tr('Numbers reported for structures are exact counts.')
+    ]
 }
 
 

@@ -74,6 +74,11 @@ class TestClassifiedPolygonLandCoverFunction(unittest.TestCase):
             msg = '%s is different than %s, I got %s' % (key, value, result)
             self.assertEqual(value, result, msg)
 
+        # check if generic notes are returned
+        self.assertIn(
+                u'Areas reported for landcover counts have not been rounded.',
+                function.notes()['fields'])
+
     def test_keywords(self):
 
         exposure_keywords = {
