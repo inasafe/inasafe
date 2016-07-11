@@ -128,8 +128,8 @@ class RoadExposureReportMixin(ReportMixin):
         for affected_category in self.affected_road_categories:
             attributes.append(affected_category)
         if self.add_unaffected_column:
-            attributes.append('Unaffected')
-        attributes.append('Total')
+            attributes.append(tr('Unaffected'))
+        attributes.append(tr('Total'))
 
         all_field = [0] * len(self.affected_road_lengths)
         for (category, road_breakdown) in self.affected_road_lengths.items():
