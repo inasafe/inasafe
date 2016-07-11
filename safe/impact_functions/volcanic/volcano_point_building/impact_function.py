@@ -48,7 +48,7 @@ class VolcanoPointBuildingFunction(
         fields = [
             tr('Map shows buildings affected in each of the volcano buffered '
                'zones.'),
-            tr(tr('Volcanoes considered: %s.') % self.volcano_names)
+            tr('Volcanoes considered: %s.') % self.volcano_names
         ]
         return {
             'title': title,
