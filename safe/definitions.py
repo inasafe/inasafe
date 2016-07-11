@@ -47,6 +47,8 @@ layer_purpose_hazard = {
         'property damage, loss of livelihoods and services, social and '
         'economic disruption, or environmental damage. For example; flood, '
         'earthquake, tsunami and volcano are all examples of hazards.')
+        # source UNISDR (2009) Terminology on disaster risk reduction.
+        # https://www.unisdr.org/we/inform/terminology
 }
 layer_purpose_exposure = {
     'key': 'exposure',
@@ -55,6 +57,8 @@ layer_purpose_exposure = {
         'An <b>exposure</b> layer represents people, property, systems, or '
         'other elements present in hazard zones that are thereby subject to '
         'potential losses in the event of a flood, earthquake, volcano etc.')
+        # source UNISDR (2009) Terminology on disaster risk reduction.
+        # https://www.unisdr.org/we/inform/terminology
 }
 layer_purpose_aggregation = {
     'key': 'aggregation',
