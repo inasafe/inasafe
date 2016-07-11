@@ -147,6 +147,8 @@ class ClassifiedRasterHazardBuildingFunction(
         self._consolidate_to_other()
 
         # Create style
+        # Low, Medium and High are translated in the attribute table.
+        # "Not affected" is not translated in the attribute table.
         style_classes = [
             dict(
                 label=tr('Not Affected'),
@@ -158,7 +160,7 @@ class ClassifiedRasterHazardBuildingFunction(
                 border_width=0.2),
             dict(
                 label=tr('Low'),
-                value='Low hazard zone',
+                value=tr('Low hazard zone'),
                 colour='#EBF442',
                 transparency=0,
                 size=2,
@@ -166,7 +168,7 @@ class ClassifiedRasterHazardBuildingFunction(
                 border_width=0.2),
             dict(
                 label=tr('Medium'),
-                value='Medium hazard zone',
+                value=tr('Medium hazard zone'),
                 colour='#F4A442',
                 transparency=0,
                 size=2,
@@ -174,7 +176,7 @@ class ClassifiedRasterHazardBuildingFunction(
                 border_width=0.2),
             dict(
                 label=tr('High'),
-                value='High hazard zone',
+                value=tr('High hazard zone'),
                 colour='#F31A1C',
                 transparency=0,
                 size=2,
