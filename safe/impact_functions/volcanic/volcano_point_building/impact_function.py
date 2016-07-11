@@ -37,8 +37,6 @@ class VolcanoPointBuildingFunction(
         self.volcano_names = tr('Not specified in data')
         self._affected_categories_volcano = []
         self.hazard_zone_attribute = 'radius'
-        # From BuildingExposureReportMixin
-        self.building_report_threshold = 25
 
     def notes(self):
         """Return the notes section of the report as dict.
@@ -135,13 +133,6 @@ class VolcanoPointBuildingFunction(
         for key in affected_building_keys:
             self.affected_buildings[tr('Radius %.1f km' % key)] = \
                 self.affected_buildings.pop(key)
-
-        # Lump small entries and 'unknown' into 'other' category
-        # Building threshold #2468
-        postprocessors = self.parameters['postprocessors']
-        building_postprocessors = postprocessors['BuildingType'][0]
-        self.building_report_threshold = building_postprocessors.value[0].value
-        self._consolidate_to_other()
 
         # Create style
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',
