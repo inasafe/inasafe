@@ -126,8 +126,12 @@ class TestClassifiedPolygonBuildingFunction(unittest.TestCase):
 
         # Test the JSON impact table content
         expected_fields = [
-            [u'Other', 0, 31, 2, 7, 40],
             [u'Commercial', 6, 25, 0, 0, 31],
+            [u'Education', 0, 7, 0, 0, 7],
+            [u'Government', 0, 12, 2, 4, 18],
+            [u'Health', 0, 3, 0, 2, 5],
+            [u'Other', 0, 1, 0, 0, 1],
+            [u'Place of worship', 0, 8, 0, 1, 9],
             [u'Residential', 5, 105, 0, 0, 110],
             [u'Total', 11, 161, 2, 7, 181]
         ]
