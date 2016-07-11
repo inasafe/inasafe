@@ -50,9 +50,6 @@ class FloodPolygonBuildingFunction(
         # The 'wet' variable
         self.wet = 'wet'
 
-        # From BuildingExposureReportMixin
-        self.building_report_threshold = 25
-
     def notes(self):
         """Return the notes section of the report as dict.
 
@@ -238,13 +235,6 @@ class FloodPolygonBuildingFunction(
             self.classify_feature(hazard_classes[0], usage, affected)
 
         self.reorder_dictionaries()
-
-        # Lump small entries and 'unknown' into 'other' category
-        # Building threshold #2468
-        postprocessors = self.parameters['postprocessors']
-        building_postprocessors = postprocessors['BuildingType'][0]
-        self.building_report_threshold = building_postprocessors.value[0].value
-        self._consolidate_to_other()
 
         style_classes = [
             dict(label=tr('Not Inundated'), value=0, colour='#1EFC7C',

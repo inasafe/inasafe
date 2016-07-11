@@ -410,26 +410,3 @@ class BuildingExposureReportMixin(ReportMixin):
         :rtype: int
         """
         return sum(self.buildings.values())
-
-    def _consolidate_to_other(self):
-        """Consolidate small building usage groups within self.threshold.
-
-        Small groups will be grouped together in the "other" group.
-        """
-        other = tr('Other')
-        for (usage, value) in self.buildings.items():
-            if value >= self.building_report_threshold:
-                continue
-            if other not in self.buildings.keys():
-                self.buildings[other] = 0
-                for category in self.affected_buildings.keys():
-                    other_dict = OrderedDict(
-                        [(key, 0) for key in self._impact_breakdown])
-                    self.affected_buildings[category][other] = other_dict
-            self.buildings[other] += value
-            del self.buildings[usage]
-            for category in self.affected_buildings.keys():
-                for key in self._impact_breakdown:
-                    old = self.affected_buildings[category][usage][key]
-                    self.affected_buildings[category][other][key] += old
-                del self.affected_buildings[category][usage]

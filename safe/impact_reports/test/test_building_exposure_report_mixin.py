@@ -202,42 +202,6 @@ class BuildingExposureReportMixinTest(unittest.TestCase):
         message = 'The unaffected number of buildings is not as expected.'
         self.assertEqual(unaffected, 7036, message)
 
-    def test_0009_consolidate_to_other(self):
-        """Test consolidating smaller building types to 'other'."""
-        total_buildings_before = self.building_mixin.total_buildings
-        affected_other_before = self.building_mixin._count_usage('Other')
-        message = (
-            'There should be no affected buildings of type other before '
-            'consolidating.')
-        self.assertEqual(affected_other_before, 0, message)
-        other_in_buildings_before = (
-            'Other' in self.building_mixin.buildings.keys())
-        message = (
-            'There should be no buildings of type other before '
-            'consolidation.')
-        self.assertFalse(other_in_buildings_before, message)
-        self.building_mixin._consolidate_to_other()
-        total_buildings_after = self.building_mixin.total_buildings
-        message = (
-            'The total number of buildings should remain the same '
-            'even after consolidation.')
-        self.assertEqual(
-            total_buildings_before,
-            total_buildings_after,
-            message)
-        affected_other_after = self.building_mixin._count_usage('Other')
-        message = 'The affected other buildings are not as expected.'
-        self.assertEqual(affected_other_after, 2, message)
-        other_in_buildings_after = (
-            'Other' in self.building_mixin.buildings.keys())
-        message = 'The type other should be in buildings.'
-        self.assertTrue(other_in_buildings_after, message)
-        total_other_after = self.building_mixin.buildings['Other']
-        message = (
-            'The total number of other after consolidation is '
-            'not as expected.')
-        self.assertEqual(total_other_after, 13, message)
-
     def test_0010_generate_data(self):
         """Test generating data."""
         self.maxDiff = None
