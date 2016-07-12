@@ -34,6 +34,16 @@ class ReportMixin(object):
         """
         return []
 
+    def action_checklist(self):
+        """Return the action checklit section of the report.
+
+        Sub classes should implement this.
+
+        :return: The actions that should be attached to this impact report.
+        :rtype: dict
+        """
+        return []
+
     def extra_actions(self):
         """Provide exposure specific actions.
 
