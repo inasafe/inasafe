@@ -31,7 +31,8 @@ class RoadExposureReportMixin(ReportMixin):
 
         .. versionadded:: 3.2
         """
-        self.question = ''
+        super(RoadExposureReportMixin, self).__init__()
+        self.exposure_report = 'road'
         self.road_lengths = {}
         self.affected_road_lengths = {}
         self.affected_road_categories = {}
@@ -101,20 +102,12 @@ class RoadExposureReportMixin(ReportMixin):
         :returns: The impact report data.
         :rtype: dict
         """
-        question = self.question
-        impact_summary = self.impact_summary()
-        impact_table = self.roads_breakdown()
-        action_checklist = self.action_checklist()
-        notes = self.notes()
-
-        return {
-            'exposure': 'road',
-            'question': question,
-            'impact summary': impact_summary,
-            'impact table': impact_table,
-            'action check list': action_checklist,
-            'notes': notes
+        extra_data = {
+            'impact table': self.impact_table(),
         }
+        data = super(RoadExposureReportMixin, self).generate_data()
+        data.update(extra_data)
+        return data
 
     def impact_summary(self):
         """Create impact summary as data.
@@ -128,8 +121,8 @@ class RoadExposureReportMixin(ReportMixin):
         for affected_category in self.affected_road_categories:
             attributes.append(affected_category)
         if self.add_unaffected_column:
-            attributes.append('Unaffected')
-        attributes.append('Total')
+            attributes.append(tr('Unaffected'))
+        attributes.append(tr('Total'))
 
         all_field = [0] * len(self.affected_road_lengths)
         for (category, road_breakdown) in self.affected_road_lengths.items():
@@ -147,7 +140,7 @@ class RoadExposureReportMixin(ReportMixin):
             'fields': fields
         }
 
-    def roads_breakdown(self):
+    def impact_table(self):
         """Create road breakdown as data.
 
         :returns: Road Breakdown in dictionary format.

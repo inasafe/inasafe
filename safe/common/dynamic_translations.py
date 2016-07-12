@@ -181,3 +181,16 @@ def dynamic_translations():
 
     # Aggregation
     tr('Area')
+
+    # OSM Downloader
+    tr('Afghanistan')
+    tr('Ethiopia')
+    tr('France')
+    tr('Indonesia')
+    tr('Madagascar')
+    tr('Malawi')
+    tr('Mozambique')
+    tr('Philippines')
+    tr('South Africa')
+    tr('Thailand')
+    tr('Zimbabwe')

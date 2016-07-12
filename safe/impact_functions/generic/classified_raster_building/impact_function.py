@@ -44,11 +44,9 @@ class ClassifiedRasterHazardBuildingFunction(
 
     def __init__(self):
         super(ClassifiedRasterHazardBuildingFunction, self).__init__()
+        BuildingExposureReportMixin.__init__(self)
         self.affected_field = 'affected'
         self.target_field = 'hazard'
-
-        # From BuildingExposureReportMixin
-        self.building_report_threshold = 25
 
     def notes(self):
         """Return the notes section of the report as dict.
@@ -139,18 +137,13 @@ class ClassifiedRasterHazardBuildingFunction(
 
         self.reorder_dictionaries()
 
-        # Consolidate the small building usage groups < 25 to other
-        # Building threshold #2468
-        postprocessors = self.parameters['postprocessors']
-        building_postprocessors = postprocessors['BuildingType'][0]
-        self.building_report_threshold = building_postprocessors.value[0].value
-        self._consolidate_to_other()
-
         # Create style
+        # Low, Medium and High are translated in the attribute table.
+        # "Not affected" is not translated in the attribute table.
         style_classes = [
             dict(
                 label=tr('Not Affected'),
-                value=None,
+                value='Not affected',
                 colour='#1EFC7C',
                 transparency=0,
                 size=2,
@@ -158,7 +151,7 @@ class ClassifiedRasterHazardBuildingFunction(
                 border_width=0.2),
             dict(
                 label=tr('Low'),
-                value='Low hazard zone',
+                value=tr('Low hazard zone'),
                 colour='#EBF442',
                 transparency=0,
                 size=2,
@@ -166,7 +159,7 @@ class ClassifiedRasterHazardBuildingFunction(
                 border_width=0.2),
             dict(
                 label=tr('Medium'),
-                value='Medium hazard zone',
+                value=tr('Medium hazard zone'),
                 colour='#F4A442',
                 transparency=0,
                 size=2,
@@ -174,7 +167,7 @@ class ClassifiedRasterHazardBuildingFunction(
                 border_width=0.2),
             dict(
                 label=tr('High'),
-                value='High hazard zone',
+                value=tr('High hazard zone'),
                 colour='#F31A1C',
                 transparency=0,
                 size=2,
