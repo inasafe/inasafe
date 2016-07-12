@@ -125,7 +125,6 @@ class ClassifiedPolygonHazardLandCoverFunction(
         :return: The notes that should be attached to this impact report.
         :rtype: list
         """
-        title = tr('Notes and assumptions')
         fields = [
             tr('The classes used for low, medium, high hazard are specific '
                'to the hazard dataset used.'),
