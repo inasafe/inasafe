@@ -247,11 +247,11 @@ class FloodRasterRoadsFunction(
         fields = [
             tr('Roads are %s when %s levels exceed %.2f m.') %
             (hazard_terminology, hazard_object, threshold),
-            tr('Roads are closed if they are %s.') % hazard_terminology,
-            tr('Roads are open if they are not %s.') % hazard_terminology
         ]
-        # include any generic exposure specific keywords from definitions.py
+        # include any generic exposure specific notes from definitions.py
         fields = fields + self.exposure_notes()
+        # include any generic hazard specific notes from definitions.py
+        fields = fields + self.hazard_notes()
         return fields
 
     def run(self):

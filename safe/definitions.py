@@ -233,7 +233,12 @@ hazard_generic = {
     'description': tr(
         'A <b>generic hazard</b> can be used for any type of hazard where the '
         'data have been classified or generalised. For example: earthquake, '
-        'flood, volcano, or tsunami.')
+        'flood, volcano, or tsunami.'),
+    'notes': [  # additional generic notes for buildings - IF has more
+    ],
+    'actions': [  # these are additional generic actions - IF has more
+
+    ]
 }
 
 hazard_earthquake = {
@@ -242,7 +247,12 @@ hazard_earthquake = {
     'description': tr(
         'An <b>earthquake</b> describes the sudden violent shaking of the '
         'ground that occurs as a result of volcanic activity or movement '
-        'in the earth\'s crust.')
+        'in the earth\'s crust.'),
+    'notes': [  # additional generic notes for buildings - IF has more
+    ],
+    'actions': [  # these are additional generic actions - IF has more
+
+    ]
 }
 
 hazard_flood = {
@@ -254,7 +264,12 @@ hazard_flood = {
         'For example: A <b>flood</b> can occur after heavy rainfall, '
         'when a river overflows its banks or when a dam breaks. '
         'The effect of a <b>flood</b> is for land that is normally dry '
-        'to become wet.')
+        'to become wet.'),
+    'notes': [  # additional generic notes for buildings - IF has more
+    ],
+    'actions': [  # these are additional generic actions - IF has more
+
+    ]
 }
 
 hazard_volcanic_ash = {
@@ -263,7 +278,12 @@ hazard_volcanic_ash = {
     'description': tr(
         '<b>Volcanic ash</b> describes fragments of pulverized rock, minerals '
         'and volcanic glass, created during volcanic eruptions, less than '
-        '2 mm (0.079 inches) in diameter.')
+        '2 mm (0.079 inches) in diameter.'),
+    'notes': [  # additional generic notes for buildings - IF has more
+    ],
+    'actions': [  # these are additional generic actions - IF has more
+
+    ]
 }
 
 hazard_tsunami = {
@@ -274,7 +294,12 @@ hazard_tsunami = {
         'waves usually caused by an underwater earthquake or volcano. '
         'A <b>tsunami</b> at sea may go unnoticed but a <b>tsunami</b> '
         'wave that strikes land may cause massive destruction and '
-        'flooding.')
+        'flooding.'),
+    'notes': [  # additional generic notes for buildings - IF has more
+    ],
+    'actions': [  # these are additional generic actions - IF has more
+
+    ]
 }
 
 hazard_volcano = {
@@ -284,7 +309,12 @@ hazard_volcano = {
         'A <b>volcano</b> describes a mountain which has a vent through '
         'which rock fragments, ash, lava, steam and gases can be ejected '
         'from below the earth\'s surface. The type of material '
-        'ejected depends on the type of <b>volcano</b>.')
+        'ejected depends on the type of <b>volcano</b>.'),
+    'notes': [  # additional generic notes for buildings - IF has more
+    ],
+    'actions': [  # these are additional generic actions - IF has more
+
+    ]
 }
 
 hazard_all = [
@@ -318,7 +348,10 @@ exposure_land_cover = {
         'the surface of the earth that might be exposed to a particular '
         ' hazard. This might include crops, forest and urban areas. '),
     'notes': [  # these are additional generic notes for people - IF has more
-        tr('Areas reported for landcover counts have not been rounded.')
+        tr('Areas reported for land cover counts have not been rounded.'),
+    ],
+    'actions': [  # these are additional generic actions - IF has more
+
     ]
 }
 
@@ -333,10 +366,17 @@ exposure_people_in_building = {
         'people and buildings in the area are mapped. There are no InaSAFE '
         'impact functions that use this exposure data yet.</p>'),
     'notes': [  # these are additional generic notes for people - IF has more
+        tr('All values are rounded up to the nearest integer in order to '
+           'avoid representing human lives as fractions.'),
+        tr('Population rounding is applied to all population values, '
+           'which may cause discrepancies when adding values.'),
         tr('Numbers reported for population counts have been rounded to the '
            'nearest 10 persons if the total is less than 1,000; nearest 100 '
            'people if more than 1,000 and less than 100,000; and nearest '
            '1000 if more than 100,000.')
+    ],
+    'actions': [  # these are additional generic actions - IF has more
+
     ]
 }
 
@@ -346,7 +386,10 @@ exposure_population = {
     'description': tr(
         'The <b>population</b> describes the people that might be '
         'exposed to a particular hazard.'),
-    'notes': exposure_people_in_building['notes']
+    'notes': exposure_people_in_building['notes'],
+    'actions': [  # these are additional generic actions - IF has more
+
+    ]
 }
 
 exposure_road = {
@@ -357,7 +400,14 @@ exposure_road = {
         'travel between two or more points.'),
     'notes': [  # these are additional generic notes for roads - IF has more
         tr('Numbers reported for road lengths have been rounded to the '
-           'nearest meter.')
+           'nearest meter.'),
+        # only flood and tsunami are used with road
+        # currently to it is safe to use inundated here ...
+        tr('Roads are closed if they are inundated.'),
+        tr('Roads are open if they are not inundated.')
+    ],
+    'actions': [  # these are additional generic actions - IF has more
+
     ]
 }
 
@@ -371,6 +421,9 @@ exposure_structure = {
         'bridge.'),
     'notes': [  # additional generic notes for buildings - IF has more
         tr('Numbers reported for structures are exact counts.')
+    ],
+    'actions': [  # these are additional generic actions - IF has more
+
     ]
 }
 
@@ -392,6 +445,17 @@ exposures = {
         'with a potential hazard. '),
     'types': exposure_all
 }
+
+# No data warnings for appending to actions if
+# nulls were encountered in rasters
+no_data_warning = [
+    tr(
+        'The layers contained "no data" values. This missing data '
+        'was carried through to the impact layer.'),
+    tr(
+        '"No data" values in the impact layer were treated as 0 '
+        'when counting the affected or total population.')
+]
 
 # Continuous Hazard Unit
 unit_feet = {

@@ -26,8 +26,7 @@ from safe.utilities.i18n import tr
 from safe.common.utilities import (
     humanize_class,
     create_classes,
-    create_label,
-    get_thousand_separator)
+    create_label)
 from safe.impact_functions.core import (
     no_population_impact_message,
     get_key_for_value
@@ -38,6 +37,7 @@ from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
 from safe.impact_reports.population_exposure_report_mixin import \
     PopulationExposureReportMixin
 from safe.utilities.keyword_io import definition
+from safe.definitions import no_data_warning
 
 
 class VolcanoPolygonPopulationFunction(
@@ -75,21 +75,12 @@ class VolcanoPolygonPopulationFunction(
         ]
 
         if self.no_data_warning:
-            fields.append(tr(
-                'The layers contained "no data" values. This missing data '
-                'was carried through to the impact layer.'))
-            fields.append(tr(
-                '"No data" values in the impact layer were treated as 0 '
-                'when counting the affected or total population.'))
+            fields = fields + no_data_warning
 
-        fields.extend([
-            tr('All values are rounded up to the nearest integer in order to '
-               'avoid representing human lives as fractions.'),
-            tr('Population rounding is applied to all population values, '
-               'which may cause discrepancies when adding value.')
-        ])
-        # include any generic exposure specific keywords from definitions.py
+        # include any generic exposure specific notes from definitions.py
         fields = fields + self.exposure_notes()
+        # include any generic hazard specific notes from definitions.py
+        fields = fields + self.hazard_notes()
         return fields
 
     def run(self):

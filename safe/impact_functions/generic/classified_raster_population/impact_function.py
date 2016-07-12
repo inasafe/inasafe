@@ -14,12 +14,6 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-__author__ = 'lucernae'
-__date__ = '24/03/15'
-__revision__ = '$Format:%H$'
-__copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
-                 'Disaster Reduction')
-
 import numpy
 import itertools
 
@@ -43,7 +37,13 @@ from safe.common.exceptions import (
     FunctionParametersError, ZeroImpactException)
 from safe.impact_reports.population_exposure_report_mixin import \
     PopulationExposureReportMixin
+from safe.definitions import no_data_warning
 
+__author__ = 'lucernae'
+__date__ = '24/03/15'
+__revision__ = '$Format:%H$'
+__copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
+                 'Disaster Reduction')
 
 class ClassifiedRasterHazardPopulationFunction(
         ClassifiedRHContinuousRE,
@@ -76,21 +76,11 @@ class ClassifiedRasterHazardPopulationFunction(
         ]
 
         if self.no_data_warning:
-            fields.append(tr(
-                'The layers contained "no data" values. This missing data '
-                'was carried through to the impact layer.'))
-            fields.append(tr(
-                '"No data" values in the impact layer were treated as 0 '
-                'when counting the affected or total population.'))
-
-        fields.extend([
-            tr('All values are rounded up to the nearest integer in order to '
-               'avoid representing human lives as fractions.'),
-            tr('Population rounding is applied to all population values, '
-               'which may cause discrepancies when adding value.')
-        ])
-        # include any generic exposure specific keywords from definitions.py
+            fields = fields + no_data_warning
+        # include any generic exposure specific notes from definitions.py
         fields = fields + self.exposure_notes()
+        # include any generic hazard specific notes from definitions.py
+        fields = fields + self.hazard_notes()
         return fields
 
     def run(self):
@@ -98,9 +88,8 @@ class ClassifiedRasterHazardPopulationFunction(
 
         Counts number of people exposed to each class of the hazard
 
-        Return
-          Map of population exposed to high class
-          Table with number of people in each class
+        :returns: Map of population exposed to high class
+            Table with number of people in each class
         """
 
         # The 3 classes

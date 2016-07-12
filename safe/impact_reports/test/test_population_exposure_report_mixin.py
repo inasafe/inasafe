@@ -189,7 +189,7 @@ class PopulationExposureReportMixinTest(unittest.TestCase):
                  'frequency': 'test frequency',
                  'table name': 'test name 2 [u]',
                  'unit': {'abbreviation': 'u'}}])]),
-            'notes': {'fields': [], 'title': 'Notes'},
+            'notes': {'fields': [], 'title': 'Notes and assumptions'},
             'question': ''}
         self.assertDictEqual(data, expected)
 

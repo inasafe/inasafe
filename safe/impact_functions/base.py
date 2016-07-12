@@ -81,7 +81,7 @@ from safe.storage.utilities import (
     buffered_bounding_box as get_buffered_extent,
     safe_to_qgis_layer,
     bbox_intersection)
-from safe.definitions import inasafe_keyword_version, exposure_all
+from safe.definitions import inasafe_keyword_version, exposure_all, hazard_all
 from safe.metadata.provenance import Provenance
 from safe.common.version import get_version
 from safe.common.signals import (
@@ -146,6 +146,8 @@ class ImpactFunction(object):
         self._parameters = self._metadata.parameters()
         # Layer representing hazard e.g. flood
         self._hazard = None
+        # Optional vector attribute used to indicate hazard zone
+        self.hazard_zone_attribute = None
         # Layer representing people / infrastructure that are exposed
         self._exposure = None
         # Layer used for aggregating results by area / district
@@ -411,6 +413,30 @@ class ImpactFunction(object):
                 self.exposure.layer.dataProvider().fieldNameMap().keys()
             )
 
+    def exposure_actions(self):
+        """Get the exposure specific actions defined in definitions.
+
+        This method will do a lookup in definitions.py and return the
+        exposure definition specific actions dictionary.
+
+        This is a helper function to make it
+        easy to get exposure specific actions from the definitions metadata.
+
+        .. versionadded:: 3.5
+
+        :returns: A list like e.g. safe.definitions.exposure_land_cover[
+            'actions']
+        :rtype: list, None
+        """
+        exposure_name = self.exposure.keyword('exposure')
+        for exposure in exposure_all:
+            try:
+                if exposure['key'] == exposure_name:
+                    return exposure['actions']
+            except KeyError:
+                pass
+        return None
+
     def exposure_notes(self):
         """Get the exposure specific notes defined in definitions.
 
@@ -431,6 +457,54 @@ class ImpactFunction(object):
             try:
                 if exposure['key'] == exposure_name:
                     return exposure['notes']
+            except KeyError:
+                pass
+        return None
+
+    def hazard_actions(self):
+        """Get the hazard specific actions defined in definitions.
+
+        This method will do a lookup in definitions.py and return the
+        hazard definition specific actions dictionary.
+
+        This is a helper function to make it
+        easy to get hazard specific actions from the definitions metadata.
+
+        .. versionadded:: 3.5
+
+        :returns: A list like e.g. safe.definitions.hazard_land_cover[
+            'actions']
+        :rtype: list, None
+        """
+        hazard_name = self.hazard.keyword('hazard')
+        for hazard in hazard_all:
+            try:
+                if hazard['key'] == hazard_name:
+                    return hazard['actions']
+            except KeyError:
+                pass
+        return None
+
+    def hazard_notes(self):
+        """Get the hazard specific notes defined in definitions.
+
+        This method will do a lookup in definitions.py and return the
+        hazard definition specific notes dictionary.
+
+        This is a helper function to make it
+        easy to get hazard specific notes from the definitions metadata.
+
+        .. versionadded:: 3.5
+
+        :returns: A list like e.g. safe.definitions.hazard_land_cover[
+            'notes']
+        :rtype: list, None
+        """
+        hazard_name = self.hazard.keyword('hazard')
+        for hazard in hazard_all:
+            try:
+                if hazard['key'] == hazard_name:
+                    return hazard['notes']
             except KeyError:
                 pass
         return None
@@ -478,7 +552,11 @@ class ImpactFunction(object):
 
     @property
     def parameters(self):
-        """Get the parameter."""
+        """Get the parameters.
+
+        :returns: A list of parameters.
+        :rtype: list
+        """
         return self._parameters
 
     @parameters.setter
@@ -700,6 +778,17 @@ class ImpactFunction(object):
             print message
         print 'Task progress: %i of %i' % (current, maximum)
 
+    def run(self):
+        """Pure virtual method that should be implemented by subclasses.
+
+        .. versionadded:: 3.5
+
+        :returns: Exception - you should implement this in the base class
+            rather.
+        :rtype: NotImplementedError
+        """
+        raise NotImplementedError
+
     def run_analysis(self):
         """It runs the IF. The method must be called from a client class.
 
@@ -823,6 +912,7 @@ class ImpactFunction(object):
             # Make hazard layer by buffering the point.
             # noinspection PyTypeChecker
             radii = self.parameters['distances'].value
+            # noinspection PyTypeChecker
             self.hazard = buffer_points(
                 qgis_layer,
                 radii,

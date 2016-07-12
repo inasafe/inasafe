@@ -30,10 +30,7 @@ class ReportMixin(object):
         :return: The notes that should be attached to this impact report.
         :rtype: dict
         """
-        return {
-            'title': tr('Notes'),
-            'fields': []
-        }
+        return []
 
     def action_checklist(self):
         """Return the action check list section of the report.

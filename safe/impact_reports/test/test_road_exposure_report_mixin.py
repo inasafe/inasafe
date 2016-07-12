@@ -59,6 +59,7 @@ class RoadExposureReportMixinTest(unittest.TestCase):
     def test_0001_generate_blank_data(self):
         """Generate a blank data."""
         blank_data = self.road_mixin_blank.generate_data()
+        self.maxDiff = None
         expected = {
             'action check list': {
                 'fields': [
@@ -81,7 +82,7 @@ class RoadExposureReportMixinTest(unittest.TestCase):
                     'Road Type', 'Unaffected', 'Total'],
                 'fields': []
             },
-            'notes': {'fields': [], 'title': 'Notes'},
+            'notes': {'fields': [], 'title': 'Notes and assumptions'},
             'question': ''}
         self.assertDictEqual(expected, blank_data)
 
@@ -141,7 +142,7 @@ class RoadExposureReportMixinTest(unittest.TestCase):
             },
             'notes': {
                 'fields': [],
-                'title': 'Notes'
+                'title': 'Notes and assumptions'
             },
             'question': ''
         }

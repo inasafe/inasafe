@@ -324,8 +324,10 @@ class TsunamiRasterRoadsFunction(
                'high tsunami hazard zone.'),
             tr('Roads are opened if they are in dry zone.')
         ]
-        # include any generic exposure specific keywords from definitions.py
+        # include any generic exposure specific notes from definitions.py
         fields = fields + self.exposure_notes()
+        # include any generic hazard specific notes from definitions.py
+        fields = fields + self.hazard_notes()
         return fields
 
     def run(self):

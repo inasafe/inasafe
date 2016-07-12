@@ -69,14 +69,12 @@ class ClassifiedPolygonHazardPopulationFunction(
             tr('<sup>1</sup>People need evacuation if they are in a hazard '
                'zone.'),
             tr('Map shows population count in high, medium, and low hazard '
-               'areas.'),
-            tr('All values are rounded up to the nearest integer in order to '
-               'avoid representing human lives as fractions.'),
-            tr('Population rounding is applied to all population values, '
-               'which may cause discrepancies when adding values.')
+               'areas.')
         ]
-        # include any generic exposure specific keywords from definitions.py
+        # include any generic exposure specific notes from definitions.py
         fields = fields + self.exposure_notes()
+        # include any generic hazard specific notes from definitions.py
+        fields = fields + self.hazard_notes()
         return fields
 
     def run(self):

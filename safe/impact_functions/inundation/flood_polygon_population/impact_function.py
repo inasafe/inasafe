@@ -38,6 +38,7 @@ from safe.common.exceptions import ZeroImpactException
 from safe.impact_functions.core import get_key_for_value
 from safe.impact_reports.population_exposure_report_mixin import \
     PopulationExposureReportMixin
+from safe.definitions import no_data_warning
 
 __author__ = 'Rizky Maulana Nugraha'
 
@@ -88,20 +89,11 @@ class FloodEvacuationVectorHazardFunction(
         ]
 
         if self.no_data_warning:
-            fields.append(tr(
-                'The layers contained "no data" values. This missing data '
-                'was carried through to the impact layer.'))
-            fields.append(tr(
-                '"No data" values in the impact layer were treated as 0 '
-                'when counting the affected or total population.'))
-        fields.extend([
-            tr('All values are rounded up to the nearest integer in order to '
-               'avoid representing human lives as fractions.'),
-            tr('Population rounding is applied to all population values, '
-               'which may cause discrepancies when adding values.')
-        ])
-        # include any generic exposure specific keywords from definitions.py
+            fields = fields + no_data_warning
+        # include any generic exposure specific notes from definitions.py
         fields = fields + self.exposure_notes()
+        # include any generic hazard specific notes from definitions.py
+        fields = fields + self.hazard_notes()
         return fields
 
     def run(self):

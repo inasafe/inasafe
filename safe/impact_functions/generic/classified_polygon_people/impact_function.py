@@ -87,16 +87,13 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         population = format_int(population_rounding(self.total_population))
         fields = [
             tr('The total people in the area is %s') % population,
-            tr('All values are rounded up to the nearest integer in order to '
-               'avoid representing human lives as fractions.'),
-            tr('People rounding is applied to all population values, which '
-               'may cause discrepancies when adding values.'),
-            tr('Null value will be considered as zero.')
+            tr('Null values will be considered as zero.')
         ]
-        # include any generic exposure specific keywords from definitions.py
+        # include any generic exposure specific notes from definitions.py
         fields = fields + self.exposure_notes()
+        # include any generic hazard specific notes from definitions.py
+        fields = fields + self.hazard_notes()
         return fields
-
 
     def run(self):
         """Risk plugin for classified polygon hazard on polygon population.
