@@ -1159,6 +1159,13 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
             # Start the analysis
             self.impact_function.run_analysis()
+        except KeywordNotFoundError as e:
+            self.hide_busy()
+            LOGGER.exception(e.message)
+            from  safe.gui.widgets.message import missing_keyword_message
+            missing_keyword_message(self, e)
+            self.analysis_done.emit(False)
+            return  # Will abort the analysis if there is exception
         except InsufficientOverlapError as e:
             context = self.tr(
                 'A problem was encountered when trying to determine the '

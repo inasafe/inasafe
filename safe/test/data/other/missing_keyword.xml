@@ -191,7 +191,7 @@
             <gco:CharacterString/>
           </field>
           <value_map>
-            <gco:Dictionary>{&quot;medium&quot;: [1.2999999523162842]}</gco:Dictionary>
+            <gco:Dictionary/>
           </value_map>
           <vector_hazard_classification>
             <gco:CharacterString/>
