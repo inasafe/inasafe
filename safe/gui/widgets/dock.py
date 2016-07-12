@@ -107,6 +107,7 @@ from safe.utilities.extent import Extent
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.utilities.unicode import get_unicode
 from safe.impact_template.utilities import get_report_template
+from safe.gui.widgets.message import missing_keyword_message
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 INFO_STYLE = styles.INFO_STYLE
@@ -1161,8 +1162,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.impact_function.run_analysis()
         except KeywordNotFoundError as e:
             self.hide_busy()
-            LOGGER.exception(e.message)
-            from  safe.gui.widgets.message import missing_keyword_message
             missing_keyword_message(self, e)
             self.analysis_done.emit(False)
             return  # Will abort the analysis if there is exception
