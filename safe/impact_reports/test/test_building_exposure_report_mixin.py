@@ -37,6 +37,7 @@ class BuildingExposureReportMixinTest(unittest.TestCase):
         """Fixture run before all tests."""
         self.building_mixin_blank = BuildingExposureReportMixin()
         self.building_mixin = BuildingExposureReportMixin()
+        self.building_mixin.question = ''
         self.building_mixin.buildings = {
             'School': 100,
             'University': 10,
@@ -114,8 +115,7 @@ class BuildingExposureReportMixinTest(unittest.TestCase):
 
     def test_0004_buildings_breakdown(self):
         """Test the buildings breakdown."""
-        buildings_breakdown = self.building_mixin.buildings_breakdown()[
-            'fields']
+        buildings_breakdown = self.building_mixin.impact_table()['fields']
         expected_results = [
             ['Religious', 0, 1, 2, 3],
             ['Residential', 12000, 1000, 7000, 20000],
@@ -221,30 +221,31 @@ class BuildingExposureReportMixinTest(unittest.TestCase):
                 u'Where will the students from the 75 closed schools go to '
                 u'study?'],
                 'title': u'Action checklist'},
-            'impact summary': {'attributes': ['category', 'value'],
-                               'fields': [[u'Hazard Level 2', 12050,
-                                           1324567000],
-                                          [u'Hazard Level 1', 1027,
-                                           21284567111],
-                                          [u'Affected buildings',
-                                           13077],
-                                          [u'Not affected buildings',
-                                           7036],
-                                          [u'Total', 20113]]},
-            'impact table': {'attributes': ['Building type',
-                                            u'Hazard Level 2',
-                                            u'Hazard Level 1',
-                                            u'Not Affected',
-                                            u'Total'],
-                             'fields': [
-                                 ['Religious', 0, 1, 2, 3],
-                                 ['Residential', 12000, 1000, 7000, 20000],
-                                 ['School', 50, 25, 25, 100],
-                                 ['University', 0, 1, 9, 10],
-                                 [u'Total', 12050, 1027, 7036, 20113]]},
+            'impact summary': {
+                'attributes': ['category', 'value'],
+                'fields': [
+                    [u'Hazard Level 2', 12050, 1324567000],
+                    [u'Hazard Level 1', 1027, 21284567111],
+                    [u'Affected buildings', 13077],
+                    [u'Not affected buildings', 7036],
+                    [u'Total', 20113]
+                ]
+            },
+            'impact table': {
+                'attributes': [
+                    'Building type', u'Hazard Level 2', u'Hazard Level 1',
+                    u'Not Affected', u'Total'],
+                'fields': [
+                    ['Religious', 0, 1, 2, 3],
+                    ['Residential', 12000, 1000, 7000, 20000],
+                    ['School', 50, 25, 25, 100],
+                    ['University', 0, 1, 9, 10],
+                    [u'Total', 12050, 1027, 7036, 20113]
+                ]
+            },
             'notes': {'fields': [], 'title': 'Notes'},
             'question': ''}
-        self.assertEquals(data, expected)
+        self.assertDictEqual(data, expected)
 
 
 if __name__ == '__main__':

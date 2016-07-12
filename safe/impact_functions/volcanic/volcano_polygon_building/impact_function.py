@@ -37,6 +37,7 @@ class VolcanoPolygonBuildingFunction(
 
     def __init__(self):
         super(VolcanoPolygonBuildingFunction, self).__init__()
+        BuildingExposureReportMixin.__init__(self)
         self.volcano_names = tr('Not specified in data')
         self._target_field = 'Hazard'
 

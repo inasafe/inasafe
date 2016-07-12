@@ -698,7 +698,6 @@ def load_standard_layers(dock=None):
         standard_data_path('hazard', 'tsunami_wgs84.tif'),
         standard_data_path('hazard', 'earthquake.tif'),
         standard_data_path('hazard', 'ash_raster_wgs84.tif'),
-        standard_data_path('exposure', 'landcover.shp'),
         standard_data_path('exposure', 'building-points.shp'),
         standard_data_path('exposure', 'buildings.shp'),
         standard_data_path('exposure', 'census.shp'),

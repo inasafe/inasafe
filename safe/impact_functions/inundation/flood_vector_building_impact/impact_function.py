@@ -47,6 +47,7 @@ class FloodPolygonBuildingFunction(
 
     def __init__(self):
         super(FloodPolygonBuildingFunction, self).__init__()
+        BuildingExposureReportMixin.__init__(self)
         # The 'wet' variable
         self.wet = 'wet'
 

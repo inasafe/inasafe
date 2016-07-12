@@ -43,8 +43,9 @@ class TsunamiRasterBuildingFunction(
 
     def __init__(self):
         """Constructor (calls ctor of base class)."""
-        self._target_field = 'depth'
         super(TsunamiRasterBuildingFunction, self).__init__()
+        BuildingExposureReportMixin.__init__(self)
+        self._target_field = 'depth'
         self.hazard_classes = [
             tr('Dry Zone'),
             tr('Low Hazard Zone'),

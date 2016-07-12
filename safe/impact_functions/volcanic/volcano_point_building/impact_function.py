@@ -34,6 +34,7 @@ class VolcanoPointBuildingFunction(
 
     def __init__(self):
         super(VolcanoPointBuildingFunction, self).__init__()
+        BuildingExposureReportMixin.__init__(self)
         self.volcano_names = tr('Not specified in data')
         self._affected_categories_volcano = []
         self.hazard_zone_attribute = 'radius'

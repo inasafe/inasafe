@@ -43,6 +43,7 @@ class PopulationExposureReportMixinTest(unittest.TestCase):
         self.population_mixin.affected_population['Medium'] = 100
         self.population_mixin.affected_population['Low'] = 100
         self.population_mixin.total_population = 400
+        self.population_mixin.question = ''
         self.population_mixin.unaffected_population = (
             self.population_mixin.total_population -
             self.population_mixin.total_affected_population)
@@ -190,7 +191,7 @@ class PopulationExposureReportMixinTest(unittest.TestCase):
                  'unit': {'abbreviation': 'u'}}])]),
             'notes': {'fields': [], 'title': 'Notes'},
             'question': ''}
-        self.assertEquals(data, expected)
+        self.assertDictEqual(data, expected)
 
 
 if __name__ == '__main__':

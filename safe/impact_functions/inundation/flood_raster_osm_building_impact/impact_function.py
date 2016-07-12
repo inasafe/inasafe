@@ -40,6 +40,7 @@ class FloodRasterBuildingFunction(
     def __init__(self):
         """Constructor (calls ctor of base class)."""
         super(FloodRasterBuildingFunction, self).__init__()
+        BuildingExposureReportMixin.__init__(self)
 
     def notes(self):
         """Return the notes section of the report as dict.

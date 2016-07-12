@@ -44,6 +44,7 @@ class EarthquakeBuildingFunction(
 
     def __init__(self):
         super(EarthquakeBuildingFunction, self).__init__()
+        BuildingExposureReportMixin.__init__(self)
         self.is_nexis = False
         self.structure_class_field = None
 

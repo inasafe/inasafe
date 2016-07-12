@@ -48,9 +48,7 @@ __author__ = 'Rizky Maulana Nugraha <lana.pcfre@gmail.com>'
 __date__ = '5/24/16'
 
 
-class AshRasterLandcoverFunction(
-        ContinuousRHClassifiedVE,
-        LandCoverReportMixin):
+class AshRasterLandcoverFunction(ContinuousRHClassifiedVE):
     # noinspection PyUnresolvedReferences
     """Simple impact function for ash raster on landcover."""
     _metadata = AshRasterHazardLandCoverFunctionMetadata()

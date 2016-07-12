@@ -72,7 +72,8 @@ class BuildingExposureReportMixin(ReportMixin):
 
             buildings = {residential: 1062, school: 52 ...}
         """
-        self.question = ''
+        super(BuildingExposureReportMixin, self).__init__()
+        self.exposure_report = 'building'
         self.buildings = {}
         self.categories = None
         self.affected_buildings = {}
@@ -136,7 +137,6 @@ class BuildingExposureReportMixin(ReportMixin):
         :rtype: dict
         """
         affect_types = self._impact_breakdown
-        attributes = ['category', 'value']
         fields = []
         for (category, building_breakdown) in self.affected_buildings.items():
             total_affected = [0] * len(affect_types)
@@ -161,11 +161,11 @@ class BuildingExposureReportMixin(ReportMixin):
         fields.append([tr('Total'), self.total_buildings])
 
         return {
-            'attributes': attributes,
+            'attributes': ['category', 'value'],
             'fields': fields
         }
 
-    def buildings_breakdown(self):
+    def impact_table(self):
         """Create building breakdown as data.
 
         :returns: Building Breakdown in dictionary format.
@@ -282,20 +282,12 @@ class BuildingExposureReportMixin(ReportMixin):
         :returns: The impact report data.
         :rtype: dict
         """
-        question = self.question
-        impact_summary = self.impact_summary()
-        impact_table = self.buildings_breakdown()
-        action_checklist = self.action_checklist()
-        notes = self.notes()
-
-        return {
-            'exposure': 'building',
-            'question': question,
-            'impact summary': impact_summary,
-            'impact table': impact_table,
-            'action check list': action_checklist,
-            'notes': notes
+        extra_data = {
+            'impact table': self.impact_table()
         }
+        data = super(BuildingExposureReportMixin, self).generate_data()
+        data.update(extra_data)
+        return data
 
     @property
     def schools_closed(self):

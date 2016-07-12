@@ -44,6 +44,7 @@ class ClassifiedRasterHazardBuildingFunction(
 
     def __init__(self):
         super(ClassifiedRasterHazardBuildingFunction, self).__init__()
+        BuildingExposureReportMixin.__init__(self)
         self.affected_field = 'affected'
         self.target_field = 'hazard'
 
