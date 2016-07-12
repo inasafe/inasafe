@@ -172,7 +172,7 @@ class BuildingExposureReportMixin(ReportMixin):
         :rtype: dict
         """
         impact_names = self.affected_buildings.keys()  # e.g. flooded, wet, dry
-        attributes = ['Building type']
+        attributes = [tr('Building type')]
         for name in impact_names:
             attributes.append(tr(name))
         # Only show not affected building row if the IF does not use custom
@@ -209,7 +209,7 @@ class BuildingExposureReportMixin(ReportMixin):
                             building_type].values()[0])
                 else:
                     impact_subtotals.append(0)
-            row.append(building_type_name.capitalize())
+            row.append(tr(building_type_name.capitalize()))
             # Only show not affected building row if the IF does not use custom
             # affected categories
             if self._affected_categories == self.affected_buildings.keys():

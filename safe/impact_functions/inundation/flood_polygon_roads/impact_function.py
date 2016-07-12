@@ -64,12 +64,12 @@ class FloodPolygonRoadsFunction(
                        for hazard_class in self.hazard_class_mapping[self.wet]]
         fields = [
             tr('Roads are said to be %s when in a region with field "%s" in '
-               '"%s" .' % (
+               '"%s".') % (
                 hazard_terminology,
                 self.hazard_class_attribute,
-                ', '.join(flood_value))),
-            tr('Roads are closed if they are %s.' % hazard_terminology),
-            tr('Roads are open if they are not %s.' % hazard_terminology)
+                ', '.join(flood_value)),
+            tr('Roads are closed if they are %s.') % hazard_terminology,
+            tr('Roads are open if they are not %s.') % hazard_terminology
         ]
 
         return {
