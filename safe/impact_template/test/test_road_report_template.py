@@ -41,13 +41,13 @@ class TestRoadReportTemplate(unittest.TestCase):
         report = road_report_template.generate_message_report()
         self.assertIn(
             impact_data['question'], report.message[0].to_text())
-        text = '''
----
-**Road Type**, **Temporarily closed (m)**, **Unaffected**, **Total**------
-All (m), 17,459, 41,116, 58,576---
-'''
 
-        self.assertIn(text, report.message[1].to_text())
+        expected = '''
+---
+**17459.7365945 (m)**, 41,116, 58,576---
+'''
+        result = report.message[1].to_text()
+        self.assertIn(expected, result)
 
 
 if __name__ == '__main__':

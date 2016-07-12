@@ -115,28 +115,19 @@ class RoadExposureReportMixin(ReportMixin):
         :returns: Impact Summary in dictionary format.
         :rtype: dict
         """
-        attributes = []
         fields = []
 
-        for affected_category in self.affected_road_categories:
-            attributes.append(affected_category)
-        if self.add_unaffected_column:
-            attributes.append(tr('Unaffected'))
-        attributes.append(tr('Total'))
-
-        all_field = [0] * len(self.affected_road_lengths)
+        sum_affected = 0
         for (category, road_breakdown) in self.affected_road_lengths.items():
             number_affected = sum(road_breakdown.values())
-            count = self.affected_road_categories.index(category)
-            all_field[count] = number_affected
+            fields.append([category, number_affected])
+            sum_affected += number_affected
         if self.add_unaffected_column:
-            all_field.append(self.total_road_length - sum(all_field))
-        all_field.append(self.total_road_length)
-
-        fields.append(all_field)
+            fields.append([tr('Unaffected'), self.total_road_length - sum_affected])
+        fields.append([tr('Total'), self.total_road_length])
 
         return {
-            'attributes': attributes,
+            'attributes': ['category', 'value'],
             'fields': fields
         }
 
