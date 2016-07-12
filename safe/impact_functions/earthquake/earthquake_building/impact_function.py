@@ -44,11 +44,9 @@ class EarthquakeBuildingFunction(
 
     def __init__(self):
         super(EarthquakeBuildingFunction, self).__init__()
+        BuildingExposureReportMixin.__init__(self)
         self.is_nexis = False
         self.structure_class_field = None
-        # From BuildingExposureReportMixin
-        # This value will not be overwrite by a parameter. #2468
-        self.building_report_threshold = 25
 
     def notes(self):
         """Return the notes section of the report as dict.
@@ -210,12 +208,6 @@ class EarthquakeBuildingFunction(
 
         if len(attributes) < 1:
             raise ZeroImpactException()
-        # Consolidate the small building usage groups < 25 to other
-        # Building threshold #2468
-        postprocessors = self.parameters['postprocessors']
-        building_postprocessors = postprocessors['BuildingType'][0]
-        self.building_report_threshold = building_postprocessors.value[0].value
-        self._consolidate_to_other()
 
         # Create style
         style_classes = [

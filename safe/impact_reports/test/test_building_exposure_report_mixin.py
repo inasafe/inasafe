@@ -37,6 +37,7 @@ class BuildingExposureReportMixinTest(unittest.TestCase):
         """Fixture run before all tests."""
         self.building_mixin_blank = BuildingExposureReportMixin()
         self.building_mixin = BuildingExposureReportMixin()
+        self.building_mixin.question = ''
         self.building_mixin.buildings = {
             'School': 100,
             'University': 10,
@@ -114,8 +115,7 @@ class BuildingExposureReportMixinTest(unittest.TestCase):
 
     def test_0004_buildings_breakdown(self):
         """Test the buildings breakdown."""
-        buildings_breakdown = self.building_mixin.buildings_breakdown()[
-            'fields']
+        buildings_breakdown = self.building_mixin.impact_table()['fields']
         expected_results = [
             ['Religious', 0, 1, 2, 3],
             ['Residential', 12000, 1000, 7000, 20000],
@@ -202,42 +202,6 @@ class BuildingExposureReportMixinTest(unittest.TestCase):
         message = 'The unaffected number of buildings is not as expected.'
         self.assertEqual(unaffected, 7036, message)
 
-    def test_0009_consolidate_to_other(self):
-        """Test consolidating smaller building types to 'other'."""
-        total_buildings_before = self.building_mixin.total_buildings
-        affected_other_before = self.building_mixin._count_usage('Other')
-        message = (
-            'There should be no affected buildings of type other before '
-            'consolidating.')
-        self.assertEqual(affected_other_before, 0, message)
-        other_in_buildings_before = (
-            'Other' in self.building_mixin.buildings.keys())
-        message = (
-            'There should be no buildings of type other before '
-            'consolidation.')
-        self.assertFalse(other_in_buildings_before, message)
-        self.building_mixin._consolidate_to_other()
-        total_buildings_after = self.building_mixin.total_buildings
-        message = (
-            'The total number of buildings should remain the same '
-            'even after consolidation.')
-        self.assertEqual(
-            total_buildings_before,
-            total_buildings_after,
-            message)
-        affected_other_after = self.building_mixin._count_usage('Other')
-        message = 'The affected other buildings are not as expected.'
-        self.assertEqual(affected_other_after, 2, message)
-        other_in_buildings_after = (
-            'Other' in self.building_mixin.buildings.keys())
-        message = 'The type other should be in buildings.'
-        self.assertTrue(other_in_buildings_after, message)
-        total_other_after = self.building_mixin.buildings['Other']
-        message = (
-            'The total number of other after consolidation is '
-            'not as expected.')
-        self.assertEqual(total_other_after, 13, message)
-
     def test_0010_generate_data(self):
         """Test generating data."""
         self.maxDiff = None
@@ -257,30 +221,31 @@ class BuildingExposureReportMixinTest(unittest.TestCase):
                 u'Where will the students from the 75 closed schools go to '
                 u'study?'],
                 'title': u'Action checklist'},
-            'impact summary': {'attributes': ['category', 'value'],
-                               'fields': [[u'Hazard Level 2', 12050,
-                                           1324567000],
-                                          [u'Hazard Level 1', 1027,
-                                           21284567111],
-                                          [u'Affected buildings',
-                                           13077],
-                                          [u'Not affected buildings',
-                                           7036],
-                                          [u'Total', 20113]]},
-            'impact table': {'attributes': ['Building type',
-                                            u'Hazard Level 2',
-                                            u'Hazard Level 1',
-                                            u'Not Affected',
-                                            u'Total'],
-                             'fields': [
-                                 ['Religious', 0, 1, 2, 3],
-                                 ['Residential', 12000, 1000, 7000, 20000],
-                                 ['School', 50, 25, 25, 100],
-                                 ['University', 0, 1, 9, 10],
-                                 [u'Total', 12050, 1027, 7036, 20113]]},
+            'impact summary': {
+                'attributes': ['category', 'value'],
+                'fields': [
+                    [u'Hazard Level 2', 12050, 1324567000],
+                    [u'Hazard Level 1', 1027, 21284567111],
+                    [u'Affected buildings', 13077],
+                    [u'Not affected buildings', 7036],
+                    [u'Total', 20113]
+                ]
+            },
+            'impact table': {
+                'attributes': [
+                    'Building type', u'Hazard Level 2', u'Hazard Level 1',
+                    u'Not Affected', u'Total'],
+                'fields': [
+                    ['Religious', 0, 1, 2, 3],
+                    ['Residential', 12000, 1000, 7000, 20000],
+                    ['School', 50, 25, 25, 100],
+                    ['University', 0, 1, 9, 10],
+                    [u'Total', 12050, 1027, 7036, 20113]
+                ]
+            },
             'notes': {'fields': [], 'title': 'Notes'},
             'question': ''}
-        self.assertEquals(data, expected)
+        self.assertDictEqual(data, expected)
 
 
 if __name__ == '__main__':

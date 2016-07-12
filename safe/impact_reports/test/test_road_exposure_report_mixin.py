@@ -37,6 +37,8 @@ class RoadExposureReportMixinTest(unittest.TestCase):
         """Fixture run before all tests."""
         self.road_mixin_blank = RoadExposureReportMixin()
         self.road_mixin = RoadExposureReportMixin()
+        self.road_mixin_blank.question = ''
+        self.road_mixin.question = ''
         self.road_mixin.road_lengths = OrderedDict([
             ('Main', 133.3),
             ('Side', 10),
@@ -81,11 +83,11 @@ class RoadExposureReportMixinTest(unittest.TestCase):
             },
             'notes': {'fields': [], 'title': 'Notes'},
             'question': ''}
-        self.assertEquals(expected, blank_data)
+        self.assertDictEqual(expected, blank_data)
 
     def test_0002_road_breakdown(self):
         """Test the buildings breakdown."""
-        roads_breakdown = self.road_mixin.roads_breakdown()['fields']
+        roads_breakdown = self.road_mixin.impact_table()['fields']
 
         expected = [
             ['Main', 2, 131.3, 133.3],
@@ -143,7 +145,7 @@ class RoadExposureReportMixinTest(unittest.TestCase):
             },
             'question': ''
         }
-        self.assertEquals(data, expected)
+        self.assertDictEqual(data, expected)
 
 
 if __name__ == '__main__':

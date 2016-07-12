@@ -37,11 +37,9 @@ class VolcanoPolygonBuildingFunction(
 
     def __init__(self):
         super(VolcanoPolygonBuildingFunction, self).__init__()
+        BuildingExposureReportMixin.__init__(self)
         self.volcano_names = tr('Not specified in data')
         self._target_field = 'Hazard'
-
-        # From BuildingExposureReportMixin
-        self.building_report_threshold = 25
 
     def notes(self):
         """Return the notes section of the report as dict.
@@ -151,13 +149,6 @@ class VolcanoPolygonBuildingFunction(
             self.classify_feature(hazard_value, usage, affected)
 
         self.reorder_dictionaries()
-
-        # Lump small entries and 'unknown' into 'other' category
-        # Building threshold #2468
-        postprocessors = self.parameters['postprocessors']
-        building_postprocessors = postprocessors['BuildingType'][0]
-        self.building_report_threshold = building_postprocessors.value[0].value
-        self._consolidate_to_other()
 
         # Create style
         colours = ['#FFFFFF', '#38A800', '#79C900', '#CEED00',

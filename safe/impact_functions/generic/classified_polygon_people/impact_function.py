@@ -61,10 +61,11 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
 
     def __init__(self):
         super(ClassifiedPolygonHazardPolygonPeopleFunction, self).__init__()
+        PolygonPeopleExposureReportMixin.__init__(self)
 
         # Set the question of the IF (as the hazard data is not an event)
         self.question = tr(
-                'In each of the hazard zones which areas might be affected.')
+            'In each of the hazard zones which areas might be affected.')
 
         # Use the proper minimum needs, update the parameters
         self.parameters = add_needs_parameters(self.parameters)

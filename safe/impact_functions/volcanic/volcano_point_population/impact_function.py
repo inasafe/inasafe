@@ -42,6 +42,7 @@ class VolcanoPointPopulationFunction(
 
     def __init__(self):
         super(VolcanoPointPopulationFunction, self).__init__()
+        PopulationExposureReportMixin.__init__(self)
         # AG: Use the proper minimum needs, update the parameters
         self.parameters = add_needs_parameters(self.parameters)
         # TODO: alternatively to specifying the question here we should

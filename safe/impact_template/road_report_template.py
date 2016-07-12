@@ -47,13 +47,13 @@ class RoadReportTemplate(AbstractRoadBuildingReportTemplate):
             impact_layer_path=impact_layer_path,
             json_file=json_file,
             impact_data=impact_data)
-        self.roads_breakdown = self.impact_data.get('impact table')
+        self.impact_table = self.impact_data.get('impact table')
 
     def format_impact_summary(self):
-        """The impact summary as per category
+        """Format impact summary.
 
         :returns: The impact summary.
-        :rtype: safe.message.Message
+        :rtype: safe.messaging.Message
         """
         attributes = self.impact_summary['attributes']
         fields = self.impact_summary['fields']
@@ -91,7 +91,7 @@ class RoadReportTemplate(AbstractRoadBuildingReportTemplate):
         :returns: The roads breakdown report.
         :rtype: safe.message.Message
         """
-        road_breakdown = self.roads_breakdown
+        road_breakdown = self.impact_table
         attributes = road_breakdown['attributes']
         fields = road_breakdown['fields']
 

@@ -43,8 +43,9 @@ class TsunamiRasterBuildingFunction(
 
     def __init__(self):
         """Constructor (calls ctor of base class)."""
-        self._target_field = 'depth'
         super(TsunamiRasterBuildingFunction, self).__init__()
+        BuildingExposureReportMixin.__init__(self)
+        self._target_field = 'depth'
         self.hazard_classes = [
             tr('Dry Zone'),
             tr('Low Hazard Zone'),
@@ -52,8 +53,6 @@ class TsunamiRasterBuildingFunction(
             tr('High Hazard Zone'),
             tr('Very High Hazard Zone'),
         ]
-        # From BuildingExposureReportMixin
-        self.building_report_threshold = 25
 
     def notes(self):
         """Return the notes section of the report as dict.
@@ -156,13 +155,6 @@ class TsunamiRasterBuildingFunction(
             self.classify_feature(category, usage, True)
 
         self.reorder_dictionaries()
-
-        # Lump small entries and 'unknown' into 'other' category
-        # Building threshold #2468
-        postprocessors = self.parameters['postprocessors']
-        building_postprocessors = postprocessors['BuildingType'][0]
-        self.building_report_threshold = building_postprocessors.value[0].value
-        self._consolidate_to_other()
 
         style_classes = [
             dict(

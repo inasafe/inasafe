@@ -54,6 +54,7 @@ class FloodEvacuationVectorHazardFunction(
     def __init__(self):
         """Constructor."""
         super(FloodEvacuationVectorHazardFunction, self).__init__()
+        PopulationExposureReportMixin.__init__(self)
 
         # Use affected field flag (if False, all polygon will be considered as
         # affected)
