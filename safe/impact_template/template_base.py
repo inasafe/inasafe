@@ -94,6 +94,9 @@ class TemplateBase(object):
     def format_impact_summary(self):
         raise NotImplementedError('Need to be implemented in child class')
 
+    def format_impact_table(self):
+        raise NotImplementedError
+
     def format_action_check_list(self):
         """Format action check list.
 

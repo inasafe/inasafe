@@ -59,7 +59,7 @@ class PolygonPeopleReportTemplate(TemplateBase):
         message = m.Message()
         message.add(m.Paragraph(self.question))
         message.add(self.format_impact_summary())
-        message.add(self.format_breakdown())
+        message.add(self.format_impact_table())
         message.add(self.format_minimum_needs_breakdown())
         message.add(self.format_action_check_list())
         message.add(self.format_notes())
@@ -93,7 +93,7 @@ class PolygonPeopleReportTemplate(TemplateBase):
 
         return message
 
-    def format_breakdown(self):
+    def format_impact_table(self):
         """
         """
         message = m.Message(style_class='container')

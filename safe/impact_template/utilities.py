@@ -22,12 +22,10 @@ import json
 
 from safe.common.exceptions import MissingImpactReport
 
-from safe.impact_template.building_report_template import (
-    BuildingReportTemplate)
+from safe.impact_template.road_building_report_template import (
+    RoadBuildingReportTemplate)
 from safe.impact_template.population_report_template import (
     PopulationReportTemplate)
-from safe.impact_template.road_report_template import (
-    RoadReportTemplate)
 from safe.impact_template.polygon_people_report_template import (
     PolygonPeopleReportTemplate)
 from safe.impact_template.land_cover_report_template import (
@@ -62,12 +60,10 @@ def get_report_template(
     if not impact_data:
         raise MissingImpactReport
 
-    if impact_data['exposure'] == 'building':
-        return BuildingReportTemplate(impact_data=impact_data)
+    if impact_data['exposure'] in ['building', 'road']:
+        return RoadBuildingReportTemplate(impact_data=impact_data)
     elif impact_data['exposure'] == 'population':
         return PopulationReportTemplate(impact_data=impact_data)
-    elif impact_data['exposure'] == 'road':
-        return RoadReportTemplate(impact_data=impact_data)
     elif impact_data['exposure'] == 'polygon people':
         return PolygonPeopleReportTemplate(impact_data=impact_data)
     elif impact_data['exposure'] == 'land cover':

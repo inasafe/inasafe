@@ -23,8 +23,8 @@ from safe.common.utilities import format_int
 from safe.impact_template.template_base import TemplateBase
 
 
-class AbstractRoadBuildingReportTemplate(TemplateBase):
-    """Abstract Report Template for Road and Building.
+class RoadBuildingReportTemplate(TemplateBase):
+    """Report Template for Road and Building.
 
     ..versionadded: 3.4
     """
@@ -41,14 +41,80 @@ class AbstractRoadBuildingReportTemplate(TemplateBase):
         :param impact_data: Dictionary that represent impact data.
         :type impact_data: dict
         """
-        super(AbstractRoadBuildingReportTemplate, self).__init__(
+        super(RoadBuildingReportTemplate, self).__init__(
             impact_layer_path=impact_layer_path,
             json_file=json_file,
             impact_data=impact_data)
+        self.impact_table = self.impact_data.get('impact table')
 
-    def format_breakdown(self):
-        """Breakdown by road/building type."""
-        raise NotImplementedError
+    def format_impact_summary(self):
+        """Format impact summary.
+
+        :returns: The impact summary.
+        :rtype: safe.messaging.Message
+        """
+        message = m.Message(style_class='container')
+        table = m.Table(style_class='table table-condensed table-striped')
+        table.caption = None
+        for category in self.impact_summary['fields']:
+            row = m.Row()
+            row.add(m.Cell(category[0], header=True))
+            row.add(m.Cell(format_int(int(category[1])), align='right'))
+            # For value field, if existed
+            if len(category) > 2:
+                row.add(m.Cell(format_int(int(category[2])), align='right'))
+            table.add(row)
+        message.add(table)
+        return message
+
+    def format_impact_table(self):
+        """Breakdown by building type.
+
+        :returns: The buildings breakdown report.
+        :rtype: safe.messaging.Message
+        """
+        message = m.Message(style_class='container')
+        table = m.Table(style_class='table table-condensed table-striped')
+        table.caption = None
+
+        # Table header
+        row = m.Row()
+        attributes = self.impact_table['attributes']
+        # Bold and align left the 1st one.
+        row.add(m.Cell(attributes[0], header=True, align='left'))
+        for attribute in attributes[1:]:
+            # Bold and align right.
+            row.add(m.Cell(attribute, header=True, align='right'))
+        table.add(row)
+
+        # Fields
+        for record in self.impact_table['fields'][:-1]:
+            row = m.Row()
+            # Bold and align left the 1st one.
+            row.add(m.Cell(record[0], header=True, align='left'))
+            for content in record[1:-1]:
+                # Align right.
+                row.add(m.Cell(format_int(int(content)), align='right'))
+            # Bold and align right the last one.
+            row.add(
+                m.Cell(
+                    format_int(int(record[-1])), header=True, align='right'))
+            table.add(row)
+
+        # Total Row
+        row = m.Row()
+        last_row = self.impact_table['fields'][-1]
+        # Bold and align left the 1st one.
+        row.add(m.Cell(last_row[0], header=True, align='left'))
+        for content in last_row[1:]:
+            # Bold and align right.
+            row.add(
+                m.Cell(format_int(int(content)), header=True, align='right'))
+        table.add(row)
+
+        message.add(table)
+
+        return message
 
     def generate_message_report(self):
         """Generate impact report as message object.
@@ -59,7 +125,7 @@ class AbstractRoadBuildingReportTemplate(TemplateBase):
         message = m.Message()
         message.add(self.format_question())
         message.add(self.format_impact_summary())
-        message.add(self.format_breakdown())
+        message.add(self.format_impact_table())
         message.add(self.format_action_check_list())
         message.add(self.format_notes())
         if self.postprocessing:
