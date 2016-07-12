@@ -73,10 +73,8 @@ class TsunamiRasterLandcoverFunction(ContinuousRHClassifiedVE):
         """Return the notes section of the report.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: safe.messaging.Message
+        :rtype: notes
         """
-        title = tr('Notes and assumptions')
-
         # Thresholds for tsunami hazard zone breakdown.
         low_max = self.parameters['low_threshold']
         medium_max = self.parameters['medium_threshold']
@@ -106,11 +104,9 @@ class TsunamiRasterLandcoverFunction(ContinuousRHClassifiedVE):
                'is more than %.1f %s') % (
                 high_max.value, high_max.unit.abbreviation)
         ]
-
-        return {
-            'title': title,
-            'fields': fields
-        }
+        # include any generic exposure specific keywords from definitions.py
+        fields = fields + self.exposure_notes()
+        return fields
 
     def run(self):
         """Run the impact function.

@@ -58,10 +58,8 @@ class VolcanoPolygonPopulationFunction(
         """Return the notes section of the report.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: dict
+        :rtype: list
         """
-        title = tr('Notes and assumptions')
-
         if get_needs_provenance_value(self.parameters) is None:
             needs_provenance = ''
         else:
@@ -89,11 +87,9 @@ class VolcanoPolygonPopulationFunction(
             tr('Population rounding is applied to all population values, '
                'which may cause discrepancies when adding value.')
         ])
-
-        return {
-            'title': title,
-            'fields': fields
-        }
+        # include any generic exposure specific keywords from definitions.py
+        fields = fields + self.exposure_notes()
+        return fields
 
     def run(self):
         """Run volcano population evacuation Impact Function.

@@ -54,9 +54,8 @@ class EarthquakeBuildingFunction(
         """Return the notes section of the report as dict.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: dict
+        :rtype: list
         """
-        title = tr('Notes and assumptions')
         # Thresholds for mmi breakdown.
         t0 = self.parameters['low_threshold'].value
         t1 = self.parameters['medium_threshold'].value
@@ -75,11 +74,9 @@ class EarthquakeBuildingFunction(
         if is_nexis:
             fields.append(tr(
                 'Values are in units of 1 million Australian Dollars'))
-
-        return {
-            'title': title,
-            'fields': fields
-        }
+        # include any generic exposure specific keywords from definitions.py
+        fields = fields + self.exposure_notes()
+        return fields
 
     def run(self):
         """Earthquake impact to buildings (e.g. from OpenStreetMap)."""

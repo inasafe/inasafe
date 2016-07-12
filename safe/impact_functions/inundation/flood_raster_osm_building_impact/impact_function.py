@@ -48,9 +48,8 @@ class FloodRasterBuildingFunction(
         """Return the notes section of the report as dict.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: dict
+        :rtype: list
         """
-        title = tr('Notes and assumptions')
         threshold = self.parameters['threshold'].value
         fields = [
             tr('Buildings are flooded when flood levels exceed %.1f m')
@@ -61,11 +60,9 @@ class FloodRasterBuildingFunction(
             tr('Buildings are closed if they are flooded or wet.'),
             tr('Buildings are open if they are dry.')
         ]
-
-        return {
-            'title': title,
-            'fields': fields
-        }
+        # include any generic exposure specific keywords from definitions.py
+        fields = fields + self.exposure_notes()
+        return fields
 
     @property
     def _affected_categories(self):

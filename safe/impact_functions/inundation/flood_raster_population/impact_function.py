@@ -65,7 +65,7 @@ class FloodEvacuationRasterHazardFunction(
         """Return the notes section of the report.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: dict
+        :rtype: list
         """
         title = tr('Notes and assumptions')
 
@@ -97,11 +97,9 @@ class FloodEvacuationRasterHazardFunction(
             tr('Population rounding is applied to all population values, '
                'which may cause discrepancies when adding values.')
         ])
-
-        return {
-            'title': title,
-            'fields': fields
-        }
+        # include any generic exposure specific keywords from definitions.py
+        fields = fields + self.exposure_notes()
+        return fields
 
     def _tabulate_zero_impact(self):
         thresholds = self.parameters['thresholds'].value

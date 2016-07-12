@@ -134,13 +134,8 @@ class ClassifiedPolygonHazardLandCoverFunction(
         ]
 
         # include any generic exposure specific keywords from definitions.py
-        exposure_definition = self.exposure_definition()
-        fields = fields + exposure_definition['notes']
-
-        return {
-            'title': title,
-            'fields': fields
-        }
+        fields = fields + self.exposure_notes()
+        return fields
 
     def run(self):
         """Risk plugin for classified polygon hazard on land cover.

@@ -211,9 +211,8 @@ class ITBFatalityFunction(
         """Notes and caveats for the IF report.
 
         :returns: Dicts containing notes.
-        :rtype: dict
+        :rtype: list
         """
-        title = tr('Notes and assumptions')
         fields = [
             tr('Total population in the analysis area: %s') %
             format_int(population_rounding(self.total_population)),
@@ -236,11 +235,10 @@ class ITBFatalityFunction(
             tr('Population rounding is applied to all population values, '
                'which may cause discrepancies when adding values.')
         ])
+        # include any generic exposure specific keywords from definitions.py
+        fields = fields + self.exposure_notes()
+        return fields
 
-        return {
-            'title': title,
-            'fields': fields
-        }
 
     def compute_probability(self, total_fatalities_raw):
         """

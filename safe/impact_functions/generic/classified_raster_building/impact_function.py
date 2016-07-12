@@ -54,18 +54,16 @@ class ClassifiedRasterHazardBuildingFunction(
         """Return the notes section of the report as dict.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: dict
+        :rtype: list
         """
-        title = tr('Notes and assumptions')
         fields = [
             tr('Map shows buildings affected in low, medium and high hazard '
                'class areas.')
         ]
+        # include any generic exposure specific keywords from definitions.py
+        fields = fields + self.exposure_notes()
+        return fields
 
-        return {
-            'title': title,
-            'fields': fields
-        }
 
     def run(self):
         """Classified hazard impact to buildings (e.g. from Open Street Map).

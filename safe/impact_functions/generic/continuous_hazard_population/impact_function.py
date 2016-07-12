@@ -66,9 +66,8 @@ class ContinuousHazardPopulationFunction(
         """Return the notes section of the report.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: dict
+        :rtype: list
         """
-        title = tr('Notes and assumptions')
         fields = [
             tr('Total population in the analysis area: %s') %
             population_rounding(self.total_population),
@@ -92,11 +91,9 @@ class ContinuousHazardPopulationFunction(
             tr('Population rounding is applied to all population values, '
                'which may cause discrepancies when adding value.')
         ])
-
-        return {
-            'title': title,
-            'fields': fields
-        }
+        # include any generic exposure specific keywords from definitions.py
+        fields = fields + self.exposure_notes()
+        return fields
 
     def run(self):
         """Plugin for impact of population as derived by continuous hazard.

@@ -231,11 +231,8 @@ class FloodRasterRoadsFunction(
         .. versionadded: 3.2.1
 
         :return: The notes that should be attached to this impact report.
-        :rtype: safe.messaging.Message
+        :rtype: list
         """
-
-        title = tr('Notes and assumptions')
-
         threshold = self.parameters['min threshold'].value
         hazard = self.hazard.keyword('hazard')
         hazard_terminology = tr('flooded')
@@ -253,11 +250,9 @@ class FloodRasterRoadsFunction(
             tr('Roads are closed if they are %s.' % hazard_terminology),
             tr('Roads are open if they are not %s.' % hazard_terminology)
         ]
-
-        return {
-            'title': title,
-            'fields': fields
-        }
+        # include any generic exposure specific keywords from definitions.py
+        fields = fields + self.exposure_notes()
+        return fields
 
     def run(self):
         """Run the impact function.

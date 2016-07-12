@@ -81,9 +81,8 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         """Return the notes section of the report.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: dict
+        :rtype: list
         """
-        title = tr('Notes and assumptions')
         population = format_int(population_rounding(self.total_population))
         fields = [
             tr('The total people in the area is %s') % population,
@@ -93,11 +92,10 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
                'may cause discrepancies when adding values.'),
             tr('Null value will be considered as zero.')
         ]
+        # include any generic exposure specific keywords from definitions.py
+        fields = fields + self.exposure_notes()
+        return fields
 
-        return {
-            'title': title,
-            'fields': fields
-        }
 
     def run(self):
         """Risk plugin for classified polygon hazard on polygon population.

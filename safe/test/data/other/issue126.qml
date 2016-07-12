@@ -1,5 +1,5 @@
 <!DOCTYPE qgis PUBLIC 'http://mrcc.com/qgis.dtd' 'SYSTEM'>
-<qgis version="2.8.3-Wien" minimumScale="0" maximumScale="1e+08" hasScaleBasedVisibilityFlag="0">
+<qgis version="2.99.0-Master" minimumScale="0" maximumScale="1e+08" hasScaleBasedVisibilityFlag="0">
   <pipe>
     <rasterrenderer opacity="1" alphaBand="-1" classificationMax="nan" classificationMinMaxOrigin="Unknown" band="1" classificationMin="nan" type="singlebandpseudocolor">
       <rasterTransparency>
@@ -11,13 +11,13 @@
       <rastershader>
         <colorrampshader colorRampType="INTERPOLATED" clip="0">
           <item alpha="255" value="0" label="" color="#ffffff"/>
-          <item alpha="255" value="0.0383626" label="Rendah [0 orang/sel]" color="#38a800"/>
-          <item alpha="255" value="0.0767252" label="" color="#79c900"/>
-          <item alpha="255" value="0.115088" label="" color="#ceed00"/>
-          <item alpha="255" value="0.15345" label="Sedang [0 orang/sel]" color="#ffcc00"/>
-          <item alpha="255" value="0.191813" label="" color="#ff6600"/>
-          <item alpha="255" value="0.230176" label="" color="#ff0000"/>
-          <item alpha="255" value="0.268538" label="Tinggi [0 orang/sel]" color="#7a0000"/>
+          <item alpha="255" value="0.0383625965479251" label="Rendah [0 orang/sel]" color="#38a800"/>
+          <item alpha="255" value="0.0767251930958501" label="" color="#79c900"/>
+          <item alpha="255" value="0.115087789643775" label="" color="#ceed00"/>
+          <item alpha="255" value="0.1534503861917" label="Sedang [0 orang/sel]" color="#ffcc00"/>
+          <item alpha="255" value="0.191812982739625" label="" color="#ff6600"/>
+          <item alpha="255" value="0.23017557928755" label="" color="#ff0000"/>
+          <item alpha="255" value="0.268538175835475" label="Tinggi [0 orang/sel]" color="#7a0000"/>
         </colorrampshader>
       </rastershader>
     </rasterrenderer>

@@ -69,10 +69,8 @@ class FloodEvacuationVectorHazardFunction(
         """Return the notes section of the report.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: dict
+        :rtype: list
         """
-        title = tr('Notes and assumptions')
-
         population = format_int(population_rounding(self.total_population))
         threshold = format_int(self.parameters['evacuation_percentage'].value)
 
@@ -101,11 +99,9 @@ class FloodEvacuationVectorHazardFunction(
             tr('Population rounding is applied to all population values, '
                'which may cause discrepancies when adding values.')
         ])
-
-        return {
-            'title': title,
-            'fields': fields
-        }
+        # include any generic exposure specific keywords from definitions.py
+        fields = fields + self.exposure_notes()
+        return fields
 
     def run(self):
         """Risk plugin for flood population evacuation.

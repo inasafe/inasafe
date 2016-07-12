@@ -58,7 +58,7 @@ class TsunamiEvacuationFunction(
         """Return the notes section of the report.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: dict
+        :rtype: list
         """
 
         thresholds = self.parameters['thresholds'].value
@@ -66,8 +66,6 @@ class TsunamiEvacuationFunction(
             needs_provenance = ''
         else:
             needs_provenance = tr(get_needs_provenance_value(self.parameters))
-
-        title = tr('Notes and assumptions')
 
         fields = [
             tr('Total population in the analysis area: %s') %
@@ -90,11 +88,9 @@ class TsunamiEvacuationFunction(
             tr('Population rounding is applied to all population values, '
                'which may cause discrepancies when adding values.')
         ])
-
-        return {
-            'title': title,
-            'fields': fields
-        }
+        # include any generic exposure specific keywords from definitions.py
+        fields = fields + self.exposure_notes()
+        return fields
 
     def run(self):
         """Risk plugin for tsunami population evacuation.

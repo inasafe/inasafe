@@ -72,9 +72,12 @@ class AshRasterLandcoverFunction(
         """Return the notes section of the report.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: safe.messaging.Message
+        :rtype: list
         """
-        return []   # TODO: what to put here?
+        fields = []  # Notes still to be defined for ASH
+        # include any generic exposure specific keywords from definitions.py
+        fields = fields + self.exposure_notes()
+        return fields
 
     def run(self):
         """Run the impact function.

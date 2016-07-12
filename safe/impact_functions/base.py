@@ -411,22 +411,28 @@ class ImpactFunction(object):
                 self.exposure.layer.dataProvider().fieldNameMap().keys()
             )
 
-    def exposure_definition(self):
-        """Get the metadata for the type of exposure that has been provided.
+    def exposure_notes(self):
+        """Get the exposure specific notes defined in definitions.
 
         This method will do a lookup in definitions.py and return the
-        exposure definition dictionary. This is a helper function to make it
+        exposure definition specific notes dictionary.
+
+        This is a helper function to make it
         easy to get exposure specific notes from the definitions metadata.
 
         .. versionadded:: 3.5
 
-        :returns: A dictionary like e.g. safe.definitions.exposure_land_cover
-        :rtype: str, None
+        :returns: A list like e.g. safe.definitions.exposure_land_cover[
+            'notes']
+        :rtype: list, None
         """
         exposure_name = self.exposure.keyword('exposure')
         for exposure in exposure_all:
-            if exposure['key'] == exposure_name:
-                return exposure
+            try:
+                if exposure['key'] == exposure_name:
+                    return exposure['notes']
+            except KeyError:
+                pass
         return None
 
     @property
