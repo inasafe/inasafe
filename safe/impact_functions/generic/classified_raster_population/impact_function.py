@@ -45,6 +45,7 @@ __revision__ = '$Format:%H$'
 __copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+
 class ClassifiedRasterHazardPopulationFunction(
         ClassifiedRHContinuousRE,
         PopulationExposureReportMixin):

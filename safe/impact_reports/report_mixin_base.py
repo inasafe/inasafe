@@ -27,21 +27,27 @@ class ReportMixin(object):
     def notes(self):
         """Return the notes section of the report.
 
+        Sub classes should implement this.
+
         :return: The notes that should be attached to this impact report.
         :rtype: dict
         """
         return []
 
-    def action_checklist(self):
-        """Return the action check list section of the report.
+    def extra_actions(self):
+        """Provide exposure specific actions.
 
-        :return: The action check list as dict.
-        :rtype: dict
+        .. note:: Only calculated actions are implemented here, the rest
+            are defined in definitions.py.
+
+        .. versionadded:: 3.5
+
+        Sub classes should implement this.
+
+        :return: The action check list as list.
+        :rtype: list
         """
-        return {
-            'title': tr('Action checklist'),
-            'fields': []
-        }
+        return []
 
     def impact_summary(self):
         """Create impact summary as data."""
@@ -53,6 +59,10 @@ class ReportMixin(object):
         :returns: The impact report data.
         :rtype: dict
         """
+        actions = {
+            'title': tr('Action checklist'),
+            'fields': self.action_checklist()
+        }
         notes = {
             'title': tr('Notes and assumptions'),
             'fields': self.notes()
@@ -61,6 +71,6 @@ class ReportMixin(object):
             'exposure': self.exposure_report,
             'question': self.question,  # The question is defined in the IF.
             'impact summary': self.impact_summary(),
-            'action check list': self.action_checklist(),
+            'action check list': actions,
             'notes': notes
         }

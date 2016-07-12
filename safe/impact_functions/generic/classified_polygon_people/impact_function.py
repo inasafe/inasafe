@@ -69,7 +69,6 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
 
         # Use the proper minimum needs, update the parameters
         self.parameters = add_needs_parameters(self.parameters)
-
         self.all_areas_ids = {}
         self.all_affected_areas = {}
         self.all_areas_population = {}

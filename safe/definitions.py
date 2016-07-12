@@ -351,7 +351,20 @@ exposure_land_cover = {
         tr('Areas reported for land cover counts have not been rounded.'),
     ],
     'actions': [  # these are additional generic actions - IF has more
-
+        tr('What type of crops are planted in the affected fields?'),
+        tr('How long will the activity or function of the land cover be '
+           'disturbed?'),
+        tr('What proportion of the land cover is damaged?'),
+        tr('What potential losses will result from the land cover '
+           'damage?'),
+        tr('How much productivity will be lost during this event?'),
+        tr('Which crops were ready for harvest during this event?'),
+        tr('What is the ownership system of the land/crops/field?'),
+        tr('Are the land/crops/field accessible after the event?'),
+        tr('What urgent actions can be taken to normalize the land/crops/'
+           'field?'),
+        tr('What tools or equipment are needed for early recovery of the '
+           'land/crops/field?')
     ]
 }
 
@@ -376,7 +389,22 @@ exposure_people_in_building = {
            '1000 if more than 100,000.')
     ],
     'actions': [  # these are additional generic actions - IF has more
-
+        tr('Which group or population is most affected?'),
+        tr('Who are the vulnerable people in the population and why?'),
+        tr('How will warnings be disseminated?'),
+        tr('What are people\'s likely movements?'),
+        tr('What are the security factors for the affected population?'),
+        tr('What are the security factors for relief responders?'),
+        tr('How will we reach evacuated people?'),
+        tr('What kind of food does the population normally consume?'),
+        tr('What are the critical non-food items required by the affected '
+           'population?'),
+        tr('If yes, where are they located and how will we distribute '
+           'them?'),
+        tr('If no, where can we obtain additional relief items and how '
+           'will we distribute them?'),
+        tr('What are the related health risks?'),
+        tr('Who are the key people responsible for coordination?')
     ]
 }
 
@@ -387,9 +415,7 @@ exposure_population = {
         'The <b>population</b> describes the people that might be '
         'exposed to a particular hazard.'),
     'notes': exposure_people_in_building['notes'],
-    'actions': [  # these are additional generic actions - IF has more
-
-    ]
+    'actions': exposure_people_in_building['actions']
 }
 
 exposure_road = {
@@ -407,6 +433,13 @@ exposure_road = {
         tr('Roads are open if they are not inundated.')
     ],
     'actions': [  # these are additional generic actions - IF has more
+        tr('Which roads can be used to evacuate people or to distribute '
+           'logistics?'),
+        tr('What type of vehicles can use the unaffected roads?'),
+        tr('What sort of equipment will be needed to reopen roads & where '
+           'will we get it?'),
+        tr('Which government department is responsible for supplying '
+           'equipment ?')
 
     ]
 }
@@ -423,7 +456,15 @@ exposure_structure = {
         tr('Numbers reported for structures are exact counts.')
     ],
     'actions': [  # these are additional generic actions - IF has more
-
+        tr('Which structures have warning capacity (eg. sirens, speakers, '
+           'etc.)?'),
+        tr('Are the water and electricity services still operating?'),
+        tr('Are the health centres still open?'),
+        tr('Are the other public services accessible?'),
+        tr('Which buildings will be evacuation centres?'),
+        tr('Where will we locate the operations centre?'),
+        tr('Where will we locate warehouse and/or distribution centres?'),
+        tr('Are the schools and hospitals still active?'),
     ]
 }
 

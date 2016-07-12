@@ -242,25 +242,19 @@ class BuildingExposureReportMixin(ReportMixin):
             'fields': fields
         }
 
-    def action_checklist(self):
-        """Action Checklist Data.
+    def extra_actions(self):
+        """Get actions specific to building exposure.
 
-        :returns: An action list in dictionary format.
-        :rtype: dict
+        .. note:: Only calculated actions are implemented here, the rest
+            are defined in definitions.py.
+
+        .. versionadded:: 3.5
+
+        :returns: An action list in list format.
+        :rtype: list
 
         """
-        title = tr('Action checklist')
-        fields = [
-            tr('Which structures have warning capacity (eg. sirens, speakers, '
-               'etc.)?'),
-            tr('Are the water and electricity services still operating?'),
-            tr('Are the health centres still open?'),
-            tr('Are the other public services accessible?'),
-            tr('Which buildings will be evacuation centres?'),
-            tr('Where will we locate the operations centre?'),
-            tr('Where will we locate warehouse and/or distribution centres?'),
-            tr('Are the schools and hospitals still active?'),
-        ]
+        fields = []
         if self.schools_closed > 0:
             fields.append(tr(
                 'Where will the students from the %s closed schools go to '
@@ -270,11 +264,7 @@ class BuildingExposureReportMixin(ReportMixin):
                 'Where will the patients from the %s closed hospitals go '
                 'for treatment and how will we transport them?') % format_int(
                 self.hospitals_closed))
-
-        return {
-            'title': title,
-            'fields': fields
-        }
+        return fields
 
     def generate_data(self):
         """Create a dictionary contains impact data.

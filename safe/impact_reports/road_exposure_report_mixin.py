@@ -185,27 +185,19 @@ class RoadExposureReportMixin(ReportMixin):
             'fields': fields
         }
 
-    def action_checklist(self):
-        """Return the action check list section of the report.
+    def extra_actions(self):
+        """Return the extra exposure specific actions.
 
-        :return: The action check list as dict.
-        :rtype: dict
+        .. note:: Only calculated actions are implemented here, the rest
+            are defined in definitions.py.
+
+        .. versionadded:: 3.5
+
+        :return: The action check list as list.
+        :rtype: list
         """
-        title = tr('Action checklist')
-        fields = [
-            tr('Which roads can be used to evacuate people or to distribute '
-               'logistics?'),
-            tr('What type of vehicles can use the unaffected roads?'),
-            tr('What sort of equipment will be needed to reopen roads & where '
-               'will we get it?'),
-            tr('Which government department is responsible for supplying '
-               'equipment ?')
-        ]
-
-        return {
-            'title': title,
-            'fields': fields
-        }
+        fields = []
+        return fields
 
     @property
     def total_road_length(self):

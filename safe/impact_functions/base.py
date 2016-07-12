@@ -509,6 +509,37 @@ class ImpactFunction(object):
                 pass
         return None
 
+    def action_checklist(self):
+        """Return the action check list.
+
+        .. versionadded:: 3.5
+
+        :return: The action check list as dict.
+        :rtype: dict
+        """
+        # Include actions defined in the mixin
+        fields = self.extra_actions()
+        # include any generic exposure specific actions from definitions.py
+        fields = fields + self.exposure_actions()
+        # include any generic hazard specific actions from definitions.py
+        fields = fields + self.hazard_actions()
+        return fields
+
+    def notes(self):
+        """Return the notes section of the report.
+
+        .. versionadded:: 3.5
+
+        :return: The notes that should be attached to this impact report.
+        :rtype: list
+        """
+        fields = []  # Notes still to be defined for ASH
+        # include any generic exposure specific notes from definitions.py
+        fields = fields + self.exposure_notes()
+        # include any generic hazard specific notes from definitions.py
+        fields = fields + self.hazard_notes()
+        return fields
+
     @property
     def aggregation(self):
         """Property for the aggregation layer to be used for the analysis.

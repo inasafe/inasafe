@@ -86,34 +86,18 @@ class LandCoverReportMixin(ReportMixin):
         data.update(extra_data)
         return data
 
-    def action_checklist(self):
-        """Return the action check list section of the report.
+    def extra_actions(self):
+        """Return actions specfici to land cover exposure.
 
-        :return: The action check list as dict.
-        :rtype: dict
+        .. note:: Only calculated actions are implemented here, the rest
+            are defined in definitions.py.
+
+        .. versionadded:: 3.5
+
+        :return: The action check list as list.
+        :rtype: list
         """
-        title = tr('Action checklist')
-        fields = [
-            tr('What type of crops are planted in the affected fields?'),
-            tr('How long will the activity or function of the land cover be '
-               'disturbed?'),
-            tr('What proportion of the land cover is damaged?'),
-            tr('What potential losses will result from the land cover '
-               'damage?'),
-            tr('How much productivity will be lost during this event?'),
-            tr('Which crops were ready for harvest during this event?'),
-            tr('What is the ownership system of the land/crops/field?'),
-            tr('Are the land/crops/field accessible after the event?'),
-            tr('What urgent actions can be taken to normalize the land/crops/'
-               'field?'),
-            tr('What tools or equipment are needed for early recovery of the '
-               'land/crops/field?')
-        ]
-
-        return {
-            'title': title,
-            'fields': fields
-        }
+        return []
 
     def impact_table(self):
         """Return data as dictionary"""
