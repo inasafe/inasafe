@@ -675,6 +675,11 @@ class ImpactFunction(object):
             print message
         print 'Task progress: %i of %i' % (current, maximum)
 
+    def run(self):
+        """Run method should be implemented in the impact function."""
+        raise NotImplementedError(
+            'The run method for this Impact Function is not implemented yet.')
+
     def run_analysis(self):
         """It runs the IF. The method must be called from a client class.
 
@@ -728,6 +733,8 @@ class ImpactFunction(object):
                 'rasters with a larger cell size.')
             analysis_error(self, e, message)
         except KeywordNotFoundError, e:
+            # Need a specific catcher here, so that it doesn't go to the
+            # the broad exception
             raise e
         except Exception, e:  # pylint: disable=W0703
             # FIXME (Ole): This branch is not covered by the tests
