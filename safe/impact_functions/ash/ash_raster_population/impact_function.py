@@ -48,7 +48,7 @@ class AshRasterPopulationFunction(
         ContinuousRHContinuousRE,
         PopulationExposureReportMixin):
     # noinspection PyUnresolvedReferences
-    """Simple impact function for ash raster on people."""
+    """Simple impact function for ash raster on population."""
     _metadata = AshRasterHazardPopulationFunctionMetadata()
 
     def __init__(self):

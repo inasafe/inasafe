@@ -55,14 +55,14 @@ class AshRasterHazardPopulationFunctionMetadata(ImpactFunctionMetadata):
         """
         dict_meta = {
             'id': 'AshRasterHazardPopulationFunctionMetadata',
-            'name': tr('Ash raster on people'),
+            'name': tr('Ash raster on population'),
             'impact': tr('Be affected'),
             'title': tr('Be affected'),
             'function_type': 'old-style',
             'author': 'Ismail Sunni',
             'date_implemented': '13/07/2016',
             'overview': tr(
-                'To assess the impact of each hazard zone on people.'),
+                'To assess the impact of each hazard zone on population.'),
             'detailed_description': '',
             'hazard_input': tr(
                 'The hazard layer must be an ash raster layer.'),
@@ -71,7 +71,7 @@ class AshRasterHazardPopulationFunctionMetadata(ImpactFunctionMetadata):
                 'population count for that cell.'),
             'output': tr(
                 'Map of population exposed to the highest hazard zone and a '
-                'table with the number of people in each hazard zone'),
+                'table with the number of population in each hazard zone'),
             'actions': tr(
                 'Provide details about how big area fall within '
                 'each hazard zone.'),
@@ -80,8 +80,8 @@ class AshRasterHazardPopulationFunctionMetadata(ImpactFunctionMetadata):
             'legend_title': '',
             'legend_units': '',
             'legend_notes': '',
-            'map_title': tr('Affected Land Cover'),
-            'layer_name': tr('People affected'),
+            'map_title': tr('Affected Population'),
+            'layer_name': tr('Population affected'),
             'layer_requirements': {
                 'hazard': {
                     'layer_mode': layer_mode_continuous,
