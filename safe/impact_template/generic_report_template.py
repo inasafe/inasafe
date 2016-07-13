@@ -18,7 +18,6 @@ import safe.messaging as m
 from safe.messaging import styles
 from safe.common.exceptions import MissingImpactReport
 from safe.common.utilities import (
-    unhumanize_number,
     format_int)
 
 __author__ = 'ismailsunni'
