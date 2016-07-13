@@ -155,7 +155,7 @@ class NeedsProfile(MinimumNeeds):
 
         self.settings.setValue('MinimumNeeds', self.minimum_needs)
 
-    def get_profiles(self):
+    def get_profiles(self, overwrite=False):
         """Get all the minimum needs profiles.
 
         :returns: The minimum needs by name.
@@ -199,7 +199,7 @@ class NeedsProfile(MinimumNeeds):
             source_file = os.path.join(path_name, file_name)
             destination_file = os.path.join(
                 locale_minimum_needs_dir, file_name)
-            if not os.path.exists(destination_file):
+            if not os.path.exists(destination_file) or overwrite:
                 copy(source_file, destination_file)
         profiles = [
             profile[:-5] for profile in
