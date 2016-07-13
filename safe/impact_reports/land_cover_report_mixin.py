@@ -18,8 +18,6 @@ __copyright__ = 'imajimatika@gmail.com'
 
 
 from qgis.core import QgsDistanceArea
-
-from safe.utilities.i18n import tr
 from safe.utilities.pivot_table import FlatTable
 from safe.impact_reports.report_mixin_base import ReportMixin
 
