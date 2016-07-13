@@ -24,6 +24,7 @@ import sys
 import shutil
 import logging
 import codecs
+import pytz
 from xml.dom import minidom
 from datetime import datetime
 from pytz import timezone
@@ -162,7 +163,7 @@ class ShakeGrid(object):
         self.month = int(date_tokens[1])
         self.day = int(date_tokens[2])
 
-        time_tokens = the_time_stamp[11:-3].split(':')
+        time_tokens = the_time_stamp[11:19].split(':')
         self.hour = int(time_tokens[0])
         self.minute = int(time_tokens[1])
         self.second = int(time_tokens[2])
@@ -173,7 +174,12 @@ class ShakeGrid(object):
             'WITA': timezone('Asia/Makassar'),
             'WIT': timezone('Asia/Jayapura')
         }
-        tzinfo = tz_dict.get(self.time_zone)
+
+        try:
+            tzinfo = tz_dict.get(self.time_zone)
+        except:
+            tzinfo = pytz.utc
+
         self.time = datetime(
             self.year,
             self.month,
