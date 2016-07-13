@@ -31,7 +31,7 @@ from safe.common.signals import send_dynamic_message, send_static_message
 from safe_extras.pydispatch import dispatcher
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
-INFO_STYLE = styles.INFO_STYLE
+SUGGESTION_STYLE = styles.SUGGESTION_STYLE
 WARNING_STYLE = styles.WARNING_STYLE
 KEYWORD_STYLE = styles.KEYWORD_STYLE
 
@@ -148,7 +148,7 @@ def check_memory_usage(buffered_geo_extent, cell_size):
             'may become unresponsive during execution, and / or the analysis '
             'may fail due to insufficient memory. Proceed at your own risk.')
         suggestion_heading = m.Heading(
-            tr('Suggestion'), **INFO_STYLE)
+            tr('Suggestion'), **SUGGESTION_STYLE)
         suggestion = tr(
             'Try zooming in to a smaller area or using a raster layer with a '
             'coarser resolution to speed up execution and reduce memory '
@@ -175,7 +175,7 @@ def memory_error():
     warning_message = tr(
         'There is not enough free memory to run this analysis.')
     suggestion_heading = m.Heading(
-        tr('Suggestion'), **INFO_STYLE)
+        tr('Suggestion'), **SUGGESTION_STYLE)
     suggestion = tr(
         'Try zooming in to a smaller area or using a raster layer with a '
         'coarser resolution to speed up execution and reduce memory '
