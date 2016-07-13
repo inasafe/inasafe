@@ -104,8 +104,11 @@ class TestTsunamiRasterLandCoverFunction(unittest.TestCase):
             self.assertAlmostEqual(value, table.columns[index])
         for index, value in enumerate(expected.affected_columns):
             self.assertAlmostEqual(value, table.affected_columns[index])
+        # This is a list of list so we unpack both
         for index, value in enumerate(expected.data):
-            self.assertAlmostEqual(value, table.data[index])
+            for value_index, value_value in enumerate(value):
+                self.assertAlmostEqual(
+                        value_value, table.data[index][value_index])
         self.assertAlmostEqual(expected.total_affected, table.total_affected)
 
     def test_keywords(self):
