@@ -50,6 +50,7 @@ class RoadExposureReportMixinTest(unittest.TestCase):
                 'Bike': 1.2})
         ])
         self.road_mixin.affected_road_categories = ['Flooded']
+        self.maxDiff = None
 
     def tearDown(self):
         """Run after each test."""
@@ -72,7 +73,7 @@ class RoadExposureReportMixinTest(unittest.TestCase):
             'exposure': 'road',
             'impact summary': {
                 'attributes': ['category', 'value'],
-                'fields': [['Unaffected', 0], ['Total', 0]]},
+                'fields': [['Unaffected (m)', 0], ['Total (m)', 0]]},
             'impact table': {
                 'attributes': [
                     'Road Type', 'Unaffected', 'Total'],
@@ -87,9 +88,9 @@ class RoadExposureReportMixinTest(unittest.TestCase):
         roads_breakdown = self.road_mixin.impact_table()['fields']
 
         expected = [
-            ['Main', 2, 131.3, 133.3],
-            ['Side', 5.5, 4.5, 10],
-            ['Bike', 1.2, 0.0, 1.2]
+            ['Main (m)', 2, 131.3, 133.3],
+            ['Side (m)', 5.5, 4.5, 10],
+            ['Bike (m)', 1.2, 0.0, 1.2]
         ]
 
         self.assertEquals(roads_breakdown, expected)
@@ -122,9 +123,9 @@ class RoadExposureReportMixinTest(unittest.TestCase):
             'impact summary': {
                 'attributes': ['category', 'value'],
                 'fields': [
-                    ['Flooded', 8.7],
-                    ['Unaffected', 135.8],
-                    ['Total', 144.5]
+                    ['Flooded (m)', 8.7],
+                    ['Unaffected (m)', 135.8],
+                    ['Total (m)', 144.5]
                 ]
             },
             'impact table': {
@@ -132,9 +133,9 @@ class RoadExposureReportMixinTest(unittest.TestCase):
                     'Road Type', 'Flooded', 'Unaffected', 'Total'
                 ],
                 'fields': [
-                    ['Main', 2, 131.3, 133.3],
-                    ['Side', 5.5, 4.5, 10],
-                    ['Bike', 1.2, 0.0, 1.2]
+                    ['Main (m)', 2, 131.3, 133.3],
+                    ['Side (m)', 5.5, 4.5, 10],
+                    ['Bike (m)', 1.2, 0.0, 1.2]
                 ]
             },
             'notes': {

@@ -10,28 +10,25 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+import os
+import json
+
+from safe.common.exceptions import MissingImpactReport
+
+from safe.impact_template.generic_report_template import (
+    GenericReportTemplate)
+from safe.impact_template.population_report_template import (
+    PopulationReportTemplate)
+from safe.impact_template.polygon_people_report_template import (
+    PolygonPeopleReportTemplate)
+from safe.impact_template.land_cover_report_template import (
+    LandCoverReportTemplate)
 
 __author__ = 'ismailsunni'
 __project_name__ = 'inasafe-dev'
 __filename__ = 'utilities'
 __date__ = '4/25/16'
 __copyright__ = 'imajimatika@gmail.com'
-
-import os
-import json
-
-from safe.common.exceptions import MissingImpactReport
-
-from safe.impact_template.building_report_template import (
-    BuildingReportTemplate)
-from safe.impact_template.population_report_template import (
-    PopulationReportTemplate)
-from safe.impact_template.road_report_template import (
-    RoadReportTemplate)
-from safe.impact_template.polygon_people_report_template import (
-    PolygonPeopleReportTemplate)
-from safe.impact_template.land_cover_report_template import (
-    LandCoverReportTemplate)
 
 
 def get_report_template(
@@ -48,7 +45,7 @@ def get_report_template(
     :type impact_data: dict
 
     :returns: Report template object
-    :rtype: TemplateBase, BuildingReportTemplate
+    :rtype: GenericReportTemplate, BuildingReportTemplate
     """
     # Check for impact layer path first
     if impact_layer_path:
@@ -62,12 +59,10 @@ def get_report_template(
     if not impact_data:
         raise MissingImpactReport
 
-    if impact_data['exposure'] == 'building':
-        return BuildingReportTemplate(impact_data=impact_data)
+    if impact_data['exposure'] in ['building', 'road']:
+        return GenericReportTemplate(impact_data=impact_data)
     elif impact_data['exposure'] == 'population':
         return PopulationReportTemplate(impact_data=impact_data)
-    elif impact_data['exposure'] == 'road':
-        return RoadReportTemplate(impact_data=impact_data)
     elif impact_data['exposure'] == 'polygon people':
         return PolygonPeopleReportTemplate(impact_data=impact_data)
     elif impact_data['exposure'] == 'land cover':

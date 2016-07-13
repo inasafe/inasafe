@@ -120,11 +120,12 @@ class RoadExposureReportMixin(ReportMixin):
         sum_affected = 0
         for (category, road_breakdown) in self.affected_road_lengths.items():
             number_affected = sum(road_breakdown.values())
-            fields.append([category, number_affected])
+            fields.append(['%s (m)' % category, number_affected])
             sum_affected += number_affected
         if self.add_unaffected_column:
-            fields.append([tr('Unaffected'), self.total_road_length - sum_affected])
-        fields.append([tr('Total'), self.total_road_length])
+            fields.append(
+                [tr('Unaffected (m)'), self.total_road_length - sum_affected])
+        fields.append([tr('Total (m)'), self.total_road_length])
 
         return {
             'attributes': ['category', 'value'],
@@ -157,7 +158,7 @@ class RoadExposureReportMixin(ReportMixin):
                     affected_by_usage.append(0)
             row = []
 
-            row.append(road_type)
+            row.append('%s (m)' % road_type.capitalize())
             for affected_by_usage_value in affected_by_usage:
                 row.append(affected_by_usage_value)
 
