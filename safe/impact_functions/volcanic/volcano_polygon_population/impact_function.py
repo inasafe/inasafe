@@ -26,8 +26,7 @@ from safe.utilities.i18n import tr
 from safe.common.utilities import (
     humanize_class,
     create_classes,
-    create_label,
-    get_thousand_separator)
+    create_label)
 from safe.impact_functions.core import (
     no_population_impact_message,
     get_key_for_value
