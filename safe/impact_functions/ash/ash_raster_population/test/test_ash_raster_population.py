@@ -51,7 +51,6 @@ class TestAshRasterPopulationFunction(unittest.TestCase):
         exposure_layer = read_layer(clipped_exposure.source())
 
         # Let's set the extent to the hazard extent
-        function.parameters['thresholds'].value = [0.7, 0.8, 0.9]
         function.hazard = SafeLayer(hazard_layer)
         function.exposure = SafeLayer(exposure_layer)
         function.run()

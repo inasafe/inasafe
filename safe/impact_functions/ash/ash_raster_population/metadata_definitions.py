@@ -24,8 +24,14 @@ from safe.definitions import (
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
-from safe.impact_functions.ash.parameter_definitions \
-    import threshold_group_parameter
+from safe.impact_functions.ash.parameter_definitions import \
+    threshold_group_parameter
+from safe.defaults import (
+    default_minimum_needs)
+from safe.defaults import (
+    default_gender_postprocessor,
+    minimum_needs_selector,
+    age_postprocessor)
 
 __author__ = 'ismailsunni'
 __project_name__ = 'inasafe-dev'
@@ -52,7 +58,7 @@ class AshRasterHazardPopulationFunctionMetadata(ImpactFunctionMetadata):
             'name': tr('Ash raster on people'),
             'impact': tr('Be affected'),
             'title': tr('Be affected'),
-            'function_type': 'qgis2.0',
+            'function_type': 'old-style',
             'author': 'Ismail Sunni',
             'date_implemented': '13/07/2016',
             'overview': tr(
@@ -101,7 +107,13 @@ class AshRasterHazardPopulationFunctionMetadata(ImpactFunctionMetadata):
             },
             'parameters': OrderedDict(
                 [
-                    ('group_threshold', threshold_group_parameter())
+                    ('group_threshold', threshold_group_parameter()),
+                    ('postprocessors', OrderedDict([
+                        ('Gender', default_gender_postprocessor()),
+                        ('Age', age_postprocessor()),
+                        ('MinimumNeeds', minimum_needs_selector()),
+                    ])),
+                    ('minimum needs', default_minimum_needs())
                 ])
         }
         return dict_meta
