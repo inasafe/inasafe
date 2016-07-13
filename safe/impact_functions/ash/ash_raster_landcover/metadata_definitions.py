@@ -23,10 +23,8 @@ from safe.definitions import (
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
-from safe.impact_functions.ash.ash_raster_landcover.parameter_definitions \
-    import (
-    moderate_threshold, low_threshold, very_low_threshold,
-    high_threshold, unaffected_threshold, threshold_group_parameter)
+from safe.impact_functions.ash.parameter_definitions import \
+    threshold_group_parameter
 
 __author__ = 'Rizky Maulana Nugraha <lana.pcfre@gmail.com>'
 __date__ = '5/24/16'
