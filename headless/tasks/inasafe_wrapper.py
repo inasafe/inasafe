@@ -11,8 +11,7 @@ from headless.celeryconfig import DEPLOY_OUTPUT_DIR, DEPLOY_OUTPUT_URL
 from headless.tasks.utilities import download_layer, archive_layer, \
     generate_styles, download_file
 from bin.inasafe import CommandLineArguments, get_impact_function_list, \
-    run_impact_function, build_report
-from safe.storage.utilities import safe_to_qgis_layer
+    run_impact_function, build_report, get_layer
 from safe.utilities.keyword_io import KeywordIO
 
 __author__ = 'Rizky Maulana Nugraha <lana.pcfre@gmail.com>'
@@ -46,7 +45,11 @@ def filter_impact_function(hazard=None, exposure=None):
         arguments.hazard = None
         arguments.exposure = None
     ifs = get_impact_function_list(arguments)
-    result = [f.metadata().as_dict()['id'] for f in ifs]
+    result = [
+        {
+            'id': f.metadata().as_dict()['id'],
+            'name': f.metadata().as_dict()['name']
+        } for f in ifs]
     LOGGER.debug(result)
     return result
 
@@ -85,15 +88,15 @@ def run_analysis(hazard, exposure, function, aggregation=None,
     else:
         new_name = '%s.shp' % tmp
 
+    # generating qml styles file
+    qgis_impact_layer = get_layer(new_name)
+    generate_styles(impact_layer, qgis_impact_layer)
+
     # if asked to generate report
     if generate_report:
         arguments.report_template = ''
         arguments.output_file = new_name
         build_report(arguments)
-
-    # generating qml styles file
-    qgis_impact_layer = safe_to_qgis_layer(impact_layer)
-    generate_styles(impact_layer, qgis_impact_layer)
 
     # archiving the layer
     new_name = archive_layer(new_name)
@@ -109,7 +112,13 @@ def run_analysis(hazard, exposure, function, aggregation=None,
 
 @app.task(queue='inasafe-headless')
 def read_keywords_iso_metadata(metadata_url, keyword=None):
-    """Read xml metadata of a layer"""
+    """Read xml metadata of a layer
+
+    :param keyword: Can be string or tuple containing keywords to search for
+    :type keyword: str, (str, )
+
+    :return: the keywords, or a dictionary with key-value pair
+    """
     filename = download_file(metadata_url)
     # add xml extension
     new_filename = filename + '.xml'
@@ -117,5 +126,11 @@ def read_keywords_iso_metadata(metadata_url, keyword=None):
     keyword_io = KeywordIO()
     keywords = keyword_io.read_keywords_file(new_filename)
     if keyword:
-        return keywords.get(keyword, None)
+        if isinstance(keyword, tuple) or isinstance(keyword, list):
+            ret_val = {}
+            for key in keyword:
+                ret_val[key] = keywords.get(key, None)
+            return ret_val
+        else:
+            return keywords.get(keyword, None)
     return keywords

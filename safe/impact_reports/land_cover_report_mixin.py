@@ -16,7 +16,6 @@ __filename__ = 'land_cover_report_mixin'
 __date__ = '5/5/16'
 __copyright__ = 'imajimatika@gmail.com'
 
-
 from qgis.core import QgsDistanceArea
 from safe.utilities.pivot_table import FlatTable
 from safe.impact_reports.report_mixin_base import ReportMixin
