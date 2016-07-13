@@ -88,31 +88,6 @@ class BuildingExposureReportMixinTest(unittest.TestCase):
         del self.building_mixin_blank
         del self.building_mixin
 
-    def test_0002_action_checklist(self):
-        """The default action check list."""
-        action_checklist = self.building_mixin_blank.action_checklist()[
-            'fields']
-        expected = [
-            'Which structures have warning capacity (eg. sirens, speakers, '
-            'etc.)?',
-            'Are the water and electricity services still operating?',
-            'Are the health centres still open?',
-            'Are the other public services accessible?',
-            'Which buildings will be evacuation centres?',
-            'Where will we locate the operations centre?',
-            'Where will we locate warehouse and/or distribution centres?',
-        ]
-        for item in expected:
-            self.assertIn(item, action_checklist)
-
-        not_expected = [
-            'Where will the students from the 0 closed schools go to study?',
-            'Where will the patients from the 0 closed hospitals go for '
-            'treatment and how will we transport them?',
-        ]
-        for item in not_expected:
-            self.assertNotIn(item, action_checklist)
-
     def test_0004_buildings_breakdown(self):
         """Test the buildings breakdown."""
         buildings_breakdown = self.building_mixin.impact_table()['fields']
@@ -208,18 +183,10 @@ class BuildingExposureReportMixinTest(unittest.TestCase):
         data = self.building_mixin.generate_data()
         expected = {
             'exposure': 'building',
-            'action check list': {'fields': [
-                u'Which structures have warning capacity (eg. sirens, '
-                u'speakers, etc.)?',
-                u'Are the water and electricity services still operating?',
-                u'Are the health centres still open?',
-                u'Are the other public services accessible?',
-                u'Which buildings will be evacuation centres?',
-                u'Where will we locate the operations centre?',
-                u'Where will we locate warehouse and/or distribution centres?',
-                u'Are the schools and hospitals still active?',
-                u'Where will the students from the 75 closed schools go to '
-                u'study?'],
+            # Since 3.5 the action checklists come from the IF base
+            # not the mixin base. Mixin has just a stub for this...
+            'action check list': {
+                'fields': [],
                 'title': u'Action checklist'},
             'impact summary': {
                 'attributes': ['category', 'value'],
@@ -233,8 +200,11 @@ class BuildingExposureReportMixinTest(unittest.TestCase):
             },
             'impact table': {
                 'attributes': [
-                    'Building type', u'Hazard Level 2', u'Hazard Level 1',
-                    u'Not Affected', u'Total'],
+                    'Building type',
+                    u'Hazard Level 2',
+                    u'Hazard Level 1',
+                    u'Not Affected',
+                    u'Total'],
                 'fields': [
                     ['Religious', 0, 1, 2, 3],
                     ['Residential', 12000, 1000, 7000, 20000],
@@ -243,7 +213,7 @@ class BuildingExposureReportMixinTest(unittest.TestCase):
                     [u'Total', 12050, 1027, 7036, 20113]
                 ]
             },
-            'notes': {'fields': [], 'title': 'Notes'},
+            'notes': {'fields': [], 'title': 'Notes and assumptions'},
             'question': ''}
         self.assertDictEqual(data, expected)
 

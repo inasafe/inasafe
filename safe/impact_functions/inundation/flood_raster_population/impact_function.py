@@ -69,8 +69,6 @@ class FloodEvacuationRasterHazardFunction(
         :return: The notes that should be attached to this impact report.
         :rtype: list
         """
-        title = tr('Notes and assumptions')
-
         population = format_int(population_rounding(self.total_population))
         thresholds = self.parameters['thresholds'].value
 

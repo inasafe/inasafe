@@ -76,7 +76,7 @@ class TestClassifiedPolygonLandCoverFunction(unittest.TestCase):
 
         # check if generic notes are returned
         self.assertIn(
-                u'Areas reported for land counts have not been rounded.',
+                u'Areas reported for land cover counts have not been rounded.',
                 function.notes())
 
     def test_keywords(self):

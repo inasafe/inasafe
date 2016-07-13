@@ -11,13 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 from safe.utilities.i18n import tr
-
-__author__ = 'tim@kartoza.com'
-__revision__ = '$Format:%H$'
-__date__ = '20/01/2011'
-__copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
-__copyright__ += 'Disaster Reduction'
-
 import os
 import tempfile
 import logging
@@ -46,6 +39,12 @@ from safe.common.exceptions import (
 )
 from safe.utilities.metadata import read_iso19115_metadata
 from safe.definitions import multipart_polygon_key
+
+__author__ = 'tim@kartoza.com'
+__revision__ = '$Format:%H$'
+__date__ = '20/01/2011'
+__copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
+__copyright__ += 'Disaster Reduction'
 
 LOGGER = logging.getLogger(name='InaSAFE')
 

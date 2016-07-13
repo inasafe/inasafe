@@ -10,9 +10,9 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
-__author__ = 'Christian Christelis <christian@kartoza.com>'
-
 from safe.utilities.i18n import tr
+
+__author__ = 'Christian Christelis <christian@kartoza.com>'
 
 
 class ReportMixin(object):
@@ -35,7 +35,10 @@ class ReportMixin(object):
         return []
 
     def action_checklist(self):
-        """Return the action checklit section of the report.
+        """Return the action checklist section of the report.
+
+        .. note:: This is also implemented in the ImpactFunction base class
+            - I think its a bit ugly to have it here too ... TS
 
         Sub classes should implement this.
 

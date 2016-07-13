@@ -183,8 +183,7 @@ class ITBFatalityFunction(
         total_displaced = self.total_evacuated
         rounded_displaced = format_int(population_rounding(total_displaced))
 
-        title = 'Action checklist'
-        fields = []
+        fields = super(ITBFatalityFunction, self).action_checklist()
         if total_fatalities:
             fields.append(tr(
                 'Are there enough victim identification units available '
@@ -203,10 +202,7 @@ class ITBFatalityFunction(
                 'If no, where can we obtain additional relief items '
                 'from and how will we transport them?'))
 
-        return {
-            'title': title,
-            'fields': fields
-        }
+        return fields
 
     def notes(self):
         """Notes and caveats for the IF report.

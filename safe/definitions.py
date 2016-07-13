@@ -399,10 +399,6 @@ exposure_people_in_building = {
         tr('What kind of food does the population normally consume?'),
         tr('What are the critical non-food items required by the affected '
            'population?'),
-        tr('If yes, where are they located and how will we distribute '
-           'them?'),
-        tr('If no, where can we obtain additional relief items and how '
-           'will we distribute them?'),
         tr('What are the related health risks?'),
         tr('Who are the key people responsible for coordination?')
     ]
