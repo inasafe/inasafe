@@ -92,14 +92,21 @@ class TestTsunamiRasterLandCoverFunction(unittest.TestCase):
             column_field='hazard',
             columns=ordered_columns,
             affected_columns=affected_columns)
-        self.assertListEqual(expected.total_rows, table.total_rows)
-        self.assertListEqual(expected.total_columns, table.total_columns)
-        self.assertListEqual(expected.total_rows_affected, table.total_rows_affected)
-        self.assertEqual(expected.total_affected, table.total_affected)
-        self.assertListEqual(expected.rows, table.rows)
-        self.assertListEqual(expected.columns, table.columns)
-        self.assertListEqual(expected.affected_columns, table.affected_columns)
-        self.assertListEqual(expected.data, table.data)
+        for index, value in enumerate(expected.total_rows):
+            self.assertAlmostEqual(value, table.total_rows[index])
+        for index, value in enumerate(expected.total_columns):
+            self.assertAlmostEqual(value, table.total_columns[index])
+        for index, value in enumerate(expected.total_rows_affected):
+            self.assertAlmostEqual(value, table.total_rows_affected[index])
+        for index, value in enumerate(expected.rows):
+            self.assertAlmostEqual(value, table.rows[index])
+        for index, value in enumerate(expected.columns):
+            self.assertAlmostEqual(value, table.columns[index])
+        for index, value in enumerate(expected.affected_columns):
+            self.assertAlmostEqual(value, table.affected_columns[index])
+        for index, value in enumerate(expected.data):
+            self.assertAlmostEqual(value, table.data[index])
+        self.assertAlmostEqual(expected.total_affected, table.total_affected)
 
     def test_keywords(self):
 

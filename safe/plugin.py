@@ -536,8 +536,7 @@ class Plugin(object):
         self._create_osm_downloader_action()
         self._create_add_osm_layer_action()
         self._create_add_petajakarta_layer_action()
-        # RMN: Disable this for now
-        # self._create_raster_reclassify_layer_action()
+        self._create_raster_reclassify_layer_action()
         self._create_shakemap_converter_action()
         self._create_minimum_needs_action()
         self._create_test_layers_action()
