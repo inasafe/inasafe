@@ -71,14 +71,6 @@ class AshRasterPopulationFunction(
         self.parameters = add_needs_parameters(self.parameters)
         self.no_data_warning = False
 
-    def notes(self):
-        """Return the notes section of the report.
-
-        :return: The notes that should be attached to this impact report.
-        :rtype: safe.messaging.Message
-        """
-        return []   # TODO: what to put here?
-
     def run(self):
         """Run the impact function.
 
@@ -121,7 +113,7 @@ class AshRasterPopulationFunction(
             thresholds_name = self.hazard_classes[i]
             if i == len(hazard_level_range) - 1:
                 # The last threshold
-                impact = medium = numpy.where(ash >= lo, population, 0)
+                impact = medium = numpy.where(ash >= hazard_level_range[0], population, 0)
                 self.impact_category_ordering.append(thresholds_name)
                 self._evacuation_category = thresholds_name
             else:
@@ -163,7 +155,7 @@ class AshRasterPopulationFunction(
         colours = [
             '#2C6BA4', '#00A4D8', '#FFEF36', '#EFA951',
             '#D62631']
-        classes = create_classes(population.flat[:], len(colours))
+        classes = create_classes(impact.flat[:], len(colours))
         interval_classes = humanize_class(classes)
         style_classes = []
 
