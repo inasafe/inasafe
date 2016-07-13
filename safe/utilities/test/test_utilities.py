@@ -150,10 +150,10 @@ class UtilitiesTest(unittest.TestCase):
         new_dict = reorder_dictionary(unordered, expected)
         self.assertItemsEqual(expected, new_dict.keys())
 
-        # These keys don't exist, we expect an empty dictionary.
+        # These keys don't exist, but we still show the dictionary
         expected = ['Z', 'X', 'Y']
         new_dict = reorder_dictionary(unordered, expected)
-        self.assertEqual(len(new_dict), 0)
+        self.assertEqual(len(new_dict), 5)
 
     def test_main_type(self):
         """Test the good feature type according to the value mapping."""

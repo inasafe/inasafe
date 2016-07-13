@@ -10,14 +10,11 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
-from collections import OrderedDict
-
 __author__ = 'ismailsunni'
 __project_name__ = 'inasafe-dev'
 __filename__ = 'land_cover_report_mixin'
 __date__ = '5/5/16'
 __copyright__ = 'imajimatika@gmail.com'
-
 
 from qgis.core import QgsDistanceArea
 
@@ -27,8 +24,7 @@ from safe.impact_reports.report_mixin_base import ReportMixin
 
 
 class LandCoverReportMixin(ReportMixin):
-    """Land cover specific report.
-    """
+    """Land cover specific report."""
 
     def __init__(
             self, question, impact_layer, target_field, ordered_columns,
@@ -58,6 +54,8 @@ class LandCoverReportMixin(ReportMixin):
         :type zone_field: str
 
         """
+        super(LandCoverReportMixin, self).__init__()
+        self.exposure_report = 'land cover'
         self.impact_layer = impact_layer
         self.target_field = target_field
         self.ordered_columns = ordered_columns
@@ -66,9 +64,9 @@ class LandCoverReportMixin(ReportMixin):
         self.zone_field = zone_field
         self.question = question
 
-        self.total_affected_landcover = 0
-        self.total_unaffected_landcover = 0
-        self.total_landcover = 0
+    def impact_summary(self):
+        # Set this as empty string
+        return ''
 
     def generate_data(self):
         """Create a dictionary contains impact data.
@@ -77,73 +75,15 @@ class LandCoverReportMixin(ReportMixin):
         :rtype: dict
         """
 
-        return {
-            'exposure': 'land cover',
-            'question': self.question,
-            'impact summary': self.impact_summary(),
+        extra_data = {
             'zone field': self.zone_field,
             'ordered columns': self.ordered_columns,
             'affected columns': self.affected_columns,
             'impact table': self.impact_table(),
-            'action check list': self.action_checklist(),
-            'notes': self.notes()
         }
-
-    def impact_summary(self):
-        """Create impact summary as data.
-
-        :returns: Impact Summary in dictionary format.
-        :rtype: dict
-        """
-        attributes = ['category', 'value']
-
-        # prepare area calculator object
-        area_calc = QgsDistanceArea()
-        area_calc.setSourceCrs(self.impact_layer.crs())
-        area_calc.setEllipsoid('WGS84')
-        area_calc.setEllipsoidalMode(True)
-
-        hazard_dict = OrderedDict()
-        if self.ordered_columns:
-            for h_class in self.ordered_columns:
-                hazard_dict[h_class] = 0
-
-        for f in self.impact_layer.getFeatures():
-            area = area_calc.measure(f.geometry()) / 1e4
-
-            hazard_type = f[self.target_field]
-
-            if hazard_type in hazard_dict:
-                hazard_dict[hazard_type] += area
-            else:
-                hazard_dict[hazard_type] = area
-
-            if ('unaffected' in hazard_type.lower() or
-                    'not affected' in hazard_type.lower()):
-                self.total_unaffected_landcover +=area
-            else:
-                self.total_affected_landcover += area
-
-        self.total_landcover = (
-            self.total_affected_landcover + self.total_unaffected_landcover)
-
-        fields = []
-        for key, value in hazard_dict.iteritems():
-            fields.append([key, value])
-
-        if len(fields) > 1:
-            fields.append(
-                [tr('Affected landcover'), self.total_affected_landcover])
-
-            fields.append([
-                tr('Not affected landcover'), self.total_unaffected_landcover]
-            )
-            fields.append([tr('Total'), self.total_landcover])
-
-        return {
-            'attributes': attributes,
-            'fields': fields
-        }
+        data = super(LandCoverReportMixin, self).generate_data()
+        data.update(extra_data)
+        return data
 
     def action_checklist(self):
         """Return the action check list section of the report.

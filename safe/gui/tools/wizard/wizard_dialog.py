@@ -57,7 +57,8 @@ from safe.common.exceptions import (
     KeywordNotFoundError,
     InvalidParameterError,
     UnsupportedProviderError,
-    InaSAFEError)
+    InaSAFEError,
+    MetadataReadError)
 from safe.utilities.resources import get_ui_class, resources_path
 from safe.utilities.unicode import get_unicode
 
@@ -271,7 +272,8 @@ class WizardDialog(QDialog, FORM_CLASS):
                 NoKeywordsFoundError,
                 KeywordNotFoundError,
                 InvalidParameterError,
-                UnsupportedProviderError):
+                UnsupportedProviderError,
+                MetadataReadError):
             self.existing_keywords = None
         self.set_mode_label_to_keywords_creation()
 
@@ -697,6 +699,10 @@ class WizardDialog(QDialog, FORM_CLASS):
             if not QgsMapLayerRegistry.instance().mapLayersByName(
                     self.layer.name()):
                 QgsMapLayerRegistry.instance().addMapLayers([self.layer])
+
+                # Make the layer visible. Might be hidden by default. See #2925
+                legend = self.iface.legendInterface()
+                legend.setLayerVisible(self.layer, True)
 
         # After the extent selection, save the extent and disconnect signals
         if current_step == self.step_fc_extent:

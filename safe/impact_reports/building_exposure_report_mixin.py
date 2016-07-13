@@ -72,7 +72,8 @@ class BuildingExposureReportMixin(ReportMixin):
 
             buildings = {residential: 1062, school: 52 ...}
         """
-        self.question = ''
+        super(BuildingExposureReportMixin, self).__init__()
+        self.exposure_report = 'building'
         self.buildings = {}
         self.categories = None
         self.affected_buildings = {}
@@ -136,7 +137,6 @@ class BuildingExposureReportMixin(ReportMixin):
         :rtype: dict
         """
         affect_types = self._impact_breakdown
-        attributes = ['category', 'value']
         fields = []
         for (category, building_breakdown) in self.affected_buildings.items():
             total_affected = [0] * len(affect_types)
@@ -161,18 +161,18 @@ class BuildingExposureReportMixin(ReportMixin):
         fields.append([tr('Total'), self.total_buildings])
 
         return {
-            'attributes': attributes,
+            'attributes': ['category', 'value'],
             'fields': fields
         }
 
-    def buildings_breakdown(self):
+    def impact_table(self):
         """Create building breakdown as data.
 
         :returns: Building Breakdown in dictionary format.
         :rtype: dict
         """
         impact_names = self.affected_buildings.keys()  # e.g. flooded, wet, dry
-        attributes = ['Building type']
+        attributes = [tr('Building type')]
         for name in impact_names:
             attributes.append(tr(name))
         # Only show not affected building row if the IF does not use custom
@@ -209,7 +209,7 @@ class BuildingExposureReportMixin(ReportMixin):
                             building_type].values()[0])
                 else:
                     impact_subtotals.append(0)
-            row.append(building_type_name.capitalize())
+            row.append(tr(building_type_name.capitalize()))
             # Only show not affected building row if the IF does not use custom
             # affected categories
             if self._affected_categories == self.affected_buildings.keys():
@@ -282,20 +282,12 @@ class BuildingExposureReportMixin(ReportMixin):
         :returns: The impact report data.
         :rtype: dict
         """
-        question = self.question
-        impact_summary = self.impact_summary()
-        impact_table = self.buildings_breakdown()
-        action_checklist = self.action_checklist()
-        notes = self.notes()
-
-        return {
-            'exposure': 'building',
-            'question': question,
-            'impact summary': impact_summary,
-            'impact table': impact_table,
-            'action check list': action_checklist,
-            'notes': notes
+        extra_data = {
+            'impact table': self.impact_table()
         }
+        data = super(BuildingExposureReportMixin, self).generate_data()
+        data.update(extra_data)
+        return data
 
     @property
     def schools_closed(self):
@@ -410,26 +402,3 @@ class BuildingExposureReportMixin(ReportMixin):
         :rtype: int
         """
         return sum(self.buildings.values())
-
-    def _consolidate_to_other(self):
-        """Consolidate small building usage groups within self.threshold.
-
-        Small groups will be grouped together in the "other" group.
-        """
-        other = tr('Other')
-        for (usage, value) in self.buildings.items():
-            if value >= self.building_report_threshold:
-                continue
-            if other not in self.buildings.keys():
-                self.buildings[other] = 0
-                for category in self.affected_buildings.keys():
-                    other_dict = OrderedDict(
-                        [(key, 0) for key in self._impact_breakdown])
-                    self.affected_buildings[category][other] = other_dict
-            self.buildings[other] += value
-            del self.buildings[usage]
-            for category in self.affected_buildings.keys():
-                for key in self._impact_breakdown:
-                    old = self.affected_buildings[category][usage][key]
-                    self.affected_buildings[category][other][key] += old
-                del self.affected_buildings[category][usage]

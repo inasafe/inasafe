@@ -47,42 +47,26 @@ class RoadReportTemplate(AbstractRoadBuildingReportTemplate):
             impact_layer_path=impact_layer_path,
             json_file=json_file,
             impact_data=impact_data)
-        self.roads_breakdown = self.impact_data.get('impact table')
+        self.impact_table = self.impact_data.get('impact table')
 
     def format_impact_summary(self):
-        """The impact summary as per category
+        """Format impact summary.
 
         :returns: The impact summary.
-        :rtype: safe.message.Message
+        :rtype: safe.messaging.Message
         """
-        attributes = self.impact_summary['attributes']
-        fields = self.impact_summary['fields']
-
         message = m.Message(style_class='container')
         table = m.Table(style_class='table table-condensed table-striped')
         table.caption = None
-
-        row = m.Row()
-        row.add(m.Cell(tr('Summary by road type'), header=True))
-        for _ in attributes:
-            row.add(m.Cell('', header=True))
-
-        row = m.Row()
-        row.add(m.Cell(tr('Road Type'), header=True))
-        for affected_category in attributes:
-            row.add(m.Cell(tr(affected_category), header=True, align='right'))
-        table.add(row)
-
-        row = m.Row()
-        row.add(m.Cell(tr('All (m)')))
-        for total_affected_value in fields[0]:
-            row.add(m.Cell(
-                format_int(int(total_affected_value)), align='right'))
-
-        table.add(row)
-
+        for category in self.impact_summary['fields']:
+            row = m.Row()
+            row.add(m.Cell('%s (m)' % category[0], header=True))
+            row.add(m.Cell(format_int(int(category[1])), align='right'))
+            # For value field, if existed
+            if len(category) > 2:
+                row.add(m.Cell(format_int(int(category[2])), align='right'))
+            table.add(row)
         message.add(table)
-
         return message
 
     def format_breakdown(self):
@@ -91,7 +75,7 @@ class RoadReportTemplate(AbstractRoadBuildingReportTemplate):
         :returns: The roads breakdown report.
         :rtype: safe.message.Message
         """
-        road_breakdown = self.roads_breakdown
+        road_breakdown = self.impact_table
         attributes = road_breakdown['attributes']
         fields = road_breakdown['fields']
 
@@ -134,7 +118,7 @@ class RoadReportTemplate(AbstractRoadBuildingReportTemplate):
         row = m.Row()
         row.add(m.Cell(tr('Total (m)'), header=True))
         for field in impact_summary_fields:
-            for value in field:
+            for value in field[1:]:
                 row.add(m.Cell(
                     format_int(int(value)),
                     align='right',

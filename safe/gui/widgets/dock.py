@@ -58,6 +58,7 @@ from safe.utilities.resources import (
     resources_path,
     get_ui_class)
 from safe.utilities.qgis_utilities import (
+    add_above_layer,
     display_critical_message_bar,
     display_warning_message_bar,
     display_information_message_bar)
@@ -107,6 +108,7 @@ from safe.utilities.extent import Extent
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.utilities.unicode import get_unicode
 from safe.impact_template.utilities import get_report_template
+from safe.gui.widgets.message import missing_keyword_message
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 INFO_STYLE = styles.INFO_STYLE
@@ -1159,6 +1161,11 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
             # Start the analysis
             self.impact_function.run_analysis()
+        except KeywordNotFoundError as e:
+            self.hide_busy()
+            missing_keyword_message(self, e)
+            self.analysis_done.emit(False)
+            return  # Will abort the analysis if there is exception
         except InsufficientOverlapError as e:
             context = self.tr(
                 'A problem was encountered when trying to determine the '
@@ -1270,81 +1277,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         return impact_function
 
-    def add_above_layer(self, new_layer, *existing_layers):
-        """Add a layer (e.g. impact layer) above another layer in the legend.
-
-        .. versionadded:: 3.2
-
-        .. note:: This method works in QGIS 2.4 and better only. In
-            earlier versions it will just add the layer to the top of the
-            layer stack.
-
-        .. seealso:: issue #2322
-
-        :param existing_layers: Layers which the new layer
-            should be added above.
-        :type existing_layers: QgsMapLayer
-
-        :param new_layer: The new layer being added. An assumption is made
-            that the newly added layer is not already loaded in the legend
-            or the map registry.
-        :type new_layer: QgsMapLayer
-
-        """
-        # Some existing layers might be None, ie the aggregation layer #2948.
-        existing_layers = [l for l in existing_layers if l is not None]
-        if not len(existing_layers) or new_layer is None:
-            return
-
-        registry = QgsMapLayerRegistry.instance()
-
-        if QGis.QGIS_VERSION_INT < 20400:
-            # True flag adds layer directly to legend
-            registry.addMapLayer(existing_layer, True)
-            return
-
-        # False flag prevents layer being added to legend
-        registry.addMapLayer(new_layer, False)
-        minimum_index = len(QgsProject.instance().layerTreeRoot().children())
-        for layer in existing_layers:
-            index = self.layer_legend_index(layer)
-            if index < minimum_index:
-                minimum_index = index
-        root = QgsProject.instance().layerTreeRoot()
-        root.insertLayer(minimum_index, new_layer)
-
-    @staticmethod
-    def layer_legend_index(layer):
-        """Find out where in the legend layer stack a layer is.
-
-        .. note:: This function requires QGIS 2.4 or greater to work. In older
-            versions it will simply return 0.
-
-        .. version_added:: 3.2
-
-        :param layer: A map layer currently loaded in the legend.
-        :type layer: QgsMapLayer
-
-        :returns: An integer representing the z-order of the given layer in
-            the legend tree. If the layer cannot be found, or the QGIS version
-            is < 2.4 it will return 0.
-        :rtype: int
-        """
-        if QGis.QGIS_VERSION_INT < 20400:
-            return 0
-
-        root = QgsProject.instance().layerTreeRoot()
-        layer_id = layer.id()
-        current_index = 0
-        nodes = root.children()
-        for node in nodes:
-            # check if the node is a layer as opposed to a group
-            if isinstance(node, QgsLayerTreeLayer):
-                if layer_id == node.layerId():
-                    return current_index
-            current_index += 1
-        return current_index
-
     def completed(self):
         """Slot activated when the process is done.
         """
@@ -1356,6 +1288,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             LOGGER.debug(datetime.now())
             LOGGER.debug(self.impact_function is None)
             report = self.show_results()
+            self.restore_state()
         except Exception, e:  # pylint: disable=W0703
 
             # FIXME (Ole): This branch is not covered by the tests
@@ -1376,12 +1309,19 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         .. versionchanged:: 3.2 - removed parameters.
 
+        .. note:: If you update this function, please report your change to
+            safe.utilities.analysis_handler.show_results too.
+
         :returns: Provides a report for writing to the dock.
         :rtype: str
         """
+        qgis_exposure = self.get_exposure_layer()
+        qgis_hazard = self.get_hazard_layer()
+        qgis_aggregation = self.get_aggregation_layer()
+
         safe_impact_layer = self.impact_function.impact
         qgis_impact_layer = read_impact_layer(safe_impact_layer)
-        # self.layer_changed(qgis_impact_layer)
+
         keywords = self.keyword_io.read_keywords(qgis_impact_layer)
         json_path = os.path.splitext(qgis_impact_layer.source())[0] + '.json'
 
@@ -1459,21 +1399,21 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         # Insert the aggregation output above the input aggregation layer
         if self.show_intermediate_layers:
-            self.add_above_layer(
+            add_above_layer(
                 self.impact_function.aggregator.layer,
-                self.get_aggregation_layer())
+                qgis_aggregation)
             legend.setLayerVisible(self.impact_function.aggregator.layer, True)
 
         if self.hide_exposure_flag:
             # Insert the impact always above the hazard
-            self.add_above_layer(qgis_impact_layer, self.get_hazard_layer())
+            add_above_layer(qgis_impact_layer, qgis_hazard)
         else:
             # Insert the impact above the hazard and the exposure if
             # we don't hide the exposure. See #2899
-            self.add_above_layer(
+            add_above_layer(
                 qgis_impact_layer,
-                self.get_exposure_layer(),
-                self.get_hazard_layer())
+                qgis_exposure,
+                qgis_hazard)
 
         active_function = self.active_impact_function
         self.active_impact_function = active_function
@@ -1482,7 +1422,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         # In QGIS 2.14.2 and GDAL 1.11.3, if the exposure is in 3857,
         # the impact layer is in 54004, we need to change it. See issue #2790.
-        if self.get_exposure_layer().crs().authid() == 'EPSG:3857':
+        if qgis_exposure.crs().authid() == 'EPSG:3857':
             if qgis_impact_layer.crs().authid() != 'EPSG:3857':
                 epsg_3857 = QgsCoordinateReferenceSystem(3857)
                 qgis_impact_layer.setCrs(epsg_3857)
@@ -1493,13 +1433,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         if self.zoom_to_impact_flag:
             self.iface.zoomToActiveLayer()
         if self.hide_exposure_flag:
-            exposure_layer = self.get_exposure_layer()
-            legend.setLayerVisible(exposure_layer, False)
+            legend.setLayerVisible(qgis_exposure, False)
 
         # Make the layer visible. Might be hidden by default. See #2925
         legend.setLayerVisible(qgis_impact_layer, True)
-
-        self.restore_state()
 
         # Return text to display in report panel
         return report
@@ -1735,6 +1672,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 HashNotFoundError,
                 InvalidParameterError,
                 NoKeywordsFoundError,
+                MetadataReadError,
                 AttributeError):
             # LOGGER.info(e.message)
             # Added this check in 3.2 for #1861

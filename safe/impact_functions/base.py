@@ -370,7 +370,7 @@ class ImpactFunction(object):
 
         # Update the target field to a non-conflicting one
         if self._hazard.is_qgsvectorlayer():
-            self._target_field = get_non_conflicting_attribute_name(
+            self.target_field = get_non_conflicting_attribute_name(
                 self.target_field,
                 self._hazard.layer.dataProvider().fieldNameMap().keys()
             )
@@ -563,9 +563,18 @@ class ImpactFunction(object):
         """Property for the target_field of the impact layer.
 
         :returns: The target field in the impact layer in case it's a vector.
-        :rtype: basestring
+        :rtype: unicode, str
         """
         return self._target_field
+
+    @target_field.setter
+    def target_field(self, target_field):
+        """Setter for the target_field of the impact laye.
+
+        :param target_field: Field name.
+        :type target_field: str
+        """
+        self._target_field = target_field
 
     @property
     def tabulated_impact(self):
@@ -666,6 +675,11 @@ class ImpactFunction(object):
             print message
         print 'Task progress: %i of %i' % (current, maximum)
 
+    def run(self):
+        """Run method should be implemented in the impact function."""
+        raise NotImplementedError(
+            'The run method for this Impact Function is not implemented yet.')
+
     def run_analysis(self):
         """It runs the IF. The method must be called from a client class.
 
@@ -718,6 +732,10 @@ class ImpactFunction(object):
                 'smaller geographical area for your analysis, or using '
                 'rasters with a larger cell size.')
             analysis_error(self, e, message)
+        except KeywordNotFoundError, e:
+            # Need a specific catcher here, so that it doesn't go to the
+            # the broad exception
+            raise e
         except Exception, e:  # pylint: disable=W0703
             # FIXME (Ole): This branch is not covered by the tests
             analysis_error(
@@ -760,6 +778,49 @@ class ImpactFunction(object):
             result = check_memory_usage(adjusted_geo_extent, cell_size)
             if not result:
                 raise InsufficientMemoryWarning
+
+        # Keyword checking
+        message = tr(
+            'This analysis needs keyword <i>%s</i> in the <b>%s</b> layer, '
+            'but it does not  have it. Please assign it via the keyword '
+            'wizard')
+        # Hazard keyword
+        if self.hazard.keywords.get('vector_hazard_classification'):
+            if not self.hazard.keywords.get('value_map'):
+                raise KeywordNotFoundError(
+                    message % ('value_map', 'hazard'),
+                    layer_name=self.hazard.layer.name,
+                    keyword='value_map'
+                )
+            if not self.hazard.keywords.get('field'):
+                raise KeywordNotFoundError(
+                    message % ('field', 'hazard'),
+                    layer_name=self.hazard.layer.name,
+                    keyword='field'
+                )
+        elif self.hazard.keywords.get('raster_hazard_classification'):
+            if not self.hazard.keywords.get('value_map'):
+                raise KeywordNotFoundError(
+                    message % ('value_map', self.hazard.layer.name),
+                    layer_name=self.hazard.layer.name,
+                    keyword='value_map'
+                )
+        # Exposure keyword
+        exposure_class_field = self.exposure.keywords.get(
+            'exposure_class_fields')
+        if exposure_class_field:
+            if not self.exposure.keywords.get('value_mapping'):
+                raise KeywordNotFoundError(
+                    message % ('value_mapping', 'exposure'),
+                    layer_name=self.hazard.layer.name,
+                    keyword='value_mapping'
+                )
+            if not self.exposure.keywords.get(exposure_class_field):
+                raise KeywordNotFoundError(
+                    message % (exposure_class_field, 'exposure'),
+                    layer_name=self.hazard.layer.name,
+                    keyword='value_mapping'
+                )
 
     def _prepare(self):
         """Prepare this impact function for running the analysis.

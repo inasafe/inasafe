@@ -698,20 +698,19 @@ def load_standard_layers(dock=None):
         standard_data_path('hazard', 'tsunami_wgs84.tif'),
         standard_data_path('hazard', 'earthquake.tif'),
         standard_data_path('hazard', 'ash_raster_wgs84.tif'),
-        standard_data_path('exposure', 'landcover.shp'),
         standard_data_path('exposure', 'building-points.shp'),
         standard_data_path('exposure', 'buildings.shp'),
         standard_data_path('exposure', 'census.shp'),
         standard_data_path('exposure', 'roads.shp'),
+        standard_data_path('exposure', 'landcover.shp'),
         standard_data_path('exposure', 'pop_binary_raster_20_20.asc'),
-        standard_data_path('idp', 'potential-idp.shp'),
+        standard_data_path('boundaries', 'grid_jakarta.shp'),
         standard_data_path('boundaries', 'district_osm_jakarta.shp'),
     ]
     hazard_layer_count, exposure_layer_count = load_layers(
         file_list, dock=dock)
     # FIXME (MB) -2 is until we add the aggregation category because of
     # kabupaten_jakarta_singlepart not being either hazard nor exposure layer
-    # potiential-idp not being either hazard nor exposure layer
 
     number_exposure_hazard = hazard_layer_count + exposure_layer_count
     expected_number_exposure_hazard = len(file_list) - 2

@@ -48,6 +48,7 @@ class ClassifiedPolygonHazardPopulationFunction(
 
     def __init__(self):
         super(ClassifiedPolygonHazardPopulationFunction, self).__init__()
+        PopulationExposureReportMixin.__init__(self)
         # Hazard zones are all unique values from the hazard zone attribute
         self.hazard_zones = []
         # AG: Use the proper minimum needs, update the parameters

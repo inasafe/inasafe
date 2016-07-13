@@ -51,7 +51,7 @@ class BuildingReportTemplate(AbstractRoadBuildingReportTemplate):
     def format_impact_summary(self):
         """Format impact summary.
 
-        :returns: The impact impact summary.
+        :returns: The impact summary.
         :rtype: safe.messaging.Message
         """
         message = m.Message(style_class='container')
