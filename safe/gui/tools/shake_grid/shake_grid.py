@@ -169,11 +169,19 @@ class ShakeGrid(object):
         self.second = int(time_tokens[2])
 
         # right now only handles Indonesian Timezones
-        tz_dict = {
-            'WIB': timezone('Asia/Jakarta'),
-            'WITA': timezone('Asia/Makassar'),
-            'WIT': timezone('Asia/Jayapura')
-        }
+        if sys.platform == 'win32':
+            # This mapping is taken from tzlocal python library
+            tz_dict = {
+                'WIB': timezone('SE Asia Standard Time'),
+                'WITA': timezone('Singapore Standard Time'),
+                'WIT': timezone('Tokyo Standard Time')
+            }
+        else:
+            tz_dict = {
+                'WIB': timezone('Asia/Jakarta'),
+                'WITA': timezone('Asia/Makassar'),
+                'WIT': timezone('Asia/Jayapura')
+            }
 
         try:
             tzinfo = tz_dict.get(self.time_zone)
