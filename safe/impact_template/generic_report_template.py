@@ -11,12 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 """
 
-__author__ = 'ismailsunni'
-__project_name__ = 'inasafe-dev'
-__filename__ = 'generic_report_template.py'
-__date__ = '4/15/16'
-__copyright__ = 'imajimatika@gmail.com'
-
 import os
 import json
 from collections import OrderedDict
@@ -27,9 +21,17 @@ from safe.common.utilities import (
     unhumanize_number,
     format_int)
 
+__author__ = 'ismailsunni'
+__project_name__ = 'inasafe-dev'
+__filename__ = 'generic_report_template.py'
+__date__ = '4/15/16'
+__copyright__ = 'imajimatika@gmail.com'
+
 
 class GenericReportTemplate(object):
-    """Template Base Class.
+    """Generic Template Class.
+    This class is used by Roads and Buildings.
+    Landcover, Polygon People and Population have a child class.
 
     ..versionadded: 3.4
     """

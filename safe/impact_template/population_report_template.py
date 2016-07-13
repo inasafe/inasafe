@@ -10,18 +10,17 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+import safe.messaging as m
+from safe.messaging import styles
+from safe.utilities.utilities import tr
+from safe.common.utilities import format_int
+from safe.impact_template.generic_report_template import GenericReportTemplate
 
 __author__ = 'ismailsunni'
 __project_name__ = 'inasafe-dev'
 __filename__ = 'population_report_template'
 __date__ = '4/25/16'
 __copyright__ = 'imajimatika@gmail.com'
-
-import safe.messaging as m
-from safe.messaging import styles
-from safe.utilities.utilities import tr
-from safe.common.utilities import format_int
-from safe.impact_template.generic_report_template import GenericReportTemplate
 
 
 class PopulationReportTemplate(GenericReportTemplate):

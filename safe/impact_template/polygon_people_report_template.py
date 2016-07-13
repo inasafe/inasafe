@@ -158,8 +158,8 @@ class PolygonPeopleReportTemplate(GenericReportTemplate):
 
         return message
 
+    @staticmethod
     def impact_row(
-            self,
             area_name,
             affected,
             percent_affected,

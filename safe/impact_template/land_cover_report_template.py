@@ -10,13 +10,6 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
-
-__author__ = 'ismailsunni'
-__project_name__ = 'inasafe-dev'
-__filename__ = 'land_cover_report_template'
-__date__ = '5/9/16'
-__copyright__ = 'imajimatika@gmail.com'
-
 import logging
 from safe import messaging as m
 from safe.common.utilities import format_decimal
@@ -24,6 +17,12 @@ from safe.utilities.i18n import tr
 from safe.messaging.styles import INFO_STYLE, SUB_INFO_STYLE
 from safe.utilities.pivot_table import FlatTable, PivotTable
 from safe.impact_template.generic_report_template import GenericReportTemplate
+
+__author__ = 'ismailsunni'
+__project_name__ = 'inasafe-dev'
+__filename__ = 'land_cover_report_template'
+__date__ = '5/9/16'
+__copyright__ = 'imajimatika@gmail.com'
 
 LOGGER = logging.getLogger('InaSAFE')
 
