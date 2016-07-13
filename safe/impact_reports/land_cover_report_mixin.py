@@ -25,8 +25,7 @@ from safe.impact_reports.report_mixin_base import ReportMixin
 
 
 class LandCoverReportMixin(ReportMixin):
-    """Land cover specific report.
-    """
+    """Land cover specific report."""
 
     def __init__(
             self, question, impact_layer, target_field, ordered_columns,
@@ -56,6 +55,8 @@ class LandCoverReportMixin(ReportMixin):
         :type zone_field: str
 
         """
+        super(LandCoverReportMixin, self).__init__()
+        self.exposure_report = 'land cover'
         self.impact_layer = impact_layer
         self.target_field = target_field
         self.ordered_columns = ordered_columns
@@ -64,6 +65,10 @@ class LandCoverReportMixin(ReportMixin):
         self.zone_field = zone_field
         self.question = question
 
+    def impact_summary(self):
+        # Set this as empty string
+        return ''
+
     def generate_data(self):
         """Create a dictionary contains impact data.
 
@@ -71,17 +76,15 @@ class LandCoverReportMixin(ReportMixin):
         :rtype: dict
         """
 
-        return {
-            'exposure': 'land cover',
-            'question': self.question,
-            'impact summary': '',  # Set this as empty string
+        extra_data = {
             'zone field': self.zone_field,
             'ordered columns': self.ordered_columns,
             'affected columns': self.affected_columns,
             'impact table': self.impact_table(),
-            'action check list': self.action_checklist(),
-            'notes': self.notes()
         }
+        data = super(LandCoverReportMixin, self).generate_data()
+        data.update(extra_data)
+        return data
 
     def action_checklist(self):
         """Return the action check list section of the report.

@@ -58,6 +58,7 @@ from safe.utilities.resources import (
     resources_path,
     get_ui_class)
 from safe.utilities.qgis_utilities import (
+    add_above_layer,
     display_critical_message_bar,
     display_warning_message_bar,
     display_information_message_bar)
@@ -1362,7 +1363,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 LOGGER.debug(self.impact_function is None)
                 report = self.show_results()
             except Exception, e:  # pylint: disable=W0703
-
                 # FIXME (Ole): This branch is not covered by the tests
                 self.analysis_error(e, self.tr('Error loading impact layer.'))
             else:
@@ -1379,12 +1379,19 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         .. versionchanged:: 3.2 - removed parameters.
 
+        .. note:: If you update this function, please report your change to
+            safe.utilities.analysis_handler.show_results too.
+
         :returns: Provides a report for writing to the dock.
         :rtype: str
         """
+        qgis_exposure = self.get_exposure_layer()
+        qgis_hazard = self.get_hazard_layer()
+        qgis_aggregation = self.get_aggregation_layer()
+
         safe_impact_layer = self.impact_function.impact
         qgis_impact_layer = read_impact_layer(safe_impact_layer)
-        # self.layer_changed(qgis_impact_layer)
+
         keywords = self.keyword_io.read_keywords(qgis_impact_layer)
         json_path = os.path.splitext(qgis_impact_layer.source())[0] + '.json'
 
@@ -1462,21 +1469,21 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         # Insert the aggregation output above the input aggregation layer
         if self.show_intermediate_layers:
-            self.add_above_layer(
+            add_above_layer(
                 self.impact_function.aggregator.layer,
-                self.get_aggregation_layer())
+                qgis_aggregation)
             legend.setLayerVisible(self.impact_function.aggregator.layer, True)
 
         if self.hide_exposure_flag:
             # Insert the impact always above the hazard
-            self.add_above_layer(qgis_impact_layer, self.get_hazard_layer())
+            add_above_layer(qgis_impact_layer, qgis_hazard)
         else:
             # Insert the impact above the hazard and the exposure if
             # we don't hide the exposure. See #2899
-            self.add_above_layer(
+            add_above_layer(
                 qgis_impact_layer,
-                self.get_exposure_layer(),
-                self.get_hazard_layer())
+                qgis_exposure,
+                qgis_hazard)
 
         active_function = self.active_impact_function
         self.active_impact_function = active_function
@@ -1485,7 +1492,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         # In QGIS 2.14.2 and GDAL 1.11.3, if the exposure is in 3857,
         # the impact layer is in 54004, we need to change it. See issue #2790.
-        if self.get_exposure_layer().crs().authid() == 'EPSG:3857':
+        if qgis_exposure.crs().authid() == 'EPSG:3857':
             if qgis_impact_layer.crs().authid() != 'EPSG:3857':
                 epsg_3857 = QgsCoordinateReferenceSystem(3857)
                 qgis_impact_layer.setCrs(epsg_3857)
@@ -1496,13 +1503,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         if self.zoom_to_impact_flag:
             self.iface.zoomToActiveLayer()
         if self.hide_exposure_flag:
-            exposure_layer = self.get_exposure_layer()
-            legend.setLayerVisible(exposure_layer, False)
+            legend.setLayerVisible(qgis_exposure, False)
 
         # Make the layer visible. Might be hidden by default. See #2925
         legend.setLayerVisible(qgis_impact_layer, True)
-
-        self.restore_state()
 
         # Return text to display in report panel
         return report
@@ -1738,6 +1742,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 HashNotFoundError,
                 InvalidParameterError,
                 NoKeywordsFoundError,
+                MetadataReadError,
                 AttributeError):
             # LOGGER.info(e.message)
             # Added this check in 3.2 for #1861

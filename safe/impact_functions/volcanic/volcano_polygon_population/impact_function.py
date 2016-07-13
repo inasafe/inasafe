@@ -48,6 +48,7 @@ class VolcanoPolygonPopulationFunction(
 
     def __init__(self):
         super(VolcanoPolygonPopulationFunction, self).__init__()
+        PopulationExposureReportMixin.__init__(self)
         # AG: Use the proper minimum needs, update the parameters
         self.parameters = add_needs_parameters(self.parameters)
         self.no_data_warning = False

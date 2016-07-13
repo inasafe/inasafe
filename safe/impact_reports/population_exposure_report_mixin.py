@@ -48,7 +48,8 @@ class PopulationExposureReportMixin(ReportMixin):
             )]
 
         """
-        self._question = ''
+        super(PopulationExposureReportMixin, self).__init__()
+        self.exposure_report = 'population'
         self._total_population = 0
         self._unaffected_population = 0
         self._evacuation_category = 0
@@ -64,20 +65,12 @@ class PopulationExposureReportMixin(ReportMixin):
         :returns: The impact report data.
         :rtype: dict
         """
-        question = self.question
-        impact_summary = self.impact_summary()
-        minimum_needs = self.total_needs.copy()
-        action_checklist = self.action_checklist()
-        notes = self.notes()
-
-        return {
-            'exposure': 'population',
-            'question': question,
-            'impact summary': impact_summary,
-            'minimum needs': minimum_needs,
-            'action check list': action_checklist,
-            'notes': notes
+        extra_data = {
+            'minimum needs': self.total_needs.copy(),
         }
+        data = super(PopulationExposureReportMixin, self).generate_data()
+        data.update(extra_data)
+        return data
 
     def action_checklist(self):
         """Return the action check list section of the report.
@@ -228,26 +221,6 @@ class PopulationExposureReportMixin(ReportMixin):
         :type affected_population: dict
         """
         self._affected_population = affected_population
-
-    @property
-    def question(self):
-        """Get the impact function question.
-
-        :returns: The impact function question.
-        :rtype: basestring
-        """
-        if not hasattr(self, '_question'):
-            self._question = ''
-        return self._question
-
-    @question.setter
-    def question(self, question):
-        """Set the impact function question.
-
-        :param question: The question.
-        :type question: basestring
-        """
-        self._question = question
 
     @property
     def unaffected_population(self):

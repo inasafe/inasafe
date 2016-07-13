@@ -42,6 +42,7 @@ class ClassifiedPolygonHazardBuildingFunction(
 
     def __init__(self):
         super(ClassifiedPolygonHazardBuildingFunction, self).__init__()
+        BuildingExposureReportMixin.__init__(self)
 
         # Hazard zones are all unique values from the hazard zone attribute
         self.hazard_zones = []
@@ -49,9 +50,6 @@ class ClassifiedPolygonHazardBuildingFunction(
         self.question = tr(
             'In each of the hazard zones how many buildings might be '
             'affected.')
-
-        # From BuildingExposureReportMixin
-        self.building_report_threshold = 25
 
     def notes(self):
         """Return the notes section of the report as dict.
@@ -170,13 +168,6 @@ class ClassifiedPolygonHazardBuildingFunction(
         interpolated_layer.dataProvider().changeAttributeValues(changed_values)
 
         self.reorder_dictionaries()
-
-        # Lump small entries and 'unknown' into 'other' category
-        # Building threshold #2468
-        postprocessors = self.parameters['postprocessors']
-        building_postprocessors = postprocessors['BuildingType'][0]
-        self.building_report_threshold = building_postprocessors.value[0].value
-        self._consolidate_to_other()
 
         # Create style
         categories = self.affected_buildings.keys()
