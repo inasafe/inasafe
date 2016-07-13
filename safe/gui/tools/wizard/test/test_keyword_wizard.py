@@ -126,6 +126,21 @@ class WizardDialogTest(unittest.TestCase):
         text = get_question_text(constant)
         self.assertEqual(text, expected_text)
 
+    def test_invalid_keyword_layer(self):
+        layer = clone_raster_layer(
+            name='invalid_keyword_xml',
+            include_keywords=True,
+            source_directory=standard_data_path('other'),
+            extension='.tif')
+
+        # check the environment first
+        self.assertIsNotNone(layer.dataProvider())
+        # Initialize dialog
+        # noinspection PyTypeChecker
+        dialog = WizardDialog()
+        # It shouldn't raise any exception although the xml is invalid
+        dialog.set_keywords_creation_mode(layer)
+
     def test_keywords_creation_wizard(self):
         """Test how the widgets work."""
         expected_category_count = 3

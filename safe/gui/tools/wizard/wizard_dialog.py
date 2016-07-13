@@ -57,7 +57,8 @@ from safe.common.exceptions import (
     KeywordNotFoundError,
     InvalidParameterError,
     UnsupportedProviderError,
-    InaSAFEError)
+    InaSAFEError,
+    MetadataReadError)
 from safe.utilities.resources import get_ui_class, resources_path
 from safe.utilities.unicode import get_unicode
 
@@ -271,7 +272,8 @@ class WizardDialog(QDialog, FORM_CLASS):
                 NoKeywordsFoundError,
                 KeywordNotFoundError,
                 InvalidParameterError,
-                UnsupportedProviderError):
+                UnsupportedProviderError,
+                MetadataReadError):
             self.existing_keywords = None
         self.set_mode_label_to_keywords_creation()
 
