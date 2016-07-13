@@ -1,7 +1,7 @@
 # coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid -
-**Impact Road Template Class**
+**Impact Template Base Class**
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -11,23 +11,29 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 """
 
-__author__ = 'etiennetrimaille'
+__author__ = 'ismailsunni'
 __project_name__ = 'inasafe-dev'
-__filename__ = 'abstract_road_building_report_template'
-__date__ = '09/05/16'
-__copyright__ = 'etienne@kartoza.com'
+__filename__ = 'generic_report_template.py'
+__date__ = '4/15/16'
+__copyright__ = 'imajimatika@gmail.com'
 
-
+import os
+import json
+from collections import OrderedDict
 import safe.messaging as m
-from safe.common.utilities import format_int
-from safe.impact_template.template_base import TemplateBase
+from safe.messaging import styles
+from safe.common.exceptions import MissingImpactReport
+from safe.common.utilities import (
+    unhumanize_number,
+    format_int)
 
 
-class RoadBuildingReportTemplate(TemplateBase):
-    """Report Template for Road and Building.
+class GenericReportTemplate(object):
+    """Template Base Class.
 
     ..versionadded: 3.4
     """
+
     def __init__(
             self, impact_layer_path=None, json_file=None, impact_data=None):
         """Initialize Template.
@@ -41,11 +47,58 @@ class RoadBuildingReportTemplate(TemplateBase):
         :param impact_data: Dictionary that represent impact data.
         :type impact_data: dict
         """
-        super(RoadBuildingReportTemplate, self).__init__(
-            impact_layer_path=impact_layer_path,
-            json_file=json_file,
-            impact_data=impact_data)
+        # Check for impact layer path first
+        if impact_layer_path:
+            impact_data_path = os.path.splitext(impact_layer_path)[0] + '.json'
+            json_file = impact_data_path
+        if json_file:
+            if os.path.exists(json_file):
+                with open(json_file) as json_file:
+                    impact_data = json.load(
+                        json_file, object_pairs_hook=OrderedDict)
+
+        if not impact_data:
+            raise MissingImpactReport
+
+        self.impact_data = impact_data
+        self.question = impact_data.get('question')
+        self.impact_summary = impact_data.get('impact summary')
+        self.action_check_list = impact_data.get('action check list')
+        self.notes = impact_data.get('notes')
+        self.postprocessing = impact_data.get('post processing')
         self.impact_table = self.impact_data.get('impact table')
+
+    def generate_message_report(self):
+        """Generate impact report as message object.
+
+        :returns: The report.
+        :rtype: safe.messaging.Message
+        """
+        message = m.Message()
+        message.add(self.format_question())
+        message.add(self.format_impact_summary())
+        message.add(self.format_impact_table())
+        message.add(self.format_action_check_list())
+        message.add(self.format_notes())
+        if self.postprocessing:
+            message.add(self.format_postprocessing())
+        return message
+
+    def generate_html_report(self):
+        """Generate HTML impact report.
+
+        :returns: The report as HTML string.
+        :rtype: unicode
+        """
+        return self.generate_message_report().to_html()
+
+    def format_question(self):
+        """Format question.
+
+        :returns: The impact question.
+        :rtype: safe.messaging.Message
+        """
+        return m.Paragraph(self.question)
 
     def format_impact_summary(self):
         """Format impact summary.
@@ -59,18 +112,18 @@ class RoadBuildingReportTemplate(TemplateBase):
         for category in self.impact_summary['fields']:
             row = m.Row()
             row.add(m.Cell(category[0], header=True))
-            row.add(m.Cell(format_int(int(category[1])), align='right'))
+            row.add(m.Cell(self.format_int(category[1]), align='right'))
             # For value field, if existed
             if len(category) > 2:
-                row.add(m.Cell(format_int(int(category[2])), align='right'))
+                row.add(m.Cell(self.format_int(category[2]), align='right'))
             table.add(row)
         message.add(table)
         return message
 
     def format_impact_table(self):
-        """Breakdown by building type.
+        """Impact detailed report.
 
-        :returns: The buildings breakdown report.
+        :returns: The detailed report.
         :rtype: safe.messaging.Message
         """
         message = m.Message(style_class='container')
@@ -116,20 +169,37 @@ class RoadBuildingReportTemplate(TemplateBase):
 
         return message
 
-    def generate_message_report(self):
-        """Generate impact report as message object.
+    def format_action_check_list(self):
+        """Format action check list.
 
-        :returns: The report.
+        :returns: The action check list.
         :rtype: safe.messaging.Message
         """
-        message = m.Message()
-        message.add(self.format_question())
-        message.add(self.format_impact_summary())
-        message.add(self.format_impact_table())
-        message.add(self.format_action_check_list())
-        message.add(self.format_notes())
-        if self.postprocessing:
-            message.add(self.format_postprocessing())
+        message = m.Message(style_class='container')
+        message.add(m.Heading(
+            self.action_check_list['title'], **styles.INFO_STYLE))
+
+        checklist = m.BulletedList()
+        for text in self.action_check_list['fields']:
+            checklist.add(text)
+
+        message.add(checklist)
+        return message
+
+    def format_notes(self):
+        """Format notes..
+
+        :returns: The notes.
+        :rtype: safe.messaging.Message
+        """
+        message = m.Message(style_class='container')
+        message.add(m.Heading(self.notes['title'], **styles.INFO_STYLE))
+
+        checklist = m.BulletedList()
+        for field in self.notes['fields']:
+            checklist.add(field)
+
+        message.add(checklist)
         return message
 
     def format_postprocessing(self):
@@ -168,13 +238,13 @@ class RoadBuildingReportTemplate(TemplateBase):
                             val = int(value)
                             total += val
                             # Align right integers.
-                            row.add(m.Cell(format_int(val), align='right'))
+                            row.add(m.Cell(self.format_int(val), align='right'))
                         except ValueError:
                             # Catch no data value. Align left strings.
                             row.add(m.Cell(value, align='left'))
 
                     row.add(m.Cell(
-                        format_int(int(round(total))), align='right'))
+                        self.format_int(round(total)), align='right'))
                     table.add(row)
 
             message.add(table)
@@ -183,3 +253,12 @@ class RoadBuildingReportTemplate(TemplateBase):
                 message.add(m.EmphasizedText(note))
 
         return message
+
+    @staticmethod
+    def format_int(number):
+        """Get the correct integer format.
+
+        :param number: The number to format
+        :type number: float or integer
+        """
+        return format_int(int(number))

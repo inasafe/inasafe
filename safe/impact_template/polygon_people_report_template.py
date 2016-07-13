@@ -11,21 +11,21 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 """
 
+import safe.messaging as m
+from safe.messaging import styles
+from safe.utilities.utilities import tr
+from safe.common.utilities import format_int
+from safe.impact_template.generic_report_template import GenericReportTemplate
+from safe.impact_functions.core import population_rounding
+
 __author__ = 'ismailsunni'
 __project_name__ = 'inasafe-dev'
 __filename__ = 'people_polygon_report_template'
 __date__ = '4/28/16'
 __copyright__ = 'imajimatika@gmail.com'
 
-import safe.messaging as m
-from safe.messaging import styles
-from safe.utilities.utilities import tr
-from safe.common.utilities import format_int
-from safe.impact_template.template_base import TemplateBase
-from safe.impact_functions.core import population_rounding
 
-
-class PolygonPeopleReportTemplate(TemplateBase):
+class PolygonPeopleReportTemplate(GenericReportTemplate):
     """Report Template for Polygon People.
 
     ..versionadded: 3.4
@@ -68,33 +68,11 @@ class PolygonPeopleReportTemplate(TemplateBase):
 
         return message
 
-    def format_impact_summary(self):
-        """The impact summary as per category
-
-        :returns: The impact summary.
-        :rtype: safe.messaging.Message
-        """
-        message = m.Message(style_class='container')
-
-        table = m.Table(
-            style_class='table table-condensed table-striped')
-        table.caption = None
-        for category in self.impact_summary['fields']:
-            row = m.Row()
-            row.add(m.Cell(category[0], header=True))
-            row.add(m.Cell(
-                format_int(population_rounding(category[1])), align='right'))
-            # For value field, if existed
-            if len(category) > 2:
-                row.add(m.Cell(format_int(category[2]), align='right'))
-            table.add(row)
-
-        message.add(table)
-
-        return message
-
     def format_impact_table(self):
-        """
+        """Impact table.
+
+        :returns: The impact table.
+        :rtype: safe.messaging.Message
         """
         message = m.Message(style_class='container')
 
@@ -233,3 +211,50 @@ class PolygonPeopleReportTemplate(TemplateBase):
             align='right'))
 
         return row
+
+    @staticmethod
+    def format_int(number):
+        """Get the correct integer format.
+
+        :param number: The number to format
+        :type number: float or integer
+        """
+        return format_int(population_rounding(number))
+
+    def format_postprocessing(self):
+        """Format postprocessing.
+
+        :returns: The postprocessing.
+        :rtype: safe.messaging.Message
+        """
+        if not self.postprocessing:
+            return False
+        message = m.Message()
+        for k, v in self.postprocessing.items():
+            table = m.Table(
+                style_class='table table-condensed table-striped')
+            table.caption = v['caption']
+            header = m.Row()
+            for attribute in v['attributes']:
+                header.add(attribute)
+            table.add(header)
+
+            for field in v['fields']:
+                row = m.Row()
+                # First column is string
+                row.add(m.Cell(field[0]))
+                for value in field[1:]:
+                    try:
+                        val = int(value)
+                        # Align right integers.
+                        row.add(m.Cell(format_int(val), align='right'))
+                    except ValueError:
+                        # Catch no data value. Align left strings.
+                        row.add(m.Cell(value, align='left'))
+
+                table.add(row)
+            message.add(table)
+            for note in v['notes']:
+                message.add(m.EmphasizedText(note))
+
+        return message

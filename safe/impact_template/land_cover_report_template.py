@@ -23,12 +23,12 @@ from safe.common.utilities import format_decimal
 from safe.utilities.i18n import tr
 from safe.messaging.styles import INFO_STYLE, SUB_INFO_STYLE
 from safe.utilities.pivot_table import FlatTable, PivotTable
-from safe.impact_template.template_base import TemplateBase
+from safe.impact_template.generic_report_template import GenericReportTemplate
 
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class LandCoverReportTemplate(TemplateBase):
+class LandCoverReportTemplate(GenericReportTemplate):
     """Report Template for Land Cover.
 
     ..versionadded: 3.4

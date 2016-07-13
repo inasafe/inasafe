@@ -21,10 +21,10 @@ import safe.messaging as m
 from safe.messaging import styles
 from safe.utilities.utilities import tr
 from safe.common.utilities import format_int
-from safe.impact_template.template_base import TemplateBase
+from safe.impact_template.generic_report_template import GenericReportTemplate
 
 
-class PopulationReportTemplate(TemplateBase):
+class PopulationReportTemplate(GenericReportTemplate):
     """Report Template for Population.
 
     ..versionadded: 3.4
@@ -48,43 +48,7 @@ class PopulationReportTemplate(TemplateBase):
             impact_data=impact_data)
         self.minimum_needs = self.impact_data.get('minimum needs')
 
-    def generate_message_report(self):
-        """Generate impact report as message object.
-
-        :returns: The report.
-        :rtype: safe.messaging.Message
-        """
-        message = m.Message()
-        message.add(self.format_question())
-        message.add(self.format_impact_summary())
-        message.add(self.format_minimum_needs_breakdown())
-        message.add(self.format_action_check_list())
-        message.add(self.format_notes())
-        if self.postprocessing:
-            message.add(self.format_postprocessing())
-        return message
-
-    def format_impact_summary(self):
-        """The impact summary as per category.
-
-        :returns: The impact summary.
-        :rtype: safe.messaging.Message
-        """
-        message = m.Message(style_class='container')
-        table = m.Table(style_class='table table-condensed table-striped')
-        table.caption = None
-        for category in self.impact_summary['fields']:
-            row = m.Row()
-            row.add(m.Cell(category[0], header=True))
-            row.add(m.Cell(format_int(category[1]), align='right'))
-            # For value field, if existed
-            if len(category) > 2:
-                row.add(m.Cell(format_int(category[2]), align='right'))
-            table.add(row)
-        message.add(table)
-        return message
-
-    def format_minimum_needs_breakdown(self):
+    def format_impact_table(self):
         """Breakdown by population.
 
         :returns: The population breakdown report.
