@@ -77,7 +77,8 @@ EXPECTED_IF = [
     'Polygon volcano on buildings',
     'Point volcano on population',
     'Polygon volcano on population',
-    'Ash raster on land cover'
+    'Ash raster on land cover',
+    'Ash raster on population'
 ]
 
 
