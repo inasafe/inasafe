@@ -37,6 +37,7 @@ from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
 from safe.impact_reports.population_exposure_report_mixin import \
     PopulationExposureReportMixin
 from safe.utilities.keyword_io import definition
+from safe.definitions import no_data_warning
 
 
 class VolcanoPolygonPopulationFunction(
@@ -58,10 +59,8 @@ class VolcanoPolygonPopulationFunction(
         """Return the notes section of the report.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: dict
+        :rtype: list
         """
-        title = tr('Notes and assumptions')
-
         if get_needs_provenance_value(self.parameters) is None:
             needs_provenance = ''
         else:
@@ -76,24 +75,13 @@ class VolcanoPolygonPopulationFunction(
         ]
 
         if self.no_data_warning:
-            fields.append(tr(
-                'The layers contained "no data" values. This missing data '
-                'was carried through to the impact layer.'))
-            fields.append(tr(
-                '"No data" values in the impact layer were treated as 0 '
-                'when counting the affected or total population.'))
+            fields = fields + no_data_warning
 
-        fields.extend([
-            tr('All values are rounded up to the nearest integer in order to '
-               'avoid representing human lives as fractions.'),
-            tr('Population rounding is applied to all population values, '
-               'which may cause discrepancies when adding value.')
-        ])
-
-        return {
-            'title': title,
-            'fields': fields
-        }
+        # include any generic exposure specific notes from definitions.py
+        fields = fields + self.exposure_notes()
+        # include any generic hazard specific notes from definitions.py
+        fields = fields + self.hazard_notes()
+        return fields
 
     def run(self):
         """Run volcano population evacuation Impact Function.

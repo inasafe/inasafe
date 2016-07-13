@@ -56,9 +56,8 @@ class FloodPolygonRoadsFunction(
         """Return the notes section of the report.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: dict
+        :rtype: list
         """
-        title = tr('Notes and assumptions')
         hazard_terminology = tr('inundated')
         flood_value = [unicode(hazard_class)
                        for hazard_class in self.hazard_class_mapping[self.wet]]
@@ -68,14 +67,12 @@ class FloodPolygonRoadsFunction(
                 hazard_terminology,
                 self.hazard_class_attribute,
                 ', '.join(flood_value)),
-            tr('Roads are closed if they are %s.') % hazard_terminology,
-            tr('Roads are open if they are not %s.') % hazard_terminology
         ]
-
-        return {
-            'title': title,
-            'fields': fields
-        }
+        # include any generic exposure specific notes from definitions.py
+        fields = fields + self.exposure_notes()
+        # include any generic hazard specific notes from definitions.py
+        fields = fields + self.hazard_notes()
+        return fields
 
     def run(self):
         """Experimental impact function for flood polygons on roads."""

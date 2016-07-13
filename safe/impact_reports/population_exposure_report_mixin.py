@@ -72,41 +72,24 @@ class PopulationExposureReportMixin(ReportMixin):
         data.update(extra_data)
         return data
 
-    def action_checklist(self):
-        """Return the action check list section of the report.
+    def extra_actions(self):
+        """Return population specific actions for the report.
 
-        :return: The action check list as dict.
-        :rtype: dict
+        .. note:: Only calculated actions are implemented here, the rest
+            are defined in definitions.py.
+
+        .. versionadded:: 3.5
+
+        :return: The action check list as list.
+        :rtype: list
         """
-        title = tr('Action checklist')
         evacuated_people = format_int(
             population_rounding(self.total_affected_population))
         fields = [
-            tr('Which group or population is most affected?'),
-            tr('Who are the vulnerable people in the population and why?'),
-            tr('How will warnings be disseminated?'),
-            tr('What are people\'s likely movements?'),
-            tr('What are the security factors for the affected population?'),
-            tr('What are the security factors for relief responders?'),
-            tr('How will we reach evacuated people?'),
-            tr('What kind of food does the population normally consume?'),
-            tr('What are the critical non-food items required by the affected '
-               'population?'),
             tr('Are there enough water supply, sanitation, hygiene, food, '
                'shelter, medicines and relief items available for %s people?'
-                % evacuated_people),
-            tr('If yes, where are they located and how will we distribute '
-               'them?'),
-            tr('If no, where can we obtain additional relief items and how '
-               'will we distribute them?'),
-            tr('What are the related health risks?'),
-            tr('Who are the key people responsible for coordination?')
-        ]
-
-        return {
-            'title': title,
-            'fields': fields
-        }
+            % evacuated_people)]
+        return fields
 
     def impact_summary(self):
         """Create impact summary as data.

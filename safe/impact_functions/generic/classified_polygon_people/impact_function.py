@@ -69,7 +69,6 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
 
         # Use the proper minimum needs, update the parameters
         self.parameters = add_needs_parameters(self.parameters)
-
         self.all_areas_ids = {}
         self.all_affected_areas = {}
         self.all_areas_population = {}
@@ -82,23 +81,18 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         """Return the notes section of the report.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: dict
+        :rtype: list
         """
-        title = tr('Notes and assumptions')
         population = format_int(population_rounding(self.total_population))
         fields = [
             tr('The total people in the area is %s') % population,
-            tr('All values are rounded up to the nearest integer in order to '
-               'avoid representing human lives as fractions.'),
-            tr('People rounding is applied to all population values, which '
-               'may cause discrepancies when adding values.'),
-            tr('Null value will be considered as zero.')
+            tr('Null values will be considered as zero.')
         ]
-
-        return {
-            'title': title,
-            'fields': fields
-        }
+        # include any generic exposure specific notes from definitions.py
+        fields = fields + self.exposure_notes()
+        # include any generic hazard specific notes from definitions.py
+        fields = fields + self.hazard_notes()
+        return fields
 
     def run(self):
         """Risk plugin for classified polygon hazard on polygon population.

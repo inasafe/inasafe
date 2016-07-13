@@ -66,13 +66,6 @@ class AshRasterLandcoverFunction(ContinuousRHClassifiedVE):
         ]
         self.affected_hazard_columns = self.hazard_classes
 
-    def notes(self):
-        """Return the notes section of the report.
-
-        :return: The notes that should be attached to this impact report.
-        :rtype: safe.messaging.Message
-        """
-        return []   # TODO: what to put here?
 
     def run(self):
         """Run the impact function.

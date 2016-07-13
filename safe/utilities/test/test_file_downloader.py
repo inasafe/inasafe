@@ -45,7 +45,7 @@ class FileDownloaderTest(unittest.TestCase):
         # ...and changed on 28 Apr 2014 by Tim to hash and url  below
         # ...and change on 9 Des 2014 by Akbar to hash and url below
         unique_hash = '57e396baedfe1a034590339082b9abce'
-        url = 'https://www.google.com/images/srpr/logo11w.png'
+        url = 'http://www.google.com/images/srpr/logo11w.png'
         path = tempfile.mktemp()
 
         file_downloader = FileDownloader(url, path)
