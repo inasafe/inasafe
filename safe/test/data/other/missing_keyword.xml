@@ -47,7 +47,7 @@
       <gmd:citation>
         <gmd:CI_Citation>
           <gmd:title>
-            <gco:CharacterString>Floods</gco:CharacterString>
+            <gco:CharacterString>Missing Keyword</gco:CharacterString>
           </gmd:title>
           <gmd:date>
             <gmd:CI_Date>
@@ -176,7 +176,7 @@
             <gco:CharacterString>single_event</gco:CharacterString>
           </hazard_category>
           <raster_hazard_classification>
-            <gco:CharacterString/>
+            <gco:CharacterString>generic_raster_hazard_classes</gco:CharacterString>
           </raster_hazard_classification>
           <multipart_polygon>
             <gco:Boolean/>
@@ -188,19 +188,19 @@
             <gco:CharacterString/>
           </volcano_name_field>
           <field>
-            <gco:CharacterString>FLOODPRONE</gco:CharacterString>
+            <gco:CharacterString/>
           </field>
           <value_map>
-            <gco:Dictionary>{&quot;high&quot;: [&quot;YES&quot;]}</gco:Dictionary>
+            <gco:Dictionary/>
           </value_map>
           <vector_hazard_classification>
-            <gco:CharacterString>generic_vector_hazard_classes</gco:CharacterString>
+            <gco:CharacterString/>
           </vector_hazard_classification>
           <layer_geometry>
-            <gco:CharacterString>polygon</gco:CharacterString>
+            <gco:CharacterString>raster</gco:CharacterString>
           </layer_geometry>
           <hazard>
-            <gco:CharacterString>flood</gco:CharacterString>
+            <gco:CharacterString>generic</gco:CharacterString>
           </hazard>
           <scale>
             <gco:CharacterString/>
@@ -218,7 +218,7 @@
             <gco:CharacterString/>
           </datatype>
           <source>
-            <gco:CharacterString>NBS</gco:CharacterString>
+            <gco:CharacterString/>
           </source>
           <layer_purpose>
             <gco:CharacterString>hazard</gco:CharacterString>
@@ -250,7 +250,7 @@
           <gmd:onLine>
             <gmd:CI_OnlineResource>
               <gmd:linkage>
-                <gmd:URL>http://nbs.go.tz</gmd:URL>
+                <gmd:URL/>
               </gmd:linkage>
             </gmd:CI_OnlineResource>
           </gmd:onLine>

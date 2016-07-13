@@ -58,10 +58,8 @@ class TsunamiRasterBuildingFunction(
         """Return the notes section of the report as dict.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: dict
+        :rtype: list
         """
-        title = tr('Notes and assumptions')
-
         # Thresholds for tsunami hazard zone breakdown.
         low_max = self.parameters['low_threshold']
         medium_max = self.parameters['medium_threshold']
@@ -94,11 +92,11 @@ class TsunamiRasterBuildingFunction(
                'very high tsunami hazard zone.'),
             tr('Buildings are opened if they are in dry zone.')
         ]
-
-        return {
-            'title': title,
-            'fields': fields
-        }
+        # include any generic exposure specific notes from definitions.py
+        fields = fields + self.exposure_notes()
+        # include any generic hazard specific notes from definitions.py
+        fields = fields + self.hazard_notes()
+        return fields
 
     @property
     def _affected_categories(self):

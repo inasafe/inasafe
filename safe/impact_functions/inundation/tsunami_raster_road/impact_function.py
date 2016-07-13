@@ -290,9 +290,8 @@ class TsunamiRasterRoadsFunction(
         """Return the notes section of the report.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: safe.messaging.Message
+        :rtype: list
         """
-        title = tr('Notes and assumptions')
         # Thresholds for tsunami hazard zone breakdown.
         low_max = self.parameters['low_threshold']
         medium_max = self.parameters['medium_threshold']
@@ -325,11 +324,11 @@ class TsunamiRasterRoadsFunction(
                'high tsunami hazard zone.'),
             tr('Roads are opened if they are in dry zone.')
         ]
-
-        return {
-            'title': title,
-            'fields': fields
-        }
+        # include any generic exposure specific notes from definitions.py
+        fields = fields + self.exposure_notes()
+        # include any generic hazard specific notes from definitions.py
+        fields = fields + self.hazard_notes()
+        return fields
 
     def run(self):
         """Run the impact function.

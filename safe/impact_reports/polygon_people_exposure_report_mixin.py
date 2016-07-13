@@ -98,43 +98,26 @@ class PolygonPeopleExposureReportMixin(ReportMixin):
             'fields': fields
         }
 
-    def action_checklist(self):
-        """Return the action check list section of the report.
+    def extra_actions(self):
+        """Return the action specific to polygon people exposure.
+
+        .. note:: Only calculated actions are implemented here, the rest
+            are defined in definitions.py.
+
+        .. versionadded:: 3.5
 
         :return: The action check list as dict.
         :rtype: dict
         """
-        title = tr('Action checklist')
-
         population = population_rounding(
             sum(self.affected_population.values()))
 
         fields = [
-            tr('Which group or people is most affected?'),
-            tr('Who are the vulnerable people in the population and why?'),
-            tr('How will warnings be disseminated?'),
-            tr('What are people\'s likely movements?'),
-            tr('What are the security factors for the affected people?'),
-            tr('What are the security factors for relief responders?'),
-            tr('How will we reach evacuated people?'),
-            tr('What kind of food does the people normally consume?'),
-            tr('What are the critical non-food items required by the affected '
-               'people?'),
             tr('Are there enough water supply, sanitation, hygiene, food, '
                'shelter, medicines and relief items available for %s people?'
                 % format_int(population)),
-            tr('If yes, where are they located and how will we distribute '
-               'them?'),
-            tr('If no, where can we obtain additional relief items and how '
-               'will we distribute them?'),
-            tr('What are the related health risks?'),
-            tr('Who are the key people responsible for coordination?')
         ]
-
-        return {
-            'title': title,
-            'fields': fields
-        }
+        return fields
 
     @property
     def total_needs(self):

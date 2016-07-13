@@ -11,11 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 """
 
-__author__ = 'akbargumbira@gmail.com'
-__revision__ = '$Format:%H$'
-__date__ = '15/03/15'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
 
 import numpy
 import logging
@@ -86,7 +81,7 @@ from safe.storage.utilities import (
     buffered_bounding_box as get_buffered_extent,
     safe_to_qgis_layer,
     bbox_intersection)
-from safe.definitions import inasafe_keyword_version
+from safe.definitions import inasafe_keyword_version, exposure_all, hazard_all
 from safe.metadata.provenance import Provenance
 from safe.common.version import get_version
 from safe.common.signals import (
@@ -106,6 +101,12 @@ SUGGESTION_STYLE = styles.SUGGESTION_STYLE
 WARNING_STYLE = styles.WARNING_STYLE
 LOGO_ELEMENT = m.Brand()
 LOGGER = logging.getLogger('InaSAFE')
+
+__author__ = 'akbargumbira@gmail.com'
+__revision__ = '$Format:%H$'
+__date__ = '15/03/15'
+__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
+                 'Disaster Reduction')
 
 
 class ImpactFunction(object):
@@ -145,6 +146,8 @@ class ImpactFunction(object):
         self._parameters = self._metadata.parameters()
         # Layer representing hazard e.g. flood
         self._hazard = None
+        # Optional vector attribute used to indicate hazard zone
+        self.hazard_zone_attribute = None
         # Layer representing people / infrastructure that are exposed
         self._exposure = None
         # Layer used for aggregating results by area / district
@@ -410,6 +413,133 @@ class ImpactFunction(object):
                 self.exposure.layer.dataProvider().fieldNameMap().keys()
             )
 
+    def exposure_actions(self):
+        """Get the exposure specific actions defined in definitions.
+
+        This method will do a lookup in definitions.py and return the
+        exposure definition specific actions dictionary.
+
+        This is a helper function to make it
+        easy to get exposure specific actions from the definitions metadata.
+
+        .. versionadded:: 3.5
+
+        :returns: A list like e.g. safe.definitions.exposure_land_cover[
+            'actions']
+        :rtype: list, None
+        """
+        exposure_name = self.exposure.keyword('exposure')
+        for exposure in exposure_all:
+            try:
+                if exposure['key'] == exposure_name:
+                    return exposure['actions']
+            except KeyError:
+                pass
+        return None
+
+    def exposure_notes(self):
+        """Get the exposure specific notes defined in definitions.
+
+        This method will do a lookup in definitions.py and return the
+        exposure definition specific notes dictionary.
+
+        This is a helper function to make it
+        easy to get exposure specific notes from the definitions metadata.
+
+        .. versionadded:: 3.5
+
+        :returns: A list like e.g. safe.definitions.exposure_land_cover[
+            'notes']
+        :rtype: list, None
+        """
+        exposure_name = self.exposure.keyword('exposure')
+        for exposure in exposure_all:
+            try:
+                if exposure['key'] == exposure_name:
+                    return exposure['notes']
+            except KeyError:
+                pass
+        return None
+
+    def hazard_actions(self):
+        """Get the hazard specific actions defined in definitions.
+
+        This method will do a lookup in definitions.py and return the
+        hazard definition specific actions dictionary.
+
+        This is a helper function to make it
+        easy to get hazard specific actions from the definitions metadata.
+
+        .. versionadded:: 3.5
+
+        :returns: A list like e.g. safe.definitions.hazard_land_cover[
+            'actions']
+        :rtype: list, None
+        """
+        hazard_name = self.hazard.keyword('hazard')
+        for hazard in hazard_all:
+            try:
+                if hazard['key'] == hazard_name:
+                    return hazard['actions']
+            except KeyError:
+                pass
+        return None
+
+    def hazard_notes(self):
+        """Get the hazard specific notes defined in definitions.
+
+        This method will do a lookup in definitions.py and return the
+        hazard definition specific notes dictionary.
+
+        This is a helper function to make it
+        easy to get hazard specific notes from the definitions metadata.
+
+        .. versionadded:: 3.5
+
+        :returns: A list like e.g. safe.definitions.hazard_land_cover[
+            'notes']
+        :rtype: list, None
+        """
+        hazard_name = self.hazard.keyword('hazard')
+        for hazard in hazard_all:
+            try:
+                if hazard['key'] == hazard_name:
+                    return hazard['notes']
+            except KeyError:
+                pass
+        return None
+
+    def action_checklist(self):
+        """Return the action check list.
+
+        .. versionadded:: 3.5
+
+        :return: The action check list as dict.
+        :rtype: dict
+        """
+        # Include actions defined in the mixin
+        fields = self.extra_actions()
+        # include any generic exposure specific actions from definitions.py
+        fields = fields + self.exposure_actions()
+        # include any generic hazard specific actions from definitions.py
+        fields = fields + self.hazard_actions()
+        return fields
+
+    def notes(self):
+        """Return the notes section of the report.
+
+        .. versionadded:: 3.5
+
+        :return: The notes that should be attached to this impact report.
+        :rtype: list
+        """
+        fields = []  # Notes still to be defined for ASH
+        # include any generic exposure specific notes from definitions.py
+        fields = fields + self.exposure_notes()
+        # include any generic hazard specific notes from definitions.py
+        fields = fields + self.hazard_notes()
+        return fields
+
     @property
     def aggregation(self):
         """Property for the aggregation layer to be used for the analysis.
@@ -453,7 +583,11 @@ class ImpactFunction(object):
 
     @property
     def parameters(self):
-        """Get the parameter."""
+        """Get the parameters.
+
+        :returns: A list of parameters.
+        :rtype: list
+        """
         return self._parameters
 
     @parameters.setter
@@ -675,6 +809,18 @@ class ImpactFunction(object):
             print message
         print 'Task progress: %i of %i' % (current, maximum)
 
+    def run(self):
+        """Pure virtual method that should be implemented by subclasses.
+
+        .. versionadded:: 3.5
+
+        :returns: Exception - you should implement this in the base class
+            rather.
+        :rtype: NotImplementedError
+        """
+        raise NotImplementedError(
+                'The run method for this Impact Function is not implemented yet.')
+
     def run_analysis(self):
         """It runs the IF. The method must be called from a client class.
 
@@ -717,7 +863,7 @@ class ImpactFunction(object):
                 'compatible with InaSAFE\'s current requirements.'))
             report.add(check_list)
             send_static_message(self, report)
-            send_analysis_done_signal(self)
+            send_analysis_done_signal(self, zero_impact=True)
             return
         except MemoryError, e:
             message = tr(
@@ -727,6 +873,10 @@ class ImpactFunction(object):
                 'smaller geographical area for your analysis, or using '
                 'rasters with a larger cell size.')
             analysis_error(self, e, message)
+        except KeywordNotFoundError, e:
+            # Need a specific catcher here, so that it doesn't go to the
+            # the broad exception
+            raise e
         except Exception, e:  # pylint: disable=W0703
             # FIXME (Ole): This branch is not covered by the tests
             analysis_error(
@@ -770,6 +920,49 @@ class ImpactFunction(object):
             if not result:
                 raise InsufficientMemoryWarning
 
+        # Keyword checking
+        message = tr(
+            'This analysis needs keyword <i>%s</i> in the <b>%s</b> layer, '
+            'but it does not  have it. Please assign it via the keyword '
+            'wizard')
+        # Hazard keyword
+        if self.hazard.keywords.get('vector_hazard_classification'):
+            if not self.hazard.keywords.get('value_map'):
+                raise KeywordNotFoundError(
+                    message % ('value_map', 'hazard'),
+                    layer_name=self.hazard.layer.name,
+                    keyword='value_map'
+                )
+            if not self.hazard.keywords.get('field'):
+                raise KeywordNotFoundError(
+                    message % ('field', 'hazard'),
+                    layer_name=self.hazard.layer.name,
+                    keyword='field'
+                )
+        elif self.hazard.keywords.get('raster_hazard_classification'):
+            if not self.hazard.keywords.get('value_map'):
+                raise KeywordNotFoundError(
+                    message % ('value_map', self.hazard.layer.name),
+                    layer_name=self.hazard.layer.name,
+                    keyword='value_map'
+                )
+        # Exposure keyword
+        exposure_class_field = self.exposure.keywords.get(
+            'exposure_class_fields')
+        if exposure_class_field:
+            if not self.exposure.keywords.get('value_mapping'):
+                raise KeywordNotFoundError(
+                    message % ('value_mapping', 'exposure'),
+                    layer_name=self.hazard.layer.name,
+                    keyword='value_mapping'
+                )
+            if not self.exposure.keywords.get(exposure_class_field):
+                raise KeywordNotFoundError(
+                    message % (exposure_class_field, 'exposure'),
+                    layer_name=self.hazard.layer.name,
+                    keyword='value_mapping'
+                )
+
     def _prepare(self):
         """Prepare this impact function for running the analysis.
 
@@ -798,6 +991,7 @@ class ImpactFunction(object):
             # Make hazard layer by buffering the point.
             # noinspection PyTypeChecker
             radii = self.parameters['distances'].value
+            # noinspection PyTypeChecker
             self.hazard = buffer_points(
                 qgis_layer,
                 radii,

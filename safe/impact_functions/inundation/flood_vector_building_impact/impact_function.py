@@ -55,9 +55,8 @@ class FloodPolygonBuildingFunction(
         """Return the notes section of the report as dict.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: dict
+        :rtype: notes
         """
-        title = tr('Notes and assumptions')
         hazard_classes_string = ', '.join(
             [unicode(hazard_class) for hazard_class in
              self.hazard_class_mapping[self.wet]])
@@ -65,11 +64,11 @@ class FloodPolygonBuildingFunction(
             tr('Buildings are flooded when in a region with field "%s" in '
                '"%s".') % (self.hazard_class_attribute, hazard_classes_string)
         ]
-
-        return {
-            'title': title,
-            'fields': fields
-        }
+        # include any generic exposure specific notes from definitions.py
+        fields = fields + self.exposure_notes()
+        # include any generic hazard specific notes from definitions.py
+        fields = fields + self.hazard_notes()
+        return fields
 
     def run(self):
         """Experimental impact function."""
