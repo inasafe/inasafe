@@ -819,7 +819,7 @@ class ImpactFunction(object):
         :rtype: NotImplementedError
         """
         raise NotImplementedError(
-                'The run method for this Impact Function is not implemented yet.')
+            'The run method for this Impact Function is not implemented yet.')
 
     def run_analysis(self):
         """It runs the IF. The method must be called from a client class.

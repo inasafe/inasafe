@@ -98,7 +98,6 @@ class TestEarthquakeBuildingFunction(unittest.TestCase):
         for item in not_expected:
             self.assertNotIn(item, action_checklist)
 
-
     def test_filter(self):
         """TestEarthquakeBuildingFunction: Test filtering IF"""
         hazard_keywords = {

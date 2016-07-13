@@ -66,7 +66,6 @@ class AshRasterLandcoverFunction(ContinuousRHClassifiedVE):
         ]
         self.affected_hazard_columns = self.hazard_classes
 
-
     def run(self):
         """Run the impact function.
 

@@ -239,7 +239,8 @@ class GenericReportTemplate(object):
                             val = int(value)
                             total += val
                             # Align right integers.
-                            row.add(m.Cell(self.format_int(val), align='right'))
+                            row.add(m.Cell(
+                                self.format_int(val), align='right'))
                         except ValueError:
                             # Catch no data value. Align left strings.
                             row.add(m.Cell(value, align='left'))
