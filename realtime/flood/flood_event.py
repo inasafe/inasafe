@@ -20,13 +20,10 @@ from qgis.core import (
     QgsRasterLayer,
     QgsVectorFileWriter,
     QgsField,
-    QgsExpression,
     QgsPalLabeling,
     QgsComposition,
     QgsCoordinateReferenceSystem,
     QgsProject)
-from openlayers_plugin.openlayers_plugin import OpenlayersPlugin
-from openlayers_plugin.weblayers.map_quest import OlMapQuestOSMLayer
 from realtime.exceptions import PetaJakartaAPIError, MapComposerError
 from realtime.flood.dummy_source_api import DummySourceAPI
 from realtime.flood.peta_jakarta_api import PetaJakartaAPI
@@ -40,13 +37,10 @@ from safe.impact_functions.impact_function_manager import \
     ImpactFunctionManager
 from safe.storage.core import read_layer, read_qgis_layer
 from safe.utilities.keyword_io import KeywordIO
-from safe.utilities.styling import set_vector_categorized_style, \
-    set_vector_graduated_style, setRasterStyle
 from safe.common.utilities import format_int
 from safe.impact_functions.core import population_rounding
 
 __author__ = 'Rizky Maulana Nugraha <lana.pcfre@gmail.com>'
-
 __date__ = '11/24/15'
 
 

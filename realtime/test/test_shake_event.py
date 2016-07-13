@@ -32,7 +32,6 @@ from realtime.push_rest import InaSAFEDjangoREST
 from realtime.earthquake.push_shake import \
     push_shake_event_to_rest
 from realtime.earthquake.shake_event import ShakeEvent
-from realtime.earthquake.make_map import process_event
 from realtime.utilities import base_data_dir
 from realtime.utilities import (
     shakemap_extract_dir,

@@ -1,0 +1,19 @@
+<GDAL_WMS>
+	<Service name="TMS">
+		<ServerUrl>http://services.arcgisonline.com/arcgis/rest/services/Ocean/World_Ocean_Base/MapServer/tile/${z}/${y}/${x}</ServerUrl>
+	</Service>
+	<DataWindow>
+		<UpperLeftX>-20037508.3428</UpperLeftX>
+		<UpperLeftY>20037508.3428</UpperLeftY>
+		<LowerRightX>20037508.3428</LowerRightX>
+		<LowerRightY>-20037508.3428</LowerRightY>
+		<TileLevel>16</TileLevel>
+		<TileCountX>1</TileCountX>
+		<TileCountY>1</TileCountY>
+		<YOrigin>top</YOrigin>
+	</DataWindow>
+	<Projection>EPSG:3857</Projection>
+	<BlockSizeX>256</BlockSizeX>
+	<BlockSizeY>256</BlockSizeY>
+	<Cache />
+</GDAL_WMS>
