@@ -47,14 +47,15 @@ def missing_keyword_message(sender, missing_keyword_exception):
         'There is missing keyword that needed for this analysis.')
     detail_heading = m.Heading(
         tr('Detail'), **DETAILS_STYLE)
-    detail = tr(
-        'The missing keyword is <i>%s</i> in your <b>%s</b> layer.' % (
-            missing_keyword_exception.keyword,
-            missing_keyword_exception.layer_name
-        )
-    )
     suggestion_heading = m.Heading(
         tr('Suggestion'), **DETAILS_STYLE)
+    detail = tr(
+        'The layer <b>%s</b> is missing the keyword <i>%s</i>.'
+         % (
+            missing_keyword_exception.layer_name,
+            missing_keyword_exception.keyword
+        )
+    )
     suggestion = m.Paragraph(
             tr('Please use the keyword wizard to update the keywords. You '
                'can open the wizard by clicking on the '),
