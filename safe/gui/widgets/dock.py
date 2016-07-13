@@ -1666,6 +1666,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 HashNotFoundError,
                 InvalidParameterError,
                 NoKeywordsFoundError,
+                MetadataReadError,
                 AttributeError):
             # LOGGER.info(e.message)
             # Added this check in 3.2 for #1861
