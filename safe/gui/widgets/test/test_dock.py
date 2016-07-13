@@ -40,6 +40,7 @@ from safe.test.utilities import get_qgis_app, get_dock
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from safe.impact_functions.loader import register_impact_functions
 from safe.common.utilities import format_int, unique_filename
+from safe.utilities.qgis_utilities import add_above_layer, layer_legend_index
 from safe.test.utilities import (
     standard_data_path,
     load_standard_layers,
@@ -348,7 +349,7 @@ class TestDock(TestCase):
             function='Need evacuation',
             function_id='FloodEvacuationRasterHazardFunction')
         layer = self.dock.get_exposure_layer()
-        index = self.dock.layer_legend_index(layer)
+        index = layer_legend_index(layer)
         self.assertEqual(index, 15)
 
     @unittest.expectedFailure
@@ -367,7 +368,7 @@ class TestDock(TestCase):
         layer_path = join(TESTDATA, 'polygon_0.shp')
         new_layer = QgsVectorLayer(layer_path, 'foo', 'ogr')
         exposure_layer = self.dock.get_exposure_layer()
-        self.dock.add_above_layer(new_layer, exposure_layer)
+        add_above_layer(new_layer, exposure_layer)
         root = QgsProject.instance().layerTreeRoot()
         id_list = root.findLayerIds()
         self.assertIn(new_layer.id(), id_list)

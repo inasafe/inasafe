@@ -700,6 +700,10 @@ class WizardDialog(QDialog, FORM_CLASS):
                     self.layer.name()):
                 QgsMapLayerRegistry.instance().addMapLayers([self.layer])
 
+                # Make the layer visible. Might be hidden by default. See #2925
+                legend = self.iface.legendInterface()
+                legend.setLayerVisible(self.layer, True)
+
         # After the extent selection, save the extent and disconnect signals
         if current_step == self.step_fc_extent:
             self.step_fc_extent.write_extent()

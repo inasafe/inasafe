@@ -135,10 +135,10 @@ class WizardDialogTest(unittest.TestCase):
 
         # check the environment first
         self.assertIsNotNone(layer.dataProvider())
-        print layer.source()
         # Initialize dialog
         # noinspection PyTypeChecker
         dialog = WizardDialog()
+        # It shouldn't raise any exception although the xml is invalid
         dialog.set_keywords_creation_mode(layer)
 
     def test_keywords_creation_wizard(self):
