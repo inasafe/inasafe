@@ -55,6 +55,20 @@ class TestAshRasterPopulationFunction(unittest.TestCase):
         function.exposure = SafeLayer(exposure_layer)
         function.run()
         impact = function.impact
+        expected = [
+            [u'Population in very low hazard zone', '0'],
+            [u'Population in medium hazard zone',
+             '1,400'],
+            [u'Population in high hazard zone', '20'],
+            [u'Population in very high hazard zone', '0'],
+            [u'Population in low hazard zone', '8,500'],
+            [u'Total affected population', '9,900'],
+            [u'Unaffected population', '0'],
+            [u'Total population', '9,900'],
+            [u'Population needing evacuation <sup>1</sup>', '9,900']
+        ]
+        self.assertListEqual(
+            expected, impact.impact_data['impact summary']['fields'])
 
     def test_keywords(self):
         """Test filtering IF from layer keywords"""
