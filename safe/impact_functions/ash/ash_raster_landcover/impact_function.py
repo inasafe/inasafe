@@ -1,6 +1,6 @@
 # coding=utf-8
-"""InaSAFE Disaster risk tool by Australian Aid - Tsunami Raster Impact on
-Road
+"""InaSAFE Disaster risk tool by Australian Aid - Ash Raster on Land Cover
+Impact Function
 
 Contact : ole.moller.nielsen@gmail.com
 

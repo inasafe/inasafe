@@ -1,6 +1,6 @@
 # coding=utf-8
-"""InaSAFE Disaster risk tool by Australian Aid - Tsunami Raster Impact on
-Buildings
+"""InaSAFE Disaster risk tool by Australian Aid - Ash Raster on Land Cover
+Metadata
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -97,11 +97,6 @@ class AshRasterHazardLandCoverFunctionMetadata(ImpactFunctionMetadata):
             },
             'parameters': OrderedDict(
                 [
-                    # ('unaffected_threshold', unaffected_threshold()),
-                    # ('very_low_threshold', very_low_threshold()),
-                    # ('low_threshold', low_threshold()),
-                    # ('moderate_threshold', moderate_threshold()),
-                    # ('high_threshold', high_threshold())
                     ('group_threshold', threshold_group_parameter())
                 ])
         }

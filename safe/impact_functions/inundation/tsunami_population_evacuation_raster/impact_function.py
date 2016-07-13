@@ -18,7 +18,6 @@ from safe.impact_functions.core import (
     population_rounding,
     has_no_data
 )
-from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.impact_functions.inundation\
     .tsunami_population_evacuation_raster.metadata_definitions import \
     TsunamiEvacuationMetadata
@@ -49,7 +48,6 @@ class TsunamiEvacuationFunction(
     def __init__(self):
         super(TsunamiEvacuationFunction, self).__init__()
         PopulationExposureReportMixin.__init__(self)
-        self.impact_function_manager = ImpactFunctionManager()
 
         # AG: Use the proper minimum needs, update the parameters
         self.parameters = add_needs_parameters(self.parameters)
