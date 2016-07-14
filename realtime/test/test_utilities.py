@@ -36,7 +36,7 @@ from realtime.utilities import (
 
 # Clear away working dirs so we can be sure they
 # are actually created
-purge_working_data()
+# purge_working_data()
 
 # The logger is initialised in utilities.py by init
 LOGGER = logging.getLogger(realtime_logger_name())

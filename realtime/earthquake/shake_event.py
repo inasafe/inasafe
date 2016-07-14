@@ -1065,7 +1065,8 @@ class ShakeEvent(QObject):
         function = ImpactFunctionManager().get(function_id)
         function.hazard = clipped_hazard_layer
         function.exposure = clipped_exposure_layer
-        result = function.calculate_impact()
+        function.run_analysis()
+        result = function.impact
         try:
             fatalities = result.keywords['fatalities_per_mmi']
             affected = result.keywords['exposed_per_mmi']

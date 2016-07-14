@@ -273,7 +273,8 @@ class FloodEvent(QObject):
             if skip_process:
                 return
 
-            self.impact_layer = impact_function.calculate_impact()
+            impact_function.run_analysis()
+            self.impact_layer = impact_function.impact
             # impact_function.aggregator.set_layers(
             #     self.hazard_layer.as_qgis_native(),
             #     self.exposure_layer.as_qgis_native())

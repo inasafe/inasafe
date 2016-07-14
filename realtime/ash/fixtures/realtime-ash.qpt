@@ -73,16 +73,16 @@
     <customproperties/>
    </ComposerItem>
   </ComposerMap>
-  <ComposerPicture resizeMode="0" pictureRotation="0" pictureWidth="21.2814" file="./logo/badan-geologi.png" pictureHeight="21.412" mapId="-1" anchorPoint="4">
-   <ComposerItem pagey="9.81383" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="157.466" y="9.81383" visibility="1" zValue="17" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="22.05" outlineWidth="0.3" excludeFromExports="0" uuid="{55d0735b-37f7-4755-85ce-03ff10bce48d}" height="21.412" itemRotation="0" frame="false" pagex="157.466">
+  <ComposerPicture resizeMode="0" pictureRotation="0" pictureWidth="21.2814" file="/home/realtime/src/inasafe/realtime/ash/fixtures/logo/badan-geologi.png" pictureHeight="21.412" mapId="-1" anchorPoint="4">
+   <ComposerItem pagey="9.81383" page="1" id="logo-geologi" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="157.466" y="9.81383" visibility="1" zValue="17" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="22.05" outlineWidth="0.3" excludeFromExports="0" uuid="{55d0735b-37f7-4755-85ce-03ff10bce48d}" height="21.412" itemRotation="0" frame="false" pagex="157.466">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
     <dataDefinedSource expr="" field="" active="false" useExpr="true"/>
     <customproperties/>
    </ComposerItem>
   </ComposerPicture>
-  <ComposerPicture resizeMode="0" pictureRotation="0" pictureWidth="17.5459" file="./logo/bnpb.png" pictureHeight="17.6535" mapId="-1" anchorPoint="4">
-   <ComposerItem pagey="9.81383" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="28.2458" y="9.81383" visibility="1" zValue="16" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="17.5459" outlineWidth="0.3" excludeFromExports="0" uuid="{911e59ee-ca45-4117-ae4b-48958200cb65}" height="21.412" itemRotation="0" frame="false" pagex="28.2458">
+  <ComposerPicture resizeMode="0" pictureRotation="0" pictureWidth="17.5459" file="/home/realtime/src/inasafe/realtime/ash/fixtures/logo/bnpb.png" pictureHeight="17.6535" mapId="-1" anchorPoint="4">
+   <ComposerItem pagey="9.80322" page="1" id="logo-bnpb" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="28.2458" y="9.80322" visibility="1" zValue="16" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="17.5459" outlineWidth="0.3" excludeFromExports="0" uuid="{911e59ee-ca45-4117-ae4b-48958200cb65}" height="21.412" itemRotation="0" frame="false" pagex="28.2458">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
     <dataDefinedSource expr="" field="" active="false" useExpr="true"/>

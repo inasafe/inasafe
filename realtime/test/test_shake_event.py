@@ -146,7 +146,7 @@ class TestShakeEvent(unittest.TestCase):
         cities_layer = shake_event.local_cities_memory_layer()
         provider = cities_layer.dataProvider()
 
-        expected_feature_count = 2
+        expected_feature_count = 3
         self.assertEquals(provider.featureCount(), expected_feature_count)
         strings = []
         request = QgsFeatureRequest()
@@ -237,13 +237,15 @@ class TestShakeEvent(unittest.TestCase):
         # Get the os environment INASAFE_WORK_DIR if it exists
         inasafe_work_dir = base_data_dir()
 
-        expected_result = ('%s/shakemaps-extracted/20131105060809/impact'
-                           '-nearest.tif') % inasafe_work_dir
+        expected_result = os.path.join(
+            inasafe_work_dir,
+            'shakemaps-extracted/20131105060809/impact-nearest.tif')
         message = 'Got: %s, Expected: %s' % (result, expected_result)
         self.assertEqual(result, expected_result, message)
 
-        expected_result = ('%s/shakemaps-extracted/20131105060809/impacts'
-                           '.html') % inasafe_work_dir
+        expected_result = os.path.join(
+            inasafe_work_dir,
+            'shakemaps-extracted/20131105060809/impacts.html')
 
         message = 'Got: %s, Expected: %s' % (fatalities_html, expected_result)
         self.assertEqual(fatalities_html, expected_result, message)
@@ -304,11 +306,15 @@ class TestShakeEvent(unittest.TestCase):
         expected_string = [
             {
                 'name': 'Jayapura',
-                'population': '134'
+                'population': '256'
             },
             {
-                'name': 'Abepura',
-                'population': '62'
+                'name': 'Sentani',
+                'population': '111'
+            },
+            {
+                'name': 'Waris',
+                'population': '48'
             }
         ]
         for i in range(1, len(table.rows)):
@@ -325,9 +331,9 @@ class TestShakeEvent(unittest.TestCase):
 
         # Get the os environment INASAFE_WORK_DIR if it exists
         inasafe_work_dir = base_data_dir()
-        expected_path = (
-            '%s/shakemaps-extracted/20131105060809/affected-cities.html' %
-            inasafe_work_dir)
+        expected_path = os.path.join(
+            inasafe_work_dir,
+            'shakemaps-extracted/20131105060809/affected-cities.html')
         message = 'Got:\n%s\nExpected:\n%s\n' % (path, expected_path)
         self.assertEqual(path, expected_path, message)
 
@@ -345,9 +351,9 @@ class TestShakeEvent(unittest.TestCase):
 
         # Get the os environment INASAFE_WORK_DIR if it exists
         inasafe_work_dir = base_data_dir()
-        expected_result = (
-            '%s/shakemaps-extracted/20131105060809/impacts.html' %
-            inasafe_work_dir)
+        expected_result = os.path.join(
+            inasafe_work_dir,
+            'shakemaps-extracted/20131105060809/impacts.html')
         message = 'Got:\n%s\nExpected:\n%s' % (result, expected_result)
         self.assertEqual(result, expected_result, message)
 
@@ -376,7 +382,7 @@ class TestShakeEvent(unittest.TestCase):
             'longitude-name': u'Longitude',
             'located-label': u'Located',
             'distance-unit': u'km',
-            'bearing-compass': u'NW',
+            'bearing-compass': u'NNW',
             'elapsed-time-name': u'Elapsed time since event',
             'exposure-table-name': u'Estimated number of people '
                                    u'affected by each MMI level',
@@ -405,7 +411,7 @@ class TestShakeEvent(unittest.TestCase):
             'mmi': '3.6',
             'map-name': u'Estimated Earthquake Impact',
             'date': '5-11-2013',
-            'bearing-degrees': '-37.75\xb0',
+            'bearing-degrees': '-28.72\xb0',
             'formatted-date-time': '05-Nov-13 06:08:09 +0707',
             'distance': '0.02',
             'direction-relation': u'of',
@@ -434,7 +440,7 @@ class TestShakeEvent(unittest.TestCase):
             u"M 3.6 5-11-2013 6:8:9 "
             u"Latitude: 2°25′48.00″S "
             u"Longitude: 140°37′12.00″E "
-            u"Depth: 10.0km Located 0.02km NW of Papua")
+            u"Depth: 10.0km Located 0.02km NNW of Papua")
         result = shake_event.event_info()
         message = ('Got:\n%s\nExpected:\n%s\n' %
                    (result, expected_result))
@@ -565,7 +571,7 @@ class TestShakeEvent(unittest.TestCase):
         inasafe_django = InaSAFEDjangoREST()
         self.assertTrue(inasafe_django.is_logged_in)
 
-    def test_push_to_realtime(self):
+    def _push_to_realtime(self):
         # only do the test if realtime test server is configured
         inasafe_django = InaSAFEDjangoREST()
         if inasafe_django.is_configured():
@@ -636,7 +642,8 @@ class TestShakeEvent(unittest.TestCase):
             # generate report
             shake_event.render_map()
             # push to realtime django
-            push_shake_event_to_rest(shake_event)
+            retval = push_shake_event_to_rest(shake_event)
+            self.assertTrue(retval)
             # check shake event exists
             session = inasafe_django.rest
             response = session.earthquake(SHAKE_ID_2).GET()

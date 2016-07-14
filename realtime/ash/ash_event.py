@@ -5,7 +5,8 @@ import os
 import datetime
 import pytz
 from PyQt4.QtCore import QObject, QFileInfo, QUrl
-from PyQt4.QtXml.QDomDocument import QDomDocument
+from PyQt4.QtXml import QDomDocument
+from qgis._core import QgsMapSettings
 from qgis.core import QgsProject, QgsPalLabeling, \
     QgsCoordinateReferenceSystem, QgsMapLayerRegistry, QgsRasterLayer, \
     QgsComposition, QgsPoint
@@ -28,16 +29,21 @@ LOGGER = logging.getLogger(realtime_logger_name())
 class AshEvent(QObject):
 
     def __init__(self):
+        QObject.__init__(self)
         self.time = datetime.datetime.now().replace(tzinfo=pytz.timezone('Asia/Jakarta'))
         self.longitude = 124.2
         self.latitude = 6.9
         self.eruption_col_height = 7000
         self.province = 'East Java'
         self.alert_level = 'Siaga'
+        self.population_impact_path = None
         self.impacts_html_path = None
         self.nearby_html_path = None
         self.landcover_html_path = None
         self.map_report_path = None
+        self.impact_exists = None
+        self.report_path = None
+        self.locale = 'en'
 
     def event_dict(self):
         tz = pytz.timezone('Asia/Jakarta')
@@ -114,8 +120,8 @@ class AshEvent(QObject):
         # Set up the map renderer that will be assigned to the composition
         map_renderer = CANVAS.mapRenderer()
         # Set the labelling engine for the canvas
-        labelling_engine = QgsPalLabeling()
-        map_renderer.setLabelingEngine(labelling_engine)
+        # labelling_engine = QgsPalLabeling()
+        # map_renderer.setLabelingEngine(labelling_engine)
 
         # Enable on the fly CRS transformations
         map_renderer.setProjectionsEnabled(True)
@@ -143,10 +149,10 @@ class AshEvent(QObject):
         CANVAS.refresh()
         # add basemap layer
         # this code uses OpenlayersPlugin
-        base_map = QgsRasterLayer(
-            self.flood_fixtures_dir('indonesia-base.xml'))
-        layer_registry.addMapLayer(base_map, False)
-        CANVAS.refresh()
+        # base_map = QgsRasterLayer(
+        #     self.ash_fixtures_dir('indonesia-base.xml'))
+        # layer_registry.addMapLayer(base_map, False)
+        # CANVAS.refresh()
 
         template_path = self.ash_fixtures_dir('realtime-ash.qpt')
 
@@ -156,13 +162,9 @@ class AshEvent(QObject):
         document = QDomDocument()
         document.setContent(template_content)
 
-        # set destination CRS to Jakarta CRS
-        # EPSG:32748
-        # This allows us to use the scalebar in meter unit scale
-        crs = QgsCoordinateReferenceSystem('EPSG:32748')
-        map_renderer.setDestinationCrs(crs)
-
         # Now set up the composition
+        # map_settings = QgsMapSettings()
+        # composition = QgsComposition(map_settings)
         composition = QgsComposition(map_renderer)
 
         subtitution_map = self.event_dict()
@@ -179,7 +181,7 @@ class AshEvent(QObject):
         # get main map canvas on the composition and set extent
         map_impact = composition.getComposerItemById('map-impact')
         if map_impact:
-            map_impact.setNewExtent(map_impact.currentMapExtent())
+            map_impact.zoomToExtent(population_impact_layer.extent())
             map_impact.renderModeUpdateCachedImage()
         else:
             LOGGER.exception('Map canvas could not be found in template %s',
@@ -218,7 +220,7 @@ class AshEvent(QObject):
 
         # setup landcover table
         landcover_table = composition.getComposerItemById(
-            'table-nearby')
+            'table-landcover')
         if landcover_table is None:
             message = 'table-landcover composer item could not be found'
             LOGGER.exception(message)
