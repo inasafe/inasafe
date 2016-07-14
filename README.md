@@ -138,7 +138,7 @@ such damages.
 
 Thank you
 =========
-[![PyCharm](http://cdn.instantlogosearch.com/svg/svgporn/pycharm.svg)]
+[![PyCharm](https://cloud.githubusercontent.com/assets/1421861/16826865/4cde910c-49ab-11e6-95ae-48cf21f3a69f.png)]
 (https://www.jetbrains.com/pycharm) 
 
 We use [PyCharm] (https://www.jetbrains.com/pycharm)  for our python development work 
