@@ -6,10 +6,9 @@ import datetime
 import pytz
 from PyQt4.QtCore import QObject, QFileInfo, QUrl
 from PyQt4.QtXml import QDomDocument
-from qgis._core import QgsMapSettings
 from qgis.core import QgsProject, QgsPalLabeling, \
     QgsCoordinateReferenceSystem, QgsMapLayerRegistry, QgsRasterLayer, \
-    QgsComposition, QgsPoint
+    QgsComposition, QgsPoint, QgsMapSettings
 
 from realtime.exceptions import MapComposerError
 from realtime.utilities import realtime_logger_name
@@ -28,22 +27,58 @@ LOGGER = logging.getLogger(realtime_logger_name())
 
 class AshEvent(QObject):
 
-    def __init__(self):
+    def __init__(
+            self,
+            event_time=None,
+            volcano_name=None,
+            volcano_location=None,
+            eruption_height=None,
+            region=None,
+            alert_level=None,
+            locale=None,
+            working_dir=None,
+            hazard_path=None,
+            landcover_path=None,
+            cities_path=None,
+            airport_path=None):
         QObject.__init__(self)
-        self.time = datetime.datetime.now().replace(tzinfo=pytz.timezone('Asia/Jakarta'))
-        self.longitude = 124.2
-        self.latitude = 6.9
-        self.eruption_col_height = 7000
-        self.province = 'East Java'
-        self.alert_level = 'Siaga'
-        self.population_impact_path = None
-        self.impacts_html_path = None
-        self.nearby_html_path = None
-        self.landcover_html_path = None
-        self.map_report_path = None
+        if event_time:
+            self.time = event_time
+        else:
+            self.time = datetime.datetime.now().replace(tzinfo=pytz.timezone('Asia/Jakarta'))
+
+        # Check timezone awareness
+        if not self.time.tzinfo:
+            raise Exception('Need timezone aware object for event time')
+
+        self.volcano_name = volcano_name
+        self.volcano_location = volcano_location
+        if self.volcano_location:
+            self.longitude = self.volcano_location[0]
+            self.latitude = self.volcano_location[1]
+        else:
+            self.longitude = None
+            self.latitude = None
+        self.erupction_height = eruption_height
+        self.region = region
+        self.alert_level = alert_level
+        self.locale = locale
+        if not self.locale:
+            self.locale = 'en'
+
+        if not working_dir:
+            raise Exception("Working directory can't be empty")
+        self.working_dir = working_dir
+        self.hazard_path = hazard_path
+        self.population_html_path = self.working_dir_path('population-table.html')
+        self.nearby_html_path = self.working_dir_path('nearby-table.html')
+        self.landcover_html_path = self.working_dir_path('landcover-table.html')
+        self.map_report_path = self.working_dir_path('report.pdf')
         self.impact_exists = None
-        self.report_path = None
         self.locale = 'en'
+
+    def working_dir_path(self, path):
+        return os.path.join(self.working_dir, path)
 
     def event_dict(self):
         tz = pytz.timezone('Asia/Jakarta')
@@ -64,11 +99,11 @@ class AshEvent(QObject):
             'report-title': self.tr('Volcanic Ash Impact'),
             'report-timestamp': self.tr('Alert Level: %s %s') % (
                 self.alert_level, timestamp_string),
-            'report-province': self.tr('Province: %s') % (self.province,),
+            'report-province': self.tr('Province: %s') % (self.region,),
             'report-location': self.tr(
                 'Longitude %s Latitude %s;'
                 ' Eruption Column Height (a.s.l) - %d m') % (
-                longitude_string, latitude_string, self.eruption_col_height),
+                longitude_string, latitude_string, self.erupction_height),
             'report-elapsed': self.tr('Elapsed time since event %s hour(s) and %s minute(s)') % (elapsed_hour, elapsed_minute),
             'header-impact-table': self.tr('Potential impact at each fallout level'),
             'header-nearby-table': self.tr('Nearby places'),
@@ -111,8 +146,7 @@ class AshEvent(QObject):
             # Cannot generate report when no impact layer present
             return
 
-        project_path = os.path.join(
-            self.report_path, 'project-%s.qgs' % self.locale)
+        project_path = self.working_dir_path('project-%s.qgs' % self.locale)
         project_instance = QgsProject.instance()
         project_instance.setFileName(project_path)
         project_instance.read()
@@ -135,7 +169,7 @@ class AshEvent(QObject):
         layer_registry.removeAllMapLayers()
         # add impact layer
         population_impact_layer = read_qgis_layer(
-            self.population_impact_path, self.tr('People Affected'))
+            self.hazard_path, self.tr('People Affected'))
         layer_registry.addMapLayer(population_impact_layer, False)
         # add volcano layer
         volcano_layer = read_qgis_layer(
@@ -148,10 +182,9 @@ class AshEvent(QObject):
         CANVAS.setExtent(population_impact_layer.extent())
         CANVAS.refresh()
         # add basemap layer
-        # this code uses OpenlayersPlugin
-        # base_map = QgsRasterLayer(
-        #     self.ash_fixtures_dir('indonesia-base.xml'))
-        # layer_registry.addMapLayer(base_map, False)
+        base_map = QgsRasterLayer(
+            self.ash_fixtures_dir('indonesia-base.tif'))
+        layer_registry.addMapLayer(base_map, False)
         # CANVAS.refresh()
 
         template_path = self.ash_fixtures_dir('realtime-ash.qpt')
@@ -201,7 +234,7 @@ class AshEvent(QObject):
             message = 'Impacts QgsComposerHtml could not be found'
             LOGGER.exception(message)
             raise MapComposerError(message)
-        impacts_html.setUrl(QUrl(self.impacts_html_path))
+        impacts_html.setUrl(QUrl(self.population_html_path))
 
         # setup nearby table
         nearby_table = composition.getComposerItemById(
@@ -232,6 +265,18 @@ class AshEvent(QObject):
             LOGGER.exception(message)
             raise MapComposerError(message)
         landcover_html.setUrl(QUrl(self.landcover_html_path))
+
+        # setup logos
+        # logos_id = ['logo-bnpb', 'logo-geologi']
+        # for logo_id in logos_id:
+        #     logo_picture = composition.getComposerItemById(logo_id)
+        #     if logo_picture is None:
+        #         message = '%s composer item could not be found' % logo_id
+        #         LOGGER.exception(message)
+        #         raise MapComposerError(message)
+        #     pic_path = os.path.basename(logo_picture.picturePath())
+        #     pic_path = os.path.join('logo', pic_path)
+        #     logo_picture.setPicturePath(self.ash_fixtures_dir(pic_path))
 
         # map_overall = composition.getComposerItemById('map-overall')
         # if map_overall:

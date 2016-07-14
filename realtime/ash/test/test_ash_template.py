@@ -5,6 +5,10 @@ import os
 
 import shutil
 
+import datetime
+
+from pytz import timezone
+
 from realtime.ash.ash_event import AshEvent
 
 __author__ = 'Rizky Maulana Nugraha <lana.pcfre@gmail.com>'
@@ -22,13 +26,22 @@ class TestAshTemplate(unittest.TestCase):
         os.makedirs(self.data_dir('temp'))
 
     def test_process_pdf(self):
-        event = AshEvent()
+        event = AshEvent(
+            working_dir=self.data_dir('temp'),
+            volcano_name='Nama Gunung',
+            volcano_location=[124.2, 6.9],
+            eruption_height=7000,
+            event_time=datetime.datetime.now().replace(
+                tzinfo=timezone('Asia/Jakarta')),
+            region='East Java',
+            alert_level='Siaga',
+            hazard_path=self.data_dir('hazard.tif')
+        )
         event.impact_exists = True
-        event.report_path = self.data_dir('temp')
-        event.population_impact_path = self.data_dir('hazard.tif')
+        event.hazard_path = self.data_dir('hazard.tif')
         event.map_report_path = self.data_dir('temp/temp.pdf')
         event.nearby_html_path = self.data_dir('nearby_places.html')
-        event.impacts_html_path = self.data_dir('table_potential_impact.html')
+        event.population_html_path = self.data_dir('table_potential_impact.html')
         event.landcover_html_path = self.data_dir('land_cover_impact.html')
         event.generate_report()
 
