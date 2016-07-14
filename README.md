@@ -138,9 +138,10 @@ such damages.
 
 Thank you
 =========
+[![PyCharm](http://cdn.instantlogosearch.com/svg/svgporn/pycharm.svg)]
+(https://www.jetbrains.com/pycharm) 
 
-We use [![PyCharm](https://www.jetbrains.com/pycharm/docs/logo_pycharm.png)]
-(https://www.jetbrains.com/pycharm) for our python development work 
+We use [PyCharm] (https://www.jetbrains.com/pycharm)  for our python development work 
 
 JetBrains kindly sponsor the licenses for InaSAFE under their 'free for 
 open source projects' programme. Please support them by buying a professional 
