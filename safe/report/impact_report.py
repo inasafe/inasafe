@@ -24,6 +24,7 @@ from qgis.core import (
     QgsComposition,
     QgsRectangle,
     QgsMapLayer,
+    QgsComposerPicture,
     QgsComposerHtml,
     QgsComposerFrame)
 
