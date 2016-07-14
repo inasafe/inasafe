@@ -267,16 +267,16 @@ class AshEvent(QObject):
         landcover_html.setUrl(QUrl(self.landcover_html_path))
 
         # setup logos
-        # logos_id = ['logo-bnpb', 'logo-geologi']
-        # for logo_id in logos_id:
-        #     logo_picture = composition.getComposerItemById(logo_id)
-        #     if logo_picture is None:
-        #         message = '%s composer item could not be found' % logo_id
-        #         LOGGER.exception(message)
-        #         raise MapComposerError(message)
-        #     pic_path = os.path.basename(logo_picture.picturePath())
-        #     pic_path = os.path.join('logo', pic_path)
-        #     logo_picture.setPicturePath(self.ash_fixtures_dir(pic_path))
+        logos_id = ['logo-bnpb', 'logo-geologi']
+        for logo_id in logos_id:
+            logo_picture = composition.getComposerItemById(logo_id)
+            if logo_picture is None:
+                message = '%s composer item could not be found' % logo_id
+                LOGGER.exception(message)
+                raise MapComposerError(message)
+            pic_path = os.path.basename(logo_picture.picturePath())
+            pic_path = os.path.join('logo', pic_path)
+            logo_picture.setPicturePath(self.ash_fixtures_dir(pic_path))
 
         # map_overall = composition.getComposerItemById('map-overall')
         # if map_overall:
