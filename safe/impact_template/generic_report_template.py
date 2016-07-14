@@ -13,12 +13,15 @@ Contact : ole.moller.nielsen@gmail.com
 
 import os
 import json
+import logging
 from collections import OrderedDict
 import safe.messaging as m
+from safe.utilities.i18n import tr
 from safe.messaging import styles
 from safe.common.exceptions import MissingImpactReport
-from safe.common.utilities import (
-    format_int)
+from safe.common.utilities import format_int
+
+LOGGER = logging.getLogger('InaSAFE')
 
 __author__ = 'ismailsunni'
 __project_name__ = 'inasafe-dev'
@@ -30,7 +33,7 @@ __copyright__ = 'imajimatika@gmail.com'
 class GenericReportTemplate(object):
     """Generic Template Class.
     This class is used by Roads and Buildings.
-    Landcover, Polygon People and Population have a child class.
+    Land Cover, Polygon People and Population have a child class.
 
     ..versionadded: 3.4
     """
@@ -82,7 +85,9 @@ class GenericReportTemplate(object):
         message.add(self.format_action_check_list())
         message.add(self.format_notes())
         if self.postprocessing:
-            message.add(self.format_postprocessing())
+            postprocessing_message = self.format_postprocessing()
+            if postprocessing_message:
+                message.add(postprocessing_message)
         return message
 
     def generate_html_report(self):
@@ -231,6 +236,11 @@ class GenericReportTemplate(object):
 
                 for field in v['fields']:
                     row = m.Row()
+                    # If it's an Entire area aggregation, skip it. See #2746
+                    # Check substring because in some part it get addition
+                    # e.g. Entire area (m)
+                    if tr('Entire area', context='Aggregator') in field[0]:
+                        return
                     # First column is string
                     row.add(m.Cell(field[0]))
                     total = 0
