@@ -18,16 +18,13 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 import os
 import logging
-
-# noinspection PyUnresolvedReferences
 from qgis.core import (
     QgsComposition,
     QgsRectangle,
     QgsMapLayer,
-    QgsComposerPicture,
     QgsComposerHtml,
     QgsComposerFrame)
-
+# Whoaa this is ugly can we get rid of it?
 try:
     # noinspection PyUnresolvedReferences
     # pylint: disable=unused-import
@@ -37,7 +34,6 @@ except ImportError:
     from qgis.core import QgsMapRenderer
 
 from PyQt4.QtCore import QUrl
-
 from safe.defaults import disclaimer
 from safe.common.utilities import temp_dir, unique_filename
 from safe.common.version import get_version
