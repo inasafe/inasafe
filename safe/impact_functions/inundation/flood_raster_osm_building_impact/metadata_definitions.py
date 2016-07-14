@@ -11,8 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-__author__ = "lucernae"
-
 from safe.common.utilities import OrderedDict
 from safe.defaults import building_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \
@@ -32,9 +30,10 @@ from safe.definitions import (
     exposure_structure,
     unit_metres,
     unit_feet,
-    hazard_tsunami,
     structure_class_field
 )
+
+__author__ = "lucernae"
 
 
 class FloodRasterBuildingMetadata(ImpactFunctionMetadata):

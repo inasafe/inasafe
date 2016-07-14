@@ -11,9 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-__author__ = 'lucernae'
-__date__ = '24/03/15'
-
 from safe.common.utilities import OrderedDict, get_thousand_separator
 from safe.defaults import default_minimum_needs
 from safe.defaults import (
@@ -36,6 +33,9 @@ from safe.definitions import (
 )
 from safe.impact_functions.generic.continuous_hazard_population\
     .parameter_definitions import categorical_thresholds
+
+__author__ = 'lucernae'
+__date__ = '24/03/15'
 
 
 class ContinuousHazardPopulationMetadata(ImpactFunctionMetadata):
