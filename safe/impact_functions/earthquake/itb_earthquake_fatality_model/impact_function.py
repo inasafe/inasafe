@@ -183,8 +183,7 @@ class ITBFatalityFunction(
         total_displaced = self.total_evacuated
         rounded_displaced = format_int(population_rounding(total_displaced))
 
-        title = 'Action checklist'
-        fields = []
+        fields = super(ITBFatalityFunction, self).action_checklist()
         if total_fatalities:
             fields.append(tr(
                 'Are there enough victim identification units available '
@@ -203,18 +202,14 @@ class ITBFatalityFunction(
                 'If no, where can we obtain additional relief items '
                 'from and how will we transport them?'))
 
-        return {
-            'title': title,
-            'fields': fields
-        }
+        return fields
 
     def notes(self):
         """Notes and caveats for the IF report.
 
         :returns: Dicts containing notes.
-        :rtype: dict
+        :rtype: list
         """
-        title = tr('Notes and assumptions')
         fields = [
             tr('Total population in the analysis area: %s') %
             format_int(population_rounding(self.total_population)),
@@ -232,16 +227,12 @@ class ITBFatalityFunction(
                 'Pager Model.'))
         fields.extend([
             tr('Map shows the estimation of displaced population.'),
-            tr('All values are rounded up to the nearest integer in order to '
-               'avoid representing human lives as fractions.'),
-            tr('Population rounding is applied to all population values, '
-               'which may cause discrepancies when adding values.')
         ])
-
-        return {
-            'title': title,
-            'fields': fields
-        }
+        # include any generic exposure specific notes from definitions.py
+        fields = fields + self.exposure_notes()
+        # include any generic hazard specific notes from definitions.py
+        fields = fields + self.hazard_notes()
+        return fields
 
     def compute_probability(self, total_fatalities_raw):
         """

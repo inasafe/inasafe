@@ -9,11 +9,6 @@ InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
      (at your option) any later version.
 
 """
-__author__ = 'ismailsunni'
-__project_name__ = 'inasafe-dev'
-__filename__ = 'test_polygon_people_report_template'
-__date__ = '4/28/16'
-__copyright__ = 'imajimatika@gmail.com'
 
 import unittest
 import os
@@ -26,6 +21,12 @@ from safe.common.utilities import temp_dir
 
 from safe.impact_template.polygon_people_report_template import (
     PolygonPeopleReportTemplate)
+
+__author__ = 'ismailsunni'
+__project_name__ = 'inasafe-dev'
+__filename__ = 'test_polygon_people_report_template'
+__date__ = '4/28/16'
+__copyright__ = 'imajimatika@gmail.com'
 
 TEMP_DIR = temp_dir(sub_dir='test/template')
 TEST_DIR = os.path.dirname(__file__)

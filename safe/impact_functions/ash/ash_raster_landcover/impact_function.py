@@ -1,6 +1,6 @@
 # coding=utf-8
-"""InaSAFE Disaster risk tool by Australian Aid - Tsunami Raster Impact on
-Road
+"""InaSAFE Disaster risk tool by Australian Aid - Ash Raster on Land Cover
+Impact Function
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -65,14 +65,6 @@ class AshRasterLandcoverFunction(ContinuousRHClassifiedVE):
             tr('Very High'),
         ]
         self.affected_hazard_columns = self.hazard_classes
-
-    def notes(self):
-        """Return the notes section of the report.
-
-        :return: The notes that should be attached to this impact report.
-        :rtype: safe.messaging.Message
-        """
-        return []   # TODO: what to put here?
 
     def run(self):
         """Run the impact function.

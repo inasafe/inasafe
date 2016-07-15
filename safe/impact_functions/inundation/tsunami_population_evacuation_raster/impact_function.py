@@ -18,7 +18,6 @@ from safe.impact_functions.core import (
     population_rounding,
     has_no_data
 )
-from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.impact_functions.inundation\
     .tsunami_population_evacuation_raster.metadata_definitions import \
     TsunamiEvacuationMetadata
@@ -35,6 +34,7 @@ from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
     filter_needs_parameters, get_needs_provenance_value
 from safe.impact_reports.population_exposure_report_mixin import \
     PopulationExposureReportMixin
+from safe.definitions import no_data_warning
 import safe.messaging as m
 
 
@@ -49,7 +49,6 @@ class TsunamiEvacuationFunction(
     def __init__(self):
         super(TsunamiEvacuationFunction, self).__init__()
         PopulationExposureReportMixin.__init__(self)
-        self.impact_function_manager = ImpactFunctionManager()
 
         # AG: Use the proper minimum needs, update the parameters
         self.parameters = add_needs_parameters(self.parameters)
@@ -59,7 +58,7 @@ class TsunamiEvacuationFunction(
         """Return the notes section of the report.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: dict
+        :rtype: list
         """
 
         thresholds = self.parameters['thresholds'].value
@@ -67,8 +66,6 @@ class TsunamiEvacuationFunction(
             needs_provenance = ''
         else:
             needs_provenance = tr(get_needs_provenance_value(self.parameters))
-
-        title = tr('Notes and assumptions')
 
         fields = [
             tr('Total population in the analysis area: %s') %
@@ -79,23 +76,12 @@ class TsunamiEvacuationFunction(
         ]
 
         if self.no_data_warning:
-            fields.append(tr(
-                'The layers contained "no data" values. This missing data '
-                'was carried through to the impact layer.'))
-            fields.append(tr(
-                '"No data" values in the impact layer were treated as 0 '
-                'when counting the affected or total population.'))
-        fields.extend([
-            tr('All values are rounded up to the nearest integer in order to '
-               'avoid representing human lives as fractions.'),
-            tr('Population rounding is applied to all population values, '
-               'which may cause discrepancies when adding values.')
-        ])
-
-        return {
-            'title': title,
-            'fields': fields
-        }
+            fields = fields + no_data_warning
+        # include any generic exposure specific notes from definitions.py
+        fields = fields + self.exposure_notes()
+        # include any generic hazard specific notes from definitions.py
+        fields = fields + self.hazard_notes()
+        return fields
 
     def run(self):
         """Risk plugin for tsunami population evacuation.
