@@ -31,6 +31,7 @@ from PyQt4.QtCore import QPyNullVariant
 
 from safe.definitions import (
     exposure_road,
+    exposure_place,
     exposure_structure)
 
 from safe.utilities.gis import is_raster_layer
@@ -42,7 +43,8 @@ from safe.gui.tools.wizard.wizard_strings import (
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step import WizardStep
 
-from safe.definitions import road_class_mapping, structure_class_mapping
+from safe.definitions import (
+    road_class_mapping, structure_class_mapping, place_class_mapping)
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
@@ -121,6 +123,8 @@ class StepKwClassify(WizardStep, FORM_CLASS):
             return road_class_mapping
         elif selected_subcategory == exposure_structure:
             return structure_class_mapping
+        elif selected_subcategory == exposure_place:
+            return place_class_mapping
         else:
             return None
 

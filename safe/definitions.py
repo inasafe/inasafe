@@ -464,12 +464,25 @@ exposure_structure = {
     ]
 }
 
+exposure_place = {
+    'key': 'place',
+    'name': tr('Place'),
+    'description': tr(
+        'A <b>place</b> is used to indicate that a particular location is '
+        'known by a particular name.'),
+    'notes': [  # additional generic notes for places - IF has more
+    ],
+    'actions': [  # these are additional generic actions - IF has more
+    ]
+}
+
 
 exposure_all = [
     exposure_land_cover,
     exposure_people_in_building,
     exposure_population,
     exposure_road,
+    exposure_place,
     exposure_structure
 ]
 
@@ -1175,6 +1188,59 @@ structure_class_mapping = [
 ]
 # List to keep the order of the keys.
 structure_class_order = [item['key'] for item in structure_class_mapping]
+
+place_class_mapping = [
+    {
+        'key': 'city',
+        'name': tr('City'),
+        'description': tr(
+            'The largest urban settlements in the territory, normally '
+            'including the national, state and provincial capitals.'),
+        'osm_downloader': [],
+        'string_defaults': ['city']
+    },
+    {
+        'key': 'Town',
+        'name': tr('Town'),
+        'description': tr(
+            'A second tier urban settlement of local importance, often with a '
+            'population of 10,000 people and good range of local facilities '
+            'including schools, medical facilities etc and traditionally a '
+            'market.'),
+        'string_defaults': ['town'],
+        'osm_downloader': []
+    },
+    {
+        'key': 'Village',
+        'name': tr('Village'),
+        'description': tr(
+            'A smaller distinct settlement, smaller than a town with few '
+            'facilities available with people traveling to nearby towns to '
+            'access these.'),
+        'string_defaults': ['village'],
+        'osm_downloader': []
+    },
+    {
+        'key': 'hamlet',
+        'name': tr('Hamlet'),
+        'description': tr(
+            'A smaller rural community typically with fewer than 100-200 '
+            'inhabitants, few infrastructure.'),
+        'string_defaults': ['hamlet'],
+        'osm_downloader': ['Tertiary', 'Tertiary link']
+    },
+    {
+        'key': 'airport',
+        'name': tr('Airport'),
+        'description': tr(
+            'A complex of runways and buildings for the takeoff, landing, and '
+            'maintenance of civil aircraft, with facilities for passengers.'),
+        'osm_downloader': [],
+        'string_defaults': ['airport']
+    }
+]
+# List to keep the order of the keys.
+place_class_order = [item['key'] for item in place_class_mapping]
 
 # Reference for structure_class_mapping. Structure class mapping is based on
 # OSM wiki map features building and Australian building classification
