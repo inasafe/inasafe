@@ -1,4 +1,5 @@
 # coding=utf-8
+import json
 import logging
 import os
 
@@ -38,6 +39,7 @@ class AshEvent(QObject):
             locale=None,
             working_dir=None,
             hazard_path=None,
+            population_path=None,
             landcover_path=None,
             cities_path=None,
             airport_path=None):
@@ -76,6 +78,37 @@ class AshEvent(QObject):
         self.map_report_path = self.working_dir_path('report.pdf')
         self.impact_exists = None
         self.locale = 'en'
+
+        # Write metadata for self reference
+        self.write_metadata()
+
+    def write_metadata(self):
+        """Write metadata file for this event folder
+
+        write metadata
+        example metadata json:
+        {
+            'volcano_name': 'Sinabung',
+            'volcano_location': [107, 6],
+            'alert_level': 'Siaga',
+            'eruption_height': 7000,  # eruption height in meters
+            'event_time': '2016-07-20 11:22:33 +0700',
+            'region': 'North Sumatra'
+        }
+
+        :return:
+        """
+        dateformat = '%Y-%m-%d %H:%M:%S %z'
+        metadata_dict = {
+            'volcano_name': self.volcano_name,
+            'volcano_location': self.volcano_location,
+            'alert_level': self.alert_level,
+            'eruption_height': self.erupction_height,
+            'event_time': self.time.strftime(dateformat),
+            'region': self.region
+        }
+        with open(self.working_dir_path('metadata.json'), 'w') as f:
+            f.write(json.dumps(metadata_dict))
 
     def working_dir_path(self, path):
         return os.path.join(self.working_dir, path)
@@ -139,6 +172,60 @@ class AshEvent(QObject):
         if fixtures_path:
             return os.path.join(path, fixtures_path)
         return path
+
+    def render_population_table(self):
+        population_dict = {}
+        # format:
+        # {
+        #     'very_low': 1,
+        #     'low': 2,
+        #     'medium': 3,
+        #     'high': 4,
+        #     'very_high': 5
+        # }
+        population_template = self.ash_fixtures_dir(
+            'population-table.template.html')
+        with open(population_template) as f:
+            template_string = f.read()
+            html_string = template_string % population_dict
+
+        with open(self.population_html_path, 'w') as f:
+            f.write(html_string)
+
+    def render_landcover_table(self):
+        landcover_list = []
+        # format:
+        # [
+        #     {
+        #         'type': 'settlement',
+        #         'area': 1000
+        #     },
+        #     {
+        #         'type': 'rice field',
+        #         'area': 10
+        #     },
+        # ]
+        landcover_template = self.ash_fixtures_dir(
+            'landcover-table.template.html')
+        with open(landcover_template) as f:
+            template_string = f.read()
+            # generate table here
+            html_string = None
+
+        with open(self.landcover_html_path, 'w') as f:
+            f.write(html_string)
+
+    def render_nearby_table(self):
+        nearby_template = self.ash_fixtures_dir(
+            'nearby-table.template.html')
+
+        with open(nearby_template) as f:
+            template_string = f.read()
+            # generate table here
+            html_string = None
+
+        with open(self.nearby_html_path, 'w') as f:
+            f.write(html_string)
 
     def generate_report(self):
         # Generate pdf report from impact/hazard
@@ -222,6 +309,10 @@ class AshEvent(QObject):
             raise MapComposerError
 
         # setup impact table
+        # self.render_population_table()
+        # self.render_nearby_table()
+        # self.render_landcover_table()
+
         impact_table = composition.getComposerItemById(
             'table-impact')
         if impact_table is None:

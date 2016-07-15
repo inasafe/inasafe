@@ -35,14 +35,13 @@ class TestAshTemplate(unittest.TestCase):
                 tzinfo=timezone('Asia/Jakarta')),
             region='East Java',
             alert_level='Siaga',
-            hazard_path=self.data_dir('hazard.tif')
-        )
+            hazard_path=self.data_dir('hazard.tif'))
         event.impact_exists = True
         event.hazard_path = self.data_dir('hazard.tif')
         event.map_report_path = self.data_dir('temp/temp.pdf')
-        event.nearby_html_path = self.data_dir('nearby_places.html')
-        event.population_html_path = self.data_dir('table_potential_impact.html')
-        event.landcover_html_path = self.data_dir('land_cover_impact.html')
+        event.nearby_html_path = self.data_dir('nearby-table.html')
+        event.population_html_path = self.data_dir('population-table.html')
+        event.landcover_html_path = self.data_dir('landcover-table.html')
         event.generate_report()
 
     def data_dir(self, path):
