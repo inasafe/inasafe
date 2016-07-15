@@ -67,6 +67,8 @@ from safe.impact_functions.volcanic.volcano_point_population\
 # Volcanic Ash
 from safe.impact_functions.ash.ash_raster_landcover.impact_function import \
     AshRasterLandcoverFunction
+from safe.impact_functions.ash.ash_raster_population.impact_function import \
+    AshRasterPopulationFunction
 
 
 def register_impact_functions():
@@ -116,3 +118,5 @@ def register_impact_functions():
     # Volcanic Ash IF's
     # Added in 3.4
     impact_function_registry.register(AshRasterLandcoverFunction)
+    # Added in 3.5
+    impact_function_registry.register(AshRasterPopulationFunction)

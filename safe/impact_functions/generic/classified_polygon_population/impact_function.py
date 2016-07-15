@@ -132,7 +132,6 @@ class ClassifiedPolygonHazardPopulationFunction(
                 # Adding the class name as a key in affected_building
                 self.affected_population[vector_hazard_class['name']] = 0
 
-
         # Interpolated layer represents grid cell that lies in the polygon
         interpolated_layer, covered_exposure_layer = \
             assign_hazard_values_to_exposure_data(

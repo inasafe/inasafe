@@ -1,7 +1,7 @@
 # coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
-- *Classified Hazard Land Cover Impact Function Test Cases.**
+- *Ash Raster on Land Cover Impact Function Test Cases.**
 
 Contact : ole.moller.nielsen@gmail.com
 
