@@ -42,18 +42,23 @@ layer_purpose_hazard = {
     'key': 'hazard',
     'name': tr('Hazard'),
     'description': tr(
-        'A <b>hazard</b> layer represents '
-        'something that will impact on the people, infrastructure or  '
-        'land cover in an area. For example; flood, earthquake, tsunami and '
-        'volcano are all examples of hazards.')
+        'A <b>hazard</b> layer represents a natural process or phenomenon '
+        'that may cause loss of life, injury or other health impacts, '
+        'property damage, loss of livelihoods and services, social and '
+        'economic disruption, or environmental damage. For example; flood, '
+        'earthquake, tsunami and volcano are all examples of hazards.')
+        # source UNISDR (2009) Terminology on disaster risk reduction.
+        # https://www.unisdr.org/we/inform/terminology
 }
 layer_purpose_exposure = {
     'key': 'exposure',
     'name': tr('Exposure'),
     'description': tr(
-        'An <b>exposure</b> layer represents '
-        'people, property, infrastructure or land cover that may be affected '
-        'in the event of a flood, earthquake, volcano etc.')
+        'An <b>exposure</b> layer represents people, property, systems, or '
+        'other elements present in hazard zones that are thereby subject to '
+        'potential losses in the event of a flood, earthquake, volcano etc.')
+        # source UNISDR (2009) Terminology on disaster risk reduction.
+        # https://www.unisdr.org/we/inform/terminology
 }
 layer_purpose_aggregation = {
     'key': 'aggregation',
