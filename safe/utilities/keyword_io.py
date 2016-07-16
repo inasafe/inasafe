@@ -348,6 +348,8 @@ class KeywordIO(QObject):
             'continuous_hazard_unit',
             'volcano_name_field',
             'road_class_field',
+            'population_field',
+            'name_field',
             'structure_class_field',
             'field',
             'value_map',  # attribute values

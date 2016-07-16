@@ -47,6 +47,7 @@ from safe.definitions import (
     hazard_volcano,
     exposure_structure,
     exposure_road,
+    exposure_place,
     exposure_population,
     exposure_land_cover,
     count_exposure_unit,
@@ -260,9 +261,9 @@ class TestImpactFunctionManager(unittest.TestCase):
             exposure_structure,
             exposure_road,
             exposure_population,
+            exposure_place,
             exposure_land_cover]
-        message = ('I expect %s but I got %s.' % (expected_result, result))
-        self.assertItemsEqual(result, expected_result, message)
+        self.assertItemsEqual(result, expected_result)
 
     def test_functions_for_constraint(self):
         """Test functions_for_constraint."""
