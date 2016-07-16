@@ -40,16 +40,16 @@ do_not_use_attribute = {
 # Concepts (used in various places, defined once to
 # keep things DRY
 concept_hazard = tr(
-    '<b>Hazards</b> (also called disasters) are what we call the data '
-    'layers that describe the extent and magnitude of natural events '
-    '(such as earthquakes, tsunamis and volcanic eruptions) that could '
-    'potentially cause an event or series of events that threaten and '
-    'disrupt the lives and livelihoods of people.')
+    'A <b>hazard</b> represents a natural process or phenomenon '
+    'that may cause loss of life, injury or other health impacts, '
+    'property damage, loss of livelihoods and services, social and '
+    'economic disruption, or environmental damage. For example; flood, '
+    'earthquake, tsunami and volcano are all examples of hazards.')
 
 concept_exposure = tr(
-    'An <b>exposure</b> layer represents '
-    'people, property, infrastructure or land cover that may be affected '
-    'in the event of a hazard such as a flood, earthquake, volcano etc.')
+    '<b>Exposure</b> represents people, property, systems, or '
+    'other elements present in hazard zones that are subject to '
+    'potential losses in the event of a flood, earthquake, volcano etc.')
 
 concept_generic_hazard = tr(
     'This is a ternary description for an area used with generic impact '
