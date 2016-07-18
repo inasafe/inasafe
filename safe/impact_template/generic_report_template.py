@@ -16,7 +16,6 @@ import json
 import logging
 from collections import OrderedDict
 import safe.messaging as m
-from safe.utilities.i18n import tr
 from safe.messaging import styles
 from safe.common.exceptions import MissingImpactReport
 from safe.common.utilities import format_int
@@ -238,12 +237,6 @@ class GenericReportTemplate(object):
 
                 for field in v['fields']:
                     row = m.Row()
-                    # If it's an Entire area aggregation, skip it. See #2746
-                    # Check substring because in some part it get addition
-                    # e.g. Entire area (m)
-                    if self.exposure != 'population':
-                        if tr('Entire area', context='Aggregator') in field[0]:
-                            return
                     # First column is string
                     row.add(m.Cell(field[0]))
                     total = 0
