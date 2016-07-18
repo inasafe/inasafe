@@ -61,13 +61,18 @@ layer_purpose_hazard = {
     'key': 'hazard',
     'name': tr('Hazard'),
     'description': concept_hazard
+    # source UNISDR (2009) Terminology on disaster risk reduction.
+    # https://www.unisdr.org/we/inform/terminology
 }
 
 layer_purpose_exposure = {
     'key': 'exposure',
     'name': tr('Exposure'),
     'description': concept_exposure
+    # source UNISDR (2009) Terminology on disaster risk reduction.
+    # https://www.unisdr.org/we/inform/terminology
 }
+
 layer_purpose_aggregation = {
     'key': 'aggregation',
     'name': tr('Aggregation'),
