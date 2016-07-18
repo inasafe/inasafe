@@ -151,15 +151,15 @@ class PopulationExposureReportMixinTest(unittest.TestCase):
             'impact summary': {
                 'attributes': ['category', 'value'],
                 'fields': [
-                    ['High', '100'],
-                    ['Medium', '100'],
-                    ['Low', '100'],
-                    ['Total affected population', '300'],
-                    ['Unaffected population', '100'],
-                    ['Total population', '400'],
+                    ['High', 100],
+                    ['Medium', 100],
+                    ['Low', 100],
+                    ['Total affected population', 300],
+                    ['Unaffected population', 100],
+                    ['Total population', 400],
                     [
                         'Population needing evacuation <sup>1</sup>',
-                        '300'
+                        300
                     ]
                 ]
             },

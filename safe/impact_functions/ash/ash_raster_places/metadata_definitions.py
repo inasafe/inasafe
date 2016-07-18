@@ -1,5 +1,5 @@
 # coding=utf-8
-"""InaSAFE Disaster risk tool by Australian Aid - Ash Raster on Land Cover
+"""InaSAFE Disaster risk tool by Australian Aid - Ash Raster on Population
 Metadata
 
 Contact : ole.moller.nielsen@gmail.com
@@ -12,25 +12,31 @@ Contact : ole.moller.nielsen@gmail.com
 """
 from safe.common.utilities import OrderedDict
 from safe.definitions import (
-    layer_mode_classified,
     layer_mode_continuous,
-    layer_geometry_polygon,
+    layer_mode_classified,
     layer_geometry_raster,
+    layer_geometry_point,
+    structure_class_field,
     hazard_category_single_event,
     hazard_category_multiple_event,
-    exposure_land_cover,
-    hazard_volcanic_ash, unit_centimetres)
+    exposure_place,
+    hazard_volcanic_ash,
+    unit_centimetres
+)
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
 from safe.impact_functions.ash.parameter_definitions import \
     threshold_group_parameter
 
-__author__ = 'Rizky Maulana Nugraha <lana.pcfre@gmail.com>'
-__date__ = '5/24/16'
+__author__ = 'etienne'
+__project_name__ = 'inasafe-dev'
+__filename__ = 'metadata_definitions.py'
+__date__ = '7/13/16'
+__copyright__ = 'etienne@kartoza.com'
 
 
-class AshRasterHazardLandCoverFunctionMetadata(ImpactFunctionMetadata):
+class AshRasterHazardPlacesFunctionMetadata(ImpactFunctionMetadata):
 
     @staticmethod
     def as_dict():
@@ -44,24 +50,23 @@ class AshRasterHazardLandCoverFunctionMetadata(ImpactFunctionMetadata):
         :rtype: dict
         """
         dict_meta = {
-            'id': 'AshRasterHazardLandCoverFunction',
-            'name': tr('Ash raster on land cover'),
+            'id': 'AshRasterHazardPlacesFunctionMetadata',
+            'name': tr('Ash raster on places'),
             'impact': tr('Be affected'),
             'title': tr('Be affected'),
-            'function_type': 'qgis2.0',
-            'author': 'Rizky Maulana Nugraha (lana.pcfre@gmail.com)',
-            'date_implemented': '24/05/2016',
+            'function_type': 'old-style',
+            'author': 'Etienne Trimaille',
+            'date_implemented': '13/07/2016',
             'overview': tr(
-                'To assess the impact of each hazard zone on land cover.'),
+                'To assess the impact of each hazard zone on places.'),
             'detailed_description': '',
             'hazard_input': tr(
                 'The hazard layer must be an ash raster layer.'),
             'exposure_input': tr(
-                'Vector polygon layer where each polygon represents a type of '
-                'land cover.'),
+                'Vector point layer where each feature represents a place.'),
             'output': tr(
-                'A vector layer of land cover polygons with each tagged '
-                'according to the hazard zone in which it falls.'),
+                'Map of places exposed to the highest hazard zone and a table '
+                'with the number of people in each hazard zone'),
             'actions': tr(
                 'Provide details about how big area fall within '
                 'each hazard zone.'),
@@ -70,8 +75,8 @@ class AshRasterHazardLandCoverFunctionMetadata(ImpactFunctionMetadata):
             'legend_title': '',
             'legend_units': '',
             'legend_notes': '',
-            'map_title': tr('Affected Land Cover'),
-            'layer_name': tr('Land cover affected'),
+            'map_title': tr('Affected Places'),
+            'layer_name': tr('Places affected'),
             'layer_requirements': {
                 'hazard': {
                     'layer_mode': layer_mode_continuous,
@@ -88,10 +93,12 @@ class AshRasterHazardLandCoverFunctionMetadata(ImpactFunctionMetadata):
                 },
                 'exposure': {
                     'layer_mode': layer_mode_classified,
-                    'layer_geometries': [layer_geometry_polygon],
-                    'exposure_types': [exposure_land_cover],
+                    'layer_geometries': [
+                        layer_geometry_point,
+                    ],
+                    'exposure_types': [exposure_place],
                     'exposure_units': [],
-                    'exposure_class_fields': [],
+                    'exposure_class_fields': [structure_class_field],
                     'additional_keywords': []
                 }
             },

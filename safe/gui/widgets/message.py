@@ -50,8 +50,7 @@ def missing_keyword_message(sender, missing_keyword_exception):
     suggestion_heading = m.Heading(
         tr('Suggestion'), **DETAILS_STYLE)
     detail = tr(
-        'The layer <b>%s</b> is missing the keyword <i>%s</i>.'
-         % (
+        'The layer <b>%s</b> is missing the keyword <i>%s</i>.' % (
             missing_keyword_exception.layer_name,
             missing_keyword_exception.keyword
         )

@@ -59,7 +59,7 @@ def get_report_template(
     if not impact_data:
         raise MissingImpactReport
 
-    if impact_data['exposure'] in ['building', 'road']:
+    if impact_data['exposure'] in ['building', 'road', 'place']:
         return GenericReportTemplate(impact_data=impact_data)
     elif impact_data['exposure'] == 'population':
         return PopulationReportTemplate(impact_data=impact_data)

@@ -1,6 +1,6 @@
 # coding=utf-8
 """InaSAFE Disaster risk tool by Australian Aid - Parameter definition for
-Tsunami Raster Impact on OSM Buildings
+Ash Raster Impact on People
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -16,15 +16,18 @@ from safe_extras.parameters.float_parameter import FloatParameter
 from safe.utilities.i18n import tr
 from safe_extras.parameters.group_parameter import GroupParameter
 
-__author__ = 'Rizky Maulana Nugraha <lana.pcfre@gmail.com>'
-__date__ = '5/24/16'
+__author__ = 'ismailsunni'
+__project_name__ = 'inasafe-dev'
+__filename__ = 'parameter_definitions.py'
+__date__ = '7/13/16'
+__copyright__ = 'imajimatika@gmail.com'
 
 
 def unaffected_threshold():
     """Generate threshold for unaffected region
 
-    :return: list of FloatParameter
-    :rtype: list[FloatParameter]
+    :returns: A FloatParameter.
+    :rtype: FloatParameter
     """
     field = FloatParameter()
     field.is_required = True
@@ -48,8 +51,8 @@ def unaffected_threshold():
 def very_low_threshold():
     """Generate very low hazard zone threshold parameter
 
-    :return: list of FloatParameter
-    :rtype: list[FloatParameter]
+    :returns: A FloatParameter.
+    :rtype: FloatParameter
     """
     field = FloatParameter()
     field.is_required = True
@@ -74,8 +77,8 @@ def very_low_threshold():
 def low_threshold():
     """Generate low hazard zone threshold parameter
 
-    :return: list of FloatParameter
-    :rtype: list[FloatParameter]
+    :returns: A FloatParameter.
+    :rtype: FloatParameter
     """
     field = FloatParameter()
     field.is_required = True
@@ -99,8 +102,8 @@ def low_threshold():
 def moderate_threshold():
     """Generate moderate hazard zone threshold parameter
 
-    :return: list of FloatParameter
-    :rtype: list[FloatParameter]
+    :returns: A FloatParameter.
+    :rtype: FloatParameter
     """
     field = FloatParameter()
     field.is_required = True
@@ -124,8 +127,8 @@ def moderate_threshold():
 def high_threshold():
     """Generate high  hazard zone threshold parameter
 
-    :return: list of FloatParameter
-    :rtype: list[FloatParameter]
+    :returns: A FloatParameter.
+    :rtype: FloatParameter
     """
     field = FloatParameter()
     field.is_required = True
@@ -183,7 +186,9 @@ def threshold_group_parameter():
 
         :param param: FloatParameter in validation
         :type param: FloatParameter
-        :return: True if valid
+
+        :returns: True if valid
+        :rtype: bool
         """
         valid = True
         message = None

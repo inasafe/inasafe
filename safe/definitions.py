@@ -37,32 +37,45 @@ do_not_use_attribute = {
     'name': tr('Don\'t use')
 }
 
+# Concepts (used in various places, defined once to
+# keep things DRY
+concept_hazard = tr(
+    'A <b>hazard</b> represents a natural process or phenomenon '
+    'that may cause loss of life, injury or other health impacts, '
+    'property damage, loss of livelihoods and services, social and '
+    'economic disruption, or environmental damage. For example; flood, '
+    'earthquake, tsunami and volcano are all examples of hazards.')
+
+concept_exposure = tr(
+    '<b>Exposure</b> represents people, property, systems, or '
+    'other elements present in hazard zones that are subject to '
+    'potential losses in the event of a flood, earthquake, volcano etc.')
+
+concept_generic_hazard = tr(
+    'This is a ternary description for an area used with generic impact '
+    'functions. The area may have either <b>low</b>, <b>medium</b>, or '
+    '<b>high</b> classification for the hazard.')
+
 # Layer Purpose
 layer_purpose_hazard = {
     'key': 'hazard',
     'name': tr('Hazard'),
-    'description': tr(
-        'A <b>hazard</b> layer represents '
-        'something that will impact on the people, infrastructure or  '
-        'land cover in an area. For example; flood, earthquake, tsunami and '
-        'volcano are all examples of hazards.')
+    'description': concept_hazard
 }
+
 layer_purpose_exposure = {
     'key': 'exposure',
     'name': tr('Exposure'),
-    'description': tr(
-        'An <b>exposure</b> layer represents '
-        'people, property, infrastructure or land cover that may be affected '
-        'in the event of a flood, earthquake, volcano etc.')
+    'description': concept_exposure
 }
 layer_purpose_aggregation = {
     'key': 'aggregation',
     'name': tr('Aggregation'),
     'description': tr(
-        'An <b>aggregation</b> layer represents '
-        'regions that can be used to summarise impact analysis results. '
-        'For example, we might summarise the affected people after '
-        'a flood according to administration boundaries.')
+        'An <b>aggregation</b> layer represents regions that can be used to '
+        'summarise impact analysis results. For example, we might summarise '
+        'the affected people after a flood according to administration '
+        'boundaries.')
 }
 
 layer_purpose = {
@@ -330,12 +343,7 @@ hazard_all = [
 hazards = {
     'key': 'hazards',
     'name': tr('Hazards'),
-    'description': tr(
-        '<b>Hazards</b> (also called disasters) are what we call the data '
-        'layers that describe the extent and magnitude of natural events '
-        '(such as earthquakes, tsunamis and volcanic eruptions) that could '
-        'potentially cause an event or series of events that threaten and '
-        'disrupt the lives and livelihoods of people.'),
+    'description': concept_hazard ,
     'types': hazard_all
 }
 
@@ -464,12 +472,25 @@ exposure_structure = {
     ]
 }
 
+exposure_place = {
+    'key': 'place',
+    'name': tr('Place'),
+    'description': tr(
+        'A <b>place</b> is used to indicate that a particular location is '
+        'known by a particular name.'),
+    'notes': [  # additional generic notes for places - IF has more
+    ],
+    'actions': [  # these are additional generic actions - IF has more
+    ]
+}
+
 
 exposure_all = [
     exposure_land_cover,
     exposure_people_in_building,
     exposure_population,
     exposure_road,
+    exposure_place,
     exposure_structure
 ]
 
@@ -477,9 +498,7 @@ exposure_all = [
 exposures = {
     'key': 'exposures',
     'name': tr('Exposure'),
-    'description': tr(
-        '<b>Exposure</b> data represents things that are at risk when faced '
-        'with a potential hazard. '),
+    'description': concept_exposure,
     'types': exposure_all
 }
 
@@ -611,10 +630,7 @@ continuous_hazard_unit_all = continuous_hazard_unit['types']
 generic_vector_hazard_classes = {
     'key': 'generic_vector_hazard_classes',
     'name': tr('Generic classes'),
-    'description': tr(
-        'This is a ternary description for an area. The area may have either '
-        '<b>low</b>, <b>medium</b>, or <b>high</b> classification for the '
-        'hazard.'),
+    'description': concept_generic_hazard,
     'default_attribute': 'affected',
     'classes': [
         {
@@ -651,9 +667,8 @@ volcano_vector_hazard_classes = {
     'key': 'volcano_vector_hazard_classes',
     'name': tr('Volcano classes'),
     'description': tr(
-        'This is a ternary description for an area. The area has either a '
-        '<b>low</b>, <b>medium</b>, or <b>high</b> classification for '
-        'volcano hazard.'),
+        'Three classes are supported for volcano vector hazard data: '
+        '<b>low</b>, <b>medium</b>, or <b>high</b>.'),
     'default_attribute': 'affected',
     'classes': [
         {
@@ -764,9 +779,7 @@ flood_raster_hazard_classes = {
 generic_raster_hazard_classes = {
     'key': 'generic_raster_hazard_classes',
     'name': tr('Generic classes'),
-    'description': tr(
-        'This is a ternary description for an area. The area is classified as '
-        'either a <b>low</b>, <b>medium</b>, or <b>high</b> hazard class.'),
+    'description': concept_generic_hazard,
     'classes': [
         {
             'key': 'high',
@@ -1175,6 +1188,59 @@ structure_class_mapping = [
 ]
 # List to keep the order of the keys.
 structure_class_order = [item['key'] for item in structure_class_mapping]
+
+place_class_mapping = [
+    {
+        'key': 'city',
+        'name': tr('City'),
+        'description': tr(
+            'The largest urban settlements in the territory, normally '
+            'including the national, state and provincial capitals.'),
+        'osm_downloader': [],
+        'string_defaults': ['city']
+    },
+    {
+        'key': 'Town',
+        'name': tr('Town'),
+        'description': tr(
+            'A second tier urban settlement of local importance, often with a '
+            'population of 10,000 people and good range of local facilities '
+            'including schools, medical facilities etc and traditionally a '
+            'market.'),
+        'string_defaults': ['town'],
+        'osm_downloader': []
+    },
+    {
+        'key': 'Village',
+        'name': tr('Village'),
+        'description': tr(
+            'A smaller distinct settlement, smaller than a town with few '
+            'facilities available with people traveling to nearby towns to '
+            'access these.'),
+        'string_defaults': ['village'],
+        'osm_downloader': []
+    },
+    {
+        'key': 'hamlet',
+        'name': tr('Hamlet'),
+        'description': tr(
+            'A smaller rural community typically with fewer than 100-200 '
+            'inhabitants, few infrastructure.'),
+        'string_defaults': ['hamlet'],
+        'osm_downloader': ['Tertiary', 'Tertiary link']
+    },
+    {
+        'key': 'airport',
+        'name': tr('Airport'),
+        'description': tr(
+            'A complex of runways and buildings for the takeoff, landing, and '
+            'maintenance of civil aircraft, with facilities for passengers.'),
+        'osm_downloader': [],
+        'string_defaults': ['airport']
+    }
+]
+# List to keep the order of the keys.
+place_class_order = [item['key'] for item in place_class_mapping]
 
 # Reference for structure_class_mapping. Structure class mapping is based on
 # OSM wiki map features building and Australian building classification

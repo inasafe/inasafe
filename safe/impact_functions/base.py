@@ -585,8 +585,8 @@ class ImpactFunction(object):
     def parameters(self):
         """Get the parameters.
 
-        :returns: A list of parameters.
-        :rtype: list
+        :returns: A dict of parameters.
+        :rtype: dict
         """
         return self._parameters
 
