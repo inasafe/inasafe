@@ -63,7 +63,6 @@ class GenericReportTemplate(object):
         if not impact_data:
             raise MissingImpactReport
 
-
         self.impact_data = impact_data
         self.exposure = impact_data.get('exposure')
         self.question = impact_data.get('question')
