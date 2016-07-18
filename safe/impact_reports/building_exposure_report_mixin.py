@@ -10,8 +10,6 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
-__author__ = 'Christian Christelis <christian@kartoza.com>'
-
 from collections import OrderedDict
 from operator import add
 from safe.utilities.i18n import tr
@@ -19,6 +17,8 @@ from safe.utilities.utilities import reorder_dictionary
 from safe.common.utilities import format_int
 from safe.impact_reports.report_mixin_base import ReportMixin
 from safe.definitions import structure_class_order
+
+__author__ = 'Christian Christelis <christian@kartoza.com>'
 
 
 class BuildingExposureReportMixin(ReportMixin):
@@ -77,7 +77,6 @@ class BuildingExposureReportMixin(ReportMixin):
         self.buildings = {}
         self.categories = None
         self.affected_buildings = {}
-        self.building_report_threshold = 25
 
         self.impact_data = {}
 
