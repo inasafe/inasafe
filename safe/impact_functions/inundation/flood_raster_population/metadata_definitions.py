@@ -102,7 +102,12 @@ class FloodEvacuationRasterHazardMetadata(ImpactFunctionMetadata):
                 tr('The default threshold of 1 meter was selected based '
                    'on consensus, not hard evidence.')
             ],
-            'citations': [],
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ],
             'map_title': tr('People in need of evacuation'),
             'legend_title': tr('Population Count'),
             'legend_units': tr('(people per cell)'),

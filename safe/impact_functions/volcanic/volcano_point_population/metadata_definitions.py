@@ -75,7 +75,12 @@ class VolcanoPointPopulationFunctionMetadata(ImpactFunctionMetadata):
                 'Provide details about how many people would likely '
                 'be affected by each hazard zone.'),
             'limitations': [],
-            'citations': [],
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ],
             'map_title': tr('People affected by the buffered point volcano'),
             'legend_title': tr('Population'),
             'legend_units': tr('(people per cell)'),

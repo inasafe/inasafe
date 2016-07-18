@@ -80,7 +80,12 @@ class VolcanoPolygonBuildingFunctionMetadata(ImpactFunctionMetadata):
                 'Provide details about the number of buildings that are '
                 'within each hazard zone.'),
             'limitations': [],
-            'citations': [],
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ],
             'map_title': tr('Buildings affected by volcanic hazard zone'),
             'legend_title': tr('Building count'),
             'legend_units': tr('(building)'),

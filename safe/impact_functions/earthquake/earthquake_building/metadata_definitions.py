@@ -78,7 +78,12 @@ class EarthquakeBuildingMetadata(ImpactFunctionMetadata):
             'output': '',
             'actions': '',
             'limitations': [],
-            'citations': [],
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ],
             'map_title': tr('Building affected by earthquake'),
             'legend_notes': tr(
                 'The level of the impact is according to the threshold the '

@@ -79,7 +79,12 @@ class FloodPolygonBuildingFunctionMetadata(ImpactFunctionMetadata):
                 'flooded and the breakdown of the building by type.'),
             'actions': '',
             'limitations': [],
-            'citations': [],
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ],
             'legend_units': '',
             'legend_notes': '',
             'map_title': tr('Buildings inundated'),

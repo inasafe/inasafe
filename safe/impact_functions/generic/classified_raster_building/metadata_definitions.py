@@ -92,7 +92,12 @@ class ClassifiedRasterHazardBuildingMetadata(ImpactFunctionMetadata):
                 'Provide details about the number of buildings that are '
                 'within each hazard class.'),
             'limitations': [tr('The number of classes is three.')],
-            'citations': [],
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ],
             'legend_notes': '',
             'map_title': tr('Buildings affected'),
             'legend_units': tr('(Low, Medium, High)'),

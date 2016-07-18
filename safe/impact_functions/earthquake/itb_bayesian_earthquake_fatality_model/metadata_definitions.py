@@ -77,11 +77,14 @@ class ITBBayesianFatalityMetadata(ITBFatalityMetadata):
             'actions': '',
             'limitations': [],
             'citations': [
-                tr('Sengara, W., Suarjana, M., Yulman, M.A., Ghasemi, H., and '
-                   'Ryu, H. (2015). '
-                   'An empirical fatality model for Indonesia based on '
-                   'a Bayesian approach. Submitted for Journal of the '
-                   'Geological Society')  # FIXME
+                {
+                    'text': tr(
+                        'Sengara, W., Suarjana, M., Yulman, M.A., Ghasemi, '
+                        'H., and Ryu, H. (2015). An empirical fatality model '
+                        'for Indonesia based on a Bayesian approach. '
+                        'Submitted for Journal of the Geological Society'),
+                    'link': None
+                }
             ],
             'map_title': 'Earthquake impact to population',
             'legend_title': '',

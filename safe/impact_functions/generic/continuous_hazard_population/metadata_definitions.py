@@ -89,7 +89,12 @@ class ContinuousHazardPopulationMetadata(ImpactFunctionMetadata):
                 'Provide details about how many people would likely '
                 'be impacted in each category.'),
             'limitations': [tr('Only three categories can be used.')],
-            'citations': [],
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ],
             'map_title': tr('People in each hazard areas (low, medium, high)'),
             'legend_title': tr('Number of People'),
             'legend_units': tr('(people per cell)'),

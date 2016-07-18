@@ -77,7 +77,12 @@ class VolcanoPointBuildingFunctionMetadata(ImpactFunctionMetadata):
                 'Provide details about how many building would likely be '
                 'affected by each hazard zones.'),
             'limitations': [],
-            'citations': [],
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ],
             'map_title': tr('Buildings affected by volcanic buffered point'),
             'legend_title': tr('Building count'),
             'legend_units': tr('(building)'),

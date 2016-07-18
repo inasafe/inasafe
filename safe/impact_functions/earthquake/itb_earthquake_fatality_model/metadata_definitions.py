@@ -107,17 +107,29 @@ class ITBFatalityMetadata(ImpactFunctionMetadata):
                    '  use by BMKG.\n')
             ],
             'citations': [
-                tr('Indonesian Earthquake Building-Damage and Fatality '
-                   'Models and Post Disaster Survey Guidelines '
-                   'Development Bali, 27-28 February 2012, 54pp.'),
-                tr('Allen, T. I., Wald, D. J., Earle, P. S., Marano, K. '
-                   'D., Hotovec, A. J., Lin, K., and Hearne, M., 2009. An '
-                   'Atlas of ShakeMaps and population exposure catalog '
-                   'for earthquake loss modeling, Bull. Earthq. Eng. 7, '
-                   '701-718.'),
-                tr('Jaiswal, K., and Wald, D., 2010. An empirical model '
-                   'for global earthquake fatality estimation, Earthq. '
-                   'Spectra 26, 1017-1037.')
+                {
+                    'text': tr(
+                        'Indonesian Earthquake Building-Damage and Fatality '
+                        'Models and Post Disaster Survey Guidelines '
+                        'Development Bali, 27-28 February 2012, 54pp.'),
+                    'link': None
+                },
+                {
+                    'text': tr(
+                        'Allen, T. I., Wald, D. J., Earle, P. S., Marano, K. '
+                        'D., Hotovec, A. J., Lin, K., and Hearne, M., 2009. An '
+                        'Atlas of ShakeMaps and population exposure catalog '
+                        'for earthquake loss modeling, Bull. Earthq. Eng. 7, '
+                        '701-718.'),
+                    'link': None
+                },
+                {
+                    'text': tr(
+                        'Jaiswal, K., and Wald, D., 2010. An empirical model '
+                        'for global earthquake fatality estimation, Earthq. '
+                        'Spectra 26, 1017-1037.'),
+                    'link': None
+                }
             ],
             'map_title': tr('Earthquake impact to population'),
             'legend_title': tr('Population Count'),

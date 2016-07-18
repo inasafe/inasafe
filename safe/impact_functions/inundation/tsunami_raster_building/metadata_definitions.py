@@ -97,9 +97,13 @@ class TsunamiRasterBuildingMetadata(ImpactFunctionMetadata):
                 'based on a fixed threshold')
             ],
             'citations': [
-                tr('Papadopoulos, Gerassimos A., and Fumihiko Imamura. '
-                   '"A proposal for a new tsunami intensity scale." '
-                   'ITS 2001 proceedings, no. 5-1, pp. 569-577. 2001.')
+                {
+                    'text': tr(
+                        'Papadopoulos, Gerassimos A., and Fumihiko Imamura. '
+                        '"A proposal for a new tsunami intensity scale." '
+                        'ITS 2001 proceedings, no. 5-1, pp. 569-577. 2001.'),
+                    'link': None
+                }
             ],
             'legend_notes': '',
             'map_title': tr('Inundated buildings'),

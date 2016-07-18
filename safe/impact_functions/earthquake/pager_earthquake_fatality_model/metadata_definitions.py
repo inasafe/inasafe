@@ -80,10 +80,14 @@ class PAGFatalityMetadata(ITBFatalityMetadata):
             'legend_notes': '',
             'layer_name': '',
             'citations': [
-                tr('Jaiswal, K. S., Wald, D. J., and Hearne, M. (2009a). '
-                   'Estimating casualties for large worldwide earthquakes '
-                   'using an empirical approach. U.S. Geological Survey '
-                   'Open-File Report 2009-1136.')
+                {
+                    'text': tr(
+                        'Jaiswal, K. S., Wald, D. J., and Hearne, M. (2009a). '
+                        'Estimating casualties for large worldwide earthquakes '
+                        'using an empirical approach. U.S. Geological Survey '
+                        'Open-File Report 2009-1136.'),
+                    'link': None
+                }
             ],
             'layer_requirements': {
                 'hazard': {
