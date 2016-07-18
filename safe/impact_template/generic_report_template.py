@@ -86,9 +86,7 @@ class GenericReportTemplate(object):
         message.add(self.format_action_check_list())
         message.add(self.format_notes())
         if self.postprocessing:
-            postprocessing_message = self.format_postprocessing()
-            if postprocessing_message:
-                message.add(postprocessing_message)
+            message.add(self.format_postprocessing())
         return message
 
     def generate_html_report(self):
