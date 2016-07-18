@@ -13,12 +13,14 @@ Contact : ole.moller.nielsen@gmail.com
 
 import os
 import json
+import logging
 from collections import OrderedDict
 import safe.messaging as m
 from safe.messaging import styles
 from safe.common.exceptions import MissingImpactReport
-from safe.common.utilities import (
-    format_int)
+from safe.common.utilities import format_int
+
+LOGGER = logging.getLogger('InaSAFE')
 
 __author__ = 'ismailsunni'
 __project_name__ = 'inasafe-dev'
@@ -30,7 +32,7 @@ __copyright__ = 'imajimatika@gmail.com'
 class GenericReportTemplate(object):
     """Generic Template Class.
     This class is used by Roads and Buildings.
-    Landcover, Polygon People and Population have a child class.
+    Land Cover, Polygon People and Population have a child class.
 
     ..versionadded: 3.4
     """
@@ -62,6 +64,7 @@ class GenericReportTemplate(object):
             raise MissingImpactReport
 
         self.impact_data = impact_data
+        self.exposure = impact_data.get('exposure')
         self.question = impact_data.get('question')
         self.impact_summary = impact_data.get('impact summary')
         self.action_check_list = impact_data.get('action check list')

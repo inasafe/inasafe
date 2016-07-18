@@ -12,11 +12,6 @@ Contact : ole.moller.nielsen@gmail.com
 .. todo:: Check raster is single band
 
 """
-__author__ = 'tim@kartoza.com'
-__revision__ = '$Format:%H$'
-__date__ = '10/01/2011'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
 
 import os
 import shutil
@@ -110,6 +105,12 @@ from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.utilities.unicode import get_unicode
 from safe.impact_template.utilities import get_report_template
 from safe.gui.widgets.message import missing_keyword_message
+
+__author__ = 'tim@kartoza.com'
+__revision__ = '$Format:%H$'
+__date__ = '10/01/2011'
+__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
+                 'Disaster Reduction')
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 INFO_STYLE = styles.INFO_STYLE
@@ -1191,7 +1192,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.analysis_error(e, context)
             self.disable_busy_cursor()
             return
-        except MemoryError as e:
+        except MemoryError:
             memory_error()
             self.disable_busy_cursor()
             return
@@ -1407,16 +1408,19 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         json_path = os.path.splitext(qgis_impact_layer.source())[0] + '.json'
 
         # write postprocessing report to keyword
-        postprocessor_data = self.impact_function.postprocessor_manager.\
-            get_json_data(self.impact_function.aggregator.aoi_mode)
         post_processing_report = m.Message()
         if os.path.exists(json_path):
-            with open(json_path) as json_file:
-                impact_data = json.load(
-                    json_file, object_pairs_hook=OrderedDict)
-                impact_data['post processing'] = postprocessor_data
-                with open(json_path, 'w') as json_file_2:
-                    json.dump(impact_data, json_file_2, indent=2)
+            # Make sure if there is post processor
+            if self.impact_function.postprocessor_manager:
+                postprocessor_data = self.impact_function.\
+                    postprocessor_manager.get_json_data(
+                        self.impact_function.aggregator.aoi_mode)
+                with open(json_path) as json_file:
+                    impact_data = json.load(
+                        json_file, object_pairs_hook=OrderedDict)
+                    impact_data['post processing'] = postprocessor_data
+                    with open(json_path, 'w') as json_file_2:
+                        json.dump(impact_data, json_file_2, indent=2)
         else:
             post_processing_report = self.impact_function.\
                 postprocessor_manager.get_output(

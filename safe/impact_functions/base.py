@@ -1595,7 +1595,15 @@ class ImpactFunction(object):
 
         # TODO (MB) do we really want this check?
         if self.aggregator.error_message is None:
-            self._run_post_processor()
+            # Do not use post processor if entire area for road and structure
+            # See issue #2746
+            skip_post_processors = ['structure', 'road']
+            if (self.exposure.keyword('exposure') in skip_post_processors and
+                    self.aggregator.aoi_mode):
+                send_not_busy_signal(self)
+                send_analysis_done_signal(self)
+            else:
+                self._run_post_processor()
         else:
             content = self.aggregator.error_message
             exception = AggregationError(tr(
