@@ -306,6 +306,8 @@ class StepKwClassify(WizardStep, FORM_CLASS):
         """
         # Populate the unique values list
         self.lstUniqueValues.clear()
+        self.lstUniqueValues.setSelectionMode(
+            QtGui.QAbstractItemView.ExtendedSelection)
         for value in unassigned_values:
             value_as_string = value is not None and unicode(value) or 'NULL'
             list_item = QtGui.QListWidgetItem(self.lstUniqueValues)
