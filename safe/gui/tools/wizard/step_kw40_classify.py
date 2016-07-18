@@ -12,11 +12,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-__author__ = 'qgis@borysjurgiel.pl'
-__revision__ = '$Format:%H$'
-__date__ = '16/03/2016'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
 
 from osgeo import gdal
 from osgeo.gdalconst import GA_ReadOnly
@@ -45,6 +40,12 @@ from safe.gui.tools.wizard.wizard_step import WizardStep
 
 from safe.definitions import (
     road_class_mapping, structure_class_mapping, place_class_mapping)
+
+__author__ = 'qgis@borysjurgiel.pl'
+__revision__ = '$Format:%H$'
+__date__ = '16/03/2016'
+__copyright__ = (
+    'Copyright 2012, Australia Indonesia Facility for Disaster Reduction')
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
@@ -89,7 +90,12 @@ class StepKwClassify(WizardStep, FORM_CLASS):
         :returns: The step to be switched to
         :rtype: WizardStep instance or None
         """
-        new_step = self.parent.step_kw_extrakeywords
+        selected_subcategory = self.parent.step_kw_subcategory.\
+            selected_subcategory()
+        if selected_subcategory == exposure_place:
+            new_step = self.parent.step_kw_name_field
+        else:
+            new_step = self.parent.step_kw_extrakeywords
         return new_step
 
     def postprocessor_classification_for_layer(self):
