@@ -64,7 +64,9 @@ class GenericReportTemplate(object):
         if not impact_data:
             raise MissingImpactReport
 
+
         self.impact_data = impact_data
+        self.exposure = impact_data.get('exposure')
         self.question = impact_data.get('question')
         self.impact_summary = impact_data.get('impact summary')
         self.action_check_list = impact_data.get('action check list')
@@ -239,8 +241,9 @@ class GenericReportTemplate(object):
                     # If it's an Entire area aggregation, skip it. See #2746
                     # Check substring because in some part it get addition
                     # e.g. Entire area (m)
-                    if tr('Entire area', context='Aggregator') in field[0]:
-                        return
+                    if self.exposure != 'population':
+                        if tr('Entire area', context='Aggregator') in field[0]:
+                            return
                     # First column is string
                     row.add(m.Cell(field[0]))
                     total = 0
