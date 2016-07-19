@@ -10,9 +10,11 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+from safe.common.exceptions import KeywordNotFoundError
 from safe.impact_reports.road_exposure_report_mixin import \
     RoadExposureReportMixin
 from safe.definitions import place_class_order
+from safe.utilities.i18n import tr
 
 __author__ = 'Etienne Trimaille <etienne@kartoza.com>'
 
@@ -30,8 +32,25 @@ class PlaceExposureReportMixin(RoadExposureReportMixin):
         """
         super(PlaceExposureReportMixin, self).__init__()
         self.exposure_report = 'place'
-        self.attribute = 'Place Type'
+        self.attribute = tr('Place Type')
         self.order = place_class_order
+
+    @property
+    def impact_summary_headings(self):
+        """Headings for the impact summary.
+
+        If population_field is found in the metadata, we are dealing with
+        population.
+
+        :return: Headings
+        :rtype: list
+        """
+        try:
+            # self.exposure is defined in the IF
+            self.exposure.keyword('population_field')
+            return [tr('Places'), tr('Population')]
+        except KeywordNotFoundError:
+            return [tr('Places'), tr('Count')]
 
     @staticmethod
     def label_with_unit(label):

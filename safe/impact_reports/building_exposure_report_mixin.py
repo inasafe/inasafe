@@ -80,6 +80,15 @@ class BuildingExposureReportMixin(ReportMixin):
 
         self.impact_data = {}
 
+    @property
+    def impact_summary_headings(self):
+        """Headings for the impact summary.
+
+        :return: Headings
+        :rtype: list
+        """
+        return [tr('Buildings'), tr('Count')]
+
     def init_report_var(self, categories):
         """Create tables for the report according to the classes.
 
@@ -161,6 +170,7 @@ class BuildingExposureReportMixin(ReportMixin):
 
         return {
             'attributes': ['category', 'value'],
+            'headings': self.impact_summary_headings,
             'fields': fields
         }
 

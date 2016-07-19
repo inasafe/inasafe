@@ -113,6 +113,16 @@ class GenericReportTemplate(object):
         message = m.Message(style_class='container')
         table = m.Table(style_class='table table-condensed table-striped')
         table.caption = None
+
+        if 'headings' in self.impact_summary.keys():
+            row = m.Row()
+            row.add(m.Cell(self.impact_summary['headings'][0], header=True))
+            row.add(m.Cell(
+                self.impact_summary['headings'][1],
+                header=True,
+                align='right'))
+            table.add(row)
+
         for category in self.impact_summary['fields']:
             row = m.Row()
             row.add(m.Cell(category[0], header=True))

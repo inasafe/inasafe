@@ -190,6 +190,7 @@ class BuildingExposureReportMixinTest(unittest.TestCase):
                 'title': u'Action checklist'},
             'impact summary': {
                 'attributes': ['category', 'value'],
+                'headings': ['Buildings', 'Count'],
                 'fields': [
                     [u'Hazard Level 2', 12050, 1324567000],
                     [u'Hazard Level 1', 1027, 21284567111],
