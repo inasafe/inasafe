@@ -245,15 +245,30 @@ class PetaJakartaDialog(QDialog, FORM_CLASS):
         # Add a calculated field indicating if a poly is flooded or not
         # from PyQt4.QtCore import QVariant
         layer.startEditing()
-        field = QgsField('flooded', QVariant.Int)
-        layer.dataProvider().addAttributes([field])
+        # Add field with integer from 0 to 4 which represents the flood
+        # class. Its the same as 'state' field except that is being treated
+        # as a string.
+        # This is used for cartography
+        flood_class_field = QgsField('floodclass', QVariant.Int)
+        layer.dataProvider().addAttributes([flood_class_field])
         layer.commitChanges()
         layer.startEditing()
-        idx = layer.fieldNameIndex('flooded')
-        expression = QgsExpression('state > 0')
-        expression.prepare(layer.pendingFields())
+        flood_class_idx = layer.fieldNameIndex('floodclass')
+        flood_class_expression = QgsExpression('to_int(state)')
+        flood_class_expression.prepare(layer.pendingFields())
+
+        # Add field with boolean flag to say if the area is flooded
+        # This is used by the impact function
+        flooded_field = QgsField('flooded', QVariant.Int)
+        layer.dataProvider().addAttributes([flooded_field])
+        layer.commitChanges()
+        layer.startEditing()
+        flooded_idx = layer.fieldNameIndex('flooded')
+        flood_flag_expression = QgsExpression('state > 0')
+        flood_flag_expression.prepare(layer.pendingFields())
         for feature in layer.getFeatures():
-            feature[idx] = expression.evaluate(feature)
+            feature[flood_class_idx] = flood_class_expression.evaluate(feature)
+            feature[flooded_idx] = flood_flag_expression.evaluate(feature)
             layer.updateFeature(feature)
         layer.commitChanges()
         return layer

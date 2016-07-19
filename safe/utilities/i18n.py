@@ -15,21 +15,23 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+
+
+# This import is to enable SIP API V2
+# noinspection PyUnresolvedReferences
+import qgis  # pylint: disable=unused-import
+# noinspection PyPackageRequirements
+from PyQt4.QtCore import QCoreApplication, QSettings, QLocale
+from safe.utilities.unicode import get_unicode
+
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '02/24/15'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-# This import is to enable SIP API V2
-# noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=unused-import
-from PyQt4.QtCore import QCoreApplication, QSettings, QLocale
 
-from safe.utilities.unicode import get_unicode
-
-
-def tr(text):
+def tr(text, context='@default'):
     """We define a tr() alias here since the utilities implementation below
     is not a class and does not inherit from QObject.
 
@@ -38,6 +40,10 @@ def tr(text):
     :param text: String to be translated
     :type text: str, unicode
 
+    :param context: A context for the translation. Since a same can be
+        translated to different text depends on the context.
+    :type context: str
+
     :returns: Translated version of the given string if available, otherwise
         the original string.
     :rtype: str, unicode
@@ -45,7 +51,7 @@ def tr(text):
     # Ensure it's in unicode
     text = get_unicode(text)
     # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
-    return QCoreApplication.translate('@default', text)
+    return QCoreApplication.translate(context, text)
 
 
 def locale():
@@ -60,6 +66,7 @@ def locale():
     if override_flag:
         locale_name = QSettings().value('locale/userLocale', 'en_US', type=str)
     else:
+        # noinspection PyArgumentList
         locale_name = QLocale.system().name()
         # NOTES: we split the locale name because we need the first two
         # character i.e. 'id', 'af, etc
