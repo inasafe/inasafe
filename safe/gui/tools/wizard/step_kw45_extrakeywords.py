@@ -21,7 +21,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore
 
-from safe.definitions import layer_mode_classified, layer_purpose_hazard
+from safe.definitions import \
+    layer_mode_classified, layer_purpose_hazard, exposure_place
 
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step import WizardStep
@@ -71,7 +72,11 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
         :returns: The step to be switched to
         :rtype: WizardStep instance or None
         """
-        if self.parent.step_kw_layermode.\
+        selected_subcategory = self.parent.step_kw_subcategory.\
+            selected_subcategory()
+        if selected_subcategory == exposure_place:
+            new_step = self.parent.step_kw_name_field
+        elif self.parent.step_kw_layermode.\
                 selected_layermode() == layer_mode_classified:
             if self.parent.step_kw_classification.selected_classification() \
                     or self.parent.step_kw_classify.\

@@ -114,6 +114,17 @@ field_question_subcategory_classified = tr(
     'You have selected <b>classified</b> data for the vector <b>%s</b> layer. '
     'Please select the attribute in this layer that represents the classes.'
 )
+field_question_population_field = tr(
+    'You have selected <b>place</b> as an exposure input for the vector '
+    '<b>%s</b> layer. Please select the attribute in this layer that '
+    'represents the population. If you do not have one, let this step empty '
+    'and click the next button.'
+)
+field_question_name_field = tr(
+    'You have selected <b>place</b> as an exposure input for the vector '
+    '<b>%s</b> layer. Please select the attribute in this layer that '
+    'represents the name.'
+)
 field_question_subcategory_classified_id = tr(
     'You have selected <b>classified</b> data for the vector <b>%s</b> layer. '
     'Please select the attribute in this layer that represents the ids.'
