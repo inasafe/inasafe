@@ -30,7 +30,7 @@ from PyQt4.QtCore import QVariant
 from safe.common.exceptions import ZeroImpactException
 from safe.impact_functions.ash.ash_raster_landcover.metadata_definitions \
     import \
-    AshRasterHazardLandCoverFunctionMetadata
+    AshRasterLandCoverFunctionMetadata
 from safe.impact_functions.bases.continuous_rh_classified_ve import \
     ContinuousRHClassifiedVE
 from safe.impact_functions.generic.classified_polygon_landcover.\
@@ -48,14 +48,14 @@ __author__ = 'Rizky Maulana Nugraha <lana.pcfre@gmail.com>'
 __date__ = '5/24/16'
 
 
-class AshRasterLandcoverFunction(ContinuousRHClassifiedVE):
+class AshRasterLandCoverFunction(ContinuousRHClassifiedVE):
     # noinspection PyUnresolvedReferences
     """Simple impact function for ash raster on landcover."""
-    _metadata = AshRasterHazardLandCoverFunctionMetadata()
+    _metadata = AshRasterLandCoverFunctionMetadata()
 
     def __init__(self):
         """Constructor."""
-        super(AshRasterLandcoverFunction, self).__init__()
+        super(AshRasterLandCoverFunction, self).__init__()
 
         self.hazard_classes = [
             tr('Very Low'),

@@ -88,7 +88,7 @@ from safe.impact_functions.volcanic.volcano_polygon_population\
 
 # Volcanic Ash
 from safe.impact_functions.ash.ash_raster_landcover.impact_function import \
-    AshRasterLandcoverFunction
+    AshRasterLandCoverFunction
 from safe.impact_functions.ash.ash_raster_population.impact_function import \
     AshRasterPopulationFunction
 from safe.impact_functions.ash.ash_raster_places.impact_function import \
@@ -162,7 +162,7 @@ class TestImpactFunctionMetadata(unittest.TestCase):
             VolcanoPolygonPopulationFunction(),
 
             # Volcanic Ash
-            AshRasterLandcoverFunction(),
+            AshRasterLandCoverFunction(),
             AshRasterPlaceFunction(),
             AshRasterPopulationFunction()
         ]

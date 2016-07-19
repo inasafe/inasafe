@@ -34,7 +34,7 @@ from safe.impact_reports.population_exposure_report_mixin import \
     PopulationExposureReportMixin
 
 from safe.impact_functions.ash.ash_raster_population.metadata_definitions \
-    import AshRasterHazardPopulationFunctionMetadata
+    import AshRasterPopulationFunctionMetadata
 
 
 __author__ = 'ismailsunni'
@@ -49,7 +49,7 @@ class AshRasterPopulationFunction(
         PopulationExposureReportMixin):
     # noinspection PyUnresolvedReferences
     """Simple impact function for ash raster on population."""
-    _metadata = AshRasterHazardPopulationFunctionMetadata()
+    _metadata = AshRasterPopulationFunctionMetadata()
 
     def __init__(self):
         """Constructor."""

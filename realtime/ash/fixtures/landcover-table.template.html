@@ -35,26 +35,16 @@
     <th align="left" width="40%">Land Cover Type</th>
     <th align="right" width="30%">Area affected (km<sup>2</sup>)</th>
    </tr>
-   <tr>
-    <td>Settlement</td>
-    <td class="right">10000</td>
-   </tr>
-   <tr>
-    <td>Rice Field</td>
-    <td class="right">2309</td>
-   </tr>
-    <tr>
-    <td>Plantation</td>
-    <td class="right">12389</td>
-   </tr>
-   <tr>
-    <td>Water Supply</td>
-    <td class="right">1234</td>
-   </tr>
-   <tr>
-    <td>Forest</td>
-    <td class="right">82822</td>
-   </tr>
+   {% for item in landcover_list %}
+     <tr>
+        <td>
+           {{ item.type }}
+        </td>
+        <td class="right">
+           {{ item.area }}
+        </td>
+     </tr>
+   {% endfor %}
   </table>
  </body>
 </html>

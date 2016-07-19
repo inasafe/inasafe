@@ -48,7 +48,7 @@ def push_ash_event_to_rest(ash_event, fail_silent=True):
         session = inasafe_django.rest
 
         # Create a zipped impact layer
-        impact_zip_path = os.path.join(ash_event.report_path, 'impact.zip')
+        impact_zip_path = ash_event.working_dir_path('impact.zip')
 
         with ZipFile(impact_zip_path, 'w') as zipf:
             for root, dirs, files in os.walk(ash_event.working_dir):
@@ -65,11 +65,12 @@ def push_ash_event_to_rest(ash_event, fail_silent=True):
         timestring = '%Y%m%d%H%M%S%z'
         ash_data = {
             'volcano_name': ash_event.volcano_name,
-            'time': ash_event.time.strftime(dateformat),
+            'event_time': ash_event.time.strftime(dateformat),
+            'language': ash_event.locale,
         }
         ash_data_file = {
-            'impact_files': open(impact_zip_path),
-            'map_report': open(ash_event.map_report_path),
+            # 'impact_files': open(impact_zip_path),
+            # 'map_report': open(ash_event.map_report_path),
         }
 
         # modify headers
@@ -78,40 +79,40 @@ def push_ash_event_to_rest(ash_event, fail_silent=True):
         }
 
         # check does the shake event already exists?
-        response = session.ash(
-            ash_data['volcano_name'],
-            ash_event.time.strftime(timestring)).GET()
-        if response.status_code == requests.codes.ok:
-            # event exists, we should update using PUT Url
-            response = session.ash(
-                ash_data['volcano_name'],
-                ash_event.time.strftime(timestring)).PUT(
-                data=ash_data,
-                files=ash_data_file,
-                headers=headers)
-        elif response.status_code == requests.codes.not_found:
-            # event does not exists, create using POST url
-            response = session.ash.POST(
-                data=ash_data,
-                files=ash_data_file,
-                headers=headers)
-
-        if not (response.status_code == requests.codes.ok or
-                response.status_code == requests.codes.created):
-            # raise exceptions
-            error = RESTRequestFailedError(
-                url=response.url,
-                status_code=response.status_code,
-                data=ash_data)
-            if fail_silent:
-                LOGGER.warning(error.message)
-            else:
-                raise error
+        # response = session.ash(
+        #     ash_data['volcano_name'],
+        #     ash_event.time.strftime(timestring)).GET()
+        # if response.status_code == requests.codes.ok:
+        #     # event exists, we should update using PUT Url
+        #     response = session.ash(
+        #         ash_data['volcano_name'],
+        #         ash_event.time.strftime(timestring)).PUT(
+        #         data=ash_data,
+        #         files=ash_data_file,
+        #         headers=headers)
+        # elif response.status_code == requests.codes.not_found:
+        #     # event does not exists, create using POST url
+        #     response = session.ash.POST(
+        #         data=ash_data,
+        #         files=ash_data_file,
+        #         headers=headers)
+        #
+        # if not (response.status_code == requests.codes.ok or
+        #         response.status_code == requests.codes.created):
+        #     # raise exceptions
+        #     error = RESTRequestFailedError(
+        #         url=response.url,
+        #         status_code=response.status_code,
+        #         data=ash_data)
+        #     if fail_silent:
+        #         LOGGER.warning(error.message)
+        #     else:
+        #         raise error
 
         # post the report
         # build report data
         event_report_files = {
-            'map_report': open(ash_event.map_report_path),
+            'report_map': open(ash_event.map_report_path),
         }
         # check report exists
 
@@ -123,24 +124,33 @@ def push_ash_event_to_rest(ash_event, fail_silent=True):
             'ash-report',
             ash_data['volcano_name'],
             ash_event.time.strftime(timestring)).GET()
+        report_exists = False
         if response.status_code == requests.codes.ok:
+            result = response.json()
+            if result and 'count' in result and result['count'] > 0:
+                report_exists = True
+        elif response.status_code == requests.codes.not_found:
+            report_exists = False
+
+        if report_exists:
             # event exists, we should update using PUT Url
             response = session(
                 'ash-report',
                 ash_data['volcano_name'],
-                ash_event.time.strftime(timestring)).PUT(
+                ash_event.time.strftime(timestring),
+                ash_event.locale).PUT(
                 data=ash_data,
                 files=event_report_files,
                 headers=headers)
-        elif response.status_code == requests.codes.not_found:
+        else:
             # event doesn't exists, we should update using POST url
             response = session(
                 'ash-report',
                 ash_data['volcano_name'],
                 ash_event.time.strftime(timestring)).POST(
-                    data=ash_data,
-                    files=event_report_files,
-                    headers=headers)
+                data=ash_data,
+                files=event_report_files,
+                headers=headers)
 
         if not (response.status_code == requests.codes.ok or
                 response.status_code == requests.codes.created):

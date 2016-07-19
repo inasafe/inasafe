@@ -23,13 +23,15 @@ def process_ash(
         volcano_location=None,
         eruption_height=None,
         region=None,
-        alert_level=None):
+        alert_level=None,
+        hazard_url=None):
     LOGGER.info('-------------------------------------------')
 
-    if 'INASAFE_LOCALE' in os.environ:
-        locale_option = os.environ['INASAFE_LOCALE']
-    else:
-        locale_option = 'en'
+    # if 'INASAFE_LOCALE' in os.environ:
+    #     locale_option = os.environ['INASAFE_LOCALE']
+    # else:
+    #     locale_option = 'en'
+    locale_option = 'en'
 
     working_directory = ASH_WORKING_DIRECTORY
     try:
@@ -41,7 +43,8 @@ def process_ash(
             volcano_location=volcano_location,
             eruption_height=eruption_height,
             region=region,
-            alert_level=alert_level)
+            alert_level=alert_level,
+            hazard_url=hazard_url)
         LOGGER.info('Process event end.')
         return True
     except Exception as e:

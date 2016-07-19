@@ -50,7 +50,7 @@ class AshRasterHazardPlacesFunctionMetadata(ImpactFunctionMetadata):
         :rtype: dict
         """
         dict_meta = {
-            'id': 'AshRasterHazardPlacesFunctionMetadata',
+            'id': 'AshRasterHazardPlacesFunction',
             'name': tr('Ash raster on places'),
             'impact': tr('Be affected'),
             'title': tr('Be affected'),

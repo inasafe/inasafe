@@ -1065,6 +1065,12 @@ class ShakeEvent(QObject):
         function = ImpactFunctionManager().get(function_id)
         function.hazard = clipped_hazard_layer
         function.exposure = clipped_exposure_layer
+        extent = function.hazard.extent()
+        function.requested_extent = [
+            extent.xMinimum(), extent.yMinimum(),
+            extent.xMaximum(), extent.yMaximum()]
+        function.requested_extent_crs = function.hazard.crs()
+        function.force_memory = True
         function.run_analysis()
         result = function.impact
         try:

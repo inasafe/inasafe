@@ -42,6 +42,7 @@ class TestAshTemplate(unittest.TestCase):
         event.nearby_html_path = self.data_dir('nearby-table.html')
         event.population_html_path = self.data_dir('population-table.html')
         event.landcover_html_path = self.data_dir('landcover-table.html')
+        event.calculate_impact()
         event.generate_report()
 
     def data_dir(self, path):
