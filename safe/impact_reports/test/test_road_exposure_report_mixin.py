@@ -73,6 +73,7 @@ class RoadExposureReportMixinTest(unittest.TestCase):
             'exposure': 'road',
             'impact summary': {
                 'attributes': ['category', 'value'],
+                'headings': ['Roads', 'Length'],
                 'fields': [['Unaffected (m)', 0], ['Total (m)', 0]]},
             'impact table': {
                 'attributes': [
@@ -122,6 +123,7 @@ class RoadExposureReportMixinTest(unittest.TestCase):
             'exposure': 'road',
             'impact summary': {
                 'attributes': ['category', 'value'],
+                'headings': ['Roads', 'Length'],
                 'fields': [
                     ['Flooded (m)', 8.7],
                     ['Unaffected (m)', 135.8],

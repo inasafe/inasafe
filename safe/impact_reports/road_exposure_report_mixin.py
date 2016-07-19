@@ -43,6 +43,15 @@ class RoadExposureReportMixin(ReportMixin):
         # But for the Tsunami raster on Roads, we already have the dry column.
         self.add_unaffected_column = True
 
+    @property
+    def impact_summary_headings(self):
+        """Headings for the impact summary.
+
+        :return: Headings
+        :rtype: list
+        """
+        return [tr('Roads'), tr('Length')]
+
     @staticmethod
     def label_with_unit(label):
         """Get the label with the correct unit.
@@ -147,6 +156,7 @@ class RoadExposureReportMixin(ReportMixin):
 
         return {
             'attributes': ['category', 'value'],
+            'headings': self.impact_summary_headings,
             'fields': fields
         }
 
