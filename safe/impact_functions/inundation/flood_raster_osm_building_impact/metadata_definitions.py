@@ -90,7 +90,12 @@ class FloodRasterBuildingMetadata(ImpactFunctionMetadata):
                 tr('This function only flags buildings as impacted or not '
                    'either based on a fixed threshold')
             ],
-            'citations': [],
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ],
             'legend_notes': '',
             'map_title': tr('Flooded buildings'),
             'legend_title': tr('Flooded structure status'),

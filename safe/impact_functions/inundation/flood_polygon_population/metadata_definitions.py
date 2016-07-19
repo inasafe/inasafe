@@ -92,7 +92,12 @@ class FloodEvacuationVectorHazardMetadata(ImpactFunctionMetadata):
                 'to be evacuated, where they are located and what '
                 'resources would be required to support them.'),
             'limitations': [],
-            'citations': [],
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ],
             'map_title': tr('People affected by flood prone areas'),
             'legend_title': tr('Population Count'),
             'legend_units': tr('(people per polygon)'),

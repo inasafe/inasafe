@@ -90,7 +90,12 @@ class TsunamiRasterRoadMetadata(ImpactFunctionMetadata):
                 'Provide details about where critical road '
                 'might be inundated.'),
             'limitations': [],
-            'citations': [],
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ],
             'legend_units': '',
             'legend_notes': '',
             'map_title': tr('Roads inundated'),

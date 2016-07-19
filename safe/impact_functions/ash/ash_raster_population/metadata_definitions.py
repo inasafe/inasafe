@@ -76,7 +76,12 @@ class AshRasterHazardPopulationFunctionMetadata(ImpactFunctionMetadata):
                 'Provide details about how big area fall within '
                 'each hazard zone.'),
             'limitations': [],
-            'citations': [],
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ],
             'legend_title': '',
             'legend_units': '',
             'legend_notes': '',

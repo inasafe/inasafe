@@ -76,7 +76,12 @@ class ClassifiedPolygonHazardPopulationFunctionMetadata(
                 'Provide details about the number of people that are '
                 'within each hazard zone.'),
             'limitations': [],
-            'citations': [],
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ],
             'map_title': tr('People impacted'),
             'legend_title': tr('Population'),
             'legend_units': tr('(people per cell)'),

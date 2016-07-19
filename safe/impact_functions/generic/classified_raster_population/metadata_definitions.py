@@ -96,8 +96,13 @@ class ClassifiedRasterHazardPopulationMetadata(ImpactFunctionMetadata):
                 'Provide details about how many people would likely be '
                 'affected for each hazard class.'),
             'limitations': [tr('The number of classes is three.')],
-            'citations': [],
             'map_title': tr('Number of people affected in each class'),
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ],
             'legend_title': tr('Number of People'),
             'legend_units': tr('(people per cell)'),
             'legend_notes': tr(

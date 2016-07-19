@@ -10,15 +10,14 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+# Please group them and sort them alphabetical
+from safe.utilities.i18n import tr
 
 __author__ = 'ismail@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '13/04/14'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
-
-# Please group them and sort them alphabetical
-from safe.utilities.i18n import tr
 
 inasafe_keyword_version_key = 'keyword_version'
 inasafe_keyword_version = '3.5'
@@ -60,17 +59,27 @@ concept_generic_hazard = tr(
 layer_purpose_hazard = {
     'key': 'hazard',
     'name': tr('Hazard'),
-    'description': concept_hazard
-    # source UNISDR (2009) Terminology on disaster risk reduction.
-    # https://www.unisdr.org/we/inform/terminology
+    'description': concept_hazard,
+    'citations': [
+        {
+            'text': tr('UNISDR (2009) Terminology on disaster risk '
+                       'reduction.'),
+            'link': 'https://www.unisdr.org/we/inform/terminology'
+        }
+    ],
 }
 
 layer_purpose_exposure = {
     'key': 'exposure',
     'name': tr('Exposure'),
-    'description': concept_exposure
-    # source UNISDR (2009) Terminology on disaster risk reduction.
-    # https://www.unisdr.org/we/inform/terminology
+    'description': concept_exposure,
+    'citations': [
+        {
+            'text': tr('UNISDR (2009) Terminology on disaster risk '
+                       'reduction.'),
+            'link': 'https://www.unisdr.org/we/inform/terminology'
+        }
+    ]
 }
 
 layer_purpose_aggregation = {
@@ -80,7 +89,13 @@ layer_purpose_aggregation = {
         'An <b>aggregation</b> layer represents regions that can be used to '
         'summarise impact analysis results. For example, we might summarise '
         'the affected people after a flood according to administration '
-        'boundaries.')
+        'boundaries.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
 }
 
 layer_purpose = {
@@ -93,6 +108,12 @@ layer_purpose = {
         layer_purpose_hazard,
         layer_purpose_exposure,
         layer_purpose_aggregation
+    ],
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
     ]
 }
 
@@ -114,7 +135,14 @@ layer_mode_continuous = {
         'raster represents a discrete class (e.g. low depth = 1, medium depth '
         '= 2, high depth = 3).</p>'
     ),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
 }
+
 layer_mode_classified = {
     'key': 'classified',
     'name': tr('Classified'),
@@ -137,6 +165,12 @@ layer_mode_classified = {
         '<p>Classified values in a vector exposure data set might include '
         'building type or road type.</p>'
     ),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
 }
 
 layer_mode = {
@@ -148,6 +182,12 @@ layer_mode = {
     'types': [
         layer_mode_continuous,
         layer_mode_classified
+    ],
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
     ]
 }
 
@@ -158,7 +198,13 @@ layer_geometry_point = {
     'description': tr(
         'A layer composed of points which each represent a feature on the '
         'earth. Currently the only point data supported by InaSAFE are '
-        '<b>volcano hazard</b> layers and building points.')
+        '<b>volcano hazard</b> layers and building points.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
 }
 
 layer_geometry_line = {
@@ -166,7 +212,13 @@ layer_geometry_line = {
     'name': tr('Line'),
     'description': tr(
         'A layer composed of linear features. Currently only <b>road exposure'
-        '</b>line layers are supported by InaSAFE.')
+        '</b>line layers are supported by InaSAFE.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
 }
 
 layer_geometry_polygon = {
@@ -181,7 +233,13 @@ layer_geometry_polygon = {
         'function to impact function and whether the layer represents '
         'a hazard or an exposure layer. Polygon layers can also be used '
         'for aggregation - where impact analysis results per boundary '
-        'such as village or district boundaries.')
+        'such as village or district boundaries.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
 }
 
 layer_geometry_raster = {
@@ -190,7 +248,13 @@ layer_geometry_raster = {
     'description': tr(
         'A raster data layer consists of a matrix of cells organised into '
         'rows and columns. The value in the cells represents information such '
-        'as a flood depth value or a hazard class. ')
+        'as a flood depth value or a hazard class. '),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
 }
 
 layer_geometry = {
@@ -204,6 +268,12 @@ layer_geometry = {
         layer_geometry_point,
         layer_geometry_line,
         layer_geometry_polygon
+    ],
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
     ]
 }
 
@@ -215,7 +285,13 @@ hazard_category_single_event = {
         '<b>Single event</b> hazard data can be based on either a specific  '
         'event that has happened in the past, for example a flood like '
         'Jakarta 2013, or a possible event, such as the tsunami that results '
-        'from an earthquake near Bima, that might happen in the future.')
+        'from an earthquake near Bima, that might happen in the future.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
 }
 
 hazard_category_multiple_event = {
@@ -228,7 +304,13 @@ hazard_category_multiple_event = {
         '<p>This type of hazard data shows those locations that might be '
         'impacted by a volcanic eruption in the future. Another example '
         'might be a probabilistic hazard model that shows the likelihood of a '
-        'magnitude 7 earthquake happening in the next 50 years.</p>')
+        'magnitude 7 earthquake happening in the next 50 years.</p>'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
 }
 
 hazard_category = {
@@ -238,6 +320,12 @@ hazard_category = {
         'This describes the type of hazard scenario that is represented by '
         'the layer. There are two possible values for this attribute, single '
         'event and multiple event.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
     'types': [
         hazard_category_single_event,
         hazard_category_multiple_event
@@ -256,6 +344,12 @@ hazard_generic = {
     ],
     'actions': [  # these are additional generic actions - IF has more
 
+    ],
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
     ]
 }
 
@@ -270,6 +364,12 @@ hazard_earthquake = {
     ],
     'actions': [  # these are additional generic actions - IF has more
 
+    ],
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
     ]
 }
 
@@ -287,6 +387,12 @@ hazard_flood = {
     ],
     'actions': [  # these are additional generic actions - IF has more
 
+    ],
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
     ]
 }
 
@@ -301,6 +407,12 @@ hazard_volcanic_ash = {
     ],
     'actions': [  # these are additional generic actions - IF has more
 
+    ],
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
     ]
 }
 
@@ -317,6 +429,12 @@ hazard_tsunami = {
     ],
     'actions': [  # these are additional generic actions - IF has more
 
+    ],
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
     ]
 }
 
@@ -332,6 +450,12 @@ hazard_volcano = {
     ],
     'actions': [  # these are additional generic actions - IF has more
 
+    ],
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
     ]
 }
 
@@ -349,7 +473,13 @@ hazards = {
     'key': 'hazards',
     'name': tr('Hazards'),
     'description': concept_hazard ,
-    'types': hazard_all
+    'types': hazard_all,
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
 }
 
 # Exposure
@@ -378,6 +508,12 @@ exposure_land_cover = {
            'field?'),
         tr('What tools or equipment are needed for early recovery of the '
            'land/crops/field?')
+    ],
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
     ]
 }
 
@@ -414,6 +550,12 @@ exposure_people_in_building = {
            'population?'),
         tr('What are the related health risks?'),
         tr('Who are the key people responsible for coordination?')
+    ],
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
     ]
 }
 
@@ -424,7 +566,13 @@ exposure_population = {
         'The <b>population</b> describes the people that might be '
         'exposed to a particular hazard.'),
     'notes': exposure_people_in_building['notes'],
-    'actions': exposure_people_in_building['actions']
+    'actions': exposure_people_in_building['actions'],
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
 }
 
 exposure_road = {
@@ -450,6 +598,12 @@ exposure_road = {
         tr('Which government department is responsible for supplying '
            'equipment ?')
 
+    ],
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
     ]
 }
 
@@ -474,6 +628,12 @@ exposure_structure = {
         tr('Where will we locate the operations centre?'),
         tr('Where will we locate warehouse and/or distribution centres?'),
         tr('Are the schools and hospitals still active?'),
+    ],
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
     ]
 }
 
@@ -486,6 +646,12 @@ exposure_place = {
     'notes': [  # additional generic notes for places - IF has more
     ],
     'actions': [  # these are additional generic actions - IF has more
+    ],
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
     ]
 }
 
@@ -504,7 +670,13 @@ exposures = {
     'key': 'exposures',
     'name': tr('Exposure'),
     'description': concept_exposure,
-    'types': exposure_all
+    'types': exposure_all,
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
 }
 
 # No data warnings for appending to actions if
@@ -527,6 +699,12 @@ unit_feet = {
     'description': tr(
         '<b>Feet</b> are an imperial unit of measure. There are 12 '
         'inches in 1 foot and 3 feet in 1 yard.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
 }
 
 unit_generic = {
@@ -537,6 +715,12 @@ unit_generic = {
     'description': tr(
         'A generic unit for value that does not have unit or we do not know '
         'about the unit. It also can be used for normalised values.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
 }
 
 unit_kilogram_per_meter_square = {
@@ -547,7 +731,13 @@ unit_kilogram_per_meter_square = {
     'description': tr(
         '<b>Kilograms per square metre</b> is a metric unit of measure where '
         'the weight is specified according to area.  This unit is relevant '
-        'for hazards such as volcanic ash.')
+        'for hazards such as volcanic ash.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
 }
 
 unit_kilometres = {
@@ -558,6 +748,12 @@ unit_kilometres = {
     'description': tr(
         '<b>Kilometres</b> are a metric unit of measure. There are 1000 '
         'metres in 1 kilometre (km).'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
 }
 
 unit_metres = {
@@ -568,6 +764,12 @@ unit_metres = {
     'description': tr(
         '<b>Metres</b> are a metric unit of measure. There are 100 '
         'centimetres in 1 metre.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
 }
 
 unit_millimetres = {
@@ -578,6 +780,12 @@ unit_millimetres = {
     'description': tr(
         '<b>Millimetres</b> are a metric unit of measure. There are 1000 '
         'millimetres in 1 metre.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
 }
 
 unit_centimetres = {
@@ -588,6 +796,12 @@ unit_centimetres = {
     'description': tr(
         '<b>Centimetres</b> are a metric unit of measure. There are 100 '
         'centimetres in 1 metre.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
 }
 
 unit_mmi = {
@@ -599,6 +813,12 @@ unit_mmi = {
         'The <b>Modified Mercalli Intensity (MMI)</b> scale describes '
         'the intensity of ground shaking from a earthquake based on the '
         'effects observed by people at the surface.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
 }
 
 unit_percentage = {
@@ -609,6 +829,12 @@ unit_percentage = {
     'description': tr(
         'Percentage values ranges from 0 to 100. It represents a ratio of '
         'hundred.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
 }
 
 continuous_hazard_unit = {
@@ -617,6 +843,12 @@ continuous_hazard_unit = {
     'description': tr(
         'Hazard units are used for continuous data. Examples of hazard units '
         'include metres and feet. '),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
     'types': [
         unit_feet,
         unit_generic,
@@ -637,6 +869,12 @@ generic_vector_hazard_classes = {
     'name': tr('Generic classes'),
     'description': concept_generic_hazard,
     'default_attribute': 'affected',
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
     'classes': [
         {
             'key': 'high',
@@ -645,7 +883,13 @@ generic_vector_hazard_classes = {
             'string_defaults': ['high'],
             'numeric_default_min': 5,
             'numeric_default_max': 10,
-            'optional': False
+            'optional': False,
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ],
         },
         {
             'key': 'medium',
@@ -654,7 +898,13 @@ generic_vector_hazard_classes = {
             'string_defaults': ['medium'],
             'numeric_default_min': 3,
             'numeric_default_max': (5 - small_number),
-            'optional': False
+            'optional': False,
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ],
         },
         {
             'key': 'low',
@@ -663,7 +913,13 @@ generic_vector_hazard_classes = {
             'string_defaults': ['low'],
             'numeric_default_min': 0,
             'numeric_default_max': (3 - small_number),
-            'optional': False
+            'optional': False,
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ],
         }
     ]
 }
@@ -675,6 +931,12 @@ volcano_vector_hazard_classes = {
         'Three classes are supported for volcano vector hazard data: '
         '<b>low</b>, <b>medium</b>, or <b>high</b>.'),
     'default_attribute': 'affected',
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
     'classes': [
         {
             'key': 'high',
@@ -683,7 +945,13 @@ volcano_vector_hazard_classes = {
             'string_defaults': ['Kawasan Rawan Bencana III', 'high'],
             'numeric_default_min': 0,
             'numeric_default_max': (3 - small_number),
-            'optional': False
+            'optional': False,
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
         },
         {
             'key': 'medium',
@@ -692,7 +960,13 @@ volcano_vector_hazard_classes = {
             'string_defaults': ['Kawasan Rawan Bencana II', 'medium'],
             'numeric_default_min': 3,
             'numeric_default_max': (5 - small_number),
-            'optional': False
+            'optional': False,
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
         },
         {
             'key': 'low',
@@ -701,7 +975,13 @@ volcano_vector_hazard_classes = {
             'string_defaults': ['Kawasan Rawan Bencana I', 'low'],
             'numeric_default_min': 5,
             'numeric_default_max': 10,
-            'optional': False
+            'optional': False,
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
         }
     ]
 }
@@ -715,6 +995,12 @@ flood_vector_hazard_classes = {
         'by flood water). This unit does not describe how <b>wet</b> or '
         '<b>dry</b> an area is.'),
     'default_attribute': 'affected',
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
     'classes': [
         {
             'key': 'wet',
@@ -723,7 +1009,13 @@ flood_vector_hazard_classes = {
             'string_defaults': ['wet', '1', 'YES', 'y', 'yes'],
             'numeric_default_min': 1,
             'numeric_default_max': 9999999999,
-            'optional': True
+            'optional': True,
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
         },
         {
             'key': 'dry',
@@ -732,7 +1024,13 @@ flood_vector_hazard_classes = {
             'string_defaults': ['dry', '0', 'No', 'n', 'no'],
             'numeric_default_min': 0,
             'numeric_default_max': (1 - small_number),
-            'optional': True
+            'optional': True,
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
         }
     ]
 }
@@ -743,6 +1041,12 @@ vector_hazard_classification = {
     'description': tr(
         'Hazard classes are a way to group the values in one of '
         'the attributes or fields in a vector layer.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
     'types': [
         generic_vector_hazard_classes,
         volcano_vector_hazard_classes,
@@ -761,6 +1065,12 @@ flood_raster_hazard_classes = {
         '<b>wet</b> (affected by flood water) or <b>dry</b> (not affected '
         'by flood water). This unit does not describe how <b>wet</b> or '
         '<b>dry</b> an area is.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
     'classes': [
         {
             'key': 'wet',
@@ -768,7 +1078,13 @@ flood_raster_hazard_classes = {
             'description': tr('Water above ground height.'),
             'numeric_default_min': 1,
             'numeric_default_max': 9999999999,
-            'optional': True
+            'optional': True,
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
         },
         {
             'key': 'dry',
@@ -776,7 +1092,13 @@ flood_raster_hazard_classes = {
             'description': tr('No water above ground height.'),
             'numeric_default_min': 0,
             'numeric_default_max': (1 - small_number),
-            'optional': True
+            'optional': True,
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
         }
     ]
 }
@@ -785,6 +1107,12 @@ generic_raster_hazard_classes = {
     'key': 'generic_raster_hazard_classes',
     'name': tr('Generic classes'),
     'description': concept_generic_hazard,
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
     'classes': [
         {
             'key': 'high',
@@ -792,7 +1120,13 @@ generic_raster_hazard_classes = {
             'description': tr('The highest hazard classification.'),
             'numeric_default_min': 3,
             'numeric_default_max': 3,
-            'optional': False
+            'optional': False,
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ],
         },
         {
             'key': 'medium',
@@ -800,7 +1134,13 @@ generic_raster_hazard_classes = {
             'description': tr('The middle hazard classification.'),
             'numeric_default_min': 2,
             'numeric_default_max': 2,
-            'optional': False
+            'optional': False,
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ],
         },
         {
             'key': 'low',
@@ -808,7 +1148,13 @@ generic_raster_hazard_classes = {
             'description': tr('The lowest hazard classification.'),
             'numeric_default_min': 1,
             'numeric_default_max': 1,
-            'optional': False
+            'optional': False,
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ],
         }
     ]
 }
@@ -822,6 +1168,12 @@ tsunami_raster_hazard_classes = {
         '<b>very high</b> for tsunami hazard classification. '
         'The following description for these classes is provided by Badan '
         'Geologi based on BNPB Perka 2/2012'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
     'classes': [
         {
             'key': 'dry',
@@ -829,7 +1181,13 @@ tsunami_raster_hazard_classes = {
             'description': tr('No water above ground height.'),
             'numeric_default_min': 0,
             'numeric_default_max': (1 - small_number),
-            'optional': True
+            'optional': True,
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
         },
         {
             'key': 'low',
@@ -846,7 +1204,13 @@ tsunami_raster_hazard_classes = {
                 'the shore.'),
             'numeric_default_min': 0,
             'numeric_default_max': 1,
-            'optional': True
+            'optional': True,
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
         },
         {
             'key': 'medium',
@@ -861,7 +1225,13 @@ tsunami_raster_hazard_classes = {
                 'wooden houses, while most of them are safe.'),
             'numeric_default_min': 1,
             'numeric_default_max': 3,
-            'optional': True
+            'optional': True,
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
         },
         {
             'key': 'high',
@@ -879,7 +1249,13 @@ tsunami_raster_hazard_classes = {
                 'away.'),
             'numeric_default_min': 3,
             'numeric_default_max': 8,
-            'optional': True
+            'optional': True,
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
         },
         {
             'key': 'very high',
@@ -887,7 +1263,13 @@ tsunami_raster_hazard_classes = {
             'description': tr('Water above 8.0m.'),
             'numeric_default_min': 8,
             'numeric_default_max': 9999999999,
-            'optional': True
+            'optional': True,
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
         }
 
     ]
@@ -903,6 +1285,12 @@ raster_hazard_classification = {
         flood_raster_hazard_classes,
         generic_raster_hazard_classes,
         tsunami_raster_hazard_classes
+    ],
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
     ]
 }
 
@@ -913,14 +1301,26 @@ count_exposure_unit = {
     'key': 'count',
     'name': tr('Count'),
     'description': tr(
-        'Number of people (or any other object) per pixel, building or area.')
+        'Number of people (or any other object) per pixel, building or area.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
 }
 
 density_exposure_unit = {
     'key': 'density',
     'name': tr('Density'),
     'description': tr(
-        'Number of people (or any other object) in a specific area.')
+        'Number of people (or any other object) in a specific area.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
 }
 
 exposure_unit = {
@@ -932,6 +1332,12 @@ exposure_unit = {
     'types': [
         count_exposure_unit,
         density_exposure_unit
+    ],
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
     ]
 }
 
@@ -939,13 +1345,25 @@ exposure_unit = {
 structure_class_field = {
     'key': 'structure_class_field',
     'name': tr('Attribute field'),
-    'description': tr('Attribute where the structure type is defined.')
+    'description': tr('Attribute where the structure type is defined.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
 }
 
 road_class_field = {
     'key': 'road_class_field',
     'name': tr('Attribute field'),
-    'description': tr('Attribute where the road type is defined.')
+    'description': tr('Attribute where the road type is defined.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
 }
 
 # Additional keywords
@@ -954,7 +1372,13 @@ volcano_name_field = {
     'key': 'volcano_name_field',
     'name': tr('Name field'),
     'type': 'field',
-    'description': tr('Attribute where the volcano name is located.')
+    'description': tr('Attribute where the volcano name is located.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
 }
 
 area_name_field = {
@@ -963,7 +1387,13 @@ area_name_field = {
     'type': 'field',
     'description': tr(
             'Attribute for the area name. We will show the name for each area '
-            'by using this attribute.')
+            'by using this attribute.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
 }
 
 area_id_field = {
@@ -972,7 +1402,13 @@ area_id_field = {
     'type': 'field',
     'description': tr(
             'Attribute for the id on the area. We will group the result by '
-            'this attribute')
+            'this attribute'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
 }
 
 # General terminology and descriptive terms
@@ -983,7 +1419,13 @@ field = {
     'description': tr(
         'The attribute field identifies a field in the attribute table used '
         'to identify the function of a feature e.g.  a road type, '
-        'building type, hazard zone etc.')
+        'building type, hazard zone etc.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
 }
 
 field_value = {
@@ -991,7 +1433,13 @@ field_value = {
     'name': tr('Attribute value'),
     'description': tr(
         'The attribute value identifies features with similar meanings. For '
-        'example building attributes may include schools and hospitals. ')
+        'example building attributes may include schools and hospitals. '),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
 }
 
 value_map = {
@@ -1001,7 +1449,13 @@ value_map = {
         'Attribute value maps are used to group related attribute '
         'values. For example flooded polygons with attribute values of "yes" '
         ', "YES", "1" and "Flooded" might all be grouped together as '
-        '"FLOODPRONE".')
+        '"FLOODPRONE".'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
 }
 
 
@@ -1016,7 +1470,13 @@ road_class_mapping = [
         'name': tr('Motorway'),
         'description': tr('A road to solve the traffic and have a fare.'),
         'osm_downloader': ['Motorway or highway', 'Motorway link'],
-        'string_defaults': ['motorway', 'trunk', 'motorway link', 'trunk link']
+        'string_defaults': ['motorway', 'trunk', 'motorway link', 'trunk link'],
+        'citations': [
+            {
+                'text': None,
+                'link': None
+            }
+        ]
     },
     {
         'key': 'primary',
@@ -1025,7 +1485,13 @@ road_class_mapping = [
             'A road that service the main transportation with a long distance '
             'travel characteristic and high average velocity.'),
         'string_defaults': ['primary', 'primary link', 'primary road'],
-        'osm_downloader': ['Primary road', 'Primary link']
+        'osm_downloader': ['Primary road', 'Primary link'],
+        'citations': [
+            {
+                'text': None,
+                'link': None
+            }
+        ]
     },
     {
         'key': 'secondary',
@@ -1034,7 +1500,13 @@ road_class_mapping = [
             'A road that service the transportation with a medium distance '
             'travel characteristic and medium average velocity.'),
         'string_defaults': ['secondary', 'secondary link'],
-        'osm_downloader': ['Secondary', 'Secondary link']
+        'osm_downloader': ['Secondary', 'Secondary link'],
+        'citations': [
+            {
+                'text': None,
+                'link': None
+            }
+        ]
     },
     {
         'key': 'local',
@@ -1045,7 +1517,13 @@ road_class_mapping = [
         'string_defaults': [
             'local', 'tertiary', 'tertiary', 'tertiary link', 'unclassified'
         ],
-        'osm_downloader': ['Tertiary', 'Tertiary link']
+        'osm_downloader': ['Tertiary', 'Tertiary link'],
+        'citations': [
+            {
+                'text': None,
+                'link': None
+            }
+        ]
     },
     {
         'key': 'path',
@@ -1053,7 +1531,13 @@ road_class_mapping = [
         'description': tr('A road to walk on foot aim.'),
         'osm_downloader': ['Track', 'Cycleway, footpath, etc.'],
         'string_defaults': [
-            'path', 'track', 'footway', 'cycleway', 'cycleway, footpath, etc.']
+            'path', 'track', 'footway', 'cycleway', 'cycleway, footpath, etc.'],
+        'citations': [
+            {
+                'text': None,
+                'link': None
+            }
+        ]
     },
     {
         'key': 'other',
@@ -1065,7 +1549,13 @@ road_class_mapping = [
             'other', 'residential', 'service', 'living street', 'pedestrian',
             'road', 'road, residential, living street, etc.'
         ],
-        'osm_downloader': ['Road, residential, living street, etc.']
+        'osm_downloader': ['Road, residential, living street, etc.'],
+        'citations': [
+            {
+                'text': None,
+                'link': None
+            }
+        ]
     }
 ]
 # List to keep the order of the keys.
@@ -1078,7 +1568,13 @@ structure_class_mapping = [
         'description': tr(
             'A structure used to provide shelter for people.'),
         'string_defaults': ['house', 'dorm', 'residential' 'residence'],
-        'osm_downloader': ['Residential']
+        'osm_downloader': ['Residential'],
+        'citations': [
+            {
+                'text': None,
+                'link': None
+            }
+        ]
     },
     {
         'key': 'education',
@@ -1089,7 +1585,13 @@ structure_class_mapping = [
             'kindergarten', 'college', 'school', 'university', 'education',
             'university/college'
         ],
-        'osm_downloader': ['School', 'University/College']
+        'osm_downloader': ['School', 'University/College'],
+        'citations': [
+            {
+                'text': None,
+                'link': None
+            }
+        ]
     },
     {
         'key': 'health',
@@ -1101,7 +1603,13 @@ structure_class_mapping = [
             'clinic', 'doctor', 'hospital', 'dentist', 'pharmacy', 'health',
             'clinic/doctor'
         ],
-        'osm_downloader': ['Clinic/Doctor', 'Hospital']
+        'osm_downloader': ['Clinic/Doctor', 'Hospital'],
+        'citations': [
+            {
+                'text': None,
+                'link': None
+            }
+        ]
     },
     {
         'key': 'transport',
@@ -1112,7 +1620,13 @@ structure_class_mapping = [
         'string_defaults': [
             'bus stop', 'bus station', 'station', 'ferry terminal',
             'aerodrome', 'airport', 'terminal', 'transportation'],
-        'osm_downloader': []
+        'osm_downloader': [],
+        'citations': [
+            {
+                'text': None,
+                'link': None
+            }
+        ]
     },
     {
         'key': 'place of worship',
@@ -1130,6 +1644,12 @@ structure_class_mapping = [
         'osm_downloader': [
             'Place of Worship - Islam', 'Place of Worship - Unitarian',
             'Place of Worship - Buddhist', 'Place of Worship'
+        ],
+        'citations': [
+            {
+                'text': None,
+                'link': None
+            }
         ]
     },
     {
@@ -1139,7 +1659,13 @@ structure_class_mapping = [
             'A structure or facility that is used to provide a public service '
             'or other government activity.'),
         'string_defaults': ['government'],
-        'osm_downloader': ['Government']
+        'osm_downloader': ['Government'],
+        'citations': [
+            {
+                'text': None,
+                'link': None
+            }
+        ]
     },
     {
         'key': 'commercial',
@@ -1153,7 +1679,13 @@ structure_class_mapping = [
             'commercial', 'industrial', 'economy', 'restaurant', 'cafe',
             'fast food', 'hotel', 'accommodation'
         ],
-        'osm_downloader': ['Supermarket', 'Commercial', 'Industrial']
+        'osm_downloader': ['Supermarket', 'Commercial', 'Industrial'],
+        'citations': [
+            {
+                'text': None,
+                'link': None
+            }
+        ]
     },
     {
         'key': 'recreation',
@@ -1166,7 +1698,13 @@ structure_class_mapping = [
             'recreation and entertainment' 'stadium', 'sport centre', 'pitch',
             'sports facility', 'sport'
         ],
-        'osm_downloader': ['Sports Facility']
+        'osm_downloader': ['Sports Facility'],
+        'citations': [
+            {
+                'text': None,
+                'link': None
+            }
+        ]
     },
     {
         'key': 'public facility',
@@ -1178,7 +1716,13 @@ structure_class_mapping = [
             'library', 'toilet', 'convention hall', 'prison', 'police station',
             'public facility', 'public building', 'fire station'
         ],
-        'osm_downloader': ['Fire Station', 'Police Station', 'Public Building']
+        'osm_downloader': ['Fire Station', 'Police Station', 'Public Building'],
+        'citations': [
+            {
+                'text': None,
+                'link': None
+            }
+        ]
     },
     {
         'key': 'other',
@@ -1188,7 +1732,13 @@ structure_class_mapping = [
         'string_defaults': [
             'animal boarding', 'water well', 'lighthouse', 'utility', 'other'
         ],
-        'osm_downloader': ['Utility']
+        'osm_downloader': ['Utility'],
+        'citations': [
+            {
+                'text': None,
+                'link': None
+            }
+        ]
     }
 ]
 # List to keep the order of the keys.
@@ -1202,7 +1752,13 @@ place_class_mapping = [
             'The largest urban settlements in the territory, normally '
             'including the national, state and provincial capitals.'),
         'osm_downloader': [],
-        'string_defaults': ['city']
+        'string_defaults': ['city'],
+        'citations': [
+            {
+                'text': None,
+                'link': None
+            }
+        ]
     },
     {
         'key': 'Town',
@@ -1213,7 +1769,13 @@ place_class_mapping = [
             'including schools, medical facilities etc and traditionally a '
             'market.'),
         'string_defaults': ['town'],
-        'osm_downloader': []
+        'osm_downloader': [],
+        'citations': [
+            {
+                'text': None,
+                'link': None
+            }
+        ]
     },
     {
         'key': 'Village',
@@ -1223,7 +1785,13 @@ place_class_mapping = [
             'facilities available with people traveling to nearby towns to '
             'access these.'),
         'string_defaults': ['village'],
-        'osm_downloader': []
+        'osm_downloader': [],
+        'citations': [
+            {
+                'text': None,
+                'link': None
+            }
+        ]
     },
     {
         'key': 'hamlet',
@@ -1232,7 +1800,13 @@ place_class_mapping = [
             'A smaller rural community typically with fewer than 100-200 '
             'inhabitants, few infrastructure.'),
         'string_defaults': ['hamlet'],
-        'osm_downloader': ['Tertiary', 'Tertiary link']
+        'osm_downloader': ['Tertiary', 'Tertiary link'],
+        'citations': [
+            {
+                'text': None,
+                'link': None
+            }
+        ]
     },
     {
         'key': 'airport',
@@ -1241,7 +1815,13 @@ place_class_mapping = [
             'A complex of runways and buildings for the takeoff, landing, and '
             'maintenance of civil aircraft, with facilities for passengers.'),
         'osm_downloader': [],
-        'string_defaults': ['airport']
+        'string_defaults': ['airport'],
+        'citations': [
+            {
+                'text': None,
+                'link': None
+            }
+        ]
     }
 ]
 # List to keep the order of the keys.
