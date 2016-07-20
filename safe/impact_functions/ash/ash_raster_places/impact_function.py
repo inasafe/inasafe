@@ -34,7 +34,7 @@ __copyright__ = 'etienne@kartoza.com'
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class AshRasterPlaceFunction(
+class AshRasterHazardPlacesFunction(
         ContinuousRHClassifiedVE,
         PlaceExposureReportMixin):
     # noinspection PyUnresolvedReferences
@@ -43,7 +43,7 @@ class AshRasterPlaceFunction(
 
     def __init__(self):
         """Constructor (calls ctor of base class)."""
-        super(AshRasterPlaceFunction, self).__init__()
+        super(AshRasterHazardPlacesFunction, self).__init__()
         PlaceExposureReportMixin.__init__(self)
         self.hazard_classes = [
             tr('Very Low'),

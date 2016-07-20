@@ -18,7 +18,7 @@ from jinja2 import Template
 from headless.tasks.utilities import download_file
 from realtime.exceptions import MapComposerError
 from realtime.utilities import realtime_logger_name
-from safe.common.exceptions import ZeroImpactException
+from safe.common.exceptions import ZeroImpactException, KeywordNotFoundError
 from safe.impact_functions.core import population_rounding
 from safe.impact_functions.impact_function_manager import \
     ImpactFunctionManager
@@ -53,7 +53,9 @@ class AshEvent(QObject):
             locale=None,
             working_dir=None,
             hazard_path=None,
+            highlight_base_path=None,
             population_path=None,
+            volcano_path=None,
             landcover_path=None,
             cities_path=None,
             airport_path=None):
@@ -121,6 +123,8 @@ class AshEvent(QObject):
         self.cities_path = cities_path
         self.airport_path = airport_path
         self.landcover_path = landcover_path
+        self.volcano_path = volcano_path
+        self.highlight_base_path = highlight_base_path
 
         # load layers
         self.hazard_layer = read_qgis_layer(self.hazard_path, 'Ash Fall')
@@ -132,6 +136,10 @@ class AshEvent(QObject):
             self.cities_path, 'Cities')
         self.airport_layer = read_qgis_layer(
             self.airport_path, 'Airport')
+        self.volcano_layer = read_qgis_layer(
+            self.volcano_path, 'Volcano')
+        self.highlight_base_layer = read_qgis_layer(
+            self.highlight_base_path, 'Base Map')
 
         # Write metadata for self reference
         self.write_metadata()
@@ -358,16 +366,136 @@ class AshEvent(QObject):
             f.write(html_string)
 
     def render_nearby_table(self):
+
+        hazard_mapping = {
+            0: 'Very Low',
+            1: 'Low',
+            2: 'Moderate',
+            3: 'High',
+            4: 'Very High'
+        }
+
+        # load PLACES
+        keyword_io = KeywordIO()
+        try:
+            cities_impact = read_qgis_layer(
+                self.working_dir_path('cities_impact.shp'),
+                'Cities')
+            hazard = keyword_io.read_keywords(
+                cities_impact, 'target_field')
+            hazard_field_index = cities_impact.fieldNameIndex(hazard)
+
+            name_field = keyword_io.read_keywords(
+                self.cities_layer, 'name_field')
+            name_field_index = cities_impact.fieldNameIndex(name_field)
+
+            try:
+                population_field = keyword_io.read_keywords(
+                    self.cities_layer, 'population_field')
+                population_field_index = cities_impact.fieldNameIndex(
+                    population_field)
+            except KeywordNotFoundError:
+                population_field = None
+                population_field_index = None
+
+            table_places = []
+            for f in cities_impact.getFeatures():
+                haz_class = f.attributes()[hazard_field_index]
+                city_name = f.attributes()[name_field_index]
+                if population_field_index:
+                    city_pop = f.attributes()[population_field_index]
+                else:
+                    city_pop = 1
+                # format:
+                # [
+                # 'hazard class',
+                # 'city's population',
+                # 'city's name',
+                # 'the type'
+                # ]
+                haz = hazard_mapping[haz_class]
+                item = {
+                    'class': haz_class,
+                    'hazard': haz,
+                    'css': haz.lower().replace(' ', '-'),
+                    'population': population_rounding(city_pop / 1000),
+                    'name': city_name.capitalize(),
+                    'type': 'places'
+                }
+                table_places.append(item)
+
+            # sort table by hazard zone, then population
+            table_places = sorted(
+                table_places,
+                key=lambda x: (-x['class'], -x['population']))
+        except Exception as e:
+            LOGGER.exception(e)
+            table_places = []
+
+        # load AIRPORTS
+        try:
+            airport_impact = read_qgis_layer(
+                self.working_dir_path('airport_impact.shp'),
+                'Airport')
+            hazard = keyword_io.read_keywords(
+                airport_impact, 'target_field')
+            hazard_field_index = airport_impact.fieldNameIndex(hazard)
+
+            name_field = keyword_io.read_keywords(
+                self.airport_layer, 'name_field')
+            name_field_index = airport_impact.fieldNameIndex(name_field)
+
+            # airport doesnt have population, so enter 0 for population
+            table_airports = []
+            for f in airport_impact.getFeatures():
+                haz_class = f.attributes()[hazard_field_index]
+                airport_name = f.attributes()[name_field_index]
+                haz = hazard_mapping[haz_class]
+                item = {
+                    'class': haz_class,
+                    'hazard': haz,
+                    'css': haz.lower().replace(' ', '-'),
+                    'population': 0,
+                    'name': airport_name.capitalize(),
+                    'type': 'airport'
+                }
+                table_airports.append(item)
+
+            # Sort by hazard class
+            table_airports = sorted(
+                table_airports,
+                key=lambda x: -x['class'])
+        except Exception as e:
+            LOGGER.exception(e)
+            table_airports = []
+
+        # decide which to show
+        # maximum 2 airport
+        airport_count = min(2, len(table_airports))
+        # maximum total 7 entries to show
+        places_count = min(len(table_places), 7 - airport_count)
+
+        # get top airport
+        table_airports = table_airports[:airport_count]
+        # get top places
+        table_places = table_places[:places_count]
+
+        item_list = table_places + table_airports
+
         nearby_template = self.ash_fixtures_dir(
             'nearby-table.template.html')
-
         with open(nearby_template) as f:
-            template_string = f.read()
+            template = Template(f.read())
             # generate table here
-            html_string = None
+            html_string = template.render(item_list=item_list)
 
         with open(self.nearby_html_path, 'w') as f:
             f.write(html_string)
+
+        # copy airport logo
+        shutil.copy(
+            self.ash_fixtures_dir('logo/airport.jpg'),
+            self.working_dir_path('airport.jpg'))
 
     def copy_layer(self, layer, target_base_name):
         """Copy layer to working directory with specified base_name
@@ -464,32 +592,32 @@ class AshEvent(QObject):
     def calculate_impact(self):
         # calculate population impact
         LOGGER.info('Calculating Impact Function')
-        population_impact_success = self.calculate_specified_impact(
-            'AshRasterPopulationFunction',
-            self.hazard_layer,
-            self.population_layer,
-            'population_impact')
-
-        # calculate landcover impact
-        landcover_impact_success = self.calculate_specified_impact(
-            'AshRasterLandCoverFunction',
-            self.hazard_layer,
-            self.landcover_layer,
-            'landcover_impact')
+        # population_impact_success = self.calculate_specified_impact(
+        #     'AshRasterPopulationFunction',
+        #     self.hazard_layer,
+        #     self.population_layer,
+        #     'population_impact')
+        #
+        # # calculate landcover impact
+        # landcover_impact_success = self.calculate_specified_impact(
+        #     'AshRasterLandCoverFunction',
+        #     self.hazard_layer,
+        #     self.landcover_layer,
+        #     'landcover_impact')
 
         # calculate cities impact
-        # cities_impact_success = self.calculate_specified_impact(
-        #     'AshRasterHazardPlacesFunction',
-        #     self.hazard_layer,
-        #     self.cities_layer,
-        #     'cities_impact')
+        cities_impact_success = self.calculate_specified_impact(
+            'AshRasterHazardPlacesFunction',
+            self.hazard_layer,
+            self.cities_layer,
+            'cities_impact')
 
         # calculate airport impact
-        # airport_impact_success = self.calculate_specified_impact(
-        #     'AshRasterHazardPlacesFunction',
-        #     self.hazard_layer,
-        #     self.airport_layer,
-        #     'airport_impact')
+        airport_impact_success = self.calculate_specified_impact(
+            'AshRasterHazardPlacesFunction',
+            self.hazard_layer,
+            self.airport_layer,
+            'airport_impact')
         self.impact_exists = True
 
     def generate_report(self):
@@ -501,6 +629,9 @@ class AshEvent(QObject):
             return
 
         project_path = self.working_dir_path('project-%s.qgs' % self.locale)
+        shutil.copy(
+            self.ash_fixtures_dir('realtime-ash.qgs'),
+            project_path)
         project_instance = QgsProject.instance()
         project_instance.setFileName(project_path)
         project_instance.read()
@@ -520,25 +651,31 @@ class AshEvent(QObject):
 
         # get layer registry
         layer_registry = QgsMapLayerRegistry.instance()
-        layer_registry.removeAllMapLayers()
-        # add impact layer
-        population_impact_layer = read_qgis_layer(
-            self.hazard_path, self.tr('People Affected'))
-        layer_registry.addMapLayer(population_impact_layer, False)
-        # add volcano layer
-        volcano_layer = read_qgis_layer(
-            self.ash_fixtures_dir('volcano-layer.shp'))
-        layer_registry.addMapLayer(volcano_layer, False)
+        # layer_registry.removeAllMapLayers()
         # add place name layer
-        placename_layer = read_qgis_layer(
-            self.ash_fixtures_dir('places-layer.shp'))
-        layer_registry.addMapLayer(placename_layer, False)
-        CANVAS.setExtent(population_impact_layer.extent())
-        CANVAS.refresh()
+        layer_registry.addMapLayer(self.cities_layer, False)
+
+        # add airport layer
+        layer_registry.addMapLayer(self.airport_layer, False)
+
+        # add volcano layer
+        layer_registry.addMapLayer(self.volcano_layer, False)
+
+        # add impact layer
+        hazard_layer = read_qgis_layer(
+            self.hazard_path, self.tr('People Affected'))
+        layer_registry.addMapLayer(hazard_layer, False)
+
         # add basemap layer
-        base_map = QgsRasterLayer(
-            self.ash_fixtures_dir('indonesia-base.tif'))
-        layer_registry.addMapLayer(base_map, False)
+        layer_registry.addMapLayer(self.highlight_base_layer, False)
+
+        # add basemap layer
+        inset_layer = read_qgis_layer(self.ash_fixtures_dir(
+            'inset_modified.tif'), 'inset_modified')
+        layer_registry.addMapLayer(inset_layer, False)
+
+        CANVAS.setExtent(hazard_layer.extent())
+        CANVAS.refresh()
         # CANVAS.refresh()
 
         template_path = self.ash_fixtures_dir('realtime-ash.qpt')
@@ -568,7 +705,7 @@ class AshEvent(QObject):
         # get main map canvas on the composition and set extent
         map_impact = composition.getComposerItemById('map-impact')
         if map_impact:
-            map_impact.zoomToExtent(population_impact_layer.extent())
+            map_impact.zoomToExtent(hazard_layer.extent())
             map_impact.renderModeUpdateCachedImage()
         else:
             LOGGER.exception('Map canvas could not be found in template %s',
@@ -577,7 +714,7 @@ class AshEvent(QObject):
 
         # setup impact table
         self.render_population_table()
-        # self.render_nearby_table()
+        self.render_nearby_table()
         self.render_landcover_table()
 
         impact_table = composition.getComposerItemById(

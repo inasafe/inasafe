@@ -47,7 +47,7 @@
 				text-align:center;
 			}
 			.airport-icon{
-				background-image: url('./airport.svg');
+				background-image: url('./airport.jpg');
 				width: 15px;
 				height: 15px;
 				display: inline-block;
@@ -62,45 +62,21 @@
 				<th width="35%">People (x1000)/ Airport affected</th>
 				<th align="left" width="25%">Fallout Level</th>
 			</tr>
+			{% for item in item_list %}
 			<tr>
-				<td><div class="tiny-box very-high"></div>Sleman</td>
-				<td class="center">20</td>
-				<td>Very High</td>
-			</tr>
-			<tr>
-				<td><div class="tiny-box very-high"></div>Boyolali</td>
-				<td class="center">10</td>
-				<td>Very High</td>
-			</tr>
-			<tr>
-				<td><div class="tiny-box high"></div>Magelang</td>
-				<td class="center">30</td>
-				<td>High</td>
-			</tr>
-				<tr>
-				<td><div class="tiny-box moderate"></div>Kota Yogyakarta</td>
-				<td class="center">60</td>
-				<td>Moderate</td>
-			</tr>
-			<tr>
-				<td><div class="tiny-box low"></div>Semarang</td>
-				<td class="center">80</td>
-				<td>Low</td>
-			</tr>
-			<tr>
-				<td><div class="tiny-box high"></div>Adisucipto Airport</td>
+				<td><div class="tiny-box {{ item.css }}"></div>{{ item.name }}</td>
+				{% if item.type == 'places' %}
+				<td class="center">{{ item.population }}</td>
+				{% elif item.type == 'airport' %}
 				<td class="center">
-					<img src="airport.jpg" style="height:15px; width: 15px;">
+					<img class="airport-icon" src="airport.jpg" style="height:15px; width: 15px;">
 				</td>
-				<td>High</td>
+				{% else %}
+				<td></td>
+				{% endif %}
+				<td>{{ item.hazard }}</td>
 			</tr>
-			<tr>
-				<td><div class="tiny-box low"></div>Adisumarmo Airport</td>
-				<td class="center">
-					<img src="airport.jpg" style="height:15px; width: 15px;">
-				</td>
-				<td>Low</td>
-			</tr>
+			{% endfor %}
 		</table>
 	</body>
 </html>

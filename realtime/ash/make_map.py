@@ -44,6 +44,8 @@ def process_event(
     landcover_path = os.environ['INASAFE_ASH_LANDCOVER_PATH']
     cities_path = os.environ['INASAFE_ASH_CITIES_PATH']
     airport_path = os.environ['INASAFE_ASH_AIRPORT_PATH']
+    volcano_path = os.environ['INASAFE_ASH_VOLCANO_PATH']
+    highlight_base_path = os.environ['INASAFE_ASH_HIGHLIGHT_BASE_PATH']
 
     # We always want to generate en products too so we manipulate the locale
     # list and loop through them:
@@ -63,6 +65,8 @@ def process_event(
             region=region,
             alert_level=alert_level,
             population_path=population_path,
+            highlight_base_path=highlight_base_path,
+            volcano_path=volcano_path,
             landcover_path=landcover_path,
             cities_path=cities_path,
             airport_path=airport_path,

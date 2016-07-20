@@ -78,37 +78,6 @@ def push_ash_event_to_rest(ash_event, fail_silent=True):
             'X-CSRFTOKEN': inasafe_django.csrf_token,
         }
 
-        # check does the shake event already exists?
-        # response = session.ash(
-        #     ash_data['volcano_name'],
-        #     ash_event.time.strftime(timestring)).GET()
-        # if response.status_code == requests.codes.ok:
-        #     # event exists, we should update using PUT Url
-        #     response = session.ash(
-        #         ash_data['volcano_name'],
-        #         ash_event.time.strftime(timestring)).PUT(
-        #         data=ash_data,
-        #         files=ash_data_file,
-        #         headers=headers)
-        # elif response.status_code == requests.codes.not_found:
-        #     # event does not exists, create using POST url
-        #     response = session.ash.POST(
-        #         data=ash_data,
-        #         files=ash_data_file,
-        #         headers=headers)
-        #
-        # if not (response.status_code == requests.codes.ok or
-        #         response.status_code == requests.codes.created):
-        #     # raise exceptions
-        #     error = RESTRequestFailedError(
-        #         url=response.url,
-        #         status_code=response.status_code,
-        #         data=ash_data)
-        #     if fail_silent:
-        #         LOGGER.warning(error.message)
-        #     else:
-        #         raise error
-
         # post the report
         # build report data
         event_report_files = {

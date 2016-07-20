@@ -18,14 +18,14 @@
   <ComposerLabel valign="128" marginX="3" marginY="-2" labelText="[report-province]" htmlState="0" halign="1">
    <LabelFont description="Ubuntu,10,-1,5,50,0,0,0,0,0" style="Regular"/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem pagey="47.1617" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="7.94716" y="47.1617" visibility="1" zValue="23" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="153.578" outlineWidth="0.3" excludeFromExports="0" uuid="{a03127a3-fcb6-4d62-867b-cc6eedc38ee7}" height="6.66504" itemRotation="0" frame="false" pagex="7.94716">
+   <ComposerItem pagey="47.1617" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="7.94716" y="47.1617" visibility="1" zValue="23" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="153.578" outlineWidth="0.3" excludeFromExports="0" uuid="{a7722357-f1a0-4add-99bb-e61dc9cc68f3}" height="6.66504" itemRotation="0" frame="false" pagex="7.94716">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
     <customproperties/>
    </ComposerItem>
   </ComposerLabel>
   <ComposerPicture resizeMode="0" pictureRotation="0" pictureWidth="4.20752" file="airport.jpg" pictureHeight="4.23333" mapId="-1" anchorPoint="0">
-   <ComposerItem pagey="189.567" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="159.683" y="189.567" visibility="1" zValue="21" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="4.89479" outlineWidth="0.3" excludeFromExports="0" uuid="{e98ed5bd-20d1-4970-bad0-93b3bded58ea}" height="4.23333" itemRotation="0" frame="false" pagex="159.683">
+   <ComposerItem pagey="189.567" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="159.683" y="189.567" visibility="1" zValue="21" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="4.89479" outlineWidth="0.3" excludeFromExports="0" uuid="{4912b01e-cba5-4888-baef-0cf13d06468b}" height="4.23333" itemRotation="0" frame="false" pagex="159.683">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
     <dataDefinedSource expr="" field="" active="false" useExpr="true"/>
@@ -33,7 +33,7 @@
    </ComposerItem>
   </ComposerPicture>
   <ComposerPicture resizeMode="0" pictureRotation="0" pictureWidth="4.20752" file="airport.jpg" pictureHeight="4.23333" mapId="-1" anchorPoint="0">
-   <ComposerItem pagey="182.423" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="159.683" y="182.423" visibility="1" zValue="20" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="4.89479" outlineWidth="0.3" excludeFromExports="0" uuid="{4725d669-09f0-45cd-ae57-85694d03207f}" height="4.23333" itemRotation="0" frame="false" pagex="159.683">
+   <ComposerItem pagey="182.423" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="159.683" y="182.423" visibility="1" zValue="20" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="4.89479" outlineWidth="0.3" excludeFromExports="0" uuid="{84e15516-759d-412c-ad2e-8829a6410b8f}" height="4.23333" itemRotation="0" frame="false" pagex="159.683">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
     <dataDefinedSource expr="" field="" active="false" useExpr="true"/>
@@ -92,14 +92,14 @@
     <annotationFontProperties description="MS Shell Dlg 2,8.25,-1,5,50,0,0,0,0,0" style=""/>
    </ComposerMapGrid>
    <AtlasMap scalingMode="2" atlasDriven="0" margin="0.10000000000000001"/>
-   <ComposerItem pagey="128.543" page="1" id="map-impact" lastValidViewScaleFactor="2.15667" positionMode="0" positionLock="false" x="12.6805" y="128.543" visibility="1" zValue="17" background="true" transparency="0" frameJoinStyle="miter" blendMode="0" width="88.9108" outlineWidth="0.3" excludeFromExports="0" uuid="{e9d13aae-6967-4bf8-9851-93e44320357a}" height="76.803" itemRotation="0" frame="false" pagex="12.6805">
+   <ComposerItem pagey="128.543" page="1" id="map-impact" lastValidViewScaleFactor="2.15667" positionMode="0" positionLock="false" x="12.6805" y="128.543" visibility="1" zValue="17" background="true" transparency="0" frameJoinStyle="miter" blendMode="0" width="88.9108" outlineWidth="0.3" excludeFromExports="0" uuid="{fb1539f0-a01c-4b3c-9d43-ff5cb2d826a6}" height="76.803" itemRotation="0" frame="false" pagex="12.6805">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="153" blue="208" green="178"/>
     <customproperties/>
    </ComposerItem>
   </ComposerMap>
   <ComposerPicture resizeMode="0" pictureRotation="0" pictureWidth="21.2814" file="./logo/badan-geologi.png" pictureHeight="21.412" mapId="-1" anchorPoint="0">
-   <ComposerItem pagey="6.81383" page="1" id="logo-geologi" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="157.466" y="6.81383" visibility="1" zValue="16" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="22.05" outlineWidth="0.3" excludeFromExports="0" uuid="{6efd57ac-3463-4afa-9cd9-696540d48c23}" height="21.412" itemRotation="0" frame="false" pagex="157.466">
+   <ComposerItem pagey="6.81383" page="1" id="logo-geologi" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="157.466" y="6.81383" visibility="1" zValue="16" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="22.05" outlineWidth="0.3" excludeFromExports="0" uuid="{11793dff-2adb-48a7-8e44-2a5fcf9bbebe}" height="21.412" itemRotation="0" frame="false" pagex="157.466">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
     <dataDefinedSource expr="" field="" active="false" useExpr="true"/>
@@ -107,7 +107,7 @@
    </ComposerItem>
   </ComposerPicture>
   <ComposerPicture resizeMode="0" pictureRotation="0" pictureWidth="17.5459" file="./logo/bnpb.png" pictureHeight="17.6535" mapId="-1" anchorPoint="0">
-   <ComposerItem pagey="7.81383" page="1" id="logo-bnpb" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="28.2458" y="7.81383" visibility="1" zValue="15" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="17.5459" outlineWidth="0.3" excludeFromExports="0" uuid="{07744ddf-a77c-4743-b78f-5010a7af6366}" height="21.412" itemRotation="0" frame="false" pagex="28.2458">
+   <ComposerItem pagey="7.81383" page="1" id="logo-bnpb" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="28.2458" y="7.81383" visibility="1" zValue="15" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="17.5459" outlineWidth="0.3" excludeFromExports="0" uuid="{616dd7ae-a19c-4f53-a0a2-8fef06247723}" height="21.412" itemRotation="0" frame="false" pagex="28.2458">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
     <dataDefinedSource expr="" field="" active="false" useExpr="true"/>
@@ -117,7 +117,7 @@
   <ComposerLabel valign="128" marginX="1" marginY="-2" labelText="[header-landcover-table]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,12,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem pagey="195.189" page="1" id="" lastValidViewScaleFactor="-1" positionMode="2" positionLock="false" x="112.185" y="195.189" visibility="1" zValue="14" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="87.6603" outlineWidth="0.3" excludeFromExports="0" uuid="{93f65340-095c-45c0-9c5c-2ac5fb524b3f}" height="10.5957" itemRotation="0" frame="false" pagex="112.185">
+   <ComposerItem pagey="195.189" page="1" id="" lastValidViewScaleFactor="-1" positionMode="2" positionLock="false" x="112.185" y="195.189" visibility="1" zValue="14" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="87.6603" outlineWidth="0.3" excludeFromExports="0" uuid="{6e1f6669-1638-4562-aa47-7d6ec291514d}" height="10.5957" itemRotation="0" frame="false" pagex="112.185">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
     <customproperties/>
@@ -126,7 +126,7 @@
   <ComposerLabel valign="128" marginX="1" marginY="-2" labelText="[header-nearby-table]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,12,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem pagey="125.995" page="1" id="" lastValidViewScaleFactor="-1" positionMode="2" positionLock="false" x="110.164" y="125.995" visibility="1" zValue="13" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="87.6603" outlineWidth="0.3" excludeFromExports="0" uuid="{1e0639e4-ff2b-4b4c-a156-646bff5719f3}" height="10.5957" itemRotation="0" frame="false" pagex="110.164">
+   <ComposerItem pagey="125.995" page="1" id="" lastValidViewScaleFactor="-1" positionMode="2" positionLock="false" x="110.164" y="125.995" visibility="1" zValue="13" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="87.6603" outlineWidth="0.3" excludeFromExports="0" uuid="{8c5a9aaf-ddbc-42f4-a82e-9703dbeaa9a4}" height="10.5957" itemRotation="0" frame="false" pagex="110.164">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
     <customproperties/>
@@ -135,7 +135,7 @@
   <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[content-notes]" htmlState="0" halign="1">
    <LabelFont description="Ubuntu,8,-1,5,50,0,0,0,0,0" style="Regular"/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem pagey="278.971" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="9.9845" y="278.971" visibility="1" zValue="12" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="189.699" outlineWidth="0.1" excludeFromExports="0" uuid="{2febf6cb-e6f4-4c5f-b388-dcc4f0f2ae44}" height="7.9795" itemRotation="0" frame="true" pagex="9.9845">
+   <ComposerItem pagey="278.971" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="9.9845" y="278.971" visibility="1" zValue="12" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="189.699" outlineWidth="0.1" excludeFromExports="0" uuid="{b142478b-ebbd-40b6-8068-6c315e3167b7}" height="7.9795" itemRotation="0" frame="true" pagex="9.9845">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
     <customproperties/>
@@ -144,7 +144,7 @@
   <ComposerLabel valign="128" marginX="3" marginY="1" labelText="[content-disclaimer]" htmlState="0" halign="1">
    <LabelFont description="Ubuntu,8,-1,5,50,0,0,0,0,0" style="Regular"/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem pagey="254.699" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="9.86383" y="254.699" visibility="1" zValue="11" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="189.932" outlineWidth="0.1" excludeFromExports="0" uuid="{7602f937-ebc3-4a20-8476-f5c7db1f2960}" height="22.7502" itemRotation="0" frame="true" pagex="9.86383">
+   <ComposerItem pagey="254.699" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="9.86383" y="254.699" visibility="1" zValue="11" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="189.932" outlineWidth="0.1" excludeFromExports="0" uuid="{1f9a5a81-bc8f-45c0-8b5e-2f4050e36577}" height="22.7502" itemRotation="0" frame="true" pagex="9.86383">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
     <customproperties/>
@@ -153,7 +153,7 @@
   <ComposerLabel valign="128" marginX="1" marginY="-2" labelText="[header-impact-table]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,14,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem pagey="54.2279" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="9.81383" y="54.2279" visibility="1" zValue="9" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="190.032" outlineWidth="0.3" excludeFromExports="0" uuid="{a6b9944c-205f-4a27-9018-fc31c7b43a23}" height="10.5957" itemRotation="0" frame="false" pagex="9.81383">
+   <ComposerItem pagey="54.2279" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="9.81383" y="54.2279" visibility="1" zValue="9" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="190.032" outlineWidth="0.3" excludeFromExports="0" uuid="{11481732-f0c6-4139-83f0-645da481f17a}" height="10.5957" itemRotation="0" frame="false" pagex="9.81383">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
     <customproperties/>
@@ -162,7 +162,7 @@
   <ComposerLabel valign="128" marginX="3" marginY="-2" labelText="[report-location]" htmlState="0" halign="1">
    <LabelFont description="Ubuntu,10,-1,5,50,0,0,0,0,0" style="Regular"/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem pagey="40.4967" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="7.94716" y="40.4967" visibility="1" zValue="7" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="153.578" outlineWidth="0.3" excludeFromExports="0" uuid="{f910f761-c7c8-4da2-8563-4c826d4355d7}" height="6.66504" itemRotation="0" frame="false" pagex="7.94716">
+   <ComposerItem pagey="40.4967" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="7.94716" y="40.4967" visibility="1" zValue="7" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="153.578" outlineWidth="0.3" excludeFromExports="0" uuid="{174dc61a-f551-4932-8bba-dcc8980787bc}" height="6.66504" itemRotation="0" frame="false" pagex="7.94716">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
     <customproperties/>
@@ -171,7 +171,7 @@
   <ComposerLabel valign="128" marginX="1" marginY="-2" labelText="[report-elapsed]" htmlState="0" halign="1">
    <LabelFont description="Ubuntu,10,-1,5,50,0,0,0,0,0" style="Regular"/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem pagey="34.1989" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="115.087" y="34.1989" visibility="1" zValue="5" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="84.7585" outlineWidth="0.3" excludeFromExports="0" uuid="{83b0db80-253b-4e99-8126-1bb3dc546d3f}" height="7.70595" itemRotation="0" frame="false" pagex="115.087">
+   <ComposerItem pagey="34.1989" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="115.087" y="34.1989" visibility="1" zValue="5" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="84.7585" outlineWidth="0.3" excludeFromExports="0" uuid="{8530be5f-e4f4-4df5-bbd8-6802cbe49383}" height="7.70595" itemRotation="0" frame="false" pagex="115.087">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
     <customproperties/>
@@ -180,7 +180,7 @@
   <ComposerLabel valign="128" marginX="1" marginY="-2" labelText="[report-timestamp]" htmlState="0" halign="1">
    <LabelFont description="Ubuntu,10,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem pagey="32.754" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="9.81383" y="32.754" visibility="1" zValue="4" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="121.137" outlineWidth="0.3" excludeFromExports="0" uuid="{e51b138d-2cfe-4a58-8a8d-35fef5ef0a8d}" height="10.5957" itemRotation="0" frame="false" pagex="9.81383">
+   <ComposerItem pagey="32.754" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="9.81383" y="32.754" visibility="1" zValue="4" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="121.137" outlineWidth="0.3" excludeFromExports="0" uuid="{e1af90ea-68e2-49ae-9997-51a75302b494}" height="10.5957" itemRotation="0" frame="false" pagex="9.81383">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
     <customproperties/>
@@ -189,32 +189,17 @@
   <ComposerLabel valign="128" marginX="1" marginY="1" labelText="[report-title]" htmlState="0" halign="4">
    <LabelFont description="Ubuntu,26,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="0" blue="0" green="0"/>
-   <ComposerItem pagey="7.81383" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="65.1873" y="7.81383" visibility="1" zValue="3" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="72.8079" outlineWidth="0.3" excludeFromExports="0" uuid="{d5af0ffc-393e-48da-b27b-ef61a4dcfa39}" height="22.1233" itemRotation="0" frame="false" pagex="65.1873">
+   <ComposerItem pagey="7.81383" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="65.1873" y="7.81383" visibility="1" zValue="3" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="72.8079" outlineWidth="0.3" excludeFromExports="0" uuid="{3c0289c7-76ef-4994-b123-e0047ebe0d41}" height="22.1233" itemRotation="0" frame="false" pagex="65.1873">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
     <customproperties/>
    </ComposerItem>
   </ComposerLabel>
   <ComposerMap mapRotation="0" keepLayerSet="true" id="0" previewMode="Render" drawCanvasItems="true">
-   <Extent ymin="-11.4044469781001041" xmin="94.50989758741958724" ymax="8.85844876303332285" xmax="141.64129176681723266"/>
+   <Extent ymin="-10.86612720499547535" xmin="93.55283848725419205" ymax="9.02325806575262135" xmax="139.81544918008791001"/>
    <LayerSet>
-    <Layer>inset_modified20160714111817356</Layer>
+    <Layer>inset_modified20160719194318208</Layer>
    </LayerSet>
-   <LayerStyles>
-    <LayerStyle layerid="inset_modified20160714111817356">
-     <qgis version="2.14.1-Essen" minimumScale="0" maximumScale="1e+08" hasScaleBasedVisibilityFlag="0">
-      <pipe>
-       <rasterrenderer opacity="1" alphaBand="4" blueBand="3" greenBand="2" type="multibandcolor" redBand="1">
-        <rasterTransparency/>
-       </rasterrenderer>
-       <brightnesscontrast brightness="0" contrast="0"/>
-       <huesaturation colorizeGreen="128" colorizeOn="0" colorizeRed="255" colorizeBlue="128" grayscaleMode="0" saturation="0" colorizeStrength="100"/>
-       <rasterresampler maxOversampling="2"/>
-      </pipe>
-      <blendMode>0</blendMode>
-     </qgis>
-    </LayerStyle>
-   </LayerStyles>
    <Grid/>
    <ComposerMapGrid rightAnnotationDirection="0" gridFramePenColor="0,0,0,255" show="0" bottomAnnotationPosition="1" annotationPrecision="3" showAnnotation="0" topFrameDivisions="0" uuid="{b7907f8e-4884-4219-a664-9d8d4570d7ea}" leftAnnotationDirection="0" topAnnotationPosition="1" rightAnnotationDisplay="0" offsetX="0" offsetY="0" rightFrameDivisions="0" gridStyle="0" annotationFontColor="0,0,0,255" intervalX="0" gridFrameSideFlags="15" intervalY="0" bottomAnnotationDirection="0" leftAnnotationDisplay="0" leftFrameDivisions="0" frameFillColor1="255,255,255,255" annotationExpression="" frameFillColor2="0,0,0,255" crossLength="3" gridFramePenThickness="0.5" bottomAnnotationDisplay="0" unit="0" topAnnotationDisplay="0" leftAnnotationPosition="1" blendMode="0" gridFrameStyle="0" rightAnnotationPosition="1" gridFrameWidth="2" name="Grid 1" annotationFormat="0" bottomFrameDivisions="0" topAnnotationDirection="0" frameAnnotationDistance="1">
     <lineStyle>
@@ -281,42 +266,15 @@
     </symbol>
    </ComposerMapOverview>
    <AtlasMap scalingMode="2" atlasDriven="0" margin="0.10000000000000001"/>
-   <ComposerItem pagey="211.798" page="1" id="map-overall" lastValidViewScaleFactor="2.15667" positionMode="0" positionLock="false" x="10.616" y="211.798" visibility="1" zValue="1" background="true" transparency="0" frameJoinStyle="miter" blendMode="0" width="93.0398" outlineWidth="0.3" excludeFromExports="0" uuid="{bb235edc-905e-4f32-98a6-1f1a09bb94a6}" height="40" itemRotation="0" frame="true" pagex="10.616">
+   <ComposerItem pagey="211.798" page="1" id="map-overall" lastValidViewScaleFactor="2.15667" positionMode="0" positionLock="false" x="10.616" y="211.798" visibility="1" zValue="1" background="true" transparency="0" frameJoinStyle="miter" blendMode="0" width="93.0398" outlineWidth="0.3" excludeFromExports="0" uuid="{c4d1ebb6-13e6-4874-b4ba-51d4a9da5c70}" height="40" itemRotation="0" frame="true" pagex="10.616">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
     <BackgroundColor alpha="255" red="153" blue="208" green="178"/>
     <customproperties/>
    </ComposerItem>
   </ComposerMap>
-  <ComposerHtml maxBreakDistance="10" contentMode="0" resizeMode="0" url="file:///D:/Ivan Busthomi/_realtime ash report template/land_cover_impact.html" useSmartBreaks="true" evaluateExpressions="true" html="&lt;!DOCTYPE html>&#xd;&#xa;&lt;html>&#xd;&#xa; &lt;head>&#xd;&#xa;  &lt;style>&#xd;&#xa;   table{&#xd;&#xa;    border-collapse: collapse;&#xd;&#xa;    font-family: &quot;Ubuntu&quot;&#xd;&#xa;   }&#xd;&#xa;&#xd;&#xa;   th {&#xd;&#xa;    border-bottom: 1px solid black;&#xd;&#xa;    padding:5px;&#xd;&#xa;    height:50px;&#xd;&#xa;    font-size:13px;&#xd;&#xa;   }&#xd;&#xa;   td {&#xd;&#xa;    border-bottom: 1px solid black;&#xd;&#xa;    padding:5px;&#xd;&#xa;    background-color: #f2f2f2;&#xd;&#xa;    font-size:12px;&#xd;&#xa;&#x9;padding:5px;&#xd;&#xa;   }&#xd;&#xa;&#x9;.right{&#xd;&#xa;&#x9;text-align:right;&#xd;&#xa;&#x9;padding-right:15px;&#xd;&#xa;&#x9;}&#xd;&#xa;   .center{&#xd;&#xa;    text-align:center;&#xd;&#xa;   }&#xd;&#xa;  &lt;/style>&#xd;&#xa; &lt;/head>&#xd;&#xa; &lt;body>&#xd;&#xa;  &lt;table frame=&quot;box&quot; width=&quot;100%&quot;>&#xd;&#xa;   &lt;tr>&#xd;&#xa;    &lt;th align=&quot;left&quot; width=&quot;40%&quot;>Land Cover Type&lt;/th>&#xd;&#xa;    &lt;th align=&quot;right&quot; width=&quot;30%&quot;>Area affected (km&lt;sup>2&lt;/sup>)&lt;/th>&#xd;&#xa;   &lt;/tr>&#xd;&#xa;   &lt;tr>&#xd;&#xa;    &lt;td>Settlement&lt;/td>&#xd;&#xa;    &lt;td class=&quot;right&quot;>10000&lt;/td>&#xd;&#xa;   &lt;/tr>&#xd;&#xa;   &lt;tr>&#xd;&#xa;    &lt;td>Rice Field&lt;/td>&#xd;&#xa;    &lt;td class=&quot;right&quot;>2309&lt;/td>&#xd;&#xa;   &lt;/tr>&#xd;&#xa;    &lt;tr>&#xd;&#xa;    &lt;td>Plantation&lt;/td>&#xd;&#xa;    &lt;td class=&quot;right&quot;>12389&lt;/td>&#xd;&#xa;   &lt;/tr>&#xd;&#xa;   &lt;tr>&#xd;&#xa;    &lt;td>Water Supply&lt;/td>&#xd;&#xa;    &lt;td class=&quot;right&quot;>1234&lt;/td>&#xd;&#xa;   &lt;/tr>&#xd;&#xa;   &lt;tr>&#xd;&#xa;    &lt;td>Forest&lt;/td>&#xd;&#xa;    &lt;td class=&quot;right&quot;>82822&lt;/td>&#xd;&#xa;   &lt;/tr>&#xd;&#xa;  &lt;/table>&#xd;&#xa; &lt;/body>&#xd;&#xa;&lt;/html>" stylesheetEnabled="false" stylesheet="">
-   <ComposerFrame sectionWidth="91.7961" sectionHeight="52.8609" hideBackgroundIfEmpty="0" hidePageIfEmpty="0" sectionX="0" sectionY="0">
-    <ComposerItem pagey="202.687" page="1" id="table-landcover" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="110.071" y="202.687" visibility="1" zValue="10" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="91.7961" outlineWidth="0.3" excludeFromExports="0" uuid="{d527629b-5041-448c-b836-f5c77041130f}" height="52.8609" itemRotation="0" frame="false" pagex="110.071">
-     <FrameColor alpha="255" red="0" blue="0" green="0"/>
-     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-     <customproperties/>
-    </ComposerItem>
-   </ComposerFrame>
-   <customproperties/>
-  </ComposerHtml>
-  <ComposerHtml maxBreakDistance="0" contentMode="0" resizeMode="0" url="file:///D:/Ivan Busthomi/_realtime ash report template/table_potential_impact.html" useSmartBreaks="true" evaluateExpressions="true" html="&lt;!DOCTYPE html>&#xd;&#xa;&lt;html>&#xd;&#xa;&#x9;&lt;head>&#xd;&#xa;&#x9;&#x9;&lt;style>&#xd;&#xa;&#x9;&#x9;&#x9;table{&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;border-collapse: collapse;&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;font-size:14px;&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;font-family: &quot;Ubuntu&quot;;&#xd;&#xa;&#x9;&#x9;&#x9;}&#xd;&#xa;&#xd;&#xa;&#x9;&#x9;&#x9;th, td {&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;border: 1px solid black;&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;padding:5px;&#xd;&#xa;&#x9;&#x9;&#x9;}&#xd;&#xa;&#xd;&#xa;&#x9;&#x9;&#x9;.lv1{&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;width:15.5%;&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;background-color:#0F74BC;&#xd;&#xa;&#x9;&#x9;&#x9;}&#xd;&#xa;&#x9;&#x9;&#x9;.lv2{&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;width:15.5%;&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;background-color:#00ADEF;&#xd;&#xa;&#x9;&#x9;&#x9;}&#xd;&#xa;&#x9;&#x9;&#x9;.lv3{&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;width:15.5%;&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;background-color:#FFF004;&#xd;&#xa;&#x9;&#x9;&#x9;}&#xd;&#xa;&#x9;&#x9;&#x9;.lv4{&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;width:15.5%;&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;background-color:#FCB040;&#xd;&#xa;&#x9;&#x9;&#x9;}&#xd;&#xa;&#x9;&#x9;&#x9;.lv5{&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;width:15.5%;&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;background-color:#E32031;&#xd;&#xa;&#x9;&#x9;&#x9;}&#xd;&#xa;&#x9;&#x9;&#x9;.center{&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;text-align:center;&#xd;&#xa;&#x9;&#x9;&#x9;}&#xd;&#xa;&#xd;&#xa;&#x9;&#x9;&#x9;.top{&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;vertical-align:top;&#xd;&#xa;&#x9;&#x9;&#x9;}&#xd;&#xa;&#x9;&#x9;&lt;/style>&#xd;&#xa;&#x9;&lt;/head>&#xd;&#xa;&#x9;&lt;body>&#xd;&#xa;&#x9;&#x9;&lt;table width=&quot;100%&quot;>&#xd;&#xa;&#x9;&#x9;&#x9;&lt;tr>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td width=&quot;22.5%&quot;>Fallout Level&lt;/th>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;th class=&quot;lv1&quot;>Very Low&lt;/th>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;th class=&quot;lv2&quot;>Low&lt;/th>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;th class=&quot;lv3&quot;>Moderate&lt;/th>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;th class=&quot;lv4&quot;>High&lt;/th>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;th class=&quot;lv5&quot;>Very High&lt;/th>&#xd;&#xa;&#x9;&#x9;&#x9;&lt;/tr>&#xd;&#xa;&#x9;&#x9;&#x9;&lt;tr style=&quot;background-color:#f2f2f2&quot;>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td>People Affected (x1000)&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td class=&quot;center&quot;>100&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td class=&quot;center&quot;>0&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td class=&quot;center&quot;>0&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td class=&quot;center&quot;>0&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td class=&quot;center&quot;>0&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&lt;/tr>&#xd;&#xa;&#x9;&#x9;&#x9;&lt;tr style=&quot;font-size:11px; line-height:1.2&quot;>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td style=&quot;font-size:14px&quot; class=&quot;top&quot;>Potential Impact&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td class=&quot;top&quot;>Impact on health (respiration), livestock, and contamination of water supply.&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td class=&quot;top&quot;>Damage to transportation routes (e.g. airports, roads, railways); damage to critical infrastructur (e.g. electricity supply); damage to more vulnerable agricultural crops (e.g. rice fields)&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td class=&quot;top&quot;>Damage to less vulnerable agricultural crops (e.g. tea plantations) and destruction of more vulnerable crops; destruction of critical infrastructure; cosmetic (non-structural) damage to buildings&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td class=&quot;top&quot;>Dry loading on buildings causing structural damage but not collapse; Wet loading on buildings (i.e. ash loading + heavy rainfall) causing structural collapse. &lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td class=&quot;top&quot;>Dry loading on buildings causing structural collapse.&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&lt;/tr>&#xd;&#xa;&#x9;&#x9;&#x9;&lt;tr>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td>Ash Thickness Range (cm)&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td>0.01 - 0.1&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td>0.2 - 2&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td>2.1 - 5&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td>5.1 - 10&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td>>10&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&lt;/tr>&#xd;&#xa;&#x9;&#x9;&lt;/table>&#xd;&#xa;&#x9;&lt;/body>&#xd;&#xa;&lt;/html>" stylesheetEnabled="false" stylesheet="">
-   <ComposerFrame sectionWidth="193.92" sectionHeight="62.9311" hideBackgroundIfEmpty="0" hidePageIfEmpty="0" sectionX="0" sectionY="0">
-    <ComposerItem pagey="62.0639" page="1" id="table-impact" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="8.04" y="62.0639" visibility="1" zValue="6" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="193.92" outlineWidth="0.3" excludeFromExports="0" uuid="{b1cf15d0-e745-40f9-a418-0a3e0cf16167}" height="62.9311" itemRotation="0" frame="false" pagex="8.04">
-     <FrameColor alpha="255" red="0" blue="0" green="0"/>
-     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-     <customproperties/>
-    </ComposerItem>
-   </ComposerFrame>
-   <ComposerFrame sectionWidth="193.92" sectionHeight="23.1722" hideBackgroundIfEmpty="0" hidePageIfEmpty="0" sectionX="0" sectionY="62.9311">
-    <ComposerItem pagey="0" page="2" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="7.94716" y="307" visibility="1" zValue="19" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="193.92" outlineWidth="0.3" excludeFromExports="0" uuid="{e88efd3b-632c-42c6-a065-ecbf6b087fb9}" height="23.1722" itemRotation="0" frame="false" pagex="7.94716">
-     <FrameColor alpha="255" red="0" blue="0" green="0"/>
-     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
-     <customproperties/>
-    </ComposerItem>
-   </ComposerFrame>
-   <customproperties/>
-  </ComposerHtml>
   <ComposerHtml maxBreakDistance="10" contentMode="0" resizeMode="0" url="" useSmartBreaks="true" evaluateExpressions="true" html="" stylesheetEnabled="false" stylesheet="">
    <ComposerFrame sectionWidth="0" sectionHeight="0" hideBackgroundIfEmpty="0" hidePageIfEmpty="0" sectionX="0" sectionY="0">
-    <ComposerItem pagey="72.6196" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="83.4427" y="72.6196" visibility="1" zValue="22" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="0.349133" outlineWidth="0.3" excludeFromExports="0" uuid="{f81a9e13-e722-42f4-9b57-c2d23f562053}" height="1.0474" itemRotation="0" frame="false" pagex="83.4427">
+    <ComposerItem pagey="72.6196" page="1" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="83.4427" y="72.6196" visibility="1" zValue="22" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="0.349133" outlineWidth="0.3" excludeFromExports="0" uuid="{fd356a9a-a9ae-4f6a-a630-708bf55b2b6d}" height="1.0474" itemRotation="0" frame="false" pagex="83.4427">
      <FrameColor alpha="255" red="0" blue="0" green="0"/>
      <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
      <customproperties/>
@@ -326,7 +284,34 @@
   </ComposerHtml>
   <ComposerHtml maxBreakDistance="0" contentMode="0" resizeMode="0" url="file:///D:/Ivan Busthomi/_realtime ash report template/nearby_places.html" useSmartBreaks="false" evaluateExpressions="true" html="&lt;!DOCTYPE html>&#xd;&#xa;&lt;html>&#xd;&#xa;&#x9;&lt;head>&#xd;&#xa;&#x9;&#x9;&lt;style>&#xd;&#xa;&#x9;&#x9;&#x9;table{&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;border-collapse: collapse;&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;font-family: &quot;Ubuntu&quot;;&#xd;&#xa;&#x9;&#x9;&#x9;}&#xd;&#xa;&#xd;&#xa;&#x9;&#x9;&#x9;th {&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;border-bottom: 1px solid black;&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;padding:5px;&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;height:40px;&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;font-size:13px;&#xd;&#xa;&#x9;&#x9;&#x9;}&#xd;&#xa;&#x9;&#x9;&#x9;td {&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;border-bottom: 1px solid black;&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;padding:5px;&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;background-color: #f2f2f2;&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;font-size:12px;&#xd;&#xa;&#x9;&#x9;&#x9;}&#xd;&#xa;&#xd;&#xa;&#x9;&#x9;&#x9;.tiny-box{&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;float: left;&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;width: 15px;&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;height: 15px;&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;margin-right:5px;&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;border: 1px solid rgba(0, 0, 0, .2);&#xd;&#xa;&#x9;&#x9;&#x9;}&#xd;&#xa;&#xd;&#xa;&#x9;&#x9;&#x9;.very-low{&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;background:#0F74BC;&#xd;&#xa;&#x9;&#x9;&#x9;}&#xd;&#xa;&#x9;&#x9;&#x9;.low{&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;background:#00ADEF;&#xd;&#xa;&#x9;&#x9;&#x9;}&#xd;&#xa;&#x9;&#x9;&#x9;.moderate{&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;background:#FFF004;&#xd;&#xa;&#x9;&#x9;&#x9;}&#xd;&#xa;&#x9;&#x9;&#x9;.high{&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;background:#FCB040;&#xd;&#xa;&#x9;&#x9;&#x9;}&#xd;&#xa;&#x9;&#x9;&#x9;.very-high{&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;background:#E32031;&#xd;&#xa;&#x9;&#x9;&#x9;}&#xd;&#xa;&#x9;&#x9;&#x9;.center{&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;text-align:center;&#xd;&#xa;&#x9;&#x9;&#x9;}&#xd;&#xa;&#x9;&#x9;&#x9;.airport-icon{&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;background-image: url('./airport.svg');&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;width: 15px;&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;height: 15px;&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;display: inline-block;&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;background-size: contain;&#xd;&#xa;&#x9;&#x9;&#x9;}&#xd;&#xa;&#x9;&#x9;&lt;/style>&#xd;&#xa;&#x9;&lt;/head>&#xd;&#xa;&#x9;&lt;body>&#xd;&#xa;&#x9;&#x9;&lt;table frame=&quot;box&quot; width=&quot;100%&quot;>&#xd;&#xa;&#x9;&#x9;&#x9;&lt;tr>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;th align=&quot;left&quot; width=&quot;40%&quot;>Name&lt;/th>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;th width=&quot;35%&quot;>People (x1000)/ Airport affected&lt;/th>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;th align=&quot;left&quot; width=&quot;25%&quot;>Fallout Level&lt;/th>&#xd;&#xa;&#x9;&#x9;&#x9;&lt;/tr>&#xd;&#xa;&#x9;&#x9;&#x9;&lt;tr>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td>&lt;div class=&quot;tiny-box very-high&quot;>&lt;/div>Sleman&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td class=&quot;center&quot;>20&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td>Very High&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&lt;/tr>&#xd;&#xa;&#x9;&#x9;&#x9;&lt;tr>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td>&lt;div class=&quot;tiny-box very-high&quot;>&lt;/div>Boyolali&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td class=&quot;center&quot;>10&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td>Very High&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&lt;/tr>&#xd;&#xa;&#x9;&#x9;&#x9;&lt;tr>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td>&lt;div class=&quot;tiny-box high&quot;>&lt;/div>Magelang&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td class=&quot;center&quot;>30&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td>High&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&lt;/tr>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;tr>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td>&lt;div class=&quot;tiny-box moderate&quot;>&lt;/div>Kota Yogyakarta&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td class=&quot;center&quot;>60&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td>Moderate&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&lt;/tr>&#xd;&#xa;&#x9;&#x9;&#x9;&lt;tr>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td>&lt;div class=&quot;tiny-box low&quot;>&lt;/div>Semarang&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td class=&quot;center&quot;>80&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td>Low&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&lt;/tr>&#xd;&#xa;&#x9;&#x9;&#x9;&lt;tr>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td>&lt;div class=&quot;tiny-box high&quot;>&lt;/div>Adisucipto Airport&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td class=&quot;center&quot;>&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td>High&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&lt;/tr>&#xd;&#xa;&#x9;&#x9;&#x9;&lt;tr>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td>&lt;div class=&quot;tiny-box low&quot;>&lt;/div>Adisumarmo Airport&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td class=&quot;center&quot;>&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td>Low&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&lt;/tr>&#xd;&#xa;&#x9;&#x9;&lt;/table>&#xd;&#xa;&#x9;&lt;/body>&#xd;&#xa;&lt;/html>" stylesheetEnabled="false" stylesheet="">
    <ComposerFrame sectionWidth="93.8172" sectionHeight="63.5383" hideBackgroundIfEmpty="0" hidePageIfEmpty="0" sectionX="0" sectionY="0">
-    <ComposerItem pagey="133.591" page="1" id="table-nearby" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="108.05" y="133.591" visibility="1" zValue="8" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="93.8172" outlineWidth="0.3" excludeFromExports="0" uuid="{c0e02019-d646-42a4-9a70-66bb60983185}" height="63.5383" itemRotation="0" frame="false" pagex="108.05">
+    <ComposerItem pagey="133.591" page="1" id="table-nearby" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="108.05" y="133.591" visibility="1" zValue="8" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="93.8172" outlineWidth="0.3" excludeFromExports="0" uuid="{44a0c5cc-f14d-4c11-9b05-513775bc3628}" height="63.5383" itemRotation="0" frame="false" pagex="108.05">
+     <FrameColor alpha="255" red="0" blue="0" green="0"/>
+     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+     <customproperties/>
+    </ComposerItem>
+   </ComposerFrame>
+   <customproperties/>
+  </ComposerHtml>
+  <ComposerHtml maxBreakDistance="0" contentMode="0" resizeMode="0" url="file:///D:/Ivan Busthomi/_realtime ash report template/table_potential_impact.html" useSmartBreaks="true" evaluateExpressions="true" html="&lt;!DOCTYPE html>&#xd;&#xa;&lt;html>&#xd;&#xa;&#x9;&lt;head>&#xd;&#xa;&#x9;&#x9;&lt;style>&#xd;&#xa;&#x9;&#x9;&#x9;table{&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;border-collapse: collapse;&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;font-size:14px;&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;font-family: &quot;Ubuntu&quot;;&#xd;&#xa;&#x9;&#x9;&#x9;}&#xd;&#xa;&#xd;&#xa;&#x9;&#x9;&#x9;th, td {&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;border: 1px solid black;&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;padding:5px;&#xd;&#xa;&#x9;&#x9;&#x9;}&#xd;&#xa;&#xd;&#xa;&#x9;&#x9;&#x9;.lv1{&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;width:15.5%;&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;background-color:#0F74BC;&#xd;&#xa;&#x9;&#x9;&#x9;}&#xd;&#xa;&#x9;&#x9;&#x9;.lv2{&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;width:15.5%;&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;background-color:#00ADEF;&#xd;&#xa;&#x9;&#x9;&#x9;}&#xd;&#xa;&#x9;&#x9;&#x9;.lv3{&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;width:15.5%;&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;background-color:#FFF004;&#xd;&#xa;&#x9;&#x9;&#x9;}&#xd;&#xa;&#x9;&#x9;&#x9;.lv4{&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;width:15.5%;&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;background-color:#FCB040;&#xd;&#xa;&#x9;&#x9;&#x9;}&#xd;&#xa;&#x9;&#x9;&#x9;.lv5{&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;width:15.5%;&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;background-color:#E32031;&#xd;&#xa;&#x9;&#x9;&#x9;}&#xd;&#xa;&#x9;&#x9;&#x9;.center{&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;text-align:center;&#xd;&#xa;&#x9;&#x9;&#x9;}&#xd;&#xa;&#xd;&#xa;&#x9;&#x9;&#x9;.top{&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;vertical-align:top;&#xd;&#xa;&#x9;&#x9;&#x9;}&#xd;&#xa;&#x9;&#x9;&lt;/style>&#xd;&#xa;&#x9;&lt;/head>&#xd;&#xa;&#x9;&lt;body>&#xd;&#xa;&#x9;&#x9;&lt;table width=&quot;100%&quot;>&#xd;&#xa;&#x9;&#x9;&#x9;&lt;tr>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td width=&quot;22.5%&quot;>Fallout Level&lt;/th>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;th class=&quot;lv1&quot;>Very Low&lt;/th>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;th class=&quot;lv2&quot;>Low&lt;/th>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;th class=&quot;lv3&quot;>Moderate&lt;/th>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;th class=&quot;lv4&quot;>High&lt;/th>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;th class=&quot;lv5&quot;>Very High&lt;/th>&#xd;&#xa;&#x9;&#x9;&#x9;&lt;/tr>&#xd;&#xa;&#x9;&#x9;&#x9;&lt;tr style=&quot;background-color:#f2f2f2&quot;>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td>People Affected (x1000)&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td class=&quot;center&quot;>100&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td class=&quot;center&quot;>0&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td class=&quot;center&quot;>0&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td class=&quot;center&quot;>0&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td class=&quot;center&quot;>0&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&lt;/tr>&#xd;&#xa;&#x9;&#x9;&#x9;&lt;tr style=&quot;font-size:11px; line-height:1.2&quot;>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td style=&quot;font-size:14px&quot; class=&quot;top&quot;>Potential Impact&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td class=&quot;top&quot;>Impact on health (respiration), livestock, and contamination of water supply.&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td class=&quot;top&quot;>Damage to transportation routes (e.g. airports, roads, railways); damage to critical infrastructur (e.g. electricity supply); damage to more vulnerable agricultural crops (e.g. rice fields)&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td class=&quot;top&quot;>Damage to less vulnerable agricultural crops (e.g. tea plantations) and destruction of more vulnerable crops; destruction of critical infrastructure; cosmetic (non-structural) damage to buildings&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td class=&quot;top&quot;>Dry loading on buildings causing structural damage but not collapse; Wet loading on buildings (i.e. ash loading + heavy rainfall) causing structural collapse. &lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td class=&quot;top&quot;>Dry loading on buildings causing structural collapse.&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&lt;/tr>&#xd;&#xa;&#x9;&#x9;&#x9;&lt;tr>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td>Ash Thickness Range (cm)&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td>0.01 - 0.1&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td>0.2 - 2&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td>2.1 - 5&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td>5.1 - 10&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&#x9;&lt;td>>10&lt;/td>&#xd;&#xa;&#x9;&#x9;&#x9;&lt;/tr>&#xd;&#xa;&#x9;&#x9;&lt;/table>&#xd;&#xa;&#x9;&lt;/body>&#xd;&#xa;&lt;/html>" stylesheetEnabled="false" stylesheet="">
+   <ComposerFrame sectionWidth="193.92" sectionHeight="62.9311" hideBackgroundIfEmpty="0" hidePageIfEmpty="0" sectionX="0" sectionY="0">
+    <ComposerItem pagey="62.0639" page="1" id="table-impact" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="8.04" y="62.0639" visibility="1" zValue="6" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="193.92" outlineWidth="0.3" excludeFromExports="0" uuid="{293c34b0-8cad-46d6-ab20-f5d0041da9f4}" height="62.9311" itemRotation="0" frame="false" pagex="8.04">
+     <FrameColor alpha="255" red="0" blue="0" green="0"/>
+     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+     <customproperties/>
+    </ComposerItem>
+   </ComposerFrame>
+   <ComposerFrame sectionWidth="193.92" sectionHeight="23.1722" hideBackgroundIfEmpty="0" hidePageIfEmpty="0" sectionX="0" sectionY="62.9311">
+    <ComposerItem pagey="0" page="2" id="" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="7.94716" y="307" visibility="1" zValue="19" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="193.92" outlineWidth="0.3" excludeFromExports="0" uuid="{ab3d2165-8d50-4e90-be14-a0d94446dff6}" height="23.1722" itemRotation="0" frame="false" pagex="7.94716">
+     <FrameColor alpha="255" red="0" blue="0" green="0"/>
+     <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
+     <customproperties/>
+    </ComposerItem>
+   </ComposerFrame>
+   <customproperties/>
+  </ComposerHtml>
+  <ComposerHtml maxBreakDistance="10" contentMode="0" resizeMode="0" url="file:///D:/Ivan Busthomi/_realtime ash report template/land_cover_impact.html" useSmartBreaks="true" evaluateExpressions="true" html="&lt;!DOCTYPE html>&#xd;&#xa;&lt;html>&#xd;&#xa; &lt;head>&#xd;&#xa;  &lt;style>&#xd;&#xa;   table{&#xd;&#xa;    border-collapse: collapse;&#xd;&#xa;    font-family: &quot;Ubuntu&quot;&#xd;&#xa;   }&#xd;&#xa;&#xd;&#xa;   th {&#xd;&#xa;    border-bottom: 1px solid black;&#xd;&#xa;    padding:5px;&#xd;&#xa;    height:50px;&#xd;&#xa;    font-size:13px;&#xd;&#xa;   }&#xd;&#xa;   td {&#xd;&#xa;    border-bottom: 1px solid black;&#xd;&#xa;    padding:5px;&#xd;&#xa;    background-color: #f2f2f2;&#xd;&#xa;    font-size:12px;&#xd;&#xa;&#x9;padding:5px;&#xd;&#xa;   }&#xd;&#xa;&#x9;.right{&#xd;&#xa;&#x9;text-align:right;&#xd;&#xa;&#x9;padding-right:15px;&#xd;&#xa;&#x9;}&#xd;&#xa;   .center{&#xd;&#xa;    text-align:center;&#xd;&#xa;   }&#xd;&#xa;  &lt;/style>&#xd;&#xa; &lt;/head>&#xd;&#xa; &lt;body>&#xd;&#xa;  &lt;table frame=&quot;box&quot; width=&quot;100%&quot;>&#xd;&#xa;   &lt;tr>&#xd;&#xa;    &lt;th align=&quot;left&quot; width=&quot;40%&quot;>Land Cover Type&lt;/th>&#xd;&#xa;    &lt;th align=&quot;right&quot; width=&quot;30%&quot;>Area affected (km&lt;sup>2&lt;/sup>)&lt;/th>&#xd;&#xa;   &lt;/tr>&#xd;&#xa;   &lt;tr>&#xd;&#xa;    &lt;td>Settlement&lt;/td>&#xd;&#xa;    &lt;td class=&quot;right&quot;>10000&lt;/td>&#xd;&#xa;   &lt;/tr>&#xd;&#xa;   &lt;tr>&#xd;&#xa;    &lt;td>Rice Field&lt;/td>&#xd;&#xa;    &lt;td class=&quot;right&quot;>2309&lt;/td>&#xd;&#xa;   &lt;/tr>&#xd;&#xa;    &lt;tr>&#xd;&#xa;    &lt;td>Plantation&lt;/td>&#xd;&#xa;    &lt;td class=&quot;right&quot;>12389&lt;/td>&#xd;&#xa;   &lt;/tr>&#xd;&#xa;   &lt;tr>&#xd;&#xa;    &lt;td>Water Supply&lt;/td>&#xd;&#xa;    &lt;td class=&quot;right&quot;>1234&lt;/td>&#xd;&#xa;   &lt;/tr>&#xd;&#xa;   &lt;tr>&#xd;&#xa;    &lt;td>Forest&lt;/td>&#xd;&#xa;    &lt;td class=&quot;right&quot;>82822&lt;/td>&#xd;&#xa;   &lt;/tr>&#xd;&#xa;  &lt;/table>&#xd;&#xa; &lt;/body>&#xd;&#xa;&lt;/html>" stylesheetEnabled="false" stylesheet="">
+   <ComposerFrame sectionWidth="91.7961" sectionHeight="52.8609" hideBackgroundIfEmpty="0" hidePageIfEmpty="0" sectionX="0" sectionY="0">
+    <ComposerItem pagey="202.687" page="1" id="table-landcover" lastValidViewScaleFactor="-1" positionMode="0" positionLock="false" x="110.071" y="202.687" visibility="1" zValue="10" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="91.7961" outlineWidth="0.3" excludeFromExports="0" uuid="{2b786ae4-9faa-409e-967b-9db64e05a6d7}" height="52.8609" itemRotation="0" frame="false" pagex="110.071">
      <FrameColor alpha="255" red="0" blue="0" green="0"/>
      <BackgroundColor alpha="255" red="255" blue="255" green="255"/>
      <customproperties/>

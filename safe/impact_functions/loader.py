@@ -1,9 +1,5 @@
 # coding=utf-8
 
-__author__ = 'Rizky Maulana Nugraha <lana.pcfre@gmail.com>'
-__date__ = '5/25/16'
-
-
 # Earthquake
 from safe.impact_functions.earthquake.earthquake_building\
     .impact_function import EarthquakeBuildingFunction
@@ -70,7 +66,11 @@ from safe.impact_functions.ash.ash_raster_landcover.impact_function import \
 from safe.impact_functions.ash.ash_raster_population.impact_function import \
     AshRasterPopulationFunction
 from safe.impact_functions.ash.ash_raster_places.impact_function import \
-    AshRasterPlaceFunction
+    AshRasterHazardPlacesFunction
+
+
+__author__ = 'Rizky Maulana Nugraha <lana.pcfre@gmail.com>'
+__date__ = '5/25/16'
 
 
 def register_impact_functions():
@@ -122,4 +122,4 @@ def register_impact_functions():
     impact_function_registry.register(AshRasterLandCoverFunction)
     # Added in 3.5
     impact_function_registry.register(AshRasterPopulationFunction)
-    impact_function_registry.register(AshRasterPlaceFunction)
+    impact_function_registry.register(AshRasterHazardPlacesFunction)
