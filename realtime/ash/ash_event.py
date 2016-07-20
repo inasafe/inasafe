@@ -629,9 +629,9 @@ class AshEvent(QObject):
             return
 
         project_path = self.working_dir_path('project-%s.qgs' % self.locale)
-        shutil.copy(
-            self.ash_fixtures_dir('realtime-ash.qgs'),
-            project_path)
+        # shutil.copy(
+        #     self.ash_fixtures_dir('realtime-ash.qgs'),
+        #     project_path)
         project_instance = QgsProject.instance()
         project_instance.setFileName(project_path)
         project_instance.read()
@@ -651,7 +651,7 @@ class AshEvent(QObject):
 
         # get layer registry
         layer_registry = QgsMapLayerRegistry.instance()
-        # layer_registry.removeAllMapLayers()
+        layer_registry.removeAllMapLayers()
         # add place name layer
         layer_registry.addMapLayer(self.cities_layer, False)
 
