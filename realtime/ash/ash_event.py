@@ -592,18 +592,18 @@ class AshEvent(QObject):
     def calculate_impact(self):
         # calculate population impact
         LOGGER.info('Calculating Impact Function')
-        # population_impact_success = self.calculate_specified_impact(
-        #     'AshRasterPopulationFunction',
-        #     self.hazard_layer,
-        #     self.population_layer,
-        #     'population_impact')
-        #
-        # # calculate landcover impact
-        # landcover_impact_success = self.calculate_specified_impact(
-        #     'AshRasterLandCoverFunction',
-        #     self.hazard_layer,
-        #     self.landcover_layer,
-        #     'landcover_impact')
+        population_impact_success = self.calculate_specified_impact(
+            'AshRasterPopulationFunction',
+            self.hazard_layer,
+            self.population_layer,
+            'population_impact')
+
+        # calculate landcover impact
+        landcover_impact_success = self.calculate_specified_impact(
+            'AshRasterLandCoverFunction',
+            self.hazard_layer,
+            self.landcover_layer,
+            'landcover_impact')
 
         # calculate cities impact
         cities_impact_success = self.calculate_specified_impact(
@@ -670,9 +670,9 @@ class AshEvent(QObject):
         layer_registry.addMapLayer(self.highlight_base_layer, False)
 
         # add basemap layer
-        inset_layer = read_qgis_layer(self.ash_fixtures_dir(
-            'inset_modified.tif'), 'inset_modified')
-        layer_registry.addMapLayer(inset_layer, False)
+        # inset_layer = read_qgis_layer(self.ash_fixtures_dir(
+        #     'inset_modified.tif'), 'inset_modified')
+        # layer_registry.addMapLayer(inset_layer, False)
 
         CANVAS.setExtent(hazard_layer.extent())
         CANVAS.refresh()
