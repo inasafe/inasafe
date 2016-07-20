@@ -180,13 +180,11 @@ class RoadExposureReportMixin(ReportMixin):
             for category in self.affected_road_categories:
                 if road_type in self.affected_road_lengths[category]:
                     affected_by_usage.append(
-                        self.affected_road_lengths[category][
-                            road_type])
+                        self.affected_road_lengths[category][road_type])
                 else:
                     affected_by_usage.append(0)
-            row = []
 
-            row.append(self.label_with_unit(road_type.capitalize()))
+            row = [self.label_with_unit(road_type.capitalize())]
             for affected_by_usage_value in affected_by_usage:
                 row.append(affected_by_usage_value)
 
@@ -199,6 +197,12 @@ class RoadExposureReportMixin(ReportMixin):
             row.append(self.road_lengths[road_type])
 
             fields.append(row)
+
+        impact_summary = self.impact_summary()['fields']
+        row = [self.label_with_unit(tr('Total'))]
+        for value in impact_summary:
+            row.append(value[1])
+        fields.append(row)
 
         return {
             'attributes': attributes,
