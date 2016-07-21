@@ -22,6 +22,14 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 inasafe_keyword_version_key = 'keyword_version'
 inasafe_keyword_version = '3.5'
 
+# InaSAFE Keyword Version compatibility.
+keyword_version_compatibilities = {
+    # 'InaSAFE keyword version': 'List of supported InaSAFE keyword version'
+    '3.3': ['3.2'],
+    '3.4': ['3.2', '3.3'],
+    '3.5': ['3.4', '3.3']
+}
+
 # constants
 small_number = 2 ** -53  # I think this is small enough
 
