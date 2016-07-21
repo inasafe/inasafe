@@ -45,10 +45,11 @@ class VolcanoPointBuildingFunction(
         :return: The notes that should be attached to this impact report.
         :rtype: list
         """
+        unique_volcano_names = sorted(set(self.volcano_names))
         fields = [
             tr('Map shows buildings affected in each of the volcano buffered '
                'zones.'),
-            tr('Volcanoes considered: %s.') % self.volcano_names
+            tr('Volcanoes considered: %s.') % unique_volcano_names
         ]
         # include any generic exposure specific notes from definitions.py
         fields = fields + self.exposure_notes()

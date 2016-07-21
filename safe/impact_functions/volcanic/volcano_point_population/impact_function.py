@@ -65,6 +65,8 @@ class VolcanoPointPopulationFunction(
             needs_provenance = ''
         else:
             needs_provenance = tr(get_needs_provenance_value(self.parameters))
+
+        unique_volcano_names = sorted(set(self.volcano_names))
         fields = [
             tr('Map shows buildings affected in each of the volcano buffered '
                'zones.'),
@@ -72,7 +74,7 @@ class VolcanoPointPopulationFunction(
             population_rounding(self.total_population),
             tr('<sup>1</sup>People need evacuation if they are within the '
                'volcanic hazard zones.'),
-            tr('Volcanoes considered: %s.') % self.volcano_names,
+            tr('Volcanoes considered: %s.') % unique_volcano_names,
             needs_provenance
         ]
 

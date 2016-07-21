@@ -65,6 +65,7 @@ class VolcanoPolygonPopulationFunction(
             needs_provenance = ''
         else:
             needs_provenance = tr(get_needs_provenance_value(self.parameters))
+
         fields = [
             tr('Total population in the analysis area: %s') %
             population_rounding(self.total_population),
@@ -134,7 +135,8 @@ class VolcanoPolygonPopulationFunction(
             for row in features:
                 volcano_name_list.append(row[name_attribute])
 
-            self.volcano_names = ', '.join(set(volcano_name_list))
+            unique_volcano_names = sorted(set(volcano_name_list))
+            self.volcano_names = ', '.join(unique_volcano_names)
 
         # Retrieve the classification that is used by the hazard layer.
         vector_hazard_classification = self.hazard.keyword(

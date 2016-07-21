@@ -99,7 +99,8 @@ class VolcanoPolygonBuildingFunction(
             for row in self.hazard.layer.get_data():
                 # Run through all polygons and get unique names
                 volcano_name_list.add(row[self.name_attribute])
-            self.volcano_names = ', '.join(volcano_name_list)
+            unique_volcano_names = sorted(set(volcano_name_list))
+            self.volcano_names = ', '.join(unique_volcano_names)
         else:
             self.volcano_names = tr('Not specified in data')
 
