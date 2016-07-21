@@ -75,7 +75,6 @@ class StepKwNameField(WizardStep, FORM_CLASS):
         .. note:: This is an automatic Qt slot
            executed when the field selection changes.
         """
-        self.clear_further_steps()
         field = self.selected_field()
         # Exit if no selection
         if not field:
@@ -114,15 +113,8 @@ class StepKwNameField(WizardStep, FORM_CLASS):
         else:
             return None
 
-    def clear_further_steps(self):
-        """ Clear all further steps
-            in order to properly calculate the prev step
-        """
-        self.parent.step_kw_classify.treeClasses.clear()
-
     def set_widgets(self):
         """Set widgets on the Field tab."""
-        self.clear_further_steps()
         subcategory = self.parent.step_kw_subcategory.selected_subcategory()
         unit = self.parent.step_kw_unit.selected_unit()
         question_text = field_question_name_field % (subcategory['name'])
