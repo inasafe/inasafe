@@ -37,7 +37,6 @@ AVAILABLE_POSTPTOCESSORS = {
     'Aggregation': 'Aggregation',
     'BuildingType': 'Building type',
     'RoadType': 'Road type',
-    'AggregationCategorical': 'Aggregation categorical',
     'MinimumNeeds': 'Minimum needs'}
 
 
