@@ -115,9 +115,9 @@ class TsunamiEvacuationMetadata(ImpactFunctionMetadata):
                 {
                     'text': tr(
                         'Hamza Latief. pers com. Default impact threshold for '
-                        'tsunami impact on people should be 0.7m. This is less '
-                        'than a flood threshold because in a tsunami, the '
-                        'water is moving with force.'),
+                        'tsunami impact on people should be 0.7m. This is '
+                        'less than a flood threshold because in a tsunami, '
+                        'the water is moving with force.'),
                     'link': None
                 }
             ],

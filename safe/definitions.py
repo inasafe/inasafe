@@ -1478,7 +1478,8 @@ road_class_mapping = [
         'name': tr('Motorway'),
         'description': tr('A road to solve the traffic and have a fare.'),
         'osm_downloader': ['Motorway or highway', 'Motorway link'],
-        'string_defaults': ['motorway', 'trunk', 'motorway link', 'trunk link'],
+        'string_defaults': [
+            'motorway', 'trunk', 'motorway link', 'trunk link'],
         'citations': [
             {
                 'text': None,
@@ -1539,7 +1540,12 @@ road_class_mapping = [
         'description': tr('A road to walk on foot aim.'),
         'osm_downloader': ['Track', 'Cycleway, footpath, etc.'],
         'string_defaults': [
-            'path', 'track', 'footway', 'cycleway', 'cycleway, footpath, etc.'],
+            'path',
+            'track',
+            'footway',
+            'cycleway',
+            'cycleway, footpath, etc.'
+        ],
         'citations': [
             {
                 'text': None,
@@ -1724,7 +1730,11 @@ structure_class_mapping = [
             'library', 'toilet', 'convention hall', 'prison', 'police station',
             'public facility', 'public building', 'fire station'
         ],
-        'osm_downloader': ['Fire Station', 'Police Station', 'Public Building'],
+        'osm_downloader': [
+            'Fire Station',
+            'Police Station',
+            'Public Building'
+        ],
         'citations': [
             {
                 'text': None,
