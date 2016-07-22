@@ -44,6 +44,12 @@
            {{ item.area }}
         </td>
      </tr>
+   {% else %}
+     <tr>
+        <td colspan="2" class="center">
+         No area affected
+        </td>
+     </tr>
    {% endfor %}
   </table>
  </body>

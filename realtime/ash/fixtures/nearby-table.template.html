@@ -76,6 +76,12 @@
 				{% endif %}
 				<td>{{ item.hazard }}</td>
 			</tr>
+			{% else %}
+			<tr>
+				<td colspan="3" class="center">
+					No nearby cities or airport affected
+				</td>
+			</tr>
 			{% endfor %}
 		</table>
 	</body>

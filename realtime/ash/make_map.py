@@ -46,6 +46,7 @@ def process_event(
     airport_path = os.environ['INASAFE_ASH_AIRPORT_PATH']
     volcano_path = os.environ['INASAFE_ASH_VOLCANO_PATH']
     highlight_base_path = os.environ['INASAFE_ASH_HIGHLIGHT_BASE_PATH']
+    overview_path = os.environ['INASAFE_ASH_OVERVIEW_PATH']
 
     # We always want to generate en products too so we manipulate the locale
     # list and loop through them:
@@ -64,6 +65,7 @@ def process_event(
             eruption_height=eruption_height,
             region=region,
             alert_level=alert_level,
+            overview_path=overview_path,
             population_path=population_path,
             highlight_base_path=highlight_base_path,
             volcano_path=volcano_path,

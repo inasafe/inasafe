@@ -8,7 +8,9 @@ from collections import OrderedDict
 
 import pytz
 import shutil
-from PyQt4.QtCore import QObject, QFileInfo, QUrl
+
+import time
+from PyQt4.QtCore import QObject, QFileInfo, QUrl, Qt
 from PyQt4.QtXml import QDomDocument
 from qgis.core import QgsProject, QgsPalLabeling, \
     QgsCoordinateReferenceSystem, QgsMapLayerRegistry, QgsRasterLayer, \
@@ -53,6 +55,7 @@ class AshEvent(QObject):
             locale=None,
             working_dir=None,
             hazard_path=None,
+            overview_path=None,
             highlight_base_path=None,
             population_path=None,
             volcano_path=None,
@@ -116,6 +119,7 @@ class AshEvent(QObject):
         self.nearby_html_path = self.working_dir_path('nearby-table.html')
         self.landcover_html_path = self.working_dir_path('landcover-table.html')
         self.map_report_path = self.working_dir_path('report.pdf')
+        self.project_path = self.working_dir_path('project.qgs')
         self.impact_exists = None
         self.locale = 'en'
 
@@ -125,6 +129,7 @@ class AshEvent(QObject):
         self.landcover_path = landcover_path
         self.volcano_path = volcano_path
         self.highlight_base_path = highlight_base_path
+        self.overview_path = overview_path
 
         # load layers
         self.hazard_layer = read_qgis_layer(self.hazard_path, 'Ash Fall')
@@ -140,6 +145,8 @@ class AshEvent(QObject):
             self.volcano_path, 'Volcano')
         self.highlight_base_layer = read_qgis_layer(
             self.highlight_base_path, 'Base Map')
+        self.overview_layer = read_qgis_layer(
+            self.overview_path, 'Overview')
 
         # Write metadata for self reference
         self.write_metadata()
@@ -351,10 +358,7 @@ class AshEvent(QObject):
                     'area': int(area)
                 })
 
-        def get_area(val):
-            return val['area']
-
-        landcover_list.sort(key=get_area, reverse=True)
+        landcover_list.sort(key=lambda x: x['area'], reverse=True)
         landcover_template = self.ash_fixtures_dir(
             'landcover-table.template.html')
         with open(landcover_template) as f:
@@ -402,7 +406,7 @@ class AshEvent(QObject):
             for f in cities_impact.getFeatures():
                 haz_class = f.attributes()[hazard_field_index]
                 city_name = f.attributes()[name_field_index]
-                if population_field_index:
+                if population_field_index >= 0:
                     city_pop = f.attributes()[population_field_index]
                 else:
                     city_pop = 1
@@ -471,9 +475,11 @@ class AshEvent(QObject):
 
         # decide which to show
         # maximum 2 airport
-        airport_count = min(2, len(table_airports))
+        max_airports = 2
+        airport_count = min(max_airports, len(table_airports))
         # maximum total 7 entries to show
-        places_count = min(len(table_places), 7 - airport_count)
+        max_rows = 6
+        places_count = min(len(table_places), max_rows - airport_count)
 
         # get top airport
         table_airports = table_airports[:airport_count]
@@ -481,6 +487,11 @@ class AshEvent(QObject):
         table_places = table_places[:places_count]
 
         item_list = table_places + table_airports
+
+        # sort entry by hazard level
+        item_list = sorted(
+            item_list,
+            key=lambda x: (-x['class'], -x['population']))
 
         nearby_template = self.ash_fixtures_dir(
             'nearby-table.template.html')
@@ -573,10 +584,11 @@ class AshEvent(QObject):
             impact_function.run_analysis()
             impact_layer = impact_function.impact
 
-            self.set_impact_style(impact_layer)
+            if impact_layer:
+                self.set_impact_style(impact_layer)
 
-            # copy results of impact to report_path directory
-            self.copy_layer(impact_layer, output_basename)
+                # copy results of impact to report_path directory
+                self.copy_layer(impact_layer, output_basename)
         except ZeroImpactException as e:
             # in case zero impact, just return
             LOGGER.info('No impact detected')
@@ -607,14 +619,14 @@ class AshEvent(QObject):
 
         # calculate cities impact
         cities_impact_success = self.calculate_specified_impact(
-            'AshRasterHazardPlacesFunction',
+            'AshRasterPlacesFunction',
             self.hazard_layer,
             self.cities_layer,
             'cities_impact')
 
         # calculate airport impact
         airport_impact_success = self.calculate_specified_impact(
-            'AshRasterHazardPlacesFunction',
+            'AshRasterPlacesFunction',
             self.hazard_layer,
             self.airport_layer,
             'airport_impact')
@@ -628,19 +640,16 @@ class AshEvent(QObject):
             LOGGER.info('Cannot Generate report when no impact present.')
             return
 
-        project_path = self.working_dir_path('project-%s.qgs' % self.locale)
-        # shutil.copy(
-        #     self.ash_fixtures_dir('realtime-ash.qgs'),
-        #     project_path)
+        # get layer registry
+        layer_registry = QgsMapLayerRegistry.instance()
+        layer_registry.removeAllMapLayers()
+
         project_instance = QgsProject.instance()
-        project_instance.setFileName(project_path)
+        project_instance.setFileName(self.project_path)
         project_instance.read()
 
         # Set up the map renderer that will be assigned to the composition
         map_renderer = CANVAS.mapRenderer()
-        # Set the labelling engine for the canvas
-        # labelling_engine = QgsPalLabeling()
-        # map_renderer.setLabelingEngine(labelling_engine)
 
         # Enable on the fly CRS transformations
         map_renderer.setProjectionsEnabled(True)
@@ -649,9 +658,6 @@ class AshEvent(QObject):
         crs = QgsCoordinateReferenceSystem('EPSG:4326')
         map_renderer.setDestinationCrs(crs)
 
-        # get layer registry
-        layer_registry = QgsMapLayerRegistry.instance()
-        layer_registry.removeAllMapLayers()
         # add place name layer
         layer_registry.addMapLayer(self.cities_layer, False)
 
@@ -670,13 +676,10 @@ class AshEvent(QObject):
         layer_registry.addMapLayer(self.highlight_base_layer, False)
 
         # add basemap layer
-        # inset_layer = read_qgis_layer(self.ash_fixtures_dir(
-        #     'inset_modified.tif'), 'inset_modified')
-        # layer_registry.addMapLayer(inset_layer, False)
+        layer_registry.addMapLayer(self.overview_layer, False)
 
         CANVAS.setExtent(hazard_layer.extent())
         CANVAS.refresh()
-        # CANVAS.refresh()
 
         template_path = self.ash_fixtures_dir('realtime-ash.qpt')
 
@@ -710,6 +713,18 @@ class AshEvent(QObject):
         else:
             LOGGER.exception('Map canvas could not be found in template %s',
                              template_path)
+            raise MapComposerError
+
+        # get overview map canvas on the composition and set extent
+        map_overall = composition.getComposerItemById('map-overall')
+        if map_overall:
+            map_overall.setLayerSet([self.overview_layer.id()])
+            map_overall.zoomToExtent(self.overview_layer.extent())
+            map_overall.renderModeUpdateCachedImage()
+        else:
+            LOGGER.exception(
+                'Map canvas could not be found in template %s',
+                template_path)
             raise MapComposerError
 
         # setup impact table
@@ -773,25 +788,10 @@ class AshEvent(QObject):
             pic_path = os.path.join('logo', pic_path)
             logo_picture.setPicturePath(self.ash_fixtures_dir(pic_path))
 
-        # map_overall = composition.getComposerItemById('map-overall')
-        # if map_overall:
-        #     map_overall.renderModelUpdateCachedImage()
-        # else:
-        #     LOGGER.exception('Map canvas could not be found in template %s',
-        #                      template_path)
-        #     raise MapComposerError
-
         # save a pdf
         composition.exportAsPDF(self.map_report_path)
 
-        # impact_qgis_layer = read_qgis_layer(self.impact_path)
-        # report = ImpactReport(
-        #     IFACE, template=None, layer=impact_qgis_layer)
-
-        # report.print_map_to_pdf(self.map_report_path)
-        # report.print_impact_table(self.table_report_path)
-
-        project_instance.write(QFileInfo(project_path))
+        project_instance.write(QFileInfo(self.project_path))
 
         layer_registry.removeAllMapLayers()
         map_renderer.setDestinationCrs(default_crs)

@@ -58,13 +58,14 @@ class AshRasterLandCoverFunction(ContinuousRHClassifiedVE):
         super(AshRasterLandCoverFunction, self).__init__()
 
         self.hazard_classes = [
+            tr('Unaffected'),
             tr('Very Low'),
             tr('Low'),
             tr('Moderate'),
             tr('High'),
             tr('Very High'),
         ]
-        self.affected_hazard_columns = self.hazard_classes
+        self.affected_hazard_columns = self.hazard_classes[1:]
 
     def run(self):
         """Run the impact function.
@@ -87,7 +88,7 @@ class AshRasterLandCoverFunction(ContinuousRHClassifiedVE):
         medium_max = group_parameters.value_map['moderate_threshold'].value
         high_max = group_parameters.value_map['high_threshold'].value
         ranges = ranges_according_thresholds_list(
-            [unaffected_max, very_low_max, low_max,
+            [None, unaffected_max, very_low_max, low_max,
              medium_max, high_max, None])
 
         hazard_value_to_class = {}
@@ -158,6 +159,16 @@ class AshRasterLandCoverFunction(ContinuousRHClassifiedVE):
         del writer
         impact_layer = QgsVectorLayer(filename, 'Impacted Land Cover', 'ogr')
 
+        # find unaffected features
+        unaffected_feats = []
+        target_field_index = impact_layer.fieldNameIndex(self.target_field)
+        for f in impact_layer.getFeatures():
+            haz_class = f.attributes()[target_field_index]
+            if haz_class == self.hazard_classes[0]:
+                unaffected_feats.append(f.id())
+
+        impact_layer.dataProvider().deleteFeatures(unaffected_feats)
+
         if impact_layer.featureCount() == 0:
             raise ZeroImpactException()
 
@@ -178,37 +189,37 @@ class AshRasterLandCoverFunction(ContinuousRHClassifiedVE):
         # Define style for the impact layer
         style_classes = [
             dict(
-                label=self.hazard_classes[0] + ': %.1f - %.1f %s' % (
+                label=self.hazard_classes[1] + ': %.1f - %.1f %s' % (
                     unaffected_max, very_low_max, unit_abbrev),
-                value=self.hazard_classes[0],
+                value=self.hazard_classes[1],
                 colour='#2C6BA4',
                 border_color='#000000',
                 transparency=0),
             dict(
-                label=self.hazard_classes[1] + ': %.1f - %.1f %s' % (
+                label=self.hazard_classes[2] + ': %.1f - %.1f %s' % (
                     very_low_max + 0.1, low_max, unit_abbrev),
-                value=self.hazard_classes[1],
+                value=self.hazard_classes[2],
                 colour='#00A4D8',
                 border_color='#000000',
                 transparency=0),
             dict(
-                label=self.hazard_classes[2] + ': %.1f - %.1f %s' % (
+                label=self.hazard_classes[3] + ': %.1f - %.1f %s' % (
                     low_max + 0.1, medium_max, unit_abbrev),
-                value=self.hazard_classes[2],
+                value=self.hazard_classes[3],
                 colour='#FFEF36',
                 border_color='#000000',
                 transparency=0),
             dict(
-                label=self.hazard_classes[3] + ': %.1f - %.1f %s' % (
+                label=self.hazard_classes[4] + ': %.1f - %.1f %s' % (
                     medium_max + 0.1, high_max, unit_abbrev),
-                value=self.hazard_classes[3],
+                value=self.hazard_classes[4],
                 colour='#EFA951',
                 border_color='#000000',
                 transparency=0),
             dict(
-                label=self.hazard_classes[4] + ': > %.1f %s' % (
+                label=self.hazard_classes[5] + ': > %.1f %s' % (
                     high_max, unit_abbrev),
-                value=self.hazard_classes[4],
+                value=self.hazard_classes[5],
                 colour='#d62631',
                 border_color='#000000',
                 transparency=0),

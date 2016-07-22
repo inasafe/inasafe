@@ -66,7 +66,7 @@ from safe.impact_functions.ash.ash_raster_landcover.impact_function import \
 from safe.impact_functions.ash.ash_raster_population.impact_function import \
     AshRasterPopulationFunction
 from safe.impact_functions.ash.ash_raster_places.impact_function import \
-    AshRasterHazardPlacesFunction
+    AshRasterPlacesFunction
 
 
 __author__ = 'Rizky Maulana Nugraha <lana.pcfre@gmail.com>'
@@ -122,4 +122,4 @@ def register_impact_functions():
     impact_function_registry.register(AshRasterLandCoverFunction)
     # Added in 3.5
     impact_function_registry.register(AshRasterPopulationFunction)
-    impact_function_registry.register(AshRasterHazardPlacesFunction)
+    impact_function_registry.register(AshRasterPlacesFunction)

@@ -92,7 +92,7 @@ from safe.impact_functions.ash.ash_raster_landcover.impact_function import \
 from safe.impact_functions.ash.ash_raster_population.impact_function import \
     AshRasterPopulationFunction
 from safe.impact_functions.ash.ash_raster_places.impact_function import \
-    AshRasterHazardPlacesFunction
+    AshRasterPlacesFunction
 
 from safe.definitions import (
     layer_purpose_exposure,
@@ -163,7 +163,7 @@ class TestImpactFunctionMetadata(unittest.TestCase):
 
             # Volcanic Ash
             AshRasterLandCoverFunction(),
-            AshRasterHazardPlacesFunction(),
+            AshRasterPlacesFunction(),
             AshRasterPopulationFunction()
         ]
         self.assertEqual(len(impact_functions), len(EXPECTED_IF))
