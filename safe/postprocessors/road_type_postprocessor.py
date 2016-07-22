@@ -9,18 +9,17 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+from safe.postprocessors.abstract_building_road_type_postprocessor import \
+    AbstractBuildingRoadTypePostprocessor
+from safe.definitions import road_class_mapping, road_class_order
+from safe.utilities.i18n import tr
 
 __author__ = 'Dmitry Kolesov <kolesov.dm@google.com>'
 __revision__ = '$Format:%H$'
 __date__ = '08/01/2014'
 __license__ = "GPL"
-__copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
-__copyright__ += 'Disaster Reduction'
-
-from safe.postprocessors.abstract_building_road_type_postprocessor import \
-    AbstractBuildingRoadTypePostprocessor
-from safe.definitions import road_class_mapping, road_class_order
-from safe.utilities.i18n import tr
+__copyright__ = (
+    'Copyright 2012, Australia Indonesia Facility for Disaster Reduction')
 
 
 class RoadTypePostprocessor(AbstractBuildingRoadTypePostprocessor):
@@ -43,8 +42,7 @@ class RoadTypePostprocessor(AbstractBuildingRoadTypePostprocessor):
             item['key']: item['name'] for item in road_class_mapping}
         self._order = road_class_order
 
-    @staticmethod
-    def feature_value(feature):
+    def feature_value(self, feature):
         """Return the value to add in the statistics. For a road, it's length.
 
         :param feature: The feature is not used.
