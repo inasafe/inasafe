@@ -31,8 +31,8 @@ We propose the title should use the following syntax
 * **The type of hazard**, it is the type of hazards that supports by InaSAFE to analyse with.
 * **Event or hazard**, this is a different scenario, in a single scenario we use **event** and 
   when it is multiple scenarios we use **hazard**.
-* We need to use specific “not translated” words for the Indonesian version
-* Capitalise the first letter of the title only
+* We need to use specific “not translated” words for the Indonesian version.
+* Capitalise the first letter of the title only.
 
 ### Examples: 
 
@@ -83,20 +83,19 @@ We propose the title should use the following syntax
 ### Description
 
 The map legend appears at the bottom of each map product and identifies and describes 
-the impact layer.
+the impact layer. 
 
-Using this table as a reference:
-![image](https://cloud.githubusercontent.com/assets/16660099/17129361/ca2f9a58-533c-11e6-9b66-a195f20c7bbf.png)
+Using this table as a reference: ![image](https://cloud.githubusercontent.com/assets/16660099/17129361/ca2f9a58-533c-11e6-9b66-a195f20c7bbf.png)
 
 We propose the legend titles should use the following syntax
 <**number of**> <**exposure**>
 
 * **Number of**, refers to the way the exposure element is measured, i.e. length, area or 
-  number of
-* **Exposure**, is as described in map title, the elements at risk
-* Capitalise the first letter of the title only
+  number of.
+* **Exposure**, is as described in map title, the elements at risk.
+* Capitalise the first letter of the title only.
 * We do not include the label **affected** in the legend entries as thresholds for the 
-  definiton of affected change from impact function to impact function
+  definiton of affected change from impact function to impact function.
 
 ### Examples
 
@@ -111,4 +110,39 @@ We propose the legend titles should use the following syntax
 - Perkiraan jumlah bangunan
 - Perkiraan panjang jalan
 - Perkiraan luas penutup lahan
+
+## Marginalia
+ 
+# Reports
+
+* Titles and text left aligned.
+* Numbers right aligned.
+
+## Question
+
+The question appears at the beginning of each report and identifies and describes 
+the purpose of the analysis. Using this table as a reference:
+
+
+## Impact summary
+
+## Impact table
+
+## Action list
+
+## Notes and assumptions
+
+## Aggregation report
+
+# Overall Examples
+
+**Volcano on people**
+
+
+**Tsunami on roads**
+
+
+**Flood on buildings**
+
+
 
