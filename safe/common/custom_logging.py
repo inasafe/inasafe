@@ -11,15 +11,15 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+import os
+import sys
+import logging
 # This is ugly but we dont have a better solution yet...
 safe_extras_dir = os.path.abspath(
     os.path.join(os.path.dirname(__file__), '..', '..', 'safe_extras'))
 if safe_extras_dir not in sys.path:
     sys.path.append(safe_extras_dir)
 
-import os
-import sys
-import logging
 from qgis.core import QgsMessageLog
 from PyQt4.QtCore import QSettings
 # pylint: disable=F0401
