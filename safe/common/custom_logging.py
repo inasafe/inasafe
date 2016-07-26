@@ -11,6 +11,11 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+# This is ugly but we dont have a better solution yet...
+safe_extras_dir = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), '..', '..', 'safe_extras'))
+if safe_extras_dir not in sys.path:
+    sys.path.append(safe_extras_dir)
 
 import os
 import sys
@@ -25,10 +30,6 @@ from raven import Client
 # pylint: enable=F0401
 from safe.common.utilities import log_file_path
 from safe.utilities.i18n import tr
-safe_extras_dir = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), '..', '..', 'safe_extras'))
-if safe_extras_dir not in sys.path:
-    sys.path.append(safe_extras_dir)
 
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
