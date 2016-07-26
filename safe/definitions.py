@@ -563,10 +563,10 @@ exposure_people_in_building = {
     ],
     'citations': [
         {
-            'UNISDR Background Paper: Proposed Updated Terminology on '
-            'Disaster Risk Reduction, August 2015': None,
-            'http://www.preventionweb.net/files/45462_backgoundpaperontermino'
-            'logyaugust20.pdf': None
+            'text': tr('UNISDR (2015) Background Paper: Proposed Updated '
+                       'Terminology on Disaster Risk  Reduction '
+                       'reduction.'),
+            'link': 'http://www.preventionweb.net/files/45462_backgoundpaperonterminologyaugust20.pdf'
         }
     ]
 }
