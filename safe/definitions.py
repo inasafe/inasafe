@@ -545,7 +545,7 @@ exposure_people_in_building = {
            'occurrence of a hazardous event. Evacuation can occur from '
            'places of residence, workplaces, schools and hospitals to other '
            'places. Evacuation is usually a planned and organised '
-           'mobilisation of persons, animals and goods.'),
+           'mobilisation of persons, animals and goods.')
     ],
     'actions': [  # these are additional generic actions - IF has more
         tr('Which group or population is most affected?'),
