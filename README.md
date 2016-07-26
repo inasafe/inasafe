@@ -39,7 +39,7 @@ Quick Installation Guide
 ========================
 
 You first need to have [QGIS](http://qgis.org/) installed. Grab your free
-copy from [the QGIS download page](http://download/qgis.org).
+copy from [the QGIS download page](http://qgis.org/en/site/forusers/download.html).
 
 To install the InaSAFE plugin, use the plugin manager in
 [QGIS](http://qgis.org):
