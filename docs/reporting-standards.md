@@ -71,11 +71,44 @@ We propose the title should use the following syntax
 - Roads affected 
 - Land cover affected
 
- 
 **Indonesian example**:
 
 - Orang terdampak 
 - Bangunan terdampak 
 - Jalan terdampak 
 - Penutup lahan terdampak
+
+## Map legend title
+
+### Description
+
+The map legend appears at the bottom of each map product and identifies and describes 
+the impact layer.
+
+Using this table as a reference:
+![image](https://cloud.githubusercontent.com/assets/16660099/17129361/ca2f9a58-533c-11e6-9b66-a195f20c7bbf.png)
+
+We propose the legend titles should use the following syntax
+<**number of**> <**exposure**>
+
+* **Number of**, refers to the way the exposure element is measured, i.e. length, area or 
+  number of
+* **Exposure**, is as described in map title, the elements at risk
+* Capitalise the first letter of the title only
+* We do not include the label **affected** in the legend entries as thresholds for the 
+  definiton of affected change from impact function to impact function
+
+### Examples
+
+**For different exposures**: 
+- Number of people 
+- Number of buildings
+- Length of roads
+- Area of land cover
+
+**Indonesian example**:
+- Perkiraan jumlah penduduk 
+- Perkiraan jumlah bangunan
+- Perkiraan panjang jalan
+- Perkiraan luas penutup lahan
 
