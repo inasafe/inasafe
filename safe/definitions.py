@@ -536,10 +536,10 @@ exposure_people_in_building = {
            'nearest 10 persons if the total is less than 1,000; nearest 100 '
            'people if more than 1,000 and less than 100,000; and nearest '
            '1000 if more than 100,000.'),
-        tr('Displaced persons are persons who, for different reasons and '
+        tr('Displaced people are people who, for different reasons and '
            'circumstances because of risk or disaster, have to leave their '
            'place of residence.'),
-        tr('Evacuated persons are persons who, for different reasons and '
+        tr('Evacuated people are people who, for different reasons and '
            'circumstances because of risk conditions or disaster, move '
            'temporarily to safer places before, during or after the '
            'occurrence of a hazardous event. Evacuation can occur from '
@@ -565,7 +565,7 @@ exposure_people_in_building = {
         {
             'text': tr('UNISDR (2015) Background Paper: Proposed Updated '
                        'Terminology on Disaster Risk  Reduction '
-                       'reduction.'),
+                       'Reduction.'),
             'link': 'http://www.preventionweb.net/files/45462_backgoundpaperonterminologyaugust20.pdf'
         }
     ]
