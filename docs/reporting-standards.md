@@ -132,8 +132,18 @@ _Disclaimer_: InaSAFE has been jointly developed by the Indonesian Government-BN
 ## Question
 
 The question appears at the beginning of each report and identifies and describes 
-the purpose of the analysis. Using this table as a reference:
+the purpose of the analysis. The question should reflect the terminology used in the
+title. Using this table as a reference:
+![image](https://cloud.githubusercontent.com/assets/16660099/17164091/0ad0b44a-53ef-11e6-93f2-0c0241d15b7d.png)
 
+We propose the questions should use the following syntax:
+In the event of a <**hazard**>, <**exposure measure**><**exposure type**> will be affected?
+
+or for Generic impact functions:
+![image](https://cloud.githubusercontent.com/assets/16660099/17164101/2448554a-53ef-11e6-9e64-446a31694a73.png)
+
+We propose the generic questions should use the following syntax:
+In each of the hazard zones <**exposure measure**> <**exposure type**> will be affected?
 
 ## Impact summary
 
