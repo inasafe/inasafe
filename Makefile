@@ -299,6 +299,23 @@ indent:
 
 ##########################################################
 #
+# A little helper to trigger a nightly build and an
+# experimental build on the InaSAFE server.
+#
+# You need to have the correct ssh configs and keys set
+# up in order for this to work.
+# 
+##########################################################
+
+build-nightlies:
+	@echo "Building nightlies"
+	@ssh inasafe-docker /home/data/experimental.inasafe.org/build_nightly_from_host.sh
+	@ssh inasafe-docker /home/data/nightly.inasafe.org/build_nightly_from_host.sh
+	@rsync -av inasafe-docker:/home/data/experimental.inasafe.org ../
+	@rsync -av inasafe-docker:/home/data/nightly.inasafe.org ../
+
+##########################################################
+#
 # Make targets specific to Docker go below this point
 #
 ##########################################################
