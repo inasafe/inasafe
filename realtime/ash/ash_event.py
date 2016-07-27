@@ -9,18 +9,23 @@ from collections import OrderedDict
 import pytz
 import shutil
 
-import time
 from PyQt4.QtCore import QObject, QFileInfo, QUrl, Qt
 from PyQt4.QtXml import QDomDocument
-from qgis.core import QgsProject, QgsPalLabeling, \
-    QgsCoordinateReferenceSystem, QgsMapLayerRegistry, QgsRasterLayer, \
-    QgsComposition, QgsPoint, QgsMapSettings
+from qgis.core import (
+    QgsProject,
+    QgsCoordinateReferenceSystem,
+    QgsMapLayerRegistry,
+    QgsRasterLayer,
+    QgsComposition,
+    QgsPoint,
+    QgsRectangle)
 
 from jinja2 import Template
 from headless.tasks.utilities import download_file
 from realtime.exceptions import MapComposerError
 from realtime.utilities import realtime_logger_name
 from safe.common.exceptions import ZeroImpactException, KeywordNotFoundError
+from safe.common.utilities import format_int
 from safe.impact_functions.core import population_rounding
 from safe.impact_functions.impact_function_manager import \
     ImpactFunctionManager
@@ -233,7 +238,7 @@ class AshEvent(QObject):
         elapsed_minute = (elapsed_time.seconds/60) % 60
         event = {
             'report-title': self.tr('Volcanic Ash Impact'),
-            'report-timestamp': self.tr('%s: Alert Level: %s %s') % (
+            'report-timestamp': self.tr('Volcano: %s, Alert Level: %s %s') % (
                 self.volcano_name,
                 self.alert_level, timestamp_string),
             'report-province': self.tr('Province: %s') % (self.region,),
@@ -302,8 +307,8 @@ class AshEvent(QObject):
             else:
                 # divide per 1000 people (unit used in the report)
                 population_dict[val] /= 1000
-                population_dict[val] = population_rounding(
-                    population_dict[val])
+                population_dict[val] = format_int(
+                    population_rounding(population_dict[val]))
 
         # format:
         # {
@@ -355,7 +360,7 @@ class AshEvent(QObject):
             if not land_type.lower() == 'other':
                 landcover_list.append({
                     'type': land_type,
-                    'area': int(area)
+                    'area': format_int(int(area))
                 })
 
         landcover_list.sort(key=lambda x: x['area'], reverse=True)
@@ -422,8 +427,9 @@ class AshEvent(QObject):
                     'class': haz_class,
                     'hazard': haz,
                     'css': haz.lower().replace(' ', '-'),
-                    'population': population_rounding(city_pop / 1000),
-                    'name': city_name.capitalize(),
+                    'population': format_int(
+                        population_rounding(city_pop / 1000)),
+                    'name': city_name.title(),
                     'type': 'places'
                 }
                 table_places.append(item)
@@ -460,7 +466,7 @@ class AshEvent(QObject):
                     'hazard': haz,
                     'css': haz.lower().replace(' ', '-'),
                     'population': 0,
-                    'name': airport_name.capitalize(),
+                    'name': airport_name.title(),
                     'type': 'airport'
                 }
                 table_airports.append(item)
@@ -640,13 +646,13 @@ class AshEvent(QObject):
             LOGGER.info('Cannot Generate report when no impact present.')
             return
 
-        # get layer registry
-        layer_registry = QgsMapLayerRegistry.instance()
-        layer_registry.removeAllMapLayers()
-
         project_instance = QgsProject.instance()
         project_instance.setFileName(self.project_path)
         project_instance.read()
+
+        # get layer registry
+        layer_registry = QgsMapLayerRegistry.instance()
+        layer_registry.removeAllMapLayers()
 
         # Set up the map renderer that will be assigned to the composition
         map_renderer = CANVAS.mapRenderer()
@@ -719,7 +725,13 @@ class AshEvent(QObject):
         map_overall = composition.getComposerItemById('map-overall')
         if map_overall:
             map_overall.setLayerSet([self.overview_layer.id()])
-            map_overall.zoomToExtent(self.overview_layer.extent())
+            # this is indonesia extent
+            indonesia_extent = QgsRectangle(
+                94.0927980005593554,
+                -15.6629591962689343,
+                142.0261493318861312,
+                10.7379406374101816)
+            map_overall.zoomToExtent(indonesia_extent)
             map_overall.renderModeUpdateCachedImage()
         else:
             LOGGER.exception(
