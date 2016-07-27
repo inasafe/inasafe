@@ -126,14 +126,14 @@ _Disclaimer_: InaSAFE has been jointly developed by the Indonesian Government-BN
 
 # Reports
 
-* Titles and text left aligned.
-* Numbers right aligned.
+* Titles, body text, table text, table text row heading and table text column headings for text content left aligned.
+* Numbers and table text column headings for number content right aligned.
 
-## Question
+## Analysis question
 
-The question appears at the beginning of each report and identifies and describes 
-the purpose of the analysis. The question should reflect the terminology used in the
-title. Using this table as a reference:
+The analysis question appears at the beginning of each report and identifies and describes 
+the purpose of the analysis. It should add more detail to the existing map title. 
+The question should reflect the terminology used in the title. Using this table as a reference:
 ![image](https://cloud.githubusercontent.com/assets/16660099/17164091/0ad0b44a-53ef-11e6-93f2-0c0241d15b7d.png)
 
 We propose the questions should use the following syntax:
@@ -145,15 +145,50 @@ or for Generic impact functions:
 We propose the generic questions should use the following syntax:
 In each of the hazard zones <**exposure measure**> <**exposure type**> will be affected?
 
-## Impact summary
+## General report
 
-## Impact table
+The general report gives a brief summary in table form of what the estimated effect of 
+the hazard will be. It should follow this form:
+Estimated <**exposure measure**><**exposure type**>
+
+![image](https://cloud.githubusercontent.com/assets/16660099/17165600/a45ffea2-53fb-11e6-91c3-761157dd7d8d.png)
+
+## Detailed report
+
+The detailed report gives further detail on the estimated effect of the hazard, broken 
+down into characteristics, e.g. gender and age for population, type of building for 
+infrastructure.
+
+![image](https://cloud.githubusercontent.com/assets/16660099/17165692/739dd55e-53fc-11e6-82db-eede1413d6e4.png)
+
+## Minimum needs report
+
+The minimum needs report gives information on the estimated amount of relief items 
+to support the affected population. It should be broken up into relief items that 
+will be provided once and relief items that are to provided weekly.
+
+![image](https://cloud.githubusercontent.com/assets/16660099/17166008/86065ffc-53fe-11e6-841e-cea3b81803f6.png)
 
 ## Action list
 
+Action lists suitable for each hazard type and exposure element should be included in 
+this section. These lists include questions that should be asked in the event of a 
+hazard occurring and should reflect the results of the report. Examples of questions 
+to be included in an action list include:
+
 ## Notes and assumptions
 
+The Notes and assumptions section is used to explain the definition of affected and not 
+affected for this particular hazard and exposure by outlining the thresholds used in 
+the analysis. This section also outlines the assumptions made during the analysis 
+that users should take into account when interpreting the report.
+
+
 ## Analysis details
+
+In the analysis details section details for each layer used in the analysis should be
+provided. This includes the layer name, its source and a link to the source if it 
+is available.
 
 **Hazard source**
 Layer name - sourced from x - <insert link here if suitable>
