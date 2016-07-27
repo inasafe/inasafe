@@ -132,6 +132,17 @@ the purpose of the analysis. Using this table as a reference:
 
 ## Notes and assumptions
 
+## Analysis details
+
+**Hazard source**
+Layer name - sourced from x - <insert link here if suitable>
+**Exposure source**
+Layer name - sourced from y - <insert link here suitable>
+**Aggregation source**
+Layer name - sourced from z - <insert link here suitable>
+**Impact Function**
+Impact Function name - published reference for this type of analysis
+
 ## Aggregation report
 
 # Overall Examples
