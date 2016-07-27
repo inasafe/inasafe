@@ -112,7 +112,18 @@ We propose the legend titles should use the following syntax
 - Perkiraan luas penutup lahan
 
 ## Marginalia
- 
+
+ _Analysis information:_
+
+- **Impact Function**: <which impact function used>
+- **Time**: <time of analysis>
+- **Note**: <recommendation to ground truth>
+- **Version**: <version of InaSAFE used>
+- logos of BNPB, Australian Aid, GFDRR
+
+_Disclaimer_: InaSAFE has been jointly developed by the Indonesian Government-BNPB, the Australian Government, the World Bank-GFDRR and independent contributors. These agencies and the individual software developers of InaSAFE take no responsibility for the correctness of outputs from InaSAFE or decisions derived as a consequence.
+**General:** Capitalise first letter only in marginalia titles
+
 # Reports
 
 * Titles and text left aligned.
