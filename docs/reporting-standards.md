@@ -11,6 +11,10 @@ elements used on map reports, tabular reports, web outputs and so on. Please
 use screenshots and examples liberally so that the norms described here 
 are accessible in both a textual and graphical form.
 
+# General rules
+
+In line with InaSAFE's human interface guidelines, all titles should capitalise
+only the first letter of the first word in labels and titles.
 
 # Maps
 
@@ -22,21 +26,21 @@ The map title appears at the top of each map product and describes the map
 content. Using this table as a reference:
 ![image](https://cloud.githubusercontent.com/assets/13621886/16513431/eab2319e-3f8e-11e6-9249-eb265f95ac43.png)
 
-We propose the title should use the following syntax
+The title should use the following syntax:
 <**exposure**> <**affected by/in**> <**type of hazard**> <**event/hazard**>
 
-* In the table, we see that **exposure** contains people (population),
-  buildings (building and infrastructure), roads, and land cover. It is people,
-  property, systems, or other elements present in hazard zones that are thereby
-  subject to potential losses (UNISDR's terminology).
-* **Affected by/in**, is the influence or effect from external factor, i.e.
-  affected by a disaster.
-* **The type of hazard**, it is the type of hazards that supports by InaSAFE to
-  analyse with.
-* **Event or hazard**, this is a different scenario, in a single scenario we
-  use **event** and when it is multiple scenarios we use **hazard**.
-* We need to use specific “not translated” words for the Indonesian version.
-* Capitalise the first letter of the title only.
+**Exposure** shows which exposure element present in the analysis area, that is
+subject to potential losses, is being focused on in this report. Examples of
+exposure elements include: people (population), buildings (building and
+infrastructure), roads, and land cover. **Affected by/in** is the
+influence or effect from an external factor, i.e. affected by a hazard. **The
+type of hazard** is the type of hazard that has been chosen for analysis if
+that hazard is supported by InaSAFE for analysis. **Event/hazard** shows
+whether the analysis is from a single scenario (**event**) or multiple
+scenarios (**hazard**).
+
+Please note that specific "not translated" words are used for titles in the
+Indonesian version.
 
 ### Examples: 
 
