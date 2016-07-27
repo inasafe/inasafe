@@ -31,8 +31,8 @@ We propose the title should use the following syntax
 * **The type of hazard**, it is the type of hazards that supports by InaSAFE to analyse with.
 * **Event or hazard**, this is a different scenario, in a single scenario we use **event** and 
   when it is multiple scenarios we use **hazard**.
-* We need to use specific “not translated” words for the Indonesian version
-* Capitalise the first letter of the title only
+* We need to use specific “not translated” words for the Indonesian version.
+* Capitalise the first letter of the title only.
 
 ### Examples: 
 
@@ -71,7 +71,6 @@ We propose the title should use the following syntax
 - Roads affected 
 - Land cover affected
 
- 
 **Indonesian example**:
 
 - Orang terdampak 
@@ -79,3 +78,104 @@ We propose the title should use the following syntax
 - Jalan terdampak 
 - Penutup lahan terdampak
 
+## Map legend title
+
+### Description
+
+The map legend appears at the bottom of each map product and identifies and describes 
+the impact layer. 
+
+Using this table as a reference: ![image](https://cloud.githubusercontent.com/assets/16660099/17129361/ca2f9a58-533c-11e6-9b66-a195f20c7bbf.png)
+
+We propose the legend titles should use the following syntax
+<**number of**> <**exposure**>
+
+* **Number of**, refers to the way the exposure element is measured, i.e. length, area or 
+  number of.
+* **Exposure**, is as described in map title, the elements at risk.
+* Capitalise the first letter of the title only.
+* We do not include the label **affected** in the legend entries as thresholds for the 
+  definiton of affected change from impact function to impact function.
+
+### Examples
+
+**For different exposures**: 
+- Number of people 
+- Number of buildings
+- Length of roads
+- Area of land cover
+
+**Indonesian example**:
+- Perkiraan jumlah penduduk 
+- Perkiraan jumlah bangunan
+- Perkiraan panjang jalan
+- Perkiraan luas penutup lahan
+
+## Marginalia
+
+ _Analysis information:_
+
+- **Impact Function**: <which impact function used>
+- **Time**: <time of analysis>
+- **Note**: <recommendation to ground truth>
+- **Version**: <version of InaSAFE used>
+- logos of BNPB, Australian Aid, GFDRR
+
+_Disclaimer_: InaSAFE has been jointly developed by the Indonesian Government-BNPB, the Australian Government, the World Bank-GFDRR and independent contributors. These agencies and the individual software developers of InaSAFE take no responsibility for the correctness of outputs from InaSAFE or decisions derived as a consequence.
+**General:** Capitalise first letter only in marginalia titles
+
+# Reports
+
+* Titles and text left aligned.
+* Numbers right aligned.
+
+## Question
+
+The question appears at the beginning of each report and identifies and describes 
+the purpose of the analysis. Using this table as a reference:
+
+
+## Impact summary
+
+## Impact table
+
+## Action list
+
+## Notes and assumptions
+
+## Analysis details
+
+**Hazard source**
+Layer name - sourced from x - <insert link here if suitable>
+**Exposure source**
+Layer name - sourced from y - <insert link here suitable>
+**Aggregation source**
+Layer name - sourced from z - <insert link here suitable>
+**Impact Function**
+Impact Function name - published reference for this type of analysis
+
+## Aggregation report
+
+# Overall Examples
+
+**Volcano on people**
+
+
+**Tsunami on roads**
+
+
+**Flood on buildings**
+
+# Terminology
+
+**Displaced**: People who, for different reasons and circumstances because of risk or disaster, have to
+leave their place of residence. Ref: [UNISDR (2015), Proposed Updated Terminology on Disaster Risk Reduction: A Technical Review](http://www.preventionweb.net/files/45462_backgoundpaperonterminologyaugust20.pdf)
+**Evacuated**: People who, for different reasons or circumstances because of risk conditions or disaster, move temporarily to safer places before, during or after the occurrence of a hazardous event. Evacuation can occur from places of residence, workplace, schools, hospitals to other places. Evacuation is usually a planned and organized mobilization of persons, animals and goods, for eventual return. Ref: [UNISDR (2015), Proposed Updated Terminology on Disaster Risk Reduction: A Technical Review](http://www.preventionweb.net/files/45462_backgoundpaperonterminologyaugust20.pdf)
+
+# Other Guidelines
+
+[Human Interface Guidelines](https://github.com/inasafe/inasafe/wiki/human-interface-guidelines)
+
+[Design](https://github.com/inasafe/inasafe-graphics/)
+
+[Identity](https://github.com/inasafe/inasafe-graphics/blob/master/inasafe-visual-language-guide-updated.pdf)
