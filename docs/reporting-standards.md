@@ -144,5 +144,17 @@ the purpose of the analysis. Using this table as a reference:
 
 **Flood on buildings**
 
+# Terminology
 
+**Displaced**: People who, for different reasons and circumstances because of risk or disaster, have to
+leave their place of residence. Ref: [UNISDR (2015), Proposed Updated Terminology on Disaster Risk Reduction: A Technical Review](http://www.preventionweb.net/files/45462_backgoundpaperonterminologyaugust20.pdf)
+**Evacuated**: People who, for different reasons or circumstances because of risk conditions or disaster, move temporarily to safer places before, during or after the occurrence of a hazardous event. Evacuation can occur from places of residence, workplace, schools, hospitals to other places. Evacuation is usually a planned and organized mobilization of persons, animals and goods, for
+eventual return. Ref: [UNISDR (2015), Proposed Updated Terminology on Disaster Risk Reduction: A Technical Review](http://www.preventionweb.net/files/45462_backgoundpaperonterminologyaugust20.pdf)
 
+# Other Guidelines
+
+[Human Interface Guidelines](https://github.com/inasafe/inasafe/wiki/human-interface-guidelines)
+
+[Design](https://github.com/inasafe/inasafe-graphics/)
+
+[Identity](https://github.com/inasafe/inasafe-graphics/blob/master/inasafe-visual-language-guide-updated.pdf)
