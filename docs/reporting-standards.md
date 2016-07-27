@@ -121,7 +121,10 @@ We propose the legend titles should use the following syntax
 - **Version**: <version of InaSAFE used>
 - logos of BNPB, Australian Aid, GFDRR
 
-_Disclaimer_: InaSAFE has been jointly developed by the Indonesian Government-BNPB, the Australian Government, the World Bank-GFDRR and independent contributors. These agencies and the individual software developers of InaSAFE take no responsibility for the correctness of outputs from InaSAFE or decisions derived as a consequence.
+_Disclaimer_: InaSAFE has been jointly developed by the Indonesian Government-BNPB, 
+the Australian Government, the World Bank-GFDRR and independent contributors. 
+These agencies and the individual software developers of InaSAFE take no responsibility 
+for the correctness of outputs from InaSAFE or decisions derived as a consequence.
 **General:** Capitalise first letter only in marginalia titles
 
 # Reports
@@ -214,8 +217,14 @@ Impact Function name - published reference for this type of analysis
 # Terminology
 
 **Displaced**: People who, for different reasons and circumstances because of risk or disaster, have to
-leave their place of residence. Ref: [UNISDR (2015), Proposed Updated Terminology on Disaster Risk Reduction: A Technical Review](http://www.preventionweb.net/files/45462_backgoundpaperonterminologyaugust20.pdf)
-**Evacuated**: People who, for different reasons or circumstances because of risk conditions or disaster, move temporarily to safer places before, during or after the occurrence of a hazardous event. Evacuation can occur from places of residence, workplace, schools, hospitals to other places. Evacuation is usually a planned and organized mobilization of persons, animals and goods, for eventual return. Ref: [UNISDR (2015), Proposed Updated Terminology on Disaster Risk Reduction: A Technical Review](http://www.preventionweb.net/files/45462_backgoundpaperonterminologyaugust20.pdf)
+leave their place of residence. Ref: [UNISDR (2015), Proposed Updated Terminology on Disaster Risk 
+Reduction: A Technical Review](http://www.preventionweb.net/files/45462_backgoundpaperonterminologyaugust20.pdf)
+**Evacuated**: People who, for different reasons or circumstances because of risk conditions or 
+disaster, move temporarily to safer places before, during or after the occurrence of a hazardous 
+event. Evacuation can occur from places of residence, workplace, schools, hospitals to other places. 
+Evacuation is usually a planned and organized mobilization of persons, animals and goods, for eventual 
+return. Ref: [UNISDR (2015), Proposed Updated Terminology on Disaster Risk Reduction: A Technical 
+Review](http://www.preventionweb.net/files/45462_backgoundpaperonterminologyaugust20.pdf)
 
 # Other Guidelines
 
