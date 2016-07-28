@@ -235,7 +235,7 @@ The notes and assumptions should be sorted in the following order: information
  what the report presents (e.g. what is done with rows or columns of zeros,
  rounding rules).
 
- ### Examples
+### Examples
 
  - Total population in the analysis area: 12,707,000
  - 'No data' values in the impact layer were treated as 0 when counting the
