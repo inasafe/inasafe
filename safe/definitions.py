@@ -535,7 +535,17 @@ exposure_people_in_building = {
         tr('Numbers reported for population counts have been rounded to the '
            'nearest 10 persons if the total is less than 1,000; nearest 100 '
            'people if more than 1,000 and less than 100,000; and nearest '
-           '1000 if more than 100,000.')
+           '1000 if more than 100,000.'),
+        tr('Displaced people are people who, for different reasons and '
+           'circumstances because of risk or disaster, have to leave their '
+           'place of residence.'),
+        tr('Evacuated people are people who, for different reasons and '
+           'circumstances because of risk conditions or disaster, move '
+           'temporarily to safer places before, during or after the '
+           'occurrence of a hazardous event. Evacuation can occur from '
+           'places of residence, workplaces, schools and hospitals to other '
+           'places. Evacuation is usually a planned and organised '
+           'mobilisation of persons, animals and goods.')
     ],
     'actions': [  # these are additional generic actions - IF has more
         tr('Which group or population is most affected?'),
@@ -553,8 +563,10 @@ exposure_people_in_building = {
     ],
     'citations': [
         {
-            'text': None,
-            'link': None
+            'text': tr('UNISDR (2015) Background Paper: Proposed Updated '
+                       'Terminology on Disaster Risk  Reduction '
+                       'Reduction.'),
+            'link': 'http://www.preventionweb.net/files/45462_backgoundpaperonterminologyaugust20.pdf'
         }
     ]
 }
@@ -596,7 +608,7 @@ exposure_road = {
         tr('What sort of equipment will be needed to reopen roads & where '
            'will we get it?'),
         tr('Which government department is responsible for supplying '
-           'equipment ?')
+           'equipment?')
 
     ],
     'citations': [
