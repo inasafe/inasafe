@@ -163,7 +163,7 @@ The analysis question appears at the beginning of each report and identifies
  In each of the hazard zones <**exposure measure**> <**exposure**> might be
  affected?
 
-![image](https://cloud.githubusercontent.com/assets/16660099/17203032/30e1bf3e-54c7-11e6-96f6-1941662f885d.png)
+![image](https://cloud.githubusercontent.com/assets/16660099/17210381/ceb96bec-54ec-11e6-8fef-3bc59e4756cb.png)
 
 Questions should always have a question mark at the end of the sentence.
 
