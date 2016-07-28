@@ -1,20 +1,20 @@
 # InaSAFE reporting standards
 
 This document is based on discussions at #2920 and subsequent discussions. 
-Please only modify this document via pull requests so that we can discuss 
-and approve changes to our standards before implementing them.
+ Please only modify this document via pull requests so that we can discuss
+ and approve changes to our standards before implementing them.
 
 ## How this document is structured
 
 We have broken up this document into sections based on the different reporting
-elements used on map reports, tabular reports, web outputs and so on. Please
-use screenshots and examples liberally so that the norms described here 
-are accessible in both a textual and graphical form.
+ elements used on map reports, tabular reports, web outputs and so on. Please
+ use screenshots and examples liberally so that the norms described here
+ are accessible in both a textual and graphical form.
 
 # General rules
 
 In line with InaSAFE's human interface guidelines, all titles should capitalise
-only the first letter of the first word in labels and titles.
+ only the first letter of the first word in labels and titles.
 
 # Maps
 
@@ -23,24 +23,24 @@ only the first letter of the first word in labels and titles.
 ### Description:
 
 The map title appears at the top of each map product and describes the map
-content. Evey map must have a title. Using this table as a reference:
+ content. Evey map should have a title. Using this table as a reference:
 ![image](https://cloud.githubusercontent.com/assets/16660099/17198916/2fae4eda-54a3-11e6-8640-2a1554dd7277.png)
 
 The title should use the following syntax:
 <**exposure**> <**affected by**> <**hazard type**> <**event/hazard**>
 
 **Exposure** identifies which exposure element present in the analysis area,
-that is subject to potential losses, is being focused on in this report.
-Examples of exposure elements include: people (population), buildings
-(building and infrastructure), roads, and land cover. **Affected by/in** is the
-influence or effect from an external factor, i.e. affected by a hazard.
-**Hazard type** is the type of hazard that has been chosen for analysis out of
-the hazards that are supported by InaSAFE for analysis. **Event/hazard** shows
-whether the analysis is from a single scenario (**event**) or multiple
-scenarios (**hazard**).
-
-Please note that specific "not translated" words are used for titles in the
-Indonesian version.
+ that is subject to potential losses, is being focused on in this report.
+ Examples of exposure elements include: people (population), buildings
+ (building and infrastructure), roads, and land cover. **Affected by/in** is the
+ influence or effect from an external factor, i.e. affected by a hazard. We
+ use the word 'affected' as the default describer for all hazards. Words such
+ as inundated, flooded, impacted should not be used. Please note that for
+ Indonesian reports we use the word 'terdampak' even though it is not directly
+ translated from 'affected'. **Hazard type** is the type of hazard that has
+ been chosen for analysis out of the hazards that are supported by InaSAFE
+ for analysis. **Event/hazard** shows whether the analysis is from a single
+ scenario (**event**) or multiple scenarios (**hazard**).
 
 ### Examples: 
 
@@ -91,18 +91,19 @@ Indonesian version.
 ### Description
 
 The map legend appears at the bottom of each map product and identifies and
-describes the impact layer. Using this table as a reference:
+ describes the impact layer. Every map should have a legend. Using this table
+ as a reference:
 ![image](https://cloud.githubusercontent.com/assets/16660099/17199050/33c64a44-54a4-11e6-979e-fad9cc0c3452.png)
 
-
-The legend titles should use the following syntax:
+Every legend should have a title. The legend titles should use the following
+ syntax:
  <**exposure measure**> <**exposure**>
 
 **Exposure measure**, refers to the way the exposure element is measured,
-i.e. length, area or number of. **Exposure**, is as described in the map title,
-i.e. the elements at risk. The label **affected** should not be included in
-the legend entries as thresholds for the definition of affected vary from
-impact function to impact function.
+ i.e. length, area or number of. **Exposure**, is as described in the map title,
+ i.e. the elements at risk. The label **affected** should not be included in
+ the legend title as thresholds for the definition of affected vary from
+ impact function to impact function.
 
 ### Examples
 
@@ -143,20 +144,23 @@ from InaSAFE or decisions derived as a consequence.
 ## Analysis question
 
 The analysis question appears at the beginning of each report and identifies
-and describes the purpose of the analysis. It should add more detail to the
-existing map title. The question should reflect the terminology used in the
-title. Using this table as a reference:
-![image](https://cloud.githubusercontent.com/assets/16660099/17164091/0ad0b44a-53ef-11e6-93f2-0c0241d15b7d.png)
+ and describes the purpose of the analysis. Each report should have an analysis
+ question. It should add more detail to the existing map title. The question
+ should reflect the terminology used in the title. Using this table as a
+ reference:
+![image](https://cloud.githubusercontent.com/assets/16660099/17199478/62fb62e2-54a7-11e6-9672-471c797e8e48.png)
 
-We propose the questions should use the following syntax:
-In the event of a <**hazard**>, <**exposure measure**><**exposure type**> will be affected?
+The questions should use the following syntax:
+In the event of a <**hazard type**>, <**exposure measure**><**exposure type**>
+will be affected?
 
-or for Generic impact functions:
-![image](https://cloud.githubusercontent.com/assets/16660099/17164101/2448554a-53ef-11e6-9e64-446a31694a73.png)
+or for generic impact functions:
+![image](https://cloud.githubusercontent.com/assets/16660099/17199531/bc89155c-54a7-11e6-8511-071566a2f53c.png)
 
-We propose the generic questions should use the following syntax:
 In each of the hazard zones <**exposure measure**> <**exposure type**> will be
 affected?
+
+Questions should always have a question mark at the end of the sentence.
 
 ## General report
 
@@ -177,32 +181,37 @@ building for infrastructure.
 ## Minimum needs report
 
 The minimum needs report gives information on the estimated amount of relief
-items to support the affected population. It should be broken up into relief
-items that will be provided once and relief items that are to provided weekly.
+ items to support the affected population. It should be broken up into relief
+ items that will be provided once and relief items that are to provided weekly.
 
 ![image](https://cloud.githubusercontent.com/assets/16660099/17166008/86065ffc-53fe-11e6-841e-cea3b81803f6.png)
 
-## Action list
+## Action checklist
 
-Action lists suitable for each hazard type and exposure element should be
-included in this section. These lists include questions that should be asked in
-the event of a hazard occurring and should reflect the results of the report.
-Examples of questions to be included in an action list include:
+Action checklists suitable for each hazard type and exposure element should be
+ included in this section. Each report should have an action checklist. These
+ checklists include questions that should be asked in the event of a hazard
+ occurring and should reflect the exposure type analysed and the results of
+ the report. Examples of questions to be included in an action checklist
+ include:
 
 ## Notes and assumptions
 
-The Notes and assumptions section is used to explain the definition of affected
-and not affected for this particular hazard and exposure by outlining the
-thresholds used in the analysis. This section also outlines the assumptions
-made during the analysis that users should take into account when interpreting
-the report.
+The notes and assumptions section identifies any notes or assumptions specific
+ to the hazard, exposure and impact function used in this report. All reports
+ should have a notes and assumptions section.
 
+If the term 'affected' is used in the analysis, this section should be used
+ to explain the definition of affected and not affected for this particular
+ hazard and exposure by outlining the thresholds used in the analysis. This
+ section also outlines the assumptions made during the analysis that users
+ should take into account when interpreting the report.
 
 ## Analysis details
 
 In the analysis details section details for each layer used in the analysis
-should be provided. This includes the layer name, its source and a link to the
-source if it is available.
+ should be provided. This includes the layer name, its source and a link to the
+ source if it is available.
 
 **Hazard source**
 Layer name - sourced from x - <insert link here if suitable>
@@ -227,13 +236,18 @@ Impact Function name - published reference for this type of analysis
 
 # Terminology
 
+**Affected**: An exposure element (e.g. people, roads, buildings, land cover)
+ that experiences a hazard (e.g. tsunami, flood, earthquake) and endures
+ consequences (e.g. damage, evacuation, displacement, death) due to that
+ hazard.
+
 **Displaced**: People who, for different reasons and circumstances because of
-risk or disaster, have to leave their place of residence.
+ risk or disaster, have to leave their place of residence.
 Ref: [UNISDR (2015), Proposed Updated Terminology on Disaster Risk Reduction:
 A Technical Review](http://www.preventionweb.net/files/45462_backgoundpaperonterminologyaugust20.pdf)
 
 **Evacuated**: People who, for different reasons or circumstances because of
-risk conditions or disaster, move temporarily to safer places before, during
+ risk conditions or disaster, move temporarily to safer places before, during
 or after the occurrence of a hazardous event. Evacuation can occur from places
 of residence, workplace, schools, hospitals to other places. Evacuation is
 usually a planned and organized mobilization of persons, animals and goods, for
