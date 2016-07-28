@@ -68,8 +68,8 @@ class ClassifiedPolygonHazardPopulationFunction(
             tr('Total population in the analysis area: %s') % population,
             tr('<sup>1</sup>People need evacuation if they are in a hazard '
                'zone.'),
-            tr('Map shows population count in high, medium, and low hazard '
-               'areas.')
+            tr('Map shows the number of people in high, medium, and low hazard '
+               'zones.')
         ]
         # include any generic exposure specific notes from definitions.py
         fields = fields + self.exposure_notes()

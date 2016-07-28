@@ -142,13 +142,13 @@ class ClassifiedRasterHazardPopulationFunction(
         # Count totals
         self.total_population = int(numpy.nansum(population))
         self.affected_population[
-            tr('Population in Low hazard class areas')] = int(
+            tr('Population in low hazard zone')] = int(
                 numpy.nansum(low_hazard_population))
         self.affected_population[
-            tr('Population in Medium hazard class areas')] = int(
+            tr('Population in medium hazard zone')] = int(
                 numpy.nansum(medium_hazard_population))
         self.affected_population[
-            tr('Population in High hazard class areas')] = int(
+            tr('Population in high hazard zone')] = int(
                 numpy.nansum(high_hazard_population))
         self.unaffected_population = (
             self.total_population - self.total_affected_population)
