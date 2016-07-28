@@ -13,8 +13,11 @@ We have broken up this document into sections based on the different reporting
 
 # General rules
 
-In line with InaSAFE's human interface guidelines, all titles should capitalise
- only the first letter of the first word in labels and titles.
+* In line with InaSAFE's human interface guidelines, all titles should capitalise
+  only the first letter of the first word in labels and titles.
+* Titles, body text, table text, table text row heading and table text column
+  headings for text content left aligned.
+* Numbers and table text column headings for number content right aligned.
 
 # Maps
 
@@ -25,6 +28,7 @@ In line with InaSAFE's human interface guidelines, all titles should capitalise
 The map title appears at the top of each map product and describes the map
  content. Evey map should have a title. Using the below table as a reference,
  the title should use the following syntax:
+
  <**exposure type**> <**affected by**> <**hazard type**> <**event/hazard**>
 
 ![image](https://cloud.githubusercontent.com/assets/16660099/17200287/154d7bfa-54ae-11e6-8d7f-ff7017a43d6c.png)
@@ -94,6 +98,7 @@ The map legend appears at the bottom of each map product and identifies and
  describes the impact layer. Every map should have a legend. Every legend
  should have a title. Using the below table as a reference, the legend titles
  should use the following syntax:
+
   <**exposure measure**> <**exposure type**>
 
 ![image](https://cloud.githubusercontent.com/assets/16660099/17200326/5b679756-54ae-11e6-8813-a53304735ca4.png)
@@ -136,28 +141,34 @@ from InaSAFE or decisions derived as a consequence.
 
 # Reports
 
-* Titles, body text, table text, table text row heading and table text column
-  headings for text content left aligned.
-* Numbers and table text column headings for number content right aligned.
-
 ## Analysis question
+
+### Description
 
 The analysis question appears at the beginning of each report and identifies
  and describes the purpose of the analysis. Each report should have an analysis
  question. It should add more detail to the existing map title. The question
  should reflect the terminology used in the title. Using the below table as a
  reference, the questions should use the following syntax:
+
  In the event of a <**hazard type**>, <**exposure measure**><**exposure type**>
- will be affected?
+ might be affected?
 
  or for generic impact functions:
 
- In each of the hazard zones <**exposure measure**> <**exposure type**> will be
+ In each of the hazard zones <**exposure measure**> <**exposure type**> might be
  affected?
 
-![image](https://cloud.githubusercontent.com/assets/16660099/17200408/2a825a76-54af-11e6-9ef7-27a2457c1110.png)
+![image](https://cloud.githubusercontent.com/assets/16660099/17200614/1f492106-54b1-11e6-8ac8-19d0b9ac9e3b.png)
 
 Questions should always have a question mark at the end of the sentence.
+
+### Examples
+
+- In the event of a flood, how many people might be affected?
+- In the event of an earthquake, which land cover might be affected?
+- In each of the hazard zones how many buildings might be affected?
+- In each of the hazard zones which length of road might be affected?
 
 ## General report
 
@@ -185,14 +196,26 @@ The minimum needs report gives information on the estimated amount of relief
 
 ## Action checklist
 
+### Description
+
 Action checklists suitable for each hazard type and exposure element should be
  included in this section. Each report should have an action checklist. These
  checklists include questions that should be asked in the event of a hazard
  occurring and should reflect the exposure type analysed and the results of
- the report. Examples of questions to be included in an action checklist
- include:
+ the report. The checklist should be sorted in the following order: general
+ information, hazard specific questions, exposure specific questions.
+ questions related to minimum needs (if applicable) and questions regarding
+ coordinators and responders.
+
+### Examples
+
+- How will we reach displaced people?
+- What kind of food does the population normally consume?
+- What are the critical non-food items required by the affected population?
 
 ## Notes and assumptions
+
+### Description
 
 The notes and assumptions section identifies any notes or assumptions specific
  to the hazard, exposure and impact function used in this report. All reports
@@ -203,6 +226,23 @@ If the term 'affected' is used in the analysis, this section should be used
  hazard and exposure by outlining the thresholds used in the analysis. This
  section also outlines the assumptions made during the analysis that users
  should take into account when interpreting the report.
+
+The notes and assumptions should be sorted in the following order: information
+ regarding exposure (e.g. total population or total number of buildings in
+ area, evacuation thresholds, damage thresholds), information regarding hazard,
+ source of minimum needs or other data (if applicable), assumptions made in the
+ analysis (e.g information on how 'no data' was handled) and information about
+ what the report presents (e.g. what is done with rows or columns of zeros,
+ rounding rules).
+
+ ### Examples
+
+ - Total population in the analysis area: 12,707,000
+ - 'No data' values in the impact layer were treated as 0 when counting the
+   affected or total population
+ - Columns where all values equal 0 were removed from this report
+ - Population rounding is applied to all population values, which may cause
+   discrepancies when adding values.
 
 ## Analysis details
 
