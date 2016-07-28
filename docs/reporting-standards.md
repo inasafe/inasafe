@@ -230,10 +230,11 @@ If the term 'affected' is used in the analysis, this section should be used
 The notes and assumptions should be sorted in the following order: information
  regarding exposure (e.g. total population or total number of buildings in
  area, evacuation thresholds, damage thresholds), information regarding hazard,
- source of minimum needs or other data (if applicable), assumptions made in the
- analysis (e.g information on how 'no data' was handled) and information about
- what the report presents (e.g. what is done with rows or columns of zeros,
- rounding rules).
+ source of minimum needs or other data (if applicable), information
+ regarding the impact function, assumptions made in the analysis (e.g
+ information on how 'no data' was handled) and information about what the
+ report presents (e.g. what is done with rows or columns of zeros, rounding
+ rules).
 
 ### Examples
 
