@@ -23,19 +23,19 @@ only the first letter of the first word in labels and titles.
 ### Description:
 
 The map title appears at the top of each map product and describes the map
-content. Using this table as a reference:
-![image](https://cloud.githubusercontent.com/assets/13621886/16513431/eab2319e-3f8e-11e6-9249-eb265f95ac43.png)
+content. Evey map must have a title. Using this table as a reference:
+![image](https://cloud.githubusercontent.com/assets/16660099/17198916/2fae4eda-54a3-11e6-8640-2a1554dd7277.png)
 
 The title should use the following syntax:
-<**exposure**> <**affected by/in**> <**type of hazard**> <**event/hazard**>
+<**exposure**> <**affected by**> <**hazard type**> <**event/hazard**>
 
-**Exposure** shows which exposure element present in the analysis area, that is
-subject to potential losses, is being focused on in this report. Examples of
-exposure elements include: people (population), buildings (building and
-infrastructure), roads, and land cover. **Affected by/in** is the
-influence or effect from an external factor, i.e. affected by a hazard. **The
-type of hazard** is the type of hazard that has been chosen for analysis if
-that hazard is supported by InaSAFE for analysis. **Event/hazard** shows
+**Exposure** identifies which exposure element present in the analysis area,
+that is subject to potential losses, is being focused on in this report.
+Examples of exposure elements include: people (population), buildings
+(building and infrastructure), roads, and land cover. **Affected by/in** is the
+influence or effect from an external factor, i.e. affected by a hazard.
+**Hazard type** is the type of hazard that has been chosen for analysis out of
+the hazards that are supported by InaSAFE for analysis. **Event/hazard** shows
 whether the analysis is from a single scenario (**event**) or multiple
 scenarios (**hazard**).
 
@@ -51,8 +51,7 @@ Indonesian version.
 - Roads affected by flood event
 - Land cover affected by flood event
 
-**Indonesian example**: we should use the word terdampak and not translate
-“affected”
+**Indonesian example**: use the word terdampak and not translate “affected”
 
 - Orang terdampak kejadian banjir
 - Bangunan terdampak kejadian banjir
@@ -92,19 +91,18 @@ Indonesian version.
 ### Description
 
 The map legend appears at the bottom of each map product and identifies and
-describes the impact layer.
+describes the impact layer. Using this table as a reference:
+![image](https://cloud.githubusercontent.com/assets/16660099/17199050/33c64a44-54a4-11e6-979e-fad9cc0c3452.png)
 
-Using this table as a reference: ![image](https://cloud.githubusercontent.com/assets/16660099/17129361/ca2f9a58-533c-11e6-9b66-a195f20c7bbf.png)
 
-We propose the legend titles should use the following syntax
-<**number of**> <**exposure**>
+The legend titles should use the following syntax:
+ <**exposure measure**> <**exposure**>
 
-* **Number of**, refers to the way the exposure element is measured, i.e.
-  length, area or number of.
-* **Exposure**, is as described in map title, the elements at risk.
-* Capitalise the first letter of the title only.
-* We do not include the label **affected** in the legend entries as thresholds
-  for the definiton of affected change from impact function to impact function.
+**Exposure measure**, refers to the way the exposure element is measured,
+i.e. length, area or number of. **Exposure**, is as described in the map title,
+i.e. the elements at risk. The label **affected** should not be included in
+the legend entries as thresholds for the definition of affected vary from
+impact function to impact function.
 
 ### Examples
 
@@ -130,12 +128,11 @@ We propose the legend titles should use the following syntax
 - **Version**: <version of InaSAFE used>
 - logos of BNPB, Australian Aid, GFDRR
 
-_Disclaimer_: InaSAFE has been jointly developed by the Indonesian Government-BNPB,
-the Australian Government, the World Bank-GFDRR and independent contributors. 
-These agencies and the individual software developers of InaSAFE take no
-responsibility for the correctness of outputs from InaSAFE or decisions derived
-as a consequence.
-**General:** Capitalise first letter only in marginalia titles
+_Disclaimer_: InaSAFE has been jointly developed by the Indonesian
+Government-BNPB, the Australian Government, the World Bank-GFDRR and
+independent contributors. These agencies and the individual software
+developers of InaSAFE take no responsibility for the correctness of outputs
+from InaSAFE or decisions derived as a consequence.
 
 # Reports
 
