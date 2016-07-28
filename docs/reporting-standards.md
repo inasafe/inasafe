@@ -23,14 +23,14 @@ In line with InaSAFE's human interface guidelines, all titles should capitalise
 ### Description:
 
 The map title appears at the top of each map product and describes the map
- content. Evey map should have a title. Using this table as a reference:
-![image](https://cloud.githubusercontent.com/assets/16660099/17198916/2fae4eda-54a3-11e6-8640-2a1554dd7277.png)
+ content. Evey map should have a title. Using the below table as a reference,
+ the title should use the following syntax:
+ <**exposure type**> <**affected by**> <**hazard type**> <**event/hazard**>
 
-The title should use the following syntax:
-<**exposure**> <**affected by**> <**hazard type**> <**event/hazard**>
+![image](https://cloud.githubusercontent.com/assets/16660099/17200287/154d7bfa-54ae-11e6-8d7f-ff7017a43d6c.png)
 
-**Exposure** identifies which exposure element present in the analysis area,
- that is subject to potential losses, is being focused on in this report.
+**Exposure type** identifies which exposure element present in the analysis
+ area, that is subject to potential losses, is being focused on in this report.
  Examples of exposure elements include: people (population), buildings
  (building and infrastructure), roads, and land cover. **Affected by/in** is the
  influence or effect from an external factor, i.e. affected by a hazard. We
@@ -91,19 +91,18 @@ The title should use the following syntax:
 ### Description
 
 The map legend appears at the bottom of each map product and identifies and
- describes the impact layer. Every map should have a legend. Using this table
- as a reference:
-![image](https://cloud.githubusercontent.com/assets/16660099/17199050/33c64a44-54a4-11e6-979e-fad9cc0c3452.png)
+ describes the impact layer. Every map should have a legend. Every legend
+ should have a title. Using the below table as a reference, the legend titles
+ should use the following syntax:
+  <**exposure measure**> <**exposure type**>
 
-Every legend should have a title. The legend titles should use the following
- syntax:
- <**exposure measure**> <**exposure**>
+![image](https://cloud.githubusercontent.com/assets/16660099/17200326/5b679756-54ae-11e6-8813-a53304735ca4.png)
 
 **Exposure measure**, refers to the way the exposure element is measured,
- i.e. length, area or number of. **Exposure**, is as described in the map title,
- i.e. the elements at risk. The label **affected** should not be included in
- the legend title as thresholds for the definition of affected vary from
- impact function to impact function.
+ i.e. length, area or number of. **Exposure type**, is as described in the map
+ title, i.e. the elements at risk. The label **affected** should not be
+ included in the legend title as thresholds for the definition of affected
+ vary from impact function to impact function.
 
 ### Examples
 
@@ -146,19 +145,17 @@ from InaSAFE or decisions derived as a consequence.
 The analysis question appears at the beginning of each report and identifies
  and describes the purpose of the analysis. Each report should have an analysis
  question. It should add more detail to the existing map title. The question
- should reflect the terminology used in the title. Using this table as a
- reference:
-![image](https://cloud.githubusercontent.com/assets/16660099/17199478/62fb62e2-54a7-11e6-9672-471c797e8e48.png)
+ should reflect the terminology used in the title. Using the below table as a
+ reference, the questions should use the following syntax:
+ In the event of a <**hazard type**>, <**exposure measure**><**exposure type**>
+ will be affected?
 
-The questions should use the following syntax:
-In the event of a <**hazard type**>, <**exposure measure**><**exposure type**>
-will be affected?
+ or for generic impact functions:
 
-or for generic impact functions:
-![image](https://cloud.githubusercontent.com/assets/16660099/17199531/bc89155c-54a7-11e6-8511-071566a2f53c.png)
+ In each of the hazard zones <**exposure measure**> <**exposure type**> will be
+ affected?
 
-In each of the hazard zones <**exposure measure**> <**exposure type**> will be
-affected?
+![image](https://cloud.githubusercontent.com/assets/16660099/17200408/2a825a76-54af-11e6-9ef7-27a2457c1110.png)
 
 Questions should always have a question mark at the end of the sentence.
 
