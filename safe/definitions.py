@@ -55,6 +55,12 @@ concept_generic_hazard = tr(
     'functions. The area may have either <b>low</b>, <b>medium</b>, or '
     '<b>high</b> classification for the hazard.')
 
+concept_affected = tr(
+    '**Affected**: An exposure element (e.g. people, roads, buildings, land '
+    'cover) that experiences a hazard (e.g. tsunami, flood, earthquake) and '
+    'endures consequences (e.g. damage, evacuation, displacement, death) due '
+    'to that hazard.')
+
 concept_displaced_people = tr(
     'Displaced people are people who, for different reasons and '
     'circumstances because of risk or disaster, have to leave their '
