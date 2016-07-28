@@ -33,18 +33,18 @@ The map title appears at the top of each map product and describes the map
 
 ![image](https://cloud.githubusercontent.com/assets/16660099/17200287/154d7bfa-54ae-11e6-8d7f-ff7017a43d6c.png)
 
-**Exposure type** identifies which exposure element present in the analysis
+**Exposure type** identifies which exposure element is present in the analysis
  area, that is subject to potential losses, is being focused on in this report.
  Examples of exposure elements include: people (population), buildings
- (building and infrastructure), roads, and land cover. **Affected by/in** is the
+ (building and infrastructure), roads, and land cover. **Affected by** is the
  influence or effect from an external factor, i.e. affected by a hazard. We
  use the word 'affected' as the default describer for all hazards. Words such
  as inundated, flooded, impacted should not be used. Please note that for
  Indonesian reports we use the word 'terdampak' even though it is not directly
  translated from 'affected'. **Hazard type** is the type of hazard that has
- been chosen for analysis out of the hazards that are supported by InaSAFE
- for analysis. **Event/hazard** shows whether the analysis is from a single
- scenario (**event**) or multiple scenarios (**hazard**).
+ been chosen for analysis out of the hazards that are supported by InaSAFE.
+ **Event/hazard** shows whether the analysis is from a single
+ event (**event**) or multiple events (**hazard**).
 
 ### Examples: 
 
