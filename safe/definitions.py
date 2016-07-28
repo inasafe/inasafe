@@ -584,8 +584,7 @@ exposure_people_in_building = {
         'data set that assigns the population of a specific administrative '
         'area to the buildings with a residential function in that area.'
         '<p>The process of assigning people to buildings assumes that all '
-        'people and buildings in the area are mapped. There are no InaSAFE '
-        'impact functions that use this exposure data yet.</p>'),
+        'people and buildings in the area are mapped.</p>'),
     'notes': exposure_population['notes'],
     'actions': exposure_population['actions'],
     'citations': [
