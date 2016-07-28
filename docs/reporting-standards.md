@@ -26,10 +26,14 @@ We have broken up this document into sections based on the different reporting
 ### Description:
 
 The map title appears at the top of each map product and describes the map
- content. Evey map should have a title. Using the below table as a reference,
+ content. Every map should have a title. Using the below table as a reference,
  the title should use the following syntax:
 
  <**exposure**> <**affected by**> <**hazard**> <**event/hazard**>
+
+ or for generic impact functions:
+
+ <**exposure**> affected
 
 ![image](https://cloud.githubusercontent.com/assets/16660099/17202979/c7f2533a-54c6-11e6-8f42-97c324f2ff58.png)
 
@@ -48,14 +52,14 @@ The map title appears at the top of each map product and describes the map
 
 ### Examples: 
 
-**Single scenario flood**:
+**For flood event**:
 
 - People affected by flood event
 - Buildings affected by flood event
 - Roads affected by flood event
 - Land cover affected by flood event
 
-**Indonesian example**: use the word terdampak and not translate “affected”
+**Indonesian example**: use the word terdampak and don't translate “affected”
 
 - Orang terdampak kejadian banjir
 - Bangunan terdampak kejadian banjir
