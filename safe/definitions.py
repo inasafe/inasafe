@@ -580,11 +580,11 @@ exposure_people_in_building = {
     'key': 'people_in_building',
     'name': tr('People in buildings'),
     'description': tr(
-        'The <b>people in buildings</b> exposure data is an experimental '
-        'data set that assigns the population of a specific administrative '
-        'area to the buildings with a residential function in that area.'
-        '<p>The process of assigning people to buildings assumes that all '
-        'people and buildings in the area are mapped.</p>'),
+        'The <b>people in buildings</b> exposure data assigns the population '
+        'of a specific administrative area to the buildings with a '
+        'residential function in that area. <p>The process of assigning '
+        'people to buildings assumes that all people and buildings in the '
+        'area are mapped.</p>'),
     'notes': exposure_population['notes'],
     'actions': exposure_population['actions'],
     'citations': [
