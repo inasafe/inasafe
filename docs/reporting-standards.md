@@ -203,9 +203,9 @@ Action checklists suitable for each hazard type and exposure element should be
  checklists include questions that should be asked in the event of a hazard
  occurring and should reflect the exposure type analysed and the results of
  the report. The checklist should be sorted in the following order: general
- information, hazard specific questions, exposure specific questions.
- questions related to minimum needs (if applicable) and questions regarding
- coordinators and responders.
+ questions, hazard and exposure specific questions, questions related to
+ minimum needs (if applicable) and questions regarding coordinators and
+ responders.
 
 ### Examples
 
