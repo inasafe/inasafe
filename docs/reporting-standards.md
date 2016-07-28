@@ -29,11 +29,11 @@ The map title appears at the top of each map product and describes the map
  content. Evey map should have a title. Using the below table as a reference,
  the title should use the following syntax:
 
- <**exposure type**> <**affected by**> <**hazard type**> <**event/hazard**>
+ <**exposure**> <**affected by**> <**hazard**> <**event/hazard**>
 
-![image](https://cloud.githubusercontent.com/assets/16660099/17200287/154d7bfa-54ae-11e6-8d7f-ff7017a43d6c.png)
+![image](https://cloud.githubusercontent.com/assets/16660099/17202979/c7f2533a-54c6-11e6-8f42-97c324f2ff58.png)
 
-**Exposure type** identifies which exposure element is present in the analysis
+**Exposure** identifies which exposure element is present in the analysis
  area, that is subject to potential losses, is being focused on in this report.
  Examples of exposure elements include: people (population), buildings
  (building and infrastructure), roads, and land cover. **Affected by** is the
@@ -41,7 +41,7 @@ The map title appears at the top of each map product and describes the map
  use the word 'affected' as the default describer for all hazards. Words such
  as inundated, flooded, impacted should not be used. Please note that for
  Indonesian reports we use the word 'terdampak' even though it is not directly
- translated from 'affected'. **Hazard type** is the type of hazard that has
+ translated from 'affected'. **Hazard** is the type of hazard that has
  been chosen for analysis out of the hazards that are supported by InaSAFE.
  **Event/hazard** shows whether the analysis is from a single
  event (**event**) or multiple events (**hazard**).
@@ -99,12 +99,12 @@ The map legend appears at the bottom of each map product and identifies and
  should have a title. Using the below table as a reference, the legend titles
  should use the following syntax:
 
-  <**exposure measure**> <**exposure type**>
+  <**exposure measure**> <**exposure**>
 
-![image](https://cloud.githubusercontent.com/assets/16660099/17200326/5b679756-54ae-11e6-8813-a53304735ca4.png)
+![image](https://cloud.githubusercontent.com/assets/16660099/17202993/efdb8cd6-54c6-11e6-9112-c96ce3652a57.png)
 
 **Exposure measure**, refers to the way the exposure element is measured,
- i.e. length, area or number of. **Exposure type**, is as described in the map
+ i.e. length, area or number of. **Exposure**, is as described in the map
  title, i.e. the elements at risk. The label **affected** should not be
  included in the legend title as thresholds for the definition of affected
  vary from impact function to impact function.
@@ -151,24 +151,24 @@ The analysis question appears at the beginning of each report and identifies
  should reflect the terminology used in the title. Using the below table as a
  reference, the questions should use the following syntax:
 
- In the event of a <**hazard type**>, <**exposure measure**><**exposure type**>
+ In the event of a <**hazard**>, <**exposure measure**> <**exposure**>
  might be affected?
 
  or for generic impact functions:
 
- In each of the hazard zones <**exposure measure**> <**exposure type**> might be
+ In each of the hazard zones <**exposure measure**> <**exposure**> might be
  affected?
 
-![image](https://cloud.githubusercontent.com/assets/16660099/17200614/1f492106-54b1-11e6-8ac8-19d0b9ac9e3b.png)
+![image](https://cloud.githubusercontent.com/assets/16660099/17203032/30e1bf3e-54c7-11e6-96f6-1941662f885d.png)
 
 Questions should always have a question mark at the end of the sentence.
 
 ### Examples
 
 - In the event of a flood, how many people might be affected?
-- In the event of an earthquake, which land cover might be affected?
+- In the event of an earthquake, what land cover might be affected?
 - In each of the hazard zones how many buildings might be affected?
-- In each of the hazard zones which length of road might be affected?
+- In each of the hazard zones what length of road might be affected?
 
 ## General report
 
