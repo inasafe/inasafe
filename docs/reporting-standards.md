@@ -174,7 +174,7 @@ Questions should always have a question mark at the end of the sentence.
 
 The general report gives a brief summary in table form of what the estimated
 effect of the hazard will be. It should follow this form:
-Estimated <**exposure measure**><**exposure type**>
+Estimated <**exposure measure**><**exposure**>
 
 ![image](https://cloud.githubusercontent.com/assets/16660099/17165600/a45ffea2-53fb-11e6-91c3-761157dd7d8d.png)
 
@@ -198,10 +198,10 @@ The minimum needs report gives information on the estimated amount of relief
 
 ### Description
 
-Action checklists suitable for each hazard type and exposure element should be
+Action checklists suitable for each hazard and exposure element should be
  included in this section. Each report should have an action checklist. These
  checklists include questions that should be asked in the event of a hazard
- occurring and should reflect the exposure type analysed and the results of
+ occurring and should reflect the exposure element analysed and the results of
  the report. The checklist should be sorted in the following order: general
  questions, hazard and exposure specific questions, questions related to
  minimum needs (if applicable) and questions regarding coordinators and
