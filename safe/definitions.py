@@ -549,7 +549,7 @@ exposure_population = {
         tr('Population rounding is applied to all population values, '
            'which may cause discrepancies when adding values.'),
         tr('Numbers reported for population counts have been rounded to the '
-           'nearest 10 persons if the total is less than 1,000; nearest 100 '
+           'nearest 10 people if the total is less than 1,000; nearest 100 '
            'people if more than 1,000 and less than 100,000; and nearest '
            '1000 if more than 100,000.'),
 
