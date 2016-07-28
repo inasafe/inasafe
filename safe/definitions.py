@@ -55,6 +55,20 @@ concept_generic_hazard = tr(
     'functions. The area may have either <b>low</b>, <b>medium</b>, or '
     '<b>high</b> classification for the hazard.')
 
+concept_displaced_people = tr(
+    'Displaced people are people who, for different reasons and '
+    'circumstances because of risk or disaster, have to leave their '
+    'place of residence.')
+
+concept_evacuated_people = tr(
+    'Evacuated people are people who, for different reasons and '
+    'circumstances because of risk conditions or disaster, move '
+    'temporarily to safer places before, during or after the '
+    'occurrence of a hazardous event. Evacuation can occur from '
+    'places of residence, workplaces, schools and hospitals to other '
+    'places. Evacuation is usually a planned and organised '
+    'mobilisation of persons, animals and goods.')
+
 # Layer Purpose
 layer_purpose_hazard = {
     'key': 'hazard',
