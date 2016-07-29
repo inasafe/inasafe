@@ -1323,7 +1323,13 @@ count_exposure_unit = {
     'key': 'count',
     'name': tr('Count'),
     'description': tr(
-        'Number of people (or any other object) per pixel, building or area.'),
+        'Number of people (or any other exposure element) per pixel, building '
+        'or area. '
+        '<p>In a raster file, a pixel would have a value assigned to it '
+        'representing the number (or count) of people in that pixel.</p> '
+        '<p>In a vector file, a value would be assigned to an object (e.g. a '
+        'building or area) representing the number of people in that '
+        'object.</p> '),
     'citations': [
         {
             'text': None,
@@ -1336,7 +1342,8 @@ density_exposure_unit = {
     'key': 'density',
     'name': tr('Density'),
     'description': tr(
-        'Number of people (or any other object) in a specific area.'),
+        'Number of people (or any other exposure element) per unit of area. '
+        '<p> e.g. 35 people per km<sup>2</sup> </p>'),
     'citations': [
         {
             'text': None,
