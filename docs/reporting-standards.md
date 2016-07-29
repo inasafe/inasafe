@@ -4,6 +4,29 @@ This document is based on discussions at #2920 and subsequent discussions.
  Please only modify this document via pull requests so that we can discuss
  and approve changes to our standards before implementing them.
 
+# Status of document
+
+This document is currently in draft form. Some sections of this document are
+ready for implementation. The status of these sections is as follows:
+
+| Section | Status |
+| ------------------------- | --------------------------- |
+| General rules | draft |
+| Map title | ready for implementation |
+| Map legend title | draft |
+| Marginalia | draft |
+| Analysis question | ready for implementation |
+| General report | draft |
+| Detailed report | draft |
+| Minimum needs report | draft |
+| Action checklist | ready for implementation |
+| Notes and assumptions | Examples |
+| Analysis details | draft |
+| Aggregation report | draft |
+| Overall examples |  |
+| Terminology | ready for implementation |
+| Other guidelines | ready for implementation |
+
 ## How this document is structured
 
 We have broken up this document into sections based on the different reporting
@@ -13,8 +36,8 @@ We have broken up this document into sections based on the different reporting
 
 # General rules
 
-* In line with InaSAFE's human interface guidelines, all titles should capitalise
-  only the first letter of the first word in labels and titles.
+* In line with InaSAFE's human interface guidelines, all titles should
+  capitalise only the first letter of the first word in labels and titles.
 * Titles, body text, table text, table text row heading and table text column
   headings for text content left aligned.
 * Numbers and table text column headings for number content right aligned.
@@ -260,13 +283,16 @@ In the analysis details section details for each layer used in the analysis
  source if it is available.
 
 **Hazard source**
-Layer name - sourced from x - <insert link here if suitable>
+ Layer name - sourced from x - <insert link here if suitable>
+
 **Exposure source**
-Layer name - sourced from y - <insert link here suitable>
+ Layer name - sourced from y - <insert link here suitable>
+
 **Aggregation source**
-Layer name - sourced from z - <insert link here suitable>
+ Layer name - sourced from z - <insert link here suitable>
+
 **Impact Function**
-Impact Function name - published reference for this type of analysis
+ Impact Function name - published reference for this type of analysis
 
 ## Aggregation report
 
@@ -301,7 +327,7 @@ eventual return.
 Ref: [UNISDR (2015), Proposed Updated Terminology on Disaster Risk Reduction:
 A Technical Review](http://www.preventionweb.net/files/45462_backgoundpaperonterminologyaugust20.pdf)
 
-# Other Guidelines
+# Other guidelines
 
 [Human Interface Guidelines](https://github.com/inasafe/inasafe/wiki/human-interface-guidelines)
 
