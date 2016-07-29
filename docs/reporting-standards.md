@@ -20,7 +20,7 @@ ready for implementation. The status of these sections is as follows:
 | Detailed report | draft |
 | Minimum needs report | draft |
 | Action checklist | ready for implementation |
-| Notes and assumptions | Examples |
+| Notes and assumptions | ready for implementation |
 | Analysis details | draft |
 | Aggregation report | draft |
 | Overall examples | draft |
