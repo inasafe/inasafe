@@ -55,6 +55,26 @@ concept_generic_hazard = tr(
     'functions. The area may have either <b>low</b>, <b>medium</b>, or '
     '<b>high</b> classification for the hazard.')
 
+concept_affected = tr(
+    'An exposure element (e.g. people, roads, buildings, land cover) that '
+    'experiences a hazard (e.g. tsunami, flood, earthquake) and endures '
+    'consequences (e.g. damage, evacuation, displacement, death) due to that '
+    'hazard.')
+
+concept_displaced_people = tr(
+    'Displaced people are people who, for different reasons and '
+    'circumstances because of risk or disaster, have to leave their '
+    'place of residence.')
+
+concept_evacuated_people = tr(
+    'Evacuated people are people who, for different reasons and '
+    'circumstances because of risk conditions or disaster, move '
+    'temporarily to safer places before, during or after the '
+    'occurrence of a hazardous event. Evacuation can occur from '
+    'places of residence, workplaces, schools and hospitals to other '
+    'places. Evacuation is usually a planned and organised '
+    'mobilisation of persons, animals and goods.')
+
 # Layer Purpose
 layer_purpose_hazard = {
     'key': 'hazard',
@@ -517,25 +537,22 @@ exposure_land_cover = {
     ]
 }
 
-exposure_people_in_building = {
-    'key': 'people_in_building',
-    'name': tr('People in buildings'),
+exposure_population = {
+    'key': 'population',
+    'name': tr('Population'),
     'description': tr(
-        'The <b>people in buildings</b> exposure data is an experimental '
-        'data set that assigns the population of a specific administrative '
-        'area to the buildings with a residential function in that area.'
-        '<p>The process of assigning people to buildings assumes that all '
-        'people and buildings in the area are mapped. There are no InaSAFE '
-        'impact functions that use this exposure data yet.</p>'),
+        'The <b>population</b> describes the people that might be '
+        'exposed to a particular hazard.'),
     'notes': [  # these are additional generic notes for people - IF has more
         tr('All values are rounded up to the nearest integer in order to '
            'avoid representing human lives as fractions.'),
         tr('Population rounding is applied to all population values, '
            'which may cause discrepancies when adding values.'),
         tr('Numbers reported for population counts have been rounded to the '
-           'nearest 10 persons if the total is less than 1,000; nearest 100 '
+           'nearest 10 people if the total is less than 1,000; nearest 100 '
            'people if more than 1,000 and less than 100,000; and nearest '
-           '1000 if more than 100,000.')
+           '1000 if more than 100,000.'),
+
     ],
     'actions': [  # these are additional generic actions - IF has more
         tr('Which group or population is most affected?'),
@@ -559,18 +576,23 @@ exposure_people_in_building = {
     ]
 }
 
-exposure_population = {
-    'key': 'population',
-    'name': tr('Population'),
+exposure_people_in_building = {
+    'key': 'people_in_building',
+    'name': tr('People in buildings'),
     'description': tr(
-        'The <b>population</b> describes the people that might be '
-        'exposed to a particular hazard.'),
-    'notes': exposure_people_in_building['notes'],
-    'actions': exposure_people_in_building['actions'],
+        '<b>People in buildings</b> exposure data assigns the population '
+        'of a specific administrative area to the buildings with a '
+        'residential function in that area. <p>The process of assigning '
+        'people to buildings assumes that all people and buildings in the '
+        'area are mapped.</p>'),
+    'notes': exposure_population['notes'],
+    'actions': exposure_population['actions'],
     'citations': [
         {
-            'text': None,
-            'link': None
+            'text': tr('UNISDR (2015) Background Paper: Proposed Updated '
+                       'Terminology on Disaster Risk  Reduction '
+                       'Reduction.'),
+            'link': 'http://www.preventionweb.net/files/45462_backgoundpaperonterminologyaugust20.pdf'
         }
     ]
 }
@@ -596,7 +618,7 @@ exposure_road = {
         tr('What sort of equipment will be needed to reopen roads & where '
            'will we get it?'),
         tr('Which government department is responsible for supplying '
-           'equipment ?')
+           'equipment?')
 
     ],
     'citations': [
