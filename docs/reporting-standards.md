@@ -231,6 +231,11 @@ If the term 'affected' is used in the analysis, this section should be used
  section also outlines the assumptions made during the analysis that users
  should take into account when interpreting the report.
 
+If columns or rows are omitted due to zeros the following standard text should
+ be included in the report:
+_Columns and rows containing only 0 or 'no data' values are excluded from
+ the tables._
+
 The notes and assumptions should be sorted in the following order: information
  regarding exposure (e.g. total population or total number of buildings in
  area, evacuation thresholds, damage thresholds), information regarding hazard,
@@ -245,7 +250,6 @@ The notes and assumptions should be sorted in the following order: information
  - Total population in the analysis area: 12,707,000
  - 'No data' values in the impact layer were treated as 0 when counting the
    affected or total population
- - Columns where all values equal 0 were removed from this report
  - Population rounding is applied to all population values, which may cause
    discrepancies when adding values.
 
