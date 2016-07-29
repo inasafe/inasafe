@@ -23,7 +23,7 @@ ready for implementation. The status of these sections is as follows:
 | Notes and assumptions | Examples |
 | Analysis details | draft |
 | Aggregation report | draft |
-| Overall examples |  |
+| Overall examples | draft |
 | Terminology | ready for implementation |
 | Other guidelines | ready for implementation |
 
