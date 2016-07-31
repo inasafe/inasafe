@@ -446,6 +446,10 @@ hazard_tsunami = {
         'wave that strikes land may cause massive destruction and '
         'flooding.'),
     'notes': [  # additional generic notes for buildings - IF has more
+        tr('Impacts on roads, people, buildings and other exposure elements '
+           'may differ in reality to the analysis results. This is due to '
+           'local environmental conditions such as terrain, infrastructure '
+           'type and conditions.'),
     ],
     'actions': [  # these are additional generic actions - IF has more
 
@@ -467,6 +471,8 @@ hazard_volcano = {
         'from below the earth\'s surface. The type of material '
         'ejected depends on the type of <b>volcano</b>.'),
     'notes': [  # additional generic notes for buildings - IF has more
+        tr('Previously mapped hazard zones may not be congruous with future '
+           'events.'),
     ],
     'actions': [  # these are additional generic actions - IF has more
 
@@ -606,10 +612,13 @@ exposure_road = {
     'notes': [  # these are additional generic notes for roads - IF has more
         tr('Numbers reported for road lengths have been rounded to the '
            'nearest meter.'),
+        tr('Roads marked as not affected may still be unusable due to network '
+           'isolation. Roads marked as affected may still be usable if they '
+           'are elevated above the local landscape.'),
         # only flood and tsunami are used with road
         # currently to it is safe to use inundated here ...
-        tr('Roads are closed if they are inundated.'),
-        tr('Roads are open if they are not inundated.')
+        tr('Roads are closed if they are affected.'),
+        tr('Roads are open if they are not affected.')
     ],
     'actions': [  # these are additional generic actions - IF has more
         tr('Which roads can be used to evacuate people or to distribute '
@@ -666,6 +675,9 @@ exposure_place = {
         'A <b>place</b> is used to indicate that a particular location is '
         'known by a particular name.'),
     'notes': [  # additional generic notes for places - IF has more
+        tr('Where places are represented as a single point, the effect of the '
+           'hazard over the entire place may differ from at the point where '
+           'the place is represented on the map.'),
     ],
     'actions': [  # these are additional generic actions - IF has more
     ],
