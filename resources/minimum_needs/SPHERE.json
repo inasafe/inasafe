@@ -87,7 +87,7 @@
       "Unit": "10-20 litre"
     },
     {
-      "Resource name": "saucepan",
+      "Resource name": "Saucepan",
       "Frequency": "once",
       "Default": 0.2,
       "Maximum allowed": 1.0,
@@ -99,7 +99,7 @@
       "Unit": ""
     },
     {
-      "Resource name": "basin",
+      "Resource name": "Basin",
       "Frequency": "once",
       "Default": 0.2,
       "Maximum allowed": 1.0,
@@ -111,7 +111,7 @@
       "Unit": ""
     },
     {
-      "Resource name": "knife",
+      "Resource name": "Knife",
       "Frequency": "once",
       "Default": 0.2,
       "Maximum allowed": 1.0,
@@ -123,7 +123,7 @@
       "Unit": ""
     },
     {
-      "Resource name": "rice ladle",
+      "Resource name": "Rice ladle",
       "Frequency": "once",
       "Default": 0.1,
       "Maximum allowed": 1.0,
@@ -135,7 +135,7 @@
       "Unit": ""
     },
     {
-      "Resource name": "plate",
+      "Resource name": "Plate",
       "Frequency": "once",
       "Default": 1,
       "Maximum allowed": 10.0,
@@ -147,7 +147,7 @@
       "Unit": ""
     },
     {
-      "Resource name": "spoon",
+      "Resource name": "Spoon",
       "Frequency": "once",
       "Default": 1,
       "Maximum allowed": 10.0,
@@ -159,7 +159,7 @@
       "Unit": ""
     },
     {
-      "Resource name": "mug",
+      "Resource name": "Mug",
       "Frequency": "once",
       "Default": 1,
       "Maximum allowed": 10.0,
@@ -219,7 +219,7 @@
       "Unit": "m2"
     },
     {
-      "Resource name": "infants blanket (100x70cm)",
+      "Resource name": "Infants blanket (100x70cm)",
       "Frequency": "once",
       "Default": 0.2,
       "Maximum allowed": 10.0,
