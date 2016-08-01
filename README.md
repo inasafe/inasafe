@@ -1,7 +1,7 @@
 InaSAFE
 =======
 
-[![InaSAFE Screenshot](http://inasafe.org/wp-content/uploads/2015/02/about-screenshot14.png)](http://inasafe.org)
+[![InaSAFE Screenshot](http://inasafe.org/wp-content/uploads/2015/02/about-screenshot14.png)](http://www.inasafe.org)
 
 InaSAFE is free software that allows disaster managers to study realistic
 natural hazard impact scenarios for better planning, preparedness and
@@ -10,7 +10,7 @@ response activities. InaSAFE is a plugin for [QGIS](http://qgis.org).
 For more information about InaSAFE and its documentation please visit [inasafe.org] (http://www.inasafe.org).
 
 The latest source code is available at
-[https://github.com/AIFDR/inasafe](https://github.com/AIFDR/inasafe),
+[https://github.com/inasafe/inasafe](https://github.com/inasafe/inasafe),
 which contains modules for risk calculations, GIS functionality and
 functions for impact modelling.
 
@@ -58,7 +58,7 @@ We work under the philosophy that stakeholders should have access to the
 development and source code, and be able to participate in every level of the 
 project - we invite comments, suggestions and contributions.  See
 [our milestones list](https://github.com/AIFDR/inasafe/issues/milestones) and
-[our open issues list](https://github.com/AIFDR/inasafe/issues?page=1&state=open)
+[our open issues list](https://github.com/inasafe/inasafe/issues?q=is%3Aopen+is%3Aissue+no%3Amilestone)
 for known bugs and outstanding tasks. You can also chat live with our developers
 and community members using the link below.
 
@@ -84,7 +84,7 @@ History
   http://www.unisdr.org/we/inform/events/23540) where it was demonstrated to 
   the then president of Indonesia, Susilo Bambang Yudhoyono who praised the project.
 * On 30 Jan 2013, InaSAFE was awarded the prestigious [Black Duck Open Source.
-  Rookie of the Year Award] (https://www.blackducksoftware.com/news/releases/black-duck-announces-2012-open-source-rookies-year-winners).
+  Rookie of the Year Award] (https://www.blackducksoftware.com/open-source-rookies).
 * Version 2.0 of InaSAFE was released in January, 2014.
 * Version 3.0 was released in March 2015 which added support
   for using the QGIS API within impact functions.
@@ -141,7 +141,7 @@ Thank you
 [![PyCharm](https://cloud.githubusercontent.com/assets/1421861/16826865/4cde910c-49ab-11e6-95ae-48cf21f3a69f.png)]
 (https://www.jetbrains.com/pycharm) 
 
-We use [PyCharm] (https://www.jetbrains.com/pycharm)  for our python development work 
+We use [PyCharm] (https://www.jetbrains.com/pycharm) for our python development work 
 
 JetBrains kindly sponsor the licenses for InaSAFE under their 'free for 
 open source projects' programme. Please support them by buying a professional 
