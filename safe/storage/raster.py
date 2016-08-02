@@ -94,6 +94,7 @@ class Raster(Layer):
                        projection=projection,
                        keywords=keywords,
                        style_info=style_info)
+        self.band = None
 
         # Input checks
         if data is None:
@@ -122,7 +123,6 @@ class Raster(Layer):
 
             self.rows = data.shape[0]
             self.columns = data.shape[1]
-
             self.number_of_bands = 1
 
     def __str__(self):
@@ -180,10 +180,13 @@ class Raster(Layer):
         The setter does a lazy read so that the data matrix is only
         initialised if is is actually wanted.
 
-        :returns: A matrix containing the layer data.
+        :returns: A matrix containing the layer data or None if the layer
+            has no band.
         :rtype: numpy.array
         """
         if self._data is None:
+            if self.band is None:
+                return None
             # Read from raster file
             data = self.band.ReadAsArray()
 
@@ -230,9 +233,10 @@ class Raster(Layer):
             if not os.path.exists(filename):
                 msg = 'Could not find file %s' % filename
             else:
-                msg = ('File %s exists, but could not be read. '
-                       'Please check if the file can be opened with '
-                       'e.g. qgis or gdalinfo' % filename)
+                msg = (
+                    'File %s exists, but could not be read. '
+                    'Please check if the file can be opened with '
+                    'e.g. qgis or gdalinfo' % filename)
             raise ReadLayerError(msg)
 
         # Record raster metadata from file
