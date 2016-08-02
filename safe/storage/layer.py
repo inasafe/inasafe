@@ -47,7 +47,7 @@ class Layer(object):
         # Defaults
         self.sublayer = sublayer
         self.filename = None
-        self.data = None
+        self._data = None  # class private
 
     def __ne__(self, other):
         """Override '!=' to allow comparison with other projection objecs
