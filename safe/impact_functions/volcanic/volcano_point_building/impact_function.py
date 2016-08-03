@@ -35,7 +35,8 @@ class VolcanoPointBuildingFunction(
     def __init__(self):
         super(VolcanoPointBuildingFunction, self).__init__()
         BuildingExposureReportMixin.__init__(self)
-        self.volcano_names = tr('Not specified in data')
+        # A set of volcano names
+        self.volcano_names = set()
         self._affected_categories_volcano = []
         self.hazard_zone_attribute = 'radius'
 
@@ -45,11 +46,15 @@ class VolcanoPointBuildingFunction(
         :return: The notes that should be attached to this impact report.
         :rtype: list
         """
-        unique_volcano_names = sorted(set(self.volcano_names))
+        if self.volcano_names:
+            sorted_volcano_names = ', '.join(sorted(self.volcano_names))
+        else:
+            sorted_volcano_names = tr('Not specified in data')
+
         fields = [
             tr('Map shows buildings affected in each of the volcano buffered '
                'zones.'),
-            tr('Volcanoes considered: %s.') % unique_volcano_names
+            tr('Volcanoes considered: %s.') % sorted_volcano_names
         ]
         # include any generic exposure specific notes from definitions.py
         fields = fields + self.exposure_notes()
@@ -90,11 +95,9 @@ class VolcanoPointBuildingFunction(
 
         # Get names of volcanoes considered
         if volcano_name_attribute in self.hazard.layer.get_attribute_names():
-            volcano_name_list = set()
             for row in self.hazard.layer.get_data():
                 # Run through all polygons and get unique names
-                volcano_name_list.add(row[volcano_name_attribute])
-            self.volcano_names = ', '.join(volcano_name_list)
+                self.volcano_names.add(row[volcano_name_attribute])
 
         # Find the target field name that has no conflict with the attribute
         # names in the hazard layer

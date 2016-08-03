@@ -52,7 +52,8 @@ class VolcanoPointPopulationFunction(
             'In the event of a volcano point how many people might be impacted'
         )
         self.no_data_warning = False
-        self.volcano_names = tr('Not specified in data')
+        # self.volcano_names = tr('Not specified in data')
+        self.volcano_names = set()
         self.hazard_zone_attribute = 'radius'
 
     def notes(self):
@@ -66,7 +67,11 @@ class VolcanoPointPopulationFunction(
         else:
             needs_provenance = tr(get_needs_provenance_value(self.parameters))
 
-        unique_volcano_names = sorted(set(self.volcano_names))
+        if self.volcano_names:
+            sorted_volcano_names = ', '.join(sorted(self.volcano_names))
+        else:
+            sorted_volcano_names = tr('Not specified in data')
+
         fields = [
             tr('Map shows buildings affected in each of the volcano buffered '
                'zones.'),
@@ -74,9 +79,10 @@ class VolcanoPointPopulationFunction(
             population_rounding(self.total_population),
             tr('<sup>1</sup>People need evacuation if they are within the '
                'volcanic hazard zones.'),
-            tr('Volcanoes considered: %s.') % unique_volcano_names,
-            needs_provenance
+            tr('Volcanoes considered: %s.') % sorted_volcano_names,
         ]
+        if needs_provenance:
+            fields.append(needs_provenance)
 
         if self.no_data_warning:
             fields = fields + no_data_warning
@@ -112,15 +118,9 @@ class VolcanoPointPopulationFunction(
 
         # Get names of volcanoes considered
         if volcano_name_attribute in self.hazard.layer.get_attribute_names():
-            volcano_name_list = []
             # Run through all polygons and get unique names
             for row in data_table:
-                volcano_name_list.append(row[volcano_name_attribute])
-
-            volcano_names = ''
-            for radius in volcano_name_list:
-                volcano_names += '%s, ' % radius
-            self.volcano_names = volcano_names[:-2]  # Strip trailing ', '
+                self.volcano_names.add(row[volcano_name_attribute])
 
         # Run interpolation function for polygon2raster
         interpolated_layer, covered_exposure_layer = \
