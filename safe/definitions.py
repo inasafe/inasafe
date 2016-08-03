@@ -22,6 +22,14 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 inasafe_keyword_version_key = 'keyword_version'
 inasafe_keyword_version = '3.5'
 
+# InaSAFE Keyword Version compatibility.
+keyword_version_compatibilities = {
+    # 'InaSAFE keyword version': 'List of supported InaSAFE keyword version'
+    '3.3': ['3.2'],
+    '3.4': ['3.2', '3.3'],
+    '3.5': ['3.4', '3.3']
+}
+
 # constants
 small_number = 2 ** -53  # I think this is small enough
 
@@ -598,7 +606,8 @@ exposure_people_in_building = {
             'text': tr('UNISDR (2015) Background Paper: Proposed Updated '
                        'Terminology on Disaster Risk  Reduction '
                        'Reduction.'),
-            'link': 'http://www.preventionweb.net/files/45462_backgoundpaperonterminologyaugust20.pdf'
+            'link': 'http://www.preventionweb.net/files/'
+                    '45462_backgoundpaperonterminologyaugust20.pdf'
         }
     ]
 }
@@ -1511,7 +1520,8 @@ road_class_mapping = [
         'name': tr('Motorway'),
         'description': tr('A road to solve the traffic and have a fare.'),
         'osm_downloader': ['Motorway or highway', 'Motorway link'],
-        'string_defaults': ['motorway', 'trunk', 'motorway link', 'trunk link'],
+        'string_defaults': [
+            'motorway', 'trunk', 'motorway link', 'trunk link'],
         'citations': [
             {
                 'text': None,
@@ -1572,7 +1582,12 @@ road_class_mapping = [
         'description': tr('A road to walk on foot aim.'),
         'osm_downloader': ['Track', 'Cycleway, footpath, etc.'],
         'string_defaults': [
-            'path', 'track', 'footway', 'cycleway', 'cycleway, footpath, etc.'],
+            'path',
+            'track',
+            'footway',
+            'cycleway',
+            'cycleway, footpath, etc.'
+        ],
         'citations': [
             {
                 'text': None,
@@ -1757,7 +1772,11 @@ structure_class_mapping = [
             'library', 'toilet', 'convention hall', 'prison', 'police station',
             'public facility', 'public building', 'fire station'
         ],
-        'osm_downloader': ['Fire Station', 'Police Station', 'Public Building'],
+        'osm_downloader': [
+            'Fire Station',
+            'Police Station',
+            'Public Building'
+        ],
         'citations': [
             {
                 'text': None,

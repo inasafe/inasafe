@@ -69,8 +69,8 @@ class ITBBayesianFatalityMetadata(ITBFatalityMetadata):
                 'from an Indonesian database of earthquake events to '
                 'calculate fatality rates. This model is better at '
                 'capturing uncertainty in the results.'),
-            'detailed_description': 'Based on the Population '
-                'Vulnerability ITB Bayesian Model.',
+            'detailed_description': tr(
+                'Based on the Population Vulnerability ITB Bayesian Model.'),
             'hazard_input': '',
             'exposure_input': '',
             'output': '',

@@ -117,10 +117,10 @@ class ITBFatalityMetadata(ImpactFunctionMetadata):
                 {
                     'text': tr(
                         'Allen, T. I., Wald, D. J., Earle, P. S., Marano, K. '
-                        'D., Hotovec, A. J., Lin, K., and Hearne, M., 2009. An '
-                        'Atlas of ShakeMaps and population exposure catalog '
-                        'for earthquake loss modeling, Bull. Earthq. Eng. 7, '
-                        '701-718.'),
+                        'D., Hotovec, A. J., Lin, K., and Hearne, M., 2009. '
+                        'An Atlas of ShakeMaps and population exposure '
+                        'catalog for earthquake loss modeling, Bull. Earthq. '
+                        'Eng. 7, 701-718.'),
                     'link': None
                 },
                 {
