@@ -52,7 +52,7 @@ class VolcanoPointPopulationFunction(
             'In the event of a volcano point how many people might be impacted'
         )
         self.no_data_warning = False
-        # self.volcano_names = tr('Not specified in data')
+        # A set of volcano names
         self.volcano_names = set()
         self.hazard_zone_attribute = 'radius'
 

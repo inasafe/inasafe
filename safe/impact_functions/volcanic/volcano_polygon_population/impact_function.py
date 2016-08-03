@@ -53,7 +53,8 @@ class VolcanoPolygonPopulationFunction(
         # AG: Use the proper minimum needs, update the parameters
         self.parameters = add_needs_parameters(self.parameters)
         self.no_data_warning = False
-        self.volcano_names = tr('Not specified in data')
+        # A set of volcano names
+        self.volcano_names = set()
 
     def notes(self):
         """Return the notes section of the report.
@@ -66,14 +67,21 @@ class VolcanoPolygonPopulationFunction(
         else:
             needs_provenance = tr(get_needs_provenance_value(self.parameters))
 
+        if self.volcano_names:
+            sorted_volcano_names = ', '.join(sorted(self.volcano_names))
+        else:
+            sorted_volcano_names = tr('Not specified in data')
+
         fields = [
             tr('Total population in the analysis area: %s') %
             population_rounding(self.total_population),
             tr('<sup>1</sup>People need evacuation if they are within the '
                'volcanic hazard zones.'),
-            tr('Volcanoes considered: %s.') % self.volcano_names,
-            needs_provenance
+            tr('Volcanoes considered: %s.') % sorted_volcano_names
         ]
+
+        if needs_provenance:
+            fields.append(needs_provenance)
 
         if self.no_data_warning:
             fields = fields + no_data_warning
@@ -130,13 +138,9 @@ class VolcanoPolygonPopulationFunction(
 
         # Get names of volcanoes considered
         if name_attribute in self.hazard.layer.get_attribute_names():
-            volcano_name_list = []
             # Run through all polygons and get unique names
             for row in features:
-                volcano_name_list.append(row[name_attribute])
-
-            unique_volcano_names = sorted(set(volcano_name_list))
-            self.volcano_names = ', '.join(unique_volcano_names)
+                self.volcano_names.add(row[name_attribute])
 
         # Retrieve the classification that is used by the hazard layer.
         vector_hazard_classification = self.hazard.keyword(
