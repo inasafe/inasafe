@@ -367,8 +367,8 @@ hazard_generic = {
     'description': tr(
         'A <b>generic hazard</b> can be used for any type of hazard where the '
         'data have been classified or generalised. For example: earthquake, '
-        'flood, volcano, or tsunami.'),
-    'notes': [  # additional generic notes for buildings - IF has more
+        'flood, volcano, tsunami, landslide, smoke haze or strong wind.'),
+    'notes': [  # additional generic notes for generic - IF has more
     ],
     'actions': [  # these are additional generic actions - IF has more
 
@@ -388,7 +388,7 @@ hazard_earthquake = {
         'An <b>earthquake</b> describes the sudden violent shaking of the '
         'ground that occurs as a result of volcanic activity or movement '
         'in the earth\'s crust.'),
-    'notes': [  # additional generic notes for buildings - IF has more
+    'notes': [  # additional generic notes for earthquake - IF has more
     ],
     'actions': [  # these are additional generic actions - IF has more
 
@@ -411,7 +411,7 @@ hazard_flood = {
         'when a river overflows its banks or when a dam breaks. '
         'The effect of a <b>flood</b> is for land that is normally dry '
         'to become wet.'),
-    'notes': [  # additional generic notes for buildings - IF has more
+    'notes': [  # additional generic notes for flood - IF has more
     ],
     'actions': [  # these are additional generic actions - IF has more
 
@@ -431,7 +431,7 @@ hazard_volcanic_ash = {
         '<b>Volcanic ash</b> describes fragments of pulverized rock, minerals '
         'and volcanic glass, created during volcanic eruptions, less than '
         '2 mm (0.079 inches) in diameter.'),
-    'notes': [  # additional generic notes for buildings - IF has more
+    'notes': [  # additional generic notes for volcanic ash - IF has more
     ],
     'actions': [  # these are additional generic actions - IF has more
 
@@ -453,7 +453,7 @@ hazard_tsunami = {
         'A <b>tsunami</b> at sea may go unnoticed but a <b>tsunami</b> '
         'wave that strikes land may cause massive destruction and '
         'flooding.'),
-    'notes': [  # additional generic notes for buildings - IF has more
+    'notes': [  # additional generic notes for tsunami - IF has more
         tr('Impacts on roads, people, buildings and other exposure elements '
            'may differ in reality to the analysis results. This is due to '
            'local environmental conditions such as terrain, infrastructure '
@@ -478,9 +478,9 @@ hazard_volcano = {
         'which rock fragments, ash, lava, steam and gases can be ejected '
         'from below the earth\'s surface. The type of material '
         'ejected depends on the type of <b>volcano</b>.'),
-    'notes': [  # additional generic notes for buildings - IF has more
-        tr('Previously mapped hazard zones may not be congruous with future '
-           'events.'),
+    'notes': [  # additional generic notes for volcano
+        tr('The extent of the mapped scenario or hazard zones may not be '
+           'consistent with future events.'),
     ],
     'actions': [  # these are additional generic actions - IF has more
 
@@ -524,8 +524,8 @@ exposure_land_cover = {
         'The <b>land cover</b> exposure data describes features on '
         'the surface of the earth that might be exposed to a particular '
         ' hazard. This might include crops, forest and urban areas. '),
-    'notes': [  # these are additional generic notes for people - IF has more
-        tr('Areas reported for land cover counts have not been rounded.'),
+    'notes': [  # these are additional generic notes for landcover - IF has more
+        tr('Areas reported for land cover have not been rounded.'),
     ],
     'actions': [  # these are additional generic actions - IF has more
         tr('What type of crops are planted in the affected fields?'),
@@ -558,14 +558,12 @@ exposure_population = {
         'The <b>population</b> describes the people that might be '
         'exposed to a particular hazard.'),
     'notes': [  # these are additional generic notes for people - IF has more
-        tr('All values are rounded up to the nearest integer in order to '
-           'avoid representing human lives as fractions.'),
-        tr('Population rounding is applied to all population values, '
-           'which may cause discrepancies when adding values.'),
         tr('Numbers reported for population counts have been rounded to the '
            'nearest 10 people if the total is less than 1,000; nearest 100 '
            'people if more than 1,000 and less than 100,000; and nearest '
            '1000 if more than 100,000.'),
+        tr('Rounding is applied to all population values, '
+           'which may cause discrepancies when adding values.'),
 
     ],
     'actions': [  # these are additional generic actions - IF has more
@@ -655,8 +653,8 @@ exposure_structure = {
         'made feature such as a building (an enclosed structure '
         'with walls and a roof), telecommunications facility or '
         'bridge.'),
-    'notes': [  # additional generic notes for buildings - IF has more
-        tr('Numbers reported for structures are exact counts.')
+    'notes': [  # additional generic notes for structures - IF has more
+        tr('Numbers reported for structures have not been rounded.')
     ],
     'actions': [  # these are additional generic actions - IF has more
         tr('Which structures have warning capacity (eg. sirens, speakers, '
@@ -685,7 +683,7 @@ exposure_place = {
         'known by a particular name.'),
     'notes': [  # additional generic notes for places - IF has more
         tr('Where places are represented as a single point, the effect of the '
-           'hazard over the entire place may differ from at the point where '
+           'hazard over the entire place may differ from the point at which '
            'the place is represented on the map.'),
     ],
     'actions': [  # these are additional generic actions - IF has more
