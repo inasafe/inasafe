@@ -470,12 +470,9 @@ hazard_volcano = {
         'which rock fragments, ash, lava, steam and gases can be ejected '
         'from below the earth\'s surface. The type of material '
         'ejected depends on the type of <b>volcano</b>.'),
-    'single_event_notes': [  # additional generic single event notes for volcano
-        tr('The extent of a mapped event scenario may change.'),
-    ],
-    'multi_event_notes': [  # additional generic multi event notes for volcano
-        tr('The extent of mapped hazard zones may not be consistent with '
-           'future events.'),
+    'notes': [  # additional generic notes for volcano
+        tr('The extent of mapped scenario or hazard zones may not be '
+           'consistent with future events.'),
     ],
     'actions': [  # these are additional generic actions - IF has more
 
