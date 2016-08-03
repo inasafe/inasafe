@@ -16,9 +16,7 @@ from safe.impact_functions.bases.classified_vh_continuous_re import \
     ClassifiedVHContinuousRE
 from safe.impact_functions.volcanic.volcano_point_population\
     .metadata_definitions import VolcanoPointPopulationFunctionMetadata
-from safe.impact_functions.core import (
-    population_rounding,
-    has_no_data)
+from safe.impact_functions.core import population_rounding, has_no_data
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.storage.raster import Raster
 from safe.utilities.i18n import tr
@@ -26,7 +24,8 @@ from safe.common.utilities import (
     format_int,
     humanize_class,
     create_classes,
-    create_label)
+    create_label
+)
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
     filter_needs_parameters, get_needs_provenance_value
 from safe.impact_reports.population_exposure_report_mixin import \
@@ -76,7 +75,7 @@ class VolcanoPointPopulationFunction(
             tr('Map shows buildings affected in each of the volcano buffered '
                'zones.'),
             tr('Total population in the analysis area: %s') %
-            population_rounding(self.total_population),
+            format_int(population_rounding(self.total_population)),
             tr('<sup>1</sup>People need evacuation if they are within the '
                'volcanic hazard zones.'),
             tr('Volcanoes considered: %s.') % sorted_volcano_names,
@@ -133,7 +132,7 @@ class VolcanoPointPopulationFunction(
         # Initialise affected population per categories
         impact_category_ordering = []
         for radius in radii:
-            category = 'Radius %s km ' % format_int(radius)
+            category = tr('Radius %s km ' % format_int(radius))
             self.affected_population[category] = 0
             impact_category_ordering.append(category)
 
@@ -148,8 +147,8 @@ class VolcanoPointPopulationFunction(
             if not numpy.isnan(population):
                 population = float(population)
                 # Update population count for this category
-                category = 'Radius %s km ' % format_int(
-                    row[self.hazard_zone_attribute])
+                category = tr('Radius %s km ' % format_int(
+                    row[self.hazard_zone_attribute]))
                 self.affected_population[category] += population
 
         # Count totals

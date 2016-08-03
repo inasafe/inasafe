@@ -17,16 +17,16 @@ from safe.impact_functions.bases.classified_vh_continuous_re import \
     ClassifiedVHContinuousRE
 from safe.impact_functions.volcanic.volcano_polygon_population\
     .metadata_definitions import VolcanoPolygonPopulationFunctionMetadata
-from safe.impact_functions.core import (
-    population_rounding,
-    has_no_data)
+from safe.impact_functions.core import population_rounding, has_no_data
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.storage.raster import Raster
 from safe.utilities.i18n import tr
 from safe.common.utilities import (
     humanize_class,
     create_classes,
-    create_label)
+    create_label,
+    format_int
+)
 from safe.impact_functions.core import (
     no_population_impact_message,
     get_key_for_value
@@ -74,7 +74,7 @@ class VolcanoPolygonPopulationFunction(
 
         fields = [
             tr('Total population in the analysis area: %s') %
-            population_rounding(self.total_population),
+            format_int(population_rounding(self.total_population)),
             tr('<sup>1</sup>People need evacuation if they are within the '
                'volcanic hazard zones.'),
             tr('Volcanoes considered: %s.') % sorted_volcano_names
