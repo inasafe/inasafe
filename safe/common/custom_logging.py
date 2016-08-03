@@ -11,33 +11,31 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-
-__author__ = 'tim@kartoza.com'
-__revision__ = '$Format:%H$'
-__date__ = '29/01/2011'
-__copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
-__copyright__ += 'Disaster Reduction'
-
 import os
 import sys
 import logging
-
-from qgis.core import QgsMessageLog
-from PyQt4.QtCore import QSettings
-
+# This is ugly but we dont have a better solution yet...
 safe_extras_dir = os.path.abspath(
     os.path.join(os.path.dirname(__file__), '..', '..', 'safe_extras'))
 if safe_extras_dir not in sys.path:
     sys.path.append(safe_extras_dir)
+
+from qgis.core import QgsMessageLog
+from PyQt4.QtCore import QSettings
 # pylint: disable=F0401
 # noinspection PyUnresolvedReferences,PyPackageRequirements
 from raven.handlers.logging import SentryHandler
 # noinspection PyUnresolvedReferences,PyPackageRequirements
 from raven import Client
 # pylint: enable=F0401
-
 from safe.common.utilities import log_file_path
 from safe.utilities.i18n import tr
+
+__author__ = 'tim@kartoza.com'
+__revision__ = '$Format:%H$'
+__date__ = '29/01/2011'
+__copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
+__copyright__ += 'Disaster Reduction'
 
 LOGGER = logging.getLogger('InaSAFE')
 

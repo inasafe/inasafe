@@ -56,7 +56,7 @@ class ClassifiedRasterHazardBuildingFunction(
         """
         fields = [
             tr('Map shows buildings affected in low, medium and high hazard '
-               'class areas.')
+               'zones.')
         ]
         # include any generic exposure specific notes from definitions.py
         fields = fields + self.exposure_notes()
