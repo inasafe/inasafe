@@ -471,7 +471,7 @@ hazard_volcano = {
         'from below the earth\'s surface. The type of material '
         'ejected depends on the type of <b>volcano</b>.'),
     'notes': [  # additional generic notes for volcano
-        tr('The extent of mapped scenario or hazard zones may not be '
+        tr('The extent of the mapped scenario or hazard zones may not be '
            'consistent with future events.'),
     ],
     'actions': [  # these are additional generic actions - IF has more
