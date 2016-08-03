@@ -131,9 +131,13 @@ class VolcanoPointPopulationFunction(
             )
 
         # Initialise affected population per categories
+        impact_category_ordering = []
         for radius in radii:
             category = 'Radius %s km ' % format_int(radius)
             self.affected_population[category] = 0
+            impact_category_ordering.append(category)
+
+        self.impact_category_ordering = impact_category_ordering
 
         if has_no_data(self.exposure.layer.get_data(nan=True)):
             self.no_data_warning = True
