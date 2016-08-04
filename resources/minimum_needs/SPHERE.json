@@ -27,6 +27,30 @@
       "Readable sentence": "Each person should be provided with {{ Default }} {{ Units }} of {{ Resource name }} {{ Frequency }} for drinking."
     },
     {
+      "Resource name": "Soap",
+      "Frequency": "monthly",
+      "Default": 250.0,
+      "Maximum allowed": 1000.0,
+      "Unit abbreviation": "g",
+      "Resource description": "Monthly soap allocation",
+      "Units": "grams",
+      "Readable sentence": "A displaced person should be provided with {{ Default }} {{ Unit }} of {{ Resource name }}. Though no less than {{ Minimum allowed }} and no more than {{ Maximum allowed }}. This should be provided {{ Frequency }}.",
+      "Minimum allowed": 250.0,
+      "Unit": "grams"
+    },
+    {
+      "Resource name": "Detergent",
+      "Frequency": "monthly",
+      "Default": 200.0,
+      "Maximum allowed": 1000.0,
+      "Unit abbreviation": "g",
+      "Resource description": "Monthly detergent requirements",
+      "Units": "grams",
+      "Readable sentence": "A displaced person should be provided with {{ Default }} {{ Unit }} of {{ Resource name }}. Though no less than {{ Minimum allowed }} and no more than {{ Maximum allowed }}. This should be provided {{ Frequency }}.",
+      "Minimum allowed": 200.0,
+      "Unit": "grams"
+    },
+    {
       "Default": "0.05",
       "Minimum allowed": "0.05",
       "Maximum allowed": "0.1",
@@ -169,6 +193,18 @@
       "Readable sentence": "A displaced person should be provided with {{ Default }}  {{ Resource name }}. The allocation is calculated per person. Though no less than {{ Minimum allowed }} and no more than {{ Maximum allowed }}. This should be provided {{ Frequency }}.",
       "Minimum allowed": 0.2,
       "Unit": ""
+    },
+    {
+      "Resource name": "Stove",
+      "Frequency": "once",
+      "Default": 0.2,
+      "Maximum allowed": 2.0,
+      "Unit abbreviation": "pc",
+      "Resource description": "Stove for cooking",
+      "Units": "pc",
+      "Readable sentence": "A displaced person should be provided with {{ Default }}  {{ Resource name }}. The allocation is calculated per person. Though no less than {{ Minimum allowed }} and no more than {{ Maximum allowed }}. This should be provided {{ Frequency }}.",
+      "Minimum allowed": 0.2,
+      "Unit": "pc"
     },
     {
       "Resource name": "Clothing",
