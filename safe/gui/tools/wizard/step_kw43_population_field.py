@@ -12,23 +12,14 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-import re
-
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QListWidgetItem
 
-from safe.definitions import (
-    layer_mode_continuous,
-    layer_purpose_aggregation)
-
 from safe.utilities.gis import is_raster_layer
-
 from safe.gui.tools.wizard.wizard_strings import (
-    field_question_subcategory_unit,
-    field_question_population_field,
-    field_question_aggregation)
+    field_question_population_field)
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step import WizardStep
 

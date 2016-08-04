@@ -157,7 +157,6 @@ def dynamic_translations():
     tr('Youth ratio')
     tr('Adult ratio')
     tr('Elderly ratio')
-    tr('Aggregation Categorical')
     tr('Displacement rate')
     tr('Mmi range')
     tr('Tolerance')
@@ -172,12 +171,11 @@ def dynamic_translations():
     tr('Age')
     tr('Aggregation')
     tr('Building type')
-    tr('Aggregation Categorical')
     tr('gender')
     tr('age')
     tr('aggregation')
     tr('building type')
-    tr('aggregation categorical')
+    tr('Place type')
 
     # Aggregation
     tr('Area')

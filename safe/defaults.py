@@ -13,13 +13,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-
-__author__ = 'marco@opengis.ch'
-__revision__ = '$Format:%H$'
-__date__ = '05/10/2012'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
-
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
@@ -34,6 +27,12 @@ from safe_extras.parameters.unit import Unit
 from safe.common.resource_parameter import ResourceParameter
 from safe.utilities.i18n import tr
 from safe.utilities.resources import resources_path
+
+__author__ = 'marco@opengis.ch'
+__revision__ = '$Format:%H$'
+__date__ = '05/10/2012'
+__copyright__ = (
+    'Copyright 2012, Australia Indonesia Facility for Disaster Reduction')
 
 
 def define_defaults():
@@ -279,6 +278,25 @@ def road_type_postprocessor():
     )
 
     return [road_type]
+
+
+def place_type_postprocessor():
+    """Get road-type parameter for postprocessing.
+
+    :return: A list of boolean parameter.
+    :rtype: list
+    """
+    place_type = BooleanParameter()
+    place_type.name = tr('Place type')
+    place_type.value = True
+    place_type.help_text = tr(
+        'Place breakdown by type.')
+    place_type.description = tr(
+        'Check this option if you want to enable a place impact report broken '
+        'down by place type.'
+    )
+
+    return [place_type]
 
 
 def building_type_postprocessor():

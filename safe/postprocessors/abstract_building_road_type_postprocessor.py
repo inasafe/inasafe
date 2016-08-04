@@ -9,16 +9,15 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+from safe.postprocessors.abstract_postprocessor import AbstractPostprocessor
+from safe.utilities.utilities import reorder_dictionary, main_type
 
 __author__ = 'Etienne Trimaille'
 __revision__ = '$Format:%H$'
 __date__ = '10/05/2016'
 __license__ = "GPL"
-__copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
-__copyright__ += 'Disaster Reduction'
-
-from safe.postprocessors.abstract_postprocessor import AbstractPostprocessor
-from safe.utilities.utilities import reorder_dictionary, main_type
+__copyright__ = (
+    'Copyright 2012, Australia Indonesia Facility for Disaster Reduction')
 
 
 class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
@@ -63,8 +62,7 @@ class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
         # The categories order.
         self._order = None
 
-    @staticmethod
-    def feature_value(feature):
+    def feature_value(self, feature):
         """Return the value to add in the statistics.
 
         :param feature: The feature.

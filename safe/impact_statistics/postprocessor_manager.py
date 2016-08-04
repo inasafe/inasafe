@@ -9,14 +9,6 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
-from safe.utilities.i18n import tr
-
-__author__ = 'marco@opengis.ch'
-__revision__ = '$Format:%H$'
-__date__ = '19/05/2013'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
-
 import logging
 from collections import OrderedDict
 
@@ -37,6 +29,13 @@ from safe.postprocessors.postprocessor_factory import (
 from safe import messaging as m
 from safe.messaging import styles
 from safe.definitions import multipart_polygon_key
+from safe.utilities.i18n import tr
+
+__author__ = 'marco@opengis.ch'
+__revision__ = '$Format:%H$'
+__date__ = '19/05/2013'
+__copyright__ = (
+    'Copyright 2012, Australia Indonesia Facility for Disaster Reduction')
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -138,6 +137,8 @@ class PostprocessorManager(QtCore.QObject):
                 table['caption'] = tr('Closed buildings')
             elif name == 'road type':
                 table['caption'] = tr('Closed roads')
+            elif name == 'place type':
+                table['caption'] = tr('Affected places')
             elif name == 'people':
                 table['caption'] = tr('Affected people')
 
@@ -160,10 +161,8 @@ class PostprocessorManager(QtCore.QObject):
                     '(affected people)') % translated_name
 
             try:
-                empty_table = not sorted_results[0][1]
+                not sorted_results[0][1]
             except IndexError:
-                empty_table = True
-            if empty_table:
                 # The table is empty.
                 # Due to an error or because every lines were removed.
                 table['attributes'] = []
@@ -638,7 +637,7 @@ class PostprocessorManager(QtCore.QObject):
                     parameters['adult_ratio'] = adult_ratio
                     parameters['elderly_ratio'] = elderly_ratio
 
-                if key == 'BuildingType' or key == 'RoadType':
+                if key in ['BuildingType', 'RoadType', 'PlaceType']:
                     try:
                         key_attribute = self.keyword_io.read_keywords(
                             self.aggregator.exposure_layer, 'key_attribute')
@@ -650,6 +649,14 @@ class PostprocessorManager(QtCore.QObject):
                     value_map = self.keyword_io.read_keywords(
                         self.aggregator.exposure_layer, 'value_mapping')
                     parameters['value_mapping'] = value_map
+
+                if key == 'PlaceType':
+                    try:
+                        population_field = self.keyword_io.read_keywords(
+                            self.aggregator.exposure_layer, 'population_field')
+                        parameters['population_field'] = population_field
+                    except KeywordNotFoundError:
+                        parameters['population_field'] = None
 
                 try:
                     value.setup(parameters)

@@ -23,6 +23,7 @@ from gender_postprocessor import GenderPostprocessor
 from age_postprocessor import AgePostprocessor
 from building_type_postprocessor import BuildingTypePostprocessor
 from road_type_postprocessor import RoadTypePostprocessor
+from place_type_postprocessor import PlaceTypePostprocessor
 from minimum_needs_postprocessor import MinimumNeedsPostprocessor
 from safe.utilities.i18n import tr
 # pylint: enable=unused-import
@@ -37,7 +38,7 @@ AVAILABLE_POSTPTOCESSORS = {
     'Aggregation': 'Aggregation',
     'BuildingType': 'Building type',
     'RoadType': 'Road type',
-    'AggregationCategorical': 'Aggregation categorical',
+    'PlaceType': 'Place type',
     'MinimumNeeds': 'Minimum needs'}
 
 

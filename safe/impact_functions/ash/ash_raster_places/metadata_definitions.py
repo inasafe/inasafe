@@ -23,6 +23,7 @@ from safe.definitions import (
     hazard_volcanic_ash,
     unit_centimetres
 )
+from safe.defaults import place_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
@@ -109,6 +110,9 @@ class AshRasterHazardPlacesFunctionMetadata(ImpactFunctionMetadata):
             },
             'parameters': OrderedDict(
                 [
+                    ('postprocessors', OrderedDict([
+                        ('PlaceType', place_type_postprocessor())
+                    ])),
                     ('group_threshold', threshold_group_parameter())
                 ])
         }
