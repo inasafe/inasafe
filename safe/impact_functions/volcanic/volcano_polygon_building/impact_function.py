@@ -38,7 +38,8 @@ class VolcanoPolygonBuildingFunction(
     def __init__(self):
         super(VolcanoPolygonBuildingFunction, self).__init__()
         BuildingExposureReportMixin.__init__(self)
-        self.volcano_names = tr('Not specified in data')
+        # A set of volcano names
+        self.volcano_names = set()
         self._target_field = 'Hazard'
 
     def notes(self):
@@ -47,10 +48,14 @@ class VolcanoPolygonBuildingFunction(
         :return: The notes that should be attached to this impact report.
         :rtype: list
         """
+        if self.volcano_names:
+            sorted_volcano_names = ', '.join(sorted(self.volcano_names))
+        else:
+            sorted_volcano_names = tr('Not specified in data')
         fields = [
             tr('Map shows buildings affected in each of the volcano hazard '
                'polygons.'),
-            tr('Volcanoes considered: %s.') % self.volcano_names
+            tr('Volcanoes considered: %s.') % sorted_volcano_names
         ]
         # include any generic exposure specific notes from definitions.py
         fields = fields + self.exposure_notes()
@@ -95,13 +100,9 @@ class VolcanoPolygonBuildingFunction(
 
         # Get names of volcanoes considered
         if self.name_attribute in self.hazard.layer.get_attribute_names():
-            volcano_name_list = set()
             for row in self.hazard.layer.get_data():
                 # Run through all polygons and get unique names
-                volcano_name_list.add(row[self.name_attribute])
-            self.volcano_names = ', '.join(volcano_name_list)
-        else:
-            self.volcano_names = tr('Not specified in data')
+                self.volcano_names.add(row[self.name_attribute])
 
         # Retrieve the classification that is used by the hazard layer.
         vector_hazard_classification = self.hazard.keyword(

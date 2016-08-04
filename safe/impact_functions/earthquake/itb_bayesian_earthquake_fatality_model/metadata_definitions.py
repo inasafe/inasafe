@@ -65,12 +65,12 @@ class ITBBayesianFatalityMetadata(ITBFatalityMetadata):
             'author': 'ITB and GA',  # FIXME
             'date_implemented': 'N/A',
             'overview': tr(
-                'Estimates the number of fatalities resulting from an '
-                'earthquake. Uses data from an Indonesian database of '
-                'earthquake events to calculate fatality rates. Based on the '
-                'Population Vulnerability ITB Bayesian Model. This model is '
-                'better at capturing uncertainty in the results.'),
-            'detailed_description': '',
+                'Estimates fatalities resulting from an earthquake using data '
+                'from an Indonesian database of earthquake events to '
+                'calculate fatality rates. This model is better at '
+                'capturing uncertainty in the results.'),
+            'detailed_description': tr(
+                'Based on the Population Vulnerability ITB Bayesian Model.'),
             'hazard_input': '',
             'exposure_input': '',
             'output': '',
