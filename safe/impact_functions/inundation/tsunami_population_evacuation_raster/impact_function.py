@@ -24,6 +24,7 @@ from safe.impact_functions.inundation\
 from safe.storage.raster import Raster
 from safe.utilities.i18n import tr
 from safe.common.utilities import (
+    format_int,
     verify,
     humanize_class,
     create_classes,
@@ -69,7 +70,7 @@ class TsunamiEvacuationFunction(
 
         fields = [
             tr('Total population in the analysis area: %s') %
-            population_rounding(self.total_population),
+            format_int(population_rounding(self.total_population)),
             tr('<sup>1</sup>People need evacuation if flood levels exceed '
                '%(eps).1f m.') % {'eps': thresholds[-1]},
             needs_provenance

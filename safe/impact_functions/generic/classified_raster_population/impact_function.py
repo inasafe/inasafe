@@ -23,6 +23,7 @@ from safe.impact_functions.core import (
     population_rounding, has_no_data, no_population_impact_message)
 from safe.storage.raster import Raster
 from safe.common.utilities import (
+    format_int,
     humanize_class,
     create_classes,
     create_label)
@@ -71,7 +72,7 @@ class ClassifiedRasterHazardPopulationFunction(
         """
         fields = [
             tr('Total population in the analysis area: %s') %
-            population_rounding(self.total_population),
+            format_int(population_rounding(self.total_population)),
             tr('<sup>1</sup>People need evacuation if they are in a hazard '
                'zone.')
         ]
