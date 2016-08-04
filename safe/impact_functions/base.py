@@ -500,11 +500,25 @@ class ImpactFunction(object):
             'notes']
         :rtype: list, None
         """
+        notes = []
         hazard_name = self.hazard.keyword('hazard')
         for hazard in hazard_all:
             try:
                 if hazard['key'] == hazard_name:
-                    return hazard['notes']
+                    if 'notes' in hazard:
+                        notes += hazard['notes']
+                if self.hazard.keywords['data_type'] == 'classified':
+                    if 'classified_notes' in hazard:
+                        notes += hazard['classified_notes']
+                if self.hazard.keywords['data_type'] == 'continuous':
+                    if 'continuous_notes' in hazard:
+                        notes += hazard['continuous_notes']
+                if self.hazard.keywords['scenario'] == 'single_event':
+                    if 'single_event_notes' in hazard:
+                        notes += hazard['single_event_notes']
+                if self.hazard.keywords['scenario'] == 'multiple_event':
+                    if 'multi_event_notes' in hazard:
+                        notes += hazard['multi_event_notes']
             except KeyError:
                 pass
         return None

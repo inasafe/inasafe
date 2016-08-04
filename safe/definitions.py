@@ -361,6 +361,14 @@ hazard_category = {
 }
 
 # Hazard
+caveat_simulation = tr(
+    'The extent and severity of the mapped scenario or hazard zones '
+    'may not be consistent with future events.')
+caveat_local_conditions = tr(
+    'The impacts on roads, people, buildings and other exposure '
+    'elements may differ from the analysis results due to local '
+    'conditions such as terrain and infrastructure type.')
+
 hazard_generic = {
     'key': 'generic',
     'name': tr('Generic'),
@@ -369,11 +377,16 @@ hazard_generic = {
         'data have been classified or generalised. For example: earthquake, '
         'flood, volcano, tsunami, landslide, smoke haze or strong wind.'),
     'notes': [  # additional generic notes for generic - IF has more
-        tr('The extent and severity of the mapped scenario or hazard zones '
-           'may not be consistent with future events.'),
-        tr('The impacts on roads, people, buildings and other exposure '
-           'elements may differ from the analysis results due to local '
-           'conditions such as terrain and infrastructure type.'),
+        caveat_simulation,
+        caveat_local_conditions,
+    ],
+    'continuous_notes': [  # notes specific to continuous data
+    ],
+    'classified_notes': [  # notes specific to classified data
+    ],
+    'single_event_notes': [  # notes specific to single event data
+    ],
+    'multi_event_notes': [  # notes specific to multi event data
     ],
     'actions': [  # these are additional generic actions - IF has more
 
@@ -394,11 +407,16 @@ hazard_earthquake = {
         'ground that occurs as a result of volcanic activity or movement '
         'in the earth\'s crust.'),
     'notes': [  # additional generic notes for earthquake - IF has more
-        tr('The extent and severity of the mapped scenario or hazard zones '
-           'may not be consistent with future events.'),
-        tr('The impacts on roads, people, buildings and other exposure '
-           'elements may differ from the analysis results due to local '
-           'conditions such as terrain and infrastructure type.'),
+        caveat_simulation,
+        caveat_local_conditions,
+    ],
+    'continuous_notes': [  # notes specific to continuous data
+    ],
+    'classified_notes': [  # notes specific to classified data
+    ],
+    'single_event_notes': [  # notes specific to single event data
+    ],
+    'multi_event_notes': [  # notes specific to multi event data
     ],
     'actions': [  # these are additional generic actions - IF has more
 
@@ -422,11 +440,16 @@ hazard_flood = {
         'The effect of a <b>flood</b> is for land that is normally dry '
         'to become wet.'),
     'notes': [  # additional generic notes for flood - IF has more
-        tr('The extent and severity of the mapped scenario or hazard zones '
-           'may not be consistent with future events.'),
-        tr('The impacts on roads, people, buildings and other exposure '
-           'elements may differ from the analysis results due to local '
-           'conditions such as terrain and infrastructure type.'),
+        caveat_simulation,
+        caveat_local_conditions,
+    ],
+    'continuous_notes': [  # notes specific to continuous data
+    ],
+    'classified_notes': [  # notes specific to classified data
+    ],
+    'single_event_notes': [  # notes specific to single event data
+    ],
+    'multi_event_notes': [  # notes specific to multi event data
     ],
     'actions': [  # these are additional generic actions - IF has more
 
@@ -447,11 +470,16 @@ hazard_volcanic_ash = {
         'and volcanic glass, created during volcanic eruptions, less than '
         '2 mm (0.079 inches) in diameter.'),
     'notes': [  # additional generic notes for volcanic ash - IF has more
-        tr('The extent and severity of the mapped scenario or hazard zones '
-           'may not be consistent with future events.'),
-        tr('The impacts on roads, people, buildings and other exposure '
-           'elements may differ from the analysis results due to local '
-           'conditions such as terrain and infrastructure type.'),
+        caveat_simulation,
+        caveat_local_conditions,
+    ],
+    'continuous_notes': [  # notes specific to continuous data
+    ],
+    'classified_notes': [  # notes specific to classified data
+    ],
+    'single_event_notes': [  # notes specific to single event data
+    ],
+    'multi_event_notes': [  # notes specific to multi event data
     ],
     'actions': [  # these are additional generic actions - IF has more
 
@@ -474,11 +502,16 @@ hazard_tsunami = {
         'wave that strikes land may cause massive destruction and '
         'flooding.'),
     'notes': [  # additional generic notes for tsunami - IF has more
-        tr('The extent and severity of the mapped scenario or hazard zones '
-           'may not be consistent with future events.'),
-        tr('The impacts on roads, people, buildings and other exposure '
-           'elements may differ from the analysis results due to local '
-           'conditions such as terrain and infrastructure type.'),
+        caveat_simulation,
+        caveat_local_conditions,
+    ],
+    'continuous_notes': [  # notes specific to continuous data
+    ],
+    'classified_notes': [  # notes specific to classified data
+    ],
+    'single_event_notes': [  # notes specific to single event data
+    ],
+    'multi_event_notes': [  # notes specific to multi event data
     ],
     'actions': [  # these are additional generic actions - IF has more
 
@@ -500,14 +533,19 @@ hazard_volcano = {
         'from below the earth\'s surface. The type of material '
         'ejected depends on the type of <b>volcano</b>.'),
     'notes': [  # additional generic notes for volcano
-        tr('The extent and severity of the mapped scenario or hazard zones '
-           'may not be consistent with future events.'),
-        tr('The impacts on roads, people, buildings and other exposure '
-           'elements may differ from the analysis results due to local '
-           'conditions such as terrain and infrastructure type.'),
+        caveat_simulation,
+        caveat_local_conditions,
     ],
     'actions': [  # these are additional generic actions - IF has more
 
+    ],
+    'continuous_notes': [  # notes specific to continuous data
+    ],
+    'classified_notes': [  # notes specific to classified data
+    ],
+    'single_event_notes': [  # notes specific to single event data
+    ],
+    'multi_event_notes': [  # notes specific to multi event data
     ],
     'citations': [
         {
