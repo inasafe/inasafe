@@ -104,3 +104,9 @@ class ITBBayesianFatalityFunction(ITBFatalityFunction):
 
         prob = numpy.hstack((cprob[0], numpy.diff(cprob))) * 100.0
         return self.round_to_sum(prob)
+
+
+
+        fields.append(tr(
+            'Fatality model is from the Population Vulnerability '
+            'Pager Model.'))

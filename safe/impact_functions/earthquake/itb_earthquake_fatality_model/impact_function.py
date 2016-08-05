@@ -210,7 +210,8 @@ class ITBFatalityFunction(
         :returns: Dicts containing notes.
         :rtype: list
         """
-        fields = [
+        fields = []
+        fields.extend([
             tr('Total population in the analysis area: %s') %
             format_int(population_rounding(self.total_population)),
             tr('<sup>1</sup>People are displaced if they experience and '
@@ -218,16 +219,13 @@ class ITBFatalityFunction(
             tr('The fatality calculation assumes that no fatalities occur for '
                'shake levels below 4 and fatality counts of less than 50 are '
                'disregarded.')
-        ]
-        if self.__class__ != ITBFatalityFunction:
-            fields.append(tr(
-                'Fatality model is from Institut Teknologi Bandung 2012.'))
-            fields.append(tr(
-                'Fatality model is from the Population Vulnerability '
-                'Pager Model.'))
-        fields.extend([
-            tr('Map shows the estimation of displaced population.'),
         ])
+        fields.append(tr(
+            'Fatality model is from Institut Teknologi Bandung 2012.'))
+
+        fields.append(
+            tr('Map shows the estimation of displaced population.'),
+        )
         # include any generic exposure specific notes from definitions.py
         fields = fields + self.exposure_notes()
         # include any generic hazard specific notes from definitions.py
