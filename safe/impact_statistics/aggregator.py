@@ -1348,13 +1348,15 @@ class Aggregator(QtCore.QObject):
                         intersection_geometry = QgsGeometry(intersection)
 
                         # from ftools
-                        unknown_geometry_type = 0
                         geometry_type = intersection_geometry.wkbType()
-                        if geometry_type == unknown_geometry_type:
+                        if geometry_type == QGis.WKBUnknown:
                             int_com = geometry.combine(
                                 qgis_polygon_geometry)
                             int_sym = geometry.symDifference(
                                 qgis_polygon_geometry)
+                            if not (int_sym or int_com):
+                                LOGGER.debug('Skip None geometry.')
+                                continue
                             intersection_geometry = QgsGeometry(
                                 int_com.difference(int_sym))
                         # LOGGER.debug('wkbType type of intersection: %s' %
