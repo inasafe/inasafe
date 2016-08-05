@@ -514,10 +514,10 @@ class ImpactFunction(object):
                 if self.hazard.keywords['data_type'] == 'continuous':
                     if 'continuous_notes' in hazard:
                         notes += hazard['continuous_notes']
-                if self.hazard.keywords['scenario'] == 'single_event':
+                if self.hazard.keywords['hazard_category'] == 'single_event':
                     if 'single_event_notes' in hazard:
                         notes += hazard['single_event_notes']
-                if self.hazard.keywords['scenario'] == 'multiple_event':
+                if self.hazard.keywords['hazard_category'] == 'multiple_event':
                     if 'multi_event_notes' in hazard:
                         notes += hazard['multi_event_notes']
             except KeyError:
