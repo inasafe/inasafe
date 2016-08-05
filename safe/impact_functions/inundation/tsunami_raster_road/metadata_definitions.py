@@ -62,6 +62,7 @@ class TsunamiRasterRoadMetadata(ImpactFunctionMetadata):
             concrete impact function.
         :rtype: dict
         """
+        title = tr('Roads affected by tsunami')
         dict_meta = {
             'id': 'TsunamiRasterRoadFunction',
             'name': tr('Raster tsunami on roads'),
@@ -98,9 +99,9 @@ class TsunamiRasterRoadMetadata(ImpactFunctionMetadata):
             ],
             'legend_units': '',
             'legend_notes': '',
-            'map_title': tr('Roads inundated'),
+            'map_title': title,
+            'layer_name': title,
             'legend_title': tr('Road inundated status'),
-            'layer_name': tr('Flooded roads'),
             'layer_requirements': {
                 'hazard': {
                     'layer_mode': layer_mode_continuous,

@@ -309,6 +309,8 @@ layer_geometry = {
 hazard_category_single_event = {
     'key': 'single_event',
     'name': tr('Single event'),
+    # short name is used when concatenating map_title in IF
+    'short_name': tr('event'),
     'description': tr(
         '<b>Single event</b> hazard data can be based on either a specific  '
         'event that has happened in the past, for example a flood like '
@@ -325,6 +327,8 @@ hazard_category_single_event = {
 hazard_category_multiple_event = {
     'key': 'multiple_event',
     'name': tr('Multiple event'),
+    # short name is used when concatenating map_title in IF
+    'short_name': tr('hazard'),
     'description': tr(
         '<b>Multiple event</b> hazard data can be based on historical '
         'observations such as a hazard map of all observed volcanic '
