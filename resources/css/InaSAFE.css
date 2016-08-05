@@ -82,3 +82,18 @@ h5 {
 .caption {
   font-size: 8pt;
 }
+
+/* List styling */
+.customBulletList, .customBulletList ul {
+  margin-top: 0;
+  padding-left: 2em;
+  list-style-type: none;
+}
+.customBulletList li:before {
+  position: absolute;
+  margin-left: -1.3em;
+  font-weight: bold;
+}
+.customBulletList li.tick:before {
+  content: "\2713";
+}
