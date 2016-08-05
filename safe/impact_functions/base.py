@@ -502,6 +502,7 @@ class ImpactFunction(object):
         """
         notes = []
         hazard_name = self.hazard.keyword('hazard')
+
         for hazard in hazard_all:
             try:
                 if hazard['key'] == hazard_name:
@@ -521,7 +522,7 @@ class ImpactFunction(object):
                         notes += hazard['multi_event_notes']
             except KeyError:
                 pass
-        return None
+        return notes
 
     def action_checklist(self):
         """Return the action check list.
