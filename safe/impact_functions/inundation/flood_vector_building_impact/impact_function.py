@@ -19,10 +19,11 @@ from qgis.core import (
     QgsRectangle,
     QgsFeatureRequest,
     QgsCoordinateTransform,
-    QgsCoordinateReferenceSystem,
     QgsGeometry)
 
 from PyQt4.QtCore import QVariant
+
+import logging
 
 from safe.impact_functions.bases.classified_vh_classified_ve import \
     ClassifiedVHClassifiedVE
@@ -35,6 +36,8 @@ from safe.storage.vector import Vector
 from safe.common.exceptions import GetDataError, ZeroImpactException
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
+
+LOGGER = logging.getLogger('InaSAFE')
 
 
 class FloodPolygonBuildingFunction(
@@ -76,6 +79,11 @@ class FloodPolygonBuildingFunction(
         # Get parameters from layer's keywords
         self.hazard_class_attribute = self.hazard.keyword('field')
         self.hazard_class_mapping = self.hazard.keyword('value_map')
+        # There is no wet in the class mapping
+        if self.wet not in self.hazard_class_mapping:
+            raise ZeroImpactException(tr(
+                'There is no flooded area int the hazard layers, thus there '
+                'is no affected building.'))
         self.exposure_class_attribute = self.exposure.keyword(
             'structure_class_field')
         exposure_value_mapping = self.exposure.keyword('value_mapping')
