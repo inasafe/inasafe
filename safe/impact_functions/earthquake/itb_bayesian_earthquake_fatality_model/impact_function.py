@@ -107,6 +107,3 @@ class ITBBayesianFatalityFunction(ITBFatalityFunction):
 
 
 
-        fields.append(tr(
-            'Fatality model is from the Population Vulnerability '
-            'Pager Model.'))
