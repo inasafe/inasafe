@@ -54,6 +54,7 @@ class ITBBayesianFatalityMetadata(ITBFatalityMetadata):
             concrete impact function.
         :rtype: dict
         """
+        title = tr('People affected by earthquake event')
         dict_meta = {
             'id': 'ITBBayesianFatalityFunction',
             'name': tr(
@@ -86,11 +87,11 @@ class ITBBayesianFatalityMetadata(ITBFatalityMetadata):
                     'link': None
                 }
             ],
-            'map_title': 'Earthquake impact to population',
+            'map_title': title,
+            'layer_name': title,
             'legend_title': '',
             'legend_units': '',
             'legend_notes': '',
-            'layer_name': '',
             'layer_requirements': {
                 'hazard': {
                     'layer_mode': layer_mode_continuous,

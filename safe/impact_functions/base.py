@@ -66,7 +66,7 @@ from safe.utilities.utilities import (
 )
 from safe.utilities.memory_checker import check_memory_usage
 from safe.utilities.i18n import tr
-from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.keyword_io import KeywordIO, definition
 from safe.utilities.gis import (
     convert_to_safe_layer,
     is_point_layer,
@@ -539,6 +539,23 @@ class ImpactFunction(object):
         # include any generic hazard specific notes from definitions.py
         fields = fields + self.hazard_notes()
         return fields
+
+    def map_title(self):
+        """Get the map title formatted according to our standards.
+
+        ..versionadded:: 3.5
+
+        See https://github.com/inasafe/inasafe/blob/develop/
+            docs/reporting-standards.md
+
+        :returns: A localised string containing the map title.
+        :rtype: basestring
+        """
+        category = self.hazard.keyword('hazard_category')
+        category = definition(category)
+        short_name = category['short_name']
+        title = self.metadata().key('map_title') + ' ' + short_name
+        return title
 
     @property
     def aggregation(self):

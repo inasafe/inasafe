@@ -62,6 +62,7 @@ class TsunamiEvacuationMetadata(ImpactFunctionMetadata):
             concrete impact function.
         :rtype: dict
         """
+        title = tr('People affected by tsunami')
         dict_meta = {
             'id': 'TsunamiEvacuationFunction',
             'name': tr('Tsunami evacuation'),
@@ -121,13 +122,13 @@ class TsunamiEvacuationMetadata(ImpactFunctionMetadata):
                     'link': None
                 }
             ],
-            'map_title': tr('People in need of evacuation'),
+            'map_title': title,
+            'layer_name': title,
             'legend_title': tr('Population'),
             'legend_units': tr('(people per cell)'),
             'legend_notes': tr(
                 'Thousand separator is represented by %s' %
                 get_thousand_separator()),
-            'layer_name': tr('Population which need evacuation'),
             'layer_requirements': {
                 'hazard': {
                     'layer_mode': layer_mode_continuous,

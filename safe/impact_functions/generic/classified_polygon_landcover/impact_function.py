@@ -255,7 +255,7 @@ class ClassifiedPolygonHazardLandCoverFunction(
             style_type='categorizedSymbol')
 
         extra_keywords = {
-            'map_title': self.metadata().key('map_title'),
+            'map_title': self.map_title(),
             'target_field': self.target_field
         }
 

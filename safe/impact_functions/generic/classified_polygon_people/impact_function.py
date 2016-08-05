@@ -240,7 +240,7 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
 
         extra_keywords = {
             'target_field': self.target_field,
-            'map_title': self.metadata().key('map_title'),
+            'map_title': self.map_title(),
         }
 
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
