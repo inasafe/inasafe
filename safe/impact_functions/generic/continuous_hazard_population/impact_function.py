@@ -29,6 +29,7 @@ from safe.impact_functions.core import (
 from safe.storage.raster import Raster
 from safe.utilities.i18n import tr
 from safe.common.utilities import (
+    format_int,
     create_classes,
     create_label,
     humanize_class)
@@ -71,7 +72,7 @@ class ContinuousHazardPopulationFunction(
         """
         fields = [
             tr('Total population in the analysis area: %s') %
-            population_rounding(self.total_population),
+            format_int(population_rounding(self.total_population)),
             tr('<sup>1</sup>People need evacuation if they are in a hazard '
                'zone.'),
             tr('Map shows the numbers of people in high, medium, and low '
