@@ -189,18 +189,23 @@ class ITBFatalityFunction(
                 'Are there enough victim identification units available '
                 'for %s people?') % (
                     format_int(population_rounding(total_fatalities))))
-        if total_displaced:
+        if rounded_displaced:
+            fields.append(
+                tr('Are there enough covered floor areas available for '
+                   '%s people?') % rounded_displaced)
             fields.append(tr(
                 'Are there enough shelters and relief items available for '
                 '%s people?') % rounded_displaced)
-        if rounded_displaced:
             fields.append(tr(
                 'If yes, where are they located and how will we '
                 'distribute them?'))
-        if total_displaced:
             fields.append(tr(
                 'If no, where can we obtain additional relief items '
                 'from and how will we transport them?'))
+            fields.append(tr(
+                'Are there enough water supply, sanitation, hygiene, food, '
+                'shelter, medicines and relief items available for %s'
+                'displaced people?') % rounded_displaced)
 
         return fields
 

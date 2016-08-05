@@ -629,18 +629,22 @@ exposure_population = {
 
     ],
     'actions': [  # these are additional generic actions - IF has more
-        tr('Which group or population is most affected?'),
-        tr('Who are the vulnerable people in the population and why?'),
         tr('How will warnings be disseminated?'),
         tr('What are people\'s likely movements?'),
-        tr('What are the security factors for the affected population?'),
+        tr('Which group or population is most affected?'),
+        tr('Who are the vulnerable people in the population and why?'),
+        tr('What are people\'s likely movements?'),
+        tr('What are the security factors for the affected people?'),
         tr('What are the security factors for relief responders?'),
-        tr('How will we reach evacuated people?'),
-        tr('What kind of food does the population normally consume?'),
-        tr('What are the critical non-food items required by the affected '
-           'population?'),
+        tr('How will we reach displaced people?'),
+        tr('What kind of food does the population normally consume?'
+           'What are the critical non-food items required by the '
+           'affected population?'),
+        tr('If yes, where are they located and how will we distribute them?'),
+        tr('If no, where can we obtain additional relief items and how'
+           ' will we distribute them?'),
         tr('What are the related health risks?'),
-        tr('Who are the key people responsible for coordination?')
+        tr('Who are the key people responsible for coordination?'),
     ],
     'citations': [
         {
