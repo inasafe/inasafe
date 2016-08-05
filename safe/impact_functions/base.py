@@ -852,6 +852,9 @@ class ImpactFunction(object):
                 'excluding %s from your analysis area.') % (
                     exposure_layer_title))
             check_list.add(tr(
+                'Check that the hazard layer (%s) has affected area.') % (
+                hazard_layer_title))
+            check_list.add(tr(
                 'Check that the exposure is not no-data or zero for the '
                 'entire area of your analysis.'))
             check_list.add(tr(
