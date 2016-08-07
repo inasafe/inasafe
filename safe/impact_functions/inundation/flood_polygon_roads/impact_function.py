@@ -89,7 +89,6 @@ class FloodPolygonRoadsFunction(
             'road_class_field')
         exposure_value_mapping = self.exposure.keyword('value_mapping')
 
-
         hazard_provider = self.hazard.layer.dataProvider()
         affected_field_index = hazard_provider.fieldNameIndex(
             self.hazard_class_attribute)
