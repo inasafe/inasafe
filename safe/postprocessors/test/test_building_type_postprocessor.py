@@ -36,10 +36,10 @@ class TestBuildingTypePostprocessor(unittest.TestCase):
             'target_field': 'safe_ag__4',
             'value_mapping': {u'government': [u'Government']},
             'impact_attrs': [
-                {'TYPE': 'Government', 'safe_ag__4': 1},
-                {'TYPE': 'Government', 'safe_ag__4': 0},
-                {'TYPE': 'Government', 'safe_ag__4': 1},
-                {'TYPE': 'Government', 'safe_ag__4': 0},
+                {'type': 'Government', 'safe_ag__4': 1},
+                {'type': 'Government', 'safe_ag__4': 0},
+                {'type': 'Government', 'safe_ag__4': 1},
+                {'type': 'Government', 'safe_ag__4': 0},
             ]}
         POSTPROCESSOR.setup(params)
         POSTPROCESSOR.process()
@@ -62,21 +62,15 @@ class TestBuildingTypePostprocessor(unittest.TestCase):
             'target_field': 'safe_ag__4',
             'value_mapping': {u'government': [u'Government']},
             'impact_attrs': [
-                {'TYPE': 'Government', 'safe_ag__4': 'Zone 1'},
-                {'TYPE': 'Government', 'safe_ag__4': 'Not Affected'},
-                {'TYPE': 'Government', 'safe_ag__4': 'Zone 1'},
-                {'TYPE': 'Government', 'safe_ag__4': 'Not Affected'},
+                {'type': 'Government', 'safe_ag__4': 'Zone 1'},
+                {'type': 'Government', 'safe_ag__4': 'Not Affected'},
+                {'type': 'Government', 'safe_ag__4': 'Zone 1'},
+                {'type': 'Government', 'safe_ag__4': 'Not Affected'},
             ]}
         POSTPROCESSOR.setup(params)
         POSTPROCESSOR.process()
         results = POSTPROCESSOR.results()
-        message = (
-            'Expecting exactly 2 Government buildings to be affected. ',
-            'Using string values in affected fields.')
-        self.assertEqual(
-            results[u'Government']['value'],
-            '2',
-            message)
+        self.assertEqual(results[u'Government']['value'], '2')
 
     def test_total_affected_calculated_correctly(self):
         """Test to see that the totalling of buildings is done correctly."""
@@ -91,11 +85,11 @@ class TestBuildingTypePostprocessor(unittest.TestCase):
                 u'economy': [u'Economy'],
             },
             'impact_attrs': [
-                {'TYPE': 'Government', 'safe_ag__4': 'Zone 1'},
-                {'TYPE': 'Museum', 'safe_ag__4': 'Zone 2'},
-                {'TYPE': 'Government', 'safe_ag__4': 'Zone 1'},
-                {'TYPE': 'Government', 'safe_ag__4': 'Not Affected'},
-                {'TYPE': 'School', 'safe_ag__4': 'Zone 3'},
+                {'type': 'Government', 'safe_ag__4': 'Zone 1'},
+                {'type': 'Museum', 'safe_ag__4': 'Zone 2'},
+                {'type': 'Government', 'safe_ag__4': 'Zone 1'},
+                {'type': 'Government', 'safe_ag__4': 'Not Affected'},
+                {'type': 'School', 'safe_ag__4': 'Zone 3'},
             ]}
         POSTPROCESSOR.setup(params)
         POSTPROCESSOR.process()
@@ -115,11 +109,11 @@ class TestBuildingTypePostprocessor(unittest.TestCase):
                 u'economy': [u'Economy'],
             },
             'impact_attrs': [
-                {'TYPE': 'Government', 'safe_ag__4': 'Zone 1'},
-                {'TYPE': 'Museum', 'safe_ag__4': 'Zone 2'},
-                {'TYPE': 'Government', 'safe_ag__4': 'Zone 1'},
-                {'TYPE': 'Government', 'safe_ag__4': 'Not Affected'},
-                {'TYPE': 'School', 'safe_ag__4': 'Zone 3'},
+                {'type': 'Government', 'safe_ag__4': 'Zone 1'},
+                {'type': 'Museum', 'safe_ag__4': 'Zone 2'},
+                {'type': 'Government', 'safe_ag__4': 'Zone 1'},
+                {'type': 'Government', 'safe_ag__4': 'Not Affected'},
+                {'type': 'School', 'safe_ag__4': 'Zone 3'},
             ]}
         POSTPROCESSOR.setup(params)
         POSTPROCESSOR.process()
