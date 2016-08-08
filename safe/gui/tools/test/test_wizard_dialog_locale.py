@@ -19,6 +19,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import unittest
 import os
 import sys
+from PyQt4.QtCore import QDateTime
 
 skipped_reason = (
     'These tests are skipped because it will make a segmentation fault. Just '
@@ -179,12 +180,14 @@ class TestWizardDialogLocale(unittest.TestCase):
         source = 'Source'
         source_scale = 'Source Scale'
         source_url = 'Source Url'
-        source_date = 'Source Date'
+        source_date = QDateTime.fromString(
+            '06-12-2015 12:30',
+            'dd-MM-yyyy HH:mm')
 
         dialog.leSource.setText(source)
         dialog.leSource_scale.setText(source_scale)
         dialog.leSource_url.setText(source_url)
-        dialog.leSource_date.setText(source_date)
+        dialog.leSource_date.seDateTime(source_date)
         dialog.pbnNext.click()  # next
         dialog.pbnNext.click()  # finish
 
@@ -239,8 +242,9 @@ class TestWizardDialogLocale(unittest.TestCase):
         self.assertEqual(dialog.leSource.text(), source, message)
         message = 'Source Url should be %s' % source_url
         self.assertEqual(dialog.leSource_url.text(), source_url, message)
-        message = 'Source Date should be %s' % source_date
-        self.assertEqual(dialog.leSource_date.text(), source_date, message)
+        message = 'Source Date should be %s' % source_date.toString(
+            'dd-MM-yyyy HH:mm')
+        self.assertEqual(dialog.leSource_date.dateTime(), source_date, message)
         message = 'Source Scale should be %s' % source_scale
         self.assertEqual(dialog.leSource_scale.text(), source_scale, message)
         dialog.pbnNext.click()

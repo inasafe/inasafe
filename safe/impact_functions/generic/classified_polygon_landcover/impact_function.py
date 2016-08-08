@@ -78,11 +78,15 @@ class ClassifiedPolygonHazardLandCoverFunction(
         self.validate()
         self.prepare()
 
+        self.provenance.append_step(
+            'Calculating Step',
+            'Impact function is calculating the impact.')
+
         # Identify hazard and exposure layers
         hazard = self.hazard.layer
         exposure = self.exposure.layer
 
-        type_attr = self.parameters['land_cover_type_field'].value
+        type_attr = self.exposure.keyword('field')
 
         # prepare objects for re-projection of geometries
         crs_wgs84 = QgsCoordinateReferenceSystem("EPSG:4326")
@@ -156,7 +160,7 @@ class ClassifiedPolygonHazardLandCoverFunction(
                 # write the impacted geometry
                 f_impact = QgsFeature(impact_fields)
                 f_impact.setGeometry(impact_geometry)
-                f_impact.setAttributes(f.attributes()+[1])
+                f_impact.setAttributes(f.attributes() + [1])
                 writer.addFeature(f_impact)
 
                 impacted_geometries.append(impact_geometry)
@@ -201,15 +205,21 @@ class ClassifiedPolygonHazardLandCoverFunction(
             style_classes=style_classes,
             style_type='categorizedSymbol')
 
+        extra_keywords = {
+            'impact_summary': impact_summary,
+            'map_title': tr('Affected Land Cover'),
+            'target_field': self.target_field
+        }
+
+        self.set_if_provenance()
+
+        impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
+
         # Create vector layer and return
         impact_layer = Vector(
             data=impact_layer,
             name=tr('Land cover affected by each hazard zone'),
-            keywords={
-                'impact_summary': impact_summary,
-                'map_title': tr('Affected Land Cover'),
-                'target_field': self.target_field
-            },
+            keywords=impact_layer_keywords,
             style_info=style_info)
 
         self._impact = impact_layer

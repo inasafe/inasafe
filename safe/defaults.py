@@ -27,6 +27,7 @@ from PyQt4.QtCore import QSettings
 
 from safe_extras.parameters.boolean_parameter import BooleanParameter
 from safe_extras.parameters.float_parameter import FloatParameter
+from safe_extras.parameters.integer_parameter import IntegerParameter
 from safe_extras.parameters.group_parameter import GroupParameter
 from safe_extras.parameters.text_parameter import TextParameter
 from safe_extras.parameters.unit import Unit
@@ -182,7 +183,7 @@ def age_postprocessor():
     age.must_scroll = False
     age.help_text = tr('Age ratios breakdown.')
     age.description = tr(
-        'Check this option if you wish to calculate a breakdown by age group'
+        'Check this option if you wish to calculate a breakdown by age group '
         'for the affected population. '
     )
 
@@ -203,9 +204,9 @@ def age_postprocessor():
     youth_ratio.description = tr(
         'Youth ratio defines what proportion of the population have not yet '
         'achieved financial independence. The age threshold for youth can '
-        'vary by region - please consult with your local census bureau to find'
-        'out what the relevant threshold is in your region. InaSAFE does not '
-        'impose a particular age ratio scheme - it will break down the '
+        'vary by region - please consult with your local census bureau to '
+        'find out what the relevant threshold is in your region. InaSAFE does '
+        'not impose a particular age ratio scheme - it will break down the '
         'population according to the thresholds you define for your locality. '
         'In InaSAFE, people 0-14 years old are defined as "youth". The '
         'default youth ratio is 0.263.'
@@ -263,26 +264,6 @@ def age_postprocessor():
     return [age]
 
 
-def aggregation_categorical_postprocessor():
-    """Get aggregation categorical postprocessor selectors.
-
-    :return: List of boolean parameter.
-    :rtype: list
-    """
-    aggregation_categorical = BooleanParameter()
-    aggregation_categorical.name = tr('Aggregation categorical')
-    aggregation_categorical.value = True
-    aggregation_categorical.help_text = tr(
-        'Report breakdown by type/category.')
-    aggregation_categorical.description = tr(
-        'Enable the aggregation by categories. For example if you have '
-        'roads classified by type, you will get a report broken down by road '
-        'type for each aggregation area.'
-    )
-
-    return [aggregation_categorical]
-
-
 def road_type_postprocessor():
     """Get road-type parameter for postprocessing.
 
@@ -305,16 +286,40 @@ def road_type_postprocessor():
 def building_type_postprocessor():
     """Get building-type parameter for postprocessing.
 
-    :return: A list of boolean parameter.
+    :return: Selectors to activate building breakdown postprocessor.
     :rtype: list
     """
-    building_type = BooleanParameter()
+    building_type = GroupParameter()
     building_type.name = tr('Building type')
-    building_type.value = True
+    building_type.enable_parameter = True
     building_type.description = tr(
-        'Check this option if you want to enable a building impact report'
+        'Check this option if you want to enable a building impact report '
         'broken down by building type for each aggregation area.'
     )
+
+    unit_threshold = Unit()
+    unit_threshold.name = tr('features')
+    unit_threshold.plural = tr('features')
+    unit_threshold.abbreviation = tr('features')
+    unit_threshold.description = tr(
+        'Number of features.'
+    )
+
+    threshold = IntegerParameter()
+    threshold.name = 'Threshold'
+    threshold.minimum_allowed_value = 1
+    # We shouldn't set a maximum, but there is a bug (#2468).
+    threshold.maximum_allowed_value = 9999
+    threshold.value = 25
+    threshold.unit = unit_threshold
+    threshold.allowed_units = [unit_threshold]
+    threshold.help_text = tr('Threshold')
+    threshold.description = tr(
+        'The threshold is used to consolidate small building usage groups '
+        'which are within this threshold.'
+    )
+
+    building_type.value = [threshold]
 
     return [building_type]
 

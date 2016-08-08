@@ -7,11 +7,14 @@ from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsCoordinateTransform,
     QGis,
+    QgsRectangle,
     QgsVectorLayer,
     QgsRasterLayer)
-from safe.common.exceptions import MemoryLayerCreationError
+from safe.common.exceptions import \
+    MemoryLayerCreationError, BoundingBoxError, InsufficientOverlapError
 from safe.storage.core import read_layer as safe_read_layer
 from safe.storage.layer import Layer
+from safe.storage.utilities import bbox_intersection
 from safe.utilities.i18n import tr
 from safe.utilities.utilities import LOGGER
 
@@ -97,6 +100,28 @@ def extent_to_array(extent, source_crs, dest_crs=None):
         transformed_extent.xMaximum(),
         transformed_extent.yMaximum()]
     return geo_extent
+
+
+def array_to_geo_array(extent, source_crs):
+    """Transform the extent in EPSG:4326.
+    :param extent: A list in the form [xmin, ymin, xmax, ymax].
+    :type extent: list
+    :param source_crs: Coordinate system used for input extent.
+    :type source_crs: QgsCoordinateReferenceSystem
+    :return: A list in the form [xmin, ymin, xmax, ymax] where all
+            coordinates provided are in Geographic / EPSG:4326.
+    :rtype: list
+    .. note:: Delegates to extent_to_array()
+    """
+
+    min_longitude = extent[0]
+    min_latitude = extent[1]
+    max_longitude = extent[2]
+    max_latitude = extent[3]
+
+    rectangle = QgsRectangle(
+        min_longitude, min_latitude, max_longitude, max_latitude)
+    return extent_to_array(rectangle, source_crs)
 
 
 def rectangle_geo_array(rectangle, map_canvas):
@@ -447,3 +472,72 @@ def vector_geometry_string(layer):
         return None
 
     return types.get(layer.geometryType())
+
+
+def get_optimal_extent(
+        hazard_geo_extent, exposure_geo_extent, viewport_geo_extent=None):
+    """A helper function to determine what the optimal extent is.
+
+    Optimal extent should be considered as the intersection between
+    the three inputs. The inasafe library will perform various checks
+    to ensure that the extent is tenable, includes data from both
+    etc.
+
+    This is a thin wrapper around safe.storage.utilities.bbox_intersection
+
+    Typically the result of this function will be used to clip
+    input layers to a common extent before processing.
+
+    :param hazard_geo_extent: An array representing the hazard layer
+        extents in the form [xmin, ymin, xmax, ymax]. It is assumed that
+        the coordinates are in EPSG:4326 although currently no checks are
+        made to enforce this.
+    :type hazard_geo_extent: list
+
+    :param exposure_geo_extent: An array representing the exposure layer
+        extents in the form [xmin, ymin, xmax, ymax]. It is assumed that
+        the coordinates are in EPSG:4326 although currently no checks are
+        made to enforce this.
+    :type exposure_geo_extent: list
+
+    :param viewport_geo_extent: (optional) An array representing the
+        viewport extents in the form [xmin, ymin, xmax, ymax]. It is
+        assumed that the coordinates are in EPSG:4326 although currently
+        no checks are made to enforce this.
+
+        ..note:: We do minimal checking as the inasafe library takes care
+        of it for us.
+
+    :returns: An array containing an extent in the form
+        [xmin, ymin, xmax, ymax]
+        e.g.::
+        [100.03, -1.14, 100.81, -0.73]
+    :rtype: list
+
+    :raises: Any exceptions raised by the InaSAFE library will be
+        propagated.
+    """
+
+    message = tr(
+        'theHazardGeoExtent or theExposureGeoExtent cannot be None.Found: '
+        '/ntheHazardGeoExtent: %s /ntheExposureGeoExtent: %s' %
+        (hazard_geo_extent, exposure_geo_extent))
+
+    if (hazard_geo_extent is None) or (exposure_geo_extent is None):
+        raise BoundingBoxError(message)
+
+    # .. note:: The bbox_intersection function below assumes that
+    # all inputs are in EPSG:4326
+    optimal_extent = bbox_intersection(
+        hazard_geo_extent, exposure_geo_extent, viewport_geo_extent)
+
+    if optimal_extent is None:
+        # Bounding boxes did not overlap
+        message = tr(
+            'Bounding boxes of hazard data, exposure data and viewport '
+            'did not overlap, so no computation was done. Please make '
+            'sure you pan to where the data is and that hazard and '
+            'exposure data overlaps.')
+        raise InsufficientOverlapError(message)
+
+    return optimal_extent

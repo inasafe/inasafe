@@ -289,7 +289,7 @@ class RoutingDialog(QDialog, FORM_CLASS):
         :type algorithm: GeoAlgorithm
 
         :param parameters: The list of parameters.
-        :type parameters: list
+        :type parameters: tuple
         """
         i = 0
         for param in algorithm.parameters:
@@ -384,11 +384,11 @@ class RoutingDialog(QDialog, FORM_CLASS):
             coefficient_road,
             coefficient_flood_edge,
             topology_tolerance,
-            file_name_edge,
-            file_name_idp,
-            file_name_route,
             file_name_exit,
-            file_name_network)
+            file_name_idp,
+            file_name_network,
+            file_name_route,
+            file_name_edge)
         self.set_parameters(model, parameters)
         critical, msg = self.check_algorithm(model)
         if critical:

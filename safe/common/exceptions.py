@@ -241,9 +241,11 @@ class CallGDALError(InaSAFEError):
     not empty"""
     pass
 
+
 class AlignRastersError(Exception):
     """Raised if alignment of hazard and exposure rasters failed"""
     pass
+
 
 class ImportDialogError(InaSAFEError):
     """Raised if import process failed."""
@@ -368,3 +370,8 @@ class MetadataCastError(InaSAFEError):
 class InvalidProvenanceDataError(InaSAFEError):
     """When a path for a metadata xml is not correct"""
     suggestion = 'Check that the IF produced all the required data'
+
+
+class MissingMetadata(InaSAFEError):
+    """When old version of metadata is not properly read."""
+    pass

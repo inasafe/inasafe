@@ -153,7 +153,8 @@ class StylingTest(unittest.TestCase):
             layer.renderer().rasterTransparency().
             transparentSingleValuePixelList())
 
-        self.assertEqual(len(transparency_list), 1)
+        # 2 because there is a default transparency for value = 0
+        self.assertEqual(len(transparency_list), 2)
 
     def test_issue_121(self):
         """Test that point symbol size can be set from style (issue 121).
@@ -212,8 +213,10 @@ class StylingTest(unittest.TestCase):
         """Verify that we give informative errors when style is not correct
            .. seealso:: https://github.com/AIFDR/inasafe/issues/230
         """
-        path = test_data_path('impact', 'polygons_for_styling.shp')
-        vector_layer, _ = load_layer(path)
+        vector_layer = clone_shp_layer(
+            name='polygons_for_styling',
+            include_keywords=True,
+            source_directory=test_data_path('impact'))
 
         style = {
             'legend_title': u'Population Count',

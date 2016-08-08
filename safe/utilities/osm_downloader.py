@@ -22,11 +22,11 @@ import os
 import logging
 import tempfile
 
-from PyQt4.QtNetwork import QNetworkAccessManager, QNetworkReply
+from PyQt4.QtNetwork import QNetworkReply
 from PyQt4.QtGui import QDialog
 
-from safe.utilities.proxy import get_proxy
 from safe.utilities.i18n import tr
+from safe.utilities.gis import qgis_version
 from safe.utilities.file_downloader import FileDownloader
 from safe.common.exceptions import DownloadError, CanceledImportDialogError
 from safe.common.version import get_version
@@ -72,16 +72,17 @@ def download(feature_type, output_base_path, extent, progress_dialog=None):
             min_latitude=min_latitude,
             max_longitude=max_longitude,
             max_latitude=max_latitude
-        )
+    )
 
     url = URL_OSM_PREFIX + feature_type + URL_OSM_SUFFIX
-    url = '{url}?bbox={box}&qgis_version=2'.format(
-        url=url, box=box)
+    url = '{url}?bbox={box}&qgis_version={qgis}'.format(
+        url=url, box=box, qgis=qgis_version())
 
     url += '&inasafe_version=%s' % get_version()
 
     if 'LANG' in os.environ:
-        env_lang = os.environ['LANG']
+        # Get the language only : eg 'en_US' -> 'en'
+        env_lang = os.environ['LANG'].split('_')[0]
         url += '&lang=%s' % env_lang
 
     path = tempfile.mktemp('.shp.zip')
@@ -132,15 +133,8 @@ def fetch_zip(url, output_path, feature_type, progress_dialog=None):
         label_text = tr('Fetching %s' % label_feature_type)
         progress_dialog.setLabelText(label_text)
 
-    # Set Proxy in web page
-    proxy = get_proxy()
-    network_manager = QNetworkAccessManager()
-    if proxy is not None:
-        network_manager.setProxy(proxy)
-
     # Download Process
-    downloader = FileDownloader(
-        network_manager, url, output_path, progress_dialog)
+    downloader = FileDownloader(url, output_path, progress_dialog)
     try:
         result = downloader.download()
     except IOError as ex:

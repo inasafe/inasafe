@@ -24,7 +24,12 @@ import logging
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
 # Import the PyQt and QGIS libraries
-from qgis.core import QgsRectangle
+from qgis.core import (
+    QGis,
+    QgsRectangle,
+    QgsRasterLayer,
+    QgsMapLayerRegistry,
+    QgsProject)
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import (
     QLocale,
@@ -317,6 +322,39 @@ class Plugin(object):
         self.action_import_dialog.triggered.connect(self.show_osm_downloader)
         self.add_action(self.action_import_dialog)
 
+    def _create_add_osm_layer_action(self):
+        """Create action for import OSM Dialog."""
+        icon = resources_path('img', 'icons', 'add-osm-tiles-layer.svg')
+        self.action_add_osm_layer = QAction(
+            QIcon(icon),
+            self.tr('Add OpenStreetMap Tile Layer'),
+            self.iface.mainWindow())
+        self.action_add_osm_layer.setStatusTip(self.tr(
+            'Add OpenStreetMap Tile Layer'))
+        self.action_add_osm_layer.setWhatsThis(self.tr(
+            'Use this to add an OSM layer to your map. '
+            'It needs internet access to function.'))
+        self.action_add_osm_layer.triggered.connect(self.add_osm_layer)
+        self.add_action(self.action_add_osm_layer)
+
+    def _create_add_petajakarta_layer_action(self):
+        """Create action for import OSM Dialog."""
+        icon = resources_path('img', 'icons', 'add-petajakarta-layer.svg')
+        self.action_add_petajakarta_layer = QAction(
+            QIcon(icon),
+            self.tr('Add PetaJakarta Flood Layer'),
+            self.iface.mainWindow())
+        self.action_add_petajakarta_layer.setStatusTip(self.tr(
+            'Add PetaJakarta Flood Layer'))
+        self.action_add_petajakarta_layer.setWhatsThis(self.tr(
+            'Use this to add a PetaJakarta layer to your map. '
+            'It needs internet access to function.'))
+        self.action_add_petajakarta_layer.triggered.connect(
+            self.add_petajakarta_layer)
+        self.add_action(
+            self.action_add_petajakarta_layer,
+            add_to_toolbar=False)
+
     def _create_impact_people_in_buildings_action(self):
         icon = resources_path('img', 'icons', 'people-in-buildings.svg')
         self.people_in_buildings_dialog = QAction(
@@ -466,6 +504,8 @@ class Plugin(object):
         self._create_analysis_wizard_action()
         self._add_spacer_to_menu()
         self._create_osm_downloader_action()
+        self._create_add_osm_layer_action()
+        self._create_add_petajakarta_layer_action()
         self._create_shakemap_converter_action()
         self._create_minimum_needs_action()
         self._create_test_layers_action()
@@ -686,7 +726,7 @@ class Plugin(object):
         dialog.exec_()  # modal
 
     def show_function_centric_wizard(self):
-        """Show the keywords creation wizard."""
+        """Show the function centric wizard."""
         # import here only so that it is AFTER i18n set up
         from safe.gui.tools.wizard_dialog import WizardDialog
 
@@ -718,6 +758,48 @@ class Plugin(object):
         from safe.gui.tools.osm_downloader_dialog import OsmDownloaderDialog
 
         dialog = OsmDownloaderDialog(self.iface.mainWindow(), self.iface)
+        dialog.show()  # non modal
+
+    def show_osm_downloader(self):
+        """Show the OSM buildings downloader dialog."""
+        from safe.gui.tools.osm_downloader_dialog import OsmDownloaderDialog
+
+        dialog = OsmDownloaderDialog(self.iface.mainWindow(), self.iface)
+        dialog.show()  # non modal
+
+    def add_osm_layer(self):
+        """Add OSM tile layer to the map.
+
+        This uses a gdal wrapper around the OSM tile service - see the
+        WorldOSM.gdal file for how it is constructed.
+        """
+        path = resources_path('osm', 'WorldOSM.gdal')
+        layer = QgsRasterLayer(path, self.tr('OpenStreetMap'))
+        registry = QgsMapLayerRegistry.instance()
+
+        # For older versions we just add directly to the top of legend
+        if QGis.QGIS_VERSION_INT < 20400:
+            # True flag adds layer directly to legend
+            registry.addMapLayer(layer, True)
+            return
+        # Otherwise try to add it as the last layer in the list
+        # False flag prevents layer being added to legend
+        registry.addMapLayer(layer, False)
+        root = QgsProject.instance().layerTreeRoot()
+        index = len(root.findLayers()) + 1
+        # LOGGER.info('Inserting layer %s at position %s' % (
+        #    layer.source(), index))
+        root.insertLayer(index, layer)
+        QgsMapLayerRegistry.instance().addMapLayer(layer)
+
+    def add_petajakarta_layer(self):
+        """Add petajakarta layer to the map.
+
+        This uses the PetaJakarta API to fetch the latest floods in JK. See
+        https://petajakarta.org/banjir/en/data/api/#aggregates
+        """
+        from safe.gui.tools.peta_jakarta_dialog import PetaJakartaDialog
+        dialog = PetaJakartaDialog(self.iface.mainWindow(), self.iface)
         dialog.show()  # non modal
 
     def show_batch_runner(self):

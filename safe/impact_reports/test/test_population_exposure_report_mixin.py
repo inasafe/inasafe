@@ -73,12 +73,13 @@ class PopulationExposureReportMixinTest(unittest.TestCase):
             u'Action checklist',
             u'How will warnings be disseminated?',
             u'How will we reach evacuated people?',
-            (u'Are there enough shelters and relief items available '
-             u'for 0 people?'),
             (u'If yes, where are they located and how will we '
              u'distribute them?'),
-            (u'If no, where can we obtain additional relief items '
-             u'from and how will we transport them to here?')]
+            (u'If no, where can we obtain additional relief items and how '
+             u'will we distribute them?'),
+            u'What are the related health risks?',
+            u'Who are the key people responsible for coordination?',
+        ]
         for item in expected_strings:
             self.assertIn(item, blank_report)
 

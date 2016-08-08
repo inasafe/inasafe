@@ -21,7 +21,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from safe.utilities.i18n import tr
 
 inasafe_keyword_version_key = 'keyword_version'
-inasafe_keyword_version = 3.2
+inasafe_keyword_version = '3.3'
 
 # constants
 small_number = 2 ** -53  # I think this is small enough
@@ -356,6 +356,7 @@ exposure_structure = {
         'bridge.')
 }
 
+
 exposure_all = [
     exposure_land_cover,
     exposure_people_in_building,
@@ -488,7 +489,7 @@ generic_vector_hazard_classes = {
     'classes': [
         {
             'key': 'high',
-            'name': tr('high'),
+            'name': tr('High Hazard Zone'),
             'description': tr('The location that has highest impact.'),
             'string_defaults': ['high'],
             'numeric_default_min': 5,
@@ -497,7 +498,7 @@ generic_vector_hazard_classes = {
         },
         {
             'key': 'medium',
-            'name': tr('medium'),
+            'name': tr('Medium Hazard Zone'),
             'description': tr('The location that has medium impact.'),
             'string_defaults': ['medium'],
             'numeric_default_min': 3,
@@ -506,7 +507,7 @@ generic_vector_hazard_classes = {
         },
         {
             'key': 'low',
-            'name': tr('low'),
+            'name': tr('Low Hazard Zone'),
             'description': tr('The location that has lowest impact.'),
             'string_defaults': ['low'],
             'numeric_default_min': 0,
@@ -527,7 +528,7 @@ volcano_vector_hazard_classes = {
     'classes': [
         {
             'key': 'high',
-            'name': tr('high'),
+            'name': tr('High Hazard Zone'),
             'description': tr('The highest hazard class.'),
             'string_defaults': ['Kawasan Rawan Bencana III', 'high'],
             'numeric_default_min': 0,
@@ -536,7 +537,7 @@ volcano_vector_hazard_classes = {
         },
         {
             'key': 'medium',
-            'name': tr('medium'),
+            'name': tr('Medium Hazard Zone'),
             'description': tr('The medium hazard class.'),
             'string_defaults': ['Kawasan Rawan Bencana II', 'medium'],
             'numeric_default_min': 3,
@@ -545,7 +546,7 @@ volcano_vector_hazard_classes = {
         },
         {
             'key': 'low',
-            'name': tr('low'),
+            'name': tr('Low Hazard Zone'),
             'description': tr('The lowest hazard class.'),
             'string_defaults': ['Kawasan Rawan Bencana I', 'low'],
             'numeric_default_min': 5,
@@ -712,7 +713,7 @@ count_exposure_unit = {
     'key': 'count',
     'name': tr('Count'),
     'description': tr(
-        'Number of people (or any other object) per pixel or building.')
+        'Number of people (or any other object) per pixel, building or area.')
 }
 
 density_exposure_unit = {
@@ -756,6 +757,24 @@ volcano_name_field = {
     'description': tr('Attribute where the volcano name is located.')
 }
 
+area_name_field = {
+    'key': 'area_name_field',
+    'name': tr('Name field'),
+    'type': 'field',
+    'description': tr(
+            'Attribute for the area name. We will show the name for each area '
+            'by using this attribute.')
+}
+
+area_id_field = {
+    'key': 'area_id_field',
+    'name': tr('Id field'),
+    'type': 'field',
+    'description': tr(
+            'Attribute for the id on the area. We will group the result by '
+            'this attribute')
+}
+
 # General terminology and descriptive terms
 
 field = {
@@ -784,3 +803,6 @@ value_map = {
         ', "YES", "1" and "Flooded" might all be grouped together as '
         '"FLOODPRONE".')
 }
+
+
+multipart_polygon_key = 'multipart_polygon'

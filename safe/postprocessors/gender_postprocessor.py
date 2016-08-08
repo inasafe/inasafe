@@ -16,6 +16,7 @@ from safe.utilities.i18n import tr
 
 LOGGER = logging.getLogger('InaSAFE')
 
+
 class GenderPostprocessor(AbstractPostprocessor):
     """
     Postprocessor that calculates gender related statistics.
@@ -81,7 +82,7 @@ class GenderPostprocessor(AbstractPostprocessor):
         This indicator reports the total population.
         """
         name = tr('Total')
-        LOGGER.info(self.impact_total)
+        # LOGGER.info(self.impact_total)
         try:
             result = self.impact_total
             result = int(round(result))
