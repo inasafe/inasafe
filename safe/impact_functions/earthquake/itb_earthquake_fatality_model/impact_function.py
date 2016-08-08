@@ -207,7 +207,7 @@ class ITBFatalityFunction(
     def notes(self):
         """Notes and caveats for the IF report.
 
-        :returns: Dicts containing notes.
+        :returns: List containing notes.
         :rtype: list
         """
         fields = [
@@ -217,17 +217,10 @@ class ITBFatalityFunction(
                'survive a shake level of more than 5 on the MMI scale.'),
             tr('The fatality calculation assumes that no fatalities occur for '
                'shake levels below 4 and fatality counts of less than 50 are '
-               'disregarded.')
+               'disregarded.'),
+            tr('Fatality model is from Institut Teknologi Bandung 2012.'),
+            tr('Map shows the estimation of displaced population.')
         ]
-        if self.__class__ != ITBFatalityFunction:
-            fields.append(tr(
-                'Fatality model is from Institut Teknologi Bandung 2012.'))
-            fields.append(tr(
-                'Fatality model is from the Population Vulnerability '
-                'Pager Model.'))
-        fields.extend([
-            tr('Map shows the estimation of displaced population.'),
-        ])
         # include any generic exposure specific notes from definitions.py
         fields = fields + self.exposure_notes()
         # include any generic hazard specific notes from definitions.py
