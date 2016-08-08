@@ -4,11 +4,7 @@
     <gco:CharacterString>None</gco:CharacterString>
   </gmd:fileIdentifier>
   <gmd:language>
-<<<<<<< HEAD
     <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/" codeListValue="eng" codeSpace="ISO 639-2">eng</gmd:LanguageCode>
-=======
-    <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/" codeListValue="eng" codeSpace="ISO 639-2">English</gmd:LanguageCode>
->>>>>>> worldpop_integration
   </gmd:language>
   <gmd:characterSet>
     <gmd:MD_CharacterSetCode codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_CharacterSetCode" codeListValue="utf8" codeSpace="ISOTC211/19115">utf8</gmd:MD_CharacterSetCode>
@@ -164,11 +160,7 @@
         </gmd:MD_Constraints>
       </gmd:resourceConstraints>
       <gmd:language>
-<<<<<<< HEAD
         <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/" codeListValue="eng" codeSpace="ISO 639-2">eng</gmd:LanguageCode>
-=======
-        <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/" codeListValue="eng" codeSpace="ISO 639-2">English</gmd:LanguageCode>
->>>>>>> worldpop_integration
       </gmd:language>
       <gmd:topicCategory>
         <gmd:MD_TopicCategoryCode>geoscientificInformation</gmd:MD_TopicCategoryCode>
@@ -208,11 +200,7 @@
             <gco:CharacterString/>
           </layer_purpose>
           <resolution>
-<<<<<<< HEAD
             <gco:FloatTuple/>
-=======
-            <gco:Tuple/>
->>>>>>> worldpop_integration
           </resolution>
         </inasafe>
       </gmd:supplementalInformation>
@@ -302,8 +290,4 @@
       </gmd:maintenanceNote>
     </gmd:MD_MaintenanceInformation>
   </gmd:metadataMaintenance>
-<<<<<<< HEAD
 </gmd:MD_Metadata>
-=======
-</gmd:MD_Metadata>
->>>>>>> worldpop_integration
