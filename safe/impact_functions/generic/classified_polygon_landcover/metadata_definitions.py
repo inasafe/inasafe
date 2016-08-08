@@ -39,6 +39,7 @@ class ClassifiedPolygonHazardLandCoverFunctionMetadata(ImpactFunctionMetadata):
             concrete impact function.
         :rtype: dict
         """
+        title = tr('Land cover affected')
         dict_meta = {
             'id': 'ClassifiedPolygonHazardLandCoverFunction',
             'name': tr('Classified polygon hazard on land cover'),
@@ -73,8 +74,8 @@ class ClassifiedPolygonHazardLandCoverFunctionMetadata(ImpactFunctionMetadata):
             'legend_title': '',
             'legend_units': '',
             'legend_notes': '',
-            'map_title': tr('Affected Land Cover'),
-            'layer_name': tr('Land cover affected'),
+            'map_title': title,
+            'layer_name': title,
             'layer_requirements': {
                 'hazard': {
                     'layer_mode': layer_mode_classified,

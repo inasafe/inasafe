@@ -53,6 +53,7 @@ class TsunamiRasterHazardLandCoverFunctionMetadata(ImpactFunctionMetadata):
             concrete impact function.
         :rtype: dict
         """
+        title = tr('Land cover affected by tsunami')
         dict_meta = {
             'id': 'RasterTsunamiHazardLandCoverFunction',
             'name': tr('Raster tsunami on land cover'),
@@ -88,8 +89,8 @@ class TsunamiRasterHazardLandCoverFunctionMetadata(ImpactFunctionMetadata):
             'legend_title': '',
             'legend_units': '',
             'legend_notes': '',
-            'map_title': tr('Affected Land Cover'),
-            'layer_name': tr('Land cover affected'),
+            'map_title': title,
+            'layer_name': title,
             'layer_requirements': {
                 'hazard': {
                     'layer_mode': layer_mode_continuous,

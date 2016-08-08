@@ -55,6 +55,7 @@ class PAGFatalityMetadata(ITBFatalityMetadata):
             concrete impact function.
         :rtype: dict
         """
+        title = tr('People affected by earthquake')
         dict_meta = {
             'id': 'PAGFatalityFunction',
             'name': tr('Earthquake PAGER fatality function'),
@@ -74,11 +75,11 @@ class PAGFatalityMetadata(ITBFatalityMetadata):
             'output': '',
             'actions': '',
             'limitations': [],
-            'map_title': 'Earthquake impact to population',
+            'map_title': title,
+            'layer_name': title,
             'legend_title': '',
             'legend_units': '',
             'legend_notes': '',
-            'layer_name': '',
             'citations': [
                 {
                     'text': tr(
