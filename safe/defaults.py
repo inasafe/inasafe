@@ -35,6 +35,7 @@ from safe_extras.parameters.unit import Unit
 from safe.common.resource_parameter import ResourceParameter
 from safe.utilities.i18n import tr
 from safe.utilities.resources import resources_path
+from collections import OrderedDict
 
 
 def define_defaults():
