@@ -552,7 +552,8 @@ exposure_land_cover = {
         'The <b>land cover</b> exposure data describes features on '
         'the surface of the earth that might be exposed to a particular '
         ' hazard. This might include crops, forest and urban areas. '),
-    'notes': [  # these are additional generic notes for landcover - IF has more
+    'notes': [
+        # these are additional generic notes for landcover - IF has more
         tr('Areas reported for land cover have not been rounded.'),
     ],
     'actions': [  # these are additional generic actions - IF has more
