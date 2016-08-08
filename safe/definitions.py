@@ -594,6 +594,10 @@ exposure_land_cover = {
         # these are additional generic notes for landcover - IF has more
         tr('Areas reported for land cover have not been rounded.'),
     ],
+    'continuous_notes': [  # notes specific to continuous data
+    ],
+    'classified_notes': [  # notes specific to classified data
+    ],
     'actions': [  # these are additional generic actions - IF has more
         tr('What type of crops are planted in the affected fields?'),
         tr('How long will the activity or function of the land cover be '
@@ -633,6 +637,10 @@ exposure_population = {
            'which may cause discrepancies when adding values.'),
 
     ],
+    'continuous_notes': [  # notes specific to continuous data
+    ],
+    'classified_notes': [  # notes specific to classified data
+    ],
     'actions': [  # these are additional generic actions - IF has more
         tr('How will warnings be disseminated?'),
         tr('What are people\'s likely movements?'),
@@ -669,6 +677,10 @@ exposure_people_in_building = {
         'people to buildings assumes that all people and buildings in the '
         'area are mapped.</p>'),
     'notes': exposure_population['notes'],
+    'continuous_notes': [  # notes specific to continuous data
+    ],
+    'classified_notes': [  # notes specific to classified data
+    ],
     'actions': exposure_population['actions'],
     'citations': [
         {
@@ -697,6 +709,10 @@ exposure_road = {
         # currently to it is safe to use inundated here ...
         tr('Roads are closed if they are affected.'),
         tr('Roads are open if they are not affected.')
+    ],
+    'continuous_notes': [  # notes specific to continuous data
+    ],
+    'classified_notes': [  # notes specific to classified data
     ],
     'actions': [  # these are additional generic actions - IF has more
         tr('Which roads can be used to evacuate people or to distribute '
@@ -727,6 +743,10 @@ exposure_structure = {
     'notes': [  # additional generic notes for structures - IF has more
         tr('Numbers reported for structures have not been rounded.')
     ],
+    'continuous_notes': [  # notes specific to continuous data
+    ],
+    'classified_notes': [  # notes specific to classified data
+    ],
     'actions': [  # these are additional generic actions - IF has more
         tr('Which structures have warning capacity (eg. sirens, speakers, '
            'etc.)?'),
@@ -756,6 +776,10 @@ exposure_place = {
         tr('Where places are represented as a single point, the effect of the '
            'hazard over the entire place may differ from the point at which '
            'the place is represented on the map.'),
+    ],
+    'continuous_notes': [  # notes specific to continuous data
+    ],
+    'classified_notes': [  # notes specific to classified data
     ],
     'actions': [  # these are additional generic actions - IF has more
     ],
