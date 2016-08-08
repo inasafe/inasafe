@@ -365,6 +365,14 @@ hazard_category = {
 }
 
 # Hazard
+caveat_simulation = tr(
+    'The extent and severity of the mapped scenario or hazard zones '
+    'may not be consistent with future events.')
+caveat_local_conditions = tr(
+    'The impacts on roads, people, buildings and other exposure '
+    'elements may differ from the analysis results due to local '
+    'conditions such as terrain and infrastructure type.')
+
 hazard_generic = {
     'key': 'generic',
     'name': tr('Generic'),
@@ -373,11 +381,16 @@ hazard_generic = {
         'data have been classified or generalised. For example: earthquake, '
         'flood, volcano, tsunami, landslide, smoke haze or strong wind.'),
     'notes': [  # additional generic notes for generic - IF has more
-        tr('The extent and severity of the mapped scenario or hazard zones '
-           'may not be consistent with future events.'),
-        tr('The impacts on roads, people, buildings and other exposure '
-           'elements may differ from the analysis results due to local '
-           'conditions such as terrain and infrastructure type.'),
+        caveat_simulation,
+        caveat_local_conditions,
+    ],
+    'continuous_notes': [  # notes specific to continuous data
+    ],
+    'classified_notes': [  # notes specific to classified data
+    ],
+    'single_event_notes': [  # notes specific to single event data
+    ],
+    'multi_event_notes': [  # notes specific to multi event data
     ],
     'actions': [  # these are additional generic actions - IF has more
 
@@ -398,11 +411,16 @@ hazard_earthquake = {
         'ground that occurs as a result of volcanic activity or movement '
         'in the earth\'s crust.'),
     'notes': [  # additional generic notes for earthquake - IF has more
-        tr('The extent and severity of the mapped scenario or hazard zones '
-           'may not be consistent with future events.'),
-        tr('The impacts on roads, people, buildings and other exposure '
-           'elements may differ from the analysis results due to local '
-           'conditions such as terrain and infrastructure type.'),
+        caveat_simulation,
+        caveat_local_conditions,
+    ],
+    'continuous_notes': [  # notes specific to continuous data
+    ],
+    'classified_notes': [  # notes specific to classified data
+    ],
+    'single_event_notes': [  # notes specific to single event data
+    ],
+    'multi_event_notes': [  # notes specific to multi event data
     ],
     'actions': [  # these are additional generic actions - IF has more
 
@@ -426,11 +444,16 @@ hazard_flood = {
         'The effect of a <b>flood</b> is for land that is normally dry '
         'to become wet.'),
     'notes': [  # additional generic notes for flood - IF has more
-        tr('The extent and severity of the mapped scenario or hazard zones '
-           'may not be consistent with future events.'),
-        tr('The impacts on roads, people, buildings and other exposure '
-           'elements may differ from the analysis results due to local '
-           'conditions such as terrain and infrastructure type.'),
+        caveat_simulation,
+        caveat_local_conditions,
+    ],
+    'continuous_notes': [  # notes specific to continuous data
+    ],
+    'classified_notes': [  # notes specific to classified data
+    ],
+    'single_event_notes': [  # notes specific to single event data
+    ],
+    'multi_event_notes': [  # notes specific to multi event data
     ],
     'actions': [  # these are additional generic actions - IF has more
 
@@ -451,11 +474,16 @@ hazard_volcanic_ash = {
         'and volcanic glass, created during volcanic eruptions, less than '
         '2 mm (0.079 inches) in diameter.'),
     'notes': [  # additional generic notes for volcanic ash - IF has more
-        tr('The extent and severity of the mapped scenario or hazard zones '
-           'may not be consistent with future events.'),
-        tr('The impacts on roads, people, buildings and other exposure '
-           'elements may differ from the analysis results due to local '
-           'conditions such as terrain and infrastructure type.'),
+        caveat_simulation,
+        caveat_local_conditions,
+    ],
+    'continuous_notes': [  # notes specific to continuous data
+    ],
+    'classified_notes': [  # notes specific to classified data
+    ],
+    'single_event_notes': [  # notes specific to single event data
+    ],
+    'multi_event_notes': [  # notes specific to multi event data
     ],
     'actions': [  # these are additional generic actions - IF has more
 
@@ -478,11 +506,16 @@ hazard_tsunami = {
         'wave that strikes land may cause massive destruction and '
         'flooding.'),
     'notes': [  # additional generic notes for tsunami - IF has more
-        tr('The extent and severity of the mapped scenario or hazard zones '
-           'may not be consistent with future events.'),
-        tr('The impacts on roads, people, buildings and other exposure '
-           'elements may differ from the analysis results due to local '
-           'conditions such as terrain and infrastructure type.'),
+        caveat_simulation,
+        caveat_local_conditions,
+    ],
+    'continuous_notes': [  # notes specific to continuous data
+    ],
+    'classified_notes': [  # notes specific to classified data
+    ],
+    'single_event_notes': [  # notes specific to single event data
+    ],
+    'multi_event_notes': [  # notes specific to multi event data
     ],
     'actions': [  # these are additional generic actions - IF has more
 
@@ -504,14 +537,19 @@ hazard_volcano = {
         'from below the earth\'s surface. The type of material '
         'ejected depends on the type of <b>volcano</b>.'),
     'notes': [  # additional generic notes for volcano
-        tr('The extent and severity of the mapped scenario or hazard zones '
-           'may not be consistent with future events.'),
-        tr('The impacts on roads, people, buildings and other exposure '
-           'elements may differ from the analysis results due to local '
-           'conditions such as terrain and infrastructure type.'),
+        caveat_simulation,
+        caveat_local_conditions,
     ],
     'actions': [  # these are additional generic actions - IF has more
 
+    ],
+    'continuous_notes': [  # notes specific to continuous data
+    ],
+    'classified_notes': [  # notes specific to classified data
+    ],
+    'single_event_notes': [  # notes specific to single event data
+    ],
+    'multi_event_notes': [  # notes specific to multi event data
     ],
     'citations': [
         {
@@ -556,6 +594,10 @@ exposure_land_cover = {
         # these are additional generic notes for landcover - IF has more
         tr('Areas reported for land cover have not been rounded.'),
     ],
+    'continuous_notes': [  # notes specific to continuous data
+    ],
+    'classified_notes': [  # notes specific to classified data
+    ],
     'actions': [  # these are additional generic actions - IF has more
         tr('What type of crops are planted in the affected fields?'),
         tr('How long will the activity or function of the land cover be '
@@ -595,19 +637,27 @@ exposure_population = {
            'which may cause discrepancies when adding values.'),
 
     ],
+    'continuous_notes': [  # notes specific to continuous data
+    ],
+    'classified_notes': [  # notes specific to classified data
+    ],
     'actions': [  # these are additional generic actions - IF has more
-        tr('Which group or population is most affected?'),
-        tr('Who are the vulnerable people in the population and why?'),
         tr('How will warnings be disseminated?'),
         tr('What are people\'s likely movements?'),
-        tr('What are the security factors for the affected population?'),
+        tr('Which group or population is most affected?'),
+        tr('Who are the vulnerable people in the population and why?'),
+        tr('What are people\'s likely movements?'),
+        tr('What are the security factors for the affected people?'),
         tr('What are the security factors for relief responders?'),
-        tr('How will we reach evacuated people?'),
-        tr('What kind of food does the population normally consume?'),
-        tr('What are the critical non-food items required by the affected '
-           'population?'),
+        tr('How will we reach displaced people?'),
+        tr('What kind of food does the population normally consume?'
+           'What are the critical non-food items required by the '
+           'affected population?'),
+        tr('If yes, where are they located and how will we distribute them?'),
+        tr('If no, where can we obtain additional relief items and how'
+           ' will we distribute them?'),
         tr('What are the related health risks?'),
-        tr('Who are the key people responsible for coordination?')
+        tr('Who are the key people responsible for coordination?'),
     ],
     'citations': [
         {
@@ -627,6 +677,10 @@ exposure_people_in_building = {
         'people to buildings assumes that all people and buildings in the '
         'area are mapped.</p>'),
     'notes': exposure_population['notes'],
+    'continuous_notes': [  # notes specific to continuous data
+    ],
+    'classified_notes': [  # notes specific to classified data
+    ],
     'actions': exposure_population['actions'],
     'citations': [
         {
@@ -655,6 +709,10 @@ exposure_road = {
         # currently to it is safe to use inundated here ...
         tr('Roads are closed if they are affected.'),
         tr('Roads are open if they are not affected.')
+    ],
+    'continuous_notes': [  # notes specific to continuous data
+    ],
+    'classified_notes': [  # notes specific to classified data
     ],
     'actions': [  # these are additional generic actions - IF has more
         tr('Which roads can be used to evacuate people or to distribute '
@@ -685,6 +743,10 @@ exposure_structure = {
     'notes': [  # additional generic notes for structures - IF has more
         tr('Numbers reported for structures have not been rounded.')
     ],
+    'continuous_notes': [  # notes specific to continuous data
+    ],
+    'classified_notes': [  # notes specific to classified data
+    ],
     'actions': [  # these are additional generic actions - IF has more
         tr('Which structures have warning capacity (eg. sirens, speakers, '
            'etc.)?'),
@@ -714,6 +776,10 @@ exposure_place = {
         tr('Where places are represented as a single point, the effect of the '
            'hazard over the entire place may differ from the point at which '
            'the place is represented on the map.'),
+    ],
+    'continuous_notes': [  # notes specific to continuous data
+    ],
+    'classified_notes': [  # notes specific to classified data
     ],
     'actions': [  # these are additional generic actions - IF has more
     ],

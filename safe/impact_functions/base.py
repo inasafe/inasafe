@@ -452,14 +452,22 @@ class ImpactFunction(object):
             'notes']
         :rtype: list, None
         """
+        notes = []
         exposure_name = self.exposure.keyword('exposure')
         for exposure in exposure_all:
             try:
                 if exposure['key'] == exposure_name:
-                    return exposure['notes']
+                    if 'notes' in exposure:
+                        notes += exposure['notes']
+                if self.exposure.keywords['layer_mode'] == 'classified':
+                    if 'classified_notes' in exposure:
+                        notes += exposure['classified_notes']
+                if self.exposure.keywords['layer_mode'] == 'continuous':
+                    if 'continuous_notes' in exposure:
+                        notes += exposure['continuous_notes']
             except KeyError:
                 pass
-        return None
+        return notes
 
     def hazard_actions(self):
         """Get the hazard specific actions defined in definitions.
@@ -500,14 +508,29 @@ class ImpactFunction(object):
             'notes']
         :rtype: list, None
         """
+        notes = []
         hazard_name = self.hazard.keyword('hazard')
+
         for hazard in hazard_all:
             try:
                 if hazard['key'] == hazard_name:
-                    return hazard['notes']
+                    if 'notes' in hazard:
+                        notes += hazard['notes']
+                if self.hazard.keywords['layer_mode'] == 'classified':
+                    if 'classified_notes' in hazard:
+                        notes += hazard['classified_notes']
+                if self.hazard.keywords['layer_mode'] == 'continuous':
+                    if 'continuous_notes' in hazard:
+                        notes += hazard['continuous_notes']
+                if self.hazard.keywords['hazard_category'] == 'single_event':
+                    if 'single_event_notes' in hazard:
+                        notes += hazard['single_event_notes']
+                if self.hazard.keywords['hazard_category'] == 'multiple_event':
+                    if 'multi_event_notes' in hazard:
+                        notes += hazard['multi_event_notes']
             except KeyError:
                 pass
-        return None
+        return notes
 
     def action_checklist(self):
         """Return the action check list.
