@@ -90,7 +90,7 @@ class TsunamiRasterBuildingFunction(
                 high_max.value, high_max.unit.abbreviation),
             tr('Buildings are closed if they are in low, medium, high, or '
                'very high tsunami hazard zone.'),
-            tr('Buildings are opened if they are in dry zone.')
+            tr('Buildings are open if they are in dry zone.')
         ]
         # include any generic exposure specific notes from definitions.py
         fields = fields + self.exposure_notes()
@@ -208,7 +208,7 @@ class TsunamiRasterBuildingFunction(
 
         extra_keywords = {
             'target_field': self.target_field,
-            'map_title': self.metadata().key('map_title'),
+            'map_title': self.map_title(),
             'legend_title': self.metadata().key('legend_title'),
             'legend_units': self.metadata().key('legend_units'),
             'buildings_total': total_features,

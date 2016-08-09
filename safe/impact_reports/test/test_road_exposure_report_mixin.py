@@ -78,7 +78,7 @@ class RoadExposureReportMixinTest(unittest.TestCase):
             'impact table': {
                 'attributes': [
                     'Road Type', 'Unaffected', 'Total'],
-                'fields': []
+                'fields': [['Total (m)', 0, 0]]
             },
             'notes': {'fields': [], 'title': 'Notes and assumptions'},
             'question': ''}
@@ -91,7 +91,8 @@ class RoadExposureReportMixinTest(unittest.TestCase):
         expected = [
             ['Main (m)', 2, 131.3, 133.3],
             ['Side (m)', 5.5, 4.5, 10],
-            ['Bike (m)', 1.2, 0.0, 1.2]
+            ['Bike (m)', 1.2, 0.0, 1.2],
+            ['Total (m)', 8.7, 135.8, 144.5]
         ]
 
         self.assertEquals(roads_breakdown, expected)
@@ -137,7 +138,8 @@ class RoadExposureReportMixinTest(unittest.TestCase):
                 'fields': [
                     ['Main (m)', 2, 131.3, 133.3],
                     ['Side (m)', 5.5, 4.5, 10],
-                    ['Bike (m)', 1.2, 0.0, 1.2]
+                    ['Bike (m)', 1.2, 0.0, 1.2],
+                    ['Total (m)', 8.7, 135.8, 144.5]
                 ]
             },
             'notes': {

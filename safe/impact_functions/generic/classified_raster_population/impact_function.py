@@ -23,6 +23,7 @@ from safe.impact_functions.core import (
     population_rounding, has_no_data, no_population_impact_message)
 from safe.storage.raster import Raster
 from safe.common.utilities import (
+    format_int,
     humanize_class,
     create_classes,
     create_label)
@@ -71,7 +72,7 @@ class ClassifiedRasterHazardPopulationFunction(
         """
         fields = [
             tr('Total population in the analysis area: %s') %
-            population_rounding(self.total_population),
+            format_int(population_rounding(self.total_population)),
             tr('<sup>1</sup>People need evacuation if they are in a hazard '
                'zone.')
         ]
@@ -142,13 +143,13 @@ class ClassifiedRasterHazardPopulationFunction(
         # Count totals
         self.total_population = int(numpy.nansum(population))
         self.affected_population[
-            tr('Population in Low hazard class areas')] = int(
+            tr('Population in low hazard zone')] = int(
                 numpy.nansum(low_hazard_population))
         self.affected_population[
-            tr('Population in Medium hazard class areas')] = int(
+            tr('Population in medium hazard zone')] = int(
                 numpy.nansum(medium_hazard_population))
         self.affected_population[
-            tr('Population in High hazard class areas')] = int(
+            tr('Population in high hazard zone')] = int(
                 numpy.nansum(high_hazard_population))
         self.unaffected_population = (
             self.total_population - self.total_affected_population)

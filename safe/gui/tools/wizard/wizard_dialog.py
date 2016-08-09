@@ -12,11 +12,6 @@ Contact : ole.moller.nielsen@gmail.com
 .. todo:: Check raster is single band
 
 """
-__author__ = 'qgis@borysjurgiel.pl'
-__revision__ = '$Format:%H$'
-__date__ = '21/02/2011'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
 
 import logging
 import json
@@ -81,6 +76,8 @@ from step_kw25_classification import StepKwClassification
 from step_kw30_field import StepKwField
 from step_kw35_resample import StepKwResample
 from step_kw40_classify import StepKwClassify
+from step_kw42_name_field import StepKwNameField
+from step_kw43_population_field import StepKwPopulationField
 from step_kw45_extrakeywords import StepKwExtraKeywords
 from step_kw50_aggregation import StepKwAggregation
 from step_kw55_source import StepKwSource
@@ -105,6 +102,12 @@ from step_fc75_extent_disjoint import StepFcExtentDisjoint
 from step_fc80_params import StepFcParams
 from step_fc85_summary import StepFcSummary
 from.step_fc90_analysis import StepFcAnalysis
+
+__author__ = 'qgis@borysjurgiel.pl'
+__revision__ = '$Format:%H$'
+__date__ = '21/02/2011'
+__copyright__ = (
+    'Copyright 2012, Australia Indonesia Facility for Disaster Reduction')
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -178,6 +181,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.step_kw_field = StepKwField(self)
         self.step_kw_resample = StepKwResample(self)
         self.step_kw_classify = StepKwClassify(self)
+        self.step_kw_name_field = StepKwNameField(self)
+        self.step_kw_population_field = StepKwPopulationField(self)
         self.step_kw_extrakeywords = StepKwExtraKeywords(self)
         self.step_kw_aggregation = StepKwAggregation(self)
         self.step_kw_source = StepKwSource(self)
@@ -211,6 +216,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.stackedWidget.addWidget(self.step_kw_field)
         self.stackedWidget.addWidget(self.step_kw_resample)
         self.stackedWidget.addWidget(self.step_kw_classify)
+        self.stackedWidget.addWidget(self.step_kw_name_field)
+        self.stackedWidget.addWidget(self.step_kw_population_field)
         self.stackedWidget.addWidget(self.step_kw_extrakeywords)
         self.stackedWidget.addWidget(self.step_kw_aggregation)
         self.stackedWidget.addWidget(self.step_kw_source)
@@ -812,6 +819,15 @@ class WizardDialog(QDialog, FORM_CLASS):
                 # exposure mapping
                 keyword = 'value_mapping'
             keywords[keyword] = json.dumps(value_map)
+
+        name_field = self.step_kw_name_field.selected_field()
+        if name_field:
+            keywords['name_field'] = name_field
+
+        population_field = self.step_kw_population_field.selected_field()
+        if population_field:
+            keywords['population_field'] = population_field
+
         extra_keywords = self.step_kw_extrakeywords.selected_extra_keywords()
         for key in extra_keywords:
             keywords[key] = extra_keywords[key]

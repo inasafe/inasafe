@@ -85,19 +85,19 @@ class AshRasterPlacesFunction(
                 very_low_max.unit.abbreviation,
                 low_max.value,
                 low_max.unit.abbreviation),
-            tr('Medium tsunami hazard zone is defined as ash depth '
+            tr('Medium ash hazard zone is defined as ash depth '
                'is more than %.1f %s but less than %.1f %s') % (
                 low_max.value,
                 low_max.unit.abbreviation,
                 medium_max.value,
                 medium_max.unit.abbreviation),
-            tr('High tsunami hazard zone is defined as ash depth is '
+            tr('High ash hazard zone is defined as ash depth is '
                'more than %.1f %s but less than %.1f %s') % (
                 medium_max.value,
                 medium_max.unit.abbreviation,
                 high_max.value,
                 high_max.unit.abbreviation),
-            tr('Very high tsunami hazard zone is defined as ash depth '
+            tr('Very high ash hazard zone is defined as ash depth '
                'is more than %.1f %s') % (
                 high_max.value, high_max.unit.abbreviation)
         ]
@@ -108,7 +108,7 @@ class AshRasterPlacesFunction(
         return fields
 
     def run(self):
-        """Tsunami raster impact to buildings (e.g. from Open Street Map)."""
+        """Ash raster impact to buildings (e.g. from Open Street Map)."""
 
         # Range for ash hazard
         group_parameters = self.parameters['group_threshold']
@@ -241,7 +241,7 @@ class AshRasterPlacesFunction(
 
         extra_keywords = {
             'target_field': self.target_field,
-            'map_title': self.metadata().key('map_title'),
+            'map_title': self.map_title(),
             'legend_title': self.metadata().key('legend_title'),
             'legend_units': self.metadata().key('legend_units'),
         }

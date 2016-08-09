@@ -80,6 +80,11 @@ class FloodPolygonRoadsFunction(
         # Get parameters from layer's keywords
         self.hazard_class_attribute = self.hazard.keyword('field')
         self.hazard_class_mapping = self.hazard.keyword('value_map')
+        # There is no wet in the class mapping
+        if self.wet not in self.hazard_class_mapping:
+            raise ZeroImpactException(tr(
+                'There is no flooded area in the hazard layers, thus there '
+                'is no affected road.'))
         self.exposure_class_attribute = self.exposure.keyword(
             'road_class_field')
         exposure_value_mapping = self.exposure.keyword('value_mapping')
@@ -220,7 +225,7 @@ class FloodPolygonRoadsFunction(
         impact_data = self.generate_data()
 
         extra_keywords = {
-            'map_title': self.metadata().key('map_title'),
+            'map_title': self.map_title(),
             'legend_title': self.metadata().key('legend_title'),
             'target_field': self.target_field
         }

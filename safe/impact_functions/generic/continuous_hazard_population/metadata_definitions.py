@@ -58,6 +58,7 @@ class ContinuousHazardPopulationMetadata(ImpactFunctionMetadata):
             concrete impact function.
         :rtype: dict
         """
+        title = tr('People affected')
         dict_meta = {
             'id': 'ContinuousHazardPopulationFunction',
             'name': tr('Continuous raster hazard on population'),
@@ -89,14 +90,19 @@ class ContinuousHazardPopulationMetadata(ImpactFunctionMetadata):
                 'Provide details about how many people would likely '
                 'be impacted in each category.'),
             'limitations': [tr('Only three categories can be used.')],
-            'citations': [],
-            'map_title': tr('People in each hazard areas (low, medium, high)'),
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ],
+            'map_title': title,
+            'layer_name': title,
             'legend_title': tr('Number of People'),
             'legend_units': tr('(people per cell)'),
             'legend_notes': tr(
                 'Thousand separator is represented by %s' %
                 get_thousand_separator()),
-            'layer_name': tr('Population might be impacted'),
             'layer_requirements': {
                 'hazard': {
                     'layer_mode': layer_mode_continuous,

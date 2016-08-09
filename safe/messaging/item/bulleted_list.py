@@ -24,7 +24,7 @@ from abstract_list import AbstractList
 class BulletedList(AbstractList):
     """A class to model free text in the messaging system """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, bullet_style=None, *args, **kwargs):
         """Creates a Text object to contain a list of Text objects
 
         Strings can be passed and are automatically converted in to
@@ -37,6 +37,7 @@ class BulletedList(AbstractList):
         how-to-pass-arguments-efficiently-kwargs-in-python
         """
         super(BulletedList, self).__init__(*args, **kwargs)
+        self.bullet_style = bullet_style
 
     def to_html(self):
         """Render a Text MessageElement as html.
@@ -50,7 +51,11 @@ class BulletedList(AbstractList):
         else:
             html = '<ul%s>\n' % self.html_attributes()
             for item in self.items:
-                html += '<li>%s</li>\n' % item.to_html()
+                if self.bullet_style:
+                    html += '<li class="%s">%s</li>\n' % (
+                        self.bullet_style, item.to_html())
+                else:
+                    html += '<li>%s</li>\n' % item.to_html()
             html += '</ul>'
             return html
 

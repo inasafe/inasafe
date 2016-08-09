@@ -322,7 +322,7 @@ class TsunamiRasterRoadsFunction(
                 high_max.value, high_max.unit.abbreviation),
             tr('Roads are closed if they are in low, medium, high, or very '
                'high tsunami hazard zone.'),
-            tr('Roads are opened if they are in dry zone.')
+            tr('Roads are open if they are in dry zone.')
         ]
         # include any generic exposure specific notes from definitions.py
         fields = fields + self.exposure_notes()
@@ -492,7 +492,7 @@ class TsunamiRasterRoadsFunction(
         impact_data = self.generate_data()
 
         extra_keywords = {
-            'map_title': self.metadata().key('map_title'),
+            'map_title': self.map_title(),
             'legend_title': self.metadata().key('legend_title'),
             'target_field': target_field
         }

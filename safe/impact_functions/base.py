@@ -66,7 +66,7 @@ from safe.utilities.utilities import (
 )
 from safe.utilities.memory_checker import check_memory_usage
 from safe.utilities.i18n import tr
-from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.keyword_io import KeywordIO, definition
 from safe.utilities.gis import (
     convert_to_safe_layer,
     is_point_layer,
@@ -452,14 +452,22 @@ class ImpactFunction(object):
             'notes']
         :rtype: list, None
         """
+        notes = []
         exposure_name = self.exposure.keyword('exposure')
         for exposure in exposure_all:
             try:
                 if exposure['key'] == exposure_name:
-                    return exposure['notes']
+                    if 'notes' in exposure:
+                        notes += exposure['notes']
+                if self.exposure.keywords['layer_mode'] == 'classified':
+                    if 'classified_notes' in exposure:
+                        notes += exposure['classified_notes']
+                if self.exposure.keywords['layer_mode'] == 'continuous':
+                    if 'continuous_notes' in exposure:
+                        notes += exposure['continuous_notes']
             except KeyError:
                 pass
-        return None
+        return notes
 
     def hazard_actions(self):
         """Get the hazard specific actions defined in definitions.
@@ -500,14 +508,29 @@ class ImpactFunction(object):
             'notes']
         :rtype: list, None
         """
+        notes = []
         hazard_name = self.hazard.keyword('hazard')
+
         for hazard in hazard_all:
             try:
                 if hazard['key'] == hazard_name:
-                    return hazard['notes']
+                    if 'notes' in hazard:
+                        notes += hazard['notes']
+                if self.hazard.keywords['layer_mode'] == 'classified':
+                    if 'classified_notes' in hazard:
+                        notes += hazard['classified_notes']
+                if self.hazard.keywords['layer_mode'] == 'continuous':
+                    if 'continuous_notes' in hazard:
+                        notes += hazard['continuous_notes']
+                if self.hazard.keywords['hazard_category'] == 'single_event':
+                    if 'single_event_notes' in hazard:
+                        notes += hazard['single_event_notes']
+                if self.hazard.keywords['hazard_category'] == 'multiple_event':
+                    if 'multi_event_notes' in hazard:
+                        notes += hazard['multi_event_notes']
             except KeyError:
                 pass
-        return None
+        return notes
 
     def action_checklist(self):
         """Return the action check list.
@@ -515,7 +538,7 @@ class ImpactFunction(object):
         .. versionadded:: 3.5
 
         :return: The action check list as dict.
-        :rtype: dict
+        :rtype: list
         """
         # Include actions defined in the mixin
         fields = self.extra_actions()
@@ -539,6 +562,23 @@ class ImpactFunction(object):
         # include any generic hazard specific notes from definitions.py
         fields = fields + self.hazard_notes()
         return fields
+
+    def map_title(self):
+        """Get the map title formatted according to our standards.
+
+        ..versionadded:: 3.5
+
+        See https://github.com/inasafe/inasafe/blob/develop/
+            docs/reporting-standards.md
+
+        :returns: A localised string containing the map title.
+        :rtype: basestring
+        """
+        category = self.hazard.keyword('hazard_category')
+        category = definition(category)
+        short_name = category['short_name']
+        title = self.metadata().key('map_title') + ' ' + short_name
+        return title
 
     @property
     def aggregation(self):
@@ -770,7 +810,7 @@ class ImpactFunction(object):
         if self._question is None:
             function_title = self.metadata().as_dict()['title']
             return (tr('In the event of %(hazard)s how many '
-                       '%(exposure)s might %(impact)s')
+                       '%(exposure)s might %(impact)s?')
                     % {'hazard': self.hazard.name.lower(),
                        'exposure': self.exposure.name.lower(),
                        'impact': function_title.lower()})
@@ -851,6 +891,9 @@ class ImpactFunction(object):
                 'Check that you are not zoomed in too much and thus '
                 'excluding %s from your analysis area.') % (
                     exposure_layer_title))
+            check_list.add(tr(
+                'Check that the hazard layer (%s) has affected area.') % (
+                hazard_layer_title))
             check_list.add(tr(
                 'Check that the exposure is not no-data or zero for the '
                 'entire area of your analysis.'))

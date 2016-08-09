@@ -639,13 +639,28 @@ class PostprocessorManager(QtCore.QObject):
                     parameters['elderly_ratio'] = elderly_ratio
 
                 if key == 'BuildingType' or key == 'RoadType':
-                    try:
+                    if key == 'BuildingType':
                         key_attribute = self.keyword_io.read_keywords(
-                            self.aggregator.exposure_layer, 'key_attribute')
-                    except KeywordNotFoundError:
-                        # use 'type' as default
-                        key_attribute = 'type'
+                            self.aggregator.exposure_layer,
+                            'structure_class_field'
+                        )
+                    elif key == 'RoadType':
+                        key_attribute = self.keyword_io.read_keywords(
+                            self.aggregator.exposure_layer,
+                            'road_class_field'
+                        )
+                    else:
+                        try:
+                            key_attribute = self.keyword_io.read_keywords(
+                                self.aggregator.exposure_layer,
+                                'key_attribute'
+                            )
+                        except KeywordNotFoundError:
+                            # use 'type' as default
+                            key_attribute = 'type'
+
                     parameters['key_attribute'] = key_attribute
+                    LOGGER.debug('key_attribute: %s', key_attribute)
 
                     value_map = self.keyword_io.read_keywords(
                         self.aggregator.exposure_layer, 'value_mapping')
