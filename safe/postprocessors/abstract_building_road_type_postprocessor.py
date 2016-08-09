@@ -98,7 +98,7 @@ class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
         self.type_fields = []
         try:
             for key in self.impact_attrs[0].iterkeys():
-                if key.lower() in self.valid_type_fields:
+                if key in self.valid_type_fields:
                     self.type_fields.append(key)
         except IndexError:
             pass

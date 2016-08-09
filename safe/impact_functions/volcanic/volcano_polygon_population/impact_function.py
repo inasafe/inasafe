@@ -17,16 +17,16 @@ from safe.impact_functions.bases.classified_vh_continuous_re import \
     ClassifiedVHContinuousRE
 from safe.impact_functions.volcanic.volcano_polygon_population\
     .metadata_definitions import VolcanoPolygonPopulationFunctionMetadata
-from safe.impact_functions.core import (
-    population_rounding,
-    has_no_data)
+from safe.impact_functions.core import population_rounding, has_no_data
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.storage.raster import Raster
 from safe.utilities.i18n import tr
 from safe.common.utilities import (
     humanize_class,
     create_classes,
-    create_label)
+    create_label,
+    format_int
+)
 from safe.impact_functions.core import (
     no_population_impact_message,
     get_key_for_value
@@ -53,7 +53,8 @@ class VolcanoPolygonPopulationFunction(
         # AG: Use the proper minimum needs, update the parameters
         self.parameters = add_needs_parameters(self.parameters)
         self.no_data_warning = False
-        self.volcano_names = tr('Not specified in data')
+        # A set of volcano names
+        self.volcano_names = set()
 
     def notes(self):
         """Return the notes section of the report.
@@ -65,14 +66,22 @@ class VolcanoPolygonPopulationFunction(
             needs_provenance = ''
         else:
             needs_provenance = tr(get_needs_provenance_value(self.parameters))
+
+        if self.volcano_names:
+            sorted_volcano_names = ', '.join(sorted(self.volcano_names))
+        else:
+            sorted_volcano_names = tr('Not specified in data')
+
         fields = [
             tr('Total population in the analysis area: %s') %
-            population_rounding(self.total_population),
+            format_int(population_rounding(self.total_population)),
             tr('<sup>1</sup>People need evacuation if they are within the '
                'volcanic hazard zones.'),
-            tr('Volcanoes considered: %s.') % self.volcano_names,
-            needs_provenance
+            tr('Volcanoes considered: %s.') % sorted_volcano_names
         ]
+
+        if needs_provenance:
+            fields.append(needs_provenance)
 
         if self.no_data_warning:
             fields = fields + no_data_warning
@@ -129,12 +138,9 @@ class VolcanoPolygonPopulationFunction(
 
         # Get names of volcanoes considered
         if name_attribute in self.hazard.layer.get_attribute_names():
-            volcano_name_list = []
             # Run through all polygons and get unique names
             for row in features:
-                volcano_name_list.append(row[name_attribute])
-
-            self.volcano_names = ', '.join(set(volcano_name_list))
+                self.volcano_names.add(row[name_attribute])
 
         # Retrieve the classification that is used by the hazard layer.
         vector_hazard_classification = self.hazard.keyword(
@@ -235,7 +241,7 @@ class VolcanoPolygonPopulationFunction(
 
         extra_keywords = {
             'target_field': self.target_field,
-            'map_title': self.metadata().key('map_title'),
+            'map_title': self.map_title(),
             'legend_notes': self.metadata().key('legend_notes'),
             'legend_units': self.metadata().key('legend_units'),
             'legend_title': self.metadata().key('legend_title'),

@@ -94,6 +94,7 @@ class Raster(Layer):
                        projection=projection,
                        keywords=keywords,
                        style_info=style_info)
+        self.band = None
 
         # Input checks
         if data is None:
@@ -111,7 +112,7 @@ class Raster(Layer):
             # Assume that data is provided as a numpy array
             # with extra keyword arguments supplying metadata
 
-            self.data = numpy.array(data, dtype='d', copy=False)
+            self._data = numpy.array(data, dtype='d', copy=False)
 
             proj4 = self.get_projection(proj4=True)
             if 'longlat' in proj4 and 'WGS84' in proj4:
@@ -122,7 +123,6 @@ class Raster(Layer):
 
             self.rows = data.shape[0]
             self.columns = data.shape[1]
-
             self.number_of_bands = 1
 
     def __str__(self):
@@ -173,6 +173,53 @@ class Raster(Layer):
         # Raster layers are identical up to the specified tolerance
         return True
 
+    @property
+    def data(self):
+        """Property for the data of this layer.
+
+        The setter does a lazy read so that the data matrix is only
+        initialised if is is actually wanted.
+
+        :returns: A matrix containing the layer data or None if the layer
+            has no band.
+        :rtype: numpy.array
+        """
+        if self._data is None:
+            if self.band is None:
+                return None
+            # Read from raster file
+            data = self.band.ReadAsArray()
+
+            # Convert to double precision (issue #75)
+            data = numpy.array(data, dtype=numpy.float64)
+
+            # Self check
+            M, N = data.shape
+            msg = (
+                'Dimensions of raster array do not match those of '
+                'raster file %s' % self.filename)
+            verify(M == self.rows, msg)
+            verify(N == self.columns, msg)
+            nodata = self.band.GetNoDataValue()
+            if nodata is None:
+                nodata = -9999
+
+            if nodata is not numpy.nan:
+                NaN = numpy.ones((M, N), numpy.float64) * numpy.nan
+                data = numpy.where(data == nodata, NaN, data)
+
+            self._data = data
+
+        return self._data
+
+    @data.setter
+    def data(self, data):
+        """Setter for the data of this layer.
+
+        :param data: A matrix containing the layer data.
+        """
+        self._data = data
+
     def read_from_file(self, filename):
         """Read and unpack raster data
         """
@@ -186,9 +233,10 @@ class Raster(Layer):
             if not os.path.exists(filename):
                 msg = 'Could not find file %s' % filename
             else:
-                msg = ('File %s exists, but could not be read. '
-                       'Please check if the file can be opened with '
-                       'e.g. qgis or gdalinfo' % filename)
+                msg = (
+                    'File %s exists, but could not be read. '
+                    'Please check if the file can be opened with '
+                    'e.g. qgis or gdalinfo' % filename)
             raise ReadLayerError(msg)
 
         # Record raster metadata from file
@@ -248,29 +296,6 @@ class Raster(Layer):
         # Force garbage collection to free up any memory we can (TS)
         gc.collect()
 
-        # Read from raster file
-        data = band.ReadAsArray()
-
-        # Convert to double precision (issue #75)
-        data = numpy.array(data, dtype=numpy.float64)
-
-        # Self check
-        M, N = data.shape
-        msg = (
-            'Dimensions of raster array do not match those of '
-            'raster file %s' % self.filename)
-        verify(M == self.rows, msg)
-        verify(N == self.columns, msg)
-        nodata = self.band.GetNoDataValue()
-        if nodata is None:
-            nodata = -9999
-
-        if nodata is not numpy.nan:
-            NaN = numpy.ones((M, N), numpy.float64) * numpy.nan
-            data = numpy.where(data == nodata, NaN, data)
-
-        self.data = data
-
     def write_to_file(self, filename):
         """Save raster data to file
 
@@ -307,13 +332,14 @@ class Raster(Layer):
 
         self.filename = filename
 
-        # Write metada
+        # Write metadata
         fid.SetProjection(str(self.projection))
         fid.SetGeoTransform(self.geotransform)
 
         # Write data
         fid.GetRasterBand(1).WriteArray(A)
         fid.GetRasterBand(1).SetNoDataValue(self.get_nodata_value())
+        # noinspection PyUnusedLocal
         fid = None  # Close
 
         # Write keywords if any

@@ -74,9 +74,7 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         :param dock: Dock widget instance that we can notify of changes.
         :type dock: Dock
         """
-
         QtGui.QDialog.__init__(self, parent)
-
         # List of parameters with the translated name.
         self.resource_parameters = {
             'Resource name': tr('Resource name'),

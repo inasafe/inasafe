@@ -193,7 +193,8 @@ class GenericReportTemplate(object):
         message.add(m.Heading(
             self.action_check_list['title'], **styles.INFO_STYLE))
 
-        checklist = m.BulletedList()
+        checklist = m.BulletedList(
+            style_class='customBulletList', bullet_style='tick')
         for text in self.action_check_list['fields']:
             checklist.add(text)
 

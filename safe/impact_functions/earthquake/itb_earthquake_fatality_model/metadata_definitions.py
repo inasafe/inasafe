@@ -57,6 +57,7 @@ class ITBFatalityMetadata(ImpactFunctionMetadata):
             concrete impact function.
         :rtype: dict
         """
+        title = tr('People affected by earthquake')
         dict_meta = {
             'id': 'ITBFatalityFunction',
             'name': tr('Earthquake ITB fatality function'),
@@ -117,10 +118,10 @@ class ITBFatalityMetadata(ImpactFunctionMetadata):
                 {
                     'text': tr(
                         'Allen, T. I., Wald, D. J., Earle, P. S., Marano, K. '
-                        'D., Hotovec, A. J., Lin, K., and Hearne, M., 2009. An '
-                        'Atlas of ShakeMaps and population exposure catalog '
-                        'for earthquake loss modeling, Bull. Earthq. Eng. 7, '
-                        '701-718.'),
+                        'D., Hotovec, A. J., Lin, K., and Hearne, M., 2009. '
+                        'An Atlas of ShakeMaps and population exposure '
+                        'catalog for earthquake loss modeling, Bull. Earthq. '
+                        'Eng. 7, 701-718.'),
                     'link': None
                 },
                 {
@@ -131,13 +132,13 @@ class ITBFatalityMetadata(ImpactFunctionMetadata):
                     'link': None
                 }
             ],
-            'map_title': tr('Earthquake impact to population'),
+            'map_title': title,
+            'layer_name': title,
             'legend_title': tr('Population Count'),
             'legend_units': tr('(people per cell)'),
             'legend_notes': tr(
                 'Thousand separator is represented by %s' %
                 get_thousand_separator()),
-            'layer_name': tr('Estimated displaced population per cell'),
             'layer_requirements': {
                 'hazard': {
                     'layer_mode': layer_mode_continuous,

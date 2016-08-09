@@ -39,15 +39,16 @@ class TestITBEarthquakeFatalityFunction(unittest.TestCase):
 
     def test_compute_fatality_rate(self):
         impact_function = ITBFatalityFunction.instance()
-        expected_result = {2: 0,
-                           3: 0,
-                           4: 2.869e-6,
-                           5: 1.203e-5,
-                           6: 5.048e-5,
-                           7: 2.117e-4,
-                           8: 8.883e-4,
-                           9: 3.726e-3,
-                           10: 1.563e-2}
+        expected_result = {
+            2: 0,
+            3: 0,
+            4: 2.869e-6,
+            5: 1.203e-5,
+            6: 5.048e-5,
+            7: 2.117e-4,
+            8: 8.883e-4,
+            9: 3.726e-3,
+            10: 1.563e-2}
         result = impact_function.compute_fatality_rate()
         for item in expected_result.keys():
             self.assertAlmostEqual(

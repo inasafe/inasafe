@@ -189,25 +189,30 @@ class ITBFatalityFunction(
                 'Are there enough victim identification units available '
                 'for %s people?') % (
                     format_int(population_rounding(total_fatalities))))
-        if total_displaced:
+        if rounded_displaced:
+            fields.append(
+                tr('Are there enough covered floor areas available for '
+                   '%s people?') % rounded_displaced)
             fields.append(tr(
                 'Are there enough shelters and relief items available for '
                 '%s people?') % rounded_displaced)
-        if rounded_displaced:
             fields.append(tr(
                 'If yes, where are they located and how will we '
                 'distribute them?'))
-        if total_displaced:
             fields.append(tr(
                 'If no, where can we obtain additional relief items '
                 'from and how will we transport them?'))
+            fields.append(tr(
+                'Are there enough water supply, sanitation, hygiene, food, '
+                'shelter, medicines and relief items available for %s'
+                'displaced people?') % rounded_displaced)
 
         return fields
 
     def notes(self):
         """Notes and caveats for the IF report.
 
-        :returns: Dicts containing notes.
+        :returns: List containing notes.
         :rtype: list
         """
         fields = [
@@ -217,17 +222,10 @@ class ITBFatalityFunction(
                'survive a shake level of more than 5 on the MMI scale.'),
             tr('The fatality calculation assumes that no fatalities occur for '
                'shake levels below 4 and fatality counts of less than 50 are '
-               'disregarded.')
+               'disregarded.'),
+            tr('Fatality model is from Institut Teknologi Bandung 2012.'),
+            tr('Map shows the estimation of displaced population.')
         ]
-        if self.__class__ != ITBFatalityFunction:
-            fields.append(tr(
-                'Fatality model is from Institut Teknologi Bandung 2012.'))
-            fields.append(tr(
-                'Fatality model is from the Population Vulnerability '
-                'Pager Model.'))
-        fields.extend([
-            tr('Map shows the estimation of displaced population.'),
-        ])
         # include any generic exposure specific notes from definitions.py
         fields = fields + self.exposure_notes()
         # include any generic hazard specific notes from definitions.py
@@ -355,7 +353,7 @@ class ITBFatalityFunction(
             'fatalities_per_mmi': number_of_fatalities,
             'total_displaced': population_rounding(total_displaced),
             'displaced_per_mmi': number_of_displaced,
-            'map_title': self.metadata().key('map_title'),
+            'map_title': self.map_title(),
             'legend_notes': self.metadata().key('legend_notes'),
             'legend_units': self.metadata().key('legend_units'),
             'legend_title': self.metadata().key('legend_title'),

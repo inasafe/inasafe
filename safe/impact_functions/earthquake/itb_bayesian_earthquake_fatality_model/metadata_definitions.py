@@ -54,6 +54,7 @@ class ITBBayesianFatalityMetadata(ITBFatalityMetadata):
             concrete impact function.
         :rtype: dict
         """
+        title = tr('People affected by earthquake event')
         dict_meta = {
             'id': 'ITBBayesianFatalityFunction',
             'name': tr(
@@ -69,8 +70,8 @@ class ITBBayesianFatalityMetadata(ITBFatalityMetadata):
                 'from an Indonesian database of earthquake events to '
                 'calculate fatality rates. This model is better at '
                 'capturing uncertainty in the results.'),
-            'detailed_description': 'Based on the Population '
-                'Vulnerability ITB Bayesian Model.',
+            'detailed_description': tr(
+                'Based on the Population Vulnerability ITB Bayesian Model.'),
             'hazard_input': '',
             'exposure_input': '',
             'output': '',
@@ -86,11 +87,11 @@ class ITBBayesianFatalityMetadata(ITBFatalityMetadata):
                     'link': None
                 }
             ],
-            'map_title': 'Earthquake impact to population',
+            'map_title': title,
+            'layer_name': title,
             'legend_title': '',
             'legend_units': '',
             'legend_notes': '',
-            'layer_name': '',
             'layer_requirements': {
                 'hazard': {
                     'layer_mode': layer_mode_continuous,
