@@ -538,7 +538,7 @@ class ImpactFunction(object):
         .. versionadded:: 3.5
 
         :return: The action check list as dict.
-        :rtype: dict
+        :rtype: list
         """
         # Include actions defined in the mixin
         fields = self.extra_actions()
