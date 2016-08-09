@@ -110,8 +110,9 @@ class ClassifiedPolygonHazardLandCoverFunction(
         super(ClassifiedPolygonHazardLandCoverFunction, self).__init__()
 
         # Set the question of the IF (as the hazard data is not an event)
-        self.question = ('In each of the hazard zones which land cover types '
-                         'might be affected.')
+        self.question = (
+            'In each of the hazard zones which land cover types might be '
+            'affected?')
         # Don't put capital letters as the value in the attribute should match.
         self.hazard_columns = OrderedDict()
         self.hazard_columns['low'] = tr('Low Hazard Zone')
