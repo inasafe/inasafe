@@ -1,4 +1,5 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="id" sourcelanguage="" version="2.0">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS><TS version="2.0" language="id" sourcelanguage="">
 <context>
     <name>@default</name>
     <message>
@@ -722,7 +723,7 @@
         <translation>Usia</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="107"/>
+        <location filename="definitions.py" line="172"/>
         <source>Aggregation</source>
         <translation>Agregasi</translation>
     </message>
@@ -857,7 +858,7 @@
         <translation>Tidak dapat menginterpolasi dari layer raster %(raster)s  ke layer vektor %(vector)s. Pesan kesalahan: %(error)s</translation>
     </message>
     <message>
-        <location filename="base.py" line="1677"/>
+        <location filename="base.py" line="1720"/>
         <source>Not specified</source>
         <translation>Tidak ditentukan</translation>
     </message>
@@ -867,37 +868,37 @@
         <translation>Tidak ada data</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="61"/>
+        <location filename="metadata_definitions.py" line="62"/>
         <source>Need evacuation</source>
         <translation>Perlu evakuasi</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="91"/>
+        <location filename="metadata_definitions.py" line="92"/>
         <source>To assess the impacts of volcano eruption on population.</source>
         <translation>Untuk menghitung dampak erupsi gunung berapi pada penduduk.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="68"/>
+        <location filename="metadata_definitions.py" line="69"/>
         <source>An exposure raster layer where each cell represent population count.</source>
         <translation>Sebuah layer keterpaparan dimana setiap sel merepresentasikan jumlah populasi.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="71"/>
+        <location filename="metadata_definitions.py" line="72"/>
         <source>Vector layer contains people affected and the minimum needs based on the number of people affected.</source>
         <translation>Layer data vektor berisi penduduk yang terdampak dan kebutuhan minimum berdasarkan pada jumlah penduduk terdampak.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="56"/>
+        <location filename="impact_function.py" line="74"/>
         <source>Not specified in data</source>
         <translation>Tidak ada rincian pada data</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="95"/>
+        <location filename="metadata_definitions.py" line="97"/>
         <source>Thousand separator is represented by  %s</source>
         <translation>Pemisah nilai ribuan diwaliki oleh %s</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="94"/>
+        <location filename="metadata_definitions.py" line="96"/>
         <source>(people per cell)</source>
         <translation>(penduduk per sel)</translation>
     </message>
@@ -907,57 +908,52 @@
         <translation>Penduduk</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="60"/>
+        <location filename="metadata_definitions.py" line="61"/>
         <source>To assess the impacts of volcano eruption on building.</source>
         <translation>Untuk menghitung dampak erupsi gunung berapi pada bangunan.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="76"/>
+        <location filename="metadata_definitions.py" line="77"/>
         <source>Provide details about how many building would likely be affected by each hazard zones.</source>
         <translation>Menyediakan rincian mengenai berapa banyak bangunan yang akan terdampak di setiap zona ancaman.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="73"/>
+        <location filename="metadata_definitions.py" line="74"/>
         <source>Vector polygon layer extracted from OSM where each polygon represents the footprint of a building.</source>
         <translation>Layer poligon vektor yang diambil dari OSM dimana setiap poligon merepresentasikan jejak keberadaan bangunan.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1770"/>
+        <location filename="definitions.py" line="1919"/>
         <source>Other</source>
         <translation>Lain-lain</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="95"/>
-        <source>Buildings affected by volcanic hazard zone</source>
-        <translation>Bangunan yang terkena dampak daerah rawan ancaman letusan gunung berapi</translation>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="92"/>
+        <location filename="metadata_definitions.py" line="94"/>
         <source>Thousand separator is represented by %s</source>
         <translation>Ribuan pemisah diwaliki oleh %s</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="91"/>
+        <location filename="metadata_definitions.py" line="93"/>
         <source>(building)</source>
         <translation>(bangunan)</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="90"/>
+        <location filename="metadata_definitions.py" line="92"/>
         <source>Building count</source>
         <translation>Jumlah Bangunan</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="64"/>
+        <location filename="metadata_definitions.py" line="65"/>
         <source>Die or be displaced</source>
         <translation>Meninggal atau mengungsi</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="318"/>
+        <location filename="impact_function.py" line="316"/>
         <source>Number of fatalities</source>
         <translation>Jumlah perkiraan kematian</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="323"/>
+        <location filename="impact_function.py" line="321"/>
         <source>Number of people displaced</source>
         <translation>Jumlah pengungsi</translation>
     </message>
@@ -972,47 +968,32 @@
         <translation>Apakah unit identifikasi korban yang tersedia cukup untuk %s orang?</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="193"/>
+        <location filename="impact_function.py" line="196"/>
         <source>Are there enough shelters and relief items available for %s people?</source>
         <translation>Apakah tempat penampungan dan barang-barang bantuan yang tersedia cukup untuk %s orang?</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="197"/>
+        <location filename="impact_function.py" line="199"/>
         <source>If yes, where are they located and how will we distribute them?</source>
         <translation>Jika iya, dimana kita akan meletakannya dan bagaimana pendistribusiannya?</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="201"/>
+        <location filename="impact_function.py" line="202"/>
         <source>If no, where can we obtain additional relief items from and how will we transport them?</source>
         <translation>Jika tidak, dimana kita dapat mendapatkan bahan bantuan tambahan dan bagaimana membawanya ke sini?</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="218"/>
+        <location filename="impact_function.py" line="223"/>
         <source>The fatality calculation assumes that no fatalities occur for shake levels below 4 and fatality counts of less than 50 are disregarded.</source>
         <translation>Perhitungan kematian menggunakan asumsi bahwa tidak ada kematian yang terjadi untuk getaran di bawah 4 dan jumlah kematian yang kurang dari 50 diabaikan.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="553"/>
-        <source>All values are rounded up to the nearest integer in order to avoid representing human lives as fractions.</source>
-        <translation>Semua nilai dibulatkan ke integer terdekat agar tidak menyatakan jumlah manusia sebagai pecahan.</translation>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="134"/>
-        <source>Earthquake impact to population</source>
-        <translation>Dampak gempa bumi terhadap populasi penduduk</translation>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="112"/>
+        <location filename="metadata_definitions.py" line="114"/>
         <source>Population Count</source>
         <translation>Jumlah penduduk</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="140"/>
-        <source>Estimated displaced population per cell</source>
-        <translation>Perkiraan penduduk yang diungsikan per sel</translation>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="62"/>
+        <location filename="metadata_definitions.py" line="63"/>
         <source>Die or be displaced according Pager model</source>
         <translation>Meninggal atau diungsikan berdasarkan model Pager</translation>
     </message>
@@ -1037,82 +1018,72 @@
         <translation>Bangunan yang terdampak</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="198"/>
+        <location filename="impact_function.py" line="197"/>
         <source>Buildings value ($M)</source>
         <translation>Nilai bangunan ($M)</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="200"/>
+        <location filename="impact_function.py" line="199"/>
         <source>Contents value ($M)</source>
         <translation>Rincian harga ($M)</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="64"/>
+        <location filename="impact_function.py" line="63"/>
         <source>High hazard is defined as shake levels greater than %i on the MMI scale.</source>
         <translation>Ancaman tinggi didefinisikan sebagai getaran tanah lebih dari %i pada skala MMI.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="67"/>
+        <location filename="impact_function.py" line="66"/>
         <source>Medium hazard is defined as shake levels between %i and %i on the MMI scale.</source>
         <translation>Ancaman menengah didefinisikan sebagai getaran tanah antara %i dan %i pada skala MMI.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="69"/>
+        <location filename="impact_function.py" line="68"/>
         <source>Low hazard is defined as shake levels between %i and %i on the MMI scale.</source>
         <translation>Ancaman rendah didefinisikan sebagai getaran tanah antara %i dan %i pada skala MMI.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="73"/>
+        <location filename="impact_function.py" line="72"/>
         <source>Values are in units of 1 million Australian Dollars</source>
         <translation>Nilai dalam satuan 1 juta Dolar Australia</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="87"/>
-        <source>Building affected by earthquake</source>
-        <translation>Bangunan yang terkena dampak oleh gempa bumi</translation>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="88"/>
+        <location filename="metadata_definitions.py" line="90"/>
         <source>The level of the impact is according to the threshold the user input.</source>
         <translation>Tingkat keterdampakan berdasarkan dari ambang batas masukan (input) pengguna.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="91"/>
+        <location filename="metadata_definitions.py" line="93"/>
         <source>(mmi)</source>
         <translation>(mmi)</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="92"/>
+        <location filename="metadata_definitions.py" line="94"/>
         <source>Impact level</source>
         <translation>Tingkat dampak</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="112"/>
-        <source>Estimated buildings affected</source>
-        <translation>Bangunan yang diperkirakan terkena dampak</translation>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="62"/>
+        <location filename="metadata_definitions.py" line="63"/>
         <source>Be impacted</source>
         <translation>Terdampak</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="653"/>
+        <location filename="definitions.py" line="803"/>
         <source>Which structures have warning capacity (eg. sirens, speakers, etc.)?</source>
         <translation>Bangunan mana saja yang memiliki mekanisme peringatan (contoh sirene, pengeras suara, dll)?</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="658"/>
+        <location filename="definitions.py" line="808"/>
         <source>Which buildings will be evacuation centres?</source>
         <translation>Bangunan mana saja yang memiliki pusat evakuasi?</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="659"/>
+        <location filename="definitions.py" line="809"/>
         <source>Where will we locate the operations centre?</source>
         <translation>Dimana kita akan menempatkan pusat operasi?</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="660"/>
+        <location filename="definitions.py" line="810"/>
         <source>Where will we locate warehouse and/or distribution centres?</source>
         <translation>Dimana kita akan menempatkan gudang dan/atau pusat distribusi?</translation>
     </message>
@@ -1132,22 +1103,22 @@
         <translation>Tidak terdampak</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="102"/>
+        <location filename="metadata_definitions.py" line="59"/>
         <source>Buildings affected</source>
         <translation>Bangunan terdampak</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="103"/>
+        <location filename="metadata_definitions.py" line="105"/>
         <source>(Low, Medium, High)</source>
         <translation>(Rendah, Sedang, Tinggi)</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="91"/>
+        <location filename="metadata_definitions.py" line="93"/>
         <source>Structure inundated status</source>
         <translation>Status struktur yang tergenang</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="85"/>
+        <location filename="metadata_definitions.py" line="86"/>
         <source>Map of population exposed to high category and a table with number of people in each category</source>
         <translation>Peta keterpaparan penduduk untuk kategori tinggi dan tabel yang berisi jumlah penduduk di setiap kategori</translation>
     </message>
@@ -1157,22 +1128,22 @@
         <translation>Penduduk yang tidak terdampak</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="566"/>
+        <location filename="definitions.py" line="697"/>
         <source>How will warnings be disseminated?</source>
         <translation>Bagimana peringatan tanggap bencana akan disebarluaskan?</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="99"/>
+        <location filename="metadata_definitions.py" line="101"/>
         <source>Number of People</source>
         <translation>Jumlah penduduk</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="65"/>
+        <location filename="metadata_definitions.py" line="66"/>
         <source>Be flooded in given thresholds</source>
         <translation>Mengalami banjir dengan ambang batas yang diberikan</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="69"/>
+        <location filename="metadata_definitions.py" line="70"/>
         <source>N/A</source>
         <translation>Tidak Tersedia</translation>
     </message>
@@ -1187,47 +1158,37 @@
         <translation>Semua</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="101"/>
-        <source>Roads inundated</source>
-        <translation>Jalan raya yang tergenang</translation>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="240"/>
+        <location filename="impact_function.py" line="248"/>
         <source>Not Inundated</source>
         <translation>Tidak tergenang</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="242"/>
+        <location filename="impact_function.py" line="250"/>
         <source>Inundated</source>
         <translation>Tergenang</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="103"/>
-        <source>Flooded roads</source>
-        <translation>Jalan yang tergenang</translation>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="73"/>
+        <location filename="metadata_definitions.py" line="74"/>
         <source>To assess the impacts of tsunami inundation in raster format on population.</source>
         <translation>Untuk menghitung dampak genangan tsunami dalam format raster pada penduduk.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="100"/>
+        <location filename="metadata_definitions.py" line="101"/>
         <source>Provide details about how many people would likely need to be evacuated, where they are located and what resources would be required to support them.</source>
         <translation>Menyediakan rincian mengenai berapa banyak orang yang akan perlu dievakuasi, dimana mereka berada, dan sumber daya apa yang dibutuhkan untuk mendukungnya.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="76"/>
+        <location filename="metadata_definitions.py" line="77"/>
         <source>The population subject to inundation exceeding a threshold (default 0.7m) is calculated and returned as a raster layer. In addition the total number and the required needs in terms of the BNPB (Perka 7) are reported. The threshold can be changed and even contain multiple numbers in which case evacuation and needs are calculated using the largest number with population breakdowns provided for the smaller numbers. The population raster is resampled to the resolution of the hazard raster and is rescaled so that the resampled population counts reflect estimates of population count per resampled cell. The resulting impact layer has the same resolution and reflects population count per cell which are affected by inundation.</source>
         <translation>Subjek populasi genangan melebihi ambang batas (default 0.7m) dihitung dan dikembalikan sebagai layer raster. Selain itu, jumlah dan kebutuhan yang diperlukan sesuai aturan BNPB (Perka 7) dilaporkan. Ambang batas dapat diubah dan bahkan mengandung beberapa nilai dalam hal evakuasi dan kebutuhan dihitung menggunakan jumlah terbesar dengan populasi diperinci untuk jumlah yang lebih kecil. Lapisan raster populasi diresampling dengan resolusi raster ancaman dan direscaling sehingga jumlah populasi hasil resampling mencerminkan perkiraan jumlah populasi per sel terresampling. Lapisan dampak yang dihasilkan memiliki resolusi yang sama dan mencerminkan jumlah penduduk per sel yang dipengaruhi oleh genangan.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="91"/>
+        <location filename="metadata_definitions.py" line="92"/>
         <source>A hazard raster layer where each cell represents tsunami depth (in meters).</source>
         <translation>Sebuah layer raster ancaman dimana setiap sel merepresentasikan kedalaman tsunami (dalam meter).</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="104"/>
+        <location filename="metadata_definitions.py" line="105"/>
         <source>The default threshold of 0.7 meter was selected based on consensus, not hard evidence.</source>
         <translation>Ambang batas default 0.7 meter dipilih berdasarkan konsensus, bukan dari bukti yang kuat.</translation>
     </message>
@@ -1237,67 +1198,47 @@
         <translation>Orang-orang yang terendam air %.1f</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="124"/>
-        <source>People in need of evacuation</source>
-        <translation>Penduduk yang perlu dievakuasi</translation>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="219"/>
+        <location filename="impact_function.py" line="227"/>
         <source>Flooded</source>
         <translation>Kebanjiran</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="90"/>
-        <source>Buildings inundated</source>
-        <translation>Bangunan terendam</translation>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="92"/>
-        <source>Flooded buildings</source>
-        <translation>Bangunan yang mengalami banjir</translation>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="58"/>
+        <location filename="metadata_definitions.py" line="59"/>
         <source>Be flooded</source>
         <translation>Terkena banjir</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="69"/>
+        <location filename="metadata_definitions.py" line="70"/>
         <source>To assess the impacts of flood inundation in vector format on population.</source>
         <translation>Untuk menilai dampak dari genangan banjir dalam format vektor terhadap penduduk.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="107"/>
-        <source>People affected by flood prone areas</source>
-        <translation>Penduduk yang terkena dampak dari area rawan banjir</translation>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="103"/>
+        <location filename="metadata_definitions.py" line="105"/>
         <source>(people per polygon)</source>
         <translation>(penduduk per poligon)</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="70"/>
+        <location filename="metadata_definitions.py" line="71"/>
         <source>To assess the impacts of flood inundation in raster format on population.</source>
         <translation>Untuk menilai dampak dari genangan banjir dalam format raster terhadap penduduk.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="88"/>
+        <location filename="metadata_definitions.py" line="89"/>
         <source>A hazard raster layer where each cell represents flood depth (in meters).</source>
         <translation>Sebuah layer data ancaman bencana berjenis raster dimana setiap sel merepresentasikan kedalaman banjir (dalam meter).</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="102"/>
+        <location filename="metadata_definitions.py" line="103"/>
         <source>The default threshold of 1 meter was selected based on consensus, not hard evidence.</source>
         <translation>Ambang batas default 1 meter dipilih berdasarkan konsensus, bukan dari bukti yang kuat.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="74"/>
+        <location filename="metadata_definitions.py" line="75"/>
         <source>Vector polygon or point layer extracted from OSM where each feature represents the footprint of a building.</source>
         <translation>Poligon vektor atau layer titik diambil dari OSM dimana masing-masing fitur merepresentasikan batas tapak sebuah bangunan.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="77"/>
+        <location filename="metadata_definitions.py" line="78"/>
         <source>Vector layer contains building is estimated to be flooded and the breakdown of the building by type.</source>
         <translation>Layer data vektor berisi bangunan yang diperkirakan banjir dan kerusakan berdasarkan jenis bangunannya.</translation>
     </message>
@@ -1312,77 +1253,77 @@
         <translation>Basah  (0 m - %.1f m)</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="549"/>
+        <location filename="definitions.py" line="680"/>
         <source>The &lt;b&gt;population&lt;/b&gt; describes the people that might be exposed to a particular hazard.</source>
         <translation>&lt;b&gt;Penduduk&lt;/b&gt; mendeskripsikan orang yang mungkin akan terdampak suatu anaman. </translation>
     </message>
     <message>
-        <location filename="definitions.py" line="609"/>
+        <location filename="definitions.py" line="751"/>
         <source>A &lt;b&gt;road&lt;/b&gt; is a defined route used by a vehicle or people to travel between two or more points.</source>
         <translation>&lt;b&gt;Jalan&lt;/b&gt; didefinisikan sebagai jalur yang digunakan oleh kendaraan atau orang untuk pergi dari satu titik ke satu titik lainnya atau lebih. </translation>
     </message>
     <message>
-        <location filename="definitions.py" line="748"/>
+        <location filename="definitions.py" line="897"/>
         <source>generic</source>
         <translation>umum</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="379"/>
+        <location filename="definitions.py" line="466"/>
         <source>An &lt;b&gt;earthquake&lt;/b&gt; describes the sudden violent shaking of the ground that occurs as a result of volcanic activity or movement in the earth&apos;s crust.</source>
         <translation>&lt;b&gt;Gempa bumi&lt;/b&gt; mendeskripsikan suatu kejadian dimana permukaan tanah bergetar kuat secara tiba-tiba berdasarkan aktivitas gunung berapi atau pergerakan lempeng bumi.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="399"/>
+        <location filename="definitions.py" line="496"/>
         <source>A &lt;b&gt;flood&lt;/b&gt; describes the inundation of land that is normally dry by a large amount of water. For example: A &lt;b&gt;flood&lt;/b&gt; can occur after heavy rainfall, when a river overflows its banks or when a dam breaks. The effect of a &lt;b&gt;flood&lt;/b&gt; is for land that is normally dry to become wet.</source>
         <translation>&lt;b&gt;Banjir&lt;/b&gt; mendeskripsikan terjadinya genangan pada suatu lahan kering oleh air dalam jumlah besar. Sebagai contoh: Suatu &lt;b&gt;banjir&lt;/b&gt; dapat terjadi setelah hujan turun secara deras, ketika sebuah sungai meluap dari bataran atau ketika bendungan rusak. Efek dari &lt;b&gt;flood&lt;/b&gt; adalah lahan yang normalnya kering menjadi basah. </translation>
     </message>
     <message>
-        <location filename="definitions.py" line="468"/>
+        <location filename="definitions.py" line="591"/>
         <source>A &lt;b&gt;volcano&lt;/b&gt; describes a mountain which has a vent through which rock fragments, ash, lava, steam and gases can be ejected from below the earth&apos;s surface. The type of material ejected depends on the type of &lt;b&gt;volcano&lt;/b&gt;.</source>
         <translation>&lt;b&gt;Gunung berapi&lt;/b&gt; mendeskripsikan sebuah gunung yang memiliki sebuah ventilasi dimana fragmen-fragmen batuan, debu, lava, uap dan gas dari bawah permukaan bumi dapat dikeluarkan dari ventilasi tersebut. Tipe material yang dikeluarkan tergantung dari tipe  &lt;b&gt;gunung berapi&lt;/b&gt;.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="732"/>
+        <location filename="definitions.py" line="881"/>
         <source>feet</source>
         <translation>kaki</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="796"/>
+        <location filename="definitions.py" line="945"/>
         <source>metres</source>
         <translation>meter</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="845"/>
+        <location filename="definitions.py" line="994"/>
         <source>MMI</source>
         <translation>MMI</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="846"/>
+        <location filename="definitions.py" line="995"/>
         <source>The &lt;b&gt;Modified Mercalli Intensity (MMI)&lt;/b&gt; scale describes the intensity of ground shaking from a earthquake based on the effects observed by people at the surface.</source>
         <translation>Skala &lt;b&gt;Modified Mercalli Intensity (MMI)&lt;/b&gt; mendeskripsikan intensitas getaran tanah dari sebuah kejadian gempa bumi berdasarkan efek yang diamati oleh orang-orang di permukaan. </translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1097"/>
+        <location filename="definitions.py" line="1241"/>
         <source>This is a binary description for an area. The area is either &lt;b&gt;wet&lt;/b&gt; (affected by flood water) or &lt;b&gt;dry&lt;/b&gt; (not affected by flood water). This unit does not describe how &lt;b&gt;wet&lt;/b&gt; or &lt;b&gt;dry&lt;/b&gt; an area is.</source>
         <translation>Ini adalah deskripsi biner untuk wilayah. Wilayah bisa berupa &lt;b&gt;basah&lt;/b&gt; (terdampak oleh air banjir) atau &lt;b&gt;kering&lt;/b&gt; (tidak terdampak oleh air banjir). Unit ini tidak mendeskripsikan seberapa &lt;b&gt;basah&lt;/b&gt; atau &lt;b&gt;kering&lt;/b&gt; wilayah tersebut.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1112"/>
+        <location filename="definitions.py" line="1256"/>
         <source>Water above ground height.</source>
         <translation>Air di atas ketinggian tanah.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1215"/>
+        <location filename="definitions.py" line="1354"/>
         <source>No water above ground height.</source>
         <translation>Tidak ada air pada ketinggian air tanah.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="31"/>
+        <location filename="definitions.py" line="39"/>
         <source>Global default</source>
         <translation>Default umum</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="36"/>
+        <location filename="definitions.py" line="44"/>
         <source>Don&apos;t use</source>
         <translation>Jangan digunakan</translation>
     </message>
@@ -1422,37 +1363,37 @@
         <translation>Kesalahan memuat template %s</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="79"/>
+        <location filename="metadata_definitions.py" line="80"/>
         <source>A hazard raster layer where each cell represents the class of the hazard. There should be 3 classes: e.g. 1, 2, and 3.</source>
         <translation>Lapisan raster ancaman dimana setiap sel merepresentasikan kelas dari ancaman. Seharusnya ada 3 kelas, seperti 1, 2, dan 3.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="87"/>
+        <location filename="metadata_definitions.py" line="88"/>
         <source>The impact layer will contain all structures that were exposed to the highest class (3) and a summary table containing the number of structures in each class.</source>
         <translation>Lapisan dampak akan berisi semua struktur yang terkena kelas tertinggi (3) dan sebuah tabel ringkasan yang berisi banyak struktu di setiap kelas.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="98"/>
+        <location filename="metadata_definitions.py" line="99"/>
         <source>The number of classes is three.</source>
         <translation>Banyak kelas adalah tiga.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="69"/>
+        <location filename="metadata_definitions.py" line="70"/>
         <source>To assess the impacts of continuous hazards in raster format on population raster layer.</source>
         <translation>Untuk menghitung dampak dari ancaman kontinyu dalam format raster pada lapisan raster penduduk.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="78"/>
+        <location filename="metadata_definitions.py" line="79"/>
         <source>A hazard raster layer where each cell represents the level of the hazard. The hazard has continuous value of hazard level.</source>
         <translation>Lapisan raster ancaman dimana setiap sel merepresentasikan tingkatan dari ancaman. Ancamannya memiliki nilai tingkatan ancaman yang kontinyu.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="95"/>
+        <location filename="metadata_definitions.py" line="96"/>
         <source>Provide details about how many people would likely be affected for each hazard class.</source>
         <translation>Menyediakan rincian mengenai berapa banyak penduduk yang akan terdampak di setiap kelas ancaman.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="233"/>
+        <location filename="definitions.py" line="298"/>
         <source>A layer composed of linear features. Currently only &lt;b&gt;road exposure&lt;/b&gt;line layers are supported by InaSAFE.</source>
         <translation>Sebuah lapisan yang terdiri dari fitur linier. Untuk sekarang hanya lapisan garis &lt;b&gt; keterpaparan jalan&lt;/b&gt; yang didukung oleh InaSAFE.</translation>
     </message>
@@ -1467,82 +1408,72 @@
         <translation>Perlihatkan rincian ...</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="70"/>
+        <location filename="impact_function.py" line="76"/>
         <source>Map shows buildings affected in each of the volcano buffered zones.</source>
         <translation>Peta menunjukkan jumlah penduduk yang terkena dampak di setiap wilayah gunung berapi penyangga.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="74"/>
+        <location filename="impact_function.py" line="81"/>
         <source>Volcanoes considered: %s.</source>
         <translation>Nama gunung api yang dipilih: %s.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="92"/>
-        <source>Buildings affected by volcanic buffered point</source>
-        <translation>Bangunan yang terkena dampak titik letusan gunung berapi penyangga</translation>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="51"/>
+        <location filename="impact_function.py" line="56"/>
         <source>Map shows buildings affected in each of the volcano hazard polygons.</source>
         <translation>Peta menunjukkan bangunan yang terdampak di tiap poligon ancaman letusan gunung berapi.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="76"/>
+        <location filename="metadata_definitions.py" line="77"/>
         <source>Vector layer contains Map of building exposed to volcanic hazard zones for each Kawasan Rawan Bencana.</source>
         <translation>Lapisan vektor yang berisi peta bangunan yang terpapar wilayah ancaman letusan gunung berapi untuk setiap Kawasan Rawan Bencana.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="97"/>
+        <location filename="metadata_definitions.py" line="98"/>
         <source>The model clearly over-predicts the fatality rates at intensities higher than VIII.</source>
         <translation>Model ini dengan jelas terlalu berlebihan memperkirakan laju kematian pada intensitas bencana lebih dari VIII.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="111"/>
+        <location filename="metadata_definitions.py" line="112"/>
         <source>Indonesian Earthquake Building-Damage and Fatality Models and Post Disaster Survey Guidelines Development Bali, 27-28 February 2012, 54pp.</source>
         <translation>Indonesian Earthquake Building-Damage and Fatality Models and Post Disaster Survey Guidelines Development Bali, 27-28 February 2012, 54pp.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="118"/>
+        <location filename="metadata_definitions.py" line="119"/>
         <source>Allen, T. I., Wald, D. J., Earle, P. S., Marano, K. D., Hotovec, A. J., Lin, K., and Hearne, M., 2009. An Atlas of ShakeMaps and population exposure catalog for earthquake loss modeling, Bull. Earthq. Eng. 7, 701-718.</source>
         <translation>Allen, T. I., Wald, D. J., Earle, P. S., Marano, K. D., Hotovec, A. J., Lin, K., and Hearne, M., 2009. An Atlas of ShakeMaps and population exposure catalog for earthquake loss modeling, Bull. Earthq. Eng. 7, 701-718.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="127"/>
+        <location filename="metadata_definitions.py" line="128"/>
         <source>Jaiswal, K., and Wald, D., 2010. An empirical model for global earthquake fatality estimation, Earthq. Spectra 26, 1017-1037.</source>
         <translation>Jaiswal, K., and Wald, D., 2010. An empirical model for global earthquake fatality estimation, Earthq. Spectra 26, 1017-1037.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="84"/>
+        <location filename="metadata_definitions.py" line="85"/>
         <source>Jaiswal, K. S., Wald, D. J., and Hearne, M. (2009a). Estimating casualties for large worldwide earthquakes using an empirical approach. U.S. Geological Survey Open-File Report 2009-1136.</source>
         <translation>Jaiswal, K. S., Wald, D. J., and Hearne, M. (2009a). Estimating casualties for large worldwide earthquakes using an empirical approach. U.S. Geological Survey Open-File Report 2009-1136.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="72"/>
+        <location filename="metadata_definitions.py" line="73"/>
         <source>This function will categorised the continuous hazard level into 3 category based on the threshold that has been input by the user. After that, this function will calculate how many people will be impacted per category for all categories in the hazard layer.</source>
         <translation>Fungsi ini akan membagi tingkat ancaman kontinu menjadi 3 kategori berdasarkan nilai ambang yang telah dimasukkan oleh pengguna. Setelah itu, fungsi tersebut akan menghitung berapa banyak orang yang terkena dampak di tiap kategori untuk semua kategori yang ada di lapisan ancaman.</translation>
     </message>
     <message>
-        <location filename="base.py" line="773"/>
+        <location filename="base.py" line="813"/>
         <source>In the event of %(hazard)s how many %(exposure)s might %(impact)s</source>
         <translation>Dalam peristiwa %(hazard)s berapa banyak %(exposure)s yang mungkin %(impact)s</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="90"/>
+        <location filename="impact_function.py" line="98"/>
         <source>Field &quot;%s&quot; is not present in the attribute table of the hazard layer. Please change the Affected Field parameter in the IF Option.</source>
         <translation>Kolom &quot;%s&quot; tidak ditemukan dalam tabel atribut lapisan ancaman. Mohon ganti parameter Kolom Terdampak di Pilihan Fungsi Dampak</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="104"/>
+        <location filename="impact_function.py" line="112"/>
         <source>Field &quot;%s&quot; is not present in the attribute table of the exposure layer. Please change the Building Type Field parameter in the IF Option.</source>
         <translation>Kolom &quot;%s&quot; tidak ditemukan di tabel atribut lapisan keterpaparan. Mohon ganti parameter &quot;Kolom Tipe Bangunan&quot; di Pilihan Fungsi Dampak</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="90"/>
-        <source>People affected by the buffered point volcano</source>
-        <translation>Orang-orang yang terdampak titik penyangga letusan gunung berapi</translation>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="66"/>
+        <location filename="metadata_definitions.py" line="67"/>
         <source>A point vector layer.</source>
         <translation>Lapisan vektor titik</translation>
     </message>
@@ -1562,7 +1493,7 @@
         <translation>Tipe jalan</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="529"/>
+        <location filename="needs_manager_dialog.py" line="527"/>
         <source>weekly</source>
         <translation>per minggu</translation>
     </message>
@@ -1602,57 +1533,57 @@
         <translation>satuan</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="56"/>
+        <location filename="metadata_definitions.py" line="57"/>
         <source>Polygon flood on buildings</source>
         <translation>Banjir poligon pada bangunan</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="67"/>
+        <location filename="metadata_definitions.py" line="68"/>
         <source>Tsunami evacuation</source>
         <translation>Evakuasi tsunami</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="53"/>
+        <location filename="metadata_definitions.py" line="54"/>
         <source>Polygon flood on roads</source>
         <translation>Banjir poligon pada jalan</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="63"/>
+        <location filename="metadata_definitions.py" line="64"/>
         <source>Polygon flood on people</source>
         <translation>Banjir poligon pada orang-orang</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="83"/>
+        <location filename="metadata_definitions.py" line="84"/>
         <source>An exposure raster layer where each cell represents a population count.</source>
         <translation>Lapisan raster keterpaparan dengan tiap kotak mewakili jumlah populasi</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="86"/>
+        <location filename="metadata_definitions.py" line="87"/>
         <source>A vector layer containing the number of people affected per flood area and the minimum needs based on evacuation percentage.</source>
         <translation>Lapisan vektor yang berisi jumlah orang terdampak per wilayah banjir dan kebutuhan minimum berdasarkan persentase evakuasi.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="61"/>
+        <location filename="metadata_definitions.py" line="62"/>
         <source>Raster flood on buildings</source>
         <translation>Banjir raster pada bangunan</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="86"/>
+        <location filename="metadata_definitions.py" line="87"/>
         <source>Provide details about where critical infrastructure might be flooded.</source>
         <translation>Memberikan detail di tempat mana infrastruktur kritis mungkin terkena banjir.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="95"/>
+        <location filename="metadata_definitions.py" line="96"/>
         <source>The model is based on a limited number of observed fatality rates during four previous fatal events.</source>
         <translation>Model ini berdasarkan pengamatan dalam jumlah terbatas tentang laju kematian pada empat peristiwa mematikan sebelumnya.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="99"/>
+        <location filename="metadata_definitions.py" line="100"/>
         <source>The model only estimates the expected fatality rate for a given intensity level. The associated uncertainty for the proposed model is not addressed.</source>
         <translation>Model ini hanya memperkirakan laju kematian untuk level intensitas tertentu. Ketidakpastian yang terkait dengan model yang diajukan tidak disebut.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="102"/>
+        <location filename="metadata_definitions.py" line="103"/>
         <source>There are few known issues in the  current model:
 
 * rounding MMI values to the nearest 0.5,
@@ -1667,107 +1598,102 @@
 </translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="65"/>
+        <location filename="metadata_definitions.py" line="66"/>
         <source>Earthquake on buildings</source>
         <translation>Gempa bumi pada bangunan</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="71"/>
+        <location filename="metadata_definitions.py" line="72"/>
         <source>This impact function will calculate the impact of an earthquake on buildings, reporting how many are expected to be damaged.</source>
         <translation>Fungsi dampak ini akan menghitung dampak gempa bumi pada bangunan, dan memberikan laporan berapa banyak bangunan yang diperkirakan terdampak.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="98"/>
-        <source>People in each hazard areas (low, medium, high)</source>
-        <translation>Orang di tiap wilayah ancaman (rendah, menengah, tinggi)</translation>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="209"/>
+        <location filename="impact_function.py" line="215"/>
         <source>Low Population [%i people/cell]</source>
         <translation>Populasi rendah [%i orang/kotak]</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="213"/>
+        <location filename="impact_function.py" line="219"/>
         <source>Medium Population [%i people/cell]</source>
         <translation>Populasi menengah [%i orang/kotak]</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="217"/>
+        <location filename="impact_function.py" line="223"/>
         <source>High Population [%i people/cell]</source>
         <translation>Populasi tinggi [%i orang/kotak]</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="63"/>
+        <location filename="metadata_definitions.py" line="64"/>
         <source>Continuous raster hazard on population</source>
         <translation>Ancaman raster kontinu pada populasi</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="88"/>
+        <location filename="metadata_definitions.py" line="89"/>
         <source>Provide details about how many people would likely be impacted in each category.</source>
         <translation>Memberikan detail tentang berapa banyak orang yang kemungkinan besar terdampak di tiap kategori.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="91"/>
+        <location filename="metadata_definitions.py" line="92"/>
         <source>Only three categories can be used.</source>
         <translation>Hanya tiga kategori yang dapat digunakan.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="67"/>
+        <location filename="metadata_definitions.py" line="68"/>
         <source>Classified raster hazard on population</source>
         <translation>Ancaman raster terklasifikasi pada populasi</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="73"/>
+        <location filename="metadata_definitions.py" line="74"/>
         <source>To assess the impacts of classified hazards in raster format on a population raster layer.</source>
         <translation>Untuk menilai dampak dari ancaman terklasifikasi dalam format raster pada lapisan raster populasi.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="85"/>
+        <location filename="metadata_definitions.py" line="86"/>
         <source>A hazard raster layer where each cell represents the class of the hazard. There should be three classes: e.g. 1, 2, and 3.</source>
         <translation>Lapisan raster ancaman dengan tiap kotak mewakili kelas ancaman. Harus ada tiga kelas: misal 1, 2, dan 3.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="59"/>
+        <location filename="metadata_definitions.py" line="60"/>
         <source>Classified polygon hazard on population</source>
         <translation>Ancaman poligon terklasifikasi pada populasi</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="65"/>
+        <location filename="metadata_definitions.py" line="66"/>
         <source>A hazard vector layer must be a polygon layer that has a hazard zone attribute.</source>
         <translation>Lapisan vektor ancaman harus berupa lapisan poligon yang memiliki atribut wilayah ancaman.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="89"/>
+        <location filename="metadata_definitions.py" line="90"/>
         <source>An exposure raster layer where each cell represents the population count for that cell.</source>
         <translation>Lapisan raster keterpaparan dengan tiap kotak mewakili jumlah populasi untuk kotak tersebut.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="74"/>
+        <location filename="metadata_definitions.py" line="75"/>
         <source>Provide details about how many people would likely be affected by each hazard zone.</source>
         <translation>Memberikan detail tentang berapa banyak orang yang mungkin terdampak oleh tiap wilayah ancaman.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="61"/>
+        <location filename="metadata_definitions.py" line="62"/>
         <source>Classified raster hazard on buildings</source>
         <translation>Ancaman raster terklasifikasi untuk tiap bangunan</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="63"/>
+        <location filename="metadata_definitions.py" line="64"/>
         <source>Be impacted in each hazard class</source>
         <translation>Terdampak di tiap kelas ancaman</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="67"/>
+        <location filename="metadata_definitions.py" line="68"/>
         <source>To assess the impacts of a classified hazard in raster format on a buildings vector layer.</source>
         <translation>Untuk menilai dampak dari ancaman yang terklasifikasi dalam format raster pada lapisan vektor bangunan.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="70"/>
+        <location filename="metadata_definitions.py" line="71"/>
         <source>This function will treat the values in the hazard raster layer as classes representing low, medium and high impact. You need to ensure that the keywords for the hazard layer have been set appropriately to define these classes.The number of buildings that will be impacted will be calculated for each class. The report will show the total number of buildings that will be affected for each hazard class.</source>
         <translation>Fungsi ini akan memperlakukan nilai pada lapisan raster ancaman sebagai kelas-kelas yang mewakili dampak rendah, menengah, dan tinggi. Anda harus memastikan bahwa kata kunci untuk lapisan ancaman telah ditentukan sesuai dengan kelas-kelas tersebut. Jumlah bangunan yang terdampak akan dihitung untuk tiap kelas. Laporan akan menampilkan jumlah total bangunan yang terdampak oleh tiap kelas ancaman.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="83"/>
+        <location filename="metadata_definitions.py" line="84"/>
         <source>A vector polygon layer which can be extracted from OSM where each polygon represents the footprint of a building.</source>
         <translation>Lapisan vektor poligon yang dapat diambil dari OSM dengan tiap poligon mewakili bentuk bangunan.</translation>
     </message>
@@ -1777,127 +1703,127 @@
         <translation>Peta menunjukkan bangunan terdampak di tiap wilayah ancaman: %s</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="53"/>
+        <location filename="metadata_definitions.py" line="54"/>
         <source>Classified polygon hazard on buildings</source>
         <translation>Ancaman poligon terklasifikasi pada bangunan</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="67"/>
+        <location filename="metadata_definitions.py" line="68"/>
         <source>The hazard layer must be a polygon layer. This layer must have an attribute representing the hazard zone that can be specified in the impact function options.</source>
         <translation>Lapisan ancaman harus berupa lapisan poligon. Lapisan ini harus memiliki atribut yang mewakili wilayah ancaman yang dapat ditentukan pada pilihan fungsi dampak.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="60"/>
+        <location filename="metadata_definitions.py" line="61"/>
         <source>Point volcano on population</source>
         <translation>Titik letusan gunung berapi pada populasi</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="54"/>
+        <location filename="metadata_definitions.py" line="55"/>
         <source>Polygon volcano on buildings</source>
         <translation>Poligon letusan gunung berapi pada bangunan</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="55"/>
+        <location filename="metadata_definitions.py" line="56"/>
         <source>Point volcano on buildings</source>
         <translation>Titik letusan gunung berapi pada bangunan</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="61"/>
+        <location filename="metadata_definitions.py" line="62"/>
         <source>To assess the impacts of volcano points on buildings.</source>
         <translation>Untuk menilai dampak titik letusan gunung berapi pada bangunan.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="59"/>
+        <location filename="metadata_definitions.py" line="60"/>
         <source>Polygon volcano on population</source>
         <translation>Poligon letusan gunung berapi pada populasi</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="75"/>
+        <location filename="metadata_definitions.py" line="76"/>
         <source>An exposure raster layer where each cell represents a population count for that cell.</source>
         <translation>Lapisan raster keterpaparan dengan tiap kotak mewakili jumlah populasi untuk kotak tersebut.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="78"/>
+        <location filename="metadata_definitions.py" line="79"/>
         <source>A vector layer containing people affected per hazard zone and the minimum needs based on the number of people affected.</source>
         <translation>Lapisan vektor yang berisi jumlah orang terdampak tiap wilayah ancaman dan kebutuhan minimum berdasarkan jumlah orang yang terdampak.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="79"/>
+        <location filename="metadata_definitions.py" line="80"/>
         <source>Provide details about the number of buildings that are within each hazard zone.</source>
         <translation>Menyediakan rincian mengenai bangunan-bangunan yang terdapat di setiap daerah ancaman.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="82"/>
+        <location filename="metadata_definitions.py" line="83"/>
         <source>Provide details about the number of people that are within each hazard zone.</source>
         <translation>Menyediakan rincian mengenai penduduk yang terdapat di setiap daerah ancaman.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="99"/>
+        <location filename="metadata_definitions.py" line="100"/>
         <source>To assess the impact of a volcano eruption on people.</source>
         <translation>Untuk menilai dampak dari letusan gunung berapi pada penduduk..</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="62"/>
+        <location filename="metadata_definitions.py" line="63"/>
         <source>Earthquake ITB fatality function</source>
         <translation>Earthquake ITB fatality function</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="60"/>
+        <location filename="metadata_definitions.py" line="61"/>
         <source>Earthquake PAGER fatality function</source>
         <translation>Earthquake PAGER fatality function</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="71"/>
+        <location filename="metadata_definitions.py" line="72"/>
         <source>A vector layer containing polygons matching the hazard areasand an attribute representing the number of people affected for each area.</source>
         <translation>Sebuah lapisan vektor berisi poligon yang sesuai dengan daerah ancaman dan atribut yang merepresentasikan banyak penduduk yang terdampak di setiap daerah.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="91"/>
+        <location filename="metadata_definitions.py" line="92"/>
         <source>Provide details about the number of buildings that are within each hazard class.</source>
         <translation>Menyediakan rincian mengenai banyak bangunan yang berada di setiap kelas ancaman.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="59"/>
+        <location filename="metadata_definitions.py" line="60"/>
         <source>To assess the impact of each hazard zone on buildings.</source>
         <translation>Untuk menghitung dampak dari setiap daerah ancaman pada bangunan.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="69"/>
+        <location filename="metadata_definitions.py" line="70"/>
         <source>A vector layer of buildings with each tagged according to the hazard zone in which it falls.</source>
         <translation>Sebuah lapisan vektor dari bangunan yang ditandai berdasarkan daerah ancaman yang ditempati.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="72"/>
+        <location filename="metadata_definitions.py" line="73"/>
         <source>Provide details about how many buildings fall within each hazard zone.</source>
         <translation>Menyediakan rincian mengenai berapa banyak bangunan yang berada di setiap daerah ancaman.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="76"/>
+        <location filename="metadata_definitions.py" line="77"/>
         <source>This function will treat the values in the hazard raster layer as classes representing low, medium and high impact. You need to ensure that the keywords for the hazard layer have been set appropriately to define these classes.The number of people that will be affected will be calculated for each class. The report will show the total number of people that will be affected for each hazard class.</source>
         <translation>Fungsi ini akan memperlakukan nilai pada lapisan raster ancaman sebagai kelas-kelas yang merepresentasikan dampak rendah, menengah, dan tinggi. Anda perlu memastikan bahwa keyword untuk lapisan ancaman sudah diset dengan tepat untuk mendefinisikan kelas-kelas ini. Banyak penduduk yang terdampak akan dihitung untuk setiap kelas. Laporan akan menunjukan total banyak penduduk total yang terdampak untuk setiap kelas ancaman.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="92"/>
+        <location filename="metadata_definitions.py" line="93"/>
         <source>Map of population exposed to the highest class and a table with the number of people in each class</source>
         <translation>Peta dari penduduk yang terkena kelas tertinggi dan tabel dengan banyak penduduk di setiap kelas</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="64"/>
+        <location filename="metadata_definitions.py" line="65"/>
         <source>Raster flood on population</source>
         <translation>Banjir raster pada penduduk</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="73"/>
+        <location filename="metadata_definitions.py" line="74"/>
         <source>The population subject to inundation exceeding a threshold (default 1m) is calculated and returned as a raster layer. In addition the total number of affected people and the required needs based on the user defined minimum needs are reported. The threshold can be changed and even contain multiple numbers in which case evacuation and needs are calculated using the largest number with population breakdowns provided for the smaller numbers. The population raster is resampled to the resolution of the hazard raster and is rescaled so that the resampled population counts reflect estimates of population count per resampled cell. The resulting impact layer has the same resolution and reflects population count per cell which are affected by inundation.</source>
         <translation>Subjek populasi genangan melebihi ambang batas (default 1m) dihitung dan dikembalikan sebagai layer raster. Selain itu, total banyak penduduk terdampak dan kebutuhan yang diperlukan berdasarkan kebutuhan minimun yang ditentukan pengguna dilaporkan. Ambang batas dapat diubah dan bahkan mengandung beberapa nilai dalam hal evakuasi dan kebutuhan dihitung menggunakan jumlah terbesar dengan populasi diperinci untuk jumlah yang lebih kecil. Lapisan raster populasi diresampling dengan resolusi raster ancaman dan direscaling sehingga jumlah populasi hasil resampling mencerminkan perkiraan jumlah populasi per sel terresampling. Lapisan dampak yang dihasilkan memiliki resolusi yang sama dan mencerminkan jumlah penduduk per sel yang dipengaruhi oleh genangan.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="72"/>
+        <location filename="metadata_definitions.py" line="73"/>
         <source>The population subject to inundation is determined by whether they are in a flood affected area or not. You can also set an evacuation percentage to calculate what percentage of the affected population should be evacuated. This number will be used to estimate needs based on the user defined minimum needs file.</source>
         <translation>Subjek populasi genangan ditentukan dari apakah mereka berada di daerah terdampak banjir atau tidak. Anda dapat menentukan nilai persentasi evakuasi untuk menghitung berapa persen dari penduduk terdampak yang seharusnya dievakuasi. Angka ini akan digunakan untuk memperkirakan kebutuhan berdasarkan berkas kebutuhan minimum yang ditentukan oleh pengguna.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="79"/>
+        <location filename="metadata_definitions.py" line="80"/>
         <source>A hazard vector layer which has an affected attribute. If it does not have that attribute, all polygons will be considered as affected.</source>
         <translation>Sebuah lapisan vektor ancaman yang memiliki sebuah atribut terdampak. Jika tidak memiliki atribut tersebut, semua poligon akan dianggap terdampak.</translation>
     </message>
@@ -1952,32 +1878,32 @@
 (munculkan %s untuk agregasi jika diperlukan)</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="82"/>
+        <location filename="needs_manager_dialog.py" line="80"/>
         <source>Resource name</source>
         <translation>Nama sumberdaya</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="410"/>
+        <location filename="needs_manager_dialog.py" line="408"/>
         <source>Name of the resource that will be provided as part of minimum needs. e.g. Rice, Water etc.</source>
         <translation>Nama dari sumber daya yang akan disediakan sebagai bagian dari kebutuhan minumum. Misalnya Nasi, Air, dll.</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="414"/>
+        <location filename="needs_manager_dialog.py" line="412"/>
         <source>A &lt;b&gt;resource&lt;/b&gt; is something that you provide to displaced persons in the event of a disaster. The resource will be made available at IDP camps and may need to be stockpiled by contingency planners in their preparations for a disaster.</source>
         <translation>Sebuah &lt;b&gt;sumber daya&lt;/b&gt; adalah sesuatu yang Anda sediakan untuk pengungsi ketika terjadi bencana. Sumber daya akan disediakan di kamp IDP dan mungkin perlu ditimbun oleh perencana kontijensi dalam persiapan bencana mereka.</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="83"/>
+        <location filename="needs_manager_dialog.py" line="81"/>
         <source>Resource description</source>
         <translation>Deskripi sumber daya</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="426"/>
+        <location filename="needs_manager_dialog.py" line="424"/>
         <source>Description of the resource that will be provided as part of minimum needs.</source>
         <translation>Deskrisi sumber daya yang akan disediakan sebagai bagian dari kebutuhan minimum.</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="429"/>
+        <location filename="needs_manager_dialog.py" line="427"/>
         <source>This gives a detailed description of what the resource is and </source>
         <translation>Ini memberikan deskripsi rinci dari apa sumber dayanya dan</translation>
     </message>
@@ -1987,107 +1913,107 @@
         <translation>Satuan</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="437"/>
+        <location filename="needs_manager_dialog.py" line="435"/>
         <source>Single unit for the resources spelled out. e.g. litre, kilogram etc.</source>
         <translation>Ejaan untuk satuan tunggal sumber daya. Misalnya liter, kilogram, dll.</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="440"/>
+        <location filename="needs_manager_dialog.py" line="438"/>
         <source>A &lt;b&gt;unit&lt;/b&gt; is the basic measurement unit used for computing the allowance per individual. For example when planning water rations the unit would be single litre.</source>
         <translation>Sebuah &lt;b&gt;satuan&lt;/b&gt; adalah satuan ukuran standar tertentu yang digunakan untuk menghitung jatah perorangan. Sebagai contoh, saat perencanaan jatah air maka satuannya menjadi liter.</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="85"/>
+        <location filename="needs_manager_dialog.py" line="83"/>
         <source>Units</source>
         <translation>Satuan jamak</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="450"/>
+        <location filename="needs_manager_dialog.py" line="448"/>
         <source>Multiple units for the resources spelled out. e.g. litres, kilogram etc.</source>
         <translation>Bentuk jamak dari satuan. Contoh, liter, kilogram, dan lain-lain.</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="453"/>
+        <location filename="needs_manager_dialog.py" line="451"/>
         <source>&lt;b&gt;Units&lt;/b&gt; are the basic measurement used for computing the allowance per individual. For example when planning water rations the units would be litres.</source>
         <translation>&lt;b&gt;Satuan&lt;/b&gt; adalah ukuran standar tertentu yang digunakan untuk menghitung jatah perorangan. Sebagai contoh, saat perencanaan jatah air maka satuannya menjadi liter.</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="86"/>
+        <location filename="needs_manager_dialog.py" line="84"/>
         <source>Unit abbreviation</source>
         <translation>Singkatan dari satuan</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="464"/>
+        <location filename="needs_manager_dialog.py" line="462"/>
         <source>Abbreviations of unit for the resources. e.g. l, kg etc.</source>
         <translation>Singkatan dari satuan suatu sumber daya. Contoh, l, kg, dan lain-lain.</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="87"/>
+        <location filename="needs_manager_dialog.py" line="85"/>
         <source>Minimum allowed</source>
         <translation>Batas minimum yang diperbolehkan</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="480"/>
+        <location filename="needs_manager_dialog.py" line="478"/>
         <source>The minimum allowable quantity per person. </source>
         <translation>Kuantitas batas minimum yang diperbolehkan perorangan.</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="482"/>
+        <location filename="needs_manager_dialog.py" line="480"/>
         <source>The &lt;b&gt;minimum&lt;/b&gt; is the minimum allowed quantity of the resource per person. For example you may dictate that the water ration per person per day should never be allowed to be less than 0.5l. This is enforced when tweaking a minimum needs set before an impact evaluation</source>
         <translation>&lt;b&gt;Minimum&lt;/b&gt; adalah kuantitas batas minimum yang diperbolehkan dari suatu sumber daya perorangan. Sebagai contoh, Anda dapat menetapkan jatah air per orang per hari tidak boleh kurang dari 0,5l. Hal ini diwajibkan saat menetapkan kebutuhan minimum sebelum evaluasi dampak</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="88"/>
+        <location filename="needs_manager_dialog.py" line="86"/>
         <source>Maximum allowed</source>
         <translation>Batas maximum yang diperbolehkan</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="496"/>
+        <location filename="needs_manager_dialog.py" line="494"/>
         <source>The maximum allowable quantity per person. </source>
         <translation>Kuantitas batas maximum yang diperbolehkan perorangan.</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="89"/>
+        <location filename="needs_manager_dialog.py" line="87"/>
         <source>Default</source>
         <translation>Default</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="512"/>
+        <location filename="needs_manager_dialog.py" line="510"/>
         <source>The default allowable quantity per person. </source>
         <translation>Kuantitas default yang diperbolehkan perorangan.</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="514"/>
+        <location filename="needs_manager_dialog.py" line="512"/>
         <source>The &lt;b&gt;default&lt;/b&gt; is the default allowed quantity of the resource per person. For example you may indicate that the water ration per person weekly should be 67l.</source>
         <translation>&lt;b&gt;Default&lt;/b&gt; adalah kuantitas default yang diperbolehkan dari suatu sumber daya perorangan. Sebagai contoh, Anda dapat menetapkan jatah air per orang per minggu sebesar 67l.</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="90"/>
+        <location filename="needs_manager_dialog.py" line="88"/>
         <source>Frequency</source>
         <translation>Frekuensi</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="522"/>
+        <location filename="needs_manager_dialog.py" line="520"/>
         <source>The frequency that this resource needs to be provided to a displaced person. e.g. weekly, daily, once etc.</source>
         <translation>Frekuensi yang dibutuhkan sumber daya ini untuk diberikan pada pengungsi. Contoh, per minggu, per hari, satu kali, dan lain-lain.</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="525"/>
+        <location filename="needs_manager_dialog.py" line="523"/>
         <source>The &lt;b&gt;frequency&lt;/b&gt; informs the aid worker how regularly this resource needs to be provided to the displaced person.</source>
         <translation>&lt;b&gt;Frekuensi&lt;/b&gt; memberitahukan relawan bantuan untuk seberapa sering sumber daya tersebut harus diberikan pada pengungsi.</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="91"/>
+        <location filename="needs_manager_dialog.py" line="89"/>
         <source>Readable sentence</source>
         <translation>Kalimat terbaca</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="533"/>
+        <location filename="needs_manager_dialog.py" line="531"/>
         <source>A readable presentation of the resource.</source>
         <translation>Bentuk tulisan dari sumber daya.</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="535"/>
+        <location filename="needs_manager_dialog.py" line="533"/>
         <source>A &lt;b&gt;readable sentence&lt;/b&gt; is a presentation of the resource that displays all pertinent information. If you are unsure then use the default. Properties should be included using double curly brackets &apos;{{&apos; &apos;}}&apos;. Including the resource name would be achieved by including e.g. {{ Resource name }}</source>
         <translation>&lt;b&gt;Kalimat terbaca&lt;/b&gt; adalah bentuk presentasi sumberdaya yang menampilkan informasi yang bersangkutan. Jika Anda tidak yakin, maka gunakan nilai default. Properti objek dapat dimasukkan menggunakan kurung kurawal ganda &apos;{{&apos; &apos;}}&apos;. Nama sumber daya dapat dimasukkan dengan cara, sebagai contoh, {{ Resource name }}</translation>
     </message>
@@ -2247,267 +2173,262 @@
         <translation>Keterpaparan</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="108"/>
+        <location filename="definitions.py" line="173"/>
         <source>An &lt;b&gt;aggregation&lt;/b&gt; layer represents regions that can be used to summarise impact analysis results. For example, we might summarise the affected people after a flood according to administration boundaries.</source>
         <translation>Sebuah lapisan &lt;b&gt;agregasi&lt;/b&gt; merepresentasikan wilayah-wilyah yang dapat Anda gunakan untuk membuat ringkasan hasil analisis. Sebagai contoh, kita bisa membuat ringkasan penduduk terdampak setelah banjir berdasarkan batas-batas kabupaten.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="124"/>
+        <location filename="definitions.py" line="189"/>
         <source>The purpose of the layer can be hazard layer, exposure layer, or aggregation layer</source>
         <translation>Maksud dari lapisan bisa berupa lapisan ancaman, lapisan keterpaparan, atau lapisan agregasi</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="143"/>
+        <location filename="definitions.py" line="208"/>
         <source>Continuous</source>
         <translation>Kontinyu</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="168"/>
+        <location filename="definitions.py" line="233"/>
         <source>Classified</source>
         <translation>Terklasifikasi</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="217"/>
+        <location filename="definitions.py" line="282"/>
         <source>Point</source>
         <translation>Titik</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="218"/>
+        <location filename="definitions.py" line="283"/>
         <source>A layer composed of points which each represent a feature on the earth. Currently the only point data supported by InaSAFE are &lt;b&gt;volcano hazard&lt;/b&gt; layers and building points.</source>
         <translation>Sebuah lapisan yang terdiri dari titik-titik yang merepresentasikan sebuah fitur di bumi. Untuk sekarang satu-satunya data titik yang didukung oleh InaSAFE adalah lapisan &lt;b&gt;ancaman gunung berapi&lt;/b&gt; dan titik bangunan.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="232"/>
+        <location filename="definitions.py" line="297"/>
         <source>Line</source>
         <translation>Garis</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="246"/>
+        <location filename="definitions.py" line="311"/>
         <source>Polygon</source>
         <translation>Poligon</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="247"/>
+        <location filename="definitions.py" line="312"/>
         <source>A layer composed on polygon features that represent areas of hazard or exposure. For example areas of flood represented as polygons (for a hazard) or building footprints represented as polygons (for an exposure). The polygon layer will often need the presence of specific layer attributes too - these will vary from impact function to impact function and whether the layer represents a hazard or an exposure layer. Polygon layers can also be used for aggregation - where impact analysis results per boundary such as village or district boundaries.</source>
         <translation>Sebuah lapisan yang terdiri dari fitur poligon yang mewakili wilayah ancaman atau keterpaparan. Sebagai contoh wilayah banjir yang diwakili sebagai poligon (untuk ancaman) atau jejak bangunan yang direpresentasikan sebagai poligon (untuk keterpaparan). Lapisan poligon akan sering memerlukan keberadaan sebuah atribut lapisan tertentu - ini akan beragam antara satu fungsi dampak ke fungsi dampak lain dan apakah lapisan merepresentasikan lapisan ancaman atau keterpaparan. Lapisan poligon juga dapat digunakan untuk agregasi - dimana hasil analisis dampak akan dirangkum per batas wilayah seperti desa atau kabupaten.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="267"/>
+        <location filename="definitions.py" line="332"/>
         <source>Raster</source>
         <translation>Raster</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="268"/>
+        <location filename="definitions.py" line="333"/>
         <source>A raster data layer consists of a matrix of cells organised into rows and columns. The value in the cells represents information such as a flood depth value or a hazard class. </source>
         <translation>Lapisan data raster mengandung matriks sel-sel yang diatur menjadi baris dan kolom. Nilai dalam sel mewakili informasi seperti nilai kedalaman banjir atau kelas ancaman.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="746"/>
+        <location filename="definitions.py" line="895"/>
         <source>Generic</source>
         <translation>Umum</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="359"/>
-        <source>A &lt;b&gt;generic hazard&lt;/b&gt; can be used for any type of hazard where the data have been classified or generalised. For example: earthquake, flood, volcano, or tsunami.</source>
-        <translation>&lt;b&gt;Ancaman umum&lt;/b&gt; dapat digunakan untuk segala tipe ancaman dimana data telah diklasifikasikan atau diperumum. Sebagai contoh: gempa bumi, banjir, gunung berapi, atau tsunami.</translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="378"/>
+        <location filename="definitions.py" line="465"/>
         <source>Earthquake</source>
         <translation>Gempa Bumi</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="398"/>
+        <location filename="definitions.py" line="495"/>
         <source>Flood</source>
         <translation>Banjir</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="441"/>
+        <location filename="definitions.py" line="558"/>
         <source>Tsunami</source>
         <translation>Tsunami</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="467"/>
+        <location filename="definitions.py" line="590"/>
         <source>Volcano</source>
         <translation>Gunung Berapi</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="515"/>
+        <location filename="definitions.py" line="641"/>
         <source>The &lt;b&gt;land cover&lt;/b&gt; exposure data describes features on the surface of the earth that might be exposed to a particular  hazard. This might include crops, forest and urban areas. </source>
         <translation>Paparan &lt;b&gt;penutup lahan&lt;/b&gt; menjelaskan fitur yang ada pada permukaan bumi yang mungkin terpapar ancaman tertentu. Hal ini mencakup ladang, hutan dan wilayah berpenghuni.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="608"/>
+        <location filename="definitions.py" line="750"/>
         <source>Road</source>
         <translation>Jalan</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="643"/>
+        <location filename="definitions.py" line="789"/>
         <source>Structure</source>
         <translation>Bangunan</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="730"/>
+        <location filename="definitions.py" line="879"/>
         <source>Feet</source>
         <translation>Kaki</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="733"/>
+        <location filename="definitions.py" line="882"/>
         <source>&lt;b&gt;Feet&lt;/b&gt; are an imperial unit of measure. There are 12 inches in 1 foot and 3 feet in 1 yard.</source>
         <translation>&lt;b&gt;Kaki&lt;/b&gt; adalah satuan besaran imperial. Ada 12 inchi dalam 1 kaki dan 3 kaki dalam 1 yard.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="749"/>
+        <location filename="definitions.py" line="898"/>
         <source>A generic unit for value that does not have unit or we do not know about the unit. It also can be used for normalised values.</source>
         <translation>Satuan umum untuk nilai yang tidak memiliki satuan atau belum diketahui satuannya. Bisa juga digunakan untuk nilai yang ternormalisasi.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="765"/>
+        <location filename="definitions.py" line="914"/>
         <source>&lt;b&gt;Kilograms per square metre&lt;/b&gt; is a metric unit of measure where the weight is specified according to area.  This unit is relevant for hazards such as volcanic ash.</source>
         <translation>&lt;b&gt;Kilograms per meter kuadrat&lt;/b&gt; adalah satuan besaran metrik dimana beban diperuntukkan menurut wilayahnya. Satuan ini bersangkutan dengan ancaman seperti abu vulkanik.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="779"/>
+        <location filename="definitions.py" line="928"/>
         <source>Kilometres</source>
         <translation>Kilometer</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="780"/>
+        <location filename="definitions.py" line="929"/>
         <source>kilometres</source>
         <translation>kilometer</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="781"/>
+        <location filename="definitions.py" line="930"/>
         <source>km</source>
         <translation>km</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="782"/>
+        <location filename="definitions.py" line="931"/>
         <source>&lt;b&gt;Kilometres&lt;/b&gt; are a metric unit of measure. There are 1000 metres in 1 kilometre (km).</source>
         <translation>&lt;b&gt;Kilometer&lt;/b&gt; merupakan satuan besaran metrik. Ada 1000 meter dalam 1 kilometer (km).</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="795"/>
+        <location filename="definitions.py" line="944"/>
         <source>Metres</source>
         <translation>Meter</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="797"/>
+        <location filename="definitions.py" line="946"/>
         <source>m</source>
         <translation>m</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="798"/>
+        <location filename="definitions.py" line="947"/>
         <source>&lt;b&gt;Metres&lt;/b&gt; are a metric unit of measure. There are 100 centimetres in 1 metre.</source>
         <translation>&lt;b&gt;Meter&lt;/b&gt; merupakan sebuah unit besaran metrik. Ada 100 sentimeter dalam 1 meter.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="811"/>
+        <location filename="definitions.py" line="960"/>
         <source>Millimetres</source>
         <translation>Milimeter</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="812"/>
+        <location filename="definitions.py" line="961"/>
         <source>millimetres</source>
         <translation>milimeter</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="813"/>
+        <location filename="definitions.py" line="962"/>
         <source>mm</source>
         <translation>m</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="814"/>
+        <location filename="definitions.py" line="963"/>
         <source>&lt;b&gt;Millimetres&lt;/b&gt; are a metric unit of measure. There are 1000 millimetres in 1 metre.</source>
         <translation>&lt;b&gt;Milimeter&lt;/b&gt; adalah satuan besaran metrik. Ada 1000 milimeter dalam 1 meter.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="860"/>
+        <location filename="definitions.py" line="1009"/>
         <source>Percentage</source>
         <translation>Persentase</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="861"/>
+        <location filename="definitions.py" line="1010"/>
         <source>percentages</source>
         <translation>persentase</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="862"/>
+        <location filename="definitions.py" line="1011"/>
         <source>%%</source>
         <translation>%%</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="863"/>
+        <location filename="definitions.py" line="1012"/>
         <source>Percentage values ranges from 0 to 100. It represents a ratio of hundred.</source>
         <translation>Nilai persentase berkisar antara 0 dan 100. Nilai ini mewakili nisbah dari 100.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1142"/>
+        <location filename="definitions.py" line="1286"/>
         <source>Generic classes</source>
         <translation>Kelas umum</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="916"/>
+        <location filename="definitions.py" line="1060"/>
         <source>The location that has highest impact.</source>
         <translation>Lokasi dengan dampak tertinggi</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="931"/>
+        <location filename="definitions.py" line="1075"/>
         <source>The location that has medium impact.</source>
         <translation>Lokasi dengan dampak menengah</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="946"/>
+        <location filename="definitions.py" line="1090"/>
         <source>The location that has lowest impact.</source>
         <translation>Lokasi dengan dampak terendah</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="963"/>
+        <location filename="definitions.py" line="1107"/>
         <source>Volcano classes</source>
         <translation>Kelas-kelas gunung berapi</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="978"/>
+        <location filename="definitions.py" line="1122"/>
         <source>The highest hazard class.</source>
         <translation>Kelas ancaman tertinggi.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="993"/>
+        <location filename="definitions.py" line="1137"/>
         <source>The medium hazard class.</source>
         <translation>Kelas ancaman menengah.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1008"/>
+        <location filename="definitions.py" line="1152"/>
         <source>The lowest hazard class.</source>
         <translation>Kelas ancaman rendah.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1096"/>
+        <location filename="definitions.py" line="1240"/>
         <source>Flood classes</source>
         <translation>Kelas banjir</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1111"/>
+        <location filename="definitions.py" line="1255"/>
         <source>wet</source>
         <translation>basah</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1125"/>
+        <location filename="definitions.py" line="1269"/>
         <source>dry</source>
         <translation>kering</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1154"/>
+        <location filename="definitions.py" line="1293"/>
         <source>The highest hazard classification.</source>
         <translation>Pengklasifikasian ancaman tertinggi.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1182"/>
+        <location filename="definitions.py" line="1321"/>
         <source>The lowest hazard classification.</source>
         <translation>Pengklasifikasian ancaman rendah.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1198"/>
+        <location filename="definitions.py" line="1337"/>
         <source>Tsunami classes</source>
         <translation>Kelas-kelas tsunami</translation>
     </message>
@@ -2517,27 +2438,27 @@
         <translation>Jumlah</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1355"/>
+        <location filename="definitions.py" line="1494"/>
         <source>Density</source>
         <translation>Kepadatan</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1370"/>
+        <location filename="definitions.py" line="1509"/>
         <source>Exposure unit defines the unit for the exposure, for example people can either be measured as count or density (count per area.</source>
         <translation>Satuan paparan menentukan satuan dari paparannya, sebagai contoh, orang dapat diukur sebagai jumlah ataupun (kepadatan per wilayah).</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1389"/>
+        <location filename="definitions.py" line="1528"/>
         <source>Attribute where the structure type is defined.</source>
         <translation>Atribut tempat tipe struktur didefinisikan.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1401"/>
+        <location filename="definitions.py" line="1540"/>
         <source>Attribute where the road type is defined.</source>
         <translation>Atribut tempat tipe jalan didefinisikan.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1416"/>
+        <location filename="definitions.py" line="1555"/>
         <source>Attribute where the volcano name is located.</source>
         <translation>Atribut tempat nama gunung berapi berada.</translation>
     </message>
@@ -2552,24 +2473,9 @@
         <translation>Daftar yang berisi radii dari titik sangga gunung api dalam urutan yang meningkat.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="72"/>
+        <location filename="impact_function.py" line="79"/>
         <source>&lt;sup&gt;1&lt;/sup&gt;People need evacuation if they are within the volcanic hazard zones.</source>
         <translation>&lt;sup&gt;1&lt;/sup&gt;Penduduk yang perlu dievakuasi bila telah diidentifikas daerahnya sebagai rawan bencana letusan gunung berapi.</translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="555"/>
-        <source>Population rounding is applied to all population values, which may cause discrepancies when adding values.</source>
-        <translation>Pembulatan populasi diterapkan untuk semua nilai populasi, yang dapat menyebabkan ketidakcocokan saat penambahan nilai.</translation>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="92"/>
-        <source>People affected by Volcano Hazard Zones</source>
-        <translation>Penduduk yang terkena dampak dari daerah rawan bahaya letusan gunung berapi</translation>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="98"/>
-        <source>People affected by volcano hazard zones</source>
-        <translation>Penduduk yang terkena dampak dari daerah rawan bahaya letusan gunung berapi</translation>
     </message>
     <message>
         <location filename="report_mixin_base.py" line="76"/>
@@ -2577,17 +2483,17 @@
         <translation>Daftar tindakan:</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="223"/>
+        <location filename="impact_function.py" line="226"/>
         <source>Fatality model is from Institut Teknologi Bandung 2012.</source>
         <translation>Model Fatality diperoleh dari Institut Teknologi Bandung 2012.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="225"/>
+        <location filename="impact_function.py" line="81"/>
         <source>Fatality model is from the Population Vulnerability Pager Model.</source>
         <translation>Model Fatality diperoleh dari Model Population Vulnerability Pager.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="228"/>
+        <location filename="impact_function.py" line="227"/>
         <source>Map shows the estimation of displaced population.</source>
         <translation>Peta menunjukkan estimasi jumlah penduduk yang perlu diungsikan.</translation>
     </message>
@@ -2622,7 +2528,7 @@
         <translation>Ambang batas ancaman yang dikategorikan sebagai kelas Ancaman Tinggi dalam skala MMI.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="75"/>
+        <location filename="impact_function.py" line="76"/>
         <source>&lt;sup&gt;1&lt;/sup&gt;People need evacuation if they are in a hazard zone.</source>
         <translation>&lt;sup&gt;1&lt;/sup&gt;Penduduk yang perlu dievakuasi jika mereka berada pada daerah ancaman.</translation>
     </message>
@@ -2702,22 +2608,22 @@
         <translation>Tiap-tiap ambang batas harus lebih besar dari ambang batas sebelumnya</translation>
     </message>
     <message>
-        <location filename="base.py" line="692"/>
+        <location filename="base.py" line="732"/>
         <source>Error: Impact Function has unknown style.</source>
         <translation>Kesalahan: Fungsi Dampak memiliki ragam yang tidak dikenali.</translation>
     </message>
     <message>
-        <location filename="base.py" line="897"/>
+        <location filename="base.py" line="940"/>
         <source>Ensure that hazard and exposure layers are all set before trying to run the impact function.</source>
         <translation>Pastikan bahwa lapisan ancaman dan keterpaparan telah siap sebelum mencoba untuk menjalankan fungsi dampak.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="155"/>
+        <location filename="impact_function.py" line="160"/>
         <source>There are no objects in the hazard layer with %s (Affected Field) in %s (Affected Value). Please check the value or use a different extent.</source>
         <translation>Tidak terdapat obyek di lapisan ancaman dengan (Kolom Terdampak) %s di (Nilai Terdampak) %s. Mohon cek nilai tersebut atau gunakan luasan yang berbeda.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="63"/>
+        <location filename="metadata_definitions.py" line="64"/>
         <source>Raster flood on roads</source>
         <translation>Banjir raster pada jalan</translation>
     </message>
@@ -2747,17 +2653,17 @@
         <translation>Ambang batas (dalam meter) dapat ditetapkan hingga sebanyak tiga dalam urutan menaik. Fungsi dampak akan melaporkan jumlah penduduk per ambang batas yang Anda tentukan di sini. Tetapkan batas atas untuk tiap ambang batas. Batas bawah dari ambang batas pertama akan selalu bernilai nol. Penduduk di kedalaman air di atas ambang batas maksimum akan diklasifikasikan sebagai penduduk yang membutuhkan evakuasi.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="74"/>
+        <location filename="impact_function.py" line="75"/>
         <source>&lt;sup&gt;1&lt;/sup&gt;People need evacuation if flood levels exceed %(eps).1f m.</source>
         <translation>&lt;sup&gt;1&lt;/sup&gt;Penduduk yang perlu dievakuasi bila terjadi banjir dengan ketinggian lebih dari %(eps).1f m</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="122"/>
+        <location filename="impact_function.py" line="123"/>
         <source>People in &gt;= %.1f m of water</source>
         <translation>Penduduk di &gt;=%.1f meter air</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="130"/>
+        <location filename="impact_function.py" line="131"/>
         <source>People in %.1f m to %.1f m of water</source>
         <translation>Penduduk di %.1f meter sampai %.1f meter air</translation>
     </message>
@@ -2797,19 +2703,14 @@
         <translation>Penduduk dengan kolom ancaman (&quot;%s&quot;) dengan nilai &quot;%s&quot;</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="188"/>
+        <location filename="impact_function.py" line="193"/>
         <source>People within any hazard polygon.</source>
         <translation>Penduduk dalam poligon ancaman manapun.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="168"/>
+        <location filename="impact_function.py" line="176"/>
         <source>There are no objects in the hazard layer with %s value in %s. Please check your data or use another attribute.</source>
         <translation>Tidak ada objek di lapisan ancaman dengan nilai %s di %s. Mohon cek kembali data Anda atau gunakan atribut lain.</translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="570"/>
-        <source>How will we reach evacuated people?</source>
-        <translation>Bagaimana kita akan menjangkau orang-orang yang dievakuasi?</translation>
     </message>
     <message>
         <location filename="population_exposure_report_mixin.py" line="135"/>
@@ -2980,17 +2881,17 @@
         <translation>InaSAFE telah dikembangkan secara bersama-sama oleh Pemerintah Indonesia-BNPB, Pemerintah Australia, World Bank-GFDRR dan kontributor independen. Instansi-instansi tersebut dan pengembang perangkat lunak dari InaSAFE tidak bertanggung jawab atas kebenaran output dari InaSAFE atau keputusan yang diberikan sebagai konsekuensinya.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="217"/>
+        <location filename="impact_function.py" line="222"/>
         <source>No roads are flooded in this scenario.</source>
         <translation>Tidak ada jalan yang tergenang pada skenario ini.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="251"/>
+        <location filename="impact_function.py" line="259"/>
         <source>No buildings were impacted by this flood.</source>
         <translation>Tidak ada bangunan yang terdampak pada skenario ini.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="97"/>
+        <location filename="metadata_definitions.py" line="98"/>
         <source>Raster layer contains population affected and the minimum needs based on number of the population affected.</source>
         <translation>Layer data raster berisi jumlah penduduk yang terkena dampak dan kebutuhan minimum berdasarkan pada jumlah penduduk yang terkena dampak.</translation>
     </message>
@@ -3000,7 +2901,7 @@
         <translation>Anda telah memilih lapisan yang memerlukan pemberian atau pembaharuan kata kunci. Di langkah selanjutnya Anda dapat memberikan kata kunci untuk lapisan tersebut. Sebelumnya Anda perlu menetapkan bahwa lapisan ini adalah lapisan agregasi.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="500"/>
+        <location filename="definitions.py" line="631"/>
         <source>Hazards</source>
         <translation>Ancaman</translation>
     </message>
@@ -3010,97 +2911,97 @@
         <translation>Tujuan</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="198"/>
+        <location filename="definitions.py" line="263"/>
         <source>Data type</source>
         <translation>Jenis Data</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="199"/>
+        <location filename="definitions.py" line="264"/>
         <source>The data type describes the values in the layer. Values can be continuous or classified</source>
         <translation>Jenis data yang mendeskripsikan nilai di lapisan. NIlai dapat berupa kontinyu atau terklasifikasi</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="282"/>
+        <location filename="definitions.py" line="347"/>
         <source>Geometry</source>
         <translation>Geometri</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="283"/>
+        <location filename="definitions.py" line="348"/>
         <source>Layer geometry can be either raster or vector. There are three possible vector geometries: point, line, and polygon. </source>
         <translation>Geometri lapisan bisa berupa raster atau vektor. Ada tiga kemungkinan geometri vektor: titik, garis, dan poligon.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="303"/>
+        <location filename="definitions.py" line="368"/>
         <source>Single event</source>
         <translation>Kejadian tunggal</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="319"/>
+        <location filename="definitions.py" line="386"/>
         <source>Multiple event</source>
         <translation>Kejadian majemuk</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="338"/>
+        <location filename="definitions.py" line="407"/>
         <source>Scenario</source>
         <translation>Skenario</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="339"/>
+        <location filename="definitions.py" line="408"/>
         <source>This describes the type of hazard scenario that is represented by the layer. There are two possible values for this attribute, single event and multiple event.</source>
         <translation>Ini mendeskripsikan jenis dari skenario ancaman yang direpresentasikan oleh lapisan. Ada dua kemungkinan nilai untuk atribut ini, kejadian tunggal dan kejadian majemuk.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="421"/>
+        <location filename="definitions.py" line="528"/>
         <source>Volcanic ash</source>
         <translation>Abu vulkanik</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="514"/>
+        <location filename="definitions.py" line="640"/>
         <source>Land cover</source>
         <translation>Penutup lahan</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="587"/>
+        <location filename="definitions.py" line="724"/>
         <source>People in buildings</source>
         <translation>Penduduk di dalam bangunan</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="764"/>
+        <location filename="definitions.py" line="913"/>
         <source>kg/m2</source>
         <translation>kg/m2</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="877"/>
+        <location filename="definitions.py" line="1026"/>
         <source>Hazard units are used for continuous data. Examples of hazard units include metres and feet. </source>
         <translation>Satuan ancama digunakan untuk data kontinyu. Contoh satuan ancaman meliputi meter dan kaki.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1314"/>
+        <location filename="definitions.py" line="1453"/>
         <source>Classes</source>
         <translation>Kelas-kelas</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1075"/>
+        <location filename="definitions.py" line="1219"/>
         <source>Hazard classes are a way to group the values in one of the attributes or fields in a vector layer.</source>
         <translation>Kelas ancaman adalah suatu cara untuk mengelompokan nilai-nilai di salah satu atribut atau field di lapisan vektor.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1168"/>
+        <location filename="definitions.py" line="1307"/>
         <source>The middle hazard classification.</source>
         <translation>Klasifikasi ancaman menengah</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1315"/>
+        <location filename="definitions.py" line="1454"/>
         <source>Hazard classes are a way to classify the cell values in a raster layer.</source>
         <translation>Kelas-kelas ancaman adalah sebuah cara untuk mengklasifikasikan nilai sel dari lapisan raster.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1459"/>
+        <location filename="definitions.py" line="1598"/>
         <source>Attribute field</source>
         <translation>Field atribute</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1427"/>
+        <location filename="definitions.py" line="1566"/>
         <source>Name field</source>
         <translation>Field nama</translation>
     </message>
@@ -3110,32 +3011,32 @@
         <translation>&lt;p&gt;Anda telah memilih &lt;b&gt;%s %s&lt;/b&gt; sebagai masukan ancaman untuk fungsi &lt;b&gt;%s&lt;/b&gt;.&lt;/p&gt; &lt;p&gt; Mohon bantu kami untuk menemukan lapisan &lt;b&gt;ancaman&lt;/b&gt; Anda. Lapisan ancaman mewakili sesuatu yang akan berdampak pada penduduk atau infrastruktur di suatu wilayah. Sebagai contoh, banjir, gempa bumi dan rendaman tsunami adalah beberapa jenis ancaman. Pilih opsi yang sesuai di bawah ini untuk memberitahukan di mana data Anda berada:&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1460"/>
+        <location filename="definitions.py" line="1599"/>
         <source>The attribute field identifies a field in the attribute table used to identify the function of a feature e.g.  a road type, building type, hazard zone etc.</source>
         <translation>Field atribut mengidentifikasikan sebuah field di dalam tabel atribut yang digunakan untuk mengidentifikasikan kegunaan dari sebuah fitur seperti tipe jalan, tipe bangunan, wilayah ancaman, dan lain-lain.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1474"/>
+        <location filename="definitions.py" line="1613"/>
         <source>Attribute value</source>
         <translation>Nilai atribute</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1475"/>
+        <location filename="definitions.py" line="1614"/>
         <source>The attribute value identifies features with similar meanings. For example building attributes may include schools and hospitals. </source>
         <translation>Nilai atribut mengidentifikasikan fitur dengan makna yang sama. Sebagai contoh, atribut bangunan mencakup sekolah dan rumah sakit.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1488"/>
+        <location filename="definitions.py" line="1627"/>
         <source>Attribute value map</source>
         <translation>Pemetaan nilai atribut</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1489"/>
+        <location filename="definitions.py" line="1628"/>
         <source>Attribute value maps are used to group related attribute values. For example flooded polygons with attribute values of &quot;yes&quot; , &quot;YES&quot;, &quot;1&quot; and &quot;Flooded&quot; might all be grouped together as &quot;FLOODPRONE&quot;.</source>
         <translation>Pemetaan nilai atribut digunakan untuk mengelompokan nilai atribut yang berkaitan. Sebagai contoh banjir poligon dengan nilai atribut &quot;yes&quot;, &quot;YES&quot;, &quot;1&quot; dan &quot;Flooded&quot; bisa dikelompokan bersama sebagai &quot;FLOODPRONE&quot;.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="102"/>
+        <location filename="metadata_definitions.py" line="104"/>
         <source>Road inundated status</source>
         <translation>Status jalan yang tergenang</translation>
     </message>
@@ -3200,27 +3101,27 @@
         <translation>Laporan dibuat oleh</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="65"/>
+        <location filename="metadata_definitions.py" line="66"/>
         <source>The hazard layer must be a polygon layer. This layer must have an attribute representing the volcano hazard zone that can be specified in the impact function option. There are three classes low, medium, and high. The default values are &quot;Kawasan Rawan Bencana I&quot; for low, &quot;Kawasan Rawan Bencana II&quot; for medium, and &quot;Kawasan  Rawan Bencana III for high.&quot; If you want to see the name of the volcano in the result, you need to specify the volcano name attribute in the Impact Function options.</source>
         <translation>Lapisan ancaman harus berupa lapisan poligon. Lapisan ini harus memiliki atribut yang merepresentasikan daerah ancaman gunung berapi yang dapat ditentukan pada opsi fungsi dampak. Ada kelas rendah, menengah, dan tinggi. Nilai defaultnya adalah Kawasan Rawan Bencana I&quot; untuk rendah, &quot;Kawasan Rawan Bencana II&quot;, untuk menengah, dan &quot;Kawasan Rawan Bencana III&quot; untuk tinggi. Jika Anda ingin melihat nama dari gunung berapi di hasil, Anda perlu menentukan atribut nama gunung berapi pada opsi Fungsi Dampak.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="92"/>
+        <location filename="metadata_definitions.py" line="93"/>
         <source>To assess the number of people that may be impacted by each hazard zone.</source>
         <translation>Untuk menghitung banyak penduduk yang bisa terdampak di setiap daerah ancaman.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="68"/>
+        <location filename="metadata_definitions.py" line="69"/>
         <source>To assess the impacts of (flood or tsunami) inundation on building footprints originating from OpenStreetMap (OSM) with hazard in raster format.</source>
         <translation>Untuk menghitung dampak genangan (banjir atau tsunami) pada jejak keberadaan bangunan yang berasal dari OpenStreetMap (OSM) dengan ancaman dalam format raster.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="72"/>
+        <location filename="metadata_definitions.py" line="73"/>
         <source>The inundation status is calculated for each building (using the centroid if it is a polygon) based on the flood threshold. The threshold can be configured in impact function options.</source>
         <translation>Status tergenang dihitung untuk seriap bangunan (menggunakan centroid jika berupa poligon) berdasarkan batas banjir. Batas ini dapat diatur melalui opsi fungsi dampak.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="95"/>
+        <location filename="metadata_definitions.py" line="96"/>
         <source>This function only flags buildings as impacted or not either based on a fixed threshold</source>
         <translation>Fungsi ini hanya memberi tanda bangunan sebagai terdampak atau tidak berdasarkan ambang batas yang tetap.</translation>
     </message>
@@ -3250,17 +3151,17 @@
         <translation>Jalan dikatakan %s ketika ketinggian %s melebihi %.2f m.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="624"/>
+        <location filename="definitions.py" line="770"/>
         <source>Which roads can be used to evacuate people or to distribute logistics?</source>
         <translation>Jalan mana yang dapat digunakan untuk mengevakuasi penduduk atau membagikan logistik?</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="626"/>
+        <location filename="definitions.py" line="772"/>
         <source>What type of vehicles can use the unaffected roads?</source>
         <translation>Kendaraan seperti apa yang dapat melewati jalan yang tidak terdampak?</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="627"/>
+        <location filename="definitions.py" line="773"/>
         <source>What sort of equipment will be needed to reopen roads &amp; where will we get it?</source>
         <translation>Peralatan seperti apa yang akan diperlukan untuk membuka jalan &amp; dimana kita akan mendapatkannya?</translation>
     </message>
@@ -3270,17 +3171,17 @@
         <translation>Tidak ada objek pada layer ancaman dengan &quot;value&quot; &gt; &apos;%s&apos;. Silahkan cek kembali nilai tersebut atau gunakan luasan lain.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="62"/>
+        <location filename="metadata_definitions.py" line="63"/>
         <source>To assess the impacts of (flood or tsunami) inundation on building footprints with hazard in vector format.</source>
         <translation>Untuk menghitung dampak genangan (banjir atau tsunami) pada jejak keberadaan bangunan dengan ancaman dalam format vektor.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="65"/>
+        <location filename="metadata_definitions.py" line="66"/>
         <source>The inundation status is calculated for each building (using the centroid if it is a polygon) based on the value of hazard attribute. The attribute and the values that are considered as flooded can be configured in impact function options.</source>
         <translation>Status tergenang dihitung untuk seriap bangunan (menggunakan centroid jika berupa poligon) berdasarkan nilai dari atribut ancaman. Atribut dan nilai yang dianggap sebagai banjir dapat diatur melalui opsi fungsi dampak.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="71"/>
+        <location filename="metadata_definitions.py" line="72"/>
         <source>A hazard vector layer whose attribute that can be used to mark whether a polygon is flood or not.</source>
         <translation>Lapisan data vektor ancaman yang memiliki atribut yang bisa digunakan untuk menandai apakah sebuah poligon terbanjiri atau tidak.</translation>
     </message>
@@ -3295,27 +3196,22 @@
         <translation>Catatan dan asumsi</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="70"/>
+        <location filename="impact_function.py" line="77"/>
         <source>Total population in the analysis area: %s</source>
         <translation>Total penduduk dalam wilayah analisis: %s</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="719"/>
+        <location filename="definitions.py" line="868"/>
         <source>The layers contained &quot;no data&quot; values. This missing data was carried through to the impact layer.</source>
         <translation>Lapisan berisi &quot;tidak ada data&quot;. Data yang hilang ini dibawa sampai ke lapisan dampak.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="722"/>
+        <location filename="definitions.py" line="871"/>
         <source>&quot;No data&quot; values in the impact layer were treated as 0 when counting the affected or total population.</source>
         <translation>Grid yang tidak memiliki data pada layer dampak dianggap sebagai 0 saat menghitung populasi terdampak atau total populasi.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="99"/>
-        <source>Number of people affected in each class</source>
-        <translation>Banyak penduduk terdampak di setiap kelas</translation>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="159"/>
+        <location filename="impact_function.py" line="160"/>
         <source>No people in %.1f m of water</source>
         <translation>Tidak ada penduduk yang terendam air berkedalaman %.1f meter</translation>
     </message>
@@ -3355,12 +3251,12 @@
         <translation>Kering</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="101"/>
+        <location filename="metadata_definitions.py" line="103"/>
         <source>Flooded structure status</source>
         <translation>Status banjir bangunan</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="102"/>
+        <location filename="metadata_definitions.py" line="104"/>
         <source>(flooded, wet, or dry)</source>
         <translation>(terbanjiri, basah, atau kering)</translation>
     </message>
@@ -3370,7 +3266,7 @@
         <translation>Terbanjiri  (&gt;= %.1f m)</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="65"/>
+        <location filename="impact_function.py" line="68"/>
         <source>Buildings are flooded when in a region with field &quot;%s&quot; in &quot;%s&quot;.</source>
         <translation>Bangunan dianggap terbanjiri apabila berada di wilayah dengan kolom &quot;%s&quot; memiliki nilai di &quot;%s&quot;.</translation>
     </message>
@@ -4150,12 +4046,12 @@
         <translation>Nisbah orang tua menentukan berapa perbandingan dari populasi yang telah melewati usia dewasa hingga lanjut usia. Batas ambang usia untuk kategori pemuda dapat berbeda-beda untuk tiap daerah - mohon konsultasikan dengan badan sensus lokal Anda untuk mencari tahu batas ambang yang sesuai di wilayah Anda. InaSAFE tidak memaksakan skema nisbah usia tertentu - populasi akan dirinci berdasarkan batas ambang yang Anda didefiniskan untuk daerah lokal Anda. Di InaSAFE, orang dengan usia 65 tahun ke atas dikategorikan sebagai &quot;orang tua&quot;. Nisbah orang tua memiliki nilai default 0,078.</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="466"/>
+        <location filename="needs_manager_dialog.py" line="464"/>
         <source>A &lt;b&gt;unit abbreviation&lt;/b&gt; is the basic measurement unit&apos;s shortened. For example when planning water rations the units would be l.</source>
         <translation>&lt;b&gt;Singkatan satuan&lt;/b&gt; adalah ukuran standar satuan yang disingkat. Contohnya, saat perencanaan jatah air satuannya menjadi l.</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="498"/>
+        <location filename="needs_manager_dialog.py" line="496"/>
         <source>The &lt;b&gt;maximum&lt;/b&gt; is the maximum allowed quantity of the resource per person. For example you may dictate that the water ration per person per day should never be allowed to be more than 67l. This is enforced when tweaking a maximum needs set before an impact evaluation.</source>
         <translation>&lt;b&gt;Maximum&lt;/b&gt; adalah kuantitas batas maximum yang diperbolehkan dari suatu sumber daya perorangan. Sebagai contoh, Anda dapat menetapkan jatah air per orang per hari tidak boleh lebih dari 67l. Hal ini diwajibkan saat menetapkan kebutuhan maksimum sebelum evaluasi dampak</translation>
     </message>
@@ -4195,17 +4091,17 @@
         <translation>Anda telah memilih data &lt;b&gt;terklasifikasi&lt;/b&gt; untuk lapisan vektor &lt;b&gt;%s&lt;/b&gt;. Mohon pilih atribut pada lapisan ini yang mewakili id-id-nya.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="59"/>
+        <location filename="metadata_definitions.py" line="60"/>
         <source>Earthquake ITB fatality function based on a Bayesian approach</source>
         <translation>Fungsi dampak ITB gempa bumi berdasarkan pendekatan Bayesian</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="63"/>
+        <location filename="metadata_definitions.py" line="64"/>
         <source>Die or be displaced according ITB bayesian model</source>
         <translation>Meninggal atau diungsikan berdasarkan model bayesian ITB</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="81"/>
+        <location filename="metadata_definitions.py" line="82"/>
         <source>Sengara, W., Suarjana, M., Yulman, M.A., Ghasemi, H., and Ryu, H. (2015). An empirical fatality model for Indonesia based on a Bayesian approach. Submitted for Journal of the Geological Society</source>
         <translation>Sengara, W., Suarjana, M., Yulman, M.A., Ghasemi, H., and Ryu, H. (2015). An empirical fatality model for Indonesia based on a Bayesian approach. Submitted for Journal of the Geological Society</translation>
     </message>
@@ -4215,27 +4111,27 @@
         <translation>Di setiap wilayah ancaman berapa banyak bangunan yang mungkin terdampak.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="58"/>
+        <location filename="metadata_definitions.py" line="59"/>
         <source>Classified polygon hazard on polygon people</source>
         <translation>Ancaman poligon terklasifikasi pada poligon penduduk</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="64"/>
+        <location filename="metadata_definitions.py" line="65"/>
         <source>To assess the impact of each hazard zone on polygon people.</source>
         <translation>Untuk menilai dampak tiap wilayah ancaman pada poligon populasi.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="71"/>
+        <location filename="metadata_definitions.py" line="72"/>
         <source>Vector polygon layer where each polygon represents a type of area where people lives.</source>
         <translation>Sebuah lapisan poligon dimana setiap poligon mewakili sebuah tipe dari wilayah dimana penduduk tinggal.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="74"/>
+        <location filename="metadata_definitions.py" line="75"/>
         <source>A vector layer of areas polygons with each tagged according to the hazard zone in which it falls.</source>
         <translation>Sebuah lapisan vektor dari poligon wilayah yang ditandai berdasarkan daerah ancaman yang ditempati.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="75"/>
+        <location filename="metadata_definitions.py" line="76"/>
         <source>Provide details about how big area fall within each hazard zone.</source>
         <translation>Menyediakan rincian mengenai seberapa luas wilayah yang berada di setiap daerah ancaman.</translation>
     </message>
@@ -4245,32 +4141,32 @@
         <translation>Di setiap wilayah ancaman berapa banyak penduduk yang mungkin terdampak.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="113"/>
+        <location filename="impact_function.py" line="122"/>
         <source>Input hazard must be a polygon layer. I got %s with layer type %s</source>
         <translation>Lapisan ancaman harus berupa lapisan poligon. Saya mendapatkan %s dengan tipe lapisan %s</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="135"/>
+        <location filename="impact_function.py" line="139"/>
         <source>Radius %.1f km</source>
         <translation>Radius %.1f km</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="147"/>
+        <location filename="impact_function.py" line="151"/>
         <source>Radius %s km</source>
         <translation>Radius %s km</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="64"/>
+        <location filename="metadata_definitions.py" line="65"/>
         <source>The hazard layer must be a point layer. This point will be buffered with the radii (in kilometer) specified in the parameters as the hazard zone. If you want to see the name of the volcano in the result, you need to specify the volcano name attribute in the Impact Function option.</source>
         <translation>Lapisan ancaman harus berupa lapisan titik. Titik ini akan disangga dengan jari-jari (dalam kilometer) yang ditentukan dalam parameter sebagai wilayah ancaman. Apabila Anda ingin melihat nama gunung berapi terkait di dalam hasil laporan, Anda perlu menentukan atribut nama gunung berapi di pengaturan Fungsi Dampak.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="73"/>
+        <location filename="metadata_definitions.py" line="74"/>
         <source>Vector layer contains Map of building exposed to volcanic hazard zones for each radius.</source>
         <translation>Lapisan vector yang berisi peta bangunan yang terpapar wilayah ancaman letusan gunung berapi di tiap jari-jarinya.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="123"/>
+        <location filename="impact_function.py" line="132"/>
         <source>Hazard data %s did not contain expected attribute %s </source>
         <translation>Data ancaman %s tidak memiliki atribut yang diharapkan %s</translation>
     </message>
@@ -4305,22 +4201,22 @@
         <translation>Total Banyak Penduduk</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="655"/>
+        <location filename="definitions.py" line="805"/>
         <source>Are the water and electricity services still operating?</source>
         <translation>Apakah layanan air dan listrik masih berjalan?</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="656"/>
+        <location filename="definitions.py" line="806"/>
         <source>Are the health centres still open?</source>
         <translation>Apakah pusat kesehatan masih dibuka?</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="657"/>
+        <location filename="definitions.py" line="807"/>
         <source>Are the other public services accessible?</source>
         <translation>Apakah layanan publik lain bisa diakses?</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="661"/>
+        <location filename="definitions.py" line="811"/>
         <source>Are the schools and hospitals still active?</source>
         <translation>Apakah sekolah dan rumah sakit masih aktif?</translation>
     </message>
@@ -4330,34 +4226,19 @@
         <translation>Bangunan tidak terdampak</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="564"/>
+        <location filename="definitions.py" line="699"/>
         <source>Which group or population is most affected?</source>
         <translation>Kelompok atau penduduk manakah yang paling terdampak?</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="565"/>
+        <location filename="definitions.py" line="700"/>
         <source>Who are the vulnerable people in the population and why?</source>
         <translation>Siapa saja penduduk yang rentan dan mengapa?</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="568"/>
-        <source>What are the security factors for the affected population?</source>
-        <translation>Apa saja faktor keamanan untuk penduduk terdampak?</translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="569"/>
+        <location filename="definitions.py" line="703"/>
         <source>What are the security factors for relief responders?</source>
         <translation>Apa saja faktor keamanan untuk pemberi bantuan?</translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="571"/>
-        <source>What kind of food does the population normally consume?</source>
-        <translation>Makanan seperti apa yang biasa dikonsumsi penduduk?</translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="572"/>
-        <source>What are the critical non-food items required by the affected population?</source>
-        <translation>Apa saja benda selain makanan yang penting yang dibutuhkan penduduk terdampak?</translation>
     </message>
     <message>
         <location filename="population_exposure_report_mixin.py" line="90"/>
@@ -4365,12 +4246,12 @@
         <translation>Apakah pasokan air, sanitasi, makanan higienis, tempat penampungan, obat-obatan, dan barang-barang bantuan yang tersedia cukup untuk %s orang?</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="574"/>
+        <location filename="definitions.py" line="711"/>
         <source>What are the related health risks?</source>
         <translation>Apa saja risiko terkait dengan kesehatan?</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="575"/>
+        <location filename="definitions.py" line="712"/>
         <source>Who are the key people responsible for coordination?</source>
         <translation>Siapa orang penting yang bertanggung jawab untuk koordinasi?</translation>
     </message>
@@ -4415,189 +4296,189 @@
         <translation>Rincian: %s</translation>
     </message>
     <message>
-        <location filename="base.py" line="1186"/>
+        <location filename="base.py" line="1229"/>
         <source>Processing started</source>
         <translation>Pemrosesan dimulai</translation>
     </message>
     <message>
-        <location filename="base.py" line="1187"/>
+        <location filename="base.py" line="1230"/>
         <source>Please wait - processing may take a while depending on your hardware configuration and the analysis extents and data.</source>
         <translation>Silakan tunggu - Pemrosesan akan memakan waktu tergantung dari konfigurasi hardware Anda serta luasan analisis dan data.</translation>
     </message>
     <message>
-        <location filename="base.py" line="1196"/>
+        <location filename="base.py" line="1239"/>
         <source>No valid layers</source>
         <translation>Tidak ada layer yang valid</translation>
     </message>
     <message>
-        <location filename="base.py" line="1197"/>
+        <location filename="base.py" line="1240"/>
         <source>Please ensure your hazard and exposure layers are set in the question area and then press run again.</source>
         <translation>Pastikan bahwa layar ancaman dan keterpaparan telah diset pada form dan kemudian tekan tombol Hitung kembali.</translation>
     </message>
     <message>
-        <location filename="base.py" line="1205"/>
+        <location filename="base.py" line="1248"/>
         <source>This analysis will calculate the impact of</source>
         <translation>Analisis ini akan menghitung dampak dari</translation>
     </message>
     <message>
-        <location filename="base.py" line="1205"/>
+        <location filename="base.py" line="1248"/>
         <source>on</source>
         <translation>pada</translation>
     </message>
     <message>
-        <location filename="base.py" line="1215"/>
+        <location filename="base.py" line="1258"/>
         <source>and bullet list the results</source>
         <translation>dan bullet list hasil</translation>
     </message>
     <message>
-        <location filename="base.py" line="1215"/>
+        <location filename="base.py" line="1258"/>
         <source>aggregated by</source>
         <translation>diagregasi berdasarkan</translation>
     </message>
     <message>
-        <location filename="base.py" line="1232"/>
+        <location filename="base.py" line="1275"/>
         <source>The following postprocessors will be used:</source>
         <translation>Hasil pengolahan berikut ini akan digunakan:</translation>
     </message>
     <message>
-        <location filename="base.py" line="911"/>
+        <location filename="base.py" line="954"/>
         <source>A problem was encountered when trying to determine the analysis extents.</source>
         <translation>Terdapat sebuah masalah ketika mencoba menentukan luasan analisis.</translation>
     </message>
     <message>
-        <location filename="base.py" line="1058"/>
+        <location filename="base.py" line="1101"/>
         <source>An error occurred when calling a GDAL command</source>
         <translation>Terjadi kesalahan ketika memanggil perintah GDAL</translation>
     </message>
     <message>
-        <location filename="base.py" line="1062"/>
+        <location filename="base.py" line="1105"/>
         <source>An error occurred when writing clip file</source>
         <translation>Kesalahan terjadi ketika membuat file hasil clip</translation>
     </message>
     <message>
-        <location filename="base.py" line="1066"/>
+        <location filename="base.py" line="1109"/>
         <source>An exception occurred when setting up the impact calculator.</source>
         <translation>Terjadi pengecualian ketika mempersiapkan kalkulator perhitungan dampak.</translation>
     </message>
     <message>
-        <location filename="base.py" line="1071"/>
+        <location filename="base.py" line="1114"/>
         <source>An error occurred because there are no features visible in the current view. Try zooming out or panning until some features become visible.</source>
         <translation>Kesalahan terjadi karena tidak ada fitur yang terlihat di layar Anda sekarang. Cobalah untuk melakukan pengecilan (zoom out) atau penggeseran sampai terlihat fitur yang dimaksud.</translation>
     </message>
     <message>
-        <location filename="base.py" line="1077"/>
+        <location filename="base.py" line="1120"/>
         <source>An error occurred because you are using a layer containing count data (e.g. population count) which will not scale accurately if we re-project it from its native coordinate reference system to WGS84/GeoGraphic.</source>
         <translation>Sebuah kesalahan terjadi karena Anda menggunakan layer yang memiliki data kepadatan (contoh : jumlah penduduk) yang tidak akan memiliki skala yang akurat jika diproyeksikan ulang dari sistem koordinat asal ke WGS84/GeoGrafis.</translation>
     </message>
     <message>
-        <location filename="base.py" line="1084"/>
+        <location filename="base.py" line="1127"/>
         <source>An error occurred because it appears that your system does not have sufficient memory. Upgrading your computer so that it has more memory may help. Alternatively, consider using a smaller geographical area for your analysis, or using rasters with a larger cell size.</source>
         <translation>Kesalahan terjadi dikarenakan sistem (komputer) Anda tidak memiliki memori yang cukup. Peng-upgrade-an komputer Anda sehingga memiliki memori yang lebih mungkin membantu. Alternatif lain, pertimbangkan untuk menggunakan area goegrafis yang lebih kecil untuk analisis Anda, atau gunakan raster dengan ukuran sel lebih besar.</translation>
     </message>
     <message>
-        <location filename="base.py" line="1477"/>
+        <location filename="base.py" line="1520"/>
         <source>Resampling and clipping the hazard layer to match the intersection of the exposure layer and the current view extents.</source>
         <translation>Melakukan resampling dan memotong lapisan ancaman bencana untuk menyesuaikan perpotongan dari lapisan keterpaparan dan luasan tampilan saat ini.</translation>
     </message>
     <message>
-        <location filename="base.py" line="1482"/>
+        <location filename="base.py" line="1525"/>
         <source>Resampling and clipping the hazard layer to match the intersection of the exposure layer extents.</source>
         <translation>Melakukan resampling dan memotong lapisan ancaman bencana untuk menyesuaikan perpotongan dari lapisan keterpaparan.</translation>
     </message>
     <message>
-        <location filename="base.py" line="1486"/>
+        <location filename="base.py" line="1529"/>
         <source>Resampling and clipping the hazard layer to match the bookmarked extents.</source>
         <translation>Melakukan resampling dan memotong lapisan ancaman bencana untuk menyesuaikan dengan luasan bookmark.</translation>
     </message>
     <message>
-        <location filename="base.py" line="1490"/>
+        <location filename="base.py" line="1533"/>
         <source>Resampling and clipping the hazard layer to match the intersection of your preferred analysis area.</source>
         <translation>Melakukan resampling dan memotong lapisan ancaman bencana untuk menyesuaikan dengan perpotongan wilayah analisis yang Anda inginkan.</translation>
     </message>
     <message>
-        <location filename="base.py" line="1496"/>
+        <location filename="base.py" line="1539"/>
         <source>Preparing hazard data</source>
         <translation>Menyiapkan data ancaman bencana</translation>
     </message>
     <message>
-        <location filename="base.py" line="1513"/>
+        <location filename="base.py" line="1556"/>
         <source>Preparing exposure data</source>
         <translation>Menyiapkan data keterpaparan</translation>
     </message>
     <message>
-        <location filename="base.py" line="1520"/>
+        <location filename="base.py" line="1563"/>
         <source>Resampling and clipping the exposure layer to match the intersection of the hazard layer and the current view extents.</source>
         <translation>Melakukan resampling dan memotong lapisan ancaman bencana untuk menyesuaikan dengan luasan tampilan saat ini.</translation>
     </message>
     <message>
-        <location filename="base.py" line="1525"/>
+        <location filename="base.py" line="1568"/>
         <source>Resampling and clipping the exposure layer to match the intersection of the hazard layer extents.</source>
         <translation>Melakukan resampling dan memotong lapisan keterpaparan untuk menyesuaikan perpotongan dari lapisan ancaman.</translation>
     </message>
     <message>
-        <location filename="base.py" line="1529"/>
+        <location filename="base.py" line="1572"/>
         <source>Resampling and clipping the exposure layer to match the bookmarked extents.</source>
         <translation>Melakukan resampling dan memotong lapisan keterpaparan untuk menyesuaikan dengan luasan bookmark.</translation>
     </message>
     <message>
-        <location filename="base.py" line="1533"/>
+        <location filename="base.py" line="1576"/>
         <source>Resampling and clipping the exposure layer to match the intersection of your preferred analysis area.</source>
         <translation>Melakukan resampling dan memotong lapisan keterpaparan untuk menyesuaikan dengan perpotongan wilayah analisis yang Anda inginkan.</translation>
     </message>
     <message>
-        <location filename="base.py" line="1575"/>
+        <location filename="base.py" line="1618"/>
         <source>No impact layer was generated.
 </source>
         <translation>Tidak ada lapisan dampak yang dibuat.
 </translation>
     </message>
     <message>
-        <location filename="base.py" line="1610"/>
+        <location filename="base.py" line="1653"/>
         <source>Aggregation error occurred.</source>
         <translation>Terjadi kesalahan (error) pada aggregasi.</translation>
     </message>
     <message>
-        <location filename="base.py" line="1635"/>
+        <location filename="base.py" line="1678"/>
         <source>Calculating impact</source>
         <translation>Menghitung dampak</translation>
     </message>
     <message>
-        <location filename="base.py" line="1636"/>
+        <location filename="base.py" line="1679"/>
         <source>This may take a little while - we are computing the areas that will be impacted by the hazard and writing the result to a new layer.</source>
         <translation>Ini mungkin memerlukan sedikit waktu - kita menghitung daerah yang akan terkena dampak ancaman bencana dan menulis hasilnya ke layer baru.</translation>
     </message>
     <message>
-        <location filename="base.py" line="843"/>
+        <location filename="base.py" line="883"/>
         <source>Notes</source>
         <translation>Catatan</translation>
     </message>
     <message>
-        <location filename="base.py" line="846"/>
+        <location filename="base.py" line="886"/>
         <source>It appears that no %s are affected by %s. You may want to consider:</source>
         <translation>Ini menunjukkan bahwa tidak ada %s terdampak oleh %s. Anda mungkin ingin mempertimbangkan:</translation>
     </message>
     <message>
-        <location filename="base.py" line="851"/>
+        <location filename="base.py" line="891"/>
         <source>Check that you are not zoomed in too much and thus excluding %s from your analysis area.</source>
         <translation>Periksa bahwa Anda tidak terlalu memperbesar peta dan sehingga %s tidak termasuk dari daerah analisis Anda.</translation>
     </message>
     <message>
-        <location filename="base.py" line="855"/>
+        <location filename="base.py" line="898"/>
         <source>Check that the exposure is not no-data or zero for the entire area of your analysis.</source>
         <translation>Pastikan bahwa keterpaparan bukan merupakan data kosong atau bernilai nol untuk seluruh area yang ingin Anda analisis.</translation>
     </message>
     <message>
-        <location filename="base.py" line="858"/>
+        <location filename="base.py" line="901"/>
         <source>Check that your impact function thresholds do not exclude all features unintentionally.</source>
         <translation>Pastikan bahwa fungsi dampak Anda tidak menghilangkan semua fitur yang ada secara tidak sengaja.</translation>
     </message>
     <message>
-        <location filename="base.py" line="862"/>
+        <location filename="base.py" line="905"/>
         <source>Check that your dataset coordinate reference system is compatible with InaSAFE&apos;s current requirements.</source>
         <translation>Periksa bahwa sistem referensi koordinat dari data Anda sesuai dengan kebutuhan InaSAFE sekarang.</translation>
     </message>
     <message>
-        <location filename="base.py" line="883"/>
+        <location filename="base.py" line="926"/>
         <source>An exception occurred when running the impact analysis.</source>
         <translation>Terjadi pengecualian ketika menjalankan analisis dampak.</translation>
     </message>
@@ -4672,57 +4553,52 @@
         <translation>Wilayah ancaman tsunami sangat tinggi didefinisikan dengan kedalaman genangan lebih dari %.1f %s</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="109"/>
-        <source>Inundated buildings</source>
-        <translation>Bangunan tergenang</translation>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="110"/>
+        <location filename="metadata_definitions.py" line="112"/>
         <source>Inundated structure status</source>
         <translation>Status genangan bangunan</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="111"/>
+        <location filename="metadata_definitions.py" line="113"/>
         <source>(low, medium, high, and very high)</source>
         <translation>(rendah, menengah, tinggi, dan sangat tinggi)</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="68"/>
+        <location filename="metadata_definitions.py" line="69"/>
         <source>Raster tsunami on buildings</source>
         <translation>Tsunami raster pada bangunan</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="69"/>
+        <location filename="metadata_definitions.py" line="70"/>
         <source>Be inundated</source>
         <translation>Tergenang</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="75"/>
+        <location filename="metadata_definitions.py" line="76"/>
         <source>To assess the impacts of tsunami inundation on building footprints in vector format with hazard in raster format.</source>
         <translation>Untuk menghitung dampak genangan tsunami pada jejak keberadaan bangunan dalam format vektor dengan ancaman dalam format raster.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="78"/>
+        <location filename="metadata_definitions.py" line="79"/>
         <source>The inundation status is calculated for each building (using the centroid if it is a polygon) based on the tsunami threshold. The threshold can be configured in impact function options.</source>
         <translation>Status tergenang dihitung untuk seriap bangunan (menggunakan centroid jika berupa poligon) berdasarkan batas tsunami. Batas ini dapat diatur melalui opsi fungsi dampak.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="81"/>
+        <location filename="metadata_definitions.py" line="82"/>
         <source>A hazard raster layer where each cell represents tsunami inundation depth (in meters).</source>
         <translation>Sebuah layer raster ancaman dimana setiap sel merepresentasikan kedalaman genangan tsunami (dalam meter).</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="86"/>
+        <location filename="metadata_definitions.py" line="87"/>
         <source>Vector polygon or point layer where each feature represents the footprint of a building.</source>
         <translation>Poligon vektor atau layer titik dimana masing-masing fitur merepresentasikan batas tapak sebuah bangunan.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="89"/>
+        <location filename="metadata_definitions.py" line="90"/>
         <source>Vector layer contains building is estimated to be inundated and the breakdown of the building by type.</source>
         <translation>Layer data vektor berisi bangunan yang diperkirakan tergenang dan kerusakan berdasarkan jenis bangunannya.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="92"/>
+        <location filename="metadata_definitions.py" line="93"/>
         <source>Provide details about where critical infrastructure might be inundated.</source>
         <translation>Berikan detail di tempat mana infrastruktur kritis mungkin tergenang.</translation>
     </message>
@@ -4742,7 +4618,7 @@
         <translation>Ambang Batas Wilayah Ancaman Tinggi.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="567"/>
+        <location filename="definitions.py" line="701"/>
         <source>What are people&apos;s likely movements?</source>
         <translation>Apa tindakan penduduk yang mungkin terjadi?</translation>
     </message>
@@ -4752,17 +4628,17 @@
         <translation>Jumlah penduduk</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1429"/>
+        <location filename="definitions.py" line="1568"/>
         <source>Attribute for the area name. We will show the name for each area by using this attribute.</source>
         <translation>Atribut untuk nama wilayah. Kami akan menampilkan nama dari setiap wilayah dengan menggunakan atribut ini.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1442"/>
+        <location filename="definitions.py" line="1581"/>
         <source>Id field</source>
         <translation>Field ID</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1444"/>
+        <location filename="definitions.py" line="1583"/>
         <source>Attribute for the id on the area. We will group the result by this attribute</source>
         <translation>Atribut untuk ID pada wilayah. Kami akan mengelompokan hasil berdasarkan atribut ini.</translation>
     </message>
@@ -4847,117 +4723,117 @@
         <translation>Jika dataset sudah ada di direktori output maka dataset tersebut akan ditimpa jika cek box &quot;Tulis ulang apabila file ada&quot; dicentang.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="144"/>
+        <location filename="definitions.py" line="209"/>
         <source>&lt;b&gt;Continuous&lt;/b&gt; data can be used in raster hazard or exposure data where the values in the data are either integers or decimal values representing a continuously varying phenomenon. For example flood depth is a continuous value from 0 to the maximum reported depth during a flood. &lt;p&gt;Raster exposure data such as population data are also continuous. In this example the cell values represent the number of people in cell.&lt;/p&gt;&lt;p&gt;Raster data is considered to be continuous by default and you should explicitly indicate that it is classified if each cell in the raster represents a discrete class (e.g. low depth = 1, medium depth = 2, high depth = 3).&lt;/p&gt;</source>
         <translation>Data &lt;b&gt;kontinyu&lt;/b&gt; dapat digunakan pada data ancaman atau keterpaparan yang setiap nilainya merupakan bilangan bulat atau desimal yang mewakili fenomena kontinyu. Sebagai contoh kedalaman banjir merupakan nilai kontinyu dari 0 hingga kedalaman maksimal yang dilaporkan selama banjir. &lt;p&gt;Data raster seperti populasi juga merupakan data kontinyu. Dalam contoh ini nilai sel mewakili jumlah orang dalam sel.&lt;/p&gt; &lt;p&gt;Data raster dianggap kontinyu secara default dan Anda perlu secara eksplisit mengindikasikan bahwa itu terklasifikasi jika tiap sel di raster merepresentasikan kelas diskrit (misalnya kedalaman rendah = 1, kedalaman menengah = 2, kedalaman tinggi = 3).&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="169"/>
+        <location filename="definitions.py" line="234"/>
         <source>&lt;b&gt;Classified&lt;/b&gt; data can be used for either hazard or exposure data and can be used for both raster and vector layer types where the attribute values represent a classified or coded value.&lt;p&gt;For example, classified values in a flood raster data set might represent discrete classes where a value of 1 might represent the low inundation class, a value of 2 might represent the medium inundation class and a value of 3 might represent the high inundation class.&lt;/p&gt;&lt;p&gt;Classified values in a vector (polygon) Volcano data set might represent discrete classes where a value of I might represent low volcanic hazard, a value of II might represent medium volcanic hazard and a value of III  might represent a high volcanic hazard.&lt;/p&gt;&lt;p&gt;In a vector (point) Volcano data the user specified buffer distances will be used to classify the data.&lt;/p&gt;&lt;p&gt;Classified values in a vector exposure data set might include building type or road type.&lt;/p&gt;</source>
         <translation>Data yang &lt;b&gt;terklasifikasi&lt;/b&gt; dapat digunakan untuk data ancaman maupun paparan dan dapat digunakan untuk tipe lapisan raster dan vektor dengan nilai atribut yang mewakili sebuah klasifikasi atau nilai yang terkode. &lt;p&gt;Sebagai contoh, nilai yang terklasifikasi dalam himpunan data raster banjir dapat mewakili kelas diskrit dimana nilai 1 dapat mewakili kelas dengan kerendaman rendah, nilai 2 dapat mewakili kelas dengan kerendaman sedang dan nilai 3 mewakili kelas dengan tingkat kerendaman tinggi.&lt;/p&gt;&lt;p&gt;Nilai yang terklasifikasi dalam himpunan data gunung api vektor (poligon) dapat mewakili kelas diskrit dimana nilai I mewakili ancaman gunung api tingkat rendah, nilai II mewakili ancaman gunung api tingkat menengah dan nilai III mewakili ancaman gunung api tingkat tinggi.&lt;/p&gt;&lt;p&gt;Dalam  data gunung api vektor (titik), pengguna menentukan jarak sangga yang akan digunakan untuk mengklasifikasikan data. Nilai yang terklasifikasi dalam himpunan data paparan vektor dapat berisi tipe bangunan atau tipe jalan.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="304"/>
+        <location filename="definitions.py" line="371"/>
         <source>&lt;b&gt;Single event&lt;/b&gt; hazard data can be based on either a specific  event that has happened in the past, for example a flood like Jakarta 2013, or a possible event, such as the tsunami that results from an earthquake near Bima, that might happen in the future.</source>
         <translation>Data ancaman &lt;b&gt;Peristiwa tunggal&lt;/b&gt; dapat berdasarkan peristiwa spesifik yang telah terjadi di masa lampau, sebagai contoh banjir seperti Jakarta 2014, atau peristiwa lain yang mungkin, seperti tsunami yang diakibatkan oleh gempa bumi di sekitar Bima, yang mungkin dapat terjadi lagi di masa yang akan datang.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="320"/>
+        <location filename="definitions.py" line="389"/>
         <source>&lt;b&gt;Multiple event&lt;/b&gt; hazard data can be based on historical observations such as a hazard map of all observed volcanic deposits around a volcano.&lt;p&gt;This type of hazard data shows those locations that might be impacted by a volcanic eruption in the future. Another example might be a probabilistic hazard model that shows the likelihood of a magnitude 7 earthquake happening in the next 50 years.&lt;/p&gt;</source>
         <translation>Data ancaman &lt;b&gt;peristiwa berlipat&lt;/b&gt; dapat berdasarkan pengamatan historis seperti peta ancaman dari semua simpanan vulkanik yang diamati di sekitar gunung berapi.&lt;p&gt;Tipe data ancaman ini menunjukkan lokasi-lokasi yang mungkin terdampak oleh letusan gunung berapi di masa yang akan datang. Contoh lainnya mungkin berupa model ancaman probabilistik yang menunjukkan kecenderungan gempa bumi bermagnitudo 7 terjadi dalam jangka waktu 50 tahun ke depan.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="422"/>
+        <location filename="definitions.py" line="529"/>
         <source>&lt;b&gt;Volcanic ash&lt;/b&gt; describes fragments of pulverized rock, minerals and volcanic glass, created during volcanic eruptions, less than 2 mm (0.079 inches) in diameter.</source>
         <translation>&lt;b&gt;Abu vulkanik&lt;/b&gt; mendeskripsikan pecahan dari batuan bubuk, mineral, dan kaca vulkanik, yang dibuat selama letusan gunung berapi, dan memiliki diameter kurang dari 2 mm (0.0079) inchi.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="442"/>
+        <location filename="definitions.py" line="559"/>
         <source>A &lt;b&gt;tsunami&lt;/b&gt; describes a large ocean wave or series or waves usually caused by an underwater earthquake or volcano. A &lt;b&gt;tsunami&lt;/b&gt; at sea may go unnoticed but a &lt;b&gt;tsunami&lt;/b&gt; wave that strikes land may cause massive destruction and flooding.</source>
         <translation>&lt;b&gt;Tsunami&lt;/b&gt; mendeskripsikan sebuah atau beberapa seri gelombang laut yang besar, atau gelombang yang biasanya disebabkan oleh gempa bumi bawah laut atau gunung berapi. &lt;b&gt;Tsunami&lt;/b&gt; di laut mungkin tidak dapat terdeteksi tetapi gelombang &lt;b&gt;tsunami&lt;/b&gt;  yang menghantam daratan dapat menyebabkan kerusakan yang besar dan banjir. </translation>
     </message>
     <message>
-        <location filename="definitions.py" line="644"/>
+        <location filename="definitions.py" line="790"/>
         <source>A &lt;b&gt;structure&lt;/b&gt; can be any relatively permanent man made feature such as a building (an enclosed structure with walls and a roof), telecommunications facility or bridge.</source>
         <translation>&lt;b&gt;Struktur&lt;/b&gt; dapat berupa apapun yang berhubungan dengan buatan manusia yang sifatnya permanen misalnya sebuah bangunan (sebuah struktur tertutup dengan dinding dan atap), atau sebuah fasilitas komunikasi atau sebuah jembatan. </translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1511"/>
+        <location filename="definitions.py" line="1650"/>
         <source>Motorway</source>
         <translation>Jalan tol</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1512"/>
+        <location filename="definitions.py" line="1651"/>
         <source>A road to solve the traffic and have a fare.</source>
         <translation>Jalan untuk mengatasi kemacetan dan untuk melewatinya harus membayar sesuai tarif yang berlaku.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1524"/>
+        <location filename="definitions.py" line="1664"/>
         <source>Primary</source>
         <translation>Jalan arteri</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1525"/>
+        <location filename="definitions.py" line="1665"/>
         <source>A road that service the main transportation with a long distance travel characteristic and high average velocity.</source>
         <translation>Jalan yang melayani angkutan utama dengan ciri-ciri perjalanan jarak jauh dan kecepatan rata-rata tinggi.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1539"/>
+        <location filename="definitions.py" line="1679"/>
         <source>Secondary</source>
         <translation>Jalan Kolektor</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1540"/>
+        <location filename="definitions.py" line="1680"/>
         <source>A road that service the transportation with a medium distance travel characteristic and medium average velocity.</source>
         <translation>Jalan yang melayani angkutan dengan ciri-ciri perjalanan jarak sedang dan kecepatan rata-rata sedang.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1554"/>
+        <location filename="definitions.py" line="1694"/>
         <source>Local</source>
         <translation>Jalan Lokal</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1555"/>
+        <location filename="definitions.py" line="1695"/>
         <source>A road that service the transportation with short distance travel and low average velocity.</source>
         <translation>Jalan yang melayani angkutan setempat dengan ciri-ciri perjalanan jarak dekat dan kecepatan rata-rata rendah.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1571"/>
+        <location filename="definitions.py" line="1711"/>
         <source>Path</source>
         <translation>Jalan Setapak</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1572"/>
+        <location filename="definitions.py" line="1712"/>
         <source>A road to walk on foot aim.</source>
         <translation>Jalan khusus pejalan kaki.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1586"/>
+        <location filename="definitions.py" line="1731"/>
         <source>A road that service the transportation with short travel and low average velocity.</source>
         <translation>Jalan yang melayani angkutan setempat dengan ciri-ciri perjalanan dekat and kecepatan rata-rata rendah.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1622"/>
+        <location filename="definitions.py" line="1767"/>
         <source>Education</source>
         <translation>Education</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1639"/>
+        <location filename="definitions.py" line="1784"/>
         <source>Health</source>
         <translation>Kesehatan</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1674"/>
+        <location filename="definitions.py" line="1819"/>
         <source>Place of Worship</source>
         <translation>Tempat Ibadah</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1698"/>
+        <location filename="definitions.py" line="1843"/>
         <source>Government</source>
         <translation>Kantor Pemerintahan</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1752"/>
+        <location filename="definitions.py" line="1897"/>
         <source>Public Facility</source>
         <translation>Fasilitas Publik</translation>
     </message>
@@ -5262,12 +5138,12 @@
         <translation>Di langkah selanjutnya Anda akan bisa memberikan kata kunci untuk lapisan ini.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="216"/>
+        <location filename="impact_function.py" line="221"/>
         <source>&lt;sup&gt;1&lt;/sup&gt;People are displaced if they experience and survive a shake level of more than 5 on the MMI scale.</source>
         <translation>&lt;sup&gt;1&lt;/sup&gt;Penduduk akan diungsikan jika mereka mengalami dan selamat dari getaran tanah melebihi 5 skala MMI</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="73"/>
+        <location filename="metadata_definitions.py" line="74"/>
         <source>This model was developed by Institut Teknologi Bandung (ITB) and implemented by Dr. Hadi Ghasemi, Geoscience Australia
 Algorithm:
 In this study, the same functional form as Allen (2009) is adopted to express fatality rate as a function of intensity (see Eq. 10 in the report). The Matlab built-in function (fminsearch) for Nelder-Mead algorithm was used to estimate the model parameters. The objective function (L2G norm) that is minimized during the optimisation is the same as the one used by Jaiswal et al. (2010).
@@ -5277,27 +5153,22 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
 Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk menyatakan laju kematian sebagai fungsi dari intensitas (lihat Eq. 10 dalam laporan). Fungsi Matlab yang telah tersedia (fminsearch) untuk algoritma Nelder-Mead digunakan untuk memperkirakan parameter model. Fungsi obyektif (L2G norm) yang diminimasi pada tahap optimasi sama dengan yang digunakan oleh Jaiswal et al. (2010). Koefisien yang digunakan di model Indonesia adalah x=0.62275231, y=8.03314466, zeta=2.15</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="91"/>
-        <source>Affected Land Cover</source>
-        <translation>Penutup Lahan yang Terdampak</translation>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="44"/>
+        <location filename="metadata_definitions.py" line="45"/>
         <source>Classified polygon hazard on land cover</source>
         <translation>Ancaman poligon terklasifikasi pada penutup lahan</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="64"/>
+        <location filename="metadata_definitions.py" line="65"/>
         <source>To assess the impact of each hazard zone on land cover.</source>
         <translation>Untuk menghitung dampak tiap kelas ancaman pada penutup lahan</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="69"/>
+        <location filename="metadata_definitions.py" line="70"/>
         <source>Vector polygon layer where each polygon represents a type of land cover.</source>
         <translation>Lapisan poligon vektor di mana tiap poligon mewakili tipe penutup lahan</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="72"/>
+        <location filename="metadata_definitions.py" line="73"/>
         <source>A vector layer of land cover polygons with each tagged according to the hazard zone in which it falls.</source>
         <translation>Sebuah lapisan vektor dari poligon penutup lahan yang ditandai menurut kelas ancaman yang meliputinya.</translation>
     </message>
@@ -5307,7 +5178,7 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
         <translation>Data ancaman %s tidak memiliki atribut &quot;%s&quot; yang diinginkan. Silahkan ganti di pilihan.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="184"/>
+        <location filename="impact_function.py" line="189"/>
         <source>Temporarily closed</source>
         <translation>Ditutup untuk sementara</translation>
     </message>
@@ -5327,42 +5198,42 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
         <translation>Ambang batas ancaman yang dikategorikan sebagai Wilayah Ancaman Tinggi dalam meter. Sebuah wilayah dikategorikan sebagai Wilayah Ancaman Tinggi jika kedalaman dari genangan tsunami lebih dari Ambang Batas Wilayah Ancaman Menengah dan kurang dari Ambang Batas Wilayah Ancaman Tinggi.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="58"/>
+        <location filename="metadata_definitions.py" line="59"/>
         <source>Raster tsunami on land cover</source>
         <translation>Tsunami raster pada penutup lahan</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="67"/>
+        <location filename="metadata_definitions.py" line="68"/>
         <source>The hazard layer must be a tsunami raster layer.</source>
         <translation>Lapisan ancaman harus berupa lapisan raster tsunami</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="67"/>
+        <location filename="metadata_definitions.py" line="68"/>
         <source>Raster tsunami on roads</source>
         <translation>Tsunami raster pada jalanan</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="74"/>
+        <location filename="metadata_definitions.py" line="75"/>
         <source>To assess the impacts of tsunami inundation on roads in vector format with hazard in raster format.</source>
         <translation>Untuk menghitung dampak genangan tsunami pada jalanan dalam format vektor dengan ancaman dalam format raster.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="77"/>
+        <location filename="metadata_definitions.py" line="78"/>
         <source>The inundation status is calculated for each roads based on the tsunami threshold. The threshold can be configured in impact function options.</source>
         <translation>Status tergenang dihitung untuk setiap bangunan berdasarkan batas tsunami. Batas ini dapat diatur melalui opsi fungsi dampak.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="84"/>
+        <location filename="metadata_definitions.py" line="85"/>
         <source>Vector line where each feature represents the road.</source>
         <translation>Vektor garis dimana masing-masing fitur merepresentasikan jalan.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="86"/>
+        <location filename="metadata_definitions.py" line="87"/>
         <source>Vector layer contains road is estimated to be inundated and the breakdown of the road by type.</source>
         <translation>Layer data vektor berisi jalanan yang diperkirakan tergenang dan kerusakan berdasarkan jenis jalannya.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="89"/>
+        <location filename="metadata_definitions.py" line="90"/>
         <source>Provide details about where critical road might be inundated.</source>
         <translation>Berikan detail di tempat mana jalanan kritis mungkin tergenang.</translation>
     </message>
@@ -5432,7 +5303,7 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
         <translation>SafeLayer hanya menerima QgsMapLayer atay safe.storage.layer.Layer.</translation>
     </message>
     <message>
-        <location filename="safe_layer.py" line="120"/>
+        <location filename="safe_layer.py" line="121"/>
         <source>Keyword &quot;%s&quot; is not found in layer %s, please add it to your layer</source>
         <translation>Kata kunci &quot;%s&quot; tidak ditemukan pada lapisan %s, silahkan tambahkan ke lapisan Anda</translation>
     </message>
@@ -5492,52 +5363,52 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
         <translation>Anda telah memilih &lt;b&gt;%s %s&lt;/b&gt;, dan atributnya adalah &lt;b&gt;%s&lt;/b&gt;. Kita harus mengetahui pemetaan nilai atribut ke kategori yang telah diketahui. Silahkan geser nilai-nilai yang unik dari daftar di kiri ke panel di kanan dan letakkan di kategori yang sesuai. Nilai yang tidak dikelompokan akan secara otomatis masuk ke grup &apos;Lainnya&apos; pada saat dijalankan.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="523"/>
+        <location filename="definitions.py" line="654"/>
         <source>What type of crops are planted in the affected fields?</source>
         <translation>Jenis tumbuhan apa yang ditanam di ladang yang terdampak?</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="524"/>
+        <location filename="definitions.py" line="655"/>
         <source>How long will the activity or function of the land cover be disturbed?</source>
         <translation>Berapa lama aktivitas atau fungsi dari penutup lahan akan terganggu?</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="526"/>
+        <location filename="definitions.py" line="657"/>
         <source>What proportion of the land cover is damaged?</source>
         <translation>Berapa perbandingan bagian penutup lahan yang rusak?</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="527"/>
+        <location filename="definitions.py" line="658"/>
         <source>What potential losses will result from the land cover damage?</source>
         <translation>Apa potensi kerugian sebagai akibat dari kerusakan penutup lahan?</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="529"/>
+        <location filename="definitions.py" line="660"/>
         <source>How much productivity will be lost during this event?</source>
         <translation>Berapa banyak produktivitas yang hilang selama kejadian?</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="530"/>
+        <location filename="definitions.py" line="661"/>
         <source>Which crops were ready for harvest during this event?</source>
         <translation>Tanaman mana yang sudah siap dipanen selama kejadian?</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="531"/>
+        <location filename="definitions.py" line="662"/>
         <source>What is the ownership system of the land/crops/field?</source>
         <translation>Sistem kepemilikan apa yang digunakan untuk lahan / tanaman / ladang?</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="532"/>
+        <location filename="definitions.py" line="663"/>
         <source>Are the land/crops/field accessible after the event?</source>
         <translation>Apakah pakah lahan / tumbuhan / ladang masih bisa diakses setelah kejadian?</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="533"/>
+        <location filename="definitions.py" line="664"/>
         <source>What urgent actions can be taken to normalize the land/crops/field?</source>
         <translation>Langkah penting apa yang bisa diambil untuk menormalkan lahan / tumbuhan / ladang?</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="535"/>
+        <location filename="definitions.py" line="666"/>
         <source>What tools or equipment are needed for early recovery of the land/crops/field?</source>
         <translation>Alat atau peralatan apa saja yang diperlukan untuk pemulihan awal lahan / tumbuhan / ladang ?</translation>
     </message>
@@ -5552,62 +5423,62 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
         <translation>Daerah tak bernama %(feature_id)s</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1608"/>
+        <location filename="definitions.py" line="1753"/>
         <source>Residential</source>
         <translation>Permukiman</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1609"/>
+        <location filename="definitions.py" line="1754"/>
         <source>A structure used to provide shelter for people.</source>
         <translation>Bangunan yang digunakan untuk menyediakan tempat berlindung untuk penduduk.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1623"/>
+        <location filename="definitions.py" line="1768"/>
         <source>A structure that provides a service in the education sector.</source>
         <translation>Bangunan yang menyediakan pelayanan di bidang pendidikan.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1640"/>
+        <location filename="definitions.py" line="1785"/>
         <source>A structure that provides a service or facility in the health sector.</source>
         <translation>Bangunan yang menyediakan pelayanan atau fasilitas di bidang kesehatan.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1657"/>
+        <location filename="definitions.py" line="1802"/>
         <source>Transport</source>
         <translation>Transportasi</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1675"/>
+        <location filename="definitions.py" line="1820"/>
         <source>A structure or facility that is used for prayer or related religion activity.</source>
         <translation>Bangunan atau fasilitas yang digunakan untuk berdoa atau kegiatan beragama.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1699"/>
+        <location filename="definitions.py" line="1844"/>
         <source>A structure or facility that is used to provide a public service or other government activity.</source>
         <translation>Bangunan atau fasilitas yang digunakan untuk menyediakan pelayanan publik atau kegiatan pemerintahan lainnya.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1713"/>
+        <location filename="definitions.py" line="1858"/>
         <source>Commercial</source>
         <translation>Komersil</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1714"/>
+        <location filename="definitions.py" line="1859"/>
         <source>A structure or facility that is used for commercial or industrial purposes.</source>
         <translation>Bangunan atau fasilitas yang digunakan untuk tujuan komersil atau industri.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1733"/>
+        <location filename="definitions.py" line="1878"/>
         <source>Recreation</source>
         <translation>Rekreasi</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1734"/>
+        <location filename="definitions.py" line="1879"/>
         <source>A structure or facility that is used for entertainment, sporting or recreation purposes.</source>
         <translation>Bangunan atau fasilitas yang digunakan untuk tujuan hiburan, olahraga dan rekreasi.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1771"/>
+        <location filename="definitions.py" line="1920"/>
         <source>Any other structure frequently mapped.</source>
         <translation>Bangunan lainnya yang sering dipetakan.</translation>
     </message>
@@ -5617,12 +5488,12 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
         <translation>Wilayah ancaman tsunami menengah didefinisikan dengan kedalaman genangan lebih dari %.1f %s tetapi kurang dari %.1f %s</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1658"/>
+        <location filename="definitions.py" line="1803"/>
         <source>A structure that provides a service or facility in the transport sector.</source>
         <translation>Bangunan yang menyediakan pelayanan atau fasilitas di bidang transportasi.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1753"/>
+        <location filename="definitions.py" line="1898"/>
         <source>A structure or facility that provides a service or facility to the public including emergency services.</source>
         <translation>Bangunan atau fasilitas yang menyediakan layanan atau memfasilitasi publik termasuk layanan darurat.</translation>
     </message>
@@ -5642,47 +5513,47 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
         <translation>Wilayah ancaman rendah</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1199"/>
+        <location filename="definitions.py" line="1338"/>
         <source>This is a quinary description for an area. The area is either &lt;b&gt;dry&lt;/b&gt;, &lt;b&gt;low&lt;/b&gt;, &lt;b&gt;medium&lt;/b&gt;, &lt;b&gt;high&lt;/b&gt;, or &lt;b&gt;very high&lt;/b&gt; for tsunami hazard classification. The following description for these classes is provided by Badan Geologi based on BNPB Perka 2/2012</source>
         <translation>Ini merupakan deskripsi yang terdiri dari lima bagian untuk sebuah wilayah. Suatu wilayah bisa berupa klasifikasi ancaman tsunami &lt;b&gt;kering&lt;/b&gt;, &lt;b&gt;rendah&lt;/b&gt;, &lt;b&gt;menengah&lt;/b&gt;, &lt;b&gt;tinggi&lt;/b&gt;, atau &lt;b&gt;sangat tinggi&lt;/b&gt;. Deskripsi mengenai kelas-kelas tersebut disediakan oleh Badan Geologi berdasarkan BNPB Perka 2/2012</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1214"/>
+        <location filename="definitions.py" line="1353"/>
         <source>Dry zone</source>
         <translation>Wilayah kering</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1296"/>
+        <location filename="definitions.py" line="1435"/>
         <source>Very high hazard zone</source>
         <translation>Wilayah ancaman sangat tinggi</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1297"/>
+        <location filename="definitions.py" line="1436"/>
         <source>Water above 8.0m.</source>
         <translation>Air di atas 8.0 m.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="81"/>
+        <location filename="metadata_definitions.py" line="82"/>
         <source>Papadopoulos, Gerassimos A., and Fumihiko Imamura. &quot;A proposal for a new tsunami intensity scale.&quot; ITS 2001 proceedings, no. 5-1, pp. 569-577. 2001.</source>
         <translation>Papadopoulos, Gerassimos A., and Fumihiko Imamura. &quot;A proposal for a new tsunami intensity scale.&quot; ITS 2001 proceedings, no. 5-1, pp. 569-577. 2001.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="116"/>
+        <location filename="metadata_definitions.py" line="117"/>
         <source>Hamza Latief. pers com. Default impact threshold for tsunami impact on people should be 0.7m. This is less than a flood threshold because in a tsunami, the water is moving with force.</source>
         <translation>Hamza Latief. pers com. Ambang batas dampat tsunami default untuk penduduk seharusnya 0.7 m. Ini kurang dari ambang batas banjir karena tsunami adalah air yang bergerak dengan kekuatan.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1229"/>
+        <location filename="definitions.py" line="1368"/>
         <source>Water above ground height and less than 1.0m. The area is potentially hit by a tsunami wave with an inundation depth less than 1 m or similar to tsunami intensity scale of V or less in (Papadoupulos and Imamura, 2001). Tsunami wave of 1m height causes few people to be frightened and flee to higher elevation. Felt by most people on large ship, observed from shore. Small vessels drift and collide and some turn over. Sand is deposited and there is flooding of areas close to the shore.</source>
         <translation>Air di atas permukaan tanah dan ketinggian kurang dari 1.0m. Wilayah berpotensi diterjang gelombang tsunami dengan kedalaman kurang dari 1 m atau setara dengan V atau kurang skala intensitas tsunami (Papadoupulos dan Imamura, 2001). Gelombang tsunami dengan ketinggian m menyebabkan orang-orang ketakutan dan kabur ke ke tempat yang lebih tinggi. Dirasakan oleh sebagian besar orang pada kapal besar, terlihat dari pantai. Kapal kecil akan hanyut dan bertabrakan dan beberapa akan terbalik. Pasir mengendap dan akan ada banjir di wilayah dekat dengan pantai.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1252"/>
+        <location filename="definitions.py" line="1391"/>
         <source>Water above 1.1m and less than 3.0m. The area is potentially hit by a tsunami wave with an inundation depth of 1 - 3 m or equal to V-VI tsunami intensity scale (Papadoupulos and Imamura, 2001). Tsunami wave with a 3m inundation depth causes most people frightened and to flee to higher ground. Small vessels drift and collide. Damage occurs to some wooden houses, while most of them are safe.</source>
         <translation>Air di atas 1.1m dan kurang dari 3.0m. Wilayah berpotensi diterjang gelombang tsunami dengan kedalaman genangan 1-3 m atau setara dengan V-VI skala intensitas tsunami (Papadoupulos dan Imamura, 2001). Gelombang tsunami dengan kedalaman genangan 3m menyebabkan sebagian besar penduduk ketakutan dan kabur ke tempat yang lebih tinggi. Kapal kecil hanyut dan bertabrakan. Kerusakan terjadi pada beberapa rumah kayu dengan sebagian besar diantaranya aman.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1273"/>
+        <location filename="definitions.py" line="1412"/>
         <source>Water above 3.1m and less than 8.0m. The area is potentially hit by a tsunami wave with an inundation depth &gt; 3 m or reach a tsunami intensity scale of VII or even more (Papadoupulos and Imamura, 2001). Tsunami wave with 4 m inundation depth cause damage to small vessel, a few ships are drifted inland, severe damage on most wooden houses. Boulders are deposited on shore. If tsunami height reaches 8 m, it will cause severe damage. Dykes, wave breaker, tsunami protection walls and green belts will be washed away.</source>
         <translation>Air di atas 3.1m dan kurang dari 8.0m. Wilayah berpotensi diterjang gelombang tsunami dengan kedalaman &gt;  3 m atau mencapai VII atau bahkan lebih skala intensitas tsunami (Papadoupulos dan Imamura, 2001). Gelombang tsunami dengan kedalaman genangan 4 m menyebabkan kerusakan pada kapal kecil, dan beberapa kapal besar hanyut ke daratan, kerusakan parah pada rumah kayu. Batu besar terhampar di pantai. Jika ketinggian tsunami mencapai 8  akan menyebabkan kerusakan parah. Tanggul, pemecah gelombang, dinding pelindung tsunami dan sabuk hijau akan hanyut.</translation>
     </message>
@@ -5767,197 +5638,172 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
         <translation>Zimbabwe</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="41"/>
+        <location filename="definitions.py" line="50"/>
         <source>A &lt;b&gt;hazard&lt;/b&gt; represents a natural process or phenomenon that may cause loss of life, injury or other health impacts, property damage, loss of livelihoods and services, social and economic disruption, or environmental damage. For example; flood, earthquake, tsunami and volcano are all examples of hazards.</source>
         <translation>&lt;b&gt;Ancaman&lt;/b&gt; merupakan suatu fenomena alam yang berpotensi memberi dampak buruk terhadap keselamatan jiwa, infrastruktur dan fasilitas publik, maupun pada lingkungan dan kehidupan sosial masyarakat di area tertentu.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="48"/>
+        <location filename="definitions.py" line="66"/>
         <source>&lt;b&gt;Exposure&lt;/b&gt; represents people, property, systems, or other elements present in hazard zones that are subject to potential losses in the event of a flood, earthquake, volcano etc.</source>
         <translation>&lt;b&gt;Paparan&lt;/b&gt; mewakili penduduk, properti, sistem, atau unsur lain yang ada pada daerah ancaman yang mungkin terdampak dari kejadian banjir, gempa bumi, gunung berapi, dll.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="53"/>
+        <location filename="definitions.py" line="80"/>
         <source>This is a ternary description for an area used with generic impact functions. The area may have either &lt;b&gt;low&lt;/b&gt;, &lt;b&gt;medium&lt;/b&gt;, or &lt;b&gt;high&lt;/b&gt; classification for the hazard.</source>
         <translation>Ini merupakan penjelasan yang terdiri dari tiga bagian untuk daerah yang digunakan oleh fungsi dampak umum. Daerah tersebut dapat berupa klasifikasi ancaman &lt;b&gt;rendah&lt;/b&gt;, &lt;b&gt;menengah&lt;/b&gt;, atau &lt;/b&gt;tinggi&lt;/b&gt;.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="58"/>
+        <location filename="definitions.py" line="94"/>
         <source>An exposure element (e.g. people, roads, buildings, land cover) that experiences a hazard (e.g. tsunami, flood, earthquake) and endures consequences (e.g. damage, evacuation, displacement, death) due to that hazard.</source>
         <translation>Unsur keterpaparan (sebagai contoh, penduduk, jalan, bangunan, dan penutup lahan) yang terkena ancaman (sebagai contoh, tsunami, banjir, gempa bumi) dan mengalami konsekuensi (sebagai contoh, kerusakan, evakuasi, pengungsian, kematian) dikarenakan ancaman tersebut.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="64"/>
+        <location filename="definitions.py" line="109"/>
         <source>Displaced people are people who, for different reasons and circumstances because of risk or disaster, have to leave their place of residence.</source>
         <translation>Pengungsi adalah penduduk yang dikarenakan berbagai alasan dan keadan yang diakibatkan bencana harus meninggalkan tempat tinggal mereka.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="69"/>
+        <location filename="definitions.py" line="123"/>
         <source>Evacuated people are people who, for different reasons and circumstances because of risk conditions or disaster, move temporarily to safer places before, during or after the occurrence of a hazardous event. Evacuation can occur from places of residence, workplaces, schools and hospitals to other places. Evacuation is usually a planned and organised mobilisation of persons, animals and goods.</source>
         <translation>Penduduk yang dievakuasi adalah penduduk yang untuk berbagai alasan dan keadaan dikarenakan kondisi ataupun bencana, pindah sementara ke tempat yang lebih aman sebelum, pada saat atau setelah kemunculan kejadian yang ancaman. Evakuasi dapat muncul dari tempat-tempat bermukim, kerja, sekolah dan rumah sakit atau tempat lain. Evakuasi biasanya merupakan mobilisasi terrencana dan terorganisaasi dari penduduk, hewan dan barang-barang.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="98"/>
+        <location filename="definitions.py" line="73"/>
         <source>UNISDR (2009) Terminology on disaster risk reduction.</source>
         <translation>Terminologi UNISDR (2009) pada pengurangan resiko bencana.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="449"/>
-        <source>Impacts on roads, people, buildings and other exposure elements may differ in reality to the analysis results. This is due to local environmental conditions such as terrain, infrastructure type and conditions.</source>
-        <translation>Dampak pada jalan, penduduk, bangunan dan unsur keterpaparan lain dapat berbeda antara kenyataan dan hasil analisis. Ini dikarenakan kondisi lingkungan lokal seperti lahan, tipe dan kondisi infrastruktur.</translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="474"/>
-        <source>Previously mapped hazard zones may not be congruous with future events.</source>
-        <translation>Daerah ancaman yang sebelumnya dipetakan mungkin tidak sesuai dengan kejadian di masa yang akan datang.</translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="520"/>
-        <source>Areas reported for land cover counts have not been rounded.</source>
-        <translation>Daerah yang dilaporkan untuk jumlah penutup lahan mungkin belum dibulatkan.</translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="557"/>
+        <location filename="definitions.py" line="684"/>
         <source>Numbers reported for population counts have been rounded to the nearest 10 people if the total is less than 1,000; nearest 100 people if more than 1,000 and less than 100,000; and nearest 1000 if more than 100,000.</source>
         <translation>Angka yang dilaporkan untuk jumlah penduduk telah dibulatkan ke 10 orang terdekat apabila total kurang dari 1.000; 100 orang terdekat apabila lebih dari 1.000 dan kurang dari 100.000; dan 1.000 orang terdekat apabila lebih dari 100.000.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="588"/>
+        <location filename="definitions.py" line="725"/>
         <source>&lt;b&gt;People in buildings&lt;/b&gt; exposure data assigns the population of a specific administrative area to the buildings with a residential function in that area. &lt;p&gt;The process of assigning people to buildings assumes that all people and buildings in the area are mapped.&lt;/p&gt;</source>
         <translation>Data paparan &lt;b&gt;penduduk dalam bangunan&lt;/b&gt; memasangkan penduduk daerah administratif tertentu pada bangunan yang memiliki fungsi pemukiman di daerah tersebut. &lt;p&gt;Proses pemasangan penduduk pada bangunan menggunakan asumsi bahwa semua penduduk dan bangunan di daerah tersebut telah dipetakan.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="598"/>
+        <location filename="definitions.py" line="739"/>
         <source>UNISDR (2015) Background Paper: Proposed Updated Terminology on Disaster Risk  Reduction Reduction.</source>
         <translation>Paper Latar Belakang UNISDR (2015): Pengajuan Pembaruan Terminologi pada Pengurangan Resiko Bencana. </translation>
     </message>
     <message>
-        <location filename="definitions.py" line="613"/>
+        <location filename="definitions.py" line="755"/>
         <source>Numbers reported for road lengths have been rounded to the nearest meter.</source>
         <translation>Angka yang dilaporkan untuk panjang jalan telah dibulatkan ke meter terdekat.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="615"/>
+        <location filename="definitions.py" line="757"/>
         <source>Roads marked as not affected may still be unusable due to network isolation. Roads marked as affected may still be usable if they are elevated above the local landscape.</source>
         <translation>Jalan yang ditandai tidak terdampak mungkin tidak dapat digunakan karena terisolasi dari jaringan. Jalan yang ditandai terdampak mungkin masih dapat digunakan apabila terletak lebih tinggi dari lanskap lokal.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="620"/>
+        <location filename="definitions.py" line="762"/>
         <source>Roads are closed if they are affected.</source>
         <translation>Jalan ditutup apabila terdampak.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="621"/>
+        <location filename="definitions.py" line="763"/>
         <source>Roads are open if they are not affected.</source>
         <translation>Jalan dibuka apabila tidak terdampak.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="629"/>
+        <location filename="definitions.py" line="775"/>
         <source>Which government department is responsible for supplying equipment?</source>
         <translation>Departemen pemerintahan mana yang bertanggung jawab untuk menyediakan peralatan?</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="650"/>
-        <source>Numbers reported for structures are exact counts.</source>
-        <translation>Angka yang dilaporkan untuk bangunan adalah angka yang sebenarnya.</translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="673"/>
+        <location filename="definitions.py" line="823"/>
         <source>Place</source>
         <translation>Lokasi</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="674"/>
+        <location filename="definitions.py" line="824"/>
         <source>A &lt;b&gt;place&lt;/b&gt; is used to indicate that a particular location is known by a particular name.</source>
         <translation>&lt;b&gt;Tempat&lt;/b&gt; digunakan untuk menunjukkan bahwa lokasi tertentu diketahui dari namanya.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="678"/>
-        <source>Where places are represented as a single point, the effect of the hazard over the entire place may differ from at the point where the place is represented on the map.</source>
-        <translation>Saat tempat-tempat diwakilkan sebagai sebuah titik, efek dari ancaman pada tempat tersebut dapat berbeda dari titik dimana tempat tersebut diwakilkan pada peta.</translation>
-    </message>
-    <message>
-        <location filename="definitions.py" line="827"/>
+        <location filename="definitions.py" line="976"/>
         <source>Centimetres</source>
         <translation>Sentimeter</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="828"/>
+        <location filename="definitions.py" line="977"/>
         <source>centimetres</source>
         <translation>sentimeter</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="829"/>
+        <location filename="definitions.py" line="978"/>
         <source>cm</source>
         <translation>cm</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="830"/>
+        <location filename="definitions.py" line="979"/>
         <source>&lt;b&gt;Centimetres&lt;/b&gt; are a metric unit of measure. There are 100 centimetres in 1 metre.</source>
         <translation>&lt;b&gt;Centimeter&lt;/b&gt; adalah satuan besaran metrik. Ada 100 sentimeter dalam 1 meter.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="964"/>
+        <location filename="definitions.py" line="1108"/>
         <source>Three classes are supported for volcano vector hazard data: &lt;b&gt;low&lt;/b&gt;, &lt;b&gt;medium&lt;/b&gt;, or &lt;b&gt;high&lt;/b&gt;.</source>
         <translation>Tiga kelas yang didukung untuk data ancaman vektor gunung berapi: &lt;b&gt;rendah&lt;/b&gt;, &lt;b&gt;menengah&lt;/b&gt;, atau &lt;b&gt;tinggi&lt;/b&gt;.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1337"/>
+        <location filename="definitions.py" line="1476"/>
         <source>Number of people (or any other exposure element) per pixel, building or area. &lt;p&gt;In a raster file, a pixel would have a value assigned to it representing the number (or count) of people in that pixel.&lt;/p&gt; &lt;p&gt;In a vector file, a value would be assigned to an object (e.g. a building or area) representing the number of people in that object.&lt;/p&gt; </source>
         <translation>Jumlah penduduk (atau unsur keterpaparan lainnya) per pixel, bangunan atau daerah. &lt;p&gt;Pada berkas raster, sebuah pixel mungkin memiliki nilai yang mewakili angka (atau jumlah) penduduk pada pixel tersebut.&lt;/p&gt; &lt;p&gt;Pada berkas vektor, sebuah nilai akan dipasangkan untuk tiap obyek (contohnya, bangunan atau daerah) yang mewakili jumlah penduduk pada obyek tersebut.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1356"/>
+        <location filename="definitions.py" line="1495"/>
         <source>Number of people (or any other exposure element) per unit of area. &lt;p&gt; e.g. 35 people per km&lt;sup&gt;2&lt;/sup&gt; &lt;/p&gt;</source>
         <translation>Jumlah penduduk (atau unsur keterpaparan lainnya) per satuan daerah. &lt;p&gt;Contohnya, 35 penduduk per km&lt;sup&gt;2&lt;/sup&gt; &lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1791"/>
+        <location filename="definitions.py" line="1940"/>
         <source>City</source>
         <translation>Kota besar</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1792"/>
+        <location filename="definitions.py" line="1941"/>
         <source>The largest urban settlements in the territory, normally including the national, state and provincial capitals.</source>
         <translation>Permukiman urban terbesar di daerah tersebut, biasanya termasuk ibu kota nasional, kabupaten dan provinsi.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1806"/>
+        <location filename="definitions.py" line="1955"/>
         <source>Town</source>
         <translation>Kota kecil</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1807"/>
+        <location filename="definitions.py" line="1956"/>
         <source>A second tier urban settlement of local importance, often with a population of 10,000 people and good range of local facilities including schools, medical facilities etc and traditionally a market.</source>
         <translation>Tingkat kedua permukiman urban lokal yang penting, biasanya dengan populasi 10.000 penduduk dan kisaran fasilitas lokal yang baik termasuk sekolah, fasilitas medis, dll serta pasar tradisional.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1823"/>
+        <location filename="definitions.py" line="1972"/>
         <source>Village</source>
         <translation>Desa</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1824"/>
+        <location filename="definitions.py" line="1973"/>
         <source>A smaller distinct settlement, smaller than a town with few facilities available with people traveling to nearby towns to access these.</source>
         <translation>Permukiman tertentu yang lebih kecil, lebih kecil dari kota dengan beberapa fasilitas yang tersedia dengan beberapa orang bepergian ke kota terdekat untuk mengakses fasilitas tersebut.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1839"/>
+        <location filename="definitions.py" line="1988"/>
         <source>Hamlet</source>
         <translation>Dusun</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1840"/>
+        <location filename="definitions.py" line="1989"/>
         <source>A smaller rural community typically with fewer than 100-200 inhabitants, few infrastructure.</source>
         <translation>Komunitas rural yang lebih kecil yang biasanya memiliki 100-200 penduduk, dengan beberapa infrastruktur.</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1854"/>
+        <location filename="definitions.py" line="2003"/>
         <source>Airport</source>
         <translation>Bandara</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="1855"/>
+        <location filename="definitions.py" line="2004"/>
         <source>A complex of runways and buildings for the takeoff, landing, and maintenance of civil aircraft, with facilities for passengers.</source>
         <translation>Kompleks berisi jalan panjang dan bangunan untuk takeoff, landing, dan perawatan pesawat sipil, dengan fasilitas yang tersedia untuk penumpang.</translation>
     </message>
@@ -5972,20 +5818,22 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
         <translation>Kakas ini akan mengklasifikasikan lapisan raster yang diberikan menjadi lapisan vektor dengan nilai ambang tertentu yang digunakan untuk klasifikasi.</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="276"/>
+        <location filename="needs_manager_dialog.py" line="274"/>
         <source>Restore defaults</source>
         <translation>Kembalikan default</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="277"/>
+        <location filename="needs_manager_dialog.py" line="275"/>
         <source>Restoring defaults will overwrite your changes on profiles provided by InaSAFE. Do you want to continue ?</source>
         <translation>Pemulihan default akan menimpa ulang perubahan pada profil yang disediakan oleh InaSAFE. Apakah Anda ingin melanjutkan ?</translation>
     </message>
     <message numerus="yes">
-        <location filename="needs_manager_dialog.py" line="542"/>
+        <location filename="needs_manager_dialog.py" line="540"/>
         <source>A displaced person should be provided with %(default value)s %(unit)s/%(units)s/%(unit abbreviation)s of %(resource name)s. Though no less than %(minimum allowed)s and no more than %(maximum allowed)s. This should be provided %(frequency)s.default value{{ Default }}</source>
         <comment>unit{{ Unit }}</comment>
-        <translation><numerusform>Penduduk yang diungsikan dapat diberikan %(default value)s %(unit)s/%(units)s/%(unit abbreviation)s %(resource name)s. Meskipun begitu, tidak boleh kurang dari %(minimum allowed)s dan tidak boleh lebih dari %(maximum allowed)s. Bantuan ini mesti disediakan %(frequency)s. Nilai default {{Default}}</numerusform></translation>
+        <translation>
+            <numerusform>Penduduk yang diungsikan dapat diberikan %(default value)s %(unit)s/%(units)s/%(unit abbreviation)s %(resource name)s. Meskipun begitu, tidak boleh kurang dari %(minimum allowed)s dan tidak boleh lebih dari %(maximum allowed)s. Bantuan ini mesti disediakan %(frequency)s. Nilai default {{Default}}</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="shake_grid.py" line="598"/>
@@ -6048,17 +5896,17 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
         <translation>Sangat Tinggi</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="48"/>
+        <location filename="metadata_definitions.py" line="49"/>
         <source>Ash raster on land cover</source>
         <translation>Raster abu vulkanik pada penutup lahan</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="67"/>
+        <location filename="metadata_definitions.py" line="68"/>
         <source>The hazard layer must be an ash raster layer.</source>
         <translation>Lapisan ancaman harus berupa lapisan raster abu.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="92"/>
+        <location filename="metadata_definitions.py" line="42"/>
         <source>Land cover affected</source>
         <translation>Penutup lahan terdampak</translation>
     </message>
@@ -6088,34 +5936,24 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
         <translation>Daerah ancaman abu Sangat Tinggi didefinisikan sebagai ketinggian abu yang lebih dari %s %s namun kurang dari %.1f %s</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="54"/>
+        <location filename="metadata_definitions.py" line="55"/>
         <source>Ash raster on places</source>
         <translation>Raster abu pada tempat</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="60"/>
+        <location filename="metadata_definitions.py" line="61"/>
         <source>To assess the impact of each hazard zone on places.</source>
         <translation>Untuk menerka dampak dari tiap daerah ancaman pada tempat.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="65"/>
+        <location filename="metadata_definitions.py" line="66"/>
         <source>Vector point layer where each feature represents a place.</source>
         <translation>Lapisan vektor titik dimana tiap fitur mewakili sebuah tempat.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="67"/>
+        <location filename="metadata_definitions.py" line="68"/>
         <source>Map of places exposed to the highest hazard zone and a table with the number of people in each hazard zone</source>
         <translation>Peta dari tempat-tempat yang terpapar hingga daerah ancaman tertinggi dan tabel dengan jumlah penduduk di tiap daerah ancaman.</translation>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="83"/>
-        <source>Affected Places</source>
-        <translation>Lokasi Terdampak</translation>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="84"/>
-        <source>Places affected</source>
-        <translation>Lokasi terdampak</translation>
     </message>
     <message>
         <location filename="impact_function.py" line="116"/>
@@ -6123,17 +5961,17 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
         <translation>Penduduk di zona ancaman sangat rendah</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="145"/>
+        <location filename="impact_function.py" line="146"/>
         <source>Population in low hazard zone</source>
         <translation>Penduduk di zona ancaman rendah</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="148"/>
+        <location filename="impact_function.py" line="149"/>
         <source>Population in medium hazard zone</source>
         <translation>Penduduk di zona ancaman menengah</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="151"/>
+        <location filename="impact_function.py" line="152"/>
         <source>Population in high hazard zone</source>
         <translation>Penduduk di zona ancaman tinggi</translation>
     </message>
@@ -6143,29 +5981,19 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
         <translation>Penduduk di zona ancaman sangat tinggi</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="58"/>
+        <location filename="metadata_definitions.py" line="59"/>
         <source>Ash raster on population</source>
         <translation>Raster abu pada penduduk</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="64"/>
+        <location filename="metadata_definitions.py" line="65"/>
         <source>To assess the impact of each hazard zone on population.</source>
         <translation>Untuk menilai dampak tiap wilayah ancaman pada populasi.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="72"/>
+        <location filename="metadata_definitions.py" line="73"/>
         <source>Map of population exposed to the highest hazard zone and a table with the number of population in each hazard zone</source>
         <translation>Peta dari penduduk terpapar hingga daerah ancaman tertinggi dan tabel dengan jumlah dari populasi di tiap daerah ancaman</translation>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="88"/>
-        <source>Affected Population</source>
-        <translation>Penduduk Terdampak</translation>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="89"/>
-        <source>Population affected</source>
-        <translation>Penduduk terdampak</translation>
     </message>
     <message>
         <location filename="parameter_definitions.py" line="34"/>
@@ -6248,27 +6076,27 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
         <translation>Ambang batas menengah harus kurang dari ambang batas tinggi</translation>
     </message>
     <message>
-        <location filename="base.py" line="925"/>
+        <location filename="base.py" line="968"/>
         <source>This analysis needs keyword &lt;i&gt;%s&lt;/i&gt; in the &lt;b&gt;%s&lt;/b&gt; layer, but it does not  have it. Please assign it via the keyword wizard</source>
         <translation>Analisis ini membutuhkan kata kunci &lt;i&gt;%s&lt;/i&gt; pada lapisan &lt;b&gt;%s&lt;/b&gt;, namun kata kunci tersebut tidak ditemukan. Mohon pasang kata kunci tersebut menggunakan wizard kata kunci.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="67"/>
+        <location filename="metadata_definitions.py" line="68"/>
         <source>Estimates fatalities resulting from an earthquake using data from an Indonesian database of earthquake events to calculate fatality rates. This model is better at capturing uncertainty in the results.</source>
         <translation>Perkiraan korban jiwa akibat gempa bumi menggunakan data dari basis data gempa bumi Indonesia untuk menghitung tingkat korban jiwa. Model ini lebih unggul dalam menangkap ketidakpastian pada hasil.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="68"/>
+        <location filename="metadata_definitions.py" line="69"/>
         <source>Estimates the number of fatalities resulting from an earthquake. Uses data from an Indonesian database of earthquake events to calculate fatality rates. Based on the earthquake model for Indonesia developed by ITB.</source>
         <translation>Perkiraan jumlah korban jiwa akibat dari gempa bumi. Tingkat korban jiwa dihitung menggunakan data dari basis data gempa bumi Indonesia. Model ini dibuat berdasarkan model gempa bumi untuk Indonesia yang dikembangkan oleh ITB.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="91"/>
+        <location filename="metadata_definitions.py" line="92"/>
         <source>Provide details about the population including estimates for mortalities.</source>
         <translation>Memberikan detail tentang populasi termasuk perkiraan kematian.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="66"/>
+        <location filename="metadata_definitions.py" line="67"/>
         <source>Estimates the number of fatalities resulting from an earthquake. Uses data from a global database of earthquake events to calculate fatality rates. Based on the Population Vulnerability PAGER Model.</source>
         <translation>Perkiraan jumlah korban jiwa akibat gempa bumi. Tingkat korban jiwa dihitung menggunakan data dari basis data gempa bumi global. Model ini dibuat berdasarkan Model Kerentanan Penduduk PAGER.</translation>
     </message>
@@ -6288,7 +6116,7 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
         <translation>Nilai null akan dianggap sebagai nol.</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="91"/>
+        <location filename="metadata_definitions.py" line="61"/>
         <source>People affected</source>
         <translation>Penduduk yang terkena dampak</translation>
     </message>
@@ -6308,44 +6136,29 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
         <translation>Tidak terdampak</translation>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="111"/>
-        <source>People that might be affected</source>
-        <translation>Penduduk yang mungkin terdampak</translation>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="77"/>
+        <location filename="impact_function.py" line="78"/>
         <source>Map shows the numbers of people in high, medium, and low hazard zones.</source>
         <translation>Peta yang menunjukan banyak penduduk di zona ancaman rendah, menengah, dan tinggi.</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="147"/>
+        <location filename="impact_function.py" line="148"/>
         <source>Population in high hazard zones</source>
         <translation>Penduduk di zona ancaman tinggi</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="150"/>
+        <location filename="impact_function.py" line="151"/>
         <source>Population in medium hazard zones</source>
         <translation>Penduduk di zona ancaman menengah</translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="153"/>
+        <location filename="impact_function.py" line="154"/>
         <source>Population in low hazard zones</source>
         <translation>Penduduk di zona ancaman rendah</translation>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="104"/>
-        <source>Population might be impacted</source>
-        <translation>Populasi yang mungkin terdampak</translation>
     </message>
     <message>
         <location filename="impact_function.py" line="66"/>
         <source>Roads are said to be %s when in a region with field &quot;%s&quot; in &quot;%s&quot;.</source>
         <translation>Jalanan dianggap terrendam apabila berada di wilayah dengan kolom &quot;%s&quot; di &quot;%s&quot;.</translation>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="130"/>
-        <source>Population which need evacuation</source>
-        <translation>Penduduk yang perlu dievakuasi</translation>
     </message>
     <message>
         <location filename="impact_function.py" line="93"/>
@@ -6397,6 +6210,186 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
         <source>There is not enough free memory to run this analysis.</source>
         <translation>Tidak ada cukup memori bebas untuk menjalankan analisis ini.</translation>
     </message>
+    <message>
+        <location filename="definitions.py" line="370"/>
+        <source>event</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="388"/>
+        <source>hazard</source>
+        <translation type="unfinished">ancaman</translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="425"/>
+        <source>The extent and severity of the mapped scenario or hazard zones may not be consistent with future events.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="428"/>
+        <source>The impacts on roads, people, buildings and other exposure elements may differ from the analysis results due to local conditions such as terrain and infrastructure type.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="436"/>
+        <source>A &lt;b&gt;generic hazard&lt;/b&gt; can be used for any type of hazard where the data have been classified or generalised. For example: earthquake, flood, volcano, tsunami, landslide, smoke haze or strong wind.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="647"/>
+        <source>Areas reported for land cover have not been rounded.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="688"/>
+        <source>Rounding is applied to all population values, which may cause discrepancies when adding values.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="702"/>
+        <source>What are the security factors for the affected people?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="704"/>
+        <source>How will we reach displaced people?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="705"/>
+        <source>What kind of food does the population normally consume?What are the critical non-food items required by the affected population?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="709"/>
+        <source>If no, where can we obtain additional relief items and how will we distribute them?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="796"/>
+        <source>Numbers reported for structures have not been rounded.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="definitions.py" line="828"/>
+        <source>Where places are represented as a single point, the effect of the hazard over the entire place may differ from the point at which the place is represented on the map.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="46"/>
+        <source>Land cover affected by volcanic ash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="52"/>
+        <source>Places affected by volcanic ash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="56"/>
+        <source>People affected by volcanic ash</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="base.py" line="895"/>
+        <source>Check that the hazard layer (%s) has affected area.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="63"/>
+        <source>Buildings affected by earthquake</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="57"/>
+        <source>People affected by earthquake event</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="73"/>
+        <source>Based on the Population Vulnerability ITB Bayesian Model.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="193"/>
+        <source>Are there enough covered floor areas available for %s people?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="205"/>
+        <source>Are there enough water supply, sanitation, hygiene, food, shelter, medicines and relief items available for %sdisplaced people?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="58"/>
+        <source>People affected by earthquake</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="115"/>
+        <source>There is no flooded area int the hazard layers, thus there is no affected population.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="62"/>
+        <source>People affected by flood</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="85"/>
+        <source>There is no flooded area int the hazard layers, thus there is no affected road.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="61"/>
+        <source>Roads affected by flood</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="54"/>
+        <source>Buildings affected by flood</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="84"/>
+        <source>There is no flooded area int the hazard layers, thus there is no affected building.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="65"/>
+        <source>People affected by tsunami</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="66"/>
+        <source>Buildings affected by tsunami</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="56"/>
+        <source>Land cover affected by tsunami</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="65"/>
+        <source>Roads affected by tsunami</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="52"/>
+        <source>Buildings affected by volcano</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="151"/>
+        <source>Radius %s km </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="57"/>
+        <source>People affected by volcano</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>AboutDialog</name>
@@ -6407,7 +6400,7 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
     </message>
     <message>
         <location filename="about_dialog.py" line="76"/>
-        <source>Edit by Hugo GarduÃ±o from The Noun Project</source>
+        <source>Edit by Hugo Gardu&#xc3;&#xb1;o from The Noun Project</source>
         <translation>Tombol Edit oleh Hugo GarduÃ±o dari The Noun Project</translation>
     </message>
     <message>
@@ -6468,8 +6461,8 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Helvetica Neue,Helvetica,Segoe UI,Arial,freesans,sans-serif'; font-size:14px; color:#333333; background-color:#ffffff;&quot;&gt;InaSAFE is free software that provides a simple but rigorous way to combine data from communities, local governments and scientists to help assess the possible impact of future disaster events on communities, assets and infrastructure. It uses innovative science and crowd sourcing techniques (OpenStreetMap, OSM) to create realistic disaster scenarios for better planning, preparedness and response activities. It is in demand by disaster managers across Indonesia and around the world. &lt;/span&gt;&lt;/p&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Helvetica Neue,Helvetica,Segoe UI,Arial,freesans,sans-serif&apos;; font-size:14px; color:#333333; background-color:#ffffff;&quot;&gt;InaSAFE is free software that provides a simple but rigorous way to combine data from communities, local governments and scientists to help assess the possible impact of future disaster events on communities, assets and infrastructure. It uses innovative science and crowd sourcing techniques (OpenStreetMap, OSM) to create realistic disaster scenarios for better planning, preparedness and response activities. It is in demand by disaster managers across Indonesia and around the world. &lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Helvetica Neue,Helvetica,Segoe UI,Arial,freesans,sans-serif&apos;; font-size:14px; color:#333333; background-color:#ffffff;&quot;&gt;InaSAFE was developed jointly by the Indonesia&apos;s National Disaster Management Agency (BNPB), the Australian Government and the World Bank - Global Facility for Disaster Reduction and Recovery (World Bank-GFDRR).&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -6483,12 +6476,12 @@ p, li { white-space: pre-wrap; }
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;These are the minimum steps you need to follow in order to use InaSAFE:&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Cantarell'; font-size:11pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;1. Add at least one hazard layer (e.g. earthquake MMI) to QGIS.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;2. Add at least one exposure layer (e.g. structures) to QGIS.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;3. Make sure you have defined keywords for your hazard and exposure layers. You can do this using the keywords icon in the InaSAFE toolbar.&lt;/span&gt;&lt;/p&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;These are the minimum steps you need to follow in order to use InaSAFE:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;1. Add at least one hazard layer (e.g. earthquake MMI) to QGIS.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;2. Add at least one exposure layer (e.g. structures) to QGIS.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;3. Make sure you have defined keywords for your hazard and exposure layers. You can do this using the keywords icon in the InaSAFE toolbar.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;4. Click on the Run button in the InaSAFE panel.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -6506,7 +6499,7 @@ p, li { white-space: pre-wrap; }
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Sans&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -6519,7 +6512,7 @@ p, li { white-space: pre-wrap; }
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Sans&apos;; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -6532,7 +6525,7 @@ p, li { white-space: pre-wrap; }
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://www.bnpb.go.id/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Indonesia’s National Disaster Management Agency (BNPB)&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://dfat.gov.au/geo/indonesia/development-assistance/Pages/disaster-risk-management-in-indonesia.aspx&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Australian Government – Disaster Risk Management in Indonesia&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://www.gfdrr.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;World Bank - Global Facility for Disaster Reductions and Recovery&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
@@ -6604,22 +6597,22 @@ p, li { white-space: pre-wrap; }
         <translation>agregasi</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="1436"/>
+        <location filename="aggregator.py" line="1438"/>
         <source>preprocessed</source>
         <translation>Proses Ulang</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="1517"/>
+        <location filename="aggregator.py" line="1519"/>
         <source>Entire area</source>
         <translation>Area keseluruhan</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="1496"/>
+        <location filename="aggregator.py" line="1498"/>
         <source>An exception occurred when creating the entire area layer.</source>
         <translation>Terjadi pengecualian ketika membuat layer area keseluruhan.</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="1502"/>
+        <location filename="aggregator.py" line="1504"/>
         <source>Area</source>
         <translation>Area</translation>
     </message>
@@ -6664,12 +6657,12 @@ p, li { white-space: pre-wrap; }
         <translation>Memodifikasi %s untuk menghindari perpotongan dengan layer agregasinya</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="1558"/>
+        <location filename="aggregator.py" line="1560"/>
         <source>No &quot;target_field&quot; keyword found in the impact layer %s keywords. The impact function should define this.</source>
         <translation>Tidak ada kata kunci &quot;target_field&quot; yang ditemukan pada kata kunci layer dampak %s. Fungsi dampak harus mendefinisikannya.</translation>
     </message>
     <message>
-        <location filename="aggregator.py" line="1570"/>
+        <location filename="aggregator.py" line="1572"/>
         <source>No attribute &quot;%s&quot; was found in the attribute table for layer &quot;%s&quot;. The impact function must define this attribute for postprocessing to work.</source>
         <translation>Tidak ada atribut &quot;%s&quot; yang ditemukan pada tabel atribut untuk layer &quot;%s&quot;. Fungsi dampak harus mendefinisikan atribut ini agar analisis pasca pemrosesan dapat dilakukan.</translation>
     </message>
@@ -7860,82 +7853,82 @@ ke
 <context>
     <name>NeedsManagerDialog</name>
     <message>
-        <location filename="needs_manager_dialog.py" line="118"/>
+        <location filename="needs_manager_dialog.py" line="116"/>
         <source>Discard changes</source>
         <translation>Membuang perubahan</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="132"/>
+        <location filename="needs_manager_dialog.py" line="130"/>
         <source>Save resource</source>
         <translation>Menyimpan sumberdaya</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="139"/>
+        <location filename="needs_manager_dialog.py" line="137"/>
         <source>Export ...</source>
         <translation>Ekspor ...</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="146"/>
+        <location filename="needs_manager_dialog.py" line="144"/>
         <source>Import ...</source>
         <translation>Impor ...</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="153"/>
+        <location filename="needs_manager_dialog.py" line="151"/>
         <source>New</source>
         <translation>Baru</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="160"/>
+        <location filename="needs_manager_dialog.py" line="158"/>
         <source>Save</source>
         <translation>Simpan</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="167"/>
+        <location filename="needs_manager_dialog.py" line="165"/>
         <source>Save as</source>
         <translation>Simpan sebagai</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="754"/>
+        <location filename="needs_manager_dialog.py" line="752"/>
         <source>JSON files (*.json *.JSON)</source>
         <translation>File JSON (*.json *.JSON)</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="754"/>
+        <location filename="needs_manager_dialog.py" line="752"/>
         <source>Create a minimum needs profile</source>
         <translation>Buat profil kebutuhan minimum</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="820"/>
+        <location filename="needs_manager_dialog.py" line="818"/>
         <source>Remove %s.</source>
         <translation>Hapus %s.</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="630"/>
+        <location filename="needs_manager_dialog.py" line="628"/>
         <source>Problem - default value is invalid</source>
         <translation>Masalah - nilai default tidak sah</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="636"/>
+        <location filename="needs_manager_dialog.py" line="634"/>
         <source>Problem - maximum value is invalid</source>
         <translation>Masalah - nilai terbesar tidak sah</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="642"/>
+        <location filename="needs_manager_dialog.py" line="640"/>
         <source>Problem - minimum value is invalid</source>
         <translation>Masalah - nilai terkecil tidak sah</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="845"/>
+        <location filename="needs_manager_dialog.py" line="843"/>
         <source>Hide Help</source>
         <translation>Sembunyikan Bantuan</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="848"/>
+        <location filename="needs_manager_dialog.py" line="846"/>
         <source>Show Help</source>
         <translation>Tampilkan Bantuan</translation>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="125"/>
+        <location filename="needs_manager_dialog.py" line="123"/>
         <source>Restore defaults</source>
         <translation>Kembalikan default</translation>
     </message>
@@ -8233,7 +8226,7 @@ ke
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:13.5pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Ubuntu&apos;; font-size:13.5pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:12pt; font-weight:600; color:#f50000;&quot;&gt;Note:&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:12pt;&quot;&gt; The above setting requires a QGIS restart to disable / enable. Error messages and diagnostic information will be posted to http://sentry.linfiniti.com/inasafe-desktop/. Some institutions may not allow you to enable this feature - check with your network administrator if unsure. Although the data is submitted anonymously, the information contained in tracebacks may contain file system paths which reveal your identity or other information from your system.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -8770,17 +8763,17 @@ p, li { white-space: pre-wrap; }
         <translation>Jumlah keseluruhan dalam area agregasi</translation>
     </message>
     <message>
-        <location filename="postprocessor_manager.py" line="664"/>
+        <location filename="postprocessor_manager.py" line="679"/>
         <source>%s postprocessor problem</source>
         <translation>%s masalah pasca pemrosesan</translation>
     </message>
     <message>
-        <location filename="postprocessor_manager.py" line="751"/>
+        <location filename="postprocessor_manager.py" line="766"/>
         <source>Postprocessing report partially skipped</source>
         <translation>Laporan pasca pemrosesan dilewati sebagian</translation>
     </message>
     <message>
-        <location filename="postprocessor_manager.py" line="755"/>
+        <location filename="postprocessor_manager.py" line="770"/>
         <source>Due to a problem while processing the results, part of the detailed postprocessing report is unavailable:</source>
         <translation>Karena masalah dalam pengolahan hasil, sebagian dari detil laporan pasca pemrosesan tidak tersedia:</translation>
     </message>
@@ -9520,7 +9513,7 @@ p, li { white-space: pre-wrap; }
     <name>pgFcAggLayerDisjoint</name>
     <message>
         <location filename="step_fc65_agglayer_disjoint.ui" line="65"/>
-        <source>The aggregation layer and hazard layer don't intersect, i.e. they cover disjoint areas.
+        <source>The aggregation layer and hazard layer don&apos;t intersect, i.e. they cover disjoint areas.
  Please step back and select another layer.</source>
         <translation>Lapisan agregasi dan ancaman tidak berpotongan, misalnya mereka tidak menutupi area yang sama.
 Mohon kembali ke tahap sebelumnya dan pilih lapisan lain.</translation>
@@ -9661,7 +9654,7 @@ Mohon kembali ke tahap sebelumnya dan pilih lapisan lain.</translation>
     <name>pgFcDisJointLayers</name>
     <message>
         <location filename="step_fc45_disjoint_layers.ui" line="65"/>
-        <source>The hazard layer and exposure layer don't intersect, i.e. they cover disjoint areas.
+        <source>The hazard layer and exposure layer don&apos;t intersect, i.e. they cover disjoint areas.
  Please step back and select another layer.</source>
         <translation>Lapisan ancaman dan keterpaparan tidak berpotongan, misalnya mereka tidak menutupi area yang sama.
 Mohon kembali ke tahap sebelumnya dan pilih lapisan lain.</translation>
@@ -9724,7 +9717,7 @@ Mohon kembali ke tahap sebelumnya dan pilih lapisan lain.</translation>
     <name>pgFcExtentDisjoint</name>
     <message>
         <location filename="step_fc75_extent_disjoint.ui" line="68"/>
-        <source>The selected extent doesn't intersect input layers.
+        <source>The selected extent doesn&apos;t intersect input layers.
  Please step back and select another layer.</source>
         <translation>Cakupan yang dipilih tidak berpotongan dengan lapisan-lapisan masukan.
 Silahkan mundur ke belakangan dan pilih lapisan lainnya.</translation>
@@ -10107,7 +10100,7 @@ Silahkan mundur ke belakangan dan pilih lapisan lainnya.</translation>
     </message>
     <message>
         <location filename="test_aggregator.py" line="105"/>
-        <source>DístrÜt&apos;s of Jakarta</source>
+        <source>D&#xed;str&#xdc;t&apos;s of Jakarta</source>
         <translation>DístrÜt&apos;s Jakarta</translation>
     </message>
 </context>
