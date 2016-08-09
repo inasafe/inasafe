@@ -204,7 +204,7 @@ class ITBFatalityFunction(
                 'from and how will we transport them?'))
             fields.append(tr(
                 'Are there enough water supply, sanitation, hygiene, food, '
-                'shelter, medicines and relief items available for %s'
+                'shelter, medicines and relief items available for %s '
                 'displaced people?') % rounded_displaced)
 
         return fields
