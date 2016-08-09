@@ -722,7 +722,7 @@
         <translation>tuổi</translation>
     </message>
     <message>
-        <location filename="definitions.py" line="107"/>
+        <location filename="definitions.py" line="172"/>
         <source>Aggregation</source>
         <translation type="unfinished"/>
     </message>
@@ -857,7 +857,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="base.py" line="1677"/>
+        <location filename="base.py" line="1720"/>
         <source>Not specified</source>
         <translation type="unfinished"/>
     </message>
@@ -867,37 +867,37 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="61"/>
+        <location filename="metadata_definitions.py" line="62"/>
         <source>Need evacuation</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="91"/>
+        <location filename="metadata_definitions.py" line="92"/>
         <source>To assess the impacts of volcano eruption on population.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="68"/>
+        <location filename="metadata_definitions.py" line="69"/>
         <source>An exposure raster layer where each cell represent population count.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="71"/>
+        <location filename="metadata_definitions.py" line="72"/>
         <source>Vector layer contains people affected and the minimum needs based on the number of people affected.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="56"/>
+        <location filename="impact_function.py" line="74"/>
         <source>Not specified in data</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="95"/>
+        <location filename="metadata_definitions.py" line="97"/>
         <source>Thousand separator is represented by  %s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="94"/>
+        <location filename="metadata_definitions.py" line="96"/>
         <source>(people per cell)</source>
         <translation type="unfinished"/>
     </message>
@@ -907,57 +907,52 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="60"/>
+        <location filename="metadata_definitions.py" line="61"/>
         <source>To assess the impacts of volcano eruption on building.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="76"/>
+        <location filename="metadata_definitions.py" line="77"/>
         <source>Provide details about how many building would likely be affected by each hazard zones.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="73"/>
+        <location filename="metadata_definitions.py" line="74"/>
         <source>Vector polygon layer extracted from OSM where each polygon represents the footprint of a building.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1770"/>
+        <location filename="definitions.py" line="1919"/>
         <source>Other</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="95"/>
-        <source>Buildings affected by volcanic hazard zone</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="92"/>
+        <location filename="metadata_definitions.py" line="94"/>
         <source>Thousand separator is represented by %s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="91"/>
+        <location filename="metadata_definitions.py" line="93"/>
         <source>(building)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="90"/>
+        <location filename="metadata_definitions.py" line="92"/>
         <source>Building count</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="64"/>
+        <location filename="metadata_definitions.py" line="65"/>
         <source>Die or be displaced</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="318"/>
+        <location filename="impact_function.py" line="316"/>
         <source>Number of fatalities</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="323"/>
+        <location filename="impact_function.py" line="321"/>
         <source>Number of people displaced</source>
         <translation type="unfinished"/>
     </message>
@@ -972,47 +967,32 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="193"/>
+        <location filename="impact_function.py" line="196"/>
         <source>Are there enough shelters and relief items available for %s people?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="197"/>
+        <location filename="impact_function.py" line="199"/>
         <source>If yes, where are they located and how will we distribute them?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="201"/>
+        <location filename="impact_function.py" line="202"/>
         <source>If no, where can we obtain additional relief items from and how will we transport them?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="218"/>
+        <location filename="impact_function.py" line="223"/>
         <source>The fatality calculation assumes that no fatalities occur for shake levels below 4 and fatality counts of less than 50 are disregarded.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="553"/>
-        <source>All values are rounded up to the nearest integer in order to avoid representing human lives as fractions.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="134"/>
-        <source>Earthquake impact to population</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="112"/>
+        <location filename="metadata_definitions.py" line="114"/>
         <source>Population Count</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="140"/>
-        <source>Estimated displaced population per cell</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="62"/>
+        <location filename="metadata_definitions.py" line="63"/>
         <source>Die or be displaced according Pager model</source>
         <translation type="unfinished"/>
     </message>
@@ -1037,82 +1017,72 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="198"/>
+        <location filename="impact_function.py" line="197"/>
         <source>Buildings value ($M)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="200"/>
+        <location filename="impact_function.py" line="199"/>
         <source>Contents value ($M)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="64"/>
+        <location filename="impact_function.py" line="63"/>
         <source>High hazard is defined as shake levels greater than %i on the MMI scale.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="67"/>
+        <location filename="impact_function.py" line="66"/>
         <source>Medium hazard is defined as shake levels between %i and %i on the MMI scale.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="69"/>
+        <location filename="impact_function.py" line="68"/>
         <source>Low hazard is defined as shake levels between %i and %i on the MMI scale.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="73"/>
+        <location filename="impact_function.py" line="72"/>
         <source>Values are in units of 1 million Australian Dollars</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="87"/>
-        <source>Building affected by earthquake</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="88"/>
+        <location filename="metadata_definitions.py" line="90"/>
         <source>The level of the impact is according to the threshold the user input.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="91"/>
+        <location filename="metadata_definitions.py" line="93"/>
         <source>(mmi)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="92"/>
+        <location filename="metadata_definitions.py" line="94"/>
         <source>Impact level</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="112"/>
-        <source>Estimated buildings affected</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="62"/>
+        <location filename="metadata_definitions.py" line="63"/>
         <source>Be impacted</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="653"/>
+        <location filename="definitions.py" line="803"/>
         <source>Which structures have warning capacity (eg. sirens, speakers, etc.)?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="658"/>
+        <location filename="definitions.py" line="808"/>
         <source>Which buildings will be evacuation centres?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="659"/>
+        <location filename="definitions.py" line="809"/>
         <source>Where will we locate the operations centre?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="660"/>
+        <location filename="definitions.py" line="810"/>
         <source>Where will we locate warehouse and/or distribution centres?</source>
         <translation type="unfinished"/>
     </message>
@@ -1132,22 +1102,22 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="102"/>
+        <location filename="metadata_definitions.py" line="59"/>
         <source>Buildings affected</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="103"/>
+        <location filename="metadata_definitions.py" line="105"/>
         <source>(Low, Medium, High)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="91"/>
+        <location filename="metadata_definitions.py" line="93"/>
         <source>Structure inundated status</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="85"/>
+        <location filename="metadata_definitions.py" line="86"/>
         <source>Map of population exposed to high category and a table with number of people in each category</source>
         <translation type="unfinished"/>
     </message>
@@ -1157,22 +1127,22 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="566"/>
+        <location filename="definitions.py" line="697"/>
         <source>How will warnings be disseminated?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="99"/>
+        <location filename="metadata_definitions.py" line="101"/>
         <source>Number of People</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="65"/>
+        <location filename="metadata_definitions.py" line="66"/>
         <source>Be flooded in given thresholds</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="69"/>
+        <location filename="metadata_definitions.py" line="70"/>
         <source>N/A</source>
         <translation type="unfinished"/>
     </message>
@@ -1187,47 +1157,37 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="101"/>
-        <source>Roads inundated</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="240"/>
+        <location filename="impact_function.py" line="248"/>
         <source>Not Inundated</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="242"/>
+        <location filename="impact_function.py" line="250"/>
         <source>Inundated</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="103"/>
-        <source>Flooded roads</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="73"/>
+        <location filename="metadata_definitions.py" line="74"/>
         <source>To assess the impacts of tsunami inundation in raster format on population.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="100"/>
+        <location filename="metadata_definitions.py" line="101"/>
         <source>Provide details about how many people would likely need to be evacuated, where they are located and what resources would be required to support them.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="76"/>
+        <location filename="metadata_definitions.py" line="77"/>
         <source>The population subject to inundation exceeding a threshold (default 0.7m) is calculated and returned as a raster layer. In addition the total number and the required needs in terms of the BNPB (Perka 7) are reported. The threshold can be changed and even contain multiple numbers in which case evacuation and needs are calculated using the largest number with population breakdowns provided for the smaller numbers. The population raster is resampled to the resolution of the hazard raster and is rescaled so that the resampled population counts reflect estimates of population count per resampled cell. The resulting impact layer has the same resolution and reflects population count per cell which are affected by inundation.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="91"/>
+        <location filename="metadata_definitions.py" line="92"/>
         <source>A hazard raster layer where each cell represents tsunami depth (in meters).</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="104"/>
+        <location filename="metadata_definitions.py" line="105"/>
         <source>The default threshold of 0.7 meter was selected based on consensus, not hard evidence.</source>
         <translation type="unfinished"/>
     </message>
@@ -1237,67 +1197,47 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="124"/>
-        <source>People in need of evacuation</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="219"/>
+        <location filename="impact_function.py" line="227"/>
         <source>Flooded</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="90"/>
-        <source>Buildings inundated</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="92"/>
-        <source>Flooded buildings</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="58"/>
+        <location filename="metadata_definitions.py" line="59"/>
         <source>Be flooded</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="69"/>
+        <location filename="metadata_definitions.py" line="70"/>
         <source>To assess the impacts of flood inundation in vector format on population.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="107"/>
-        <source>People affected by flood prone areas</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="103"/>
+        <location filename="metadata_definitions.py" line="105"/>
         <source>(people per polygon)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="70"/>
+        <location filename="metadata_definitions.py" line="71"/>
         <source>To assess the impacts of flood inundation in raster format on population.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="88"/>
+        <location filename="metadata_definitions.py" line="89"/>
         <source>A hazard raster layer where each cell represents flood depth (in meters).</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="102"/>
+        <location filename="metadata_definitions.py" line="103"/>
         <source>The default threshold of 1 meter was selected based on consensus, not hard evidence.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="74"/>
+        <location filename="metadata_definitions.py" line="75"/>
         <source>Vector polygon or point layer extracted from OSM where each feature represents the footprint of a building.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="77"/>
+        <location filename="metadata_definitions.py" line="78"/>
         <source>Vector layer contains building is estimated to be flooded and the breakdown of the building by type.</source>
         <translation type="unfinished"/>
     </message>
@@ -1312,77 +1252,77 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="549"/>
+        <location filename="definitions.py" line="680"/>
         <source>The &lt;b&gt;population&lt;/b&gt; describes the people that might be exposed to a particular hazard.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="609"/>
+        <location filename="definitions.py" line="751"/>
         <source>A &lt;b&gt;road&lt;/b&gt; is a defined route used by a vehicle or people to travel between two or more points.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="748"/>
+        <location filename="definitions.py" line="897"/>
         <source>generic</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="379"/>
+        <location filename="definitions.py" line="466"/>
         <source>An &lt;b&gt;earthquake&lt;/b&gt; describes the sudden violent shaking of the ground that occurs as a result of volcanic activity or movement in the earth&apos;s crust.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="399"/>
+        <location filename="definitions.py" line="496"/>
         <source>A &lt;b&gt;flood&lt;/b&gt; describes the inundation of land that is normally dry by a large amount of water. For example: A &lt;b&gt;flood&lt;/b&gt; can occur after heavy rainfall, when a river overflows its banks or when a dam breaks. The effect of a &lt;b&gt;flood&lt;/b&gt; is for land that is normally dry to become wet.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="468"/>
+        <location filename="definitions.py" line="591"/>
         <source>A &lt;b&gt;volcano&lt;/b&gt; describes a mountain which has a vent through which rock fragments, ash, lava, steam and gases can be ejected from below the earth&apos;s surface. The type of material ejected depends on the type of &lt;b&gt;volcano&lt;/b&gt;.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="732"/>
+        <location filename="definitions.py" line="881"/>
         <source>feet</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="796"/>
+        <location filename="definitions.py" line="945"/>
         <source>metres</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="845"/>
+        <location filename="definitions.py" line="994"/>
         <source>MMI</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="846"/>
+        <location filename="definitions.py" line="995"/>
         <source>The &lt;b&gt;Modified Mercalli Intensity (MMI)&lt;/b&gt; scale describes the intensity of ground shaking from a earthquake based on the effects observed by people at the surface.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1097"/>
+        <location filename="definitions.py" line="1241"/>
         <source>This is a binary description for an area. The area is either &lt;b&gt;wet&lt;/b&gt; (affected by flood water) or &lt;b&gt;dry&lt;/b&gt; (not affected by flood water). This unit does not describe how &lt;b&gt;wet&lt;/b&gt; or &lt;b&gt;dry&lt;/b&gt; an area is.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1112"/>
+        <location filename="definitions.py" line="1256"/>
         <source>Water above ground height.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1215"/>
+        <location filename="definitions.py" line="1354"/>
         <source>No water above ground height.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="31"/>
+        <location filename="definitions.py" line="39"/>
         <source>Global default</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="36"/>
+        <location filename="definitions.py" line="44"/>
         <source>Don&apos;t use</source>
         <translation type="unfinished"/>
     </message>
@@ -1422,37 +1362,37 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="79"/>
+        <location filename="metadata_definitions.py" line="80"/>
         <source>A hazard raster layer where each cell represents the class of the hazard. There should be 3 classes: e.g. 1, 2, and 3.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="87"/>
+        <location filename="metadata_definitions.py" line="88"/>
         <source>The impact layer will contain all structures that were exposed to the highest class (3) and a summary table containing the number of structures in each class.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="98"/>
+        <location filename="metadata_definitions.py" line="99"/>
         <source>The number of classes is three.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="69"/>
+        <location filename="metadata_definitions.py" line="70"/>
         <source>To assess the impacts of continuous hazards in raster format on population raster layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="78"/>
+        <location filename="metadata_definitions.py" line="79"/>
         <source>A hazard raster layer where each cell represents the level of the hazard. The hazard has continuous value of hazard level.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="95"/>
+        <location filename="metadata_definitions.py" line="96"/>
         <source>Provide details about how many people would likely be affected for each hazard class.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="233"/>
+        <location filename="definitions.py" line="298"/>
         <source>A layer composed of linear features. Currently only &lt;b&gt;road exposure&lt;/b&gt;line layers are supported by InaSAFE.</source>
         <translation type="unfinished"/>
     </message>
@@ -1467,82 +1407,72 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="70"/>
+        <location filename="impact_function.py" line="76"/>
         <source>Map shows buildings affected in each of the volcano buffered zones.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="74"/>
+        <location filename="impact_function.py" line="81"/>
         <source>Volcanoes considered: %s.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="92"/>
-        <source>Buildings affected by volcanic buffered point</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="51"/>
+        <location filename="impact_function.py" line="56"/>
         <source>Map shows buildings affected in each of the volcano hazard polygons.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="76"/>
+        <location filename="metadata_definitions.py" line="77"/>
         <source>Vector layer contains Map of building exposed to volcanic hazard zones for each Kawasan Rawan Bencana.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="97"/>
+        <location filename="metadata_definitions.py" line="98"/>
         <source>The model clearly over-predicts the fatality rates at intensities higher than VIII.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="111"/>
+        <location filename="metadata_definitions.py" line="112"/>
         <source>Indonesian Earthquake Building-Damage and Fatality Models and Post Disaster Survey Guidelines Development Bali, 27-28 February 2012, 54pp.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="118"/>
+        <location filename="metadata_definitions.py" line="119"/>
         <source>Allen, T. I., Wald, D. J., Earle, P. S., Marano, K. D., Hotovec, A. J., Lin, K., and Hearne, M., 2009. An Atlas of ShakeMaps and population exposure catalog for earthquake loss modeling, Bull. Earthq. Eng. 7, 701-718.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="127"/>
+        <location filename="metadata_definitions.py" line="128"/>
         <source>Jaiswal, K., and Wald, D., 2010. An empirical model for global earthquake fatality estimation, Earthq. Spectra 26, 1017-1037.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="84"/>
+        <location filename="metadata_definitions.py" line="85"/>
         <source>Jaiswal, K. S., Wald, D. J., and Hearne, M. (2009a). Estimating casualties for large worldwide earthquakes using an empirical approach. U.S. Geological Survey Open-File Report 2009-1136.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="72"/>
+        <location filename="metadata_definitions.py" line="73"/>
         <source>This function will categorised the continuous hazard level into 3 category based on the threshold that has been input by the user. After that, this function will calculate how many people will be impacted per category for all categories in the hazard layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="base.py" line="773"/>
+        <location filename="base.py" line="813"/>
         <source>In the event of %(hazard)s how many %(exposure)s might %(impact)s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="90"/>
+        <location filename="impact_function.py" line="98"/>
         <source>Field &quot;%s&quot; is not present in the attribute table of the hazard layer. Please change the Affected Field parameter in the IF Option.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="104"/>
+        <location filename="impact_function.py" line="112"/>
         <source>Field &quot;%s&quot; is not present in the attribute table of the exposure layer. Please change the Building Type Field parameter in the IF Option.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="90"/>
-        <source>People affected by the buffered point volcano</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="66"/>
+        <location filename="metadata_definitions.py" line="67"/>
         <source>A point vector layer.</source>
         <translation type="unfinished"/>
     </message>
@@ -1562,7 +1492,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="529"/>
+        <location filename="needs_manager_dialog.py" line="527"/>
         <source>weekly</source>
         <translation type="unfinished"/>
     </message>
@@ -1602,57 +1532,57 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="56"/>
+        <location filename="metadata_definitions.py" line="57"/>
         <source>Polygon flood on buildings</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="67"/>
+        <location filename="metadata_definitions.py" line="68"/>
         <source>Tsunami evacuation</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="53"/>
+        <location filename="metadata_definitions.py" line="54"/>
         <source>Polygon flood on roads</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="63"/>
+        <location filename="metadata_definitions.py" line="64"/>
         <source>Polygon flood on people</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="83"/>
+        <location filename="metadata_definitions.py" line="84"/>
         <source>An exposure raster layer where each cell represents a population count.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="86"/>
+        <location filename="metadata_definitions.py" line="87"/>
         <source>A vector layer containing the number of people affected per flood area and the minimum needs based on evacuation percentage.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="61"/>
+        <location filename="metadata_definitions.py" line="62"/>
         <source>Raster flood on buildings</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="86"/>
+        <location filename="metadata_definitions.py" line="87"/>
         <source>Provide details about where critical infrastructure might be flooded.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="95"/>
+        <location filename="metadata_definitions.py" line="96"/>
         <source>The model is based on a limited number of observed fatality rates during four previous fatal events.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="99"/>
+        <location filename="metadata_definitions.py" line="100"/>
         <source>The model only estimates the expected fatality rate for a given intensity level. The associated uncertainty for the proposed model is not addressed.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="102"/>
+        <location filename="metadata_definitions.py" line="103"/>
         <source>There are few known issues in the  current model:
 
 * rounding MMI values to the nearest 0.5,
@@ -1662,107 +1592,102 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="65"/>
+        <location filename="metadata_definitions.py" line="66"/>
         <source>Earthquake on buildings</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="71"/>
+        <location filename="metadata_definitions.py" line="72"/>
         <source>This impact function will calculate the impact of an earthquake on buildings, reporting how many are expected to be damaged.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="98"/>
-        <source>People in each hazard areas (low, medium, high)</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="209"/>
+        <location filename="impact_function.py" line="215"/>
         <source>Low Population [%i people/cell]</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="213"/>
+        <location filename="impact_function.py" line="219"/>
         <source>Medium Population [%i people/cell]</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="217"/>
+        <location filename="impact_function.py" line="223"/>
         <source>High Population [%i people/cell]</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="63"/>
+        <location filename="metadata_definitions.py" line="64"/>
         <source>Continuous raster hazard on population</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="88"/>
+        <location filename="metadata_definitions.py" line="89"/>
         <source>Provide details about how many people would likely be impacted in each category.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="91"/>
+        <location filename="metadata_definitions.py" line="92"/>
         <source>Only three categories can be used.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="67"/>
+        <location filename="metadata_definitions.py" line="68"/>
         <source>Classified raster hazard on population</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="73"/>
+        <location filename="metadata_definitions.py" line="74"/>
         <source>To assess the impacts of classified hazards in raster format on a population raster layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="85"/>
+        <location filename="metadata_definitions.py" line="86"/>
         <source>A hazard raster layer where each cell represents the class of the hazard. There should be three classes: e.g. 1, 2, and 3.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="59"/>
+        <location filename="metadata_definitions.py" line="60"/>
         <source>Classified polygon hazard on population</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="65"/>
+        <location filename="metadata_definitions.py" line="66"/>
         <source>A hazard vector layer must be a polygon layer that has a hazard zone attribute.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="89"/>
+        <location filename="metadata_definitions.py" line="90"/>
         <source>An exposure raster layer where each cell represents the population count for that cell.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="74"/>
+        <location filename="metadata_definitions.py" line="75"/>
         <source>Provide details about how many people would likely be affected by each hazard zone.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="61"/>
+        <location filename="metadata_definitions.py" line="62"/>
         <source>Classified raster hazard on buildings</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="63"/>
+        <location filename="metadata_definitions.py" line="64"/>
         <source>Be impacted in each hazard class</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="67"/>
+        <location filename="metadata_definitions.py" line="68"/>
         <source>To assess the impacts of a classified hazard in raster format on a buildings vector layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="70"/>
+        <location filename="metadata_definitions.py" line="71"/>
         <source>This function will treat the values in the hazard raster layer as classes representing low, medium and high impact. You need to ensure that the keywords for the hazard layer have been set appropriately to define these classes.The number of buildings that will be impacted will be calculated for each class. The report will show the total number of buildings that will be affected for each hazard class.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="83"/>
+        <location filename="metadata_definitions.py" line="84"/>
         <source>A vector polygon layer which can be extracted from OSM where each polygon represents the footprint of a building.</source>
         <translation type="unfinished"/>
     </message>
@@ -1772,127 +1697,127 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="53"/>
+        <location filename="metadata_definitions.py" line="54"/>
         <source>Classified polygon hazard on buildings</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="67"/>
+        <location filename="metadata_definitions.py" line="68"/>
         <source>The hazard layer must be a polygon layer. This layer must have an attribute representing the hazard zone that can be specified in the impact function options.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="60"/>
+        <location filename="metadata_definitions.py" line="61"/>
         <source>Point volcano on population</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="54"/>
+        <location filename="metadata_definitions.py" line="55"/>
         <source>Polygon volcano on buildings</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="55"/>
+        <location filename="metadata_definitions.py" line="56"/>
         <source>Point volcano on buildings</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="61"/>
+        <location filename="metadata_definitions.py" line="62"/>
         <source>To assess the impacts of volcano points on buildings.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="59"/>
+        <location filename="metadata_definitions.py" line="60"/>
         <source>Polygon volcano on population</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="75"/>
+        <location filename="metadata_definitions.py" line="76"/>
         <source>An exposure raster layer where each cell represents a population count for that cell.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="78"/>
+        <location filename="metadata_definitions.py" line="79"/>
         <source>A vector layer containing people affected per hazard zone and the minimum needs based on the number of people affected.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="79"/>
+        <location filename="metadata_definitions.py" line="80"/>
         <source>Provide details about the number of buildings that are within each hazard zone.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="82"/>
+        <location filename="metadata_definitions.py" line="83"/>
         <source>Provide details about the number of people that are within each hazard zone.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="99"/>
+        <location filename="metadata_definitions.py" line="100"/>
         <source>To assess the impact of a volcano eruption on people.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="62"/>
+        <location filename="metadata_definitions.py" line="63"/>
         <source>Earthquake ITB fatality function</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="60"/>
+        <location filename="metadata_definitions.py" line="61"/>
         <source>Earthquake PAGER fatality function</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="71"/>
+        <location filename="metadata_definitions.py" line="72"/>
         <source>A vector layer containing polygons matching the hazard areasand an attribute representing the number of people affected for each area.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="91"/>
+        <location filename="metadata_definitions.py" line="92"/>
         <source>Provide details about the number of buildings that are within each hazard class.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="59"/>
+        <location filename="metadata_definitions.py" line="60"/>
         <source>To assess the impact of each hazard zone on buildings.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="69"/>
+        <location filename="metadata_definitions.py" line="70"/>
         <source>A vector layer of buildings with each tagged according to the hazard zone in which it falls.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="72"/>
+        <location filename="metadata_definitions.py" line="73"/>
         <source>Provide details about how many buildings fall within each hazard zone.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="76"/>
+        <location filename="metadata_definitions.py" line="77"/>
         <source>This function will treat the values in the hazard raster layer as classes representing low, medium and high impact. You need to ensure that the keywords for the hazard layer have been set appropriately to define these classes.The number of people that will be affected will be calculated for each class. The report will show the total number of people that will be affected for each hazard class.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="92"/>
+        <location filename="metadata_definitions.py" line="93"/>
         <source>Map of population exposed to the highest class and a table with the number of people in each class</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="64"/>
+        <location filename="metadata_definitions.py" line="65"/>
         <source>Raster flood on population</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="73"/>
+        <location filename="metadata_definitions.py" line="74"/>
         <source>The population subject to inundation exceeding a threshold (default 1m) is calculated and returned as a raster layer. In addition the total number of affected people and the required needs based on the user defined minimum needs are reported. The threshold can be changed and even contain multiple numbers in which case evacuation and needs are calculated using the largest number with population breakdowns provided for the smaller numbers. The population raster is resampled to the resolution of the hazard raster and is rescaled so that the resampled population counts reflect estimates of population count per resampled cell. The resulting impact layer has the same resolution and reflects population count per cell which are affected by inundation.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="72"/>
+        <location filename="metadata_definitions.py" line="73"/>
         <source>The population subject to inundation is determined by whether they are in a flood affected area or not. You can also set an evacuation percentage to calculate what percentage of the affected population should be evacuated. This number will be used to estimate needs based on the user defined minimum needs file.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="79"/>
+        <location filename="metadata_definitions.py" line="80"/>
         <source>A hazard vector layer which has an affected attribute. If it does not have that attribute, all polygons will be considered as affected.</source>
         <translation type="unfinished"/>
     </message>
@@ -1942,32 +1867,32 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="82"/>
+        <location filename="needs_manager_dialog.py" line="80"/>
         <source>Resource name</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="410"/>
+        <location filename="needs_manager_dialog.py" line="408"/>
         <source>Name of the resource that will be provided as part of minimum needs. e.g. Rice, Water etc.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="414"/>
+        <location filename="needs_manager_dialog.py" line="412"/>
         <source>A &lt;b&gt;resource&lt;/b&gt; is something that you provide to displaced persons in the event of a disaster. The resource will be made available at IDP camps and may need to be stockpiled by contingency planners in their preparations for a disaster.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="83"/>
+        <location filename="needs_manager_dialog.py" line="81"/>
         <source>Resource description</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="426"/>
+        <location filename="needs_manager_dialog.py" line="424"/>
         <source>Description of the resource that will be provided as part of minimum needs.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="429"/>
+        <location filename="needs_manager_dialog.py" line="427"/>
         <source>This gives a detailed description of what the resource is and </source>
         <translation type="unfinished"/>
     </message>
@@ -1977,107 +1902,107 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="437"/>
+        <location filename="needs_manager_dialog.py" line="435"/>
         <source>Single unit for the resources spelled out. e.g. litre, kilogram etc.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="440"/>
+        <location filename="needs_manager_dialog.py" line="438"/>
         <source>A &lt;b&gt;unit&lt;/b&gt; is the basic measurement unit used for computing the allowance per individual. For example when planning water rations the unit would be single litre.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="85"/>
+        <location filename="needs_manager_dialog.py" line="83"/>
         <source>Units</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="450"/>
+        <location filename="needs_manager_dialog.py" line="448"/>
         <source>Multiple units for the resources spelled out. e.g. litres, kilogram etc.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="453"/>
+        <location filename="needs_manager_dialog.py" line="451"/>
         <source>&lt;b&gt;Units&lt;/b&gt; are the basic measurement used for computing the allowance per individual. For example when planning water rations the units would be litres.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="86"/>
+        <location filename="needs_manager_dialog.py" line="84"/>
         <source>Unit abbreviation</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="464"/>
+        <location filename="needs_manager_dialog.py" line="462"/>
         <source>Abbreviations of unit for the resources. e.g. l, kg etc.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="87"/>
+        <location filename="needs_manager_dialog.py" line="85"/>
         <source>Minimum allowed</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="480"/>
+        <location filename="needs_manager_dialog.py" line="478"/>
         <source>The minimum allowable quantity per person. </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="482"/>
+        <location filename="needs_manager_dialog.py" line="480"/>
         <source>The &lt;b&gt;minimum&lt;/b&gt; is the minimum allowed quantity of the resource per person. For example you may dictate that the water ration per person per day should never be allowed to be less than 0.5l. This is enforced when tweaking a minimum needs set before an impact evaluation</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="88"/>
+        <location filename="needs_manager_dialog.py" line="86"/>
         <source>Maximum allowed</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="496"/>
+        <location filename="needs_manager_dialog.py" line="494"/>
         <source>The maximum allowable quantity per person. </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="89"/>
+        <location filename="needs_manager_dialog.py" line="87"/>
         <source>Default</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="512"/>
+        <location filename="needs_manager_dialog.py" line="510"/>
         <source>The default allowable quantity per person. </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="514"/>
+        <location filename="needs_manager_dialog.py" line="512"/>
         <source>The &lt;b&gt;default&lt;/b&gt; is the default allowed quantity of the resource per person. For example you may indicate that the water ration per person weekly should be 67l.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="90"/>
+        <location filename="needs_manager_dialog.py" line="88"/>
         <source>Frequency</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="522"/>
+        <location filename="needs_manager_dialog.py" line="520"/>
         <source>The frequency that this resource needs to be provided to a displaced person. e.g. weekly, daily, once etc.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="525"/>
+        <location filename="needs_manager_dialog.py" line="523"/>
         <source>The &lt;b&gt;frequency&lt;/b&gt; informs the aid worker how regularly this resource needs to be provided to the displaced person.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="91"/>
+        <location filename="needs_manager_dialog.py" line="89"/>
         <source>Readable sentence</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="533"/>
+        <location filename="needs_manager_dialog.py" line="531"/>
         <source>A readable presentation of the resource.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="535"/>
+        <location filename="needs_manager_dialog.py" line="533"/>
         <source>A &lt;b&gt;readable sentence&lt;/b&gt; is a presentation of the resource that displays all pertinent information. If you are unsure then use the default. Properties should be included using double curly brackets &apos;{{&apos; &apos;}}&apos;. Including the resource name would be achieved by including e.g. {{ Resource name }}</source>
         <translation type="unfinished"/>
     </message>
@@ -2237,267 +2162,262 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="108"/>
+        <location filename="definitions.py" line="173"/>
         <source>An &lt;b&gt;aggregation&lt;/b&gt; layer represents regions that can be used to summarise impact analysis results. For example, we might summarise the affected people after a flood according to administration boundaries.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="124"/>
+        <location filename="definitions.py" line="189"/>
         <source>The purpose of the layer can be hazard layer, exposure layer, or aggregation layer</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="143"/>
+        <location filename="definitions.py" line="208"/>
         <source>Continuous</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="168"/>
+        <location filename="definitions.py" line="233"/>
         <source>Classified</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="217"/>
+        <location filename="definitions.py" line="282"/>
         <source>Point</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="218"/>
+        <location filename="definitions.py" line="283"/>
         <source>A layer composed of points which each represent a feature on the earth. Currently the only point data supported by InaSAFE are &lt;b&gt;volcano hazard&lt;/b&gt; layers and building points.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="232"/>
+        <location filename="definitions.py" line="297"/>
         <source>Line</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="246"/>
+        <location filename="definitions.py" line="311"/>
         <source>Polygon</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="247"/>
+        <location filename="definitions.py" line="312"/>
         <source>A layer composed on polygon features that represent areas of hazard or exposure. For example areas of flood represented as polygons (for a hazard) or building footprints represented as polygons (for an exposure). The polygon layer will often need the presence of specific layer attributes too - these will vary from impact function to impact function and whether the layer represents a hazard or an exposure layer. Polygon layers can also be used for aggregation - where impact analysis results per boundary such as village or district boundaries.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="267"/>
+        <location filename="definitions.py" line="332"/>
         <source>Raster</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="268"/>
+        <location filename="definitions.py" line="333"/>
         <source>A raster data layer consists of a matrix of cells organised into rows and columns. The value in the cells represents information such as a flood depth value or a hazard class. </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="746"/>
+        <location filename="definitions.py" line="895"/>
         <source>Generic</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="359"/>
-        <source>A &lt;b&gt;generic hazard&lt;/b&gt; can be used for any type of hazard where the data have been classified or generalised. For example: earthquake, flood, volcano, or tsunami.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="378"/>
+        <location filename="definitions.py" line="465"/>
         <source>Earthquake</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="398"/>
+        <location filename="definitions.py" line="495"/>
         <source>Flood</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="441"/>
+        <location filename="definitions.py" line="558"/>
         <source>Tsunami</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="467"/>
+        <location filename="definitions.py" line="590"/>
         <source>Volcano</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="515"/>
+        <location filename="definitions.py" line="641"/>
         <source>The &lt;b&gt;land cover&lt;/b&gt; exposure data describes features on the surface of the earth that might be exposed to a particular  hazard. This might include crops, forest and urban areas. </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="608"/>
+        <location filename="definitions.py" line="750"/>
         <source>Road</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="643"/>
+        <location filename="definitions.py" line="789"/>
         <source>Structure</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="730"/>
+        <location filename="definitions.py" line="879"/>
         <source>Feet</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="733"/>
+        <location filename="definitions.py" line="882"/>
         <source>&lt;b&gt;Feet&lt;/b&gt; are an imperial unit of measure. There are 12 inches in 1 foot and 3 feet in 1 yard.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="749"/>
+        <location filename="definitions.py" line="898"/>
         <source>A generic unit for value that does not have unit or we do not know about the unit. It also can be used for normalised values.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="765"/>
+        <location filename="definitions.py" line="914"/>
         <source>&lt;b&gt;Kilograms per square metre&lt;/b&gt; is a metric unit of measure where the weight is specified according to area.  This unit is relevant for hazards such as volcanic ash.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="779"/>
+        <location filename="definitions.py" line="928"/>
         <source>Kilometres</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="780"/>
+        <location filename="definitions.py" line="929"/>
         <source>kilometres</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="781"/>
+        <location filename="definitions.py" line="930"/>
         <source>km</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="782"/>
+        <location filename="definitions.py" line="931"/>
         <source>&lt;b&gt;Kilometres&lt;/b&gt; are a metric unit of measure. There are 1000 metres in 1 kilometre (km).</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="795"/>
+        <location filename="definitions.py" line="944"/>
         <source>Metres</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="797"/>
+        <location filename="definitions.py" line="946"/>
         <source>m</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="798"/>
+        <location filename="definitions.py" line="947"/>
         <source>&lt;b&gt;Metres&lt;/b&gt; are a metric unit of measure. There are 100 centimetres in 1 metre.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="811"/>
+        <location filename="definitions.py" line="960"/>
         <source>Millimetres</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="812"/>
+        <location filename="definitions.py" line="961"/>
         <source>millimetres</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="813"/>
+        <location filename="definitions.py" line="962"/>
         <source>mm</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="814"/>
+        <location filename="definitions.py" line="963"/>
         <source>&lt;b&gt;Millimetres&lt;/b&gt; are a metric unit of measure. There are 1000 millimetres in 1 metre.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="860"/>
+        <location filename="definitions.py" line="1009"/>
         <source>Percentage</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="861"/>
+        <location filename="definitions.py" line="1010"/>
         <source>percentages</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="862"/>
+        <location filename="definitions.py" line="1011"/>
         <source>%%</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="863"/>
+        <location filename="definitions.py" line="1012"/>
         <source>Percentage values ranges from 0 to 100. It represents a ratio of hundred.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1142"/>
+        <location filename="definitions.py" line="1286"/>
         <source>Generic classes</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="916"/>
+        <location filename="definitions.py" line="1060"/>
         <source>The location that has highest impact.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="931"/>
+        <location filename="definitions.py" line="1075"/>
         <source>The location that has medium impact.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="946"/>
+        <location filename="definitions.py" line="1090"/>
         <source>The location that has lowest impact.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="963"/>
+        <location filename="definitions.py" line="1107"/>
         <source>Volcano classes</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="978"/>
+        <location filename="definitions.py" line="1122"/>
         <source>The highest hazard class.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="993"/>
+        <location filename="definitions.py" line="1137"/>
         <source>The medium hazard class.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1008"/>
+        <location filename="definitions.py" line="1152"/>
         <source>The lowest hazard class.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1096"/>
+        <location filename="definitions.py" line="1240"/>
         <source>Flood classes</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1111"/>
+        <location filename="definitions.py" line="1255"/>
         <source>wet</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1125"/>
+        <location filename="definitions.py" line="1269"/>
         <source>dry</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1154"/>
+        <location filename="definitions.py" line="1293"/>
         <source>The highest hazard classification.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1182"/>
+        <location filename="definitions.py" line="1321"/>
         <source>The lowest hazard classification.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1198"/>
+        <location filename="definitions.py" line="1337"/>
         <source>Tsunami classes</source>
         <translation type="unfinished"/>
     </message>
@@ -2507,27 +2427,27 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1355"/>
+        <location filename="definitions.py" line="1494"/>
         <source>Density</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1370"/>
+        <location filename="definitions.py" line="1509"/>
         <source>Exposure unit defines the unit for the exposure, for example people can either be measured as count or density (count per area.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1389"/>
+        <location filename="definitions.py" line="1528"/>
         <source>Attribute where the structure type is defined.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1401"/>
+        <location filename="definitions.py" line="1540"/>
         <source>Attribute where the road type is defined.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1416"/>
+        <location filename="definitions.py" line="1555"/>
         <source>Attribute where the volcano name is located.</source>
         <translation type="unfinished"/>
     </message>
@@ -2542,23 +2462,8 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="72"/>
+        <location filename="impact_function.py" line="79"/>
         <source>&lt;sup&gt;1&lt;/sup&gt;People need evacuation if they are within the volcanic hazard zones.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="555"/>
-        <source>Population rounding is applied to all population values, which may cause discrepancies when adding values.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="92"/>
-        <source>People affected by Volcano Hazard Zones</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="98"/>
-        <source>People affected by volcano hazard zones</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -2567,17 +2472,17 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="223"/>
+        <location filename="impact_function.py" line="226"/>
         <source>Fatality model is from Institut Teknologi Bandung 2012.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="225"/>
+        <location filename="impact_function.py" line="81"/>
         <source>Fatality model is from the Population Vulnerability Pager Model.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="228"/>
+        <location filename="impact_function.py" line="227"/>
         <source>Map shows the estimation of displaced population.</source>
         <translation type="unfinished"/>
     </message>
@@ -2612,7 +2517,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="75"/>
+        <location filename="impact_function.py" line="76"/>
         <source>&lt;sup&gt;1&lt;/sup&gt;People need evacuation if they are in a hazard zone.</source>
         <translation type="unfinished"/>
     </message>
@@ -2692,22 +2597,22 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="base.py" line="692"/>
+        <location filename="base.py" line="732"/>
         <source>Error: Impact Function has unknown style.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="base.py" line="897"/>
+        <location filename="base.py" line="940"/>
         <source>Ensure that hazard and exposure layers are all set before trying to run the impact function.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="155"/>
+        <location filename="impact_function.py" line="160"/>
         <source>There are no objects in the hazard layer with %s (Affected Field) in %s (Affected Value). Please check the value or use a different extent.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="63"/>
+        <location filename="metadata_definitions.py" line="64"/>
         <source>Raster flood on roads</source>
         <translation type="unfinished"/>
     </message>
@@ -2737,17 +2642,17 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="74"/>
+        <location filename="impact_function.py" line="75"/>
         <source>&lt;sup&gt;1&lt;/sup&gt;People need evacuation if flood levels exceed %(eps).1f m.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="122"/>
+        <location filename="impact_function.py" line="123"/>
         <source>People in &gt;= %.1f m of water</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="130"/>
+        <location filename="impact_function.py" line="131"/>
         <source>People in %.1f m to %.1f m of water</source>
         <translation type="unfinished"/>
     </message>
@@ -2787,18 +2692,13 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="188"/>
+        <location filename="impact_function.py" line="193"/>
         <source>People within any hazard polygon.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="168"/>
+        <location filename="impact_function.py" line="176"/>
         <source>There are no objects in the hazard layer with %s value in %s. Please check your data or use another attribute.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="570"/>
-        <source>How will we reach evacuated people?</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -2968,17 +2868,17 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="217"/>
+        <location filename="impact_function.py" line="222"/>
         <source>No roads are flooded in this scenario.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="251"/>
+        <location filename="impact_function.py" line="259"/>
         <source>No buildings were impacted by this flood.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="97"/>
+        <location filename="metadata_definitions.py" line="98"/>
         <source>Raster layer contains population affected and the minimum needs based on number of the population affected.</source>
         <translation type="unfinished"/>
     </message>
@@ -2988,7 +2888,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="500"/>
+        <location filename="definitions.py" line="631"/>
         <source>Hazards</source>
         <translation type="unfinished"/>
     </message>
@@ -2998,97 +2898,97 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="198"/>
+        <location filename="definitions.py" line="263"/>
         <source>Data type</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="199"/>
+        <location filename="definitions.py" line="264"/>
         <source>The data type describes the values in the layer. Values can be continuous or classified</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="282"/>
+        <location filename="definitions.py" line="347"/>
         <source>Geometry</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="283"/>
+        <location filename="definitions.py" line="348"/>
         <source>Layer geometry can be either raster or vector. There are three possible vector geometries: point, line, and polygon. </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="303"/>
+        <location filename="definitions.py" line="368"/>
         <source>Single event</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="319"/>
+        <location filename="definitions.py" line="386"/>
         <source>Multiple event</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="338"/>
+        <location filename="definitions.py" line="407"/>
         <source>Scenario</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="339"/>
+        <location filename="definitions.py" line="408"/>
         <source>This describes the type of hazard scenario that is represented by the layer. There are two possible values for this attribute, single event and multiple event.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="421"/>
+        <location filename="definitions.py" line="528"/>
         <source>Volcanic ash</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="514"/>
+        <location filename="definitions.py" line="640"/>
         <source>Land cover</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="587"/>
+        <location filename="definitions.py" line="724"/>
         <source>People in buildings</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="764"/>
+        <location filename="definitions.py" line="913"/>
         <source>kg/m2</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="877"/>
+        <location filename="definitions.py" line="1026"/>
         <source>Hazard units are used for continuous data. Examples of hazard units include metres and feet. </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1314"/>
+        <location filename="definitions.py" line="1453"/>
         <source>Classes</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1075"/>
+        <location filename="definitions.py" line="1219"/>
         <source>Hazard classes are a way to group the values in one of the attributes or fields in a vector layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1168"/>
+        <location filename="definitions.py" line="1307"/>
         <source>The middle hazard classification.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1315"/>
+        <location filename="definitions.py" line="1454"/>
         <source>Hazard classes are a way to classify the cell values in a raster layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1459"/>
+        <location filename="definitions.py" line="1598"/>
         <source>Attribute field</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1427"/>
+        <location filename="definitions.py" line="1566"/>
         <source>Name field</source>
         <translation type="unfinished"/>
     </message>
@@ -3098,32 +2998,32 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1460"/>
+        <location filename="definitions.py" line="1599"/>
         <source>The attribute field identifies a field in the attribute table used to identify the function of a feature e.g.  a road type, building type, hazard zone etc.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1474"/>
+        <location filename="definitions.py" line="1613"/>
         <source>Attribute value</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1475"/>
+        <location filename="definitions.py" line="1614"/>
         <source>The attribute value identifies features with similar meanings. For example building attributes may include schools and hospitals. </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1488"/>
+        <location filename="definitions.py" line="1627"/>
         <source>Attribute value map</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1489"/>
+        <location filename="definitions.py" line="1628"/>
         <source>Attribute value maps are used to group related attribute values. For example flooded polygons with attribute values of &quot;yes&quot; , &quot;YES&quot;, &quot;1&quot; and &quot;Flooded&quot; might all be grouped together as &quot;FLOODPRONE&quot;.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="102"/>
+        <location filename="metadata_definitions.py" line="104"/>
         <source>Road inundated status</source>
         <translation type="unfinished"/>
     </message>
@@ -3188,27 +3088,27 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="65"/>
+        <location filename="metadata_definitions.py" line="66"/>
         <source>The hazard layer must be a polygon layer. This layer must have an attribute representing the volcano hazard zone that can be specified in the impact function option. There are three classes low, medium, and high. The default values are &quot;Kawasan Rawan Bencana I&quot; for low, &quot;Kawasan Rawan Bencana II&quot; for medium, and &quot;Kawasan  Rawan Bencana III for high.&quot; If you want to see the name of the volcano in the result, you need to specify the volcano name attribute in the Impact Function options.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="92"/>
+        <location filename="metadata_definitions.py" line="93"/>
         <source>To assess the number of people that may be impacted by each hazard zone.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="68"/>
+        <location filename="metadata_definitions.py" line="69"/>
         <source>To assess the impacts of (flood or tsunami) inundation on building footprints originating from OpenStreetMap (OSM) with hazard in raster format.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="72"/>
+        <location filename="metadata_definitions.py" line="73"/>
         <source>The inundation status is calculated for each building (using the centroid if it is a polygon) based on the flood threshold. The threshold can be configured in impact function options.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="95"/>
+        <location filename="metadata_definitions.py" line="96"/>
         <source>This function only flags buildings as impacted or not either based on a fixed threshold</source>
         <translation type="unfinished"/>
     </message>
@@ -3238,17 +3138,17 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="624"/>
+        <location filename="definitions.py" line="770"/>
         <source>Which roads can be used to evacuate people or to distribute logistics?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="626"/>
+        <location filename="definitions.py" line="772"/>
         <source>What type of vehicles can use the unaffected roads?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="627"/>
+        <location filename="definitions.py" line="773"/>
         <source>What sort of equipment will be needed to reopen roads &amp; where will we get it?</source>
         <translation type="unfinished"/>
     </message>
@@ -3258,17 +3158,17 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="62"/>
+        <location filename="metadata_definitions.py" line="63"/>
         <source>To assess the impacts of (flood or tsunami) inundation on building footprints with hazard in vector format.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="65"/>
+        <location filename="metadata_definitions.py" line="66"/>
         <source>The inundation status is calculated for each building (using the centroid if it is a polygon) based on the value of hazard attribute. The attribute and the values that are considered as flooded can be configured in impact function options.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="71"/>
+        <location filename="metadata_definitions.py" line="72"/>
         <source>A hazard vector layer whose attribute that can be used to mark whether a polygon is flood or not.</source>
         <translation type="unfinished"/>
     </message>
@@ -3283,27 +3183,22 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="70"/>
+        <location filename="impact_function.py" line="77"/>
         <source>Total population in the analysis area: %s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="719"/>
+        <location filename="definitions.py" line="868"/>
         <source>The layers contained &quot;no data&quot; values. This missing data was carried through to the impact layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="722"/>
+        <location filename="definitions.py" line="871"/>
         <source>&quot;No data&quot; values in the impact layer were treated as 0 when counting the affected or total population.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="99"/>
-        <source>Number of people affected in each class</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="159"/>
+        <location filename="impact_function.py" line="160"/>
         <source>No people in %.1f m of water</source>
         <translation type="unfinished"/>
     </message>
@@ -3343,12 +3238,12 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="101"/>
+        <location filename="metadata_definitions.py" line="103"/>
         <source>Flooded structure status</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="102"/>
+        <location filename="metadata_definitions.py" line="104"/>
         <source>(flooded, wet, or dry)</source>
         <translation type="unfinished"/>
     </message>
@@ -3358,7 +3253,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="65"/>
+        <location filename="impact_function.py" line="68"/>
         <source>Buildings are flooded when in a region with field &quot;%s&quot; in &quot;%s&quot;.</source>
         <translation type="unfinished"/>
     </message>
@@ -4138,12 +4033,12 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="466"/>
+        <location filename="needs_manager_dialog.py" line="464"/>
         <source>A &lt;b&gt;unit abbreviation&lt;/b&gt; is the basic measurement unit&apos;s shortened. For example when planning water rations the units would be l.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="498"/>
+        <location filename="needs_manager_dialog.py" line="496"/>
         <source>The &lt;b&gt;maximum&lt;/b&gt; is the maximum allowed quantity of the resource per person. For example you may dictate that the water ration per person per day should never be allowed to be more than 67l. This is enforced when tweaking a maximum needs set before an impact evaluation.</source>
         <translation type="unfinished"/>
     </message>
@@ -4183,17 +4078,17 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="59"/>
+        <location filename="metadata_definitions.py" line="60"/>
         <source>Earthquake ITB fatality function based on a Bayesian approach</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="63"/>
+        <location filename="metadata_definitions.py" line="64"/>
         <source>Die or be displaced according ITB bayesian model</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="81"/>
+        <location filename="metadata_definitions.py" line="82"/>
         <source>Sengara, W., Suarjana, M., Yulman, M.A., Ghasemi, H., and Ryu, H. (2015). An empirical fatality model for Indonesia based on a Bayesian approach. Submitted for Journal of the Geological Society</source>
         <translation type="unfinished"/>
     </message>
@@ -4203,27 +4098,27 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="58"/>
+        <location filename="metadata_definitions.py" line="59"/>
         <source>Classified polygon hazard on polygon people</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="64"/>
+        <location filename="metadata_definitions.py" line="65"/>
         <source>To assess the impact of each hazard zone on polygon people.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="71"/>
+        <location filename="metadata_definitions.py" line="72"/>
         <source>Vector polygon layer where each polygon represents a type of area where people lives.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="74"/>
+        <location filename="metadata_definitions.py" line="75"/>
         <source>A vector layer of areas polygons with each tagged according to the hazard zone in which it falls.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="75"/>
+        <location filename="metadata_definitions.py" line="76"/>
         <source>Provide details about how big area fall within each hazard zone.</source>
         <translation type="unfinished"/>
     </message>
@@ -4233,32 +4128,32 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="113"/>
+        <location filename="impact_function.py" line="122"/>
         <source>Input hazard must be a polygon layer. I got %s with layer type %s</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="135"/>
+        <location filename="impact_function.py" line="139"/>
         <source>Radius %.1f km</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="147"/>
+        <location filename="impact_function.py" line="151"/>
         <source>Radius %s km</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="64"/>
+        <location filename="metadata_definitions.py" line="65"/>
         <source>The hazard layer must be a point layer. This point will be buffered with the radii (in kilometer) specified in the parameters as the hazard zone. If you want to see the name of the volcano in the result, you need to specify the volcano name attribute in the Impact Function option.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="73"/>
+        <location filename="metadata_definitions.py" line="74"/>
         <source>Vector layer contains Map of building exposed to volcanic hazard zones for each radius.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="123"/>
+        <location filename="impact_function.py" line="132"/>
         <source>Hazard data %s did not contain expected attribute %s </source>
         <translation type="unfinished"/>
     </message>
@@ -4293,22 +4188,22 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="655"/>
+        <location filename="definitions.py" line="805"/>
         <source>Are the water and electricity services still operating?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="656"/>
+        <location filename="definitions.py" line="806"/>
         <source>Are the health centres still open?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="657"/>
+        <location filename="definitions.py" line="807"/>
         <source>Are the other public services accessible?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="661"/>
+        <location filename="definitions.py" line="811"/>
         <source>Are the schools and hospitals still active?</source>
         <translation type="unfinished"/>
     </message>
@@ -4318,33 +4213,18 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="564"/>
+        <location filename="definitions.py" line="699"/>
         <source>Which group or population is most affected?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="565"/>
+        <location filename="definitions.py" line="700"/>
         <source>Who are the vulnerable people in the population and why?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="568"/>
-        <source>What are the security factors for the affected population?</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="569"/>
+        <location filename="definitions.py" line="703"/>
         <source>What are the security factors for relief responders?</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="571"/>
-        <source>What kind of food does the population normally consume?</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="572"/>
-        <source>What are the critical non-food items required by the affected population?</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -4353,12 +4233,12 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="574"/>
+        <location filename="definitions.py" line="711"/>
         <source>What are the related health risks?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="575"/>
+        <location filename="definitions.py" line="712"/>
         <source>Who are the key people responsible for coordination?</source>
         <translation type="unfinished"/>
     </message>
@@ -4403,188 +4283,188 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="base.py" line="1186"/>
+        <location filename="base.py" line="1229"/>
         <source>Processing started</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="base.py" line="1187"/>
+        <location filename="base.py" line="1230"/>
         <source>Please wait - processing may take a while depending on your hardware configuration and the analysis extents and data.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="base.py" line="1196"/>
+        <location filename="base.py" line="1239"/>
         <source>No valid layers</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="base.py" line="1197"/>
+        <location filename="base.py" line="1240"/>
         <source>Please ensure your hazard and exposure layers are set in the question area and then press run again.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="base.py" line="1205"/>
+        <location filename="base.py" line="1248"/>
         <source>This analysis will calculate the impact of</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="base.py" line="1205"/>
+        <location filename="base.py" line="1248"/>
         <source>on</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="base.py" line="1215"/>
+        <location filename="base.py" line="1258"/>
         <source>and bullet list the results</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="base.py" line="1215"/>
+        <location filename="base.py" line="1258"/>
         <source>aggregated by</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="base.py" line="1232"/>
+        <location filename="base.py" line="1275"/>
         <source>The following postprocessors will be used:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="base.py" line="911"/>
+        <location filename="base.py" line="954"/>
         <source>A problem was encountered when trying to determine the analysis extents.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="base.py" line="1058"/>
+        <location filename="base.py" line="1101"/>
         <source>An error occurred when calling a GDAL command</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="base.py" line="1062"/>
+        <location filename="base.py" line="1105"/>
         <source>An error occurred when writing clip file</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="base.py" line="1066"/>
+        <location filename="base.py" line="1109"/>
         <source>An exception occurred when setting up the impact calculator.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="base.py" line="1071"/>
+        <location filename="base.py" line="1114"/>
         <source>An error occurred because there are no features visible in the current view. Try zooming out or panning until some features become visible.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="base.py" line="1077"/>
+        <location filename="base.py" line="1120"/>
         <source>An error occurred because you are using a layer containing count data (e.g. population count) which will not scale accurately if we re-project it from its native coordinate reference system to WGS84/GeoGraphic.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="base.py" line="1084"/>
+        <location filename="base.py" line="1127"/>
         <source>An error occurred because it appears that your system does not have sufficient memory. Upgrading your computer so that it has more memory may help. Alternatively, consider using a smaller geographical area for your analysis, or using rasters with a larger cell size.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="base.py" line="1477"/>
+        <location filename="base.py" line="1520"/>
         <source>Resampling and clipping the hazard layer to match the intersection of the exposure layer and the current view extents.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="base.py" line="1482"/>
+        <location filename="base.py" line="1525"/>
         <source>Resampling and clipping the hazard layer to match the intersection of the exposure layer extents.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="base.py" line="1486"/>
+        <location filename="base.py" line="1529"/>
         <source>Resampling and clipping the hazard layer to match the bookmarked extents.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="base.py" line="1490"/>
+        <location filename="base.py" line="1533"/>
         <source>Resampling and clipping the hazard layer to match the intersection of your preferred analysis area.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="base.py" line="1496"/>
+        <location filename="base.py" line="1539"/>
         <source>Preparing hazard data</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="base.py" line="1513"/>
+        <location filename="base.py" line="1556"/>
         <source>Preparing exposure data</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="base.py" line="1520"/>
+        <location filename="base.py" line="1563"/>
         <source>Resampling and clipping the exposure layer to match the intersection of the hazard layer and the current view extents.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="base.py" line="1525"/>
+        <location filename="base.py" line="1568"/>
         <source>Resampling and clipping the exposure layer to match the intersection of the hazard layer extents.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="base.py" line="1529"/>
+        <location filename="base.py" line="1572"/>
         <source>Resampling and clipping the exposure layer to match the bookmarked extents.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="base.py" line="1533"/>
+        <location filename="base.py" line="1576"/>
         <source>Resampling and clipping the exposure layer to match the intersection of your preferred analysis area.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="base.py" line="1575"/>
+        <location filename="base.py" line="1618"/>
         <source>No impact layer was generated.
 </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="base.py" line="1610"/>
+        <location filename="base.py" line="1653"/>
         <source>Aggregation error occurred.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="base.py" line="1635"/>
+        <location filename="base.py" line="1678"/>
         <source>Calculating impact</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="base.py" line="1636"/>
+        <location filename="base.py" line="1679"/>
         <source>This may take a little while - we are computing the areas that will be impacted by the hazard and writing the result to a new layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="base.py" line="843"/>
+        <location filename="base.py" line="883"/>
         <source>Notes</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="base.py" line="846"/>
+        <location filename="base.py" line="886"/>
         <source>It appears that no %s are affected by %s. You may want to consider:</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="base.py" line="851"/>
+        <location filename="base.py" line="891"/>
         <source>Check that you are not zoomed in too much and thus excluding %s from your analysis area.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="base.py" line="855"/>
+        <location filename="base.py" line="898"/>
         <source>Check that the exposure is not no-data or zero for the entire area of your analysis.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="base.py" line="858"/>
+        <location filename="base.py" line="901"/>
         <source>Check that your impact function thresholds do not exclude all features unintentionally.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="base.py" line="862"/>
+        <location filename="base.py" line="905"/>
         <source>Check that your dataset coordinate reference system is compatible with InaSAFE&apos;s current requirements.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="base.py" line="883"/>
+        <location filename="base.py" line="926"/>
         <source>An exception occurred when running the impact analysis.</source>
         <translation type="unfinished"/>
     </message>
@@ -4659,57 +4539,52 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="109"/>
-        <source>Inundated buildings</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="110"/>
+        <location filename="metadata_definitions.py" line="112"/>
         <source>Inundated structure status</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="111"/>
+        <location filename="metadata_definitions.py" line="113"/>
         <source>(low, medium, high, and very high)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="68"/>
+        <location filename="metadata_definitions.py" line="69"/>
         <source>Raster tsunami on buildings</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="69"/>
+        <location filename="metadata_definitions.py" line="70"/>
         <source>Be inundated</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="75"/>
+        <location filename="metadata_definitions.py" line="76"/>
         <source>To assess the impacts of tsunami inundation on building footprints in vector format with hazard in raster format.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="78"/>
+        <location filename="metadata_definitions.py" line="79"/>
         <source>The inundation status is calculated for each building (using the centroid if it is a polygon) based on the tsunami threshold. The threshold can be configured in impact function options.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="81"/>
+        <location filename="metadata_definitions.py" line="82"/>
         <source>A hazard raster layer where each cell represents tsunami inundation depth (in meters).</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="86"/>
+        <location filename="metadata_definitions.py" line="87"/>
         <source>Vector polygon or point layer where each feature represents the footprint of a building.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="89"/>
+        <location filename="metadata_definitions.py" line="90"/>
         <source>Vector layer contains building is estimated to be inundated and the breakdown of the building by type.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="92"/>
+        <location filename="metadata_definitions.py" line="93"/>
         <source>Provide details about where critical infrastructure might be inundated.</source>
         <translation type="unfinished"/>
     </message>
@@ -4729,7 +4604,7 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="567"/>
+        <location filename="definitions.py" line="701"/>
         <source>What are people&apos;s likely movements?</source>
         <translation type="unfinished"/>
     </message>
@@ -4739,17 +4614,17 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1429"/>
+        <location filename="definitions.py" line="1568"/>
         <source>Attribute for the area name. We will show the name for each area by using this attribute.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1442"/>
+        <location filename="definitions.py" line="1581"/>
         <source>Id field</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1444"/>
+        <location filename="definitions.py" line="1583"/>
         <source>Attribute for the id on the area. We will group the result by this attribute</source>
         <translation type="unfinished"/>
     </message>
@@ -4834,117 +4709,117 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="144"/>
+        <location filename="definitions.py" line="209"/>
         <source>&lt;b&gt;Continuous&lt;/b&gt; data can be used in raster hazard or exposure data where the values in the data are either integers or decimal values representing a continuously varying phenomenon. For example flood depth is a continuous value from 0 to the maximum reported depth during a flood. &lt;p&gt;Raster exposure data such as population data are also continuous. In this example the cell values represent the number of people in cell.&lt;/p&gt;&lt;p&gt;Raster data is considered to be continuous by default and you should explicitly indicate that it is classified if each cell in the raster represents a discrete class (e.g. low depth = 1, medium depth = 2, high depth = 3).&lt;/p&gt;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="169"/>
+        <location filename="definitions.py" line="234"/>
         <source>&lt;b&gt;Classified&lt;/b&gt; data can be used for either hazard or exposure data and can be used for both raster and vector layer types where the attribute values represent a classified or coded value.&lt;p&gt;For example, classified values in a flood raster data set might represent discrete classes where a value of 1 might represent the low inundation class, a value of 2 might represent the medium inundation class and a value of 3 might represent the high inundation class.&lt;/p&gt;&lt;p&gt;Classified values in a vector (polygon) Volcano data set might represent discrete classes where a value of I might represent low volcanic hazard, a value of II might represent medium volcanic hazard and a value of III  might represent a high volcanic hazard.&lt;/p&gt;&lt;p&gt;In a vector (point) Volcano data the user specified buffer distances will be used to classify the data.&lt;/p&gt;&lt;p&gt;Classified values in a vector exposure data set might include building type or road type.&lt;/p&gt;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="304"/>
+        <location filename="definitions.py" line="371"/>
         <source>&lt;b&gt;Single event&lt;/b&gt; hazard data can be based on either a specific  event that has happened in the past, for example a flood like Jakarta 2013, or a possible event, such as the tsunami that results from an earthquake near Bima, that might happen in the future.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="320"/>
+        <location filename="definitions.py" line="389"/>
         <source>&lt;b&gt;Multiple event&lt;/b&gt; hazard data can be based on historical observations such as a hazard map of all observed volcanic deposits around a volcano.&lt;p&gt;This type of hazard data shows those locations that might be impacted by a volcanic eruption in the future. Another example might be a probabilistic hazard model that shows the likelihood of a magnitude 7 earthquake happening in the next 50 years.&lt;/p&gt;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="422"/>
+        <location filename="definitions.py" line="529"/>
         <source>&lt;b&gt;Volcanic ash&lt;/b&gt; describes fragments of pulverized rock, minerals and volcanic glass, created during volcanic eruptions, less than 2 mm (0.079 inches) in diameter.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="442"/>
+        <location filename="definitions.py" line="559"/>
         <source>A &lt;b&gt;tsunami&lt;/b&gt; describes a large ocean wave or series or waves usually caused by an underwater earthquake or volcano. A &lt;b&gt;tsunami&lt;/b&gt; at sea may go unnoticed but a &lt;b&gt;tsunami&lt;/b&gt; wave that strikes land may cause massive destruction and flooding.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="644"/>
+        <location filename="definitions.py" line="790"/>
         <source>A &lt;b&gt;structure&lt;/b&gt; can be any relatively permanent man made feature such as a building (an enclosed structure with walls and a roof), telecommunications facility or bridge.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1511"/>
+        <location filename="definitions.py" line="1650"/>
         <source>Motorway</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1512"/>
+        <location filename="definitions.py" line="1651"/>
         <source>A road to solve the traffic and have a fare.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1524"/>
+        <location filename="definitions.py" line="1664"/>
         <source>Primary</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1525"/>
+        <location filename="definitions.py" line="1665"/>
         <source>A road that service the main transportation with a long distance travel characteristic and high average velocity.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1539"/>
+        <location filename="definitions.py" line="1679"/>
         <source>Secondary</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1540"/>
+        <location filename="definitions.py" line="1680"/>
         <source>A road that service the transportation with a medium distance travel characteristic and medium average velocity.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1554"/>
+        <location filename="definitions.py" line="1694"/>
         <source>Local</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1555"/>
+        <location filename="definitions.py" line="1695"/>
         <source>A road that service the transportation with short distance travel and low average velocity.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1571"/>
+        <location filename="definitions.py" line="1711"/>
         <source>Path</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1572"/>
+        <location filename="definitions.py" line="1712"/>
         <source>A road to walk on foot aim.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1586"/>
+        <location filename="definitions.py" line="1731"/>
         <source>A road that service the transportation with short travel and low average velocity.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1622"/>
+        <location filename="definitions.py" line="1767"/>
         <source>Education</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1639"/>
+        <location filename="definitions.py" line="1784"/>
         <source>Health</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1674"/>
+        <location filename="definitions.py" line="1819"/>
         <source>Place of Worship</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1698"/>
+        <location filename="definitions.py" line="1843"/>
         <source>Government</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1752"/>
+        <location filename="definitions.py" line="1897"/>
         <source>Public Facility</source>
         <translation type="unfinished"/>
     </message>
@@ -5249,12 +5124,12 @@
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="216"/>
+        <location filename="impact_function.py" line="221"/>
         <source>&lt;sup&gt;1&lt;/sup&gt;People are displaced if they experience and survive a shake level of more than 5 on the MMI scale.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="73"/>
+        <location filename="metadata_definitions.py" line="74"/>
         <source>This model was developed by Institut Teknologi Bandung (ITB) and implemented by Dr. Hadi Ghasemi, Geoscience Australia
 Algorithm:
 In this study, the same functional form as Allen (2009) is adopted to express fatality rate as a function of intensity (see Eq. 10 in the report). The Matlab built-in function (fminsearch) for Nelder-Mead algorithm was used to estimate the model parameters. The objective function (L2G norm) that is minimized during the optimisation is the same as the one used by Jaiswal et al. (2010).
@@ -5262,27 +5137,22 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="91"/>
-        <source>Affected Land Cover</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="44"/>
+        <location filename="metadata_definitions.py" line="45"/>
         <source>Classified polygon hazard on land cover</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="64"/>
+        <location filename="metadata_definitions.py" line="65"/>
         <source>To assess the impact of each hazard zone on land cover.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="69"/>
+        <location filename="metadata_definitions.py" line="70"/>
         <source>Vector polygon layer where each polygon represents a type of land cover.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="72"/>
+        <location filename="metadata_definitions.py" line="73"/>
         <source>A vector layer of land cover polygons with each tagged according to the hazard zone in which it falls.</source>
         <translation type="unfinished"/>
     </message>
@@ -5292,7 +5162,7 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="184"/>
+        <location filename="impact_function.py" line="189"/>
         <source>Temporarily closed</source>
         <translation type="unfinished"/>
     </message>
@@ -5312,42 +5182,42 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="58"/>
+        <location filename="metadata_definitions.py" line="59"/>
         <source>Raster tsunami on land cover</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="67"/>
+        <location filename="metadata_definitions.py" line="68"/>
         <source>The hazard layer must be a tsunami raster layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="67"/>
+        <location filename="metadata_definitions.py" line="68"/>
         <source>Raster tsunami on roads</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="74"/>
+        <location filename="metadata_definitions.py" line="75"/>
         <source>To assess the impacts of tsunami inundation on roads in vector format with hazard in raster format.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="77"/>
+        <location filename="metadata_definitions.py" line="78"/>
         <source>The inundation status is calculated for each roads based on the tsunami threshold. The threshold can be configured in impact function options.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="84"/>
+        <location filename="metadata_definitions.py" line="85"/>
         <source>Vector line where each feature represents the road.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="86"/>
+        <location filename="metadata_definitions.py" line="87"/>
         <source>Vector layer contains road is estimated to be inundated and the breakdown of the road by type.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="89"/>
+        <location filename="metadata_definitions.py" line="90"/>
         <source>Provide details about where critical road might be inundated.</source>
         <translation type="unfinished"/>
     </message>
@@ -5417,7 +5287,7 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="safe_layer.py" line="120"/>
+        <location filename="safe_layer.py" line="121"/>
         <source>Keyword &quot;%s&quot; is not found in layer %s, please add it to your layer</source>
         <translation type="unfinished"/>
     </message>
@@ -5477,52 +5347,52 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="523"/>
+        <location filename="definitions.py" line="654"/>
         <source>What type of crops are planted in the affected fields?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="524"/>
+        <location filename="definitions.py" line="655"/>
         <source>How long will the activity or function of the land cover be disturbed?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="526"/>
+        <location filename="definitions.py" line="657"/>
         <source>What proportion of the land cover is damaged?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="527"/>
+        <location filename="definitions.py" line="658"/>
         <source>What potential losses will result from the land cover damage?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="529"/>
+        <location filename="definitions.py" line="660"/>
         <source>How much productivity will be lost during this event?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="530"/>
+        <location filename="definitions.py" line="661"/>
         <source>Which crops were ready for harvest during this event?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="531"/>
+        <location filename="definitions.py" line="662"/>
         <source>What is the ownership system of the land/crops/field?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="532"/>
+        <location filename="definitions.py" line="663"/>
         <source>Are the land/crops/field accessible after the event?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="533"/>
+        <location filename="definitions.py" line="664"/>
         <source>What urgent actions can be taken to normalize the land/crops/field?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="535"/>
+        <location filename="definitions.py" line="666"/>
         <source>What tools or equipment are needed for early recovery of the land/crops/field?</source>
         <translation type="unfinished"/>
     </message>
@@ -5537,62 +5407,62 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1608"/>
+        <location filename="definitions.py" line="1753"/>
         <source>Residential</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1609"/>
+        <location filename="definitions.py" line="1754"/>
         <source>A structure used to provide shelter for people.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1623"/>
+        <location filename="definitions.py" line="1768"/>
         <source>A structure that provides a service in the education sector.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1640"/>
+        <location filename="definitions.py" line="1785"/>
         <source>A structure that provides a service or facility in the health sector.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1657"/>
+        <location filename="definitions.py" line="1802"/>
         <source>Transport</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1675"/>
+        <location filename="definitions.py" line="1820"/>
         <source>A structure or facility that is used for prayer or related religion activity.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1699"/>
+        <location filename="definitions.py" line="1844"/>
         <source>A structure or facility that is used to provide a public service or other government activity.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1713"/>
+        <location filename="definitions.py" line="1858"/>
         <source>Commercial</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1714"/>
+        <location filename="definitions.py" line="1859"/>
         <source>A structure or facility that is used for commercial or industrial purposes.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1733"/>
+        <location filename="definitions.py" line="1878"/>
         <source>Recreation</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1734"/>
+        <location filename="definitions.py" line="1879"/>
         <source>A structure or facility that is used for entertainment, sporting or recreation purposes.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1771"/>
+        <location filename="definitions.py" line="1920"/>
         <source>Any other structure frequently mapped.</source>
         <translation type="unfinished"/>
     </message>
@@ -5602,12 +5472,12 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1658"/>
+        <location filename="definitions.py" line="1803"/>
         <source>A structure that provides a service or facility in the transport sector.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1753"/>
+        <location filename="definitions.py" line="1898"/>
         <source>A structure or facility that provides a service or facility to the public including emergency services.</source>
         <translation type="unfinished"/>
     </message>
@@ -5627,47 +5497,47 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1199"/>
+        <location filename="definitions.py" line="1338"/>
         <source>This is a quinary description for an area. The area is either &lt;b&gt;dry&lt;/b&gt;, &lt;b&gt;low&lt;/b&gt;, &lt;b&gt;medium&lt;/b&gt;, &lt;b&gt;high&lt;/b&gt;, or &lt;b&gt;very high&lt;/b&gt; for tsunami hazard classification. The following description for these classes is provided by Badan Geologi based on BNPB Perka 2/2012</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1214"/>
+        <location filename="definitions.py" line="1353"/>
         <source>Dry zone</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1296"/>
+        <location filename="definitions.py" line="1435"/>
         <source>Very high hazard zone</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1297"/>
+        <location filename="definitions.py" line="1436"/>
         <source>Water above 8.0m.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="81"/>
+        <location filename="metadata_definitions.py" line="82"/>
         <source>Papadopoulos, Gerassimos A., and Fumihiko Imamura. &quot;A proposal for a new tsunami intensity scale.&quot; ITS 2001 proceedings, no. 5-1, pp. 569-577. 2001.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="116"/>
+        <location filename="metadata_definitions.py" line="117"/>
         <source>Hamza Latief. pers com. Default impact threshold for tsunami impact on people should be 0.7m. This is less than a flood threshold because in a tsunami, the water is moving with force.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1229"/>
+        <location filename="definitions.py" line="1368"/>
         <source>Water above ground height and less than 1.0m. The area is potentially hit by a tsunami wave with an inundation depth less than 1 m or similar to tsunami intensity scale of V or less in (Papadoupulos and Imamura, 2001). Tsunami wave of 1m height causes few people to be frightened and flee to higher elevation. Felt by most people on large ship, observed from shore. Small vessels drift and collide and some turn over. Sand is deposited and there is flooding of areas close to the shore.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1252"/>
+        <location filename="definitions.py" line="1391"/>
         <source>Water above 1.1m and less than 3.0m. The area is potentially hit by a tsunami wave with an inundation depth of 1 - 3 m or equal to V-VI tsunami intensity scale (Papadoupulos and Imamura, 2001). Tsunami wave with a 3m inundation depth causes most people frightened and to flee to higher ground. Small vessels drift and collide. Damage occurs to some wooden houses, while most of them are safe.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1273"/>
+        <location filename="definitions.py" line="1412"/>
         <source>Water above 3.1m and less than 8.0m. The area is potentially hit by a tsunami wave with an inundation depth &gt; 3 m or reach a tsunami intensity scale of VII or even more (Papadoupulos and Imamura, 2001). Tsunami wave with 4 m inundation depth cause damage to small vessel, a few ships are drifted inland, severe damage on most wooden houses. Boulders are deposited on shore. If tsunami height reaches 8 m, it will cause severe damage. Dykes, wave breaker, tsunami protection walls and green belts will be washed away.</source>
         <translation type="unfinished"/>
     </message>
@@ -5752,197 +5622,172 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="41"/>
+        <location filename="definitions.py" line="50"/>
         <source>A &lt;b&gt;hazard&lt;/b&gt; represents a natural process or phenomenon that may cause loss of life, injury or other health impacts, property damage, loss of livelihoods and services, social and economic disruption, or environmental damage. For example; flood, earthquake, tsunami and volcano are all examples of hazards.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="48"/>
+        <location filename="definitions.py" line="66"/>
         <source>&lt;b&gt;Exposure&lt;/b&gt; represents people, property, systems, or other elements present in hazard zones that are subject to potential losses in the event of a flood, earthquake, volcano etc.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="53"/>
+        <location filename="definitions.py" line="80"/>
         <source>This is a ternary description for an area used with generic impact functions. The area may have either &lt;b&gt;low&lt;/b&gt;, &lt;b&gt;medium&lt;/b&gt;, or &lt;b&gt;high&lt;/b&gt; classification for the hazard.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="58"/>
+        <location filename="definitions.py" line="94"/>
         <source>An exposure element (e.g. people, roads, buildings, land cover) that experiences a hazard (e.g. tsunami, flood, earthquake) and endures consequences (e.g. damage, evacuation, displacement, death) due to that hazard.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="64"/>
+        <location filename="definitions.py" line="109"/>
         <source>Displaced people are people who, for different reasons and circumstances because of risk or disaster, have to leave their place of residence.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="69"/>
+        <location filename="definitions.py" line="123"/>
         <source>Evacuated people are people who, for different reasons and circumstances because of risk conditions or disaster, move temporarily to safer places before, during or after the occurrence of a hazardous event. Evacuation can occur from places of residence, workplaces, schools and hospitals to other places. Evacuation is usually a planned and organised mobilisation of persons, animals and goods.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="98"/>
+        <location filename="definitions.py" line="73"/>
         <source>UNISDR (2009) Terminology on disaster risk reduction.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="449"/>
-        <source>Impacts on roads, people, buildings and other exposure elements may differ in reality to the analysis results. This is due to local environmental conditions such as terrain, infrastructure type and conditions.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="474"/>
-        <source>Previously mapped hazard zones may not be congruous with future events.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="520"/>
-        <source>Areas reported for land cover counts have not been rounded.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="557"/>
+        <location filename="definitions.py" line="684"/>
         <source>Numbers reported for population counts have been rounded to the nearest 10 people if the total is less than 1,000; nearest 100 people if more than 1,000 and less than 100,000; and nearest 1000 if more than 100,000.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="588"/>
+        <location filename="definitions.py" line="725"/>
         <source>&lt;b&gt;People in buildings&lt;/b&gt; exposure data assigns the population of a specific administrative area to the buildings with a residential function in that area. &lt;p&gt;The process of assigning people to buildings assumes that all people and buildings in the area are mapped.&lt;/p&gt;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="598"/>
+        <location filename="definitions.py" line="739"/>
         <source>UNISDR (2015) Background Paper: Proposed Updated Terminology on Disaster Risk  Reduction Reduction.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="613"/>
+        <location filename="definitions.py" line="755"/>
         <source>Numbers reported for road lengths have been rounded to the nearest meter.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="615"/>
+        <location filename="definitions.py" line="757"/>
         <source>Roads marked as not affected may still be unusable due to network isolation. Roads marked as affected may still be usable if they are elevated above the local landscape.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="620"/>
+        <location filename="definitions.py" line="762"/>
         <source>Roads are closed if they are affected.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="621"/>
+        <location filename="definitions.py" line="763"/>
         <source>Roads are open if they are not affected.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="629"/>
+        <location filename="definitions.py" line="775"/>
         <source>Which government department is responsible for supplying equipment?</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="650"/>
-        <source>Numbers reported for structures are exact counts.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="673"/>
+        <location filename="definitions.py" line="823"/>
         <source>Place</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="674"/>
+        <location filename="definitions.py" line="824"/>
         <source>A &lt;b&gt;place&lt;/b&gt; is used to indicate that a particular location is known by a particular name.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="678"/>
-        <source>Where places are represented as a single point, the effect of the hazard over the entire place may differ from at the point where the place is represented on the map.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="definitions.py" line="827"/>
+        <location filename="definitions.py" line="976"/>
         <source>Centimetres</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="828"/>
+        <location filename="definitions.py" line="977"/>
         <source>centimetres</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="829"/>
+        <location filename="definitions.py" line="978"/>
         <source>cm</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="830"/>
+        <location filename="definitions.py" line="979"/>
         <source>&lt;b&gt;Centimetres&lt;/b&gt; are a metric unit of measure. There are 100 centimetres in 1 metre.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="964"/>
+        <location filename="definitions.py" line="1108"/>
         <source>Three classes are supported for volcano vector hazard data: &lt;b&gt;low&lt;/b&gt;, &lt;b&gt;medium&lt;/b&gt;, or &lt;b&gt;high&lt;/b&gt;.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1337"/>
+        <location filename="definitions.py" line="1476"/>
         <source>Number of people (or any other exposure element) per pixel, building or area. &lt;p&gt;In a raster file, a pixel would have a value assigned to it representing the number (or count) of people in that pixel.&lt;/p&gt; &lt;p&gt;In a vector file, a value would be assigned to an object (e.g. a building or area) representing the number of people in that object.&lt;/p&gt; </source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1356"/>
+        <location filename="definitions.py" line="1495"/>
         <source>Number of people (or any other exposure element) per unit of area. &lt;p&gt; e.g. 35 people per km&lt;sup&gt;2&lt;/sup&gt; &lt;/p&gt;</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1791"/>
+        <location filename="definitions.py" line="1940"/>
         <source>City</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1792"/>
+        <location filename="definitions.py" line="1941"/>
         <source>The largest urban settlements in the territory, normally including the national, state and provincial capitals.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1806"/>
+        <location filename="definitions.py" line="1955"/>
         <source>Town</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1807"/>
+        <location filename="definitions.py" line="1956"/>
         <source>A second tier urban settlement of local importance, often with a population of 10,000 people and good range of local facilities including schools, medical facilities etc and traditionally a market.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1823"/>
+        <location filename="definitions.py" line="1972"/>
         <source>Village</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1824"/>
+        <location filename="definitions.py" line="1973"/>
         <source>A smaller distinct settlement, smaller than a town with few facilities available with people traveling to nearby towns to access these.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1839"/>
+        <location filename="definitions.py" line="1988"/>
         <source>Hamlet</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1840"/>
+        <location filename="definitions.py" line="1989"/>
         <source>A smaller rural community typically with fewer than 100-200 inhabitants, few infrastructure.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1854"/>
+        <location filename="definitions.py" line="2003"/>
         <source>Airport</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="1855"/>
+        <location filename="definitions.py" line="2004"/>
         <source>A complex of runways and buildings for the takeoff, landing, and maintenance of civil aircraft, with facilities for passengers.</source>
         <translation type="unfinished"/>
     </message>
@@ -5957,17 +5802,17 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="276"/>
+        <location filename="needs_manager_dialog.py" line="274"/>
         <source>Restore defaults</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="277"/>
+        <location filename="needs_manager_dialog.py" line="275"/>
         <source>Restoring defaults will overwrite your changes on profiles provided by InaSAFE. Do you want to continue ?</source>
         <translation type="unfinished"/>
     </message>
     <message numerus="yes">
-        <location filename="needs_manager_dialog.py" line="542"/>
+        <location filename="needs_manager_dialog.py" line="540"/>
         <source>A displaced person should be provided with %(default value)s %(unit)s/%(units)s/%(unit abbreviation)s of %(resource name)s. Though no less than %(minimum allowed)s and no more than %(maximum allowed)s. This should be provided %(frequency)s.default value{{ Default }}</source>
         <comment>unit{{ Unit }}</comment>
         <translation type="unfinished"><numerusform></numerusform></translation>
@@ -6033,17 +5878,17 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="48"/>
+        <location filename="metadata_definitions.py" line="49"/>
         <source>Ash raster on land cover</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="67"/>
+        <location filename="metadata_definitions.py" line="68"/>
         <source>The hazard layer must be an ash raster layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="92"/>
+        <location filename="metadata_definitions.py" line="42"/>
         <source>Land cover affected</source>
         <translation type="unfinished"/>
     </message>
@@ -6073,33 +5918,23 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="54"/>
+        <location filename="metadata_definitions.py" line="55"/>
         <source>Ash raster on places</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="60"/>
+        <location filename="metadata_definitions.py" line="61"/>
         <source>To assess the impact of each hazard zone on places.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="65"/>
+        <location filename="metadata_definitions.py" line="66"/>
         <source>Vector point layer where each feature represents a place.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="67"/>
+        <location filename="metadata_definitions.py" line="68"/>
         <source>Map of places exposed to the highest hazard zone and a table with the number of people in each hazard zone</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="83"/>
-        <source>Affected Places</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="84"/>
-        <source>Places affected</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -6108,17 +5943,17 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="145"/>
+        <location filename="impact_function.py" line="146"/>
         <source>Population in low hazard zone</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="148"/>
+        <location filename="impact_function.py" line="149"/>
         <source>Population in medium hazard zone</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="151"/>
+        <location filename="impact_function.py" line="152"/>
         <source>Population in high hazard zone</source>
         <translation type="unfinished"/>
     </message>
@@ -6128,28 +5963,18 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="58"/>
+        <location filename="metadata_definitions.py" line="59"/>
         <source>Ash raster on population</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="64"/>
+        <location filename="metadata_definitions.py" line="65"/>
         <source>To assess the impact of each hazard zone on population.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="72"/>
+        <location filename="metadata_definitions.py" line="73"/>
         <source>Map of population exposed to the highest hazard zone and a table with the number of population in each hazard zone</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="88"/>
-        <source>Affected Population</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="89"/>
-        <source>Population affected</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -6233,27 +6058,27 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="base.py" line="925"/>
+        <location filename="base.py" line="968"/>
         <source>This analysis needs keyword &lt;i&gt;%s&lt;/i&gt; in the &lt;b&gt;%s&lt;/b&gt; layer, but it does not  have it. Please assign it via the keyword wizard</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="67"/>
+        <location filename="metadata_definitions.py" line="68"/>
         <source>Estimates fatalities resulting from an earthquake using data from an Indonesian database of earthquake events to calculate fatality rates. This model is better at capturing uncertainty in the results.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="68"/>
+        <location filename="metadata_definitions.py" line="69"/>
         <source>Estimates the number of fatalities resulting from an earthquake. Uses data from an Indonesian database of earthquake events to calculate fatality rates. Based on the earthquake model for Indonesia developed by ITB.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="91"/>
+        <location filename="metadata_definitions.py" line="92"/>
         <source>Provide details about the population including estimates for mortalities.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="66"/>
+        <location filename="metadata_definitions.py" line="67"/>
         <source>Estimates the number of fatalities resulting from an earthquake. Uses data from a global database of earthquake events to calculate fatality rates. Based on the Population Vulnerability PAGER Model.</source>
         <translation type="unfinished"/>
     </message>
@@ -6273,7 +6098,7 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="91"/>
+        <location filename="metadata_definitions.py" line="61"/>
         <source>People affected</source>
         <translation type="unfinished"/>
     </message>
@@ -6293,43 +6118,28 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="metadata_definitions.py" line="111"/>
-        <source>People that might be affected</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="77"/>
+        <location filename="impact_function.py" line="78"/>
         <source>Map shows the numbers of people in high, medium, and low hazard zones.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="147"/>
+        <location filename="impact_function.py" line="148"/>
         <source>Population in high hazard zones</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="150"/>
+        <location filename="impact_function.py" line="151"/>
         <source>Population in medium hazard zones</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="153"/>
+        <location filename="impact_function.py" line="154"/>
         <source>Population in low hazard zones</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="104"/>
-        <source>Population might be impacted</source>
         <translation type="unfinished"/>
     </message>
     <message>
         <location filename="impact_function.py" line="66"/>
         <source>Roads are said to be %s when in a region with field &quot;%s&quot; in &quot;%s&quot;.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="metadata_definitions.py" line="130"/>
-        <source>Population which need evacuation</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -6380,6 +6190,186 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
     <message>
         <location filename="memory_checker.py" line="175"/>
         <source>There is not enough free memory to run this analysis.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="370"/>
+        <source>event</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="388"/>
+        <source>hazard</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="425"/>
+        <source>The extent and severity of the mapped scenario or hazard zones may not be consistent with future events.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="428"/>
+        <source>The impacts on roads, people, buildings and other exposure elements may differ from the analysis results due to local conditions such as terrain and infrastructure type.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="436"/>
+        <source>A &lt;b&gt;generic hazard&lt;/b&gt; can be used for any type of hazard where the data have been classified or generalised. For example: earthquake, flood, volcano, tsunami, landslide, smoke haze or strong wind.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="647"/>
+        <source>Areas reported for land cover have not been rounded.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="688"/>
+        <source>Rounding is applied to all population values, which may cause discrepancies when adding values.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="702"/>
+        <source>What are the security factors for the affected people?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="704"/>
+        <source>How will we reach displaced people?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="705"/>
+        <source>What kind of food does the population normally consume?What are the critical non-food items required by the affected population?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="709"/>
+        <source>If no, where can we obtain additional relief items and how will we distribute them?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="796"/>
+        <source>Numbers reported for structures have not been rounded.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="828"/>
+        <source>Where places are represented as a single point, the effect of the hazard over the entire place may differ from the point at which the place is represented on the map.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="46"/>
+        <source>Land cover affected by volcanic ash</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="52"/>
+        <source>Places affected by volcanic ash</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="56"/>
+        <source>People affected by volcanic ash</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="base.py" line="895"/>
+        <source>Check that the hazard layer (%s) has affected area.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="63"/>
+        <source>Buildings affected by earthquake</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="57"/>
+        <source>People affected by earthquake event</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="73"/>
+        <source>Based on the Population Vulnerability ITB Bayesian Model.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="193"/>
+        <source>Are there enough covered floor areas available for %s people?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="205"/>
+        <source>Are there enough water supply, sanitation, hygiene, food, shelter, medicines and relief items available for %sdisplaced people?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="58"/>
+        <source>People affected by earthquake</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="115"/>
+        <source>There is no flooded area int the hazard layers, thus there is no affected population.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="62"/>
+        <source>People affected by flood</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="85"/>
+        <source>There is no flooded area int the hazard layers, thus there is no affected road.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="61"/>
+        <source>Roads affected by flood</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="54"/>
+        <source>Buildings affected by flood</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="84"/>
+        <source>There is no flooded area int the hazard layers, thus there is no affected building.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="65"/>
+        <source>People affected by tsunami</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="66"/>
+        <source>Buildings affected by tsunami</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="56"/>
+        <source>Land cover affected by tsunami</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="65"/>
+        <source>Roads affected by tsunami</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="52"/>
+        <source>Buildings affected by volcano</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="151"/>
+        <source>Radius %s km </source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="metadata_definitions.py" line="57"/>
+        <source>People affected by volcano</source>
         <translation type="unfinished"/>
     </message>
 </context>
@@ -6558,22 +6548,22 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="aggregator.py" line="1436"/>
+        <location filename="aggregator.py" line="1438"/>
         <source>preprocessed</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="aggregator.py" line="1517"/>
+        <location filename="aggregator.py" line="1519"/>
         <source>Entire area</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="aggregator.py" line="1496"/>
+        <location filename="aggregator.py" line="1498"/>
         <source>An exception occurred when creating the entire area layer.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="aggregator.py" line="1502"/>
+        <location filename="aggregator.py" line="1504"/>
         <source>Area</source>
         <translation type="unfinished"/>
     </message>
@@ -6618,12 +6608,12 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="aggregator.py" line="1558"/>
+        <location filename="aggregator.py" line="1560"/>
         <source>No &quot;target_field&quot; keyword found in the impact layer %s keywords. The impact function should define this.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="aggregator.py" line="1570"/>
+        <location filename="aggregator.py" line="1572"/>
         <source>No attribute &quot;%s&quot; was found in the attribute table for layer &quot;%s&quot;. The impact function must define this attribute for postprocessing to work.</source>
         <translation type="unfinished"/>
     </message>
@@ -7792,82 +7782,82 @@ to
 <context>
     <name>NeedsManagerDialog</name>
     <message>
-        <location filename="needs_manager_dialog.py" line="118"/>
+        <location filename="needs_manager_dialog.py" line="116"/>
         <source>Discard changes</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="132"/>
+        <location filename="needs_manager_dialog.py" line="130"/>
         <source>Save resource</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="139"/>
+        <location filename="needs_manager_dialog.py" line="137"/>
         <source>Export ...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="146"/>
+        <location filename="needs_manager_dialog.py" line="144"/>
         <source>Import ...</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="153"/>
+        <location filename="needs_manager_dialog.py" line="151"/>
         <source>New</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="160"/>
+        <location filename="needs_manager_dialog.py" line="158"/>
         <source>Save</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="167"/>
+        <location filename="needs_manager_dialog.py" line="165"/>
         <source>Save as</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="754"/>
+        <location filename="needs_manager_dialog.py" line="752"/>
         <source>JSON files (*.json *.JSON)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="754"/>
+        <location filename="needs_manager_dialog.py" line="752"/>
         <source>Create a minimum needs profile</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="820"/>
+        <location filename="needs_manager_dialog.py" line="818"/>
         <source>Remove %s.</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="630"/>
+        <location filename="needs_manager_dialog.py" line="628"/>
         <source>Problem - default value is invalid</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="636"/>
+        <location filename="needs_manager_dialog.py" line="634"/>
         <source>Problem - maximum value is invalid</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="642"/>
+        <location filename="needs_manager_dialog.py" line="640"/>
         <source>Problem - minimum value is invalid</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="845"/>
+        <location filename="needs_manager_dialog.py" line="843"/>
         <source>Hide Help</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="848"/>
+        <location filename="needs_manager_dialog.py" line="846"/>
         <source>Show Help</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="needs_manager_dialog.py" line="125"/>
+        <location filename="needs_manager_dialog.py" line="123"/>
         <source>Restore defaults</source>
         <translation type="unfinished"/>
     </message>
@@ -8698,17 +8688,17 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="postprocessor_manager.py" line="664"/>
+        <location filename="postprocessor_manager.py" line="679"/>
         <source>%s postprocessor problem</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="postprocessor_manager.py" line="751"/>
+        <location filename="postprocessor_manager.py" line="766"/>
         <source>Postprocessing report partially skipped</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="postprocessor_manager.py" line="755"/>
+        <location filename="postprocessor_manager.py" line="770"/>
         <source>Due to a problem while processing the results, part of the detailed postprocessing report is unavailable:</source>
         <translation type="unfinished"/>
     </message>
