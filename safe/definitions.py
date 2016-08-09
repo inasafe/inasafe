@@ -44,70 +44,123 @@ do_not_use_attribute = {
     'name': tr('Don\'t use')
 }
 
-# Concepts (used in various places, defined once to
-# keep things DRY
-concept_hazard = tr(
-    'A <b>hazard</b> represents a natural process or phenomenon '
-    'that may cause loss of life, injury or other health impacts, '
-    'property damage, loss of livelihoods and services, social and '
-    'economic disruption, or environmental damage. For example; flood, '
-    'earthquake, tsunami and volcano are all examples of hazards.')
+# Concepts (used in various places, defined once to keep things DRY)
+concepts = {
+    'hazard': {
+        'description': tr(
+             'A <b>hazard</b> represents a natural process or phenomenon '
+             'that may cause loss of life, injury or other health impacts, '
+             'property damage, loss of livelihoods and services, social and '
+             'economic disruption, or environmental damage. For example; '
+             'flood, earthquake, tsunami and volcano are all examples of '
+             'hazards.'),
+        'citations': [
+            {
+                'text': tr(
+                    'UNISDR (2009) Terminology on disaster risk reduction.'),
+                'link': 'https://www.unisdr.org/we/inform/terminology'
+            }
+        ],
+    },
+    'exposure': {
+        'description': tr(
+            '<b>Exposure</b> represents people, property, systems, or '
+            'other elements present in hazard zones that are subject to '
+            'potential losses in the event of a flood, earthquake, volcano '
+            'etc.'),
+        'citations': [
+            {
+                'text': tr(
+                    'UNISDR (2009) Terminology on disaster risk reduction.'),
+                'link': 'https://www.unisdr.org/we/inform/terminology'
+            }
+        ],
+    },
+    'generic_hazard': {
+        'description': tr(
+            'This is a ternary description for an area used with generic '
+            'impact functions. The area may have either <b>low</b>, '
+            '<b>medium</b>, or <b>high</b> classification for the hazard.'),
+        'citations': [
+            {
+                'text': tr(
+                    ''),
+                'link': ''
+            }
+        ],
+    },
+    'affected': {
+        'description': tr(
+            'An exposure element (e.g. people, roads, buildings, land '
+            'cover) that experiences a hazard (e.g. tsunami, flood, '
+            'earthquake) and endures consequences (e.g. damage, evacuation, '
+            'displacement, death) due to that hazard.'),
+        'citations': [
+            {
+                'text': tr(
+                    ''),
+                'link': ''
+             }
+        ],
+    },
+    'displaced_people': {
+        'description': tr(
+            'Displaced people are people who, for different reasons and '
+            'circumstances because of risk or disaster, have to leave their '
+            'place of residence.'),
+        'citations': [
+            {
+                'text': tr(
+                    ''),
+                'link': ''
+            }
+        ],
+    },
+    'evacuated_people': {
+        'description': tr(
+            'Evacuated people are people who, for different reasons and '
+            'circumstances because of risk conditions or disaster, move '
+            'temporarily to safer places before, during or after the '
+            'occurrence of a hazardous event. Evacuation can occur from '
+            'places of residence, workplaces, schools and hospitals to other '
+            'places. Evacuation is usually a planned and organised '
+            'mobilisation of persons, animals and goods.'),
+        'citations': [
+            {
+                'text': tr(
+                    ''),
+                'link': ''
+            }
+        ],
+    },
+    # Boilerplate for adding a new concept...
+    #  '': {
+    #    'description': tr(
+    #    ),
+    #    'citations': [
+    #        {
+    #            'text': tr(
+    #                ''),
+    #            'link': ''
+    #        }
+    #    ],
+    #  },
+}
 
-concept_exposure = tr(
-    '<b>Exposure</b> represents people, property, systems, or '
-    'other elements present in hazard zones that are subject to '
-    'potential losses in the event of a flood, earthquake, volcano etc.')
-
-concept_generic_hazard = tr(
-    'This is a ternary description for an area used with generic impact '
-    'functions. The area may have either <b>low</b>, <b>medium</b>, or '
-    '<b>high</b> classification for the hazard.')
-
-concept_affected = tr(
-    'An exposure element (e.g. people, roads, buildings, land cover) that '
-    'experiences a hazard (e.g. tsunami, flood, earthquake) and endures '
-    'consequences (e.g. damage, evacuation, displacement, death) due to that '
-    'hazard.')
-
-concept_displaced_people = tr(
-    'Displaced people are people who, for different reasons and '
-    'circumstances because of risk or disaster, have to leave their '
-    'place of residence.')
-
-concept_evacuated_people = tr(
-    'Evacuated people are people who, for different reasons and '
-    'circumstances because of risk conditions or disaster, move '
-    'temporarily to safer places before, during or after the '
-    'occurrence of a hazardous event. Evacuation can occur from '
-    'places of residence, workplaces, schools and hospitals to other '
-    'places. Evacuation is usually a planned and organised '
-    'mobilisation of persons, animals and goods.')
 
 # Layer Purpose
 layer_purpose_hazard = {
     'key': 'hazard',
     'name': tr('Hazard'),
-    'description': concept_hazard,
-    'citations': [
-        {
-            'text': tr('UNISDR (2009) Terminology on disaster risk '
-                       'reduction.'),
-            'link': 'https://www.unisdr.org/we/inform/terminology'
-        }
-    ],
+    'description': concepts['hazard']['description'],
+    'citations': concepts['hazard']['citations']
 }
 
 layer_purpose_exposure = {
     'key': 'exposure',
     'name': tr('Exposure'),
-    'description': concept_exposure,
-    'citations': [
-        {
-            'text': tr('UNISDR (2009) Terminology on disaster risk '
-                       'reduction.'),
-            'link': 'https://www.unisdr.org/we/inform/terminology'
-        }
-    ]
+    'description': concepts['exposure']['description'],
+    'citations': concepts['exposure']['citations'],
 }
 
 layer_purpose_aggregation = {
@@ -572,14 +625,9 @@ hazard_all = [
 hazards = {
     'key': 'hazards',
     'name': tr('Hazards'),
-    'description': concept_hazard ,
+    'description': concepts['hazard']['description'],
     'types': hazard_all,
-    'citations': [
-        {
-            'text': None,
-            'link': None
-        }
-    ]
+    'citations': concepts['hazard']['citations']
 }
 
 # Exposure
@@ -805,14 +853,9 @@ exposure_all = [
 exposures = {
     'key': 'exposures',
     'name': tr('Exposure'),
-    'description': concept_exposure,
+    'description': concepts['exposure']['description'],
+    'citations': concepts['exposure']['citations'],
     'types': exposure_all,
-    'citations': [
-        {
-            'text': None,
-            'link': None
-        }
-    ]
 }
 
 # No data warnings for appending to actions if
@@ -1003,14 +1046,9 @@ continuous_hazard_unit_all = continuous_hazard_unit['types']
 generic_vector_hazard_classes = {
     'key': 'generic_vector_hazard_classes',
     'name': tr('Generic classes'),
-    'description': concept_generic_hazard,
+    'description': concepts['generic_hazard']['description'],
+    'citations': concepts['generic_hazard']['citations'],
     'default_attribute': 'affected',
-    'citations': [
-        {
-            'text': None,
-            'link': None
-        }
-    ],
     'classes': [
         {
             'key': 'high',
@@ -1242,13 +1280,8 @@ flood_raster_hazard_classes = {
 generic_raster_hazard_classes = {
     'key': 'generic_raster_hazard_classes',
     'name': tr('Generic classes'),
-    'description': concept_generic_hazard,
-    'citations': [
-        {
-            'text': None,
-            'link': None
-        }
-    ],
+    'description': concepts['generic_hazard']['description'],
+    'citations': concepts['generic_hazard']['citations'],
     'classes': [
         {
             'key': 'high',
