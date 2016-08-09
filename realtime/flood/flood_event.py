@@ -210,7 +210,7 @@ class FloodEvent(QObject):
             'field': 'state',
             'hazard': 'generic',
             'hazard_category': 'single_event',
-            'keyword_version': '3.3',
+            'keyword_version': '3.5',
             'layer_geometry': 'polygon',
             'layer_mode': 'classified',
             'layer_purpose': 'hazard',
