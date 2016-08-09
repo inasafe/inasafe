@@ -66,6 +66,41 @@ class TestFloodVectorPolygonRoadsFunction(unittest.TestCase):
             expected_feature_total, count)
         self.assertEquals(count, expected_feature_total, message)
 
+    def test_run_aggregation(self):
+        """Test running the IF with aggregation."""
+        function = FloodPolygonRoadsFunction.instance()
+
+        hazard_path = standard_data_path(
+            'hazard', 'flood_multipart_polygons.shp')
+        exposure_path = standard_data_path('exposure', 'roads.shp')
+        aggregation_path = standard_data_path('boundaries', 'grid_jakarta.shp')
+        # noinspection PyCallingNonCallable
+        hazard_layer = QgsVectorLayer(hazard_path, 'Flood', 'ogr')
+        # noinspection PyCallingNonCallable
+        exposure_layer = QgsVectorLayer(exposure_path, 'Roads', 'ogr')
+        # noinspection PyCallingNonCallable
+        aggregation_layer = QgsVectorLayer(aggregation_path, 'Grids', 'ogr')
+
+        # Let's set the extent to the hazard extent
+        extent = aggregation_layer.extent()
+        rect_extent = [
+            extent.xMinimum(), extent.yMaximum(),
+            extent.xMaximum(), extent.yMinimum()]
+        function.hazard = SafeLayer(hazard_layer)
+        function.exposure = SafeLayer(exposure_layer)
+        function.aggregation = aggregation_layer
+
+        function.requested_extent = rect_extent
+        try:
+            function._validate()
+            function._prepare()
+            function._impact = function._calculate_impact()
+            function._run_aggregator()
+        except KeyError as e:
+            self.fail('KeyError because of %s' % e)
+        except Exception as e:
+            self.fail('Exception because of %s' % e)
+
     def test_filter(self):
         """Test filtering IF from layer keywords"""
         hazard_keywords = {
