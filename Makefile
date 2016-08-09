@@ -50,6 +50,7 @@ test-translations:
 	@python scripts/missing_translations.py `pwd` fr
 	@python scripts/missing_translations.py `pwd` af
 	@python scripts/missing_translations.py `pwd` es_ES
+	@python scripts/missing_translations.py `pwd` vi
 
 
 translation-stats:
