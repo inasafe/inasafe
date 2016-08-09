@@ -49,7 +49,7 @@ class ClassifiedPolygonHazardBuildingFunction(
         # Set the question of the IF (as the hazard data is not an event)
         self.question = tr(
             'In each of the hazard zones how many buildings might be '
-            'affected.')
+            'affected?')
 
     def notes(self):
         """Return the notes section of the report as dict.
