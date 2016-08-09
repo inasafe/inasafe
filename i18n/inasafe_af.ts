@@ -6238,11 +6238,6 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="definitions.py" line="705"/>
-        <source>What kind of food does the population normally consume?What are the critical non-food items required by the affected population?</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="definitions.py" line="709"/>
         <source>If no, where can we obtain additional relief items and how will we distribute them?</source>
         <translation type="unfinished"/>
@@ -6298,28 +6293,13 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="205"/>
-        <source>Are there enough water supply, sanitation, hygiene, food, shelter, medicines and relief items available for %sdisplaced people?</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="metadata_definitions.py" line="58"/>
         <source>People affected by earthquake</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="impact_function.py" line="115"/>
-        <source>There is no flooded area int the hazard layers, thus there is no affected population.</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="metadata_definitions.py" line="62"/>
         <source>People affected by flood</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="85"/>
-        <source>There is no flooded area int the hazard layers, thus there is no affected road.</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -6330,11 +6310,6 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
     <message>
         <location filename="metadata_definitions.py" line="54"/>
         <source>Buildings affected by flood</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="84"/>
-        <source>There is no flooded area int the hazard layers, thus there is no affected building.</source>
         <translation type="unfinished"/>
     </message>
     <message>
@@ -6370,6 +6345,36 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
     <message>
         <location filename="metadata_definitions.py" line="57"/>
         <source>People affected by volcano</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="705"/>
+        <source>What kind of food does the population normally consume?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="definitions.py" line="706"/>
+        <source>What are the critical non-food items required by the affected population?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="205"/>
+        <source>Are there enough water supply, sanitation, hygiene, food, shelter, medicines and relief items available for %s displaced people?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="115"/>
+        <source>There is no flooded area in the hazard layers, thus there is no affected population.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="85"/>
+        <source>There is no flooded area in the hazard layers, thus there is no affected road.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="84"/>
+        <source>There is no flooded area in the hazard layers, thus there is no affected building.</source>
         <translation type="unfinished"/>
     </message>
 </context>
