@@ -1458,11 +1458,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="base.py" line="813"/>
-        <source>In the event of %(hazard)s how many %(exposure)s might %(impact)s</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="impact_function.py" line="98"/>
         <source>Field &quot;%s&quot; is not present in the attribute table of the hazard layer. Please change the Affected Field parameter in the IF Option.</source>
         <translation type="unfinished"></translation>
@@ -4094,11 +4089,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="50"/>
-        <source>In each of the hazard zones how many buildings might be affected.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="metadata_definitions.py" line="59"/>
         <source>Classified polygon hazard on polygon people</source>
         <translation type="unfinished"></translation>
@@ -4121,11 +4111,6 @@
     <message>
         <location filename="metadata_definitions.py" line="76"/>
         <source>Provide details about how big area fall within each hazard zone.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="57"/>
-        <source>In each of the hazard zones how many people might be impacted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4637,11 +4622,6 @@
     <message>
         <location filename="wizard_strings.py" line="68"/>
         <source>You have selected &lt;b&gt;%s&lt;/b&gt; for this &lt;b&gt;%s&lt;/b&gt; layer. &lt;p&gt;We need to confirm that attribute values represents &lt;b&gt;continuous&lt;/b&gt; data.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="impact_function.py" line="67"/>
-        <source>In each of the hazard zones which areas might be affected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -6087,12 +6067,12 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="129"/>
+        <location filename="impact_function.py" line="130"/>
         <source>The classes used for low, medium, high hazard are specific to the hazard dataset used.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="impact_function.py" line="131"/>
+        <location filename="impact_function.py" line="132"/>
         <source>Please consult the original hazard dataset creator for more details.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6379,6 +6359,26 @@ The coefficients used in the indonesian model are x=0.62275231, y=8.03314466, ze
     <message>
         <location filename="impact_function.py" line="84"/>
         <source>There is no flooded area in the hazard layers, thus there is no affected building.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="base.py" line="813"/>
+        <source>In the event of %(hazard)s how many %(exposure)s might %(impact)s?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="50"/>
+        <source>In each of the hazard zones how many buildings might be affected?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="67"/>
+        <source>In each of the hazard zones which areas might be affected?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="impact_function.py" line="57"/>
+        <source>In each of the hazard zones how many people might be impacted?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
