@@ -698,9 +698,9 @@ exposure_population = {
         tr('What are the security factors for the affected people?'),
         tr('What are the security factors for relief responders?'),
         tr('How will we reach displaced people?'),
-        tr('What kind of food does the population normally consume?'
-           'What are the critical non-food items required by the '
-           'affected population?'),
+        tr('What kind of food does the population normally consume?'),
+        tr('What are the critical non-food items required by the affected '
+           'population?'),
         tr('If yes, where are they located and how will we distribute them?'),
         tr('If no, where can we obtain additional relief items and how'
            ' will we distribute them?'),
