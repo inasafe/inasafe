@@ -48,11 +48,10 @@ class TestVolcanoPolygonBuildingFunction(unittest.TestCase):
         impact_layer = impact_function.impact
 
         # Check the question
-        expected_question = ('In the event of volcano krb how many buildings '
-                             'might be affected')
-        message = 'The question should be %s, but it returns %s' % (
-            expected_question, impact_function.question)
-        self.assertEqual(expected_question, impact_function.question, message)
+        expected_question = (
+            'In the event of volcano krb how many buildings might be '
+            'affected?')
+        self.assertEqual(expected_question, impact_function.question)
 
         # The buildings should all be categorised into 5000 zone
         zone_sum = impact_layer.get_data(

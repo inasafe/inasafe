@@ -81,7 +81,7 @@ class TestITBEarthquakeFatalityFunction(unittest.TestCase):
         # Check the question
         expected_question = (
             'In the event of earthquake how many population might die or be '
-            'displaced')
+            'displaced?')
         self.assertEqual(expected_question, impact_function.question)
 
         expected_result = {

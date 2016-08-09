@@ -810,7 +810,7 @@ class ImpactFunction(object):
         if self._question is None:
             function_title = self.metadata().as_dict()['title']
             return (tr('In the event of %(hazard)s how many '
-                       '%(exposure)s might %(impact)s')
+                       '%(exposure)s might %(impact)s?')
                     % {'hazard': self.hazard.name.lower(),
                        'exposure': self.exposure.name.lower(),
                        'impact': function_title.lower()})
