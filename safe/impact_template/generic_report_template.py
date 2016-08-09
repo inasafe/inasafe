@@ -223,10 +223,13 @@ class GenericReportTemplate(object):
         :returns: The postprocessing.
         :rtype: safe.messaging.Message
         """
+        # List of post processor that can't be sum up. Issue #3118
+        no_total = ['Age', 'Gender', 'MinimumNeeds']
+
         if not self.postprocessing:
             return False
         message = m.Message()
-        for k, v in self.postprocessing.items():
+        for postprocessor, v in self.postprocessing.items():
             table = m.Table(
                 style_class='table table-condensed table-striped')
             table.caption = v['caption']
@@ -240,7 +243,8 @@ class GenericReportTemplate(object):
                 for attribute in attributes[1:]:
                     # Bold and align right.
                     header.add(m.Cell(attribute, header=True, align='right'))
-                header.add(m.Cell('Total', header=True, align='right'))
+                if postprocessor not in no_total:
+                    header.add(m.Cell('Total', header=True, align='right'))
                 table.add(header)
 
                 for field in v['fields']:
@@ -258,9 +262,9 @@ class GenericReportTemplate(object):
                         except ValueError:
                             # Catch no data value. Align left strings.
                             row.add(m.Cell(value, align='left'))
-
-                    row.add(m.Cell(
-                        self.format_int(round(total)), align='right'))
+                    if postprocessor not in no_total:
+                        row.add(m.Cell(
+                            self.format_int(round(total)), align='right'))
                     table.add(row)
 
             message.add(table)
