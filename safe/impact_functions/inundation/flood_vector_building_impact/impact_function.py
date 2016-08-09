@@ -82,7 +82,7 @@ class FloodPolygonBuildingFunction(
         # There is no wet in the class mapping
         if self.wet not in self.hazard_class_mapping:
             raise ZeroImpactException(tr(
-                'There is no flooded area int the hazard layers, thus there '
+                'There is no flooded area in the hazard layers, thus there '
                 'is no affected building.'))
         self.exposure_class_attribute = self.exposure.keyword(
             'structure_class_field')
