@@ -7,6 +7,8 @@ from zipfile import ZipFile
 
 import pytz
 import datetime
+import json
+from collections import OrderedDict
 
 import re
 from PyQt4.QtCore import QObject, QFileInfo, QVariant, QTranslator, \
@@ -35,7 +37,6 @@ from safe.test.utilities import get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.common.exceptions import ZeroImpactException, TranslationLoadError
-from safe.engine.core import calculate_impact as safe_calculate_impact
 from safe.impact_functions.impact_function_manager import \
     ImpactFunctionManager
 from safe.storage.core import read_layer, read_qgis_layer
@@ -293,7 +294,7 @@ class FloodEvent(QObject):
             # if skip_process:
             #     return
 
-            self.impact_layer = safe_calculate_impact(impact_function)
+            self.impact_layer = impact_function.calculate_impact()
             # impact_function.aggregator.set_layers(
             #     self.hazard_layer.as_qgis_native(),
             #     self.exposure_layer.as_qgis_native())
@@ -326,7 +327,8 @@ class FloodEvent(QObject):
     def calculate_aggregate_impact(self, impact_function):
 
         # total affected population only calculated for hazard class >=2
-        # total minimum needs should be recalculated with new affected population
+        # total minimum needs should be recalculated with new affected
+        # population
         total_affected = 0
         needs_dict = {}
 
@@ -446,16 +448,27 @@ class FloodEvent(QObject):
 
     def generate_aggregation(self, impact_function):
         # write postprocessing report to keyword
-        keyword_io = KeywordIO()
 
-        safe_impact_layer = self.impact_layer
-        qgis_impact_layer = safe_impact_layer.as_qgis_native()
-        keywords = keyword_io.read_keywords(qgis_impact_layer)
+        qgis_impact_layer = self.impact_layer.as_qgis_native()
 
-        output = impact_function.postprocessor_manager.get_output(True)
-        keywords['postprocessing_report'] = output.to_html(
-            suppress_newlines=True)
-        keyword_io.write_keywords(qgis_impact_layer, keywords)
+        json_path = os.path.splitext(qgis_impact_layer.source())[0] + '.json'
+
+        if os.path.exists(json_path):
+            postprocessor_data = impact_function.postprocessor_manager.\
+                get_json_data(self.impact_function.aggregator.aoi_mode)
+            with open(json_path) as json_file:
+                impact_data = json.load(
+                    json_file, object_pairs_hook=OrderedDict)
+                impact_data['post processing'] = postprocessor_data
+                with open(json_path, 'w') as json_file_2:
+                    json.dump(impact_data, json_file_2, indent=2)
+        else:
+            keyword_io = KeywordIO()
+            keywords = keyword_io.read_keywords(qgis_impact_layer)
+            output = impact_function.postprocessor_manager.get_output(True)
+            keywords['postprocessing_report'] = output.to_html(
+                suppress_newlines=True)
+            keyword_io.write_keywords(qgis_impact_layer, keywords)
 
     def set_style(self):
         # get requested style of impact
@@ -503,7 +516,7 @@ class FloodEvent(QObject):
                     "set_color_part(" \
                     "set_color_part('0,0,255','saturation', %d ), 'alpha', " \
                     "if(attribute($currentfeature, '%s') = 0, " \
-                    "0, 255))" % (i * 20,  self.affect_field)
+                    "0, 255))" % (i * 20, self.affect_field)
                 marker_border = \
                     "set_color_part(" \
                     "'0,0,0','alpha', " \

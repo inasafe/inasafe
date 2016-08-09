@@ -12,8 +12,6 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 from safe.common.utilities import OrderedDict
-from safe.impact_functions.generic.parameter_definitions import \
-    categorical_hazards
 from safe.utilities.i18n import tr
 from safe.defaults import building_type_postprocessor
 from safe.impact_functions.impact_function_metadata import (
@@ -58,6 +56,7 @@ class ClassifiedRasterHazardBuildingMetadata(ImpactFunctionMetadata):
             concrete impact function.
         :rtype: dict
         """
+        title = tr('Buildings affected')
         dict_meta = {
             'id': 'ClassifiedRasterHazardBuildingFunction',
             'name': tr('Classified raster hazard on buildings'),
@@ -94,7 +93,17 @@ class ClassifiedRasterHazardBuildingMetadata(ImpactFunctionMetadata):
                 'Provide details about the number of buildings that are '
                 'within each hazard class.'),
             'limitations': [tr('The number of classes is three.')],
-            'citations': [],
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ],
+            'legend_notes': '',
+            'map_title': title,
+            'layer_name': title,
+            'legend_units': tr('(Low, Medium, High)'),
+            'legend_title': tr('Structure inundated status'),
             'layer_requirements': {
                 'hazard': {
                     'layer_mode': layer_mode_classified,
@@ -125,7 +134,6 @@ class ClassifiedRasterHazardBuildingMetadata(ImpactFunctionMetadata):
             },
             # parameters
             'parameters': OrderedDict([
-                ('Categorical hazards', categorical_hazards()),
                 ('postprocessors', OrderedDict([
                     ('BuildingType', building_type_postprocessor())
                 ]))

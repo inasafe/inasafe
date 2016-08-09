@@ -55,6 +55,7 @@ class PAGFatalityMetadata(ITBFatalityMetadata):
             concrete impact function.
         :rtype: dict
         """
+        title = tr('People affected by earthquake')
         dict_meta = {
             'id': 'PAGFatalityFunction',
             'name': tr('Earthquake PAGER fatality function'),
@@ -64,19 +65,30 @@ class PAGFatalityMetadata(ITBFatalityMetadata):
             'author': 'Helen Crowley',
             'date_implemented': 'N/A',
             'overview': tr(
-                'To assess the impact of an earthquake on population based '
-                'on the Population Vulnerability Pager Model.'),
+                'Estimates the number of fatalities resulting from an '
+                'earthquake. Uses data from a global database of earthquake '
+                'events to calculate fatality rates. Based on the '
+                'Population Vulnerability PAGER Model.'),
             'detailed_description': '',
             'hazard_input': '',
             'exposure_input': '',
             'output': '',
             'actions': '',
             'limitations': [],
+            'map_title': title,
+            'layer_name': title,
+            'legend_title': '',
+            'legend_units': '',
+            'legend_notes': '',
             'citations': [
-                tr('Jaiswal, K. S., Wald, D. J., and Hearne, M. (2009a). '
-                   'Estimating casualties for large worldwide earthquakes '
-                   'using an empirical approach. U.S. Geological Survey '
-                   'Open-File Report 2009-1136.')
+                {
+                    'text': tr(
+                        'Jaiswal, K. S., Wald, D. J., and Hearne, M. (2009a). '
+                        'Estimating casualties for large worldwide '
+                        'earthquakes using an empirical approach. U.S. '
+                        'Geological Survey Open-File Report 2009-1136.'),
+                    'link': None
+                }
             ],
             'layer_requirements': {
                 'hazard': {

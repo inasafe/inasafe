@@ -24,7 +24,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.impact_functions.earthquake.itb_earthquake_fatality_model\
     .impact_function import ITBFatalityFunction
-from safe.test.utilities import test_data_path
+from safe.test.utilities import standard_data_path
 from safe.storage.core import read_layer
 from safe.storage.safe_layer import SafeLayer
 
@@ -39,15 +39,16 @@ class TestITBEarthquakeFatalityFunction(unittest.TestCase):
 
     def test_compute_fatality_rate(self):
         impact_function = ITBFatalityFunction.instance()
-        expected_result = {2: 0,
-                           3: 0,
-                           4: 2.869e-6,
-                           5: 1.203e-5,
-                           6: 5.048e-5,
-                           7: 2.117e-4,
-                           8: 8.883e-4,
-                           9: 3.726e-3,
-                           10: 1.563e-2}
+        expected_result = {
+            2: 0,
+            3: 0,
+            4: 2.869e-6,
+            5: 1.203e-5,
+            6: 5.048e-5,
+            7: 2.117e-4,
+            8: 8.883e-4,
+            9: 3.726e-3,
+            10: 1.563e-2}
         result = impact_function.compute_fatality_rate()
         for item in expected_result.keys():
             self.assertAlmostEqual(
@@ -56,8 +57,8 @@ class TestITBEarthquakeFatalityFunction(unittest.TestCase):
     def test_run(self):
         """TestITEarthquakeFatalityFunction: Test running the IF."""
         # FIXME(Hyeuk): test requires more realistic hazard and population data
-        eq_path = test_data_path('hazard', 'earthquake.tif')
-        population_path = test_data_path(
+        eq_path = standard_data_path('hazard', 'earthquake.tif')
+        population_path = standard_data_path(
             'exposure', 'pop_binary_raster_20_20.asc')
 
         # For EQ on Pops we need to clip the hazard and exposure first to the
@@ -80,7 +81,7 @@ class TestITBEarthquakeFatalityFunction(unittest.TestCase):
         # Check the question
         expected_question = (
             'In the event of earthquake how many population might die or be '
-            'displaced')
+            'displaced?')
         self.assertEqual(expected_question, impact_function.question)
 
         expected_result = {

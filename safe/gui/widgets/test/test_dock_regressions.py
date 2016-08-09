@@ -7,21 +7,17 @@ from qgis.core import QgsMapLayerRegistry
 
 from PyQt4 import QtCore
 
-from safe.impact_functions import register_impact_functions
+from safe.test.utilities import get_qgis_app, get_dock
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
+from safe.impact_functions.loader import register_impact_functions
 from safe.test.utilities import (
-    test_data_path,
+    standard_data_path,
     load_layer,
     set_canvas_crs,
     GEOCRS,
-    setup_scenario,
-    get_qgis_app)
+    setup_scenario)
 from safe.utilities.keyword_io import KeywordIO
-
-# AG: get_qgis_app() should be called before importing modules from
-# safe.gui.widgets.dock
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-
-from safe.gui.widgets.dock import Dock
 
 
 # noinspection PyArgumentList
@@ -30,7 +26,7 @@ class TestDockRegressions(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.dock = Dock(IFACE)
+        cls.dock = get_dock()
 
     def setUp(self):
         """Fixture run before all tests.
@@ -74,9 +70,9 @@ class TestDockRegressions(TestCase):
         population with no resampling.
 
         """
-        hazard_path = test_data_path(
+        hazard_path = standard_data_path(
             'hazard', 'continuous_flood_unaligned_big_size.tif')
-        exposure_path = test_data_path(
+        exposure_path = standard_data_path(
             'exposure', 'people_allow_resampling_false.tif')
 
         hazard_layer, hazard_layer_purpose = load_layer(hazard_path)
@@ -120,8 +116,8 @@ class TestDockRegressions(TestCase):
                     total_population += value
                 column += 1
             row += 1
-        print "Total value of all cells is: %d" % total_population
-        print "Number of cells counted: %d" % cell_count
+        # print "Total value of all cells is: %d" % total_population
+        # print "Number of cells counted: %d" % cell_count
 
         # 131 computed using r.sum
         self.assertAlmostEqual(total_population, 131.0177006121)
@@ -156,9 +152,9 @@ class TestDockRegressions(TestCase):
         population with no resampling.
 
         """
-        hazard_path = test_data_path(
+        hazard_path = standard_data_path(
             'hazard', 'continuous_flood_unaligned_big_size.tif')
-        exposure_path = test_data_path(
+        exposure_path = standard_data_path(
             'exposure', 'people_allow_resampling_true.tif')
         hazard_layer, hazard_layer_purpose = load_layer(hazard_path)
         # Check if there is a regression about keywords being updated from
@@ -201,8 +197,8 @@ class TestDockRegressions(TestCase):
                     total_population += value
                 column += 1
             row += 1
-        print "Total value of all cells is: %d" % total_population
-        print "Number of cells counted: %d" % cell_count
+        # print "Total value of all cells is: %d" % total_population
+        # print "Number of cells counted: %d" % cell_count
 
         result, message = setup_scenario(
             self.dock,

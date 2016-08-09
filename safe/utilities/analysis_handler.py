@@ -18,7 +18,9 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import os
+import json
 import logging
+from collections import OrderedDict
 
 # noinspection PyPackageRequirements
 from qgis.core import (
@@ -67,7 +69,9 @@ from safe.report.impact_report import ImpactReport
 from safe.gui.tools.impact_report_dialog import ImpactReportDialog
 from safe_extras.pydispatch import dispatcher
 from safe.utilities.extent import Extent
+from safe.utilities.qgis_utilities import add_above_layer
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
+from safe.impact_template.utilities import get_report_template
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 INFO_STYLE = styles.INFO_STYLE
@@ -143,13 +147,13 @@ class AnalysisHandler(QObject):
 
         # noinspection PyArgumentEqualDefault,PyUnresolvedReferences
         dispatcher.connect(
-            self.parent.wvResults.static_message_event,
+            self.parent.step_fc_analysis.wvResults.static_message_event,
             signal=STATIC_MESSAGE_SIGNAL,
             sender=dispatcher.Any)
 
         # noinspection PyArgumentEqualDefault,PyUnresolvedReferences
         dispatcher.connect(
-            self.parent.wvResults.error_message_event,
+            self.parent.step_fc_analysis.wvResults.error_message_event,
             signal=ERROR_MESSAGE_SIGNAL,
             sender=dispatcher.Any)
 
@@ -186,14 +190,16 @@ class AnalysisHandler(QObject):
         :type sender: Object, None
 
         :param message: An instance of our rich message class.
-        :type message: Message
+        :type message: safe.messaging.Message
 
         """
         # TODO Hardcoded step - may overflow, if number of messages increase
         # noinspection PyUnresolvedReferences
-        self.parent.pbProgress.setValue(self.parent.pbProgress.value() + 15)
+        self.parent.step_fc_analysis.pbProgress.setValue(
+            self.parent.step_fc_analysis.pbProgress.value() + 15)
         # noinspection PyUnresolvedReferences
-        self.parent.wvResults.dynamic_message_event(sender, message)
+        self.parent.step_fc_analysis.wvResults.dynamic_message_event(
+            sender, message)
 
     def read_settings(self):
         """Restore settings from QSettings.
@@ -323,8 +329,8 @@ class AnalysisHandler(QObject):
         """
         # Impact Function
         self.impact_function = self.impact_function_manager.get(
-            self.parent.selected_function()['id'])
-        self.impact_function.parameters = self.parent.if_params
+            self.parent.step_fc_function.selected_function()['id'])
+        self.impact_function.parameters = self.parent.step_fc_summary.if_params
 
         # Layers
         self.impact_function.hazard = self.parent.hazard_layer
@@ -361,9 +367,7 @@ class AnalysisHandler(QObject):
 
             # Load impact layer into QGIS
             qgis_impact_layer = read_impact_layer(self.impact_function.impact)
-
-            report = self.show_results(
-                qgis_impact_layer, self.impact_function.impact)
+            report = self.show_results()
 
         except Exception, e:  # pylint: disable=W0703
             # FIXME (Ole): This branch is not covered by the tests
@@ -377,54 +381,86 @@ class AnalysisHandler(QObject):
             # message.add(m.Link('file://%s' % self.parent.wvResults.log_path))
             # noinspection PyTypeChecker
             send_static_message(self, message)
-            self.parent.wvResults.impact_path = impact_path
+            self.parent.step_fc_analysis.wvResults.impact_path = impact_path
 
-        self.parent.pbProgress.hide()
-        self.parent.lblAnalysisStatus.setText('Analysis done.')
-        self.parent.pbnReportWeb.show()
-        self.parent.pbnReportPDF.show()
-        self.parent.pbnReportComposer.show()
+        self.parent.step_fc_analysis.pbProgress.hide()
+        self.parent.step_fc_analysis.lblAnalysisStatus.setText(
+            'Analysis done.')
+        self.parent.step_fc_analysis.pbnReportWeb.show()
+        self.parent.step_fc_analysis.pbnReportPDF.show()
+        self.parent.step_fc_analysis.pbnReportComposer.show()
         self.hide_busy()
         self.analysisDone.emit(True)
 
-    def show_results(self, qgis_impact_layer, engine_impact_layer):
+    def show_impact_report(self, qgis_impact_layer):
+        pass
+
+    def show_results(self):
         """Helper function for slot activated when the process is done.
 
-        .. note:: Adapted from the dock
+        .. versionchanged:: 3.4 - removed parameters.
 
-        :param qgis_impact_layer: A QGIS layer representing the impact.
-        :type qgis_impact_layer: QgsMapLayer, QgsVectorLayer, QgsRasterLayer
-
-        :param engine_impact_layer: A safe_layer representing the impact.
-        :type engine_impact_layer: ReadLayer
+        .. note:: If you update this function, please report your change to
+            safe.gui.widgets.dock.show_results too.
 
         :returns: Provides a report for writing to the dock.
         :rtype: str
         """
+        qgis_exposure = self.impact_function.exposure.qgis_layer()
+        qgis_hazard = self.impact_function.hazard.qgis_layer()
+        qgis_aggregation = self.impact_function.aggregation.qgis_layer()
+
+        safe_impact_layer = self.impact_function.impact
+        qgis_impact_layer = read_impact_layer(safe_impact_layer)
+
         keywords = self.keyword_io.read_keywords(qgis_impact_layer)
+        json_path = os.path.splitext(qgis_impact_layer.source())[0] + '.json'
 
         # write postprocessing report to keyword
-        output = self.impact_function.postprocessor_manager.get_output(
-            self.impact_function.aggregator.aoi_mode)
-        keywords['postprocessing_report'] = output.to_html(
-            suppress_newlines=True)
-        self.keyword_io.write_keywords(qgis_impact_layer, keywords)
+        postprocessor_data = self.impact_function.postprocessor_manager.\
+            get_json_data(self.impact_function.aggregator.aoi_mode)
+        post_processing_report = m.Message()
+        if os.path.exists(json_path):
+            with open(json_path) as json_file:
+                impact_data = json.load(
+                    json_file, object_pairs_hook=OrderedDict)
+                impact_data['post processing'] = postprocessor_data
+                with open(json_path, 'w') as json_file_2:
+                    json.dump(impact_data, json_file_2, indent=2)
+        else:
+            post_processing_report = self.impact_function.\
+                postprocessor_manager.get_output(
+                    self.impact_function.aggregator.aoi_mode)
+            keywords['postprocessing_report'] = post_processing_report.to_html(
+                suppress_newlines=True)
+            self.keyword_io.write_keywords(qgis_impact_layer, keywords)
 
         # Get tabular information from impact layer
         report = m.Message()
         report.add(LOGO_ELEMENT)
-        report.add(m.Heading(self.tr(
-            'Analysis Results'), **INFO_STYLE))
-        report.add(self.keyword_io.read_keywords(
-            qgis_impact_layer, 'impact_summary'))
+        report.add(m.Heading(self.tr('Analysis Results'), **INFO_STYLE))
+        # If JSON Impact Data Exist, use JSON
+        json_path = qgis_impact_layer.source()[:-3] + 'json'
+        LOGGER.debug('JSON Path %s' % json_path)
+        if os.path.exists(json_path):
+            impact_template = get_report_template(json_file=json_path)
+            impact_report = impact_template.generate_message_report()
+            report.add(impact_report)
+        else:
+            report.add(self.keyword_io.read_keywords(
+                qgis_impact_layer, 'impact_summary'))
+            # append postprocessing report
+            report.add(post_processing_report.to_html())
+
+        # Layer attribution comes last
+        report.add(impact_attribution(keywords).to_html(True))
 
         # Get requested style for impact layer of either kind
-        style = engine_impact_layer.get_style_info()
-        style_type = engine_impact_layer.get_style_type()
+        style = safe_impact_layer.get_style_info()
+        style_type = safe_impact_layer.get_style_type()
 
         # Determine styling for QGIS layer
-        if engine_impact_layer.is_vector:
-            LOGGER.debug('myEngineImpactLayer.is_vector')
+        if safe_impact_layer.is_vector:
             if not style:
                 # Set default style if possible
                 pass
@@ -435,12 +471,9 @@ class AnalysisHandler(QObject):
                 LOGGER.debug('use graduated')
                 set_vector_graduated_style(qgis_impact_layer, style)
 
-        elif engine_impact_layer.is_raster:
-            LOGGER.debug('myEngineImpactLayer.is_raster')
+        elif safe_impact_layer.is_raster:
             if not style:
                 qgis_impact_layer.setDrawingStyle("SingleBandPseudoColor")
-                # qgis_impact_layer.setColorShadingAlgorithm(
-                #    QgsRasterLayer.PseudoColorShader)
             else:
                 setRasterStyle(qgis_impact_layer, style)
 
@@ -451,27 +484,47 @@ class AnalysisHandler(QObject):
             # noinspection PyExceptionInherit
             raise ReadLayerError(message)
 
-        # Add layers to QGIS
-        layers_to_add = []
+        legend = self.iface.legendInterface()
+
+        # Insert the aggregation output above the input aggregation layer
         if self.show_intermediate_layers:
-            layers_to_add.append(self.impact_function.aggregator.layer)
-        layers_to_add.append(qgis_impact_layer)
-        # noinspection PyArgumentList
-        QgsMapLayerRegistry.instance().addMapLayers(layers_to_add)
+            add_above_layer(
+                self.impact_function.aggregator.layer,
+                qgis_aggregation)
+            legend.setLayerVisible(self.impact_function.aggregator.layer, True)
+
+        if self.hide_exposure_flag:
+            # Insert the impact always above the hazard
+            add_above_layer(
+                qgis_impact_layer,
+                qgis_hazard)
+        else:
+            # Insert the impact above the hazard and the exposure if
+            # we don't hide the exposure. See #2899
+            add_above_layer(
+                qgis_impact_layer,
+                qgis_exposure,
+                qgis_hazard)
+
+        # In QGIS 2.14.2 and GDAL 1.11.3, if the exposure is in 3857,
+        # the impact layer is in 54004, we need to change it. See issue #2790.
+        if qgis_exposure.crs().authid() == 'EPSG:3857':
+            if qgis_impact_layer.crs().authid() != 'EPSG:3857':
+                epsg_3857 = QgsCoordinateReferenceSystem(3857)
+                qgis_impact_layer.setCrs(epsg_3857)
+
         # make sure it is active in the legend - needed since QGIS 2.4
         self.iface.setActiveLayer(qgis_impact_layer)
         # then zoom to it
         if self.zoom_to_impact_flag:
             self.iface.zoomToActiveLayer()
         if self.hide_exposure_flag:
-            exposure_layer = self.impact_function.exposure.qgis_layer()
-            legend = self.iface.legendInterface()
+            exposure_layer = self.get_exposure_layer()
             legend.setLayerVisible(exposure_layer, False)
 
-        # append postprocessing report
-        report.add(output.to_html())
-        # Layer attribution comes last
-        report.add(impact_attribution(keywords).to_html(True))
+        # Make the layer visible. Might be hidden by default. See #2925
+        legend.setLayerVisible(qgis_impact_layer, True)
+
         # Return text to display in report panel
         return report
 

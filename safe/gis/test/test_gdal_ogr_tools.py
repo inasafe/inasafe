@@ -20,16 +20,16 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import unittest
 from osgeo import ogr
 
-from safe.gis.gdal_ogr_tools import polygonize_thresholds
-from safe.test.utilities import test_data_path
+from safe.gis.gdal_ogr_tools import polygonize_thresholds, polygonize
+from safe.test.utilities import standard_data_path
 
 
 class TestGDALOGRTools(unittest.TestCase):
 
     def test_polygonize_thresholds(self):
-        """Test polygonize raster using gdal
-        """
-        raster_path = test_data_path('hazard', 'jakarta_flood_design.tif')
+        """Test polygonize raster using gdal with some thresholds."""
+
+        raster_path = standard_data_path('hazard', 'jakarta_flood_design.tif')
 
         inside_file_name, inside_layer_name, outside_file_name, \
             outside_layer_name = polygonize_thresholds(
@@ -52,6 +52,33 @@ class TestGDALOGRTools(unittest.TestCase):
         feature_count2 = layer2.GetFeatureCount()
         # print 'outside %s' % (outside_file_name)
         self.assertEquals(feature_count2, 1)
+
+    def test_polygonize(self):
+        """Test if we can polygonize a raster using GDAL."""
+
+        raster_path = standard_data_path(
+            'hazard', 'classified_flood_20_20.asc')
+        driver = ogr.GetDriverByName('ESRI Shapefile')
+        expected_field_name = 'my_field'
+
+        shapefile = polygonize(raster_path, 1, expected_field_name)
+        data_source = driver.Open(shapefile, 0)
+        layer = data_source.GetLayer()
+
+        layer_definition = layer.GetLayerDefn()
+        field_name = layer_definition.GetFieldDefn(0).GetName()
+        self.assertEqual(field_name, expected_field_name)
+
+        self.assertEquals(layer.GetFeatureCount(), 400)
+
+        layer.SetAttributeFilter('%s = 1' % expected_field_name)
+        self.assertEquals(layer.GetFeatureCount(), 133)
+
+        layer.SetAttributeFilter('%s = 2' % expected_field_name)
+        self.assertEquals(layer.GetFeatureCount(), 134)
+
+        layer.SetAttributeFilter('%s = 3' % expected_field_name)
+        self.assertEquals(layer.GetFeatureCount(), 133)
 
 
 if __name__ == '__main__':

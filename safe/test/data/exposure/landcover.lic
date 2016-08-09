@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='iso-8859-1'?>
+<ga_license_file>
+  <metadata>
+    <author>Martin Dobias</author>
+  </metadata>
+
+  <datafile>
+    <filename>landcover.shp</filename>
+    <checksum>2489397254</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Martin Dobias</accountable>
+    <source>DMInnovation</source>
+    <IP_owner>DMInnovation</IP_owner>
+    <IP_info>Raster created at DMInnovation for test purposes</IP_info>
+  </datafile>
+
+  <datafile>
+    <filename>landcover.dbf</filename>
+    <checksum>976894014</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Martin Dobias</accountable>
+    <source>DMInnovation</source>
+    <IP_owner>DMInnovation</IP_owner>
+    <IP_info>Raster created at DMInnovation for test purposes</IP_info>
+  </datafile>
+
+  <datafile>
+    <filename>landcover.shx</filename>
+    <checksum>1229365098</checksum>
+    <publishable>Yes</publishable>
+    <accountable>Martin Dobias</accountable>
+    <source>DMInnovation</source>
+    <IP_owner>DMInnovation</IP_owner>
+    <IP_info>Raster created at DMInnovation for test purposes</IP_info>
+  </datafile>
+
+</ga_license_file>

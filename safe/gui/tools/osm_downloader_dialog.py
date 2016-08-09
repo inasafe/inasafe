@@ -156,12 +156,13 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
     def populate_countries(self):
         """Populate the combobox about countries and levels."""
         for i in range(1, 12):
-            self.admin_level_comboBox.addItem(self.tr("Level %s" % i), i)
+            self.admin_level_comboBox.addItem(self.tr('Level %s') % i, i)
 
         # Set current index to admin_level 8, the most common one
         self.admin_level_comboBox.setCurrentIndex(7)
 
-        list_countries = self.countries.keys()
+        list_countries = [
+            self.tr(country) for country in self.countries.keys()]
         list_countries.sort()
         for country in list_countries:
             self.country_comboBox.addItem(country)
@@ -551,7 +552,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
                 QgsExpressionContextUtils.setLayerVariable(
                     layer, 'qgis_25d_angle', 70)
 
-        canvas_srid = self.canvas.mapRenderer().destinationCrs().srsid()
+        canvas_srid = self.canvas.mapSettings().destinationCrs().srsid()
         on_the_fly_projection = self.canvas.hasCrsTransformEnabled()
         if canvas_srid != 4326 and not on_the_fly_projection:
             if QGis.QGIS_VERSION_INT >= 20400:

@@ -30,7 +30,7 @@ from PyQt4.QtCore import QObject, pyqtSignal, QVariant, QByteArray, QUrl
 from PyQt4.QtNetwork import QNetworkReply
 
 from safe.utilities.osm_downloader import fetch_zip, extract_zip
-from safe.test.utilities import test_data_path, get_qgis_app
+from safe.test.utilities import standard_data_path, get_qgis_app
 from safe.common.version import get_version
 from safe.utilities.gis import qgis_version
 
@@ -169,7 +169,7 @@ def read_all(path):
     :returns: The file contents.
     :rtype: str
     """
-    control_files_dir = test_data_path('control', 'files')
+    control_files_dir = standard_data_path('control', 'files')
     path = os.path.join(control_files_dir, path)
     handle = open(path, 'r')
     content = handle.read()
@@ -216,7 +216,7 @@ class OsmDownloaderTest(unittest.TestCase):
         """
         base_path = tempfile.mkdtemp()
         base_file_path = os.path.join(base_path, 'test')
-        zip_file_path = test_data_path(
+        zip_file_path = standard_data_path(
             'control',
             'files',
             'test-importdlg-extractzip.zip')
@@ -235,7 +235,7 @@ class OsmDownloaderTest(unittest.TestCase):
 
         .. versionadded:: 3.2
         """
-        zip_file_path = test_data_path(
+        zip_file_path = standard_data_path(
             'control', 'files', 'test-importdlg-extractzip.zip')
         output_path = tempfile.mkdtemp()
 

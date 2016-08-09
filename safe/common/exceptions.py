@@ -194,7 +194,12 @@ class KeywordDbError(InaSAFEError):
 class KeywordNotFoundError(InaSAFEError):
     """Custom exception for when a keyword's key (e.g. unit) cannot be found.
     """
-    pass
+    def __init__(self, message, **kwargs):
+        # Call the base class constructor with the parameters it needs
+        super(KeywordNotFoundError, self).__init__(message)
+
+        self.layer_name = kwargs.get('layer_name', 'Missing Layer Name')
+        self.keyword = kwargs.get('keyword', 'Missing Keyword')
 
 
 class HashNotFoundError(InaSAFEError):
@@ -404,4 +409,9 @@ class InvalidProvenanceDataError(InaSAFEError):
 
 class MissingMetadata(InaSAFEError):
     """When old version of metadata is not properly read."""
+    pass
+
+
+class MissingImpactReport(InaSAFEError):
+    """When Impact Report do not have proper input.."""
     pass

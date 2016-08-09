@@ -228,7 +228,7 @@ class Extent(object):
             return
 
         # make sure the extent is in the same crs as the canvas
-        destination_crs = self.iface.mapCanvas().mapRenderer().destinationCrs()
+        destination_crs = self.iface.mapCanvas().mapSettings().destinationCrs()
         transform = QgsCoordinateTransform(source_crs, destination_crs)
         extent = transform.transformBoundingBox(extent)
 

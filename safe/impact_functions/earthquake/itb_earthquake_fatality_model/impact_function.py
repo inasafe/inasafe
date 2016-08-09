@@ -25,15 +25,14 @@ from safe.common.utilities import (
     humanize_class,
     format_int,
     create_classes,
-    create_label,
-    get_thousand_separator)
+    create_label)
 from safe.utilities.i18n import tr
-from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
-    get_needs_provenance_value, filter_needs_parameters
+from safe.gui.tools.minimum_needs.needs_profile import (
+    add_needs_parameters,
+    filter_needs_parameters
+)
 from safe.impact_reports.population_exposure_report_mixin import \
     PopulationExposureReportMixin
-import safe.messaging as m
-from safe.messaging import styles
 
 __author__ = 'lucernae'
 __date__ = '24/03/15'
@@ -108,6 +107,7 @@ class ITBFatalityFunction(
 
     def __init__(self):
         super(ITBFatalityFunction, self).__init__()
+        PopulationExposureReportMixin.__init__(self)
 
         # AG: Use the proper minimum needs, update the parameters
         self.parameters = add_needs_parameters(self.parameters)
@@ -182,75 +182,55 @@ class ITBFatalityFunction(
         total_fatalities = self.total_fatalities
         total_displaced = self.total_evacuated
         rounded_displaced = format_int(population_rounding(total_displaced))
-        message = m.Message(style_class='container')
-        message.add(m.Heading(tr('Action checklist'), **styles.INFO_STYLE))
-        checklist = m.BulletedList()
+
+        fields = super(ITBFatalityFunction, self).action_checklist()
         if total_fatalities:
-            checklist.add(tr(
+            fields.append(tr(
                 'Are there enough victim identification units available '
                 'for %s people?') % (
                     format_int(population_rounding(total_fatalities))))
-        if total_displaced:
-            checklist.add(tr(
+        if rounded_displaced:
+            fields.append(
+                tr('Are there enough covered floor areas available for '
+                   '%s people?') % rounded_displaced)
+            fields.append(tr(
                 'Are there enough shelters and relief items available for '
                 '%s people?') % rounded_displaced)
-        if rounded_displaced:
-            checklist.add(tr(
+            fields.append(tr(
                 'If yes, where are they located and how will we '
                 'distribute them?'))
-        if total_displaced:
-            checklist.add(tr(
+            fields.append(tr(
                 'If no, where can we obtain additional relief items '
                 'from and how will we transport them?'))
-        message.add(checklist)
-        return message
+            fields.append(tr(
+                'Are there enough water supply, sanitation, hygiene, food, '
+                'shelter, medicines and relief items available for %s '
+                'displaced people?') % rounded_displaced)
+
+        return fields
 
     def notes(self):
         """Notes and caveats for the IF report.
 
-        :returns: List of dicts containing notes.
+        :returns: List containing notes.
         :rtype: list
         """
-        message = m.Message(style_class='container')
-        message.add(
-            m.Heading(tr('Notes and assumptions'), **styles.INFO_STYLE))
-
-        checklist = m.BulletedList()
-
-        checklist.add(tr(
-            'Total population in the analysis area: %s'
-            ) % format_int(population_rounding(self.total_population)))
-
-        checklist.add(tr(
-            '<sup>1</sup>People are displaced if '
-            'they experience and survive a shake level'
-            'of more than 5 on the MMI scale.'))
-
-        checklist.add(tr(
-            'The fatality calculation assumes that '
-            'no fatalities occur for shake levels below 4 '
-            'and fatality counts of less than 50 are '
-            'disregarded.'))
-
-        if self.__class__ != ITBFatalityFunction:
-            checklist.add(tr(
-                'Fatality model is from Institut Teknologi Bandung 2012.'))
-            checklist.add(tr(
-                'Fatality model is from the Population Vulnerability '
-                'Pager Model.'))
-
-        checklist.add(tr('Map shows the estimation of displaced population.'))
-
-        checklist.add(tr(get_needs_provenance_value(self.parameters)))
-        checklist.add(tr(
-            'All values are rounded up to the nearest integer in '
-            'order to avoid representing human lives as fractions.'))
-        checklist.add(tr(
-            'Population rounding is applied to all population '
-            'values, which may cause discrepancies when adding values.'))
-
-        message.add(checklist)
-        return message
+        fields = [
+            tr('Total population in the analysis area: %s') %
+            format_int(population_rounding(self.total_population)),
+            tr('<sup>1</sup>People are displaced if they experience and '
+               'survive a shake level of more than 5 on the MMI scale.'),
+            tr('The fatality calculation assumes that no fatalities occur for '
+               'shake levels below 4 and fatality counts of less than 50 are '
+               'disregarded.'),
+            tr('Fatality model is from Institut Teknologi Bandung 2012.'),
+            tr('Map shows the estimation of displaced population.')
+        ]
+        # include any generic exposure specific notes from definitions.py
+        fields = fields + self.exposure_notes()
+        # include any generic hazard specific notes from definitions.py
+        fields = fields + self.hazard_notes()
+        return fields
 
     def compute_probability(self, total_fatalities_raw):
         """
@@ -346,10 +326,6 @@ class ITBFatalityFunction(
         ]
         total_needs = self.total_needs
 
-        # Result
-        impact_summary = self.html_report()
-        impact_table = impact_summary
-
         # Create style
         colours = ['#EEFFEE', '#FFFF7F', '#E15500', '#E4001B', '#730000']
         classes = create_classes(mask.flat[:], len(colours))
@@ -367,16 +343,9 @@ class ITBFatalityFunction(
                           style_classes=style_classes,
                           style_type='rasterStyle')
 
-        # For printing map purpose
-        map_title = tr('Earthquake impact to population')
-        legend_title = tr('Population Count')
-        legend_units = tr('(people per cell)')
-        legend_notes = tr(
-            'Thousand separator is represented by %s' %
-            get_thousand_separator())
+        impact_data = self.generate_data()
 
         extra_keywords = {
-            'impact_summary': impact_summary,
             'exposed_per_mmi': number_of_exposed,
             'total_population': self.total_population,
             'total_fatalities': population_rounding(self.total_fatalities),
@@ -384,11 +353,10 @@ class ITBFatalityFunction(
             'fatalities_per_mmi': number_of_fatalities,
             'total_displaced': population_rounding(total_displaced),
             'displaced_per_mmi': number_of_displaced,
-            'impact_table': impact_table,
-            'map_title': map_title,
-            'legend_notes': legend_notes,
-            'legend_units': legend_units,
-            'legend_title': legend_title,
+            'map_title': self.map_title(),
+            'legend_notes': self.metadata().key('legend_notes'),
+            'legend_units': self.metadata().key('legend_units'),
+            'legend_title': self.metadata().key('legend_title'),
             'total_needs': total_needs,
             'prob_fatality_mag': prob_fatality_mag,
         }
@@ -396,12 +364,14 @@ class ITBFatalityFunction(
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 
         # Create raster object and return
-        raster = Raster(
+        impact_layer = Raster(
             mask,
             projection=self.exposure.layer.get_projection(),
             geotransform=self.exposure.layer.get_geotransform(),
             keywords=impact_layer_keywords,
-            name=tr('Estimated displaced population per cell'),
+            name=self.metadata().key('layer_name'),
             style_info=style_info)
-        self._impact = raster
-        return raster
+
+        impact_layer.impact_data = impact_data
+        self._impact = impact_layer
+        return impact_layer

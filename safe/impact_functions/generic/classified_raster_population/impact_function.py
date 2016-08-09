@@ -14,28 +14,20 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-__author__ = 'lucernae'
-__date__ = '24/03/15'
-__revision__ = '$Format:%H$'
-__copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
-                 'Disaster Reduction')
-
 import numpy
 import itertools
 
 from safe.impact_functions.bases.classified_rh_continuous_re import \
     ClassifiedRHContinuousRE
 from safe.impact_functions.core import (
-    population_rounding,
-    has_no_data)
+    population_rounding, has_no_data, no_population_impact_message)
 from safe.storage.raster import Raster
 from safe.common.utilities import (
+    format_int,
     humanize_class,
     create_classes,
-    create_label,
-    get_thousand_separator)
+    create_label)
 from safe.utilities.i18n import tr
-from safe.impact_functions.core import no_population_impact_message
 from safe.impact_functions.generic.\
     classified_raster_population.metadata_definitions import \
     ClassifiedRasterHazardPopulationMetadata
@@ -46,8 +38,13 @@ from safe.common.exceptions import (
     FunctionParametersError, ZeroImpactException)
 from safe.impact_reports.population_exposure_report_mixin import \
     PopulationExposureReportMixin
-import safe.messaging as m
-from safe.messaging import styles
+from safe.definitions import no_data_warning
+
+__author__ = 'lucernae'
+__date__ = '24/03/15'
+__revision__ = '$Format:%H$'
+__copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
+                 'Disaster Reduction')
 
 
 class ClassifiedRasterHazardPopulationFunction(
@@ -60,6 +57,7 @@ class ClassifiedRasterHazardPopulationFunction(
 
     def __init__(self):
         super(ClassifiedRasterHazardPopulationFunction, self).__init__()
+        PopulationExposureReportMixin.__init__(self)
         self.impact_function_manager = ImpactFunctionManager()
 
         # AG: Use the proper minimum needs, update the parameters
@@ -70,45 +68,30 @@ class ClassifiedRasterHazardPopulationFunction(
         """Return the notes section of the report.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: safe.messaging.Message
+        :rtype: list
         """
-        message = m.Message(style_class='container')
-
-        message.add(
-            m.Heading(tr('Notes and assumptions'), **styles.INFO_STYLE))
-        checklist = m.BulletedList()
-        checklist.add(tr(
-            'Total population in the analysis area: %s'
-            ) % population_rounding(self.total_population))
-        checklist.add(tr(
-            '<sup>1</sup>People need evacuation if they are in a '
-            'hazard zone.'))
+        fields = [
+            tr('Total population in the analysis area: %s') %
+            format_int(population_rounding(self.total_population)),
+            tr('<sup>1</sup>People need evacuation if they are in a hazard '
+               'zone.')
+        ]
 
         if self.no_data_warning:
-            checklist.add(tr(
-                'The layers contained "no data" values. This missing data '
-                'was carried through to the impact layer.'))
-            checklist.add(tr(
-                '"No data" values in the impact layer were treated as 0 '
-                'when counting the affected or total population.'))
-        checklist.add(tr(
-            'All values are rounded up to the nearest integer in '
-            'order to avoid representing human lives as fractions.'))
-        checklist.add(tr(
-            'Population rounding is applied to all population '
-            'values, which may cause discrepancies when adding value.'))
-
-        message.add(checklist)
-        return message
+            fields = fields + no_data_warning
+        # include any generic exposure specific notes from definitions.py
+        fields = fields + self.exposure_notes()
+        # include any generic hazard specific notes from definitions.py
+        fields = fields + self.hazard_notes()
+        return fields
 
     def run(self):
         """Plugin for impact of population as derived by classified hazard.
 
         Counts number of people exposed to each class of the hazard
 
-        Return
-          Map of population exposed to high class
-          Table with number of people in each class
+        :returns: Map of population exposed to high class
+            Table with number of people in each class
         """
 
         # The 3 classes
@@ -160,14 +143,14 @@ class ClassifiedRasterHazardPopulationFunction(
         # Count totals
         self.total_population = int(numpy.nansum(population))
         self.affected_population[
-            tr('Population in High hazard class areas')] = int(
-                numpy.nansum(high_hazard_population))
+            tr('Population in low hazard zone')] = int(
+                numpy.nansum(low_hazard_population))
         self.affected_population[
-            tr('Population in Medium hazard class areas')] = int(
+            tr('Population in medium hazard zone')] = int(
                 numpy.nansum(medium_hazard_population))
         self.affected_population[
-            tr('Population in Low hazard class areas')] = int(
-                numpy.nansum(low_hazard_population))
+            tr('Population in high hazard zone')] = int(
+                numpy.nansum(high_hazard_population))
         self.unaffected_population = (
             self.total_population - self.total_affected_population)
 
@@ -182,7 +165,6 @@ class ClassifiedRasterHazardPopulationFunction(
         ]
 
         total_needs = self.total_needs
-        impact_table = impact_summary = self.html_report()
 
         # Create style
         colours = [
@@ -219,35 +201,27 @@ class ClassifiedRasterHazardPopulationFunction(
             style_classes=style_classes,
             style_type='rasterStyle')
 
-        # For printing map purpose
-        map_title = tr('Number of people affected in each class')
-        legend_title = tr('Number of People')
-        legend_units = tr('(people per cell)')
-        legend_notes = tr(
-            'Thousand separator is represented by %s' %
-            get_thousand_separator())
+        impact_data = self.generate_data()
 
         extra_keywords = {
-            'impact_summary': impact_summary,
-            'impact_table': impact_table,
-            'map_title': map_title,
-            'legend_notes': legend_notes,
-            'legend_units': legend_units,
-            'legend_title': legend_title,
+            'map_title': self.metadata().key('map_title'),
+            'legend_notes': self.metadata().key('legend_notes'),
+            'legend_units': self.metadata().key('legend_units'),
+            'legend_title': self.metadata().key('legend_title'),
             'total_needs': total_needs
         }
 
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 
         # Create raster object and return
-        raster_layer = Raster(
+        impact_layer = Raster(
             data=affected_population,
             projection=self.exposure.layer.get_projection(),
             geotransform=self.exposure.layer.get_geotransform(),
-            name=tr('People that might %s') % (
-                self.impact_function_manager
-                .get_function_title(self).lower()),
+            name=self.metadata().key('layer_name'),
             keywords=impact_layer_keywords,
             style_info=style_info)
-        self._impact = raster_layer
-        return raster_layer
+
+        impact_layer.impact_data = impact_data
+        self._impact = impact_layer
+        return impact_layer

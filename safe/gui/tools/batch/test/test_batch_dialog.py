@@ -21,18 +21,18 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 # noinspection PyUnresolvedReferences
 import unittest
 
-from safe.test.utilities import test_data_path, get_qgis_app
+from safe.test.utilities import standard_data_path, get_qgis_app, get_dock
 # In our tests, we need to have this line below before importing any other
 # safe_qgis.__init__ to load all the configurations that we make for testing
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
+import logging
+
 from safe.gui.tools.batch.batch_dialog import BatchDialog
 from safe.common.utilities import temp_dir
-from safe.gui.widgets.dock import Dock
-from safe.impact_functions import register_impact_functions
+from safe.impact_functions.loader import register_impact_functions
 
-
-DOCK = Dock(IFACE)
+LOGGER = logging.getLogger('InaSAFE')
 
 
 class BatchDialogTest(unittest.TestCase):
@@ -40,35 +40,33 @@ class BatchDialogTest(unittest.TestCase):
 
     def setUp(self):
         register_impact_functions()
+        self.dock = get_dock()
 
     def test_load_batch_dialog(self):
         """Test for BatchDialog behaviour.
         """
-        scenarios_dir = test_data_path('control', 'scenarios')
-        dialog = BatchDialog(PARENT, IFACE, DOCK)
+        scenarios_dir = standard_data_path('control', 'scenarios')
+        dialog = BatchDialog(PARENT, IFACE, self.dock)
         dialog.show_results_popup = False
         dialog.scenario_directory_radio.setChecked(True)
         dialog.source_directory.setText(scenarios_dir)
         dialog.source_directory.textChanged.emit(scenarios_dir)
-        print "Testing using : %s" % scenarios_dir
         number_row = dialog.table.rowCount()
-        self.assertTrue(
-            number_row == 2, 'Num scenario is wrong. I got %s' % number_row)
+        self.assertEquals(
+            number_row, 2, 'Num scenario should be 2, but got %s' % number_row)
         out_path = dialog.output_directory.text()
-        self.assertTrue(
-            out_path == scenarios_dir, 'Output directory is %s' % out_path)
+        self.assertEquals(out_path, scenarios_dir)
         dialog.scenario_directory_radio.setChecked(False)
         dialog.output_directory.setText('not a dir')
         out_path = dialog.output_directory.text()
         dialog.scenario_directory_radio.setText(scenarios_dir + 'a')
         dialog.scenario_directory_radio.setText(scenarios_dir)
-        self.assertTrue(
-            out_path != scenarios_dir, 'Output directory is %s' % out_path)
+        self.assertNotEqual(out_path, scenarios_dir)
 
     def test_run_single_scenario(self):
         """Test run single scenario."""
-        scenarios_dir = test_data_path('control', 'scenarios')
-        dialog = BatchDialog(PARENT, IFACE, DOCK)
+        scenarios_dir = standard_data_path('control', 'scenarios')
+        dialog = BatchDialog(PARENT, IFACE, self.dock)
         dialog.show_results_popup = False
         dialog.scenario_directory_radio.setChecked(False)
         dialog.source_directory.setText(scenarios_dir)
@@ -85,8 +83,8 @@ class BatchDialogTest(unittest.TestCase):
 
     def test_run_all_scenario(self):
         """Test run all scenarii."""
-        scenarios_dir = test_data_path('control', 'scenarios')
-        dialog = BatchDialog(PARENT, IFACE, DOCK)
+        scenarios_dir = standard_data_path('control', 'scenarios')
+        dialog = BatchDialog(PARENT, IFACE, self.dock)
         dialog.show_results_popup = False
         dialog.scenario_directory_radio.setChecked(False)
         dialog.source_directory.setText(scenarios_dir)
@@ -97,8 +95,8 @@ class BatchDialogTest(unittest.TestCase):
         button.click()
         status0 = dialog.table.item(0, 1).text()
         status1 = dialog.table.item(1, 1).text()
-        self.assertTrue(status0 == 'Analysis Fail', status0)
-        self.assertTrue(status1 == 'Report Ok', status1)
+        self.assertEquals(status0, 'Analysis Fail')
+        self.assertEquals(status1, 'Report Ok')
 
 
 if __name__ == '__main__':

@@ -57,6 +57,12 @@ h5 {
   line-height: 2;
 }
 
+.sub_info {
+  color: #fff;
+  background-color: #6ec5e6;
+  line-height: 2;
+}
+
 .suggestion {
   color: #fff;
   background-color: #50CF5C;
@@ -75,4 +81,19 @@ h5 {
 
 .caption {
   font-size: 8pt;
+}
+
+/* List styling */
+.customBulletList, .customBulletList ul {
+  margin-top: 0;
+  padding-left: 2em;
+  list-style-type: none;
+}
+.customBulletList li:before {
+  position: absolute;
+  margin-left: -1.3em;
+  font-weight: bold;
+}
+.customBulletList li.tick:before {
+  content: "\2713";
 }

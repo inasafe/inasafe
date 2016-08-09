@@ -18,8 +18,11 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 
+from xml.etree.ElementTree import Element, tostring
+
 from safe.common.exceptions import InvalidProvenanceDataError
 from safe.metadata.provenance.provenance_step import ProvenanceStep
+from safe.utilities.unicode import get_unicode
 
 
 class IFProvenanceStep(ProvenanceStep):
@@ -50,7 +53,10 @@ class IFProvenanceStep(ProvenanceStep):
         'exposure_pixel_size',
         'hazard_pixel_size',
         'impact_pixel_size',
-        'analysis_extent',
+        'actual_extent',
+        'requested_extent',
+        'actual_extent_crs',
+        'requested_extent_crs',
         'parameter'
     ]
 
@@ -87,7 +93,10 @@ class IFProvenanceStep(ProvenanceStep):
         xml = self._get_xml(False)
         for key in self.impact_functions_fields:
             value = self.data(key)
-            xml += '<{0}>{1}</{0}>\n'.format(key, value)
+            element = Element(key)
+            element.text = get_unicode(value)
 
-        xml += '</provenance_step>\n'
+            xml += tostring(element)
+
+        xml += '</provenance_step>'
         return xml

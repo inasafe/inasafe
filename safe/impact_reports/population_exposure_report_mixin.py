@@ -10,23 +10,21 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
-__author__ = 'Christian Christelis <christian@kartoza.com>'
-__revision__ = '$Format:%H$'
-__date__ = '05/05/2015'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
 
 from collections import OrderedDict
 
 from safe.utilities.i18n import tr
 from safe.common.utilities import format_int
 from safe.impact_reports.report_mixin_base import ReportMixin
-
 from safe.impact_functions.core import (
     evacuated_population_needs,
     population_rounding)
-import safe.messaging as m
-from safe.messaging import styles
+
+__author__ = 'Christian Christelis <christian@kartoza.com>'
+__revision__ = '$Format:%H$'
+__date__ = '05/05/2015'
+__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
+                 'Disaster Reduction')
 
 
 class PopulationExposureReportMixin(ReportMixin):
@@ -51,7 +49,8 @@ class PopulationExposureReportMixin(ReportMixin):
             )]
 
         """
-        self._question = ''
+        super(PopulationExposureReportMixin, self).__init__()
+        self.exposure_report = 'population'
         self._total_population = 0
         self._unaffected_population = 0
         self._evacuation_category = 0
@@ -61,159 +60,87 @@ class PopulationExposureReportMixin(ReportMixin):
         self._other_population_counts = {}
         self._impact_category_ordering = []
 
-    def generate_report(self):
-        """Breakdown by building type.
+    def generate_data(self):
+        """Create a dictionary contains impact data.
 
-        :returns: The report.
+        :returns: The impact report data.
+        :rtype: dict
+        """
+        extra_data = {
+            'minimum needs': self.total_needs.copy(),
+        }
+        data = super(PopulationExposureReportMixin, self).generate_data()
+        data.update(extra_data)
+        return data
+
+    def extra_actions(self):
+        """Return population specific actions for the report.
+
+        .. note:: Only calculated actions are implemented here, the rest
+            are defined in definitions.py.
+
+        .. versionadded:: 3.5
+
+        :return: The action check list as list.
         :rtype: list
         """
-        message = m.Message()
-        message.add(m.Paragraph(self.question))
-        message.add(self.impact_summary())
-        message.add(self.minimum_needs_breakdown())
-        message.add(self.action_checklist())
-        message.add(self.notes())
-        return message
-
-    def action_checklist(self):
-        """Population action.
-
-        :returns: The population breakdown report.
-        :rtype: safe.messaging.Message
-        """
-        message = m.Message(style_class='container')
-        message.add(m.Heading(tr('Action checklist'), **styles.INFO_STYLE))
-        checklist = m.BulletedList()
-        checklist.add(tr('Which group or population is most affected?'))
-        checklist.add(
-            tr('Who are the vulnerable people in the population and why?'))
-        checklist.add(tr('How will warnings be disseminated?'))
-        checklist.add(tr('What are people\'s likely movements?'))
-        checklist.add(
-            tr('What are the security factors for the affected population?'))
-        checklist.add(
-            tr('What are the security factors for relief responders?'))
-        checklist.add(tr('How will we reach evacuated people?'))
-        checklist.add(
-            tr('What kind of food does the population normally consume?'))
-        checklist.add(
-            tr('What are the critical non-food items required by the affected '
-               'population?'))
         evacuated_people = format_int(
             population_rounding(self.total_affected_population))
-        checklist.add(tr(
-            'Are there enough water supply, sanitation, hygiene, food, '
-            'shelter, medicines and relief items available for %s people?'
-            % evacuated_people))
-        checklist.add(tr(
-            'If yes, where are they located and how will we distribute them?'))
-        checklist.add(tr(
-            'If no, where can we obtain additional relief items and how will '
-            'we distribute them?'))
-        checklist.add(tr('What are the related health risks?'))
-        checklist.add(
-            tr('Who are the key people responsible for coordination?'))
-        message.add(checklist)
-        return message
+        fields = [
+            tr('Are there enough water supply, sanitation, hygiene, food, '
+               'shelter, medicines and relief items available for %s '
+               'people?' % evacuated_people)]
+        return fields
 
     def impact_summary(self):
-        """The impact summary as per category
+        """Create impact summary as data.
 
-        :returns: The impact summary.
-        :rtype: safe.messaging.Message
+        :returns: Impact Summary in dictionary format.
+        :rtype: dict
         """
-        message = m.Message(style_class='container')
-        table = m.Table(style_class='table table-condensed table-striped')
-        table.caption = None
+        attributes = ['category', 'value']
+        fields = []
 
         # Breakdown by hazard level (if available)
         if len(self.impact_category_ordering):
             for category in self.impact_category_ordering:
                 population_in_category = self.lookup_category(category)
-                population_in_category = format_int(population_rounding(
-                    population_in_category
-                ))
-                row = m.Row()
-                row.add(m.Cell(tr(category), header=True))
-                row.add(m.Cell(population_in_category, align='right'))
-                table.add(row)
+                population_in_category = population_in_category
+                row = [tr(category), population_in_category]
+                fields.append(row)
 
         # Total affected population
-        row = m.Row()
-        row.add(m.Cell(
+        row = [
             tr('Total affected population'),
-            header=True))
-        affected = format_int(
-            population_rounding(self.total_affected_population))
-        row.add(m.Cell(affected, align='right'))
-        table.add(row)
+            self.total_affected_population
+        ]
+        fields.append(row)
 
         # Non affected population
-        row = m.Row()
-        unaffected = format_int(
-            population_rounding(self.unaffected_population))
-        row.add(m.Cell(tr('Unaffected population'), header=True))
-        row.add(m.Cell(unaffected, align='right'))
-        table.add(row)
+        row = [
+            tr('Unaffected population'),
+            self.unaffected_population
+        ]
+        fields.append(row)
 
         # Total Population
-        row = m.Row()
-        total_population = format_int(
-            population_rounding(self.total_population))
-        row.add(m.Cell(tr('Total population'), header=True))
-        row.add(m.Cell(total_population, align='right'))
-        table.add(row)
-
-        # Empty row
-        empty_row = m.Row()
-        empty_row.add(m.Cell(''))
-        empty_row.add(m.Cell(''))
-        table.add(empty_row)
+        row = [
+            tr('Total population'),
+            self.total_population
+        ]
+        fields.append(row)
 
         # Population needing evacuation
-        row = m.Row()
-        row.add(m.Cell(
+        row = [
             tr('Population needing evacuation <sup>1</sup>'),
-            header=True))
-        evacuated = format_int(population_rounding(self.total_evacuated))
-        row.add(m.Cell(evacuated, align='right'))
-        table.add(row)
+            self.total_evacuated
+        ]
+        fields.append(row)
 
-        message.add(table)
-        return message
-
-    def minimum_needs_breakdown(self):
-        """Breakdown by population.
-
-        :returns: The population breakdown report.
-        :rtype: list
-        """
-        message = m.Message(style_class='container')
-        message.add(m.Heading(
-            tr('Evacuated population minimum needs'),
-            **styles.INFO_STYLE))
-        table = m.Table(
-            style_class='table table-condensed table-striped')
-        table.caption = None
-        total_needs = self.total_needs
-        for frequency, needs in total_needs.items():
-            row = m.Row()
-            row.add(m.Cell(
-                tr('Relief items to be provided %s' % frequency),
-                header=True
-            ))
-            row.add(m.Cell(tr('Total'), header=True, align='right'))
-            table.add(row)
-            for resource in needs:
-                row = m.Row()
-                row.add(m.Cell(tr(resource['table name'])))
-                row.add(m.Cell(
-                    tr(format_int(resource['amount'])),
-                    align='right'
-                ))
-                table.add(row)
-        message.add(table)
-        return message
+        return {
+            'attributes': attributes,
+            'fields': fields
+        }
 
     @property
     def impact_category_ordering(self):
@@ -276,26 +203,6 @@ class PopulationExposureReportMixin(ReportMixin):
         :type affected_population: dict
         """
         self._affected_population = affected_population
-
-    @property
-    def question(self):
-        """Get the impact function question.
-
-        :returns: The impact function question.
-        :rtype: basestring
-        """
-        if not hasattr(self, '_question'):
-            self._question = ''
-        return self._question
-
-    @question.setter
-    def question(self, question):
-        """Set the impact function question.
-
-        :param question: The question.
-        :type question: basestring
-        """
-        self._question = question
 
     @property
     def unaffected_population(self):

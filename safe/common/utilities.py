@@ -19,6 +19,11 @@ from collections import OrderedDict
 # pylint: enable=unused-import
 
 from PyQt4.QtCore import QPyNullVariant
+from qgis.core import (
+    QgsCoordinateReferenceSystem,
+    QgsCoordinateTransform,
+    QgsGeometry,
+    QgsPoint)
 
 from safe.common.exceptions import VerificationError
 from safe.utilities.i18n import locale
@@ -130,9 +135,9 @@ def unique_filename(**kwargs):
     Example usage:
 
     tempdir = temp_dir(sub_dir='test')
-    filename = unique_filename(suffix='.keywords', dir=tempdir)
+    filename = unique_filename(suffix='.foo', dir=tempdir)
     print filename
-    /tmp/inasafe/23-08-2012/timlinux/test/tmpyeO5VR.keywords
+    /tmp/inasafe/23-08-2012/timlinux/test/tmpyeO5VR.foo
 
     Or with no preferred subdir, a default subdir of 'impacts' is used:
 
@@ -592,17 +597,38 @@ def get_utm_zone(longitude):
     return zone
 
 
-def get_utm_epsg(longitude, latitude):
-    """Return epsg code of the utm zone.
+def get_utm_epsg(longitude, latitude, crs=None):
+    """Return epsg code of the utm zone according to X, Y coordinates.
+
+    By default, the CRS is EPSG:4326. If the CRS is provided, first X,Y will
+    be reprojected from the input CRS to WGS84.
 
     The code is based on the code:
     http://gis.stackexchange.com/questions/34401
+
+    :param longitude: The longitude.
+    :type longitude: float
+
+    :param latitude: The latitude.
+    :type latitude: float
+
+    :param crs: The coordinate reference system of the latitude, longitude.
+    :type crs: QgsCoordinateReferenceSystem
     """
-    epsg = 32600
-    if latitude < 0.0:
-        epsg += 100
-    epsg += get_utm_zone(longitude)
-    return epsg
+    if crs is None or crs.authid() == 'EPSG:4326':
+        epsg = 32600
+        if latitude < 0.0:
+            epsg += 100
+        epsg += get_utm_zone(longitude)
+        return epsg
+    else:
+        epsg_4326 = QgsCoordinateReferenceSystem('EPSG:4326')
+        transform = QgsCoordinateTransform(crs, epsg_4326)
+        geom = QgsGeometry.fromPoint(QgsPoint(longitude, latitude))
+        geom.transform(transform)
+        point = geom.asPoint()
+        # The point is now in 4326, we can call the function again.
+        return get_utm_epsg(point.x(), point.y())
 
 
 def feature_attributes_as_dict(field_map, attributes):
@@ -708,8 +734,8 @@ def get_non_conflicting_attribute_name(default_name, attribute_names):
 def color_ramp(number_of_colour):
     """Generate list of color in hexadecimal.
 
-    This will generate colors using hsv model by playing around with the hue
-    (the saturation and the value are all set to 1).
+    This will generate colors using hsl model by playing around with the hue
+    see: https://coderwall.com/p/dvsxwg/smoothly-transition-from-green-to-red
 
     :param number_of_colour: The number of intervals between R and G spectrum.
     :type number_of_colour: int
@@ -721,71 +747,18 @@ def color_ramp(number_of_colour):
         raise Exception('The number of colours should be > 0')
 
     colors = []
-    hue_interval = 1.0 / number_of_colour
+    if number_of_colour == 1:
+        hue_interval = 1
+    else:
+        hue_interval = 1.0 / (number_of_colour - 1)
     for i in range(number_of_colour):
-        hue = i * hue_interval
-        saturation = 1
-        value = 1
-        # pylint: disable=bad-builtin
-        # pylint: disable=deprecated-lambda
-        rgb = map(
-            lambda x: int(x * 255), colorsys.hsv_to_rgb(
-                hue, saturation, value))
-        # pylint: enable=deprecated-lambda
-        # pylint: enable=bad-builtin
+        hue = (i * hue_interval) / 3
+        light = 127.5
+        saturation = -1.007905138339921
+        rgb = colorsys.hls_to_rgb(hue, light, saturation)
         hex_color = '#%02x%02x%02x' % (rgb[0], rgb[1], rgb[2])
         colors.append(hex_color)
     return colors
-
-
-def get_osm_building_usage(attribute_names, feature):
-    """Get the usage of a row of OSM building data.
-
-    :param attribute_names: The list of attribute of the OSM building data.
-    :type attribute_names: list
-
-    :param feature: A row of data representing an OSM building.
-    :type feature: dict
-
-    :returns: The usage of the feature. Return None if it does not find any.
-    :rtype: str
-    """
-    attribute_names_lower = [
-        attribute_name.lower() for attribute_name in attribute_names]
-
-    # if the feature is from QGIS layer, NULL values are represented
-    # by QPyNullVariant instead of None, so we handle that explicitly
-
-    usage = None
-    # Prioritize 'type' attribute
-    if 'type' in attribute_names_lower:
-        attribute_index = attribute_names_lower.index('type')
-        field_name = attribute_names[attribute_index]
-        if not isinstance(feature[field_name], QPyNullVariant):
-            usage = feature[field_name]
-
-    # Get the usage from other attribute names
-    building_type_attributes = ['amenity', 'building_t', 'office', 'tourism',
-                                'leisure', 'use']
-    for type_attribute in building_type_attributes:
-        if (type_attribute in attribute_names_lower) and usage is None:
-            attribute_index = attribute_names_lower.index(
-                type_attribute)
-            field_name = attribute_names[attribute_index]
-            if not isinstance(feature[field_name], QPyNullVariant):
-                usage = feature[field_name]
-
-    # The last one is to get it from 'building' attribute
-    if 'building' in attribute_names_lower and usage is None:
-        attribute_index = attribute_names_lower.index('building')
-        field_name = attribute_names[attribute_index]
-        if not isinstance(feature[field_name], QPyNullVariant):
-            usage = feature[field_name]
-
-        if usage is not None and usage.lower() == 'yes':
-            usage = 'building'
-
-    return usage
 
 
 def log_file_path():

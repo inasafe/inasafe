@@ -25,14 +25,16 @@ import os
 
 from qgis.core import QgsMapLayerRegistry
 
+from safe.test.utilities import standard_data_path, get_qgis_app
+
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
 from safe.storage.core import read_layer as safe_read_layer
 from safe.gui.tools.minimum_needs.needs_calculator_dialog import (
     NeedsCalculatorDialog)
-from safe.test.utilities import test_data_path, get_qgis_app
 
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-shapefile_path = test_data_path('other', 'minimum_needs.shp')
-result_path_base = test_data_path('other', 'minimum_needs_perka7')
+shapefile_path = standard_data_path('other', 'minimum_needs.shp')
+result_path_base = standard_data_path('other', 'minimum_needs_perka7')
 
 
 class MinimumNeedsTest(unittest.TestCase):

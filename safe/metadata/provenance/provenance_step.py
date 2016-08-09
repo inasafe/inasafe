@@ -19,6 +19,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 
 from datetime import datetime
+from xml.etree.ElementTree import Element, SubElement, tostring
 
 
 class ProvenanceStep(object):
@@ -42,7 +43,18 @@ class ProvenanceStep(object):
         elif isinstance(timestamp, datetime):
             self._time = timestamp
         elif isinstance(timestamp, basestring):
-            self._time = datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%S.%f")
+            try:
+                self._time = datetime.strptime(
+                    timestamp, "%Y-%m-%dT%H:%M:%S.%f")
+            except ValueError:
+                try:
+                    self._time = datetime.strptime(
+                        timestamp, "%Y-%m-%dT%H:%M:%S")
+                except ValueError:
+                    try:
+                        self._time = datetime.strptime(timestamp, "%Y-%m-%d")
+                    except ValueError:
+                        self._time = datetime.now()
         else:
             raise RuntimeError('The timestamp %s has an invalid type (%s)',
                                timestamp, type(timestamp))
@@ -145,12 +157,18 @@ class ProvenanceStep(object):
         :rtype: str
         """
 
-        xml = (
-            '<provenance_step timestamp="%s">\n'
-            '<title>%s</title>\n'
-            '<description>%s</description>\n'
-            )
-        if close_tag:
-            xml += '</provenance_step>\n'
+        provenance_step_element = Element('provenance_step', {
+            'timestamp': self.time.isoformat()
+        })
+        title = SubElement(provenance_step_element, 'title')
+        title.text = self.title
+        description = SubElement(provenance_step_element, 'description')
+        description.text = self.description
 
-        return xml % (self.time.isoformat(), self.title, self.description)
+        xml_string = tostring(provenance_step_element)
+
+        if close_tag:
+            return xml_string
+        else:
+            # Remove the close tag
+            return xml_string[:-len('</provenance_step>')]

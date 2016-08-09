@@ -17,7 +17,7 @@ __filename__ = 'test_classified_hazard_building'
 __date__ = '24/03/15'
 
 import unittest
-from safe.test.utilities import test_data_path, get_qgis_app
+from safe.test.utilities import standard_data_path, get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.common.utilities import OrderedDict
@@ -27,7 +27,6 @@ from safe.impact_functions.generic.continuous_hazard_population\
     .impact_function import ContinuousHazardPopulationFunction
 from safe.storage.safe_layer import SafeLayer
 from safe.storage.core import read_layer
-
 
 
 class TestContinuousHazardPopulationFunction(unittest.TestCase):
@@ -41,9 +40,9 @@ class TestContinuousHazardPopulationFunction(unittest.TestCase):
     def test_run(self):
         function = ContinuousHazardPopulationFunction.instance()
 
-        hazard_path = test_data_path(
+        hazard_path = standard_data_path(
             'hazard', 'continuous_flood_20_20.asc')
-        exposure_path = test_data_path(
+        exposure_path = standard_data_path(
             'exposure', 'pop_binary_raster_20_20.asc')
         hazard_layer = read_layer(hazard_path)
         exposure_layer = read_layer(exposure_path)

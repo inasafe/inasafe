@@ -4,6 +4,11 @@
 Test building type postprocessor
 """
 
+import unittest
+
+from safe.postprocessors.building_type_postprocessor import (
+    BuildingTypePostprocessor)
+
 __author__ = 'Christian Christelis <christian@kartoza.com>'
 __revision__ = '$Format:%H$'
 __date__ = '21/07/2015'
@@ -12,94 +17,98 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 
-import unittest
-
-from safe.postprocessors.building_type_postprocessor import (
-    BuildingTypePostprocessor)
-
-POSTPROCESSOR = BuildingTypePostprocessor()
-
-
 class TestBuildingTypePostprocessor(unittest.TestCase):
+    postprocessor = BuildingTypePostprocessor()
 
     def tearDown(self):
         """Run after each test."""
-        POSTPROCESSOR.clear()
+        self.postprocessor.clear()
 
     def test_process_integer_values(self):
-        """Test for checking if the ratio is wrong (total is more than one)."""
-        # ratios_total < 1 should pass
+        """Test for checking when the value is integer."""
         params = {
             'impact_total': 0,
             'key_attribute': 'type',
-            u'Building type': True,
-            'target_field': 'safe_ag__4',
+            'Building type': True,
+            'target_field': 'affected',
+            'value_mapping': {'government': ['Government']},
             'impact_attrs': [
-                {'TYPE': 'Government', 'safe_ag__4': 1},
-                {'TYPE': 'Government', 'safe_ag__4': 0},
-                {'TYPE': 'Government', 'safe_ag__4': 1},
-                {'TYPE': 'Government', 'safe_ag__4': 0},
+                {'type': 'Government', 'affected': 1},
+                {'type': 'Government', 'affected': 0},
+                {'type': 'Government', 'affected': 1},
+                {'type': 'Government', 'affected': 0},
             ]}
-        POSTPROCESSOR.setup(params)
-        POSTPROCESSOR.process()
-        results = POSTPROCESSOR.results()
-        message = (
-            'Expecting exactly 2 Government buildings to be affected. ',
-            'Using integer values in affected fields.')
-        self.assertEqual(
-            results[u'Government']['value'],
-            '2',
-            message)
+        self.postprocessor.setup(params)
+        self.postprocessor.process()
+        results = self.postprocessor.results()
+        self.assertEqual(results['Government']['value'], '2')
 
     def test_process_string_values(self):
-        """Test for checking if the ratio is wrong (total is more than one)."""
-        # ratios_total < 1 should pass
+        """Test for checking when the value is string."""
         params = {
             'impact_total': 0,
             'key_attribute': 'type',
-            u'Building type': True,
-            'target_field': 'safe_ag__4',
+            'Building type': True,
+            'target_field': 'affected',
+            'value_mapping': {'government': ['Government']},
             'impact_attrs': [
-                {'TYPE': 'Government', 'safe_ag__4': 'Zone 1'},
-                {'TYPE': 'Government', 'safe_ag__4': 'Not Affected'},
-                {'TYPE': 'Government', 'safe_ag__4': 'Zone 1'},
-                {'TYPE': 'Government', 'safe_ag__4': 'Not Affected'},
+                {'type': 'Government', 'affected': 'Zone 1'},
+                {'type': 'Government', 'affected': 'Not Affected'},
+                {'type': 'Government', 'affected': 'Zone 1'},
+                {'type': 'Government', 'affected': 'Not Affected'},
             ]}
-        POSTPROCESSOR.setup(params)
-        POSTPROCESSOR.process()
-        results = POSTPROCESSOR.results()
-        message = (
-            'Expecting exactly 2 Government buildings to be affected. ',
-            'Using string values in affected fields.')
-        self.assertEqual(
-            results[u'Government']['value'],
-            '2',
-            message)
+        self.postprocessor.setup(params)
+        self.postprocessor.process()
+        results = self.postprocessor.results()
+        self.assertEqual(results['Government']['value'], '2')
 
     def test_total_affected_calculated_correctly(self):
-        """Test to see that the totalling of buildings is done correctly."""
-        # ratios_total < 1 should pass
+        """Test for checking the total affected and value mapping"""
         params = {
             'impact_total': 0,
             'key_attribute': 'type',
-            u'Building type': True,
-            'target_field': 'safe_ag__4',
+            'Building type': True,
+            'target_field': 'affected',
+            'value_mapping': {
+                'government': ['Government'],
+                'economy': ['Economy'],
+            },
             'impact_attrs': [
-                {'TYPE': 'Government', 'safe_ag__4': 'Zone 1'},
-                {'TYPE': 'Museum', 'safe_ag__4': 'Zone 2'},
-                {'TYPE': 'Government', 'safe_ag__4': 'Zone 1'},
-                {'TYPE': 'Government', 'safe_ag__4': 'Not Affected'},
+                {'type': 'Government', 'affected': 'Zone 1'},
+                {'type': 'Museum', 'affected': 'Zone 2'},
+                {'type': 'Government', 'affected': 'Zone 1'},
+                {'type': 'Government', 'affected': 'Not Affected'},
+                {'type': 'School', 'affected': 'Zone 3'},
             ]}
-        POSTPROCESSOR.setup(params)
-        POSTPROCESSOR.process()
-        results = POSTPROCESSOR.results()
-        message = (
-            'Expecting exactly 3 buildings have been affected. ',
-            'In Zone 1 and Zone 2.')
-        self.assertEqual(
-            results[u'Total Affected']['value'],
-            '3',
-            message)
+        self.postprocessor.setup(params)
+        self.postprocessor.process()
+        results = self.postprocessor.results()
+        self.assertEqual(results['Government']['value'], '2')
+        self.assertEqual(results['Other']['value'], '2')
+
+        self.postprocessor.clear()
+        # Same as above, but we add the school in the value mapping.
+        params = {
+            'impact_total': 0,
+            'key_attribute': 'type',
+            'Building type': True,
+            'target_field': 'affected',
+            'value_mapping': {
+                'government': ['Government', 'School'],
+                'economy': ['Economy'],
+            },
+            'impact_attrs': [
+                {'type': 'Government', 'affected': 'Zone 1'},
+                {'type': 'Museum', 'affected': 'Zone 2'},
+                {'type': 'Government', 'affected': 'Zone 1'},
+                {'type': 'Government', 'affected': 'Not Affected'},
+                {'type': 'School', 'affected': 'Zone 3'},
+            ]}
+        self.postprocessor.setup(params)
+        self.postprocessor.process()
+        results = self.postprocessor.results()
+        self.assertEqual(results['Government']['value'], '3')
+        self.assertEqual(results['Other']['value'], '1')
 
 
 if __name__ == '__main__':

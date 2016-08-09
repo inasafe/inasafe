@@ -13,7 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 import unittest
-from safe.test.utilities import get_qgis_app, test_data_path
+from safe.test.utilities import get_qgis_app, standard_data_path
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from qgis.core import QgsVectorLayer
@@ -38,9 +38,9 @@ class TestClassifiedPolygonPeopleFunction(unittest.TestCase):
         # 1. Initializing function with necessary data
         function = ClassifiedPolygonHazardPolygonPeopleFunction.instance()
 
-        hazard_path = test_data_path(
+        hazard_path = standard_data_path(
                 'hazard', 'classified_generic_polygon.shp')
-        exposure_path = test_data_path('exposure', 'census.shp')
+        exposure_path = standard_data_path('exposure', 'census.shp')
         # noinspection PyCallingNonCallable
         hazard_layer = QgsVectorLayer(hazard_path, 'Hazard', 'ogr')
         # noinspection PyCallingNonCallable
@@ -69,7 +69,7 @@ class TestClassifiedPolygonPeopleFunction(unittest.TestCase):
         # Asserting for the number of features in the impact
         # layer
 
-        self.assertEqual(impact.dataProvider().featureCount(), 5L)
+        self.assertEqual(impact.dataProvider().featureCount(), 6L)
 
         # 4. Asserting about the results found
         features = {}
@@ -85,16 +85,19 @@ class TestClassifiedPolygonPeopleFunction(unittest.TestCase):
             3: 8534.3
         }
         self.assertEqual(features, expected_features)
-        expected_impact_summary = [
-            '**High Hazard Zone**, 4,600------',
-            '**Medium Hazard Zone**, 65,700------',
-            '**Low Hazard Zone**, 11,500------',
-            '**Total affected people**, 81,600------',
-            '**Unaffected people**, 17,300------',
-            '**Total people**, 98,900---'
+        expected_results = [
+            [u'High Hazard Zone', 7271.431538053051],
+            [u'Medium Hazard Zone', 72852.05080801852],
+            [u'Low Hazard Zone', 11459.170311153292],
+            [u'Total affected people', 91583.0],
+            [u'Unaffected people', 17269.0],
+            [u'Total people', 108852]
         ]
-        for row in expected_impact_summary:
-            self.assertIn(row, function.impact_summary().to_text())
+
+        result = function.generate_data()['impact summary']['fields']
+
+        for expected_result in expected_results:
+            self.assertIn(expected_result, result)
 
     def test_keywords(self):
         """TestClassifiedPolygonPeopleFunction: Test keywords IF"""

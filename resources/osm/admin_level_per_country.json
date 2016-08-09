@@ -1,6 +1,7 @@
 {
   "Afghanistan": {
 	"_comments": "BBOX format : West, North, East, South. It's a list of polygons.",
+	"_comments_translation": "JSON can't be translated. Countries should be added manually to dynamic_translations.py.",
 	"bbox": [[60.33, 38.56, 75.03, 29.32]],
 	"levels": {
 	  "1": "N/A",

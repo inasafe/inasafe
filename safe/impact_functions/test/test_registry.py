@@ -22,18 +22,20 @@ import inspect
 from safe.test.utilities import get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe.impact_functions import register_impact_functions
-from safe.impact_functions import EarthquakeBuildingFunction
-from safe.impact_functions import ITBFatalityFunction
-from safe.impact_functions import PAGFatalityFunction
-from safe.impact_functions import ITBBayesianFatalityFunction
-from safe.impact_functions import FloodRasterBuildingFunction
-from safe.impact_functions import TsunamiRasterBuildingFunction
-from safe.impact_functions import ClassifiedPolygonHazardBuildingFunction
-from safe.impact_functions import VolcanoPolygonBuildingFunction
-from safe.impact_functions import VolcanoPointBuildingFunction
-from safe.impact_functions import FloodPolygonBuildingFunction
-from safe.impact_functions import ClassifiedRasterHazardBuildingFunction
+from safe.impact_functions.loader import register_impact_functions
+from safe.impact_functions.loader import EarthquakeBuildingFunction
+from safe.impact_functions.loader import ITBFatalityFunction
+from safe.impact_functions.loader import PAGFatalityFunction
+from safe.impact_functions.loader import ITBBayesianFatalityFunction
+from safe.impact_functions.loader import FloodRasterBuildingFunction
+from safe.impact_functions.loader import TsunamiRasterBuildingFunction
+from safe.impact_functions.loader import \
+    ClassifiedPolygonHazardBuildingFunction
+from safe.impact_functions.loader import VolcanoPolygonBuildingFunction
+from safe.impact_functions.loader import VolcanoPointBuildingFunction
+from safe.impact_functions.loader import FloodPolygonBuildingFunction
+from safe.impact_functions.loader import \
+    ClassifiedRasterHazardBuildingFunction
 
 from safe.impact_functions.registry import Registry
 from safe.definitions import (
@@ -47,6 +49,38 @@ from safe.definitions import (
     hazard_category_single_event,
     layer_mode_classified
 )
+
+# This list is used in another test file.
+EXPECTED_IF = [
+    'Polygon flood on buildings',
+    'Polygon flood on roads',
+    'Polygon flood on people',
+    'Raster flood on population',
+    'Raster flood on buildings',
+    'Raster flood on roads',
+    'Tsunami evacuation',
+    'Raster tsunami on buildings',
+    'Raster tsunami on roads',
+    'Raster tsunami on land cover',
+    'Classified raster hazard on buildings',
+    'Classified raster hazard on population',
+    'Continuous raster hazard on population',
+    'Classified polygon hazard on population',
+    'Classified polygon hazard on buildings',
+    'Classified polygon hazard on polygon people',
+    'Classified polygon hazard on land cover',
+    'Earthquake on buildings',
+    'Earthquake ITB fatality function',
+    'Earthquake PAGER fatality function',
+    'Earthquake ITB fatality function based on a Bayesian approach',
+    'Point volcano on buildings',
+    'Polygon volcano on buildings',
+    'Point volcano on population',
+    'Polygon volcano on population',
+    'Ash raster on land cover',
+    'Ash raster on places',
+    'Ash raster on population'
+]
 
 
 class TestRegistry(unittest.TestCase):
@@ -78,31 +112,7 @@ class TestRegistry(unittest.TestCase):
         """TestRegistry: Test list all register IFs."""
         registry = Registry()
         impact_functions = registry.list()
-        expected = [
-            'Polygon flood on buildings',
-            'Polygon flood on roads',
-            'Polygon flood on people',
-            'Raster flood on population',
-            'Raster flood on buildings',
-            'Raster flood on roads',
-            'Tsunami evacuation',
-            'Raster tsunami on buildings',
-            'Raster tsunami on roads',
-            'Classified raster hazard on buildings',
-            'Classified raster hazard on population',
-            'Continuous raster hazard on population',
-            'Classified polygon hazard on population',
-            'Classified polygon hazard on buildings',
-            'Classified polygon hazard on polygon people',
-            'Earthquake on buildings',
-            'Earthquake ITB fatality function',
-            'Earthquake PAGER fatality function',
-            'Earthquake ITB fatality function based on a Bayesian approach',
-            'Point volcano on buildings',
-            'Polygon volcano on buildings',
-            'Point volcano on population',
-            'Polygon volcano on population']
-        self.assertItemsEqual(expected, impact_functions)
+        self.assertItemsEqual(EXPECTED_IF, impact_functions)
 
     def test_get_impact_function_instance(self):
         """TestRegistry: Test we can get an impact function instance."""
@@ -300,7 +310,8 @@ class TestRegistry(unittest.TestCase):
         self.assertTrue(len(impact_functions) > 0, message)
 
         for i in impact_functions:
-            print i.__name__
+            # print i.__name__
+            continue
 
         for impact_function in impact_functions:
             result = impact_function.metadata().as_dict()[
@@ -347,7 +358,8 @@ class TestRegistry(unittest.TestCase):
         impact_functions = registry.filter_by_keyword_string(
             hazard_keywords, exposure_keywords)
 
-        print len(impact_functions)
+        # print len(impact_functions)
 
         for i in impact_functions:
-            print i.__name__
+            # print i.__name__
+            continue

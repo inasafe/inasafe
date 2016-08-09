@@ -74,11 +74,24 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         :param dock: Dock widget instance that we can notify of changes.
         :type dock: Dock
         """
-
         QtGui.QDialog.__init__(self, parent)
+        # List of parameters with the translated name.
+        self.resource_parameters = {
+            'Resource name': tr('Resource name'),
+            'Resource description': tr('Resource description'),
+            'Unit': tr('Unit'),
+            'Units': tr('Units'),
+            'Unit abbreviation': tr('Unit abbreviation'),
+            'Minimum allowed': tr('Minimum allowed'),
+            'Maximum allowed': tr('Maximum allowed'),
+            'Default': tr('Default'),
+            'Frequency': tr('Frequency'),
+            'Readable sentence': tr('Readable sentence')
+        }
+
         self.setupUi(self)
         self.dock = dock
-        # These are in the little button bar at the top
+        # These are in the little button bar at the bottom
         # 'Remove resource' button
         # noinspection PyUnresolvedReferences
         self.remove_resource_button.clicked.connect(self.remove_resource)
@@ -105,6 +118,13 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
             self.discard_changes_button, QDialogButtonBox.ActionRole)
         # noinspection PyUnresolvedReferences
         self.discard_changes_button.clicked.connect(self.discard_changes)
+
+        # Restore defaults profiles
+        self.restore_defaults_button = QPushButton(self.tr('Restore defaults'))
+        self.button_box.addButton(
+            self.restore_defaults_button, QDialogButtonBox.ActionRole)
+        # noinspection PyUnresolvedReferences
+        self.restore_defaults_button.clicked.connect(self.restore_defaults)
 
         # Save changes to a resource
         self.save_resource_button = QPushButton(self.tr('Save resource'))
@@ -249,10 +269,30 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         item.resource_full = resource
         self.resources_list.addItem(item)
 
-    def load_profiles(self):
+    def restore_defaults(self):
+        """Restore defaults profiles."""
+        title = tr('Restore defaults')
+        msg = tr(
+            'Restoring defaults will overwrite your changes on profiles '
+            'provided by InaSAFE. Do you want to continue ?')
+        # noinspection PyCallByClass
+        reply = QMessageBox.question(
+            self, title, msg, QtGui.QMessageBox.Yes, QtGui.QMessageBox.No)
+
+        if reply == QtGui.QMessageBox.Yes:
+            self.profile_combo.clear()
+            self.load_profiles(True)
+            # Next 2 lines fixes issues #1388 #1389 #1390 #1391
+            if self.profile_combo.count() > 0:
+                self.select_profile(0)
+
+    def load_profiles(self, overwrite=False):
         """Load the profiles into the dropdown list.
+
+        :param overwrite: If we overwrite existing profiles from the plugin.
+        :type overwrite: bool
         """
-        for profile in self.minimum_needs.get_profiles():
+        for profile in self.minimum_needs.get_profiles(overwrite):
             self.profile_combo.addItem(profile)
         minimum_needs = self.minimum_needs.get_full_needs()
         self.profile_combo.setCurrentIndex(
@@ -314,11 +354,20 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         parameter_widgets[7].set_value(100)
         parameter_widgets[8].set_text(tr('weekly'))
         parameter_widgets[9].set_text(tr(
-            "A displaced person should be provided with "
-            "{{ Default }} {{ Unit }}/{{ Units }}/{{ Unit abbreviation }} of "
-            "{{ Resource name }}. Though no less than {{ Minimum allowed }} "
-            "and no more than {{ Maximum allowed }}. This should be provided "
-            "{{ Frequency }}."))
+            'A displaced person should be provided with '
+            '%(default value)s %(unit)s/%(units)s/%(unit abbreviation)s of '
+            '%(resource name)s. Though no less than %(minimum allowed)s '
+            'and no more than %(maximum allowed)s. This should be provided '
+            '%(frequency)s.' % {
+                'default value': '{{ Default }}',
+                'unit': '{{ Unit }}',
+                'units': '{{ Units }}',
+                'unit abbreviation': '{{ Unit abbreviation }}',
+                'resource name': '{{ Resource name }}',
+                'minimum allowed': '{{ Minimum allowed }}',
+                'maximum allowed': '{{ Maximum allowed }}',
+                'frequency': '{{ Frequency }}'
+            }))
         self.stacked_widget.setCurrentWidget(self.resource_edit_page)
         # hide the close button
         self.button_box.button(QDialogButtonBox.Close).setHidden(True)
@@ -355,7 +404,7 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         """Set up the resource parameter for the add/edit view.
         """
         name_parameter = StringParameter('UUID-1')
-        name_parameter.name = tr('Resource name')
+        name_parameter.name = self.resource_parameters['Resource name']
         name_parameter.help_text = tr(
             'Name of the resource that will be provided '
             'as part of minimum needs. '
@@ -369,7 +418,8 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         name_parameter.value = ''
 
         description_parameter = StringParameter('UUID-2')
-        description_parameter.name = tr('Resource description')
+        description_parameter.name = self.resource_parameters[
+            'Resource description']
         description_parameter.help_text = tr(
             'Description of the resource that will be provided as part of '
             'minimum needs.')
@@ -379,7 +429,7 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         description_parameter.value = ''
 
         unit_parameter = StringParameter('UUID-3')
-        unit_parameter.name = tr('Unit')
+        unit_parameter.name = self.resource_parameters['Unit']
         unit_parameter.help_text = tr(
             'Single unit for the resources spelled out. e.g. litre, '
             'kilogram etc.')
@@ -391,7 +441,7 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         unit_parameter.value = ''
 
         units_parameter = StringParameter('UUID-4')
-        units_parameter.name = tr('Units')
+        units_parameter.name = self.resource_parameters['Units']
         units_parameter.help_text = tr(
             'Multiple units for the resources spelled out. e.g. litres, '
             'kilogram etc.')
@@ -403,7 +453,8 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         units_parameter.value = ''
 
         unit_abbreviation_parameter = StringParameter('UUID-5')
-        unit_abbreviation_parameter.name = tr('Unit abbreviation')
+        unit_abbreviation_parameter.name = \
+            self.resource_parameters['Unit abbreviation']
         unit_abbreviation_parameter.help_text = tr(
             'Abbreviations of unit for the resources. e.g. l, kg etc.')
         unit_abbreviation_parameter.description = tr(
@@ -414,7 +465,7 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         unit_abbreviation_parameter.value = ''
 
         minimum_parameter = FloatParameter('UUID-6')
-        minimum_parameter.name = tr('Minimum allowed')
+        minimum_parameter.name = self.resource_parameters['Minimum allowed']
         minimum_parameter.is_required = True
         minimum_parameter.precision = 2
         minimum_parameter.minimum_allowed_value = -99999.0
@@ -430,7 +481,7 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         minimum_parameter.value = 0.00
 
         maximum_parameter = FloatParameter('UUID-7')
-        maximum_parameter.name = tr('Maximum allowed')
+        maximum_parameter.name = self.resource_parameters['Maximum allowed']
         maximum_parameter.is_required = True
         maximum_parameter.precision = 2
         maximum_parameter.minimum_allowed_value = -99999.0
@@ -446,7 +497,7 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         maximum_parameter.value = 100.0
 
         default_parameter = FloatParameter('UUID-8')
-        default_parameter.name = tr('Default')
+        default_parameter.name = self.resource_parameters['Default']
         default_parameter.is_required = True
         default_parameter.precision = 2
         default_parameter.minimum_allowed_value = -99999.0
@@ -460,7 +511,7 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         default_parameter.value = 10.0
 
         frequency_parameter = StringParameter('UUID-9')
-        frequency_parameter.name = tr('Frequency')
+        frequency_parameter.name = self.resource_parameters['Frequency']
         frequency_parameter.help_text = tr(
             "The frequency that this resource needs to be provided to a "
             "displaced person. e.g. weekly, daily, once etc.")
@@ -471,7 +522,7 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         frequency_parameter.value = tr('weekly')
 
         sentence_parameter = TextParameter('UUID-10')
-        sentence_parameter.name = tr('Readable sentence')
+        sentence_parameter.name = self.resource_parameters['Readable sentence']
         sentence_parameter.help_text = tr(
             'A readable presentation of the resource.')
         sentence_parameter.description = tr(
@@ -482,11 +533,20 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
             "achieved by including e.g. {{ Resource name }}")
         sentence_parameter.is_required = True
         sentence_parameter.value = tr(
-            "A displaced person should be provided with "
-            "{{ Default }} {{ Unit }}/{{ Units }}/{{ Unit abbreviation }} of "
-            "{{ Resource name }}. Though no less than {{ Minimum allowed }} "
-            "and no more than {{ Maximum allowed }}. This should be provided "
-            "{{ Frequency }}.")
+            'A displaced person should be provided with '
+            '%(default value)s %(unit)s/%(units)s/%(unit abbreviation)s of '
+            '%(resource name)s. Though no less than %(minimum allowed)s '
+            'and no more than %(maximum allowed)s. This should be provided '
+            '%(frequency)s.' % {
+                'default value': '{{ Default }}',
+                'unit': '{{ Unit }}',
+                'units': '{{ Units }}',
+                'unit abbreviation': '{{ Unit abbreviation }}',
+                'resource name': '{{ Resource name }}',
+                'minimum allowed': '{{ Minimum allowed }}',
+                'maximum allowed': '{{ Maximum allowed }}',
+                'frequency': '{{ Frequency }}'
+            })
 
         parameters = [
             name_parameter,
@@ -533,9 +593,12 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
             range(self.parameters_scrollarea.layout().count())][0]
         parameters = parameters_widget.widget().get_parameters()
 
+        # To store parameters, we need the english version.
+        translated_to_english = dict(
+            (y, x) for x, y in self.resource_parameters.iteritems())
         resource = {}
         for parameter in parameters:
-            resource[parameter.name] = parameter.value
+            resource[translated_to_english[parameter.name]] = parameter.value
 
         # verify the parameters are ok - create a throw-away resource param
         try:

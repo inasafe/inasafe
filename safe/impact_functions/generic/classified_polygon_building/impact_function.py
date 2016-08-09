@@ -11,9 +11,9 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-from collections import OrderedDict
 from qgis.core import QgsField, QgsRectangle
 from PyQt4.QtCore import QVariant
+
 from safe.impact_functions.bases.classified_vh_classified_ve import \
     ClassifiedVHClassifiedVE
 from safe.storage.vector import Vector
@@ -21,20 +21,16 @@ from safe.utilities.i18n import tr
 from safe.impact_functions.generic.classified_polygon_building \
     .metadata_definitions \
     import ClassifiedPolygonHazardBuildingFunctionMetadata
-from safe.common.exceptions import InaSAFEError, KeywordNotFoundError, \
-    ZeroImpactException
-from safe.common.utilities import (
-    get_thousand_separator,
-    get_osm_building_usage,
-    color_ramp)
+from safe.common.exceptions import (
+    InaSAFEError, ZeroImpactException, KeywordNotFoundError)
+from safe.common.utilities import color_ramp
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
 from safe.engine.interpolation_qgis import interpolate_polygon_polygon
-import safe.messaging as m
-from safe.messaging import styles
 from safe.impact_functions.core import get_key_for_value
 from safe.utilities.keyword_io import definition
 from safe.utilities.unicode import get_unicode
+from safe.utilities.utilities import main_type
 
 
 class ClassifiedPolygonHazardBuildingFunction(
@@ -46,32 +42,31 @@ class ClassifiedPolygonHazardBuildingFunction(
 
     def __init__(self):
         super(ClassifiedPolygonHazardBuildingFunction, self).__init__()
+        BuildingExposureReportMixin.__init__(self)
 
         # Hazard zones are all unique values from the hazard zone attribute
         self.hazard_zones = []
         # Set the question of the IF (as the hazard data is not an event)
         self.question = tr(
             'In each of the hazard zones how many buildings might be '
-            'affected.')
-
-        # From BuildingExposureReportMixin
-        self.building_report_threshold = 25
+            'affected?')
 
     def notes(self):
-        """Return the notes section of the report.
+        """Return the notes section of the report as dict.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: safe.messaging.Message
+        :rtype: list
         """
-        message = m.Message(style_class='container')
-        message.add(m.Heading(
-            tr('Notes and assumptions'), **styles.INFO_STYLE))
-        checklist = m.BulletedList()
-        checklist.add(tr(
-            'Map shows buildings affected in each of these hazard '
-            'zones: %s') % ', '.join(self.hazard_zones))
-        message.add(checklist)
-        return message
+        fields = [
+            tr('Map shows buildings affected in each of these hazard zones: '
+               '%s') % ', '.join(self.hazard_zones)
+        ]
+
+        # include any generic exposure specific notes from definitions.py
+        fields = fields + self.exposure_notes()
+        # include any generic hazard specific notes from definitions.py
+        fields = fields + self.hazard_notes()
+        return fields
 
     def run(self):
         """Risk plugin for classified polygon hazard on building/structure.
@@ -86,13 +81,13 @@ class ClassifiedPolygonHazardBuildingFunction(
         # Value from layer's keywords
         self.hazard_class_attribute = self.hazard.keyword('field')
         self.hazard_class_mapping = self.hazard.keyword('value_map')
-        # Try to get the value from keyword, if not exist, it will not fail,
-        # but use the old get_osm_building_usage
+        self.exposure_class_attribute = self.exposure.keyword(
+            'structure_class_field')
         try:
-            self.exposure_class_attribute = self.exposure.keyword(
-                'structure_class_field')
+            exposure_value_mapping = self.exposure.keyword('value_mapping')
         except KeywordNotFoundError:
-            self.exposure_class_attribute = None
+            # Generic IF, the keyword might not be defined base.py
+            exposure_value_mapping = {}
 
         # Retrieve the classification that is used by the hazard layer.
         vector_hazard_classification = self.hazard.keyword(
@@ -101,9 +96,8 @@ class ClassifiedPolygonHazardBuildingFunction(
         vector_hazard_classification = definition(vector_hazard_classification)
         # Get the list classes in the classification
         vector_hazard_classes = vector_hazard_classification['classes']
-        # Initialize OrderedDict of affected buildings
-        self.affected_buildings = OrderedDict()
         # Iterate over vector hazard classes
+        hazard_classes = []
         for vector_hazard_class in vector_hazard_classes:
             # Check if the key of class exist in hazard_class_mapping
             if vector_hazard_class['key'] in self.hazard_class_mapping.keys():
@@ -112,7 +106,7 @@ class ClassifiedPolygonHazardBuildingFunction(
                 self.hazard_class_mapping[vector_hazard_class['name']] = \
                     self.hazard_class_mapping.pop(vector_hazard_class['key'])
                 # Adding the class name as a key in affected_building
-                self.affected_buildings[vector_hazard_class['name']] = {}
+                hazard_classes.append(vector_hazard_class['name'])
 
         hazard_zone_attribute_index = self.hazard.layer.fieldNameIndex(
             self.hazard_class_attribute)
@@ -131,7 +125,7 @@ class ClassifiedPolygonHazardBuildingFunction(
         # Values might be integer or float, we should have unicode. #2626
         self.hazard_zones = [get_unicode(val) for val in unique_values]
 
-        self.buildings = {}
+        self.init_report_var(hazard_classes)
 
         wgs84_extent = QgsRectangle(
             self.requested_extent[0], self.requested_extent[1],
@@ -145,8 +139,6 @@ class ClassifiedPolygonHazardBuildingFunction(
         interpolated_layer.dataProvider().addAttributes([new_field])
         interpolated_layer.updateFields()
 
-        attribute_names = [
-            field.name() for field in interpolated_layer.pendingFields()]
         target_field_index = interpolated_layer.fieldNameIndex(
             self.target_field)
         changed_values = {}
@@ -164,35 +156,18 @@ class ClassifiedPolygonHazardBuildingFunction(
                 hazard_value = self._not_affected_value
             changed_values[feature.id()] = {target_field_index: hazard_value}
 
-            if (self.exposure_class_attribute and
-                        self.exposure_class_attribute in attribute_names):
-                usage = feature[self.exposure_class_attribute]
-            else:
-                usage = get_osm_building_usage(attribute_names, feature)
+            usage = feature[self.exposure_class_attribute]
+            usage = main_type(usage, exposure_value_mapping)
 
-            if usage is None:
-                usage = tr('Unknown')
-            if usage not in self.buildings:
-                self.buildings[usage] = 0
-                for category in self.hazard_class_mapping.keys():
-                    self.affected_buildings[category][usage] = OrderedDict(
-                        [(tr('Buildings Affected'), 0)])
-            self.buildings[usage] += 1
+            affected = False
             if hazard_value in self.hazard_class_mapping.keys():
-                self.affected_buildings[hazard_value][usage][
-                    tr('Buildings Affected')] += 1
+                affected = True
+
+            self.classify_feature(hazard_value, usage, affected)
 
         interpolated_layer.dataProvider().changeAttributeValues(changed_values)
 
-        # Lump small entries and 'unknown' into 'other' category
-        # Building threshold #2468
-        postprocessors = self.parameters['postprocessors']
-        building_postprocessors = postprocessors['BuildingType'][0]
-        self.building_report_threshold = building_postprocessors.value[0].value
-        self._consolidate_to_other()
-
-        # Generate simple impact report
-        impact_summary = impact_table = self.html_report()
+        self.reorder_dictionaries()
 
         # Create style
         categories = self.affected_buildings.keys()
@@ -200,8 +175,7 @@ class ClassifiedPolygonHazardBuildingFunction(
         colours = color_ramp(len(categories))
         style_classes = []
 
-        i = 0
-        for hazard_zone in self.affected_buildings.keys():
+        for i, hazard_zone in enumerate(self.affected_buildings.keys()):
             style_class = dict()
             style_class['label'] = tr(hazard_zone)
             style_class['transparency'] = 0
@@ -209,7 +183,6 @@ class ClassifiedPolygonHazardBuildingFunction(
             style_class['size'] = 1
             style_class['colour'] = colours[i]
             style_classes.append(style_class)
-            i += 1
 
         # Override style info with new classes and name
         style_info = dict(
@@ -218,22 +191,14 @@ class ClassifiedPolygonHazardBuildingFunction(
             style_type='categorizedSymbol'
         )
 
-        # For printing map purpose
-        map_title = tr('Buildings affected by each hazard zone')
-        legend_title = tr('Building count')
-        legend_units = tr('(building)')
-        legend_notes = tr(
-            'Thousand separator is represented by %s' %
-            get_thousand_separator())
+        impact_data = self.generate_data()
 
         extra_keywords = {
-            'impact_summary': impact_summary,
-            'impact_table': impact_table,
             'target_field': self.target_field,
-            'map_title': map_title,
-            'legend_notes': legend_notes,
-            'legend_units': legend_units,
-            'legend_title': legend_title
+            'map_title': self.metadata().key('map_title'),
+            'legend_notes': self.metadata().key('legend_notes'),
+            'legend_units': self.metadata().key('legend_units'),
+            'legend_title': self.metadata().key('legend_title')
         }
 
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
@@ -241,9 +206,10 @@ class ClassifiedPolygonHazardBuildingFunction(
         # Create vector layer and return
         impact_layer = Vector(
             data=interpolated_layer,
-            name=tr('Buildings affected by each hazard zone'),
+            name=self.metadata().key('layer_name'),
             keywords=impact_layer_keywords,
             style_info=style_info)
 
+        impact_layer.impact_data = impact_data
         self._impact = impact_layer
         return impact_layer

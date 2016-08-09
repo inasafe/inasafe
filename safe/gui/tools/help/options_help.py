@@ -57,7 +57,7 @@ def content():
     message = m.Message()
     message.add(tr(
         'The InaSAFE options dialog is used to control various aspects of '
-        'InaSAFE analysis and reporting environment. Here are brief '
+        'the InaSAFE analysis and reporting environment. Here are brief '
         'descriptions of all the options available, grouped by the tab '
         'page on which they occur.'
     ))

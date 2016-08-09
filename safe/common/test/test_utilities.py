@@ -22,6 +22,9 @@ import unittest
 import os
 import numpy
 
+from qgis.core import QgsCoordinateReferenceSystem
+
+from safe.test.utilities import get_qgis_app
 from safe.common.utilities import (
     get_significant_decimal,
     humanize_class,
@@ -39,6 +42,8 @@ from safe.common.utilities import (
     humanize_file_size,
     add_to_list,
     color_ramp)
+
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 def print_class(array, result_class, expected_result):
@@ -80,7 +85,7 @@ class TestUtilities(unittest.TestCase):
             ('2.3', '3.4'),
             ('3.4', '4.5')
         ]
-        print_class(array, result_class, expected_class)
+        # print_class(array, result_class, expected_class)
         self.assertEqual(result_class, expected_class)
 
     def test_humanize_class2(self):
@@ -93,7 +98,7 @@ class TestUtilities(unittest.TestCase):
         my_expected_class = [('0', '1'),
                              ('1', '5,754'),
                              ('5,754', '11,507')]
-        print_class(my_array, my_result_class, my_expected_class)
+        # print_class(my_array, my_result_class, my_expected_class)
         my_msg = 'got: ' + str(my_result_class)
         my_msg += ' expect: ' + str(my_expected_class)
         assert my_result_class == my_expected_class, my_msg
@@ -110,7 +115,7 @@ class TestUtilities(unittest.TestCase):
                              ('0.5', '0.9')]
         my_msg = 'got: ' + str(my_result_class)
         my_msg += ' expect: ' + str(my_expected_class)
-        print_class(my_array, my_result_class, my_expected_class)
+        # print_class(my_array, my_result_class, my_expected_class)
         assert my_result_class == my_expected_class, my_msg
 
     def test_humanize_class4(self):
@@ -125,7 +130,7 @@ class TestUtilities(unittest.TestCase):
                              ('7.5', '7.9')]
         my_msg = 'got: ' + str(my_result_class)
         my_msg += ' expect: ' + str(my_expected_class)
-        print_class(my_array, my_result_class, my_expected_class)
+        # print_class(my_array, my_result_class, my_expected_class)
         assert my_result_class == my_expected_class, my_msg
 
     def test_humanize_class5(self):
@@ -140,7 +145,7 @@ class TestUtilities(unittest.TestCase):
                              ('7', '8'),
                              ('8', '9'),
                              ('9', '11')]
-        print_class(my_array, my_result_class, my_expected_class)
+        # print_class(my_array, my_result_class, my_expected_class)
         my_msg = 'got: ' + str(my_result_class)
         my_msg += ' expect: ' + str(my_expected_class)
         assert my_result_class == my_expected_class, my_msg
@@ -157,7 +162,7 @@ class TestUtilities(unittest.TestCase):
                              ('7', '8'),
                              ('8', '9'),
                              ('9', '11')]
-        print_class(my_array, my_result_class, my_expected_class)
+        # print_class(my_array, my_result_class, my_expected_class)
         my_msg = 'got: ' + str(my_result_class)
         my_msg += ' expect: ' + str(my_expected_class)
         assert my_result_class == my_expected_class, my_msg
@@ -182,22 +187,22 @@ class TestUtilities(unittest.TestCase):
         interval = 0.9912
         my_number = 10
         my_result = format_decimal(interval, my_number)
-        print my_result
+        # print my_result
         assert my_result == '10', 'Format decimal is not valid %s' % my_result
         my_number = 10.0121034435
         my_result = format_decimal(interval, my_number)
-        print my_result
+        # print my_result
         assert my_result == '10.012', \
             'Format decimal is not valid %s' % my_result
         my_number = float('nan')
         my_result = format_decimal(interval, my_number)
-        print my_result
+        # print my_result
         assert my_result == 'nan', \
             'Format decimal is not valid %s' % my_result
 
         my_number = float('10000.09')
         my_result = format_decimal(interval, my_number)
-        print my_result
+        # print my_result
         assert my_result == '10,000.09', \
             'Format decimal is not valid %s' % my_result
 
@@ -288,14 +293,18 @@ class TestUtilities(unittest.TestCase):
 
     def test_get_utm_epsg(self):
         """Test we can get correct epsg code"""
-        # North semisphere
+        # North semisphere in geographic coordinates:
         self.assertEqual(get_utm_epsg(-178, 10), 32601)
         self.assertEqual(get_utm_epsg(178, 20), 32660)
         self.assertEqual(get_utm_epsg(-3, 30), 32630)
-        # South semisphere:
+        # South semisphere in geographic coordinates:
         self.assertEqual(get_utm_epsg(-178, -10), 32701)
         self.assertEqual(get_utm_epsg(178, -20), 32760)
         self.assertEqual(get_utm_epsg(-3, -30), 32730)
+
+        # North semisphere not in geographic coordinates:
+        epsg = QgsCoordinateReferenceSystem('EPSG:2154')
+        self.assertEqual(get_utm_epsg(573593, 6330659, epsg), 32631)
 
     def test_get_non_conflicting_attribute_name(self):
         """Test we can get a non conflicting attribute name."""
@@ -359,7 +368,17 @@ class TestUtilities(unittest.TestCase):
         self.assertEqual(colors, expected_colors)
 
         number_of_colours = 2
-        expected_colors = ['#ff0000', '#00ffff']
+        expected_colors = ['#ff0000', '#00ff00']
+        colors = color_ramp(number_of_colours)
+        self.assertEqual(colors, expected_colors)
+
+        number_of_colours = 3
+        expected_colors = ['#ff0000', '#feff00', '#00ff00']
+        colors = color_ramp(number_of_colours)
+        self.assertEqual(colors, expected_colors)
+
+        number_of_colours = 4
+        expected_colors = ['#ff0000', '#ffaa00', '#a9ff00', '#00ff00']
         colors = color_ramp(number_of_colours)
         self.assertEqual(colors, expected_colors)
 

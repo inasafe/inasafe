@@ -10,7 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.common.utilities import OrderedDict
+from safe.common.utilities import OrderedDict, get_thousand_separator
 from safe.definitions import (
     layer_mode_classified,
     layer_mode_continuous,
@@ -54,6 +54,7 @@ class ClassifiedPolygonHazardPopulationFunctionMetadata(
             concrete impact function.
         :rtype: dict
         """
+        title = tr('People affected')
         dict_meta = {
             'id': 'ClassifiedPolygonHazardPopulationFunction',
             'name': tr('Classified polygon hazard on population'),
@@ -76,7 +77,19 @@ class ClassifiedPolygonHazardPopulationFunctionMetadata(
                 'Provide details about the number of people that are '
                 'within each hazard zone.'),
             'limitations': [],
-            'citations': [],
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ],
+            'map_title': title,
+            'layer_name': title,
+            'legend_title': tr('Population'),
+            'legend_units': tr('(people per cell)'),
+            'legend_notes': tr(
+                'Thousand separator is represented by  %s' %
+                get_thousand_separator()),
             'overview': tr(
                 'To assess the number of people that may be impacted by '
                 'each hazard zone.'),

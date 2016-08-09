@@ -10,9 +10,9 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
-__author__ = 'Christian Christelis <christian@kartoza.com>'
+from safe.utilities.i18n import tr
 
-import safe.messaging as m
+__author__ = 'Christian Christelis <christian@kartoza.com>'
 
 
 class ReportMixin(object):
@@ -20,47 +20,70 @@ class ReportMixin(object):
 
     .. versionadded:: 3.1
     """
-
-    def html_report(self):
-        """Generate an HTML report.
-
-        :returns: The report in html format.
-        :rtype: basestring
-        """
-        return self.generate_report().to_html(suppress_newlines=True)
-
-    def generate_report(self):
-        """Defining the interface.
-
-        :returns: An itemized breakdown of the report.
-        :rtype: safe.messaging.Message
-        """
-        return m.Message()
-
-    def action_checklist(self):
-        """The actions to be taken in for the impact on this exposure type.
-
-        :returns: The action checklist.
-        :rtype: safe.messaging.Message
-        """
-        return m.Message()
-
-    def impact_summary(self):
-        """The impact summary.
-
-        :returns: The action checklist.
-        :rtype: safe.messaging.Message
-        """
-        return m.Message()
+    def __init__(self):
+        super(ReportMixin, self).__init__()
+        self.exposure_report = None
 
     def notes(self):
-        """Additional notes to be used.
+        """Return the notes section of the report.
 
-        :return: The notes to be added to this report
-        :rtype: safe.messaging.Message
+        Sub classes should implement this.
 
-        ..Notes:
-        Notes are very much specific to IFs so it is expected that this method
-        is overwritten in the IF if needed.
+        :return: The notes that should be attached to this impact report.
+        :rtype: dict
         """
-        return m.Message()
+        return []
+
+    def action_checklist(self):
+        """Return the action checklist section of the report.
+
+        .. note:: This is also implemented in the ImpactFunction base class
+            - I think its a bit ugly to have it here too ... TS
+
+        Sub classes should implement this.
+
+        :return: The actions that should be attached to this impact report.
+        :rtype: dict
+        """
+        return []
+
+    def extra_actions(self):
+        """Provide exposure specific actions.
+
+        .. note:: Only calculated actions are implemented here, the rest
+            are defined in definitions.py.
+
+        .. versionadded:: 3.5
+
+        Sub classes should implement this.
+
+        :return: The action check list as list.
+        :rtype: list
+        """
+        return []
+
+    def impact_summary(self):
+        """Create impact summary as data."""
+        raise NotImplementedError
+
+    def generate_data(self):
+        """Create a dictionary contains impact data.
+
+        :returns: The impact report data.
+        :rtype: dict
+        """
+        actions = {
+            'title': tr('Action checklist'),
+            'fields': self.action_checklist()
+        }
+        notes = {
+            'title': tr('Notes and assumptions'),
+            'fields': self.notes()
+        }
+        return {
+            'exposure': self.exposure_report,
+            'question': self.question,  # The question is defined in the IF.
+            'impact summary': self.impact_summary(),
+            'action check list': actions,
+            'notes': notes
+        }

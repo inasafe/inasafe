@@ -479,12 +479,13 @@
     },
     {
       "data": {
-        "analysis_extent": [
+        "actual_extent": [
           0,
           1,
           2,
           2
         ],
+        "actual_extent_crs": "EPSG: 4326",
         "exposure_layer": "path/to/exposure/layer",
         "exposure_pixel_size": "0.1",
         "finish_time": "20140714_061255",
@@ -501,6 +502,13 @@
         "pyqt_version": "5.1",
         "qgis_version": "2.4",
         "qt_version": "4.5",
+        "requested_extent": [
+          0,
+          1,
+          2,
+          2
+        ],
+        "requested_extent_crs": "EPSG: 4326",
         "start_time": "20140714_060955",
         "user": "my_user"
       },

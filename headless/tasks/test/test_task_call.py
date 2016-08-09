@@ -80,7 +80,10 @@ class TestTaskCall(unittest.TestCase):
         self.assertEqual(len(ifs), 1)
 
         actual_id = ifs[0]
-        expected_id = 'FloodEvacuationRasterHazardFunction'
+        expected_id = {
+            'id': 'FloodEvacuationRasterHazardFunction',
+            'name': u'Raster flood on population'
+        }
 
         self.assertEqual(actual_id, expected_id)
 

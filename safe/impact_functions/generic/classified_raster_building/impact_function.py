@@ -15,22 +15,22 @@ __author__ = 'lucernae'
 __date__ = '23/03/15'
 
 import logging
-from collections import OrderedDict
 from numpy import round as numpy_round
+from collections import OrderedDict
 
 from safe.impact_functions.bases.classified_rh_classified_ve import \
     ClassifiedRHClassifiedVE
 from safe.storage.vector import Vector
+from safe.common.exceptions import KeywordNotFoundError
+from safe.common.utilities import get_non_conflicting_attribute_name
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.utilities.i18n import tr
-from safe.common.utilities import get_osm_building_usage
+from safe.utilities.utilities import main_type
 from safe.impact_functions.generic.classified_raster_building\
     .metadata_definitions import ClassifiedRasterHazardBuildingMetadata
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
-from safe.common.exceptions import KeywordNotFoundError
-import safe.messaging as m
-from safe.messaging import styles
+from safe.definitions import generic_raster_hazard_classes
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -44,178 +44,163 @@ class ClassifiedRasterHazardBuildingFunction(
 
     def __init__(self):
         super(ClassifiedRasterHazardBuildingFunction, self).__init__()
+        BuildingExposureReportMixin.__init__(self)
         self.affected_field = 'affected'
-
-        # From BuildingExposureReportMixin
-        self.building_report_threshold = 25
+        self.target_field = 'hazard'
 
     def notes(self):
-        """Return the notes section of the report.
+        """Return the notes section of the report as dict.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: safe.messaging.Message
+        :rtype: list
         """
-        message = m.Message()
-        message.add(m.Heading(
-            tr('Notes and assumptions'), **styles.INFO_STYLE))
-        message.add(tr(
-            'Map shows buildings affected in low, medium and '
-            'high hazard class areas.'))
-        return message
+        fields = [
+            tr('Map shows buildings affected in low, medium and high hazard '
+               'zones.')
+        ]
+        # include any generic exposure specific notes from definitions.py
+        fields = fields + self.exposure_notes()
+        # include any generic hazard specific notes from definitions.py
+        fields = fields + self.hazard_notes()
+        return fields
 
     def run(self):
         """Classified hazard impact to buildings (e.g. from Open Street Map).
         """
 
         # Value from layer's keywords
-        # Try to get the value from keyword, if not exist, it will not fail,
-        # but use the old get_osm_building_usage
+        structure_class_field = self.exposure.keyword('structure_class_field')
         try:
-            structure_class_field = self.exposure.keyword(
-                'structure_class_field')
+            exposure_value_mapping = self.exposure.keyword('value_mapping')
         except KeywordNotFoundError:
-            structure_class_field = None
+            # Generic IF, the keyword might not be defined base.py
+            exposure_value_mapping = {}
+        self.hazard_class_mapping = self.hazard.keyword('value_map')
 
-        # The 3 classes
-        categorical_hazards = self.parameters['Categorical hazards'].value
-        low_t = categorical_hazards[0].value
-        medium_t = categorical_hazards[1].value
-        high_t = categorical_hazards[2].value
+        keys = [x['key'] for x in generic_raster_hazard_classes['classes']]
+        names = [x['name'] for x in generic_raster_hazard_classes['classes']]
+        classes = OrderedDict()
+        for i in range(len(keys)):
+            classes[keys[i]] = names[i]
 
-        # Determine attribute name for hazard levels
-        if self.hazard.layer.is_raster:
-            hazard_attribute = 'level'
-        else:
-            hazard_attribute = None
+        # Determine attribute name for hazard class
+        hazard_class_attribute = get_non_conflicting_attribute_name(
+            'haz_class',
+            [x.keys() for x in self.exposure.layer.data][0]
+        )
 
         interpolated_result = assign_hazard_values_to_exposure_data(
             self.hazard.layer,
             self.exposure.layer,
-            attribute_name=hazard_attribute,
+            attribute_name=hazard_class_attribute,
             mode='constant')
 
         # Extract relevant exposure data
-        attribute_names = interpolated_result.get_attribute_names()
         attributes = interpolated_result.get_data()
 
+        # Number of building in the interpolated layer
         buildings_total = len(interpolated_result)
-        # Calculate building impact
-        self.buildings = {}
-        self.affected_buildings = OrderedDict([
-            (tr('High Hazard Class'), {}),
-            (tr('Medium Hazard Class'), {}),
-            (tr('Low Hazard Class'), {})
-        ])
+
+        # Inverse the order from low to high
+        self.init_report_var(classes.values()[::-1])
+
         for i in range(buildings_total):
+            # Get the usage of the building
+            usage = attributes[i][structure_class_field]
+            usage = main_type(usage, exposure_value_mapping)
 
-            if (structure_class_field and
-                    structure_class_field in attribute_names):
-                usage = attributes[i][structure_class_field]
-            else:
-                usage = get_osm_building_usage(attribute_names, attributes[i])
-
-            if usage is None or usage == 0:
-                usage = 'unknown'
-
-            if usage not in self.buildings:
-                self.buildings[usage] = 0
-                for category in self.affected_buildings.keys():
-                    self.affected_buildings[category][usage] = OrderedDict([
-                        (tr('Buildings Affected'), 0)])
-
-            # Count all buildings by type
-            self.buildings[usage] += 1
-            attributes[i][self.target_field] = 0
+            # Initialize value as Not affected
+            attributes[i][self.target_field] = tr('Not affected')
             attributes[i][self.affected_field] = 0
-            level = float(attributes[i]['level'])
+
+            # Get the hazard level of the building
+            level = float(attributes[i][hazard_class_attribute])
             level = float(numpy_round(level))
-            if level == high_t:
-                impact_level = tr('High Hazard Class')
-            elif level == medium_t:
-                impact_level = tr('Medium Hazard Class')
-            elif level == low_t:
-                impact_level = tr('Low Hazard Class')
-            else:
-                continue
 
-            # Add calculated impact to existing attributes
-            attributes[i][self.target_field] = {
-                tr('High Hazard Class'): 3,
-                tr('Medium Hazard Class'): 2,
-                tr('Low Hazard Class'): 1
-            }[impact_level]
-            attributes[i][self.affected_field] = 1
+            # Find the class according the building's level
+            for k, v in self.hazard_class_mapping.items():
+                if level in v:
+                    impact_class = classes[k]
+                    # Set the impact level
+                    attributes[i][self.target_field] = impact_class
+                    # Set to affected
+                    attributes[i][self.affected_field] = 1
+                    break
+
             # Count affected buildings by type
-            self.affected_buildings[impact_level][usage][
-                tr('Buildings Affected')] += 1
+            self.classify_feature(
+                attributes[i][self.target_field],
+                usage,
+                bool(attributes[i][self.affected_field])
+            )
 
-        # Consolidate the small building usage groups < 25 to other
-        # Building threshold #2468
-        postprocessors = self.parameters['postprocessors']
-        building_postprocessors = postprocessors['BuildingType'][0]
-        self.building_report_threshold = building_postprocessors.value[0].value
-        self._consolidate_to_other()
+        self.reorder_dictionaries()
 
         # Create style
-        style_classes = [dict(label=tr('High'),
-                              value=3,
-                              colour='#F31A1C',
-                              transparency=0,
-                              size=2,
-                              border_color='#969696',
-                              border_width=0.2),
-                         dict(label=tr('Medium'),
-                              value=2,
-                              colour='#F4A442',
-                              transparency=0,
-                              size=2,
-                              border_color='#969696',
-                              border_width=0.2),
-                         dict(label=tr('Low'),
-                              value=1,
-                              colour='#EBF442',
-                              transparency=0,
-                              size=2,
-                              border_color='#969696',
-                              border_width=0.2),
-                         dict(label=tr('Not Affected'),
-                              value=None,
-                              colour='#1EFC7C',
-                              transparency=0,
-                              size=2,
-                              border_color='#969696',
-                              border_width=0.2)]
-        style_info = dict(target_field=self.target_field,
-                          style_classes=style_classes,
-                          style_type='categorizedSymbol')
+        # Low, Medium and High are translated in the attribute table.
+        # "Not affected" is not translated in the attribute table.
+        style_classes = [
+            dict(
+                label=tr('Not Affected'),
+                value='Not affected',
+                colour='#1EFC7C',
+                transparency=0,
+                size=2,
+                border_color='#969696',
+                border_width=0.2),
+            dict(
+                label=tr('Low'),
+                value=tr('Low hazard zone'),
+                colour='#EBF442',
+                transparency=0,
+                size=2,
+                border_color='#969696',
+                border_width=0.2),
+            dict(
+                label=tr('Medium'),
+                value=tr('Medium hazard zone'),
+                colour='#F4A442',
+                transparency=0,
+                size=2,
+                border_color='#969696',
+                border_width=0.2),
+            dict(
+                label=tr('High'),
+                value=tr('High hazard zone'),
+                colour='#F31A1C',
+                transparency=0,
+                size=2,
+                border_color='#969696',
+                border_width=0.2),
+        ]
+        style_info = dict(
+            target_field=self.target_field,
+            style_classes=style_classes,
+            style_type='categorizedSymbol')
+        LOGGER.debug('target field : ' + self.target_field)
 
-        impact_table = impact_summary = self.html_report()
-
-        # For printing map purpose
-        map_title = tr('Buildings affected')
-        legend_title = tr('Structure inundated status')
-        legend_units = tr('(Low, Medium, High)')
+        impact_data = self.generate_data()
 
         extra_keywords = {
-            'impact_summary': impact_summary,
-            'impact_table': impact_table,
             'target_field': self.affected_field,
-            'map_title': map_title,
-            'legend_units': legend_units,
-            'legend_title': legend_title,
+            'map_title': self.metadata().key('map_title'),
+            'legend_units': self.metadata().key('legend_units'),
+            'legend_title': self.metadata().key('legend_title'),
             'buildings_total': buildings_total,
             'buildings_affected': self.total_affected_buildings
         }
 
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 
-        # Create vector layer and return
-        vector_layer = Vector(
+        # Create impact layer and return
+        impact_layer = Vector(
             data=attributes,
             projection=self.exposure.layer.get_projection(),
             geometry=self.exposure.layer.get_geometry(),
-            name=tr('Estimated buildings affected'),
+            name=self.metadata().key('layer_name'),
             keywords=impact_layer_keywords,
             style_info=style_info)
-        self._impact = vector_layer
-        return vector_layer
+
+        impact_layer.impact_data = impact_data
+        self._impact = impact_layer
+        return impact_layer

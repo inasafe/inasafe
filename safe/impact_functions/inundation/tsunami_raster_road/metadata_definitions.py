@@ -20,7 +20,7 @@ from safe.common.utilities import OrderedDict
 from safe.defaults import road_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
-from safe.impact_functions.inundation.tsunami_raster_road \
+from safe.impact_functions.inundation.tsunami_raster_building \
     .parameter_definitions import (
         low_threshold,
         medium_threshold,
@@ -38,7 +38,7 @@ from safe.definitions import (
     unit_metres,
     unit_feet,
     hazard_tsunami,
-    structure_class_field
+    road_class_field
 )
 
 
@@ -62,6 +62,7 @@ class TsunamiRasterRoadMetadata(ImpactFunctionMetadata):
             concrete impact function.
         :rtype: dict
         """
+        title = tr('Roads affected by tsunami')
         dict_meta = {
             'id': 'TsunamiRasterRoadFunction',
             'name': tr('Raster tsunami on roads'),
@@ -90,7 +91,17 @@ class TsunamiRasterRoadMetadata(ImpactFunctionMetadata):
                 'Provide details about where critical road '
                 'might be inundated.'),
             'limitations': [],
-            'citations': [],
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ],
+            'legend_units': '',
+            'legend_notes': '',
+            'map_title': title,
+            'layer_name': title,
+            'legend_title': tr('Road inundated status'),
             'layer_requirements': {
                 'hazard': {
                     'layer_mode': layer_mode_continuous,
@@ -110,7 +121,7 @@ class TsunamiRasterRoadMetadata(ImpactFunctionMetadata):
                     'layer_geometries': [layer_geometry_line],
                     'exposure_types': [exposure_road],
                     'exposure_units': [],
-                    'exposure_class_fields': [structure_class_field],
+                    'exposure_class_fields': [road_class_field],
                     'additional_keywords': []
                 }
             },

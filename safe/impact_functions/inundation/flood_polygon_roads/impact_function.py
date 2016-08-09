@@ -11,7 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 import logging
-from collections import OrderedDict
 
 from qgis.core import (
     QgsRectangle,
@@ -28,14 +27,13 @@ from safe.impact_functions.inundation. \
     FloodPolygonRoadsMetadata
 from safe.common.exceptions import ZeroImpactException
 from safe.utilities.i18n import tr
+from safe.utilities.utilities import main_type
 from safe.storage.vector import Vector
 from safe.common.utilities import get_utm_epsg
 from safe.common.exceptions import GetDataError
 from safe.gis.qgis_vector_tools import split_by_polygon, clip_by_polygon
 from safe.impact_reports.road_exposure_report_mixin import\
     RoadExposureReportMixin
-import safe.messaging as m
-from safe.messaging import styles
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -57,34 +55,24 @@ class FloodPolygonRoadsFunction(
     def notes(self):
         """Return the notes section of the report.
 
-        .. versionadded:: 3.2.1
-
         :return: The notes that should be attached to this impact report.
-        :rtype: safe.messaging.Message
+        :rtype: list
         """
-
         hazard_terminology = tr('inundated')
         flood_value = [unicode(hazard_class)
                        for hazard_class in self.hazard_class_mapping[self.wet]]
-
-        message = m.Message(style_class='container')
-        message.add(
-            m.Heading(tr('Notes and assumptions'), **styles.INFO_STYLE))
-
-        checklist = m.BulletedList()
-        checklist.add(tr(
-            'Roads are said to be %s when in a region with field "%s" in '
-            '"%s" .' % (
+        fields = [
+            tr('Roads are said to be %s when in a region with field "%s" in '
+               '"%s".') % (
                 hazard_terminology,
                 self.hazard_class_attribute,
-                ', '.join(flood_value))))
-        checklist.add(tr(
-            'Roads are closed if they are %s.' % hazard_terminology))
-        checklist.add(tr(
-            'Roads are open if they are not %s.' % hazard_terminology))
-
-        message.add(checklist)
-        return message
+                ', '.join(flood_value)),
+        ]
+        # include any generic exposure specific notes from definitions.py
+        fields = fields + self.exposure_notes()
+        # include any generic hazard specific notes from definitions.py
+        fields = fields + self.hazard_notes()
+        return fields
 
     def run(self):
         """Experimental impact function for flood polygons on roads."""
@@ -92,8 +80,14 @@ class FloodPolygonRoadsFunction(
         # Get parameters from layer's keywords
         self.hazard_class_attribute = self.hazard.keyword('field')
         self.hazard_class_mapping = self.hazard.keyword('value_map')
+        # There is no wet in the class mapping
+        if self.wet not in self.hazard_class_mapping:
+            raise ZeroImpactException(tr(
+                'There is no flooded area in the hazard layers, thus there '
+                'is no affected road.'))
         self.exposure_class_attribute = self.exposure.keyword(
             'road_class_field')
+        exposure_value_mapping = self.exposure.keyword('value_mapping')
 
         hazard_provider = self.hazard.layer.dataProvider()
         affected_field_index = hazard_provider.fieldNameIndex(
@@ -191,35 +185,27 @@ class FloodPolygonRoadsFunction(
         road_type_field_index = line_layer.fieldNameIndex(
             self.exposure_class_attribute)
         target_field_index = line_layer.fieldNameIndex(self.target_field)
-        flooded_keyword = tr('Temporarily closed (m)')
-        self.affected_road_categories = [flooded_keyword]
-        self.affected_road_lengths = OrderedDict([
-            (flooded_keyword, {})])
-        self.road_lengths = OrderedDict()
+
+        classes = [tr('Temporarily closed')]
+        self.init_report_var(classes)
 
         for road in roads_data:
             attributes = road.attributes()
-            road_type = attributes[road_type_field_index]
-            if road_type.__class__.__name__ == 'QPyNullVariant':
-                road_type = tr('Other')
+
+            usage = attributes[road_type_field_index]
+            usage = main_type(usage, exposure_value_mapping)
+
             geom = road.geometry()
             geom.transform(transform)
             length = geom.length()
 
-            if road_type not in self.road_lengths:
-                self.affected_road_lengths[flooded_keyword][road_type] = 0
-                self.road_lengths[road_type] = 0
-
-            self.road_lengths[road_type] += length
+            affected = False
             if attributes[target_field_index] == 1:
-                self.affected_road_lengths[
-                    flooded_keyword][road_type] += length
+                affected = True
 
-        impact_summary = self.html_report()
+            self.classify_feature(classes[0], usage, length, affected)
 
-        # For printing map purpose
-        map_title = tr('Roads inundated')
-        legend_title = tr('Road inundated status')
+        self.reorder_dictionaries()
 
         style_classes = [dict(label=tr('Not Inundated'), value=0,
                               colour='#1EFC7C', transparency=0, size=0.5),
@@ -236,22 +222,23 @@ class FloodPolygonRoadsFunction(
             raise ZeroImpactException(
                 tr('No roads are flooded in this scenario.'))
 
+        impact_data = self.generate_data()
+
         extra_keywords = {
-            'impact_summary': impact_summary,
-            'map_title': map_title,
-            'legend_title': legend_title,
+            'map_title': self.map_title(),
+            'legend_title': self.metadata().key('legend_title'),
             'target_field': self.target_field
         }
 
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 
-        line_layer = Vector(
+        impact_layer = Vector(
             data=line_layer,
-            name=tr('Flooded roads'),
+            name=self.metadata().key('layer_name'),
             keywords=impact_layer_keywords,
             style_info=style_info
         )
 
-        self._impact = line_layer
-
-        return line_layer
+        impact_layer.impact_data = impact_data
+        self._impact = impact_layer
+        return impact_layer

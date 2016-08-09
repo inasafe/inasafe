@@ -13,7 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 __author__ = 'Rizky Maulana Nugraha'
 
-from safe.common.utilities import OrderedDict
+from safe.common.utilities import OrderedDict, get_thousand_separator
 from safe.defaults import (
     default_minimum_needs,
     default_gender_postprocessor,
@@ -58,6 +58,7 @@ class FloodEvacuationVectorHazardMetadata(ImpactFunctionMetadata):
             concrete impact function.
         :rtype: dict
         """
+        title = tr('People affected by flood')
         dict_meta = {
             'id': 'FloodEvacuationVectorHazardFunction',
             'name': tr('Polygon flood on people'),
@@ -92,7 +93,19 @@ class FloodEvacuationVectorHazardMetadata(ImpactFunctionMetadata):
                 'to be evacuated, where they are located and what '
                 'resources would be required to support them.'),
             'limitations': [],
-            'citations': [],
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ],
+            'map_title': title,
+            'layer_name': title,
+            'legend_title': tr('Population Count'),
+            'legend_units': tr('(people per polygon)'),
+            'legend_notes': tr(
+                'Thousand separator is represented by %s' %
+                get_thousand_separator()),
             'layer_requirements': {
                 'hazard': {
                     'layer_mode': layer_mode_classified,

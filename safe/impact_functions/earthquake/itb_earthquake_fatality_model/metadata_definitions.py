@@ -10,7 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.common.utilities import OrderedDict
+from safe.common.utilities import OrderedDict, get_thousand_separator
 from safe.defaults import default_minimum_needs
 from safe.defaults import (
     default_gender_postprocessor,
@@ -57,6 +57,7 @@ class ITBFatalityMetadata(ImpactFunctionMetadata):
             concrete impact function.
         :rtype: dict
         """
+        title = tr('People affected by earthquake')
         dict_meta = {
             'id': 'ITBFatalityFunction',
             'name': tr('Earthquake ITB fatality function'),
@@ -66,8 +67,10 @@ class ITBFatalityMetadata(ImpactFunctionMetadata):
             'author': 'Hadi Ghasemi',
             'date_implemented': 'N/A',
             'overview': tr(
-                'To assess the impact of earthquake on population based '
-                'on the earthquake model for Indonesia developed by ITB.'),
+                'Estimates the number of fatalities resulting from an '
+                'earthquake. Uses data from an Indonesian database of '
+                'earthquake events to calculate fatality rates. Based on the '
+                'earthquake model for Indonesia developed by ITB.'),
             'detailed_description': tr(
                 'This model was developed by Institut Teknologi Bandung '
                 '(ITB) and implemented by Dr. Hadi Ghasemi, Geoscience '
@@ -88,7 +91,7 @@ class ITBFatalityMetadata(ImpactFunctionMetadata):
             'output': '',
             'actions': tr(
                 'Provide details about the population including '
-                'estimates for mortalities and displaced persons.'),
+                'estimates for mortalities.'),
             'limitations': [
                 tr('The model is based on a limited number of observed '
                    'fatality rates during four previous fatal events.'),
@@ -105,18 +108,37 @@ class ITBFatalityMetadata(ImpactFunctionMetadata):
                    '  use by BMKG.\n')
             ],
             'citations': [
-                tr('Indonesian Earthquake Building-Damage and Fatality '
-                   'Models and Post Disaster Survey Guidelines '
-                   'Development Bali, 27-28 February 2012, 54pp.'),
-                tr('Allen, T. I., Wald, D. J., Earle, P. S., Marano, K. '
-                   'D., Hotovec, A. J., Lin, K., and Hearne, M., 2009. An '
-                   'Atlas of ShakeMaps and population exposure catalog '
-                   'for earthquake loss modeling, Bull. Earthq. Eng. 7, '
-                   '701-718.'),
-                tr('Jaiswal, K., and Wald, D., 2010. An empirical model '
-                   'for global earthquake fatality estimation, Earthq. '
-                   'Spectra 26, 1017-1037.')
+                {
+                    'text': tr(
+                        'Indonesian Earthquake Building-Damage and Fatality '
+                        'Models and Post Disaster Survey Guidelines '
+                        'Development Bali, 27-28 February 2012, 54pp.'),
+                    'link': None
+                },
+                {
+                    'text': tr(
+                        'Allen, T. I., Wald, D. J., Earle, P. S., Marano, K. '
+                        'D., Hotovec, A. J., Lin, K., and Hearne, M., 2009. '
+                        'An Atlas of ShakeMaps and population exposure '
+                        'catalog for earthquake loss modeling, Bull. Earthq. '
+                        'Eng. 7, 701-718.'),
+                    'link': None
+                },
+                {
+                    'text': tr(
+                        'Jaiswal, K., and Wald, D., 2010. An empirical model '
+                        'for global earthquake fatality estimation, Earthq. '
+                        'Spectra 26, 1017-1037.'),
+                    'link': None
+                }
             ],
+            'map_title': title,
+            'layer_name': title,
+            'legend_title': tr('Population Count'),
+            'legend_units': tr('(people per cell)'),
+            'legend_notes': tr(
+                'Thousand separator is represented by %s' %
+                get_thousand_separator()),
             'layer_requirements': {
                 'hazard': {
                     'layer_mode': layer_mode_continuous,

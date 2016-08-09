@@ -11,13 +11,14 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import logging
-from safe.postprocessors.abstract_postprocessor import AbstractPostprocessor
+from safe.postprocessors.abstract_population_postprocessor import \
+    AbstractPopulationPostprocessor
 from safe.utilities.i18n import tr
 
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class GenderPostprocessor(AbstractPostprocessor):
+class GenderPostprocessor(AbstractPopulationPostprocessor):
     """
     Postprocessor that calculates gender related statistics.
 
@@ -27,21 +28,16 @@ class GenderPostprocessor(AbstractPostprocessor):
     """
 
     def __init__(self):
-        AbstractPostprocessor.__init__(self)
+        AbstractPopulationPostprocessor.__init__(self)
         self.impact_total = None
         self.female_ratio = None
-
-    def description(self):
-        """Describe briefly what the post processor does.
-
-        """
-        return tr('Calculates gender related statistics.')
+        self._description = tr('Calculates gender related statistics.')
 
     def setup(self, params):
         """Initialise parameters.
 
         """
-        AbstractPostprocessor.setup(self, None)
+        AbstractPopulationPostprocessor.setup(self, None)
         if self.impact_total is not None or self.female_ratio is not None:
             self._raise_error('clear needs to be called before setup')
         self.impact_total = params['impact_total']
@@ -55,7 +51,7 @@ class GenderPostprocessor(AbstractPostprocessor):
         """Setup parameters parameters and performs all the calculations.
 
         """
-        AbstractPostprocessor.process(self)
+        AbstractPopulationPostprocessor.process(self)
         if self.impact_total is None or self.female_ratio is None:
             self._log_message(
                 '%s not all params have been correctly '
@@ -72,7 +68,7 @@ class GenderPostprocessor(AbstractPostprocessor):
         """Clear the parameters.
 
         """
-        AbstractPostprocessor.clear(self)
+        AbstractPopulationPostprocessor.clear(self)
         self.impact_total = None
         self.female_ratio = None
 
@@ -82,12 +78,15 @@ class GenderPostprocessor(AbstractPostprocessor):
         This indicator reports the total population.
         """
         name = tr('Total')
-        # LOGGER.info(self.impact_total)
-        try:
-            result = self.impact_total
-            result = int(round(result))
-        except ValueError:
+        LOGGER.info(self.impact_total)
+        if not self.impact_total:
             result = self.NO_DATA_TEXT
+        else:
+            try:
+                result = self.impact_total
+                result = int(round(result))
+            except ValueError:
+                result = self.NO_DATA_TEXT
         self._append_result(name, result)
 
     def _calculate_females(self):
@@ -98,11 +97,14 @@ class GenderPostprocessor(AbstractPostprocessor):
 
         """
         name = tr('Female count (affected)')
-        result = self.impact_total * self.female_ratio
-        try:
-            result = int(round(result))
-        except ValueError:
+        if not self.impact_total:
             result = self.NO_DATA_TEXT
+        else:
+            result = self.impact_total * self.female_ratio
+            try:
+                result = int(round(result))
+            except ValueError:
+                result = self.NO_DATA_TEXT
         self._append_result(name, result)
 
     def _calculate_weekly_hygene_packs(self):
@@ -117,11 +119,14 @@ class GenderPostprocessor(AbstractPostprocessor):
 
         # weekly hygene packs =
         # affected pop * fem_ratio * 0.7937 * week / intended day-of-use
-        result = self.impact_total * self.female_ratio * 0.7937 * (7 / 7)
-        try:
-            result = int(round(result))
-        except ValueError:
+        if not self.impact_total:
             result = self.NO_DATA_TEXT
+        else:
+            result = self.impact_total * self.female_ratio * 0.7937 * (7 / 7)
+            try:
+                result = int(round(result))
+            except ValueError:
+                result = self.NO_DATA_TEXT
         self._append_result(name, result, meta)
 
     def _calculate_weekly_increased_calories(self):
@@ -140,11 +145,14 @@ class GenderPostprocessor(AbstractPostprocessor):
 
         # weekly Kg rice =
         # affected pop * fem_ratio * 0.7937 * week / intended day-of-use
-        lact_kg = self.impact_total * self.female_ratio * 2 * 0.033782
-        preg_kg = self.impact_total * self.female_ratio * 2 * 0.01281
-        result = lact_kg + preg_kg
-        try:
-            result = int(round(result))
-        except ValueError:
+        if not self.impact_total:
             result = self.NO_DATA_TEXT
+        else:
+            lact_kg = self.impact_total * self.female_ratio * 2 * 0.033782
+            preg_kg = self.impact_total * self.female_ratio * 2 * 0.01281
+            result = lact_kg + preg_kg
+            try:
+                result = int(round(result))
+            except ValueError:
+                result = self.NO_DATA_TEXT
         self._append_result(name, result, meta)

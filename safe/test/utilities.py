@@ -6,8 +6,6 @@ import re
 import sys
 import hashlib
 import logging
-import platform
-import glob
 import shutil
 from itertools import izip
 from qgis.core import (
@@ -18,6 +16,7 @@ from qgis.core import (
     QgsMapLayerRegistry)
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui  # pylint: disable=W0621
+from qgis.utils import iface
 
 from safe.gis.numerics import axes_to_points
 from safe.common.utilities import unique_filename, temp_dir
@@ -25,25 +24,19 @@ from safe.common.exceptions import NoKeywordsFoundError
 
 from safe.utilities.clipper import extent_to_geoarray, clip_layer
 from safe.utilities.gis import get_wgs84_resolution
-from safe.utilities.metadata import (
-    read_iso19115_metadata,
-    write_read_iso_19115_metadata
-)
-from safe.utilities.utilities import read_file_keywords
+from safe.utilities.metadata import read_iso19115_metadata
 
 QGIS_APP = None  # Static variable used to hold hand to running QGIS app
 CANVAS = None
 PARENT = None
 IFACE = None
-YOGYA2006_title = 'An earthquake in Yogyakarta like in 2006'
-PADANG2009_title = 'An earthquake in Padang like in 2009'
 LOGGER = logging.getLogger('InaSAFE')
 GEOCRS = 4326  # constant for EPSG:GEOCRS Geographic CRS id
 GOOGLECRS = 3857  # constant for EPSG:GOOGLECRS Google Mercator id
 DEVNULL = open(os.devnull, 'w')
 
 # FIXME AG: We are going to remove the usage of all the data from
-# inasafe_data and just use data in test_data_path. But until that is done,
+# inasafe_data and just use data in standard_data_path. But until that is done,
 # we still keep TESTDATA, HAZDATA, EXPDATA, and BOUNDATA below
 
 # Assuming test data three lvls up
@@ -74,6 +67,16 @@ def get_qgis_app():
     If QGIS is already running the handle to that app will be returned.
     """
 
+    global QGIS_APP, PARENT, IFACE, CANVAS  # pylint: disable=W0603
+
+    if iface:
+        from qgis.core import QgsApplication
+        QGIS_APP = QgsApplication
+        CANVAS = iface.mapCanvas()
+        PARENT = iface.mainWindow()
+        IFACE = iface
+        return QGIS_APP, CANVAS, IFACE, PARENT
+
     try:
         from qgis.core import QgsApplication
         from qgis.gui import QgsMapCanvas  # pylint: disable=no-name-in-module
@@ -84,8 +87,6 @@ def get_qgis_app():
         from safe.gis.qgis_interface import QgisInterface
     except ImportError:
         return None, None, None, None
-
-    global QGIS_APP  # pylint: disable=W0603
 
     if QGIS_APP is None:
         gui_flag = True  # All test will run qgis in gui mode
@@ -100,7 +101,10 @@ def get_qgis_app():
         QCoreApplication.setApplicationName('QGIS2InaSAFETesting')
 
         # noinspection PyPep8Naming
-        QGIS_APP = QgsApplication(sys.argv, gui_flag)
+        if 'argv' in dir(sys):
+            QGIS_APP = QgsApplication(sys.argv, gui_flag)
+        else:
+            QGIS_APP = QgsApplication([], gui_flag)
 
         # Make sure QGIS_PREFIX_PATH is set in your env if needed!
         QGIS_APP.initQgis()
@@ -118,44 +122,46 @@ def get_qgis_app():
         settings.setValue('inasafe/showRubberBands', True)
         settings.setValue('inasafe/analysis_extents_mode', 'HazardExposure')
 
-    global PARENT  # pylint: disable=W0603
     if PARENT is None:
         # noinspection PyPep8Naming
         PARENT = QtGui.QWidget()
 
-    global CANVAS  # pylint: disable=W0603
     if CANVAS is None:
         # noinspection PyPep8Naming
         CANVAS = QgsMapCanvas(PARENT)
         CANVAS.resize(QtCore.QSize(400, 400))
 
-    global IFACE  # pylint: disable=W0603
     if IFACE is None:
         # QgisInterface is a stub implementation of the QGIS plugin interface
         # noinspection PyPep8Naming
         IFACE = QgisInterface(CANVAS)
         # Note(IS): I put here since it needs QGIS apps instance first
-        from safe.impact_functions import register_impact_functions
+        from safe.impact_functions.loader import register_impact_functions
         register_impact_functions()
 
     return QGIS_APP, CANVAS, IFACE, PARENT
 
 
-def assert_hashes_for_file(hashes, filename):
-    """Assert that a files has matches one of a list of expected hashes
-    :param filename: the filename
-    :param hashes: the hash of the file
+def get_dock():
+    """Get a dock for testing.
+
+    If you call this function from a QGIS Desktop, you will get the real dock,
+    however, you use a fake QGIS interface, it will create a fake dock for you.
+
+    :returns: A dock.
+    :rtype: QDockWidget
     """
-    file_hash = hash_for_file(filename)
-    message = (
-        'Unexpected hash'
-        '\nGot: %s'
-        '\nExpected: %s'
-        '\nPlease check graphics %s visually '
-        'and add to list of expected hashes '
-        'if it is OK on this platform.' % (file_hash, hashes, filename))
-    if file_hash not in hashes:
-        raise Exception(message)
+    # Don't move this import.
+    from safe.gui.widgets.dock import Dock as DockObject
+    if iface:
+        docks = iface.mainWindow().findChildren(QtGui.QDockWidget)
+        for dock in docks:
+            if isinstance(dock, DockObject):
+                return dock
+        else:
+            return DockObject(iface)
+    else:
+        return DockObject(IFACE)
 
 
 def assert_hash_for_file(hash_string, filename):
@@ -184,7 +190,7 @@ def hash_for_file(filename):
     return data_hash
 
 
-def test_data_path(*args):
+def standard_data_path(*args):
     """Return the absolute path to the InaSAFE test data or directory path.
 
     .. versionadded:: 3.0
@@ -223,14 +229,7 @@ def load_layer(layer_path):
     # Determine if layer is hazard or exposure
     layer_purpose = 'undefined'
     try:
-        try:
-            keywords = read_iso19115_metadata(layer_path)
-        except:
-            try:
-                keywords = read_file_keywords(layer_path)
-                keywords = write_read_iso_19115_metadata(layer_path, keywords)
-            except NoKeywordsFoundError:
-                keywords = {}
+        keywords = read_iso19115_metadata(layer_path)
         if 'layer_purpose' in keywords:
             layer_purpose = keywords['layer_purpose']
     except NoKeywordsFoundError:
@@ -249,7 +248,7 @@ def load_layer(layer_path):
     message = 'Layer "%s" is not valid' % layer.source()
     # noinspection PyUnresolvedReferences
     if not layer.isValid():
-        print message
+        LOGGER.log(message)
     # noinspection PyUnresolvedReferences
     if not layer.isValid():
         raise Exception(message)
@@ -278,20 +277,6 @@ def set_canvas_crs(epsg_id, enable_projection=False):
     CANVAS.mapRenderer().setDestinationCrs(crs)
 
 
-def set_padang_extent(dock=None):
-    """Zoom to an area occupied by both both Padang layers.
-
-    :param dock: A dock widget - if supplied, the extents will also be
-        set as the user extent and an appropriate CRS set.
-    :type dock: Dock
-    """
-    rect = QgsRectangle(100.21, -1.05, 100.63, -0.84)
-    CANVAS.setExtent(rect)
-    if dock is not None:
-        crs = QgsCoordinateReferenceSystem('EPSG:4326')
-        dock.define_user_analysis_extent(rect, crs)
-
-
 def set_jakarta_extent(dock=None):
     """Zoom to an area occupied by both Jakarta layers in Geo.
 
@@ -317,20 +302,6 @@ def set_jakarta_google_extent(dock=None):
     CANVAS.setExtent(rect)
     if dock is not None:
         crs = QgsCoordinateReferenceSystem('EPSG:3857')
-        dock.define_user_analysis_extent(rect, crs)
-
-
-def set_batemans_bay_extent(dock=None):
-    """Zoom to an area occupied by both Batemans Bay layers in geo crs.
-
-    :param dock: A dock widget - if supplied, the extents will also be
-        set as the user extent and an appropriate CRS set.
-    :type dock: Dock
-    """
-    rect = QgsRectangle(150.152, -35.710, 150.187, -35.7013)
-    CANVAS.setExtent(rect)
-    if dock is not None:
-        crs = QgsCoordinateReferenceSystem('EPSG:4326')
         dock.define_user_analysis_extent(rect, crs)
 
 
@@ -362,209 +333,37 @@ def set_small_jakarta_extent(dock=None):
         dock.define_user_analysis_extent(rect, crs)
 
 
-def set_manila_extent(dock=None):
-    """Zoom to an area occupied by both Manila layers in Geo.
+def compare_two_vector_layers(control_layer, test_layer):
+    """Compare two vector layers (same geometries and same attributes)
 
-    :param dock: A dock widget - if supplied, the extents will also be
-        set as the user extent and an appropriate CRS set.
-    :type dock: Dock
-    """
-    rect = QgsRectangle(120.866995, 14.403305, 121.193824, 14.784944)
-    CANVAS.setExtent(rect)
-    if dock is not None:
-        crs = QgsCoordinateReferenceSystem('EPSG:4326')
-        dock.define_user_analysis_extent(rect, crs)
+    :param control_layer: The control layer.
+    :type control_layer: QgsVectorLayer
 
+    :param test_layer: The layer being checked.
+    :type test_layer: QgsVectorLayer
 
-def set_geo_extent(bounding_box, dock=None):
-    """Zoom to an area specified given bounding box.
-
-    :param bounding_box: List containing [xmin, ymin, xmax, ymax]
-    :type bounding_box: list
-
-    :param dock: A dock widget - if supplied, the extents will also be
-        set as the user extent and an appropriate CRS set.
-    :type dock: Dock
-    """
-    rect = QgsRectangle(*bounding_box)
-    CANVAS.setExtent(rect)
-    if dock is not None:
-        crs = QgsCoordinateReferenceSystem('EPSG:4326')
-        dock.define_user_analysis_extent(rect, crs)
-        print dock.extent.user_extent.toString(), 'set geo extent'
-
-
-def check_images(control_image, test_image_path, tolerance=1000):
-    r"""Compare a test image against a collection of known good images.
-
-    :param tolerance: How many pixels may be different between the
-        two images.
-    :type tolerance: int
-
-    :param test_image_path: The Image being checked (must have same dimensions
-        as the control image). Must be full path to image.
-    :type test_image_path: str
-
-    :param control_image: The basename for the control image. The .png
-        extension will automatically be added and the test image dir
-        (safe/test/data/control/images) will be prepended. e.g.
-        addClassToLegend will cause the control image of
-        test\/data\/control/images\/addClassToLegend.png to be used.
-    :type control_image: str
-
-    :returns: Success or failure indicator, message providing analysis,
-        comparison notes
+    :returns: Success or failure indicator, message providing notes.
     :rtype: bool, str
     """
-    control_image_dir = test_data_path('control', 'images')
-    messages = ''
-    platform_name = get_platform_name()
-    base_name, extension = os.path.splitext(control_image)
-    platform_image = os.path.join(control_image_dir, '%s-variant%s%s.png' % (
-        base_name, platform_name, extension))
-    messages += 'Checking for platform specific variant...\n'
-    messages += test_image_path + '\n'
-    messages += platform_image + '\n'
-    # It the platform image exists, we should test only that!
-    if os.path.exists(platform_image):
-        flag, message = check_image(
-            platform_image, test_image_path, tolerance)
-        messages += message + '\n'
-        return flag, messages
 
-    messages += (
-        '\nNo platform specific control image could be found,\n'
-        'testing against all control images. Try adding %s in\n '
-        'the file name if you want it to be detected for this\n'
-        'platform which will speed up image comparison tests.\n' %
-        platform_name)
+    if test_layer.geometryType() != control_layer.geometryType():
+        return False, 'These two layers are not using the same geometry type.'
 
-    # Ok there is no specific platform match so go ahead and match to any of
-    # the control image and its variants...
-    control_images = glob.glob('%s/%s*%s' % (
-        control_image_dir, base_name, extension))
-    flag = False
+    if test_layer.crs().authid() != control_layer.crs().authid():
+        return False, 'These two layers are not using the same CRS.'
 
-    for control_image in control_images:
-        full_path = os.path.join(
-            control_image_dir, control_image)
-        flag, message = check_image(
-            full_path, test_image_path, tolerance)
-        messages += message
-        # As soon as one passes we are done!
-        if flag:
-            print 'match with: ', control_image
-            break
-        LOGGER.debug('No match for control image %s' % control_image)
+    if test_layer.featureCount() != control_layer.featureCount():
+        return False, 'These two layers haven\'t the same number of features'
 
-    return flag, messages
-
-
-def check_image(control_image_path, test_image_path, tolerance=1000):
-    """Compare a test image against a known good image.
-
-    :param tolerance: How many pixels may be different between the two images.
-    :type tolerance: int
-
-    :param test_image_path: The Image being checked (must have same dimensions
-        as the control image).
-    :type test_image_path: str
-
-    :param control_image_path: The image representing expected output.
-    :type control_image_path: str
-
-    :returns: Two tuple consisting of success or failure indicator and a
-        message providing analysis comparison notes.
-    :rtype: (bool, str)
-    """
-
-    try:
-        if not os.path.exists(test_image_path):
-            LOGGER.debug('checkImage: Test image does not exist:\n%s' %
-                         test_image_path)
-            raise OSError
-        test_image = QtGui.QImage(test_image_path)
-    except OSError:
-        message = 'Test image:\n{0:s}\ncould not be loaded'.format(
-            test_image_path)
-        return False, message
-
-    try:
-        if not os.path.exists(control_image_path):
-            LOGGER.debug('checkImage: Control image does not exist:\n%s' %
-                         control_image_path)
-            raise OSError
-        control_image = QtGui.QImage(control_image_path)
-    except OSError:
-        message = 'Control image:\n{0:s}\ncould not be loaded.\n'
-        return False, message
-
-    if (control_image.width() != test_image.width() or
-            control_image.height() != test_image.height()):
-        message = (
-            'Control and test images are different sizes.\n'
-            'Control image   : %s (%i x %i)\n'
-            'Test image      : %s (%i x %i)\n'
-            'If this test has failed look at the above images '
-            'to try to determine what may have change or '
-            'adjust the tolerance if needed.' %
-            (
-                control_image_path,
-                control_image.width(),
-                control_image.height(),
-                test_image_path,
-                test_image.width(),
-                test_image.height()))
-        LOGGER.debug(message)
-        return False, message
-
-    image_width = control_image.width()
-    image_height = control_image.height()
-    mismatch_count = 0
-
-    difference_image = QtGui.QImage(
-        image_width,
-        image_height,
-        QtGui.QImage.Format_ARGB32_Premultiplied)
-    difference_image.fill(152 + 219 * 256 + 249 * 256 * 256)
-
-    for y in range(image_height):
-        for x in range(image_width):
-            control_pixel = control_image.pixel(x, y)
-            test_pixel = test_image.pixel(x, y)
-            if control_pixel != test_pixel:
-                mismatch_count += 1
-                difference_image.setPixel(x, y, QtGui.qRgb(255, 0, 0))
-    difference_path = unique_filename(
-        prefix='difference-%s' % os.path.basename(control_image_path),
-        suffix='.png',
-        dir=temp_dir('test'))
-    LOGGER.debug('Saving difference image as: %s' % difference_path)
-    difference_image.save(difference_path, "PNG")
-
-    # allow pixel deviation of 1 percent
-    pixel_count = image_width * image_height
-    # TODO (Ole): Use relative error i.e. mismatch count/total pixels
-    if mismatch_count > tolerance:
-        success_flag = False
+    for feature in test_layer.getFeatures():
+        for expected in control_layer.getFeatures():
+            if feature.attributes() == expected.attributes():
+                if feature.geometry().isGeosEqual(expected.geometry()):
+                    break
+        else:
+            return False, 'A feature could not be found in the control layer.'
     else:
-        success_flag = True
-    message = (
-        '%i of %i pixels are mismatched. Tolerance is %i.\n'
-        'Control image   : %s\n'
-        'Test image      : %s\n'
-        'Difference image: %s\n'
-        'If this test has failed look at the above images '
-        'to try to determine what may have change or '
-        'adjust the tolerance if needed.' %
-        (
-            mismatch_count,
-            pixel_count,
-            tolerance,
-            control_image_path,
-            test_image_path,
-            difference_path))
-    return success_flag, message
+        return True, None
 
 
 class RedirectStreams(object):
@@ -614,32 +413,6 @@ class RedirectStreams(object):
         sys.stderr = self.old_stderr
 
 
-def get_platform_name():
-    """Get a platform name for this host.
-
-        e.g OSX10.8
-        Windows7-SP1-AMD64
-        LinuxMint-14-x86_64
-    """
-    platform_name = platform.system()
-    if platform_name == 'Darwin':
-        name = 'OSX'
-        name += '.'.join(platform.mac_ver()[0].split('.')[0:2])
-        return name
-    elif platform_name == 'Linux':
-        name = '-'.join(platform.dist()[:-1]) + '-' + platform.machine()
-        return name
-    elif platform_name == 'Windows':
-        name = 'Windows'
-        win32_version = platform.win32_ver()
-        platform_machine = platform.machine()
-        name += win32_version[0] + '-' + win32_version[2]
-        name += '-' + platform_machine
-        return name
-    else:
-        return None
-
-
 def get_ui_state(dock):
     """Get state of the 3 combos on the DOCK dock.
 
@@ -673,22 +446,6 @@ def get_ui_state(dock):
             'Impact Function Title': impact_function_title,
             'Impact Function Id': impact_function_id,
             'Run Button Enabled': run_button}
-
-
-def formatted_list(layer_list):
-    """Return a string representing a list of layers
-
-    :param layer_list: A list of layers.
-    :type layer_list: list
-
-    :returns: The returned string will list layers in correct order but
-        formatted with line breaks between each entry.
-    :rtype: str
-    """
-    list_string = ''
-    for item in layer_list:
-        list_string += item + '\n'
-    return list_string
 
 
 def canvas_list():
@@ -931,28 +688,29 @@ def load_standard_layers(dock=None):
     #
     # WARNING: Please keep test/data/project/load_standard_layers.qgs in sync
     file_list = [
-        test_data_path('idp', 'potential-idp.shp'),
-        test_data_path('exposure', 'building-points.shp'),
-        test_data_path('exposure', 'buildings.shp'),
-        test_data_path('exposure', 'census.shp'),
-        test_data_path('hazard', 'volcano_point.shp'),
-        test_data_path('exposure', 'roads.shp'),
-        test_data_path('hazard', 'flood_multipart_polygons.shp'),
-        test_data_path('hazard', 'floods.shp'),
-        test_data_path('hazard', 'classified_generic_polygon.shp'),
-        test_data_path('hazard', 'volcano_krb.shp'),
-        test_data_path('exposure', 'pop_binary_raster_20_20.asc'),
-        test_data_path('hazard', 'classified_flood_20_20.asc'),
-        test_data_path('hazard', 'continuous_flood_20_20.asc'),
-        test_data_path('hazard', 'tsunami_wgs84.tif'),
-        test_data_path('hazard', 'earthquake.tif'),
-        test_data_path('boundaries', 'district_osm_jakarta.shp'),
+        standard_data_path('hazard', 'flood_multipart_polygons.shp'),
+        standard_data_path('hazard', 'floods.shp'),
+        standard_data_path('hazard', 'classified_generic_polygon.shp'),
+        standard_data_path('hazard', 'volcano_krb.shp'),
+        standard_data_path('hazard', 'volcano_point.shp'),
+        standard_data_path('hazard', 'classified_flood_20_20.asc'),
+        standard_data_path('hazard', 'continuous_flood_20_20.asc'),
+        standard_data_path('hazard', 'tsunami_wgs84.tif'),
+        standard_data_path('hazard', 'earthquake.tif'),
+        standard_data_path('hazard', 'ash_raster_wgs84.tif'),
+        standard_data_path('exposure', 'building-points.shp'),
+        standard_data_path('exposure', 'buildings.shp'),
+        standard_data_path('exposure', 'census.shp'),
+        standard_data_path('exposure', 'roads.shp'),
+        standard_data_path('exposure', 'landcover.shp'),
+        standard_data_path('exposure', 'pop_binary_raster_20_20.asc'),
+        standard_data_path('boundaries', 'grid_jakarta.shp'),
+        standard_data_path('boundaries', 'district_osm_jakarta.shp'),
     ]
     hazard_layer_count, exposure_layer_count = load_layers(
         file_list, dock=dock)
     # FIXME (MB) -2 is until we add the aggregation category because of
     # kabupaten_jakarta_singlepart not being either hazard nor exposure layer
-    # potiential-idp not being either hazard nor exposure layer
 
     number_exposure_hazard = hazard_layer_count + exposure_layer_count
     expected_number_exposure_hazard = len(file_list) - 2
@@ -1076,7 +834,6 @@ def clone_shp_layer(
     """
     extensions = ['.shp', '.shx', '.dbf', '.prj']
     if include_keywords:
-        extensions.append('.keywords')
         extensions.append('.xml')
     temp_path = unique_filename(dir=temp_dir(target_directory))
     # copy to temp file
@@ -1143,7 +900,6 @@ def clone_raster_layer(
     """
     extensions = ['.prj', '.sld', 'qml', '.prj', extension]
     if include_keywords:
-        extensions.append('.keywords')
         extensions.append('.xml')
     temp_path = unique_filename(dir=temp_dir(target_directory))
     # copy to temp file
@@ -1167,7 +923,7 @@ def remove_vector_temp_file(file_path):
     :type file_path: str
     """
     file_path = file_path[:-4]
-    extensions = ['.shp', '.shx', '.dbf', '.prj', '.keywords', '.xml']
+    extensions = ['.shp', '.shx', '.dbf', '.prj', '.xml']
     extensions.extend(['.prj', '.sld', 'qml'])
     for ext in extensions:
         if os.path.exists(file_path + ext):
@@ -1198,6 +954,7 @@ class FakeLayer(object):
         return self.layer_source
 
 
+# TODO(IS): This method doesn't belong to this file.
 def clip_layers(first_layer_path, second_layer_path):
     """Clip and resample layers with the reference to the first layer.
 

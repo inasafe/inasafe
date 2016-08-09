@@ -18,7 +18,11 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import unittest
-import safe.impact_functions.core  # pylint: disable=unused-import
+from collections import OrderedDict
+from safe.test.utilities import get_qgis_app
+
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
 from safe.impact_reports.population_exposure_report_mixin import (
     PopulationExposureReportMixin)
 
@@ -39,6 +43,7 @@ class PopulationExposureReportMixinTest(unittest.TestCase):
         self.population_mixin.affected_population['Medium'] = 100
         self.population_mixin.affected_population['Low'] = 100
         self.population_mixin.total_population = 400
+        self.population_mixin.question = ''
         self.population_mixin.unaffected_population = (
             self.population_mixin.total_population -
             self.population_mixin.total_affected_population)
@@ -62,27 +67,6 @@ class PopulationExposureReportMixinTest(unittest.TestCase):
         del self.population_mixin_blank
         del self.population_mixin
 
-    def test_0001_generate_report(self):
-        """Generate a blank report."""
-        blank_report = self.population_mixin_blank.generate_report()
-        blank_report = blank_report.to_text()
-        expected_strings = [
-            u'**Population needing evacuation <sup>1</sup>**, 0',
-            u'**Unaffected population**, 0',
-            u'Evacuated population minimum needs',
-            u'Action checklist',
-            u'How will warnings be disseminated?',
-            u'How will we reach evacuated people?',
-            (u'If yes, where are they located and how will we '
-             u'distribute them?'),
-            (u'If no, where can we obtain additional relief items and how '
-             u'will we distribute them?'),
-            u'What are the related health risks?',
-            u'Who are the key people responsible for coordination?',
-        ]
-        for item in expected_strings:
-            self.assertIn(item, blank_report)
-
     def test_0002_category_ordering(self):
         """Test correct category ordering."""
         category_ordering = self.population_mixin.impact_category_ordering
@@ -95,18 +79,9 @@ class PopulationExposureReportMixinTest(unittest.TestCase):
 
     def test_0003_minimum_needs_breakdown(self):
         """Test minimum needs breakdown."""
-        needs_breakdown = self.population_mixin.minimum_needs_breakdown()
-        needs_breakdown = needs_breakdown.to_text()
-
-        expected_needs = [
-            u'Evacuated population minimum needs',
-            u'**Relief items to be provided test frequency**',
-            u'test name 1 [u], 300',
-            u'test name 2 [u], 600'
-        ]
-
-        for item in expected_needs:
-            self.assertIn(item, needs_breakdown)
+        needs_breakdown = self.population_mixin.minimum_needs
+        expected_needs = self.population_mixin.minimum_needs
+        self.assertEquals(expected_needs, needs_breakdown)
 
     def test_0004_population_counts(self):
         """Test correct category ordering."""
@@ -161,6 +136,45 @@ class PopulationExposureReportMixinTest(unittest.TestCase):
         self.assertEqual(total, 300, message)
         message = 'Non-existent category should not have anything.'
         self.assertIsNone(nothing, message)
+
+    def test_0006_generate_data(self):
+        """Test generating data."""
+        data = self.population_mixin.generate_data()
+        expected = {
+            'action check list': {
+                # Remove list entries in 3.5 because logic is in IF
+                # not in mixin now and this test does not actuall
+                # create an IF...TS
+                'fields': [],
+                'title': 'Action checklist'},
+            'exposure': 'population',
+            'impact summary': {
+                'attributes': ['category', 'value'],
+                'fields': [
+                    ['High', 100],
+                    ['Medium', 100],
+                    ['Low', 100],
+                    ['Total affected population', 300],
+                    ['Unaffected population', 100],
+                    ['Total population', 400],
+                    [
+                        'Population needing evacuation <sup>1</sup>',
+                        300
+                    ]
+                ]
+            },
+            'minimum needs': OrderedDict([('test frequency', [
+                {'name': 'test name 1', 'value': '1', 'amount': 300,
+                 'frequency': 'test frequency',
+                 'table name': 'test name 1 [u]',
+                 'unit': {'abbreviation': 'u'}},
+                {'name': 'test name 2', 'value': '2', 'amount': 600,
+                 'frequency': 'test frequency',
+                 'table name': 'test name 2 [u]',
+                 'unit': {'abbreviation': 'u'}}])]),
+            'notes': {'fields': [], 'title': 'Notes and assumptions'},
+            'question': ''}
+        self.assertDictEqual(data, expected)
 
 
 if __name__ == '__main__':

@@ -18,6 +18,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import unittest
+import os
 
 from qgis.core import (
     QgsRasterLayer,
@@ -26,7 +27,7 @@ from qgis.core import (
     QgsVectorLayer,
     QgsRectangle)
 
-from safe.test.utilities import test_data_path, get_qgis_app
+from safe.test.utilities import standard_data_path, get_qgis_app
 from safe.gis.qgis_raster_tools import (
     pixels_to_points,
     polygonize,
@@ -34,8 +35,8 @@ from safe.gis.qgis_raster_tools import (
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-RASTER_BASE = test_data_path('hazard', 'jakarta_flood_design')
-VECTOR_BASE = test_data_path('other', 'polygonization_result')
+RASTER_BASE = standard_data_path('hazard', 'jakarta_flood_design')
+VECTOR_BASE = standard_data_path('other', 'polygonization_result')
 
 
 class TestQGISRasterTools(unittest.TestCase):
@@ -47,6 +48,8 @@ class TestQGISRasterTools(unittest.TestCase):
         self.x_res = self.raster.rasterUnitsPerPixelX()
         self.y_res = self.raster.rasterUnitsPerPixelY()
 
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_pixels_to_points(self):
         points = pixels_to_points(
             self.raster, threshold_min=1.0, threshold_max=1.5)
@@ -82,8 +85,9 @@ class TestQGISRasterTools(unittest.TestCase):
                 self.extent)
             value = value.results()[1]
             self.assertGreater(value, 1.1)
-    test_pixels_to_points.slow = True
 
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_polygonize(self):
         """Test if polygonize works"""
         geometry = polygonize(
@@ -103,8 +107,9 @@ class TestQGISRasterTools(unittest.TestCase):
             # the layer has one feature only
             expected_geom = feature.geometry()
             self.assertTrue((geometry.isGeosEqual(expected_geom)))
-    test_polygonize.slow = True
 
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_clip_raster(self):
         """Test clip_raster work"""
         new_raster = clip_raster(
@@ -149,7 +154,6 @@ class TestQGISRasterTools(unittest.TestCase):
         self.assertEqual(new_extent, new_raster.extent())
         self.assertEqual(self.raster.width(), new_raster.width())
         self.assertEqual(self.raster.height(), new_raster.height())
-    test_clip_raster.slow = True
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestQGISRasterTools, 'test')
