@@ -105,6 +105,23 @@ concepts = {
              }
         ],
     },
+    'affected_people': {
+        'description': tr(
+            'People who are affected by a hazardous event. People can be '
+            'affected directly or indirectly. Affected people may experience '
+            'short-term or long-term consequences to their lives, livelihoods '
+            'or health and in the economic, physical, social, cultural and '
+            'environmental assets.'),
+        'citations': [
+            {
+                'text': tr(
+                    'UNISDR (2015)Proposed Updated Terminology on Disaster '
+                    'Risk Reduction: A Technical Review'),
+                'link': 'http://www.preventionweb.net/files/'
+                        '45462_backgoundpaperonterminologyaugust20.pdf'
+             }
+        ],
+    },
     'displaced_people': {
         'description': tr(
             'Displaced people are people who, for different reasons and '
@@ -139,6 +156,33 @@ concepts = {
             }
         ],
     },
+    'killed_people': {
+        'description': tr('People suffering from a new or exacerbated physical '
+                          'or psychological harm, trauma or an illness as a '
+                          'result of a hazardous event.'),
+        'citations': [
+            {
+                'text': tr(
+                    'UNISDR (2015)Proposed Updated Terminology on Disaster '
+                    'Risk Reduction: A Technical Review'),
+                'link': 'http://www.preventionweb.net/files/'
+                        '45462_backgoundpaperonterminologyaugust20.pdf'
+            }
+        ],
+      },
+    'injured_people': {
+        'description': tr('People who lost their lives as a consequence of a '
+                'hazardous event.'),
+        'citations': [
+            {
+                'text': tr(
+                    'UNISDR (2015)Proposed Updated Terminology on Disaster '
+                    'Risk Reduction: A Technical Review'),
+                'link': 'http://www.preventionweb.net/files/'
+                        '45462_backgoundpaperonterminologyaugust20.pdf'
+            }
+        ],
+      },
     # Boilerplate for adding a new concept...
     #  '': {
     #    'description': tr(
