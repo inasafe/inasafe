@@ -292,6 +292,8 @@ building for infrastructure.
 
 ![image](https://cloud.githubusercontent.com/assets/16660099/17165692/739dd55e-53fc-11e6-82db-eede1413d6e4.png)
 
+## Aggregation report
+
 ## Minimum needs report
 
 The minimum needs report gives information on the estimated amount of relief
