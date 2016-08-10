@@ -168,22 +168,20 @@ class ShakeGrid(object):
         self.second = int(time_tokens[2])
 
         # right now only handles Indonesian Timezones
-        if sys.platform == 'win32':
-            # This mapping is taken from tzlocal python library
-            tz_dict = {
-                'WIB': timezone('SE Asia Standard Time'),
-                'WITA': timezone('Singapore Standard Time'),
-                'WIT': timezone('Tokyo Standard Time')
-            }
-        else:
-            tz_dict = {
-                'WIB': timezone('Asia/Jakarta'),
-                'WITA': timezone('Asia/Makassar'),
-                'WIT': timezone('Asia/Jayapura')
-            }
+        tz_dict = {
+            'WIB': 'Asia/Jakarta',
+            'WITA': 'Asia/Makassar',
+            'WIT': 'Asia/Jayapura'
+        }
+        if self.time_zone in tz_dict:
+            self.time_zone = tz_dict.get(self.time_zone, self.time_zone)
 
         try:
-            tzinfo = tz_dict.get(self.time_zone)
+            if not self.time_zone:
+                # default to utc if empty
+                tzinfo = pytz.utc
+            else:
+                tzinfo = timezone(self.time_zone)
         except:
             tzinfo = pytz.utc
 
@@ -195,8 +193,7 @@ class ShakeGrid(object):
             self.minute,
             self.second,
             # For now realtime always uses Indonesia Time
-            tzinfo=tzinfo
-        )
+            tzinfo=tzinfo)
 
     def parse_grid_xml(self):
         """Parse the grid xyz and calculate the bounding box of the event.
