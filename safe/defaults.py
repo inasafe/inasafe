@@ -27,7 +27,6 @@ from PyQt4.QtCore import QSettings
 
 from safe_extras.parameters.boolean_parameter import BooleanParameter
 from safe_extras.parameters.float_parameter import FloatParameter
-from safe_extras.parameters.integer_parameter import IntegerParameter
 from safe_extras.parameters.group_parameter import GroupParameter
 from safe_extras.parameters.text_parameter import TextParameter
 from safe_extras.parameters.unit import Unit
@@ -288,37 +287,13 @@ def building_type_postprocessor():
     :return: Selectors to activate building breakdown postprocessor.
     :rtype: list
     """
-    building_type = GroupParameter()
+    building_type = BooleanParameter()
     building_type.name = tr('Building type')
-    building_type.enable_parameter = True
+    building_type.value = True
     building_type.description = tr(
         'Check this option if you want to enable a building impact report '
         'broken down by building type for each aggregation area.'
     )
-
-    unit_threshold = Unit()
-    unit_threshold.name = tr('features')
-    unit_threshold.plural = tr('features')
-    unit_threshold.abbreviation = tr('features')
-    unit_threshold.description = tr(
-        'Number of features.'
-    )
-
-    threshold = IntegerParameter()
-    threshold.name = 'Threshold'
-    threshold.minimum_allowed_value = 1
-    # We shouldn't set a maximum, but there is a bug (#2468).
-    threshold.maximum_allowed_value = 9999
-    threshold.value = 25
-    threshold.unit = unit_threshold
-    threshold.allowed_units = [unit_threshold]
-    threshold.help_text = tr('Threshold')
-    threshold.description = tr(
-        'The threshold is used to consolidate small building usage groups '
-        'which are within this threshold.'
-    )
-
-    building_type.value = [threshold]
 
     return [building_type]
 

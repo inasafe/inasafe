@@ -11,8 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-__author__ = "lucernae"
-
 from safe.common.utilities import OrderedDict
 from safe.defaults import building_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \
@@ -32,9 +30,10 @@ from safe.definitions import (
     exposure_structure,
     unit_metres,
     unit_feet,
-    hazard_tsunami,
     structure_class_field
 )
+
+__author__ = "lucernae"
 
 
 class FloodRasterBuildingMetadata(ImpactFunctionMetadata):
@@ -57,6 +56,7 @@ class FloodRasterBuildingMetadata(ImpactFunctionMetadata):
             concrete impact function.
         :rtype: dict
         """
+        title = tr('Buildings affected by flood')
         dict_meta = {
             'id': 'FloodRasterBuildingFunction',
             'name': tr('Raster flood on buildings'),
@@ -91,12 +91,17 @@ class FloodRasterBuildingMetadata(ImpactFunctionMetadata):
                 tr('This function only flags buildings as impacted or not '
                    'either based on a fixed threshold')
             ],
-            'citations': [],
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ],
             'legend_notes': '',
-            'map_title': tr('Flooded buildings'),
+            'map_title': title,
+            'layer_name': title,
             'legend_title': tr('Flooded structure status'),
             'legend_units': tr('(flooded, wet, or dry)'),
-            'layer_name': tr('Estimated buildings affected'),
             'layer_requirements': {
                 'hazard': {
                     'layer_mode': layer_mode_continuous,

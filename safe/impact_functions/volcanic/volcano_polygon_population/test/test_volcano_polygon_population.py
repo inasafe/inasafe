@@ -16,7 +16,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import unittest
 import numpy
-from safe.test.utilities import test_data_path, get_qgis_app
+from safe.test.utilities import standard_data_path, get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.common.exceptions import KeywordNotFoundError
@@ -37,8 +37,8 @@ class TestVolcanoPolygonPopulationFunction(unittest.TestCase):
 
     def test_run(self):
         """TestVolcanoPolygonPopulationFunction: Test running the IF."""
-        merapi_krb_path = test_data_path('hazard', 'volcano_krb.shp')
-        population_path = test_data_path(
+        merapi_krb_path = standard_data_path('hazard', 'volcano_krb.shp')
+        population_path = standard_data_path(
             'exposure', 'pop_binary_raster_20_20.asc')
 
         merapi_krb_layer = read_layer(merapi_krb_path)
@@ -52,20 +52,19 @@ class TestVolcanoPolygonPopulationFunction(unittest.TestCase):
         impact_function.run()
         impact_layer = impact_function.impact
         # Check the question
-        expected_question = ('In the event of volcano krb how many population '
-                             'might need evacuation')
-        message = 'The question should be %s, but it returns %s' % (
-            expected_question, impact_function.question)
-        self.assertEqual(expected_question, impact_function.question, message)
+        expected_question = (
+            'In the event of volcano krb how many population might need '
+            'evacuation?')
+        self.assertEqual(expected_question, impact_function.question)
         # Count by hand
         expected_affected_population = 181
         result = numpy.nansum(impact_layer.get_data())
-        self.assertEqual(expected_affected_population, result, message)
+        self.assertEqual(expected_affected_population, result)
 
     def test_run_failed(self):
         """Test run IF with missing keywords."""
-        merapi_krb_path = test_data_path('hazard', 'volcano_krb.shp')
-        population_path = test_data_path(
+        merapi_krb_path = standard_data_path('hazard', 'volcano_krb.shp')
+        population_path = standard_data_path(
             'exposure', 'pop_binary_raster_20_20.asc')
 
         merapi_krb_layer = read_layer(merapi_krb_path)

@@ -15,7 +15,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import unittest
-from safe.test.utilities import test_data_path, get_qgis_app
+from safe.test.utilities import standard_data_path, get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
@@ -35,8 +35,8 @@ class TestVolcanoPointBuildingFunction(unittest.TestCase):
 
     def test_run(self):
         """TestVolcanoPointBuildingFunction: Test running the IF."""
-        volcano_path = test_data_path('hazard', 'volcano_point.shp')
-        building_path = test_data_path('exposure', 'buildings.shp')
+        volcano_path = standard_data_path('hazard', 'volcano_point.shp')
+        building_path = standard_data_path('exposure', 'buildings.shp')
 
         hazard_layer = read_layer(volcano_path)
         exposure_layer = read_layer(building_path)
@@ -51,10 +51,8 @@ class TestVolcanoPointBuildingFunction(unittest.TestCase):
         # Check the question
         expected_question = (
             'In the event of volcano point how many buildings might be '
-            'affected')
-        message = 'The question should be %s, but it returns %s' % (
-            expected_question, impact_function.question)
-        self.assertEqual(expected_question, impact_function.question, message)
+            'affected?')
+        self.assertEqual(expected_question, impact_function.question)
 
         # The buildings should all be categorised into 3000 zone
         zone_sum = sum(impact_layer.get_data(

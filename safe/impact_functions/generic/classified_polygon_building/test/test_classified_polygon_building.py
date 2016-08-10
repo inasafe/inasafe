@@ -16,7 +16,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import unittest
 
-from safe.test.utilities import get_qgis_app, test_data_path
+from safe.test.utilities import get_qgis_app, standard_data_path
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
@@ -48,9 +48,9 @@ class TestClassifiedPolygonBuildingFunction(unittest.TestCase):
             expected_high_count + expected_medium_count + expected_low_count)
         expected_not_affected = expected_total - expected_total_affected
 
-        generic_polygon_path = test_data_path(
+        generic_polygon_path = standard_data_path(
             'hazard', 'classified_generic_polygon.shp')
-        building_path = test_data_path('exposure', 'buildings.shp')
+        building_path = standard_data_path('exposure', 'buildings.shp')
 
         hazard_layer = QgsVectorLayer(generic_polygon_path, 'Hazard', 'ogr')
         exposure_layer = QgsVectorLayer(building_path, 'Buildings', 'ogr')
@@ -70,11 +70,10 @@ class TestClassifiedPolygonBuildingFunction(unittest.TestCase):
         impact_data = impact_layer.impact_data
 
         # Check the question
-        expected_question = ('In each of the hazard zones how many buildings '
-                             'might be affected.')
-        message = 'The question should be %s, but it returns %s' % (
-            expected_question, impact_function.question)
-        self.assertEqual(expected_question, impact_function.question, message)
+        expected_question = (
+            'In each of the hazard zones how many buildings might be '
+            'affected?')
+        self.assertEqual(expected_question, impact_function.question)
 
         # Check the impact layer
         zone_sum = impact_layer.get_data(
@@ -126,8 +125,13 @@ class TestClassifiedPolygonBuildingFunction(unittest.TestCase):
 
         # Test the JSON impact table content
         expected_fields = [
-            [u'Other', 0, 31, 2, 7, 40],
-            [u'Residential', 11, 130, 0, 0, 141],
+            [u'Commercial', 6, 25, 0, 0, 31],
+            [u'Education', 0, 7, 0, 0, 7],
+            [u'Government', 0, 12, 2, 4, 18],
+            [u'Health', 0, 3, 0, 2, 5],
+            [u'Other', 0, 1, 0, 0, 1],
+            [u'Place of worship', 0, 8, 0, 1, 9],
+            [u'Residential', 5, 105, 0, 0, 110],
             [u'Total', 11, 161, 2, 7, 181]
         ]
         for expected, data in zip(expected_fields, impact_table['fields']):
@@ -138,9 +142,9 @@ class TestClassifiedPolygonBuildingFunction(unittest.TestCase):
 
         See https://github.com/AIFDR/inasafe/issues/2156.
         """
-        generic_polygon_path = test_data_path(
+        generic_polygon_path = standard_data_path(
             'hazard', 'classified_generic_polygon.shp')
-        building_path = test_data_path('exposure', 'building-points.shp')
+        building_path = standard_data_path('exposure', 'building-points.shp')
 
         hazard_layer = QgsVectorLayer(generic_polygon_path, 'Hazard', 'ogr')
         exposure_layer = QgsVectorLayer(building_path, 'Buildings', 'ogr')
@@ -159,11 +163,10 @@ class TestClassifiedPolygonBuildingFunction(unittest.TestCase):
         impact_layer = impact_function.impact
 
         # Check the question
-        expected_question = ('In each of the hazard zones how many buildings '
-                             'might be affected.')
-        message = 'The question should be %s, but it returns %s' % (
-            expected_question, impact_function.question)
-        self.assertEqual(expected_question, impact_function.question, message)
+        expected_question = (
+            'In each of the hazard zones how many buildings might be '
+            'affected?')
+        self.assertEqual(expected_question, impact_function.question)
 
         zone_sum = impact_layer.get_data(
             attribute=impact_function.target_field)

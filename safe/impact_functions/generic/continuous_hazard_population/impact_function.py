@@ -13,13 +13,6 @@ Contact : ole.moller.nielsen@gmail.com
 .. todo:: Check raster is single band
 
 """
-
-__author__ = 'lucernae'
-__date__ = '24/03/15'
-__revision__ = '$Format:%H$'
-__copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
-                 'Disaster Reduction')
-
 import numpy
 
 from safe.impact_functions.generic\
@@ -36,6 +29,7 @@ from safe.impact_functions.core import (
 from safe.storage.raster import Raster
 from safe.utilities.i18n import tr
 from safe.common.utilities import (
+    format_int,
     create_classes,
     create_label,
     humanize_class)
@@ -45,6 +39,13 @@ from safe.gui.tools.minimum_needs.needs_profile import (
     add_needs_parameters, filter_needs_parameters)
 from safe.impact_reports.population_exposure_report_mixin import \
     PopulationExposureReportMixin
+from safe.definitions import no_data_warning
+
+__author__ = 'lucernae'
+__date__ = '24/03/15'
+__revision__ = '$Format:%H$'
+__copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
+                 'Disaster Reduction')
 
 
 class ContinuousHazardPopulationFunction(
@@ -56,6 +57,7 @@ class ContinuousHazardPopulationFunction(
 
     def __init__(self):
         super(ContinuousHazardPopulationFunction, self).__init__()
+        PopulationExposureReportMixin.__init__(self)
         self.impact_function_manager = ImpactFunctionManager()
 
         # AG: Use the proper minimum needs, update the parameters
@@ -66,37 +68,25 @@ class ContinuousHazardPopulationFunction(
         """Return the notes section of the report.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: dict
+        :rtype: list
         """
-        title = tr('Notes and assumptions')
         fields = [
             tr('Total population in the analysis area: %s') %
-            population_rounding(self.total_population),
+            format_int(population_rounding(self.total_population)),
             tr('<sup>1</sup>People need evacuation if they are in a hazard '
                'zone.'),
             tr('Map shows the numbers of people in high, medium, and low '
-               'hazard class areas.')
+               'hazard zones.')
         ]
 
         if self.no_data_warning:
-            fields.append(tr(
-                'The layers contained "no data" values. This missing data '
-                'was carried through to the impact layer.'))
-            fields.append(tr(
-                '"No data" values in the impact layer were treated as 0 '
-                'when counting the affected or total population.'))
+            fields = fields + no_data_warning
 
-        fields.extend([
-            tr('All values are rounded up to the nearest integer in order to '
-               'avoid representing human lives as fractions.'),
-            tr('Population rounding is applied to all population values, '
-               'which may cause discrepancies when adding value.')
-        ])
-
-        return {
-            'title': title,
-            'fields': fields
-        }
+        # include any generic exposure specific notes from definitions.py
+        fields = fields + self.exposure_notes()
+        # include any generic hazard specific notes from definitions.py
+        fields = fields + self.hazard_notes()
+        return fields
 
     def run(self):
         """Plugin for impact of population as derived by continuous hazard.
@@ -155,13 +145,13 @@ class ContinuousHazardPopulationFunction(
         # Count totals
         self.total_population = int(numpy.nansum(exposure_data))
         self.affected_population[
-            tr('Population in high hazard areas')] = int(
+            tr('Population in high hazard zones')] = int(
                 numpy.nansum(high_exposure))
         self.affected_population[
-            tr('Population in medium hazard areas')] = int(
+            tr('Population in medium hazard zones')] = int(
                 numpy.nansum(medium_exposure))
         self.affected_population[
-            tr('Population in low hazard areas')] = int(
+            tr('Population in low hazard zones')] = int(
                 numpy.nansum(low_exposure))
         self.unaffected_population = (
             self.total_population - self.total_affected_population)

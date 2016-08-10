@@ -24,11 +24,11 @@ import sys
 import shutil
 import logging
 import codecs
+import pytz
 from xml.dom import minidom
 from datetime import datetime
 from pytz import timezone
 from subprocess import call, CalledProcessError
-
 from osgeo import gdal, ogr
 from osgeo.gdalconst import GA_ReadOnly
 # This import is required to enable PyQt API v2
@@ -41,7 +41,6 @@ from qgis.core import (
     QgsFeatureRequest,
     QgsRectangle,
     QgsRasterLayer)
-
 from safe.common.utilities import which, romanise
 from safe.common.exceptions import (
     GridXmlFileNotFoundError,
@@ -49,8 +48,9 @@ from safe.common.exceptions import (
     ContourCreationError,
     InvalidLayerError)
 from safe.utilities.styling import mmi_colour
-from safe.utilities.unicode import get_string
 from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.i18n import tr
+from safe.common.exceptions import CallGDALError
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -162,18 +162,29 @@ class ShakeGrid(object):
         self.month = int(date_tokens[1])
         self.day = int(date_tokens[2])
 
-        time_tokens = the_time_stamp[11:-3].split(':')
+        time_tokens = the_time_stamp[11:19].split(':')
         self.hour = int(time_tokens[0])
         self.minute = int(time_tokens[1])
         self.second = int(time_tokens[2])
 
         # right now only handles Indonesian Timezones
         tz_dict = {
-            'WIB': timezone('Asia/Jakarta'),
-            'WITA': timezone('Asia/Makassar'),
-            'WIT': timezone('Asia/Jayapura')
+            'WIB': 'Asia/Jakarta',
+            'WITA': 'Asia/Makassar',
+            'WIT': 'Asia/Jayapura'
         }
-        tzinfo = tz_dict.get(self.time_zone)
+        if self.time_zone in tz_dict:
+            self.time_zone = tz_dict.get(self.time_zone, self.time_zone)
+
+        try:
+            if not self.time_zone:
+                # default to utc if empty
+                tzinfo = pytz.utc
+            else:
+                tzinfo = timezone(self.time_zone)
+        except:
+            tzinfo = pytz.utc
+
         self.time = datetime(
             self.year,
             self.month,
@@ -182,8 +193,7 @@ class ShakeGrid(object):
             self.minute,
             self.second,
             # For now realtime always uses Indonesia Time
-            tzinfo=tzinfo
-        )
+            tzinfo=tzinfo)
 
     def parse_grid_xml(self):
         """Parse the grid xyz and calculate the bounding box of the event.
@@ -582,12 +592,22 @@ class ShakeGrid(object):
 
         # now generate the tif using default interpolation options
 
+        binary_list = which('ogr2ogr')
+        LOGGER.debug('Path for ogr2ogr: %s' % binary_list)
+        if len(binary_list) < 1:
+            raise CallGDALError(
+                    tr('ogr2ogr could not be found on your computer'))
+        # Use the first matching gdalwarp found
+        binary = binary_list[0]
         command = (
-            ('ogr2ogr -overwrite -select mmi -a_srs EPSG:4326 '
-             '%(shp)s %(vrt)s mmi') % {'shp': shp_path, 'vrt': vrt_path})
+            ('%(ogr2ogr)s -overwrite -select mmi -a_srs EPSG:4326 '
+             '%(shp)s %(vrt)s mmi') % {
+                'ogr2ogr': binary,
+                'shp': shp_path,
+                'vrt': vrt_path})
 
-        LOGGER.info('Created this gdal command:\n%s' % command)
-        # Now run GDAL warp scottie...
+        LOGGER.info('Created this ogr command:\n%s' % command)
+        # Now run ogr2ogr ...
         # noinspection PyProtectedMember
         self._run_command(command)
 

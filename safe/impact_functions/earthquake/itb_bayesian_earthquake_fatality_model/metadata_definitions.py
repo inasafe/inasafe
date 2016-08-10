@@ -54,6 +54,7 @@ class ITBBayesianFatalityMetadata(ITBFatalityMetadata):
             concrete impact function.
         :rtype: dict
         """
+        title = tr('People affected by earthquake event')
         dict_meta = {
             'id': 'ITBBayesianFatalityFunction',
             'name': tr(
@@ -65,26 +66,32 @@ class ITBBayesianFatalityMetadata(ITBFatalityMetadata):
             'author': 'ITB and GA',  # FIXME
             'date_implemented': 'N/A',
             'overview': tr(
-                'To assess the impact of an earthquake on population based '
-                'on the Population Vulnerability ITB bayesian Model.'),
-            'detailed_description': '',
+                'Estimates fatalities resulting from an earthquake using data '
+                'from an Indonesian database of earthquake events to '
+                'calculate fatality rates. This model is better at '
+                'capturing uncertainty in the results.'),
+            'detailed_description': tr(
+                'Based on the Population Vulnerability ITB Bayesian Model.'),
             'hazard_input': '',
             'exposure_input': '',
             'output': '',
             'actions': '',
             'limitations': [],
             'citations': [
-                tr('Sengara, W., Suarjana, M., Yulman, M.A., Ghasemi, H., and '
-                   'Ryu, H. (2015). '
-                   'An empirical fatality model for Indonesia based on '
-                   'a Bayesian approach. Submitted for Journal of the '
-                   'Geological Society')  # FIXME
+                {
+                    'text': tr(
+                        'Sengara, W., Suarjana, M., Yulman, M.A., Ghasemi, '
+                        'H., and Ryu, H. (2015). An empirical fatality model '
+                        'for Indonesia based on a Bayesian approach. '
+                        'Submitted for Journal of the Geological Society'),
+                    'link': None
+                }
             ],
-            'map_title': 'Earthquake impact to population',
+            'map_title': title,
+            'layer_name': title,
             'legend_title': '',
             'legend_units': '',
             'legend_notes': '',
-            'layer_name': '',
             'layer_requirements': {
                 'hazard': {
                     'layer_mode': layer_mode_continuous,

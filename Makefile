@@ -24,7 +24,7 @@ ALL := $(NONGUI) $(GUI)  # Would like to turn this into comma separated list usi
 
 # LOCALES = space delimited list of iso codes to generate po files for
 # Please dont remove en here
-LOCALES = en id fr
+LOCALES = en id fr vi es_ES
 
 default: quicktest
 
@@ -50,6 +50,7 @@ test-translations:
 	@python scripts/missing_translations.py `pwd` fr
 	@python scripts/missing_translations.py `pwd` af
 	@python scripts/missing_translations.py `pwd` es_ES
+	@python scripts/missing_translations.py `pwd` vi
 
 
 translation-stats:
@@ -296,6 +297,23 @@ indent:
 	@# sudo apt-get install python2.7-examples for reindent script
 	python /usr/share/doc/python2.7/examples/Tools/scripts/reindent.py *.py
 
+
+##########################################################
+#
+# A little helper to trigger a nightly build and an
+# experimental build on the InaSAFE server.
+#
+# You need to have the correct ssh configs and keys set
+# up in order for this to work.
+# 
+##########################################################
+
+build-nightlies:
+	@echo "Building nightlies"
+	@ssh inasafe-docker /home/data/experimental.inasafe.org/build_nightly_from_host.sh
+	@ssh inasafe-docker /home/data/nightly.inasafe.org/build_nightly_from_host.sh
+	@rsync -av inasafe-docker:/home/data/experimental.inasafe.org ../
+	@rsync -av inasafe-docker:/home/data/nightly.inasafe.org ../
 
 ##########################################################
 #

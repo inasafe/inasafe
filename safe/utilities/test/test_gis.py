@@ -21,7 +21,7 @@ from safe.test.utilities import (
     clone_shp_layer,
     compare_two_vector_layers,
     clone_raster_layer,
-    test_data_path,
+    standard_data_path,
     load_layer,
     get_qgis_app)
 from safe.utilities.gis import get_optimal_extent
@@ -37,7 +37,7 @@ class TestQGIS(unittest.TestCase):
         layer = clone_shp_layer(
             name='district_osm_jakarta',
             include_keywords=True,
-            source_directory=test_data_path('boundaries'))
+            source_directory=standard_data_path('boundaries'))
 
         # with good attribute name
         attributes, position = layer_attribute_names(
@@ -72,7 +72,7 @@ class TestQGIS(unittest.TestCase):
             name='padang_tsunami_mw8',
             extension='.tif',
             include_keywords=True,
-            source_directory=test_data_path('hazard')
+            source_directory=standard_data_path('hazard')
         )
         attributes, position = layer_attribute_names(layer, [], '')
         message = 'Should return None, None for raster layer, got %s, %s' % (
@@ -85,7 +85,7 @@ class TestQGIS(unittest.TestCase):
         layer = clone_shp_layer(
             name='district_osm_jakarta',
             include_keywords=True,
-            source_directory=test_data_path('boundaries'))
+            source_directory=standard_data_path('boundaries'))
         message = 'isPolygonLayer, %s layer should be polygonal' % layer
         self.assertTrue(is_polygon_layer(layer), message)
 
@@ -93,7 +93,7 @@ class TestQGIS(unittest.TestCase):
         layer = clone_shp_layer(
             name='volcano_point',
             include_keywords=True,
-            source_directory=test_data_path('hazard'))
+            source_directory=standard_data_path('hazard'))
         message = '%s layer should be polygonal' % layer
         self.assertFalse(is_polygon_layer(layer), message)
 
@@ -101,7 +101,7 @@ class TestQGIS(unittest.TestCase):
             name='padang_tsunami_mw8',
             extension='.tif',
             include_keywords=True,
-            source_directory=test_data_path('hazard')
+            source_directory=standard_data_path('hazard')
         )
         message = ('%s raster layer should not be polygonal' % layer)
         self.assertFalse(is_polygon_layer(layer), message)
@@ -297,7 +297,7 @@ class TestQGIS(unittest.TestCase):
     def test_buffer_points(self):
         """Test if we can make buffers correctly, whatever the projection."""
         # Original data in 3857.
-        data_path = test_data_path('other', 'buffer_points_3857.shp')
+        data_path = standard_data_path('other', 'buffer_points_3857.shp')
         layer, _ = load_layer(data_path)
 
         output_crs = qgis.core.QgsCoordinateReferenceSystem('EPSG:4326')
@@ -311,7 +311,8 @@ class TestQGIS(unittest.TestCase):
         radii = [1, 2, 3]
         output_crs = qgis.core.QgsCoordinateReferenceSystem('EPSG:3857')
         result = buffer_points(layer, radii, 'test', output_crs)
-        data_path = test_data_path('other', 'buffer_points_expected_4326.shp')
+        data_path = standard_data_path(
+            'other', 'buffer_points_expected_4326.shp')
         control_layer, _ = load_layer(data_path)
         is_equal, msg = compare_two_vector_layers(control_layer, result)
         self.assertFalse(is_equal, msg)
@@ -319,7 +320,8 @@ class TestQGIS(unittest.TestCase):
         # Expected result in 4326.
         output_crs = qgis.core.QgsCoordinateReferenceSystem('EPSG:4326')
         result = buffer_points(layer, radii, 'test', output_crs)
-        data_path = test_data_path('other', 'buffer_points_expected_4326.shp')
+        data_path = standard_data_path(
+            'other', 'buffer_points_expected_4326.shp')
         control_layer, _ = load_layer(data_path)
         is_equal, msg = compare_two_vector_layers(control_layer, result)
         self.assertTrue(is_equal, msg)
@@ -327,7 +329,8 @@ class TestQGIS(unittest.TestCase):
         # Expected result in 3857.
         output_crs = qgis.core.QgsCoordinateReferenceSystem('EPSG:3857')
         result = buffer_points(layer, radii, 'test', output_crs)
-        data_path = test_data_path('other', 'buffer_points_expected_3857.shp')
+        data_path = standard_data_path(
+            'other', 'buffer_points_expected_3857.shp')
         control_layer, _ = load_layer(data_path)
         is_equal, msg = compare_two_vector_layers(control_layer, result)
         self.assertTrue(is_equal, msg)

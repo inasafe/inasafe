@@ -28,7 +28,7 @@ from safe.common.signals import (
     STATIC_MESSAGE_SIGNAL,
     ERROR_MESSAGE_SIGNAL)
 from safe.utilities.utilities import get_error_message
-from safe.test.utilities import test_data_path
+from safe.test.utilities import standard_data_path
 
 from safe.test.utilities import get_qgis_app
 
@@ -94,7 +94,7 @@ class MessageViewerTest(unittest.TestCase):
     def test_error_message(self):
         """Test we can send error messages to the message viewer."""
         text = self.fake_error()
-        control_file_path = test_data_path(
+        control_file_path = standard_data_path(
             'control',
             'files',
             'test-error-message.txt')
@@ -105,7 +105,7 @@ class MessageViewerTest(unittest.TestCase):
         """Test error message works when there is a static message in place."""
         self.message_viewer.static_message_event(None, m.Message('Hi'))
         text = self.fake_error()
-        control_file_path = test_data_path(
+        control_file_path = standard_data_path(
             'control',
             'files',
             'test-static-error-message.txt')

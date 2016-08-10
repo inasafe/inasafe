@@ -62,6 +62,7 @@ class ClassifiedRasterHazardPopulationMetadata(ImpactFunctionMetadata):
             concrete impact function.
         :rtype: dict
         """
+        title = tr('People affected')
         dict_meta = {
             'id': 'ClassifiedRasterHazardPopulationFunction',
             'name': tr('Classified raster hazard on population'),
@@ -96,14 +97,19 @@ class ClassifiedRasterHazardPopulationMetadata(ImpactFunctionMetadata):
                 'Provide details about how many people would likely be '
                 'affected for each hazard class.'),
             'limitations': [tr('The number of classes is three.')],
-            'citations': [],
-            'map_title': tr('Number of people affected in each class'),
+            'map_title': title,
+            'layer_name': title,
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ],
             'legend_title': tr('Number of People'),
             'legend_units': tr('(people per cell)'),
             'legend_notes': tr(
                 'Thousand separator is represented by %s' %
                 get_thousand_separator()),
-            'layer_name': tr('People that might be affected'),
             'layer_requirements': {
                 'hazard': {
                     'layer_mode': layer_mode_classified,

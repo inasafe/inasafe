@@ -41,14 +41,14 @@ from safe.test.utilities import (
     clone_raster_layer,
     clone_shp_layer,
     get_qgis_app,
-    test_data_path)
+    standard_data_path)
 
 # AG: get_qgis_app() should be called before importing modules from
 # safe.gui.tools.wizard
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.definitions import inasafe_keyword_version
-from safe.impact_functions import register_impact_functions
+from safe.impact_functions.loader import register_impact_functions
 from safe.gui.tools.wizard.wizard_dialog import WizardDialog
 from safe.gui.tools.wizard.wizard_utils import get_question_text
 from safe.utilities.keyword_io import KeywordIO, definition
@@ -126,6 +126,21 @@ class WizardDialogTest(unittest.TestCase):
         text = get_question_text(constant)
         self.assertEqual(text, expected_text)
 
+    def test_invalid_keyword_layer(self):
+        layer = clone_raster_layer(
+            name='invalid_keyword_xml',
+            include_keywords=True,
+            source_directory=standard_data_path('other'),
+            extension='.tif')
+
+        # check the environment first
+        self.assertIsNotNone(layer.dataProvider())
+        # Initialize dialog
+        # noinspection PyTypeChecker
+        dialog = WizardDialog()
+        # It shouldn't raise any exception although the xml is invalid
+        dialog.set_keywords_creation_mode(layer)
+
     def test_keywords_creation_wizard(self):
         """Test how the widgets work."""
         expected_category_count = 3
@@ -177,7 +192,7 @@ class WizardDialogTest(unittest.TestCase):
         layer = clone_shp_layer(
             name='flood_multipart_polygons',
             include_keywords=True,
-            source_directory=test_data_path('hazard'))
+            source_directory=standard_data_path('hazard'))
 
         # check the environment first
         self.assertIsNotNone(layer.dataProvider())
@@ -347,7 +362,7 @@ class WizardDialogTest(unittest.TestCase):
         layer = clone_shp_layer(
             name='flood_multipart_polygons',
             include_keywords=True,
-            source_directory=test_data_path('hazard'))
+            source_directory=standard_data_path('hazard'))
 
         # check the environment first
         self.assertIsNotNone(layer.dataProvider())
@@ -426,7 +441,7 @@ class WizardDialogTest(unittest.TestCase):
         layer = clone_shp_layer(
             name='volcano_krb',
             include_keywords=True,
-            source_directory=test_data_path('hazard'))
+            source_directory=standard_data_path('hazard'))
         # noinspection PyTypeChecker
         dialog = WizardDialog()
         dialog.set_keywords_creation_mode(layer)
@@ -602,7 +617,7 @@ class WizardDialogTest(unittest.TestCase):
         layer = clone_shp_layer(
             name='district_osm_jakarta',
             include_keywords=True,
-            source_directory=test_data_path('boundaries'))
+            source_directory=standard_data_path('boundaries'))
         dialog = WizardDialog()
         dialog.set_keywords_creation_mode(layer)
 
@@ -645,7 +660,7 @@ class WizardDialogTest(unittest.TestCase):
         layer = clone_shp_layer(
             name='buildings',
             include_keywords=True,
-            source_directory=test_data_path('exposure'))
+            source_directory=standard_data_path('exposure'))
         dialog = WizardDialog()
         dialog.set_keywords_creation_mode(layer)
 
@@ -678,7 +693,7 @@ class WizardDialogTest(unittest.TestCase):
         layer = clone_shp_layer(
             name='district_osm_jakarta',
             include_keywords=True,
-            source_directory=test_data_path('boundaries'))
+            source_directory=standard_data_path('boundaries'))
         dialog = WizardDialog()
         dialog.set_keywords_creation_mode(layer)
 
@@ -715,7 +730,7 @@ class WizardDialogTest(unittest.TestCase):
         layer = clone_shp_layer(
             name='volcano_krb',
             include_keywords=True,
-            source_directory=test_data_path('hazard'))
+            source_directory=standard_data_path('hazard'))
         dialog = WizardDialog()
         dialog.set_keywords_creation_mode(layer)
 
@@ -756,7 +771,7 @@ class WizardDialogTest(unittest.TestCase):
         layer = clone_shp_layer(
             name='volcano_point',
             include_keywords=True,
-            source_directory=test_data_path('hazard'))
+            source_directory=standard_data_path('hazard'))
         dialog = WizardDialog()
         dialog.set_keywords_creation_mode(layer)
 
@@ -783,7 +798,7 @@ class WizardDialogTest(unittest.TestCase):
         layer = clone_shp_layer(
             name='buildings',
             include_keywords=True,
-            source_directory=test_data_path('exposure'))
+            source_directory=standard_data_path('exposure'))
         dialog = WizardDialog()
         dialog.set_keywords_creation_mode(layer)
 
@@ -798,7 +813,7 @@ class WizardDialogTest(unittest.TestCase):
         layer = clone_shp_layer(
             name='volcano_point',
             include_keywords=True,
-            source_directory=test_data_path('hazard'))
+            source_directory=standard_data_path('hazard'))
         dialog = WizardDialog()
         dialog.set_keywords_creation_mode(layer)
 
@@ -868,7 +883,7 @@ class WizardDialogTest(unittest.TestCase):
             name='earthquake',
             extension='.tif',
             include_keywords=False,
-            source_directory=test_data_path('hazard'))
+            source_directory=standard_data_path('hazard'))
         dialog = WizardDialog()
         dialog.set_keywords_creation_mode(layer)
 
@@ -1017,7 +1032,7 @@ class WizardDialogTest(unittest.TestCase):
         layer = clone_shp_layer(
             name='roads',
             include_keywords=True,
-            source_directory=test_data_path('exposure'))
+            source_directory=standard_data_path('exposure'))
         dialog = WizardDialog()
         dialog.set_keywords_creation_mode(layer)
 
@@ -1076,7 +1091,7 @@ class WizardDialogTest(unittest.TestCase):
         """Test for polygon layer and all possibilities."""
         layer = clone_shp_layer(
             name='flood_multipart_polygons',
-            source_directory=test_data_path('hazard'),
+            source_directory=standard_data_path('hazard'),
             include_keywords=False)
         dialog = WizardDialog()
         dialog.set_keywords_creation_mode(layer)
@@ -1328,7 +1343,7 @@ class WizardDialogTest(unittest.TestCase):
         layer = clone_shp_layer(
             name='district_osm_jakarta',
             include_keywords=True,
-            source_directory=test_data_path('boundaries'))
+            source_directory=standard_data_path('boundaries'))
         dialog = WizardDialog()
         dialog.set_keywords_creation_mode(layer)
         dialog.suppress_warning_dialog = True
@@ -1381,7 +1396,7 @@ class WizardDialogTest(unittest.TestCase):
             name='people_allow_resampling_false',
             extension='.tif',
             include_keywords=False,
-            source_directory=test_data_path('exposure'))
+            source_directory=standard_data_path('exposure'))
         dialog = WizardDialog()
         dialog.set_keywords_creation_mode(layer)
         dialog.suppress_warning_dialog = True

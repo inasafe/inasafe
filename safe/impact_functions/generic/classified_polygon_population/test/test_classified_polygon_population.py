@@ -16,7 +16,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import unittest
 import numpy
-from safe.test.utilities import test_data_path, get_qgis_app
+from safe.test.utilities import standard_data_path, get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
@@ -36,9 +36,9 @@ class TestClassifiedPolygonPopulationFunction(unittest.TestCase):
 
     def test_run(self):
         """TestClassifiedPolygonPopulationFunction: Test running the IF."""
-        generic_polygon_path = test_data_path(
+        generic_polygon_path = standard_data_path(
             'hazard', 'classified_generic_polygon.shp')
-        population_path = test_data_path(
+        population_path = standard_data_path(
             'exposure', 'pop_binary_raster_20_20.asc')
 
         generic_polygon_layer = read_layer(generic_polygon_path)
@@ -50,15 +50,13 @@ class TestClassifiedPolygonPopulationFunction(unittest.TestCase):
         impact_function.run()
         impact_layer = impact_function.impact
         # Check the question
-        expected_question = ('In each of the hazard zones how many people '
-                             'might be impacted.')
-        message = 'The question should be %s, but it returns %s' % (
-            expected_question, impact_function.question)
-        self.assertEqual(expected_question, impact_function.question, message)
+        expected_question = (
+            'In each of the hazard zones how many people might be impacted?')
+        self.assertEqual(expected_question, impact_function.question)
         # Count by hand
         expected_affected_population = 181
         result = numpy.nansum(impact_layer.get_data())
-        self.assertEqual(expected_affected_population, result, message)
+        self.assertEqual(expected_affected_population, result)
 
     def test_filter(self):
         """TestClassifiedPolygonPopulationFunction: Test filtering IF"""

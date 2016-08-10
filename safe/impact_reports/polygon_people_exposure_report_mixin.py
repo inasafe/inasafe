@@ -34,7 +34,8 @@ class PolygonPeopleExposureReportMixin(ReportMixin):
         .. versionadded:: 3.2
 
         """
-        self._question = ''
+        super(PolygonPeopleExposureReportMixin, self).__init__()
+        self.exposure_report = 'polygon people'
         self._areas = {}
         self._affected_areas = {}
         self._areas_population = {}
@@ -50,22 +51,13 @@ class PolygonPeopleExposureReportMixin(ReportMixin):
         :returns: The impact report data.
         :rtype: dict
         """
-        question = self.question
-        impact_summary = self.impact_summary()
-        breakdown = self.breakdown()
-        minimum_needs = self.total_needs.copy()
-        action_checklist = self.action_checklist()
-        notes = self.notes()
-
-        return {
-            'exposure': 'polygon people',
-            'question': question,
-            'impact summary': impact_summary,
-            'breakdown': breakdown,
-            'minimum needs': minimum_needs,
-            'action check list': action_checklist,
-            'notes': notes
+        extra_data = {
+            'minimum needs': self.total_needs.copy(),
+            'breakdown': self.impact_table(),  # TODO, need to update breakdown
         }
+        data = super(PolygonPeopleExposureReportMixin, self).generate_data()
+        data.update(extra_data)
+        return data
 
     def impact_summary(self):
         """Create impact summary as data.
@@ -106,43 +98,26 @@ class PolygonPeopleExposureReportMixin(ReportMixin):
             'fields': fields
         }
 
-    def action_checklist(self):
-        """Return the action check list section of the report.
+    def extra_actions(self):
+        """Return the action specific to polygon people exposure.
+
+        .. note:: Only calculated actions are implemented here, the rest
+            are defined in definitions.py.
+
+        .. versionadded:: 3.5
 
         :return: The action check list as dict.
         :rtype: dict
         """
-        title = tr('Action checklist')
-
         population = population_rounding(
             sum(self.affected_population.values()))
 
         fields = [
-            tr('Which group or people is most affected?'),
-            tr('Who are the vulnerable people in the population and why?'),
-            tr('How will warnings be disseminated?'),
-            tr('What are people\'s likely movements?'),
-            tr('What are the security factors for the affected people?'),
-            tr('What are the security factors for relief responders?'),
-            tr('How will we reach evacuated people?'),
-            tr('What kind of food does the people normally consume?'),
-            tr('What are the critical non-food items required by the affected '
-               'people?'),
             tr('Are there enough water supply, sanitation, hygiene, food, '
                'shelter, medicines and relief items available for %s people?'
                 % format_int(population)),
-            tr('If yes, where are they located and how will we distribute '
-               'them?'),
-            tr('If no, where can we obtain additional relief items and how '
-               'will we distribute them?'),
-            tr('What are the related health risks?'),
-            tr('Who are the key people responsible for coordination?')
         ]
-
-        return {
-            'title': title,
-            'fields': fields
-        }
+        return fields
 
     @property
     def total_needs(self):
@@ -160,7 +135,7 @@ class PolygonPeopleExposureReportMixin(ReportMixin):
         return evacuated_population_needs(
             total_population_evacuated, self.minimum_needs)
 
-    def breakdown(self):
+    def impact_table(self):
         """Create breakdown as data.
 
         :returns: Breakdown in dictionary format.
@@ -242,26 +217,6 @@ class PolygonPeopleExposureReportMixin(ReportMixin):
         :type affected_population: dict
         """
         self._affected_population = affected_population
-
-    @property
-    def question(self):
-        """Get the impact function question.
-
-        :returns: The impact function question.
-        :rtype: basestring
-        """
-        if not hasattr(self, '_question'):
-            self._question = ''
-        return self._question
-
-    @question.setter
-    def question(self, question):
-        """Set the impact function question.
-
-        :param question: The question.
-        :type question: basestring
-        """
-        self._question = question
 
     @property
     def unaffected_population(self):

@@ -327,7 +327,11 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             self,
             self.tr('Set north arrow image file'),
             '',
-            self.tr('Portable Network Graphics files (*.png *.PNG)'))
+            self.tr(
+                'Portable Network Graphics files (*.png *.PNG);;'
+                'JPEG Images (*.jpg *.jpeg);;'
+                'GIF Images (*.gif *.GIF);;'
+                'SVG Images (*.svg *.SVG);;'))
         if file_name != '':
             self.leNorthArrowPath.setText(file_name)
 
@@ -341,7 +345,11 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             self,
             self.tr('Set organisation logo file'),
             '',
-            self.tr('Portable Network Graphics files (*.png *.PNG)'))
+            self.tr(
+                'Portable Network Graphics files (*.png *.PNG);;'
+                'JPEG Images (*.jpg *.jpeg);;'
+                'GIF Images (*.gif *.GIF);;'
+                'SVG Images (*.svg *.SVG);;'))
         if file_name != '':
             self.leOrganisationLogoPath.setText(file_name)
 

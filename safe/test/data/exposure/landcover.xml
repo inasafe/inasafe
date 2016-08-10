@@ -47,7 +47,7 @@
       <gmd:citation>
         <gmd:CI_Citation>
           <gmd:title>
-            <gco:CharacterString>Land Cover</gco:CharacterString>
+            <gco:CharacterString>landcover</gco:CharacterString>
           </gmd:title>
           <gmd:date>
             <gmd:CI_Date>

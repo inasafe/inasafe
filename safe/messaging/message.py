@@ -47,6 +47,7 @@ class Message(MessageElement):
         http://stackoverflow.com/questions/13124961/
         how-to-pass-arguments-efficiently-kwargs-in-python
         """
+        self.in_div_flag = kwargs.pop('in_div_flag', False)
         super(Message, self).__init__(**kwargs)
         self.message = []
 
@@ -119,7 +120,7 @@ class Message(MessageElement):
         :rtype: str
         """
 
-        if in_div_flag:
+        if in_div_flag or self.in_div_flag:
             message = '<div %s>' % self.html_attributes()
         else:
             message = ''

@@ -62,6 +62,7 @@ class TsunamiEvacuationMetadata(ImpactFunctionMetadata):
             concrete impact function.
         :rtype: dict
         """
+        title = tr('People affected by tsunami')
         dict_meta = {
             'id': 'TsunamiEvacuationFunction',
             'name': tr('Tsunami evacuation'),
@@ -105,21 +106,29 @@ class TsunamiEvacuationMetadata(ImpactFunctionMetadata):
                 'The default threshold of 0.7 meter was selected based on '
                 'consensus, not hard evidence.')],
             'citations': [
-                tr('Papadopoulos, Gerassimos A., and Fumihiko Imamura. '
-                   '"A proposal for a new tsunami intensity scale." '
-                   'ITS 2001 proceedings, no. 5-1, pp. 569-577. 2001.'),
-                tr('Hamza Latief. pers com. Default impact threshold for '
-                   'tsunami impact on people should be 0.7m. This is less '
-                   'than a flood threshold because in a tsunami, the water is '
-                   'moving with force.'),
+                {
+                    'text': tr(
+                        'Papadopoulos, Gerassimos A., and Fumihiko Imamura. '
+                        '"A proposal for a new tsunami intensity scale." '
+                        'ITS 2001 proceedings, no. 5-1, pp. 569-577. 2001.'),
+                    'link': None
+                },
+                {
+                    'text': tr(
+                        'Hamza Latief. pers com. Default impact threshold for '
+                        'tsunami impact on people should be 0.7m. This is '
+                        'less than a flood threshold because in a tsunami, '
+                        'the water is moving with force.'),
+                    'link': None
+                }
             ],
-            'map_title': tr('People in need of evacuation'),
+            'map_title': title,
+            'layer_name': title,
             'legend_title': tr('Population'),
             'legend_units': tr('(people per cell)'),
             'legend_notes': tr(
                 'Thousand separator is represented by %s' %
                 get_thousand_separator()),
-            'layer_name': tr('Population which need evacuation'),
             'layer_requirements': {
                 'hazard': {
                     'layer_mode': layer_mode_continuous,

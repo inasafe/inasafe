@@ -76,21 +76,24 @@ def process_event(working_directory, locale_option='en', dummy_folder=None):
     for locale in locale_list:
         LOGGER.info('Creating Flood Event for locale %s.' % locale)
         now = datetime.utcnow()
-        event = FloodEvent(
-            working_dir=working_directory,
-            locale=locale,
-            population_path=population_path,
-            duration=duration,
-            level=level,
-            year=now.year,
-            month=now.month,
-            day=now.day,
-            hour=now.hour,
-            dummy_report_folder=dummy_folder)
+        try:
+            event = FloodEvent(
+                working_dir=working_directory,
+                locale=locale,
+                population_path=population_path,
+                duration=duration,
+                level=level,
+                year=now.year,
+                month=now.month,
+                day=now.day,
+                hour=now.hour,
+                dummy_report_folder=dummy_folder)
 
-        event.calculate_impact()
-        event.generate_report()
-        ret = push_flood_event_to_rest(flood_event=event)
+            event.calculate_impact()
+            event.generate_report()
+            ret = push_flood_event_to_rest(flood_event=event)
+        except:
+            ret = False
         LOGGER.info('Is Push successful? %s.' % bool(ret))
 
 

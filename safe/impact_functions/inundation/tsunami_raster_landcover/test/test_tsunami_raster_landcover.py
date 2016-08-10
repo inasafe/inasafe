@@ -14,18 +14,17 @@ Contact : ole.moller.nielsen@gmail.com
 
 import unittest
 from qgis.core import QgsVectorLayer, QgsRasterLayer
-
-from safe.test.utilities import get_qgis_app, test_data_path
+from safe.test.utilities import get_qgis_app, standard_data_path
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-
 from safe.impact_functions.inundation.tsunami_raster_landcover. \
     impact_function import TsunamiRasterLandcoverFunction
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.storage.utilities import safe_to_qgis_layer
+from safe.utilities.pivot_table import PivotTable, FlatTable
 
 
-class TestClassifiedPolygonLandCoverFunction(unittest.TestCase):
-    """Test for Classified Polygon Land Cover Impact Function."""
+class TestTsunamiRasterLandCoverFunction(unittest.TestCase):
+    """Test for Tsunami Raster Land Cover Impact Function."""
 
     def setUp(self):
         registry = ImpactFunctionManager().registry
@@ -35,14 +34,14 @@ class TestClassifiedPolygonLandCoverFunction(unittest.TestCase):
     def test_run(self):
         function = TsunamiRasterLandcoverFunction.instance()
 
-        hazard_path = test_data_path('hazard', 'tsunami_wgs84.tif')
-        exposure_path = test_data_path('exposure', 'landcover.shp')
+        hazard_path = standard_data_path('hazard', 'tsunami_wgs84.tif')
+        exposure_path = standard_data_path('exposure', 'landcover.shp')
         # noinspection PyCallingNonCallable
         hazard_layer = QgsRasterLayer(hazard_path, 'Tsunami')
         # noinspection PyCallingNonCallable
         exposure_layer = QgsVectorLayer(exposure_path, 'Land Cover', 'ogr')
-        self.assertEqual(hazard_layer.isValid(), True)
-        self.assertEqual(exposure_layer.isValid(), True)
+        self.assertTrue(hazard_layer.isValid())
+        self.assertTrue(exposure_layer.isValid())
 
         rect_extent = [106.5, -6.5, 107, -6]
         function.hazard = hazard_layer
@@ -50,35 +49,67 @@ class TestClassifiedPolygonLandCoverFunction(unittest.TestCase):
         function.requested_extent = rect_extent
         function.run()
         impact = function.impact
-
         impact = safe_to_qgis_layer(impact)
 
-        self.assertEqual(impact.dataProvider().featureCount(), 72)
-        features = {}
-        exposure_field = function.exposure.keyword('field')
-        for f in impact.getFeatures():
-            type_tuple = f[exposure_field], f[function.target_field]
-            features[type_tuple] = round(f.geometry().area(), 1)
+        expected = {
+            'data':
+                [[u'Population', u'Dry Zone', None, 793.6916054134609],
+                 [u'Water', u'Low Hazard Zone', None, 16.298813953855912],
+                 [u'Population', u'Very High Hazard Zone', None,
+                  12.45623642166847],
+                 [u'Water', u'Very High Hazard Zone', None,
+                  0.08036139883589728],
+                 [u'Water', u'Medium Hazard Zone', None, 12.1033540507973],
+                 [u'Population', u'Low Hazard Zone', None, 28.866862427357326],
+                 [u'Water', u'Dry Zone', None, 164.67113858186028],
+                 [u'Meadow', u'Dry Zone', None, 249.95443689559693],
+                 [u'Population', u'Medium Hazard Zone', None,
+                  30.69211822286981],
+                 [u'Water', u'High Hazard Zone', None, 5.835228232982915],
+                 [u'Population', u'High Hazard Zone', None, 29.72789895440279],
+                 [u'Forest', u'Dry Zone', None, 99.489344261353]],
+            'groups': ('landcover', 'hazard', 'zone')}
+        ordered_columns = function.impact.impact_data.get('ordered columns')
+        affected_columns = function.impact.impact_data.get('affected columns')
+        expected = FlatTable().from_dict(
+                groups=expected['groups'],
+                data=expected['data'],)
+        expected = PivotTable(
+            expected,
+            row_field='landcover',
+            column_field='hazard',
+            columns=ordered_columns,
+            affected_columns=affected_columns)
 
-        expected_features = {
-            (u'Population', u'Dry Zone'): 7977390.3,
-            (u'Population', u'Low Hazard Zone'): 403.8,
-            (u'Population', u'Medium Hazard Zone'): 156692.3,
-            (u'Population', u'High Hazard Zone'): 298791.1,
-            (u'Population', u'Very High Hazard Zone'): 8884.6,
-            (u'Water', u'Dry Zone'): 403.8,
-            (u'Water', u'Low Hazard Zone'): 65836.7,
-            (u'Water', u'Medium Hazard Zone'): 34746.7,
-            (u'Water', u'High Hazard Zone'): 9310.4,
-            (u'Water', u'Very High Hazard Zone'): 807.7,
-            (u'Meadow', u'Dry Zone'): 2512444.0,
-            (u'Forest', u'Dry Zone'): 1000000.0
-        }
-        self.assertEqual(len(expected_features.keys()), len(features.keys()))
-        for key, value in expected_features.iteritems():
-            result = features[key]
-            msg = '%s is different than %s, I got %s' % (key, value, result)
-            self.assertEqual(value, result, msg)
+        self.assertEqual(impact.dataProvider().featureCount(), 72)
+        table = function.impact.impact_data['impact table']
+        table = FlatTable().from_dict(
+            groups=table['groups'],
+            data=table['data'],)
+        table = PivotTable(
+            table,
+            row_field='landcover',
+            column_field='hazard',
+            columns=ordered_columns,
+            affected_columns=affected_columns)
+        for index, value in enumerate(expected.total_rows):
+            self.assertAlmostEqual(value, table.total_rows[index])
+        for index, value in enumerate(expected.total_columns):
+            self.assertAlmostEqual(value, table.total_columns[index])
+        for index, value in enumerate(expected.total_rows_affected):
+            self.assertAlmostEqual(value, table.total_rows_affected[index])
+        for index, value in enumerate(expected.rows):
+            self.assertAlmostEqual(value, table.rows[index])
+        for index, value in enumerate(expected.columns):
+            self.assertAlmostEqual(value, table.columns[index])
+        for index, value in enumerate(expected.affected_columns):
+            self.assertAlmostEqual(value, table.affected_columns[index])
+        # This is a list of list so we unpack both
+        for index, value in enumerate(expected.data):
+            for value_index, value_value in enumerate(value):
+                self.assertAlmostEqual(
+                        value_value, table.data[index][value_index])
+        self.assertAlmostEqual(expected.total_affected, table.total_affected)
 
     def test_keywords(self):
 

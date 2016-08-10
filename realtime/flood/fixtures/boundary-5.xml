@@ -206,7 +206,7 @@
             <gco:CharacterString>NAME</gco:CharacterString>
           </aggregation_attribute>
           <keyword_version>
-            <gco:CharacterString>3.3</gco:CharacterString>
+            <gco:CharacterString>3.5</gco:CharacterString>
           </keyword_version>
           <datatype>
             <gco:CharacterString/>

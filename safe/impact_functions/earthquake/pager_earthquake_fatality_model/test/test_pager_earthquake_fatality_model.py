@@ -16,7 +16,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import unittest
 
-from safe.test.utilities import test_data_path, get_qgis_app, clip_layers
+from safe.test.utilities import standard_data_path, get_qgis_app, clip_layers
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
@@ -80,8 +80,8 @@ class TestPagerEarthquakeFatalityFunction(unittest.TestCase):
     def test_run(self):
         """TestPagerEarthquakeFatalityFunction: Test running the IF."""
         # FIXME(Hyeuk): test requires more realistic hazard and population data
-        eq_path = test_data_path('hazard', 'earthquake.tif')
-        population_path = test_data_path(
+        eq_path = standard_data_path('hazard', 'earthquake.tif')
+        population_path = standard_data_path(
             'exposure', 'pop_binary_raster_20_20.asc')
 
         # For EQ on Pops we need to clip the hazard and exposure first to the
@@ -104,10 +104,8 @@ class TestPagerEarthquakeFatalityFunction(unittest.TestCase):
         # Check the question
         expected_question = (
             'In the event of earthquake how many population might die or '
-            'be displaced according pager model')
-        message = 'The question should be %s, but it returns %s' % (
-            expected_question, impact_function.question)
-        self.assertEqual(expected_question, impact_function.question, message)
+            'be displaced according pager model?')
+        self.assertEqual(expected_question, impact_function.question)
 
         expected_result = {
             'total_population': 200,

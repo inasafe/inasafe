@@ -22,18 +22,20 @@ import inspect
 from safe.test.utilities import get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe.impact_functions import register_impact_functions
-from safe.impact_functions import EarthquakeBuildingFunction
-from safe.impact_functions import ITBFatalityFunction
-from safe.impact_functions import PAGFatalityFunction
-from safe.impact_functions import ITBBayesianFatalityFunction
-from safe.impact_functions import FloodRasterBuildingFunction
-from safe.impact_functions import TsunamiRasterBuildingFunction
-from safe.impact_functions import ClassifiedPolygonHazardBuildingFunction
-from safe.impact_functions import VolcanoPolygonBuildingFunction
-from safe.impact_functions import VolcanoPointBuildingFunction
-from safe.impact_functions import FloodPolygonBuildingFunction
-from safe.impact_functions import ClassifiedRasterHazardBuildingFunction
+from safe.impact_functions.loader import register_impact_functions
+from safe.impact_functions.loader import EarthquakeBuildingFunction
+from safe.impact_functions.loader import ITBFatalityFunction
+from safe.impact_functions.loader import PAGFatalityFunction
+from safe.impact_functions.loader import ITBBayesianFatalityFunction
+from safe.impact_functions.loader import FloodRasterBuildingFunction
+from safe.impact_functions.loader import TsunamiRasterBuildingFunction
+from safe.impact_functions.loader import \
+    ClassifiedPolygonHazardBuildingFunction
+from safe.impact_functions.loader import VolcanoPolygonBuildingFunction
+from safe.impact_functions.loader import VolcanoPointBuildingFunction
+from safe.impact_functions.loader import FloodPolygonBuildingFunction
+from safe.impact_functions.loader import \
+    ClassifiedRasterHazardBuildingFunction
 
 from safe.impact_functions.registry import Registry
 from safe.definitions import (
@@ -74,7 +76,10 @@ EXPECTED_IF = [
     'Point volcano on buildings',
     'Polygon volcano on buildings',
     'Point volcano on population',
-    'Polygon volcano on population'
+    'Polygon volcano on population',
+    'Ash raster on land cover',
+    'Ash raster on places',
+    'Ash raster on population'
 ]
 
 
@@ -305,7 +310,8 @@ class TestRegistry(unittest.TestCase):
         self.assertTrue(len(impact_functions) > 0, message)
 
         for i in impact_functions:
-            print i.__name__
+            # print i.__name__
+            continue
 
         for impact_function in impact_functions:
             result = impact_function.metadata().as_dict()[
@@ -352,7 +358,8 @@ class TestRegistry(unittest.TestCase):
         impact_functions = registry.filter_by_keyword_string(
             hazard_keywords, exposure_keywords)
 
-        print len(impact_functions)
+        # print len(impact_functions)
 
         for i in impact_functions:
-            print i.__name__
+            # print i.__name__
+            continue

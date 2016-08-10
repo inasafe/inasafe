@@ -15,7 +15,6 @@ __date__ = '24/03/15'
 
 import logging
 from collections import OrderedDict
-
 from safe.impact_functions.bases.continuous_rh_classified_ve import \
     ContinuousRHClassifiedVE
 from safe.impact_functions.earthquake.earthquake_building \
@@ -44,19 +43,16 @@ class EarthquakeBuildingFunction(
 
     def __init__(self):
         super(EarthquakeBuildingFunction, self).__init__()
+        BuildingExposureReportMixin.__init__(self)
         self.is_nexis = False
         self.structure_class_field = None
-        # From BuildingExposureReportMixin
-        # This value will not be overwrite by a parameter. #2468
-        self.building_report_threshold = 25
 
     def notes(self):
         """Return the notes section of the report as dict.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: dict
+        :rtype: list
         """
-        title = tr('Notes and assumptions')
         # Thresholds for mmi breakdown.
         t0 = self.parameters['low_threshold'].value
         t1 = self.parameters['medium_threshold'].value
@@ -75,11 +71,11 @@ class EarthquakeBuildingFunction(
         if is_nexis:
             fields.append(tr(
                 'Values are in units of 1 million Australian Dollars'))
-
-        return {
-            'title': title,
-            'fields': fields
-        }
+        # include any generic exposure specific notes from definitions.py
+        fields = fields + self.exposure_notes()
+        # include any generic hazard specific notes from definitions.py
+        fields = fields + self.hazard_notes()
+        return fields
 
     def run(self):
         """Earthquake impact to buildings (e.g. from OpenStreetMap)."""
@@ -213,12 +209,6 @@ class EarthquakeBuildingFunction(
 
         if len(attributes) < 1:
             raise ZeroImpactException()
-        # Consolidate the small building usage groups < 25 to other
-        # Building threshold #2468
-        postprocessors = self.parameters['postprocessors']
-        building_postprocessors = postprocessors['BuildingType'][0]
-        self.building_report_threshold = building_postprocessors.value[0].value
-        self._consolidate_to_other()
 
         # Create style
         style_classes = [
@@ -246,7 +236,7 @@ class EarthquakeBuildingFunction(
         impact_data = self.generate_data()
 
         extra_keywords = {
-            'map_title': self.metadata().key('map_title'),
+            'map_title': self.map_title(),
             'legend_notes': self.metadata().key('legend_notes'),
             'legend_units': self.metadata().key('legend_units'),
             'legend_title': self.metadata().key('legend_title'),

@@ -16,7 +16,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import unittest
 import numpy
-from safe.test.utilities import get_qgis_app, test_data_path
+from safe.test.utilities import get_qgis_app, standard_data_path
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
@@ -36,8 +36,8 @@ class TestVolcanoPointPopulationFunction(unittest.TestCase):
 
     def test_run(self):
         """TestVolcanoPointPopulationFunction: Test running the IF."""
-        merapi_point_path = test_data_path('hazard', 'volcano_point.shp')
-        population_path = test_data_path(
+        merapi_point_path = standard_data_path('hazard', 'volcano_point.shp')
+        population_path = standard_data_path(
             'exposure', 'pop_binary_raster_20_20.asc')
 
         merapi_point_layer = read_layer(merapi_point_path)
@@ -53,17 +53,13 @@ class TestVolcanoPointPopulationFunction(unittest.TestCase):
         impact_layer = impact_function.impact
         # Check the question
         expected_question = (
-            'In the event of a volcano point how many '
-            'people might be impacted')
-        message = 'The question should be %s, but it returns %s' % (
-            expected_question, impact_function.question)
-        self.assertEqual(expected_question, impact_function.question, message)
+            'In the event of a volcano point how many people might be '
+            'impacted?')
+        self.assertEqual(expected_question, impact_function.question)
         # Count by hand
         expected_affected_population = 200
         result = numpy.nansum(impact_layer.get_data())
-        message = 'Expecting %s, but it returns %s' % (
-            expected_affected_population, result)
-        self.assertEqual(expected_affected_population, result, message)
+        self.assertEqual(expected_affected_population, result)
 
     def test_filter(self):
         """TestVolcanoPointPopulationFunction: Test filtering IF"""

@@ -59,6 +59,7 @@ class FloodEvacuationRasterHazardMetadata(ImpactFunctionMetadata):
             concrete impact function.
         :rtype: dict
         """
+        title = tr('People affected by flood')
         dict_meta = {
             'id': 'FloodEvacuationRasterHazardFunction',
             'name': tr('Raster flood on population'),
@@ -102,14 +103,19 @@ class FloodEvacuationRasterHazardMetadata(ImpactFunctionMetadata):
                 tr('The default threshold of 1 meter was selected based '
                    'on consensus, not hard evidence.')
             ],
-            'citations': [],
-            'map_title': tr('People in need of evacuation'),
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ],
+            'map_title': title,
+            'layer_name': title,
             'legend_title': tr('Population Count'),
             'legend_units': tr('(people per cell)'),
             'legend_notes': tr(
                 'Thousand separator is represented by %s' %
                 get_thousand_separator()),
-            'layer_name': tr('Population which need evacuation'),
             'layer_requirements': {
                 'hazard': {
                     'layer_mode': layer_mode_continuous,

@@ -74,9 +74,7 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         :param dock: Dock widget instance that we can notify of changes.
         :type dock: Dock
         """
-
         QtGui.QDialog.__init__(self, parent)
-
         # List of parameters with the translated name.
         self.resource_parameters = {
             'Resource name': tr('Resource name'),
@@ -93,7 +91,7 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
 
         self.setupUi(self)
         self.dock = dock
-        # These are in the little button bar at the top
+        # These are in the little button bar at the bottom
         # 'Remove resource' button
         # noinspection PyUnresolvedReferences
         self.remove_resource_button.clicked.connect(self.remove_resource)
@@ -120,6 +118,13 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
             self.discard_changes_button, QDialogButtonBox.ActionRole)
         # noinspection PyUnresolvedReferences
         self.discard_changes_button.clicked.connect(self.discard_changes)
+
+        # Restore defaults profiles
+        self.restore_defaults_button = QPushButton(self.tr('Restore defaults'))
+        self.button_box.addButton(
+            self.restore_defaults_button, QDialogButtonBox.ActionRole)
+        # noinspection PyUnresolvedReferences
+        self.restore_defaults_button.clicked.connect(self.restore_defaults)
 
         # Save changes to a resource
         self.save_resource_button = QPushButton(self.tr('Save resource'))
@@ -264,10 +269,30 @@ class NeedsManagerDialog(QDialog, FORM_CLASS):
         item.resource_full = resource
         self.resources_list.addItem(item)
 
-    def load_profiles(self):
+    def restore_defaults(self):
+        """Restore defaults profiles."""
+        title = tr('Restore defaults')
+        msg = tr(
+            'Restoring defaults will overwrite your changes on profiles '
+            'provided by InaSAFE. Do you want to continue ?')
+        # noinspection PyCallByClass
+        reply = QMessageBox.question(
+            self, title, msg, QtGui.QMessageBox.Yes, QtGui.QMessageBox.No)
+
+        if reply == QtGui.QMessageBox.Yes:
+            self.profile_combo.clear()
+            self.load_profiles(True)
+            # Next 2 lines fixes issues #1388 #1389 #1390 #1391
+            if self.profile_combo.count() > 0:
+                self.select_profile(0)
+
+    def load_profiles(self, overwrite=False):
         """Load the profiles into the dropdown list.
+
+        :param overwrite: If we overwrite existing profiles from the plugin.
+        :type overwrite: bool
         """
-        for profile in self.minimum_needs.get_profiles():
+        for profile in self.minimum_needs.get_profiles(overwrite):
             self.profile_combo.addItem(profile)
         minimum_needs = self.minimum_needs.get_full_needs()
         self.profile_combo.setCurrentIndex(

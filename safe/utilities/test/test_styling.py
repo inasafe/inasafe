@@ -25,7 +25,7 @@ from safe.utilities.styling import (
     mmi_colour)
 from safe.utilities.utilities import get_error_message
 from safe.test.utilities import (
-    test_data_path,
+    standard_data_path,
     load_layer,
     get_qgis_app,
     clone_shp_layer)
@@ -50,7 +50,7 @@ class StylingTest(unittest.TestCase):
         .. seealso:: https://github.com/AIFDR/inasafe/issues/126
         """
         # This dataset has all cells with value 1.3
-        data_path = test_data_path('other', 'issue126.tif')
+        data_path = standard_data_path('other', 'issue126.tif')
         layer, _ = load_layer(data_path)
 
         # Note the float quantity values below
@@ -118,7 +118,7 @@ class StylingTest(unittest.TestCase):
         """Test that transparency of minimum value works when set to 100%
         """
         # This dataset has all cells with value 1.3
-        data_path = test_data_path('other', 'issue126.tif')
+        data_path = standard_data_path('other', 'issue126.tif')
         layer, _ = load_layer(data_path)
 
         # Note the float quantity values below
@@ -163,7 +163,7 @@ class StylingTest(unittest.TestCase):
         layer = clone_shp_layer(
             name='volcano_point',
             include_keywords=True,
-            source_directory=test_data_path('hazard'))
+            source_directory=standard_data_path('hazard'))
 
         # Note the float quantity values below
         style_info = {
@@ -176,7 +176,7 @@ class StylingTest(unittest.TestCase):
                 {'opacity': 1, 'max': 539, 'colour': '#f31a1c',
                  'min': 351, 'label': 'High', 'size': 3}]}
 
-        print 'Setting style with point sizes should work.'
+        # print 'Setting style with point sizes should work.'
         set_vector_graduated_style(layer, style_info)
 
         # Now validate the size values were set as expected
@@ -216,7 +216,7 @@ class StylingTest(unittest.TestCase):
         vector_layer = clone_shp_layer(
             name='polygons_for_styling',
             include_keywords=True,
-            source_directory=test_data_path('impact'))
+            source_directory=standard_data_path('impact'))
 
         style = {
             'legend_title': u'Population Count',
@@ -288,7 +288,7 @@ class StylingTest(unittest.TestCase):
             print str(e)
         assert False, 'Incorrect handling of broken styles'
 
-    def testAddMinMaxToStyle(self):
+    def test_add_min_max_to_style(self):
         """Test our add min max to style function."""
         myClasses = [dict(colour='#38A800', quantity=2, transparency=0),
                      dict(colour='#38A800', quantity=5, transparency=50),
@@ -320,7 +320,7 @@ class StylingTest(unittest.TestCase):
         self.maxDiff = None
         self.assertListEqual(myExpectedClasses, myActualClasses)
 
-    def testMmiColour(self):
+    def test_mmi_colour(self):
         """Test that we can get a colour given an mmi number."""
         values = range(0, 12)
         myExpectedResult = ['#FFFFFF', '#FFFFFF', '#209fff', '#00cfff',

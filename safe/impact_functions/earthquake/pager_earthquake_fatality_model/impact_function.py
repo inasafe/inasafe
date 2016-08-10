@@ -26,6 +26,7 @@ from safe.impact_functions.earthquake.\
 from safe.impact_functions.earthquake\
     .pager_earthquake_fatality_model.metadata_definitions import \
     PAGFatalityMetadata
+from safe.utilities.i18n import tr
 
 
 class PAGFatalityFunction(ITBFatalityFunction):
@@ -69,6 +70,23 @@ class PAGFatalityFunction(ITBFatalityFunction):
             ('calculate_displaced_people', True),
             ('magnitude_bin', numpy.power(10, range(1, 6), dtype=float))
         ])
+
+    def notes(self):
+        """Notes and caveats for the IF report.
+
+        :returns: List containing notes.
+        :rtype: list
+        """
+        fields = [
+            tr(
+                'Fatality model is from the Population Vulnerability '
+                'Pager Model.'),
+        ]
+        # include any generic exposure specific notes from definitions.py
+        fields = fields + self.exposure_notes()
+        # include any generic hazard specific notes from definitions.py
+        fields = fields + self.hazard_notes()
+        return fields
 
     def compute_fatality_rate(self):
         """Pager method to compute fatality rate.

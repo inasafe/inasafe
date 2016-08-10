@@ -47,7 +47,7 @@ class Layer(object):
         # Defaults
         self.sublayer = sublayer
         self.filename = None
-        self.data = None
+        self._data = None  # class private
 
     def __ne__(self, other):
         """Override '!=' to allow comparison with other projection objecs
@@ -88,22 +88,6 @@ class Layer(object):
         """Return style_info dictionary
         """
         return self.style_info
-
-    def get_impact_summary(self):
-        """Return 'impact_summary' keyword if present. Otherwise ''.
-        """
-        if 'impact_summary' in self.keywords:
-            return self.keywords['impact_summary']
-        else:
-            return ''
-
-    def get_total_needs(self):
-        """Return 'total_needs' keyword if present. Otherwise ''.
-        """
-        if 'total_needs' in self.keywords:
-            return self.keywords['total_needs']
-        else:
-            return ''
 
     def get_style_type(self):
         """Return style type of a layer. If not found, return None

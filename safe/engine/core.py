@@ -17,8 +17,6 @@ LOGGER = logging.getLogger('InaSAFE')
 
 # Mandatory keywords that must be present in layers
 REQUIRED_KEYWORDS = ['layer_purpose', 'layer_mode']
-REQUIRED_HAZARD_KEYWORDS = ['hazard', 'hazard_category']
-REQUIRED_EXPOSURE_KEYWORDS = ['exposure']
 
 
 def check_data_integrity(layer_objects):
