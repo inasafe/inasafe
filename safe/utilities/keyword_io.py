@@ -189,7 +189,7 @@ class KeywordIO(QObject):
         the keywords store.
 
         :param layer: A QGIS QgsMapLayer instance.
-        :type layer: QgsMapLayer
+        :type layer: qgis.core.QgsMapLayer
 
         :param keywords: A dict containing all the keywords to be written
               for the layer.
@@ -242,7 +242,7 @@ class KeywordIO(QObject):
             copyKeywords('foo.shp', 'bar.shp', {'resolution': 0.01})
 
         :param source_layer: A QGIS QgsMapLayer instance.
-        :type source_layer: QgsMapLayer
+        :type source_layer: qgis.core.QgsMapLayer
 
         :param destination_file: The output filename that should be used
             to store the keywords in. It's a path to a layer file.
