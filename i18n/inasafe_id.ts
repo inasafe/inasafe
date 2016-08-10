@@ -1,4 +1,5 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="id" sourcelanguage="" version="2.0">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS><TS version="2.0" language="id" sourcelanguage="">
 <context>
     <name>@default</name>
     <message>
@@ -5810,7 +5811,9 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
         <location filename="needs_manager_dialog.py" line="540"/>
         <source>A displaced person should be provided with %(default value)s %(unit)s/%(units)s/%(unit abbreviation)s of %(resource name)s. Though no less than %(minimum allowed)s and no more than %(maximum allowed)s. This should be provided %(frequency)s.default value{{ Default }}</source>
         <comment>unit{{ Unit }}</comment>
-        <translation><numerusform>Penduduk yang diungsikan dapat diberikan %(default value)s %(unit)s/%(units)s/%(unit abbreviation)s %(resource name)s. Meskipun begitu, tidak boleh kurang dari %(minimum allowed)s dan tidak boleh lebih dari %(maximum allowed)s. Bantuan ini mesti disediakan %(frequency)s. Nilai default {{Default}}</numerusform></translation>
+        <translation>
+            <numerusform>Penduduk yang diungsikan dapat diberikan %(default value)s %(unit)s/%(units)s/%(unit abbreviation)s %(resource name)s. Meskipun begitu, tidak boleh kurang dari %(minimum allowed)s dan tidak boleh lebih dari %(maximum allowed)s. Bantuan ini mesti disediakan %(frequency)s. Nilai default {{Default}}</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="shake_grid.py" line="598"/>
@@ -6422,7 +6425,7 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
     </message>
     <message>
         <location filename="about_dialog.py" line="76"/>
-        <source>Edit by Hugo GarduÃ±o from The Noun Project</source>
+        <source>Edit by Hugo Gardu&#xc3;&#xb1;o from The Noun Project</source>
         <translation>Tombol Edit oleh Hugo GarduÃ±o dari The Noun Project</translation>
     </message>
     <message>
@@ -6439,6 +6442,11 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
         <location filename="about_dialog.py" line="83"/>
         <source>Humanitarian icons source: OCHA</source>
         <translation>Sumber ikon Humanitarian: OCHA</translation>
+    </message>
+    <message>
+        <location filename="about_dialog.py" line="84"/>
+        <source>&quot;Sign post&quot; by Tara Swart from the Noun Project</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -6483,8 +6491,8 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Helvetica Neue,Helvetica,Segoe UI,Arial,freesans,sans-serif'; font-size:14px; color:#333333; background-color:#ffffff;&quot;&gt;InaSAFE is free software that provides a simple but rigorous way to combine data from communities, local governments and scientists to help assess the possible impact of future disaster events on communities, assets and infrastructure. It uses innovative science and crowd sourcing techniques (OpenStreetMap, OSM) to create realistic disaster scenarios for better planning, preparedness and response activities. It is in demand by disaster managers across Indonesia and around the world. &lt;/span&gt;&lt;/p&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Helvetica Neue,Helvetica,Segoe UI,Arial,freesans,sans-serif&apos;; font-size:14px; color:#333333; background-color:#ffffff;&quot;&gt;InaSAFE is free software that provides a simple but rigorous way to combine data from communities, local governments and scientists to help assess the possible impact of future disaster events on communities, assets and infrastructure. It uses innovative science and crowd sourcing techniques (OpenStreetMap, OSM) to create realistic disaster scenarios for better planning, preparedness and response activities. It is in demand by disaster managers across Indonesia and around the world. &lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Helvetica Neue,Helvetica,Segoe UI,Arial,freesans,sans-serif&apos;; font-size:14px; color:#333333; background-color:#ffffff;&quot;&gt;InaSAFE was developed jointly by the Indonesia&apos;s National Disaster Management Agency (BNPB), the Australian Government and the World Bank - Global Facility for Disaster Reduction and Recovery (World Bank-GFDRR).&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -6498,12 +6506,12 @@ p, li { white-space: pre-wrap; }
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;These are the minimum steps you need to follow in order to use InaSAFE:&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Cantarell'; font-size:11pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;1. Add at least one hazard layer (e.g. earthquake MMI) to QGIS.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;2. Add at least one exposure layer (e.g. structures) to QGIS.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;3. Make sure you have defined keywords for your hazard and exposure layers. You can do this using the keywords icon in the InaSAFE toolbar.&lt;/span&gt;&lt;/p&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;These are the minimum steps you need to follow in order to use InaSAFE:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;1. Add at least one hazard layer (e.g. earthquake MMI) to QGIS.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;2. Add at least one exposure layer (e.g. structures) to QGIS.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;3. Make sure you have defined keywords for your hazard and exposure layers. You can do this using the keywords icon in the InaSAFE toolbar.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:11pt;&quot;&gt;4. Click on the Run button in the InaSAFE panel.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -6521,7 +6529,7 @@ p, li { white-space: pre-wrap; }
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Sans&apos;;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -6534,7 +6542,7 @@ p, li { white-space: pre-wrap; }
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;Sans&apos;; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -6547,7 +6555,7 @@ p, li { white-space: pre-wrap; }
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'AvantGarde Bk BT'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;AvantGarde Bk BT&apos;; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://www.bnpb.go.id/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Indonesia’s National Disaster Management Agency (BNPB)&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;http://dfat.gov.au/geo/indonesia/development-assistance/Pages/disaster-risk-management-in-indonesia.aspx&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Australian Government – Disaster Risk Management in Indonesia&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a href=&quot;https://www.gfdrr.org/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;World Bank - Global Facility for Disaster Reductions and Recovery&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;
@@ -6815,6 +6823,64 @@ p, li { white-space: pre-wrap; }
         <location filename="analysis_handler.py" line="703"/>
         <source>Opening using the default PDF viewer on your system. The generated pdfs were saved as:</source>
         <translation>Membuka dengan menggunakan pembaca berkas PDF pada sistem komputer Anda. Berkas PDF Anda disimpan di:</translation>
+    </message>
+</context>
+<context>
+    <name>AshEvent</name>
+    <message>
+        <location filename="ash_event.py" line="240"/>
+        <source>Volcanic Ash Impact</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="241"/>
+        <source>Volcano: %s, Alert Level: %s %s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="244"/>
+        <source>Province: %s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="247"/>
+        <source>Longitude %s Latitude %s; Eruption Column Height (a.s.l) - %d m</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="249"/>
+        <source>Elapsed time since event %s hour(s) and %s minute(s)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="250"/>
+        <source>Potential impact at each fallout level</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="251"/>
+        <source>Nearby places</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="252"/>
+        <source>Land Cover Impact</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="253"/>
+        <source>The impact estimation is automatically generated and only takes into account the population, cities and land cover affected by different levels of volcanic ash fallout at surface level. The estimate is based on volcanic ash fallout data from Badan Geologi, population count data derived by DMInnovation from worldpop.org.uk, place information from geonames.org, land cover classification data provided by Indonesian Geospatial Portal at http://portal.ina-sdi.or.id and software developed by BNPB. Limitation in the estimates of surface fallout, population and place names datasets may result in significant misrepresentation of the on-the-surface situation in the figures shown here. Consequently decisions should not be made soley on the information presented here and should always be verified by ground truthing and other reliable information sources.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="271"/>
+        <source>This report was created using InaSAFE version %s. Visit http://inasafe.org for more information. </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="677"/>
+        <source>People Affected</source>
+        <translation type="unfinished">Penduduk Terdampak</translation>
     </message>
 </context>
 <context>
@@ -7440,7 +7506,7 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>FloodEvent</name>
     <message>
-        <location filename="flood_event.py" line="576"/>
+        <location filename="flood_event.py" line="536"/>
         <source>THE GOVERNMENT OF DKI JAKARTA PROVINCE
 REGIONAL DISASTER MANAGEMENT AGENCY
 </source>
@@ -7448,47 +7514,47 @@ REGIONAL DISASTER MANAGEMENT AGENCY
 BADAN PENANGGULANGAN BENCANA DAERAH</translation>
     </message>
     <message>
-        <location filename="flood_event.py" line="579"/>
+        <location filename="flood_event.py" line="539"/>
         <source>FLOOD IMPACT REPORT FOR POPULATION</source>
         <translation>LAPORAN DAMPAK BANJIR PADA PENDUDUK</translation>
     </message>
     <message>
-        <location filename="flood_event.py" line="580"/>
+        <location filename="flood_event.py" line="540"/>
         <source>Based on flood %s</source>
         <translation>Berdasarkan banjir %s</translation>
     </message>
     <message>
-        <location filename="flood_event.py" line="583"/>
+        <location filename="flood_event.py" line="543"/>
         <source>Legend</source>
         <translation>Legenda</translation>
     </message>
     <message>
-        <location filename="flood_event.py" line="584"/>
+        <location filename="flood_event.py" line="544"/>
         <source>InaSAFE Analysis Result</source>
         <translation>Hasil Analisis InaSAFE</translation>
     </message>
     <message>
-        <location filename="flood_event.py" line="585"/>
+        <location filename="flood_event.py" line="545"/>
         <source>Data Source</source>
         <translation>Sumber Data</translation>
     </message>
     <message>
-        <location filename="flood_event.py" line="586"/>
+        <location filename="flood_event.py" line="546"/>
         <source>Contact</source>
         <translation>Kontak</translation>
     </message>
     <message>
-        <location filename="flood_event.py" line="587"/>
+        <location filename="flood_event.py" line="547"/>
         <source>Supported by</source>
         <translation>Didukung oleh</translation>
     </message>
     <message>
-        <location filename="flood_event.py" line="588"/>
+        <location filename="flood_event.py" line="548"/>
         <source>Disclaimer</source>
         <translation>Ketentuan</translation>
     </message>
     <message>
-        <location filename="flood_event.py" line="589"/>
+        <location filename="flood_event.py" line="549"/>
         <source>Data Sources:
 1. Hazard Data
    Flood: BPBD DKI Jakarta / PetaJakarta.org
@@ -7503,12 +7569,12 @@ Penduduk: Dinas Kependudukan DKI Jakarta.
 </translation>
     </message>
     <message>
-        <location filename="flood_event.py" line="595"/>
+        <location filename="flood_event.py" line="555"/>
         <source>This impact estimate is automatically generated and only takes into account the population affected by flood hazard in Jakarta. The estimate is based on flood hazard data from BPBD DKI Jakarta and population exposure data from the Population Agency, DKI Jakarta Province. Limitations in the estimates of flood hazard and population may result in significant misrepresentation of the on-the-surface situation in the figures shown here. Consequently, decisions should not be made solely on the information presented here and should always be verified with other reliable information sources.</source>
         <translation>Perkiraan dampak ini secara otomatis dibangkitkan dan hanya memperhitungkan penduduk dan kota yang terdampak banjir di Jakarta. Perkiraan ini berdasarkan data banjir dari BPBD DKI Jakarta dan data penduduk dari Dinas Kependudukan DKI Jakarta. Batasan dalam perkiraan banjir dan penduduk dapat menyebabkan kesalahan representasi dari situasi yang sebenarnya terjadi. Oleh karena itu, keputusan tidak seharusnya diambil semata-mata berdasarkan informasi yang tertera di sini dan harus selalu diverifikasi dengan sumber terpercaya lainnya.</translation>
     </message>
     <message>
-        <location filename="flood_event.py" line="610"/>
+        <location filename="flood_event.py" line="569"/>
         <source>Pusat Pengendalian Operasi (Pusdalops)
 BPBD Provinsi DKI Jakarta
 Jl. Medan Merdeka Selatan No. 8-9 Blok F lantai 3
@@ -7521,34 +7587,34 @@ Telp. (021)164
 </translation>
     </message>
     <message>
-        <location filename="flood_event.py" line="638"/>
-        <source>Total affected population : %s people
-Estimates of IDP          : %s people
-
-Relief items to be provided %s :
-%s
-
-Relief items to be provided %s :
-%s
-        </source>
-        <translation>Total penduduk terdampak : %s jiwa
-Perkiraan IDP : %s jiwa
-
-Barang bantuan yang disediakan %s:
-%s
-
-Barang bantuan yang disediakan %s:
-%s</translation>
-    </message>
-    <message>
-        <location filename="flood_event.py" line="678"/>
+        <location filename="flood_event.py" line="683"/>
         <source>People Affected</source>
         <translation>Penduduk Terdampak</translation>
     </message>
     <message>
-        <location filename="flood_event.py" line="686"/>
+        <location filename="flood_event.py" line="691"/>
         <source>Flood Depth (cm)</source>
         <translation>Kedalaman Banjir (cm)</translation>
+    </message>
+    <message>
+        <location filename="flood_event.py" line="588"/>
+        <source>%s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="flood_event.py" line="590"/>
+        <source>Total affected population (people)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="flood_event.py" line="594"/>
+        <source>Estimates of IDP (people)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="flood_event.py" line="600"/>
+        <source>Relief items to be provided %s :</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -8248,7 +8314,7 @@ ke
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:13.5pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Ubuntu&apos;; font-size:13.5pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:12pt; font-weight:600; color:#f50000;&quot;&gt;Note:&lt;/span&gt;&lt;span style=&quot; font-family:&apos;Cantarell&apos;; font-size:12pt;&quot;&gt; The above setting requires a QGIS restart to disable / enable. Error messages and diagnostic information will be posted to http://sentry.linfiniti.com/inasafe-desktop/. Some institutions may not allow you to enable this feature - check with your network administrator if unsure. Although the data is submitted anonymously, the information contained in tracebacks may contain file system paths which reveal your identity or other information from your system.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -8969,97 +9035,97 @@ p, li { white-space: pre-wrap; }
         <translation>Getaran yang Dirasakan</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1615"/>
+        <location filename="shake_event.py" line="1622"/>
         <source>Estimated Earthquake Impact</source>
         <translation>Perkiraan Dampak Gempa</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1616"/>
+        <location filename="shake_event.py" line="1623"/>
         <source>Estimated number of people affected by each MMI level</source>
         <translation>Perkiraan banyaknya penduduk yang terkena dampak untuk setiap tingkatan MMI</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1618"/>
+        <location filename="shake_event.py" line="1625"/>
         <source>Estimated fatalities</source>
         <translation>Perkiraan kematian</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1661"/>
+        <location filename="shake_event.py" line="1668"/>
         <source>km</source>
         <translation>km</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1662"/>
+        <location filename="shake_event.py" line="1669"/>
         <source>of</source>
         <translation>dari</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1663"/>
+        <location filename="shake_event.py" line="1670"/>
         <source>bearing</source>
         <translation>menanggung</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1679"/>
+        <location filename="shake_event.py" line="1686"/>
         <source>n/a</source>
         <translation>tidak ada informasi</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1686"/>
+        <location filename="shake_event.py" line="1693"/>
         <source>Elapsed time since event</source>
         <translation>Waktu berlalu sejak kejadian</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1710"/>
+        <location filename="shake_event.py" line="1717"/>
         <source>Latitude</source>
         <translation>Lintang</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1712"/>
+        <location filename="shake_event.py" line="1719"/>
         <source>Longitude</source>
         <translation>Bujur</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1714"/>
+        <location filename="shake_event.py" line="1721"/>
         <source>Depth</source>
         <translation>Kedalaman</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1717"/>
+        <location filename="shake_event.py" line="1724"/>
         <source>Located</source>
         <translation>Terletak</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1761"/>
+        <location filename="shake_event.py" line="1768"/>
         <source>minute(s)</source>
         <translation>menit</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1761"/>
+        <location filename="shake_event.py" line="1768"/>
         <source>hour(s)</source>
         <translation>jam</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1775"/>
+        <location filename="shake_event.py" line="1782"/>
         <source>days</source>
         <translation>hari</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1775"/>
+        <location filename="shake_event.py" line="1782"/>
         <source>weeks</source>
         <translation>pekan</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1804"/>
+        <location filename="shake_event.py" line="1811"/>
         <source>Version: %s</source>
         <translation>Versi: %s</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1647"/>
+        <location filename="shake_event.py" line="1654"/>
         <source>This report was created using InaSAFE version %s. Visit http://inasafe.org for more information.</source>
         <translation>Laporan ini dibuat dengan menggunakan InaSAFE versi %s. Kunjungi http://inasafe.org untuk informasi lebih lanjut.</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1630"/>
+        <location filename="shake_event.py" line="1637"/>
         <source>Population count per grid cell</source>
         <translation>Jumlah populasi per grid</translation>
     </message>
@@ -9069,17 +9135,17 @@ p, li { white-space: pre-wrap; }
         <translation>Jumlah penduduk (x 1000)</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1629"/>
+        <location filename="shake_event.py" line="1636"/>
         <source>Nearby Places</source>
         <translation>Lokasi Sekitar</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1631"/>
+        <location filename="shake_event.py" line="1638"/>
         <source>This impact estimation is automatically generated and only takes into account the population and cities affected by different levels of ground shaking. The estimate is based on ground shaking data from BMKG, population count data derived by Australian Government from worldpop.org.uk, place information from geonames.org and software developed by BNPB. Limitations in the estimates of ground shaking, population and place names datasets may result in significant misrepresentation of the on-the-ground situation in the figures shown here. Consequently decisions should not be made solely on the information presented here and should always be verified by ground truthing and other reliable information sources. The fatality calculation assumes that no fatalities occur for shake levels below MMI 4. Fatality counts of less than 50 are disregarded.</source>
         <translation>Perkiraan dampak ini dihasilkan secara otomatis dan hanya memperhitungkan penduduk dan kota yang terdampak oleh beberapa tingkatan getaran tanah. Perkiraan ini berdasarkan data getaran dari BMKG, data jumlah penduduk yang diturunkan oleh Pemerintah Australia dari worldpop.org.uk, informasi tempat dari geonames.org dan perangkat lunak yang dikembangkan oleh BNPB. Batasan dalam perkiraan getaran tanah, data populasi, dan data nama tempat dapat menghasilkan kesalahan representasi dari situasi yang sebenarnya terjadi. Oleh karena itu keputusan tidak seharusnya diambil semata-mata hanya berdasarkan informasi yang ditunjukkan di sini dan seharusnya selalu diperiksa kebenarannya dengan survei lapangan ataupun dari sumber informasi lainnya yang terpercaya. Perhitungan kematian menggunakan asumsi bahwa tidak terjadi kematian pada level getaran di bawah 4 MMI. Jumlah kematian kurang dari 50 diabaikan.</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1650"/>
+        <location filename="shake_event.py" line="1657"/>
         <source>Supported by the Australian Government, Geoscience Australia and the World Bank-GFDRR.</source>
         <translation>Didukung oleh Pemerintah Australia, Geoscience Australia, dan Bank Dunia-GFDRR.</translation>
     </message>
@@ -9535,7 +9601,7 @@ p, li { white-space: pre-wrap; }
     <name>pgFcAggLayerDisjoint</name>
     <message>
         <location filename="step_fc65_agglayer_disjoint.ui" line="65"/>
-        <source>The aggregation layer and hazard layer don't intersect, i.e. they cover disjoint areas.
+        <source>The aggregation layer and hazard layer don&apos;t intersect, i.e. they cover disjoint areas.
  Please step back and select another layer.</source>
         <translation>Lapisan agregasi dan ancaman tidak berpotongan, misalnya mereka tidak menutupi area yang sama.
 Mohon kembali ke tahap sebelumnya dan pilih lapisan lain.</translation>
@@ -9676,7 +9742,7 @@ Mohon kembali ke tahap sebelumnya dan pilih lapisan lain.</translation>
     <name>pgFcDisJointLayers</name>
     <message>
         <location filename="step_fc45_disjoint_layers.ui" line="65"/>
-        <source>The hazard layer and exposure layer don't intersect, i.e. they cover disjoint areas.
+        <source>The hazard layer and exposure layer don&apos;t intersect, i.e. they cover disjoint areas.
  Please step back and select another layer.</source>
         <translation>Lapisan ancaman dan keterpaparan tidak berpotongan, misalnya mereka tidak menutupi area yang sama.
 Mohon kembali ke tahap sebelumnya dan pilih lapisan lain.</translation>
@@ -9739,7 +9805,7 @@ Mohon kembali ke tahap sebelumnya dan pilih lapisan lain.</translation>
     <name>pgFcExtentDisjoint</name>
     <message>
         <location filename="step_fc75_extent_disjoint.ui" line="68"/>
-        <source>The selected extent doesn't intersect input layers.
+        <source>The selected extent doesn&apos;t intersect input layers.
  Please step back and select another layer.</source>
         <translation>Cakupan yang dipilih tidak berpotongan dengan lapisan-lapisan masukan.
 Silahkan mundur ke belakangan dan pilih lapisan lainnya.</translation>
@@ -10122,7 +10188,7 @@ Silahkan mundur ke belakangan dan pilih lapisan lainnya.</translation>
     </message>
     <message>
         <location filename="test_aggregator.py" line="105"/>
-        <source>DístrÜt&apos;s of Jakarta</source>
+        <source>D&#xed;str&#xdc;t&apos;s of Jakarta</source>
         <translation>DístrÜt&apos;s Jakarta</translation>
     </message>
 </context>
