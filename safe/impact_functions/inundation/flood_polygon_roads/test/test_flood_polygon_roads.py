@@ -67,7 +67,8 @@ class TestFloodVectorPolygonRoadsFunction(unittest.TestCase):
         self.assertEquals(count, expected_feature_total, message)
 
     def test_run_aggregation(self):
-        """Test running the IF with aggregation."""
+        """Test running the IF with aggregation with same attribute name #2750.
+        """
         function = FloodPolygonRoadsFunction.instance()
 
         hazard_path = standard_data_path(
