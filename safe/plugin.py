@@ -320,7 +320,8 @@ class Plugin(object):
             'Population Downloader'))
         self.action_import_dialog.setWhatsThis(self.tr(
             'Population Downloader'))
-        self.action_import_dialog.triggered.connect(self.show_population_downloader)
+        self.action_import_dialog.triggered.connect(
+            self.show_population_downloader)
         self.add_action(self.action_import_dialog)
 
     def _create_add_osm_layer_action(self):
@@ -780,9 +781,12 @@ class Plugin(object):
 
     def show_population_downloader(self):
         """Show the Population downloader dialog."""
-        from safe.gui.tools.population_downloader_dialog import PopulationDownloaderDialog
+        from safe.gui.tools.population_downloader_dialog import \
+            PopulationDownloaderDialog
 
-        dialog = PopulationDownloaderDialog(self.iface.mainWindow(), self.iface)
+        dialog = PopulationDownloaderDialog(
+            self.iface.mainWindow(),
+            self.iface)
         dialog.show()  # non modal
 
     def add_osm_layer(self):

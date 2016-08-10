@@ -44,8 +44,8 @@ from safe.utilities.qgis_utilities import (
     display_warning_message_box)
 
 from safe.gui.tools.rectangle_map_tool import RectangleMapTool
-from safe.gui.tools.help.population_downloader_help import population_downloader_help
-
+from safe.gui.tools.help.population_downloader_help import \
+    population_downloader_help
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -385,7 +385,7 @@ class PopulationDownloaderDialog(QDialog, FORM_CLASS):
         """
 
         path = '%s.geojson' % base_path
-        
+
     def reject(self):
         """Redefinition of the reject() method
         to remove the rectangle selection tool.

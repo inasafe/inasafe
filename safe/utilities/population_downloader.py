@@ -129,7 +129,7 @@ def create_layer(data, points):
 
     fields = QgsFields()
     fields.append(QgsField("pixelCount", QVariant.String))
-    fields.append(QgsField("population",  QVariant.String))
+    fields.append(QgsField("population", QVariant.String))
     fields.append(QgsField("area", QVariant.String))
 
     writer = QgsVectorFileWriter(
@@ -185,6 +185,7 @@ def create_layer(data, points):
     iface.mapCanvas().refresh()
 
     iface.zoomToActiveLayer()
+
 
 
 
