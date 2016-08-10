@@ -30,7 +30,7 @@ __author__ = 'Rizky Maulana Nugraha <lana.pcfre@gmail.com>'
 __date__ = '5/24/16'
 
 
-class AshRasterHazardLandCoverFunctionMetadata(ImpactFunctionMetadata):
+class AshRasterLandCoverFunctionMetadata(ImpactFunctionMetadata):
 
     @staticmethod
     def as_dict():
@@ -45,7 +45,7 @@ class AshRasterHazardLandCoverFunctionMetadata(ImpactFunctionMetadata):
         """
         title = tr('Land cover affected by volcanic ash')
         dict_meta = {
-            'id': 'AshRasterHazardLandCoverFunction',
+            'id': 'AshRasterLandCoverFunction',
             'name': tr('Ash raster on land cover'),
             'impact': tr('Be affected'),
             'title': tr('Be affected'),
