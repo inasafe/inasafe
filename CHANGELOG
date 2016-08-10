@@ -1,3 +1,454 @@
+Changelog for version 3.5.0
+================================
+
+087ed0c (HEAD -> release, upstream/develop, origin/develop, origin/HEAD, develop) Add changelog for 3.5 (#3125)
+b10bb47 Translation 3.5 (#3134)
+631bf88 Merge pull request #3133 from ismailsunni/fix_3405_logo_for_place
+392ef03 Merge pull request #3052 from lucernae/realtime_ash
+ed449e0 Fix tests
+3bc42e5 Better formating svg.
+02d306d Add logo for place and image credit #3405.
+8197712 Update earthquake template
+f089f3e Merge branch 'develop' of http://github.com/AIFDR/inasafe into realtime_ash
+b14aab1 Translation 3.5 (#3130)
+ba1bf81 Merge pull request #3128 from ismailsunni/fix_2750_same_field_name_problem
+fea77d7 Merge pull request #3127 from Charlotte-Morgan/develop
+3fd278c Elaborate comment.
+66c6bb3 PEP8.
+457eaff Merge branch 'develop' of github.com:inasafe/inasafe into fix_2750_same_field_name_problem
+85e9012 Fix #2750 by storing the non conflicting attribute name.
+c523c7f add new concepts for affected_people, killed_people, injured_people
+2b0e35f add citations for concepts
+b02449d Translation 3.5 (#3124)
+9fa38a6 Merge branch 'realtime-flood' into realtime_ash
+9d059be Merge branch 'develop' of http://github.com/AIFDR/inasafe into realtime-flood
+ff6def4 upgrade inasafe requirement
+15992c8 Merge branch 'develop' of http://github.com/AIFDR/inasafe into realtime_ash
+c3905be Add unit test to catch the bug.
+208a9fa Merge pull request #3123 from ismailsunni/fix_3122_question_mark
+de25478 Add question mark for fixing #3122
+150f6e8 Merge pull request #3119 from ismailsunni/fix_3118_total_mistery
+e00ec68 Merge pull request #3121 from ismailsunni/typo-3.5
+ce02669 Typo.
+47e9469 Small typo and coding standards for translation.
+ef54d5e Merge pull request #3120 from timlinux/inasafe-3117
+5180eea Support more granular definition of notes  (#3110)
+38b37ad (origin/inasafe-3117, inasafe-3117) fix #3117 - Add citations to concept definitions in definitions.py
+9f7dc06 Fix for #2998 - show correct attribution for each earthquake IF (#3116)
+99f2853 Do not show total if it is Age, Gender, or MinimumNeeds. Fix #3118
+9611b06 Merge pull request #3115 from ismailsunni/fix_2847_no_aggregation_table
+42f6080 PEP8.
+7a991a1 Merge branch 'develop' of github.com:inasafe/inasafe into fix_2847_no_aggregation_table
+ae9ed27 Tidy up code.
+0cd4fe8 Fix failed unit test.
+bb4ee48 Merge pull request #3112 from ismailsunni/fix_2798_attribute_error
+831e262 Updates to SPHERE standards - see #3065 (#3081)
+e079be0 Implementation for standardised map titles and layer names. (#3114)
+a9514bb Merge branch 'develop' of github.com:inasafe/inasafe into fix_2847_no_aggregation_table
+36d33fe Better setup for postprocessor and checker.
+d718d05 Merge pull request #3105 from ismailsunni/fix_3089_thousand_separator
+f9a09cb Merge pull request #3111 from ismailsunni/fix_3108_no_wet
+84d6d29 Merge pull request #3113 from ismailsunni/fix_2430_tick_bullet
+e5becec Use tick for action checklist. Fix #2430.
+436943c Add custom bullet list.
+63f91b2 By pass Unknown geometry type.
+bcd7ca2 More zero impact exception on the other IFs.
+a18f432 Add zero impact exception if no wet in value mapping. Fix #3108
+7c6581d Merge pull request #3107 from ismailsunni/fix_3076_datetime_format
+8542ec7 Add more format for datetime per #3076
+0f98032 add notes for all hazards (#3104)
+01fdf79 Add thousands separator per #3089.
+965bcfc fix #2804 - make checking the analysis environment more efficient by not reading the full raster each time you pan or zoom (#3102)
+afbcc34 Merge pull request #3100 from Charlotte-Morgan/develop
+9dbb7ff Merge pull request #3056 from ismailsunni/paper_cut
+717b038 update test text string
+babc9f9 Fix population thousand separator.
+3c0f2bb fix volcano notes
+e57f946 fix volcano notes
+97c35d4 PEP8.
+8645818 Merge branch 'develop' of github.com:inasafe/inasafe into paper_cut
+0f1faf3 Fix volcano names in volcano polygon IF.
+da4c641 Fix radii sorting in volcano point.
+5999a53 Fix volcano names in volcano point.
+d204d04 Minor text tweaks added single and multi event notes for volcano
+747dfba Minor fixes (#3096)
+96eeeea incorporated Tim's brain dump for roads, volcano, tsunami and places. (#3093)
+dc75670 Reporting standards (#3078)
+729e657 fix #3071 (#3094)
+f5ae0c5 Merge pull request #3092 from Charlotte-Morgan/develop
+03fed25 Merge pull request #3077 from easmetz/definitions
+b8e7875 removed "the" before "people in buildings"
+6d48556 Merge branch 'develop' of https://github.com/inasafe/inasafe into definitions
+8765e37 replace areas with zones fix capitalisation replace moderate with medium
+fc5c15a changed "persons" to "people" according to feedback from Charlotte
+82efb92 Merge pull request #3087 from easmetz/EQ-IF
+38b9beb Merge pull request #3088 from easmetz/population
+12de12b removed statement about the "people_in_buildings" dataset being experimental
+da0ff7e removed statement "there are no InaSAFE Impact Functions that use this exposure data yet"
+c1eecb6 removed markdown "affected"
+fefdaaf improved definitions of 'count' and 'density' to help users in wizard
+aea6453 shortened description of ITB Bayesian EQ IF to fit into wizard window
+8b29440 added definition for concept "affected"
+3aaa12f inserted new concepts: displace, evacuated
+c3f69e0 changed focus from exposure_people_in_buildings to exposure_population.
+8cd6d65 Merge branch 'develop' of https://github.com/inasafe/inasafe into definitions
+3268506 Added a make command so nightlies can be triggered locally (#3074)
+c7454b5 changing "persons" to "people"
+c507a70 removing rogue comma
+d9acc84 changes to correct how the citations are done - I did them incorrectly the first time
+4dc15a4 Inserted definitions of displaced and evacuated into population in buildings/population notes (as they are the same). I am not completely sure if I have cited correctly as the link is too long for the space available. The definitions are slightly inconsistent in their wording as I have used the exact UNISDR definitions. I think it would be wise to edit them for consistency of wording (ie persons vs people, etc) but I'm open to comment.
+f8556bf Update ash report styling
+5e2bd14 Fix plugin load error (#3075)
+a5721b2 Reporting standards (#3027)
+6dc6be6 Minor text tweaks (#3066)
+3cd3d6f Refactor report generation for Realtime Ash: - Create templating system for population, nearby and landcover table - Display overview map and collation - Add environment variable for additional layer context - Fix AshRasterPlaces and AshRasterLandCover so it calculates Unaffected exposure correctly
+c837549 PEP8.
+fbbf261 Only show unique volcano names.
+15ef03f Move version compatibilities to definitions.py
+8406770 Merge pull request #3053 from Gustry/place-value-mapping
+453deaa remove clear_further_steps in exposure places classify
+e04c7d3 fix zoom layer
+4fa3e22 Merge pull request #3050 from Gustry/total-road-report
+e5c3ab9 disable inset layer
+56b6c10 Add nearby-table calculation
+4e5f7ff Let there be citations. Added forma citation structures to definitions and all impact function metadata. Not exposed in any reports yet. (#3049)
+8d4cf8d Add name and population fields to the wizard about place exposure (#3047)
+dd158fb (rizky/realtime_ash) Merge branch 'develop' of http://github.com/AIFDR/inasafe into realtime_ash
+718b75c Add Realtime Ash functionality
+1384412 add total line to the road impact table
+3082b59 Merge pull request #3051 from Gustry/headings
+4f9c562 add headings for roads/places/buildingsin the impact summary
+b925fd4 Merge pull request #3048 from Gustry/metadate_exposure
+cb9ab92 fix #2911 - PetaJakarta layer style not working (#3044)
+b8ba37f Metadata definition cleanups from @easmetz (#3046)
+6b5e881 Merge pull request #3039 from ismailsunni/fix_2746_remove_entire_area
+8ba30ae update exposure layers with new keywords
+3047ea2 Small pep8.
+4f0e2b6 Merge branch 'develop' of github.com:inasafe/inasafe into fix_2746_remove_entire_area
+01d767d Revert back changes.
+5f66469 Fix #2746. Skip post processor for road and structure if entire area.
+b233e6b Merge pull request #3043 from Gustry/reports-units
+4bcbce0 More dirty hack.
+9de71c9 add units in roads/places reports and refactoring
+459626f fix #3034 - remove duplication of hazard and exposure concepts in def… (#3035)
+d289b54 Merge pull request #3041 from Gustry/ash-places
+7183458 Fix #2966 - support more formats than just png for custom map north arrow and organsiation logo (#3040)
+b272869 Merge branch 'ash-places' of https://github.com/Gustry/inasafe into realtime_ash
+560a80c Merge branch 'develop' of http://github.com/AIFDR/inasafe into realtime_ash
+e4b221c Add backend celery infrastructure for Ash Realtime
+ce10c83 add airports dataset
+6bdad15 ash on places
+dd5fb62 Merge pull request #3033 from ismailsunni/ash_people_if
+5bc861b (realtime_ash) uncomment logo path calculations
+1855392 Update Ash template
+8750116 Removed the impact merge tool. fix #2909. (#3036)
+a41c4fa Fix failing test.
+05110c4 Merge branch 'develop' of github.com:inasafe/inasafe into ash_people_if
+82da242 Merge branch 'develop' of github.com:inasafe/inasafe into fix_2746_remove_entire_area
+0381c0e Merge pull request #3038 from inasafe/update-pycharm-logo
+27032be Fix #2746, remove Entire area.
+f769a72 More appropriate URL
+2781cc4 Merge pull request #3011 from Gustry/memory-error
+ae31a4f Update PyCharm logo
+842412c Add pdf generation tests. Fix tests.
+7d25272 Impact data should be in raw format.
+4316978 Code standarads.
+a6f69bb Another fix failing test.
+addc65b PEP8.
+677a5a1 Merge branch 'develop' of github.com:inasafe/inasafe into ash_people_if
+3c369eb Fix failed test on travis.
+2e89716 Replace people with population.
+3e5c163 Merge pull request #2995 from lucernae/develop_functionality
+51b7e89 Merge branch 'develop' of github.com:inasafe/inasafe into ash_people_if
+6c9ea59 Make test.
+d48df20 refactoring report templates,merging child class buildings and roads (#3029)
+a74440c Refactor how notes are handled (#3023)
+b04125d Cleaner approach.
+98d8a6c Merge pull request #3032 from Gustry/data
+c23e097 It works but not good result.
+d205a5a update dataset to 3.5
+23a5dda Ash raster on population is running, but need to check the result.
+a6883d9 Initial commit for realtime ash report test
+93bbf9f Add initial commit for Ash Raster Population IF.
+c35eda5 Add ash raster IF to loader.
+05177a5 Update keyword version.
+de17325 Merge pull request #3005 from ismailsunni/fix_2913_peta_jakarta
+a334e4f Fix docs
+045164e (rizky/develop_functionality) Merge branch 'develop' of github.com:AIFDR/inasafe into develop_functionality
+fda53e2 Move metadata definitions one level up.
+b30586b Merge pull request #3021 from ismailsunni/fix_2926_missing_keyword
+a68ac1f Fix merged conflict.
+40cd1a2 Merge branch 'develop' of github.com:inasafe/inasafe into fix_2926_missing_keyword
+2d251c3 Update string for message.
+a04ae55 (rizky/develop) Merge pull request #3003 from ismailsunni/fix_old_keyword_problem
+dd6e3f0 Use suggestion style instead of info style
+73ee39d Merge pull request #3025 from Gustry/fix-2921-minimum-needs
+f0d53bb Merge pull request #3000 from Gustry/layer-visibility
+8f58ef4 Merge branch 'develop' of github.com:inasafe/inasafe into fix_2926_missing_keyword
+0e15cf8 Merge pull request #3024 from Gustry/road-report-summary
+7c283c3 minimum needs : add a button to restore defaults
+f842a44 fix tests
+663d52b reverse the impact summary for roads report #2950
+2d5ebe9 Add more comment and add more catcher.
+f08a60b Add header.
+f7aa865 PEP8.
+6c18546 Merge branch 'develop' of github.com:inasafe/inasafe into fix_2926_missing_keyword
+1638e1b Add message for missing keywords #2926.
+502024d Merge pull request #3008 from Gustry/clean-reports
+e1fef25 Merge pull request #3017 from Gustry/missing-translations
+d2bcf05 add missing translations in notes
+ccf555b add missing translations in the road/building report
+3f9ddca Merge pull request #3016 from Gustry/remove-threshold
+71629de Merge pull request #3015 from Gustry/translation
+c60b182 Remove print and add clearer comment.
+c17efb4 fix tests about threshold
+5fc288b Remove the building threshold fix #2932
+ad1ce2f fix translated legend and attribute table
+2b4cbe0 Merge pull request #3013 from Gustry/fix-2858-not-affected
+d59008e fix #2858 not affected legend in classified raster building IF
+c69daba display a nice error message if MemoryError
+8da9426 fix landcover imported twice
+c60c11c fix the question inheritance
+58e0f00 use more POO in reports
+ca5d1c0 Call Report constructor in each IF
+d21fd11 Merge pull request #3010 from Gustry/data
+96cf7e6 remove potential-idp, add grid jakarta and landcover to the test layers
+e47aae3 Merge pull request #3009 from Gustry/fix-travis
+bac97d8 fix failed tests in qgis_testrunner.sh
+45fd12d Merge branch 'develop_functionality' of github.com:lucernae/inasafe into develop_functionality
+0c0289a fix imports
+5de3b16 (inasafe-2804) Merge pull request #2979 from Gustry/travis-docker
+339a232 Add missing keyword data test.
+bd0d5bd Show proper message when there is invalid keyword.
+ce57b10 Merge pull request #3004 from Gustry/tr-osm-downloader
+63d04d2 Merge pull request #3002 from Gustry/unicode
+3cd12fd add translations for countries
+b165c73 Do not read impact layer's report when there is zero impact.
+8321521 Fix #2913 for key error classified polygon population IF.
+3db7717 use unicode if the layer name has some accents
+9f80443 Better handling in wizard for MetadataError from old xml keywords.
+7b29978 Merge branch 'develop' of github.com:inasafe/inasafe into fix_old_keyword_problem
+0814e82 Merge pull request #2999 from ismailsunni/fix_2969_minus_number
+fa3cc9f Fix tests
+01e7323 Fix failed test.
+098370a Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop_functionality
+77be0c4 Fix failed test.
+cb442cb Fix #2969
+611f930 copy the dock behaviour to the wizard when the analysis is finished
+be7eb21 Show if we are running slow tests
+8f18921 Merge remote-tracking branch 'upstream/develop' into travis-docker
+e26d7c5 Fix test data.
+2dd29ba make the exposure/hazard visible when we add them from IFCW
+8009329 Merge pull request #2685 from ismailsunni/not_slow_test
+30a8c7f Small pep8.
+718fbe7 Skip slow test only on travis.
+64e8183 Get rid off X in test name.
+3bed92e Merge branch 'develop' of github.com:inasafe/inasafe into not_slow_test
+fffdb5d Merge branch 'develop' of github.com:inasafe/inasafe into fix_2969_minus_number
+9968edd Update keywords.
+fca5aa0 Better unit test.
+9c44536 Better unit test and fix small issue.
+ea71aeb Add index column in test data.
+ea1f922 Remove categorical IF parameter.
+85aa367 Add more comments
+b038f0f Convert unicode to string when store in vector.
+7893e92 Use value map for classified raster hazard.
+5dffedf Smaller test data.
+b56c5bd Merge pull request #2997 from Gustry/labels-2925
+2efbf52 Merge pull request #2996 from Gustry/logs-in-tests
+450d22a improve labels in settings about layer visible
+97709cf remove print or logs in tests
+5ac3f26 use unittest.skip instead of renaming the test
+c71c08b Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop_functionality
+31790d0 Modify land cover report mixin to include impact summary
+6cbfa8b Add data test for #2969
+e0ba802 Remove slow = false for consistency.
+92edf2e Merge branch 'develop' into not_slow_test
+0e9d79f Replace mark as slow with skip test.
+f5f3e3c Merge remote-tracking branch 'upstream/develop' into travis-docker
+dc76c8c Merge pull request #2988 from Gustry/change_test
+12301fb do not put test in a function name if it is not a test
+586679f rename tests
+b76a015 fix how we launch the test suite
+b83b0fe disable QGIS 2.8
+81fe0a9 enable QGIS 2.8
+936eaf8 travis config
+7c2aa13 fix qgis_testrunner output
+451b9fb tests disabled in docker qgis
+d7252e3 Merge pull request #2981 from ismailsunni/fix_1128_update_provenance
+de99d36 Removed duplicated show_osm_downloader method in plugin.py (#2978)
+7854d12 fix #1317 - add minimum needs for SPHERE (#2983)
+4ab3149 Add old invalid keyword test file.
+0131d44 Pass when the metadata is outdated on loading to combo box. (#2976)
+90b118a add qgis 2.8 and qgis 2.14 to travis
+c95c317 fix tty
+c57551b travis
+614e08e disable clip raster because of the prompt in the UI
+0ac3a30 Merge pull request #2982 from Gustry/qgis-testing-improvments
+371c3ba Update test on metadata.
+e4eb15f add qgis version in the test log
+be4dfae fix if the real iface did not find the dock
+ac75a3b add test utilities package
+cd9f381 fix import Dock in tests
+ce216e7 Update metadata
+84b4599 Merge branch 'develop' of github.com:inasafe/inasafe into fix_2945_metadata_error
+208b042 Add more information in impact layer provenance.
+7ecdf06 Merge pull request #2974 from Gustry/test-menu
+ae42829 Merge pull request #2837 from lucernae/develop-ash-raster-landcover
+7e980f9 Pass when the metadata is outdated on loading to combo box.
+425eab8 (rizky/develop-ash-raster-landcover, develop-ash-raster-landcover) Merge branch 'develop' of github.com:AIFDR/inasafe into develop-ash-raster-landcover
+7b40aeb select test package
+81031b1 Merge pull request #2960 from Gustry/travis-docker
+a9c6d9d fix tests
+d856656 Fix issue when running tests that required you to manually open the console first
+8e2b766 fix import UI in tests
+e8fe560 clean code
+6154eed revert travis.yml
+d2e121d Merge remote-tracking branch 'upstream/develop' into travis-docker
+d23b743 Added button to launch tests when in developer mode
+e761bd3 Merge branch 'develop' of github.com:AIFDR/inasafe into develop-ash-raster-landcover
+d1a2364 make travis happy
+ab2be38 travis tests dock
+f99234d Merge pull request #2965 from ismailsunni/experimental_travis_test
+348d3e8 Run full tests again. Make travis great again.
+f666901 remove all gdal use exceptions.
+14589a3 Fix wrong path to coverage.
+25c5011 Modify coverage.
+01f01b4 Revert back to run full tests.
+c34ce83 Remove gdal exceptions.
+406e837 Move up get_qgis_app.
+67e39ae Use gdal again.
+87f2509 Revert back QGIS App retrieving.
+e807563 Remove gdal completely.
+7c77e6e Revert logger and experimental things
+fff97d7 Fix test.
+40017b7 Put back gdal, but not the gdal exceptions.
+e379290 Comment out gdal.
+2107370 Verbos logger.
+193e4a0 Comment out the code.
+0b1155b Replace .click with actual function.
+21c77e7 Wrong path to batch package.
+a580a74 Remove .click from the test.
+32c07fe Disable test run single scenario.
+77246e8 Ignore test all scenario.
+e319334 Only test tool package.
+e31e4c1 Merge branch 'develop' of github.com:AIFDR/inasafe into develop-ash-raster-landcover
+c053d6b Add new test data for ash raster landcover
+22b24d8 test travis docker
+c8f309d Merge pull request #2954 from Gustry/work-2385
+1bf59e8 Merge pull request #2903 from lucernae/fix-2896
+25183d8 Merge pull request #2950 from timlinux/faster-impact-on-roads
+5f63d30 #2385 legend order in classified raster building IF
+0f5e46c Merge pull request #2952 from Gustry/nodata-flood
+aaa2965 Changelog updates for 3.4.1
+c740a3a Merge pull request #2943 from ismailsunni/fix_failed_test_osx
+bcba8d2 Changelog updates for 3.4.1
+5aade10 Fix comments from Gustry for #2950
+ec88d40 faster impact flood on roads
+691c715 Fix failing tsunnami impact on roads tests
+991887e Remove impact length test
+3ba583e Remove debug and use <= 0 for dry
+42ada46 Use gdal to get nodata and exclude dry cells too.
+227b074 Merge pull request #2949 from Gustry/fix-2948-legend
+6777518 Merged changes from upstream
+5b4a4e0 Improvement for tsunami on roads IF performance - don't vectorise nodata raster cells
+485bcd3 fix legend order when the layer is None
+ad56ad7 Merge pull request #2904 from Gustry/empty-line-2318
+7211b05 Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop_functionality
+2fbdce5 fix sentence about no data in the report
+47f2992 add missing thousands separator
+4698c72 fix tests
+56745b5 update notes about no data and 0
+8f54c25 remove empty lines from postprocessing outputs #2318
+03c56f3 Merge pull request #2931 from Gustry/fix-2915-building-report
+05998ae Merge pull request #2929 from Gustry/fix-2927
+4efb4cd Merge pull request #2935 from Gustry/fix-2925-display-layers
+7804718 Merge branch 'develop' of github.com:inasafe/inasafe into fix_failed_test_osx
+9437d72 Merge pull request #2939 from Gustry/test-data
+c9831a7 Remove print statement.
+5d85708 Fix failed test in test_shake_grid.py
+f0acf88 Update metadata to 3.5
+fcf99f6 update test data after running tests with 3.5
+6d10597 add setLayerVisible to the fake qgis legend interface
+bc89e4f Merge branch 'develop' of github.com:inasafe/inasafe into not_slow_test
+bd7cb04 fix #2925 set the layer visible when we add it the map canvas
+1706a6e fix tests value mapping
+dab93a3 Merge pull request #2905 from Gustry/layer-order-2899
+f7f9b51 Merge pull request #2901 from lucernae/fix-2684
+0f3612c Merge pull request #2923 from timlinux/develop
+8ffdc93 Merge pull request #2919 from ismailsunni/fix_2908_shakemap_converter_error
+eb65d82 Merge pull request #2924 from borysiasty/develop
+e855790 add tests about the JSON in the generic polygon on buildings
+c846af7 add categorized rendering to test buildings
+28e66f4 fix #2927 enable lineEdit if the checkbox is toggled in settings
+d884e25 [Wizard] Follow up the previous commit
+0d329da [Wizard] Fix compatibility with recent QGIS versions. Fixes #2906.
+cf3941b Merge branch 'develop' of github.com:AIFDR/inasafe into develop-ash-raster-landcover
+5568f00 Merge pull request #2914 from Gustry/styles
+1c317ce Merge pull request #2918 from ismailsunni/fix_2898_xml_character_handling
+f63e7b8 [BACKPORT] Fix failing dock test on QGIS 2.15 (and possibly earlier versions).
+3c812fa add missing map_title in EQ IF
+623af40 Fix #2908, handle KeyError in keywords.
+f12b9d7 Add test with special character.
+121c74e Fix #2898. Handle special character in xml.
+a1a7a09 fix tests
+7635a04 make these legend parameters compulsory
+a556385 add missing IF to automatic testing
+3c884a6 move layer name and map parameters to metadata in earthquake IF
+a7c21a7 move layer name and map parameters to metadata in inundation IF
+61313a4 move layer name and map parameters to metadata in volcano IF
+2984a5f move layer name and map parameters to metadata in generic IF
+7d9e88e add get key in IF metadata
+cf59886 remove "by each hazard zone"
+d6ab3af fix #2899 impact layer should draw over the hazard layer
+5549d1c (rizky/fix-2896) fix #2896
+2f7b689 (rizky/fix-2684) fix #2684
+c5e475c Merge pull request #2893 from ismailsunni/fix_2676_minimum_needs
+0af1c7f Merge pull request #2894 from Gustry/typo-minimum-needs
+57e41b2 Merge pull request #2891 from ismailsunni/fix_2773_remove.keywords
+3a71c33 Add back test_vector.py but set keyword to empty.
+e331006 typo
+9d3e15c PEP8.
+8a09c06 Compile translation strings.
+cc586e5 Update translation.
+e06f1ac Fix failing test in travis.
+c378bbd Change data test keyword version to 3.5
+f92abe8 Less code, less maintaining overhead.
+9819026 Remove dead code and test.
+e751d01 Fix failed test.
+f2e4403 Removing dead code.
+ac2c1bb Remove dead code on core.py and test related.
+16f4eae Remove unused code in keyword.io
+d661bdc Remove .keywords related part 2.
+fd6601e Remove .keywords related part 1.
+1017f23 Merge pull request #2888 from Gustry/fix-2884
+1040ce6 Update keyword version in test data.
+0f8ce37 Delete .keywords file
+f685428 Set version to 3.5
+39ecbb9 Merge pull request #2889 from ismailsunni/backport_3.4
+b54e646 Merge branch 'develop' of github.com:inasafe/inasafe into backport_3.4
+cef74e3 fix #2884 mistake in the tsunami legend
+1c30d25 partial commit
+73466f0 Merge pull request #2882 from ismailsunni/backport_fix_2880
+828bb75 Fix #2880
+ffc26f1 Merge branch 'develop' of github.com:AIFDR/inasafe into develop-ash-raster-landcover
+550a6d1 fix tests
+d5c70ed Merge branch 'develop' of github.com:AIFDR/inasafe into develop-ash-raster-landcover
+a8d2e45 fix tests
+0ea0224 Merge branch 'develop' of github.com:AIFDR/inasafe into develop-ash-raster-landcover
+9d44ecc tidying up code
+bb15b21 Add Ash Raster Landcover Polygon Impact Function Move register_impact_function to new module called loader (to avoid get_qgis_app deadlock when running individual tests of impact_functions)
+9c94e15 (rizky/realtime-flood) Add HTML frame based report for impact summary
+e71e59b Tweak IF report generation: Revise symbol counting method
+4181dd5 Tweak IF report generation
+d77a471 Update reporting code from InaSAFE 3.4 migration
+580a88a Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop_functionality
+faec393 InaSAFE Headless: Add more information for filter_impact_function
+52615af (ismail/not_slow_test) Remove not slow filter in travis.
+167cf64 Merge branch 'develop' of https://github.com/AIFDR/inasafe into develop_functionality
+7d6f648 include qml files for uploading
+807bda1 modify headless tasks: read keywords
+
 Changelog for version 3.4.0
 ================================
 
