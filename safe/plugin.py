@@ -86,7 +86,6 @@ class Plugin(object):
         self.action_shake_converter = None
         self.action_minimum_needs = None
         self.action_minimum_needs_config = None
-        self.action_impact_merge_dlg = None
         self.key_action = None
         self.action_options = None
         self.action_keywords_wizard = None
@@ -376,21 +375,6 @@ class Plugin(object):
             self.action_raster_reclassify_layer,
             add_to_toolbar=False)
 
-    def _create_impact_merge_action(self):
-        """Create action for impact layer merge Dialog."""
-        icon = resources_path('img', 'icons', 'show-impact-merge.svg')
-        self.action_impact_merge_dlg = QAction(
-            QIcon(icon),
-            self.tr('Impact Layer Merger'),
-            self.iface.mainWindow())
-        self.action_impact_merge_dlg.setStatusTip(self.tr(
-            'Impact Layer Merger'))
-        self.action_impact_merge_dlg.setWhatsThis(self.tr(
-            'Impact Layer Merger'))
-        self.action_impact_merge_dlg.triggered.connect(self.show_impact_merge)
-        self.add_action(
-            self.action_impact_merge_dlg, add_to_toolbar=self.full_toolbar)
-
     def _create_rubber_bands_action(self):
         """Create action for toggling rubber bands."""
         icon = resources_path('img', 'icons', 'toggle-rubber-bands.svg')
@@ -536,15 +520,13 @@ class Plugin(object):
         self._create_osm_downloader_action()
         self._create_add_osm_layer_action()
         self._create_add_petajakarta_layer_action()
-        # RMN: Disable this for now
-        # self._create_raster_reclassify_layer_action()
+        self._create_raster_reclassify_layer_action()
         self._create_shakemap_converter_action()
         self._create_minimum_needs_action()
         self._create_test_layers_action()
         self._create_run_test_action()
         self._add_spacer_to_menu()
         self._create_batch_runner_action()
-        self._create_impact_merge_action()
         self._create_save_scenario_action()
 
         # Hook up a slot for when the dock is hidden using its close button
@@ -727,14 +709,6 @@ class Plugin(object):
         dialog = NeedsManagerDialog(
             parent=self.iface.mainWindow(),
             dock=self.dock_widget)
-        dialog.exec_()  # modal
-
-    def show_impact_merge(self):
-        """Show the impact layer merge dialog."""
-        # import here only so that it is AFTER i18n set up
-        from safe.gui.tools.impact_merge_dialog import ImpactMergeDialog
-
-        dialog = ImpactMergeDialog(self.iface.mainWindow())
         dialog.exec_()  # modal
 
     def show_options(self):

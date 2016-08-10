@@ -10,8 +10,6 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
-__author__ = 'Christian Christelis <christian@kartoza.com>'
-
 from collections import OrderedDict
 from operator import add
 from safe.utilities.i18n import tr
@@ -19,6 +17,8 @@ from safe.utilities.utilities import reorder_dictionary
 from safe.common.utilities import format_int
 from safe.impact_reports.report_mixin_base import ReportMixin
 from safe.definitions import structure_class_order
+
+__author__ = 'Christian Christelis <christian@kartoza.com>'
 
 
 class BuildingExposureReportMixin(ReportMixin):
@@ -77,9 +77,17 @@ class BuildingExposureReportMixin(ReportMixin):
         self.buildings = {}
         self.categories = None
         self.affected_buildings = {}
-        self.building_report_threshold = 25
 
         self.impact_data = {}
+
+    @property
+    def impact_summary_headings(self):
+        """Headings for the impact summary.
+
+        :return: Headings
+        :rtype: list
+        """
+        return [tr('Buildings'), tr('Count')]
 
     def init_report_var(self, categories):
         """Create tables for the report according to the classes.
@@ -162,6 +170,7 @@ class BuildingExposureReportMixin(ReportMixin):
 
         return {
             'attributes': ['category', 'value'],
+            'headings': self.impact_summary_headings,
             'fields': fields
         }
 
@@ -242,25 +251,19 @@ class BuildingExposureReportMixin(ReportMixin):
             'fields': fields
         }
 
-    def action_checklist(self):
-        """Action Checklist Data.
+    def extra_actions(self):
+        """Get actions specific to building exposure.
 
-        :returns: An action list in dictionary format.
-        :rtype: dict
+        .. note:: Only calculated actions are implemented here, the rest
+            are defined in definitions.py.
+
+        .. versionadded:: 3.5
+
+        :returns: An action list in list format.
+        :rtype: list
 
         """
-        title = tr('Action checklist')
-        fields = [
-            tr('Which structures have warning capacity (eg. sirens, speakers, '
-               'etc.)?'),
-            tr('Are the water and electricity services still operating?'),
-            tr('Are the health centres still open?'),
-            tr('Are the other public services accessible?'),
-            tr('Which buildings will be evacuation centres?'),
-            tr('Where will we locate the operations centre?'),
-            tr('Where will we locate warehouse and/or distribution centres?'),
-            tr('Are the schools and hospitals still active?'),
-        ]
+        fields = []
         if self.schools_closed > 0:
             fields.append(tr(
                 'Where will the students from the %s closed schools go to '
@@ -270,11 +273,7 @@ class BuildingExposureReportMixin(ReportMixin):
                 'Where will the patients from the %s closed hospitals go '
                 'for treatment and how will we transport them?') % format_int(
                 self.hospitals_closed))
-
-        return {
-            'title': title,
-            'fields': fields
-        }
+        return fields
 
     def generate_data(self):
         """Create a dictionary contains impact data.

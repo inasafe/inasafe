@@ -11,13 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-__author__ = 'tim@kartoza.com'
-__revision__ = '$Format:%H$'
-__date__ = '29/01/2011'
-__copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
-__copyright__ += 'Disaster Reduction'
 
-import os
 import sys
 import traceback
 import logging
@@ -25,8 +19,6 @@ import webbrowser
 import unicodedata
 import codecs
 from collections import OrderedDict
-
-# noinspection PyPackageRequirements
 
 from safe.common.utilities import unique_filename
 from safe.common.version import get_version
@@ -36,8 +28,16 @@ from safe.messaging import styles, Message
 from safe.messaging.error_message import ErrorMessage
 from safe.utilities.unicode import get_unicode
 from safe.utilities.i18n import tr
-from safe.definitions import inasafe_keyword_version
+from safe.definitions import (
+    inasafe_keyword_version,
+    keyword_version_compatibilities
+)
 
+__author__ = 'tim@kartoza.com'
+__revision__ = '$Format:%H$'
+__date__ = '29/01/2011'
+__copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
+__copyright__ += 'Disaster Reduction'
 
 INFO_STYLE = styles.INFO_STYLE
 
@@ -426,12 +426,6 @@ def is_keyword_version_supported(
         version_split = version.split('.')
         return version_split[0] + '.' + version_split[1]
 
-    version_compatibilities = {
-        '3.3': ['3.2'],
-        '3.4': ['3.2', '3.3'],
-        '3.5': ['3.4', '3.3']
-    }
-
     # Convert to minor version.
     keyword_version = minor_version(keyword_version)
     inasafe_version = minor_version(inasafe_version)
@@ -439,8 +433,8 @@ def is_keyword_version_supported(
     if inasafe_version == keyword_version:
         return True
 
-    if inasafe_version in version_compatibilities.keys():
-        if keyword_version in version_compatibilities[inasafe_version]:
+    if inasafe_version in keyword_version_compatibilities.keys():
+        if keyword_version in keyword_version_compatibilities[inasafe_version]:
             return True
         else:
             return False

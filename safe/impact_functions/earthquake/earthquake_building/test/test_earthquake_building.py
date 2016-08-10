@@ -49,10 +49,8 @@ class TestEarthquakeBuildingFunction(unittest.TestCase):
         impact_layer = impact_function.impact
         # Check the question
         expected_question = (
-            'In the event of earthquake how many buildings might be affected')
-        message = 'The question should be %s, but it returns %s' % (
-            expected_question, impact_function.question)
-        self.assertEqual(expected_question, impact_function.question, message)
+            'In the event of earthquake how many buildings might be affected?')
+        self.assertEqual(expected_question, impact_function.question)
         # Count by hand,
         # 1 = low, 2 = medium, 3 = high
         impact = {
@@ -73,6 +71,30 @@ class TestEarthquakeBuildingFunction(unittest.TestCase):
 
         message = 'Expecting %s, but it returns %s' % (impact, result)
         self.assertEqual(impact, result, message)
+
+        # Check the mixin works too...
+        self.maxDiff = None
+        action_checklist = impact_function.action_checklist()
+        expected = [
+            'Which structures have warning capacity (eg. sirens, speakers, '
+            'etc.)?',
+            'Are the water and electricity services still operating?',
+            'Are the health centres still open?',
+            'Are the other public services accessible?',
+            'Which buildings will be evacuation centres?',
+            'Where will we locate the operations centre?',
+            'Where will we locate warehouse and/or distribution centres?',
+            'Are the schools and hospitals still active?'
+        ]
+        self.assertListEqual(expected, action_checklist)
+
+        not_expected = [
+            'Where will the students from the 0 closed schools go to study?',
+            'Where will the patients from the 0 closed hospitals go for '
+            'treatment and how will we transport them?',
+        ]
+        for item in not_expected:
+            self.assertNotIn(item, action_checklist)
 
     def test_filter(self):
         """TestEarthquakeBuildingFunction: Test filtering IF"""

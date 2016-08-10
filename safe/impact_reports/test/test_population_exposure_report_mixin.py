@@ -142,41 +142,24 @@ class PopulationExposureReportMixinTest(unittest.TestCase):
         data = self.population_mixin.generate_data()
         expected = {
             'action check list': {
-                'fields': [
-                    'Which group or population is most affected?',
-                    'Who are the vulnerable people in the population and why?',
-                    'How will warnings be disseminated?',
-                    'What are people\'s likely movements?',
-                    'What are the security factors for the affected '
-                    'population?',
-                    'What are the security factors for relief responders?',
-                    'How will we reach evacuated people?',
-                    'What kind of food does the population normally consume?',
-                    'What are the critical non-food items required by the '
-                    'affected population?',
-                    'Are there enough water supply, sanitation, hygiene, '
-                    'food, shelter, medicines and relief items available for '
-                    '300 people?',
-                    'If yes, where are they located and how will we '
-                    'distribute them?',
-                    'If no, where can we obtain additional relief items and '
-                    'how will we distribute them?',
-                    'What are the related health risks?',
-                    'Who are the key people responsible for coordination?'],
+                # Remove list entries in 3.5 because logic is in IF
+                # not in mixin now and this test does not actuall
+                # create an IF...TS
+                'fields': [],
                 'title': 'Action checklist'},
             'exposure': 'population',
             'impact summary': {
                 'attributes': ['category', 'value'],
                 'fields': [
-                    ['High', '100'],
-                    ['Medium', '100'],
-                    ['Low', '100'],
-                    ['Total affected population', '300'],
-                    ['Unaffected population', '100'],
-                    ['Total population', '400'],
+                    ['High', 100],
+                    ['Medium', 100],
+                    ['Low', 100],
+                    ['Total affected population', 300],
+                    ['Unaffected population', 100],
+                    ['Total population', 400],
                     [
                         'Population needing evacuation <sup>1</sup>',
-                        '300'
+                        300
                     ]
                 ]
             },
@@ -189,7 +172,7 @@ class PopulationExposureReportMixinTest(unittest.TestCase):
                  'frequency': 'test frequency',
                  'table name': 'test name 2 [u]',
                  'unit': {'abbreviation': 'u'}}])]),
-            'notes': {'fields': [], 'title': 'Notes'},
+            'notes': {'fields': [], 'title': 'Notes and assumptions'},
             'question': ''}
         self.assertDictEqual(data, expected)
 

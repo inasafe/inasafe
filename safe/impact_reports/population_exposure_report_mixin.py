@@ -10,11 +10,6 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
-__author__ = 'Christian Christelis <christian@kartoza.com>'
-__revision__ = '$Format:%H$'
-__date__ = '05/05/2015'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
 
 from collections import OrderedDict
 
@@ -24,6 +19,12 @@ from safe.impact_reports.report_mixin_base import ReportMixin
 from safe.impact_functions.core import (
     evacuated_population_needs,
     population_rounding)
+
+__author__ = 'Christian Christelis <christian@kartoza.com>'
+__revision__ = '$Format:%H$'
+__date__ = '05/05/2015'
+__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
+                 'Disaster Reduction')
 
 
 class PopulationExposureReportMixin(ReportMixin):
@@ -72,41 +73,24 @@ class PopulationExposureReportMixin(ReportMixin):
         data.update(extra_data)
         return data
 
-    def action_checklist(self):
-        """Return the action check list section of the report.
+    def extra_actions(self):
+        """Return population specific actions for the report.
 
-        :return: The action check list as dict.
-        :rtype: dict
+        .. note:: Only calculated actions are implemented here, the rest
+            are defined in definitions.py.
+
+        .. versionadded:: 3.5
+
+        :return: The action check list as list.
+        :rtype: list
         """
-        title = tr('Action checklist')
         evacuated_people = format_int(
             population_rounding(self.total_affected_population))
         fields = [
-            tr('Which group or population is most affected?'),
-            tr('Who are the vulnerable people in the population and why?'),
-            tr('How will warnings be disseminated?'),
-            tr('What are people\'s likely movements?'),
-            tr('What are the security factors for the affected population?'),
-            tr('What are the security factors for relief responders?'),
-            tr('How will we reach evacuated people?'),
-            tr('What kind of food does the population normally consume?'),
-            tr('What are the critical non-food items required by the affected '
-               'population?'),
             tr('Are there enough water supply, sanitation, hygiene, food, '
-               'shelter, medicines and relief items available for %s people?'
-                % evacuated_people),
-            tr('If yes, where are they located and how will we distribute '
-               'them?'),
-            tr('If no, where can we obtain additional relief items and how '
-               'will we distribute them?'),
-            tr('What are the related health risks?'),
-            tr('Who are the key people responsible for coordination?')
-        ]
-
-        return {
-            'title': title,
-            'fields': fields
-        }
+               'shelter, medicines and relief items available for %s '
+               'people?' % evacuated_people)]
+        return fields
 
     def impact_summary(self):
         """Create impact summary as data.
@@ -121,37 +105,35 @@ class PopulationExposureReportMixin(ReportMixin):
         if len(self.impact_category_ordering):
             for category in self.impact_category_ordering:
                 population_in_category = self.lookup_category(category)
-                population_in_category = format_int(population_rounding(
-                    population_in_category
-                ))
+                population_in_category = population_in_category
                 row = [tr(category), population_in_category]
                 fields.append(row)
 
         # Total affected population
         row = [
             tr('Total affected population'),
-            format_int(population_rounding(self.total_affected_population))
+            self.total_affected_population
         ]
         fields.append(row)
 
         # Non affected population
         row = [
             tr('Unaffected population'),
-            format_int(population_rounding(self.unaffected_population))
+            self.unaffected_population
         ]
         fields.append(row)
 
         # Total Population
         row = [
             tr('Total population'),
-            format_int(population_rounding(self.total_population))
+            self.total_population
         ]
         fields.append(row)
 
         # Population needing evacuation
         row = [
             tr('Population needing evacuation <sup>1</sup>'),
-            format_int(population_rounding(self.total_evacuated))
+            self.total_evacuated
         ]
         fields.append(row)
 

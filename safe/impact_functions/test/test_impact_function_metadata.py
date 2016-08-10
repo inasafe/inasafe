@@ -88,7 +88,11 @@ from safe.impact_functions.volcanic.volcano_polygon_population\
 
 # Volcanic Ash
 from safe.impact_functions.ash.ash_raster_landcover.impact_function import \
-    AshRasterLandcoverFunction
+    AshRasterLandCoverFunction
+from safe.impact_functions.ash.ash_raster_population.impact_function import \
+    AshRasterPopulationFunction
+from safe.impact_functions.ash.ash_raster_places.impact_function import \
+    AshRasterPlacesFunction
 
 from safe.definitions import (
     layer_purpose_exposure,
@@ -158,7 +162,9 @@ class TestImpactFunctionMetadata(unittest.TestCase):
             VolcanoPolygonPopulationFunction(),
 
             # Volcanic Ash
-            AshRasterLandcoverFunction(),
+            AshRasterLandCoverFunction(),
+            AshRasterPlacesFunction(),
+            AshRasterPopulationFunction()
         ]
         self.assertEqual(len(impact_functions), len(EXPECTED_IF))
 

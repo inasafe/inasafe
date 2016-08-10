@@ -70,11 +70,10 @@ class TestClassifiedPolygonBuildingFunction(unittest.TestCase):
         impact_data = impact_layer.impact_data
 
         # Check the question
-        expected_question = ('In each of the hazard zones how many buildings '
-                             'might be affected.')
-        message = 'The question should be %s, but it returns %s' % (
-            expected_question, impact_function.question)
-        self.assertEqual(expected_question, impact_function.question, message)
+        expected_question = (
+            'In each of the hazard zones how many buildings might be '
+            'affected?')
+        self.assertEqual(expected_question, impact_function.question)
 
         # Check the impact layer
         zone_sum = impact_layer.get_data(
@@ -164,11 +163,10 @@ class TestClassifiedPolygonBuildingFunction(unittest.TestCase):
         impact_layer = impact_function.impact
 
         # Check the question
-        expected_question = ('In each of the hazard zones how many buildings '
-                             'might be affected.')
-        message = 'The question should be %s, but it returns %s' % (
-            expected_question, impact_function.question)
-        self.assertEqual(expected_question, impact_function.question, message)
+        expected_question = (
+            'In each of the hazard zones how many buildings might be '
+            'affected?')
+        self.assertEqual(expected_question, impact_function.question)
 
         zone_sum = impact_layer.get_data(
             attribute=impact_function.target_field)

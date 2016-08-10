@@ -55,32 +55,27 @@ class ClassifiedPolygonHazardPopulationFunction(
         self.parameters = add_needs_parameters(self.parameters)
         # Set the question of the IF (as the hazard data is not an event)
         self.question = tr(
-            'In each of the hazard zones how many people might be impacted.')
+            'In each of the hazard zones how many people might be impacted?')
 
     def notes(self):
         """Return the notes section of the report.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: dict
+        :rtype: list
         """
-        title = tr('Notes and assumptions')
         population = format_int(population_rounding(self.total_population))
         fields = [
             tr('Total population in the analysis area: %s') % population,
             tr('<sup>1</sup>People need evacuation if they are in a hazard '
                'zone.'),
-            tr('Map shows population count in high, medium, and low hazard '
-               'areas.'),
-            tr('All values are rounded up to the nearest integer in order to '
-               'avoid representing human lives as fractions.'),
-            tr('Population rounding is applied to all population values, '
-               'which may cause discrepancies when adding values.')
+            tr('Map shows the number of people in high, medium, and low '
+               'hazard zones.')
         ]
-
-        return {
-            'title': title,
-            'fields': fields
-        }
+        # include any generic exposure specific notes from definitions.py
+        fields = fields + self.exposure_notes()
+        # include any generic hazard specific notes from definitions.py
+        fields = fields + self.hazard_notes()
+        return fields
 
     def run(self):
         """Run classified population evacuation Impact Function.
@@ -157,7 +152,8 @@ class ClassifiedPolygonHazardPopulationFunction(
                     self.hazard_class_mapping)
                 if not hazard_value:
                     hazard_value = self._not_affected_value
-                self.affected_population[hazard_value] += population
+                else:
+                    self.affected_population[hazard_value] += population
 
         # Count total population from exposure layer
         self.total_population = int(

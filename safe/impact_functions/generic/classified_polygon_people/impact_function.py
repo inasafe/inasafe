@@ -65,11 +65,10 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
 
         # Set the question of the IF (as the hazard data is not an event)
         self.question = tr(
-            'In each of the hazard zones which areas might be affected.')
+            'In each of the hazard zones which areas might be affected?')
 
         # Use the proper minimum needs, update the parameters
         self.parameters = add_needs_parameters(self.parameters)
-
         self.all_areas_ids = {}
         self.all_affected_areas = {}
         self.all_areas_population = {}
@@ -82,23 +81,18 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         """Return the notes section of the report.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: dict
+        :rtype: list
         """
-        title = tr('Notes and assumptions')
         population = format_int(population_rounding(self.total_population))
         fields = [
             tr('The total people in the area is %s') % population,
-            tr('All values are rounded up to the nearest integer in order to '
-               'avoid representing human lives as fractions.'),
-            tr('People rounding is applied to all population values, which '
-               'may cause discrepancies when adding values.'),
-            tr('Null value will be considered as zero.')
+            tr('Null values will be considered as zero.')
         ]
-
-        return {
-            'title': title,
-            'fields': fields
-        }
+        # include any generic exposure specific notes from definitions.py
+        fields = fields + self.exposure_notes()
+        # include any generic hazard specific notes from definitions.py
+        fields = fields + self.hazard_notes()
+        return fields
 
     def run(self):
         """Risk plugin for classified polygon hazard on polygon population.
@@ -225,7 +219,8 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         for class_key, colour in classes_colours.items():
             style_class = dict()
             if class_key in classes.keys():
-                label = classes[class_key][0]
+                # label = classes[class_key][0]
+                label = class_key
             else:
                 continue
             transparency = 0
@@ -372,9 +367,12 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
                 hazard_attribute_key = self.get_hazard_class_field_key(hazard)
 
                 # find unaffected area geometry
+                is_unaffected = (
+                    (hazard_attribute_key == "dry") or
+                    (hazard_attribute_key == "unaffected") or
+                    (not hazard_attribute_key))
 
-                if hazard_attribute_key is not None and hazard_attribute_key \
-                        == "dry":
+                if is_unaffected:
                     # In case the impact geometry has a 'no or NO' value in
                     # the flood column
                     unaffected_geometry = geometry.symDifference(
@@ -541,9 +539,15 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
 
         hazard_attribute_key = None
         for key, value in self.hazard_class_mapping.iteritems():
-            if value[0] == hazard_attribute:
-                hazard_attribute_key = key
-                break
+            if isinstance(value, list):
+                for v in value:
+                    if str(hazard_attribute) == str(v):
+                        hazard_attribute_key = key
+                        break
+            else:
+                if str(hazard_attribute) == str(value):
+                    hazard_attribute_key = key
+                    break
         return hazard_attribute_key
 
     def assign_hazard_levels(
@@ -580,9 +584,20 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
                 impacted_feature.setAttributes(feature.attributes() + [1])
             elif hazard_attribute_key == "dry":
                 impacted_feature.setAttributes(feature.attributes() + [2])
+            elif hazard_attribute_key == "unaffected":
+                impacted_feature.setAttributes(feature.attributes() + [0])
+
+            # if hazard_attribute_key == "unaffected":
+            #     unaffected_feature.setAttributes(feature.attributes() + [1])
+            # else:
+            #     unaffected_feature.setAttributes(feature.attributes() + [0])
         else:
-            unaffected_feature.setAttributes(feature.attributes() + [1])
-            impacted_feature.setAttributes(feature.attributes() + [3])
+            # RMN:
+            # if hazard_attribute_key is None then it is not classified
+            # the value is outside the class. Shouldn't we take this as not
+            # not affected?
+            unaffected_feature.setAttributes(feature.attributes() + [0])
+            impacted_feature.setAttributes(feature.attributes() + [0])
 
     def evaluate_affected_people(self):
         """Calculate the number of people affected on the area

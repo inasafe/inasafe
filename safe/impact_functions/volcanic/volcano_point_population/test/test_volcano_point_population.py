@@ -53,17 +53,13 @@ class TestVolcanoPointPopulationFunction(unittest.TestCase):
         impact_layer = impact_function.impact
         # Check the question
         expected_question = (
-            'In the event of a volcano point how many '
-            'people might be impacted')
-        message = 'The question should be %s, but it returns %s' % (
-            expected_question, impact_function.question)
-        self.assertEqual(expected_question, impact_function.question, message)
+            'In the event of a volcano point how many people might be '
+            'impacted?')
+        self.assertEqual(expected_question, impact_function.question)
         # Count by hand
         expected_affected_population = 200
         result = numpy.nansum(impact_layer.get_data())
-        message = 'Expecting %s, but it returns %s' % (
-            expected_affected_population, result)
-        self.assertEqual(expected_affected_population, result, message)
+        self.assertEqual(expected_affected_population, result)
 
     def test_filter(self):
         """TestVolcanoPointPopulationFunction: Test filtering IF"""

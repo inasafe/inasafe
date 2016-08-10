@@ -1,7 +1,7 @@
 # coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
-- *Classified Hazard Land Cover Impact Function Test Cases.**
+- *Ash Raster on Land Cover Impact Function Test Cases.**
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -17,7 +17,7 @@ from safe.test.utilities import get_qgis_app, standard_data_path
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from qgis.core import QgsVectorLayer, QgsRasterLayer
 from safe.impact_functions.ash.ash_raster_landcover.impact_function import \
-    AshRasterLandcoverFunction
+    AshRasterLandCoverFunction
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.storage.utilities import safe_to_qgis_layer
 
@@ -32,10 +32,10 @@ class TestAshRasterPolygonLandCoverFunction(unittest.TestCase):
     def setUp(self):
         registry = ImpactFunctionManager().registry
         registry.clear()
-        registry.register(AshRasterLandcoverFunction)
+        registry.register(AshRasterLandCoverFunction)
 
     def test_run(self):
-        function = AshRasterLandcoverFunction.instance()
+        function = AshRasterLandCoverFunction.instance()
 
         hazard_path = standard_data_path('hazard', 'ash_raster_wgs84.tif')
         exposure_path = standard_data_path('exposure', 'landcover.shp')

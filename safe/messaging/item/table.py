@@ -37,8 +37,9 @@ class Table(MessageElement):
         http://stackoverflow.com/questions/13124961/
         how-to-pass-arguments-efficiently-kwargs-in-python
         """
+        self.caption = kwargs.pop('caption', None)
+        self.header = kwargs.pop('header', None)
         super(Table, self).__init__(**kwargs)
-        self.caption = kwargs.get('caption', None)
         self.rows = []
 
         for arg in args:
@@ -69,7 +70,17 @@ class Table(MessageElement):
         """
         table = '<table%s>\n' % self.html_attributes()
         if self.caption is not None:
-            table += '<caption>%s</caption>\n' % self.caption
+            if isinstance(self.caption, MessageElement):
+                caption = self.caption.to_html()
+            else:
+                caption = self.caption
+            table += '<caption>%s</caption>\n' % caption
+        if self.header:
+            if isinstance(self.header, MessageElement):
+                header = self.header.to_html()
+            else:
+                header = self.header
+            table += '<thead>%s</thead>' % header
         table += '<tbody>\n'
         for row in self.rows:
             table += row.to_html()

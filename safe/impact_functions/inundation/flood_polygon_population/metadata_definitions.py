@@ -58,6 +58,7 @@ class FloodEvacuationVectorHazardMetadata(ImpactFunctionMetadata):
             concrete impact function.
         :rtype: dict
         """
+        title = tr('People affected by flood')
         dict_meta = {
             'id': 'FloodEvacuationVectorHazardFunction',
             'name': tr('Polygon flood on people'),
@@ -92,14 +93,19 @@ class FloodEvacuationVectorHazardMetadata(ImpactFunctionMetadata):
                 'to be evacuated, where they are located and what '
                 'resources would be required to support them.'),
             'limitations': [],
-            'citations': [],
-            'map_title': tr('People affected by flood prone areas'),
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ],
+            'map_title': title,
+            'layer_name': title,
             'legend_title': tr('Population Count'),
             'legend_units': tr('(people per polygon)'),
             'legend_notes': tr(
                 'Thousand separator is represented by %s' %
                 get_thousand_separator()),
-            'layer_name': tr('People affected by flood prone areas'),
             'layer_requirements': {
                 'hazard': {
                     'layer_mode': layer_mode_classified,

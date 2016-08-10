@@ -43,7 +43,18 @@ class ProvenanceStep(object):
         elif isinstance(timestamp, datetime):
             self._time = timestamp
         elif isinstance(timestamp, basestring):
-            self._time = datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%S.%f")
+            try:
+                self._time = datetime.strptime(
+                    timestamp, "%Y-%m-%dT%H:%M:%S.%f")
+            except ValueError:
+                try:
+                    self._time = datetime.strptime(
+                        timestamp, "%Y-%m-%dT%H:%M:%S")
+                except ValueError:
+                    try:
+                        self._time = datetime.strptime(timestamp, "%Y-%m-%d")
+                    except ValueError:
+                        self._time = datetime.now()
         else:
             raise RuntimeError('The timestamp %s has an invalid type (%s)',
                                timestamp, type(timestamp))

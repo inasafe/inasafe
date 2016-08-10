@@ -1,6 +1,6 @@
 # coding=utf-8
-"""InaSAFE Disaster risk tool by Australian Aid - Tsunami Raster Impact on
-Buildings
+"""InaSAFE Disaster risk tool by Australian Aid - Ash Raster on Land Cover
+Metadata
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -23,16 +23,14 @@ from safe.definitions import (
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
-from safe.impact_functions.ash.ash_raster_landcover.parameter_definitions \
-    import (
-    moderate_threshold, low_threshold, very_low_threshold,
-    high_threshold, unaffected_threshold, threshold_group_parameter)
+from safe.impact_functions.ash.parameter_definitions import \
+    threshold_group_parameter
 
 __author__ = 'Rizky Maulana Nugraha <lana.pcfre@gmail.com>'
 __date__ = '5/24/16'
 
 
-class AshRasterHazardLandCoverFunctionMetadata(ImpactFunctionMetadata):
+class AshRasterLandCoverFunctionMetadata(ImpactFunctionMetadata):
 
     @staticmethod
     def as_dict():
@@ -45,8 +43,9 @@ class AshRasterHazardLandCoverFunctionMetadata(ImpactFunctionMetadata):
             concrete impact function.
         :rtype: dict
         """
+        title = tr('Land cover affected by volcanic ash')
         dict_meta = {
-            'id': 'AshRasterHazardLandCoverFunction',
+            'id': 'AshRasterLandCoverFunction',
             'name': tr('Ash raster on land cover'),
             'impact': tr('Be affected'),
             'title': tr('Be affected'),
@@ -68,12 +67,17 @@ class AshRasterHazardLandCoverFunctionMetadata(ImpactFunctionMetadata):
                 'Provide details about how big area fall within '
                 'each hazard zone.'),
             'limitations': [],
-            'citations': [],
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ],
             'legend_title': '',
             'legend_units': '',
             'legend_notes': '',
-            'map_title': tr('Affected Land Cover'),
-            'layer_name': tr('Land cover affected'),
+            'map_title': title,
+            'layer_name': title,
             'layer_requirements': {
                 'hazard': {
                     'layer_mode': layer_mode_continuous,
@@ -99,11 +103,6 @@ class AshRasterHazardLandCoverFunctionMetadata(ImpactFunctionMetadata):
             },
             'parameters': OrderedDict(
                 [
-                    # ('unaffected_threshold', unaffected_threshold()),
-                    # ('very_low_threshold', very_low_threshold()),
-                    # ('low_threshold', low_threshold()),
-                    # ('moderate_threshold', moderate_threshold()),
-                    # ('high_threshold', high_threshold())
                     ('group_threshold', threshold_group_parameter())
                 ])
         }

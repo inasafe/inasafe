@@ -12,11 +12,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-__author__ = 'qgis@borysjurgiel.pl'
-__revision__ = '$Format:%H$'
-__date__ = '16/03/2016'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
 
 from osgeo import gdal
 from osgeo.gdalconst import GA_ReadOnly
@@ -31,6 +26,7 @@ from PyQt4.QtCore import QPyNullVariant
 
 from safe.definitions import (
     exposure_road,
+    exposure_place,
     exposure_structure)
 
 from safe.utilities.gis import is_raster_layer
@@ -42,7 +38,14 @@ from safe.gui.tools.wizard.wizard_strings import (
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step import WizardStep
 
-from safe.definitions import road_class_mapping, structure_class_mapping
+from safe.definitions import (
+    road_class_mapping, structure_class_mapping, place_class_mapping)
+
+__author__ = 'qgis@borysjurgiel.pl'
+__revision__ = '$Format:%H$'
+__date__ = '16/03/2016'
+__copyright__ = (
+    'Copyright 2012, Australia Indonesia Facility for Disaster Reduction')
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
@@ -87,7 +90,12 @@ class StepKwClassify(WizardStep, FORM_CLASS):
         :returns: The step to be switched to
         :rtype: WizardStep instance or None
         """
-        new_step = self.parent.step_kw_extrakeywords
+        selected_subcategory = self.parent.step_kw_subcategory.\
+            selected_subcategory()
+        if selected_subcategory == exposure_place:
+            new_step = self.parent.step_kw_name_field
+        else:
+            new_step = self.parent.step_kw_extrakeywords
         return new_step
 
     def postprocessor_classification_for_layer(self):
@@ -121,6 +129,8 @@ class StepKwClassify(WizardStep, FORM_CLASS):
             return road_class_mapping
         elif selected_subcategory == exposure_structure:
             return structure_class_mapping
+        elif selected_subcategory == exposure_place:
+            return place_class_mapping
         else:
             return None
 
@@ -296,6 +306,8 @@ class StepKwClassify(WizardStep, FORM_CLASS):
         """
         # Populate the unique values list
         self.lstUniqueValues.clear()
+        self.lstUniqueValues.setSelectionMode(
+            QtGui.QAbstractItemView.ExtendedSelection)
         for value in unassigned_values:
             value_as_string = value is not None and unicode(value) or 'NULL'
             list_item = QtGui.QListWidgetItem(self.lstUniqueValues)

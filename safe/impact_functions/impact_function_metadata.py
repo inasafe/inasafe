@@ -11,18 +11,16 @@ Contact : ole.moller.nielsen@gmail.com
    (at your option) any later version.
 """
 
+import json
+
+from safe.common.utilities import add_to_list, get_list_key, is_key_exist
+from safe.definitions import layer_purpose_exposure, layer_purpose_hazard
+
 __author__ = 'ismail@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '14/03/14'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
-
-import json
-
-from safe.common.utilities import add_to_list, get_list_key, is_key_exist
-from safe.definitions import (
-    layer_purpose_exposure,
-    layer_purpose_hazard)
 
 
 class ImpactFunctionMetadata(object):

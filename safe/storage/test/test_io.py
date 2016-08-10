@@ -1748,10 +1748,9 @@ class TestIO(unittest.TestCase):
 
         assert same_API(V, R, exclude=exclude)
 
-        for filename in [os.path.join(TESTDATA,
-                                      'test_buildings.shp'),
-                         os.path.join(HAZDATA,
-                                      'Lembang_Earthquake_Scenario.asc')]:
+        for filename in [
+            os.path.join(TESTDATA, 'test_buildings.shp'),
+            os.path.join(HAZDATA, 'Lembang_Earthquake_Scenario.asc')]:
 
             L = read_layer(filename)
 

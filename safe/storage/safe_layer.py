@@ -88,7 +88,8 @@ class SafeLayer(object):
     @property
     def keywords(self):
         """Property for the layer's keywords.
-        :returns: A keywords.
+
+        :returns: A keywords dictionary.
         :rtype: dict
         """
         return self._keywords
@@ -119,7 +120,11 @@ class SafeLayer(object):
             message = tr(
                 'Keyword "%s" is not found in layer %s, please add it to your '
                 'layer' % (key, self.name))
-            raise KeywordNotFoundError(message)
+            raise KeywordNotFoundError(
+                message,
+                layer_name=self.layer.name,
+                keyword=key
+            )
 
     @property
     def name(self):

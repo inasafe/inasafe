@@ -18,7 +18,6 @@ from qgis.core import (
     QGis,
     QgsCoordinateReferenceSystem,
     QgsCoordinateTransform,
-    QgsDistanceArea,
     QgsFeature,
     QgsFeatureRequest,
     QgsField,
@@ -102,7 +101,8 @@ def _calculate_landcover_impact(
             #     writer.addFeature(f_out)
 
 
-class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
+class ClassifiedPolygonHazardLandCoverFunction(
+        ClassifiedVHClassifiedVE):
 
     _metadata = ClassifiedPolygonHazardLandCoverFunctionMetadata()
 
@@ -110,8 +110,9 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
         super(ClassifiedPolygonHazardLandCoverFunction, self).__init__()
 
         # Set the question of the IF (as the hazard data is not an event)
-        self.question = ('In each of the hazard zones which land cover types '
-                         'might be affected.')
+        self.question = (
+            'In each of the hazard zones which land cover types might be '
+            'affected?')
         # Don't put capital letters as the value in the attribute should match.
         self.hazard_columns = OrderedDict()
         self.hazard_columns['low'] = tr('Low Hazard Zone')
@@ -125,42 +126,18 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
         :return: The notes that should be attached to this impact report.
         :rtype: list
         """
-        title = tr('Notes and assumptions')
-
-        # Thresholds for tsunami hazard zone breakdown.
-        low_max = self.parameters['low_threshold']
-        medium_max = self.parameters['medium_threshold']
-        high_max = self.parameters['high_threshold']
-
         fields = [
-            tr('Dry zone is defined as non-inundated area or has inundation '
-               'depth is 0 %s') % low_max.unit.abbreviation,
-            tr('Low tsunami hazard zone is defined as inundation depth is '
-               'more than 0 %s but less than %.1f %s') % (
-                low_max.unit.abbreviation,
-                low_max.value,
-                low_max.unit.abbreviation),
-            tr('Medium tsunami hazard zone is defined as inundation depth '
-               'is more than %.1f %s but less than %.1f %s') % (
-                low_max.value,
-                low_max.unit.abbreviation,
-                medium_max.value,
-                medium_max.unit.abbreviation),
-            tr('High tsunami hazard zone is defined as inundation depth is '
-               'more than %.1f %s but less than %.1f %s') % (
-                medium_max.value,
-                medium_max.unit.abbreviation,
-                high_max.value,
-                high_max.unit.abbreviation),
-            tr('Very high tsunami hazard zone is defined as inundation depth '
-               'is more than %.1f %s') % (
-                high_max.value, high_max.unit.abbreviation),
+            tr('The classes used for low, medium, high hazard are specific '
+               'to the hazard dataset used.'),
+            tr('Please consult the original hazard dataset creator for more '
+               'details.')
         ]
 
-        return {
-            'title': title,
-            'fields': fields
-        }  # TODO: what to put here?
+        # include any generic exposure specific notes from definitions.py
+        fields = fields + self.exposure_notes()
+        # include any generic hazard specific notes from definitions.py
+        fields = fields + self.hazard_notes()
+        return fields
 
     def run(self):
         """Risk plugin for classified polygon hazard on land cover.
@@ -202,6 +179,7 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
 
         # make spatial index of hazard
         hazard_index = QgsSpatialIndex()
+
         hazard_features = {}
         for f in hazard.getFeatures(QgsFeatureRequest(extent_hazard)):
             f.geometry().transform(hazard_to_exposure)
@@ -213,7 +191,6 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
         impact_fields = exposure.dataProvider().fields()
         impact_fields.append(QgsField(self.target_field, QVariant.String))
         writer = QgsVectorFileWriter(
-
             filename, 'utf-8', impact_fields, QGis.WKBPolygon, exposure.crs())
 
         # Iterate over all exposure polygons and calculate the impact.
@@ -232,7 +209,11 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
         if self.aggregator:
             zone_field = self.aggregator.exposure_aggregation_field
 
-        impact_data = LandCoverReportMixin(
+        # This is not the standard way to use mixins
+        # Martin preferred to call it directly - normally it is called with
+        # multiple inheritance. Thats ok but we need to monkey patch the
+        # notes function as it is not overloaded by this class
+        mixin = LandCoverReportMixin(
             question=self.question,
             impact_layer=impact_layer,
             target_field=self.target_field,
@@ -240,7 +221,10 @@ class ClassifiedPolygonHazardLandCoverFunction(ClassifiedVHClassifiedVE):
             affected_columns=self.affected_hazard_columns,
             land_cover_field=type_attr,
             zone_field=zone_field
-        ).generate_data()
+        )
+
+        mixin.notes = self.notes
+        impact_data = mixin.generate_data()
 
         # Define style for the impact layer
         style_classes = [

@@ -1,9 +1,5 @@
 # coding=utf-8
 
-__author__ = 'Rizky Maulana Nugraha <lana.pcfre@gmail.com>'
-__date__ = '5/25/16'
-
-
 # Earthquake
 from safe.impact_functions.earthquake.earthquake_building\
     .impact_function import EarthquakeBuildingFunction
@@ -66,7 +62,15 @@ from safe.impact_functions.volcanic.volcano_point_population\
 
 # Volcanic Ash
 from safe.impact_functions.ash.ash_raster_landcover.impact_function import \
-    AshRasterLandcoverFunction
+    AshRasterLandCoverFunction
+from safe.impact_functions.ash.ash_raster_population.impact_function import \
+    AshRasterPopulationFunction
+from safe.impact_functions.ash.ash_raster_places.impact_function import \
+    AshRasterPlacesFunction
+
+
+__author__ = 'Rizky Maulana Nugraha <lana.pcfre@gmail.com>'
+__date__ = '5/25/16'
 
 
 def register_impact_functions():
@@ -115,4 +119,7 @@ def register_impact_functions():
 
     # Volcanic Ash IF's
     # Added in 3.4
-    impact_function_registry.register(AshRasterLandcoverFunction)
+    impact_function_registry.register(AshRasterLandCoverFunction)
+    # Added in 3.5
+    impact_function_registry.register(AshRasterPopulationFunction)
+    impact_function_registry.register(AshRasterPlacesFunction)
