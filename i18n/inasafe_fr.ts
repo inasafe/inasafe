@@ -6444,6 +6444,11 @@ Les coefficients utilisés dans le modèle Indonésien sont x=0.62275231, y=8.03
         <source>Humanitarian icons source: OCHA</source>
         <translation>Source des icônes humanitaires : OCHA </translation>
     </message>
+    <message>
+        <location filename="about_dialog.py" line="84"/>
+        <source>&quot;Sign post&quot; by Tara Swart from the Noun Project</source>
+        <translation type="unfinished"/>
+    </message>
 </context>
 <context>
     <name>AboutDialogBase</name>
@@ -6819,6 +6824,64 @@ p, li { white-space: pre-wrap; }
         <location filename="analysis_handler.py" line="703"/>
         <source>Opening using the default PDF viewer on your system. The generated pdfs were saved as:</source>
         <translation>Ouverture en utilisant la visionneuse PDF par défaut de votre système. Le PDF se situe:</translation>
+    </message>
+</context>
+<context>
+    <name>AshEvent</name>
+    <message>
+        <location filename="ash_event.py" line="240"/>
+        <source>Volcanic Ash Impact</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="241"/>
+        <source>Volcano: %s, Alert Level: %s %s</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="244"/>
+        <source>Province: %s</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="247"/>
+        <source>Longitude %s Latitude %s; Eruption Column Height (a.s.l) - %d m</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="249"/>
+        <source>Elapsed time since event %s hour(s) and %s minute(s)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="250"/>
+        <source>Potential impact at each fallout level</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="251"/>
+        <source>Nearby places</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="252"/>
+        <source>Land Cover Impact</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="253"/>
+        <source>The impact estimation is automatically generated and only takes into account the population, cities and land cover affected by different levels of volcanic ash fallout at surface level. The estimate is based on volcanic ash fallout data from Badan Geologi, population count data derived by DMInnovation from worldpop.org.uk, place information from geonames.org, land cover classification data provided by Indonesian Geospatial Portal at http://portal.ina-sdi.or.id and software developed by BNPB. Limitation in the estimates of surface fallout, population and place names datasets may result in significant misrepresentation of the on-the-surface situation in the figures shown here. Consequently decisions should not be made soley on the information presented here and should always be verified by ground truthing and other reliable information sources.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="271"/>
+        <source>This report was created using InaSAFE version %s. Visit http://inasafe.org for more information. </source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="ash_event.py" line="677"/>
+        <source>People Affected</source>
+        <translation>Personnes Affectées</translation>
     </message>
 </context>
 <context>
@@ -7442,7 +7505,7 @@ p, li { white-space: pre-wrap; }
 <context>
     <name>FloodEvent</name>
     <message>
-        <location filename="flood_event.py" line="576"/>
+        <location filename="flood_event.py" line="536"/>
         <source>THE GOVERNMENT OF DKI JAKARTA PROVINCE
 REGIONAL DISASTER MANAGEMENT AGENCY
 </source>
@@ -7451,47 +7514,47 @@ AGENCE RÉGIONALE DE LA RÉDUCTION DES DÉSASTRES
 </translation>
     </message>
     <message>
-        <location filename="flood_event.py" line="579"/>
+        <location filename="flood_event.py" line="539"/>
         <source>FLOOD IMPACT REPORT FOR POPULATION</source>
         <translation>RAPPORT D&apos;INONDATION SUR LA POPULATION</translation>
     </message>
     <message>
-        <location filename="flood_event.py" line="580"/>
+        <location filename="flood_event.py" line="540"/>
         <source>Based on flood %s</source>
         <translation>Utilisant l&apos;inondation %s</translation>
     </message>
     <message>
-        <location filename="flood_event.py" line="583"/>
+        <location filename="flood_event.py" line="543"/>
         <source>Legend</source>
         <translation>Légende</translation>
     </message>
     <message>
-        <location filename="flood_event.py" line="584"/>
+        <location filename="flood_event.py" line="544"/>
         <source>InaSAFE Analysis Result</source>
         <translation>Résultat de l&apos;analyse d&apos;InaSAFE</translation>
     </message>
     <message>
-        <location filename="flood_event.py" line="585"/>
+        <location filename="flood_event.py" line="545"/>
         <source>Data Source</source>
         <translation>Source des données</translation>
     </message>
     <message>
-        <location filename="flood_event.py" line="586"/>
+        <location filename="flood_event.py" line="546"/>
         <source>Contact</source>
         <translation>Contact</translation>
     </message>
     <message>
-        <location filename="flood_event.py" line="587"/>
+        <location filename="flood_event.py" line="547"/>
         <source>Supported by</source>
         <translation>Soutenu par</translation>
     </message>
     <message>
-        <location filename="flood_event.py" line="588"/>
+        <location filename="flood_event.py" line="548"/>
         <source>Disclaimer</source>
         <translation>Avertissement sur la limitation de responsabilité</translation>
     </message>
     <message>
-        <location filename="flood_event.py" line="589"/>
+        <location filename="flood_event.py" line="549"/>
         <source>Data Sources:
 1. Hazard Data
    Flood: BPBD DKI Jakarta / PetaJakarta.org
@@ -7506,12 +7569,12 @@ Population: Population Agence DKI Jakarta Prov.
 </translation>
     </message>
     <message>
-        <location filename="flood_event.py" line="595"/>
+        <location filename="flood_event.py" line="555"/>
         <source>This impact estimate is automatically generated and only takes into account the population affected by flood hazard in Jakarta. The estimate is based on flood hazard data from BPBD DKI Jakarta and population exposure data from the Population Agency, DKI Jakarta Province. Limitations in the estimates of flood hazard and population may result in significant misrepresentation of the on-the-surface situation in the figures shown here. Consequently, decisions should not be made solely on the information presented here and should always be verified with other reliable information sources.</source>
         <translation>L’estimation de l’impact est généré automatiquement et ne prend en compte que la population touchée par les différents niveaux de l&apos;inondation. L’estimation est basée sur des données d&apos;inondation BPBD DKI Jakarta, les données de recensement de l&apos;Agence de la Population de DKI Jakarta. Les limitations dans les estimations d&apos;inondation et la population peuvent entraîner une importante différence de la représentation du terrain comparée aux chiffres présentés ici. Par conséquent, les décisions ne doivent pas être prises uniquement sur les informations présentées ici et doivent toujours être vérifiées par vérification au sol et par d’autres sources d’information fiables.</translation>
     </message>
     <message>
-        <location filename="flood_event.py" line="610"/>
+        <location filename="flood_event.py" line="569"/>
         <source>Pusat Pengendalian Operasi (Pusdalops)
 BPBD Provinsi DKI Jakarta
 Jl. Medan Merdeka Selatan No. 8-9 Blok F lantai 3
@@ -7524,35 +7587,34 @@ Telp. (021)164
 </translation>
     </message>
     <message>
-        <location filename="flood_event.py" line="638"/>
-        <source>Total affected population : %s people
-Estimates of IDP          : %s people
-
-Relief items to be provided %s :
-%s
-
-Relief items to be provided %s :
-%s
-        </source>
-        <translation>Population affectée totale : %s personnes
-Estimation des IDP : %s personnes
-
-Matériels de secours à fournir %s :
-%s
-
-Matériels de secours à fournir %s :
-%s
-        </translation>
-    </message>
-    <message>
-        <location filename="flood_event.py" line="678"/>
+        <location filename="flood_event.py" line="683"/>
         <source>People Affected</source>
         <translation>Personnes Affectées</translation>
     </message>
     <message>
-        <location filename="flood_event.py" line="686"/>
+        <location filename="flood_event.py" line="691"/>
         <source>Flood Depth (cm)</source>
         <translation>Profondeur d&apos;inondation (cm)</translation>
+    </message>
+    <message>
+        <location filename="flood_event.py" line="588"/>
+        <source>%s</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="flood_event.py" line="590"/>
+        <source>Total affected population (people)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="flood_event.py" line="594"/>
+        <source>Estimates of IDP (people)</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="flood_event.py" line="600"/>
+        <source>Relief items to be provided %s :</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -8973,97 +9035,97 @@ p, li { white-space: pre-wrap; }
         <translation>Tremblement perçu</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1615"/>
+        <location filename="shake_event.py" line="1622"/>
         <source>Estimated Earthquake Impact</source>
         <translation>Impact estimé du séisme</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1616"/>
+        <location filename="shake_event.py" line="1623"/>
         <source>Estimated number of people affected by each MMI level</source>
         <translation>Estimation du nombre de personnes affectées par chaque niveau de MMI</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1618"/>
+        <location filename="shake_event.py" line="1625"/>
         <source>Estimated fatalities</source>
         <translation>Victimes estimées</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1661"/>
+        <location filename="shake_event.py" line="1668"/>
         <source>km</source>
         <translation>km</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1662"/>
+        <location filename="shake_event.py" line="1669"/>
         <source>of</source>
         <translation>de</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1663"/>
+        <location filename="shake_event.py" line="1670"/>
         <source>bearing</source>
         <translation>supportant</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1679"/>
+        <location filename="shake_event.py" line="1686"/>
         <source>n/a</source>
         <translation>sans objet</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1686"/>
+        <location filename="shake_event.py" line="1693"/>
         <source>Elapsed time since event</source>
         <translation>Temps écoulé depuis l&apos;événement</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1710"/>
+        <location filename="shake_event.py" line="1717"/>
         <source>Latitude</source>
         <translation>Latitude</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1712"/>
+        <location filename="shake_event.py" line="1719"/>
         <source>Longitude</source>
         <translation>Longitude</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1714"/>
+        <location filename="shake_event.py" line="1721"/>
         <source>Depth</source>
         <translation>Profondeur</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1717"/>
+        <location filename="shake_event.py" line="1724"/>
         <source>Located</source>
         <translation>Situé</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1761"/>
+        <location filename="shake_event.py" line="1768"/>
         <source>minute(s)</source>
         <translation>minute(s)</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1761"/>
+        <location filename="shake_event.py" line="1768"/>
         <source>hour(s)</source>
         <translation>heure(s)</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1775"/>
+        <location filename="shake_event.py" line="1782"/>
         <source>days</source>
         <translation>jours</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1775"/>
+        <location filename="shake_event.py" line="1782"/>
         <source>weeks</source>
         <translation>semaines</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1804"/>
+        <location filename="shake_event.py" line="1811"/>
         <source>Version: %s</source>
         <translation>Version: %s</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1647"/>
+        <location filename="shake_event.py" line="1654"/>
         <source>This report was created using InaSAFE version %s. Visit http://inasafe.org for more information.</source>
         <translation>Ce rapport a été créé avec la version %s d&apos;InaSAFE. Rendez-vous sur http://inasafe.org pour plus d&apos;information.</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1630"/>
+        <location filename="shake_event.py" line="1637"/>
         <source>Population count per grid cell</source>
         <translation>Dénombrement de population par cellule de la matrice (raster)</translation>
     </message>
@@ -9073,17 +9135,17 @@ p, li { white-space: pre-wrap; }
         <translation>Population (x 1000)</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1629"/>
+        <location filename="shake_event.py" line="1636"/>
         <source>Nearby Places</source>
         <translation>Zones proches</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1631"/>
+        <location filename="shake_event.py" line="1638"/>
         <source>This impact estimation is automatically generated and only takes into account the population and cities affected by different levels of ground shaking. The estimate is based on ground shaking data from BMKG, population count data derived by Australian Government from worldpop.org.uk, place information from geonames.org and software developed by BNPB. Limitations in the estimates of ground shaking, population and place names datasets may result in significant misrepresentation of the on-the-ground situation in the figures shown here. Consequently decisions should not be made solely on the information presented here and should always be verified by ground truthing and other reliable information sources. The fatality calculation assumes that no fatalities occur for shake levels below MMI 4. Fatality counts of less than 50 are disregarded.</source>
         <translation>L’estimation de l’impact est généré automatiquement et ne prend en compte que la population et les villes touchées par les différents niveaux du séisme. L’estimation est basée sur des données sismiques BMKG, les données de recensement de la population dérivées par le gouvernement australien à partir de worldpop.org.uk, les informations géographiques de geonames.org et le logiciel développé par BNPB. Les limitations dans les estimations sismiques, la population et les noms de lieux peuvent entraîner une importante différence de la représentation du terrain comparée aux chiffres présentés ici. Par conséquent, les décisions ne doivent pas être prises uniquement sur les informations présentées ici et doivent toujours être vérifiées par vérification au sol et par d’autres sources d’information fiables. Le calcul de la létalité suppose qu’aucun décès se produisent pour les niveaux sismiques inférieurs à 4 MMI. La létalité de moins de 50 décès sont ignorés.</translation>
     </message>
     <message>
-        <location filename="shake_event.py" line="1650"/>
+        <location filename="shake_event.py" line="1657"/>
         <source>Supported by the Australian Government, Geoscience Australia and the World Bank-GFDRR.</source>
         <translation>Soutenu par le gouvernement Australien, Geoscience Australie et la Banque Mondiale-GFDRR.</translation>
     </message>
