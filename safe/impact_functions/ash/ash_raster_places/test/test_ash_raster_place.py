@@ -66,8 +66,8 @@ class TsunamiRasterBuildingFunctionTest(unittest.TestCase):
         # 1 = inundated, 2 = wet, 3 = dry
         expected_result = {
             0: 0,
-            1: 0,
-            2: 197,
+            1: 135,
+            2: 62,
             3: 1,
             4: 0
         }
