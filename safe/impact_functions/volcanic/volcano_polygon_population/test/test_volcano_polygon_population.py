@@ -52,15 +52,14 @@ class TestVolcanoPolygonPopulationFunction(unittest.TestCase):
         impact_function.run()
         impact_layer = impact_function.impact
         # Check the question
-        expected_question = ('In the event of volcano krb how many population '
-                             'might need evacuation')
-        message = 'The question should be %s, but it returns %s' % (
-            expected_question, impact_function.question)
-        self.assertEqual(expected_question, impact_function.question, message)
+        expected_question = (
+            'In the event of volcano krb how many population might need '
+            'evacuation?')
+        self.assertEqual(expected_question, impact_function.question)
         # Count by hand
         expected_affected_population = 181
         result = numpy.nansum(impact_layer.get_data())
-        self.assertEqual(expected_affected_population, result, message)
+        self.assertEqual(expected_affected_population, result)
 
     def test_run_failed(self):
         """Test run IF with missing keywords."""

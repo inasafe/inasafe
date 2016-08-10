@@ -65,7 +65,7 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
 
         # Set the question of the IF (as the hazard data is not an event)
         self.question = tr(
-            'In each of the hazard zones which areas might be affected.')
+            'In each of the hazard zones which areas might be affected?')
 
         # Use the proper minimum needs, update the parameters
         self.parameters = add_needs_parameters(self.parameters)
