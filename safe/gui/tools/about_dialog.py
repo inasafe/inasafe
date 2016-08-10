@@ -78,6 +78,7 @@ class AboutDialog(QtGui.QDialog, FORM_CLASS):
         attributes_list.append(self.tr(
             '"Remove icon" designed by Dalpat Prajapati from the Noun '
             'Project'))
+        attributes_list.append(self.tr('Humanitarian icons source: OCHA'))
         attributes_list.append(self.tr(
-            'Humanitarian icons source: OCHA'))
+            'Sign post by Tara Swart from the Noun Project'))
         return attributes_list
