@@ -40,7 +40,7 @@ __date__ = '7/13/16'
 __copyright__ = 'imajimatika@gmail.com'
 
 
-class AshRasterHazardPopulationFunctionMetadata(ImpactFunctionMetadata):
+class AshRasterPopulationFunctionMetadata(ImpactFunctionMetadata):
 
     @staticmethod
     def as_dict():
@@ -55,7 +55,7 @@ class AshRasterHazardPopulationFunctionMetadata(ImpactFunctionMetadata):
         """
         title = tr('People affected by volcanic ash')
         dict_meta = {
-            'id': 'AshRasterHazardPopulationFunctionMetadata',
+            'id': 'AshRasterPopulationFunction',
             'name': tr('Ash raster on population'),
             'impact': tr('Be affected'),
             'title': tr('Be affected'),
