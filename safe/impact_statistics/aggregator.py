@@ -1597,7 +1597,6 @@ class Aggregator(QtCore.QObject):
         if algorithm is not None:
             return algorithm.getOutputValuesAsDictionary()
 
-
     def _intersect_exposure_with_aggregation(
             self, exposure_layer, agg_layer, agg_field_name):
         """ Make a new layer that is intersection of exposure and aggregation
@@ -1606,7 +1605,8 @@ class Aggregator(QtCore.QObject):
         Aggregation zones are reprojected to exposure layer if necessary.
 
         Note: tried to use qgis:intersection (with qgis:reprojectlayer)
-        from Processing, however that lead to poor results with missing features.
+        from Processing, however that lead to poor results with missing
+        features.
         """
 
         exposure_fields = [
