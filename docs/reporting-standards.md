@@ -24,7 +24,6 @@ ready for implementation. The status of these sections is as follows:
 | Analysis details | draft |
 | Aggregation report | draft |
 | Overall examples | draft |
-| Terminology | ready for implementation |
 | Other guidelines | ready for implementation |
 
 ## How this document is structured
