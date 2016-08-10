@@ -13,7 +13,7 @@ ready for implementation. The status of these sections is as follows:
 | ------------------------- | --------------------------- |
 | General rules | draft |
 | Map title | ready for implementation |
-| Map legend title | draft |
+| Map legend | draft |
 | Marginalia | draft |
 | Analysis question | ready for implementation |
 | General report | draft |
@@ -121,7 +121,7 @@ The map title appears at the top of each map product and describes the map
 - Jalan terdampak 
 - Penutup lahan terdampak
 
-## Map legends (draft)
+## Map legend (draft)
 
 ### Description
 
@@ -168,7 +168,7 @@ combination.
 Map legend classes will have labels. The label should complement the
 legend title and should use the following syntax:
 
-    <**label**> <**threshold**> <**count**> <**unit**>
+<**label**> <**threshold**> <**count**> <**unit**>
 
 **Label**, refers to the class in the table above, i.e. affected, not affected,
 high hazard zone etc. **threshold** is the dynamic value which defines the
@@ -188,6 +188,10 @@ or in Indonesian language with the units for people included:
 
 ![image](https://cloud.githubusercontent.com/assets/5743135/17542965/56f60786-5ef7-11e6-941d-1486ab1c291a.png)
 
+The **"People affected by volcanic ash event"** map legend might look like:
+
+![image](https://cloud.githubusercontent.com/assets/5743135/17543836/a3037fa4-5efd-11e6-8d7c-db36a0a30cf6.png)
+
 The **"Buildings affected by flood event"** map legend might look like:
 
 ![image](https://cloud.githubusercontent.com/assets/5743135/17543699/a6f6c7fc-5efc-11e6-8ca9-63f4a2b37397.png)
@@ -205,10 +209,6 @@ The **"Roads affected by flood hazard"** map legend might look like:
 
 Note: thresholds are not included in the legend label for multiple event hazard
  data.
-
-The **"People affected by volcanic ash event"** map legend might look like:
-
-![image](https://cloud.githubusercontent.com/assets/5743135/17543836/a3037fa4-5efd-11e6-8d7c-db36a0a30cf6.png)
 
 
 
