@@ -29,7 +29,6 @@ from qgis.core import (
     QgsVectorLayer
 )
 from PyQt4.QtCore import QVariant, QPyNullVariant
-
 from safe.common.exceptions import ZeroImpactException
 from safe.impact_functions.bases.continuous_rh_classified_ve import \
     ContinuousRHClassifiedVE
@@ -166,7 +165,6 @@ def _raster_to_vector_cells(raster, ranges, output_crs):
             if rd % 1000 == 0:
                 vl.dataProvider().addFeatures(features)
                 features = []
-
     # Add the latest features
     vl.dataProvider().addFeatures(features)
 
@@ -292,9 +290,8 @@ class TsunamiRasterRoadsFunction(
         """Return the notes section of the report.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: safe.messaging.Message
+        :rtype: list
         """
-        title = tr('Notes and assumptions')
         # Thresholds for tsunami hazard zone breakdown.
         low_max = self.parameters['low_threshold']
         medium_max = self.parameters['medium_threshold']
@@ -325,13 +322,13 @@ class TsunamiRasterRoadsFunction(
                 high_max.value, high_max.unit.abbreviation),
             tr('Roads are closed if they are in low, medium, high, or very '
                'high tsunami hazard zone.'),
-            tr('Roads are opened if they are in dry zone.')
+            tr('Roads are open if they are in dry zone.')
         ]
-
-        return {
-            'title': title,
-            'fields': fields
-        }
+        # include any generic exposure specific notes from definitions.py
+        fields = fields + self.exposure_notes()
+        # include any generic hazard specific notes from definitions.py
+        fields = fields + self.hazard_notes()
+        return fields
 
     def run(self):
         """Run the impact function.
@@ -495,7 +492,7 @@ class TsunamiRasterRoadsFunction(
         impact_data = self.generate_data()
 
         extra_keywords = {
-            'map_title': self.metadata().key('map_title'),
+            'map_title': self.map_title(),
             'legend_title': self.metadata().key('legend_title'),
             'target_field': target_field
         }

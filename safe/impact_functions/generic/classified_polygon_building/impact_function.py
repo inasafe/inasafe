@@ -42,33 +42,31 @@ class ClassifiedPolygonHazardBuildingFunction(
 
     def __init__(self):
         super(ClassifiedPolygonHazardBuildingFunction, self).__init__()
+        BuildingExposureReportMixin.__init__(self)
 
         # Hazard zones are all unique values from the hazard zone attribute
         self.hazard_zones = []
         # Set the question of the IF (as the hazard data is not an event)
         self.question = tr(
             'In each of the hazard zones how many buildings might be '
-            'affected.')
-
-        # From BuildingExposureReportMixin
-        self.building_report_threshold = 25
+            'affected?')
 
     def notes(self):
         """Return the notes section of the report as dict.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: dict
+        :rtype: list
         """
-        title = tr('Notes and assumptions')
         fields = [
             tr('Map shows buildings affected in each of these hazard zones: '
                '%s') % ', '.join(self.hazard_zones)
         ]
 
-        return {
-            'title': title,
-            'fields': fields
-        }
+        # include any generic exposure specific notes from definitions.py
+        fields = fields + self.exposure_notes()
+        # include any generic hazard specific notes from definitions.py
+        fields = fields + self.hazard_notes()
+        return fields
 
     def run(self):
         """Risk plugin for classified polygon hazard on building/structure.
@@ -170,13 +168,6 @@ class ClassifiedPolygonHazardBuildingFunction(
         interpolated_layer.dataProvider().changeAttributeValues(changed_values)
 
         self.reorder_dictionaries()
-
-        # Lump small entries and 'unknown' into 'other' category
-        # Building threshold #2468
-        postprocessors = self.parameters['postprocessors']
-        building_postprocessors = postprocessors['BuildingType'][0]
-        self.building_report_threshold = building_postprocessors.value[0].value
-        self._consolidate_to_other()
 
         # Create style
         categories = self.affected_buildings.keys()

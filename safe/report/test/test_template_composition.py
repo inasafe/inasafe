@@ -33,7 +33,7 @@ INASAFE_TEMPLATE_PATH = resources_path(
 
 
 class TemplateCompositionTest(unittest.TestCase):
-    """Test Impact Merge Dialog widget."""
+    """Test template composition."""
 
     # noinspection PyPep8Naming
     def setUp(self):

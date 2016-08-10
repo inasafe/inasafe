@@ -9,17 +9,11 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
-__author__ = 'marco@opengis.ch'
-__revision__ = '$Format:%H$'
-__date__ = '19/05/2013'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
 
 import sys
 import logging
 import time
 import numpy
-from collections import OrderedDict
 from qgis.core import (
     QgsCoordinateTransform,
     QgsMapLayer,
@@ -35,8 +29,6 @@ from qgis.core import (
     QgsVectorLayer,
     QgsVectorFileWriter,
     QGis,
-    QgsSingleSymbolRendererV2,
-    QgsFillSymbolV2,
     QgsCoordinateReferenceSystem)
 # pylint: disable=no-name-in-module
 from qgis.analysis import QgsZonalStatistics
@@ -59,7 +51,9 @@ from safe.common.utilities import (
     temp_dir,
     unique_filename,
     feature_attributes_as_dict,
-    get_utm_epsg)
+    get_utm_epsg,
+    get_non_conflicting_attribute_name
+)
 from safe.common.exceptions import ReadLayerError, PointsInputError
 from safe.gis.polygon import (
     in_and_outside_polygon as points_in_and_outside_polygon)
@@ -75,7 +69,14 @@ from safe.common.exceptions import (
     InvalidAggregatorError,
     UnsupportedProviderError,
     InvalidLayerError,
-    InsufficientParametersError)
+    InsufficientParametersError
+)
+
+__author__ = 'marco@opengis.ch'
+__revision__ = '$Format:%H$'
+__date__ = '19/05/2013'
+__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
+                 'Disaster Reduction')
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 INFO_STYLE = styles.INFO_STYLE
@@ -488,7 +489,7 @@ class Aggregator(QtCore.QObject):
         agg_keyword = self.get_default_keyword('AGGR_ATTR_KEY')
         agg_attribute = self.read_keywords(self.layer)[agg_keyword]
 
-        out_filename = _intersect_exposure_with_aggregation(
+        out_filename = self._intersect_exposure_with_aggregation(
             self.exposure_layer,
             self.layer,
             agg_attribute)
@@ -555,7 +556,7 @@ class Aggregator(QtCore.QObject):
         fields = provider.fields()
 
         # mark important attributes as needed
-        self._set_persistant_attributes()
+        self._set_persistent_attributes()
         unneeded_attributes = []
 
         for i in xrange(fields.count()):
@@ -679,7 +680,7 @@ class Aggregator(QtCore.QObject):
         """Aggregate on a raster impact layer by using zonal statistics.
 
         :param impact_layer: A raster impact layer.
-        :type impact_layer: QgsRasterLayer
+        :type impact_layer: qgis.core.QgsRasterLayer
         """
         zonal_statistics = QgsZonalStatistics(
             self.layer,
@@ -879,8 +880,8 @@ class Aggregator(QtCore.QObject):
             self.layer, self.get_default_keyword('AGGR_ATTR_KEY'))
         agg_attribute_index = agg_provider.fieldNameIndex(agg_attribute)
 
-        request = QgsFeatureRequest(). \
-            setSubsetOfAttributes([agg_attribute_index])
+        request = QgsFeatureRequest().setSubsetOfAttributes(
+            [agg_attribute_index])
         agg_attribute_dict = {}
         for feature_id, feat in enumerate(self.layer.getFeatures(request)):
             name = feat.attributes()[0]
@@ -889,8 +890,8 @@ class Aggregator(QtCore.QObject):
             agg_attribute_dict[name] = feature_id
         # Total impacted length in the aggregation polygons:
         total = {
-            feature_id: 0 for feature_id, __ in enumerate(
-            self.layer.getFeatures(request))
+                feature_id: 0 for feature_id, __ in enumerate(
+                self.layer.getFeatures(request))
             }
 
         # Create slots for dicts
@@ -908,8 +909,10 @@ class Aggregator(QtCore.QObject):
 
         request = QgsFeatureRequest(). \
             setFlags(QgsFeatureRequest.NoGeometry)
+        # NOTE(IS): I use non conflicting agg attribute to avoid issue with
+        # the same attribute in exposure layer #2750
         agg_attribute_index = impact_layer_splits.dataProvider(). \
-            fieldNameIndex(agg_attribute)
+            fieldNameIndex(self.non_conflicting_agg_attribute)
         for feat in impact_layer_splits.getFeatures(request):
             line_attributes = feat.attributes()
             polygon_name = line_attributes[agg_attribute_index]
@@ -1089,7 +1092,7 @@ class Aggregator(QtCore.QObject):
         return centroids
 
     # noinspection PyDictCreation
-    def _set_persistant_attributes(self):
+    def _set_persistent_attributes(self):
         """Mark any attributes that should remain in the self.layer table."""
         self.attributes = {}
         self.attributes[self.get_default_keyword(
@@ -1348,13 +1351,15 @@ class Aggregator(QtCore.QObject):
                         intersection_geometry = QgsGeometry(intersection)
 
                         # from ftools
-                        unknown_geometry_type = 0
                         geometry_type = intersection_geometry.wkbType()
-                        if geometry_type == unknown_geometry_type:
+                        if geometry_type == QGis.WKBUnknown:
                             int_com = geometry.combine(
                                 qgis_polygon_geometry)
                             int_sym = geometry.symDifference(
                                 qgis_polygon_geometry)
+                            if not (int_sym or int_com):
+                                LOGGER.debug('Skip None geometry.')
+                                continue
                             intersection_geometry = QgsGeometry(
                                 int_com.difference(int_sym))
                         # LOGGER.debug('wkbType type of intersection: %s' %
@@ -1407,7 +1412,7 @@ class Aggregator(QtCore.QObject):
                 remaining_indexes = remaining_indexes[next_iteration_index]
                 LOGGER.debug('Remaining: %s' % len(remaining_polygons))
             else:
-                print 'no more polygons to be checked'
+                # print 'no more polygons to be checked'
                 break
                 # del tmpWriter
 
@@ -1585,80 +1590,87 @@ class Aggregator(QtCore.QObject):
         :param args: list of arguments
         :type args: list
 
-        :returns: The ouput of the algorithm.
+        :returns: The output of the algorithm.
         :rtype: dict
         """
         algorithm = self.processing.runAlgorithm(algorithm_name, None, *args)
         if algorithm is not None:
             return algorithm.getOutputValuesAsDictionary()
 
+    def _intersect_exposure_with_aggregation(
+            self, exposure_layer, agg_layer, agg_field_name):
+        """ Make a new layer that is intersection of exposure and aggregation
+        layers and add aggregation zone name.
 
-# private functions used in the module
+        Aggregation zones are reprojected to exposure layer if necessary.
 
-def _intersect_exposure_with_aggregation(
-        exposure_layer, agg_layer, agg_field_name):
-    """ Make a new layer that is intersection of exposure and aggregation
-    layers and add aggregation zone name.
+        Note: tried to use qgis:intersection (with qgis:reprojectlayer)
+        from Processing, however that lead to poor results with missing
+        features.
+        """
 
-    Aggregation zones are reprojected to exposure layer if necessary.
+        exposure_fields = [
+            i.name() for i in self.exposure_layer.dataProvider().fields()
+        ]
+        # Need to get the non conflicting to get the real agg attribute in
+        # output layer #2750
+        self.non_conflicting_agg_attribute = \
+            get_non_conflicting_attribute_name(agg_field_name, exposure_fields)
 
-    Note: tried to use qgis:intersection (with qgis:reprojectlayer)
-    from Processing, however that lead to poor results with missing features.
-    """
+        temporary_dir = temp_dir(sub_dir='pre-process')
+        out_filename = unique_filename(suffix='.shp', dir=temporary_dir)
 
-    temporary_dir = temp_dir(sub_dir='pre-process')
-    out_filename = unique_filename(suffix='.shp', dir=temporary_dir)
+        # reproject aggregation layer if not in the same CRS as exposure
+        if exposure_layer.crs() != agg_layer.crs():
+            ct = QgsCoordinateTransform(agg_layer.crs(), exposure_layer.crs())
+        else:
+            ct = None
 
-    # reproject aggregation layer if not in the same CRS as exposure
-    if exposure_layer.crs() != agg_layer.crs():
-        ct = QgsCoordinateTransform(agg_layer.crs(), exposure_layer.crs())
-    else:
-        ct = None
+        out_fields = exposure_layer.pendingFields()
+        out_fields.append(QgsField(
+            self.non_conflicting_agg_attribute, QVariant.String))
 
-    out_fields = exposure_layer.pendingFields()
-    out_fields.append(QgsField(agg_field_name, QVariant.String))
+        writer = QgsVectorFileWriter(
+            out_filename, "utf-8", out_fields,
+            exposure_layer.wkbType(), exposure_layer.crs())
 
-    writer = QgsVectorFileWriter(
-        out_filename, "utf-8", out_fields,
-        exposure_layer.wkbType(), exposure_layer.crs())
+        # build index for exposure
+        exp_index = QgsSpatialIndex()
+        exp_features = {}
+        for f in exposure_layer.getFeatures():
+            exp_index.insertFeature(f)
+            exp_features[f.id()] = QgsFeature(f)
 
-    # build index for exposure
-    exp_index = QgsSpatialIndex()
-    exp_features = {}
-    for f in exposure_layer.getFeatures():
-        exp_index.insertFeature(f)
-        exp_features[f.id()] = QgsFeature(f)
+        for agg_feature in agg_layer.getFeatures():
+            geom = QgsGeometry(agg_feature.geometry())
+            agg_name = agg_feature[agg_field_name]
+            if ct is not None:
+                geom.transform(ct)
 
-    for agg_feature in agg_layer.getFeatures():
-        geom = QgsGeometry(agg_feature.geometry())
-        agg_name = agg_feature[agg_field_name]
-        if ct is not None:
-            geom.transform(ct)
+            for exp_fid in exp_index.intersects(geom.boundingBox()):
+                exp_feature = exp_features[exp_fid]
+                exp_geom = QgsGeometry(exp_feature.geometry())
+                if geom.contains(exp_geom):
+                    # write feature as is
+                    out_feature = QgsFeature(out_fields)
+                    out_feature.setGeometry(exp_geom)
+                    out_feature.setAttributes(
+                        exp_feature.attributes() + [agg_name])
+                    writer.addFeature(out_feature)
+                elif geom.intersects(exp_geom):
+                    # need to do intersection
+                    out_geom = geom.intersection(exp_geom)
+                    out_feature = QgsFeature(out_fields)
+                    if not out_geom:
+                        LOGGER.warning('out_geom is None')
+                        continue
+                    if not out_feature:
+                        LOGGER.warning('out_feature is None')
+                        continue
+                    out_feature.setGeometry(out_geom)
+                    out_feature.setAttributes(
+                        exp_feature.attributes() + [agg_name])
+                    writer.addFeature(out_feature)
 
-        for exp_fid in exp_index.intersects(geom.boundingBox()):
-            exp_feature = exp_features[exp_fid]
-            exp_geom = QgsGeometry(exp_feature.geometry())
-            if geom.contains(exp_geom):
-                # write feature as is
-                out_feature = QgsFeature(out_fields)
-                out_feature.setGeometry(exp_geom)
-                out_feature.setAttributes(
-                    exp_feature.attributes() + [agg_name])
-                writer.addFeature(out_feature)
-            elif geom.intersects(exp_geom):
-                # need to do intersection
-                out_geom = geom.intersection(exp_geom)
-                out_feature = QgsFeature(out_fields)
-                if not out_geom:
-                    LOGGER.warning('out_geom is None')
-                    continue
-                if not out_feature:
-                    LOGGER.warning('out_feature is None')
-                    continue
-                out_feature.setGeometry(out_geom)
-                out_feature.setAttributes(
-                    exp_feature.attributes() + [agg_name])
-                writer.addFeature(out_feature)
-
-    del writer
-    return out_filename
+        del writer
+        return out_filename

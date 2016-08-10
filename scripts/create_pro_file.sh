@@ -53,4 +53,5 @@ echo "
 TRANSLATIONS = i18n/inasafe_id.ts \\
                i18n/inasafe_fr.ts \\
                i18n/inasafe_es_ES.ts \\
+               i18n/inasafe_vi.ts \\
                i18n/inasafe_af.ts"  >> ${PRO_FILE}

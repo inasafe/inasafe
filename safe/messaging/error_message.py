@@ -130,7 +130,7 @@ class ErrorMessage(MessageElement):
             'do something unsupported.')
         suggestions.add(
             'Report the problem using the issue tracker at '
-            'https://github.com/AIFDR/inasafe/issues. Reporting an issue '
+            'https://github.com/inasafe/inasafe/issues. Reporting an issue '
             'requires that you first create a free account at '
             'http://github.com. When you report the issue, '
             'please copy and paste the complete contents of this panel '

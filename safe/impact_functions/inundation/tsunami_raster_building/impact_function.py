@@ -43,8 +43,9 @@ class TsunamiRasterBuildingFunction(
 
     def __init__(self):
         """Constructor (calls ctor of base class)."""
-        self._target_field = 'depth'
         super(TsunamiRasterBuildingFunction, self).__init__()
+        BuildingExposureReportMixin.__init__(self)
+        self._target_field = 'depth'
         self.hazard_classes = [
             tr('Dry Zone'),
             tr('Low Hazard Zone'),
@@ -52,17 +53,13 @@ class TsunamiRasterBuildingFunction(
             tr('High Hazard Zone'),
             tr('Very High Hazard Zone'),
         ]
-        # From BuildingExposureReportMixin
-        self.building_report_threshold = 25
 
     def notes(self):
         """Return the notes section of the report as dict.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: dict
+        :rtype: list
         """
-        title = tr('Notes and assumptions')
-
         # Thresholds for tsunami hazard zone breakdown.
         low_max = self.parameters['low_threshold']
         medium_max = self.parameters['medium_threshold']
@@ -93,13 +90,13 @@ class TsunamiRasterBuildingFunction(
                 high_max.value, high_max.unit.abbreviation),
             tr('Buildings are closed if they are in low, medium, high, or '
                'very high tsunami hazard zone.'),
-            tr('Buildings are opened if they are in dry zone.')
+            tr('Buildings are open if they are in dry zone.')
         ]
-
-        return {
-            'title': title,
-            'fields': fields
-        }
+        # include any generic exposure specific notes from definitions.py
+        fields = fields + self.exposure_notes()
+        # include any generic hazard specific notes from definitions.py
+        fields = fields + self.hazard_notes()
+        return fields
 
     @property
     def _affected_categories(self):
@@ -161,13 +158,6 @@ class TsunamiRasterBuildingFunction(
 
         self.reorder_dictionaries()
 
-        # Lump small entries and 'unknown' into 'other' category
-        # Building threshold #2468
-        postprocessors = self.parameters['postprocessors']
-        building_postprocessors = postprocessors['BuildingType'][0]
-        self.building_report_threshold = building_postprocessors.value[0].value
-        self._consolidate_to_other()
-
         style_classes = [
             dict(
                 label=self.hazard_classes[0] + ': 0 m',
@@ -218,7 +208,7 @@ class TsunamiRasterBuildingFunction(
 
         extra_keywords = {
             'target_field': self.target_field,
-            'map_title': self.metadata().key('map_title'),
+            'map_title': self.map_title(),
             'legend_title': self.metadata().key('legend_title'),
             'legend_units': self.metadata().key('legend_units'),
             'buildings_total': total_features,

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<style>
+			table{
+				border-collapse: collapse;
+				font-family: "Ubuntu";
+			}
+
+			th {
+				border-bottom: 1px solid black;
+				padding:5px;
+				height:40px;
+				font-size:13px;
+			}
+			td {
+				border-bottom: 1px solid black;
+				padding:5px;
+				background-color: #f2f2f2;
+				font-size:12px;
+			}
+
+			.tiny-box{
+				float: left;
+				width: 15px;
+				height: 15px;
+				margin-right:5px;
+				border: 1px solid rgba(0, 0, 0, .2);
+			}
+
+			.very-low{
+				background:#0F74BC;
+			}
+			.low{
+				background:#00ADEF;
+			}
+			.moderate{
+				background:#FFF004;
+			}
+			.high{
+				background:#FCB040;
+			}
+			.very-high{
+				background:#E32031;
+			}
+			.center{
+				text-align:center;
+			}
+			.airport-icon{
+				background-image: url('./airport.svg');
+				width: 15px;
+				height: 15px;
+				display: inline-block;
+				background-size: contain;
+			}
+		</style>
+	</head>
+	<body>
+		<table frame="box" width="100%">
+			<tr>
+				<th align="left" width="40%">Name</th>
+				<th width="35%">People (x1000)/ Airport affected</th>
+				<th align="left" width="25%">Fallout Level</th>
+			</tr>
+			<tr>
+				<td><div class="tiny-box very-high"></div>Sleman</td>
+				<td class="center">20</td>
+				<td>Very High</td>
+			</tr>
+			<tr>
+				<td><div class="tiny-box very-high"></div>Boyolali</td>
+				<td class="center">10</td>
+				<td>Very High</td>
+			</tr>
+			<tr>
+				<td><div class="tiny-box high"></div>Magelang</td>
+				<td class="center">30</td>
+				<td>High</td>
+			</tr>
+				<tr>
+				<td><div class="tiny-box moderate"></div>Kota Yogyakarta</td>
+				<td class="center">60</td>
+				<td>Moderate</td>
+			</tr>
+			<tr>
+				<td><div class="tiny-box low"></div>Semarang</td>
+				<td class="center">80</td>
+				<td>Low</td>
+			</tr>
+			<tr>
+				<td><div class="tiny-box high"></div>Adisucipto Airport</td>
+				<td class="center">
+					<img src="airport.jpg" style="height:15px; width: 15px;">
+				</td>
+				<td>High</td>
+			</tr>
+			<tr>
+				<td><div class="tiny-box low"></div>Adisumarmo Airport</td>
+				<td class="center">
+					<img src="airport.jpg" style="height:15px; width: 15px;">
+				</td>
+				<td>Low</td>
+			</tr>
+		</table>
+	</body>
+</html>

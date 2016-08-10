@@ -19,10 +19,11 @@ from qgis.core import (
     QgsRectangle,
     QgsFeatureRequest,
     QgsCoordinateTransform,
-    QgsCoordinateReferenceSystem,
     QgsGeometry)
 
 from PyQt4.QtCore import QVariant
+
+import logging
 
 from safe.impact_functions.bases.classified_vh_classified_ve import \
     ClassifiedVHClassifiedVE
@@ -36,6 +37,8 @@ from safe.common.exceptions import GetDataError, ZeroImpactException
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
 
+LOGGER = logging.getLogger('InaSAFE')
+
 
 class FloodPolygonBuildingFunction(
         ClassifiedVHClassifiedVE,
@@ -47,19 +50,16 @@ class FloodPolygonBuildingFunction(
 
     def __init__(self):
         super(FloodPolygonBuildingFunction, self).__init__()
+        BuildingExposureReportMixin.__init__(self)
         # The 'wet' variable
         self.wet = 'wet'
-
-        # From BuildingExposureReportMixin
-        self.building_report_threshold = 25
 
     def notes(self):
         """Return the notes section of the report as dict.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: dict
+        :rtype: notes
         """
-        title = tr('Notes and assumptions')
         hazard_classes_string = ', '.join(
             [unicode(hazard_class) for hazard_class in
              self.hazard_class_mapping[self.wet]])
@@ -67,11 +67,11 @@ class FloodPolygonBuildingFunction(
             tr('Buildings are flooded when in a region with field "%s" in '
                '"%s".') % (self.hazard_class_attribute, hazard_classes_string)
         ]
-
-        return {
-            'title': title,
-            'fields': fields
-        }
+        # include any generic exposure specific notes from definitions.py
+        fields = fields + self.exposure_notes()
+        # include any generic hazard specific notes from definitions.py
+        fields = fields + self.hazard_notes()
+        return fields
 
     def run(self):
         """Experimental impact function."""
@@ -79,6 +79,11 @@ class FloodPolygonBuildingFunction(
         # Get parameters from layer's keywords
         self.hazard_class_attribute = self.hazard.keyword('field')
         self.hazard_class_mapping = self.hazard.keyword('value_map')
+        # There is no wet in the class mapping
+        if self.wet not in self.hazard_class_mapping:
+            raise ZeroImpactException(tr(
+                'There is no flooded area in the hazard layers, thus there '
+                'is no affected building.'))
         self.exposure_class_attribute = self.exposure.keyword(
             'structure_class_field')
         exposure_value_mapping = self.exposure.keyword('value_mapping')
@@ -239,13 +244,6 @@ class FloodPolygonBuildingFunction(
 
         self.reorder_dictionaries()
 
-        # Lump small entries and 'unknown' into 'other' category
-        # Building threshold #2468
-        postprocessors = self.parameters['postprocessors']
-        building_postprocessors = postprocessors['BuildingType'][0]
-        self.building_report_threshold = building_postprocessors.value[0].value
-        self._consolidate_to_other()
-
         style_classes = [
             dict(label=tr('Not Inundated'), value=0, colour='#1EFC7C',
                  transparency=0, size=0.5),
@@ -264,7 +262,7 @@ class FloodPolygonBuildingFunction(
         impact_data = self.generate_data()
 
         extra_keywords = {
-            'map_title': self.metadata().key('map_title'),
+            'map_title': self.map_title(),
             'legend_title': self.metadata().key('legend_title'),
             'target_field': self.target_field,
             'buildings_total': self.total_buildings,

@@ -60,6 +60,7 @@ class EarthquakeBuildingMetadata(ImpactFunctionMetadata):
             concrete impact function.
         :rtype: dict
         """
+        title = tr('Buildings affected by earthquake')
         dict_meta = {
             'id': 'EarthquakeBuildingFunction',
             'name': tr('Earthquake on buildings'),
@@ -78,14 +79,19 @@ class EarthquakeBuildingMetadata(ImpactFunctionMetadata):
             'output': '',
             'actions': '',
             'limitations': [],
-            'citations': [],
-            'map_title': tr('Building affected by earthquake'),
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ],
+            'map_title': title,
+            'layer_name': title,
             'legend_notes': tr(
                 'The level of the impact is according to the threshold the '
                 'user input.'),
             'legend_units': tr('(mmi)'),
             'legend_title': tr('Impact level'),
-            'layer_name': tr('Estimated buildings affected'),
             'layer_requirements': {
                 'hazard': {
                     'layer_mode': layer_mode_continuous,

@@ -38,6 +38,7 @@ from safe.common.exceptions import ZeroImpactException
 from safe.impact_functions.core import get_key_for_value
 from safe.impact_reports.population_exposure_report_mixin import \
     PopulationExposureReportMixin
+from safe.definitions import no_data_warning
 
 __author__ = 'Rizky Maulana Nugraha'
 
@@ -54,6 +55,7 @@ class FloodEvacuationVectorHazardFunction(
     def __init__(self):
         """Constructor."""
         super(FloodEvacuationVectorHazardFunction, self).__init__()
+        PopulationExposureReportMixin.__init__(self)
 
         # Use affected field flag (if False, all polygon will be considered as
         # affected)
@@ -69,10 +71,8 @@ class FloodEvacuationVectorHazardFunction(
         """Return the notes section of the report.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: dict
+        :rtype: list
         """
-        title = tr('Notes and assumptions')
-
         population = format_int(population_rounding(self.total_population))
         threshold = format_int(self.parameters['evacuation_percentage'].value)
 
@@ -89,23 +89,12 @@ class FloodEvacuationVectorHazardFunction(
         ]
 
         if self.no_data_warning:
-            fields.append(tr(
-                'The layers contained "no data" values. This missing data '
-                'was carried through to the impact layer.'))
-            fields.append(tr(
-                '"No data" values in the impact layer were treated as 0 '
-                'when counting the affected or total population.'))
-        fields.extend([
-            tr('All values are rounded up to the nearest integer in order to '
-               'avoid representing human lives as fractions.'),
-            tr('Population rounding is applied to all population values, '
-               'which may cause discrepancies when adding values.')
-        ])
-
-        return {
-            'title': title,
-            'fields': fields
-        }
+            fields = fields + no_data_warning
+        # include any generic exposure specific notes from definitions.py
+        fields = fields + self.exposure_notes()
+        # include any generic hazard specific notes from definitions.py
+        fields = fields + self.hazard_notes()
+        return fields
 
     def run(self):
         """Risk plugin for flood population evacuation.
@@ -120,6 +109,11 @@ class FloodEvacuationVectorHazardFunction(
         # Get parameters from layer's keywords
         self.hazard_class_attribute = self.hazard.keyword('field')
         self.hazard_class_mapping = self.hazard.keyword('value_map')
+        # There is no wet in the class mapping
+        if self.wet not in self.hazard_class_mapping:
+            raise ZeroImpactException(tr(
+                'There is no flooded area in the hazard layers, thus there '
+                'is no affected population.'))
 
         # Get the IF parameters
         self._evacuation_percentage = (
@@ -258,7 +252,7 @@ class FloodEvacuationVectorHazardFunction(
 
         extra_keywords = {
             'target_field': self.target_field,
-            'map_title': self.metadata().key('map_title'),
+            'map_title': self.map_title(),
             'legend_notes': self.metadata().key('legend_notes'),
             'legend_units': self.metadata().key('legend_units'),
             'legend_title': self.metadata().key('legend_title'),

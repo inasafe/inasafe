@@ -19,10 +19,8 @@ from safe.gis.numerics import (
 from safe.common.exceptions import (
     GetDataError,
     InaSAFEError,
-    MetadataReadError,
     ReadLayerError,
-    WriteLayerError,
-    NoKeywordsFoundError
+    WriteLayerError
 )
 
 from layer import Layer
@@ -30,8 +28,6 @@ from vector import Vector
 from projection import Projection
 
 from utilities import DRIVER_MAP
-from utilities import read_keywords
-from utilities import write_keywords
 from utilities import (
     geotransform_to_bbox,
     geotransform_to_resolution,
@@ -42,7 +38,6 @@ from safe.utilities.unicode import get_string
 from safe.utilities.metadata import (
     write_iso19115_metadata,
     read_iso19115_metadata,
-    write_read_iso_19115_metadata
 )
 
 
@@ -65,7 +60,7 @@ class Raster(Layer):
         * name: Optional name for layer. If None, basename is used.
         * keywords: Optional dictionary with keywords that describe the
             layer. When the layer is stored, these keywords will
-            be written into an associated file with extension .keywords.
+            be written into an associated file with extension .xml.
             Keywords can for example be used to display text
             about the layer in a web application.
         * style_info: Dictionary with information about how this layer
@@ -99,6 +94,7 @@ class Raster(Layer):
                        projection=projection,
                        keywords=keywords,
                        style_info=style_info)
+        self.band = None
 
         # Input checks
         if data is None:
@@ -116,7 +112,7 @@ class Raster(Layer):
             # Assume that data is provided as a numpy array
             # with extra keyword arguments supplying metadata
 
-            self.data = numpy.array(data, dtype='d', copy=False)
+            self._data = numpy.array(data, dtype='d', copy=False)
 
             proj4 = self.get_projection(proj4=True)
             if 'longlat' in proj4 and 'WGS84' in proj4:
@@ -127,7 +123,6 @@ class Raster(Layer):
 
             self.rows = data.shape[0]
             self.columns = data.shape[1]
-
             self.number_of_bands = 1
 
     def __str__(self):
@@ -178,6 +173,53 @@ class Raster(Layer):
         # Raster layers are identical up to the specified tolerance
         return True
 
+    @property
+    def data(self):
+        """Property for the data of this layer.
+
+        The setter does a lazy read so that the data matrix is only
+        initialised if is is actually wanted.
+
+        :returns: A matrix containing the layer data or None if the layer
+            has no band.
+        :rtype: numpy.array
+        """
+        if self._data is None:
+            if self.band is None:
+                return None
+            # Read from raster file
+            data = self.band.ReadAsArray()
+
+            # Convert to double precision (issue #75)
+            data = numpy.array(data, dtype=numpy.float64)
+
+            # Self check
+            M, N = data.shape
+            msg = (
+                'Dimensions of raster array do not match those of '
+                'raster file %s' % self.filename)
+            verify(M == self.rows, msg)
+            verify(N == self.columns, msg)
+            nodata = self.band.GetNoDataValue()
+            if nodata is None:
+                nodata = -9999
+
+            if nodata is not numpy.nan:
+                NaN = numpy.ones((M, N), numpy.float64) * numpy.nan
+                data = numpy.where(data == nodata, NaN, data)
+
+            self._data = data
+
+        return self._data
+
+    @data.setter
+    def data(self, data):
+        """Setter for the data of this layer.
+
+        :param data: A matrix containing the layer data.
+        """
+        self._data = data
+
     def read_from_file(self, filename):
         """Read and unpack raster data
         """
@@ -191,9 +233,10 @@ class Raster(Layer):
             if not os.path.exists(filename):
                 msg = 'Could not find file %s' % filename
             else:
-                msg = ('File %s exists, but could not be read. '
-                       'Please check if the file can be opened with '
-                       'e.g. qgis or gdalinfo' % filename)
+                msg = (
+                    'File %s exists, but could not be read. '
+                    'Please check if the file can be opened with '
+                    'e.g. qgis or gdalinfo' % filename)
             raise ReadLayerError(msg)
 
         # Record raster metadata from file
@@ -211,11 +254,7 @@ class Raster(Layer):
                 raise ReadLayerError(msg)
 
         # Look for any keywords
-        try:
-            self.keywords = read_iso19115_metadata(filename)
-        except (MetadataReadError, NoKeywordsFoundError):
-            keywords = read_keywords(basename + '.keywords')
-            self.keywords = write_read_iso_19115_metadata(filename, keywords)
+        self.keywords = read_iso19115_metadata(filename)
 
         # Determine name
         if 'title' in self.keywords:
@@ -257,29 +296,6 @@ class Raster(Layer):
         # Force garbage collection to free up any memory we can (TS)
         gc.collect()
 
-        # Read from raster file
-        data = band.ReadAsArray()
-
-        # Convert to double precision (issue #75)
-        data = numpy.array(data, dtype=numpy.float64)
-
-        # Self check
-        M, N = data.shape
-        msg = (
-            'Dimensions of raster array do not match those of '
-            'raster file %s' % self.filename)
-        verify(M == self.rows, msg)
-        verify(N == self.columns, msg)
-        nodata = self.band.GetNoDataValue()
-        if nodata is None:
-            nodata = -9999
-
-        if nodata is not numpy.nan:
-            NaN = numpy.ones((M, N), numpy.float64) * numpy.nan
-            data = numpy.where(data == nodata, NaN, data)
-
-        self.data = data
-
     def write_to_file(self, filename):
         """Save raster data to file
 
@@ -316,18 +332,18 @@ class Raster(Layer):
 
         self.filename = filename
 
-        # Write metada
+        # Write metadata
         fid.SetProjection(str(self.projection))
         fid.SetGeoTransform(self.geotransform)
 
         # Write data
         fid.GetRasterBand(1).WriteArray(A)
         fid.GetRasterBand(1).SetNoDataValue(self.get_nodata_value())
+        # noinspection PyUnusedLocal
         fid = None  # Close
 
         # Write keywords if any
         write_iso19115_metadata(filename, self.keywords)
-        # write_keywords(self.keywords, basename + '.keywords')
 
     def read_from_qgis_native(self, qgis_layer):
         """Read raster data from qgis layer QgsRasterLayer.
@@ -360,7 +376,6 @@ class Raster(Layer):
             provider.crs())
 
         # Write keywords if any
-        # write_keywords(self.keywords, base_name + '.keywords')
         write_iso19115_metadata(file_name, self.keywords)
         self.read_from_file(file_name)
 

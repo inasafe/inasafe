@@ -13,9 +13,8 @@ import logging
 import unittest
 
 from safe.common.utilities import temp_dir, unique_filename
-from safe.storage.utilities import read_keywords
 from safe.storage.vector import Vector, QGIS_IS_AVAILABLE
-from safe.test.utilities import test_data_path, get_qgis_app
+from safe.test.utilities import standard_data_path, get_qgis_app
 
 if QGIS_IS_AVAILABLE:   # Import QgsVectorLayer if qgis is available
     QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -23,9 +22,9 @@ if QGIS_IS_AVAILABLE:   # Import QgsVectorLayer if qgis is available
 
 
 LOGGER = logging.getLogger('InaSAFE')
-KEYWORD_PATH = test_data_path('exposure', 'exposure.xml')
-SQLITE_PATH = test_data_path('exposure', 'exposure.sqlite')
-SHP_BASE = test_data_path('exposure', 'buildings_osm_4326')
+KEYWORD_PATH = standard_data_path('exposure', 'exposure.xml')
+SQLITE_PATH = standard_data_path('exposure', 'exposure.sqlite')
+SHP_BASE = standard_data_path('exposure', 'buildings_osm_4326')
 EXPOSURE_SUBLAYER_NAME = 'buildings_osm_4326'
 
 
@@ -41,7 +40,7 @@ class VectorTest(unittest.TestCase):
 
     def test_sublayer_loading(self):
         """Test if we can load sublayers."""
-        keywords = read_keywords(KEYWORD_PATH, EXPOSURE_SUBLAYER_NAME)
+        keywords = {}
         layer = Vector(data=SQLITE_PATH, keywords=keywords,
                        sublayer=EXPOSURE_SUBLAYER_NAME)
         msg = ('Expected layer to be a polygon layer, got a %s' %
@@ -52,7 +51,7 @@ class VectorTest(unittest.TestCase):
 
     def test_shapefile_loading(self):
         """Test that loading a dataset with no sublayers works."""
-        keywords = read_keywords(SHP_BASE + '.keywords')
+        keywords = {}
         layer = Vector(data=SHP_BASE + '.shp', keywords=keywords)
         msg = ('Expected layer to be a polygon layer, got a %s' %
                layer.geometry_type)
@@ -60,19 +59,20 @@ class VectorTest(unittest.TestCase):
         count = len(layer)
         self.assertEqual(count, 250, 'Expected 250 features, got %s' % count)
 
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
     def test_sqlite_writing(self):
         """Test that writing a dataset to sqlite works."""
-        keywords = read_keywords(SHP_BASE + '.keywords')
+        keywords = {}
         layer = Vector(data=SHP_BASE + '.shp', keywords=keywords)
         test_dir = temp_dir(sub_dir='test')
         test_file = unique_filename(suffix='.sqlite', dir=test_dir)
         layer.write_to_file(test_file, sublayer='foo')
         self.assertTrue(os.path.exists(test_file))
-    test_sqlite_writing.slow = True
 
     def test_qgis_vector_layer_loading(self):
         """Test that reading from QgsVectorLayer works."""
-        keywords = read_keywords(KEYWORD_PATH, EXPOSURE_SUBLAYER_NAME)
+        keywords = {}
         if QGIS_IS_AVAILABLE:
             qgis_layer = QgsVectorLayer(SHP_BASE + '.shp', 'test', 'ogr')
 
@@ -88,7 +88,7 @@ class VectorTest(unittest.TestCase):
         """Test that converting to QgsVectorLayer works."""
         if QGIS_IS_AVAILABLE:
             # Create vector layer
-            keywords = read_keywords(SHP_BASE + '.keywords')
+            keywords = {}
             layer = Vector(data=SHP_BASE + '.shp', keywords=keywords)
 
             # Convert to QgsVectorLayer

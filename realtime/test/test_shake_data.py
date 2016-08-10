@@ -24,7 +24,7 @@ import unittest
 
 from realtime.earthquake.shake_data import ShakeData
 from safe.common.utilities import temp_dir
-from safe.test.utilities import test_data_path
+from safe.test.utilities import standard_data_path
 
 # Shake ID for this test
 SHAKE_ID = '20131105060809'
@@ -35,7 +35,7 @@ class ShakeDataTest(unittest.TestCase):
         """Setup before each test."""
         # Download files (which are local files) to realtime-test temp folder
         local_path = os.path.join(temp_dir('realtime-test'))
-        shake_data = test_data_path('hazard', 'shake_data', SHAKE_ID)
+        shake_data = standard_data_path('hazard', 'shake_data', SHAKE_ID)
         shutil.copytree(
             shake_data, os.path.join(local_path, 'shakemaps', SHAKE_ID))
 

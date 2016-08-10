@@ -14,7 +14,7 @@ __author__ = 'Rizky Maulana Nugraha "lucernae" <lana.pcfre@gmail.com>'
 __date__ = '07/05/15'
 
 import unittest
-from safe.test.utilities import test_data_path, get_qgis_app
+from safe.test.utilities import standard_data_path, get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.common.exceptions import NoAttributeInLayerError
@@ -34,9 +34,9 @@ class TestBaseClassesMixin(unittest.TestCase):
 
     def test_vector_attribute_checker(self):
 
-        generic_polygon_path = test_data_path(
+        generic_polygon_path = standard_data_path(
             'hazard', 'classified_generic_polygon.shp')
-        building_path = test_data_path('exposure', 'buildings.shp')
+        building_path = standard_data_path('exposure', 'buildings.shp')
 
         hazard_layer = read_layer(generic_polygon_path)
         exposure_layer = read_layer(building_path)

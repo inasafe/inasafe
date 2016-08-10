@@ -16,9 +16,7 @@ from safe.impact_functions.bases.classified_vh_continuous_re import \
     ClassifiedVHContinuousRE
 from safe.impact_functions.volcanic.volcano_point_population\
     .metadata_definitions import VolcanoPointPopulationFunctionMetadata
-from safe.impact_functions.core import (
-    population_rounding,
-    has_no_data)
+from safe.impact_functions.core import population_rounding, has_no_data
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
 from safe.storage.raster import Raster
 from safe.utilities.i18n import tr
@@ -26,11 +24,13 @@ from safe.common.utilities import (
     format_int,
     humanize_class,
     create_classes,
-    create_label)
+    create_label
+)
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
     filter_needs_parameters, get_needs_provenance_value
 from safe.impact_reports.population_exposure_report_mixin import \
     PopulationExposureReportMixin
+from safe.definitions import no_data_warning
 
 
 class VolcanoPointPopulationFunction(
@@ -42,59 +42,54 @@ class VolcanoPointPopulationFunction(
 
     def __init__(self):
         super(VolcanoPointPopulationFunction, self).__init__()
+        PopulationExposureReportMixin.__init__(self)
         # AG: Use the proper minimum needs, update the parameters
         self.parameters = add_needs_parameters(self.parameters)
         # TODO: alternatively to specifying the question here we should
         # TODO: consider changing the 'population' metadata concept to 'people'
         self.question = (
-            'In the event of a volcano point how many people might be impacted'
-        )
+            'In the event of a volcano point how many people might be '
+            'impacted?')
         self.no_data_warning = False
-        self.volcano_names = tr('Not specified in data')
+        # A set of volcano names
+        self.volcano_names = set()
         self.hazard_zone_attribute = 'radius'
 
     def notes(self):
         """Return the notes section of the report.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: dict
+        :rtype: list
         """
-        title = tr('Notes and assumptions')
-
         if get_needs_provenance_value(self.parameters) is None:
             needs_provenance = ''
         else:
             needs_provenance = tr(get_needs_provenance_value(self.parameters))
+
+        if self.volcano_names:
+            sorted_volcano_names = ', '.join(sorted(self.volcano_names))
+        else:
+            sorted_volcano_names = tr('Not specified in data')
+
         fields = [
             tr('Map shows buildings affected in each of the volcano buffered '
                'zones.'),
             tr('Total population in the analysis area: %s') %
-            population_rounding(self.total_population),
+            format_int(population_rounding(self.total_population)),
             tr('<sup>1</sup>People need evacuation if they are within the '
                'volcanic hazard zones.'),
-            tr('Volcanoes considered: %s.') % self.volcano_names,
-            needs_provenance
+            tr('Volcanoes considered: %s.') % sorted_volcano_names,
         ]
+        if needs_provenance:
+            fields.append(needs_provenance)
 
         if self.no_data_warning:
-            fields.append(tr(
-                'The layers contained "no data" values. This missing data '
-                'was carried through to the impact layer.'))
-            fields.append(tr(
-                '"No data" values in the impact layer were treated as 0 '
-                'when counting the affected or total population.'))
-
-        fields.extend([
-            tr('All values are rounded up to the nearest integer in order to '
-               'avoid representing human lives as fractions.'),
-            tr('Population rounding is applied to all population values, '
-               'which may cause discrepancies when adding value.')
-        ])
-
-        return {
-            'title': title,
-            'fields': fields
-        }
+            fields = fields + no_data_warning
+        # include any generic exposure specific notes from definitions.py
+        fields = fields + self.exposure_notes()
+        # include any generic hazard specific notes from definitions.py
+        fields = fields + self.hazard_notes()
+        return fields
 
     def run(self):
         """Run volcano point population evacuation Impact Function.
@@ -122,15 +117,9 @@ class VolcanoPointPopulationFunction(
 
         # Get names of volcanoes considered
         if volcano_name_attribute in self.hazard.layer.get_attribute_names():
-            volcano_name_list = []
             # Run through all polygons and get unique names
             for row in data_table:
-                volcano_name_list.append(row[volcano_name_attribute])
-
-            volcano_names = ''
-            for radius in volcano_name_list:
-                volcano_names += '%s, ' % radius
-            self.volcano_names = volcano_names[:-2]  # Strip trailing ', '
+                self.volcano_names.add(row[volcano_name_attribute])
 
         # Run interpolation function for polygon2raster
         interpolated_layer, covered_exposure_layer = \
@@ -141,9 +130,13 @@ class VolcanoPointPopulationFunction(
             )
 
         # Initialise affected population per categories
+        impact_category_ordering = []
         for radius in radii:
-            category = 'Radius %s km ' % format_int(radius)
+            category = tr('Radius %s km ' % format_int(radius))
             self.affected_population[category] = 0
+            impact_category_ordering.append(category)
+
+        self.impact_category_ordering = impact_category_ordering
 
         if has_no_data(self.exposure.layer.get_data(nan=True)):
             self.no_data_warning = True
@@ -154,8 +147,8 @@ class VolcanoPointPopulationFunction(
             if not numpy.isnan(population):
                 population = float(population)
                 # Update population count for this category
-                category = 'Radius %s km ' % format_int(
-                    row[self.hazard_zone_attribute])
+                category = tr('Radius %s km ' % format_int(
+                    row[self.hazard_zone_attribute]))
                 self.affected_population[category] += population
 
         # Count totals
@@ -210,7 +203,7 @@ class VolcanoPointPopulationFunction(
         # Create vector layer and return
         extra_keywords = {
             'target_field': self.target_field,
-            'map_title': self.metadata().key('map_title'),
+            'map_title': self.map_title(),
             'legend_notes': self.metadata().key('legend_notes'),
             'legend_units': self.metadata().key('legend_units'),
             'legend_title': self.metadata().key('legend_title'),

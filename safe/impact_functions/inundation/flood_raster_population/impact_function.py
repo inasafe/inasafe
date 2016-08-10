@@ -38,6 +38,7 @@ from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
     get_needs_provenance_value
 from safe.impact_reports.population_exposure_report_mixin import \
     PopulationExposureReportMixin
+from safe.definitions import no_data_warning
 import safe.messaging as m
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -53,6 +54,7 @@ class FloodEvacuationRasterHazardFunction(
     def __init__(self):
         """Constructor."""
         super(FloodEvacuationRasterHazardFunction, self).__init__()
+        PopulationExposureReportMixin.__init__(self)
         self.impact_function_manager = ImpactFunctionManager()
 
         # AG: Use the proper minimum needs, update the parameters
@@ -65,10 +67,8 @@ class FloodEvacuationRasterHazardFunction(
         """Return the notes section of the report.
 
         :return: The notes that should be attached to this impact report.
-        :rtype: dict
+        :rtype: list
         """
-        title = tr('Notes and assumptions')
-
         population = format_int(population_rounding(self.total_population))
         thresholds = self.parameters['thresholds'].value
 
@@ -85,23 +85,12 @@ class FloodEvacuationRasterHazardFunction(
         ]
 
         if self.no_data_warning:
-            fields.append(tr(
-                'The layers contained "no data" values. This missing data '
-                'was carried through to the impact layer.'))
-            fields.append(tr(
-                '"No data" values in the impact layer were treated as 0 '
-                'when counting the affected or total population.'))
-        fields.extend([
-            tr('All values are rounded up to the nearest integer in order to '
-               'avoid representing human lives as fractions.'),
-            tr('Population rounding is applied to all population values, '
-               'which may cause discrepancies when adding values.')
-        ])
-
-        return {
-            'title': title,
-            'fields': fields
-        }
+            fields = fields + no_data_warning
+        # include any generic exposure specific notes from definitions.py
+        fields = fields + self.exposure_notes()
+        # include any generic hazard specific notes from definitions.py
+        fields = fields + self.hazard_notes()
+        return fields
 
     def _tabulate_zero_impact(self):
         thresholds = self.parameters['thresholds'].value
@@ -232,7 +221,7 @@ class FloodEvacuationRasterHazardFunction(
         impact_data = self.generate_data()
 
         extra_keywords = {
-            'map_title': self.metadata().key('map_title'),
+            'map_title': self.map_title(),
             'legend_notes': self.metadata().key('legend_notes'),
             'legend_units': self.metadata().key('legend_units'),
             'legend_title': self.metadata().key('legend_title'),

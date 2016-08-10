@@ -10,7 +10,6 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
-__author__ = 'Christian Christelis <christian@kartoza.com>'
 
 from collections import OrderedDict
 
@@ -18,6 +17,8 @@ from safe.utilities.i18n import tr
 from safe.impact_reports.report_mixin_base import ReportMixin
 from safe.definitions import road_class_order
 from safe.utilities.utilities import reorder_dictionary
+
+__author__ = 'Christian Christelis <christian@kartoza.com>'
 
 
 class RoadExposureReportMixin(ReportMixin):
@@ -31,13 +32,37 @@ class RoadExposureReportMixin(ReportMixin):
 
         .. versionadded:: 3.2
         """
-        self.question = ''
+        super(RoadExposureReportMixin, self).__init__()
+        self.exposure_report = 'road'
+        self.attribute = 'Road Type'
+        self.order = road_class_order
         self.road_lengths = {}
         self.affected_road_lengths = {}
         self.affected_road_categories = {}
         # By default it's true.
         # But for the Tsunami raster on Roads, we already have the dry column.
         self.add_unaffected_column = True
+
+    @property
+    def impact_summary_headings(self):
+        """Headings for the impact summary.
+
+        :return: Headings
+        :rtype: list
+        """
+        return [tr('Roads'), tr('Length')]
+
+    @staticmethod
+    def label_with_unit(label):
+        """Get the label with the correct unit.
+
+        :param label: The label.
+        :type label: str
+
+        :return: The label with the unit.
+        :rtype: str
+        """
+        return '%s (m)' % label
 
     def init_report_var(self, categories):
         """Create tables for the report according to the classes.
@@ -86,14 +111,14 @@ class RoadExposureReportMixin(ReportMixin):
     def reorder_dictionaries(self):
         """Reorder every dictionaries so as to generate the report properly."""
         road_lengths = self.road_lengths.copy()
-        self.road_lengths = reorder_dictionary(road_lengths, road_class_order)
+        self.road_lengths = reorder_dictionary(road_lengths, self.order)
 
         affected_road_lengths = self.affected_road_lengths.copy()
         self.affected_road_lengths = OrderedDict()
         for key in affected_road_lengths:
             item = affected_road_lengths[key]
             self.affected_road_lengths[key] = reorder_dictionary(
-                item, road_class_order)
+                item, self.order)
 
     def generate_data(self):
         """Create a dictionary contains impact data.
@@ -101,20 +126,12 @@ class RoadExposureReportMixin(ReportMixin):
         :returns: The impact report data.
         :rtype: dict
         """
-        question = self.question
-        impact_summary = self.impact_summary()
-        impact_table = self.roads_breakdown()
-        action_checklist = self.action_checklist()
-        notes = self.notes()
-
-        return {
-            'exposure': 'road',
-            'question': question,
-            'impact summary': impact_summary,
-            'impact table': impact_table,
-            'action check list': action_checklist,
-            'notes': notes
+        extra_data = {
+            'impact table': self.impact_table(),
         }
+        data = super(RoadExposureReportMixin, self).generate_data()
+        data.update(extra_data)
+        return data
 
     def impact_summary(self):
         """Create impact summary as data.
@@ -122,38 +139,34 @@ class RoadExposureReportMixin(ReportMixin):
         :returns: Impact Summary in dictionary format.
         :rtype: dict
         """
-        attributes = []
         fields = []
 
-        for affected_category in self.affected_road_categories:
-            attributes.append(affected_category)
-        if self.add_unaffected_column:
-            attributes.append('Unaffected')
-        attributes.append('Total')
-
-        all_field = [0] * len(self.affected_road_lengths)
+        sum_affected = 0
         for (category, road_breakdown) in self.affected_road_lengths.items():
             number_affected = sum(road_breakdown.values())
-            count = self.affected_road_categories.index(category)
-            all_field[count] = number_affected
+            fields.append([self.label_with_unit(category), number_affected])
+            sum_affected += number_affected
         if self.add_unaffected_column:
-            all_field.append(self.total_road_length - sum(all_field))
-        all_field.append(self.total_road_length)
-
-        fields.append(all_field)
+            fields.append([
+                self.label_with_unit(tr('Unaffected')),
+                self.total_road_length - sum_affected])
+        fields.append([
+            self.label_with_unit(tr('Total')),
+            self.total_road_length])
 
         return {
-            'attributes': attributes,
+            'attributes': ['category', 'value'],
+            'headings': self.impact_summary_headings,
             'fields': fields
         }
 
-    def roads_breakdown(self):
+    def impact_table(self):
         """Create road breakdown as data.
 
         :returns: Road Breakdown in dictionary format.
         :rtype: dict
         """
-        attributes = ['Road Type']
+        attributes = [self.attribute]
         fields = []
 
         for affected_category in self.affected_road_categories:
@@ -167,13 +180,11 @@ class RoadExposureReportMixin(ReportMixin):
             for category in self.affected_road_categories:
                 if road_type in self.affected_road_lengths[category]:
                     affected_by_usage.append(
-                        self.affected_road_lengths[category][
-                            road_type])
+                        self.affected_road_lengths[category][road_type])
                 else:
                     affected_by_usage.append(0)
-            row = []
 
-            row.append(road_type)
+            row = [self.label_with_unit(road_type.capitalize())]
             for affected_by_usage_value in affected_by_usage:
                 row.append(affected_by_usage_value)
 
@@ -187,32 +198,30 @@ class RoadExposureReportMixin(ReportMixin):
 
             fields.append(row)
 
+        impact_summary = self.impact_summary()['fields']
+        row = [self.label_with_unit(tr('Total'))]
+        for value in impact_summary:
+            row.append(value[1])
+        fields.append(row)
+
         return {
             'attributes': attributes,
             'fields': fields
         }
 
-    def action_checklist(self):
-        """Return the action check list section of the report.
+    def extra_actions(self):
+        """Return the extra exposure specific actions.
 
-        :return: The action check list as dict.
-        :rtype: dict
+        .. note:: Only calculated actions are implemented here, the rest
+            are defined in definitions.py.
+
+        .. versionadded:: 3.5
+
+        :return: The action check list as list.
+        :rtype: list
         """
-        title = tr('Action checklist')
-        fields = [
-            tr('Which roads can be used to evacuate people or to distribute '
-               'logistics?'),
-            tr('What type of vehicles can use the unaffected roads?'),
-            tr('What sort of equipment will be needed to reopen roads & where '
-               'will we get it?'),
-            tr('Which government department is responsible for supplying '
-               'equipment ?')
-        ]
-
-        return {
-            'title': title,
-            'fields': fields
-        }
+        fields = []
+        return fields
 
     @property
     def total_road_length(self):

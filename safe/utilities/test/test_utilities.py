@@ -4,30 +4,27 @@
 import unittest
 import os
 import codecs
-import shutil
 from unittest import expectedFailure
 
-from safe.definitions import inasafe_keyword_version
+from safe.test.utilities import (
+    standard_data_path,
+    get_qgis_app,
+)
+
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+
 from safe.utilities.utilities import (
     get_error_message,
     humanise_seconds,
     impact_attribution,
     replace_accentuated_characters,
-    read_file_keywords,
     reorder_dictionary,
     main_type,
     is_keyword_version_supported
 )
 from safe.utilities.gis import qgis_version
-from safe.test.utilities import (
-    test_data_path,
-    get_qgis_app,
-    clone_raster_layer
-)
-from safe.common.exceptions import KeywordNotFoundError
-from safe.storage.utilities import bbox_intersection
 
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+from safe.storage.utilities import bbox_intersection
 
 
 class UtilitiesTest(unittest.TestCase):
@@ -65,7 +62,7 @@ class UtilitiesTest(unittest.TestCase):
             assert str(e) in message
 
             message = message.decode('string_escape')
-            control_file_path = test_data_path(
+            control_file_path = standard_data_path(
                 'control',
                 'files',
                 'test-stacktrace-html.txt')
@@ -102,7 +99,7 @@ class UtilitiesTest(unittest.TestCase):
             'exposure_title': 'Sample Exposure Title',
             'exposure_source': 'Sample Exposure Source'}
         attribution = impact_attribution(keywords)
-        control_file_path = test_data_path(
+        control_file_path = standard_data_path(
             'control',
             'files',
             'impact-layer-attribution.txt')
@@ -130,42 +127,6 @@ class UtilitiesTest(unittest.TestCase):
         # Set back to en
         os.environ['LANG'] = 'en'
 
-    def test_get_keyword_from_file(self):
-        """Get keyword from a filesystem file's .keyword file."""
-        raster_layer = clone_raster_layer(
-            'jakarta_flood_design', '.tif', False, test_data_path('hazard'))
-
-        raster_layer_path = raster_layer.source()
-
-        keyword_file = test_data_path('other', 'jakarta_flood_design.keywords')
-
-        raster_keyword_path = (
-            os.path.splitext(raster_layer_path)[0] + '.keywords')
-
-        shutil.copy2(keyword_file, raster_keyword_path)
-
-        keyword = read_file_keywords(raster_layer_path, 'layer_purpose')
-        expected_keyword = 'hazard'
-        self.assertEqual(keyword, expected_keyword)
-
-        # Test we get an exception if keyword is not found
-        self.assertRaises(
-            KeywordNotFoundError,
-            read_file_keywords, raster_layer_path, 'boguskeyword')
-
-        # Test if all the keywords are all ready correctly
-        keywords = read_file_keywords(raster_layer_path)
-        expected_keywords = {
-            'hazard_category': 'single_event',
-            'hazard': 'flood',
-            'continuous_hazard_unit': 'metres',
-            'layer_purpose': 'hazard',
-            'layer_mode': 'continuous',
-            'title': 'Jakarta flood like 2007 with structural improvements',
-            'keyword_version': '3.2'
-        }
-        self.assertDictEqual(keywords, expected_keywords)
-
     def test_is_keyword_version_supported(self):
         """Test for is_keyword_version_supported."""
         self.assertTrue(is_keyword_version_supported('3.2', '3.2'))
@@ -189,10 +150,10 @@ class UtilitiesTest(unittest.TestCase):
         new_dict = reorder_dictionary(unordered, expected)
         self.assertItemsEqual(expected, new_dict.keys())
 
-        # These keys don't exist, we expect an empty dictionary.
+        # These keys don't exist, but we still show the dictionary
         expected = ['Z', 'X', 'Y']
         new_dict = reorder_dictionary(unordered, expected)
-        self.assertEqual(len(new_dict), 0)
+        self.assertEqual(len(new_dict), 5)
 
     def test_main_type(self):
         """Test the good feature type according to the value mapping."""
