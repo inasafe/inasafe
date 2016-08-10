@@ -98,8 +98,10 @@ concepts = {
         'citations': [
             {
                 'text': tr(
-                    ''),
-                'link': ''
+                    'UNISDR (2015)Proposed Updated Terminology on Disaster '
+                    'Risk Reduction: A Technical Review'),
+                'link': 'http://www.preventionweb.net/files/'
+                        '45462_backgoundpaperonterminologyaugust20.pdf'
              }
         ],
     },
@@ -111,8 +113,10 @@ concepts = {
         'citations': [
             {
                 'text': tr(
-                    ''),
-                'link': ''
+                    'UNISDR (2015)Proposed Updated Terminology on Disaster '
+                    'Risk Reduction: A Technical Review'),
+                'link': 'http://www.preventionweb.net/files/'
+                        '45462_backgoundpaperonterminologyaugust20.pdf'
             }
         ],
     },
@@ -128,8 +132,10 @@ concepts = {
         'citations': [
             {
                 'text': tr(
-                    ''),
-                'link': ''
+                    'UNISDR (2015)Proposed Updated Terminology on Disaster '
+                    'Risk Reduction: A Technical Review'),
+                'link': 'http://www.preventionweb.net/files/'
+                        '45462_backgoundpaperonterminologyaugust20.pdf'
             }
         ],
     },
