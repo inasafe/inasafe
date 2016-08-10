@@ -16,7 +16,7 @@
    </layer>
   </symbol>
   <ComposerLabel valign="32" marginX="2" marginY="2" labelText="[software-tag]" htmlState="0" halign="1">
-   <LabelFont description="Times New Roman,10,-1,5,50,0,0,0,0,0" style=""/>
+   <LabelFont description="Ubuntu,10,-1,5,50,0,0,0,0,0" style=""/>
    <FontColor red="0" blue="0" green="0"/>
    <ComposerItem pagey="281" page="1" id="disclaimer" lastValidViewScaleFactor="20.8282" positionMode="0" positionLock="true" x="4.73016" y="281" visibility="1" zValue="21" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="197.27" outlineWidth="0.1" excludeFromExports="0" uuid="{fc8d79af-c7ca-481b-9441-37a59bf951ab}" height="8.5" itemRotation="0" frame="true" pagex="4.73016">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
@@ -175,7 +175,7 @@
    </ComposerItem>
   </ComposerMap>
   <ComposerLabel valign="32" marginX="2" marginY="2" labelText="[limitations]" htmlState="0" halign="1">
-   <LabelFont description="Times New Roman,10,-1,5,50,0,0,0,0,0" style=""/>
+   <LabelFont description="Ubuntu,10,-1,5,50,0,0,0,0,0" style=""/>
    <FontColor red="0" blue="0" green="0"/>
    <ComposerItem pagey="238.05" page="1" id="disclaimer" lastValidViewScaleFactor="1.92236" positionMode="0" positionLock="false" x="4.73016" y="238.05" visibility="1" zValue="8" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="197.27" outlineWidth="0.1" excludeFromExports="0" uuid="{9733bf7e-fb2f-43eb-98a0-8ed917d8e1ab}" height="39.959" itemRotation="0" frame="true" pagex="4.73016">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
@@ -259,7 +259,7 @@
    </ComposerItem>
   </ComposerMap>
   <ComposerLabel valign="32" marginX="1" marginY="1" labelText="[credits]" htmlState="0" halign="4">
-   <LabelFont description="Times New Roman,10,-1,5,75,0,0,0,0,0" style=""/>
+   <LabelFont description="Ubuntu,10,-1,5,75,0,0,0,0,0" style=""/>
    <FontColor red="0" blue="0" green="0"/>
    <ComposerItem pagey="289" page="1" id="credits" lastValidViewScaleFactor="3.35093" positionMode="0" positionLock="false" x="7.27816" y="289" visibility="1" zValue="6" background="false" transparency="0" frameJoinStyle="miter" blendMode="0" width="192.174" outlineWidth="0.1" excludeFromExports="0" uuid="{6b5654b0-6988-406e-a97b-d96f58be7e19}" height="8.3508" itemRotation="0" frame="false" pagex="7.27816">
     <FrameColor alpha="255" red="0" blue="0" green="0"/>
