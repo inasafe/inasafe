@@ -80,5 +80,5 @@ class AboutDialog(QtGui.QDialog, FORM_CLASS):
             'Project'))
         attributes_list.append(self.tr('Humanitarian icons source: OCHA'))
         attributes_list.append(self.tr(
-            'Sign post by Tara Swart from the Noun Project'))
+            '"Sign post" by Tara Swart from the Noun Project'))
         return attributes_list
