@@ -50,15 +50,19 @@ We have broken up this document into sections based on the different reporting
 
 The map title appears at the top of each map product and describes the map
  content. Every map should have a title. Using the below table as a reference,
- the title should use the following syntax:
+ the title on maps for analyses supported by hazard specific impact functions
+ should use the following syntax:
 
  <**exposure**> <**affected by**> <**hazard**> <**event/hazard**>
 
- or for generic impact functions:
+ The title on maps for analyses that are supported through generic impact
+ functions should be shorter and use the following syntax:
 
  <**exposure**> affected
 
 ![image](https://cloud.githubusercontent.com/assets/16660099/17202979/c7f2533a-54c6-11e6-8f42-97c324f2ff58.png)
+
+### Notes:
 
 **Exposure** identifies which exposure element is present in the analysis
  area, that is subject to potential losses, is being focused on in this report.
@@ -73,7 +77,7 @@ The map title appears at the top of each map product and describes the map
  **Event/hazard** shows whether the analysis is from a single
  event (**event**) or multiple events (**hazard**).
 
-### Examples: 
+### Examples of map titles:
 
 **For flood event**:
 
@@ -117,7 +121,7 @@ The map title appears at the top of each map product and describes the map
 - Jalan terdampak 
 - Penutup lahan terdampak
 
-## Map legend title
+## Map legends (draft)
 
 ### Description
 
@@ -136,7 +140,7 @@ The map legend appears at the bottom of each map product and identifies and
  included in the legend title as thresholds for the definition of affected
  vary from impact function to impact function.
 
-### Examples
+### Examples of map legend titles
 
 **For different exposures**: 
 - Number of people 
@@ -150,7 +154,65 @@ The map legend appears at the bottom of each map product and identifies and
 - Perkiraan panjang jalan
 - Perkiraan luas penutup lahan
 
-## Marginalia
+The map legend is used to display the exposure elements in the impact
+layer. The number of classes in the legend should reflect the number of
+classes in the hazard data. The colours in the legend should reflect the
+severity of the hazard. The same colour should be used to represent high
+hazard in all map legends regardless of whether there are two or five
+classes in the legend. The table below lists the colour definitions and the
+number of classes to be used in map legends depending on the hazard / exposure
+combination.
+
+![image](https://cloud.githubusercontent.com/assets/5743135/17542495/6b968a16-5ef3-11e6-8622-af1cab2e0a5f.png)
+
+Map legend classes will have labels. The label should complement the
+legend title and should use the following syntax:
+
+    <**label**> <**threshold**> <**count**> <**unit**>
+
+**Label**, refers to the class in the table above, i.e. affected, not affected,
+high hazard zone etc. **threshold** is the dynamic value which defines the
+class boundary i.e. the value of 0.7m for people affected by tsunami. **count**
+is the number of exposure elements in each class. In some cases count will
+include a **unit**. The table below lists the units for each exposure type.
+
+![image](https://cloud.githubusercontent.com/assets/5743135/17543942/5a0a51b4-5efe-11e6-98ca-112abb2403cd.png)
+
+### Examples of map legends
+
+The **"People affected by tsunami event"** map legend might look like:
+
+![image](https://cloud.githubusercontent.com/assets/5743135/17542950/35d17e32-5ef7-11e6-8832-3eaa49e50b96.png)
+
+or in Indonesian language with the units for people included:
+
+![image](https://cloud.githubusercontent.com/assets/5743135/17542965/56f60786-5ef7-11e6-941d-1486ab1c291a.png)
+
+The **"Buildings affected by flood event"** map legend might look like:
+
+![image](https://cloud.githubusercontent.com/assets/5743135/17543699/a6f6c7fc-5efc-11e6-8ca9-63f4a2b37397.png)
+
+Note: the dry legend class is only used for building and road exposures  with
+flood or tsunami hazards.
+
+The **"Landcover affected by tsunami hazard"** map legend might look like:
+
+![image](https://cloud.githubusercontent.com/assets/5743135/17543749/00fa2aaa-5efd-11e6-9a08-47aff3c86298.png)
+
+The **"Roads affected by flood hazard"** map legend might look like:
+
+![image](https://cloud.githubusercontent.com/assets/5743135/17544021/e017f3a6-5efe-11e6-8b97-d234b32b4578.png)
+
+Note: thresholds are not included in the legend label for multiple event hazard
+ data.
+
+The **"People affected by volcanic ash event"** map legend might look like:
+
+![image](https://cloud.githubusercontent.com/assets/5743135/17543836/a3037fa4-5efd-11e6-8d7c-db36a0a30cf6.png)
+
+
+
+## Marginalia (draft)
 
  _Analysis information:_
 
