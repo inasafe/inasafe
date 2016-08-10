@@ -207,16 +207,6 @@ class PopulationDownloaderDialog(QDialog, FORM_CLASS):
         self.canvas.unsetMapTool(self.pan_tool)
         self.canvas.setMapTool(self.rectangle_map_tool)
 
-    def get_checked_features(self):
-        """Create a tab with all checked features.
-        :return A list with all features which are checked in the UI.
-        :rtype list
-        """
-        feature_types = []
-        if self.population_flag.isChecked():
-            feature_types.append('population')
-        return feature_types
-
     def accept(self):
         """Do population download and display it in QGIS."""
         error_dialog_title = self.tr('InaSAFE worldpop Downloader Error')
@@ -243,44 +233,30 @@ class PopulationDownloaderDialog(QDialog, FORM_CLASS):
             self.bounding_box_group.setEnabled(True)
             return
 
-        # Validate features
-        feature_types = self.get_checked_features()
-        if len(feature_types) < 1:
-            message = self.tr(
-                'No feature selected. '
-                'Please make sure you have checked one feature.')
-            # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
-            display_warning_message_box(self, error_dialog_title, message)
-            # Unlock the bounding_box_group
-            self.bounding_box_group.setEnabled(True)
-            return
-
         try:
             self.save_state()
             self.require_directory()
             rectangle = self.rectangle_map_tool.rectangle()
-            for feature_type in feature_types:
 
-                output_directory = self.output_directory.text()
-                output_prefix = self.filename_prefix.text()
-                overwrite = self.overwrite_flag.isChecked()
-                output_base_file_path = self.get_output_base_path(
-                    output_directory, output_prefix, feature_type, overwrite)
+            output_directory = self.output_directory.text()
+            output_prefix = self.filename_prefix.text()
+            overwrite = self.overwrite_flag.isChecked()
+            output_base_file_path = self.get_output_base_path(
+                output_directory, output_prefix, overwrite)
 
-                download(
-                    feature_type,
-                    output_base_file_path,
-                    extent,
-                    rectangle,
-                    self.progress_dialog)
+            download(
+                output_base_file_path,
+                extent,
+                rectangle,
+                self.progress_dialog)
 
-                try:
-                    self.load_file(output_prefix, output_base_file_path)
-                except FileMissingError as exception:
-                    display_warning_message_box(
-                        self,
-                        error_dialog_title,
-                        exception.message)
+            try:
+                self.load_file(output_prefix, output_base_file_path)
+            except FileMissingError as exception:
+                display_warning_message_box(
+                    self,
+                    error_dialog_title,
+                    exception.message)
             self.done(QDialog.Accepted)
             self.rectangle_map_tool.reset()
 
@@ -303,17 +279,17 @@ class PopulationDownloaderDialog(QDialog, FORM_CLASS):
             self,
             output_directory,
             output_prefix,
-            feature_type,
             overwrite):
         """Get a full base name path to save the geojson.
         :param output_directory: The directory where to put results.
         :type output_directory: str
+
         :param output_prefix: The prefix to add for the file.
         :type output_prefix: str
-        :param feature_type: What kind of features should be downloaded.
-        :type feature_type: str
+
         :param overwrite: Boolean to know if we can overwrite existing files.
         :type overwrite: bool
+
         :return: The base path.
         :rtype: str
         """
@@ -401,11 +377,10 @@ class PopulationDownloaderDialog(QDialog, FORM_CLASS):
 
     def load_file(self, base_name, base_path):
         """Load downloaded file to QGIS Main Window.
-        :param feature_type: What kind of features should be downloaded.
-            Currently 'buildings', 'building-points' or 'roads' are supported.
-        :type feature_type: str
+
         :param base_path: The base path of the shape file (without extension).
         :type base_path: str
+
         :raises: FileMissingError - when geojson file does not exist
         """
 

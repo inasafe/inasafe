@@ -23,7 +23,8 @@ from qgis.core import (
     QgsVectorLayer,
     QgsMapLayerRegistry,
     QgsCoordinateReferenceSystem,
-    QgsVectorFileWriter
+    QgsVectorFileWriter,
+    QgsNetworkAccessManager
 )
 
 from qgis.utils import iface
@@ -34,35 +35,35 @@ from safe.common.utilities import (
 )
 
 from PyQt4.QtCore import QVariant
-import logging
-import requests
-import json
+from safe.utilities.request import Request
 
-# from PyQt4.QtGui import QDialog, QMessageBox
+import logging
+import json
 
 LOGGER = logging.getLogger('InaSAFE')
 
 
 def download(
-        feature_type,
         output_base_path,
         extent,
         rectangle,
         progress_dialog=None):
     """Download worldpop data
 
-    :param feature_type: What kind of features should be downloaded.
-    :type feature_type: str
     :param output_base_path: The base path of the shape file.
     :type output_base_path: str
+
     :param extent: A list in the form [xmin, ymin, xmax, ymax] where all
     coordinates provided are in Geographic / EPSG:4326.
     :type extent: list
+
     :param rectangle: Bounding box rectangle
     coordinates provided are in Geographic / EPSG:4326.
     :type rectangle: QgsRectangle
+
     :param progress_dialog: A progress dialog.
     :type progress_dialog: QProgressDialog
+
     :raises: ImportDialogError, CanceledImportDialogError
     """
 
@@ -89,32 +90,38 @@ def download(
                   str(min_long_min_lat) + ',' + \
                   str(min_long_max_lat) + ']]'
 
-    data = {'coordinates': coordinates}
+    data = 'coordinates=' + str(coordinates)
 
     # python requests to fetch json data from api
     url = 'https://worldpop-api-server.herokuapp.com/api'
-    response = requests.post(url, data)
-    if response.status_code is 200:
-        population_data = response.content
+
+    request = Request(url, progress_dialog)
+    response = request.post(data)
+
+    if response[0] is not False:
+        population_data = response[1]
+
         file_path = output_base_path + '.geojson'
 
         with open(file_path, 'w+') as outfile:
             outfile.write(population_data)
+
         create_layer(population_data, points)
     else:
-        message = "Server not responding, check your " \
-                  "internet connection and try again. "
-        message = message, response.status_code
-        raise Exception(message)
+        _, error_message = response
+
+        raise Exception(error_message)
 
 
 def create_layer(data, points):
     """  Create vector layer from given data with a polygon
     from the given rectangle
 
-    :param data: population data
+    :param data: number of population
+    :type data: {}
+
     :param points: population area coordinate points
-    :return:
+    :type points:[]
 
     """
     filename = unique_filename(suffix='.shp')
@@ -139,7 +146,7 @@ def create_layer(data, points):
     # Correcting population value to right density
     # as the api return value exceeds by 10000
 
-    population = population / 10000
+    population /= 10000
     population = int(population)
     population = format_int(population)
 
