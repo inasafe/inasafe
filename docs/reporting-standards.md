@@ -48,7 +48,7 @@ We have broken up this document into sections based on the different reporting
 ### Description:
 
 The map title appears at the top of each map product and describes the map
- content. Every map should have a title. Using the below table as a reference,
+ content. Every map should have a title. Using the table below as a reference,
  the title on maps for analyses supported by hazard specific impact functions
  should use the following syntax:
 
@@ -227,7 +227,7 @@ independent contributors. These agencies and the individual software
 developers of InaSAFE take no responsibility for the correctness of outputs
 from InaSAFE or decisions derived as a consequence.
 
-# Reports
+# Reports (draft)
 
 ## Analysis question
 
@@ -235,36 +235,54 @@ from InaSAFE or decisions derived as a consequence.
 
 The analysis question appears at the beginning of each report and identifies
  and describes the purpose of the analysis. Each report should have an analysis
- question. It should add more detail to the existing map title. The question
- should reflect the terminology used in the title. Using the below table as a
- reference, the questions should use the following syntax:
+ question. It should add more detail to the map title. The question  should
+ reflect the terminology used in the title. Using the table below as a
+ reference, the question on reports for analyses supported by hazard specific
+ impact functions should use the following syntax:
 
  In the event of a <**hazard**>, <**exposure measure**> <**exposure**>
  might be affected?
 
- or for generic impact functions:
+The question on reports for analyses that are supported through generic impact
+functions should use the following syntax:
 
  In each of the hazard zones <**exposure measure**> <**exposure**> might be
  affected?
 
-![image](https://cloud.githubusercontent.com/assets/16660099/17210381/ceb96bec-54ec-11e6-8fef-3bc59e4756cb.png)
+![image](https://cloud.githubusercontent.com/assets/5743135/17546788/f7592454-5f0d-11e6-985b-e91c16e71501.png)
 
 Questions should always have a question mark at the end of the sentence.
 
 ### Examples
 
 - In the event of a flood, how many people might be affected?
-- In the event of an earthquake, what land cover might be affected?
+- In the event of an earthquake, how much land cover might be affected?
 - In each of the hazard zones how many buildings might be affected?
 - In each of the hazard zones what length of road might be affected?
 
 ## General report
 
+### Description
+
 The general report gives a brief summary in table form of what the estimated
-effect of the hazard will be. It should follow this form:
+effect of the hazard will be. The general report is formatted as a table with a
+title, column headings and row headings, and totals. The title should use the
+following syntax:
+
 Estimated <**exposure measure**><**exposure**>
 
-![image](https://cloud.githubusercontent.com/assets/16660099/17165600/a45ffea2-53fb-11e6-91c3-761157dd7d8d.png)
+The column headings should include units where necessary. The row headings
+will include the same number of classes as described in the map legend with an
+additional summary for affected and not affected where the legend has three or
+more classes.
+
+### Examples
+
+![image](https://cloud.githubusercontent.com/assets/5743135/17547173/d881e334-5f0f-11e6-83e4-f8f3e0220a6b.png)
+
+![image](https://cloud.githubusercontent.com/assets/5743135/17547217/20cf333a-5f10-11e6-924b-29e811320f8a.png)
+
+![image](https://cloud.githubusercontent.com/assets/5743135/17547259/639ac102-5f10-11e6-9a8c-cfc7fdd049ce.png)
 
 ## Detailed report
 
