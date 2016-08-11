@@ -2,14 +2,11 @@
 import json
 import logging
 import os
-
 import datetime
 from collections import OrderedDict
-
 import pytz
 import shutil
-
-from PyQt4.QtCore import QObject, QFileInfo, QUrl, Qt
+from PyQt4.QtCore import QObject, QFileInfo, QUrl
 from PyQt4.QtXml import QDomDocument
 from qgis.core import (
     QgsProject,
@@ -19,7 +16,6 @@ from qgis.core import (
     QgsComposition,
     QgsPoint,
     QgsRectangle)
-
 from jinja2 import Template
 from headless.tasks.utilities import download_file
 from realtime.exceptions import MapComposerError
@@ -35,10 +31,10 @@ from safe.utilities.gis import get_wgs84_resolution
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.styling import set_vector_categorized_style, \
     set_vector_graduated_style, setRasterStyle
-
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from safe.common.version import get_version
 from safe.storage.core import read_qgis_layer
+
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 __author__ = 'Rizky Maulana Nugraha <lana.pcfre@gmail.com>'
 __date__ = '7/13/16'
