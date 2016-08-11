@@ -30,7 +30,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from safe.impact_functions.impact_function_manager\
     import ImpactFunctionManager
 from safe.impact_functions.ash.ash_raster_places.impact_function import \
-    AshRasterPlaceFunction
+    AshRasterPlacesFunction
 
 
 class TsunamiRasterBuildingFunctionTest(unittest.TestCase):
@@ -39,10 +39,10 @@ class TsunamiRasterBuildingFunctionTest(unittest.TestCase):
     def setUp(self):
         registry = ImpactFunctionManager().registry
         registry.clear()
-        registry.register(AshRasterPlaceFunction)
+        registry.register(AshRasterPlacesFunction)
 
     def test_run_without_population_field(self):
-        impact_function = AshRasterPlaceFunction.instance()
+        impact_function = AshRasterPlacesFunction.instance()
 
         hazard_path = standard_data_path('hazard', 'ash_raster_wgs84.tif')
         exposure_path = standard_data_path('exposure', 'places.shp')
@@ -66,8 +66,8 @@ class TsunamiRasterBuildingFunctionTest(unittest.TestCase):
         # 1 = inundated, 2 = wet, 3 = dry
         expected_result = {
             0: 0,
-            1: 0,
-            2: 197,
+            1: 135,
+            2: 62,
             3: 1,
             4: 0
         }

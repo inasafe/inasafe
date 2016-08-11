@@ -24,6 +24,7 @@ import sys
 import shutil
 import logging
 import codecs
+import pytz
 from xml.dom import minidom
 from datetime import datetime
 from pytz import timezone
@@ -161,18 +162,29 @@ class ShakeGrid(object):
         self.month = int(date_tokens[1])
         self.day = int(date_tokens[2])
 
-        time_tokens = the_time_stamp[11:-3].split(':')
+        time_tokens = the_time_stamp[11:19].split(':')
         self.hour = int(time_tokens[0])
         self.minute = int(time_tokens[1])
         self.second = int(time_tokens[2])
 
         # right now only handles Indonesian Timezones
         tz_dict = {
-            'WIB': timezone('Asia/Jakarta'),
-            'WITA': timezone('Asia/Makassar'),
-            'WIT': timezone('Asia/Jayapura')
+            'WIB': 'Asia/Jakarta',
+            'WITA': 'Asia/Makassar',
+            'WIT': 'Asia/Jayapura'
         }
-        tzinfo = tz_dict.get(self.time_zone)
+        if self.time_zone in tz_dict:
+            self.time_zone = tz_dict.get(self.time_zone, self.time_zone)
+
+        try:
+            if not self.time_zone:
+                # default to utc if empty
+                tzinfo = pytz.utc
+            else:
+                tzinfo = timezone(self.time_zone)
+        except:
+            tzinfo = pytz.utc
+
         self.time = datetime(
             self.year,
             self.month,
@@ -181,8 +193,7 @@ class ShakeGrid(object):
             self.minute,
             self.second,
             # For now realtime always uses Indonesia Time
-            tzinfo=tzinfo
-        )
+            tzinfo=tzinfo)
 
     def parse_grid_xml(self):
         """Parse the grid xyz and calculate the bounding box of the event.

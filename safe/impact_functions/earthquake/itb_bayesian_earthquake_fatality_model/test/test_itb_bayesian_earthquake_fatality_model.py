@@ -71,10 +71,8 @@ class TestITBBayesianEarthquakeFatalityFunction(unittest.TestCase):
         # Check the question
         expected_question = (
             'In the event of earthquake how many population might die or '
-            'be displaced according itb bayesian model')
-        message = 'The question should be %s, but it returns %s' % (
-            expected_question, impact_function.question)
-        self.assertEqual(expected_question, impact_function.question, message)
+            'be displaced according itb bayesian model?')
+        self.assertEqual(expected_question, impact_function.question)
 
         expected_result = {
             'total_population': 200,

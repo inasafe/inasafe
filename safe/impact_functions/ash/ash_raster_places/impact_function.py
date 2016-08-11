@@ -14,11 +14,11 @@ Contact : ole.moller.nielsen@gmail.com
 import logging
 
 from safe.impact_functions.ash.ash_raster_places.metadata_definitions import \
-    AshRasterHazardPlacesFunctionMetadata
+    AshRasterPlacesFunctionMetadata
 from safe.impact_functions.bases.continuous_rh_classified_ve import \
     ContinuousRHClassifiedVE
 from safe.storage.vector import Vector
-from safe.common.exceptions import KeywordNotFoundError
+from safe.common.exceptions import KeywordNotFoundError, ZeroImpactException
 from safe.utilities.i18n import tr
 from safe.utilities.utilities import main_type
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
@@ -34,16 +34,16 @@ __copyright__ = 'etienne@kartoza.com'
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class AshRasterPlaceFunction(
+class AshRasterPlacesFunction(
         ContinuousRHClassifiedVE,
         PlaceExposureReportMixin):
     # noinspection PyUnresolvedReferences
     """Inundation raster impact on building data."""
-    _metadata = AshRasterHazardPlacesFunctionMetadata()
+    _metadata = AshRasterPlacesFunctionMetadata()
 
     def __init__(self):
         """Constructor (calls ctor of base class)."""
-        super(AshRasterPlaceFunction, self).__init__()
+        super(AshRasterPlacesFunction, self).__init__()
         PlaceExposureReportMixin.__init__(self)
         self.hazard_classes = [
             tr('Very Low'),
@@ -142,15 +142,19 @@ class AshRasterPlaceFunction(
 
         self.init_report_var(self.hazard_classes)
 
+        unaffected_feats = []
+
         for i in range(total_features):
             # Get the interpolated depth
             ash_hazard_zone = float(features[i][self.target_field])
             if ash_hazard_zone <= unaffected_max:
-                current_hash_zone = 0  # not affected
+                # current_hash_zone = 0  # not affected
+                unaffected_feats.append(i)
+                continue  # not affected
             elif unaffected_max < ash_hazard_zone <= very_low_max:
-                current_hash_zone = 1  # very low
+                current_hash_zone = 0  # very low
             elif very_low_max < ash_hazard_zone <= low_max:
-                current_hash_zone = 2  # low
+                current_hash_zone = 1  # low
             elif low_max < ash_hazard_zone <= medium_max:
                 current_hash_zone = 2  # medium
             elif medium_max < ash_hazard_zone <= high_max:
@@ -159,7 +163,9 @@ class AshRasterPlaceFunction(
                 current_hash_zone = 4  # very high
             # If not a number or a value beside real number.
             else:
-                current_hash_zone = 0
+                # current_hash_zone = 0
+                unaffected_feats.append(i)
+                continue
 
             usage = features[i].get(structure_class_field, None)
             usage = main_type(usage, exposure_value_mapping)
@@ -174,6 +180,12 @@ class AshRasterPlaceFunction(
                 population = 1
 
             self.classify_feature(category, usage, population, True)
+
+        geometries = interpolated_layer.get_geometry()
+        unaffected_feats.reverse()
+        for u in unaffected_feats:
+            features.remove(features[u])
+            geometries.remove(geometries[u])
 
         self.reorder_dictionaries()
 
@@ -236,10 +248,13 @@ class AshRasterPlaceFunction(
 
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
 
+        if not features or len(features) == 0:
+            raise ZeroImpactException()
+
         impact_layer = Vector(
             data=features,
             projection=interpolated_layer.get_projection(),
-            geometry=interpolated_layer.get_geometry(),
+            geometry=geometries,
             name=self.metadata().key('layer_name'),
             keywords=impact_layer_keywords,
             style_info=style_info)

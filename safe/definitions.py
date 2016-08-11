@@ -44,70 +44,173 @@ do_not_use_attribute = {
     'name': tr('Don\'t use')
 }
 
-# Concepts (used in various places, defined once to
-# keep things DRY
-concept_hazard = tr(
-    'A <b>hazard</b> represents a natural process or phenomenon '
-    'that may cause loss of life, injury or other health impacts, '
-    'property damage, loss of livelihoods and services, social and '
-    'economic disruption, or environmental damage. For example; flood, '
-    'earthquake, tsunami and volcano are all examples of hazards.')
+# Concepts (used in various places, defined once to keep things DRY)
+concepts = {
+    'hazard': {
+        'description': tr(
+             'A <b>hazard</b> represents a natural process or phenomenon '
+             'that may cause loss of life, injury or other health impacts, '
+             'property damage, loss of livelihoods and services, social and '
+             'economic disruption, or environmental damage. For example; '
+             'flood, earthquake, tsunami and volcano are all examples of '
+             'hazards.'),
+        'citations': [
+            {
+                'text': tr(
+                    'UNISDR (2009) Terminology on disaster risk reduction.'),
+                'link': 'https://www.unisdr.org/we/inform/terminology'
+            }
+        ],
+    },
+    'exposure': {
+        'description': tr(
+            '<b>Exposure</b> represents people, property, systems, or '
+            'other elements present in hazard zones that are subject to '
+            'potential losses in the event of a flood, earthquake, volcano '
+            'etc.'),
+        'citations': [
+            {
+                'text': tr(
+                    'UNISDR (2009) Terminology on disaster risk reduction.'),
+                'link': 'https://www.unisdr.org/we/inform/terminology'
+            }
+        ],
+    },
+    'generic_hazard': {
+        'description': tr(
+            'This is a ternary description for an area used with generic '
+            'impact functions. The area may have either <b>low</b>, '
+            '<b>medium</b>, or <b>high</b> classification for the hazard.'),
+        'citations': [
+            {
+                'text': tr(
+                    ''),
+                'link': ''
+            }
+        ],
+    },
+    'affected': {
+        'description': tr(
+            'An exposure element (e.g. people, roads, buildings, land '
+            'cover) that experiences a hazard (e.g. tsunami, flood, '
+            'earthquake) and endures consequences (e.g. damage, evacuation, '
+            'displacement, death) due to that hazard.'),
+        'citations': [
+            {
+                'text': tr(
+                    'UNISDR (2015)Proposed Updated Terminology on Disaster '
+                    'Risk Reduction: A Technical Review'),
+                'link': 'http://www.preventionweb.net/files/'
+                        '45462_backgoundpaperonterminologyaugust20.pdf'
+             }
+        ],
+    },
+    'affected_people': {
+        'description': tr(
+            'People who are affected by a hazardous event. People can be '
+            'affected directly or indirectly. Affected people may experience '
+            'short-term or long-term consequences to their lives, livelihoods '
+            'or health and in the economic, physical, social, cultural and '
+            'environmental assets.'),
+        'citations': [
+            {
+                'text': tr(
+                    'UNISDR (2015)Proposed Updated Terminology on Disaster '
+                    'Risk Reduction: A Technical Review'),
+                'link': 'http://www.preventionweb.net/files/'
+                        '45462_backgoundpaperonterminologyaugust20.pdf'
+             }
+        ],
+    },
+    'displaced_people': {
+        'description': tr(
+            'Displaced people are people who, for different reasons and '
+            'circumstances because of risk or disaster, have to leave their '
+            'place of residence.'),
+        'citations': [
+            {
+                'text': tr(
+                    'UNISDR (2015)Proposed Updated Terminology on Disaster '
+                    'Risk Reduction: A Technical Review'),
+                'link': 'http://www.preventionweb.net/files/'
+                        '45462_backgoundpaperonterminologyaugust20.pdf'
+            }
+        ],
+    },
+    'evacuated_people': {
+        'description': tr(
+            'Evacuated people are people who, for different reasons and '
+            'circumstances because of risk conditions or disaster, move '
+            'temporarily to safer places before, during or after the '
+            'occurrence of a hazardous event. Evacuation can occur from '
+            'places of residence, workplaces, schools and hospitals to other '
+            'places. Evacuation is usually a planned and organised '
+            'mobilisation of persons, animals and goods.'),
+        'citations': [
+            {
+                'text': tr(
+                    'UNISDR (2015)Proposed Updated Terminology on Disaster '
+                    'Risk Reduction: A Technical Review'),
+                'link': 'http://www.preventionweb.net/files/'
+                        '45462_backgoundpaperonterminologyaugust20.pdf'
+            }
+        ],
+    },
+    'killed_people': {
+        'description': tr('People suffering from a new or exacerbated physical '
+                          'or psychological harm, trauma or an illness as a '
+                          'result of a hazardous event.'),
+        'citations': [
+            {
+                'text': tr(
+                    'UNISDR (2015)Proposed Updated Terminology on Disaster '
+                    'Risk Reduction: A Technical Review'),
+                'link': 'http://www.preventionweb.net/files/'
+                        '45462_backgoundpaperonterminologyaugust20.pdf'
+            }
+        ],
+      },
+    'injured_people': {
+        'description': tr('People who lost their lives as a consequence of a '
+                'hazardous event.'),
+        'citations': [
+            {
+                'text': tr(
+                    'UNISDR (2015)Proposed Updated Terminology on Disaster '
+                    'Risk Reduction: A Technical Review'),
+                'link': 'http://www.preventionweb.net/files/'
+                        '45462_backgoundpaperonterminologyaugust20.pdf'
+            }
+        ],
+      },
+    # Boilerplate for adding a new concept...
+    #  '': {
+    #    'description': tr(
+    #    ),
+    #    'citations': [
+    #        {
+    #            'text': tr(
+    #                ''),
+    #            'link': ''
+    #        }
+    #    ],
+    #  },
+}
 
-concept_exposure = tr(
-    '<b>Exposure</b> represents people, property, systems, or '
-    'other elements present in hazard zones that are subject to '
-    'potential losses in the event of a flood, earthquake, volcano etc.')
-
-concept_generic_hazard = tr(
-    'This is a ternary description for an area used with generic impact '
-    'functions. The area may have either <b>low</b>, <b>medium</b>, or '
-    '<b>high</b> classification for the hazard.')
-
-concept_affected = tr(
-    'An exposure element (e.g. people, roads, buildings, land cover) that '
-    'experiences a hazard (e.g. tsunami, flood, earthquake) and endures '
-    'consequences (e.g. damage, evacuation, displacement, death) due to that '
-    'hazard.')
-
-concept_displaced_people = tr(
-    'Displaced people are people who, for different reasons and '
-    'circumstances because of risk or disaster, have to leave their '
-    'place of residence.')
-
-concept_evacuated_people = tr(
-    'Evacuated people are people who, for different reasons and '
-    'circumstances because of risk conditions or disaster, move '
-    'temporarily to safer places before, during or after the '
-    'occurrence of a hazardous event. Evacuation can occur from '
-    'places of residence, workplaces, schools and hospitals to other '
-    'places. Evacuation is usually a planned and organised '
-    'mobilisation of persons, animals and goods.')
 
 # Layer Purpose
 layer_purpose_hazard = {
     'key': 'hazard',
     'name': tr('Hazard'),
-    'description': concept_hazard,
-    'citations': [
-        {
-            'text': tr('UNISDR (2009) Terminology on disaster risk '
-                       'reduction.'),
-            'link': 'https://www.unisdr.org/we/inform/terminology'
-        }
-    ],
+    'description': concepts['hazard']['description'],
+    'citations': concepts['hazard']['citations']
 }
 
 layer_purpose_exposure = {
     'key': 'exposure',
     'name': tr('Exposure'),
-    'description': concept_exposure,
-    'citations': [
-        {
-            'text': tr('UNISDR (2009) Terminology on disaster risk '
-                       'reduction.'),
-            'link': 'https://www.unisdr.org/we/inform/terminology'
-        }
-    ]
+    'description': concepts['exposure']['description'],
+    'citations': concepts['exposure']['citations'],
 }
 
 layer_purpose_aggregation = {
@@ -365,6 +468,14 @@ hazard_category = {
 }
 
 # Hazard
+caveat_simulation = tr(
+    'The extent and severity of the mapped scenario or hazard zones '
+    'may not be consistent with future events.')
+caveat_local_conditions = tr(
+    'The impacts on roads, people, buildings and other exposure '
+    'elements may differ from the analysis results due to local '
+    'conditions such as terrain and infrastructure type.')
+
 hazard_generic = {
     'key': 'generic',
     'name': tr('Generic'),
@@ -373,11 +484,16 @@ hazard_generic = {
         'data have been classified or generalised. For example: earthquake, '
         'flood, volcano, tsunami, landslide, smoke haze or strong wind.'),
     'notes': [  # additional generic notes for generic - IF has more
-        tr('The extent and severity of the mapped scenario or hazard zones '
-           'may not be consistent with future events.'),
-        tr('The impacts on roads, people, buildings and other exposure '
-           'elements may differ from the analysis results due to local '
-           'conditions such as terrain and infrastructure type.'),
+        caveat_simulation,
+        caveat_local_conditions,
+    ],
+    'continuous_notes': [  # notes specific to continuous data
+    ],
+    'classified_notes': [  # notes specific to classified data
+    ],
+    'single_event_notes': [  # notes specific to single event data
+    ],
+    'multi_event_notes': [  # notes specific to multi event data
     ],
     'actions': [  # these are additional generic actions - IF has more
 
@@ -398,11 +514,16 @@ hazard_earthquake = {
         'ground that occurs as a result of volcanic activity or movement '
         'in the earth\'s crust.'),
     'notes': [  # additional generic notes for earthquake - IF has more
-        tr('The extent and severity of the mapped scenario or hazard zones '
-           'may not be consistent with future events.'),
-        tr('The impacts on roads, people, buildings and other exposure '
-           'elements may differ from the analysis results due to local '
-           'conditions such as terrain and infrastructure type.'),
+        caveat_simulation,
+        caveat_local_conditions,
+    ],
+    'continuous_notes': [  # notes specific to continuous data
+    ],
+    'classified_notes': [  # notes specific to classified data
+    ],
+    'single_event_notes': [  # notes specific to single event data
+    ],
+    'multi_event_notes': [  # notes specific to multi event data
     ],
     'actions': [  # these are additional generic actions - IF has more
 
@@ -426,11 +547,16 @@ hazard_flood = {
         'The effect of a <b>flood</b> is for land that is normally dry '
         'to become wet.'),
     'notes': [  # additional generic notes for flood - IF has more
-        tr('The extent and severity of the mapped scenario or hazard zones '
-           'may not be consistent with future events.'),
-        tr('The impacts on roads, people, buildings and other exposure '
-           'elements may differ from the analysis results due to local '
-           'conditions such as terrain and infrastructure type.'),
+        caveat_simulation,
+        caveat_local_conditions,
+    ],
+    'continuous_notes': [  # notes specific to continuous data
+    ],
+    'classified_notes': [  # notes specific to classified data
+    ],
+    'single_event_notes': [  # notes specific to single event data
+    ],
+    'multi_event_notes': [  # notes specific to multi event data
     ],
     'actions': [  # these are additional generic actions - IF has more
 
@@ -451,11 +577,16 @@ hazard_volcanic_ash = {
         'and volcanic glass, created during volcanic eruptions, less than '
         '2 mm (0.079 inches) in diameter.'),
     'notes': [  # additional generic notes for volcanic ash - IF has more
-        tr('The extent and severity of the mapped scenario or hazard zones '
-           'may not be consistent with future events.'),
-        tr('The impacts on roads, people, buildings and other exposure '
-           'elements may differ from the analysis results due to local '
-           'conditions such as terrain and infrastructure type.'),
+        caveat_simulation,
+        caveat_local_conditions,
+    ],
+    'continuous_notes': [  # notes specific to continuous data
+    ],
+    'classified_notes': [  # notes specific to classified data
+    ],
+    'single_event_notes': [  # notes specific to single event data
+    ],
+    'multi_event_notes': [  # notes specific to multi event data
     ],
     'actions': [  # these are additional generic actions - IF has more
 
@@ -478,11 +609,16 @@ hazard_tsunami = {
         'wave that strikes land may cause massive destruction and '
         'flooding.'),
     'notes': [  # additional generic notes for tsunami - IF has more
-        tr('The extent and severity of the mapped scenario or hazard zones '
-           'may not be consistent with future events.'),
-        tr('The impacts on roads, people, buildings and other exposure '
-           'elements may differ from the analysis results due to local '
-           'conditions such as terrain and infrastructure type.'),
+        caveat_simulation,
+        caveat_local_conditions,
+    ],
+    'continuous_notes': [  # notes specific to continuous data
+    ],
+    'classified_notes': [  # notes specific to classified data
+    ],
+    'single_event_notes': [  # notes specific to single event data
+    ],
+    'multi_event_notes': [  # notes specific to multi event data
     ],
     'actions': [  # these are additional generic actions - IF has more
 
@@ -504,14 +640,19 @@ hazard_volcano = {
         'from below the earth\'s surface. The type of material '
         'ejected depends on the type of <b>volcano</b>.'),
     'notes': [  # additional generic notes for volcano
-        tr('The extent and severity of the mapped scenario or hazard zones '
-           'may not be consistent with future events.'),
-        tr('The impacts on roads, people, buildings and other exposure '
-           'elements may differ from the analysis results due to local '
-           'conditions such as terrain and infrastructure type.'),
+        caveat_simulation,
+        caveat_local_conditions,
     ],
     'actions': [  # these are additional generic actions - IF has more
 
+    ],
+    'continuous_notes': [  # notes specific to continuous data
+    ],
+    'classified_notes': [  # notes specific to classified data
+    ],
+    'single_event_notes': [  # notes specific to single event data
+    ],
+    'multi_event_notes': [  # notes specific to multi event data
     ],
     'citations': [
         {
@@ -534,14 +675,9 @@ hazard_all = [
 hazards = {
     'key': 'hazards',
     'name': tr('Hazards'),
-    'description': concept_hazard ,
+    'description': concepts['hazard']['description'],
     'types': hazard_all,
-    'citations': [
-        {
-            'text': None,
-            'link': None
-        }
-    ]
+    'citations': concepts['hazard']['citations']
 }
 
 # Exposure
@@ -552,8 +688,13 @@ exposure_land_cover = {
         'The <b>land cover</b> exposure data describes features on '
         'the surface of the earth that might be exposed to a particular '
         ' hazard. This might include crops, forest and urban areas. '),
-    'notes': [  # these are additional generic notes for landcover - IF has more
+    'notes': [
+        # these are additional generic notes for landcover - IF has more
         tr('Areas reported for land cover have not been rounded.'),
+    ],
+    'continuous_notes': [  # notes specific to continuous data
+    ],
+    'classified_notes': [  # notes specific to classified data
     ],
     'actions': [  # these are additional generic actions - IF has more
         tr('What type of crops are planted in the affected fields?'),
@@ -594,19 +735,27 @@ exposure_population = {
            'which may cause discrepancies when adding values.'),
 
     ],
+    'continuous_notes': [  # notes specific to continuous data
+    ],
+    'classified_notes': [  # notes specific to classified data
+    ],
     'actions': [  # these are additional generic actions - IF has more
-        tr('Which group or population is most affected?'),
-        tr('Who are the vulnerable people in the population and why?'),
         tr('How will warnings be disseminated?'),
         tr('What are people\'s likely movements?'),
-        tr('What are the security factors for the affected population?'),
+        tr('Which group or population is most affected?'),
+        tr('Who are the vulnerable people in the population and why?'),
+        tr('What are people\'s likely movements?'),
+        tr('What are the security factors for the affected people?'),
         tr('What are the security factors for relief responders?'),
-        tr('How will we reach evacuated people?'),
+        tr('How will we reach displaced people?'),
         tr('What kind of food does the population normally consume?'),
         tr('What are the critical non-food items required by the affected '
            'population?'),
+        tr('If yes, where are they located and how will we distribute them?'),
+        tr('If no, where can we obtain additional relief items and how'
+           ' will we distribute them?'),
         tr('What are the related health risks?'),
-        tr('Who are the key people responsible for coordination?')
+        tr('Who are the key people responsible for coordination?'),
     ],
     'citations': [
         {
@@ -626,6 +775,10 @@ exposure_people_in_building = {
         'people to buildings assumes that all people and buildings in the '
         'area are mapped.</p>'),
     'notes': exposure_population['notes'],
+    'continuous_notes': [  # notes specific to continuous data
+    ],
+    'classified_notes': [  # notes specific to classified data
+    ],
     'actions': exposure_population['actions'],
     'citations': [
         {
@@ -655,6 +808,10 @@ exposure_road = {
         tr('Roads are closed if they are affected.'),
         tr('Roads are open if they are not affected.')
     ],
+    'continuous_notes': [  # notes specific to continuous data
+    ],
+    'classified_notes': [  # notes specific to classified data
+    ],
     'actions': [  # these are additional generic actions - IF has more
         tr('Which roads can be used to evacuate people or to distribute '
            'logistics?'),
@@ -683,6 +840,10 @@ exposure_structure = {
         'bridge.'),
     'notes': [  # additional generic notes for structures - IF has more
         tr('Numbers reported for structures have not been rounded.')
+    ],
+    'continuous_notes': [  # notes specific to continuous data
+    ],
+    'classified_notes': [  # notes specific to classified data
     ],
     'actions': [  # these are additional generic actions - IF has more
         tr('Which structures have warning capacity (eg. sirens, speakers, '
@@ -714,6 +875,10 @@ exposure_place = {
            'hazard over the entire place may differ from the point at which '
            'the place is represented on the map.'),
     ],
+    'continuous_notes': [  # notes specific to continuous data
+    ],
+    'classified_notes': [  # notes specific to classified data
+    ],
     'actions': [  # these are additional generic actions - IF has more
     ],
     'citations': [
@@ -738,14 +903,9 @@ exposure_all = [
 exposures = {
     'key': 'exposures',
     'name': tr('Exposure'),
-    'description': concept_exposure,
+    'description': concepts['exposure']['description'],
+    'citations': concepts['exposure']['citations'],
     'types': exposure_all,
-    'citations': [
-        {
-            'text': None,
-            'link': None
-        }
-    ]
 }
 
 # No data warnings for appending to actions if
@@ -936,14 +1096,9 @@ continuous_hazard_unit_all = continuous_hazard_unit['types']
 generic_vector_hazard_classes = {
     'key': 'generic_vector_hazard_classes',
     'name': tr('Generic classes'),
-    'description': concept_generic_hazard,
+    'description': concepts['generic_hazard']['description'],
+    'citations': concepts['generic_hazard']['citations'],
     'default_attribute': 'affected',
-    'citations': [
-        {
-            'text': None,
-            'link': None
-        }
-    ],
     'classes': [
         {
             'key': 'high',
@@ -1175,13 +1330,8 @@ flood_raster_hazard_classes = {
 generic_raster_hazard_classes = {
     'key': 'generic_raster_hazard_classes',
     'name': tr('Generic classes'),
-    'description': concept_generic_hazard,
-    'citations': [
-        {
-            'text': None,
-            'link': None
-        }
-    ],
+    'description': concepts['generic_hazard']['description'],
+    'citations': concepts['generic_hazard']['citations'],
     'classes': [
         {
             'key': 'high',

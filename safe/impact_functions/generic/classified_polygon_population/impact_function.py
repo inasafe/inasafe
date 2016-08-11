@@ -55,7 +55,7 @@ class ClassifiedPolygonHazardPopulationFunction(
         self.parameters = add_needs_parameters(self.parameters)
         # Set the question of the IF (as the hazard data is not an event)
         self.question = tr(
-            'In each of the hazard zones how many people might be impacted.')
+            'In each of the hazard zones how many people might be impacted?')
 
     def notes(self):
         """Return the notes section of the report.

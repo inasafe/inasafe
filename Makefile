@@ -24,7 +24,7 @@ ALL := $(NONGUI) $(GUI)  # Would like to turn this into comma separated list usi
 
 # LOCALES = space delimited list of iso codes to generate po files for
 # Please dont remove en here
-LOCALES = en id fr
+LOCALES = en id fr vi es_ES
 
 default: quicktest
 
@@ -50,6 +50,7 @@ test-translations:
 	@python scripts/missing_translations.py `pwd` fr
 	@python scripts/missing_translations.py `pwd` af
 	@python scripts/missing_translations.py `pwd` es_ES
+	@python scripts/missing_translations.py `pwd` vi
 
 
 translation-stats:

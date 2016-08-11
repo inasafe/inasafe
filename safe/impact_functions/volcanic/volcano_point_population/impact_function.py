@@ -48,8 +48,8 @@ class VolcanoPointPopulationFunction(
         # TODO: alternatively to specifying the question here we should
         # TODO: consider changing the 'population' metadata concept to 'people'
         self.question = (
-            'In the event of a volcano point how many people might be impacted'
-        )
+            'In the event of a volcano point how many people might be '
+            'impacted?')
         self.no_data_warning = False
         # A set of volcano names
         self.volcano_names = set()

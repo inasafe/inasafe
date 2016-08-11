@@ -359,21 +359,28 @@ class Plugin(object):
 
     def _create_raster_reclassify_layer_action(self):
         """Create action for Raster Reclassification to vector."""
-        icon = resources_path('img', 'icons', 'raster-reclassify-layer.svg')
-        self.action_raster_reclassify_layer = QAction(
-            QIcon(icon),
-            self.tr('Reclassify Raster to Vector Layer'),
-            self.iface.mainWindow())
-        self.action_raster_reclassify_layer.setStatusTip(self.tr(
-            'Reclassify Raster to Vector Layer'))
-        self.action_raster_reclassify_layer.setWhatsThis(self.tr(
-            'Use this to reclassify Raster Layer into Vector Layer '
-            'with defined thresholds as classifier.'))
-        self.action_raster_reclassify_layer.triggered.connect(
-            self.raster_reclassify)
-        self.add_action(
-            self.action_raster_reclassify_layer,
-            add_to_toolbar=False)
+        # Disabled for 3.5
+        final_release = release_status() == 'final'
+        settings = QSettings()
+        self.developer_mode = settings.value(
+            'inasafe/developer_mode', False, type=bool)
+        if not final_release and self.developer_mode:
+            icon = resources_path(
+                'img', 'icons', 'raster-reclassify-layer.svg')
+            self.action_raster_reclassify_layer = QAction(
+                QIcon(icon),
+                self.tr('Reclassify Raster to Vector Layer'),
+                self.iface.mainWindow())
+            self.action_raster_reclassify_layer.setStatusTip(self.tr(
+                'Reclassify Raster to Vector Layer'))
+            self.action_raster_reclassify_layer.setWhatsThis(self.tr(
+                'Use this to reclassify Raster Layer into Vector Layer '
+                'with defined thresholds as classifier.'))
+            self.action_raster_reclassify_layer.triggered.connect(
+                self.raster_reclassify)
+            self.add_action(
+                self.action_raster_reclassify_layer,
+                add_to_toolbar=False)
 
     def _create_rubber_bands_action(self):
         """Create action for toggling rubber bands."""

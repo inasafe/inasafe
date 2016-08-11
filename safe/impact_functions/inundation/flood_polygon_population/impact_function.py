@@ -109,6 +109,11 @@ class FloodEvacuationVectorHazardFunction(
         # Get parameters from layer's keywords
         self.hazard_class_attribute = self.hazard.keyword('field')
         self.hazard_class_mapping = self.hazard.keyword('value_map')
+        # There is no wet in the class mapping
+        if self.wet not in self.hazard_class_mapping:
+            raise ZeroImpactException(tr(
+                'There is no flooded area in the hazard layers, thus there '
+                'is no affected population.'))
 
         # Get the IF parameters
         self._evacuation_percentage = (

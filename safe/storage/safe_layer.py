@@ -88,7 +88,8 @@ class SafeLayer(object):
     @property
     def keywords(self):
         """Property for the layer's keywords.
-        :returns: A keywords.
+
+        :returns: A keywords dictionary.
         :rtype: dict
         """
         return self._keywords
