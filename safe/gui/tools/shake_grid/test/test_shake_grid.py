@@ -116,7 +116,7 @@ class ShakeGridTest(unittest.TestCase):
         self.assertEquals(6, SHAKE_GRID.hour)
         self.assertEquals(8, SHAKE_GRID.minute)
         self.assertEquals(9, SHAKE_GRID.second)
-        self.assertEquals('WIB', SHAKE_GRID.time_zone)
+        self.assertEquals('Asia/Jakarta', SHAKE_GRID.time_zone)
         self.assertEquals(140.62, SHAKE_GRID.longitude)
         self.assertEquals(-2.43, SHAKE_GRID.latitude)
         self.assertEquals(10.0, SHAKE_GRID.depth)
