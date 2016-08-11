@@ -34,10 +34,6 @@ from realtime.flood.peta_jakarta_api import PetaJakartaAPI
 from realtime.utilities import realtime_logger_name
 
 from safe.test.utilities import get_qgis_app
-from safe.utilities.styling import (
-    set_vector_categorized_style,
-    set_vector_graduated_style,
-    setRasterStyle)
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -48,8 +44,6 @@ from safe.storage.core import read_layer, read_qgis_layer
 from safe.utilities.keyword_io import KeywordIO
 from safe.common.utilities import format_int
 from safe.impact_functions.core import population_rounding
-from safe import messaging as m
-
 
 __author__ = 'Rizky Maulana Nugraha <lana.pcfre@gmail.com>'
 __date__ = '11/24/15'
@@ -587,8 +581,7 @@ Telp. (021)164
             self.impact_data.total_affected_population))
         estimates_idp = self.tr('%s') % format_int(population_rounding(
             self.impact_data.estimates_idp))
-        row.add(m.Cell(
-            self.tr('Total affected population (people)'), header=True))
+        row.add(m.Cell(self.tr('Total affected population (people)'), header=True))
         row.add(m.Cell(total_people, style_class="text-right"))
         table.add(row)
         row = m.Row()
