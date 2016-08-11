@@ -58,7 +58,6 @@ class FloodRasterRoadsMetadata(ImpactFunctionMetadata):
             concrete impact function.
         :rtype: dict
         """
-        title = tr('Roads affected by flood')
         dict_meta = {
             'id': 'FloodRasterRoadsFunction',
             'name': tr('Raster flood on roads'),
@@ -82,8 +81,6 @@ class FloodRasterRoadsMetadata(ImpactFunctionMetadata):
             ],
             'legend_units': '',
             'legend_notes': '',
-            'map_title': title,
-            'layer_name': title,
             'legend_title': tr('Road inundated status'),
             'layer_requirements': {
                 'hazard': {

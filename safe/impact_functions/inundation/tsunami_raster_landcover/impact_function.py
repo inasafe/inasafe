@@ -260,7 +260,7 @@ class TsunamiRasterLandcoverFunction(ContinuousRHClassifiedVE):
         # Create vector layer and return
         impact_layer = Vector(
             data=impact_layer,
-            name=self.metadata().key('layer_name'),
+            name=self.map_title(),
             keywords=impact_layer_keywords,
             style_info=style_info)
 

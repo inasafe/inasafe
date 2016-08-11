@@ -204,7 +204,7 @@ class ClassifiedRasterHazardPopulationFunction(
         impact_data = self.generate_data()
 
         extra_keywords = {
-            'map_title': self.metadata().key('map_title'),
+            'map_title': self.map_title(),
             'legend_notes': self.metadata().key('legend_notes'),
             'legend_units': self.metadata().key('legend_units'),
             'legend_title': self.metadata().key('legend_title'),
@@ -218,7 +218,7 @@ class ClassifiedRasterHazardPopulationFunction(
             data=affected_population,
             projection=self.exposure.layer.get_projection(),
             geotransform=self.exposure.layer.get_geotransform(),
-            name=self.metadata().key('layer_name'),
+            name=self.map_title(),
             keywords=impact_layer_keywords,
             style_info=style_info)
 

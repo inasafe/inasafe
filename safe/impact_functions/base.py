@@ -571,13 +571,40 @@ class ImpactFunction(object):
         See https://github.com/inasafe/inasafe/blob/develop/
             docs/reporting-standards.md
 
+        See also: https://github.com/inasafe/inasafe/issues/3083
+
         :returns: A localised string containing the map title.
         :rtype: basestring
         """
-        category = self.hazard.keyword('hazard_category')
-        category = definition(category)
-        short_name = category['short_name']
-        title = self.metadata().key('map_title') + ' ' + short_name
+        # Exposure: People, buildings etc.
+        exposure = self.exposure.keyword('exposure')
+        exposure = definition(exposure)
+        exposure = exposure['name']
+
+        # Hazard category : single event or scenario
+        scenario = self.hazard.keyword('hazard_category')
+        scenario = definition(scenario)
+        scenario = scenario['short_name']
+
+        # Hazard: flood, eq etc.
+        hazard = self.hazard.keyword('hazard')
+
+        if hazard == 'generic':
+            hazard_verb = tr('affected')
+            hazard = ''
+            scenario = ''
+        else:
+            hazard_verb = tr('affected by')
+            hazard = definition(hazard)
+            hazard = hazard['name'].lower()
+
+        title = '%(exposure)s %(verb)s %(hazard)s %(scenario)s' % (
+            {
+                'exposure': exposure,
+                'verb': hazard_verb,
+                'hazard': hazard,
+                'scenario': scenario
+            })
         return title
 
     @property
