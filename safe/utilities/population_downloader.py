@@ -185,7 +185,3 @@ def create_layer(data, points):
     iface.mapCanvas().refresh()
 
     iface.zoomToActiveLayer()
-
-
-
-
