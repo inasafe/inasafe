@@ -43,7 +43,6 @@ class AshRasterLandCoverFunctionMetadata(ImpactFunctionMetadata):
             concrete impact function.
         :rtype: dict
         """
-        title = tr('Land cover affected by volcanic ash')
         dict_meta = {
             'id': 'AshRasterLandCoverFunction',
             'name': tr('Ash raster on land cover'),
@@ -76,8 +75,6 @@ class AshRasterLandCoverFunctionMetadata(ImpactFunctionMetadata):
             'legend_title': '',
             'legend_units': '',
             'legend_notes': '',
-            'map_title': title,
-            'layer_name': title,
             'layer_requirements': {
                 'hazard': {
                     'layer_mode': layer_mode_continuous,

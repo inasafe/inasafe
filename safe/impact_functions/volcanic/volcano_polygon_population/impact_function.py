@@ -255,7 +255,7 @@ class VolcanoPolygonPopulationFunction(
             data=covered_exposure_layer.get_data(),
             projection=covered_exposure_layer.get_projection(),
             geotransform=covered_exposure_layer.get_geotransform(),
-            name=self.metadata().key('layer_name'),
+            name=self.map_title(),
             keywords=impact_layer_keywords,
             style_info=style_info
         )

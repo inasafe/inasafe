@@ -183,7 +183,7 @@ class ClassifiedRasterHazardBuildingFunction(
 
         extra_keywords = {
             'target_field': self.affected_field,
-            'map_title': self.metadata().key('map_title'),
+            'map_title': self.map_title(),
             'legend_units': self.metadata().key('legend_units'),
             'legend_title': self.metadata().key('legend_title'),
             'buildings_total': buildings_total,
@@ -197,7 +197,7 @@ class ClassifiedRasterHazardBuildingFunction(
             data=attributes,
             projection=self.exposure.layer.get_projection(),
             geometry=self.exposure.layer.get_geometry(),
-            name=self.metadata().key('layer_name'),
+            name=self.map_title(),
             keywords=impact_layer_keywords,
             style_info=style_info)
 

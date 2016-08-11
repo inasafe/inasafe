@@ -197,7 +197,7 @@ class VolcanoPolygonBuildingFunction(
             data=features,
             projection=interpolated_layer.get_projection(),
             geometry=interpolated_layer.get_geometry(),
-            name=self.metadata().key('layer_name'),
+            name=self.map_title(),
             keywords=impact_layer_keywords,
             style_info=style_info
         )

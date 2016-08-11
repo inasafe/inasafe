@@ -60,7 +60,6 @@ class EarthquakeBuildingMetadata(ImpactFunctionMetadata):
             concrete impact function.
         :rtype: dict
         """
-        title = tr('Buildings affected by earthquake')
         dict_meta = {
             'id': 'EarthquakeBuildingFunction',
             'name': tr('Earthquake on buildings'),
@@ -85,8 +84,6 @@ class EarthquakeBuildingMetadata(ImpactFunctionMetadata):
                     'link': None
                 }
             ],
-            'map_title': title,
-            'layer_name': title,
             'legend_notes': tr(
                 'The level of the impact is according to the threshold the '
                 'user input.'),

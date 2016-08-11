@@ -48,7 +48,6 @@ class FloodPolygonRoadsMetadata(ImpactFunctionMetadata):
             concrete impact function.
         :rtype: dict
         """
-        title = tr('Roads affected by flood')
         dict_meta = {
             'id': 'FloodVectorRoadsExperimentalFunction',
             'name': tr('Polygon flood on roads'),
@@ -72,8 +71,6 @@ class FloodPolygonRoadsMetadata(ImpactFunctionMetadata):
             ],
             'legend_units': '',
             'legend_notes': '',
-            'map_title': title,
-            'layer_name': title,
             'legend_title': tr('Road inundated status'),
             'layer_requirements': {
                 'hazard': {

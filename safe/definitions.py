@@ -793,7 +793,7 @@ exposure_people_in_building = {
 
 exposure_road = {
     'key': 'road',
-    'name': tr('Road'),
+    'name': tr('Roads'),
     'description': tr(
         'A <b>road</b> is a defined route used by a vehicle or people to '
         'travel between two or more points.'),
@@ -832,7 +832,7 @@ exposure_road = {
 
 exposure_structure = {
     'key': 'structure',
-    'name': tr('Structure'),
+    'name': tr('Structures'),
     'description': tr(
         'A <b>structure</b> can be any relatively permanent man '
         'made feature such as a building (an enclosed structure '
@@ -866,7 +866,7 @@ exposure_structure = {
 
 exposure_place = {
     'key': 'place',
-    'name': tr('Place'),
+    'name': tr('Places'),
     'description': tr(
         'A <b>place</b> is used to indicate that a particular location is '
         'known by a particular name.'),
