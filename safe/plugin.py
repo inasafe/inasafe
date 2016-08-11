@@ -1,14 +1,11 @@
 # coding=utf-8
 """
 InaSAFE Disaster risk assessment tool by AusAid **QGIS plugin implementation.**
-
 Contact : ole.moller.nielsen@gmail.com
-
 .. note:: This program is free software; you can redistribute it and/or modify
      it under the terms of the GNU General Public License as published by
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
-
 """
 
 __author__ = 'tim@kartoza.com'
@@ -57,7 +54,6 @@ LOGGER = logging.getLogger('InaSAFE')
 
 class Plugin(object):
     """The QGIS interface implementation for the InaSAFE plugin.
-
     This class acts as the 'glue' between QGIS and our custom logic.
     It creates a toolbar and menu bar entry and launches the InaSAFE user
     interface if these are activated.
@@ -65,11 +61,9 @@ class Plugin(object):
 
     def __init__(self, iface):
         """Class constructor.
-
         On instantiation, the plugin instance will be assigned a copy
         of the QGIS iface object which will allow this plugin to access and
         manipulate the running QGIS instance that spawned it.
-
         :param iface:Quantum GIS iface instance. This instance is
             automatically passed to the plugin by QGIS when it loads the
             plugin.
@@ -107,13 +101,10 @@ class Plugin(object):
     # noinspection PyArgumentList
     def change_i18n(self, new_locale):
         """Change internationalisation for the plugin.
-
         Override the system locale  and then see if we can get a valid
         translation file for whatever locale is effectively being used.
-
         :param new_locale: The new locale i.e. 'id', 'af', etc.
         :type new_locale: str
-
         :raises: TranslationLoadException
         """
 
@@ -142,12 +133,9 @@ class Plugin(object):
     # noinspection PyMethodMayBeStatic
     def tr(self, message):
         """Get the translation for a string using Qt translation API.
-
         We implement this ourselves since we do not inherit QObject.
-
         :param message: String for translation.
         :type message: str, QString
-
         :returns: Translated version of message.
         :rtype: QString
         """
@@ -156,14 +144,11 @@ class Plugin(object):
 
     def add_action(self, action, add_to_toolbar=True):
         """Add a toolbar icon to the InaSAFE toolbar.
-
         :param action: The action that should be added to the toolbar.
         :type action: QAction
-
         :param add_to_toolbar: Flag indicating whether the action should also
             be added to the InaSAFE toolbar. Defaults to True.
         :type add_to_toolbar: bool
-
         """
         # store in the class list of actions for easy plugin unloading
         self.actions.append(action)
@@ -322,6 +307,21 @@ class Plugin(object):
         self.action_import_dialog.setWhatsThis(self.tr(
             'OpenStreetMap Downloader'))
         self.action_import_dialog.triggered.connect(self.show_osm_downloader)
+        self.add_action(self.action_import_dialog)
+
+    def _create_population_downloader_action(self):
+        """Create action for import population Dialog."""
+        icon = resources_path('img', 'icons', 'show-population-download.svg')
+        self.action_import_dialog = QAction(
+            QIcon(icon),
+            self.tr('Population Downloader'),
+            self.iface.mainWindow())
+        self.action_import_dialog.setStatusTip(self.tr(
+            'Population Downloader'))
+        self.action_import_dialog.setWhatsThis(self.tr(
+            'Population Downloader'))
+        self.action_import_dialog.triggered.connect(
+            self.show_population_downloader)
         self.add_action(self.action_import_dialog)
 
     def _create_add_osm_layer_action(self):
@@ -500,9 +500,7 @@ class Plugin(object):
 
     def initGui(self):
         """Gui initialisation procedure (for QGIS plugin api).
-
         .. note:: Don't change the name of this method from initGui!
-
         This method is called by QGIS and should be used to set up
         any graphical user interface elements that should appear in QGIS by
         default (i.e. before the user performs any explicit action with the
@@ -525,6 +523,7 @@ class Plugin(object):
         self._create_analysis_wizard_action()
         self._add_spacer_to_menu()
         self._create_osm_downloader_action()
+        self._create_population_downloader_action()
         self._create_add_osm_layer_action()
         self._create_add_petajakarta_layer_action()
         self._create_raster_reclassify_layer_action()
@@ -552,7 +551,6 @@ class Plugin(object):
 
     def clear_modules(self):
         """Unload inasafe functions and try to return QGIS to before InaSAFE.
-
         .. todo:: I think this function can be removed. TS.
         """
         # next lets force remove any inasafe related modules
@@ -588,9 +586,7 @@ class Plugin(object):
 
     def unload(self):
         """GUI breakdown procedure (for QGIS plugin api).
-
         .. note:: Don't change the name of this method from unload!
-
         This method is called by QGIS and should be used to *remove*
         any graphical user interface elements that should appear in QGIS.
         """
@@ -608,10 +604,8 @@ class Plugin(object):
 
     def toggle_inasafe_action(self, checked):
         """Check or un-check the toggle inaSAFE toolbar button.
-
         This slot is called when the user hides the inaSAFE panel using its
         close button or using view->panels.
-
         :param checked: True if the dock should be shown, otherwise False.
         :type checked: bool
         """
@@ -785,9 +779,25 @@ class Plugin(object):
         dialog = OsmDownloaderDialog(self.iface.mainWindow(), self.iface)
         dialog.show()  # non modal
 
+    def show_osm_downloader(self):
+        """Show the OSM buildings downloader dialog."""
+        from safe.gui.tools.osm_downloader_dialog import OsmDownloaderDialog
+
+        dialog = OsmDownloaderDialog(self.iface.mainWindow(), self.iface)
+        dialog.show()  # non modal
+
+    def show_population_downloader(self):
+        """Show the Population downloader dialog."""
+        from safe.gui.tools.population_downloader_dialog import \
+            PopulationDownloaderDialog
+
+        dialog = PopulationDownloaderDialog(
+            self.iface.mainWindow(),
+            self.iface)
+        dialog.show()  # non modal
+
     def add_osm_layer(self):
         """Add OSM tile layer to the map.
-
         This uses a gdal wrapper around the OSM tile service - see the
         WorldOSM.gdal file for how it is constructed.
         """
@@ -812,7 +822,6 @@ class Plugin(object):
 
     def add_petajakarta_layer(self):
         """Add petajakarta layer to the map.
-
         This uses the PetaJakarta API to fetch the latest floods in JK. See
         https://petajakarta.org/banjir/en/data/api/#aggregates
         """
@@ -822,7 +831,6 @@ class Plugin(object):
 
     def raster_reclassify(self):
         """Show dialog for Raster Reclassification.
-
         This will convert Raster Layer to Vector Layer
         """
         from safe.gui.tools.raster_reclassify_dialog import \
@@ -855,7 +863,6 @@ class Plugin(object):
 
     def layer_changed(self, layer):
         """Enable or disable keywords editor icon when active layer changes.
-
         :param layer: The layer that is now active.
         :type layer: QgsMapLayer
         """
