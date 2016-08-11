@@ -157,9 +157,10 @@ concepts = {
         ],
     },
     'killed_people': {
-        'description': tr('People suffering from a new or exacerbated physical '
-                          'or psychological harm, trauma or an illness as a '
-                          'result of a hazardous event.'),
+        'description': tr(
+            'People suffering from a new or exacerbated physical or '
+            'psychological harm, trauma or an illness as a result of a '
+            'hazardous event.'),
         'citations': [
             {
                 'text': tr(

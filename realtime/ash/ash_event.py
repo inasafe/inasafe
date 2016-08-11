@@ -87,7 +87,8 @@ class AshEvent(QObject):
         if event_time:
             self.time = event_time
         else:
-            self.time = datetime.datetime.now().replace(tzinfo=pytz.timezone('Asia/Jakarta'))
+            self.time = datetime.datetime.now().replace(
+                tzinfo=pytz.timezone('Asia/Jakarta'))
 
         # Check timezone awareness
         if not self.time.tzinfo:
@@ -120,9 +121,11 @@ class AshEvent(QObject):
         if not os.path.exists(self.hazard_path):
             IOError("Hazard path doesn't exists")
 
-        self.population_html_path = self.working_dir_path('population-table.html')
+        self.population_html_path = self.working_dir_path(
+            'population-table.html')
         self.nearby_html_path = self.working_dir_path('nearby-table.html')
-        self.landcover_html_path = self.working_dir_path('landcover-table.html')
+        self.landcover_html_path = self.working_dir_path(
+            'landcover-table.html')
         self.map_report_path = self.working_dir_path('report.pdf')
         self.project_path = self.working_dir_path('project.qgs')
         self.impact_exists = None
@@ -233,9 +236,10 @@ class AshEvent(QObject):
         tokens = coordinates.split(',')
         longitude_string = tokens[0]
         latitude_string = tokens[1]
-        elapsed_time = datetime.datetime.utcnow().replace(tzinfo=pytz.utc) - self.time
-        elapsed_hour = elapsed_time.seconds/3600
-        elapsed_minute = (elapsed_time.seconds/60) % 60
+        current_time = datetime.datetime.utcnow().replace(tzinfo=pytz.utc)
+        elapsed_time = current_time - self.time
+        elapsed_hour = elapsed_time.seconds / 3600
+        elapsed_minute = (elapsed_time.seconds / 60) % 60
         event = {
             'report-title': self.tr('Volcanic Ash Impact'),
             'report-timestamp': self.tr('Volcano: %s, Alert Level: %s %s') % (
@@ -246,8 +250,11 @@ class AshEvent(QObject):
                 'Longitude %s Latitude %s;'
                 ' Eruption Column Height (a.s.l) - %d m') % (
                 longitude_string, latitude_string, self.erupction_height),
-            'report-elapsed': self.tr('Elapsed time since event %s hour(s) and %s minute(s)') % (elapsed_hour, elapsed_minute),
-            'header-impact-table': self.tr('Potential impact at each fallout level'),
+            'report-elapsed': self.tr(
+                'Elapsed time since event %s hour(s) and %s minute(s)') % (
+                elapsed_hour, elapsed_minute),
+            'header-impact-table': self.tr(
+                'Potential impact at each fallout level'),
             'header-nearby-table': self.tr('Nearby places'),
             'header-landcover-table': self.tr('Land Cover Impact'),
             'content-disclaimer': self.tr(
