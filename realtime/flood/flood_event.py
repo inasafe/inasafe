@@ -587,7 +587,8 @@ Telp. (021)164
             self.impact_data.total_affected_population))
         estimates_idp = self.tr('%s') % format_int(population_rounding(
             self.impact_data.estimates_idp))
-        row.add(m.Cell(self.tr('Total affected population (people)'), header=True))
+        row.add(m.Cell(
+            self.tr('Total affected population (people)'), header=True))
         row.add(m.Cell(total_people, style_class="text-right"))
         table.add(row)
         row = m.Row()

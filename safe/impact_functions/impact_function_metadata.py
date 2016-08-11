@@ -246,11 +246,9 @@ class ImpactFunctionMetadata(object):
             'actions': basestring,
             'limitations': list,  # list of string
             'citations': list,  # list of string
-            'map_title': basestring,
             'legend_title': basestring,
             'legend_units': basestring,
             'legend_notes': basestring,
-            'layer_name': basestring,
             'layer_requirements': dict
         }
 

@@ -63,7 +63,6 @@ class TsunamiRasterBuildingMetadata(ImpactFunctionMetadata):
             concrete impact function.
         :rtype: dict
         """
-        title = tr('Buildings affected by tsunami')
         dict_meta = {
             'id': 'TsunamiRasterBuildingFunction',
             'name': tr('Raster tsunami on buildings'),
@@ -107,8 +106,6 @@ class TsunamiRasterBuildingMetadata(ImpactFunctionMetadata):
                 }
             ],
             'legend_notes': '',
-            'map_title': title,
-            'layer_name': title,
             'legend_title': tr('Inundated structure status'),
             'legend_units': tr('(low, medium, high, and very high)'),
             'layer_requirements': {

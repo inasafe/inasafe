@@ -399,7 +399,7 @@ class FloodRasterRoadsFunction(
         # Convert QgsVectorLayer to inasafe layer and return it
         impact_layer = Vector(
             data=line_layer,
-            name=self.metadata().key('layer_name'),
+            name=self.map_title(),
             keywords=impact_layer_keywords,
             style_info=style_info)
 

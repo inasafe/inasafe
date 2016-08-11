@@ -369,7 +369,7 @@ class ITBFatalityFunction(
             projection=self.exposure.layer.get_projection(),
             geotransform=self.exposure.layer.get_geotransform(),
             keywords=impact_layer_keywords,
-            name=self.metadata().key('layer_name'),
+            name=self.map_title(),
             style_info=style_info)
 
         impact_layer.impact_data = impact_data
