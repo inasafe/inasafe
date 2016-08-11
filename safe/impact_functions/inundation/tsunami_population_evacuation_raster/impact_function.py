@@ -207,7 +207,7 @@ class TsunamiEvacuationFunction(
             impact,
             projection=self.hazard.layer.get_projection(),
             geotransform=self.hazard.layer.get_geotransform(),
-            name=self.metadata().key('layer_name'),
+            name=self.map_title(),
             keywords=impact_layer_keywords,
             style_info=style_info)
 

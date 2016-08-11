@@ -138,6 +138,8 @@ class Aggregator(QtCore.QObject):
         # It contains lists of objects that are covered by
         # aggregation polygons (one list for one polygon)
         self.impact_layer_attributes = []
+        # Initialize only
+        self.non_conflicting_agg_attribute = None
 
         # Notes(Ismail): Need to initialize Processing in QGIS 2.8.x
         self.processing = Processing
@@ -911,8 +913,12 @@ class Aggregator(QtCore.QObject):
             setFlags(QgsFeatureRequest.NoGeometry)
         # NOTE(IS): I use non conflicting agg attribute to avoid issue with
         # the same attribute in exposure layer #2750
-        agg_attribute_index = impact_layer_splits.dataProvider(). \
-            fieldNameIndex(self.non_conflicting_agg_attribute)
+        if self.non_conflicting_agg_attribute:
+            agg_attribute_index = impact_layer_splits.dataProvider(). \
+                fieldNameIndex(self.non_conflicting_agg_attribute)
+        else:
+            agg_attribute_index = impact_layer_splits.dataProvider(). \
+                fieldNameIndex(agg_attribute)
         for feat in impact_layer_splits.getFeatures(request):
             line_attributes = feat.attributes()
             polygon_name = line_attributes[agg_attribute_index]

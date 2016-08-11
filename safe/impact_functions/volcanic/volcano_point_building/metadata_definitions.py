@@ -50,7 +50,6 @@ class VolcanoPointBuildingFunctionMetadata(ImpactFunctionMetadata):
             concrete impact function.
         :rtype: dict
         """
-        title = tr('Buildings affected by volcano')
         dict_meta = {
             'id': 'VolcanoPointBuildingFunction',
             'name': tr('Point volcano on buildings'),
@@ -84,8 +83,6 @@ class VolcanoPointBuildingFunctionMetadata(ImpactFunctionMetadata):
                     'link': None
                 }
             ],
-            'map_title': title,
-            'layer_name': title,
             'legend_title': tr('Building count'),
             'legend_units': tr('(building)'),
             'legend_notes': tr(

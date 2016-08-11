@@ -236,8 +236,8 @@ class AshEvent(QObject):
         tokens = coordinates.split(',')
         longitude_string = tokens[0]
         latitude_string = tokens[1]
-        elapsed_time = datetime.datetime.utcnow().replace(
-            tzinfo=pytz.utc) - self.time
+        current_time = datetime.datetime.utcnow().replace(tzinfo=pytz.utc)
+        elapsed_time = current_time - self.time
         elapsed_hour = elapsed_time.seconds / 3600
         elapsed_minute = (elapsed_time.seconds / 60) % 60
         event = {

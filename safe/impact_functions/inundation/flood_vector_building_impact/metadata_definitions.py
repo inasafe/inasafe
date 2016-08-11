@@ -51,7 +51,6 @@ class FloodPolygonBuildingFunctionMetadata(ImpactFunctionMetadata):
             concrete impact function.
         :rtype: dict
         """
-        title = tr('Buildings affected by flood')
         dict_meta = {
             'id': 'FloodPolygonBuildingFunction',
             'name': tr('Polygon flood on buildings'),
@@ -88,8 +87,6 @@ class FloodPolygonBuildingFunctionMetadata(ImpactFunctionMetadata):
             ],
             'legend_units': '',
             'legend_notes': '',
-            'map_title': title,
-            'layer_name': title,
             'legend_title': tr('Structure inundated status'),
             'layer_requirements': {
                 'hazard': {
