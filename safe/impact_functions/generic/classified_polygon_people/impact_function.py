@@ -241,7 +241,7 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
 
         extra_keywords = {
             'target_field': self.target_field,
-            'map_title': self.metadata().key('map_title'),
+            'map_title': self.map_title(),
         }
 
         impact_layer_keywords = self.generate_impact_keywords(extra_keywords)
@@ -249,7 +249,7 @@ class ClassifiedPolygonHazardPolygonPeopleFunction(
         # Create vector layer and return
         impact_layer = Vector(
             data=impact_layer,
-            name=self.metadata().key('layer_name'),
+            name=self.map_title(),
             keywords=impact_layer_keywords,
             style_info=style_info)
 

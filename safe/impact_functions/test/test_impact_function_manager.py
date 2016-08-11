@@ -52,9 +52,7 @@ from safe.definitions import (
     exposure_land_cover,
     count_exposure_unit,
     density_exposure_unit,
-    layer_mode_classified,
     layer_mode_continuous,
-    layer_geometry_polygon,
     layer_mode_classified,
     layer_geometry_raster,
     layer_geometry_polygon,
@@ -307,6 +305,7 @@ class TestImpactFunctionManager(unittest.TestCase):
 
     def test_available_exposure_constraints(self):
         """Test for available_exposure_constraints."""
+        self.maxDiff = None
         ifm = ImpactFunctionManager()
         exposure_constraints = ifm.available_exposure_constraints(
             'population')

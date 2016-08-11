@@ -54,7 +54,6 @@ class ClassifiedPolygonHazardPopulationFunctionMetadata(
             concrete impact function.
         :rtype: dict
         """
-        title = tr('People affected')
         dict_meta = {
             'id': 'ClassifiedPolygonHazardPopulationFunction',
             'name': tr('Classified polygon hazard on population'),
@@ -83,8 +82,6 @@ class ClassifiedPolygonHazardPopulationFunctionMetadata(
                     'link': None
                 }
             ],
-            'map_title': title,
-            'layer_name': title,
             'legend_title': tr('Population'),
             'legend_units': tr('(people per cell)'),
             'legend_notes': tr(

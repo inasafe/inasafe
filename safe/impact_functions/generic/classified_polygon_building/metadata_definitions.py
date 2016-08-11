@@ -48,7 +48,6 @@ class ClassifiedPolygonHazardBuildingFunctionMetadata(ImpactFunctionMetadata):
             concrete impact function.
         :rtype: dict
         """
-        title = tr('Buildings affected')
         dict_meta = {
             'id': 'ClassifiedPolygonHazardBuildingFunction',
             'name': tr('Classified polygon hazard on buildings'),
@@ -80,8 +79,6 @@ class ClassifiedPolygonHazardBuildingFunctionMetadata(ImpactFunctionMetadata):
                     'link': None
                 }
             ],
-            'map_title': title,
-            'layer_name': title,
             'legend_title': tr('Building count'),
             'legend_units': tr('(building)'),
             'legend_notes': tr(

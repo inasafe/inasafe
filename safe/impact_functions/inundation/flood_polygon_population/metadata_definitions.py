@@ -58,7 +58,6 @@ class FloodEvacuationVectorHazardMetadata(ImpactFunctionMetadata):
             concrete impact function.
         :rtype: dict
         """
-        title = tr('People affected by flood')
         dict_meta = {
             'id': 'FloodEvacuationVectorHazardFunction',
             'name': tr('Polygon flood on people'),
@@ -99,8 +98,6 @@ class FloodEvacuationVectorHazardMetadata(ImpactFunctionMetadata):
                     'link': None
                 }
             ],
-            'map_title': title,
-            'layer_name': title,
             'legend_title': tr('Population Count'),
             'legend_units': tr('(people per polygon)'),
             'legend_notes': tr(
