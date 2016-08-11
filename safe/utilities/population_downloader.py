@@ -101,7 +101,7 @@ def download(
 
     # python requests to fetch json data from api
     url = 'https://worldpop-api-server.herokuapp.com/api'
-    
+
     request = Request(url, progress_dialog)
     response = request.post(data)
 
