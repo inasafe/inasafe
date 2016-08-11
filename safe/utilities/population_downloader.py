@@ -34,7 +34,13 @@ from safe.common.utilities import (
     unique_filename
 )
 
-from PyQt4.QtCore import QVariant
+from PyQt4.QtGui import (
+    QApplication,
+    QCursor)
+
+from PyQt4.QtCore import (
+    QVariant,
+    Qt)
 from safe.utilities.request import Request
 
 import logging
@@ -66,6 +72,7 @@ def download(
 
     :raises: ImportDialogError, CanceledImportDialogError
     """
+    QApplication.setOverrideCursor(QCursor(Qt.WaitCursor))
 
     # preparing coordinates of the dragged area
     min_longitude = extent[0]
@@ -94,12 +101,12 @@ def download(
 
     # python requests to fetch json data from api
     url = 'https://worldpop-api-server.herokuapp.com/api'
-
+    
     request = Request(url, progress_dialog)
     response = request.post(data)
 
     if response[0] is not False:
-        population_data = response[1]
+        population_data = str(response[1])
 
         file_path = output_base_path + '.geojson'
 
@@ -107,6 +114,8 @@ def download(
             outfile.write(population_data)
 
         create_layer(population_data, points)
+
+        QApplication.restoreOverrideCursor()
     else:
         _, error_message = response
 
