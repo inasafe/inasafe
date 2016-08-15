@@ -66,6 +66,9 @@ class Text(MessageElement):
         elif isinstance(text, QPyNullVariant):
             self.text.append(PlainText(
                 tr('Null (PyQt4.QtCore.QPyNullVariant) found from the data.')))
+        elif text is None:
+            self.text.append(PlainText(
+                tr('None or Null found from the data.')))
         else:
             raise InvalidMessageItemError(text, text.__class__)
 
