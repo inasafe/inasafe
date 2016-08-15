@@ -352,36 +352,41 @@ class AnalysisHandler(QObject):
             self.impact_function.requested_extent_crs = extent.user_extent_crs
 
     # noinspection PyUnresolvedReferences
-    def completed(self):
+    def completed(self, zero_impact):
         """Slot activated when the process is done.
+
+        :param zero_impact: Flag for zero impact.
+        :type zero_impact: bool
 
         .. note:: Adapted from the dock
         """
 
         # Try to run completion code
-        try:
-            from datetime import datetime
-            LOGGER.debug(datetime.now())
-            LOGGER.debug('get engine impact layer')
-            LOGGER.debug(self.impact_function is None)
+        # Show the result in the dock from layer if there is an impact.
+        if not zero_impact:
+            try:
+                from datetime import datetime
+                LOGGER.debug(datetime.now())
+                LOGGER.debug('get engine impact layer')
+                LOGGER.debug(self.impact_function is None)
 
-            # Load impact layer into QGIS
-            qgis_impact_layer = read_impact_layer(self.impact_function.impact)
-            report = self.show_results()
+                # Load impact layer into QGIS
+                qgis_impact_layer = read_impact_layer(self.impact_function.impact)
+                report = self.show_results()
 
-        except Exception, e:  # pylint: disable=W0703
-            # FIXME (Ole): This branch is not covered by the tests
-            self.analysis_error(e, self.tr('Error loading impact layer.'))
-        else:
-            # On success, display generated report
-            impact_path = qgis_impact_layer.source()
-            message = m.Message(report)
-            # message.add(m.Heading(self.tr('View processing log as HTML'),
-            #                      **INFO_STYLE))
-            # message.add(m.Link('file://%s' % self.parent.wvResults.log_path))
-            # noinspection PyTypeChecker
-            send_static_message(self, message)
-            self.parent.step_fc_analysis.wvResults.impact_path = impact_path
+            except Exception, e:  # pylint: disable=W0703
+                # FIXME (Ole): This branch is not covered by the tests
+                self.analysis_error(e, self.tr('Error loading impact layer.'))
+            else:
+                # On success, display generated report
+                impact_path = qgis_impact_layer.source()
+                message = m.Message(report)
+                # message.add(m.Heading(self.tr('View processing log as HTML'),
+                #                      **INFO_STYLE))
+                # message.add(m.Link('file://%s' % self.parent.wvResults.log_path))
+                # noinspection PyTypeChecker
+                send_static_message(self, message)
+                self.parent.step_fc_analysis.wvResults.impact_path = impact_path
 
         self.parent.step_fc_analysis.pbProgress.hide()
         self.parent.step_fc_analysis.lblAnalysisStatus.setText(
