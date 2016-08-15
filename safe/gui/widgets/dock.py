@@ -40,7 +40,9 @@ from safe.utilities.utilities import (
     get_error_message,
     impact_attribution,
     add_ordered_combo_item,
-    is_keyword_version_supported)
+    is_keyword_version_supported,
+    write_json
+)
 from safe.defaults import (
     disclaimer,
     default_north_arrow_path)
@@ -1419,8 +1421,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     impact_data = json.load(
                         json_file, object_pairs_hook=OrderedDict)
                     impact_data['post processing'] = postprocessor_data
-                    with open(json_path, 'w') as json_file_2:
-                        json.dump(impact_data, json_file_2, indent=2)
+                    write_json(impact_data, json_path)
         else:
             post_processing_report = self.impact_function.\
                 postprocessor_manager.get_output(
