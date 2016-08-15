@@ -11,11 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-__author__ = 'qgis@borysjurgiel.pl'
-__revision__ = '$Format:%H$'
-__date__ = '21/02/2011'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
 
 import os
 import json
@@ -26,7 +21,6 @@ from collections import OrderedDict
 from qgis.core import (
     QgsCoordinateTransform,
     QgsRectangle,
-    QgsMapLayerRegistry,
     QgsCoordinateReferenceSystem)
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
@@ -36,7 +30,9 @@ from PyQt4.QtCore import QObject, QSettings, pyqtSignal
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.utilities import (
     get_error_message,
-    impact_attribution)
+    impact_attribution,
+    write_json
+)
 from safe.utilities.gis import (
     extent_string_to_array,
     read_impact_layer,
@@ -72,6 +68,12 @@ from safe.utilities.extent import Extent
 from safe.utilities.qgis_utilities import add_above_layer
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.impact_template.utilities import get_report_template
+
+__author__ = 'qgis@borysjurgiel.pl'
+__revision__ = '$Format:%H$'
+__date__ = '21/02/2011'
+__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
+                 'Disaster Reduction')
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 INFO_STYLE = styles.INFO_STYLE
@@ -352,36 +354,41 @@ class AnalysisHandler(QObject):
             self.impact_function.requested_extent_crs = extent.user_extent_crs
 
     # noinspection PyUnresolvedReferences
-    def completed(self):
+    def completed(self, zero_impact):
         """Slot activated when the process is done.
+
+        :param zero_impact: Flag for zero impact.
+        :type zero_impact: bool
 
         .. note:: Adapted from the dock
         """
 
         # Try to run completion code
-        try:
-            from datetime import datetime
-            LOGGER.debug(datetime.now())
-            LOGGER.debug('get engine impact layer')
-            LOGGER.debug(self.impact_function is None)
+        # Show the result in the dock from layer if there is an impact.
+        if not zero_impact:
+            try:
+                from datetime import datetime
+                LOGGER.debug(datetime.now())
+                LOGGER.debug('get engine impact layer')
+                LOGGER.debug(self.impact_function is None)
 
-            # Load impact layer into QGIS
-            qgis_impact_layer = read_impact_layer(self.impact_function.impact)
-            report = self.show_results()
+                # Load impact layer into QGIS
+                qgis_impact_layer = read_impact_layer(self.impact_function.impact)
+                report = self.show_results()
 
-        except Exception, e:  # pylint: disable=W0703
-            # FIXME (Ole): This branch is not covered by the tests
-            self.analysis_error(e, self.tr('Error loading impact layer.'))
-        else:
-            # On success, display generated report
-            impact_path = qgis_impact_layer.source()
-            message = m.Message(report)
-            # message.add(m.Heading(self.tr('View processing log as HTML'),
-            #                      **INFO_STYLE))
-            # message.add(m.Link('file://%s' % self.parent.wvResults.log_path))
-            # noinspection PyTypeChecker
-            send_static_message(self, message)
-            self.parent.step_fc_analysis.wvResults.impact_path = impact_path
+            except Exception, e:  # pylint: disable=W0703
+                # FIXME (Ole): This branch is not covered by the tests
+                self.analysis_error(e, self.tr('Error loading impact layer.'))
+            else:
+                # On success, display generated report
+                impact_path = qgis_impact_layer.source()
+                message = m.Message(report)
+                # message.add(m.Heading(self.tr('View processing log as HTML'),
+                #                      **INFO_STYLE))
+                # message.add(m.Link('file://%s' % self.parent.wvResults.log_path))
+                # noinspection PyTypeChecker
+                send_static_message(self, message)
+                self.parent.step_fc_analysis.wvResults.impact_path = impact_path
 
         self.parent.step_fc_analysis.pbProgress.hide()
         self.parent.step_fc_analysis.lblAnalysisStatus.setText(
@@ -425,8 +432,7 @@ class AnalysisHandler(QObject):
                 impact_data = json.load(
                     json_file, object_pairs_hook=OrderedDict)
                 impact_data['post processing'] = postprocessor_data
-                with open(json_path, 'w') as json_file_2:
-                    json.dump(impact_data, json_file_2, indent=2)
+                write_json(impact_data, json_path)
         else:
             post_processing_report = self.impact_function.\
                 postprocessor_manager.get_output(

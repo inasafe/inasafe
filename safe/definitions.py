@@ -156,7 +156,7 @@ concepts = {
             }
         ],
     },
-    'killed_people': {
+    'injured_people': {
         'description': tr(
             'People suffering from a new or exacerbated physical or '
             'psychological harm, trauma or an illness as a result of a '
@@ -171,7 +171,7 @@ concepts = {
             }
         ],
       },
-    'injured_people': {
+    'killed_people': {
         'description': tr('People who lost their lives as a consequence of a '
                 'hazardous event.'),
         'citations': [

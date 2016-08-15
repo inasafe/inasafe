@@ -62,7 +62,8 @@ from safe.common.utilities import (
 )
 from safe.utilities.utilities import (
     get_error_message,
-    replace_accentuated_characters
+    replace_accentuated_characters,
+    write_json
 )
 from safe.utilities.memory_checker import check_memory_usage
 from safe.utilities.i18n import tr
@@ -1811,8 +1812,7 @@ class ImpactFunction(object):
         if hasattr(result_layer, 'impact_data'):
             impact_data = result_layer.impact_data
             json_file_name = os.path.splitext(output_filename)[0] + '.json'
-            with open(json_file_name, 'w') as json_file:
-                json.dump(impact_data, json_file, indent=2)
+            write_json(impact_data, json_file_name)
 
         # Establish default name (layer1 X layer1 x impact_function)
         if not result_layer.get_name():

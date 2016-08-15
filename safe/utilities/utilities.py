@@ -19,6 +19,9 @@ import webbrowser
 import unicodedata
 import codecs
 from collections import OrderedDict
+import json
+
+from PyQt4.QtCore import QPyNullVariant
 
 from safe.common.utilities import unique_filename
 from safe.common.version import get_version
@@ -440,3 +443,26 @@ def is_keyword_version_supported(
             return False
     else:
         return False
+
+
+def write_json(data, filename):
+    """Custom handler for writing json file in InaSAFE.
+
+    Criteria:
+    - use indent = 2
+    - Handle NULL from QGIS
+
+    :param data: The data that will be written.
+    :type data: dict
+
+    :param filename: The file name.
+    :type filename: str
+    """
+
+    def custom_default(obj):
+        if isinstance(obj, QPyNullVariant):
+            return 'Null'
+        raise TypeError
+
+    with open(filename, 'w') as json_file:
+        json.dump(data, json_file, indent=2, default=custom_default)
