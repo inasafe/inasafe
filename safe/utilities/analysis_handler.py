@@ -11,11 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-__author__ = 'qgis@borysjurgiel.pl'
-__revision__ = '$Format:%H$'
-__date__ = '21/02/2011'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
 
 import os
 import json
@@ -26,7 +21,6 @@ from collections import OrderedDict
 from qgis.core import (
     QgsCoordinateTransform,
     QgsRectangle,
-    QgsMapLayerRegistry,
     QgsCoordinateReferenceSystem)
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
@@ -36,7 +30,9 @@ from PyQt4.QtCore import QObject, QSettings, pyqtSignal
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.utilities import (
     get_error_message,
-    impact_attribution)
+    impact_attribution,
+    write_json
+)
 from safe.utilities.gis import (
     extent_string_to_array,
     read_impact_layer,
@@ -72,6 +68,12 @@ from safe.utilities.extent import Extent
 from safe.utilities.qgis_utilities import add_above_layer
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.impact_template.utilities import get_report_template
+
+__author__ = 'qgis@borysjurgiel.pl'
+__revision__ = '$Format:%H$'
+__date__ = '21/02/2011'
+__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
+                 'Disaster Reduction')
 
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
 INFO_STYLE = styles.INFO_STYLE
@@ -425,8 +427,7 @@ class AnalysisHandler(QObject):
                 impact_data = json.load(
                     json_file, object_pairs_hook=OrderedDict)
                 impact_data['post processing'] = postprocessor_data
-                with open(json_path, 'w') as json_file_2:
-                    json.dump(impact_data, json_file_2, indent=2)
+                write_json(impact_data, json_path)
         else:
             post_processing_report = self.impact_function.\
                 postprocessor_manager.get_output(
