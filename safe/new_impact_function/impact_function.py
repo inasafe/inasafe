@@ -256,6 +256,34 @@ class ImpactFunction(object):
         """
         self._viewport_extent = viewport_extent
 
+    @property
+    def callback(self):
+        """Property for the callback used to relay processing progress.
+
+        :returns: A callback function. The callback function will have the
+            following parameter requirements.
+
+            progress_callback(current, maximum, message=None)
+
+        :rtype: function
+
+        .. seealso:: console_progress_callback
+        """
+        return self._callback
+
+    @callback.setter
+    def callback(self, callback):
+        """Setter for callback property.
+
+        :param callback: A callback function reference that provides the
+            following signature:
+
+            progress_callback(current, maximum, message=None)
+
+        :type callback: function
+        """
+        self._callback = callback
+
     def set_algorithm(self):
         if self.exposure.keyword('layer_geometry') == 'raster':
             self.algorithm = RasterAlgorithm
@@ -274,6 +302,8 @@ class ImpactFunction(object):
         pass
 
     def run_algorithm(self):
+        #TODO(IS) : Think how we can pass the affected field and aggregation
+        # field
         algorithm_instance = self.algorithm(
             self.hazard.layer,
             self.exposure.layer,
@@ -290,3 +320,23 @@ class ImpactFunction(object):
 
     def run(self):
         pass
+
+    @staticmethod
+    def console_progress_callback(current, maximum, message=None):
+        """Simple console based callback implementation for tests.
+
+        :param current: Current progress.
+        :type current: int
+
+        :param maximum: Maximum range (point at which task is complete.
+        :type maximum: int
+
+        :param message: Optional message to display in the progress bar
+        :type message: str, QString
+        """
+        # noinspection PyChainedComparisons
+        if maximum > 1000 and current % 1000 != 0 and current != maximum:
+            return
+        if message is not None:
+            print message
+        print 'Task progress: %i of %i' % (current, maximum)
