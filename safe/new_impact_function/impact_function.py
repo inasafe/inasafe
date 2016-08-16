@@ -49,7 +49,7 @@ class ImpactFunction(object):
 
         self.algorithm = None
         self.impact_layer = None
-        self._affected_field = 'hazard'
+        self._hazard_field = 'hazard'
         self._aggregation_field = 'agg_area'
 
     @property
@@ -104,8 +104,8 @@ class ImpactFunction(object):
 
         if self._exposure.is_qgsvectorlayer():
             # Update the affected field to a non-conflicting one
-            self.affected_field = get_non_conflicting_attribute_name(
-                self.affected_field,
+            self.hazard_field = get_non_conflicting_attribute_name(
+                self.hazard_field,
                 self._exposure.layer.dataProvider().fieldNameMap().keys()
             )
 
@@ -113,7 +113,7 @@ class ImpactFunction(object):
             self.aggregation_field = get_non_conflicting_attribute_name(
                 self.aggregation_field,
                 (self._exposure.layer.dataProvider().fieldNameMap().keys()
-                 + [self.affected_field])
+                 + [self.hazard_field])
             )
         self.set_algorithm()
 
@@ -143,22 +143,22 @@ class ImpactFunction(object):
             raise InvalidLayerError(message)
 
     @property
-    def affected_field(self):
+    def hazard_field(self):
         """Property for the affected_field of the impact layer.
 
         :returns: The affected_field in the impact layer in case it's a vector.
         :rtype: unicode, str
         """
-        return self._affected_field
+        return self._hazard_field
 
-    @affected_field.setter
-    def affected_field(self, affected_field):
+    @hazard_field.setter
+    def hazard_field(self, affected_field):
         """Setter for the affected_field of the impact layer.
 
         :param affected_field: Field name.
         :type affected_field: str
         """
-        self._affected_field = affected_field
+        self._hazard_field = affected_field
 
     @property
     def aggregation_field(self):
