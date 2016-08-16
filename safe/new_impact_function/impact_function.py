@@ -30,7 +30,8 @@ class ImpactFunction(object):
 
         self.algorithm = None
         self.impact_layer = None
-        self._target_field = 'affected'
+        self._affected_field = 'hazard'
+        self._aggregation_field = 'agg_area'
 
     @property
     def hazard(self):
@@ -53,15 +54,9 @@ class ImpactFunction(object):
         elif isinstance(layer, QgsMapLayer):
             self._hazard = SafeLayer(layer)
         else:
-            message = tr('Layer should be SafeLayer or QgsMapLayer')
+            message = tr('Hazard layer should be SafeLayer or QgsMapLayer')
             raise Exception(message)
 
-        # Update the target field to a non-conflicting one
-        if self._hazard.is_qgsvectorlayer():
-            self.target_field = get_non_conflicting_attribute_name(
-                self.target_field,
-                self._hazard.layer.dataProvider().fieldNameMap().keys()
-            )
         self.set_algorithm()
 
     @property
@@ -78,41 +73,91 @@ class ImpactFunction(object):
         """Setter for exposure layer property.
 
         :param layer: exposure layer to be used for the analysis.
-        :type layer: SafeLayer
+        :type layer: SafeLayer, QgsMapLayer
         """
         if isinstance(layer, SafeLayer):
             self._exposure = layer
         elif isinstance(layer, QgsMapLayer):
             self._exposure = SafeLayer(layer)
         else:
-            message = tr('Layer should be SafeLayer or QgsMapLayer')
+            message = tr('Exposure layer should be SafeLayer or QgsMapLayer')
             raise Exception(message)
 
-        # Update the target field to a non-conflicting one
         if self._exposure.is_qgsvectorlayer():
-            self.target_field = get_non_conflicting_attribute_name(
-                self.target_field,
+            # Update the affected field to a non-conflicting one
+            self.affected_field = get_non_conflicting_attribute_name(
+                self.affected_field,
                 self._exposure.layer.dataProvider().fieldNameMap().keys()
+            )
+
+            # Update the aggregation field to a non-conflicting one
+            self.aggregation_field = get_non_conflicting_attribute_name(
+                self.aggregation_field,
+                (self._exposure.layer.dataProvider().fieldNameMap().keys()
+                 + [self.affected_field])
             )
         self.set_algorithm()
 
     @property
-    def target_field(self):
-        """Property for the target_field of the impact layer.
+    def aggregation(self):
+        """Property for the aggregation layer to be used for the analysis.
 
-        :returns: The target field in the impact layer in case it's a vector.
+        :returns: A map layer.
+        :rtype: SafeLayer
+        """
+        return self._exposure
+
+    @aggregation.setter
+    def aggregation(self, layer):
+        """Setter for aggregation layer property.
+
+        :param layer: aggregation layer to be used for the analysis.
+        :type layer: SafeLayer, QgsMapLayer
+        """
+        if isinstance(layer, SafeLayer):
+            self._aggregation = layer
+        elif isinstance(layer, QgsMapLayer):
+            self._aggregation = SafeLayer(layer)
+        else:
+            message = tr(
+                'Aggregation layer should be SafeLayer or QgsMapLayer')
+            raise Exception(message)
+
+    @property
+    def affected_field(self):
+        """Property for the affected_field of the impact layer.
+
+        :returns: The affected_field in the impact layer in case it's a vector.
         :rtype: unicode, str
         """
-        return self._target_field
+        return self._affected_field
 
-    @target_field.setter
-    def target_field(self, target_field):
-        """Setter for the target_field of the impact layer.
+    @affected_field.setter
+    def affected_field(self, affected_field):
+        """Setter for the affected_field of the impact layer.
 
-        :param target_field: Field name.
-        :type target_field: str
+        :param affected_field: Field name.
+        :type affected_field: str
         """
-        self._target_field = target_field
+        self._affected_field = affected_field
+
+    @property
+    def aggregation_field(self):
+        """Property for the aggregation_field of the impact layer.
+
+        :returns: The aggregation_field in the impact layer
+        :rtype: unicode, str
+        """
+        return self._aggregation_field
+
+    @aggregation_field.setter
+    def aggregation_field(self, aggregation_field):
+        """Setter for the aggregation_field of the impact layer.
+
+        :param aggregation_field: Field name.
+        :type aggregation_field: str
+        """
+        self._aggregation_field = aggregation_field
 
     def set_algorithm(self):
         if self.exposure.keyword('layer_geometry') == 'raster':
