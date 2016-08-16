@@ -170,7 +170,7 @@ class ImpactFunction(object):
         # ABC's will normally set this property.
         self._impact_style = None
         # The target field for vector impact layer
-        self._target_field = 'safe_ag'
+        self._target_field = 'affected'
         # The string to mark not affected value in the vector impact layer
         self._not_affected_value = 'Not Affected'
         # Store provenances
