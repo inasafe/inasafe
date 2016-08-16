@@ -9,4 +9,6 @@ from safe.new_impact_function.algorithm.base import BaseAlgorithm
 
 
 class PointAlgorithm(BaseAlgorithm):
+    # Algorithm name : saga:addpolygonattributestopoints
     pass
+

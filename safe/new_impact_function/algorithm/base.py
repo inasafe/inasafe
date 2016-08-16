@@ -22,11 +22,15 @@ class BaseAlgorithm(object):
         :param extent: The extent
         :type extent: QgsRectangle
         """
-        pass
+        self.hazard = hazard
+        self.exposure = exposure
+        self.aggregation = aggregation
+        self.extent = extent
+
     def run(self):
         """Run the algorithm
 
         :returns: Vector layer.
         :rtype: QgsVectorLayer
         """
-        return None
+        return self.exposure
