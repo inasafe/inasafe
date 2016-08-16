@@ -1,11 +1,11 @@
-__author__ = 'ismailsunni'
-__project_name__ = 'inasafe-dev'
-__filename__ = 'impact_function'
-__date__ = '8/16/16'
-__copyright__ = 'imajimatika@gmail.com'
 
-from qgis.core import QgsMapLayer
 
+from qgis.core import (
+    QgsMapLayer,
+    QgsCoordinateReferenceSystem,
+    QgsRectangle)
+
+from safe.common.exceptions import InvalidExtentError, InvalidLayerError
 from safe.utilities.i18n import tr
 from safe.common.utilities import get_non_conflicting_attribute_name
 from safe.storage.safe_layer import SafeLayer
@@ -19,6 +19,13 @@ from safe.new_impact_function.algorithm.indivisible_polygon import (
 )
 
 
+__author__ = 'ismailsunni'
+__project_name__ = 'inasafe-dev'
+__filename__ = 'impact_function'
+__date__ = '8/16/16'
+__copyright__ = 'imajimatika@gmail.com'
+
+
 class ImpactFunction(object):
     """Impact Function."""
 
@@ -26,7 +33,19 @@ class ImpactFunction(object):
         self._hazard = None
         self._exposure = None
         self._aggregation = None
-        self._extent = None
+        # Requested extent to use
+        self._requested_extent = None
+        # Requested extent's CRS
+        self._requested_extent_crs = QgsCoordinateReferenceSystem('EPSG:4326')
+        # The current viewport extent of the map canvas
+        self._viewport_extent = None
+        # Actual extent to use - Read Only
+        # For 'old-style' IF we do some manipulation to the requested extent
+        self._actual_extent = None
+        # Actual extent's CRS - Read Only
+        self._actual_extent_crs = QgsCoordinateReferenceSystem('EPSG:4326')
+        # set this to a gui call back / web callback etc as needed.
+        self._callback = self.console_progress_callback
 
         self.algorithm = None
         self.impact_layer = None
@@ -55,7 +74,7 @@ class ImpactFunction(object):
             self._hazard = SafeLayer(layer)
         else:
             message = tr('Hazard layer should be SafeLayer or QgsMapLayer')
-            raise Exception(message)
+            raise InvalidLayerError(message)
 
         self.set_algorithm()
 
@@ -81,7 +100,7 @@ class ImpactFunction(object):
             self._exposure = SafeLayer(layer)
         else:
             message = tr('Exposure layer should be SafeLayer or QgsMapLayer')
-            raise Exception(message)
+            raise InvalidLayerError(message)
 
         if self._exposure.is_qgsvectorlayer():
             # Update the affected field to a non-conflicting one
@@ -121,7 +140,7 @@ class ImpactFunction(object):
         else:
             message = tr(
                 'Aggregation layer should be SafeLayer or QgsMapLayer')
-            raise Exception(message)
+            raise InvalidLayerError(message)
 
     @property
     def affected_field(self):
@@ -159,6 +178,84 @@ class ImpactFunction(object):
         """
         self._aggregation_field = aggregation_field
 
+    @property
+    def requested_extent(self):
+        """Property for the extent of impact function analysis.
+
+        :returns: A QgsRectangle.
+        :rtype: QgsRectangle
+        """
+        return self._requested_extent
+
+    @requested_extent.setter
+    def requested_extent(self, extent):
+        """Setter for extent property.
+
+        :param extent: Analysis boundaries expressed as a QgsRectangle.
+        The extent CRS should match the extent_crs property of this IF instance.
+        :type extent: QgsRectangle
+        """
+        if isinstance(extent, QgsRectangle):
+            self._requested_extent = extent
+        else:
+            raise InvalidExtentError('%s is not a valid extent.' % extent)
+
+    @property
+    def requested_extent_crs(self):
+        """Property for the extent CRS of impact function analysis.
+
+        :return crs: The coordinate reference system for the analysis boundary.
+        :rtype: QgsCoordinateReferenceSystem
+        """
+        return self._requested_extent_crs
+
+    @requested_extent_crs.setter
+    def requested_extent_crs(self, crs):
+        """Setter for extent_crs property.
+
+        :param crs: The coordinate reference system for the analysis boundary.
+        :type crs: QgsCoordinateReferenceSystem
+        """
+        self._requested_extent_crs = crs
+
+    @property
+    def actual_extent(self):
+        """Property for the actual extent of impact function analysis.
+
+        :returns: A QgsRectangle.
+        :rtype: QgsRectangle
+        """
+        return self._actual_extent
+
+    @property
+    def actual_extent_crs(self):
+        """Property for the actual extent crs for analysis.
+
+        :returns: The CRS for the actual extent.
+        :rtype: QgsCoordinateReferenceSystem
+        """
+        return self._actual_extent_crs
+
+    @property
+    def viewport_extent(self):
+        """Property for the viewport extent of the map canvas.
+
+        :returns: A QgsRectangle.
+        :rtype: QgsRectangle
+        """
+        return self._viewport_extent
+
+    @viewport_extent.setter
+    def viewport_extent(self, viewport_extent):
+        """Setter for the viewport extent of the map canvas.
+
+        :param viewport_extent: Analysis boundaries expressed as a
+        QgsRectangle. The extent CRS should match the extent_crs property of
+        this IF instance.
+        :type viewport_extent: QgsRectangle
+        """
+        self._viewport_extent = viewport_extent
+
     def set_algorithm(self):
         if self.exposure.keyword('layer_geometry') == 'raster':
             self.algorithm = RasterAlgorithm
@@ -173,6 +270,7 @@ class ImpactFunction(object):
 
     def preprocess(self):
         """"""
+        # Clipping
         pass
 
     def run_algorithm(self):
@@ -180,7 +278,7 @@ class ImpactFunction(object):
             self.hazard.layer,
             self.exposure.layer,
             self.aggregation.layer,
-            self.extent
+            self.actual_extent
         )
         self.impact_layer = algorithm_instance.run()
         # Add impact keywords after this
