@@ -46,7 +46,7 @@ class TestImpactFunction(unittest.TestCase):
         impact_function.hazard = hazard_layer
         impact_function.run()
         result = impact_function.impact_layer
-        pass
+        self.assertIsNotNone(result)
 
 if __name__ == '__main__':
     unittest.main()
