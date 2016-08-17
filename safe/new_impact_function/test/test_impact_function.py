@@ -12,7 +12,7 @@ from qgis.core import QgsVectorLayer
 class TestImpactFunction(unittest.TestCase):
     """Test for Generic Polygon on Building Impact Function."""
 
-    def test_impact_function(self):
+    def test_impact_function_behaviour(self):
         """Test behaviour of impact function"""
         hazard_path = standard_data_path(
             'hazard', 'flood_multipart_polygons.shp')
@@ -26,6 +26,8 @@ class TestImpactFunction(unittest.TestCase):
         impact_function.exposure = exposure_layer
         impact_function.hazard = hazard_layer
         self.assertEqual(impact_function.algorithm, LineAlgorithm)
+        self.assertEqual(impact_function.name, 'Flood Polygon on Road Line')
+        self.assertEqual(impact_function.title, 'be affected')
 
 
 if __name__ == '__main__':

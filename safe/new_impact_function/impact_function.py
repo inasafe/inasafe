@@ -52,6 +52,9 @@ class ImpactFunction(object):
         self._hazard_field = 'hazard'
         self._aggregation_field = 'agg_area'
 
+        self._name = None  # e.g. Flood Raster on Building Polygon
+        self._title = None  # be affected
+
     @property
     def hazard(self):
         """Property for the hazard layer to be used for the analysis.
@@ -76,7 +79,7 @@ class ImpactFunction(object):
             message = tr('Hazard layer should be SafeLayer or QgsMapLayer')
             raise InvalidLayerError(message)
 
-        self.set_algorithm()
+        self.setup_impact_function()
 
     @property
     def exposure(self):
@@ -115,7 +118,7 @@ class ImpactFunction(object):
                 (self._exposure.layer.dataProvider().fieldNameMap().keys()
                  + [self.hazard_field])
             )
-        self.set_algorithm()
+        self.setup_impact_function()
 
     @property
     def aggregation(self):
@@ -257,6 +260,24 @@ class ImpactFunction(object):
         self._viewport_extent = viewport_extent
 
     @property
+    def name(self):
+        """The name of the impact function
+
+        :returns: The name.
+        :rtype: basestring
+        """
+        return self._name
+
+    @property
+    def title(self):
+        """The title of the impact function
+
+        :returns: The title.
+        :rtype: basestring
+        """
+        return self._title
+
+    @property
     def callback(self):
         """Property for the callback used to relay processing progress.
 
@@ -284,9 +305,36 @@ class ImpactFunction(object):
         """
         self._callback = callback
 
+    def setup_impact_function(self):
+        """Automatically called when the hazard or exposure is changed.
+        """
+        if not self.hazard or not self.exposure:
+            return
+
+        # Set the algorithm
+        self.set_algorithm()
+
+        # Set the name
+        self._name = '%s %s on %s %s' % (
+            self.hazard.keyword('hazard').title(),
+            self.hazard.keyword('layer_geometry').title(),
+            self.exposure.keyword('exposure').title(),
+            self.exposure.keyword('layer_geometry').title(),
+        )
+
+        # Set the title
+        if self.exposure.keyword('exposure') == 'population':
+            self._title = tr('need evacuation')
+        else:
+            self._title = tr('be affected')
+
     def set_algorithm(self):
         if self.exposure.keyword('layer_geometry') == 'raster':
-            self.algorithm = RasterAlgorithm
+            # Special case for Raster Earthquake hazard.
+            if self.hazard.keyword('hazard') == 'earthquake':
+                pass
+            else:
+                self.algorithm = RasterAlgorithm
         elif self.exposure.keyword('layer_geometry') == 'point':
             self.algorithm = PointAlgorithm
         elif self.exposure.keyword('exposure') == 'structure':
@@ -297,29 +345,36 @@ class ImpactFunction(object):
             self.algorithm = PolygonAlgorithm
 
     def preprocess(self):
-        """"""
+        """Run process before running the main work / algorithm"""
         # Clipping
+        # Convert hazard to classified vector
         pass
 
     def run_algorithm(self):
-        #TODO(IS) : Think how we can pass the affected field and aggregation
-        # field
+        """Run the algorithm
+        """
         algorithm_instance = self.algorithm(
-            self.hazard.layer,
-            self.exposure.layer,
-            self.aggregation.layer,
-            self.actual_extent
+            hazard=self.hazard.layer,
+            exposure=self.exposure.layer,
+            aggregation=self.aggregation.layer,
+            extent=self.actual_extent,
+            hazard_field=self.hazard_field,
+            aggregation_field=self.aggregation_field
         )
         self.impact_layer = algorithm_instance.run()
         # Add impact keywords after this
 
 
     def post_process(self):
-        """"""
+        """More process after getting the impact layer with data."""
+        # Post processor (gender, age, building type, etc)
+        # Notes, action
         pass
 
     def run(self):
-        pass
+        self.preprocess()
+        self.run_algorithm()
+        self.post_process()
 
     @staticmethod
     def console_progress_callback(current, maximum, message=None):
