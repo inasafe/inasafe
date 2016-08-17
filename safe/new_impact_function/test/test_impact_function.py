@@ -29,6 +29,24 @@ class TestImpactFunction(unittest.TestCase):
         self.assertEqual(impact_function.name, 'Flood Polygon on Road Line')
         self.assertEqual(impact_function.title, 'be affected')
 
+    def test_run_impact_function(self):
+        """Test running impact function on test data."""
+        # Set up test data
+        hazard_path = standard_data_path(
+            'hazard', 'flood_multipart_polygons.shp')
+        exposure_path = standard_data_path('exposure', 'building-points.shp')
+        # noinspection PyCallingNonCallable
+        hazard_layer = QgsVectorLayer(hazard_path, 'Flood', 'ogr')
+        # noinspection PyCallingNonCallable
+        exposure_layer = QgsVectorLayer(exposure_path, 'Building Point', 'ogr')
+
+        # Set up impact function
+        impact_function = ImpactFunction()
+        impact_function.exposure = exposure_layer
+        impact_function.hazard = hazard_layer
+        impact_function.run()
+        result = impact_function.impact_layer
+        pass
 
 if __name__ == '__main__':
     unittest.main()

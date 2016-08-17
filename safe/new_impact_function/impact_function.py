@@ -127,7 +127,7 @@ class ImpactFunction(object):
         :returns: A map layer.
         :rtype: SafeLayer
         """
-        return self._exposure
+        return self._aggregation
 
     @aggregation.setter
     def aggregation(self, layer):
@@ -347,7 +347,8 @@ class ImpactFunction(object):
     def preprocess(self):
         """Run process before running the main work / algorithm"""
         # Clipping
-        # Convert hazard to classified vector
+        # Convert hazard to classified vecto
+        # Aggregation if needed
         pass
 
     def run_algorithm(self):
@@ -356,10 +357,13 @@ class ImpactFunction(object):
         algorithm_instance = self.algorithm(
             hazard=self.hazard.layer,
             exposure=self.exposure.layer,
-            aggregation=self.aggregation.layer,
+            # aggregation=self.aggregation.layer,
             extent=self.actual_extent,
             hazard_field=self.hazard_field,
-            aggregation_field=self.aggregation_field
+            aggregation_field=self.aggregation_field,
+            original_hazard_field=self.hazard.keyword('field'),
+            # original_aggregation_field=self.aggregation.keyword(
+            #     'aggregation_attribute')
         )
         self.impact_layer = algorithm_instance.run()
         # Add impact keywords after this
