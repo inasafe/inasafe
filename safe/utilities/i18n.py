@@ -22,6 +22,8 @@ Contact : ole.moller.nielsen@gmail.com
 import qgis  # pylint: disable=unused-import
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import QCoreApplication, QSettings, QLocale
+import logging
+
 from safe.utilities.unicode import get_unicode
 
 __author__ = 'tim@kartoza.com'
@@ -29,6 +31,8 @@ __revision__ = '$Format:%H$'
 __date__ = '02/24/15'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
+
+LOGGER = logging.getLogger('InaSAFE')
 
 
 def tr(text, context='@default'):
@@ -51,14 +55,33 @@ def tr(text, context='@default'):
     # Ensure it's in unicode
     text = get_unicode(text)
     # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
-    return QCoreApplication.translate(context, text)
+    translated_text = QCoreApplication.translate(context, text)
+    # Check if there is missing container. If so, return the original text.
+    # See #3164
+    if text.count('%') == translated_text.count('%'):
+        return translated_text
+    else:
+        content = (
+            'There is a problem in the translation text.\n'
+            'The original text: "%s".\n'
+            'The translation: "%s".\n'
+            'The number of %% character does not match (%s and %s).'
+            'Please check the translation in transifex for %s.' % (
+            text,
+            translated_text,
+            text.count('%'),
+            translated_text.count('%s'),
+            locale()
+        ))
+        LOGGER.warning(content)
+        return text
 
 
 def locale():
     """Get the name of the currently active locale.
 
     :returns: Name of hte locale e.g. 'id'
-    :rtype: stre
+    :rtype: str
     """
     override_flag = QSettings().value(
         'locale/overrideFlag', True, type=bool)
