@@ -373,7 +373,8 @@ class AnalysisHandler(QObject):
                 LOGGER.debug(self.impact_function is None)
 
                 # Load impact layer into QGIS
-                qgis_impact_layer = read_impact_layer(self.impact_function.impact)
+                qgis_impact_layer = read_impact_layer(
+                    self.impact_function.impact)
                 report = self.show_results()
 
             except Exception, e:  # pylint: disable=W0703
@@ -383,12 +384,10 @@ class AnalysisHandler(QObject):
                 # On success, display generated report
                 impact_path = qgis_impact_layer.source()
                 message = m.Message(report)
-                # message.add(m.Heading(self.tr('View processing log as HTML'),
-                #                      **INFO_STYLE))
-                # message.add(m.Link('file://%s' % self.parent.wvResults.log_path))
                 # noinspection PyTypeChecker
                 send_static_message(self, message)
-                self.parent.step_fc_analysis.wvResults.impact_path = impact_path
+                self.parent.step_fc_analysis.wvResults.impact_path = \
+                    impact_path
 
         self.parent.step_fc_analysis.pbProgress.hide()
         self.parent.step_fc_analysis.lblAnalysisStatus.setText(
