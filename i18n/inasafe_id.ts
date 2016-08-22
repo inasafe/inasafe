@@ -5885,7 +5885,7 @@ Dalam studi ini, bentuk fungsional yang sama dengan Allen (2009) diadopsi untuk 
     <message>
         <location filename="impact_function.py" line="101"/>
         <source>Very high ash hazard zone is defined as ash depth is more than %.1f %s</source>
-        <translation>Daerah ancaman abu Sangat Tinggi didefinisikan sebagai ketinggian abu yang lebih dari %s %s namun kurang dari %.1f %s</translation>
+        <translation>Daerah ancaman abu sangat tinggi didefinisikan sebagai ketinggian abu yang lebih dari %.1f %s</translation>
     </message>
     <message>
         <location filename="metadata_definitions.py" line="54"/>
