@@ -83,7 +83,7 @@ def extract_path(scenario_file_path, path):
     return path, base_name
 
 
-def add_layers(scenario_dir, paths, iface):   # pylint: disable=W0621
+def add_layers(scenario_dir, paths, iface, layer_group):   # pylint: disable=W0621
     """Add the layers described in a scenario file to QGIS.
 
     :param scenario_dir: Base directory to find path.
@@ -131,7 +131,10 @@ def add_layers(scenario_dir, paths, iface):   # pylint: disable=W0621
         else:
             raise Exception('File %s had illegal extension' % path)
     # noinspection PyUnresolvedReferences
-    QgsMapLayerRegistry.instance().addMapLayers(layer_set)
+    QgsMapLayerRegistry.instance().addMapLayers(layer_set, False)
+    # add to group
+    for layer in layer_set:
+        layer_group.addLayer(layer)
     # noinspection PyCallingNonCallable
     iface.mapCanvas().setLayerSet([QgsMapCanvasLayer(layer) for layer in
                                    layer_set])

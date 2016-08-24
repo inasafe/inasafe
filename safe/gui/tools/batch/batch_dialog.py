@@ -27,7 +27,11 @@ from StringIO import StringIO
 from ConfigParser import ConfigParser, MissingSectionHeaderError, ParsingError
 
 from qgis.core import (
-    QgsRectangle, QgsCoordinateReferenceSystem, QgsMapLayerRegistry)
+    QgsRectangle, 
+    QgsCoordinateReferenceSystem, 
+    QgsMapLayerRegistry, 
+    QgsProject, 
+    QgsVectorLayer)
 
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature, pyqtSlot, QSettings, Qt
@@ -83,6 +87,9 @@ class BatchDialog(QDialog, FORM_CLASS):
 
         self.table.setColumnWidth(0, 200)
         self.table.setColumnWidth(1, 125)
+
+        # initiate layer group creation
+        self.root = QgsProject.instance().layerTreeRoot()
 
         # preventing error if the user delete the directory
         self.default_directory = temp_dir()
@@ -192,6 +199,8 @@ class BatchDialog(QDialog, FORM_CLASS):
         unparsed_files = []
         self.table.clearContents()
 
+        # Block signal to allow update checking only when the table is ready
+        self.table.blockSignals(True)
         # NOTE(gigih): need this line to remove existing rows
         self.table.setRowCount(0)
 
@@ -218,6 +227,8 @@ class BatchDialog(QDialog, FORM_CLASS):
                 except ParsingError:
                     unparsed_files.append(current_path)
 
+        # unblock signal
+        self.table.blockSignals(False)
         # LOGGER.info(self.show_parser_results(parsed_files, unparsed_files))
 
     def run_script(self, filename):
@@ -243,7 +254,7 @@ class BatchDialog(QDialog, FORM_CLASS):
             script = __import__(module)
 
         # run as a new project
-        self.iface.newProject()
+        # self.iface.newProject()
 
         # run entry function
         function = script.runScript
@@ -266,18 +277,23 @@ class BatchDialog(QDialog, FORM_CLASS):
         scenario_directory = str(self.source_directory.text())
 
         paths = []
-        if 'hazard' in items:
-            paths.append(items['hazard'])
-        if 'exposure' in items:
-            paths.append(items['exposure'])
         if 'aggregation' in items:
             paths.append(items['aggregation'])
-
+        if 'exposure' in items:
+            paths.append(items['exposure'])
+        if 'hazard' in items:
+            paths.append(items['hazard'])
         # always run in new project
-        self.iface.newProject()
+        # self.iface.newProject()
 
         try:
-            scenario_runner.add_layers(scenario_directory, paths, self.iface)
+            # create layer group
+            print 'this is items in run_scenario'
+            print items
+            group_name = items['scenario_name']
+            self.layer_group = self.root.addGroup(group_name)
+            # add layer to group
+            scenario_runner.add_layers(scenario_directory, paths, self.iface, self.layer_group)
         except FileNotFoundError:
             # set status to 'fail'
             LOGGER.exception('Loading layers failed: \nRoot: %s\n%s' % (
@@ -466,7 +482,6 @@ class BatchDialog(QDialog, FORM_CLASS):
         # .. see also:: :func:`appendRow` to understand the next 2 lines
         variant = task_item.data(QtCore.Qt.UserRole)
         value = variant[0]
-
         result = True
 
         if isinstance(value, str):
@@ -500,9 +515,20 @@ class BatchDialog(QDialog, FORM_CLASS):
 
                 # Load impact layer into QGIS
                 qgis_layer = read_impact_layer(impact_layer)
-                QgsMapLayerRegistry.instance().addMapLayer(
-                    qgis_layer, addToLegend=False)
-
+                impact_layer_source = qgis_layer.source()
+                QgsMapLayerRegistry.instance().addMapLayer(qgis_layer, addToLegend=False)
+                # call legend layers
+                layers = self.iface.mapCanvas().layers()
+                print len(layers)
+                # identify impact layer in map canvas from impact layer source
+                legend_impact_layer = self.identify_impact_layer(impact_layer_source)
+                # move impact layer to layer group
+                clone = QgsVectorLayer(legend_impact_layer.source(),
+                                        legend_impact_layer.name(),
+                                        legend_impact_layer.providerType())
+                QgsMapLayerRegistry.instance().addMapLayer(clone, False)
+                self.layer_group.insertLayer(0,clone)
+                QgsMapLayerRegistry.instance().removeMapLayers([legend_impact_layer])
                 # noinspection PyBroadException
                 try:
                     status_item.setText(self.tr('Analysis Ok'))
@@ -674,6 +700,51 @@ class BatchDialog(QDialog, FORM_CLASS):
         title = self.tr('Set the output directory for pdf report files')
         self.choose_directory(self.output_directory, title)
 
+    def on_table_cellClicked(self):
+        self.active_scenario = self.table.currentItem().text()
+        self.active_scenario_path = self.find_scenario_file(self.active_scenario)
+
+    def on_table_cellChanged(self):
+        print "Current column,row is %s,%s" % (str(self.table.currentColumn()),str(self.table.currentRow()))
+        
+        if self.table.currentColumn() == 0:
+            new_scenario = self.table.currentItem().text()
+            # update keyword
+            parser = ConfigParser()
+            scenario = open(self.active_scenario_path, 'r')
+            parser.readfp(scenario)
+            old_section = self.active_scenario
+            old_item = parser.items(old_section)
+            new_section = new_scenario
+            parser.add_section(new_section)
+            for option, value in old_item:
+                parser.set(new_section, option, value)
+            parser.remove_section(old_section)
+            scenario.close()
+            # proceed to rewrite scenario files
+            scenario = open(self.active_scenario_path, 'w')
+            parser.write(scenario)
+            scenario.close()
+        else:
+            pass
+        
+
+    def find_scenario_file(self,scenario_name):
+        scenario_dir = self.source_directory.text()
+        for file in os.listdir(scenario_dir):
+            ext = os.path.splitext(file)[1]
+            full_path = os.path.abspath(os.path.join(scenario_dir, file))
+            if ext == '.txt':
+                scenario = read_scenarios(full_path)
+                key,value = scenario.items()[0]
+                if key == scenario_name:
+                    scenario_file = full_path
+                    return scenario_file
+                else:
+                    pass
+
+
+
     @pyqtSlot()
     @pyqtSignature('bool')  # prevents actions being handled twice
     def help_toggled(self, flag):
@@ -714,6 +785,24 @@ class BatchDialog(QDialog, FORM_CLASS):
 
         self.help_web_view.setHtml(string)
 
+    def identify_impact_layer(self, impact_layer_source):
+        """Identify impact layer created from dock so we can access it
+
+        :param impact_layer_source: the source of impact layer created from dock.
+                                    we will use this to match with the source of each
+                                    in layer legend.
+        :type label: str
+        :return QgsVectorLayer
+        """
+
+        # iterate legend layer to match with input layer
+        legend_layers = self.iface.mapCanvas().layers()
+        for layer in legend_layers:
+            LOGGER.info("Layer source is %s" % layer.source())
+            if layer.source() == impact_layer_source:
+                return layer
+        else:
+            raise Exception('Can not identify impact layer from layer source')
 
 def read_scenarios(filename):
     """Read keywords dictionary from file
@@ -759,6 +848,10 @@ def read_scenarios(filename):
     # convert to dictionary
     for section in parser.sections():
         items = parser.items(section)
+        #add section as scenario name
+        items.append(('scenario_name',section))
+        # add fullpath to the blocks
+        items.append(('full_path', filename))
         blocks[section] = {}
         for key, value in items:
             blocks[section][key] = value
@@ -768,6 +861,7 @@ def read_scenarios(filename):
     #           { 'bar' : { 'd': 'e', 'f': 'g'}}
     # where foo and bar are scenarios and their dicts are the options for
     # that scenario (e.g. hazard, exposure etc)
+    print blocks
     return blocks
 
 
