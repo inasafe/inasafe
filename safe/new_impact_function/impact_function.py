@@ -21,14 +21,6 @@ from safe.utilities.i18n import tr
 from safe.common.utilities import get_non_conflicting_attribute_name
 from safe.utilities.keyword_io import KeywordIO
 
-from safe.new_impact_function.algorithm.line import LineAlgorithm
-from safe.new_impact_function.algorithm.point import PointAlgorithm
-from safe.new_impact_function.algorithm.polygon import PolygonAlgorithm
-from safe.new_impact_function.algorithm.raster import RasterAlgorithm
-from safe.new_impact_function.algorithm.indivisible_polygon import (
-    IndivisiblePolygonAlgorithm
-)
-
 
 __author__ = 'ismailsunni'
 __project_name__ = 'inasafe-dev'
@@ -398,15 +390,15 @@ class ImpactFunction(object):
             if self.hazard_keyword('hazard') == 'earthquake':
                 pass
             else:
-                self.algorithm = RasterAlgorithm
+                self.algorithm = self.raster_algorithm
         elif self.exposure_keyword.get('layer_geometry') == 'point':
-            self.algorithm = PointAlgorithm
+            self.algorithm = self.point_algorithm
         elif self.exposure_keyword.get('exposure') == 'structure':
-            self.algorithm = IndivisiblePolygonAlgorithm
+            self.algorithm = self.indivisible_polygon_algorithm
         elif self.exposure_keyword.get('layer_geometry') == 'line':
-            self.algorithm = LineAlgorithm
+            self.algorithm = self.line_algorithm
         else:
-            self.algorithm = PolygonAlgorithm
+            self.algorithm = self.polygon_algorithm
 
     def preprocess(self):
         """Run process before running the main work / algorithm"""
@@ -463,3 +455,19 @@ class ImpactFunction(object):
         if message is not None:
             print message
         print 'Task progress: %i of %i' % (current, maximum)
+
+
+    def indivisible_polygon_algorithm(self):
+        pass
+
+    def line_algorithm(self):
+        pass
+
+    def point_algorithm(self):
+        pass
+
+    def polygon_algorithm(self):
+        pass
+
+    def raster_algorithm(self):
+        pass

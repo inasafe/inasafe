@@ -4,7 +4,6 @@ from safe.test.utilities import get_qgis_app, standard_data_path
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.new_impact_function.impact_function import ImpactFunction
-from safe.new_impact_function.algorithm.line import LineAlgorithm
 
 from qgis.core import QgsVectorLayer
 
@@ -25,7 +24,8 @@ class TestImpactFunction(unittest.TestCase):
         impact_function = ImpactFunction()
         impact_function.exposure = exposure_layer
         impact_function.hazard = hazard_layer
-        self.assertEqual(impact_function.algorithm, LineAlgorithm)
+        self.assertEqual(
+            impact_function.algorithm, impact_function.line_algorithm)
         self.assertEqual(impact_function.name, 'Flood Polygon on Road Line')
         self.assertEqual(impact_function.title, 'be affected')
 
