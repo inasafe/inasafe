@@ -763,7 +763,19 @@ exposure_population = {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    'postprocessor': {
+        'gender': {
+            'type': 'rate'
+        },
+        # TODO: How to put the 3 needed fields here
+        'age': {
+            'type': 'rate'
+        },
+        'minimum_needs': {
+            'type': 'rate'
+        }
+    }
 }
 
 exposure_people_in_building = {
@@ -789,7 +801,20 @@ exposure_people_in_building = {
             'link': 'http://www.preventionweb.net/files/'
                     '45462_backgoundpaperonterminologyaugust20.pdf'
         }
-    ]
+    ],
+    'postprocessor': {
+        'gender': {
+            'type': 'rate'
+        },
+        # TODO: How to put the 3 needed fields here
+        'age': {
+            'type': 'rate'
+        },
+        'minimum_needs': {
+            'type': 'rate'
+        }
+    }
+
 }
 
 exposure_road = {
@@ -828,7 +853,12 @@ exposure_road = {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    'postprocessor': {
+        'road_type': {
+            'mode': 'count'
+        }
+    }
 }
 
 exposure_structure = {
@@ -862,7 +892,12 @@ exposure_structure = {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    'postprocessor': {
+        'building_type': {
+            'mode': 'count'
+        }
+    }
 }
 
 exposure_place = {
@@ -887,7 +922,8 @@ exposure_place = {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    'postprocessor': {}
 }
 
 
