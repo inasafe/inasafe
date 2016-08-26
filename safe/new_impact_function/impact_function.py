@@ -1,14 +1,25 @@
+# coding=utf-8
+"""InaSAFE Disaster risk assessment tool developed by AusAid -
+  *Impact Function.**
 
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+
+"""
 
 from qgis.core import (
     QgsMapLayer,
     QgsCoordinateReferenceSystem,
     QgsRectangle)
 
-from safe.common.exceptions import InvalidExtentError, InvalidLayerError
+from safe.common.exceptions import InvalidExtentError
 from safe.utilities.i18n import tr
 from safe.common.utilities import get_non_conflicting_attribute_name
-from safe.storage.safe_layer import SafeLayer
+from safe.utilities.keyword_io import KeywordIO
 
 from safe.new_impact_function.algorithm.line import LineAlgorithm
 from safe.new_impact_function.algorithm.point import PointAlgorithm
@@ -31,8 +42,14 @@ class ImpactFunction(object):
 
     def __init__(self):
         self._hazard = None
+        self._hazard_keyword = {}
+
         self._exposure = None
+        self._exposure_keyword = {}
+
         self._aggregation = None
+        self._aggregation_keyword = {}
+
         # Requested extent to use
         self._requested_extent = None
         # Requested extent's CRS
@@ -60,7 +77,7 @@ class ImpactFunction(object):
         """Property for the hazard layer to be used for the analysis.
 
         :returns: A map layer.
-        :rtype: SafeLayer
+        :rtype: QgsMapLayer
         """
         return self._hazard
 
@@ -69,24 +86,40 @@ class ImpactFunction(object):
         """Setter for hazard layer property.
 
         :param layer: Hazard layer to be used for the analysis.
-        :type layer: SafeLayer, QgsMapLayer
+        :type layer: QgsMapLayer
         """
-        if isinstance(layer, SafeLayer):
-            self._hazard = layer
-        elif isinstance(layer, QgsMapLayer):
-            self._hazard = SafeLayer(layer)
-        else:
-            message = tr('Hazard layer should be SafeLayer or QgsMapLayer')
-            raise InvalidLayerError(message)
+        self._hazard = layer
+        self._hazard_keyword = KeywordIO().read_keywords(layer)
 
         self.setup_impact_function()
+
+    @property
+    def hazard_keyword(self, keyword=None):
+        """Keyword for the hazard layer to be used for the analysis.
+
+        :returns: A dictionary or string
+        :rtype: dict, str
+        """
+        if keyword:
+            return self._hazard_keyword.get(keyword)
+        else:
+            return self._hazard_keyword
+
+    @hazard_keyword.setter
+    def hazard_keyword(self, keyword):
+        """Setter for hazard layer keyword.
+
+        :param keyword: Dictionary of keyword
+        :type keyword: dict
+        """
+        self._hazard_keyword = keyword
 
     @property
     def exposure(self):
         """Property for the exposure layer to be used for the analysis.
 
         :returns: A map layer.
-        :rtype: SafeLayer
+        :rtype: QgsMapLayer
         """
         return self._exposure
 
@@ -95,37 +128,53 @@ class ImpactFunction(object):
         """Setter for exposure layer property.
 
         :param layer: exposure layer to be used for the analysis.
-        :type layer: SafeLayer, QgsMapLayer
+        :type layer: QgsMapLayer
         """
-        if isinstance(layer, SafeLayer):
-            self._exposure = layer
-        elif isinstance(layer, QgsMapLayer):
-            self._exposure = SafeLayer(layer)
-        else:
-            message = tr('Exposure layer should be SafeLayer or QgsMapLayer')
-            raise InvalidLayerError(message)
+        self._exposure = layer
+        self._exposure_keyword = KeywordIO().read_keywords(layer)
 
-        if self._exposure.is_qgsvectorlayer():
+        if layer.type() == QgsMapLayer.VectorLayer:
             # Update the affected field to a non-conflicting one
             self.hazard_field = get_non_conflicting_attribute_name(
                 self.hazard_field,
-                self._exposure.layer.dataProvider().fieldNameMap().keys()
+                self._exposure.dataProvider().fieldNameMap().keys()
             )
 
             # Update the aggregation field to a non-conflicting one
             self.aggregation_field = get_non_conflicting_attribute_name(
                 self.aggregation_field,
-                (self._exposure.layer.dataProvider().fieldNameMap().keys()
+                (self._exposure.dataProvider().fieldNameMap().keys()
                  + [self.hazard_field])
             )
         self.setup_impact_function()
+
+    @property
+    def exposure_keyword(self, keyword=None):
+        """Keyword for the exposure layer to be used for the analysis.
+
+        :returns: A dictionary or string
+        :rtype: dict, str
+        """
+        if keyword:
+            return self._exposure_keyword.get(keyword)
+        else:
+            return self._exposure_keyword
+
+    @exposure_keyword.setter
+    def exposure_keyword(self, keyword):
+        """Setter for exposure layer keyword.
+
+        :param keyword: Dictionary of keyword
+        :type keyword: dict
+        """
+        self._exposure_keyword = keyword
 
     @property
     def aggregation(self):
         """Property for the aggregation layer to be used for the analysis.
 
         :returns: A map layer.
-        :rtype: SafeLayer
+        :rtype: QgsMapLayer
         """
         return self._aggregation
 
@@ -134,16 +183,31 @@ class ImpactFunction(object):
         """Setter for aggregation layer property.
 
         :param layer: aggregation layer to be used for the analysis.
-        :type layer: SafeLayer, QgsMapLayer
+        :type layer: QgsMapLayer
         """
-        if isinstance(layer, SafeLayer):
-            self._aggregation = layer
-        elif isinstance(layer, QgsMapLayer):
-            self._aggregation = SafeLayer(layer)
+        self._aggregation = layer
+        self._aggregation_keyword = KeywordIO().read_keywords(layer)
+
+    @property
+    def aggregation_keyword(self, keyword=None):
+        """Keyword for the aggregation layer to be used for the analysis.
+
+        :returns: A dictionary or string
+        :rtype: dict, str
+        """
+        if keyword:
+            return self._aggregation_keyword.get(keyword)
         else:
-            message = tr(
-                'Aggregation layer should be SafeLayer or QgsMapLayer')
-            raise InvalidLayerError(message)
+            return self._aggregation_keyword
+
+    @aggregation_keyword.setter
+    def aggregation_keyword(self, keyword):
+        """Setter for aggregation layer keyword.
+
+        :param keyword: Dictionary of keyword
+        :type keyword: dict
+        """
+        self._aggregation_keyword = keyword
 
     @property
     def hazard_field(self):
@@ -316,30 +380,30 @@ class ImpactFunction(object):
 
         # Set the name
         self._name = '%s %s on %s %s' % (
-            self.hazard.keyword('hazard').title(),
-            self.hazard.keyword('layer_geometry').title(),
-            self.exposure.keyword('exposure').title(),
-            self.exposure.keyword('layer_geometry').title(),
+            self.hazard_keyword.get('hazard').title(),
+            self.hazard_keyword.get('layer_geometry').title(),
+            self.exposure_keyword.get('exposure').title(),
+            self.exposure_keyword.get('layer_geometry').title(),
         )
 
         # Set the title
-        if self.exposure.keyword('exposure') == 'population':
+        if self.exposure_keyword.get('exposure') == 'population':
             self._title = tr('need evacuation')
         else:
             self._title = tr('be affected')
 
     def set_algorithm(self):
-        if self.exposure.keyword('layer_geometry') == 'raster':
+        if self.exposure_keyword.get('layer_geometry') == 'raster':
             # Special case for Raster Earthquake hazard.
-            if self.hazard.keyword('hazard') == 'earthquake':
+            if self.hazard_keyword('hazard') == 'earthquake':
                 pass
             else:
                 self.algorithm = RasterAlgorithm
-        elif self.exposure.keyword('layer_geometry') == 'point':
+        elif self.exposure_keyword.get('layer_geometry') == 'point':
             self.algorithm = PointAlgorithm
-        elif self.exposure.keyword('exposure') == 'structure':
+        elif self.exposure_keyword.get('exposure') == 'structure':
             self.algorithm = IndivisiblePolygonAlgorithm
-        elif self.exposure.keyword('layer_geometry') == 'line':
+        elif self.exposure_keyword.get('layer_geometry') == 'line':
             self.algorithm = LineAlgorithm
         else:
             self.algorithm = PolygonAlgorithm
@@ -347,7 +411,7 @@ class ImpactFunction(object):
     def preprocess(self):
         """Run process before running the main work / algorithm"""
         # Clipping
-        # Convert hazard to classified vecto
+        # Convert hazard to classified vector
         # Aggregation if needed
         pass
 
