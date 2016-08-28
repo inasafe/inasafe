@@ -21,6 +21,7 @@ SHELL := /bin/bash
 NONGUI := safe
 GUI := gui
 ALL := $(NONGUI) $(GUI)  # Would like to turn this into comma separated list using e.g. $(subst,...) or $(ALL, Wstr) but None of that works as described in the various posts
+DIR := ${CURDIR}
 
 # LOCALES = space delimited list of iso codes to generate po files for
 # Please dont remove en here
@@ -436,3 +437,11 @@ apidocs:
 	@cd docs && $(MAKE) html
 	@echo "HTML API docs has been builded."
 	@echo "You can look it under docs/_build directory.."
+
+docker-update-translation-strings:
+	@echo "Update translation using docker"
+	@docker run -t -i -v $(DIR):/home ismailsunni/docker-translation make update-translation-strings
+
+docker-compile-translation-strings::
+	@echo "Update translation using docker"
+	@docker run -t -i -v $(DIR):/home ismailsunni/docker-translation make compile-translation-strings
