@@ -52,6 +52,7 @@ from safe.utilities.resources import (
 from safe.messaging import styles
 from safe.utilities.resources import resources_path
 from safe.gui.tools.help.batch_help import batch_help
+from safe.gui.tools.impact_report_dialog import ImpactReportDialog
 
 INFO_STYLE = styles.INFO_STYLE
 LOGGER = logging.getLogger('InaSAFE')
@@ -288,8 +289,6 @@ class BatchDialog(QDialog, FORM_CLASS):
 
         try:
             # create layer group
-            print 'this is items in run_scenario'
-            print items
             group_name = items['scenario_name']
             self.layer_group = self.root.addGroup(group_name)
             # add layer to group
@@ -519,7 +518,9 @@ class BatchDialog(QDialog, FORM_CLASS):
                 QgsMapLayerRegistry.instance().addMapLayer(qgis_layer, addToLegend=False)
                 # call legend layers
                 layers = self.iface.mapCanvas().layers()
-                print len(layers)
+                #print len(layers)   # somehow, if this line is removed, we'll get errors
+                for layer in layers:
+                    print layer.name()
                 # identify impact layer in map canvas from impact layer source
                 legend_impact_layer = self.identify_impact_layer(impact_layer_source)
                 # move impact layer to layer group
@@ -529,6 +530,14 @@ class BatchDialog(QDialog, FORM_CLASS):
                 QgsMapLayerRegistry.instance().addMapLayer(clone, False)
                 self.layer_group.insertLayer(0,clone)
                 QgsMapLayerRegistry.instance().removeMapLayers([legend_impact_layer])
+                self.iface.setActiveLayer(clone)
+                
+                layers = self.iface.mapCanvas().layers()
+                print "-------"
+                self.iface.mapCanvas().refresh()
+                for layer in layers:
+                    print layer.name()
+
                 # noinspection PyBroadException
                 try:
                     status_item.setText(self.tr('Analysis Ok'))
@@ -621,6 +630,7 @@ class BatchDialog(QDialog, FORM_CLASS):
 
         LOGGER.debug("Report done %s %s" % (map_path, table_path))
 
+
     def show_parser_results(self, parsed_list, unparsed_list):
         """Compile a formatted list of un/successfully parsed files.
 
@@ -700,50 +710,6 @@ class BatchDialog(QDialog, FORM_CLASS):
         title = self.tr('Set the output directory for pdf report files')
         self.choose_directory(self.output_directory, title)
 
-    def on_table_cellClicked(self):
-        self.active_scenario = self.table.currentItem().text()
-        self.active_scenario_path = self.find_scenario_file(self.active_scenario)
-
-    def on_table_cellChanged(self):
-        print "Current column,row is %s,%s" % (str(self.table.currentColumn()),str(self.table.currentRow()))
-        
-        if self.table.currentColumn() == 0:
-            new_scenario = self.table.currentItem().text()
-            # update keyword
-            parser = ConfigParser()
-            scenario = open(self.active_scenario_path, 'r')
-            parser.readfp(scenario)
-            old_section = self.active_scenario
-            old_item = parser.items(old_section)
-            new_section = new_scenario
-            parser.add_section(new_section)
-            for option, value in old_item:
-                parser.set(new_section, option, value)
-            parser.remove_section(old_section)
-            scenario.close()
-            # proceed to rewrite scenario files
-            scenario = open(self.active_scenario_path, 'w')
-            parser.write(scenario)
-            scenario.close()
-        else:
-            pass
-        
-
-    def find_scenario_file(self,scenario_name):
-        scenario_dir = self.source_directory.text()
-        for file in os.listdir(scenario_dir):
-            ext = os.path.splitext(file)[1]
-            full_path = os.path.abspath(os.path.join(scenario_dir, file))
-            if ext == '.txt':
-                scenario = read_scenarios(full_path)
-                key,value = scenario.items()[0]
-                if key == scenario_name:
-                    scenario_file = full_path
-                    return scenario_file
-                else:
-                    pass
-
-
 
     @pyqtSlot()
     @pyqtSignature('bool')  # prevents actions being handled twice
@@ -798,7 +764,7 @@ class BatchDialog(QDialog, FORM_CLASS):
         # iterate legend layer to match with input layer
         legend_layers = self.iface.mapCanvas().layers()
         for layer in legend_layers:
-            LOGGER.info("Layer source is %s" % layer.source())
+            # LOGGER.info("Layer source is %s" % layer.source())
             if layer.source() == impact_layer_source:
                 return layer
         else:
@@ -861,7 +827,6 @@ def read_scenarios(filename):
     #           { 'bar' : { 'd': 'e', 'f': 'g'}}
     # where foo and bar are scenarios and their dicts are the options for
     # that scenario (e.g. hazard, exposure etc)
-    print blocks
     return blocks
 
 
