@@ -29,6 +29,7 @@ from ConfigParser import ConfigParser, MissingSectionHeaderError, ParsingError
 from qgis.core import (
     QgsRectangle, 
     QgsCoordinateReferenceSystem, 
+    QgsMapLayer,
     QgsMapLayerRegistry, 
     QgsProject, 
     QgsVectorLayer)
@@ -517,16 +518,24 @@ class BatchDialog(QDialog, FORM_CLASS):
                 impact_layer_source = qgis_layer.source()
                 QgsMapLayerRegistry.instance().addMapLayer(qgis_layer, addToLegend=False)
                 # call legend layers
-                layers = self.iface.mapCanvas().layers()
+                self.iface.mapCanvas().refresh()
+                #layers = self.iface.mapCanvas().layers()
                 #print len(layers)   # somehow, if this line is removed, we'll get errors
-                for layer in layers:
-                    print layer.name()
+                #for layer in layers:
+                #    print layer.name()
                 # identify impact layer in map canvas from impact layer source
                 legend_impact_layer = self.identify_impact_layer(impact_layer_source)
                 # move impact layer to layer group
-                clone = QgsVectorLayer(legend_impact_layer.source(),
-                                        legend_impact_layer.name(),
-                                        legend_impact_layer.providerType())
+                if qgis_layer.type() == QgsMapLayer.VectorLayer:
+                    clone = QgsVectorLayer(legend_impact_layer.source(),
+                                            legend_impact_layer.name(),
+                                            legend_impact_layer.providerType())
+                elif qgis_layer.type() == QgsMapLayer.RasterLayer:
+                    clone = QgsVectorLayer(legend_impact_layer.source(),
+                                            legend_impact_layer.name(),
+                                            legend_impact_layer.providerType())
+                else:
+                    raise Exception('layer source is failed to be recognized')
                 QgsMapLayerRegistry.instance().addMapLayer(clone, False)
                 self.layer_group.insertLayer(0,clone)
                 QgsMapLayerRegistry.instance().removeMapLayers([legend_impact_layer])
@@ -762,11 +771,11 @@ class BatchDialog(QDialog, FORM_CLASS):
         """
 
         # iterate legend layer to match with input layer
-        legend_layers = self.iface.mapCanvas().layers()
-        for layer in legend_layers:
-            # LOGGER.info("Layer source is %s" % layer.source())
-            if layer.source() == impact_layer_source:
-                return layer
+        registry_layers = QgsMapLayerRegistry.instance().mapLayers().iteritems()
+        for key,value in registry_layers:
+            print "Layer source is %s" % value.source()
+            if value.source() == impact_layer_source:
+                return value
         else:
             raise Exception('Can not identify impact layer from layer source')
 
