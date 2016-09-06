@@ -773,7 +773,6 @@ class BatchDialog(QDialog, FORM_CLASS):
         # iterate legend layer to match with input layer
         registry_layers = QgsMapLayerRegistry.instance().mapLayers().iteritems()
         for key,value in registry_layers:
-            print "Layer source is %s" % value.source()
             if value.source() == impact_layer_source:
                 return value
         else:
