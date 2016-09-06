@@ -32,7 +32,8 @@ from qgis.core import (
     QgsMapLayer,
     QgsMapLayerRegistry, 
     QgsProject, 
-    QgsVectorLayer)
+    QgsVectorLayer,
+    QgsRasterLayer)
 
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature, pyqtSlot, QSettings, Qt
@@ -531,7 +532,7 @@ class BatchDialog(QDialog, FORM_CLASS):
                                             legend_impact_layer.name(),
                                             legend_impact_layer.providerType())
                 elif qgis_layer.type() == QgsMapLayer.RasterLayer:
-                    clone = QgsVectorLayer(legend_impact_layer.source(),
+                    clone = QgsRasterLayer(legend_impact_layer.source(),
                                             legend_impact_layer.name(),
                                             legend_impact_layer.providerType())
                 else:
@@ -542,10 +543,6 @@ class BatchDialog(QDialog, FORM_CLASS):
                 self.iface.setActiveLayer(clone)
                 
                 layers = self.iface.mapCanvas().layers()
-                print "-------"
-                self.iface.mapCanvas().refresh()
-                for layer in layers:
-                    print layer.name()
 
                 # noinspection PyBroadException
                 try:
