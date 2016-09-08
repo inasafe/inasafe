@@ -1,5 +1,19 @@
+# coding=utf-8
+"""
+InaSAFE Disaster risk assessment tool developed by AusAid / DFAT -
+**New Metadata for SAFE.**
+
+Contact : ole.moller.nielsen@gmail.com
+
+.. note:: This program is free software; you can redistribute it and/or modify
+     it under the terms of the GNU General Public License as published by
+     the Free Software Foundation; either version 2 of the License, or
+     (at your option) any later version.
+"""
+
 # This module contains code for mapping class_id's to their nammes
 # and writing the names to the attribute table as a new column.
+
 
 def write_class_names(hazard_layer, custom_classification=None):
     """
@@ -22,4 +36,7 @@ def write_class_names(hazard_layer, custom_classification=None):
     :rtype: bool
     :return: False if the operation failed, otherwise True
     """
-    return False
+
+    name_field = 'class_name'
+
+

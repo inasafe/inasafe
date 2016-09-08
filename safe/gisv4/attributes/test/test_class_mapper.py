@@ -36,9 +36,15 @@ class TestClassMapper(unittest.TestCase):
             'floods',
             include_keywords=True,
             source_directory=self.polygon_base)
-        self.assertTrue(write_class_names(layer))
-        provider = layer.dataProvider()
-        fields = provider.fields()
-        print fields
+        result = write_class_names(layer)
+        self.assertTrue(result)
+        results = []
+        for feature in layer.getFeatures():
+            value = feature['class_name']
+            results.append(value)
+        expected_results = ['low', 'medium', 'high', 'low']
+        self.assertListEqual(results, expected_results)
+
+
 
 
