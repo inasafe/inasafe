@@ -24,6 +24,14 @@ def read_json_flow(json_path):
     return data['scenario'], data['expected']
 
 def run_scenario(scenario):
+    """Run scenario
+
+    :param scenario: Dictionary of hazard, exposure, and aggregation.
+    :type scenario: dict
+
+    :returns: Flow dictionary.
+    :rtype: dict
+    """
     if os.path.exists(scenario['exposure']):
         exposure_path = scenario['exposure']
     elif os.path.exists(standard_data_path('exposure', scenario['exposure'])):
@@ -56,8 +64,6 @@ def run_scenario(scenario):
     result = impact_function.flow()
 
     return result
-
-
 
 class TestImpactFunction(unittest.TestCase):
     """Test for Generic Polygon on Building Impact Function."""
@@ -126,6 +132,21 @@ class TestImpactFunction(unittest.TestCase):
         scenario, expected = read_json_flow(scenario_path)
         result = run_scenario(scenario)
         self.assertDictEqual(result, expected)
+
+    def test_scenario_directory(self):
+        self.maxDiff = None
+        def test_scenario(scenario_path):
+            scenario, expected = read_json_flow(scenario_path)
+            result = run_scenario(scenario)
+            self.assertDictEqual(result, expected)
+
+        path = './data'
+        json_files = [os.path.join(path, f) for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
+        for json_file in json_files:
+            test_scenario(json_file)
+
+
+
 
 if __name__ == '__main__':
     unittest.main()
