@@ -1,0 +1,44 @@
+{
+  "scenario": {
+    "hazard": "flood_multipart_polygons.shp",
+    "exposure": "building-points.shp",
+    "aggregation": null
+  },
+
+
+  "expected":{
+    "impact function":{
+      "process":[
+        "Run impact function",
+        "Assign by location aggregation and hazard areas to exposure features"
+      ],
+      "algorithm":"point"
+    },
+    "post_processor":{
+      "process":[
+
+      ]
+    },
+    "aggregation":{
+      "process":[
+        "Project aggregation CRS to exposure CRS"
+      ],
+      "provided":false
+    },
+    "hazard":{
+      "process":[
+        "Assign classes based on value map",
+        "Classified polygon hazard with keywords",
+        "Project hazard CRS to exposure CRS",
+        "Vector clip and mask hazard to aggregation",
+        "Intersect hazard polygons with aggregation areas and assign hazard class"
+      ],
+      "geometry":"vector"
+    },
+    "exposure":{
+      "process":[
+        "Vector clip and mask exposure to aggregation"
+      ]
+    }
+  }
+}

@@ -1,4 +1,6 @@
 import unittest
+import json
+import os
 
 from safe.test.utilities import get_qgis_app, standard_data_path
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -6,6 +8,55 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from safe.new_impact_function.impact_function import ImpactFunction
 
 from qgis.core import QgsVectorLayer
+
+
+def read_json_flow(json_path):
+    """Helper method to read json file that contains a scenario
+
+    :param json_path: Path to json file.
+    :type json_path: unicode, str
+
+    :returns: Tuple of dictionary contains a scenario and expected result
+    :rtype: (dict, dict)
+    """
+    with open(json_path) as json_data:
+        data = json.load(json_data)
+    return data['scenario'], data['expected']
+
+def run_scenario(scenario):
+    if os.path.exists(scenario['exposure']):
+        exposure_path = scenario['exposure']
+    elif os.path.exists(standard_data_path('exposure', scenario['exposure'])):
+        exposure_path = standard_data_path('exposure', scenario['exposure'])
+    else:
+        raise IOError('No exposure file')
+    if os.path.exists(scenario['hazard']):
+        hazard_path = scenario['hazard']
+    elif os.path.exists(standard_data_path('hazard', scenario['hazard'])):
+        hazard_path = standard_data_path('hazard', scenario['hazard'])
+    else:
+        raise IOError('No hazard file')
+
+    if not scenario['aggregation']:
+        aggregation_path = None
+    else:
+        if os.path.exists(scenario['aggregation']):
+            aggregation_path = scenario['aggregation']
+        elif os.path.exists(standard_data_path('aggregation', scenario['aggregation'])):
+            aggregation_path = standard_data_path('aggregation', scenario['aggregation'])
+        else:
+            aggregation_path = None
+
+    impact_function = ImpactFunction()
+    impact_function.hazard = QgsVectorLayer(hazard_path, 'Hazard', 'ogr')
+    impact_function.exposure = QgsVectorLayer(exposure_path, 'Exposure', 'ogr')
+    if aggregation_path:
+        impact_function.aggregation = QgsVectorLayer(aggregation_path, 'Exposure', 'ogr')
+
+    result = impact_function.flow()
+
+    return result
+
 
 
 class TestImpactFunction(unittest.TestCase):
@@ -68,7 +119,13 @@ class TestImpactFunction(unittest.TestCase):
         impact_function_state = impact_function.flow()
         from pprint import pprint
         pprint(impact_function_state)
+        print json.dumps(impact_function_state)
 
+    def test_scenario(self):
+        scenario_path = './data/scenario_1.json'
+        scenario, expected = read_json_flow(scenario_path)
+        result = run_scenario(scenario)
+        self.assertDictEqual(result, expected)
 
 if __name__ == '__main__':
     unittest.main()
