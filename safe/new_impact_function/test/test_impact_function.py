@@ -49,5 +49,26 @@ class TestImpactFunction(unittest.TestCase):
         result = impact_function.impact_layer
         self.assertIsNotNone(result)
 
+    def test_impact_function_flow(self):
+        """Test running impact function on test data."""
+        # Set up test data
+        hazard_path = standard_data_path(
+            'hazard', 'flood_multipart_polygons.shp')
+        exposure_path = standard_data_path('exposure', 'building-points.shp')
+        # noinspection PyCallingNonCallable
+        hazard_layer = QgsVectorLayer(hazard_path, 'Flood', 'ogr')
+        # noinspection PyCallingNonCallable
+        exposure_layer = QgsVectorLayer(exposure_path, 'Building Point', 'ogr')
+
+        # Set up impact function
+        impact_function = ImpactFunction()
+        impact_function.exposure = exposure_layer
+        impact_function.hazard = hazard_layer
+
+        impact_function_state = impact_function.flow()
+        from pprint import pprint
+        pprint(impact_function_state)
+
+
 if __name__ == '__main__':
     unittest.main()
