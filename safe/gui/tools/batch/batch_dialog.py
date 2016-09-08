@@ -36,7 +36,7 @@ from qgis.core import (
     QgsRasterLayer)
 
 from PyQt4 import QtGui, QtCore
-from PyQt4.QtCore import pyqtSignature, pyqtSlot, QSettings, Qt
+from PyQt4.QtCore import pyqtSignature, pyqtSlot, QSettings, Qt, QTimer
 from PyQt4.QtGui import (
     QDialog,
     QFileDialog,
@@ -93,6 +93,8 @@ class BatchDialog(QDialog, FORM_CLASS):
 
         # initiate layer group creation
         self.root = QgsProject.instance().layerTreeRoot()
+        # container for all layer group
+        self.layer_group_container = []
 
         # preventing error if the user delete the directory
         self.default_directory = temp_dir()
@@ -282,10 +284,16 @@ class BatchDialog(QDialog, FORM_CLASS):
         paths = []
         if 'aggregation' in items:
             paths.append(items['aggregation'])
+            # add access to aggregation layer source so we can access it later
+            # self.aggregation_source = os.path.normpath(os.path.join(scenario_directory,items['aggregation']))
         if 'exposure' in items:
             paths.append(items['exposure'])
+            # add access to exposure layer source so we can access it later
+            self.exposure_source = os.path.normpath(os.path.join(scenario_directory,items['exposure']))
         if 'hazard' in items:
             paths.append(items['hazard'])
+            # add access to aggregation layer source so we can access it later
+            # self.hazard_source = os.path.normpath(os.path.join(scenario_directory, items['hazard']))
         # always run in new project
         # self.iface.newProject()
 
@@ -293,6 +301,7 @@ class BatchDialog(QDialog, FORM_CLASS):
             # create layer group
             group_name = items['scenario_name']
             self.layer_group = self.root.addGroup(group_name)
+            self.layer_group_container.append(self.layer_group)
             # add layer to group
             scenario_runner.add_layers(scenario_directory, paths, self.iface, self.layer_group)
         except FileNotFoundError:
@@ -475,8 +484,10 @@ class BatchDialog(QDialog, FORM_CLASS):
         :returns: Flag indicating if the task succeeded or not.
         :rtype: bool
         """
-
+        # self.iface.mapCanvas().freeze(True)
         self.enable_busy_cursor()
+        for layer_group in self.layer_group_container:
+            layer_group.setVisible(False)
         # set status to 'running'
         status_item.setText(self.tr('Running'))
 
@@ -518,47 +529,58 @@ class BatchDialog(QDialog, FORM_CLASS):
                 qgis_layer = read_impact_layer(impact_layer)
                 impact_layer_source = qgis_layer.source()
                 QgsMapLayerRegistry.instance().addMapLayer(qgis_layer, addToLegend=False)
-                # call legend layers
-                self.iface.mapCanvas().refresh()
                 #layers = self.iface.mapCanvas().layers()
                 #print len(layers)   # somehow, if this line is removed, we'll get errors
                 #for layer in layers:
                 #    print layer.name()
                 # identify impact layer in map canvas from impact layer source
-                legend_impact_layer = self.identify_impact_layer(impact_layer_source)
-                # move impact layer to layer group
+                legend_impact_layer = self.identify_layer(impact_layer_source)
+                # clone impact layer in Layer Panel
                 if qgis_layer.type() == QgsMapLayer.VectorLayer:
-                    clone = QgsVectorLayer(legend_impact_layer.source(),
+                    cloned_layer = QgsVectorLayer(legend_impact_layer.source(),
                                             legend_impact_layer.name(),
                                             legend_impact_layer.providerType())
                 elif qgis_layer.type() == QgsMapLayer.RasterLayer:
-                    clone = QgsRasterLayer(legend_impact_layer.source(),
+                    cloned_layer = QgsRasterLayer(legend_impact_layer.source(),
                                             legend_impact_layer.name(),
                                             legend_impact_layer.providerType())
                 else:
                     raise Exception('layer source is failed to be recognized')
-                QgsMapLayerRegistry.instance().addMapLayer(clone, False)
-                self.layer_group.insertLayer(0,clone)
+                # remove original layer created from dock
                 QgsMapLayerRegistry.instance().removeMapLayers([legend_impact_layer])
-                self.iface.setActiveLayer(clone)
-                
+                # add cloned layer to the layer group
+                QgsMapLayerRegistry.instance().addMapLayer(cloned_layer, False)
+                self.layer_group.insertLayer(0,cloned_layer)
+                # Set cloned layer as active layer
+                # self.iface.setActiveLayer(cloned_layer)
+                # turn off exposure layer visibility
+                exposure_layer = self.identify_layer(self.exposure_source)
+                self.iface.legendInterface().setLayerVisible(exposure_layer, False)
+                # print layer list. somehow this is the only way to update the map canvas
                 layers = self.iface.mapCanvas().layers()
-
+                for layer in layers:
+                    print layer.name()
                 # noinspection PyBroadException
-                try:
-                    status_item.setText(self.tr('Analysis Ok'))
-                    self.create_pdf(
-                        title, path, qgis_layer, count, index)
-                    status_item.setText(self.tr('Report Ok'))
-                except Exception:  # pylint: disable=W0703
-                    LOGGER.exception('Unable to render map: "%s"' % value)
-                    status_item.setText(self.tr('Report Failed'))
-                    result = False
+                # self.iface.mapCanvas().update()
+                status_item.setText(self.tr('Analysis Ok'))
+                self.create_pdf(title, path, cloned_layer, count, index)
+                status_item.setText(self.tr('Report OK'))
+                # try:
+                #     status_item.setText(self.tr('Analysis Ok'))
+                #     self.create_pdf(
+                #         title, path, qgis_layer, count, index)
+                #     LOGGER.info('Map has been rendered: "%s"' % value)
+                #     status_item.setText(self.tr('Report Ok'))
+                # except Exception:  # pylint: disable=W0703
+                #     LOGGER.exception('Unable to render map: "%s"' % value)
+                #     status_item.setText(self.tr('Report Failed'))
+                #     result = False
         else:
             LOGGER.exception('Data type not supported: "%s"' % value)
             result = False
 
         self.disable_busy_cursor()
+        # self.iface.mapCanvas().freeze(False)
         return result
 
     # noinspection PyMethodMayBeStatic
@@ -757,7 +779,7 @@ class BatchDialog(QDialog, FORM_CLASS):
 
         self.help_web_view.setHtml(string)
 
-    def identify_impact_layer(self, impact_layer_source):
+    def identify_layer(self, layer_source):
         """Identify impact layer created from dock so we can access it
 
         :param impact_layer_source: the source of impact layer created from dock.
@@ -770,7 +792,7 @@ class BatchDialog(QDialog, FORM_CLASS):
         # iterate legend layer to match with input layer
         registry_layers = QgsMapLayerRegistry.instance().mapLayers().iteritems()
         for key,value in registry_layers:
-            if value.source() == impact_layer_source:
+            if value.source() == layer_source:
                 return value
         else:
             raise Exception('Can not identify impact layer from layer source')
