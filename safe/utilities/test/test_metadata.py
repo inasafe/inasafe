@@ -5,7 +5,7 @@ from safe.utilities.metadata import (
     write_iso19115_metadata,
     read_iso19115_metadata
 )
-from safe.definitions import inasafe_keyword_version
+from safe.definitionsv4 import inasafe_keyword_version
 
 
 class TestMetadataUtilities(unittest.TestCase):

@@ -26,7 +26,7 @@ from safe.impact_functions.inundation.\
     flood_raster_population.parameter_definitions \
     import threshold
 from safe.utilities.i18n import tr
-from safe.definitions import (
+from safe.definitionsv4 import (
     layer_mode_continuous,
     layer_geometry_raster,
     hazard_flood,

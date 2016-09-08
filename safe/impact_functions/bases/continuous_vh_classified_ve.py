@@ -3,7 +3,7 @@ import logging
 
 from safe.common.exceptions import (
     MetadataLayerConstraintError)
-from safe.definitions import layer_mode_continuous, layer_geometry_point, \
+from safe.definitionsv4 import layer_mode_continuous, layer_geometry_point, \
     layer_geometry_line, layer_geometry_polygon, layer_mode_classified
 from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.bases.layer_types. \

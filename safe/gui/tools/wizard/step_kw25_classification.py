@@ -23,7 +23,7 @@ from PyQt4 import QtCore
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QListWidgetItem
 
-from safe.definitions import layer_purpose_hazard
+from safe.definitionsv4 import layer_purpose_hazard
 
 from safe.utilities.gis import is_raster_layer
 from safe.utilities.keyword_io import definition

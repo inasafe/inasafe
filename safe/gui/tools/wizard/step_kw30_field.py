@@ -25,7 +25,7 @@ from PyQt4 import QtCore
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QListWidgetItem
 
-from safe.definitions import (
+from safe.definitionsv4 import (
     layer_mode_classified,
     layer_mode_continuous,
     layer_purpose_aggregation)

@@ -1,5 +1,5 @@
 # coding=utf-8
-from safe.definitions import unit_generic, unit_metres, unit_mmi, \
+from safe.definitionsv4 import unit_generic, unit_metres, unit_mmi, \
     unit_percentage, unit_centimetres
 from safe_extras.parameters.unit import Unit
 

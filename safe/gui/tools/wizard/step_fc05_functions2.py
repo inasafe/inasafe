@@ -23,7 +23,7 @@ from PyQt4 import QtCore, QtGui
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import pyqtSignature
 
-from safe.definitions import (
+from safe.definitionsv4 import (
     layer_geometry_point,
     layer_geometry_line,
     layer_geometry_polygon,

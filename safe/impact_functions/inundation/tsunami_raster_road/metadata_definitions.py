@@ -27,7 +27,7 @@ from safe.impact_functions.inundation.tsunami_raster_building \
         high_threshold
     )
 from safe.utilities.i18n import tr
-from safe.definitions import (
+from safe.definitionsv4 import (
     layer_mode_classified,
     layer_mode_continuous,
     layer_geometry_line,

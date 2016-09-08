@@ -11,7 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 from safe.common.utilities import OrderedDict, get_thousand_separator
-from safe.definitions import (
+from safe.definitionsv4 import (
     layer_mode_classified,
     layer_mode_continuous,
     layer_geometry_polygon,

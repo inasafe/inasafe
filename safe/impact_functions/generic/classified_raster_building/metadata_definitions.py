@@ -16,7 +16,7 @@ from safe.utilities.i18n import tr
 from safe.defaults import building_type_postprocessor
 from safe.impact_functions.impact_function_metadata import (
     ImpactFunctionMetadata)
-from safe.definitions import (
+from safe.definitionsv4 import (
     layer_mode_classified,
     layer_geometry_polygon,
     layer_geometry_point,

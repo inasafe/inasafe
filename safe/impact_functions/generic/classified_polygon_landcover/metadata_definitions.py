@@ -14,7 +14,7 @@ Contact : ole.moller.nielsen@gmail.com
 from safe.common.utilities import OrderedDict
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
-from safe.definitions import (
+from safe.definitionsv4 import (
     layer_mode_classified,
     layer_geometry_polygon,
     hazard_all,

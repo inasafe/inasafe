@@ -120,6 +120,6 @@ def content():
         m.Link(
             'http://wiki.openstreetmap.org/wiki/Tag:boundary%3Dadministrative',
         text=tr(
-            'List of OSM Admin Boundary definitions '))))
+            'List of OSM Admin Boundary definitionsv4 '))))
 
     return message

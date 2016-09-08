@@ -19,7 +19,7 @@ __copyright__ += 'Disaster Reduction'
 
 from safe.postprocessors.abstract_building_road_type_postprocessor import \
     AbstractBuildingRoadTypePostprocessor
-from safe.definitions import road_class_mapping, road_class_order
+from safe.definitionsv4 import road_class_mapping, road_class_order
 from safe.utilities.i18n import tr
 
 

@@ -39,7 +39,7 @@ from safe.utilities.resources import resources_path
 def define_defaults():
     """Define standard defaults such as age ratios etc.
 
-    :returns: A dictionary of standard default definitions.
+    :returns: A dictionary of standard default definitionsv4.
     :rtype: dict
     """
     settings = QSettings()

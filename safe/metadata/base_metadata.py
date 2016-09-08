@@ -38,7 +38,7 @@ from safe.metadata.utils import (
     reading_ancillary_files
 )
 from safe.utilities.i18n import tr
-from safe.definitions import multipart_polygon_key
+from safe.definitionsv4 import multipart_polygon_key
 
 
 class BaseMetadata(object):

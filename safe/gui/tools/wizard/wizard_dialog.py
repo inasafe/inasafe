@@ -28,7 +28,7 @@ from PyQt4.QtGui import (
     QDialog,
     QPixmap)
 
-from safe.definitions import (
+from safe.definitionsv4 import (
     continuous_hazard_unit,
     exposure_unit,
     layer_purpose_hazard,

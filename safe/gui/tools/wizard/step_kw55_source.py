@@ -21,7 +21,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import QDateTime
 
-from safe.definitions import layer_mode_classified, layer_purpose_aggregation
+from safe.definitionsv4 import layer_mode_classified, layer_purpose_aggregation
 
 from safe.utilities.unicode import get_unicode
 

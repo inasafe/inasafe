@@ -17,7 +17,7 @@ from safe.impact_functions.impact_function_metadata import \
 from safe.impact_functions.volcanic.volcano_point_building\
     .parameter_definitions import distance
 from safe.utilities.i18n import tr
-from safe.definitions import (
+from safe.definitionsv4 import (
     layer_geometry_point,
     layer_geometry_polygon,
     hazard_volcano,

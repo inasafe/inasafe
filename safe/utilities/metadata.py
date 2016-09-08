@@ -32,7 +32,7 @@ from safe.metadata import (
     ImpactLayerMetadata,
     GenericLayerMetadata
 )
-from safe.definitions import inasafe_keyword_version
+from safe.definitionsv4 import inasafe_keyword_version
 
 
 def write_iso19115_metadata(layer_uri, keywords):

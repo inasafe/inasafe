@@ -27,7 +27,7 @@ from PyQt4.QtGui import (
     QListWidgetItem,
     QPixmap)
 
-from safe.definitions import layer_purpose_aggregation
+from safe.definitionsv4 import layer_purpose_aggregation
 
 from safe.utilities.keyword_io import definition
 from safe.utilities.resources import resources_path

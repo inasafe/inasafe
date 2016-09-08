@@ -29,7 +29,7 @@ from PyQt4.QtGui import (
     QPixmap)
 
 
-from safe.definitions import (
+from safe.definitionsv4 import (
     layer_purpose_hazard,
     layer_purpose_exposure)
 

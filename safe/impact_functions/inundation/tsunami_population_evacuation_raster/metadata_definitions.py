@@ -29,7 +29,7 @@ from safe.impact_functions.inundation.tsunami_population_evacuation_raster\
     .parameter_definitions import threshold
 from safe.utilities.i18n import tr
 from safe.common.utilities import OrderedDict, get_thousand_separator
-from safe.definitions import (
+from safe.definitionsv4 import (
     layer_mode_continuous,
     layer_geometry_raster,
     hazard_category_single_event,
