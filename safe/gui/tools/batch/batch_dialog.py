@@ -547,7 +547,7 @@ class BatchDialog(QDialog, FORM_CLASS):
                 else:
                     raise Exception('layer source is failed to be recognized')
                 # remove original layer created from dock
-                QgsMapLayerRegistry.instance().removeMapLayers([legend_impact_layer])
+                QgsMapLayerRegistry.instance().removeMapLayer(legend_impact_layer)
                 # add cloned layer to the layer group
                 QgsMapLayerRegistry.instance().addMapLayer(cloned_layer, False)
                 self.layer_group.insertLayer(0,cloned_layer)
