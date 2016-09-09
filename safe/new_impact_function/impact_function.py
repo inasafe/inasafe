@@ -523,6 +523,8 @@ class ImpactFunction(object):
             if not self.actual_extent:
                 self._actual_extent = self.exposure.extent()
             # Create aggregation layer from bbox = QgsVectorLayer()
+            impact_function_state['aggregation']['process'].append(
+                'Convert bbox aggregation to polygon layer with keywords')
             aggregation_layer = QgsVectorLayer("Polygon?crs=epsg:4326", "aggregation", "memory")
             data_provider = aggregation_layer.dataProvider()
 
