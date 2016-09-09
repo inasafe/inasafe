@@ -128,7 +128,7 @@ class TestImpactFunction(unittest.TestCase):
         print json.dumps(impact_function_state)
 
     def test_scenario(self):
-        scenario_path = './data/scenario_1.json'
+        scenario_path = standard_data_path('scenario', 'scenario_1.json')
         scenario, expected = read_json_flow(scenario_path)
         result = run_scenario(scenario)
         self.assertDictEqual(result, expected)
@@ -140,7 +140,7 @@ class TestImpactFunction(unittest.TestCase):
             result = run_scenario(scenario)
             self.assertDictEqual(result, expected)
 
-        path = './data'
+        path = standard_data_path('scenario')
         json_files = [os.path.join(path, f) for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
         for json_file in json_files:
             test_scenario(json_file)
