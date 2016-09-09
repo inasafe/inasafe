@@ -581,7 +581,7 @@ class ImpactFunction(object):
                 'Intersect aggregate hazard layer with divisible polygon')
         else:  # Not raster
             impact_function_state['exposure']['process'].append('Vector clip and mask exposure to aggregation')
-            if self.exposure_keyword.get('exposure') in ['structure', 'place']:
+            if self.is_divisible_exposure():
                 pass
             elif self.exposure_keyword.get('layer_geometry') == 'line':
                 impact_function_state['exposure']['process'].append('Intersect line with aggregation hazard areas')
