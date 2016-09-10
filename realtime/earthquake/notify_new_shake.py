@@ -45,12 +45,22 @@ class ShakemapPushHandler(pyinotify.ProcessEvent):
         pattern = re.compile('^(?P<shake_id>\d{14})/output/grid\.xml$')
         if os.path.exists(event.pathname) and pattern.search(rel_path):
             # if we got grid.xml
+            LOGGER.info('Got grid.xml: %s' % rel_path)
             if self.callback:
                 shake_id = pattern.match(rel_path).group('shake_id')
                 self.callback(shake_id=shake_id)
 
+    def process_IN_MOVED_TO(self, event):
+        """Handle rename event of grid.xml.
+
+        Should be the same with Create event
+
+        :param event: Inotify event
+        """
+        self.process_IN_CREATE(event)
+
     def process_IN_MODIFY(self, event):
-        """Handle modigy event of grid.xml.
+        """Handle modify event of grid.xml.
 
         Should be the same with Create event
 
@@ -66,7 +76,8 @@ def watch_shakemaps_push(
         notifier = pyinotify.ThreadedNotifier(wm, handler, timeout=timeout)
     else:
         notifier = pyinotify.Notifier(wm, handler, timeout=timeout)
-    wm.add_watch(working_dir, pyinotify.IN_CREATE, rec=True, auto_add=True)
+    flags = pyinotify.IN_CREATE | pyinotify.IN_MODIFY | pyinotify.IN_MOVED_TO
+    wm.add_watch(working_dir, flags, rec=True, auto_add=True)
 
     return notifier
 
