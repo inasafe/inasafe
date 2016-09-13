@@ -21,6 +21,7 @@
     },
     "aggregation":{
       "process":[
+        "Convert bbox aggregation to polygon layer with keywords",
         "Project aggregation CRS to exposure CRS"
       ],
       "provided":false
@@ -37,7 +38,8 @@
     },
     "exposure":{
       "process":[
-        "Vector clip and mask exposure to aggregation"
+        "Vector clip and mask exposure to aggregation",
+        "Intersect aggregate hazard layer with divisible polygon"
       ]
     }
   }
