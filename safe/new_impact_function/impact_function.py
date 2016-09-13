@@ -20,6 +20,7 @@ from qgis.core import (
     QgsFeature
 )
 
+from safe.definitions import post_processors
 from safe.defaults import get_defaults
 from safe.common.exceptions import InvalidExtentError
 from safe.utilities.i18n import tr
@@ -636,10 +637,9 @@ class ImpactFunction(object):
 
         # Post Processor
         # TODO (Ismail) Add new keyword for post processor in exposure layer
-        post_processor_parameters = self.exposure_keyword.get(
-            'post_processor', {})
-        for post_processor, parameter in post_processor_parameters.items():
+        post_processor_parameters = post_processors
+        for post_processor in post_processor_parameters:
             impact_function_state['post_processor']['process'].append(
-                'Post processor for %s ' % post_processor)
+                'Post processor for %s.' % post_processor['name'])
 
         return impact_function_state

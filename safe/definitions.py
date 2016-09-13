@@ -172,8 +172,9 @@ concepts = {
         ],
       },
     'killed_people': {
-        'description': tr('People who lost their lives as a consequence of a '
-                'hazardous event.'),
+        'description': tr(
+            'People who lost their lives as a consequence of a hazardous '
+            'event.'),
         'citations': [
             {
                 'text': tr(
@@ -2087,3 +2088,36 @@ place_class_order = [item['key'] for item in place_class_mapping]
 # OSM wiki map features building and Australian building classification
 # standards in @charlotte_morgan head. This list attempts to be generic and
 # not location specific. It should be reviewed. 25 May 2016.
+
+# Post Processor
+post_processor_gender = {
+    'key': 'gender',
+    'name': tr('Gender'),
+    'description': tr(
+        'Post processor to calculate the number of affected woman'),
+    'input': {
+        'population_field': {
+            'default': 'population',
+            'description': tr('Number of population'),
+            'layer': 'exposure',
+            'needed': True
+        },
+        'gender_ratio_field': {
+            'default': 'gender_ratio',
+            'description': tr('Ratio of woman per total population.'),
+            'layer': 'aggregation',
+            'needed': False
+        }
+    },
+    'output': {
+        'woman_field': {
+            'default': 'woman',
+            'description': tr('Number of affected woman.'),
+            'formula': 'population_field * gender_ratio_field'
+        }
+    }
+}
+
+post_processors = [
+    post_processor_gender
+]
