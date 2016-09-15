@@ -27,7 +27,8 @@ from StringIO import StringIO
 from ConfigParser import ConfigParser, MissingSectionHeaderError, ParsingError
 
 from qgis.core import (
-    QgsRectangle, 
+    QgsRectangle,
+    QgsCoordinateTransform,
     QgsCoordinateReferenceSystem, 
     QgsMapLayer,
     QgsMapLayerRegistry, 
@@ -583,6 +584,71 @@ class BatchDialog(QDialog, FORM_CLASS):
         # self.iface.mapCanvas().freeze(False)
         return result
 
+    def generate_pdf(self, impact_layer):
+        """
+        attempt to replicate pdf creation method from dock
+        :return:
+        """
+
+        # Open Impact Report Dialog
+        print_dialog = ImpactReportDialog(self.iface)
+
+        # Use full extent
+        map_crs = self.iface.mapCanvas().mapRenderer().destinationCrs()
+        layer_crs = impact_layer.crs()
+        layer_extent = impact_layer.extent()
+        if map_crs != layer_crs:
+            transform = QgsCoordinateTransform(layer_crs, map_crs)
+            layer_extent = transform.transformBoundingBox(layer_extent)
+        area_extent = layer_extent
+
+        # set template path
+        template_path = resources_path(
+            'qgis-composer-templates', 'a4-portrait-blue.qpt')
+        impact_report = ImpactReport(self.iface, template_path, impact_layer)
+        impact_report.extent = area_extent
+
+        # Get other setting
+        settings = QSettings()
+        logo_path = settings.value(
+            'inasafe/organisation_logo_path', '', type=str)
+        impact_report.organisation_logo = logo_path
+
+        disclaimer_text = settings.value(
+            'inasafe/reportDisclaimer', '', type=str)
+        impact_report.disclaimer = disclaimer_text
+
+        north_arrow_path = settings.value(
+            'inasafe/north_arrow_path', '', type=str)
+        impact_report.north_arrow = north_arrow_path
+
+        template_warning_verbose = bool(settings.value(
+            'inasafe/template_warning_verbose', True, type=bool))
+
+        # Check if there's missing elements needed in the template
+        component_ids = ['safe-logo', 'north-arrow', 'organisation-logo',
+                         'impact-map', 'impact-legend']
+        impact_report.component_ids = component_ids
+        length = len(impact_report.missing_elements)
+        if template_warning_verbose and length != 0:
+            title = self.tr('Template is missing some elements')
+            question = self.tr(
+                'The composer template you are printing to is missing '
+                'these elements: %s. Do you still want to continue') % (
+                           ', '.join(impact_report.missing_elements))
+            # noinspection PyCallByClass,PyTypeChecker
+            answer = QtGui.QMessageBox.question(
+                self,
+                title,
+                question,
+                QtGui.QMessageBox.Yes | QtGui.QMessageBox.No)
+            if answer == QtGui.QMessageBox.No:
+                return
+
+        self.enable_busy_cursor()
+        self.dock.print_map_to_pdf(impact_report)
+        self.disable_busy_cursor()
+        
     # noinspection PyMethodMayBeStatic
     def report_path(self, directory, title, count=0, index=None):
         """Get PDF report filename given directory, title and optional index.
