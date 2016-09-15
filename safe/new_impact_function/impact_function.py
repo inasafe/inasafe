@@ -55,7 +55,6 @@ class ImpactFunction(object):
         # The current viewport extent of the map canvas
         self._viewport_extent = None
         # Actual extent to use - Read Only
-        # For 'old-style' IF we do some manipulation to the requested extent
         self._actual_extent = None
         # Actual extent's CRS - Read Only
         self._actual_extent_crs = QgsCoordinateReferenceSystem('EPSG:4326')
@@ -69,6 +68,8 @@ class ImpactFunction(object):
 
         self._name = None  # e.g. Flood Raster on Building Polygon
         self._title = None  # be affected
+
+        self.state = {}
 
     @property
     def hazard(self):
@@ -475,7 +476,8 @@ class ImpactFunction(object):
 
     def is_divisible_exposure(self):
         """Check if an exposure has divisible feature.
-        :returns: True if divisible, else False
+
+        :returns: True if divisible, else False.
         :rtype: bool
         """
         if self.exposure_keyword.get('layer_geometry') == 'point':
@@ -508,32 +510,43 @@ class ImpactFunction(object):
 
         return aggregation_layer
 
-    def flow(self):
-        impact_function_state = {
+    def reset_state(self):
+        """Method to reset the state of the impact function.
+        """
+        self.state = {
             'hazard': {
-                'process': []
+                'process': [],
+                'info': {}
             },
             'exposure': {
-                'process': []
+                'process': [],
+                'info': {}
             },
             'aggregation': {
-                'process': []
+                'process': [],
+                'info': {}
             },
             'impact function': {
-                'process': []
-
+                'process': [],
+                'info': {}
             },
             'post_processor': {
-                'process': []
-
+                'process': [],
+                'info': {}
             }
         }
 
+    def flow(self):
+        self.reset_state()
+
         # Aggregation Preparation
         if not self.aggregation:
-            impact_function_state['aggregation']['provided'] = False
+            self.state['aggregation']['info']['provided'] = False
             if not self.actual_extent:
                 self._actual_extent = self.exposure.extent()
+
+            self.state['aggregation']['process'].append(
+                'Convert bbox aggregation to polygon layer with keywords')
 
             self.aggregation = self.create_virtual_aggregation()
 
@@ -542,75 +555,75 @@ class ImpactFunction(object):
             self.aggregation_keyword = aggregation_keyword
 
         else:
-            impact_function_state['aggregation']['provided'] = True
+            self.state['aggregation']['info']['provided'] = True
 
-        impact_function_state['aggregation']['process'].append(
+        self.state['aggregation']['process'].append(
             'Project aggregation CRS to exposure CRS')
 
         # Hazard Preparation
         if self.hazard.type() == QgsMapLayer.VectorLayer:
             if self.hazard_keyword.get('layer_mode') == 'continuous':
-                impact_function_state['hazard']['process'].append(
+                self.state['hazard']['process'].append(
                     'classify continuous hazard and assign class name')
                 if self.hazard_keyword.get('layer_geometry') != 'polygon':
-                    impact_function_state['hazard']['process'].append(
+                    self.state['hazard']['process'].append(
                         'Buffering')
             else:
                 if self.hazard_keyword.get('layer_geometry') != 'polygon':
-                    impact_function_state['hazard']['process'].append(
+                    self.state['hazard']['process'].append(
                         'Buffering')
-                impact_function_state['hazard']['process'].append(
+                self.state['hazard']['process'].append(
                     'Assign classes based on value map')
 
         elif self.hazard.type() == QgsMapLayer.RasterLayer:
             if self.hazard_keyword.get('layer_mode') == 'continuous':
-                impact_function_state['hazard']['process'].append(
+                self.state['hazard']['process'].append(
                     'classify continuous raster hazard')
-            impact_function_state['hazard']['process'].append(
+            self.state['hazard']['process'].append(
                 'polygonise classified raster hazard')
-            impact_function_state['hazard']['process'].append(
+            self.state['hazard']['process'].append(
                 'assign class name based on class id')
         else:
             raise tr('Unsupported hazard layer type')
 
-        impact_function_state['hazard']['process'].append(
+        self.state['hazard']['process'].append(
             'Classified polygon hazard with keywords')
-        impact_function_state['hazard']['process'].append(
+        self.state['hazard']['process'].append(
             'Project hazard CRS to exposure CRS')
 
-        impact_function_state['hazard']['process'].append(
+        self.state['hazard']['process'].append(
             'Vector clip and mask hazard to aggregation')
-        impact_function_state['hazard']['process'].append(
+        self.state['hazard']['process'].append(
             'Intersect hazard polygons with aggregation areas and assign '
             'hazard class')
 
         # Exposure Preparation
         if self.exposure.type() == QgsMapLayer.RasterLayer:
             if self.exposure_keyword.get('exposure_unit') == 'density':
-                impact_function_state['exposure']['process'].append(
+                self.state['exposure']['process'].append(
                     'Calculate counts per cell')
-            impact_function_state['exposure']['process'].append(
+            self.state['exposure']['process'].append(
                 'Raster clip and mask exposure to aggregation')
-            impact_function_state['exposure']['process'].append(
+            self.state['exposure']['process'].append(
                 'Zonal stats on intersected hazard / aggregation data')
-            impact_function_state['exposure']['process'].append(
+            self.state['exposure']['process'].append(
                 'Intersect aggregate hazard layer with divisible polygon')
         elif self.exposure.type() == QgsMapLayer.VectorLayer:
-            impact_function_state['exposure']['process'].append(
+            self.state['exposure']['process'].append(
                 'Vector clip and mask exposure to aggregation')
             if self.is_divisible_exposure():
                 pass
             elif self.exposure_keyword.get('layer_geometry') == 'line':
-                impact_function_state['exposure']['process'].append(
+                self.state['exposure']['process'].append(
                     'Intersect line with aggregation hazard areas')
             else:
-                impact_function_state['exposure']['process'].append(
+                self.state['exposure']['process'].append(
                     'Intersect aggregate hazard layer with divisible polygon')
         else:
             raise tr('Unsupported exposure layer type')
 
         # Running Impact Function
-        impact_function_state['impact function']['process'].append(
+        self.state['impact function']['process'].append(
             'Run impact function')
 
         if self.exposure_keyword.get('layer_geometry') == 'raster':
@@ -618,24 +631,24 @@ class ImpactFunction(object):
             if self.hazard_keyword('hazard') == 'earthquake':
                 pass
             else:
-                impact_function_state['impact function']['algorithm'] = \
+                self.state['impact function']['info']['algorithm'] = \
                     'raster'
         elif self.exposure_keyword.get('layer_geometry') == 'point':
-            impact_function_state['impact function']['algorithm'] = 'point'
+            self.state['impact function']['info']['algorithm'] = 'point'
         elif self.exposure_keyword.get('exposure') == 'structure':
-            impact_function_state['impact function']['algorithm'] = \
+            self.state['impact function']['info']['algorithm'] = \
                 'indivisible polygon'
         elif self.exposure_keyword.get('layer_geometry') == 'line':
-            impact_function_state['impact function']['algorithm'] = 'line'
+            self.state['impact function']['info']['algorithm'] = 'line'
         else:
-            impact_function_state['impact function']['algorithm'] = 'polygon'
+            self.state['impact function']['info']['algorithm'] = 'polygon'
 
         if self.is_divisible_exposure():
-            impact_function_state['impact function']['process'].append(
+            self.state['impact function']['process'].append(
                 'Highest class of hazard is assigned when more than one '
                 'overlaps')
         else:
-            impact_function_state['impact function']['process'].append(
+            self.state['impact function']['process'].append(
                 'Assign by location aggregation and hazard areas to exposure '
                 'features')
 
@@ -643,7 +656,7 @@ class ImpactFunction(object):
         # TODO (Ismail) Add new keyword for post processor in exposure layer
         post_processor_parameters = post_processors
         for post_processor in post_processor_parameters:
-            impact_function_state['post_processor']['process'].append(
+            self.state['post_processor']['process'].append(
                 'Post processor for %s.' % post_processor['name'])
 
-        return impact_function_state
+        return self.state

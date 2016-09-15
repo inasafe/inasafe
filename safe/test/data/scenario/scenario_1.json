@@ -8,25 +8,31 @@
 
   "expected":{
     "impact function":{
+      "info": {
+        "algorithm":"point"
+      },
       "process":[
         "Run impact function",
         "Assign by location aggregation and hazard areas to exposure features"
-      ],
-      "algorithm":"point"
+      ]
     },
     "post_processor":{
+      "info": {},
       "process":[
         "Post processor for Gender."
       ]
     },
     "aggregation":{
+      "info": {
+        "provided":false
+      },
       "process":[
         "Convert bbox aggregation to polygon layer with keywords",
         "Project aggregation CRS to exposure CRS"
-      ],
-      "provided":false
+      ]
     },
     "hazard":{
+      "info": {},
       "process":[
         "Assign classes based on value map",
         "Classified polygon hazard with keywords",
@@ -36,6 +42,7 @@
       ]
     },
     "exposure":{
+      "info": {},
       "process":[
         "Vector clip and mask exposure to aggregation",
         "Intersect aggregate hazard layer with divisible polygon"
