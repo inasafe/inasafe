@@ -548,7 +548,6 @@ class ImpactFunction(object):
         """
         self.state[context]["process"].append(process)
 
-
     def set_state_info(self, context, key, value):
         """Method to add information for a context in the IF state.
 
@@ -594,7 +593,7 @@ class ImpactFunction(object):
             if self.hazard_keyword.get('layer_mode') == 'continuous':
                 self.set_state_process(
                     'hazard',
-                    'Classify continuous hazard and assign class name')
+                    'Classify continuous hazard and assign class names')
                 if self.hazard_keyword.get('layer_geometry') != 'polygon':
                     self.set_state_process('hazard', 'Buffering')
             else:
