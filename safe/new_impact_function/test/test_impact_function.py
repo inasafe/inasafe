@@ -86,6 +86,7 @@ class TestImpactFunction(unittest.TestCase):
         self.assertEqual(impact_function.name, 'Flood Polygon on Road Line')
         self.assertEqual(impact_function.title, 'be affected')
 
+    # Expected failure since there is not real implementation yet.
     @unittest.expectedFailure
     def test_run_impact_function(self):
         """Test running impact function on test data."""
@@ -144,8 +145,6 @@ class TestImpactFunction(unittest.TestCase):
         json_files = [os.path.join(path, f) for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
         for json_file in json_files:
             test_scenario(json_file)
-
-
 
 
 if __name__ == '__main__':

@@ -540,9 +540,7 @@ class ImpactFunction(object):
             'Project aggregation CRS to exposure CRS')
 
         # Hazard Preparation
-        if self.hazard_keyword.get('layer_geometry') in [
-                'point', 'line', 'polygon']:
-            impact_function_state['hazard']['geometry'] = 'vector'
+        if self.hazard.type() == QgsMapLayer.VectorLayer:
             if self.hazard_keyword.get('layer_mode') == 'continuous':
                 impact_function_state['hazard']['process'].append(
                     'classify continuous hazard and assign class name')
@@ -556,20 +554,16 @@ class ImpactFunction(object):
                 impact_function_state['hazard']['process'].append(
                     'Assign classes based on value map')
 
-        elif self.hazard_keyword.get('layer_geometry') == 'raster':
-            impact_function_state['hazard']['geometry'] = 'raster'
+        elif self.hazard.type() == QgsMapLayer.RasterLayer:
             if self.hazard_keyword.get('layer_mode') == 'continuous':
-                impact_function_state['hazard']['mode'] = 'continuous'
                 impact_function_state['hazard']['process'].append(
                     'classify continuous raster hazard')
-            else:
-                impact_function_state['hazard']['mode'] = 'classified'
             impact_function_state['hazard']['process'].append(
                 'polygonise classified raster hazard')
             impact_function_state['hazard']['process'].append(
                 'assign class name based on class id')
         else:
-            impact_function_state['hazard']['geometry'] = 'other'
+            raise tr('Unsupported hazard layer type')
 
         impact_function_state['hazard']['process'].append(
             'Classified polygon hazard with keywords')
@@ -583,7 +577,7 @@ class ImpactFunction(object):
             'hazard class')
 
         # Exposure Preparation
-        if self.exposure_keyword.get('layer_geometry') == 'raster':
+        if self.exposure.type() == QgsMapLayer.RasterLayer:
             if self.exposure_keyword.get('exposure_unit') == 'density':
                 impact_function_state['exposure']['process'].append(
                     'Calculate counts per cell')
@@ -593,7 +587,7 @@ class ImpactFunction(object):
                 'Zonal stats on intersected hazard / aggregation data')
             impact_function_state['exposure']['process'].append(
                 'Intersect aggregate hazard layer with divisible polygon')
-        else:  # Not raster
+        elif self.exposure.type() == QgsMapLayer.VectorLayer:
             impact_function_state['exposure']['process'].append(
                 'Vector clip and mask exposure to aggregation')
             if self.is_divisible_exposure():
@@ -604,6 +598,8 @@ class ImpactFunction(object):
             else:
                 impact_function_state['exposure']['process'].append(
                     'Intersect aggregate hazard layer with divisible polygon')
+        else:
+            raise tr('Unsupported exposure layer type')
 
         # Running Impact Function
         impact_function_state['impact function']['process'].append(

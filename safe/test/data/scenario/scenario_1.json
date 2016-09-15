@@ -33,8 +33,7 @@
         "Project hazard CRS to exposure CRS",
         "Vector clip and mask hazard to aggregation",
         "Intersect hazard polygons with aggregation areas and assign hazard class"
-      ],
-      "geometry":"vector"
+      ]
     },
     "exposure":{
       "process":[
