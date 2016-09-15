@@ -415,3 +415,8 @@ class MissingMetadata(InaSAFEError):
 class MissingImpactReport(InaSAFEError):
     """When Impact Report do not have proper input.."""
     pass
+
+
+class ErrorDataStore(InaSAFEError):
+    """When the datastore has an error."""
+    pass
