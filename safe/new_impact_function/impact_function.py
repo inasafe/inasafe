@@ -490,6 +490,24 @@ class ImpactFunction(object):
         else:
             return True
 
+    def create_virtual_aggregation(self):
+        """Function to create aggregation layer based on extent
+
+        :returns: A polygon layer with exposure's crs.
+        :rtype: QgsVectorLayer
+        """
+        exposure_crs = self.exposure.crs().authid()
+        aggregation_layer = QgsVectorLayer(
+            "Polygon?crs=%s" % exposure_crs, "aggregation", "memory")
+        data_provider = aggregation_layer.dataProvider()
+
+        feature = QgsFeature()
+        # noinspection PyCallByClass,PyArgumentList,PyTypeChecker
+        feature.setGeometry(QgsGeometry.fromRect(self.actual_extent))
+        data_provider.addFeatures([feature])
+
+        return aggregation_layer
+
     def flow(self):
         impact_function_state = {
             'hazard': {
@@ -516,19 +534,8 @@ class ImpactFunction(object):
             impact_function_state['aggregation']['provided'] = False
             if not self.actual_extent:
                 self._actual_extent = self.exposure.extent()
-            # Create aggregation layer from bbox = QgsVectorLayer()
-            impact_function_state['aggregation']['process'].append(
-                'Convert bbox aggregation to polygon layer with keywords')
-            aggregation_layer = QgsVectorLayer(
-                "Polygon?crs=epsg:4326", "aggregation", "memory")
-            data_provider = aggregation_layer.dataProvider()
 
-            feature = QgsFeature()
-            # noinspection PyCallByClass,PyArgumentList,PyTypeChecker
-            feature.setGeometry(QgsGeometry.fromRect(self.actual_extent))
-            data_provider.addFeatures([feature])
-
-            self.aggregation = aggregation_layer
+            self.aggregation = self.create_virtual_aggregation()
 
             # Generate aggregation keywords
             aggregation_keyword = get_defaults()
@@ -536,6 +543,7 @@ class ImpactFunction(object):
 
         else:
             impact_function_state['aggregation']['provided'] = True
+
         impact_function_state['aggregation']['process'].append(
             'Project aggregation CRS to exposure CRS')
 
