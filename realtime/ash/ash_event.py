@@ -273,7 +273,9 @@ class AshEvent(QObject):
             ),
             'content-notes': self.tr(
                 'This report was created using InaSAFE version %s. Visit '
-                'http://inasafe.org for more information. ') % get_version()
+                'http://inasafe.org for more information. ') % get_version(),
+            'content-support': self.tr(
+                'Supported by DMInnovation, Geoscience Australia and the World Bank-GFDRR')
         }
         return event
 
@@ -792,7 +794,7 @@ class AshEvent(QObject):
         landcover_html.setUrl(QUrl(self.landcover_html_path))
 
         # setup logos
-        logos_id = ['logo-bnpb', 'logo-geologi']
+        logos_id = ['logo-bnpb', 'logo-geologi', 'logo-inasafe']
         for logo_id in logos_id:
             logo_picture = composition.getComposerItemById(logo_id)
             if logo_picture is None:
