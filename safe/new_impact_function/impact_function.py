@@ -609,7 +609,7 @@ class ImpactFunction(object):
             self.set_state_process(
                 'hazard', 'Polygonise classified raster hazard')
             self.set_state_process(
-                'hazard', 'Assign class name based on class id')
+                'hazard', 'Assign class names based on class id')
         else:
             raise tr('Unsupported hazard layer type')
         self.set_state_process(
