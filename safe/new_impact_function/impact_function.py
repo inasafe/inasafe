@@ -626,13 +626,18 @@ class ImpactFunction(object):
 
         # Exposure Preparation
         if self.exposure.type() == QgsMapLayer.RasterLayer:
-            if self.exposure_keyword.get('exposure_unit') == 'density':
-                self.set_state_process('exposure', 'Calculate counts per cell')
-            self.set_state_process(
-                'exposure', 'Raster clip and mask exposure to aggregation')
-            self.set_state_process(
-                'exposure',
-                'Zonal stats on intersected hazard / aggregation data')
+            if self.exposure_keyword.get('layer_mode') == 'continuous':
+                if self.exposure_keyword.get('exposure_unit') == 'density':
+                    self.set_state_process(
+                        'exposure', 'Calculate counts per cell')
+                self.set_state_process(
+                    'exposure', 'Raster clip and mask exposure to aggregation')
+                self.set_state_process(
+                    'exposure',
+                    'Zonal stats on intersected hazard / aggregation data')
+            else:
+                self.set_state_process(
+                    'exposure', 'Polygonise classified raster exposure')
             self.set_state_process(
                 'exposure',
                 'Intersect aggregate hazard layer with divisible polygon')
