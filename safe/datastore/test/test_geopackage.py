@@ -39,7 +39,7 @@ class TestGeoPackage(unittest.TestCase):
         """Test if we can store geopackage."""
         path = QFileInfo(mktemp() + '.gpkg')
         self.assertFalse(path.exists())
-        ds = GeoPackage(path)
+        data_store = GeoPackage(path)
         path.refresh()
         self.assertTrue(path.exists())
 
@@ -48,16 +48,16 @@ class TestGeoPackage(unittest.TestCase):
         # Let's add a vector layer.
         layer = standard_data_path('hazard', 'flood_multipart_polygons.shp')
         vector_layer = QgsVectorLayer(layer, 'Flood', 'ogr')
-        result = ds.add_layer(vector_layer, layer_name)
+        result = data_store.add_layer(vector_layer, layer_name)
         self.assertTrue(result[0])
 
-        layers = ds.layers()
+        layers = data_store.layers()
         self.assertEqual(len(layers), 1)
         self.assertIn(layer_name, layers)
 
-        self.assertIsNone(ds.layer_uri('fake_layer'))
+        self.assertIsNone(data_store.layer_uri('fake_layer'))
         expected = path.absoluteFilePath() + '|layername=' + layer_name
-        self.assertEqual(ds.layer_uri(layer_name), expected)
+        self.assertEqual(data_store.layer_uri(layer_name), expected)
 
 
 if __name__ == '__main__':
