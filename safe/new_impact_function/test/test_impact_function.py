@@ -50,8 +50,10 @@ def run_scenario(scenario):
     else:
         if os.path.exists(scenario['aggregation']):
             aggregation_path = scenario['aggregation']
-        elif os.path.exists(standard_data_path('aggregation', scenario['aggregation'])):
-            aggregation_path = standard_data_path('aggregation', scenario['aggregation'])
+        elif os.path.exists(standard_data_path(
+                'aggregation', scenario['aggregation'])):
+            aggregation_path = standard_data_path(
+                'aggregation', scenario['aggregation'])
         else:
             aggregation_path = None
 
@@ -59,7 +61,8 @@ def run_scenario(scenario):
     impact_function.hazard = QgsVectorLayer(hazard_path, 'Hazard', 'ogr')
     impact_function.exposure = QgsVectorLayer(exposure_path, 'Exposure', 'ogr')
     if aggregation_path:
-        impact_function.aggregation = QgsVectorLayer(aggregation_path, 'Exposure', 'ogr')
+        impact_function.aggregation = QgsVectorLayer(
+            aggregation_path, 'Exposure', 'ogr')
 
     result = impact_function.flow()
 
@@ -107,29 +110,9 @@ class TestImpactFunction(unittest.TestCase):
         result = impact_function.impact_layer
         self.assertIsNotNone(result)
 
-    def test_impact_function_flow(self):
-        """Test running impact function on test data."""
-        # Set up test data
-        hazard_path = standard_data_path(
-            'hazard', 'flood_multipart_polygons.shp')
-        exposure_path = standard_data_path('exposure', 'building-points.shp')
-        # noinspection PyCallingNonCallable
-        hazard_layer = QgsVectorLayer(hazard_path, 'Flood', 'ogr')
-        # noinspection PyCallingNonCallable
-        exposure_layer = QgsVectorLayer(exposure_path, 'Building Point', 'ogr')
-
-        # Set up impact function
-        impact_function = ImpactFunction()
-        impact_function.exposure = exposure_layer
-        impact_function.hazard = hazard_layer
-
-        impact_function_state = impact_function.flow()
-        from pprint import pprint
-        pprint(impact_function_state)
-        print json.dumps(impact_function_state)
-
     def test_scenario(self):
-        scenario_path = standard_data_path('scenario', 'scenario_1.json')
+        scenario_path = standard_data_path(
+            'scenario', 'polygon_hazard_point_exposure.json')
         scenario, expected = read_json_flow(scenario_path)
         result = run_scenario(scenario)
         self.assertDictEqual(result, expected)
@@ -142,7 +125,9 @@ class TestImpactFunction(unittest.TestCase):
             self.assertDictEqual(result, expected)
 
         path = standard_data_path('scenario')
-        json_files = [os.path.join(path, f) for f in os.listdir(path) if os.path.isfile(os.path.join(path, f))]
+        json_files = [
+            os.path.join(path, f) for f in os.listdir(path)
+            if os.path.isfile(os.path.join(path, f))]
         for json_file in json_files:
             test_scenario(json_file)
 
