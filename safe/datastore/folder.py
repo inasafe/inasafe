@@ -1,6 +1,6 @@
 # coding=utf-8
 """
-InaSAFE Disaster risk assessment tool by AusAid - **Clipper test suite.**
+InaSAFE Disaster risk assessment tool by AusAid
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -61,6 +61,16 @@ class Folder(DataStore):
         .. versionadded:: 4.0
         """
         return QFileInfo(self._uri.absolutePath()).isWritable()
+
+    def is_raster_supported(self):
+        """Check if we can support raster in the datastore.
+
+        :return: If it's writable or not.
+        :rtype: bool
+
+        .. versionadded:: 4.0
+        """
+        return True
 
     def layers(self):
         """Return a list of layers available.

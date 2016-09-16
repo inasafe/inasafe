@@ -1,6 +1,6 @@
 # coding=utf-8
 """
-InaSAFE Disaster risk assessment tool by AusAid - **Clipper test suite.**
+InaSAFE Disaster risk assessment tool by AusAid
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -77,6 +77,17 @@ class DataStore(object):
     @abstractmethod
     def is_writable(self):
         """Check if the URI is writable.
+
+        :return: If it's writable or not.
+        :rtype: bool
+
+        .. versionadded:: 4.0
+        """
+        raise NotImplementedError
+
+    @abstractmethod
+    def is_raster_supported(self):
+        """Check if we can support raster in the datastore.
 
         :return: If it's writable or not.
         :rtype: bool
