@@ -192,6 +192,16 @@
       "value": null,
       "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/impact_table/gco:CharacterString"
     },
+    "inasafe_fields": {
+      "allowed_python_types": [
+        "dict",
+        "NoneType"
+      ],
+      "name": "inasafe_fields",
+      "python_type": "NoneType",
+      "value": null,
+      "xml_path": "gmd:identificationInfo/gmd:MD_DataIdentification/gmd:supplementalInformation/inasafe/inasafe_fields/gco:Dictionary"
+    },
     "keyword_version": {
       "allowed_python_types": [
         "str",
