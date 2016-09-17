@@ -2118,6 +2118,28 @@ post_processor_gender = {
     }
 }
 
+post_processor_value = {
+    'key': 'value',
+    'name': tr('Value'),
+    'description': tr(
+        'Post processor to calculate the value of a feature. A feature should '
+        'have a value field.'),
+    'input': {
+        'value_field': {
+            'default': 'value',
+            'description': tr('The value of the feature'),
+            'layer': 'exposure',
+            'needed': True
+        }
+    },
+    'output': {
+        'value_field': {
+            # No need to do anything. TODO: How?
+        }
+    }
+}
+
 post_processors = [
-    post_processor_gender
+    post_processor_gender,
+    post_processor_value
 ]
