@@ -176,7 +176,12 @@
             <gco:Boolean/>
           </multipart_polygon>
           <inasafe_fields>
-            <gco:Dictionary/>
+            <gco:Dictionary>
+              {
+              &quot;population_field&quot;:&quot;population&quot;,
+              &quot;gender_ratio_field&quot;:&quot;WomenRatio&quot;
+              }
+            </gco:Dictionary>
           </inasafe_fields>
           <map_title>
             <gco:CharacterString>Structures affected by flood event</gco:CharacterString>
