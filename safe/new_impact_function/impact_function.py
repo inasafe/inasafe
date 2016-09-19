@@ -437,7 +437,7 @@ class ImpactFunction(object):
         # TODO (Ismail) Add new keyword for post processor in exposure layer
         post_processor_parameters = post_processors
         for post_processor in post_processor_parameters:
-            self.run_single_post_processor(post_processor)
+            print self.run_single_post_processor(post_processor)
             self.set_state_process(
                 'post_processor',
                 'Post processor for %s.' % post_processor['name'])
@@ -710,10 +710,15 @@ class ImpactFunction(object):
         """
         inasafe_fields = self.impact_keyword.get('inasafe_fields', {})
         if self.enough_input(inasafe_fields, post_processor['input']):
-            print True, post_processor['key']
-            return True
+            # Get real input
+            input_mapping = self.input_mapping(
+                inasafe_fields, post_processor['input'])
+            # Calculate based on formula
+            
+            # Generate output
+            return True, post_processor['key']
         else:
-            print False, post_processor['key']
+            return False, post_processor['key'], tr('Not enough inputs')
 
     def enough_input(self, inasafe_fields, post_processor_input):
         """Check if the input from inasafe_fields in enough.
@@ -734,3 +739,23 @@ class ImpactFunction(object):
             else:
                 return False
         return True
+
+    def input_mapping(self, inasafe_fields, post_processor_input):
+        """Obtain the mapping of post processor input and inasafe_fields
+
+
+        :param inasafe_fields: Special fields from the impact layer.
+        :type inasafe_fields: dict
+
+        :param post_processor_input: Collection of post processor input
+            requirements.
+        :type post_processor_input: dict
+
+        :returns: Mapping between input key and field name.
+        :rtype: dict
+        """
+        input_mapping = {}
+        for input_key, input_value in post_processor_input.items():
+            input_mapping[input_key] = inasafe_fields.get(
+                input_value['field']['key'])
+        return input_mapping

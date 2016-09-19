@@ -5,6 +5,7 @@ import os
 from safe.test.utilities import get_qgis_app, standard_data_path
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
+from safe.definitions import post_processor_gender, post_processor_value
 from safe.test.utilities import clone_shp_layer
 from safe.utilities.keyword_io import KeywordIO
 from safe.new_impact_function.impact_function import ImpactFunction
@@ -164,12 +165,26 @@ class TestImpactFunction(unittest.TestCase):
             'population_field': 'population',
             'gender_ratio_field': 'gender'
         }
-        from safe.definitions import post_processor_gender, post_processor_value
+
         self.assertTrue(impact_function.enough_input(
             inasafe_fields, post_processor_gender['input']))
         self.assertFalse(impact_function.enough_input(
             inasafe_fields, post_processor_value['input']))
 
+    def test_input_mapping(self):
+        """Test for input_mapping function."""
+        impact_function = ImpactFunction()
+        inasafe_fields = {
+            'population_field': 'population',
+            'gender_ratio_field': 'WomenRatio'
+        }
+
+        expected_input_mapping = {
+            'gender_ratio': 'WomenRatio', 'population': 'population'}
+        self.assertDictEqual(
+            expected_input_mapping,
+            impact_function.input_mapping(
+                inasafe_fields, post_processor_gender['input']))
 
 if __name__ == '__main__':
     unittest.main()

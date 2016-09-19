@@ -2160,6 +2160,8 @@ post_processor_gender = {
     'input': {
         'population': {
             'field': population_field,
+            # We can add something later, like mandatory requirement, another
+            #  source of input (e.g. parameter)
         },
         'gender_ratio': {
             'field': gender_ratio_field,
