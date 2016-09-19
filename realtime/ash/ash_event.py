@@ -436,6 +436,7 @@ class AshEvent(QObject):
                     'class': haz_class,
                     'hazard': haz,
                     'css': haz.lower().replace(' ', '-'),
+                    'pop_val': city_pop,
                     'population': format_int(
                         population_rounding(city_pop / 1000)),
                     'name': city_name.title(),
@@ -446,7 +447,7 @@ class AshEvent(QObject):
             # sort table by hazard zone, then population
             table_places = sorted(
                 table_places,
-                key=lambda x: (-x['class'], -x['population']))
+                key=lambda x: (-x['class'], -x['pop_val']))
         except Exception as e:
             LOGGER.exception(e)
             table_places = []
@@ -474,7 +475,8 @@ class AshEvent(QObject):
                     'class': haz_class,
                     'hazard': haz,
                     'css': haz.lower().replace(' ', '-'),
-                    'population': 0,
+                    'pop_val': 0,
+                    'population': '0',
                     'name': airport_name.title(),
                     'type': 'airport'
                 }
@@ -506,7 +508,7 @@ class AshEvent(QObject):
         # sort entry by hazard level
         item_list = sorted(
             item_list,
-            key=lambda x: (-x['class'], -x['population']))
+            key=lambda x: (-x['class'], -x['pop_val']))
 
         nearby_template = self.ash_fixtures_dir(
             'nearby-table.template.html')
