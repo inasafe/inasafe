@@ -453,10 +453,14 @@ class ImpactFunction(object):
         """More process after getting the impact layer with data."""
         # Post processor (gender, age, building type, etc)
         # Notes, action
-        # TODO (Ismail) Add new keyword for post processor in exposure layer
-        post_processor_parameters = post_processors
-        for post_processor in post_processor_parameters:
-            print self.run_single_post_processor(post_processor)
+        if 'post_processor_fields' not in self.impact_keyword:
+            self.impact_keyword['post_processor_fields'] = {}
+
+        for post_processor in post_processors:
+            post_processor_output = self.run_single_post_processor(
+                post_processor)
+            self.impact_keyword['post_processor_fields'].update(
+                    post_processor_output[2])
             self.set_state_process(
                 'post_processor',
                 'Post processor for %s.' % post_processor['name'])

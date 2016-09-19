@@ -138,6 +138,37 @@ class TestImpactFunction(unittest.TestCase):
         for json_file in json_files:
             test_scenario(json_file)
 
+    def test_gender_post_processor(self):
+        expected_inasafe_fields = {
+            'population_field': 'population',
+            'gender_ratio_field': 'WomenRatio'
+        }
+        impact_layer = clone_shp_layer(
+            'indivisible_polygon_impact',
+            include_keywords=True,
+            source_directory=standard_data_path('impact'))
+        self.assertIsNotNone(impact_layer)
+        impact_function = ImpactFunction()
+        impact_function.impact_layer = impact_layer
+        impact_function.impact_keyword = KeywordIO().read_keywords(
+            impact_layer)
+        self.assertDictEqual(
+            impact_function.impact_keyword.get('inasafe_fields'),
+            expected_inasafe_fields
+        )
+
+        result = impact_function.run_single_post_processor(
+            post_processor_gender)
+        self.assertTrue(result[0])
+        self.assertEquals(result[1], post_processor_gender['key'])
+        self.assertEquals(result[2], {'women': 'women'})
+
+        impact_layer = impact_function.impact_layer
+        self.assertIsNotNone(impact_layer)
+        post_processor_index = impact_layer.dataProvider().fieldNameIndex(
+            'women')
+        self.assertEquals(7, post_processor_index)
+
     def test_post_processor(self):
         """Test for running post processor."""
         expected_inasafe_fields = {
