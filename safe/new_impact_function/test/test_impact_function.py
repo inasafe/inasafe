@@ -70,6 +70,7 @@ def run_scenario(scenario):
 
     return result
 
+
 class TestImpactFunction(unittest.TestCase):
     """Test for Generic Polygon on Building Impact Function."""
 
@@ -155,6 +156,19 @@ class TestImpactFunction(unittest.TestCase):
             expected_inasafe_fields
         )
         impact_function.post_process()
+
+    def test_enough_input(self):
+        """Test to check the post processor input checker."""
+        impact_function = ImpactFunction()
+        inasafe_fields = {
+            'population_field': 'population',
+            'gender_ratio_field': 'gender'
+        }
+        from safe.definitions import post_processor_gender, post_processor_value
+        self.assertTrue(impact_function.enough_input(
+            inasafe_fields, post_processor_gender['input']))
+        self.assertFalse(impact_function.enough_input(
+            inasafe_fields, post_processor_value['input']))
 
 
 if __name__ == '__main__':
