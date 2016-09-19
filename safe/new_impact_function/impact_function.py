@@ -22,13 +22,16 @@ from qgis.core import (
 )
 
 from PyQt4.QtCore import QVariant
+import logging
 
 from safe.definitions import post_processors
 from safe.defaults import get_defaults
-from safe.common.exceptions import InvalidExtentError
+from safe.common.exceptions import InvalidExtentError, InvalidLayerError
 from safe.utilities.i18n import tr
 from safe.common.utilities import get_non_conflicting_attribute_name
 from safe.utilities.keyword_io import KeywordIO
+
+LOGGER = logging.getLogger('InaSAFE')
 
 
 __author__ = 'ismailsunni'
@@ -160,8 +163,8 @@ class ImpactFunction(object):
             # Update the aggregation field to a non-conflicting one
             self.aggregation_field = get_non_conflicting_attribute_name(
                 self.aggregation_field,
-                (self._exposure.dataProvider().fieldNameMap().keys()
-                 + [self.hazard_field])
+                (self._exposure.dataProvider().fieldNameMap().keys() + [
+                    self.hazard_field])
             )
         self.setup_impact_function()
 
@@ -276,7 +279,8 @@ class ImpactFunction(object):
         """Setter for extent property.
 
         :param extent: Analysis boundaries expressed as a QgsRectangle.
-        The extent CRS should match the extent_crs property of this IF instance.
+            The extent CRS should match the extent_crs property of this IF
+            instance.
         :type extent: QgsRectangle
         """
         if isinstance(extent, QgsRectangle):
@@ -643,7 +647,7 @@ class ImpactFunction(object):
             self.set_state_process(
                 'hazard', 'Assign class names based on class id')
         else:
-            raise tr('Unsupported hazard layer type')
+            raise InvalidLayerError(tr('Unsupported hazard layer type'))
         self.set_state_process(
             'hazard', 'Classified polygon hazard with keywords')
         self.set_state_process(
@@ -686,7 +690,7 @@ class ImpactFunction(object):
                     'exposure',
                     'Intersect aggregate hazard layer with divisible polygon')
         else:
-            raise tr('Unsupported exposure layer type')
+            raise InvalidLayerError(tr('Unsupported exposure layer type'))
 
         # Running Impact Function
 
@@ -759,18 +763,17 @@ class ImpactFunction(object):
                     input_mapping_index[key] = impact_data_provider.\
                         fieldNameIndex(value)
                 # Calculate the output
-                iter = self.impact_layer.getFeatures()
+                iterator = self.impact_layer.getFeatures()
                 post_processor_result_dict = {
 
                 }
-                for feature in iter:
+                for feature in iterator:
                     attributes = feature.attributes()
                     variables = {}
                     for key, value in input_mapping_index.items():
                         variables[key] = attributes[value]
                     post_processor_result = evaluate_formula(
                         output_value['formula'], variables)
-                    print variables, post_processor_result
                     post_processor_result_dict[feature.id()] = {
                             output_field_index: post_processor_result
                         }
@@ -778,7 +781,7 @@ class ImpactFunction(object):
                 impact_data_provider.changeAttributeValues(
                     post_processor_result_dict)
                 self.impact_layer.updateFields()
-                print self.impact_layer.source()
+                LOGGER.debug(self.impact_layer.source())
 
             # Generate output
             return True, post_processor['key'], output_mapping

@@ -27,6 +27,7 @@ def read_json_flow(json_path):
         data = json.load(json_data)
     return data['scenario'], data['expected']
 
+
 def run_scenario(scenario):
     """Run scenario
 
@@ -126,6 +127,7 @@ class TestImpactFunction(unittest.TestCase):
     def test_scenario_directory(self):
         """Run test scenario in directory."""
         self.maxDiff = None
+
         def test_scenario(scenario_path):
             scenario, expected = read_json_flow(scenario_path)
             result = run_scenario(scenario)
@@ -232,6 +234,7 @@ class TestImpactFunction(unittest.TestCase):
             'gender_ratio': 0.45
         }
         self.assertEquals(45, evaluate_formula(formula, variables))
+
 
 if __name__ == '__main__':
     unittest.main()
