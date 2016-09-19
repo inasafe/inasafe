@@ -19,7 +19,8 @@
     "post_processor":{
       "info": {},
       "process":[
-        "Post processor for Gender."
+        "Post processor for Gender Post Processor.",
+        "Post processor for Value Post Processor."
       ]
     },
     "aggregation":{

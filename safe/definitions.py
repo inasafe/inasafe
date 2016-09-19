@@ -2089,47 +2089,99 @@ place_class_order = [item['key'] for item in place_class_mapping]
 # standards in @charlotte_morgan head. This list attempts to be generic and
 # not location specific. It should be reviewed. 25 May 2016.
 
+# InaSAFE Fields
+population_field = {
+    'key': 'population_field',
+    'name': tr('Population field'),
+    'default_field': 'population',
+    'type': int,
+    'description': tr('Attribute where the number of population is located.'),
+    'layer': 'exposure',
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+
+gender_ratio_field = {
+    'key': 'gender_ratio_field',
+    'name': tr('Gender Ratio field'),
+    'default_field': 'gender_ratio',
+    'type': float,
+    'description': tr('Attribute where the ratio of women is located.'),
+    'layer': 'aggregation',
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+
+value_field = {
+    'key': 'value_field',
+    'name': tr('Value field'),
+    'default_field': 'value',
+    'type': float,
+    'description': tr('Attribute where the value of the feature is located.'),
+    'layer': 'exposure',
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+
+women_field = {
+    'key': 'women_field',
+    'name': tr('Women field'),
+    'default_field': 'women',
+    'type': int,
+    'description': tr(
+        'Attribute where the number of women of the feature is located.'),
+    'layer': 'impact',
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+
 # Post Processor
 post_processor_gender = {
-    'key': 'gender',
-    'name': tr('Gender'),
+    'key': 'post_processor_gender',
+    'name': tr('Gender Post Processor'),
     'description': tr(
         'Post processor to calculate the number of affected woman'),
     'input': {
-        'population_field': {
-            'default': 'population',
-            'description': tr('Number of population'),
-            'layer': 'exposure',
-            'needed': True
+        'population': {
+            'field': population_field,
         },
-        'gender_ratio_field': {
-            'default': 'gender_ratio',
-            'description': tr('Ratio of woman per total population.'),
-            'layer': 'aggregation',
-            'needed': False
+        'gender_ratio': {
+            'field': gender_ratio_field,
         }
     },
     'output': {
-        'woman_field': {
-            'default': 'woman',
-            'description': tr('Number of affected woman.'),
-            'formula': 'population_field * gender_ratio_field'
+        'women': {
+            'field': women_field,
+            'formula': 'population * gender ratio'
         }
     }
 }
 
 post_processor_value = {
-    'key': 'value',
-    'name': tr('Value'),
+    'key': 'post_processor_value',
+    'name': tr('Value Post Processor'),
     'description': tr(
         'Post processor to calculate the value of a feature. A feature should '
         'have a value field.'),
     'input': {
-        'value_field': {
-            'default': 'value',
-            'description': tr('The value of the feature'),
-            'layer': 'exposure',
-            'needed': True
+        'value': {
+            'field': value_field
         }
     },
     'output': {

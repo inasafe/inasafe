@@ -63,6 +63,7 @@ class ImpactFunction(object):
 
         self.algorithm = None
         self.impact_layer = None
+        self.impact_keyword = {}
         self._hazard_field = 'hazard'
         self._aggregation_field = 'agg_area'
 
@@ -70,6 +71,7 @@ class ImpactFunction(object):
         self._title = None  # be affected
 
         self.state = {}
+        self.reset_state()
 
     @property
     def hazard(self):
@@ -432,7 +434,13 @@ class ImpactFunction(object):
         """More process after getting the impact layer with data."""
         # Post processor (gender, age, building type, etc)
         # Notes, action
-        pass
+        # TODO (Ismail) Add new keyword for post processor in exposure layer
+        post_processor_parameters = post_processors
+        for post_processor in post_processor_parameters:
+            self.run_single_post_processor(post_processor)
+            self.set_state_process(
+                'post_processor',
+                'Post processor for %s.' % post_processor['name'])
 
     def run(self):
         self.preprocess()
@@ -690,11 +698,39 @@ class ImpactFunction(object):
                 'features')
 
         # Post Processor
-        # TODO (Ismail) Add new keyword for post processor in exposure layer
-        post_processor_parameters = post_processors
-        for post_processor in post_processor_parameters:
-            self.set_state_process(
-                'post_processor',
-                'Post processor for %s.' % post_processor['name'])
+        self.post_process()
 
         return self.state
+
+    def run_single_post_processor(self, post_processor):
+        """Run single post processor.
+
+        :param post_processor: A post processor definition.
+        :type post_processor: dict
+        """
+        inasafe_fields = self.impact_keyword.get('inasafe_fields', {})
+        if self.enough_input(inasafe_fields, post_processor['input']):
+            print True, post_processor['key']
+            return True
+        else:
+            print False, post_processor['key']
+
+    def enough_input(self, inasafe_fields, post_processor_input):
+        """Check if the input from inasafe_fields in enough.
+
+        :param inasafe_fields: Special fields from the impact layer.
+        :type inasafe_fields: dict
+
+        :param post_processor_input: Collection of post processor input
+            requirements.
+        :type post_processor_input: dict
+
+        :returns: True if input is enough, else False.
+        :rtype: bool
+        """
+        for input_key, input_value in post_processor_input.items():
+            if input_value['field']['key'] in inasafe_fields.keys():
+                continue
+            else:
+                return False
+        return True

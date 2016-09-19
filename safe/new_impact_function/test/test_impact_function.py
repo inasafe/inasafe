@@ -5,6 +5,8 @@ import os
 from safe.test.utilities import get_qgis_app, standard_data_path
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
+from safe.test.utilities import clone_shp_layer
+from safe.utilities.keyword_io import KeywordIO
 from safe.new_impact_function.impact_function import ImpactFunction
 
 from qgis.core import QgsVectorLayer
@@ -111,6 +113,7 @@ class TestImpactFunction(unittest.TestCase):
         self.assertIsNotNone(result)
 
     def test_scenario(self):
+        """Run test single scenario."""
         scenario_path = standard_data_path(
             'scenario', 'polygon_hazard_point_exposure.json')
         scenario, expected = read_json_flow(scenario_path)
@@ -118,6 +121,7 @@ class TestImpactFunction(unittest.TestCase):
         self.assertDictEqual(result, expected)
 
     def test_scenario_directory(self):
+        """Run test scenario in directory."""
         self.maxDiff = None
         def test_scenario(scenario_path):
             scenario, expected = read_json_flow(scenario_path)
@@ -130,6 +134,27 @@ class TestImpactFunction(unittest.TestCase):
             if os.path.isfile(os.path.join(path, f))]
         for json_file in json_files:
             test_scenario(json_file)
+
+    def test_post_processor(self):
+        """Test for running post processor."""
+        expected_inasafe_fields = {
+            'population_field': 'population',
+            'gender_ratio_field': 'WomenRatio'
+        }
+        impact_layer = clone_shp_layer(
+            'indivisible_polygon_impact',
+            include_keywords=True,
+            source_directory=standard_data_path('impact'))
+        self.assertIsNotNone(impact_layer)
+        impact_function = ImpactFunction()
+        impact_function.impact_layer = impact_layer
+        impact_function.impact_keyword = KeywordIO().read_keywords(
+            impact_layer)
+        self.assertDictEqual(
+            impact_function.impact_keyword.get('inasafe_fields'),
+            expected_inasafe_fields
+        )
+        impact_function.post_process()
 
 
 if __name__ == '__main__':
