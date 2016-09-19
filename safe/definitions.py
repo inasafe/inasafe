@@ -2170,7 +2170,7 @@ post_processor_gender = {
     'output': {
         'women': {
             'field': women_field,
-            'formula': 'population * gender ratio'
+            'formula': 'population * gender_ratio'
         }
     }
 }

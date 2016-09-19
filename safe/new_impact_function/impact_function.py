@@ -17,8 +17,11 @@ from qgis.core import (
     QgsRectangle,
     QgsVectorLayer,
     QgsGeometry,
-    QgsFeature
+    QgsFeature,
+    QgsField,
 )
+
+from PyQt4.QtCore import QVariant
 
 from safe.definitions import post_processors
 from safe.defaults import get_defaults
@@ -713,10 +716,29 @@ class ImpactFunction(object):
             # Get real input
             input_mapping = self.input_mapping(
                 inasafe_fields, post_processor['input'])
+            output_mapping = {}
             # Calculate based on formula
-            
+            for output_key, output_value in post_processor['output'].items():
+                # Get output attribute name
+                output_field_name = get_non_conflicting_attribute_name(
+                    output_value['field']['default_field'],
+                    self.impact_layer.dataProvider().fieldNameMap().keys()
+                )
+                # Store field name in output mapping
+                output_mapping[output_key] = output_field_name
+                # Add new attribute to the layer
+                impact_data_provider = self.impact_layer.dataProvider()
+                impact_data_provider.addAttributes(
+                    [QgsField(output_field_name, QVariant.Int)])
+                self.impact_layer.updateFields()
+                output_field_index = impact_data_provider.fieldNameIndex(
+                    output_field_name)
+                # Calculate the output
+                # Add to the data attribute
+                pass
+
             # Generate output
-            return True, post_processor['key']
+            return True, post_processor['key'], output_mapping
         else:
             return False, post_processor['key'], tr('Not enough inputs')
 
@@ -759,3 +781,19 @@ class ImpactFunction(object):
             input_mapping[input_key] = inasafe_fields.get(
                 input_value['field']['key'])
         return input_mapping
+
+
+def evaluate_formula(formula, variables):
+    """Very simple formula evaluator. Beware the security.
+    :param formula: A simple formula.
+    :type formula: str
+
+    :param variables: A collection of variable (key and value).
+    :type variables: dict
+
+    :returns: The result of the formula execution.
+    :rtype: float, int
+    """
+    for key, value in variables.items():
+        formula = formula.replace(key, str(value))
+    return eval(formula)

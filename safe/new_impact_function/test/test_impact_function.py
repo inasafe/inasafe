@@ -9,6 +9,7 @@ from safe.definitions import post_processor_gender, post_processor_value
 from safe.test.utilities import clone_shp_layer
 from safe.utilities.keyword_io import KeywordIO
 from safe.new_impact_function.impact_function import ImpactFunction
+from safe.new_impact_function.impact_function import evaluate_formula
 
 from qgis.core import QgsVectorLayer
 
@@ -185,6 +186,15 @@ class TestImpactFunction(unittest.TestCase):
             expected_input_mapping,
             impact_function.input_mapping(
                 inasafe_fields, post_processor_gender['input']))
+
+    def test_evaluate_formula(self):
+        """Test for evaluating formula."""
+        formula = 'population * gender_ratio'
+        variables = {
+            'population': 100,
+            'gender_ratio': 0.45
+        }
+        self.assertEquals(45, evaluate_formula(formula, variables))
 
 if __name__ == '__main__':
     unittest.main()
