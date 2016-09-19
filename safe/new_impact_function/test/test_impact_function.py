@@ -159,6 +159,12 @@ class TestImpactFunction(unittest.TestCase):
         )
         impact_function.post_process()
 
+        impact_layer = impact_function.impact_layer
+        self.assertIsNotNone(impact_layer)
+        post_processor_index = impact_layer.dataProvider().fieldNameIndex(
+            'women')
+        self.assertEquals(7, post_processor_index)
+
     def test_enough_input(self):
         """Test to check the post processor input checker."""
         impact_function = ImpactFunction()

@@ -38,6 +38,22 @@ __date__ = '8/16/16'
 __copyright__ = 'imajimatika@gmail.com'
 
 
+def evaluate_formula(formula, variables):
+    """Very simple formula evaluator. Beware the security.
+    :param formula: A simple formula.
+    :type formula: str
+
+    :param variables: A collection of variable (key and value).
+    :type variables: dict
+
+    :returns: The result of the formula execution.
+    :rtype: float, int
+    """
+    for key, value in variables.items():
+        formula = formula.replace(key, str(value))
+    return eval(formula)
+
+
 class ImpactFunction(object):
     """Impact Function."""
 
@@ -733,9 +749,31 @@ class ImpactFunction(object):
                 self.impact_layer.updateFields()
                 output_field_index = impact_data_provider.fieldNameIndex(
                     output_field_name)
+                input_mapping_index = {}
+                for key, value in input_mapping.items():
+                    input_mapping_index[key] = impact_data_provider.\
+                        fieldNameIndex(value)
                 # Calculate the output
-                # Add to the data attribute
-                pass
+                iter = self.impact_layer.getFeatures()
+                post_processor_result_dict = {
+
+                }
+                for feature in iter:
+                    attributes = feature.attributes()
+                    variables = {}
+                    for key, value in input_mapping_index.items():
+                        variables[key] = attributes[value]
+                    post_processor_result = evaluate_formula(
+                        output_value['formula'], variables)
+                    print variables, post_processor_result
+                    post_processor_result_dict[feature.id()] = {
+                            output_field_index: post_processor_result
+                        }
+
+                impact_data_provider.changeAttributeValues(
+                    post_processor_result_dict)
+                self.impact_layer.updateFields()
+                print self.impact_layer.source()
 
             # Generate output
             return True, post_processor['key'], output_mapping
@@ -781,19 +819,3 @@ class ImpactFunction(object):
             input_mapping[input_key] = inasafe_fields.get(
                 input_value['field']['key'])
         return input_mapping
-
-
-def evaluate_formula(formula, variables):
-    """Very simple formula evaluator. Beware the security.
-    :param formula: A simple formula.
-    :type formula: str
-
-    :param variables: A collection of variable (key and value).
-    :type variables: dict
-
-    :returns: The result of the formula execution.
-    :rtype: float, int
-    """
-    for key, value in variables.items():
-        formula = formula.replace(key, str(value))
-    return eval(formula)
