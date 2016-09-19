@@ -459,7 +459,8 @@ class ImpactFunction(object):
         for post_processor in post_processors:
             post_processor_output = self.run_single_post_processor(
                 post_processor)
-            self.impact_keyword['post_processor_fields'].update(
+            if post_processor_output[0]:
+                self.impact_keyword['post_processor_fields'].update(
                     post_processor_output[2])
             self.set_state_process(
                 'post_processor',
