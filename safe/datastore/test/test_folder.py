@@ -74,6 +74,8 @@ class TestFolder(unittest.TestCase):
         layer = standard_data_path('hazard', 'classified_hazard.tif')
         raster_layer = QgsRasterLayer(layer, 'Flood')
         self.assertTrue(data_store.add_layer(raster_layer, layer_name))
+
+        # The datastore should have two layers.
         self.assertEqual(len(data_store.layers()), 2)
 
         # Check the URI for the raster layer.

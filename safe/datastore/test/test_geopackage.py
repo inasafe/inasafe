@@ -51,13 +51,17 @@ class TestGeoPackage(unittest.TestCase):
         result = data_store.add_layer(vector_layer, layer_name)
         self.assertTrue(result[0])
 
+        # We should have one layer.
         layers = data_store.layers()
         self.assertEqual(len(layers), 1)
         self.assertIn(layer_name, layers)
 
-        self.assertIsNone(data_store.layer_uri('fake_layer'))
+        # Test the URI of the new layer.
         expected = path.absoluteFilePath() + '|layername=' + layer_name
         self.assertEqual(data_store.layer_uri(layer_name), expected)
+
+        # Test a fake layer.
+        self.assertIsNone(data_store.layer_uri('fake_layer'))
 
 
 if __name__ == '__main__':

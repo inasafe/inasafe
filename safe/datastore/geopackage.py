@@ -66,7 +66,7 @@ class GeoPackage(DataStore):
         # Fixme, need to check DB permissions ?
         return self._uri.absolutePath().isWritable()
 
-    def is_raster_supported(self):
+    def supports_rasters(self):
         """Check if we can support raster in the datastore.
 
         :return: If it's writable or not.
@@ -130,17 +130,18 @@ class GeoPackage(DataStore):
         # if not self.is_writable():
         #    return False, 'The destination is not writable.'
 
-        geom = QGIS_OGR_GEOMETRY_MAP[vector_layer.wkbType()]
+        geometry = QGIS_OGR_GEOMETRY_MAP[vector_layer.wkbType()]
 
-        srs = osr.SpatialReference()
-        qgis_crs = vector_layer.crs().authid()
-        srs.ImportFromEPSG(int(qgis_crs.split(':')[1]))
+        spatial_reference = osr.SpatialReference()
+        qgis_spatial_reference = vector_layer.crs().authid()
+        spatial_reference.ImportFromEPSG(
+            int(qgis_spatial_reference.split(':')[1]))
 
-        self.datasource.CreateLayer(layer_name, srs, geom)
+        self.datasource.CreateLayer(layer_name, spatial_reference, geometry)
         uri = u'{}|layerid=0'.format(self.uri.absoluteFilePath())
-        vl = QgsVectorLayer(uri, layer_name, u'ogr')
+        vector_layer = QgsVectorLayer(uri, layer_name, u'ogr')
 
-        data_provider = vl.dataProvider()
+        data_provider = vector_layer.dataProvider()
         for feature in vector_layer.getFeatures():
             data_provider.addFeatures([feature])
 

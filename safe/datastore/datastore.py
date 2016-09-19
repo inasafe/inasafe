@@ -33,6 +33,8 @@ class DataStore(object):
         - a folder to store a shapefile
         - a geopackage file.
 
+        We may add more datastores in the future.
+
         In a datastore, we should be able to save many layers.
 
         :param uri: The URI using a QFileInfo, QgsDataSourceURI or the path.
@@ -86,7 +88,7 @@ class DataStore(object):
         raise NotImplementedError
 
     @abstractmethod
-    def is_raster_supported(self):
+    def supports_rasters(self):
         """Check if we can support raster in the datastore.
 
         :return: If it's writable or not.

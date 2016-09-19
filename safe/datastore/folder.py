@@ -31,6 +31,9 @@ class Folder(DataStore):
     """
     Folder DataStore
 
+    A folder based data store is a collection of shape files and tiff images
+    stored in a common folder.
+
     .. versionadded:: 4.0
     """
 
@@ -62,7 +65,7 @@ class Folder(DataStore):
         """
         return QFileInfo(self._uri.absolutePath()).isWritable()
 
-    def is_raster_supported(self):
+    def supports_rasters(self):
         """Check if we can support raster in the datastore.
 
         :return: If it's writable or not.
