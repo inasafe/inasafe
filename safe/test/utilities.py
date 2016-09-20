@@ -25,6 +25,7 @@ from safe.common.exceptions import NoKeywordsFoundError
 from safe.utilities.clipper import extent_to_geoarray, clip_layer
 from safe.utilities.gis import get_wgs84_resolution
 from safe.utilities.metadata import read_iso19115_metadata
+from safe.utilities.keyword_io import KeywordIO
 
 QGIS_APP = None  # Static variable used to hold hand to running QGIS app
 CANVAS = None
@@ -212,6 +213,60 @@ def standard_data_path(*args):
     return path
 
 
+def vector_test_layer(*args):
+    """Return the test vector layer.
+
+    :param args: List of path e.g. ['control', 'files',
+        'test-error-message.txt'] or ['control', 'scenarios'] to get the path
+        to scenarios dir.
+    :type args: list
+
+    :return: The vector layer.
+    :rtype: QgsVectorLayer
+
+    .. versionadded:: 4.0
+    """
+    path = standard_data_path(*args)
+    name = os.path.basename(path)
+    layer = QgsVectorLayer(path, name, 'ogr')
+
+    # In InaSAFE V4, we do monkey patching for keywords.
+    keyword_io = KeywordIO()
+    try:
+        layer.keywords = keyword_io.read_keywords(layer)
+    except NoKeywordsFoundError:
+        layer.keywords = {}
+
+    return layer
+
+
+def raster_test_layer(*args):
+    """Return the test raster layer.
+
+    :param args: List of path e.g. ['control', 'files',
+        'test-error-message.txt'] or ['control', 'scenarios'] to get the path
+        to scenarios dir.
+    :type args: list
+
+    :return: The raster layer.
+    :rtype: QgsRasterLayer
+
+    .. versionadded:: 4.0
+    """
+    path = standard_data_path(*args)
+    name = os.path.basename(path)
+    layer = QgsRasterLayer(path, name)
+
+    # In InaSAFE V4, we do monkey patching for keywords.
+    keyword_io = KeywordIO()
+    try:
+        layer.keywords = keyword_io.read_keywords(layer)
+    except NoKeywordsFoundError:
+        layer.keywords = {}
+
+    return layer
+
+
 def load_layer(layer_path):
     """Helper to load and return a single QGIS layer
 
@@ -252,6 +307,14 @@ def load_layer(layer_path):
     # noinspection PyUnresolvedReferences
     if not layer.isValid():
         raise Exception(message)
+
+    # In InaSAFE V4, we do monkey patching for keywords.
+    keyword_io = KeywordIO()
+    try:
+        layer.keywords = keyword_io.read_keywords(layer)
+    except NoKeywordsFoundError:
+        layer.keywords = {}
+
     return layer, layer_purpose
 
 
@@ -845,6 +908,14 @@ def clone_shp_layer(
 
     shp_path = '%s.shp' % temp_path
     layer = QgsVectorLayer(shp_path, os.path.basename(shp_path), 'ogr')
+
+    # In InaSAFE V4, we do monkey patching for keywords.
+    keyword_io = KeywordIO()
+    try:
+        layer.keywords = keyword_io.read_keywords(layer)
+    except NoKeywordsFoundError:
+        layer.keywords = {}
+
     return layer
 
 
@@ -911,6 +982,14 @@ def clone_raster_layer(
 
     raster_path = '%s%s' % (temp_path, extension)
     layer = QgsRasterLayer(raster_path, os.path.basename(raster_path))
+
+    # In InaSAFE V4, we do monkey patching for keywords.
+    keyword_io = KeywordIO()
+    try:
+        layer.keywords = keyword_io.read_keywords(layer)
+    except NoKeywordsFoundError:
+        layer.keywords = {}
+
     return layer
 
 
