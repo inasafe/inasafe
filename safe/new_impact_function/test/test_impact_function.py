@@ -5,7 +5,8 @@ import os
 from safe.test.utilities import get_qgis_app, standard_data_path
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe.definitions import post_processor_gender, post_processor_value
+from safe.definitionsv4.definitions_v3 import (
+    post_processor_gender, post_processor_value)
 from safe.test.utilities import clone_shp_layer
 from safe.utilities.keyword_io import KeywordIO
 from safe.new_impact_function.impact_function import ImpactFunction
