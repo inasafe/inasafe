@@ -10,34 +10,35 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-import numpy
 from collections import OrderedDict
 
-from safe.impact_functions.bases.classified_vh_continuous_re import \
-    ClassifiedVHContinuousRE
-from safe.impact_functions.volcanic.volcano_polygon_population\
-    .metadata_definitions import VolcanoPolygonPopulationFunctionMetadata
-from safe.impact_functions.core import population_rounding, has_no_data
-from safe.engine.interpolation import assign_hazard_values_to_exposure_data
-from safe.storage.raster import Raster
-from safe.utilities.i18n import tr
+import numpy
+
+from definitionsv4.definitions_v3 import no_data_warning
+from safe.common.exceptions import InaSAFEError, ZeroImpactException
 from safe.common.utilities import (
     humanize_class,
     create_classes,
     create_label,
     format_int
 )
+from safe.engine.interpolation import assign_hazard_values_to_exposure_data
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
+    filter_needs_parameters, get_needs_provenance_value
+from safe.impact_functions.bases.classified_vh_continuous_re import \
+    ClassifiedVHContinuousRE
 from safe.impact_functions.core import (
     no_population_impact_message,
     get_key_for_value
 )
-from safe.common.exceptions import InaSAFEError, ZeroImpactException
-from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
-    filter_needs_parameters, get_needs_provenance_value
+from safe.impact_functions.core import population_rounding, has_no_data
+from safe.impact_functions.volcanic.volcano_polygon_population\
+    .metadata_definitions import VolcanoPolygonPopulationFunctionMetadata
 from safe.impact_reports.population_exposure_report_mixin import \
     PopulationExposureReportMixin
+from safe.storage.raster import Raster
+from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import definition
-from safe.definitions import no_data_warning
 
 
 class VolcanoPolygonPopulationFunction(
@@ -86,9 +87,9 @@ class VolcanoPolygonPopulationFunction(
         if self.no_data_warning:
             fields = fields + no_data_warning
 
-        # include any generic exposure specific notes from definitions.py
+        # include any generic exposure specific notes from definitions_v3.py
         fields = fields + self.exposure_notes()
-        # include any generic hazard specific notes from definitions.py
+        # include any generic hazard specific notes from definitions_v3.py
         fields = fields + self.hazard_notes()
         return fields
 

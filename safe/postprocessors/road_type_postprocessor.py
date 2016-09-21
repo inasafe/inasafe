@@ -17,9 +17,9 @@ __license__ = "GPL"
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
+from definitionsv4.definitions_v3 import road_class_mapping, road_class_order
 from safe.postprocessors.abstract_building_road_type_postprocessor import \
     AbstractBuildingRoadTypePostprocessor
-from safe.definitions import road_class_mapping, road_class_order
 from safe.utilities.i18n import tr
 
 

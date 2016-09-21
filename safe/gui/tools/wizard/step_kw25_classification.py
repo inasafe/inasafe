@@ -20,18 +20,14 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore
-# noinspection PyPackageRequirements
 from PyQt4.QtGui import QListWidgetItem
 
-from safe.definitions import layer_purpose_hazard
-
+from definitionsv4.definitions_v3 import layer_purpose_hazard
+from safe.gui.tools.wizard.wizard_step import WizardStep
+from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
+from safe.gui.tools.wizard.wizard_strings import classification_question
 from safe.utilities.gis import is_raster_layer
 from safe.utilities.keyword_io import definition
-
-from safe.gui.tools.wizard.wizard_strings import classification_question
-from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
-from safe.gui.tools.wizard.wizard_step import WizardStep
-
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 

@@ -10,8 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.common.utilities import OrderedDict
-from safe.definitions import (
+from definitionsv4.definitions_v3 import (
     layer_mode_continuous,
     layer_geometry_raster,
     hazard_category_single_event,
@@ -21,17 +20,18 @@ from safe.definitions import (
     unit_centimetres,
     count_exposure_unit
 )
-from safe.impact_functions.impact_function_metadata import \
-    ImpactFunctionMetadata
-from safe.utilities.i18n import tr
-from safe.impact_functions.ash.parameter_definitions import \
-    threshold_group_parameter
-from safe.defaults import (
-    default_minimum_needs)
+from safe.common.utilities import OrderedDict
 from safe.defaults import (
     default_gender_postprocessor,
     minimum_needs_selector,
     age_postprocessor)
+from safe.defaults import (
+    default_minimum_needs)
+from safe.impact_functions.ash.parameter_definitions import \
+    threshold_group_parameter
+from safe.impact_functions.impact_function_metadata import \
+    ImpactFunctionMetadata
+from safe.utilities.i18n import tr
 
 __author__ = 'ismailsunni'
 __project_name__ = 'inasafe-dev'

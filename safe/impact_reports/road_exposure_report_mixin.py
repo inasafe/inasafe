@@ -13,9 +13,9 @@ Contact : ole.moller.nielsen@gmail.com
 
 from collections import OrderedDict
 
-from safe.utilities.i18n import tr
+from definitionsv4.definitions_v3 import road_class_order
 from safe.impact_reports.report_mixin_base import ReportMixin
-from safe.definitions import road_class_order
+from safe.utilities.i18n import tr
 from safe.utilities.utilities import reorder_dictionary
 
 __author__ = 'Christian Christelis <christian@kartoza.com>'
@@ -213,7 +213,7 @@ class RoadExposureReportMixin(ReportMixin):
         """Return the extra exposure specific actions.
 
         .. note:: Only calculated actions are implemented here, the rest
-            are defined in definitions.py.
+            are defined in definitions_v3.py.
 
         .. versionadded:: 3.5
 

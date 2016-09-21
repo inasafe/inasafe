@@ -17,17 +17,12 @@ __date__ = '24/02/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import unittest
-import sys
 import os
 import shutil
+import sys
+import unittest
 
-# Import qgis in order to set SIP API.
-# pylint: disable=unused-import
-import qgis
-# pylint: enable=unused-import
 from PyQt4 import QtCore
-# noinspection PyPackageRequirements
 from PyQt4.QtCore import Qt
 
 # noinspection PyPackageRequirements
@@ -47,7 +42,7 @@ from safe.test.utilities import (
 # safe.gui.tools.wizard
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe.definitions import inasafe_keyword_version
+from definitionsv4.definitions_v3 import inasafe_keyword_version
 from safe.impact_functions.loader import register_impact_functions
 from safe.gui.tools.wizard.wizard_dialog import WizardDialog
 from safe.gui.tools.wizard.wizard_utils import get_question_text

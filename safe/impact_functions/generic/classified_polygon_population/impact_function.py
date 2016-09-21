@@ -71,9 +71,9 @@ class ClassifiedPolygonHazardPopulationFunction(
             tr('Map shows the number of people in high, medium, and low '
                'hazard zones.')
         ]
-        # include any generic exposure specific notes from definitions.py
+        # include any generic exposure specific notes from definitions_v3.py
         fields = fields + self.exposure_notes()
-        # include any generic hazard specific notes from definitions.py
+        # include any generic hazard specific notes from definitions_v3.py
         fields = fields + self.hazard_notes()
         return fields
 

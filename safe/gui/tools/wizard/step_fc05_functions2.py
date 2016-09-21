@@ -20,26 +20,23 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore, QtGui
-# noinspection PyPackageRequirements
 from PyQt4.QtCore import pyqtSignature
 
-from safe.definitions import (
+from definitionsv4.definitions_v3 import (
     layer_geometry_point,
     layer_geometry_line,
     layer_geometry_polygon,
     layer_geometry_raster)
-
+from safe.gui.tools.wizard.wizard_step import WizardStep
+from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_strings import (
     select_function_constraints2_question)
-from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
-from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_utils import (
     RoleFunctions,
     RoleHazard,
     RoleExposure,
     RoleHazardConstraint,
     RoleExposureConstraint)
-
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 

@@ -11,10 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-from safe.common.utilities import OrderedDict
-from safe.impact_functions.impact_function_metadata import \
-    ImpactFunctionMetadata
-from safe.definitions import (
+from definitionsv4.definitions_v3 import (
     layer_mode_classified,
     layer_geometry_polygon,
     hazard_all,
@@ -23,6 +20,9 @@ from safe.definitions import (
     exposure_land_cover,
     generic_vector_hazard_classes,
 )
+from safe.common.utilities import OrderedDict
+from safe.impact_functions.impact_function_metadata import \
+    ImpactFunctionMetadata
 from safe.utilities.i18n import tr
 
 

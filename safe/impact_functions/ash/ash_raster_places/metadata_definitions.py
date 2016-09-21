@@ -10,8 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.common.utilities import OrderedDict
-from safe.definitions import (
+from definitionsv4.definitions_v3 import (
     layer_mode_continuous,
     layer_mode_classified,
     layer_geometry_raster,
@@ -23,11 +22,12 @@ from safe.definitions import (
     hazard_volcanic_ash,
     unit_centimetres
 )
+from safe.common.utilities import OrderedDict
+from safe.impact_functions.ash.parameter_definitions import \
+    threshold_group_parameter
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
-from safe.impact_functions.ash.parameter_definitions import \
-    threshold_group_parameter
 
 __author__ = 'etienne'
 __project_name__ = 'inasafe-dev'

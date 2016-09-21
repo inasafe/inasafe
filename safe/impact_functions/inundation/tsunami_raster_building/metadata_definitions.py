@@ -16,18 +16,7 @@ __filename__ = 'metadata_definitions'
 __date__ = '12/31/15'
 __copyright__ = 'imajimatika@gmail.com'
 
-from safe.common.utilities import OrderedDict
-from safe.defaults import building_type_postprocessor
-from safe.impact_functions.impact_function_metadata import \
-    ImpactFunctionMetadata
-from safe.impact_functions.inundation.tsunami_raster_building \
-    .parameter_definitions import (
-    low_threshold,
-    medium_threshold,
-    high_threshold
-)
-from safe.utilities.i18n import tr
-from safe.definitions import (
+from definitionsv4.definitions_v3 import (
     layer_mode_classified,
     layer_mode_continuous,
     layer_geometry_polygon,
@@ -41,6 +30,17 @@ from safe.definitions import (
     hazard_tsunami,
     structure_class_field
 )
+from safe.common.utilities import OrderedDict
+from safe.defaults import building_type_postprocessor
+from safe.impact_functions.impact_function_metadata import \
+    ImpactFunctionMetadata
+from safe.impact_functions.inundation.tsunami_raster_building \
+    .parameter_definitions import (
+    low_threshold,
+    medium_threshold,
+    high_threshold
+)
+from safe.utilities.i18n import tr
 
 
 class TsunamiRasterBuildingMetadata(ImpactFunctionMetadata):

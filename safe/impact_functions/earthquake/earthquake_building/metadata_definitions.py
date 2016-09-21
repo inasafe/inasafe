@@ -10,15 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.common.utilities import OrderedDict
-from safe.defaults import building_type_postprocessor
-from safe.impact_functions.earthquake.earthquake_building\
-    .parameter_definitions import (
-        low_threshold, medium_threshold, high_threshold)
-from safe.impact_functions.impact_function_metadata import \
-    ImpactFunctionMetadata
-from safe.utilities.i18n import tr
-from safe.definitions import (
+from definitionsv4.definitions_v3 import (
     layer_mode_continuous,
     layer_mode_classified,
     layer_geometry_polygon,
@@ -31,7 +23,14 @@ from safe.definitions import (
     hazard_category_multiple_event,
     structure_class_field
 )
-
+from safe.common.utilities import OrderedDict
+from safe.defaults import building_type_postprocessor
+from safe.impact_functions.earthquake.earthquake_building\
+    .parameter_definitions import (
+        low_threshold, medium_threshold, high_threshold)
+from safe.impact_functions.impact_function_metadata import \
+    ImpactFunctionMetadata
+from safe.utilities.i18n import tr
 
 __author__ = 'lucernae'
 __project_name__ = 'inasafe'

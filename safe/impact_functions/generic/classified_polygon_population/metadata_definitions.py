@@ -10,8 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.common.utilities import OrderedDict, get_thousand_separator
-from safe.definitions import (
+from definitionsv4.definitions_v3 import (
     layer_mode_classified,
     layer_mode_continuous,
     layer_geometry_polygon,
@@ -23,6 +22,7 @@ from safe.definitions import (
     generic_vector_hazard_classes,
     count_exposure_unit,
 )
+from safe.common.utilities import OrderedDict, get_thousand_separator
 from safe.defaults import (
     default_minimum_needs,
     default_gender_postprocessor,
