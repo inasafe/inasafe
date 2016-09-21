@@ -19,10 +19,11 @@ __date__ = '03/12/2015'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 import os
+
+from definitionsv4.definitions_v3 import inasafe_keyword_version
 from safe.common.exceptions import (
     MetadataReadError,
     KeywordNotFoundError,
-    MissingMetadata,
     NoKeywordsFoundError
 )
 from safe.metadata import (
@@ -32,7 +33,6 @@ from safe.metadata import (
     ImpactLayerMetadata,
     GenericLayerMetadata
 )
-from safe.definitions import inasafe_keyword_version
 
 
 def write_iso19115_metadata(layer_uri, keywords):

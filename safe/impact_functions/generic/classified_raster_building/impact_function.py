@@ -15,22 +15,24 @@ __author__ = 'lucernae'
 __date__ = '23/03/15'
 
 import logging
-from numpy import round as numpy_round
 from collections import OrderedDict
 
-from safe.impact_functions.bases.classified_rh_classified_ve import \
-    ClassifiedRHClassifiedVE
-from safe.storage.vector import Vector
+from numpy import round as numpy_round
+
+from definitionsv4.definitions_v3 import generic_raster_hazard_classes
 from safe.common.exceptions import KeywordNotFoundError
 from safe.common.utilities import get_non_conflicting_attribute_name
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
-from safe.utilities.i18n import tr
-from safe.utilities.utilities import main_type
+from safe.impact_functions.bases.classified_rh_classified_ve import \
+    ClassifiedRHClassifiedVE
 from safe.impact_functions.generic.classified_raster_building\
     .metadata_definitions import ClassifiedRasterHazardBuildingMetadata
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
-from safe.definitions import generic_raster_hazard_classes
+from safe.storage.vector import Vector
+from safe.utilities.i18n import tr
+from safe.utilities.utilities import main_type
+
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -58,9 +60,9 @@ class ClassifiedRasterHazardBuildingFunction(
             tr('Map shows buildings affected in low, medium and high hazard '
                'zones.')
         ]
-        # include any generic exposure specific notes from definitions.py
+        # include any generic exposure specific notes from definitions_v3.py
         fields = fields + self.exposure_notes()
-        # include any generic hazard specific notes from definitions.py
+        # include any generic hazard specific notes from definitions_v3.py
         fields = fields + self.hazard_notes()
         return fields
 

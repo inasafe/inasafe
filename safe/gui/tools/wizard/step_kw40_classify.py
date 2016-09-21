@@ -13,33 +13,27 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
+import json
+
+import numpy
+from PyQt4 import QtCore, QtGui
+from PyQt4.QtCore import QPyNullVariant
 from osgeo import gdal
 from osgeo.gdalconst import GA_ReadOnly
 
-import json
-import numpy
-
-# noinspection PyPackageRequirements
-from PyQt4 import QtCore, QtGui
-# noinspection PyPackageRequirements
-from PyQt4.QtCore import QPyNullVariant
-
-from safe.definitions import (
+from definitionsv4.definitions_v3 import (
     exposure_road,
     exposure_place,
     exposure_structure)
-
-from safe.utilities.gis import is_raster_layer
-
+from definitionsv4.definitions_v3 import (
+    road_class_mapping, structure_class_mapping, place_class_mapping)
+from safe.gui.tools.wizard.wizard_step import WizardStep
+from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_strings import (
     classify_raster_question,
     classify_vector_question,
     classify_vector_for_postprocessor_question)
-from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
-from safe.gui.tools.wizard.wizard_step import WizardStep
-
-from safe.definitions import (
-    road_class_mapping, structure_class_mapping, place_class_mapping)
+from safe.utilities.gis import is_raster_layer
 
 __author__ = 'qgis@borysjurgiel.pl'
 __revision__ = '$Format:%H$'

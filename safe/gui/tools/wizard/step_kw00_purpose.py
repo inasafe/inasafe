@@ -20,22 +20,17 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore
-# noinspection PyPackageRequirements
 from PyQt4.QtCore import pyqtSignature
-# noinspection PyPackageRequirements
 from PyQt4.QtGui import (
     QListWidgetItem,
     QPixmap)
 
-from safe.definitions import layer_purpose_aggregation
-
+from definitionsv4.definitions_v3 import layer_purpose_aggregation
+from safe.gui.tools.wizard.wizard_step import WizardStep
+from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
+from safe.gui.tools.wizard.wizard_strings import category_question
 from safe.utilities.keyword_io import definition
 from safe.utilities.resources import resources_path
-
-from safe.gui.tools.wizard.wizard_strings import category_question
-from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
-from safe.gui.tools.wizard.wizard_step import WizardStep
-
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 

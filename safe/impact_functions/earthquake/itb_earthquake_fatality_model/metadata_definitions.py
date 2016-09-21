@@ -10,16 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.common.utilities import OrderedDict, get_thousand_separator
-from safe.defaults import default_minimum_needs
-from safe.defaults import (
-    default_gender_postprocessor,
-    age_postprocessor,
-    minimum_needs_selector)
-from safe.utilities.i18n import tr
-from safe.impact_functions.impact_function_metadata import \
-    ImpactFunctionMetadata
-from safe.definitions import (
+from definitionsv4.definitions_v3 import (
     layer_mode_continuous,
     layer_geometry_raster,
     hazard_earthquake,
@@ -29,6 +20,15 @@ from safe.definitions import (
     hazard_category_multiple_event,
     unit_mmi
 )
+from safe.common.utilities import OrderedDict, get_thousand_separator
+from safe.defaults import (
+    default_gender_postprocessor,
+    age_postprocessor,
+    minimum_needs_selector)
+from safe.defaults import default_minimum_needs
+from safe.impact_functions.impact_function_metadata import \
+    ImpactFunctionMetadata
+from safe.utilities.i18n import tr
 
 __author__ = 'lucernae'
 __project_name__ = 'inasafe'

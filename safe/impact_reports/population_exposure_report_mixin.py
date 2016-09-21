@@ -77,7 +77,7 @@ class PopulationExposureReportMixin(ReportMixin):
         """Return population specific actions for the report.
 
         .. note:: Only calculated actions are implemented here, the rest
-            are defined in definitions.py.
+            are defined in definitions_v3.py.
 
         .. versionadded:: 3.5
 

@@ -1,7 +1,7 @@
 <!DOCTYPE qgis PUBLIC 'http://mrcc.com/qgis.dtd' 'SYSTEM'>
-<qgis version="2.14.1-Essen" minimumScale="-4.65661e-10" maximumScale="1e+08" hasScaleBasedVisibilityFlag="0">
+<qgis version="2.14.1-Essen" minimumScale="0" maximumScale="1e+08" hasScaleBasedVisibilityFlag="0">
   <pipe>
-    <rasterrenderer opacity="0.847059" alphaBand="0" classificationMax="2779.7" classificationMinMaxOrigin="MinMaxFullExtentEstimated" band="1" classificationMin="0" type="singlebandpseudocolor">
+    <rasterrenderer opacity="0.85098" alphaBand="-1" classificationMax="2779.7" classificationMinMaxOrigin="MinMaxFullExtentEstimated" band="1" classificationMin="0" type="singlebandpseudocolor">
       <rasterTransparency/>
       <rastershader>
         <colorrampshader colorRampType="DISCRETE" clip="0">

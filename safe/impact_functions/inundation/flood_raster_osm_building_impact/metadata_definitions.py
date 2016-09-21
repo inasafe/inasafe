@@ -11,14 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-from safe.common.utilities import OrderedDict
-from safe.defaults import building_type_postprocessor
-from safe.impact_functions.impact_function_metadata import \
-    ImpactFunctionMetadata
-from safe.impact_functions.inundation.flood_raster_osm_building_impact\
-    .parameter_definitions import threshold
-from safe.utilities.i18n import tr
-from safe.definitions import (
+from definitionsv4.definitions_v3 import (
     layer_mode_classified,
     layer_mode_continuous,
     layer_geometry_polygon,
@@ -32,6 +25,13 @@ from safe.definitions import (
     unit_feet,
     structure_class_field
 )
+from safe.common.utilities import OrderedDict
+from safe.defaults import building_type_postprocessor
+from safe.impact_functions.impact_function_metadata import \
+    ImpactFunctionMetadata
+from safe.impact_functions.inundation.flood_raster_osm_building_impact\
+    .parameter_definitions import threshold
+from safe.utilities.i18n import tr
 
 __author__ = "lucernae"
 

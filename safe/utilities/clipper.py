@@ -10,11 +10,11 @@ Contact : ole.moller.nielsen@gmail.com
    (at your option) any later version.
 
 """
-from safe.utilities.i18n import tr
+import logging
 import os
 import tempfile
-import logging
 
+from PyQt4.QtCore import QProcess
 from qgis.core import (
     QGis,
     QgsCoordinateTransform,
@@ -26,10 +26,8 @@ from qgis.core import (
     QgsGeometry,
     QgsVectorLayer,
     QgsRasterLayer)
-from PyQt4.QtCore import QProcess
 
-from safe.common.utilities import temp_dir, which, verify
-from safe.utilities.keyword_io import KeywordIO
+from definitionsv4.definitions_v3 import multipart_polygon_key
 from safe.common.exceptions import (
     InvalidParameterError,
     NoFeaturesInExtentError,
@@ -37,8 +35,10 @@ from safe.common.exceptions import (
     InvalidProjectionError,
     InvalidClipGeometryError,
 )
+from safe.common.utilities import temp_dir, which, verify
+from safe.utilities.i18n import tr
+from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.metadata import read_iso19115_metadata
-from safe.definitions import multipart_polygon_key
 
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'

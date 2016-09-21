@@ -14,31 +14,32 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-import numpy
 import itertools
 
-from safe.impact_functions.bases.classified_rh_continuous_re import \
-    ClassifiedRHContinuousRE
-from safe.impact_functions.core import (
-    population_rounding, has_no_data, no_population_impact_message)
-from safe.storage.raster import Raster
+import numpy
+
+from definitionsv4.definitions_v3 import no_data_warning
+from safe.common.exceptions import (
+    FunctionParametersError, ZeroImpactException)
 from safe.common.utilities import (
     format_int,
     humanize_class,
     create_classes,
     create_label)
-from safe.utilities.i18n import tr
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
+from safe.impact_functions.bases.classified_rh_continuous_re import \
+    ClassifiedRHContinuousRE
+from safe.impact_functions.core import (
+    population_rounding, has_no_data, no_population_impact_message)
 from safe.impact_functions.generic.\
     classified_raster_population.metadata_definitions import \
     ClassifiedRasterHazardPopulationMetadata
 from safe.impact_functions.impact_function_manager\
     import ImpactFunctionManager
-from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
-from safe.common.exceptions import (
-    FunctionParametersError, ZeroImpactException)
 from safe.impact_reports.population_exposure_report_mixin import \
     PopulationExposureReportMixin
-from safe.definitions import no_data_warning
+from safe.storage.raster import Raster
+from safe.utilities.i18n import tr
 
 __author__ = 'lucernae'
 __date__ = '24/03/15'
@@ -79,9 +80,9 @@ class ClassifiedRasterHazardPopulationFunction(
 
         if self.no_data_warning:
             fields = fields + no_data_warning
-        # include any generic exposure specific notes from definitions.py
+        # include any generic exposure specific notes from definitions_v3.py
         fields = fields + self.exposure_notes()
-        # include any generic hazard specific notes from definitions.py
+        # include any generic hazard specific notes from definitions_v3.py
         fields = fields + self.hazard_notes()
         return fields
 

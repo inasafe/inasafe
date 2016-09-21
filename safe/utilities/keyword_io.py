@@ -14,27 +14,19 @@ __license__ = "GPL"
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
-import os
-from os.path import expanduser
 import logging
-from sqlite3 import OperationalError
+import os
 from ast import literal_eval
-from PyQt4.QtCore import QUrl, QDateTime
 from datetime import datetime
+from os.path import expanduser
+from sqlite3 import OperationalError
 
-# This import is to enable SIP API V2
-# noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
-from qgis.core import QgsDataSourceURI
-# noinspection PyPackageRequirements
 from PyQt4.QtCore import QObject, QSettings
+from PyQt4.QtCore import QUrl, QDateTime
 
-import safe.definitions
+import definitionsv4.definitions_v3
 from safe import messaging as m
-from safe.messaging import styles
-from safe.utilities.i18n import tr
-from safe.utilities.unicode import get_string
-from safe.common.utilities import verify
 from safe.common.exceptions import (
     HashNotFoundError,
     KeywordNotFoundError,
@@ -43,10 +35,14 @@ from safe.common.exceptions import (
     NoKeywordsFoundError,
     MetadataReadError
 )
+from safe.common.utilities import verify
+from safe.messaging import styles
+from safe.utilities.i18n import tr
 from safe.utilities.metadata import (
     write_iso19115_metadata,
     read_iso19115_metadata,
 )
+from safe.utilities.unicode import get_string
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -69,12 +65,12 @@ def definition(keyword):
     :type keyword: str
 
     :returns: A dictionary containing the matched key definition
-        from definitions.py, otherwise None if no match was found.
+        from definitions_v3.py, otherwise None if no match was found.
     :rtype: dict, None
     """
-    for item in dir(safe.definitions):
+    for item in dir(definitionsv4.definitions_v3):
         if not item.startswith("__"):
-            var = getattr(safe.definitions, item)
+            var = getattr(definitionsv4.definitions_v3, item)
             if isinstance(var, dict):
                 if var.get('key') == keyword:
                     return var
@@ -461,13 +457,13 @@ class KeywordIO(QObject):
         elif keyword in [
                 'vector_hazard_classification',
                 'raster_hazard_classification']:
-            # get the keyword_definition for this class from definitions.py
+            # get the keyword_definition for this class from definitions_v3.py
             value = definition(value)
             value = value['description']
         # In these VALUE cases we show the DESCRIPTION for
         # the VALUE keyword_definition
         elif value in []:
-            # get the keyword_definition for this class from definitions.py
+            # get the keyword_definition for this class from definitions_v3.py
             value = definition(value)
             value = value['description']
         # In these VALUE cases we show the NAME for the VALUE
@@ -479,7 +475,7 @@ class KeywordIO(QObject):
                 'line',
                 'polygon'
                 'field']:
-            # get the name for this class from definitions.py
+            # get the name for this class from definitions_v3.py
             value = definition(value)
             value = value['name']
         # otherwise just treat the keyword as literal text

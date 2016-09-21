@@ -17,19 +17,7 @@ __filename__ = 'metadata_definitions'
 __date__ = '23/03/15'
 __copyright__ = 'lana.pcfre@gmail.com'
 
-from safe.defaults import (
-    default_minimum_needs)
-from safe.defaults import (
-    default_gender_postprocessor,
-    minimum_needs_selector,
-    age_postprocessor)
-from safe.impact_functions.impact_function_metadata import \
-    ImpactFunctionMetadata
-from safe.impact_functions.inundation.tsunami_population_evacuation_raster\
-    .parameter_definitions import threshold
-from safe.utilities.i18n import tr
-from safe.common.utilities import OrderedDict, get_thousand_separator
-from safe.definitions import (
+from definitionsv4.definitions_v3 import (
     layer_mode_continuous,
     layer_geometry_raster,
     hazard_category_single_event,
@@ -40,6 +28,18 @@ from safe.definitions import (
     exposure_population,
     hazard_tsunami
 )
+from safe.common.utilities import OrderedDict, get_thousand_separator
+from safe.defaults import (
+    default_gender_postprocessor,
+    minimum_needs_selector,
+    age_postprocessor)
+from safe.defaults import (
+    default_minimum_needs)
+from safe.impact_functions.impact_function_metadata import \
+    ImpactFunctionMetadata
+from safe.impact_functions.inundation.tsunami_population_evacuation_raster\
+    .parameter_definitions import threshold
+from safe.utilities.i18n import tr
 
 
 class TsunamiEvacuationMetadata(ImpactFunctionMetadata):

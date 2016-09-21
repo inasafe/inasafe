@@ -16,18 +16,7 @@ __filename__ = 'metadata_definitions.py'
 __date__ = '11/03/16'
 __copyright__ = 'etienne@kartoza.com'
 
-from safe.common.utilities import OrderedDict
-from safe.defaults import road_type_postprocessor
-from safe.impact_functions.impact_function_metadata import \
-    ImpactFunctionMetadata
-from safe.impact_functions.inundation.tsunami_raster_building \
-    .parameter_definitions import (
-        low_threshold,
-        medium_threshold,
-        high_threshold
-    )
-from safe.utilities.i18n import tr
-from safe.definitions import (
+from definitionsv4.definitions_v3 import (
     layer_mode_classified,
     layer_mode_continuous,
     layer_geometry_line,
@@ -40,6 +29,17 @@ from safe.definitions import (
     hazard_tsunami,
     road_class_field
 )
+from safe.common.utilities import OrderedDict
+from safe.defaults import road_type_postprocessor
+from safe.impact_functions.impact_function_metadata import \
+    ImpactFunctionMetadata
+from safe.impact_functions.inundation.tsunami_raster_building \
+    .parameter_definitions import (
+        low_threshold,
+        medium_threshold,
+        high_threshold
+    )
+from safe.utilities.i18n import tr
 
 
 class TsunamiRasterRoadMetadata(ImpactFunctionMetadata):

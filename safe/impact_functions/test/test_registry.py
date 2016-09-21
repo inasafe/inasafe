@@ -17,9 +17,11 @@ __date__ = '19/03/15'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import unittest
 import inspect
+import unittest
+
 from safe.test.utilities import get_qgis_app
+
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.impact_functions.loader import register_impact_functions
@@ -38,7 +40,7 @@ from safe.impact_functions.loader import \
     ClassifiedRasterHazardBuildingFunction
 
 from safe.impact_functions.registry import Registry
-from safe.definitions import (
+from definitionsv4.definitions_v3 import (
     layer_mode_continuous,
     layer_geometry_point,
     layer_geometry_polygon,

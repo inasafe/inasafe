@@ -226,9 +226,9 @@ class ITBFatalityFunction(
             tr('Fatality model is from Institut Teknologi Bandung 2012.'),
             tr('Map shows the estimation of displaced population.')
         ]
-        # include any generic exposure specific notes from definitions.py
+        # include any generic exposure specific notes from definitions_v3.py
         fields = fields + self.exposure_notes()
-        # include any generic hazard specific notes from definitions.py
+        # include any generic hazard specific notes from definitions_v3.py
         fields = fields + self.hazard_notes()
         return fields
 

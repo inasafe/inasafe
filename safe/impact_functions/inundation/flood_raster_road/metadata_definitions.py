@@ -16,14 +16,7 @@ __filename__ = 'metadata_definitions'
 __date__ = '23/03/15'
 __copyright__ = 'lana.pcfre@gmail.com'
 
-from safe.defaults import road_type_postprocessor
-from safe.impact_functions.impact_function_metadata import \
-    ImpactFunctionMetadata
-from safe.impact_functions.inundation.flood_raster_road\
-    import parameter_definitions
-from safe.utilities.i18n import tr
-from safe.common.utilities import OrderedDict
-from safe.definitions import (
+from definitionsv4.definitions_v3 import (
     layer_mode_classified,
     layer_mode_continuous,
     layer_geometry_raster,
@@ -36,6 +29,13 @@ from safe.definitions import (
     unit_feet,
     road_class_field
 )
+from safe.common.utilities import OrderedDict
+from safe.defaults import road_type_postprocessor
+from safe.impact_functions.impact_function_metadata import \
+    ImpactFunctionMetadata
+from safe.impact_functions.inundation.flood_raster_road\
+    import parameter_definitions
+from safe.utilities.i18n import tr
 
 
 class FloodRasterRoadsMetadata(ImpactFunctionMetadata):

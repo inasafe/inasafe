@@ -13,22 +13,18 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-import logging
 import json
+import logging
 from sqlite3 import OperationalError
 
-from qgis.core import QgsMapLayerRegistry
-
-# noinspection PyPackageRequirements
 from PyQt4 import QtGui
-# noinspection PyPackageRequirements
 from PyQt4.QtCore import pyqtSignature
-# noinspection PyPackageRequirements
 from PyQt4.QtGui import (
     QDialog,
     QPixmap)
+from qgis.core import QgsMapLayerRegistry
 
-from safe.definitions import (
+from definitionsv4.definitions_v3 import (
     continuous_hazard_unit,
     exposure_unit,
     layer_purpose_hazard,
@@ -36,16 +32,6 @@ from safe.definitions import (
     layer_purpose_aggregation,
     layer_mode_continuous,
     layer_mode_classified)
-from safe.impact_functions.impact_function_manager import ImpactFunctionManager
-from safe.utilities.keyword_io import KeywordIO
-from safe.utilities.gis import (
-    is_raster_layer,
-    is_point_layer,
-    is_polygon_layer)
-
-from safe.utilities.utilities import (
-    get_error_message,
-    is_keyword_version_supported)
 from safe.common.exceptions import (
     HashNotFoundError,
     NoKeywordsFoundError,
@@ -54,9 +40,6 @@ from safe.common.exceptions import (
     UnsupportedProviderError,
     InaSAFEError,
     MetadataReadError)
-from safe.utilities.resources import get_ui_class, resources_path
-from safe.utilities.unicode import get_unicode
-
 from safe.gui.tools.wizard.wizard_strings import (
     category_question_hazard,
     category_question_exposure,
@@ -67,22 +50,17 @@ from safe.gui.tools.wizard.wizard_utils import (
     RoleExposure,
     RoleHazardConstraint,
     RoleExposureConstraint)
-from step_kw00_purpose import StepKwPurpose
-from step_kw05_subcategory import StepKwSubcategory
-from step_kw10_hazard_category import StepKwHazardCategory
-from step_kw15_layermode import StepKwLayerMode
-from step_kw20_unit import StepKwUnit
-from step_kw25_classification import StepKwClassification
-from step_kw30_field import StepKwField
-from step_kw35_resample import StepKwResample
-from step_kw40_classify import StepKwClassify
-from step_kw42_name_field import StepKwNameField
-from step_kw43_population_field import StepKwPopulationField
-from step_kw45_extrakeywords import StepKwExtraKeywords
-from step_kw50_aggregation import StepKwAggregation
-from step_kw55_source import StepKwSource
-from step_kw60_title import StepKwTitle
-from step_kw65_summary import StepKwSummary
+from safe.impact_functions.impact_function_manager import ImpactFunctionManager
+from safe.utilities.gis import (
+    is_raster_layer,
+    is_point_layer,
+    is_polygon_layer)
+from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.resources import get_ui_class, resources_path
+from safe.utilities.unicode import get_unicode
+from safe.utilities.utilities import (
+    get_error_message,
+    is_keyword_version_supported)
 from step_fc00_functions1 import StepFcFunctions1
 from step_fc05_functions2 import StepFcFunctions2
 from step_fc10_function import StepFcFunction
@@ -101,6 +79,22 @@ from step_fc70_extent import StepFcExtent
 from step_fc75_extent_disjoint import StepFcExtentDisjoint
 from step_fc80_params import StepFcParams
 from step_fc85_summary import StepFcSummary
+from step_kw00_purpose import StepKwPurpose
+from step_kw05_subcategory import StepKwSubcategory
+from step_kw10_hazard_category import StepKwHazardCategory
+from step_kw15_layermode import StepKwLayerMode
+from step_kw20_unit import StepKwUnit
+from step_kw25_classification import StepKwClassification
+from step_kw30_field import StepKwField
+from step_kw35_resample import StepKwResample
+from step_kw40_classify import StepKwClassify
+from step_kw42_name_field import StepKwNameField
+from step_kw43_population_field import StepKwPopulationField
+from step_kw45_extrakeywords import StepKwExtraKeywords
+from step_kw50_aggregation import StepKwAggregation
+from step_kw55_source import StepKwSource
+from step_kw60_title import StepKwTitle
+from step_kw65_summary import StepKwSummary
 from.step_fc90_analysis import StepFcAnalysis
 
 __author__ = 'qgis@borysjurgiel.pl'

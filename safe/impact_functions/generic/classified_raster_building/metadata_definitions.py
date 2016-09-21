@@ -11,12 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-from safe.common.utilities import OrderedDict
-from safe.utilities.i18n import tr
-from safe.defaults import building_type_postprocessor
-from safe.impact_functions.impact_function_metadata import (
-    ImpactFunctionMetadata)
-from safe.definitions import (
+from definitionsv4.definitions_v3 import (
     layer_mode_classified,
     layer_geometry_polygon,
     layer_geometry_point,
@@ -28,6 +23,11 @@ from safe.definitions import (
     generic_raster_hazard_classes,
     structure_class_field
 )
+from safe.common.utilities import OrderedDict
+from safe.defaults import building_type_postprocessor
+from safe.impact_functions.impact_function_metadata import (
+    ImpactFunctionMetadata)
+from safe.utilities.i18n import tr
 
 __author__ = 'lucernae'
 __project_name__ = 'inasafe'

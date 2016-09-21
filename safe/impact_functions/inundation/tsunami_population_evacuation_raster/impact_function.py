@@ -12,6 +12,17 @@ Contact : ole.moller.nielsen@gmail.com
 """
 import numpy
 
+import safe.messaging as m
+from definitionsv4.definitions_v3 import no_data_warning
+from safe.common.exceptions import ZeroImpactException
+from safe.common.utilities import (
+    format_int,
+    verify,
+    humanize_class,
+    create_classes,
+    create_label)
+from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
+    filter_needs_parameters, get_needs_provenance_value
 from safe.impact_functions.bases.continuous_rh_continuous_re import \
     ContinuousRHContinuousRE
 from safe.impact_functions.core import (
@@ -21,22 +32,10 @@ from safe.impact_functions.core import (
 from safe.impact_functions.inundation\
     .tsunami_population_evacuation_raster.metadata_definitions import \
     TsunamiEvacuationMetadata
-from safe.storage.raster import Raster
-from safe.utilities.i18n import tr
-from safe.common.utilities import (
-    format_int,
-    verify,
-    humanize_class,
-    create_classes,
-    create_label)
-
-from safe.common.exceptions import ZeroImpactException
-from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
-    filter_needs_parameters, get_needs_provenance_value
 from safe.impact_reports.population_exposure_report_mixin import \
     PopulationExposureReportMixin
-from safe.definitions import no_data_warning
-import safe.messaging as m
+from safe.storage.raster import Raster
+from safe.utilities.i18n import tr
 
 
 # noinspection PyClassHasNoInit
@@ -78,9 +77,9 @@ class TsunamiEvacuationFunction(
 
         if self.no_data_warning:
             fields = fields + no_data_warning
-        # include any generic exposure specific notes from definitions.py
+        # include any generic exposure specific notes from definitions_v3.py
         fields = fields + self.exposure_notes()
-        # include any generic hazard specific notes from definitions.py
+        # include any generic hazard specific notes from definitions_v3.py
         fields = fields + self.hazard_notes()
         return fields
 

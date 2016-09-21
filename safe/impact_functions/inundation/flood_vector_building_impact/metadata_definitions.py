@@ -13,12 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 __author__ = 'lucernae'
 
-from safe.common.utilities import OrderedDict
-from safe.defaults import building_type_postprocessor
-from safe.impact_functions.impact_function_metadata import \
-    ImpactFunctionMetadata
-from safe.utilities.i18n import tr
-from safe.definitions import (
+from definitionsv4.definitions_v3 import (
     layer_mode_classified,
     layer_geometry_polygon,
     layer_geometry_point,
@@ -29,6 +24,11 @@ from safe.definitions import (
     flood_vector_hazard_classes,
     structure_class_field
 )
+from safe.common.utilities import OrderedDict
+from safe.defaults import building_type_postprocessor
+from safe.impact_functions.impact_function_metadata import \
+    ImpactFunctionMetadata
+from safe.utilities.i18n import tr
 
 
 class FloodPolygonBuildingFunctionMetadata(ImpactFunctionMetadata):

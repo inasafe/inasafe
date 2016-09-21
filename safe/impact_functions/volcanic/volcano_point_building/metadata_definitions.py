@@ -10,14 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.common.utilities import OrderedDict, get_thousand_separator
-from safe.defaults import building_type_postprocessor
-from safe.impact_functions.impact_function_metadata import \
-    ImpactFunctionMetadata
-from safe.impact_functions.volcanic.volcano_point_building\
-    .parameter_definitions import distance
-from safe.utilities.i18n import tr
-from safe.definitions import (
+from definitionsv4.definitions_v3 import (
     layer_geometry_point,
     layer_geometry_polygon,
     hazard_volcano,
@@ -28,6 +21,13 @@ from safe.definitions import (
     structure_class_field,
     hazard_category_single_event
 )
+from safe.common.utilities import OrderedDict, get_thousand_separator
+from safe.defaults import building_type_postprocessor
+from safe.impact_functions.impact_function_metadata import \
+    ImpactFunctionMetadata
+from safe.impact_functions.volcanic.volcano_point_building\
+    .parameter_definitions import distance
+from safe.utilities.i18n import tr
 
 
 class VolcanoPointBuildingFunctionMetadata(ImpactFunctionMetadata):

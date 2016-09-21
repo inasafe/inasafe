@@ -10,16 +10,19 @@ Contact : etienne at kartoza dot com
      (at your option) any later version.
 
 """
-__author__ = 'etiennetrimaille'
-__revision__ = '$Format:%H$'
-__date__ = '14/06/2016'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
 
 import sys
 import os
 import unittest
+from osgeo import gdal
+from PyQt4 import Qt
 from safe.utilities.gis import qgis_version
+
+__author__ = 'etiennetrimaille'
+__revision__ = '$Format:%H$'
+__date__ = '14/06/2016'
+__copyright__ = (
+    'Copyright 2012, Australia Indonesia Facility for Disaster Reduction')
 
 
 def _run_tests(test_suite, package_name):
@@ -28,6 +31,8 @@ def _run_tests(test_suite, package_name):
     print '########'
     print '%s tests has been discovered in %s' % (count, package_name)
     print 'QGIS : %s' % qgis_version()
+    print 'Python GDAL : %s' % gdal.VersionInfo('VERSION_NUM')
+    print 'QT : %s' % Qt.QT_VERSION
     print 'Run slow tests : %s' % (not os.environ.get('ON_TRAVIS', False))
     print '########'
     unittest.TextTestRunner(verbosity=3, stream=sys.stdout).run(test_suite)

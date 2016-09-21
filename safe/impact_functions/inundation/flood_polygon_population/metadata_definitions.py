@@ -13,18 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 __author__ = 'Rizky Maulana Nugraha'
 
-from safe.common.utilities import OrderedDict, get_thousand_separator
-from safe.defaults import (
-    default_minimum_needs,
-    default_gender_postprocessor,
-    age_postprocessor,
-    minimum_needs_selector)
-from safe.impact_functions.impact_function_metadata import \
-    ImpactFunctionMetadata
-from safe.impact_functions.inundation.\
-    flood_polygon_population import parameter_definitions
-from safe.utilities.i18n import tr
-from safe.definitions import (
+from definitionsv4.definitions_v3 import (
     layer_mode_classified,
     layer_mode_continuous,
     layer_geometry_polygon,
@@ -36,6 +25,17 @@ from safe.definitions import (
     count_exposure_unit,
     exposure_population,
 )
+from safe.common.utilities import OrderedDict, get_thousand_separator
+from safe.defaults import (
+    default_minimum_needs,
+    default_gender_postprocessor,
+    age_postprocessor,
+    minimum_needs_selector)
+from safe.impact_functions.impact_function_metadata import \
+    ImpactFunctionMetadata
+from safe.impact_functions.inundation.\
+    flood_polygon_population import parameter_definitions
+from safe.utilities.i18n import tr
 
 
 class FloodEvacuationVectorHazardMetadata(ImpactFunctionMetadata):

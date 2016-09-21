@@ -11,16 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-from safe.common.utilities import OrderedDict, get_thousand_separator
-from safe.defaults import default_minimum_needs
-from safe.defaults import (
-    default_gender_postprocessor,
-    age_postprocessor,
-    minimum_needs_selector)
-from safe.utilities.i18n import tr
-from safe.impact_functions.impact_function_metadata import \
-    ImpactFunctionMetadata
-from safe.definitions import (
+from definitionsv4.definitions_v3 import (
     layer_mode_continuous,
     layer_geometry_raster,
     hazard_all,
@@ -31,8 +22,17 @@ from safe.definitions import (
     unit_generic,
     density_exposure_unit
 )
+from safe.common.utilities import OrderedDict, get_thousand_separator
+from safe.defaults import (
+    default_gender_postprocessor,
+    age_postprocessor,
+    minimum_needs_selector)
+from safe.defaults import default_minimum_needs
 from safe.impact_functions.generic.continuous_hazard_population\
     .parameter_definitions import categorical_thresholds
+from safe.impact_functions.impact_function_metadata import \
+    ImpactFunctionMetadata
+from safe.utilities.i18n import tr
 
 __author__ = 'lucernae'
 __date__ = '24/03/15'
