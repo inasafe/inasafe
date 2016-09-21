@@ -10,10 +10,14 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 """
 
-import sys
 import logging
+import sys
 import time
+
 import numpy
+from PyQt4 import QtGui, QtCore
+from PyQt4.QtCore import QSettings, QVariant
+from qgis.analysis import QgsZonalStatistics
 from qgis.core import (
     QgsCoordinateTransform,
     QgsMapLayer,
@@ -30,37 +34,9 @@ from qgis.core import (
     QgsVectorFileWriter,
     QGis,
     QgsCoordinateReferenceSystem)
-# pylint: disable=no-name-in-module
-from qgis.analysis import QgsZonalStatistics
-# pylint: enable=no-name-in-module
-from PyQt4 import QtGui, QtCore
-from PyQt4.QtCore import QSettings, QVariant
-from safe.storage.core import read_layer as safe_read_layer
-from safe.storage.utilities import (
-    calculate_polygon_centroid,
-    safe_to_qgis_layer)
-from safe.utilities.clipper import clip_layer
-from safe.defaults import get_defaults
-from safe.utilities.keyword_io import KeywordIO
-from safe.utilities.gis import (
-    layer_attribute_names,
-    create_memory_layer,
-    is_polygon_layer)
-from safe.utilities.styling import set_vector_graduated_style
-from safe.common.utilities import (
-    temp_dir,
-    unique_filename,
-    feature_attributes_as_dict,
-    get_utm_epsg,
-    get_non_conflicting_attribute_name
-)
-from safe.common.exceptions import ReadLayerError, PointsInputError
-from safe.gis.polygon import (
-    in_and_outside_polygon as points_in_and_outside_polygon)
-from safe.common.signals import send_dynamic_message
+
+from definitionsv4.definitions_v3 import global_default_attribute, do_not_use_attribute
 from safe import messaging as m
-from safe.definitions import global_default_attribute, do_not_use_attribute
-from safe.messaging import styles
 from safe.common.exceptions import (
     KeywordNotFoundError,
     NoKeywordsFoundError,
@@ -71,6 +47,30 @@ from safe.common.exceptions import (
     InvalidLayerError,
     InsufficientParametersError
 )
+from safe.common.exceptions import ReadLayerError, PointsInputError
+from safe.common.signals import send_dynamic_message
+from safe.common.utilities import (
+    temp_dir,
+    unique_filename,
+    feature_attributes_as_dict,
+    get_utm_epsg,
+    get_non_conflicting_attribute_name
+)
+from safe.defaults import get_defaults
+from safe.gis.polygon import (
+    in_and_outside_polygon as points_in_and_outside_polygon)
+from safe.messaging import styles
+from safe.storage.core import read_layer as safe_read_layer
+from safe.storage.utilities import (
+    calculate_polygon_centroid,
+    safe_to_qgis_layer)
+from safe.utilities.clipper import clip_layer
+from safe.utilities.gis import (
+    layer_attribute_names,
+    create_memory_layer,
+    is_polygon_layer)
+from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.styling import set_vector_graduated_style
 
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'

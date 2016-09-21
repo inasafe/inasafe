@@ -20,23 +20,21 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import re
 
-# noinspection PyPackageRequirements
 from PyQt4 import QtCore
-
 from qgis.core import QgsCoordinateTransform
 
-from safe.common.version import get_version
-from safe.definitions import (
+import safe.gui.tools.wizard.wizard_strings
+from definitionsv4.definitions_v3 import (
     layer_purpose_hazard,
     layer_purpose_exposure,
     layer_mode_classified)
+from safe.common.version import get_version
 from safe.utilities.gis import (
     is_raster_layer,
     is_point_layer,
     is_polygon_layer)
 from safe.utilities.i18n import tr
 from safe.utilities.utilities import is_keyword_version_supported
-import safe.gui.tools.wizard.wizard_strings
 
 
 # Data roles

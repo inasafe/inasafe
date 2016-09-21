@@ -1,12 +1,11 @@
 # coding=utf-8
 """Tests for keyword io class."""
 import unittest
-import os
-import shutil
 
 from qgis.core import QgsDataSourceURI, QgsVectorLayer
 
-from safe.definitions import inasafe_keyword_version
+from definitionsv4.definitions_v3 import inasafe_keyword_version
+from safe.common.exceptions import NoKeywordsFoundError
 from safe.common.utilities import unique_filename
 from safe.test.utilities import (
     load_layer,
@@ -14,9 +13,8 @@ from safe.test.utilities import (
     standard_data_path,
     clone_raster_layer)
 from safe.utilities.keyword_io import KeywordIO, definition
-from safe.common.exceptions import NoKeywordsFoundError
-from safe.utilities.unicode import get_unicode
 from safe.utilities.metadata import read_iso19115_metadata
+from safe.utilities.unicode import get_unicode
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 

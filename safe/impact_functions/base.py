@@ -11,27 +11,23 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 """
 
-
-import numpy
+import getpass
 import logging
 import json
 import os
-
-from socket import gethostname
-import getpass
 import platform
 from datetime import datetime
-from qgis.utils import QGis
-from qgis.core import QgsMapLayer, QgsCoordinateReferenceSystem, QgsRectangle
-from osgeo import gdal
-from PyQt4.QtCore import QT_VERSION_STR, QSettings
-from PyQt4.Qt import PYQT_VERSION_STR
+from socket import gethostname
 
-from safe.impact_statistics.aggregator import Aggregator
-from safe.impact_statistics.postprocessor_manager import (
-    PostprocessorManager)
-from safe.impact_functions.impact_function_metadata import \
-    ImpactFunctionMetadata
+import numpy
+from PyQt4.Qt import PYQT_VERSION_STR
+from PyQt4.QtCore import QT_VERSION_STR, QSettings
+from osgeo import gdal
+from qgis.core import QgsMapLayer, QgsCoordinateReferenceSystem, QgsRectangle
+from qgis.utils import QGis
+
+from definitionsv4.definitions_v3 import inasafe_keyword_version, exposure_all, hazard_all
+from safe import messaging as m
 from safe.common.exceptions import (
     InvalidExtentError,
     InsufficientMemoryWarning,
@@ -49,42 +45,6 @@ from safe.common.exceptions import (
     FunctionParametersError,
     NoValidLayerError,
     InsufficientOverlapError)
-from safe import messaging as m
-from safe.messaging import styles
-from safe.messaging.utilities import generate_insufficient_overlap_message
-from safe.postprocessors.postprocessor_factory import (
-    get_postprocessors,
-    get_postprocessor_human_name)
-from safe.common.utilities import (
-    get_non_conflicting_attribute_name,
-    unique_filename,
-    verify
-)
-from safe.utilities.utilities import (
-    get_error_message,
-    replace_accentuated_characters,
-    write_json
-)
-from safe.utilities.memory_checker import check_memory_usage
-from safe.utilities.i18n import tr
-from safe.utilities.keyword_io import KeywordIO, definition
-from safe.utilities.gis import (
-    convert_to_safe_layer,
-    is_point_layer,
-    buffer_points,
-    get_wgs84_resolution,
-    array_to_geo_array,
-    extent_to_array,
-    get_optimal_extent)
-from safe.utilities.clipper import adjust_clip_extent, clip_layer
-from safe.storage.safe_layer import SafeLayer
-from safe.storage.utilities import (
-    buffered_bounding_box as get_buffered_extent,
-    safe_to_qgis_layer,
-    bbox_intersection)
-from safe.definitions import inasafe_keyword_version, exposure_all, hazard_all
-from safe.metadata.provenance import Provenance
-from safe.common.version import get_version
 from safe.common.signals import (
     analysis_error,
     send_static_message,
@@ -94,7 +54,46 @@ from safe.common.signals import (
     send_not_busy_signal,
     send_analysis_done_signal
 )
+from safe.common.utilities import (
+    get_non_conflicting_attribute_name,
+    unique_filename,
+    verify
+)
+from safe.common.version import get_version
 from safe.engine.core import check_data_integrity
+from safe.impact_functions.impact_function_metadata import \
+    ImpactFunctionMetadata
+from safe.impact_statistics.aggregator import Aggregator
+from safe.impact_statistics.postprocessor_manager import (
+    PostprocessorManager)
+from safe.messaging import styles
+from safe.messaging.utilities import generate_insufficient_overlap_message
+from safe.metadata.provenance import Provenance
+from safe.postprocessors.postprocessor_factory import (
+    get_postprocessors,
+    get_postprocessor_human_name)
+from safe.storage.safe_layer import SafeLayer
+from safe.storage.utilities import (
+    buffered_bounding_box as get_buffered_extent,
+    safe_to_qgis_layer,
+    bbox_intersection)
+from safe.utilities.clipper import adjust_clip_extent, clip_layer
+from safe.utilities.gis import (
+    convert_to_safe_layer,
+    is_point_layer,
+    buffer_points,
+    get_wgs84_resolution,
+    array_to_geo_array,
+    extent_to_array,
+    get_optimal_extent)
+from safe.utilities.i18n import tr
+from safe.utilities.keyword_io import KeywordIO, definition
+from safe.utilities.memory_checker import check_memory_usage
+from safe.utilities.utilities import (
+    get_error_message,
+    replace_accentuated_characters,
+    write_json
+)
 
 INFO_STYLE = styles.INFO_STYLE
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
@@ -417,7 +416,7 @@ class ImpactFunction(object):
     def exposure_actions(self):
         """Get the exposure specific actions defined in definitions.
 
-        This method will do a lookup in definitions.py and return the
+        This method will do a lookup in definitions_v3.py and return the
         exposure definition specific actions dictionary.
 
         This is a helper function to make it
@@ -441,7 +440,7 @@ class ImpactFunction(object):
     def exposure_notes(self):
         """Get the exposure specific notes defined in definitions.
 
-        This method will do a lookup in definitions.py and return the
+        This method will do a lookup in definitions_v3.py and return the
         exposure definition specific notes dictionary.
 
         This is a helper function to make it
@@ -473,7 +472,7 @@ class ImpactFunction(object):
     def hazard_actions(self):
         """Get the hazard specific actions defined in definitions.
 
-        This method will do a lookup in definitions.py and return the
+        This method will do a lookup in definitions_v3.py and return the
         hazard definition specific actions dictionary.
 
         This is a helper function to make it
@@ -497,7 +496,7 @@ class ImpactFunction(object):
     def hazard_notes(self):
         """Get the hazard specific notes defined in definitions.
 
-        This method will do a lookup in definitions.py and return the
+        This method will do a lookup in definitions_v3.py and return the
         hazard definition specific notes dictionary.
 
         This is a helper function to make it
@@ -543,9 +542,9 @@ class ImpactFunction(object):
         """
         # Include actions defined in the mixin
         fields = self.extra_actions()
-        # include any generic exposure specific actions from definitions.py
+        # include any generic exposure specific actions from definitions_v3.py
         fields = fields + self.exposure_actions()
-        # include any generic hazard specific actions from definitions.py
+        # include any generic hazard specific actions from definitions_v3.py
         fields = fields + self.hazard_actions()
         return fields
 
@@ -558,9 +557,9 @@ class ImpactFunction(object):
         :rtype: list
         """
         fields = []  # Notes still to be defined for ASH
-        # include any generic exposure specific notes from definitions.py
+        # include any generic exposure specific notes from definitions_v3.py
         fields = fields + self.exposure_notes()
-        # include any generic hazard specific notes from definitions.py
+        # include any generic hazard specific notes from definitions_v3.py
         fields = fields + self.hazard_notes()
         return fields
 

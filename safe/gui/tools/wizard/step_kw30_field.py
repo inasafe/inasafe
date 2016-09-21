@@ -20,25 +20,21 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import re
 
-# noinspection PyPackageRequirements
 from PyQt4 import QtCore
-# noinspection PyPackageRequirements
 from PyQt4.QtGui import QListWidgetItem
 
-from safe.definitions import (
+from definitionsv4.definitions_v3 import (
     layer_mode_classified,
     layer_mode_continuous,
     layer_purpose_aggregation)
-
-from safe.utilities.gis import is_raster_layer
-
+from safe.gui.tools.wizard.wizard_step import WizardStep
+from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_strings import (
     field_question_subcategory_unit,
     field_question_subcategory_classified,
     field_question_aggregation)
-from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
-from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_utils import get_question_text
+from safe.utilities.gis import is_raster_layer
 
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)

@@ -1,9 +1,9 @@
 # coding=utf-8
 
+from definitionsv4.definitions_v3 import layer_mode_continuous, layer_geometry_raster, \
+    layer_mode_classified
 from safe.common.exceptions import (
     MetadataLayerConstraintError)
-from safe.definitions import layer_mode_continuous, layer_geometry_raster, \
-    layer_mode_classified
 from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.bases.layer_types.classified_raster_hazard import \
     ClassifiedRasterHazardMixin

@@ -10,12 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.common.utilities import OrderedDict
-from safe.defaults import road_type_postprocessor
-from safe.impact_functions.impact_function_metadata import \
-    ImpactFunctionMetadata
-from safe.utilities.i18n import tr
-from safe.definitions import (
+from definitionsv4.definitions_v3 import (
     layer_mode_classified,
     layer_geometry_polygon,
     layer_geometry_line,
@@ -26,6 +21,11 @@ from safe.definitions import (
     exposure_road,
     road_class_field
 )
+from safe.common.utilities import OrderedDict
+from safe.defaults import road_type_postprocessor
+from safe.impact_functions.impact_function_metadata import \
+    ImpactFunctionMetadata
+from safe.utilities.i18n import tr
 
 
 class FloodPolygonRoadsMetadata(ImpactFunctionMetadata):

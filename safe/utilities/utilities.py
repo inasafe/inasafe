@@ -12,29 +12,29 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
+import codecs
+import json
+import logging
 import sys
 import traceback
-import logging
-import webbrowser
 import unicodedata
-import codecs
+import webbrowser
 from collections import OrderedDict
-import json
 
 from PyQt4.QtCore import QPyNullVariant
 
-from safe.common.utilities import unique_filename
-from safe.common.version import get_version
-from safe.defaults import disclaimer
-from safe import messaging as m
-from safe.messaging import styles, Message
-from safe.messaging.error_message import ErrorMessage
-from safe.utilities.unicode import get_unicode
-from safe.utilities.i18n import tr
-from safe.definitions import (
+from definitionsv4.definitions_v3 import (
     inasafe_keyword_version,
     keyword_version_compatibilities
 )
+from safe import messaging as m
+from safe.common.utilities import unique_filename
+from safe.common.version import get_version
+from safe.defaults import disclaimer
+from safe.messaging import styles, Message
+from safe.messaging.error_message import ErrorMessage
+from safe.utilities.i18n import tr
+from safe.utilities.unicode import get_unicode
 
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'

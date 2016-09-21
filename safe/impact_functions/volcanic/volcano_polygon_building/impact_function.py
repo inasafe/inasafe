@@ -57,9 +57,9 @@ class VolcanoPolygonBuildingFunction(
                'polygons.'),
             tr('Volcanoes considered: %s.') % sorted_volcano_names
         ]
-        # include any generic exposure specific notes from definitions.py
+        # include any generic exposure specific notes from definitions_v3.py
         fields = fields + self.exposure_notes()
-        # include any generic hazard specific notes from definitions.py
+        # include any generic hazard specific notes from definitions_v3.py
         fields = fields + self.hazard_notes()
         return fields
 

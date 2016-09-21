@@ -18,7 +18,9 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import unittest
+
 from safe.test.utilities import get_qgis_app
+
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.impact_functions.loader import register_impact_functions
@@ -34,7 +36,7 @@ from safe.impact_functions.generic.continuous_hazard_population\
 from safe.impact_functions.inundation.flood_vector_building_impact\
     .impact_function import FloodPolygonBuildingFunction
 
-from safe.definitions import (
+from definitionsv4.definitions_v3 import (
     layer_purpose_hazard,
     layer_purpose_exposure,
     hazard_category_single_event,

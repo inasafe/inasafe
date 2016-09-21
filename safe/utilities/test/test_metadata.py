@@ -1,11 +1,11 @@
 import unittest
 
+from definitionsv4.definitions_v3 import inasafe_keyword_version
 from safe.test.utilities import standard_data_path, clone_shp_layer
 from safe.utilities.metadata import (
     write_iso19115_metadata,
     read_iso19115_metadata
 )
-from safe.definitions import inasafe_keyword_version
 
 
 class TestMetadataUtilities(unittest.TestCase):

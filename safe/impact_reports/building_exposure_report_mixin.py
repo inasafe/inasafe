@@ -12,11 +12,12 @@ Contact : ole.moller.nielsen@gmail.com
 """
 from collections import OrderedDict
 from operator import add
-from safe.utilities.i18n import tr
-from safe.utilities.utilities import reorder_dictionary
+
+from definitionsv4.definitions_v3 import structure_class_order
 from safe.common.utilities import format_int
 from safe.impact_reports.report_mixin_base import ReportMixin
-from safe.definitions import structure_class_order
+from safe.utilities.i18n import tr
+from safe.utilities.utilities import reorder_dictionary
 
 __author__ = 'Christian Christelis <christian@kartoza.com>'
 
@@ -255,7 +256,7 @@ class BuildingExposureReportMixin(ReportMixin):
         """Get actions specific to building exposure.
 
         .. note:: Only calculated actions are implemented here, the rest
-            are defined in definitions.py.
+            are defined in definitions_v3.py.
 
         .. versionadded:: 3.5
 

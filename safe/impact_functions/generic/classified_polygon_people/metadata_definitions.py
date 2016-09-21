@@ -14,10 +14,7 @@ Contact : ole.moller.nielsen@gmail.com
 __author__ = 'Samweli Twesa Mwakisambwe "Samweli" <smwltwesa6@gmail.com>'
 __date__ = '8/6/15'
 
-from safe.common.utilities import OrderedDict
-from safe.impact_functions.impact_function_metadata import \
-    ImpactFunctionMetadata
-from safe.definitions import (
+from definitionsv4.definitions_v3 import (
     area_name_field,
     area_id_field,
     exposure_population,
@@ -31,11 +28,11 @@ from safe.definitions import (
     layer_geometry_polygon,
     count_exposure_unit
 )
+from safe.common.utilities import OrderedDict
 from safe.defaults import (
-    default_minimum_needs,
-    default_gender_postprocessor,
-    age_postprocessor,
-    minimum_needs_selector)
+    default_minimum_needs)
+from safe.impact_functions.impact_function_metadata import \
+    ImpactFunctionMetadata
 from safe.utilities.i18n import tr
 
 

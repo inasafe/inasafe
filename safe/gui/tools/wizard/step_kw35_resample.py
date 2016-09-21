@@ -18,13 +18,11 @@ __date__ = '16/03/2016'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from safe.definitions import layer_purpose_exposure
-
-from safe.utilities.gis import is_raster_layer
-
-from safe.gui.tools.wizard.wizard_strings import allow_resampling_question
-from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
+from definitionsv4.definitions_v3 import layer_purpose_exposure
 from safe.gui.tools.wizard.wizard_step import WizardStep
+from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
+from safe.gui.tools.wizard.wizard_strings import allow_resampling_question
+from safe.utilities.gis import is_raster_layer
 
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)

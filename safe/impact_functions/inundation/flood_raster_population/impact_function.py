@@ -13,21 +13,12 @@ Contact : ole.moller.nielsen@gmail.com
 __author__ = 'Rizky Maulana Nugraha'
 
 import logging
+
 import numpy
 
-from safe.impact_functions.core import (
-    population_rounding,
-    has_no_data)
-from safe.impact_functions.impact_function_manager \
-    import ImpactFunctionManager
-from safe.impact_functions.inundation.flood_raster_population\
-    .metadata_definitions import FloodEvacuationRasterHazardMetadata
-from safe.impact_functions.bases.continuous_rh_continuous_re import \
-    ContinuousRHContinuousRE
-from safe.utilities.i18n import tr
-from safe.impact_functions.core import no_population_impact_message
+import safe.messaging as m
+from definitionsv4.definitions_v3 import no_data_warning
 from safe.common.exceptions import ZeroImpactException
-from safe.storage.raster import Raster
 from safe.common.utilities import (
     format_int,
     create_classes,
@@ -36,10 +27,20 @@ from safe.common.utilities import (
     verify)
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
     get_needs_provenance_value
+from safe.impact_functions.bases.continuous_rh_continuous_re import \
+    ContinuousRHContinuousRE
+from safe.impact_functions.core import no_population_impact_message
+from safe.impact_functions.core import (
+    population_rounding,
+    has_no_data)
+from safe.impact_functions.impact_function_manager \
+    import ImpactFunctionManager
+from safe.impact_functions.inundation.flood_raster_population\
+    .metadata_definitions import FloodEvacuationRasterHazardMetadata
 from safe.impact_reports.population_exposure_report_mixin import \
     PopulationExposureReportMixin
-from safe.definitions import no_data_warning
-import safe.messaging as m
+from safe.storage.raster import Raster
+from safe.utilities.i18n import tr
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -86,9 +87,9 @@ class FloodEvacuationRasterHazardFunction(
 
         if self.no_data_warning:
             fields = fields + no_data_warning
-        # include any generic exposure specific notes from definitions.py
+        # include any generic exposure specific notes from definitions_v3.py
         fields = fields + self.exposure_notes()
-        # include any generic hazard specific notes from definitions.py
+        # include any generic hazard specific notes from definitions_v3.py
         fields = fields + self.hazard_notes()
         return fields
 

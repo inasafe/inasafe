@@ -16,8 +16,7 @@ __filename__ = 'metadata_definitions'
 __date__ = '10/05/16'
 __copyright__ = 'etienne@kartoza.com'
 
-from safe.common.utilities import OrderedDict
-from safe.definitions import (
+from definitionsv4.definitions_v3 import (
     layer_mode_classified,
     layer_mode_continuous,
     layer_geometry_polygon,
@@ -29,14 +28,15 @@ from safe.definitions import (
     unit_feet,
     hazard_tsunami
 )
+from safe.common.utilities import OrderedDict
+from safe.impact_functions.impact_function_metadata import \
+    ImpactFunctionMetadata
 from safe.impact_functions.inundation.tsunami_raster_building.\
     metadata_definitions import (
         low_threshold,
         medium_threshold,
         high_threshold
     )
-from safe.impact_functions.impact_function_metadata import \
-    ImpactFunctionMetadata
 from safe.utilities.i18n import tr
 
 

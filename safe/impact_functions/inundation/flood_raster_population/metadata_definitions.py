@@ -13,8 +13,18 @@ Contact : ole.moller.nielsen@gmail.com
 
 __author__ = 'Rizky Maulana Nugraha'
 
+from definitionsv4.definitions_v3 import (
+    layer_mode_continuous,
+    layer_geometry_raster,
+    hazard_flood,
+    hazard_category_single_event,
+    hazard_category_multiple_event,
+    unit_metres,
+    unit_feet,
+    count_exposure_unit,
+    exposure_population
+)
 from safe.common.utilities import OrderedDict, get_thousand_separator
-
 from safe.defaults import (
     default_minimum_needs,
     default_gender_postprocessor,
@@ -26,17 +36,6 @@ from safe.impact_functions.inundation.\
     flood_raster_population.parameter_definitions \
     import threshold
 from safe.utilities.i18n import tr
-from safe.definitions import (
-    layer_mode_continuous,
-    layer_geometry_raster,
-    hazard_flood,
-    hazard_category_single_event,
-    hazard_category_multiple_event,
-    unit_metres,
-    unit_feet,
-    count_exposure_unit,
-    exposure_population
-)
 
 
 class FloodEvacuationRasterHazardMetadata(ImpactFunctionMetadata):

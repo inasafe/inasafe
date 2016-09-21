@@ -21,9 +21,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 from sqlite3 import OperationalError
 
-# noinspection PyPackageRequirements
 from PyQt4.QtCore import QSettings
-
+from db_manager.db_plugins.postgis.connector import PostGisDBConnector
 from qgis.core import (
     QgsDataItem,
     QgsVectorLayer,
@@ -31,21 +30,8 @@ from qgis.core import (
     QgsDataSourceURI,
     QgsBrowserModel)
 
-# pylint: disable=F0401
-from db_manager.db_plugins.postgis.connector import PostGisDBConnector
-# pylint: enable=F0401
-
-from safe.common.exceptions import (
-    HashNotFoundError,
-    InaSAFEError,
-    InvalidParameterError,
-    KeywordNotFoundError,
-    MissingMetadata,
-    NoKeywordsFoundError,
-    UnsupportedProviderError)
-
-import safe.definitions
-from safe.definitions import (
+import definitionsv4.definitions_v3
+from definitionsv4.definitions_v3 import (
     continuous_hazard_unit,
     exposure_unit,
     raster_hazard_classification,
@@ -56,17 +42,23 @@ from safe.definitions import (
     layer_geometry_polygon,
     layer_mode_continuous,
     layer_mode_classified)
-
-from safe.utilities.gis import is_raster_layer
-from safe.utilities.utilities import (
-    is_keyword_version_supported)
-
-from safe.gui.tools.wizard.wizard_strings import (
-    create_postGIS_connection_first)
+from safe.common.exceptions import (
+    HashNotFoundError,
+    InaSAFEError,
+    InvalidParameterError,
+    KeywordNotFoundError,
+    MissingMetadata,
+    NoKeywordsFoundError,
+    UnsupportedProviderError)
 from safe.gui.tools.wizard.layer_browser_proxy_model import (
     LayerBrowserProxyModel)
 from safe.gui.tools.wizard.wizard_step import WizardStep
+from safe.gui.tools.wizard.wizard_strings import (
+    create_postGIS_connection_first)
 from safe.gui.tools.wizard.wizard_utils import layer_description_html
+from safe.utilities.gis import is_raster_layer
+from safe.utilities.utilities import (
+    is_keyword_version_supported)
 
 
 class WizardStepBrowser(WizardStep):
@@ -326,12 +318,12 @@ class WizardStepBrowser(WizardStep):
                 %s
             </table>
         ''' % (self.tr('Layer'), self.tr('Required'),
-               safe.definitions.layer_geometry['name'],
+               definitionsv4.definitions_v3.layer_geometry['name'],
                lay_geometry, req_geometry,
-               safe.definitions.layer_purpose['name'],
+               definitionsv4.definitions_v3.layer_purpose['name'],
                lay_purpose, layer_purpose,
                layer_purpose_key_name, lay_subcategory, req_subcategory,
-               safe.definitions.layer_mode['name'],
+               definitionsv4.definitions_v3.layer_mode['name'],
                lay_layer_mode, req_layer_mode,
                classification_row,
                units_row)

@@ -21,12 +21,10 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import QDateTime
 
-from safe.definitions import layer_mode_classified, layer_purpose_aggregation
-
-from safe.utilities.unicode import get_unicode
-
-from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
+from definitionsv4.definitions_v3 import layer_mode_classified, layer_purpose_aggregation
 from safe.gui.tools.wizard.wizard_step import WizardStep
+from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
+from safe.utilities.unicode import get_unicode
 
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
