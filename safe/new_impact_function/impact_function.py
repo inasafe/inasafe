@@ -24,7 +24,7 @@ from qgis.core import (
 from PyQt4.QtCore import QVariant
 import logging
 
-from safe.definitionsv4.definitions_v3 import post_processors
+from definitionsv4.post_processors import post_processors
 from safe.defaults import get_defaults
 from safe.common.exceptions import InvalidExtentError, InvalidLayerError
 from safe.utilities.i18n import tr
