@@ -84,7 +84,8 @@ feature_rate_field = {
     'field_name': 'exp_rate',
     'type': float,
     'description': tr(
-        'Attribute where the rate value of the feature is located.'),
+        'Attribute where the rate value of the feature is located. A rate '
+        'value is the cost per unit of measure (m2 / m) for the feature.'),
     'citations': [
         {
             'text': None,
@@ -156,11 +157,11 @@ aggregation_name_field = {
         }
     ]
 }
-# Gender Ratio
-gender_ratio_field = {
-    'key': 'gender_ratio_field',
-    'name': tr('Gender Ratio'),
-    'field_name': 'gender_r',
+# Female Ratio
+female_ratio_field = {
+    'key': 'female_ratio_field',
+    'name': tr('Female Ratio'),
+    'field_name': 'female_r',
     'type': float,
     'description': tr('Attribute where the ratio of women is located.'),
     'citations': [
@@ -326,7 +327,7 @@ hazard_fields = [
 aggregation_fields = [
     aggregation_id_field,
     aggregation_name_field,
-    gender_ratio_field,
+    female_ratio_field,
     youth_ratio_field,
     adult_ratio_field,
     elderly_ratio_field
@@ -342,7 +343,7 @@ impact_fields = [
     hazard_class_field,
     aggregation_id_field,
     aggregation_name_field,
-    gender_ratio_field,
+    female_ratio_field,
     youth_ratio_field,
     adult_ratio_field,
     elderly_ratio_field,
