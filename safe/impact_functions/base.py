@@ -13,7 +13,6 @@ Contact : ole.moller.nielsen@gmail.com
 
 import getpass
 import logging
-import json
 import os
 import platform
 from datetime import datetime
@@ -26,7 +25,8 @@ from osgeo import gdal
 from qgis.core import QgsMapLayer, QgsCoordinateReferenceSystem, QgsRectangle
 from qgis.utils import QGis
 
-from definitionsv4.definitions_v3 import inasafe_keyword_version, exposure_all, hazard_all
+from definitionsv4.definitions_v3 import (
+    inasafe_keyword_version, exposure_all, hazard_all)
 from safe import messaging as m
 from safe.common.exceptions import (
     InvalidExtentError,

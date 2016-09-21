@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid -
 **InaSAFE Field Definitions**
@@ -298,7 +299,8 @@ elderly_count_field = {
     'field_name': 'elderly',
     'type': int,
     'description': tr(
-        'Attribute where the number of elderly people of the feature is located.'
+        'Attribute where the number of elderly people of the feature is '
+        'located.'
     ),
     'citations': [
         {

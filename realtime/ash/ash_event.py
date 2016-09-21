@@ -279,7 +279,8 @@ class AshEvent(QObject):
                 'This report was created using InaSAFE version %s. Visit '
                 'http://inasafe.org for more information. ') % get_version(),
             'content-support': self.tr(
-                'Supported by DMInnovation, Geoscience Australia and the World Bank-GFDRR')
+                'Supported by DMInnovation, Geoscience Australia and the '
+                'World Bank-GFDRR')
         }
         return event
 

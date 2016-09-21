@@ -1,7 +1,12 @@
 # coding=utf-8
 
-from definitionsv4.definitions_v3 import layer_mode_continuous, layer_geometry_raster, \
-    layer_geometry_point, layer_geometry_line, layer_geometry_polygon
+from definitionsv4.definitions_v3 import (
+    layer_mode_continuous,
+    layer_geometry_raster,
+    layer_geometry_point,
+    layer_geometry_line,
+    layer_geometry_polygon
+)
 from safe.common.exceptions import (
     MetadataLayerConstraintError)
 from safe.impact_functions.base import ImpactFunction

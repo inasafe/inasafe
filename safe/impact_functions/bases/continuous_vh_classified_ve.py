@@ -1,8 +1,13 @@
 # coding=utf-8
 import logging
 
-from definitionsv4.definitions_v3 import layer_mode_continuous, layer_geometry_point, \
-    layer_geometry_line, layer_geometry_polygon, layer_mode_classified
+from definitionsv4.definitions_v3 import (
+    layer_mode_continuous,
+    layer_geometry_point,
+    layer_geometry_line,
+    layer_geometry_polygon,
+    layer_mode_classified
+)
 from safe.common.exceptions import (
     MetadataLayerConstraintError)
 from safe.impact_functions.base import ImpactFunction

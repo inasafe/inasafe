@@ -35,7 +35,10 @@ from qgis.core import (
     QGis,
     QgsCoordinateReferenceSystem)
 
-from definitionsv4.definitions_v3 import global_default_attribute, do_not_use_attribute
+from definitionsv4.definitions_v3 import (
+    global_default_attribute,
+    do_not_use_attribute
+)
 from safe import messaging as m
 from safe.common.exceptions import (
     KeywordNotFoundError,

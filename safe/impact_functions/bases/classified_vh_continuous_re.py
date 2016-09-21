@@ -1,7 +1,12 @@
 # coding=utf-8
-from definitionsv4.definitions_v3 import layer_mode_classified, layer_geometry_line, \
-    layer_geometry_point, layer_geometry_polygon, layer_mode_continuous, \
+from definitionsv4.definitions_v3 import (
+    layer_mode_classified,
+    layer_geometry_line,
+    layer_geometry_point,
+    layer_geometry_polygon,
+    layer_mode_continuous,
     layer_geometry_raster
+)
 from safe.common.exceptions import MetadataLayerConstraintError
 from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.bases.layer_types.classified_vector_hazard import \
