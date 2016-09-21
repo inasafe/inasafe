@@ -18,7 +18,7 @@ from safe.impact_functions.earthquake.earthquake_building\
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
-from safe.definitions import (
+from safe.definitionsv4 import (
     layer_mode_continuous,
     layer_mode_classified,
     layer_geometry_polygon,

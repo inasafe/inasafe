@@ -34,7 +34,7 @@ from safe.impact_functions.generic.continuous_hazard_population\
 from safe.impact_functions.inundation.flood_vector_building_impact\
     .impact_function import FloodPolygonBuildingFunction
 
-from safe.definitions import (
+from safe.definitionsv4 import (
     layer_purpose_hazard,
     layer_purpose_exposure,
     hazard_category_single_event,

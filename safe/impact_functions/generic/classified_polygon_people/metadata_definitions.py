@@ -17,7 +17,7 @@ __date__ = '8/6/15'
 from safe.common.utilities import OrderedDict
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
-from safe.definitions import (
+from safe.definitionsv4 import (
     area_name_field,
     area_id_field,
     exposure_population,

@@ -22,7 +22,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from PyQt4 import QtCore
 
 from safe.defaults import get_defaults
-from safe.definitions import (
+from safe.definitionsv4 import (
     global_default_attribute,
     do_not_use_attribute)
 from safe.utilities.gis import layer_attribute_names

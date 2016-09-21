@@ -24,7 +24,7 @@ from PyQt4 import QtCore, QtGui
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import QPyNullVariant
 
-from safe.definitions import (
+from safe.definitionsv4 import (
     exposure_road,
     exposure_place,
     exposure_structure)
@@ -38,7 +38,7 @@ from safe.gui.tools.wizard.wizard_strings import (
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step import WizardStep
 
-from safe.definitions import (
+from safe.definitionsv4 import (
     road_class_mapping, structure_class_mapping, place_class_mapping)
 
 __author__ = 'qgis@borysjurgiel.pl'
@@ -235,10 +235,10 @@ class StepKwClassify(WizardStep, FORM_CLASS):
                         c.upper() for c in default_class['string_defaults']])
                 condition_2 = (
                     field_type < 10 and
-                    'numeric_default_min' in default_class and
-                    'numeric_default_max' in default_class and (
-                        default_class['numeric_default_min'] <= unique_value <=
-                        default_class['numeric_default_max']))
+                    'numeric_min' in default_class and
+                    'numeric_max' in default_class and (
+                        default_class['numeric_min'] <= unique_value <=
+                        default_class['numeric_max']))
                 if condition_1 or condition_2:
                     assigned_values[default_class['key']] += [unique_value]
                     assigned = True

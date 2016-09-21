@@ -37,7 +37,7 @@ from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters, \
 from safe.impact_reports.population_exposure_report_mixin import \
     PopulationExposureReportMixin
 from safe.utilities.keyword_io import definition
-from safe.definitions import no_data_warning
+from safe.definitionsv4 import no_data_warning
 
 
 class VolcanoPolygonPopulationFunction(
@@ -86,9 +86,9 @@ class VolcanoPolygonPopulationFunction(
         if self.no_data_warning:
             fields = fields + no_data_warning
 
-        # include any generic exposure specific notes from definitions.py
+        # include any generic exposure specific notes from definitionsv4.py
         fields = fields + self.exposure_notes()
-        # include any generic hazard specific notes from definitions.py
+        # include any generic hazard specific notes from definitionsv4.py
         fields = fields + self.hazard_notes()
         return fields
 

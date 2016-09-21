@@ -13,7 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
 from safe.common.exceptions import KeywordNotFoundError
 from safe.impact_reports.road_exposure_report_mixin import \
     RoadExposureReportMixin
-from safe.definitions import place_class_order
+from safe.definitionsv4 import place_class_order
 from safe.utilities.i18n import tr
 
 __author__ = 'Etienne Trimaille <etienne@kartoza.com>'

@@ -38,7 +38,7 @@ from safe.common.exceptions import (
     InvalidClipGeometryError,
 )
 from safe.utilities.metadata import read_iso19115_metadata
-from safe.definitions import multipart_polygon_key
+from safe.definitionsv4 import multipart_polygon_key
 
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'

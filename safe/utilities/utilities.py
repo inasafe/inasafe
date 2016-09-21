@@ -31,7 +31,7 @@ from safe.messaging import styles, Message
 from safe.messaging.error_message import ErrorMessage
 from safe.utilities.unicode import get_unicode
 from safe.utilities.i18n import tr
-from safe.definitions import (
+from safe.definitionsv4 import (
     inasafe_keyword_version,
     keyword_version_compatibilities
 )

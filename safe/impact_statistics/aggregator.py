@@ -59,7 +59,7 @@ from safe.gis.polygon import (
     in_and_outside_polygon as points_in_and_outside_polygon)
 from safe.common.signals import send_dynamic_message
 from safe import messaging as m
-from safe.definitions import global_default_attribute, do_not_use_attribute
+from safe.definitionsv4 import global_default_attribute, do_not_use_attribute
 from safe.messaging import styles
 from safe.common.exceptions import (
     KeywordNotFoundError,

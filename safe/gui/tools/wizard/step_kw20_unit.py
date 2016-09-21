@@ -23,7 +23,7 @@ from PyQt4 import QtCore
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QListWidgetItem
 
-from safe.definitions import (
+from safe.definitionsv4 import (
     continuous_hazard_unit,
     exposure_unit,
     layer_purpose_hazard,
@@ -156,7 +156,7 @@ class StepKwUnit(WizardStep, FORM_CLASS):
         else:
             key = exposure_unit['key']
         unit_id = self.parent.get_existing_keyword(key)
-        # unit_id = definitions.old_to_new_unit_id(unit_id)
+        # unit_id = definitionsv4.old_to_new_unit_id(unit_id)
         if unit_id:
             units = []
             for index in xrange(self.lstUnits.count()):

@@ -44,8 +44,8 @@ from safe.common.exceptions import (
     NoKeywordsFoundError,
     UnsupportedProviderError)
 
-import safe.definitions
-from safe.definitions import (
+import safe.definitionsv4
+from safe.definitionsv4 import (
     continuous_hazard_unit,
     exposure_unit,
     raster_hazard_classification,
@@ -326,12 +326,12 @@ class WizardStepBrowser(WizardStep):
                 %s
             </table>
         ''' % (self.tr('Layer'), self.tr('Required'),
-               safe.definitions.layer_geometry['name'],
+               safe.definitionsv4.layer_geometry['name'],
                lay_geometry, req_geometry,
-               safe.definitions.layer_purpose['name'],
+               safe.definitionsv4.layer_purpose['name'],
                lay_purpose, layer_purpose,
                layer_purpose_key_name, lay_subcategory, req_subcategory,
-               safe.definitions.layer_mode['name'],
+               safe.definitionsv4.layer_mode['name'],
                lay_layer_mode, req_layer_mode,
                classification_row,
                units_row)

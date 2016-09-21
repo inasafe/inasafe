@@ -21,7 +21,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import re
 
-from safe.definitions import (
+from safe.definitionsv4 import (
     inasafe_keyword_version,
     inasafe_keyword_version_key,
     layer_purpose_hazard,

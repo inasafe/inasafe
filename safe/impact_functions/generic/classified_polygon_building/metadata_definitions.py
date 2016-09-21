@@ -12,7 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 from safe.common.utilities import OrderedDict, get_thousand_separator
 from safe.defaults import building_type_postprocessor
-from safe.definitions import (
+from safe.definitionsv4 import (
     layer_mode_classified,
     layer_geometry_polygon,
     layer_geometry_point,

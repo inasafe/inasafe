@@ -82,7 +82,7 @@ from safe.storage.utilities import (
     buffered_bounding_box as get_buffered_extent,
     safe_to_qgis_layer,
     bbox_intersection)
-from safe.definitions import inasafe_keyword_version, exposure_all, hazard_all
+from safe.definitionsv4 import inasafe_keyword_version, exposure_all, hazard_all
 from safe.metadata.provenance import Provenance
 from safe.common.version import get_version
 from safe.common.signals import (
@@ -415,17 +415,17 @@ class ImpactFunction(object):
             )
 
     def exposure_actions(self):
-        """Get the exposure specific actions defined in definitions.
+        """Get the exposure specific actions defined in definitionsv4.
 
-        This method will do a lookup in definitions.py and return the
+        This method will do a lookup in definitionsv4.py and return the
         exposure definition specific actions dictionary.
 
         This is a helper function to make it
-        easy to get exposure specific actions from the definitions metadata.
+        easy to get exposure specific actions from the definitionsv4 metadata.
 
         .. versionadded:: 3.5
 
-        :returns: A list like e.g. safe.definitions.exposure_land_cover[
+        :returns: A list like e.g. safe.definitionsv4.exposure_land_cover[
             'actions']
         :rtype: list, None
         """
@@ -439,17 +439,17 @@ class ImpactFunction(object):
         return None
 
     def exposure_notes(self):
-        """Get the exposure specific notes defined in definitions.
+        """Get the exposure specific notes defined in definitionsv4.
 
-        This method will do a lookup in definitions.py and return the
+        This method will do a lookup in definitionsv4.py and return the
         exposure definition specific notes dictionary.
 
         This is a helper function to make it
-        easy to get exposure specific notes from the definitions metadata.
+        easy to get exposure specific notes from the definitionsv4 metadata.
 
         .. versionadded:: 3.5
 
-        :returns: A list like e.g. safe.definitions.exposure_land_cover[
+        :returns: A list like e.g. safe.definitionsv4.exposure_land_cover[
             'notes']
         :rtype: list, None
         """
@@ -471,17 +471,17 @@ class ImpactFunction(object):
         return notes
 
     def hazard_actions(self):
-        """Get the hazard specific actions defined in definitions.
+        """Get the hazard specific actions defined in definitionsv4.
 
-        This method will do a lookup in definitions.py and return the
+        This method will do a lookup in definitionsv4.py and return the
         hazard definition specific actions dictionary.
 
         This is a helper function to make it
-        easy to get hazard specific actions from the definitions metadata.
+        easy to get hazard specific actions from the definitionsv4 metadata.
 
         .. versionadded:: 3.5
 
-        :returns: A list like e.g. safe.definitions.hazard_land_cover[
+        :returns: A list like e.g. safe.definitionsv4.hazard_land_cover[
             'actions']
         :rtype: list, None
         """
@@ -495,17 +495,17 @@ class ImpactFunction(object):
         return None
 
     def hazard_notes(self):
-        """Get the hazard specific notes defined in definitions.
+        """Get the hazard specific notes defined in definitionsv4.
 
-        This method will do a lookup in definitions.py and return the
+        This method will do a lookup in definitionsv4.py and return the
         hazard definition specific notes dictionary.
 
         This is a helper function to make it
-        easy to get hazard specific notes from the definitions metadata.
+        easy to get hazard specific notes from the definitionsv4 metadata.
 
         .. versionadded:: 3.5
 
-        :returns: A list like e.g. safe.definitions.hazard_land_cover[
+        :returns: A list like e.g. safe.definitionsv4.hazard_land_cover[
             'notes']
         :rtype: list, None
         """
@@ -543,9 +543,9 @@ class ImpactFunction(object):
         """
         # Include actions defined in the mixin
         fields = self.extra_actions()
-        # include any generic exposure specific actions from definitions.py
+        # include any generic exposure specific actions from definitionsv4.py
         fields = fields + self.exposure_actions()
-        # include any generic hazard specific actions from definitions.py
+        # include any generic hazard specific actions from definitionsv4.py
         fields = fields + self.hazard_actions()
         return fields
 
@@ -558,9 +558,9 @@ class ImpactFunction(object):
         :rtype: list
         """
         fields = []  # Notes still to be defined for ASH
-        # include any generic exposure specific notes from definitions.py
+        # include any generic exposure specific notes from definitionsv4.py
         fields = fields + self.exposure_notes()
-        # include any generic hazard specific notes from definitions.py
+        # include any generic hazard specific notes from definitionsv4.py
         fields = fields + self.hazard_notes()
         return fields
 

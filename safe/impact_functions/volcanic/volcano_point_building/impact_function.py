@@ -56,9 +56,9 @@ class VolcanoPointBuildingFunction(
                'zones.'),
             tr('Volcanoes considered: %s.') % sorted_volcano_names
         ]
-        # include any generic exposure specific notes from definitions.py
+        # include any generic exposure specific notes from definitionsv4.py
         fields = fields + self.exposure_notes()
-        # include any generic hazard specific notes from definitions.py
+        # include any generic hazard specific notes from definitionsv4.py
         fields = fields + self.hazard_notes()
         return fields
 

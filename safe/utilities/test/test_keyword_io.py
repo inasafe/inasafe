@@ -6,7 +6,7 @@ import shutil
 
 from qgis.core import QgsDataSourceURI, QgsVectorLayer
 
-from safe.definitions import inasafe_keyword_version
+from safe.definitionsv4 import inasafe_keyword_version
 from safe.common.utilities import unique_filename
 from safe.test.utilities import (
     load_layer,
@@ -152,7 +152,7 @@ class KeywordIOTest(unittest.TestCase):
         self.assertDictEqual(copied_keywords, expected_keywords)
 
     def test_definition(self):
-        """Test we can get definitions for keywords.
+        """Test we can get definitionsv4 for keywords.
 
         .. versionadded:: 3.2
 

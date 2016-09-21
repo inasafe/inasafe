@@ -18,7 +18,7 @@ __date__ = '16/03/2016'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from safe.definitions import layer_purpose_exposure
+from safe.definitionsv4 import layer_purpose_exposure
 
 from safe.utilities.gis import is_raster_layer
 

@@ -23,7 +23,7 @@ from safe.impact_functions.inundation.flood_raster_road\
     import parameter_definitions
 from safe.utilities.i18n import tr
 from safe.common.utilities import OrderedDict
-from safe.definitions import (
+from safe.definitionsv4 import (
     layer_mode_classified,
     layer_mode_continuous,
     layer_geometry_raster,

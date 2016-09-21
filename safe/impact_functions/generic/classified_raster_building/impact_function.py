@@ -30,7 +30,7 @@ from safe.impact_functions.generic.classified_raster_building\
     .metadata_definitions import ClassifiedRasterHazardBuildingMetadata
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
-from safe.definitions import generic_raster_hazard_classes
+from safe.definitionsv4 import generic_raster_hazard_classes
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -58,9 +58,9 @@ class ClassifiedRasterHazardBuildingFunction(
             tr('Map shows buildings affected in low, medium and high hazard '
                'zones.')
         ]
-        # include any generic exposure specific notes from definitions.py
+        # include any generic exposure specific notes from definitionsv4.py
         fields = fields + self.exposure_notes()
-        # include any generic hazard specific notes from definitions.py
+        # include any generic hazard specific notes from definitionsv4.py
         fields = fields + self.hazard_notes()
         return fields
 

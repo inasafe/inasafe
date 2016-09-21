@@ -25,7 +25,7 @@ from PyQt4.QtCore import pyqtSignature
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QListWidgetItem
 
-from safe.definitions import (
+from safe.definitionsv4 import (
     layer_purpose_hazard)
 
 from safe.utilities.keyword_io import definition
