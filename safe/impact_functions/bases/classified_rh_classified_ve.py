@@ -1,6 +1,6 @@
 # coding=utf-8
 
-from definitionsv4.definitions_v3 import layer_geometry_raster, \
+from safe.definitionsv4.definitions_v3 import layer_geometry_raster, \
     layer_mode_classified, layer_geometry_point, layer_geometry_line, \
     layer_geometry_polygon
 from safe.common.exceptions import (

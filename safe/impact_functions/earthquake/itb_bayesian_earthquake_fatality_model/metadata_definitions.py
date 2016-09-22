@@ -14,7 +14,7 @@ Contact : dynaryu@gmail.com
 __author__ = 'dynaryu@gmail.com'
 __date__ = '09/09/15'
 
-from definitionsv4.definitions_v3 import (
+from safe.definitionsv4.definitions_v3 import (
     layer_mode_continuous,
     layer_geometry_raster,
     hazard_earthquake,

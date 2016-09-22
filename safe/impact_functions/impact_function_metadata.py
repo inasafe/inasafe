@@ -13,7 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 import json
 
-from definitionsv4.definitions_v3 import (
+from safe.definitionsv4.definitions_v3 import (
     layer_purpose_exposure, layer_purpose_hazard)
 from safe.common.utilities import add_to_list, get_list_key, is_key_exist
 

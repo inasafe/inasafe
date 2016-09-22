@@ -22,7 +22,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import pyqtSignature
 
-from definitionsv4.definitions_v3 import (
+from safe.definitionsv4.definitions_v3 import (
     layer_geometry_point,
     layer_geometry_line,
     layer_geometry_polygon,

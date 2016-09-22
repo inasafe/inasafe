@@ -17,7 +17,7 @@ __license__ = "GPL"
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
-from definitionsv4.definitions_v3 import (
+from safe.definitionsv4.definitions_v3 import (
     structure_class_mapping,
     structure_class_order
 )
