@@ -7,12 +7,15 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.definitionsv4.fields import (
     women_count_field,
-    youth_count_field
+    youth_count_field,
+    adult_count_field,
+    elderly_count_field
 )
 from definitionsv4.post_processors import (
     post_processor_gender,
-    post_processor_value,
-    post_processor_youth
+    post_processor_youth,
+    post_processor_adult,
+    post_processor_elderly
 )
 from safe.test.utilities import clone_shp_layer
 from safe.new_impact_function.impact_function import ImpactFunction
@@ -148,6 +151,7 @@ class TestImpactFunction(unittest.TestCase):
             test_scenario(json_file)
 
     def test_gender_post_processor(self):
+        """Test gender post processor."""
         impact_layer = clone_shp_layer(
             'indivisible_polygon_impact',
             include_keywords=True,
@@ -168,6 +172,7 @@ class TestImpactFunction(unittest.TestCase):
         self.assertIn(women_count_field['field_name'], impact_fields)
 
     def test_youth_post_processor(self):
+        """Test gender post processor."""
         impact_layer = clone_shp_layer(
             'indivisible_polygon_impact',
             include_keywords=True,
@@ -186,6 +191,48 @@ class TestImpactFunction(unittest.TestCase):
         # Check if new field is added
         impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
         self.assertIn(youth_count_field['field_name'], impact_fields)
+
+    def test_adult_post_processor(self):
+        """Test adult post processor."""
+        impact_layer = clone_shp_layer(
+            'indivisible_polygon_impact',
+            include_keywords=True,
+            source_directory=standard_data_path('impact'))
+        self.assertIsNotNone(impact_layer)
+        impact_function = ImpactFunction()
+        impact_function.impact_layer = impact_layer
+
+        result = impact_function.run_single_post_processor(
+            post_processor_adult)
+        self.assertTrue(result)
+
+        impact_layer = impact_function.impact_layer
+        self.assertIsNotNone(impact_layer)
+
+        # Check if new field is added
+        impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
+        self.assertIn(adult_count_field['field_name'], impact_fields)
+
+    def test_elderly_post_processor(self):
+        """Test elderly post processor."""
+        impact_layer = clone_shp_layer(
+            'indivisible_polygon_impact',
+            include_keywords=True,
+            source_directory=standard_data_path('impact'))
+        self.assertIsNotNone(impact_layer)
+        impact_function = ImpactFunction()
+        impact_function.impact_layer = impact_layer
+
+        result = impact_function.run_single_post_processor(
+            post_processor_elderly)
+        self.assertTrue(result)
+
+        impact_layer = impact_function.impact_layer
+        self.assertIsNotNone(impact_layer)
+
+        # Check if new field is added
+        impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
+        self.assertIn(elderly_count_field['field_name'], impact_fields)
 
     def test_post_processor(self):
         """Test for running post processor."""
@@ -215,8 +262,6 @@ class TestImpactFunction(unittest.TestCase):
 
         self.assertTrue(impact_function.enough_input(
             impact_fields, post_processor_gender['input']))
-        self.assertFalse(impact_function.enough_input(
-            impact_fields, post_processor_value['input']))
 
     def test_evaluate_formula(self):
         """Test for evaluating formula."""

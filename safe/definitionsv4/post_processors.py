@@ -14,10 +14,13 @@ from utilities.i18n import tr
 from safe.definitionsv4.fields import (
     female_ratio_field,
     population_count_field,
-    feature_value_field,
     women_count_field,
     youth_ratio_field,
-    youth_count_field
+    youth_count_field,
+    adult_ratio_field,
+    adult_count_field,
+    elderly_ratio_field,
+    elderly_count_field
 )
 
 __author__ = 'ismail@kartoza.com'
@@ -70,24 +73,53 @@ post_processor_youth = {
         }
     }
 }
-post_processor_value = {
-    'key': 'post_processor_value',
-    'name': tr('Value Post Processor'),
+post_processor_adult = {
+    'key': 'post_processor_adult',
+    'name': tr('Adult Post Processor'),
     'description': tr(
-        'Post processor to calculate the value of a feature. A feature should '
-        'have a value field.'),
+        'Post processor to calculate the number of affected adult people'),
     'input': {
-        'value': {
-            'field': feature_value_field
+        'population': {
+            'field': population_count_field,
+            # We can add something later, like mandatory requirement, another
+            #  source of input (e.g. parameter)
+        },
+        'adult_ratio': {
+            'field': adult_ratio_field,
         }
     },
     'output': {
-        'value_field': {
-            # No need to do anything. TODO: How?
+        'adult': {
+            'field': adult_count_field,
+            'formula': 'population * adult_ratio'
         }
     }
 }
+post_processor_elderly = {
+    'key': 'post_processor_elderly',
+    'name': tr('Elderly Post Processor'),
+    'description': tr(
+        'Post processor to calculate the number of affected elderly people'),
+    'input': {
+        'population': {
+            'field': population_count_field,
+            # We can add something later, like mandatory requirement, another
+            #  source of input (e.g. parameter)
+        },
+        'elderly_ratio': {
+            'field': elderly_ratio_field,
+        }
+    },
+    'output': {
+        'elderly': {
+            'field': elderly_count_field,
+            'formula': 'population * elderly_ratio'
+        }
+    }
+}
+
 post_processors = [
     post_processor_gender,
-    post_processor_value
+    post_processor_youth,
+    post_processor_adult
 ]
