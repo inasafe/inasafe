@@ -5,13 +5,16 @@ import os
 from safe.test.utilities import get_qgis_app, standard_data_path
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe.definitionsv4.fields import women_count_field
+from safe.definitionsv4.fields import (
+    women_count_field,
+    youth_count_field
+)
 from definitionsv4.post_processors import (
     post_processor_gender,
-    post_processor_value
+    post_processor_value,
+    post_processor_youth
 )
 from safe.test.utilities import clone_shp_layer
-from safe.utilities.keyword_io import KeywordIO
 from safe.new_impact_function.impact_function import ImpactFunction
 from safe.new_impact_function.impact_function import evaluate_formula
 
@@ -145,10 +148,6 @@ class TestImpactFunction(unittest.TestCase):
             test_scenario(json_file)
 
     def test_gender_post_processor(self):
-        expected_inasafe_fields = {
-            'population_field': 'population',
-            'gender_ratio_field': 'WomenRatio'
-        }
         impact_layer = clone_shp_layer(
             'indivisible_polygon_impact',
             include_keywords=True,
@@ -156,12 +155,6 @@ class TestImpactFunction(unittest.TestCase):
         self.assertIsNotNone(impact_layer)
         impact_function = ImpactFunction()
         impact_function.impact_layer = impact_layer
-        impact_function.impact_keyword = KeywordIO().read_keywords(
-            impact_layer)
-        self.assertDictEqual(
-            impact_function.impact_keyword.get('inasafe_fields'),
-            expected_inasafe_fields
-        )
 
         result = impact_function.run_single_post_processor(
             post_processor_gender)
@@ -169,17 +162,12 @@ class TestImpactFunction(unittest.TestCase):
 
         impact_layer = impact_function.impact_layer
         self.assertIsNotNone(impact_layer)
-        post_processor_index = impact_layer.dataProvider().fieldNameIndex(
-            women_count_field['field_name'])
-        self.assertEquals(7, post_processor_index)
-        print impact_layer.source()
 
-    def test_post_processor(self):
-        """Test for running post processor."""
-        expected_inasafe_fields = {
-            'population_field': 'population',
-            'gender_ratio_field': 'WomenRatio'
-        }
+        # Check if new field is added
+        impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
+        self.assertIn(women_count_field['field_name'], impact_fields)
+
+    def test_youth_post_processor(self):
         impact_layer = clone_shp_layer(
             'indivisible_polygon_impact',
             include_keywords=True,
@@ -187,19 +175,37 @@ class TestImpactFunction(unittest.TestCase):
         self.assertIsNotNone(impact_layer)
         impact_function = ImpactFunction()
         impact_function.impact_layer = impact_layer
-        impact_function.impact_keyword = KeywordIO().read_keywords(
-            impact_layer)
-        self.assertDictEqual(
-            impact_function.impact_keyword.get('inasafe_fields'),
-            expected_inasafe_fields
-        )
+
+        result = impact_function.run_single_post_processor(
+            post_processor_youth)
+        self.assertTrue(result)
+
+        impact_layer = impact_function.impact_layer
+        self.assertIsNotNone(impact_layer)
+
+        # Check if new field is added
+        impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
+        self.assertIn(youth_count_field['field_name'], impact_fields)
+
+    def test_post_processor(self):
+        """Test for running post processor."""
+
+        impact_layer = clone_shp_layer(
+            'indivisible_polygon_impact',
+            include_keywords=True,
+            source_directory=standard_data_path('impact'))
+        self.assertIsNotNone(impact_layer)
+        impact_function = ImpactFunction()
+        impact_function.impact_layer = impact_layer
+
         impact_function.post_process()
 
         impact_layer = impact_function.impact_layer
         self.assertIsNotNone(impact_layer)
-        post_processor_index = impact_layer.dataProvider().fieldNameIndex(
-            'women')
-        self.assertEquals(7, post_processor_index)
+
+        # Check if new field is added
+        impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
+        self.assertIn(women_count_field['field_name'], impact_fields)
 
     def test_enough_input(self):
         """Test to check the post processor input checker."""

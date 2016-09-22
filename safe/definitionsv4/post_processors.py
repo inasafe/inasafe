@@ -15,7 +15,9 @@ from safe.definitionsv4.fields import (
     female_ratio_field,
     population_count_field,
     feature_value_field,
-    women_count_field
+    women_count_field,
+    youth_ratio_field,
+    youth_count_field
 )
 
 __author__ = 'ismail@kartoza.com'
@@ -43,6 +45,28 @@ post_processor_gender = {
         'women': {
             'field': women_count_field,
             'formula': 'population * gender_ratio'
+        }
+    }
+}
+post_processor_youth = {
+    'key': 'post_processor_youth',
+    'name': tr('Youth Post Processor'),
+    'description': tr(
+        'Post processor to calculate the number of affected youth people'),
+    'input': {
+        'population': {
+            'field': population_count_field,
+            # We can add something later, like mandatory requirement, another
+            #  source of input (e.g. parameter)
+        },
+        'youth_ratio': {
+            'field': youth_ratio_field,
+        }
+    },
+    'output': {
+        'youth': {
+            'field': youth_count_field,
+            'formula': 'population * youth_ratio'
         }
     }
 }
