@@ -173,6 +173,7 @@ class TestImpactFunction(unittest.TestCase):
         post_processor_index = impact_layer.dataProvider().fieldNameIndex(
             'women')
         self.assertEquals(7, post_processor_index)
+        print impact_layer.source()
 
     def test_post_processor(self):
         """Test for running post processor."""
@@ -204,15 +205,13 @@ class TestImpactFunction(unittest.TestCase):
     def test_enough_input(self):
         """Test to check the post processor input checker."""
         impact_function = ImpactFunction()
-        inasafe_fields = {
-            'population_field': 'population',
-            'gender_ratio_field': 'gender'
-        }
+
+        impact_fields = ['population', 'female_r']
 
         self.assertTrue(impact_function.enough_input(
-            inasafe_fields, post_processor_gender['input']))
+            impact_fields, post_processor_gender['input']))
         self.assertFalse(impact_function.enough_input(
-            inasafe_fields, post_processor_value['input']))
+            impact_fields, post_processor_value['input']))
 
     def test_input_mapping(self):
         """Test for input_mapping function."""

@@ -11,55 +11,17 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 """
 from utilities.i18n import tr
+from safe.definitionsv4.fields import (
+    female_ratio_field,
+    population_count_field,
+    feature_value_field
+)
 
 __author__ = 'ismail@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '22/09/16'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
-
-population_field = {
-    'key': 'population_field',
-    'name': tr('Population field'),
-    'default_field': 'population',
-    'type': int,
-    'description': tr('Attribute where the number of population is located.'),
-    'layer': 'exposure',
-    'citations': [
-        {
-            'text': None,
-            'link': None
-        }
-    ]
-}
-gender_ratio_field = {
-    'key': 'gender_ratio_field',
-    'name': tr('Gender Ratio field'),
-    'default_field': 'gender_ratio',
-    'type': float,
-    'description': tr('Attribute where the ratio of women is located.'),
-    'layer': 'aggregation',
-    'citations': [
-        {
-            'text': None,
-            'link': None
-        }
-    ]
-}
-value_field = {
-    'key': 'value_field',
-    'name': tr('Value field'),
-    'default_field': 'value',
-    'type': float,
-    'description': tr('Attribute where the value of the feature is located.'),
-    'layer': 'exposure',
-    'citations': [
-        {
-            'text': None,
-            'link': None
-        }
-    ]
-}
 women_field = {
     'key': 'women_field',
     'name': tr('Women field'),
@@ -82,12 +44,12 @@ post_processor_gender = {
         'Post processor to calculate the number of affected woman'),
     'input': {
         'population': {
-            'field': population_field,
+            'field': population_count_field,
             # We can add something later, like mandatory requirement, another
             #  source of input (e.g. parameter)
         },
         'gender_ratio': {
-            'field': gender_ratio_field,
+            'field': female_ratio_field,
         }
     },
     'output': {
@@ -105,7 +67,7 @@ post_processor_value = {
         'have a value field.'),
     'input': {
         'value': {
-            'field': value_field
+            'field': feature_value_field
         }
     },
     'output': {

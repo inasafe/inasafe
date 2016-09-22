@@ -745,10 +745,7 @@ class ImpactFunction(object):
             # Calculate based on formula
             for output_key, output_value in post_processor['output'].items():
                 # Get output attribute name
-                output_field_name = get_non_conflicting_attribute_name(
-                    output_value['field']['default_field'],
-                    self.impact_layer.dataProvider().fieldNameMap().keys()
-                )
+                output_field_name = output_value['field']['field_name']
                 # Store field name in output mapping
                 output_mapping[output_key] = output_field_name
                 # Add new attribute to the layer
@@ -788,11 +785,11 @@ class ImpactFunction(object):
         else:
             return False, post_processor['key'], tr('Not enough inputs')
 
-    def enough_input(self, inasafe_fields, post_processor_input):
-        """Check if the input from inasafe_fields in enough.
+    def enough_input(self, impact_fields, post_processor_input):
+        """Check if the input from impact_fields in enough.
 
-        :param inasafe_fields: Special fields from the impact layer.
-        :type inasafe_fields: dict
+        :param impact_fields: List of field in impact layer
+        :type impact_fields: list
 
         :param post_processor_input: Collection of post processor input
             requirements.
@@ -802,7 +799,7 @@ class ImpactFunction(object):
         :rtype: bool
         """
         for input_key, input_value in post_processor_input.items():
-            if input_value['field']['key'] in inasafe_fields.keys():
+            if input_value['field']['field_name'] in impact_fields:
                 continue
             else:
                 return False
