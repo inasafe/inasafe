@@ -74,7 +74,8 @@ def check_format(field):
             return False, message
     return True, 'Format is valid.'
 
-class TestImpactFunction(unittest.TestCase):
+
+class TestFieldDefinitions(unittest.TestCase):
     """Test for Field definitions."""
     def test_field_format(self):
         """Test to check all field is valid"""
