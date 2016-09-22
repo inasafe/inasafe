@@ -20,7 +20,9 @@ from safe.definitionsv4.fields import (
     adult_ratio_field,
     adult_count_field,
     elderly_ratio_field,
-    elderly_count_field
+    elderly_count_field,
+    feature_rate_field,
+    feature_value_field
 )
 
 __author__ = 'ismail@kartoza.com'
@@ -36,17 +38,17 @@ post_processor_gender = {
         'Post processor to calculate the number of affected woman'),
     'input': {
         'population': {
-            'field': population_count_field,
-            # We can add something later, like mandatory requirement, another
-            #  source of input (e.g. parameter)
+            'value': population_count_field,
+            'type': 'field'
         },
         'gender_ratio': {
-            'field': female_ratio_field,
+            'value': female_ratio_field,
+            'type': 'field'
         }
     },
     'output': {
         'women': {
-            'field': women_count_field,
+            'value': women_count_field,
             'formula': 'population * gender_ratio'
         }
     }
@@ -58,17 +60,17 @@ post_processor_youth = {
         'Post processor to calculate the number of affected youth people'),
     'input': {
         'population': {
-            'field': population_count_field,
-            # We can add something later, like mandatory requirement, another
-            #  source of input (e.g. parameter)
+            'value': population_count_field,
+            'type': 'field'
         },
         'youth_ratio': {
-            'field': youth_ratio_field,
+            'value': youth_ratio_field,
+            'type': 'field'
         }
     },
     'output': {
         'youth': {
-            'field': youth_count_field,
+            'value': youth_count_field,
             'formula': 'population * youth_ratio'
         }
     }
@@ -80,17 +82,17 @@ post_processor_adult = {
         'Post processor to calculate the number of affected adult people'),
     'input': {
         'population': {
-            'field': population_count_field,
-            # We can add something later, like mandatory requirement, another
-            #  source of input (e.g. parameter)
+            'value': population_count_field,
+            'type': 'field'
         },
         'adult_ratio': {
-            'field': adult_ratio_field,
+            'value': adult_ratio_field,
+            'type': 'field'
         }
     },
     'output': {
         'adult': {
-            'field': adult_count_field,
+            'value': adult_count_field,
             'formula': 'population * adult_ratio'
         }
     }
@@ -102,18 +104,44 @@ post_processor_elderly = {
         'Post processor to calculate the number of affected elderly people'),
     'input': {
         'population': {
-            'field': population_count_field,
-            # We can add something later, like mandatory requirement, another
-            #  source of input (e.g. parameter)
+            'value': population_count_field,
+            'type': 'field'
         },
         'elderly_ratio': {
-            'field': elderly_ratio_field,
+            'value': elderly_ratio_field,
+            'type': 'field'
         }
     },
     'output': {
         'elderly': {
-            'field': elderly_count_field,
+            'value': elderly_count_field,
             'formula': 'population * elderly_ratio'
+        }
+    }
+}
+post_processor_size_rate = {
+    'key': 'post_processor_size_rate',
+    'name': tr('Size Rate Post Processor'),
+    'description': tr(
+        'Post processor to calculate the value of feature based on the size '
+        'of the feature. If feature is polygon we use area in m^2. If feature '
+        'is line we use length per m.'),
+    'input': {
+        'size': {
+            'value': 'size',
+            'type': 'geometry_property'
+            # We can add something later, like mandatory requirement, another
+            #  source of input (e.g. parameter)
+        },
+        'rate': {
+            'value': feature_rate_field,
+            'type': 'field'
+        }
+    },
+    'output': {
+        'elderly': {
+            'value': feature_value_field,
+            'formula': 'size * rate'
         }
     }
 }

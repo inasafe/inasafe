@@ -742,12 +742,14 @@ class ImpactFunction(object):
             # Iterate all possible output
             for output_key, output_value in post_processor['output'].items():
                 # Get output attribute name
-                output_field_name = output_value['field']['field_name']
+                output_field_name = output_value['value']['field_name']
                 # Add output attribute name to the layer
                 impact_data_provider = self.impact_layer.dataProvider()
                 impact_data_provider.addAttributes(
                     [QgsField(
-                        output_field_name, output_value['field']['type'])])
+                        output_field_name,
+                        output_value['value']['type'])]
+                )
                 self.impact_layer.updateFields()
                 # Get the index of output attribute
                 output_field_index = impact_data_provider.fieldNameIndex(
@@ -755,8 +757,9 @@ class ImpactFunction(object):
                 # Get the input field's indexes for input
                 input_indexes = {}
                 for key, value in post_processor['input'].items():
-                    input_indexes[key] = impact_data_provider.\
-                        fieldNameIndex(value['field']['field_name'])
+                    if value['type'] == 'field':
+                        input_indexes[key] = impact_data_provider.\
+                            fieldNameIndex(value['value']['field_name'])
                 # Create variable to store the formula's result
                 post_processor_result_dict = {}
                 # Create iterator for feature
@@ -801,8 +804,9 @@ class ImpactFunction(object):
         :rtype: bool
         """
         for input_key, input_value in post_processor_input.items():
-            if input_value['field']['field_name'] in impact_fields:
-                continue
+            if input_value['type'] == 'field':
+                if input_value['value']['field_name'] in impact_fields:
+                    continue
             else:
                 return False
         return True
