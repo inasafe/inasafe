@@ -22,7 +22,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from PyQt4 import QtCore
 from PyQt4.QtGui import QListWidgetItem
 
-from definitionsv4.definitions_v3 import (
+from safe.definitionsv4.definitions_v3 import (
     continuous_hazard_unit,
     exposure_unit,
     layer_purpose_hazard,

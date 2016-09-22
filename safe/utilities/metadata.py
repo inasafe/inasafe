@@ -20,7 +20,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 import os
 
-from definitionsv4.definitions_v3 import inasafe_keyword_version
+from safe.definitionsv4.definitions_v3 import inasafe_keyword_version
 from safe.common.exceptions import (
     MetadataReadError,
     KeywordNotFoundError,

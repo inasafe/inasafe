@@ -35,7 +35,7 @@ from qgis.core import (
     QGis,
     QgsCoordinateReferenceSystem)
 
-from definitionsv4.definitions_v3 import (
+from safe.definitionsv4.definitions_v3 import (
     global_default_attribute,
     do_not_use_attribute
 )

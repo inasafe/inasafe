@@ -14,7 +14,7 @@ Contact : ole.moller.nielsen@gmail.com
 __author__ = 'Samweli Twesa Mwakisambwe "Samweli" <smwltwesa6@gmail.com>'
 __date__ = '8/6/15'
 
-from definitionsv4.definitions_v3 import (
+from safe.definitionsv4.definitions_v3 import (
     area_name_field,
     area_id_field,
     exposure_population,

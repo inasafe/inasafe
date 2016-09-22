@@ -16,7 +16,7 @@ __filename__ = 'metadata_definitions.py'
 __date__ = '11/03/16'
 __copyright__ = 'etienne@kartoza.com'
 
-from definitionsv4.definitions_v3 import (
+from safe.definitionsv4.definitions_v3 import (
     layer_mode_classified,
     layer_mode_continuous,
     layer_geometry_line,

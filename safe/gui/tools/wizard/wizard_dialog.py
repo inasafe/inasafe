@@ -24,7 +24,7 @@ from PyQt4.QtGui import (
     QPixmap)
 from qgis.core import QgsMapLayerRegistry
 
-from definitionsv4.definitions_v3 import (
+from safe.definitionsv4.definitions_v3 import (
     continuous_hazard_unit,
     exposure_unit,
     layer_purpose_hazard,

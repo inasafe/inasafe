@@ -23,7 +23,7 @@ import re
 from PyQt4 import QtCore
 from PyQt4.QtGui import QListWidgetItem
 
-from definitionsv4.definitions_v3 import (
+from safe.definitionsv4.definitions_v3 import (
     layer_mode_classified,
     layer_mode_continuous,
     layer_purpose_aggregation)

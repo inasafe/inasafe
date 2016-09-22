@@ -40,7 +40,7 @@ from safe.impact_functions.loader import \
     ClassifiedRasterHazardBuildingFunction
 
 from safe.impact_functions.registry import Registry
-from definitionsv4.definitions_v3 import (
+from safe.definitionsv4.definitions_v3 import (
     layer_mode_continuous,
     layer_geometry_point,
     layer_geometry_polygon,

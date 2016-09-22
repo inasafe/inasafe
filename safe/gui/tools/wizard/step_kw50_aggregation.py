@@ -21,7 +21,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore
 
-from definitionsv4.definitions_v3 import (
+from safe.definitionsv4.definitions_v3 import (
     global_default_attribute,
     do_not_use_attribute)
 from safe.defaults import get_defaults

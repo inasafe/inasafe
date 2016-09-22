@@ -18,7 +18,7 @@ __date__ = '16/03/2016'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from definitionsv4.definitions_v3 import layer_purpose_exposure
+from safe.definitionsv4.definitions_v3 import layer_purpose_exposure
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_strings import allow_resampling_question

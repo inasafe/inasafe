@@ -36,7 +36,7 @@ from safe.postprocessors.postprocessor_factory import (
     get_postprocessor_human_name)
 from safe import messaging as m
 from safe.messaging import styles
-from definitionsv4.definitions_v3 import multipart_polygon_key
+from safe.definitionsv4.definitions_v3 import multipart_polygon_key
 
 LOGGER = logging.getLogger('InaSAFE')
 
