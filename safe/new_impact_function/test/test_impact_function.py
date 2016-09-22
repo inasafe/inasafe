@@ -78,7 +78,7 @@ def run_scenario(scenario):
 
 
 class TestImpactFunction(unittest.TestCase):
-    """Test for Generic Polygon on Building Impact Function."""
+    """Test Impact Function."""
 
     def test_impact_function_behaviour(self):
         """Test behaviour of impact function"""
