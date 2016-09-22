@@ -45,7 +45,7 @@ def reproject(layer, output_crs, callback=None):
 
     .. versionadded:: 4.0
     """
-    layer_name = 'reprojected'
+    output_layer_name = 'reprojected'
 
     output_raster = unique_filename(suffix='.asc', dir=temp_dir())
 
@@ -68,7 +68,7 @@ def reproject(layer, output_crs, callback=None):
         transformed_extent,
         output_crs)
 
-    output_layer = QgsRasterLayer(output_raster, layer_name)
+    output_layer = QgsRasterLayer(output_raster, output_layer_name)
 
     # We transfer keywords to the output.
     # We don't need to update keywords as the CRS is dynamic.

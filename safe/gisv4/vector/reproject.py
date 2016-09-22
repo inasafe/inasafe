@@ -42,13 +42,13 @@ def reproject(layer, output_crs, callback=None):
 
     .. versionadded:: 4.0
     """
-    layer_name = 'reprojected'
+    output_layer_name = 'reprojected'
 
     input_crs = layer.crs()
     feature_count = layer.featureCount()
 
     reprojected = create_memory_layer(
-        layer_name, layer.geometryType(), output_crs)
+        output_layer_name, layer.geometryType(), output_crs)
     data_provider = reprojected.dataProvider()
 
     crs_transform = QgsCoordinateTransform(input_crs, output_crs)

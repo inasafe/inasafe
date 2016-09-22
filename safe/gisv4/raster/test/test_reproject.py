@@ -14,13 +14,10 @@ import unittest
 
 from safe.test.utilities import (
     get_qgis_app,
-    standard_data_path)
+    load_test_raster_layer)
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from qgis.core import (
-    QgsRasterLayer,
-    QgsCoordinateReferenceSystem,
-)
+from qgis.core import QgsCoordinateReferenceSystem
 
 from safe.gisv4.raster.reproject import reproject
 
@@ -35,12 +32,12 @@ class TestReprojectRaster(unittest.TestCase):
 
     def test_reproject_raster(self):
         """Test we can reproject a raster layer."""
-        layer = standard_data_path('hazard', 'classified_flood_20_20.asc')
-        raster_layer = QgsRasterLayer(layer, 'Flood')
+        layer = load_test_raster_layer('hazard', 'classified_flood_20_20.asc')
 
         output_crs = QgsCoordinateReferenceSystem(3857)
 
-        reprojected = reproject(layer=raster_layer, output_crs=output_crs)
+        reprojected = reproject(layer=layer, output_crs=output_crs)
 
         self.assertEqual(reprojected.crs(), output_crs)
         self.assertEqual(reprojected.name(), 'reprojected')
+        self.assertDictEqual(layer.keywords, reprojected.keywords)

@@ -14,13 +14,10 @@ import unittest
 
 from safe.test.utilities import (
     get_qgis_app,
-    standard_data_path)
+    load_test_vector_layer)
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from qgis.core import (
-    QgsVectorLayer,
-    QgsCoordinateReferenceSystem,
-)
+from qgis.core import QgsCoordinateReferenceSystem
 
 from safe.gisv4.vector.reproject import reproject
 
@@ -36,14 +33,14 @@ class TestReprojectVector(unittest.TestCase):
     def test_reproject_vector(self):
         """Test we can reproject a vector layer."""
 
-        layer = standard_data_path('exposure', 'buildings.shp')
-        vector_layer = QgsVectorLayer(layer, 'Buildings', 'ogr')
+        layer = load_test_vector_layer('exposure', 'buildings.shp')
 
         output_crs = QgsCoordinateReferenceSystem(3857)
 
-        reprojected = reproject(layer=vector_layer, output_crs=output_crs)
+        reprojected = reproject(layer=layer, output_crs=output_crs)
 
         self.assertEqual(reprojected.crs(), output_crs)
         self.assertEqual(
-            reprojected.featureCount(), vector_layer.featureCount())
+            reprojected.featureCount(), layer.featureCount())
         self.assertEqual(reprojected.name(), 'reprojected')
+        self.assertDictEqual(layer.keywords, reprojected.keywords)
