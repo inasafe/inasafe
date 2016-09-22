@@ -12,7 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 import numpy
 
-from definitionsv4.definitions_v3 import no_data_warning
+from safe.definitionsv4.definitions_v3 import no_data_warning
 from safe.common.utilities import (
     format_int,
     humanize_class,

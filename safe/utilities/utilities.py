@@ -23,7 +23,7 @@ from collections import OrderedDict
 
 from PyQt4.QtCore import QPyNullVariant
 
-from definitionsv4.definitions_v3 import (
+from safe.definitionsv4.definitions_v3 import (
     inasafe_keyword_version,
     keyword_version_compatibilities
 )

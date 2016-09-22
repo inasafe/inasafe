@@ -26,7 +26,7 @@ from PyQt4.QtGui import (
     QListWidgetItem,
     QPixmap)
 
-from definitionsv4.definitions_v3 import (
+from safe.definitionsv4.definitions_v3 import (
     layer_purpose_hazard,
     layer_purpose_exposure)
 from safe.gui.tools.wizard.wizard_step import WizardStep

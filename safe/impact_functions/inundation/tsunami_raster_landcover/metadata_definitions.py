@@ -16,7 +16,7 @@ __filename__ = 'metadata_definitions'
 __date__ = '10/05/16'
 __copyright__ = 'etienne@kartoza.com'
 
-from definitionsv4.definitions_v3 import (
+from safe.definitionsv4.definitions_v3 import (
     layer_mode_classified,
     layer_mode_continuous,
     layer_geometry_polygon,

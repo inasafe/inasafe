@@ -25,7 +25,7 @@ from PyQt4.QtGui import (
     QListWidgetItem,
     QPixmap)
 
-from definitionsv4.definitions_v3 import layer_purpose_aggregation
+from safe.definitionsv4.definitions_v3 import layer_purpose_aggregation
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_strings import category_question

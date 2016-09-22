@@ -1,7 +1,7 @@
 # coding=utf-8
 import logging
 
-from definitionsv4.definitions_v3 import (
+from safe.definitionsv4.definitions_v3 import (
     layer_mode_continuous,
     layer_geometry_point,
     layer_geometry_line,

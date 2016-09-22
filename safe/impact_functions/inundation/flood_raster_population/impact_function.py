@@ -17,7 +17,7 @@ import logging
 import numpy
 
 import safe.messaging as m
-from definitionsv4.definitions_v3 import no_data_warning
+from safe.definitionsv4.definitions_v3 import no_data_warning
 from safe.common.exceptions import ZeroImpactException
 from safe.common.utilities import (
     format_int,

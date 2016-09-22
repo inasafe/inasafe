@@ -96,7 +96,7 @@ from safe.impact_functions.ash.ash_raster_population.impact_function import \
 from safe.impact_functions.ash.ash_raster_places.impact_function import \
     AshRasterPlacesFunction
 
-from definitionsv4.definitions_v3 import (
+from safe.definitionsv4.definitions_v3 import (
     layer_purpose_exposure,
     hazard_category_single_event,
     hazard_category_multiple_event,

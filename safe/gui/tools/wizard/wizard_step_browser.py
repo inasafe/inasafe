@@ -31,7 +31,7 @@ from qgis.core import (
     QgsBrowserModel)
 
 import definitionsv4.definitions_v3
-from definitionsv4.definitions_v3 import (
+from safe.definitionsv4.definitions_v3 import (
     continuous_hazard_unit,
     exposure_unit,
     raster_hazard_classification,

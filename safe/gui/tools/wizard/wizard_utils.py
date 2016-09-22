@@ -24,7 +24,7 @@ from PyQt4 import QtCore
 from qgis.core import QgsCoordinateTransform
 
 import safe.gui.tools.wizard.wizard_strings
-from definitionsv4.definitions_v3 import (
+from safe.definitionsv4.definitions_v3 import (
     layer_purpose_hazard,
     layer_purpose_exposure,
     layer_mode_classified)

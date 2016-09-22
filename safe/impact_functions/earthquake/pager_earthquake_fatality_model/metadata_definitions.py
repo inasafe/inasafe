@@ -14,7 +14,7 @@ Contact : ole.moller.nielsen@gmail.com
 __author__ = 'lucernae'
 __date__ = '24/03/15'
 
-from definitionsv4.definitions_v3 import (
+from safe.definitionsv4.definitions_v3 import (
     layer_mode_continuous,
     layer_geometry_raster,
     hazard_earthquake,

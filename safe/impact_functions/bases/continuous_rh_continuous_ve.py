@@ -1,6 +1,6 @@
 # coding=utf-8
 
-from definitionsv4.definitions_v3 import (
+from safe.definitionsv4.definitions_v3 import (
     layer_mode_continuous,
     layer_geometry_raster,
     layer_geometry_point,

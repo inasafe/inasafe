@@ -1,6 +1,11 @@
 # coding=utf-8
-from definitionsv4.definitions_v3 import unit_generic, unit_metres, unit_mmi, \
-    unit_percentage, unit_centimetres
+from safe.definitionsv4.definitions_v3 import (
+    unit_generic,
+    unit_metres,
+    unit_mmi,
+    unit_percentage,
+    unit_centimetres
+)
 from safe_extras.parameters.unit import Unit
 
 __author__ = 'Rizky Maulana Nugraha "lucernae" <lana.pcfre@gmail.com>'
