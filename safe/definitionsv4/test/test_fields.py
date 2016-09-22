@@ -18,6 +18,9 @@ from safe.definitionsv4.fields import (
     aggregation_fields,
     impact_fields
 )
+from PyQt4.QtCore import QVariant
+
+qvariant_type = type(QVariant.Int)
 
 all_fields = OrderedDict([
     ('Exposure Fields', exposure_fields),
@@ -49,7 +52,7 @@ def check_format(field):
         'key': basestring,
         'name': basestring,
         'field_name': basestring,
-        'type': type,
+        'type': qvariant_type,
         'description': basestring,
         'citations': list
     }
@@ -58,7 +61,7 @@ def check_format(field):
             if isinstance(field[key], value):
                 continue
             elif isinstance(field[key], list) and key == 'type':
-                if not all([isinstance(i, type) for i in field[key]]):
+                if not all([isinstance(i, qvariant_type) for i in field[key]]):
                     message = (
                         'List of should only contain of type only. We '
                         'found invalid for field %s' % field)
