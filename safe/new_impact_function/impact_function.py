@@ -456,18 +456,14 @@ class ImpactFunction(object):
         """More process after getting the impact layer with data."""
         # Post processor (gender, age, building type, etc)
         # Notes, action
-        if 'post_processor_fields' not in self.impact_keyword:
-            self.impact_keyword['post_processor_fields'] = {}
 
         for post_processor in post_processors:
             post_processor_output = self.run_single_post_processor(
                 post_processor)
-            if post_processor_output[0]:
-                self.impact_keyword['post_processor_fields'].update(
-                    post_processor_output[2])
             self.set_state_process(
                 'post_processor',
-                'Post processor for %s.' % post_processor['name'])
+                'Post processor for %s %s.' % (
+                    post_processor['name'], post_processor_output))
 
     def run(self):
         self.preprocess()
@@ -725,7 +721,8 @@ class ImpactFunction(object):
                 'features')
 
         # Post Processor
-        self.post_process()
+        # Disable post processor for now (IS)
+        # self.post_process()
 
         return self.state
 
@@ -734,6 +731,9 @@ class ImpactFunction(object):
 
         :param post_processor: A post processor definition.
         :type post_processor: dict
+
+        :returns: True if success, else False
+        :rtype: bool
         """
         # Get all field name from impact layer
         impact_fields = self.impact_layer.dataProvider().fieldNameMap().keys()
@@ -783,9 +783,9 @@ class ImpactFunction(object):
                 LOGGER.debug(self.impact_layer.source())
 
             # Generate output
-            return True, tr('Success')
+            return True
         else:
-            return False, tr('Not enough inputs')
+            return False
 
     def enough_input(self, impact_fields, post_processor_input):
         """Check if the input from impact_fields in enough.

@@ -165,7 +165,7 @@ class TestImpactFunction(unittest.TestCase):
 
         result = impact_function.run_single_post_processor(
             post_processor_gender)
-        self.assertTrue(result[0])
+        self.assertTrue(result)
 
         impact_layer = impact_function.impact_layer
         self.assertIsNotNone(impact_layer)
