@@ -7,13 +7,6 @@
 
 """
 
-__author__ = 'tim@kartoza.com'
-__revision__ = '$Format:%H$'
-__date__ = '29/01/2011'
-__license__ = "GPL"
-__copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
-__copyright__ += 'Disaster Reduction'
-
 import logging
 import os
 from ast import literal_eval
@@ -25,7 +18,7 @@ import qgis  # pylint: disable=unused-import
 from PyQt4.QtCore import QObject, QSettings
 from PyQt4.QtCore import QUrl, QDateTime
 
-import definitionsv4.definitions_v3
+import safe.definitionsv4.definitions_v3
 from safe import messaging as m
 from safe.common.exceptions import (
     HashNotFoundError,
@@ -43,6 +36,13 @@ from safe.utilities.metadata import (
     read_iso19115_metadata,
 )
 from safe.utilities.unicode import get_string
+
+__author__ = 'tim@kartoza.com'
+__revision__ = '$Format:%H$'
+__date__ = '29/01/2011'
+__license__ = "GPL"
+__copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
+__copyright__ += 'Disaster Reduction'
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -68,9 +68,9 @@ def definition(keyword):
         from definitions_v3.py, otherwise None if no match was found.
     :rtype: dict, None
     """
-    for item in dir(definitionsv4.definitions_v3):
+    for item in dir(safe.definitionsv4.definitions_v3):
         if not item.startswith("__"):
-            var = getattr(definitionsv4.definitions_v3, item)
+            var = getattr(safe.definitionsv4.definitions_v3, item)
             if isinstance(var, dict):
                 if var.get('key') == keyword:
                     return var
