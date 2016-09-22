@@ -11,6 +11,8 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 """
 
+from PyQt4.QtCore import QVariant
+
 from utilities.i18n import tr
 __author__ = 'ismail@kartoza.com'
 __revision__ = '$Format:%H$'
@@ -251,7 +253,7 @@ women_count_field = {
     'key': 'women_count_field',
     'name': tr('Women Count'),
     'field_name': 'women',
-    'type': int,
+    'type': QVariant.Int,
     'description': tr(
         'Attribute where the number of women of the feature is located.'),
     'citations': [

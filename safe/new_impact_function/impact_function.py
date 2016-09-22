@@ -21,7 +21,6 @@ from qgis.core import (
     QgsField,
 )
 
-from PyQt4.QtCore import QVariant
 import logging
 
 from definitionsv4.post_processors import post_processors
@@ -736,54 +735,57 @@ class ImpactFunction(object):
         :param post_processor: A post processor definition.
         :type post_processor: dict
         """
-        inasafe_fields = self.impact_keyword.get('inasafe_fields', {})
-        if self.enough_input(inasafe_fields, post_processor['input']):
-            # Get real input
-            input_mapping = self.input_mapping(
-                inasafe_fields, post_processor['input'])
-            output_mapping = {}
+        # Get all field name from impact layer
+        impact_fields = self.impact_layer.dataProvider().fieldNameMap().keys()
+        if self.enough_input(impact_fields, post_processor['input']):
             # Calculate based on formula
+            # Iterate all possible output
             for output_key, output_value in post_processor['output'].items():
                 # Get output attribute name
                 output_field_name = output_value['field']['field_name']
-                # Store field name in output mapping
-                output_mapping[output_key] = output_field_name
-                # Add new attribute to the layer
+                # Add output attribute name to the layer
                 impact_data_provider = self.impact_layer.dataProvider()
                 impact_data_provider.addAttributes(
-                    [QgsField(output_field_name, QVariant.Int)])
+                    [QgsField(
+                        output_field_name, output_value['field']['type'])])
                 self.impact_layer.updateFields()
+                # Get the index of output attribute
                 output_field_index = impact_data_provider.fieldNameIndex(
                     output_field_name)
-                input_mapping_index = {}
-                for key, value in input_mapping.items():
-                    input_mapping_index[key] = impact_data_provider.\
-                        fieldNameIndex(value)
-                # Calculate the output
+                # Get the input field's indexes for input
+                input_indexes = {}
+                for key, value in post_processor['input'].items():
+                    input_indexes[key] = impact_data_provider.\
+                        fieldNameIndex(value['field']['field_name'])
+                # Create variable to store the formula's result
+                post_processor_result_dict = {}
+                # Create iterator for feature
                 iterator = self.impact_layer.getFeatures()
-                post_processor_result_dict = {
-
-                }
+                # Iterate all feature
                 for feature in iterator:
                     attributes = feature.attributes()
+                    # Create dictionary to store the input
                     variables = {}
-                    for key, value in input_mapping_index.items():
+                    # Fill up the input
+                    for key, value in input_indexes.items():
                         variables[key] = attributes[value]
+                    # Evaluate the formula
                     post_processor_result = evaluate_formula(
                         output_value['formula'], variables)
+                    # Store the result to variable
                     post_processor_result_dict[feature.id()] = {
                             output_field_index: post_processor_result
                         }
-
+                # Update the layer with the formula's result
                 impact_data_provider.changeAttributeValues(
                     post_processor_result_dict)
                 self.impact_layer.updateFields()
                 LOGGER.debug(self.impact_layer.source())
 
             # Generate output
-            return True, post_processor['key'], output_mapping
+            return True, tr('Success')
         else:
-            return False, post_processor['key'], tr('Not enough inputs')
+            return False, tr('Not enough inputs')
 
     def enough_input(self, impact_fields, post_processor_input):
         """Check if the input from impact_fields in enough.
@@ -804,23 +806,3 @@ class ImpactFunction(object):
             else:
                 return False
         return True
-
-    def input_mapping(self, inasafe_fields, post_processor_input):
-        """Obtain the mapping of post processor input and inasafe_fields
-
-
-        :param inasafe_fields: Special fields from the impact layer.
-        :type inasafe_fields: dict
-
-        :param post_processor_input: Collection of post processor input
-            requirements.
-        :type post_processor_input: dict
-
-        :returns: Mapping between input key and field name.
-        :rtype: dict
-        """
-        input_mapping = {}
-        for input_key, input_value in post_processor_input.items():
-            input_mapping[input_key] = inasafe_fields.get(
-                input_value['field']['key'])
-        return input_mapping

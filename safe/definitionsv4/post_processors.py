@@ -14,7 +14,8 @@ from utilities.i18n import tr
 from safe.definitionsv4.fields import (
     female_ratio_field,
     population_count_field,
-    feature_value_field
+    feature_value_field,
+    women_count_field
 )
 
 __author__ = 'ismail@kartoza.com'
@@ -22,21 +23,7 @@ __revision__ = '$Format:%H$'
 __date__ = '22/09/16'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
-women_field = {
-    'key': 'women_field',
-    'name': tr('Women field'),
-    'default_field': 'women',
-    'type': int,
-    'description': tr(
-        'Attribute where the number of women of the feature is located.'),
-    'layer': 'impact',
-    'citations': [
-        {
-            'text': None,
-            'link': None
-        }
-    ]
-}
+
 post_processor_gender = {
     'key': 'post_processor_gender',
     'name': tr('Gender Post Processor'),
@@ -54,7 +41,7 @@ post_processor_gender = {
     },
     'output': {
         'women': {
-            'field': women_field,
+            'field': women_count_field,
             'formula': 'population * gender_ratio'
         }
     }

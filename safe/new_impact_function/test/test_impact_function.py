@@ -5,6 +5,7 @@ import os
 from safe.test.utilities import get_qgis_app, standard_data_path
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
+from safe.definitionsv4.fields import women_count_field
 from definitionsv4.post_processors import (
     post_processor_gender,
     post_processor_value
@@ -165,13 +166,11 @@ class TestImpactFunction(unittest.TestCase):
         result = impact_function.run_single_post_processor(
             post_processor_gender)
         self.assertTrue(result[0])
-        self.assertEquals(result[1], post_processor_gender['key'])
-        self.assertEquals(result[2], {'women': 'women'})
 
         impact_layer = impact_function.impact_layer
         self.assertIsNotNone(impact_layer)
         post_processor_index = impact_layer.dataProvider().fieldNameIndex(
-            'women')
+            women_count_field['field_name'])
         self.assertEquals(7, post_processor_index)
         print impact_layer.source()
 
@@ -212,21 +211,6 @@ class TestImpactFunction(unittest.TestCase):
             impact_fields, post_processor_gender['input']))
         self.assertFalse(impact_function.enough_input(
             impact_fields, post_processor_value['input']))
-
-    def test_input_mapping(self):
-        """Test for input_mapping function."""
-        impact_function = ImpactFunction()
-        inasafe_fields = {
-            'population_field': 'population',
-            'gender_ratio_field': 'WomenRatio'
-        }
-
-        expected_input_mapping = {
-            'gender_ratio': 'WomenRatio', 'population': 'population'}
-        self.assertDictEqual(
-            expected_input_mapping,
-            impact_function.input_mapping(
-                inasafe_fields, post_processor_gender['input']))
 
     def test_evaluate_formula(self):
         """Test for evaluating formula."""
