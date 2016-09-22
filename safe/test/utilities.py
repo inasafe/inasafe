@@ -213,12 +213,10 @@ def standard_data_path(*args):
     return path
 
 
-def vector_test_layer(*args):
+def load_test_vector_layer(*args):
     """Return the test vector layer.
 
-    :param args: List of path e.g. ['control', 'files',
-        'test-error-message.txt'] or ['control', 'scenarios'] to get the path
-        to scenarios dir.
+    :param args: List of path e.g. ['exposure', 'buildings.shp'.
     :type args: list
 
     :return: The vector layer.
@@ -240,12 +238,10 @@ def vector_test_layer(*args):
     return layer
 
 
-def raster_test_layer(*args):
+def load_test_raster_layer(*args):
     """Return the test raster layer.
 
-    :param args: List of path e.g. ['control', 'files',
-        'test-error-message.txt'] or ['control', 'scenarios'] to get the path
-        to scenarios dir.
+    :param args: List of path e.g. ['exposure', 'population.asc'].
     :type args: list
 
     :return: The raster layer.
