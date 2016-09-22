@@ -250,9 +250,20 @@ class TestImpactFunction(unittest.TestCase):
         impact_layer = impact_function.impact_layer
         self.assertIsNotNone(impact_layer)
 
+        used_post_processors = [
+            post_processor_gender,
+            post_processor_youth,
+            post_processor_adult,
+            post_processor_elderly
+        ]
+
         # Check if new field is added
         impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
-        self.assertIn(women_count_field['field_name'], impact_fields)
+        for post_processor in used_post_processors:
+            # noinspection PyTypeChecker
+            for output_value in post_processor['output'].values():
+                field_name = output_value['value']['field_name']
+                self.assertIn(field_name, impact_fields)
 
     def test_enough_input(self):
         """Test to check the post processor input checker."""
