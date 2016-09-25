@@ -18,7 +18,8 @@ import qgis  # pylint: disable=unused-import
 from PyQt4.QtCore import QObject, QSettings
 from PyQt4.QtCore import QUrl, QDateTime
 
-import safe.definitionsv4.definitions_v3
+
+from safe.definitionsv4 import definitions_v3
 from safe import messaging as m
 from safe.common.exceptions import (
     HashNotFoundError,
@@ -68,9 +69,10 @@ def definition(keyword):
         from definitions_v3.py, otherwise None if no match was found.
     :rtype: dict, None
     """
-    for item in dir(safe.definitionsv4.definitions_v3):
+
+    for item in dir(definitions_v3):
         if not item.startswith("__"):
-            var = getattr(safe.definitionsv4.definitions_v3, item)
+            var = getattr(definitions_v3, item)
             if isinstance(var, dict):
                 if var.get('key') == keyword:
                     return var
