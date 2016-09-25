@@ -18,6 +18,7 @@
 *.shx binary
 *.db binary
 *.zip binary
+*.pdf binary
 
 # binary
 *.sqlite binary

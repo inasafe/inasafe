@@ -30,7 +30,7 @@ from qgis.core import (
     QgsDataSourceURI,
     QgsBrowserModel)
 
-import definitionsv4.definitions_v3
+from safe.definitionsv4 import definitions_v3
 from safe.definitionsv4.definitions_v3 import (
     continuous_hazard_unit,
     exposure_unit,
@@ -318,12 +318,12 @@ class WizardStepBrowser(WizardStep):
                 %s
             </table>
         ''' % (self.tr('Layer'), self.tr('Required'),
-               definitionsv4.definitions_v3.layer_geometry['name'],
+               definitions_v3.layer_geometry['name'],
                lay_geometry, req_geometry,
-               definitionsv4.definitions_v3.layer_purpose['name'],
+               definitions_v3.layer_purpose['name'],
                lay_purpose, layer_purpose,
                layer_purpose_key_name, lay_subcategory, req_subcategory,
-               definitionsv4.definitions_v3.layer_mode['name'],
+               definitions_v3.layer_mode['name'],
                lay_layer_mode, req_layer_mode,
                classification_row,
                units_row)
