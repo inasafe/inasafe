@@ -10,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
    (at your option) any later version.
 
 """
+from PyQt4.QtCore import QVariant
 
 from qgis.core import (
     QgsMapLayer,
@@ -19,6 +20,7 @@ from qgis.core import (
     QgsGeometry,
     QgsFeature,
     QgsField,
+    QgsDistanceArea,
 )
 
 import logging
@@ -741,10 +743,22 @@ class ImpactFunction(object):
             # Calculate based on formula
             # Iterate all possible output
             for output_key, output_value in post_processor['output'].items():
+                # Get impact data provider from impact layer
+                impact_data_provider = self.impact_layer.dataProvider()
+                # Get the input field's indexes for input
+                input_indexes = {}
+                for key, value in post_processor['input'].items():
+                    if value['type'] == 'field':
+                        input_indexes[key] = impact_data_provider.\
+                            fieldNameIndex(value['value']['field_name'])
+                    # For geometry, create new field that contain the value
+                    elif value['type'] == 'geometry_property':
+                        if value['value'] == 'size':
+                            input_indexes[key] = self.add_size_field()
+
                 # Get output attribute name
                 output_field_name = output_value['value']['field_name']
                 # Add output attribute name to the layer
-                impact_data_provider = self.impact_layer.dataProvider()
                 impact_data_provider.addAttributes(
                     [QgsField(
                         output_field_name,
@@ -754,12 +768,7 @@ class ImpactFunction(object):
                 # Get the index of output attribute
                 output_field_index = impact_data_provider.fieldNameIndex(
                     output_field_name)
-                # Get the input field's indexes for input
-                input_indexes = {}
-                for key, value in post_processor['input'].items():
-                    if value['type'] == 'field':
-                        input_indexes[key] = impact_data_provider.\
-                            fieldNameIndex(value['value']['field_name'])
+
                 # Create variable to store the formula's result
                 post_processor_result_dict = {}
                 # Create iterator for feature
@@ -768,13 +777,15 @@ class ImpactFunction(object):
                 for feature in iterator:
                     attributes = feature.attributes()
                     # Create dictionary to store the input
-                    variables = {}
-                    # Fill up the input
+                    parameters = {}
+                    # Fill up the input from fields
                     for key, value in input_indexes.items():
-                        variables[key] = attributes[value]
+                        parameters[key] = attributes[value]
+                    # Fill up the input from geometry property
+
                     # Evaluate the formula
                     post_processor_result = evaluate_formula(
-                        output_value['formula'], variables)
+                        output_value['formula'], parameters)
                     # Store the result to variable
                     post_processor_result_dict[feature.id()] = {
                             output_field_index: post_processor_result
@@ -807,6 +818,63 @@ class ImpactFunction(object):
             if input_value['type'] == 'field':
                 if input_value['value']['field_name'] in impact_fields:
                     continue
-            else:
-                return False
+                else:
+                    return False
         return True
+
+    def get_parameter(self, feature, post_processor_input):
+        """Obtain parameter value for post processor from a feature.
+
+        :param feature: A QgsFeature.
+        :type feature: QgsFeature
+
+        :param post_processor_input: Input of post processor.
+        :type post_processor_input: dict
+
+        :returns: Dictionary of key and value of parameter.
+        :rtype: dict
+        """
+        parameters = {
+
+        }
+        for key, value in post_processor_input:
+            if value['type'] == 'field':
+                pass
+
+    def add_size_field(self):
+        """Add size field in to impact layer.
+
+        If polygon, size will be area in square meter.
+        If line, size will be length in meter.
+
+        :returns: Index of the size field.
+        :rtype: int
+        """
+        # Create QgsDistanceArea object
+        size_calculator = QgsDistanceArea()
+        size_calculator.setSourceCrs(self.impact_layer.crs())
+        size_calculator.setEllipsoid('WGS84')
+        size_calculator.setEllipsoidalMode(True)
+
+        # Add new field, size
+        impact_data_provider = self.impact_layer.dataProvider()
+        impact_data_provider.addAttributes(
+            [QgsField(
+                'size',
+                QVariant.Double
+            )]
+        )
+        # Get index
+        size_field_index = impact_data_provider.fieldNameIndex('size')
+
+        sizes = {}
+        # Iterate through all features
+        features = self.impact_layer.getFeatures()
+        for feature in features:
+            sizes[feature.id()] = {
+                size_field_index: size_calculator.measure(feature.geometry())
+            }
+        # Insert to field
+        impact_data_provider.changeAttributeValues(sizes)
+        self.impact_layer.updateFields()
+        return size_field_index

@@ -9,13 +9,15 @@ from safe.definitionsv4.fields import (
     women_count_field,
     youth_count_field,
     adult_count_field,
-    elderly_count_field
+    elderly_count_field,
+    feature_value_field
 )
 from definitionsv4.post_processors import (
     post_processor_gender,
     post_processor_youth,
     post_processor_adult,
-    post_processor_elderly
+    post_processor_elderly,
+    post_processor_size_rate
 )
 from safe.test.utilities import clone_shp_layer
 from safe.new_impact_function.impact_function import ImpactFunction
@@ -233,6 +235,27 @@ class TestImpactFunction(unittest.TestCase):
         # Check if new field is added
         impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
         self.assertIn(elderly_count_field['field_name'], impact_fields)
+
+    def test_size_rate_post_processor(self):
+        """Test size rate post processor."""
+        impact_layer = clone_shp_layer(
+            'indivisible_polygon_impact',
+            include_keywords=True,
+            source_directory=standard_data_path('impact'))
+        self.assertIsNotNone(impact_layer)
+        impact_function = ImpactFunction()
+        impact_function.impact_layer = impact_layer
+
+        result = impact_function.run_single_post_processor(
+            post_processor_size_rate)
+        self.assertTrue(result)
+
+        impact_layer = impact_function.impact_layer
+        self.assertIsNotNone(impact_layer)
+
+        # Check if new field is added
+        impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
+        self.assertIn(feature_value_field['field_name'], impact_fields)
 
     def test_post_processor(self):
         """Test for running post processor."""
