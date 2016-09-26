@@ -323,7 +323,8 @@ exposure_fields = [
 
 hazard_fields = [
     hazard_id_field,
-    hazard_value_field
+    hazard_value_field,
+    hazard_class_field
 ]
 
 aggregation_fields = [
