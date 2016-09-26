@@ -36,7 +36,7 @@ class TestReprojectRaster(unittest.TestCase):
 
         output_crs = QgsCoordinateReferenceSystem(3857)
 
-        reprojected = reproject(layer=layer, output_crs=output_crs)
+        reprojected = reproject(layer, output_crs)
 
         self.assertEqual(reprojected.crs(), output_crs)
         self.assertEqual(reprojected.name(), 'reprojected')

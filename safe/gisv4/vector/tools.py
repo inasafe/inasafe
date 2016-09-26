@@ -45,4 +45,5 @@ def create_memory_layer(layer_name, geometry, coordinate_reference_system):
     crs = coordinate_reference_system.authid().lower()
     uri = '%s?crs=%s&index=yes&uuid=%s' % (type_string, crs, str(uuid4()))
     memory_layer = QgsVectorLayer(uri, layer_name, 'memory')
+    memory_layer.keywords = {}
     return memory_layer
