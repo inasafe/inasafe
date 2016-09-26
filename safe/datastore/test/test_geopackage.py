@@ -36,7 +36,7 @@ class TestGeoPackage(unittest.TestCase):
         pass
 
     @unittest.skipIf(
-        gdal.VersionInfo('VERSION_NUM') < 1110000,
+        int(gdal.VersionInfo('VERSION_NUM')) < 1110000,
         'GDAL 1.11 is required for geopackage.')
     def test_create_geopackage(self):
         """Test if we can store geopackage."""
