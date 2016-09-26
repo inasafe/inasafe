@@ -628,6 +628,8 @@ class ImpactFunction(object):
                 impact_data_provider = self.impact_layer.dataProvider()
                 # Get the input field's indexes for input
                 input_indexes = {}
+                # Store the indexes that will be deleted.
+                temporary_indexes = []
                 for key, value in post_processor['input'].items():
                     if value['type'] == 'field':
                         input_indexes[key] = impact_data_provider.\
@@ -636,6 +638,7 @@ class ImpactFunction(object):
                     elif value['type'] == 'geometry_property':
                         if value['value'] == 'size':
                             input_indexes[key] = self.add_size_field()
+                            temporary_indexes.append(input_indexes[key])
 
                 # Get output attribute name
                 output_field_name = output_value['value']['field_name']
@@ -674,6 +677,8 @@ class ImpactFunction(object):
                 # Update the layer with the formula's result
                 impact_data_provider.changeAttributeValues(
                     post_processor_result_dict)
+                # Delete temporary indexes
+                impact_data_provider.deleteAttributes(temporary_indexes)
                 self.impact_layer.updateFields()
                 LOGGER.debug(self.impact_layer.source())
 

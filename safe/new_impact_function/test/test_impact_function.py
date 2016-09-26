@@ -256,6 +256,7 @@ class TestImpactFunction(unittest.TestCase):
         # Check if new field is added
         impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
         self.assertIn(feature_value_field['field_name'], impact_fields)
+        self.assertNotIn('size', impact_fields)
 
     def test_post_processor(self):
         """Test for running post processor."""
