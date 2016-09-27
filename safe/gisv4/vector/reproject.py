@@ -48,10 +48,11 @@ def reproject(layer, output_crs, callback=None):
     processing_step = reproject_vector['step_name']
 
     input_crs = layer.crs()
+    input_fields = layer.fields()
     feature_count = layer.featureCount()
 
     reprojected = create_memory_layer(
-        output_layer_name, layer.geometryType(), output_crs)
+        output_layer_name, layer.geometryType(), output_crs, input_fields)
     data_provider = reprojected.dataProvider()
 
     crs_transform = QgsCoordinateTransform(input_crs, output_crs)
