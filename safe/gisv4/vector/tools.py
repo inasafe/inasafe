@@ -16,7 +16,8 @@ from qgis.core import QgsVectorLayer, QgsCoordinateReferenceSystem, QGis
 from safe.common.exceptions import MemoryLayerCreationError
 
 
-def create_memory_layer(layer_name, geometry, coordinate_reference_system):
+def create_memory_layer(
+        layer_name, geometry, coordinate_reference_system, fields=None):
     """Create a vector memory layer.
 
     :param layer_name: The name of the layer.
@@ -27,6 +28,9 @@ def create_memory_layer(layer_name, geometry, coordinate_reference_system):
 
     :param coordinate_reference_system: The CRS of the memory layer.
     :type coordinate_reference_system: QgsCoordinateReferenceSystem
+
+    :param fields: Fields of the vector layer. Default to None.
+    :type fields: QgsFields
 
     :return: The memory layer.
     :rtype: QgsVectorLayer
@@ -45,4 +49,10 @@ def create_memory_layer(layer_name, geometry, coordinate_reference_system):
     crs = coordinate_reference_system.authid().lower()
     uri = '%s?crs=%s&index=yes&uuid=%s' % (type_string, crs, str(uuid4()))
     memory_layer = QgsVectorLayer(uri, layer_name, 'memory')
+
+    if fields:
+        data_provider = memory_layer.dataProvider()
+        data_provider.addAttributes(fields)
+        memory_layer.updateFields()
+
     return memory_layer

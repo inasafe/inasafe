@@ -13,7 +13,8 @@ Contact : ole.moller.nielsen@gmail.com
 
 from PyQt4.QtCore import QVariant
 
-from utilities.i18n import tr
+from safe.utilities.i18n import tr
+
 __author__ = 'ismail@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '21/09/16'

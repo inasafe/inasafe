@@ -20,17 +20,23 @@ from qgis.core import (
     QgsGeometry,
     QgsFeature,
     QGis,
+    QgsField,
 )
 
 from safe.common.exceptions import KeywordNotFoundError
 from safe.common.utilities import get_utm_epsg
 from safe.gisv4.vector.tools import create_memory_layer
+from safe.definitionsv4.fields import hazard_value_field
 from safe.utilities.i18n import tr
 
 
 def buffering(layer, radii, callback=None):
     """
-    Buffering
+    Buffer a vector point or line layer into polygons.
+
+    This processing algorithm will keep the original attribute table and
+    will add a new one for the hazard class name according to
+    safe.definitionsv4.fields.hazard_value_field.
 
     radii = OrderedDict()
     radii[500] = 'high'
@@ -61,8 +67,15 @@ def buffering(layer, radii, callback=None):
     input_crs = layer.crs()
     feature_count = layer.featureCount()
 
+    # Set the new hazard value field
+    fields = layer.fields()
+    field_type = hazard_value_field['type'][0]
+    field_name = hazard_value_field['field_name']
+    new_field = QgsField(field_name, field_type)
+    fields.append(new_field)
+
     buffered = create_memory_layer(
-        output_layer_name, QGis.Polygon, input_crs)
+        output_layer_name, QGis.Polygon, input_crs, fields)
     data_provider = buffered.dataProvider()
 
     # Reproject features if needed into UTM if the layer is in 4326.
@@ -87,6 +100,9 @@ def buffering(layer, radii, callback=None):
         for radius in radii:
             attributes = feature.attributes()
 
+            # We add the hazard value name to the attribute table.
+            attributes.append(radii[radius])
+
             circle = geom.buffer(radius, 30)
 
             if inner_ring:
@@ -109,8 +125,16 @@ def buffering(layer, radii, callback=None):
     # We transfer keywords to the output.
     try:
         buffered.keywords = layer.keywords
-        buffered.keywords['layer_geometry'] = 'polygon'
     except AttributeError:
         raise KeywordNotFoundError
+
+    buffered.keywords['layer_geometry'] = 'polygon'
+
+    try:
+        buffered.keywords['inasafe_fields']
+    except KeyError:
+        buffered.keywords['inasafe_fields'] = {}
+
+    buffered.keywords['inasafe_fields']['hazard_value_field'] = field_name
 
     return buffered
