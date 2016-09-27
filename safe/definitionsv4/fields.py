@@ -11,6 +11,8 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 """
 
+from PyQt4.QtCore import QVariant
+
 from utilities.i18n import tr
 __author__ = 'ismail@kartoza.com'
 __revision__ = '$Format:%H$'
@@ -24,7 +26,7 @@ exposure_id_field = {
     'key': 'exposure_id_field',
     'name': tr('Exposure ID'),
     'field_name': 'exp_id',
-    'type': int,
+    'type': QVariant.Int,
     'description': tr(
         'Attribute where the exposure ID of the feature is located.'),
     'citations': [
@@ -39,7 +41,7 @@ feature_type_field = {
     'key': 'feature_type_field',
     'name': tr('Feature Type'),
     'field_name': 'feature_type',
-    'type': str,
+    'type': QVariant.String,
     'description': tr(
         'Attribute where the type of the feature is located.'),
     'citations': [
@@ -54,7 +56,7 @@ population_count_field = {
     'key': 'population_count_field',
     'name': tr('Population count'),
     'field_name': 'population',
-    'type': int,
+    'type': QVariant.Int,
     'description': tr('Attribute where the number of population is located.'),
     'citations': [
         {
@@ -68,7 +70,7 @@ feature_value_field = {
     'key': 'feature_value_field',
     'name': tr('Feature Value'),
     'field_name': 'exp_value',
-    'type': float,
+    'type': QVariant.Double,
     'description': tr('Attribute where the value of the feature is located.'),
     'citations': [
         {
@@ -82,7 +84,7 @@ feature_rate_field = {
     'key': 'feature_rate_field',
     'name': tr('Feature Rate'),
     'field_name': 'exp_rate',
-    'type': float,
+    'type': QVariant.Double,
     'description': tr(
         'Attribute where the rate value of the feature is located. A rate '
         'value is the cost per unit of measure (m2 / m) for the feature.'),
@@ -100,7 +102,7 @@ hazard_id_field = {
     'key': 'hazard_id_field',
     'name': tr('Hazard ID'),
     'field_name': 'haz_id',
-    'type': int,
+    'type': QVariant.Int,
     'description': tr(
         'Attribute where the hazard ID of the feature is located.'),
     'citations': [
@@ -115,7 +117,7 @@ hazard_value_field = {
     'key': 'hazard_value_field',
     'name': tr('Hazard Value'),
     'field_name': 'haz_value',
-    'type': [str, int, float],
+    'type': [QVariant.String, QVariant.Int, QVariant.Double],
     'description': tr(
         'Attribute where the hazard value of the feature is located.'),
     'citations': [
@@ -132,7 +134,7 @@ aggregation_id_field = {
     'key': 'aggregation_id_field',
     'name': tr('Aggregation ID'),
     'field_name': 'agg_id',
-    'type': int,
+    'type': QVariant.Int,
     'description': tr(
         'Attribute where the aggregation ID of the feature is located.'),
     'citations': [
@@ -147,7 +149,7 @@ aggregation_name_field = {
     'key': 'aggregation_name_field',
     'name': tr('Aggregation Name'),
     'field_name': 'agg_name',
-    'type': str,
+    'type': QVariant.String,
     'description': tr(
         'Attribute where the aggregation name of the feature is located.'),
     'citations': [
@@ -162,7 +164,7 @@ female_ratio_field = {
     'key': 'female_ratio_field',
     'name': tr('Female Ratio'),
     'field_name': 'female_r',
-    'type': float,
+    'type': QVariant.Double,
     'description': tr('Attribute where the ratio of women is located.'),
     'citations': [
         {
@@ -176,7 +178,7 @@ youth_ratio_field = {
     'key': 'youth_ratio_field',
     'name': tr('Youth Ratio'),
     'field_name': 'youth_r',
-    'type': float,
+    'type': QVariant.Double,
     'description': tr('Attribute where the ratio of youth people is located.'),
     'citations': [
         {
@@ -190,7 +192,7 @@ adult_ratio_field = {
     'key': 'adult_ratio_field',
     'name': tr('Adult Ratio'),
     'field_name': 'adult_r',
-    'type': float,
+    'type': QVariant.Double,
     'description': tr('Attribute where the ratio of adult people is located.'),
     'citations': [
         {
@@ -204,7 +206,7 @@ elderly_ratio_field = {
     'key': 'elderly_ratio_field',
     'name': tr('Elderly Ratio'),
     'field_name': 'elderly_r',
-    'type': float,
+    'type': QVariant.Double,
     'description': tr(
         'Attribute where the ratio of elderly people is located.'),
     'citations': [
@@ -221,7 +223,7 @@ exposure_class_field = {
     'key': 'exposure_class_field',
     'name': tr('Exposure Class'),
     'field_name': 'exp_class',
-    'type': str,
+    'type': QVariant.String,
     'description': tr(
         'Attribute where the exposure class of the feature is located.'),
     'citations': [
@@ -236,7 +238,7 @@ hazard_class_field = {
     'key': 'hazard_class_field',
     'name': tr('Hazard Class'),
     'field_name': 'haz_class',
-    'type': str,
+    'type': QVariant.String,
     'description': tr(
         'Attribute where the hazard class of the feature is located.'),
     'citations': [
@@ -251,7 +253,7 @@ women_count_field = {
     'key': 'women_count_field',
     'name': tr('Women Count'),
     'field_name': 'women',
-    'type': int,
+    'type': QVariant.Int,
     'description': tr(
         'Attribute where the number of women of the feature is located.'),
     'citations': [
@@ -266,7 +268,7 @@ youth_count_field = {
     'key': 'youth_count_field',
     'name': tr('Youth Count'),
     'field_name': 'youth',
-    'type': int,
+    'type': QVariant.Int,
     'description': tr(
         'Attribute where the number of youth people of the feature is located.'
     ),
@@ -282,7 +284,7 @@ adult_count_field = {
     'key': 'adult_count_field',
     'name': tr('Adult Count'),
     'field_name': 'adult',
-    'type': int,
+    'type': QVariant.Int,
     'description': tr(
         'Attribute where the number of adult people of the feature is located.'
     ),
@@ -298,7 +300,7 @@ elderly_count_field = {
     'key': 'elderly_count_field',
     'name': tr('Elderly Count'),
     'field_name': 'elderly',
-    'type': int,
+    'type': QVariant.Int,
     'description': tr(
         'Attribute where the number of elderly people of the feature is '
         'located.'
@@ -321,7 +323,8 @@ exposure_fields = [
 
 hazard_fields = [
     hazard_id_field,
-    hazard_value_field
+    hazard_value_field,
+    hazard_class_field
 ]
 
 aggregation_fields = [

@@ -181,6 +181,9 @@
           <youth_ratio_attribute>
             <gco:CharacterString>Global default</gco:CharacterString>
           </youth_ratio_attribute>
+          <inasafe_fields>
+            <gco:Dictionary/>
+          </inasafe_fields>
           <scale>
             <gco:CharacterString/>
           </scale>

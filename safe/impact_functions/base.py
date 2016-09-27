@@ -124,11 +124,6 @@ class ImpactFunction(object):
                 super(FloodImpactFunction, self).__init__()
 
         """
-        # User who runs this
-        self._user = getpass.getuser().replace(' ', '_')
-        # The host that runs this
-        self._host_name = gethostname()
-
         # Requested extent to use
         self._requested_extent = None
         # Requested extent's CRS
@@ -175,7 +170,7 @@ class ImpactFunction(object):
         # ABC's will normally set this property.
         self._impact_style = None
         # The target field for vector impact layer
-        self._target_field = 'safe_ag'
+        self._target_field = 'affected'
         # The string to mark not affected value in the vector impact layer
         self._not_affected_value = 'Not Affected'
         # Store provenances
@@ -209,7 +204,7 @@ class ImpactFunction(object):
         :returns: User who runs this
         :rtype: basestring
         """
-        return self._user
+        return getpass.getuser().replace(' ', '_')
 
     @property
     def host_name(self):
@@ -218,7 +213,7 @@ class ImpactFunction(object):
         :returns: The host name.
         :rtype: basestring
         """
-        return self._host_name
+        return gethostname()
 
     @property
     def requested_extent(self):
