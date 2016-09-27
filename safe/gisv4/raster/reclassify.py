@@ -21,6 +21,7 @@ from qgis.core import QgsRasterLayer
 from safe.common.exceptions import FileNotFoundError, KeywordNotFoundError
 from safe.common.utilities import unique_filename, temp_dir
 from safe.utilities.i18n import tr
+from safe.definitionsv4.processing import reclassify_raster
 
 
 def reclassify(layer, ranges, callback=None):
@@ -59,8 +60,8 @@ def reclassify(layer, ranges, callback=None):
 
     .. versionadded:: 4.0
     """
-    output_layer_name = 'reclassified'
-    processing_step = tr('Reclassifying')
+    output_layer_name = reclassify_raster['output_layer_name']
+    processing_step = reclassify_raster['step_name']
 
     output_raster = unique_filename(suffix='.tiff', dir=temp_dir())
 

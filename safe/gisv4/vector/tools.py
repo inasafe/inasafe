@@ -49,6 +49,7 @@ def create_memory_layer(
     crs = coordinate_reference_system.authid().lower()
     uri = '%s?crs=%s&index=yes&uuid=%s' % (type_string, crs, str(uuid4()))
     memory_layer = QgsVectorLayer(uri, layer_name, 'memory')
+    memory_layer.keywords = {}
 
     if fields:
         data_provider = memory_layer.dataProvider()

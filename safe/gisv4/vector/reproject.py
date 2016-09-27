@@ -17,7 +17,9 @@ from qgis.core import (
     QgsFeature,
 )
 
+from safe.common.exceptions import KeywordNotFoundError
 from safe.gisv4.vector.tools import create_memory_layer
+from safe.definitionsv4.processing import reproject_vector
 
 
 def reproject(layer, output_crs, callback=None):
@@ -33,8 +35,8 @@ def reproject(layer, output_crs, callback=None):
     :type output_crs: QgsCoordinateReferenceSystem
 
     :param callback: A function to all to indicate progress. The function
-        should accept params 'current' (int) and 'maximum' (int). Defaults to
-        None.
+        should accept params 'current' (int), 'maximum' (int) and 'step' (str).
+        Defaults to None.
     :type callback: function
 
     :return: Reprojected memory layer.
@@ -42,7 +44,8 @@ def reproject(layer, output_crs, callback=None):
 
     .. versionadded:: 4.0
     """
-    output_layer_name = 'reprojected'
+    output_layer_name = reproject_vector['output_layer_name']
+    processing_step = reproject_vector['step_name']
 
     input_crs = layer.crs()
     feature_count = layer.featureCount()
@@ -63,13 +66,13 @@ def reproject(layer, output_crs, callback=None):
         data_provider.addFeatures([out_feature])
 
         if callback:
-            callback(current=i, maximum=feature_count)
+            callback(current=i, maximum=feature_count, step=processing_step)
 
     # We transfer keywords to the output.
     # We don't need to update keywords as the CRS is dynamic.
     try:
         reprojected.keywords = layer.keywords
-    except AttributeError:
+    except KeywordNotFoundError:
         pass
 
     return reprojected
