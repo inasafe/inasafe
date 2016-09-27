@@ -610,6 +610,9 @@ class ImpactFunction(object):
     def run_single_post_processor(self, post_processor):
         """Run single post processor.
 
+        If the impact layer has the output field, it will pass the post
+        processor calculation.
+
         :param post_processor: A post processor definition.
         :type post_processor: dict
 
@@ -624,6 +627,22 @@ class ImpactFunction(object):
             for output_key, output_value in post_processor['output'].items():
                 # Get impact data provider from impact layer
                 impact_data_provider = self.impact_layer.dataProvider()
+                # Get output attribute name
+                output_field_name = output_value['value']['field_name']
+                # If there is already the output field, don't proceed
+                if impact_data_provider.fieldNameIndex(output_field_name):
+                    continue
+                # Add output attribute name to the layer
+                impact_data_provider.addAttributes(
+                    [QgsField(
+                        output_field_name,
+                        output_value['value']['type'])]
+                )
+                self.impact_layer.updateFields()
+                # Get the index of output attribute
+                output_field_index = impact_data_provider.fieldNameIndex(
+                    output_field_name)
+
                 # Get the input field's indexes for input
                 input_indexes = {}
                 # Store the indexes that will be deleted.
@@ -637,19 +656,6 @@ class ImpactFunction(object):
                         if value['value'] == 'size':
                             input_indexes[key] = self.add_size_field()
                             temporary_indexes.append(input_indexes[key])
-
-                # Get output attribute name
-                output_field_name = output_value['value']['field_name']
-                # Add output attribute name to the layer
-                impact_data_provider.addAttributes(
-                    [QgsField(
-                        output_field_name,
-                        output_value['value']['type'])]
-                )
-                self.impact_layer.updateFields()
-                # Get the index of output attribute
-                output_field_index = impact_data_provider.fieldNameIndex(
-                    output_field_name)
 
                 # Create variable to store the formula's result
                 post_processor_result_dict = {}
@@ -679,8 +685,6 @@ class ImpactFunction(object):
                 impact_data_provider.deleteAttributes(temporary_indexes)
                 self.impact_layer.updateFields()
                 LOGGER.debug(self.impact_layer.source())
-
-            # Generate output
             return True
         else:
             return False
