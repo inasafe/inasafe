@@ -571,7 +571,6 @@ class ImpactFunction(object):
             raise InvalidLayerError(tr('Unsupported exposure layer type'))
 
         # Running Impact Function
-
         self.set_state_process('impact function', 'Run impact function')
 
         if self.exposure.type() == QgsMapLayer.RasterLayer:

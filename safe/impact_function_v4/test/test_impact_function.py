@@ -20,8 +20,8 @@ from definitionsv4.post_processors import (
     post_processor_size_rate
 )
 from safe.test.utilities import clone_shp_layer
-from safe.new_impact_function.impact_function import ImpactFunction
-from safe.new_impact_function.impact_function import evaluate_formula
+from safe.impact_function_v4.impact_function import ImpactFunction
+from safe.impact_function_v4.impact_function import evaluate_formula
 
 from qgis.core import QgsVectorLayer
 
