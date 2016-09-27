@@ -45,8 +45,10 @@ class TestBuffering(unittest.TestCase):
 
         expected_keywords = keywords.copy()
         expected_keywords['layer_geometry'] = 'polygon'
-        expected_name_field = hazard_value_field['key']
-        expected_keywords['attribute_field'] = expected_name_field
+        expected_name_field = hazard_value_field['field_name']
+        expected_keywords['inasafe_fields'] = {}
+        expected_keywords['inasafe_fields']['hazard_value_field'] = \
+            expected_name_field
         result = buffering(
             layer=layer,
             radii=radii)

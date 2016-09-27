@@ -69,9 +69,9 @@ def buffering(layer, radii, callback=None):
 
     # Set the new hazard value field
     fields = layer.fields()
-    type_field = hazard_value_field['type'][0]
-    name_field = hazard_value_field['key']
-    new_field = QgsField(name_field, type_field)
+    field_type = hazard_value_field['type'][0]
+    field_name = hazard_value_field['field_name']
+    new_field = QgsField(field_name, field_type)
     fields.append(new_field)
 
     buffered = create_memory_layer(
@@ -125,9 +125,16 @@ def buffering(layer, radii, callback=None):
     # We transfer keywords to the output.
     try:
         buffered.keywords = layer.keywords
-        buffered.keywords['layer_geometry'] = 'polygon'
-        buffered.keywords['attribute_field'] = name_field
     except AttributeError:
         raise KeywordNotFoundError
+
+    buffered.keywords['layer_geometry'] = 'polygon'
+
+    try:
+        buffered.keywords['inasafe_fields']
+    except KeyError:
+        buffered.keywords['inasafe_fields'] = {}
+
+    buffered.keywords['inasafe_fields']['hazard_value_field'] = field_name
 
     return buffered
