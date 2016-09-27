@@ -20,6 +20,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from qgis.core import QGis
 from safe.gisv4.vector.buffering import buffering
+from safe.definitionsv4.fields import hazard_value_field
 
 
 class TestBuffering(unittest.TestCase):
@@ -44,6 +45,8 @@ class TestBuffering(unittest.TestCase):
 
         expected_keywords = keywords.copy()
         expected_keywords['layer_geometry'] = 'polygon'
+        expected_name_field = hazard_value_field['key']
+        expected_keywords['attribute_field'] = expected_name_field
         result = buffering(
             layer=layer,
             radii=radii)
@@ -52,3 +55,13 @@ class TestBuffering(unittest.TestCase):
         self.assertEqual(result.geometryType(), QGis.Polygon)
         expected_feature_count = layer.featureCount() * len(radii)
         self.assertEqual(result.featureCount(), expected_feature_count)
+
+        # We can check the new field added about the hazard class name.
+        expected_fields_count = layer.fields().count() + 1
+
+        self.assertEqual(result.fields().count(), expected_fields_count)
+
+        # Check if the field name is correct.
+        self.assertEqual(
+            result.fields().at(expected_fields_count - 1).name(),
+            expected_name_field)
