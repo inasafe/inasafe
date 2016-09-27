@@ -20,6 +20,9 @@
 *.zip binary
 *.pdf binary
 
+# OSX Plist
+*.plist eol=lf
+
 # binary
 *.sqlite binary
 *.qm binary
