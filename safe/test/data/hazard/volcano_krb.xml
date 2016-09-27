@@ -184,6 +184,9 @@
           <prob_fatality_mag>
             <gco:Tuple/>
           </prob_fatality_mag>
+          <inasafe_fields>
+            <gco:Dictionary/>
+          </inasafe_fields>
           <volcano_name_field>
             <gco:CharacterString>volcano</gco:CharacterString>
           </volcano_name_field>
