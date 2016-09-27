@@ -26,6 +26,7 @@ from safe.common.utilities import which
 from safe.common.exceptions import KeywordNotFoundError, CallGDALError
 from safe.common.utilities import unique_filename, temp_dir
 from safe.utilities.i18n import tr
+from safe.definitionsv4.processing import reproject_layer
 
 LOGGER = logging.getLogger(name='InaSAFE')
 
@@ -83,8 +84,8 @@ def _reproject_gdal(layer, output_crs, callback=None):
 
     .. versionadded:: 4.0
     """
-    output_layer_name = 'reprojected'
-    processing_step = tr('Reprojecting')
+    output_layer_name = reproject_layer['output_layer_name']
+    processing_step = reproject_layer['step_name']
 
     output_raster = unique_filename(suffix='.tiff', dir=temp_dir())
 
@@ -161,8 +162,8 @@ def _reproject_pyqgis(layer, output_crs, callback=None):
 
     .. versionadded:: 4.0
     """
-    output_layer_name = 'reprojected'
-    processing_step = tr('Reprojecting')
+    output_layer_name = reproject_layer['output_layer_name']
+    processing_step = reproject_layer['step_name']
 
     output_raster = unique_filename(suffix='.tiff', dir=temp_dir())
 

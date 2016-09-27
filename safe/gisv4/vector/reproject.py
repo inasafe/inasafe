@@ -20,6 +20,7 @@ from qgis.core import (
 from safe.common.exceptions import KeywordNotFoundError
 from safe.gisv4.vector.tools import create_memory_layer
 from safe.utilities.i18n import tr
+from safe.definitionsv4.processing import reproject_layer
 
 
 def reproject(layer, output_crs, callback=None):
@@ -44,8 +45,8 @@ def reproject(layer, output_crs, callback=None):
 
     .. versionadded:: 4.0
     """
-    output_layer_name = 'reprojected'
-    processing_step = tr('Reproject')
+    output_layer_name = reproject_layer['output_layer_name']
+    processing_step = reproject_layer['step_name']
 
     input_crs = layer.crs()
     feature_count = layer.featureCount()
