@@ -108,9 +108,9 @@ class ImpactFunction(object):
         """
         self._hazard = layer
         try:
-            self._hazard.keyword = KeywordIO().read_keywords(layer)
+            self._hazard.keywords = KeywordIO().read_keywords(layer)
         except NoKeywordsFoundError:
-            self._hazard.keyword = {}
+            self._hazard.keywords = {}
 
         self.setup_impact_function()
 
@@ -132,9 +132,9 @@ class ImpactFunction(object):
         """
         self._exposure = layer
         try:
-            self._exposure.keyword = KeywordIO().read_keywords(layer)
+            self._exposure.keywords = KeywordIO().read_keywords(layer)
         except NoKeywordsFoundError:
-            self._exposure.keyword = {}
+            self._exposure.keywords = {}
 
         self.setup_impact_function()
 
@@ -156,9 +156,9 @@ class ImpactFunction(object):
         """
         self._aggregation = layer
         try:
-            self._aggregation.keyword = KeywordIO().read_keywords(layer)
+            self._aggregation.keywords = KeywordIO().read_keywords(layer)
         except NoKeywordsFoundError:
-            self._aggregation.keyword = {}
+            self._aggregation.keywords = {}
 
     @property
     def requested_extent(self):
@@ -296,30 +296,30 @@ class ImpactFunction(object):
 
         # Set the name
         self._name = '%s %s on %s %s' % (
-            self.hazard.keyword.get('hazard').title(),
-            self.hazard.keyword.get('layer_geometry').title(),
-            self.exposure.keyword.get('exposure').title(),
-            self.exposure.keyword.get('layer_geometry').title(),
+            self.hazard.keywords.get('hazard').title(),
+            self.hazard.keywords.get('layer_geometry').title(),
+            self.exposure.keywords.get('exposure').title(),
+            self.exposure.keywords.get('layer_geometry').title(),
         )
 
         # Set the title
-        if self.exposure.keyword.get('exposure') == 'population':
+        if self.exposure.keywords.get('exposure') == 'population':
             self._title = tr('need evacuation')
         else:
             self._title = tr('be affected')
 
     def set_algorithm(self):
-        if self.exposure.keyword.get('layer_geometry') == 'raster':
+        if self.exposure.keywords.get('layer_geometry') == 'raster':
             # Special case for Raster Earthquake hazard.
-            if self.hazard.keyword('hazard') == 'earthquake':
+            if self.hazard.keywords('hazard') == 'earthquake':
                 pass
             else:
                 self.algorithm = self.raster_algorithm
-        elif self.exposure.keyword.get('layer_geometry') == 'point':
+        elif self.exposure.keywords.get('layer_geometry') == 'point':
             self.algorithm = self.point_algorithm
-        elif self.exposure.keyword.get('exposure') == 'structure':
+        elif self.exposure.keywords.get('exposure') == 'structure':
             self.algorithm = self.indivisible_polygon_algorithm
-        elif self.exposure.keyword.get('layer_geometry') == 'line':
+        elif self.exposure.keywords.get('layer_geometry') == 'line':
             self.algorithm = self.line_algorithm
         else:
             self.algorithm = self.polygon_algorithm
@@ -395,12 +395,12 @@ class ImpactFunction(object):
         :returns: True if divisible, else False.
         :rtype: bool
         """
-        if self.exposure.keyword.get('layer_geometry') == 'point':
+        if self.exposure.keywords.get('layer_geometry') == 'point':
             return False
-        elif self.exposure.keyword.get('layer_geometry') == 'line':
+        elif self.exposure.keywords.get('layer_geometry') == 'line':
             return True
-        elif self.exposure.keyword.get('layer_geometry') == 'polygon':
-            if self.exposure.keyword.get('layer_geometry') == 'structure':
+        elif self.exposure.keywords.get('layer_geometry') == 'polygon':
+            if self.exposure.keywords.get('layer_geometry') == 'structure':
                 return False
             else:
                 return True
@@ -494,7 +494,7 @@ class ImpactFunction(object):
             self.aggregation = self.create_virtual_aggregation()
 
             # Generate aggregation keywords
-            self.aggregation.keyword = get_defaults()
+            self.aggregation.keywords = get_defaults()
 
         else:
             self.set_state_info('aggregation', 'provided', True)
@@ -504,20 +504,20 @@ class ImpactFunction(object):
 
         # Hazard Preparation
         if self.hazard.type() == QgsMapLayer.VectorLayer:
-            if self.hazard.keyword.get('layer_mode') == 'continuous':
+            if self.hazard.keywords.get('layer_mode') == 'continuous':
                 self.set_state_process(
                     'hazard',
                     'Classify continuous hazard and assign class names')
-                if self.hazard.keyword.get('layer_geometry') != 'polygon':
+                if self.hazard.keywords.get('layer_geometry') != 'polygon':
                     self.set_state_process('hazard', 'Buffering')
             else:
-                if self.hazard.keyword.get('layer_geometry') != 'polygon':
+                if self.hazard.keywords.get('layer_geometry') != 'polygon':
                     self.set_state_process('hazard', 'Buffering')
                 self.set_state_process(
                     'hazard', 'Assign classes based on value map')
 
         elif self.hazard.type() == QgsMapLayer.RasterLayer:
-            if self.hazard.keyword.get('layer_mode') == 'continuous':
+            if self.hazard.keywords.get('layer_mode') == 'continuous':
                 self.set_state_process(
                     'hazard', 'Classify continuous raster hazard')
             self.set_state_process(
@@ -540,8 +540,8 @@ class ImpactFunction(object):
 
         # Exposure Preparation
         if self.exposure.type() == QgsMapLayer.RasterLayer:
-            if self.exposure.keyword.get('layer_mode') == 'continuous':
-                if self.exposure.keyword.get('exposure_unit') == 'density':
+            if self.exposure.keywords.get('layer_mode') == 'continuous':
+                if self.exposure.keywords.get('exposure_unit') == 'density':
                     self.set_state_process(
                         'exposure', 'Calculate counts per cell')
                 self.set_state_process(
@@ -560,7 +560,7 @@ class ImpactFunction(object):
                 'exposure', 'Vector clip and mask exposure to aggregation')
             if self.is_divisible_exposure():
                 pass
-            elif self.exposure.keyword.get('layer_geometry') == 'line':
+            elif self.exposure.keywords.get('layer_geometry') == 'line':
                 self.set_state_process(
                     'exposure', 'Intersect line with aggregation hazard areas')
             else:
@@ -576,18 +576,18 @@ class ImpactFunction(object):
 
         if self.exposure.type() == QgsMapLayer.RasterLayer:
             # Special case for Raster Earthquake hazard.
-            if self.hazard.keyword('hazard') == 'earthquake':
+            if self.hazard.keywords('hazard') == 'earthquake':
                 pass
             else:
                 self.set_state_info('impact function', 'algorithm', 'raster')
                 self.state['impact function']['info']['algorithm'] = \
                     'raster'
-        elif self.exposure.keyword.get('layer_geometry') == 'point':
+        elif self.exposure.keywords.get('layer_geometry') == 'point':
             self.set_state_info('impact function', 'algorithm', 'point')
-        elif self.exposure.keyword.get('exposure') == 'structure':
+        elif self.exposure.keywords.get('exposure') == 'structure':
             self.set_state_info(
                 'impact function', 'algorithm', 'indivisible polygon')
-        elif self.exposure.keyword.get('layer_geometry') == 'line':
+        elif self.exposure.keywords.get('layer_geometry') == 'line':
             self.set_state_info('impact function', 'algorithm', 'line')
         else:
             self.set_state_info('impact function', 'algorithm', 'polygon')
