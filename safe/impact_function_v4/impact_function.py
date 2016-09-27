@@ -349,11 +349,6 @@ class ImpactFunction(object):
                 'Post processor for %s %s.' % (
                     post_processor['name'], post_processor_output))
 
-    def run(self):
-        self.preprocess()
-        self.run_algorithm()
-        self.post_process()
-
     @staticmethod
     def console_progress_callback(current, maximum, message=None):
         """Simple console based callback implementation for tests.
@@ -478,7 +473,8 @@ class ImpactFunction(object):
         """
         self.state[context]["info"][key] = value
 
-    def flow(self):
+    def run(self):
+        """Run the whole impact function."""
         self.reset_state()
 
         # Aggregation Preparation
@@ -495,7 +491,6 @@ class ImpactFunction(object):
 
             # Generate aggregation keywords
             self.aggregation.keywords = get_defaults()
-
         else:
             self.set_state_info('aggregation', 'provided', True)
 
@@ -605,6 +600,10 @@ class ImpactFunction(object):
         # Post Processor
         # Disable post processor for now (IS)
         # self.post_process()
+
+        # Disable writing impact keyword until implementing all helper methods
+        # KeywordIO().write_keywords(
+        #     self.impact_layer, self.impact_layer.keywords)
 
         return self.state
 

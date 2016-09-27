@@ -81,7 +81,7 @@ def run_scenario(scenario):
         impact_function.aggregation = QgsVectorLayer(
             aggregation_path, 'Exposure', 'ogr')
 
-    result = impact_function.flow()
+    result = impact_function.run()
 
     return result
 
