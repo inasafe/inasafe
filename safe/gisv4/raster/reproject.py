@@ -54,17 +54,34 @@ def reproject(layer, output_crs, callback=None):
 
     .. versionadded:: 4.0
     """
-    # I have a problem reprojecting with PyQGIS. I'm using GDAL.
+
     # ET 26/09/16
+    # I have a problem reprojecting with PyQGIS. I'm using GDAL command line.
 
     # Fixme : Manage callback in these functions.
     return _reproject_gdal(layer, output_crs, callback)
 
 
 def _reproject_gdal(layer, output_crs, callback=None):
-    """Reproject using GDAL command line.
+    """Reproject a raster layer using GDAL command line.
 
-    You shouldn't call this function. Use "reproject" instead.
+    You mustn't call this function. Use "reproject" instead.
+
+    :param layer: The layer to reproject.
+    :type layer: QgsRasterLayer
+
+    :param output_crs: The destination CRS.
+    :type output_crs: QgsCoordinateReferenceSystem
+
+    :param callback: A function to all to indicate progress. The function
+        should accept params 'current' (int), 'maximum' (int) and 'step' (str).
+        Defaults to None.
+    :type callback: function
+
+    :return: Reprojected memory layer.
+    :rtype: QgsRasterLayer
+
+    .. versionadded:: 4.0
     """
     output_layer_name = 'reprojected'
     processing_step = tr('Reprojecting')
@@ -78,17 +95,18 @@ def _reproject_gdal(layer, output_crs, callback=None):
             tr('gdalwarp could not be found on your computer'))
     # Use the first matching gdalwarp found
     binary = binary_list[0]
-    command = ('"%s" '
-               '-s_srs %s '
-               '-t_srs %s '
-               '-of GTiff '
-               '"%s" '
-               '"%s"' % (
-                binary,
-                layer.crs().authid(),
-                output_crs.authid(),
-                layer.source(),
-                output_raster))
+    command = (
+        '"%s" '
+        '-s_srs %s '
+        '-t_srs %s '
+        '-of GTiff '
+        '"%s" '
+        '"%s"' % (
+            binary,
+            layer.crs().authid(),
+            output_crs.authid(),
+            layer.source(),
+            output_raster))
 
     LOGGER.debug(command)
     result = QProcess().execute(command)
@@ -122,9 +140,26 @@ def _reproject_gdal(layer, output_crs, callback=None):
 
 
 def _reproject_pyqgis(layer, output_crs, callback=None):
-    """Not working properly for now. Need more tests.
+    """Reproject a raster layer using PyQGIS.
+    Not working properly for now. Need more tests.
 
-    You shouldn't call this function. Use "reproject" instead.
+    You mustn't call this function. Use "reproject" instead.
+
+    :param layer: The layer to reproject.
+    :type layer: QgsRasterLayer
+
+    :param output_crs: The destination CRS.
+    :type output_crs: QgsCoordinateReferenceSystem
+
+    :param callback: A function to all to indicate progress. The function
+        should accept params 'current' (int), 'maximum' (int) and 'step' (str).
+        Defaults to None.
+    :type callback: function
+
+    :return: Reprojected memory layer.
+    :rtype: QgsRasterLayer
+
+    .. versionadded:: 4.0
     """
     output_layer_name = 'reprojected'
     processing_step = tr('Reprojecting')
