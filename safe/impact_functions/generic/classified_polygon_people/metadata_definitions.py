@@ -15,19 +15,22 @@ __author__ = 'Samweli Twesa Mwakisambwe "Samweli" <smwltwesa6@gmail.com>'
 __date__ = '8/6/15'
 
 from safe.definitionsv4.definitions_v3 import (
-    area_name_field,
     area_id_field,
-    exposure_population,
     hazard_all,
-    hazard_category_single_event,
     hazard_category_multiple_event,
     generic_vector_hazard_classes,
     flood_vector_hazard_classes,
-    layer_mode_classified,
-    layer_mode_continuous,
-    layer_geometry_polygon,
-    count_exposure_unit
+    layer_mode_classified
 )
+from safe.definitionsv4.layer_modes import layer_mode_continuous, \
+    layer_mode_classified
+from safe.definitionsv4.fields import area_name_field, area_id_field
+from safe.definitionsv4.exposure import exposure_population
+from safe.definitionsv4.units import count_exposure_unit
+from safe.definitionsv4.hazard import hazard_category_single_event, \
+    hazard_category_multiple_event, generic_vector_hazard_classes, \
+    flood_vector_hazard_classes, hazard_all
+from safe.definitionsv4.layer_geometry import layer_geometry_polygon
 from safe.common.utilities import OrderedDict
 from safe.defaults import (
     default_minimum_needs)

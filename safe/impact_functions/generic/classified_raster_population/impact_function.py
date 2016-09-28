@@ -18,7 +18,7 @@ import itertools
 
 import numpy
 
-from safe.definitionsv4.definitions_v3 import no_data_warning
+from safe.definitionsv4.caveats import no_data_warning
 from safe.common.exceptions import (
     FunctionParametersError, ZeroImpactException)
 from safe.common.utilities import (

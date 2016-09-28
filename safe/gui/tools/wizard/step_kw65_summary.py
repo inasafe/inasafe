@@ -22,11 +22,12 @@ import os
 import re
 
 from safe.definitionsv4.definitions_v3 import (
-    inasafe_keyword_version,
-    inasafe_keyword_version_key,
-    layer_purpose_hazard,
-    layer_purpose_exposure,
     layer_purpose_aggregation)
+from safe.definitionsv4.constants import inasafe_keyword_version_key
+from safe.definitionsv4.layer_purposes import layer_purpose_exposure, \
+    layer_purpose_aggregation
+from safe.definitionsv4.hazard import layer_purpose_hazard
+from safe.definitionsv4.versions import inasafe_keyword_version
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 

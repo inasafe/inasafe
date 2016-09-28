@@ -13,7 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 from collections import OrderedDict
 
-from safe.definitionsv4.definitions_v3 import road_class_order
+from safe.definitionsv4.value_maps import road_class_order
 from safe.impact_reports.report_mixin_base import ReportMixin
 from safe.utilities.i18n import tr
 from safe.utilities.utilities import reorder_dictionary

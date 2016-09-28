@@ -12,13 +12,17 @@ Contact : ole.moller.nielsen@gmail.com
 """
 from safe.definitionsv4.definitions_v3 import (
     layer_mode_classified,
-    layer_mode_continuous,
-    layer_geometry_polygon,
     layer_geometry_raster,
-    hazard_category_single_event,
     hazard_category_multiple_event,
-    exposure_land_cover,
-    hazard_volcanic_ash, unit_centimetres)
+    hazard_volcanic_ash)
+from safe.definitionsv4.layer_modes import layer_mode_continuous, \
+    layer_mode_classified
+from safe.definitionsv4.exposure import exposure_land_cover
+from safe.definitionsv4.units import unit_centimetres
+from safe.definitionsv4.hazard import hazard_category_single_event, \
+    hazard_category_multiple_event, hazard_volcanic_ash
+from safe.definitionsv4.layer_geometry import layer_geometry_polygon, \
+    layer_geometry_raster
 from safe.common.utilities import OrderedDict
 from safe.impact_functions.ash.parameter_definitions import \
     threshold_group_parameter

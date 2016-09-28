@@ -12,16 +12,18 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 from safe.definitionsv4.definitions_v3 import (
-    layer_mode_continuous,
-    layer_geometry_raster,
     hazard_all,
     hazard_category_multiple_event,
     count_exposure_unit,
-    exposure_population,
-    hazard_category_single_event,
-    unit_generic,
     density_exposure_unit
 )
+from safe.definitionsv4.layer_modes import layer_mode_continuous
+from safe.definitionsv4.exposure import exposure_population
+from safe.definitionsv4.units import unit_generic, count_exposure_unit, \
+    density_exposure_unit
+from safe.definitionsv4.hazard import hazard_category_single_event, \
+    hazard_category_multiple_event, hazard_all
+from safe.definitionsv4.layer_geometry import layer_geometry_raster
 from safe.common.utilities import OrderedDict, get_thousand_separator
 from safe.defaults import (
     default_gender_postprocessor,

@@ -41,16 +41,19 @@ from safe.impact_functions.loader import \
 
 from safe.impact_functions.registry import Registry
 from safe.definitionsv4.definitions_v3 import (
-    layer_mode_continuous,
-    layer_geometry_point,
     layer_geometry_polygon,
     layer_geometry_raster,
     hazard_earthquake,
-    exposure_structure,
-    unit_mmi,
-    hazard_category_single_event,
     layer_mode_classified
 )
+from safe.definitionsv4.layer_modes import layer_mode_continuous, \
+    layer_mode_classified
+from safe.definitionsv4.exposure import exposure_structure
+from safe.definitionsv4.units import unit_mmi
+from safe.definitionsv4.hazard import hazard_category_single_event, \
+    hazard_earthquake
+from safe.definitionsv4.layer_geometry import layer_geometry_point, \
+    layer_geometry_polygon, layer_geometry_raster
 
 # This list is used in another test file.
 EXPECTED_IF = [

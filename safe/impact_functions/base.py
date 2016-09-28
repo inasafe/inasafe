@@ -25,8 +25,9 @@ from osgeo import gdal
 from qgis.core import QgsMapLayer, QgsCoordinateReferenceSystem, QgsRectangle
 from qgis.utils import QGis
 
-from safe.definitionsv4.definitions_v3 import (
-    inasafe_keyword_version, exposure_all, hazard_all)
+from safe.definitionsv4.exposure import exposure_all
+from safe.definitionsv4.hazard import hazard_all
+from safe.definitionsv4.versions import inasafe_keyword_version
 from safe import messaging as m
 from safe.common.exceptions import (
     InvalidExtentError,

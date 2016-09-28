@@ -12,16 +12,19 @@ Contact : ole.moller.nielsen@gmail.com
 """
 from safe.definitionsv4.definitions_v3 import (
     layer_mode_classified,
-    layer_geometry_point,
     hazard_volcano,
     hazard_category_multiple_event,
-    exposure_population,
-    layer_geometry_raster,
-    count_exposure_unit,
-    layer_mode_continuous,
-    volcano_name_field,
-    hazard_category_single_event
+    layer_geometry_raster
 )
+from safe.definitionsv4.layer_modes import layer_mode_continuous, \
+    layer_mode_classified
+from safe.definitionsv4.fields import volcano_name_field
+from safe.definitionsv4.exposure import exposure_population
+from safe.definitionsv4.units import count_exposure_unit
+from safe.definitionsv4.hazard import hazard_category_single_event, \
+    hazard_category_multiple_event, hazard_volcano
+from safe.definitionsv4.layer_geometry import layer_geometry_point, \
+    layer_geometry_raster
 from safe.common.utilities import OrderedDict, get_thousand_separator
 from safe.defaults import (
     default_minimum_needs,

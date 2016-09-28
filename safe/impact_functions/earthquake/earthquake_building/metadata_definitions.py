@@ -11,18 +11,21 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 from safe.definitionsv4.definitions_v3 import (
-    layer_mode_continuous,
     layer_mode_classified,
     layer_geometry_polygon,
-    layer_geometry_point,
     layer_geometry_raster,
     hazard_earthquake,
-    exposure_structure,
-    unit_mmi,
-    hazard_category_single_event,
-    hazard_category_multiple_event,
-    structure_class_field
+    hazard_category_multiple_event
 )
+from safe.definitionsv4.layer_modes import layer_mode_continuous, \
+    layer_mode_classified
+from safe.definitionsv4.fields import structure_class_field
+from safe.definitionsv4.exposure import exposure_structure
+from safe.definitionsv4.units import unit_mmi
+from safe.definitionsv4.hazard import hazard_category_single_event, \
+    hazard_category_multiple_event, hazard_earthquake
+from safe.definitionsv4.layer_geometry import layer_geometry_point, \
+    layer_geometry_polygon, layer_geometry_raster
 from safe.common.utilities import OrderedDict
 from safe.defaults import building_type_postprocessor
 from safe.impact_functions.earthquake.earthquake_building\
