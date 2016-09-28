@@ -1,3 +1,12 @@
+# coding=utf-8
+
+"""Definitions relating to the version of InaSAFE."""
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
+
 # InaSAFE Keyword Version compatibility.
 inasafe_keyword_version = '3.5'
 keyword_version_compatibilities = {

@@ -1,4 +1,15 @@
+# coding=utf-8
+"""
+Definitions relating to layer modes (continuous or classified data).
+"""
+
 from safe.utilities.i18n import tr
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
+
 
 layer_mode_continuous = {
     'key': 'continuous',

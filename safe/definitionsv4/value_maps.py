@@ -1,4 +1,17 @@
+# coding=utf-8
+
+"""Definitions relating to value maps.
+
+Value maps are used to map concepts in user data to concepts in InaSAFE.
+"""
+
+
 from safe.utilities.i18n import tr
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 value_map = {
     'key': 'value_map',

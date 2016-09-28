@@ -1,4 +1,16 @@
+# coding=utf-8
+
+"""Definitions relating to layer geometry (point/line/poly/raster).
+"""
+
+
+
 from safe.utilities.i18n import tr
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 layer_geometry_point = {
     'key': 'point',
@@ -14,6 +26,7 @@ layer_geometry_point = {
         }
     ]
 }
+
 layer_geometry_line = {
     'key': 'line',
     'name': tr('Line'),
@@ -27,6 +40,7 @@ layer_geometry_line = {
         }
     ]
 }
+
 layer_geometry_polygon = {
     'key': 'polygon',
     'name': tr('Polygon'),

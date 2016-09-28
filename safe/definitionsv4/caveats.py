@@ -1,4 +1,15 @@
+# coding=utf-8
+"""Caveats and advisories that will be shown in reports.
+
+Some of these may be shown only in certain contexts.
+"""
+
 from safe.utilities.i18n import tr
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 caveat_simulation = tr(
     'The extent and severity of the mapped scenario or hazard zones '

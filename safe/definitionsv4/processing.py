@@ -1,28 +1,14 @@
 # coding=utf-8
 """
-InaSAFE Disaster risk assessment tool developed by AusAid -
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
+Definitions for the name of the current step in our algorithms.
 """
 
 from safe.utilities.i18n import tr
 
-
-__author__ = 'etienne@kartoza.com'
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
-__date__ = '27/09/16'
-__copyright__ = (
-    'Copyright 2012, Australia Indonesia Facility for Disaster Reduction')
-
-"""
-Definitions how we call the output and the name of the current step
-in our algorithms.
-"""
 
 reproject_vector = {
     'step_name': tr('Reprojecting'),

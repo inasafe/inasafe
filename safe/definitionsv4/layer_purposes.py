@@ -1,6 +1,15 @@
+# coding=utf-8
+
+"""Definitions relating to exposure."""
+
 from safe.definitionsv4.concepts import concepts
 from safe.definitionsv4.hazard import layer_purpose_hazard
 from safe.utilities.i18n import tr
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 layer_purpose_exposure = {
     'key': 'exposure',

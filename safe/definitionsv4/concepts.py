@@ -1,4 +1,18 @@
+# coding=utf-8
+"""Concepts used in various places in InaSAFE.
+
+Where possible please supply citations. Concepts are used in reporting display
+and in other places like the wizard to ensure that the user will have adequate
+contextual information to accompany the data shown to them.
+"""
+
 from safe.utilities.i18n import tr
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
+
 
 concepts = {
     'hazard': {
