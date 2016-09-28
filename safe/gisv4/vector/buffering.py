@@ -27,7 +27,7 @@ from safe.common.exceptions import KeywordNotFoundError
 from safe.common.utilities import get_utm_epsg
 from safe.gisv4.vector.tools import create_memory_layer
 from safe.definitionsv4.fields import hazard_value_field
-from safe.utilities.i18n import tr
+from safe.definitionsv4.processing import buffer_vector
 
 
 def buffering(layer, radii, callback=None):
@@ -61,8 +61,8 @@ def buffering(layer, radii, callback=None):
     """
 
     # Layer output
-    output_layer_name = 'buffer'
-    processing_step = tr('Buffer')
+    output_layer_name = buffer_vector['output_layer_name']
+    processing_step = buffer_vector['step_name']
 
     input_crs = layer.crs()
     feature_count = layer.featureCount()
