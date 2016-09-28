@@ -89,6 +89,30 @@ def run_scenario(scenario):
 class TestImpactFunction(unittest.TestCase):
     """Test Impact Function."""
 
+    def test_keyword_monkey_patch(self):
+        """Test behaviour of generating keywords"""
+        exposure_path = standard_data_path('exposure', 'building-points.shp')
+        # noinspection PyCallingNonCallable
+        exposure_layer = QgsVectorLayer(exposure_path, 'Building', 'ogr')
+
+        impact_function = ImpactFunction()
+        impact_function.exposure = exposure_layer
+
+        expected_inasafe_fields = {
+            'feature_type_field': 'TYPE', 'population': 'pop_count'}
+        self.assertDictEqual(
+            exposure_layer.keywords['inasafe_fields'], expected_inasafe_fields)
+
+        fields = impact_function.exposure.dataProvider().fieldNameMap().keys()
+        self.assertIn(
+            exposure_layer.keywords['inasafe_fields']['feature_type_field'],
+            fields
+        )
+        self.assertIn(
+            exposure_layer.keywords['inasafe_fields']['population'],
+            fields
+        )
+
     def test_impact_function_behaviour(self):
         """Test behaviour of impact function"""
         hazard_path = standard_data_path(
