@@ -14,7 +14,7 @@ from collections import OrderedDict
 
 import numpy
 
-from safe.definitionsv4.definitions_v3 import no_data_warning
+from safe.definitionsv4.caveats import no_data_warning
 from safe.common.exceptions import InaSAFEError, ZeroImpactException
 from safe.common.utilities import (
     humanize_class,

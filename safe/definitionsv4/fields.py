@@ -356,3 +356,92 @@ impact_fields = [
     adult_count_field,
     elderly_count_field
 ]
+structure_class_field = {
+    'key': 'structure_class_field',
+    'name': tr('Attribute field'),
+    'description': tr('Attribute where the structure type is defined.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+road_class_field = {
+    'key': 'road_class_field',
+    'name': tr('Attribute field'),
+    'description': tr('Attribute where the road type is defined.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+volcano_name_field = {
+    'key': 'volcano_name_field',
+    'name': tr('Name field'),
+    'type': 'field',
+    'description': tr('Attribute where the volcano name is located.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+area_name_field = {
+    'key': 'area_name_field',
+    'name': tr('Name field'),
+    'type': 'field',
+    'description': tr(
+            'Attribute for the area name. We will show the name for each area '
+            'by using this attribute.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+area_id_field = {
+    'key': 'area_id_field',
+    'name': tr('Id field'),
+    'type': 'field',
+    'description': tr(
+            'Attribute for the id on the area. We will group the result by '
+            'this attribute'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+field = {
+    'key': 'field',
+    'name': tr('Attribute field'),
+    'description': tr(
+        'The attribute field identifies a field in the attribute table used '
+        'to identify the function of a feature e.g.  a road type, '
+        'building type, hazard zone etc.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+field_value = {
+    'key': 'field_value',
+    'name': tr('Attribute value'),
+    'description': tr(
+        'The attribute value identifies features with similar meanings. For '
+        'example building attributes may include schools and hospitals. '),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}

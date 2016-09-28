@@ -23,10 +23,11 @@ from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import pyqtSignature
 
 from safe.definitionsv4.definitions_v3 import (
-    layer_geometry_point,
     layer_geometry_line,
     layer_geometry_polygon,
     layer_geometry_raster)
+from safe.definitionsv4.layer_geometry import layer_geometry_point, \
+    layer_geometry_line, layer_geometry_polygon, layer_geometry_raster
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_strings import (

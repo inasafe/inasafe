@@ -26,12 +26,15 @@ from qgis.core import QgsMapLayerRegistry
 
 from safe.definitionsv4.definitions_v3 import (
     continuous_hazard_unit,
-    exposure_unit,
-    layer_purpose_hazard,
-    layer_purpose_exposure,
     layer_purpose_aggregation,
-    layer_mode_continuous,
     layer_mode_classified)
+from safe.definitionsv4.layer_purposes import layer_purpose_exposure, \
+    layer_purpose_aggregation
+from safe.definitionsv4.layer_modes import layer_mode_continuous, \
+    layer_mode_classified
+from safe.definitionsv4.units import exposure_unit
+from safe.definitionsv4.hazard import layer_purpose_hazard, \
+    continuous_hazard_unit
 from safe.common.exceptions import (
     HashNotFoundError,
     NoKeywordsFoundError,

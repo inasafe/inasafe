@@ -23,10 +23,11 @@ from PyQt4 import QtCore
 from PyQt4.QtGui import QListWidgetItem
 
 from safe.definitionsv4.definitions_v3 import (
-    layer_mode_classified,
-    layer_mode_continuous,
-    layer_purpose_hazard,
-    layer_purpose_exposure)
+    layer_mode_classified)
+from safe.definitionsv4.layer_purposes import layer_purpose_exposure
+from safe.definitionsv4.layer_modes import layer_mode_continuous, \
+    layer_mode_classified
+from safe.definitionsv4.hazard import layer_purpose_hazard
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_strings import (

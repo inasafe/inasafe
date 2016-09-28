@@ -14,16 +14,17 @@ Contact : ole.moller.nielsen@gmail.com
 __author__ = 'Rizky Maulana Nugraha'
 
 from safe.definitionsv4.definitions_v3 import (
-    layer_mode_continuous,
-    layer_geometry_raster,
     hazard_flood,
-    hazard_category_single_event,
     hazard_category_multiple_event,
     unit_metres,
-    unit_feet,
-    count_exposure_unit,
-    exposure_population
+    count_exposure_unit
 )
+from safe.definitionsv4.layer_modes import layer_mode_continuous
+from safe.definitionsv4.exposure import exposure_population
+from safe.definitionsv4.units import unit_feet, unit_metres, count_exposure_unit
+from safe.definitionsv4.hazard import hazard_category_single_event, \
+    hazard_category_multiple_event, hazard_flood
+from safe.definitionsv4.layer_geometry import layer_geometry_raster
 from safe.common.utilities import OrderedDict, get_thousand_separator
 from safe.defaults import (
     default_minimum_needs,

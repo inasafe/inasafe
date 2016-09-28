@@ -10,7 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
-from utilities.i18n import tr
+from safe.utilities.i18n import tr
 from safe.definitionsv4.fields import (
     female_ratio_field,
     population_count_field,

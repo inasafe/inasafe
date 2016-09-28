@@ -12,6 +12,10 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+import safe.definitionsv4.layer_geometry
+import safe.definitionsv4.layer_modes
+import safe.definitionsv4.layer_purposes
+
 __author__ = 'qgis@borysjurgiel.pl'
 __revision__ = '$Format:%H$'
 __date__ = '16/03/2016'
@@ -33,15 +37,19 @@ from qgis.core import (
 from safe.definitionsv4 import definitions_v3
 from safe.definitionsv4.definitions_v3 import (
     continuous_hazard_unit,
-    exposure_unit,
     raster_hazard_classification,
     vector_hazard_classification,
-    layer_purpose_hazard,
-    layer_purpose_exposure,
     layer_purpose_aggregation,
-    layer_geometry_polygon,
-    layer_mode_continuous,
     layer_mode_classified)
+from safe.definitionsv4.layer_purposes import layer_purpose_exposure, \
+    layer_purpose_aggregation
+from safe.definitionsv4.layer_modes import layer_mode_continuous, \
+    layer_mode_classified
+from safe.definitionsv4.units import exposure_unit
+from safe.definitionsv4.hazard import layer_purpose_hazard, \
+    continuous_hazard_unit, vector_hazard_classification, \
+    raster_hazard_classification
+from safe.definitionsv4.layer_geometry import layer_geometry_polygon
 from safe.common.exceptions import (
     HashNotFoundError,
     InaSAFEError,
@@ -318,12 +326,12 @@ class WizardStepBrowser(WizardStep):
                 %s
             </table>
         ''' % (self.tr('Layer'), self.tr('Required'),
-               definitions_v3.layer_geometry['name'],
+               safe.definitionsv4.layer_geometry.layer_geometry['name'],
                lay_geometry, req_geometry,
-               definitions_v3.layer_purpose['name'],
+               safe.definitionsv4.layer_purposes.layer_purpose['name'],
                lay_purpose, layer_purpose,
                layer_purpose_key_name, lay_subcategory, req_subcategory,
-               definitions_v3.layer_mode['name'],
+               safe.definitionsv4.layer_modes.layer_mode['name'],
                lay_layer_mode, req_layer_mode,
                classification_row,
                units_row)

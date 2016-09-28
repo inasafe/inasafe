@@ -13,18 +13,21 @@ Contact : ole.moller.nielsen@gmail.com
 
 from safe.definitionsv4.definitions_v3 import (
     layer_mode_classified,
-    layer_mode_continuous,
     layer_geometry_polygon,
-    layer_geometry_point,
     layer_geometry_raster,
     hazard_flood,
-    hazard_category_single_event,
     hazard_category_multiple_event,
-    exposure_structure,
-    unit_metres,
-    unit_feet,
-    structure_class_field
+    unit_metres
 )
+from safe.definitionsv4.layer_modes import layer_mode_continuous, \
+    layer_mode_classified
+from safe.definitionsv4.fields import structure_class_field
+from safe.definitionsv4.exposure import exposure_structure
+from safe.definitionsv4.units import unit_feet, unit_metres
+from safe.definitionsv4.hazard import hazard_category_single_event, \
+    hazard_category_multiple_event, hazard_flood
+from safe.definitionsv4.layer_geometry import layer_geometry_point, \
+    layer_geometry_raster
 from safe.common.utilities import OrderedDict
 from safe.defaults import building_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \

@@ -22,8 +22,9 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from PyQt4 import QtCore
 
 from safe.definitionsv4.definitions_v3 import (
-    global_default_attribute,
     do_not_use_attribute)
+from safe.definitionsv4.aggregation import global_default_attribute, \
+    do_not_use_attribute
 from safe.defaults import get_defaults
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class

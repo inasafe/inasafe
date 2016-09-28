@@ -24,9 +24,10 @@ from collections import OrderedDict
 from PyQt4.QtCore import QPyNullVariant
 
 from safe.definitionsv4.definitions_v3 import (
-    inasafe_keyword_version,
     keyword_version_compatibilities
 )
+from safe.definitionsv4.versions import inasafe_keyword_version, \
+    keyword_version_compatibilities
 from safe import messaging as m
 from safe.common.utilities import unique_filename
 from safe.common.version import get_version

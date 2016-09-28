@@ -15,14 +15,15 @@ __author__ = 'dynaryu@gmail.com'
 __date__ = '09/09/15'
 
 from safe.definitionsv4.definitions_v3 import (
-    layer_mode_continuous,
-    layer_geometry_raster,
     hazard_earthquake,
-    exposure_population,
-    count_exposure_unit,
-    hazard_category_single_event,
-    unit_mmi
+    count_exposure_unit
 )
+from safe.definitionsv4.layer_modes import layer_mode_continuous
+from safe.definitionsv4.exposure import exposure_population
+from safe.definitionsv4.units import unit_mmi, count_exposure_unit
+from safe.definitionsv4.hazard import hazard_category_single_event, \
+    hazard_earthquake
+from safe.definitionsv4.layer_geometry import layer_geometry_raster
 from safe.common.utilities import OrderedDict
 from safe.defaults import (
     default_gender_postprocessor,

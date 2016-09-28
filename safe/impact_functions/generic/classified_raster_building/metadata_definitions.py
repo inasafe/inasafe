@@ -12,17 +12,19 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 from safe.definitionsv4.definitions_v3 import (
-    layer_mode_classified,
     layer_geometry_polygon,
-    layer_geometry_point,
     layer_geometry_raster,
     hazard_all,
-    hazard_category_single_event,
     hazard_category_multiple_event,
-    exposure_structure,
-    generic_raster_hazard_classes,
-    structure_class_field
+    generic_raster_hazard_classes
 )
+from safe.definitionsv4.layer_modes import layer_mode_classified
+from safe.definitionsv4.fields import structure_class_field
+from safe.definitionsv4.exposure import exposure_structure
+from safe.definitionsv4.hazard import hazard_category_single_event, \
+    hazard_category_multiple_event, generic_raster_hazard_classes, hazard_all
+from safe.definitionsv4.layer_geometry import layer_geometry_point, \
+    layer_geometry_polygon, layer_geometry_raster
 from safe.common.utilities import OrderedDict
 from safe.defaults import building_type_postprocessor
 from safe.impact_functions.impact_function_metadata import (

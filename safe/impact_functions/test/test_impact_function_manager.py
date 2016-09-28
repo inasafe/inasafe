@@ -37,8 +37,6 @@ from safe.impact_functions.inundation.flood_vector_building_impact\
     .impact_function import FloodPolygonBuildingFunction
 
 from safe.definitionsv4.definitions_v3 import (
-    layer_purpose_hazard,
-    layer_purpose_exposure,
     hazard_category_single_event,
     hazard_category_multiple_event,
     hazard_flood,
@@ -50,19 +48,28 @@ from safe.definitionsv4.definitions_v3 import (
     exposure_structure,
     exposure_road,
     exposure_place,
-    exposure_population,
     exposure_land_cover,
     count_exposure_unit,
     density_exposure_unit,
-    layer_mode_continuous,
     layer_mode_classified,
     layer_geometry_raster,
-    layer_geometry_polygon,
-    structure_class_field,
     unit_metres,
-    unit_generic,
-    unit_feet
+    unit_generic
 )
+from safe.definitionsv4.layer_purposes import layer_purpose_exposure
+from safe.definitionsv4.layer_modes import layer_mode_continuous, \
+    layer_mode_classified
+from safe.definitionsv4.fields import structure_class_field
+from safe.definitionsv4.exposure import exposure_population, exposure_road, \
+    exposure_structure, exposure_place, exposure_land_cover
+from safe.definitionsv4.units import unit_feet, unit_generic, unit_metres, \
+    count_exposure_unit, density_exposure_unit
+from safe.definitionsv4.hazard import layer_purpose_hazard, \
+    hazard_category_single_event, hazard_category_multiple_event, \
+    hazard_generic, hazard_earthquake, hazard_flood, hazard_volcanic_ash, \
+    hazard_tsunami, hazard_volcano
+from safe.definitionsv4.layer_geometry import layer_geometry_polygon, \
+    layer_geometry_raster
 
 
 class TestImpactFunctionManager(unittest.TestCase):

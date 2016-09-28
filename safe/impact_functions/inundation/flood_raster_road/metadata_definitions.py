@@ -18,17 +18,19 @@ __copyright__ = 'lana.pcfre@gmail.com'
 
 from safe.definitionsv4.definitions_v3 import (
     layer_mode_classified,
-    layer_mode_continuous,
     layer_geometry_raster,
-    layer_geometry_line,
     hazard_flood,
-    hazard_category_single_event,
     hazard_category_multiple_event,
-    exposure_road,
-    unit_metres,
-    unit_feet,
-    road_class_field
+    unit_metres
 )
+from safe.definitionsv4.layer_modes import layer_mode_continuous, \
+    layer_mode_classified
+from safe.definitionsv4.fields import road_class_field
+from safe.definitionsv4.exposure import exposure_road
+from safe.definitionsv4.units import unit_feet, unit_metres
+from safe.definitionsv4.hazard import hazard_category_single_event, \
+    hazard_category_multiple_event, hazard_flood
+from safe.definitionsv4.layer_geometry import layer_geometry_line
 from safe.common.utilities import OrderedDict
 from safe.defaults import road_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \
