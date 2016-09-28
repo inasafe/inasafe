@@ -11,11 +11,6 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-from safe.definitionsv4.definitions_v3 import (
-    hazard_all,
-    hazard_category_multiple_event,
-    generic_vector_hazard_classes,
-)
 from safe.definitionsv4.layer_modes import layer_mode_classified
 from safe.definitionsv4.exposure import exposure_land_cover
 from safe.definitionsv4.hazard import hazard_category_single_event, \

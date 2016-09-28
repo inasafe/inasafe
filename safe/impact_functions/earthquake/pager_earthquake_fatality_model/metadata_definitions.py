@@ -14,11 +14,6 @@ Contact : ole.moller.nielsen@gmail.com
 __author__ = 'lucernae'
 __date__ = '24/03/15'
 
-from safe.definitionsv4.definitions_v3 import (
-    hazard_earthquake,
-    count_exposure_unit,
-    hazard_category_multiple_event
-)
 from safe.definitionsv4.layer_modes import layer_mode_continuous
 from safe.definitionsv4.exposure import exposure_population
 from safe.definitionsv4.units import unit_mmi, count_exposure_unit
