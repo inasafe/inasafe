@@ -21,7 +21,7 @@
 *.pdf binary
 
 # OSX Plist
-*.plist eol=crlf
+*.plist crlf=input
 
 # binary
 *.sqlite binary
