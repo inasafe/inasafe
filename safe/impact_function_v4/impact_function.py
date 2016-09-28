@@ -630,7 +630,7 @@ class ImpactFunction(object):
                 # Get output attribute name
                 output_field_name = output_value['value']['field_name']
                 # If there is already the output field, don't proceed
-                if impact_data_provider.fieldNameIndex(output_field_name):
+                if impact_data_provider.fieldNameIndex(output_field_name) > -1:
                     continue
                 # Add output attribute name to the layer
                 impact_data_provider.addAttributes(
