@@ -319,7 +319,11 @@ exposure_fields = [
     feature_type_field,
     population_count_field,
     feature_value_field,
-    feature_rate_field
+    feature_rate_field,
+    women_count_field,
+    youth_count_field,
+    adult_count_field,
+    elderly_count_field
 ]
 
 hazard_fields = [
