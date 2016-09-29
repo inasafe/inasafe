@@ -477,37 +477,18 @@ class ImpactFunction(object):
         """Run the whole impact function."""
         self.reset_state()
 
-        # Aggregation Preparation
-        if not self.aggregation:
-            self.set_state_info('aggregation', 'provided', False)
-            if not self.actual_extent:
-                self._actual_extent = self.exposure.extent()
-
-            self.set_state_process(
-                'aggregation',
-                'Convert bbox aggregation to polygon layer with keywords')
-
-            self.aggregation = self.create_virtual_aggregation()
-
-            # Generate aggregation keywords
-            self.aggregation.keywords = get_defaults()
-        else:
-            self.set_state_info('aggregation', 'provided', True)
-
-        self.set_state_process(
-            'aggregation', 'Project aggregation CRS to exposure CRS')
-
         # Hazard Preparation
         if self.hazard.type() == QgsMapLayer.VectorLayer:
-            if self.hazard.keywords.get('layer_mode') == 'continuous':
-                self.set_state_process(
-                    'hazard',
-                    'Classify continuous hazard and assign class names')
-                if self.hazard.keywords.get('layer_geometry') != 'polygon':
-                    self.set_state_process('hazard', 'Buffering')
+            if self.hazard.keywords.get('layer_geometry') == 'polygon':
+                if self.hazard.keywords.get('layer_mode') == 'continuous':
+                    self.set_state_process(
+                        'hazard',
+                        'Classify continuous hazard and assign class names')
+                else:
+                    self.set_state_process(
+                        'hazard', 'Assign classes based on value map')
             else:
-                if self.hazard.keywords.get('layer_geometry') != 'polygon':
-                    self.set_state_process('hazard', 'Buffering')
+                self.set_state_process('hazard', 'Buffering')
                 self.set_state_process(
                     'hazard', 'Assign classes based on value map')
 
@@ -528,8 +509,28 @@ class ImpactFunction(object):
 
         self.set_state_process(
             'hazard', 'Vector clip and mask hazard to aggregation')
+
+        # Aggregation Preparation
+        if not self.aggregation:
+            self.set_state_info('aggregation', 'provided', False)
+            if not self.actual_extent:
+                self._actual_extent = self.exposure.extent()
+
+            self.set_state_process(
+                'aggregation',
+                'Convert bbox aggregation to polygon layer with keywords')
+
+            self.aggregation = self.create_virtual_aggregation()
+
+            # Generate aggregation keywords
+            self.aggregation.keywords = get_defaults()
+        else:
+            self.set_state_info('aggregation', 'provided', True)
+
         self.set_state_process(
-            'hazard',
+            'aggregation', 'Project aggregation CRS to exposure CRS')
+        self.set_state_process(
+            'aggregation',
             'Intersect hazard polygons with aggregation areas and assign '
             'hazard class')
 
@@ -540,28 +541,42 @@ class ImpactFunction(object):
                     self.set_state_process(
                         'exposure', 'Calculate counts per cell')
                 self.set_state_process(
-                    'exposure', 'Raster clip and mask exposure to aggregation')
+                    'exposure',
+                    'Raster clip and mask exposure to aggregate hazard')
                 self.set_state_process(
                     'exposure',
                     'Zonal stats on intersected hazard / aggregation data')
             else:
                 self.set_state_process(
-                    'exposure', 'Polygonise classified raster exposure')
-            self.set_state_process(
-                'exposure',
-                'Intersect aggregate hazard layer with divisible polygon')
-        elif self.exposure.type() == QgsMapLayer.VectorLayer:
-            self.set_state_process(
-                'exposure', 'Vector clip and mask exposure to aggregation')
-            if self.is_divisible_exposure():
-                pass
-            elif self.exposure.keywords.get('layer_geometry') == 'line':
-                self.set_state_process(
-                    'exposure', 'Intersect line with aggregation hazard areas')
-            else:
+                    'exposure', 'Polygonise classified raster hazard')
                 self.set_state_process(
                     'exposure',
                     'Intersect aggregate hazard layer with divisible polygon')
+                self.set_state_process(
+                    'exposure',
+                    'Recalculate population based on new polygonise size')
+
+        elif self.exposure.type() == QgsMapLayer.VectorLayer:
+            self.set_state_process(
+                'exposure', 'Classified exposure with keywords')
+            if self.is_divisible_exposure():
+                if self.exposure.keywords.get('layer_geometry') == 'line':
+                    self.set_state_process(
+                        'exposure',
+                        'Intersect with aggregate hazard and exclude roads '
+                        'outside')
+                else:
+                    self.set_state_process(
+                        'exposure',
+                        'Intersect aggregate hazard layer with divisible '
+                        'polygon')
+                    self.set_state_process(
+                        'exposure',
+                        'Recalculate population based on new polygonise size')
+            else:
+                self.set_state_process(
+                    'exposure',
+                    'Exclude all polygons not intersecting aggregate hazard')
         else:
             raise InvalidLayerError(tr('Unsupported exposure layer type'))
 
