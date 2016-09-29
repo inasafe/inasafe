@@ -35,20 +35,16 @@ from qgis.core import (
     QgsBrowserModel)
 
 from safe.definitionsv4 import definitions_v3
-from safe.definitionsv4.definitions_v3 import (
-    continuous_hazard_unit,
-    raster_hazard_classification,
-    vector_hazard_classification,
-    layer_purpose_aggregation,
-    layer_mode_classified)
-from safe.definitionsv4.layer_purposes import layer_purpose_exposure, \
-    layer_purpose_aggregation
-from safe.definitionsv4.layer_modes import layer_mode_continuous, \
-    layer_mode_classified
+from safe.definitionsv4.layer_purposes import (
+    layer_purpose_exposure, layer_purpose_aggregation)
+from safe.definitionsv4.layer_modes import (
+    layer_mode_continuous, layer_mode_classified)
 from safe.definitionsv4.units import exposure_unit
-from safe.definitionsv4.hazard import layer_purpose_hazard, \
-    continuous_hazard_unit, vector_hazard_classification, \
-    raster_hazard_classification
+from safe.definitionsv4.hazard import (
+    layer_purpose_hazard,
+    continuous_hazard_unit,
+    vector_hazard_classification,
+    raster_hazard_classification)
 from safe.definitionsv4.layer_geometry import layer_geometry_polygon
 from safe.common.exceptions import (
     HashNotFoundError,

@@ -21,15 +21,10 @@ from PyQt4.QtCore import QPyNullVariant
 from osgeo import gdal
 from osgeo.gdalconst import GA_ReadOnly
 
-from safe.definitionsv4.definitions_v3 import (
-    exposure_place,
-    exposure_structure)
-from safe.definitionsv4.exposure import exposure_road, exposure_structure, \
-    exposure_place
-from safe.definitionsv4.definitions_v3 import (
-    structure_class_mapping, place_class_mapping)
-from safe.definitionsv4.value_maps import road_class_mapping, \
-    structure_class_mapping, place_class_mapping
+from safe.definitionsv4.exposure import (
+    exposure_road, exposure_structure, exposure_place)
+from safe.definitionsv4.value_maps import (
+    road_class_mapping, structure_class_mapping, place_class_mapping)
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_strings import (
