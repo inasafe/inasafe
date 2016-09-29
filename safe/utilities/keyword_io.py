@@ -66,7 +66,7 @@ def definition(keyword):
     :type keyword: str
 
     :returns: A dictionary containing the matched key definition
-        from definitions_v3.py, otherwise None if no match was found.
+        from definitions, otherwise None if no match was found.
     :rtype: dict, None
     """
 
@@ -459,13 +459,13 @@ class KeywordIO(QObject):
         elif keyword in [
                 'vector_hazard_classification',
                 'raster_hazard_classification']:
-            # get the keyword_definition for this class from definitions_v3.py
+            # get the keyword_definition for this class from definitions
             value = definition(value)
             value = value['description']
         # In these VALUE cases we show the DESCRIPTION for
         # the VALUE keyword_definition
         elif value in []:
-            # get the keyword_definition for this class from definitions_v3.py
+            # get the keyword_definition for this class from definitions
             value = definition(value)
             value = value['description']
         # In these VALUE cases we show the NAME for the VALUE
@@ -477,7 +477,7 @@ class KeywordIO(QObject):
                 'line',
                 'polygon'
                 'field']:
-            # get the name for this class from definitions_v3.py
+            # get the name for this class from definitions
             value = definition(value)
             value = value['name']
         # otherwise just treat the keyword as literal text

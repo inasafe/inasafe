@@ -412,7 +412,7 @@ class ImpactFunction(object):
     def exposure_actions(self):
         """Get the exposure specific actions defined in definitions.
 
-        This method will do a lookup in definitions_v3.py and return the
+        This method will do a lookup in definitions and return the
         exposure definition specific actions dictionary.
 
         This is a helper function to make it
@@ -436,7 +436,7 @@ class ImpactFunction(object):
     def exposure_notes(self):
         """Get the exposure specific notes defined in definitions.
 
-        This method will do a lookup in definitions_v3.py and return the
+        This method will do a lookup in definitions and return the
         exposure definition specific notes dictionary.
 
         This is a helper function to make it
@@ -468,7 +468,7 @@ class ImpactFunction(object):
     def hazard_actions(self):
         """Get the hazard specific actions defined in definitions.
 
-        This method will do a lookup in definitions_v3.py and return the
+        This method will do a lookup in definitions and return the
         hazard definition specific actions dictionary.
 
         This is a helper function to make it
@@ -492,7 +492,7 @@ class ImpactFunction(object):
     def hazard_notes(self):
         """Get the hazard specific notes defined in definitions.
 
-        This method will do a lookup in definitions_v3.py and return the
+        This method will do a lookup in definitions and return the
         hazard definition specific notes dictionary.
 
         This is a helper function to make it
@@ -538,9 +538,9 @@ class ImpactFunction(object):
         """
         # Include actions defined in the mixin
         fields = self.extra_actions()
-        # include any generic exposure specific actions from definitions_v3.py
+        # include any generic exposure specific actions from definitions
         fields = fields + self.exposure_actions()
-        # include any generic hazard specific actions from definitions_v3.py
+        # include any generic hazard specific actions from definitions
         fields = fields + self.hazard_actions()
         return fields
 
@@ -553,9 +553,9 @@ class ImpactFunction(object):
         :rtype: list
         """
         fields = []  # Notes still to be defined for ASH
-        # include any generic exposure specific notes from definitions_v3.py
+        # include any generic exposure specific notes from definitions
         fields = fields + self.exposure_notes()
-        # include any generic hazard specific notes from definitions_v3.py
+        # include any generic hazard specific notes from definitions
         fields = fields + self.hazard_notes()
         return fields
 

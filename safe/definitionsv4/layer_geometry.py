@@ -3,8 +3,6 @@
 """Definitions relating to layer geometry (point/line/poly/raster).
 """
 
-
-
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

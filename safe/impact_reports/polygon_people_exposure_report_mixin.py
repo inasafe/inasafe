@@ -102,7 +102,7 @@ class PolygonPeopleExposureReportMixin(ReportMixin):
         """Return the action specific to polygon people exposure.
 
         .. note:: Only calculated actions are implemented here, the rest
-            are defined in definitions_v3.py.
+            are defined in definitions.
 
         .. versionadded:: 3.5
 
