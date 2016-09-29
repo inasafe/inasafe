@@ -10,7 +10,9 @@ from safe.definitionsv4.fields import (
     youth_count_field,
     adult_count_field,
     elderly_count_field,
-    feature_value_field
+    feature_value_field,
+    population_count_field,
+    feature_type_field
 )
 from safe.definitionsv4.post_processors import (
     post_processor_gender,
@@ -99,7 +101,9 @@ class TestImpactFunction(unittest.TestCase):
         impact_function.exposure = exposure_layer
 
         expected_inasafe_fields = {
-            'feature_type_field': 'TYPE', 'population': 'pop_count'}
+            feature_type_field['key']: 'TYPE',
+            population_count_field['key']: 'pop_count'
+        }
         self.assertDictEqual(
             exposure_layer.keywords['inasafe_fields'], expected_inasafe_fields)
 
@@ -108,10 +112,8 @@ class TestImpactFunction(unittest.TestCase):
             exposure_layer.keywords['inasafe_fields']['feature_type_field'],
             fields
         )
-        self.assertIn(
-            exposure_layer.keywords['inasafe_fields']['population'],
-            fields
-        )
+        inasafe_fields = exposure_layer.keywords['inasafe_fields']
+        self.assertIn(inasafe_fields['population_count_field'], fields)
 
     def test_impact_function_behaviour(self):
         """Test behaviour of impact function"""
