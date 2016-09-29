@@ -36,26 +36,6 @@ from safe.impact_functions.generic.continuous_hazard_population\
 from safe.impact_functions.inundation.flood_vector_building_impact\
     .impact_function import FloodPolygonBuildingFunction
 
-from safe.definitionsv4.definitions_v3 import (
-    hazard_category_single_event,
-    hazard_category_multiple_event,
-    hazard_flood,
-    hazard_tsunami,
-    hazard_generic,
-    hazard_earthquake,
-    hazard_volcanic_ash,
-    hazard_volcano,
-    exposure_structure,
-    exposure_road,
-    exposure_place,
-    exposure_land_cover,
-    count_exposure_unit,
-    density_exposure_unit,
-    layer_mode_classified,
-    layer_geometry_raster,
-    unit_metres,
-    unit_generic
-)
 from safe.definitionsv4.layer_purposes import layer_purpose_exposure
 from safe.definitionsv4.layer_modes import layer_mode_continuous, \
     layer_mode_classified

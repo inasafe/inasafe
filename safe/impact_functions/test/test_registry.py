@@ -40,12 +40,6 @@ from safe.impact_functions.loader import \
     ClassifiedRasterHazardBuildingFunction
 
 from safe.impact_functions.registry import Registry
-from safe.definitionsv4.definitions_v3 import (
-    layer_geometry_polygon,
-    layer_geometry_raster,
-    hazard_earthquake,
-    layer_mode_classified
-)
 from safe.definitionsv4.layer_modes import layer_mode_continuous, \
     layer_mode_classified
 from safe.definitionsv4.exposure import exposure_structure

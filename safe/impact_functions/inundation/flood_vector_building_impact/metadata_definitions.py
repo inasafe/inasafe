@@ -13,12 +13,6 @@ Contact : ole.moller.nielsen@gmail.com
 
 __author__ = 'lucernae'
 
-from safe.definitionsv4.definitions_v3 import (
-    layer_geometry_point,
-    hazard_flood,
-    hazard_category_multiple_event,
-    flood_vector_hazard_classes
-)
 from safe.definitionsv4.layer_modes import layer_mode_classified
 from safe.definitionsv4.fields import structure_class_field
 from safe.definitionsv4.exposure import exposure_structure

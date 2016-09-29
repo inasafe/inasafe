@@ -10,12 +10,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.definitionsv4.definitions_v3 import (
-    layer_mode_classified,
-    hazard_volcano,
-    hazard_category_multiple_event,
-    layer_geometry_raster
-)
 from safe.definitionsv4.layer_modes import layer_mode_continuous, \
     layer_mode_classified
 from safe.definitionsv4.fields import volcano_name_field

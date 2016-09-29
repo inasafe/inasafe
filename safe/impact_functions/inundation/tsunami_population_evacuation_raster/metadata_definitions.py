@@ -17,12 +17,6 @@ __filename__ = 'metadata_definitions'
 __date__ = '23/03/15'
 __copyright__ = 'lana.pcfre@gmail.com'
 
-from safe.definitionsv4.definitions_v3 import (
-    hazard_category_multiple_event,
-    unit_metres,
-    count_exposure_unit,
-    hazard_tsunami
-)
 from safe.definitionsv4.layer_modes import layer_mode_continuous
 from safe.definitionsv4.exposure import exposure_population
 from safe.definitionsv4.units import unit_feet, unit_metres, count_exposure_unit

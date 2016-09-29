@@ -10,13 +10,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.definitionsv4.definitions_v3 import (
-    layer_mode_classified,
-    layer_geometry_polygon,
-    layer_geometry_raster,
-    hazard_earthquake,
-    hazard_category_multiple_event
-)
 from safe.definitionsv4.layer_modes import layer_mode_continuous, \
     layer_mode_classified
 from safe.definitionsv4.fields import structure_class_field

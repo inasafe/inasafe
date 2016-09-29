@@ -13,13 +13,6 @@ Contact : ole.moller.nielsen@gmail.com
 
 __author__ = 'Rizky Maulana Nugraha'
 
-from safe.definitionsv4.definitions_v3 import (
-    layer_mode_classified,
-    layer_geometry_raster,
-    hazard_flood,
-    hazard_category_multiple_event,
-    flood_vector_hazard_classes,
-)
 from safe.definitionsv4.layer_modes import layer_mode_continuous, \
     layer_mode_classified
 from safe.definitionsv4.exposure import exposure_population

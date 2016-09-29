@@ -16,13 +16,6 @@ __filename__ = 'metadata_definitions'
 __date__ = '23/03/15'
 __copyright__ = 'lana.pcfre@gmail.com'
 
-from safe.definitionsv4.definitions_v3 import (
-    layer_mode_classified,
-    layer_geometry_raster,
-    hazard_flood,
-    hazard_category_multiple_event,
-    unit_metres
-)
 from safe.definitionsv4.layer_modes import layer_mode_continuous, \
     layer_mode_classified
 from safe.definitionsv4.fields import road_class_field

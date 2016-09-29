@@ -17,13 +17,6 @@ __filename__ = 'metadata_definitions'
 __date__ = '24/03/15'
 __copyright__ = 'lana.pcfre@gmail.com'
 
-from safe.definitionsv4.definitions_v3 import (
-    layer_mode_classified,
-    hazard_all,
-    hazard_category_multiple_event,
-    generic_raster_hazard_classes,
-    density_exposure_unit
-)
 from safe.definitionsv4.layer_modes import layer_mode_continuous, \
     layer_mode_classified
 from safe.definitionsv4.exposure import exposure_population

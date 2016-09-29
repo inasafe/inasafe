@@ -96,13 +96,6 @@ from safe.impact_functions.ash.ash_raster_population.impact_function import \
 from safe.impact_functions.ash.ash_raster_places.impact_function import \
     AshRasterPlacesFunction
 
-from safe.definitionsv4.definitions_v3 import (
-    hazard_category_multiple_event,
-    hazard_earthquake,
-    exposure_structure,
-    count_exposure_unit,
-    volcano_name_field,
-)
 from safe.definitionsv4.layer_purposes import layer_purpose_exposure
 from safe.definitionsv4.layer_modes import layer_mode_continuous
 from safe.definitionsv4.fields import structure_class_field, volcano_name_field

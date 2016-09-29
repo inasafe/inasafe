@@ -16,15 +16,6 @@ __filename__ = 'metadata_definitions'
 __date__ = '12/31/15'
 __copyright__ = 'imajimatika@gmail.com'
 
-from safe.definitionsv4.definitions_v3 import (
-    layer_mode_classified,
-    layer_geometry_polygon,
-    layer_geometry_raster,
-    hazard_category_multiple_event,
-    unit_metres,
-    hazard_tsunami,
-    structure_class_field
-)
 from safe.definitionsv4.layer_modes import layer_mode_continuous, \
     layer_mode_classified
 from safe.definitionsv4.exposure import exposure_structure

@@ -1,12 +1,11 @@
 # coding=utf-8
-from safe.definitionsv4.definitions_v3 import (
+
+from safe.definitionsv4.units import (
+    unit_generic,
     unit_metres,
+    unit_centimetres,
     unit_mmi,
-    unit_percentage,
-    unit_centimetres
-)
-from safe.definitionsv4.units import unit_generic, unit_metres, \
-    unit_centimetres, unit_mmi, unit_percentage
+    unit_percentage)
 from safe_extras.parameters.unit import Unit
 
 __author__ = 'Rizky Maulana Nugraha "lucernae" <lana.pcfre@gmail.com>'

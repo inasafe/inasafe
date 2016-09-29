@@ -34,7 +34,6 @@ from qgis.core import (
     QgsDataSourceURI,
     QgsBrowserModel)
 
-from safe.definitionsv4 import definitions_v3
 from safe.definitionsv4.layer_purposes import (
     layer_purpose_exposure, layer_purpose_aggregation)
 from safe.definitionsv4.layer_modes import (

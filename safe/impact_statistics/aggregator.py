@@ -35,9 +35,6 @@ from qgis.core import (
     QGis,
     QgsCoordinateReferenceSystem)
 
-from safe.definitionsv4.definitions_v3 import (
-    do_not_use_attribute
-)
 from safe.definitionsv4.aggregation import global_default_attribute, \
     do_not_use_attribute
 from safe import messaging as m

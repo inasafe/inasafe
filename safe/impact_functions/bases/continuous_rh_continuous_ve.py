@@ -1,10 +1,5 @@
 # coding=utf-8
 
-from safe.definitionsv4.definitions_v3 import (
-    layer_geometry_raster,
-    layer_geometry_line,
-    layer_geometry_polygon
-)
 from safe.definitionsv4.layer_modes import layer_mode_continuous
 from safe.definitionsv4.layer_geometry import layer_geometry_point, \
     layer_geometry_line, layer_geometry_polygon, layer_geometry_raster
