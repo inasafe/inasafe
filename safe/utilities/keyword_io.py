@@ -19,7 +19,7 @@ from PyQt4.QtCore import QObject, QSettings
 from PyQt4.QtCore import QUrl, QDateTime
 
 
-from safe.definitionsv4 import definitions_v3
+from safe import definitionsv4
 from safe import messaging as m
 from safe.common.exceptions import (
     HashNotFoundError,
@@ -70,9 +70,9 @@ def definition(keyword):
     :rtype: dict, None
     """
 
-    for item in dir(definitions_v3):
+    for item in dir(definitionsv4):
         if not item.startswith("__"):
-            var = getattr(definitions_v3, item)
+            var = getattr(definitionsv4, item)
             if isinstance(var, dict):
                 if var.get('key') == keyword:
                     return var
