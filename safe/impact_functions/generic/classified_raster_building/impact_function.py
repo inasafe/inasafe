@@ -19,7 +19,7 @@ from collections import OrderedDict
 
 from numpy import round as numpy_round
 
-from safe.definitionsv4.definitions_v3 import generic_raster_hazard_classes
+from safe.definitionsv4.hazard import generic_raster_hazard_classes
 from safe.common.exceptions import KeywordNotFoundError
 from safe.common.utilities import get_non_conflicting_attribute_name
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data
@@ -60,9 +60,9 @@ class ClassifiedRasterHazardBuildingFunction(
             tr('Map shows buildings affected in low, medium and high hazard '
                'zones.')
         ]
-        # include any generic exposure specific notes from definitions_v3.py
+        # include any generic exposure specific notes from definitions
         fields = fields + self.exposure_notes()
-        # include any generic hazard specific notes from definitions_v3.py
+        # include any generic hazard specific notes from definitions
         fields = fields + self.hazard_notes()
         return fields
 

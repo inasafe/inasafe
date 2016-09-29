@@ -67,9 +67,9 @@ class FloodPolygonBuildingFunction(
             tr('Buildings are flooded when in a region with field "%s" in '
                '"%s".') % (self.hazard_class_attribute, hazard_classes_string)
         ]
-        # include any generic exposure specific notes from definitions_v3.py
+        # include any generic exposure specific notes from definitions
         fields = fields + self.exposure_notes()
-        # include any generic hazard specific notes from definitions_v3.py
+        # include any generic hazard specific notes from definitions
         fields = fields + self.hazard_notes()
         return fields
 
