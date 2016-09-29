@@ -18,8 +18,10 @@ from safe.definitionsv4.exposure import exposure_structure
 from safe.definitionsv4.units import unit_feet, unit_metres
 from safe.definitionsv4.hazard import hazard_category_single_event, \
     hazard_category_multiple_event, hazard_flood
-from safe.definitionsv4.layer_geometry import layer_geometry_point, \
-    layer_geometry_raster
+from safe.definitionsv4.layer_geometry import (
+    layer_geometry_point,
+    layer_geometry_raster,
+    layer_geometry_polygon)
 from safe.common.utilities import OrderedDict
 from safe.defaults import building_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \

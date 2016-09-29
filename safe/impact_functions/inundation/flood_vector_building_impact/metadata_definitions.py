@@ -18,7 +18,8 @@ from safe.definitionsv4.fields import structure_class_field
 from safe.definitionsv4.exposure import exposure_structure
 from safe.definitionsv4.hazard import hazard_category_single_event, \
     hazard_category_multiple_event, flood_vector_hazard_classes, hazard_flood
-from safe.definitionsv4.layer_geometry import layer_geometry_polygon
+from safe.definitionsv4.layer_geometry import (
+    layer_geometry_polygon, layer_geometry_point)
 from safe.common.utilities import OrderedDict
 from safe.defaults import building_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \
