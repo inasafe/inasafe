@@ -35,6 +35,8 @@ from safe.utilities.gis import (
     is_raster_layer,
     is_point_layer)
 from safe.utilities.keyword_io import definition
+from safe.definitionsv4.layer_modes import (
+    layer_mode_classified, layer_mode_continuous)
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
