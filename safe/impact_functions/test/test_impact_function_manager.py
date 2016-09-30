@@ -46,7 +46,6 @@ from safe.definitionsv4.exposure import exposure_population, exposure_road, \
 from safe.definitionsv4.units import unit_feet, unit_generic, unit_metres, \
     count_exposure_unit, density_exposure_unit
 from safe.definitionsv4.hazard import (
-    hazard_category_multiple_event,
     hazard_generic,
     hazard_earthquake,
     hazard_flood,
