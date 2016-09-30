@@ -19,7 +19,7 @@ from collections import OrderedDict
 
 from numpy import round as numpy_round
 
-from safe.definitionsv4.hazard import generic_raster_hazard_classes
+from safe.definitionsv4 import generic_raster_hazard_classes
 from safe.common.exceptions import KeywordNotFoundError
 from safe.common.utilities import get_non_conflicting_attribute_name
 from safe.engine.interpolation import assign_hazard_values_to_exposure_data

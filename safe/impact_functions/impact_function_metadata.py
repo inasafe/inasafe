@@ -13,8 +13,8 @@ Contact : ole.moller.nielsen@gmail.com
 
 import json
 
-from safe.definitionsv4.layer_purposes import layer_purpose_exposure
-from safe.definitionsv4.hazard import layer_purpose_hazard
+from safe.definitionsv4.layer_purposes import (
+    layer_purpose_exposure, layer_purpose_hazard)
 from safe.common.utilities import add_to_list, get_list_key, is_key_exist
 
 __author__ = 'ismail@kartoza.com'

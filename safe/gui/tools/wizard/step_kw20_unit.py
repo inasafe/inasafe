@@ -22,10 +22,11 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from PyQt4 import QtCore
 from PyQt4.QtGui import QListWidgetItem
 
-from safe.definitionsv4.layer_purposes import layer_purpose_exposure
+from safe.definitionsv4.layer_purposes import (
+    layer_purpose_exposure, layer_purpose_hazard)
 from safe.definitionsv4.units import exposure_unit
 from safe.definitionsv4.hazard import (
-    layer_purpose_hazard, continuous_hazard_unit)
+    continuous_hazard_unit)
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_strings import unit_question

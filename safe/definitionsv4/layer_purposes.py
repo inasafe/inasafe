@@ -1,9 +1,13 @@
 # coding=utf-8
 
 """Definitions relating to exposure."""
-
 from safe.definitionsv4.concepts import concepts
-from safe.definitionsv4.hazard import layer_purpose_hazard
+from safe.definitionsv4.layer_geometry import (
+    layer_geometry_raster,
+    layer_geometry_line,
+    layer_geometry_point,
+    layer_geometry_polygon
+)
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -15,7 +19,25 @@ layer_purpose_exposure = {
     'key': 'exposure',
     'name': tr('Exposure'),
     'description': concepts['exposure']['description'],
+    'layer_geometry': [
+        layer_geometry_point,
+        layer_geometry_line,
+        layer_geometry_polygon,
+        layer_geometry_raster
+    ],
     'citations': concepts['exposure']['citations'],
+}
+layer_purpose_hazard = {
+    'key': 'hazard',
+    'name': tr('Hazard'),
+    'description': concepts['hazard']['description'],
+    'layer_geometry': [
+        layer_geometry_point,
+        layer_geometry_line,
+        layer_geometry_polygon,
+        layer_geometry_raster
+    ],
+    'citations': concepts['hazard']['citations']
 }
 layer_purpose_aggregation = {
     'key': 'aggregation',
@@ -25,6 +47,7 @@ layer_purpose_aggregation = {
         'summarise impact analysis results. For example, we might summarise '
         'the affected people after a flood according to administration '
         'boundaries.'),
+    'layer_geometry': [layer_geometry_polygon],
     'citations': [
         {
             'text': None,
@@ -32,6 +55,7 @@ layer_purpose_aggregation = {
         }
     ]
 }
+
 layer_purpose = {
     'key': 'layer_purpose',
     'name': tr('Purpose'),

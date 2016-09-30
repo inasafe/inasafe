@@ -25,7 +25,7 @@ from qgis.core import (
 
 import logging
 
-from definitionsv4.post_processors import post_processors
+from safe.definitionsv4.post_processors import post_processors
 from safe.defaults import get_defaults
 from safe.common.exceptions import (
     InvalidExtentError, InvalidLayerError, NoKeywordsFoundError)
