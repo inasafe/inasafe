@@ -182,7 +182,7 @@
             <gco:FloatTuple/>
           </resolution>
           <inasafe_fields>
-            <gco:Dictionary>{&quot;population&quot;: &quot;pop_count&quot;, &quot;feature_type_field&quot;: &quot;TYPE&quot;}</gco:Dictionary>
+            <gco:Dictionary>{&quot;feature_type_field&quot;: &quot;TYPE&quot;, &quot;population&quot;: &quot;pop_count&quot;}</gco:Dictionary>
           </inasafe_fields>
           <area_name_field>
             <gco:CharacterString/>
@@ -221,7 +221,7 @@
             <gco:CharacterString/>
           </datatype>
           <value_map>
-            <gco:Dictionary>{&quot;health&quot;: [&quot;Clinic/Doctor&quot;], &quot;education&quot;: [&quot;School&quot;], &quot;commercial&quot;: [&quot;Commercial&quot;, &quot;Industrial&quot;], &quot;place of worship&quot;: [&quot;Place of Worship - Islam&quot;], &quot;government&quot;: [&quot;Government&quot;]}</gco:Dictionary>
+            <gco:Dictionary>{&quot;commercial&quot;: [&quot;Commercial&quot;, &quot;Industrial&quot;], &quot;education&quot;: [&quot;School&quot;], &quot;health&quot;: [&quot;Clinic/Doctor&quot;], &quot;place of worship&quot;: [&quot;Place of Worship - Islam&quot;], &quot;government&quot;: [&quot;Government&quot;]}</gco:Dictionary>
           </value_map>
           <structure_class_field>
             <gco:CharacterString>TYPE</gco:CharacterString>

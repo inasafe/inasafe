@@ -2,13 +2,13 @@
 
 """Definitions relating to hazards."""
 
+from safe.definitionsv4.caveats import caveat_simulation, \
+    caveat_local_conditions
 from safe.definitionsv4.concepts import concepts
 from safe.definitionsv4.constants import small_number
 from safe.definitionsv4.units import unit_feet, unit_generic, \
     unit_kilogram_per_meter_square, unit_kilometres, unit_metres, \
     unit_millimetres, unit_centimetres, unit_mmi
-from safe.definitionsv4.caveats import caveat_simulation, \
-    caveat_local_conditions
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -16,13 +16,6 @@ __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
-
-layer_purpose_hazard = {
-    'key': 'hazard',
-    'name': tr('Hazard'),
-    'description': concepts['hazard']['description'],
-    'citations': concepts['hazard']['citations']
-}
 hazard_category_single_event = {
     'key': 'single_event',
     'name': tr('Single event'),

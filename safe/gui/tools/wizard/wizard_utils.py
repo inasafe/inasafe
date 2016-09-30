@@ -24,9 +24,9 @@ from PyQt4 import QtCore
 from qgis.core import QgsCoordinateTransform
 
 import safe.gui.tools.wizard.wizard_strings
-from safe.definitionsv4.layer_purposes import layer_purpose_exposure
+from safe.definitionsv4.layer_purposes import (
+    layer_purpose_exposure, layer_purpose_hazard)
 from safe.definitionsv4.layer_modes import layer_mode_classified
-from safe.definitionsv4.hazard import layer_purpose_hazard
 from safe.common.version import get_version
 from safe.utilities.gis import (
     is_raster_layer,

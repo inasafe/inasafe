@@ -12,7 +12,7 @@ from safe.definitionsv4.fields import (
     elderly_count_field,
     feature_value_field
 )
-from definitionsv4.post_processors import (
+from safe.definitionsv4.post_processors import (
     post_processor_gender,
     post_processor_youth,
     post_processor_adult,

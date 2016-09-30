@@ -351,6 +351,7 @@ impact_fields = [
     adult_count_field,
     elderly_count_field
 ]
+
 structure_class_field = {
     'key': 'structure_class_field',
     'name': tr('Attribute field'),
@@ -362,6 +363,7 @@ structure_class_field = {
         }
     ]
 }
+
 road_class_field = {
     'key': 'road_class_field',
     'name': tr('Attribute field'),
@@ -373,6 +375,7 @@ road_class_field = {
         }
     ]
 }
+
 volcano_name_field = {
     'key': 'volcano_name_field',
     'name': tr('Name field'),
@@ -385,6 +388,7 @@ volcano_name_field = {
         }
     ]
 }
+
 area_name_field = {
     'key': 'area_name_field',
     'name': tr('Name field'),
@@ -399,6 +403,7 @@ area_name_field = {
         }
     ]
 }
+
 area_id_field = {
     'key': 'area_id_field',
     'name': tr('Id field'),
@@ -413,6 +418,7 @@ area_id_field = {
         }
     ]
 }
+
 field = {
     'key': 'field',
     'name': tr('Attribute field'),
@@ -427,6 +433,7 @@ field = {
         }
     ]
 }
+
 field_value = {
     'key': 'field_value',
     'name': tr('Attribute value'),
