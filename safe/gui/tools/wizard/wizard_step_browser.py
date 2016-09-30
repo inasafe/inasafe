@@ -41,8 +41,9 @@ from safe.definitionsv4.layer_modes import (
 from safe.definitionsv4.units import exposure_unit
 from safe.definitionsv4.hazard import (
     continuous_hazard_unit,
-    vector_hazard_classification,
     raster_hazard_classification)
+from safe.definitionsv4.hazard_classifications import vector_hazard_classification, \
+    raster_hazard_classification
 from safe.definitionsv4.layer_geometry import layer_geometry_polygon
 from safe.common.exceptions import (
     HashNotFoundError,

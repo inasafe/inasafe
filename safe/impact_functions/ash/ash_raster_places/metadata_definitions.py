@@ -16,9 +16,10 @@ from safe.definitionsv4.fields import structure_class_field
 from safe.definitionsv4.exposure import exposure_place
 from safe.definitionsv4.units import unit_centimetres
 from safe.definitionsv4.hazard import (
-    hazard_category_single_event,
     hazard_category_multiple_event,
     hazard_volcanic_ash)
+from safe.definitionsv4.hazard_category import hazard_category_single_event, \
+    hazard_category_multiple_event
 from safe.definitionsv4.layer_geometry import (
     layer_geometry_point, layer_geometry_raster)
 from safe.common.utilities import OrderedDict
