@@ -328,6 +328,7 @@ flood_raster_hazard_classes = {
             'key': 'wet',
             'name': tr('wet'),
             'description': tr('Water above ground height.'),
+            'class_value': 2,
             'numeric_default_min': 1,
             'numeric_default_max': 9999999999,
             'optional': True,
@@ -342,6 +343,7 @@ flood_raster_hazard_classes = {
             'key': 'dry',
             'name': tr('dry'),
             'description': tr('No water above ground height.'),
+            'class_value': 1,
             'numeric_default_min': 0,
             'numeric_default_max': (1 - small_number),
             'optional': True,
@@ -365,6 +367,7 @@ generic_raster_hazard_classes = {
             'key': 'high',
             'name': tr('High hazard zone'),
             'description': tr('The highest hazard classification.'),
+            'class_value': 3,
             'numeric_default_min': 3,
             'numeric_default_max': 3,
             'optional': False,
@@ -379,6 +382,7 @@ generic_raster_hazard_classes = {
             'key': 'medium',
             'name': tr('Medium hazard zone'),
             'description': tr('The middle hazard classification.'),
+            'class_value': 2,
             'numeric_default_min': 2,
             'numeric_default_max': 2,
             'optional': False,
@@ -393,6 +397,7 @@ generic_raster_hazard_classes = {
             'key': 'low',
             'name': tr('Low hazard zone'),
             'description': tr('The lowest hazard classification.'),
+            'class_value': 1,
             'numeric_default_min': 1,
             'numeric_default_max': 1,
             'optional': False,
@@ -426,6 +431,7 @@ tsunami_raster_hazard_classes = {
             'key': 'dry',
             'name': tr('Dry zone'),
             'description': tr('No water above ground height.'),
+            'class_value': 1,
             'numeric_default_min': 0,
             'numeric_default_max': (1 - small_number),
             'optional': True,
@@ -449,6 +455,7 @@ tsunami_raster_hazard_classes = {
                 'shore. Small vessels drift and collide and some turn over. '
                 'Sand is deposited and there is flooding of areas close to '
                 'the shore.'),
+            'class_value': 2,
             'numeric_default_min': 0,
             'numeric_default_max': 1,
             'optional': True,
@@ -470,6 +477,7 @@ tsunami_raster_hazard_classes = {
                 'causes most people frightened and to flee to higher ground. '
                 'Small vessels drift and collide. Damage occurs to some '
                 'wooden houses, while most of them are safe.'),
+            'class_value': 3,
             'numeric_default_min': 1,
             'numeric_default_max': 3,
             'optional': True,
@@ -494,6 +502,7 @@ tsunami_raster_hazard_classes = {
                 '8 m, it will cause severe damage. Dykes, wave breaker, '
                 'tsunami protection walls and green belts will be washed '
                 'away.'),
+            'class_value': 4,
             'numeric_default_min': 3,
             'numeric_default_max': 8,
             'optional': True,
@@ -508,6 +517,7 @@ tsunami_raster_hazard_classes = {
             'key': 'very high',
             'name': tr('Very high hazard zone'),
             'description': tr('Water above 8.0m.'),
+            'class_value': 5,
             'numeric_default_min': 8,
             'numeric_default_max': 9999999999,
             'optional': True,
