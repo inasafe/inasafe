@@ -16,8 +16,7 @@ from safe.definitionsv4.layer_modes import layer_mode_continuous, \
 from safe.definitionsv4.fields import volcano_name_field
 from safe.definitionsv4.exposure import exposure_population
 from safe.definitionsv4.units import count_exposure_unit
-from safe.definitionsv4.hazard import hazard_category_multiple_event, \
-    hazard_volcano
+from safe.definitionsv4.hazard import hazard_volcano
 from safe.definitionsv4 import volcano_vector_hazard_classes
 from safe.definitionsv4.hazard_category import hazard_category_single_event, \
     hazard_category_multiple_event

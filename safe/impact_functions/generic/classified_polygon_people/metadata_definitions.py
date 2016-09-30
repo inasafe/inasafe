@@ -19,8 +19,8 @@ from safe.definitionsv4.layer_modes import layer_mode_continuous, \
 from safe.definitionsv4.fields import area_name_field, area_id_field
 from safe.definitionsv4.exposure import exposure_population
 from safe.definitionsv4.units import count_exposure_unit
-from safe.definitionsv4.hazard import hazard_category_multiple_event, generic_vector_hazard_classes, \
-    hazard_all
+from safe.definitionsv4.hazard import (
+    generic_vector_hazard_classes, hazard_all)
 from safe.definitionsv4 import flood_vector_hazard_classes
 from safe.definitionsv4.hazard_category import hazard_category_single_event, \
     hazard_category_multiple_event
