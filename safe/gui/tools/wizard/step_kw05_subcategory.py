@@ -80,13 +80,13 @@ class StepKwSubcategory(WizardStep, FORM_CLASS):
         :rtype: list
         """
         purpose = self.parent.step_kw_purpose.selected_purpose()
-        layer_geometry_id = self.parent.get_layer_geometry_id()
+        layer_geometry_key = self.parent.get_layer_geometry_key()
         if purpose == layer_purpose_hazard:
             return self.impact_function_manager.hazards_for_layer(
-                layer_geometry_id)
+                layer_geometry_key)
         elif purpose == layer_purpose_exposure:
             return self.impact_function_manager.exposures_for_layer(
-                layer_geometry_id)
+                layer_geometry_key)
 
     # noinspection PyPep8Naming
     def on_lstSubcategories_itemSelectionChanged(self):

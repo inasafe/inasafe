@@ -109,7 +109,7 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
         :returns: A list where each value represents a valid additional kw.
         :rtype: list
         """
-        layer_geometry_key = self.parent.get_layer_geometry_id()
+        layer_geometry_key = self.parent.get_layer_geometry_key()
         layer_mode_key = self.parent.step_kw_layermode.\
             selected_layermode()['key']
         if self.parent.step_kw_purpose.\

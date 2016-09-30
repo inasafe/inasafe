@@ -71,7 +71,7 @@ class StepKwClassification(WizardStep, FORM_CLASS):
         :returns: A list where each value represents a valid classification.
         :rtype: list
         """
-        layer_geometry_id = self.parent.get_layer_geometry_id()
+        layer_geometry_key = self.parent.get_layer_geometry_key()
         layer_mode_id = self.parent.step_kw_layermode.\
             selected_layermode()['key']
         subcategory_id = self.parent.step_kw_subcategory.\
@@ -84,14 +84,14 @@ class StepKwClassification(WizardStep, FORM_CLASS):
                 return self.impact_function_manager.\
                     raster_hazards_classifications_for_layer(
                         subcategory_id,
-                        layer_geometry_id,
+                        layer_geometry_key,
                         layer_mode_id,
                         hazard_category_id)
             else:
                 return self.impact_function_manager\
                     .vector_hazards_classifications_for_layer(
                         subcategory_id,
-                        layer_geometry_id,
+                        layer_geometry_key,
                         layer_mode_id,
                         hazard_category_id)
         else:

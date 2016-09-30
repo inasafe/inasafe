@@ -311,7 +311,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         else:
             # purpose: exposure
             layer_mode_key = self.step_kw_layermode.selected_layermode()['key']
-            layer_geometry_key = self.get_layer_geometry_id()
+            layer_geometry_key = self.get_layer_geometry_key()
             exposure_key = self.step_kw_subcategory.\
                 selected_subcategory()['key']
             exposure_class_fields = self.impact_function_manager.\
@@ -424,7 +424,7 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         # Compare layer properties with explicitly set constraints
         # Reject if layer geometry doesn't match
-        if layer_geometry != self.get_layer_geometry_id(layer):
+        if layer_geometry != self.get_layer_geometry_key(layer):
             return False
 
         # If no keywords, there's nothing more we can check.
@@ -530,7 +530,7 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         return layers
 
-    def get_layer_geometry_id(self, layer=None):
+    def get_layer_geometry_key(self, layer=None):
         """Obtain layer mode of a given layer.
 
         If no layer specified, the current layer is used
@@ -765,7 +765,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         :rtype: dict
         """
         keywords = {}
-        keywords['layer_geometry'] = self.get_layer_geometry_id()
+        keywords['layer_geometry'] = self.get_layer_geometry_key()
         if self.step_kw_purpose.selected_purpose():
             keywords['layer_purpose'] = self.step_kw_purpose.\
                 selected_purpose()['key']

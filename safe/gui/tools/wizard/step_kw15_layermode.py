@@ -97,15 +97,15 @@ class StepKwLayerMode(WizardStep, FORM_CLASS):
         """
         purpose = self.parent.step_kw_purpose.selected_purpose()
         subcategory = self.parent.step_kw_subcategory.selected_subcategory()
-        layer_geometry_id = self.parent.get_layer_geometry_id()
+        layer_geometry_key = self.parent.get_layer_geometry_key()
         if purpose == layer_purpose_hazard:
             hazard_category = self.parent.step_kw_hazard_category.\
                 selected_hazard_category()
             return self.impact_function_manager.available_hazard_layer_modes(
-                subcategory['key'], layer_geometry_id, hazard_category['key'])
+                subcategory['key'], layer_geometry_key, hazard_category['key'])
         elif purpose == layer_purpose_exposure:
             return self.impact_function_manager.available_exposure_layer_modes(
-                subcategory['key'], layer_geometry_id)
+                subcategory['key'], layer_geometry_key)
 
     # noinspection PyPep8Naming
     def on_lstLayerModes_itemSelectionChanged(self):

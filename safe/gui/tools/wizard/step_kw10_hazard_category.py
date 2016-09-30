@@ -69,14 +69,14 @@ class StepKwHazardCategory(WizardStep, FORM_CLASS):
         :returns: A list where each value represents a valid hazard category.
         :rtype: list
         """
-        layer_geometry_id = self.parent.get_layer_geometry_id()
+        layer_geometry_key = self.parent.get_layer_geometry_key()
         if self.parent.step_kw_purpose.\
                 selected_purpose() != layer_purpose_hazard:
             return []
         hazard_type_id = self.parent.step_kw_subcategory.\
             selected_subcategory()['key']
         return self.impact_function_manager.hazard_categories_for_layer(
-            layer_geometry_id, hazard_type_id)
+            layer_geometry_key, hazard_type_id)
 
     # prevents actions being handled twice
     # noinspection PyPep8Naming
