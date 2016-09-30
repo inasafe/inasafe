@@ -11,6 +11,8 @@ from safe.definitionsv4.constants import *
 from safe.definitionsv4.exposure import *
 from safe.definitionsv4.fields import *
 from safe.definitionsv4.hazard import *
+from safe.definitionsv4.hazard_category import *
+from safe.definitionsv4.hazard_classifications import *
 from safe.definitionsv4.layer_geometry import *
 from safe.definitionsv4.layer_modes import *
 from safe.definitionsv4.layer_purposes import *
