@@ -1,52 +1,38 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
-- **GUI Test Cases.**
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
-
-__author__ = 'borysjurgiel.pl'
-__date__ = '24/02/2014'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
-
+"""Tests for the keyword wizard."""
 import os
 import shutil
 import sys
 import unittest
-
+# noinspection PyUnresolvedReferences
+import qgis
 from PyQt4 import QtCore
 from PyQt4.QtCore import Qt
-
 # noinspection PyPackageRequirements
 # Add PARENT directory to path to make test aware of other modules
 pardir = os.path.abspath(
     os.path.join(os.path.dirname(__file__), '../../..///'))
 sys.path.append(pardir)
-
 from safe.common.utilities import temp_dir
 from safe.test.utilities import (
     clone_raster_layer,
     clone_shp_layer,
     get_qgis_app,
     standard_data_path)
-
 # AG: get_qgis_app() should be called before importing modules from
 # safe.gui.tools.wizard
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-
 from safe.definitionsv4.versions import inasafe_keyword_version
 from safe.impact_functions.loader import register_impact_functions
 from safe.gui.tools.wizard.wizard_dialog import WizardDialog
 from safe.gui.tools.wizard.wizard_utils import get_question_text
 from safe.utilities.keyword_io import KeywordIO, definition
+
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 
 # noinspection PyTypeChecker
