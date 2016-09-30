@@ -31,9 +31,7 @@ from safe.gui.tools.wizard.wizard_strings import (
     layer_mode_vector_question,
     layer_mode_vector_classified_confirm,
     layer_mode_vector_continuous_confirm)
-from safe.utilities.gis import (
-    is_raster_layer,
-    is_point_layer)
+from safe.utilities.gis import is_raster_layer, is_point_layer
 from safe.utilities.keyword_io import definition
 from safe.definitionsv4.layer_modes import (
     layer_mode_classified, layer_mode_continuous)

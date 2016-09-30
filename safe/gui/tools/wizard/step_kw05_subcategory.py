@@ -22,9 +22,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 
 from PyQt4 import QtCore
-from PyQt4.QtGui import (
-    QListWidgetItem,
-    QPixmap)
+from PyQt4.QtGui import QListWidgetItem, QPixmap
 
 from safe.definitionsv4.layer_purposes import (
     layer_purpose_exposure, layer_purpose_hazard)
