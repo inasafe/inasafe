@@ -1,7 +1,7 @@
 # coding=utf-8
 
 """Definitions relating to hazards category."""
-from utilities.i18n import tr
+from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

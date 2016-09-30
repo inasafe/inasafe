@@ -2,7 +2,7 @@
 
 """Definitions relating to hazards category."""
 from safe.definitionsv4 import concepts, small_number
-from utilities.i18n import tr
+from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
