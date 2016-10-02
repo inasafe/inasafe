@@ -20,6 +20,11 @@ buffer_vector = {
     'output_layer_name': 'buffer',
 }
 
+prepare_vector = {
+    'step_name': tr('Preparing'),
+    'output_layer_name': 'cleaned',
+}
+
 reclassify_raster = {
     'step_name': tr('Reclassifying'),
     'output_layer_name': 'reclassified',
@@ -28,5 +33,6 @@ reclassify_raster = {
 processing_algorithms = [
     reproject_vector,
     buffer_vector,
+    prepare_vector,
     reclassify_raster,
 ]
