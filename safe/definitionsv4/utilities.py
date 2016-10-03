@@ -2,7 +2,7 @@
 
 """Utilities module for helping definitions retrieval.
 """
-import definitionsv4
+from safe import definitionsv4
 from safe.definitionsv4 import layer_purposes
 from safe.definitionsv4 import hazard_all
 
