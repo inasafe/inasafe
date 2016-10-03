@@ -81,3 +81,8 @@ layer_mode = {
         }
     ]
 }
+
+layer_mode_all = [
+    layer_mode_classified,
+    layer_mode_continuous
+]

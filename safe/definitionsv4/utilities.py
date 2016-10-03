@@ -7,7 +7,8 @@ from safe.definitionsv4 import (
     layer_purposes,
     hazard_all,
     exposure_all,
-    hazard_category_all
+    hazard_category_all,
+    layer_mode_all
 )
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -87,6 +88,10 @@ def hazard_categories_for_layer(layer_geometry_key, hazard_key=None):
 
     return sorted(hazard_category_all, key=lambda k: k['key'])
 
+
+def get_layer_modes():
+    """Return all sorted layer modes."""
+    return sorted(layer_mode_all, key=lambda k: k['key'])
 
 def definition(keyword):
     """Given a keyword, try to get a definition dict for it.

@@ -145,8 +145,8 @@ class WizardDialogTest(unittest.TestCase):
             'generic']
         chosen_subcategory = 'flood'
 
-        expected_mode_count = 1
-        expected_modes = ['classified']
+        expected_mode_count = 2
+        expected_modes = ['classified', 'continuous']
 
         expected_field_count = 6
         expected_fields = ['OBJECTID', 'KAB_NAME', 'KEC_NAME', 'KEL_NAME',
