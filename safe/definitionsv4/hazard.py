@@ -157,7 +157,7 @@ hazard_flood = {
     'continuous_hazard_units': [],
     'vector_hazard_classifications': [flood_vector_hazard_classes],
     'raster_hazard_classifications': [flood_raster_hazard_classes],
-    'layer_geometry':[
+    'layer_geometry': [
         'polygon',
         'raster'
     ]

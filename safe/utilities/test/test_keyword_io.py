@@ -150,8 +150,6 @@ class KeywordIOTest(unittest.TestCase):
 
         self.assertDictEqual(copied_keywords, expected_keywords)
 
-
-
     def test_to_message(self):
         """Test we can convert keywords to a message object.
 

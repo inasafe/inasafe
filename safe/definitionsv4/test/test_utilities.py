@@ -16,14 +16,17 @@ from safe.definitionsv4 import (
     exposure_road,
     exposure_structure,
     exposure_people_in_building,
-    exposure_place
+    exposure_place,
+    hazard_category_single_event,
+    hazard_category_multiple_event
 )
 
 from safe.definitionsv4.utilities import (
     definition,
     purposes_for_layer,
     hazards_for_layer,
-    exposures_for_layer
+    exposures_for_layer,
+    hazard_categories_for_layer
 )
 
 
@@ -95,6 +98,39 @@ class TestDefinitionsUtilities(unittest.TestCase):
         exposures = exposures_for_layer('line')
         expected = [exposure_road]
         self.assertItemsEqual(exposures, expected)
+
+    def test_hazard_categories_for_layer(self):
+        """Test for hazard_categories_for_layer"""
+        hazard_categories = hazard_categories_for_layer('polygon')
+        expected = [
+            hazard_category_single_event,
+            hazard_category_multiple_event]
+        self.assertItemsEqual(hazard_categories, expected)
+
+        # Note(IS): Currently we don't count the hazard category. We can
+        # update it later when we have use the hazard category
+        # hazard_categories = hazard_categories_for_layer('line')
+        # expected = []
+        # self.assertItemsEqual(hazard_categories, expected)
+
+        hazard_categories = hazard_categories_for_layer('point')
+        expected = [
+            hazard_category_multiple_event,
+            hazard_category_single_event
+        ]
+        self.assertItemsEqual(hazard_categories, expected)
+
+        hazard_categories = hazard_categories_for_layer('raster')
+        expected = [
+            hazard_category_single_event,
+            hazard_category_multiple_event]
+        self.assertItemsEqual(hazard_categories, expected)
+
+        hazard_categories = hazard_categories_for_layer('raster', 'earthquake')
+        expected = [
+            hazard_category_single_event,
+            hazard_category_multiple_event]
+        self.assertItemsEqual(hazard_categories, expected)
 
 
 if __name__ == '__main__':

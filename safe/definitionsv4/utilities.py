@@ -6,7 +6,8 @@ from safe import definitionsv4
 from safe.definitionsv4 import (
     layer_purposes,
     hazard_all,
-    exposure_all
+    exposure_all,
+    hazard_category_all
 )
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -69,6 +70,22 @@ def exposures_for_layer(layer_geometry_key):
             result.append(exposure)
 
     return sorted(result, key=lambda k: k['key'])
+
+
+def hazard_categories_for_layer(layer_geometry_key, hazard_key=None):
+    """Get hazard categories form layer_geometry_key
+
+    :param layer_geometry_key: The geometry id
+    :type layer_geometry_key: str
+
+    :param hazard_key: The hazard key
+    :type hazard_key: str
+
+    :returns: List of hazard_categories
+    :rtype: list
+    """
+
+    return sorted(hazard_category_all, key=lambda k: k['key'])
 
 
 def definition(keyword):
