@@ -81,7 +81,7 @@ hazard_generic = {
     ],
     'continuous_hazard_units': [],
     'vector_hazard_classifications': [generic_vector_hazard_classes],
-    'raster_hazard_classifications': [generic_raster_hazard_classes],
+    'raster_hazard_classifications': [generic_raster_hazard_classes]
 }
 hazard_earthquake = {
     'key': 'earthquake',

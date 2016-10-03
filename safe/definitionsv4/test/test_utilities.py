@@ -4,11 +4,24 @@
 """
 import unittest
 
-from safe.definitionsv4.utilities import purposes_for_layer
+from safe.definitionsv4 import (
+    hazard_flood,
+    hazard_tsunami,
+    hazard_earthquake,
+    hazard_volcano,
+    hazard_volcanic_ash,
+    hazard_generic
+)
+
+from safe.definitionsv4.utilities import (
+    purposes_for_layer,
+    hazards_for_layer
+)
 
 
 class TestDefinitionsUtilities(unittest.TestCase):
     def test_layer_purpose_for_layer(self):
+        """Test for purpose_for_layer method."""
         expected = ['aggregation', 'exposure', 'hazard']
         self.assertListEqual(expected, purposes_for_layer('polygon'))
 
@@ -17,6 +30,37 @@ class TestDefinitionsUtilities(unittest.TestCase):
 
         expected = ['exposure']
         self.assertListEqual(expected, purposes_for_layer('line'))
+
+    def test_hazards_for_layer(self):
+        """Test for hazards_for_layer"""
+        hazards = hazards_for_layer(
+            'polygon', 'single_event')
+        # print [x['key'] for x in hazards]
+        expected = [
+            hazard_flood,
+            hazard_tsunami,
+            hazard_earthquake,
+            hazard_volcano,
+            hazard_volcanic_ash,
+            hazard_generic
+        ]
+        self.assertItemsEqual(hazards, expected)
+
+        hazards = hazards_for_layer('polygon')
+        expected = [
+            hazard_flood,
+            hazard_tsunami,
+            hazard_earthquake,
+            hazard_volcano,
+            hazard_volcanic_ash,
+            hazard_generic
+        ]
+        self.assertItemsEqual(hazards, expected)
+
+        hazards = hazards_for_layer(
+            'point', 'single_event')
+        expected = [hazard_volcano]
+        self.assertItemsEqual(hazards, expected)
 
 
 if __name__ == '__main__':

@@ -4,6 +4,7 @@
 """
 
 from safe.definitionsv4 import layer_purposes
+from safe.definitionsv4 import hazard_all
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -28,3 +29,21 @@ def purposes_for_layer(layer_geometry_key):
             return_value.append(layer_purpose['key'])
 
     return sorted(return_value)
+
+
+def hazards_for_layer(layer_geometry_key, hazard_category_key=None):
+    """Get hazard categories form layer_geometry_key.
+
+    :param layer_geometry_key: The geometry id
+    :type layer_geometry_key: str
+
+    :param hazard_category_key: The hazard category
+    :type hazard_category_key: str
+
+    :returns: List of hazard
+    :rtype: list
+    """
+    hazards = []
+
+
+    return hazard_all
