@@ -51,7 +51,7 @@ def hazards_for_layer(layer_geometry_key, hazard_category_key=None):
         if layer_geometry_key in hazard.get('layer_geometry'):
             result.append(hazard)
 
-    return result
+    return sorted(result, key=lambda k: k['key'])
 
 
 def exposures_for_layer(layer_geometry_key):
@@ -68,7 +68,7 @@ def exposures_for_layer(layer_geometry_key):
         if layer_geometry_key in exposure.get('layer_geometry'):
             result.append(exposure)
 
-    return result
+    return sorted(result, key=lambda k: k['key'])
 
 
 def definition(keyword):

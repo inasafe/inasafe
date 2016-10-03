@@ -786,7 +786,7 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnNext.click()  # choose exposure
         self.assertEquals(
-            dialog.step_kw_subcategory.lstSubcategories.currentRow(), 0)
+            dialog.step_kw_subcategory.lstSubcategories.currentRow(), 2)
         num_item = dialog.step_kw_subcategory.lstSubcategories.count()
         self.assertTrue(num_item == 3)
 

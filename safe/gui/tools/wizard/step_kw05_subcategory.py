@@ -26,7 +26,10 @@ from PyQt4.QtGui import QListWidgetItem, QPixmap
 
 from safe.definitionsv4.layer_purposes import (
     layer_purpose_exposure, layer_purpose_hazard)
-from safe.definitionsv4.utilities import hazards_for_layer, definition
+from safe.definitionsv4.utilities import (
+    hazards_for_layer,
+    definition,
+    exposures_for_layer)
 
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
@@ -83,8 +86,7 @@ class StepKwSubcategory(WizardStep, FORM_CLASS):
         if purpose == layer_purpose_hazard:
             return hazards_for_layer(layer_geometry_key)
         elif purpose == layer_purpose_exposure:
-            return self.impact_function_manager.exposures_for_layer(
-                layer_geometry_key)
+            return exposures_for_layer(layer_geometry_key)
 
     # noinspection PyPep8Naming
     def on_lstSubcategories_itemSelectionChanged(self):
