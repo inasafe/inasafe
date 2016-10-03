@@ -23,7 +23,10 @@ from safe.definitionsv4 import (
     count_exposure_unit,
     unit_metres,
     unit_feet,
-    unit_generic
+    unit_generic,
+    flood_raster_hazard_classes,
+    flood_vector_hazard_classes,
+    generic_vector_hazard_classes
 )
 
 from safe.definitionsv4.utilities import (
@@ -33,8 +36,16 @@ from safe.definitionsv4.utilities import (
     exposures_for_layer,
     hazard_categories_for_layer,
     hazard_units,
-    exposure_units
+    exposure_units,
+    raster_hazards_classifications,
+    vector_hazards_classifications
 )
+
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 
 class TestDefinitionsUtilities(unittest.TestCase):
@@ -147,8 +158,19 @@ class TestDefinitionsUtilities(unittest.TestCase):
     def test_hazards_units(self):
         """Test for hazard_units"""
         expected = [unit_metres, unit_feet, unit_generic]
-        print [i['key'] for i in hazard_units('flood')]
         self.assertItemsEqual(hazard_units('flood'), expected)
+
+    def test_raster_hazards_classifications(self):
+        """Test for raster_hazards_classifications."""
+        expected = [flood_raster_hazard_classes]
+        self.assertItemsEqual(
+            raster_hazards_classifications('flood'), expected)
+
+    def test_vector_hazards_classifications(self):
+        """Test for vector_hazards_classifications."""
+        expected = [flood_vector_hazard_classes, generic_vector_hazard_classes]
+        self.assertItemsEqual(
+            vector_hazards_classifications('flood'), expected)
 
 
 if __name__ == '__main__':

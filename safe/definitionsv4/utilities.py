@@ -117,6 +117,31 @@ def exposure_units(exposure):
     units = definition(exposure)['units']
     return sorted(units, key=lambda k: k['key'])
 
+
+def raster_hazards_classifications(hazard_key):
+    """Get raster hazard classifications.
+    :param hazard_key: The hazard key
+    :type hazard_key: str
+
+    :returns: List of raster_hazards_classifications
+    :rtype: list
+    """
+    classifications = definition(hazard_key)['raster_hazard_classifications']
+    return sorted(classifications, key=lambda k: k['key'])
+
+
+def vector_hazards_classifications(hazard_key):
+    """Get vector hazard classifications.
+    :param hazard_key: The hazard key
+    :type hazard_key: str
+
+    :returns: List of vector_hazards_classifications
+    :rtype: list
+    """
+    classifications = definition(hazard_key)['vector_hazard_classifications']
+    return sorted(classifications, key=lambda k: k['key'])
+
+
 def definition(keyword):
     """Given a keyword, try to get a definition dict for it.
 

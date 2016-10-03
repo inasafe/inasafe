@@ -27,7 +27,8 @@ from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_strings import classification_question
 from safe.utilities.gis import is_raster_layer
-from safe.definitionsv4.utilities import definition
+from safe.definitionsv4.utilities import (
+    definition, raster_hazards_classifications, vector_hazards_classifications)
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
@@ -71,29 +72,14 @@ class StepKwClassification(WizardStep, FORM_CLASS):
         :returns: A list where each value represents a valid classification.
         :rtype: list
         """
-        layer_geometry_key = self.parent.get_layer_geometry_key()
-        layer_mode_id = self.parent.step_kw_layermode.\
-            selected_layermode()['key']
-        subcategory_id = self.parent.step_kw_subcategory.\
+        subcategory_key = self.parent.step_kw_subcategory.\
             selected_subcategory()['key']
         if self.parent.step_kw_purpose.\
                 selected_purpose() == layer_purpose_hazard:
-            hazard_category_id = self.parent.step_kw_hazard_category.\
-                selected_hazard_category()['key']
             if is_raster_layer(self.parent.layer):
-                return self.impact_function_manager.\
-                    raster_hazards_classifications_for_layer(
-                        subcategory_id,
-                        layer_geometry_key,
-                        layer_mode_id,
-                        hazard_category_id)
+                return raster_hazards_classifications(subcategory_key)
             else:
-                return self.impact_function_manager\
-                    .vector_hazards_classifications_for_layer(
-                        subcategory_id,
-                        layer_geometry_key,
-                        layer_mode_id,
-                        hazard_category_id)
+                return  vector_hazards_classifications(subcategory_key)
         else:
             # There are no classifications for exposures defined yet, apart
             # from postprocessor_classification, processed paralelly
