@@ -43,8 +43,6 @@ from safe.definitionsv4.layer_modes import layer_mode_continuous, \
 from safe.definitionsv4.fields import structure_class_field
 from safe.definitionsv4.exposure import exposure_population, exposure_road, \
     exposure_structure, exposure_place, exposure_land_cover
-from safe.definitionsv4.units import unit_feet, unit_generic, unit_metres, \
-    count_exposure_unit, density_exposure_unit
 from safe.definitionsv4.hazard import (
     hazard_generic,
     hazard_earthquake,
@@ -211,24 +209,6 @@ class TestImpactFunctionManager(unittest.TestCase):
             'line')
         expected = [exposure_road]
         self.assertItemsEqual(exposures, expected)
-
-    def test_exposure_units_for_layer(self):
-        """Test for exposure_units_for_layer"""
-        impact_function_manager = ImpactFunctionManager()
-        exposure_units = impact_function_manager.exposure_units_for_layer(
-            'population', 'raster', 'continuous')
-        expected = [count_exposure_unit, density_exposure_unit]
-        self.assertItemsEqual(exposure_units, expected)
-
-    def test_continuous_hazards_units_for_layer(self):
-        """Test for continuous_hazards_units_for_layer"""
-        impact_function_manager = ImpactFunctionManager()
-        continuous_hazards_units = impact_function_manager.\
-            continuous_hazards_units_for_layer(
-                'tsunami', 'raster', 'continuous', 'single_event')
-        # print [x['key'] for x in continuous_hazards_units]
-        expected = [unit_metres, unit_feet, unit_generic]
-        self.assertItemsEqual(continuous_hazards_units, expected)
 
     def test_available_hazards(self):
         """Test available_hazards API."""
