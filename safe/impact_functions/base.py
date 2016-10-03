@@ -88,7 +88,8 @@ from safe.utilities.gis import (
     extent_to_array,
     get_optimal_extent)
 from safe.utilities.i18n import tr
-from safe.utilities.keyword_io import KeywordIO, definition
+from safe.utilities.keyword_io import KeywordIO
+from safe.definitionsv4.utilities import definition
 from safe.utilities.memory_checker import check_memory_usage
 from safe.utilities.utilities import (
     get_error_message,

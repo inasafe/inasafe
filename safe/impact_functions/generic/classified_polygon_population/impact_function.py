@@ -36,7 +36,7 @@ from safe.gui.tools.minimum_needs.needs_profile import (
     filter_needs_parameters)
 from safe.impact_reports.population_exposure_report_mixin import (
     PopulationExposureReportMixin)
-from safe.utilities.keyword_io import definition
+from safe.definitionsv4.utilities import definition
 
 
 class ClassifiedPolygonHazardPopulationFunction(

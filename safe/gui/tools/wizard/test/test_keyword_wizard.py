@@ -26,8 +26,8 @@ from safe.definitionsv4.versions import inasafe_keyword_version
 from safe.impact_functions.loader import register_impact_functions
 from safe.gui.tools.wizard.wizard_dialog import WizardDialog
 from safe.gui.tools.wizard.wizard_utils import get_question_text
-from safe.utilities.keyword_io import KeywordIO, definition
-
+from safe.utilities.keyword_io import KeywordIO
+from safe.definitionsv4.utilities import definition
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

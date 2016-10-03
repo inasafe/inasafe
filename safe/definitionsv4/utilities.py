@@ -2,7 +2,7 @@
 
 """Utilities module for helping definitions retrieval.
 """
-
+import definitionsv4
 from safe.definitionsv4 import layer_purposes
 from safe.definitionsv4 import hazard_all
 
@@ -43,7 +43,39 @@ def hazards_for_layer(layer_geometry_key, hazard_category_key=None):
     :returns: List of hazard
     :rtype: list
     """
-    hazards = []
+    result = []
+    for hazard in hazard_all:
+        if layer_geometry_key in hazard['layer_geometry']:
+            result.append(hazard)
 
+    return result
 
-    return hazard_all
+def definition(keyword):
+    """Given a keyword, try to get a definition dict for it.
+
+    .. versionadded:: 3.2
+
+    Definition dicts are defined in keywords.py. We try to return
+    one if present, otherwise we return none. Using this method you
+    can present rich metadata to the user e.g.
+
+    keyword = 'layer_purpose'
+    kio = safe.utilities.keyword_io.Keyword_IO()
+    definition = kio.definition(keyword)
+    print definition
+
+    :param keyword: A keyword key.
+    :type keyword: str
+
+    :returns: A dictionary containing the matched key definition
+        from definitions, otherwise None if no match was found.
+    :rtype: dict, None
+    """
+
+    for item in dir(definitionsv4):
+        if not item.startswith("__"):
+            var = getattr(definitionsv4, item)
+            if isinstance(var, dict):
+                if var.get('key') == keyword:
+                    return var
+    return None

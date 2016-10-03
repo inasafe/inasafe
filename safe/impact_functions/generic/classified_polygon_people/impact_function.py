@@ -46,7 +46,7 @@ from safe.impact_functions.core import (
 from safe.common.exceptions import ZeroImpactException
 from safe.gui.tools.minimum_needs.needs_profile import add_needs_parameters
 
-from safe.utilities.keyword_io import definition
+from safe.definitionsv4.utilities import definition
 
 import logging
 

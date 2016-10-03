@@ -28,7 +28,7 @@ from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
 from safe.engine.interpolation_qgis import interpolate_polygon_polygon
 from safe.impact_functions.core import get_key_for_value
-from safe.utilities.keyword_io import definition
+from safe.definitionsv4.utilities import definition
 from safe.utilities.unicode import get_unicode
 from safe.utilities.utilities import main_type
 

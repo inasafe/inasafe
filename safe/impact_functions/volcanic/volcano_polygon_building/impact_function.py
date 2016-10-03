@@ -22,7 +22,7 @@ from safe.engine.interpolation import (
     assign_hazard_values_to_exposure_data)
 from safe.impact_reports.building_exposure_report_mixin import (
     BuildingExposureReportMixin)
-from safe.utilities.keyword_io import definition
+from safe.definitionsv4.utilities import definition
 from safe.utilities.utilities import main_type
 from safe.impact_functions.core import get_key_for_value
 from safe.utilities.unicode import get_string

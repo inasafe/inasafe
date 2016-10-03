@@ -14,12 +14,10 @@ from datetime import datetime
 from os.path import expanduser
 from sqlite3 import OperationalError
 
-import qgis  # pylint: disable=unused-import
 from PyQt4.QtCore import QObject, QSettings
 from PyQt4.QtCore import QUrl, QDateTime
 
-
-from safe import definitionsv4
+from safe.definitionsv4.utilities import definition
 from safe import messaging as m
 from safe.common.exceptions import (
     HashNotFoundError,
@@ -46,37 +44,6 @@ __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 LOGGER = logging.getLogger('InaSAFE')
-
-
-def definition(keyword):
-    """Given a keyword, try to get a definition dict for it.
-
-    .. versionadded:: 3.2
-
-    Definition dicts are defined in keywords.py. We try to return
-    one if present, otherwise we return none. Using this method you
-    can present rich metadata to the user e.g.
-
-    keyword = 'layer_purpose'
-    kio = safe.utilities.keyword_io.Keyword_IO()
-    definition = kio.definition(keyword)
-    print definition
-
-    :param keyword: A keyword key.
-    :type keyword: str
-
-    :returns: A dictionary containing the matched key definition
-        from definitions, otherwise None if no match was found.
-    :rtype: dict, None
-    """
-
-    for item in dir(definitionsv4):
-        if not item.startswith("__"):
-            var = getattr(definitionsv4, item)
-            if isinstance(var, dict):
-                if var.get('key') == keyword:
-                    return var
-    return None
 
 
 class KeywordIO(QObject):

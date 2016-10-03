@@ -38,7 +38,7 @@ from safe.impact_reports.population_exposure_report_mixin import \
     PopulationExposureReportMixin
 from safe.storage.raster import Raster
 from safe.utilities.i18n import tr
-from safe.utilities.keyword_io import definition
+from safe.definitionsv4.utilities import definition
 
 
 class VolcanoPolygonPopulationFunction(

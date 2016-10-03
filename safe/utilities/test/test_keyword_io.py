@@ -12,7 +12,8 @@ from safe.test.utilities import (
     get_qgis_app,
     standard_data_path,
     clone_raster_layer)
-from safe.utilities.keyword_io import KeywordIO, definition
+from safe.utilities.keyword_io import KeywordIO
+from safe.definitionsv4.utilities import definition
 from safe.utilities.metadata import read_iso19115_metadata
 from safe.utilities.unicode import get_unicode
 
@@ -149,15 +150,7 @@ class KeywordIOTest(unittest.TestCase):
 
         self.assertDictEqual(copied_keywords, expected_keywords)
 
-    def test_definition(self):
-        """Test we can get definitions for keywords.
 
-        .. versionadded:: 3.2
-
-        """
-        keyword = 'hazards'
-        keyword_definition = definition(keyword)
-        self.assertTrue('description' in keyword_definition)
 
     def test_to_message(self):
         """Test we can convert keywords to a message object.

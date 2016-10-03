@@ -14,12 +14,25 @@ from safe.definitionsv4 import (
 )
 
 from safe.definitionsv4.utilities import (
+    definition,
     purposes_for_layer,
     hazards_for_layer
 )
 
 
 class TestDefinitionsUtilities(unittest.TestCase):
+    """Test Utilities Class for Definitions."""
+
+    def test_definition(self):
+        """Test we can get definitions for keywords.
+
+        .. versionadded:: 3.2
+
+        """
+        keyword = 'hazards'
+        keyword_definition = definition(keyword)
+        self.assertTrue('description' in keyword_definition)
+
     def test_layer_purpose_for_layer(self):
         """Test for purpose_for_layer method."""
         expected = ['aggregation', 'exposure', 'hazard']
