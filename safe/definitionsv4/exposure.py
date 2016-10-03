@@ -1,4 +1,6 @@
 from safe.definitionsv4.concepts import concepts
+from safe.definitionsv4.units import (
+    count_exposure_unit, density_exposure_unit)
 from safe.utilities.i18n import tr
 
 """
@@ -55,6 +57,10 @@ exposure_population = {
     'layer_geometry': [
         'polygon',
         'raster'
+    ],
+    'units': [
+        count_exposure_unit,
+        density_exposure_unit
     ]
 }
 exposure_people_in_building = {
@@ -83,7 +89,8 @@ exposure_people_in_building = {
     ],
     'layer_geometry': [
         'point'
-    ]
+    ],
+    'units': []
 }
 exposure_road = {
     'key': 'road',
@@ -124,7 +131,8 @@ exposure_road = {
     ],
     'layer_geometry': [
         'line'
-    ]
+    ],
+    'units': []
 }
 exposure_structure = {
     'key': 'structure',
@@ -161,7 +169,8 @@ exposure_structure = {
     'layer_geometry': [
         'polygon',
         'point'
-    ]
+    ],
+    'units': []
 }
 exposure_place = {
     'key': 'place',
@@ -188,7 +197,8 @@ exposure_place = {
     ],
     'layer_geometry': [
         'point'
-    ]
+    ],
+    'units': []
 }
 exposure_land_cover = {
     'key': 'land_cover',
@@ -230,7 +240,8 @@ exposure_land_cover = {
     'layer_geometry': [
         'polygon',
         'raster'
-    ]
+    ],
+    'units': []
 }
 exposure_all = [
     exposure_land_cover,

@@ -154,7 +154,7 @@ hazard_flood = {
             'link': None
         }
     ],
-    'continuous_hazard_units': [],
+    'continuous_hazard_units': [unit_feet, unit_metres, unit_generic],
     'vector_hazard_classifications': [flood_vector_hazard_classes],
     'raster_hazard_classifications': [flood_raster_hazard_classes],
     'layer_geometry': [

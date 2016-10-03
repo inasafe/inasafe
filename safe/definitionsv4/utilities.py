@@ -93,6 +93,30 @@ def get_layer_modes():
     """Return all sorted layer modes."""
     return sorted(layer_mode_all, key=lambda k: k['key'])
 
+def hazard_units(hazard):
+    """Helper to get unit of a hazard.
+
+    :param hazard: Hazard type.
+    :type hazard: str
+
+    :returns: List of hazard units.
+    :rtype: list
+    """
+    units = definition(hazard)['continuous_hazard_units']
+    return sorted(units, key=lambda k: k['key'])
+
+def exposure_units(exposure):
+    """Helper to get unit of an exposure.
+
+    :param exposure: Exposure type.
+    :type exposure: str
+
+    :returns: List of exposure units.
+    :rtype: list
+    """
+    units = definition(exposure)['units']
+    return sorted(units, key=lambda k: k['key'])
+
 def definition(keyword):
     """Given a keyword, try to get a definition dict for it.
 

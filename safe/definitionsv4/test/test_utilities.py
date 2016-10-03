@@ -18,7 +18,12 @@ from safe.definitionsv4 import (
     exposure_people_in_building,
     exposure_place,
     hazard_category_single_event,
-    hazard_category_multiple_event
+    hazard_category_multiple_event,
+    density_exposure_unit,
+    count_exposure_unit,
+    unit_metres,
+    unit_feet,
+    unit_generic
 )
 
 from safe.definitionsv4.utilities import (
@@ -26,7 +31,9 @@ from safe.definitionsv4.utilities import (
     purposes_for_layer,
     hazards_for_layer,
     exposures_for_layer,
-    hazard_categories_for_layer
+    hazard_categories_for_layer,
+    hazard_units,
+    exposure_units
 )
 
 
@@ -131,6 +138,17 @@ class TestDefinitionsUtilities(unittest.TestCase):
             hazard_category_single_event,
             hazard_category_multiple_event]
         self.assertItemsEqual(hazard_categories, expected)
+
+    def test_exposure_units(self):
+        """Test for exposure_units"""
+        expected = [count_exposure_unit, density_exposure_unit]
+        self.assertItemsEqual(exposure_units('population'), expected)
+
+    def test_hazards_units(self):
+        """Test for hazard_units"""
+        expected = [unit_metres, unit_feet, unit_generic]
+        print [i['key'] for i in hazard_units('flood')]
+        self.assertItemsEqual(hazard_units('flood'), expected)
 
 
 if __name__ == '__main__':
