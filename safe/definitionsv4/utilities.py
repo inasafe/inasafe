@@ -3,8 +3,11 @@
 """Utilities module for helping definitions retrieval.
 """
 from safe import definitionsv4
-from safe.definitionsv4 import layer_purposes
-from safe.definitionsv4 import hazard_all
+from safe.definitionsv4 import (
+    layer_purposes,
+    hazard_all,
+    exposure_all
+)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -45,10 +48,28 @@ def hazards_for_layer(layer_geometry_key, hazard_category_key=None):
     """
     result = []
     for hazard in hazard_all:
-        if layer_geometry_key in hazard['layer_geometry']:
+        if layer_geometry_key in hazard.get('layer_geometry'):
             result.append(hazard)
 
     return result
+
+
+def exposures_for_layer(layer_geometry_key):
+    """Get hazard categories form layer_geometry_key
+
+    :param layer_geometry_key: The geometry key
+    :type layer_geometry_key: str
+
+    :returns: List of hazard
+    :rtype: list
+    """
+    result = []
+    for exposure in exposure_all:
+        if layer_geometry_key in exposure.get('layer_geometry'):
+            result.append(exposure)
+
+    return result
+
 
 def definition(keyword):
     """Given a keyword, try to get a definition dict for it.

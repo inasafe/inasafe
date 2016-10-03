@@ -10,13 +10,20 @@ from safe.definitionsv4 import (
     hazard_earthquake,
     hazard_volcano,
     hazard_volcanic_ash,
-    hazard_generic
+    hazard_generic,
+    exposure_population,
+    exposure_land_cover,
+    exposure_road,
+    exposure_structure,
+    exposure_people_in_building,
+    exposure_place
 )
 
 from safe.definitionsv4.utilities import (
     definition,
     purposes_for_layer,
-    hazards_for_layer
+    hazards_for_layer,
+    exposures_for_layer
 )
 
 
@@ -74,6 +81,20 @@ class TestDefinitionsUtilities(unittest.TestCase):
             'point', 'single_event')
         expected = [hazard_volcano]
         self.assertItemsEqual(hazards, expected)
+
+    def test_exposures_for_layer(self):
+        """Test for exposures_for_layer"""
+        exposures = exposures_for_layer('polygon')
+        expected = [
+            exposure_structure,
+            exposure_population,
+            exposure_land_cover,
+        ]
+        self.assertItemsEqual(exposures, expected)
+
+        exposures = exposures_for_layer('line')
+        expected = [exposure_road]
+        self.assertItemsEqual(exposures, expected)
 
 
 if __name__ == '__main__':

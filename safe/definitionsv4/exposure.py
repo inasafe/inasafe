@@ -51,6 +51,10 @@ exposure_population = {
             'text': None,
             'link': None
         }
+    ],
+    'layer_geometry': [
+        'polygon',
+        'raster'
     ]
 }
 exposure_people_in_building = {
@@ -76,6 +80,9 @@ exposure_people_in_building = {
             'link': 'http://www.preventionweb.net/files/'
                     '45462_backgoundpaperonterminologyaugust20.pdf'
         }
+    ],
+    'layer_geometry': [
+        'point'
     ]
 }
 exposure_road = {
@@ -114,6 +121,9 @@ exposure_road = {
             'text': None,
             'link': None
         }
+    ],
+    'layer_geometry': [
+        'line'
     ]
 }
 exposure_structure = {
@@ -147,6 +157,10 @@ exposure_structure = {
             'text': None,
             'link': None
         }
+    ],
+    'layer_geometry': [
+        'polygon',
+        'point'
     ]
 }
 exposure_place = {
@@ -171,6 +185,9 @@ exposure_place = {
             'text': None,
             'link': None
         }
+    ],
+    'layer_geometry': [
+        'point'
     ]
 }
 exposure_land_cover = {
@@ -209,6 +226,10 @@ exposure_land_cover = {
             'text': None,
             'link': None
         }
+    ],
+    'layer_geometry': [
+        'polygon',
+        'raster'
     ]
 }
 exposure_all = [
