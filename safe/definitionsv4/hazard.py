@@ -115,7 +115,7 @@ hazard_earthquake = {
             'link': None
         }
     ],
-    'continuous_hazard_units': [unit_mmi],
+    'continuous_hazard_units': [unit_mmi, unit_generic],
     'vector_hazard_classifications': [],
     'raster_hazard_classifications': [],
     'layer_geometry': [
