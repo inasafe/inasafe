@@ -19,18 +19,15 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import re
-
 from PyQt4 import QtCore
+
 from qgis.core import QgsCoordinateTransform
 
 import safe.gui.tools.wizard.wizard_strings
-from safe.definitionsv4.layer_purposes import (
-    layer_purpose_exposure,
-    layer_purpose_hazard,
-    layer_purpose_aggregation,
-    layer_purposes)
-from safe.definitionsv4.layer_modes import layer_mode_classified
 from safe.common.version import get_version
+from safe.definitionsv4.layer_modes import layer_mode_classified
+from safe.definitionsv4.layer_purposes import (
+    layer_purpose_exposure, layer_purpose_hazard)
 from safe.utilities.gis import (
     is_raster_layer,
     is_point_layer,
@@ -173,22 +170,3 @@ def layer_description_html(layer, keywords=None):
                tr('In the next step you will be able' +
                   ' to assign keywords to this layer.'))
     return desc
-
-
-def purposes_for_layer(layer_geometry_key):
-    """Get purposes of a layer geometry id.
-
-    :param layer_geometry_key: The geometry id
-    :type layer_geometry_key: str
-
-    :returns: List of suitable layer purpose.
-    :rtype: list
-    """
-    return_value = []
-    for layer_purpose in layer_purposes:
-        layer_geometry_keys = [
-            i['key'] for i in layer_purpose['layer_geometry']]
-        if layer_geometry_key in layer_geometry_keys:
-            return_value.append(layer_purpose['key'])
-
-    return sorted(return_value)
