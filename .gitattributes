@@ -21,7 +21,7 @@
 *.pdf binary
 
 # OSX Plist
-*.plist eol=lf
+*.plist -text
 
 # binary
 *.sqlite binary
