@@ -226,8 +226,8 @@ def _add_id_column(layer):
         id_field = QgsField()
         id_field.setName(safe_id['field_name'])
         id_field.setType(safe_id['type'])
-        id_field.setPrecision(0)
-        id_field.setLength(10)
+        id_field.setPrecision(safe_id['precision'])
+        id_field.setLength(safe_id['length'])
 
         layer.addAttribute(id_field)
 

@@ -12,6 +12,9 @@ __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
+default_field_length = 10
+default_field_precision = 5
+
 # Exposure
 # Exposure ID
 exposure_id_field = {
@@ -19,6 +22,8 @@ exposure_id_field = {
     'name': tr('Exposure ID'),
     'field_name': 'exp_id',
     'type': QVariant.Int,
+    'length': default_field_length,
+    'precision': 0,
     'description': tr(
         'Attribute where the exposure ID of the feature is located.'),
     'citations': [
@@ -34,6 +39,8 @@ feature_type_field = {
     'name': tr('Feature Type'),
     'field_name': 'feature_type',
     'type': QVariant.String,
+    'length': default_field_length,
+    'precision': 0,
     'description': tr(
         'Attribute where the type of the feature is located.'),
     'citations': [
@@ -49,6 +56,8 @@ population_count_field = {
     'name': tr('Population count'),
     'field_name': 'population',
     'type': QVariant.Int,
+    'length': default_field_length,
+    'precision': 0,
     'description': tr('Attribute where the number of population is located.'),
     'citations': [
         {
@@ -63,6 +72,8 @@ feature_value_field = {
     'name': tr('Feature Value'),
     'field_name': 'exp_value',
     'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': default_field_precision,
     'description': tr('Attribute where the value of the feature is located.'),
     'citations': [
         {
@@ -77,6 +88,8 @@ feature_rate_field = {
     'name': tr('Feature Rate'),
     'field_name': 'exp_rate',
     'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': default_field_precision,
     'description': tr(
         'Attribute where the rate value of the feature is located. A rate '
         'value is the cost per unit of measure (m2 / m) for the feature.'),
@@ -95,6 +108,8 @@ hazard_id_field = {
     'name': tr('Hazard ID'),
     'field_name': 'haz_id',
     'type': QVariant.Int,
+    'length': default_field_length,
+    'precision': 0,
     'description': tr(
         'Attribute where the hazard ID of the feature is located.'),
     'citations': [
@@ -110,6 +125,8 @@ hazard_value_field = {
     'name': tr('Hazard Value'),
     'field_name': 'haz_value',
     'type': [QVariant.String, QVariant.Int, QVariant.Double],
+    'length': default_field_length,
+    'precision': 0,
     'description': tr(
         'Attribute where the hazard value of the feature is located.'),
     'citations': [
@@ -127,6 +144,8 @@ aggregation_id_field = {
     'name': tr('Aggregation ID'),
     'field_name': 'agg_id',
     'type': QVariant.Int,
+    'length': default_field_length,
+    'precision': 0,
     'description': tr(
         'Attribute where the aggregation ID of the feature is located.'),
     'citations': [
@@ -142,6 +161,8 @@ aggregation_name_field = {
     'name': tr('Aggregation Name'),
     'field_name': 'agg_name',
     'type': QVariant.String,
+    'length': default_field_length,
+    'precision': 0,
     'description': tr(
         'Attribute where the aggregation name of the feature is located.'),
     'citations': [
@@ -157,6 +178,8 @@ female_ratio_field = {
     'name': tr('Female Ratio'),
     'field_name': 'female_r',
     'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': default_field_precision,
     'description': tr('Attribute where the ratio of women is located.'),
     'citations': [
         {
@@ -171,6 +194,8 @@ youth_ratio_field = {
     'name': tr('Youth Ratio'),
     'field_name': 'youth_r',
     'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': default_field_precision,
     'description': tr('Attribute where the ratio of youth people is located.'),
     'citations': [
         {
@@ -185,6 +210,8 @@ adult_ratio_field = {
     'name': tr('Adult Ratio'),
     'field_name': 'adult_r',
     'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': default_field_precision,
     'description': tr('Attribute where the ratio of adult people is located.'),
     'citations': [
         {
@@ -199,6 +226,8 @@ elderly_ratio_field = {
     'name': tr('Elderly Ratio'),
     'field_name': 'elderly_r',
     'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': default_field_precision,
     'description': tr(
         'Attribute where the ratio of elderly people is located.'),
     'citations': [
@@ -216,6 +245,8 @@ exposure_class_field = {
     'name': tr('Exposure Class'),
     'field_name': 'exp_class',
     'type': QVariant.String,
+    'length': default_field_length,
+    'precision': 0,
     'description': tr(
         'Attribute where the exposure class of the feature is located.'),
     'citations': [
@@ -231,6 +262,8 @@ hazard_class_field = {
     'name': tr('Hazard Class'),
     'field_name': 'haz_class',
     'type': QVariant.String,
+    'length': default_field_length,
+    'precision': 0,
     'description': tr(
         'Attribute where the hazard class of the feature is located.'),
     'citations': [
@@ -246,6 +279,8 @@ women_count_field = {
     'name': tr('Women Count'),
     'field_name': 'women',
     'type': QVariant.Int,
+    'length': default_field_length,
+    'precision': 0,
     'description': tr(
         'Attribute where the number of women of the feature is located.'),
     'citations': [
@@ -261,6 +296,8 @@ youth_count_field = {
     'name': tr('Youth Count'),
     'field_name': 'youth',
     'type': QVariant.Int,
+    'length': default_field_length,
+    'precision': 0,
     'description': tr(
         'Attribute where the number of youth people of the feature is located.'
     ),
@@ -277,6 +314,8 @@ adult_count_field = {
     'name': tr('Adult Count'),
     'field_name': 'adult',
     'type': QVariant.Int,
+    'length': default_field_length,
+    'precision': 0,
     'description': tr(
         'Attribute where the number of adult people of the feature is located.'
     ),
@@ -293,6 +332,8 @@ elderly_count_field = {
     'name': tr('Elderly Count'),
     'field_name': 'elderly',
     'type': QVariant.Int,
+    'length': default_field_length,
+    'precision': 0,
     'description': tr(
         'Attribute where the number of elderly people of the feature is '
         'located.'
