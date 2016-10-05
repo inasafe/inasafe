@@ -63,7 +63,7 @@ def buffering(layer, radii, callback=None):
 
     # Set the new hazard value field
     fields = layer.fields()
-    field_type = hazard_class_field['type'][0]
+    field_type = hazard_class_field['type']
     field_name = hazard_class_field['field_name']
     new_field = QgsField(field_name, field_type)
     fields.append(new_field)

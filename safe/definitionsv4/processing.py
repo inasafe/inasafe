@@ -40,8 +40,8 @@ Raster package
 """
 
 polygonize_raster = {
-    'step_name': tr('Polygonise'),
-    'output_layer_name': 'polygonised',
+    'step_name': tr('Polygonize'),
+    'output_layer_name': 'polygonized',
 }
 
 reclassify_raster = {
