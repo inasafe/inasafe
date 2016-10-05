@@ -8,6 +8,7 @@ from PyQt4.QtCore import QPyNullVariant
 from qgis.core import QGis, QgsField
 
 from safe.definitionsv4.fields import hazard_class_field, hazard_value_field
+from safe.definitionsv4.processing import reclassify_vector
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -50,9 +51,8 @@ def reclassify(layer, ranges, callback=None):
 
     .. versionadded:: 4.0
     """
-    # Fixme, todo
-    output_layer_name = 'classified'
-    processing_step = 'classifying'
+    output_layer_name = reclassify_vector['output_layer_name']
+    processing_step = reclassify_vector['step_name']
 
     # This layer should have this keyword, or it's a mistake from the dev.
     inasafe_fields = layer.keywords['inasafe_fields']

@@ -17,6 +17,7 @@ from safe.common.utilities import unique_filename, temp_dir
 from safe.definitionsv4.fields import hazard_class_field
 from safe.definitionsv4.layer_geometry import (
     layer_geometry, layer_geometry_polygon)
+from safe.definitionsv4.processing import polygonize_raster
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -43,9 +44,8 @@ def polygonize(layer, callback=None):
 
     .. versionadded:: 4.0
     """
-
-    # Fixme use processing definitions
-    output_layer_name = 'polygonized'
+    output_layer_name = polygonize_raster['output_layer_name']
+    processing_step = polygonize_raster['step_name']
 
     input_raster = gdal.Open(layer.source(), gdal.GA_ReadOnly)
 
