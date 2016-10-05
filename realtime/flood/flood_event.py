@@ -112,10 +112,11 @@ class FloodEvent(QObject):
         self.source = 'PetaJakarta - Jakarta'
         self.region = 'Jakarta'
 
-        self.report_path = os.path.join(self.working_dir, self.report_id)
+        self.report_path = os.path.join(
+            self.working_dir, self.report_id, locale)
 
         if not os.path.exists(self.report_path):
-            os.mkdir(self.report_path)
+            os.makedirs(self.report_path)
 
         self.hazard_path = os.path.join(self.report_path, 'flood_data.json')
         self.hazard_layer = None
@@ -295,6 +296,7 @@ class FloodEvent(QObject):
 
             impact_function.run_analysis()
             self.impact_layer = impact_function.impact
+            self.target_field = impact_function.target_field
             # impact_function.aggregator.set_layers(
             #     self.hazard_layer.as_qgis_native(),
             #     self.exposure_layer.as_qgis_native())
