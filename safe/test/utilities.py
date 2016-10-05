@@ -257,6 +257,11 @@ def load_test_vector_layer(*args, **kwargs):
     except NoKeywordsFoundError:
         layer.keywords = {}
 
+    try:
+        layer.keywords['inasafe_fields']
+    except KeyError:
+        layer.keywords['inasafe_fields'] = {}
+
     return layer
 
 
@@ -281,6 +286,11 @@ def load_test_raster_layer(*args):
         layer.keywords = keyword_io.read_keywords(layer)
     except NoKeywordsFoundError:
         layer.keywords = {}
+
+    try:
+        layer.keywords['inasafe_fields']
+    except KeyError:
+        layer.keywords['inasafe_fields'] = {}
 
     return layer
 
@@ -332,6 +342,11 @@ def load_layer(layer_path):
         layer.keywords = keyword_io.read_keywords(layer)
     except NoKeywordsFoundError:
         layer.keywords = {}
+
+    try:
+        layer.keywords['inasafe_fields']
+    except KeyError:
+        layer.keywords['inasafe_fields'] = {}
 
     return layer, layer_purpose
 
@@ -934,6 +949,11 @@ def clone_shp_layer(
     except NoKeywordsFoundError:
         layer.keywords = {}
 
+    try:
+        layer.keywords['inasafe_fields']
+    except KeyError:
+        layer.keywords['inasafe_fields'] = {}
+
     return layer
 
 
@@ -1007,6 +1027,11 @@ def clone_raster_layer(
         layer.keywords = keyword_io.read_keywords(layer)
     except NoKeywordsFoundError:
         layer.keywords = {}
+
+    try:
+        layer.keywords['inasafe_fields']
+    except KeyError:
+        layer.keywords['inasafe_fields'] = {}
 
     return layer
 

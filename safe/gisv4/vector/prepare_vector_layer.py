@@ -1,13 +1,7 @@
 # coding=utf-8
+
 """
-InaSAFE Disaster risk assessment tool developed by AusAid -
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
+Prepare layers for InaSAFE.
 """
 
 from qgis.core import (
@@ -15,8 +9,8 @@ from qgis.core import (
     QgsField,
 )
 
-from safe.common.exceptions import KeywordNotFoundError
-from safe.gisv4.vector.tools import create_memory_layer, remove_fields, copy_fields, copy_layer
+from safe.gisv4.vector.tools import (
+    create_memory_layer, remove_fields, copy_fields, copy_layer)
 from safe.definitionsv4.processing import prepare_vector
 from safe.definitionsv4.fields import (
     exposure_id_field,
@@ -31,6 +25,11 @@ from safe.definitionsv4.layer_purposes import (
     layer_purpose_hazard,
     layer_purpose_aggregation
 )
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 
 def prepare_vector_layer(layer, callback=None):
@@ -63,10 +62,7 @@ def prepare_vector_layer(layer, callback=None):
         output_layer_name, layer.geometryType(), layer.crs(), layer.fields())
 
     # We transfer keywords to the output.
-    try:
-        cleaned.keywords = layer.keywords
-    except KeywordNotFoundError:
-        pass
+    cleaned.keywords = layer.keywords
 
     copy_layer(layer, cleaned)
     _add_id_column(cleaned)

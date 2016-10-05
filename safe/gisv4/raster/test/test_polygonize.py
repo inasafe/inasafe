@@ -1,14 +1,4 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool developed by AusAid -
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-"""
 
 import unittest
 
@@ -23,6 +13,11 @@ from safe.gisv4.raster.polygonize import polygonize
 from safe.definitionsv4.layer_geometry import (
     layer_geometry, layer_geometry_polygon)
 from safe.definitionsv4.fields import hazard_class_field
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 
 class TestReclassifyRaster(unittest.TestCase):

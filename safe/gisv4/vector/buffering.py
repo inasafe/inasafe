@@ -1,16 +1,6 @@
 # coding=utf-8
 """
-InaSAFE Disaster risk assessment tool developed by AusAid -
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-Issue https://github.com/inasafe/inasafe/issues/3185
-
+Buffer a vector point or line layer into polygons.
 """
 
 from qgis.core import (
@@ -23,11 +13,15 @@ from qgis.core import (
     QgsField,
 )
 
-from safe.common.exceptions import KeywordNotFoundError
 from safe.common.utilities import get_utm_epsg
 from safe.gisv4.vector.tools import create_memory_layer
-from safe.definitionsv4.fields import hazard_value_field
+from safe.definitionsv4.fields import hazard_class_field
 from safe.definitionsv4.processing import buffer_vector
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 
 def buffering(layer, radii, callback=None):
@@ -69,8 +63,8 @@ def buffering(layer, radii, callback=None):
 
     # Set the new hazard value field
     fields = layer.fields()
-    field_type = hazard_value_field['type'][0]
-    field_name = hazard_value_field['field_name']
+    field_type = hazard_class_field['type'][0]
+    field_name = hazard_class_field['field_name']
     new_field = QgsField(field_name, field_type)
     fields.append(new_field)
 
@@ -123,18 +117,8 @@ def buffering(layer, radii, callback=None):
             callback(current=i, maximum=feature_count, step=processing_step)
 
     # We transfer keywords to the output.
-    try:
-        buffered.keywords = layer.keywords
-    except AttributeError:
-        raise KeywordNotFoundError
-
+    buffered.keywords = layer.keywords
     buffered.keywords['layer_geometry'] = 'polygon'
-
-    try:
-        buffered.keywords['inasafe_fields']
-    except KeyError:
-        buffered.keywords['inasafe_fields'] = {}
-
-    buffered.keywords['inasafe_fields']['hazard_value_field'] = field_name
+    buffered.keywords['inasafe_fields'][hazard_class_field['key']] = field_name
 
     return buffered
