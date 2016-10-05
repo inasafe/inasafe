@@ -21,9 +21,9 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from safe.gisv4.vector.tools import create_memory_layer
 from safe.gisv4.vector.prepare_vector_layer import (
     prepare_vector_layer,
-    _copy_layer,
-    _copy_fields,
-    _remove_fields,
+    copy_layer,
+    copy_fields,
+    remove_fields,
     _add_id_column
 )
 from safe.definitionsv4.fields import (
@@ -47,18 +47,18 @@ class TestPrepareLayer(unittest.TestCase):
         new_layer = create_memory_layer(
             'New layer', layer.geometryType(), layer.crs(), layer.fields())
         new_layer.keywords = layer.keywords
-        _copy_layer(layer, new_layer)
+        copy_layer(layer, new_layer)
         self.assertEqual(layer.featureCount(), new_layer.featureCount())
         self.assertEqual(
             len(layer.fields().toList()), len(new_layer.fields().toList()))
 
         expected = len(new_layer.fields().toList()) + 1
         new_fields = {'STRUCTURE': 'my_new_field'}
-        _copy_fields(new_layer, new_fields)
+        copy_fields(new_layer, new_fields)
         self.assertEqual(
             len(new_layer.fields().toList()), expected)
 
-        _remove_fields(new_layer, ['STRUCTURE', 'OSM_TYPE'])
+        remove_fields(new_layer, ['STRUCTURE', 'OSM_TYPE'])
         self.assertEqual(
             len(new_layer.fields().toList()), expected - 2)
 
