@@ -1,11 +1,5 @@
 # coding=utf-8
-"""Docstring for this file."""
-__author__ = 'ismailsunni'
-__project_name = 'parameters'
-__filename = 'generic_parameter_widget'
-__date__ = '8/21/14'
-__copyright__ = 'ismail@kartoza.com'
-__doc__ = ''
+"""Generic Parameter Widget for this file."""
 
 from PyQt4.QtGui import (
     QWidget,
@@ -15,6 +9,13 @@ from PyQt4.QtGui import (
     QToolButton,
     QGridLayout,
     QSizePolicy)
+
+__author__ = 'ismailsunni'
+__project_name = 'parameters'
+__filename = 'generic_parameter_widget'
+__date__ = '8/21/14'
+__copyright__ = 'ismail@kartoza.com'
+__doc__ = ''
 
 
 class GenericParameterWidget(QWidget, object):
@@ -70,15 +71,10 @@ class GenericParameterWidget(QWidget, object):
 
         # spacing
         self._main_layout.setSpacing(0)
-        self._main_layout.setContentsMargins(0, 0, 0, 0)
         self._input_layout.setSpacing(0)
-        self._input_layout.setContentsMargins(0, 0, 0, 0)
         self._help_layout.setSpacing(0)
-        self._help_layout.setContentsMargins(0, 0, 0, 0)
         self._inner_input_layout.setSpacing(7)
-        self._inner_input_layout.setContentsMargins(0, 0, 0, 0)
         self._inner_help_layout.setSpacing(0)
-        self._inner_help_layout.setContentsMargins(0, 0, 0, 0)
 
         # Put elements into layouts
         self._input_layout.addWidget(self._label)

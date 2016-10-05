@@ -9,9 +9,6 @@ from parameter_exceptions import (
 class NumericParameter(GenericParameter):
     """A subclass of generic parameter that accepts float or integer only.
 
-    Known issue : You should set the minimum and the maximum value explicitly.
-    See https://github.com/inasafe/inasafe/issues/2468#issuecomment-171124507
-
     .. versionadded:: 2.2
     """
 

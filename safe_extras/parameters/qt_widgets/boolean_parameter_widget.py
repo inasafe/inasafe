@@ -25,18 +25,12 @@ class BooleanParameterWidget(GenericParameterWidget):
         """
         super(BooleanParameterWidget, self).__init__(parameter, parent)
 
-        # Get the parameter label and use its value as the checkbox text
-        label_item = self._input_layout.itemAt(0)
-        label_widget = label_item.widget()
-        text = label_widget.text()
-
-        self._check_box_input = QCheckBox(text)
+        self._check_box_input = QCheckBox()
         # Tooltips
         self.setToolTip('Tick here to enable ' + self._parameter.name)
         self._check_box_input.setChecked(self._parameter.value)
 
-        self._inner_input_layout.insertWidget(0, self._check_box_input)
-        self._input_layout.removeItem(label_item)
+        self._inner_input_layout.addWidget(self._check_box_input)
 
     def get_parameter(self):
         """Obtain boolean parameter object from the current widget state.

@@ -17,6 +17,7 @@ from qt_widgets.list_parameter_widget import ListParameterWidget
 from qt_widgets.input_list_parameter_widget import InputListParameterWidget
 from qt_widgets.dict_parameter_widget import DictParameterWidget
 from qt_widgets.group_parameter_widget import GroupParameterWidget
+from qt_widgets.select_parameter_widget import SelectParameterWidget
 
 
 class Qt4ParameterFactory(object):
@@ -33,7 +34,8 @@ class Qt4ParameterFactory(object):
             'InputListParameter': InputListParameterWidget,
             'DictParameter': DictParameterWidget,
             'TextParameter': TextParameterWidget,
-            'GroupParameter': GroupParameterWidget
+            'GroupParameter': GroupParameterWidget,
+            'SelectParameter': SelectParameterWidget
         }
 
     def register_widget(self, parameter, parameter_widget):
