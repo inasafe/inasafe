@@ -7,6 +7,8 @@ import sys
 import hashlib
 import logging
 import shutil
+from tempfile import mkdtemp
+from os.path import exists, splitext, basename, join
 from itertools import izip
 from qgis.core import (
     QgsVectorLayer,
@@ -213,11 +215,14 @@ def standard_data_path(*args):
     return path
 
 
-def load_test_vector_layer(*args):
+def load_test_vector_layer(*args, **kwargs):
     """Return the test vector layer.
 
     :param args: List of path e.g. ['exposure', 'buildings.shp'.
     :type args: list
+
+    :param kwargs: It can be clone=True if you want to copy the layer first.
+    :type kwargs: dict
 
     :return: The vector layer.
     :rtype: QgsVectorLayer
@@ -225,7 +230,24 @@ def load_test_vector_layer(*args):
     .. versionadded:: 4.0
     """
     path = standard_data_path(*args)
-    name = os.path.basename(path)
+    name = splitext(basename(path))[0]
+    extension = splitext(path)[1]
+
+    extensions = [
+        '.shp', '.shx', '.dbf', '.prj', '.gpkg', '.geojson', '.xml', '.qml']
+
+    if 'clone' in kwargs.keys():
+        if kwargs['clone']:
+            target_directory = mkdtemp()
+            current_path = splitext(path)[0]
+            path = join(target_directory, name + extension)
+
+            for ext in extensions:
+                src_path = current_path + ext
+                if exists(src_path):
+                    target_path = join(target_directory, name + ext)
+                    shutil.copy2(src_path, target_path)
+
     layer = QgsVectorLayer(path, name, 'ogr')
 
     # In InaSAFE V4, we do monkey patching for keywords.
@@ -965,7 +987,7 @@ def clone_raster_layer(
         put the files into. Default to 'testing'.
     :type target_directory: str
     """
-    extensions = ['.prj', '.sld', 'qml', '.prj', extension]
+    extensions = ['.prj', '.sld', 'qml', extension]
     if include_keywords:
         extensions.append('.xml')
     temp_path = unique_filename(dir=temp_dir(target_directory))
