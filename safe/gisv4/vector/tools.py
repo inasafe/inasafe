@@ -6,7 +6,13 @@ Tools for vector layers.
 
 from uuid import uuid4
 from qgis.core import (
-    QgsVectorLayer, QgsCoordinateReferenceSystem, QGis, QgsFeature, QgsField)
+    QgsVectorLayer,
+    QgsCoordinateReferenceSystem,
+    QGis,
+    QgsFeature,
+    QgsField,
+    QgsWKBTypes
+)
 
 from safe.common.exceptions import MemoryLayerCreationError
 
@@ -14,6 +20,28 @@ __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
+
+
+wkb_type_groups = {
+    'Point': (
+        QgsWKBTypes.Point,
+        QgsWKBTypes.MultiPoint,
+        QgsWKBTypes.Point25D,
+        QgsWKBTypes.MultiPoint25D,),
+    'LineString': (
+        QgsWKBTypes.LineString,
+        QgsWKBTypes.MultiLineString,
+        QgsWKBTypes.LineString25D,
+        QgsWKBTypes.MultiLineString25D,),
+    'Polygon': (
+        QgsWKBTypes.Polygon,
+        QgsWKBTypes.MultiPolygon,
+        QgsWKBTypes.Polygon25D,
+        QgsWKBTypes.MultiPolygon25D,),
+}
+for key, value in list(wkb_type_groups.items()):
+    for const in value:
+        wkb_type_groups[const] = key
 
 
 def create_memory_layer(
