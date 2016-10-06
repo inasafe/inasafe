@@ -10,10 +10,9 @@ __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
-reproject_vector = {
-    'step_name': tr('Reprojecting'),
-    'output_layer_name': 'reprojected',
-}
+"""
+Vector package
+"""
 
 buffer_vector = {
     'step_name': tr('Buffering'),
@@ -25,14 +24,27 @@ prepare_vector = {
     'output_layer_name': 'cleaned',
 }
 
-reclassify_raster = {
+reclassify_vector = {
     'step_name': tr('Reclassifying'),
     'output_layer_name': 'reclassified',
 }
 
-processing_algorithms = [
-    reproject_vector,
-    buffer_vector,
-    prepare_vector,
-    reclassify_raster,
-]
+reproject_vector = {
+    'step_name': tr('Reprojecting'),
+    'output_layer_name': 'reprojected',
+}
+
+
+"""
+Raster package
+"""
+
+polygonize_raster = {
+    'step_name': tr('Polygonize'),
+    'output_layer_name': 'polygonized',
+}
+
+reclassify_raster = {
+    'step_name': tr('Reclassifying'),
+    'output_layer_name': 'reclassified',
+}

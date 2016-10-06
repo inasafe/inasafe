@@ -52,6 +52,8 @@ def check_format(field):
         'key': basestring,
         'name': basestring,
         'field_name': basestring,
+        'precision': int,
+        'length': int,
         'type': qvariant_type,
         'description': basestring,
         'citations': list

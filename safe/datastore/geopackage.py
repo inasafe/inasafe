@@ -11,7 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-from osgeo import ogr, osr
+from osgeo import ogr, osr, gdal
 from PyQt4.QtCore import QFileInfo
 from qgis.core import (
     QgsVectorLayer,
@@ -40,7 +40,8 @@ class GeoPackage(DataStore):
         .. versionadded:: 4.0
         """
         super(GeoPackage, self).__init__(uri)
-        self.driver = ogr.GetDriverByName('GPKG')
+        self.vector_driver = ogr.GetDriverByName('GPKG')
+        self.raster_driver = gdal.GetDriverByName('GPKG')
 
         if isinstance(uri, QFileInfo):
             self._uri = uri
@@ -50,10 +51,19 @@ class GeoPackage(DataStore):
             raise ErrorDataStore('Unknown type')
 
         if self.uri.exists():
-            raise ErrorDataStore('A file exists already')
+            raster_datasource = gdal.Open(self.uri.absoluteFilePath())
+            if raster_datasource is None:
+                # Let's try if it's a vector one.
+                vector_datasource = self.vector_driver.Open(
+                    self.uri.absoluteFilePath())
+                if vector_datasource is None:
+                    msg = 'The file is not a geopackage or it doesn\'t ' \
+                          'contain any layers.'
+                    raise ErrorDataStore(msg)
         else:
             path = self.uri.absoluteFilePath()
-            self.datasource = self.driver.CreateDataSource(path)
+            datasource = self.vector_driver.CreateDataSource(path)
+            del datasource
 
     def is_writable(self):
         """Check if the folder is writable.
@@ -67,15 +77,55 @@ class GeoPackage(DataStore):
         return self._uri.absolutePath().isWritable()
 
     def supports_rasters(self):
-        """Check if we can support raster in the datastore.
+        """Check if we can support raster in the geopackage.
 
         :return: If it's writable or not.
         :rtype: bool
 
         .. versionadded:: 4.0
         """
-        # Fixme need to check GDAL version
-        return False
+        if int(gdal.VersionInfo('VERSION_NUM')) < 2000000:
+            return False
+        else:
+            return True
+
+    def _vector_layers(self):
+        """Return a list of vector layers available.
+
+        :return: List of vector layers available in the geopackage.
+        :rtype: list
+
+        .. versionadded:: 4.0
+        """
+        layers = []
+        vector_datasource = self.vector_driver.Open(
+            self.uri.absoluteFilePath())
+        if vector_datasource:
+            for i in range(vector_datasource.GetLayerCount()):
+                layers.append(vector_datasource.GetLayer(i).GetName())
+        return layers
+
+    def _raster_layers(self):
+        """Return a list of raster layers available.
+
+        :return: List of raster layers available in the geopackage.
+        :rtype: list
+
+        .. versionadded:: 4.0
+        """
+        layers = []
+
+        raster_datasource = gdal.Open(self.uri.absoluteFilePath())
+        if raster_datasource:
+            subdatasets = raster_datasource.GetSubDatasets()
+            if len(subdatasets) == 0:
+                metadata = raster_datasource.GetMetadata()
+                layers.append(metadata['IDENTIFIER'])
+            else:
+                for subdataset in subdatasets:
+                    layers.append(subdataset[0].split(':')[2])
+
+        return layers
 
     def layers(self):
         """Return a list of layers available.
@@ -85,13 +135,16 @@ class GeoPackage(DataStore):
 
         .. versionadded:: 4.0
         """
-        layers = []
-        for i in range(self.datasource.GetLayerCount()):
-            layers.append(self.datasource.GetLayer(i).GetName())
-        return layers
+        return self._vector_layers() + self._raster_layers()
 
     def layer_uri(self, layer_name):
         """Get layer URI.
+
+        For a vector layer :
+        /path/to/the/geopackage.gpkg|layername=my_vector_layer
+
+        For a raster :
+        GPKG:/path/to/the/geopackage.gpkg:my_raster_layer
 
         :param layer_name: The name of the layer to fetch.
         :type layer_name: str
@@ -101,13 +154,19 @@ class GeoPackage(DataStore):
 
         .. versionadded:: 4.0
         """
-        for layer in self.layers():
+        for layer in self._vector_layers():
             if layer == layer_name:
                 uri = u'{}|layername={}'.format(
                     self.uri.absoluteFilePath(), layer_name)
                 return uri
         else:
-            return None
+            for layer in self._raster_layers():
+                if layer == layer_name:
+                    uri = u'GPKG:{}:{}'.format(
+                        self.uri.absoluteFilePath(), layer_name)
+                    return uri
+            else:
+                return None
 
     def _add_vector_layer(self, vector_layer, layer_name):
         """Add a vector layer to the geopackage.
@@ -137,7 +196,9 @@ class GeoPackage(DataStore):
         spatial_reference.ImportFromEPSG(
             int(qgis_spatial_reference.split(':')[1]))
 
-        self.datasource.CreateLayer(layer_name, spatial_reference, geometry)
+        vector_datasource = self.vector_driver.Open(
+            self.uri.absoluteFilePath(), True)
+        vector_datasource.CreateLayer(layer_name, spatial_reference, geometry)
         uri = u'{}|layerid=0'.format(self.uri.absoluteFilePath())
         vector_layer = QgsVectorLayer(uri, layer_name, u'ogr')
 
@@ -163,8 +224,27 @@ class GeoPackage(DataStore):
 
         .. versionadded:: 4.0
         """
-        # fixme
-        # if not self.is_writable():
-        #    return False, 'The destination is not writable.'
 
-        raise NotImplementedError
+        source = gdal.Open(raster_layer.source())
+        array = source.GetRasterBand(1).ReadAsArray()
+
+        x_size = source.RasterXSize
+        y_size = source.RasterYSize
+
+        output = self.raster_driver.Create(
+            self.uri.absoluteFilePath(),
+            x_size,
+            y_size,
+            1,
+            gdal.GDT_Byte,
+            ['APPEND_SUBDATASET=YES', 'RASTER_TABLE=%s' % layer_name]
+        )
+
+        output.SetGeoTransform(source.GetGeoTransform())
+        output.SetProjection(source.GetProjection())
+        output.GetRasterBand(1).WriteArray(array)
+
+        # Once we're done, close properly the dataset
+        output = None
+        source = None
+        return True, layer_name

@@ -1,11 +1,5 @@
 # coding=utf-8
-"""Docstring for this file."""
-__author__ = 'ismailsunni'
-__project_name = 'parameters'
-__filename = 'numeric_parameter_widget'
-__date__ = '8/21/14'
-__copyright__ = 'ismail@kartoza.com'
-__doc__ = ''
+"""Numeric Parameter Widget"""
 
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QLabel, QSizePolicy, QWidget, QComboBox
@@ -13,6 +7,13 @@ from PyQt4.QtGui import QLabel, QSizePolicy, QWidget, QComboBox
 from PyQt4.QtCore import Qt
 
 from qt_widgets.generic_parameter_widget import GenericParameterWidget
+
+__author__ = 'ismailsunni'
+__project_name = 'parameters'
+__filename = 'numeric_parameter_widget'
+__date__ = '8/21/14'
+__copyright__ = 'ismail@kartoza.com'
+__doc__ = ''
 
 
 class NumericParameterWidget(GenericParameterWidget):
