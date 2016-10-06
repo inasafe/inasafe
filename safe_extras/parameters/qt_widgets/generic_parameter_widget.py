@@ -1,11 +1,5 @@
 # coding=utf-8
-"""Docstring for this file."""
-__author__ = 'ismailsunni'
-__project_name = 'parameters'
-__filename = 'generic_parameter_widget'
-__date__ = '8/21/14'
-__copyright__ = 'ismail@kartoza.com'
-__doc__ = ''
+"""Generic Parameter Widget for this file."""
 
 from PyQt4.QtGui import (
     QWidget,
@@ -15,6 +9,13 @@ from PyQt4.QtGui import (
     QToolButton,
     QGridLayout,
     QSizePolicy)
+
+__author__ = 'ismailsunni'
+__project_name = 'parameters'
+__filename = 'generic_parameter_widget'
+__date__ = '8/21/14'
+__copyright__ = 'ismail@kartoza.com'
+__doc__ = ''
 
 
 class GenericParameterWidget(QWidget, object):
