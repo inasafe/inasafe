@@ -8,7 +8,11 @@ from safe.definitionsv4 import (
     hazard_all,
     exposure_all,
     hazard_category_all,
-    layer_mode_all
+    layer_mode_all,
+    exposure_fields,
+    hazard_fields,
+    aggregation_fields,
+    impact_fields
 )
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -140,6 +144,27 @@ def vector_hazards_classifications(hazard_key):
     """
     classifications = definition(hazard_key)['vector_hazard_classifications']
     return sorted(classifications, key=lambda k: k['key'])
+
+
+def get_fields(layer_purpose):
+    """Get all field based on the layer purpose.
+
+    :param layer_purpose: The layer purpose.
+    :type layer_purpose: str
+
+    :returns: List of fields.
+    :rtype: list
+    """
+    if layer_purpose == 'exposure':
+        return exposure_fields
+    elif layer_purpose == 'hazard':
+        return hazard_fields
+    elif layer_purpose == 'aggregation':
+        return aggregation_fields
+    elif layer_purpose == 'impact':
+        return impact_fields
+    else:
+        return []
 
 
 def definition(keyword):
