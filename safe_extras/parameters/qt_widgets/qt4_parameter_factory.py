@@ -1,12 +1,5 @@
 # coding=utf-8
-"""Docstring for this file."""
-
-__author__ = 'ismailsunni'
-__project_name = 'parameters'
-__filename = 'qt4_parameter_factory'
-__date__ = '8/19/14'
-__copyright__ = 'ismail@kartoza.com'
-__doc__ = ''
+"""QT4 Parameter Factory."""
 
 from qt_widgets.boolean_parameter_widget import BooleanParameterWidget
 from qt_widgets.float_parameter_widget import FloatParameterWidget
@@ -18,6 +11,13 @@ from qt_widgets.input_list_parameter_widget import InputListParameterWidget
 from qt_widgets.dict_parameter_widget import DictParameterWidget
 from qt_widgets.group_parameter_widget import GroupParameterWidget
 from qt_widgets.select_parameter_widget import SelectParameterWidget
+
+__author__ = 'ismailsunni'
+__project_name = 'parameters'
+__filename = 'qt4_parameter_factory'
+__date__ = '8/19/14'
+__copyright__ = 'ismail@kartoza.com'
+__doc__ = ''
 
 
 class Qt4ParameterFactory(object):

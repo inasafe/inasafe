@@ -1,11 +1,6 @@
 # coding=utf-8
-"""Docstring for this file."""
-__author__ = 'ismailsunni'
-__project_name = 'parameters'
-__filename = 'parameter_container'
-__date__ = '8/22/14'
-__copyright__ = 'ismail@kartoza.com'
-__doc__ = ''
+"""Parameter Container."""
+
 
 from PyQt4.QtGui import (
     QWidget,
@@ -19,6 +14,13 @@ from PyQt4.QtGui import (
     QFrame)
 
 from qt_widgets.qt4_parameter_factory import Qt4ParameterFactory
+
+__author__ = 'ismailsunni'
+__project_name = 'parameters'
+__filename = 'parameter_container'
+__date__ = '8/22/14'
+__copyright__ = 'ismail@kartoza.com'
+__doc__ = ''
 
 
 class ParameterContainer(QWidget, object):
@@ -141,8 +143,8 @@ class ParameterContainer(QWidget, object):
         # Label for description
         self.description_label.setText(self.description_text)
 
-        self.group_frame.setLineWidth(1)
-        self.group_frame.setFrameStyle(QFrame.Panel)
+        self.group_frame.setLineWidth(0)
+        self.group_frame.setFrameStyle(QFrame.NoFrame)
         vlayout = QVBoxLayout()
         vlayout.setContentsMargins(0, 0, 0, 0)
         vlayout.setSpacing(0)
@@ -194,9 +196,9 @@ class ParameterContainer(QWidget, object):
                 color = color_odd
             i += 1
             parameter_widget.setAutoFillBackground(True)
-            palette = parameter_widget.palette()
-            palette.setColor(parameter_widget.backgroundRole(), color)
-            parameter_widget.setPalette(palette)
+            # palette = parameter_widget.palette()
+            # palette.setColor(parameter_widget.backgroundRole(), color)
+            # parameter_widget.setPalette(palette)
             self.vertical_layout.addWidget(parameter_widget)
 
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
