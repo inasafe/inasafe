@@ -110,7 +110,7 @@ class ImpactFunction(object):
         try:
             self._hazard.keywords = KeywordIO().read_keywords(layer)
         except NoKeywordsFoundError:
-            self._hazard.keywords = {}
+            self._hazard.keywords = {'inasafe_fields': {}}
 
         self.setup_impact_function()
 
@@ -134,7 +134,7 @@ class ImpactFunction(object):
         try:
             self._exposure.keywords = KeywordIO().read_keywords(layer)
         except NoKeywordsFoundError:
-            self._exposure.keywords = {}
+            self._exposure.keywords = {'inasafe_fields': {}}
 
         self.setup_impact_function()
 
@@ -158,7 +158,7 @@ class ImpactFunction(object):
         try:
             self._aggregation.keywords = KeywordIO().read_keywords(layer)
         except NoKeywordsFoundError:
-            self._aggregation.keywords = {}
+            self._aggregation.keywords = {'inasafe_fields': {}}
 
     @property
     def requested_extent(self):

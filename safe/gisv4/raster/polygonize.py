@@ -17,7 +17,7 @@ from safe.common.utilities import unique_filename, temp_dir
 from safe.definitionsv4.fields import hazard_class_field
 from safe.definitionsv4.layer_geometry import (
     layer_geometry, layer_geometry_polygon)
-from safe.common.exceptions import NoKeywordsFoundError
+from safe.definitionsv4.processing import polygonize_raster
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -44,9 +44,8 @@ def polygonize(layer, callback=None):
 
     .. versionadded:: 4.0
     """
-
-    # Fixme use processing definitions
-    output_layer_name = 'polygonized'
+    output_layer_name = polygonize_raster['output_layer_name']
+    processing_step = polygonize_raster['step_name']
 
     input_raster = gdal.Open(layer.source(), gdal.GA_ReadOnly)
 
@@ -72,21 +71,13 @@ def polygonize(layer, callback=None):
 
     vector_layer = QgsVectorLayer(out_shapefile, output_layer_name, 'ogr')
 
-    inasafe_fields = hazard_class_field['key']
-    field_name = hazard_class_field['field_name']
     # We transfer keywords to the output.
-    try:
-        vector_layer.keywords = layer.keywords
-        vector_layer.keywords[
-            layer_geometry['key']] = layer_geometry_polygon['key']
+    vector_layer.keywords = layer.keywords
+    vector_layer.keywords[
+        layer_geometry['key']] = layer_geometry_polygon['key']
 
-        try:
-            vector_layer.keywords['inasafe_fields']
-        except KeyError:
-            vector_layer.keywords['inasafe_fields'] = {}
-
-        vector_layer.keywords['inasafe_fields'][inasafe_fields] = field_name
-    except AttributeError:
-        raise NoKeywordsFoundError
+    inasafe_field = hazard_class_field['key']
+    field_name = hazard_class_field['field_name']
+    vector_layer.keywords['inasafe_fields'][inasafe_field] = field_name
 
     return vector_layer

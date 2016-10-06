@@ -1,14 +1,4 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool developed by AusAid -
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-"""
 
 import unittest
 from collections import OrderedDict
@@ -20,7 +10,12 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from qgis.core import QGis
 from safe.gisv4.vector.buffering import buffering
-from safe.definitionsv4.fields import hazard_value_field
+from safe.definitionsv4.fields import hazard_class_field
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 
 class TestBuffering(unittest.TestCase):
@@ -45,10 +40,10 @@ class TestBuffering(unittest.TestCase):
 
         expected_keywords = keywords.copy()
         expected_keywords['layer_geometry'] = 'polygon'
-        expected_name_field = hazard_value_field['field_name']
+        expected_name_field = hazard_class_field['field_name']
         expected_keywords['inasafe_fields'] = {}
-        expected_keywords['inasafe_fields']['hazard_value_field'] = \
-            expected_name_field
+        expected_keywords['inasafe_fields'][hazard_class_field['key']] = (
+            expected_name_field)
         result = buffering(
             layer=layer,
             radii=radii)

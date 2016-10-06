@@ -1,24 +1,19 @@
 # coding=utf-8
+
 """
-InaSAFE Disaster risk assessment tool developed by AusAid -
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-Issue https://github.com/inasafe/inasafe/issues/3180
-
+Reclassify a continuous vector layer.
 """
 
 from PyQt4.QtCore import QPyNullVariant
 from qgis.core import QGis, QgsField
 
-from safe.gisv4.vector.tools import remove_fields
-from safe.definitionsv4.fields import hazard_value_field as field
-from safe.common.exceptions import KeywordNotFoundError
+from safe.definitionsv4.fields import hazard_class_field, hazard_value_field
+from safe.definitionsv4.processing import reclassify_vector
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 
 def reclassify(layer, ranges, callback=None):
@@ -56,21 +51,20 @@ def reclassify(layer, ranges, callback=None):
 
     .. versionadded:: 4.0
     """
-    # Fixme, todo
-    output_layer_name = 'classified'
-    processing_step = 'classifying'
+    output_layer_name = reclassify_vector['output_layer_name']
+    processing_step = reclassify_vector['step_name']
 
     # This layer should have this keyword, or it's a mistake from the dev.
     inasafe_fields = layer.keywords['inasafe_fields']
-    continuous_column = inasafe_fields[field['key']]
+    continuous_column = inasafe_fields[hazard_value_field['key']]
 
     continuous_index = layer.fieldNameIndex(continuous_column)
 
     classified_field = QgsField()
-    classified_field.setType(field['type'][0])
-    classified_field.setName(field['field_name'])
-    classified_field.setLength(field['length'])
-    classified_field.setPrecision(field['precision'])
+    classified_field.setType(hazard_class_field['type'])
+    classified_field.setName(hazard_class_field['field_name'])
+    classified_field.setLength(hazard_class_field['length'])
+    classified_field.setPrecision(hazard_class_field['precision'])
 
     layer.startEditing()
     layer.addAttribute(classified_field)
@@ -90,14 +84,10 @@ def reclassify(layer, ranges, callback=None):
     layer.commitChanges()
     layer.updateFields()
 
-    remove_fields(layer, [continuous_column])
-
     # We transfer keywords to the output.
-    try:
-        layer.keywords = layer.keywords
-        inasafe_fields[field['key']] = field['field_name']
-    except AttributeError:
-        raise KeywordNotFoundError
+    layer.keywords = layer.keywords
+    inasafe_fields[hazard_class_field['key']] = (
+        hazard_class_field['field_name'])
 
     return layer
 
