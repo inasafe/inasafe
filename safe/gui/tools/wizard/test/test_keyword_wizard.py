@@ -108,7 +108,7 @@ class WizardDialogTest(unittest.TestCase):
         self.assertEqual(text, expected_text)
 
     @unittest.skipIf(
-        os.environ.get('ON_DOCKER', False),
+        os.environ.get('ON_TRAVIS', False),
         'This test is failing with the docker QGIS environment.')
     def test_invalid_keyword_layer(self):
         layer = clone_raster_layer(
@@ -1012,7 +1012,7 @@ class WizardDialogTest(unittest.TestCase):
         self.check_current_step(dialog.step_kw_source)
 
     @unittest.skipIf(
-        os.environ.get('ON_DOCKER', False),
+        os.environ.get('ON_TRAVIS', False),
         'This test is failing with the docker QGIS environment.')
     def test_integrated_line(self):
         """Test for line layer and all possibilities."""
@@ -1075,7 +1075,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnCancel.click()  # cancel
 
     @unittest.skipIf(
-        os.environ.get('ON_DOCKER', False),
+        os.environ.get('ON_TRAVIS', False),
         'This test is failing with the docker QGIS environment.')
     def test_integrated_polygon(self):
         """Test for polygon layer and all possibilities."""
