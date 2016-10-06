@@ -1,16 +1,8 @@
 # coding=utf-8
 """
-InaSAFE Disaster risk assessment tool developed by AusAid -
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
+Reclassify a raster layer.
 
 Issue https://github.com/inasafe/inasafe/issues/3182
-
 """
 
 import numpy as np
@@ -18,10 +10,14 @@ from osgeo import gdal
 from os.path import isfile
 from qgis.core import QgsRasterLayer
 
-from safe.common.exceptions import FileNotFoundError, KeywordNotFoundError
+from safe.common.exceptions import FileNotFoundError
 from safe.common.utilities import unique_filename, temp_dir
-from safe.utilities.i18n import tr
 from safe.definitionsv4.processing import reclassify_raster
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 
 def reclassify(layer, ranges, callback=None):
@@ -103,11 +99,7 @@ def reclassify(layer, ranges, callback=None):
     reclassified = QgsRasterLayer(output_raster, output_layer_name)
 
     # We transfer keywords to the output.
-    # We don't need to update keywords as the CRS is dynamic.
-    try:
-        reclassified.keywords = layer.keywords
-        reclassified.keywords['layer_mode'] = 'classified'
-    except AttributeError:
-        raise KeywordNotFoundError
+    reclassified.keywords = layer.keywords
+    reclassified.keywords['layer_mode'] = 'classified'
 
     return reclassified

@@ -1,14 +1,4 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool developed by AusAid -
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-"""
 
 import unittest
 from osgeo import gdal
@@ -22,7 +12,12 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from qgis.core import QgsFeatureRequest
 
 from safe.gisv4.vector.reclassify import reclassify
-from safe.definitionsv4.fields import hazard_value_field
+from safe.definitionsv4.fields import hazard_class_field
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 
 class TestReclassifyVector(unittest.TestCase):
@@ -55,16 +50,16 @@ class TestReclassifyVector(unittest.TestCase):
         layer = load_test_vector_layer(
             'hazard', 'continuous_vector.geojson', clone=True)
 
-        # Ismail any idea why inasafe_fields is not loaded ?
-        # I need to hardcode it this keyword.
-        layer.keywords['inasafe_fields'] = {'hazard_value_field': 'depth'}
-
         self.assertEqual(layer.featureCount(), 400)
         classified = reclassify(layer, ranges)
         self.assertEqual(layer.featureCount(), 375)
 
-        expected_field = hazard_value_field['field_name']
-        self.assertEqual(classified.fieldNameIndex(expected_field), 0)
+        expected_field = hazard_class_field['field_name']
+        self.assertEqual(classified.fieldNameIndex(expected_field), 1)
+
+        self.assertEqual(
+            layer.keywords['inasafe_fields'][hazard_class_field['key']],
+            hazard_class_field['field_name'])
 
         """
         Test deactivated, I will promise I will come back. ET
