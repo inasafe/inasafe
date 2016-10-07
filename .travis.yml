@@ -4,7 +4,6 @@ services:
 env:
   global:
     - ON_TRAVIS=true
-#    - ON_DOCKER=true
     - IMAGE=elpaso/qgis-testing-environment
     # - IMAGE=etrimaille/qgis-testing-environment
     # - IMAGE=boundlessgeo/qgis-testing-environment
