@@ -4,17 +4,17 @@ services:
 env:
   global:
     - ON_TRAVIS=true
-    # - IMAGE=elpaso/qgis-testing-environment
+    - IMAGE=elpaso/qgis-testing-environment
     # - IMAGE=etrimaille/qgis-testing-environment
-    - IMAGE=boundlessgeo/qgis-testing-environment
+    # - IMAGE=boundlessgeo/qgis-testing-environment
 
   matrix:
     # Tags from elpaso and etrimaille
     # - QGIS_VERSION_TAG=release-2_8
-    # - QGIS_VERSION_TAG=release-2_14
+    - QGIS_VERSION_TAG=release-2_14
 
     # Tags from boundlessgeo
-    - QGIS_VERSION_TAG=release # Current 2.14
+    # - QGIS_VERSION_TAG=release # Current 2.14
     # - QGIS_VERSION_TAG=master_2 # Current 2.17
     # - QGIS_VERSION_TAG=master # Current 3.0
 
