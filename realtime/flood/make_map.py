@@ -92,7 +92,8 @@ def process_event(working_directory, locale_option='en', dummy_folder=None):
             event.calculate_impact()
             event.generate_report()
             ret = push_flood_event_to_rest(flood_event=event)
-        except:
+        except Exception as e:
+            LOGGER.error(e)
             ret = False
         LOGGER.info('Is Push successful? %s.' % bool(ret))
 
