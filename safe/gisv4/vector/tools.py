@@ -72,7 +72,7 @@ def create_memory_layer(
         type_string = 'Polygon'
     else:
         raise MemoryLayerCreationError(
-            'Layer is whether Point nor Line nor Polygon')
+            'Layer is whether Point nor Line nor Polygon, I got %s' % geometry)
 
     crs = coordinate_reference_system.authid().lower()
     uri = '%s?crs=%s&index=yes&uuid=%s' % (type_string, crs, str(uuid4()))
