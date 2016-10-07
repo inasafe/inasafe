@@ -107,10 +107,10 @@ class WizardDialogTest(unittest.TestCase):
         text = get_question_text(constant)
         self.assertEqual(text, expected_text)
 
-    # @unittest.skipIf(
-    #     os.environ.get('ON_TRAVIS', False),
-    #     'This test is failing with the docker QGIS environment.')
-    @unittest.skip('This test is failing with the docker QGIS environment.')
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False),
+        'This test is failing with the docker QGIS environment.')
+    # @unittest.skip('This test is failing with the docker QGIS environment.')
     def test_invalid_keyword_layer(self):
         layer = clone_raster_layer(
             name='invalid_keyword_xml',
@@ -1012,10 +1012,10 @@ class WizardDialogTest(unittest.TestCase):
         # check if in step source
         self.check_current_step(dialog.step_kw_source)
 
-    # @unittest.skipIf(
-    #     os.environ.get('ON_TRAVIS', False),
-    #     'This test is failing with the docker QGIS environment.')
-    @unittest.skip('This test is failing with the docker QGIS environment.')
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False),
+        'This test is failing with the docker QGIS environment.')
+    # @unittest.skip('This test is failing with the docker QGIS environment.')
     def test_integrated_line(self):
         """Test for line layer and all possibilities."""
         layer = clone_shp_layer(
@@ -1037,14 +1037,14 @@ class WizardDialogTest(unittest.TestCase):
         # check if in step subcategory
         self.check_current_step(dialog.step_kw_subcategory)
 
-        expected_subcategories = ['Road']
+        expected_subcategories = ['Roads']
         self.check_list(
             expected_subcategories,
             dialog.step_kw_subcategory.lstSubcategories
         )
 
         self.check_current_text(
-            'Road', dialog.step_kw_subcategory.lstSubcategories)
+            'Roads', dialog.step_kw_subcategory.lstSubcategories)
 
         dialog.pbnNext.click()  # go to laywr mode
 
@@ -1076,10 +1076,10 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnCancel.click()  # cancel
 
-    # @unittest.skipIf(
-    #     os.environ.get('ON_TRAVIS', False),
-    #     'This test is failing with the docker QGIS environment.')
-    @unittest.skip('This test is failing with the docker QGIS environment.')
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False),
+        'This test is failing with the docker QGIS environment.')
+    # @unittest.skip('This test is failing with the docker QGIS environment.')
     def test_integrated_polygon(self):
         """Test for polygon layer and all possibilities."""
         layer = clone_shp_layer(
@@ -1100,7 +1100,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # Go to subcategory
 
         # check number of subcategories
-        expected_subcategories = ['Structure', 'Population', 'Land cover']
+        expected_subcategories = ['Structures', 'Population', 'Land cover']
         self.check_list(
             expected_subcategories,
             dialog.step_kw_subcategory.lstSubcategories
@@ -1109,10 +1109,10 @@ class WizardDialogTest(unittest.TestCase):
         # check if automatically select the only option
 
         self.select_from_list_widget(
-            'Structure', dialog.step_kw_subcategory.lstSubcategories)
+            'Structures', dialog.step_kw_subcategory.lstSubcategories)
 
         self.check_current_text(
-            'Structure', dialog.step_kw_subcategory.lstSubcategories)
+            'Structures', dialog.step_kw_subcategory.lstSubcategories)
 
         dialog.pbnNext.click()  # Go to layer mode
 
