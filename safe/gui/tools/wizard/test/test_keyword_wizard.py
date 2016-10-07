@@ -2,17 +2,12 @@
 """Tests for the keyword wizard."""
 import os
 import shutil
-import sys
 import unittest
 # noinspection PyUnresolvedReferences
 import qgis
 from PyQt4 import QtCore
 from PyQt4.QtCore import Qt
 # noinspection PyPackageRequirements
-# Add PARENT directory to path to make test aware of other modules
-pardir = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), '../../..///'))
-sys.path.append(pardir)
 from safe.common.utilities import temp_dir
 from safe.test.utilities import (
     clone_raster_layer,
@@ -27,7 +22,6 @@ from safe.impact_functions.loader import register_impact_functions
 from safe.gui.tools.wizard.wizard_dialog import WizardDialog
 from safe.gui.tools.wizard.wizard_utils import get_question_text
 from safe.utilities.keyword_io import KeywordIO, definition
-
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -499,6 +493,7 @@ class WizardDialogTest(unittest.TestCase):
         source = 'Source'
         source_scale = 'Source Scale'
         source_url = 'Source Url'
+        # noinspection PyCallByClass
         source_date = QtCore.QDateTime.fromString(
             '06-12-2015 12:30',
             'dd-MM-yyyy HH:mm')
