@@ -3,11 +3,16 @@
 """Definitions relating to hazards category."""
 from safe.definitionsv4 import concepts, small_number
 from safe.utilities.i18n import tr
+from safe.definitionsv4.units import unit_centimetres
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
+
+"""
+Vector classes
+"""
 
 generic_vector_hazard_classes = {
     'key': 'generic_vector_hazard_classes',
@@ -21,8 +26,9 @@ generic_vector_hazard_classes = {
             'name': tr('High Hazard Zone'),
             'description': tr('The location that has highest impact.'),
             'string_defaults': ['high'],
-            'numeric_default_min': 5,
-            'numeric_default_max': 10,
+            'class_value': 3,
+            'numeric_default_min': 3,
+            'numeric_default_max': (4 - small_number),
             'optional': False,
             'citations': [
                 {
@@ -36,8 +42,9 @@ generic_vector_hazard_classes = {
             'name': tr('Medium Hazard Zone'),
             'description': tr('The location that has medium impact.'),
             'string_defaults': ['medium'],
-            'numeric_default_min': 3,
-            'numeric_default_max': (5 - small_number),
+            'class_value': 2,
+            'numeric_default_min': 2,
+            'numeric_default_max': (3 - small_number),
             'optional': False,
             'citations': [
                 {
@@ -51,8 +58,9 @@ generic_vector_hazard_classes = {
             'name': tr('Low Hazard Zone'),
             'description': tr('The location that has lowest impact.'),
             'string_defaults': ['low'],
+            'class_value': 1,
             'numeric_default_min': 0,
-            'numeric_default_max': (3 - small_number),
+            'numeric_default_max': (2 - small_number),
             'optional': False,
             'citations': [
                 {
@@ -63,6 +71,7 @@ generic_vector_hazard_classes = {
         }
     ]
 }
+
 volcano_vector_hazard_classes = {
     'key': 'volcano_vector_hazard_classes',
     'name': tr('Volcano classes'),
@@ -82,6 +91,7 @@ volcano_vector_hazard_classes = {
             'name': tr('High Hazard Zone'),
             'description': tr('The highest hazard class.'),
             'string_defaults': ['Kawasan Rawan Bencana III', 'high'],
+            'class_value': 3,
             'numeric_default_min': 0,
             'numeric_default_max': (3 - small_number),
             'optional': False,
@@ -97,6 +107,7 @@ volcano_vector_hazard_classes = {
             'name': tr('Medium Hazard Zone'),
             'description': tr('The medium hazard class.'),
             'string_defaults': ['Kawasan Rawan Bencana II', 'medium'],
+            'class_value': 2,
             'numeric_default_min': 3,
             'numeric_default_max': (5 - small_number),
             'optional': False,
@@ -112,6 +123,7 @@ volcano_vector_hazard_classes = {
             'name': tr('Low Hazard Zone'),
             'description': tr('The lowest hazard class.'),
             'string_defaults': ['Kawasan Rawan Bencana I', 'low'],
+            'class_value': 1,
             'numeric_default_min': 5,
             'numeric_default_max': 10,
             'optional': False,
@@ -124,6 +136,7 @@ volcano_vector_hazard_classes = {
         }
     ]
 }
+
 flood_vector_hazard_classes = {
     'key': 'flood_vector_hazard_classes',
     'name': tr('Flood classes'),
@@ -145,6 +158,7 @@ flood_vector_hazard_classes = {
             'name': tr('wet'),
             'description': tr('Water above ground height.'),
             'string_defaults': ['wet', '1', 'YES', 'y', 'yes'],
+            'class_value': 2,
             'numeric_default_min': 1,
             'numeric_default_max': 9999999999,
             'optional': True,
@@ -160,6 +174,7 @@ flood_vector_hazard_classes = {
             'name': tr('dry'),
             'description': tr('No water above ground height.'),
             'string_defaults': ['dry', '0', 'No', 'n', 'no'],
+            'class_value': 1,
             'numeric_default_min': 0,
             'numeric_default_max': (1 - small_number),
             'optional': True,
@@ -172,6 +187,102 @@ flood_vector_hazard_classes = {
         }
     ]
 }
+
+ash_vector_hazard_classes = {
+    'key': 'ash_vector_hazard_classes',
+    'name': tr('Ash classes'),
+    'description': tr(
+        'Three four are supported for ash vector hazard data: '
+        '<b>very low</b>, <b>low</b>, <b>medium</b>, <b>high</b> or '
+        '<b>very high</b>.'),
+    'default_attribute': 'affected',
+    'unit': unit_centimetres,
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    'classes': [
+        {
+            'key': 'very low',
+            'name': tr('Very Low'),
+            'description': tr('Very Low.'),
+            'class_value': 1,
+            'numeric_default_min': 0.01,
+            'numeric_default_max': 0.1,
+            'optional': True,
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
+            'key': 'low',
+            'name': tr('Low'),
+            'description': tr('Low'),
+            'class_value': 2,
+            'numeric_default_min': 0.1,
+            'numeric_default_max': 2,
+            'optional': True,
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
+            'key': 'medium',
+            'name': tr('Medium'),
+            'description': tr('Medium'),
+            'class_value': 3,
+            'numeric_default_min': 2,
+            'numeric_default_max': 5,
+            'optional': True,
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
+            'key': 'high',
+            'name': tr('High'),
+            'description': tr('High'),
+            'class_value': 4,
+            'numeric_default_min': 5,
+            'numeric_default_max': 10,
+            'optional': True,
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
+            'key': 'very high',
+            'name': tr('Very high'),
+            'description': tr('Very High.'),
+            'class_value': 5,
+            'numeric_default_min': 10,
+            'numeric_default_max': 9999999999,
+            'optional': True,
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        }
+    ]
+}
+
+
 vector_hazard_classification = {
     'key': 'vector_hazard_classification',
     'name': tr('Classes'),
@@ -187,10 +298,17 @@ vector_hazard_classification = {
     'types': [
         generic_vector_hazard_classes,
         volcano_vector_hazard_classes,
-        flood_vector_hazard_classes
+        flood_vector_hazard_classes,
+        ash_vector_hazard_classes
     ]
 }
+
 all_vector_hazard_classes = vector_hazard_classification['types']
+
+"""
+Raster classes
+"""
+
 flood_raster_hazard_classes = {
     'key': 'flood_raster_hazard_classes',
     'name': tr('Flood classes'),
@@ -210,6 +328,7 @@ flood_raster_hazard_classes = {
             'key': 'wet',
             'name': tr('wet'),
             'description': tr('Water above ground height.'),
+            'class_value': 2,
             'numeric_default_min': 1,
             'numeric_default_max': 9999999999,
             'optional': True,
@@ -224,6 +343,7 @@ flood_raster_hazard_classes = {
             'key': 'dry',
             'name': tr('dry'),
             'description': tr('No water above ground height.'),
+            'class_value': 1,
             'numeric_default_min': 0,
             'numeric_default_max': (1 - small_number),
             'optional': True,
@@ -236,6 +356,7 @@ flood_raster_hazard_classes = {
         }
     ]
 }
+
 generic_raster_hazard_classes = {
     'key': 'generic_raster_hazard_classes',
     'name': tr('Generic classes'),
@@ -246,6 +367,7 @@ generic_raster_hazard_classes = {
             'key': 'high',
             'name': tr('High hazard zone'),
             'description': tr('The highest hazard classification.'),
+            'class_value': 3,
             'numeric_default_min': 3,
             'numeric_default_max': 3,
             'optional': False,
@@ -260,6 +382,7 @@ generic_raster_hazard_classes = {
             'key': 'medium',
             'name': tr('Medium hazard zone'),
             'description': tr('The middle hazard classification.'),
+            'class_value': 2,
             'numeric_default_min': 2,
             'numeric_default_max': 2,
             'optional': False,
@@ -274,6 +397,7 @@ generic_raster_hazard_classes = {
             'key': 'low',
             'name': tr('Low hazard zone'),
             'description': tr('The lowest hazard classification.'),
+            'class_value': 1,
             'numeric_default_min': 1,
             'numeric_default_max': 1,
             'optional': False,
@@ -286,6 +410,7 @@ generic_raster_hazard_classes = {
         }
     ]
 }
+
 tsunami_raster_hazard_classes = {
     'key': 'tsunami_raster_hazard_classes',
     'name': tr('Tsunami classes'),
@@ -306,6 +431,7 @@ tsunami_raster_hazard_classes = {
             'key': 'dry',
             'name': tr('Dry zone'),
             'description': tr('No water above ground height.'),
+            'class_value': 1,
             'numeric_default_min': 0,
             'numeric_default_max': (1 - small_number),
             'optional': True,
@@ -329,6 +455,7 @@ tsunami_raster_hazard_classes = {
                 'shore. Small vessels drift and collide and some turn over. '
                 'Sand is deposited and there is flooding of areas close to '
                 'the shore.'),
+            'class_value': 2,
             'numeric_default_min': 0,
             'numeric_default_max': 1,
             'optional': True,
@@ -350,6 +477,7 @@ tsunami_raster_hazard_classes = {
                 'causes most people frightened and to flee to higher ground. '
                 'Small vessels drift and collide. Damage occurs to some '
                 'wooden houses, while most of them are safe.'),
+            'class_value': 3,
             'numeric_default_min': 1,
             'numeric_default_max': 3,
             'optional': True,
@@ -374,6 +502,7 @@ tsunami_raster_hazard_classes = {
                 '8 m, it will cause severe damage. Dykes, wave breaker, '
                 'tsunami protection walls and green belts will be washed '
                 'away.'),
+            'class_value': 4,
             'numeric_default_min': 3,
             'numeric_default_max': 8,
             'optional': True,
@@ -388,6 +517,7 @@ tsunami_raster_hazard_classes = {
             'key': 'very high',
             'name': tr('Very high hazard zone'),
             'description': tr('Water above 8.0m.'),
+            'class_value': 5,
             'numeric_default_min': 8,
             'numeric_default_max': 9999999999,
             'optional': True,
@@ -401,6 +531,7 @@ tsunami_raster_hazard_classes = {
 
     ]
 }
+
 raster_hazard_classification = {
     'key': 'raster_hazard_classification',
     'name': tr('Classes'),
@@ -419,4 +550,5 @@ raster_hazard_classification = {
         }
     ]
 }
+
 all_raster_hazard_classes = raster_hazard_classification['types']
