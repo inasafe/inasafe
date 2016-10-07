@@ -2,17 +2,12 @@
 """Tests for the keyword wizard."""
 import os
 import shutil
-import sys
 import unittest
 # noinspection PyUnresolvedReferences
 import qgis
 from PyQt4 import QtCore
 from PyQt4.QtCore import Qt
 # noinspection PyPackageRequirements
-# Add PARENT directory to path to make test aware of other modules
-pardir = os.path.abspath(
-    os.path.join(os.path.dirname(__file__), '../../..///'))
-sys.path.append(pardir)
 from safe.common.utilities import temp_dir
 from safe.test.utilities import (
     clone_raster_layer,
@@ -27,7 +22,6 @@ from safe.impact_functions.loader import register_impact_functions
 from safe.gui.tools.wizard.wizard_dialog import WizardDialog
 from safe.gui.tools.wizard.wizard_utils import get_question_text
 from safe.utilities.keyword_io import KeywordIO, definition
-
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -107,7 +101,6 @@ class WizardDialogTest(unittest.TestCase):
         text = get_question_text(constant)
         self.assertEqual(text, expected_text)
 
-    @unittest.skip('This test is failing with the docker QGIS environment.')
     def test_invalid_keyword_layer(self):
         layer = clone_raster_layer(
             name='invalid_keyword_xml',
@@ -496,6 +489,7 @@ class WizardDialogTest(unittest.TestCase):
         source = 'Source'
         source_scale = 'Source Scale'
         source_url = 'Source Url'
+        # noinspection PyCallByClass
         source_date = QtCore.QDateTime.fromString(
             '06-12-2015 12:30',
             'dd-MM-yyyy HH:mm')
@@ -1009,7 +1003,6 @@ class WizardDialogTest(unittest.TestCase):
         # check if in step source
         self.check_current_step(dialog.step_kw_source)
 
-    @unittest.skip('This test is failing with the docker QGIS environment.')
     def test_integrated_line(self):
         """Test for line layer and all possibilities."""
         layer = clone_shp_layer(
@@ -1031,14 +1024,14 @@ class WizardDialogTest(unittest.TestCase):
         # check if in step subcategory
         self.check_current_step(dialog.step_kw_subcategory)
 
-        expected_subcategories = ['Road']
+        expected_subcategories = ['Roads']
         self.check_list(
             expected_subcategories,
             dialog.step_kw_subcategory.lstSubcategories
         )
 
         self.check_current_text(
-            'Road', dialog.step_kw_subcategory.lstSubcategories)
+            'Roads', dialog.step_kw_subcategory.lstSubcategories)
 
         dialog.pbnNext.click()  # go to laywr mode
 
@@ -1070,7 +1063,6 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnCancel.click()  # cancel
 
-    @unittest.skip('This test is failing with the docker QGIS environment.')
     def test_integrated_polygon(self):
         """Test for polygon layer and all possibilities."""
         layer = clone_shp_layer(
@@ -1091,7 +1083,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()  # Go to subcategory
 
         # check number of subcategories
-        expected_subcategories = ['Structure', 'Population', 'Land cover']
+        expected_subcategories = ['Structures', 'Population', 'Land cover']
         self.check_list(
             expected_subcategories,
             dialog.step_kw_subcategory.lstSubcategories
@@ -1100,10 +1092,10 @@ class WizardDialogTest(unittest.TestCase):
         # check if automatically select the only option
 
         self.select_from_list_widget(
-            'Structure', dialog.step_kw_subcategory.lstSubcategories)
+            'Structures', dialog.step_kw_subcategory.lstSubcategories)
 
         self.check_current_text(
-            'Structure', dialog.step_kw_subcategory.lstSubcategories)
+            'Structures', dialog.step_kw_subcategory.lstSubcategories)
 
         dialog.pbnNext.click()  # Go to layer mode
 

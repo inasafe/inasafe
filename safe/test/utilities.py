@@ -22,7 +22,7 @@ from qgis.utils import iface
 
 from safe.gis.numerics import axes_to_points
 from safe.common.utilities import unique_filename, temp_dir
-from safe.common.exceptions import NoKeywordsFoundError
+from safe.common.exceptions import NoKeywordsFoundError, MetadataReadError
 
 from safe.utilities.clipper import extent_to_geoarray, clip_layer
 from safe.utilities.gis import get_wgs84_resolution
@@ -1025,7 +1025,7 @@ def clone_raster_layer(
     keyword_io = KeywordIO()
     try:
         layer.keywords = keyword_io.read_keywords(layer)
-    except NoKeywordsFoundError:
+    except (NoKeywordsFoundError, MetadataReadError):
         layer.keywords = {}
 
     try:
