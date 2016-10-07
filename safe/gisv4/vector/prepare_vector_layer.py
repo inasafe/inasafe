@@ -4,9 +4,11 @@
 Prepare layers for InaSAFE.
 """
 
+from PyQt4.QtCore import QPyNullVariant
 from qgis.core import (
     QgsVectorLayer,
     QgsField,
+    QgsFeatureRequest,
 )
 
 from safe.gisv4.vector.tools import (
@@ -16,6 +18,9 @@ from safe.definitionsv4.fields import (
     exposure_id_field,
     hazard_id_field,
     aggregation_id_field,
+    feature_type_field,
+    hazard_value_field,
+    aggregation_name_field,
     exposure_fields,
     hazard_fields,
     aggregation_fields
@@ -65,6 +70,7 @@ def prepare_vector_layer(layer, callback=None):
     cleaned.keywords = layer.keywords
 
     copy_layer(layer, cleaned)
+    _remove_rows(cleaned)
     _add_id_column(cleaned)
     _rename_remove_inasafe_fields(cleaned)
 
@@ -111,34 +117,59 @@ def _rename_remove_inasafe_fields(layer):
     remove_fields(layer, to_remove)
 
 
+def _remove_rows(layer):
+    """Remove rows which do not have information for InaSAFE.
+
+    :param layer: The vector layer.
+    :type layer: QgsVectorLayer
+    """
+    layer_purpose = layer.keywords['layer_purpose']
+    mapping = {
+        layer_purpose_exposure['key']: feature_type_field,
+        layer_purpose_hazard['key']: hazard_value_field,
+        layer_purpose_aggregation['key']: aggregation_name_field
+    }
+
+    for layer_type, field in mapping.iteritems():
+        if layer_purpose == layer_type:
+            compulsory_field = field['key']
+            break
+
+    inasafe_fields = layer.keywords['inasafe_fields']
+    field_name = inasafe_fields[compulsory_field]
+    index = layer.fieldNameIndex(field_name)
+
+    request = QgsFeatureRequest()
+    request.setSubsetOfAttributes([field_name], layer.pendingFields())
+    layer.startEditing()
+    for feature in layer.getFeatures(request):
+        if isinstance(feature.attributes()[index], QPyNullVariant):
+            layer.deleteFeature(feature.id())
+        # TODO We need to add more tests
+        # like checking if the value is in the value_mapping.
+    layer.commitChanges()
+
+
 def _add_id_column(layer):
     """Add an ID column if it's not present in the attribute table.
 
     :param layer: The vector layer.
     :type layer: QgsVectorLayer
     """
+    layer_purpose = layer.keywords['layer_purpose']
+    mapping = {
+        layer_purpose_exposure['key']: exposure_id_field,
+        layer_purpose_hazard['key']: hazard_id_field,
+        layer_purpose_aggregation['key']: aggregation_id_field
+    }
+
     has_id_column = False
-
-    # Exposure
-    if layer.keywords['layer_purpose'] == layer_purpose_exposure['key']:
-        if layer.keywords.get(exposure_id_field['field_name']):
-            has_id_column = True
-        else:
-            safe_id = exposure_id_field
-
-    # Hazard
-    elif layer.keywords['layer_purpose'] == layer_purpose_hazard['key']:
-        if layer.keywords.get(hazard_id_field['field_name']):
-            has_id_column = True
-        else:
-            safe_id = exposure_id_field
-
-    # Aggregation
-    elif layer.keywords['layer_purpose'] == layer_purpose_aggregation['key']:
-        if layer.keywords.get(aggregation_id_field['field_name']):
-            has_id_column = True
-        else:
-            safe_id = exposure_id_field
+    for layer_type, field in mapping.iteritems():
+        if layer_purpose == layer_type:
+            safe_id = field
+            if layer.keywords.get(field['field_name']):
+                has_id_column = True
+            break
 
     if not has_id_column:
 
@@ -159,3 +190,5 @@ def _add_id_column(layer):
                 feature.id(), new_index, feature.id())
 
         layer.commitChanges()
+
+        layer.keywords[safe_id['key']] = safe_id['field_name']

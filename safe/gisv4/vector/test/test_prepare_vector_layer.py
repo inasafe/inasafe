@@ -1,6 +1,7 @@
 # coding=utf-8
 
 import unittest
+from osgeo import gdal
 
 from safe.test.utilities import (
     get_qgis_app,
@@ -14,6 +15,7 @@ from safe.gisv4.vector.prepare_vector_layer import (
     copy_layer,
     copy_fields,
     remove_fields,
+    _remove_rows,
     _add_id_column
 )
 from safe.definitionsv4.fields import (
@@ -60,6 +62,18 @@ class TestPrepareLayer(unittest.TestCase):
         _add_id_column(new_layer)
         field_name = exposure_id_field['field_name']
         self.assertGreater(new_layer.fieldNameIndex(field_name), -1)
+
+    @unittest.skipIf(
+        int(gdal.VersionInfo('VERSION_NUM')) < 2010000,
+        'GDAL 2.1 is required to edit GeoJSON.')
+    def test_remove_rows(self):
+        """Test we can remove rows."""
+
+        layer = load_test_vector_layer(
+            'gisv4', 'hazard', 'classified_vector.geojson', clone=True)
+        feature_count = layer.featureCount()
+        _remove_rows(layer)
+        self.assertEqual(layer.featureCount(), feature_count - 1)
 
     def test_prepare_layer(self):
         """Test we can prepare a vector layer."""

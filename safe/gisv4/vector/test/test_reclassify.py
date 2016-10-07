@@ -30,7 +30,7 @@ class TestReclassifyVector(unittest.TestCase):
 
     @unittest.skipIf(
         int(gdal.VersionInfo('VERSION_NUM')) < 2010000,
-        'GDAL 2.1 is required for geopackage.')
+        'GDAL 2.1 is required to edit GeoJSON.')
     def test_reclassify_vector(self):
         """Test we can reclassify a continuous vector layer."""
         ranges = OrderedDict()
