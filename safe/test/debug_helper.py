@@ -83,5 +83,6 @@ def save_layer_to_file(layer):
     """
     path = mkdtemp()
     data_store = Folder(path)
+    data_store.default_vector_format = 'geojson'
     result = data_store.add_layer(layer, 'debug_layer')
     return data_store.layer_uri(result[1])
