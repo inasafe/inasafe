@@ -18,6 +18,9 @@ from safe.test.utilities import (
 # safe.gui.tools.wizard
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from safe.definitionsv4.versions import inasafe_keyword_version
+from safe.definitionsv4.layer_modes import (
+    layer_mode_continuous, layer_mode_classified)
+
 from safe.impact_functions.loader import register_impact_functions
 from safe.gui.tools.wizard.wizard_dialog import WizardDialog
 from safe.gui.tools.wizard.wizard_utils import get_question_text
@@ -1039,7 +1042,10 @@ class WizardDialogTest(unittest.TestCase):
         # check if in step layer mode
         self.check_current_step(dialog.step_kw_layermode)
 
-        expected_modes = ['Classified']
+        expected_modes = [
+            layer_mode_classified['name'],
+            layer_mode_continuous['name']
+        ]
         self.check_list(expected_modes, dialog.step_kw_layermode.lstLayerModes)
 
         self.check_current_text(
@@ -1104,12 +1110,15 @@ class WizardDialogTest(unittest.TestCase):
         self.check_current_step(dialog.step_kw_layermode)
 
         # check the values of modes options
-        expected_modes = ['Classified']
+        expected_modes = [
+            layer_mode_classified['name'],
+            layer_mode_continuous['name']
+        ]
         self.check_list(expected_modes, dialog.step_kw_layermode.lstLayerModes)
 
         # choosing classified
         self.select_from_list_widget(
-            'Classified', dialog.step_kw_layermode.lstLayerModes)
+            layer_mode_classified['name'], dialog.step_kw_layermode.lstLayerModes)
 
         dialog.pbnNext.click()  # Go to field
 
@@ -1167,7 +1176,7 @@ class WizardDialogTest(unittest.TestCase):
         # select classified
         self.check_current_step(dialog.step_kw_layermode)
         self.select_from_list_widget(
-            'Classified', dialog.step_kw_layermode.lstLayerModes)
+            layer_mode_classified['name'], dialog.step_kw_layermode.lstLayerModes)
         dialog.pbnNext.click()  # go to classifications
 
         self.check_current_step(dialog.step_kw_classification)
