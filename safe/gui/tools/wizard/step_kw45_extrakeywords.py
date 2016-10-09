@@ -56,20 +56,6 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
 
         """
         WizardStep.__init__(self, parent)
-        # Collect some serial widgets
-        self.extra_keywords_widgets = [
-            {'cbo': self.cboExtraKeyword1, 'lbl': self.lblExtraKeyword1},
-            {'cbo': self.cboExtraKeyword2, 'lbl': self.lblExtraKeyword2},
-            {'cbo': self.cboExtraKeyword3, 'lbl': self.lblExtraKeyword3},
-            {'cbo': self.cboExtraKeyword4, 'lbl': self.lblExtraKeyword4},
-            {'cbo': self.cboExtraKeyword5, 'lbl': self.lblExtraKeyword5},
-            {'cbo': self.cboExtraKeyword6, 'lbl': self.lblExtraKeyword6},
-            {'cbo': self.cboExtraKeyword7, 'lbl': self.lblExtraKeyword7},
-            {'cbo': self.cboExtraKeyword8, 'lbl': self.lblExtraKeyword8}
-        ]
-        for ekw in self.extra_keywords_widgets:
-            ekw['key'] = None
-            ekw['slave_key'] = None
 
         self.parameters = []
 
@@ -80,7 +66,7 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
         :returns: True if new step may be enabled.
         :rtype: bool
         """
-        return self.are_all_extra_keywords_selected()
+        return True
 
     def get_previous_step(self):
         """Find the proper step when user clicks the Previous button.
@@ -131,94 +117,6 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
         return get_fields(
             self.parent.step_kw_purpose.selected_purpose()['key'])
 
-    # noinspection PyPep8Naming
-    def on_cboExtraKeyword1_currentIndexChanged(self, indx):
-        """This is an automatic Qt slot executed when the
-           1st extra keyword combobox selection changes.
-
-        :param indx: The new index.
-        :type indx: int or str
-        """
-        if isinstance(indx, int) and indx > -1:
-            self.extra_keyword_changed(self.extra_keywords_widgets[0])
-
-    # noinspection PyPep8Naming
-    def on_cboExtraKeyword2_currentIndexChanged(self, indx):
-        """This is an automatic Qt slot executed when the
-           2nd extra keyword combobox selection changes.
-
-        :param indx: The new index.
-        :type indx: int or str
-        """
-        if isinstance(indx, int) and indx > -1:
-            self.extra_keyword_changed(self.extra_keywords_widgets[1])
-
-    # noinspection PyPep8Naming
-    def on_cboExtraKeyword3_currentIndexChanged(self, indx):
-        """This is an automatic Qt slot executed when the
-           3rd extra keyword combobox selection changes.
-
-        :param indx: The new index.
-        :type indx: int or str
-        """
-        if isinstance(indx, int) and indx > -1:
-            self.extra_keyword_changed(self.extra_keywords_widgets[2])
-
-    # noinspection PyPep8Naming
-    def on_cboExtraKeyword4_currentIndexChanged(self, indx):
-        """This is an automatic Qt slot executed when the
-           4th extra keyword combobox selection changes.
-
-        :param indx: The new index.
-        :type indx: int or str
-        """
-        if isinstance(indx, int) and indx > -1:
-            self.extra_keyword_changed(self.extra_keywords_widgets[3])
-
-    # noinspection PyPep8Naming
-    def on_cboExtraKeyword5_currentIndexChanged(self, indx):
-        """This is an automatic Qt slot executed when the
-           5th extra keyword combobox selection changes.
-
-        :param indx: The new index.
-        :type indx: int or str
-        """
-        if isinstance(indx, int) and indx > -1:
-            self.extra_keyword_changed(self.extra_keywords_widgets[4])
-
-    # noinspection PyPep8Naming
-    def on_cboExtraKeyword6_currentIndexChanged(self, indx):
-        """This is an automatic Qt slot executed when the
-           6th extra keyword combobox selection changes.
-
-        :param indx: The new index.
-        :type indx: int or str
-        """
-        if isinstance(indx, int) and indx > -1:
-            self.extra_keyword_changed(self.extra_keywords_widgets[5])
-
-    # noinspection PyPep8Naming
-    def on_cboExtraKeyword7_currentIndexChanged(self, indx):
-        """This is an automatic Qt slot executed when the
-           7th extra keyword combobox selection changes.
-
-        :param indx: The new index.
-        :type indx: int or str
-        """
-        if isinstance(indx, int) and indx > -1:
-            self.extra_keyword_changed(self.extra_keywords_widgets[6])
-
-    # noinspection PyPep8Naming
-    def on_cboExtraKeyword8_currentIndexChanged(self, indx):
-        """This is an automatic Qt slot executed when the
-           8th extra keyword combobox selection changes.
-
-        :param indx: The new index.
-        :type indx: int or str
-        """
-        if isinstance(indx, int) and indx > -1:
-            self.extra_keyword_changed(self.extra_keywords_widgets[7])
-
     def extra_keyword_changed(self, widget):
         """Populate slave widget if exists and enable the Next button
            if all extra keywords are set.
@@ -226,12 +124,6 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
         :param widget: Metadata of the widget where the event happened.
         :type widget: dict
         """
-        if 'slave_key' in widget and widget['slave_key']:
-            for w in self.extra_keywords_widgets:
-                if w['key'] == widget['slave_key']:
-                    field_name = widget['cbo'].itemData(
-                        widget['cbo'].currentIndex(), QtCore.Qt.UserRole)
-                    self.populate_value_widget_from_field(w['cbo'], field_name)
 
         self.parent.pbnNext.setEnabled(self.are_all_extra_keywords_selected())
 
@@ -242,12 +134,7 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
         :rtype: dict, None
         """
         extra_keywords = {}
-        for ekw in self.extra_keywords_widgets:
-            if ekw['key'] is not None and ekw['cbo'].currentIndex() != -1:
-                key = ekw['key']
-                val = ekw['cbo'].itemData(ekw['cbo'].currentIndex(),
-                                          QtCore.Qt.UserRole)
-                extra_keywords[key] = val
+
         return extra_keywords
 
     def are_all_extra_keywords_selected(self):
@@ -256,9 +143,6 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
         :returns: True if all additional keyword widgets are set
         :rtype: boolean
         """
-        for ekw in self.extra_keywords_widgets:
-            if ekw['key'] is not None and ekw['cbo'].currentIndex() == -1:
-                return False
         return True
 
     def populate_value_widget_from_field(self, widget, field_name):
@@ -322,15 +206,6 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
         self.kwExtraKeywordsGridLayout.addWidget(parameter_container)
 
         # kwExtraKeywordsGridLayout
-
-        # Hide all widgets
-
-        for ekw in self.extra_keywords_widgets:
-            ekw['cbo'].clear()
-            ekw['cbo'].hide()
-            ekw['lbl'].hide()
-            ekw['key'] = None
-            ekw['master_key'] = None
 
         # # Set and show used widgets
         # extra_keywords = self.additional_keywords_for_the_layer()
