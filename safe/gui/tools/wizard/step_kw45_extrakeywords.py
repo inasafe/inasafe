@@ -23,7 +23,8 @@ from PyQt4 import QtCore
 
 from safe.definitionsv4.layer_modes import layer_mode_classified
 from safe.definitionsv4.exposure import exposure_place
-from safe.definitionsv4.layer_purposes import layer_purpose_hazard
+from safe.definitionsv4.utilities import get_fields
+from safe.definitionsv4.layer_geometry import layer_geometry_raster
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 
@@ -104,28 +105,16 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
         return new_step
 
     def additional_keywords_for_the_layer(self):
-        """Return a list of valid additional keywords for the current layer.
+        """Return a list of inasafe fields the current layer.
 
-        :returns: A list where each value represents a valid additional kw.
+        :returns: A list where each value represents inasafe field.
         :rtype: list
         """
-        layer_geometry_key = self.parent.get_layer_geometry_key()
-        layer_mode_key = self.parent.step_kw_layermode.\
-            selected_layermode()['key']
-        if self.parent.step_kw_purpose.\
-                selected_purpose() == layer_purpose_hazard:
-            hazard_category_key = self.parent.step_kw_hazard_category.\
-                selected_hazard_category()['key']
-            hazard_key = self.parent.step_kw_subcategory.\
-                selected_subcategory()['key']
-            return self.impact_function_manager.hazard_additional_keywords(
-                layer_mode_key, layer_geometry_key,
-                hazard_category_key, hazard_key)
-        else:
-            exposure_key = self.parent.step_kw_subcategory.\
-                selected_subcategory()['key']
-            return self.impact_function_manager.exposure_additional_keywords(
-                layer_mode_key, layer_geometry_key, exposure_key)
+        if (self.parent.get_layer_geometry_key() ==
+                layer_geometry_raster['key']):
+            return []
+        return get_fields(
+            self.parent.step_kw_purpose.selected_purpose()['key'])
 
     # noinspection PyPep8Naming
     def on_cboExtraKeyword1_currentIndexChanged(self, indx):
