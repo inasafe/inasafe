@@ -19,6 +19,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 # noinspection PyPackageRequirements
+import logging
 from PyQt4 import QtCore
 from PyQt4.QtGui import (
     QGroupBox,
@@ -34,6 +35,7 @@ from safe_extras.parameters.select_parameter import SelectParameter
 from safe_extras.parameters.qt_widgets.parameter_container import (
     ParameterContainer)
 
+from safe.utilities.i18n import tr
 from safe.definitionsv4.layer_modes import layer_mode_classified
 from safe.definitionsv4.exposure import exposure_place
 from safe.definitionsv4.utilities import get_fields
@@ -43,6 +45,7 @@ from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
+LOGGER = logging.getLogger('InaSAFE')
 
 
 class StepKwExtraKeywords(WizardStep, FORM_CLASS):
@@ -164,40 +167,31 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
 
     def set_widgets(self):
         """Set widgets on the Extra Keywords tab."""
-        # scroll_layout = QVBoxLayout()
-        # scroll_widget = QWidget()
-        # scroll_widget.setLayout(scroll_layout)
-        # scroll = QScrollArea()
-        # scroll.setWidgetResizable(True)
-        # scroll.setWidget(scroll_widget)
-        # main_layout = QVBoxLayout()
-        # main_layout.addWidget(scroll)
-        # main_widget = QWidget()
-        # main_widget.setLayout(main_layout)
+        layer_data_provider = self.parent.layer.dataProvider()
 
-        # select_parameter = SelectParameter()
-        # select_parameter.name = 'Select Affected Field'
-        # select_parameter.is_required = True
-        # select_parameter.help_text = 'Column used for affected field'
-        # select_parameter.description = (
-        #     'Column used for affected field in the vector')
-        # select_parameter.element_type = str
-        # select_parameter.options_list = [
-        #     'FLOODPRONE', 'affected', 'floodprone', 'yes/no',
-        #     '\xddounicode test']
-        # select_parameter.value = 'affected'
+        for inasafe_field in self.additional_keywords_for_the_layer():
+            option_list = [tr('N/A')]
+            for field in layer_data_provider.fields():
+                if isinstance(inasafe_field['type'], list):
+                    if field.type() in inasafe_field['type']:
+                        field_name = field.name()
+                        option_list.append('%s' % field_name)
+                else:
+                    if field.type() == inasafe_field['type']:
+                        field_name = field.name()
+                        option_list.append('%s' % field_name)
 
-        for i in self.additional_keywords_for_the_layer():
+            LOGGER.debug(inasafe_field['name'])
+            LOGGER.debug(option_list)
+
             select_parameter = SelectParameter()
-            select_parameter.name = i['name']
+            select_parameter.name = inasafe_field['name']
             select_parameter.is_required = False
-            select_parameter.help_text = i['description']
-            select_parameter.description = i['description']
-            select_parameter.element_type = str
-            select_parameter.options_list = [
-                'FLOODPRONE', 'affected', 'floodprone', 'yes/no',
-                '\xddounicode test']
-            select_parameter.value = 'affected'
+            select_parameter.help_text = inasafe_field['description']
+            select_parameter.description = inasafe_field['description']
+            select_parameter.element_type = unicode
+            select_parameter.options_list = option_list
+            select_parameter.value = option_list[0]
             self.parameters.append(select_parameter)
 
         parameter_container = ParameterContainer(self.parameters)
