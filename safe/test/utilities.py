@@ -24,6 +24,7 @@ from safe.gis.numerics import axes_to_points
 from safe.common.utilities import unique_filename, temp_dir
 from safe.common.exceptions import NoKeywordsFoundError, MetadataReadError
 
+from safe.gisv4.vector.tools import create_memory_layer, copy_layer
 from safe.utilities.clipper import extent_to_geoarray, clip_layer
 from safe.utilities.gis import get_wgs84_resolution
 from safe.utilities.metadata import read_iso19115_metadata
@@ -221,7 +222,9 @@ def load_test_vector_layer(*args, **kwargs):
     :param args: List of path e.g. ['exposure', 'buildings.shp'.
     :type args: list
 
-    :param kwargs: It can be clone=True if you want to copy the layer first.
+    :param kwargs: It can be :
+        clone=True if you want to copy the layer first to a temporary file.
+        clone_to_memory=True if you want to create a memory layer.
     :type kwargs: dict
 
     :return: The vector layer.
@@ -249,20 +252,35 @@ def load_test_vector_layer(*args, **kwargs):
                     shutil.copy2(src_path, target_path)
 
     layer = QgsVectorLayer(path, name, 'ogr')
+    monkey_patch_keywords(layer)
 
-    # In InaSAFE V4, we do monkey patching for keywords.
+    if 'clone_to_memory' in kwargs.keys():
+        keywords = layer.keywords.copy()
+        memory_layer = create_memory_layer(
+            name, layer.geometryType(), layer.crs(), layer.fields())
+        copy_layer(layer, memory_layer)
+        memory_layer.keywords = keywords
+        return memory_layer
+    else:
+        return layer
+
+
+def monkey_patch_keywords(layer):
+    """In InaSAFE V4, we do monkey patching for keywords.
+
+    :param layer: The layer to monkey patch keywords.
+    :type layer: QgsMapLayer
+    """
     keyword_io = KeywordIO()
     try:
         layer.keywords = keyword_io.read_keywords(layer)
-    except NoKeywordsFoundError:
+    except (NoKeywordsFoundError, MetadataReadError):
         layer.keywords = {}
 
     try:
         layer.keywords['inasafe_fields']
     except KeyError:
         layer.keywords['inasafe_fields'] = {}
-
-    return layer
 
 
 def load_test_raster_layer(*args):
@@ -280,17 +298,7 @@ def load_test_raster_layer(*args):
     name = os.path.basename(path)
     layer = QgsRasterLayer(path, name)
 
-    # In InaSAFE V4, we do monkey patching for keywords.
-    keyword_io = KeywordIO()
-    try:
-        layer.keywords = keyword_io.read_keywords(layer)
-    except NoKeywordsFoundError:
-        layer.keywords = {}
-
-    try:
-        layer.keywords['inasafe_fields']
-    except KeyError:
-        layer.keywords['inasafe_fields'] = {}
+    monkey_patch_keywords(layer)
 
     return layer
 
@@ -336,17 +344,7 @@ def load_layer(layer_path):
     if not layer.isValid():
         raise Exception(message)
 
-    # In InaSAFE V4, we do monkey patching for keywords.
-    keyword_io = KeywordIO()
-    try:
-        layer.keywords = keyword_io.read_keywords(layer)
-    except NoKeywordsFoundError:
-        layer.keywords = {}
-
-    try:
-        layer.keywords['inasafe_fields']
-    except KeyError:
-        layer.keywords['inasafe_fields'] = {}
+    monkey_patch_keywords(layer)
 
     return layer, layer_purpose
 
@@ -942,17 +940,7 @@ def clone_shp_layer(
     shp_path = '%s.shp' % temp_path
     layer = QgsVectorLayer(shp_path, os.path.basename(shp_path), 'ogr')
 
-    # In InaSAFE V4, we do monkey patching for keywords.
-    keyword_io = KeywordIO()
-    try:
-        layer.keywords = keyword_io.read_keywords(layer)
-    except NoKeywordsFoundError:
-        layer.keywords = {}
-
-    try:
-        layer.keywords['inasafe_fields']
-    except KeyError:
-        layer.keywords['inasafe_fields'] = {}
+    monkey_patch_keywords(layer)
 
     return layer
 
@@ -1021,17 +1009,7 @@ def clone_raster_layer(
     raster_path = '%s%s' % (temp_path, extension)
     layer = QgsRasterLayer(raster_path, os.path.basename(raster_path))
 
-    # In InaSAFE V4, we do monkey patching for keywords.
-    keyword_io = KeywordIO()
-    try:
-        layer.keywords = keyword_io.read_keywords(layer)
-    except (NoKeywordsFoundError, MetadataReadError):
-        layer.keywords = {}
-
-    try:
-        layer.keywords['inasafe_fields']
-    except KeyError:
-        layer.keywords['inasafe_fields'] = {}
+    monkey_patch_keywords(layer)
 
     return layer
 

@@ -18,7 +18,7 @@ from safe.definitionsv4.fields import (
     exposure_id_field,
     hazard_id_field,
     aggregation_id_field,
-    feature_type_field,
+    exposure_class_field,
     hazard_value_field,
     aggregation_name_field,
     exposure_fields,
@@ -125,7 +125,7 @@ def _remove_rows(layer):
     """
     layer_purpose = layer.keywords['layer_purpose']
     mapping = {
-        layer_purpose_exposure['key']: feature_type_field,
+        layer_purpose_exposure['key']: exposure_class_field,
         layer_purpose_hazard['key']: hazard_value_field,
         layer_purpose_aggregation['key']: aggregation_name_field
     }
