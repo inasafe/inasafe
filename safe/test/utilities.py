@@ -274,7 +274,7 @@ def monkey_patch_keywords(layer):
     keyword_io = KeywordIO()
     try:
         layer.keywords = keyword_io.read_keywords(layer)
-    except NoKeywordsFoundError:
+    except (NoKeywordsFoundError, MetadataReadError):
         layer.keywords = {}
 
     try:
