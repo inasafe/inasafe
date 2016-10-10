@@ -143,8 +143,7 @@ class TestImpactFunction(unittest.TestCase):
         impact_function.exposure = exposure_layer
         impact_function.hazard = hazard_layer
         impact_function.run()
-        result = impact_function.impact_layer
-        self.assertIsNotNone(result)
+        self.assertIsNotNone(impact_function.impact)
 
     def test_scenario(self):
         """Run test single scenario."""
@@ -178,13 +177,13 @@ class TestImpactFunction(unittest.TestCase):
             clone_to_memory=True)
         self.assertIsNotNone(impact_layer)
         impact_function = ImpactFunction()
-        impact_function.impact_layer = impact_layer
+        impact_function.impact = impact_layer
 
         result = impact_function.run_single_post_processor(
             post_processor_gender)
-        self.assertTrue(result)
+        self.assertTrue(result[0], result[1])
 
-        impact_layer = impact_function.impact_layer
+        impact_layer = impact_function.impact
         self.assertIsNotNone(impact_layer)
 
         # Check if new field is added
@@ -192,20 +191,20 @@ class TestImpactFunction(unittest.TestCase):
         self.assertIn(women_count_field['field_name'], impact_fields)
 
     def test_youth_post_processor(self):
-        """Test gender post processor."""
+        """Test youth post processor."""
         impact_layer = load_test_vector_layer(
             'impact',
             'indivisible_polygon_impact.shp',
             clone_to_memory=True)
         self.assertIsNotNone(impact_layer)
         impact_function = ImpactFunction()
-        impact_function.impact_layer = impact_layer
+        impact_function.impact = impact_layer
 
         result = impact_function.run_single_post_processor(
             post_processor_youth)
         self.assertTrue(result)
 
-        impact_layer = impact_function.impact_layer
+        impact_layer = impact_function.impact
         self.assertIsNotNone(impact_layer)
 
         # Check if new field is added
@@ -220,13 +219,13 @@ class TestImpactFunction(unittest.TestCase):
             clone_to_memory=True)
         self.assertIsNotNone(impact_layer)
         impact_function = ImpactFunction()
-        impact_function.impact_layer = impact_layer
+        impact_function.impact = impact_layer
 
         result = impact_function.run_single_post_processor(
             post_processor_adult)
         self.assertTrue(result)
 
-        impact_layer = impact_function.impact_layer
+        impact_layer = impact_function.impact
         self.assertIsNotNone(impact_layer)
 
         # Check if new field is added
@@ -241,13 +240,13 @@ class TestImpactFunction(unittest.TestCase):
             clone_to_memory=True)
         self.assertIsNotNone(impact_layer)
         impact_function = ImpactFunction()
-        impact_function.impact_layer = impact_layer
+        impact_function.impact = impact_layer
 
         result = impact_function.run_single_post_processor(
             post_processor_elderly)
         self.assertTrue(result)
 
-        impact_layer = impact_function.impact_layer
+        impact_layer = impact_function.impact
         self.assertIsNotNone(impact_layer)
 
         # Check if new field is added
@@ -262,13 +261,13 @@ class TestImpactFunction(unittest.TestCase):
             clone_to_memory=True)
         self.assertIsNotNone(impact_layer)
         impact_function = ImpactFunction()
-        impact_function.impact_layer = impact_layer
+        impact_function.impact = impact_layer
 
         result = impact_function.run_single_post_processor(
             post_processor_size_rate)
         self.assertTrue(result)
 
-        impact_layer = impact_function.impact_layer
+        impact_layer = impact_function.impact
         self.assertIsNotNone(impact_layer)
 
         # Check if new field is added
@@ -285,11 +284,11 @@ class TestImpactFunction(unittest.TestCase):
             clone_to_memory=True)
         self.assertIsNotNone(impact_layer)
         impact_function = ImpactFunction()
-        impact_function.impact_layer = impact_layer
+        impact_function.impact = impact_layer
 
         impact_function.post_process()
 
-        impact_layer = impact_function.impact_layer
+        impact_layer = impact_function.impact
         self.assertIsNotNone(impact_layer)
 
         used_post_processors = [
@@ -311,10 +310,19 @@ class TestImpactFunction(unittest.TestCase):
         """Test to check the post processor input checker."""
         impact_function = ImpactFunction()
 
-        impact_fields = ['population', 'female_r']
+        class FakeMonkeyPatch(object):
+            pass
 
+        # We need to monkey patch some keywords to the impact layer.
+        impact_function.impact = FakeMonkeyPatch()
+        impact_function.impact.keywords = {
+            'inasafe_fields': {
+                'population_count_field': 'population',
+                'female_ratio_field': 'female_r'
+            }
+        }
         self.assertTrue(impact_function.enough_input(
-            impact_fields, post_processor_gender['input']))
+            post_processor_gender['input']))
 
     def test_evaluate_formula(self):
         """Test for evaluating formula."""

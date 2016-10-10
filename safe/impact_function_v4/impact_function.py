@@ -616,12 +616,11 @@ class ImpactFunction(object):
         :param post_processor: A post processor definition.
         :type post_processor: dict
 
-        :returns: True if success, else False
-        :rtype: bool
+        :returns: Tuple with True if success, else False with an error message.
+        :rtype: (bool, str)
         """
-        # Get all field name from impact layer
-        impact_fields = self.impact_layer.dataProvider().fieldNameMap().keys()
-        if self.enough_input(impact_fields, post_processor['input']):
+        valid, message = self.enough_input(post_processor['input'])
+        if valid:
             # Calculate based on formula
             # Iterate all possible output
             for output_key, output_value in post_processor['output'].items():
@@ -685,30 +684,30 @@ class ImpactFunction(object):
                 impact_data_provider.deleteAttributes(temporary_indexes)
                 self.impact.updateFields()
                 LOGGER.debug(self.impact.source())
-            return True
+            return True, None
         else:
-            return False
+            return False, message
 
-    def enough_input(self, impact_fields, post_processor_input):
+    def enough_input(self, post_processor_input):
         """Check if the input from impact_fields in enough.
-
-        :param impact_fields: List of field in impact layer
-        :type impact_fields: list
 
         :param post_processor_input: Collection of post processor input
             requirements.
         :type post_processor_input: dict
 
-        :returns: True if input is enough, else False.
-        :rtype: bool
+        :returns: Tuple with True if success, else False with an error message.
+        :rtype: (bool, str)
         """
+        impact_fields = self.impact.keywords['inasafe_fields'].keys()
         for input_key, input_value in post_processor_input.items():
             if input_value['type'] == 'field':
-                if input_value['value']['field_name'] in impact_fields:
+                key = input_value['value']['key']
+                if key in impact_fields:
                     continue
                 else:
-                    return False
-        return True
+                    msg = 'Key %s is missing in fields %s' % (key, impact_fields)
+                    return False, msg
+        return True, None
 
     def get_parameter(self, feature, post_processor_input):
         """Obtain parameter value for post processor from a feature.
