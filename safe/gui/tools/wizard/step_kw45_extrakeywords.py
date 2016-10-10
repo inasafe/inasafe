@@ -61,6 +61,8 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
         WizardStep.__init__(self, parent)
 
         self.parameters = []
+        self.parameter_container = ParameterContainer()
+        self.kwExtraKeywordsGridLayout.addWidget(self.parameter_container)
 
     def is_ready_to_next_step(self):
         """Check if the step is complete. If so, there is
@@ -167,6 +169,12 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
 
     def set_widgets(self):
         """Set widgets on the Extra Keywords tab."""
+        if self.parameter_container:
+            self.kwExtraKeywordsGridLayout.removeWidget(
+                self.parameter_container)
+        if self.parameters:
+            self.parameters = []
+
         layer_data_provider = self.parent.layer.dataProvider()
 
         for inasafe_field in self.additional_keywords_for_the_layer():
@@ -194,10 +202,9 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
             select_parameter.value = option_list[0]
             self.parameters.append(select_parameter)
 
-        parameter_container = ParameterContainer(self.parameters)
-        parameter_container.setup_ui()
-
-        self.kwExtraKeywordsGridLayout.addWidget(parameter_container)
+        self.parameter_container = ParameterContainer(self.parameters)
+        self.parameter_container.setup_ui()
+        self.kwExtraKeywordsGridLayout.addWidget(self.parameter_container)
 
         # kwExtraKeywordsGridLayout
 
