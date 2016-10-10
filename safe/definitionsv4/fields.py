@@ -352,7 +352,11 @@ exposure_fields = [
     women_count_field,
     youth_count_field,
     adult_count_field,
-    elderly_count_field
+    elderly_count_field,
+    female_ratio_field,
+    youth_ratio_field,
+    adult_ratio_field,
+    elderly_ratio_field
 ]
 
 hazard_fields = [
