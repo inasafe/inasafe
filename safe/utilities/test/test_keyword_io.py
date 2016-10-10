@@ -58,7 +58,7 @@ class KeywordIOTest(unittest.TestCase):
         self.expected_vector_keywords = {
             'keyword_version': '3.5',
             'structure_class_field': 'FLOODED',
-            'value_mapping': {},
+            'value_map': {},
             'title': 'buildings_osm_4326',
             'layer_geometry': 'polygon',
             'layer_purpose': 'exposure',

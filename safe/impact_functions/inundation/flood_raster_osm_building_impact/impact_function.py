@@ -95,7 +95,7 @@ class FloodRasterBuildingFunction(
         total_features = len(interpolated_layer)
 
         structure_class_field = self.exposure.keyword('structure_class_field')
-        exposure_value_mapping = self.exposure.keyword('value_mapping')
+        exposure_value_mapping = self.exposure.keyword('value_map')
 
         hazard_classes = [tr('Flooded'), tr('Wet'), tr('Dry')]
         self.init_report_var(hazard_classes)

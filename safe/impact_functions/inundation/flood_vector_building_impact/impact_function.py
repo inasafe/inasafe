@@ -86,7 +86,7 @@ class FloodPolygonBuildingFunction(
                 'is no affected building.'))
         self.exposure_class_attribute = self.exposure.keyword(
             'structure_class_field')
-        exposure_value_mapping = self.exposure.keyword('value_mapping')
+        exposure_value_mapping = self.exposure.keyword('value_map')
 
         # Prepare Hazard Layer
         hazard_provider = self.hazard.layer.dataProvider()

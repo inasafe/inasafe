@@ -177,7 +177,7 @@ class StepKwClassify(WizardStep, FORM_CLASS):
             classification_name = sel_cl['name']
         else:
             default_classes = self.postprocessor_classification_for_layer()
-            mapping_keyword = 'value_mapping'
+            mapping_keyword = 'value_map'
             classification_name = ''
         if is_raster_layer(self.parent.layer):
             self.lblClassify.setText(classify_raster_question % (

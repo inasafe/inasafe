@@ -85,7 +85,7 @@ class VolcanoPointBuildingFunction(
         volcano_name_attribute = self.hazard.keyword('volcano_name_field')
         self.exposure_class_attribute = self.exposure.keyword(
             'structure_class_field')
-        exposure_value_mapping = self.exposure.keyword('value_mapping')
+        exposure_value_mapping = self.exposure.keyword('value_map')
 
         # Category names for the impact zone
         category_names = radii
