@@ -24,7 +24,9 @@ from qgis.core import (
 from safe.datastore.datastore import DataStore
 from safe.common.exceptions import ErrorDataStore, ShapefileCreationError
 
-EXTENSIONS = ('shp', 'asc', 'tiff', 'tif')
+VECTOR_EXTENSIONS = ('shp', 'kml', 'geojson')
+RASTER_EXTENSIONS = ('asc', 'tiff', 'tif')
+EXTENSIONS = RASTER_EXTENSIONS + VECTOR_EXTENSIONS
 
 
 class Folder(DataStore):
@@ -47,6 +49,7 @@ class Folder(DataStore):
         .. versionadded:: 4.0
         """
         super(Folder, self).__init__(uri)
+        self._default_vector_format = 'shp'
 
         if isinstance(uri, QDir):
             self._uri = uri
@@ -54,6 +57,26 @@ class Folder(DataStore):
             self._uri = QDir(uri)
         else:
             raise ErrorDataStore('Unknown type')
+
+    @property
+    def default_vector_format(self):
+        """Default vector format for the folder datastore.
+
+        :return: The default vector format.
+        :rtype: str.
+        """
+        return self._default_vector_format
+
+    @default_vector_format.setter
+    def default_vector_format(self, default_format):
+        """Set the default vector format for the folder datastore.
+
+        :param default_format: The default output format.
+            It can be 'shp', 'geojson' or 'kml'.
+        :param default_format: str
+        """
+        if default_format in VECTOR_EXTENSIONS:
+            self._default_vector_format = default_format
 
     def is_writable(self):
         """Check if the folder is writable.
@@ -126,26 +149,25 @@ class Folder(DataStore):
         if not self.is_writable():
             return False, 'The destination is not writable.'
 
-        output = QFileInfo(self.uri.filePath(layer_name + '.shp'))
+        output = QFileInfo(
+            self.uri.filePath(layer_name + '.' + self._default_vector_format))
         if output.exists():
             msg = 'The file was already existing : %s' % output.fileName()
             return False, msg
 
-        file_writer = QgsVectorFileWriter(
+        driver_mapping = {
+            'shp': 'ESRI Shapefile',
+            'kml': 'KML',
+            'geojson': 'GeoJSON',
+        }
+
+        QgsVectorFileWriter.writeAsVectorFormat(
+            vector_layer,
             output.absoluteFilePath(),
             'utf-8',
-            vector_layer.fields(),
-            vector_layer.wkbType(),
             vector_layer.crs(),
-            'ESRI Shapefile')
+            driver_mapping[self._default_vector_format])
 
-        if file_writer.hasError() != QgsVectorFileWriter.NoError:
-            raise ShapefileCreationError(file_writer.hasError())
-
-        for feature in vector_layer.getFeatures():
-            file_writer.addFeature(feature)
-
-        del file_writer
         return True, output.fileName()
 
     def _add_raster_layer(self, raster_layer, layer_name):

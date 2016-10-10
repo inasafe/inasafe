@@ -4,7 +4,7 @@ import unittest
 
 from qgis.core import QgsDataSourceURI, QgsVectorLayer
 
-from safe.definitionsv4.definitions_v3 import inasafe_keyword_version
+from safe.definitionsv4.versions import inasafe_keyword_version
 from safe.common.exceptions import NoKeywordsFoundError
 from safe.common.utilities import unique_filename
 from safe.test.utilities import (

@@ -50,13 +50,13 @@ class CollectionParameter(GenericParameter):
             self._minimum_item_count = minimum_count
             return
         # Otherwise it must be less than maximum
-        if minimum_count < self._maximum_item_count:
+        if minimum_count <= self._maximum_item_count:
             self._minimum_item_count = minimum_count
             return
 
         self._minimum_item_count = minimum_count
         raise InvalidMinimumError(
-            'Minimum item count must be less than maximum')
+            'Minimum item count must be no more than maximum')
 
     @property
     def maximum_item_count(self):
@@ -76,7 +76,7 @@ class CollectionParameter(GenericParameter):
             self._maximum_item_count = maximum_count
             return
         # Otherwise it must be less than maximum
-        if maximum_count > self._minimum_item_count:
+        if maximum_count >= self._minimum_item_count:
             self._maximum_item_count = maximum_count
             return
         raise InvalidMaximumError('Maximum must be greater than minimum')

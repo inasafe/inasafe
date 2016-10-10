@@ -1,13 +1,7 @@
 # coding=utf-8
+
 """
-InaSAFE Disaster risk assessment tool developed by AusAid -
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
+Reproject a vector layer to a specific CRS.
 """
 
 from qgis.core import (
@@ -17,9 +11,13 @@ from qgis.core import (
     QgsFeature,
 )
 
-from safe.common.exceptions import KeywordNotFoundError
 from safe.gisv4.vector.tools import create_memory_layer
 from safe.definitionsv4.processing import reproject_vector
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 
 def reproject(layer, output_crs, callback=None):
@@ -71,9 +69,6 @@ def reproject(layer, output_crs, callback=None):
 
     # We transfer keywords to the output.
     # We don't need to update keywords as the CRS is dynamic.
-    try:
-        reprojected.keywords = layer.keywords
-    except KeywordNotFoundError:
-        pass
+    reprojected.keywords = layer.keywords
 
     return reprojected

@@ -11,15 +11,13 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-from safe.definitionsv4.definitions_v3 import (
-    layer_mode_classified,
-    layer_geometry_polygon,
-    hazard_all,
-    hazard_category_multiple_event,
-    hazard_category_single_event,
-    exposure_land_cover,
-    generic_vector_hazard_classes,
-)
+from safe.definitionsv4.layer_modes import layer_mode_classified
+from safe.definitionsv4.exposure import exposure_land_cover
+from safe.definitionsv4.hazard import hazard_all
+from safe.definitionsv4 import generic_vector_hazard_classes
+from safe.definitionsv4.hazard_category import hazard_category_single_event, \
+    hazard_category_multiple_event
+from safe.definitionsv4.layer_geometry import layer_geometry_polygon
 from safe.common.utilities import OrderedDict
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata

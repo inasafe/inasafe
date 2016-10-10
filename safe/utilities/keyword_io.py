@@ -19,7 +19,7 @@ from PyQt4.QtCore import QObject, QSettings
 from PyQt4.QtCore import QUrl, QDateTime
 
 
-from safe.definitionsv4 import definitions_v3
+from safe import definitionsv4
 from safe import messaging as m
 from safe.common.exceptions import (
     HashNotFoundError,
@@ -66,13 +66,13 @@ def definition(keyword):
     :type keyword: str
 
     :returns: A dictionary containing the matched key definition
-        from definitions_v3.py, otherwise None if no match was found.
+        from definitions, otherwise None if no match was found.
     :rtype: dict, None
     """
 
-    for item in dir(definitions_v3):
+    for item in dir(definitionsv4):
         if not item.startswith("__"):
-            var = getattr(definitions_v3, item)
+            var = getattr(definitionsv4, item)
             if isinstance(var, dict):
                 if var.get('key') == keyword:
                     return var
@@ -459,13 +459,13 @@ class KeywordIO(QObject):
         elif keyword in [
                 'vector_hazard_classification',
                 'raster_hazard_classification']:
-            # get the keyword_definition for this class from definitions_v3.py
+            # get the keyword_definition for this class from definitions
             value = definition(value)
             value = value['description']
         # In these VALUE cases we show the DESCRIPTION for
         # the VALUE keyword_definition
         elif value in []:
-            # get the keyword_definition for this class from definitions_v3.py
+            # get the keyword_definition for this class from definitions
             value = definition(value)
             value = value['description']
         # In these VALUE cases we show the NAME for the VALUE
@@ -477,7 +477,7 @@ class KeywordIO(QObject):
                 'line',
                 'polygon'
                 'field']:
-            # get the name for this class from definitions_v3.py
+            # get the name for this class from definitions
             value = definition(value)
             value = value['name']
         # otherwise just treat the keyword as literal text

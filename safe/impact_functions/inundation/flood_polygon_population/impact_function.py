@@ -17,7 +17,7 @@ import logging
 
 import numpy
 
-from safe.definitionsv4.definitions_v3 import no_data_warning
+from safe.definitionsv4.caveats import no_data_warning
 from safe.common.exceptions import ZeroImpactException
 from safe.common.utilities import (
     format_int,
@@ -91,9 +91,9 @@ class FloodEvacuationVectorHazardFunction(
 
         if self.no_data_warning:
             fields = fields + no_data_warning
-        # include any generic exposure specific notes from definitions_v3.py
+        # include any generic exposure specific notes from definitions
         fields = fields + self.exposure_notes()
-        # include any generic hazard specific notes from definitions_v3.py
+        # include any generic hazard specific notes from definitions
         fields = fields + self.hazard_notes()
         return fields
 

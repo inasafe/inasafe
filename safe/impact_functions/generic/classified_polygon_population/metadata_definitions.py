@@ -10,18 +10,16 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.definitionsv4.definitions_v3 import (
-    layer_mode_classified,
-    layer_mode_continuous,
-    layer_geometry_polygon,
-    layer_geometry_raster,
-    hazard_all,
-    hazard_category_single_event,
-    hazard_category_multiple_event,
-    exposure_population,
-    generic_vector_hazard_classes,
-    count_exposure_unit,
-)
+from safe.definitionsv4.layer_modes import layer_mode_continuous, \
+    layer_mode_classified
+from safe.definitionsv4.exposure import exposure_population
+from safe.definitionsv4.units import count_exposure_unit
+from safe.definitionsv4.hazard import hazard_all
+from safe.definitionsv4 import generic_vector_hazard_classes
+from safe.definitionsv4.hazard_category import hazard_category_single_event, \
+    hazard_category_multiple_event
+from safe.definitionsv4.layer_geometry import layer_geometry_polygon, \
+    layer_geometry_raster
 from safe.common.utilities import OrderedDict, get_thousand_separator
 from safe.defaults import (
     default_minimum_needs,
