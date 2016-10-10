@@ -27,7 +27,8 @@
       },
       "process":[
         "Convert bbox aggregation to polygon layer with keywords",
-        "Project aggregation CRS to exposure CRS"
+        "Project aggregation CRS to exposure CRS",
+        "Intersect hazard polygons with aggregation areas and assign hazard class"
       ]
     },
     "hazard":{
@@ -36,15 +37,14 @@
         "Assign classes based on value map",
         "Classified polygon hazard with keywords",
         "Project hazard CRS to exposure CRS",
-        "Vector clip and mask hazard to aggregation",
-        "Intersect hazard polygons with aggregation areas and assign hazard class"
+        "Vector clip and mask hazard to aggregation"
       ]
     },
     "exposure":{
       "info": {},
       "process":[
-        "Vector clip and mask exposure to aggregation",
-        "Intersect aggregate hazard layer with divisible polygon"
+        "Classified exposure with keywords",
+        "Exclude all polygons not intersecting aggregate hazard"
       ]
     }
   }
