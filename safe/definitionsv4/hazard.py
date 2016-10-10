@@ -1,7 +1,7 @@
 # coding=utf-8
 
 """Definitions relating to hazards."""
-from safe.definitionsv4.hazard_classifications import (
+from safe.definitionsv4.hazard_classifications_v3 import (
     generic_vector_hazard_classes,
     volcano_vector_hazard_classes,
     flood_vector_hazard_classes,
