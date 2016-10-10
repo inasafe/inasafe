@@ -82,7 +82,7 @@ class ImpactFunction(object):
         self._callback = self.console_progress_callback
 
         self.algorithm = None
-        self.impact_layer = None
+        self.impact = None
 
         self._name = None  # e.g. Flood Raster on Building Polygon
         self._title = None  # be affected
@@ -603,7 +603,7 @@ class ImpactFunction(object):
 
         # Disable writing impact keyword until implementing all helper methods
         # KeywordIO().write_keywords(
-        #     self.impact_layer, self.impact_layer.keywords)
+        #     self.impact, self.impact.keywords)
 
         return self.state
 
@@ -626,7 +626,7 @@ class ImpactFunction(object):
             # Iterate all possible output
             for output_key, output_value in post_processor['output'].items():
                 # Get impact data provider from impact layer
-                impact_data_provider = self.impact_layer.dataProvider()
+                impact_data_provider = self.impact.dataProvider()
                 # Get output attribute name
                 output_field_name = output_value['value']['field_name']
                 # If there is already the output field, don't proceed
@@ -638,7 +638,7 @@ class ImpactFunction(object):
                         output_field_name,
                         output_value['value']['type'])]
                 )
-                self.impact_layer.updateFields()
+                self.impact.updateFields()
                 # Get the index of output attribute
                 output_field_index = impact_data_provider.fieldNameIndex(
                     output_field_name)
@@ -660,7 +660,7 @@ class ImpactFunction(object):
                 # Create variable to store the formula's result
                 post_processor_result_dict = {}
                 # Create iterator for feature
-                iterator = self.impact_layer.getFeatures()
+                iterator = self.impact.getFeatures()
                 # Iterate all feature
                 for feature in iterator:
                     attributes = feature.attributes()
@@ -683,8 +683,8 @@ class ImpactFunction(object):
                     post_processor_result_dict)
                 # Delete temporary indexes
                 impact_data_provider.deleteAttributes(temporary_indexes)
-                self.impact_layer.updateFields()
-                LOGGER.debug(self.impact_layer.source())
+                self.impact.updateFields()
+                LOGGER.debug(self.impact.source())
             return True
         else:
             return False
@@ -740,12 +740,12 @@ class ImpactFunction(object):
         """
         # Create QgsDistanceArea object
         size_calculator = QgsDistanceArea()
-        size_calculator.setSourceCrs(self.impact_layer.crs())
+        size_calculator.setSourceCrs(self.impact.crs())
         size_calculator.setEllipsoid('WGS84')
         size_calculator.setEllipsoidalMode(True)
 
         # Add new field, size
-        impact_data_provider = self.impact_layer.dataProvider()
+        impact_data_provider = self.impact.dataProvider()
         impact_data_provider.addAttributes(
             [QgsField(
                 'size',
@@ -757,12 +757,12 @@ class ImpactFunction(object):
 
         sizes = {}
         # Iterate through all features
-        features = self.impact_layer.getFeatures()
+        features = self.impact.getFeatures()
         for feature in features:
             sizes[feature.id()] = {
                 size_field_index: size_calculator.measure(feature.geometry())
             }
         # Insert to field
         impact_data_provider.changeAttributeValues(sizes)
-        self.impact_layer.updateFields()
+        self.impact.updateFields()
         return size_field_index
