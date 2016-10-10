@@ -169,6 +169,7 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
 
     def set_widgets(self):
         """Set widgets on the Extra Keywords tab."""
+        # Remove old container and parameter
         if self.parameter_container:
             self.kwExtraKeywordsGridLayout.removeWidget(
                 self.parameter_container)
@@ -177,9 +178,12 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
 
         layer_data_provider = self.parent.layer.dataProvider()
 
+        # Iterate through all inasafe fields
         for inasafe_field in self.additional_keywords_for_the_layer():
+            # Option for Not Available
             option_list = [tr('N/A')]
             for field in layer_data_provider.fields():
+                # Check the field type
                 if isinstance(inasafe_field['type'], list):
                     if field.type() in inasafe_field['type']:
                         field_name = field.name()
@@ -189,9 +193,7 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
                         field_name = field.name()
                         option_list.append('%s' % field_name)
 
-            LOGGER.debug(inasafe_field['name'])
-            LOGGER.debug(option_list)
-
+            # Create SelectParameter
             select_parameter = SelectParameter()
             select_parameter.name = inasafe_field['name']
             select_parameter.is_required = False
@@ -202,49 +204,7 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
             select_parameter.value = option_list[0]
             self.parameters.append(select_parameter)
 
+        # Create the parameter container and add to the wizard.
         self.parameter_container = ParameterContainer(self.parameters)
         self.parameter_container.setup_ui()
         self.kwExtraKeywordsGridLayout.addWidget(self.parameter_container)
-
-        # kwExtraKeywordsGridLayout
-
-        # # Set and show used widgets
-        # extra_keywords = self.additional_keywords_for_the_layer()
-        # for i in range(len(extra_keywords)):
-        #     extra_keyword = extra_keywords[i]
-        #     extra_keywords_widget = self.extra_keywords_widgets[i]
-        #     extra_keywords_widget['key'] = extra_keyword['key']
-        #     extra_keywords_widget['lbl'].setText(extra_keyword['description'])
-        #     if extra_keyword['type'] == 'value':
-        #         field_widget = self.extra_keywords_widgets[i - 1]['cbo']
-        #         field_name = field_widget.itemData(
-        #             field_widget.currentIndex(), QtCore.Qt.UserRole)
-        #         self.populate_value_widget_from_field(
-        #             extra_keywords_widget['cbo'], field_name)
-        #     else:
-        #         for field in self.parent.layer.dataProvider().fields():
-        #             field_name = field.name()
-        #             field_type = field.typeName()
-        #             extra_keywords_widget['cbo'].addItem('%s (%s)' % (
-        #                 field_name, field_type), field_name)
-        #     # If there is a master keyword, attach this widget as a slave
-        #     # to the master widget. It's used for values of a given field.
-        #     if ('master_keyword' in extra_keyword and
-        #             extra_keyword['master_keyword']):
-        #         master_key = extra_keyword['master_keyword']['key']
-        #         for master_candidate in self.extra_keywords_widgets:
-        #             if master_candidate['key'] == master_key:
-        #                 master_candidate['slave_key'] = extra_keyword['key']
-        #     # Show the widget
-        #     extra_keywords_widget['cbo'].setCurrentIndex(-1)
-        #     extra_keywords_widget['lbl'].show()
-        #     extra_keywords_widget['cbo'].show()
-        #
-        # # Set values based on existing keywords (if already assigned)
-        # for ekw in self.extra_keywords_widgets:
-        #     if not ekw['key']:
-        #         continue
-        #     value = self.parent.get_existing_keyword(ekw['key'])
-        #     indx = ekw['cbo'].findData(value, QtCore.Qt.UserRole)
-        #     if indx != -1:
-        #         ekw['cbo'].setCurrentIndex(indx)
