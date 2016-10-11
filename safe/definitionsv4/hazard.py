@@ -20,6 +20,7 @@ from safe.definitionsv4.units import (
     unit_millimetres,
     unit_centimetres,
     unit_mmi)
+from safe.definitionsv4.fields import volcano_name_field
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -82,6 +83,7 @@ hazard_generic = {
     'continuous_hazard_units': [],
     'vector_hazard_classifications': [generic_vector_hazard_classes],
     'raster_hazard_classifications': [generic_raster_hazard_classes],
+    'extra_fields': []
 }
 hazard_earthquake = {
     'key': 'earthquake',
@@ -114,6 +116,7 @@ hazard_earthquake = {
     'continuous_hazard_units': [unit_mmi],
     'vector_hazard_classifications': [],
     'raster_hazard_classifications': [],
+    'extra_fields': []
 }
 hazard_flood = {
     'key': 'flood',
@@ -149,6 +152,7 @@ hazard_flood = {
     'continuous_hazard_units': [],
     'vector_hazard_classifications': [flood_vector_hazard_classes],
     'raster_hazard_classifications': [flood_raster_hazard_classes],
+    'extra_fields': []
 }
 hazard_volcanic_ash = {
     'key': 'volcanic_ash',
@@ -181,6 +185,7 @@ hazard_volcanic_ash = {
     'continuous_hazard_units': [unit_centimetres],
     'vector_hazard_classifications': [],
     'raster_hazard_classifications': [],
+    'extra_fields': []
 }
 hazard_tsunami = {
     'key': 'tsunami',
@@ -215,6 +220,7 @@ hazard_tsunami = {
     'continuous_hazard_units': [unit_feet, unit_metres],
     'vector_hazard_classifications': [],
     'raster_hazard_classifications': [tsunami_raster_hazard_classes],
+    'extra_fields': []
 }
 hazard_volcano = {
     'key': 'volcano',
@@ -248,6 +254,7 @@ hazard_volcano = {
     'continuous_hazard_units': [],
     'vector_hazard_classifications': [volcano_vector_hazard_classes],
     'raster_hazard_classifications': [],
+    'extra_fields': [volcano_name_field]
 }
 hazard_all = [
     hazard_flood,
