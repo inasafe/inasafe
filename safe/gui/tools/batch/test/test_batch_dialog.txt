@@ -1,4 +1,5 @@
 # coding=utf-8
+# TODO This file has been disabled for inasafe v4
 """
 InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
 - **Test for Batch Runner Dialog.**
