@@ -80,3 +80,20 @@ class SelectParameterWidget(GenericParameterWidget):
             raise err
 
         return self._parameter
+
+    def set_choice(self, choice):
+        """Set choice value by item's string.
+
+        :param choice: The choice.
+        :type choice: str
+
+        :returns: True if success, else False.
+        :rtype: bool
+        """
+        # Find index of choice
+        choice_index = self._parameter.options_list.index(choice)
+        if choice_index < 0:
+            return False
+        else:
+            self._input.setCurrentIndex(choice_index)
+            return True
