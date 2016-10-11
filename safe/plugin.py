@@ -351,9 +351,9 @@ class Plugin(object):
         self.action_show_definitions.setWhatsThis(self.tr(
             'Use this to how a document describing all InaSAFE concepts.'))
         self.action_show_definitions.triggered.connect(
-            self.action_show_definitions)
+            self.show_definitions)
         self.add_action(
-            self.show_definitions,
+            self.action_show_definitions,
             add_to_toolbar=False)
 
     def _create_add_petajakarta_layer_action(self):
