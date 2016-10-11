@@ -1,6 +1,12 @@
 # coding=utf-8
 """Definitions relating to hazards."""
-
+from safe.definitionsv4.hazard_classifications import (
+    generic_hazard_classes,
+    volcano_hazard_classes,
+    flood_hazard_classes,
+    tsunami_hazard_classes,
+    ash_hazard_classes
+)
 from safe.definitionsv4.hazard_classifications_v3 import (
     generic_vector_hazard_classes,
     volcano_vector_hazard_classes,
@@ -87,6 +93,7 @@ hazard_generic = {
         'polygon',
         'raster'
     ],
+    'hazard_classifications': [generic_hazard_classes],
     'extra_fields': []
 }
 hazard_earthquake = {
@@ -124,6 +131,7 @@ hazard_earthquake = {
         'polygon',
         'raster'
     ],
+    'hazard_classifications': [generic_hazard_classes],
     'extra_fields': []
 }
 hazard_flood = {
@@ -167,6 +175,7 @@ hazard_flood = {
         'polygon',
         'raster'
     ],
+    'hazard_classifications': [flood_hazard_classes],
     'extra_fields': []
 }
 hazard_volcanic_ash = {
@@ -204,6 +213,7 @@ hazard_volcanic_ash = {
         'polygon',
         'raster'
     ],
+    'hazard_classifications': [ash_hazard_classes],
     'extra_fields': []
 }
 hazard_tsunami = {
@@ -243,6 +253,7 @@ hazard_tsunami = {
         'polygon',
         'raster'
     ],
+    'hazard_classifications': [tsunami_hazard_classes],
     'extra_fields': []
 }
 hazard_volcano = {
@@ -282,6 +293,7 @@ hazard_volcano = {
         'raster',
         'point'
     ],
+    'hazard_classifications': [volcano_hazard_classes],
     'extra_fields': [hazard_name_field]
 }
 hazard_all = [
