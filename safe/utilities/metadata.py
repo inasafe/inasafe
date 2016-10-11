@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# coding=utf-8
 """
 InaSAFE Disaster risk assessment tool developed by AusAid -
 **metadata utilities module.**
@@ -12,12 +12,6 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
-
-__author__ = 'ismail@kartoza.com'
-__revision__ = '$Format:%H$'
-__date__ = '03/12/2015'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
 import os
 
 from safe.definitionsv4.versions import inasafe_keyword_version
@@ -46,6 +40,11 @@ from safe.metadata import (
     ImpactLayerMetadata,
     GenericLayerMetadata
 )
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 
 def write_iso19115_metadata(layer_uri, keywords):
@@ -150,13 +149,15 @@ def read_iso19115_metadata(layer_uri, keyword=None):
         keywords['if_provenance'] = metadata.provenance
     return keywords
 
+
 def metadata_migration(old_metadata, new_version=inasafe_keyword_version):
     """Migrate metadata to the new version.
 
     :param old_metadata: Old metadata as dictionary.
     :type old_metadata: dict
 
-    :param new_version: New target version.
+    :param new_version: New target keyword version, default current keyword
+        version.
     :type new_version: str
 
     :returns: Migrated metadata.
@@ -165,20 +166,11 @@ def metadata_migration(old_metadata, new_version=inasafe_keyword_version):
     new_metadata = {}
     if old_metadata['version'] == '3.5' and new_version == '4.0':
         new_metadata['inasafe_fields'] = {}
-        inasafe_fields = [
-            'field',
-            'population_field',
-            'area_type_field',
-            'area_population_field',
-            'structure_class_field',
-            'area_name_field',
-            'name_field',
-            'area_id_field',
-            'road_class_field'
-        ]
+        new_metadata['version'] = new_version
         for key, value in old_metadata:
-            if key == 'version':
-                new_metadata[key] = new_version
+            if key in ['raster_hazard_classification',
+                       'vector_hazard_classification']:
+                new_metadata['hazard_classification'] = value
             elif key == 'field':
                 if old_metadata['layer_purpose'] == 'hazard':
                     new_metadata['inasafe_fields'][
@@ -228,10 +220,6 @@ def metadata_migration(old_metadata, new_version=inasafe_keyword_version):
             elif key == 'elderly ratio attribute':
                 new_metadata['inasafe_fields'][
                     elderly_ratio_field['key']] = value
-            elif key in [
-                'raster_hazard_classification',
-                'vector_hazard_classification']:
-                new_metadata['hazard_classification'] = value
             else:
                 new_metadata[key] = value
 

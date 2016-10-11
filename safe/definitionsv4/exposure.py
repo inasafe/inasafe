@@ -1,3 +1,6 @@
+# coding=utf-8
+"""Definitions relating to exposure in InaSAFE."""
+
 from safe.definitionsv4.concepts import concepts
 from safe.definitionsv4.fields import (
     exposure_name_field,
@@ -12,9 +15,6 @@ from safe.definitionsv4.fields import (
 )
 from safe.utilities.i18n import tr
 
-"""
-Definitions relating to exposure.
-"""
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
