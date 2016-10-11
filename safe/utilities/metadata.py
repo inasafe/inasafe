@@ -24,6 +24,7 @@ from safe.definitionsv4.versions import inasafe_keyword_version
 from safe.definitionsv4.fields import (
     population_count_field,
     exposure_class_field,
+    hazard_class_field,
     volcano_name_field,
     youth_ratio_field,
     adult_ratio_field,
@@ -31,7 +32,7 @@ from safe.definitionsv4.fields import (
     female_ratio_field,
     aggregation_name_field,
     exposure_name_field,
-    exposure_id_field
+    exposure_id_field,
     )
 from safe.common.exceptions import (
     MetadataReadError,
@@ -149,7 +150,7 @@ def read_iso19115_metadata(layer_uri, keyword=None):
         keywords['if_provenance'] = metadata.provenance
     return keywords
 
-def metadata_migration(old_metadata, new_version):
+def metadata_migration(old_metadata, new_version=inasafe_keyword_version):
     """Migrate metadata to the new version.
 
     :param old_metadata: Old metadata as dictionary.
@@ -180,9 +181,11 @@ def metadata_migration(old_metadata, new_version):
                 new_metadata[key] = new_version
             elif key == 'field':
                 if old_metadata['layer_purpose'] == 'hazard':
-                    pass
+                    new_metadata['inasafe_fields'][
+                        hazard_class_field['key']] = value
                 elif old_metadata['layer_purpose'] == 'exposure':
-                    pass
+                    new_metadata['inasafe_fields'][
+                        exposure_class_field['key']] = value
             elif key == 'population_field':
                 new_metadata['inasafe_fields'][
                     population_count_field['key']] = value
@@ -231,6 +234,5 @@ def metadata_migration(old_metadata, new_version):
                 new_metadata['hazard_classification'] = value
             else:
                 new_metadata[key] = value
-
 
     return new_metadata
