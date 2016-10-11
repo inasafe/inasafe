@@ -164,11 +164,15 @@ def metadata_migration(old_metadata, new_version=inasafe_keyword_version):
     :rtype: dict
     """
     new_metadata = {}
-    if old_metadata['version'] == '3.5' and new_version == '4.0':
+    if old_metadata['keyword_version'] == new_version:
+        return old_metadata
+    elif old_metadata['keyword_version'] == '3.5' and new_version == '4.0':
         new_metadata['inasafe_fields'] = {}
-        new_metadata['version'] = new_version
-        for key, value in old_metadata:
-            if key in ['raster_hazard_classification',
+        new_metadata['keyword_version'] = new_version
+        for key, value in old_metadata.items():
+            if key == 'keyword_version':
+                new_metadata['keyword_version'] = new_version
+            elif key in ['raster_hazard_classification',
                        'vector_hazard_classification']:
                 new_metadata['hazard_classification'] = value
             elif key == 'field':
