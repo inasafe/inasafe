@@ -178,8 +178,12 @@
           <inasafe_fields>
             <gco:Dictionary>
               {
-              &quot;population_field&quot;:&quot;population&quot;,
-              &quot;gender_ratio_field&quot;:&quot;WomenRatio&quot;
+              &quot;youth_ratio_field&quot;:&quot;youth_r&quot;,
+              &quot;feature_rate_field&quot;:&quot;exp_rate&quot;,
+              &quot;elderly_ratio_field&quot;:&quot;elderly_r&quot;,
+              &quot;adult_ratio_field&quot;:&quot;adult_r&quot;,
+              &quot;population_count_field&quot;:&quot;population&quot;,
+              &quot;female_ratio_field&quot;:&quot;WomenRatio&quot;
               }
             </gco:Dictionary>
           </inasafe_fields>
