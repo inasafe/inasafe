@@ -146,19 +146,23 @@ def vector_hazards_classifications(hazard_key):
     return sorted(classifications, key=lambda k: k['key'])
 
 
-def get_fields(layer_purpose):
+def get_fields(layer_purpose, layer_subcategory):
     """Get all field based on the layer purpose.
 
     :param layer_purpose: The layer purpose.
     :type layer_purpose: str
 
+    :param layer_subcategory: Exposure or hazard value.
+    :type layer_subcategory: str
+
     :returns: List of fields.
     :rtype: list
     """
+    subcategory = definition(layer_subcategory)
     if layer_purpose == 'exposure':
-        return exposure_fields
+        return exposure_fields + subcategory['extra_fields']
     elif layer_purpose == 'hazard':
-        return hazard_fields
+        return hazard_fields + subcategory['extra_fields']
     elif layer_purpose == 'aggregation':
         return aggregation_fields
     elif layer_purpose == 'impact':

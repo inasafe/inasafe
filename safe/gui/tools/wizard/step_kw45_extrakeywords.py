@@ -119,8 +119,11 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
         if (self.parent.get_layer_geometry_key() ==
                 layer_geometry_raster['key']):
             return []
+        # Get hazard or exposure value
+        subcategory = self.parent.step_kw_subcategory.selected_subcategory()
         return get_fields(
-            self.parent.step_kw_purpose.selected_purpose()['key'])
+            self.parent.step_kw_purpose.selected_purpose()['key'],
+            subcategory['key'])
 
     def extra_keyword_changed(self, widget):
         """Populate slave widget if exists and enable the Next button

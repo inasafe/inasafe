@@ -15,8 +15,6 @@ from safe.definitionsv4 import (
     exposure_land_cover,
     exposure_road,
     exposure_structure,
-    exposure_people_in_building,
-    exposure_place,
     hazard_category_single_event,
     hazard_category_multiple_event,
     density_exposure_unit,
@@ -26,7 +24,8 @@ from safe.definitionsv4 import (
     unit_generic,
     flood_raster_hazard_classes,
     flood_vector_hazard_classes,
-    generic_vector_hazard_classes
+    generic_vector_hazard_classes,
+    exposure_fields
 )
 
 from safe.definitionsv4.utilities import (
@@ -38,7 +37,8 @@ from safe.definitionsv4.utilities import (
     hazard_units,
     exposure_units,
     raster_hazards_classifications,
-    vector_hazards_classifications
+    vector_hazards_classifications,
+    get_fields
 )
 
 
@@ -171,6 +171,13 @@ class TestDefinitionsUtilities(unittest.TestCase):
         expected = [flood_vector_hazard_classes, generic_vector_hazard_classes]
         self.assertItemsEqual(
             vector_hazards_classifications('flood'), expected)
+
+    def test_get_fields(self):
+        """Test get_fields method."""
+        fields = get_fields('exposure', 'structure')
+        self.assertListEqual(
+            fields, exposure_fields + exposure_structure['extra_fields']
+        )
 
 
 if __name__ == '__main__':
