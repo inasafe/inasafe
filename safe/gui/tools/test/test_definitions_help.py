@@ -3,12 +3,13 @@
 """Tests for definitions help.
 """
 
+import unittest
+import logging
 import codecs
 from safe.test.utilities import (
     standard_data_path,
 )
-import unittest
-import logging
+from safe.utilities.resources import html_footer, html_header
 from safe.utilities.i18n import tr
 from safe.gui.tools.help import definitions_help
 
@@ -77,8 +78,16 @@ class TestDefinitionsHelp(unittest.TestCase):
 
     def test_definitions_help(self):
         """Test definitions help generation."""
-        help_text = definitions_help.content()
-        self.assertEqual(help_text, '')
+        help_text = definitions_help.definitions_help()
+
+        # Next three lines temporary for debugging
+        html = file('/Users/timlinux/Desktop/definitions.html', 'wt')
+        html.writelines(html_header())
+        html.writelines(help_text.to_html())
+        html.writelines(html_footer())
+        html.close()
+
+        self.assertEqual(help_text.to_text(), '')
 
     def test_definition_to_message(self):
         """Test definitions to message renderer."""
