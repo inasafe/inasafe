@@ -20,7 +20,7 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
-class TestReclassifyRaster(unittest.TestCase):
+class TestPolygonizeRaster(unittest.TestCase):
 
     def setUp(self):
         pass
@@ -28,15 +28,15 @@ class TestReclassifyRaster(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test_reclassify_raster(self):
-        """Test we can reclassify a raster layer."""
+    def test_polygonize_raster(self):
+        """Test we can polygonize a raster layer."""
         layer = load_test_raster_layer('hazard', 'classified_flood_20_20.asc')
 
         expected_keywords = layer.keywords.copy()
         expected_keywords[
             layer_geometry['key']] = layer_geometry_polygon['key']
         expected_keywords['inasafe_fields'] = {
-            hazard_class_field['key']: hazard_class_field['field_name']}
+            hazard_class_field['key']: hazard_class_field['field_name'][0:10]}
 
         polygonized = polygonize(layer)
 

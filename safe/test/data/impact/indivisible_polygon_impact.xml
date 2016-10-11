@@ -183,7 +183,7 @@
               &quot;elderly_ratio_field&quot;:&quot;elderly_r&quot;,
               &quot;adult_ratio_field&quot;:&quot;adult_r&quot;,
               &quot;population_count_field&quot;:&quot;population&quot;,
-              &quot;female_ratio_field&quot;:&quot;WomenRatio&quot;
+              &quot;female_ratio_field&quot;:&quot;female_r&quot;
               }
             </gco:Dictionary>
           </inasafe_fields>

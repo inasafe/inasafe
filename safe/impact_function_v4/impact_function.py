@@ -21,10 +21,13 @@ from qgis.core import (
     QgsFeature,
     QgsField,
     QgsDistanceArea,
+    QGis,
+    QgsFeatureRequest,
 )
 
 import logging
 
+from safe.gisv4.vector.tools import create_memory_layer
 from safe.definitionsv4.post_processors import post_processors
 from safe.defaults import get_defaults
 from safe.common.exceptions import (
@@ -408,15 +411,16 @@ class ImpactFunction(object):
         :returns: A polygon layer with exposure's crs.
         :rtype: QgsVectorLayer
         """
-        exposure_crs = self.exposure.crs().authid()
-        aggregation_layer = QgsVectorLayer(
-            "Polygon?crs=%s" % exposure_crs, "aggregation", "memory")
-        data_provider = aggregation_layer.dataProvider()
+        aggregation_layer = create_memory_layer(
+            'aggregation', QGis.Polygon, self.exposure.crs())
+
+        aggregation_layer.startEditing()
 
         feature = QgsFeature()
         # noinspection PyCallByClass,PyArgumentList,PyTypeChecker
         feature.setGeometry(QgsGeometry.fromRect(self.actual_extent))
-        data_provider.addFeatures([feature])
+        aggregation_layer.addFeature(feature)
+        aggregation_layer.commitChanges()
 
         return aggregation_layer
 
@@ -636,50 +640,95 @@ class ImpactFunction(object):
         """
         valid, message = self.enough_input(post_processor['input'])
         if valid:
+
+            # Turn on the editing mode.
+            if not self.impact.startEditing():
+                msg = tr('The impact layer could not start the editing mode.')
+                return False, msg
+
             # Calculate based on formula
             # Iterate all possible output
             for output_key, output_value in post_processor['output'].items():
-                # Get impact data provider from impact layer
-                impact_data_provider = self.impact.dataProvider()
+
                 # Get output attribute name
                 output_field_name = output_value['value']['field_name']
+
                 # If there is already the output field, don't proceed
-                if impact_data_provider.fieldNameIndex(output_field_name) > -1:
-                    continue
+                if self.impact.fieldNameIndex(output_field_name) > -1:
+                    msg = tr(
+                        'The field name %s already exists.'
+                        % output_field_name)
+                    return False, msg
+
                 # Add output attribute name to the layer
-                impact_data_provider.addAttributes(
-                    [QgsField(
+                result = self.impact.addAttribute(
+                    QgsField(
                         output_field_name,
-                        output_value['value']['type'])]
+                        output_value['value']['type'])
                 )
-                self.impact.updateFields()
+                if not result:
+                    msg = tr(
+                        'Error while creating the field %s.'
+                        % output_field_name)
+                    return False, msg
+
                 # Get the index of output attribute
-                output_field_index = impact_data_provider.fieldNameIndex(
+                output_field_index = self.impact.fieldNameIndex(
                     output_field_name)
+
+                if self.impact.fieldNameIndex(output_field_name) == -1:
+                    msg = tr(
+                        'The field name %s has not been created.'
+                        % output_field_name)
+                    return False, msg
 
                 # Get the input field's indexes for input
                 input_indexes = {}
                 # Store the indexes that will be deleted.
                 temporary_indexes = []
                 for key, value in post_processor['input'].items():
+
                     if value['type'] == 'field':
-                        input_indexes[key] = impact_data_provider.\
-                            fieldNameIndex(value['value']['field_name'])
+                        inasafe_fields = self.impact.keywords['inasafe_fields']
+                        name_field = inasafe_fields.get(value['value']['key'])
+
+                        if not name_field:
+                            msg = tr(
+                                '%s has not been found in inasafe fields.'
+                                % value['value']['key'])
+                            return False, msg
+
+                        index = self.impact.fieldNameIndex(name_field)
+
+                        if index == -1:
+                            fields = self.impact.fields().toList()
+                            msg = tr(
+                                'The field name %s has not been found in %s'
+                                % (
+                                    name_field,
+                                    [f.name() for f in fields]
+                                ))
+                            return False, msg
+
+                        input_indexes[key] = index
+
                     # For geometry, create new field that contain the value
                     elif value['type'] == 'geometry_property':
                         if value['value'] == 'size':
                             input_indexes[key] = self.add_size_field()
                             temporary_indexes.append(input_indexes[key])
 
-                # Create variable to store the formula's result
-                post_processor_result_dict = {}
                 # Create iterator for feature
-                iterator = self.impact.getFeatures()
+                request = QgsFeatureRequest().setSubsetOfAttributes(
+                    input_indexes.values())
+                iterator = self.impact.getFeatures(request)
                 # Iterate all feature
                 for feature in iterator:
                     attributes = feature.attributes()
+
                     # Create dictionary to store the input
                     parameters = {}
+
                     # Fill up the input from fields
                     for key, value in input_indexes.items():
                         parameters[key] = attributes[value]
@@ -688,17 +737,18 @@ class ImpactFunction(object):
                     # Evaluate the formula
                     post_processor_result = evaluate_formula(
                         output_value['formula'], parameters)
-                    # Store the result to variable
-                    post_processor_result_dict[feature.id()] = {
-                            output_field_index: post_processor_result
-                        }
-                # Update the layer with the formula's result
-                impact_data_provider.changeAttributeValues(
-                    post_processor_result_dict)
+
+                    self.impact.changeAttributeValue(
+                        feature.id(),
+                        output_field_index,
+                        post_processor_result
+                    )
+
                 # Delete temporary indexes
-                impact_data_provider.deleteAttributes(temporary_indexes)
-                self.impact.updateFields()
-                LOGGER.debug(self.impact.source())
+                self.impact.deleteAttributes(temporary_indexes)
+
+            self.impact.commitChanges()
+            LOGGER.debug(self.impact.source())
             return True, None
         else:
             return False, message
@@ -720,28 +770,10 @@ class ImpactFunction(object):
                 if key in impact_fields:
                     continue
                 else:
-                    msg = 'Key %s is missing in fields %s' % (key, impact_fields)
+                    msg = 'Key %s is missing in fields %s' % (
+                        key, impact_fields)
                     return False, msg
         return True, None
-
-    def get_parameter(self, feature, post_processor_input):
-        """Obtain parameter value for post processor from a feature.
-
-        :param feature: A QgsFeature.
-        :type feature: QgsFeature
-
-        :param post_processor_input: Input of post processor.
-        :type post_processor_input: dict
-
-        :returns: Dictionary of key and value of parameter.
-        :rtype: dict
-        """
-        parameters = {
-
-        }
-        for key, value in post_processor_input:
-            if value['type'] == 'field':
-                pass
 
     def add_size_field(self):
         """Add size field in to impact layer.
@@ -759,24 +791,18 @@ class ImpactFunction(object):
         size_calculator.setEllipsoidalMode(True)
 
         # Add new field, size
-        impact_data_provider = self.impact.dataProvider()
-        impact_data_provider.addAttributes(
-            [QgsField(
-                'size',
-                QVariant.Double
-            )]
-        )
-        # Get index
-        size_field_index = impact_data_provider.fieldNameIndex('size')
+        self.impact.addAttribute(QgsField('size', QVariant.Double))
 
-        sizes = {}
+        # Get index
+        size_field_index = self.impact.fieldNameIndex('size')
+
         # Iterate through all features
-        features = self.impact.getFeatures()
+        request = QgsFeatureRequest().setSubsetOfAttributes([])
+        features = self.impact.getFeatures(request)
         for feature in features:
-            sizes[feature.id()] = {
-                size_field_index: size_calculator.measure(feature.geometry())
-            }
-        # Insert to field
-        impact_data_provider.changeAttributeValues(sizes)
-        self.impact.updateFields()
+            self.impact.changeAttributeValue(
+                feature.id(),
+                size_field_index,
+                size_calculator.measure(feature.geometry())
+            )
         return size_field_index
