@@ -82,7 +82,7 @@ class ImpactFunction(object):
         self._callback = self.console_progress_callback
 
         self.algorithm = None
-        self.impact_layer = None
+        self.impact = None
 
         self._name = None  # e.g. Flood Raster on Building Polygon
         self._title = None  # be affected
@@ -477,37 +477,18 @@ class ImpactFunction(object):
         """Run the whole impact function."""
         self.reset_state()
 
-        # Aggregation Preparation
-        if not self.aggregation:
-            self.set_state_info('aggregation', 'provided', False)
-            if not self.actual_extent:
-                self._actual_extent = self.exposure.extent()
-
-            self.set_state_process(
-                'aggregation',
-                'Convert bbox aggregation to polygon layer with keywords')
-
-            self.aggregation = self.create_virtual_aggregation()
-
-            # Generate aggregation keywords
-            self.aggregation.keywords = get_defaults()
-        else:
-            self.set_state_info('aggregation', 'provided', True)
-
-        self.set_state_process(
-            'aggregation', 'Project aggregation CRS to exposure CRS')
-
         # Hazard Preparation
         if self.hazard.type() == QgsMapLayer.VectorLayer:
-            if self.hazard.keywords.get('layer_mode') == 'continuous':
-                self.set_state_process(
-                    'hazard',
-                    'Classify continuous hazard and assign class names')
-                if self.hazard.keywords.get('layer_geometry') != 'polygon':
-                    self.set_state_process('hazard', 'Buffering')
+            if self.hazard.keywords.get('layer_geometry') == 'polygon':
+                if self.hazard.keywords.get('layer_mode') == 'continuous':
+                    self.set_state_process(
+                        'hazard',
+                        'Classify continuous hazard and assign class names')
+                else:
+                    self.set_state_process(
+                        'hazard', 'Assign classes based on value map')
             else:
-                if self.hazard.keywords.get('layer_geometry') != 'polygon':
-                    self.set_state_process('hazard', 'Buffering')
+                self.set_state_process('hazard', 'Buffering')
                 self.set_state_process(
                     'hazard', 'Assign classes based on value map')
 
@@ -528,8 +509,28 @@ class ImpactFunction(object):
 
         self.set_state_process(
             'hazard', 'Vector clip and mask hazard to aggregation')
+
+        # Aggregation Preparation
+        if not self.aggregation:
+            self.set_state_info('aggregation', 'provided', False)
+            if not self.actual_extent:
+                self._actual_extent = self.exposure.extent()
+
+            self.set_state_process(
+                'aggregation',
+                'Convert bbox aggregation to polygon layer with keywords')
+
+            self.aggregation = self.create_virtual_aggregation()
+
+            # Generate aggregation keywords
+            self.aggregation.keywords = get_defaults()
+        else:
+            self.set_state_info('aggregation', 'provided', True)
+
         self.set_state_process(
-            'hazard',
+            'aggregation', 'Project aggregation CRS to exposure CRS')
+        self.set_state_process(
+            'aggregation',
             'Intersect hazard polygons with aggregation areas and assign '
             'hazard class')
 
@@ -540,28 +541,42 @@ class ImpactFunction(object):
                     self.set_state_process(
                         'exposure', 'Calculate counts per cell')
                 self.set_state_process(
-                    'exposure', 'Raster clip and mask exposure to aggregation')
+                    'exposure',
+                    'Raster clip and mask exposure to aggregate hazard')
                 self.set_state_process(
                     'exposure',
                     'Zonal stats on intersected hazard / aggregation data')
             else:
                 self.set_state_process(
-                    'exposure', 'Polygonise classified raster exposure')
-            self.set_state_process(
-                'exposure',
-                'Intersect aggregate hazard layer with divisible polygon')
-        elif self.exposure.type() == QgsMapLayer.VectorLayer:
-            self.set_state_process(
-                'exposure', 'Vector clip and mask exposure to aggregation')
-            if self.is_divisible_exposure():
-                pass
-            elif self.exposure.keywords.get('layer_geometry') == 'line':
-                self.set_state_process(
-                    'exposure', 'Intersect line with aggregation hazard areas')
-            else:
+                    'exposure', 'Polygonise classified raster hazard')
                 self.set_state_process(
                     'exposure',
                     'Intersect aggregate hazard layer with divisible polygon')
+                self.set_state_process(
+                    'exposure',
+                    'Recalculate population based on new polygonise size')
+
+        elif self.exposure.type() == QgsMapLayer.VectorLayer:
+            self.set_state_process(
+                'exposure', 'Classified exposure with keywords')
+            if self.is_divisible_exposure():
+                if self.exposure.keywords.get('layer_geometry') == 'line':
+                    self.set_state_process(
+                        'exposure',
+                        'Intersect with aggregate hazard and exclude roads '
+                        'outside')
+                else:
+                    self.set_state_process(
+                        'exposure',
+                        'Intersect aggregate hazard layer with divisible '
+                        'polygon')
+                    self.set_state_process(
+                        'exposure',
+                        'Recalculate population based on new polygonise size')
+            else:
+                self.set_state_process(
+                    'exposure',
+                    'Exclude all polygons not intersecting aggregate hazard')
         else:
             raise InvalidLayerError(tr('Unsupported exposure layer type'))
 
@@ -603,7 +618,7 @@ class ImpactFunction(object):
 
         # Disable writing impact keyword until implementing all helper methods
         # KeywordIO().write_keywords(
-        #     self.impact_layer, self.impact_layer.keywords)
+        #     self.impact, self.impact.keywords)
 
         return self.state
 
@@ -616,17 +631,16 @@ class ImpactFunction(object):
         :param post_processor: A post processor definition.
         :type post_processor: dict
 
-        :returns: True if success, else False
-        :rtype: bool
+        :returns: Tuple with True if success, else False with an error message.
+        :rtype: (bool, str)
         """
-        # Get all field name from impact layer
-        impact_fields = self.impact_layer.dataProvider().fieldNameMap().keys()
-        if self.enough_input(impact_fields, post_processor['input']):
+        valid, message = self.enough_input(post_processor['input'])
+        if valid:
             # Calculate based on formula
             # Iterate all possible output
             for output_key, output_value in post_processor['output'].items():
                 # Get impact data provider from impact layer
-                impact_data_provider = self.impact_layer.dataProvider()
+                impact_data_provider = self.impact.dataProvider()
                 # Get output attribute name
                 output_field_name = output_value['value']['field_name']
                 # If there is already the output field, don't proceed
@@ -638,7 +652,7 @@ class ImpactFunction(object):
                         output_field_name,
                         output_value['value']['type'])]
                 )
-                self.impact_layer.updateFields()
+                self.impact.updateFields()
                 # Get the index of output attribute
                 output_field_index = impact_data_provider.fieldNameIndex(
                     output_field_name)
@@ -660,7 +674,7 @@ class ImpactFunction(object):
                 # Create variable to store the formula's result
                 post_processor_result_dict = {}
                 # Create iterator for feature
-                iterator = self.impact_layer.getFeatures()
+                iterator = self.impact.getFeatures()
                 # Iterate all feature
                 for feature in iterator:
                     attributes = feature.attributes()
@@ -683,32 +697,32 @@ class ImpactFunction(object):
                     post_processor_result_dict)
                 # Delete temporary indexes
                 impact_data_provider.deleteAttributes(temporary_indexes)
-                self.impact_layer.updateFields()
-                LOGGER.debug(self.impact_layer.source())
-            return True
+                self.impact.updateFields()
+                LOGGER.debug(self.impact.source())
+            return True, None
         else:
-            return False
+            return False, message
 
-    def enough_input(self, impact_fields, post_processor_input):
+    def enough_input(self, post_processor_input):
         """Check if the input from impact_fields in enough.
-
-        :param impact_fields: List of field in impact layer
-        :type impact_fields: list
 
         :param post_processor_input: Collection of post processor input
             requirements.
         :type post_processor_input: dict
 
-        :returns: True if input is enough, else False.
-        :rtype: bool
+        :returns: Tuple with True if success, else False with an error message.
+        :rtype: (bool, str)
         """
+        impact_fields = self.impact.keywords['inasafe_fields'].keys()
         for input_key, input_value in post_processor_input.items():
             if input_value['type'] == 'field':
-                if input_value['value']['field_name'] in impact_fields:
+                key = input_value['value']['key']
+                if key in impact_fields:
                     continue
                 else:
-                    return False
-        return True
+                    msg = 'Key %s is missing in fields %s' % (key, impact_fields)
+                    return False, msg
+        return True, None
 
     def get_parameter(self, feature, post_processor_input):
         """Obtain parameter value for post processor from a feature.
@@ -740,12 +754,12 @@ class ImpactFunction(object):
         """
         # Create QgsDistanceArea object
         size_calculator = QgsDistanceArea()
-        size_calculator.setSourceCrs(self.impact_layer.crs())
+        size_calculator.setSourceCrs(self.impact.crs())
         size_calculator.setEllipsoid('WGS84')
         size_calculator.setEllipsoidalMode(True)
 
         # Add new field, size
-        impact_data_provider = self.impact_layer.dataProvider()
+        impact_data_provider = self.impact.dataProvider()
         impact_data_provider.addAttributes(
             [QgsField(
                 'size',
@@ -757,12 +771,12 @@ class ImpactFunction(object):
 
         sizes = {}
         # Iterate through all features
-        features = self.impact_layer.getFeatures()
+        features = self.impact.getFeatures()
         for feature in features:
             sizes[feature.id()] = {
                 size_field_index: size_calculator.measure(feature.geometry())
             }
         # Insert to field
         impact_data_provider.changeAttributeValues(sizes)
-        self.impact_layer.updateFields()
+        self.impact.updateFields()
         return size_field_index

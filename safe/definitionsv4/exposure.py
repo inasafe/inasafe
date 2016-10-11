@@ -1,11 +1,22 @@
+# coding=utf-8
+"""Definitions relating to exposure in InaSAFE."""
+
 from safe.definitionsv4.concepts import concepts
 from safe.definitionsv4.units import (
     count_exposure_unit, density_exposure_unit)
+from safe.definitionsv4.fields import (
+    exposure_name_field,
+    women_count_field,
+    youth_count_field,
+    adult_count_field,
+    elderly_count_field,
+    female_ratio_field,
+    youth_ratio_field,
+    adult_ratio_field,
+    elderly_ratio_field
+)
 from safe.utilities.i18n import tr
 
-"""
-Definitions relating to exposure.
-"""
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
@@ -60,7 +71,17 @@ exposure_population = {
     ],
     'units': [
         count_exposure_unit,
-        density_exposure_unit
+        density_exposure_unit],
+    'extra_fields': [
+        exposure_name_field,
+        women_count_field,
+        youth_count_field,
+        adult_count_field,
+        elderly_count_field,
+        female_ratio_field,
+        youth_ratio_field,
+        adult_ratio_field,
+        elderly_ratio_field
     ]
 }
 exposure_people_in_building = {
@@ -90,7 +111,17 @@ exposure_people_in_building = {
     'layer_geometry': [
         'point'
     ],
-    'units': []
+    'units': [],
+    'extra_fields': [
+        women_count_field,
+        youth_count_field,
+        adult_count_field,
+        elderly_count_field,
+        female_ratio_field,
+        youth_ratio_field,
+        adult_ratio_field,
+        elderly_ratio_field
+    ]
 }
 exposure_road = {
     'key': 'road',
@@ -132,7 +163,8 @@ exposure_road = {
     'layer_geometry': [
         'line'
     ],
-    'units': []
+    'units': [],
+    'extra_fields': []
 }
 exposure_structure = {
     'key': 'structure',
@@ -170,7 +202,17 @@ exposure_structure = {
         'polygon',
         'point'
     ],
-    'units': []
+    'units': [],
+    'extra_fields': [
+        women_count_field,
+        youth_count_field,
+        adult_count_field,
+        elderly_count_field,
+        female_ratio_field,
+        youth_ratio_field,
+        adult_ratio_field,
+        elderly_ratio_field
+    ]
 }
 exposure_place = {
     'key': 'place',
@@ -198,7 +240,18 @@ exposure_place = {
     'layer_geometry': [
         'point'
     ],
-    'units': []
+    'units': [],
+    'extra_fields': [
+        exposure_name_field,
+        women_count_field,
+        youth_count_field,
+        adult_count_field,
+        elderly_count_field,
+        female_ratio_field,
+        youth_ratio_field,
+        adult_ratio_field,
+        elderly_ratio_field
+    ]
 }
 exposure_land_cover = {
     'key': 'land_cover',
@@ -241,7 +294,8 @@ exposure_land_cover = {
         'polygon',
         'raster'
     ],
-    'units': []
+    'units': [],
+    'extra_fields': []
 }
 exposure_all = [
     exposure_land_cover,

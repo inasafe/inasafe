@@ -12,7 +12,7 @@ from safe.definitionsv4.fields import (
     elderly_count_field,
     feature_value_field,
     population_count_field,
-    feature_type_field
+    exposure_class_field
 )
 from safe.definitionsv4.post_processors import (
     post_processor_gender,
@@ -21,7 +21,7 @@ from safe.definitionsv4.post_processors import (
     post_processor_elderly,
     post_processor_size_rate
 )
-from safe.test.utilities import clone_shp_layer
+from safe.test.utilities import load_test_vector_layer
 from safe.impact_function_v4.impact_function import ImpactFunction
 from safe.impact_function_v4.impact_function import evaluate_formula
 
@@ -101,7 +101,7 @@ class TestImpactFunction(unittest.TestCase):
         impact_function.exposure = exposure_layer
 
         expected_inasafe_fields = {
-            feature_type_field['key']: 'TYPE',
+            exposure_class_field['key']: 'TYPE',
             population_count_field['key']: 'pop_count'
         }
         self.assertDictEqual(
@@ -109,7 +109,7 @@ class TestImpactFunction(unittest.TestCase):
 
         fields = impact_function.exposure.dataProvider().fieldNameMap().keys()
         self.assertIn(
-            exposure_layer.keywords['inasafe_fields']['feature_type_field'],
+            exposure_layer.keywords['inasafe_fields']['exposure_class_field'],
             fields
         )
         inasafe_fields = exposure_layer.keywords['inasafe_fields']
@@ -117,13 +117,9 @@ class TestImpactFunction(unittest.TestCase):
 
     def test_impact_function_behaviour(self):
         """Test behaviour of impact function"""
-        hazard_path = standard_data_path(
+        hazard_layer = load_test_vector_layer(
             'hazard', 'flood_multipart_polygons.shp')
-        exposure_path = standard_data_path('exposure', 'roads.shp')
-        # noinspection PyCallingNonCallable
-        hazard_layer = QgsVectorLayer(hazard_path, 'Flood', 'ogr')
-        # noinspection PyCallingNonCallable
-        exposure_layer = QgsVectorLayer(exposure_path, 'Roads', 'ogr')
+        exposure_layer = load_test_vector_layer('exposure', 'roads.shp')
 
         impact_function = ImpactFunction()
         impact_function.exposure = exposure_layer
@@ -137,22 +133,17 @@ class TestImpactFunction(unittest.TestCase):
     @unittest.expectedFailure
     def test_run_impact_function(self):
         """Test running impact function on test data."""
-        # Set up test data
-        hazard_path = standard_data_path(
+        hazard_layer = load_test_vector_layer(
             'hazard', 'flood_multipart_polygons.shp')
-        exposure_path = standard_data_path('exposure', 'building-points.shp')
-        # noinspection PyCallingNonCallable
-        hazard_layer = QgsVectorLayer(hazard_path, 'Flood', 'ogr')
-        # noinspection PyCallingNonCallable
-        exposure_layer = QgsVectorLayer(exposure_path, 'Building Point', 'ogr')
+        exposure_layer = load_test_vector_layer(
+            'hazard', 'flood_multipart_polygons.shp')
 
         # Set up impact function
         impact_function = ImpactFunction()
         impact_function.exposure = exposure_layer
         impact_function.hazard = hazard_layer
         impact_function.run()
-        result = impact_function.impact_layer
-        self.assertIsNotNone(result)
+        self.assertIsNotNone(impact_function.impact)
 
     def test_scenario(self):
         """Run test single scenario."""
@@ -180,19 +171,19 @@ class TestImpactFunction(unittest.TestCase):
 
     def test_gender_post_processor(self):
         """Test gender post processor."""
-        impact_layer = clone_shp_layer(
-            'indivisible_polygon_impact',
-            include_keywords=True,
-            source_directory=standard_data_path('impact'))
+        impact_layer = load_test_vector_layer(
+            'impact',
+            'indivisible_polygon_impact.shp',
+            clone_to_memory=True)
         self.assertIsNotNone(impact_layer)
         impact_function = ImpactFunction()
-        impact_function.impact_layer = impact_layer
+        impact_function.impact = impact_layer
 
         result = impact_function.run_single_post_processor(
             post_processor_gender)
-        self.assertTrue(result)
+        self.assertTrue(result[0], result[1])
 
-        impact_layer = impact_function.impact_layer
+        impact_layer = impact_function.impact
         self.assertIsNotNone(impact_layer)
 
         # Check if new field is added
@@ -200,20 +191,20 @@ class TestImpactFunction(unittest.TestCase):
         self.assertIn(women_count_field['field_name'], impact_fields)
 
     def test_youth_post_processor(self):
-        """Test gender post processor."""
-        impact_layer = clone_shp_layer(
-            'indivisible_polygon_impact',
-            include_keywords=True,
-            source_directory=standard_data_path('impact'))
+        """Test youth post processor."""
+        impact_layer = load_test_vector_layer(
+            'impact',
+            'indivisible_polygon_impact.shp',
+            clone_to_memory=True)
         self.assertIsNotNone(impact_layer)
         impact_function = ImpactFunction()
-        impact_function.impact_layer = impact_layer
+        impact_function.impact = impact_layer
 
         result = impact_function.run_single_post_processor(
             post_processor_youth)
         self.assertTrue(result)
 
-        impact_layer = impact_function.impact_layer
+        impact_layer = impact_function.impact
         self.assertIsNotNone(impact_layer)
 
         # Check if new field is added
@@ -222,19 +213,19 @@ class TestImpactFunction(unittest.TestCase):
 
     def test_adult_post_processor(self):
         """Test adult post processor."""
-        impact_layer = clone_shp_layer(
-            'indivisible_polygon_impact',
-            include_keywords=True,
-            source_directory=standard_data_path('impact'))
+        impact_layer = load_test_vector_layer(
+            'impact',
+            'indivisible_polygon_impact.shp',
+            clone_to_memory=True)
         self.assertIsNotNone(impact_layer)
         impact_function = ImpactFunction()
-        impact_function.impact_layer = impact_layer
+        impact_function.impact = impact_layer
 
         result = impact_function.run_single_post_processor(
             post_processor_adult)
         self.assertTrue(result)
 
-        impact_layer = impact_function.impact_layer
+        impact_layer = impact_function.impact
         self.assertIsNotNone(impact_layer)
 
         # Check if new field is added
@@ -243,19 +234,19 @@ class TestImpactFunction(unittest.TestCase):
 
     def test_elderly_post_processor(self):
         """Test elderly post processor."""
-        impact_layer = clone_shp_layer(
-            'indivisible_polygon_impact',
-            include_keywords=True,
-            source_directory=standard_data_path('impact'))
+        impact_layer = load_test_vector_layer(
+            'impact',
+            'indivisible_polygon_impact.shp',
+            clone_to_memory=True)
         self.assertIsNotNone(impact_layer)
         impact_function = ImpactFunction()
-        impact_function.impact_layer = impact_layer
+        impact_function.impact = impact_layer
 
         result = impact_function.run_single_post_processor(
             post_processor_elderly)
         self.assertTrue(result)
 
-        impact_layer = impact_function.impact_layer
+        impact_layer = impact_function.impact
         self.assertIsNotNone(impact_layer)
 
         # Check if new field is added
@@ -264,19 +255,19 @@ class TestImpactFunction(unittest.TestCase):
 
     def test_size_rate_post_processor(self):
         """Test size rate post processor."""
-        impact_layer = clone_shp_layer(
-            'indivisible_polygon_impact',
-            include_keywords=True,
-            source_directory=standard_data_path('impact'))
+        impact_layer = load_test_vector_layer(
+            'impact',
+            'indivisible_polygon_impact.shp',
+            clone_to_memory=True)
         self.assertIsNotNone(impact_layer)
         impact_function = ImpactFunction()
-        impact_function.impact_layer = impact_layer
+        impact_function.impact = impact_layer
 
         result = impact_function.run_single_post_processor(
             post_processor_size_rate)
         self.assertTrue(result)
 
-        impact_layer = impact_function.impact_layer
+        impact_layer = impact_function.impact
         self.assertIsNotNone(impact_layer)
 
         # Check if new field is added
@@ -287,17 +278,17 @@ class TestImpactFunction(unittest.TestCase):
     def test_post_processor(self):
         """Test for running post processor."""
 
-        impact_layer = clone_shp_layer(
-            'indivisible_polygon_impact',
-            include_keywords=True,
-            source_directory=standard_data_path('impact'))
+        impact_layer = load_test_vector_layer(
+            'impact',
+            'indivisible_polygon_impact.shp',
+            clone_to_memory=True)
         self.assertIsNotNone(impact_layer)
         impact_function = ImpactFunction()
-        impact_function.impact_layer = impact_layer
+        impact_function.impact = impact_layer
 
         impact_function.post_process()
 
-        impact_layer = impact_function.impact_layer
+        impact_layer = impact_function.impact
         self.assertIsNotNone(impact_layer)
 
         used_post_processors = [
@@ -319,10 +310,19 @@ class TestImpactFunction(unittest.TestCase):
         """Test to check the post processor input checker."""
         impact_function = ImpactFunction()
 
-        impact_fields = ['population', 'female_r']
+        class FakeMonkeyPatch(object):
+            pass
 
+        # We need to monkey patch some keywords to the impact layer.
+        impact_function.impact = FakeMonkeyPatch()
+        impact_function.impact.keywords = {
+            'inasafe_fields': {
+                'population_count_field': 'population',
+                'female_ratio_field': 'female_r'
+            }
+        }
         self.assertTrue(impact_function.enough_input(
-            impact_fields, post_processor_gender['input']))
+            post_processor_gender['input']))
 
     def test_evaluate_formula(self):
         """Test for evaluating formula."""

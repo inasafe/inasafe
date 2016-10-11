@@ -33,16 +33,16 @@ exposure_id_field = {
         }
     ]
 }
-# Feature Type
-feature_type_field = {
-    'key': 'feature_type_field',
-    'name': tr('Feature Type'),
-    'field_name': 'feature_type',
+# Exposure Name Field
+exposure_name_field = {
+    'key': 'exposure_name_field',
+    'name': tr('Exposure Name'),
+    'field_name': 'exp_name',
     'type': QVariant.String,
     'length': default_field_length,
     'precision': 0,
     'description': tr(
-        'Attribute where the type of the feature is located.'),
+        'Attribute where the exposure name of the feature is located.'),
     'citations': [
         {
             'text': None,
@@ -50,6 +50,26 @@ feature_type_field = {
         }
     ]
 }
+
+
+# Exposure Class
+exposure_class_field = {
+    'key': 'exposure_class_field',
+    'name': tr('Exposure Class'),
+    'field_name': 'exposure_class',
+    'type': QVariant.String,
+    'length': default_field_length,
+    'precision': 0,
+    'description': tr(
+        'Attribute where the exposure class of the feature is located.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+
 # Population Count
 population_count_field = {
     'key': 'population_count_field',
@@ -66,6 +86,7 @@ population_count_field = {
         }
     ]
 }
+
 # Feature Value
 feature_value_field = {
     'key': 'feature_value_field',
@@ -82,6 +103,7 @@ feature_value_field = {
         }
     ]
 }
+
 # Feature Rate
 feature_rate_field = {
     'key': 'feature_rate_field',
@@ -119,6 +141,25 @@ hazard_id_field = {
         }
     ]
 }
+
+# Hazard name
+hazard_name_field = {
+    'key': 'hazard_name_field',
+    'name': tr('Hazard Name'),
+    'field_name': 'hazard_name',
+    'type': QVariant.String,
+    'length': default_field_length,
+    'precision': 0,
+    'description': tr(
+        'Attribute where the hazard name of the feature is located.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+
 # Hazard Value
 hazard_value_field = {
     'key': 'hazard_value_field',
@@ -155,6 +196,7 @@ aggregation_id_field = {
         }
     ]
 }
+
 # Aggregation Name
 aggregation_name_field = {
     'key': 'aggregation_name_field',
@@ -172,6 +214,7 @@ aggregation_name_field = {
         }
     ]
 }
+
 # Female Ratio
 female_ratio_field = {
     'key': 'female_ratio_field',
@@ -188,6 +231,7 @@ female_ratio_field = {
         }
     ]
 }
+
 # Youth Ratio
 youth_ratio_field = {
     'key': 'youth_ratio_field',
@@ -204,6 +248,7 @@ youth_ratio_field = {
         }
     ]
 }
+
 # Adult Ratio
 adult_ratio_field = {
     'key': 'adult_ratio_field',
@@ -220,6 +265,7 @@ adult_ratio_field = {
         }
     ]
 }
+
 # elderly Ratio
 elderly_ratio_field = {
     'key': 'elderly_ratio_field',
@@ -239,23 +285,6 @@ elderly_ratio_field = {
 }
 
 # Impact
-# Exposure Class
-exposure_class_field = {
-    'key': 'exposure_class_field',
-    'name': tr('Exposure Class'),
-    'field_name': 'exp_class',
-    'type': QVariant.String,
-    'length': default_field_length,
-    'precision': 0,
-    'description': tr(
-        'Attribute where the exposure class of the feature is located.'),
-    'citations': [
-        {
-            'text': None,
-            'link': None
-        }
-    ]
-}
 # Hazard Class
 hazard_class_field = {
     'key': 'hazard_class_field',
@@ -273,6 +302,7 @@ hazard_class_field = {
         }
     ]
 }
+
 # Women Count
 women_count_field = {
     'key': 'women_count_field',
@@ -290,6 +320,7 @@ women_count_field = {
         }
     ]
 }
+
 # Youth Count
 youth_count_field = {
     'key': 'youth_count_field',
@@ -308,6 +339,7 @@ youth_count_field = {
         }
     ]
 }
+
 # Adult Count
 adult_count_field = {
     'key': 'adult_count_field',
@@ -326,6 +358,7 @@ adult_count_field = {
         }
     ]
 }
+
 # Elderly Count
 elderly_count_field = {
     'key': 'elderly_count_field',
@@ -348,14 +381,10 @@ elderly_count_field = {
 
 exposure_fields = [
     exposure_id_field,
-    feature_type_field,
+    exposure_class_field,
     population_count_field,
     feature_value_field,
-    feature_rate_field,
-    women_count_field,
-    youth_count_field,
-    adult_count_field,
-    elderly_count_field
+    feature_rate_field
 ]
 
 hazard_fields = [
@@ -419,7 +448,7 @@ road_class_field = {
 
 volcano_name_field = {
     'key': 'volcano_name_field',
-    'name': tr('Name field'),
+    'name': tr('Volcano name field'),
     'type': 'field',
     'description': tr('Attribute where the volcano name is located.'),
     'citations': [

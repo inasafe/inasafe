@@ -1017,17 +1017,17 @@ class ImpactFunction(object):
         exposure_class_field = self.exposure.keywords.get(
             'exposure_class_fields')
         if exposure_class_field:
-            if not self.exposure.keywords.get('value_mapping'):
+            if not self.exposure.keywords.get('value_map'):
                 raise KeywordNotFoundError(
-                    message % ('value_mapping', 'exposure'),
+                    message % ('value_map', 'exposure'),
                     layer_name=self.hazard.layer.name,
-                    keyword='value_mapping'
+                    keyword='value_map'
                 )
             if not self.exposure.keywords.get(exposure_class_field):
                 raise KeywordNotFoundError(
                     message % (exposure_class_field, 'exposure'),
                     layer_name=self.hazard.layer.name,
-                    keyword='value_mapping'
+                    keyword='value_map'
                 )
 
     def _prepare(self):
@@ -1070,14 +1070,14 @@ class ImpactFunction(object):
         # to check the for the value_mapping keyword.
         if self.exposure.keyword('exposure') in ['road', 'structure']:
             try:
-                self.exposure.keyword('value_mapping')
+                self.exposure.keyword('value_map')
             except KeywordNotFoundError:
                 LOGGER.debug(
                     'value_mapping not found in the aggregation layer, using '
                     'an empty value_mapping.')
                 keyword_io = KeywordIO()
                 keyword_io.update_keywords(
-                    self.exposure.qgis_layer(), {'value_mapping': {}})
+                    self.exposure.qgis_layer(), {'value_map': {}})
 
         self._setup_aggregator()
 

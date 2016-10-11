@@ -663,8 +663,8 @@ class PostprocessorManager(QtCore.QObject):
                     LOGGER.debug('key_attribute: %s', key_attribute)
 
                     value_map = self.keyword_io.read_keywords(
-                        self.aggregator.exposure_layer, 'value_mapping')
-                    parameters['value_mapping'] = value_map
+                        self.aggregator.exposure_layer, 'value_map')
+                    parameters['value_map'] = value_map
 
                 try:
                     value.setup(parameters)

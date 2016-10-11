@@ -13,5 +13,6 @@ keyword_version_compatibilities = {
     # 'InaSAFE keyword version': 'List of supported InaSAFE keyword version'
     '3.3': ['3.2'],
     '3.4': ['3.2', '3.3'],
-    '3.5': ['3.4', '3.3']
+    '3.5': ['3.4', '3.3'],
+    '4.0': ['3.5']
 }

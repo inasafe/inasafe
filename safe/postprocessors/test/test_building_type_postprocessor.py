@@ -31,7 +31,7 @@ class TestBuildingTypePostprocessor(unittest.TestCase):
             'key_attribute': 'type',
             'Building type': True,
             'target_field': 'affected',
-            'value_mapping': {'government': ['Government']},
+            'value_map': {'government': ['Government']},
             'impact_attrs': [
                 {'type': 'Government', 'affected': 1},
                 {'type': 'Government', 'affected': 0},
@@ -50,7 +50,7 @@ class TestBuildingTypePostprocessor(unittest.TestCase):
             'key_attribute': 'type',
             'Building type': True,
             'target_field': 'affected',
-            'value_mapping': {'government': ['Government']},
+            'value_map': {'government': ['Government']},
             'impact_attrs': [
                 {'type': 'Government', 'affected': 'Zone 1'},
                 {'type': 'Government', 'affected': 'Not Affected'},
@@ -69,7 +69,7 @@ class TestBuildingTypePostprocessor(unittest.TestCase):
             'key_attribute': 'type',
             'Building type': True,
             'target_field': 'affected',
-            'value_mapping': {
+            'value_map': {
                 'government': ['Government'],
                 'economy': ['Economy'],
             },
@@ -93,7 +93,7 @@ class TestBuildingTypePostprocessor(unittest.TestCase):
             'key_attribute': 'type',
             'Building type': True,
             'target_field': 'affected',
-            'value_mapping': {
+            'value_map': {
                 'government': ['Government', 'School'],
                 'economy': ['Economy'],
             },

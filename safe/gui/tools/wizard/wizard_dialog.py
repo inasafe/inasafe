@@ -805,13 +805,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                 selected_classification()['key']
         value_map = self.step_kw_classify.selected_mapping()
         if value_map:
-            if self.step_kw_classification.selected_classification():
-                # hazard mapping
-                keyword = 'value_map'
-            else:
-                # exposure mapping
-                keyword = 'value_mapping'
-            keywords[keyword] = json.dumps(value_map)
+            keywords['value_map'] = json.dumps(value_map)
 
         name_field = self.step_kw_name_field.selected_field()
         if name_field:
