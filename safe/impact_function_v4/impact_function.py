@@ -720,7 +720,8 @@ class ImpactFunction(object):
                 if key in impact_fields:
                     continue
                 else:
-                    msg = 'Key %s is missing in fields %s' % (key, impact_fields)
+                    msg = 'Key %s is missing in fields %s' % (
+                        key, impact_fields)
                     return False, msg
         return True, None
 
