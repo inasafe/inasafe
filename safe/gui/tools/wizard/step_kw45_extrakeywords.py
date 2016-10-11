@@ -12,36 +12,28 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-__author__ = 'qgis@borysjurgiel.pl'
-__revision__ = '$Format:%H$'
-__date__ = '16/03/2016'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
 
 # noinspection PyPackageRequirements
 import logging
-from PyQt4 import QtCore
-from PyQt4.QtGui import (
-    QGroupBox,
-    QLineEdit,
-    QLabel,
-    QDialog,
-    QCheckBox,
-    QWidget,
-    QScrollArea,
-    QVBoxLayout)
+from PyQt4.QtGui import QWidget
 
 from safe_extras.parameters.select_parameter import SelectParameter
 from safe_extras.parameters.qt_widgets.parameter_container import (
     ParameterContainer)
 
-from safe.utilities.i18n import tr
 from safe.definitionsv4.layer_modes import layer_mode_classified
 from safe.definitionsv4.exposure import exposure_place
 from safe.definitionsv4.utilities import get_fields
 from safe.definitionsv4.layer_geometry import layer_geometry_raster
+from safe.definitionsv4.constants import not_available
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
+
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
@@ -170,6 +162,7 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
             widget.addItem(unicode(v), unicode(v))
         widget.setCurrentIndex(-1)
 
+    # noinspection PyTypeChecker
     def set_widgets(self):
         """Set widgets on the Extra Keywords tab."""
         # Remove old container and parameter
@@ -184,7 +177,7 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
         # Iterate through all inasafe fields
         for inasafe_field in self.additional_keywords_for_the_layer():
             # Option for Not Available
-            option_list = [tr('N/A')]
+            option_list = [not_available]
             for field in layer_data_provider.fields():
                 # Check the field type
                 if isinstance(inasafe_field['type'], list):
@@ -198,6 +191,7 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
 
             # Create SelectParameter
             select_parameter = SelectParameter()
+            select_parameter.guid = inasafe_field['key']
             select_parameter.name = inasafe_field['name']
             select_parameter.is_required = False
             select_parameter.help_text = inasafe_field['description']
