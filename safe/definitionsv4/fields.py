@@ -363,19 +363,10 @@ elderly_count_field = {
 
 exposure_fields = [
     exposure_id_field,
-    exposure_name_field,
     exposure_class_field,
     population_count_field,
     feature_value_field,
-    feature_rate_field,
-    women_count_field,
-    youth_count_field,
-    adult_count_field,
-    elderly_count_field,
-    female_ratio_field,
-    youth_ratio_field,
-    adult_ratio_field,
-    elderly_ratio_field
+    feature_rate_field
 ]
 
 hazard_fields = [

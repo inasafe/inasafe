@@ -30,7 +30,8 @@ from safe.definitionsv4.fields import (
     elderly_ratio_field,
     female_ratio_field,
     aggregation_name_field,
-    exposure_name_field
+    exposure_name_field,
+    exposure_id_field
     )
 from safe.common.exceptions import (
     MetadataReadError,
@@ -178,11 +179,15 @@ def metadata_migration(old_metadata, new_version):
             if key == 'version':
                 new_metadata[key] = new_version
             elif key == 'field':
-                pass
+                if old_metadata['layer_purpose'] == 'hazard':
+                    pass
+                elif old_metadata['layer_purpose'] == 'exposure':
+                    pass
             elif key == 'population_field':
                 new_metadata['inasafe_fields'][
                     population_count_field['key']] = value
             elif key == 'area_type_field':
+                # Not being used
                 pass
             elif key == 'area_population_field':
                 new_metadata['inasafe_fields'][
@@ -194,14 +199,14 @@ def metadata_migration(old_metadata, new_version):
                 new_metadata['inasafe_fields'][
                     exposure_name_field['key']] = value
             elif key == 'name_field':
-                pass
+                new_metadata['inasafe_fields'][
+                    exposure_name_field['key']] = value
             elif key == 'area_id_field':
-                pass
+                new_metadata['inasafe_fields'][
+                    exposure_id_field['key']] = value
             elif key == 'road_class_field':
                 new_metadata['inasafe_fields'][
                     exposure_class_field['key']] = value
-            elif key == 'field':
-                pass
             elif key == 'volcano_name_field':
                 new_metadata['inasafe_fields'][
                     volcano_name_field['key']] = value
