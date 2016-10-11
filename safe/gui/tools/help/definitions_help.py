@@ -78,19 +78,16 @@ def content():
     #  Exposure definitions
     ##
 
+    exposures = definitions.exposures
     header = m.Heading(tr('Exposures'), **INFO_STYLE)
-    message = m.Message()
     message.add(header)
-    message.add(definition_to_message(hazards))
-    header = m.Heading(tr('Exposure scenarios'), **INFO_STYLE)
-    message.add(header)
-    message.add(definition_to_message(hazard_category))
+    message.add(definition_to_message(exposures))
     header = m.Heading(tr('Exposure fields'), **INFO_STYLE)
     message.add(header)
-    hazard_fields = definitions.hazard_fields
-    for hazard_field in hazard_fields:
+    exposure_fields = definitions.exposure_fields
+    for exposure_field in exposure_fields:
         message.add(definition_to_message(
-            hazard_field))
+            exposure_field))
 
 
     # paragraph = m.Paragraph(tr(

@@ -339,6 +339,23 @@ class Plugin(object):
         self.action_add_osm_layer.triggered.connect(self.add_osm_layer)
         self.add_action(self.action_add_osm_layer)
 
+    def _create_show_definitions_action(self):
+        """Create action for showing definitions."""
+        icon = resources_path('img', 'icons', 'defintions.svg')
+        self.action_show_definitions = QAction(
+            QIcon(icon),
+            self.tr('Show InaSAFE Definitions'),
+            self.iface.mainWindow())
+        self.action_show_definitions.setStatusTip(self.tr(
+            'Show InaSAFE Definitions'))
+        self.action_show_definitions.setWhatsThis(self.tr(
+            'Use this to how a document describing all InaSAFE concepts.'))
+        self.action_show_definitions.triggered.connect(
+            self.action_show_definitions)
+        self.add_action(
+            self.show_definitions,
+            add_to_toolbar=False)
+
     def _create_add_petajakarta_layer_action(self):
         """Create action for import OSM Dialog."""
         icon = resources_path('img', 'icons', 'add-petajakarta-layer.svg')
@@ -535,6 +552,8 @@ class Plugin(object):
         self._add_spacer_to_menu()
         self._create_batch_runner_action()
         self._create_save_scenario_action()
+        self._add_spacer_to_menu()
+        self._create_show_definitions_action()
 
         # Hook up a slot for when the dock is hidden using its close button
         # or  view-panels
@@ -809,6 +828,16 @@ class Plugin(object):
         #    layer.source(), index))
         root.insertLayer(index, layer)
         QgsMapLayerRegistry.instance().addMapLayer(layer)
+
+    def show_definitions(self):
+        """Show InaSAFE Definitions (a report showing all key metadata).
+        """
+        from safe.gui.tools.help_dialog import HelpDialog
+        from safe.gui.tools.help import definitions_help
+        dialog = HelpDialog(
+            self.iface.mainWindow(),
+            definitions_help.definitions_help())
+        dialog.show()  # non modal
 
     def add_petajakarta_layer(self):
         """Add petajakarta layer to the map.
