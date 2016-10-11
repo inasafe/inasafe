@@ -139,9 +139,6 @@ def get_qgis_app():
         # QgisInterface is a stub implementation of the QGIS plugin interface
         # noinspection PyPep8Naming
         IFACE = QgisInterface(CANVAS)
-        # Note(IS): I put here since it needs QGIS apps instance first
-        from safe.impact_functions.loader import register_impact_functions
-        register_impact_functions()
 
     return QGIS_APP, CANVAS, IFACE, PARENT
 
