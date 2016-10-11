@@ -61,7 +61,9 @@ def polygonize(layer, callback=None):
 
     output_layer = destination.CreateLayer(output_layer_name, srs)
 
-    fd = ogr.FieldDefn(hazard_class_field['field_name'], ogr.OFTInteger)
+    # We have no other way to use a shapefile. We need only the first 10 chars.
+    field_name = hazard_class_field['field_name'][0:10]
+    fd = ogr.FieldDefn(field_name, ogr.OFTInteger)
     output_layer.CreateField(fd)
 
     input_band = input_raster.GetRasterBand(1)
@@ -77,7 +79,6 @@ def polygonize(layer, callback=None):
         layer_geometry['key']] = layer_geometry_polygon['key']
 
     inasafe_field = hazard_class_field['key']
-    field_name = hazard_class_field['field_name']
     vector_layer.keywords['inasafe_fields'][inasafe_field] = field_name
 
     return vector_layer

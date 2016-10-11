@@ -179,9 +179,9 @@ class TestImpactFunction(unittest.TestCase):
         impact_function = ImpactFunction()
         impact_function.impact = impact_layer
 
-        result = impact_function.run_single_post_processor(
+        result, message = impact_function.run_single_post_processor(
             post_processor_gender)
-        self.assertTrue(result[0], result[1])
+        self.assertTrue(result, message)
 
         impact_layer = impact_function.impact
         self.assertIsNotNone(impact_layer)
@@ -200,9 +200,9 @@ class TestImpactFunction(unittest.TestCase):
         impact_function = ImpactFunction()
         impact_function.impact = impact_layer
 
-        result = impact_function.run_single_post_processor(
+        result, message = impact_function.run_single_post_processor(
             post_processor_youth)
-        self.assertTrue(result)
+        self.assertTrue(result, message)
 
         impact_layer = impact_function.impact
         self.assertIsNotNone(impact_layer)
@@ -221,9 +221,9 @@ class TestImpactFunction(unittest.TestCase):
         impact_function = ImpactFunction()
         impact_function.impact = impact_layer
 
-        result = impact_function.run_single_post_processor(
+        result, message = impact_function.run_single_post_processor(
             post_processor_adult)
-        self.assertTrue(result)
+        self.assertTrue(result, message)
 
         impact_layer = impact_function.impact
         self.assertIsNotNone(impact_layer)
@@ -242,9 +242,9 @@ class TestImpactFunction(unittest.TestCase):
         impact_function = ImpactFunction()
         impact_function.impact = impact_layer
 
-        result = impact_function.run_single_post_processor(
+        result, message = impact_function.run_single_post_processor(
             post_processor_elderly)
-        self.assertTrue(result)
+        self.assertTrue(result, message)
 
         impact_layer = impact_function.impact
         self.assertIsNotNone(impact_layer)
@@ -263,9 +263,9 @@ class TestImpactFunction(unittest.TestCase):
         impact_function = ImpactFunction()
         impact_function.impact = impact_layer
 
-        result = impact_function.run_single_post_processor(
+        result, message = impact_function.run_single_post_processor(
             post_processor_size_rate)
-        self.assertTrue(result)
+        self.assertTrue(result, message)
 
         impact_layer = impact_function.impact
         self.assertIsNotNone(impact_layer)

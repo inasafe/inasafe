@@ -20,7 +20,7 @@ default_field_precision = 5
 exposure_id_field = {
     'key': 'exposure_id_field',
     'name': tr('Exposure ID'),
-    'field_name': 'exp_id',
+    'field_name': 'exposure_id',
     'type': QVariant.Int,
     'length': default_field_length,
     'precision': 0,
@@ -37,7 +37,7 @@ exposure_id_field = {
 exposure_name_field = {
     'key': 'exposure_name_field',
     'name': tr('Exposure Name'),
-    'field_name': 'exp_name',
+    'field_name': 'exposure_name',
     'type': QVariant.String,
     'length': default_field_length,
     'precision': 0,
@@ -91,7 +91,7 @@ population_count_field = {
 feature_value_field = {
     'key': 'feature_value_field',
     'name': tr('Feature Value'),
-    'field_name': 'exp_value',
+    'field_name': 'exposure_value',
     'type': QVariant.Double,
     'length': default_field_length,
     'precision': default_field_precision,
@@ -108,7 +108,7 @@ feature_value_field = {
 feature_rate_field = {
     'key': 'feature_rate_field',
     'name': tr('Feature Rate'),
-    'field_name': 'exp_rate',
+    'field_name': 'exposure_rate',
     'type': QVariant.Double,
     'length': default_field_length,
     'precision': default_field_precision,
@@ -128,7 +128,7 @@ feature_rate_field = {
 hazard_id_field = {
     'key': 'hazard_id_field',
     'name': tr('Hazard ID'),
-    'field_name': 'haz_id',
+    'field_name': 'hazard_id',
     'type': QVariant.Int,
     'length': default_field_length,
     'precision': 0,
@@ -164,7 +164,7 @@ hazard_name_field = {
 hazard_value_field = {
     'key': 'hazard_value_field',
     'name': tr('Hazard Value'),
-    'field_name': 'haz_value',
+    'field_name': 'hazard_value',
     'type': [QVariant.String, QVariant.Int, QVariant.Double],
     'length': default_field_length,
     'precision': 0,
@@ -183,7 +183,7 @@ hazard_value_field = {
 aggregation_id_field = {
     'key': 'aggregation_id_field',
     'name': tr('Aggregation ID'),
-    'field_name': 'agg_id',
+    'field_name': 'aggregation_id',
     'type': QVariant.Int,
     'length': default_field_length,
     'precision': 0,
@@ -201,7 +201,7 @@ aggregation_id_field = {
 aggregation_name_field = {
     'key': 'aggregation_name_field',
     'name': tr('Aggregation Name'),
-    'field_name': 'agg_name',
+    'field_name': 'aggregation_name',
     'type': QVariant.String,
     'length': default_field_length,
     'precision': 0,
@@ -219,7 +219,7 @@ aggregation_name_field = {
 female_ratio_field = {
     'key': 'female_ratio_field',
     'name': tr('Female Ratio'),
-    'field_name': 'female_r',
+    'field_name': 'female_ratio',
     'type': QVariant.Double,
     'length': default_field_length,
     'precision': default_field_precision,
@@ -236,7 +236,7 @@ female_ratio_field = {
 youth_ratio_field = {
     'key': 'youth_ratio_field',
     'name': tr('Youth Ratio'),
-    'field_name': 'youth_r',
+    'field_name': 'youth_ratio',
     'type': QVariant.Double,
     'length': default_field_length,
     'precision': default_field_precision,
@@ -253,7 +253,7 @@ youth_ratio_field = {
 adult_ratio_field = {
     'key': 'adult_ratio_field',
     'name': tr('Adult Ratio'),
-    'field_name': 'adult_r',
+    'field_name': 'adult_ratio',
     'type': QVariant.Double,
     'length': default_field_length,
     'precision': default_field_precision,
@@ -270,7 +270,7 @@ adult_ratio_field = {
 elderly_ratio_field = {
     'key': 'elderly_ratio_field',
     'name': tr('Elderly Ratio'),
-    'field_name': 'elderly_r',
+    'field_name': 'elderly_ratio',
     'type': QVariant.Double,
     'length': default_field_length,
     'precision': default_field_precision,
@@ -289,7 +289,7 @@ elderly_ratio_field = {
 hazard_class_field = {
     'key': 'hazard_class_field',
     'name': tr('Hazard Class'),
-    'field_name': 'haz_class',
+    'field_name': 'hazard_class',
     'type': QVariant.String,
     'length': default_field_length,
     'precision': 0,
