@@ -265,7 +265,7 @@ class FloodRasterRoadsFunction(
 
         # Get parameters from layer's keywords
         road_class_field = self.exposure.keyword('road_class_field')
-        exposure_value_mapping = self.exposure.keyword('value_mapping')
+        exposure_value_mapping = self.exposure.keyword('value_map')
 
         # Get parameters from IF parameter
         threshold_min = self.parameters['min threshold'].value

@@ -351,7 +351,6 @@ class KeywordIO(QObject):
             'structure_class_field',
             'field',
             'value_map',  # attribute values
-            'value_mapping',  # attribute values
             'resample',
             'source',
             'url',
@@ -451,8 +450,7 @@ class KeywordIO(QObject):
         # We deal with some special cases first:
 
         # In this case the value contains a DICT that we want to present nicely
-        if keyword in ['value_map',
-                       'value_mapping']:
+        if keyword == 'value_map':
             value = self._dict_to_row(value)
         # In these KEYWORD cases we show the DESCRIPTION for
         # the VALUE keyword_definition

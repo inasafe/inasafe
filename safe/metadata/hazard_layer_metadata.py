@@ -50,6 +50,13 @@ class HazardLayerMetadata(GenericLayerMetadata):
             'inasafe/'
             'continuous_hazard_unit/'
             'gco:CharacterString'),
+        'hazard_classification': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'hazard_classification/'
+            'gco:CharacterString'),
         'vector_hazard_classification': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'

@@ -39,3 +39,4 @@ class TestExposureMetadata(TestCase):
         # from ExposureLayerMetadata
         metadata.get_property('exposure')
         metadata.get_property('exposure_unit')
+        metadata.get_property('value_map')

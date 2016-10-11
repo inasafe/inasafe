@@ -344,7 +344,7 @@ class TsunamiRasterRoadsFunction(
         target_field = self.target_field
         # Get parameters from layer's keywords
         road_class_field = self.exposure.keyword('road_class_field')
-        exposure_value_mapping = self.exposure.keyword('value_mapping')
+        exposure_value_mapping = self.exposure.keyword('value_map')
 
         # reproject self.extent to the hazard projection
         hazard_crs = self.hazard.layer.crs()

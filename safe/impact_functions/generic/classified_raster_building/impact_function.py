@@ -73,7 +73,7 @@ class ClassifiedRasterHazardBuildingFunction(
         # Value from layer's keywords
         structure_class_field = self.exposure.keyword('structure_class_field')
         try:
-            exposure_value_mapping = self.exposure.keyword('value_mapping')
+            exposure_value_mapping = self.exposure.keyword('value_map')
         except KeywordNotFoundError:
             # Generic IF, the keyword might not be defined base.py
             exposure_value_mapping = {}

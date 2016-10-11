@@ -91,7 +91,7 @@ class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
         self.target_field = params['target_field']
 
         self.value_mapping = reorder_dictionary(
-            params['value_mapping'], self._order)
+            params['value_map'], self._order)
 
         self.valid_type_fields = params['key_attribute']
 
