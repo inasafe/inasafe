@@ -33,6 +33,24 @@ exposure_id_field = {
         }
     ]
 }
+# Exposure Name Field
+exposure_name_field = {
+    'key': 'exposure_name_field',
+    'name': tr('Exposure Name'),
+    'field_name': 'exp_name',
+    'type': QVariant.String,
+    'length': default_field_length,
+    'precision': 0,
+    'description': tr(
+        'Attribute where the exposure name of the feature is located.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+
 
 # Exposure Class
 exposure_class_field = {
@@ -345,6 +363,7 @@ elderly_count_field = {
 
 exposure_fields = [
     exposure_id_field,
+    exposure_name_field,
     exposure_class_field,
     population_count_field,
     feature_value_field,
@@ -420,7 +439,7 @@ road_class_field = {
 
 volcano_name_field = {
     'key': 'volcano_name_field',
-    'name': tr('Name field'),
+    'name': tr('Volcano name field'),
     'type': 'field',
     'description': tr('Attribute where the volcano name is located.'),
     'citations': [

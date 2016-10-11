@@ -22,7 +22,16 @@ import os
 
 from safe.definitionsv4.versions import inasafe_keyword_version
 from safe.definitionsv4.fields import (
-    population_count_field)
+    population_count_field,
+    exposure_class_field,
+    volcano_name_field,
+    youth_ratio_field,
+    adult_ratio_field,
+    elderly_ratio_field,
+    female_ratio_field,
+    aggregation_name_field,
+    exposure_name_field
+    )
 from safe.common.exceptions import (
     MetadataReadError,
     KeywordNotFoundError,
@@ -179,29 +188,38 @@ def metadata_migration(old_metadata, new_version):
                 new_metadata['inasafe_fields'][
                     population_count_field['key']] = value
             elif key == 'structure_class_field':
-                pass
+                new_metadata['inasafe_fields'][
+                    exposure_class_field['key']] = value
             elif key == 'area_name_field':
-                pass
+                new_metadata['inasafe_fields'][
+                    exposure_name_field['key']] = value
             elif key == 'name_field':
                 pass
             elif key == 'area_id_field':
                 pass
             elif key == 'road_class_field':
-                pass
+                new_metadata['inasafe_fields'][
+                    exposure_class_field['key']] = value
             elif key == 'field':
                 pass
             elif key == 'volcano_name_field':
-                pass
+                new_metadata['inasafe_fields'][
+                    volcano_name_field['key']] = value
             elif key == 'youth ratio attribute':
-                pass
+                new_metadata['inasafe_fields'][
+                    youth_ratio_field['key']] = value
             elif key == 'aggregation attribute':
-                pass
+                new_metadata['inasafe_fields'][
+                    aggregation_name_field['key']] = value
             elif key == 'adult ratio attribute':
-                pass
+                new_metadata['inasafe_fields'][
+                    adult_ratio_field['key']] = value
             elif key == 'female ratio attribute':
-                pass
+                new_metadata['inasafe_fields'][
+                    female_ratio_field['key']] = value
             elif key == 'elderly ratio attribute':
-                pass
+                new_metadata['inasafe_fields'][
+                    elderly_ratio_field['key']] = value
             elif key in [
                 'raster_hazard_classification',
                 'vector_hazard_classification']:
