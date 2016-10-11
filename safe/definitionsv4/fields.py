@@ -142,6 +142,24 @@ hazard_id_field = {
     ]
 }
 
+# Hazard name
+hazard_name_field = {
+    'key': 'hazard_name_field',
+    'name': tr('Hazard Name'),
+    'field_name': 'hazard_name',
+    'type': QVariant.String,
+    'length': default_field_length,
+    'precision': 0,
+    'description': tr(
+        'Attribute where the hazard name of the feature is located.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+
 # Hazard Value
 hazard_value_field = {
     'key': 'hazard_value_field',

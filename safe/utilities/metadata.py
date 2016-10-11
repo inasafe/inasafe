@@ -19,7 +19,6 @@ from safe.definitionsv4.fields import (
     population_count_field,
     exposure_class_field,
     hazard_class_field,
-    volcano_name_field,
     youth_ratio_field,
     adult_ratio_field,
     elderly_ratio_field,
@@ -27,19 +26,17 @@ from safe.definitionsv4.fields import (
     aggregation_name_field,
     exposure_name_field,
     exposure_id_field,
-    )
+    hazard_name_field)
 from safe.common.exceptions import (
     MetadataReadError,
     KeywordNotFoundError,
-    NoKeywordsFoundError
-)
+    NoKeywordsFoundError)
 from safe.metadata import (
     ExposureLayerMetadata,
     HazardLayerMetadata,
     AggregationLayerMetadata,
     ImpactLayerMetadata,
-    GenericLayerMetadata
-)
+    GenericLayerMetadata)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -208,7 +205,7 @@ def metadata_migration(old_metadata, new_version=inasafe_keyword_version):
                     exposure_class_field['key']] = value
             elif key == 'volcano_name_field':
                 new_metadata['inasafe_fields'][
-                    volcano_name_field['key']] = value
+                    hazard_name_field['key']] = value
             elif key == 'youth ratio attribute':
                 new_metadata['inasafe_fields'][
                     youth_ratio_field['key']] = value

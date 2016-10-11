@@ -20,7 +20,7 @@ from safe.definitionsv4.units import (
     unit_millimetres,
     unit_centimetres,
     unit_mmi)
-from safe.definitionsv4.fields import volcano_name_field
+from safe.definitionsv4.fields import hazard_name_field
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -254,7 +254,7 @@ hazard_volcano = {
     'continuous_hazard_units': [],
     'vector_hazard_classifications': [volcano_vector_hazard_classes],
     'raster_hazard_classifications': [],
-    'extra_fields': [volcano_name_field]
+    'extra_fields': [hazard_name_field]
 }
 hazard_all = [
     hazard_flood,
