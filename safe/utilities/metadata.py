@@ -21,6 +21,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 
 from safe.definitionsv4.versions import inasafe_keyword_version
+from safe.definitionsv4.fields import (
+    population_count_field)
 from safe.common.exceptions import (
     MetadataReadError,
     KeywordNotFoundError,
@@ -136,3 +138,76 @@ def read_iso19115_metadata(layer_uri, keyword=None):
     if isinstance(metadata, ImpactLayerMetadata):
         keywords['if_provenance'] = metadata.provenance
     return keywords
+
+def metadata_migration(old_metadata, new_version):
+    """Migrate metadata to the new version.
+
+    :param old_metadata: Old metadata as dictionary.
+    :type old_metadata: dict
+
+    :param new_version: New target version.
+    :type new_version: str
+
+    :returns: Migrated metadata.
+    :rtype: dict
+    """
+    new_metadata = {}
+    if old_metadata['version'] == '3.5' and new_version == '4.0':
+        new_metadata['inasafe_fields'] = {}
+        inasafe_fields = [
+            'field',
+            'population_field',
+            'area_type_field',
+            'area_population_field',
+            'structure_class_field',
+            'area_name_field',
+            'name_field',
+            'area_id_field',
+            'road_class_field'
+        ]
+        for key, value in old_metadata:
+            if key == 'version':
+                new_metadata[key] = new_version
+            elif key == 'field':
+                pass
+            elif key == 'population_field':
+                new_metadata['inasafe_fields'][
+                    population_count_field['key']] = value
+            elif key == 'area_type_field':
+                pass
+            elif key == 'area_population_field':
+                new_metadata['inasafe_fields'][
+                    population_count_field['key']] = value
+            elif key == 'structure_class_field':
+                pass
+            elif key == 'area_name_field':
+                pass
+            elif key == 'name_field':
+                pass
+            elif key == 'area_id_field':
+                pass
+            elif key == 'road_class_field':
+                pass
+            elif key == 'field':
+                pass
+            elif key == 'volcano_name_field':
+                pass
+            elif key == 'youth ratio attribute':
+                pass
+            elif key == 'aggregation attribute':
+                pass
+            elif key == 'adult ratio attribute':
+                pass
+            elif key == 'female ratio attribute':
+                pass
+            elif key == 'elderly ratio attribute':
+                pass
+            elif key in [
+                'raster_hazard_classification',
+                'vector_hazard_classification']:
+                new_metadata['hazard_classification'] = value
+            else:
+                new_metadata[key] = value
+
+
+    return new_metadata
