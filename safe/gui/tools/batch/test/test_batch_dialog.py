@@ -63,6 +63,8 @@ class BatchDialogTest(unittest.TestCase):
         dialog.scenario_directory_radio.setText(scenarios_dir)
         self.assertNotEqual(out_path, scenarios_dir)
 
+    # Skip because it is an old test from inasafe v3
+    @unittest.skip
     def test_run_single_scenario(self):
         """Test run single scenario."""
         scenarios_dir = standard_data_path('control', 'scenarios')
@@ -81,6 +83,8 @@ class BatchDialogTest(unittest.TestCase):
         message = 'Expected %s but got %s' % (expected_status, status)
         self.assertEqual(status, expected_status, message)
 
+    # Skip because it is an old test from inasafe v3
+    @unittest.skip
     def test_run_all_scenario(self):
         """Test run all scenarii."""
         scenarios_dir = standard_data_path('control', 'scenarios')

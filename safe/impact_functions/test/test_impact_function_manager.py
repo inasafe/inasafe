@@ -31,10 +31,6 @@ from safe.impact_functions.earthquake.pager_earthquake_fatality_model \
     .impact_function import PAGFatalityFunction
 from safe.impact_functions.earthquake.itb_bayesian_earthquake_fatality_model \
     .impact_function import ITBBayesianFatalityFunction
-from safe.impact_functions.generic.continuous_hazard_population\
-    .impact_function import ContinuousHazardPopulationFunction
-from safe.impact_functions.inundation.flood_vector_building_impact\
-    .impact_function import FloodPolygonBuildingFunction
 
 from safe.definitionsv4.layer_purposes import (
     layer_purpose_exposure, layer_purpose_hazard)
@@ -85,6 +81,8 @@ class TestImpactFunctionManager(unittest.TestCase):
             'enabled impact functions' % (expected_result, result))
         self.assertEqual(result, expected_result, message)
 
+    # Skip because it is an old test from inasafe v3
+    @unittest.skip
     def test_get_function_title(self):
         """TestImpactFunctionManager: Test getting function title."""
         impact_function_title = ImpactFunctionManager().get_function_title(

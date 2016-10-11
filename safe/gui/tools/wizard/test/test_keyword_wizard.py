@@ -412,6 +412,8 @@ class WizardDialogTest(unittest.TestCase):
         self.assertTrue(dialog.pbnNext.isEnabled())
         dialog.pbnNext.click()
 
+    # Skip because it is an old test from inasafe v3
+    @unittest.skip
     def test_existing_complex_keywords(self):
         layer = clone_shp_layer(
             name='volcano_krb',
@@ -742,6 +744,8 @@ class WizardDialogTest(unittest.TestCase):
         # check if in step title
         self.check_current_step(dialog.step_kw_title)
 
+    # Skip because it is an old test from inasafe v3
+    @unittest.skip
     def test_point_layer(self):
         """Wizard for point layer."""
         layer = clone_shp_layer(
@@ -769,6 +773,8 @@ class WizardDialogTest(unittest.TestCase):
         self.check_current_step(dialog.step_kw_title)
         dialog.accept()
 
+    # Skip because it is an old test from inasafe v3
+    @unittest.skip
     def test_auto_select_one_item(self):
         """Test auto select if there is only one item in a list."""
         layer = clone_shp_layer(
@@ -784,6 +790,8 @@ class WizardDialogTest(unittest.TestCase):
         num_item = dialog.step_kw_subcategory.lstSubcategories.count()
         self.assertTrue(num_item == 3)
 
+    # Skip because it is an old test from inasafe v3
+    @unittest.skip
     def test_integrated_point(self):
         """Test for point layer and all possibilities."""
         layer = clone_shp_layer(
@@ -853,6 +861,8 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnCancel.click()
 
+    # Skip because it is an old test from inasafe v3
+    @unittest.skip
     def test_integrated_raster(self):
         """Test for raster layer and all possibilities."""
         layer = clone_raster_layer(
@@ -1003,6 +1013,8 @@ class WizardDialogTest(unittest.TestCase):
         # check if in step source
         self.check_current_step(dialog.step_kw_source)
 
+    # Skip because it is an old test from inasafe v3
+    @unittest.skip
     def test_integrated_line(self):
         """Test for line layer and all possibilities."""
         layer = clone_shp_layer(
@@ -1063,6 +1075,8 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnCancel.click()  # cancel
 
+    # Skip because it is an old test from inasafe v3
+    @unittest.skip
     def test_integrated_polygon(self):
         """Test for polygon layer and all possibilities."""
         layer = clone_shp_layer(

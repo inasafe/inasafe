@@ -29,15 +29,6 @@ from safe.impact_functions.loader import EarthquakeBuildingFunction
 from safe.impact_functions.loader import ITBFatalityFunction
 from safe.impact_functions.loader import PAGFatalityFunction
 from safe.impact_functions.loader import ITBBayesianFatalityFunction
-from safe.impact_functions.loader import FloodRasterBuildingFunction
-from safe.impact_functions.loader import TsunamiRasterBuildingFunction
-from safe.impact_functions.loader import \
-    ClassifiedPolygonHazardBuildingFunction
-from safe.impact_functions.loader import VolcanoPolygonBuildingFunction
-from safe.impact_functions.loader import VolcanoPointBuildingFunction
-from safe.impact_functions.loader import FloodPolygonBuildingFunction
-from safe.impact_functions.loader import \
-    ClassifiedRasterHazardBuildingFunction
 
 from safe.impact_functions.registry import Registry
 from safe.definitionsv4.layer_modes import layer_mode_continuous, \
@@ -51,34 +42,11 @@ from safe.definitionsv4.layer_geometry import layer_geometry_point, \
 
 # This list is used in another test file.
 EXPECTED_IF = [
-    'Polygon flood on buildings',
-    'Polygon flood on roads',
-    'Polygon flood on people',
-    'Raster flood on population',
-    'Raster flood on buildings',
-    'Raster flood on roads',
-    'Tsunami evacuation',
-    'Raster tsunami on buildings',
-    'Raster tsunami on roads',
-    'Raster tsunami on land cover',
-    'Classified raster hazard on buildings',
-    'Classified raster hazard on population',
-    'Continuous raster hazard on population',
-    'Classified polygon hazard on population',
-    'Classified polygon hazard on buildings',
-    'Classified polygon hazard on polygon people',
-    'Classified polygon hazard on land cover',
+
     'Earthquake on buildings',
     'Earthquake ITB fatality function',
     'Earthquake PAGER fatality function',
     'Earthquake ITB fatality function based on a Bayesian approach',
-    'Point volcano on buildings',
-    'Polygon volcano on buildings',
-    'Point volcano on population',
-    'Polygon volcano on population',
-    'Ash raster on land cover',
-    'Ash raster on places',
-    'Ash raster on population'
 ]
 
 
@@ -95,24 +63,14 @@ class TestRegistry(unittest.TestCase):
                   'functions exists instead' % len(registry.impact_functions)
         self.assertEqual(0, len(registry.impact_functions), message)
 
-        registry.register(FloodPolygonBuildingFunction)
-        message = 'Expecting registry will contains 1 impact functions. %s ' \
-                  'impact functions exists' % len(registry.impact_functions)
-        self.assertEqual(1, len(registry.impact_functions), message)
-
-        result = registry.get_instance('FloodPolygonBuildingFunction')\
-            .metadata().as_dict()['id']
-        expected = 'FloodPolygonBuildingFunction'
-        message = 'Expected registered impact function ID should be %s. ' \
-                  'Got %s instead' % (expected, result)
-        self.assertEqual(expected, result, message)
-
     def test_list(self):
         """TestRegistry: Test list all register IFs."""
         registry = Registry()
         impact_functions = registry.list()
         self.assertItemsEqual(EXPECTED_IF, impact_functions)
 
+    # Skip because it is an old test from inasafe v3
+    @unittest.skip
     def test_get_impact_function_instance(self):
         """TestRegistry: Test we can get an impact function instance."""
         # Getting an IF instance using its class name
@@ -124,6 +82,8 @@ class TestRegistry(unittest.TestCase):
                   'instead.' % result
         self.assertEqual(class_name, result, message)
 
+    # Skip because it is an old test from inasafe v3
+    @unittest.skip
     def test_get_impact_function_class(self):
         """TestRegistry: Test we can get an impact function class."""
         # Getting an IF class using its class name
@@ -140,6 +100,8 @@ class TestRegistry(unittest.TestCase):
         message = 'Expecting %s. Got %s instead.' % (expected, result)
         self.assertEqual(expected, result, message)
 
+    # Skip because it is an old test from inasafe v3
+    @unittest.skip
     def test_get_impact_functions_by_metadata(self):
         """TestRegistry: Test getting the impact functions by its metadata."""
         # Test getting the impact functions by 'id'
@@ -157,6 +119,8 @@ class TestRegistry(unittest.TestCase):
         message = 'Expecting %s. Got %s instead.' % (expected, result)
         self.assertEqual(expected, result, message)
 
+    # Skip because it is an old test from inasafe v3
+    @unittest.skip
     def test_filter_by_hazard_metadata(self):
         """TestRegistry: Test filtering IF by hazard metadata."""
         # Full metadata
@@ -214,14 +178,7 @@ class TestRegistry(unittest.TestCase):
         impact_functions = registry.filter_by_exposure(
             registry.impact_functions, exposure_metadata)
         expected = [
-            FloodPolygonBuildingFunction,
-            FloodRasterBuildingFunction,
-            TsunamiRasterBuildingFunction,
-            ClassifiedRasterHazardBuildingFunction,
-            ClassifiedPolygonHazardBuildingFunction,
             EarthquakeBuildingFunction,
-            VolcanoPointBuildingFunction,
-            VolcanoPolygonBuildingFunction
         ]
         message = 'Expecting \n%s.\n\nGot \n%s \n instead' % (
             '\n'.join([x.__name__ for x in expected]),
@@ -239,14 +196,7 @@ class TestRegistry(unittest.TestCase):
         impact_functions = registry.filter_by_exposure(
             registry.impact_functions, exposure_metadata)
         expected = [
-            FloodPolygonBuildingFunction,
-            FloodRasterBuildingFunction,
-            TsunamiRasterBuildingFunction,
-            ClassifiedRasterHazardBuildingFunction,
-            ClassifiedPolygonHazardBuildingFunction,
             EarthquakeBuildingFunction,
-            VolcanoPointBuildingFunction,
-            VolcanoPolygonBuildingFunction,
         ]
         message = 'Expecting \n%s.\n\nGot \n%s instead' % (
             '\n'.join([x.__name__ for x in expected]),
