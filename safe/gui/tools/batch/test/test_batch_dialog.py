@@ -42,6 +42,7 @@ class BatchDialogTest(unittest.TestCase):
         register_impact_functions()
         self.dock = get_dock()
 
+    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_load_batch_dialog(self):
         """Test for BatchDialog behaviour.
         """
@@ -63,6 +64,7 @@ class BatchDialogTest(unittest.TestCase):
         dialog.scenario_directory_radio.setText(scenarios_dir)
         self.assertNotEqual(out_path, scenarios_dir)
 
+    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_run_single_scenario(self):
         """Test run single scenario."""
         scenarios_dir = standard_data_path('control', 'scenarios')
@@ -81,6 +83,7 @@ class BatchDialogTest(unittest.TestCase):
         message = 'Expected %s but got %s' % (expected_status, status)
         self.assertEqual(status, expected_status, message)
 
+    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_run_all_scenario(self):
         """Test run all scenarii."""
         scenarios_dir = standard_data_path('control', 'scenarios')

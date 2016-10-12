@@ -38,64 +38,6 @@ from safe.impact_functions.earthquake.pager_earthquake_fatality_model. \
 from safe.impact_functions.earthquake.itb_bayesian_earthquake_fatality_model.\
     impact_function import ITBBayesianFatalityFunction
 
-# Generic IFs
-from safe.impact_functions.generic.classified_polygon_building\
-    .impact_function import ClassifiedPolygonHazardBuildingFunction
-from safe.impact_functions.generic.classified_polygon_population \
-    .impact_function import ClassifiedPolygonHazardPopulationFunction
-from safe.impact_functions.generic.classified_polygon_people\
-    .impact_function import ClassifiedPolygonHazardPolygonPeopleFunction
-from safe.impact_functions.generic.classified_polygon_landcover\
-    .impact_function import ClassifiedPolygonHazardLandCoverFunction
-from safe.impact_functions.generic.classified_raster_building \
-    .impact_function import ClassifiedRasterHazardBuildingFunction
-from safe.impact_functions.generic.classified_raster_population \
-    .impact_function import ClassifiedRasterHazardPopulationFunction
-from safe.impact_functions.generic.continuous_hazard_population \
-    .impact_function import ContinuousHazardPopulationFunction
-
-# Inundation IFs
-from safe.impact_functions.inundation.flood_polygon_population\
-    .impact_function import FloodEvacuationVectorHazardFunction
-from safe.impact_functions.inundation.flood_polygon_roads.impact_function \
-    import FloodPolygonRoadsFunction
-from safe.impact_functions.inundation.flood_raster_osm_building_impact\
-    .impact_function import FloodRasterBuildingFunction
-from safe.impact_functions.inundation.flood_raster_population.impact_function\
-    import FloodEvacuationRasterHazardFunction
-from safe.impact_functions.inundation.flood_raster_road\
-    .impact_function import FloodRasterRoadsFunction
-from safe.impact_functions.inundation.flood_vector_building_impact\
-    .impact_function import FloodPolygonBuildingFunction
-
-# Tsunami
-from safe.impact_functions.inundation.tsunami_population_evacuation_raster\
-    .impact_function import TsunamiEvacuationFunction
-from safe.impact_functions.inundation.tsunami_raster_road\
-    .impact_function import TsunamiRasterRoadsFunction
-from safe.impact_functions.inundation.tsunami_raster_landcover\
-    .impact_function import TsunamiRasterLandcoverFunction
-from safe.impact_functions.inundation.tsunami_raster_building\
-    .impact_function import TsunamiRasterBuildingFunction
-
-# Volcanic IFs
-from safe.impact_functions.volcanic.volcano_point_building.impact_function\
-    import VolcanoPointBuildingFunction
-from safe.impact_functions.volcanic.volcano_point_population.impact_function \
-    import VolcanoPointPopulationFunction
-from safe.impact_functions.volcanic.volcano_polygon_building.impact_function\
-    import VolcanoPolygonBuildingFunction
-from safe.impact_functions.volcanic.volcano_polygon_population\
-    .impact_function import VolcanoPolygonPopulationFunction
-
-# Volcanic Ash
-from safe.impact_functions.ash.ash_raster_landcover.impact_function import \
-    AshRasterLandCoverFunction
-from safe.impact_functions.ash.ash_raster_population.impact_function import \
-    AshRasterPopulationFunction
-from safe.impact_functions.ash.ash_raster_places.impact_function import \
-    AshRasterPlacesFunction
-
 from safe.definitionsv4.layer_purposes import layer_purpose_exposure
 from safe.definitionsv4.layer_modes import layer_mode_continuous
 from safe.definitionsv4.fields import structure_class_field, volcano_name_field
@@ -128,40 +70,6 @@ class TestImpactFunctionMetadata(unittest.TestCase):
             ITBFatalityFunction(),
             PAGFatalityFunction(),
             ITBBayesianFatalityFunction(),
-
-            # Generic
-            ClassifiedPolygonHazardBuildingFunction(),
-            ClassifiedPolygonHazardLandCoverFunction(),
-            ClassifiedPolygonHazardPopulationFunction(),
-            ClassifiedPolygonHazardPolygonPeopleFunction(),
-            ClassifiedRasterHazardBuildingFunction(),
-            ClassifiedRasterHazardPopulationFunction(),
-            ContinuousHazardPopulationFunction(),
-
-            # Inundation
-            FloodEvacuationVectorHazardFunction(),
-            FloodPolygonRoadsFunction(),
-            FloodRasterBuildingFunction(),
-            FloodEvacuationRasterHazardFunction(),
-            FloodRasterRoadsFunction(),
-            FloodPolygonBuildingFunction(),
-
-            # Tsunami
-            TsunamiEvacuationFunction(),
-            TsunamiRasterRoadsFunction(),
-            TsunamiRasterLandcoverFunction(),
-            TsunamiRasterBuildingFunction(),
-
-            # Volcanic
-            VolcanoPointBuildingFunction(),
-            VolcanoPointPopulationFunction(),
-            VolcanoPolygonBuildingFunction(),
-            VolcanoPolygonPopulationFunction(),
-
-            # Volcanic Ash
-            AshRasterLandCoverFunction(),
-            AshRasterPlacesFunction(),
-            AshRasterPopulationFunction()
         ]
         self.assertEqual(len(impact_functions), len(EXPECTED_IF))
 
@@ -198,7 +106,7 @@ class TestImpactFunctionMetadata(unittest.TestCase):
 
     def test_get_layer_requirements(self):
         """Test for get_layer_requirements."""
-        impact_function = VolcanoPolygonBuildingFunction()
+        impact_function = EarthquakeBuildingFunction()
         layer_req = impact_function.metadata().get_layer_requirements()
         self.assertIsNotNone(layer_req)
         self.assertIsInstance(layer_req, dict)
@@ -356,6 +264,7 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         expected = layer_mode_continuous
         self.assertEqual(result, expected)
 
+    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_hazard_additional_keywords(self):
         """Test for hazard_additional_keywords."""
         impact_function = FloodPolygonBuildingFunction()
@@ -386,6 +295,7 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         expected = [volcano_name_field]
         self.assertItemsEqual(result, expected)
 
+    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_exposure_additional_keywords(self):
         """Test for exposure_additional_keywords."""
         impact_function = FloodPolygonBuildingFunction()
@@ -404,6 +314,7 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         expected = []
         self.assertItemsEqual(result, expected)
 
+    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_exposure_class_fields(self):
         """Test for exposure_class_fields."""
         impact_function = FloodPolygonBuildingFunction()
