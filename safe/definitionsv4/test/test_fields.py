@@ -16,8 +16,9 @@ from safe.definitionsv4.fields import (
     exposure_fields,
     hazard_fields,
     aggregation_fields,
-    impact_fields
-)
+    impact_fields)
+from safe.definitionsv4.hazard import hazard_all
+from safe.definitionsv4.exposure import exposure_all
 from PyQt4.QtCore import QVariant
 
 qvariant_type = type(QVariant.Int)
@@ -54,7 +55,7 @@ def check_format(field):
         'field_name': basestring,
         'precision': int,
         'length': int,
-        'type': qvariant_type,
+        'type': list,
         'description': basestring,
         'citations': list
     }
@@ -86,6 +87,16 @@ class TestFieldDefinitions(unittest.TestCase):
         """Test to check all field is valid"""
         for layer, fields in all_fields.items():
             for field in fields:
+                check = check_format(field)
+                self.assertTrue(check[0], check[1])
+
+        for hazard in hazard_all:
+            for field in hazard['extra_fields']:
+                check = check_format(field)
+                self.assertTrue(check[0], check[1])
+
+        for exposure in exposure_all:
+            for field in exposure['extra_fields']:
                 check = check_format(field)
                 self.assertTrue(check[0], check[1])
 

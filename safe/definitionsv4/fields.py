@@ -21,7 +21,7 @@ exposure_id_field = {
     'key': 'exposure_id_field',
     'name': tr('Exposure ID'),
     'field_name': 'exposure_id',
-    'type': QVariant.Int,
+    'type': [QVariant.Int],
     'length': default_field_length,
     'precision': 0,
     'description': tr(
@@ -38,7 +38,7 @@ exposure_name_field = {
     'key': 'exposure_name_field',
     'name': tr('Exposure Name'),
     'field_name': 'exposure_name',
-    'type': QVariant.String,
+    'type': [QVariant.String],
     'length': default_field_length,
     'precision': 0,
     'description': tr(
@@ -57,7 +57,7 @@ exposure_class_field = {
     'key': 'exposure_class_field',
     'name': tr('Exposure Class'),
     'field_name': 'exposure_class',
-    'type': QVariant.String,
+    'type': [QVariant.String],
     'length': default_field_length,
     'precision': 0,
     'description': tr(
@@ -75,7 +75,7 @@ population_count_field = {
     'key': 'population_count_field',
     'name': tr('Population count'),
     'field_name': 'population',
-    'type': QVariant.Int,
+    'type': [QVariant.Int],
     'length': default_field_length,
     'precision': 0,
     'description': tr('Attribute where the number of population is located.'),
@@ -92,7 +92,7 @@ feature_value_field = {
     'key': 'feature_value_field',
     'name': tr('Feature Value'),
     'field_name': 'exposure_value',
-    'type': QVariant.Double,
+    'type': [QVariant.Double],
     'length': default_field_length,
     'precision': default_field_precision,
     'description': tr('Attribute where the value of the feature is located.'),
@@ -109,7 +109,7 @@ feature_rate_field = {
     'key': 'feature_rate_field',
     'name': tr('Feature Rate'),
     'field_name': 'exposure_rate',
-    'type': QVariant.Double,
+    'type': [QVariant.Double],
     'length': default_field_length,
     'precision': default_field_precision,
     'description': tr(
@@ -129,7 +129,7 @@ hazard_id_field = {
     'key': 'hazard_id_field',
     'name': tr('Hazard ID'),
     'field_name': 'hazard_id',
-    'type': QVariant.Int,
+    'type': [QVariant.Int],
     'length': default_field_length,
     'precision': 0,
     'description': tr(
@@ -147,7 +147,7 @@ hazard_name_field = {
     'key': 'hazard_name_field',
     'name': tr('Hazard Name'),
     'field_name': 'hazard_name',
-    'type': QVariant.String,
+    'type': [QVariant.String],
     'length': default_field_length,
     'precision': 0,
     'description': tr(
@@ -184,7 +184,7 @@ aggregation_id_field = {
     'key': 'aggregation_id_field',
     'name': tr('Aggregation ID'),
     'field_name': 'aggregation_id',
-    'type': QVariant.Int,
+    'type': [QVariant.Int],
     'length': default_field_length,
     'precision': 0,
     'description': tr(
@@ -202,7 +202,7 @@ aggregation_name_field = {
     'key': 'aggregation_name_field',
     'name': tr('Aggregation Name'),
     'field_name': 'aggregation_name',
-    'type': QVariant.String,
+    'type': [QVariant.String],
     'length': default_field_length,
     'precision': 0,
     'description': tr(
@@ -220,7 +220,7 @@ female_ratio_field = {
     'key': 'female_ratio_field',
     'name': tr('Female Ratio'),
     'field_name': 'female_ratio',
-    'type': QVariant.Double,
+    'type': [QVariant.Double],
     'length': default_field_length,
     'precision': default_field_precision,
     'description': tr('Attribute where the ratio of women is located.'),
@@ -237,7 +237,7 @@ youth_ratio_field = {
     'key': 'youth_ratio_field',
     'name': tr('Youth Ratio'),
     'field_name': 'youth_ratio',
-    'type': QVariant.Double,
+    'type': [QVariant.Double],
     'length': default_field_length,
     'precision': default_field_precision,
     'description': tr('Attribute where the ratio of youth people is located.'),
@@ -254,7 +254,7 @@ adult_ratio_field = {
     'key': 'adult_ratio_field',
     'name': tr('Adult Ratio'),
     'field_name': 'adult_ratio',
-    'type': QVariant.Double,
+    'type': [QVariant.Double],
     'length': default_field_length,
     'precision': default_field_precision,
     'description': tr('Attribute where the ratio of adult people is located.'),
@@ -271,7 +271,7 @@ elderly_ratio_field = {
     'key': 'elderly_ratio_field',
     'name': tr('Elderly Ratio'),
     'field_name': 'elderly_ratio',
-    'type': QVariant.Double,
+    'type': [QVariant.Double],
     'length': default_field_length,
     'precision': default_field_precision,
     'description': tr(
@@ -290,7 +290,7 @@ hazard_class_field = {
     'key': 'hazard_class_field',
     'name': tr('Hazard Class'),
     'field_name': 'hazard_class',
-    'type': QVariant.String,
+    'type': [QVariant.String],
     'length': default_field_length,
     'precision': 0,
     'description': tr(
@@ -308,7 +308,7 @@ women_count_field = {
     'key': 'women_count_field',
     'name': tr('Women Count'),
     'field_name': 'women',
-    'type': QVariant.Int,
+    'type': [QVariant.Int],
     'length': default_field_length,
     'precision': 0,
     'description': tr(
@@ -326,7 +326,7 @@ youth_count_field = {
     'key': 'youth_count_field',
     'name': tr('Youth Count'),
     'field_name': 'youth',
-    'type': QVariant.Int,
+    'type': [QVariant.Int],
     'length': default_field_length,
     'precision': 0,
     'description': tr(
@@ -345,7 +345,7 @@ adult_count_field = {
     'key': 'adult_count_field',
     'name': tr('Adult Count'),
     'field_name': 'adult',
-    'type': QVariant.Int,
+    'type': [QVariant.Int],
     'length': default_field_length,
     'precision': 0,
     'description': tr(
@@ -364,7 +364,7 @@ elderly_count_field = {
     'key': 'elderly_count_field',
     'name': tr('Elderly Count'),
     'field_name': 'elderly',
-    'type': QVariant.Int,
+    'type': [QVariant.Int],
     'length': default_field_length,
     'precision': 0,
     'description': tr(
@@ -422,6 +422,8 @@ impact_fields = [
     elderly_count_field
 ]
 
+
+# From v3, we will remove it
 structure_class_field = {
     'key': 'structure_class_field',
     'name': tr('Attribute field'),
