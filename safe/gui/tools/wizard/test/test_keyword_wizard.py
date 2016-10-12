@@ -26,7 +26,6 @@ from safe.definitionsv4.hazard_category import hazard_category_multiple_event
 from safe.definitionsv4.constants import not_available
 
 
-from safe.impact_functions.loader import register_impact_functions
 from safe.gui.tools.wizard.wizard_dialog import WizardDialog
 from safe.gui.tools.wizard.wizard_utils import get_question_text
 from safe.utilities.keyword_io import KeywordIO
@@ -41,9 +40,6 @@ __revision__ = '$Format:%H$'
 # noinspection PyTypeChecker
 class WizardDialogTest(unittest.TestCase):
     """Test the InaSAFE wizard GUI"""
-    def setUp(self):
-        # register impact functions
-        register_impact_functions()
 
     def tearDown(self):
         """Run after each test."""
@@ -645,6 +641,7 @@ class WizardDialogTest(unittest.TestCase):
             dialog.step_kw_aggregation.dsbFemaleRatioDefault.isEnabled())
 
     # noinspection PyTypeChecker
+    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_unit_building_generic(self):
         """Test for case existing building generic unit for structure."""
         layer = clone_shp_layer(
