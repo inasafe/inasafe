@@ -456,6 +456,7 @@ class TestDock(TestCase):
             self.dock.cboExposure.currentText())
         self.assertTrue(button.isEnabled(), message)
 
+    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_issue160(self):
         """Test that multipart features can be used in a scenario - GH #160"""
         exposure_layer = clone_shp_layer(
@@ -551,6 +552,7 @@ class TestDock(TestCase):
             'It appears that no Population are affected by Continuous Flood.'
             in result, message)
 
+    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_state(self):
         """Check if the save/restore state methods work. See also
         https://github.com/AIFDR/inasafe/issues/58

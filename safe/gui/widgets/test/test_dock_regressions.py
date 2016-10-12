@@ -1,5 +1,4 @@
 import unittest
-import os
 
 # this import required to enable PyQt API v2
 # noinspection PyUnresolvedReferences
@@ -59,9 +58,7 @@ class TestDockRegressions(unittest.TestCase):
         self.dock.cboExposure.clear()
 
     # noinspection PyUnusedLocal
-    # This test is failing on some QGIS docker image used for testing.
-    @unittest.skipIf(
-        os.environ.get('ON_TRAVIS', False), 'This test is failing in docker.')
+    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_regression_2553_no_resample(self):
         """Test for regression 2553 (no resampling).
 
@@ -144,9 +141,7 @@ class TestDockRegressions(unittest.TestCase):
         self.assertEqual(evacuated, expected_evacuated)
 
     # noinspection PyUnusedLocal
-    # This test is failing on some QGIS docker image used for testing.
-    @unittest.skipIf(
-        os.environ.get('ON_TRAVIS', False), 'This test is failing in docker.')
+    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_regression_2553_with_resample(self):
         """Test for regression 2553 (with resampling).
 

@@ -31,10 +31,6 @@ from safe.impact_functions.earthquake.pager_earthquake_fatality_model \
     .impact_function import PAGFatalityFunction
 from safe.impact_functions.earthquake.itb_bayesian_earthquake_fatality_model \
     .impact_function import ITBBayesianFatalityFunction
-from safe.impact_functions.generic.continuous_hazard_population\
-    .impact_function import ContinuousHazardPopulationFunction
-from safe.impact_functions.inundation.flood_vector_building_impact\
-    .impact_function import FloodPolygonBuildingFunction
 
 from safe.definitionsv4.layer_purposes import (
     layer_purpose_exposure, layer_purpose_hazard)
@@ -85,10 +81,11 @@ class TestImpactFunctionManager(unittest.TestCase):
             'enabled impact functions' % (expected_result, result))
         self.assertEqual(result, expected_result, message)
 
+    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_get_function_title(self):
         """TestImpactFunctionManager: Test getting function title."""
         impact_function_title = ImpactFunctionManager().get_function_title(
-            FloodPolygonBuildingFunction)
+            ITBFatalityFunction)
         expected_title = 'Be flooded'
         message = 'Expecting %s but got %s' % (
             impact_function_title, expected_title)
@@ -115,6 +112,7 @@ class TestImpactFunctionManager(unittest.TestCase):
                 print ''
             print ''
 
+    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_purposes_for_layer(self):
         """Test for purposes_for_layer"""
         impact_function_manager = ImpactFunctionManager()
@@ -134,6 +132,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         expected = [layer_purpose_hazard, layer_purpose_exposure]
         self.assertItemsEqual(layer_purposes, expected)
 
+    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_hazard_categories_for_layer(self):
         """Test for hazard_categories_for_layer"""
         impact_function_manager = ImpactFunctionManager()
@@ -171,6 +170,7 @@ class TestImpactFunctionManager(unittest.TestCase):
             hazard_category_multiple_event]
         self.assertItemsEqual(hazard_categories, expected)
 
+    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_hazards_for_layer(self):
         """Test for hazards_for_layer"""
         impact_function_manager = ImpactFunctionManager()
@@ -197,6 +197,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         expected = [hazard_volcano]
         self.assertItemsEqual(hazards, expected)
 
+    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_exposures_for_layer(self):
         """Test for exposures_for_layer"""
         impact_function_manager = ImpactFunctionManager()
@@ -212,6 +213,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         expected = [exposure_road]
         self.assertItemsEqual(exposures, expected)
 
+    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_exposure_units_for_layer(self):
         """Test for exposure_units_for_layer"""
         impact_function_manager = ImpactFunctionManager()
@@ -220,6 +222,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         expected = [count_exposure_unit, density_exposure_unit]
         self.assertItemsEqual(exposure_units, expected)
 
+    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_continuous_hazards_units_for_layer(self):
         """Test for continuous_hazards_units_for_layer"""
         impact_function_manager = ImpactFunctionManager()
@@ -230,6 +233,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         expected = [unit_metres, unit_feet, unit_generic]
         self.assertItemsEqual(continuous_hazards_units, expected)
 
+    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_available_hazards(self):
         """Test available_hazards API."""
         impact_function_manager = ImpactFunctionManager()
@@ -246,6 +250,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
+    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_available_exposures(self):
         """Test available_exposures API."""
         impact_function_manager = ImpactFunctionManager()
@@ -258,6 +263,7 @@ class TestImpactFunctionManager(unittest.TestCase):
             exposure_land_cover]
         self.assertItemsEqual(result, expected_result)
 
+    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_functions_for_constraint(self):
         """Test functions_for_constraint."""
         ifm = ImpactFunctionManager()
@@ -284,6 +290,7 @@ class TestImpactFunctionManager(unittest.TestCase):
             message = key
             self.assertItemsEqual(result, hope, message)
 
+    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_available_hazard_constraints(self):
         """Test for available_hazard_constraints."""
         ifm = ImpactFunctionManager()
@@ -298,6 +305,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         # print [(x[0]['key'], x[1]['key']) for x in hazard_constraints]
         self.assertItemsEqual(hazard_constraints, expected)
 
+    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_available_exposure_constraints(self):
         """Test for available_exposure_constraints."""
         self.maxDiff = None
@@ -310,6 +318,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         ]
         self.assertItemsEqual(exposure_constraints, expected)
 
+    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_available_hazard_layer_modes(self):
         """Test for available_hazard_layer_modes."""
         ifm = ImpactFunctionManager()
