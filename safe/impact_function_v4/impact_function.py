@@ -28,11 +28,15 @@ from qgis.core import (
 import logging
 
 from safe.gisv4.vector.tools import create_memory_layer
-from safe.gisv4.vector.prepare_vector_layer import prepare_vector_layer
 from safe.definitionsv4.post_processors import post_processors
 from safe.defaults import get_defaults
 from safe.common.exceptions import (
-    InvalidExtentError, InvalidLayerError)
+    InvalidExtentError,
+    InvalidLayerError,
+    InvalidAggregationKeywords,
+    InvalidHazardKeywords,
+    InvalidExposureKeywords,
+)
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 
@@ -111,9 +115,21 @@ class ImpactFunction(object):
         :type layer: QgsMapLayer
 
         :raise: NoKeywordsFoundError if no keywords has been found.
+        :raise: InvalidHazardKeywords if the layer is not an hazard layer.
         """
+        try:
+            # The layer might have monkey patching already.
+            keywords = layer.keywords
+        except AttributeError:
+            # Or we should read it using KeywordIO
+            # but NoKeywordsFoundError might be raised.
+            keywords = KeywordIO().read_keywords(layer)
+
+        if keywords.get('layer_purpose') != 'hazard':
+            raise InvalidHazardKeywords
+
         self._hazard = layer
-        self._hazard.keywords = KeywordIO().read_keywords(layer)
+        self._hazard.keywords = keywords
 
         self.setup_impact_function()
 
@@ -134,9 +150,21 @@ class ImpactFunction(object):
         :type layer: QgsMapLayer
 
         :raise: NoKeywordsFoundError if no keywords has been found.
+        :raise: InvalidExposureKeywords if the layer is not an exposure layer.
         """
+        try:
+            # The layer might have monkey patching already.
+            keywords = layer.keywords
+        except AttributeError:
+            # Or we should read it using KeywordIO
+            # but NoKeywordsFoundError might be raised.
+            keywords = KeywordIO().read_keywords(layer)
+
+        if keywords.get('layer_purpose') != 'exposure':
+            raise InvalidExposureKeywords
+
         self._exposure = layer
-        self._exposure.keywords = KeywordIO().read_keywords(layer)
+        self._exposure.keywords = keywords
 
         self.setup_impact_function()
 
@@ -157,9 +185,21 @@ class ImpactFunction(object):
         :type layer: QgsMapLayer
 
         :raise: NoKeywordsFoundError if no keywords has been found.
+        :raise: InvalidExposureKeywords if the layer isn't an aggregation layer
         """
+        try:
+            # The layer might have monkey patching already.
+            keywords = layer.keywords
+        except AttributeError:
+            # Or we should read it using KeywordIO
+            # but NoKeywordsFoundError might be raised.
+            keywords = KeywordIO().read_keywords(layer)
+
+        if keywords.get('layer_purpose') != 'aggregation':
+            raise InvalidAggregationKeywords
+
         self._aggregation = layer
-        self._aggregation.keywords = KeywordIO().read_keywords(layer)
+        self._aggregation.keywords = keywords
 
     @property
     def requested_extent(self):
@@ -350,7 +390,7 @@ class ImpactFunction(object):
         elif self.exposure.keywords.get('layer_geometry') == 'line':
             return True
         elif self.exposure.keywords.get('layer_geometry') == 'polygon':
-            if self.exposure.keywords.get('layer_purpose') == 'structure':
+            if self.exposure.keywords.get('exposure') == 'structure':
                 return False
             else:
                 return True
@@ -373,6 +413,10 @@ class ImpactFunction(object):
         feature.setGeometry(QgsGeometry.fromRect(self.actual_extent))
         aggregation_layer.addFeature(feature)
         aggregation_layer.commitChanges()
+
+        # Generate aggregation keywords
+        aggregation_layer.keywords = get_defaults()
+        aggregation_layer.keywords['layer_purpose'] = 'aggregation'
 
         return aggregation_layer
 
@@ -478,8 +522,6 @@ class ImpactFunction(object):
 
             self.aggregation = self.create_virtual_aggregation()
 
-            # Generate aggregation keywords
-            self.aggregation.keywords = get_defaults()
         else:
             self.set_state_info('aggregation', 'provided', True)
 

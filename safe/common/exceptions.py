@@ -361,6 +361,16 @@ class InvalidAggregationKeywords(InaSAFEError):
     pass
 
 
+class InvalidExposureKeywords(InaSAFEError):
+    """Raised when the exposure keywords is invalid."""
+    pass
+
+
+class InvalidHazardKeywords(InaSAFEError):
+    """Raised when the hazard keywords is invalid."""
+    pass
+
+
 class InvalidExtentError(InaSAFEError):
     """Raised if an extent is not valid."""
     pass
