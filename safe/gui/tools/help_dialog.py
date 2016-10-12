@@ -33,8 +33,11 @@ FORM_CLASS = get_ui_class('help_dialog_base.ui')
 class HelpDialog(QtGui.QDialog, FORM_CLASS):
     """About dialog for the InaSAFE plugin."""
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, message=None):
         """Constructor for the dialog.
+
+        :param message: An optional message object to display in the dialog.
+        :type message: Message
 
         :param parent: Parent widget of this dialog
         :type parent: QWidget
@@ -50,7 +53,8 @@ class HelpDialog(QtGui.QDialog, FORM_CLASS):
 
         string = header
 
-        message = dock_help()
+        if message is None:
+            message = dock_help()
 
         string += message.to_html()
         string += footer

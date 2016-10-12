@@ -124,8 +124,6 @@ class TestImpactFunction(unittest.TestCase):
         impact_function = ImpactFunction()
         impact_function.exposure = exposure_layer
         impact_function.hazard = hazard_layer
-        self.assertEqual(
-            impact_function.algorithm, impact_function.line_algorithm)
         self.assertEqual(impact_function.name, 'Flood Polygon on Road Line')
         self.assertEqual(impact_function.title, 'be affected')
 
@@ -136,7 +134,7 @@ class TestImpactFunction(unittest.TestCase):
         hazard_layer = load_test_vector_layer(
             'hazard', 'flood_multipart_polygons.shp')
         exposure_layer = load_test_vector_layer(
-            'hazard', 'flood_multipart_polygons.shp')
+            'exposure', 'buildings.shp')
 
         # Set up impact function
         impact_function = ImpactFunction()

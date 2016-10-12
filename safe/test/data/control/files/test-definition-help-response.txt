@@ -1,0 +1,36 @@
+*****InaSAFE Definitions help
+*****Hazards
+*Hazards*
+*Flood*
+*Flood classes*
+*Tsunami*
+*Metres*
+*Tsunami classes*
+*Earthquake
+*MMI*
+*Volcano*
+*Volcano classes*
+*Volcanic ash*
+*Centimetres*
+*Generic*
+*Generic classes*
+*Hazards scenarios
+*Scenario*
+*Single event*
+*Multiple event*
+****Hazard fields
+*Hazard ID
+*Hazard Value*
+*Exposures
+*Exposure
+*Land cover
+*People in buildings*
+*Population
+*Places
+*Structures
+****Exposure fields
+*Exposure ID
+*Exposure Class
+*Population count
+*Feature Value
+*Feature Rate
