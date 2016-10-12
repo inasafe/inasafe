@@ -47,7 +47,6 @@ from safe.test.utilities import (
 # safe.gui.tools.wizard
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe.impact_functions.loader import register_impact_functions
 from safe.gui.tools.wizard.wizard_dialog import WizardDialog
 
 
@@ -60,8 +59,7 @@ class WizardDialogTest(unittest.TestCase):
         cls.dock = get_dock()
 
     def setUp(self):
-        # register impact functions
-        register_impact_functions()
+        pass
 
     def tearDown(self):
         """Run after each test."""
@@ -94,7 +92,7 @@ class WizardDialogTest(unittest.TestCase):
         message = 'There is no %s in the list widget' % option
         raise Exception(message)
 
-    @unittest.skip('This test is failing with the docker QGIS environment.')
+    @unittest.skip('Skip because it is an old test from inasafe v3')
     def test_input_function_centric_wizard(self):
         """Test the IFCW mode: FloodRasterBuildingFunction"""
 
@@ -287,7 +285,7 @@ class WizardDialogTest(unittest.TestCase):
         # close the wizard
         dialog.pbnNext.click()
 
-    @unittest.skip('This test is failing with the docker QGIS environment.')
+    @unittest.skip('Skip because it is an old test from inasafe v3')
     def test_input_function_centric_wizard_test_2(self):
         """Test the IFCW mode: """
 
@@ -404,7 +402,7 @@ class WizardDialogTest(unittest.TestCase):
         self.check_current_step(dialog.step_fc_functions1)
         dialog.pbnCancel.click()
 
-    @unittest.skip('This test is failing with the docker QGIS environment.')
+    @unittest.skip('Skip because it is an old test from inasafe v3')
     def test_input_function_centric_wizard_test_3(self):
         """Test various usecases of the wizard:
            keywordless layers, disjoint layers, browsers,
@@ -643,7 +641,7 @@ class WizardDialogTest(unittest.TestCase):
         # No need to test more backward steps (already tested in other test)
         dialog.pbnCancel.click()
 
-    @unittest.skip('This test is failing with the docker QGIS environment.')
+    @unittest.skip('Skip because it is an old test from inasafe v3')
     def test_input_function_centric_wizard_test_4(self):
         """Test keyword creation wizard called from the IF centric one."""
 
