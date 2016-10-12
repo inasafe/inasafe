@@ -28,6 +28,7 @@ from qgis.core import (
 import logging
 
 from safe.gisv4.vector.tools import create_memory_layer
+from safe.gisv4.vector.prepare_vector_layer import prepare_vector_layer
 from safe.definitionsv4.post_processors import post_processors
 from safe.defaults import get_defaults
 from safe.common.exceptions import (
@@ -291,9 +292,6 @@ class ImpactFunction(object):
         if not self.hazard or not self.exposure:
             return
 
-        # Set the algorithm
-        self.set_algorithm()
-
         # Set the name
         self._name = '%s %s on %s %s' % (
             self.hazard.keywords.get('hazard').title(),
@@ -307,34 +305,6 @@ class ImpactFunction(object):
             self._title = tr('need evacuation')
         else:
             self._title = tr('be affected')
-
-    def set_algorithm(self):
-        if self.exposure.keywords.get('layer_geometry') == 'raster':
-            # Special case for Raster Earthquake hazard.
-            if self.hazard.keywords('hazard') == 'earthquake':
-                pass
-            else:
-                self.algorithm = self.raster_algorithm
-        elif self.exposure.keywords.get('layer_geometry') == 'point':
-            self.algorithm = self.point_algorithm
-        elif self.exposure.keywords.get('exposure') == 'structure':
-            self.algorithm = self.indivisible_polygon_algorithm
-        elif self.exposure.keywords.get('layer_geometry') == 'line':
-            self.algorithm = self.line_algorithm
-        else:
-            self.algorithm = self.polygon_algorithm
-
-    def preprocess(self):
-        """Run process before running the main work / algorithm"""
-        # Clipping
-        # Convert hazard to classified vector
-        # Aggregation if needed
-        pass
-
-    def run_algorithm(self):
-        """Run the algorithm
-        """
-        pass
 
     def post_process(self):
         """More process after getting the impact layer with data."""
@@ -368,21 +338,6 @@ class ImpactFunction(object):
         if message is not None:
             print message
         print 'Task progress: %i of %i' % (current, maximum)
-
-    def indivisible_polygon_algorithm(self):
-        pass
-
-    def line_algorithm(self):
-        pass
-
-    def point_algorithm(self):
-        pass
-
-    def polygon_algorithm(self):
-        pass
-
-    def raster_algorithm(self):
-        pass
 
     def is_divisible_exposure(self):
         """Check if an exposure has divisible feature.
