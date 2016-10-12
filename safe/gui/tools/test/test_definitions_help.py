@@ -20,6 +20,7 @@ __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
+
 class TestDefinitionsHelp(unittest.TestCase):
     """Test Defintions Help Generation
     """
@@ -78,16 +79,13 @@ class TestDefinitionsHelp(unittest.TestCase):
 
     def test_definitions_help(self):
         """Test definitions help generation."""
-        help_text = definitions_help.definitions_help()
+        help_text = definitions_help.definitions_help().to_text()
+        expected_result = self.get_control_text(
+            'test-definition-help-response.txt')
 
-        # Next three lines temporary for debugging
-        html = file('/Users/timlinux/Desktop/definitions.html', 'wt')
-        html.writelines(html_header())
-        html.writelines(help_text.to_html())
-        html.writelines(html_footer())
-        html.close()
-
-        self.assertEqual(help_text.to_text(), '')
+        for line in expected_result:
+            line = line.replace('\n', '')
+            self.assertIn(line, help_text)
 
     def test_definition_to_message(self):
         """Test definitions to message renderer."""
