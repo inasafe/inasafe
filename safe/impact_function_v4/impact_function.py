@@ -27,6 +27,8 @@ from qgis.core import (
 
 import logging
 
+from safe.common.utilities import temp_dir
+from safe.datastore.folder import Folder
 from safe.gisv4.vector.tools import create_memory_layer
 from safe.definitionsv4.post_processors import post_processors
 from safe.defaults import get_defaults
@@ -94,6 +96,11 @@ class ImpactFunction(object):
 
         self._name = None  # e.g. Flood Raster on Building Polygon
         self._title = None  # be affected
+
+        # By default, results will go in a temporary folder.
+        # Users are free to set their own datastore with the setter.
+        self._datastore = Folder(temp_dir())
+        self._datastore.default_vector_format = 'geojson'
 
         self.state = {}
         self.reset_state()
@@ -279,6 +286,24 @@ class ImpactFunction(object):
         :type viewport_extent: QgsRectangle
         """
         self._viewport_extent = viewport_extent
+
+    @property
+    def datastore(self):
+        """Return the current datastore.
+
+        :return: The datastore.
+        :rtype: Datastore
+        """
+        return self._datastore
+
+    @datastore.setter
+    def datastore(self, datastore):
+        """Setter for the datastore.
+
+        :param datastore: The datastore.
+        :type datastore: DataStore
+        """
+        self._datastore = datastore
 
     @property
     def name(self):
@@ -613,6 +638,8 @@ class ImpactFunction(object):
         # Post Processor
         # Disable post processor for now (IS)
         # self.post_process()
+
+        # self.datastore.add_layer(self.impact)
 
         # Disable writing impact keyword until implementing all helper methods
         # KeywordIO().write_keywords(
