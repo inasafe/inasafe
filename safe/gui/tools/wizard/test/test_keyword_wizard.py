@@ -23,7 +23,9 @@ from safe.definitionsv4.layer_modes import (
 from safe.definitionsv4.layer_purposes import layer_purpose_hazard
 from safe.definitionsv4.hazard import hazard_volcano
 from safe.definitionsv4.hazard_category import hazard_category_multiple_event
+from safe.definitionsv4.hazard_classifications import volcano_hazard_classes
 from safe.definitionsv4.constants import not_available
+from safe.definitionsv4.fields import hazard_name_field
 
 
 from safe.gui.tools.wizard.wizard_dialog import WizardDialog
@@ -419,7 +421,6 @@ class WizardDialogTest(unittest.TestCase):
         self.assertTrue(dialog.pbnNext.isEnabled())
         dialog.pbnNext.click()
 
-    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_existing_complex_keywords(self):
         layer = clone_shp_layer(
             name='volcano_krb',
@@ -429,38 +430,71 @@ class WizardDialogTest(unittest.TestCase):
         dialog = WizardDialog()
         dialog.set_keywords_creation_mode(layer)
 
-        # select hazard
+        # Check if in select purpose step
+        self.check_current_step(dialog.step_kw_purpose)
+
+        # Select hazard
         self.select_from_list_widget(
             layer_purpose_hazard['name'], dialog.step_kw_purpose.lstCategories)
+
+        # Click next to select hazard
         dialog.pbnNext.click()
+
+        # Check if in select hazard step
+        self.check_current_step(dialog.step_kw_subcategory)
 
         # select volcano
         self.select_from_list_widget(
             hazard_volcano['name'],
             dialog.step_kw_subcategory.lstSubcategories)
+
+        # Click next to select volcano
         dialog.pbnNext.click()
+
+        # Check if in select hazard category step
+        self.check_current_step(dialog.step_kw_hazard_category)
 
         # select multiple_event
         self.select_from_list_widget(
             hazard_category_multiple_event['name'],
             dialog.step_kw_hazard_category.lstHazardCategories)
+
+        # Click next to select multiple event
         dialog.pbnNext.click()
+
+        # Check if in select layer mode step
+        self.check_current_step(dialog.step_kw_layermode)
 
         # select classified mode
         self.select_from_list_widget(
             layer_mode_classified['name'],
             dialog.step_kw_layermode.lstLayerModes)
+
+        # Click next to select classified
         dialog.pbnNext.click()
+
+        # Check if in select classification step
+        self.check_current_step(dialog.step_kw_classification)
 
         # select volcano vector hazard classes classification
         self.select_from_list_widget(
-            'Volcano classes',
+            volcano_hazard_classes['name'],
             dialog.step_kw_classification.lstClassifications)
+
+        # Click next to select volcano classes
         dialog.pbnNext.click()
+
+        # Check if in select field step
+        self.check_current_step(dialog.step_kw_field)
 
         # select KRB field
         self.select_from_list_widget('KRB', dialog.step_kw_field.lstFields)
+
+        # Click next to select KRB
         dialog.pbnNext.click()
+
+        # Check if in classify step
+        self.check_current_step(dialog.step_kw_classify)
 
         # select value map
         classification = dialog.step_kw_classification.\
@@ -474,13 +508,21 @@ class WizardDialogTest(unittest.TestCase):
         }
         dialog.step_kw_classify.populate_classified_values(
             unassigned_values, assigned_values, default_classes)
+
+        # Click next to finish value mapping
         dialog.pbnNext.click()
 
-        # select additional keywords
+        # select additional keywords / inasafe fields step
         self.check_current_step(dialog.step_kw_extrakeywords)
-        dialog.pbnBack.click()
-        dialog.pbnNext.click()
-        first_field = not_available
+
+        hazard_name_parameter_widget = dialog.step_kw_extrakeywords.\
+            parameter_container.get_parameter_widget_by_guid(
+            hazard_name_field['key'])
+
+        hazard_name_parameter_widget.set_choice('volcano')
+
+        self.assertEqual(
+            'volcano', hazard_name_parameter_widget.get_parameter().value)
 
         # index = dialog.step_kw_extrakeywords.cboExtraKeyword1.findData(
         #     first_field, Qt.UserRole)
