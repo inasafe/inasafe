@@ -12,7 +12,11 @@ from safe.definitionsv4 import (
     exposure_fields,
     hazard_fields,
     aggregation_fields,
-    impact_fields
+    impact_fields,
+    hazard_class_field,
+    exposure_class_field,
+    aggregation_name_field,
+    hazard_value_field
 )
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -158,17 +162,28 @@ def get_fields(layer_purpose, layer_subcategory):
     :returns: List of fields.
     :rtype: list
     """
+    fields = []
     subcategory = definition(layer_subcategory)
     if layer_purpose == 'exposure':
-        return exposure_fields + subcategory['extra_fields']
+        fields = exposure_fields + subcategory['extra_fields']
+        fields.remove(exposure_class_field)
     elif layer_purpose == 'hazard':
-        return hazard_fields + subcategory['extra_fields']
+        fields = hazard_fields + subcategory['extra_fields']
+        try:
+            fields.remove(hazard_class_field)
+        except ValueError:
+            pass
+        try:
+            fields.remove(hazard_value_field)
+        except ValueError:
+            pass
     elif layer_purpose == 'aggregation':
-        return aggregation_fields
+        fields = aggregation_fields
+        fields.remove(aggregation_name_field)
     elif layer_purpose == 'impact':
-        return impact_fields
-    else:
-        return []
+        fields = impact_fields
+
+    return fields
 
 
 def definition(keyword):

@@ -25,7 +25,11 @@ from safe.definitionsv4 import (
     flood_raster_hazard_classes,
     flood_vector_hazard_classes,
     generic_vector_hazard_classes,
-    exposure_fields
+    exposure_fields,
+    exposure_class_field,
+    hazard_class_field,
+    hazard_fields,
+    hazard_value_field
 )
 
 from safe.definitionsv4.utilities import (
@@ -175,9 +179,15 @@ class TestDefinitionsUtilities(unittest.TestCase):
     def test_get_fields(self):
         """Test get_fields method."""
         fields = get_fields('exposure', 'structure')
-        self.assertListEqual(
-            fields, exposure_fields + exposure_structure['extra_fields']
-        )
+        expected_fields = exposure_fields + exposure_structure['extra_fields']
+        expected_fields.remove(exposure_class_field)
+        self.assertListEqual(fields, expected_fields)
+
+        fields = get_fields('hazard', 'flood')
+        expected_fields = hazard_fields + hazard_flood['extra_fields']
+        expected_fields.remove(hazard_class_field)
+        expected_fields.remove(hazard_value_field)
+        self.assertListEqual(fields, expected_fields)
 
 
 if __name__ == '__main__':
