@@ -31,7 +31,7 @@ from safe.gisv4.vector.tools import create_memory_layer
 from safe.definitionsv4.post_processors import post_processors
 from safe.defaults import get_defaults
 from safe.common.exceptions import (
-    InvalidExtentError, InvalidLayerError, NoKeywordsFoundError)
+    InvalidExtentError, InvalidLayerError)
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 
@@ -108,12 +108,11 @@ class ImpactFunction(object):
 
         :param layer: Hazard layer to be used for the analysis.
         :type layer: QgsMapLayer
+
+        :raise: NoKeywordsFoundError if no keywords has been found.
         """
         self._hazard = layer
-        try:
-            self._hazard.keywords = KeywordIO().read_keywords(layer)
-        except NoKeywordsFoundError:
-            self._hazard.keywords = {'inasafe_fields': {}}
+        self._hazard.keywords = KeywordIO().read_keywords(layer)
 
         self.setup_impact_function()
 
@@ -132,12 +131,11 @@ class ImpactFunction(object):
 
         :param layer: exposure layer to be used for the analysis.
         :type layer: QgsMapLayer
+
+        :raise: NoKeywordsFoundError if no keywords has been found.
         """
         self._exposure = layer
-        try:
-            self._exposure.keywords = KeywordIO().read_keywords(layer)
-        except NoKeywordsFoundError:
-            self._exposure.keywords = {'inasafe_fields': {}}
+        self._exposure.keywords = KeywordIO().read_keywords(layer)
 
         self.setup_impact_function()
 
@@ -156,12 +154,11 @@ class ImpactFunction(object):
 
         :param layer: aggregation layer to be used for the analysis.
         :type layer: QgsMapLayer
+
+        :raise: NoKeywordsFoundError if no keywords has been found.
         """
         self._aggregation = layer
-        try:
-            self._aggregation.keywords = KeywordIO().read_keywords(layer)
-        except NoKeywordsFoundError:
-            self._aggregation.keywords = {'inasafe_fields': {}}
+        self._aggregation.keywords = KeywordIO().read_keywords(layer)
 
     @property
     def requested_extent(self):
@@ -398,7 +395,7 @@ class ImpactFunction(object):
         elif self.exposure.keywords.get('layer_geometry') == 'line':
             return True
         elif self.exposure.keywords.get('layer_geometry') == 'polygon':
-            if self.exposure.keywords.get('layer_geometry') == 'structure':
+            if self.exposure.keywords.get('layer_purpose') == 'structure':
                 return False
             else:
                 return True
