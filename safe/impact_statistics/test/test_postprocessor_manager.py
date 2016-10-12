@@ -22,7 +22,6 @@ import logging
 
 from qgis.core import QgsMapLayerRegistry
 
-from safe.impact_functions.loader import register_impact_functions
 from safe.test.utilities import (
     set_canvas_crs,
     set_jakarta_extent,
@@ -64,8 +63,6 @@ class PostprocessorManagerTest(unittest.TestCase):
         self.DOCK.show_intermediate_layers = False
         set_jakarta_extent()
 
-        register_impact_functions()
-
     def tearDown(self):
         """Run after each test."""
         # Let's use a fresh registry, canvas, and dock for each test!
@@ -73,6 +70,7 @@ class PostprocessorManagerTest(unittest.TestCase):
         self.DOCK.cboHazard.clear()
         self.DOCK.cboExposure.clear()
 
+    # NOTE(IS): Why do we expect failure here?
     # noinspection PyMethodMayBeStatic
     @unittest.expectedFailure
     def test_check_postprocessing_layers_visibility(self):
@@ -123,6 +121,7 @@ class PostprocessorManagerTest(unittest.TestCase):
         # We expect two more since we enabled showing intermediate layers
         assert expected_count == after_count, message
 
+    # NOTE(IS): Why do we expect failure here?
     # noinspection PyMethodMayBeStatic
     @unittest.expectedFailure
     def test_post_processor_output(self):

@@ -31,7 +31,6 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.gis.qgis_interface import QgisInterface
 from safe.plugin import Plugin
-from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 
 # Add parent directory to path to make test aware of other modules
 pardir = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
@@ -110,10 +109,7 @@ class PluginTest(unittest.TestCase):
         plugin.change_i18n('af')  # afrikaans
         language = os.environ['LANG']
         assert language == 'af'
-        # functions = get_safe_impact_function()
-        # print functions
-        functions = ImpactFunctionManager().get('Tydelik gesluit')
-        assert len(functions) > 0
+
 
 if __name__ == '__main__':
     unittest.main()

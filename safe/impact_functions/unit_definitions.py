@@ -21,21 +21,5 @@ def convert_to_parameter_unit(unit_definition):
     return unit
 
 
-def parameter_unit_generic():
-    return convert_to_parameter_unit(unit_generic)
-
-
-def parameter_unit_metres():
-    return convert_to_parameter_unit(unit_metres)
-
-
 def parameter_unit_mmi():
     return convert_to_parameter_unit(unit_mmi)
-
-
-def parameter_unit_percentage():
-    return convert_to_parameter_unit(unit_percentage)
-
-
-def parameter_unit_centimetres():
-    return convert_to_parameter_unit(unit_centimetres)

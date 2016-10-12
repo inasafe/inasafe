@@ -1,4 +1,4 @@
-from unittest import TestCase
+import unittest
 
 # this import required to enable PyQt API v2
 # noinspection PyUnresolvedReferences
@@ -10,7 +10,6 @@ from PyQt4 import QtCore
 from safe.test.utilities import get_qgis_app, get_dock
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe.impact_functions.loader import register_impact_functions
 from safe.test.utilities import (
     standard_data_path,
     load_layer,
@@ -21,7 +20,7 @@ from safe.utilities.keyword_io import KeywordIO
 
 
 # noinspection PyArgumentList
-class TestDockRegressions(TestCase):
+class TestDockRegressions(unittest.TestCase):
     """Regression tests for the InaSAFE GUI."""
 
     @classmethod
@@ -33,8 +32,6 @@ class TestDockRegressions(TestCase):
 
         These tests require that you manually load the layers you need.
         """
-        register_impact_functions()
-
         self.dock.show_only_visible_layers_flag = True
         self.dock.cboHazard.setCurrentIndex(0)
         self.dock.cboExposure.setCurrentIndex(0)
@@ -58,6 +55,7 @@ class TestDockRegressions(TestCase):
         self.dock.cboExposure.clear()
 
     # noinspection PyUnusedLocal
+    @unittest.skip('Skip because it is an old test from inasafe v3')
     def test_regression_2553_no_resample(self):
         """Test for regression 2553 (no resampling).
 
@@ -140,6 +138,7 @@ class TestDockRegressions(TestCase):
         self.assertEqual(evacuated, expected_evacuated)
 
     # noinspection PyUnusedLocal
+    @unittest.skip('Skip because it is an old test from inasafe v3')
     def test_regression_2553_with_resample(self):
         """Test for regression 2553 (with resampling).
 

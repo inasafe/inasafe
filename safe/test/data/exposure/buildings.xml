@@ -178,9 +178,6 @@
           <multipart_polygon>
             <gco:Boolean/>
           </multipart_polygon>
-          <resolution>
-            <gco:FloatTuple/>
-          </resolution>
           <inasafe_fields>
             <gco:Dictionary/>
           </inasafe_fields>
@@ -199,6 +196,9 @@
           <field>
             <gco:CharacterString/>
           </field>
+          <value_map>
+            <gco:Dictionary>{&quot;government&quot;: [&quot;Government&quot;], &quot;residential&quot;: [&quot;Residential&quot;], &quot;commercial&quot;: [&quot;Commercial&quot;], &quot;health&quot;: [&quot;Clinic/Doctor&quot;], &quot;education&quot;: [&quot;School&quot;], &quot;place of worship&quot;: [&quot;Place of Worship - Islam&quot;]}</gco:Dictionary>
+          </value_map>
           <layer_geometry>
             <gco:CharacterString>polygon</gco:CharacterString>
           </layer_geometry>
@@ -220,9 +220,9 @@
           <datatype>
             <gco:CharacterString/>
           </datatype>
-          <value_map>
-            <gco:Dictionary>{&quot;government&quot;: [&quot;Government&quot;], &quot;residential&quot;: [&quot;Residential&quot;], &quot;commercial&quot;: [&quot;Commercial&quot;], &quot;health&quot;: [&quot;Clinic/Doctor&quot;], &quot;education&quot;: [&quot;School&quot;], &quot;place of worship&quot;: [&quot;Place of Worship - Islam&quot;]}</gco:Dictionary>
-          </value_map>
+          <resolution>
+            <gco:FloatTuple/>
+          </resolution>
           <structure_class_field>
             <gco:CharacterString>TYPE</gco:CharacterString>
           </structure_class_field>
