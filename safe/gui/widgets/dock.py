@@ -1528,7 +1528,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         return report
 
     def show_help(self):
-        """Open the About dialog."""
+        """Open the help dialog."""
         # noinspection PyTypeChecker
         dialog = HelpDialog(self)
         dialog.show()
