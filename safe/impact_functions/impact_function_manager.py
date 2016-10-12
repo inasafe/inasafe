@@ -54,23 +54,6 @@ class ImpactFunctionManager(object):
         """
         return self.registry.get_instance(class_name)
 
-    def get_class(self, class_name):
-        """Return the class of an impact function given its class name.
-
-        .. example::
-
-            if_manager = ImpactFunctionManager()
-            if_class_name = 'FloodBuildingImpactFunction'
-            if_class =  if_manager.get_class(if_class_name)
-
-        :param class_name: the name of IF class
-        :type class_name: str
-
-        :return: impact function class that matches the argument.
-        :rtype: safe.impact_functions.base.ImpactFunction
-        """
-        return self.registry.get_class(class_name)
-
     def get(self, impact_function_id):
         """Return an instance of an impact function given its ID.
 
@@ -245,82 +228,6 @@ class ImpactFunctionManager(object):
 
         return impact_functions_metadata
 
-    def purposes_for_layer(self, layer_geometry_key):
-        """Get purposes of a layer geometry id.
-
-        :param layer_geometry_key: The geometry id
-        :type layer_geometry_key: str
-
-        """
-        layer_purposes = []
-        for impact_function in self.impact_functions:
-            if_layer_purposes = impact_function.metadata().purposes_for_layer(
-                layer_geometry_key)
-            if if_layer_purposes:
-                add_to_list(layer_purposes, if_layer_purposes)
-
-        return layer_purposes
-
-    def hazard_categories_for_layer(self, layer_geometry_key, hazard_key=None):
-        """Get hazard categories form layer_geometry_key
-
-        :param layer_geometry_key: The geometry id
-        :type layer_geometry_key: str
-
-        :param hazard_key: The hazard key
-        :type hazard_key: str
-
-        :returns: List of hazard_categories
-        :rtype: list
-        """
-        hazard_categories = []
-        for impact_function in self.impact_functions:
-            if_hazard_categories = impact_function.metadata()\
-                .hazard_categories_for_layer(layer_geometry_key, hazard_key)
-            if if_hazard_categories:
-                add_to_list(hazard_categories, if_hazard_categories)
-
-        return hazard_categories
-
-    def hazards_for_layer(self, layer_geometry_key, hazard_category_key=None):
-        """Get hazard categories form layer_geometry_key
-
-        :param layer_geometry_key: The geometry id
-        :type layer_geometry_key: str
-
-        :param hazard_category_key: The hazard category
-        :type hazard_category_key: str
-
-        :returns: List of hazard
-        :rtype: list
-        """
-        hazards = []
-        for impact_function in self.impact_functions:
-            if_hazards = impact_function.metadata().hazards_for_layer(
-                layer_geometry_key, hazard_category_key)
-            if if_hazards:
-                add_to_list(hazards, if_hazards)
-
-        return hazards
-
-    def exposures_for_layer(self, layer_geometry_key):
-        """Get hazard categories form layer_geometry_key
-
-        :param layer_geometry_key: The geometry id
-        :type layer_geometry_key: str
-
-        :returns: List of hazard
-        :rtype: list
-        """
-        exposures = []
-        for impact_function in self.impact_functions:
-            if_exposures = impact_function.metadata().exposures_for_layer(
-                layer_geometry_key)
-            if if_exposures:
-                add_to_list(exposures, if_exposures)
-
-        return exposures
-
     def available_hazards(self, hazard_category_key, ascending=True):
         """available_hazards from hazard_category_key
 
@@ -405,109 +312,6 @@ class ImpactFunctionManager(object):
 
         return impact_functions
 
-    def available_hazard_constraints(
-            self, hazard_key, hazard_category_key):
-        """Get hazard constraints for hazard_key and hazard_category_key
-
-        :param hazard_key: The hazard key
-        :type hazard_key: str
-
-        :param hazard_category_key: The hazard category key
-        :type hazard_category_key: str
-
-        :returns: List of tuple of layer_mode and layer_geometry
-        :rtype: list
-        """
-        hazard_constraints = []
-        for impact_function in self.impact_functions:
-            if_hazard_constraints = impact_function.metadata().\
-                available_hazard_constraints(
-                    hazard_key, hazard_category_key)
-            if if_hazard_constraints:
-                add_to_list(hazard_constraints, if_hazard_constraints)
-
-        return hazard_constraints
-
-    def available_exposure_constraints(self, exposure_key):
-        """Get exposure constraints for exposure_key.
-
-        :param exposure_key: The exposure key
-        :type exposure_key: str
-
-        :returns: List of tuple of layer_mode and layer_geometry
-        :rtype: list
-        """
-        exposure_constraints = []
-        for impact_function in self.impact_functions:
-            if_exposure_constraints = impact_function.metadata(). \
-                available_exposure_constraints(exposure_key)
-            if if_exposure_constraints:
-                add_to_list(exposure_constraints, if_exposure_constraints)
-
-        return exposure_constraints
-
-    def hazard_additional_keywords(
-            self, layer_mode_key=None, layer_geometry_key=None,
-            hazard_category_key=None, hazard_key=None):
-        """Return additional_keywords for hazard.
-
-        :param layer_mode_key: The layer mode key
-        :type layer_mode_key: str
-
-        :param layer_geometry_key: The layer geometry key
-        :type layer_geometry_key: str
-
-        :param hazard_category_key: The hazard category key
-        :type hazard_category_key: str
-
-        :param hazard_key: The hazard key
-        :type hazard_key: str
-
-        :returns: List of additional keywords
-        :rtype: list
-        """
-        additional_keywords = []
-        for impact_function in self.impact_functions:
-            if_additional_keywords = impact_function.metadata().\
-                hazard_additional_keywords(
-                    layer_mode_key=layer_mode_key,
-                    layer_geometry_key=layer_geometry_key,
-                    hazard_category_key=hazard_category_key,
-                    hazard_key=hazard_key)
-            if if_additional_keywords:
-                add_to_list(additional_keywords, if_additional_keywords)
-
-        return additional_keywords
-
-    def exposure_additional_keywords(
-            self, layer_mode_key=None, layer_geometry_key=None,
-            exposure_key=None):
-        """Return additional_keywords for exposure.
-
-        :param layer_mode_key: The layer mode key
-        :type layer_mode_key: str
-
-        :param layer_geometry_key: The layer geometry key
-        :type layer_geometry_key: str
-
-        :param exposure_key: The hazard key
-        :type exposure_key: str
-
-        :returns: List of additional keywords
-        :rtype: list
-        """
-        additional_keywords = []
-        for impact_function in self.impact_functions:
-            if_additional_keywords = impact_function.metadata().\
-                exposure_additional_keywords(
-                    layer_mode_key=layer_mode_key,
-                    layer_geometry_key=layer_geometry_key,
-                    exposure_key=exposure_key)
-            if if_additional_keywords:
-                add_to_list(additional_keywords, if_additional_keywords)
-
-        return additional_keywords
-
     def exposure_class_fields(
             self, layer_mode_key=None, layer_geometry_key=None,
             exposure_key=None):
@@ -528,7 +332,7 @@ class ImpactFunctionManager(object):
         result = []
         for impact_function in self.impact_functions:
             if_exposure_class_field = impact_function.metadata(). \
-                exposure_class_fields(
+                exposure_class_fiexposure_class_fieldselds(
                     layer_mode_key=layer_mode_key,
                     layer_geometry_key=layer_geometry_key,
                     exposure_key=exposure_key)
