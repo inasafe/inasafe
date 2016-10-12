@@ -439,6 +439,7 @@ class TestEngine(unittest.TestCase):
         assert attributes['KRB'] == 'Kawasan Rawan Bencana I'
         assert attributes['polygon_id'] == 4
 
+    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_user_directory_when_saving(self):
         # These imports must be inside the test.
         from PyQt4.QtCore import QCoreApplication, QSettings
@@ -482,6 +483,7 @@ class TestEngine(unittest.TestCase):
 
         settings.remove('inasafe/defaultUserDirectory')
 
+    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_data_sources_are_carried_forward(self):
         """Data sources are carried forward to impact layer."""
         hazard_filepath = standard_data_path(
@@ -1713,6 +1715,7 @@ class TestEngine(unittest.TestCase):
         # assert I_attributes[198]['polygon_id'] == 235
         # assert I_attributes[198]['parent_line_id'] == 333
 
+    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_layer_integrity_raises_exception(self):
         """Layers without keywords raise exception."""
         population = 'Population_Jakarta_geographic.asc'

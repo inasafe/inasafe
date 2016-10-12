@@ -116,6 +116,7 @@ class WizardDialogTest(unittest.TestCase):
         # It shouldn't raise any exception although the xml is invalid
         dialog.set_keywords_creation_mode(layer)
 
+    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_keywords_creation_wizard(self):
         """Test how the widgets work."""
         expected_category_count = 3
@@ -330,6 +331,7 @@ class WizardDialogTest(unittest.TestCase):
 
         self.assertEqual(keywords, expected_keywords)
 
+    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_existing_keywords(self):
         """Test if keywords already exist."""
         expected_field_count = 6
@@ -412,6 +414,7 @@ class WizardDialogTest(unittest.TestCase):
         self.assertTrue(dialog.pbnNext.isEnabled())
         dialog.pbnNext.click()
 
+    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_existing_complex_keywords(self):
         layer = clone_shp_layer(
             name='volcano_krb',
@@ -701,6 +704,7 @@ class WizardDialogTest(unittest.TestCase):
         expected_default_value = 0.08
         self.assertEqual(expected_default_value, default_value)
 
+    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_unknown_unit(self):
         """Checking that it works for unknown unit."""
         layer = clone_shp_layer(
@@ -742,6 +746,7 @@ class WizardDialogTest(unittest.TestCase):
         # check if in step title
         self.check_current_step(dialog.step_kw_title)
 
+    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_point_layer(self):
         """Wizard for point layer."""
         layer = clone_shp_layer(
@@ -769,6 +774,7 @@ class WizardDialogTest(unittest.TestCase):
         self.check_current_step(dialog.step_kw_title)
         dialog.accept()
 
+    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_auto_select_one_item(self):
         """Test auto select if there is only one item in a list."""
         layer = clone_shp_layer(
@@ -784,6 +790,7 @@ class WizardDialogTest(unittest.TestCase):
         num_item = dialog.step_kw_subcategory.lstSubcategories.count()
         self.assertTrue(num_item == 3)
 
+    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_integrated_point(self):
         """Test for point layer and all possibilities."""
         layer = clone_shp_layer(
@@ -853,6 +860,7 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnCancel.click()
 
+    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_integrated_raster(self):
         """Test for raster layer and all possibilities."""
         layer = clone_raster_layer(
@@ -1003,6 +1011,7 @@ class WizardDialogTest(unittest.TestCase):
         # check if in step source
         self.check_current_step(dialog.step_kw_source)
 
+    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_integrated_line(self):
         """Test for line layer and all possibilities."""
         layer = clone_shp_layer(
@@ -1063,6 +1072,7 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnCancel.click()  # cancel
 
+    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_integrated_polygon(self):
         """Test for polygon layer and all possibilities."""
         layer = clone_shp_layer(
