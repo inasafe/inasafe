@@ -49,7 +49,6 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.impact_statistics.aggregator import Aggregator
 from safe.utilities.keyword_io import KeywordIO
-from safe.impact_functions.loader import register_impact_functions
 
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -66,7 +65,6 @@ class AggregatorTest(unittest.TestCase):
     # noinspection PyPep8Naming
     def setUp(self):
         """Fixture run before all tests"""
-        register_impact_functions()
         self.maxDiff = None  # show full diff for assert errors
         os.environ['LANG'] = 'en'
         self.DOCK.show_only_visible_layers_flag = True
