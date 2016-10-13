@@ -584,7 +584,11 @@ class WizardDialogTest(unittest.TestCase):
             'url': source_url,
             'title': layer_title,
             'hazard': hazard_volcano['key'],
-            'inasafe_fields': json.dumps({'hazard_class_field': u'KRB'}),
+            'inasafe_fields': json.dumps(
+                {
+                    'hazard_class_field': u'KRB',
+                    'hazard_name_field': u'volcano',
+                 }),
             'value_map': json.dumps(assigned_values),
             'date': source_date,
             'hazard_classification': volcano_hazard_classes['key'],
