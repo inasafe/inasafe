@@ -68,6 +68,7 @@ class TestDefinitionsHelp(unittest.TestCase):
             test_subdefinition2
         ]
     }
+
     # noinspection PyPep8Naming
     def setUp(self):
         """Runs before each test."""
