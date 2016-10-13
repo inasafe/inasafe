@@ -101,6 +101,7 @@ def get_layer_modes():
     """Return all sorted layer modes."""
     return sorted(layer_mode_all, key=lambda k: k['key'])
 
+
 def hazard_units(hazard):
     """Helper to get unit of a hazard.
 
@@ -112,6 +113,7 @@ def hazard_units(hazard):
     """
     units = definition(hazard)['continuous_hazard_units']
     return sorted(units, key=lambda k: k['key'])
+
 
 def exposure_units(exposure):
     """Helper to get unit of an exposure.
@@ -172,6 +174,7 @@ def get_fields(layer_purpose, layer_subcategory):
         fields = impact_fields
 
     return fields
+
 
 def get_class_field_key(layer_purpose):
     """Get class field based on layer_purpose.

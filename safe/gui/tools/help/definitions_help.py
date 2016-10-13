@@ -89,7 +89,6 @@ def content():
         message.add(definition_to_message(
             exposure_field))
 
-
     # paragraph = m.Paragraph(tr(
     #   ''
     # ))

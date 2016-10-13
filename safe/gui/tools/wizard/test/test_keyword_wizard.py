@@ -1132,7 +1132,8 @@ class WizardDialogTest(unittest.TestCase):
 
         # choosing classified
         self.select_from_list_widget(
-            layer_mode_classified['name'], dialog.step_kw_layermode.lstLayerModes)
+            layer_mode_classified['name'],
+            dialog.step_kw_layermode.lstLayerModes)
 
         dialog.pbnNext.click()  # Go to field
 
@@ -1190,7 +1191,8 @@ class WizardDialogTest(unittest.TestCase):
         # select classified
         self.check_current_step(dialog.step_kw_layermode)
         self.select_from_list_widget(
-            layer_mode_classified['name'], dialog.step_kw_layermode.lstLayerModes)
+            layer_mode_classified['name'],
+            dialog.step_kw_layermode.lstLayerModes)
         dialog.pbnNext.click()  # go to classifications
 
         self.check_current_step(dialog.step_kw_classification)
