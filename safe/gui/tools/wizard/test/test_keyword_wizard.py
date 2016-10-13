@@ -3,6 +3,7 @@
 import os
 import shutil
 import unittest
+import json
 # noinspection PyUnresolvedReferences
 import qgis
 from PyQt4 import QtCore
@@ -583,11 +584,8 @@ class WizardDialogTest(unittest.TestCase):
             'url': source_url,
             'title': layer_title,
             'hazard': hazard_volcano['key'],
-            'inasafe_fields': {'hazard_class_field': u'KRB'},
-            'value_map':
-                '{"high": ["Kawasan Rawan Bencana III"], '
-                '"medium": ["Kawasan Rawan Bencana II"], '
-                '"low": ["Kawasan Rawan Bencana I"]}',
+            'inasafe_fields': json.dumps({'hazard_class_field': u'KRB'}),
+            'value_map': json.dumps(assigned_values),
             'date': source_date,
             'hazard_classification': volcano_hazard_classes['key'],
             'layer_geometry': layer_geometry_polygon['key'],
