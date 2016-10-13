@@ -21,6 +21,7 @@ from safe.definitionsv4.post_processors import (
     post_processor_elderly,
     post_processor_size_rate
 )
+from safe.utilities.unicode import byteify
 from safe.test.utilities import load_test_vector_layer
 from safe.impact_function_v4.impact_function import ImpactFunction
 from safe.impact_function_v4.impact_function import evaluate_formula
@@ -38,7 +39,7 @@ def read_json_flow(json_path):
     :rtype: (dict, dict)
     """
     with open(json_path) as json_data:
-        data = json.load(json_data)
+        data = byteify(json.load(json_data))
     return data['scenario'], data['expected']
 
 
@@ -124,32 +125,40 @@ class TestImpactFunction(unittest.TestCase):
         impact_function = ImpactFunction()
         impact_function.exposure = exposure_layer
         impact_function.hazard = hazard_layer
-        self.assertEqual(impact_function.name, 'Flood Polygon on Road Line')
+        self.assertEqual(impact_function.name, 'Flood Polygon On Road Line')
         self.assertEqual(impact_function.title, 'be affected')
 
     # Expected failure since there is not real implementation yet.
-    @unittest.expectedFailure
+    # @unittest.expectedFailure
     def test_run_impact_function(self):
         """Test running impact function on test data."""
         hazard_layer = load_test_vector_layer(
-            'hazard', 'flood_multipart_polygons.shp')
+            'gisv4', 'hazard', 'classified_vector.geojson')
         exposure_layer = load_test_vector_layer(
-            'exposure', 'buildings.shp')
+            'gisv4', 'exposure', 'building-points.geojson')
+        aggregation_layer = load_test_vector_layer(
+            'gisv4', 'aggregation', 'small_grid.geojson')
 
         # Set up impact function
         impact_function = ImpactFunction()
+        impact_function.debug = True
+        impact_function.aggregation = aggregation_layer
         impact_function.exposure = exposure_layer
         impact_function.hazard = hazard_layer
         impact_function.run()
-        self.assertIsNotNone(impact_function.impact)
+        print impact_function.datastore.uri.absolutePath()
+        print impact_function.datastore.layers()
+        # self.assertIsNotNone(impact_function.impact)
 
     def test_scenario(self):
         """Run test single scenario."""
+        self.maxDiff = None
+
         scenario_path = standard_data_path(
             'scenario', 'polygon_hazard_point_exposure.json')
         scenario, expected = read_json_flow(scenario_path)
         result = run_scenario(scenario)
-        self.assertDictEqual(result, expected)
+        self.assertDictEqual(expected, result)
 
     def test_scenario_directory(self):
         """Run test scenario in directory."""
@@ -158,7 +167,7 @@ class TestImpactFunction(unittest.TestCase):
         def test_scenario(scenario_path):
             scenario, expected = read_json_flow(scenario_path)
             result = run_scenario(scenario)
-            self.assertDictEqual(result, expected)
+            self.assertDictEqual(expected, result)
 
         path = standard_data_path('scenario')
         json_files = [

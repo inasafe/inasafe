@@ -101,7 +101,8 @@ def _rename_remove_inasafe_fields(layer):
     # Rename fields
     to_rename = {}
     for key, val in layer.keywords.get('inasafe_fields').iteritems():
-        to_rename[val] = expected_fields[key]
+        if expected_fields[key] != val:
+            to_rename[val] = expected_fields[key]
 
     copy_fields(layer, to_rename)
     remove_fields(layer, to_rename.keys())
@@ -167,7 +168,7 @@ def _add_id_column(layer):
     for layer_type, field in mapping.iteritems():
         if layer_purpose == layer_type:
             safe_id = field
-            if layer.keywords.get(field['field_name']):
+            if layer.keywords.get(field['key']):
                 has_id_column = True
             break
 

@@ -62,3 +62,22 @@ def get_string(input_text, encoding='utf-8'):
     if isinstance(input_text, unicode):
         return input_text.encode(encoding)
     return input_text
+
+
+def byteify(input_object):
+    """Recursive function to transform an object to byte.
+
+    :param input_object: A python object such as unicode, dictionary or list.
+    :type: unicode, list, dict
+
+    :return: The object with byte only.
+    """
+    if isinstance(input_object, dict):
+        return {byteify(key): byteify(value)
+                for key, value in input_object.iteritems()}
+    elif isinstance(input_object, list):
+        return [byteify(element) for element in input_object]
+    elif isinstance(input_object, unicode):
+        return input_object.encode('utf-8')
+    else:
+        return input_object

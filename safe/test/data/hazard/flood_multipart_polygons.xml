@@ -185,7 +185,7 @@
             <gco:Tuple/>
           </prob_fatality_mag>
           <inasafe_fields>
-            <gco:Dictionary/>
+            <gco:Dictionary>{&quot;hazard_id_field&quot;: &quot;OBJECTID&quot;, &quot;hazard_value_field&quot;: &quot;FLOODPRONE&quot;}</gco:Dictionary>
           </inasafe_fields>
           <volcano_name_field>
             <gco:CharacterString/>
@@ -232,6 +232,9 @@
           <layer_mode>
             <gco:CharacterString>classified</gco:CharacterString>
           </layer_mode>
+          <hazard_classification>
+            <gco:CharacterString/>
+          </hazard_classification>
         </inasafe>
       </gmd:supplementalInformation>
     </gmd:MD_DataIdentification>
