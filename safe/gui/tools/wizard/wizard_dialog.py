@@ -29,8 +29,9 @@ from safe.definitionsv4.layer_purposes import (
 from safe.definitionsv4.layer_modes import (
     layer_mode_continuous, layer_mode_classified)
 from safe.definitionsv4.units import exposure_unit
-from safe.definitionsv4.hazard import (
-    continuous_hazard_unit)
+from safe.definitionsv4.hazard import continuous_hazard_unit
+from safe.definitionsv4.utilities import get_class_field_key
+
 from safe.common.exceptions import (
     HashNotFoundError,
     NoKeywordsFoundError,
@@ -294,33 +295,10 @@ class WizardDialog(QDialog, FORM_CLASS):
         Expected values are: 'field', 'structure_class_field', road_class_field
 
         :returns: the field keyword
-        :rtype: string
+        :rtype: str
         """
-
-        if self.step_kw_purpose.selected_purpose() == \
-                layer_purpose_aggregation:
-            # purpose: aggregation
-            return 'aggregation attribute'
-        elif self.step_kw_purpose.selected_purpose() == layer_purpose_hazard:
-            # purpose: hazard
-            if (self.step_kw_layermode.selected_layermode() ==
-                    layer_mode_classified and
-                    is_point_layer(self.layer)):
-                # No field for classified point hazards
-                return ''
-        else:
-            # purpose: exposure
-            layer_mode_key = self.step_kw_layermode.selected_layermode()['key']
-            layer_geometry_key = self.get_layer_geometry_key()
-            exposure_key = self.step_kw_subcategory.\
-                selected_subcategory()['key']
-            exposure_class_fields = self.impact_function_manager.\
-                exposure_class_fields(
-                    layer_mode_key, layer_geometry_key, exposure_key)
-            if exposure_class_fields and len(exposure_class_fields) == 1:
-                return exposure_class_fields[0]['key']
-        # Fallback to default
-        return 'field'
+        layer_purpose_key = self.step_kw_purpose.selected_purpose()['key']
+        return get_class_field_key(layer_purpose_key)
 
     def get_parent_mode_constraints(self):
         """Return the category and subcategory keys to be set in the
@@ -765,6 +743,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         :rtype: dict
         """
         keywords = {}
+        inasafe_fields = {}
         keywords['layer_geometry'] = self.get_layer_geometry_key()
         if self.step_kw_purpose.selected_purpose():
             keywords['layer_purpose'] = self.step_kw_purpose.\
@@ -794,8 +773,8 @@ class WizardDialog(QDialog, FORM_CLASS):
                 self.step_kw_resample.selected_allowresampling() and
                 'true' or 'false')
         if self.step_kw_field.lstFields.currentItem():
-            field_keyword = self.field_keyword_for_the_layer()
-            keywords[field_keyword] = self.step_kw_field.\
+            field_key = self.field_keyword_for_the_layer()
+            inasafe_fields[field_key] = self.step_kw_field.\
                 lstFields.currentItem().text()
         if self.step_kw_classification.selected_classification():
             key = '%s_classification' % (
@@ -834,6 +813,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         if self.step_kw_title.leTitle.text():
             keywords['title'] = get_unicode(self.step_kw_title.leTitle.text())
 
+        keywords['inasafe_fields'] = json.dumps(inasafe_fields)
         return keywords
 
     def save_current_keywords(self):

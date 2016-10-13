@@ -308,7 +308,7 @@ class KeywordIO(QObject):
             'hazard_category',
             'layer_geometry',
             'layer_mode',
-            'vector_hazard_classification',
+            'hazard_classification',
             'exposure_unit',
             'continuous_hazard_unit',
             'volcano_name_field',
@@ -318,6 +318,7 @@ class KeywordIO(QObject):
             'structure_class_field',
             'field',
             'value_map',  # attribute values
+            'inasafe_fields',
             'resample',
             'source',
             'url',
@@ -417,13 +418,11 @@ class KeywordIO(QObject):
         # We deal with some special cases first:
 
         # In this case the value contains a DICT that we want to present nicely
-        if keyword == 'value_map':
+        if keyword in ['value_map', 'inasafe_fields']:
             value = self._dict_to_row(value)
         # In these KEYWORD cases we show the DESCRIPTION for
         # the VALUE keyword_definition
-        elif keyword in [
-                'vector_hazard_classification',
-                'raster_hazard_classification']:
+        elif keyword in ['hazard_classification']:
             # get the keyword_definition for this class from definitions
             value = definition(value)
             value = value['description']
@@ -486,19 +485,23 @@ class KeywordIO(QObject):
         if isinstance(keyword_value, basestring):
             keyword_value = literal_eval(keyword_value)
         table = m.Table(style_class='table table-condensed')
-        for key, value_list in keyword_value.iteritems():
+        for key, value in keyword_value.iteritems():
             row = m.Row()
-            # Firs the heading
-            key = m.ImportantText(key)
-            row.add(m.Cell(key))
+            # First the heading
+            name = definition(key)['name'] if definition(key) else key
+            row.add(m.Cell(m.ImportantText(name)))
             # Then the value. If it contains more than one element we
             # present it as a bullet list, otherwise just as simple text
-            if len(value_list) > 1:
-                bullets = m.BulletedList()
-                for item in value_list:
-                    bullets.add(item)
-                row.add(m.Cell(bullets))
+            if isinstance(value, basestring):
+                row.add(m.Cell(value))
             else:
-                row.add(m.Cell(value_list[0]))
+                if len(value) > 1:
+                    bullets = m.BulletedList()
+                    for item in value:
+                        bullets.add(item)
+                    row.add(m.Cell(bullets))
+                else:
+                    row.add(m.Cell(value[0]))
+
             table.add(row)
         return table

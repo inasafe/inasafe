@@ -16,7 +16,7 @@ from safe.definitionsv4 import (
     hazard_class_field,
     exposure_class_field,
     aggregation_name_field,
-    hazard_value_field
+    hazard_value_field,
 )
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -172,6 +172,24 @@ def get_fields(layer_purpose, layer_subcategory):
         fields = impact_fields
 
     return fields
+
+def get_class_field_key(layer_purpose):
+    """Get class field based on layer_purpose.
+
+    :param layer_purpose: The layer purpose.
+    :type layer_purpose: str
+
+    :returns: Class field key.
+    :rtype: str
+    """
+    if layer_purpose == 'hazard':
+        return hazard_class_field['key']
+    elif layer_purpose == 'exposure':
+        return exposure_class_field['key']
+    elif layer_purpose == 'aggregation':
+        return aggregation_name_field['key']
+    else:
+        return ''
 
 
 def definition(keyword):

@@ -583,7 +583,7 @@ class WizardDialogTest(unittest.TestCase):
             'url': source_url,
             'title': layer_title,
             'hazard': hazard_volcano['key'],
-            'field': u'KRB',
+            'inasafe_fields': {'hazard_class_field': u'KRB'},
             'value_map':
                 '{"high": ["Kawasan Rawan Bencana III"], '
                 '"medium": ["Kawasan Rawan Bencana II"], '
