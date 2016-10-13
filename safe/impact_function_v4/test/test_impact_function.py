@@ -78,6 +78,7 @@ def run_scenario(scenario):
             aggregation_path = None
 
     impact_function = ImpactFunction()
+    # impact_function.debug = True
     impact_function.hazard = QgsVectorLayer(hazard_path, 'Hazard', 'ogr')
     impact_function.exposure = QgsVectorLayer(exposure_path, 'Exposure', 'ogr')
     if aggregation_path:
@@ -128,8 +129,6 @@ class TestImpactFunction(unittest.TestCase):
         self.assertEqual(impact_function.name, 'Flood Polygon On Road Line')
         self.assertEqual(impact_function.title, 'be affected')
 
-    # Expected failure since there is not real implementation yet.
-    # @unittest.expectedFailure
     def test_run_impact_function(self):
         """Test running impact function on test data."""
         hazard_layer = load_test_vector_layer(
@@ -146,9 +145,10 @@ class TestImpactFunction(unittest.TestCase):
         impact_function.exposure = exposure_layer
         impact_function.hazard = hazard_layer
         impact_function.run()
-        print impact_function.datastore.uri.absolutePath()
-        print impact_function.datastore.layers()
-        # self.assertIsNotNone(impact_function.impact)
+        # print impact_function.datastore.uri.absolutePath()
+        # print impact_function.datastore.layers()
+        self.assertIsNotNone(impact_function.impact)
+        self.assertEqual(6, len(impact_function.datastore.layers()))
 
     def test_scenario(self):
         """Run test single scenario."""
