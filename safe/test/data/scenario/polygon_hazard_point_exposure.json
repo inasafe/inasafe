@@ -8,12 +8,10 @@
 
   "expected":{
     "impact function":{
-      "info": {
-        "algorithm":"point"
-      },
+      "info": {},
       "process":[
         "Run impact function",
-        "Assign by location aggregation and hazard areas to exposure features"
+        "Intersect aggregate hazard and exposure"
       ]
     },
     "post_processor":{
@@ -27,24 +25,22 @@
       },
       "process":[
         "Convert bbox aggregation to polygon layer with keywords",
-        "Project aggregation CRS to exposure CRS",
         "Intersect hazard polygons with aggregation areas and assign hazard class"
       ]
     },
     "hazard":{
       "info": {},
       "process":[
+        "Cleaning the vector hazard attribute table",
         "Assign classes based on value map",
         "Classified polygon hazard with keywords",
-        "Project hazard CRS to exposure CRS",
         "Vector clip and mask hazard to aggregation"
       ]
     },
     "exposure":{
       "info": {},
       "process":[
-        "Classified exposure with keywords",
-        "Exclude all polygons not intersecting aggregate hazard"
+        "Cleaning the vector exposure attribute table"
       ]
     }
   }

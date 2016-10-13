@@ -178,9 +178,6 @@
           <raster_hazard_classification>
             <gco:CharacterString/>
           </raster_hazard_classification>
-          <hazard_classification>
-            <gco:CharacterString>generic_hazard_classes</gco:CharacterString>
-          </hazard_classification>
           <multipart_polygon>
             <gco:Boolean/>
           </multipart_polygon>
@@ -235,6 +232,9 @@
           <layer_mode>
             <gco:CharacterString>classified</gco:CharacterString>
           </layer_mode>
+          <hazard_classification>
+            <gco:CharacterString>generic_hazard_classes</gco:CharacterString>
+          </hazard_classification>
         </inasafe>
       </gmd:supplementalInformation>
     </gmd:MD_DataIdentification>

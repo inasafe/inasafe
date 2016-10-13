@@ -21,15 +21,15 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore
 from PyQt4.QtCore import pyqtSignature
-from PyQt4.QtGui import (
-    QListWidgetItem,
-    QPixmap)
+from PyQt4.QtGui import QListWidgetItem, QPixmap
 
 from safe.definitionsv4.layer_purposes import layer_purpose_aggregation
+from safe.definitionsv4.utilities import purposes_for_layer
+
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_strings import category_question
-from safe.utilities.keyword_io import definition
+from safe.definitionsv4.utilities import definition
 from safe.utilities.resources import resources_path
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
@@ -115,9 +115,8 @@ class StepKwPurpose(WizardStep, FORM_CLASS):
         :returns: A list where each value represents a valid purpose.
         :rtype: list
         """
-        layer_geometry_id = self.parent.get_layer_geometry_id()
-        return self.impact_function_manager.purposes_for_layer(
-            layer_geometry_id)
+        layer_geometry_key = self.parent.get_layer_geometry_key()
+        return purposes_for_layer(layer_geometry_key)
 
     def clear_further_steps(self):
         """ Clear all further steps
@@ -140,8 +139,6 @@ class StepKwPurpose(WizardStep, FORM_CLASS):
         self.lblSelectCategory.setText(
             category_question % self.parent.layer.name())
         purposes = self.purposes_for_layer()
-        if self.parent.get_layer_geometry_id() == 'polygon':
-            purposes += ['aggregation']
         for purpose in purposes:
             if not isinstance(purpose, dict):
                 purpose = definition(purpose)

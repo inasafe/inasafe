@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>300</height>
+    <height>723</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -34,125 +34,7 @@
     </widget>
    </item>
    <item>
-    <layout class="QGridLayout" name="kwExtraKeywordsGridLayout">
-     <item row="0" column="1">
-      <widget class="QComboBox" name="cboExtraKeyword1"/>
-     </item>
-     <item row="1" column="1">
-      <widget class="QComboBox" name="cboExtraKeyword2"/>
-     </item>
-     <item row="2" column="1">
-      <widget class="QComboBox" name="cboExtraKeyword3"/>
-     </item>
-     <item row="3" column="1">
-      <widget class="QComboBox" name="cboExtraKeyword4"/>
-     </item>
-     <item row="4" column="1">
-      <widget class="QComboBox" name="cboExtraKeyword5"/>
-     </item>
-     <item row="5" column="1">
-      <widget class="QComboBox" name="cboExtraKeyword6"/>
-     </item>
-     <item row="6" column="1">
-      <widget class="QComboBox" name="cboExtraKeyword7"/>
-     </item>
-     <item row="7" column="1">
-      <widget class="QComboBox" name="cboExtraKeyword8"/>
-     </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="lblExtraKeyword1">
-       <property name="text">
-        <string>Attribute 1</string>
-       </property>
-       <property name="wordWrap">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="lblExtraKeyword2">
-       <property name="text">
-        <string>Attribute 2</string>
-       </property>
-       <property name="wordWrap">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="lblExtraKeyword3">
-       <property name="text">
-        <string>Attribute 3</string>
-       </property>
-       <property name="wordWrap">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="lblExtraKeyword4">
-       <property name="text">
-        <string>Attribute 4</string>
-       </property>
-       <property name="wordWrap">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="0">
-      <widget class="QLabel" name="lblExtraKeyword5">
-       <property name="text">
-        <string>Attribute 5</string>
-       </property>
-       <property name="wordWrap">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="0">
-      <widget class="QLabel" name="lblExtraKeyword6">
-       <property name="text">
-        <string>Attribute 6</string>
-       </property>
-       <property name="wordWrap">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="0">
-      <widget class="QLabel" name="lblExtraKeyword7">
-       <property name="text">
-        <string>Attribute 7</string>
-       </property>
-       <property name="wordWrap">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="0">
-      <widget class="QLabel" name="lblExtraKeyword8">
-       <property name="text">
-        <string>Attribute 8</string>
-       </property>
-       <property name="wordWrap">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <spacer name="verticalSpacer_9">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>419</height>
-      </size>
-     </property>
-    </spacer>
+    <layout class="QGridLayout" name="kwExtraKeywordsGridLayout"/>
    </item>
   </layout>
  </widget>

@@ -31,10 +31,8 @@ from safe.gui.tools.wizard.wizard_strings import (
     layer_mode_vector_question,
     layer_mode_vector_classified_confirm,
     layer_mode_vector_continuous_confirm)
-from safe.utilities.gis import (
-    is_raster_layer,
-    is_point_layer)
-from safe.utilities.keyword_io import definition
+from safe.utilities.gis import is_raster_layer, is_point_layer
+from safe.definitionsv4.utilities import definition, get_layer_modes
 from safe.definitionsv4.layer_modes import (
     layer_mode_classified, layer_mode_continuous)
 
@@ -91,24 +89,6 @@ class StepKwLayerMode(WizardStep, FORM_CLASS):
             new_step = self.parent.step_kw_unit
         return new_step
 
-    def layermodes_for_layer(self):
-        """Return a list of valid layer modes for a layer.
-
-        :returns: A list where each value represents a valid layer mode.
-        :rtype: list
-        """
-        purpose = self.parent.step_kw_purpose.selected_purpose()
-        subcategory = self.parent.step_kw_subcategory.selected_subcategory()
-        layer_geometry_id = self.parent.get_layer_geometry_id()
-        if purpose == layer_purpose_hazard:
-            hazard_category = self.parent.step_kw_hazard_category.\
-                selected_hazard_category()
-            return self.impact_function_manager.available_hazard_layer_modes(
-                subcategory['key'], layer_geometry_id, hazard_category['key'])
-        elif purpose == layer_purpose_exposure:
-            return self.impact_function_manager.available_exposure_layer_modes(
-                subcategory['key'], layer_geometry_id)
-
     # noinspection PyPep8Naming
     def on_lstLayerModes_itemSelectionChanged(self):
         """Update layer mode description label and unit widgets.
@@ -160,7 +140,7 @@ class StepKwLayerMode(WizardStep, FORM_CLASS):
 
         self.lblDescribeLayerMode.setText('')
         self.lstLayerModes.clear()
-        layer_modes = self.parent.step_kw_layermode.layermodes_for_layer()
+        layer_modes = get_layer_modes()
         if is_raster_layer(self.parent.layer):
             layer_mode_question = layer_mode_raster_question
         else:

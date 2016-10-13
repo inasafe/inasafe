@@ -43,6 +43,26 @@ class DataStore(object):
         .. versionadded:: 4.0
         """
         self._uri = uri
+        self._index = 1
+        self._use_index = False
+
+    @property
+    def use_index(self):
+        """Return if we use an index to add the layer name.
+
+        :return: If we use an index.
+        :rtype: bool
+        """
+        return self._use_index
+
+    @use_index.setter
+    def use_index(self, index):
+        """Setter if we use an index when we add a layer to the datastore.
+
+        :param index: A boolean if we use an index.
+        :type index: bool
+        """
+        self._use_index = index
 
     @property
     def uri(self):
@@ -71,6 +91,10 @@ class DataStore(object):
 
         .. versionadded:: 4.0
         """
+        if self._use_index:
+            layer_name = '%s-%s' % (self._index, layer_name)
+            self._index += 1
+
         if isinstance(layer, QgsRasterLayer):
             return self._add_raster_layer(layer, layer_name)
         else:
