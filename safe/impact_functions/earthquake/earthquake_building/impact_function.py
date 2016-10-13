@@ -117,7 +117,8 @@ class EarthquakeBuildingFunction(
         )
 
         # Get parameters from layer's keywords
-        structure_class_field = self.exposure.keyword('structure_class_field')
+        structure_class_field = self.exposure.keyword('inasafe_fields').get(
+            'exposure_class_field')
         exposure_value_mapping = self.exposure.keyword('value_map')
         attributes = interpolate_result.get_data()
 
