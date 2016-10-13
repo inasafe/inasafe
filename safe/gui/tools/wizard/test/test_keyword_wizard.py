@@ -522,7 +522,7 @@ class WizardDialogTest(unittest.TestCase):
         # Get the parameter widget for hazard name
         hazard_name_parameter_widget = dialog.step_kw_extrakeywords.\
             parameter_container.get_parameter_widget_by_guid(
-            hazard_name_field['key'])
+                hazard_name_field['key'])
 
         # Check if it's set to N/A at the beginning
         self.assertEqual(
@@ -598,6 +598,7 @@ class WizardDialogTest(unittest.TestCase):
         self.assertDictEqual(real_keywords, expected_keyword)
 
     # noinspection PyTypeChecker
+    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_existing_aggregation_keywords(self):
         """Test for case existing keywords in aggregation layer."""
         layer = clone_shp_layer(
@@ -675,6 +676,7 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnNext.click()  # finishing
 
+    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_default_attributes_value(self):
         """Checking that default attributes is set to the CIA's one."""
         layer = clone_shp_layer(
@@ -1340,6 +1342,7 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnCancel.click()
 
+    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_sum_ratio_behavior(self):
         """Test for wizard's behavior related sum of age ratio."""
         layer = clone_shp_layer(
