@@ -3,7 +3,7 @@
 """
 Prepare layers for InaSAFE.
 """
-
+import logging
 from PyQt4.QtCore import QPyNullVariant
 from qgis.core import (
     QgsVectorLayer,
@@ -30,11 +30,14 @@ from safe.definitionsv4.layer_purposes import (
     layer_purpose_hazard,
     layer_purpose_aggregation
 )
+from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
+
+LOGGER = logging.getLogger('InaSAFE')
 
 
 def prepare_vector_layer(layer, callback=None):
@@ -108,7 +111,7 @@ def _rename_remove_inasafe_fields(layer):
     remove_fields(layer, to_rename.keys())
 
     # Houra, InaSAFE keywords match our concepts !
-    layer.keywords['inasafe_fields'] = {key: key for key in to_rename.values()}
+    layer.keywords['inasafe_fields'].update(expected_fields)
 
     # Remove useless fields
     to_remove = []
@@ -116,6 +119,9 @@ def _rename_remove_inasafe_fields(layer):
         if field.name() not in expected_fields.values():
             to_remove.append(field.name())
     remove_fields(layer, to_remove)
+    LOGGER.debug(tr(
+        'Fields which have been removed from %s : %s'
+        % (layer.keywords['layer_purpose'], to_remove)))
 
 
 def _remove_rows(layer):
@@ -124,7 +130,9 @@ def _remove_rows(layer):
     :param layer: The vector layer.
     :type layer: QgsVectorLayer
     """
+    # Get the layer purpose of the layer.
     layer_purpose = layer.keywords['layer_purpose']
+
     mapping = {
         layer_purpose_exposure['key']: exposure_class_field,
         layer_purpose_hazard['key']: hazard_value_field,

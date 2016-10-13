@@ -71,9 +71,9 @@ def assign_hazard_class(layer, callback=None):
             layer.changeAttributeValue(
                 feature.id(), classified_field_index, classified_value)
 
-    remove_fields(layer, [unclassified_column])
-
     layer.commitChanges()
+
+    remove_fields(layer, [unclassified_column])
 
     # We transfer keywords to the output.
     inasafe_fields[hazard_class_field['key']] = (
