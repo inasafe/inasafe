@@ -25,13 +25,13 @@ from PyQt4.QtGui import QListWidgetItem
 from safe.definitionsv4.layer_purposes import (
     layer_purpose_exposure, layer_purpose_hazard)
 from safe.definitionsv4.units import exposure_unit
-from safe.definitionsv4.hazard import (
-    continuous_hazard_unit)
+from safe.definitionsv4.hazard import continuous_hazard_unit
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_strings import unit_question
 from safe.utilities.gis import is_raster_layer
-from safe.utilities.keyword_io import definition
+from safe.definitionsv4.utilities import (
+    definition, hazard_units, exposure_units)
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
@@ -122,18 +122,10 @@ class StepKwUnit(WizardStep, FORM_CLASS):
         self.lblDescribeUnit.setText('')
         self.lstUnits.clear()
         subcat = self.parent.step_kw_subcategory.selected_subcategory()['key']
-        laygeo = self.parent.get_layer_geometry_id()
-        laymod = self.parent.step_kw_layermode.selected_layermode()['key']
         if purpose == layer_purpose_hazard:
-            hazcat = self.parent.step_kw_hazard_category.\
-                selected_hazard_category()['key']
-            units_for_layer = self.impact_function_manager.\
-                continuous_hazards_units_for_layer(
-                    subcat, laygeo, laymod, hazcat)
+            units_for_layer = hazard_units(subcat)
         else:
-            units_for_layer = self.impact_function_manager\
-                .exposure_units_for_layer(
-                    subcat, laygeo, laymod)
+            units_for_layer = exposure_units(subcat)
         for unit_for_layer in units_for_layer:
             # if (self.parent.get_layer_geometry_id() == 'raster' and
             #         'constraint' in unit_for_layer and

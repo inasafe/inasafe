@@ -47,6 +47,11 @@ hazard_category_multiple_event = {
     ]
 }
 
+hazard_category_all = [
+    hazard_category_single_event,
+    hazard_category_multiple_event
+]
+
 hazard_category = {
     'key': 'hazard_category',
     'name': tr('Scenario'),

@@ -39,8 +39,6 @@ from safe.definitionsv4.layer_modes import layer_mode_continuous, \
 from safe.definitionsv4.fields import structure_class_field
 from safe.definitionsv4.exposure import exposure_population, exposure_road, \
     exposure_structure, exposure_place, exposure_land_cover
-from safe.definitionsv4.units import unit_feet, unit_generic, unit_metres, \
-    count_exposure_unit, density_exposure_unit
 from safe.definitionsv4.hazard import (
     hazard_generic,
     hazard_earthquake,
@@ -112,141 +110,13 @@ class TestImpactFunctionManager(unittest.TestCase):
                 print ''
             print ''
 
-    @unittest.skip('Skip unit test from InaSAFE v3.')
-    def test_purposes_for_layer(self):
-        """Test for purposes_for_layer"""
-        impact_function_manager = ImpactFunctionManager()
-        layer_purposes = impact_function_manager.purposes_for_layer('polygon')
-        expected = [layer_purpose_hazard, layer_purpose_exposure]
-        self.assertItemsEqual(layer_purposes, expected)
-
-        layer_purposes = impact_function_manager.purposes_for_layer('line')
-        expected = [layer_purpose_exposure]
-        self.assertItemsEqual(layer_purposes, expected)
-
-        layer_purposes = impact_function_manager.purposes_for_layer('point')
-        expected = [layer_purpose_hazard, layer_purpose_exposure]
-        self.assertItemsEqual(layer_purposes, expected)
-
-        layer_purposes = impact_function_manager.purposes_for_layer('raster')
-        expected = [layer_purpose_hazard, layer_purpose_exposure]
-        self.assertItemsEqual(layer_purposes, expected)
-
-    @unittest.skip('Skip unit test from InaSAFE v3.')
-    def test_hazard_categories_for_layer(self):
-        """Test for hazard_categories_for_layer"""
-        impact_function_manager = ImpactFunctionManager()
-        hazard_categories = impact_function_manager.\
-            hazard_categories_for_layer('polygon')
-        expected = [
-            hazard_category_single_event,
-            hazard_category_multiple_event]
-        self.assertItemsEqual(hazard_categories, expected)
-
-        hazard_categories = impact_function_manager.\
-            hazard_categories_for_layer('line')
-        expected = []
-        self.assertItemsEqual(hazard_categories, expected)
-
-        hazard_categories = impact_function_manager.\
-            hazard_categories_for_layer('point')
-        expected = [
-            hazard_category_multiple_event,
-            hazard_category_single_event
-        ]
-        self.assertItemsEqual(hazard_categories, expected)
-
-        hazard_categories = impact_function_manager.\
-            hazard_categories_for_layer('raster')
-        expected = [
-            hazard_category_single_event,
-            hazard_category_multiple_event]
-        self.assertItemsEqual(hazard_categories, expected)
-
-        hazard_categories = impact_function_manager. \
-            hazard_categories_for_layer('raster', 'earthquake')
-        expected = [
-            hazard_category_single_event,
-            hazard_category_multiple_event]
-        self.assertItemsEqual(hazard_categories, expected)
-
-    @unittest.skip('Skip unit test from InaSAFE v3.')
-    def test_hazards_for_layer(self):
-        """Test for hazards_for_layer"""
-        impact_function_manager = ImpactFunctionManager()
-        hazards = impact_function_manager.hazards_for_layer(
-            'polygon', 'single_event')
-        # print [x['key'] for x in hazards]
-        expected = [
-            hazard_flood,
-            hazard_tsunami,
-            hazard_earthquake,
-            hazard_volcano,
-            hazard_volcanic_ash,
-            hazard_generic
-        ]
-        self.assertItemsEqual(hazards, expected)
-
-        hazards = impact_function_manager.hazards_for_layer('polygon')
-        expected = [hazard_flood, hazard_tsunami, hazard_earthquake,
-                    hazard_volcano, hazard_volcanic_ash, hazard_generic]
-        self.assertItemsEqual(hazards, expected)
-
-        hazards = impact_function_manager.hazards_for_layer(
-            'point', 'single_event')
-        expected = [hazard_volcano]
-        self.assertItemsEqual(hazards, expected)
-
-    @unittest.skip('Skip unit test from InaSAFE v3.')
-    def test_exposures_for_layer(self):
-        """Test for exposures_for_layer"""
-        impact_function_manager = ImpactFunctionManager()
-        exposures = impact_function_manager.exposures_for_layer(
-            'polygon')
-        expected = [exposure_structure,
-                    exposure_population,
-                    exposure_land_cover]
-        self.assertItemsEqual(exposures, expected)
-
-        exposures = impact_function_manager.exposures_for_layer(
-            'line')
-        expected = [exposure_road]
-        self.assertItemsEqual(exposures, expected)
-
-    @unittest.skip('Skip unit test from InaSAFE v3.')
-    def test_exposure_units_for_layer(self):
-        """Test for exposure_units_for_layer"""
-        impact_function_manager = ImpactFunctionManager()
-        exposure_units = impact_function_manager.exposure_units_for_layer(
-            'population', 'raster', 'continuous')
-        expected = [count_exposure_unit, density_exposure_unit]
-        self.assertItemsEqual(exposure_units, expected)
-
-    @unittest.skip('Skip unit test from InaSAFE v3.')
-    def test_continuous_hazards_units_for_layer(self):
-        """Test for continuous_hazards_units_for_layer"""
-        impact_function_manager = ImpactFunctionManager()
-        continuous_hazards_units = impact_function_manager.\
-            continuous_hazards_units_for_layer(
-                'tsunami', 'raster', 'continuous', 'single_event')
-        # print [x['key'] for x in continuous_hazards_units]
-        expected = [unit_metres, unit_feet, unit_generic]
-        self.assertItemsEqual(continuous_hazards_units, expected)
-
-    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_available_hazards(self):
         """Test available_hazards API."""
         impact_function_manager = ImpactFunctionManager()
 
         result = impact_function_manager.available_hazards(
             'single_event')
-        # print [x['key'] for x in result]
-        expected_result = [hazard_flood,
-                           hazard_tsunami,
-                           hazard_earthquake,
-                           hazard_generic,
-                           hazard_volcanic_ash,
-                           hazard_volcano]
+        expected_result = [hazard_earthquake]
         message = ('I expect %s but I got %s.' % (expected_result, result))
         self.assertItemsEqual(result, expected_result, message)
 
@@ -278,8 +148,7 @@ class TestImpactFunctionManager(unittest.TestCase):
         expected = [
             ITBFatalityFunction.metadata().as_dict(),
             ITBBayesianFatalityFunction.metadata().as_dict(),
-            PAGFatalityFunction.metadata().as_dict(),
-            ContinuousHazardPopulationFunction.metadata().as_dict()]
+            PAGFatalityFunction.metadata().as_dict()]
 
         for key in impact_functions[0].keys():
             if key == 'parameters':
@@ -289,78 +158,6 @@ class TestImpactFunctionManager(unittest.TestCase):
             hope = [x[key] for x in expected]
             message = key
             self.assertItemsEqual(result, hope, message)
-
-    @unittest.skip('Skip unit test from InaSAFE v3.')
-    def test_available_hazard_constraints(self):
-        """Test for available_hazard_constraints."""
-        ifm = ImpactFunctionManager()
-        hazard_constraints = ifm.available_hazard_constraints(
-            'earthquake', 'single_event')
-        expected = [
-            (layer_mode_continuous, layer_geometry_raster),
-            (layer_mode_classified, layer_geometry_raster),
-            (layer_mode_classified, layer_geometry_polygon),
-        ]
-
-        # print [(x[0]['key'], x[1]['key']) for x in hazard_constraints]
-        self.assertItemsEqual(hazard_constraints, expected)
-
-    @unittest.skip('Skip unit test from InaSAFE v3.')
-    def test_available_exposure_constraints(self):
-        """Test for available_exposure_constraints."""
-        self.maxDiff = None
-        ifm = ImpactFunctionManager()
-        exposure_constraints = ifm.available_exposure_constraints(
-            'population')
-        expected = [
-            (layer_mode_continuous, layer_geometry_raster),
-            (layer_mode_continuous, layer_geometry_polygon)
-        ]
-        self.assertItemsEqual(exposure_constraints, expected)
-
-    @unittest.skip('Skip unit test from InaSAFE v3.')
-    def test_available_hazard_layer_modes(self):
-        """Test for available_hazard_layer_modes."""
-        ifm = ImpactFunctionManager()
-        hazard_layer_mode = ifm.available_hazard_layer_modes(
-            'earthquake', 'raster', 'single_event')
-        expected = [layer_mode_continuous, layer_mode_classified]
-
-        self.assertItemsEqual(hazard_layer_mode, expected)
-
-    def test_available_exposure_layer_modes(self):
-        """Test for available_exposure_layer_modes."""
-        ifm = ImpactFunctionManager()
-        exposure_layer_mode = ifm.available_exposure_layer_modes(
-            'population', 'raster')
-        expected = [layer_mode_continuous]
-
-        self.assertItemsEqual(exposure_layer_mode, expected)
-
-    def test_hazard_additional_keywords(self):
-        """Test for hazard_additional_keywords."""
-        ifm = ImpactFunctionManager()
-        additional_keywords = ifm.hazard_additional_keywords(
-            layer_mode_key='classified',
-            layer_geometry_key='polygon',
-            hazard_category_key='single_event',
-            hazard_key='flood'
-        )
-        expected = []
-
-        self.assertItemsEqual(additional_keywords, expected)
-
-    def test_exposure_additional_keywords(self):
-        """Test for exposure_additional_keywords."""
-        ifm = ImpactFunctionManager()
-        additional_keywords = ifm.exposure_additional_keywords(
-            layer_mode_key='classified',
-            layer_geometry_key='polygon',
-            exposure_key='structure'
-        )
-        expected = []
-
-        self.assertItemsEqual(additional_keywords, expected)
 
     def test_exposure_class_fields(self):
         """Test for exposure_class_fields."""

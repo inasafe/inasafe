@@ -257,3 +257,19 @@ class ParameterContainer(QWidget, object):
             if parameter.guid == parameter_guid:
                 return parameter
         return None
+
+    def get_parameter_widget_by_guid(self, parameter_guid):
+        """Return a parameter widget based on its uuid
+
+        :param parameter_guid: The parameter uuid
+        :type parameter_guid: str
+
+        :returns: The parameter widget or None if not exist
+        :rtype: GenericParameterWidget, None
+        """
+        parameter_widgets = self.get_parameter_widgets()
+        for parameter_widget in parameter_widgets:
+            if (parameter_widget.widget().get_parameter().guid ==
+                    parameter_guid):
+                return parameter_widget.widget()
+        return None

@@ -2,6 +2,8 @@
 """Definitions relating to exposure in InaSAFE."""
 
 from safe.definitionsv4.concepts import concepts
+from safe.definitionsv4.units import (
+    count_exposure_unit, density_exposure_unit)
 from safe.definitionsv4.fields import (
     exposure_name_field,
     women_count_field,
@@ -63,6 +65,13 @@ exposure_population = {
             'link': None
         }
     ],
+    'layer_geometry': [
+        'polygon',
+        'raster'
+    ],
+    'units': [
+        count_exposure_unit,
+        density_exposure_unit],
     'extra_fields': [
         exposure_name_field,
         women_count_field,
@@ -99,6 +108,10 @@ exposure_people_in_building = {
                     '45462_backgoundpaperonterminologyaugust20.pdf'
         }
     ],
+    'layer_geometry': [
+        'point'
+    ],
+    'units': [],
     'extra_fields': [
         women_count_field,
         youth_count_field,
@@ -147,6 +160,10 @@ exposure_road = {
             'link': None
         }
     ],
+    'layer_geometry': [
+        'line'
+    ],
+    'units': [],
     'extra_fields': []
 }
 exposure_structure = {
@@ -181,6 +198,11 @@ exposure_structure = {
             'link': None
         }
     ],
+    'layer_geometry': [
+        'polygon',
+        'point'
+    ],
+    'units': [],
     'extra_fields': [
         women_count_field,
         youth_count_field,
@@ -215,6 +237,10 @@ exposure_place = {
             'link': None
         }
     ],
+    'layer_geometry': [
+        'point'
+    ],
+    'units': [],
     'extra_fields': [
         exposure_name_field,
         women_count_field,
@@ -264,6 +290,11 @@ exposure_land_cover = {
             'link': None
         }
     ],
+    'layer_geometry': [
+        'polygon',
+        'raster'
+    ],
+    'units': [],
     'extra_fields': []
 }
 exposure_all = [

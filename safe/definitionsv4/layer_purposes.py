@@ -33,7 +33,6 @@ layer_purpose_hazard = {
     'description': concepts['hazard']['description'],
     'layer_geometry': [
         layer_geometry_point,
-        layer_geometry_line,
         layer_geometry_polygon,
         layer_geometry_raster
     ],
@@ -74,3 +73,10 @@ layer_purpose = {
         }
     ]
 }
+
+
+layer_purposes = [
+    layer_purpose_hazard,
+    layer_purpose_exposure,
+    layer_purpose_aggregation
+]

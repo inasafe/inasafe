@@ -219,7 +219,7 @@ class WizardStepBrowser(WizardStep):
             req_geometry = layer_geometry_polygon['key']
         req_layer_mode = lay_req['layer_mode']['key']
 
-        lay_geometry = self.parent.get_layer_geometry_id(layer)
+        layer_geometry_key = self.parent.get_layer_geometry_key(layer)
         lay_purpose = '&nbsp;&nbsp;-'
         lay_subcategory = '&nbsp;&nbsp;-'
         lay_layer_mode = '&nbsp;&nbsp;-'
@@ -232,7 +232,8 @@ class WizardStepBrowser(WizardStep):
             if 'layer_mode' in keywords:
                 lay_layer_mode = keywords['layer_mode']
 
-        lay_geometry, req_geometry = emphasize(lay_geometry, req_geometry)
+        layer_geometry_key, req_geometry = emphasize(
+            layer_geometry_key, req_geometry)
         lay_purpose, layer_purpose = emphasize(lay_purpose, layer_purpose)
         lay_subcategory, req_subcategory = emphasize(
             lay_subcategory, req_subcategory)
@@ -320,7 +321,7 @@ class WizardStepBrowser(WizardStep):
             </table>
         ''' % (self.tr('Layer'), self.tr('Required'),
                safe.definitionsv4.layer_geometry.layer_geometry['name'],
-               lay_geometry, req_geometry,
+               layer_geometry_key, req_geometry,
                safe.definitionsv4.layer_purposes.layer_purpose['name'],
                lay_purpose, layer_purpose,
                layer_purpose_key_name, lay_subcategory, req_subcategory,

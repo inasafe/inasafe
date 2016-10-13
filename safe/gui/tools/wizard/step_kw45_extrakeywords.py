@@ -12,23 +12,32 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-__author__ = 'qgis@borysjurgiel.pl'
-__revision__ = '$Format:%H$'
-__date__ = '16/03/2016'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
 
 # noinspection PyPackageRequirements
-from PyQt4 import QtCore
+import logging
+from PyQt4.QtGui import QWidget
+
+from safe_extras.parameters.select_parameter import SelectParameter
+from safe_extras.parameters.qt_widgets.parameter_container import (
+    ParameterContainer)
 
 from safe.definitionsv4.layer_modes import layer_mode_classified
 from safe.definitionsv4.exposure import exposure_place
-from safe.definitionsv4.layer_purposes import layer_purpose_hazard
+from safe.definitionsv4.utilities import get_fields
+from safe.definitionsv4.layer_geometry import layer_geometry_raster
+from safe.definitionsv4.constants import not_available
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 
 
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
+
+
 FORM_CLASS = get_wizard_step_ui_class(__file__)
+LOGGER = logging.getLogger('InaSAFE')
 
 
 class StepKwExtraKeywords(WizardStep, FORM_CLASS):
@@ -42,20 +51,10 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
 
         """
         WizardStep.__init__(self, parent)
-        # Collect some serial widgets
-        self.extra_keywords_widgets = [
-            {'cbo': self.cboExtraKeyword1, 'lbl': self.lblExtraKeyword1},
-            {'cbo': self.cboExtraKeyword2, 'lbl': self.lblExtraKeyword2},
-            {'cbo': self.cboExtraKeyword3, 'lbl': self.lblExtraKeyword3},
-            {'cbo': self.cboExtraKeyword4, 'lbl': self.lblExtraKeyword4},
-            {'cbo': self.cboExtraKeyword5, 'lbl': self.lblExtraKeyword5},
-            {'cbo': self.cboExtraKeyword6, 'lbl': self.lblExtraKeyword6},
-            {'cbo': self.cboExtraKeyword7, 'lbl': self.lblExtraKeyword7},
-            {'cbo': self.cboExtraKeyword8, 'lbl': self.lblExtraKeyword8}
-        ]
-        for ekw in self.extra_keywords_widgets:
-            ekw['key'] = None
-            ekw['slave_key'] = None
+
+        self.parameters = []
+        self.parameter_container = ParameterContainer()
+        self.kwExtraKeywordsGridLayout.addWidget(self.parameter_container)
 
     def is_ready_to_next_step(self):
         """Check if the step is complete. If so, there is
@@ -64,7 +63,7 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
         :returns: True if new step may be enabled.
         :rtype: bool
         """
-        return self.are_all_extra_keywords_selected()
+        return True
 
     def get_previous_step(self):
         """Find the proper step when user clicks the Previous button.
@@ -103,117 +102,21 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
         new_step = self.parent.step_kw_source
         return new_step
 
-    def additional_keywords_for_the_layer(self):
-        """Return a list of valid additional keywords for the current layer.
+    def inasafe_fields_for_the_layer(self):
+        """Return a list of inasafe fields the current layer.
 
-        :returns: A list where each value represents a valid additional kw.
+        :returns: A list where each value represents inasafe field.
         :rtype: list
         """
-        layer_geometry_key = self.parent.get_layer_geometry_id()
-        layer_mode_key = self.parent.step_kw_layermode.\
-            selected_layermode()['key']
-        if self.parent.step_kw_purpose.\
-                selected_purpose() == layer_purpose_hazard:
-            hazard_category_key = self.parent.step_kw_hazard_category.\
-                selected_hazard_category()['key']
-            hazard_key = self.parent.step_kw_subcategory.\
-                selected_subcategory()['key']
-            return self.impact_function_manager.hazard_additional_keywords(
-                layer_mode_key, layer_geometry_key,
-                hazard_category_key, hazard_key)
-        else:
-            exposure_key = self.parent.step_kw_subcategory.\
-                selected_subcategory()['key']
-            return self.impact_function_manager.exposure_additional_keywords(
-                layer_mode_key, layer_geometry_key, exposure_key)
-
-    # noinspection PyPep8Naming
-    def on_cboExtraKeyword1_currentIndexChanged(self, indx):
-        """This is an automatic Qt slot executed when the
-           1st extra keyword combobox selection changes.
-
-        :param indx: The new index.
-        :type indx: int or str
-        """
-        if isinstance(indx, int) and indx > -1:
-            self.extra_keyword_changed(self.extra_keywords_widgets[0])
-
-    # noinspection PyPep8Naming
-    def on_cboExtraKeyword2_currentIndexChanged(self, indx):
-        """This is an automatic Qt slot executed when the
-           2nd extra keyword combobox selection changes.
-
-        :param indx: The new index.
-        :type indx: int or str
-        """
-        if isinstance(indx, int) and indx > -1:
-            self.extra_keyword_changed(self.extra_keywords_widgets[1])
-
-    # noinspection PyPep8Naming
-    def on_cboExtraKeyword3_currentIndexChanged(self, indx):
-        """This is an automatic Qt slot executed when the
-           3rd extra keyword combobox selection changes.
-
-        :param indx: The new index.
-        :type indx: int or str
-        """
-        if isinstance(indx, int) and indx > -1:
-            self.extra_keyword_changed(self.extra_keywords_widgets[2])
-
-    # noinspection PyPep8Naming
-    def on_cboExtraKeyword4_currentIndexChanged(self, indx):
-        """This is an automatic Qt slot executed when the
-           4th extra keyword combobox selection changes.
-
-        :param indx: The new index.
-        :type indx: int or str
-        """
-        if isinstance(indx, int) and indx > -1:
-            self.extra_keyword_changed(self.extra_keywords_widgets[3])
-
-    # noinspection PyPep8Naming
-    def on_cboExtraKeyword5_currentIndexChanged(self, indx):
-        """This is an automatic Qt slot executed when the
-           5th extra keyword combobox selection changes.
-
-        :param indx: The new index.
-        :type indx: int or str
-        """
-        if isinstance(indx, int) and indx > -1:
-            self.extra_keyword_changed(self.extra_keywords_widgets[4])
-
-    # noinspection PyPep8Naming
-    def on_cboExtraKeyword6_currentIndexChanged(self, indx):
-        """This is an automatic Qt slot executed when the
-           6th extra keyword combobox selection changes.
-
-        :param indx: The new index.
-        :type indx: int or str
-        """
-        if isinstance(indx, int) and indx > -1:
-            self.extra_keyword_changed(self.extra_keywords_widgets[5])
-
-    # noinspection PyPep8Naming
-    def on_cboExtraKeyword7_currentIndexChanged(self, indx):
-        """This is an automatic Qt slot executed when the
-           7th extra keyword combobox selection changes.
-
-        :param indx: The new index.
-        :type indx: int or str
-        """
-        if isinstance(indx, int) and indx > -1:
-            self.extra_keyword_changed(self.extra_keywords_widgets[6])
-
-    # noinspection PyPep8Naming
-    def on_cboExtraKeyword8_currentIndexChanged(self, indx):
-        """This is an automatic Qt slot executed when the
-           8th extra keyword combobox selection changes.
-
-        :param indx: The new index.
-        :type indx: int or str
-        """
-        if isinstance(indx, int) and indx > -1:
-            self.extra_keyword_changed(self.extra_keywords_widgets[7])
+        if (self.parent.get_layer_geometry_key() ==
+                layer_geometry_raster['key']):
+            return []
+        # Get hazard or exposure value
+        subcategory = self.parent.step_kw_subcategory.selected_subcategory()
+        inasafe_fields = get_fields(
+            self.parent.step_kw_purpose.selected_purpose()['key'],
+            subcategory['key'])
+        return inasafe_fields
 
     def extra_keyword_changed(self, widget):
         """Populate slave widget if exists and enable the Next button
@@ -222,12 +125,6 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
         :param widget: Metadata of the widget where the event happened.
         :type widget: dict
         """
-        if 'slave_key' in widget and widget['slave_key']:
-            for w in self.extra_keywords_widgets:
-                if w['key'] == widget['slave_key']:
-                    field_name = widget['cbo'].itemData(
-                        widget['cbo'].currentIndex(), QtCore.Qt.UserRole)
-                    self.populate_value_widget_from_field(w['cbo'], field_name)
 
         self.parent.pbnNext.setEnabled(self.are_all_extra_keywords_selected())
 
@@ -238,12 +135,7 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
         :rtype: dict, None
         """
         extra_keywords = {}
-        for ekw in self.extra_keywords_widgets:
-            if ekw['key'] is not None and ekw['cbo'].currentIndex() != -1:
-                key = ekw['key']
-                val = ekw['cbo'].itemData(ekw['cbo'].currentIndex(),
-                                          QtCore.Qt.UserRole)
-                extra_keywords[key] = val
+
         return extra_keywords
 
     def are_all_extra_keywords_selected(self):
@@ -252,9 +144,6 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
         :returns: True if all additional keyword widgets are set
         :rtype: boolean
         """
-        for ekw in self.extra_keywords_widgets:
-            if ekw['key'] is not None and ekw['cbo'].currentIndex() == -1:
-                return False
         return True
 
     def populate_value_widget_from_field(self, widget, field_name):
@@ -274,54 +163,60 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
             widget.addItem(unicode(v), unicode(v))
         widget.setCurrentIndex(-1)
 
+    # noinspection PyTypeChecker
     def set_widgets(self):
         """Set widgets on the Extra Keywords tab."""
-        # Hide all widgets
+        # Remove old container and parameter
+        if self.parameter_container:
+            self.kwExtraKeywordsGridLayout.removeWidget(
+                self.parameter_container)
+        if self.parameters:
+            self.parameters = []
 
-        for ekw in self.extra_keywords_widgets:
-            ekw['cbo'].clear()
-            ekw['cbo'].hide()
-            ekw['lbl'].hide()
-            ekw['key'] = None
-            ekw['master_key'] = None
+        layer_data_provider = self.parent.layer.dataProvider()
 
-        # Set and show used widgets
-        extra_keywords = self.additional_keywords_for_the_layer()
-        for i in range(len(extra_keywords)):
-            extra_keyword = extra_keywords[i]
-            extra_keywords_widget = self.extra_keywords_widgets[i]
-            extra_keywords_widget['key'] = extra_keyword['key']
-            extra_keywords_widget['lbl'].setText(extra_keyword['description'])
-            if extra_keyword['type'] == 'value':
-                field_widget = self.extra_keywords_widgets[i - 1]['cbo']
-                field_name = field_widget.itemData(
-                    field_widget.currentIndex(), QtCore.Qt.UserRole)
-                self.populate_value_widget_from_field(
-                    extra_keywords_widget['cbo'], field_name)
-            else:
-                for field in self.parent.layer.dataProvider().fields():
-                    field_name = field.name()
-                    field_type = field.typeName()
-                    extra_keywords_widget['cbo'].addItem('%s (%s)' % (
-                        field_name, field_type), field_name)
-            # If there is a master keyword, attach this widget as a slave
-            # to the master widget. It's used for values of a given field.
-            if ('master_keyword' in extra_keyword and
-                    extra_keyword['master_keyword']):
-                master_key = extra_keyword['master_keyword']['key']
-                for master_candidate in self.extra_keywords_widgets:
-                    if master_candidate['key'] == master_key:
-                        master_candidate['slave_key'] = extra_keyword['key']
-            # Show the widget
-            extra_keywords_widget['cbo'].setCurrentIndex(-1)
-            extra_keywords_widget['lbl'].show()
-            extra_keywords_widget['cbo'].show()
+        # Iterate through all inasafe fields
+        for inasafe_field in self.inasafe_fields_for_the_layer():
+            # Option for Not Available
+            option_list = [not_available]
+            for field in layer_data_provider.fields():
+                # Check the field type
+                if isinstance(inasafe_field['type'], list):
+                    if field.type() in inasafe_field['type']:
+                        field_name = field.name()
+                        option_list.append('%s' % field_name)
+                else:
+                    if field.type() == inasafe_field['type']:
+                        field_name = field.name()
+                        option_list.append('%s' % field_name)
 
-        # Set values based on existing keywords (if already assigned)
-        for ekw in self.extra_keywords_widgets:
-            if not ekw['key']:
-                continue
-            value = self.parent.get_existing_keyword(ekw['key'])
-            indx = ekw['cbo'].findData(value, QtCore.Qt.UserRole)
-            if indx != -1:
-                ekw['cbo'].setCurrentIndex(indx)
+            # Create SelectParameter
+            select_parameter = SelectParameter()
+            select_parameter.guid = inasafe_field['key']
+            select_parameter.name = inasafe_field['name']
+            select_parameter.is_required = False
+            select_parameter.help_text = inasafe_field['description']
+            select_parameter.description = inasafe_field['description']
+            select_parameter.element_type = unicode
+            select_parameter.options_list = option_list
+            select_parameter.value = option_list[0]
+            self.parameters.append(select_parameter)
+
+        # Create the parameter container and add to the wizard.
+        self.parameter_container = ParameterContainer(self.parameters)
+        self.parameter_container.setup_ui()
+        self.kwExtraKeywordsGridLayout.addWidget(self.parameter_container)
+
+    def get_inasafe_fields(self):
+        """Return inasafe fields from the current wizard state.
+
+        :returns: Dictionary of key and value from InaSAFE Fields.
+        :rtype: dict
+        """
+        inasafe_fields = {}
+        parameters = self.parameter_container.get_parameters(True)
+        for parameter in parameters:
+            if not parameter.value == not_available:
+                inasafe_fields[parameter.guid] = parameter.value
+
+        return inasafe_fields

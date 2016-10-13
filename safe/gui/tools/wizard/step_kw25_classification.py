@@ -27,7 +27,8 @@ from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_strings import classification_question
 from safe.utilities.gis import is_raster_layer
-from safe.utilities.keyword_io import definition
+from safe.definitionsv4.utilities import (
+    definition, get_hazard_classifications)
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
@@ -71,29 +72,11 @@ class StepKwClassification(WizardStep, FORM_CLASS):
         :returns: A list where each value represents a valid classification.
         :rtype: list
         """
-        layer_geometry_id = self.parent.get_layer_geometry_id()
-        layer_mode_id = self.parent.step_kw_layermode.\
-            selected_layermode()['key']
-        subcategory_id = self.parent.step_kw_subcategory.\
+        subcategory_key = self.parent.step_kw_subcategory.\
             selected_subcategory()['key']
         if self.parent.step_kw_purpose.\
                 selected_purpose() == layer_purpose_hazard:
-            hazard_category_id = self.parent.step_kw_hazard_category.\
-                selected_hazard_category()['key']
-            if is_raster_layer(self.parent.layer):
-                return self.impact_function_manager.\
-                    raster_hazards_classifications_for_layer(
-                        subcategory_id,
-                        layer_geometry_id,
-                        layer_mode_id,
-                        hazard_category_id)
-            else:
-                return self.impact_function_manager\
-                    .vector_hazards_classifications_for_layer(
-                        subcategory_id,
-                        layer_geometry_id,
-                        layer_mode_id,
-                        hazard_category_id)
+            return get_hazard_classifications(subcategory_key)
         else:
             # There are no classifications for exposures defined yet, apart
             # from postprocessor_classification, processed paralelly
@@ -155,9 +138,8 @@ class StepKwClassification(WizardStep, FORM_CLASS):
             self.lstClassifications.addItem(item)
 
         # Set values based on existing keywords (if already assigned)
-        geom = 'raster' if is_raster_layer(self.parent.layer) else 'vector'
-        key = '%s_%s_classification' % (
-            geom, self.parent.step_kw_purpose.selected_purpose()['key'])
+        key = '%s_classification' % (
+            self.parent.step_kw_purpose.selected_purpose()['key'])
         classification_keyword = self.parent.get_existing_keyword(key)
         if classification_keyword:
             classifications = []

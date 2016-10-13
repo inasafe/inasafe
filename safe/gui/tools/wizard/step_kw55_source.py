@@ -83,7 +83,7 @@ class StepKwSource(WizardStep, FORM_CLASS):
                 == layer_purpose_aggregation:
             new_step = self.parent.step_kw_aggregation
         elif self.parent.step_kw_extrakeywords.\
-                additional_keywords_for_the_layer():
+                inasafe_fields_for_the_layer():
             new_step = self.parent.step_kw_extrakeywords
         # otherwise behave like it was step_kw_extrakeywords
         elif self.parent.step_kw_layermode.\

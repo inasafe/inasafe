@@ -3,6 +3,7 @@
 import os
 import shutil
 import unittest
+import json
 # noinspection PyUnresolvedReferences
 import qgis
 from PyQt4 import QtCore
@@ -18,10 +19,21 @@ from safe.test.utilities import (
 # safe.gui.tools.wizard
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from safe.definitionsv4.versions import inasafe_keyword_version
-from safe.impact_functions.loader import register_impact_functions
+from safe.definitionsv4.layer_modes import (
+    layer_mode_continuous, layer_mode_classified)
+from safe.definitionsv4.layer_purposes import layer_purpose_hazard
+from safe.definitionsv4.hazard import hazard_volcano
+from safe.definitionsv4.hazard_category import hazard_category_multiple_event
+from safe.definitionsv4.hazard_classifications import volcano_hazard_classes
+from safe.definitionsv4.constants import not_available
+from safe.definitionsv4.fields import hazard_name_field
+from safe.definitionsv4.layer_geometry import layer_geometry_polygon
+
+
 from safe.gui.tools.wizard.wizard_dialog import WizardDialog
 from safe.gui.tools.wizard.wizard_utils import get_question_text
-from safe.utilities.keyword_io import KeywordIO, definition
+from safe.utilities.keyword_io import KeywordIO
+from safe.definitionsv4.utilities import definition
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -32,9 +44,6 @@ __revision__ = '$Format:%H$'
 # noinspection PyTypeChecker
 class WizardDialogTest(unittest.TestCase):
     """Test the InaSAFE wizard GUI"""
-    def setUp(self):
-        # register impact functions
-        register_impact_functions()
 
     def tearDown(self):
         """Run after each test."""
@@ -139,8 +148,8 @@ class WizardDialogTest(unittest.TestCase):
             'generic']
         chosen_subcategory = 'flood'
 
-        expected_mode_count = 1
-        expected_modes = ['classified']
+        expected_mode_count = 2
+        expected_modes = ['classified', 'continuous']
 
         expected_field_count = 6
         expected_fields = ['OBJECTID', 'KAB_NAME', 'KEC_NAME', 'KEL_NAME',
@@ -414,49 +423,84 @@ class WizardDialogTest(unittest.TestCase):
         self.assertTrue(dialog.pbnNext.isEnabled())
         dialog.pbnNext.click()
 
-    @unittest.skip('Skip unit test from InaSAFE v3.')
-    def test_existing_complex_keywords(self):
+    def test_hazard_volcano_polygon_keyword(self):
+        """Test keyword wizard for volcano hazard polygon"""
+        self.maxDiff = None
         layer = clone_shp_layer(
             name='volcano_krb',
-            include_keywords=True,
+            include_keywords=False,
             source_directory=standard_data_path('hazard'))
         # noinspection PyTypeChecker
         dialog = WizardDialog()
         dialog.set_keywords_creation_mode(layer)
 
-        # select hazard
+        # Check if in select purpose step
+        self.check_current_step(dialog.step_kw_purpose)
+
+        # Select hazard
         self.select_from_list_widget(
-            'Hazard', dialog.step_kw_purpose.lstCategories)
+            layer_purpose_hazard['name'], dialog.step_kw_purpose.lstCategories)
+
+        # Click next to select hazard
         dialog.pbnNext.click()
+
+        # Check if in select hazard step
+        self.check_current_step(dialog.step_kw_subcategory)
 
         # select volcano
         self.select_from_list_widget(
-            'Volcano', dialog.step_kw_subcategory.lstSubcategories)
+            hazard_volcano['name'],
+            dialog.step_kw_subcategory.lstSubcategories)
+
+        # Click next to select volcano
         dialog.pbnNext.click()
+
+        # Check if in select hazard category step
+        self.check_current_step(dialog.step_kw_hazard_category)
 
         # select multiple_event
         self.select_from_list_widget(
-            'Multiple event',
+            hazard_category_multiple_event['name'],
             dialog.step_kw_hazard_category.lstHazardCategories)
+
+        # Click next to select multiple event
         dialog.pbnNext.click()
 
-        # select volcano classified mode
+        # Check if in select layer mode step
+        self.check_current_step(dialog.step_kw_layermode)
+
+        # select classified mode
         self.select_from_list_widget(
-            'Classified', dialog.step_kw_layermode.lstLayerModes)
+            layer_mode_classified['name'],
+            dialog.step_kw_layermode.lstLayerModes)
+
+        # Click next to select classified
         dialog.pbnNext.click()
+
+        # Check if in select classification step
+        self.check_current_step(dialog.step_kw_classification)
 
         # select volcano vector hazard classes classification
         self.select_from_list_widget(
-            'Volcano classes',
-            dialog.step_kw_classification.lstClassifications
-        )
+            volcano_hazard_classes['name'],
+            dialog.step_kw_classification.lstClassifications)
+
+        # Click next to select volcano classes
         dialog.pbnNext.click()
+
+        # Check if in select field step
+        self.check_current_step(dialog.step_kw_field)
 
         # select KRB field
         self.select_from_list_widget('KRB', dialog.step_kw_field.lstFields)
+
+        # Click next to select KRB
         dialog.pbnNext.click()
 
-        # select mapping
+        # Check if in classify step
+        self.check_current_step(dialog.step_kw_classify)
+
+        # select value map
         classification = dialog.step_kw_classification.\
             selected_classification()
         default_classes = classification['classes']
@@ -468,27 +512,35 @@ class WizardDialogTest(unittest.TestCase):
         }
         dialog.step_kw_classify.populate_classified_values(
             unassigned_values, assigned_values, default_classes)
+
+        # Click next to finish value mapping
         dialog.pbnNext.click()
 
-        # select additional keywords
+        # select additional keywords / inasafe fields step
         self.check_current_step(dialog.step_kw_extrakeywords)
-        dialog.pbnBack.click()
+
+        # Get the parameter widget for hazard name
+        hazard_name_parameter_widget = dialog.step_kw_extrakeywords.\
+            parameter_container.get_parameter_widget_by_guid(
+                hazard_name_field['key'])
+
+        # Check if it's set to N/A at the beginning
+        self.assertEqual(
+            not_available, hazard_name_parameter_widget.get_parameter().value)
+
+        # Select volcano
+        hazard_name_parameter_widget.set_choice('volcano')
+
+        # Check if it's set to volcano
+        self.assertEqual(
+            'volcano', hazard_name_parameter_widget.get_parameter().value)
+
+        # Click next to finish inasafe fields step and go to source step
         dialog.pbnNext.click()
-        first_field = 'KRB'
-        index = dialog.step_kw_extrakeywords.cboExtraKeyword1.findData(
-            first_field, Qt.UserRole)
-        dialog.step_kw_extrakeywords.cboExtraKeyword1.setCurrentIndex(index)
-        self.assertEqual(index, 0)
 
-        third_field = 'volcano'
-        index = dialog.step_kw_extrakeywords.cboExtraKeyword1.findData(
-            third_field, Qt.UserRole)
-        dialog.step_kw_extrakeywords.cboExtraKeyword1.setCurrentIndex(index)
-        self.assertEqual(index, 2)
-
-        dialog.pbnNext.click()
-
+        # Check if in source step
         self.check_current_step(dialog.step_kw_source)
+
         source = 'Source'
         source_scale = 'Source Scale'
         source_url = 'Source Url'
@@ -497,6 +549,7 @@ class WizardDialogTest(unittest.TestCase):
             '06-12-2015 12:30',
             'dd-MM-yyyy HH:mm')
         source_license = 'Source License'
+        layer_title = 'Layer Title'
 
         dialog.step_kw_source.leSource.setText(source)
         dialog.step_kw_source.leSource_scale.setText(source_scale)
@@ -504,93 +557,52 @@ class WizardDialogTest(unittest.TestCase):
         dialog.step_kw_source.ckbSource_date.setChecked(True)
         dialog.step_kw_source.dtSource_date.setDateTime(source_date)
         dialog.step_kw_source.leSource_license.setText(source_license)
-        dialog.pbnNext.click()  # next
-        dialog.pbnNext.click()  # next
-        dialog.pbnNext.click()  # finish
 
-        # noinspection PyTypeChecker
-        dialog = WizardDialog()
-        dialog.set_keywords_creation_mode(layer)
-
-        # step 1 - select layer purpose
-        self.check_current_text('Hazard', dialog.step_kw_purpose.lstCategories)
-
-        # Click Next
+        # Click next to finish source step and go to title step
         dialog.pbnNext.click()
 
-        # step 2 - select subcategory
-        # noinspection PyTypeChecker
-        self.check_current_text(
-            'Volcano', dialog.step_kw_subcategory.lstSubcategories)
+        # Check if in title step
+        self.check_current_step(dialog.step_kw_title)
 
-        # Click Next
+        dialog.step_kw_title.leTitle.setText(layer_title)
+
+        # Click next to finish title step and go to kw summary step
         dialog.pbnNext.click()
 
-        # step 3 - select hazard category
-        self.check_current_text(
-            'Multiple event',
-            dialog.step_kw_hazard_category.lstHazardCategories
-        )
+        # Check if in title step
+        self.check_current_step(dialog.step_kw_summary)
 
-        # Click Next
+        # Click finish
         dialog.pbnNext.click()
 
-        # step 4 - select layer mode
-        self.check_current_text(
-            'Classified', dialog.step_kw_layermode.lstLayerModes)
+        # Checking Keyword Created
+        expected_keyword = {
+            'scale': source_scale,
+            'hazard_category': hazard_category_multiple_event['key'],
+            'license': source_license,
+            'source': source,
+            'url': source_url,
+            'title': layer_title,
+            'hazard': hazard_volcano['key'],
+            'inasafe_fields': json.dumps(
+                {
+                    'hazard_class_field': u'KRB',
+                    'hazard_name_field': u'volcano',
+                 }),
+            'value_map': json.dumps(assigned_values),
+            'date': source_date,
+            'hazard_classification': volcano_hazard_classes['key'],
+            'layer_geometry': layer_geometry_polygon['key'],
+            'layer_purpose': layer_purpose_hazard['key'],
+            'layer_mode': layer_mode_classified['key']
+        }
 
-        # Click Next
-        dialog.pbnNext.click()
-
-        # step 5 - select classification
-        self.check_current_text(
-            'Volcano classes',
-            dialog.step_kw_classification.lstClassifications
-        )
-
-        # Click Next
-        dialog.pbnNext.click()
-
-        # step 6 - select field
-        self.check_current_text('KRB', dialog.step_kw_field.lstFields)
-
-        # Click Next
-        dialog.pbnNext.click()
-
-        # step 7 - select mapping
-        for index in range(dialog.step_kw_classify.lstUniqueValues.count()):
-            self.assertIn(
-                dialog.step_kw_classify.lstUniqueValues.item(index).text(),
-                unassigned_values)
-        real_assigned_values = dialog.step_kw_classify.selected_mapping()
-        self.assertDictEqual(real_assigned_values, assigned_values)
-
-        # Click Next
-        dialog.pbnNext.click()
-
-        # step 8 - additional keywords
-        self.assertTrue(dialog.pbnNext.isEnabled())
-
-        # Click Next
-        dialog.pbnNext.click()
-
-        # step 9 - enter source
-        self.check_current_step(dialog.step_kw_source)
-        self.assertTrue(dialog.pbnNext.isEnabled())
-
-        self.assertEqual(dialog.step_kw_source.leSource.text(), source)
-        self.assertEqual(dialog.step_kw_source.leSource_url.text(), source_url)
-        self.assertEqual(
-            dialog.step_kw_source.leSource_scale.text(), source_scale)
-        self.assertEqual(
-            dialog.step_kw_source.dtSource_date.dateTime(), source_date)
-        self.assertEqual(
-            dialog.step_kw_source.leSource_license.text(), source_license)
-        dialog.pbnNext.click()
-
-        dialog.pbnCancel.click()
+        real_keywords = dialog.get_keywords()
+        print real_keywords
+        self.assertDictEqual(real_keywords, expected_keyword)
 
     # noinspection PyTypeChecker
+    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_existing_aggregation_keywords(self):
         """Test for case existing keywords in aggregation layer."""
         layer = clone_shp_layer(
@@ -634,6 +646,7 @@ class WizardDialogTest(unittest.TestCase):
             dialog.step_kw_aggregation.dsbFemaleRatioDefault.isEnabled())
 
     # noinspection PyTypeChecker
+    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_unit_building_generic(self):
         """Test for case existing building generic unit for structure."""
         layer = clone_shp_layer(
@@ -667,6 +680,7 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnNext.click()  # finishing
 
+    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_default_attributes_value(self):
         """Checking that default attributes is set to the CIA's one."""
         layer = clone_shp_layer(
@@ -786,7 +800,7 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnNext.click()  # choose exposure
         self.assertEquals(
-            dialog.step_kw_subcategory.lstSubcategories.currentRow(), 0)
+            dialog.step_kw_subcategory.lstSubcategories.currentRow(), 2)
         num_item = dialog.step_kw_subcategory.lstSubcategories.count()
         self.assertTrue(num_item == 3)
 
@@ -1047,7 +1061,10 @@ class WizardDialogTest(unittest.TestCase):
         # check if in step layer mode
         self.check_current_step(dialog.step_kw_layermode)
 
-        expected_modes = ['Classified']
+        expected_modes = [
+            layer_mode_classified['name'],
+            layer_mode_continuous['name']
+        ]
         self.check_list(expected_modes, dialog.step_kw_layermode.lstLayerModes)
 
         self.check_current_text(
@@ -1113,12 +1130,16 @@ class WizardDialogTest(unittest.TestCase):
         self.check_current_step(dialog.step_kw_layermode)
 
         # check the values of modes options
-        expected_modes = ['Classified']
+        expected_modes = [
+            layer_mode_classified['name'],
+            layer_mode_continuous['name']
+        ]
         self.check_list(expected_modes, dialog.step_kw_layermode.lstLayerModes)
 
         # choosing classified
         self.select_from_list_widget(
-            'Classified', dialog.step_kw_layermode.lstLayerModes)
+            layer_mode_classified['name'],
+            dialog.step_kw_layermode.lstLayerModes)
 
         dialog.pbnNext.click()  # Go to field
 
@@ -1176,7 +1197,8 @@ class WizardDialogTest(unittest.TestCase):
         # select classified
         self.check_current_step(dialog.step_kw_layermode)
         self.select_from_list_widget(
-            'Classified', dialog.step_kw_layermode.lstLayerModes)
+            layer_mode_classified['name'],
+            dialog.step_kw_layermode.lstLayerModes)
         dialog.pbnNext.click()  # go to classifications
 
         self.check_current_step(dialog.step_kw_classification)
@@ -1324,6 +1346,7 @@ class WizardDialogTest(unittest.TestCase):
 
         dialog.pbnCancel.click()
 
+    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_sum_ratio_behavior(self):
         """Test for wizard's behavior related sum of age ratio."""
         layer = clone_shp_layer(

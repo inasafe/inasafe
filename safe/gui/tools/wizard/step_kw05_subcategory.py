@@ -22,16 +22,18 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 
 from PyQt4 import QtCore
-from PyQt4.QtGui import (
-    QListWidgetItem,
-    QPixmap)
+from PyQt4.QtGui import QListWidgetItem, QPixmap
 
 from safe.definitionsv4.layer_purposes import (
     layer_purpose_exposure, layer_purpose_hazard)
+from safe.definitionsv4.utilities import (
+    hazards_for_layer,
+    definition,
+    exposures_for_layer)
+
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_utils import get_question_text
-from safe.utilities.keyword_io import definition
 from safe.utilities.resources import resources_path
 
 
@@ -80,13 +82,11 @@ class StepKwSubcategory(WizardStep, FORM_CLASS):
         :rtype: list
         """
         purpose = self.parent.step_kw_purpose.selected_purpose()
-        layer_geometry_id = self.parent.get_layer_geometry_id()
+        layer_geometry_key = self.parent.get_layer_geometry_key()
         if purpose == layer_purpose_hazard:
-            return self.impact_function_manager.hazards_for_layer(
-                layer_geometry_id)
+            return hazards_for_layer(layer_geometry_key)
         elif purpose == layer_purpose_exposure:
-            return self.impact_function_manager.exposures_for_layer(
-                layer_geometry_id)
+            return exposures_for_layer(layer_geometry_key)
 
     # noinspection PyPep8Naming
     def on_lstSubcategories_itemSelectionChanged(self):

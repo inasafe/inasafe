@@ -168,34 +168,6 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         expected = []
         self.assertItemsEqual(exposures, expected)
 
-    def test_exposure_units_for_layer(self):
-        """Test exposure_units_for_layer."""
-        impact_function = ITBFatalityFunction()
-        exposure_units = impact_function.metadata().exposure_units_for_layer(
-            'population', 'raster', 'continuous')
-        expected = [count_exposure_unit]
-        self.assertItemsEqual(exposure_units, expected)
-
-        exposure_units = impact_function.metadata().exposure_units_for_layer(
-            'population', 'raster', 'classified')
-        expected = []
-        self.assertItemsEqual(exposure_units, expected)
-
-    def test_continuous_hazards_units_for_layer(self):
-        """Test continuous_hazards_units_for_layer."""
-        impact_function = ITBFatalityFunction()
-        continuous_hazards_units = impact_function.metadata().\
-            continuous_hazards_units_for_layer(
-                'earthquake', 'raster', 'continuous', 'single_event')
-        expected = [unit_mmi]
-        self.assertItemsEqual(continuous_hazards_units, expected)
-
-        continuous_hazards_units = impact_function.metadata().\
-            continuous_hazards_units_for_layer(
-                'flood', 'raster', 'continuous', 'single_event')
-        expected = []
-        self.assertItemsEqual(continuous_hazards_units, expected)
-
     def test_available_hazards(self):
         """Test available_hazards."""
         impact_function = ITBFatalityFunction()
