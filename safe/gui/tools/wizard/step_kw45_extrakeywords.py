@@ -206,3 +206,17 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
         self.parameter_container = ParameterContainer(self.parameters)
         self.parameter_container.setup_ui()
         self.kwExtraKeywordsGridLayout.addWidget(self.parameter_container)
+
+    def get_inasafe_fields(self):
+        """Return inasafe fields from the current wizard state.
+
+        :returns: Dictionary of key and value from InaSAFE Fields.
+        :rtype: dict
+        """
+        inasafe_fields = {}
+        parameters = self.parameter_container.get_parameters(True)
+        for parameter in parameters:
+            if not parameter.value == not_available:
+                inasafe_fields[parameter.guid] = parameter.value
+
+        return inasafe_fields

@@ -813,6 +813,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         if self.step_kw_title.leTitle.text():
             keywords['title'] = get_unicode(self.step_kw_title.leTitle.text())
 
+        inasafe_fields.update(self.step_kw_extrakeywords.get_inasafe_fields())
+
         keywords['inasafe_fields'] = json.dumps(inasafe_fields)
         return keywords
 
