@@ -995,7 +995,7 @@ def clone_raster_layer(
         put the files into. Default to 'testing'.
     :type target_directory: str
     """
-    extensions = ['.prj', '.sld', 'qml', extension]
+    extensions = ['.prj', '.sld', '.qml', extension]
     if include_keywords:
         extensions.append('.xml')
     temp_path = unique_filename(dir=temp_dir(target_directory))
@@ -1005,6 +1005,8 @@ def clone_raster_layer(
         if os.path.exists(src_path):
             trg_path = temp_path + ext
             shutil.copy2(src_path, trg_path)
+        elif not os.path.exists(src_path) and ext == extension:
+            raise OSError('File %s not found' % src_path)
 
     raster_path = '%s%s' % (temp_path, extension)
     layer = QgsRasterLayer(raster_path, os.path.basename(raster_path))
