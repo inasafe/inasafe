@@ -35,6 +35,8 @@ from safe.gisv4.vector.prepare_vector_layer import prepare_vector_layer
 from safe.gisv4.vector.reproject import reproject
 from safe.gisv4.vector.intersection import intersection
 from safe.gisv4.vector.assign_highest_value import assign_highest_value
+from safe.gisv4.vector.reclassify import reclassify
+from safe.gisv4.vector.assign_hazard_class import assign_hazard_class
 from safe.definitionsv4.post_processors import post_processors
 from safe.defaults import get_defaults
 from safe.common.exceptions import (
@@ -418,17 +420,11 @@ class ImpactFunction(object):
         :returns: True if divisible, else False.
         :rtype: bool
         """
-        if self.exposure.keywords.get('layer_geometry') == 'point':
-            return False
-        elif self.exposure.keywords.get('layer_geometry') == 'line':
-            return True
-        elif self.exposure.keywords.get('layer_geometry') == 'polygon':
+        # Only building polygons are not divisible.
+        if self.exposure.keywords.get('layer_geometry') == 'polygon':
             if self.exposure.keywords.get('exposure') == 'structure':
                 return False
-            else:
-                return True
-        else:
-            return True
+        return True
 
     def create_virtual_aggregation(self):
         """Function to create aggregation layer based on extent
@@ -525,6 +521,9 @@ class ImpactFunction(object):
             self._datastore = Folder(temp_dir(sub_dir=self._unique_name))
             self._datastore.default_vector_format = 'geojson'
 
+        if self.debug:
+            self._datastore.use_index = True
+
         # Special case for Raster Earthquake hazard.
         if self.hazard.type() == QgsMapLayer.RasterLayer:
             if self.hazard.keywords('hazard') == 'earthquake':
@@ -545,9 +544,8 @@ class ImpactFunction(object):
 
         # self.datastore.add_layer(self.impact)
 
-        # Disable writing impact keyword until implementing all helper methods
-        # KeywordIO().write_keywords(
-        #     self.impact, self.impact.keywords)
+        KeywordIO().write_keywords(
+            self.impact, self.impact.keywords)
 
         return self.state
 
@@ -581,9 +579,7 @@ class ImpactFunction(object):
             # self.impact = zonal_statistics(
             #    self.exposure, self._aggregate_hazard)
 
-        # if self.debug:
-        #    self.datastore.add_layer(
-        #        self.impact, 'impact')
+        self.datastore.add_layer(self.impact, 'impact')
 
     def exposure_preparation(self):
         """This function is doing the exposure preparation."""
@@ -686,13 +682,23 @@ class ImpactFunction(object):
                     self.hazard, 'hazard_cleaned')
 
             if self.hazard.keywords.get('layer_geometry') == 'polygon':
+
                 if self.hazard.keywords.get('layer_mode') == 'continuous':
                     self.set_state_process(
                         'hazard',
                         'Classify continuous hazard and assign class names')
+                    # self.hazard = reclassify(self.hazard, ranges)
+                    # if self.debug:
+                    #     self.datastore.add_layer(
+                    #         self.hazard, 'hazard reclassified')
+
                 else:
                     self.set_state_process(
                         'hazard', 'Assign classes based on value map')
+                    self.hazard = assign_hazard_class(self.hazard)
+                    if self.debug:
+                        self.datastore.add_layer(
+                            self.hazard, 'hazard_value_map_to_reclassified')
             else:
                 self.set_state_process('hazard', 'Buffering')
                 self.set_state_process(

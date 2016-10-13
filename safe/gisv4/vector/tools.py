@@ -146,7 +146,7 @@ def remove_fields(layer, fields_to_remove):
     :param layer: The vector layer.
     :type layer: QgsVectorLayer
 
-    :param fields_to_remove: List of fields to copy.
+    :param fields_to_remove: List of fields to remove.
     :type fields_to_remove: list
     """
     index_to_remove = []

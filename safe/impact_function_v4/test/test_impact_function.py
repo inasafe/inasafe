@@ -43,11 +43,14 @@ def read_json_flow(json_path):
     return data['scenario'], data['expected']
 
 
-def run_scenario(scenario):
+def run_scenario(scenario, use_debug=False):
     """Run scenario
 
     :param scenario: Dictionary of hazard, exposure, and aggregation.
     :type scenario: dict
+
+    :param use_debug: If we should use debug when we run the scenario.
+    :type use_debug: bool
 
     :returns: Flow dictionary.
     :rtype: dict
@@ -78,13 +81,17 @@ def run_scenario(scenario):
             aggregation_path = None
 
     impact_function = ImpactFunction()
+    if use_debug:
+        impact_function.debug = True
     impact_function.hazard = QgsVectorLayer(hazard_path, 'Hazard', 'ogr')
     impact_function.exposure = QgsVectorLayer(exposure_path, 'Exposure', 'ogr')
     if aggregation_path:
         impact_function.aggregation = QgsVectorLayer(
-            aggregation_path, 'Exposure', 'ogr')
+            aggregation_path, 'Aggregation', 'ogr')
 
     result = impact_function.run()
+    if use_debug:
+        print impact_function.datastore.uri.absolutePath()
 
     return result
 
@@ -128,10 +135,9 @@ class TestImpactFunction(unittest.TestCase):
         self.assertEqual(impact_function.name, 'Flood Polygon On Road Line')
         self.assertEqual(impact_function.title, 'be affected')
 
-    # Expected failure since there is not real implementation yet.
-    # @unittest.expectedFailure
     def test_run_impact_function(self):
         """Test running impact function on test data."""
+        use_debug = False
         hazard_layer = load_test_vector_layer(
             'gisv4', 'hazard', 'classified_vector.geojson')
         exposure_layer = load_test_vector_layer(
@@ -141,32 +147,36 @@ class TestImpactFunction(unittest.TestCase):
 
         # Set up impact function
         impact_function = ImpactFunction()
-        impact_function.debug = True
+        if use_debug:
+            impact_function.debug = True
         impact_function.aggregation = aggregation_layer
         impact_function.exposure = exposure_layer
         impact_function.hazard = hazard_layer
         impact_function.run()
-        print impact_function.datastore.uri.absolutePath()
-        print impact_function.datastore.layers()
-        # self.assertIsNotNone(impact_function.impact)
+        if use_debug:
+            print impact_function.datastore.uri.absolutePath()
+            print impact_function.datastore.layers()
+        self.assertIsNotNone(impact_function.impact)
 
     def test_scenario(self):
         """Run test single scenario."""
         self.maxDiff = None
+        use_debug = False
 
         scenario_path = standard_data_path(
             'scenario', 'polygon_hazard_point_exposure.json')
         scenario, expected = read_json_flow(scenario_path)
-        result = run_scenario(scenario)
+        result = run_scenario(scenario, use_debug)
         self.assertDictEqual(expected, result)
 
     def test_scenario_directory(self):
         """Run test scenario in directory."""
         self.maxDiff = None
+        use_debug = False
 
         def test_scenario(scenario_path):
             scenario, expected = read_json_flow(scenario_path)
-            result = run_scenario(scenario)
+            result = run_scenario(scenario, use_debug)
             self.assertDictEqual(expected, result)
 
         path = standard_data_path('scenario')

@@ -11,7 +11,7 @@
       "info": {},
       "process":[
         "Run impact function",
-        "Intersect aggregate hazard and exposure with highest hazard value"
+        "Intersect aggregate hazard and exposure"
       ]
     },
     "post_processor":{
