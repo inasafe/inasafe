@@ -690,7 +690,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         new_step = current_step.get_next_step()
         if (new_step == self.step_kw_extrakeywords and not
                 self.step_kw_extrakeywords.
-                additional_keywords_for_the_layer()):
+                inasafe_fields_for_the_layer()):
             # Skip the extra_keywords tab if no extra keywords available:
             new_step = self.step_kw_source
 

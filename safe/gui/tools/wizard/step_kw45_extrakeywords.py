@@ -102,7 +102,7 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
         new_step = self.parent.step_kw_source
         return new_step
 
-    def additional_keywords_for_the_layer(self):
+    def inasafe_fields_for_the_layer(self):
         """Return a list of inasafe fields the current layer.
 
         :returns: A list where each value represents inasafe field.
@@ -113,9 +113,10 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
             return []
         # Get hazard or exposure value
         subcategory = self.parent.step_kw_subcategory.selected_subcategory()
-        return get_fields(
+        inasafe_fields = get_fields(
             self.parent.step_kw_purpose.selected_purpose()['key'],
             subcategory['key'])
+        return inasafe_fields
 
     def extra_keyword_changed(self, widget):
         """Populate slave widget if exists and enable the Next button
@@ -175,7 +176,7 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
         layer_data_provider = self.parent.layer.dataProvider()
 
         # Iterate through all inasafe fields
-        for inasafe_field in self.additional_keywords_for_the_layer():
+        for inasafe_field in self.inasafe_fields_for_the_layer():
             # Option for Not Available
             option_list = [not_available]
             for field in layer_data_provider.fields():
