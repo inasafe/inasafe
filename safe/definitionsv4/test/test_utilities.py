@@ -1,7 +1,5 @@
 # coding=utf-8
-
-"""Test for utilities module..
-"""
+"""Test for utilities module.."""
 import unittest
 
 from safe.definitionsv4 import (
@@ -22,14 +20,12 @@ from safe.definitionsv4 import (
     unit_metres,
     unit_feet,
     unit_generic,
-    flood_raster_hazard_classes,
-    flood_vector_hazard_classes,
-    generic_vector_hazard_classes,
     exposure_fields,
     exposure_class_field,
     hazard_class_field,
     hazard_fields,
-    hazard_value_field
+    hazard_value_field,
+    flood_hazard_classes
 )
 
 from safe.definitionsv4.utilities import (
@@ -42,7 +38,8 @@ from safe.definitionsv4.utilities import (
     exposure_units,
     raster_hazards_classifications,
     vector_hazards_classifications,
-    get_fields
+    get_fields,
+    get_hazard_classifications
 )
 
 
@@ -164,17 +161,11 @@ class TestDefinitionsUtilities(unittest.TestCase):
         expected = [unit_metres, unit_feet, unit_generic]
         self.assertItemsEqual(hazard_units('flood'), expected)
 
-    def test_raster_hazards_classifications(self):
-        """Test for raster_hazards_classifications."""
-        expected = [flood_raster_hazard_classes]
+    def test_hazards_classifications(self):
+        """Test for get_hazards_classifications."""
+        expected = [flood_hazard_classes]
         self.assertItemsEqual(
-            raster_hazards_classifications('flood'), expected)
-
-    def test_vector_hazards_classifications(self):
-        """Test for vector_hazards_classifications."""
-        expected = [flood_vector_hazard_classes, generic_vector_hazard_classes]
-        self.assertItemsEqual(
-            vector_hazards_classifications('flood'), expected)
+            get_hazard_classifications('flood'), expected)
 
     def test_get_fields(self):
         """Test get_fields method."""

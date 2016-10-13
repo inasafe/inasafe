@@ -798,9 +798,8 @@ class WizardDialog(QDialog, FORM_CLASS):
             keywords[field_keyword] = self.step_kw_field.\
                 lstFields.currentItem().text()
         if self.step_kw_classification.selected_classification():
-            geom = 'raster' if is_raster_layer(self.layer) else 'vector'
-            key = '%s_%s_classification' % (
-                geom, self.step_kw_purpose.selected_purpose()['key'])
+            key = '%s_classification' % (
+                self.step_kw_purpose.selected_purpose()['key'])
             keywords[key] = self.step_kw_classification.\
                 selected_classification()['key']
         value_map = self.step_kw_classify.selected_mapping()

@@ -589,7 +589,7 @@ class WizardDialogTest(unittest.TestCase):
                 '"medium": ["Kawasan Rawan Bencana II"], '
                 '"low": ["Kawasan Rawan Bencana I"]}',
             'date': source_date,
-            'vector_hazard_classification': 'volcano_vector_hazard_classes',
+            'hazard_classification': volcano_hazard_classes['key'],
             'layer_geometry': layer_geometry_polygon['key'],
             'layer_purpose': layer_purpose_hazard['key'],
             'layer_mode': layer_mode_classified['key']

@@ -28,7 +28,7 @@ from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_strings import classification_question
 from safe.utilities.gis import is_raster_layer
 from safe.definitionsv4.utilities import (
-    definition, raster_hazards_classifications, vector_hazards_classifications)
+    definition, get_hazard_classifications)
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
@@ -76,10 +76,7 @@ class StepKwClassification(WizardStep, FORM_CLASS):
             selected_subcategory()['key']
         if self.parent.step_kw_purpose.\
                 selected_purpose() == layer_purpose_hazard:
-            if is_raster_layer(self.parent.layer):
-                return raster_hazards_classifications(subcategory_key)
-            else:
-                return  vector_hazards_classifications(subcategory_key)
+            return get_hazard_classifications(subcategory_key)
         else:
             # There are no classifications for exposures defined yet, apart
             # from postprocessor_classification, processed paralelly
@@ -141,9 +138,8 @@ class StepKwClassification(WizardStep, FORM_CLASS):
             self.lstClassifications.addItem(item)
 
         # Set values based on existing keywords (if already assigned)
-        geom = 'raster' if is_raster_layer(self.parent.layer) else 'vector'
-        key = '%s_%s_classification' % (
-            geom, self.parent.step_kw_purpose.selected_purpose()['key'])
+        key = '%s_classification' % (
+            self.parent.step_kw_purpose.selected_purpose()['key'])
         classification_keyword = self.parent.get_existing_keyword(key)
         if classification_keyword:
             classifications = []
