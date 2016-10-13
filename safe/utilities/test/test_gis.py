@@ -69,7 +69,7 @@ class TestQGIS(unittest.TestCase):
 
         # with raster layer
         layer = clone_raster_layer(
-            name='padang_tsunami_mw8',
+            name='ash_raster_wgs84',
             extension='.tif',
             include_keywords=True,
             source_directory=standard_data_path('hazard')
@@ -98,7 +98,7 @@ class TestQGIS(unittest.TestCase):
         self.assertFalse(is_polygon_layer(layer), message)
 
         layer = clone_raster_layer(
-            name='padang_tsunami_mw8',
+            name='ash_raster_wgs84',
             extension='.tif',
             include_keywords=True,
             source_directory=standard_data_path('hazard')
