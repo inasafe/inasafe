@@ -144,6 +144,8 @@ def read_iso19115_metadata(layer_uri, keyword=None):
 
     if isinstance(metadata, ImpactLayerMetadata):
         keywords['if_provenance'] = metadata.provenance
+
+    keywords = metadata_migration(keywords)
     return keywords
 
 
