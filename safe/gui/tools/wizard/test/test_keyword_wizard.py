@@ -26,6 +26,7 @@ from safe.definitionsv4.hazard_category import hazard_category_multiple_event
 from safe.definitionsv4.hazard_classifications import volcano_hazard_classes
 from safe.definitionsv4.constants import not_available
 from safe.definitionsv4.fields import hazard_name_field
+from safe.definitionsv4.layer_geometry import layer_geometry_polygon
 
 
 from safe.gui.tools.wizard.wizard_dialog import WizardDialog
@@ -423,6 +424,7 @@ class WizardDialogTest(unittest.TestCase):
 
     def test_hazard_volcano_polygon_keyword(self):
         """Test keyword wizard for volcano hazard polygon"""
+        self.maxDiff = None
         layer = clone_shp_layer(
             name='volcano_krb',
             include_keywords=False,
@@ -546,6 +548,7 @@ class WizardDialogTest(unittest.TestCase):
             '06-12-2015 12:30',
             'dd-MM-yyyy HH:mm')
         source_license = 'Source License'
+        layer_title = 'Layer Title'
 
         dialog.step_kw_source.leSource.setText(source)
         dialog.step_kw_source.leSource_scale.setText(source_scale)
@@ -560,6 +563,8 @@ class WizardDialogTest(unittest.TestCase):
         # Check if in title step
         self.check_current_step(dialog.step_kw_title)
 
+        dialog.step_kw_title.leTitle.setText(layer_title)
+
         # Click next to finish title step and go to kw summary step
         dialog.pbnNext.click()
 
@@ -570,6 +575,29 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()
 
         # Checking Keyword Created
+        expected_keyword = {
+            'scale': source_scale,
+            'hazard_category': hazard_category_multiple_event['key'],
+            'license': source_license,
+            'source': source,
+            'url': source_url,
+            'title': layer_title,
+            'hazard': hazard_volcano['key'],
+            'field': u'KRB',
+            'value_map':
+                '{"high": ["Kawasan Rawan Bencana III"], '
+                '"medium": ["Kawasan Rawan Bencana II"], '
+                '"low": ["Kawasan Rawan Bencana I"]}',
+            'date': source_date,
+            'vector_hazard_classification': 'volcano_vector_hazard_classes',
+            'layer_geometry': layer_geometry_polygon['key'],
+            'layer_purpose': layer_purpose_hazard['key'],
+            'layer_mode': layer_mode_classified['key']
+        }
+
+        real_keywords = dialog.get_keywords()
+        print real_keywords
+        self.assertDictEqual(real_keywords, expected_keyword)
 
     # noinspection PyTypeChecker
     def test_existing_aggregation_keywords(self):
