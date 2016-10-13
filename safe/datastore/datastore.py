@@ -60,7 +60,7 @@ class DataStore(object):
         """Setter if we use an index when we add a layer to the datastore.
 
         :param index: A boolean if we use an index.
-        :rtype index: bool
+        :type index: bool
         """
         self._use_index = index
 
