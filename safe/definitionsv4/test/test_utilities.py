@@ -36,8 +36,6 @@ from safe.definitionsv4.utilities import (
     hazard_categories_for_layer,
     hazard_units,
     exposure_units,
-    raster_hazards_classifications,
-    vector_hazards_classifications,
     get_fields,
     get_hazard_classifications
 )
@@ -120,36 +118,11 @@ class TestDefinitionsUtilities(unittest.TestCase):
 
     def test_hazard_categories_for_layer(self):
         """Test for hazard_categories_for_layer"""
-        hazard_categories = hazard_categories_for_layer('polygon')
-        expected = [
-            hazard_category_single_event,
-            hazard_category_multiple_event]
-        self.assertItemsEqual(hazard_categories, expected)
-
-        # Note(IS): Currently we don't count the hazard category. We can
-        # update it later when we have use the hazard category
-        # hazard_categories = hazard_categories_for_layer('line')
-        # expected = []
-        # self.assertItemsEqual(hazard_categories, expected)
-
-        hazard_categories = hazard_categories_for_layer('point')
+        hazard_categories = hazard_categories_for_layer()
         expected = [
             hazard_category_multiple_event,
-            hazard_category_single_event
-        ]
-        self.assertItemsEqual(hazard_categories, expected)
-
-        hazard_categories = hazard_categories_for_layer('raster')
-        expected = [
-            hazard_category_single_event,
-            hazard_category_multiple_event]
-        self.assertItemsEqual(hazard_categories, expected)
-
-        hazard_categories = hazard_categories_for_layer('raster', 'earthquake')
-        expected = [
-            hazard_category_single_event,
-            hazard_category_multiple_event]
-        self.assertItemsEqual(hazard_categories, expected)
+            hazard_category_single_event]
+        self.assertListEqual(hazard_categories, expected)
 
     def test_exposure_units(self):
         """Test for exposure_units"""

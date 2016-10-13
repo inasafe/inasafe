@@ -81,19 +81,12 @@ def exposures_for_layer(layer_geometry_key):
     return sorted(result, key=lambda k: k['key'])
 
 
-def hazard_categories_for_layer(layer_geometry_key, hazard_key=None):
-    """Get hazard categories form layer_geometry_key
-
-    :param layer_geometry_key: The geometry id
-    :type layer_geometry_key: str
-
-    :param hazard_key: The hazard key
-    :type hazard_key: str
+def hazard_categories_for_layer():
+    """Get hazard categories
 
     :returns: List of hazard_categories
     :rtype: list
     """
-
     return sorted(hazard_category_all, key=lambda k: k['key'])
 
 
