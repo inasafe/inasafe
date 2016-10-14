@@ -185,19 +185,19 @@
             <gco:Tuple/>
           </prob_fatality_mag>
           <inasafe_fields>
-            <gco:Dictionary/>
+            <gco:Dictionary>{&quot;hazard_class_field&quot;: &quot;KRB&quot;, &quot;hazard_name_field&quot;: &quot;volcano&quot;}</gco:Dictionary>
           </inasafe_fields>
           <volcano_name_field>
-            <gco:CharacterString>volcano</gco:CharacterString>
+            <gco:CharacterString/>
           </volcano_name_field>
           <field>
-            <gco:CharacterString>KRB</gco:CharacterString>
+            <gco:CharacterString/>
           </field>
           <value_map>
             <gco:Dictionary>{&quot;high&quot;: [&quot;Kawasan Rawan Bencana III&quot;], &quot;medium&quot;: [&quot;Kawasan Rawan Bencana II&quot;], &quot;low&quot;: [&quot;Kawasan Rawan Bencana I&quot;]}</gco:Dictionary>
           </value_map>
           <vector_hazard_classification>
-            <gco:CharacterString>volcano_vector_hazard_classes</gco:CharacterString>
+            <gco:CharacterString/>
           </vector_hazard_classification>
           <layer_geometry>
             <gco:CharacterString>polygon</gco:CharacterString>
@@ -232,6 +232,9 @@
           <layer_mode>
             <gco:CharacterString>classified</gco:CharacterString>
           </layer_mode>
+          <hazard_classification>
+            <gco:CharacterString>volcano_vector_hazard_classes</gco:CharacterString>
+          </hazard_classification>
         </inasafe>
       </gmd:supplementalInformation>
     </gmd:MD_DataIdentification>
