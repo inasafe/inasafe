@@ -31,7 +31,6 @@ from safe.definitionsv4.layer_geometry import layer_geometry_polygon
 
 
 from safe.gui.tools.wizard.wizard_dialog import WizardDialog
-from safe.gui.tools.wizard.wizard_utils import get_question_text
 from safe.utilities.keyword_io import KeywordIO
 from safe.definitionsv4.utilities import definition
 
@@ -102,13 +101,6 @@ class WizardDialogTest(unittest.TestCase):
                 return
         message = 'There is no %s in the list widget' % option
         raise Exception(message)
-
-    def test_get_missing_question_text(self):
-        """Test how the wizard copes with importing missing texts."""
-        constant = '_dummy_missing_constant'
-        expected_text = '<b>MISSING CONSTANT: %s</b>' % constant
-        text = get_question_text(constant)
-        self.assertEqual(text, expected_text)
 
     def test_invalid_keyword_layer(self):
         layer = clone_raster_layer(
