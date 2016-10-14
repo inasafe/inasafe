@@ -201,11 +201,14 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
             select_parameter.description = inasafe_field['description']
             select_parameter.element_type = unicode
             select_parameter.options_list = option_list
-            existing_value = existing_inasafe_field.get(inasafe_field['key'])
-            if existing_value:
-                select_parameter.value = existing_value
-            else:
-                select_parameter.value = not_available
+            select_parameter.value = not_available
+            # Check if there is already value in the metadata.
+            if existing_inasafe_field:
+                existing_value = existing_inasafe_field.get(
+                    inasafe_field['key'])
+                if existing_value:
+                    select_parameter.value = existing_value
+
             self.parameters.append(select_parameter)
 
         # Create the parameter container and add to the wizard.
