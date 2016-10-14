@@ -166,6 +166,8 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
     # noinspection PyTypeChecker
     def set_widgets(self):
         """Set widgets on the Extra Keywords tab."""
+        existing_inasafe_field = self.parent.get_existing_keyword(
+            'inasafe_fields')
         # Remove old container and parameter
         if self.parameter_container:
             self.kwExtraKeywordsGridLayout.removeWidget(
@@ -199,7 +201,11 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
             select_parameter.description = inasafe_field['description']
             select_parameter.element_type = unicode
             select_parameter.options_list = option_list
-            select_parameter.value = option_list[0]
+            existing_value = existing_inasafe_field.get(inasafe_field['key'])
+            if existing_value:
+                select_parameter.value = existing_value
+            else:
+                select_parameter.value = not_available
             self.parameters.append(select_parameter)
 
         # Create the parameter container and add to the wizard.

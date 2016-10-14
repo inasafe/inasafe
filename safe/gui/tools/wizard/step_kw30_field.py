@@ -189,11 +189,13 @@ class StepKwField(WizardStep, FORM_CLASS):
 
         # Set values based on existing keywords (if already assigned)
         field_keyword = self.parent.field_keyword_for_the_layer()
-        field = self.parent.get_existing_keyword(field_keyword)
-        if field:
-            fields = []
-            for index in xrange(self.lstFields.count()):
-                fields.append(str(self.lstFields.item(index).text()))
-            if field in fields:
-                self.lstFields.setCurrentRow(fields.index(field))
-        self.auto_select_one_item(self.lstFields)
+        inasafe_field = self.parent.get_existing_keyword('inasafe_fields')
+        if inasafe_field:
+            field = inasafe_field.get(field_keyword)
+            if field:
+                fields = []
+                for index in xrange(self.lstFields.count()):
+                    fields.append(str(self.lstFields.item(index).text()))
+                if field in fields:
+                    self.lstFields.setCurrentRow(fields.index(field))
+            self.auto_select_one_item(self.lstFields)

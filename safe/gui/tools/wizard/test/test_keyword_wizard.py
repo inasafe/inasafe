@@ -14,7 +14,8 @@ from safe.test.utilities import (
     clone_raster_layer,
     clone_shp_layer,
     get_qgis_app,
-    standard_data_path)
+    standard_data_path,
+    load_test_vector_layer)
 # AG: get_qgis_app() should be called before importing modules from
 # safe.gui.tools.wizard
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -26,7 +27,7 @@ from safe.definitionsv4.hazard import hazard_volcano
 from safe.definitionsv4.hazard_category import hazard_category_multiple_event
 from safe.definitionsv4.hazard_classifications import volcano_hazard_classes
 from safe.definitionsv4.constants import not_available
-from safe.definitionsv4.fields import hazard_name_field
+from safe.definitionsv4.fields import hazard_name_field, hazard_class_field
 from safe.definitionsv4.layer_geometry import layer_geometry_polygon
 
 
@@ -332,87 +333,139 @@ class WizardDialogTest(unittest.TestCase):
 
         self.assertEqual(keywords, expected_keywords)
 
-    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_existing_keywords(self):
         """Test if keywords already exist."""
-        expected_field_count = 6
+        self.maxDiff = None
 
-        layer = clone_shp_layer(
-            name='flood_multipart_polygons',
-            include_keywords=True,
-            source_directory=standard_data_path('hazard'))
-
-        # check the environment first
-        self.assertIsNotNone(layer.dataProvider())
-
-        # Initialize dialog
+        layer = load_test_vector_layer(
+            'hazard', 'volcano_krb.shp', clone=True)
         # noinspection PyTypeChecker
         dialog = WizardDialog()
         dialog.set_keywords_creation_mode(layer)
 
-        # step 1 - select layer purpose
-        self.check_current_text('Hazard', dialog.step_kw_purpose.lstCategories)
+        # Check if in select purpose step
+        self.check_current_step(dialog.step_kw_purpose)
 
-        self.assertTrue(dialog.pbnNext.isEnabled())
-        # Click Next
-        dialog.pbnNext.click()
-
-        # step 2 - select subcategory
-        # noinspection PyTypeChecker
+        # Check if hazard is selected
         self.check_current_text(
-            'Flood', dialog.step_kw_subcategory.lstSubcategories)
-        self.assertTrue(dialog.pbnNext.isEnabled())
-        # Click Next
+            layer_purpose_hazard['name'], dialog.step_kw_purpose.lstCategories)
+
+        # Click next to select hazard
         dialog.pbnNext.click()
 
-        # step 3 - select hazard category
+        # Check if in select hazard step
+        self.check_current_step(dialog.step_kw_subcategory)
+
+        # Check if volcano is selected
         self.check_current_text(
-            'Single event', dialog.step_kw_hazard_category.lstHazardCategories)
-        self.assertTrue(dialog.pbnNext.isEnabled())
-        # Click Next
+            hazard_volcano['name'],
+            dialog.step_kw_subcategory.lstSubcategories)
+
+        # Click next to select volcano
         dialog.pbnNext.click()
 
-        # step 4 - select layer mode
-        # noinspection PyTypeChecker
+        # Check if in select hazard category step
+        self.check_current_step(dialog.step_kw_hazard_category)
+
+        # Check if multiple event is selected
         self.check_current_text(
-            'Classified', dialog.step_kw_layermode.lstLayerModes)
-        self.assertTrue(dialog.pbnNext.isEnabled())
-        # Click Next
+            hazard_category_multiple_event['name'],
+            dialog.step_kw_hazard_category.lstHazardCategories)
+
+        # Click next to select multiple event
         dialog.pbnNext.click()
 
-        # step 5 - select flood classification
+        # Check if in select layer mode step
+        self.check_current_step(dialog.step_kw_layermode)
+
+        # Check if classified is selected
         self.check_current_text(
-            'Flood classes', dialog.step_kw_classification.lstClassifications)
-        self.assertTrue(dialog.pbnNext.isEnabled())
-        # Click Next
+            layer_mode_classified['name'],
+            dialog.step_kw_layermode.lstLayerModes)
+
+        # Click next to select classified
         dialog.pbnNext.click()
 
-        # step 6 - select field
-        # noinspection PyTypeChecker
-        self.check_current_text('FLOODPRONE', dialog.step_kw_field.lstFields)
-        self.assertTrue(dialog.pbnNext.isEnabled())
+        # Check if in select classification step
+        self.check_current_step(dialog.step_kw_classification)
 
-        count = dialog.step_kw_field.lstFields.count()
-        self.assertEqual(count, expected_field_count)
+        # Check if volcano class is selected
+        self.check_current_text(
+            volcano_hazard_classes['name'],
+            dialog.step_kw_classification.lstClassifications)
 
-        # Click Next
+        # Click next to select volcano classes
         dialog.pbnNext.click()
 
-        # Click Next
+        # Check if in select field step
+        self.check_current_step(dialog.step_kw_field)
+
+        # Check if KRB is selected
+        self.check_current_text('KRB', dialog.step_kw_field.lstFields)
+
+        # Click next to select KRB
         dialog.pbnNext.click()
 
-        # step 7 - enter source
+        # Check if in classify step
+        self.check_current_step(dialog.step_kw_classify)
+
+        # Click next to finish value mapping
+        dialog.pbnNext.click()
+
+        # select additional keywords / inasafe fields step
+        self.check_current_step(dialog.step_kw_extrakeywords)
+
+        # Check inasafe fields
+        parameters = dialog.step_kw_extrakeywords. \
+            parameter_container.get_parameters(True)
+
+        # Get layer's inasafe_fields
+        inasafe_fields = layer.keywords.get('inasafe_fields')
+        self.assertIsNotNone(inasafe_fields)
+        for key, value in inasafe_fields.items():
+            # Not check if it's hazard_name_field
+            if key == hazard_class_field['key']:
+                continue
+            # Check if existing key in parameters guid
+            self.assertIn(key, [p.guid for p in parameters])
+            # Iterate through all parameter to get parameter value
+            for parameter in parameters:
+                if parameter.guid == key:
+                    # Check the value is the same
+                    self.assertEqual(value, parameter.value)
+                    break
+
+        for parameter in parameters:
+            # If not available is chosen, inasafe_fields shouldn't have it
+            if parameter.value == not_available:
+                self.assertNotIn(parameter.guid, inasafe_fields.keys())
+            # If not available is not chosen, inasafe_fields should have it
+            else:
+                self.assertIn(parameter.guid, inasafe_fields.keys())
+
+        # Click next to finish inasafe fields step and go to source step
+        dialog.pbnNext.click()
+
+        # Check if in source step
+        self.check_current_step(dialog.step_kw_source)
+
         self.assertTrue(dialog.pbnNext.isEnabled())
         self.assertEqual(dialog.step_kw_source.leSource.text(), '')
         self.assertEqual(dialog.step_kw_source.leSource_url.text(), '')
         self.assertFalse(dialog.step_kw_source.ckbSource_date.isChecked())
         self.assertEqual(dialog.step_kw_source.leSource_scale.text(), '')
+
+        # Click next to finish source step and go to title step
         dialog.pbnNext.click()
 
-        # step 8 - enter title
+        # Check if in title step
+        self.check_current_step(dialog.step_kw_title)
+
         self.assertEqual(
             dialog.layer.name(), dialog.step_kw_title.leTitle.text())
         self.assertTrue(dialog.pbnNext.isEnabled())
+
+        # Click finish
         dialog.pbnNext.click()
 
     def test_hazard_volcano_polygon_keyword(self):
