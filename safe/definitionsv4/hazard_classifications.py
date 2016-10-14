@@ -75,7 +75,7 @@ generic_hazard_classes = {
 }
 
 volcano_hazard_classes = {
-    'key': 'volcano_vector_hazard_classes',
+    'key': 'volcano_hazard_classes',
     'name': tr('Volcano classes'),
     'description': tr(
         'Three classes are supported for volcano vector hazard data: '

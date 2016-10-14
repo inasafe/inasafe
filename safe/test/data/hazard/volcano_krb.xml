@@ -233,7 +233,7 @@
             <gco:CharacterString>classified</gco:CharacterString>
           </layer_mode>
           <hazard_classification>
-            <gco:CharacterString>volcano_vector_hazard_classes</gco:CharacterString>
+            <gco:CharacterString>volcano_hazard_classes</gco:CharacterString>
           </hazard_classification>
         </inasafe>
       </gmd:supplementalInformation>
