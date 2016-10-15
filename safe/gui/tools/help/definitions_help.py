@@ -6,6 +6,7 @@ from safe import messaging as m
 from safe.messaging import styles
 import safe.definitionsv4 as definitions
 INFO_STYLE = styles.INFO_STYLE
+WARNING_STYLE = styles.WARNING_STYLE
 SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
 
 __author__ = 'timlinux'
@@ -59,11 +60,9 @@ def content():
 
     hazards = definitions.hazards
     hazard_category = definitions.hazard_category
-    header = m.Heading(tr('Hazards'), **INFO_STYLE)
     message = m.Message()
-    message.add(header)
-    message.add(definition_to_message(hazards))
-    header = m.Heading(tr('Hazards scenarios'), **INFO_STYLE)
+    message.add(definition_to_message(hazards, heading_style=INFO_STYLE))
+    header = m.Heading(tr('Hazard scenarios'), **INFO_STYLE)
     message.add(header)
     message.add(definition_to_message(hazard_category))
     header = m.Heading(tr('Hazard fields'), **INFO_STYLE)
@@ -95,11 +94,15 @@ def content():
     return message
 
 
-def definition_to_message(definition):
+def definition_to_message(definition, heading_style=None):
     """Helper function to render a definition to a message.
 
     :param definition: A definition dictionary (see definitions package).
     :type definition: dict
+
+    :param heading_style: Optional style to apply to the definition
+        heading. See safe.messaging.styles
+    :type heading_style: dict
 
     'key': A String describing the unique name for this definition
     'name': A human readable translated string naming this definition
@@ -130,7 +133,10 @@ def definition_to_message(definition):
     :rtype: str
     """
 
-    header = m.ImportantText(definition['name'])
+    if heading_style:
+        header = m.Heading(definition['name'], **heading_style)
+    else:
+        header = m.Heading(definition['name'])
     message = m.Message()
     message.add(m.HorizontalRule())
     message.add(header)
@@ -163,54 +169,61 @@ def definition_to_message(definition):
         message.add(
             m.Paragraph(tr('Field length: %s') % definition['precision']))
 
+    # types containses e.g. hazard_all
     if 'types' in definition:
         for sub_definition in definition['types']:
-            message.add(definition_to_message(sub_definition))
+            message.add(definition_to_message(
+                sub_definition, WARNING_STYLE))
 
     if 'notes' in definition:
-        message.add(m.Paragraph(tr('General notes:')))
+        message.add(m.Paragraph(
+            m.ImportantText(tr('General notes:'))))
         bullets = m.BulletedList()
         for note in definition['notes']:
             bullets.add(m.Text(note))
         message.add(bullets)
 
     if 'continuous_notes' in definition:
-        message.add(m.Paragraph(tr('Notes for continuous datasets:')))
+        message.add(m.Paragraph(
+            m.ImportantText(tr('Notes for continuous datasets:'))))
         bullets = m.BulletedList()
         for note in definition['continuous_notes']:
             bullets.add(m.Text(note))
         message.add(bullets)
 
     if 'classified_notes' in definition:
-        message.add(m.Paragraph(tr('Notes for classified datasets:')))
+        message.add(m.Paragraph(
+            m.ImportantText(tr('Notes for classified datasets:'))))
         bullets = m.BulletedList()
         for note in definition['classified_notes']:
             bullets.add(m.Text(note))
         message.add(bullets)
 
     if 'single_event_notes' in definition:
-        message.add(m.Paragraph(tr('Notes for single events')))
+        message.add(
+            m.Paragraph(m.ImportantText(tr('Notes for single events'))))
         bullets = m.BulletedList()
         for note in definition['single_event_notes']:
             bullets.add(m.Text(note))
         message.add(bullets)
 
     if 'multi_event_notes' in definition:
-        message.add(m.Paragraph(tr('Notes for multi events / scenarios:')))
+        message.add(m.Paragraph(
+            m.ImportantText(tr('Notes for multi events / scenarios:'))))
         bullets = m.BulletedList()
         for note in definition['multi_event_notes']:
             bullets.add(m.Text(note))
         message.add(bullets)
 
     if 'actions' in definition:
-        message.add(m.Paragraph(tr('Actions:')))
+        message.add(m.Paragraph(m.ImportantText(tr('Actions:'))))
         bullets = m.BulletedList()
         for note in definition['actions']:
             bullets.add(m.Text(note))
         message.add(bullets)
 
     if 'continuous_hazard_units' in definition:
-        message.add(m.Paragraph(tr('Units:')))
+        message.add(m.Paragraph(m.ImportantText(tr('Units:'))))
         table = m.Table(style_class='table table-condensed table-striped')
         row = m.Row()
         row.add(m.Cell(tr('Name')), header_flag=True)
