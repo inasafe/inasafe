@@ -4,7 +4,6 @@
 from safe.utilities.i18n import tr
 from safe import messaging as m
 from safe.messaging import styles
-from safe.utilities.resources import resources_path
 import safe.definitionsv4 as definitions
 INFO_STYLE = styles.INFO_STYLE
 SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
@@ -99,6 +98,9 @@ def content():
 def definition_to_message(definition):
     """Helper function to render a definition to a message.
 
+    :param definition: A definition dictionary (see definitions package).
+    :type definition: dict
+
     'key': A String describing the unique name for this definition
     'name': A human readable translated string naming this definition
     'description': A human readable translated detailed description of this
@@ -133,9 +135,11 @@ def definition_to_message(definition):
     message.add(m.HorizontalRule())
     message.add(header)
     message.add(m.Paragraph(definition['description']))
+
     if 'field_name' in definition:
         message.add(
             m.Paragraph(tr('Field name: %s') % definition['field_name']))
+
     if 'type' in definition:
         # TODO: figure out how to get class names for Qt4 enumerated types
         # For now we just show the enumeration ids
@@ -150,9 +154,11 @@ def definition_to_message(definition):
                 message.add(
                     m.Paragraph(
                         tr('Field type: %s') % field_type))
+
     if 'length' in definition:
         message.add(
             m.Paragraph(tr('Field length: %s') % definition['length']))
+
     if 'precision' in definition:
         message.add(
             m.Paragraph(tr('Field length: %s') % definition['precision']))
@@ -208,13 +214,41 @@ def definition_to_message(definition):
         for unit in definition['continuous_hazard_units']:
             message.add(definition_to_message(unit))
 
-    if 'vector_hazard_classifications' in definition:
-        message.add(m.Paragraph(tr('Vector hazard classifications')))
-        for hazard_class in definition['vector_hazard_classifications']:
+    # TOOD: vector_hazard_classifications should be ignored
+    # it is replaced by hazard_classfications in v4
+    # We should delete vector_hazard_classifications from
+    # definitions
+    if 'hazard_classifications' in definition:
+        message.add(m.Paragraph(tr('Hazard classifications')))
+        for hazard_class in definition['hazard_classifications']:
             message.add(definition_to_message(hazard_class))
 
     if 'raster_hazard_classifications' in definition:
         message.add(m.Paragraph(tr('Raster hazard classifications')))
         for hazard_class in definition['raster_hazard_classifications']:
             message.add(definition_to_message(hazard_class))
+
+    if 'classes' in definition:
+        message.add(m.Paragraph(tr('Hazard class concepts')))
+        for hazard_class in definition['classes']:
+            message.add(definition_to_message(hazard_class))
+
+    if 'affected' in definition:
+        if definition['affected']:
+            message.add(m.Paragraph(tr(
+                'Exposure entities in this class ARE '
+                'considered affected')))
+        else:
+            message.add(m.Paragraph(tr(
+                'Exposure entities in this class '
+                'are NOT considered affected')))
+
+    if 'optional' in definition:
+        if definition['optional']:
+            message.add(m.Paragraph(tr(
+                'This class is NOT required in the hazard keywords.')))
+        else:
+            message.add(m.Paragraph(tr(
+                'This class IS required in the hazard keywords.')))
+
     return message

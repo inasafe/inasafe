@@ -161,6 +161,7 @@ flood_hazard_classes = {
             'string_defaults': ['wet', '1', 'YES', 'y', 'yes'],
             'numeric_default_min': 1,
             'numeric_default_max': 9999999999,
+            # @ismailsunni shouldnt this be false?
             'optional': True,
             'citations': [
                 {
