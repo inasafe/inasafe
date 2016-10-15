@@ -210,9 +210,22 @@ def definition_to_message(definition):
         message.add(bullets)
 
     if 'continuous_hazard_units' in definition:
-        message.add(m.Paragraph(tr('Continuous hazard units:')))
+        message.add(m.Paragraph(tr('Units:')))
+        table = m.Table(style_class='table table-condensed table-striped')
+        row = m.Row()
+        row.add(m.Cell(tr('Name')), header_flag=True)
+        row.add(m.Cell(tr('Plural')), header_flag=True)
+        row.add(m.Cell(tr('Abbreviation')), header_flag=True)
+        row.add(m.Cell(tr('Details')), header_flag=True)
+        table.add(row)
         for unit in definition['continuous_hazard_units']:
-            message.add(definition_to_message(unit))
+            row = m.Row()
+            row.add(m.Cell(unit['name']))
+            row.add(m.Cell(unit['plural_name']))
+            row.add(m.Cell(unit['abbreviation']))
+            row.add(m.Cell(unit['description']))
+            table.add(row)
+        message.add(table)
 
     # TOOD: vector_hazard_classifications should be ignored
     # it is replaced by hazard_classfications in v4
@@ -229,9 +242,42 @@ def definition_to_message(definition):
             message.add(definition_to_message(hazard_class))
 
     if 'classes' in definition:
-        message.add(m.Paragraph(tr('Hazard class concepts')))
+        message.add(m.Paragraph(tr('Hazard classes')))
+        table = m.Table(style_class='table table-condensed table-striped')
+        row = m.Row()
+        row.add(m.Cell(tr('Name')), header_flag=True)
+        row.add(m.Cell(tr('Affected')), header_flag=True)
+        row.add(m.Cell(tr('Default values')), header_flag=True)
+        row.add(m.Cell(tr('Default min')), header_flag=True)
+        row.add(m.Cell(tr('Default max')), header_flag=True)
+        row.add(m.Cell(tr('Optional')), header_flag=True)
+        table.add(row)
         for hazard_class in definition['classes']:
-            message.add(definition_to_message(hazard_class))
+            row = m.Row()
+            row.add(m.Cell(hazard_class['name']))
+            if 'affected' in hazard_class:
+                row.add(m.Cell(hazard_class['affected']))
+            else:
+                row.add(m.Cell(tr('unspecified')))
+            if 'string_defaults' in hazard_class:
+                defaults = None
+                for default in hazard_class['string_defaults']:
+                    if defaults:
+                        defaults += ',%s' % default
+                    else:
+                        defaults = default
+                row.add(m.Cell(defaults))
+                row.add(m.Cell(hazard_class['numeric_default_min']))
+                row.add(m.Cell(hazard_class['numeric_default_max']))
+                row.add(m.Cell(hazard_class['optional']))
+                table.add(row)
+                # Description goes in its own row with spanning
+                row = m.Row()
+                row.add(m.Cell(hazard_class['description'], span=6))
+                table.add(row)
+            else:
+                row.add(m.Cell(tr('unspecified')))
+        message.add(table)
 
     if 'affected' in definition:
         if definition['affected']:

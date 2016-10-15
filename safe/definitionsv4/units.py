@@ -13,7 +13,7 @@ unit_feet = {
     'key': 'feet',
     'name': tr('Feet'),
     'plural_name': tr('feet'),
-    'abbreviation': tr('feet'),
+    'abbreviation': tr('ft'),
     'description': tr(
         '<b>Feet</b> are an imperial unit of measure. There are 12 '
         'inches in 1 foot and 3 feet in 1 yard.'),
