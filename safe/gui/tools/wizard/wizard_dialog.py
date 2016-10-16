@@ -13,7 +13,6 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-import json
 import logging
 from sqlite3 import OperationalError
 
@@ -97,11 +96,10 @@ from step_kw60_title import StepKwTitle
 from step_kw65_summary import StepKwSummary
 from.step_fc90_analysis import StepFcAnalysis
 
-__author__ = 'qgis@borysjurgiel.pl'
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
-__date__ = '21/02/2011'
-__copyright__ = (
-    'Copyright 2012, Australia Indonesia Facility for Disaster Reduction')
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -783,7 +781,7 @@ class WizardDialog(QDialog, FORM_CLASS):
                 selected_classification()['key']
         value_map = self.step_kw_classify.selected_mapping()
         if value_map:
-            keywords['value_map'] = json.dumps(value_map)
+            keywords['value_map'] = value_map
 
         name_field = self.step_kw_name_field.selected_field()
         if name_field:
@@ -815,7 +813,7 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         inasafe_fields.update(self.step_kw_extrakeywords.get_inasafe_fields())
 
-        keywords['inasafe_fields'] = json.dumps(inasafe_fields)
+        keywords['inasafe_fields'] = inasafe_fields
         return keywords
 
     def save_current_keywords(self):
