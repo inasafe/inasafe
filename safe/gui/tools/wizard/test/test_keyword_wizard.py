@@ -21,13 +21,16 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from safe.definitionsv4.versions import inasafe_keyword_version
 from safe.definitionsv4.layer_modes import (
     layer_mode_continuous, layer_mode_classified)
-from safe.definitionsv4.layer_purposes import layer_purpose_hazard
+from safe.definitionsv4.layer_purposes import (
+    layer_purpose_hazard, layer_purpose_exposure)
 from safe.definitionsv4.hazard import hazard_volcano
+from safe.definitionsv4.exposure import exposure_structure
 from safe.definitionsv4.hazard_category import hazard_category_multiple_event
 from safe.definitionsv4.hazard_classifications import volcano_hazard_classes
 from safe.definitionsv4.constants import not_available
 from safe.definitionsv4.fields import hazard_name_field, hazard_class_field
 from safe.definitionsv4.layer_geometry import layer_geometry_polygon
+from safe.definitionsv4.value_maps import structure_class_mapping
 
 from safe.gui.tools.wizard.wizard_dialog import WizardDialog
 from safe.utilities.keyword_io import KeywordIO
@@ -42,6 +45,7 @@ __revision__ = '$Format:%H$'
 # noinspection PyTypeChecker
 class TestKeywordWizard(unittest.TestCase):
     """Test the InaSAFE keyword wizard GUI"""
+    maxDiff = None
 
     def tearDown(self):
         """Run after each test."""
@@ -118,7 +122,6 @@ class TestKeywordWizard(unittest.TestCase):
 
     def test_hazard_volcano_polygon_keyword(self):
         """Test keyword wizard for volcano hazard polygon"""
-        self.maxDiff = None
         layer = clone_shp_layer(
             name='volcano_krb',
             include_keywords=False,
@@ -295,8 +298,6 @@ class TestKeywordWizard(unittest.TestCase):
 
     def test_existing_keywords_hazard_volcano(self):
         """Test if keywords already exist."""
-        self.maxDiff = None
-
         layer = load_test_vector_layer(
             'hazard', 'volcano_krb.shp', clone=True)
         # noinspection PyTypeChecker
@@ -428,7 +429,156 @@ class TestKeywordWizard(unittest.TestCase):
         # Click finish
         dialog.pbnNext.click()
 
+    def test_exposure_structure_polygon_keyword(self):
+        """Test keyword wizard for exposure structure polygon"""
+        layer = clone_shp_layer(
+            name='buildings',
+            include_keywords=False,
+            source_directory=standard_data_path('exposure'))
+        self.assertIsNotNone(layer)
 
+        # noinspection PyTypeChecker
+        dialog = WizardDialog()
+        dialog.set_keywords_creation_mode(layer)
+
+        # Check if in select purpose step
+        self.check_current_step(dialog.step_kw_purpose)
+
+        # Select exposure
+        self.select_from_list_widget(
+            layer_purpose_exposure['name'],
+            dialog.step_kw_purpose.lstCategories)
+
+        # Click next to select exposure
+        dialog.pbnNext.click()
+
+        # Check if in select exposure step
+        self.check_current_step(dialog.step_kw_subcategory)
+
+        # select structure
+        self.select_from_list_widget(
+            exposure_structure['name'],
+            dialog.step_kw_subcategory.lstSubcategories)
+
+        # Click next to select structure
+        dialog.pbnNext.click()
+
+        # Check if in select layer mode step
+        self.check_current_step(dialog.step_kw_layermode)
+
+        # select classified mode
+        self.select_from_list_widget(
+            layer_mode_classified['name'],
+            dialog.step_kw_layermode.lstLayerModes)
+
+        # Click next to select classified
+        dialog.pbnNext.click()
+
+        # Check if in select field step
+        self.check_current_step(dialog.step_kw_field)
+
+        # select TYPE field
+        self.select_from_list_widget(
+            'TYPE', dialog.step_kw_field.lstFields)
+
+        # Click next to select BUILDING
+        dialog.pbnNext.click()
+
+        # Check if in classify step
+        self.check_current_step(dialog.step_kw_classify)
+
+        # select value map
+        # classification = dialog.step_kw_classification.\
+        #     selected_classification()
+
+        # default_classes = classification['classes']
+        default_classes = structure_class_mapping
+        unassigned_values = []  # no need to check actually, not save in file
+        assigned_values = {
+            u'residential': [u'Residential'],
+            u'education': [u'School'],
+            u'health': [u'Clinic/Doctor'],
+            u'transport': [],
+            u'place of worship': [u'Place of Worship - Islam'],
+            u'government': [u'Government'],
+            u'commercial': [u'Commercial', u'Industrial'],
+            u'recreation': [],
+            u'public facility': [],
+            u'other': []
+        }
+        dialog.step_kw_classify.populate_classified_values(
+            unassigned_values, assigned_values, default_classes)
+
+        # Click next to finish value mapping
+        dialog.pbnNext.click()
+
+        # select additional keywords / inasafe fields step
+        self.check_current_step(dialog.step_kw_extrakeywords)
+
+        # Click next to finish inasafe fields step and go to source step
+        dialog.pbnNext.click()
+
+        # Check if in source step
+        self.check_current_step(dialog.step_kw_source)
+
+        source = u'Source'
+        source_scale = u'Source Scale'
+        source_url = u'Source Url'
+        # noinspection PyCallByClass
+        source_date = QtCore.QDateTime.fromString(
+            '06-12-2015 12:30',
+            'dd-MM-yyyy HH:mm')
+        source_license = u'Source License'
+        layer_title = u'Layer Title'
+
+        dialog.step_kw_source.leSource.setText(source)
+        dialog.step_kw_source.leSource_scale.setText(source_scale)
+        dialog.step_kw_source.leSource_url.setText(source_url)
+        dialog.step_kw_source.ckbSource_date.setChecked(True)
+        dialog.step_kw_source.dtSource_date.setDateTime(source_date)
+        dialog.step_kw_source.leSource_license.setText(source_license)
+
+        # Click next to finish source step and go to title step
+        dialog.pbnNext.click()
+
+        # Check if in title step
+        self.check_current_step(dialog.step_kw_title)
+
+        dialog.step_kw_title.leTitle.setText(layer_title)
+
+        # Click next to finish title step and go to kw summary step
+        dialog.pbnNext.click()
+
+        # Check if in title step
+        self.check_current_step(dialog.step_kw_summary)
+
+        # Click finish
+        dialog.pbnNext.click()
+
+        # Checking Keyword Created
+        expected_keyword = {
+            'scale': source_scale,
+            'license': source_license,
+            'source': source,
+            'url': source_url,
+            'title': layer_title,
+            'exposure': exposure_structure['key'],
+            'inasafe_fields':
+                {
+                    'exposure_class_field': u'TYPE',
+                },
+            # No value will be omitted.
+            'value_map': dict((k, v) for k, v in assigned_values.items() if v),
+            'date': source_date,
+            # 'hazard_classification': volcano_hazard_classes['key'],
+            'layer_geometry': layer_geometry_polygon['key'],
+            'layer_purpose': layer_purpose_exposure['key'],
+            'layer_mode': layer_mode_classified['key']
+        }
+
+        real_keywords = dialog.get_keywords()
+
+        self.assertDictEqual(real_keywords, expected_keyword)
 
     @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_keywords_creation_wizard(self):
