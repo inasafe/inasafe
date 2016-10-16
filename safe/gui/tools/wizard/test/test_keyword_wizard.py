@@ -2,7 +2,6 @@
 """Tests for the keyword wizard."""
 import shutil
 import unittest
-import json
 # noinspection PyUnresolvedReferences
 import qgis
 from PyQt4 import QtCore
