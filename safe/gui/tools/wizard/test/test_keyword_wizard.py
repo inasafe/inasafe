@@ -27,7 +27,8 @@ from safe.definitionsv4.exposure import exposure_structure
 from safe.definitionsv4.hazard_category import hazard_category_multiple_event
 from safe.definitionsv4.hazard_classifications import volcano_hazard_classes
 from safe.definitionsv4.constants import not_available
-from safe.definitionsv4.fields import hazard_name_field, hazard_class_field
+from safe.definitionsv4.fields import (
+    hazard_name_field, hazard_class_field, exposure_class_field)
 from safe.definitionsv4.layer_geometry import layer_geometry_polygon
 from safe.definitionsv4.value_maps import structure_class_mapping
 
@@ -295,8 +296,8 @@ class TestKeywordWizard(unittest.TestCase):
         real_keywords = dialog.get_keywords()
         self.assertDictEqual(real_keywords, expected_keyword)
 
-    def test_existing_keywords_hazard_volcano(self):
-        """Test if keywords already exist."""
+    def test_existing_keywords_hazard_volcano_polygon(self):
+        """Test existing keyword for hazard volcano polygon."""
         layer = load_test_vector_layer(
             'hazard', 'volcano_krb.shp', clone=True)
         # noinspection PyTypeChecker
@@ -383,7 +384,7 @@ class TestKeywordWizard(unittest.TestCase):
         inasafe_fields = layer.keywords.get('inasafe_fields')
         self.assertIsNotNone(inasafe_fields)
         for key, value in inasafe_fields.items():
-            # Not check if it's hazard_name_field
+            # Not check if it's hazard_class_field
             if key == hazard_class_field['key']:
                 continue
             # Check if existing key in parameters guid
@@ -578,6 +579,123 @@ class TestKeywordWizard(unittest.TestCase):
         real_keywords = dialog.get_keywords()
 
         self.assertDictEqual(real_keywords, expected_keyword)
+
+    def test_existing_keywords_exposure_structure_polygon(self):
+        """Test existing keyword for exposure structure polygon."""
+        layer = load_test_vector_layer(
+            'exposure', 'buildings.shp', clone=True)
+        # noinspection PyTypeChecker
+        dialog = WizardDialog()
+        dialog.set_keywords_creation_mode(layer)
+
+        # Check if in select purpose step
+        self.check_current_step(dialog.step_kw_purpose)
+
+        # Check if hazard is selected
+        self.check_current_text(
+            layer_purpose_exposure['name'],
+            dialog.step_kw_purpose.lstCategories)
+
+        # Click next to select exposure
+        dialog.pbnNext.click()
+
+        # Check if in select exposure step
+        self.check_current_step(dialog.step_kw_subcategory)
+
+        # Check if structure is selected
+        self.check_current_text(
+            exposure_structure['name'],
+            dialog.step_kw_subcategory.lstSubcategories)
+
+        # Click next to select structure
+        dialog.pbnNext.click()
+
+        # Check if in select layer mode step
+        self.check_current_step(dialog.step_kw_layermode)
+
+        # Check if classified is selected
+        self.check_current_text(
+            layer_mode_classified['name'],
+            dialog.step_kw_layermode.lstLayerModes)
+
+        # Click next to select classified
+        dialog.pbnNext.click()
+
+        # Check if in select field step
+        self.check_current_step(dialog.step_kw_field)
+
+        # Check if TYPE is selected
+        self.check_current_text('TYPE', dialog.step_kw_field.lstFields)
+
+        # Click next to select TYPE
+        dialog.pbnNext.click()
+
+        # Check if in classify step
+        self.check_current_step(dialog.step_kw_classify)
+
+        # Click next to finish value mapping
+        dialog.pbnNext.click()
+
+        # select additional keywords / inasafe fields step
+        self.check_current_step(dialog.step_kw_extrakeywords)
+
+        # Check inasafe fields
+        parameters = dialog.step_kw_extrakeywords. \
+            parameter_container.get_parameters(True)
+
+        # Get layer's inasafe_fields
+        inasafe_fields = layer.keywords.get('inasafe_fields')
+        self.assertIsNotNone(inasafe_fields)
+        for key, value in inasafe_fields.items():
+            # Not check if it's hazard_class_field
+            if key == hazard_class_field['key']:
+                continue
+            # Not check if it's exposure_class_field
+            if key == exposure_class_field['key']:
+                continue
+            # Check if existing key in parameters guid
+            self.assertIn(key, [p.guid for p in parameters])
+            # Iterate through all parameter to get parameter value
+            for parameter in parameters:
+                if parameter.guid == key:
+                    # Check the value is the same
+                    self.assertEqual(value, parameter.value)
+                    break
+
+        for parameter in parameters:
+            # If not available is chosen, inasafe_fields shouldn't have it
+            if parameter.value == not_available:
+                self.assertNotIn(parameter.guid, inasafe_fields.keys())
+            # If not available is not chosen, inasafe_fields should have it
+            else:
+                self.assertIn(parameter.guid, inasafe_fields.keys())
+
+        # Click next to finish inasafe fields step and go to source step
+        dialog.pbnNext.click()
+
+        # Check if in source step
+        self.check_current_step(dialog.step_kw_source)
+
+        self.assertTrue(dialog.pbnNext.isEnabled())
+        self.assertEqual(
+            dialog.step_kw_source.leSource.text(),
+            layer.keywords.get('source'))
+        self.assertEqual(dialog.step_kw_source.leSource_url.text(), '')
+        self.assertFalse(dialog.step_kw_source.ckbSource_date.isChecked())
+        self.assertEqual(dialog.step_kw_source.leSource_scale.text(), '')
+
+        # Click next to finish source step and go to title step
+        dialog.pbnNext.click()
+
+        # Check if in title step
+        self.check_current_step(dialog.step_kw_title)
+
+        self.assertEqual(
+            dialog.layer.name(), dialog.step_kw_title.leTitle.text())
+        self.assertTrue(dialog.pbnNext.isEnabled())
+
+        # Click finish
+        dialog.pbnNext.click()
 
     @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_keywords_creation_wizard(self):
