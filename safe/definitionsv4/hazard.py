@@ -7,6 +7,13 @@ from safe.definitionsv4.hazard_classifications import (
     tsunami_hazard_classes,
     ash_hazard_classes
 )
+from safe.definitionsv4.hazard_classifications_v3 import (
+    generic_vector_hazard_classes,
+    volcano_vector_hazard_classes,
+    flood_vector_hazard_classes,
+    flood_raster_hazard_classes,
+    generic_raster_hazard_classes,
+    tsunami_raster_hazard_classes)
 from safe.definitionsv4.caveats import (
     caveat_simulation, caveat_local_conditions)
 from safe.definitionsv4.concepts import concepts
@@ -19,6 +26,8 @@ from safe.definitionsv4.units import (
     unit_millimetres,
     unit_centimetres,
     unit_mmi)
+from safe.definitionsv4.layer_modes import (
+    layer_mode_classified, layer_mode_continuous)
 from safe.definitionsv4.fields import hazard_name_field
 from safe.utilities.i18n import tr
 
@@ -121,7 +130,8 @@ hazard_earthquake = {
         'raster'
     ],
     'hazard_classifications': [generic_hazard_classes],
-    'extra_fields': []
+    'extra_fields': [],
+    'layer_modes': [layer_mode_classified, layer_mode_continuous]
 }
 hazard_flood = {
     'key': 'flood',
@@ -160,7 +170,8 @@ hazard_flood = {
         'raster'
     ],
     'hazard_classifications': [flood_hazard_classes, generic_hazard_classes],
-    'extra_fields': []
+    'extra_fields': [],
+    'layer_modes': [layer_mode_classified, layer_mode_continuous]
 }
 hazard_volcanic_ash = {
     'key': 'volcanic_ash',
@@ -196,7 +207,8 @@ hazard_volcanic_ash = {
         'raster'
     ],
     'hazard_classifications': [ash_hazard_classes, generic_hazard_classes],
-    'extra_fields': []
+    'extra_fields': [],
+    'layer_modes': [layer_mode_classified, layer_mode_continuous]
 }
 hazard_tsunami = {
     'key': 'tsunami',
@@ -234,7 +246,8 @@ hazard_tsunami = {
         'raster'
     ],
     'hazard_classifications': [tsunami_hazard_classes, generic_hazard_classes],
-    'extra_fields': []
+    'extra_fields': [],
+    'layer_modes': [layer_mode_classified, layer_mode_continuous]
 }
 hazard_volcano = {
     'key': 'volcano',
@@ -272,7 +285,8 @@ hazard_volcano = {
         'point'
     ],
     'hazard_classifications': [volcano_hazard_classes, generic_hazard_classes],
-    'extra_fields': [hazard_name_field]
+    'extra_fields': [hazard_name_field],
+    'layer_modes': [layer_mode_classified, layer_mode_continuous]
 }
 hazard_all = [
     hazard_flood,

@@ -15,6 +15,8 @@ from safe.definitionsv4.fields import (
     adult_ratio_field,
     elderly_ratio_field
 )
+from safe.definitionsv4.layer_modes import (
+    layer_mode_classified, layer_mode_continuous)
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -82,7 +84,8 @@ exposure_population = {
         youth_ratio_field,
         adult_ratio_field,
         elderly_ratio_field
-    ]
+    ],
+    'layer_modes': [layer_mode_continuous]
 }
 exposure_people_in_building = {
     'key': 'people_in_building',
@@ -121,7 +124,8 @@ exposure_people_in_building = {
         youth_ratio_field,
         adult_ratio_field,
         elderly_ratio_field
-    ]
+    ],
+    'layer_modes': [layer_mode_classified]
 }
 exposure_road = {
     'key': 'road',
@@ -164,7 +168,8 @@ exposure_road = {
         'line'
     ],
     'units': [],
-    'extra_fields': []
+    'extra_fields': [],
+    'layer_modes': [layer_mode_classified]
 }
 exposure_structure = {
     'key': 'structure',
@@ -212,7 +217,8 @@ exposure_structure = {
         youth_ratio_field,
         adult_ratio_field,
         elderly_ratio_field
-    ]
+    ],
+    'layer_modes': [layer_mode_classified]
 }
 exposure_place = {
     'key': 'place',
@@ -251,7 +257,8 @@ exposure_place = {
         youth_ratio_field,
         adult_ratio_field,
         elderly_ratio_field
-    ]
+    ],
+    'layer_modes': [layer_mode_classified]
 }
 exposure_land_cover = {
     'key': 'land_cover',
@@ -295,7 +302,8 @@ exposure_land_cover = {
         'raster'
     ],
     'units': [],
-    'extra_fields': []
+    'extra_fields': [],
+    'layer_modes': [layer_mode_classified]
 }
 exposure_all = [
     exposure_land_cover,

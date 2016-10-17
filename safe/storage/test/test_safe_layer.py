@@ -18,6 +18,7 @@ from qgis.core import QgsVectorLayer, QgsRasterLayer, QgsMapLayer
 from safe.storage.core import read_layer
 from safe.storage.safe_layer import SafeLayer
 from safe.common.exceptions import InvalidLayerError, KeywordNotFoundError
+from safe.test.utilities import clone_shp_layer
 
 
 class SafeLayerTest(unittest.TestCase):
@@ -26,7 +27,12 @@ class SafeLayerTest(unittest.TestCase):
         self.maxDiff = None
         building_path = standard_data_path('exposure', 'buildings.shp')
 
-        building_layer = read_layer(building_path)
+        building_layer = clone_shp_layer(
+            name='buildings',
+            include_keywords=True,
+            source_directory=standard_data_path('exposure'))
+
+        # building_layer = read_layer(building_path)
 
         exposure = SafeLayer(building_layer)
         # Expect InvalidLayerError
@@ -38,19 +44,26 @@ class SafeLayerTest(unittest.TestCase):
         expected_keywords = {
             'license': u'Open Data Commons Open Database License (ODbL)',
             'keyword_version': u'3.5',
-            'value_map': {u'government': [u'Government'],
-                          u'residential': [u'Residential'],
-                          u'commercial': [u'Commercial'],
-                          u'health': [u'Clinic/Doctor'],
-                          u'education': [u'School'],
-                          u'place of worship': [u'Place of Worship - Islam']},
-            'structure_class_field': u'TYPE', 'title': u'Buildings',
+            'value_map': {
+                u'residential': [u'Residential'],
+                u'education': [u'School'],
+                u'health': [u'Clinic/Doctor'],
+                u'place of worship': [u'Place of Worship - Islam'],
+                u'government': [u'Government'],
+                u'commercial': [u'Commercial', u'Industrial'],
+            },
+            # 'structure_class_field': u'TYPE',
+            'inasafe_fields': {u'exposure_class_field': u'TYPE'},
+            'title': u'Buildings',
             'source': u'OpenStreetMap - www.openstreetmap.org',
-            'layer_geometry': u'polygon', 'layer_purpose': u'exposure',
-            'layer_mode': u'classified', 'exposure': u'structure'}
+            'layer_geometry': u'polygon',
+            'layer_purpose': u'exposure',
+            'layer_mode': u'classified',
+            'exposure': u'structure'
+        }
 
         self.assertEquals(exposure.keywords, expected_keywords)
-        self.assertFalse(exposure.is_qgsvectorlayer())
+        self.assertTrue(exposure.is_qgsvectorlayer())
         self.assertTrue(isinstance(exposure.qgis_layer(), QgsMapLayer))
         self.assertTrue(isinstance(exposure.qgis_layer(), QgsVectorLayer))
         self.assertFalse(isinstance(exposure.qgis_layer(), QgsRasterLayer))

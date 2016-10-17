@@ -8,7 +8,6 @@ from safe.definitionsv4 import (
     hazard_all,
     exposure_all,
     hazard_category_all,
-    layer_mode_all,
     exposure_fields,
     hazard_fields,
     aggregation_fields,
@@ -90,9 +89,17 @@ def hazard_categories_for_layer():
     return sorted(hazard_category_all, key=lambda k: k['key'])
 
 
-def get_layer_modes():
-    """Return all sorted layer modes."""
-    return sorted(layer_mode_all, key=lambda k: k['key'])
+def get_layer_modes(subcategory):
+    """Return all sorted layer modes from exposure or hazard.
+
+    :param subcategory: Hazard or Exposure key.
+    :type subcategory: str
+
+    :returns: List of layer modes defintion.
+    :rtype: list
+    """
+    layer_modes = definition(subcategory)['layer_modes']
+    return sorted(layer_modes, key=lambda k: k['key'])
 
 
 def hazard_units(hazard):
