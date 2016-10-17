@@ -7,13 +7,6 @@ from safe.definitionsv4.hazard_classifications import (
     tsunami_hazard_classes,
     ash_hazard_classes
 )
-from safe.definitionsv4.hazard_classifications_v3 import (
-    generic_vector_hazard_classes,
-    volcano_vector_hazard_classes,
-    flood_vector_hazard_classes,
-    flood_raster_hazard_classes,
-    generic_raster_hazard_classes,
-    tsunami_raster_hazard_classes)
 from safe.definitionsv4.caveats import (
     caveat_simulation, caveat_local_conditions)
 from safe.definitionsv4.concepts import concepts
@@ -87,8 +80,6 @@ hazard_generic = {
         }
     ],
     'continuous_hazard_units': [],
-    'vector_hazard_classifications': [generic_vector_hazard_classes],
-    'raster_hazard_classifications': [generic_raster_hazard_classes],
     'layer_geometry': [
         'polygon',
         'raster'
@@ -125,8 +116,6 @@ hazard_earthquake = {
         }
     ],
     'continuous_hazard_units': [unit_mmi, unit_generic],
-    'vector_hazard_classifications': [],
-    'raster_hazard_classifications': [],
     'layer_geometry': [
         'polygon',
         'raster'
@@ -166,16 +155,11 @@ hazard_flood = {
         }
     ],
     'continuous_hazard_units': [unit_feet, unit_metres, unit_generic],
-    'vector_hazard_classifications': [
-        flood_vector_hazard_classes,
-        generic_vector_hazard_classes
-    ],
-    'raster_hazard_classifications': [flood_raster_hazard_classes],
     'layer_geometry': [
         'polygon',
         'raster'
     ],
-    'hazard_classifications': [flood_hazard_classes],
+    'hazard_classifications': [flood_hazard_classes, generic_hazard_classes],
     'extra_fields': []
 }
 hazard_volcanic_ash = {
@@ -207,13 +191,11 @@ hazard_volcanic_ash = {
         }
     ],
     'continuous_hazard_units': [unit_centimetres],
-    'vector_hazard_classifications': [],
-    'raster_hazard_classifications': [],
     'layer_geometry': [
         'polygon',
         'raster'
     ],
-    'hazard_classifications': [ash_hazard_classes],
+    'hazard_classifications': [ash_hazard_classes, generic_hazard_classes],
     'extra_fields': []
 }
 hazard_tsunami = {
@@ -247,13 +229,11 @@ hazard_tsunami = {
         }
     ],
     'continuous_hazard_units': [unit_feet, unit_metres],
-    'vector_hazard_classifications': [],
-    'raster_hazard_classifications': [tsunami_raster_hazard_classes],
     'layer_geometry': [
         'polygon',
         'raster'
     ],
-    'hazard_classifications': [tsunami_hazard_classes],
+    'hazard_classifications': [tsunami_hazard_classes, generic_hazard_classes],
     'extra_fields': []
 }
 hazard_volcano = {
@@ -286,14 +266,12 @@ hazard_volcano = {
         }
     ],
     'continuous_hazard_units': [],
-    'vector_hazard_classifications': [volcano_vector_hazard_classes],
-    'raster_hazard_classifications': [],
     'layer_geometry': [
         'polygon',
         'raster',
         'point'
     ],
-    'hazard_classifications': [volcano_hazard_classes],
+    'hazard_classifications': [volcano_hazard_classes, generic_hazard_classes],
     'extra_fields': [hazard_name_field]
 }
 hazard_all = [

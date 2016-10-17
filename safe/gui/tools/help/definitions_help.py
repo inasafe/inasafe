@@ -249,11 +249,6 @@ def definition_to_message(definition, heading_style=None):
         for hazard_class in definition['hazard_classifications']:
             message.add(definition_to_message(hazard_class))
 
-    if 'raster_hazard_classifications' in definition:
-        message.add(m.Paragraph(tr('Raster hazard classifications')))
-        for hazard_class in definition['raster_hazard_classifications']:
-            message.add(definition_to_message(hazard_class))
-
     if 'classes' in definition:
         message.add(m.Paragraph(tr('Hazard classes')))
         table = m.Table(style_class='table table-condensed table-striped')
