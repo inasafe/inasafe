@@ -258,7 +258,6 @@ def definition_to_message(definition, heading_style=None):
         row.add(m.Cell(tr('Default values')), header_flag=True)
         row.add(m.Cell(tr('Default min')), header_flag=True)
         row.add(m.Cell(tr('Default max')), header_flag=True)
-        row.add(m.Cell(tr('Optional')), header_flag=True)
         table.add(row)
         for hazard_class in definition['classes']:
             row = m.Row()
@@ -277,11 +276,10 @@ def definition_to_message(definition, heading_style=None):
                 row.add(m.Cell(defaults))
                 row.add(m.Cell(hazard_class['numeric_default_min']))
                 row.add(m.Cell(hazard_class['numeric_default_max']))
-                row.add(m.Cell(hazard_class['optional']))
                 table.add(row)
                 # Description goes in its own row with spanning
                 row = m.Row()
-                row.add(m.Cell(hazard_class['description'], span=6))
+                row.add(m.Cell(hazard_class['description'], span=5))
                 table.add(row)
             else:
                 row.add(m.Cell(tr('unspecified')))
