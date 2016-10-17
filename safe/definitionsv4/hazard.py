@@ -7,13 +7,6 @@ from safe.definitionsv4.hazard_classifications import (
     tsunami_hazard_classes,
     ash_hazard_classes
 )
-from safe.definitionsv4.hazard_classifications_v3 import (
-    generic_vector_hazard_classes,
-    volcano_vector_hazard_classes,
-    flood_vector_hazard_classes,
-    flood_raster_hazard_classes,
-    generic_raster_hazard_classes,
-    tsunami_raster_hazard_classes)
 from safe.definitionsv4.caveats import (
     caveat_simulation, caveat_local_conditions)
 from safe.definitionsv4.concepts import concepts

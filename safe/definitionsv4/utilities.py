@@ -130,6 +130,7 @@ def exposure_units(exposure):
 
 def get_hazard_classifications(hazard_key):
     """Get hazard classifications.
+
     :param hazard_key: The hazard key
     :type hazard_key: str
 
