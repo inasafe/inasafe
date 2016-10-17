@@ -65,12 +65,6 @@ def content():
     header = m.Heading(tr('Hazard scenarios'), **INFO_STYLE)
     message.add(header)
     message.add(definition_to_message(hazard_category))
-    header = m.Heading(tr('Hazard fields'), **INFO_STYLE)
-    message.add(header)
-    hazard_fields = definitions.hazard_fields
-    for hazard_field in hazard_fields:
-        message.add(definition_to_message(
-            hazard_field))
 
     ##
     #  Exposure definitions
@@ -80,12 +74,6 @@ def content():
     header = m.Heading(tr('Exposures'), **INFO_STYLE)
     message.add(header)
     message.add(definition_to_message(exposures))
-    header = m.Heading(tr('Exposure fields'), **INFO_STYLE)
-    message.add(header)
-    exposure_fields = definitions.exposure_fields
-    for exposure_field in exposure_fields:
-        message.add(definition_to_message(
-            exposure_field))
 
     # paragraph = m.Paragraph(tr(
     #   ''
@@ -141,34 +129,6 @@ def definition_to_message(definition, heading_style=None):
     message.add(m.HorizontalRule())
     message.add(header)
     message.add(m.Paragraph(definition['description']))
-
-    if 'field_name' in definition:
-        message.add(
-            m.Paragraph(tr('Field name: %s') % definition['field_name']))
-
-    if 'type' in definition:
-        # TODO: figure out how to get class names for Qt4 enumerated types
-        # For now we just show the enumeration ids
-
-        # Hack for now until we have consistent store of types in a list
-        if not isinstance(definition['type'], list):
-            message.add(
-                m.Paragraph(
-                    tr('Field type: %s') % definition['type']))
-        else:
-            for field_type in definition['type']:
-                message.add(
-                    m.Paragraph(
-                        tr('Field type: %s') % field_type))
-
-    if 'length' in definition:
-        message.add(
-            m.Paragraph(tr('Field length: %s') % definition['length']))
-
-    if 'precision' in definition:
-        message.add(
-            m.Paragraph(tr('Field length: %s') % definition['precision']))
-
     # types containses e.g. hazard_all
     if 'types' in definition:
         for sub_definition in definition['types']:
@@ -237,6 +197,39 @@ def definition_to_message(definition, heading_style=None):
             row.add(m.Cell(unit['plural_name']))
             row.add(m.Cell(unit['abbreviation']))
             row.add(m.Cell(unit['description']))
+            table.add(row)
+        message.add(table)
+
+    if 'extra_fields' and 'fields' in definition:
+        message.add(m.Paragraph(tr('Fields')))
+        table = m.Table(style_class='table table-condensed table-striped')
+        row = m.Row()
+        row.add(m.Cell(tr('Name')), header_flag=True)
+        row.add(m.Cell(tr('Field Name')), header_flag=True)
+        row.add(m.Cell(tr('Type')), header_flag=True)
+        row.add(m.Cell(tr('Length')), header_flag=True)
+        row.add(m.Cell(tr('Precision')), header_flag=True)
+        table.add(row)
+        all_fields = definition['fields'] + definition['extra_fields']
+        for field in all_fields:
+            row = m.Row()
+            row.add(m.Cell(field['name']))
+            row.add(m.Cell(field['field_name']))
+            field_types = None
+            if not isinstance(field['type'], list):
+                field_types = '%s' % field['type']
+            else:
+                for field_type in field['type']:
+                    if field_types:
+                        field_types += ', %s' % unicode(field_type)
+                    else:
+                        field_types = unicode(field_type)
+            row.add(m.Cell(field_types))
+            row.add(m.Cell(field['precision']))
+            table.add(row)
+            # Description goes in its own row with spanning
+            row = m.Row()
+            row.add(m.Cell(field['description'], span=5))
             table.add(row)
         message.add(table)
 

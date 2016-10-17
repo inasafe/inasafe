@@ -13,7 +13,8 @@ from safe.definitionsv4.fields import (
     female_ratio_field,
     youth_ratio_field,
     adult_ratio_field,
-    elderly_ratio_field
+    elderly_ratio_field,
+    exposure_fields
 )
 from safe.definitionsv4.layer_modes import (
     layer_mode_classified, layer_mode_continuous)
@@ -74,6 +75,7 @@ exposure_population = {
     'units': [
         count_exposure_unit,
         density_exposure_unit],
+    'fields': exposure_fields,
     'extra_fields': [
         exposure_name_field,
         women_count_field,
@@ -115,6 +117,7 @@ exposure_people_in_building = {
         'point'
     ],
     'units': [],
+    'fields': exposure_fields,
     'extra_fields': [
         women_count_field,
         youth_count_field,
@@ -168,6 +171,7 @@ exposure_road = {
         'line'
     ],
     'units': [],
+    'fields': exposure_fields,
     'extra_fields': [],
     'layer_modes': [layer_mode_classified]
 }
@@ -208,6 +212,7 @@ exposure_structure = {
         'point'
     ],
     'units': [],
+    'fields': exposure_fields,
     'extra_fields': [
         women_count_field,
         youth_count_field,
@@ -247,6 +252,7 @@ exposure_place = {
         'point'
     ],
     'units': [],
+    'fields': exposure_fields,
     'extra_fields': [
         exposure_name_field,
         women_count_field,
@@ -302,6 +308,7 @@ exposure_land_cover = {
         'raster'
     ],
     'units': [],
+    'fields': exposure_fields,
     'extra_fields': [],
     'layer_modes': [layer_mode_classified]
 }

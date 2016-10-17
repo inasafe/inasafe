@@ -14,9 +14,6 @@
 *Scenario
 *Single event
 *Multiple event
-****Hazard fields
-*Hazard ID
-*Hazard Value
 *Exposures
 *Exposure
 *Land cover
@@ -24,9 +21,3 @@
 *Population
 *Places
 *Structures
-****Exposure fields
-*Exposure ID
-*Exposure Class
-*Population count
-*Feature Value
-*Feature Rate
