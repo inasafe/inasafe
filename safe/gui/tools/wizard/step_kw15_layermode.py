@@ -140,7 +140,7 @@ class StepKwLayerMode(WizardStep, FORM_CLASS):
 
         self.lblDescribeLayerMode.setText('')
         self.lstLayerModes.clear()
-        layer_modes = get_layer_modes()
+        layer_modes = get_layer_modes(subcategory['key'])
         if is_raster_layer(self.parent.layer):
             layer_mode_question = layer_mode_raster_question
         else:

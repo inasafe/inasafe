@@ -250,7 +250,8 @@ class StepKwClassify(WizardStep, FORM_CLASS):
 
         # Do not continue if user selected different field
         field_keyword = self.parent.field_keyword_for_the_layer()
-        field = self.parent.get_existing_keyword(field_keyword)
+        field = self.parent.get_existing_keyword('inasafe_fields').get(
+            field_keyword)
         if (not is_raster_layer(self.parent.layer) and
                 field != self.parent.step_kw_field.selected_field()):
             return
