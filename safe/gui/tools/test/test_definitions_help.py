@@ -88,6 +88,8 @@ class TestDefinitionsHelp(unittest.TestCase):
             line = line.replace('\n', '')
             self.assertIn(line, help_text)
 
+
+
     def test_definition_to_message(self):
         """Test definitions to message renderer."""
         help_text = definitions_help.definition_to_message(

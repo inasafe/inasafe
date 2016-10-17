@@ -31,7 +31,6 @@ generic_hazard_classes = {
             'string_defaults': ['high'],
             'numeric_default_min': 3,
             'numeric_default_max': (4 - small_number),
-            'optional': False,
             'citations': [
                 {
                     'text': None,
@@ -47,7 +46,6 @@ generic_hazard_classes = {
             'string_defaults': ['medium'],
             'numeric_default_min': 2,
             'numeric_default_max': (3 - small_number),
-            'optional': False,
             'citations': [
                 {
                     'text': None,
@@ -63,7 +61,6 @@ generic_hazard_classes = {
             'string_defaults': ['low'],
             'numeric_default_min': 0,
             'numeric_default_max': (2 - small_number),
-            'optional': False,
             'citations': [
                 {
                     'text': None,
@@ -95,7 +92,6 @@ volcano_hazard_classes = {
             'string_defaults': ['Kawasan Rawan Bencana III', 'high'],
             'numeric_default_min': 0,
             'numeric_default_max': (3 - small_number),
-            'optional': False,
             'citations': [
                 {
                     'text': None,
@@ -111,7 +107,6 @@ volcano_hazard_classes = {
             'string_defaults': ['Kawasan Rawan Bencana II', 'medium'],
             'numeric_default_min': 3,
             'numeric_default_max': (5 - small_number),
-            'optional': False,
             'citations': [
                 {
                     'text': None,
@@ -127,7 +122,6 @@ volcano_hazard_classes = {
             'string_defaults': ['Kawasan Rawan Bencana I', 'low'],
             'numeric_default_min': 5,
             'numeric_default_max': 10,
-            'optional': False,
             'citations': [
                 {
                     'text': None,
@@ -161,7 +155,6 @@ flood_hazard_classes = {
             'string_defaults': ['wet', '1', 'YES', 'y', 'yes'],
             'numeric_default_min': 1,
             'numeric_default_max': 9999999999,
-            'optional': True,
             'citations': [
                 {
                     'text': None,
@@ -177,7 +170,6 @@ flood_hazard_classes = {
             'string_defaults': ['dry', '0', 'No', 'n', 'no'],
             'numeric_default_min': 0,
             'numeric_default_max': (1 - small_number),
-            'optional': True,
             'citations': [
                 {
                     'text': None,
@@ -210,7 +202,6 @@ ash_hazard_classes = {
             'description': tr('Very High.'),
             'numeric_default_min': 10,
             'numeric_default_max': 9999999999,
-            'optional': True,
             'citations': [
                 {
                     'text': None,
@@ -225,7 +216,6 @@ ash_hazard_classes = {
             'description': tr('High'),
             'numeric_default_min': 5,
             'numeric_default_max': 10,
-            'optional': True,
             'citations': [
                 {
                     'text': None,
@@ -240,7 +230,6 @@ ash_hazard_classes = {
             'description': tr('Medium'),
             'numeric_default_min': 2,
             'numeric_default_max': 5,
-            'optional': True,
             'citations': [
                 {
                     'text': None,
@@ -255,7 +244,6 @@ ash_hazard_classes = {
             'description': tr('Low'),
             'numeric_default_min': 0.1,
             'numeric_default_max': 2,
-            'optional': True,
             'citations': [
                 {
                     'text': None,
@@ -270,7 +258,6 @@ ash_hazard_classes = {
             'description': tr('Very Low.'),
             'numeric_default_min': 0.01,
             'numeric_default_max': 0.1,
-            'optional': True,
             'citations': [
                 {
                     'text': None,
@@ -305,7 +292,6 @@ tsunami_hazard_classes = {
             'description': tr('Water above 8.0m.'),
             'numeric_default_min': 8,
             'numeric_default_max': 9999999999,
-            'optional': True,
             'citations': [
                 {
                     'text': None,
@@ -330,7 +316,6 @@ tsunami_hazard_classes = {
                 'away.'),
             'numeric_default_min': 3,
             'numeric_default_max': 8,
-            'optional': True,
             'citations': [
                 {
                     'text': None,
@@ -352,7 +337,6 @@ tsunami_hazard_classes = {
                 'wooden houses, while most of them are safe.'),
             'numeric_default_min': 1,
             'numeric_default_max': 3,
-            'optional': True,
             'citations': [
                 {
                     'text': None,
@@ -376,7 +360,6 @@ tsunami_hazard_classes = {
                 'the shore.'),
             'numeric_default_min': 0,
             'numeric_default_max': 1,
-            'optional': True,
             'citations': [
                 {
                     'text': None,
@@ -391,7 +374,6 @@ tsunami_hazard_classes = {
             'description': tr('No water above ground height.'),
             'numeric_default_min': 0,
             'numeric_default_max': (1 - small_number),
-            'optional': True,
             'citations': [
                 {
                     'text': None,

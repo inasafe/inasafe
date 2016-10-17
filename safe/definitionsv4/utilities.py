@@ -8,8 +8,6 @@ from safe.definitionsv4 import (
     hazard_all,
     exposure_all,
     hazard_category_all,
-    exposure_fields,
-    hazard_fields,
     aggregation_fields,
     impact_fields,
     hazard_class_field,
@@ -130,6 +128,7 @@ def exposure_units(exposure):
 
 def get_hazard_classifications(hazard_key):
     """Get hazard classifications.
+
     :param hazard_key: The hazard key
     :type hazard_key: str
 
@@ -155,10 +154,10 @@ def get_fields(layer_purpose, layer_subcategory):
     fields = []
     subcategory = definition(layer_subcategory)
     if layer_purpose == 'exposure':
-        fields = exposure_fields + subcategory['extra_fields']
+        fields = subcategory['fields'] + subcategory['extra_fields']
         fields.remove(exposure_class_field)
     elif layer_purpose == 'hazard':
-        fields = hazard_fields + subcategory['extra_fields']
+        fields = subcategory['fields'] + subcategory['extra_fields']
         try:
             fields.remove(hazard_class_field)
         except ValueError:

@@ -7,13 +7,6 @@ from safe.definitionsv4.hazard_classifications import (
     tsunami_hazard_classes,
     ash_hazard_classes
 )
-from safe.definitionsv4.hazard_classifications_v3 import (
-    generic_vector_hazard_classes,
-    volcano_vector_hazard_classes,
-    flood_vector_hazard_classes,
-    flood_raster_hazard_classes,
-    generic_raster_hazard_classes,
-    tsunami_raster_hazard_classes)
 from safe.definitionsv4.caveats import (
     caveat_simulation, caveat_local_conditions)
 from safe.definitionsv4.concepts import concepts
@@ -28,7 +21,7 @@ from safe.definitionsv4.units import (
     unit_mmi)
 from safe.definitionsv4.layer_modes import (
     layer_mode_classified, layer_mode_continuous)
-from safe.definitionsv4.fields import hazard_name_field
+from safe.definitionsv4.fields import hazard_name_field, hazard_fields
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -89,13 +82,12 @@ hazard_generic = {
         }
     ],
     'continuous_hazard_units': [],
-    'vector_hazard_classifications': [generic_vector_hazard_classes],
-    'raster_hazard_classifications': [generic_raster_hazard_classes],
     'layer_geometry': [
         'polygon',
         'raster'
     ],
     'hazard_classifications': [generic_hazard_classes],
+    'fields': hazard_fields,
     'extra_fields': []
 }
 hazard_earthquake = {
@@ -127,13 +119,12 @@ hazard_earthquake = {
         }
     ],
     'continuous_hazard_units': [unit_mmi, unit_generic],
-    'vector_hazard_classifications': [],
-    'raster_hazard_classifications': [],
     'layer_geometry': [
         'polygon',
         'raster'
     ],
     'hazard_classifications': [generic_hazard_classes],
+    'fields': hazard_fields,
     'extra_fields': [],
     'layer_modes': [layer_mode_classified, layer_mode_continuous]
 }
@@ -169,16 +160,12 @@ hazard_flood = {
         }
     ],
     'continuous_hazard_units': [unit_feet, unit_metres, unit_generic],
-    'vector_hazard_classifications': [
-        flood_vector_hazard_classes,
-        generic_vector_hazard_classes
-    ],
-    'raster_hazard_classifications': [flood_raster_hazard_classes],
     'layer_geometry': [
         'polygon',
         'raster'
     ],
-    'hazard_classifications': [flood_hazard_classes],
+    'hazard_classifications': [flood_hazard_classes, generic_hazard_classes],
+    'fields': hazard_fields,
     'extra_fields': [],
     'layer_modes': [layer_mode_classified, layer_mode_continuous]
 }
@@ -211,13 +198,12 @@ hazard_volcanic_ash = {
         }
     ],
     'continuous_hazard_units': [unit_centimetres],
-    'vector_hazard_classifications': [],
-    'raster_hazard_classifications': [],
     'layer_geometry': [
         'polygon',
         'raster'
     ],
-    'hazard_classifications': [ash_hazard_classes],
+    'hazard_classifications': [ash_hazard_classes, generic_hazard_classes],
+    'fields': hazard_fields,
     'extra_fields': [],
     'layer_modes': [layer_mode_classified, layer_mode_continuous]
 }
@@ -252,13 +238,12 @@ hazard_tsunami = {
         }
     ],
     'continuous_hazard_units': [unit_feet, unit_metres],
-    'vector_hazard_classifications': [],
-    'raster_hazard_classifications': [tsunami_raster_hazard_classes],
     'layer_geometry': [
         'polygon',
         'raster'
     ],
-    'hazard_classifications': [tsunami_hazard_classes],
+    'hazard_classifications': [tsunami_hazard_classes, generic_hazard_classes],
+    'fields': hazard_fields,
     'extra_fields': [],
     'layer_modes': [layer_mode_classified, layer_mode_continuous]
 }
@@ -292,14 +277,13 @@ hazard_volcano = {
         }
     ],
     'continuous_hazard_units': [],
-    'vector_hazard_classifications': [volcano_vector_hazard_classes],
-    'raster_hazard_classifications': [],
     'layer_geometry': [
         'polygon',
         'raster',
         'point'
     ],
-    'hazard_classifications': [volcano_hazard_classes],
+    'hazard_classifications': [volcano_hazard_classes, generic_hazard_classes],
+    'fields': hazard_fields,
     'extra_fields': [hazard_name_field],
     'layer_modes': [layer_mode_classified, layer_mode_continuous]
 }

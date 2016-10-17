@@ -36,6 +36,11 @@ class Cell(MessageElement):
             differently e.g. with bold text.
         :type header: bool
 
+        :param span: The number of columns this cell should span. If not
+            specified it will span 1 column only. Note that if the renderer
+            does not support column spanning this option will be ignored.
+        :type span: int
+
         :param align: A flag to indicate if special alignment should
             be given to cells if supported in the output renderer.
             Valid options are: None, 'left', 'right', 'center'
@@ -62,6 +67,13 @@ class Cell(MessageElement):
             self.header_flag = kwargs['header']
             # dont pass the kw on to the base class as we handled it here
             kwargs.pop('header')
+
+        # Also check for column spanning
+        self.span = 1
+        if 'span' in kwargs:
+            self.span = kwargs['span']
+            # dont pass the kw on to the base class as we handled it here
+            kwargs.pop('span')
 
         # Also check if align parameter is called before calling the ABC
         self.align = None
@@ -121,11 +133,11 @@ class Cell(MessageElement):
 
         # Check if we have a header or not then render
         if self.header_flag is True:
-            return '<th%s>%s</th>\n' % (
-                self.html_attributes(), html)
+            return '<th%s colspan=%i>%s</th>\n' % (
+                self.html_attributes(), self.span, html)
         else:
-            return '<td%s>%s</td>\n' % (
-                self.html_attributes(), html)
+            return '<td%s colspan=%i>%s</td>\n' % (
+                self.html_attributes(), self.span, html)
 
     def to_text(self):
         """Render a Cell MessageElement as plain text

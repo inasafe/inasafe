@@ -422,6 +422,7 @@ impact_fields = [
     elderly_count_field
 ]
 
+# Used by earthquake
 structure_class_field = {
     'key': 'structure_class_field',
     'name': tr('Attribute field'),
