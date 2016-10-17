@@ -429,6 +429,9 @@ class TestKeywordWizard(unittest.TestCase):
         # Click finish
         dialog.pbnNext.click()
 
+        self.assertDictEqual(
+            layer.keywords['value_map'], dialog.get_keywords()['value_map'])
+
     def test_exposure_structure_polygon_keyword(self):
         """Test keyword wizard for exposure structure polygon"""
         layer = clone_shp_layer(
@@ -696,6 +699,9 @@ class TestKeywordWizard(unittest.TestCase):
 
         # Click finish
         dialog.pbnNext.click()
+
+        self.assertDictEqual(
+            layer.keywords['value_map'], dialog.get_keywords()['value_map'])
 
     @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_keywords_creation_wizard(self):
