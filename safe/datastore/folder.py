@@ -11,8 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-from os.path import splitext
-from os import remove
+from itertools import product
 from PyQt4.QtCore import QFileInfo, QDir
 from qgis.core import (
     QgsVectorFileWriter,
@@ -22,7 +21,7 @@ from qgis.core import (
 )
 
 from safe.datastore.datastore import DataStore
-from safe.common.exceptions import ErrorDataStore, ShapefileCreationError
+from safe.common.exceptions import ErrorDataStore
 
 VECTOR_EXTENSIONS = ('shp', 'kml', 'geojson')
 RASTER_EXTENSIONS = ('asc', 'tiff', 'tif')
@@ -110,6 +109,7 @@ class Folder(DataStore):
         self.uri.setNameFilters(extensions)
         files = self.uri.entryList()
         self.uri.setNameFilters('')
+        files = [QFileInfo(f).baseName() for f in files]
         return files
 
     def layer_uri(self, layer_name):
@@ -123,9 +123,12 @@ class Folder(DataStore):
 
         .. versionadded:: 4.0
         """
-        for layer in self.layers():
-            if layer == layer_name:
-                return self.uri.filePath(layer)
+        for layer, extension in product(self.layers(), EXTENSIONS):
+            one_file = QFileInfo(
+                self.uri.filePath(layer + '.' + extension))
+            if one_file.exists():
+                if one_file.baseName() == layer_name:
+                    return one_file.absoluteFilePath()
         else:
             return None
 
@@ -151,9 +154,6 @@ class Folder(DataStore):
 
         output = QFileInfo(
             self.uri.filePath(layer_name + '.' + self._default_vector_format))
-        if output.exists():
-            msg = 'The file was already existing : %s' % output.fileName()
-            return False, msg
 
         driver_mapping = {
             'shp': 'ESRI Shapefile',
@@ -168,7 +168,7 @@ class Folder(DataStore):
             vector_layer.crs(),
             driver_mapping[self._default_vector_format])
 
-        return True, output.fileName()
+        return True, output.baseName()
 
     def _add_raster_layer(self, raster_layer, layer_name):
         """Add a raster layer to the folder.
@@ -191,10 +191,6 @@ class Folder(DataStore):
 
         output = QFileInfo(self.uri.filePath(layer_name + '.tif'))
 
-        if output.exists():
-            msg = 'The file was already existing : %s' % output.fileName()
-            return False, msg
-
         renderer = raster_layer.renderer()
         provider = raster_layer.dataProvider()
         crs = raster_layer.crs()
@@ -210,4 +206,4 @@ class Folder(DataStore):
             pipe, provider.xSize(), provider.ySize(), provider.extent(), crs)
 
         del file_writer
-        return True, output.fileName()
+        return True, output.baseName()

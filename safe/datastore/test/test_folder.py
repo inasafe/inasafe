@@ -15,12 +15,18 @@ import unittest
 
 from tempfile import mkdtemp
 from os.path import join
-from qgis.core import QgsVectorLayer, QgsRasterLayer
+
+# This import must come first to force sip2 api
+# noinspection PyUnresolvedReferences
+# pylint: disable=unused-import
+from qgis.core import QGis  # force sip2 api
+
 from PyQt4.QtCore import QDir
 
 from safe.test.utilities import (
     get_qgis_app,
-    standard_data_path)
+    load_test_raster_layer,
+    load_test_vector_layer)
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.datastore.folder import Folder
@@ -42,45 +48,58 @@ class TestFolder(unittest.TestCase):
         self.assertTrue(data_store.is_writable())
 
         path = mkdtemp()
-        layer_name = 'flood_test'
         data_store = Folder(path)
 
         # We do not have any layer yet.
         self.assertEqual(len(data_store.layers()), 0)
 
         # Let's add a vector layer.
-        layer = standard_data_path('hazard', 'flood_multipart_polygons.shp')
-        vector_layer = QgsVectorLayer(layer, 'Flood', 'ogr')
-        result = data_store.add_layer(vector_layer, layer_name)
+        layer = load_test_vector_layer(
+            'hazard', 'flood_multipart_polygons.shp')
+        vector_layer_name = 'flood_test'
+
+        result = data_store.add_layer(layer, vector_layer_name)
         self.assertTrue(result[0])
-        self.assertEqual(result[1], '%s.shp' % layer_name)
+        self.assertEqual(result[1], vector_layer_name)
 
         # We try to add the layer twice with the same name.
-        result = data_store.add_layer(vector_layer, layer_name)
+        result = data_store.add_layer(layer, vector_layer_name)
         self.assertFalse(result[0])
 
         # We have imported one layer.
         self.assertEqual(len(data_store.layers()), 1)
 
         # Check if we have the correct URI.
-        self.assertIsNone(data_store.layer_uri(layer_name))
-        expected = join(path, layer_name + '.shp')
-        self.assertEqual(data_store.layer_uri(layer_name + '.shp'), expected)
+        # self.assertIsNone(data_store.layer_uri(layer_name))
+        expected = join(path, vector_layer_name + '.shp')
+        self.assertEqual(data_store.layer_uri(vector_layer_name), expected)
 
         # This layer do not exist
         self.assertIsNone(data_store.layer_uri('fake_layer'))
 
         # Let's add a raster layer.
-        layer = standard_data_path('hazard', 'classified_hazard.tif')
-        raster_layer = QgsRasterLayer(layer, 'Flood')
-        self.assertTrue(data_store.add_layer(raster_layer, layer_name))
+        layer = load_test_raster_layer('hazard', 'classified_hazard.tif')
+        result = data_store.add_layer(layer, vector_layer_name)
+        self.assertFalse(result[0])
+
+        raster_layer_name = 'flood_raster'
+        result = data_store.add_layer(layer, raster_layer_name)
+        self.assertTrue(result[0])
 
         # The datastore should have two layers.
         self.assertEqual(len(data_store.layers()), 2)
 
         # Check the URI for the raster layer.
-        expected = join(path, layer_name + '.tif')
-        self.assertEqual(data_store.layer_uri(layer_name + '.tif'), expected)
+        expected = join(path, raster_layer_name)
+        self.assertEqual(
+            data_store.layer_uri(raster_layer_name), expected + '.tif')
+
+        # Check keywords files
+        data_store.uri.setNameFilters('*.xml')
+        files = data_store.uri.entryList()
+        data_store.uri.setNameFilters('')
+        self.assertIn(raster_layer_name + '.xml', files)
+        self.assertIn(vector_layer_name + '.xml', files)
 
 if __name__ == '__main__':
     unittest.main()
