@@ -1,6 +1,7 @@
 import unittest
 import json
 import os
+from safe.test.utilities import get_control_text
 
 from safe.test.utilities import get_qgis_app, standard_data_path
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -135,9 +136,34 @@ class TestImpactFunction(unittest.TestCase):
         self.assertEqual(impact_function.name, 'Flood Polygon On Road Line')
         self.assertEqual(impact_function.title, 'be affected')
 
+    def test_profiling(self):
+        """Test running impact function on test data."""
+        hazard_layer = load_test_vector_layer(
+            'gisv4', 'hazard', 'classified_vector.geojson')
+        exposure_layer = load_test_vector_layer(
+            'gisv4', 'exposure', 'building-points.geojson')
+        aggregation_layer = load_test_vector_layer(
+            'gisv4', 'aggregation', 'small_grid.geojson')
+
+        # Set up impact function
+        impact_function = ImpactFunction()
+        impact_function.aggregation = aggregation_layer
+        impact_function.exposure = exposure_layer
+        impact_function.hazard = hazard_layer
+        impact_function.run()
+        message = impact_function.performance_log_message().to_text()
+        expected_result = get_control_text(
+            'test-profiling-logs.txt')
+
+        for line in expected_result:
+            line = line.replace('\n', '')
+            if line == '' or line == '-':
+                continue
+            self.assertIn(line, message)
+
     def test_run_impact_function(self):
         """Test running impact function on test data."""
-        use_debug = False
+        use_debug = True
         hazard_layer = load_test_vector_layer(
             'gisv4', 'hazard', 'classified_vector.geojson')
         exposure_layer = load_test_vector_layer(

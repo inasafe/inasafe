@@ -13,6 +13,7 @@ from qgis.core import QgsRasterLayer
 from safe.common.exceptions import FileNotFoundError
 from safe.common.utilities import unique_filename, temp_dir
 from safe.definitionsv4.processing import reclassify_raster
+from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -20,6 +21,7 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
+@profile
 def reclassify(layer, ranges, callback=None):
     """Reclassify a continuous raster layer.
 

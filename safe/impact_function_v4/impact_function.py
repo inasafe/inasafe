@@ -34,8 +34,6 @@ from safe.gisv4.vector.tools import create_memory_layer
 from safe.gisv4.vector.prepare_vector_layer import prepare_vector_layer
 from safe.gisv4.vector.reproject import reproject
 from safe.gisv4.vector.intersection import intersection
-from safe.gisv4.vector.assign_highest_value import assign_highest_value
-from safe.gisv4.vector.reclassify import reclassify
 from safe.gisv4.vector.assign_hazard_class import assign_hazard_class
 from safe.definitionsv4.post_processors import post_processors
 from safe.defaults import get_defaults
@@ -49,6 +47,9 @@ from safe.common.exceptions import (
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.utilities import replace_accentuated_characters
+from safe.utilities.profiling import (
+    profile, clear_prof_data, profiling_log)
+from safe import messaging as m
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -113,7 +114,40 @@ class ImpactFunction(object):
         self._datastore = None
 
         self.state = {}
+        self._performance_log = None
         self.reset_state()
+
+    @property
+    def performance_log(self):
+        """Property for the performance log that can be used for benchmarking.
+
+        :returns: A dict containing benchmarking data.
+        :rtype: dict
+        """
+        return self._performance_log
+
+    def performance_log_message(self):
+        """Return the profiling log as a message"""
+        message = m.Message()
+        table = m.Table(style_class='table table-condensed table-striped')
+        row = m.Row()
+        row.add(m.Cell(tr('Function')), header_flag=True)
+        row.add(m.Cell(tr('Calls')), header_flag=True)
+        row.add(m.Cell(tr('Average (ms)')), header_flag=True)
+        row.add(m.Cell(tr('Max (ms)')), header_flag=True)
+        table.add(row)
+        for function_name, data in self._performance_log.items():
+            calls = data[0]
+            max_time = max(data[1])
+            avg_time = sum(data[1]) / len(data[1])
+            row = m.Row()
+            row.add(m.Cell(function_name))
+            row.add(m.Cell(calls))
+            row.add(m.Cell(avg_time))
+            row.add(m.Cell(max_time))
+            table.add(row)
+        message.add(table)
+        return message
 
     @property
     def hazard(self):
@@ -361,6 +395,7 @@ class ImpactFunction(object):
         """
         self._callback = callback
 
+    @profile
     def setup_impact_function(self):
         """Automatically called when the hazard or exposure is changed.
         """
@@ -381,6 +416,7 @@ class ImpactFunction(object):
         else:
             self._title = tr('be affected')
 
+    @profile
     def post_process(self):
         """More process after getting the impact layer with data."""
         # Post processor (gender, age, building type, etc)
@@ -414,6 +450,7 @@ class ImpactFunction(object):
             print message
         print 'Task progress: %i of %i' % (current, maximum)
 
+    @profile
     def is_divisible_exposure(self):
         """Check if an exposure has divisible feature.
 
@@ -426,6 +463,7 @@ class ImpactFunction(object):
                 return False
         return True
 
+    @profile
     def create_virtual_aggregation(self):
         """Function to create aggregation layer based on extent
 
@@ -449,6 +487,7 @@ class ImpactFunction(object):
         aggregation_layer.keywords['inasafe_fields'] = {}
 
         return aggregation_layer
+
 
     def reset_state(self):
         """Method to reset the state of the impact function.
@@ -503,9 +542,11 @@ class ImpactFunction(object):
         """
         self.state[context]["info"][key] = value
 
+    @profile
     def run(self):
         """Run the whole impact function."""
         self.reset_state()
+        clear_prof_data()
 
         # Set a unique name for this impact
         self._unique_name = self._name.replace(' ', '')
@@ -547,8 +588,11 @@ class ImpactFunction(object):
         KeywordIO().write_keywords(
             self.impact, self.impact.keywords)
 
+        # Get the profiling log
+        self._performance_log = profiling_log()
         return self.state
 
+    @profile
     def intersect_exposure_and_aggregate_hazard(self):
         """This function intersects the exposure with the aggregate hazard.
 
@@ -581,6 +625,7 @@ class ImpactFunction(object):
 
         self.datastore.add_layer(self.impact, 'impact')
 
+    @profile
     def exposure_preparation(self):
         """This function is doing the exposure preparation."""
         if self.exposure.type() == QgsMapLayer.RasterLayer:
@@ -617,6 +662,7 @@ class ImpactFunction(object):
         else:
             raise InvalidLayerError(tr('Unsupported exposure layer type'))
 
+    @profile
     def aggregate_hazard_preparation(self):
         """This function is doing the aggregate hazard layer.
 
@@ -668,6 +714,7 @@ class ImpactFunction(object):
             self.datastore.add_layer(
                 self._aggregate_hazard, 'aggregate_hazard')
 
+    @profile
     def hazard_preparation(self):
         """This function is doing the hazard preparation."""
 
@@ -730,6 +777,7 @@ class ImpactFunction(object):
         self.set_state_process(
             'hazard', 'Vector clip and mask hazard to aggregation')
 
+    @profile
     def run_single_post_processor(self, post_processor):
         """Run single post processor.
 
@@ -857,6 +905,7 @@ class ImpactFunction(object):
         else:
             return False, message
 
+    @profile
     def enough_input(self, post_processor_input):
         """Check if the input from impact_fields in enough.
 
@@ -879,6 +928,7 @@ class ImpactFunction(object):
                     return False, msg
         return True, None
 
+    @profile
     def add_size_field(self):
         """Add size field in to impact layer.
 

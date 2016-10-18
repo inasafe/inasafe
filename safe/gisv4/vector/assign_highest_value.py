@@ -21,6 +21,7 @@ from safe.definitionsv4.fields import hazard_class_field
 from safe.definitionsv4.hazard_classifications import hazard_classification
 # from safe.definitionsv4.processing import assign_highest_value
 from safe.gisv4.vector.tools import create_memory_layer, wkb_type_groups
+from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -31,6 +32,7 @@ __revision__ = '$Format:%H$'
 LOGGER = logging.getLogger('InaSAFE')
 
 
+@profile
 def assign_highest_value(exposure_layer, hazard_layer, callback=None):
     """For indivisible polygon exposure layers such as buildings, we need to
     assigned the greatest hazard that each polygon touches and use that as the

@@ -29,6 +29,7 @@ from safe.utilities.clipper import extent_to_geoarray, clip_layer
 from safe.utilities.gis import get_wgs84_resolution
 from safe.utilities.metadata import read_iso19115_metadata
 from safe.utilities.keyword_io import KeywordIO
+import codecs
 
 QGIS_APP = None  # Static variable used to hold hand to running QGIS app
 CANVAS = None
@@ -1102,3 +1103,25 @@ def clip_layers(first_layer_path, second_layer_path):
         cell_size=cell_size)
 
     return clipped_first_layer, clipped_second_layer
+
+
+def get_control_text(file_name):
+    """Helper to get control text for string compares.
+
+    :param file_name: filename
+    :type file_name: str
+
+    :returns: A string containing the contents of the file.
+    """
+    control_file_path = standard_data_path(
+        'control',
+        'files',
+        file_name
+    )
+    expected_result = codecs.open(
+        control_file_path,
+        mode='r',
+        encoding='utf-8').readlines()
+    return expected_result
+
+

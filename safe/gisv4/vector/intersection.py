@@ -19,6 +19,7 @@ from qgis.core import (
 from safe.utilities.i18n import tr
 # from safe.definitionsv4.processing import intersection_vector
 from safe.gisv4.vector.tools import create_memory_layer, wkb_type_groups
+from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -29,6 +30,7 @@ __revision__ = '$Format:%H$'
 LOGGER = logging.getLogger('InaSAFE')
 
 
+@profile
 def intersection(layer_to_clip, mask_layer, callback=None):
     """Clip and mask a vector layer.
 

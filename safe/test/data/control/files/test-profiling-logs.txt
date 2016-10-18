@@ -1,0 +1,19 @@
+Function, Calls, Average (ms), Max (ms)
+is_divisible_exposure
+intersection
+copy_layer
+run
+rename_remove_inasafe_fields
+aggregate_hazard_preparation
+remove_fields
+copy_fields
+hazard_preparation
+remove_rows
+add_id_column
+assign_hazard_class
+intersect_exposure_and_aggregate_hazard
+create_memory_layer
+exposure_preparation
+prepare_vector_layer
+setup_impact_function
+
