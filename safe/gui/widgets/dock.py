@@ -67,8 +67,6 @@ from safe.utilities.styling import (
     setRasterStyle,
     set_vector_graduated_style,
     set_vector_categorized_style)
-from safe.gui.tools.function_options_dialog import (
-    FunctionOptionsDialog)
 from safe.common.utilities import temp_dir
 from safe.common.exceptions import ReadLayerError, TemplateLoadingError
 from safe.common.version import get_version
@@ -103,7 +101,7 @@ from safe.gui.tools.help_dialog import HelpDialog
 from safe.gui.tools.impact_report_dialog import ImpactReportDialog
 from safe_extras.pydispatch import dispatcher
 from safe.utilities.extent import Extent
-from safe.impact_functions.impact_function_manager import ImpactFunctionManager
+from safe.impact_function_v4.impact_function import ImpactFunction
 from safe.utilities.unicode import get_unicode
 from safe.impact_template.utilities import get_report_template
 from safe.gui.widgets.message import missing_keyword_message
@@ -159,9 +157,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # Save reference to the QGIS interface
         self.iface = iface
 
-        # Impact Function Manager to deal with IF needs
-        self.impact_function_manager = ImpactFunctionManager()
-
         self.impact_function = None
         self.keyword_io = KeywordIO()
         self.active_impact_function = None
@@ -180,7 +175,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.busy = False
 
         # Values for settings these get set in read_settings.
-        self.run_in_thread_flag = None
         self.show_only_visible_layers_flag = None
         self.set_layer_from_title_flag = None
         self.zoom_to_impact_flag = None
@@ -339,10 +333,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 self.extent.user_extent_crs = None
 
         self.draw_rubber_bands()
-
-        flag = settings.value(
-            'inasafe/useThreadingFlag', False, type=bool)
-        self.run_in_thread_flag = flag
 
         flag = settings.value(
             'inasafe/visibleLayersOnlyFlag', True, type=bool)
@@ -651,9 +641,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             message = self.getting_started_message()
             return False, message
 
-        if self.cboFunction.currentIndex() == -1:
-            message = self.not_ready_message()
-            return False, message
         # Now check if extents are ok for #1811
         else:
             message = self.ready_message()
@@ -710,7 +697,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         """
         # Add any other logic you might like here...
         del index
-        self.get_functions()
         self.toggle_aggregation_combo()
         self.set_run_button_status()
         self.draw_rubber_bands()
@@ -727,37 +713,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         """
         # Add any other logic you might like here...
         del index
-        self.get_functions()
         self.toggle_aggregation_combo()
         self.set_run_button_status()
         self.draw_rubber_bands()
 
-    # noinspection PyPep8Naming
-    @pyqtSlot(int)
-    def on_cboFunction_currentIndexChanged(self, index):
-        """Automatic slot executed when the Function combo is changed.
-
-        This is here so that we can see if the ok button should be enabled.
-
-        :param index: The index number of the selected function.
-        """
-        # Add any other logic you might like here...
-        if index > -1:
-            function_id = self.get_function_id()
-
-            function = self.impact_function_manager.get(function_id)
-            self.active_impact_function = function
-            self.impact_function_parameters = None
-            if hasattr(self.active_impact_function, 'parameters'):
-                self.impact_function_parameters = \
-                    self.active_impact_function.parameters
-            self.set_function_options_status()
-        else:
-            self.impact_function_parameters = None
-            self.set_function_options_status()
-
-        self.toggle_aggregation_combo()
-        self.set_run_button_status()
 
     def toggle_aggregation_combo(self):
         """Toggle the aggregation combo enabled status.
@@ -786,31 +745,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         button.setEnabled(flag)
         if message is not None:
             send_static_message(self, message)
-
-    def set_function_options_status(self):
-        """Helper function to toggle the tool function button based on context.
-
-        If there are function parameters to configure then enable it, otherwise
-        disable it.
-        """
-        # Check if function_parameters initialized
-        if self.impact_function_parameters is None:
-            self.toolFunctionOptions.setEnabled(False)
-        else:
-            self.toolFunctionOptions.setEnabled(True)
-
-    # noinspection PyPep8Naming
-    @pyqtSlot()
-    def on_toolFunctionOptions_clicked(self):
-        """Automatic slot executed when toolFunctionOptions is clicked."""
-        dialog = FunctionOptionsDialog(self)
-        dialog.set_dialog_info(self.get_function_id())
-        dialog.build_form(self.impact_function_parameters)
-
-        if dialog.exec_():
-            self.active_impact_function.parameters = dialog.result()
-            self.impact_function_parameters = \
-                self.active_impact_function.parameters
 
     @pyqtSlot()
     def canvas_layerset_changed(self):
@@ -977,8 +911,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.cboAggregation.setCurrentIndex(0)
         self.toggle_aggregation_combo()
 
-        # Now populate the functions list based on the layers loaded
-        self.get_functions()
         self.restore_state()
         self.grpQuestion.setEnabled(True)
         self.grpQuestion.setVisible(True)
@@ -992,67 +924,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.layer_changed(self.iface.activeLayer())
         # Make sure to update the analysis area preview
         self.draw_rubber_bands()
-
-    def get_functions(self):
-        """Obtain a list of impact functions from the IF manager."""
-        # remember what the current function is
-        original_function = self.cboFunction.currentText()
-        self.cboFunction.clear()
-
-        # Get the keyword dictionaries for hazard and exposure
-        hazard_layer = self.get_hazard_layer()
-        if hazard_layer is None:
-            return
-        exposure_layer = self.get_exposure_layer()
-        if exposure_layer is None:
-            return
-        # noinspection PyTypeChecker
-        hazard_keywords = self.keyword_io.read_keywords(hazard_layer)
-        # We need to add the layer type to the returned keywords
-        if hazard_layer.type() == QgsMapLayer.VectorLayer:
-            # noinspection PyTypeChecker
-            hazard_keywords['layer_geometry'] = vector_geometry_string(
-                hazard_layer)
-        elif hazard_layer.type() == QgsMapLayer.RasterLayer:
-            hazard_keywords['layer_geometry'] = 'raster'
-
-        # noinspection PyTypeChecker
-        exposure_keywords = self.keyword_io.read_keywords(exposure_layer)
-        # We need to add the layer type to the returned keywords
-        if exposure_layer.type() == QgsMapLayer.VectorLayer:
-            # noinspection PyTypeChecker
-            exposure_keywords['layer_geometry'] = vector_geometry_string(
-                exposure_layer)
-        elif exposure_layer.type() == QgsMapLayer.RasterLayer:
-            exposure_keywords['layer_geometry'] = 'raster'
-
-        # Find out which functions can be used with these layers
-        try:
-            # from pprint import pprint
-            # pprint(hazard_keywords)
-            # pprint(exposure_keywords)
-            # print '---------------------------------------------------------'
-            impact_functions = self.impact_function_manager.filter_by_keywords(
-                hazard_keywords, exposure_keywords)
-            # Populate the hazard combo with the available functions
-            for impact_function in impact_functions:
-                function_id = self.impact_function_manager.get_function_id(
-                    impact_function)
-                function_title = \
-                    self.impact_function_manager.get_function_title(
-                        impact_function)
-
-                # Provide function title and ID to function combo:
-                # function_title is the text displayed in the combo
-                # function_name is the canonical identifier
-                add_ordered_combo_item(
-                    self.cboFunction,
-                    function_title,
-                    data=function_id)
-        except Exception, e:
-            raise e
-
-        self.restore_function_state(original_function)
 
     def get_hazard_layer(self):
         """Get the QgsMapLayer currently selected in the hazard combo.
@@ -1140,9 +1011,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.show_next_analysis_extent()  # green
             self.extent.show_user_analysis_extent()  # blue
             try:
-                clip_parameters = self.impact_function.clip_parameters
-                self.extent.show_last_analysis_extent(
-                    clip_parameters['adjusted_geo_extent'])  # red
+                pass
+                #clip_parameters = self.impact_function.clip_parameters
+                #self.extent.show_last_analysis_extent(
+                #    clip_parameters['adjusted_geo_extent'])  # red
             except (AttributeError, TypeError):
                 pass
 
@@ -1159,12 +1031,12 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.enable_busy_cursor()
             self.show_next_analysis_extent()
             self.impact_function = self.prepare_impact_function()
-            clip_parameters = self.impact_function.clip_parameters
-            self.extent.show_last_analysis_extent(
-                clip_parameters['adjusted_geo_extent'])
+            #clip_parameters = self.impact_function.clip_parameters
+            #self.extent.show_last_analysis_extent(
+            #    clip_parameters['adjusted_geo_extent'])
 
             # Start the analysis
-            self.impact_function.run_analysis()
+            self.impact_function.run()
         except KeywordNotFoundError as e:
             self.hide_busy()
             missing_keyword_message(self, e)
@@ -1264,9 +1136,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         """Create analysis as a representation of current situation of dock."""
 
         # Impact Functions
-        impact_function = self.impact_function_manager.get(
-            self.get_function_id())
-        impact_function.parameters = self.impact_function_parameters
+        impact_function = ImpactFunction()
 
         # Layers
         impact_function.hazard = self.get_hazard_layer()
@@ -1500,11 +1370,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 qgis_impact_layer,
                 qgis_exposure,
                 qgis_hazard)
-
-        active_function = self.active_impact_function
-        self.active_impact_function = active_function
-        self.impact_function_parameters = \
-            self.active_impact_function.parameters
 
         # In QGIS 2.14.2 and GDAL 1.11.3, if the exposure is in 3857,
         # the impact layer is in 54004, we need to change it. See issue #2790.
@@ -1785,7 +1650,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         state = {
             'hazard': self.cboHazard.currentText(),
             'exposure': self.cboExposure.currentText(),
-            'function': self.cboFunction.currentText(),
             'aggregation': self.cboAggregation.currentText(),
             'report': self.wvResults.page().currentFrame().toHtml()}
         self.state = state
@@ -1809,22 +1673,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             if item_text == self.state['aggregation']:
                 self.cboAggregation.setCurrentIndex(myCount)
                 break
-        self.restore_function_state(self.state['function'])
         self.wvResults.setHtml(self.state['report'])
-
-    def restore_function_state(self, original_function):
-        """Restore the function combo to a known state.
-
-        :param original_function: Name of function that should be selected.
-        :type original_function: str
-
-        """
-        # Restore previous state of combo
-        for count in range(0, self.cboFunction.count()):
-            item_text = self.cboFunction.itemText(count)
-            if item_text == original_function:
-                self.cboFunction.setCurrentIndex(count)
-                break
 
     def print_map(self):
         """Open impact report dialog used to tune report when printing."""
@@ -2031,25 +1880,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.composer.fitInView(
                 0, 0, paper_width + 1, height + 1, QtCore.Qt.KeepAspectRatio)
 
-    def get_function_id(self, index=None):
-        """Get the canonical impact function ID for the currently selected
-           function (or the specified combo entry if theIndex is supplied.
-
-        :param index: Optional index position in the combo that you
-            want the function id for. Defaults to None. If not set / None
-            the currently selected combo item's function id will be
-            returned.
-        :type index: int
-
-        :returns: Id of the currently selected function.
-        :rtype: str
-        """
-        if index is None:
-            index = self.cboFunction.currentIndex()
-        item_data = self.cboFunction.itemData(index, QtCore.Qt.UserRole)
-        function_id = '' if item_data is None else str(item_data)
-        return function_id
-
     @pyqtSlot('QgsRectangle', 'QgsCoordinateReferenceSystem')
     def define_user_analysis_extent(self, extent, crs):
         """Slot called when user has defined a custom analysis extent.
@@ -2206,7 +2036,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         try:
             # Temporary only, for checking the user extent
             impact_function = self.prepare_impact_function()
-            clip_parameters = impact_function.clip_parameters
-            return True, clip_parameters['adjusted_geo_extent']
+            #clip_parameters = impact_function.clip_parameters
+            #return True, clip_parameters['adjusted_geo_extent']
+            return True, None
         except (AttributeError, InsufficientOverlapError):
             return False, None
