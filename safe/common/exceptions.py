@@ -356,6 +356,10 @@ class InsufficientMemoryWarning(InaSAFEError):
     pass
 
 
+class InvalidKeywordsForProcessingAlgorithm(InaSAFEError):
+    """Raised if the algorithm don't have proper keywords to run."""
+    pass
+
 class InvalidAggregationKeywords(InaSAFEError):
     """Raised when the aggregation keywords is invalid."""
     pass

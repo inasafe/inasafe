@@ -17,6 +17,7 @@ from qgis.core import (
 )
 
 from safe.utilities.i18n import tr
+from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
 # from safe.definitionsv4.processing import intersection_vector
 from safe.gisv4.vector.tools import create_memory_layer, wkb_type_groups
 from safe.utilities.profiling import profile
@@ -61,8 +62,7 @@ def intersection(layer_to_clip, mask_layer, callback=None):
     processing_step = 'Clipping and masking'
 
     fields = layer_to_clip.fields()
-    for field in mask_layer.fields():
-        fields.append(field)
+    fields.extend(mask_layer.fields())
 
     writer = create_memory_layer(
         output_layer_name,
@@ -70,6 +70,29 @@ def intersection(layer_to_clip, mask_layer, callback=None):
         layer_to_clip.crs(),
         fields
     )
+
+    # Specific to InaSAFE
+    clip_purpose = layer_to_clip.keywords['layer_purpose']
+    mask_purpose = mask_layer.keywords['layer_purpose']
+    inasafe_fields = layer_to_clip.keywords['inasafe_fields'].copy()
+    inasafe_fields.update(mask_layer.keywords['inasafe_fields'])
+
+    writer.keywords = layer_to_clip.keywords.copy()
+    writer.keywords['inasafe_fields'] = inasafe_fields
+
+    not_transfer_attributes = False
+    if clip_purpose == 'hazard' and mask_purpose == 'aggregation':
+        writer.keywords['layer_purpose'] = 'aggregate_hazard'
+    elif clip_purpose == 'exposure' and mask_purpose == 'aggregation':
+        writer.keywords['layer_purpose'] = 'exposure'
+    elif clip_purpose == 'exposure' and mask_purpose == 'aggregate_hazard':
+        writer.keywords['layer_purpose'] = 'impact'
+        not_transfer_attributes = True
+    else:
+        msg = 'I got clip purpose = %s and mask purpose = %s'\
+              % (clip_purpose, mask_purpose)
+        raise InvalidKeywordsForProcessingAlgorithm(msg)
+
     writer.startEditing()
 
     # Begin copy/paste from Processing plugin.
@@ -124,10 +147,5 @@ def intersection(layer_to_clip, mask_layer, callback=None):
 
     # End copy/paste from Processing plugin.
     writer.commitChanges()
-
-    inasafe_fields = layer_to_clip.keywords['inasafe_fields'].copy()
-    inasafe_fields.update(mask_layer.keywords['inasafe_fields'])
-    writer.keywords['inasafe_fields'] = inasafe_fields
-    writer.keywords['layer_purpose'] = 'aggregate_hazard'
 
     return writer

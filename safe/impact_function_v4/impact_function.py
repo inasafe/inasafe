@@ -33,7 +33,9 @@ from safe.datastore.folder import Folder
 from safe.gisv4.vector.tools import create_memory_layer
 from safe.gisv4.vector.prepare_vector_layer import prepare_vector_layer
 from safe.gisv4.vector.reproject import reproject
-from safe.gisv4.vector.intersection import intersection
+from safe.gisv4.vector.assign_highest_value import assign_highest_value
+from safe.gisv4.vector.reclassify import reclassify
+from safe.gisv4.vector.clip import clip
 from safe.gisv4.vector.assign_hazard_class import assign_hazard_class
 from safe.definitionsv4.post_processors import post_processors
 from safe.defaults import get_defaults
@@ -104,7 +106,6 @@ class ImpactFunction(object):
         # set this to a gui call back / web callback etc as needed.
         self._callback = self.console_progress_callback
 
-        self.algorithm = None
         self.impact = None
 
         self._name = None  # e.g. Flood Raster on Building Polygon
@@ -451,19 +452,6 @@ class ImpactFunction(object):
         print 'Task progress: %i of %i' % (current, maximum)
 
     @profile
-    def is_divisible_exposure(self):
-        """Check if an exposure has divisible feature.
-
-        :returns: True if divisible, else False.
-        :rtype: bool
-        """
-        # Only building polygons are not divisible.
-        if self.exposure.keywords.get('layer_geometry') == 'polygon':
-            if self.exposure.keywords.get('exposure') == 'structure':
-                return False
-        return True
-
-    @profile
     def create_virtual_aggregation(self):
         """Function to create aggregation layer based on extent
 
@@ -487,7 +475,6 @@ class ImpactFunction(object):
         aggregation_layer.keywords['inasafe_fields'] = {}
 
         return aggregation_layer
-
 
     def reset_state(self):
         """Method to reset the state of the impact function.
@@ -583,10 +570,7 @@ class ImpactFunction(object):
         # Disable post processor for now (IS)
         # self.post_process()
 
-        # self.datastore.add_layer(self.impact)
-
-        KeywordIO().write_keywords(
-            self.impact, self.impact.keywords)
+        # self.datastore.add_layer(self.impact, 'impact')
 
         # Get the profiling log
         self._performance_log = profiling_log()
@@ -599,31 +583,21 @@ class ImpactFunction(object):
         This function will set the impact layer.
         """
         self.set_state_process('impact function', 'Run impact function')
-
-        if self.is_divisible_exposure():
+        if self.exposure.keywords.get('exposure') == 'structure':
             self.set_state_process(
                 'impact function',
-                'Intersect aggregate hazard and exposure')
-            self.impact = intersection(self.exposure, self._aggregate_hazard)
+                'Highest class of hazard is assigned when more than one '
+                'overlaps')
+            # self.impact = intersection(self.exposure, self._aggregate_hazard)
 
-            # FIXME : Recalculate population based on new polygon size
-            # in Omnigraffle
-
-        elif not self.is_divisible_exposure():
-            self.set_state_process(
-                'impact function',
-                'Intersect aggregate hazard and exposure with highest hazard '
-                'value')
-            # self.impact = assign_highest_value(
-            #    self.exposure, self._aggregate_hazard)
         else:
             self.set_state_process(
                 'impact function',
-                'Zonal stats on the exposure with the aggregate hazard')
+                'Union exposure features to the aggregate hazard')
             # self.impact = zonal_statistics(
             #    self.exposure, self._aggregate_hazard)
 
-        self.datastore.add_layer(self.impact, 'impact')
+        # self.datastore.add_layer(self.impact, 'intermediate-impact')
 
     @profile
     def exposure_preparation(self):
@@ -654,6 +628,7 @@ class ImpactFunction(object):
             self.set_state_process(
                 'exposure',
                 'Cleaning the vector exposure attribute table')
+            # noinspection PyTypeChecker
             self.exposure = prepare_vector_layer(self.exposure)
             if self.debug:
                 self.datastore.add_layer(
@@ -687,6 +662,7 @@ class ImpactFunction(object):
 
             self.set_state_process(
                 'aggregation', 'Cleaning the aggregation layer')
+            # noinspection PyTypeChecker
             self.aggregation = prepare_vector_layer(self.aggregation)
             if self.debug:
                 self.datastore.add_layer(self.aggregation, 'aggr_prepared')
@@ -695,6 +671,7 @@ class ImpactFunction(object):
                 self.set_state_process(
                     'aggregation',
                     'Reproject aggregation layer to exposure CRS')
+                # noinspection PyTypeChecker
                 self.aggregation = reproject(
                     self.aggregation, self.exposure.crs())
                 if self.debug:
@@ -706,13 +683,21 @@ class ImpactFunction(object):
                     'Aggregation layer already in exposure CRS')
 
         self.set_state_process(
-            'aggregation',
-            'Intersect hazard polygons with aggregation areas and assign '
-            'hazard class')
-        self._aggregate_hazard = intersection(self.hazard, self.aggregation)
+            'hazard',
+            'Clip and mask hazard polygons with aggregation')
+        self._aggregate_hazard = clip(self.hazard, self.aggregation)
         if self.debug:
             self.datastore.add_layer(
-                self._aggregate_hazard, 'aggregate_hazard')
+                self._aggregate_hazard, 'hazard_clip_by_aggregation')
+
+        self.set_state_process(
+            'aggregation',
+            'Union hazard polygons with aggregation areas and assign '
+            'hazard class')
+        # self._aggregate_hazard = union(self.hazard, self.aggregation)
+        # if self.debug:
+        #    self.datastore.add_layer(
+        #        self._aggregate_hazard, 'aggregate_hazard')
 
     @profile
     def hazard_preparation(self):
@@ -723,6 +708,7 @@ class ImpactFunction(object):
             self.set_state_process(
                 'hazard',
                 'Cleaning the vector hazard attribute table')
+            # noinspection PyTypeChecker
             self.hazard = prepare_vector_layer(self.hazard)
             if self.debug:
                 self.datastore.add_layer(
@@ -768,6 +754,7 @@ class ImpactFunction(object):
             self.set_state_process(
                 'hazard',
                 'Reproject hazard layer to exposure CRS')
+            # noinspection PyTypeChecker
             self.hazard = reproject(
                 self.hazard, self.exposure.crs())
             if self.debug:

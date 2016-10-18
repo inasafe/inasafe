@@ -6,6 +6,7 @@ Reclassify a continuous vector layer.
 
 from qgis.core import QGis, QgsField
 
+from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
 from safe.definitionsv4.fields import hazard_class_field, hazard_value_field
 from safe.definitionsv4.processing import reclassify_vector
 from safe.gisv4.vector.tools import remove_fields
@@ -37,12 +38,15 @@ def assign_hazard_class(layer, callback=None):
     output_layer_name = reclassify_vector['output_layer_name']
     processing_step = reclassify_vector['step_name']
 
-    # This layer should have this keyword, or it's a mistake from the dev.
-    hazard_keywords = layer.keywords
-    inasafe_fields = hazard_keywords['inasafe_fields']
-    unclassified_column = inasafe_fields[hazard_value_field['key']]
+    keywords = layer.keywords
+    inasafe_fields = keywords['inasafe_fields']
+    if not inasafe_fields.get(hazard_value_field['key']):
+        raise InvalidKeywordsForProcessingAlgorithm
+    if not keywords.get('value_map'):
+        raise InvalidKeywordsForProcessingAlgorithm
 
-    value_map = layer.keywords['value_map']
+    unclassified_column = inasafe_fields[hazard_value_field['key']]
+    value_map = keywords['value_map']
 
     reversed_value_map = {}
     for hazard_class, values in value_map.iteritems():
@@ -78,9 +82,14 @@ def assign_hazard_class(layer, callback=None):
     remove_fields(layer, [unclassified_column])
 
     # We transfer keywords to the output.
+    # We add hazard class field
     inasafe_fields[hazard_class_field['key']] = (
         hazard_class_field['field_name'])
 
+    # and we remove hazard value field
     inasafe_fields.pop(hazard_value_field['key'])
+
+    layer.keywords = keywords
+    layer.keywords['inasafe_fields'] = inasafe_fields
 
     return layer
