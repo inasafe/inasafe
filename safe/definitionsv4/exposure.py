@@ -68,7 +68,7 @@ exposure_population = {
             'link': None
         }
     ],
-    'layer_geometry': [
+    'allowed_geometries': [
         'polygon',
         'raster'
     ],
@@ -113,7 +113,7 @@ exposure_people_in_building = {
                     '45462_backgoundpaperonterminologyaugust20.pdf'
         }
     ],
-    'layer_geometry': [
+    'allowed_geometries': [
         'point'
     ],
     'units': [],
@@ -167,7 +167,7 @@ exposure_road = {
             'link': None
         }
     ],
-    'layer_geometry': [
+    'allowed_geometries': [
         'line'
     ],
     'units': [],
@@ -207,7 +207,7 @@ exposure_structure = {
             'link': None
         }
     ],
-    'layer_geometry': [
+    'allowed_geometries': [
         'polygon',
         'point'
     ],
@@ -248,7 +248,7 @@ exposure_place = {
             'link': None
         }
     ],
-    'layer_geometry': [
+    'allowed_geometries': [
         'point'
     ],
     'units': [],
@@ -303,7 +303,7 @@ exposure_land_cover = {
             'link': None
         }
     ],
-    'layer_geometry': [
+    'allowed_geometries': [
         'polygon',
         'raster'
     ],

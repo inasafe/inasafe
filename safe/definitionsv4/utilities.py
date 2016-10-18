@@ -34,7 +34,7 @@ def purposes_for_layer(layer_geometry_key):
     return_value = []
     for layer_purpose in layer_purposes:
         layer_geometry_keys = [
-            i['key'] for i in layer_purpose['layer_geometry']]
+            i['key'] for i in layer_purpose['allowed_geometries']]
         if layer_geometry_key in layer_geometry_keys:
             return_value.append(layer_purpose['key'])
 
@@ -55,7 +55,7 @@ def hazards_for_layer(layer_geometry_key, hazard_category_key=None):
     """
     result = []
     for hazard in hazard_all:
-        if layer_geometry_key in hazard.get('layer_geometry'):
+        if layer_geometry_key in hazard.get('allowed_geometries'):
             result.append(hazard)
 
     return sorted(result, key=lambda k: k['key'])
@@ -72,7 +72,7 @@ def exposures_for_layer(layer_geometry_key):
     """
     result = []
     for exposure in exposure_all:
-        if layer_geometry_key in exposure.get('layer_geometry'):
+        if layer_geometry_key in exposure.get('allowed_geometries'):
             result.append(exposure)
 
     return sorted(result, key=lambda k: k['key'])

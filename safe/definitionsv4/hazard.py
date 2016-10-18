@@ -82,7 +82,7 @@ hazard_generic = {
         }
     ],
     'continuous_hazard_units': [],
-    'layer_geometry': [
+    'allowed_geometries': [
         'polygon',
         'raster'
     ],
@@ -119,7 +119,7 @@ hazard_earthquake = {
         }
     ],
     'continuous_hazard_units': [unit_mmi, unit_generic],
-    'layer_geometry': [
+    'allowed_geometries': [
         'polygon',
         'raster'
     ],
@@ -160,7 +160,7 @@ hazard_flood = {
         }
     ],
     'continuous_hazard_units': [unit_feet, unit_metres, unit_generic],
-    'layer_geometry': [
+    'allowed_geometries': [
         'polygon',
         'raster'
     ],
@@ -198,7 +198,7 @@ hazard_volcanic_ash = {
         }
     ],
     'continuous_hazard_units': [unit_centimetres],
-    'layer_geometry': [
+    'allowed_geometries': [
         'polygon',
         'raster'
     ],
@@ -238,7 +238,7 @@ hazard_tsunami = {
         }
     ],
     'continuous_hazard_units': [unit_feet, unit_metres],
-    'layer_geometry': [
+    'allowed_geometries': [
         'polygon',
         'raster'
     ],
@@ -277,7 +277,7 @@ hazard_volcano = {
         }
     ],
     'continuous_hazard_units': [],
-    'layer_geometry': [
+    'allowed_geometries': [
         'polygon',
         'raster',
         'point'

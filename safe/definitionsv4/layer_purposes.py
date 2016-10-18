@@ -19,7 +19,7 @@ layer_purpose_exposure = {
     'key': 'exposure',
     'name': tr('Exposure'),
     'description': concepts['exposure']['description'],
-    'layer_geometry': [
+    'allowed_geometries': [
         layer_geometry_point,
         layer_geometry_line,
         layer_geometry_polygon,
@@ -31,7 +31,7 @@ layer_purpose_hazard = {
     'key': 'hazard',
     'name': tr('Hazard'),
     'description': concepts['hazard']['description'],
-    'layer_geometry': [
+    'allowed_geometries': [
         layer_geometry_point,
         layer_geometry_polygon,
         layer_geometry_raster
@@ -46,7 +46,7 @@ layer_purpose_aggregation = {
         'summarise impact analysis results. For example, we might summarise '
         'the affected people after a flood according to administration '
         'boundaries.'),
-    'layer_geometry': [layer_geometry_polygon],
+    'allowed_geometries': [layer_geometry_polygon],
     'citations': [
         {
             'text': None,
