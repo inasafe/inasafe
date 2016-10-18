@@ -12,7 +12,9 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 from abc import ABCMeta, abstractmethod
-from qgis.core import QgsMapLayer, QgsRasterLayer
+from qgis.core import QgsMapLayer, QgsRasterLayer, QgsVectorLayer
+from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.i18n import tr
 
 
 class DataStore(object):
@@ -95,10 +97,44 @@ class DataStore(object):
             layer_name = '%s-%s' % (self._index, layer_name)
             self._index += 1
 
+        if self.layer_uri(layer_name):
+            return False, tr('The layer already exists in the datastore.')
+
         if isinstance(layer, QgsRasterLayer):
-            return self._add_raster_layer(layer, layer_name)
+            result = self._add_raster_layer(layer, layer_name)
         else:
-            return self._add_vector_layer(layer, layer_name)
+            result = self._add_vector_layer(layer, layer_name)
+
+        try:
+            layer.keywords
+            KeywordIO().write_keywords(
+                self.layer(result[1]), layer.keywords)
+        except AttributeError:
+            pass
+
+        return result
+
+    def layer(self, layer_name):
+        """Get QGIS layer.
+
+        :param layer_name: The name of the layer to fetch.
+        :type layer_name: str
+
+        :return: The QGIS layer.
+        :rtype: QgsMapLayer
+
+        .. versionadded:: 4.0
+        """
+        uri = self.layer_uri(layer_name)
+        layer = QgsVectorLayer(uri, layer_name, 'ogr')
+        if layer.isValid():
+            return layer
+        else:
+            layer = QgsRasterLayer(uri, layer_name)
+            if layer.isValid():
+                return layer
+            else:
+                return None
 
     @abstractmethod
     def is_writable(self):
