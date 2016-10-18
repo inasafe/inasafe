@@ -11,7 +11,7 @@
       "info": {},
       "process":[
         "Run impact function",
-        "Intersect aggregate hazard and exposure"
+        "Highest class of hazard is assigned when more than one overlaps"
       ]
     },
     "post_processor":{
@@ -25,7 +25,7 @@
       },
       "process":[
         "Convert bbox aggregation to polygon layer with keywords",
-        "Intersect hazard polygons with aggregation areas and assign hazard class"
+        "Union hazard polygons with aggregation areas and assign hazard class"
       ]
     },
     "hazard":{
@@ -34,7 +34,8 @@
         "Cleaning the vector hazard attribute table",
         "Assign classes based on value map",
         "Classified polygon hazard with keywords",
-        "Vector clip and mask hazard to aggregation"
+        "Vector clip and mask hazard to aggregation",
+        "Clip and mask hazard polygons with aggregation"
       ]
     },
     "exposure":{

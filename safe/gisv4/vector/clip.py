@@ -172,10 +172,5 @@ def clip(layer_to_clip, mask_layer, callback=None):
     # End copy/paste from Processing plugin.
     writer.commitChanges()
 
-    # Todo keywords
-    # inasafe_fields = layer_to_clip.keywords['inasafe_fields'].copy()
-    # inasafe_fields.update(mask_layer.keywords['inasafe_fields'])
-    # writer.keywords['inasafe_fields'] = inasafe_fields
-    # writer.keywords['layer_purpose'] = 'aggregate_hazard'
-
+    writer.keywords = layer_to_clip.keywords.copy()
     return writer

@@ -17,6 +17,7 @@ from qgis.core import (
 )
 
 from safe.utilities.i18n import tr
+from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
 from safe.definitionsv4.fields import hazard_class_field
 from safe.definitionsv4.hazard_classifications import hazard_classification
 # from safe.definitionsv4.processing import assign_highest_value
@@ -64,6 +65,14 @@ def assign_highest_value(exposure_layer, hazard_layer, callback=None):
     output_layer_name = 'highest_hazard_value'
     processing_step = 'Assigning the highest hazard value'
 
+    hazard_keywords = hazard_layer.keywords
+    hazard_inasafe_fields = hazard_keywords['inasafe_fields']
+
+    if not hazard_keywords.get('hazard_classification'):
+        raise InvalidKeywordsForProcessingAlgorithm
+    if not hazard_inasafe_fields.get(hazard_class_field['key']):
+        raise InvalidKeywordsForProcessingAlgorithm
+
     # We add exposure and hazard fields to the out layer.
     fields = exposure_layer.fields()
     for field in hazard_layer.fields():
@@ -83,11 +92,10 @@ def assign_highest_value(exposure_layer, hazard_layer, callback=None):
     # Todo callback
     # total = 100.0 / len(selectionA)
 
-    hazard_keywords = hazard_layer.keywords
-    inasafe_fields = hazard_keywords['inasafe_fields']
-    hazard_field = inasafe_fields[hazard_class_field['key']]
+    hazard_field = hazard_inasafe_fields[hazard_class_field['key']]
     index = hazard_layer.fieldNameIndex(hazard_field)
 
+    layer_classification = None
     for classification in hazard_classification['types']:
         if classification['key'] == hazard_keywords['hazard_classification']:
             layer_classification = classification
@@ -162,7 +170,8 @@ def assign_highest_value(exposure_layer, hazard_layer, callback=None):
 
     inasafe_fields = exposure_layer.keywords['inasafe_fields'].copy()
     inasafe_fields.update(hazard_layer.keywords['inasafe_fields'])
+    writer.keywords = exposure_layer.keywords
     writer.keywords['inasafe_fields'] = inasafe_fields
-    writer.keywords['layer_purpose'] = 'aggregate_hazard'
+    writer.keywords['layer_purpose'] = 'impact'
 
     return writer
