@@ -114,7 +114,7 @@ def definition_to_message(definition, heading_style=None):
     'continuous_hazard_units': list of ,
     'vector_hazard_classifications': list of,
     'raster_hazard_classifications': list of,
-    'hazard_classifications': list of ,
+    'classifications': list of ,
     'extra_fields': []
 
     :returns: Message
@@ -237,9 +237,9 @@ def definition_to_message(definition, heading_style=None):
     # it is replaced by hazard_classfications in v4
     # We should delete vector_hazard_classifications from
     # definitions
-    if 'hazard_classifications' in definition:
+    if 'classifications' in definition:
         message.add(m.Paragraph(tr('Hazard classifications')))
-        for hazard_class in definition['hazard_classifications']:
+        for hazard_class in definition['classifications']:
             message.add(definition_to_message(hazard_class))
 
     if 'classes' in definition:
