@@ -182,8 +182,7 @@ class TestImpactFunction(unittest.TestCase):
         if use_debug:
             print impact_function.datastore.uri.absolutePath()
             print impact_function.datastore.layers()
-        # Temporary disabled
-        # self.assertIsNotNone(impact_function.impact)
+        self.assertIsNotNone(impact_function.impact)
 
     def test_scenario(self):
         """Run test single scenario."""
