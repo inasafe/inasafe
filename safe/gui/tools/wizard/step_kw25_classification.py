@@ -138,9 +138,8 @@ class StepKwClassification(WizardStep, FORM_CLASS):
             self.lstClassifications.addItem(item)
 
         # Set values based on existing keywords (if already assigned)
-        key = '%s_classification' % (
-            self.parent.step_kw_purpose.selected_purpose()['key'])
-        classification_keyword = self.parent.get_existing_keyword(key)
+        classification_keyword = self.parent.get_existing_keyword(
+            'classification')
         if classification_keyword:
             classifications = []
             for index in xrange(self.lstClassifications.count()):
