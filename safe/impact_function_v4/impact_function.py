@@ -35,6 +35,7 @@ from safe.gisv4.vector.prepare_vector_layer import prepare_vector_layer
 from safe.gisv4.vector.reproject import reproject
 from safe.gisv4.vector.assign_highest_value import assign_highest_value
 from safe.gisv4.vector.reclassify import reclassify
+from safe.gisv4.vector.union import union
 from safe.gisv4.vector.clip import clip
 from safe.gisv4.vector.assign_hazard_class import assign_hazard_class
 from safe.definitionsv4.post_processors import post_processors
@@ -577,129 +578,6 @@ class ImpactFunction(object):
         return self.state
 
     @profile
-    def intersect_exposure_and_aggregate_hazard(self):
-        """This function intersects the exposure with the aggregate hazard.
-
-        This function will set the impact layer.
-        """
-        self.set_state_process('impact function', 'Run impact function')
-        if self.exposure.keywords.get('exposure') == 'structure':
-            self.set_state_process(
-                'impact function',
-                'Highest class of hazard is assigned when more than one '
-                'overlaps')
-            # self.impact = intersection(self.exposure, self._aggregate_hazard)
-
-        else:
-            self.set_state_process(
-                'impact function',
-                'Union exposure features to the aggregate hazard')
-            # self.impact = zonal_statistics(
-            #    self.exposure, self._aggregate_hazard)
-
-        # self.datastore.add_layer(self.impact, 'intermediate-impact')
-
-    @profile
-    def exposure_preparation(self):
-        """This function is doing the exposure preparation."""
-        if self.exposure.type() == QgsMapLayer.RasterLayer:
-            if self.exposure.keywords.get('layer_mode') == 'continuous':
-                if self.exposure.keywords.get('exposure_unit') == 'density':
-                    self.set_state_process(
-                        'exposure', 'Calculate counts per cell')
-                self.set_state_process(
-                    'exposure',
-                    'Raster clip and mask exposure to aggregate hazard')
-                self.set_state_process(
-                    'exposure',
-                    'Zonal stats on intersected hazard / aggregation data')
-            else:
-                self.set_state_process(
-                    'exposure', 'Polygonise classified raster hazard')
-                self.set_state_process(
-                    'exposure',
-                    'Intersect aggregate hazard layer with divisible polygon')
-                self.set_state_process(
-                    'exposure',
-                    'Recalculate population based on new polygonise size')
-
-        elif self.exposure.type() == QgsMapLayer.VectorLayer:
-
-            self.set_state_process(
-                'exposure',
-                'Cleaning the vector exposure attribute table')
-            # noinspection PyTypeChecker
-            self.exposure = prepare_vector_layer(self.exposure)
-            if self.debug:
-                self.datastore.add_layer(
-                    self.exposure, 'exposure_cleaned')
-
-        else:
-            raise InvalidLayerError(tr('Unsupported exposure layer type'))
-
-    @profile
-    def aggregate_hazard_preparation(self):
-        """This function is doing the aggregate hazard layer.
-
-        It will prepare the aggregate layer and intersect hazard polygons with
-        aggregation areas and assign hazard class.
-        """
-        if not self.aggregation:
-            self.set_state_info('aggregation', 'provided', False)
-
-            if not self.actual_extent:
-                self._actual_extent = self.exposure.extent()
-
-            self.set_state_process(
-                'aggregation',
-                'Convert bbox aggregation to polygon layer with keywords')
-            self.aggregation = self.create_virtual_aggregation()
-            if self.debug:
-                self.datastore.add_layer(self.aggregation, 'aggr_from_bbox')
-
-        else:
-            self.set_state_info('aggregation', 'provided', True)
-
-            self.set_state_process(
-                'aggregation', 'Cleaning the aggregation layer')
-            # noinspection PyTypeChecker
-            self.aggregation = prepare_vector_layer(self.aggregation)
-            if self.debug:
-                self.datastore.add_layer(self.aggregation, 'aggr_prepared')
-
-            if self.aggregation.crs().authid() != self.exposure.crs().authid():
-                self.set_state_process(
-                    'aggregation',
-                    'Reproject aggregation layer to exposure CRS')
-                # noinspection PyTypeChecker
-                self.aggregation = reproject(
-                    self.aggregation, self.exposure.crs())
-                if self.debug:
-                    self.datastore.add_layer(
-                        self.aggregation, 'aggr_reprojected')
-            else:
-                self.set_state_process(
-                    'aggregation',
-                    'Aggregation layer already in exposure CRS')
-
-        self.set_state_process(
-            'hazard',
-            'Clip and mask hazard polygons with aggregation')
-        self._aggregate_hazard = clip(self.hazard, self.aggregation)
-        if self.debug:
-            self.datastore.add_layer(
-                self._aggregate_hazard, 'hazard_clip_by_aggregation')
-
-        self.set_state_process(
-            'aggregation',
-            'Union hazard polygons with aggregation areas and assign '
-            'hazard class')
-        # self._aggregate_hazard = union(self.hazard, self.aggregation)
-        # if self.debug:
-        #    self.datastore.add_layer(
-        #        self._aggregate_hazard, 'aggregate_hazard')
-
-    @profile
     def hazard_preparation(self):
         """This function is doing the hazard preparation."""
 
@@ -763,6 +641,142 @@ class ImpactFunction(object):
 
         self.set_state_process(
             'hazard', 'Vector clip and mask hazard to aggregation')
+
+    @profile
+    def aggregate_hazard_preparation(self):
+        """This function is doing the aggregate hazard layer.
+
+        It will prepare the aggregate layer and intersect hazard polygons with
+        aggregation areas and assign hazard class.
+        """
+        if not self.aggregation:
+            self.set_state_info('aggregation', 'provided', False)
+
+            if not self.actual_extent:
+                self._actual_extent = self.exposure.extent()
+
+            self.set_state_process(
+                'aggregation',
+                'Convert bbox aggregation to polygon layer with keywords')
+            self.aggregation = self.create_virtual_aggregation()
+            if self.debug:
+                self.datastore.add_layer(self.aggregation, 'aggr_from_bbox')
+
+        else:
+            self.set_state_info('aggregation', 'provided', True)
+
+            self.set_state_process(
+                'aggregation', 'Cleaning the aggregation layer')
+            # noinspection PyTypeChecker
+            self.aggregation = prepare_vector_layer(self.aggregation)
+            if self.debug:
+                self.datastore.add_layer(self.aggregation, 'aggr_prepared')
+
+            if self.aggregation.crs().authid() != self.exposure.crs().authid():
+                self.set_state_process(
+                    'aggregation',
+                    'Reproject aggregation layer to exposure CRS')
+                # noinspection PyTypeChecker
+                self.aggregation = reproject(
+                    self.aggregation, self.exposure.crs())
+                if self.debug:
+                    self.datastore.add_layer(
+                        self.aggregation, 'aggr_reprojected')
+            else:
+                self.set_state_process(
+                    'aggregation',
+                    'Aggregation layer already in exposure CRS')
+
+        self.set_state_process(
+            'hazard',
+            'Clip and mask hazard polygons with aggregation')
+        self._aggregate_hazard = clip(self.hazard, self.aggregation)
+        if self.debug:
+            self.datastore.add_layer(
+                self._aggregate_hazard, 'hazard_clip_by_aggregation')
+
+        self.set_state_process(
+            'aggregation',
+            'Union hazard polygons with aggregation areas and assign '
+            'hazard class')
+        self._aggregate_hazard = union(self.hazard, self.aggregation)
+        if self.debug:
+            self.datastore.add_layer(
+                self._aggregate_hazard, 'aggregate_hazard')
+
+    @profile
+    def exposure_preparation(self):
+        """This function is doing the exposure preparation."""
+        if self.exposure.type() == QgsMapLayer.RasterLayer:
+            if self.exposure.keywords.get('layer_mode') == 'continuous':
+                if self.exposure.keywords.get('exposure_unit') == 'density':
+                    self.set_state_process(
+                        'exposure', 'Calculate counts per cell')
+                self.set_state_process(
+                    'exposure',
+                    'Raster clip and mask exposure to aggregate hazard')
+                self.set_state_process(
+                    'exposure',
+                    'Zonal stats on intersected hazard / aggregation data')
+            else:
+                self.set_state_process(
+                    'exposure', 'Polygonise classified raster hazard')
+                self.set_state_process(
+                    'exposure',
+                    'Intersect aggregate hazard layer with divisible polygon')
+                self.set_state_process(
+                    'exposure',
+                    'Recalculate population based on new polygonise size')
+
+        elif self.exposure.type() == QgsMapLayer.VectorLayer:
+
+            self.set_state_process(
+                'exposure',
+                'Cleaning the vector exposure attribute table')
+            # noinspection PyTypeChecker
+            self.exposure = prepare_vector_layer(self.exposure)
+            if self.debug:
+                self.datastore.add_layer(
+                    self.exposure, 'exposure_cleaned')
+
+            exposure = self.exposure.keywords.get('exposure')
+            geometry = self.exposure.geometryType()
+            if exposure == 'structure' and geometry == QGis.Polygon:
+                self.set_state_process(
+                    'exposure',
+                    'Smart clip')
+            else:
+                self.set_state_process(
+                    'exposure',
+                    'Clip the exposure layer with the aggregagte hazard')
+                self.exposure = clip(self.exposure, self._aggregate_hazard)
+                if self.debug:
+                    self.datastore.add_layer(
+                        self.exposure, 'exposure_clip')
+
+    @profile
+    def intersect_exposure_and_aggregate_hazard(self):
+        """This function intersects the exposure with the aggregate hazard.
+
+        This function will set the impact layer.
+        """
+        self.set_state_process('impact function', 'Run impact function')
+        exposure = self.exposure.keywords.get('exposure')
+        geometry = self.exposure.geometryType()
+        if exposure == 'structure' and geometry == QGis.Polygon:
+            self.set_state_process(
+                'impact function',
+                'Highest class of hazard is assigned when more than one '
+                'overlaps')
+            # self.impact = intersection(self.exposure, self._aggregate_hazard)
+
+        else:
+            self.set_state_process(
+                'impact function',
+                'Union exposure features to the aggregate hazard')
+            self.impact = union(self.exposure, self._aggregate_hazard)
+
+        self.datastore.add_layer(self.impact, 'intermediate-impact')
 
     @profile
     def run_single_post_processor(self, post_processor):
