@@ -78,7 +78,7 @@ exposure_population = {
     'units': [
         count_exposure_unit,
         density_exposure_unit],
-    'exposure_classifications': [],
+    'classifications': [],
     'fields': exposure_fields,
     'extra_fields': [
         exposure_name_field,
@@ -135,7 +135,7 @@ exposure_road = {
         'line'
     ],
     'units': [],
-    'exposure_classifications': [generic_road_classes],
+    'classifications': [generic_road_classes],
     'fields': exposure_fields,
     'extra_fields': [],
     'layer_modes': [layer_mode_classified]
@@ -177,7 +177,7 @@ exposure_structure = {
         'point'
     ],
     'units': [],
-    'exposure_classifications': [generic_structure_classes],
+    'classifications': [generic_structure_classes],
     'fields': exposure_fields,
     'extra_fields': [
         women_count_field,
@@ -218,7 +218,7 @@ exposure_place = {
         'point'
     ],
     'units': [],
-    'exposure_classifications': [generic_place_classes],
+    'classifications': [generic_place_classes],
     'fields': exposure_fields,
     'extra_fields': [
         exposure_name_field,

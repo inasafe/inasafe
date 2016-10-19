@@ -126,16 +126,16 @@ def exposure_units(exposure):
     return sorted(units, key=lambda k: k['key'])
 
 
-def get_hazard_classifications(hazard_key):
-    """Get hazard classifications.
+def get_classifications(subcategory_key):
+    """Get hazard or exposure classifications.
 
-    :param hazard_key: The hazard key
-    :type hazard_key: str
+    :param subcategory_key: The hazard or exposure key
+    :type subcategory_key: str
 
-    :returns: List of hazards_classifications
+    :returns: List of hazard or exposure classifications
     :rtype: list
     """
-    classifications = definition(hazard_key)['classifications']
+    classifications = definition(subcategory_key)['classifications']
     return sorted(classifications, key=lambda k: k['key'])
 
 

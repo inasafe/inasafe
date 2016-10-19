@@ -22,13 +22,14 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from PyQt4 import QtCore
 from PyQt4.QtGui import QListWidgetItem
 
-from safe.definitionsv4.layer_purposes import layer_purpose_hazard
+from safe.definitionsv4.layer_purposes import (
+    layer_purpose_hazard, layer_purpose_exposure)
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_strings import classification_question
 from safe.utilities.gis import is_raster_layer
 from safe.definitionsv4.utilities import (
-    definition, get_hazard_classifications)
+    definition, get_classifications)
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
@@ -74,12 +75,13 @@ class StepKwClassification(WizardStep, FORM_CLASS):
         """
         subcategory_key = self.parent.step_kw_subcategory.\
             selected_subcategory()['key']
-        if self.parent.step_kw_purpose.\
-                selected_purpose() == layer_purpose_hazard:
-            return get_hazard_classifications(subcategory_key)
+        layer_purpose = self.parent.step_kw_purpose.selected_purpose()
+        if layer_purpose in [
+            layer_purpose_hazard, layer_purpose_exposure]:
+            return get_classifications(subcategory_key)
         else:
-            # There are no classifications for exposures defined yet, apart
-            # from postprocessor_classification, processed paralelly
+            # There are no classifications for non exposure and hazard
+            # defined yet
             return []
 
     def on_lstClassifications_itemSelectionChanged(self):
