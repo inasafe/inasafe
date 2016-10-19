@@ -31,6 +31,7 @@ from safe.definitionsv4.layer_purposes import (
     layer_purpose_aggregation
 )
 from safe.utilities.i18n import tr
+from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -40,6 +41,7 @@ __revision__ = '$Format:%H$'
 LOGGER = logging.getLogger('InaSAFE')
 
 
+@profile
 def prepare_vector_layer(layer, callback=None):
     """
     This function will prepare the layer to be used in InaSAFE :
@@ -80,6 +82,7 @@ def prepare_vector_layer(layer, callback=None):
     return cleaned
 
 
+@profile
 def _rename_remove_inasafe_fields(layer):
     """Loop over fields and rename fields which are used in InaSAFE.
 
@@ -124,6 +127,7 @@ def _rename_remove_inasafe_fields(layer):
         % (layer.keywords['layer_purpose'], to_remove)))
 
 
+@profile
 def _remove_rows(layer):
     """Remove rows which do not have information for InaSAFE.
 
@@ -159,6 +163,7 @@ def _remove_rows(layer):
     layer.commitChanges()
 
 
+@profile
 def _add_id_column(layer):
     """Add an ID column if it's not present in the attribute table.
 

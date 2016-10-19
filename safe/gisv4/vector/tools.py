@@ -15,6 +15,7 @@ from qgis.core import (
 )
 
 from safe.common.exceptions import MemoryLayerCreationError
+from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -44,6 +45,7 @@ for key, value in list(wkb_type_groups.items()):
         wkb_type_groups[const] = key
 
 
+@profile
 def create_memory_layer(
         layer_name, geometry, coordinate_reference_system, fields=None):
     """Create a vector memory layer.
@@ -87,6 +89,7 @@ def create_memory_layer(
     return memory_layer
 
 
+@profile
 def copy_layer(source, target):
     """Copy a vector layer to another one.
 
@@ -106,6 +109,7 @@ def copy_layer(source, target):
         data_provider.addFeatures([out_feature])
 
 
+@profile
 def copy_fields(layer, fields_to_copy):
     """Copy fields inside an attribute table.
 
@@ -140,6 +144,7 @@ def copy_fields(layer, fields_to_copy):
             layer.updateFields()
 
 
+@profile
 def remove_fields(layer, fields_to_remove):
     """Remove fields from a vector layer.
 

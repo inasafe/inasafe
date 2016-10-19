@@ -9,6 +9,7 @@ from qgis.core import QGis, QgsField
 from safe.definitionsv4.fields import hazard_class_field, hazard_value_field
 from safe.definitionsv4.processing import reclassify_vector
 from safe.gisv4.vector.tools import remove_fields
+from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -16,6 +17,7 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
+@profile
 def assign_hazard_class(layer, callback=None):
     """Assign hazard class to a vector layer.
 

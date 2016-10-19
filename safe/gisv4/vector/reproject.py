@@ -13,6 +13,8 @@ from qgis.core import (
 
 from safe.gisv4.vector.tools import create_memory_layer
 from safe.definitionsv4.processing import reproject_vector
+from safe.utilities.profiling import profile
+
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -20,6 +22,7 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
+@profile
 def reproject(layer, output_crs, callback=None):
     """
     Reproject a vector layer to a specific CRS.

@@ -18,6 +18,7 @@ from safe.definitionsv4.fields import hazard_class_field
 from safe.definitionsv4.layer_geometry import (
     layer_geometry, layer_geometry_polygon)
 from safe.definitionsv4.processing import polygonize_raster
+from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -25,6 +26,7 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
+@profile
 def polygonize(layer, callback=None):
     """
     Polygonize a raster layer into a vector layer using GDAL.
