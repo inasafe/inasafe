@@ -1,7 +1,5 @@
 # coding=utf-8
-"""Definitions relating to exposure classifications.
-
-"""
+"""Definitions relating to exposure classifications."""
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -448,10 +446,10 @@ generic_place_classes = {
             'key': 'Town',
             'name': tr('Town'),
             'description': tr(
-                'A second tier urban settlement of local importance, often with a '
-                'population of 10,000 people and good range of local facilities '
-                'including schools, medical facilities etc and traditionally a '
-                'market.'),
+                'A second tier urban settlement of local importance, often '
+                'with a population of 10,000 people and good range of local '
+                'facilities including schools, medical facilities etc and '
+                'traditionally a market.'),
             'string_defaults': ['town'],
             'osm_downloader': [],
             'citations': [
@@ -466,8 +464,8 @@ generic_place_classes = {
             'name': tr('Village'),
             'description': tr(
                 'A smaller distinct settlement, smaller than a town with few '
-                'facilities available with people traveling to nearby towns to '
-                'access these.'),
+                'facilities available with people traveling to nearby towns '
+                'to access these.'),
             'string_defaults': ['village'],
             'osm_downloader': [],
             'citations': [
@@ -499,8 +497,9 @@ generic_place_classes = {
             'key': 'airport',
             'name': tr('Airport'),
             'description': tr(
-                'A complex of runways and buildings for the takeoff, landing, and '
-                'maintenance of civil aircraft, with facilities for passengers.'),
+                'A complex of runways and buildings for the takeoff, landing, '
+                'and maintenance of civil aircraft, with facilities for '
+                'passengers.'),
             'osm_downloader': [],
             'string_defaults': ['airport'],
             'citations': [
