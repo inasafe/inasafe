@@ -308,7 +308,7 @@ class KeywordIO(QObject):
             'hazard_category',
             'layer_geometry',
             'layer_mode',
-            'hazard_classification',
+            'classification',
             'exposure_unit',
             'continuous_hazard_unit',
             'volcano_name_field',
@@ -422,7 +422,7 @@ class KeywordIO(QObject):
             value = self._dict_to_row(value)
         # In these KEYWORD cases we show the DESCRIPTION for
         # the VALUE keyword_definition
-        elif keyword in ['hazard_classification']:
+        elif keyword in ['classification']:
             # get the keyword_definition for this class from definitions
             value = definition(value)
             value = value['description']

@@ -135,7 +135,7 @@ def get_hazard_classifications(hazard_key):
     :returns: List of hazards_classifications
     :rtype: list
     """
-    classifications = definition(hazard_key)['hazard_classifications']
+    classifications = definition(hazard_key)['classifications']
     return sorted(classifications, key=lambda k: k['key'])
 
 

@@ -288,7 +288,7 @@ class TestKeywordWizard(unittest.TestCase):
                  },
             'value_map': assigned_values,
             'date': source_date,
-            'hazard_classification': volcano_hazard_classes['key'],
+            'classification': volcano_hazard_classes['key'],
             'layer_geometry': layer_geometry_polygon['key'],
             'layer_purpose': layer_purpose_hazard['key'],
             'layer_mode': layer_mode_classified['key']
@@ -574,7 +574,7 @@ class TestKeywordWizard(unittest.TestCase):
             # No value will be omitted.
             'value_map': dict((k, v) for k, v in assigned_values.items() if v),
             'date': source_date,
-            # 'hazard_classification': volcano_hazard_classes['key'],
+            # 'classification': volcano_hazard_classes['key'],
             'layer_geometry': layer_geometry_polygon['key'],
             'layer_purpose': layer_purpose_exposure['key'],
             'layer_mode': layer_mode_classified['key']
