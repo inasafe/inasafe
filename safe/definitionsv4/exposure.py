@@ -5,19 +5,22 @@ from safe.definitionsv4.concepts import concepts
 from safe.definitionsv4.units import (
     count_exposure_unit, density_exposure_unit)
 from safe.definitionsv4.fields import (
+    adult_count_field,
+    adult_ratio_field,
+    elderly_count_field,
+    elderly_ratio_field,
+    exposure_fields,
     exposure_name_field,
+    female_ratio_field,
     women_count_field,
     youth_count_field,
-    adult_count_field,
-    elderly_count_field,
-    female_ratio_field,
-    youth_ratio_field,
-    adult_ratio_field,
-    elderly_ratio_field,
-    exposure_fields
+    youth_ratio_field
 )
 from safe.definitionsv4.layer_modes import (
     layer_mode_classified, layer_mode_continuous)
+from safe.definitionsv4.exposure_classifications import (
+    generic_place_classes, generic_road_classes, generic_structure_classes
+)
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -75,6 +78,7 @@ exposure_population = {
     'units': [
         count_exposure_unit,
         density_exposure_unit],
+    'exposure_classifications': [],
     'fields': exposure_fields,
     'extra_fields': [
         exposure_name_field,
@@ -89,47 +93,7 @@ exposure_population = {
     ],
     'layer_modes': [layer_mode_continuous]
 }
-exposure_people_in_building = {
-    'key': 'people_in_building',
-    'name': tr('People in buildings'),
-    'description': tr(
-        '<b>People in buildings</b> exposure data assigns the population '
-        'of a specific administrative area to the buildings with a '
-        'residential function in that area. <p>The process of assigning '
-        'people to buildings assumes that all people and buildings in the '
-        'area are mapped.</p>'),
-    'notes': exposure_population['notes'],
-    'continuous_notes': [  # notes specific to continuous data
-    ],
-    'classified_notes': [  # notes specific to classified data
-    ],
-    'actions': exposure_population['actions'],
-    'citations': [
-        {
-            'text': tr('UNISDR (2015) Background Paper: Proposed Updated '
-                       'Terminology on Disaster Risk  Reduction '
-                       'Reduction.'),
-            'link': 'http://www.preventionweb.net/files/'
-                    '45462_backgoundpaperonterminologyaugust20.pdf'
-        }
-    ],
-    'allowed_geometries': [
-        'point'
-    ],
-    'units': [],
-    'fields': exposure_fields,
-    'extra_fields': [
-        women_count_field,
-        youth_count_field,
-        adult_count_field,
-        elderly_count_field,
-        female_ratio_field,
-        youth_ratio_field,
-        adult_ratio_field,
-        elderly_ratio_field
-    ],
-    'layer_modes': [layer_mode_classified]
-}
+
 exposure_road = {
     'key': 'road',
     'name': tr('Roads'),
@@ -171,6 +135,7 @@ exposure_road = {
         'line'
     ],
     'units': [],
+    'exposure_classifications': [generic_road_classes],
     'fields': exposure_fields,
     'extra_fields': [],
     'layer_modes': [layer_mode_classified]
@@ -212,6 +177,7 @@ exposure_structure = {
         'point'
     ],
     'units': [],
+    'exposure_classifications': [generic_structure_classes],
     'fields': exposure_fields,
     'extra_fields': [
         women_count_field,
@@ -252,6 +218,7 @@ exposure_place = {
         'point'
     ],
     'units': [],
+    'exposure_classifications': [generic_place_classes],
     'fields': exposure_fields,
     'extra_fields': [
         exposure_name_field,
@@ -314,7 +281,6 @@ exposure_land_cover = {
 }
 exposure_all = [
     exposure_land_cover,
-    exposure_people_in_building,
     exposure_population,
     exposure_road,
     exposure_place,
