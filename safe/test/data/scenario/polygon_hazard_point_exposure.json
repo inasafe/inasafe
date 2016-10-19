@@ -11,7 +11,7 @@
       "info": {},
       "process":[
         "Run impact function",
-        "Highest class of hazard is assigned when more than one overlaps"
+        "Union exposure features to the aggregate hazard"
       ]
     },
     "post_processor":{
@@ -41,7 +41,8 @@
     "exposure":{
       "info": {},
       "process":[
-        "Cleaning the vector exposure attribute table"
+        "Cleaning the vector exposure attribute table",
+        "Clip the exposure layer with the aggregagte hazard"
       ]
     }
   }

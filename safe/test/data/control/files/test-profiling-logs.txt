@@ -1,6 +1,4 @@
 Function, Calls, Average (ms), Max (ms)
-is_divisible_exposure
-intersection
 copy_layer
 run
 rename_remove_inasafe_fields

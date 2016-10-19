@@ -1123,5 +1123,3 @@ def get_control_text(file_name):
         mode='r',
         encoding='utf-8').readlines()
     return expected_result
-
-

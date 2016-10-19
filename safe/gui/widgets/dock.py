@@ -717,7 +717,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.set_run_button_status()
         self.draw_rubber_bands()
 
-
     def toggle_aggregation_combo(self):
         """Toggle the aggregation combo enabled status.
 
@@ -1012,8 +1011,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.extent.show_user_analysis_extent()  # blue
             try:
                 pass
-                #clip_parameters = self.impact_function.clip_parameters
-                #self.extent.show_last_analysis_extent(
+                # clip_parameters = self.impact_function.clip_parameters
+                # self.extent.show_last_analysis_extent(
                 #    clip_parameters['adjusted_geo_extent'])  # red
             except (AttributeError, TypeError):
                 pass
@@ -1031,11 +1030,12 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.enable_busy_cursor()
             self.show_next_analysis_extent()
             self.impact_function = self.prepare_impact_function()
-            #clip_parameters = self.impact_function.clip_parameters
-            #self.extent.show_last_analysis_extent(
+            # clip_parameters = self.impact_function.clip_parameters
+            # self.extent.show_last_analysis_extent(
             #    clip_parameters['adjusted_geo_extent'])
 
             # Start the analysis
+            self.impact_function.debug = True
             self.impact_function.run()
         except KeywordNotFoundError as e:
             self.hide_busy()
@@ -1144,9 +1144,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         impact_function.aggregation = self.get_aggregation_layer()
 
         # Variables
-        impact_function.clip_hard = self.clip_hard
-        impact_function.show_intermediate_layers = \
-            self.show_intermediate_layers
+        # impact_function.clip_hard = self.clip_hard
+        # impact_function.show_intermediate_layers = \
+        #     self.show_intermediate_layers
         viewport = viewport_geo_array(self.iface.mapCanvas())
         impact_function.viewport_extent = viewport
         if self.extent.user_extent:
@@ -2036,8 +2036,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         try:
             # Temporary only, for checking the user extent
             impact_function = self.prepare_impact_function()
-            #clip_parameters = impact_function.clip_parameters
-            #return True, clip_parameters['adjusted_geo_extent']
+            # clip_parameters = impact_function.clip_parameters
+            # return True, clip_parameters['adjusted_geo_extent']
             return True, None
         except (AttributeError, InsufficientOverlapError):
             return False, None

@@ -8,13 +8,14 @@ This code was taken from http://stackoverflow.com/a/3620972
 
 import time
 from functools import wraps
+from collections import OrderedDict
 
 __copyright__ = "Vadim Shender (original poster in stack overflow), InaSAFE"
 __license__ = "Creative Commons"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
-PROF_DATA = {}
+PROF_DATA = OrderedDict()
 
 
 def profile(fn):
@@ -35,6 +36,7 @@ def profile(fn):
 
     return with_profiling
 
+
 def profiling_log():
     """Get the profiling logs."""
     return PROF_DATA
@@ -42,4 +44,4 @@ def profiling_log():
 
 def clear_prof_data():
     global PROF_DATA
-    PROF_DATA = {}
+    PROF_DATA = OrderedDict()
