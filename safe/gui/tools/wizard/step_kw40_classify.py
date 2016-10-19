@@ -24,7 +24,10 @@ from osgeo.gdalconst import GA_ReadOnly
 from safe.definitionsv4.exposure import (
     exposure_road, exposure_structure, exposure_place)
 from safe.definitionsv4.value_maps import (
-    road_class_mapping, structure_class_mapping, place_class_mapping)
+    road_class_mapping, place_class_mapping)
+from safe.definitionsv4.exposure_classifications import (
+    generic_structure_classes
+)
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_strings import (
@@ -120,7 +123,7 @@ class StepKwClassify(WizardStep, FORM_CLASS):
         if selected_subcategory == exposure_road:
             return road_class_mapping
         elif selected_subcategory == exposure_structure:
-            return structure_class_mapping
+            return generic_structure_classes['classes']
         elif selected_subcategory == exposure_place:
             return place_class_mapping
         else:

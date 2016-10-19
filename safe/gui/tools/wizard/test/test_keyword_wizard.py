@@ -30,7 +30,8 @@ from safe.definitionsv4.constants import not_available
 from safe.definitionsv4.fields import (
     hazard_name_field, hazard_class_field, exposure_class_field)
 from safe.definitionsv4.layer_geometry import layer_geometry_polygon
-from safe.definitionsv4.value_maps import structure_class_mapping
+from safe.definitionsv4.exposure_classifications import (
+    generic_structure_classes)
 
 from safe.gui.tools.wizard.wizard_dialog import WizardDialog
 from safe.utilities.keyword_io import KeywordIO
@@ -495,7 +496,7 @@ class TestKeywordWizard(unittest.TestCase):
         #     selected_classification()
 
         # default_classes = classification['classes']
-        default_classes = structure_class_mapping
+        default_classes = generic_structure_classes['classes']
         unassigned_values = []  # no need to check actually, not save in file
         assigned_values = {
             u'residential': [u'Residential'],
