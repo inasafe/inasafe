@@ -39,6 +39,10 @@ from safe.gisv4.vector.union import union
 from safe.gisv4.vector.clip import clip
 from safe.gisv4.vector.assign_hazard_class import assign_hazard_class
 from safe.definitionsv4.post_processors import post_processors
+from safe.definitionsv4.fields import (
+    aggregation_id_field,
+    aggregation_name_field
+)
 from safe.defaults import get_defaults
 from safe.common.exceptions import (
     InvalidExtentError,
@@ -425,12 +429,13 @@ class ImpactFunction(object):
         # Notes, action
 
         for post_processor in post_processors:
-            post_processor_output = self.run_single_post_processor(
+            result, post_processor_output = self.run_single_post_processor(
                 post_processor)
-            self.set_state_process(
-                'post_processor',
-                'Post processor for %s %s.' % (
-                    post_processor['name'], post_processor_output))
+            if result:
+                self.set_state_process(
+                    'post_processor',
+                    'Post processor for %s %s.' % (
+                        post_processor['name'], post_processor_output))
 
     @staticmethod
     def console_progress_callback(current, maximum, message=None):
@@ -459,14 +464,25 @@ class ImpactFunction(object):
         :returns: A polygon layer with exposure's crs.
         :rtype: QgsVectorLayer
         """
+        fields = [
+            QgsField(
+                aggregation_id_field['field_name'],
+                aggregation_id_field['type']
+            ),
+            QgsField(
+                aggregation_name_field['field_name'],
+                aggregation_name_field['type']
+            )
+        ]
         aggregation_layer = create_memory_layer(
-            'aggregation', QGis.Polygon, self.exposure.crs())
+            'aggregation', QGis.Polygon, self.exposure.crs(), fields)
 
         aggregation_layer.startEditing()
 
         feature = QgsFeature()
         # noinspection PyCallByClass,PyArgumentList,PyTypeChecker
         feature.setGeometry(QgsGeometry.fromRect(self.actual_extent))
+        feature.setAttributes([1, tr('Entire Area')])
         aggregation_layer.addFeature(feature)
         aggregation_layer.commitChanges()
 
@@ -556,6 +572,11 @@ class ImpactFunction(object):
         if self.debug:
             self._datastore.use_index = True
 
+            self.datastore.add_layer(self.exposure, 'exposure')
+            self.datastore.add_layer(self.hazard, 'hazard')
+            if self.aggregation:
+                self.datastore.add_layer(self.aggregation, 'aggregation')
+
         # Special case for Raster Earthquake hazard.
         if self.hazard.type() == QgsMapLayer.RasterLayer:
             if self.hazard.keywords('hazard') == 'earthquake':
@@ -571,10 +592,9 @@ class ImpactFunction(object):
         self.intersect_exposure_and_aggregate_hazard()
 
         # Post Processor
-        # Disable post processor for now (IS)
-        # self.post_process()
+        self.post_process()
 
-        # self.datastore.add_layer(self.impact, 'impact')
+        self.datastore.add_layer(self.impact, 'impact')
 
         # Get the profiling log
         self._performance_log = profiling_log()
@@ -811,7 +831,9 @@ class ImpactFunction(object):
             for output_key, output_value in post_processor['output'].items():
 
                 # Get output attribute name
+                key = output_value['value']['key']
                 output_field_name = output_value['value']['field_name']
+                self.impact.keywords['inasafe_fields'][key] = output_field_name
 
                 # If there is already the output field, don't proceed
                 if self.impact.fieldNameIndex(output_field_name) > -1:
@@ -908,7 +930,6 @@ class ImpactFunction(object):
                 self.impact.deleteAttributes(temporary_indexes)
 
             self.impact.commitChanges()
-            LOGGER.debug(self.impact.source())
             return True, None
         else:
             return False, message

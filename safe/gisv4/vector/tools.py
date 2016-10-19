@@ -67,11 +67,11 @@ def create_memory_layer(
     """
 
     if geometry == QGis.Point:
-        type_string = 'Point'
+        type_string = 'MultiPoint'
     elif geometry == QGis.Line:
-        type_string = 'Line'
+        type_string = 'MultiLineString'
     elif geometry == QGis.Polygon:
-        type_string = 'Polygon'
+        type_string = 'MultiPolygon'
     else:
         raise MemoryLayerCreationError(
             'Layer is whether Point nor Line nor Polygon, I got %s' % geometry)
