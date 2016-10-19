@@ -19,5 +19,4 @@ from safe.definitionsv4.layer_modes import *
 from safe.definitionsv4.layer_purposes import *
 from safe.definitionsv4.post_processors import *
 from safe.definitionsv4.units import *
-from safe.definitionsv4.value_maps import *
 from safe.definitionsv4.versions import *
