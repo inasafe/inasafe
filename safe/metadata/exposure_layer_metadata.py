@@ -113,6 +113,13 @@ class ExposureLayerMetadata(GenericLayerMetadata):
             'inasafe/'
             'name_field/'
             'gco:CharacterString'),
+        'exposure_classification': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'exposure_classification/'
+            'gco:CharacterString'),
         'value_map': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
