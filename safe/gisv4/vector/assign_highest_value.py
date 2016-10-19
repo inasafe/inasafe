@@ -68,7 +68,7 @@ def assign_highest_value(exposure_layer, hazard_layer, callback=None):
     hazard_keywords = hazard_layer.keywords
     hazard_inasafe_fields = hazard_keywords['inasafe_fields']
 
-    if not hazard_keywords.get('hazard_classification'):
+    if not hazard_keywords.get('classification'):
         raise InvalidKeywordsForProcessingAlgorithm
     if not hazard_inasafe_fields.get(hazard_class_field['key']):
         raise InvalidKeywordsForProcessingAlgorithm
@@ -97,7 +97,7 @@ def assign_highest_value(exposure_layer, hazard_layer, callback=None):
 
     layer_classification = None
     for classification in hazard_classification['types']:
-        if classification['key'] == hazard_keywords['hazard_classification']:
+        if classification['key'] == hazard_keywords['classification']:
             layer_classification = classification
             break
 

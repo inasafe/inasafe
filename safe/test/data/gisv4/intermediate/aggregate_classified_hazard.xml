@@ -178,9 +178,9 @@
           <raster_hazard_classification>
             <gco:CharacterString/>
           </raster_hazard_classification>
-          <hazard_classification>
+          <classification>
             <gco:CharacterString>generic_hazard_classes</gco:CharacterString>
-          </hazard_classification>
+          </classification>
           <multipart_polygon>
             <gco:Boolean/>
           </multipart_polygon>

@@ -17,7 +17,6 @@
 *Exposures
 *Exposure
 *Land cover
-*People in buildings
 *Population
 *Places
 *Structures
