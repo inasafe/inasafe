@@ -91,20 +91,20 @@ def union(union_a, union_b, callback=None):
     index_b = QgsSpatialIndex(union_a.getFeatures())
 
     count = 0
-    nElement = 0
+    n_element = 0
     # Todo fix callback
     # nFeat = len(union_a.getFeatures())
-    for inFeatA in union_a.getFeatures():
+    for in_feat_a in union_a.getFeatures():
         # progress.setPercentage(nElement / float(nFeat) * 50)
-        nElement += 1
-        lstIntersectingB = []
-        geom = inFeatA.geometry()
-        atMapA = inFeatA.attributes()
+        n_element += 1
+        list_intersecting_b = []
+        geom = in_feat_a.geometry()
+        at_map_a = in_feat_a.attributes()
         intersects = index_a.intersects(geom.boundingBox())
         if len(intersects) < 1:
             try:
                 out_feature.setGeometry(geom)
-                out_feature.setAttributes(atMapA)
+                out_feature.setAttributes(at_map_a)
                 writer.addFeature(out_feature)
             except:
                 # This really shouldn't happen, as we haven't
@@ -118,15 +118,15 @@ def union(union_a, union_b, callback=None):
             engine = QgsGeometry.createGeometryEngine(geom.geometry())
             engine.prepareGeometry()
 
-            for inFeatB in union_b.getFeatures(request):
+            for in_feat_b in union_b.getFeatures(request):
                 count += 1
 
-                atMapB = inFeatB.attributes()
-                tmpGeom = inFeatB.geometry()
+                at_map_b = in_feat_b.attributes()
+                tmp_geom = in_feat_b.geometry()
 
-                if engine.intersects(tmpGeom.geometry()):
-                    int_geom = geom.intersection(tmpGeom)
-                    lstIntersectingB.append(QgsGeometry(tmpGeom))
+                if engine.intersects(tmp_geom.geometry()):
+                    int_geom = geom.intersection(tmp_geom)
+                    list_intersecting_b.append(QgsGeometry(tmp_geom))
 
                     if not int_geom:
                         # There was a problem creating the intersection
@@ -148,7 +148,8 @@ def union(union_a, union_b, callback=None):
                                 int_geom = QgsGeometry(i)
                                 try:
                                     out_feature.setGeometry(int_geom)
-                                    out_feature.setAttributes(atMapA + atMapB)
+                                    out_feature.setAttributes(
+                                        at_map_a + at_map_b)
                                     writer.addFeature(out_feature)
                                 except:
                                     LOGGER.debug(
@@ -164,7 +165,7 @@ def union(union_a, union_b, callback=None):
                             wkb_type_groups[int_geom.wkbType()]]:
                             try:
                                 out_feature.setGeometry(int_geom)
-                                out_feature.setAttributes(atMapA + atMapB)
+                                out_feature.setAttributes(at_map_a + at_map_b)
                                 writer.addFeature(out_feature)
                             except:
                                 LOGGER.debug(
@@ -176,9 +177,9 @@ def union(union_a, union_b, callback=None):
             # if there is nothing left, this will just silently fail and we
             # are good
             diff_geom = QgsGeometry(geom)
-            if len(lstIntersectingB) != 0:
-                intB = QgsGeometry.unaryUnion(lstIntersectingB)
-                diff_geom = diff_geom.difference(intB)
+            if len(list_intersecting_b) != 0:
+                int_b = QgsGeometry.unaryUnion(list_intersecting_b)
+                diff_geom = diff_geom.difference(int_b)
                 if diff_geom.isGeosEmpty() or not diff_geom.isGeosValid():
                     LOGGER.debug(
                         tr('GEOS geoprocessing error: One or more input '
@@ -193,7 +194,7 @@ def union(union_a, union_b, callback=None):
                         diff_geom = QgsGeometry(i)
             try:
                 out_feature.setGeometry(diff_geom)
-                out_feature.setAttributes(atMapA)
+                out_feature.setAttributes(at_map_a)
                 writer.addFeature(out_feature)
             except:
                 LOGGER.debug(
@@ -201,16 +202,16 @@ def union(union_a, union_b, callback=None):
                        'ignored due to invalid geometry.'))
 
     length = len(union_a.fields())
-    atMapA = [None] * length
+    at_map_a = [None] * length
 
     # nFeat = len(union_b.getFeatures())
-    for inFeatA in union_b.getFeatures():
+    for in_feat_a in union_b.getFeatures():
         # progress.setPercentage(nElement / float(nFeat) * 100)
         add = False
-        geom = inFeatA.geometry()
+        geom = in_feat_a.geometry()
         diff_geom = QgsGeometry(geom)
         atMap = [None] * length
-        atMap.extend(inFeatA.attributes())
+        atMap.extend(in_feat_a.attributes())
         intersects = index_b.intersects(geom.boundingBox())
 
         if len(intersects) < 1:
@@ -229,13 +230,13 @@ def union(union_a, union_b, callback=None):
             engine = QgsGeometry.createGeometryEngine(diff_geom.geometry())
             engine.prepareGeometry()
 
-            for inFeatB in union_a.getFeatures(request):
-                atMapB = inFeatB.attributes()
-                tmpGeom = inFeatB.geometry()
+            for in_feat_b in union_a.getFeatures(request):
+                at_map_b = in_feat_b.attributes()
+                tmp_geom = in_feat_b.geometry()
 
-                if engine.intersects(tmpGeom.geometry()):
+                if engine.intersects(tmp_geom.geometry()):
                     add = True
-                    diff_geom = QgsGeometry(diff_geom.difference(tmpGeom))
+                    diff_geom = QgsGeometry(diff_geom.difference(tmp_geom))
                     if diff_geom.isGeosEmpty() or not diff_geom.isGeosValid():
                         LOGGER.debug(
                             tr('GEOS geoprocessing error: One or more input '
@@ -261,9 +262,9 @@ def union(union_a, union_b, callback=None):
                 LOGGER.debug(
                     tr('Feature geometry error: One or more output features '
                        'ignored due to invalid geometry.'))
-        nElement += 1
+        n_element += 1
 
-    # End of copy/paste fron processing
+    # End of copy/paste from processing
 
     writer.commitChanges()
     return writer

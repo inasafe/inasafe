@@ -549,6 +549,9 @@ class ImpactFunction(object):
             # Users are free to set their own datastore with the setter.
             self._datastore = Folder(temp_dir(sub_dir=self._unique_name))
             self._datastore.default_vector_format = 'geojson'
+            if self.debug:
+                print 'Temporary datastore'
+                print self.datastore.uri.absolutePath()
 
         if self.debug:
             self._datastore.use_index = True
@@ -575,6 +578,10 @@ class ImpactFunction(object):
 
         # Get the profiling log
         self._performance_log = profiling_log()
+
+        if self.debug:
+            print 'Performance log message :'
+            print self.performance_log_message().to_text()
         return self.state
 
     @profile
