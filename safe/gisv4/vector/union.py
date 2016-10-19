@@ -81,10 +81,12 @@ def union(union_a, union_b, callback=None):
     layer_purpose_2 = keywords_union_2['layer_purpose']
 
     if not (layer_purpose_1 == 'exposure' and
-                layer_purpose_2 == 'aggregate_hazard') or \
+                layer_purpose_2 == 'aggregate_hazard') and \
         not (layer_purpose_1 == 'hazard' and
                      layer_purpose_2 == 'aggregation'):
-        raise InvalidKeywordsForProcessingAlgorithm
+        msg = 'I got layer purpose 1 = %s and layer purpose 2 = %s'\
+              % (layer_purpose_1, layer_purpose_2)
+        raise InvalidKeywordsForProcessingAlgorithm(msg)
 
     writer.keywords = union_a.keywords
     writer.keywords['inasafe_fields'] = inasafe_fields
