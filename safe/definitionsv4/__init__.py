@@ -9,6 +9,7 @@ from safe.definitionsv4.caveats import *
 from safe.definitionsv4.concepts import *
 from safe.definitionsv4.constants import *
 from safe.definitionsv4.exposure import *
+from safe.definitionsv4.exposure_classifications import *
 from safe.definitionsv4.fields import *
 from safe.definitionsv4.hazard import *
 from safe.definitionsv4.hazard_category import *

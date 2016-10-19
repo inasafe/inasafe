@@ -1,6 +1,6 @@
 # coding=utf-8
 
-"""Definitions relating to hazards category.
+"""Definitions relating to hazards classifications.
 
 See https://github.com/inasafe/inasafe/issues/2920#issuecomment-229874044
 to have a table showing you classes of each kind of hazard.
