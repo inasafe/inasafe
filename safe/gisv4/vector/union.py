@@ -77,6 +77,15 @@ def union(union_a, union_b, callback=None):
     inasafe_fields = inasafe_fields_union_1
     inasafe_fields.update(inasafe_fields_union_2)
 
+    layer_purpose_1 = keywords_union_1['layer_purpose']
+    layer_purpose_2 = keywords_union_2['layer_purpose']
+
+    if not (layer_purpose_1 == 'exposure' and
+                layer_purpose_2 == 'aggregate_hazard') or \
+        not (layer_purpose_1 == 'hazard' and
+                     layer_purpose_2 == 'aggregation'):
+        raise InvalidKeywordsForProcessingAlgorithm
+
     writer.keywords = union_a.keywords
     writer.keywords['inasafe_fields'] = inasafe_fields
     writer.keywords['layer_purpose'] = 'aggregate_hazard'
@@ -86,7 +95,6 @@ def union(union_a, union_b, callback=None):
     # Begin copy/paste from Processing plugin.
     # Please follow their code as their code is optimized.
 
-    out_feature = QgsFeature()
     index_a = QgsSpatialIndex(union_b.getFeatures())
     index_b = QgsSpatialIndex(union_a.getFeatures())
 
@@ -103,9 +111,7 @@ def union(union_a, union_b, callback=None):
         intersects = index_a.intersects(geom.boundingBox())
         if len(intersects) < 1:
             try:
-                out_feature.setGeometry(geom)
-                out_feature.setAttributes(at_map_a)
-                writer.addFeature(out_feature)
+                _write_feature(at_map_a, geom, writer)
             except:
                 # This really shouldn't happen, as we haven't
                 # edited the input geom at all
@@ -147,10 +153,10 @@ def union(union_a, union_b, callback=None):
                             if i.type() == geom.type():
                                 int_geom = QgsGeometry(i)
                                 try:
-                                    out_feature.setGeometry(int_geom)
-                                    out_feature.setAttributes(
-                                        at_map_a + at_map_b)
-                                    writer.addFeature(out_feature)
+                                    _write_feature(
+                                        at_map_a + at_map_b,
+                                        int_geom,
+                                        writer)
                                 except:
                                     LOGGER.debug(
                                         tr('Feature geometry error: One or '
@@ -164,9 +170,8 @@ def union(union_a, union_b, callback=None):
                         if int_geom.wkbType() in wkb_type_groups[
                             wkb_type_groups[int_geom.wkbType()]]:
                             try:
-                                out_feature.setGeometry(int_geom)
-                                out_feature.setAttributes(at_map_a + at_map_b)
-                                writer.addFeature(out_feature)
+                                _write_feature(
+                                    at_map_a + at_map_b, int_geom, writer)
                             except:
                                 LOGGER.debug(
                                     tr('Feature geometry error: One or more '
@@ -193,9 +198,7 @@ def union(union_a, union_b, callback=None):
                     if i.type() == geom.type():
                         diff_geom = QgsGeometry(i)
             try:
-                out_feature.setGeometry(diff_geom)
-                out_feature.setAttributes(at_map_a)
-                writer.addFeature(out_feature)
+                _write_feature(at_map_a, diff_geom, writer)
             except:
                 LOGGER.debug(
                     tr('Feature geometry error: One or more output features '
@@ -216,9 +219,7 @@ def union(union_a, union_b, callback=None):
 
         if len(intersects) < 1:
             try:
-                out_feature.setGeometry(geom)
-                out_feature.setAttributes(atMap)
-                writer.addFeature(out_feature)
+                _write_feature(atMap, geom, writer)
             except:
                 LOGGER.debug(
                     tr('Feature geometry error: One or more output features '
@@ -245,9 +246,8 @@ def union(union_a, union_b, callback=None):
                     try:
                         # Ihis only happends if the bounding box
                         # intersects, but the geometry doesn't
-                        out_feature.setGeometry(diff_geom)
-                        out_feature.setAttributes(atMap)
-                        writer.addFeature(out_feature)
+                        _write_feature(
+                            atMap, diff_geom, writer)
                     except:
                         LOGGER.debug(
                             tr('Feature geometry error: One or more output '
@@ -255,9 +255,7 @@ def union(union_a, union_b, callback=None):
 
         if add:
             try:
-                out_feature.setGeometry(diff_geom)
-                out_feature.setAttributes(atMap)
-                writer.addFeature(out_feature)
+                _write_feature(atMap, diff_geom, writer)
             except:
                 LOGGER.debug(
                     tr('Feature geometry error: One or more output features '
@@ -268,3 +266,26 @@ def union(union_a, union_b, callback=None):
 
     writer.commitChanges()
     return writer
+
+
+def _write_feature(attributes, geometry, writer):
+    """
+    Internal function to write the feature to the output.
+
+    :param attributes: Attributes of the feature.
+    :type attributes: list
+
+    :param geometry: The geometry to write to the output.
+    :type geometry: QgsGeometry
+
+    :param writer: A vector layer in editing mode.
+    :type: QgsVectorLayer
+    """
+    if writer.geometryType() != geometry.type():
+        # We don't write the feature if it's not the same geometry type.
+        return
+
+    out_feature = QgsFeature()
+    out_feature.setGeometry(geometry)
+    out_feature.setAttributes(attributes)
+    writer.addFeature(out_feature)
