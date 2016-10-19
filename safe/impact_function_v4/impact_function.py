@@ -39,6 +39,10 @@ from safe.gisv4.vector.union import union
 from safe.gisv4.vector.clip import clip
 from safe.gisv4.vector.assign_hazard_class import assign_hazard_class
 from safe.definitionsv4.post_processors import post_processors
+from safe.definitionsv4.fields import (
+    aggregation_id_field,
+    aggregation_name_field
+)
 from safe.defaults import get_defaults
 from safe.common.exceptions import (
     InvalidExtentError,
@@ -459,14 +463,25 @@ class ImpactFunction(object):
         :returns: A polygon layer with exposure's crs.
         :rtype: QgsVectorLayer
         """
+        fields = [
+            QgsField(
+                aggregation_id_field['field_name'],
+                aggregation_id_field['type']
+            ),
+            QgsField(
+                aggregation_name_field['field_name'],
+                aggregation_name_field['type']
+            )
+        ]
         aggregation_layer = create_memory_layer(
-            'aggregation', QGis.Polygon, self.exposure.crs())
+            'aggregation', QGis.Polygon, self.exposure.crs(), fields)
 
         aggregation_layer.startEditing()
 
         feature = QgsFeature()
         # noinspection PyCallByClass,PyArgumentList,PyTypeChecker
         feature.setGeometry(QgsGeometry.fromRect(self.actual_extent))
+        feature.setAttributes([1, tr('Entire Area')])
         aggregation_layer.addFeature(feature)
         aggregation_layer.commitChanges()
 
@@ -555,6 +570,11 @@ class ImpactFunction(object):
 
         if self.debug:
             self._datastore.use_index = True
+
+            self.datastore.add_layer(self.exposure, 'exposure')
+            self.datastore.add_layer(self.hazard, 'hazard')
+            if self.aggregation:
+                self.datastore.add_layer(self.aggregation, 'aggregation')
 
         # Special case for Raster Earthquake hazard.
         if self.hazard.type() == QgsMapLayer.RasterLayer:
