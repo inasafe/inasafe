@@ -127,6 +127,7 @@ class TestKeywordWizard(unittest.TestCase):
             name='volcano_krb',
             include_keywords=False,
             source_directory=standard_data_path('hazard'))
+
         # noinspection PyTypeChecker
         dialog = WizardDialog()
         dialog.set_keywords_creation_mode(layer)
@@ -478,6 +479,14 @@ class TestKeywordWizard(unittest.TestCase):
         # Click next to select classified
         dialog.pbnNext.click()
 
+        # Check if in select classification step
+        self.check_current_step(dialog.step_kw_classification)
+
+        # select volcano vector hazard classes classification
+        self.select_from_list_widget(
+            generic_structure_classes['name'],
+            dialog.step_kw_classification.lstClassifications)
+
         # Check if in select field step
         self.check_current_step(dialog.step_kw_field)
 
@@ -485,7 +494,7 @@ class TestKeywordWizard(unittest.TestCase):
         self.select_from_list_widget(
             'TYPE', dialog.step_kw_field.lstFields)
 
-        # Click next to select BUILDING
+        # Click next to select TYPE
         dialog.pbnNext.click()
 
         # Check if in classify step
