@@ -482,10 +482,13 @@ class TestKeywordWizard(unittest.TestCase):
         # Check if in select classification step
         self.check_current_step(dialog.step_kw_classification)
 
-        # select volcano vector hazard classes classification
+        # select generic structure classes classification
         self.select_from_list_widget(
             generic_structure_classes['name'],
             dialog.step_kw_classification.lstClassifications)
+
+        # Click next to select the classifications
+        dialog.pbnNext.click()
 
         # Check if in select field step
         self.check_current_step(dialog.step_kw_field)
@@ -583,7 +586,7 @@ class TestKeywordWizard(unittest.TestCase):
             # No value will be omitted.
             'value_map': dict((k, v) for k, v in assigned_values.items() if v),
             'date': source_date,
-            # 'classification': volcano_hazard_classes['key'],
+            'classification': generic_structure_classes['key'],
             'layer_geometry': layer_geometry_polygon['key'],
             'layer_purpose': layer_purpose_exposure['key'],
             'layer_mode': layer_mode_classified['key']
@@ -632,6 +635,17 @@ class TestKeywordWizard(unittest.TestCase):
             dialog.step_kw_layermode.lstLayerModes)
 
         # Click next to select classified
+        dialog.pbnNext.click()
+
+        # Check if in select classification step
+        self.check_current_step(dialog.step_kw_classification)
+
+        # Check if generic structure classes is selected.
+        self.check_current_text(
+            generic_structure_classes['name'],
+            dialog.step_kw_classification.lstClassifications)
+
+        # Click next to select the classifications
         dialog.pbnNext.click()
 
         # Check if in select field step
