@@ -358,14 +358,27 @@ class TestImpactFunction(unittest.TestCase):
 
         # We need to monkey patch some keywords to the impact layer.
         impact_function.impact = FakeMonkeyPatch()
+
+        # Gender postprocessor with female ratio missing.
+        impact_function.impact.keywords = {
+            'inasafe_fields': {
+                'population_count_field': 'population'
+            }
+        }
+        result = impact_function.enough_input(
+           post_processor_gender['input'])
+        self.assertFalse(result[0])
+
+        # Gender postprocessor with female ratio missing.
         impact_function.impact.keywords = {
             'inasafe_fields': {
                 'population_count_field': 'population',
                 'female_ratio_field': 'female_r'
             }
         }
-        self.assertTrue(impact_function.enough_input(
-            post_processor_gender['input']))
+        result = impact_function.enough_input(
+           post_processor_gender['input'])
+        self.assertTrue(result[0])
 
     def test_evaluate_formula(self):
         """Test for evaluating formula."""
