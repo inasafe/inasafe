@@ -230,7 +230,7 @@ class ImpactFunction(object):
         """Property for the aggregation layer to be used for the analysis.
 
         :returns: A map layer.
-        :rtype: QgsMapLayer
+        :rtype: QgsVectorLayer
         """
         return self._aggregation
 
@@ -239,7 +239,7 @@ class ImpactFunction(object):
         """Setter for aggregation layer property.
 
         :param layer: aggregation layer to be used for the analysis.
-        :type layer: QgsMapLayer
+        :type layer: QgsVectorLayer
 
         :raise: NoKeywordsFoundError if no keywords has been found.
         :raise: InvalidExposureKeywords if the layer isn't an aggregation layer
@@ -257,6 +257,15 @@ class ImpactFunction(object):
 
         self._aggregation = layer
         self._aggregation.keywords = keywords
+
+    @property
+    def aggregate_hazard(self):
+        """Property for the aggregate hazard.
+
+        :returns: A vector layer.
+        :rtype: QgsVectorLayer
+        """
+        return self._aggregate_hazard
 
     @property
     def requested_extent(self):
@@ -421,21 +430,6 @@ class ImpactFunction(object):
             self._title = tr('need evacuation')
         else:
             self._title = tr('be affected')
-
-    @profile
-    def post_process(self):
-        """More process after getting the impact layer with data."""
-        # Post processor (gender, age, building type, etc)
-        # Notes, action
-
-        for post_processor in post_processors:
-            result, post_processor_output = self.run_single_post_processor(
-                post_processor)
-            if result:
-                self.set_state_process(
-                    'post_processor',
-                    'Post processor for %s %s.' % (
-                        post_processor['name'], post_processor_output))
 
     @staticmethod
     def console_progress_callback(current, maximum, message=None):
@@ -806,6 +800,20 @@ class ImpactFunction(object):
         self.datastore.add_layer(self.impact, 'intermediate-impact')
 
     @profile
+    def post_process(self):
+        """More process after getting the impact layer with data."""
+        # Post processor (gender, age, building type, etc)
+        # Notes, action
+
+        for post_processor in post_processors:
+            result, post_processor_output = self.run_single_post_processor(
+                post_processor)
+            if result:
+                self.set_state_process(
+                    'post_processor',
+                    'Post processor for %s.' % post_processor['name'])
+
+    @profile
     def run_single_post_processor(self, post_processor):
         """Run single post processor.
 
@@ -821,10 +829,13 @@ class ImpactFunction(object):
         valid, message = self.enough_input(post_processor['input'])
         if valid:
 
-            # Turn on the editing mode.
-            if not self.impact.startEditing():
-                msg = tr('The impact layer could not start the editing mode.')
-                return False, msg
+            if not self.impact.editBuffer():
+
+                # Turn on the editing mode.
+                if not self.impact.startEditing():
+                    msg = tr(
+                        'The impact layer could not start the editing mode.')
+                    return False, msg
 
             # Calculate based on formula
             # Iterate all possible output
@@ -840,6 +851,7 @@ class ImpactFunction(object):
                     msg = tr(
                         'The field name %s already exists.'
                         % output_field_name)
+                    self.impact.rollBack()
                     return False, msg
 
                 # Add output attribute name to the layer
@@ -852,6 +864,7 @@ class ImpactFunction(object):
                     msg = tr(
                         'Error while creating the field %s.'
                         % output_field_name)
+                    self.impact.rollBack()
                     return False, msg
 
                 # Get the index of output attribute
@@ -862,6 +875,7 @@ class ImpactFunction(object):
                     msg = tr(
                         'The field name %s has not been created.'
                         % output_field_name)
+                    self.impact.rollBack()
                     return False, msg
 
                 # Get the input field's indexes for input
@@ -878,6 +892,7 @@ class ImpactFunction(object):
                             msg = tr(
                                 '%s has not been found in inasafe fields.'
                                 % value['value']['key'])
+                            self.impact.rollBack()
                             return False, msg
 
                         index = self.impact.fieldNameIndex(name_field)
@@ -890,6 +905,7 @@ class ImpactFunction(object):
                                     name_field,
                                     [f.name() for f in fields]
                                 ))
+                            self.impact.rollBack()
                             return False, msg
 
                         input_indexes[key] = index
@@ -932,6 +948,7 @@ class ImpactFunction(object):
             self.impact.commitChanges()
             return True, None
         else:
+            self.impact.rollBack()
             return False, message
 
     @profile
