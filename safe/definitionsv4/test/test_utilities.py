@@ -38,7 +38,7 @@ from safe.definitionsv4.utilities import (
     hazard_units,
     exposure_units,
     get_fields,
-    get_hazard_classifications
+    get_classifications
 )
 
 
@@ -140,7 +140,7 @@ class TestDefinitionsUtilities(unittest.TestCase):
         self.maxDiff = None
         expected = [flood_hazard_classes, generic_hazard_classes]
         self.assertItemsEqual(
-            get_hazard_classifications('flood'), expected)
+            get_classifications('flood'), expected)
 
     def test_get_fields(self):
         """Test get_fields method."""
