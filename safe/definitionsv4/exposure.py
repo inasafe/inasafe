@@ -14,7 +14,8 @@ from safe.definitionsv4.fields import (
     female_ratio_field,
     women_count_field,
     youth_count_field,
-    youth_ratio_field
+    youth_ratio_field,
+    population_count_field
 )
 from safe.definitionsv4.layer_modes import (
     layer_mode_classified, layer_mode_continuous)
@@ -81,6 +82,7 @@ exposure_population = {
     'classifications': [],
     'fields': exposure_fields,
     'extra_fields': [
+        population_count_field,
         exposure_name_field,
         women_count_field,
         youth_count_field,
@@ -180,6 +182,7 @@ exposure_structure = {
     'classifications': [generic_structure_classes],
     'fields': exposure_fields,
     'extra_fields': [
+        population_count_field,
         women_count_field,
         youth_count_field,
         adult_count_field,
@@ -221,6 +224,7 @@ exposure_place = {
     'classifications': [generic_place_classes],
     'fields': exposure_fields,
     'extra_fields': [
+        population_count_field,
         exposure_name_field,
         women_count_field,
         youth_count_field,
