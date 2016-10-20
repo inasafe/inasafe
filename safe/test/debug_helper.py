@@ -12,7 +12,13 @@ InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
 
 from tempfile import mkdtemp
 from PyQt4.QtCore import QVariant
-from qgis.core import QgsMapLayerRegistry, QgsVectorLayer, QgsFeature, QgsField
+from qgis.core import (
+    QgsMapLayerRegistry,
+    QgsVectorLayer,
+    QgsFeature,
+    QgsField,
+    QgsFeatureRequest,
+)
 
 from safe.datastore.folder import Folder
 
@@ -86,3 +92,28 @@ def save_layer_to_file(layer):
     data_store.default_vector_format = 'geojson'
     result = data_store.add_layer(layer, 'debug_layer')
     return data_store.layer_uri(result[1])
+
+
+def print_attribute_table(layer, limit=-1):
+    """Print the attribute table in the console.
+
+    :param layer: The layer to print.
+    :type layer: QgsVectorLayer
+
+    :param limit: The limit in the query.
+    :type limit: integer
+    """
+    names = ['geom']
+    names.extend([f.name() for f in layer.fields().toList()])
+    print names
+
+    types = ['geom']
+    types.extend([f.type() for f in layer.fields().toList()])
+    print types
+
+    request = QgsFeatureRequest()
+    request.setLimit(limit)
+    for feature in layer.getFeatures(request):
+        attributes = [feature.geometry().type()]
+        attributes.extend(feature.attributes())
+        print attributes
