@@ -37,7 +37,7 @@ from safe.gisv4.vector.assign_highest_value import assign_highest_value
 from safe.gisv4.vector.reclassify import reclassify
 from safe.gisv4.vector.union import union
 from safe.gisv4.vector.clip import clip
-from safe.gisv4.vector.assign_hazard_class import assign_hazard_class
+from safe.gisv4.vector.assign_inasafe_values import assign_inasafe_values
 from safe.definitionsv4.post_processors import post_processors
 from safe.definitionsv4.fields import (
     aggregation_id_field,
@@ -628,7 +628,7 @@ class ImpactFunction(object):
                 else:
                     self.set_state_process(
                         'hazard', 'Assign classes based on value map')
-                    self.hazard = assign_hazard_class(self.hazard)
+                    self.hazard = assign_inasafe_values(self.hazard)
                     if self.debug:
                         self.datastore.add_layer(
                             self.hazard, 'hazard_value_map_to_reclassified')
@@ -760,6 +760,13 @@ class ImpactFunction(object):
             if self.debug:
                 self.datastore.add_layer(
                     self.exposure, 'exposure_cleaned')
+
+            self.set_state_process(
+                'exposure', 'Assign classes based on value map')
+            self.exposure = assign_inasafe_values(self.exposure)
+            if self.debug:
+                self.datastore.add_layer(
+                    self.exposure, 'exposure_value_map_to_reclassified')
 
             exposure = self.exposure.keywords.get('exposure')
             geometry = self.exposure.geometryType()

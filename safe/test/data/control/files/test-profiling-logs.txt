@@ -8,7 +8,7 @@ copy_fields
 hazard_preparation
 remove_rows
 add_id_column
-assign_hazard_class
+assign_inasafe_values
 intersect_exposure_and_aggregate_hazard
 create_memory_layer
 exposure_preparation

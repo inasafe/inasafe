@@ -181,8 +181,11 @@
           <resolution>
             <gco:FloatTuple/>
           </resolution>
+          <classification>
+            <gco:CharacterString>generic_structure_classes</gco:CharacterString>
+          </classification>
           <inasafe_fields>
-            <gco:Dictionary>{&quot;exposure_id_field&quot;: &quot;exposure_id&quot;, &quot;exposure_class_field&quot;: &quot;exposure_type&quot;}</gco:Dictionary>
+            <gco:Dictionary>{&quot;exposure_id_field&quot;: &quot;exposure_id&quot;, &quot;exposure_type_field&quot;: &quot;exposure_type&quot;}</gco:Dictionary>
           </inasafe_fields>
           <area_name_field>
             <gco:CharacterString/>

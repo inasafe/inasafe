@@ -182,7 +182,7 @@
             <gco:FloatTuple/>
           </resolution>
           <inasafe_fields>
-            <gco:Dictionary>{&quot;exposure_id_field&quot;: &quot;exposure_id&quot;, &quot;exposure_class_field&quot;: &quot;exposure_type&quot;}</gco:Dictionary>
+            <gco:Dictionary>{&quot;exposure_id_field&quot;: &quot;exposure_id&quot;, &quot;exposure_type_field&quot;: &quot;exposure_type&quot;}</gco:Dictionary>
           </inasafe_fields>
           <area_name_field>
             <gco:CharacterString/>
@@ -221,8 +221,11 @@
             <gco:CharacterString/>
           </datatype>
           <value_map>
-            <gco:Dictionary>{&quot;primary&quot;: [&quot;primary&quot;], &quot;secondary&quot;: [&quot;secondary&quot;]}</gco:Dictionary>
+            <gco:Dictionary>{&quot;primary&quot;: [&quot;primary_road&quot;], &quot;secondary&quot;: [&quot;secondary_road&quot;]}</gco:Dictionary>
           </value_map>
+          <classification>
+            <gco:CharacterString>generic_road_classes</gco:CharacterString>
+          </classification>
           <structure_class_field>
             <gco:CharacterString/>
           </structure_class_field>

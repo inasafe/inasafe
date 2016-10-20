@@ -21,7 +21,7 @@ from safe.gisv4.vector.prepare_vector_layer import (
 from safe.definitionsv4.fields import (
     exposure_id_field,
     population_count_field,
-    exposure_class_field
+    exposure_type_field
 )
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -90,7 +90,7 @@ class TestPrepareLayer(unittest.TestCase):
             [0, 1, 2])
 
         self.assertIn(
-            cleaned.fieldNameIndex(exposure_class_field['field_name']),
+            cleaned.fieldNameIndex(exposure_type_field['field_name']),
             [0, 1, 2])
 
         self.assertIn(
