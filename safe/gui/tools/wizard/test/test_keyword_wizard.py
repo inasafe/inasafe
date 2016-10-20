@@ -28,14 +28,17 @@ from safe.definitionsv4.hazard_category import hazard_category_multiple_event
 from safe.definitionsv4.hazard_classifications import volcano_hazard_classes
 from safe.definitionsv4.constants import not_available
 from safe.definitionsv4.fields import (
-    hazard_name_field, hazard_class_field, exposure_class_field)
+    hazard_name_field,
+    hazard_class_field,
+    exposure_type_field,
+    hazard_value_field)
 from safe.definitionsv4.layer_geometry import layer_geometry_polygon
 from safe.definitionsv4.exposure_classifications import (
     generic_structure_classes)
 
 from safe.gui.tools.wizard.wizard_dialog import WizardDialog
 from safe.utilities.keyword_io import KeywordIO
-from safe.definitionsv4.utilities import definition
+from safe.definitionsv4.utilities import definition, get_class_field_key
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -284,7 +287,7 @@ class TestKeywordWizard(unittest.TestCase):
             'hazard': hazard_volcano['key'],
             'inasafe_fields':
                 {
-                    'hazard_class_field': u'KRB',
+                    'hazard_value_field': u'KRB',
                     'hazard_name_field': u'volcano',
                  },
             'value_map': assigned_values,
@@ -387,7 +390,7 @@ class TestKeywordWizard(unittest.TestCase):
         self.assertIsNotNone(inasafe_fields)
         for key, value in inasafe_fields.items():
             # Not check if it's hazard_class_field
-            if key == hazard_class_field['key']:
+            if key == get_class_field_key(layer_purpose_hazard['key']):
                 continue
             # Check if existing key in parameters guid
             self.assertIn(key, [p.guid for p in parameters])
@@ -581,7 +584,7 @@ class TestKeywordWizard(unittest.TestCase):
             'exposure': exposure_structure['key'],
             'inasafe_fields':
                 {
-                    'exposure_class_field': u'TYPE',
+                    'exposure_type_field': u'TYPE',
                 },
             # No value will be omitted.
             'value_map': dict((k, v) for k, v in assigned_values.items() if v),
@@ -674,11 +677,8 @@ class TestKeywordWizard(unittest.TestCase):
         inasafe_fields = layer.keywords.get('inasafe_fields')
         self.assertIsNotNone(inasafe_fields)
         for key, value in inasafe_fields.items():
-            # Not check if it's hazard_class_field
-            if key == hazard_class_field['key']:
-                continue
-            # Not check if it's exposure_class_field
-            if key == exposure_class_field['key']:
+            # Not check if it's hazard_value_field
+            if key == get_class_field_key(layer_purpose_hazard['key']):
                 continue
             # Check if existing key in parameters guid
             self.assertIn(key, [p.guid for p in parameters])

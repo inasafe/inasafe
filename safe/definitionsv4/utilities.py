@@ -10,10 +10,9 @@ from safe.definitionsv4 import (
     hazard_category_all,
     aggregation_fields,
     impact_fields,
-    hazard_class_field,
-    exposure_type_field,
     aggregation_name_field,
     hazard_value_field,
+    exposure_type_field,
 )
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -93,7 +92,7 @@ def get_layer_modes(subcategory):
     :param subcategory: Hazard or Exposure key.
     :type subcategory: str
 
-    :returns: List of layer modes defintion.
+    :returns: List of layer modes definition.
     :rtype: list
     """
     layer_modes = definition(subcategory)['layer_modes']
@@ -178,9 +177,9 @@ def get_class_field_key(layer_purpose):
     :rtype: str
     """
     if layer_purpose == 'hazard':
-        return hazard_class_field['key']
+        return hazard_value_field['key']
     elif layer_purpose == 'exposure':
-        return exposure_class_field['key']
+        return exposure_type_field['key']
     elif layer_purpose == 'aggregation':
         return aggregation_name_field['key']
     else:

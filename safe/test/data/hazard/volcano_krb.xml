@@ -185,7 +185,7 @@
             <gco:Tuple/>
           </prob_fatality_mag>
           <inasafe_fields>
-            <gco:Dictionary>{&quot;hazard_name_field&quot;: &quot;volcano&quot;, &quot;hazard_class_field&quot;: &quot;KRB&quot;}</gco:Dictionary>
+            <gco:Dictionary>{&quot;hazard_name_field&quot;: &quot;volcano&quot;, &quot;hazard_value_field&quot;: &quot;KRB&quot;}</gco:Dictionary>
           </inasafe_fields>
           <volcano_name_field>
             <gco:CharacterString/>
