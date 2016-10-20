@@ -17,6 +17,7 @@
     "post_processor":{
       "info": {},
       "process":[
+        "Post processor for Size Rate Post Processor."
       ]
     },
     "aggregation":{
