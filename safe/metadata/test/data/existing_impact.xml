@@ -178,6 +178,9 @@
           <inasafe_fields>
             <gco:Dictionary/>
           </inasafe_fields>
+          <inasafe_default_values>
+            <gco:Dictionary/>
+          </inasafe_default_values>
           <map_title>
             <gco:CharacterString/>
           </map_title>
