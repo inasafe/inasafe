@@ -59,7 +59,8 @@ class SafeLayerTest(unittest.TestCase):
             'layer_geometry': u'polygon',
             'layer_purpose': u'exposure',
             'layer_mode': u'classified',
-            'exposure': u'structure'
+            'exposure': u'structure',
+            'classification': u'generic_structure_classes',
         }
 
         self.assertEquals(exposure.keywords, expected_keywords)

@@ -239,11 +239,11 @@ def definition_to_message(definition, heading_style=None):
     # definitions
     if 'classifications' in definition:
         message.add(m.Paragraph(tr('Hazard classifications')))
-        for hazard_class in definition['classifications']:
-            message.add(definition_to_message(hazard_class))
+        for inasafe_class in definition['classifications']:
+            message.add(definition_to_message(inasafe_class))
 
     if 'classes' in definition:
-        message.add(m.Paragraph(tr('Hazard classes')))
+        message.add(m.Paragraph(tr('Classes')))
         table = m.Table(style_class='table table-condensed table-striped')
         row = m.Row()
         row.add(m.Cell(tr('Name')), header_flag=True)
@@ -252,27 +252,34 @@ def definition_to_message(definition, heading_style=None):
         row.add(m.Cell(tr('Default min')), header_flag=True)
         row.add(m.Cell(tr('Default max')), header_flag=True)
         table.add(row)
-        for hazard_class in definition['classes']:
+        for inasafe_class in definition['classes']:
             row = m.Row()
-            row.add(m.Cell(hazard_class['name']))
-            if 'affected' in hazard_class:
-                row.add(m.Cell(hazard_class['affected']))
+            row.add(m.Cell(inasafe_class['name']))
+            if 'affected' in inasafe_class:
+                row.add(m.Cell(inasafe_class['affected']))
             else:
                 row.add(m.Cell(tr('unspecified')))
-            if 'string_defaults' in hazard_class:
+            if 'string_defaults' in inasafe_class:
                 defaults = None
-                for default in hazard_class['string_defaults']:
+                for default in inasafe_class['string_defaults']:
                     if defaults:
                         defaults += ',%s' % default
                     else:
                         defaults = default
                 row.add(m.Cell(defaults))
-                row.add(m.Cell(hazard_class['numeric_default_min']))
-                row.add(m.Cell(hazard_class['numeric_default_max']))
+                if 'numeric_default_min' in inasafe_class:
+                    row.add(m.Cell(inasafe_class['numeric_default_min']))
+                else:
+                    row.add(m.Cell(tr('unspecified')))
+                if 'numeric_default_min' in inasafe_class:
+                    row.add(m.Cell(inasafe_class['numeric_default_max']))
+                else:
+                    row.add(m.Cell(tr('unspecified')))
+
                 table.add(row)
                 # Description goes in its own row with spanning
                 row = m.Row()
-                row.add(m.Cell(hazard_class['description'], span=5))
+                row.add(m.Cell(inasafe_class['description'], span=5))
                 table.add(row)
             else:
                 row.add(m.Cell(tr('unspecified')))
@@ -281,12 +288,11 @@ def definition_to_message(definition, heading_style=None):
     if 'affected' in definition:
         if definition['affected']:
             message.add(m.Paragraph(tr(
-                'Exposure entities in this class ARE '
-                'considered affected')))
+                'Exposure entities in this class ARE considered affected')))
         else:
             message.add(m.Paragraph(tr(
-                'Exposure entities in this class '
-                'are NOT considered affected')))
+                'Exposure entities in this class are NOT considered '
+                'affected')))
 
     if 'optional' in definition:
         if definition['optional']:
