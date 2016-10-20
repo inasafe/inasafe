@@ -1,9 +1,14 @@
+# coding=utf-8
+"""Test for Impact Function."""
+
 import unittest
 import json
 import os
-from safe.test.utilities import get_control_text
 
+from safe.test.utilities import get_control_text
 from safe.test.utilities import get_qgis_app, standard_data_path
+from safe.test.debug_helper import print_attribute_table
+
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.definitionsv4.fields import (
@@ -13,14 +18,16 @@ from safe.definitionsv4.fields import (
     elderly_count_field,
     feature_value_field,
     population_count_field,
-    exposure_class_field
+    exposure_class_field,
+    size_field
 )
 from safe.definitionsv4.post_processors import (
     post_processor_gender,
     post_processor_youth,
     post_processor_adult,
     post_processor_elderly,
-    post_processor_size_rate
+    post_processor_size_rate,
+    post_processor_size
 )
 from safe.utilities.unicode import byteify
 from safe.test.utilities import load_test_vector_layer
@@ -28,6 +35,11 @@ from safe.impact_function_v4.impact_function import ImpactFunction
 from safe.impact_function_v4.impact_function import evaluate_formula
 
 from qgis.core import QgsVectorLayer
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 
 def read_json_flow(json_path):
@@ -296,6 +308,27 @@ class TestImpactFunction(unittest.TestCase):
         impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
         self.assertIn(elderly_count_field['field_name'], impact_fields)
 
+    def test_size_post_processor(self):
+        """Test size  post processor."""
+        impact_layer = load_test_vector_layer(
+            'impact',
+            'indivisible_polygon_impact.shp',
+            clone_to_memory=True)
+        self.assertIsNotNone(impact_layer)
+        impact_function = ImpactFunction()
+        impact_function.impact = impact_layer
+
+        result, message = impact_function.run_single_post_processor(
+            post_processor_size)
+        self.assertTrue(result, message)
+
+        impact_layer = impact_function.impact
+        self.assertIsNotNone(impact_layer)
+
+        # Check if new field is added
+        impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
+        self.assertIn(size_field['field_name'], impact_fields)
+
     def test_size_rate_post_processor(self):
         """Test size rate post processor."""
         impact_layer = load_test_vector_layer(
@@ -335,10 +368,11 @@ class TestImpactFunction(unittest.TestCase):
         self.assertIsNotNone(impact_layer)
 
         used_post_processors = [
+            post_processor_size,
             post_processor_gender,
             post_processor_youth,
             post_processor_adult,
-            post_processor_elderly
+            post_processor_elderly,
         ]
 
         # Check if new field is added
@@ -348,6 +382,7 @@ class TestImpactFunction(unittest.TestCase):
             for output_value in post_processor['output'].values():
                 field_name = output_value['value']['field_name']
                 self.assertIn(field_name, impact_fields)
+        print_attribute_table(impact_layer, 1)
 
     def test_enough_input(self):
         """Test to check the post processor input checker."""
