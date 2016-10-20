@@ -54,6 +54,26 @@ exposure_name_field = {
 }
 
 
+# Exposure Type
+exposure_type_field = {
+    'key': 'exposure_type_field',
+    'name': tr('Exposure Type'),
+    'field_name': 'exposure_type',
+    'type': QVariant.String,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': False,
+    'description': tr(
+        'Attribute where the exposure type of the feature is located.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+
+
 # Exposure Class
 exposure_class_field = {
     'key': 'exposure_class_field',
@@ -421,6 +441,7 @@ size_field = {
 
 exposure_fields = [
     exposure_id_field,
+    exposure_type_field,
     exposure_class_field,
     population_count_field,
     feature_value_field,
