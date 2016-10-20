@@ -100,13 +100,15 @@ def copy_layer(source, target):
     :type source: QgsVectorLayer
     """
     out_feature = QgsFeature()
-    data_provider = target.dataProvider()
+    target.startEditing()
 
     for i, feature in enumerate(source.getFeatures()):
         geom = feature.geometry()
         out_feature.setGeometry(geom)
         out_feature.setAttributes(feature.attributes())
-        data_provider.addFeatures([out_feature])
+        target.addFeature(out_feature)
+
+    target.commitChanges()
 
 
 @profile

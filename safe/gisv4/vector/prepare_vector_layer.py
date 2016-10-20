@@ -11,6 +11,7 @@ from qgis.core import (
     QgsFeatureRequest,
 )
 
+from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
 from safe.gisv4.vector.tools import (
     create_memory_layer, remove_fields, copy_fields, copy_layer)
 from safe.definitionsv4.processing import prepare_vector
@@ -18,7 +19,7 @@ from safe.definitionsv4.fields import (
     exposure_id_field,
     hazard_id_field,
     aggregation_id_field,
-    exposure_class_field,
+    exposure_type_field,
     hazard_value_field,
     aggregation_name_field,
     exposure_fields,
@@ -113,6 +114,10 @@ def _rename_remove_inasafe_fields(layer):
     copy_fields(layer, to_rename)
     remove_fields(layer, to_rename.keys())
 
+    LOGGER.debug(tr(
+        'Fields which have been renamed from %s : %s'
+        % (layer.keywords['layer_purpose'], to_rename)))
+
     # Houra, InaSAFE keywords match our concepts !
     layer.keywords['inasafe_fields'].update(expected_fields)
 
@@ -138,7 +143,7 @@ def _remove_rows(layer):
     layer_purpose = layer.keywords['layer_purpose']
 
     mapping = {
-        layer_purpose_exposure['key']: exposure_class_field,
+        layer_purpose_exposure['key']: exposure_type_field,
         layer_purpose_hazard['key']: hazard_value_field,
         layer_purpose_aggregation['key']: aggregation_name_field
     }
@@ -149,18 +154,27 @@ def _remove_rows(layer):
             break
 
     inasafe_fields = layer.keywords['inasafe_fields']
-    field_name = inasafe_fields[compulsory_field]
+    field_name = inasafe_fields.get(compulsory_field)
+    if not field_name:
+        msg = 'Keyword %s is missing from %s' % (
+            compulsory_field, layer_purpose)
+        raise InvalidKeywordsForProcessingAlgorithm(msg)
     index = layer.fieldNameIndex(field_name)
 
     request = QgsFeatureRequest()
     request.setSubsetOfAttributes([field_name], layer.pendingFields())
     layer.startEditing()
+    i = 0
     for feature in layer.getFeatures(request):
         if isinstance(feature.attributes()[index], QPyNullVariant):
             layer.deleteFeature(feature.id())
+            i += 1
         # TODO We need to add more tests
         # like checking if the value is in the value_mapping.
     layer.commitChanges()
+    LOGGER.debug(tr(
+        'Features which have been removed from %s : %s'
+        % (layer.keywords['layer_purpose'], i)))
 
 
 @profile

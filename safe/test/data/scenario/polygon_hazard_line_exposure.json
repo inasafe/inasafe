@@ -43,6 +43,7 @@
       "info": {},
       "process":[
         "Cleaning the vector exposure attribute table",
+        "Assign classes based on value map",
         "Clip the exposure layer with the aggregagte hazard"
       ]
     }
