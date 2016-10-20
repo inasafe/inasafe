@@ -442,8 +442,6 @@ size_field = {
 exposure_fields = [
     exposure_id_field,
     exposure_type_field,
-    exposure_class_field,
-    population_count_field,
     feature_value_field,
     feature_rate_field
 ]
@@ -451,7 +449,6 @@ exposure_fields = [
 hazard_fields = [
     hazard_id_field,
     hazard_value_field,
-    hazard_class_field
 ]
 
 aggregation_fields = [
@@ -466,11 +463,11 @@ aggregation_fields = [
 impact_fields = [
     exposure_id_field,
     exposure_class_field,
+    hazard_id_field,
+    hazard_class_field,
     population_count_field,
     feature_value_field,
     feature_rate_field,
-    hazard_id_field,
-    hazard_class_field,
     aggregation_id_field,
     aggregation_name_field,
     female_ratio_field,

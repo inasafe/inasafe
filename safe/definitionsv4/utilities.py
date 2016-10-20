@@ -11,7 +11,7 @@ from safe.definitionsv4 import (
     aggregation_fields,
     impact_fields,
     hazard_class_field,
-    exposure_class_field,
+    exposure_type_field,
     aggregation_name_field,
     hazard_value_field,
 )
@@ -155,17 +155,10 @@ def get_fields(layer_purpose, layer_subcategory):
     subcategory = definition(layer_subcategory)
     if layer_purpose == 'exposure':
         fields = subcategory['fields'] + subcategory['extra_fields']
-        fields.remove(exposure_class_field)
+        fields.remove(exposure_type_field)
     elif layer_purpose == 'hazard':
         fields = subcategory['fields'] + subcategory['extra_fields']
-        try:
-            fields.remove(hazard_class_field)
-        except ValueError:
-            pass
-        try:
-            fields.remove(hazard_value_field)
-        except ValueError:
-            pass
+        fields.remove(hazard_value_field)
     elif layer_purpose == 'aggregation':
         fields = aggregation_fields
         fields.remove(aggregation_name_field)
