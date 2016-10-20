@@ -41,7 +41,8 @@ from safe.gisv4.vector.assign_hazard_class import assign_hazard_class
 from safe.definitionsv4.post_processors import post_processors
 from safe.definitionsv4.fields import (
     aggregation_id_field,
-    aggregation_name_field
+    aggregation_name_field,
+    size_field
 )
 from safe.defaults import get_defaults
 from safe.common.exceptions import (
@@ -913,8 +914,15 @@ class ImpactFunction(object):
                     # For geometry, create new field that contain the value
                     elif value['type'] == 'geometry_property':
                         if value['value'] == 'size':
+                            flag = False
+                            # Check if size field is already exist
+                            if self.impact.fieldNameIndex(
+                                    size_field['field_name']) != -1:
+                                flag = True
+                                # temporary_indexes.append(input_indexes[key])
                             input_indexes[key] = self.add_size_field()
-                            temporary_indexes.append(input_indexes[key])
+                            if not flag:
+                                temporary_indexes.append(input_indexes[key])
 
                 # Create iterator for feature
                 request = QgsFeatureRequest().setSubsetOfAttributes(
@@ -990,11 +998,14 @@ class ImpactFunction(object):
         size_calculator.setEllipsoid('WGS84')
         size_calculator.setEllipsoidalMode(True)
 
-        # Add new field, size
-        self.impact.addAttribute(QgsField('size', QVariant.Double))
-
-        # Get index
         size_field_index = self.impact.fieldNameIndex('size')
+        # Check if size field already exist
+        if size_field_index == -1:
+            # Add new field, size
+            self.impact.addAttribute(QgsField(
+                size_field['field_name'], QVariant.Double))
+            # Get index
+            size_field_index = self.impact.fieldNameIndex('size')
 
         # Iterate through all features
         request = QgsFeatureRequest().setSubsetOfAttributes([])
