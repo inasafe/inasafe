@@ -45,6 +45,13 @@ class FlatTable(object):
             self.data[key] = 0
         self.data[key] += value
 
+    def get_value(self, **kwargs):
+        """Return the value for a specific key."""
+        key = tuple(kwargs[group] for group in self.groups)
+        if key not in self.data:
+            self.data[key] = 0
+        return self.data[key]
+
     def group_values(self, group_name):
         """Return all distinct group values for given group"""
         group_index = self.groups.index(group_name)
