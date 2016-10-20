@@ -40,9 +40,7 @@ from safe.impact_functions.earthquake.itb_bayesian_earthquake_fatality_model.\
 
 from safe.definitionsv4.layer_purposes import layer_purpose_exposure
 from safe.definitionsv4.layer_modes import layer_mode_continuous
-from safe.definitionsv4.fields import structure_class_field, volcano_name_field
 from safe.definitionsv4.exposure import exposure_population, exposure_structure
-from safe.definitionsv4.units import unit_mmi, count_exposure_unit
 from safe.definitionsv4.hazard import hazard_earthquake
 from safe.definitionsv4.hazard_category import hazard_category_single_event, \
     hazard_category_multiple_event
@@ -234,14 +232,6 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         ]
         self.assertItemsEqual(result, expected)
 
-    @unittest.skip('Test without assert.')
-    def test_valid_layer_keywords(self):
-        """Test for valid_layer_keywords."""
-        impact_function = VolcanoPointPopulationFunction()
-        layer_keywords = impact_function.metadata().valid_layer_keywords()
-        from pprint import pprint
-        pprint(layer_keywords)
-
     def test_available_hazard_layer_mode(self):
         """Test for available_hazard_layer_mode."""
         impact_function = ITBFatalityFunction()
@@ -264,74 +254,6 @@ class TestImpactFunctionMetadata(unittest.TestCase):
         expected = layer_mode_continuous
         self.assertEqual(result, expected)
 
-    @unittest.skip('Skip unit test from InaSAFE v3.')
-    def test_hazard_additional_keywords(self):
-        """Test for hazard_additional_keywords."""
-        impact_function = FloodPolygonBuildingFunction()
-        result = impact_function.metadata().hazard_additional_keywords(
-            layer_mode_key='classified',
-            layer_geometry_key='polygon',
-            hazard_category_key='single_event',
-            hazard_key='flood'
-        )
-        expected = []
-        self.assertItemsEqual(result, expected)
-
-        result = impact_function.metadata().hazard_additional_keywords(
-            layer_mode_key='classified',
-            layer_geometry_key='polygon',
-            hazard_category_key='single_event',
-        )
-        expected = []
-        self.assertItemsEqual(result, expected)
-
-        impact_function = VolcanoPointBuildingFunction()
-        result = impact_function.metadata().hazard_additional_keywords(
-            layer_mode_key='classified',
-            layer_geometry_key='point',
-            hazard_category_key='multiple_event',
-            hazard_key='volcano'
-        )
-        expected = [volcano_name_field]
-        self.assertItemsEqual(result, expected)
-
-    @unittest.skip('Skip unit test from InaSAFE v3.')
-    def test_exposure_additional_keywords(self):
-        """Test for exposure_additional_keywords."""
-        impact_function = FloodPolygonBuildingFunction()
-        result = impact_function.metadata().exposure_additional_keywords(
-            layer_mode_key='classified',
-            layer_geometry_key='polygon',
-            exposure_key='structure'
-        )
-        expected = []
-        self.assertItemsEqual(result, expected)
-
-        result = impact_function.metadata().exposure_additional_keywords(
-            layer_geometry_key='polygon',
-            exposure_key='structure'
-        )
-        expected = []
-        self.assertItemsEqual(result, expected)
-
-    @unittest.skip('Skip unit test from InaSAFE v3.')
-    def test_exposure_class_fields(self):
-        """Test for exposure_class_fields."""
-        impact_function = FloodPolygonBuildingFunction()
-        result = impact_function.metadata().exposure_class_fields(
-            layer_mode_key='classified',
-            layer_geometry_key='polygon',
-            exposure_key='structure'
-        )
-        expected = [structure_class_field]
-        self.assertItemsEqual(result, expected)
-
-        result = impact_function.metadata().exposure_class_fields(
-            layer_geometry_key='polygon',
-            exposure_key='structure'
-        )
-        expected = [structure_class_field]
-        self.assertItemsEqual(result, expected)
 
 if __name__ == '__main__':
     unittest.main()
