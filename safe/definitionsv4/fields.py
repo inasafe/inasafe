@@ -399,6 +399,26 @@ elderly_count_field = {
     ]
 }
 
+# Size
+size_field = {
+    'key': 'size_field',
+    'name': tr('Geometric Size'),
+    'field_name': 'size',
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': 2,
+    'absolute': True,
+    'description': tr(
+        'Attribute where the size of the gemetry is located.'
+    ),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+
 exposure_fields = [
     exposure_id_field,
     exposure_class_field,
@@ -439,7 +459,8 @@ impact_fields = [
     women_count_field,
     youth_count_field,
     adult_count_field,
-    elderly_count_field
+    elderly_count_field,
+    size_field,
 ]
 
 # Used by earthquake

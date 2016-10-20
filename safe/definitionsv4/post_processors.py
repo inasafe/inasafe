@@ -14,7 +14,8 @@ from safe.definitionsv4.fields import (
     elderly_ratio_field,
     elderly_count_field,
     feature_rate_field,
-    feature_value_field
+    feature_value_field,
+    size_field,
 )
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -110,6 +111,27 @@ post_processor_elderly = {
         }
     }
 }
+
+post_processor_size = {
+    'key': 'post_processor_size',
+    'name': tr('Size Rate Post Processor'),
+    'description': tr(
+        'Post processor to calculate the size of the feature. If feature is '
+        'polygon we use m^2. If feature is line we use meter.'),
+    'input': {
+        'size': {
+            'value': 'size',
+            'type': 'geometry_property'
+        }
+    },
+    'output': {
+        'elderly': {
+            'value': size_field,
+            'formula': 'size'
+        }
+    }
+}
+
 post_processor_size_rate = {
     'key': 'post_processor_size_rate',
     'name': tr('Size Rate Post Processor'),
@@ -142,5 +164,6 @@ post_processors = [
     post_processor_youth,
     post_processor_adult,
     post_processor_elderly,
-    post_processor_size_rate
+    post_processor_size_rate,
+    post_processor_size
 ]
