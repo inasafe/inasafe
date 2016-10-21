@@ -439,6 +439,48 @@ size_field = {
     ]
 }
 
+
+# Total per aggregation area
+total_field = {
+    'key': 'total_field',
+    'name': tr('Total'),
+    'field_name': 'total',
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': 2,
+    'absolute': False,
+    'description': tr(
+        'Attribute where the total of the total is located.'
+    ),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+
+# Special dynamic field for each exposure type in the aggregate hazard table.
+exposure_count_field = {
+    'key': '%s_exposure_field',
+    'name': tr('Total %s'),
+    'field_name': '%s_count',
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': 2,
+    'absolute': True,
+    'description': tr(
+        'Attribute where the total of the count is located.'
+    ),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+
+
 exposure_fields = [
     exposure_id_field,
     exposure_type_field,
@@ -479,6 +521,15 @@ impact_fields = [
     adult_count_field,
     elderly_count_field,
     size_field,
+]
+
+aggregate_hazard_fields = [
+    aggregation_id_field,
+    aggregation_name_field,
+    hazard_id_field,
+    hazard_class_field,
+    exposure_count_field,
+    total_field,
 ]
 
 # Used by earthquake, please remove after we remove the earthquake
