@@ -21,11 +21,16 @@ from safe_extras.parameters.select_parameter import SelectParameter
 from safe_extras.parameters.qt_widgets.parameter_container import (
     ParameterContainer)
 
+from safe.definitionsv4.layer_purposes import (
+    layer_purpose_aggregation, layer_purpose_hazard, layer_purpose_exposure)
 from safe.definitionsv4.layer_modes import layer_mode_classified
 from safe.definitionsv4.exposure import exposure_place
-from safe.definitionsv4.utilities import get_fields
+from safe.definitionsv4.utilities import get_fields, get_class_field
 from safe.definitionsv4.layer_geometry import layer_geometry_raster
 from safe.definitionsv4.constants import not_available
+from safe.definitionsv4.fields import (
+    hazard_value_field, exposure_type_field
+)
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 
@@ -112,10 +117,16 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
                 layer_geometry_raster['key']):
             return []
         # Get hazard or exposure value
-        subcategory = self.parent.step_kw_subcategory.selected_subcategory()
-        inasafe_fields = get_fields(
-            self.parent.step_kw_purpose.selected_purpose()['key'],
-            subcategory['key'])
+        layer_purpose_key = self.parent.step_kw_purpose.selected_purpose()[
+            'key']
+        if layer_purpose_key != layer_purpose_aggregation['key']:
+            subcategory_key = self.parent.step_kw_subcategory.\
+                selected_subcategory()['key']
+        else:
+            subcategory_key = None
+        inasafe_fields = get_fields(layer_purpose_key, subcategory_key)
+        # Remove hazard_value_field since it's already selected in Field step
+        inasafe_fields.remove(get_class_field(layer_purpose_key))
         return inasafe_fields
 
     def extra_keyword_changed(self, widget):

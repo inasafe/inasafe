@@ -22,10 +22,9 @@ from safe.definitionsv4 import (
     unit_generic,
     exposure_fields,
     hazard_fields,
-    hazard_value_field,
     flood_hazard_classes,
     generic_hazard_classes,
-    exposure_type_field
+    aggregation_fields
 )
 
 from safe.definitionsv4.utilities import (
@@ -145,12 +144,22 @@ class TestDefinitionsUtilities(unittest.TestCase):
         """Test get_fields method."""
         fields = get_fields('exposure', 'structure')
         expected_fields = exposure_fields + exposure_structure['extra_fields']
-        expected_fields.remove(exposure_type_field)
         self.assertListEqual(fields, expected_fields)
 
         fields = get_fields('hazard', 'flood')
         expected_fields = hazard_fields + hazard_flood['extra_fields']
-        expected_fields.remove(hazard_value_field)
+        self.assertListEqual(fields, expected_fields)
+
+        fields = get_fields('hazard')
+        expected_fields = hazard_fields
+        self.assertListEqual(fields, expected_fields)
+
+        fields = get_fields('exposure')
+        expected_fields = exposure_fields
+        self.assertListEqual(fields, expected_fields)
+
+        fields = get_fields('aggregation')
+        expected_fields = aggregation_fields
         self.assertListEqual(fields, expected_fields)
 
 
