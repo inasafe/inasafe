@@ -29,7 +29,7 @@ from safe.definitionsv4.layer_modes import (
     layer_mode_continuous, layer_mode_classified)
 from safe.definitionsv4.units import exposure_unit
 from safe.definitionsv4.hazard import continuous_hazard_unit
-from safe.definitionsv4.utilities import get_class_field_key
+from safe.definitionsv4.utilities import get_class_field
 
 from safe.common.exceptions import (
     HashNotFoundError,
@@ -296,7 +296,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         :rtype: str
         """
         layer_purpose_key = self.step_kw_purpose.selected_purpose()['key']
-        return get_class_field_key(layer_purpose_key)
+        return get_class_field(layer_purpose_key)['key']
 
     def get_parent_mode_constraints(self):
         """Return the category and subcategory keys to be set in the

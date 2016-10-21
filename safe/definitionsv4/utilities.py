@@ -2,6 +2,7 @@
 
 """Utilities module for helping definitions retrieval.
 """
+from copy import deepcopy
 from safe import definitionsv4
 from safe.definitionsv4 import (
     layer_purposes,
@@ -13,6 +14,8 @@ from safe.definitionsv4 import (
     aggregation_name_field,
     hazard_value_field,
     exposure_type_field,
+    exposure_fields,
+    hazard_fields
 )
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -138,7 +141,7 @@ def get_classifications(subcategory_key):
     return sorted(classifications, key=lambda k: k['key'])
 
 
-def get_fields(layer_purpose, layer_subcategory):
+def get_fields(layer_purpose, layer_subcategory=None):
     """Get all field based on the layer purpose.
 
     :param layer_purpose: The layer purpose.
@@ -151,39 +154,43 @@ def get_fields(layer_purpose, layer_subcategory):
     :rtype: list
     """
     fields = []
-    subcategory = definition(layer_subcategory)
     if layer_purpose == 'exposure':
-        fields = subcategory['fields'] + subcategory['extra_fields']
-        fields.remove(exposure_type_field)
+        if layer_subcategory:
+            subcategory = definition(layer_subcategory)
+            fields = subcategory['fields'] + subcategory['extra_fields']
+        else:
+            fields = deepcopy(exposure_fields)
     elif layer_purpose == 'hazard':
-        fields = subcategory['fields'] + subcategory['extra_fields']
-        fields.remove(hazard_value_field)
+        if layer_subcategory:
+            subcategory = definition(layer_subcategory)
+            fields = subcategory['fields'] + subcategory['extra_fields']
+        else:
+            fields = deepcopy(hazard_fields)
     elif layer_purpose == 'aggregation':
-        fields = aggregation_fields
-        fields.remove(aggregation_name_field)
+        fields = deepcopy(aggregation_fields)
     elif layer_purpose == 'impact':
-        fields = impact_fields
+        fields = deepcopy(impact_fields)
 
     return fields
 
 
-def get_class_field_key(layer_purpose):
+def get_class_field(layer_purpose):
     """Get class field based on layer_purpose.
 
     :param layer_purpose: The layer purpose.
     :type layer_purpose: str
 
-    :returns: Class field key.
-    :rtype: str
+    :returns: Class field
+    :rtype: dict
     """
     if layer_purpose == 'hazard':
-        return hazard_value_field['key']
+        return hazard_value_field
     elif layer_purpose == 'exposure':
-        return exposure_type_field['key']
+        return exposure_type_field
     elif layer_purpose == 'aggregation':
-        return aggregation_name_field['key']
+        return aggregation_name_field
     else:
-        return ''
+        return None
 
 
 def definition(keyword):
