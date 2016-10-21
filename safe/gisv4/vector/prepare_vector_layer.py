@@ -24,13 +24,15 @@ from safe.definitionsv4.fields import (
     aggregation_name_field,
     exposure_fields,
     hazard_fields,
-    aggregation_fields
+    aggregation_fields,
+    exposure_type_field
 )
 from safe.definitionsv4.layer_purposes import (
     layer_purpose_exposure,
     layer_purpose_hazard,
     layer_purpose_aggregation
 )
+from safe.definitionsv4.utilities import get_fields
 from safe.utilities.i18n import tr
 from safe.utilities.profiling import profile
 
@@ -93,15 +95,20 @@ def _rename_remove_inasafe_fields(layer):
 
     # Exposure
     if layer.keywords['layer_purpose'] == layer_purpose_exposure['key']:
-        fields = exposure_fields
+        fields = get_fields(
+            layer.keywords['layer_purpose'], layer.keywords['exposure'])
 
     # Hazard
     elif layer.keywords['layer_purpose'] == layer_purpose_hazard['key']:
-        fields = hazard_fields
+        fields = get_fields(
+            layer.keywords['layer_purpose'], layer.keywords['hazard'])
 
     # Aggregation
     elif layer.keywords['layer_purpose'] == layer_purpose_aggregation['key']:
-        fields = aggregation_fields
+        fields = get_fields(
+            layer.keywords['layer_purpose'])
+
+
 
     expected_fields = {field['key']: field['field_name'] for field in fields}
 
