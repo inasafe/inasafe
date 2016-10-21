@@ -37,6 +37,7 @@ from safe.gisv4.vector.assign_highest_value import assign_highest_value
 from safe.gisv4.vector.reclassify import reclassify
 from safe.gisv4.vector.union import union
 from safe.gisv4.vector.clip import clip
+from safe.gisv4.vector.aggregate_summary import aggregate_summary
 from safe.gisv4.vector.assign_inasafe_values import assign_inasafe_values
 from safe.definitionsv4.post_processors import post_processors
 from safe.definitionsv4.fields import (
@@ -484,7 +485,10 @@ class ImpactFunction(object):
         # Generate aggregation keywords
         aggregation_layer.keywords = get_defaults()
         aggregation_layer.keywords['layer_purpose'] = 'aggregation'
-        aggregation_layer.keywords['inasafe_fields'] = {}
+        aggregation_layer.keywords['inasafe_fields'] = {
+            aggregation_id_field['key']: aggregation_id_field['field_name'],
+            aggregation_name_field['key']: aggregation_name_field['field_name']
+        }
 
         return aggregation_layer
 
@@ -590,6 +594,14 @@ class ImpactFunction(object):
         self.post_process()
 
         self.datastore.add_layer(self.impact, 'impact')
+
+        self.set_state_process(
+            'impact function',
+            'Aggregate the impact summary')
+        self._aggregate_hazard = aggregate_summary(
+            self.aggregate_hazard, self.impact)
+
+        self.datastore.add_layer(self.aggregate_hazard, 'aggregate-hazard')
 
         # Get the profiling log
         self._performance_log = profiling_log()
@@ -712,10 +724,10 @@ class ImpactFunction(object):
         self.set_state_process(
             'hazard',
             'Clip and mask hazard polygons with aggregation')
-        self._aggregate_hazard = clip(self.hazard, self.aggregation)
+        self.hazard = clip(self.hazard, self.aggregation)
         if self.debug:
             self.datastore.add_layer(
-                self._aggregate_hazard, 'hazard_clip_by_aggregation')
+                self.hazard, 'hazard_clip_by_aggregation')
 
         self.set_state_process(
             'aggregation',
@@ -1010,7 +1022,7 @@ class ImpactFunction(object):
         if size_field_index == -1:
             # Add new field, size
             self.impact.addAttribute(QgsField(
-                size_field['field_name'], QVariant.Double))
+                size_field['field_name'], size_field['type']))
             # Get index
             size_field_index = self.impact.fieldNameIndex('size')
 

@@ -32,14 +32,18 @@ class TestAssignHighestValueVector(unittest.TestCase):
         exposure = load_test_vector_layer(
             'gisv4', 'exposure', 'buildings.geojson')
 
-        hazard = load_test_vector_layer(
+        aggregate_hazard = load_test_vector_layer(
             'gisv4', 'intermediate', 'aggregate_classified_hazard.geojson')
 
-        layer = assign_highest_value(exposure, hazard)
+        # Monkey patching classification. We should remove this line
+        # when we will have aggregate_hazard definitions.
+        aggregate_hazard.keywords['classification'] = 'generic_hazard_classes'
+
+        layer = assign_highest_value(exposure, aggregate_hazard)
 
         self.assertEqual(layer.featureCount(), 5)
         self.assertEqual(
-            exposure.fields().count() + hazard.fields().count(),
+            exposure.fields().count() + aggregate_hazard.fields().count(),
             layer.fields().count()
         )
 
