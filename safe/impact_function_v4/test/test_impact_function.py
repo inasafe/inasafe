@@ -225,6 +225,7 @@ class TestImpactFunction(unittest.TestCase):
             os.path.join(path, f) for f in os.listdir(path)
             if os.path.isfile(os.path.join(path, f))]
         for json_file in json_files:
+            print json_file
             test_scenario(json_file)
 
     def test_gender_post_processor(self):
