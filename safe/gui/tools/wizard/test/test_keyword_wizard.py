@@ -27,11 +27,7 @@ from safe.definitionsv4.exposure import exposure_structure
 from safe.definitionsv4.hazard_category import hazard_category_multiple_event
 from safe.definitionsv4.hazard_classifications import volcano_hazard_classes
 from safe.definitionsv4.constants import not_available
-from safe.definitionsv4.fields import (
-    hazard_name_field,
-    hazard_class_field,
-    exposure_type_field,
-    hazard_value_field)
+from safe.definitionsv4.fields import hazard_name_field
 from safe.definitionsv4.layer_geometry import layer_geometry_polygon
 from safe.definitionsv4.exposure_classifications import (
     generic_structure_classes)
