@@ -51,6 +51,8 @@ before_install:
 install:
   - pip install --upgrade pip
   - pip install --upgrade pep8
+  - git submodule init
+  - git submodule update
   - echo "Checking out test data at" `date`
   - make testdata
   - docker run -d --name qgis-testing-environment -v ${TRAVIS_BUILD_DIR}_data:/inasafe_data -v ${TRAVIS_BUILD_DIR}:/tests_directory -e ON_TRAVIS=${ON_TRAVIS} -e DISPLAY=:99 ${IMAGE}:${QGIS_VERSION_TAG}
