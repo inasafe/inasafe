@@ -18,7 +18,7 @@ from safe.definitionsv4.fields import (
     elderly_count_field,
     feature_value_field,
     population_count_field,
-    exposure_class_field,
+    exposure_type_field,
     size_field
 )
 from safe.definitionsv4.post_processors import (
@@ -122,7 +122,7 @@ class TestImpactFunction(unittest.TestCase):
         impact_function.exposure = exposure_layer
 
         expected_inasafe_fields = {
-            exposure_class_field['key']: 'TYPE',
+            exposure_type_field['key']: 'TYPE',
             population_count_field['key']: 'pop_count'
         }
         self.assertDictEqual(
@@ -130,7 +130,7 @@ class TestImpactFunction(unittest.TestCase):
 
         fields = impact_function.exposure.dataProvider().fieldNameMap().keys()
         self.assertIn(
-            exposure_layer.keywords['inasafe_fields']['exposure_class_field'],
+            exposure_layer.keywords['inasafe_fields']['exposure_type_field'],
             fields
         )
         inasafe_fields = exposure_layer.keywords['inasafe_fields']
@@ -222,6 +222,7 @@ class TestImpactFunction(unittest.TestCase):
             os.path.join(path, f) for f in os.listdir(path)
             if os.path.isfile(os.path.join(path, f))]
         for json_file in json_files:
+            print json_file
             test_scenario(json_file)
 
     def test_gender_post_processor(self):
