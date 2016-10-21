@@ -493,4 +493,3 @@ structure_class_field = {
         }
     ]
 }
-
