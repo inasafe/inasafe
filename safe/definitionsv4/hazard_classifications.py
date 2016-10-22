@@ -25,6 +25,7 @@ generic_hazard_classes = {
     'classes': [
         {
             'key': 'high',
+            'value': 3,
             'name': tr('High Hazard Zone'),
             'affected': True,
             'description': tr('The location that has highest impact.'),
@@ -40,6 +41,7 @@ generic_hazard_classes = {
         },
         {
             'key': 'medium',
+            'value': 2,
             'name': tr('Medium Hazard Zone'),
             'affected': True,
             'description': tr('The location that has medium impact.'),
@@ -55,6 +57,7 @@ generic_hazard_classes = {
         },
         {
             'key': 'low',
+            'value': 1,
             'name': tr('Low Hazard Zone'),
             'affected': True,
             'description': tr('The location that has lowest impact.'),
@@ -86,6 +89,7 @@ volcano_hazard_classes = {
     'classes': [
         {
             'key': 'high',
+            'value': 3,
             'name': tr('High Hazard Zone'),
             'affected': True,
             'description': tr('The highest hazard class.'),
@@ -101,6 +105,7 @@ volcano_hazard_classes = {
         },
         {
             'key': 'medium',
+            'value': 2,
             'name': tr('Medium Hazard Zone'),
             'affected': True,
             'description': tr('The medium hazard class.'),
@@ -116,6 +121,7 @@ volcano_hazard_classes = {
         },
         {
             'key': 'low',
+            'value': 1,
             'name': tr('Low Hazard Zone'),
             'affected': True,
             'description': tr('The lowest hazard class.'),
@@ -149,6 +155,7 @@ flood_hazard_classes = {
     'classes': [
         {
             'key': 'wet',
+            'value': 2,
             'name': tr('wet'),
             'affected': True,
             'description': tr('Water above ground height.'),
@@ -164,6 +171,7 @@ flood_hazard_classes = {
         },
         {
             'key': 'dry',
+            'value': 1,
             'name': tr('dry'),
             'affected': False,
             'description': tr('No water above ground height.'),
@@ -197,6 +205,7 @@ ash_hazard_classes = {
     'classes': [
         {
             'key': 'very high',
+            'value': 5,
             'name': tr('Very high'),
             'affected': True,
             'description': tr('Very High.'),
@@ -211,6 +220,7 @@ ash_hazard_classes = {
         },
         {
             'key': 'high',
+            'value': 4,
             'name': tr('High'),
             'affected': True,
             'description': tr('High'),
@@ -225,6 +235,7 @@ ash_hazard_classes = {
         },
         {
             'key': 'medium',
+            'value': 3,
             'name': tr('Medium'),
             'affected': True,
             'description': tr('Medium'),
@@ -239,6 +250,7 @@ ash_hazard_classes = {
         },
         {
             'key': 'low',
+            'value': 2,
             'name': tr('Low'),
             'affected': False,
             'description': tr('Low'),
@@ -253,6 +265,7 @@ ash_hazard_classes = {
         },
         {
             'key': 'very low',
+            'value': 1,
             'name': tr('Very Low'),
             'affected': False,
             'description': tr('Very Low.'),
@@ -287,6 +300,7 @@ tsunami_hazard_classes = {
     'classes': [
         {
             'key': 'very high',
+            'value': 5,
             'name': tr('Very high hazard zone'),
             'affected': True,
             'description': tr('Water above 8.0m.'),
@@ -301,6 +315,7 @@ tsunami_hazard_classes = {
         },
         {
             'key': 'high',
+            'value': 4,
             'name': tr('High hazard zone'),
             'affected': True,
             'description': tr(
@@ -325,6 +340,7 @@ tsunami_hazard_classes = {
         },
         {
             'key': 'medium',
+            'value': 3,
             'name': tr('Medium hazard zone'),
             'affected': True,
             'description': tr(
@@ -346,6 +362,7 @@ tsunami_hazard_classes = {
         },
         {
             'key': 'low',
+            'value': 2,
             'name': tr('Low hazard zone'),
             'affected': False,
             'description': tr(
@@ -369,6 +386,7 @@ tsunami_hazard_classes = {
         },
         {
             'key': 'dry',
+            'value': 1,
             'name': tr('Dry zone'),
             'affected': False,
             'description': tr('No water above ground height.'),
