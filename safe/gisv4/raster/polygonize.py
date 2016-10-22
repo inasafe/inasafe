@@ -14,7 +14,7 @@ from qgis.core import (
 )
 
 from safe.common.utilities import unique_filename, temp_dir
-from safe.definitionsv4.fields import hazard_class_field
+from safe.definitionsv4.fields import hazard_value_field
 from safe.definitionsv4.layer_geometry import (
     layer_geometry, layer_geometry_polygon)
 from safe.definitionsv4.processing import polygonize_raster
@@ -64,7 +64,7 @@ def polygonize(layer, callback=None):
     output_layer = destination.CreateLayer(output_layer_name, srs)
 
     # We have no other way to use a shapefile. We need only the first 10 chars.
-    field_name = hazard_class_field['field_name'][0:10]
+    field_name = hazard_value_field['field_name'][0:10]
     fd = ogr.FieldDefn(field_name, ogr.OFTInteger)
     output_layer.CreateField(fd)
 
@@ -76,11 +76,15 @@ def polygonize(layer, callback=None):
     vector_layer = QgsVectorLayer(out_shapefile, output_layer_name, 'ogr')
 
     # We transfer keywords to the output.
-    vector_layer.keywords = layer.keywords
+    vector_layer.keywords = layer.keywords.copy()
     vector_layer.keywords[
         layer_geometry['key']] = layer_geometry_polygon['key']
 
-    inasafe_field = hazard_class_field['key']
-    vector_layer.keywords['inasafe_fields'][inasafe_field] = field_name
+    inasafe_field = hazard_value_field['key']
+
+    # We just polygonized the raster layer. inasafe_fields do not exist.
+    vector_layer.keywords['inasafe_fields'] = {
+        inasafe_field: field_name
+    }
 
     return vector_layer

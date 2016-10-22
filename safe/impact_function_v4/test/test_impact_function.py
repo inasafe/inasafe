@@ -34,7 +34,7 @@ from safe.test.utilities import load_test_vector_layer
 from safe.impact_function_v4.impact_function import ImpactFunction
 from safe.impact_function_v4.impact_function import evaluate_formula
 
-from qgis.core import QgsVectorLayer
+from qgis.core import QgsVectorLayer, QgsRasterLayer
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -96,8 +96,17 @@ def run_scenario(scenario, use_debug=False):
     impact_function = ImpactFunction()
     if use_debug:
         impact_function.debug = True
-    impact_function.hazard = QgsVectorLayer(hazard_path, 'Hazard', 'ogr')
-    impact_function.exposure = QgsVectorLayer(exposure_path, 'Exposure', 'ogr')
+
+    layer = QgsVectorLayer(hazard_path, 'Hazard', 'ogr')
+    if not layer.isValid():
+        layer = QgsRasterLayer(hazard_path, 'Hazard')
+    impact_function.hazard = layer
+
+    layer = QgsVectorLayer(exposure_path, 'Exposure', 'ogr')
+    if not layer.isValid():
+        layer = QgsRasterLayer(hazard_path, 'Exposure')
+    impact_function.exposure = layer
+
     if aggregation_path:
         impact_function.aggregation = QgsVectorLayer(
             aggregation_path, 'Aggregation', 'ogr')
@@ -205,7 +214,7 @@ class TestImpactFunction(unittest.TestCase):
         use_debug = True
 
         scenario_path = standard_data_path(
-            'scenario', 'polygon_hazard_point_exposure.json')
+            'scenario', 'raster_continuous_hazard_line_exposure.json')
         scenario, expected = read_json_flow(scenario_path)
         result = run_scenario(scenario, use_debug)
         self.assertDictEqual(expected, result)
@@ -225,7 +234,6 @@ class TestImpactFunction(unittest.TestCase):
             os.path.join(path, f) for f in os.listdir(path)
             if os.path.isfile(os.path.join(path, f))]
         for json_file in json_files:
-            print json_file
             test_scenario(json_file)
 
     def test_gender_post_processor(self):
