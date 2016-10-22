@@ -10,22 +10,20 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.definitionsv4.layer_modes import layer_mode_classified
+from safe.definitionsv4.fields import road_class_field
+from safe.definitionsv4.exposure import exposure_road
+from safe.definitionsv4.hazard import hazard_flood
+from safe.definitionsv4 import flood_vector_hazard_classes
+from safe.definitionsv4.hazard_category import hazard_category_single_event, \
+    hazard_category_multiple_event
+from safe.definitionsv4.layer_geometry import layer_geometry_line, \
+    layer_geometry_polygon
 from safe.common.utilities import OrderedDict
 from safe.defaults import road_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.utilities.i18n import tr
-from safe.definitions import (
-    layer_mode_classified,
-    layer_geometry_polygon,
-    layer_geometry_line,
-    hazard_flood,
-    hazard_category_single_event,
-    hazard_category_multiple_event,
-    flood_vector_hazard_classes,
-    exposure_road,
-    road_class_field
-)
 
 
 class FloodPolygonRoadsMetadata(ImpactFunctionMetadata):

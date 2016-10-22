@@ -14,24 +14,21 @@ Contact : dynaryu@gmail.com
 __author__ = 'dynaryu@gmail.com'
 __date__ = '09/09/15'
 
+from safe.definitionsv4.layer_modes import layer_mode_continuous
+from safe.definitionsv4.exposure import exposure_population
+from safe.definitionsv4.units import unit_mmi, count_exposure_unit
+from safe.definitionsv4.hazard import hazard_earthquake
+from safe.definitionsv4.hazard_category import hazard_category_single_event
+from safe.definitionsv4.layer_geometry import layer_geometry_raster
 from safe.common.utilities import OrderedDict
-from safe.defaults import default_minimum_needs
 from safe.defaults import (
     default_gender_postprocessor,
     age_postprocessor,
     minimum_needs_selector)
+from safe.defaults import default_minimum_needs
 from safe.impact_functions.earthquake.itb_earthquake_fatality_model\
     .metadata_definitions import ITBFatalityMetadata
 from safe.utilities.i18n import tr
-from safe.definitions import (
-    layer_mode_continuous,
-    layer_geometry_raster,
-    hazard_earthquake,
-    exposure_population,
-    count_exposure_unit,
-    hazard_category_single_event,
-    unit_mmi
-)
 
 
 class ITBBayesianFatalityMetadata(ITBFatalityMetadata):

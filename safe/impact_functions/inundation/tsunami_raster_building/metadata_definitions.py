@@ -16,6 +16,16 @@ __filename__ = 'metadata_definitions'
 __date__ = '12/31/15'
 __copyright__ = 'imajimatika@gmail.com'
 
+from safe.definitionsv4.layer_modes import layer_mode_continuous, \
+    layer_mode_classified
+from safe.definitionsv4.exposure import exposure_structure
+from safe.definitionsv4.units import unit_feet, unit_metres
+from safe.definitionsv4.hazard import hazard_tsunami
+from safe.definitionsv4.hazard_category import hazard_category_single_event, \
+    hazard_category_multiple_event
+from safe.definitionsv4.layer_geometry import layer_geometry_point, \
+    layer_geometry_polygon, layer_geometry_raster
+from safe.definitionsv4.fields import structure_class_field
 from safe.common.utilities import OrderedDict
 from safe.defaults import building_type_postprocessor
 from safe.impact_functions.impact_function_metadata import \
@@ -27,20 +37,6 @@ from safe.impact_functions.inundation.tsunami_raster_building \
     high_threshold
 )
 from safe.utilities.i18n import tr
-from safe.definitions import (
-    layer_mode_classified,
-    layer_mode_continuous,
-    layer_geometry_polygon,
-    layer_geometry_point,
-    layer_geometry_raster,
-    hazard_category_single_event,
-    hazard_category_multiple_event,
-    exposure_structure,
-    unit_metres,
-    unit_feet,
-    hazard_tsunami,
-    structure_class_field
-)
 
 
 class TsunamiRasterBuildingMetadata(ImpactFunctionMetadata):

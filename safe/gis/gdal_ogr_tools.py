@@ -21,6 +21,19 @@ from safe.common.utilities import unique_filename, temp_dir
 LOGGER = logging.getLogger('InaSAFE')
 
 
+# From https://qgis.org/api/classQGis.html#a8da456870e1caec209d8ba7502cceff7
+QGIS_OGR_GEOMETRY_MAP = {
+    0: ogr.wkbUnknown,
+    1: ogr.wkbPoint,
+    2: ogr.wkbLineString,
+    3: ogr.wkbPolygon,
+    4: ogr.wkbMultiPoint,
+    5: ogr.wkbMultiLineString,
+    6: ogr.wkbMultiPolygon,
+    100: ogr.wkbNone
+}
+
+
 def polygonize_thresholds(
         raster_file_name,
         threshold_min=0.0,

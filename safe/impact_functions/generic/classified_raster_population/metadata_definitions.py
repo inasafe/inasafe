@@ -17,29 +17,26 @@ __filename__ = 'metadata_definitions'
 __date__ = '24/03/15'
 __copyright__ = 'lana.pcfre@gmail.com'
 
+from safe.definitionsv4.layer_modes import layer_mode_continuous, \
+    layer_mode_classified
+from safe.definitionsv4.exposure import exposure_population
+from safe.definitionsv4.units import count_exposure_unit, density_exposure_unit
+from safe.definitionsv4.hazard import hazard_all
+from safe.definitionsv4 import generic_raster_hazard_classes
+from safe.definitionsv4.hazard_category import hazard_category_single_event, \
+    hazard_category_multiple_event
+from safe.definitionsv4.layer_geometry import layer_geometry_raster
 from safe.common.utilities import OrderedDict, get_thousand_separator
-from safe.defaults import default_minimum_needs
 from safe.defaults import (
     default_gender_postprocessor,
     age_postprocessor,
     minimum_needs_selector)
-from safe.utilities.i18n import tr
-from safe.impact_functions.impact_function_metadata import \
-    ImpactFunctionMetadata
-from safe.definitions import (
-    layer_mode_classified,
-    layer_mode_continuous,
-    layer_geometry_raster,
-    hazard_all,
-    hazard_category_single_event,
-    hazard_category_multiple_event,
-    count_exposure_unit,
-    generic_raster_hazard_classes,
-    exposure_population,
-    density_exposure_unit
-)
+from safe.defaults import default_minimum_needs
 from safe.impact_functions.generic.parameter_definitions import \
     categorical_hazards
+from safe.impact_functions.impact_function_metadata import \
+    ImpactFunctionMetadata
+from safe.utilities.i18n import tr
 
 
 class ClassifiedRasterHazardPopulationMetadata(ImpactFunctionMetadata):

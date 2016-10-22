@@ -18,10 +18,15 @@
 *.shx binary
 *.db binary
 *.zip binary
+*.pdf binary
+
+# OSX Plist
+*.plist -text
 
 # binary
 *.sqlite binary
 *.qm binary
+*.gpkg binary
 
 # fonts:
 *.eot binary

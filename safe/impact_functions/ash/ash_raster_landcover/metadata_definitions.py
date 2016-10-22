@@ -10,21 +10,21 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.definitionsv4.layer_modes import (
+    layer_mode_continuous, layer_mode_classified)
+from safe.definitionsv4.exposure import exposure_land_cover
+from safe.definitionsv4.units import unit_centimetres
+from safe.definitionsv4.hazard import hazard_volcanic_ash
+from safe.definitionsv4.hazard_category import hazard_category_single_event, \
+    hazard_category_multiple_event
+from safe.definitionsv4.layer_geometry import (
+    layer_geometry_polygon, layer_geometry_raster)
 from safe.common.utilities import OrderedDict
-from safe.definitions import (
-    layer_mode_classified,
-    layer_mode_continuous,
-    layer_geometry_polygon,
-    layer_geometry_raster,
-    hazard_category_single_event,
-    hazard_category_multiple_event,
-    exposure_land_cover,
-    hazard_volcanic_ash, unit_centimetres)
-from safe.impact_functions.impact_function_metadata import \
-    ImpactFunctionMetadata
+from safe.impact_functions.ash.parameter_definitions import (
+    threshold_group_parameter)
+from safe.impact_functions.impact_function_metadata import (
+    ImpactFunctionMetadata)
 from safe.utilities.i18n import tr
-from safe.impact_functions.ash.parameter_definitions import \
-    threshold_group_parameter
 
 __author__ = 'Rizky Maulana Nugraha <lana.pcfre@gmail.com>'
 __date__ = '5/24/16'

@@ -10,10 +10,10 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+from safe.definitionsv4.value_maps import place_class_order
 from safe.common.exceptions import KeywordNotFoundError
 from safe.impact_reports.road_exposure_report_mixin import \
     RoadExposureReportMixin
-from safe.definitions import place_class_order
 from safe.utilities.i18n import tr
 
 __author__ = 'Etienne Trimaille <etienne@kartoza.com>'

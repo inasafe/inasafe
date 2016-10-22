@@ -1,9 +1,10 @@
 # coding=utf-8
 import logging
 
-from safe.common.exceptions import MetadataLayerConstraintError
-from safe.definitions import layer_mode_classified, layer_geometry_point, \
+from safe.definitionsv4.layer_modes import layer_mode_classified
+from safe.definitionsv4.layer_geometry import layer_geometry_point, \
     layer_geometry_line, layer_geometry_polygon
+from safe.common.exceptions import MetadataLayerConstraintError
 from safe.impact_functions.base import ImpactFunction
 from safe.impact_functions.bases.layer_types.classified_vector_exposure\
     import ClassifiedVectorExposureMixin

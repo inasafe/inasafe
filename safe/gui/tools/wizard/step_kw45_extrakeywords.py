@@ -21,11 +21,11 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore
 
-from safe.definitions import \
-    layer_mode_classified, layer_purpose_hazard, exposure_place
-
-from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
+from safe.definitionsv4.layer_modes import layer_mode_classified
+from safe.definitionsv4.exposure import exposure_place
+from safe.definitionsv4.layer_purposes import layer_purpose_hazard
 from safe.gui.tools.wizard.wizard_step import WizardStep
+from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)

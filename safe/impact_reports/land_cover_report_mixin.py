@@ -87,7 +87,7 @@ class LandCoverReportMixin(ReportMixin):
         """Return actions specfici to land cover exposure.
 
         .. note:: Only calculated actions are implemented here, the rest
-            are defined in definitions.py.
+            are defined in definitions.
 
         .. versionadded:: 3.5
 

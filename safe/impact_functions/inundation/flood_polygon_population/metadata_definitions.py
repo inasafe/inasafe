@@ -13,6 +13,16 @@ Contact : ole.moller.nielsen@gmail.com
 
 __author__ = 'Rizky Maulana Nugraha'
 
+from safe.definitionsv4.layer_modes import layer_mode_continuous, \
+    layer_mode_classified
+from safe.definitionsv4.exposure import exposure_population
+from safe.definitionsv4.units import count_exposure_unit
+from safe.definitionsv4.hazard import hazard_flood
+from safe.definitionsv4 import flood_vector_hazard_classes
+from safe.definitionsv4.hazard_category import hazard_category_single_event, \
+    hazard_category_multiple_event
+from safe.definitionsv4.layer_geometry import layer_geometry_polygon, \
+    layer_geometry_raster
 from safe.common.utilities import OrderedDict, get_thousand_separator
 from safe.defaults import (
     default_minimum_needs,
@@ -24,18 +34,6 @@ from safe.impact_functions.impact_function_metadata import \
 from safe.impact_functions.inundation.\
     flood_polygon_population import parameter_definitions
 from safe.utilities.i18n import tr
-from safe.definitions import (
-    layer_mode_classified,
-    layer_mode_continuous,
-    layer_geometry_polygon,
-    layer_geometry_raster,
-    hazard_flood,
-    hazard_category_multiple_event,
-    hazard_category_single_event,
-    flood_vector_hazard_classes,
-    count_exposure_unit,
-    exposure_population,
-)
 
 
 class FloodEvacuationVectorHazardMetadata(ImpactFunctionMetadata):

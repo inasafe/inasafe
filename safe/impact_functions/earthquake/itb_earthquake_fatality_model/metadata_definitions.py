@@ -10,25 +10,23 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from safe.definitionsv4.layer_modes import layer_mode_continuous
+from safe.definitionsv4.exposure import exposure_population
+from safe.definitionsv4.units import unit_mmi, count_exposure_unit
+from safe.definitionsv4.hazard import hazard_earthquake
+from safe.definitionsv4.hazard_category import (
+    hazard_category_single_event,
+    hazard_category_multiple_event)
+from safe.definitionsv4.layer_geometry import layer_geometry_raster
 from safe.common.utilities import OrderedDict, get_thousand_separator
-from safe.defaults import default_minimum_needs
 from safe.defaults import (
     default_gender_postprocessor,
     age_postprocessor,
     minimum_needs_selector)
-from safe.utilities.i18n import tr
+from safe.defaults import default_minimum_needs
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
-from safe.definitions import (
-    layer_mode_continuous,
-    layer_geometry_raster,
-    hazard_earthquake,
-    exposure_population,
-    count_exposure_unit,
-    hazard_category_single_event,
-    hazard_category_multiple_event,
-    unit_mmi
-)
+from safe.utilities.i18n import tr
 
 __author__ = 'lucernae'
 __project_name__ = 'inasafe'

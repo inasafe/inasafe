@@ -10,13 +10,16 @@ InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
 
 """
 
-__author__ = 'etienne@kartoza.com'
-__date__ = '20/04/2016'
-__copyright__ = ('Copyright 2016, Australia Indonesia Facility for '
-                 'Disaster Reduction')
-
+from tempfile import mkdtemp
 from PyQt4.QtCore import QVariant
 from qgis.core import QgsMapLayerRegistry, QgsVectorLayer, QgsFeature, QgsField
+
+from safe.datastore.folder import Folder
+
+__author__ = 'etienne@kartoza.com'
+__date__ = '20/04/2016'
+__copyright__ = (
+    'Copyright 2016, Australia Indonesia Facility for Disaster Reduction')
 
 """
 BE CAREFUL :
@@ -67,3 +70,18 @@ def show_qgis_layer(layer):
     :type layer: QgsMapLayer
     """
     QgsMapLayerRegistry.instance().addMapLayer(layer)
+
+
+def save_layer_to_file(layer):
+    """Save a QGIS layer to disk.
+
+    :param layer: The layer to save.
+    :type layer: QgsMapLayer
+
+    :return: The path to the file.
+    :rtype: str
+    """
+    path = mkdtemp()
+    data_store = Folder(path)
+    result = data_store.add_layer(layer, 'debug_layer')
+    return data_store.layer_uri(result[1])
