@@ -10,7 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
    (at your option) any later version.
 
 """
-from PyQt4.QtCore import QVariant
+from collections import OrderedDict
 from datetime import datetime
 
 from qgis.core import (
@@ -34,17 +34,20 @@ from safe.gisv4.vector.tools import create_memory_layer
 from safe.gisv4.vector.prepare_vector_layer import prepare_vector_layer
 from safe.gisv4.vector.reproject import reproject
 from safe.gisv4.vector.assign_highest_value import assign_highest_value
-from safe.gisv4.vector.reclassify import reclassify
+from safe.gisv4.vector.reclassify import reclassify as reclassify_vector
 from safe.gisv4.vector.union import union
 from safe.gisv4.vector.clip import clip
 from safe.gisv4.vector.aggregate_summary import aggregate_summary
 from safe.gisv4.vector.assign_inasafe_values import assign_inasafe_values
+from safe.gisv4.raster.reclassify import reclassify as reclassify_raster
+from safe.gisv4.raster.polygonize import polygonize
 from safe.definitionsv4.post_processors import post_processors
 from safe.definitionsv4.fields import (
     aggregation_id_field,
     aggregation_name_field,
     size_field
 )
+from safe.definitionsv4.utilities import definition
 from safe.defaults import get_defaults
 from safe.common.exceptions import (
     InvalidExtentError,
@@ -176,6 +179,9 @@ class ImpactFunction(object):
         :raise: NoKeywordsFoundError if no keywords has been found.
         :raise: InvalidHazardKeywords if the layer is not an hazard layer.
         """
+        if not layer.isValid():
+            raise InvalidHazardKeywords(tr('The hazard is not valid.'))
+
         try:
             # The layer might have monkey patching already.
             keywords = layer.keywords
@@ -211,6 +217,9 @@ class ImpactFunction(object):
         :raise: NoKeywordsFoundError if no keywords has been found.
         :raise: InvalidExposureKeywords if the layer is not an exposure layer.
         """
+        if not layer.isValid():
+            raise InvalidHazardKeywords(tr('The exposure is not valid.'))
+
         try:
             # The layer might have monkey patching already.
             keywords = layer.keywords
@@ -246,6 +255,9 @@ class ImpactFunction(object):
         :raise: NoKeywordsFoundError if no keywords has been found.
         :raise: InvalidExposureKeywords if the layer isn't an aggregation layer
         """
+        if not layer.isValid():
+            raise InvalidHazardKeywords(tr('The aggregation is not valid.'))
+
         try:
             # The layer might have monkey patching already.
             keywords = layer.keywords
@@ -578,9 +590,9 @@ class ImpactFunction(object):
 
         # Special case for Raster Earthquake hazard.
         if self.hazard.type() == QgsMapLayer.RasterLayer:
-            if self.hazard.keywords('hazard') == 'earthquake':
+            if self.hazard.keywords.get('hazard') == 'earthquake':
                 # return self.state()
-                pass
+                return
 
         self.hazard_preparation()
 
@@ -637,28 +649,54 @@ class ImpactFunction(object):
                     #     self.datastore.add_layer(
                     #         self.hazard, 'hazard reclassified')
 
-                else:
-                    self.set_state_process(
-                        'hazard', 'Assign classes based on value map')
-                    self.hazard = assign_inasafe_values(self.hazard)
-                    if self.debug:
-                        self.datastore.add_layer(
-                            self.hazard, 'hazard_value_map_to_reclassified')
             else:
                 self.set_state_process('hazard', 'Buffering')
                 self.set_state_process(
                     'hazard', 'Assign classes based on value map')
 
         elif self.hazard.type() == QgsMapLayer.RasterLayer:
+
             if self.hazard.keywords.get('layer_mode') == 'continuous':
                 self.set_state_process(
                     'hazard', 'Classify continuous raster hazard')
+                classifications = self.hazard.keywords.get('classification')
+                hazard_classes = definition(classifications)['classes']
+                ranges = OrderedDict()
+                for hazard_class in reversed(hazard_classes):
+                    min_value = hazard_class['numeric_default_min']
+                    max_value = hazard_class['numeric_default_max']
+                    ranges[hazard_class['value']] = [min_value, max_value]
+                self.hazard = reclassify_raster(self.hazard, ranges)
+                if self.debug:
+                    self.datastore.add_layer(
+                        self.hazard, 'hazard_raster_reclassified')
+
             self.set_state_process(
-                'hazard', 'Polygonise classified raster hazard')
+                'hazard', 'Polygonize classified raster hazard')
+            self.hazard = polygonize(self.hazard)
+            if self.debug:
+                self.datastore.add_layer(
+                    self.hazard, 'hazard_polygonized')
+
             self.set_state_process(
-                'hazard', 'Assign class names based on class id')
+                'hazard',
+                'Cleaning the vector hazard attribute table')
+            # noinspection PyTypeChecker
+            self.hazard = prepare_vector_layer(self.hazard)
+            if self.debug:
+                self.datastore.add_layer(
+                    self.hazard, 'hazard_cleaned')
+
         else:
             raise InvalidLayerError(tr('Unsupported hazard layer type'))
+
+        self.set_state_process(
+            'hazard', 'Assign classes based on value map')
+        self.hazard = assign_inasafe_values(self.hazard)
+        if self.debug:
+            self.datastore.add_layer(
+                self.hazard, 'hazard_value_map_to_reclassified')
+
         self.set_state_process(
             'hazard', 'Classified polygon hazard with keywords')
 
@@ -831,7 +869,7 @@ class ImpactFunction(object):
             if result:
                 self.set_state_process(
                     'post_processor',
-                    'Post processor for %s.' % post_processor['name'])
+                    str('Post processor for %s' % post_processor['name']))
 
     @profile
     def run_single_post_processor(self, post_processor):

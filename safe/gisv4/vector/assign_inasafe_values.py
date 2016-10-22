@@ -89,10 +89,10 @@ def assign_inasafe_values(layer, callback=None):
         classified_value = reversed_value_map.get(source_value)
 
         if not classified_value:
-            layer.deleteFeature(feature.id())
-        else:
-            layer.changeAttributeValue(
-                feature.id(), classified_field_index, classified_value)
+            classified_value = ''
+
+        layer.changeAttributeValue(
+            feature.id(), classified_field_index, classified_value)
 
     layer.commitChanges()
 

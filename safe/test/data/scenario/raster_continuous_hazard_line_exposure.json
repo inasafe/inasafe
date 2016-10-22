@@ -1,8 +1,8 @@
 {
   "scenario": {
-    "hazard": "flood_multipart_polygons.shp",
-    "exposure": "building-points.shp",
-    "aggregation": null
+    "hazard": "tsunami_wgs84.tif",
+    "exposure": "roads.shp",
+    "aggregation": "grid_jakarta.shp"
   },
 
 
@@ -33,6 +33,8 @@
     "hazard":{
       "info": {},
       "process":[
+        "Classify continuous raster hazard",
+        "Polygonize classified raster hazard",
         "Cleaning the vector hazard attribute table",
         "Assign classes based on value map",
         "Classified polygon hazard with keywords",
