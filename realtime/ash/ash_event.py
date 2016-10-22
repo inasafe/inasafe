@@ -277,7 +277,9 @@ class AshEvent(QObject):
             ),
             'content-notes': self.tr(
                 'This report was created using InaSAFE version %s. Visit '
-                'http://inasafe.org for more information. ') % get_version()
+                'http://inasafe.org for more information. ') % get_version(),
+            'content-support': self.tr(
+                'Supported by DMInnovation, Geoscience Australia and the World Bank-GFDRR')
         }
         return event
 
@@ -434,6 +436,7 @@ class AshEvent(QObject):
                     'class': haz_class,
                     'hazard': haz,
                     'css': haz.lower().replace(' ', '-'),
+                    'pop_val': city_pop,
                     'population': format_int(
                         population_rounding(city_pop / 1000)),
                     'name': city_name.title(),
@@ -444,7 +447,7 @@ class AshEvent(QObject):
             # sort table by hazard zone, then population
             table_places = sorted(
                 table_places,
-                key=lambda x: (-x['class'], -x['population']))
+                key=lambda x: (-x['class'], -x['pop_val']))
         except Exception as e:
             LOGGER.exception(e)
             table_places = []
@@ -472,7 +475,8 @@ class AshEvent(QObject):
                     'class': haz_class,
                     'hazard': haz,
                     'css': haz.lower().replace(' ', '-'),
-                    'population': 0,
+                    'pop_val': 0,
+                    'population': '0',
                     'name': airport_name.title(),
                     'type': 'airport'
                 }
@@ -504,7 +508,7 @@ class AshEvent(QObject):
         # sort entry by hazard level
         item_list = sorted(
             item_list,
-            key=lambda x: (-x['class'], -x['population']))
+            key=lambda x: (-x['class'], -x['pop_val']))
 
         nearby_template = self.ash_fixtures_dir(
             'nearby-table.template.html')
@@ -796,7 +800,7 @@ class AshEvent(QObject):
         landcover_html.setUrl(QUrl(self.landcover_html_path))
 
         # setup logos
-        logos_id = ['logo-bnpb', 'logo-geologi']
+        logos_id = ['logo-bnpb', 'logo-geologi', 'logo-inasafe']
         for logo_id in logos_id:
             logo_picture = composition.getComposerItemById(logo_id)
             if logo_picture is None:
