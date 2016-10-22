@@ -12,7 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 from itertools import product
-from PyQt4.QtCore import QFileInfo, QDir
+from PyQt4.QtCore import QFileInfo, QDir, QFile
 from qgis.core import (
     QgsVectorFileWriter,
     QgsRasterLayer,
@@ -191,19 +191,30 @@ class Folder(DataStore):
 
         output = QFileInfo(self.uri.filePath(layer_name + '.tif'))
 
-        renderer = raster_layer.renderer()
-        provider = raster_layer.dataProvider()
-        crs = raster_layer.crs()
+        source = QFileInfo(raster_layer.source())
+        if source.exists() and source.suffix() in ['tiff', 'tif']:
+            # If it's tiff file based.
+            QFile.copy(source.absoluteFilePath(), output.absoluteFilePath())
 
-        pipe = QgsRasterPipe()
-        pipe.set(provider.clone())
-        pipe.set(renderer.clone())
+        else:
+            # If it's not file based.
+            renderer = raster_layer.renderer()
+            provider = raster_layer.dataProvider()
+            crs = raster_layer.crs()
 
-        file_writer = QgsRasterFileWriter(output.absoluteFilePath())
-        file_writer.Mode(1)
+            pipe = QgsRasterPipe()
+            pipe.set(provider.clone())
+            pipe.set(renderer.clone())
 
-        file_writer.writeRaster(
-            pipe, provider.xSize(), provider.ySize(), provider.extent(), crs)
+            file_writer = QgsRasterFileWriter(output.absoluteFilePath())
+            file_writer.Mode(1)
 
-        del file_writer
+            file_writer.writeRaster(
+                pipe,
+                provider.xSize(),
+                provider.ySize(),
+                provider.extent(),
+                crs)
+
+            del file_writer
         return True, output.baseName()
