@@ -1,0 +1,53 @@
+{
+  "scenario": {
+    "hazard": "classified_flood_20_20.asc",
+    "exposure": "roads.shp",
+    "aggregation": "grid_jakarta.shp"
+  },
+
+
+  "expected":{
+    "impact function":{
+      "info": {},
+      "process":[
+        "Run impact function",
+        "Union exposure features to the aggregate hazard",
+        "Aggregate the impact summary"
+      ]
+    },
+    "post_processor":{
+      "info": {},
+      "process":[
+        "Post processor for Size Rate Post Processor"
+      ]
+    },
+    "aggregation":{
+      "info": {
+        "provided":false
+      },
+      "process":[
+        "Convert bbox aggregation to polygon layer with keywords",
+        "Union hazard polygons with aggregation areas and assign hazard class"
+      ]
+    },
+    "hazard":{
+      "info": {},
+      "process":[
+        "Polygonize classified raster hazard",
+        "Cleaning the vector hazard attribute table",
+        "Assign classes based on value map",
+        "Classified polygon hazard with keywords",
+        "Vector clip and mask hazard to aggregation",
+        "Clip and mask hazard polygons with aggregation"
+      ]
+    },
+    "exposure":{
+      "info": {},
+      "process":[
+        "Cleaning the vector exposure attribute table",
+        "Assign classes based on value map",
+        "Clip the exposure layer with the aggregagte hazard"
+      ]
+    }
+  }
+}

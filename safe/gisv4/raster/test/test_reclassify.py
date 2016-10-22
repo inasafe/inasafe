@@ -41,6 +41,7 @@ class TestReclassifyRaster(unittest.TestCase):
 
         expected_keywords = layer.keywords.copy()
         expected_keywords['layer_mode'] = 'classified'
+        expected_keywords['value_map'] = {'dry': [1], 'wet': [2]}
 
         reclassified = reclassify(layer, ranges)
 

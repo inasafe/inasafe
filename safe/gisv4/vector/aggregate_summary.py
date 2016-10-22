@@ -125,6 +125,6 @@ def aggregate_summary(aggregate_hazard, impact, callback=None):
     aggregate_hazard.commitChanges()
 
     # Todo add keywords for these new fields
-    aggregate_hazard.keywords['inasafe_fields'][total_field['key']] = total_field['field_name']
+    aggregate_hazard.keywords['inasafe_fields'][total_field['key']] = (
+        total_field['field_name'])
     return aggregate_hazard
-

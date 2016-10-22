@@ -175,9 +175,9 @@
           <hazard_category>
             <gco:CharacterString>single_event</gco:CharacterString>
           </hazard_category>
-          <raster_hazard_classification>
-            <gco:CharacterString/>
-          </raster_hazard_classification>
+          <classification>
+            <gco:CharacterString>flood_hazard_classes</gco:CharacterString>
+          </classification>
           <multipart_polygon>
             <gco:Boolean/>
           </multipart_polygon>
