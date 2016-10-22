@@ -567,33 +567,33 @@ class AshEvent(QObject):
             self, function_id, hazard_layer,
             exposure_layer, output_basename):
         LOGGER.info('Calculate %s' % function_id)
-        if_manager = ImpactFunctionManager()
-        impact_function = if_manager.get_instance(function_id)
-
-        impact_function.hazard = hazard_layer
-
-        extent = impact_function.hazard.extent()
-        hazard_extent = [
-            extent.xMinimum(), extent.yMinimum(),
-            extent.xMaximum(), extent.yMaximum()]
-
-        # clip exposure if required (if it is too large)
-        if isinstance(exposure_layer, QgsRasterLayer):
-            cell_size, _ = get_wgs84_resolution(exposure_layer)
-        else:
-            cell_size = None
-        clipped_exposure = clip_layer(
-            layer=exposure_layer,
-            extent=hazard_extent,
-            cell_size=cell_size)
-        exposure_layer = clipped_exposure
-
-        impact_function.exposure = exposure_layer
-        impact_function.requested_extent = hazard_extent
-        impact_function.requested_extent_crs = impact_function.hazard.crs()
-        impact_function.force_memory = True
-
         try:
+            if_manager = ImpactFunctionManager()
+            impact_function = if_manager.get_instance(function_id)
+
+            impact_function.hazard = hazard_layer
+
+            extent = impact_function.hazard.extent()
+            hazard_extent = [
+                extent.xMinimum(), extent.yMinimum(),
+                extent.xMaximum(), extent.yMaximum()]
+
+            # clip exposure if required (if it is too large)
+            if isinstance(exposure_layer, QgsRasterLayer):
+                cell_size, _ = get_wgs84_resolution(exposure_layer)
+            else:
+                cell_size = None
+            clipped_exposure = clip_layer(
+                layer=exposure_layer,
+                extent=hazard_extent,
+                cell_size=cell_size)
+            exposure_layer = clipped_exposure
+
+            impact_function.exposure = exposure_layer
+            impact_function.requested_extent = hazard_extent
+            impact_function.requested_extent_crs = impact_function.hazard.crs()
+            impact_function.force_memory = True
+
             impact_function.run_analysis()
             impact_layer = impact_function.impact
 
