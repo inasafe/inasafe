@@ -627,36 +627,10 @@ class ImpactFunction(object):
     def hazard_preparation(self):
         """This function is doing the hazard preparation."""
 
-        if self.hazard.type() == QgsMapLayer.VectorLayer:
-
-            self.set_state_process(
-                'hazard',
-                'Cleaning the vector hazard attribute table')
-            # noinspection PyTypeChecker
-            self.hazard = prepare_vector_layer(self.hazard)
-            if self.debug:
-                self.datastore.add_layer(
-                    self.hazard, 'hazard_cleaned')
-
-            if self.hazard.keywords.get('layer_geometry') == 'polygon':
-
-                if self.hazard.keywords.get('layer_mode') == 'continuous':
-                    self.set_state_process(
-                        'hazard',
-                        'Classify continuous hazard and assign class names')
-                    # self.hazard = reclassify(self.hazard, ranges)
-                    # if self.debug:
-                    #     self.datastore.add_layer(
-                    #         self.hazard, 'hazard reclassified')
-
-            else:
-                self.set_state_process('hazard', 'Buffering')
-                self.set_state_process(
-                    'hazard', 'Assign classes based on value map')
-
-        elif self.hazard.type() == QgsMapLayer.RasterLayer:
+        if self.hazard.type() == QgsMapLayer.RasterLayer:
 
             if self.hazard.keywords.get('layer_mode') == 'continuous':
+
                 self.set_state_process(
                     'hazard', 'Classify continuous raster hazard')
                 classifications = self.hazard.keywords.get('classification')
@@ -678,17 +652,30 @@ class ImpactFunction(object):
                 self.datastore.add_layer(
                     self.hazard, 'hazard_polygonized')
 
-            self.set_state_process(
-                'hazard',
-                'Cleaning the vector hazard attribute table')
-            # noinspection PyTypeChecker
-            self.hazard = prepare_vector_layer(self.hazard)
-            if self.debug:
-                self.datastore.add_layer(
-                    self.hazard, 'hazard_cleaned')
+        self.set_state_process(
+            'hazard',
+            'Cleaning the vector hazard attribute table')
+        # noinspection PyTypeChecker
+        self.hazard = prepare_vector_layer(self.hazard)
+        if self.debug:
+            self.datastore.add_layer(
+                self.hazard, 'hazard_cleaned')
+
+        if self.hazard.geometryType() == QGis.Polygon:
+
+            if self.hazard.keywords.get('layer_mode') == 'continuous':
+                self.set_state_process(
+                    'hazard',
+                    'Classify continuous hazard and assign class names')
+                # self.hazard = reclassify(self.hazard, ranges)
+                # if self.debug:
+                #     self.datastore.add_layer(
+                #         self.hazard, 'hazard reclassified')
 
         else:
-            raise InvalidLayerError(tr('Unsupported hazard layer type'))
+            self.set_state_process('hazard', 'Buffering')
+            self.set_state_process(
+                'hazard', 'Assign classes based on value map')
 
         self.set_state_process(
             'hazard', 'Assign classes based on value map')

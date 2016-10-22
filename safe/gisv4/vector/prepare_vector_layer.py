@@ -108,7 +108,6 @@ def _rename_remove_inasafe_fields(layer):
         fields = get_fields(
             layer.keywords['layer_purpose'])
 
-
     expected_fields = {field['key']: field['field_name'] for field in fields}
 
     # Rename fields
