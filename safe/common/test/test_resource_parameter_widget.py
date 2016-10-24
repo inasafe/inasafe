@@ -21,8 +21,7 @@ import unittest
 
 from safe.common.parameters.resource_parameter_widget import (
     ResourceParameterWidget)
-
-from common.parameters.resource_parameter import ResourceParameter
+from safe.common.parameters.resource_parameter import ResourceParameter
 from safe.test.utilities import get_qgis_app
 from safe_extras.parameters.metadata import unit_feet_depth, unit_metres_depth
 from safe_extras.parameters.unit import Unit
