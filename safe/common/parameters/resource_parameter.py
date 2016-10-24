@@ -5,7 +5,8 @@ import os
 import sys
 PARAMETERS_DIR = os.path.abspath(
     os.path.join(
-        os.path.dirname(__file__), '..', '..', 'safe_extras', 'parameters'))
+        os.path.dirname(__file__), '..', '..', '..', 'safe_extras',
+        'parameters'))
 if PARAMETERS_DIR not in sys.path:
     sys.path.append(PARAMETERS_DIR)
 
