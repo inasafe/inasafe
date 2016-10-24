@@ -14,27 +14,19 @@ from safe.test.debug_helper import print_attribute_table
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.definitionsv4.fields import (
-    women_count_field,
-    youth_count_field,
-    adult_count_field,
-    elderly_count_field,
-    feature_value_field,
     population_count_field,
     exposure_type_field,
-    size_field
 )
 from safe.definitionsv4.post_processors import (
     post_processor_gender,
     post_processor_youth,
     post_processor_adult,
     post_processor_elderly,
-    post_processor_size_rate,
     post_processor_size
 )
 from safe.utilities.unicode import byteify
 from safe.test.utilities import load_test_vector_layer
 from safe.impact_function_v4.impact_function import ImpactFunction
-from safe.impact_function_v4.impact_function import evaluate_formula
 
 from qgis.core import QgsVectorLayer, QgsRasterLayer
 
@@ -206,6 +198,7 @@ class TestImpactFunction(unittest.TestCase):
             print impact_function.datastore.uri.absolutePath()
             print impact_function.datastore.layers()
         self.assertIsNotNone(impact_function.impact)
+        self.assertIsNotNone(impact_function.aggregate_hazard)
 
     @unittest.skipIf(
         os.environ.get('ON_TRAVIS', False),
@@ -241,115 +234,6 @@ class TestImpactFunction(unittest.TestCase):
         for json_file in json_files:
             test_scenario(json_file)
 
-    def test_gender_post_processor(self):
-        """Test gender post processor."""
-        impact_layer = load_test_vector_layer(
-            'impact',
-            'indivisible_polygon_impact.shp',
-            clone_to_memory=True)
-        self.assertIsNotNone(impact_layer)
-        impact_function = ImpactFunction()
-
-        result, message = impact_function.run_single_post_processor(
-            impact_layer,
-            post_processor_gender)
-        self.assertTrue(result, message)
-
-        # Check if new field is added
-        impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
-        self.assertIn(women_count_field['field_name'], impact_fields)
-
-    def test_youth_post_processor(self):
-        """Test youth post processor."""
-        impact_layer = load_test_vector_layer(
-            'impact',
-            'indivisible_polygon_impact.shp',
-            clone_to_memory=True)
-        self.assertIsNotNone(impact_layer)
-        impact_function = ImpactFunction()
-
-        result, message = impact_function.run_single_post_processor(
-            impact_layer,
-            post_processor_youth)
-        self.assertTrue(result, message)
-
-        # Check if new field is added
-        impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
-        self.assertIn(youth_count_field['field_name'], impact_fields)
-
-    def test_adult_post_processor(self):
-        """Test adult post processor."""
-        impact_layer = load_test_vector_layer(
-            'impact',
-            'indivisible_polygon_impact.shp',
-            clone_to_memory=True)
-        self.assertIsNotNone(impact_layer)
-        impact_function = ImpactFunction()
-
-        result, message = impact_function.run_single_post_processor(
-            impact_layer,
-            post_processor_adult)
-        self.assertTrue(result, message)
-
-        # Check if new field is added
-        impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
-        self.assertIn(adult_count_field['field_name'], impact_fields)
-
-    def test_elderly_post_processor(self):
-        """Test elderly post processor."""
-        impact_layer = load_test_vector_layer(
-            'impact',
-            'indivisible_polygon_impact.shp',
-            clone_to_memory=True)
-        self.assertIsNotNone(impact_layer)
-        impact_function = ImpactFunction()
-
-        result, message = impact_function.run_single_post_processor(
-            impact_layer,
-            post_processor_elderly)
-        self.assertTrue(result, message)
-
-        # Check if new field is added
-        impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
-        self.assertIn(elderly_count_field['field_name'], impact_fields)
-
-    def test_size_post_processor(self):
-        """Test size  post processor."""
-        impact_layer = load_test_vector_layer(
-            'impact',
-            'indivisible_polygon_impact.shp',
-            clone_to_memory=True)
-        self.assertIsNotNone(impact_layer)
-        impact_function = ImpactFunction()
-
-        result, message = impact_function.run_single_post_processor(
-            impact_layer,
-            post_processor_size)
-        self.assertTrue(result, message)
-
-        # Check if new field is added
-        impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
-        self.assertIn(size_field['field_name'], impact_fields)
-
-    def test_size_rate_post_processor(self):
-        """Test size rate post processor."""
-        impact_layer = load_test_vector_layer(
-            'impact',
-            'indivisible_polygon_impact.shp',
-            clone_to_memory=True)
-        self.assertIsNotNone(impact_layer)
-        impact_function = ImpactFunction()
-
-        result, message = impact_function.run_single_post_processor(
-            impact_layer,
-            post_processor_size_rate)
-        self.assertTrue(result, message)
-
-        # Check if new field is added
-        impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
-        self.assertIn(feature_value_field['field_name'], impact_fields)
-        self.assertNotIn('size', impact_fields)
-
     def test_post_processor(self):
         """Test for running post processor."""
 
@@ -378,50 +262,6 @@ class TestImpactFunction(unittest.TestCase):
                 field_name = output_value['value']['field_name']
                 self.assertIn(field_name, impact_fields)
         print_attribute_table(impact_layer, 1)
-
-    def test_enough_input(self):
-        """Test to check the post processor input checker."""
-        impact_function = ImpactFunction()
-
-        class FakeMonkeyPatch(object):
-            pass
-
-        # We need to monkey patch some keywords to the impact layer.
-        layer = FakeMonkeyPatch()
-
-        # Gender postprocessor with female ratio missing.
-        layer.keywords = {
-            'inasafe_fields': {
-                'population_count_field': 'population'
-            }
-        }
-        # noinspection PyTypeChecker
-        result = impact_function.enough_input(
-            layer,
-            post_processor_gender['input'])
-        self.assertFalse(result[0])
-
-        # Gender postprocessor with female ratio missing.
-        layer.keywords = {
-            'inasafe_fields': {
-                'population_count_field': 'population',
-                'female_ratio_field': 'female_r'
-            }
-        }
-        # noinspection PyTypeChecker
-        result = impact_function.enough_input(
-            layer,
-            post_processor_gender['input'])
-        self.assertTrue(result[0])
-
-    def test_evaluate_formula(self):
-        """Test for evaluating formula."""
-        formula = 'population * gender_ratio'
-        variables = {
-            'population': 100,
-            'gender_ratio': 0.45
-        }
-        self.assertEquals(45, evaluate_formula(formula, variables))
 
 
 if __name__ == '__main__':
