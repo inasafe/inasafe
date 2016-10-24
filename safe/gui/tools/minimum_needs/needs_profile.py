@@ -10,16 +10,13 @@ __copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
 import os
 from shutil import copy
 
-# noinspection PyUnresolvedReferences
-# pylint: disable=unused-import
-from qgis.core import QgsApplication
-# noinspection PyPackageRequirements
 from PyQt4.QtCore import QSettings
+from qgis.core import QgsApplication
 
-from safe.common.resource_parameter import ResourceParameter
+from common.parameters.resource_parameter import ResourceParameter
 from safe.common.minimum_needs import MinimumNeeds
-from safe.utilities.resources import resources_path
 from safe.utilities.i18n import tr
+from safe.utilities.resources import resources_path
 from safe_extras.parameters.text_parameter import TextParameter
 
 

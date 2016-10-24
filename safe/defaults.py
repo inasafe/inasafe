@@ -25,15 +25,14 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import qgis  # pylint: disable=unused-import
 from PyQt4.QtCore import QSettings
 
+from common.parameters.resource_parameter import ResourceParameter
+from safe.utilities.i18n import tr
+from safe.utilities.resources import resources_path
 from safe_extras.parameters.boolean_parameter import BooleanParameter
 from safe_extras.parameters.float_parameter import FloatParameter
 from safe_extras.parameters.group_parameter import GroupParameter
 from safe_extras.parameters.text_parameter import TextParameter
 from safe_extras.parameters.unit import Unit
-
-from safe.common.resource_parameter import ResourceParameter
-from safe.utilities.i18n import tr
-from safe.utilities.resources import resources_path
 
 
 def define_defaults():

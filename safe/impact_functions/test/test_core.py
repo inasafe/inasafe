@@ -18,19 +18,21 @@ __date__ = '24/10/14'
 __copyright__ = ('Copyright 2014, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-import unittest
-import random
-import os
 import logging
+import os
+import random
+import unittest
 from collections import OrderedDict
+
 from safe.test.utilities import get_qgis_app, TESTDATA, HAZDATA
+
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.impact_functions.core import (
     population_rounding_full,
     population_rounding,
     evacuated_population_needs)
-from safe.common.resource_parameter import ResourceParameter
+from common.parameters.resource_parameter import ResourceParameter
 from safe.defaults import default_minimum_needs
 
 LOGGER = logging.getLogger('InaSAFE')

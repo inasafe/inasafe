@@ -1,10 +1,5 @@
 # coding=utf-8
-"""Docstring for this file."""
-__author__ = 'Christian Christelis christian@kartoza.com'
-__project_name = 'parameters'
-__filename = 'float_parameter_widget'
-__date__ = '12/11/14'
-__copyright__ = 'kartoza.com'
+"""Resource Parameter Widget"""
 
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
@@ -14,6 +9,11 @@ from PyQt4.QtGui import QLabel
 
 from safe_extras.parameters.qt_widgets.float_parameter_widget import (
     FloatParameterWidget)
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 
 # pylint: disable=super-on-old-class

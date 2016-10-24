@@ -19,7 +19,7 @@ __copyright__ += 'Disaster Reduction'
 
 import unittest
 
-from safe.common.resource_parameter import ResourceParameter
+from common.parameters.resource_parameter import ResourceParameter
 from safe_extras.parameters.unit import Unit
 
 
