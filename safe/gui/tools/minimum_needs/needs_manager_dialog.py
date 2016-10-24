@@ -29,9 +29,12 @@ from PyQt4.QtGui import (
     QMessageBox,
     QIcon
 )
+# This import must come first to force sip2 api
+# noinspection PyUnresolvedReferences
+# pylint: disable=unused-import
 from qgis.core import QGis  # force sip2 api
 
-from common.parameters.resource_parameter import ResourceParameter
+from safe.common.parameters.resource_parameter import ResourceParameter
 from safe.gui.tools.help.needs_manager_help import needs_manager_helps
 from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
 from safe.messaging import styles

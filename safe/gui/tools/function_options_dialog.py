@@ -33,9 +33,10 @@ from PyQt4.QtGui import (
     QWidget,
     QScrollArea,
     QVBoxLayout)
-from safe.common.resource_parameter_widget import ResourceParameterWidget
+from safe.common.parameters.resource_parameter_widget import (
+    ResourceParameterWidget)
 
-from common.parameters.resource_parameter import ResourceParameter
+from safe.common.parameters.resource_parameter import ResourceParameter
 from safe.gui.tools.help.function_options_help import function_options_help
 from safe.utilities.i18n import tr
 from safe.utilities.resources import html_footer, html_header, get_ui_class
