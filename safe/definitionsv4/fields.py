@@ -32,7 +32,9 @@ exposure_id_field = {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
 }
 # Exposure Name Field
 exposure_name_field = {
@@ -50,7 +52,9 @@ exposure_name_field = {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
 }
 
 
@@ -70,7 +74,9 @@ exposure_type_field = {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
 }
 
 
@@ -90,7 +96,9 @@ exposure_class_field = {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
 }
 
 # Population Count
@@ -108,7 +116,9 @@ population_count_field = {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
 }
 
 # Feature Value
@@ -126,7 +136,9 @@ feature_value_field = {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
 }
 
 # Feature Rate
@@ -146,7 +158,9 @@ feature_rate_field = {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': True
 }
 
 # Hazard
@@ -166,7 +180,9 @@ hazard_id_field = {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
 }
 
 # Hazard name
@@ -185,7 +201,9 @@ hazard_name_field = {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
 }
 
 # Hazard Value
@@ -204,7 +222,9 @@ hazard_value_field = {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
 }
 
 # Aggregation
@@ -224,7 +244,9 @@ aggregation_id_field = {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
 }
 
 # Aggregation Name
@@ -243,7 +265,9 @@ aggregation_name_field = {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
 }
 
 # Female Ratio
@@ -261,7 +285,9 @@ female_ratio_field = {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': True
 }
 
 # Youth Ratio
@@ -279,7 +305,9 @@ youth_ratio_field = {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': True
 }
 
 # Adult Ratio
@@ -297,7 +325,9 @@ adult_ratio_field = {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': True
 }
 
 # elderly Ratio
@@ -316,7 +346,9 @@ elderly_ratio_field = {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': True
 }
 
 # Impact
@@ -336,7 +368,9 @@ hazard_class_field = {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
 }
 
 # Women Count
@@ -355,7 +389,9 @@ women_count_field = {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
 }
 
 # Youth Count
@@ -375,7 +411,9 @@ youth_count_field = {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
 }
 
 # Adult Count
@@ -395,7 +433,9 @@ adult_count_field = {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
 }
 
 # Elderly Count
@@ -416,7 +456,9 @@ elderly_count_field = {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
 }
 
 # Size
@@ -436,7 +478,9 @@ size_field = {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
 }
 
 
@@ -457,7 +501,9 @@ total_field = {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
 }
 
 # Special dynamic field for each exposure type in the aggregate hazard table.
@@ -477,7 +523,9 @@ exposure_count_field = {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
 }
 
 
