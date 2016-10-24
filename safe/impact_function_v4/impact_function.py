@@ -41,6 +41,7 @@ from safe.gisv4.vector.aggregate_summary import aggregate_summary
 from safe.gisv4.vector.assign_inasafe_values import assign_inasafe_values
 from safe.gisv4.raster.reclassify import reclassify as reclassify_raster
 from safe.gisv4.raster.polygonize import polygonize
+from safe.gisv4.raster.zonal_statistics import zonal_stats
 from safe.definitionsv4.post_processors import post_processors
 from safe.definitionsv4.fields import (
     aggregation_id_field,
@@ -116,7 +117,7 @@ class ImpactFunction(object):
         # set this to a gui call back / web callback etc as needed.
         self._callback = self.console_progress_callback
 
-        self.impact = None
+        self._impact = None
 
         self._name = None  # e.g. Flood Raster on Building Polygon
         self._title = None  # be affected
@@ -191,7 +192,8 @@ class ImpactFunction(object):
             keywords = KeywordIO().read_keywords(layer)
 
         if keywords.get('layer_purpose') != 'hazard':
-            raise InvalidHazardKeywords
+            raise InvalidHazardKeywords(
+                tr('The layer is not an hazard layer.'))
 
         self._hazard = layer
         self._hazard.keywords = keywords
@@ -229,7 +231,8 @@ class ImpactFunction(object):
             keywords = KeywordIO().read_keywords(layer)
 
         if keywords.get('layer_purpose') != 'exposure':
-            raise InvalidExposureKeywords
+            raise InvalidExposureKeywords(
+                tr('The layer is not an exposure layer.'))
 
         self._exposure = layer
         self._exposure.keywords = keywords
@@ -267,7 +270,8 @@ class ImpactFunction(object):
             keywords = KeywordIO().read_keywords(layer)
 
         if keywords.get('layer_purpose') != 'aggregation':
-            raise InvalidAggregationKeywords
+            raise InvalidAggregationKeywords(
+                tr('The layer is not an aggregation layer.'))
 
         self._aggregation = layer
         self._aggregation.keywords = keywords
@@ -280,6 +284,15 @@ class ImpactFunction(object):
         :rtype: QgsVectorLayer
         """
         return self._aggregate_hazard
+
+    @property
+    def impact(self):
+        """Property for the impact layer.
+
+        :returns: A vector layer.
+        :rtype: QgsVectorLayer
+        """
+        return self._impact
 
     @property
     def requested_extent(self):
@@ -603,17 +616,20 @@ class ImpactFunction(object):
         self.intersect_exposure_and_aggregate_hazard()
 
         # Post Processor
-        self.post_process()
+        if self._impact:
+            self.post_process(self._impact)
 
-        self.datastore.add_layer(self.impact, 'impact')
+            self.datastore.add_layer(self._impact, 'impact')
 
-        self.set_state_process(
-            'impact function',
-            'Aggregate the impact summary')
-        self._aggregate_hazard = aggregate_summary(
-            self.aggregate_hazard, self.impact)
+            self.set_state_process(
+                'impact function',
+                'Aggregate the impact summary')
+            self._aggregate_hazard = aggregate_summary(
+                self.aggregate_hazard, self._impact)
 
-        self.datastore.add_layer(self.aggregate_hazard, 'aggregate-hazard')
+        self.post_process(self._aggregate_hazard)
+
+        self.datastore.add_layer(self._aggregate_hazard, 'aggregate-hazard')
 
         # Get the profiling log
         self._performance_log = profiling_log()
@@ -771,12 +787,7 @@ class ImpactFunction(object):
                 if self.exposure.keywords.get('exposure_unit') == 'density':
                     self.set_state_process(
                         'exposure', 'Calculate counts per cell')
-                self.set_state_process(
-                    'exposure',
-                    'Raster clip and mask exposure to aggregate hazard')
-                self.set_state_process(
-                    'exposure',
-                    'Zonal stats on intersected hazard / aggregation data')
+
             else:
                 self.set_state_process(
                     'exposure', 'Polygonise classified raster hazard')
@@ -824,34 +835,61 @@ class ImpactFunction(object):
     def intersect_exposure_and_aggregate_hazard(self):
         """This function intersects the exposure with the aggregate hazard.
 
-        This function will set the impact layer.
+        If the the exposure is a continuous raster exposure, this function
+            will set the aggregate hazard layer.
+        However, this function will set the impact layer.
         """
         self.set_state_process('impact function', 'Run impact function')
-        exposure = self.exposure.keywords.get('exposure')
-        geometry = self.exposure.geometryType()
-        if exposure == 'structure' and geometry == QGis.Polygon:
+
+        if self.exposure.type() == QgsMapLayer.RasterLayer:
             self.set_state_process(
                 'impact function',
-                'Highest class of hazard is assigned when more than one '
-                'overlaps')
-            # self.impact = intersection(self.exposure, self._aggregate_hazard)
+                'Zonal stats between exposure and aggregate hazard')
+            # noinspection PyTypeChecker
+            self._aggregate_hazard = zonal_stats(
+                self.exposure, self.aggregate_hazard)
+            if self.debug:
+                self.datastore.add_layer(
+                    self._aggregate_hazard, 'zonal_stats')
+
+            # I know it's redundant, it's just to be sure that we don't have
+            # any impact layer for that IF.
+            self._impact = None
 
         else:
-            self.set_state_process(
-                'impact function',
-                'Union exposure features to the aggregate hazard')
-            self.impact = union(self.exposure, self._aggregate_hazard)
+            exposure = self.exposure.keywords.get('exposure')
+            geometry = self.exposure.geometryType()
+            if exposure == 'structure' and geometry == QGis.Polygon:
+                self.set_state_process(
+                    'impact function',
+                    'Highest class of hazard is assigned when more than one '
+                    'overlaps')
+                # self.impact = intersection(
+                #     self.exposure, self._aggregate_hazard)
 
-        self.datastore.add_layer(self.impact, 'intermediate-impact')
+            else:
+                self.set_state_process(
+                    'impact function',
+                    'Union exposure features to the aggregate hazard')
+                self._impact = union(self.exposure, self._aggregate_hazard)
+
+            if self.debug:
+                self.datastore.add_layer(
+                    self._impact, 'intermediate-impact')
 
     @profile
-    def post_process(self):
-        """More process after getting the impact layer with data."""
+    def post_process(self, layer):
+        """More process after getting the impact layer with data.
+
+        :param layer: The vector layer to use for post processing.
+        :type layer: QgsVectorLayer
+        """
         # Post processor (gender, age, building type, etc)
         # Notes, action
 
         for post_processor in post_processors:
             result, post_processor_output = self.run_single_post_processor(
+                layer,
                 post_processor)
             if result:
                 self.set_state_process(
@@ -859,11 +897,14 @@ class ImpactFunction(object):
                     str('Post processor for %s' % post_processor['name']))
 
     @profile
-    def run_single_post_processor(self, post_processor):
+    def run_single_post_processor(self, layer, post_processor):
         """Run single post processor.
 
-        If the impact layer has the output field, it will pass the post
+        If the layer has the output field, it will pass the post
         processor calculation.
+
+        :param layer: The vector layer to use for post processing.
+        :type layer: QgsVectorLayer
 
         :param post_processor: A post processor definition.
         :type post_processor: dict
@@ -871,13 +912,13 @@ class ImpactFunction(object):
         :returns: Tuple with True if success, else False with an error message.
         :rtype: (bool, str)
         """
-        valid, message = self.enough_input(post_processor['input'])
+        valid, message = self.enough_input(layer, post_processor['input'])
         if valid:
 
-            if not self.impact.editBuffer():
+            if not layer.editBuffer():
 
                 # Turn on the editing mode.
-                if not self.impact.startEditing():
+                if not layer.startEditing():
                     msg = tr(
                         'The impact layer could not start the editing mode.')
                     return False, msg
@@ -889,18 +930,18 @@ class ImpactFunction(object):
                 # Get output attribute name
                 key = output_value['value']['key']
                 output_field_name = output_value['value']['field_name']
-                self.impact.keywords['inasafe_fields'][key] = output_field_name
+                layer.keywords['inasafe_fields'][key] = output_field_name
 
                 # If there is already the output field, don't proceed
-                if self.impact.fieldNameIndex(output_field_name) > -1:
+                if layer.fieldNameIndex(output_field_name) > -1:
                     msg = tr(
                         'The field name %s already exists.'
                         % output_field_name)
-                    self.impact.rollBack()
+                    layer.rollBack()
                     return False, msg
 
                 # Add output attribute name to the layer
-                result = self.impact.addAttribute(
+                result = layer.addAttribute(
                     QgsField(
                         output_field_name,
                         output_value['value']['type'])
@@ -909,18 +950,18 @@ class ImpactFunction(object):
                     msg = tr(
                         'Error while creating the field %s.'
                         % output_field_name)
-                    self.impact.rollBack()
+                    layer.rollBack()
                     return False, msg
 
                 # Get the index of output attribute
-                output_field_index = self.impact.fieldNameIndex(
+                output_field_index = layer.fieldNameIndex(
                     output_field_name)
 
-                if self.impact.fieldNameIndex(output_field_name) == -1:
+                if layer.fieldNameIndex(output_field_name) == -1:
                     msg = tr(
                         'The field name %s has not been created.'
                         % output_field_name)
-                    self.impact.rollBack()
+                    layer.rollBack()
                     return False, msg
 
                 # Get the input field's indexes for input
@@ -930,27 +971,27 @@ class ImpactFunction(object):
                 for key, value in post_processor['input'].items():
 
                     if value['type'] == 'field':
-                        inasafe_fields = self.impact.keywords['inasafe_fields']
+                        inasafe_fields = layer.keywords['inasafe_fields']
                         name_field = inasafe_fields.get(value['value']['key'])
 
                         if not name_field:
                             msg = tr(
                                 '%s has not been found in inasafe fields.'
                                 % value['value']['key'])
-                            self.impact.rollBack()
+                            layer.rollBack()
                             return False, msg
 
-                        index = self.impact.fieldNameIndex(name_field)
+                        index = layer.fieldNameIndex(name_field)
 
                         if index == -1:
-                            fields = self.impact.fields().toList()
+                            fields = layer.fields().toList()
                             msg = tr(
                                 'The field name %s has not been found in %s'
                                 % (
                                     name_field,
                                     [f.name() for f in fields]
                                 ))
-                            self.impact.rollBack()
+                            layer.rollBack()
                             return False, msg
 
                         input_indexes[key] = index
@@ -960,18 +1001,18 @@ class ImpactFunction(object):
                         if value['value'] == 'size':
                             flag = False
                             # Check if size field is already exist
-                            if self.impact.fieldNameIndex(
+                            if layer.fieldNameIndex(
                                     size_field['field_name']) != -1:
                                 flag = True
                                 # temporary_indexes.append(input_indexes[key])
-                            input_indexes[key] = self.add_size_field()
+                            input_indexes[key] = self.add_size_field(layer)
                             if not flag:
                                 temporary_indexes.append(input_indexes[key])
 
                 # Create iterator for feature
                 request = QgsFeatureRequest().setSubsetOfAttributes(
                     input_indexes.values())
-                iterator = self.impact.getFeatures(request)
+                iterator = layer.getFeatures(request)
                 # Iterate all feature
                 for feature in iterator:
                     attributes = feature.attributes()
@@ -988,24 +1029,27 @@ class ImpactFunction(object):
                     post_processor_result = evaluate_formula(
                         output_value['formula'], parameters)
 
-                    self.impact.changeAttributeValue(
+                    layer.changeAttributeValue(
                         feature.id(),
                         output_field_index,
                         post_processor_result
                     )
 
                 # Delete temporary indexes
-                self.impact.deleteAttributes(temporary_indexes)
+                layer.deleteAttributes(temporary_indexes)
 
-            self.impact.commitChanges()
+            layer.commitChanges()
             return True, None
         else:
-            self.impact.rollBack()
+            layer.rollBack()
             return False, message
 
-    @profile
-    def enough_input(self, post_processor_input):
+    @staticmethod
+    def enough_input(layer, post_processor_input):
         """Check if the input from impact_fields in enough.
+
+        :param layer: The vector layer to use for post processing.
+        :type layer: QgsVectorLayer
 
         :param post_processor_input: Collection of post processor input
             requirements.
@@ -1014,7 +1058,7 @@ class ImpactFunction(object):
         :returns: Tuple with True if success, else False with an error message.
         :rtype: (bool, str)
         """
-        impact_fields = self.impact.keywords['inasafe_fields'].keys()
+        impact_fields = layer.keywords['inasafe_fields'].keys()
         for input_key, input_value in post_processor_input.items():
             if input_value['type'] == 'field':
                 key = input_value['value']['key']
@@ -1027,35 +1071,38 @@ class ImpactFunction(object):
         return True, None
 
     @profile
-    def add_size_field(self):
+    def add_size_field(self, layer):
         """Add size field in to impact layer.
 
         If polygon, size will be area in square meter.
         If line, size will be length in meter.
+
+        :param layer: The vector layer to use for post processing.
+        :type layer: QgsVectorLayer
 
         :returns: Index of the size field.
         :rtype: int
         """
         # Create QgsDistanceArea object
         size_calculator = QgsDistanceArea()
-        size_calculator.setSourceCrs(self.impact.crs())
+        size_calculator.setSourceCrs(layer.crs())
         size_calculator.setEllipsoid('WGS84')
         size_calculator.setEllipsoidalMode(True)
 
-        size_field_index = self.impact.fieldNameIndex('size')
+        size_field_index = layer.fieldNameIndex('size')
         # Check if size field already exist
         if size_field_index == -1:
             # Add new field, size
-            self.impact.addAttribute(QgsField(
+            layer.addAttribute(QgsField(
                 size_field['field_name'], size_field['type']))
             # Get index
-            size_field_index = self.impact.fieldNameIndex('size')
+            size_field_index = layer.fieldNameIndex('size')
 
         # Iterate through all features
         request = QgsFeatureRequest().setSubsetOfAttributes([])
-        features = self.impact.getFeatures(request)
+        features = layer.getFeatures(request)
         for feature in features:
-            self.impact.changeAttributeValue(
+            layer.changeAttributeValue(
                 feature.id(),
                 size_field_index,
                 size_calculator.measure(feature.geometry())
