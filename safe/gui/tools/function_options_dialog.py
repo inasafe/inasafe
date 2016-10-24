@@ -18,14 +18,12 @@ __date__ = '01/10/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from collections import OrderedDict
 import logging
-# This import is to enable SIP API V2
-# noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=unused-import
-# noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
-# noinspection PyPackageRequirements
+from collections import OrderedDict
+
+import qgis  # pylint: disable=unused-import
+from PyQt4.QtCore import pyqtSignature, pyqtSlot
 from PyQt4.QtGui import (
     QGroupBox,
     QLineEdit,
@@ -35,16 +33,15 @@ from PyQt4.QtGui import (
     QWidget,
     QScrollArea,
     QVBoxLayout)
-from PyQt4.QtCore import pyqtSignature, pyqtSlot
+from safe.common.resource_parameter_widget import ResourceParameterWidget
 
+from common.parameters.resource_parameter import ResourceParameter
+from safe.gui.tools.help.function_options_help import function_options_help
 from safe.utilities.i18n import tr
+from safe.utilities.resources import html_footer, html_header, get_ui_class
+from safe_extras.parameters.parameter_exceptions import CollectionLengthError
 from safe_extras.parameters.qt_widgets.parameter_container import (
     ParameterContainer)
-from safe_extras.parameters.parameter_exceptions import CollectionLengthError
-from safe.common.resource_parameter import ResourceParameter
-from safe.common.resource_parameter_widget import ResourceParameterWidget
-from safe.utilities.resources import html_footer, html_header, get_ui_class
-from safe.gui.tools.help.function_options_help import function_options_help
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8

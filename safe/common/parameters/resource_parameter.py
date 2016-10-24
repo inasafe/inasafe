@@ -1,10 +1,5 @@
 # coding=utf-8
-"""Docstring for this file."""
-__author__ = 'Christian Christelis'
-__project_name = 'parameters'
-__filename = 'resource_parameter'
-__date__ = '11/11/14'
-__copyright__ = 'kartoza.com'
+"""Resource Parameter."""
 
 import os
 import sys
@@ -16,6 +11,11 @@ if PARAMETERS_DIR not in sys.path:
 
 from safe_extras.parameters.float_parameter import FloatParameter
 from safe_extras.parameters.unit import Unit
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 
 class ResourceParameter(FloatParameter):
