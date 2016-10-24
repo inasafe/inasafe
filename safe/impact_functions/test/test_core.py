@@ -32,7 +32,7 @@ from safe.impact_functions.core import (
     population_rounding_full,
     population_rounding,
     evacuated_population_needs)
-from common.parameters.resource_parameter import ResourceParameter
+from safe.common.parameters.resource_parameter import ResourceParameter
 from safe.defaults import default_minimum_needs
 
 LOGGER = logging.getLogger('InaSAFE')

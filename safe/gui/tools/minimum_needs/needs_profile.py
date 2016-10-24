@@ -13,7 +13,7 @@ from shutil import copy
 from PyQt4.QtCore import QSettings
 from qgis.core import QgsApplication
 
-from common.parameters.resource_parameter import ResourceParameter
+from safe.common.parameters.resource_parameter import ResourceParameter
 from safe.common.minimum_needs import MinimumNeeds
 from safe.utilities.i18n import tr
 from safe.utilities.resources import resources_path
