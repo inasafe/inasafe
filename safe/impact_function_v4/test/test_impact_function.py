@@ -4,6 +4,8 @@
 import unittest
 import json
 import os
+from os.path import join, isfile
+from os import listdir
 
 from safe.test.utilities import get_control_text
 from safe.test.utilities import get_qgis_app, standard_data_path
@@ -104,7 +106,7 @@ def run_scenario(scenario, use_debug=False):
 
     layer = QgsVectorLayer(exposure_path, 'Exposure', 'ogr')
     if not layer.isValid():
-        layer = QgsRasterLayer(hazard_path, 'Exposure')
+        layer = QgsRasterLayer(exposure_path, 'Exposure')
     impact_function.exposure = layer
 
     if aggregation_path:
@@ -214,7 +216,7 @@ class TestImpactFunction(unittest.TestCase):
         use_debug = True
 
         scenario_path = standard_data_path(
-            'scenario', 'raster_continuous_hazard_line_exposure.json')
+            'scenario', 'raster_continuous_hazard_on_raster_population_exposure.json')
         scenario, expected = read_json_flow(scenario_path)
         result = run_scenario(scenario, use_debug)
         self.assertDictEqual(expected, result)
@@ -230,9 +232,12 @@ class TestImpactFunction(unittest.TestCase):
             self.assertDictEqual(expected, result)
 
         path = standard_data_path('scenario')
+
         json_files = [
-            os.path.join(path, f) for f in os.listdir(path)
-            if os.path.isfile(os.path.join(path, f))]
+            join(path, f) for f in listdir(path)
+            if isfile(join(path, f)) and f.endswith('json')
+        ]
+
         for json_file in json_files:
             test_scenario(json_file)
 
@@ -244,14 +249,11 @@ class TestImpactFunction(unittest.TestCase):
             clone_to_memory=True)
         self.assertIsNotNone(impact_layer)
         impact_function = ImpactFunction()
-        impact_function.impact = impact_layer
 
         result, message = impact_function.run_single_post_processor(
+            impact_layer,
             post_processor_gender)
         self.assertTrue(result, message)
-
-        impact_layer = impact_function.impact
-        self.assertIsNotNone(impact_layer)
 
         # Check if new field is added
         impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
@@ -265,14 +267,11 @@ class TestImpactFunction(unittest.TestCase):
             clone_to_memory=True)
         self.assertIsNotNone(impact_layer)
         impact_function = ImpactFunction()
-        impact_function.impact = impact_layer
 
         result, message = impact_function.run_single_post_processor(
+            impact_layer,
             post_processor_youth)
         self.assertTrue(result, message)
-
-        impact_layer = impact_function.impact
-        self.assertIsNotNone(impact_layer)
 
         # Check if new field is added
         impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
@@ -286,14 +285,11 @@ class TestImpactFunction(unittest.TestCase):
             clone_to_memory=True)
         self.assertIsNotNone(impact_layer)
         impact_function = ImpactFunction()
-        impact_function.impact = impact_layer
 
         result, message = impact_function.run_single_post_processor(
+            impact_layer,
             post_processor_adult)
         self.assertTrue(result, message)
-
-        impact_layer = impact_function.impact
-        self.assertIsNotNone(impact_layer)
 
         # Check if new field is added
         impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
@@ -307,14 +303,11 @@ class TestImpactFunction(unittest.TestCase):
             clone_to_memory=True)
         self.assertIsNotNone(impact_layer)
         impact_function = ImpactFunction()
-        impact_function.impact = impact_layer
 
         result, message = impact_function.run_single_post_processor(
+            impact_layer,
             post_processor_elderly)
         self.assertTrue(result, message)
-
-        impact_layer = impact_function.impact
-        self.assertIsNotNone(impact_layer)
 
         # Check if new field is added
         impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
@@ -328,14 +321,11 @@ class TestImpactFunction(unittest.TestCase):
             clone_to_memory=True)
         self.assertIsNotNone(impact_layer)
         impact_function = ImpactFunction()
-        impact_function.impact = impact_layer
 
         result, message = impact_function.run_single_post_processor(
+            impact_layer,
             post_processor_size)
         self.assertTrue(result, message)
-
-        impact_layer = impact_function.impact
-        self.assertIsNotNone(impact_layer)
 
         # Check if new field is added
         impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
@@ -349,14 +339,11 @@ class TestImpactFunction(unittest.TestCase):
             clone_to_memory=True)
         self.assertIsNotNone(impact_layer)
         impact_function = ImpactFunction()
-        impact_function.impact = impact_layer
 
         result, message = impact_function.run_single_post_processor(
+            impact_layer,
             post_processor_size_rate)
         self.assertTrue(result, message)
-
-        impact_layer = impact_function.impact
-        self.assertIsNotNone(impact_layer)
 
         # Check if new field is added
         impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
@@ -372,12 +359,8 @@ class TestImpactFunction(unittest.TestCase):
             clone_to_memory=True)
         self.assertIsNotNone(impact_layer)
         impact_function = ImpactFunction()
-        impact_function.impact = impact_layer
 
-        impact_function.post_process()
-
-        impact_layer = impact_function.impact
-        self.assertIsNotNone(impact_layer)
+        impact_function.post_process(impact_layer)
 
         used_post_processors = [
             post_processor_size,
@@ -404,27 +387,31 @@ class TestImpactFunction(unittest.TestCase):
             pass
 
         # We need to monkey patch some keywords to the impact layer.
-        impact_function.impact = FakeMonkeyPatch()
+        layer = FakeMonkeyPatch()
 
         # Gender postprocessor with female ratio missing.
-        impact_function.impact.keywords = {
+        layer.keywords = {
             'inasafe_fields': {
                 'population_count_field': 'population'
             }
         }
+        # noinspection PyTypeChecker
         result = impact_function.enough_input(
-           post_processor_gender['input'])
+            layer,
+            post_processor_gender['input'])
         self.assertFalse(result[0])
 
         # Gender postprocessor with female ratio missing.
-        impact_function.impact.keywords = {
+        layer.keywords = {
             'inasafe_fields': {
                 'population_count_field': 'population',
                 'female_ratio_field': 'female_r'
             }
         }
+        # noinspection PyTypeChecker
         result = impact_function.enough_input(
-           post_processor_gender['input'])
+            layer,
+            post_processor_gender['input'])
         self.assertTrue(result[0])
 
     def test_evaluate_formula(self):

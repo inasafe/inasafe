@@ -1,8 +1,8 @@
 {
   "scenario": {
-    "hazard": "flood_multipart_polygons.shp",
-    "exposure": "building-points.shp",
-    "aggregation": null
+    "hazard": "tsunami_wgs84.tif",
+    "exposure": "pop_binary_raster_20_20.asc",
+    "aggregation": "grid_jakarta.shp"
   },
 
 
@@ -11,8 +11,7 @@
       "info": {},
       "process":[
         "Run impact function",
-        "Union exposure features to the aggregate hazard",
-        "Aggregate the impact summary"
+        "Zonal stats between exposure and aggregate hazard"
       ]
     },
     "post_processor":{
@@ -33,6 +32,8 @@
     "hazard":{
       "info": {},
       "process":[
+        "Classify continuous raster hazard",
+        "Polygonize classified raster hazard",
         "Cleaning the vector hazard attribute table",
         "Assign classes based on value map",
         "Classified polygon hazard with keywords",
@@ -42,11 +43,7 @@
     },
     "exposure":{
       "info": {},
-      "process":[
-        "Cleaning the vector exposure attribute table",
-        "Assign classes based on value map",
-        "Clip the exposure layer with the aggregagte hazard"
-      ]
+      "process":[]
     }
   }
 }
