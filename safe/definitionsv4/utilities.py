@@ -141,7 +141,7 @@ def get_classifications(subcategory_key):
     return sorted(classifications, key=lambda k: k['key'])
 
 
-def get_fields(layer_purpose, layer_subcategory=None):
+def get_fields(layer_purpose, layer_subcategory=None, replace_null=None):
     """Get all field based on the layer purpose.
 
     :param layer_purpose: The layer purpose.
@@ -149,6 +149,10 @@ def get_fields(layer_purpose, layer_subcategory=None):
 
     :param layer_subcategory: Exposure or hazard value.
     :type layer_subcategory: str
+
+    :param replace_null: If None all fields are returned, if True only if
+        it's True, if False only if it's False.
+    :type replace_null: None, bool
 
     :returns: List of fields.
     :rtype: list
@@ -171,7 +175,12 @@ def get_fields(layer_purpose, layer_subcategory=None):
     elif layer_purpose == 'impact':
         fields = deepcopy(impact_fields)
 
-    return fields
+    if isinstance(replace_null, bool):
+        fields = [
+            field for field in fields if field['replace_null'] == replace_null]
+        return fields
+    else:
+        return fields
 
 
 def get_class_field(layer_purpose):
