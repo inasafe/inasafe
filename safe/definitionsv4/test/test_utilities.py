@@ -162,6 +162,14 @@ class TestDefinitionsUtilities(unittest.TestCase):
         expected_fields = aggregation_fields
         self.assertListEqual(fields, expected_fields)
 
+        fields = get_fields('aggregation', replace_null=True)
+        expected_fields = [f for f in aggregation_fields if f['replace_null']]
+        self.assertListEqual(fields, expected_fields)
+
+        fields = get_fields('aggregation', replace_null=False)
+        expected_fields = [
+            f for f in aggregation_fields if not f['replace_null']]
+        self.assertListEqual(fields, expected_fields)
 
 if __name__ == '__main__':
     unittest.main()
