@@ -111,8 +111,9 @@ class StepKwInaSAFEFields(WizardStep, FORM_CLASS):
         default_inasafe_fields = get_fields(
             layer_purpose_key, subcategory_key, replace_null=False)
         if default_inasafe_fields:
-            new_step = ''
-        new_step = self.parent.step_kw_source
+            new_step = self.parent.step_kw_default_inasafe_fields
+        else:
+            new_step = self.parent.step_kw_source
         return new_step
 
     def inasafe_fields_for_the_layer(self):

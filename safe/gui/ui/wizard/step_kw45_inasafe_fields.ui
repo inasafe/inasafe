@@ -23,7 +23,7 @@
       <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
      </property>
      <property name="text">
-      <string>Please input attribute(s) in this layer that represents specified parameters:</string>
+      <string>Please choose field in this layer that represents specified concept of field:</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>

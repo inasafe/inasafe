@@ -213,6 +213,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.stackedWidget.addWidget(self.step_kw_name_field)
         self.stackedWidget.addWidget(self.step_kw_population_field)
         self.stackedWidget.addWidget(self.step_kw_inasafe_fields)
+        self.stackedWidget.addWidget(self.step_kw_default_inasafe_fields)
         self.stackedWidget.addWidget(self.step_kw_aggregation)
         self.stackedWidget.addWidget(self.step_kw_source)
         self.stackedWidget.addWidget(self.step_kw_title)
