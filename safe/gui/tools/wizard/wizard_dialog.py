@@ -89,7 +89,7 @@ from step_kw35_resample import StepKwResample
 from step_kw40_classify import StepKwClassify
 from step_kw42_name_field import StepKwNameField
 from step_kw43_population_field import StepKwPopulationField
-from step_kw45_extrakeywords import StepKwExtraKeywords
+from step_kw45_inasafefields import StepKwInaSAFEFields
 from step_kw50_aggregation import StepKwAggregation
 from step_kw55_source import StepKwSource
 from step_kw60_title import StepKwTitle
@@ -175,7 +175,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.step_kw_classify = StepKwClassify(self)
         self.step_kw_name_field = StepKwNameField(self)
         self.step_kw_population_field = StepKwPopulationField(self)
-        self.step_kw_extrakeywords = StepKwExtraKeywords(self)
+        self.step_kw_extrakeywords = StepKwInaSAFEFields(self)
         self.step_kw_aggregation = StepKwAggregation(self)
         self.step_kw_source = StepKwSource(self)
         self.step_kw_title = StepKwTitle(self)

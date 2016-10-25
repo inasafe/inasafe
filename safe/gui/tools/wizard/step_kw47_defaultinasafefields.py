@@ -119,9 +119,15 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
                 selected_subcategory()['key']
         else:
             subcategory_key = None
-        inasafe_fields = get_fields(layer_purpose_key, subcategory_key)
-        # Remove hazard_value_field since it's already selected in Field step
-        inasafe_fields.remove(get_class_field(layer_purpose_key))
+        # Get all fields with replace_null = False
+        inasafe_fields = get_fields(
+            layer_purpose_key, subcategory_key, replace_null=False)
+        # Remove the field for value map since it's already selected in
+        # Field step
+        try:
+            inasafe_fields.remove(get_class_field(layer_purpose_key))
+        except ValueError:
+            pass
         return inasafe_fields
 
     # noinspection PyTypeChecker
