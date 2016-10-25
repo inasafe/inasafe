@@ -787,7 +787,6 @@ def load_standard_layers(dock=None):
         standard_data_path('hazard', 'floods.shp'),
         standard_data_path('hazard', 'classified_generic_polygon.shp'),
         standard_data_path('hazard', 'volcano_krb.shp'),
-        standard_data_path('hazard', 'volcano_point.shp'),
         standard_data_path('hazard', 'classified_flood_20_20.asc'),
         standard_data_path('hazard', 'continuous_flood_20_20.asc'),
         standard_data_path('hazard', 'tsunami_wgs84.tif'),

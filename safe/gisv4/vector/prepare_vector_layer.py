@@ -9,6 +9,7 @@ from qgis.core import (
     QgsVectorLayer,
     QgsField,
     QgsFeatureRequest,
+    QGis,
 )
 
 from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
@@ -19,12 +20,8 @@ from safe.definitionsv4.fields import (
     exposure_id_field,
     hazard_id_field,
     aggregation_id_field,
-    exposure_type_field,
     hazard_value_field,
     aggregation_name_field,
-    exposure_fields,
-    hazard_fields,
-    aggregation_fields,
     exposure_type_field
 )
 from safe.definitionsv4.layer_purposes import (
@@ -146,6 +143,11 @@ def _remove_rows(layer):
     """
     # Get the layer purpose of the layer.
     layer_purpose = layer.keywords['layer_purpose']
+
+    # Volcano point is special case. We do not have a hazard value field.
+    hazard = layer.keywords.get('hazard')
+    if hazard == 'volcano' and layer.geometryType() == QGis.Point:
+        return
 
     mapping = {
         layer_purpose_exposure['key']: exposure_type_field,

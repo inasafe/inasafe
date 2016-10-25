@@ -27,6 +27,7 @@ from safe.gisv4.vector.assign_highest_value import assign_highest_value
 from safe.gisv4.vector.reclassify import reclassify as reclassify_vector
 from safe.gisv4.vector.union import union
 from safe.gisv4.vector.clip import clip
+from safe.gisv4.vector.buffering import buffering
 from safe.gisv4.vector.aggregate_summary import aggregate_summary
 from safe.gisv4.vector.assign_inasafe_values import assign_inasafe_values
 from safe.gisv4.raster.reclassify import reclassify as reclassify_raster
@@ -660,17 +661,26 @@ class ImpactFunction(object):
                 #     self.datastore.add_layer(
                 #         self.hazard, 'hazard reclassified')
 
-        else:
-            self.set_state_process('hazard', 'Buffering')
             self.set_state_process(
                 'hazard', 'Assign classes based on value map')
+            self.hazard = assign_inasafe_values(self.hazard)
+            if self.debug:
+                self.datastore.add_layer(
+                    self.hazard, 'hazard_value_map_to_reclassified')
 
-        self.set_state_process(
-            'hazard', 'Assign classes based on value map')
-        self.hazard = assign_inasafe_values(self.hazard)
-        if self.debug:
-            self.datastore.add_layer(
-                self.hazard, 'hazard_value_map_to_reclassified')
+        else:
+            self.set_state_process('hazard', 'Buffering')
+            classifications = self.hazard.keywords.get('classification')
+            hazard_classes = definition(classifications)['classes']
+            ranges = OrderedDict()
+            for hazard_class in hazard_classes:
+                max_value = hazard_class['numeric_default_max']
+                ranges[max_value * 1000] = hazard_class['key']
+            # noinspection PyTypeChecker
+            self.hazard = buffering(self.hazard, ranges)
+            if self.debug:
+                self.datastore.add_layer(
+                    self.hazard, 'buffered-hazard')
 
         self.set_state_process(
             'hazard', 'Classified polygon hazard with keywords')
