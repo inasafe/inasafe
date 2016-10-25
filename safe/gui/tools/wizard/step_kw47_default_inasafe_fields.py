@@ -29,7 +29,8 @@ from safe.definitionsv4.layer_modes import layer_mode_classified
 from safe.definitionsv4.exposure import exposure_place
 from safe.definitionsv4.utilities import get_fields, get_class_field
 from safe.definitionsv4.layer_geometry import layer_geometry_raster
-from safe.definitionsv4.constants import not_available
+from safe.definitionsv4.constants import no_field
+from safe.definitionsv4.utilities import get_defaults
 
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
@@ -154,7 +155,7 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
         # Iterate through all inasafe fields
         for inasafe_field in self.inasafe_fields_for_the_layer():
             # Option for Not Available
-            option_list = [not_available]
+            option_list = [no_field]
             for field in layer_data_provider.fields():
                 # Check the field type
                 if isinstance(inasafe_field['type'], list):
@@ -166,24 +167,26 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
                         field_name = field.name()
                         option_list.append('%s' % field_name)
 
-            # Create SelectParameter
-            select_parameter = DefaultSelectParameter()
-            select_parameter.guid = inasafe_field['key']
-            select_parameter.name = inasafe_field['name']
-            select_parameter.is_required = False
-            select_parameter.help_text = inasafe_field['description']
-            select_parameter.description = inasafe_field['description']
-            select_parameter.element_type = unicode
-            select_parameter.options_list = option_list
-            select_parameter.value = not_available
+            # Create DefaultSelectParameter
+            parameter = DefaultSelectParameter()
+            parameter.guid = inasafe_field['key']
+            parameter.name = inasafe_field['name']
+            parameter.is_required = False
+            parameter.help_text = inasafe_field['description']
+            parameter.description = inasafe_field['description']
+            parameter.element_type = unicode
+            parameter.options_list = option_list
+            parameter.value = no_field
+            parameter.default_labels = get_defaults(inasafe_field['key'])[0]
+            parameter.default_values = get_defaults(inasafe_field['key'])[1]
             # Check if there is already value in the metadata.
             if existing_inasafe_field:
                 existing_value = existing_inasafe_field.get(
                     inasafe_field['key'])
                 if existing_value:
-                    select_parameter.value = existing_value
+                    parameter.value = existing_value
 
-            self.parameters.append(select_parameter)
+            self.parameters.append(parameter)
 
         # Create the parameter container and add to the wizard.
         self.parameter_container = ParameterContainer(
@@ -200,7 +203,7 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
         inasafe_fields = {}
         parameters = self.parameter_container.get_parameters(True)
         for parameter in parameters:
-            if not parameter.value == not_available:
+            if not parameter.value == no_field:
                 inasafe_fields[parameter.guid] = parameter.value
 
         return inasafe_fields
