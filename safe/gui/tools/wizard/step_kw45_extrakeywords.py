@@ -21,25 +21,20 @@ from safe_extras.parameters.select_parameter import SelectParameter
 from safe_extras.parameters.qt_widgets.parameter_container import (
     ParameterContainer)
 
-from safe.definitionsv4.layer_purposes import (
-    layer_purpose_aggregation, layer_purpose_hazard, layer_purpose_exposure)
+from safe.definitionsv4.layer_purposes import (layer_purpose_aggregation)
 from safe.definitionsv4.layer_modes import layer_mode_classified
 from safe.definitionsv4.exposure import exposure_place
 from safe.definitionsv4.utilities import get_fields, get_class_field
 from safe.definitionsv4.layer_geometry import layer_geometry_raster
 from safe.definitionsv4.constants import not_available
-from safe.definitionsv4.fields import (
-    hazard_value_field, exposure_type_field
-)
+
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
-
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
-
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 LOGGER = logging.getLogger('InaSAFE')
@@ -51,7 +46,7 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
     def __init__(self, parent=None):
         """Constructor for the tab.
 
-        :param parent: parent - widget to use as parent (Wizad Dialog).
+        :param parent: parent - widget to use as parent (Wizard Dialog).
         :type parent: QWidget
 
         """
@@ -128,51 +123,6 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
         # Remove hazard_value_field since it's already selected in Field step
         inasafe_fields.remove(get_class_field(layer_purpose_key))
         return inasafe_fields
-
-    def extra_keyword_changed(self, widget):
-        """Populate slave widget if exists and enable the Next button
-           if all extra keywords are set.
-
-        :param widget: Metadata of the widget where the event happened.
-        :type widget: dict
-        """
-
-        self.parent.pbnNext.setEnabled(self.are_all_extra_keywords_selected())
-
-    def selected_extra_keywords(self):
-        """Obtain the extra keywords selected by user.
-
-        :returns: Metadata of the extra keywords.
-        :rtype: dict, None
-        """
-        extra_keywords = {}
-
-        return extra_keywords
-
-    def are_all_extra_keywords_selected(self):
-        """Ensure all all additional keyword are set by user
-
-        :returns: True if all additional keyword widgets are set
-        :rtype: boolean
-        """
-        return True
-
-    def populate_value_widget_from_field(self, widget, field_name):
-        """Populate the slave widget with unique values of the field
-           selected in the master widget.
-
-        :param widget: The widget to be populated
-        :type widget: QComboBox
-
-        :param field_name: Name of the field to take the values from
-        :type field_name: str
-        """
-        fields = self.parent.layer.dataProvider().fields()
-        field_index = fields.indexFromName(field_name)
-        widget.clear()
-        for v in self.parent.layer.uniqueValues(field_index):
-            widget.addItem(unicode(v), unicode(v))
-        widget.setCurrentIndex(-1)
 
     # noinspection PyTypeChecker
     def set_widgets(self):
