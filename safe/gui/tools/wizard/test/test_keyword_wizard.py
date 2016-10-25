@@ -26,7 +26,7 @@ from safe.definitionsv4.hazard import hazard_volcano
 from safe.definitionsv4.exposure import exposure_structure
 from safe.definitionsv4.hazard_category import hazard_category_multiple_event
 from safe.definitionsv4.hazard_classifications import volcano_hazard_classes
-from safe.definitionsv4.constants import not_available
+from safe.definitionsv4.constants import no_field
 from safe.definitionsv4.fields import hazard_name_field
 from safe.definitionsv4.layer_geometry import layer_geometry_polygon
 from safe.definitionsv4.exposure_classifications import (
@@ -223,7 +223,7 @@ class TestKeywordWizard(unittest.TestCase):
 
         # Check if it's set to N/A at the beginning
         self.assertEqual(
-            not_available, hazard_name_parameter_widget.get_parameter().value)
+            no_field, hazard_name_parameter_widget.get_parameter().value)
 
         # Select volcano
         hazard_name_parameter_widget.set_choice('volcano')
@@ -399,7 +399,7 @@ class TestKeywordWizard(unittest.TestCase):
 
         for parameter in parameters:
             # If not available is chosen, inasafe_fields shouldn't have it
-            if parameter.value == not_available:
+            if parameter.value == no_field:
                 self.assertNotIn(parameter.guid, inasafe_fields.keys())
             # If not available is not chosen, inasafe_fields should have it
             else:
@@ -687,7 +687,7 @@ class TestKeywordWizard(unittest.TestCase):
 
         for parameter in parameters:
             # If not available is chosen, inasafe_fields shouldn't have it
-            if parameter.value == not_available:
+            if parameter.value == no_field:
                 self.assertNotIn(parameter.guid, inasafe_fields.keys())
             # If not available is not chosen, inasafe_fields should have it
             else:

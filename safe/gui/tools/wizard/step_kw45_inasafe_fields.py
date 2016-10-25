@@ -26,7 +26,7 @@ from safe.definitionsv4.layer_modes import layer_mode_classified
 from safe.definitionsv4.exposure import exposure_place
 from safe.definitionsv4.utilities import get_fields, get_class_field
 from safe.definitionsv4.layer_geometry import layer_geometry_raster
-from safe.definitionsv4.constants import not_available
+from safe.definitionsv4.constants import no_field
 
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
@@ -161,7 +161,7 @@ class StepKwInaSAFEFields(WizardStep, FORM_CLASS):
         # Iterate through all inasafe fields
         for inasafe_field in self.inasafe_fields_for_the_layer():
             # Option for Not Available
-            option_list = [not_available]
+            option_list = [no_field]
             for field in layer_data_provider.fields():
                 # Check the field type
                 if isinstance(inasafe_field['type'], list):
@@ -182,7 +182,7 @@ class StepKwInaSAFEFields(WizardStep, FORM_CLASS):
             select_parameter.description = inasafe_field['description']
             select_parameter.element_type = unicode
             select_parameter.options_list = option_list
-            select_parameter.value = not_available
+            select_parameter.value = no_field
             # Check if there is already value in the metadata.
             if existing_inasafe_field:
                 existing_value = existing_inasafe_field.get(
@@ -206,7 +206,7 @@ class StepKwInaSAFEFields(WizardStep, FORM_CLASS):
         inasafe_fields = {}
         parameters = self.parameter_container.get_parameters(True)
         for parameter in parameters:
-            if not parameter.value == not_available:
+            if not parameter.value == no_field:
                 inasafe_fields[parameter.guid] = parameter.value
 
         return inasafe_fields

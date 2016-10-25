@@ -18,5 +18,6 @@ from safe.definitionsv4.layer_geometry import *
 from safe.definitionsv4.layer_modes import *
 from safe.definitionsv4.layer_purposes import *
 from safe.definitionsv4.post_processors import *
+from safe.definitionsv4.settings import *
 from safe.definitionsv4.units import *
 from safe.definitionsv4.versions import *

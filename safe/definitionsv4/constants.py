@@ -11,4 +11,4 @@ __revision__ = '$Format:%H$'
 small_number = 2 ** -53  # I think this is small enough
 inasafe_keyword_version_key = 'keyword_version'
 multipart_polygon_key = 'multipart_polygon'
-not_available = tr('N/A')
+no_field = tr('No Field')
