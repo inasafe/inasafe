@@ -209,7 +209,8 @@ class TestImpactFunction(unittest.TestCase):
         use_debug = True
 
         scenario_path = standard_data_path(
-            'scenario', 'raster_continuous_hazard_on_raster_population_exposure.json')
+            'scenario',
+            'raster_continuous_hazard_on_raster_population_exposure.json')
         scenario, expected = read_json_flow(scenario_path)
         result = run_scenario(scenario, use_debug)
         self.assertDictEqual(expected, result)

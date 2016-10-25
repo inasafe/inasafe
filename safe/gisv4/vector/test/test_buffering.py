@@ -34,14 +34,13 @@ class TestBuffering(unittest.TestCase):
         radii[2000] = 'low'
 
         # Let's add a vector layer.
-        layer = load_test_vector_layer('hazard', 'volcano_point.shp')
+        layer = load_test_vector_layer('hazard', 'volcano_point.geojson')
         keywords = layer.keywords
         self.assertEqual(layer.keywords['layer_geometry'], 'point')
 
         expected_keywords = keywords.copy()
         expected_keywords['layer_geometry'] = 'polygon'
         expected_name_field = hazard_class_field['field_name']
-        expected_keywords['inasafe_fields'] = {}
         expected_keywords['inasafe_fields'][hazard_class_field['key']] = (
             expected_name_field)
         result = buffering(

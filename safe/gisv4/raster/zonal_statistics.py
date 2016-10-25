@@ -52,7 +52,11 @@ def zonal_stats(raster, vector, callback=None):
     processing_step = 'zonal_statistics'
 
     layer = create_memory_layer(
-        output_layer_name, vector.geometryType(), vector.crs(), vector.fields())
+        output_layer_name,
+        vector.geometryType(),
+        vector.crs(),
+        vector.fields()
+    )
 
     copy_layer(vector, layer)
 

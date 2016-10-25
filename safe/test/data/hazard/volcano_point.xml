@@ -175,9 +175,9 @@
           <hazard_category>
             <gco:CharacterString>multiple_event</gco:CharacterString>
           </hazard_category>
-          <raster_hazard_classification>
-            <gco:CharacterString/>
-          </raster_hazard_classification>
+          <classification>
+            <gco:CharacterString>volcano_hazard_classes</gco:CharacterString>
+          </classification>
           <multipart_polygon>
             <gco:Boolean/>
           </multipart_polygon>
@@ -185,20 +185,14 @@
             <gco:Tuple/>
           </prob_fatality_mag>
           <inasafe_fields>
-            <gco:Dictionary/>
+            <gco:Dictionary>{&quot;hazard_id_field&quot;: &quot;NUMBER&quot;, &quot;hazard_name_field&quot;: &quot;NAME&quot;}</gco:Dictionary>
           </inasafe_fields>
-          <volcano_name_field>
-            <gco:CharacterString>NAME</gco:CharacterString>
-          </volcano_name_field>
           <field>
             <gco:CharacterString/>
           </field>
           <value_map>
             <gco:Dictionary/>
           </value_map>
-          <vector_hazard_classification>
-            <gco:CharacterString/>
-          </vector_hazard_classification>
           <layer_geometry>
             <gco:CharacterString>point</gco:CharacterString>
           </layer_geometry>
