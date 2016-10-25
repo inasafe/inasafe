@@ -2,7 +2,7 @@
   "scenario": {
     "hazard": "classified_flood_20_20.asc",
     "exposure": "roads.shp",
-    "aggregation": "grid_jakarta.shp"
+    "aggregation": "grid_jakarta.geojson"
   },
 
 
@@ -24,10 +24,11 @@
     },
     "aggregation":{
       "info": {
-        "provided":false
+        "provided":true
       },
       "process":[
-        "Convert bbox aggregation to polygon layer with keywords",
+        "Cleaning the aggregation layer",
+        "Reproject aggregation layer to exposure CRS",
         "Union hazard polygons with aggregation areas and assign hazard class"
       ]
     },

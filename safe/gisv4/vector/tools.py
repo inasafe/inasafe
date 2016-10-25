@@ -5,8 +5,10 @@ Tools for vector layers.
 """
 
 from uuid import uuid4
+from PyQt4.QtCore import QSettings
 from qgis.core import (
     QgsVectorLayer,
+    QgsFeatureRequest,
     QgsCoordinateReferenceSystem,
     QGis,
     QgsFeature,
@@ -102,7 +104,16 @@ def copy_layer(source, target):
     out_feature = QgsFeature()
     target.startEditing()
 
-    for i, feature in enumerate(source.getFeatures()):
+    request = QgsFeatureRequest()
+
+    if source.keywords.get('layer_purpose') == 'aggregation':
+        settings = QSettings()
+        flag = bool(settings.value(
+            'inasafe/useSelectedFeaturesOnly', False, type=bool))
+        if flag:
+            request.setFilterFids(source.selectedFeaturesIds())
+
+    for i, feature in enumerate(source.getFeatures(request)):
         geom = feature.geometry()
         out_feature.setGeometry(geom)
         out_feature.setAttributes(feature.attributes())

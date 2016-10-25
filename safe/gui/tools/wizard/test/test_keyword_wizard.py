@@ -975,10 +975,10 @@ class TestKeywordWizard(unittest.TestCase):
     @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_existing_aggregation_keywords(self):
         """Test for case existing keywords in aggregation layer."""
-        layer = clone_shp_layer(
-            name='district_osm_jakarta',
-            include_keywords=True,
-            source_directory=standard_data_path('boundaries'))
+        layer = load_test_vector_layer(
+            'aggregation',
+            'district_osm_jakarta.geojson',
+            clone_to_memory=True)
         dialog = WizardDialog()
         dialog.set_keywords_creation_mode(layer)
 

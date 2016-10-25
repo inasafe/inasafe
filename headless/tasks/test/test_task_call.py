@@ -38,7 +38,7 @@ class TestTaskCall(unittest.TestCase):
             'safe/test/data/exposure/pop_binary_raster_20_20.asc')
         aggregation = os.path.join(
             self.inasafe_work_dir,
-            'safe/test/data/boundaries/district_osm_jakarta.shp')
+            'safe/test/data/aggregation/district_osm_jakarta.geojson')
         hazard = archive_layer(hazard)
         exposure = archive_layer(exposure)
         aggregation = archive_layer(aggregation)

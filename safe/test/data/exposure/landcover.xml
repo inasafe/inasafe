@@ -172,12 +172,18 @@
       <gmd:supplementalInformation>
         <inasafe_keywords/>
         <inasafe>
+          <population_field>
+            <gco:CharacterString/>
+          </population_field>
           <multipart_polygon>
             <gco:Boolean/>
           </multipart_polygon>
-          <resolution>
-            <gco:FloatTuple/>
-          </resolution>
+          <inasafe_fields>
+            <gco:Dictionary>{&quot;exposure_id_field&quot;: &quot;id&quot;, &quot;exposure_type_field&quot;: &quot;FCODE&quot;}</gco:Dictionary>
+          </inasafe_fields>
+          <inasafe_default_values>
+            <gco:Dictionary/>
+          </inasafe_default_values>
           <area_name_field>
             <gco:CharacterString/>
           </area_name_field>
@@ -190,15 +196,18 @@
           <area_id_field>
             <gco:CharacterString/>
           </area_id_field>
-          <source>
-            <gco:CharacterString>My data</gco:CharacterString>
-          </source>
+          <field>
+            <gco:CharacterString/>
+          </field>
+          <value_map>
+            <gco:Dictionary>{&quot;farm&quot;: [&quot;Meadow&quot;], &quot;residential&quot;: [&quot;Population&quot;], &quot;wood&quot;: [&quot;Forest&quot;, &quot;Water&quot;]}</gco:Dictionary>
+          </value_map>
           <layer_geometry>
             <gco:CharacterString>polygon</gco:CharacterString>
           </layer_geometry>
-          <field>
-            <gco:CharacterString>FCODE</gco:CharacterString>
-          </field>
+          <classification>
+            <gco:CharacterString>generic_landcover_classes</gco:CharacterString>
+          </classification>
           <scale>
             <gco:CharacterString/>
           </scale>
@@ -208,21 +217,27 @@
           <exposure>
             <gco:CharacterString>land_cover</gco:CharacterString>
           </exposure>
+          <name_field>
+            <gco:CharacterString/>
+          </name_field>
           <keyword_version>
-            <gco:CharacterString>3.3</gco:CharacterString>
+            <gco:CharacterString>3.5</gco:CharacterString>
           </keyword_version>
           <datatype>
             <gco:CharacterString/>
           </datatype>
-          <value_map>
-            <gco:Dictionary/>
-          </value_map>
+          <resolution>
+            <gco:FloatTuple/>
+          </resolution>
           <structure_class_field>
             <gco:CharacterString/>
           </structure_class_field>
           <allow_resampling>
             <gco:CharacterString/>
           </allow_resampling>
+          <source>
+            <gco:CharacterString>My data</gco:CharacterString>
+          </source>
           <layer_purpose>
             <gco:CharacterString>exposure</gco:CharacterString>
           </layer_purpose>

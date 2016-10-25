@@ -85,7 +85,7 @@ def run_scenario(scenario, use_debug=False):
             aggregation_path = standard_data_path(
                 'aggregation', scenario['aggregation'])
         else:
-            aggregation_path = None
+            raise IOError('No aggregation file')
 
     impact_function = ImpactFunction()
     if use_debug:
@@ -210,7 +210,7 @@ class TestImpactFunction(unittest.TestCase):
 
         scenario_path = standard_data_path(
             'scenario',
-            'raster_continuous_hazard_on_raster_population_exposure.json')
+            'raster_classified_hazard_on_indivisible_polygons_exposure_grid_aggregation.json')
         scenario, expected = read_json_flow(scenario_path)
         result = run_scenario(scenario, use_debug)
         self.assertDictEqual(expected, result)
@@ -223,7 +223,12 @@ class TestImpactFunction(unittest.TestCase):
         def test_scenario(scenario_path):
             scenario, expected = read_json_flow(scenario_path)
             result = run_scenario(scenario, use_debug)
-            self.assertDictEqual(expected, result)
+            try:
+                self.assertDictEqual(expected, result)
+            except:
+                # In case of an exception, print the scenario path and reraise.
+                print 'Error with the scenario %s' % scenario_path
+                raise
 
         path = standard_data_path('scenario')
 

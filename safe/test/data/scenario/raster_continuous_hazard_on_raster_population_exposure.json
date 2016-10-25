@@ -2,7 +2,7 @@
   "scenario": {
     "hazard": "tsunami_wgs84.tif",
     "exposure": "pop_binary_raster_20_20.asc",
-    "aggregation": "grid_jakarta.shp"
+    "aggregation": "grid_jakarta.geojson"
   },
 
 
@@ -22,10 +22,11 @@
     },
     "aggregation":{
       "info": {
-        "provided":false
+        "provided":true
       },
       "process":[
-        "Convert bbox aggregation to polygon layer with keywords",
+        "Cleaning the aggregation layer",
+        "Reproject aggregation layer to exposure CRS",
         "Union hazard polygons with aggregation areas and assign hazard class"
       ]
     },
