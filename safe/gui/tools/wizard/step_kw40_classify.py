@@ -88,7 +88,7 @@ class StepKwClassify(WizardStep, FORM_CLASS):
         if selected_subcategory == exposure_place:
             new_step = self.parent.step_kw_name_field
         else:
-            new_step = self.parent.step_kw_extrakeywords
+            new_step = self.parent.step_kw_inasafe_fields
         return new_step
 
     def postprocessor_classification_for_layer(self):

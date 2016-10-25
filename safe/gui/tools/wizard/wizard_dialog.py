@@ -89,7 +89,8 @@ from step_kw35_resample import StepKwResample
 from step_kw40_classify import StepKwClassify
 from step_kw42_name_field import StepKwNameField
 from step_kw43_population_field import StepKwPopulationField
-from step_kw45_inasafefields import StepKwInaSAFEFields
+from step_kw45_inasafe_fields import StepKwInaSAFEFields
+from step_kw47_default_inasafe_fields import StepKwDefaultInaSAFEFields
 from step_kw50_aggregation import StepKwAggregation
 from step_kw55_source import StepKwSource
 from step_kw60_title import StepKwTitle
@@ -175,7 +176,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.step_kw_classify = StepKwClassify(self)
         self.step_kw_name_field = StepKwNameField(self)
         self.step_kw_population_field = StepKwPopulationField(self)
-        self.step_kw_extrakeywords = StepKwInaSAFEFields(self)
+        self.step_kw_inasafe_fields = StepKwInaSAFEFields(self)
+        self.step_kw_default_inasafe_fields = StepKwDefaultInaSAFEFields(self)
         self.step_kw_aggregation = StepKwAggregation(self)
         self.step_kw_source = StepKwSource(self)
         self.step_kw_title = StepKwTitle(self)
@@ -210,7 +212,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.stackedWidget.addWidget(self.step_kw_classify)
         self.stackedWidget.addWidget(self.step_kw_name_field)
         self.stackedWidget.addWidget(self.step_kw_population_field)
-        self.stackedWidget.addWidget(self.step_kw_extrakeywords)
+        self.stackedWidget.addWidget(self.step_kw_inasafe_fields)
         self.stackedWidget.addWidget(self.step_kw_aggregation)
         self.stackedWidget.addWidget(self.step_kw_source)
         self.stackedWidget.addWidget(self.step_kw_title)
@@ -686,8 +688,8 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         # Determine the new step to be switched
         new_step = current_step.get_next_step()
-        if (new_step == self.step_kw_extrakeywords and not
-                self.step_kw_extrakeywords.
+        if (new_step == self.step_kw_inasafe_fields and not
+                self.step_kw_inasafe_fields.
                 inasafe_fields_for_the_layer()):
             # Skip the extra_keywords tab if no extra keywords available:
             new_step = self.step_kw_source
@@ -806,7 +808,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         if self.step_kw_title.leTitle.text():
             keywords['title'] = get_unicode(self.step_kw_title.leTitle.text())
 
-        inasafe_fields.update(self.step_kw_extrakeywords.get_inasafe_fields())
+        inasafe_fields.update(self.step_kw_inasafe_fields.get_inasafe_fields())
 
         keywords['inasafe_fields'] = inasafe_fields
         return keywords

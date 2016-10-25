@@ -76,12 +76,12 @@ class StepKwLayerMode(WizardStep, FORM_CLASS):
                     and self.parent.step_kw_purpose.\
                     selected_purpose() == layer_purpose_hazard:
                 # Skip FIELD and CLASSIFICATION for point volcanos
-                new_step = self.parent.step_kw_extrakeywords
+                new_step = self.parent.step_kw_inasafe_fields
             elif self.parent.step_kw_classification.\
                     classifications_for_layer():
                 new_step = self.parent.step_kw_classification
             elif is_raster_layer(self.parent.layer):
-                new_step = self.parent.step_kw_extrakeywords
+                new_step = self.parent.step_kw_inasafe_fields
             else:
                 new_step = self.parent.step_kw_field
         else:

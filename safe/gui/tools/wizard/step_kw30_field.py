@@ -90,7 +90,7 @@ class StepKwField(WizardStep, FORM_CLASS):
                 return self.parent.step_kw_classify
 
         # Any other case
-        return self.parent.step_kw_extrakeywords
+        return self.parent.step_kw_inasafe_fields
 
     # noinspection PyPep8Naming
     def on_lstFields_itemSelectionChanged(self):

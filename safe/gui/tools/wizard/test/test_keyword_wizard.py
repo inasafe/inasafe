@@ -214,10 +214,10 @@ class TestKeywordWizard(unittest.TestCase):
         dialog.pbnNext.click()
 
         # select additional keywords / inasafe fields step
-        self.check_current_step(dialog.step_kw_extrakeywords)
+        self.check_current_step(dialog.step_kw_inasafe_fields)
 
         # Get the parameter widget for hazard name
-        hazard_name_parameter_widget = dialog.step_kw_extrakeywords.\
+        hazard_name_parameter_widget = dialog.step_kw_inasafe_fields.\
             parameter_container.get_parameter_widget_by_guid(
                 hazard_name_field['key'])
 
@@ -375,10 +375,10 @@ class TestKeywordWizard(unittest.TestCase):
         dialog.pbnNext.click()
 
         # select additional keywords / inasafe fields step
-        self.check_current_step(dialog.step_kw_extrakeywords)
+        self.check_current_step(dialog.step_kw_inasafe_fields)
 
         # Check inasafe fields
-        parameters = dialog.step_kw_extrakeywords. \
+        parameters = dialog.step_kw_inasafe_fields. \
             parameter_container.get_parameters(True)
 
         # Get layer's inasafe_fields
@@ -528,7 +528,7 @@ class TestKeywordWizard(unittest.TestCase):
         dialog.pbnNext.click()
 
         # select additional keywords / inasafe fields step
-        self.check_current_step(dialog.step_kw_extrakeywords)
+        self.check_current_step(dialog.step_kw_inasafe_fields)
 
         # Click next to finish inasafe fields step and go to source step
         dialog.pbnNext.click()
@@ -663,10 +663,10 @@ class TestKeywordWizard(unittest.TestCase):
         dialog.pbnNext.click()
 
         # select additional keywords / inasafe fields step
-        self.check_current_step(dialog.step_kw_extrakeywords)
+        self.check_current_step(dialog.step_kw_inasafe_fields)
 
         # Check inasafe fields
-        parameters = dialog.step_kw_extrakeywords. \
+        parameters = dialog.step_kw_inasafe_fields. \
             parameter_container.get_parameters(True)
 
         # Get layer's inasafe_fields
@@ -1086,8 +1086,8 @@ class TestKeywordWizard(unittest.TestCase):
         dialog.pbnNext.click()  # accept mapping
 
         # check if in step extra keywords
-        self.check_current_step(dialog.step_kw_extrakeywords)
-        dialog.step_kw_extrakeywords.cboExtraKeyword1.setCurrentIndex(2)
+        self.check_current_step(dialog.step_kw_inasafe_fields)
+        dialog.step_kw_inasafe_fields.cboExtraKeyword1.setCurrentIndex(2)
         dialog.pbnNext.click()  # accept extra keywords
 
         # check if in step source
@@ -1113,7 +1113,7 @@ class TestKeywordWizard(unittest.TestCase):
         dialog.step_kw_layermode.lstLayerModes.setCurrentRow(0)  # choose none
         dialog.pbnNext.click()  # choose none
         # choose NAME
-        dialog.step_kw_extrakeywords.cboExtraKeyword1.setCurrentIndex(4)
+        dialog.step_kw_inasafe_fields.cboExtraKeyword1.setCurrentIndex(4)
         dialog.pbnNext.click()  # choose NAME
 
         # check if in step source
@@ -1191,10 +1191,10 @@ class TestKeywordWizard(unittest.TestCase):
         dialog.step_kw_layermode.lstLayerModes.setCurrentRow(0)
 
         dialog.pbnNext.click()  # go to extra keywords
-        self.check_current_step(dialog.step_kw_extrakeywords)
-        dialog.step_kw_extrakeywords.cboExtraKeyword1.setCurrentIndex(4)
+        self.check_current_step(dialog.step_kw_inasafe_fields)
+        dialog.step_kw_inasafe_fields.cboExtraKeyword1.setCurrentIndex(4)
         expected_field = 'NAME (String)'
-        actual_field = dialog.step_kw_extrakeywords.cboExtraKeyword1.\
+        actual_field = dialog.step_kw_inasafe_fields.cboExtraKeyword1.\
             currentText()
         self.assertEqual(actual_field, expected_field)
 
@@ -1673,9 +1673,9 @@ class TestKeywordWizard(unittest.TestCase):
             self.assertEqual(expected_num_child, num_child)
 
         dialog.pbnNext.click()  # go to extra keywords
-        self.check_current_step(dialog.step_kw_extrakeywords)
-        dialog.step_kw_extrakeywords.cboExtraKeyword1.setCurrentIndex(5)
-        dialog.step_kw_extrakeywords.cboExtraKeyword2.setCurrentIndex(1)
+        self.check_current_step(dialog.step_kw_inasafe_fields)
+        dialog.step_kw_inasafe_fields.cboExtraKeyword1.setCurrentIndex(5)
+        dialog.step_kw_inasafe_fields.cboExtraKeyword2.setCurrentIndex(1)
 
         dialog.pbnNext.click()  # go to source
         self.check_current_step(dialog.step_kw_source)
