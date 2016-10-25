@@ -1,8 +1,8 @@
 {
   "scenario": {
-    "hazard": "flood_multipart_polygons.shp",
+    "hazard": "volcano_point.geojson",
     "exposure": "roads.shp",
-    "aggregation": null
+    "aggregation": "grid_jakarta.geojson"
   },
 
 
@@ -24,10 +24,11 @@
     },
     "aggregation":{
       "info": {
-        "provided":false
+        "provided":true
       },
       "process":[
-        "Convert bbox aggregation to polygon layer with keywords",
+        "Cleaning the aggregation layer",
+        "Reproject aggregation layer to exposure CRS",
         "Union hazard polygons with aggregation areas and assign hazard class"
       ]
     },
@@ -35,7 +36,7 @@
       "info": {},
       "process":[
         "Cleaning the vector hazard attribute table",
-        "Assign classes based on value map",
+        "Buffering",
         "Classified polygon hazard with keywords",
         "Vector clip and mask hazard to aggregation",
         "Clip and mask hazard polygons with aggregation"

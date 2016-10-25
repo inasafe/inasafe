@@ -30,7 +30,7 @@ class TestReclassifyRaster(unittest.TestCase):
         raster = load_test_raster_layer(
             'exposure', 'pop_binary_raster_20_20.asc')
         vector = load_test_vector_layer(
-            'boundaries', 'grid_jakarta_4326.geojson')
+            'aggregation', 'grid_jakarta_4326.geojson')
 
         number_fields = vector.fields().count()
         vector = zonal_stats(raster, vector)

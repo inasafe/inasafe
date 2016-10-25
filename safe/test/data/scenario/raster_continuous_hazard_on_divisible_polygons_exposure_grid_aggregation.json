@@ -1,8 +1,8 @@
 {
   "scenario": {
-    "hazard": "volcano_point.geojson",
-    "exposure": "roads.shp",
-    "aggregation": "grid_jakarta.shp"
+    "hazard": "tsunami_wgs84.tif",
+    "exposure": "landcover.geojson",
+    "aggregation": "grid_jakarta.geojson"
   },
 
 
@@ -24,19 +24,23 @@
     },
     "aggregation":{
       "info": {
-        "provided":false
+        "provided":true
       },
       "process":[
-        "Convert bbox aggregation to polygon layer with keywords",
+        "Cleaning the aggregation layer",
+        "Aggregation layer already in exposure CRS",
         "Union hazard polygons with aggregation areas and assign hazard class"
       ]
     },
     "hazard":{
       "info": {},
       "process":[
+        "Classify continuous raster hazard",
+        "Polygonize classified raster hazard",
         "Cleaning the vector hazard attribute table",
-        "Buffering",
+        "Assign classes based on value map",
         "Classified polygon hazard with keywords",
+        "Reproject hazard layer to exposure CRS",
         "Vector clip and mask hazard to aggregation",
         "Clip and mask hazard polygons with aggregation"
       ]

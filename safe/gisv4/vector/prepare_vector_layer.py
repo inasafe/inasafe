@@ -66,6 +66,10 @@ def prepare_vector_layer(layer, callback=None):
     output_layer_name = prepare_vector['output_layer_name']
     processing_step = prepare_vector['step_name']
 
+    if not layer.keywords.get('inasafe_fields'):
+        msg = 'inasafe_fields is missing in keywords from %s' % layer.name()
+        raise InvalidKeywordsForProcessingAlgorithm(msg)
+
     feature_count = layer.featureCount()
 
     cleaned = create_memory_layer(

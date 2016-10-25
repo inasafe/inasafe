@@ -1418,7 +1418,7 @@
     </maplayer>
     <maplayer minimumScale="0" maximumScale="1e+08" simplifyDrawingHints="1" minLabelScale="1" maxLabelScale="1e+08" simplifyDrawingTol="1" geometry="Polygon" simplifyMaxScale="1" type="vector" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
       <id>district_osm_jakarta20150417145937161</id>
-      <datasource>../boundaries/district_osm_jakarta.shp</datasource>
+      <datasource>../aggregation/district_osm_jakarta.geojson</datasource>
       <title></title>
       <abstract></abstract>
       <keywordList>

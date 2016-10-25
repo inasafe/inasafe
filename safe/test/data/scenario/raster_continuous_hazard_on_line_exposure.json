@@ -2,7 +2,7 @@
   "scenario": {
     "hazard": "tsunami_wgs84.tif",
     "exposure": "roads.shp",
-    "aggregation": "grid_jakarta.shp"
+    "aggregation": null
   },
 
 

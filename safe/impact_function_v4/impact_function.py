@@ -694,7 +694,7 @@ class ImpactFunction(object):
                 self.hazard, self.exposure.crs())
             if self.debug:
                 self.datastore.add_layer(
-                    self.aggregation, 'hazard_reprojected')
+                    self.hazard, 'hazard_reprojected')
 
         self.set_state_process(
             'hazard', 'Vector clip and mask hazard to aggregation')
