@@ -2,7 +2,7 @@
 """
 InaSAFE Disaster risk assessment tool by AusAid -**InaSAFE Wizard**
 
-This module provides: Keyword Wizard Step: InaSAFE Fields
+This module provides: Keyword Wizard Step: Default InaSAFE Fields
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -17,7 +17,8 @@ Contact : ole.moller.nielsen@gmail.com
 import logging
 from PyQt4.QtGui import QWidget
 
-from safe_extras.parameters.select_parameter import SelectParameter
+from safe.common.parameters.default_select_parameter import (
+    DefaultSelectParameter)
 from safe_extras.parameters.qt_widgets.parameter_container import (
     ParameterContainer)
 
@@ -40,8 +41,8 @@ FORM_CLASS = get_wizard_step_ui_class(__file__)
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class StepKwInaSAFEFields(WizardStep, FORM_CLASS):
-    """Keyword Wizard Step: InaSAFE Fields"""
+class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
+    """Keyword Wizard Step: Default InaSAFE Fields"""
 
     def __init__(self, parent=None):
         """Constructor for the tab.
@@ -119,9 +120,9 @@ class StepKwInaSAFEFields(WizardStep, FORM_CLASS):
                 selected_subcategory()['key']
         else:
             subcategory_key = None
-        # Get all fields with replace_null = False
+        # Get all fields with replace_null = True
         inasafe_fields = get_fields(
-            layer_purpose_key, subcategory_key)
+            layer_purpose_key, subcategory_key, replace_null=True)
         # Remove the field for value map since it's already selected in
         # Field step
         try:
@@ -160,7 +161,7 @@ class StepKwInaSAFEFields(WizardStep, FORM_CLASS):
                         option_list.append('%s' % field_name)
 
             # Create SelectParameter
-            select_parameter = SelectParameter()
+            select_parameter = DefaultSelectParameter()
             select_parameter.guid = inasafe_field['key']
             select_parameter.name = inasafe_field['name']
             select_parameter.is_required = False

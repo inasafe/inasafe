@@ -2,7 +2,7 @@
 """
 InaSAFE Disaster risk assessment tool by AusAid -**InaSAFE Wizard**
 
-This module provides: Keyword Wizard Step: Extra Keywords
+This module provides: Keyword Wizard Step: InaSAFE Fields
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -40,8 +40,8 @@ FORM_CLASS = get_wizard_step_ui_class(__file__)
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class StepKwExtraKeywords(WizardStep, FORM_CLASS):
-    """Keyword Wizard Step: Extra Keywords"""
+class StepKwInaSAFEFields(WizardStep, FORM_CLASS):
+    """Keyword Wizard Step: InaSAFE Fields"""
 
     def __init__(self, parent=None):
         """Constructor for the tab.
@@ -99,6 +99,19 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
         :returns: The step to be switched to
         :rtype: WizardStep instance or None
         """
+        # Get hazard or exposure value
+        layer_purpose_key = self.parent.step_kw_purpose.selected_purpose()[
+            'key']
+        if layer_purpose_key != layer_purpose_aggregation['key']:
+            subcategory_key = self.parent.step_kw_subcategory. \
+                selected_subcategory()['key']
+        else:
+            subcategory_key = None
+        # Check if InaSAFE fields with replace_null = True has element
+        default_inasafe_fields = get_fields(
+            layer_purpose_key, subcategory_key, replace_null=False)
+        if default_inasafe_fields:
+            new_step = ''
         new_step = self.parent.step_kw_source
         return new_step
 
