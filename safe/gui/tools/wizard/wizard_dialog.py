@@ -789,9 +789,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         if population_field:
             keywords['population_field'] = population_field
 
-        extra_keywords = self.step_kw_extrakeywords.selected_extra_keywords()
-        for key in extra_keywords:
-            keywords[key] = extra_keywords[key]
         if self.step_kw_source.leSource.text():
             keywords['source'] = get_unicode(
                 self.step_kw_source.leSource.text())
