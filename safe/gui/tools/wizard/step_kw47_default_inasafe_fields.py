@@ -19,6 +19,8 @@ from PyQt4.QtGui import QWidget
 
 from safe.common.parameters.default_select_parameter import (
     DefaultSelectParameter)
+from safe.common.parameters.default_select_parameter_widget import (
+    DefaultSelectParameterWidget)
 from safe_extras.parameters.qt_widgets.parameter_container import (
     ParameterContainer)
 
@@ -53,8 +55,12 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
         """
         WizardStep.__init__(self, parent)
 
+        self.extra_parameters = [
+            (DefaultSelectParameter, DefaultSelectParameterWidget)
+        ]
         self.parameters = []
-        self.parameter_container = ParameterContainer()
+        self.parameter_container = ParameterContainer(
+            extra_parameters=self.extra_parameters)
         self.kwExtraKeywordsGridLayout.addWidget(self.parameter_container)
 
     def is_ready_to_next_step(self):
@@ -180,7 +186,8 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
             self.parameters.append(select_parameter)
 
         # Create the parameter container and add to the wizard.
-        self.parameter_container = ParameterContainer(self.parameters)
+        self.parameter_container = ParameterContainer(
+            self.parameters, extra_parameters=self.extra_parameters)
         self.parameter_container.setup_ui()
         self.kwExtraKeywordsGridLayout.addWidget(self.parameter_container)
 
