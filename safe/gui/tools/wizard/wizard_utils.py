@@ -1,23 +1,5 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool by AusAid -**Wizard Utilities.**
-
-The module provides utilities function for InaSAFE Wizard dialog.
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
-
-__author__ = 'qgis@borysjurgiel.pl'
-__revision__ = '$Format:%H$'
-__date__ = '24/04/2016'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
+"""Wizard Utilities Functions"""
 
 import re
 import logging
@@ -37,6 +19,11 @@ from safe.utilities.gis import (
     is_polygon_layer)
 from safe.utilities.i18n import tr
 from safe.utilities.utilities import is_keyword_version_supported
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 
 # Data roles
@@ -176,10 +163,11 @@ def layer_description_html(layer, keywords=None):
                   ' to assign keywords to this layer.'))
     return desc
 
-def set_inasafe_default_value_qsetting(setting, inasafe_field_key, value):
+
+def set_inasafe_default_value_qsetting(qsetting, inasafe_field_key, value):
     """Helper method to set inasafe default value to qsetting.
 
-    :param setting: QSetting
+    :param qsetting: QSetting
     :type setting: QSetting
 
     :param inasafe_field_key: Key for the field.
@@ -189,14 +177,14 @@ def set_inasafe_default_value_qsetting(setting, inasafe_field_key, value):
     :type value: float
     """
     key = 'inasafe/default_value/%s' % inasafe_field_key
-    setting.setValue(key, value)
+    qsetting.setValue(key, value)
 
 
-def get_inasafe_default_value_qsetting(setting, inasafe_field_key):
+def get_inasafe_default_value_qsetting(qsetting, inasafe_field_key):
     """Helper method to get the inasafe default value from qsetting.
 
-    :param setting: QSetting
-    :type setting: QSetting
+    :param qsetting: QSetting
+    :type qsetting: QSetting
 
     :param inasafe_field_key: Key for the field.
     :type inasafe_field_key: str
@@ -205,7 +193,7 @@ def get_inasafe_default_value_qsetting(setting, inasafe_field_key):
     :rtype: float
     """
     key = 'inasafe/default_value/%s' % inasafe_field_key
-    default_value = setting.value(key)
+    default_value = qsetting.value(key)
     return default_value
 
 
