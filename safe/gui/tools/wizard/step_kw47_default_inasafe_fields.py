@@ -222,3 +222,17 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
                 inasafe_fields[parameter.guid] = parameter.value
 
         return inasafe_fields
+
+    def get_inasafe_default_values(self):
+        """Return inasafe default from the current wizard state.
+
+        :returns: Dictionary of key and value from InaSAFE Default Values.
+        :rtype: dict
+        """
+        inasafe_default_values = {}
+        parameters = self.parameter_container.get_parameters(True)
+        for parameter in parameters:
+            if parameter.default:
+                inasafe_default_values[parameter.guid] = parameter.default
+
+        return inasafe_default_values

@@ -319,6 +319,7 @@ class KeywordIO(QObject):
             'field',
             'value_map',  # attribute values
             'inasafe_fields',
+            'inasafe_default_values',
             'resample',
             'source',
             'url',
@@ -418,7 +419,8 @@ class KeywordIO(QObject):
         # We deal with some special cases first:
 
         # In this case the value contains a DICT that we want to present nicely
-        if keyword in ['value_map', 'inasafe_fields']:
+        if keyword in [
+            'value_map', 'inasafe_fields', 'inasafe_default_values']:
             value = self._dict_to_row(value)
         # In these KEYWORD cases we show the DESCRIPTION for
         # the VALUE keyword_definition
@@ -492,9 +494,7 @@ class KeywordIO(QObject):
             row.add(m.Cell(m.ImportantText(name)))
             # Then the value. If it contains more than one element we
             # present it as a bullet list, otherwise just as simple text
-            if isinstance(value, basestring):
-                row.add(m.Cell(value))
-            else:
+            if isinstance(value, (tuple, list, dict, set)):
                 if len(value) > 1:
                     bullets = m.BulletedList()
                     for item in value:
@@ -502,6 +502,8 @@ class KeywordIO(QObject):
                     row.add(m.Cell(bullets))
                 else:
                     row.add(m.Cell(value[0]))
+            else:
+                row.add(m.Cell(value))
 
             table.add(row)
         return table
