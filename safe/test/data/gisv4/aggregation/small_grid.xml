@@ -182,8 +182,11 @@
             <gco:CharacterString>Global default</gco:CharacterString>
           </youth_ratio_attribute>
           <inasafe_fields>
-            <gco:Dictionary>{&quot;aggregation_name_field&quot;: &quot;area_name&quot;, &quot;aggregation_id_field&quot;: &quot;area_id&quot;}</gco:Dictionary>
+            <gco:Dictionary>{&quot;aggregation_id_field&quot;: &quot;area_id&quot;, &quot;aggregation_name_field&quot;: &quot;area_name&quot;}</gco:Dictionary>
           </inasafe_fields>
+          <inasafe_default_values>
+            <gco:Dictionary/>
+          </inasafe_default_values>
           <scale>
             <gco:CharacterString/>
           </scale>
