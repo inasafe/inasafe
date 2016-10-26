@@ -12,6 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+
 __author__ = 'qgis@borysjurgiel.pl'
 __revision__ = '$Format:%H$'
 __date__ = '24/04/2016'
@@ -19,12 +20,14 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import re
+import logging
 from PyQt4 import QtCore
 
 from qgis.core import QgsCoordinateTransform
 
 import safe.gui.tools.wizard.wizard_strings
 from safe.common.version import get_version
+from safe.definitionsv4 import settings
 from safe.definitionsv4.layer_modes import layer_mode_classified
 from safe.definitionsv4.layer_purposes import (
     layer_purpose_exposure, layer_purpose_hazard)
@@ -42,6 +45,8 @@ RoleHazard = QtCore.Qt.UserRole + 1
 RoleExposure = QtCore.Qt.UserRole + 2
 RoleHazardConstraint = QtCore.Qt.UserRole + 3
 RoleExposureConstraint = QtCore.Qt.UserRole + 4
+
+LOGGER = logging.getLogger('InaSAFE')
 
 
 def get_question_text(constant):
@@ -170,3 +175,60 @@ def layer_description_html(layer, keywords=None):
                tr('In the next step you will be able' +
                   ' to assign keywords to this layer.'))
     return desc
+
+def set_inasafe_default_value_qsetting(setting, inasafe_field_key, value):
+    """Helper method to set inasafe default value to qsetting.
+
+    :param setting: QSetting
+    :type setting: QSetting
+
+    :param inasafe_field_key: Key for the field.
+    :type inasafe_field_key: str
+
+    :param value: Value of the inasafe_default_value.
+    :type value: float
+    """
+    key = 'inasafe/default_value/%s' % inasafe_field_key
+    setting.setValue(key, value)
+
+
+def get_inasafe_default_value_qsetting(setting, inasafe_field_key):
+    """Helper method to get the inasafe default value from qsetting.
+
+    :param setting: QSetting
+    :type setting: QSetting
+
+    :param inasafe_field_key: Key for the field.
+    :type inasafe_field_key: str
+
+    :returns: Value of the inasafe_default_value.
+    :rtype: float
+    """
+    key = 'inasafe/default_value/%s' % inasafe_field_key
+    default_value = setting.value(key)
+    return default_value
+
+
+def get_defaults(qsetting, field_key):
+    """Obtain default value for a field with default value.
+
+    By default it will return label list and default value list
+    label: [Setting, Do not use, Custom]
+    values: [Value from setting, None, Value from QSetting (if exist)]
+
+    :param qsetting: QSetting object
+    :type qsetting: QSetting
+
+    :param field_key: The field's key.
+    :type field_key: str
+
+    :returns: Tuple of list. List of labels and list of values.
+    """
+    labels = [tr('Setting (%s)'), tr('Do not use'), tr('Custom')]
+    values = [
+        settings.default_values.get(field_key, None),
+        None,
+        get_inasafe_default_value_qsetting(qsetting, field_key)
+    ]
+
+    return labels, values
