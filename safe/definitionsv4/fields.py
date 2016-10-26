@@ -1,7 +1,5 @@
 # coding=utf-8
-"""
-Definitions relating to fields.
-"""
+"""Definitions relating to fields."""
 
 from PyQt4.QtCore import QVariant
 
