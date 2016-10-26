@@ -805,8 +805,14 @@ class WizardDialog(QDialog, FORM_CLASS):
             keywords['title'] = get_unicode(self.step_kw_title.leTitle.text())
 
         inasafe_fields.update(self.step_kw_inasafe_fields.get_inasafe_fields())
+        inasafe_fields.update(
+            self.step_kw_default_inasafe_fields.get_inasafe_fields())
 
         keywords['inasafe_fields'] = inasafe_fields
+
+        inasafe_default_values = self.step_kw_default_inasafe_fields.\
+            get_inasafe_default_values()
+        keywords['inasafe_default_values'] = inasafe_default_values
         return keywords
 
     def save_current_keywords(self):
