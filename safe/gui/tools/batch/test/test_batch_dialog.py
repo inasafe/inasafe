@@ -34,6 +34,8 @@ from safe.impact_functions.loader import register_impact_functions
 
 LOGGER = logging.getLogger('InaSAFE')
 
+LOGGER = logging.getLogger('InaSAFE')
+
 
 class BatchDialogTest(unittest.TestCase):
     """Tests for the script/batch runner dialog."""
