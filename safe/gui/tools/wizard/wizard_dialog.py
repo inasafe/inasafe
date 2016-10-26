@@ -689,11 +689,6 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         # Determine the new step to be switched
         new_step = current_step.get_next_step()
-        if (new_step == self.step_kw_inasafe_fields and not
-                self.step_kw_inasafe_fields.
-                inasafe_fields_for_the_layer()):
-            # Skip the extra_keywords tab if no extra keywords available:
-            new_step = self.step_kw_source
 
         if new_step is not None:
             # Prepare the next tab

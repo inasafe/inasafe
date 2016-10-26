@@ -82,6 +82,9 @@ class StepKwSource(WizardStep, FORM_CLASS):
         if self.parent.step_kw_purpose.selected_purpose()\
                 == layer_purpose_aggregation:
             new_step = self.parent.step_kw_aggregation
+        elif self.parent.step_kw_default_inasafe_fields.\
+                inasafe_fields_for_the_layer():
+            new_step = self.parent.step_kw_default_inasafe_fields
         elif self.parent.step_kw_inasafe_fields.\
                 inasafe_fields_for_the_layer():
             new_step = self.parent.step_kw_inasafe_fields
