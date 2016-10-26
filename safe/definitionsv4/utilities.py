@@ -3,6 +3,7 @@
 """Utilities module for helping definitions retrieval.
 """
 from copy import deepcopy
+
 from safe import definitionsv4
 from safe.definitionsv4 import (
     layer_purposes,
@@ -15,10 +16,8 @@ from safe.definitionsv4 import (
     hazard_value_field,
     exposure_type_field,
     exposure_fields,
-    hazard_fields,
-    settings
+    hazard_fields
 )
-from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -233,25 +232,3 @@ def definition(keyword):
                 if var.get('key') == keyword:
                     return var
     return None
-
-
-def get_defaults(field_key):
-    """Obtain default value for a field with default value.
-
-    By default it will return label list and default value list
-    label: [Setting, Do not use, Custom]
-    values: [Value from setting, None, Value from QSetting (if exist)]
-
-    :param field_key: The field's key.
-    :type field_key: str
-
-    :returns: Tuple of list. List of labels and list of values.
-    """
-    labels = [tr('Setting (%s)'), tr('Do not use'), tr('Custom')]
-    values = [
-        settings.default_values.get(field_key, None),
-        None,
-        settings.qsetting.get(field_key, None)
-    ]
-
-    return labels, values

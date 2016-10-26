@@ -17,7 +17,7 @@ import logging
 from sqlite3 import OperationalError
 
 from PyQt4 import QtGui
-from PyQt4.QtCore import pyqtSignature
+from PyQt4.QtCore import pyqtSignature, QSettings
 from PyQt4.QtGui import (
     QDialog,
     QPixmap)
@@ -48,7 +48,8 @@ from safe.gui.tools.wizard.wizard_utils import (
     RoleHazard,
     RoleExposure,
     RoleHazardConstraint,
-    RoleExposureConstraint)
+    RoleExposureConstraint,
+    set_inasafe_default_value_qsetting)
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.utilities.gis import (
     is_raster_layer,
@@ -237,6 +238,9 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.stackedWidget.addWidget(self.step_fc_params)
         self.stackedWidget.addWidget(self.step_fc_summary)
         self.stackedWidget.addWidget(self.step_fc_analysis)
+
+        # QSetting
+        self.setting = QSettings()
 
     def set_mode_label_to_keywords_creation(self):
         """Set the mode label to the Keywords Creation/Update mode
@@ -836,3 +840,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         if self.dock is not None:
             # noinspection PyUnresolvedReferences
             self.dock.get_layers()
+
+        # Save default value to QSetting
+        for key, value in current_keywords['inasafe_default_values'].items():
+            set_inasafe_default_value_qsetting(self.setting, key, value)

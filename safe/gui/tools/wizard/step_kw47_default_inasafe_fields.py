@@ -30,7 +30,7 @@ from safe.definitionsv4.exposure import exposure_place
 from safe.definitionsv4.utilities import get_fields, get_class_field
 from safe.definitionsv4.layer_geometry import layer_geometry_raster
 from safe.definitionsv4.constants import no_field
-from safe.definitionsv4.utilities import get_defaults
+from safe.gui.tools.wizard.wizard_utils import get_defaults
 
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
@@ -196,8 +196,10 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
             parameter.element_type = unicode
             parameter.options_list = option_list
             parameter.value = no_field
-            parameter.default_labels = get_defaults(inasafe_field['key'])[0]
-            parameter.default_values = get_defaults(inasafe_field['key'])[1]
+            parameter.default_labels = get_defaults(
+                self.parent.setting, inasafe_field['key'])[0]
+            parameter.default_values = get_defaults(
+                self.parent.setting, inasafe_field['key'])[1]
             # Check if there is already value in the metadata.
             if existing_inasafe_field:
                 existing_value = existing_inasafe_field.get(
@@ -224,11 +226,12 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
                 get_parameter_widgets():
             parameter_widget.widget().set_default(None)
         # Set default value from existing keywords
-        for guid, default in existing_inasafe_default_values.items():
-            parameter_widget = self.parameter_container.\
-                get_parameter_widget_by_guid(guid)
-            if isinstance(parameter_widget, DefaultSelectParameterWidget):
-                parameter_widget.set_default(default)
+        if existing_inasafe_default_values:
+            for guid, default in existing_inasafe_default_values.items():
+                parameter_widget = self.parameter_container.\
+                    get_parameter_widget_by_guid(guid)
+                if isinstance(parameter_widget, DefaultSelectParameterWidget):
+                    parameter_widget.set_default(default)
 
     def get_inasafe_fields(self):
         """Return inasafe fields from the current wizard state.
