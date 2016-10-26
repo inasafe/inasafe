@@ -88,8 +88,6 @@ from step_kw25_classification import StepKwClassification
 from step_kw30_field import StepKwField
 from step_kw35_resample import StepKwResample
 from step_kw40_classify import StepKwClassify
-from step_kw42_name_field import StepKwNameField
-from step_kw43_population_field import StepKwPopulationField
 from step_kw45_inasafe_fields import StepKwInaSAFEFields
 from step_kw47_default_inasafe_fields import StepKwDefaultInaSAFEFields
 from step_kw50_aggregation import StepKwAggregation
@@ -175,8 +173,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.step_kw_field = StepKwField(self)
         self.step_kw_resample = StepKwResample(self)
         self.step_kw_classify = StepKwClassify(self)
-        self.step_kw_name_field = StepKwNameField(self)
-        self.step_kw_population_field = StepKwPopulationField(self)
         self.step_kw_inasafe_fields = StepKwInaSAFEFields(self)
         self.step_kw_default_inasafe_fields = StepKwDefaultInaSAFEFields(self)
         self.step_kw_aggregation = StepKwAggregation(self)
@@ -211,8 +207,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.stackedWidget.addWidget(self.step_kw_field)
         self.stackedWidget.addWidget(self.step_kw_resample)
         self.stackedWidget.addWidget(self.step_kw_classify)
-        self.stackedWidget.addWidget(self.step_kw_name_field)
-        self.stackedWidget.addWidget(self.step_kw_population_field)
         self.stackedWidget.addWidget(self.step_kw_inasafe_fields)
         self.stackedWidget.addWidget(self.step_kw_default_inasafe_fields)
         self.stackedWidget.addWidget(self.step_kw_aggregation)
@@ -782,14 +776,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         value_map = self.step_kw_classify.selected_mapping()
         if value_map:
             keywords['value_map'] = value_map
-
-        name_field = self.step_kw_name_field.selected_field()
-        if name_field:
-            keywords['name_field'] = name_field
-
-        population_field = self.step_kw_population_field.selected_field()
-        if population_field:
-            keywords['population_field'] = population_field
 
         if self.step_kw_source.leSource.text():
             keywords['source'] = get_unicode(
