@@ -158,6 +158,8 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
         """Set widgets on the Extra Keywords tab."""
         existing_inasafe_field = self.parent.get_existing_keyword(
             'inasafe_fields')
+        existing_inasafe_default_values = self.parent.get_existing_keyword(
+            'inasafe_default_values')
         # Remove old container and parameter
         if self.parameter_container:
             self.kwExtraKeywordsGridLayout.removeWidget(
@@ -168,6 +170,8 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
         layer_data_provider = self.parent.layer.dataProvider()
 
         # Iterate through all inasafe fields
+        # existing_inasafe_default_values
+
         for inasafe_field in self.inasafe_fields_for_the_layer():
             # Option for Not Available
             option_list = [no_field]
@@ -201,6 +205,12 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
                 if existing_value:
                     parameter.value = existing_value
 
+            if existing_inasafe_default_values:
+                existing_default_value = existing_inasafe_default_values.get(
+                    inasafe_field['key'])
+                if existing_default_value:
+                    parameter.default = existing_default_value
+
             self.parameters.append(parameter)
 
         # Create the parameter container and add to the wizard.
@@ -208,6 +218,17 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
             self.parameters, extra_parameters=self.extra_parameters)
         self.parameter_container.setup_ui()
         self.kwExtraKeywordsGridLayout.addWidget(self.parameter_container)
+
+        # Set default value to None
+        for parameter_widget in self.parameter_container.\
+                get_parameter_widgets():
+            parameter_widget.widget().set_default(None)
+        # Set default value from existing keywords
+        for guid, default in existing_inasafe_default_values.items():
+            parameter_widget = self.parameter_container.\
+                get_parameter_widget_by_guid(guid)
+            if isinstance(parameter_widget, DefaultSelectParameterWidget):
+                parameter_widget.set_default(default)
 
     def get_inasafe_fields(self):
         """Return inasafe fields from the current wizard state.
