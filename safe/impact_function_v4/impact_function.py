@@ -10,6 +10,7 @@ from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsRectangle,
     QgsVectorLayer,
+    QgsFeatureRequest,
     QgsGeometry,
     QgsFeature,
     QgsField,
@@ -27,6 +28,7 @@ from safe.gisv4.vector.assign_highest_value import assign_highest_value
 from safe.gisv4.vector.reclassify import reclassify as reclassify_vector
 from safe.gisv4.vector.union import union
 from safe.gisv4.vector.clip import clip
+from safe.gisv4.vector.smart_clip import smart_clip
 from safe.gisv4.vector.buffering import buffering
 from safe.gisv4.vector.aggregate_summary import aggregate_summary
 from safe.gisv4.vector.assign_inasafe_values import assign_inasafe_values
@@ -36,6 +38,8 @@ from safe.gisv4.raster.zonal_statistics import zonal_stats
 from safe.definitionsv4.fields import (
     aggregation_id_field,
     aggregation_name_field,
+    analysis_id_field,
+    analysis_name_field,
 )
 from safe.definitionsv4.post_processors import post_processors
 from safe.definitionsv4.utilities import definition
@@ -67,14 +71,19 @@ class ImpactFunction(object):
     """Impact Function."""
 
     def __init__(self):
+
+        # Input layers
         self._hazard = None
-
         self._exposure = None
-
         self._aggregation = None
 
+        # Output layers
+        self._impact = None
         self._aggregate_hazard = None
+        self._aggregation_impacted = None
+        self._analysis_impacted = None
 
+        # Use debug to store intermediate results
         self.debug = False
 
         # Requested extent to use
@@ -87,17 +96,19 @@ class ImpactFunction(object):
         self._actual_extent = None
         # Actual extent's CRS - Read Only
         self._actual_extent_crs = QgsCoordinateReferenceSystem('EPSG:4326')
+
         # set this to a gui call back / web callback etc as needed.
         self._callback = self.console_progress_callback
 
-        self._impact = None
-
+        # Names
         self._name = None  # e.g. Flood Raster on Building Polygon
         self._title = None  # be affected
         self._unique_name = None  # EXP + On + Haz + DDMMMMYYYY + HHhMM.SS
 
+        # Datastore when to save layers
         self._datastore = None
 
+        # Metadata on the IF
         self.state = {}
         self._performance_log = None
         self.reset_state()
@@ -250,15 +261,6 @@ class ImpactFunction(object):
         self._aggregation.keywords = keywords
 
     @property
-    def aggregate_hazard(self):
-        """Property for the aggregate hazard.
-
-        :returns: A vector layer.
-        :rtype: QgsVectorLayer
-        """
-        return self._aggregate_hazard
-
-    @property
     def impact(self):
         """Property for the impact layer.
 
@@ -266,6 +268,33 @@ class ImpactFunction(object):
         :rtype: QgsVectorLayer
         """
         return self._impact
+
+    @property
+    def aggregate_hazard_impacted(self):
+        """Property for the aggregate hazard impacted.
+
+        :returns: A vector layer.
+        :rtype: QgsVectorLayer
+        """
+        return self._aggregate_hazard
+
+    @property
+    def aggregation_impacted(self):
+        """Property for the aggregation impacted.
+
+        :returns: A vector layer.
+        :rtype: QgsVectorLayer
+        """
+        return self._aggregation_impacted
+
+    @property
+    def analysis_layer(self):
+        """Property for the analysis layer.
+
+        :returns: A vector layer.
+        :rtype: QgsVectorLayer
+        """
+        return self._analysis_impacted
 
     @property
     def requested_extent(self):
@@ -490,6 +519,49 @@ class ImpactFunction(object):
 
         return aggregation_layer
 
+    def create_analysis_layer(self):
+        """Create the analysis layer.
+
+        :returns: A polygon layer with exposure's crs.
+        :rtype: QgsVectorLayer
+        """
+        fields = [
+            QgsField(
+                analysis_id_field['field_name'],
+                analysis_id_field['type']
+            ),
+            QgsField(
+                analysis_name_field['field_name'],
+                analysis_name_field['type']
+            ),
+        ]
+        analysis_layer = create_memory_layer(
+            'analysis', QGis.Polygon, self.exposure.crs(), fields)
+
+        analysis_layer.startEditing()
+
+        geometries = []
+        request = QgsFeatureRequest().setSubsetOfAttributes([])
+        for area in self.aggregation.getFeatures(request):
+            geometries.append(QgsGeometry(area.geometry()))
+
+        feature = QgsFeature()
+        # noinspection PyCallByClass,PyArgumentList,PyTypeChecker
+        feature.setGeometry(QgsGeometry.unaryUnion(geometries))
+        feature.setAttributes([1, self.name])
+        analysis_layer.addFeature(feature)
+        analysis_layer.commitChanges()
+
+        # Generate aggregation keywords
+        analysis_layer.keywords = get_defaults()
+        analysis_layer.keywords['layer_purpose'] = 'analysis'
+        analysis_layer.keywords['inasafe_fields'] = {
+            analysis_id_field['key']: analysis_id_field['field_name'],
+            analysis_name_field['key']: analysis_name_field['field_name']
+        }
+
+        return analysis_layer
+
     def reset_state(self):
         """Method to reset the state of the impact function.
         """
@@ -598,7 +670,7 @@ class ImpactFunction(object):
                 'impact function',
                 'Aggregate the impact summary')
             self._aggregate_hazard = aggregate_summary(
-                self.aggregate_hazard, self._impact)
+                self.aggregate_hazard_impacted, self._impact)
 
         self.post_process(self._aggregate_hazard)
 
@@ -629,6 +701,7 @@ class ImpactFunction(object):
                     min_value = hazard_class['numeric_default_min']
                     max_value = hazard_class['numeric_default_max']
                     ranges[hazard_class['value']] = [min_value, max_value]
+                # noinspection PyTypeChecker
                 self.hazard = reclassify_raster(self.hazard, ranges)
                 if self.debug:
                     self.datastore.add_layer(
@@ -636,6 +709,7 @@ class ImpactFunction(object):
 
             self.set_state_process(
                 'hazard', 'Polygonize classified raster hazard')
+            # noinspection PyTypeChecker
             self.hazard = polygonize(self.hazard)
             if self.debug:
                 self.datastore.add_layer(
@@ -745,12 +819,20 @@ class ImpactFunction(object):
                     'Aggregation layer already in exposure CRS')
 
         self.set_state_process(
-            'hazard',
-            'Clip and mask hazard polygons with aggregation')
-        self.hazard = clip(self.hazard, self.aggregation)
+            'aggregation',
+            'Convert the aggregation layer to the analysis layer')
+        self._analysis_impacted = self.create_analysis_layer()
         if self.debug:
             self.datastore.add_layer(
-                self.hazard, 'hazard_clip_by_aggregation')
+                self._analysis_impacted, 'analysis_layer')
+
+        self.set_state_process(
+            'hazard',
+            'Clip and mask hazard polygons with the analysis layer')
+        self.hazard = clip(self.hazard, self.analysis_layer)
+        if self.debug:
+            self.datastore.add_layer(
+                self.hazard, 'hazard_clip_by_analysis_layer')
 
         self.set_state_process(
             'aggregation',
@@ -804,14 +886,17 @@ class ImpactFunction(object):
                 self.set_state_process(
                     'exposure',
                     'Smart clip')
+                self.exposure = smart_clip(
+                    self.exposure, self._analysis_impacted)
             else:
                 self.set_state_process(
                     'exposure',
-                    'Clip the exposure layer with the aggregagte hazard')
-                self.exposure = clip(self.exposure, self._aggregate_hazard)
-                if self.debug:
-                    self.datastore.add_layer(
-                        self.exposure, 'exposure_clip')
+                    'Clip the exposure layer with the analysis layer')
+                self.exposure = clip(self.exposure, self._analysis_impacted)
+
+            if self.debug:
+                self.datastore.add_layer(
+                    self.exposure, 'exposure_clip')
 
     @profile
     def intersect_exposure_and_aggregate_hazard(self):
@@ -829,7 +914,7 @@ class ImpactFunction(object):
                 'Zonal stats between exposure and aggregate hazard')
             # noinspection PyTypeChecker
             self._aggregate_hazard = zonal_stats(
-                self.exposure, self.aggregate_hazard)
+                self.exposure, self._aggregate_hazard)
             if self.debug:
                 self.datastore.add_layer(
                     self._aggregate_hazard, 'zonal_stats')
@@ -846,8 +931,8 @@ class ImpactFunction(object):
                     'impact function',
                     'Highest class of hazard is assigned when more than one '
                     'overlaps')
-                # self.impact = intersection(
-                #     self.exposure, self._aggregate_hazard)
+                self._impact = assign_highest_value(
+                    self.exposure, self._aggregate_hazard)
 
             else:
                 self.set_state_process(

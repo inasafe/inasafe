@@ -7,7 +7,7 @@ from safe.test.utilities import (
     load_test_vector_layer)
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe.gisv4.vector.clip import clip
+from safe.gisv4.vector.smart_clip import smart_clip
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -24,15 +24,15 @@ class TestClipVector(unittest.TestCase):
         pass
 
     def test_clip_vector(self):
-        """Test we can clip two layers, like buildings and aggregation."""
+        """Test we can smart clip two layers, like indivisible polygons."""
 
-        aggregation = load_test_vector_layer(
-            'gisv4', 'aggregation', 'small_grid.geojson')
+        analysis = load_test_vector_layer(
+            'gisv4', 'analysis', 'analysis.geojson')
 
         exposure = load_test_vector_layer(
-            'gisv4', 'exposure', 'building-points.geojson')
+            'gisv4', 'exposure', 'buildings.geojson')
 
-        layer = clip(exposure, aggregation)
+        layer = smart_clip(exposure, analysis)
         self.assertEqual(layer.featureCount(), 9)
 
         # Add test about keywords

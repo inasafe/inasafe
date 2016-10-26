@@ -1,8 +1,8 @@
 {
   "scenario": {
-    "hazard": "flood_multipart_polygons.shp",
-    "exposure": "roads.shp",
-    "aggregation": null
+    "hazard": "classified_flood_20_20.asc",
+    "exposure": "buildings.shp",
+    "aggregation": "grid_jakarta.geojson"
   },
 
 
@@ -11,7 +11,7 @@
       "info": {},
       "process":[
         "Run impact function",
-        "Union exposure features to the aggregate hazard",
+        "Highest class of hazard is assigned when more than one overlaps",
         "Aggregate the impact summary"
       ]
     },
@@ -24,10 +24,11 @@
     },
     "aggregation":{
       "info": {
-        "provided":false
+        "provided":true
       },
       "process":[
-        "Convert bbox aggregation to polygon layer with keywords",
+        "Cleaning the aggregation layer",
+        "Reproject aggregation layer to exposure CRS",
         "Convert the aggregation layer to the analysis layer",
         "Union hazard polygons with aggregation areas and assign hazard class"
       ]
@@ -35,6 +36,7 @@
     "hazard":{
       "info": {},
       "process":[
+        "Polygonize classified raster hazard",
         "Cleaning the vector hazard attribute table",
         "Assign classes based on value map",
         "Classified polygon hazard with keywords",
@@ -47,7 +49,7 @@
       "process":[
         "Cleaning the vector exposure attribute table",
         "Assign classes based on value map",
-        "Clip the exposure layer with the analysis layer"
+        "Smart clip"
       ]
     }
   }

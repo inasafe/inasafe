@@ -29,6 +29,7 @@
       "process":[
         "Cleaning the aggregation layer",
         "Reproject aggregation layer to exposure CRS",
+        "Convert the aggregation layer to the analysis layer",
         "Union hazard polygons with aggregation areas and assign hazard class"
       ]
     },
@@ -39,7 +40,7 @@
         "Buffering",
         "Classified polygon hazard with keywords",
         "Vector clip and mask hazard to aggregation",
-        "Clip and mask hazard polygons with aggregation"
+        "Clip and mask hazard polygons with the analysis layer"
       ]
     },
     "exposure":{
@@ -47,7 +48,7 @@
       "process":[
         "Cleaning the vector exposure attribute table",
         "Assign classes based on value map",
-        "Clip the exposure layer with the aggregagte hazard"
+        "Clip the exposure layer with the analysis layer"
       ]
     }
   }
