@@ -232,7 +232,17 @@ class TestKeywordWizard(unittest.TestCase):
         self.assertEqual(
             'volcano', hazard_name_parameter_widget.get_parameter().value)
 
-        # Click next to finish inasafe fields step and go to source step
+        # Check if in InaSAFE field step
+        self.check_current_step(dialog.step_kw_inasafe_fields)
+
+        # Click next to finish inasafe fields step and go to inasafe default
+        # field step
+        dialog.pbnNext.click()
+
+        # Check if in InaSAFE Default field step
+        self.check_current_step(dialog.step_kw_default_inasafe_fields)
+
+        # Click next to finish InaSAFE Default Field step and go to source step
         dialog.pbnNext.click()
 
         # Check if in source step
@@ -286,6 +296,7 @@ class TestKeywordWizard(unittest.TestCase):
                     'hazard_value_field': u'KRB',
                     'hazard_name_field': u'volcano',
                  },
+            'inasafe_default_values': {},
             'value_map': assigned_values,
             'date': source_date,
             'classification': volcano_hazard_classes['key'],
@@ -405,7 +416,14 @@ class TestKeywordWizard(unittest.TestCase):
             else:
                 self.assertIn(parameter.guid, inasafe_fields.keys())
 
-        # Click next to finish inasafe fields step and go to source step
+        # Click next to finish inasafe fields step and go to inasafe default
+        # field step
+        dialog.pbnNext.click()
+
+        # Check if in InaSAFE Default field step
+        self.check_current_step(dialog.step_kw_default_inasafe_fields)
+
+        # Click next to finish InaSAFE Default Field step and go to source step
         dialog.pbnNext.click()
 
         # Check if in source step
@@ -527,10 +545,17 @@ class TestKeywordWizard(unittest.TestCase):
         # Click next to finish value mapping
         dialog.pbnNext.click()
 
-        # select additional keywords / inasafe fields step
+        # Check if in InaSAFE field step
         self.check_current_step(dialog.step_kw_inasafe_fields)
 
-        # Click next to finish inasafe fields step and go to source step
+        # Click next to finish inasafe fields step and go to inasafe default
+        # field step
+        dialog.pbnNext.click()
+
+        # Check if in InaSAFE Default field step
+        self.check_current_step(dialog.step_kw_default_inasafe_fields)
+
+        # Click next to finish InaSAFE Default Field step and go to source step
         dialog.pbnNext.click()
 
         # Check if in source step
@@ -582,6 +607,7 @@ class TestKeywordWizard(unittest.TestCase):
                 {
                     'exposure_type_field': u'TYPE',
                 },
+            'inasafe_default_values': {},
             # No value will be omitted.
             'value_map': dict((k, v) for k, v in assigned_values.items() if v),
             'date': source_date,
@@ -693,7 +719,14 @@ class TestKeywordWizard(unittest.TestCase):
             else:
                 self.assertIn(parameter.guid, inasafe_fields.keys())
 
-        # Click next to finish inasafe fields step and go to source step
+        # Click next to finish inasafe fields step and go to inasafe default
+        # field step
+        dialog.pbnNext.click()
+
+        # Check if in InaSAFE Default field step
+        self.check_current_step(dialog.step_kw_default_inasafe_fields)
+
+        # Click next to finish InaSAFE Default Field step and go to source step
         dialog.pbnNext.click()
 
         # Check if in source step
@@ -1733,6 +1766,7 @@ class TestKeywordWizard(unittest.TestCase):
 
         dialog.pbnCancel.click()
 
+    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_allow_resample(self):
         """Test the allow resample step"""
 
