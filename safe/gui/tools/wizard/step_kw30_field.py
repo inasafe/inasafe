@@ -79,7 +79,7 @@ class StepKwField(WizardStep, FORM_CLASS):
         if self.parent.step_kw_purpose.\
                 selected_purpose() == layer_purpose_aggregation:
             # Aggregation layer
-            return self.parent.step_kw_aggregation
+            return self.parent.step_kw_
 
         if self.parent.step_kw_layermode.\
                 selected_layermode() == layer_mode_classified:
