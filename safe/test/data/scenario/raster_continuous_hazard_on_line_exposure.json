@@ -28,6 +28,7 @@
       },
       "process":[
         "Convert bbox aggregation to polygon layer with keywords",
+        "Convert the aggregation layer to the analysis layer",
         "Union hazard polygons with aggregation areas and assign hazard class"
       ]
     },
@@ -40,7 +41,7 @@
         "Assign classes based on value map",
         "Classified polygon hazard with keywords",
         "Vector clip and mask hazard to aggregation",
-        "Clip and mask hazard polygons with aggregation"
+        "Clip and mask hazard polygons with the analysis layer"
       ]
     },
     "exposure":{
@@ -48,7 +49,7 @@
       "process":[
         "Cleaning the vector exposure attribute table",
         "Assign classes based on value map",
-        "Clip the exposure layer with the aggregagte hazard"
+        "Clip the exposure layer with the analysis layer"
       ]
     }
   }

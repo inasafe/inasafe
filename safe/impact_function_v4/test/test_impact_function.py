@@ -182,7 +182,7 @@ class TestImpactFunction(unittest.TestCase):
         hazard_layer = load_test_vector_layer(
             'gisv4', 'hazard', 'classified_vector.geojson')
         exposure_layer = load_test_vector_layer(
-            'gisv4', 'exposure', 'building-points.geojson')
+            'gisv4', 'exposure', 'buildings.geojson')
         aggregation_layer = load_test_vector_layer(
             'gisv4', 'aggregation', 'small_grid.geojson')
 
@@ -198,7 +198,9 @@ class TestImpactFunction(unittest.TestCase):
             print impact_function.datastore.uri.absolutePath()
             print impact_function.datastore.layers()
         self.assertIsNotNone(impact_function.impact)
-        self.assertIsNotNone(impact_function.aggregate_hazard)
+        self.assertIsNotNone(impact_function.aggregate_hazard_impacted)
+        # self.assertIsNotNone(impact_function.aggregation_impacted)
+        self.assertIsNotNone(impact_function.analysis_layer)
 
     @unittest.skipIf(
         os.environ.get('ON_TRAVIS', False),
@@ -210,7 +212,9 @@ class TestImpactFunction(unittest.TestCase):
 
         scenario_path = standard_data_path(
             'scenario',
-            'raster_classified_hazard_on_indivisible_polygons_exposure_grid_aggregation.json')
+            'raster_classified_hazard_on_'
+            'indivisible_polygons_exposure_'
+            'grid_aggregation.json')
         scenario, expected = read_json_flow(scenario_path)
         result = run_scenario(scenario, use_debug)
         self.assertDictEqual(expected, result)
@@ -226,7 +230,7 @@ class TestImpactFunction(unittest.TestCase):
             try:
                 self.assertDictEqual(expected, result)
             except:
-                # In case of an exception, print the scenario path and reraise.
+                # In case of an exception, print the scenario path and re raise
                 print 'Error with the scenario %s' % scenario_path
                 raise
 

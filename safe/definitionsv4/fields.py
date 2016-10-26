@@ -526,6 +526,42 @@ exposure_count_field = {
     'replace_null': False
 }
 
+# Fields for the analysis layer
+analysis_id_field = {
+    'key': 'analysis_id_field',
+    'name': tr('Analysis ID'),
+    'field_name': 'analysis_id',
+    'type': QVariant.Int,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': False,
+    'description': tr(
+        'Attribute where the analysis ID of the feature is located.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+
+analysis_name_field = {
+    'key': 'analysis_name_field',
+    'name': tr('Analysis Name'),
+    'field_name': 'analysis_name',
+    'type': QVariant.String,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': False,
+    'description': tr(
+        'Attribute where the analysis name of the feature is located.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
 
 exposure_fields = [
     exposure_id_field,
@@ -576,6 +612,11 @@ aggregate_hazard_fields = [
     hazard_class_field,
     exposure_count_field,
     total_field,
+]
+
+analysis_fields = [
+    analysis_id_field,
+    analysis_name_field,
 ]
 
 # Used by earthquake, please remove after we remove the earthquake
