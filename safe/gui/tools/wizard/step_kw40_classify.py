@@ -222,10 +222,14 @@ class StepKwClassify(WizardStep, FORM_CLASS):
             value_as_string = unicode(unique_value).upper().replace('_', ' ')
             assigned = False
             for default_class in default_classes:
-                condition_1 = (
-                    field_type > 9 and
-                    value_as_string in [
-                        c.upper() for c in default_class['string_defaults']])
+                if 'string_defaults' in default_class:
+                    condition_1 = (
+                        field_type > 9 and
+                        value_as_string in [
+                            c.upper() for c in
+                            default_class['string_defaults']])
+                else:
+                    condition_1 = False
                 condition_2 = (
                     field_type < 10 and
                     'numeric_default_min' in default_class and
