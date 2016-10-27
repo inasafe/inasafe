@@ -7,9 +7,9 @@ Issue https://github.com/inasafe/inasafe/issues/3192
 """
 
 import logging
+from PyQt4.QtCore import QPyNullVariant
 from qgis.core import (
     QGis,
-    QgsGeometry,
     QgsFeatureRequest,
     QgsWKBTypes,
     QgsFeature,
@@ -21,7 +21,7 @@ from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
 from safe.definitionsv4.fields import hazard_class_field
 from safe.definitionsv4.hazard_classifications import hazard_classification
 # from safe.definitionsv4.processing import assign_highest_value
-from safe.gisv4.vector.tools import create_memory_layer, wkb_type_groups
+from safe.gisv4.vector.tools import create_memory_layer
 from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -133,6 +133,8 @@ def assign_highest_value(exposure_layer, hazard_layer, callback=None):
 
                 if hazard_value:
                     value = levels.index(hazard_value)
+                elif isinstance(hazard_value, QPyNullVariant):
+                    value = -1
                 else:
                     value = -1
 
@@ -152,7 +154,7 @@ def assign_highest_value(exposure_layer, hazard_layer, callback=None):
                     # We compare to a previous feature if the hazard is higher:
                     if value > highest_hazard_value[0]:
                         highest_hazard_value = (
-                            levels.index(hazard_value),
+                            value,
                             hazard_attributes
                         )
 
@@ -161,7 +163,7 @@ def assign_highest_value(exposure_layer, hazard_layer, callback=None):
                         # TODO We should add another test to check the biggest
                         # aggregation area.
                         highest_hazard_value = (
-                            levels.index(hazard_value),
+                            value,
                             hazard_attributes
                         )
 
