@@ -81,13 +81,13 @@ allow_resampling_question = tr(
     'check box below if you want to set the <i>allow_resampling</i> '
     'keyword to <i>False</i>.</p>')  # (subcategory, category, layer_mode)
 flood_metres_depth_question = tr(
-    'flood depth in meters')
+    'flood depth in metres')
 flood_feet_depth_question = tr(
     'flood depth in feet')
 flood_wetdry_question = tr(
     'flood extent as wet/dry')
 tsunami_metres_depth_question = tr(
-    'tsunami depth in meters')
+    'tsunami depth in metres')
 tsunami_feet_depth_question = tr(
     'tsunami depth in feet')
 tsunami_wetdry_question = tr(
@@ -167,7 +167,7 @@ select_function_question = tr(
     'impact function you would like to use from the list below.</p> '
     '<p>Please note some functions may require either continuous or '
     'classified input data. A <b>continuous</b> raster is one where cell '
-    'values are real data values such as: depth of flood water in meters or '
+    'values are real data values such as: depth of flood water in metres or '
     'the number of people per cell. A <b>classified</b> raster is one where '
     'cell values represent classes or zones such as: high hazard zone, '
     'medium hazard zone, low hazard zone.</p>'

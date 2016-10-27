@@ -190,7 +190,7 @@ class PostprocessorManager(QtCore.QObject):
                     zone_name = tr('Unnamed Area %s' % null_index)
                     null_index += 1
                 if name == 'road type':
-                    # We add the unit 'meter' as we are counting roads.
+                    # We add the unit 'metre' as we are counting roads.
                     zone_name = tr(
                         '%(zone_name)s (m)' % {'zone_name': zone_name})
                 row = [zone_name]
@@ -326,7 +326,7 @@ class PostprocessorManager(QtCore.QObject):
                     zone_name = tr('Unnamed Area %s' % null_index)
                     null_index += 1
                 if name == 'road type':
-                    # We add the unit 'meter' as we are counting roads.
+                    # We add the unit 'metre' as we are counting roads.
                     # proper format for i186
                     zone_name = tr(
                         '%(zone_name)s (m)') % {'zone_name': tr(zone_name)}

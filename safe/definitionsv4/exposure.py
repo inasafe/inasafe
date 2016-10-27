@@ -107,7 +107,7 @@ exposure_road = {
         'travel between two or more points.'),
     'notes': [  # these are additional generic notes for roads - IF has more
         tr('Numbers reported for road lengths have been rounded to the '
-           'nearest meter.'),
+           'nearest metre.'),
         tr('Roads marked as not affected may still be unusable due to network '
            'isolation. Roads marked as affected may still be usable if they '
            'are elevated above the local landscape.'),
