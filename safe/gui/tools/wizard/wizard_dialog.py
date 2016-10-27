@@ -91,7 +91,6 @@ from step_kw35_resample import StepKwResample
 from step_kw40_classify import StepKwClassify
 from step_kw45_inasafe_fields import StepKwInaSAFEFields
 from step_kw47_default_inasafe_fields import StepKwDefaultInaSAFEFields
-from step_kw50_aggregation import StepKwAggregation
 from step_kw55_source import StepKwSource
 from step_kw60_title import StepKwTitle
 from step_kw65_summary import StepKwSummary
@@ -176,7 +175,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.step_kw_classify = StepKwClassify(self)
         self.step_kw_inasafe_fields = StepKwInaSAFEFields(self)
         self.step_kw_default_inasafe_fields = StepKwDefaultInaSAFEFields(self)
-        self.step_kw_aggregation = StepKwAggregation(self)
         self.step_kw_source = StepKwSource(self)
         self.step_kw_title = StepKwTitle(self)
         self.step_kw_summary = StepKwSummary(self)
@@ -210,7 +208,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.stackedWidget.addWidget(self.step_kw_classify)
         self.stackedWidget.addWidget(self.step_kw_inasafe_fields)
         self.stackedWidget.addWidget(self.step_kw_default_inasafe_fields)
-        self.stackedWidget.addWidget(self.step_kw_aggregation)
         self.stackedWidget.addWidget(self.step_kw_source)
         self.stackedWidget.addWidget(self.step_kw_title)
         self.stackedWidget.addWidget(self.step_kw_summary)
@@ -667,20 +664,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         if current_step == self.step_kw_summary:
             self.save_current_keywords()
 
-        if current_step == self.step_kw_aggregation:
-            good_age_ratio, sum_age_ratios = self.step_kw_aggregation.\
-                age_ratios_are_valid()
-            if not good_age_ratio:
-                message = self.tr(
-                    'The sum of age ratio default is %s and it is more '
-                    'than 1. Please adjust the age ratio default so that they '
-                    'will not more than 1.' % sum_age_ratios)
-                if not self.suppress_warning_dialog:
-                    # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
-                    QtGui.QMessageBox.warning(
-                        self, self.tr('InaSAFE'), message)
-                return
-
         # After any step involving Browser, add selected layer to map canvas
         if current_step in [self.step_fc_hazlayer_from_browser,
                             self.step_fc_explayer_from_browser,
@@ -763,9 +746,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         if self.step_kw_purpose.selected_purpose():
             keywords['layer_purpose'] = self.step_kw_purpose.\
                 selected_purpose()['key']
-            if keywords['layer_purpose'] == 'aggregation':
-                keywords.update(
-                    self.step_kw_aggregation.get_aggregation_attributes())
         if self.step_kw_subcategory.selected_subcategory():
             key = self.step_kw_purpose.selected_purpose()['key']
             keywords[key] = self.step_kw_subcategory.\

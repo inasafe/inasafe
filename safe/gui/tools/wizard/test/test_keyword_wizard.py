@@ -982,39 +982,6 @@ class TestKeywordWizard(unittest.TestCase):
         dialog = WizardDialog()
         dialog.set_keywords_creation_mode(layer)
 
-        category = dialog.step_kw_purpose.lstCategories.currentItem().text()
-        expected_category = 'Aggregation'
-        self.assertEqual(expected_category, category)
-
-        dialog.pbnNext.click()
-
-        self.check_current_text('KAB_NAME', dialog.step_kw_field.lstFields)
-
-        dialog.pbnNext.click()
-
-        expected_aggregation_attributes = {
-            'elderly ratio attribute': 'Global default',
-            'youth ratio default': 0.26,
-            'elderly ratio default': 0.08,
-            'adult ratio attribute': 'Global default',
-            'female ratio attribute': 'PEREMPUAN',
-            'youth ratio attribute': 'Global default',
-            'female ratio default': 0.5,
-            'adult ratio default': 0.66
-        }
-        aggregation_attributes = dialog.step_kw_aggregation.\
-            get_aggregation_attributes()
-        self.assertDictEqual(
-            expected_aggregation_attributes, aggregation_attributes)
-
-        dialog.step_kw_aggregation.cboFemaleRatioAttribute.setCurrentIndex(2)
-        expected_female_attribute_key = 'PEREMPUAN'
-        female_attribute_key = dialog.step_kw_aggregation.\
-            cboFemaleRatioAttribute.currentText()
-        self.assertEqual(expected_female_attribute_key, female_attribute_key)
-        self.assertFalse(
-            dialog.step_kw_aggregation.dsbFemaleRatioDefault.isEnabled())
-
     # noinspection PyTypeChecker
     @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_unit_building_generic(self):
@@ -1049,44 +1016,6 @@ class TestKeywordWizard(unittest.TestCase):
         self.check_current_step(dialog.step_kw_title)
 
         dialog.pbnNext.click()  # finishing
-
-    @unittest.skip('Skip unit test from InaSAFE v3.')
-    def test_default_attributes_value(self):
-        """Checking that default attributes is set to the CIA's one."""
-        layer = clone_shp_layer(
-            name='district_osm_jakarta',
-            include_keywords=True,
-            source_directory=standard_data_path('boundaries'))
-        dialog = WizardDialog()
-        dialog.set_keywords_creation_mode(layer)
-
-        dialog.pbnNext.click()  # choose aggregation go to field step
-        dialog.pbnNext.click()  # choose KAB_NAME go to aggregation step
-
-        ratio_attribute = dialog.step_kw_aggregation.cboElderlyRatioAttribute.\
-            currentText()
-        self.assertEqual('Global default', ratio_attribute)
-
-        ratio_attribute = dialog.step_kw_aggregation.cboAdultRatioAttribute.\
-            currentText()
-        self.assertEqual('Global default', ratio_attribute)
-
-        ratio_attribute = dialog.step_kw_aggregation.cboYouthRatioAttribute.\
-            currentText()
-        self.assertEqual('Global default', ratio_attribute)
-
-        default_value = dialog.step_kw_aggregation.dsbYouthRatioDefault.value()
-        expected_default_value = 0.26
-        self.assertEqual(expected_default_value, default_value)
-
-        default_value = dialog.step_kw_aggregation.dsbAdultRatioDefault.value()
-        expected_default_value = 0.66
-        self.assertEqual(expected_default_value, default_value)
-
-        default_value = dialog.step_kw_aggregation.dsbElderlyRatioDefault.\
-            value()
-        expected_default_value = 0.08
-        self.assertEqual(expected_default_value, default_value)
 
     @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_unknown_unit(self):
@@ -1711,57 +1640,6 @@ class TestKeywordWizard(unittest.TestCase):
         dialog.step_kw_inasafe_fields.cboExtraKeyword2.setCurrentIndex(1)
 
         dialog.pbnNext.click()  # go to source
-        self.check_current_step(dialog.step_kw_source)
-
-        dialog.pbnCancel.click()
-
-    @unittest.skip('Skip unit test from InaSAFE v3.')
-    def test_sum_ratio_behavior(self):
-        """Test for wizard's behavior related sum of age ratio."""
-        layer = clone_shp_layer(
-            name='district_osm_jakarta',
-            include_keywords=True,
-            source_directory=standard_data_path('boundaries'))
-        dialog = WizardDialog()
-        dialog.set_keywords_creation_mode(layer)
-        dialog.suppress_warning_dialog = True
-
-        self.check_current_text(
-            'Aggregation', dialog.step_kw_purpose.lstCategories)
-
-        dialog.pbnNext.click()  # Go to field step
-
-        self.check_current_text('KAB_NAME', dialog.step_kw_field.lstFields)
-
-        dialog.pbnNext.click()  # Go to aggregation step
-
-        dialog.step_kw_aggregation.dsbYouthRatioDefault.setValue(1.0)
-
-        dialog.pbnNext.click()  # Try to go to source step
-
-        # check if still in aggregation step
-        self.check_current_step(dialog.step_kw_aggregation)
-
-        # set don't use
-        dialog.step_kw_aggregation.cboYouthRatioAttribute.setCurrentIndex(1)
-
-        dialog.pbnNext.click()  # Try to go to  source step
-
-        # check if in source step
-        self.check_current_step(dialog.step_kw_source)
-
-        dialog.pbnBack.click()  # Go to aggregation step
-
-        # check if in aggregation step
-        self.check_current_step(dialog.step_kw_aggregation)
-        # set global default
-        dialog.step_kw_aggregation.cboYouthRatioAttribute.setCurrentIndex(0)
-
-        dialog.step_kw_aggregation.dsbYouthRatioDefault.setValue(0.0)
-
-        dialog.pbnNext.click()  # Try to go to source step
-
-        # check if in source step
         self.check_current_step(dialog.step_kw_source)
 
         dialog.pbnCancel.click()
