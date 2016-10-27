@@ -1145,17 +1145,6 @@ class TestKeywordWizard(unittest.TestCase):
 
     # noinspection PyTypeChecker
     @unittest.skip('Skip unit test from InaSAFE v3.')
-    def test_existing_aggregation_keywords(self):
-        """Test for case existing keywords in aggregation layer."""
-        layer = load_test_vector_layer(
-            'aggregation',
-            'district_osm_jakarta.geojson',
-            clone_to_memory=True)
-        dialog = WizardDialog()
-        dialog.set_keywords_creation_mode(layer)
-
-    # noinspection PyTypeChecker
-    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_unit_building_generic(self):
         """Test for case existing building generic unit for structure."""
         layer = clone_shp_layer(
