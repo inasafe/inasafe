@@ -176,22 +176,22 @@
             <gco:Boolean/>
           </multipart_polygon>
           <adult_ratio_attribute>
-            <gco:CharacterString>Global default</gco:CharacterString>
+            <gco:CharacterString/>
           </adult_ratio_attribute>
           <youth_ratio_attribute>
-            <gco:CharacterString>Global default</gco:CharacterString>
+            <gco:CharacterString/>
           </youth_ratio_attribute>
           <inasafe_fields>
             <gco:Dictionary>{&quot;aggregation_id_field&quot;: &quot;area_id&quot;, &quot;aggregation_name_field&quot;: &quot;area_name&quot;}</gco:Dictionary>
           </inasafe_fields>
           <inasafe_default_values>
-            <gco:Dictionary/>
+            <gco:Dictionary>{}</gco:Dictionary>
           </inasafe_default_values>
           <scale>
             <gco:CharacterString/>
           </scale>
           <elderly_ratio_attribute>
-            <gco:CharacterString>Global default</gco:CharacterString>
+            <gco:CharacterString/>
           </elderly_ratio_attribute>
           <source>
             <gco:CharacterString/>
@@ -200,16 +200,16 @@
             <gco:CharacterString>polygon</gco:CharacterString>
           </layer_geometry>
           <youth_ratio_default>
-            <gco:Float>0.26</gco:Float>
+            <gco:Float/>
           </youth_ratio_default>
           <female_ratio_attribute>
-            <gco:CharacterString>Global default</gco:CharacterString>
+            <gco:CharacterString/>
           </female_ratio_attribute>
           <report>
             <gco:CharacterString/>
           </report>
           <aggregation_attribute>
-            <gco:CharacterString>area_name</gco:CharacterString>
+            <gco:CharacterString/>
           </aggregation_attribute>
           <keyword_version>
             <gco:CharacterString>3.5</gco:CharacterString>
@@ -218,16 +218,16 @@
             <gco:CharacterString/>
           </datatype>
           <adult_ratio_default>
-            <gco:Float>0.66</gco:Float>
+            <gco:Float/>
           </adult_ratio_default>
           <elderly_ratio_default>
-            <gco:Float>0.08</gco:Float>
+            <gco:Float/>
           </elderly_ratio_default>
           <layer_purpose>
             <gco:CharacterString>aggregation</gco:CharacterString>
           </layer_purpose>
           <female_ratio_default>
-            <gco:Float>0.5</gco:Float>
+            <gco:Float/>
           </female_ratio_default>
           <resolution>
             <gco:FloatTuple/>
