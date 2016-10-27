@@ -7,6 +7,7 @@ import sys
 import hashlib
 import logging
 import shutil
+import inspect
 from tempfile import mkdtemp
 from os.path import exists, splitext, basename, join
 from itertools import izip
@@ -217,8 +218,38 @@ def standard_data_path(*args):
     return path
 
 
+def load_local_vector_layer(test_file, **kwargs):
+    """Return the test vector layer.
+
+    See documentation of load_path_vector_layer
+
+    :param test_file: The file to load in the data directory next to the file.
+    :type test_file: str
+
+    :param kwargs: It can be :
+        clone=True if you want to copy the layer first to a temporary file.
+
+        clone_to_memory=True if you want to create a memory layer.
+
+        with_keywords=False if you do not want keywords. "clone_to_memory" is
+            required.
+
+    :type kwargs: dict
+
+    :return: The vector layer.
+    :rtype: QgsVectorLayer
+
+    .. versionadded:: 4.0
+    """
+    caller_path = inspect.getouterframes(inspect.currentframe())[1][1]
+    path = os.path.join(os.path.dirname(caller_path), 'data', test_file)
+    return load_path_vector_layer(path, **kwargs)
+
+
 def load_test_vector_layer(*args, **kwargs):
     """Return the test vector layer.
+
+    See documentation of load_path_vector_layer
 
     :param args: List of path e.g. ['exposure', 'buildings.shp'.
     :type args: list
@@ -239,6 +270,30 @@ def load_test_vector_layer(*args, **kwargs):
     .. versionadded:: 4.0
     """
     path = standard_data_path(*args)
+    return load_path_vector_layer(path, **kwargs)
+
+
+def load_path_vector_layer(path, **kwargs):
+    """Return the test vector layer.
+
+    :param path: Path to the vector layer.
+    :type path: str
+
+    :param kwargs: It can be :
+        clone=True if you want to copy the layer first to a temporary file.
+
+        clone_to_memory=True if you want to create a memory layer.
+
+        with_keywords=False if you do not want keywords. "clone_to_memory" is
+            required.
+
+    :type kwargs: dict
+
+    :return: The vector layer.
+    :rtype: QgsVectorLayer
+
+    .. versionadded:: 4.0
+    """
     name = splitext(basename(path))[0]
     extension = splitext(path)[1]
 
