@@ -545,11 +545,11 @@ class WizardDialog(QDialog, FORM_CLASS):
         :rtype: str, QUrl
         """
         if self.existing_keywords is None:
-            return None
+            return {}
         if keyword is not None:
             return self.existing_keywords.get(keyword, None)
         else:
-            return None
+            return {}
 
     def get_layer_description_from_canvas(self, layer, purpose):
         """Obtain the description of a canvas layer selected by user.
