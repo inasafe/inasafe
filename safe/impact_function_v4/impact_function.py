@@ -128,20 +128,21 @@ class ImpactFunction(object):
         table = m.Table(style_class='table table-condensed table-striped')
         row = m.Row()
         row.add(m.Cell(tr('Function')), header_flag=True)
-        row.add(m.Cell(tr('Calls')), header_flag=True)
-        row.add(m.Cell(tr('Average (ms)')), header_flag=True)
-        row.add(m.Cell(tr('Max (ms)')), header_flag=True)
+        row.add(m.Cell(tr('Time')), header_flag=True)
         table.add(row)
-        for function_name, data in self._performance_log.items():
-            calls = data[0]
-            max_time = max(data[1])
-            avg_time = sum(data[1]) / len(data[1])
+
+        breakdown = self.performance_log[0]
+        for line in breakdown:
+            time = line[1]
             row = m.Row()
-            row.add(m.Cell(function_name))
-            row.add(m.Cell(calls))
-            row.add(m.Cell(avg_time))
-            row.add(m.Cell(max_time))
+            row.add(m.Cell(line[0]))
+            row.add(m.Cell(time))
             table.add(row)
+        row = m.Row()
+
+        row.add(m.Cell('Total'))
+        row.add(m.Cell(self.performance_log[1]))
+        table.add(row)
         message.add(table)
         return message
 
@@ -439,7 +440,6 @@ class ImpactFunction(object):
         """
         self._callback = callback
 
-    @profile
     def setup_impact_function(self):
         """Automatically called when the hazard or exposure is changed.
         """
@@ -519,6 +519,7 @@ class ImpactFunction(object):
 
         return aggregation_layer
 
+    @profile
     def create_analysis_layer(self):
         """Create the analysis layer.
 
@@ -615,7 +616,6 @@ class ImpactFunction(object):
         """
         self.state[context]["info"][key] = value
 
-    @profile
     def run(self):
         """Run the whole impact function."""
         self.reset_state()
