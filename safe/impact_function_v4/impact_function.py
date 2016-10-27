@@ -675,8 +675,9 @@ class ImpactFunction(object):
                 'Aggregate the impact summary')
             self._aggregate_hazard = aggregate_summary(
                 self.aggregate_hazard_impacted, self._impact)
-
-        self.post_process(self._aggregate_hazard)
+        else:
+            # We do not want to post process twice.
+            self.post_process(self._aggregate_hazard)
 
         self.datastore.add_layer(self._aggregate_hazard, 'aggregate-hazard')
 
