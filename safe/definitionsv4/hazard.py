@@ -21,7 +21,8 @@ from safe.definitionsv4.units import (
     unit_mmi)
 from safe.definitionsv4.layer_modes import (
     layer_mode_classified, layer_mode_continuous)
-from safe.definitionsv4.fields import hazard_name_field, hazard_fields
+from safe.definitionsv4.fields import (
+    hazard_name_field, hazard_fields, hazard_value_field)
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -88,6 +89,7 @@ hazard_generic = {
         'raster'
     ],
     'classifications': [generic_hazard_classes],
+    'compulsory_fields': [hazard_value_field],
     'fields': hazard_fields,
     'extra_fields': []
 }
@@ -126,6 +128,7 @@ hazard_earthquake = {
         'raster'
     ],
     'classifications': [generic_hazard_classes],
+    'compulsory_fields': [hazard_value_field],
     'fields': hazard_fields,
     'extra_fields': [],
     'layer_modes': [layer_mode_classified, layer_mode_continuous]
@@ -168,6 +171,7 @@ hazard_flood = {
         'raster'
     ],
     'classifications': [flood_hazard_classes, generic_hazard_classes],
+    'compulsory_fields': [hazard_value_field],
     'fields': hazard_fields,
     'extra_fields': [],
     'layer_modes': [layer_mode_classified, layer_mode_continuous]
@@ -207,6 +211,7 @@ hazard_volcanic_ash = {
         'raster'
     ],
     'classifications': [ash_hazard_classes, generic_hazard_classes],
+    'compulsory_fields': [hazard_value_field],
     'fields': hazard_fields,
     'extra_fields': [],
     'layer_modes': [layer_mode_classified, layer_mode_continuous]
@@ -248,6 +253,7 @@ hazard_tsunami = {
         'raster'
     ],
     'classifications': [tsunami_hazard_classes, generic_hazard_classes],
+    'compulsory_fields': [hazard_value_field],
     'fields': hazard_fields,
     'extra_fields': [],
     'layer_modes': [layer_mode_classified, layer_mode_continuous]
@@ -289,6 +295,7 @@ hazard_volcano = {
         'point'
     ],
     'classifications': [volcano_hazard_classes, generic_hazard_classes],
+    'compulsory_fields': [hazard_value_field],
     'fields': hazard_fields,
     'extra_fields': [hazard_name_field],
     'layer_modes': [layer_mode_classified, layer_mode_continuous]
