@@ -1,17 +1,6 @@
-Function, Calls, Average (ms), Max (ms)
+Function, Time
 copy_layer
-run
-rename_remove_inasafe_fields
-aggregate_hazard_preparation
-remove_fields
-copy_fields
-hazard_preparation
-remove_rows
-add_id_column
-assign_inasafe_values
-intersect_exposure_and_aggregate_hazard
-create_memory_layer
 exposure_preparation
-prepare_vector_layer
-setup_impact_function
-
+assign_inasafe_values
+run_single_post_processor
+Total

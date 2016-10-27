@@ -181,7 +181,6 @@ def run_single_post_processor(layer, post_processor):
         return False, message
 
 
-@profile
 def enough_input(layer, post_processor_input):
     """Check if the input from impact_fields in enough.
 

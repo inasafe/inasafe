@@ -234,6 +234,7 @@ def _add_id_column(layer):
         layer.keywords[safe_id['key']] = safe_id['field_name']
 
 
+@profile
 def _add_default_values(layer):
     """Add or fill default values to the layer, see #3325
 

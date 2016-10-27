@@ -8,29 +8,32 @@ This code was taken from http://stackoverflow.com/a/3620972
 
 import time
 from functools import wraps
-from collections import OrderedDict
 
 __copyright__ = "Vadim Shender (original poster in stack overflow), InaSAFE"
 __license__ = "Creative Commons"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
-PROF_DATA = OrderedDict()
+PROF_DATA = []
+TOTAL_TIME = 0
 
 
 def profile(fn):
     @wraps(fn)
     def with_profiling(*args, **kwargs):
+        global TOTAL_TIME
+
         start_time = time.time()
+        PROF_DATA.append([fn.__name__, None])
+        index = len(PROF_DATA) - 1
 
         ret = fn(*args, **kwargs)
 
         elapsed_time = time.time() - start_time
+        TOTAL_TIME += elapsed_time
 
-        if fn.__name__ not in PROF_DATA:
-            PROF_DATA[fn.__name__] = [0, []]
-        PROF_DATA[fn.__name__][0] += 1
-        PROF_DATA[fn.__name__][1].append(elapsed_time)
+        elapsed_time = round(time.time() - start_time, 3)
+        PROF_DATA[index] = ([fn.__name__, elapsed_time])
 
         return ret
 
@@ -39,9 +42,10 @@ def profile(fn):
 
 def profiling_log():
     """Get the profiling logs."""
-    return PROF_DATA
+    return PROF_DATA, TOTAL_TIME
 
 
 def clear_prof_data():
-    global PROF_DATA
-    PROF_DATA = OrderedDict()
+    global PROF_DATA, TOTAL_TIME
+    PROF_DATA = []
+    TOTAL_TIME = 0
