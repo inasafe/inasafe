@@ -841,7 +841,7 @@ class Aggregator(QtCore.QObject):
 
         # Add length column to impact layer
 
-        # We need calculate length in meters, not degrees:
+        # We need calculate length in metres, not degrees:
         # We can use processing 'qgis:exportaddgeometrycolumns' with
         # CALC_METHODS=2 (Ellipsoidal) directly, but that
         # requires  QgsProject instance (see ftools source).

@@ -88,7 +88,7 @@ class RoadExposureReportMixin(ReportMixin):
         :param usage: The main usage of the road.
         :type usage: str
 
-        :param length: The length of the road, in meters.
+        :param length: The length of the road, in metres.
         :type length: float
 
         :param affected: If the road is affected or not.

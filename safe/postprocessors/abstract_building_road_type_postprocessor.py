@@ -36,7 +36,7 @@ class AbstractBuildingRoadTypePostprocessor(AbstractPostprocessor):
         """
         AbstractPostprocessor.__init__(self)
 
-        # Integer with total number of features/meters affected.
+        # Integer with total number of features/metres affected.
         self.impact_total = None
 
         # List of features

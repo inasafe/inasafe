@@ -632,7 +632,7 @@ def buffer_points(point_layer, radii, hazard_zone_attribute, output_crs):
     :param point_layer: A point layer to buffer.
     :type point_layer: QgsVectorLayer
 
-    :param radii: Desired approximate radii in kilometers (must be
+    :param radii: Desired approximate radii in kilometres (must be
         monotonically ascending). Can be either one number or list of numbers
     :type radii: int, list
 
