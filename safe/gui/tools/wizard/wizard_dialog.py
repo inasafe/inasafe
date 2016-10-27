@@ -547,7 +547,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         if self.existing_keywords is None:
             return {}
         if keyword is not None:
-            return self.existing_keywords.get(keyword, None)
+            return self.existing_keywords.get(keyword, {})
         else:
             return {}
 
