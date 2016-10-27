@@ -51,28 +51,66 @@ exposure_population = {
     ],
     'classified_notes': [  # notes specific to classified data
     ],
-    'actions': [  # these are additional generic actions - IF has more
-        tr('How will warnings be disseminated?'),
+    'actions': [  # these are additional generic actions
         tr('Which group or population is most affected?'),
         tr('Who are the vulnerable people in the population and why?'),
         tr('How will we distribute relief items?'),
-        tr('What are people\'s likely movements?'),
-        tr('What are the security factors for the affected people?'),
-        tr('What are the security factors for relief responders?'),
-        tr('How will we reach displaced people?'),
-        tr('What kind of food does the population normally consume?'),
-        tr('What are the critical non-food items required by the affected '
-           'people?'),
-        tr('If yes, where are they located and how will we distribute them?'),
-        tr('If no, where can we obtain additional relief items and how'
-           ' will we distribute them?'),
-        tr('What are the related health risks?'),
+        tr('Where can we obtain additional relief items?'),
+        tr('How will we distribute relief items?'),
         tr('Who are the key people responsible for coordination?'),
+        tr('What are the security factors for relief responders?'),
+        tr('Are there enough victim identification units for the killed '
+           'people?'),
+        # these are shelter actions
+        tr('What are people\'s likely movements?'),
+        tr('How will we reach displaced people?'),
+        tr('Are there enough covered floor areas available for the displaced '
+           'people?'),
+        tr('What are the land-use rights for the settlement location?'),
+        tr('What is the ownership of the shelter or settlement location'),
+        tr('What is the appropriate construction for temporary or transitional '
+           'household shelter?'),
+        tr('What are the existing environmental risks or vulnerabilities at '
+           'the shelter location?'),
+        tr('Are there enough clothing, betting and household items available '
+           'for the displaced people?'),
+        tr('What are the critical non-food items required by the affected '
+           'population?'),
+        tr('Are the non-food items available at an active local market?'),
+        # these are food security and nutrition actions
+        tr('What kind of food does the population normally consume?'),
+        tr('Are there any alternative source of food?'),
+        tr('Is there enough food for the displaced people?'),
+        tr('Are there any crops that can be used for consumption?'),
+        tr('Are there large numbers of separated children?'),
+        # these are WASH actions
+        tr('What water and sanitation practices were the population '
+           'accustomed to before the emergency?'),
+        tr('What type of outreach system would work for hygiene promotion for '
+           'this situation?'),
+        tr('What is the current water supply source and who are the present '
+           'users?'),
+        tr('Are there enough water supply, sanitation and hygiene, items '
+           'available for displaced people?'),
+        tr('Are water collection points close enough to where people live?'),
+        tr('Are water collection points safe?'),
+        tr('Is the water source contaminated or at risk of contamination?'),
+        tr('Are there alternative sources of water nearby?'),
+        tr('Is there a drainage problem?'),
+        # these are health actions
+        tr('What are the existing health problems?'),
+        tr('What are the potential epidemic diseases?'),
+        tr('Are there any potential disease outbreaks?'),
+        tr('Are there any healthcare sources that are accessible and '
+           'functioning?')
+
     ],
     'citations': [
         {
-            'text': None,
-            'link': None
+                'text': tr(
+                    'The Sphere Handbook: Humanitarian Charter and Minimum '
+                    'Standards in Humanitarian Response'),
+                'link': 'http://www.spherehandbook.org/'
         }
     ],
     'allowed_geometries': [
