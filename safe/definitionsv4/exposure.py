@@ -17,7 +17,8 @@ from safe.definitionsv4.fields import (
     women_count_field,
     youth_count_field,
     youth_ratio_field,
-    population_count_field
+    population_count_field,
+    exposure_type_field
 )
 from safe.definitionsv4.layer_modes import (
     layer_mode_classified, layer_mode_continuous)
@@ -141,9 +142,9 @@ exposure_population = {
         count_exposure_unit,
         density_exposure_unit],
     'classifications': [],
+    'compulsory_fields': [population_count_field],
     'fields': exposure_fields,
     'extra_fields': [
-        population_count_field,
         exposure_name_field,
         women_count_field,
         youth_count_field,
@@ -199,6 +200,7 @@ exposure_road = {
     ],
     'units': [],
     'classifications': [generic_road_classes],
+    'compulsory_fields': [exposure_type_field],
     'fields': exposure_fields,
     'extra_fields': [],
     'layer_modes': [layer_mode_classified]
@@ -242,6 +244,7 @@ exposure_structure = {
     ],
     'units': [],
     'classifications': [generic_structure_classes],
+    'compulsory_fields': [exposure_type_field],
     'fields': exposure_fields,
     'extra_fields': [
         population_count_field,
@@ -285,6 +288,7 @@ exposure_place = {
     ],
     'units': [],
     'classifications': [generic_place_classes],
+    'compulsory_fields': [exposure_type_field],
     'fields': exposure_fields,
     'extra_fields': [
         population_count_field,
@@ -344,6 +348,7 @@ exposure_land_cover = {
     ],
     'units': [],
     'classifications': [generic_landcover_classes],
+    'compulsory_fields': [exposure_type_field],
     'fields': exposure_fields,
     'extra_fields': [],
     'layer_modes': [layer_mode_classified]

@@ -565,14 +565,12 @@ analysis_name_field = {
 
 exposure_fields = [
     exposure_id_field,
-    exposure_type_field,
     feature_value_field,
     feature_rate_field
 ]
 
 hazard_fields = [
     hazard_id_field,
-    hazard_value_field,
 ]
 
 aggregation_fields = [
