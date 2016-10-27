@@ -741,7 +741,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         button = self.pbnRunStop
         flag, message = self.validate()
 
-        button.setEnabled(flag)
+        # Hack until we fix the dock for InaSAFE V4
+        # button.setEnabled(flag)
+        button.setEnabled(True)
         if message is not None:
             send_static_message(self, message)
 
@@ -1141,7 +1143,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # Layers
         impact_function.hazard = self.get_hazard_layer()
         impact_function.exposure = self.get_exposure_layer()
-        impact_function.aggregation = self.get_aggregation_layer()
+        aggregation = self.get_aggregation_layer()
+        if aggregation:
+            impact_function.aggregation = aggregation
 
         # Variables
         # impact_function.clip_hard = self.clip_hard
@@ -1418,14 +1422,18 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
     @staticmethod
     def enable_busy_cursor():
         """Set the hourglass enabled and stop listening for layer changes."""
-        QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
+        # Disable the cursor until we fix for InaSAFE V4.
+        pass
+        # QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
 
     @staticmethod
     def disable_busy_cursor():
         """Disable the hourglass cursor and listen for layer changes."""
-        while QtGui.qApp.overrideCursor() is not None and \
-                QtGui.qApp.overrideCursor().shape() == QtCore.Qt.WaitCursor:
-            QtGui.qApp.restoreOverrideCursor()
+        # Disable the cursor until we fix for InaSAFE V4.
+        pass
+        # while QtGui.qApp.overrideCursor() is not None and \
+        #        QtGui.qApp.overrideCursor().shape() == QtCore.Qt.WaitCursor:
+        #     QtGui.qApp.restoreOverrideCursor()
 
     def show_impact_report(self, layer, keywords):
         """Show the report for an impact layer.

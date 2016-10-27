@@ -638,6 +638,8 @@ class ImpactFunction(object):
                 print 'Temporary datastore'
                 print self.datastore.uri.absolutePath()
 
+            LOGGER.debug('Datastore : %s' % self.datastore.uri.absolutePath())
+
         if self.debug:
             self._datastore.use_index = True
 
