@@ -39,12 +39,12 @@ exposure_population = {
         'The <b>population</b> describes the people that might be '
         'exposed to a particular hazard.'),
     'notes': [  # these are additional generic notes for people - IF has more
-        tr('Numbers reported for population counts have been rounded to the '
+        tr('Numbers for population counts have been rounded to the '
            'nearest 10 people if the total is less than 1,000; nearest 100 '
            'people if more than 1,000 and less than 100,000; and nearest '
            '1000 if more than 100,000.'),
-        tr('Rounding is applied to all population values, '
-           'which may cause discrepancies when adding values.'),
+        tr('Rounding is applied to all population values, which may cause '
+           'discrepancies between subtotals and totals.'),
 
     ],
     'continuous_notes': [  # notes specific to continuous data
@@ -53,16 +53,16 @@ exposure_population = {
     ],
     'actions': [  # these are additional generic actions - IF has more
         tr('How will warnings be disseminated?'),
-        tr('What are people\'s likely movements?'),
         tr('Which group or population is most affected?'),
         tr('Who are the vulnerable people in the population and why?'),
+        tr('How will we distribute relief items?'),
         tr('What are people\'s likely movements?'),
         tr('What are the security factors for the affected people?'),
         tr('What are the security factors for relief responders?'),
         tr('How will we reach displaced people?'),
         tr('What kind of food does the population normally consume?'),
         tr('What are the critical non-food items required by the affected '
-           'population?'),
+           'people?'),
         tr('If yes, where are they located and how will we distribute them?'),
         tr('If no, where can we obtain additional relief items and how'
            ' will we distribute them?'),
@@ -106,8 +106,7 @@ exposure_road = {
         'A <b>road</b> is a defined route used by a vehicle or people to '
         'travel between two or more points.'),
     'notes': [  # these are additional generic notes for roads - IF has more
-        tr('Numbers reported for road lengths have been rounded to the '
-           'nearest metre.'),
+        tr('Numbers for road lengths have been rounded to the nearest metre.'),
         tr('Roads marked as not affected may still be unusable due to network '
            'isolation. Roads marked as affected may still be usable if they '
            'are elevated above the local landscape.'),
@@ -124,8 +123,8 @@ exposure_road = {
         tr('Which roads can be used to evacuate people or to distribute '
            'logistics?'),
         tr('What type of vehicles can use the unaffected roads?'),
-        tr('What sort of equipment will be needed to reopen roads & where '
-           'will we get it?'),
+        tr('What sort of equipment will be needed to reopen roads?'),
+        tr('Where will we get the equipment needed to open roads?'),
         tr('Which government department is responsible for supplying '
            'equipment?')
 
@@ -161,15 +160,15 @@ exposure_structure = {
     'classified_notes': [  # notes specific to classified data
     ],
     'actions': [  # these are additional generic actions - IF has more
-        tr('Which structures have warning capacity (eg. sirens, speakers, '
-           'etc.)?'),
+        tr('Which structures have warning capacity (eg. sirens or speakers?'),
         tr('Are the water and electricity services still operating?'),
+        tr('Are the schools and hospitals still active?'),
         tr('Are the health centres still open?'),
         tr('Are the other public services accessible?'),
         tr('Which buildings will be evacuation centres?'),
         tr('Where will we locate the operations centre?'),
-        tr('Where will we locate warehouse and/or distribution centres?'),
-        tr('Are the schools and hospitals still active?'),
+        tr('Where will we locate warehouse and/or distribution centres?')
+
     ],
     'citations': [
         {
