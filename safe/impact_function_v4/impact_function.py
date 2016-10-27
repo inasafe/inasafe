@@ -656,6 +656,8 @@ class ImpactFunction(object):
 
         self.hazard_preparation()
 
+        self.aggregation_preparation()
+
         self.aggregate_hazard_preparation()
 
         self.exposure_preparation()
@@ -776,12 +778,8 @@ class ImpactFunction(object):
             'hazard', 'Vector clip and mask hazard to aggregation')
 
     @profile
-    def aggregate_hazard_preparation(self):
-        """This function is doing the aggregate hazard layer.
-
-        It will prepare the aggregate layer and intersect hazard polygons with
-        aggregation areas and assign hazard class.
-        """
+    def aggregation_preparation(self):
+        """This function is doing the aggregation preparation."""
         if not self.aggregation:
             self.set_state_info('aggregation', 'provided', False)
 
@@ -828,6 +826,13 @@ class ImpactFunction(object):
             self.datastore.add_layer(
                 self._analysis_impacted, 'analysis_layer')
 
+    @profile
+    def aggregate_hazard_preparation(self):
+        """This function is doing the aggregate hazard layer.
+
+        It will prepare the aggregate layer and intersect hazard polygons with
+        aggregation areas and assign hazard class.
+        """
         self.set_state_process(
             'hazard',
             'Clip and mask hazard polygons with the analysis layer')
