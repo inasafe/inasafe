@@ -84,9 +84,18 @@ class TestKeywordWizard(unittest.TestCase):
         :param list_widget: List widget that wants to be checked.
         :type list_widget: QListWidget
         """
-        # noinspection PyUnresolvedReferences
-        current_text = list_widget.currentItem().text()
-        self.assertEqual(expected_text, current_text)
+        try:
+            # noinspection PyUnresolvedReferences
+            current_text = list_widget.currentItem().text()
+            self.assertEqual(expected_text, current_text)
+        except AttributeError:
+            options = [
+                list_widget.item(i).text()
+                for i in range(list_widget.count())
+            ]
+            message = 'There is no %s in the available option %s' % (
+                expected_text, options)
+            self.assertFalse(True, message)
 
     # noinspection PyUnresolvedReferences
     def select_from_list_widget(self, option, list_widget):
@@ -448,7 +457,7 @@ class TestKeywordWizard(unittest.TestCase):
         self.check_current_step(dialog.step_kw_title)
 
         self.assertEqual(
-            dialog.layer.name(), dialog.step_kw_title.leTitle.text())
+            'Volcano KRB', dialog.step_kw_title.leTitle.text())
         self.assertTrue(dialog.pbnNext.isEnabled())
 
         # Click finish
@@ -753,7 +762,7 @@ class TestKeywordWizard(unittest.TestCase):
         self.check_current_step(dialog.step_kw_title)
 
         self.assertEqual(
-            dialog.layer.name(), dialog.step_kw_title.leTitle.text())
+            'Buildings', dialog.step_kw_title.leTitle.text())
         self.assertTrue(dialog.pbnNext.isEnabled())
 
         # Click finish
@@ -835,6 +844,86 @@ class TestKeywordWizard(unittest.TestCase):
             'layer_purpose': layer_purpose_aggregation['key'],
             'title': layer_title
         }
+        # Check the keywords
+        real_keywords = dialog.get_keywords()
+        self.assertDictEqual(real_keywords, expected_keyword)
+
+    def test_existing_aggregation_keyword(self):
+        """Test Aggregation Keywords"""
+        layer = load_test_vector_layer(
+            'gisv4', 'aggregation', 'small_grid.geojson', clone_to_memory=True)
+
+        area_name = 'area_name'
+        layer_title = 'Tempe'
+        expected_keyword = {
+            'inasafe_default_values': {},
+            'inasafe_fields': {aggregation_name_field['key']: area_name},
+            'layer_geometry': layer_geometry_polygon['key'],
+            'layer_purpose': layer_purpose_aggregation['key'],
+            'title': layer_title
+        }
+        # Assigning dummy keyword
+        layer.keywords = expected_keyword
+
+        # noinspection PyTypeChecker
+        dialog = WizardDialog()
+        dialog.set_keywords_creation_mode(layer)
+
+        # Check if in select purpose step
+        self.check_current_step(dialog.step_kw_purpose)
+
+        # Select aggregation
+        self.check_current_text(
+            layer_purpose_aggregation['name'],
+            dialog.step_kw_purpose.lstCategories)
+
+        # Click next to select aggregation
+        dialog.pbnNext.click()
+
+        # Check if in select field step
+        self.check_current_step(dialog.step_kw_field)
+
+        # select area_name field
+        self.check_current_text(
+            area_name, dialog.step_kw_field.lstFields)
+
+        # Click next to select KRB
+        dialog.pbnNext.click()
+
+        # select inasafe fields step
+        self.check_current_step(dialog.step_kw_inasafe_fields)
+
+        # Click next to finish inasafe fields step and go to inasafe default
+        # field step
+        dialog.pbnNext.click()
+
+        # Check if in InaSAFE Default field step
+        self.check_current_step(dialog.step_kw_default_inasafe_fields)
+
+        # Click next to finish InaSAFE Default Field step and go to source step
+        dialog.pbnNext.click()
+
+        # Check if in source step
+        self.check_current_step(dialog.step_kw_source)
+
+        # Click next to finish source step and go to title step
+        dialog.pbnNext.click()
+
+        # Check if in title step
+        self.check_current_step(dialog.step_kw_title)
+
+        # Check if the title is already filled
+        self.assertEqual(dialog.step_kw_title.leTitle.text(), layer_title)
+
+        # Click next to finish title step and go to kw summary step
+        dialog.pbnNext.click()
+
+        # Check if in title step
+        self.check_current_step(dialog.step_kw_summary)
+
+        # Click finish
+        dialog.pbnNext.click()
+
         # Check the keywords
         real_keywords = dialog.get_keywords()
         self.assertDictEqual(real_keywords, expected_keyword)

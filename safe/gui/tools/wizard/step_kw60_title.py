@@ -78,7 +78,10 @@ class StepKwTitle(WizardStep, FORM_CLASS):
 
     def set_widgets(self):
         """Set widgets on the Title tab."""
-        # Just set values based on existing keywords
+        # Set title from keyword first, if not found use layer name
         if self.parent.layer:
-            title = self.parent.layer.name()
+            if self.parent.get_existing_keyword('title'):
+                title = self.parent.get_existing_keyword('title')
+            else:
+                title = self.parent.layer.name()
             self.leTitle.setText(title)
