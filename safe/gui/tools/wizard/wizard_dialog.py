@@ -38,7 +38,8 @@ from safe.common.exceptions import (
     InvalidParameterError,
     UnsupportedProviderError,
     InaSAFEError,
-    MetadataReadError)
+    MetadataReadError,
+    InvalidWizardStep)
 from safe.gui.tools.wizard.wizard_strings import (
     category_question_hazard,
     category_question_exposure,
@@ -235,6 +236,10 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         # QSetting
         self.setting = QSettings()
+
+        # Wizard Steps
+        self.impact_function_steps = []
+        self.keyword_steps = []
 
     def set_mode_label_to_keywords_creation(self):
         """Set the mode label to the Keywords Creation/Update mode
@@ -650,6 +655,13 @@ class WizardDialog(QDialog, FORM_CLASS):
            executed when the Next button is released.
         """
         current_step = self.get_current_step()
+        if current_step.step_type == 'step_fc':
+            self.impact_function_steps.append(current_step)
+        elif current_step.step_type == 'step_kw':
+            self.keyword_steps.append(current_step)
+        else:
+            LOGGER.debug(current_step.step_type)
+            raise InvalidWizardStep
 
         # Save keywords if it's the end of the keyword creation mode
         if current_step == self.step_kw_summary:
@@ -708,7 +720,16 @@ class WizardDialog(QDialog, FORM_CLASS):
            executed when the Back button is released.
         """
         current_step = self.get_current_step()
-        new_step = current_step.get_previous_step()
+        if current_step.step_type == 'step_fc':
+            new_step = self.impact_function_steps.pop()
+        elif current_step.step_type == 'step_kw':
+            try:
+                new_step = self.keyword_steps.pop()
+            except IndexError:
+                new_step = self.impact_function_steps.pop()
+        else:
+            raise InvalidWizardStep
+
         # set focus to table widgets, as the inactive selection style is gray
         if new_step == self.step_fc_functions1:
             self.step_fc_functions1.tblFunctions1.setFocus()

@@ -104,3 +104,11 @@ class WizardStep(QWidget):
         """
         raise NotImplementedError("The current step class doesn't implement \
             the set_widgets method")
+
+    @property
+    def step_type(self):
+        """Whether it's a IFCW step or Keyword Wizard Step."""
+        if 'stepfc' in self.__class__.__name__.lower():
+            return 'step_fc'
+        if 'stepkw' in self.__class__.__name__.lower():
+            return 'step_kw'

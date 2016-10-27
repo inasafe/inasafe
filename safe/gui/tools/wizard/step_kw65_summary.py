@@ -106,6 +106,8 @@ class StepKwSummary(WizardStep, FORM_CLASS):
         else:
             # Wizard complete
             new_step = None
+        # Reset the step history
+        self.parent.keyword_steps = []
         return new_step
 
     def set_widgets(self):
