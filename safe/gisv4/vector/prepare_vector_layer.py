@@ -29,7 +29,7 @@ from safe.definitionsv4.layer_purposes import (
     layer_purpose_hazard,
     layer_purpose_aggregation
 )
-from safe.definitionsv4.utilities import get_fields
+from safe.definitionsv4.utilities import get_fields, definition
 from safe.utilities.i18n import tr
 from safe.utilities.profiling import profile
 
@@ -82,6 +82,7 @@ def prepare_vector_layer(layer, callback=None):
     _remove_rows(cleaned)
     _add_id_column(cleaned)
     _rename_remove_inasafe_fields(cleaned)
+    _add_default_values(cleaned)
 
     return cleaned
 
@@ -231,3 +232,77 @@ def _add_id_column(layer):
         layer.commitChanges()
 
         layer.keywords[safe_id['key']] = safe_id['field_name']
+
+
+def _add_default_values(layer):
+    """Add or fill default values to the layer, see #3325
+
+    1. It doesn't have inasafe_field and it doesn't have inasafe_default_value
+        --> Do nothing.
+    2. It has inasafe_field and it does not have inasafe_default_value
+        --> Do nothing.
+    3. It does not have inasafe_field but it has inasafe_default_value
+        --> Create new field, and fill with the default value for all features
+    4. It has inasafe_field and it has inasafe_default_value
+        --> Replace the null value with the default one.
+    """
+    fields = layer.keywords.get('inasafe_fields')
+    defaults = layer.keywords.get('inasafe_default_value')
+
+    # At that stage of the workflow, inasafe_fields will always exist.
+
+    if not defaults:
+        # Case 1 and 2.
+        LOGGER.debug(
+            tr('inasafe_default_value is not present, we can not fill default '
+               'values.'))
+        return
+
+    for default in defaults.keys():
+
+        field = fields.get(default)
+        target_field = definition(default)
+        layer.startEditing()
+
+        if not field:
+            # Case 3
+            LOGGER.debug(
+                tr('{field} key is not present but the layer has {value} as a '
+                   'default for {field}'.format(
+                    **{'field': target_field['key'],
+                       'value': defaults[default]})))
+
+            new_field = QgsField()
+            new_field.setName(target_field['field_name'])
+            new_field.setType(target_field['type'])
+            new_field.setPrecision(target_field['precision'])
+            new_field.setLength(target_field['length'])
+
+            layer.addAttribute(new_field)
+
+            new_index = layer.fieldNameIndex(new_field.name())
+
+            for feature in layer.getFeatures():
+                layer.changeAttributeValue(
+                    feature.id(), new_index, defaults[default])
+
+            layer.keywords[target_field['key']] = target_field['field_name']
+
+        else:
+            # Case 4
+            LOGGER.debug(
+                tr(
+                    '{field} key is present but the layer has {value} as a '
+                    'default for {field}, we should fill null values.'.format(
+                        **{'field': target_field['key'],
+                           'value': defaults[default]})))
+
+            index = layer.fieldNameIndex(field)
+
+            for feature in layer.getFeatures():
+                if isinstance(feature.attributes()[index], QPyNullVariant):
+                    layer.changeAttributeValue(
+                        feature.id(), index, defaults[default])
+
+        layer.commitChanges()
+    return
