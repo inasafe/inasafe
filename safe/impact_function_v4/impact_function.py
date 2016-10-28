@@ -21,6 +21,7 @@ import logging
 
 from safe.common.utilities import temp_dir
 from safe.datastore.folder import Folder
+from safe.datastore.datastore import DataStore
 from safe.gisv4.vector.tools import create_memory_layer
 from safe.gisv4.vector.prepare_vector_layer import prepare_vector_layer
 from safe.gisv4.vector.reproject import reproject
@@ -46,6 +47,7 @@ from safe.definitionsv4.utilities import definition
 from safe.defaults import get_defaults
 from safe.common.exceptions import (
     InvalidExtentError,
+    InvalidLayerError,
     InvalidAggregationKeywords,
     InvalidHazardKeywords,
     InvalidExposureKeywords,
@@ -89,13 +91,12 @@ class ImpactFunction(object):
         # Requested extent to use
         self._requested_extent = None
         # Requested extent's CRS
-        self._requested_extent_crs = QgsCoordinateReferenceSystem('EPSG:4326')
+        self._requested_extent_crs = None
+
         # The current viewport extent of the map canvas
         self._viewport_extent = None
-        # Actual extent to use - Read Only
-        self._actual_extent = None
-        # Actual extent's CRS - Read Only
-        self._actual_extent_crs = QgsCoordinateReferenceSystem('EPSG:4326')
+        # Current viewport extent's CRS
+        self._viewport_extent_crs = None
 
         # set this to a gui call back / web callback etc as needed.
         self._callback = self.console_progress_callback
@@ -337,24 +338,10 @@ class ImpactFunction(object):
         :type crs: QgsCoordinateReferenceSystem
         """
         self._requested_extent_crs = crs
-
-    @property
-    def actual_extent(self):
-        """Property for the actual extent of impact function analysis.
-
-        :returns: A QgsRectangle.
-        :rtype: QgsRectangle
-        """
-        return self._actual_extent
-
-    @property
-    def actual_extent_crs(self):
-        """Property for the actual extent crs for analysis.
-
-        :returns: The CRS for the actual extent.
-        :rtype: QgsCoordinateReferenceSystem
-        """
-        return self._actual_extent_crs
+        if isinstance(crs, QgsCoordinateReferenceSystem):
+            self._requested_extent_crs = crs
+        else:
+            raise InvalidExtentError('%s is not a valid CRS object.' % crs)
 
     @property
     def viewport_extent(self):
@@ -366,15 +353,19 @@ class ImpactFunction(object):
         return self._viewport_extent
 
     @viewport_extent.setter
-    def viewport_extent(self, viewport_extent):
+    def viewport_extent(self, extent):
         """Setter for the viewport extent of the map canvas.
 
-        :param viewport_extent: Analysis boundaries expressed as a
+        :param extent: Analysis boundaries expressed as a
         QgsRectangle. The extent CRS should match the extent_crs property of
         this IF instance.
-        :type viewport_extent: QgsRectangle
+        :type extent: QgsRectangle
         """
-        self._viewport_extent = viewport_extent
+        self._viewport_extent = extent
+        if isinstance(extent, QgsRectangle):
+            self._viewport_extent = extent
+        else:
+            raise InvalidExtentError('%s is not a valid extent.' % extent)
 
     @property
     def datastore(self):
@@ -392,7 +383,10 @@ class ImpactFunction(object):
         :param datastore: The datastore.
         :type datastore: DataStore
         """
-        self._datastore = datastore
+        if isinstance(datastore, DataStore):
+            self._datastore = datastore
+        else:
+            raise Exception('%s is not a valid datastore.' % datastore)
 
     @property
     def name(self):
@@ -481,12 +475,16 @@ class ImpactFunction(object):
         print 'Task progress: %i of %i' % (current, maximum)
 
     @profile
-    def create_virtual_aggregation(self):
+    def create_virtual_aggregation(self, extent=None, extent_crs=None):
         """Function to create aggregation layer based on extent
 
         :returns: A polygon layer with exposure's crs.
         :rtype: QgsVectorLayer
         """
+        if extent is None and extent_crs is None:
+            extent = self.exposure.extent()
+            extent_crs = self.exposure.crs()
+
         fields = [
             QgsField(
                 aggregation_id_field['field_name'],
@@ -498,13 +496,13 @@ class ImpactFunction(object):
             )
         ]
         aggregation_layer = create_memory_layer(
-            'aggregation', QGis.Polygon, self.exposure.crs(), fields)
+            'aggregation', QGis.Polygon, extent_crs, fields)
 
         aggregation_layer.startEditing()
 
         feature = QgsFeature()
         # noinspection PyCallByClass,PyArgumentList,PyTypeChecker
-        feature.setGeometry(QgsGeometry.fromRect(self.actual_extent))
+        feature.setGeometry(QgsGeometry.fromRect(extent))
         feature.setAttributes([1, tr('Entire Area')])
         aggregation_layer.addFeature(feature)
         aggregation_layer.commitChanges()
@@ -616,8 +614,37 @@ class ImpactFunction(object):
         """
         self.state[context]["info"][key] = value
 
+    def validate(self):
+        """Method to check if the impact function can be run."""
+        if not self.exposure:
+            raise InvalidLayerError(tr('The exposure layer is compulsory.'))
+
+        if not self.hazard:
+            raise InvalidLayerError(tr('The hazard layer is compulsory.'))
+
+        if self.aggregation:
+            if self.requested_extent:
+                raise InvalidExtentError(
+                    tr('Requested Extent must be null when an aggregation is '
+                       'provided.'))
+            if self.requested_extent_crs:
+                raise InvalidExtentError(
+                    tr('Requested Extent CRS must be null when an aggregation '
+                       'is provided.'))
+            if self._viewport_extent:
+                raise InvalidExtentError(
+                    tr('Viewport Extent must be null when an aggregation is '
+                       'provided.'))
+            if self._viewport_extent_crs:
+                raise InvalidExtentError(
+                    tr('Viewport CRS must be null when an aggregation is '
+                       'provided.'))
+
     def run(self):
         """Run the whole impact function."""
+
+        self.validate()
+
         self.reset_state()
         clear_prof_data()
 
@@ -785,9 +812,6 @@ class ImpactFunction(object):
         """This function is doing the aggregation preparation."""
         if not self.aggregation:
             self.set_state_info('aggregation', 'provided', False)
-
-            if not self.actual_extent:
-                self._actual_extent = self.exposure.extent()
 
             self.set_state_process(
                 'aggregation',
