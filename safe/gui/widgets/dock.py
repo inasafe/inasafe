@@ -1095,6 +1095,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 self.impact_function.force_memory = False
             self.disable_signal_receiver()
 
+            for layer in self.impact_function.datastore.layers():
+                qgis_layer = self.impact_function.datastore.layer(layer)
+                QgsMapLayerRegistry.instance().addMapLayer(qgis_layer)
+
     def accept_cancelled(self, old_keywords):
         """Deal with user cancelling post processing option dialog.
 
