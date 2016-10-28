@@ -648,11 +648,13 @@ class ImpactFunction(object):
             if self.aggregation:
                 self.datastore.add_layer(self.aggregation, 'aggregation')
 
-        # Special case for Raster Earthquake hazard.
+        # Special case for Raster Earthquake hazard on Raster population.
         if self.hazard.type() == QgsMapLayer.RasterLayer:
             if self.hazard.keywords.get('hazard') == 'earthquake':
-                # return self.state()
-                return
+                if self.exposure.type() == QgsMapLayer.RasterLayer:
+                    if self.exposure.keywords.get('exposure') == 'population':
+                        # return self.state()
+                        return
 
         self.hazard_preparation()
 
