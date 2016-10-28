@@ -186,23 +186,26 @@ def get_fields(layer_purpose, layer_subcategory=None, replace_null=None):
         return fields
 
 
-def get_mandatory_fields(layer_purpose, layer_subcategory=None):
-    """Get class field based on layer_purpose.
+def get_compulsory_fields(layer_purpose, layer_subcategory=None):
+    """Get compulsory field based on layer_purpose and layer_subcategory
 
     :param layer_purpose: The layer purpose.
     :type layer_purpose: str
 
-    :returns: Class field
-    :rtype: dict
+    :returns: Compulsory field
+    :rtype: str
     """
-    if layer_purpose == 'hazard':
-        return hazard_value_field
-    elif layer_purpose == 'exposure':
-        return exposure_type_field
-    elif layer_purpose == 'aggregation':
-        return aggregation_name_field
+    if not layer_subcategory:
+        if layer_purpose == 'hazard':
+            return hazard_value_field
+        elif layer_purpose == 'exposure':
+            return exposure_type_field
+        elif layer_purpose == 'aggregation':
+            return aggregation_name_field
+        else:
+            return None
     else:
-        return None
+        return definition(layer_subcategory).get('compulsory_fields')[0]
 
 
 def definition(keyword):
