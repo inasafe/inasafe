@@ -1037,7 +1037,11 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             #    clip_parameters['adjusted_geo_extent'])
 
             # Start the analysis
-            self.impact_function.debug = True
+            # Set the debug mode
+            settings = QSettings()
+            developer_mode = settings.value(
+                'inasafe/developer_mode', False, type=bool)
+            self.impact_function.debug = developer_mode
             self.impact_function.run()
         except KeywordNotFoundError as e:
             self.hide_busy()
