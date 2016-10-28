@@ -101,7 +101,6 @@ from safe.gui.tools.help_dialog import HelpDialog
 from safe.gui.tools.impact_report_dialog import ImpactReportDialog
 from safe_extras.pydispatch import dispatcher
 from safe.utilities.extent import Extent
-from safe.impact_function_v4.impact_function import ImpactFunction
 from safe.utilities.unicode import get_unicode
 from safe.impact_template.utilities import get_report_template
 from safe.gui.widgets.message import missing_keyword_message
@@ -742,7 +741,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         button = self.pbnRunStop
         flag, message = self.validate()
 
-        button.setEnabled(flag)
+        # Hack until we fix the dock for InaSAFE V4
+        # button.setEnabled(flag)
+        button.setEnabled(True)
         if message is not None:
             send_static_message(self, message)
 
@@ -990,6 +991,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         :type flag: bool
         """
         self.extent.show_rubber_bands = flag
+        # Temporary disable until we fix the dock in inasafe v4.
+        self.extent.show_rubber_bands = False
         settings = QSettings()
         settings.setValue('inasafe/showRubberBands', flag)
         if not flag:
@@ -1093,6 +1096,11 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 self.impact_function.force_memory = False
             self.disable_signal_receiver()
 
+            if self.impact_function.datastore:
+                for layer in self.impact_function.datastore.layers():
+                    qgis_layer = self.impact_function.datastore.layer(layer)
+                    QgsMapLayerRegistry.instance().addMapLayer(qgis_layer)
+
     def accept_cancelled(self, old_keywords):
         """Deal with user cancelling post processing option dialog.
 
@@ -1141,17 +1149,19 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # Layers
         impact_function.hazard = self.get_hazard_layer()
         impact_function.exposure = self.get_exposure_layer()
-        impact_function.aggregation = self.get_aggregation_layer()
+        aggregation = self.get_aggregation_layer()
 
-        # Variables
-        impact_function.clip_hard = self.clip_hard
-        impact_function.show_intermediate_layers = \
-            self.show_intermediate_layers
-        viewport = viewport_geo_array(self.iface.mapCanvas())
-        impact_function.viewport_extent = viewport
-        if self.extent.user_extent:
-            impact_function.requested_extent = self.extent.user_extent
-            impact_function.requested_extent_crs = self.extent.user_extent_crs
+        if aggregation:
+            impact_function.aggregation = aggregation
+        else:
+            # We need to enable it again when we will fix the dock.
+            # impact_function.requested_extent = self.extent.user_extent
+            # impact_function.requested_extent = self.extent.user_extent_crs
+
+            map_settings = self.iface.mapCanvas().mapSettings()
+            impact_function.viewport_extent = map_settings.fullExtent()
+            impact_function._viewport_extent_crs = (
+                map_settings.destinationCrs())
 
         return impact_function
 
@@ -1418,14 +1428,18 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
     @staticmethod
     def enable_busy_cursor():
         """Set the hourglass enabled and stop listening for layer changes."""
-        QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
+        # Disable the cursor until we fix for InaSAFE V4.
+        pass
+        # QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
 
     @staticmethod
     def disable_busy_cursor():
         """Disable the hourglass cursor and listen for layer changes."""
+        # Disable the cursor until we fix for InaSAFE V4.
+        pass
         while QtGui.qApp.overrideCursor() is not None and \
                 QtGui.qApp.overrideCursor().shape() == QtCore.Qt.WaitCursor:
-            QtGui.qApp.restoreOverrideCursor()
+                QtGui.qApp.restoreOverrideCursor()
 
     def show_impact_report(self, layer, keywords):
         """Show the report for an impact layer.

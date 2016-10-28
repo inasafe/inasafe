@@ -186,6 +186,13 @@ class BaseMetadata(object):
             'inasafe/'
             'inasafe_fields/'
             'gco:Dictionary'),
+        'inasafe_default_values': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'inasafe_default_values/'
+            'gco:Dictionary'),
     }
 
     def __getattr__(self, name):

@@ -1,30 +1,15 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool by AusAid -**Wizard Utilities.**
-
-The module provides utilities function for InaSAFE Wizard dialog.
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
-__author__ = 'qgis@borysjurgiel.pl'
-__revision__ = '$Format:%H$'
-__date__ = '24/04/2016'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
+"""Wizard Utilities Functions"""
 
 import re
+import logging
 from PyQt4 import QtCore
 
 from qgis.core import QgsCoordinateTransform
 
 import safe.gui.tools.wizard.wizard_strings
 from safe.common.version import get_version
+from safe.definitionsv4 import settings
 from safe.definitionsv4.layer_modes import layer_mode_classified
 from safe.definitionsv4.layer_purposes import (
     layer_purpose_exposure, layer_purpose_hazard)
@@ -35,6 +20,11 @@ from safe.utilities.gis import (
 from safe.utilities.i18n import tr
 from safe.utilities.utilities import is_keyword_version_supported
 
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
+
 
 # Data roles
 RoleFunctions = QtCore.Qt.UserRole
@@ -42,6 +32,8 @@ RoleHazard = QtCore.Qt.UserRole + 1
 RoleExposure = QtCore.Qt.UserRole + 2
 RoleHazardConstraint = QtCore.Qt.UserRole + 3
 RoleExposureConstraint = QtCore.Qt.UserRole + 4
+
+LOGGER = logging.getLogger('InaSAFE')
 
 
 def get_question_text(constant):
@@ -170,3 +162,61 @@ def layer_description_html(layer, keywords=None):
                tr('In the next step you will be able' +
                   ' to assign keywords to this layer.'))
     return desc
+
+
+def set_inasafe_default_value_qsetting(qsetting, inasafe_field_key, value):
+    """Helper method to set inasafe default value to qsetting.
+
+    :param qsetting: QSetting
+    :type setting: QSetting
+
+    :param inasafe_field_key: Key for the field.
+    :type inasafe_field_key: str
+
+    :param value: Value of the inasafe_default_value.
+    :type value: float
+    """
+    key = 'inasafe/default_value/%s' % inasafe_field_key
+    qsetting.setValue(key, value)
+
+
+def get_inasafe_default_value_qsetting(qsetting, inasafe_field_key):
+    """Helper method to get the inasafe default value from qsetting.
+
+    :param qsetting: QSetting
+    :type qsetting: QSetting
+
+    :param inasafe_field_key: Key for the field.
+    :type inasafe_field_key: str
+
+    :returns: Value of the inasafe_default_value.
+    :rtype: float
+    """
+    key = 'inasafe/default_value/%s' % inasafe_field_key
+    default_value = qsetting.value(key)
+    return default_value
+
+
+def get_defaults(qsetting, field_key):
+    """Obtain default value for a field with default value.
+
+    By default it will return label list and default value list
+    label: [Setting, Do not use, Custom]
+    values: [Value from setting, None, Value from QSetting (if exist)]
+
+    :param qsetting: QSetting object
+    :type qsetting: QSetting
+
+    :param field_key: The field's key.
+    :type field_key: str
+
+    :returns: Tuple of list. List of labels and list of values.
+    """
+    labels = [tr('Setting (%s)'), tr('Do not use'), tr('Custom')]
+    values = [
+        settings.default_values.get(field_key, None),
+        None,
+        get_inasafe_default_value_qsetting(qsetting, field_key)
+    ]
+
+    return labels, values

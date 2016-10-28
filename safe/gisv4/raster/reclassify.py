@@ -12,7 +12,9 @@ from qgis.core import QgsRasterLayer
 
 from safe.common.exceptions import FileNotFoundError
 from safe.common.utilities import unique_filename, temp_dir
+from safe.definitionsv4.utilities import definition
 from safe.definitionsv4.processing import reclassify_raster
+from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -20,6 +22,7 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
+@profile
 def reclassify(layer, ranges, callback=None):
     """Reclassify a continuous raster layer.
 
@@ -99,7 +102,15 @@ def reclassify(layer, ranges, callback=None):
     reclassified = QgsRasterLayer(output_raster, output_layer_name)
 
     # We transfer keywords to the output.
-    reclassified.keywords = layer.keywords
+    reclassified.keywords = layer.keywords.copy()
     reclassified.keywords['layer_mode'] = 'classified'
+
+    value_map = {}
+    classifications = layer.keywords.get('classification')
+    hazard_classes = definition(classifications)['classes']
+    for hazard_class in reversed(hazard_classes):
+        value_map[hazard_class['key']] = [hazard_class['value']]
+
+    reclassified.keywords['value_map'] = value_map
 
     return reclassified

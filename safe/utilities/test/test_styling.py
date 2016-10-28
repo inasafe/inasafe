@@ -26,6 +26,7 @@ from safe.utilities.styling import (
 from safe.utilities.utilities import get_error_message
 from safe.test.utilities import (
     standard_data_path,
+    load_test_vector_layer,
     load_layer,
     get_qgis_app,
     clone_shp_layer)
@@ -160,10 +161,8 @@ class StylingTest(unittest.TestCase):
         """Test that point symbol size can be set from style (issue 121).
         .. seealso:: https://github.com/AIFDR/inasafe/issues/121
         """
-        layer = clone_shp_layer(
-            name='volcano_point',
-            include_keywords=True,
-            source_directory=standard_data_path('hazard'))
+        layer = load_test_vector_layer(
+            'hazard', 'volcano_point.geojson', clone=True)
 
         # Note the float quantity values below
         style_info = {

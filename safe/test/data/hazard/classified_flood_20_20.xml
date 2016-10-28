@@ -175,9 +175,9 @@
           <hazard_category>
             <gco:CharacterString>multiple_event</gco:CharacterString>
           </hazard_category>
-          <raster_hazard_classification>
-            <gco:CharacterString>generic_raster_hazard_classes</gco:CharacterString>
-          </raster_hazard_classification>
+          <classification>
+            <gco:CharacterString>generic_hazard_classes</gco:CharacterString>
+          </classification>
           <multipart_polygon>
             <gco:Boolean/>
           </multipart_polygon>
@@ -196,9 +196,6 @@
           <value_map>
             <gco:Dictionary>{&quot;high&quot;: [3.0], &quot;medium&quot;: [2.0], &quot;low&quot;: [1.0]}</gco:Dictionary>
           </value_map>
-          <vector_hazard_classification>
-            <gco:CharacterString/>
-          </vector_hazard_classification>
           <layer_geometry>
             <gco:CharacterString>raster</gco:CharacterString>
           </layer_geometry>

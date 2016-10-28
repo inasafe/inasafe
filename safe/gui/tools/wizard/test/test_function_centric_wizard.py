@@ -37,6 +37,7 @@ sys.path.append(pardir)
 
 from safe.common.utilities import temp_dir
 from safe.test.utilities import (
+    load_test_vector_layer,
     clone_raster_layer,
     clone_shp_layer,
     get_qgis_app,
@@ -469,18 +470,19 @@ class WizardDialogTest(unittest.TestCase):
         QgsMapLayerRegistry.instance().addMapLayers([layer])
 
         # Aggregation layer
-        layer = clone_shp_layer(
-            name='district_osm_jakarta',
-            include_keywords=True,
-            source_directory=standard_data_path('boundaries'))
+        layer = load_test_vector_layer(
+            'aggregation',
+            'district_osm_jakarta.geojson',
+            clone=True)
         # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayers([layer])
 
         # Aggregation layer without keywords
-        layer = clone_shp_layer(
-            name='grid_jakarta',
-            include_keywords=False,
-            source_directory=standard_data_path('boundaries'))
+        layer = load_test_vector_layer(
+            'aggregation',
+            'grid_jakarta.geojson',
+            clone_to_memory=True,
+            with_keywords=False)
         # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayers([layer])
 

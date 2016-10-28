@@ -171,7 +171,7 @@ def metadata_migration(old_metadata, new_version=inasafe_keyword_version):
                 new_metadata['keyword_version'] = new_version
             elif key in ['raster_hazard_classification',
                        'vector_hazard_classification']:
-                new_metadata['hazard_classification'] = value
+                new_metadata['classification'] = value
             elif key == 'field':
                 if old_metadata['layer_purpose'] == 'hazard':
                     new_metadata['inasafe_fields'][

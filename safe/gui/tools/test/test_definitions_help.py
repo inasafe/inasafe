@@ -5,13 +5,9 @@
 
 import unittest
 import logging
-import codecs
-from safe.test.utilities import (
-    standard_data_path,
-)
-from safe.utilities.resources import html_footer, html_header
 from safe.utilities.i18n import tr
 from safe.gui.tools.help import definitions_help
+from safe.test.utilities import get_control_text
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -81,45 +77,23 @@ class TestDefinitionsHelp(unittest.TestCase):
     def test_definitions_help(self):
         """Test definitions help generation."""
         help_text = definitions_help.definitions_help().to_text()
-        expected_result = self.get_control_text(
+        expected_result = get_control_text(
             'test-definition-help-response.txt')
 
         for line in expected_result:
             line = line.replace('\n', '')
             self.assertIn(line, help_text)
 
-
-
     def test_definition_to_message(self):
         """Test definitions to message renderer."""
         help_text = definitions_help.definition_to_message(
             self.test_definition).to_text()
-        expected_result = self.get_control_text(
+        expected_result = get_control_text(
             'test-definition-to-message-response.txt')
 
         for line in expected_result:
             line = line.replace('\n', '')
             self.assertIn(line, help_text)
-
-    def get_control_text(self, file_name):
-        """Helper to get control text for string compares.
-
-        :param file_name: filename
-        :type file_name: str
-
-        :returns: A string containing the contents of the file.
-        """
-        control_file_path = standard_data_path(
-            'control',
-            'files',
-            file_name
-            )
-        expected_result = codecs.open(
-            control_file_path,
-            mode='r',
-            encoding='utf-8').readlines()
-        return expected_result
-
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestDefinitionsHelp, 'test')

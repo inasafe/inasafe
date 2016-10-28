@@ -79,7 +79,7 @@ class StepKwField(WizardStep, FORM_CLASS):
         if self.parent.step_kw_purpose.\
                 selected_purpose() == layer_purpose_aggregation:
             # Aggregation layer
-            return self.parent.step_kw_aggregation
+            return self.parent.step_kw_inasafe_fields
 
         if self.parent.step_kw_layermode.\
                 selected_layermode() == layer_mode_classified:
@@ -90,7 +90,7 @@ class StepKwField(WizardStep, FORM_CLASS):
                 return self.parent.step_kw_classify
 
         # Any other case
-        return self.parent.step_kw_extrakeywords
+        return self.parent.step_kw_inasafe_fields
 
     # noinspection PyPep8Naming
     def on_lstFields_itemSelectionChanged(self):

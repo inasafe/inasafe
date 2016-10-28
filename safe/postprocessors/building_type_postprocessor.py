@@ -17,8 +17,8 @@ __license__ = "GPL"
 __copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
-from safe.definitionsv4.value_maps import structure_class_mapping, \
-    structure_class_order
+from safe.definitionsv4.exposure_classifications import (
+    generic_structure_classes, structure_class_order)
 from safe.postprocessors.abstract_building_road_type_postprocessor import \
     AbstractBuildingRoadTypePostprocessor
 from safe.utilities.i18n import tr
@@ -40,7 +40,9 @@ class BuildingTypePostprocessor(AbstractBuildingRoadTypePostprocessor):
         AbstractBuildingRoadTypePostprocessor.__init__(self)
         self._description = tr('Calculates building types related statistics.')
         self._labels = {
-            item['key']: item['name'] for item in structure_class_mapping}
+            item['key']: item['name']
+            for item in generic_structure_classes['classes']
+            }
         self._order = structure_class_order
 
     @staticmethod

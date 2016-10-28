@@ -1,7 +1,5 @@
 # coding=utf-8
-"""
-Definitions relating to fields.
-"""
+"""Definitions relating to fields."""
 
 from PyQt4.QtCore import QVariant
 
@@ -24,6 +22,7 @@ exposure_id_field = {
     'type': QVariant.Int,
     'length': default_field_length,
     'precision': 0,
+    'absolute': False,
     'description': tr(
         'Attribute where the exposure ID of the feature is located.'),
     'citations': [
@@ -31,7 +30,9 @@ exposure_id_field = {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
 }
 # Exposure Name Field
 exposure_name_field = {
@@ -41,6 +42,7 @@ exposure_name_field = {
     'type': QVariant.String,
     'length': default_field_length,
     'precision': 0,
+    'absolute': False,
     'description': tr(
         'Attribute where the exposure name of the feature is located.'),
     'citations': [
@@ -48,7 +50,31 @@ exposure_name_field = {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+
+# Exposure Type
+exposure_type_field = {
+    'key': 'exposure_type_field',
+    'name': tr('Exposure Type'),
+    'field_name': 'exposure_type',
+    'type': QVariant.String,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': False,
+    'description': tr(
+        'Attribute where the exposure type of the feature is located.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
 }
 
 
@@ -60,6 +86,7 @@ exposure_class_field = {
     'type': QVariant.String,
     'length': default_field_length,
     'precision': 0,
+    'absolute': False,
     'description': tr(
         'Attribute where the exposure class of the feature is located.'),
     'citations': [
@@ -67,7 +94,9 @@ exposure_class_field = {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
 }
 
 # Population Count
@@ -78,13 +107,16 @@ population_count_field = {
     'type': QVariant.Int,
     'length': default_field_length,
     'precision': 0,
+    'absolute': True,
     'description': tr('Attribute where the number of population is located.'),
     'citations': [
         {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
 }
 
 # Feature Value
@@ -95,13 +127,16 @@ feature_value_field = {
     'type': QVariant.Double,
     'length': default_field_length,
     'precision': default_field_precision,
+    'absolute': True,
     'description': tr('Attribute where the value of the feature is located.'),
     'citations': [
         {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
 }
 
 # Feature Rate
@@ -112,6 +147,7 @@ feature_rate_field = {
     'type': QVariant.Double,
     'length': default_field_length,
     'precision': default_field_precision,
+    'absolute': False,
     'description': tr(
         'Attribute where the rate value of the feature is located. A rate '
         'value is the cost per unit of measure (m2 / m) for the feature.'),
@@ -120,7 +156,9 @@ feature_rate_field = {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': True
 }
 
 # Hazard
@@ -132,6 +170,7 @@ hazard_id_field = {
     'type': QVariant.Int,
     'length': default_field_length,
     'precision': 0,
+    'absolute': False,
     'description': tr(
         'Attribute where the hazard ID of the feature is located.'),
     'citations': [
@@ -139,7 +178,9 @@ hazard_id_field = {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
 }
 
 # Hazard name
@@ -150,6 +191,7 @@ hazard_name_field = {
     'type': QVariant.String,
     'length': default_field_length,
     'precision': 0,
+    'absolute': False,
     'description': tr(
         'Attribute where the hazard name of the feature is located.'),
     'citations': [
@@ -157,7 +199,9 @@ hazard_name_field = {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
 }
 
 # Hazard Value
@@ -168,6 +212,7 @@ hazard_value_field = {
     'type': [QVariant.String, QVariant.Int, QVariant.Double],
     'length': default_field_length,
     'precision': 0,
+    'absolute': False,
     'description': tr(
         'Attribute where the hazard value of the feature is located.'),
     'citations': [
@@ -175,7 +220,9 @@ hazard_value_field = {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
 }
 
 # Aggregation
@@ -187,6 +234,7 @@ aggregation_id_field = {
     'type': QVariant.Int,
     'length': default_field_length,
     'precision': 0,
+    'absolute': False,
     'description': tr(
         'Attribute where the aggregation ID of the feature is located.'),
     'citations': [
@@ -194,7 +242,9 @@ aggregation_id_field = {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
 }
 
 # Aggregation Name
@@ -205,6 +255,7 @@ aggregation_name_field = {
     'type': QVariant.String,
     'length': default_field_length,
     'precision': 0,
+    'absolute': False,
     'description': tr(
         'Attribute where the aggregation name of the feature is located.'),
     'citations': [
@@ -212,7 +263,9 @@ aggregation_name_field = {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
 }
 
 # Female Ratio
@@ -223,13 +276,16 @@ female_ratio_field = {
     'type': QVariant.Double,
     'length': default_field_length,
     'precision': default_field_precision,
+    'absolute': False,
     'description': tr('Attribute where the ratio of women is located.'),
     'citations': [
         {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': True
 }
 
 # Youth Ratio
@@ -240,13 +296,16 @@ youth_ratio_field = {
     'type': QVariant.Double,
     'length': default_field_length,
     'precision': default_field_precision,
+    'absolute': False,
     'description': tr('Attribute where the ratio of youth people is located.'),
     'citations': [
         {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': True
 }
 
 # Adult Ratio
@@ -257,13 +316,16 @@ adult_ratio_field = {
     'type': QVariant.Double,
     'length': default_field_length,
     'precision': default_field_precision,
+    'absolute': False,
     'description': tr('Attribute where the ratio of adult people is located.'),
     'citations': [
         {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': True
 }
 
 # elderly Ratio
@@ -274,6 +336,7 @@ elderly_ratio_field = {
     'type': QVariant.Double,
     'length': default_field_length,
     'precision': default_field_precision,
+    'absolute': False,
     'description': tr(
         'Attribute where the ratio of elderly people is located.'),
     'citations': [
@@ -281,7 +344,9 @@ elderly_ratio_field = {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': True
 }
 
 # Impact
@@ -293,6 +358,7 @@ hazard_class_field = {
     'type': QVariant.String,
     'length': default_field_length,
     'precision': 0,
+    'absolute': False,
     'description': tr(
         'Attribute where the hazard class of the feature is located.'),
     'citations': [
@@ -300,7 +366,9 @@ hazard_class_field = {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
 }
 
 # Women Count
@@ -311,6 +379,7 @@ women_count_field = {
     'type': QVariant.Int,
     'length': default_field_length,
     'precision': 0,
+    'absolute': True,
     'description': tr(
         'Attribute where the number of women of the feature is located.'),
     'citations': [
@@ -318,7 +387,9 @@ women_count_field = {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
 }
 
 # Youth Count
@@ -329,6 +400,7 @@ youth_count_field = {
     'type': QVariant.Int,
     'length': default_field_length,
     'precision': 0,
+    'absolute': True,
     'description': tr(
         'Attribute where the number of youth people of the feature is located.'
     ),
@@ -337,7 +409,9 @@ youth_count_field = {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
 }
 
 # Adult Count
@@ -348,6 +422,7 @@ adult_count_field = {
     'type': QVariant.Int,
     'length': default_field_length,
     'precision': 0,
+    'absolute': True,
     'description': tr(
         'Attribute where the number of adult people of the feature is located.'
     ),
@@ -356,7 +431,9 @@ adult_count_field = {
             'text': None,
             'link': None
         }
-    ]
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
 }
 
 # Elderly Count
@@ -367,10 +444,117 @@ elderly_count_field = {
     'type': QVariant.Int,
     'length': default_field_length,
     'precision': 0,
+    'absolute': True,
     'description': tr(
         'Attribute where the number of elderly people of the feature is '
         'located.'
     ),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+# Size
+size_field = {
+    'key': 'size_field',
+    'name': tr('Geometric Size'),
+    'field_name': 'size',
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': 2,
+    'absolute': True,
+    'description': tr(
+        'Attribute where the size of the gemetry is located.'
+    ),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+
+# Total per aggregation area
+total_field = {
+    'key': 'total_field',
+    'name': tr('Total'),
+    'field_name': 'total',
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': 2,
+    'absolute': False,
+    'description': tr(
+        'Attribute where the total of the total is located.'
+    ),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+# Special dynamic field for each exposure type in the aggregate hazard table.
+exposure_count_field = {
+    'key': '%s_exposure_field',
+    'name': tr('Total %s'),
+    'field_name': '%s_count',
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': 2,
+    'absolute': True,
+    'description': tr(
+        'Attribute where the total of the count is located.'
+    ),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+# Fields for the analysis layer
+analysis_id_field = {
+    'key': 'analysis_id_field',
+    'name': tr('Analysis ID'),
+    'field_name': 'analysis_id',
+    'type': QVariant.Int,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': False,
+    'description': tr(
+        'Attribute where the analysis ID of the feature is located.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+
+analysis_name_field = {
+    'key': 'analysis_name_field',
+    'name': tr('Analysis Name'),
+    'field_name': 'analysis_name',
+    'type': QVariant.String,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': False,
+    'description': tr(
+        'Attribute where the analysis name of the feature is located.'),
     'citations': [
         {
             'text': None,
@@ -381,8 +565,7 @@ elderly_count_field = {
 
 exposure_fields = [
     exposure_id_field,
-    exposure_class_field,
-    population_count_field,
+    exposure_type_field,
     feature_value_field,
     feature_rate_field
 ]
@@ -390,7 +573,6 @@ exposure_fields = [
 hazard_fields = [
     hazard_id_field,
     hazard_value_field,
-    hazard_class_field
 ]
 
 aggregation_fields = [
@@ -405,11 +587,11 @@ aggregation_fields = [
 impact_fields = [
     exposure_id_field,
     exposure_class_field,
+    hazard_id_field,
+    hazard_class_field,
     population_count_field,
     feature_value_field,
     feature_rate_field,
-    hazard_id_field,
-    hazard_class_field,
     aggregation_id_field,
     aggregation_name_field,
     female_ratio_field,
@@ -419,98 +601,29 @@ impact_fields = [
     women_count_field,
     youth_count_field,
     adult_count_field,
-    elderly_count_field
+    elderly_count_field,
+    size_field,
 ]
 
-# Used by earthquake
+aggregate_hazard_fields = [
+    aggregation_id_field,
+    aggregation_name_field,
+    hazard_id_field,
+    hazard_class_field,
+    exposure_count_field,
+    total_field,
+]
+
+analysis_fields = [
+    analysis_id_field,
+    analysis_name_field,
+]
+
+# Used by earthquake, please remove after we remove the earthquake
 structure_class_field = {
     'key': 'structure_class_field',
     'name': tr('Attribute field'),
     'description': tr('Attribute where the structure type is defined.'),
-    'citations': [
-        {
-            'text': None,
-            'link': None
-        }
-    ]
-}
-
-road_class_field = {
-    'key': 'road_class_field',
-    'name': tr('Attribute field'),
-    'description': tr('Attribute where the road type is defined.'),
-    'citations': [
-        {
-            'text': None,
-            'link': None
-        }
-    ]
-}
-
-volcano_name_field = {
-    'key': 'volcano_name_field',
-    'name': tr('Volcano name field'),
-    'type': 'field',
-    'description': tr('Attribute where the volcano name is located.'),
-    'citations': [
-        {
-            'text': None,
-            'link': None
-        }
-    ]
-}
-
-area_name_field = {
-    'key': 'area_name_field',
-    'name': tr('Name field'),
-    'type': 'field',
-    'description': tr(
-            'Attribute for the area name. We will show the name for each area '
-            'by using this attribute.'),
-    'citations': [
-        {
-            'text': None,
-            'link': None
-        }
-    ]
-}
-
-area_id_field = {
-    'key': 'area_id_field',
-    'name': tr('Id field'),
-    'type': 'field',
-    'description': tr(
-            'Attribute for the id on the area. We will group the result by '
-            'this attribute'),
-    'citations': [
-        {
-            'text': None,
-            'link': None
-        }
-    ]
-}
-
-field = {
-    'key': 'field',
-    'name': tr('Attribute field'),
-    'description': tr(
-        'The attribute field identifies a field in the attribute table used '
-        'to identify the function of a feature e.g.  a road type, '
-        'building type, hazard zone etc.'),
-    'citations': [
-        {
-            'text': None,
-            'link': None
-        }
-    ]
-}
-
-field_value = {
-    'key': 'field_value',
-    'name': tr('Attribute value'),
-    'description': tr(
-        'The attribute value identifies features with similar meanings. For '
-        'example building attributes may include schools and hospitals. '),
     'citations': [
         {
             'text': None,

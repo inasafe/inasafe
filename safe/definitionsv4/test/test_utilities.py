@@ -21,12 +21,10 @@ from safe.definitionsv4 import (
     unit_feet,
     unit_generic,
     exposure_fields,
-    exposure_class_field,
-    hazard_class_field,
     hazard_fields,
-    hazard_value_field,
     flood_hazard_classes,
-    generic_hazard_classes
+    generic_hazard_classes,
+    aggregation_fields
 )
 
 from safe.definitionsv4.utilities import (
@@ -38,7 +36,7 @@ from safe.definitionsv4.utilities import (
     hazard_units,
     exposure_units,
     get_fields,
-    get_hazard_classifications
+    get_classifications
 )
 
 
@@ -140,21 +138,38 @@ class TestDefinitionsUtilities(unittest.TestCase):
         self.maxDiff = None
         expected = [flood_hazard_classes, generic_hazard_classes]
         self.assertItemsEqual(
-            get_hazard_classifications('flood'), expected)
+            get_classifications('flood'), expected)
 
     def test_get_fields(self):
         """Test get_fields method."""
         fields = get_fields('exposure', 'structure')
         expected_fields = exposure_fields + exposure_structure['extra_fields']
-        expected_fields.remove(exposure_class_field)
         self.assertListEqual(fields, expected_fields)
 
         fields = get_fields('hazard', 'flood')
         expected_fields = hazard_fields + hazard_flood['extra_fields']
-        expected_fields.remove(hazard_class_field)
-        expected_fields.remove(hazard_value_field)
         self.assertListEqual(fields, expected_fields)
 
+        fields = get_fields('hazard')
+        expected_fields = hazard_fields
+        self.assertListEqual(fields, expected_fields)
+
+        fields = get_fields('exposure')
+        expected_fields = exposure_fields
+        self.assertListEqual(fields, expected_fields)
+
+        fields = get_fields('aggregation')
+        expected_fields = aggregation_fields
+        self.assertListEqual(fields, expected_fields)
+
+        fields = get_fields('aggregation', replace_null=True)
+        expected_fields = [f for f in aggregation_fields if f['replace_null']]
+        self.assertListEqual(fields, expected_fields)
+
+        fields = get_fields('aggregation', replace_null=False)
+        expected_fields = [
+            f for f in aggregation_fields if not f['replace_null']]
+        self.assertListEqual(fields, expected_fields)
 
 if __name__ == '__main__':
     unittest.main()

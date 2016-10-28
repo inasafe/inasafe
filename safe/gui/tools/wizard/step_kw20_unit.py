@@ -69,7 +69,7 @@ class StepKwUnit(WizardStep, FORM_CLASS):
                 # Only go to resample for continuous raster exposures
                 new_step = self.parent.step_kw_resample
             else:
-                new_step = self.parent.step_kw_extrakeywords
+                new_step = self.parent.step_kw_inasafe_fields
         else:
             # Currently not used, as we don't have continuous vectors
             new_step = self.parent.step_kw_field

@@ -56,7 +56,8 @@ def check_format(field):
         'length': int,
         'type': qvariant_type,
         'description': basestring,
-        'citations': list
+        'citations': list,
+        'replace_null': bool
     }
     for key, value in mandatory_format.items():
         if key in field.keys():

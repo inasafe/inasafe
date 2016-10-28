@@ -12,7 +12,7 @@ from qgis.core import QgsFeatureRequest
 from safe.gisv4.raster.polygonize import polygonize
 from safe.definitionsv4.layer_geometry import (
     layer_geometry, layer_geometry_polygon)
-from safe.definitionsv4.fields import hazard_class_field
+from safe.definitionsv4.fields import hazard_value_field
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -36,7 +36,7 @@ class TestPolygonizeRaster(unittest.TestCase):
         expected_keywords[
             layer_geometry['key']] = layer_geometry_polygon['key']
         expected_keywords['inasafe_fields'] = {
-            hazard_class_field['key']: hazard_class_field['field_name'][0:10]}
+            hazard_value_field['key']: hazard_value_field['field_name'][0:10]}
 
         polygonized = polygonize(layer)
 
@@ -52,7 +52,7 @@ class TestPolygonizeRaster(unittest.TestCase):
         }
 
         inasafe_fields = polygonized.keywords.get('inasafe_fields')
-        field_name = inasafe_fields.get(hazard_class_field['key'])
+        field_name = inasafe_fields.get(hazard_value_field['key'])
 
         for value, count in expected_count.iteritems():
             expression = '"%s" = \'%s\'' % (field_name, value)

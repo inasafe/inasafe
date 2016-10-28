@@ -23,8 +23,9 @@ from osgeo.gdalconst import GA_ReadOnly
 
 from safe.definitionsv4.exposure import (
     exposure_road, exposure_structure, exposure_place)
-from safe.definitionsv4.value_maps import (
-    road_class_mapping, structure_class_mapping, place_class_mapping)
+from safe.definitionsv4.exposure_classifications import (
+    generic_structure_classes, generic_road_classes, generic_place_classes
+)
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_strings import (
@@ -87,7 +88,7 @@ class StepKwClassify(WizardStep, FORM_CLASS):
         if selected_subcategory == exposure_place:
             new_step = self.parent.step_kw_name_field
         else:
-            new_step = self.parent.step_kw_extrakeywords
+            new_step = self.parent.step_kw_inasafe_fields
         return new_step
 
     def postprocessor_classification_for_layer(self):
@@ -118,11 +119,11 @@ class StepKwClassify(WizardStep, FORM_CLASS):
         selected_subcategory = self.parent.step_kw_subcategory.\
             selected_subcategory()
         if selected_subcategory == exposure_road:
-            return road_class_mapping
+            return generic_road_classes['classes']
         elif selected_subcategory == exposure_structure:
-            return structure_class_mapping
+            return generic_structure_classes['classes']
         elif selected_subcategory == exposure_place:
-            return place_class_mapping
+            return generic_place_classes['classes']
         else:
             return None
 
@@ -221,10 +222,14 @@ class StepKwClassify(WizardStep, FORM_CLASS):
             value_as_string = unicode(unique_value).upper().replace('_', ' ')
             assigned = False
             for default_class in default_classes:
-                condition_1 = (
-                    field_type > 9 and
-                    value_as_string in [
-                        c.upper() for c in default_class['string_defaults']])
+                if 'string_defaults' in default_class:
+                    condition_1 = (
+                        field_type > 9 and
+                        value_as_string in [
+                            c.upper() for c in
+                            default_class['string_defaults']])
+                else:
+                    condition_1 = False
                 condition_2 = (
                     field_type < 10 and
                     'numeric_default_min' in default_class and

@@ -7,6 +7,7 @@ import sys
 import hashlib
 import logging
 import shutil
+import inspect
 from tempfile import mkdtemp
 from os.path import exists, splitext, basename, join
 from itertools import izip
@@ -29,6 +30,7 @@ from safe.utilities.clipper import extent_to_geoarray, clip_layer
 from safe.utilities.gis import get_wgs84_resolution
 from safe.utilities.metadata import read_iso19115_metadata
 from safe.utilities.keyword_io import KeywordIO
+import codecs
 
 QGIS_APP = None  # Static variable used to hold hand to running QGIS app
 CANVAS = None
@@ -216,15 +218,50 @@ def standard_data_path(*args):
     return path
 
 
+def load_local_vector_layer(test_file, **kwargs):
+    """Return the test vector layer.
+
+    See documentation of load_path_vector_layer
+
+    :param test_file: The file to load in the data directory next to the file.
+    :type test_file: str
+
+    :param kwargs: It can be :
+        clone=True if you want to copy the layer first to a temporary file.
+
+        clone_to_memory=True if you want to create a memory layer.
+
+        with_keywords=False if you do not want keywords. "clone_to_memory" is
+            required.
+
+    :type kwargs: dict
+
+    :return: The vector layer.
+    :rtype: QgsVectorLayer
+
+    .. versionadded:: 4.0
+    """
+    caller_path = inspect.getouterframes(inspect.currentframe())[1][1]
+    path = os.path.join(os.path.dirname(caller_path), 'data', test_file)
+    return load_path_vector_layer(path, **kwargs)
+
+
 def load_test_vector_layer(*args, **kwargs):
     """Return the test vector layer.
+
+    See documentation of load_path_vector_layer
 
     :param args: List of path e.g. ['exposure', 'buildings.shp'.
     :type args: list
 
     :param kwargs: It can be :
         clone=True if you want to copy the layer first to a temporary file.
+
         clone_to_memory=True if you want to create a memory layer.
+
+        with_keywords=False if you do not want keywords. "clone_to_memory" is
+            required.
+
     :type kwargs: dict
 
     :return: The vector layer.
@@ -233,33 +270,61 @@ def load_test_vector_layer(*args, **kwargs):
     .. versionadded:: 4.0
     """
     path = standard_data_path(*args)
+    return load_path_vector_layer(path, **kwargs)
+
+
+def load_path_vector_layer(path, **kwargs):
+    """Return the test vector layer.
+
+    :param path: Path to the vector layer.
+    :type path: str
+
+    :param kwargs: It can be :
+        clone=True if you want to copy the layer first to a temporary file.
+
+        clone_to_memory=True if you want to create a memory layer.
+
+        with_keywords=False if you do not want keywords. "clone_to_memory" is
+            required.
+
+    :type kwargs: dict
+
+    :return: The vector layer.
+    :rtype: QgsVectorLayer
+
+    .. versionadded:: 4.0
+    """
     name = splitext(basename(path))[0]
     extension = splitext(path)[1]
 
     extensions = [
         '.shp', '.shx', '.dbf', '.prj', '.gpkg', '.geojson', '.xml', '.qml']
 
-    if 'clone' in kwargs.keys():
-        if kwargs['clone']:
-            target_directory = mkdtemp()
-            current_path = splitext(path)[0]
-            path = join(target_directory, name + extension)
+    if kwargs.get('with_keywords'):
+        if not kwargs.get('clone_to_memory'):
+            raise Exception('with_keywords needs a clone_to_memory')
 
-            for ext in extensions:
-                src_path = current_path + ext
-                if exists(src_path):
-                    target_path = join(target_directory, name + ext)
-                    shutil.copy2(src_path, target_path)
+    if kwargs.get('clone', False):
+        target_directory = mkdtemp()
+        current_path = splitext(path)[0]
+        path = join(target_directory, name + extension)
+
+        for ext in extensions:
+            src_path = current_path + ext
+            if exists(src_path):
+                target_path = join(target_directory, name + ext)
+                shutil.copy2(src_path, target_path)
 
     layer = QgsVectorLayer(path, name, 'ogr')
     monkey_patch_keywords(layer)
 
-    if 'clone_to_memory' in kwargs.keys():
+    if kwargs.get('clone_to_memory', False):
         keywords = layer.keywords.copy()
         memory_layer = create_memory_layer(
             name, layer.geometryType(), layer.crs(), layer.fields())
         copy_layer(layer, memory_layer)
-        memory_layer.keywords = keywords
+        if kwargs.get('with_keywords', True):
+            memory_layer.keywords = keywords
         return memory_layer
     else:
         return layer
@@ -327,9 +392,9 @@ def load_layer(layer_path):
         pass
 
     # Create QGis Layer Instance
-    if extension in ['.asc', '.tif']:
+    if extension in ['.asc', '.tif', '.tiff']:
         layer = QgsRasterLayer(layer_path, base_name)
-    elif extension in ['.shp']:
+    elif extension in ['.shp', '.geojson', '.gpkg']:
         layer = QgsVectorLayer(layer_path, base_name, 'ogr')
     else:
         message = 'File %s had illegal extension' % layer_path
@@ -339,9 +404,7 @@ def load_layer(layer_path):
     message = 'Layer "%s" is not valid' % layer.source()
     # noinspection PyUnresolvedReferences
     if not layer.isValid():
-        LOGGER.log(message)
-    # noinspection PyUnresolvedReferences
-    if not layer.isValid():
+        LOGGER.debug(message)
         raise Exception(message)
 
     monkey_patch_keywords(layer)
@@ -786,20 +849,20 @@ def load_standard_layers(dock=None):
         standard_data_path('hazard', 'floods.shp'),
         standard_data_path('hazard', 'classified_generic_polygon.shp'),
         standard_data_path('hazard', 'volcano_krb.shp'),
-        standard_data_path('hazard', 'volcano_point.shp'),
         standard_data_path('hazard', 'classified_flood_20_20.asc'),
         standard_data_path('hazard', 'continuous_flood_20_20.asc'),
         standard_data_path('hazard', 'tsunami_wgs84.tif'),
         standard_data_path('hazard', 'earthquake.tif'),
         standard_data_path('hazard', 'ash_raster_wgs84.tif'),
+        standard_data_path('hazard', 'volcano_point.geojson'),
         standard_data_path('exposure', 'building-points.shp'),
         standard_data_path('exposure', 'buildings.shp'),
         standard_data_path('exposure', 'census.shp'),
         standard_data_path('exposure', 'roads.shp'),
-        standard_data_path('exposure', 'landcover.shp'),
+        standard_data_path('exposure', 'landcover.geojson'),
         standard_data_path('exposure', 'pop_binary_raster_20_20.asc'),
-        standard_data_path('boundaries', 'grid_jakarta.shp'),
-        standard_data_path('boundaries', 'district_osm_jakarta.shp'),
+        standard_data_path('aggregation', 'grid_jakarta.geojson'),
+        standard_data_path('aggregation', 'district_osm_jakarta.geojson'),
     ]
     hazard_layer_count, exposure_layer_count = load_layers(
         file_list, dock=dock)
@@ -1102,3 +1165,23 @@ def clip_layers(first_layer_path, second_layer_path):
         cell_size=cell_size)
 
     return clipped_first_layer, clipped_second_layer
+
+
+def get_control_text(file_name):
+    """Helper to get control text for string compares.
+
+    :param file_name: filename
+    :type file_name: str
+
+    :returns: A string containing the contents of the file.
+    """
+    control_file_path = standard_data_path(
+        'control',
+        'files',
+        file_name
+    )
+    expected_result = codecs.open(
+        control_file_path,
+        mode='r',
+        encoding='utf-8').readlines()
+    return expected_result

@@ -356,6 +356,11 @@ class InsufficientMemoryWarning(InaSAFEError):
     pass
 
 
+class InvalidKeywordsForProcessingAlgorithm(InaSAFEError):
+    """Raised if the algorithm don't have proper keywords to run."""
+    pass
+
+
 class InvalidAggregationKeywords(InaSAFEError):
     """Raised when the aggregation keywords is invalid."""
     pass
@@ -429,4 +434,9 @@ class MissingImpactReport(InaSAFEError):
 
 class ErrorDataStore(InaSAFEError):
     """When the datastore has an error."""
+    pass
+
+
+class InvalidWizardStep(InaSAFEError):
+    """When there is an invalid wizard step."""
     pass

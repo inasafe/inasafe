@@ -5,8 +5,10 @@ Tools for vector layers.
 """
 
 from uuid import uuid4
+from PyQt4.QtCore import QSettings
 from qgis.core import (
     QgsVectorLayer,
+    QgsFeatureRequest,
     QgsCoordinateReferenceSystem,
     QGis,
     QgsFeature,
@@ -15,6 +17,7 @@ from qgis.core import (
 )
 
 from safe.common.exceptions import MemoryLayerCreationError
+from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -44,6 +47,7 @@ for key, value in list(wkb_type_groups.items()):
         wkb_type_groups[const] = key
 
 
+@profile
 def create_memory_layer(
         layer_name, geometry, coordinate_reference_system, fields=None):
     """Create a vector memory layer.
@@ -65,11 +69,11 @@ def create_memory_layer(
     """
 
     if geometry == QGis.Point:
-        type_string = 'Point'
+        type_string = 'MultiPoint'
     elif geometry == QGis.Line:
-        type_string = 'Line'
+        type_string = 'MultiLineString'
     elif geometry == QGis.Polygon:
-        type_string = 'Polygon'
+        type_string = 'MultiPolygon'
     else:
         raise MemoryLayerCreationError(
             'Layer is whether Point nor Line nor Polygon, I got %s' % geometry)
@@ -87,6 +91,7 @@ def create_memory_layer(
     return memory_layer
 
 
+@profile
 def copy_layer(source, target):
     """Copy a vector layer to another one.
 
@@ -97,15 +102,27 @@ def copy_layer(source, target):
     :type source: QgsVectorLayer
     """
     out_feature = QgsFeature()
-    data_provider = target.dataProvider()
+    target.startEditing()
 
-    for i, feature in enumerate(source.getFeatures()):
+    request = QgsFeatureRequest()
+
+    if source.keywords.get('layer_purpose') == 'aggregation':
+        settings = QSettings()
+        flag = bool(settings.value(
+            'inasafe/useSelectedFeaturesOnly', False, type=bool))
+        if flag:
+            request.setFilterFids(source.selectedFeaturesIds())
+
+    for i, feature in enumerate(source.getFeatures(request)):
         geom = feature.geometry()
         out_feature.setGeometry(geom)
         out_feature.setAttributes(feature.attributes())
-        data_provider.addFeatures([out_feature])
+        target.addFeature(out_feature)
+
+    target.commitChanges()
 
 
+@profile
 def copy_fields(layer, fields_to_copy):
     """Copy fields inside an attribute table.
 
@@ -140,6 +157,7 @@ def copy_fields(layer, fields_to_copy):
             layer.updateFields()
 
 
+@profile
 def remove_fields(layer, fields_to_remove):
     """Remove fields from a vector layer.
 

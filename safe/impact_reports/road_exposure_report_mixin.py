@@ -13,7 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 from collections import OrderedDict
 
-from safe.definitionsv4.value_maps import road_class_order
+from safe.definitionsv4.exposure_classifications import road_class_order
 from safe.impact_reports.report_mixin_base import ReportMixin
 from safe.utilities.i18n import tr
 from safe.utilities.utilities import reorder_dictionary
@@ -88,7 +88,7 @@ class RoadExposureReportMixin(ReportMixin):
         :param usage: The main usage of the road.
         :type usage: str
 
-        :param length: The length of the road, in meters.
+        :param length: The length of the road, in metres.
         :type length: float
 
         :param affected: If the road is affected or not.

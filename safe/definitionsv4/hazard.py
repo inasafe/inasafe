@@ -86,7 +86,7 @@ hazard_generic = {
         'polygon',
         'raster'
     ],
-    'hazard_classifications': [generic_hazard_classes],
+    'classifications': [generic_hazard_classes],
     'fields': hazard_fields,
     'extra_fields': []
 }
@@ -123,7 +123,7 @@ hazard_earthquake = {
         'polygon',
         'raster'
     ],
-    'hazard_classifications': [generic_hazard_classes],
+    'classifications': [generic_hazard_classes],
     'fields': hazard_fields,
     'extra_fields': [],
     'layer_modes': [layer_mode_classified, layer_mode_continuous]
@@ -164,7 +164,7 @@ hazard_flood = {
         'polygon',
         'raster'
     ],
-    'hazard_classifications': [flood_hazard_classes, generic_hazard_classes],
+    'classifications': [flood_hazard_classes, generic_hazard_classes],
     'fields': hazard_fields,
     'extra_fields': [],
     'layer_modes': [layer_mode_classified, layer_mode_continuous]
@@ -202,7 +202,7 @@ hazard_volcanic_ash = {
         'polygon',
         'raster'
     ],
-    'hazard_classifications': [ash_hazard_classes, generic_hazard_classes],
+    'classifications': [ash_hazard_classes, generic_hazard_classes],
     'fields': hazard_fields,
     'extra_fields': [],
     'layer_modes': [layer_mode_classified, layer_mode_continuous]
@@ -242,7 +242,7 @@ hazard_tsunami = {
         'polygon',
         'raster'
     ],
-    'hazard_classifications': [tsunami_hazard_classes, generic_hazard_classes],
+    'classifications': [tsunami_hazard_classes, generic_hazard_classes],
     'fields': hazard_fields,
     'extra_fields': [],
     'layer_modes': [layer_mode_classified, layer_mode_continuous]
@@ -282,7 +282,7 @@ hazard_volcano = {
         'raster',
         'point'
     ],
-    'hazard_classifications': [volcano_hazard_classes, generic_hazard_classes],
+    'classifications': [volcano_hazard_classes, generic_hazard_classes],
     'fields': hazard_fields,
     'extra_fields': [hazard_name_field],
     'layer_modes': [layer_mode_classified, layer_mode_continuous]

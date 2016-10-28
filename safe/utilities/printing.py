@@ -27,7 +27,7 @@ def points_to_mm(points, dpi):
 
 
 def dpi_to_meters(dpi):
-    """Convert dots per inch (dpi) to dots per meters.
+    """Convert dots per inch (dpi) to dots per metres.
 
     :param dpi: Dots per inch in the print / display medium.
     :type dpi: int, float

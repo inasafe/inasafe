@@ -1,0 +1,53 @@
+{
+  "scenario": {
+    "hazard": "flood_multipart_polygons.shp",
+    "exposure": "building-points.shp",
+    "aggregation": null
+  },
+
+
+  "expected":{
+    "impact function":{
+      "info": {},
+      "process":[
+        "Run impact function",
+        "Union exposure features to the aggregate hazard",
+        "Aggregate the impact summary"
+      ]
+    },
+    "post_processor":{
+      "info": {},
+      "process":[
+        "Post processor for Size Rate Post Processor"
+      ]
+    },
+    "aggregation":{
+      "info": {
+        "provided":false
+      },
+      "process":[
+        "Convert bbox aggregation to polygon layer with keywords",
+        "Convert the aggregation layer to the analysis layer",
+        "Union hazard polygons with aggregation areas and assign hazard class"
+      ]
+    },
+    "hazard":{
+      "info": {},
+      "process":[
+        "Cleaning the vector hazard attribute table",
+        "Assign classes based on value map",
+        "Classified polygon hazard with keywords",
+        "Vector clip and mask hazard to aggregation",
+        "Clip and mask hazard polygons with the analysis layer"
+      ]
+    },
+    "exposure":{
+      "info": {},
+      "process":[
+        "Cleaning the vector exposure attribute table",
+        "Assign classes based on value map",
+        "Clip the exposure layer with the analysis layer"
+      ]
+    }
+  }
+}

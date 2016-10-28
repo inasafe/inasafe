@@ -118,6 +118,7 @@ class KeywordIOTest(unittest.TestCase):
         self.keyword_io.update_keywords(layer, new_keywords)
         keywords = self.keyword_io.read_keywords(layer)
         expected_keywords = {
+            'classification': 'tsunami_hazard_classes',
             'hazard_category': 'multiple_event',
             'title': 'Tsunami',
             'hazard': 'tsunami',

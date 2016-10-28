@@ -2,7 +2,6 @@
 """Test for GIS utilities functions."""
 import unittest
 import numpy
-from os.path import join
 
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
@@ -21,6 +20,7 @@ from safe.test.utilities import (
     clone_shp_layer,
     compare_two_vector_layers,
     clone_raster_layer,
+    load_test_vector_layer,
     standard_data_path,
     load_layer,
     get_qgis_app)
@@ -34,10 +34,11 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 class TestQGIS(unittest.TestCase):
     def test_get_layer_attribute_names(self):
         """Test we can get the correct attributes back"""
-        layer = clone_shp_layer(
-            name='district_osm_jakarta',
-            include_keywords=True,
-            source_directory=standard_data_path('boundaries'))
+        layer = load_test_vector_layer(
+            'aggregation',
+            'district_osm_jakarta.geojson',
+            clone=True
+        )
 
         # with good attribute name
         attributes, position = layer_attribute_names(
@@ -82,18 +83,16 @@ class TestQGIS(unittest.TestCase):
     def test_is_polygonal_layer(self):
         """Test we can get the correct attributes back"""
         # Polygon layer
-        layer = clone_shp_layer(
-            name='district_osm_jakarta',
-            include_keywords=True,
-            source_directory=standard_data_path('boundaries'))
+        layer = load_test_vector_layer(
+            'aggregation',
+            'district_osm_jakarta.geojson',
+            clone=True
+        )
         message = 'isPolygonLayer, %s layer should be polygonal' % layer
         self.assertTrue(is_polygon_layer(layer), message)
 
         # Point layer
-        layer = clone_shp_layer(
-            name='volcano_point',
-            include_keywords=True,
-            source_directory=standard_data_path('hazard'))
+        layer = load_test_vector_layer('hazard', 'volcano_point.geojson')
         message = '%s layer should be polygonal' % layer
         self.assertFalse(is_polygon_layer(layer), message)
 

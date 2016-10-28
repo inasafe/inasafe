@@ -21,20 +21,20 @@ from safe.definitionsv4.versions import inasafe_keyword_version
 from safe.definitionsv4.layer_modes import (
     layer_mode_continuous, layer_mode_classified)
 from safe.definitionsv4.layer_purposes import (
-    layer_purpose_hazard, layer_purpose_exposure)
+    layer_purpose_hazard, layer_purpose_exposure, layer_purpose_aggregation)
 from safe.definitionsv4.hazard import hazard_volcano
 from safe.definitionsv4.exposure import exposure_structure
 from safe.definitionsv4.hazard_category import hazard_category_multiple_event
 from safe.definitionsv4.hazard_classifications import volcano_hazard_classes
-from safe.definitionsv4.constants import not_available
-from safe.definitionsv4.fields import (
-    hazard_name_field, hazard_class_field, exposure_class_field)
+from safe.definitionsv4.constants import no_field
+from safe.definitionsv4.fields import hazard_name_field, aggregation_name_field
 from safe.definitionsv4.layer_geometry import layer_geometry_polygon
-from safe.definitionsv4.value_maps import structure_class_mapping
+from safe.definitionsv4.exposure_classifications import (
+    generic_structure_classes)
 
 from safe.gui.tools.wizard.wizard_dialog import WizardDialog
 from safe.utilities.keyword_io import KeywordIO
-from safe.definitionsv4.utilities import definition
+from safe.definitionsv4.utilities import definition, get_class_field
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -84,9 +84,18 @@ class TestKeywordWizard(unittest.TestCase):
         :param list_widget: List widget that wants to be checked.
         :type list_widget: QListWidget
         """
-        # noinspection PyUnresolvedReferences
-        current_text = list_widget.currentItem().text()
-        self.assertEqual(expected_text, current_text)
+        try:
+            # noinspection PyUnresolvedReferences
+            current_text = list_widget.currentItem().text()
+            self.assertEqual(expected_text, current_text)
+        except AttributeError:
+            options = [
+                list_widget.item(i).text()
+                for i in range(list_widget.count())
+            ]
+            message = 'There is no %s in the available option %s' % (
+                expected_text, options)
+            self.assertFalse(True, message)
 
     # noinspection PyUnresolvedReferences
     def select_from_list_widget(self, option, list_widget):
@@ -98,11 +107,17 @@ class TestKeywordWizard(unittest.TestCase):
         :param list_widget: List widget that wants to be checked.
         :type list_widget: QListWidget
         """
+        available_options = []
         for i in range(list_widget.count()):
             if list_widget.item(i).text() == option:
                 list_widget.setCurrentRow(i)
                 return
-        message = 'There is no %s in the list widget' % option
+            else:
+                available_options.append(list_widget.item(i).text())
+        message = (
+            'There is no %s in the list widget. The available options are %'
+            's' % (option, available_options))
+
         raise Exception(message)
 
     def test_invalid_keyword_layer(self):
@@ -126,6 +141,7 @@ class TestKeywordWizard(unittest.TestCase):
             name='volcano_krb',
             include_keywords=False,
             source_directory=standard_data_path('hazard'))
+
         # noinspection PyTypeChecker
         dialog = WizardDialog()
         dialog.set_keywords_creation_mode(layer)
@@ -212,17 +228,17 @@ class TestKeywordWizard(unittest.TestCase):
         # Click next to finish value mapping
         dialog.pbnNext.click()
 
-        # select additional keywords / inasafe fields step
-        self.check_current_step(dialog.step_kw_extrakeywords)
+        # select inasafe fields step
+        self.check_current_step(dialog.step_kw_inasafe_fields)
 
         # Get the parameter widget for hazard name
-        hazard_name_parameter_widget = dialog.step_kw_extrakeywords.\
+        hazard_name_parameter_widget = dialog.step_kw_inasafe_fields.\
             parameter_container.get_parameter_widget_by_guid(
                 hazard_name_field['key'])
 
-        # Check if it's set to N/A at the beginning
+        # Check if it's set to no field at the beginning
         self.assertEqual(
-            not_available, hazard_name_parameter_widget.get_parameter().value)
+            no_field, hazard_name_parameter_widget.get_parameter().value)
 
         # Select volcano
         hazard_name_parameter_widget.set_choice('volcano')
@@ -231,7 +247,17 @@ class TestKeywordWizard(unittest.TestCase):
         self.assertEqual(
             'volcano', hazard_name_parameter_widget.get_parameter().value)
 
-        # Click next to finish inasafe fields step and go to source step
+        # Check if in InaSAFE field step
+        self.check_current_step(dialog.step_kw_inasafe_fields)
+
+        # Click next to finish inasafe fields step and go to inasafe default
+        # field step
+        dialog.pbnNext.click()
+
+        # Check if in InaSAFE Default field step
+        self.check_current_step(dialog.step_kw_default_inasafe_fields)
+
+        # Click next to finish InaSAFE Default Field step and go to source step
         dialog.pbnNext.click()
 
         # Check if in source step
@@ -282,12 +308,13 @@ class TestKeywordWizard(unittest.TestCase):
             'hazard': hazard_volcano['key'],
             'inasafe_fields':
                 {
-                    'hazard_class_field': u'KRB',
+                    'hazard_value_field': u'KRB',
                     'hazard_name_field': u'volcano',
                  },
+            'inasafe_default_values': {},
             'value_map': assigned_values,
             'date': source_date,
-            'hazard_classification': volcano_hazard_classes['key'],
+            'classification': volcano_hazard_classes['key'],
             'layer_geometry': layer_geometry_polygon['key'],
             'layer_purpose': layer_purpose_hazard['key'],
             'layer_mode': layer_mode_classified['key']
@@ -374,10 +401,10 @@ class TestKeywordWizard(unittest.TestCase):
         dialog.pbnNext.click()
 
         # select additional keywords / inasafe fields step
-        self.check_current_step(dialog.step_kw_extrakeywords)
+        self.check_current_step(dialog.step_kw_inasafe_fields)
 
         # Check inasafe fields
-        parameters = dialog.step_kw_extrakeywords. \
+        parameters = dialog.step_kw_inasafe_fields. \
             parameter_container.get_parameters(True)
 
         # Get layer's inasafe_fields
@@ -385,7 +412,7 @@ class TestKeywordWizard(unittest.TestCase):
         self.assertIsNotNone(inasafe_fields)
         for key, value in inasafe_fields.items():
             # Not check if it's hazard_class_field
-            if key == hazard_class_field['key']:
+            if key == get_class_field(layer_purpose_hazard['key'])['key']:
                 continue
             # Check if existing key in parameters guid
             self.assertIn(key, [p.guid for p in parameters])
@@ -398,13 +425,20 @@ class TestKeywordWizard(unittest.TestCase):
 
         for parameter in parameters:
             # If not available is chosen, inasafe_fields shouldn't have it
-            if parameter.value == not_available:
+            if parameter.value == no_field:
                 self.assertNotIn(parameter.guid, inasafe_fields.keys())
             # If not available is not chosen, inasafe_fields should have it
             else:
                 self.assertIn(parameter.guid, inasafe_fields.keys())
 
-        # Click next to finish inasafe fields step and go to source step
+        # Click next to finish inasafe fields step and go to inasafe default
+        # field step
+        dialog.pbnNext.click()
+
+        # Check if in InaSAFE Default field step
+        self.check_current_step(dialog.step_kw_default_inasafe_fields)
+
+        # Click next to finish InaSAFE Default Field step and go to source step
         dialog.pbnNext.click()
 
         # Check if in source step
@@ -423,7 +457,7 @@ class TestKeywordWizard(unittest.TestCase):
         self.check_current_step(dialog.step_kw_title)
 
         self.assertEqual(
-            dialog.layer.name(), dialog.step_kw_title.leTitle.text())
+            'Volcano KRB', dialog.step_kw_title.leTitle.text())
         self.assertTrue(dialog.pbnNext.isEnabled())
 
         # Click finish
@@ -477,6 +511,17 @@ class TestKeywordWizard(unittest.TestCase):
         # Click next to select classified
         dialog.pbnNext.click()
 
+        # Check if in select classification step
+        self.check_current_step(dialog.step_kw_classification)
+
+        # select generic structure classes classification
+        self.select_from_list_widget(
+            generic_structure_classes['name'],
+            dialog.step_kw_classification.lstClassifications)
+
+        # Click next to select the classifications
+        dialog.pbnNext.click()
+
         # Check if in select field step
         self.check_current_step(dialog.step_kw_field)
 
@@ -484,7 +529,7 @@ class TestKeywordWizard(unittest.TestCase):
         self.select_from_list_widget(
             'TYPE', dialog.step_kw_field.lstFields)
 
-        # Click next to select BUILDING
+        # Click next to select TYPE
         dialog.pbnNext.click()
 
         # Check if in classify step
@@ -495,7 +540,7 @@ class TestKeywordWizard(unittest.TestCase):
         #     selected_classification()
 
         # default_classes = classification['classes']
-        default_classes = structure_class_mapping
+        default_classes = generic_structure_classes['classes']
         unassigned_values = []  # no need to check actually, not save in file
         assigned_values = {
             u'residential': [u'Residential'],
@@ -515,10 +560,17 @@ class TestKeywordWizard(unittest.TestCase):
         # Click next to finish value mapping
         dialog.pbnNext.click()
 
-        # select additional keywords / inasafe fields step
-        self.check_current_step(dialog.step_kw_extrakeywords)
+        # Check if in InaSAFE field step
+        self.check_current_step(dialog.step_kw_inasafe_fields)
 
-        # Click next to finish inasafe fields step and go to source step
+        # Click next to finish inasafe fields step and go to inasafe default
+        # field step
+        dialog.pbnNext.click()
+
+        # Check if in InaSAFE Default field step
+        self.check_current_step(dialog.step_kw_default_inasafe_fields)
+
+        # Click next to finish InaSAFE Default Field step and go to source step
         dialog.pbnNext.click()
 
         # Check if in source step
@@ -568,12 +620,13 @@ class TestKeywordWizard(unittest.TestCase):
             'exposure': exposure_structure['key'],
             'inasafe_fields':
                 {
-                    'exposure_class_field': u'TYPE',
+                    'exposure_type_field': u'TYPE',
                 },
+            'inasafe_default_values': {},
             # No value will be omitted.
             'value_map': dict((k, v) for k, v in assigned_values.items() if v),
             'date': source_date,
-            # 'hazard_classification': volcano_hazard_classes['key'],
+            'classification': generic_structure_classes['key'],
             'layer_geometry': layer_geometry_polygon['key'],
             'layer_purpose': layer_purpose_exposure['key'],
             'layer_mode': layer_mode_classified['key']
@@ -624,6 +677,17 @@ class TestKeywordWizard(unittest.TestCase):
         # Click next to select classified
         dialog.pbnNext.click()
 
+        # Check if in select classification step
+        self.check_current_step(dialog.step_kw_classification)
+
+        # Check if generic structure classes is selected.
+        self.check_current_text(
+            generic_structure_classes['name'],
+            dialog.step_kw_classification.lstClassifications)
+
+        # Click next to select the classifications
+        dialog.pbnNext.click()
+
         # Check if in select field step
         self.check_current_step(dialog.step_kw_field)
 
@@ -640,21 +704,18 @@ class TestKeywordWizard(unittest.TestCase):
         dialog.pbnNext.click()
 
         # select additional keywords / inasafe fields step
-        self.check_current_step(dialog.step_kw_extrakeywords)
+        self.check_current_step(dialog.step_kw_inasafe_fields)
 
         # Check inasafe fields
-        parameters = dialog.step_kw_extrakeywords. \
+        parameters = dialog.step_kw_inasafe_fields. \
             parameter_container.get_parameters(True)
 
         # Get layer's inasafe_fields
         inasafe_fields = layer.keywords.get('inasafe_fields')
         self.assertIsNotNone(inasafe_fields)
         for key, value in inasafe_fields.items():
-            # Not check if it's hazard_class_field
-            if key == hazard_class_field['key']:
-                continue
-            # Not check if it's exposure_class_field
-            if key == exposure_class_field['key']:
+            # Not check if it's hazard_value_field
+            if key == get_class_field(layer_purpose_exposure['key'])['key']:
                 continue
             # Check if existing key in parameters guid
             self.assertIn(key, [p.guid for p in parameters])
@@ -667,13 +728,20 @@ class TestKeywordWizard(unittest.TestCase):
 
         for parameter in parameters:
             # If not available is chosen, inasafe_fields shouldn't have it
-            if parameter.value == not_available:
+            if parameter.value == no_field:
                 self.assertNotIn(parameter.guid, inasafe_fields.keys())
             # If not available is not chosen, inasafe_fields should have it
             else:
                 self.assertIn(parameter.guid, inasafe_fields.keys())
 
-        # Click next to finish inasafe fields step and go to source step
+        # Click next to finish inasafe fields step and go to inasafe default
+        # field step
+        dialog.pbnNext.click()
+
+        # Check if in InaSAFE Default field step
+        self.check_current_step(dialog.step_kw_default_inasafe_fields)
+
+        # Click next to finish InaSAFE Default Field step and go to source step
         dialog.pbnNext.click()
 
         # Check if in source step
@@ -694,7 +762,7 @@ class TestKeywordWizard(unittest.TestCase):
         self.check_current_step(dialog.step_kw_title)
 
         self.assertEqual(
-            dialog.layer.name(), dialog.step_kw_title.leTitle.text())
+            'Buildings', dialog.step_kw_title.leTitle.text())
         self.assertTrue(dialog.pbnNext.isEnabled())
 
         # Click finish
@@ -702,6 +770,163 @@ class TestKeywordWizard(unittest.TestCase):
 
         self.assertDictEqual(
             layer.keywords['value_map'], dialog.get_keywords()['value_map'])
+
+    def test_aggregation_keyword(self):
+        """Test Aggregation Keywords"""
+        layer = load_test_vector_layer(
+            'gisv4', 'aggregation', 'small_grid.geojson', clone_to_memory=True)
+        layer.keywords = {}
+
+        # noinspection PyTypeChecker
+        dialog = WizardDialog()
+        dialog.set_keywords_creation_mode(layer)
+
+        # Check if in select purpose step
+        self.check_current_step(dialog.step_kw_purpose)
+
+        # Select aggregation
+        self.select_from_list_widget(
+            layer_purpose_aggregation['name'],
+            dialog.step_kw_purpose.lstCategories)
+
+        # Click next to select aggregation
+        dialog.pbnNext.click()
+
+        # Check if in select field step
+        self.check_current_step(dialog.step_kw_field)
+
+        # select area_name field
+        area_name = 'area_name'
+        self.select_from_list_widget(
+            area_name, dialog.step_kw_field.lstFields)
+
+        # Click next to select KRB
+        dialog.pbnNext.click()
+
+        # select inasafe fields step
+        self.check_current_step(dialog.step_kw_inasafe_fields)
+
+        # Click next to finish inasafe fields step and go to inasafe default
+        # field step
+        dialog.pbnNext.click()
+
+        # Check if in InaSAFE Default field step
+        self.check_current_step(dialog.step_kw_default_inasafe_fields)
+
+        # Click next to finish InaSAFE Default Field step and go to source step
+        dialog.pbnNext.click()
+
+        # Check if in source step
+        self.check_current_step(dialog.step_kw_source)
+
+        # Click next to finish source step and go to title step
+        dialog.pbnNext.click()
+
+        # Check if in title step
+        self.check_current_step(dialog.step_kw_title)
+
+        layer_title = 'Layer Title'
+        dialog.step_kw_title.leTitle.setText(layer_title)
+
+        # Click next to finish title step and go to kw summary step
+        dialog.pbnNext.click()
+
+        # Check if in title step
+        self.check_current_step(dialog.step_kw_summary)
+
+        # Click finish
+        dialog.pbnNext.click()
+
+        expected_keyword = {
+            'inasafe_default_values': {},
+            'inasafe_fields': {aggregation_name_field['key']: area_name},
+            'layer_geometry': layer_geometry_polygon['key'],
+            'layer_purpose': layer_purpose_aggregation['key'],
+            'title': layer_title
+        }
+        # Check the keywords
+        real_keywords = dialog.get_keywords()
+        self.assertDictEqual(real_keywords, expected_keyword)
+
+    def test_existing_aggregation_keyword(self):
+        """Test Aggregation Keywords"""
+        layer = load_test_vector_layer(
+            'gisv4', 'aggregation', 'small_grid.geojson', clone_to_memory=True)
+
+        area_name = 'area_name'
+        layer_title = 'Tempe'
+        expected_keyword = {
+            'inasafe_default_values': {},
+            'inasafe_fields': {aggregation_name_field['key']: area_name},
+            'layer_geometry': layer_geometry_polygon['key'],
+            'layer_purpose': layer_purpose_aggregation['key'],
+            'title': layer_title
+        }
+        # Assigning dummy keyword
+        layer.keywords = expected_keyword
+
+        # noinspection PyTypeChecker
+        dialog = WizardDialog()
+        dialog.set_keywords_creation_mode(layer)
+
+        # Check if in select purpose step
+        self.check_current_step(dialog.step_kw_purpose)
+
+        # Select aggregation
+        self.check_current_text(
+            layer_purpose_aggregation['name'],
+            dialog.step_kw_purpose.lstCategories)
+
+        # Click next to select aggregation
+        dialog.pbnNext.click()
+
+        # Check if in select field step
+        self.check_current_step(dialog.step_kw_field)
+
+        # select area_name field
+        self.check_current_text(
+            area_name, dialog.step_kw_field.lstFields)
+
+        # Click next to select KRB
+        dialog.pbnNext.click()
+
+        # select inasafe fields step
+        self.check_current_step(dialog.step_kw_inasafe_fields)
+
+        # Click next to finish inasafe fields step and go to inasafe default
+        # field step
+        dialog.pbnNext.click()
+
+        # Check if in InaSAFE Default field step
+        self.check_current_step(dialog.step_kw_default_inasafe_fields)
+
+        # Click next to finish InaSAFE Default Field step and go to source step
+        dialog.pbnNext.click()
+
+        # Check if in source step
+        self.check_current_step(dialog.step_kw_source)
+
+        # Click next to finish source step and go to title step
+        dialog.pbnNext.click()
+
+        # Check if in title step
+        self.check_current_step(dialog.step_kw_title)
+
+        # Check if the title is already filled
+        self.assertEqual(dialog.step_kw_title.leTitle.text(), layer_title)
+
+        # Click next to finish title step and go to kw summary step
+        dialog.pbnNext.click()
+
+        # Check if in title step
+        self.check_current_step(dialog.step_kw_summary)
+
+        # Click finish
+        dialog.pbnNext.click()
+
+        # Check the keywords
+        real_keywords = dialog.get_keywords()
+        self.assertDictEqual(real_keywords, expected_keyword)
 
     @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_keywords_creation_wizard(self):
@@ -920,50 +1145,6 @@ class TestKeywordWizard(unittest.TestCase):
 
     # noinspection PyTypeChecker
     @unittest.skip('Skip unit test from InaSAFE v3.')
-    def test_existing_aggregation_keywords(self):
-        """Test for case existing keywords in aggregation layer."""
-        layer = clone_shp_layer(
-            name='district_osm_jakarta',
-            include_keywords=True,
-            source_directory=standard_data_path('boundaries'))
-        dialog = WizardDialog()
-        dialog.set_keywords_creation_mode(layer)
-
-        category = dialog.step_kw_purpose.lstCategories.currentItem().text()
-        expected_category = 'Aggregation'
-        self.assertEqual(expected_category, category)
-
-        dialog.pbnNext.click()
-
-        self.check_current_text('KAB_NAME', dialog.step_kw_field.lstFields)
-
-        dialog.pbnNext.click()
-
-        expected_aggregation_attributes = {
-            'elderly ratio attribute': 'Global default',
-            'youth ratio default': 0.26,
-            'elderly ratio default': 0.08,
-            'adult ratio attribute': 'Global default',
-            'female ratio attribute': 'PEREMPUAN',
-            'youth ratio attribute': 'Global default',
-            'female ratio default': 0.5,
-            'adult ratio default': 0.66
-        }
-        aggregation_attributes = dialog.step_kw_aggregation.\
-            get_aggregation_attributes()
-        self.assertDictEqual(
-            expected_aggregation_attributes, aggregation_attributes)
-
-        dialog.step_kw_aggregation.cboFemaleRatioAttribute.setCurrentIndex(2)
-        expected_female_attribute_key = 'PEREMPUAN'
-        female_attribute_key = dialog.step_kw_aggregation.\
-            cboFemaleRatioAttribute.currentText()
-        self.assertEqual(expected_female_attribute_key, female_attribute_key)
-        self.assertFalse(
-            dialog.step_kw_aggregation.dsbFemaleRatioDefault.isEnabled())
-
-    # noinspection PyTypeChecker
-    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_unit_building_generic(self):
         """Test for case existing building generic unit for structure."""
         layer = clone_shp_layer(
@@ -998,44 +1179,6 @@ class TestKeywordWizard(unittest.TestCase):
         dialog.pbnNext.click()  # finishing
 
     @unittest.skip('Skip unit test from InaSAFE v3.')
-    def test_default_attributes_value(self):
-        """Checking that default attributes is set to the CIA's one."""
-        layer = clone_shp_layer(
-            name='district_osm_jakarta',
-            include_keywords=True,
-            source_directory=standard_data_path('boundaries'))
-        dialog = WizardDialog()
-        dialog.set_keywords_creation_mode(layer)
-
-        dialog.pbnNext.click()  # choose aggregation go to field step
-        dialog.pbnNext.click()  # choose KAB_NAME go to aggregation step
-
-        ratio_attribute = dialog.step_kw_aggregation.cboElderlyRatioAttribute.\
-            currentText()
-        self.assertEqual('Global default', ratio_attribute)
-
-        ratio_attribute = dialog.step_kw_aggregation.cboAdultRatioAttribute.\
-            currentText()
-        self.assertEqual('Global default', ratio_attribute)
-
-        ratio_attribute = dialog.step_kw_aggregation.cboYouthRatioAttribute.\
-            currentText()
-        self.assertEqual('Global default', ratio_attribute)
-
-        default_value = dialog.step_kw_aggregation.dsbYouthRatioDefault.value()
-        expected_default_value = 0.26
-        self.assertEqual(expected_default_value, default_value)
-
-        default_value = dialog.step_kw_aggregation.dsbAdultRatioDefault.value()
-        expected_default_value = 0.66
-        self.assertEqual(expected_default_value, default_value)
-
-        default_value = dialog.step_kw_aggregation.dsbElderlyRatioDefault.\
-            value()
-        expected_default_value = 0.08
-        self.assertEqual(expected_default_value, default_value)
-
-    @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_unknown_unit(self):
         """Checking that it works for unknown unit."""
         layer = clone_shp_layer(
@@ -1066,8 +1209,8 @@ class TestKeywordWizard(unittest.TestCase):
         dialog.pbnNext.click()  # accept mapping
 
         # check if in step extra keywords
-        self.check_current_step(dialog.step_kw_extrakeywords)
-        dialog.step_kw_extrakeywords.cboExtraKeyword1.setCurrentIndex(2)
+        self.check_current_step(dialog.step_kw_inasafe_fields)
+        dialog.step_kw_inasafe_fields.cboExtraKeyword1.setCurrentIndex(2)
         dialog.pbnNext.click()  # accept extra keywords
 
         # check if in step source
@@ -1093,7 +1236,7 @@ class TestKeywordWizard(unittest.TestCase):
         dialog.step_kw_layermode.lstLayerModes.setCurrentRow(0)  # choose none
         dialog.pbnNext.click()  # choose none
         # choose NAME
-        dialog.step_kw_extrakeywords.cboExtraKeyword1.setCurrentIndex(4)
+        dialog.step_kw_inasafe_fields.cboExtraKeyword1.setCurrentIndex(4)
         dialog.pbnNext.click()  # choose NAME
 
         # check if in step source
@@ -1171,10 +1314,10 @@ class TestKeywordWizard(unittest.TestCase):
         dialog.step_kw_layermode.lstLayerModes.setCurrentRow(0)
 
         dialog.pbnNext.click()  # go to extra keywords
-        self.check_current_step(dialog.step_kw_extrakeywords)
-        dialog.step_kw_extrakeywords.cboExtraKeyword1.setCurrentIndex(4)
+        self.check_current_step(dialog.step_kw_inasafe_fields)
+        dialog.step_kw_inasafe_fields.cboExtraKeyword1.setCurrentIndex(4)
         expected_field = 'NAME (String)'
-        actual_field = dialog.step_kw_extrakeywords.cboExtraKeyword1.\
+        actual_field = dialog.step_kw_inasafe_fields.cboExtraKeyword1.\
             currentText()
         self.assertEqual(actual_field, expected_field)
 
@@ -1653,9 +1796,9 @@ class TestKeywordWizard(unittest.TestCase):
             self.assertEqual(expected_num_child, num_child)
 
         dialog.pbnNext.click()  # go to extra keywords
-        self.check_current_step(dialog.step_kw_extrakeywords)
-        dialog.step_kw_extrakeywords.cboExtraKeyword1.setCurrentIndex(5)
-        dialog.step_kw_extrakeywords.cboExtraKeyword2.setCurrentIndex(1)
+        self.check_current_step(dialog.step_kw_inasafe_fields)
+        dialog.step_kw_inasafe_fields.cboExtraKeyword1.setCurrentIndex(5)
+        dialog.step_kw_inasafe_fields.cboExtraKeyword2.setCurrentIndex(1)
 
         dialog.pbnNext.click()  # go to source
         self.check_current_step(dialog.step_kw_source)
@@ -1663,56 +1806,6 @@ class TestKeywordWizard(unittest.TestCase):
         dialog.pbnCancel.click()
 
     @unittest.skip('Skip unit test from InaSAFE v3.')
-    def test_sum_ratio_behavior(self):
-        """Test for wizard's behavior related sum of age ratio."""
-        layer = clone_shp_layer(
-            name='district_osm_jakarta',
-            include_keywords=True,
-            source_directory=standard_data_path('boundaries'))
-        dialog = WizardDialog()
-        dialog.set_keywords_creation_mode(layer)
-        dialog.suppress_warning_dialog = True
-
-        self.check_current_text(
-            'Aggregation', dialog.step_kw_purpose.lstCategories)
-
-        dialog.pbnNext.click()  # Go to field step
-
-        self.check_current_text('KAB_NAME', dialog.step_kw_field.lstFields)
-
-        dialog.pbnNext.click()  # Go to aggregation step
-
-        dialog.step_kw_aggregation.dsbYouthRatioDefault.setValue(1.0)
-
-        dialog.pbnNext.click()  # Try to go to source step
-
-        # check if still in aggregation step
-        self.check_current_step(dialog.step_kw_aggregation)
-
-        # set don't use
-        dialog.step_kw_aggregation.cboYouthRatioAttribute.setCurrentIndex(1)
-
-        dialog.pbnNext.click()  # Try to go to  source step
-
-        # check if in source step
-        self.check_current_step(dialog.step_kw_source)
-
-        dialog.pbnBack.click()  # Go to aggregation step
-
-        # check if in aggregation step
-        self.check_current_step(dialog.step_kw_aggregation)
-        # set global default
-        dialog.step_kw_aggregation.cboYouthRatioAttribute.setCurrentIndex(0)
-
-        dialog.step_kw_aggregation.dsbYouthRatioDefault.setValue(0.0)
-
-        dialog.pbnNext.click()  # Try to go to source step
-
-        # check if in source step
-        self.check_current_step(dialog.step_kw_source)
-
-        dialog.pbnCancel.click()
-
     def test_allow_resample(self):
         """Test the allow resample step"""
 

@@ -19,6 +19,7 @@ from qgis.core import (
 from safe.utilities.i18n import tr
 # from safe.definitionsv4.processing import clip_vector
 from safe.gisv4.vector.tools import create_memory_layer
+from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -29,6 +30,7 @@ __revision__ = '$Format:%H$'
 LOGGER = logging.getLogger('InaSAFE')
 
 
+@profile
 def clip(layer_to_clip, mask_layer, callback=None):
     """Clip a vector layer with another.
 
@@ -57,10 +59,6 @@ def clip(layer_to_clip, mask_layer, callback=None):
     # processing_step = intersection_vector['step_name']
     output_layer_name = 'clip'
     processing_step = 'Clipping and masking'
-
-    fields = layer_to_clip.fields()
-    for field in mask_layer.fields():
-        fields.append(field)
 
     writer = create_memory_layer(
         output_layer_name,
@@ -170,10 +168,5 @@ def clip(layer_to_clip, mask_layer, callback=None):
     # End copy/paste from Processing plugin.
     writer.commitChanges()
 
-    # Todo keywords
-    # inasafe_fields = layer_to_clip.keywords['inasafe_fields'].copy()
-    # inasafe_fields.update(mask_layer.keywords['inasafe_fields'])
-    # writer.keywords['inasafe_fields'] = inasafe_fields
-    # writer.keywords['layer_purpose'] = 'aggregate_hazard'
-
+    writer.keywords = layer_to_clip.keywords.copy()
     return writer

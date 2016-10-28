@@ -17,6 +17,7 @@ from safe.common.utilities import get_utm_epsg
 from safe.gisv4.vector.tools import create_memory_layer
 from safe.definitionsv4.fields import hazard_class_field
 from safe.definitionsv4.processing import buffer_vector
+from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -24,6 +25,7 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
+@profile
 def buffering(layer, radii, callback=None):
     """
     Buffer a vector point or line layer into polygons.

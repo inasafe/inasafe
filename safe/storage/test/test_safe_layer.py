@@ -15,7 +15,6 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from qgis.core import QgsVectorLayer, QgsRasterLayer, QgsMapLayer
 
-from safe.storage.core import read_layer
 from safe.storage.safe_layer import SafeLayer
 from safe.common.exceptions import InvalidLayerError, KeywordNotFoundError
 from safe.test.utilities import clone_shp_layer
@@ -53,13 +52,14 @@ class SafeLayerTest(unittest.TestCase):
                 u'commercial': [u'Commercial', u'Industrial'],
             },
             # 'structure_class_field': u'TYPE',
-            'inasafe_fields': {u'exposure_class_field': u'TYPE'},
+            'inasafe_fields': {u'exposure_type_field': u'TYPE'},
             'title': u'Buildings',
             'source': u'OpenStreetMap - www.openstreetmap.org',
             'layer_geometry': u'polygon',
             'layer_purpose': u'exposure',
             'layer_mode': u'classified',
-            'exposure': u'structure'
+            'exposure': u'structure',
+            'classification': u'generic_structure_classes',
         }
 
         self.assertEquals(exposure.keywords, expected_keywords)
