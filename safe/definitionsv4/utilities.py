@@ -159,16 +159,20 @@ def get_fields(layer_purpose, layer_subcategory=None, replace_null=None):
     :rtype: list
     """
     fields = []
-    if layer_purpose == 'exposure':
+    if layer_purpose in 'exposure':
         if layer_subcategory:
             subcategory = definition(layer_subcategory)
-            fields = subcategory['fields'] + subcategory['extra_fields']
+            fields += subcategory['fields']
+            fields += subcategory['extra_fields']
+            fields += subcategory['compulsory_fields']
         else:
             fields = deepcopy(exposure_fields)
     elif layer_purpose == 'hazard':
         if layer_subcategory:
             subcategory = definition(layer_subcategory)
-            fields = subcategory['fields'] + subcategory['extra_fields']
+            fields += subcategory['fields']
+            fields += subcategory['extra_fields']
+            fields += subcategory['compulsory_fields']
         else:
             fields = deepcopy(hazard_fields)
     elif layer_purpose == 'aggregation':
@@ -184,7 +188,6 @@ def get_fields(layer_purpose, layer_subcategory=None, replace_null=None):
         return fields
     else:
         return fields
-
 
 def get_compulsory_fields(layer_purpose, layer_subcategory=None):
     """Get compulsory field based on layer_purpose and layer_subcategory
