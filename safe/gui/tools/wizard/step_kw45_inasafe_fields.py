@@ -24,7 +24,7 @@ from safe_extras.parameters.qt_widgets.parameter_container import (
 from safe.definitionsv4.layer_purposes import (layer_purpose_aggregation)
 from safe.definitionsv4.layer_modes import layer_mode_classified
 from safe.definitionsv4.exposure import exposure_place
-from safe.definitionsv4.utilities import get_fields, get_mandatory_fields
+from safe.definitionsv4.utilities import get_fields, get_compulsory_fields
 from safe.definitionsv4.layer_geometry import layer_geometry_raster
 from safe.definitionsv4.constants import no_field
 
