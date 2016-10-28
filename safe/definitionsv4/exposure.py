@@ -59,8 +59,7 @@ exposure_population = {
         tr('How will we distribute relief items?'),
         tr('Who are the key people responsible for coordination?'),
         tr('What are the security factors for relief responders?'),
-        tr('Are there enough victim identification units for the killed '
-           'people?'),
+        tr('Are there enough victim identification units?'),
         # these are shelter actions
         tr('What are people\'s likely movements?'),
         tr('How will we reach displaced people?'),
@@ -72,7 +71,7 @@ exposure_population = {
            'household shelter?'),
         tr('What are the existing environmental risks or vulnerabilities at '
            'the shelter location?'),
-        tr('Are there enough clothing, betting and household items available '
+        tr('Are there enough clothing, bedding and household items available '
            'for the displaced people?'),
         tr('What are the critical non-food items required by the affected '
            'population?'),
@@ -198,7 +197,7 @@ exposure_structure = {
     'classified_notes': [  # notes specific to classified data
     ],
     'actions': [  # these are additional generic actions - IF has more
-        tr('Which structures have warning capacity (eg. sirens or speakers?'),
+        tr('Which structures have warning capacity (eg. sirens or speakers)?'),
         tr('Are the water and electricity services still operating?'),
         tr('Are the schools and hospitals still active?'),
         tr('Are the health centres still open?'),
