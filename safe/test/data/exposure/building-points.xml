@@ -178,12 +178,12 @@
           <multipart_polygon>
             <gco:Boolean/>
           </multipart_polygon>
-          <resolution>
-            <gco:FloatTuple/>
-          </resolution>
           <inasafe_fields>
-            <gco:Dictionary>{&quot;exposure_type_field&quot;: &quot;TYPE&quot;, &quot;population_count_field&quot;: &quot;pop_count&quot;}</gco:Dictionary>
+            <gco:Dictionary>{&quot;population_count_field&quot;: &quot;pop_count&quot;, &quot;exposure_type_field&quot;: &quot;TYPE&quot;}</gco:Dictionary>
           </inasafe_fields>
+          <inasafe_default_values>
+            <gco:Dictionary/>
+          </inasafe_default_values>
           <area_name_field>
             <gco:CharacterString/>
           </area_name_field>
@@ -199,9 +199,15 @@
           <field>
             <gco:CharacterString/>
           </field>
+          <value_map>
+            <gco:Dictionary>{&quot;health&quot;: [&quot;Clinic/Doctor&quot;], &quot;education&quot;: [&quot;School&quot;], &quot;commercial&quot;: [&quot;Commercial&quot;, &quot;Industrial&quot;], &quot;place of worship&quot;: [&quot;Place of Worship - Islam&quot;], &quot;government&quot;: [&quot;Government&quot;]}</gco:Dictionary>
+          </value_map>
           <layer_geometry>
             <gco:CharacterString>point</gco:CharacterString>
           </layer_geometry>
+          <classification>
+            <gco:CharacterString/>
+          </classification>
           <scale>
             <gco:CharacterString/>
           </scale>
@@ -220,9 +226,9 @@
           <datatype>
             <gco:CharacterString/>
           </datatype>
-          <value_map>
-            <gco:Dictionary>{&quot;health&quot;: [&quot;Clinic/Doctor&quot;], &quot;education&quot;: [&quot;School&quot;], &quot;commercial&quot;: [&quot;Commercial&quot;, &quot;Industrial&quot;], &quot;place of worship&quot;: [&quot;Place of Worship - Islam&quot;], &quot;government&quot;: [&quot;Government&quot;]}</gco:Dictionary>
-          </value_map>
+          <resolution>
+            <gco:FloatTuple/>
+          </resolution>
           <structure_class_field>
             <gco:CharacterString>TYPE</gco:CharacterString>
           </structure_class_field>

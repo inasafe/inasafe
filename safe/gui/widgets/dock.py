@@ -95,6 +95,7 @@ from safe.common.exceptions import (
     MissingImpactReport,
     MetadataReadError
 )
+from safe.impact_function_v4.impact_function import ImpactFunction
 from safe.report.impact_report import ImpactReport
 from safe.gui.tools.about_dialog import AboutDialog
 from safe.gui.tools.help_dialog import HelpDialog
@@ -147,7 +148,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         """
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
-        self.pbnShowQuestion.setVisible(False)
+        self.show_question_button.setVisible(False)
         self.enable_messaging()
         self.inasafe_version = get_version()
 
@@ -184,7 +185,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.developer_mode = None
         self.organisation_logo_path = None
 
-        self.pbnPrint.setEnabled(False)
+        self.print_button.setEnabled(False)
         self.runtime_keywords_dialog = None
 
         self.setup_button_connectors()
@@ -197,8 +198,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # Enable on the fly projection by default
         canvas.setCrsTransformEnabled(True)
         self.connect_layer_listener()
-        self.grpQuestion.setEnabled(False)
-        self.grpQuestion.setVisible(False)
+        self.question_group.setEnabled(False)
+        self.question_group.setVisible(False)
         self.set_run_button_status()
 
         self.read_settings()  # get_project_layers called by this
@@ -242,29 +243,29 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # to existing user messages
         # noinspection PyArgumentEqualDefault
         dispatcher.connect(
-            self.wvResults.dynamic_message_event,
+            self.results_webview.dynamic_message_event,
             signal=DYNAMIC_MESSAGE_SIGNAL,
             sender=dispatcher.Any)
         # Set up dispatcher for static messages
         # Static messages clear the message queue and so the display is 'reset'
         # noinspection PyArgumentEqualDefault
         dispatcher.connect(
-            self.wvResults.static_message_event,
+            self.results_webview.static_message_event,
             signal=STATIC_MESSAGE_SIGNAL,
             sender=dispatcher.Any)
         # Set up dispatcher for error messages
         # Error messages clear the message queue and so the display is 'reset'
         # noinspection PyArgumentEqualDefault
         dispatcher.connect(
-            self.wvResults.error_message_event,
+            self.results_webview.error_message_event,
             signal=ERROR_MESSAGE_SIGNAL,
             sender=dispatcher.Any)
 
     def setup_button_connectors(self):
         """Setup signal/slot mechanisms for dock buttons."""
-        self.pbnHelp.clicked.connect(self.show_help)
-        self.pbnPrint.clicked.connect(self.print_map)
-        self.pbnRunStop.clicked.connect(self.accept)
+        self.help_button.clicked.connect(self.show_help)
+        self.print_button.clicked.connect(self.print_map)
+        self.run_button.clicked.connect(self.accept)
         self.about_button.clicked.connect(self.about)
 
     def about(self):
@@ -634,8 +635,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         """
         if self.busy:
             return False, None
-        hazard_index = self.cboHazard.currentIndex()
-        exposure_index = self.cboExposure.currentIndex()
+        hazard_index = self.hazard_layer_combo.currentIndex()
+        exposure_index = self.exposure_layer_combo.currentIndex()
         if hazard_index == -1 or exposure_index == -1:
             message = self.getting_started_message()
             return False, message
@@ -686,7 +687,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
     # noinspection PyPep8Naming
     @pyqtSlot(int)
-    def on_cboHazard_currentIndexChanged(self, index):
+    def on_hazard_layer_combo_currentIndexChanged(self, index):
         """Automatic slot executed when the Hazard combo is changed.
 
         This is here so that we can see if the ok button should be enabled.
@@ -696,13 +697,13 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         """
         # Add any other logic you might like here...
         del index
-        self.toggle_aggregation_combo()
+        self.toggle_aggregation_layer_combo()
         self.set_run_button_status()
         self.draw_rubber_bands()
 
     # noinspection PyPep8Naming
     @pyqtSlot(int)
-    def on_cboExposure_currentIndexChanged(self, index):
+    def on_exposure_layer_combo_currentIndexChanged(self, index):
         """Automatic slot executed when the Exposure combo is changed.
 
         This is here so that we can see if the ok button should be enabled.
@@ -712,12 +713,12 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         """
         # Add any other logic you might like here...
         del index
-        self.toggle_aggregation_combo()
+        self.toggle_aggregation_layer_combo()
         self.set_run_button_status()
         self.draw_rubber_bands()
 
 
-    def toggle_aggregation_combo(self):
+    def toggle_aggregation_layer_combo(self):
         """Toggle the aggregation combo enabled status.
 
         Whether the combo is toggled on or off will depend on the current dock
@@ -727,18 +728,18 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         selected_exposure_layer = self.get_exposure_layer()
 
         # more than 1 because No aggregation is always there
-        if ((self.cboAggregation.count() > 1) and
+        if ((self.aggregation_layer_combo.count() > 1) and
                 (selected_hazard_layer is not None) and
                 (selected_exposure_layer is not None)):
-            self.cboAggregation.setEnabled(True)
+            self.aggregation_layer_combo.setEnabled(True)
         else:
-            self.cboAggregation.setCurrentIndex(0)
-            self.cboAggregation.setEnabled(False)
+            self.aggregation_layer_combo.setCurrentIndex(0)
+            self.aggregation_layer_combo.setEnabled(False)
 
     def set_run_button_status(self):
         """Helper function to set the run button status based on form validity.
         """
-        button = self.pbnRunStop
+        button = self.run_button
         flag, message = self.validate()
 
         # Hack until we fix the dock for InaSAFE V4
@@ -760,16 +761,16 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
     def unblock_signals(self):
         """Let the combos listen for event changes again."""
-        self.cboAggregation.blockSignals(False)
-        self.cboExposure.blockSignals(False)
-        self.cboHazard.blockSignals(False)
+        self.aggregation_layer_combo.blockSignals(False)
+        self.exposure_layer_combo.blockSignals(False)
+        self.hazard_layer_combo.blockSignals(False)
 
     def block_signals(self):
         """Prevent the combos and dock listening for event changes."""
         self.disconnect_layer_listener()
-        self.cboAggregation.blockSignals(True)
-        self.cboExposure.blockSignals(True)
-        self.cboHazard.blockSignals(True)
+        self.aggregation_layer_combo.blockSignals(True)
+        self.exposure_layer_combo.blockSignals(True)
+        self.hazard_layer_combo.blockSignals(True)
 
     @pyqtSlot()
     def update_layer_name(self):
@@ -787,8 +788,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
     def get_layers(self, *args):
         r"""Obtain a list of layers currently loaded in QGIS.
 
-        On invocation, this method will populate cboHazard, cboExposure and
-        cboAggregation on the dialog with a list of available layers.
+        On invocation, this method will populate hazard_layer_combo, exposure_layer_combo and
+        aggregation_layer_combo on the dialog with a list of available layers.
 
         Only **polygon vector** layers will be added to the aggregate list.
 
@@ -823,9 +824,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # disconnection without reconnection
         self.block_signals()
         self.save_state()
-        self.cboHazard.clear()
-        self.cboExposure.clear()
-        self.cboAggregation.clear()
+        self.hazard_layer_combo.clear()
+        self.exposure_layer_combo.clear()
+        self.aggregation_layer_combo.clear()
 
         for layer in layers:
 
@@ -880,7 +881,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             # https://github.com/AIFDR/inasafe/issues/528
             # check if layer is a vector polygon layer
             # if isPolygonLayer(layer):
-            #     addComboItemInOrder(self.cboAggregation, title,
+            #     addComboItemInOrder(self.aggregation_layer_combo, title,
             #                         source)
             #     self.aggregationLayers.append(layer)
 
@@ -900,22 +901,22 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 continue
 
             if layer_purpose == 'hazard':
-                add_ordered_combo_item(self.cboHazard, title, source)
+                add_ordered_combo_item(self.hazard_layer_combo, title, source)
             elif layer_purpose == 'exposure':
-                add_ordered_combo_item(self.cboExposure, title, source)
+                add_ordered_combo_item(self.exposure_layer_combo, title, source)
             elif layer_purpose == 'aggregation':
-                add_ordered_combo_item(self.cboAggregation, title, source)
+                add_ordered_combo_item(self.aggregation_layer_combo, title, source)
 
         self.unblock_signals()
-        # handle the cboAggregation combo
-        self.cboAggregation.insertItem(0, self.tr('Entire area'))
-        self.cboAggregation.setCurrentIndex(0)
-        self.toggle_aggregation_combo()
+        # handle the aggregation_layer_combo combo
+        self.aggregation_layer_combo.insertItem(0, self.tr('Entire area'))
+        self.aggregation_layer_combo.setCurrentIndex(0)
+        self.toggle_aggregation_layer_combo()
 
         self.restore_state()
-        self.grpQuestion.setEnabled(True)
-        self.grpQuestion.setVisible(True)
-        self.pbnShowQuestion.setVisible(False)
+        self.question_group.setEnabled(True)
+        self.question_group.setVisible(True)
+        self.show_question_button.setVisible(False)
         # Note: Don't change the order of the next two lines otherwise there
         # will be a lot of unneeded looping around as the signal is handled
         self.connect_layer_listener()
@@ -936,10 +937,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         :rtype: QgsMapLayer
 
         """
-        index = self.cboHazard.currentIndex()
+        index = self.hazard_layer_combo.currentIndex()
         if index < 0:
             return None
-        layer_id = self.cboHazard.itemData(
+        layer_id = self.hazard_layer_combo.itemData(
             index, QtCore.Qt.UserRole)
         layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
         return layer
@@ -954,10 +955,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         :rtype: QgsMapLayer
         """
 
-        index = self.cboExposure.currentIndex()
+        index = self.exposure_layer_combo.currentIndex()
         if index < 0:
             return None
-        layer_id = self.cboExposure.itemData(
+        layer_id = self.exposure_layer_combo.itemData(
             index, QtCore.Qt.UserRole)
         layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
         return layer
@@ -969,16 +970,16 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         Obtain QgsMapLayer id from the userrole of the QtCombo for post
         processing combo return it as a QgsMapLayer.
 
-        :returns: None if no aggregation is selected or cboAggregation is
+        :returns: None if no aggregation is selected or aggregation_layer_combo is
                 disabled, otherwise a polygon layer.
         :rtype: QgsMapLayer, QgsVectorLayer or None
         """
 
         no_selection_value = 0
-        index = self.cboAggregation.currentIndex()
+        index = self.aggregation_layer_combo.currentIndex()
         if index <= no_selection_value:
             return None
-        layer_id = self.cboAggregation.itemData(
+        layer_id = self.aggregation_layer_combo.itemData(
             index, QtCore.Qt.UserRole)
         layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
         return layer
@@ -1115,8 +1116,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
     def show_busy(self):
         """Hide the question group box and enable the busy cursor."""
-        self.grpQuestion.setEnabled(False)
-        self.grpQuestion.setVisible(False)
+        self.question_group.setEnabled(False)
+        self.question_group.setVisible(False)
         QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
         self.repaint()
         QtGui.qApp.processEvents()
@@ -1410,17 +1411,17 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
     def hide_busy(self):
         """A helper function to indicate processing is done."""
-        self.pbnShowQuestion.setVisible(True)
-        self.grpQuestion.setEnabled(True)
-        self.grpQuestion.setVisible(False)
+        self.show_question_button.setVisible(True)
+        self.question_group.setEnabled(True)
+        self.question_group.setVisible(False)
         # for #706 - if the exposure is hidden
         # due to self.hide_exposure_flag being enabled
         # we may have no exposure layers left
         # so we handle that here and disable run
-        if self.cboExposure.count() == 0:
-            self.pbnRunStop.setEnabled(False)
+        if self.exposure_layer_combo.count() == 0:
+            self.run_button.setEnabled(False)
         else:
-            self.pbnRunStop.setEnabled(True)
+            self.run_button.setEnabled(True)
         self.repaint()
         self.disable_busy_cursor()
         self.busy = False
@@ -1469,12 +1470,12 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         if 'postprocessing_report' in keywords:
             report.add(keywords['postprocessing_report'])
         report.add(impact_attribution(keywords))
-        self.pbnPrint.setEnabled(True)
+        self.print_button.setEnabled(True)
         send_static_message(self, report)
         # also hide the question and show the show question button
-        self.pbnShowQuestion.setVisible(True)
-        self.grpQuestion.setEnabled(True)
-        self.grpQuestion.setVisible(False)
+        self.show_question_button.setVisible(True)
+        self.question_group.setEnabled(True)
+        self.question_group.setVisible(False)
 
     def show_impact_keywords(self, keywords):
         """Show the keywords for an impact layer.
@@ -1498,12 +1499,12 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         if 'postprocessing_report' in keywords:
             report.add(keywords['postprocessing_report'])
         report.add(impact_attribution(keywords))
-        self.pbnPrint.setEnabled(True)
+        self.print_button.setEnabled(True)
         send_static_message(self, report)
         # also hide the question and show the show question button
-        self.pbnShowQuestion.setVisible(True)
-        self.grpQuestion.setEnabled(True)
-        self.grpQuestion.setVisible(False)
+        self.show_question_button.setVisible(True)
+        self.question_group.setEnabled(True)
+        self.question_group.setVisible(False)
 
     def show_generic_keywords(self, layer):
         """Show the keywords defined for the active layer.
@@ -1518,7 +1519,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         :type layer: QgsMapLayer
         """
         keywords = KeywordIO(layer)
-        self.pbnPrint.setEnabled(False)
+        self.print_button.setEnabled(False)
         message = keywords.to_message()
         send_static_message(self, message)
 
@@ -1547,7 +1548,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.tr(
                 ' icon in the toolbar.'))
         report.add(context)
-        self.pbnPrint.setEnabled(False)
+        self.print_button.setEnabled(False)
         send_static_message(self, report)
 
     def show_keyword_version_message(
@@ -1584,7 +1585,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.tr(
                 ' icon in the toolbar.'))
         report.add(context)
-        self.pbnPrint.setEnabled(False)
+        self.print_button.setEnabled(False)
         send_static_message(self, report)
 
     @pyqtSlot('QgsMapLayer')
@@ -1662,32 +1663,32 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         :func:`restore_state`
         """
         state = {
-            'hazard': self.cboHazard.currentText(),
-            'exposure': self.cboExposure.currentText(),
-            'aggregation': self.cboAggregation.currentText(),
-            'report': self.wvResults.page().currentFrame().toHtml()}
+            'hazard': self.hazard_layer_combo.currentText(),
+            'exposure': self.exposure_layer_combo.currentText(),
+            'aggregation': self.aggregation_layer_combo.currentText(),
+            'report': self.results_webview.page().currentFrame().toHtml()}
         self.state = state
 
     def restore_state(self):
         """Restore the state of the dock to the last known state."""
         if self.state is None:
             return
-        for myCount in range(0, self.cboExposure.count()):
-            item_text = self.cboExposure.itemText(myCount)
+        for myCount in range(0, self.exposure_layer_combo.count()):
+            item_text = self.exposure_layer_combo.itemText(myCount)
             if item_text == self.state['exposure']:
-                self.cboExposure.setCurrentIndex(myCount)
+                self.exposure_layer_combo.setCurrentIndex(myCount)
                 break
-        for myCount in range(0, self.cboHazard.count()):
-            item_text = self.cboHazard.itemText(myCount)
+        for myCount in range(0, self.hazard_layer_combo.count()):
+            item_text = self.hazard_layer_combo.itemText(myCount)
             if item_text == self.state['hazard']:
-                self.cboHazard.setCurrentIndex(myCount)
+                self.hazard_layer_combo.setCurrentIndex(myCount)
                 break
-        for myCount in range(0, self.cboAggregation.count()):
-            item_text = self.cboAggregation.itemText(myCount)
+        for myCount in range(0, self.aggregation_layer_combo.count()):
+            item_text = self.aggregation_layer_combo.itemText(myCount)
             if item_text == self.state['aggregation']:
-                self.cboAggregation.setCurrentIndex(myCount)
+                self.aggregation_layer_combo.setCurrentIndex(myCount)
                 break
-        self.wvResults.setHtml(self.state['report'])
+        self.results_webview.setHtml(self.state['report'])
 
     def print_map(self):
         """Open impact report dialog used to tune report when printing."""
@@ -1973,7 +1974,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # with unneeded status messages...
         flag, _ = self.validate()
         if not flag:
-            self.pbnRunStop.setEnabled(False)
+            self.run_button.setEnabled(False)
             return
 
         # IF could potentially run - lets see if the extents will work well...
@@ -1997,7 +1998,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     message,
                     self.tr('More info ...'),
                     2)
-            self.pbnRunStop.setEnabled(True)
+            self.run_button.setEnabled(True)
         else:
             # For issue #618, #1811
             if self.show_only_visible_layers_flag:
@@ -2018,12 +2019,12 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                         self.tr('InaSAFE'),
                         self.tr('No overlapping extents'),
                         message)
-            self.pbnRunStop.setEnabled(False)
+            self.run_button.setEnabled(False)
             # For #2077 somewhat kludgy hack to prevent positive
             # message when we cant actually run
             match = self.tr(
                 'You can now proceed to run your analysis by clicking the ')
-            current_text = self.wvResults.page_to_text()
+            current_text = self.results_webview.page_to_text()
             if match in current_text:
                 message = m.Message()
                 message.add(LOGO_ELEMENT)

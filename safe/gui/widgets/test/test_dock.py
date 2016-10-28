@@ -38,7 +38,6 @@ from PyQt4 import QtCore
 from safe.test.utilities import get_qgis_app, get_dock
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-from safe.impact_functions.loader import register_impact_functions
 from safe.common.utilities import format_int, unique_filename
 from safe.utilities.qgis_utilities import add_above_layer, layer_legend_index
 from safe.test.utilities import (
@@ -78,14 +77,11 @@ class TestDock(TestCase):
 
     def setUp(self):
         """Fixture run before all tests"""
-        register_impact_functions()
 
         self.dock.show_only_visible_layers_flag = True
         load_standard_layers(self.dock)
-        self.dock.cboHazard.setCurrentIndex(1)
-        self.dock.cboExposure.setCurrentIndex(0)
-        self.dock.cboFunction.setCurrentIndex(0)
-        self.dock.run_in_thread_flag = False
+        self.dock.hazard_layer_combo.setCurrentIndex(1)
+        self.dock.exposure_layer_combo.setCurrentIndex(0)
         self.dock.show_only_visible_layers_flag = False
         self.dock.set_layer_from_title_flag = False
         self.dock.zoom_to_impact_flag = False
@@ -105,10 +101,10 @@ class TestDock(TestCase):
     def tearDown(self):
         """Fixture run after each test"""
         QgsMapLayerRegistry.instance().removeAllMapLayers()
-        self.dock.cboHazard.clear()
-        self.dock.cboExposure.clear()
-        # self.dock.cboAggregation.clear()
-        # do not do this because the cboAggregation
+        self.dock.hazard_layer_combo.clear()
+        self.dock.exposure_layer_combo.clear()
+        # self.dock.aggregation_layer_combo.clear()
+        # do not do this because the aggregation_layer_combo
         # need to be able to react to the status changes of the other combos
 
         # Make sure we reinstate globale default analysis extents mode of
@@ -122,10 +118,9 @@ class TestDock(TestCase):
     def test_defaults(self):
         """Test the GUI in its default state"""
         # print combos_to_string(self.dock)
-        self.assertEqual(self.dock.cboHazard.currentIndex(), 1)
-        self.assertEqual(self.dock.cboExposure.currentIndex(), 0)
-        self.assertEqual(self.dock.cboFunction.currentIndex(), 0)
-        self.assertEqual(self.dock.cboAggregation.currentIndex(), 0)
+        self.assertEqual(self.dock.hazard_layer_combo.currentIndex(), 1)
+        self.assertEqual(self.dock.exposure_layer_combo.currentIndex(), 0)
+        self.assertEqual(self.dock.aggregation_layer_combo.currentIndex(), 0)
 
     def test_validate(self):
         """Validate function work as expected"""
@@ -177,9 +172,7 @@ class TestDock(TestCase):
         result, message = setup_scenario(
             self.dock,
             hazard='Continuous Flood',
-            exposure='Population',
-            function='Need evacuation',
-            function_id='FloodEvacuationRasterHazardFunction')
+            exposure='Population')
         self.assertTrue(result, message)
 
         # Enable on-the-fly reprojection
@@ -202,9 +195,7 @@ class TestDock(TestCase):
         result, message = setup_scenario(
             self.dock,
             hazard='Classified Flood',
-            exposure='Buildings',
-            function='Be impacted in each hazard class',
-            function_id='ClassifiedRasterHazardBuildingFunction')
+            exposure='Buildings')
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
@@ -237,9 +228,7 @@ class TestDock(TestCase):
         result, message = setup_scenario(
             self.dock,
             hazard='Continuous Flood',
-            exposure='Population',
-            function='Need evacuation',
-            function_id='FloodEvacuationRasterHazardFunction')
+            exposure='Population')
         self.assertTrue(result, message)
 
         # Enable on-the-fly reprojection
@@ -247,9 +236,8 @@ class TestDock(TestCase):
         set_jakarta_extent(self.dock)
 
         self.dock.accept()
-        safe_layer = self.dock.impact_function.impact
-        qgis_layer = read_impact_layer(safe_layer)
-        style = safe_layer.get_style_info()
+        qgis_layer = self.dock.impact_function.impact
+        style = qgis_layer.get_style_info()
         setRasterStyle(qgis_layer, style)
         # simple test for now - we could test explicitly for style state
         # later if needed.
@@ -282,9 +270,7 @@ class TestDock(TestCase):
         result, message = setup_scenario(
             self.dock,
             hazard='Continuous Flood',
-            exposure='Population',
-            function='Need evacuation',
-            function_id='FloodEvacuationRasterHazardFunction')
+            exposure='Population')
         self.assertTrue(result, message)
 
         # Enable on-the-fly reprojection
@@ -313,9 +299,7 @@ class TestDock(TestCase):
         result, message = setup_scenario(
             self.dock,
             hazard='Continuous Flood',
-            exposure='Population',
-            function='Need evacuation',
-            function_id='FloodEvacuationRasterHazardFunction')
+            exposure='Population')
         self.assertTrue(result, message)
         # LOGGER.info("Canvas list before:\n%s" % canvas_list())
         # Enable on-the-fly reprojection
@@ -345,9 +329,7 @@ class TestDock(TestCase):
         setup_scenario(
             self.dock,
             hazard='Continuous Flood',
-            exposure='Population',
-            function='Need evacuation',
-            function_id='FloodEvacuationRasterHazardFunction')
+            exposure='Population')
         layer = self.dock.get_exposure_layer()
         index = layer_legend_index(layer)
         self.assertEqual(index, 15)
@@ -362,9 +344,7 @@ class TestDock(TestCase):
         setup_scenario(
             self.dock,
             hazard='Continuous Flood',
-            exposure='Population',
-            function='Need evacuation',
-            function_id='FloodEvacuationRasterHazardFunction')
+            exposure='Population')
         layer_path = join(TESTDATA, 'polygon_0.shp')
         new_layer = QgsVectorLayer(layer_path, 'foo', 'ogr')
         exposure_layer = self.dock.get_exposure_layer()
@@ -382,14 +362,14 @@ class TestDock(TestCase):
 
         hazard_layer_count, exposure_layer_count = load_standard_layers()
         message = 'Expect %s layer(s) in hazard list widget but got %s' % (
-            hazard_layer_count, self.dock.cboHazard.count())
+            hazard_layer_count, self.dock.hazard_layer_combo.count())
         # pylint: disable=W0106
         self.assertEqual(
-                self.dock.cboHazard.count(), hazard_layer_count, message)
+                self.dock.hazard_layer_combo.count(), hazard_layer_count, message)
         message = 'Expect %s layer(s) in exposure list widget but got %s' % (
-            exposure_layer_count, self.dock.cboExposure.count())
+            exposure_layer_count, self.dock.exposure_layer_combo.count())
         self.assertEqual(
-                self.dock.cboExposure.count(), exposure_layer_count, message)
+                self.dock.exposure_layer_combo.count(), exposure_layer_count, message)
         # pylint: disable=W0106
 
     @unittest.expectedFailure
@@ -428,8 +408,8 @@ class TestDock(TestCase):
         _, _ = load_layers(file_list, clear_flag)
         # set exposure to : Population Count (5kmx5km)
         # by moving one down
-        self.dock.cboExposure.setCurrentIndex(
-                self.dock.cboExposure.currentIndex() + 1)
+        self.dock.exposure_layer_combo.setCurrentIndex(
+                self.dock.exposure_layer_combo.currentIndex() + 1)
         actual_dict = get_ui_state(self.dock)
         expected_dict = {
             'Run Button Enabled': False,
@@ -440,7 +420,7 @@ class TestDock(TestCase):
         message = ((
             'Run button was not disabled when exposure set to \n%s'
             '\nUI State: \n%s\nExpected State:\n%s\n%s') % (
-                self.dock.cboExposure.currentText(),
+                self.dock.exposure_layer_combo.currentText(),
                 actual_dict,
                 expected_dict,
                 combos_to_string(self.dock)))
@@ -449,11 +429,11 @@ class TestDock(TestCase):
 
         # Now select again a valid layer and the run button
         # should be enabled
-        self.dock.cboExposure.setCurrentIndex(
-            self.dock.cboExposure.currentIndex() - 1)
+        self.dock.exposure_layer_combo.setCurrentIndex(
+            self.dock.exposure_layer_combo.currentIndex() - 1)
         message = (
             'Run button was not enabled when exposure set to \n%s' %
-            self.dock.cboExposure.currentText())
+            self.dock.exposure_layer_combo.currentText())
         self.assertTrue(button.isEnabled(), message)
 
     @unittest.skip('Skip unit test from InaSAFE v3.')
@@ -501,9 +481,7 @@ class TestDock(TestCase):
         result, message = setup_scenario(
             self.dock,
             hazard='Flood Polygon',
-            exposure='Buildings',
-            function='Be flooded',
-            function_id='FloodPolygonBuildingFunction')
+            exposure='Buildings')
         self.assertTrue(result, message)
 
         # Enable on-the-fly reprojection
@@ -534,9 +512,7 @@ class TestDock(TestCase):
         result, message = setup_scenario(
             self.dock,
             hazard='Continuous Flood',
-            exposure='Population',
-            function='Need evacuation',
-            function_id='FloodEvacuationRasterHazardFunction')
+            exposure='Population')
         self.assertTrue(result, message)
 
         # Enable on-the-fly reprojection
@@ -559,72 +535,21 @@ class TestDock(TestCase):
         """
         # default selected layer is the third layer exposure
         # so, decrease the index by one to change it
-        self.dock.cboExposure.setCurrentIndex(
-            self.dock.cboExposure.currentIndex() - 1)
+        self.dock.exposure_layer_combo.setCurrentIndex(
+            self.dock.exposure_layer_combo.currentIndex() - 1)
         self.dock.save_state()
         expected_dict = get_ui_state(self.dock)
         # myState = self.dock.state
         # Now reset and restore and check that it gets the old state
         # Html is not considered in restore test since the ready
         # message overwrites it in dock implementation
-        self.dock.cboExposure.setCurrentIndex(
-            self.dock.cboExposure.currentIndex() - 1)
+        self.dock.exposure_layer_combo.setCurrentIndex(
+            self.dock.exposure_layer_combo.currentIndex() - 1)
         self.dock.restore_state()
         result_dict = get_ui_state(self.dock)
         message = 'Got unexpected state: %s\nExpected: %s\n%s' % (
             result_dict, expected_dict, combos_to_string(self.dock))
         self.assertTrue(expected_dict == result_dict, message)
-
-        # Corner case test when two layers can have the
-        # same functions - when switching layers the selected function should
-        # remain unchanged
-        self.tearDown()
-        file_list = [
-            standard_data_path('hazard', 'jakarta_flood_design.tif'),
-            standard_data_path('hazard', 'continuous_flood_20_20.asc'),
-            standard_data_path('exposure', 'pop_binary_raster_20_20.asc')
-        ]
-        hazard_layer_count, exposure_layer_count = load_layers(file_list)
-        message = 'Expecting 2 hazard layers, got %s' % hazard_layer_count
-        self.assertTrue(hazard_layer_count == 2, message)
-        message = 'Expecting 1 exposure layer, got %s' % exposure_layer_count
-        self.assertTrue(exposure_layer_count == 1, message)
-        # we will have 1 impact function available right now:
-        # - FloodEvacuationRasterHazardFunction, titled: 'Need evacuation'
-        # set it to the second for testing purposes
-        self.dock.cboFunction.setCurrentIndex(0)
-        self.dock.cboHazard.setCurrentIndex(0)
-        self.dock.cboExposure.setCurrentIndex(0)
-        expected_function = str(self.dock.cboFunction.currentText())
-
-        # Now move down one hazard in the combo then verify
-        # the function remains unchanged
-        self.dock.cboHazard.setCurrentIndex(1)
-        current_function = str(self.dock.cboFunction.currentText())
-
-        hazard_layer = self.dock.get_hazard_layer()
-        hazard_keywords = self.dock.keyword_io.read_keywords(hazard_layer)
-        exposure_layer = self.dock.get_exposure_layer()
-        exposure_keywords = self.dock.keyword_io.read_keywords(exposure_layer)
-        message = (
-            'Expected selected impact function to remain unchanged when '
-            'choosing a different hazard of the same category.\n')
-        message += 'Expected IF: "%s"\n' % expected_function
-        message += 'Current IF: "%s"\n' % current_function
-        message += 'Current Dock State: %s' % combos_to_string(self.dock)
-        message += 'Hazard Keywords\n'
-        message += str(hazard_keywords) + '\n'
-        message += 'Exposure Keywords\n'
-        message += str(exposure_keywords) + '\n'
-
-        self.assertTrue(expected_function == current_function, message)
-        self.dock.cboHazard.setCurrentIndex(0)
-        # Selected function should remain the same
-        expected = 'Need evacuation'
-        function = self.dock.cboFunction.currentText()
-        message = 'Expected: %s, Got: %s' % (expected, function)
-
-        self.assertTrue(function == expected, message)
 
     @skipIf(sys.platform == 'win32', "Test cannot run on Windows")
     @unittest.expectedFailure
@@ -766,45 +691,8 @@ class TestDock(TestCase):
         result, message = setup_scenario(
             self.dock,
             hazard='Continuous Flood',
-            exposure='Buildings',
-            function='Be flooded',
-            function_id='FloodRasterBuildingFunction')
-        self.dock.get_functions()
+            exposure='Buildings')
         self.assertTrue(result, message)
-
-    def test_has_parameters_button_disabled(self):
-        """Function configuration button is disabled when layers not
-        compatible."""
-        set_canvas_crs(GEOCRS, True)
-        setup_scenario(
-            self.dock,
-            hazard='Earthquake',
-            exposure='Roads',
-            function='',
-            function_id='')
-        tool_button = self.dock.toolFunctionOptions
-        flag = tool_button.isEnabled()
-        self.assertTrue(
-            not flag,
-            'Expected configuration options button to be disabled')
-
-    @unittest.expectedFailure
-    def test_has_parameters_button_enabled(self):
-        """Function configuration button is enabled when layers are compatible.
-        """
-        set_canvas_crs(GEOCRS, True)
-        set_jakarta_extent(self.dock)
-        setup_scenario(
-            self.dock,
-            hazard='A flood in Jakarta like in 2007',
-            exposure='Penduduk Jakarta',
-            function='Need evacuation',
-            function_id='FloodEvacuationRasterHazardFunction')
-        tool_button = self.dock.toolFunctionOptions
-        flag = tool_button.isEnabled()
-        self.assertTrue(
-            flag,
-            'Expected configuration options button to be enabled')
 
     # I disabled the test for now as checkMemory now returns None unless
     # there is a problem. TS
@@ -816,9 +704,7 @@ class TestDock(TestCase):
         setup_scenario(
             self.dock,
             hazard='A flood in Jakarta like in 2007',
-            exposure='Penduduk Jakarta',
-            function='Need evacuation',
-            function_id='FloodEvacuationRasterHazardFunction')
+            exposure='Penduduk Jakarta')
         result = self.dock.checkMemoryUsage()
         message = 'Expected "3mb" to apear in : %s' % result
         self.assertTrue(result is not None, 'Check memory reported None')
@@ -830,16 +716,16 @@ class TestDock(TestCase):
         message = (
             'The aggregation combobox should have only the "Entire '
             'area" item when the project has no layer. Found:'
-            ' %s' % (self.dock.cboAggregation.currentText()))
+            ' %s' % (self.dock.aggregation_layer_combo.currentText()))
 
-        self.assertEqual(self.dock.cboAggregation.currentText(), self.dock.tr(
+        self.assertEqual(self.dock.aggregation_layer_combo.currentText(), self.dock.tr(
             'Entire area'), message)
 
         message = (
             'The aggregation combobox should be disabled when the '
             'project has no layer.')
 
-        self.assertTrue(not self.dock.cboAggregation.isEnabled(), message)
+        self.assertTrue(not self.dock.aggregation_layer_combo.isEnabled(), message)
 
     @unittest.expectedFailure
     def test_cbo_aggregation_toggle(self):
@@ -852,8 +738,6 @@ class TestDock(TestCase):
             self.dock,
             hazard='Continuous Flood',
             exposure='Population',
-            function='Need evacuation',
-            function_id='FloodEvacuationRasterHazardFunction',
             aggregation_layer=u'D\xedstr\xedct\'s of Jakarta',
             aggregation_enabled_flag=True)
         message += ' when an aggregation layer is defined.'
@@ -867,8 +751,6 @@ class TestDock(TestCase):
             self.dock,
             hazard='Continuous Flood',
             exposure='Population',
-            function='Need evacuation',
-            function_id='FloodEvacuationRasterHazardFunction',
             aggregation_enabled_flag=False)
         message += ' when no aggregation layer is defined.'
         self.assertTrue(result, message)
@@ -907,8 +789,6 @@ class TestDock(TestCase):
             self.dock,
             hazard='Continuous Flood',
             exposure='Population',
-            function='Need evacuation',
-            function_id='FloodEvacuationRasterHazardFunction',
             aggregation_layer=u'D\xedstr\xedct\'s of Jakarta',
             aggregation_enabled_flag=True)
 
@@ -985,8 +865,6 @@ class TestDock(TestCase):
             self.dock,
             hazard='Continuous Flood',
             exposure='Population',
-            function='Need evacuation',
-            function_id='FloodEvacuationRasterHazardFunction',
             aggregation_layer=u'D\xedstr\xedct\'s of Jakarta',
             aggregation_enabled_flag=True)
 
@@ -1013,9 +891,7 @@ class TestDock(TestCase):
         result, message = setup_scenario(
             self.dock,
             hazard='Earthquake',
-            exposure='Buildings',
-            function='Be affected',
-            function_id='EarthquakeBuildingFunction')
+            exposure='Buildings')
         self.assertTrue(result, message)
 
         layer = self.dock.get_hazard_layer()
