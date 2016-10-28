@@ -991,6 +991,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         :type flag: bool
         """
         self.extent.show_rubber_bands = flag
+        # Temporary disable until we fix the dock in inasafe v4.
+        self.extent.show_rubber_bands = False
         settings = QSettings()
         settings.setValue('inasafe/showRubberBands', flag)
         if not flag:
@@ -1099,9 +1101,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 self.impact_function.force_memory = False
             self.disable_signal_receiver()
 
-            for layer in self.impact_function.datastore.layers():
-                qgis_layer = self.impact_function.datastore.layer(layer)
-                QgsMapLayerRegistry.instance().addMapLayer(qgis_layer)
+            if self.impact_function.datastore:
+                for layer in self.impact_function.datastore.layers():
+                    qgis_layer = self.impact_function.datastore.layer(layer)
+                    QgsMapLayerRegistry.instance().addMapLayer(qgis_layer)
 
     def accept_cancelled(self, old_keywords):
         """Deal with user cancelling post processing option dialog.
@@ -1152,18 +1155,18 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         impact_function.hazard = self.get_hazard_layer()
         impact_function.exposure = self.get_exposure_layer()
         aggregation = self.get_aggregation_layer()
+
         if aggregation:
             impact_function.aggregation = aggregation
+        else:
+            # We need to enable it again when we will fix the dock.
+            # impact_function.requested_extent = self.extent.user_extent
+            # impact_function.requested_extent = self.extent.user_extent_crs
 
-        # Variables
-        # impact_function.clip_hard = self.clip_hard
-        # impact_function.show_intermediate_layers = \
-        #     self.show_intermediate_layers
-        viewport = viewport_geo_array(self.iface.mapCanvas())
-        impact_function.viewport_extent = viewport
-        if self.extent.user_extent:
-            impact_function.requested_extent = self.extent.user_extent
-            impact_function.requested_extent_crs = self.extent.user_extent_crs
+            map_settings = self.iface.mapCanvas().mapSettings()
+            impact_function.viewport_extent = map_settings.fullExtent()
+            impact_function._viewport_extent_crs = (
+                map_settings.destinationCrs())
 
         return impact_function
 
