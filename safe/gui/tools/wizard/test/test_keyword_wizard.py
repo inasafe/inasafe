@@ -34,7 +34,7 @@ from safe.definitionsv4.exposure_classifications import (
 
 from safe.gui.tools.wizard.wizard_dialog import WizardDialog
 from safe.utilities.keyword_io import KeywordIO
-from safe.definitionsv4.utilities import definition, get_class_field
+from safe.definitionsv4.utilities import definition, get_mandatory_fields
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -412,7 +412,7 @@ class TestKeywordWizard(unittest.TestCase):
         self.assertIsNotNone(inasafe_fields)
         for key, value in inasafe_fields.items():
             # Not check if it's hazard_class_field
-            if key == get_class_field(layer_purpose_hazard['key'])['key']:
+            if key == get_mandatory_fields(layer_purpose_hazard['key'])['key']:
                 continue
             # Check if existing key in parameters guid
             self.assertIn(key, [p.guid for p in parameters])
@@ -715,7 +715,8 @@ class TestKeywordWizard(unittest.TestCase):
         self.assertIsNotNone(inasafe_fields)
         for key, value in inasafe_fields.items():
             # Not check if it's hazard_value_field
-            if key == get_class_field(layer_purpose_exposure['key'])['key']:
+            if key == get_mandatory_fields(
+                    layer_purpose_exposure['key'])['key']:
                 continue
             # Check if existing key in parameters guid
             self.assertIn(key, [p.guid for p in parameters])

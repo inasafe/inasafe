@@ -178,13 +178,15 @@ def get_fields(layer_purpose, layer_subcategory=None, replace_null=None):
 
     if isinstance(replace_null, bool):
         fields = [
-            field for field in fields if field['replace_null'] == replace_null]
+            field for field in fields
+            if field.get('replace_null') == replace_null
+            ]
         return fields
     else:
         return fields
 
 
-def get_class_field(layer_purpose):
+def get_mandatory_fields(layer_purpose, layer_subcategory=None):
     """Get class field based on layer_purpose.
 
     :param layer_purpose: The layer purpose.
