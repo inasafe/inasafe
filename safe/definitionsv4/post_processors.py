@@ -117,7 +117,7 @@ post_processor_size = {
     'name': tr('Size Rate Post Processor'),
     'description': tr(
         'Post processor to calculate the size of the feature. If feature is '
-        'polygon we use m^2. If feature is line we use meter.'),
+        'polygon we use m^2. If feature is line we use metre.'),
     'input': {
         'size': {
             'value': 'size',

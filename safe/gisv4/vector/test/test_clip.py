@@ -33,7 +33,7 @@ class TestClipVector(unittest.TestCase):
             'gisv4', 'exposure', 'building-points.geojson')
 
         layer = clip(exposure, aggregation)
-        self.assertEqual(layer.featureCount(), 8)
+        self.assertEqual(layer.featureCount(), 9)
 
         # Add test about keywords
         # todo

@@ -7,6 +7,10 @@ __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
+# Note from Etienne 25/10/16
+# The osm_downloader is not used in InaSAFE itself. It is used in OSM-Reporter
+# to generate the value_mapping. Please do not remove it.
+# See https://github.com/kartoza/osm-reporter/wiki how to use this key.
 
 generic_structure_classes = {
     'key': 'generic_structure_classes',
@@ -414,6 +418,7 @@ generic_road_classes = {
         }
     ]
 }
+
 generic_place_classes = {
     'key': 'generic_place_classes',
     'name': tr('Generic Place Classification'),
@@ -482,10 +487,7 @@ generic_place_classes = {
                 'A smaller rural community typically with fewer than 100-200 '
                 'inhabitants, few infrastructure.'),
             'string_defaults': ['hamlet'],
-            'osm_downloader': [
-                'Tertiary link',
-                'Tertiary',
-            ],
+            'osm_downloader': [],
             'citations': [
                 {
                     'text': None,
@@ -511,6 +513,108 @@ generic_place_classes = {
         }
     ]
 }
+
+generic_landcover_classes = {
+    'key': 'generic_landcover_classes',
+    'name': tr('Generic Landcover Classification'),
+    'description': tr(
+        'Classification of landcover based on OSM.'
+    ),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    'classes': [
+        {
+            'key': 'residential',
+            'name': tr('Residential'),
+            'description': tr(
+                'Predominantly houses or apartment buildings.'),
+            'osm_downloader': [],
+            'string_defaults': ['residential', 'population'],
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
+            'key': 'industrial',
+            'name': tr('industrial'),
+            'description': tr(
+                'Predominantly workshops, factories or warehouses.'),
+            'string_defaults': ['industrial'],
+            'osm_downloader': [],
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
+            'key': 'retail',
+            'name': tr('Retail'),
+            'description': tr(
+                'Predominantly shops.'),
+            'string_defaults': ['retail'],
+            'osm_downloader': [],
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
+            'key': 'wood',
+            'name': tr('Wood'),
+            'description': tr(
+                'Wood.'),
+            'string_defaults': ['wood', 'forest'],
+            'osm_downloader': [],
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
+            'key': 'farm',
+            'name': tr('Farm'),
+            'description': tr(
+                'An area of farmland used for tillage and pasture (animals, '
+                'vegetables, flowers, fruit growing).'),
+            'osm_downloader': [],
+            'string_defaults': ['farm', 'meadow'],
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
+            'key': 'water',
+            'name': tr('Water'),
+            'description': tr(
+                'Lakes, etc.'),
+            'osm_downloader': [],
+            'string_defaults': ['water', 'lake'],
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        }
+    ]
+}
+
 # Classes order
 structure_class_order = [
     item['key'] for item in generic_structure_classes['classes']]

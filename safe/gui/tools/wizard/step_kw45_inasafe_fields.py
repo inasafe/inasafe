@@ -2,7 +2,7 @@
 """
 InaSAFE Disaster risk assessment tool by AusAid -**InaSAFE Wizard**
 
-This module provides: Keyword Wizard Step: Extra Keywords
+This module provides: Keyword Wizard Step: InaSAFE Fields
 
 Contact : ole.moller.nielsen@gmail.com
 
@@ -26,7 +26,7 @@ from safe.definitionsv4.layer_modes import layer_mode_classified
 from safe.definitionsv4.exposure import exposure_place
 from safe.definitionsv4.utilities import get_fields, get_class_field
 from safe.definitionsv4.layer_geometry import layer_geometry_raster
-from safe.definitionsv4.constants import not_available
+from safe.definitionsv4.constants import no_field
 
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
@@ -40,8 +40,8 @@ FORM_CLASS = get_wizard_step_ui_class(__file__)
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class StepKwExtraKeywords(WizardStep, FORM_CLASS):
-    """Keyword Wizard Step: Extra Keywords"""
+class StepKwInaSAFEFields(WizardStep, FORM_CLASS):
+    """Keyword Wizard Step: InaSAFE Fields"""
 
     def __init__(self, parent=None):
         """Constructor for the tab.
@@ -99,7 +99,21 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
         :returns: The step to be switched to
         :rtype: WizardStep instance or None
         """
-        new_step = self.parent.step_kw_source
+        # Get hazard or exposure value
+        layer_purpose_key = self.parent.step_kw_purpose.selected_purpose()[
+            'key']
+        if layer_purpose_key != layer_purpose_aggregation['key']:
+            subcategory_key = self.parent.step_kw_subcategory. \
+                selected_subcategory()['key']
+        else:
+            subcategory_key = None
+        # Check if InaSAFE fields with replace_null = True has element
+        default_inasafe_fields = get_fields(
+            layer_purpose_key, subcategory_key, replace_null=False)
+        if default_inasafe_fields:
+            new_step = self.parent.step_kw_default_inasafe_fields
+        else:
+            new_step = self.parent.step_kw_source
         return new_step
 
     def inasafe_fields_for_the_layer(self):
@@ -119,9 +133,15 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
                 selected_subcategory()['key']
         else:
             subcategory_key = None
-        inasafe_fields = get_fields(layer_purpose_key, subcategory_key)
-        # Remove hazard_value_field since it's already selected in Field step
-        inasafe_fields.remove(get_class_field(layer_purpose_key))
+        # Get all fields with replace_null = False
+        inasafe_fields = get_fields(
+            layer_purpose_key, subcategory_key, replace_null=False)
+        # Remove the field for value map since it's already selected in
+        # Field step
+        try:
+            inasafe_fields.remove(get_class_field(layer_purpose_key))
+        except ValueError:
+            pass
         return inasafe_fields
 
     # noinspection PyTypeChecker
@@ -141,7 +161,7 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
         # Iterate through all inasafe fields
         for inasafe_field in self.inasafe_fields_for_the_layer():
             # Option for Not Available
-            option_list = [not_available]
+            option_list = [no_field]
             for field in layer_data_provider.fields():
                 # Check the field type
                 if isinstance(inasafe_field['type'], list):
@@ -162,7 +182,7 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
             select_parameter.description = inasafe_field['description']
             select_parameter.element_type = unicode
             select_parameter.options_list = option_list
-            select_parameter.value = not_available
+            select_parameter.value = no_field
             # Check if there is already value in the metadata.
             if existing_inasafe_field:
                 existing_value = existing_inasafe_field.get(
@@ -186,7 +206,7 @@ class StepKwExtraKeywords(WizardStep, FORM_CLASS):
         inasafe_fields = {}
         parameters = self.parameter_container.get_parameters(True)
         for parameter in parameters:
-            if not parameter.value == not_available:
+            if not parameter.value == no_field:
                 inasafe_fields[parameter.guid] = parameter.value
 
         return inasafe_fields

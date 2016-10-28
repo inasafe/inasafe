@@ -34,10 +34,11 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 class TestQGIS(unittest.TestCase):
     def test_get_layer_attribute_names(self):
         """Test we can get the correct attributes back"""
-        layer = clone_shp_layer(
-            name='district_osm_jakarta',
-            include_keywords=True,
-            source_directory=standard_data_path('boundaries'))
+        layer = load_test_vector_layer(
+            'aggregation',
+            'district_osm_jakarta.geojson',
+            clone=True
+        )
 
         # with good attribute name
         attributes, position = layer_attribute_names(
@@ -82,10 +83,11 @@ class TestQGIS(unittest.TestCase):
     def test_is_polygonal_layer(self):
         """Test we can get the correct attributes back"""
         # Polygon layer
-        layer = clone_shp_layer(
-            name='district_osm_jakarta',
-            include_keywords=True,
-            source_directory=standard_data_path('boundaries'))
+        layer = load_test_vector_layer(
+            'aggregation',
+            'district_osm_jakarta.geojson',
+            clone=True
+        )
         message = 'isPolygonLayer, %s layer should be polygonal' % layer
         self.assertTrue(is_polygon_layer(layer), message)
 

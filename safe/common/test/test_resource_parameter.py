@@ -28,13 +28,13 @@ class TestResourceParameter(unittest.TestCase):
     def test_all(self):
         """Basic test of all properties."""
         unit = Unit()
-        unit.name = 'meter'
+        unit.name = 'metre'
         unit.plural = 'metres'
         unit.abbreviation = 'm'
         unit.description = (
             '<b>metres</b> are a metric unit of measure. There are 100 '
             'centimetres in 1 metre.'),
-        unit.help_text = 'Help for meter unit'
+        unit.help_text = 'Help for metre unit'
 
         parameter = ResourceParameter()
         parameter.is_required = True

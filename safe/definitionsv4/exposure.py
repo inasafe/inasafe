@@ -20,7 +20,10 @@ from safe.definitionsv4.fields import (
 from safe.definitionsv4.layer_modes import (
     layer_mode_classified, layer_mode_continuous)
 from safe.definitionsv4.exposure_classifications import (
-    generic_place_classes, generic_road_classes, generic_structure_classes
+    generic_place_classes,
+    generic_road_classes,
+    generic_structure_classes,
+    generic_landcover_classes,
 )
 from safe.utilities.i18n import tr
 
@@ -104,7 +107,7 @@ exposure_road = {
         'travel between two or more points.'),
     'notes': [  # these are additional generic notes for roads - IF has more
         tr('Numbers reported for road lengths have been rounded to the '
-           'nearest meter.'),
+           'nearest metre.'),
         tr('Roads marked as not affected may still be unusable due to network '
            'isolation. Roads marked as affected may still be usable if they '
            'are elevated above the local landscape.'),
@@ -279,6 +282,7 @@ exposure_land_cover = {
         'raster'
     ],
     'units': [],
+    'classifications': [generic_landcover_classes],
     'fields': exposure_fields,
     'extra_fields': [],
     'layer_modes': [layer_mode_classified]

@@ -41,7 +41,7 @@ class TestAssignHighestValueVector(unittest.TestCase):
 
         layer = assign_highest_value(exposure, aggregate_hazard)
 
-        self.assertEqual(layer.featureCount(), 5)
+        self.assertEqual(layer.featureCount(), 9)
         self.assertEqual(
             exposure.fields().count() + aggregate_hazard.fields().count(),
             layer.fields().count()
@@ -49,14 +49,18 @@ class TestAssignHighestValueVector(unittest.TestCase):
 
         expected_count = {
             'high': 4,
-            'medium': 1,
+            'medium': 2,
+            '': 3
         }
 
         inasafe_fields = layer.keywords['inasafe_fields']
         expected_field = inasafe_fields[hazard_class_field['key']]
 
         for value, count in expected_count.iteritems():
-            expression = '"%s" = \'%s\'' % (expected_field, value)
+            if value:
+                expression = '"%s" = \'%s\'' % (expected_field, value)
+            else:
+                expression = '"%s" is NULL' % expected_field
             request = QgsFeatureRequest().setFilterExpression(expression)
             self.assertEqual(
                 sum(1 for _ in layer.getFeatures(request)), count)

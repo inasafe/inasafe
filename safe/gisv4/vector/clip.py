@@ -60,10 +60,6 @@ def clip(layer_to_clip, mask_layer, callback=None):
     output_layer_name = 'clip'
     processing_step = 'Clipping and masking'
 
-    fields = layer_to_clip.fields()
-    for field in mask_layer.fields():
-        fields.append(field)
-
     writer = create_memory_layer(
         output_layer_name,
         layer_to_clip.geometryType(),

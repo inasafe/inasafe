@@ -3,6 +3,7 @@
 """Utilities module for helping definitions retrieval.
 """
 from copy import deepcopy
+
 from safe import definitionsv4
 from safe.definitionsv4 import (
     layer_purposes,

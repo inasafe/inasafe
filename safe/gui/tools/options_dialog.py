@@ -119,8 +119,8 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         self.cbxHideExposure.setChecked(flag)
 
         flag = bool(settings.value(
-            'inasafe/clip_hard', False, type=bool))
-        self.cbxClipHard.setChecked(flag)
+            'inasafe/useSelectedFeaturesOnly', False, type=bool))
+        self.cbxUseSelectedFeaturesOnly.setChecked(flag)
 
         flag = bool(settings.value(
             'inasafe/useSentry', False, type=bool))
@@ -228,8 +228,8 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             'inasafe/setHideExposureFlag',
             self.cbxHideExposure.isChecked())
         settings.setValue(
-            'inasafe/clip_hard',
-            self.cbxClipHard.isChecked())
+            'inasafe/useSelectedFeaturesOnly',
+            self.cbxUseSelectedFeaturesOnly.isChecked())
         settings.setValue(
             'inasafe/useSentry',
             self.cbxUseSentry.isChecked())

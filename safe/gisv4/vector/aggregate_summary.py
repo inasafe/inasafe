@@ -71,6 +71,15 @@ def aggregate_summary(aggregate_hazard, impact, callback=None):
     else:
         field_index = None
 
+    # Special case for a point layer and indivisible polygon,
+    # we do not want to report on the size.
+    geometry = impact.geometryType()
+    exposure = impact.keywords.get('exposure')
+    if geometry == QGis.Point:
+        field_index = None
+    if geometry == QGis.Polygon and exposure == 'structure':
+        field_index = None
+
     aggregate_hazard.startEditing()
 
     shift = aggregate_hazard.fields().count()
@@ -127,4 +136,10 @@ def aggregate_summary(aggregate_hazard, impact, callback=None):
     # Todo add keywords for these new fields
     aggregate_hazard.keywords['inasafe_fields'][total_field['key']] = (
         total_field['field_name'])
+
+    for column in unique_exposure:
+        key = exposure_count_field['key'] % column
+        value = exposure_count_field['field_name'] % column
+        aggregate_hazard.keywords['inasafe_fields'][key] = value
+
     return aggregate_hazard

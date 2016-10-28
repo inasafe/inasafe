@@ -181,7 +181,6 @@ def run_single_post_processor(layer, post_processor):
         return False, message
 
 
-@profile
 def enough_input(layer, post_processor_input):
     """Check if the input from impact_fields in enough.
 
@@ -212,8 +211,8 @@ def enough_input(layer, post_processor_input):
 def add_size_field(layer):
     """Add size field in to impact layer.
 
-    If polygon, size will be area in square meter.
-    If line, size will be length in meter.
+    If polygon, size will be area in square metre.
+    If line, size will be length in metre.
 
     :param layer: The vector layer to use for post processing.
     :type layer: QgsVectorLayer
