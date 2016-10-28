@@ -27,7 +27,7 @@ from safe_extras.parameters.qt_widgets.parameter_container import (
 from safe.definitionsv4.layer_purposes import (layer_purpose_aggregation)
 from safe.definitionsv4.layer_modes import layer_mode_classified
 from safe.definitionsv4.exposure import exposure_place
-from safe.definitionsv4.utilities import get_fields, get_class_field
+from safe.definitionsv4.utilities import get_fields, get_mandatory_fields
 from safe.definitionsv4.layer_geometry import layer_geometry_raster
 from safe.definitionsv4.constants import no_field
 from safe.gui.tools.wizard.wizard_utils import get_defaults
@@ -145,12 +145,6 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
         # Get all fields with replace_null = True
         inasafe_fields = get_fields(
             layer_purpose_key, subcategory_key, replace_null=True)
-        # Remove the field for value map since it's already selected in
-        # Field step
-        try:
-            inasafe_fields.remove(get_class_field(layer_purpose_key))
-        except ValueError:
-            pass
         return inasafe_fields
 
     # noinspection PyTypeChecker
