@@ -34,7 +34,7 @@ continuous_hazard_unit = {
     'name': tr('Units'),
     'description': tr(
         'Hazard units are used for continuous data. Examples of hazard units '
-        'include metres and feet. '),
+        'include metres and feet.'),
     'citations': [
         {
             'text': None,
