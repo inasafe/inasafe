@@ -2,6 +2,8 @@
 """Definitions relating to exposure in InaSAFE."""
 
 from safe.definitionsv4.concepts import concepts
+from safe.definitionsv4.caveats import (
+    caveat_simulation, caveat_local_conditions)
 from safe.definitionsv4.units import (
     count_exposure_unit, density_exposure_unit)
 from safe.definitionsv4.fields import (
@@ -38,13 +40,33 @@ exposure_population = {
     'description': tr(
         'The <b>population</b> describes the people that might be '
         'exposed to a particular hazard.'),
-    'notes': [  # these are additional generic notes for people - IF has more
+    'notes': [  # these are additional generic notes for people
+                # IF specific notes are included below - CM
+        caveat_simulation,
+        caveat_local_conditions,
+
         tr('Numbers reported for population counts have been rounded to the '
            'nearest 10 people if the total is less than 1,000; nearest 100 '
            'people if more than 1,000 and less than 100,000; and nearest '
            '1000 if more than 100,000.'),
         tr('Rounding is applied to all population values, '
            'which may cause discrepancies when adding values.'),
+    ],
+    'earthquake_notes': [   # these are earthquake specific notes for population
+        tr('Map shows the estimation of displaced population.'),
+        tr('People are displaced if they experience and survive a shake level '
+           'of more than 5 on the MMI scale.'),
+        tr('The fatality calculation assumes that no fatalities occur for '
+           'shake levels below 4 and fatality counts of less than 50 are '
+           'disregarded.'),
+
+    ],
+    'earthquake_pager_notes': [   # these are earthquake Pager specific notes
+        tr('Fatality model is from Population Vulnerability '
+            'Pager Model.'),
+    ],
+    'earthquake_itb_notes': [   # these are earthquake ITB specific notes
+         tr('Fatality model is from Institut Teknologi Bandung 2012.'),
 
     ],
     'continuous_notes': [  # notes specific to continuous data
@@ -161,8 +183,7 @@ exposure_structure = {
     'classified_notes': [  # notes specific to classified data
     ],
     'actions': [  # these are additional generic actions - IF has more
-        tr('Which structures have warning capacity (eg. sirens, speakers, '
-           'etc.)?'),
+        tr('Which structures have warning capacity (eg. sirens or speakers)?'),
         tr('Are the water and electricity services still operating?'),
         tr('Are the health centres still open?'),
         tr('Are the other public services accessible?'),
