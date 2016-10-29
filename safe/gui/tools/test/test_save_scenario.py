@@ -36,7 +36,6 @@ from safe.test.utilities import (
     GEOCRS,
     standard_data_path)
 from safe.common.utilities import unique_filename, temp_dir
-from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 
 
 class SaveScenarioTest(unittest.TestCase):
@@ -51,9 +50,8 @@ class SaveScenarioTest(unittest.TestCase):
         os.environ['LANG'] = 'en'
         self.DOCK.show_only_visible_layers_flag = True
         load_standard_layers(self.DOCK)
-        self.DOCK.cboHazard.setCurrentIndex(0)
-        self.DOCK.cboExposure.setCurrentIndex(0)
-        self.DOCK.cboFunction.setCurrentIndex(0)
+        self.DOCK.hazard_layer_combo.setCurrentIndex(0)
+        self.DOCK.exposure_layer_combo.setCurrentIndex(0)
         self.DOCK.run_in_thread_flag = False
         self.DOCK.show_only_visible_layers_flag = False
         self.DOCK.set_layer_from_title_flag = False
@@ -63,18 +61,15 @@ class SaveScenarioTest(unittest.TestCase):
 
         # Create scenario dialog
         self.save_scenario_dialog = SaveScenarioDialog(IFACE, self.DOCK)
-        # register impact functions
-        register_impact_functions()
-        self.impact_function_manager = ImpactFunctionManager()
 
     def tearDown(self):
         """Fixture run after each test"""
         # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().removeAllMapLayers()
-        self.DOCK.cboHazard.clear()
-        self.DOCK.cboExposure.clear()
-        # self.DOCK.cboAggregation.clear()
-        # #dont do this because the cboAggregation
+        self.DOCK.hazard_layer_combo.clear()
+        self.DOCK.exposure_layer_combo.clear()
+        # self.DOCK.aggregation_layer_combo.clear()
+        # #dont do this because the aggregation_layer_combo
         # need to be able to react to the status changes of the other combos
         self.save_scenario_dialog = None
 
@@ -85,16 +80,14 @@ class SaveScenarioTest(unittest.TestCase):
         result, message = setup_scenario(
             self.DOCK,
             hazard='Classified Flood',
-            exposure='Population',
-            function='Be affected',
-            function_id='ClassifiedRasterHazardPopulationFunction')
+            exposure='Population')
         self.assertTrue(result, message)
         is_valid, message = self.save_scenario_dialog.validate_input()
         self.assertTrue(is_valid)
         self.assertIsNone(message)
 
         # Change the hazard layer to None
-        self.save_scenario_dialog.dock.cboHazard.setCurrentIndex(-1)
+        self.save_scenario_dialog.dock.hazard_layer_combo.setCurrentIndex(-1)
         is_valid, message = self.save_scenario_dialog.validate_input()
         self.assertFalse(is_valid)
         self.assertIsNotNone(message)
@@ -105,9 +98,7 @@ class SaveScenarioTest(unittest.TestCase):
         result, message = setup_scenario(
             self.DOCK,
             hazard='Classified Flood',
-            exposure='Population',
-            function='Be affected',
-            function_id='ClassifiedRasterHazardPopulationFunction')
+            exposure='Population')
         self.assertTrue(result, message)
 
         # Enable on-the-fly reprojection
@@ -141,10 +132,6 @@ class SaveScenarioTest(unittest.TestCase):
             hazard.startswith('hazard =') and hazard.endswith(
                 'classified_flood_20_20.asc'),
             'Hazard is not the same')
-        self.assertTrue(
-            function == (
-                'function = ClassifiedRasterHazardPopulationFunction'),
-            'Impact function is not same')
 
         # TODO: figure out why this changed between releases
         if qgis_version() < 20400:
@@ -165,9 +152,7 @@ class SaveScenarioTest(unittest.TestCase):
         result, message = setup_scenario(
             self.DOCK,
             hazard='Classified Flood',
-            exposure='Population',
-            function='Be affected',
-            function_id='ClassifiedRasterHazardPopulationFunction')
+            exposure='Population')
         self.assertTrue(result, message)
         fake_dir = standard_data_path()
         scenario_file = unique_filename(

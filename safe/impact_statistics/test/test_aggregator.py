@@ -71,9 +71,8 @@ class AggregatorTest(unittest.TestCase):
         os.environ['LANG'] = 'en'
         self.DOCK.show_only_visible_layers_flag = True
         load_standard_layers(self.DOCK)
-        self.DOCK.cboHazard.setCurrentIndex(0)
-        self.DOCK.cboExposure.setCurrentIndex(0)
-        self.DOCK.cboFunction.setCurrentIndex(0)
+        self.DOCK.hazard_layer_combo.setCurrentIndex(0)
+        self.DOCK.exposure_layer_combo.setCurrentIndex(0)
         self.DOCK.run_in_thread_flag = False
         self.DOCK.show_only_visible_layers_flag = False
         self.DOCK.set_layer_from_title_flag = False
@@ -94,8 +93,8 @@ class AggregatorTest(unittest.TestCase):
         """Run after each test."""
         # Let's use a fresh registry, canvas, and dock for each test!
         QgsMapLayerRegistry.instance().removeAllMapLayers()
-        self.DOCK.cboHazard.clear()
-        self.DOCK.cboExposure.clear()
+        self.DOCK.hazard_layer_combo.clear()
+        self.DOCK.exposure_layer_combo.clear()
 
     @unittest.expectedFailure
     def test_combo_aggregation_loaded_project(self):
@@ -103,8 +102,8 @@ class AggregatorTest(unittest.TestCase):
         layer_list = [
             self.DOCK.tr('Entire area'),
             self.DOCK.tr(u"D\xedstr\xedct's of Jakarta")]
-        current_layers = [self.DOCK.cboAggregation.itemText(i) for i in range(
-            self.DOCK.cboAggregation.count())]
+        current_layers = [self.DOCK.aggregation_layer_combo.itemText(i) for i in range(
+            self.DOCK.aggregation_layer_combo.count())]
 
         message = (
             'The aggregation combobox should have:\n %s \nFound: %s'
@@ -123,7 +122,6 @@ class AggregatorTest(unittest.TestCase):
             self.DOCK,
             hazard='Continuous Flood',
             exposure='Population',
-            function_id='FloodEvacuationRasterHazardFunction',
             aggregation_layer=u"Dístríct's of Jakarta",
             aggregation_enabled_flag=True)
         set_jakarta_extent(dock=self.DOCK)
@@ -153,7 +151,6 @@ class AggregatorTest(unittest.TestCase):
             self.DOCK,
             hazard='Continuous Flood',
             exposure='Population',
-            function_id='FloodEvacuationRasterHazardFunction',
             aggregation_layer='kabupaten jakarta singlepart 1 good attr')
         set_jakarta_extent(dock=self.DOCK)
         assert result, message
@@ -183,7 +180,6 @@ class AggregatorTest(unittest.TestCase):
             self.DOCK,
             hazard='Continuous Flood',
             exposure='Population',
-            function_id='FloodEvacuationRasterHazardFunction',
             aggregation_layer='kabupaten jakarta singlepart 0 good attr')
         set_jakarta_extent(dock=self.DOCK)
         self.assertTrue(result, message)
@@ -212,7 +208,6 @@ class AggregatorTest(unittest.TestCase):
             self.DOCK,
             hazard='Continuous Flood',
             exposure='Population',
-            function_id='FloodEvacuationRasterHazardFunction',
             aggregation_layer='kabupaten jakarta singlepart with None keyword')
         set_jakarta_extent(dock=self.DOCK)
         self.assertTrue(result, message)
@@ -256,7 +251,6 @@ class AggregatorTest(unittest.TestCase):
             self.DOCK,
             hazard='Flood Polygon Cross Kabupaten',
             exposure='Population',
-            function_id='FloodEvacuationVectorHazardFunction',
             aggregation_layer=u"Dístríct's of Jakarta",
             aggregation_enabled_flag=True)
         assert result, message

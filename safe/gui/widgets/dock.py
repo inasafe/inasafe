@@ -1562,7 +1562,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         .. note:: The print button will be disabled if this method is called.
         """
-        LOGGER.debug('Showing Mismatch Version Message')
+        LOGGER.debug('Showing incorrect keywords for v4 message')
         report = m.Message()
         report.add(LOGO_ELEMENT)
         report.add(m.Heading(self.tr(

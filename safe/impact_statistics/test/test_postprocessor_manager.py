@@ -53,9 +53,8 @@ class PostprocessorManagerTest(unittest.TestCase):
         os.environ['LANG'] = 'en'
         self.DOCK.show_only_visible_layers_flag = True
         load_standard_layers(self.DOCK)
-        self.DOCK.cboHazard.setCurrentIndex(0)
-        self.DOCK.cboExposure.setCurrentIndex(0)
-        self.DOCK.cboFunction.setCurrentIndex(0)
+        self.DOCK.hazard_layer_combo.setCurrentIndex(0)
+        self.DOCK.exposure_layer_combo.setCurrentIndex(0)
         self.DOCK.run_in_thread_flag = False
         self.DOCK.show_only_visible_layers_flag = False
         self.DOCK.set_layer_from_title_flag = False
@@ -70,8 +69,8 @@ class PostprocessorManagerTest(unittest.TestCase):
         """Run after each test."""
         # Let's use a fresh registry, canvas, and dock for each test!
         QgsMapLayerRegistry.instance().removeAllMapLayers()
-        self.DOCK.cboHazard.clear()
-        self.DOCK.cboExposure.clear()
+        self.DOCK.hazard_layer_combo.clear()
+        self.DOCK.exposure_layer_combo.clear()
 
     # noinspection PyMethodMayBeStatic
     @unittest.expectedFailure
@@ -85,7 +84,6 @@ class PostprocessorManagerTest(unittest.TestCase):
             self.DOCK,
             hazard='Continuous Flood',
             exposure='Population',
-            function_id='FloodEvacuationRasterHazardFunction',
             aggregation_layer=u"Dístríct's of Jakarta")
         set_jakarta_extent(dock=self.DOCK)
         assert result, message
@@ -133,8 +131,7 @@ class PostprocessorManagerTest(unittest.TestCase):
         result, message = setup_scenario(
             self.DOCK,
             hazard='Continuous Flood',
-            exposure='Population',
-            function_id='FloodEvacuationRasterHazardFunction')
+            exposure='Population')
 
         # Enable on-the-fly reprojection
         set_canvas_crs(GEOCRS, True)
