@@ -586,8 +586,6 @@ def get_ui_state(dock):
 
         {'Hazard': 'flood',
          'Exposure': 'population',
-         'Impact Function Title': 'be affected',
-         'Impact Function Id': 'FloodImpactFunction',
          'Run Button Enabled': False}
 
     """
@@ -745,13 +743,8 @@ def setup_scenario(
     state = get_ui_state(dock)
 
     expected_state = {'Run Button Enabled': ok_button_flag,
-                      'Impact Function Id': function_id,
                       'Hazard': hazard,
                       'Exposure': exposure}
-    if function is not None:
-        expected_state['Impact Function Title'] = function
-    else:
-        state.pop('Impact Function Title')
 
     message = 'Expected versus Actual State\n'
     message += '--------------------------------------------------------\n'
