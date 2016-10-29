@@ -93,7 +93,8 @@ from safe.common.exceptions import (
     InvalidAggregationKeywords,
     InsufficientMemoryWarning,
     MissingImpactReport,
-    MetadataReadError
+    MetadataReadError,
+    InvalidKeywordsForProcessingAlgorithm
 )
 from safe.impact_function_v4.impact_function import ImpactFunction
 from safe.report.impact_report import ImpactReport
@@ -1041,6 +1042,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
             # Start the analysis
             self.impact_function.run()
+        except InvalidKeywordsForProcessingAlgorithm as e:
+            self.show_keywords_need_review_message()
+            self.hide_busy()
         except KeywordNotFoundError as e:
             self.hide_busy()
             missing_keyword_message(self, e)
@@ -1547,6 +1551,32 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 **SMALL_ICON_STYLE),
             self.tr(
                 ' icon in the toolbar.'))
+        report.add(context)
+        self.print_button.setEnabled(False)
+        send_static_message(self, report)
+
+    def show_keywords_need_review_message(self):
+        """Show a message keywords are not adequate to run an analysis.
+
+        .. versionadded: 4.0
+
+        .. note:: The print button will be disabled if this method is called.
+        """
+        LOGGER.debug('Showing Mismatch Version Message')
+        report = m.Message()
+        report.add(LOGO_ELEMENT)
+        report.add(m.Heading(self.tr(
+            'Layer Keywords Outdated:'), **WARNING_STYLE))
+        context = m.Paragraph(
+            self.tr(
+                'Please update the keywords for your layers and then '
+                'try to run the analysis again. Use the keyword wizard '),
+            m.Image(
+                'file:///%s/img/icons/'
+                'show-keyword-wizard.svg' % resources_path(),
+                **SMALL_ICON_STYLE),
+            self.tr(
+                ' icon in the toolbar to update your layer\s keywords.'))
         report.add(context)
         self.print_button.setEnabled(False)
         send_static_message(self, report)
