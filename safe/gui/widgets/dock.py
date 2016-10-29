@@ -1576,7 +1576,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 'show-keyword-wizard.svg' % resources_path(),
                 **SMALL_ICON_STYLE),
             self.tr(
-                ' icon in the toolbar to update your layer\s keywords.'))
+                ' icon in the toolbar to update your layer\'s keywords.'))
         report.add(context)
         self.print_button.setEnabled(False)
         send_static_message(self, report)
