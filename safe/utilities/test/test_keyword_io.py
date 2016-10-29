@@ -120,7 +120,7 @@ class KeywordIOTest(unittest.TestCase):
         expected_keywords = {
             'classification': 'tsunami_hazard_classes',
             'hazard_category': 'multiple_event',
-            'title': 'Tsunami',
+            'title': 'tsunami_wgs84',
             'hazard': 'tsunami',
             'continuous_hazard_unit': 'metres',
             'layer_geometry': 'raster',
@@ -131,7 +131,7 @@ class KeywordIOTest(unittest.TestCase):
         expected_keywords = {
             k: get_unicode(v) for k, v in expected_keywords.iteritems()
         }
-        self.assertDictEqual(keywords, expected_keywords)
+        self.assertDictEqual(expected_keywords, keywords)
 
     def test_copy_keywords(self):
         """Test we can copy the keywords."""
