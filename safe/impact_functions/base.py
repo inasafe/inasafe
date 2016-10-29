@@ -32,16 +32,8 @@ from safe import messaging as m
 from safe.common.exceptions import (
     InvalidExtentError,
     InsufficientMemoryWarning,
-    InvalidAggregationKeywords,
-    NoFeaturesInExtentError,
-    InvalidProjectionError,
-    InvalidGeometryError,
     KeywordNotFoundError,
-    AggregationError,
-    KeywordDbError,
     ZeroImpactException,
-    InvalidLayerError,
-    UnsupportedProviderError,
     CallGDALError,
     FunctionParametersError,
     NoValidLayerError,
@@ -64,7 +56,6 @@ from safe.common.version import get_version
 from safe.engine.core import check_data_integrity
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
-from safe.impact_statistics.aggregator import Aggregator
 from safe.impact_statistics.postprocessor_manager import (
     PostprocessorManager)
 from safe.messaging import styles
@@ -88,11 +79,9 @@ from safe.utilities.gis import (
     extent_to_array,
     get_optimal_extent)
 from safe.utilities.i18n import tr
-from safe.utilities.keyword_io import KeywordIO
 from safe.definitionsv4.utilities import definition
 from safe.utilities.memory_checker import check_memory_usage
 from safe.utilities.utilities import (
-    get_error_message,
     replace_accentuated_characters,
     write_json
 )
@@ -149,8 +138,6 @@ class ImpactFunction(object):
         self._exposure = None
         # Layer used for aggregating results by area / district
         self._aggregation = None
-        # Aggregator
-        self._aggregator = None
         # Postprocessor manager
         self._postprocessor_manager = None
         # The best extents to use for the assessment
@@ -628,15 +615,6 @@ class ImpactFunction(object):
             self._aggregation = None
 
     @property
-    def aggregator(self):
-        """Get the aggregator.
-
-        :return: The aggregator.
-        :rtype: Aggregator
-        """
-        return self._aggregator
-
-    @property
     def postprocessor_manager(self):
         """Get the postprocessor manager.
 
@@ -896,7 +874,6 @@ class ImpactFunction(object):
             self._emit_pre_run_message()
             self._prepare()
             self._impact = self._calculate_impact()
-            self._run_aggregator()
         except ZeroImpactException, e:
             report = m.Message()
             report.add(LOGO_ELEMENT)
@@ -1047,117 +1024,8 @@ class ImpactFunction(object):
         implementation so that it includes any impact function specific checks
         too.
         """
+        pass
 
-        self.provenance.append_step(
-            'Preparation Step',
-            'Impact function is being prepared to run the analysis.')
-
-        qgis_layer = self.hazard.qgis_layer()
-        if is_point_layer(qgis_layer):
-            # If the hazard is a point layer, it's a volcano hazard.
-            # Make hazard layer by buffering the point.
-            # noinspection PyTypeChecker
-            radii = self.parameters['distances'].value
-            # noinspection PyTypeChecker
-            self.hazard = buffer_points(
-                qgis_layer,
-                radii,
-                self.hazard_zone_attribute,
-                self.exposure.crs()
-            )
-
-        # Special process if the exposure is a road or building layer, we need
-        # to check the for the value_mapping keyword.
-        if self.exposure.keyword('exposure') in ['road', 'structure']:
-            try:
-                self.exposure.keyword('value_map')
-            except KeywordNotFoundError:
-                LOGGER.debug(
-                    'value_mapping not found in the aggregation layer, using '
-                    'an empty value_mapping.')
-                keyword_io = KeywordIO()
-                keyword_io.update_keywords(
-                    self.exposure.qgis_layer(), {'value_map': {}})
-
-        self._setup_aggregator()
-
-        # go check if our postprocessing layer has any keywords set and if not
-        # prompt for them. if a prompt is shown run method is called by the
-        # accepted signal of the keywords dialog
-        self.aggregator.validate_keywords()
-        if self.aggregator.is_valid:
-            pass
-        else:
-            raise InvalidAggregationKeywords
-
-        try:
-            if self.requires_clipping:
-                # The impact function uses SAFE layers, clip them.
-                hazard_layer, exposure_layer = self._optimal_clip()
-                self.aggregator.set_layers(hazard_layer, exposure_layer)
-
-                # See if the inputs need further refinement for aggregations
-                try:
-                    # This line is a fix for #997
-                    self.aggregator.validate_keywords()
-                    self.aggregator.deintersect()
-                except (InvalidLayerError,
-                        UnsupportedProviderError,
-                        KeywordDbError):
-                    raise
-                # Get clipped layers
-                self.hazard = self.aggregator.hazard_layer
-                self.exposure = self.aggregator.exposure_layer
-            else:
-                # It is a QGIS impact function,
-                # clipping isn't needed, but we need to set up extent
-                self.aggregator.set_layers(
-                    self.hazard.qgis_layer(), self.exposure.qgis_layer())
-                clip_parameters = self.clip_parameters
-                adjusted_geo_extent = clip_parameters['adjusted_geo_extent']
-                self.requested_extent = adjusted_geo_extent
-                # Cut the exposure according to aggregation layer if necessary
-                self.aggregator.validate_keywords()
-                self.aggregator.deintersect_exposure()
-                self.exposure = self.aggregator.exposure_layer
-        except CallGDALError, e:
-            analysis_error(self, e, tr(
-                'An error occurred when calling a GDAL command'))
-            return
-        except IOError, e:
-            analysis_error(self, e, tr(
-                'An error occurred when writing clip file'))
-            return
-        except InsufficientOverlapError, e:
-            analysis_error(self, e, tr(
-                'An exception occurred when setting up the '
-                'impact calculator.'))
-            return
-        except NoFeaturesInExtentError, e:
-            analysis_error(self, e, tr(
-                'An error occurred because there are no features visible in '
-                'the current view. Try zooming out or panning until some '
-                'features become visible.'))
-            return
-        except InvalidProjectionError, e:
-            analysis_error(self, e, tr(
-                'An error occurred because you are using a layer containing '
-                'count data (e.g. population count) which will not '
-                'scale accurately if we re-project it from its native '
-                'coordinate reference system to WGS84/GeoGraphic.'))
-            return
-        except MemoryError, e:
-            analysis_error(
-                self,
-                e,
-                tr(
-                    'An error occurred because it appears that your '
-                    'system does not have sufficient memory. Upgrading '
-                    'your computer so that it has more memory may help. '
-                    'Alternatively, consider using a smaller geographical '
-                    'area for your analysis, or using rasters with a larger '
-                    'cell size.'))
-            return
 
     def generate_impact_keywords(self, extra_keywords=None):
         """Obtain keywords for the impact layer.
@@ -1612,74 +1480,8 @@ class ImpactFunction(object):
             hard_clip_flag=self.clip_hard)
         return clipped_hazard, clipped_exposure
 
-    def _setup_aggregator(self):
-        """Create an aggregator for this analysis run."""
-        try:
-            buffered_geo_extent = self.impact.extent
-        except AttributeError:
-            # if we have no runner, set dummy extent
-            buffered_geo_extent = self.clip_parameters['adjusted_geo_extent']
-
-        if self.aggregation is not None:
-            qgis_layer = self.aggregation.qgis_layer()
-        else:
-            qgis_layer = None
-
-        # setup aggregator to use buffered_geo_extent to deal with #759
-        self._aggregator = Aggregator(buffered_geo_extent, qgis_layer)
-
-        self._aggregator.show_intermediate_layers = \
-            self.show_intermediate_layers
-
-        self.aggregation = self.aggregator.layer
-
-    def _run_aggregator(self):
-        """Run all post processing steps."""
-        LOGGER.debug('Do aggregation')
-        if self.impact is None:
-            # Done was emitted, but no impact layer was calculated
-            message = tr('No impact layer was generated.\n')
-            send_not_busy_signal(self)
-            send_error_message(self, message)
-            send_analysis_done_signal(self)
-            return
-        try:
-            # TODO (ET) check if the aggregator can take a SafeLayer.
-            qgis_impact_layer = safe_to_qgis_layer(self.impact)
-            self.aggregator.extent = extent_to_array(
-                qgis_impact_layer.extent(),
-                qgis_impact_layer.crs())
-            self.aggregator.aggregate(self.impact)
-        except InvalidGeometryError, e:
-            message = get_error_message(e)
-            send_error_message(self, message)
-            # self.analysis_done.emit(False)
-            return
-        except Exception, e:  # pylint: disable=W0703
-            # noinspection PyPropertyAccess
-            e.args = (str(e.args[0]) + '\nAggregation error occurred',)
-            raise
-
-        # TODO (MB) do we really want this check?
-        if self.aggregator.error_message is None:
-            # Do not use post processor if entire area for road and structure
-            # See issue #2746
-            skip_post_processors = ['structure', 'road']
-            if (self.exposure.keyword('exposure') in skip_post_processors and
-                    self.aggregator.aoi_mode):
-                send_not_busy_signal(self)
-                send_analysis_done_signal(self)
-            else:
-                self._run_post_processor()
-        else:
-            content = self.aggregator.error_message
-            exception = AggregationError(tr(
-                'Aggregation error occurred.'))
-            analysis_error(self, exception, content)
-
     def _run_post_processor(self):
         """Carry out any postprocessing required for this impact layer."""
-        self._postprocessor_manager = PostprocessorManager(self.aggregator)
         self.postprocessor_manager.function_parameters = self.parameters
         self.postprocessor_manager.run()
         send_not_busy_signal(self)
