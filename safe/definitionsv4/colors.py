@@ -9,7 +9,7 @@ __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
-# Hazard classes
+# Hazard classes as specified in reporting standards
 green = QColor('#1A9641')
 light_green = QColor('#A6D96A')
 yellow = QColor('#FFFFB2')
