@@ -67,8 +67,8 @@ exposure_population = {
            'people?'),
         tr('What are the land-use rights for the settlement location?'),
         tr('What is the ownership of the shelter or settlement location'),
-        tr('What is the appropriate construction for temporary or transitional '
-           'household shelter?'),
+        tr('What is the appropriate construction for temporary or '
+           'transitional household shelter?'),
         tr('What are the existing environmental risks or vulnerabilities at '
            'the shelter location?'),
         tr('Are there enough clothing, bedding and household items available '

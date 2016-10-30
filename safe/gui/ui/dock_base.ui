@@ -17,29 +17,16 @@
   <property name="windowTitle">
    <string>InaSAFE</string>
   </property>
-  <widget class="QWidget" name="dockWidgetContents">
+  <widget class="QWidget" name="dock_layout">
    <layout class="QVBoxLayout" name="verticalLayout">
-    <property name="leftMargin">
-     <number>0</number>
+    <property name="spacing">
+     <number>1</number>
     </property>
-    <property name="topMargin">
-     <number>0</number>
-    </property>
-    <property name="rightMargin">
-     <number>0</number>
-    </property>
-    <property name="bottomMargin">
+    <property name="margin">
      <number>0</number>
     </property>
     <item>
-     <widget class="QPushButton" name="pbnShowQuestion">
-      <property name="text">
-       <string>Show question form</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QGroupBox" name="grpQuestion">
+     <widget class="QGroupBox" name="question_group">
       <property name="title">
        <string/>
       </property>
@@ -60,88 +47,59 @@
         <number>0</number>
        </property>
        <property name="verticalSpacing">
-        <number>10</number>
+        <number>3</number>
        </property>
        <item row="7" column="0">
-        <widget class="QLabel" name="label_8">
+        <widget class="QLabel" name="aggregation_question_label">
          <property name="text">
-          <string>&amp;Might</string>
+          <string>will be affected? Summarise the results by</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
-         </property>
-         <property name="buddy">
-          <cstring>cboFunction</cstring>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="0">
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>Aggregate results by</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
-         </property>
-        </widget>
-       </item>
-       <item row="10" column="0" colspan="2">
-        <widget class="QComboBox" name="cboAggregation"/>
-       </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="label_7">
-         <property name="text">
-          <string>How many</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
-         </property>
-         <property name="buddy">
-          <cstring>cboExposure</cstring>
          </property>
         </widget>
        </item>
        <item row="6" column="0" colspan="2">
-        <widget class="QComboBox" name="cboExposure">
+        <widget class="QComboBox" name="exposure_layer_combo">
          <property name="insertPolicy">
           <enum>QComboBox::InsertAlphabetically</enum>
          </property>
         </widget>
        </item>
-       <item row="8" column="0">
-        <widget class="QComboBox" name="cboFunction">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="insertPolicy">
-          <enum>QComboBox::InsertAlphabetically</enum>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="1">
-        <widget class="QPushButton" name="toolFunctionOptions">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
+       <item row="4" column="0">
+        <widget class="QLabel" name="expsosure_layer_label">
          <property name="text">
-          <string>Options ...</string>
+          <string>how many</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+         </property>
+         <property name="buddy">
+          <cstring>exposure_layer_combo</cstring>
          </property>
         </widget>
+       </item>
+       <item row="8" column="0" colspan="2">
+        <widget class="QComboBox" name="aggregation_layer_combo"/>
        </item>
        <item row="2" column="0">
-        <widget class="QLabel" name="label">
+        <widget class="QLabel" name="hazard_layer_label">
          <property name="text">
-          <string>Question: In the event of</string>
+          <string>In the event of</string>
          </property>
         </widget>
        </item>
-       <item row="3" column="0">
-        <widget class="QComboBox" name="cboHazard">
+       <item row="3" column="0" colspan="2">
+        <widget class="QComboBox" name="hazard_layer_combo">
          <property name="insertPolicy">
           <enum>QComboBox::InsertAlphabetically</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0" colspan="2">
+        <widget class="QPushButton" name="show_question_button">
+         <property name="text">
+          <string>Show question form</string>
          </property>
         </widget>
        </item>
@@ -149,7 +107,7 @@
      </widget>
     </item>
     <item>
-     <widget class="MessageViewer" name="wvResults" native="true">
+     <widget class="MessageViewer" name="results_webview" native="true">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
         <horstretch>0</horstretch>
@@ -166,6 +124,13 @@
        <url>
         <string>about:blank</string>
        </url>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QProgressBar" name="progress_bar">
+      <property name="value">
+       <number>24</number>
       </property>
      </widget>
     </item>
@@ -206,7 +171,7 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <widget class="QPushButton" name="pbnHelp">
+       <widget class="QPushButton" name="help_button">
         <property name="text">
          <string>Help</string>
         </property>
@@ -246,7 +211,7 @@
        </spacer>
       </item>
       <item>
-       <widget class="QPushButton" name="pbnPrint">
+       <widget class="QPushButton" name="print_button">
         <property name="text">
          <string>Print ...</string>
         </property>
@@ -266,7 +231,7 @@
        </spacer>
       </item>
       <item>
-       <widget class="QPushButton" name="pbnRunStop">
+       <widget class="QPushButton" name="run_button">
         <property name="text">
          <string>Run</string>
         </property>
@@ -286,22 +251,19 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>pbnShowQuestion</tabstop>
-  <tabstop>cboExposure</tabstop>
-  <tabstop>cboFunction</tabstop>
-  <tabstop>toolFunctionOptions</tabstop>
-  <tabstop>cboAggregation</tabstop>
-  <tabstop>pbnHelp</tabstop>
+  <tabstop>exposure_layer_combo</tabstop>
+  <tabstop>aggregation_layer_combo</tabstop>
+  <tabstop>help_button</tabstop>
   <tabstop>about_button</tabstop>
-  <tabstop>pbnPrint</tabstop>
-  <tabstop>pbnRunStop</tabstop>
+  <tabstop>print_button</tabstop>
+  <tabstop>run_button</tabstop>
  </tabstops>
  <resources/>
  <connections>
   <connection>
-   <sender>pbnShowQuestion</sender>
+   <sender>show_question_button</sender>
    <signal>clicked()</signal>
-   <receiver>pbnShowQuestion</receiver>
+   <receiver>show_question_button</receiver>
    <slot>hide()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -315,9 +277,9 @@
    </hints>
   </connection>
   <connection>
-   <sender>pbnShowQuestion</sender>
+   <sender>show_question_button</sender>
    <signal>clicked()</signal>
-   <receiver>grpQuestion</receiver>
+   <receiver>question_group</receiver>
    <slot>show()</slot>
    <hints>
     <hint type="sourcelabel">

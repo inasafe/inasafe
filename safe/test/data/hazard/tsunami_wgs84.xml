@@ -47,7 +47,7 @@
       <gmd:citation>
         <gmd:CI_Citation>
           <gmd:title>
-            <gco:CharacterString>Tsunami</gco:CharacterString>
+            <gco:CharacterString>tsunami_wgs84</gco:CharacterString>
           </gmd:title>
           <gmd:date>
             <gmd:CI_Date>
@@ -175,24 +175,36 @@
           <hazard_category>
             <gco:CharacterString>single_event</gco:CharacterString>
           </hazard_category>
+          <raster_hazard_classification>
+            <gco:CharacterString/>
+          </raster_hazard_classification>
           <classification>
             <gco:CharacterString>tsunami_hazard_classes</gco:CharacterString>
           </classification>
-          <multipart_polygon>
-            <gco:Boolean/>
-          </multipart_polygon>
           <prob_fatality_mag>
             <gco:Tuple/>
           </prob_fatality_mag>
           <inasafe_fields>
             <gco:Dictionary/>
           </inasafe_fields>
+          <inasafe_default_values>
+            <gco:Dictionary/>
+          </inasafe_default_values>
+          <volcano_name_field>
+            <gco:CharacterString/>
+          </volcano_name_field>
+          <multipart_polygon>
+            <gco:Boolean/>
+          </multipart_polygon>
           <field>
             <gco:CharacterString/>
           </field>
           <value_map>
             <gco:Dictionary/>
           </value_map>
+          <vector_hazard_classification>
+            <gco:CharacterString/>
+          </vector_hazard_classification>
           <layer_geometry>
             <gco:CharacterString>raster</gco:CharacterString>
           </layer_geometry>

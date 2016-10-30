@@ -43,6 +43,7 @@ from safe.definitionsv4.fields import (
     analysis_name_field,
 )
 from safe.definitionsv4.post_processors import post_processors
+from safe.definitionsv4.analysis_steps import analysis_steps
 from safe.definitionsv4.utilities import definition
 from safe.defaults import get_defaults
 from safe.common.exceptions import (
@@ -131,6 +132,10 @@ class ImpactFunction(object):
         row.add(m.Cell(tr('Function')), header_flag=True)
         row.add(m.Cell(tr('Time')), header_flag=True)
         table.add(row)
+
+        if self.performance_log is None:
+            message.add(table)
+            return message
 
         breakdown = self.performance_log[0]
         for line in breakdown:
@@ -413,7 +418,7 @@ class ImpactFunction(object):
         :returns: A callback function. The callback function will have the
             following parameter requirements.
 
-            progress_callback(current, maximum, message=None)
+            self.progress_callback(current, maximum, message=None)
 
         :rtype: function
 
@@ -464,15 +469,17 @@ class ImpactFunction(object):
         :param maximum: Maximum range (point at which task is complete.
         :type maximum: int
 
-        :param message: Optional message to display in the progress bar
-        :type message: str, QString
+        :param message: Optional message dictionary to containing content
+            we can display to the user. See safe.definitions.analysis_steps
+            for an example of the expected format
+        :type message: dict
         """
         # noinspection PyChainedComparisons
         if maximum > 1000 and current % 1000 != 0 and current != maximum:
             return
         if message is not None:
-            print message
-        print 'Task progress: %i of %i' % (current, maximum)
+            LOGGER.info(message['description'])
+        LOGGER.info('Task progress: %i of %i' % (current, maximum))
 
     @profile
     def create_virtual_aggregation(self, extent=None, extent_crs=None):
@@ -612,6 +619,7 @@ class ImpactFunction(object):
         :param value: The value of the information. E.g point
         :type value: str, unicode, int, float, bool, list, dict
         """
+        LOGGER.debug('%s: %s: %s' % (context, key, value))
         self.state[context]["info"][key] = value
 
     def validate(self):
@@ -644,7 +652,8 @@ class ImpactFunction(object):
         """Run the whole impact function."""
 
         self.validate()
-
+        step_count = 8
+        self.callback(0, step_count, analysis_steps['initialisation'])
         self.reset_state()
         clear_prof_data()
 
@@ -659,6 +668,7 @@ class ImpactFunction(object):
         if not self._datastore:
             # By default, results will go in a temporary folder.
             # Users are free to set their own datastore with the setter.
+            self.callback(1, step_count, analysis_steps['data_store'])
             self._datastore = Folder(temp_dir(sub_dir=self._unique_name))
             self._datastore.default_vector_format = 'geojson'
             if self.debug:
@@ -683,18 +693,31 @@ class ImpactFunction(object):
                         # return self.state()
                         return
 
+        self._performance_log = profiling_log()
+        self.callback(2, step_count, analysis_steps['hazard_preparation'])
         self.hazard_preparation()
 
+        self._performance_log = profiling_log()
+        self.callback(3, step_count, analysis_steps['aggregation_preparation'])
         self.aggregation_preparation()
 
+        self._performance_log = profiling_log()
+        self.callback(
+            4, step_count, analysis_steps['aggregate_hazard_preparation'])
         self.aggregate_hazard_preparation()
 
+        self._performance_log = profiling_log()
+        self.callback(5, step_count, analysis_steps['exposure_preparation'])
         self.exposure_preparation()
 
+        self._performance_log = profiling_log()
+        self.callback(6, step_count, analysis_steps['combine_hazard_exposure'])
         self.intersect_exposure_and_aggregate_hazard()
 
         # Post Processor
         if self._impact:
+            self._performance_log = profiling_log()
+            self.callback(7, step_count, analysis_steps['post_processing'])
             self.post_process(self._impact)
 
             self.datastore.add_layer(self._impact, 'impact')
@@ -712,6 +735,7 @@ class ImpactFunction(object):
 
         # Get the profiling log
         self._performance_log = profiling_log()
+        self.callback(8, step_count, analysis_steps['profiling'])
 
         if self.debug:
             print 'Performance log message :'

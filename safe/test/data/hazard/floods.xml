@@ -178,18 +178,24 @@
           <raster_hazard_classification>
             <gco:CharacterString/>
           </raster_hazard_classification>
-          <multipart_polygon>
-            <gco:Boolean/>
-          </multipart_polygon>
+          <classification>
+            <gco:CharacterString/>
+          </classification>
           <prob_fatality_mag>
             <gco:Tuple/>
           </prob_fatality_mag>
           <inasafe_fields>
             <gco:Dictionary/>
           </inasafe_fields>
+          <inasafe_default_values>
+            <gco:Dictionary/>
+          </inasafe_default_values>
           <volcano_name_field>
             <gco:CharacterString/>
           </volcano_name_field>
+          <multipart_polygon>
+            <gco:Boolean/>
+          </multipart_polygon>
           <field>
             <gco:CharacterString>FLOODPRONE</gco:CharacterString>
           </field>
