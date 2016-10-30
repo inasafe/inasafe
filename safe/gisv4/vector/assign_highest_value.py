@@ -13,7 +13,6 @@ from qgis.core import (
     QgsFeatureRequest,
     QgsWKBTypes,
     QgsFeature,
-    QgsSpatialIndex
 )
 
 from safe.utilities.i18n import tr
@@ -21,7 +20,7 @@ from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
 from safe.definitionsv4.fields import hazard_class_field
 from safe.definitionsv4.hazard_classifications import hazard_classification
 # from safe.definitionsv4.processing import assign_highest_value
-from safe.gisv4.vector.tools import create_memory_layer
+from safe.gisv4.vector.tools import create_memory_layer, create_spatial_index
 from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -86,7 +85,7 @@ def assign_highest_value(exposure_layer, hazard_layer, callback=None):
     )
     writer.startEditing()
 
-    spatial_index = QgsSpatialIndex(hazard_layer.getFeatures())
+    spatial_index = create_spatial_index(hazard_layer)
 
     # Todo callback
     # total = 100.0 / len(selectionA)

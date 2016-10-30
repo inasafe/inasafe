@@ -13,13 +13,13 @@ from qgis.core import (
     QgsFeatureRequest,
     QgsWKBTypes,
     QgsFeature,
-    QgsSpatialIndex
 )
 
 from safe.utilities.i18n import tr
 from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
 # from safe.definitionsv4.processing import union
-from safe.gisv4.vector.tools import create_memory_layer, wkb_type_groups
+from safe.gisv4.vector.tools import (
+    create_memory_layer, wkb_type_groups, create_spatial_index)
 from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -97,8 +97,8 @@ def union(union_a, union_b, callback=None):
     # Begin copy/paste from Processing plugin.
     # Please follow their code as their code is optimized.
 
-    index_a = QgsSpatialIndex(union_b.getFeatures())
-    index_b = QgsSpatialIndex(union_a.getFeatures())
+    index_a = create_spatial_index(union_b)
+    index_b = create_spatial_index(union_a)
 
     count = 0
     n_element = 0
