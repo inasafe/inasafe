@@ -1061,7 +1061,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         """
         self.enable_signal_receiver()
         try:
-            self.enable_busy_cursor()
+            self.show_busy()
             self.show_next_analysis_extent()
             self.impact_function = self.prepare_impact_function()
             #clip_parameters = self.impact_function.clip_parameters
@@ -1145,16 +1145,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.impact_function.aggregator.layer, old_keywords)
         self.hide_busy()
         self.set_run_button_status()
-
-    def show_busy(self):
-        """Hide the question group box and enable the busy cursor."""
-        self.progress_bar.show(self)
-        self.question_group.setEnabled(False)
-        self.question_group.setVisible(False)
-        QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
-        self.repaint()
-        QtGui.qApp.processEvents()
-        self.busy = True
 
     def analysis_error(self, exception, message):
         """A helper to spawn an error and halt processing.
@@ -1442,6 +1432,16 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # noinspection PyTypeChecker
         dialog = HelpDialog(self)
         dialog.show()
+
+    def show_busy(self):
+        """Hide the question group box and enable the busy cursor."""
+        self.progress_bar.show()
+        self.question_group.setEnabled(False)
+        self.question_group.setVisible(False)
+        self.enable_busy_cursor()
+        self.repaint()
+        QtGui.qApp.processEvents()
+        self.busy = True
 
     def hide_busy(self):
         """A helper function to indicate processing is done."""
