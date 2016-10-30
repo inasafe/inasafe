@@ -78,8 +78,8 @@ def profile(fn):
     def with_profiling(*args, **kwargs):
         global ROOT
 
-        curframe = inspect.currentframe()
-        parent_frame = inspect.getouterframes(curframe)[1]
+        current_frame = inspect.currentframe()
+        parent_frame = inspect.getouterframes(current_frame)[1]
         parent_name = parent_frame[3]
 
         current_step = Tree(fn.__name__)

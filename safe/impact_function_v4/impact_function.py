@@ -144,7 +144,13 @@ class ImpactFunction(object):
             new_row = m.Row()
 
             # This is a kind of hack to display the tree with indentation
-            text = '-' * space
+            text = '|'
+            text += '*' * space
+
+            if tree.children:
+                text += '\ '
+            else:
+                text += '| '
             text += tree.__str__()
 
             new_row.add(m.Cell(text))
