@@ -719,7 +719,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.set_run_button_status()
         self.draw_rubber_bands()
 
-
     def toggle_aggregation_layer_combo(self):
         """Toggle the aggregation combo enabled status.
 
@@ -790,8 +789,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
     def get_layers(self, *args):
         r"""Obtain a list of layers currently loaded in QGIS.
 
-        On invocation, this method will populate hazard_layer_combo, exposure_layer_combo and
-        aggregation_layer_combo on the dialog with a list of available layers.
+        On invocation, this method will populate hazard_layer_combo,
+        exposure_layer_combo and aggregation_layer_combo on the dialog
+        with a list of available layers.
 
         Only **polygon vector** layers will be added to the aggregate list.
 
@@ -903,11 +903,14 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 continue
 
             if layer_purpose == 'hazard':
-                add_ordered_combo_item(self.hazard_layer_combo, title, source)
+                add_ordered_combo_item(
+                    self.hazard_layer_combo, title, source)
             elif layer_purpose == 'exposure':
-                add_ordered_combo_item(self.exposure_layer_combo, title, source)
+                add_ordered_combo_item(
+                    self.exposure_layer_combo, title, source)
             elif layer_purpose == 'aggregation':
-                add_ordered_combo_item(self.aggregation_layer_combo, title, source)
+                add_ordered_combo_item(
+                    self.aggregation_layer_combo, title, source)
 
         self.unblock_signals()
         # handle the aggregation_layer_combo combo
@@ -972,8 +975,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         Obtain QgsMapLayer id from the userrole of the QtCombo for post
         processing combo return it as a QgsMapLayer.
 
-        :returns: None if no aggregation is selected or aggregation_layer_combo is
-                disabled, otherwise a polygon layer.
+        :returns: None if no aggregation is selected or aggregation_layer_combo
+            is disabled, otherwise a polygon layer.
         :rtype: QgsMapLayer, QgsVectorLayer or None
         """
 
@@ -1018,11 +1021,11 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.extent.show_user_analysis_extent()  # blue
             try:
                 pass
-                #clip_parameters = self.impact_function.clip_parameters
-                #self.extent.show_last_analysis_extent(
-                #    clip_parameters['adjusted_geo_extent'])  # red
+                # clip_parameters = self.impact_function.clip_parameters
+                # self.extent.show_last_analysis_extent(
+                # clip_parameters['adjusted_geo_extent'])  # red
             except (AttributeError, TypeError):
-                passinfo
+                pass
 
     def progress_callback(self, current_value, maximum_value, message=None):
         """GUI based callback implementation for showing progress.
@@ -1064,8 +1067,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.show_busy()
             self.show_next_analysis_extent()
             self.impact_function = self.prepare_impact_function()
-            #clip_parameters = self.impact_function.clip_parameters
-            #self.extent.show_last_analysis_extent(
+            # clip_parameters = self.impact_function.clip_parameters
+            # self.extent.show_last_analysis_extent(
             #    clip_parameters['adjusted_geo_extent'])
 
             # Start the analysis
@@ -1129,7 +1132,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 self.impact_function.force_memory = False
                 if self.impact_function.datastore:
                     for layer in self.impact_function.datastore.layers():
-                        qgis_layer = self.impact_function.datastore.layer(layer)
+                        qgis_layer = self.impact_function.datastore.layer(
+                            layer)
                         QgsMapLayerRegistry.instance().addMapLayer(qgis_layer)
             self.disable_signal_receiver()
         self.hide_busy()
@@ -2112,8 +2116,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         try:
             # Temporary only, for checking the user extent
             impact_function = self.prepare_impact_function()
-            #clip_parameters = impact_function.clip_parameters
-            #return True, clip_parameters['adjusted_geo_extent']
+            # clip_parameters = impact_function.clip_parameters
+            # return True, clip_parameters['adjusted_geo_extent']
             return True, None
         except (AttributeError, InsufficientOverlapError):
             return False, None

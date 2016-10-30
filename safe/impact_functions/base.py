@@ -1026,7 +1026,6 @@ class ImpactFunction(object):
         """
         pass
 
-
     def generate_impact_keywords(self, extra_keywords=None):
         """Obtain keywords for the impact layer.
 

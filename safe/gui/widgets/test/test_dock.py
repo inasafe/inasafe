@@ -365,11 +365,13 @@ class TestDock(TestCase):
             hazard_layer_count, self.dock.hazard_layer_combo.count())
         # pylint: disable=W0106
         self.assertEqual(
-                self.dock.hazard_layer_combo.count(), hazard_layer_count, message)
+            self.dock.hazard_layer_combo.count(),
+            hazard_layer_count, message)
         message = 'Expect %s layer(s) in exposure list widget but got %s' % (
             exposure_layer_count, self.dock.exposure_layer_combo.count())
         self.assertEqual(
-                self.dock.exposure_layer_combo.count(), exposure_layer_count, message)
+            self.dock.exposure_layer_combo.count(),
+            exposure_layer_count, message)
         # pylint: disable=W0106
 
     @unittest.expectedFailure
@@ -718,14 +720,16 @@ class TestDock(TestCase):
             'area" item when the project has no layer. Found:'
             ' %s' % (self.dock.aggregation_layer_combo.currentText()))
 
-        self.assertEqual(self.dock.aggregation_layer_combo.currentText(), self.dock.tr(
-            'Entire area'), message)
+        self.assertEqual(
+            self.dock.aggregation_layer_combo.currentText(),
+            self.dock.tr('Entire area'), message)
 
         message = (
             'The aggregation combobox should be disabled when the '
             'project has no layer.')
 
-        self.assertTrue(not self.dock.aggregation_layer_combo.isEnabled(), message)
+        self.assertTrue(
+            not self.dock.aggregation_layer_combo.isEnabled(), message)
 
     @unittest.expectedFailure
     def test_cbo_aggregation_toggle(self):

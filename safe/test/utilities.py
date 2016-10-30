@@ -733,7 +733,8 @@ def setup_scenario(
         dock.aggregation_layer_combo.setCurrentIndex(index)
 
     if aggregation_enabled_flag is not None:
-        if dock.aggregation_layer_combo.isEnabled() != aggregation_enabled_flag:
+        combo_enabled_flag = dock.aggregation_layer_combo.isEnabled()
+        if combo_enabled_flag != aggregation_enabled_flag:
             message = (
                 'The aggregation combobox should be %s' %
                 ('enabled' if aggregation_enabled_flag else 'disabled'))

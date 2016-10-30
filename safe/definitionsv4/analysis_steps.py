@@ -46,8 +46,8 @@ analysis_steps = {
         'name': tr('Hazard preparation'),
         'description': tr(
             'During the hazard preparation phase of the analysis, we convert '
-            'the hazard data to a classified vector layer if it is not already '
-            'in this format.'),
+            'the hazard data to a classified vector layer if it is not '
+            'already  in this format.'),
         'icon': 'hazard_preparation.svg',
         'icon_credits': 'Not specified',
         'citations': [
@@ -277,4 +277,3 @@ analysis_steps = {
         ]
     },
 }
-
