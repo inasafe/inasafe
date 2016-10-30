@@ -13,7 +13,6 @@ from qgis.core import (
     QgsFeatureRequest,
     QgsWKBTypes,
     QgsFeature,
-    QgsSpatialIndex
 )
 
 from safe.utilities.i18n import tr
