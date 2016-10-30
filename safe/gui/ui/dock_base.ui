@@ -19,6 +19,9 @@
   </property>
   <widget class="QWidget" name="dock_layout">
    <layout class="QVBoxLayout" name="verticalLayout">
+    <property name="spacing">
+     <number>1</number>
+    </property>
     <property name="margin">
      <number>0</number>
     </property>
@@ -121,6 +124,13 @@
        <url>
         <string>about:blank</string>
        </url>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QProgressBar" name="progress_bar">
+      <property name="value">
+       <number>24</number>
       </property>
      </widget>
     </item>

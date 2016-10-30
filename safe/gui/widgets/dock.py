@@ -150,6 +150,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         QtGui.QDockWidget.__init__(self, None)
         self.setupUi(self)
         self.show_question_button.setVisible(False)
+        self.progress_bar.hide()
         self.enable_messaging()
         self.inasafe_version = get_version()
 
@@ -1021,7 +1022,34 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 #self.extent.show_last_analysis_extent(
                 #    clip_parameters['adjusted_geo_extent'])  # red
             except (AttributeError, TypeError):
-                pass
+                passinfo
+
+    def progress_callback(self, current_value, maximum_value, message=None):
+        """GUI based callback implementation for showing progress.
+
+        :param current_value: Current progress.
+        :type current_value: int
+
+        :param maximum_value: Maximum range (point at which task is complete.
+        :type maximum_value: int
+
+        :param message: Optional message dictionary to containing content
+            we can display to the user. See safe.definitions.analysis_steps
+            for an example of the expected format
+        :type message: dict
+        """
+        report = m.Message()
+        report.add(LOGO_ELEMENT)
+        report.add(m.Heading(
+            self.tr('Analysis status'), **INFO_STYLE))
+        if message is not None:
+            report.add(m.ImportantText(message['name']))
+            report.add(m.Paragraph(message['description']))
+        report.add(self.impact_function.performance_log_message())
+        send_static_message(self, report)
+        self.progress_bar.setMaximum(maximum_value)
+        self.progress_bar.setValue(current_value)
+        QtGui.QApplication.processEvents()
 
     def accept(self):
         """Execute analysis when run button is clicked.
@@ -1043,7 +1071,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             # Start the analysis
             self.impact_function.run()
         except InvalidKeywordsForProcessingAlgorithm as e:
-            self.show_keywords_need_review_message()
+            self.show_keywords_need_review_message(e.message)
             self.hide_busy()
         except KeywordNotFoundError as e:
             self.hide_busy()
@@ -1099,12 +1127,12 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             # Set back analysis to not ignore memory warning
             if self.impact_function:
                 self.impact_function.force_memory = False
+                if self.impact_function.datastore:
+                    for layer in self.impact_function.datastore.layers():
+                        qgis_layer = self.impact_function.datastore.layer(layer)
+                        QgsMapLayerRegistry.instance().addMapLayer(qgis_layer)
             self.disable_signal_receiver()
-
-            if self.impact_function.datastore:
-                for layer in self.impact_function.datastore.layers():
-                    qgis_layer = self.impact_function.datastore.layer(layer)
-                    QgsMapLayerRegistry.instance().addMapLayer(qgis_layer)
+        self.hide_busy()
 
     def accept_cancelled(self, old_keywords):
         """Deal with user cancelling post processing option dialog.
@@ -1120,6 +1148,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
     def show_busy(self):
         """Hide the question group box and enable the busy cursor."""
+        self.progress_bar.show(self)
         self.question_group.setEnabled(False)
         self.question_group.setVisible(False)
         QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
@@ -1150,6 +1179,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         # Impact Functions
         impact_function = ImpactFunction()
+        impact_function.callback = self.progress_callback
 
         # Layers
         impact_function.hazard = self.get_hazard_layer()
@@ -1415,6 +1445,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
     def hide_busy(self):
         """A helper function to indicate processing is done."""
+        self.progress_bar.hide()
         self.show_question_button.setVisible(True)
         self.question_group.setEnabled(True)
         self.question_group.setVisible(False)
@@ -1433,15 +1464,11 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
     @staticmethod
     def enable_busy_cursor():
         """Set the hourglass enabled and stop listening for layer changes."""
-        # Disable the cursor until we fix for InaSAFE V4.
-        pass
-        # QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
+        QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
 
     @staticmethod
     def disable_busy_cursor():
         """Disable the hourglass cursor and listen for layer changes."""
-        # Disable the cursor until we fix for InaSAFE V4.
-        pass
         while QtGui.qApp.overrideCursor() is not None and \
                 QtGui.qApp.overrideCursor().shape() == QtCore.Qt.WaitCursor:
                 QtGui.qApp.restoreOverrideCursor()
@@ -1555,10 +1582,13 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.print_button.setEnabled(False)
         send_static_message(self, report)
 
-    def show_keywords_need_review_message(self):
+    def show_keywords_need_review_message(self, message=None):
         """Show a message keywords are not adequate to run an analysis.
 
         .. versionadded: 4.0
+
+        :param message: Additional message to display.
+        :type message: str
 
         .. note:: The print button will be disabled if this method is called.
         """
@@ -1576,7 +1606,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 'show-keyword-wizard.svg' % resources_path(),
                 **SMALL_ICON_STYLE),
             self.tr(
-                ' icon in the toolbar to update your layer\'s keywords.'))
+                ' icon in the toolbar to update your layer\'s keywords.'),
+            message)
         report.add(context)
         self.print_button.setEnabled(False)
         send_static_message(self, report)
@@ -2075,7 +2106,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             usable, otherwise False. It will also return False if an invalid
             condition exists e.g. no hazard layer etc. The second element will
             be a rectangle for the analysis extent (if valid) or None.
-        :rtype: (bool, QgisRectangle)
+        :rtype: (bool, QgsRectangle)
         """
 
         try:
