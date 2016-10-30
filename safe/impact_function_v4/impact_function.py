@@ -478,7 +478,7 @@ class ImpactFunction(object):
         if maximum > 1000 and current % 1000 != 0 and current != maximum:
             return
         if message is not None:
-            LOGGER.info(message['descrption'])
+            LOGGER.info(message['description'])
         LOGGER.info('Task progress: %i of %i' % (current, maximum))
 
     @profile
