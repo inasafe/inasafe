@@ -1,6 +1,5 @@
 Function, Time
-copy_layer
-exposure_preparation
-assign_inasafe_values
-run_single_post_processor
-Total
+Copy layer
+Exposure preparation
+Assign inasafe values
+Run single post processor

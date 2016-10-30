@@ -137,19 +137,28 @@ class ImpactFunction(object):
             message.add(table)
             return message
 
-        breakdown = self.performance_log[0]
-        for line in breakdown:
-            time = line[1]
-            row = m.Row()
-            row.add(m.Cell(line[0]))
-            row.add(m.Cell(time))
-            table.add(row)
-        row = m.Row()
+        indent = -1
 
-        row.add(m.Cell('Total'))
-        row.add(m.Cell(self.performance_log[1]))
-        table.add(row)
+        def display_tree(tree, space):
+            space += 1
+            new_row = m.Row()
+
+            # This is a kind of hack to display the tree with indentation
+            text = '-' * space
+            text += tree.__str__()
+
+            new_row.add(m.Cell(text))
+            new_row.add(m.Cell(tree.elapsed_time))
+            table.add(new_row)
+            if tree.children:
+                for child in tree.children:
+                    display_tree(child, space)
+            space -= 1
+
+        # noinspection PyTypeChecker
+        display_tree(self.performance_log, indent)
         message.add(table)
+
         return message
 
     @property
@@ -652,10 +661,16 @@ class ImpactFunction(object):
         """Run the whole impact function."""
 
         self.validate()
-        step_count = 8
-        self.callback(0, step_count, analysis_steps['initialisation'])
+
         self.reset_state()
         clear_prof_data()
+        return self._run()
+
+    @profile
+    def _run(self):
+        """Internal function to run the impact function with profiling."""
+        step_count = 8
+        self.callback(0, step_count, analysis_steps['initialisation'])
 
         # Set a unique name for this impact
         self._unique_name = self._name.replace(' ', '')
@@ -715,9 +730,9 @@ class ImpactFunction(object):
         self.intersect_exposure_and_aggregate_hazard()
 
         # Post Processor
+        self.callback(7, step_count, analysis_steps['post_processing'])
         if self._impact:
             self._performance_log = profiling_log()
-            self.callback(7, step_count, analysis_steps['post_processing'])
             self.post_process(self._impact)
 
             self.datastore.add_layer(self._impact, 'impact')

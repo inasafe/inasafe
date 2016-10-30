@@ -179,6 +179,7 @@ def remove_fields(layer, fields_to_remove):
     data_provider.deleteAttributes(index_to_remove)
     layer.updateFields()
 
+
 @profile
 def create_spatial_index(layer):
     """Helper function to create the spatial index on a vector layer.
