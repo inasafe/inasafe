@@ -66,8 +66,8 @@ def zonal_stats(raster, vector, callback=None):
     LOGGER.debug(tr('Zonal stats on %s : %s' % (raster.source(), result)))
 
     layer.keywords = raster.keywords.copy()
-    layer.keywords['inasafe_fields'] = {
-        population_count_field['key']: 'exposure_sum'
-    }
+    layer.keywords['inasafe_fields'] = vector.keywords['inasafe_fields'].copy()
+    key = population_count_field['key']
+    layer.keywords['inasafe_fields'][key] = 'exposure_sum'
 
     return layer

@@ -247,9 +247,6 @@
           <layer_mode>
             <gco:CharacterString>classified</gco:CharacterString>
           </layer_mode>
-          <road_class_field>
-            <gco:CharacterString>TYPE</gco:CharacterString>
-          </road_class_field>
         </inasafe>
       </gmd:supplementalInformation>
     </gmd:MD_DataIdentification>

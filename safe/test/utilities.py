@@ -30,6 +30,7 @@ from safe.utilities.clipper import extent_to_geoarray, clip_layer
 from safe.utilities.gis import get_wgs84_resolution
 from safe.utilities.metadata import read_iso19115_metadata
 from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.i18n import tr
 import codecs
 
 QGIS_APP = None  # Static variable used to hold hand to running QGIS app
@@ -168,6 +169,35 @@ def get_dock():
             return DockObject(iface)
     else:
         return DockObject(IFACE)
+
+
+def check_inasafe_fields(layer):
+    """Helper to check inasafe_fields.
+
+    :param layer: The layer to check.
+    :type layer: QgsVectorLayer
+
+    :return: A tuple with a boolean if it's ok.
+        If it's not a OK, the second member is the error message.
+    :rtype: tuple(bool, str)
+    """
+    inasafe_fields = layer.keywords['inasafe_fields']
+
+    real_fields = layer.fields()
+
+    if len(inasafe_fields.keys()) != real_fields.count():
+        msg = tr(
+            'inasafe_fields do not match the attribute table in %s. ' %
+                 layer.keywords['layer_purpose'])
+        return False, msg
+
+    for key, field in inasafe_fields.iteritems():
+        index = layer.fieldNameIndex(field)
+        if index == -1:
+            msg = tr('The attribute table is missing %s.' % field)
+            return False, msg
+
+    return True, None
 
 
 def assert_hash_for_file(hash_string, filename):

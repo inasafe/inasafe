@@ -1192,6 +1192,11 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             impact_function._viewport_extent_crs = (
                 map_settings.destinationCrs())
 
+        settings = QSettings()
+        developer_mode = settings.value(
+            'inasafe/developer_mode', False, type=bool)
+        impact_function.debug_mode = developer_mode
+
         return impact_function
 
     def add_above_layer(self, new_layer, *existing_layers):

@@ -107,5 +107,6 @@ def assign_inasafe_values(layer, callback=None):
 
     layer.keywords = keywords
     layer.keywords['inasafe_fields'] = inasafe_fields
+    layer.keywords.pop('value_map')
 
     return layer

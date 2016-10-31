@@ -196,9 +196,6 @@
           <multipart_polygon>
             <gco:Boolean/>
           </multipart_polygon>
-          <field>
-            <gco:CharacterString>FLOODPRONE</gco:CharacterString>
-          </field>
           <value_map>
             <gco:Dictionary>{&quot;dry&quot;: [&quot;NO&quot;], &quot;wet&quot;: [&quot;YES&quot;]}</gco:Dictionary>
           </value_map>
