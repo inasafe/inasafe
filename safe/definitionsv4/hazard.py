@@ -8,7 +8,7 @@ from safe.definitionsv4.hazard_classifications import (
     ash_hazard_classes
 )
 from safe.definitionsv4.caveats import (
-    caveat_simulation, caveat_local_conditions)
+    caveat_simulation, caveat_local_conditions, caveat_analysis_extent)
 from safe.definitionsv4.concepts import concepts
 from safe.definitionsv4.units import (
     unit_feet,
@@ -63,6 +63,7 @@ hazard_generic = {
     'notes': [  # additional generic notes for generic - IF has more
         caveat_simulation,
         caveat_local_conditions,
+        caveat_analysis_extent,
     ],
     'continuous_notes': [  # notes specific to continuous data
     ],
@@ -100,6 +101,7 @@ hazard_earthquake = {
     'notes': [  # additional generic notes for earthquake - IF has more
         caveat_simulation,
         caveat_local_conditions,
+        caveat_analysis_extent,
     ],
     'continuous_notes': [  # notes specific to continuous data
     ],
@@ -141,6 +143,7 @@ hazard_flood = {
     'notes': [  # additional generic notes for flood - IF has more
         caveat_simulation,
         caveat_local_conditions,
+        caveat_analysis_extent,
     ],
     'continuous_notes': [  # notes specific to continuous data
     ],
@@ -179,6 +182,7 @@ hazard_volcanic_ash = {
     'notes': [  # additional generic notes for volcanic ash - IF has more
         caveat_simulation,
         caveat_local_conditions,
+        caveat_analysis_extent,
     ],
     'continuous_notes': [  # notes specific to continuous data
     ],
@@ -219,6 +223,7 @@ hazard_tsunami = {
     'notes': [  # additional generic notes for tsunami - IF has more
         caveat_simulation,
         caveat_local_conditions,
+        caveat_analysis_extent,
     ],
     'continuous_notes': [  # notes specific to continuous data
     ],
@@ -258,6 +263,7 @@ hazard_volcano = {
     'notes': [  # additional generic notes for volcano
         caveat_simulation,
         caveat_local_conditions,
+        caveat_analysis_extent,
     ],
     'actions': [  # these are additional generic actions - IF has more
 
