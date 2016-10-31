@@ -111,7 +111,9 @@ def copy_layer(source, target):
         settings = QSettings()
         flag = bool(settings.value(
             'inasafe/useSelectedFeaturesOnly', False, type=bool))
-        if flag:
+        # We need to check if the user wants selected feature only and if there
+        # is one minimum selected.
+        if flag and source.selectedFeatureCount() > 0:
             request.setFilterFids(source.selectedFeaturesIds())
 
     for i, feature in enumerate(source.getFeatures(request)):

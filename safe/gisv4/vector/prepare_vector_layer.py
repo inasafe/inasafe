@@ -12,7 +12,8 @@ from qgis.core import (
     QGis,
 )
 
-from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
+from safe.common.exceptions import (
+    InvalidKeywordsForProcessingAlgorithm, NoFeaturesInExtentError)
 from safe.gisv4.vector.tools import (
     create_memory_layer, remove_fields, copy_fields, copy_layer)
 from safe.definitionsv4.processing import prepare_vector
@@ -80,6 +81,15 @@ def prepare_vector_layer(layer, callback=None):
 
     copy_layer(layer, cleaned)
     _remove_rows(cleaned)
+
+    # After removing rows, let's check if there is still a feature.
+    request = QgsFeatureRequest().setFlags(QgsFeatureRequest.NoGeometry)
+    iterator = cleaned.getFeatures(request)
+    try:
+        next(iterator)
+    except StopIteration:
+        raise NoFeaturesInExtentError
+
     _add_id_column(cleaned)
     _rename_remove_inasafe_fields(cleaned)
     _add_default_values(cleaned)
