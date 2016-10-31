@@ -10,10 +10,6 @@ from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsRectangle,
     QgsVectorLayer,
-    QgsFeatureRequest,
-    QgsGeometry,
-    QgsFeature,
-    QgsField,
     QGis,
 )
 
@@ -22,7 +18,6 @@ import logging
 from safe.common.utilities import temp_dir
 from safe.datastore.folder import Folder
 from safe.datastore.datastore import DataStore
-from safe.gisv4.vector.tools import create_memory_layer
 from safe.gisv4.vector.prepare_vector_layer import prepare_vector_layer
 from safe.gisv4.vector.reproject import reproject
 from safe.gisv4.vector.assign_highest_value import assign_highest_value
@@ -35,12 +30,6 @@ from safe.gisv4.vector.assign_inasafe_values import assign_inasafe_values
 from safe.gisv4.raster.reclassify import reclassify as reclassify_raster
 from safe.gisv4.raster.polygonize import polygonize
 from safe.gisv4.raster.zonal_statistics import zonal_stats
-from safe.definitionsv4.fields import (
-    aggregation_id_field,
-    aggregation_name_field,
-    analysis_id_field,
-    analysis_name_field,
-)
 from safe.definitionsv4.post_processors import post_processors
 from safe.definitionsv4.analysis_steps import analysis_steps
 from safe.definitionsv4.utilities import definition
@@ -52,6 +41,8 @@ from safe.common.exceptions import (
     InvalidExposureKeywords,
 )
 from safe.impact_function_v4.postprocessors import run_single_post_processor
+from safe.impact_function_v4.create_extra_layers import (
+    create_analysis_layer, create_virtual_aggregation)
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.utilities import replace_accentuated_characters
@@ -494,91 +485,6 @@ class ImpactFunction(object):
             LOGGER.info(message['description'])
         LOGGER.info('Task progress: %i of %i' % (current, maximum))
 
-    @profile
-    def create_virtual_aggregation(self, extent=None, extent_crs=None):
-        """Function to create aggregation layer based on extent
-
-        :returns: A polygon layer with exposure's crs.
-        :rtype: QgsVectorLayer
-        """
-        if extent is None and extent_crs is None:
-            extent = self.exposure.extent()
-            extent_crs = self.exposure.crs()
-
-        fields = [
-            QgsField(
-                aggregation_id_field['field_name'],
-                aggregation_id_field['type']
-            ),
-            QgsField(
-                aggregation_name_field['field_name'],
-                aggregation_name_field['type']
-            )
-        ]
-        aggregation_layer = create_memory_layer(
-            'aggregation', QGis.Polygon, extent_crs, fields)
-
-        aggregation_layer.startEditing()
-
-        feature = QgsFeature()
-        # noinspection PyCallByClass,PyArgumentList,PyTypeChecker
-        feature.setGeometry(QgsGeometry.fromRect(extent))
-        feature.setAttributes([1, tr('Entire Area')])
-        aggregation_layer.addFeature(feature)
-        aggregation_layer.commitChanges()
-
-        # Generate aggregation keywords
-        aggregation_layer.keywords['layer_purpose'] = 'aggregation'
-        aggregation_layer.keywords['inasafe_fields'] = {
-            aggregation_id_field['key']: aggregation_id_field['field_name'],
-            aggregation_name_field['key']: aggregation_name_field['field_name']
-        }
-
-        return aggregation_layer
-
-    @profile
-    def create_analysis_layer(self):
-        """Create the analysis layer.
-
-        :returns: A polygon layer with exposure's crs.
-        :rtype: QgsVectorLayer
-        """
-        fields = [
-            QgsField(
-                analysis_id_field['field_name'],
-                analysis_id_field['type']
-            ),
-            QgsField(
-                analysis_name_field['field_name'],
-                analysis_name_field['type']
-            ),
-        ]
-        analysis_layer = create_memory_layer(
-            'analysis', QGis.Polygon, self.exposure.crs(), fields)
-
-        analysis_layer.startEditing()
-
-        geometries = []
-        request = QgsFeatureRequest().setSubsetOfAttributes([])
-        for area in self.aggregation.getFeatures(request):
-            geometries.append(QgsGeometry(area.geometry()))
-
-        feature = QgsFeature()
-        # noinspection PyCallByClass,PyArgumentList,PyTypeChecker
-        feature.setGeometry(QgsGeometry.unaryUnion(geometries))
-        feature.setAttributes([1, self.name])
-        analysis_layer.addFeature(feature)
-        analysis_layer.commitChanges()
-
-        # Generate aggregation keywords
-        analysis_layer.keywords['layer_purpose'] = 'analysis'
-        analysis_layer.keywords['inasafe_fields'] = {
-            analysis_id_field['key']: analysis_id_field['field_name'],
-            analysis_name_field['key']: analysis_name_field['field_name']
-        }
-
-        return analysis_layer
-
     def reset_state(self):
         """Method to reset the state of the impact function.
         """
@@ -841,7 +747,8 @@ class ImpactFunction(object):
             self.set_state_process(
                 'aggregation',
                 'Convert bbox aggregation to polygon layer with keywords')
-            self.aggregation = self.create_virtual_aggregation()
+            self.aggregation = create_virtual_aggregation(
+                self.exposure.extent(), self.exposure.crs())
             if self.debug_mode:
                 self.datastore.add_layer(self.aggregation, 'aggr_from_bbox')
 
@@ -873,7 +780,8 @@ class ImpactFunction(object):
         self.set_state_process(
             'aggregation',
             'Convert the aggregation layer to the analysis layer')
-        self._analysis_impacted = self.create_analysis_layer()
+        self._analysis_impacted = create_analysis_layer(
+            self.aggregation, self.exposure.crs(), self.name)
         if self.debug_mode:
             self.datastore.add_layer(
                 self._analysis_impacted, 'analysis_layer')
