@@ -37,7 +37,7 @@ from qgis.core import (
     QgsRasterLayer)
 
 from PyQt4 import QtGui, QtCore
-from PyQt4.QtCore import pyqtSignature, pyqtSlot, QSettings, Qt, QTimer
+from PyQt4.QtCore import pyqtSignature, pyqtSlot, QSettings, Qt
 from PyQt4.QtGui import (
     QDialog,
     QFileDialog,
@@ -295,8 +295,6 @@ class BatchDialog(QDialog, FORM_CLASS):
             paths.append(items['hazard'])
             # add access to aggregation layer source so we can access it later
             # self.hazard_source = os.path.normpath(os.path.join(scenario_directory, items['hazard']))
-        # always run in new project
-        # self.iface.newProject()
 
         try:
             # create layer group
@@ -485,7 +483,7 @@ class BatchDialog(QDialog, FORM_CLASS):
         :returns: Flag indicating if the task succeeded or not.
         :rtype: bool
         """
-        # self.iface.mapCanvas().freeze(True)
+
         self.enable_busy_cursor()
         for layer_group in self.layer_group_container:
             layer_group.setVisible(False)
@@ -530,58 +528,58 @@ class BatchDialog(QDialog, FORM_CLASS):
                 qgis_layer = read_impact_layer(impact_layer)
                 impact_layer_source = qgis_layer.source()
                 QgsMapLayerRegistry.instance().addMapLayer(qgis_layer, addToLegend=False)
-                #layers = self.iface.mapCanvas().layers()
-                #print len(layers)   # somehow, if this line is removed, we'll get errors
-                #for layer in layers:
-                #    print layer.name()
+
                 # identify impact layer in map canvas from impact layer source
                 legend_impact_layer = self.identify_layer(impact_layer_source)
                 # clone impact layer in Layer Panel
                 if qgis_layer.type() == QgsMapLayer.VectorLayer:
-                    cloned_layer = QgsVectorLayer(legend_impact_layer.source(),
-                                            legend_impact_layer.name(),
-                                            legend_impact_layer.providerType())
+                    cloned_layer = QgsVectorLayer(
+                        legend_impact_layer.source(),
+                        legend_impact_layer.name(),
+                        legend_impact_layer.providerType())
                 elif qgis_layer.type() == QgsMapLayer.RasterLayer:
-                    cloned_layer = QgsRasterLayer(legend_impact_layer.source(),
-                                            legend_impact_layer.name(),
-                                            legend_impact_layer.providerType())
+                    cloned_layer = QgsRasterLayer(
+                        legend_impact_layer.source(),
+                        legend_impact_layer.name(),
+                        legend_impact_layer.providerType())
                 else:
                     raise Exception('layer source is failed to be recognized')
-                # remove original layer created from dock
+                # remove original layer created from dock,
+                # sometimes this code is failed leaving original file in layer panel
                 QgsMapLayerRegistry.instance().removeMapLayer(legend_impact_layer)
+                # QgsMapLayerRegistry.instance().layerRemoved(legend_impact_layer)
+
                 # add cloned layer to the layer group
                 QgsMapLayerRegistry.instance().addMapLayer(cloned_layer, False)
                 self.layer_group.insertLayer(0,cloned_layer)
-                # Set cloned layer as active layer
-                # self.iface.setActiveLayer(cloned_layer)
                 # turn off exposure layer visibility
                 exposure_layer = self.identify_layer(self.exposure_source)
                 self.iface.legendInterface().setLayerVisible(exposure_layer, False)
+
                 # print layer list. somehow this is the only way to update the map canvas
+                # still need improvement
                 layers = self.iface.mapCanvas().layers()
                 for layer in layers:
                     print layer.name()
                 # noinspection PyBroadException
-                # self.iface.mapCanvas().update()
-                status_item.setText(self.tr('Analysis Ok'))
-                self.create_pdf(title, path, cloned_layer, count, index)
-                status_item.setText(self.tr('Report OK'))
-                # try:
-                #     status_item.setText(self.tr('Analysis Ok'))
-                #     self.create_pdf(
-                #         title, path, qgis_layer, count, index)
-                #     LOGGER.info('Map has been rendered: "%s"' % value)
-                #     status_item.setText(self.tr('Report Ok'))
-                # except Exception:  # pylint: disable=W0703
-                #     LOGGER.exception('Unable to render map: "%s"' % value)
-                #     status_item.setText(self.tr('Report Failed'))
-                #     result = False
+                # status_item.setText(self.tr('Analysis Ok'))
+                # self.create_pdf(title, path, cloned_layer, count, index)
+                # status_item.setText(self.tr('Report OK'))
+                try:
+                    status_item.setText(self.tr('Analysis Ok'))
+                    self.create_pdf(
+                        title, path, cloned_layer, count, index)
+                    LOGGER.info('Map has been rendered: "%s"' % value)
+                    status_item.setText(self.tr('Report Ok'))
+                except Exception:  # pylint: disable=W0703
+                    LOGGER.exception('Unable to render map: "%s"' % value)
+                    status_item.setText(self.tr('Report Failed'))
+                    result = False
         else:
             LOGGER.exception('Data type not supported: "%s"' % value)
             result = False
 
         self.disable_busy_cursor()
-        # self.iface.mapCanvas().freeze(False)
         return result
 
     # noinspection PyMethodMayBeStatic
@@ -658,7 +656,6 @@ class BatchDialog(QDialog, FORM_CLASS):
         map_path, table_path = impact_report.print_to_pdf(map_path)
 
         LOGGER.debug("Report done %s %s" % (map_path, table_path))
-
 
     def show_parser_results(self, parsed_list, unparsed_list):
         """Compile a formatted list of un/successfully parsed files.
@@ -738,7 +735,6 @@ class BatchDialog(QDialog, FORM_CLASS):
 
         title = self.tr('Set the output directory for pdf report files')
         self.choose_directory(self.output_directory, title)
-
 
     @pyqtSlot()
     @pyqtSignature('bool')  # prevents actions being handled twice
@@ -842,9 +838,9 @@ def read_scenarios(filename):
     # convert to dictionary
     for section in parser.sections():
         items = parser.items(section)
-        #add section as scenario name
+        # add section as scenario name
         items.append(('scenario_name',section))
-        # add fullpath to the blocks
+        # add full path to the blocks
         items.append(('full_path', filename))
         blocks[section] = {}
         for key, value in items:
