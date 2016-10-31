@@ -74,7 +74,6 @@ class TestDefinitionsUtilities(unittest.TestCase):
         """Test for hazards_for_layer"""
         hazards = hazards_for_layer(
             'polygon', 'single_event')
-        # print [x['key'] for x in hazards]
         expected = [
             hazard_flood,
             hazard_tsunami,
@@ -97,8 +96,14 @@ class TestDefinitionsUtilities(unittest.TestCase):
         self.assertItemsEqual(hazards, expected)
 
         hazards = hazards_for_layer(
-            'point', 'single_event')
-        expected = [hazard_volcano]
+            'raster', 'single_event')
+        expected = [
+            hazard_flood,
+            hazard_tsunami,
+            hazard_earthquake,
+            hazard_volcanic_ash,
+            hazard_generic
+        ]
         self.assertItemsEqual(hazards, expected)
 
     def test_exposures_for_layer(self):
@@ -143,11 +148,15 @@ class TestDefinitionsUtilities(unittest.TestCase):
     def test_get_fields(self):
         """Test get_fields method."""
         fields = get_fields('exposure', 'structure')
-        expected_fields = exposure_fields + exposure_structure['extra_fields']
+        expected_fields = exposure_structure['compulsory_fields']
+        expected_fields += exposure_structure['fields']
+        expected_fields += exposure_structure['extra_fields']
         self.assertListEqual(fields, expected_fields)
 
         fields = get_fields('hazard', 'flood')
-        expected_fields = hazard_fields + hazard_flood['extra_fields']
+        expected_fields = hazard_flood['compulsory_fields']
+        expected_fields += hazard_flood['fields']
+        expected_fields += hazard_flood['extra_fields']
         self.assertListEqual(fields, expected_fields)
 
         fields = get_fields('hazard')

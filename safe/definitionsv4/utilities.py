@@ -166,17 +166,17 @@ def get_fields(layer_purpose, layer_subcategory=None, replace_null=None):
     if layer_purpose == layer_purpose_exposure['key']:
         if layer_subcategory:
             subcategory = definition(layer_subcategory)
+            fields += subcategory['compulsory_fields']
             fields += subcategory['fields']
             fields += subcategory['extra_fields']
-            fields += subcategory['compulsory_fields']
         else:
             fields = deepcopy(exposure_fields)
     elif layer_purpose == layer_purpose_hazard['key']:
         if layer_subcategory:
             subcategory = definition(layer_subcategory)
+            fields += subcategory['compulsory_fields']
             fields += subcategory['fields']
             fields += subcategory['extra_fields']
-            fields += subcategory['compulsory_fields']
         else:
             fields = deepcopy(hazard_fields)
     elif layer_purpose == layer_purpose_aggregation['key']:
