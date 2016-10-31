@@ -16,7 +16,11 @@ from safe.definitionsv4 import (
     hazard_value_field,
     exposure_type_field,
     exposure_fields,
-    hazard_fields
+    hazard_fields,
+    layer_purpose_hazard,
+    layer_purpose_exposure,
+    layer_purpose_aggregation,
+    layer_purpose_impact
 )
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -159,7 +163,7 @@ def get_fields(layer_purpose, layer_subcategory=None, replace_null=None):
     :rtype: list
     """
     fields = []
-    if layer_purpose in 'exposure':
+    if layer_purpose == layer_purpose_exposure['key']:
         if layer_subcategory:
             subcategory = definition(layer_subcategory)
             fields += subcategory['fields']
@@ -167,7 +171,7 @@ def get_fields(layer_purpose, layer_subcategory=None, replace_null=None):
             fields += subcategory['compulsory_fields']
         else:
             fields = deepcopy(exposure_fields)
-    elif layer_purpose == 'hazard':
+    elif layer_purpose == layer_purpose_hazard['key']:
         if layer_subcategory:
             subcategory = definition(layer_subcategory)
             fields += subcategory['fields']
@@ -175,9 +179,9 @@ def get_fields(layer_purpose, layer_subcategory=None, replace_null=None):
             fields += subcategory['compulsory_fields']
         else:
             fields = deepcopy(hazard_fields)
-    elif layer_purpose == 'aggregation':
+    elif layer_purpose == layer_purpose_aggregation['key']:
         fields = deepcopy(aggregation_fields)
-    elif layer_purpose == 'impact':
+    elif layer_purpose == layer_purpose_impact['key']:
         fields = deepcopy(impact_fields)
 
     if isinstance(replace_null, bool):
