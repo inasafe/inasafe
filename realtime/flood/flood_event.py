@@ -570,8 +570,9 @@ REGIONAL DISASTER MANAGEMENT AGENCY
             ),
             'content-contact': self.tr("""Pusat Pengendalian Operasi (Pusdalops)
 BPBD Provinsi DKI Jakarta
-Jl. Medan Merdeka Selatan No. 8-9 Blok F lantai 3
-Telp. (021)164
+Gedung Dinas Teknis Lt. 5
+Jl. Abdul Muis No. 66
+Telp. 121
 """),
         }
         return event
