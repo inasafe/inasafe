@@ -43,6 +43,7 @@ from safe.definitionsv4.fields import (
     analysis_name_field,
 )
 from safe.definitionsv4.post_processors import post_processors
+from safe.definitionsv4.analysis_steps import analysis_steps
 from safe.definitionsv4.utilities import definition
 from safe.defaults import get_defaults
 from safe.common.exceptions import (
@@ -132,19 +133,38 @@ class ImpactFunction(object):
         row.add(m.Cell(tr('Time')), header_flag=True)
         table.add(row)
 
-        breakdown = self.performance_log[0]
-        for line in breakdown:
-            time = line[1]
-            row = m.Row()
-            row.add(m.Cell(line[0]))
-            row.add(m.Cell(time))
-            table.add(row)
-        row = m.Row()
+        if self.performance_log is None:
+            message.add(table)
+            return message
 
-        row.add(m.Cell('Total'))
-        row.add(m.Cell(self.performance_log[1]))
-        table.add(row)
+        indent = -1
+
+        def display_tree(tree, space):
+            space += 1
+            new_row = m.Row()
+
+            # This is a kind of hack to display the tree with indentation
+            text = '|'
+            text += '*' * space
+
+            if tree.children:
+                text += '\ '
+            else:
+                text += '| '
+            text += tree.__str__()
+
+            new_row.add(m.Cell(text))
+            new_row.add(m.Cell(tree.elapsed_time))
+            table.add(new_row)
+            if tree.children:
+                for child in tree.children:
+                    display_tree(child, space)
+            space -= 1
+
+        # noinspection PyTypeChecker
+        display_tree(self.performance_log, indent)
         message.add(table)
+
         return message
 
     @property
@@ -413,7 +433,7 @@ class ImpactFunction(object):
         :returns: A callback function. The callback function will have the
             following parameter requirements.
 
-            progress_callback(current, maximum, message=None)
+            self.progress_callback(current, maximum, message=None)
 
         :rtype: function
 
@@ -464,15 +484,17 @@ class ImpactFunction(object):
         :param maximum: Maximum range (point at which task is complete.
         :type maximum: int
 
-        :param message: Optional message to display in the progress bar
-        :type message: str, QString
+        :param message: Optional message dictionary to containing content
+            we can display to the user. See safe.definitions.analysis_steps
+            for an example of the expected format
+        :type message: dict
         """
         # noinspection PyChainedComparisons
         if maximum > 1000 and current % 1000 != 0 and current != maximum:
             return
         if message is not None:
-            print message
-        print 'Task progress: %i of %i' % (current, maximum)
+            LOGGER.info(message['description'])
+        LOGGER.info('Task progress: %i of %i' % (current, maximum))
 
     @profile
     def create_virtual_aggregation(self, extent=None, extent_crs=None):
@@ -612,6 +634,7 @@ class ImpactFunction(object):
         :param value: The value of the information. E.g point
         :type value: str, unicode, int, float, bool, list, dict
         """
+        LOGGER.debug('%s: %s: %s' % (context, key, value))
         self.state[context]["info"][key] = value
 
     def validate(self):
@@ -647,6 +670,13 @@ class ImpactFunction(object):
 
         self.reset_state()
         clear_prof_data()
+        return self._run()
+
+    @profile
+    def _run(self):
+        """Internal function to run the impact function with profiling."""
+        step_count = 8
+        self.callback(0, step_count, analysis_steps['initialisation'])
 
         # Set a unique name for this impact
         self._unique_name = self._name.replace(' ', '')
@@ -659,6 +689,7 @@ class ImpactFunction(object):
         if not self._datastore:
             # By default, results will go in a temporary folder.
             # Users are free to set their own datastore with the setter.
+            self.callback(1, step_count, analysis_steps['data_store'])
             self._datastore = Folder(temp_dir(sub_dir=self._unique_name))
             self._datastore.default_vector_format = 'geojson'
             if self.debug:
@@ -683,18 +714,31 @@ class ImpactFunction(object):
                         # return self.state()
                         return
 
+        self._performance_log = profiling_log()
+        self.callback(2, step_count, analysis_steps['hazard_preparation'])
         self.hazard_preparation()
 
+        self._performance_log = profiling_log()
+        self.callback(3, step_count, analysis_steps['aggregation_preparation'])
         self.aggregation_preparation()
 
+        self._performance_log = profiling_log()
+        self.callback(
+            4, step_count, analysis_steps['aggregate_hazard_preparation'])
         self.aggregate_hazard_preparation()
 
+        self._performance_log = profiling_log()
+        self.callback(5, step_count, analysis_steps['exposure_preparation'])
         self.exposure_preparation()
 
+        self._performance_log = profiling_log()
+        self.callback(6, step_count, analysis_steps['combine_hazard_exposure'])
         self.intersect_exposure_and_aggregate_hazard()
 
         # Post Processor
+        self.callback(7, step_count, analysis_steps['post_processing'])
         if self._impact:
+            self._performance_log = profiling_log()
             self.post_process(self._impact)
 
             self.datastore.add_layer(self._impact, 'impact')
@@ -712,6 +756,7 @@ class ImpactFunction(object):
 
         # Get the profiling log
         self._performance_log = profiling_log()
+        self.callback(8, step_count, analysis_steps['profiling'])
 
         if self.debug:
             print 'Performance log message :'
@@ -758,37 +803,21 @@ class ImpactFunction(object):
             self.datastore.add_layer(
                 self.hazard, 'hazard_cleaned')
 
-        if self.hazard.geometryType() == QGis.Polygon:
-
-            if self.hazard.keywords.get('layer_mode') == 'continuous':
-                self.set_state_process(
-                    'hazard',
-                    'Classify continuous hazard and assign class names')
-                # self.hazard = reclassify(self.hazard, ranges)
-                # if self.debug:
-                #     self.datastore.add_layer(
-                #         self.hazard, 'hazard reclassified')
-
+        if self.hazard.keywords.get('layer_mode') == 'continuous':
             self.set_state_process(
-                'hazard', 'Assign classes based on value map')
-            self.hazard = assign_inasafe_values(self.hazard)
-            if self.debug:
-                self.datastore.add_layer(
-                    self.hazard, 'hazard_value_map_to_reclassified')
+                'hazard',
+                'Classify continuous hazard and assign class names')
+            # self.hazard = reclassify(self.hazard, ranges)
+            # if self.debug:
+            #     self.datastore.add_layer(
+            #         self.hazard, 'hazard reclassified')
 
-        else:
-            self.set_state_process('hazard', 'Buffering')
-            classifications = self.hazard.keywords.get('classification')
-            hazard_classes = definition(classifications)['classes']
-            ranges = OrderedDict()
-            for hazard_class in hazard_classes:
-                max_value = hazard_class['numeric_default_max']
-                ranges[max_value * 1000] = hazard_class['key']
-            # noinspection PyTypeChecker
-            self.hazard = buffering(self.hazard, ranges)
-            if self.debug:
-                self.datastore.add_layer(
-                    self.hazard, 'buffered-hazard')
+        self.set_state_process(
+            'hazard', 'Assign classes based on value map')
+        self.hazard = assign_inasafe_values(self.hazard)
+        if self.debug:
+            self.datastore.add_layer(
+                self.hazard, 'hazard_value_map_to_reclassified')
 
         self.set_state_process(
             'hazard', 'Classified polygon hazard with keywords')

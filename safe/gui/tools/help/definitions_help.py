@@ -54,13 +54,23 @@ def content():
     :returns: A message object without brand element.
     :rtype: safe.messaging.message.Message
     """
+    message = m.Message()
+    ##
+    #  Analysis workflow
+    ##
+
+    steps = definitions.analysis_steps.values()
+    header = m.Heading(tr('Analysis steps'), **INFO_STYLE)
+    message.add(header)
+    for step in steps:
+        message.add(definition_to_message(step))
+
     ##
     #  Hazard definitions
     ##
 
     hazards = definitions.hazards
     hazard_category = definitions.hazard_category
-    message = m.Message()
     message.add(definition_to_message(hazards, heading_style=INFO_STYLE))
     header = m.Heading(tr('Hazard scenarios'), **INFO_STYLE)
     message.add(header)

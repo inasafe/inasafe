@@ -13,13 +13,13 @@ from qgis.core import (
     QgsFeatureRequest,
     QgsWKBTypes,
     QgsFeature,
-    QgsSpatialIndex
 )
 
 from safe.utilities.i18n import tr
 from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
 # from safe.definitionsv4.processing import intersection_vector
-from safe.gisv4.vector.tools import create_memory_layer, wkb_type_groups
+from safe.gisv4.vector.tools import (
+    create_memory_layer, wkb_type_groups, create_spatial_index)
 from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -99,7 +99,7 @@ def intersection(layer_to_clip, mask_layer, callback=None):
     # Please follow their code as their code is optimized.
 
     out_feature = QgsFeature()
-    index = QgsSpatialIndex(mask_layer.getFeatures())
+    index = create_spatial_index(mask_layer)
 
     # Todo callback
     # total = 100.0 / len(selectionA)

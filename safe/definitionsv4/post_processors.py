@@ -27,7 +27,7 @@ post_processor_gender = {
     'key': 'post_processor_gender',
     'name': tr('Gender Post Processor'),
     'description': tr(
-        'Post processor to calculate the number of affected woman'),
+        'Post processor to calculate the number of affected females'),
     'input': {
         'population': {
             'value': population_count_field,
@@ -49,7 +49,7 @@ post_processor_youth = {
     'key': 'post_processor_youth',
     'name': tr('Youth Post Processor'),
     'description': tr(
-        'Post processor to calculate the number of affected youth people'),
+        'Post processor to calculate the number of affected youth'),
     'input': {
         'population': {
             'value': population_count_field,
@@ -71,7 +71,7 @@ post_processor_adult = {
     'key': 'post_processor_adult',
     'name': tr('Adult Post Processor'),
     'description': tr(
-        'Post processor to calculate the number of affected adult people'),
+        'Post processor to calculate the number of affected adults'),
     'input': {
         'population': {
             'value': population_count_field,
@@ -93,7 +93,7 @@ post_processor_elderly = {
     'key': 'post_processor_elderly',
     'name': tr('Elderly Post Processor'),
     'description': tr(
-        'Post processor to calculate the number of affected elderly people'),
+        'Post processor to calculate the number of affected elderly'),
     'input': {
         'population': {
             'value': population_count_field,
@@ -116,8 +116,8 @@ post_processor_size = {
     'key': 'post_processor_size',
     'name': tr('Size Rate Post Processor'),
     'description': tr(
-        'Post processor to calculate the size of the feature. If feature is '
-        'polygon we use m^2. If feature is line we use metre.'),
+        'Post processor to calculate the size of the feature. If the feature '
+        'is a polygon we use m^2. If the feature is a line we use metres.'),
     'input': {
         'size': {
             'value': 'size',
@@ -136,9 +136,9 @@ post_processor_size_rate = {
     'key': 'post_processor_size_rate',
     'name': tr('Size Rate Post Processor'),
     'description': tr(
-        'Post processor to calculate the value of feature based on the size '
-        'of the feature. If feature is polygon we use area in m^2. If feature '
-        'is line we use length per m.'),
+        'Post processor to calculate the value of a feature based on the size '
+        'of the feature. If feature is a polygon the size is calculated as '
+        'the area in m^2. If the feature is a line we use length in metres.'),
     'input': {
         'size': {
             'value': 'size',

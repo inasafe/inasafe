@@ -149,11 +149,6 @@ def _remove_rows(layer):
     # Get the layer purpose of the layer.
     layer_purpose = layer.keywords['layer_purpose']
 
-    # Volcano point is special case. We do not have a hazard value field.
-    hazard = layer.keywords.get('hazard')
-    if hazard == 'volcano' and layer.geometryType() == QGis.Point:
-        return
-
     mapping = {
         layer_purpose_exposure['key']: exposure_type_field,
         layer_purpose_hazard['key']: hazard_value_field,

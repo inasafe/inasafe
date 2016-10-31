@@ -8,6 +8,7 @@ from uuid import uuid4
 from PyQt4.QtCore import QSettings
 from qgis.core import (
     QgsVectorLayer,
+    QgsSpatialIndex,
     QgsFeatureRequest,
     QgsCoordinateReferenceSystem,
     QGis,
@@ -177,3 +178,19 @@ def remove_fields(layer, fields_to_remove):
 
     data_provider.deleteAttributes(index_to_remove)
     layer.updateFields()
+
+
+@profile
+def create_spatial_index(layer):
+    """Helper function to create the spatial index on a vector layer.
+
+    This function is mainly used to see the processing time with the decorator.
+
+    :param layer: The vector layer.
+    :type layer: QgsVectorLayer
+
+    :return: The index.
+    :rtype: QgsSpatialIndex
+    """
+    spatial_index = QgsSpatialIndex(layer.getFeatures())
+    return spatial_index
