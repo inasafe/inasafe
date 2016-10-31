@@ -28,8 +28,7 @@ from ConfigParser import ConfigParser, MissingSectionHeaderError, ParsingError
 
 from qgis.core import (
     QgsRectangle,
-    QgsCoordinateTransform,
-    QgsCoordinateReferenceSystem, 
+    QgsCoordinateReferenceSystem,
     QgsMapLayer,
     QgsMapLayerRegistry, 
     QgsProject, 
@@ -55,7 +54,6 @@ from safe.utilities.resources import (
 from safe.messaging import styles
 from safe.utilities.resources import resources_path
 from safe.gui.tools.help.batch_help import batch_help
-from safe.gui.tools.impact_report_dialog import ImpactReportDialog
 
 INFO_STYLE = styles.INFO_STYLE
 LOGGER = logging.getLogger('InaSAFE')
@@ -544,11 +542,12 @@ class BatchDialog(QDialog, FORM_CLASS):
                         legend_impact_layer.providerType())
                 else:
                     raise Exception('layer source is failed to be recognized')
+                # turn off layer visibility just in case layer removing is not working
+                # so that it won't be shown in the next scenario
+                self.iface.legendInterface().setLayerVisible(legend_impact_layer, False)
                 # remove original layer created from dock,
                 # sometimes this code is failed leaving original file in layer panel
                 QgsMapLayerRegistry.instance().removeMapLayer(legend_impact_layer)
-                # QgsMapLayerRegistry.instance().layerRemoved(legend_impact_layer)
-
                 # add cloned layer to the layer group
                 QgsMapLayerRegistry.instance().addMapLayer(cloned_layer, False)
                 self.layer_group.insertLayer(0,cloned_layer)
@@ -731,7 +730,7 @@ class BatchDialog(QDialog, FORM_CLASS):
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_output_directory_chooser_clicked(self):
-        """Autoconnect slot activated when tbOutputDiris clicked """
+        """Auto  connect slot activated when tbOutputDiris clicked """
 
         title = self.tr('Set the output directory for pdf report files')
         self.choose_directory(self.output_directory, title)
@@ -741,7 +740,7 @@ class BatchDialog(QDialog, FORM_CLASS):
     def help_toggled(self, flag):
         """Show or hide the help tab in the main stacked widget.
 
-        .. versionadded: 3.2.1
+        .. version added: 3.2.1
 
         :param flag: Flag indicating whether help should be shown or hidden.
         :type flag: bool
@@ -756,7 +755,7 @@ class BatchDialog(QDialog, FORM_CLASS):
     def hide_help(self):
         """Hide the usage info from the user.
 
-        .. versionadded:: 3.2.1
+        .. version added:: 3.2.1
         """
         self.main_stacked_widget.setCurrentIndex(1)
 
