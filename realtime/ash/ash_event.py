@@ -238,16 +238,18 @@ class AshEvent(QObject):
         elapsed_minute = (elapsed_time.seconds / 60) % 60
         event = {
             'report-title': self.tr('Volcanic Ash Impact'),
-            'report-timestamp': self.tr('Volcano: %s, Alert Level: %s %s') % (
+            'report-timestamp': self.tr('Volcano: %s, %s') % (
                 self.volcano_name,
-                self.alert_level, timestamp_string),
+                timestamp_string),
             'report-province': self.tr('Province: %s') % (self.region,),
+            'report-alert-level': self.tr('Alert Level: %s') % (
+                self.alert_level.capitalize(), ),
             'report-location': self.tr(
-                'Longitude %s Latitude %s;'
+                'Position: %s, %s;'
                 ' Eruption Column Height (a.s.l) - %d m') % (
                 longitude_string, latitude_string, self.erupction_height),
             'report-elapsed': self.tr(
-                'Elapsed time since event %s hour(s) and %s minute(s)') % (
+                'Elapsed time since event: %s hour(s) and %s minute(s)') % (
                 elapsed_hour, elapsed_minute),
             'header-impact-table': self.tr(
                 'Potential impact at each fallout level'),
@@ -260,16 +262,15 @@ class AshEvent(QObject):
                 'surface level. The estimate is based on volcanic ash '
                 'fallout data from Badan Geologi, population count data '
                 'derived by DMInnovation from worldpop.org.uk, place '
-                'information from geonames.org, land cover classification '
-                'data provided by Indonesian Geospatial Portal at '
-                'http://portal.ina-sdi.or.id and software developed by BNPB. '
-                'Limitation in the estimates of surface fallout, population '
-                'and place names datasets may result in significant '
-                'misrepresentation of the on-the-surface situation in the '
-                'figures shown here. Consequently decisions should not be '
-                'made soley on the information presented here and should '
-                'always be verified by ground truthing and other reliable '
-                'information sources.'
+                'information and land cover classification data provided by '
+                'Indonesian Geospatial Portal at http://portal.ina-sdi.or.id '
+                'and software developed by BNPB. Limitation in the estimates '
+                'of surface fallout, population and place names datasets may '
+                'result in a significant misrepresentation of the '
+                'on-the-surface situation in the figures shown here. '
+                'Consequently, decisions should not be made solely on the '
+                'information presented here and should always be verified '
+                'by ground truthing and other reliable information sources.'
             ),
             'content-notes': self.tr(
                 'This report was created using InaSAFE version %s. Visit '
