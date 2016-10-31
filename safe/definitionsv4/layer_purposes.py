@@ -32,7 +32,6 @@ layer_purpose_hazard = {
     'name': tr('Hazard'),
     'description': concepts['hazard']['description'],
     'allowed_geometries': [
-        layer_geometry_point,
         layer_geometry_polygon,
         layer_geometry_raster
     ],
@@ -54,6 +53,22 @@ layer_purpose_aggregation = {
         }
     ]
 }
+layer_purpose_impact = {
+    'key': 'impact',
+    'name': tr('Impact'),
+    'description': tr(
+        'An <b>impact</b> layer is the result from InaSAFE analysis. It has '
+        'fields that represent the result of each exposure from the hazard in '
+        'the aggregation area.'),
+    'allowed_geometries': [layer_geometry_polygon],
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+
 
 layer_purpose = {
     'key': 'layer_purpose',
