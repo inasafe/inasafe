@@ -2,6 +2,8 @@
 """Definitions relating to exposure in InaSAFE."""
 
 from safe.definitionsv4.concepts import concepts
+from safe.definitionsv4.caveats import (
+    caveat_incomplete_data)
 from safe.definitionsv4.units import (
     count_exposure_unit, density_exposure_unit)
 from safe.definitionsv4.fields import (
@@ -39,6 +41,7 @@ exposure_population = {
         'The <b>population</b> describes the people that might be '
         'exposed to a particular hazard.'),
     'notes': [  # these are additional generic notes for people - IF has more
+        caveat_incomplete_data,
         tr('Numbers reported for population counts have been rounded to the '
            'nearest 10 people if the total is less than 1,000; nearest 100 '
            'people if more than 1,000 and less than 100,000; and nearest '
@@ -161,6 +164,7 @@ exposure_road = {
         'A <b>road</b> is a defined route used by a vehicle or people to '
         'travel between two or more points.'),
     'notes': [  # these are additional generic notes for roads - IF has more
+        caveat_incomplete_data,
         tr('Numbers for road lengths have been rounded to the nearest metre.'),
         tr('Roads marked as not affected may still be unusable due to network '
            'isolation. Roads marked as affected may still be usable if they '
@@ -208,6 +212,7 @@ exposure_structure = {
         'with walls and a roof), telecommunications facility or '
         'bridge.'),
     'notes': [  # additional generic notes for structures - IF has more
+        caveat_incomplete_data,
         tr('Numbers reported for structures have not been rounded.')
     ],
     'continuous_notes': [  # notes specific to continuous data
@@ -258,6 +263,7 @@ exposure_place = {
         'A <b>place</b> is used to indicate that a particular location is '
         'known by a particular name.'),
     'notes': [  # additional generic notes for places - IF has more
+        caveat_incomplete_data,
         tr('Where places are represented as a single point, the effect of the '
            'hazard over the entire place may differ from the point at which '
            'the place is represented on the map.'),
@@ -303,6 +309,7 @@ exposure_land_cover = {
         ' hazard. This might include crops, forest and urban areas. '),
     'notes': [
         # these are additional generic notes for landcover - IF has more
+        caveat_incomplete_data,
         tr('Areas reported for land cover have not been rounded.'),
     ],
     'continuous_notes': [  # notes specific to continuous data
