@@ -8,7 +8,7 @@ from safe.definitionsv4.hazard_classifications import (
     ash_hazard_classes
 )
 from safe.definitionsv4.caveats import (
-    caveat_simulation, caveat_local_conditions, caveat_analysis_extent)
+    caveat_simulation, caveat_local_conditions, caveat_analysis_extent,)
 from safe.definitionsv4.concepts import concepts
 from safe.definitionsv4.units import (
     unit_feet,
