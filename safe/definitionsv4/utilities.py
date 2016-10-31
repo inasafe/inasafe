@@ -185,13 +185,11 @@ def get_fields(layer_purpose, layer_subcategory=None, replace_null=None):
         fields = deepcopy(impact_fields)
 
     if isinstance(replace_null, bool):
-        fields = [
-            field for field in fields
-            if field.get('replace_null') == replace_null
-            ]
+        fields = [f for f in fields if f.get('replace_null') == replace_null]
         return fields
     else:
         return fields
+
 
 def get_compulsory_fields(layer_purpose, layer_subcategory=None):
     """Get compulsory field based on layer_purpose and layer_subcategory

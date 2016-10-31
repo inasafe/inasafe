@@ -187,8 +187,8 @@ def check_inasafe_fields(layer):
 
     if len(inasafe_fields.keys()) != real_fields.count():
         msg = tr(
-            'inasafe_fields do not match the attribute table in %s. ' %
-                 layer.keywords['layer_purpose'])
+            'inasafe_fields do not match the attribute table in %s. '
+            % layer.keywords['layer_purpose'])
         return False, msg
 
     for key, field in inasafe_fields.iteritems():
