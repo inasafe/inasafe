@@ -50,7 +50,8 @@ exposure_population = {
         tr('Rounding is applied to all population values, which may cause '
            'discrepancies between subtotals and totals.'),
     ],
-    'earthquake_notes': [   # these are earthquake specific notes for population
+    'earthquake_notes': [
+        # these are earthquake specific notes for population
         tr('Map shows the estimation of displaced population.'),
         tr('People are displaced if they experience and survive a shake level '
            'of more than 5 on the MMI scale.'),
@@ -221,8 +222,10 @@ exposure_structure = {
     ],
     'classified_notes': [  # notes specific to classified data
     ],
-    'actions': [  # these are additional generic actions - IF has more
-        tr('Which structures have warning capacity (e.g. sirens or speakers)?'),
+    'actions': [
+        # these are additional generic actions - IF has more
+        tr('Which structures have warning capacity '
+           '(e.g. sirens or speakers)?'),
         tr('Are the water and electricity services still operating?'),
         tr('Are the schools and hospitals still active?'),
         tr('Are the health centres still open?'),

@@ -414,7 +414,8 @@ class TestKeywordWizard(unittest.TestCase):
         self.assertIsNotNone(inasafe_fields)
         for key, value in inasafe_fields.items():
             # Not check if it's hazard_class_field
-            if key == get_compulsory_fields(layer_purpose_hazard['key'])['key']:
+            if key == get_compulsory_fields(
+                    layer_purpose_hazard['key'])['key']:
                 continue
             # Check if existing key in parameters guid
             self.assertIn(key, [p.guid for p in parameters])
