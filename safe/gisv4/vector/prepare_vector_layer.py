@@ -114,22 +114,23 @@ def _rename_remove_inasafe_fields(layer):
 
     # Rename fields
     to_rename = {}
+    new_keywords = {}
     for key, val in layer.keywords.get('inasafe_fields').iteritems():
         if expected_fields[key] != val:
             to_rename[val] = expected_fields[key]
+            new_keywords[key] = expected_fields[key]
 
     copy_fields(layer, to_rename)
-    remove_fields(layer, to_rename.keys())
+    to_remove = to_rename.keys()
 
     LOGGER.debug(tr(
         'Fields which have been renamed from %s : %s'
         % (layer.keywords['layer_purpose'], to_rename)))
 
     # Houra, InaSAFE keywords match our concepts !
-    layer.keywords['inasafe_fields'].update(expected_fields)
+    layer.keywords['inasafe_fields'].update(new_keywords)
 
     # Remove useless fields
-    to_remove = []
     for field in layer.fields().toList():
         if field.name() not in expected_fields.values():
             to_remove.append(field.name())
@@ -226,7 +227,8 @@ def _add_id_column(layer):
 
         layer.commitChanges()
 
-        layer.keywords[safe_id['key']] = safe_id['field_name']
+        layer.keywords['inasafe_fields'][safe_id['key']] = (
+            safe_id['field_name'])
 
 
 @profile

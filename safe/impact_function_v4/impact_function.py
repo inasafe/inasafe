@@ -30,7 +30,6 @@ from safe.gisv4.vector.reclassify import reclassify as reclassify_vector
 from safe.gisv4.vector.union import union
 from safe.gisv4.vector.clip import clip
 from safe.gisv4.vector.smart_clip import smart_clip
-from safe.gisv4.vector.buffering import buffering
 from safe.gisv4.vector.aggregate_summary import aggregate_summary
 from safe.gisv4.vector.assign_inasafe_values import assign_inasafe_values
 from safe.gisv4.raster.reclassify import reclassify as reclassify_raster
@@ -45,7 +44,6 @@ from safe.definitionsv4.fields import (
 from safe.definitionsv4.post_processors import post_processors
 from safe.definitionsv4.analysis_steps import analysis_steps
 from safe.definitionsv4.utilities import definition
-from safe.defaults import get_defaults
 from safe.common.exceptions import (
     InvalidExtentError,
     InvalidLayerError,
@@ -87,7 +85,7 @@ class ImpactFunction(object):
         self._analysis_impacted = None
 
         # Use debug to store intermediate results
-        self.debug = False
+        self.debug_mode = False
 
         # Requested extent to use
         self._requested_extent = None
@@ -530,7 +528,6 @@ class ImpactFunction(object):
         aggregation_layer.commitChanges()
 
         # Generate aggregation keywords
-        aggregation_layer.keywords = get_defaults()
         aggregation_layer.keywords['layer_purpose'] = 'aggregation'
         aggregation_layer.keywords['inasafe_fields'] = {
             aggregation_id_field['key']: aggregation_id_field['field_name'],
@@ -574,7 +571,6 @@ class ImpactFunction(object):
         analysis_layer.commitChanges()
 
         # Generate aggregation keywords
-        analysis_layer.keywords = get_defaults()
         analysis_layer.keywords['layer_purpose'] = 'analysis'
         analysis_layer.keywords['inasafe_fields'] = {
             analysis_id_field['key']: analysis_id_field['field_name'],
@@ -692,13 +688,13 @@ class ImpactFunction(object):
             self.callback(1, step_count, analysis_steps['data_store'])
             self._datastore = Folder(temp_dir(sub_dir=self._unique_name))
             self._datastore.default_vector_format = 'geojson'
-            if self.debug:
+            if self.debug_mode:
                 print 'Temporary datastore'
                 print self.datastore.uri.absolutePath()
 
             LOGGER.debug('Datastore : %s' % self.datastore.uri.absolutePath())
 
-        if self.debug:
+        if self.debug_mode:
             self._datastore.use_index = True
 
             self.datastore.add_layer(self.exposure, 'exposure')
@@ -758,7 +754,7 @@ class ImpactFunction(object):
         self._performance_log = profiling_log()
         self.callback(8, step_count, analysis_steps['profiling'])
 
-        if self.debug:
+        if self.debug_mode:
             print 'Performance log message :'
             print self.performance_log_message().to_text()
         return self.state
@@ -782,7 +778,7 @@ class ImpactFunction(object):
                     ranges[hazard_class['value']] = [min_value, max_value]
                 # noinspection PyTypeChecker
                 self.hazard = reclassify_raster(self.hazard, ranges)
-                if self.debug:
+                if self.debug_mode:
                     self.datastore.add_layer(
                         self.hazard, 'hazard_raster_reclassified')
 
@@ -790,7 +786,7 @@ class ImpactFunction(object):
                 'hazard', 'Polygonize classified raster hazard')
             # noinspection PyTypeChecker
             self.hazard = polygonize(self.hazard)
-            if self.debug:
+            if self.debug_mode:
                 self.datastore.add_layer(
                     self.hazard, 'hazard_polygonized')
 
@@ -799,7 +795,7 @@ class ImpactFunction(object):
             'Cleaning the vector hazard attribute table')
         # noinspection PyTypeChecker
         self.hazard = prepare_vector_layer(self.hazard)
-        if self.debug:
+        if self.debug_mode:
             self.datastore.add_layer(
                 self.hazard, 'hazard_cleaned')
 
@@ -808,14 +804,14 @@ class ImpactFunction(object):
                 'hazard',
                 'Classify continuous hazard and assign class names')
             # self.hazard = reclassify(self.hazard, ranges)
-            # if self.debug:
+            # if self.debug_mode:
             #     self.datastore.add_layer(
             #         self.hazard, 'hazard reclassified')
 
         self.set_state_process(
             'hazard', 'Assign classes based on value map')
         self.hazard = assign_inasafe_values(self.hazard)
-        if self.debug:
+        if self.debug_mode:
             self.datastore.add_layer(
                 self.hazard, 'hazard_value_map_to_reclassified')
 
@@ -829,7 +825,7 @@ class ImpactFunction(object):
             # noinspection PyTypeChecker
             self.hazard = reproject(
                 self.hazard, self.exposure.crs())
-            if self.debug:
+            if self.debug_mode:
                 self.datastore.add_layer(
                     self.hazard, 'hazard_reprojected')
 
@@ -846,7 +842,7 @@ class ImpactFunction(object):
                 'aggregation',
                 'Convert bbox aggregation to polygon layer with keywords')
             self.aggregation = self.create_virtual_aggregation()
-            if self.debug:
+            if self.debug_mode:
                 self.datastore.add_layer(self.aggregation, 'aggr_from_bbox')
 
         else:
@@ -856,7 +852,7 @@ class ImpactFunction(object):
                 'aggregation', 'Cleaning the aggregation layer')
             # noinspection PyTypeChecker
             self.aggregation = prepare_vector_layer(self.aggregation)
-            if self.debug:
+            if self.debug_mode:
                 self.datastore.add_layer(self.aggregation, 'aggr_prepared')
 
             if self.aggregation.crs().authid() != self.exposure.crs().authid():
@@ -866,7 +862,7 @@ class ImpactFunction(object):
                 # noinspection PyTypeChecker
                 self.aggregation = reproject(
                     self.aggregation, self.exposure.crs())
-                if self.debug:
+                if self.debug_mode:
                     self.datastore.add_layer(
                         self.aggregation, 'aggr_reprojected')
             else:
@@ -878,7 +874,7 @@ class ImpactFunction(object):
             'aggregation',
             'Convert the aggregation layer to the analysis layer')
         self._analysis_impacted = self.create_analysis_layer()
-        if self.debug:
+        if self.debug_mode:
             self.datastore.add_layer(
                 self._analysis_impacted, 'analysis_layer')
 
@@ -893,7 +889,7 @@ class ImpactFunction(object):
             'hazard',
             'Clip and mask hazard polygons with the analysis layer')
         self.hazard = clip(self.hazard, self.analysis_layer)
-        if self.debug:
+        if self.debug_mode:
             self.datastore.add_layer(
                 self.hazard, 'hazard_clip_by_analysis_layer')
 
@@ -902,7 +898,7 @@ class ImpactFunction(object):
             'Union hazard polygons with aggregation areas and assign '
             'hazard class')
         self._aggregate_hazard = union(self.hazard, self.aggregation)
-        if self.debug:
+        if self.debug_mode:
             self.datastore.add_layer(
                 self._aggregate_hazard, 'aggregate_hazard')
 
@@ -932,14 +928,14 @@ class ImpactFunction(object):
                 'Cleaning the vector exposure attribute table')
             # noinspection PyTypeChecker
             self.exposure = prepare_vector_layer(self.exposure)
-            if self.debug:
+            if self.debug_mode:
                 self.datastore.add_layer(
                     self.exposure, 'exposure_cleaned')
 
             self.set_state_process(
                 'exposure', 'Assign classes based on value map')
             self.exposure = assign_inasafe_values(self.exposure)
-            if self.debug:
+            if self.debug_mode:
                 self.datastore.add_layer(
                     self.exposure, 'exposure_value_map_to_reclassified')
 
@@ -957,7 +953,7 @@ class ImpactFunction(object):
                     'Clip the exposure layer with the analysis layer')
                 self.exposure = clip(self.exposure, self._analysis_impacted)
 
-            if self.debug:
+            if self.debug_mode:
                 self.datastore.add_layer(
                     self.exposure, 'exposure_clip')
 
@@ -978,7 +974,7 @@ class ImpactFunction(object):
             # noinspection PyTypeChecker
             self._aggregate_hazard = zonal_stats(
                 self.exposure, self._aggregate_hazard)
-            if self.debug:
+            if self.debug_mode:
                 self.datastore.add_layer(
                     self._aggregate_hazard, 'zonal_stats')
 
@@ -1003,7 +999,7 @@ class ImpactFunction(object):
                     'Union exposure features to the aggregate hazard')
                 self._impact = union(self.exposure, self._aggregate_hazard)
 
-            if self.debug:
+            if self.debug_mode:
                 self.datastore.add_layer(
                     self._impact, 'intermediate-impact')
 

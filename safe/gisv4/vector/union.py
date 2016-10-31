@@ -80,17 +80,20 @@ def union(union_a, union_b, callback=None):
     layer_purpose_1 = keywords_union_1['layer_purpose']
     layer_purpose_2 = keywords_union_2['layer_purpose']
 
+    writer.keywords = union_a.keywords
+    writer.keywords['inasafe_fields'] = inasafe_fields
+
     if not (layer_purpose_1 == 'exposure' and
-                layer_purpose_2 == 'aggregate_hazard') and \
-        not (layer_purpose_1 == 'hazard' and
-                     layer_purpose_2 == 'aggregation'):
+                layer_purpose_2 == 'aggregate_hazard'):
+        writer.keywords['layer_purpose'] = 'impact'
+    elif not (layer_purpose_1 == 'hazard' and
+                layer_purpose_2 == 'aggregation'):
+        writer.keywords['layer_purpose'] = 'aggregate_hazard'
+
+    else:
         msg = 'I got layer purpose 1 = %s and layer purpose 2 = %s'\
               % (layer_purpose_1, layer_purpose_2)
         raise InvalidKeywordsForProcessingAlgorithm(msg)
-
-    writer.keywords = union_a.keywords
-    writer.keywords['inasafe_fields'] = inasafe_fields
-    writer.keywords['layer_purpose'] = 'aggregate_hazard'
 
     writer.startEditing()
 
