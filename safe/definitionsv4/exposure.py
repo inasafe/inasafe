@@ -215,8 +215,7 @@ exposure_structure = {
     'classified_notes': [  # notes specific to classified data
     ],
     'actions': [  # these are additional generic actions - IF has more
-        tr('Which structures have warning capacity (e.g. sirens, speakers, '
-           'etc.)?'),
+        tr('Which structures have warning capacity (e.g. sirens or speakers)?'),
         tr('Are the water and electricity services still operating?'),
         tr('Are the schools and hospitals still active?'),
         tr('Are the health centres still open?'),
