@@ -144,7 +144,8 @@ class StepKwSource(WizardStep, FORM_CLASS):
                 self.dtSource_date.setDateTime(source_date)
             except TypeError:
                 raise TypeError(
-                    'Expected QDateTime or datetime got %s' % type(source_date))
+                    'Expected QDateTime or datetime got %s' %
+                    type(source_date))
         else:
             self.ckbSource_date.setChecked(False)
             self.dtSource_date.clear()

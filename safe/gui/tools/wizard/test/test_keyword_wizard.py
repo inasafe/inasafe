@@ -18,6 +18,7 @@ from safe.test.utilities import (
 # safe.gui.tools.wizard
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from safe.definitionsv4.versions import inasafe_keyword_version
+from datetime import datetime
 from safe.definitionsv4.layer_modes import (
     layer_mode_continuous, layer_mode_classified)
 from safe.definitionsv4.layer_purposes import (
@@ -47,12 +48,10 @@ __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
+# Some default values for testing
 source = u'Source'
 source_scale = u'Source Scale'
 source_url = u'Source Url'
-# noinspection PyCallByClass
-# source_date = QtCore.QDateTime.fromString('06-12-2015', 'dd-MM-yyyy')
-from  datetime import datetime
 source_date = datetime.strptime('06-12-2015', '%d-%m-%Y')
 source_license = u'Source License'
 layer_title = u'Layer Title'
