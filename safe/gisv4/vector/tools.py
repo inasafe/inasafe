@@ -7,6 +7,7 @@ Tools for vector layers.
 from uuid import uuid4
 from PyQt4.QtCore import QSettings
 from qgis.core import (
+    QgsGeometry,
     QgsVectorLayer,
     QgsSpatialIndex,
     QgsFeatureRequest,
@@ -118,7 +119,7 @@ def copy_layer(source, target):
 
     for i, feature in enumerate(source.getFeatures(request)):
         geom = feature.geometry()
-        out_feature.setGeometry(geom)
+        out_feature.setGeometry(QgsGeometry(geom))
         out_feature.setAttributes(feature.attributes())
         target.addFeature(out_feature)
 

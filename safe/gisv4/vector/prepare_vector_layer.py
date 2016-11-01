@@ -80,7 +80,7 @@ def prepare_vector_layer(layer, callback=None):
     cleaned.keywords = layer.keywords
 
     copy_layer(layer, cleaned)
-    _remove_rows(cleaned)
+    _remove_features(cleaned)
 
     # After removing rows, let's check if there is still a feature.
     request = QgsFeatureRequest().setFlags(QgsFeatureRequest.NoGeometry)
@@ -151,8 +151,9 @@ def _rename_remove_inasafe_fields(layer):
 
 
 @profile
-def _remove_rows(layer):
-    """Remove rows which do not have information for InaSAFE.
+def _remove_features(layer):
+    """Remove features which do not have information for InaSAFE or an invalid
+    geometry.
 
     :param layer: The vector layer.
     :type layer: QgsVectorLayer
@@ -184,9 +185,25 @@ def _remove_rows(layer):
     layer.startEditing()
     i = 0
     for feature in layer.getFeatures(request):
+        # Check if the compulsory field is not empty.
         if isinstance(feature.attributes()[index], QPyNullVariant):
             layer.deleteFeature(feature.id())
             i += 1
+            continue
+
+        # Check if there is en empty geometry.
+        geometry = feature.geometry()
+        if not geometry:
+            layer.deleteFeature(feature.id())
+            i += 1
+            continue
+
+        # Check if the geometry is valid.
+        if not geometry.isGeosValid():
+            layer.deleteFeature(feature.id())
+            i += 1
+            continue
+
         # TODO We need to add more tests
         # like checking if the value is in the value_mapping.
     layer.commitChanges()
