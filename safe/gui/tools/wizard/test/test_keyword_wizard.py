@@ -935,7 +935,8 @@ class TestKeywordWizard(unittest.TestCase):
 
     def test_exposure_population_polygon_keyword(self):
         """Test exposure population polygon keyword"""
-        layer = load_test_vector_layer('gisv4', 'exposure', 'census.geojson')
+        layer = load_test_vector_layer(
+            'gisv4', 'exposure', 'census.geojson', clone_to_memory=True)
         layer.keywords = {}
 
         self.assertIsNotNone(layer)
