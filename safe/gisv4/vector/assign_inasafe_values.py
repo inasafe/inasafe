@@ -13,7 +13,7 @@ from safe.definitionsv4.fields import (
     exposure_type_field,
     exposure_class_field
 )
-from safe.definitionsv4.processing import reclassify_vector
+from safe.definitionsv4.processing_steps import assign_inasafe_values_steps
 from safe.gisv4.vector.tools import remove_fields
 from safe.utilities.profiling import profile
 
@@ -40,8 +40,9 @@ def assign_inasafe_values(layer, callback=None):
 
     .. versionadded:: 4.0
     """
-    output_layer_name = reclassify_vector['output_layer_name']
-    processing_step = reclassify_vector['step_name']
+    output_layer_name = assign_inasafe_values_steps['output_layer_name']
+    processing_step = assign_inasafe_values_steps['step_name']
+    output_layer_name = output_layer_name % layer.keywords['layer_purpose']
 
     keywords = layer.keywords
     inasafe_fields = keywords['inasafe_fields']
@@ -108,5 +109,6 @@ def assign_inasafe_values(layer, callback=None):
     layer.keywords = keywords
     layer.keywords['inasafe_fields'] = inasafe_fields
     layer.keywords.pop('value_map')
+    layer.keywords['title'] = output_layer_name
 
     return layer

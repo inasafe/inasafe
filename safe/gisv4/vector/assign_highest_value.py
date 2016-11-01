@@ -15,11 +15,10 @@ from qgis.core import (
     QgsFeature,
 )
 
-from safe.utilities.i18n import tr
 from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
 from safe.definitionsv4.fields import hazard_class_field
 from safe.definitionsv4.hazard_classifications import hazard_classification
-# from safe.definitionsv4.processing import assign_highest_value
+from safe.definitionsv4.processing_steps import assign_highest_value_steps
 from safe.gisv4.vector.tools import create_memory_layer, create_spatial_index
 from safe.utilities.profiling import profile
 
@@ -58,11 +57,8 @@ def assign_highest_value(exposure_layer, hazard_layer, callback=None):
 
     .. versionadded:: 4.0
     """
-    # To fix
-    # output_layer_name = intersection_vector['output_layer_name']
-    # processing_step = intersection_vector['step_name']
-    output_layer_name = 'highest_hazard_value'
-    processing_step = 'Assigning the highest hazard value'
+    output_layer_name = assign_highest_value_steps['output_layer_name']
+    processing_step = assign_highest_value_steps['step_name']
 
     hazard_keywords = hazard_layer.keywords
     hazard_inasafe_fields = hazard_keywords['inasafe_fields']
@@ -192,5 +188,7 @@ def assign_highest_value(exposure_layer, hazard_layer, callback=None):
         hazard_layer.keywords['aggregation_keywords'])
     writer.keywords['hazard_keywords'] = (
         hazard_layer.keywords['hazard_keywords'])
+
+    writer.keywords['title'] = output_layer_name
 
     return writer

@@ -16,7 +16,7 @@ from safe.common.exceptions import (
     InvalidKeywordsForProcessingAlgorithm, NoFeaturesInExtentError)
 from safe.gisv4.vector.tools import (
     create_memory_layer, remove_fields, copy_fields, copy_layer)
-from safe.definitionsv4.processing import prepare_vector
+from safe.definitionsv4.processing_steps import prepare_vector_steps
 from safe.definitionsv4.fields import (
     exposure_id_field,
     hazard_id_field,
@@ -64,8 +64,9 @@ def prepare_vector_layer(layer, callback=None):
 
     .. versionadded:: 4.0
     """
-    output_layer_name = prepare_vector['output_layer_name']
-    processing_step = prepare_vector['step_name']
+    output_layer_name = prepare_vector_steps['output_layer_name']
+    output_layer_name = output_layer_name % layer.keywords['layer_purpose']
+    processing_step = prepare_vector_steps['step_name']
 
     if not layer.keywords.get('inasafe_fields'):
         msg = 'inasafe_fields is missing in keywords from %s' % layer.name()
@@ -93,6 +94,8 @@ def prepare_vector_layer(layer, callback=None):
     _add_id_column(cleaned)
     _rename_remove_inasafe_fields(cleaned)
     _add_default_values(cleaned)
+
+    cleaned.keywords['title'] = output_layer_name
 
     return cleaned
 

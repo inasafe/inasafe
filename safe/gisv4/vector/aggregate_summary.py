@@ -15,6 +15,7 @@ from safe.definitionsv4.fields import (
     exposure_count_field,
     size_field
 )
+from safe.definitionsv4.processing_steps import aggregate_summary_steps
 from safe.utilities.profiling import profile
 from safe.utilities.pivot_table import FlatTable
 
@@ -44,6 +45,9 @@ def aggregate_summary(aggregate_hazard, impact, callback=None):
 
     .. versionadded:: 4.0
     """
+    output_layer_name = aggregate_summary_steps['output_layer_name']
+    processing_step = aggregate_summary_steps['step_name']
+
     impact_fields = impact.keywords['inasafe_fields']
     aggregate_fields = aggregate_hazard.keywords['inasafe_fields']
 
@@ -141,5 +145,7 @@ def aggregate_summary(aggregate_hazard, impact, callback=None):
         key = exposure_count_field['key'] % column
         value = exposure_count_field['field_name'] % column
         aggregate_hazard.keywords['inasafe_fields'][key] = value
+
+    aggregate_hazard.keywords['title'] = output_layer_name
 
     return aggregate_hazard
