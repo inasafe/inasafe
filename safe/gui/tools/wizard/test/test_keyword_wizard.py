@@ -23,14 +23,20 @@ from safe.definitionsv4.layer_modes import (
 from safe.definitionsv4.layer_purposes import (
     layer_purpose_hazard, layer_purpose_exposure, layer_purpose_aggregation)
 from safe.definitionsv4.hazard import hazard_volcano
-from safe.definitionsv4.exposure import exposure_structure
+from safe.definitionsv4.exposure import exposure_structure, exposure_population
 from safe.definitionsv4.hazard_category import hazard_category_multiple_event
 from safe.definitionsv4.hazard_classifications import volcano_hazard_classes
 from safe.definitionsv4.constants import no_field
-from safe.definitionsv4.fields import hazard_name_field, aggregation_name_field
+from safe.definitionsv4.fields import (
+    hazard_name_field,
+    aggregation_name_field,
+    population_count_field,
+    exposure_type_field,
+    hazard_value_field)
 from safe.definitionsv4.layer_geometry import layer_geometry_polygon
 from safe.definitionsv4.exposure_classifications import (
     generic_structure_classes)
+from safe.definitionsv4.units import count_exposure_unit
 
 from safe.gui.tools.wizard.wizard_dialog import WizardDialog
 from safe.utilities.keyword_io import KeywordIO
@@ -310,8 +316,8 @@ class TestKeywordWizard(unittest.TestCase):
             'hazard': hazard_volcano['key'],
             'inasafe_fields':
                 {
-                    'hazard_value_field': u'KRB',
-                    'hazard_name_field': u'volcano',
+                    hazard_value_field['key']: u'KRB',
+                    hazard_name_field['key']: u'volcano',
                  },
             'inasafe_default_values': {},
             'value_map': assigned_values,
@@ -538,11 +544,6 @@ class TestKeywordWizard(unittest.TestCase):
         # Check if in classify step
         self.check_current_step(dialog.step_kw_classify)
 
-        # select value map
-        # classification = dialog.step_kw_classification.\
-        #     selected_classification()
-
-        # default_classes = classification['classes']
         default_classes = generic_structure_classes['classes']
         unassigned_values = []  # no need to check actually, not save in file
         assigned_values = {
@@ -623,7 +624,7 @@ class TestKeywordWizard(unittest.TestCase):
             'exposure': exposure_structure['key'],
             'inasafe_fields':
                 {
-                    'exposure_type_field': u'TYPE',
+                    exposure_type_field['key']: u'TYPE',
                 },
             'inasafe_default_values': {},
             # No value will be omitted.
@@ -804,7 +805,7 @@ class TestKeywordWizard(unittest.TestCase):
         self.select_from_list_widget(
             area_name, dialog.step_kw_field.lstFields)
 
-        # Click next to select KRB
+        # Click next to select area_name
         dialog.pbnNext.click()
 
         # select inasafe fields step
@@ -932,220 +933,146 @@ class TestKeywordWizard(unittest.TestCase):
         real_keywords = dialog.get_keywords()
         self.assertDictEqual(real_keywords, expected_keyword)
 
-    @unittest.skip('Skip unit test from InaSAFE v3.')
-    def test_keywords_creation_wizard(self):
-        """Test how the widgets work."""
-        expected_category_count = 3
-        expected_categories = ['hazard', 'exposure', 'aggregation']
-        chosen_category = 'hazard'
+    def test_exposure_population_polygon_keyword(self):
+        """Test exposure population polygon keyword"""
+        layer = load_test_vector_layer('gisv4', 'exposure', 'census.geojson')
+        layer.keywords = {}
 
-        expected_hazard_category_count = 2
-        expected_hazard_categories = ['Single event', 'Multiple event']
-        chosen_hazard_category = 'Single event'
+        self.assertIsNotNone(layer)
 
-        expected_subcategory_count = 6
-        # expected_subcategories = ['flood', 'tsunami']
-        # Notes: IS, the generic IF makes the expected sub categories like this
-        expected_subcategories = [
-            'flood',
-            'tsunami',
-            'earthquake',
-            'volcano',
-            'volcanic_ash',
-            'generic']
-        chosen_subcategory = 'flood'
-
-        expected_mode_count = 2
-        expected_modes = ['classified', 'continuous']
-
-        expected_field_count = 6
-        expected_fields = ['OBJECTID', 'KAB_NAME', 'KEC_NAME', 'KEL_NAME',
-                           'RW', 'FLOODPRONE']
-        expected_chosen_field = 'FLOODPRONE'
-
-        expected_classification_count = 2
-        expected_classification = 'Flood classes'
-
-        expected_keywords = {
-            'layer_geometry': 'polygon',
-            'layer_purpose': 'hazard',
-            'hazard_category': 'single_event',
-            'hazard': 'flood',
-            'field': 'FLOODPRONE',
-            'layer_mode': 'classified',
-            'vector_hazard_classification':
-                'flood_vector_hazard_classes',
-            'value_map': {'wet': ['YES'], 'dry': ['NO']},
-            'source': 'some source',
-            'title': 'some title',
-            'keyword_version': inasafe_keyword_version
-        }
-
-        layer = clone_shp_layer(
-            name='flood_multipart_polygons',
-            include_keywords=True,
-            source_directory=standard_data_path('hazard'))
-
-        # check the environment first
-        self.assertIsNotNone(layer.dataProvider())
-
-        # Initialize dialog
         # noinspection PyTypeChecker
         dialog = WizardDialog()
         dialog.set_keywords_creation_mode(layer)
 
-        # step 1 of 9 - select category
-        count = dialog.step_kw_purpose.lstCategories.count()
-        self.assertEqual(count, expected_category_count)
+        # Check if in select purpose step
+        self.check_current_step(dialog.step_kw_purpose)
 
-        # Get all the categories given by wizards and save the 'hazard' index
-        categories = []
-        hazard_index = -1
-        for i in range(expected_category_count):
-            category_name = dialog.step_kw_purpose.lstCategories.item(i).data(
-                Qt.UserRole)
-            categories.append(category_name)
-            if category_name == chosen_category:
-                hazard_index = i
-        # Check if categories is the same with expected_categories
-        self.assertItemsEqual(categories, expected_categories)
-        # The Next button should be on disabled state first unless the keywords
-        # are already assigned
-        self.assertTrue(
-            not dialog.pbnNext.isEnabled() or
-            len(dialog.step_kw_purpose.lstCategories.selectedItems()))
-        # Select hazard one
-        dialog.step_kw_purpose.lstCategories.setCurrentRow(hazard_index)
-        self.assertTrue(dialog.pbnNext.isEnabled())
-        # Click Next
+        # Select exposure
+        self.select_from_list_widget(
+            layer_purpose_exposure['name'],
+            dialog.step_kw_purpose.lstCategories)
+
+        # Click next to select exposure
         dialog.pbnNext.click()
 
-        # step 2 of 9 - select subcategory
-        # Check the number of sub categories
-        count = dialog.step_kw_subcategory.lstSubcategories.count()
-        self.assertEqual(count, expected_subcategory_count)
+        # Check if in select exposure step
+        self.check_current_step(dialog.step_kw_subcategory)
 
-        # Get all the subcategories given and save the 'flood' index
-        subcategories = []
-        tsunami_index = -1
-        for i in range(expected_subcategory_count):
-            subcategory_name = dialog.step_kw_subcategory.lstSubcategories.\
-                item(i).data(Qt.UserRole)
-            subcategories.append(subcategory_name)
-            if subcategory_name == chosen_subcategory:
-                tsunami_index = i
-        # Check if subcategories is the same with expected_subcategories
-        self.assertItemsEqual(subcategories, expected_subcategories)
-        # The Next button should be on disabled state first unless the keywords
-        # are already assigned
-        self.assertTrue(
-            not dialog.pbnNext.isEnabled() or
-            len(dialog.step_kw_subcategory.lstSubcategories.selectedItems()),
-            'Invalid Next button state in step 3! '
-            'Enabled while there\'s nothing selected yet')
-        # Set to tsunami subcategories
-        dialog.step_kw_subcategory.lstSubcategories.setCurrentRow(
-            tsunami_index)
-        self.assertTrue(dialog.pbnNext.isEnabled())
-        # Click next button
+        # select structure
+        self.select_from_list_widget(
+            exposure_population['name'],
+            dialog.step_kw_subcategory.lstSubcategories)
+
+        # Click next to select structure
         dialog.pbnNext.click()
 
-        # step 3 of 9 - select hazard category
-        count = dialog.step_kw_hazard_category.lstHazardCategories.count()
-        self.assertEqual(count, expected_hazard_category_count)
-
-        # Get all the categories given by wizards and save the 'hazard' index
-        hazard_categories = []
-        scenario_index = -1
-        for i in range(expected_hazard_category_count):
-            key = dialog.step_kw_hazard_category.lstHazardCategories.\
-                item(i).data(Qt.UserRole)
-            hazard_category_name = definition(key)['name']
-            hazard_categories.append(hazard_category_name)
-            if hazard_category_name == chosen_hazard_category:
-                scenario_index = i
-        # Check if categories is the same with expected_categories
-        self.assertItemsEqual(hazard_categories, expected_hazard_categories)
-        # The Next button should be on disabled state first unless the keywords
-        # are already assigned
-        self.assertTrue(
-            not dialog.pbnNext.isEnabled() or
-            len(dialog.step_kw_hazard_category.lstHazardCategories.
-                selectedItems())
-        )
-        # Select hazard one
-        dialog.step_kw_hazard_category.lstHazardCategories.setCurrentRow(
-            scenario_index)
-        self.assertTrue(dialog.pbnNext.isEnabled())
-        # Click Next
-        dialog.pbnNext.click()
-
-        # step 4 of 9 - select classified mode
-        # Check if the number of modes is 2
+        # Check if in select layer mode step
         self.check_current_step(dialog.step_kw_layermode)
-        count = dialog.step_kw_layermode.lstLayerModes.count()
-        self.assertEqual(count, expected_mode_count)
-        # Get all the modes given and save the classified index
-        modes = []
-        for i in range(expected_mode_count):
-            mode_name = dialog.step_kw_layermode.lstLayerModes.item(i).data(
-                Qt.UserRole)
-            modes.append(mode_name)
-        # Check if units is the same with expected_units
-        self.assertItemsEqual(expected_modes, modes)
 
+        # Select continous
+        self.select_from_list_widget(
+            layer_mode_continuous['name'],
+            dialog.step_kw_layermode.lstLayerModes)
+
+        # Click next to select continuous
         dialog.pbnNext.click()
 
-        # step 5 of 9 - select classification scheme
-        # Check if the number of classifications is 2
-        count = dialog.step_kw_classification.lstClassifications.count()
-        self.assertEqual(count, expected_classification_count)
-        self.check_current_text(
-            expected_classification,
-            dialog.step_kw_classification.lstClassifications
-        )
-        # Click next
+        # Check if in select unit step
+        self.check_current_step(dialog.step_kw_unit)
+
+        # Select count
+        self.select_from_list_widget(
+            count_exposure_unit['name'],
+            dialog.step_kw_unit.lstUnits)
+
+        # Click next to select count
         dialog.pbnNext.click()
 
-        # step 6 of 9 - select data field for flood
+        # Check if in select unit step
         self.check_current_step(dialog.step_kw_field)
-        count = dialog.step_kw_field.lstFields.count()
-        self.assertEqual(count, expected_field_count)
-        # Get all the fields given and save the 'FLOODPRONE' index
-        fields = []
-        floodprone_index = -1
-        for i in range(expected_field_count):
-            field_name = dialog.step_kw_field.lstFields.item(i).text()
-            fields.append(field_name)
-            if field_name == expected_chosen_field:
-                floodprone_index = i
-        # Check if fields is the same with expected_fields
-        self.assertItemsEqual(expected_fields, fields)
-        dialog.step_kw_field.lstFields.setCurrentRow(floodprone_index)
-        self.assertTrue(dialog.pbnNext.isEnabled())
-        # Click next
+
+        # select population field
+        population_field = 'population'
+        self.select_from_list_widget(
+            population_field, dialog.step_kw_field.lstFields)
+
+        # Click next to select population
         dialog.pbnNext.click()
 
-        # Click next
+        # Check if in InaSAFE field step
+        self.check_current_step(dialog.step_kw_inasafe_fields)
+
+        # Click next to finish inasafe fields step and go to inasafe default
+        # field step
         dialog.pbnNext.click()
 
-        # step 8 of 9 - enter source
-        self.assertTrue(dialog.pbnNext.isEnabled())
-        dialog.step_kw_source.leSource.setText('some source')
+        # Check if in InaSAFE Default field step
+        self.check_current_step(dialog.step_kw_default_inasafe_fields)
+
+        # Click next to finish InaSAFE Default Field step and go to source step
         dialog.pbnNext.click()
 
-        # step 9 of 9 - enter title
-        dialog.step_kw_title.leTitle.setText('some title')
-        self.assertTrue(dialog.pbnNext.isEnabled())
-        dialog.pbnNext.click()
+        # Check if in source step
+        self.check_current_step(dialog.step_kw_source)
+
+        source = u'Source'
+        source_scale = u'Source Scale'
+        source_url = u'Source Url'
+        # noinspection PyCallByClass
+        source_date = QtCore.QDateTime.fromString(
+            '06-12-2015 12:30',
+            'dd-MM-yyyy HH:mm')
+        source_license = u'Source License'
+        layer_title = u'Layer Title'
+
+        dialog.step_kw_source.leSource.setText(source)
+        dialog.step_kw_source.leSource_scale.setText(source_scale)
+        dialog.step_kw_source.leSource_url.setText(source_url)
+        dialog.step_kw_source.ckbSource_date.setChecked(True)
+        dialog.step_kw_source.dtSource_date.setDateTime(source_date)
+        dialog.step_kw_source.leSource_license.setText(source_license)
+
+        # Click next to finish source step and go to title step
         dialog.pbnNext.click()
 
-        # test the resulting keywords
-        keyword_io = KeywordIO()
-        # noinspection PyTypeChecker
-        keywords = keyword_io.read_keywords(layer)
+        # Check if in title step
+        self.check_current_step(dialog.step_kw_title)
 
-        self.assertEqual(keywords, expected_keywords)
+        dialog.step_kw_title.leTitle.setText(layer_title)
+
+        # Click next to finish title step and go to kw summary step
+        dialog.pbnNext.click()
+
+        # Check if in title step
+        self.check_current_step(dialog.step_kw_summary)
+
+        # Click finish
+        dialog.pbnNext.click()
+
+        # Checking Keyword Created
+        expected_keyword = {
+            'scale': source_scale,
+            'license': source_license,
+            'source': source,
+            'url': source_url,
+            'title': layer_title,
+            'exposure': exposure_population['key'],
+            'exposure_unit': count_exposure_unit['key'],
+            'inasafe_fields':
+                {
+                    population_count_field['key']: u'population',
+                },
+            'inasafe_default_values': {},
+            # No value will be omitted.
+            'date': source_date,
+            'layer_geometry': layer_geometry_polygon['key'],
+            'layer_purpose': layer_purpose_exposure['key'],
+            'layer_mode': layer_mode_continuous['key']
+        }
+
+        real_keywords = dialog.get_keywords()
+
+        self.assertDictEqual(real_keywords, expected_keyword)
 
     # noinspection PyTypeChecker
     @unittest.skip('Skip unit test from InaSAFE v3.')
