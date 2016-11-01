@@ -16,7 +16,7 @@ from safe.gisv4.vector.prepare_vector_layer import (
     copy_layer,
     copy_fields,
     remove_fields,
-    _remove_rows,
+    _remove_features,
     _add_id_column,
     _add_default_values,
 )
@@ -75,7 +75,7 @@ class TestPrepareLayer(unittest.TestCase):
         layer = load_test_vector_layer(
             'gisv4', 'hazard', 'classified_vector.geojson', clone=True)
         feature_count = layer.featureCount()
-        _remove_rows(layer)
+        _remove_features(layer)
         self.assertEqual(layer.featureCount(), feature_count - 1)
 
     def test_default_value(self):
