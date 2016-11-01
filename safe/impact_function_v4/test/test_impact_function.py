@@ -300,7 +300,11 @@ class TestImpactFunction(unittest.TestCase):
             'impact',
             'indivisible_polygon_impact.geojson',
             clone_to_memory=True)
-        self.assertIsNotNone(impact_layer)
+
+        impact_layer.keywords['hazard_keywords'] = {
+            'classification': 'flood_hazard_classes'
+        }
+
         impact_function = ImpactFunction()
 
         impact_function.post_process(impact_layer)

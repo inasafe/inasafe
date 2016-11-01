@@ -16,7 +16,10 @@ from safe.definitionsv4.fields import (
     feature_rate_field,
     feature_value_field,
     size_field,
+    hazard_class_field,
+    affected_field,
 )
+from safe.definitionsv4.hazard_classifications import all_hazard_classes
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -56,6 +59,23 @@ def assign(**kwargs):
 
     value = kwargs.values()[0]
     return value
+
+
+def post_processor_affected_function(**kwargs):
+    """Private function used in the affected postprocessor."""
+    for hazard in all_hazard_classes:
+        if hazard['key'] == kwargs['classification']:
+            classification = hazard['classes']
+
+    for level in classification:
+        if level['key'] == kwargs['hazard_class']:
+            affected = level['affected']
+            break
+    else:
+        affected = False
+
+    return tr(unicode(affected))
+
 
 """
 Post processors
@@ -197,11 +217,40 @@ post_processor_size_rate = {
     }
 }
 
+# We can access a specific keyword by specifying a list of keys to reach the
+# keyword.
+# For instance ['hazard_keywords', 'classification'].
+
+post_processor_affected = {
+    'key': 'post_processor_affected',
+    'name': tr('Affected Post Processor'),
+    'description': tr(
+        'Post processor to determine of the feature is affected or not '
+        'according to the hazard classification.'),
+    'input': {
+        'hazard_class': {
+            'value': hazard_class_field,
+            'type': 'field'
+        },
+        'classification': {
+            'type': 'keyword',
+            'value': ['hazard_keywords', 'classification'],
+        },
+    },
+    'output': {
+        'affected': {
+            'value': affected_field,
+            'function': post_processor_affected_function
+        }
+    }
+}
+
 post_processors = [
     post_processor_gender,
     post_processor_youth,
     post_processor_adult,
     post_processor_elderly,
+    post_processor_size,
     post_processor_size_rate,
-    post_processor_size
+    post_processor_affected,
 ]

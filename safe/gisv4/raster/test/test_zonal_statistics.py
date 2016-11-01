@@ -32,6 +32,9 @@ class TestReclassifyRaster(unittest.TestCase):
         vector = load_test_vector_layer(
             'aggregation', 'grid_jakarta_4326.geojson')
 
+        vector.keywords['hazard_keywords'] = {}
+        vector.keywords['aggregation_keywords'] = {}
+
         number_fields = vector.fields().count()
         vector = zonal_stats(raster, vector)
 
