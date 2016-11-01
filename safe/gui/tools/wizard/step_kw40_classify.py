@@ -30,8 +30,7 @@ from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_strings import (
     classify_raster_question,
-    classify_vector_question,
-    classify_vector_for_postprocessor_question)
+    classify_vector_question)
 from safe.utilities.gis import is_raster_layer
 
 __author__ = 'qgis@borysjurgiel.pl'
@@ -168,18 +167,12 @@ class StepKwClassify(WizardStep, FORM_CLASS):
         """Set widgets on the Classify tab."""
         purpose = self.parent.step_kw_purpose.selected_purpose()
         subcategory = self.parent.step_kw_subcategory.selected_subcategory()
-        # There may be two cases this tab is displayed: either
-        # a classification or postprocessor_classification is available
 
         sel_cl = self.parent.step_kw_classification.selected_classification()
-        if sel_cl:
-            default_classes = sel_cl['classes']
-            mapping_keyword = 'value_map'
-            classification_name = sel_cl['name']
-        else:
-            default_classes = self.postprocessor_classification_for_layer()
-            mapping_keyword = 'value_map'
-            classification_name = ''
+        default_classes = sel_cl['classes']
+        mapping_keyword = 'value_map'
+        classification_name = sel_cl['name']
+
         if is_raster_layer(self.parent.layer):
             self.lblClassify.setText(classify_raster_question % (
                 subcategory['name'], purpose['name'], classification_name))
@@ -198,14 +191,9 @@ class StepKwClassify(WizardStep, FORM_CLASS):
                 indexFromName(field)
             field_type = self.parent.layer.dataProvider().\
                 fields()[field_index].type()
-            if classification_name:
-                self.lblClassify.setText(classify_vector_question % (
+            self.lblClassify.setText(classify_vector_question % (
                     subcategory['name'], purpose['name'],
                     classification_name, field.upper()))
-            else:
-                self.lblClassify.setText(
-                    classify_vector_for_postprocessor_question % (
-                        subcategory['name'], purpose['name'], field.upper()))
             unique_values = self.parent.layer.uniqueValues(field_index)
 
         # Assign unique values to classes (according to default)
