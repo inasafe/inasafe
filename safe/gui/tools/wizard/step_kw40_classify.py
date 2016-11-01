@@ -21,11 +21,7 @@ from PyQt4.QtCore import QPyNullVariant
 from osgeo import gdal
 from osgeo.gdalconst import GA_ReadOnly
 
-from safe.definitionsv4.exposure import (
-    exposure_road, exposure_structure, exposure_place)
-from safe.definitionsv4.exposure_classifications import (
-    generic_structure_classes, generic_road_classes, generic_place_classes
-)
+from safe.definitionsv4.layer_geometry import layer_geometry_raster
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_strings import (
@@ -70,13 +66,11 @@ class StepKwClassify(WizardStep, FORM_CLASS):
         :returns: The step to be switched to
         :rtype: WizardStep instance or None
         """
-        selected_subcategory = self.parent.step_kw_subcategory.\
-            selected_subcategory()
-        if selected_subcategory == exposure_place:
-            new_step = self.parent.step_kw_name_field
+        if self.parent.get_layer_geometry_key() == \
+                layer_geometry_raster['key']:
+            return self.parent.step_kw_source
         else:
-            new_step = self.parent.step_kw_inasafe_fields
-        return new_step
+            return self.parent.step_kw_inasafe_fields
 
     # noinspection PyMethodMayBeStatic
     def update_dragged_item_flags(self, item, column):
