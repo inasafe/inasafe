@@ -26,7 +26,7 @@ from safe.gisv4.vector.union import union
 from safe.gisv4.vector.clip import clip
 from safe.gisv4.vector.smart_clip import smart_clip
 from safe.gisv4.vector.aggregate_summary import aggregate_summary
-from safe.gisv4.vector.assign_inasafe_values import assign_inasafe_values
+from safe.gisv4.vector.assign_inasafe_values import update_value_map
 from safe.gisv4.raster.reclassify import reclassify as reclassify_raster
 from safe.gisv4.raster.polygonize import polygonize
 from safe.gisv4.raster.zonal_statistics import zonal_stats
@@ -729,7 +729,7 @@ class ImpactFunction(object):
 
         self.set_state_process(
             'hazard', 'Assign classes based on value map')
-        self.hazard = assign_inasafe_values(self.hazard)
+        self.hazard = update_value_map(self.hazard)
         if self.debug_mode:
             self.debug_layer(self.hazard)
 
@@ -849,7 +849,7 @@ class ImpactFunction(object):
 
             self.set_state_process(
                 'exposure', 'Assign classes based on value map')
-            self.exposure = assign_inasafe_values(self.exposure)
+            self.exposure = update_value_map(self.exposure)
             if self.debug_mode:
                 self.debug_layer(self.exposure)
 

@@ -24,7 +24,7 @@ __revision__ = '$Format:%H$'
 
 
 @profile
-def assign_inasafe_values(layer, callback=None):
+def update_value_map(layer, callback=None):
     """Assign inasafe values according to definitions for a vector layer.
 
     :param layer: The vector layer.
