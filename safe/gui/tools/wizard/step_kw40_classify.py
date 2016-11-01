@@ -64,18 +64,6 @@ class StepKwClassify(WizardStep, FORM_CLASS):
         """
         return True
 
-    def get_previous_step(self):
-        """Find the proper step when user clicks the Previous button.
-
-        :returns: The step to be switched to
-        :rtype: WizardStep instance or None
-        """
-        if is_raster_layer(self.parent.layer):
-            new_step = self.parent.step_kw_classification
-        else:
-            new_step = self.parent.step_kw_field
-        return new_step
-
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.
 
@@ -89,42 +77,6 @@ class StepKwClassify(WizardStep, FORM_CLASS):
         else:
             new_step = self.parent.step_kw_inasafe_fields
         return new_step
-
-    def postprocessor_classification_for_layer(self):
-        """Returns a postprocessor classification if available for the
-           current layer.
-
-           It is parallel to classifications_for_layer(), with some
-           differences:
-
-           The classifications_for_layer returns a list of classifications
-           obtained from ImpactFuctionManager and is currently available
-           for hazards only.
-
-           The postprocessor_classification_for_layer returns just one
-           classification, based on information obtained from
-           Type Postprocessors. Currently, only structure and road exposure
-           are supported.
-
-           Because there is at most one classification available, the returned
-           value is just a list of classes. Also, the postprocessor
-           classification doesn't cause displaying the classification
-           selection step (unlike the hazard classifications)
-
-        :returns: A list where each value represents a classification category.
-        :rtype: list
-
-        """
-        selected_subcategory = self.parent.step_kw_subcategory.\
-            selected_subcategory()
-        if selected_subcategory == exposure_road:
-            return generic_road_classes['classes']
-        elif selected_subcategory == exposure_structure:
-            return generic_structure_classes['classes']
-        elif selected_subcategory == exposure_place:
-            return generic_place_classes['classes']
-        else:
-            return None
 
     # noinspection PyMethodMayBeStatic
     def update_dragged_item_flags(self, item, column):

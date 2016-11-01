@@ -47,21 +47,6 @@ class StepKwPurpose(WizardStep, FORM_CLASS):
         """
         return bool(self.selected_purpose())
 
-    def get_previous_step(self):
-        """Find the proper step when user clicks the Previous button.
-
-        :returns: The step to be switched to
-        :rtype: WizardStep instance or None
-        """
-        if self.parent.parent_step:
-            # Come back to the parent thread
-            self.parent.set_mode_label_to_ifcw()
-            new_step = self.parent.parent_step
-            self.parent.parent_step = None
-        else:
-            new_step = None
-        return new_step
-
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.
 
