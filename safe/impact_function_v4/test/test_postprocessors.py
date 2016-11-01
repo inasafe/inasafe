@@ -13,7 +13,7 @@ from safe.definitionsv4.fields import (
     adult_count_field,
     elderly_count_field,
     feature_value_field,
-    size_field
+    size_field,
 )
 from safe.definitionsv4.post_processors import (
     post_processor_gender,
@@ -21,7 +21,7 @@ from safe.definitionsv4.post_processors import (
     post_processor_adult,
     post_processor_elderly,
     post_processor_size_rate,
-    post_processor_size
+    post_processor_size,
 )
 from safe.test.utilities import load_test_vector_layer
 from safe.impact_function_v4.postprocessors import (
@@ -43,7 +43,7 @@ class TestPostProcessors(unittest.TestCase):
         """Test gender post processor."""
         impact_layer = load_test_vector_layer(
             'impact',
-            'indivisible_polygon_impact.shp',
+            'indivisible_polygon_impact.geojson',
             clone_to_memory=True)
         self.assertIsNotNone(impact_layer)
 
@@ -60,7 +60,7 @@ class TestPostProcessors(unittest.TestCase):
         """Test youth post processor."""
         impact_layer = load_test_vector_layer(
             'impact',
-            'indivisible_polygon_impact.shp',
+            'indivisible_polygon_impact.geojson',
             clone_to_memory=True)
         self.assertIsNotNone(impact_layer)
 
@@ -77,7 +77,7 @@ class TestPostProcessors(unittest.TestCase):
         """Test adult post processor."""
         impact_layer = load_test_vector_layer(
             'impact',
-            'indivisible_polygon_impact.shp',
+            'indivisible_polygon_impact.geojson',
             clone_to_memory=True)
         self.assertIsNotNone(impact_layer)
 
@@ -94,7 +94,7 @@ class TestPostProcessors(unittest.TestCase):
         """Test elderly post processor."""
         impact_layer = load_test_vector_layer(
             'impact',
-            'indivisible_polygon_impact.shp',
+            'indivisible_polygon_impact.geojson',
             clone_to_memory=True)
         self.assertIsNotNone(impact_layer)
 
@@ -111,7 +111,7 @@ class TestPostProcessors(unittest.TestCase):
         """Test size  post processor."""
         impact_layer = load_test_vector_layer(
             'impact',
-            'indivisible_polygon_impact.shp',
+            'indivisible_polygon_impact.geojson',
             clone_to_memory=True)
         self.assertIsNotNone(impact_layer)
 
@@ -128,7 +128,7 @@ class TestPostProcessors(unittest.TestCase):
         """Test size rate post processor."""
         impact_layer = load_test_vector_layer(
             'impact',
-            'indivisible_polygon_impact.shp',
+            'indivisible_polygon_impact.geojson',
             clone_to_memory=True)
         self.assertIsNotNone(impact_layer)
 

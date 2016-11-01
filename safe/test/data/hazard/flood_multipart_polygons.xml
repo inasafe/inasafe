@@ -179,7 +179,7 @@
             <gco:CharacterString/>
           </raster_hazard_classification>
           <classification>
-            <gco:CharacterString/>
+            <gco:CharacterString>flood_hazard_classes</gco:CharacterString>
           </classification>
           <prob_fatality_mag>
             <gco:Tuple/>
