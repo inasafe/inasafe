@@ -51,19 +51,6 @@ class StepKwLayerMode(WizardStep, FORM_CLASS):
         """
         return bool(self.selected_layermode())
 
-    def get_previous_step(self):
-        """Find the proper step when user clicks the Previous button.
-
-        :returns: The step to be switched to
-        :rtype: WizardStep instance or None
-        """
-        if self.parent.step_kw_purpose.\
-                selected_purpose() == layer_purpose_hazard:
-            new_step = self.parent.step_kw_hazard_category
-        else:
-            new_step = self.parent.step_kw_subcategory
-        return new_step
-
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.
 
