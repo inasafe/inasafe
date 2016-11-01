@@ -25,7 +25,6 @@ from safe.definitionsv4.post_processors import (
 )
 from safe.test.utilities import load_test_vector_layer
 from safe.impact_function_v4.postprocessors import (
-    evaluate_formula,
     run_single_post_processor,
     enough_input
 )
@@ -172,15 +171,6 @@ class TestPostProcessors(unittest.TestCase):
         # noinspection PyTypeChecker
         result = enough_input(layer, post_processor_gender['input'])
         self.assertTrue(result[0])
-
-    def test_evaluate_formula(self):
-        """Test for evaluating formula."""
-        formula = 'population * gender_ratio'
-        variables = {
-            'population': 100,
-            'gender_ratio': 0.45
-        }
-        self.assertEquals(45, evaluate_formula(formula, variables))
 
 
 if __name__ == '__main__':

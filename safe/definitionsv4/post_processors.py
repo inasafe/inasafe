@@ -23,6 +23,44 @@ __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
+"""
+Functions
+"""
+
+
+def multiply(**kwargs):
+    """Simple postprocessor where we multiply values.
+
+    :param kwargs: Dictionary of values to multiply
+    :type kwargs: dict
+
+    :return: The result.
+    :rtype: float
+    """
+    result = 1
+    for i in kwargs.values():
+        result *= i
+    return result
+
+
+def assign(**kwargs):
+    """Simple postprocessor where we assign a value.
+
+    :param kwargs: Dictionary of only one value to return.
+    :type kwargs: dict
+
+    :return: The result.
+    """
+    if len(kwargs) != 1:
+        raise Exception('The dictionary should have only one item.')
+
+    value = kwargs.values()[0]
+    return value
+
+"""
+Post processors
+"""
+
 post_processor_gender = {
     'key': 'post_processor_gender',
     'name': tr('Gender Post Processor'),
@@ -41,7 +79,7 @@ post_processor_gender = {
     'output': {
         'women': {
             'value': women_count_field,
-            'formula': 'population * gender_ratio'
+            'function': multiply
         }
     }
 }
@@ -63,7 +101,7 @@ post_processor_youth = {
     'output': {
         'youth': {
             'value': youth_count_field,
-            'formula': 'population * youth_ratio'
+            'function': multiply
         }
     }
 }
@@ -85,7 +123,7 @@ post_processor_adult = {
     'output': {
         'adult': {
             'value': adult_count_field,
-            'formula': 'population * adult_ratio'
+            'function': multiply
         }
     }
 }
@@ -107,7 +145,7 @@ post_processor_elderly = {
     'output': {
         'elderly': {
             'value': elderly_count_field,
-            'formula': 'population * elderly_ratio'
+            'function': multiply
         }
     }
 }
@@ -127,7 +165,7 @@ post_processor_size = {
     'output': {
         'elderly': {
             'value': size_field,
-            'formula': 'size'
+            'function': assign
         }
     }
 }
@@ -154,7 +192,7 @@ post_processor_size_rate = {
     'output': {
         'elderly': {
             'value': feature_value_field,
-            'formula': 'size * rate'
+            'function': multiply
         }
     }
 }
