@@ -115,7 +115,8 @@ class TestKeywordWizard(unittest.TestCase):
             self.assertFalse(True, message)
 
     # noinspection PyUnresolvedReferences
-    def select_from_list_widget(self, option, list_widget):
+    @staticmethod
+    def select_from_list_widget(option, list_widget):
         """Helper function to select option from list_widget
 
         :param option: Option to be chosen
@@ -819,7 +820,6 @@ class TestKeywordWizard(unittest.TestCase):
         # Check if in title step
         self.check_current_step(dialog.step_kw_title)
 
-        layer_title = 'Layer Title'
         dialog.step_kw_title.leTitle.setText(layer_title)
 
         # Click next to finish title step and go to kw summary step
