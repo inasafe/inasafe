@@ -9,6 +9,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from qgis.core import QgsRasterBandStats
 from collections import OrderedDict
 
+from safe.definitionsv4.processing_steps import reclassify_raster_steps
 from safe.gisv4.raster.reclassify import reclassify
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -40,12 +41,14 @@ class TestReclassifyRaster(unittest.TestCase):
         ranges[11] = [1.3, None]
 
         expected_keywords = layer.keywords.copy()
+        title = reclassify_raster_steps['output_layer_name'] % (
+            layer.keywords['layer_purpose'])
         expected_keywords['layer_mode'] = 'classified'
         expected_keywords['value_map'] = {'dry': [1], 'wet': [2]}
+        expected_keywords['title'] = title
 
         reclassified = reclassify(layer, ranges)
 
-        self.assertEqual(reclassified.name(), 'reclassified')
         self.assertDictEqual(reclassified.keywords, expected_keywords)
 
         stats = reclassified.dataProvider().bandStatistics(
