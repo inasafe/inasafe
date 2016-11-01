@@ -86,8 +86,13 @@ def run_single_post_processor(layer, post_processor):
 
             # Get the input field's indexes for input
             input_indexes = {}
+
+            # Default parameters
+            default_parameters = {}
+
             # Store the indexes that will be deleted.
             temporary_indexes = []
+
             for key, value in post_processor['input'].items():
 
                 if value['type'] == 'field':
@@ -129,16 +134,27 @@ def run_single_post_processor(layer, post_processor):
                         if not flag:
                             temporary_indexes.append(input_indexes[key])
 
+                elif value['type'] == 'keyword':
+
+                    # See http://stackoverflow.com/questions/14692690/
+                    # access-python-nested-dictionary-items-via-a-list-of-keys
+                    value = reduce(
+                        lambda d, k: d[k], value['value'], layer.keywords)
+
+                    default_parameters[key] = value
+
             # Create iterator for feature
             request = QgsFeatureRequest().setSubsetOfAttributes(
                 input_indexes.values())
             iterator = layer.getFeatures(request)
+
             # Iterate all feature
             for feature in iterator:
                 attributes = feature.attributes()
 
                 # Create dictionary to store the input
                 parameters = {}
+                parameters.update(default_parameters)
 
                 # Fill up the input from fields
                 for key, value in input_indexes.items():

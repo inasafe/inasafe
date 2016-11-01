@@ -371,6 +371,27 @@ hazard_class_field = {
     'replace_null': False
 }
 
+# Affected or not
+affected_field = {
+    'key': 'affected_field',
+    'name': tr('Affected'),
+    'field_name': 'affected',
+    'type': QVariant.String,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'description': tr(
+        'Attribute where the feature is affected or not.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
 # Women Count
 women_count_field = {
     'key': 'women_count_field',

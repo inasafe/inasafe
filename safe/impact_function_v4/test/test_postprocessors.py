@@ -14,6 +14,7 @@ from safe.definitionsv4.fields import (
     elderly_count_field,
     feature_value_field,
     size_field,
+    affected_field,
 )
 from safe.definitionsv4.post_processors import (
     post_processor_gender,
@@ -22,6 +23,7 @@ from safe.definitionsv4.post_processors import (
     post_processor_elderly,
     post_processor_size_rate,
     post_processor_size,
+    post_processor_affected,
 )
 from safe.test.utilities import load_test_vector_layer
 from safe.impact_function_v4.postprocessors import (
@@ -123,6 +125,27 @@ class TestPostProcessors(unittest.TestCase):
         # Check if new field is added
         impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
         self.assertIn(size_field['field_name'], impact_fields)
+
+    def test_affected_post_processor(self):
+        """Test affected  post processor."""
+        impact_layer = load_test_vector_layer(
+            'impact',
+            'indivisible_polygon_impact.geojson',
+            clone_to_memory=True)
+
+        # Need to add keywords on the fly.
+        impact_layer.keywords['hazard_keywords'] = {
+            'classification': 'flood_hazard_classes'
+        }
+
+        result, message = run_single_post_processor(
+            impact_layer,
+            post_processor_affected)
+        self.assertTrue(result, message)
+
+        # Check if new field is added
+        impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
+        self.assertIn(affected_field['field_name'], impact_fields)
 
     def test_size_rate_post_processor(self):
         """Test size rate post processor."""
