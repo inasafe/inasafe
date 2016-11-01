@@ -34,7 +34,7 @@
     </gmd:CI_ResponsibleParty>
   </gmd:contact>
   <gmd:dateStamp>
-    <gco:Date>2015-12-06T12:30:00</gco:Date>
+    <gco:Date/>
   </gmd:dateStamp>
   <gmd:metadataStandardName>
     <gco:CharacterString>ISO 19115:2003 - Geographic information - Metadata</gco:CharacterString>
@@ -47,7 +47,7 @@
       <gmd:citation>
         <gmd:CI_Citation>
           <gmd:title>
-            <gco:CharacterString>Layer Title</gco:CharacterString>
+            <gco:CharacterString>Census</gco:CharacterString>
           </gmd:title>
           <gmd:date>
             <gmd:CI_Date>
@@ -155,7 +155,7 @@
       <gmd:resourceConstraints>
         <gmd:MD_Constraints>
           <gmd:useLimitation>
-            <gco:CharacterString>Source License</gco:CharacterString>
+            <gco:CharacterString/>
           </gmd:useLimitation>
         </gmd:MD_Constraints>
       </gmd:resourceConstraints>
@@ -179,7 +179,7 @@
             <gco:Boolean/>
           </multipart_polygon>
           <inasafe_fields>
-            <gco:Dictionary>{&quot;exposure_type_field&quot;: &quot;population&quot;}</gco:Dictionary>
+            <gco:Dictionary>{&quot;population_count_field&quot;: &quot;population&quot;}</gco:Dictionary>
           </inasafe_fields>
           <inasafe_default_values>
             <gco:Dictionary>{}</gco:Dictionary>
@@ -209,7 +209,7 @@
             <gco:CharacterString/>
           </classification>
           <scale>
-            <gco:CharacterString>Source Scale</gco:CharacterString>
+            <gco:CharacterString/>
           </scale>
           <report>
             <gco:CharacterString/>
@@ -236,7 +236,7 @@
             <gco:CharacterString/>
           </allow_resampling>
           <source>
-            <gco:CharacterString>Source</gco:CharacterString>
+            <gco:CharacterString>NBS</gco:CharacterString>
           </source>
           <layer_purpose>
             <gco:CharacterString>exposure</gco:CharacterString>
@@ -271,7 +271,7 @@
           <gmd:onLine>
             <gmd:CI_OnlineResource>
               <gmd:linkage>
-                <gmd:URL>Source Url</gmd:URL>
+                <gmd:URL>http://nbs.go.tz</gmd:URL>
               </gmd:linkage>
             </gmd:CI_OnlineResource>
           </gmd:onLine>
