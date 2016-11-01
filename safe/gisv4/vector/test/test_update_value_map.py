@@ -7,7 +7,7 @@ from safe.test.utilities import (
     load_test_vector_layer)
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe.gisv4.vector.assign_inasafe_values import assign_inasafe_values
+from safe.gisv4.vector.assign_inasafe_values import update_value_map
 from safe.definitionsv4.fields import (
     hazard_value_field,
     hazard_class_field,
@@ -38,7 +38,7 @@ class TestAssignHazardClass(unittest.TestCase):
         self.assertIn(
             hazard_value_field['key'], hazard.keywords['inasafe_fields'])
 
-        layer = assign_inasafe_values(hazard)
+        layer = update_value_map(hazard)
 
         self.assertNotIn(
             hazard_value_field['key'], hazard.keywords['inasafe_fields'])
@@ -59,7 +59,7 @@ class TestAssignHazardClass(unittest.TestCase):
         self.assertIn(
             exposure_type_field['key'], exposure.keywords['inasafe_fields'])
 
-        layer = assign_inasafe_values(exposure)
+        layer = update_value_map(exposure)
 
         self.assertNotIn(
             exposure_type_field['key'], exposure.keywords['inasafe_fields'])
