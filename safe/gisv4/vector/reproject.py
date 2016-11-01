@@ -12,7 +12,7 @@ from qgis.core import (
 )
 
 from safe.gisv4.vector.tools import create_memory_layer
-from safe.definitionsv4.processing import reproject_vector
+from safe.definitionsv4.processing_steps import reproject_steps
 from safe.utilities.profiling import profile
 
 
@@ -45,8 +45,9 @@ def reproject(layer, output_crs, callback=None):
 
     .. versionadded:: 4.0
     """
-    output_layer_name = reproject_vector['output_layer_name']
-    processing_step = reproject_vector['step_name']
+    output_layer_name = reproject_steps['output_layer_name']
+    output_layer_name = output_layer_name % layer.keywords['layer_purpose']
+    processing_step = reproject_steps['step_name']
 
     input_crs = layer.crs()
     input_fields = layer.fields()
@@ -73,5 +74,5 @@ def reproject(layer, output_crs, callback=None):
     # We transfer keywords to the output.
     # We don't need to update keywords as the CRS is dynamic.
     reprojected.keywords = layer.keywords
-
+    reprojected.keywords['title'] = output_layer_name
     return reprojected

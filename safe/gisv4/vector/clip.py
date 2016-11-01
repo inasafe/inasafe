@@ -16,7 +16,7 @@ from qgis.core import (
     )
 
 from safe.utilities.i18n import tr
-# from safe.definitionsv4.processing import clip_vector
+from safe.definitionsv4.processing_steps import clip_steps
 from safe.gisv4.vector.tools import create_memory_layer
 from safe.utilities.profiling import profile
 
@@ -53,11 +53,10 @@ def clip(layer_to_clip, mask_layer, callback=None):
 
     .. versionadded:: 4.0
     """
-    # To fix
-    # output_layer_name = intersection_vector['output_layer_name']
-    # processing_step = intersection_vector['step_name']
-    output_layer_name = 'clip'
-    processing_step = 'Clipping and masking'
+    output_layer_name = clip_steps['output_layer_name']
+    output_layer_name = output_layer_name % (
+        layer_to_clip.keywords['layer_purpose'])
+    processing_step = clip_steps['step_name']
 
     writer = create_memory_layer(
         output_layer_name,
@@ -168,4 +167,5 @@ def clip(layer_to_clip, mask_layer, callback=None):
     writer.commitChanges()
 
     writer.keywords = layer_to_clip.keywords.copy()
+    writer.keywords['title'] = output_layer_name
     return writer

@@ -13,7 +13,7 @@ from qgis.core import QgsRasterLayer
 from safe.common.exceptions import FileNotFoundError
 from safe.common.utilities import unique_filename, temp_dir
 from safe.definitionsv4.utilities import definition
-from safe.definitionsv4.processing import reclassify_raster
+from safe.definitionsv4.processing_steps import reclassify_raster_steps
 from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -59,8 +59,9 @@ def reclassify(layer, ranges, callback=None):
 
     .. versionadded:: 4.0
     """
-    output_layer_name = reclassify_raster['output_layer_name']
-    processing_step = reclassify_raster['step_name']
+    output_layer_name = reclassify_raster_steps['output_layer_name']
+    processing_step = reclassify_raster_steps['step_name']
+    output_layer_name = output_layer_name % layer.keywords['layer_purpose']
 
     output_raster = unique_filename(suffix='.tiff', dir=temp_dir())
 
@@ -112,5 +113,6 @@ def reclassify(layer, ranges, callback=None):
         value_map[hazard_class['key']] = [hazard_class['value']]
 
     reclassified.keywords['value_map'] = value_map
+    reclassified.keywords['title'] = output_layer_name
 
     return reclassified

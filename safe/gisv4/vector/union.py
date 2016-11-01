@@ -17,7 +17,7 @@ from qgis.core import (
 
 from safe.utilities.i18n import tr
 from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
-# from safe.definitionsv4.processing import union
+from safe.definitionsv4.processing_steps import union_steps
 from safe.gisv4.vector.tools import (
     create_memory_layer, wkb_type_groups, create_spatial_index)
 from safe.utilities.profiling import profile
@@ -55,11 +55,12 @@ def union(union_a, union_b, callback=None):
 
     .. versionadded:: 4.0
     """
-    # To fix
-    # output_layer_name = intersection_vector['output_layer_name']
-    # processing_step = intersection_vector['step_name']
-    output_layer_name = 'clip'
-    processing_step = 'Clipping and masking'
+    output_layer_name = union_steps['output_layer_name']
+    processing_step = union_steps['step_name']
+    output_layer_name = output_layer_name % (
+        union_a.keywords['layer_purpose'],
+        union_b.keywords['layer_purpose']
+    )
 
     fields = union_a.fields()
     fields.extend(union_b.fields())
@@ -82,6 +83,7 @@ def union(union_a, union_b, callback=None):
 
     writer.keywords = union_a.keywords
     writer.keywords['inasafe_fields'] = inasafe_fields
+    writer.keywords['title'] = output_layer_name
 
     if layer_purpose_1 == 'exposure' and layer_purpose_2 == 'aggregate_hazard':
 
