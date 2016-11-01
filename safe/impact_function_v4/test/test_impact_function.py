@@ -218,6 +218,7 @@ class TestImpactFunction(unittest.TestCase):
         impact_function = ImpactFunction()
         if use_debug:
             impact_function.debug_mode = True
+
         impact_function.aggregation = aggregation_layer
         impact_function.exposure = exposure_layer
         impact_function.hazard = hazard_layer
@@ -269,7 +270,7 @@ class TestImpactFunction(unittest.TestCase):
     def test_scenario_directory(self):
         """Run test scenario in directory."""
         self.maxDiff = None
-        use_debug = False
+        use_debug = True
 
         def test_scenario(scenario_path):
             LOGGER.info('Running the scenario : %s' % scenario_path)
