@@ -187,4 +187,10 @@ def assign_highest_value(exposure_layer, hazard_layer, callback=None):
     writer.keywords['inasafe_fields'] = inasafe_fields
     writer.keywords['layer_purpose'] = 'impact'
 
+    writer.keywords['exposure_keywords'] = exposure_layer.keywords
+    writer.keywords['aggregation_keywords'] = (
+        hazard_layer.keywords['aggregation_keywords'])
+    writer.keywords['hazard_keywords'] = (
+        hazard_layer.keywords['hazard_keywords'])
+
     return writer

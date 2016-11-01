@@ -70,4 +70,9 @@ def zonal_stats(raster, vector, callback=None):
     key = population_count_field['key']
     layer.keywords['inasafe_fields'][key] = 'exposure_sum'
 
+    layer.keywords['exposure_keywords'] = raster.keywords
+    layer.keywords['hazard_keywords'] = vector.keywords['hazard_keywords']
+    layer.keywords['aggregation_keywords'] = (
+        vector.keywords['aggregation_keywords'])
+
     return layer
