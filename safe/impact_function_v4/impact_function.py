@@ -26,7 +26,7 @@ from safe.gisv4.vector.union import union
 from safe.gisv4.vector.clip import clip
 from safe.gisv4.vector.smart_clip import smart_clip
 from safe.gisv4.vector.aggregate_summary import aggregate_summary
-from safe.gisv4.vector.assign_inasafe_values import update_value_map
+from safe.gisv4.vector.update_value_map import update_value_map
 from safe.gisv4.raster.reclassify import reclassify as reclassify_raster
 from safe.gisv4.raster.polygonize import polygonize
 from safe.gisv4.raster.zonal_statistics import zonal_stats

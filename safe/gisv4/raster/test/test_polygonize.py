@@ -12,6 +12,7 @@ from qgis.core import QgsFeatureRequest
 from safe.gisv4.raster.polygonize import polygonize
 from safe.definitionsv4.layer_geometry import (
     layer_geometry, layer_geometry_polygon)
+from safe.definitionsv4.processing_steps import polygonize_steps
 from safe.definitionsv4.fields import hazard_value_field
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -33,14 +34,17 @@ class TestPolygonizeRaster(unittest.TestCase):
         layer = load_test_raster_layer('hazard', 'classified_flood_20_20.asc')
 
         expected_keywords = layer.keywords.copy()
+        title = polygonize_steps['output_layer_name'] % (
+            layer.keywords['layer_purpose'])
         expected_keywords[
             layer_geometry['key']] = layer_geometry_polygon['key']
+        expected_keywords['title'] = title
+
         expected_keywords['inasafe_fields'] = {
             hazard_value_field['key']: hazard_value_field['field_name'][0:10]}
 
         polygonized = polygonize(layer)
 
-        self.assertEqual(polygonized.name(), 'polygonized')
         self.assertDictEqual(polygonized.keywords, expected_keywords)
 
         self.assertEqual(polygonized.featureCount(), 400)

@@ -7,7 +7,7 @@ from safe.test.utilities import (
     load_test_vector_layer)
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe.gisv4.vector.assign_inasafe_values import update_value_map
+from safe.gisv4.vector.update_value_map import update_value_map
 from safe.definitionsv4.fields import (
     hazard_value_field,
     hazard_class_field,
@@ -21,7 +21,7 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
-class TestAssignHazardClass(unittest.TestCase):
+class TestUpdateValueMap(unittest.TestCase):
 
     def setUp(self):
         pass
@@ -29,7 +29,7 @@ class TestAssignHazardClass(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test_assign_hazard_values(self):
+    def test_update_value_map(self):
         """Test we can assign hazard values."""
 
         hazard = load_test_vector_layer(
