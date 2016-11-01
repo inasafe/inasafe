@@ -47,6 +47,16 @@ __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
+source = u'Source'
+source_scale = u'Source Scale'
+source_url = u'Source Url'
+# noinspection PyCallByClass
+# source_date = QtCore.QDateTime.fromString('06-12-2015', 'dd-MM-yyyy')
+from  datetime import datetime
+source_date = datetime.strptime('06-12-2015', '%d-%m-%Y')
+source_license = u'Source License'
+layer_title = u'Layer Title'
+
 
 # noinspection PyTypeChecker
 class TestKeywordWizard(unittest.TestCase):
@@ -270,16 +280,6 @@ class TestKeywordWizard(unittest.TestCase):
 
         # Check if in source step
         self.check_current_step(dialog.step_kw_source)
-
-        source = 'Source'
-        source_scale = 'Source Scale'
-        source_url = 'Source Url'
-        # noinspection PyCallByClass
-        source_date = QtCore.QDateTime.fromString(
-            '06-12-2015 12:30',
-            'dd-MM-yyyy HH:mm')
-        source_license = 'Source License'
-        layer_title = 'Layer Title'
 
         dialog.step_kw_source.leSource.setText(source)
         dialog.step_kw_source.leSource_scale.setText(source_scale)
@@ -580,16 +580,6 @@ class TestKeywordWizard(unittest.TestCase):
         # Check if in source step
         self.check_current_step(dialog.step_kw_source)
 
-        source = u'Source'
-        source_scale = u'Source Scale'
-        source_url = u'Source Url'
-        # noinspection PyCallByClass
-        source_date = QtCore.QDateTime.fromString(
-            '06-12-2015 12:30',
-            'dd-MM-yyyy HH:mm')
-        source_license = u'Source License'
-        layer_title = u'Layer Title'
-
         dialog.step_kw_source.leSource.setText(source)
         dialog.step_kw_source.leSource_scale.setText(source_scale)
         dialog.step_kw_source.leSource_url.setText(source_url)
@@ -859,7 +849,6 @@ class TestKeywordWizard(unittest.TestCase):
             'gisv4', 'aggregation', 'small_grid.geojson', clone_to_memory=True)
 
         area_name = 'area_name'
-        layer_title = 'Tempe'
         expected_keyword = {
             'inasafe_default_values': {},
             'inasafe_fields': {aggregation_name_field['key']: area_name},
@@ -959,18 +948,18 @@ class TestKeywordWizard(unittest.TestCase):
         # Check if in select exposure step
         self.check_current_step(dialog.step_kw_subcategory)
 
-        # select structure
+        # select population
         self.select_from_list_widget(
             exposure_population['name'],
             dialog.step_kw_subcategory.lstSubcategories)
 
-        # Click next to select structure
+        # Click next to select population
         dialog.pbnNext.click()
 
         # Check if in select layer mode step
         self.check_current_step(dialog.step_kw_layermode)
 
-        # Select continous
+        # Select continuous
         self.select_from_list_widget(
             layer_mode_continuous['name'],
             dialog.step_kw_layermode.lstLayerModes)
@@ -1015,16 +1004,6 @@ class TestKeywordWizard(unittest.TestCase):
 
         # Check if in source step
         self.check_current_step(dialog.step_kw_source)
-
-        source = u'Source'
-        source_scale = u'Source Scale'
-        source_url = u'Source Url'
-        # noinspection PyCallByClass
-        source_date = QtCore.QDateTime.fromString(
-            '06-12-2015 12:30',
-            'dd-MM-yyyy HH:mm')
-        source_license = u'Source License'
-        layer_title = u'Layer Title'
 
         dialog.step_kw_source.leSource.setText(source)
         dialog.step_kw_source.leSource_scale.setText(source_scale)
@@ -1071,6 +1050,138 @@ class TestKeywordWizard(unittest.TestCase):
             'layer_mode': layer_mode_continuous['key']
         }
 
+        real_keywords = dialog.get_keywords()
+
+        self.assertDictEqual(real_keywords, expected_keyword)
+
+    def test_existing_exposure_population_polygon_keyword(self):
+        """Test existing exposure population polygon keyword"""
+        layer = load_test_vector_layer(
+            'gisv4', 'exposure', 'census.geojson', clone_to_memory=True)
+        expected_keyword = {
+            'scale': source_scale,
+            'license': source_license,
+            'source': source,
+            'url': source_url,
+            'title': layer_title,
+            'exposure': exposure_population['key'],
+            'exposure_unit': count_exposure_unit['key'],
+            'inasafe_fields':
+                {
+                    population_count_field['key']: u'population',
+                },
+            'inasafe_default_values': {},
+            # No value will be omitted.
+            'date': source_date,
+            'layer_geometry': layer_geometry_polygon['key'],
+            'layer_purpose': layer_purpose_exposure['key'],
+            'layer_mode': layer_mode_continuous['key']
+        }
+        layer.keywords = expected_keyword
+
+        # noinspection PyTypeChecker
+        dialog = WizardDialog()
+        dialog.set_keywords_creation_mode(layer)
+
+        # Check if in select purpose step
+        self.check_current_step(dialog.step_kw_purpose)
+
+        # Check if exposure is selected
+        self.select_from_list_widget(
+            layer_purpose_exposure['name'],
+            dialog.step_kw_purpose.lstCategories)
+
+        # Click next to select exposure
+        dialog.pbnNext.click()
+
+        # Check if in select exposure step
+        self.check_current_step(dialog.step_kw_subcategory)
+
+        # Check if population is selected
+        self.check_current_text(
+            exposure_population['name'],
+            dialog.step_kw_subcategory.lstSubcategories)
+
+        # Click next to select population
+        dialog.pbnNext.click()
+
+        # Check if in select layer mode step
+        self.check_current_step(dialog.step_kw_layermode)
+
+        # Check if continuous is selected
+        self.check_current_text(
+            layer_mode_continuous['name'],
+            dialog.step_kw_layermode.lstLayerModes)
+
+        # Click next to select continuous
+        dialog.pbnNext.click()
+
+        # Check if in select unit step
+        self.check_current_step(dialog.step_kw_unit)
+
+        # Check if count is selected
+        self.check_current_text(
+            count_exposure_unit['name'],
+            dialog.step_kw_unit.lstUnits)
+
+        # Click next to select count
+        dialog.pbnNext.click()
+
+        # Check if in select unit step
+        self.check_current_step(dialog.step_kw_field)
+
+        # Check if population is selected
+        population_field = 'population'
+        self.check_current_text(
+            population_field, dialog.step_kw_field.lstFields)
+
+        # Click next to select population
+        dialog.pbnNext.click()
+
+        # Check if in InaSAFE field step
+        self.check_current_step(dialog.step_kw_inasafe_fields)
+
+        # Click next to finish inasafe fields step and go to inasafe default
+        # field step
+        dialog.pbnNext.click()
+
+        # Check if in InaSAFE Default field step
+        self.check_current_step(dialog.step_kw_default_inasafe_fields)
+
+        # Click next to finish InaSAFE Default Field step and go to source step
+        dialog.pbnNext.click()
+
+        # Check if in source step
+        self.check_current_step(dialog.step_kw_source)
+
+        self.assertEqual(dialog.step_kw_source.leSource.text(), source)
+        self.assertEqual(
+            dialog.step_kw_source.leSource_scale.text(), source_scale)
+        self.assertEqual(
+            dialog.step_kw_source.ckbSource_date.isChecked(), True)
+        self.assertEqual(
+            dialog.step_kw_source.dtSource_date.dateTime(), source_date)
+        self.assertEqual(
+            dialog.step_kw_source.leSource_license.text(), source_license)
+
+        # Click next to finish source step and go to title step
+        dialog.pbnNext.click()
+
+        # Check if in title step
+        self.check_current_step(dialog.step_kw_title)
+
+        self.assertEqual(dialog.step_kw_title.leTitle.text(), layer_title)
+
+        # Click next to finish title step and go to kw summary step
+        dialog.pbnNext.click()
+
+        # Check if in title step
+        self.check_current_step(dialog.step_kw_summary)
+
+        # Click finish
+        dialog.pbnNext.click()
+
+        # Checking Keyword Created
         real_keywords = dialog.get_keywords()
 
         self.assertDictEqual(real_keywords, expected_keyword)

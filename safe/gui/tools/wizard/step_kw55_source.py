@@ -18,9 +18,6 @@ __date__ = '16/03/2016'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-# noinspection PyPackageRequirements
-from PyQt4.QtCore import QDateTime
-
 from safe.definitionsv4.layer_purposes import layer_purpose_aggregation
 from safe.definitionsv4.layer_modes import layer_mode_classified
 from safe.gui.tools.wizard.wizard_step import WizardStep
@@ -143,9 +140,11 @@ class StepKwSource(WizardStep, FORM_CLASS):
         source_date = self.parent.get_existing_keyword('date')
         if source_date:
             self.ckbSource_date.setChecked(True)
-            self.dtSource_date.setDateTime(
-                QDateTime.fromString(get_unicode(source_date),
-                                     'yyyy-MM-dd HH:mm:ss'))
+            try:
+                self.dtSource_date.setDateTime(source_date)
+            except TypeError:
+                raise TypeError(
+                    'Expected QDateTime or datetime got %s' % type(source_date))
         else:
             self.ckbSource_date.setChecked(False)
             self.dtSource_date.clear()
