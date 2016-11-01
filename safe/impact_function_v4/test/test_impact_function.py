@@ -298,7 +298,7 @@ class TestImpactFunction(unittest.TestCase):
 
         impact_layer = load_test_vector_layer(
             'impact',
-            'indivisible_polygon_impact.shp',
+            'indivisible_polygon_impact.geojson',
             clone_to_memory=True)
         self.assertIsNotNone(impact_layer)
         impact_function = ImpactFunction()

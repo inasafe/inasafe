@@ -178,6 +178,7 @@
           <inasafe_fields>
             <gco:Dictionary>
               {
+              &quot;hazard_class_field&quot;:&quot;haz_class&quot;,
               &quot;youth_ratio_field&quot;:&quot;youth_r&quot;,
               &quot;feature_rate_field&quot;:&quot;exp_rate&quot;,
               &quot;elderly_ratio_field&quot;:&quot;elderly_r&quot;,
