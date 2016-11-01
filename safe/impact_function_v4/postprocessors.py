@@ -16,22 +16,6 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
-def evaluate_formula(formula, variables):
-    """Very simple formula evaluator. Beware the security.
-    :param formula: A simple formula.
-    :type formula: str
-
-    :param variables: A collection of variable (key and value).
-    :type variables: dict
-
-    :returns: The result of the formula execution.
-    :rtype: float, int
-    """
-    for key, value in variables.items():
-        formula = formula.replace(key, str(value))
-    return eval(formula)
-
-
 @profile
 def run_single_post_processor(layer, post_processor):
     """Run single post processor.
@@ -161,9 +145,8 @@ def run_single_post_processor(layer, post_processor):
                     parameters[key] = attributes[value]
                 # Fill up the input from geometry property
 
-                # Evaluate the formula
-                post_processor_result = evaluate_formula(
-                    output_value['formula'], parameters)
+                # Evaluate the function
+                post_processor_result = output_value['function'](**parameters)
 
                 layer.changeAttributeValue(
                     feature.id(),
