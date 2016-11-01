@@ -75,17 +75,10 @@ class StepKwField(WizardStep, FORM_CLASS):
         :returns: The step to be switched to
         :rtype: WizardStep instance or None
         """
-
-        if self.parent.step_kw_purpose.\
-                selected_purpose() == layer_purpose_aggregation:
-            # Aggregation layer
-            return self.parent.step_kw_inasafe_fields
-
         if self.parent.step_kw_layermode.\
                 selected_layermode() == layer_mode_classified:
             if self.parent.step_kw_classification.\
-                    classifications_for_layer() or self.parent.\
-                    step_kw_classify.postprocessor_classification_for_layer():
+                    classifications_for_layer():
                 # Classified data
                 return self.parent.step_kw_classify
 
