@@ -13,7 +13,8 @@ from safe.test.utilities import (
     clone_shp_layer,
     get_qgis_app,
     standard_data_path,
-    load_test_vector_layer)
+    load_test_vector_layer,
+    load_test_raster_layer)
 # AG: get_qgis_app() should be called before importing modules from
 # safe.gui.tools.wizard
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -23,10 +24,11 @@ from safe.definitionsv4.layer_modes import (
     layer_mode_continuous, layer_mode_classified)
 from safe.definitionsv4.layer_purposes import (
     layer_purpose_hazard, layer_purpose_exposure, layer_purpose_aggregation)
-from safe.definitionsv4.hazard import hazard_volcano
+from safe.definitionsv4.hazard import hazard_volcano, hazard_flood
 from safe.definitionsv4.exposure import exposure_structure, exposure_population
 from safe.definitionsv4.hazard_category import hazard_category_multiple_event
-from safe.definitionsv4.hazard_classifications import volcano_hazard_classes
+from safe.definitionsv4.hazard_classifications import (
+    volcano_hazard_classes, generic_hazard_classes)
 from safe.definitionsv4.constants import no_field
 from safe.definitionsv4.fields import (
     hazard_name_field,
@@ -34,7 +36,8 @@ from safe.definitionsv4.fields import (
     population_count_field,
     exposure_type_field,
     hazard_value_field)
-from safe.definitionsv4.layer_geometry import layer_geometry_polygon
+from safe.definitionsv4.layer_geometry import (
+    layer_geometry_polygon, layer_geometry_raster)
 from safe.definitionsv4.exposure_classifications import (
     generic_structure_classes)
 from safe.definitionsv4.units import count_exposure_unit
@@ -210,12 +213,12 @@ class TestKeywordWizard(unittest.TestCase):
         # Check if in select classification step
         self.check_current_step(dialog.step_kw_classification)
 
-        # select volcano vector hazard classes classification
+        # select volcano hazard classification
         self.select_from_list_widget(
             volcano_hazard_classes['name'],
             dialog.step_kw_classification.lstClassifications)
 
-        # Click next to select volcano classes
+        # Click next to select volcano hazard classification
         dialog.pbnNext.click()
 
         # Check if in select field step
@@ -1148,6 +1151,268 @@ class TestKeywordWizard(unittest.TestCase):
         self.check_current_step(dialog.step_kw_default_inasafe_fields)
 
         # Click next to finish InaSAFE Default Field step and go to source step
+        dialog.pbnNext.click()
+
+        # Check if in source step
+        self.check_current_step(dialog.step_kw_source)
+
+        self.assertEqual(dialog.step_kw_source.leSource.text(), source)
+        self.assertEqual(
+            dialog.step_kw_source.leSource_scale.text(), source_scale)
+        self.assertEqual(
+            dialog.step_kw_source.ckbSource_date.isChecked(), True)
+        self.assertEqual(
+            dialog.step_kw_source.dtSource_date.dateTime(), source_date)
+        self.assertEqual(
+            dialog.step_kw_source.leSource_license.text(), source_license)
+
+        # Click next to finish source step and go to title step
+        dialog.pbnNext.click()
+
+        # Check if in title step
+        self.check_current_step(dialog.step_kw_title)
+
+        self.assertEqual(dialog.step_kw_title.leTitle.text(), layer_title)
+
+        # Click next to finish title step and go to kw summary step
+        dialog.pbnNext.click()
+
+        # Check if in title step
+        self.check_current_step(dialog.step_kw_summary)
+
+        # Click finish
+        dialog.pbnNext.click()
+
+        # Checking Keyword Created
+        real_keywords = dialog.get_keywords()
+
+        self.assertDictEqual(real_keywords, expected_keyword)
+
+    def test_classified_raster(self):
+        """Test classified raster."""
+        layer = load_test_raster_layer(
+            'hazard', 'classified_flood_20_20.asc', clone=True)
+        self.assertIsNotNone(layer)
+        layer.keywords = {}
+
+        # noinspection PyTypeChecker
+        dialog = WizardDialog()
+        dialog.set_keywords_creation_mode(layer)
+
+        # Check if in select purpose step
+        self.check_current_step(dialog.step_kw_purpose)
+
+        # Select hazard
+        self.select_from_list_widget(
+            layer_purpose_hazard['name'], dialog.step_kw_purpose.lstCategories)
+
+        # Click next to select hazard
+        dialog.pbnNext.click()
+
+        # Check if in select hazard step
+        self.check_current_step(dialog.step_kw_subcategory)
+
+        # select flood
+        self.select_from_list_widget(
+            hazard_flood['name'],
+            dialog.step_kw_subcategory.lstSubcategories)
+
+        # Click next to select flood
+        dialog.pbnNext.click()
+
+        # Check if in select hazard category step
+        self.check_current_step(dialog.step_kw_hazard_category)
+
+        # select multiple_event
+        self.select_from_list_widget(
+            hazard_category_multiple_event['name'],
+            dialog.step_kw_hazard_category.lstHazardCategories)
+
+        # Click next to select multiple event
+        dialog.pbnNext.click()
+
+        # Check if in select layer mode step
+        self.check_current_step(dialog.step_kw_layermode)
+
+        # select classified mode
+        self.select_from_list_widget(
+            layer_mode_classified['name'],
+            dialog.step_kw_layermode.lstLayerModes)
+
+        # Click next to select classified
+        dialog.pbnNext.click()
+
+        # Check if in select classification step
+        self.check_current_step(dialog.step_kw_classification)
+
+        # select generic hazard classification
+        self.select_from_list_widget(
+            generic_hazard_classes['name'],
+            dialog.step_kw_classification.lstClassifications)
+
+        # Click next to select generic classification
+        dialog.pbnNext.click()
+
+        # Check if in classify step
+        self.check_current_step(dialog.step_kw_classify)
+
+        # select value map
+        classification = dialog.step_kw_classification. \
+            selected_classification()
+        default_classes = classification['classes']
+        unassigned_values = []  # no need to check actually, not save in file
+        assigned_values = {
+            u'low': [1.0],
+            u'medium': [2.0],
+            u'high': [3.0]
+        }
+        dialog.step_kw_classify.populate_classified_values(
+            unassigned_values, assigned_values, default_classes)
+
+        # Click next to finish value mapping
+        dialog.pbnNext.click()
+
+        # Check if in source step
+        self.check_current_step(dialog.step_kw_source)
+
+        dialog.step_kw_source.leSource.setText(source)
+        dialog.step_kw_source.leSource_scale.setText(source_scale)
+        dialog.step_kw_source.leSource_url.setText(source_url)
+        dialog.step_kw_source.ckbSource_date.setChecked(True)
+        dialog.step_kw_source.dtSource_date.setDateTime(source_date)
+        dialog.step_kw_source.leSource_license.setText(source_license)
+
+        # Click next to finish source step and go to title step
+        dialog.pbnNext.click()
+
+        # Check if in title step
+        self.check_current_step(dialog.step_kw_title)
+
+        dialog.step_kw_title.leTitle.setText(layer_title)
+
+        # Click next to finish title step and go to kw summary step
+        dialog.pbnNext.click()
+
+        # Check if in title step
+        self.check_current_step(dialog.step_kw_summary)
+
+        # Click finish
+        dialog.pbnNext.click()
+
+        # Checking Keyword Created
+        expected_keyword = {
+            'scale': source_scale,
+            'hazard_category': hazard_category_multiple_event['key'],
+            'license': source_license,
+            'source': source,
+            'url': source_url,
+            'title': layer_title,
+            'hazard': hazard_flood['key'],
+            'value_map': assigned_values,
+            'date': source_date,
+            'inasafe_fields': {},
+            'inasafe_default_values': {},
+            'classification': generic_hazard_classes['key'],
+            'layer_geometry': layer_geometry_raster['key'],
+            'layer_purpose': layer_purpose_hazard['key'],
+            'layer_mode': layer_mode_classified['key']
+        }
+
+        real_keywords = dialog.get_keywords()
+        self.assertDictEqual(real_keywords, expected_keyword)
+
+    def test_existing_keywords_classified_raster(self):
+        """Test existing keywords classified raster."""
+        layer = load_test_raster_layer(
+            'hazard', 'classified_flood_20_20.asc', clone=True)
+        self.assertIsNotNone(layer)
+        assigned_values = {
+            u'low': [1.0],
+            u'medium': [2.0],
+            u'high': [3.0]
+        }
+        expected_keyword = {
+            'scale': source_scale,
+            'hazard_category': hazard_category_multiple_event['key'],
+            'license': source_license,
+            'source': source,
+            'url': source_url,
+            'title': layer_title,
+            'hazard': hazard_flood['key'],
+            'value_map': assigned_values,
+            'date': source_date,
+            'inasafe_fields': {},
+            'inasafe_default_values': {},
+            'classification': generic_hazard_classes['key'],
+            'layer_geometry': layer_geometry_raster['key'],
+            'layer_purpose': layer_purpose_hazard['key'],
+            'layer_mode': layer_mode_classified['key']
+        }
+
+        layer.keywords = expected_keyword
+
+        # noinspection PyTypeChecker
+        dialog = WizardDialog()
+        dialog.set_keywords_creation_mode(layer)
+
+        # Check if in select purpose step
+        self.check_current_step(dialog.step_kw_purpose)
+
+        # Check if hazard is selected
+        self.check_current_text(
+            layer_purpose_hazard['name'], dialog.step_kw_purpose.lstCategories)
+
+        # Click next to select hazard
+        dialog.pbnNext.click()
+
+        # Check if in select hazard step
+        self.check_current_step(dialog.step_kw_subcategory)
+
+        # Check if flood is selected
+        self.check_current_text(
+            hazard_flood['name'],
+            dialog.step_kw_subcategory.lstSubcategories)
+
+        # Click next to select flood
+        dialog.pbnNext.click()
+
+        # Check if in select hazard category step
+        self.check_current_step(dialog.step_kw_hazard_category)
+
+        # Check if multiple event is selected
+        self.check_current_text(
+            hazard_category_multiple_event['name'],
+            dialog.step_kw_hazard_category.lstHazardCategories)
+
+        # Click next to select multiple event
+        dialog.pbnNext.click()
+
+        # Check if in select layer mode step
+        self.check_current_step(dialog.step_kw_layermode)
+
+        # Check if classified is selected
+        self.check_current_text(
+            layer_mode_classified['name'],
+            dialog.step_kw_layermode.lstLayerModes)
+
+        # Click next to select classified
+        dialog.pbnNext.click()
+
+        # Check if in select classification step
+        self.check_current_step(dialog.step_kw_classification)
+
+        # Check if generic hazard is selected
+        self.check_current_text(
+            generic_hazard_classes['name'],
+            dialog.step_kw_classification.lstClassifications)
+
+        # Click next to select generic classification
+        dialog.pbnNext.click()
+
+        # Check if in classify step
+        self.check_current_step(dialog.step_kw_classify)
+
+        # Click next to finish value mapping
         dialog.pbnNext.click()
 
         # Check if in source step
