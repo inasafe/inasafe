@@ -281,7 +281,7 @@ def load_test_vector_layer(*args, **kwargs):
 
     See documentation of load_path_vector_layer
 
-    :param args: List of path e.g. ['exposure', 'buildings.shp'.
+    :param args: List of path e.g. ['exposure', 'buildings.shp'].
     :type args: list
 
     :param kwargs: It can be :
@@ -378,11 +378,47 @@ def monkey_patch_keywords(layer):
         layer.keywords['inasafe_fields'] = {}
 
 
-def load_test_raster_layer(*args):
+def load_local_raster_layer(test_file, **kwargs):
     """Return the test raster layer.
 
-    :param args: List of path e.g. ['exposure', 'population.asc'].
+    See documentation of load_path_raster_layer
+
+    :param test_file: The file to load in the data directory next to the file.
+    :type test_file: str
+
+    :param kwargs: It can be :
+        clone=True if you want to copy the layer first to a temporary file.
+
+        with_keywords=False if you do not want keywords. "clone" is
+            required.
+
+    :type kwargs: dict
+
+    :return: The raster layer.
+    :rtype: QgsRasterLayer
+
+    .. versionadded:: 4.0
+    """
+    caller_path = inspect.getouterframes(inspect.currentframe())[1][1]
+    path = os.path.join(os.path.dirname(caller_path), 'data', test_file)
+    return load_path_raster_layer(path, **kwargs)
+
+
+def load_test_raster_layer(*args, **kwargs):
+    """Return the test raster layer.
+
+    See documentation of load_path_raster_layer
+
+    :param args: List of path e.g. ['exposure', 'population.asc]'.
     :type args: list
+
+    :param kwargs: It can be :
+        clone=True if you want to copy the layer first to a temporary file.
+
+        with_keywords=False if you do not want keywords. "clone" is
+            required.
+
+    :type kwargs: dict
 
     :return: The raster layer.
     :rtype: QgsRasterLayer
@@ -390,6 +426,51 @@ def load_test_raster_layer(*args):
     .. versionadded:: 4.0
     """
     path = standard_data_path(*args)
+    return load_path_raster_layer(path, **kwargs)
+
+
+def load_path_raster_layer(path, **kwargs):
+    """Return the test raster layer.
+
+    :param path: Path to the raster layer.
+    :type path: str
+
+    :param kwargs: It can be :
+        clone=True if you want to copy the layer first to a temporary file.
+
+        with_keywords=False if you do not want keywords. "clone" is
+            required.
+
+    :return: The raster layer.
+    :rtype: QgsRasterLayer
+
+    .. versionadded:: 4.0
+    """
+    name = splitext(basename(path))[0]
+    extension = splitext(path)[1]
+
+    extensions = [
+        '.tiff', '.tif', '.asc', '.xml', '.qml']
+
+    if kwargs.get('with_keywords'):
+        if not kwargs.get('clone'):
+            raise Exception('with_keywords needs a clone')
+
+    if not kwargs.get('with_keywords', True):
+        index = extensions.index('.xml')
+        extensions.pop(index)
+
+    if kwargs.get('clone', False):
+        target_directory = mkdtemp()
+        current_path = splitext(path)[0]
+        path = join(target_directory, name + extension)
+
+        for ext in extensions:
+            src_path = current_path + ext
+            if exists(src_path):
+                target_path = join(target_directory, name + ext)
+                shutil.copy2(src_path, target_path)
+
     name = os.path.basename(path)
     layer = QgsRasterLayer(path, name)
 
