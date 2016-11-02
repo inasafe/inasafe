@@ -61,8 +61,17 @@ def assign(**kwargs):
     return value
 
 
+# This postprocessor function is also used in the aggregation_summary
 def post_processor_affected_function(**kwargs):
-    """Private function used in the affected postprocessor."""
+    """Private function used in the affected postprocessor.
+
+    :param classification: The hazard classification to use.
+
+    :param hazard_class: The hazard class to check.
+
+    :return: If this hazard class is affected or not.
+    :rtype: bool
+    """
     for hazard in all_hazard_classes:
         if hazard['key'] == kwargs['classification']:
             classification = hazard['classes']
@@ -74,7 +83,7 @@ def post_processor_affected_function(**kwargs):
     else:
         affected = False
 
-    return tr(unicode(affected))
+    return affected
 
 
 """

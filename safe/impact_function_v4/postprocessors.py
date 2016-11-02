@@ -164,6 +164,10 @@ def run_single_post_processor(layer, post_processor):
                 # Evaluate the function
                 post_processor_result = output_value['function'](**parameters)
 
+                # The affected postprocessor is returning a boolean.
+                if isinstance(post_processor_result, bool):
+                    post_processor_result = tr(unicode(post_processor_result))
+
                 layer.changeAttributeValue(
                     feature.id(),
                     output_field_index,
