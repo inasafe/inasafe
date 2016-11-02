@@ -13,11 +13,13 @@ from safe.reportv4.extractors.minimum_needs import minimum_needs_extractor
 from safe.reportv4.processors.default import qgis_composer_renderer, \
     jinja2_renderer
 from safe.reportv4.report_metadata import ReportMetadata
-from safe.test.utilities import get_qgis_app
+from safe.test.utilities import get_qgis_app, load_test_vector_layer
+
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from PyQt4.QtCore import QSettings
-from qgis.core import QgsVectorLayer
+from PyQt4.QtXml import QDomDocument
+from qgis.core import QgsVectorLayer, QgsMapLayerRegistry, QgsComposition
 from safe.definitionsv4.report import report_a3_portrait_blue
 from safe.reportv4.impact_report import ImpactReport
 
@@ -110,8 +112,30 @@ class TestImpactReport(unittest.TestCase):
             impact_layer,
             analysis_layer,
             minimum_needs_profile=minimum_needs)
-        impact_report.output_folder = os.path.abspath('reportv4/test/output/')
+        impact_report.output_folder = self.fixtures_dir('../output')
         impact_report.process_component()
+
+    def test_existing_population_json(self):
+        layer = load_test_vector_layer(
+            'gisv4', 'exposure', 'building-points.geojson')
+        print layer.extent().asWktPolygon()
+        print layer.extent().width()
+
+    def test_qgis_composer_print(self):
+        composition = QgsComposition(CANVAS.mapRenderer())
+
+        template_path = os.path.abspath(
+            '../resources/report-templates/standard-template/qgis-composer/blank.qpt')
+
+        with open(template_path) as f:
+            template_content = f.read()
+
+        document = QDomDocument()
+        document.setContent(template_content)
+
+        # load composition object from template
+        result = composition.loadFromTemplate(document, {})
+        composition.exportAsPDF(self.fixtures_dir('../output/test.pdf'))
 
     def test_default_qgis_report(self):
         """Test generate qgis composition"""
@@ -138,17 +162,26 @@ class TestImpactReport(unittest.TestCase):
                 }
             ]
         }
-        impact_json = self.fixtures_dir('impact.geojson')
+        impact_json = self.fixtures_dir('analysis_sample/13-impact.geojson')
         impact_layer = QgsVectorLayer(impact_json, '', 'ogr')
         analysis_json = self.fixtures_dir('analysis_sample/analysis-summary.geojson')
         analysis_layer = QgsVectorLayer(analysis_json, '', 'ogr')
+        minimum_needs = NeedsProfile()
+        minimum_needs.load()
+
+        # insert layer to registry
+        layer_registry = QgsMapLayerRegistry.instance()
+        layer_registry.removeAllMapLayers()
+        layer_registry.addMapLayer(impact_layer)
+
         report_metadata = ReportMetadata(
             metadata_dict=sample_report_metadata_dict)
         impact_report = ImpactReport(
             IFACE,
             report_metadata,
             impact_layer,
-            analysis_layer)
+            analysis_layer,
+            minimum_needs_profile=minimum_needs)
 
         # Get other setting
         settings = QSettings()
@@ -165,7 +198,7 @@ class TestImpactReport(unittest.TestCase):
         impact_report.inasafe_context.north_arrow = north_arrow_path
 
         impact_report.qgis_composition_context.extent = impact_layer.extent()
-        impact_report.output_folder = self.fixtures_dir('output')
+        impact_report.output_folder = self.fixtures_dir('../output')
 
         impact_report.process_component()
 

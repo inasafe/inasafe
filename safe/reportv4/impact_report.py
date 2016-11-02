@@ -162,8 +162,17 @@ class QGISCompositionContext(object):
     def __init__(self, extent, map_settings, page_dpi):
         self._extent = extent
         self._map_settings = map_settings
-        self._plot_style = QgsComposition.Preview
+        self._page_dpi = page_dpi
+        self._plot_style = QgsComposition.Print
         self._save_as_raster = True
+
+    @property
+    def page_dpi(self):
+        return self._page_dpi
+
+    @page_dpi.setter
+    def page_dpi(self, value):
+        self._page_dpi = value
 
     @property
     def extent(self):
@@ -256,6 +265,8 @@ class ImpactReport(object):
     @output_folder.setter
     def output_folder(self, value):
         self._output_folder = value
+        if not os.path.exists(self._output_folder):
+            os.makedirs(self._output_folder)
 
     @property
     def impact_layer(self):

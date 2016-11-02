@@ -55,6 +55,12 @@ def jinja2_renderer(impact_report, component):
             impact_report.output_folder = mkdtemp(dir=temp_dir())
         output_path = os.path.join(
             impact_report.output_folder, component.output_path)
+
+        # make sure directory is created
+        dirname = os.path.dirname(output_path)
+        if not os.path.exists(dirname):
+            os.makedirs(dirname)
+
         with io.open(output_path, mode='w', encoding='utf-8') as output_file:
             output_file.write(rendered)
         return output_path
@@ -156,19 +162,23 @@ def qgis_composer_renderer(impact_report, component):
             height = canvas_extent.height()
             longest_width = width if width > height else height
             half_length = longest_width / 2
+            margin = half_length / 5
             center = canvas_extent.center()
-            min_x = center.x() - half_length
-            max_x = center.x() + half_length
-            min_y = center.y() - half_length
-            max_y = center.y() + half_length
+            min_x = center.x() - half_length - margin
+            max_x = center.x() + half_length + margin
+            min_y = center.y() - half_length - margin
+            max_y = center.y() + half_length + margin
             # noinspection PyCallingNonCallable
             square_extent = QgsRectangle(min_x, min_y, max_x, max_y)
-            composer_map.setNewExtent(square_extent)
+            composer_map.zoomToExtent(square_extent)
+            composer_map.renderModeUpdateCachedImage()
+
+            actual_extent = composer_map.extent()
 
             # calculate intervals for grid
-            x_interval = square_extent.width() / split_count
+            x_interval = actual_extent.width() / split_count
             composer_map.setGridIntervalX(x_interval)
-            y_interval = square_extent.height() / split_count
+            y_interval = actual_extent.height() / split_count
             composer_map.setGridIntervalY(y_interval)
 
     # calculate legend element
@@ -212,6 +222,12 @@ def qgis_composer_renderer(impact_report, component):
         impact_report.output_folder = mkdtemp(dir=temp_dir())
     output_path = os.path.join(
         impact_report.output_folder, component.output_path)
+
+    # make sure directory is created
+    dirname = os.path.dirname(output_path)
+    if not os.path.exists(dirname):
+        os.makedirs(dirname, exist_ok=True)
+
     output_format = component.output_format
     # for QGIS composer only pdf and png output are available
     if output_format == 'pdf':
