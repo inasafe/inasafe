@@ -25,7 +25,7 @@ from safe.gisv4.vector.reclassify import reclassify as reclassify_vector
 from safe.gisv4.vector.union import union
 from safe.gisv4.vector.clip import clip
 from safe.gisv4.vector.smart_clip import smart_clip
-from safe.gisv4.vector.aggregate_summary import aggregate_summary
+from safe.gisv4.vector.summary_1_impact import impact_summary
 from safe.gisv4.vector.update_value_map import update_value_map
 from safe.gisv4.raster.reclassify import reclassify as reclassify_raster
 from safe.gisv4.raster.polygonize import polygonize
@@ -665,8 +665,8 @@ class ImpactFunction(object):
             self.set_state_process(
                 'impact function',
                 'Aggregate the impact summary')
-            self._aggregate_hazard = aggregate_summary(
-                self.aggregate_hazard_impacted, self._impact)
+            self._aggregate_hazard = impact_summary(
+                self._impact, self.aggregate_hazard_impacted)
         else:
             # We do not want to post process twice.
             self.post_process(self._aggregate_hazard)

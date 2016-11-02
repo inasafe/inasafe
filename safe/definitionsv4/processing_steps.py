@@ -14,9 +14,14 @@ __revision__ = '$Format:%H$'
 Vector package
 """
 
-aggregate_summary_steps = {
-    'step_name': tr('Aggregate hazard results'),
+summary_1_impact_steps = {
+    'step_name': tr('Aggregate impact results'),
     'output_layer_name': 'aggregate_hazard',
+}
+
+summary_2_aggregate_hazard_steps = {
+    'step_name': tr('Aggregate hazard results'),
+    'output_layer_name': 'aggregation',
 }
 
 assign_highest_value_steps = {
