@@ -8,7 +8,7 @@ from safe.test.utilities import (
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.definitionsv4.fields import total_field, exposure_count_field
-from safe.gisv4.vector.aggregate_summary import aggregate_summary
+from safe.gisv4.vector.summary_1_impact import impact_summary
 
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -25,8 +25,8 @@ class TestAggregateSummary(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test_aggregate_summary(self):
-        """Test we can aggregate the impact to the aggregation."""
+    def test_impact_summary(self):
+        """Test we can aggregate the impact to the aggregate hazard."""
 
         aggregate_hazard = load_test_vector_layer(
             'gisv4',
@@ -39,6 +39,8 @@ class TestAggregateSummary(unittest.TestCase):
             'impacts',
             'building-points-classified-vector.geojson')
 
-        layer = aggregate_summary(aggregate_hazard, impact)
+        layer = impact_summary(impact, aggregate_hazard)
 
         self.assertIn(total_field['key'], layer.keywords['inasafe_fields'])
+
+        # TODO We should add more tests.
