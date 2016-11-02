@@ -185,10 +185,10 @@
             <gco:Tuple/>
           </prob_fatality_mag>
           <inasafe_fields>
-            <gco:Dictionary/>
+            <gco:Dictionary>{}</gco:Dictionary>
           </inasafe_fields>
           <inasafe_default_values>
-            <gco:Dictionary/>
+            <gco:Dictionary>{}</gco:Dictionary>
           </inasafe_default_values>
           <volcano_name_field>
             <gco:CharacterString/>
