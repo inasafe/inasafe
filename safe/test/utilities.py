@@ -183,21 +183,23 @@ def check_inasafe_fields(layer):
     """
     inasafe_fields = layer.keywords['inasafe_fields']
 
-    real_fields = layer.fields()
+    real_fields = [field.name() for field in layer.fields().toList()]
 
-    if len(inasafe_fields.keys()) != real_fields.count():
+    difference = set(inasafe_fields.values()).difference(real_fields)
+    if len(difference):
         msg = tr(
-            'inasafe_fields do not match the attribute table in %s. '
-            % layer.keywords['layer_purpose'])
+            'inasafe_fields has more fields than the layer itself : %s'
+            % difference)
         return False, msg
 
-    for key, field in inasafe_fields.iteritems():
-        index = layer.fieldNameIndex(field)
-        if index == -1:
-            msg = tr('The attribute table is missing %s.' % field)
-            return False, msg
-
-    return True, None
+    difference = set(real_fields).difference(inasafe_fields.values())
+    if len(difference):
+        msg = tr(
+            'The layer has more fields than inasafe_fields : %s'
+            % difference)
+        return False, msg
+    else:
+        return True, None
 
 
 def assert_hash_for_file(hash_string, filename):
