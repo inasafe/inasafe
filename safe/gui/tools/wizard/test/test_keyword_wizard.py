@@ -1189,7 +1189,6 @@ class TestKeywordWizard(unittest.TestCase):
 
         self.assertDictEqual(real_keywords, expected_keyword)
 
-    # @unittest.skip('Path is not found')
     def test_classified_raster(self):
         """Test classified raster."""
         path = standard_data_path('hazard', 'classified_flood_20_20.asc')
