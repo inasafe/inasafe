@@ -4,6 +4,7 @@ import shutil
 import unittest
 # noinspection PyUnresolvedReferences
 import qgis
+import os
 from PyQt4 import QtCore
 from PyQt4.QtCore import Qt
 # noinspection PyPackageRequirements
@@ -1188,10 +1189,17 @@ class TestKeywordWizard(unittest.TestCase):
 
         self.assertDictEqual(real_keywords, expected_keyword)
 
+    # @unittest.skip('Path is not found')
     def test_classified_raster(self):
         """Test classified raster."""
-        layer = load_test_raster_layer(
-            'hazard', 'classified_flood_20_20.asc', clone=True)
+        path = standard_data_path('hazard', 'classified_flood_20_20.asc')
+        message = "Path %s is not found" % path
+        self.assertTrue(os.path.exists(path), message)
+        layer = clone_raster_layer(
+            name='classified_flood_20_20',
+            extension='.asc',
+            include_keywords=False,
+            source_directory=standard_data_path('hazard'))
         self.assertIsNotNone(layer)
         layer.keywords = {}
 
@@ -1323,8 +1331,11 @@ class TestKeywordWizard(unittest.TestCase):
 
     def test_existing_keywords_classified_raster(self):
         """Test existing keywords classified raster."""
-        layer = load_test_raster_layer(
-            'hazard', 'classified_flood_20_20.asc', clone=True)
+        layer = clone_raster_layer(
+            name='classified_flood_20_20',
+            extension='.asc',
+            include_keywords=False,
+            source_directory=standard_data_path('hazard'))
         self.assertIsNotNone(layer)
         assigned_values = {
             u'low': [1.0],
