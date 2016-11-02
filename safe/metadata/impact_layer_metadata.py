@@ -165,6 +165,20 @@ class ImpactLayerMetadata(BaseMetadata):
             'inasafe/'
             'impact_table/'
             'gco:CharacterString'),
+        'exposure_keywords': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'exposure_keywords/'
+            'gco:Dictionary'),
+        'hazard_keywords': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'hazard_keywords/'
+            'gco:Dictionary'),
     }
     _standard_properties = merge_dictionaries(
         BaseMetadata._standard_properties, _standard_properties)
