@@ -41,6 +41,10 @@ class TestAggregateSummary(unittest.TestCase):
             'aggregate_classified_hazard.geojson',
             clone=True)
 
+        aggregate_hazard.keywords['hazard_keywords'] = {
+            'classification': 'generic_hazard_classes'
+        }
+
         number_of_fields = aggregate_hazard.fields().count()
 
         layer = impact_summary(impact, aggregate_hazard)
@@ -57,7 +61,7 @@ class TestAggregateSummary(unittest.TestCase):
 
         self.assertEqual(
             layer.fields().count(),
-            len(unique_exposure) + number_of_fields + 1
+            len(unique_exposure) + number_of_fields + 2
         )
 
     def test_analysis_summary(self):
