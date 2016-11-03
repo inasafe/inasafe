@@ -16,12 +16,15 @@ from safe.definitionsv4.fields import (
     exposure_class_field,
     total_field,
     exposure_count_field,
+    affected_field,
     size_field
 )
+from safe.definitionsv4.post_processors import post_processor_affected_function
 from safe.definitionsv4.processing_steps import summary_1_impact_steps
 from safe.gisv4.vector.tools import create_field_from_definition
 from safe.utilities.profiling import profile
 from safe.utilities.pivot_table import FlatTable
+from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -129,6 +132,13 @@ def impact_summary(source, target, callback=None):
         value = exposure_count_field['field_name'] % column
         target.keywords['inasafe_fields'][key] = value
 
+    # Affected field
+    field = create_field_from_definition(affected_field)
+    target.addAttribute(field)
+    target.keywords['inasafe_fields'][affected_field['key']] = (
+        affected_field['field_name'])
+
+    # Total field
     field = create_field_from_definition(total_field)
     target.addAttribute(field)
     target.keywords['inasafe_fields'][total_field['key']] = (
@@ -158,6 +168,8 @@ def impact_summary(source, target, callback=None):
             exposure_class=exposure_value
         )
 
+    classification = target.keywords['hazard_keywords']['classification']
+
     for area in target.getFeatures(request):
         aggregation_value = area[aggregation_id]
         hazard_value = area[hazard_id]
@@ -171,8 +183,14 @@ def impact_summary(source, target, callback=None):
             total += sum
             target.changeAttributeValue(area.id(), shift + i, sum)
 
+        affected = post_processor_affected_function(
+            classification=classification, hazard_class=hazard_value)
+        affected = tr(unicode(affected))
         target.changeAttributeValue(
-            area.id(), shift + len(unique_exposure), total)
+            area.id(), shift + len(unique_exposure), affected)
+
+        target.changeAttributeValue(
+            area.id(), shift + len(unique_exposure) + 1, total)
 
     target.commitChanges()
 
