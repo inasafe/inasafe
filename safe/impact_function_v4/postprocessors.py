@@ -4,9 +4,10 @@
 Postprocessors.
 """
 
-from qgis.core import QgsDistanceArea, QgsField, QgsFeatureRequest
+from qgis.core import QgsDistanceArea, QgsFeatureRequest
 
 from safe.definitionsv4.fields import size_field
+from safe.gisv4.vector.tools import create_field_from_definition
 from safe.utilities.profiling import profile
 from safe.utilities.i18n import tr
 
@@ -61,11 +62,8 @@ def run_single_post_processor(layer, post_processor):
                 return False, msg
 
             # Add output attribute name to the layer
-            result = layer.addAttribute(
-                QgsField(
-                    output_field_name,
-                    output_value['value']['type'])
-            )
+            field = create_field_from_definition(output_value['value'])
+            result = layer.addAttribute(field)
             if not result:
                 msg = tr(
                     'Error while creating the field %s.'
@@ -233,8 +231,8 @@ def add_size_field(layer):
     # Check if size field already exist
     if size_field_index == -1:
         # Add new field, size
-        layer.addAttribute(QgsField(
-            size_field['field_name'], size_field['type']))
+        field = create_field_from_definition(size_field)
+        layer.addAttribute(field)
         # Get index
         size_field_index = layer.fieldNameIndex('size')
 

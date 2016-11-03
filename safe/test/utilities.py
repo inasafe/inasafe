@@ -188,15 +188,15 @@ def check_inasafe_fields(layer):
     difference = set(inasafe_fields.values()).difference(real_fields)
     if len(difference):
         msg = tr(
-            'inasafe_fields has more fields than the layer itself : %s'
-            % difference)
+            'inasafe_fields has more fields than the layer %s itself : %s'
+            % (layer. title(), difference))
         return False, msg
 
     difference = set(real_fields).difference(inasafe_fields.values())
     if len(difference):
         msg = tr(
-            'The layer has more fields than inasafe_fields : %s'
-            % difference)
+            'The layer %s has more fields than inasafe_fields : %s'
+            % (layer.title(), difference))
         return False, msg
     else:
         return True, None

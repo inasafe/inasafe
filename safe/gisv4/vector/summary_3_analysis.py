@@ -1,10 +1,11 @@
 # coding=utf-8
 
 """
-Aggregate the impact table to the aggregate hazard.
+Aggregate the aggregate hazard to the analysis layer.
 """
 
-from qgis.core import QGis, QgsField, QgsFeatureRequest
+from PyQt4.QtCore import QPyNullVariant
+from qgis.core import QGis, QgsFeatureRequest
 
 from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
 from safe.definitionsv4.fields import (
@@ -21,6 +22,7 @@ from safe.definitionsv4.fields import (
 from safe.definitionsv4.processing_steps import (
     summary_3_aggregate_hazard_steps)
 from safe.definitionsv4.post_processors import post_processor_affected_function
+from safe.gisv4.vector.tools import create_field_from_definition
 from safe.utilities.profiling import profile
 from safe.utilities.pivot_table import FlatTable
 
@@ -33,6 +35,15 @@ __revision__ = '$Format:%H$'
 @profile
 def analysis_summary(source, target, callback=None):
     """Compute the summary from the aggregate hazard to analysis.
+
+    Source layer :
+    | haz_id | haz_class | aggr_id | aggr_name | total_feature |
+
+    Target layer :
+    | analysis_id |
+
+    Output layer :
+    | analysis_id | count_hazard_class | affected_count | total |
 
     :param source: The layer to aggregate vector layer.
     :type source: QgsVectorLayer
@@ -91,13 +102,18 @@ def analysis_summary(source, target, callback=None):
 
     flat_table = FlatTable('hazard_class')
 
+    # First loop over the source layer
     request = QgsFeatureRequest()
     request.setSubsetOfAttributes([hazard_class, total], source.fields())
     request.setFlags(QgsFeatureRequest.NoGeometry)
     for area in source.getFeatures():
+        hazard_value = area[hazard_class_index]
+        value = area[total]
+        if not hazard_value or isinstance(hazard_value, QPyNullVariant):
+            hazard_value = 'NULL'
         flat_table.add_value(
-            area[total],
-            hazard_class=area[hazard_class_index]
+            value,
+            hazard_class=hazard_value
         )
 
     target.startEditing()
@@ -105,28 +121,30 @@ def analysis_summary(source, target, callback=None):
     shift = target.fields().count()
 
     for column in unique_hazard:
-        field = QgsField(hazard_count_field['field_name'] % column)
-        field.setType(hazard_count_field['type'])
-        field.setLength(hazard_count_field['length'])
-        field.setPrecision(hazard_count_field['precision'])
+        if not column or isinstance(column, QPyNullVariant):
+            column = 'NULL'
+        field = create_field_from_definition(hazard_count_field, column)
         target.addAttribute(field)
+        key = hazard_count_field['key'] % column
+        value = hazard_count_field['field_name'] % column
+        target.keywords['inasafe_fields'][key] = value
 
-    field = QgsField(affected_count_field['field_name'])
-    field.setType(affected_count_field['type'])
-    field.setLength(affected_count_field['length'])
-    field.setPrecision(affected_count_field['precision'])
+    field = create_field_from_definition(affected_count_field)
     target.addAttribute(field)
+    target.keywords['inasafe_fields'][affected_count_field['key']] = (
+        affected_count_field['field_name'])
 
-    field = QgsField(total_field['field_name'])
-    field.setType(total_field['type'])
-    field.setLength(total_field['length'])
-    field.setPrecision(total_field['precision'])
+    field = create_field_from_definition(total_field)
     target.addAttribute(field)
+    target.keywords['inasafe_fields'][total_field['key']] = (
+        total_field['field_name'])
 
     affected_sum = 0
     for area in target.getFeatures(request):
         total = 0
         for i, val in enumerate(unique_hazard):
+            if not val or isinstance(val, QPyNullVariant):
+                val = 'NULL'
             sum = flat_table.get_value(hazard_class=val)
             total += sum
             target.changeAttributeValue(area.id(), shift + i, sum)
@@ -143,16 +161,6 @@ def analysis_summary(source, target, callback=None):
             area.id(), shift + len(unique_hazard) + 1, total)
 
     target.commitChanges()
-
-    target.keywords['inasafe_fields'][affected_count_field['key']] = (
-        affected_count_field['field_name'])
-    target.keywords['inasafe_fields'][total_field['key']] = (
-        total_field['field_name'])
-
-    for column in unique_hazard:
-        key = hazard_count_field['key'] % column
-        value = hazard_count_field['field_name'] % column
-        target.keywords['inasafe_fields'][key] = value
 
     target.keywords['title'] = output_layer_name
 
