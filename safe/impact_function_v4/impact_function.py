@@ -26,6 +26,7 @@ from safe.gisv4.vector.union import union
 from safe.gisv4.vector.clip import clip
 from safe.gisv4.vector.smart_clip import smart_clip
 from safe.gisv4.vector.summary_1_impact import impact_summary
+from safe.gisv4.vector.summary_2_aggregate_hazard import aggregation_summary
 from safe.gisv4.vector.summary_3_analysis import analysis_summary
 from safe.gisv4.vector.update_value_map import update_value_map
 from safe.gisv4.raster.reclassify import reclassify as reclassify_raster
@@ -970,8 +971,8 @@ class ImpactFunction(object):
             self.set_state_process(
                 'impact function',
                 'Aggregate the aggregation summary')
-            # self._aggregate_hazard = impact_summary(
-            #     self._impact, self.aggregate_hazard_impacted)
+            self._aggregation = aggregation_summary(
+                self.aggregate_hazard_impacted, self.aggregation)
 
             self.set_state_process(
                 'impact function',

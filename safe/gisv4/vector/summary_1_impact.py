@@ -99,6 +99,7 @@ def impact_summary(source, target, callback=None):
     aggregation_id = target_fields[aggregation_id_field['key']]
 
     hazard_id = target_fields[hazard_id_field['key']]
+    hazard_class = target_fields[hazard_class_field['key']]
 
     exposure_class = source_fields[exposure_class_field['key']]
     exposure_class_index = source.fieldNameIndex(exposure_class)
@@ -172,19 +173,20 @@ def impact_summary(source, target, callback=None):
 
     for area in target.getFeatures(request):
         aggregation_value = area[aggregation_id]
-        hazard_value = area[hazard_id]
+        feature_hazard_id = area[hazard_id]
+        feature_hazard_value = area[hazard_class]
         total = 0
         for i, val in enumerate(unique_exposure):
             sum = flat_table.get_value(
                 aggregation_id=aggregation_value,
-                hazard_id=hazard_value,
+                hazard_id=feature_hazard_id,
                 exposure_class=val
             )
             total += sum
             target.changeAttributeValue(area.id(), shift + i, sum)
 
         affected = post_processor_affected_function(
-            classification=classification, hazard_class=hazard_value)
+            classification=classification, hazard_class=feature_hazard_value)
         affected = tr(unicode(affected))
         target.changeAttributeValue(
             area.id(), shift + len(unique_exposure), affected)
