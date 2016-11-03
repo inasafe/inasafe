@@ -11,7 +11,9 @@
       "info": {},
       "process":[
         "Run impact function",
-        "Zonal stats between exposure and aggregate hazard"
+        "Zonal stats between exposure and aggregate hazard",
+        "Aggregate the aggregation summary",
+        "Aggregate the analysis summary"
       ]
     },
     "post_processor":{

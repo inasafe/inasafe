@@ -9,7 +9,10 @@ from qgis.core import QGis, QgsField, QgsFeatureRequest
 from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
 from safe.definitionsv4.fields import (
     aggregation_id_field,
+    aggregation_name_field,
     hazard_id_field,
+    hazard_class_field,
+    exposure_id_field,
     exposure_class_field,
     total_field,
     exposure_count_field,
@@ -51,15 +54,33 @@ def impact_summary(source, target, callback=None):
     source_fields = source.keywords['inasafe_fields']
     target_fields = target.keywords['inasafe_fields']
 
-    if not target_fields.get(aggregation_id_field['key']):
-        msg = '%s not found in %s' % (
-            aggregation_id_field['key'], target_fields)
-        raise InvalidKeywordsForProcessingAlgorithm(msg)
+    target_compulsory_fields = [
+        aggregation_id_field,
+        aggregation_name_field,
+        hazard_id_field,
+        hazard_class_field
+    ]
+    for field in target_compulsory_fields:
+        # noinspection PyTypeChecker
+        if not target_fields.get(field['key']):
+            # noinspection PyTypeChecker
+            msg = '%s not found in %s' % (field['key'], target_fields)
+            raise InvalidKeywordsForProcessingAlgorithm(msg)
 
-    if not source_fields.get(exposure_class_field['key']):
-        msg = '%s not found in %s' % (
-            exposure_class_field['key'], source_fields)
-        raise InvalidKeywordsForProcessingAlgorithm(msg)
+    source_compulsory_fields = [
+        exposure_id_field,
+        exposure_class_field,
+        aggregation_id_field,
+        aggregation_name_field,
+        hazard_id_field,
+        hazard_class_field
+    ]
+    for field in source_compulsory_fields:
+        # noinspection PyTypeChecker
+        if not source_fields.get(field['key']):
+            # noinspection PyTypeChecker
+            msg = '%s not found in %s' % (field['key'], source_fields)
+            raise InvalidKeywordsForProcessingAlgorithm(msg)
 
     aggregation_id = target_fields[aggregation_id_field['key']]
 

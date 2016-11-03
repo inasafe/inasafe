@@ -12,7 +12,9 @@
       "process":[
         "Run impact function",
         "Union exposure features to the aggregate hazard",
-        "Aggregate the impact summary"
+        "Aggregate the impact summary",
+        "Aggregate the aggregation summary",
+        "Aggregate the analysis summary"
       ]
     },
     "post_processor":{
