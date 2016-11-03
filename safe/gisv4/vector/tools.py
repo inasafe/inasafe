@@ -5,7 +5,7 @@ Tools for vector layers.
 """
 
 from uuid import uuid4
-from PyQt4.QtCore import QSettings
+from PyQt4.QtCore import QSettings, QPyNullVariant
 from qgis.core import (
     QgsGeometry,
     QgsVectorLayer,
@@ -197,3 +197,32 @@ def create_spatial_index(layer):
     """
     spatial_index = QgsSpatialIndex(layer.getFeatures())
     return spatial_index
+
+
+def create_field_from_definition(field_definition, name=None):
+    """Helper to create a field from definition.
+
+    :param field_definition: The definition of the field.
+    :type field_definition: safe.definitionsv4.fields
+
+    :param name: The name is required if the field name is dynamic and need a
+        string formatting.
+    :type name: basestring
+
+    :return: The new field.
+    :rtype: QgsField
+    """
+    field = QgsField()
+
+    if isinstance(name, QPyNullVariant):
+        name = 'NULL'
+
+    if name:
+        field.setName(field_definition['field_name'] % name)
+    else:
+        field.setName(field_definition['field_name'])
+
+    field.setType(field_definition['type'])
+    field.setLength(field_definition['length'])
+    field.setPrecision(field_definition['precision'])
+    return field

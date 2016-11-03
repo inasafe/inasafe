@@ -9,7 +9,6 @@ from qgis.core import (
     QgsFeatureRequest,
     QgsGeometry,
     QgsFeature,
-    QgsField,
     QGis,
 )
 
@@ -19,7 +18,8 @@ from safe.definitionsv4.fields import (
     analysis_id_field,
     analysis_name_field,
 )
-from safe.gisv4.vector.tools import create_memory_layer
+from safe.gisv4.vector.tools import (
+    create_memory_layer, create_field_from_definition)
 from safe.utilities.profiling import profile
 from safe.utilities.i18n import tr
 
@@ -38,14 +38,8 @@ def create_virtual_aggregation(extent, extent_crs):
     """
 
     fields = [
-        QgsField(
-            aggregation_id_field['field_name'],
-            aggregation_id_field['type']
-        ),
-        QgsField(
-            aggregation_name_field['field_name'],
-            aggregation_name_field['type']
-        )
+        create_field_from_definition(aggregation_id_field),
+        create_field_from_definition(aggregation_name_field)
     ]
     aggregation_layer = create_memory_layer(
         'aggregation', QGis.Polygon, extent_crs, fields)
@@ -87,14 +81,8 @@ def create_analysis_layer(aggregation, crs, name):
     :rtype: QgsVectorLayer
     """
     fields = [
-        QgsField(
-            analysis_id_field['field_name'],
-            analysis_id_field['type']
-        ),
-        QgsField(
-            analysis_name_field['field_name'],
-            analysis_name_field['type']
-        ),
+        create_field_from_definition(analysis_id_field),
+        create_field_from_definition(analysis_name_field)
     ]
     analysis_layer = create_memory_layer(
         'analysis', QGis.Polygon, crs, fields)

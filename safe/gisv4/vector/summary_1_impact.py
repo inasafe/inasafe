@@ -3,8 +3,8 @@
 """
 Aggregate the impact table to the aggregate hazard.
 """
-
-from qgis.core import QGis, QgsField, QgsFeatureRequest
+from PyQt4.QtCore import QPyNullVariant
+from qgis.core import QGis, QgsFeatureRequest
 
 from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
 from safe.definitionsv4.fields import (
@@ -19,6 +19,7 @@ from safe.definitionsv4.fields import (
     size_field
 )
 from safe.definitionsv4.processing_steps import summary_1_impact_steps
+from safe.gisv4.vector.tools import create_field_from_definition
 from safe.utilities.profiling import profile
 from safe.utilities.pivot_table import FlatTable
 
@@ -30,7 +31,17 @@ __revision__ = '$Format:%H$'
 
 @profile
 def impact_summary(source, target, callback=None):
-    """Compute the summary from the layer_to_aggregate into the aggregate hazard.
+    """Compute the summary from the source layer to the target layer.
+
+    Source layer :
+    |exp_id|exp_class|haz_id|haz_class|aggr_id|aggr_name|affected|extra*|
+
+    Target layer :
+    | aggr_id | aggr_name | haz_id | haz_class | extra* |
+
+    Output layer :
+    |aggr_id| aggr_name|haz_id|haz_class|affected|extra*|count ber exposure*|
+
 
     :param source: The layer to aggregate vector layer.
     :type source: QgsVectorLayer
@@ -110,17 +121,18 @@ def impact_summary(source, target, callback=None):
     shift = target.fields().count()
 
     for column in unique_exposure:
-        field = QgsField(exposure_count_field['field_name'] % column)
-        field.setType(exposure_count_field['type'])
-        field.setLength(exposure_count_field['length'])
-        field.setPrecision(exposure_count_field['precision'])
+        if not column or isinstance(column, QPyNullVariant):
+            column = 'NULL'
+        field = create_field_from_definition(exposure_count_field, column)
         target.addAttribute(field)
+        key = exposure_count_field['key'] % column
+        value = exposure_count_field['field_name'] % column
+        target.keywords['inasafe_fields'][key] = value
 
-    field = QgsField(total_field['field_name'])
-    field.setType(total_field['type'])
-    field.setLength(total_field['length'])
-    field.setPrecision(total_field['precision'])
+    field = create_field_from_definition(total_field)
     target.addAttribute(field)
+    target.keywords['inasafe_fields'][total_field['key']] = (
+        total_field['field_name'])
 
     flat_table = FlatTable('aggregation_id', 'hazard_id', 'exposure_class')
 
@@ -133,11 +145,17 @@ def impact_summary(source, target, callback=None):
         else:
             value = 1
 
+        aggregation_value = f[aggregation_id]
+        hazard_value = f[hazard_id]
+        exposure_value = f[exposure_class]
+        if not exposure_value or isinstance(exposure_value, QPyNullVariant):
+            exposure_value = 'NULL'
+
         flat_table.add_value(
             value,
-            aggregation_id=f[aggregation_id],
-            hazard_id=f[hazard_id],
-            exposure_class=f[exposure_class]
+            aggregation_id=aggregation_value,
+            hazard_id=hazard_value,
+            exposure_class=exposure_value
         )
 
     for area in target.getFeatures(request):
@@ -157,15 +175,6 @@ def impact_summary(source, target, callback=None):
             area.id(), shift + len(unique_exposure), total)
 
     target.commitChanges()
-
-    # Todo add keywords for these new fields
-    target.keywords['inasafe_fields'][total_field['key']] = (
-        total_field['field_name'])
-
-    for column in unique_exposure:
-        key = exposure_count_field['key'] % column
-        value = exposure_count_field['field_name'] % column
-        target.keywords['inasafe_fields'][key] = value
 
     target.keywords['title'] = output_layer_name
 
