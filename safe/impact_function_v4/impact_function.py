@@ -26,6 +26,7 @@ from safe.gisv4.vector.union import union
 from safe.gisv4.vector.clip import clip
 from safe.gisv4.vector.smart_clip import smart_clip
 from safe.gisv4.vector.summary_1_impact import impact_summary
+from safe.gisv4.vector.summary_3_analysis import analysis_summary
 from safe.gisv4.vector.update_value_map import update_value_map
 from safe.gisv4.raster.reclassify import reclassify as reclassify_raster
 from safe.gisv4.raster.polygonize import polygonize
@@ -594,7 +595,7 @@ class ImpactFunction(object):
     @profile
     def _run(self):
         """Internal function to run the impact function with profiling."""
-        step_count = 8
+        step_count = len(analysis_steps)
         self.callback(0, step_count, analysis_steps['initialisation'])
 
         # Set a unique name for this impact
@@ -654,24 +655,41 @@ class ImpactFunction(object):
         self.callback(6, step_count, analysis_steps['combine_hazard_exposure'])
         self.intersect_exposure_and_aggregate_hazard()
 
-        # Post Processor
+        self._performance_log = profiling_log()
         self.callback(7, step_count, analysis_steps['post_processing'])
         if self._impact:
             self._performance_log = profiling_log()
+            # We post process the impact layer
             self.post_process(self._impact)
-
-            self.datastore.add_layer(self._impact, 'impact')
-
-            self.set_state_process(
-                'impact function',
-                'Aggregate the impact summary')
-            self._aggregate_hazard = impact_summary(
-                self._impact, self.aggregate_hazard_impacted)
         else:
-            # We do not want to post process twice.
-            self.post_process(self._aggregate_hazard)
+            if self._aggregate_hazard:
+                # We post process the aggregate hazard. (raster exposure).
+                self.post_process(self._aggregate_hazard)
+            else:
+                # We post process the aggregation (EQ raster or pop raster).
+                self.post_process(self.aggregation)
 
-        self.datastore.add_layer(self._aggregate_hazard, 'aggregate-hazard')
+        self._performance_log = profiling_log()
+        self.callback(8, step_count, analysis_steps['summary_calculation'])
+        self.summary_calculation()
+
+        # End of the impact function, we can add layers to the datastore.
+        # We replace memory layers by the real layer from the datastore.
+        if self.impact:
+            _, name = self.datastore.add_layer(self._impact, 'impact')
+            self._impact = self.datastore.layer(name)
+
+        if self.aggregate_hazard_impacted:
+            _, name = self.datastore.add_layer(
+                self._aggregate_hazard, 'aggregate-hazard')
+            self._aggregate_hazard = self.datastore.layer(name)
+
+        _, name = self.datastore.add_layer(
+            self._aggregation, 'aggregation')
+        self._aggregation = self.datastore.layer(name)
+
+        _, name = self.datastore.add_layer(self.analysis_layer, 'analysis')
+        self._analysis_impacted = self.datastore.layer(name)
 
         # Get the profiling log
         self._performance_log = profiling_log()
@@ -914,6 +932,9 @@ class ImpactFunction(object):
             if self.debug_mode:
                 self.debug_layer(self._impact)
 
+        if self._impact:
+            self._impact.keywords['title'] = 'impact'
+
     @profile
     def post_process(self, layer):
         """More process after getting the impact layer with data.
@@ -929,6 +950,31 @@ class ImpactFunction(object):
                 layer,
                 post_processor)
             if result:
-                self.set_state_process(
-                    'post_processor',
-                    str('Post processor for %s' % post_processor['name']))
+                msg = str('Post processor for %s' % post_processor['name'])
+                self.set_state_process('post_processor', msg)
+                LOGGER.info(msg)
+            else:
+                LOGGER.info(post_processor_output)
+
+    def summary_calculation(self):
+        """Do the summary calculation."""
+
+        if self.impact:
+            self.set_state_process(
+                'impact function',
+                'Aggregate the impact summary')
+            self._aggregate_hazard = impact_summary(
+                self._impact, self.aggregate_hazard_impacted)
+
+        if self.aggregate_hazard_impacted:
+            self.set_state_process(
+                'impact function',
+                'Aggregate the aggregation summary')
+            # self._aggregate_hazard = impact_summary(
+            #     self._impact, self.aggregate_hazard_impacted)
+
+            self.set_state_process(
+                'impact function',
+                'Aggregate the analysis summary')
+            self._analysis_impacted = analysis_summary(
+                self.aggregate_hazard_impacted, self._analysis_impacted)

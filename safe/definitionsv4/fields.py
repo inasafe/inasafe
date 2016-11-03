@@ -527,9 +527,9 @@ total_field = {
 
 # Special dynamic field for each exposure type in the aggregate hazard table.
 exposure_count_field = {
-    'key': '%s_exposure_field',
+    'key': '%s_exposure_count_field',
     'name': tr('Total %s'),
-    'field_name': '%s_count',
+    'field_name': '%s_exposure_count',
     'type': QVariant.Double,
     'length': default_field_length,
     'precision': 2,
@@ -537,6 +537,27 @@ exposure_count_field = {
     'description': tr(
         'Attribute where the total of the count is located.'
     ),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+# Count for affected
+affected_count_field = {
+    'key': 'affected_count_field',
+    'name': tr('Affected count'),
+    'field_name': 'affected_count',
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': default_field_precision,
+    'absolute': True,
+    'description': tr(
+        'Count the number of affected features.'),
     'citations': [
         {
             'text': None,
@@ -582,6 +603,28 @@ analysis_name_field = {
             'link': None
         }
     ]
+}
+
+# Special dynamic field for each hazard class in analysis layer.
+hazard_count_field = {
+    'key': '%s_hazard_count_field',
+    'name': tr('Total %s'),
+    'field_name': '%s_hazard_count',
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': 2,
+    'absolute': True,
+    'description': tr(
+        'Attribute where the total of the count is located.'
+    ),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
 }
 
 exposure_fields = [

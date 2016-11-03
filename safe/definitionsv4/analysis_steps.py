@@ -143,6 +143,20 @@ analysis_steps = {
             }
         ]
     },
+    'summary_calculation': {
+        'key': 'summary',
+        'name': tr('Summary calculation'),
+        'description': tr(
+            'At the end of the analysis we compute the summary.'),
+        'icon': '.svg',
+        'icon_credits': 'Not specified',
+        'citations': [
+            {
+                'text': tr(''),
+                'link': ''
+            }
+        ]
+    },
     'profiling': {
         'key': 'profiling',
         'name': tr('Profiling'),
@@ -150,123 +164,6 @@ analysis_steps = {
             'At the end of the analysis we extract profiling data so that '
             'we can provide a detailed work log and also help you to '
             'identify any bottlenecks in the processing flow.'),
-        'icon': '.svg',
-        'icon_credits': 'Not specified',
-        'citations': [
-            {
-                'text': tr(''),
-                'link': ''
-            }
-        ]
-    },
-    '': {
-        'key': '',
-        'name': tr(''),
-        'description': tr(''),
-        'icon': '.svg',
-        'icon_credits': 'Not specified',
-        'citations': [
-            {
-                'text': tr(''),
-                'link': ''
-            }
-        ]
-    },
-    '': {
-        'key': '',
-        'name': tr(''),
-        'description': tr(''),
-        'icon': '.svg',
-        'icon_credits': 'Not specified',
-        'citations': [
-            {
-                'text': tr(''),
-                'link': ''
-            }
-        ]
-    },
-    '': {
-        'key': '',
-        'name': tr(''),
-        'description': tr(''),
-        'icon': '.svg',
-        'icon_credits': 'Not specified',
-        'citations': [
-            {
-                'text': tr(''),
-                'link': ''
-            }
-        ]
-    },
-    '': {
-        'key': '',
-        'name': tr(''),
-        'description': tr(''),
-        'icon': '.svg',
-        'icon_credits': 'Not specified',
-        'citations': [
-            {
-                'text': tr(''),
-                'link': ''
-            }
-        ]
-    },
-    '': {
-        'key': '',
-        'name': tr(''),
-        'description': tr(''),
-        'icon': '.svg',
-        'icon_credits': 'Not specified',
-        'citations': [
-            {
-                'text': tr(''),
-                'link': ''
-            }
-        ]
-    },
-    '': {
-        'key': '',
-        'name': tr(''),
-        'description': tr(''),
-        'icon': '.svg',
-        'icon_credits': 'Not specified',
-        'citations': [
-            {
-                'text': tr(''),
-                'link': ''
-            }
-        ]
-    },
-    '': {
-        'key': '',
-        'name': tr(''),
-        'description': tr(''),
-        'icon': '.svg',
-        'icon_credits': 'Not specified',
-        'citations': [
-            {
-                'text': tr(''),
-                'link': ''
-            }
-        ]
-    },
-    '': {
-        'key': '',
-        'name': tr(''),
-        'description': tr(''),
-        'icon': '.svg',
-        'icon_credits': 'Not specified',
-        'citations': [
-            {
-                'text': tr(''),
-                'link': ''
-            }
-        ]
-    },
-    '': {
-        'key': '',
-        'name': tr(''),
-        'description': tr(''),
         'icon': '.svg',
         'icon_credits': 'Not specified',
         'citations': [

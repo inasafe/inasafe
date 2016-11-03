@@ -10,7 +10,7 @@ from qgis.core import QgsRasterLayer
 from qgis.analysis import QgsZonalStatistics
 
 from safe.gisv4.vector.tools import copy_layer, create_memory_layer
-from safe.definitionsv4.fields import population_count_field
+from safe.definitionsv4.fields import total_field
 from safe.definitionsv4.processing_steps import zonal_stats_steps
 from safe.utilities.profiling import profile
 from safe.utilities.i18n import tr
@@ -62,7 +62,7 @@ def zonal_stats(raster, vector, callback=None):
 
     layer.keywords = raster.keywords.copy()
     layer.keywords['inasafe_fields'] = vector.keywords['inasafe_fields'].copy()
-    key = population_count_field['key']
+    key = total_field['key']
     layer.keywords['inasafe_fields'][key] = 'exposure_sum'
 
     layer.keywords['exposure_keywords'] = raster.keywords

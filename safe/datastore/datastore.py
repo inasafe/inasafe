@@ -15,6 +15,7 @@ from abc import ABCMeta, abstractmethod
 from qgis.core import QgsMapLayer, QgsRasterLayer, QgsVectorLayer
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.i18n import tr
+from safe.test.utilities import monkey_patch_keywords
 
 
 class DataStore(object):
@@ -127,14 +128,14 @@ class DataStore(object):
         """
         uri = self.layer_uri(layer_name)
         layer = QgsVectorLayer(uri, layer_name, 'ogr')
-        if layer.isValid():
-            return layer
-        else:
+        if not layer.isValid():
             layer = QgsRasterLayer(uri, layer_name)
-            if layer.isValid():
-                return layer
-            else:
-                return None
+            if not layer.isValid():
+                return False
+
+        monkey_patch_keywords(layer)
+
+        return layer
 
     @abstractmethod
     def is_writable(self):
