@@ -19,6 +19,11 @@ summary_1_impact_steps = {
     'output_layer_name': 'aggregate_hazard',
 }
 
+summary_2_aggregation_steps = {
+    'step_name': tr('Aggregation results'),
+    'output_layer_name': 'aggregation',
+}
+
 summary_3_aggregate_hazard_steps = {
     'step_name': tr('Aggregate hazard results'),
     'output_layer_name': 'analysis',

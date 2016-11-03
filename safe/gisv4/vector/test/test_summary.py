@@ -9,8 +9,13 @@ from safe.test.utilities import (
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.definitionsv4.fields import (
-    total_field, exposure_class_field, hazard_class_field)
+    total_field,
+    exposure_class_field,
+    hazard_class_field,
+    exposure_count_field
+)
 from safe.gisv4.vector.summary_1_impact import impact_summary
+from safe.gisv4.vector.summary_2_aggregate_hazard import aggregation_summary
 from safe.gisv4.vector.summary_3_analysis import analysis_summary
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -62,6 +67,41 @@ class TestAggregateSummary(unittest.TestCase):
         self.assertEqual(
             layer.fields().count(),
             len(unique_exposure) + number_of_fields + 2
+        )
+
+    def test_aggregation_summary(self):
+        """Test we can aggregate the aggregate hazard to the aggregation."""
+
+        aggregate_hazard = load_test_vector_layer(
+            'gisv4',
+            'intermediate',
+            'aggregate_classified_hazard_summary.geojson')
+
+        aggregation = load_test_vector_layer(
+            'gisv4',
+            'aggregation',
+            'aggregation_cleaned.geojson',
+            clone=True)
+
+        number_of_fields = aggregation.fields().count()
+
+        layer = aggregation_summary(aggregate_hazard, aggregation)
+
+        result = check_inasafe_fields(layer)
+        self.assertTrue(result[0], result[1])
+
+        # I need the number of unique exposure
+        pattern = exposure_count_field['key']
+        pattern = pattern.replace('%s', '')
+        unique_exposure = []
+        inasafe_fields = aggregate_hazard.keywords['inasafe_fields']
+        for key, name_field in inasafe_fields.iteritems():
+            if key.endswith(pattern):
+                unique_exposure.append(key.replace(pattern, ''))
+
+        self.assertEqual(
+            layer.fields().count(),
+            len(unique_exposure) + number_of_fields + 1
         )
 
     def test_analysis_summary(self):
