@@ -51,7 +51,7 @@ for key, value in list(wkb_type_groups.items()):
 
 @profile
 def create_memory_layer(
-        layer_name, geometry, coordinate_reference_system, fields=None):
+        layer_name, geometry, coordinate_reference_system=None, fields=None):
     """Create a vector memory layer.
 
     :param layer_name: The name of the layer.
@@ -76,14 +76,20 @@ def create_memory_layer(
         type_string = 'MultiLineString'
     elif geometry == QGis.Polygon:
         type_string = 'MultiPolygon'
+    elif geometry == QGis.NoGeometry:
+        type_string = 'none'
     else:
         raise MemoryLayerCreationError(
             'Layer is whether Point nor Line nor Polygon, I got %s' % geometry)
 
-    crs = coordinate_reference_system.authid().lower()
-    uri = '%s?crs=%s&index=yes&uuid=%s' % (type_string, crs, str(uuid4()))
+    uri = '%s?index=yes&uuid=%s' % (type_string, str(uuid4()))
+    if coordinate_reference_system:
+        crs = coordinate_reference_system.authid().lower()
+        uri += '&crs=%s' % crs
     memory_layer = QgsVectorLayer(uri, layer_name, 'memory')
-    memory_layer.keywords = {}
+    memory_layer.keywords = {
+        'inasafe_fields': {}
+    }
 
     if fields:
         data_provider = memory_layer.dataProvider()
@@ -226,3 +232,25 @@ def create_field_from_definition(field_definition, name=None):
     field.setLength(field_definition['length'])
     field.setPrecision(field_definition['precision'])
     return field
+
+
+def read_dynamic_inasafe_field(inasafe_fields, dynamic_field):
+    """Helper to read inasafe_fields using a dynamic field.
+
+    :param inasafe_fields: inasafe_fields keywords to use.
+    :type inasafe_fields: dict
+
+    :param dynamic_field: The dynamic field to use.
+    :type dynamic_field: safe.definitions.fields
+
+    :return: A list of unique value used in this dynamic field.
+    :return: list
+    """
+    pattern = dynamic_field['key']
+    pattern = pattern.replace('%s', '')
+    unique_exposure = []
+    for key, name_field in inasafe_fields.iteritems():
+        if key.endswith(pattern):
+            unique_exposure.append(key.replace(pattern, ''))
+
+    return unique_exposure
