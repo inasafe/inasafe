@@ -326,6 +326,9 @@ def load_path_vector_layer(path, **kwargs):
 
     .. versionadded:: 4.0
     """
+    if not exists(path):
+        raise Exception('%s do not exist.' % path)
+
     name = splitext(basename(path))[0]
     extension = splitext(path)[1]
 
@@ -347,7 +350,14 @@ def load_path_vector_layer(path, **kwargs):
                 target_path = join(target_directory, name + ext)
                 shutil.copy2(src_path, target_path)
 
-    layer = QgsVectorLayer(path, name, 'ogr')
+    if path.endswith('.csv'):
+        layer = QgsVectorLayer(path, name, 'delimitedtext')
+    else:
+        layer = QgsVectorLayer(path, name, 'ogr')
+
+    if not layer.isValid():
+        raise Exception('%s is not a valid layer.' % name)
+
     monkey_patch_keywords(layer)
 
     if kwargs.get('clone_to_memory', False):
@@ -448,6 +458,9 @@ def load_path_raster_layer(path, **kwargs):
 
     .. versionadded:: 4.0
     """
+    if not exists(path):
+        raise Exception('%s do not exist.' % path)
+
     name = splitext(basename(path))[0]
     extension = splitext(path)[1]
 
@@ -475,6 +488,9 @@ def load_path_raster_layer(path, **kwargs):
 
     name = os.path.basename(path)
     layer = QgsRasterLayer(path, name)
+
+    if not layer.isValid():
+        raise Exception('%s is not a valid layer.' % name)
 
     monkey_patch_keywords(layer)
 
