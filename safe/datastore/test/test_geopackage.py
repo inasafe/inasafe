@@ -20,6 +20,7 @@ from osgeo import gdal
 
 from safe.test.utilities import (
     get_qgis_app,
+    load_test_vector_layer,
     standard_data_path)
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -97,6 +98,13 @@ class TestGeoPackage(unittest.TestCase):
         layer_name = 'big raster flood'
         self.assertTrue(data_store.add_layer(raster_layer, layer_name))
         self.assertEqual(len(data_store.layers()), 4)
+
+        # Test layer without geometry
+        layer = load_test_vector_layer(
+            'gisv4', 'impacts', 'exposure_breakdown_tabular.csv')
+        tabular_layer_name = 'breakdown'
+        result = data_store.add_layer(layer, tabular_layer_name)
+        self.assertTrue(result[0])
 
     @unittest.skipIf(
         int(gdal.VersionInfo('VERSION_NUM')) < 2000000,
