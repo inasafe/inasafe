@@ -64,6 +64,12 @@ class StepKwField(WizardStep, FORM_CLASS):
                 # Classified data
                 return self.parent.step_kw_classify
 
+        if self.parent.step_kw_layermode. \
+                selected_layermode() == layer_mode_continuous:
+            if self.parent.step_kw_classification. \
+                    classifications_for_layer():
+                return self.parent.step_kw_threshold
+
         # Any other case
         return self.parent.step_kw_inasafe_fields
 

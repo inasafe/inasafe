@@ -59,21 +59,17 @@ class StepKwLayerMode(WizardStep, FORM_CLASS):
         """
         if self.parent.step_kw_layermode.\
                 selected_layermode() == layer_mode_classified:
-            if is_point_layer(self.parent.layer) \
-                    and self.parent.step_kw_purpose.\
-                    selected_purpose() == layer_purpose_hazard:
-                # Skip FIELD and CLASSIFICATION for point volcanos
-                new_step = self.parent.step_kw_inasafe_fields
-            elif self.parent.step_kw_classification.\
+            if self.parent.step_kw_classification.\
                     classifications_for_layer():
                 new_step = self.parent.step_kw_classification
             elif is_raster_layer(self.parent.layer):
                 new_step = self.parent.step_kw_inasafe_fields
             else:
                 new_step = self.parent.step_kw_field
-        else:
-            # CONTINUOUS DATA, ALL GEOMETRIES
-            new_step = self.parent.step_kw_unit
+        elif self.parent.step_kw_layermode. \
+                selected_layermode() == layer_mode_continuous:
+            pass
+
         return new_step
 
     # noinspection PyPep8Naming
