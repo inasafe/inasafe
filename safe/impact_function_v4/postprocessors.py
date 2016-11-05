@@ -17,6 +17,23 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
+def evaluate_formula(formula, variables):
+    """Very simple formula evaluator. Beware the security.
+
+    :param formula: A simple formula.
+    :type formula: str
+
+    :param variables: A collection of variable (key and value).
+    :type variables: dict
+
+    :returns: The result of the formula execution.
+    :rtype: float, int
+    """
+    for key, value in variables.items():
+        formula = formula.replace(key, str(value))
+    return eval(formula)
+
+
 @profile
 def run_single_post_processor(layer, post_processor):
     """Run single post processor.
@@ -160,7 +177,15 @@ def run_single_post_processor(layer, post_processor):
                 # Fill up the input from geometry property
 
                 # Evaluate the function
-                post_processor_result = output_value['function'](**parameters)
+                python_function = output_value.get('function')
+                if python_function:
+                    # Launch the python function
+                    post_processor_result = python_function(**parameters)
+                else:
+                    # Evaluate the function
+                    formula = output_value['formula']
+                    post_processor_result = evaluate_formula(
+                        formula, parameters)
 
                 # The affected postprocessor returns a boolean.
                 if isinstance(post_processor_result, bool):
