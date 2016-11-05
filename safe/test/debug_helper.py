@@ -14,6 +14,7 @@ from tempfile import mkdtemp
 from PyQt4.QtCore import QVariant
 from qgis.core import (
     QgsMapLayerRegistry,
+    QGis,
     QgsVectorLayer,
     QgsFeature,
     QgsField,
@@ -94,6 +95,29 @@ def save_layer_to_file(layer):
     return data_store.layer_uri(result[1])
 
 
+def pretty_table(iterable, header):
+    """Copy/paste from http://stackoverflow.com/a/40426743/2395485"""
+    max_len = [len(x) for x in header]
+    for row in iterable:
+        row = [row] if type(row) not in (list, tuple) else row
+        for index, col in enumerate(row):
+            if max_len[index] < len(str(col)):
+                max_len[index] = len(str(col))
+    output = '-' * (sum(max_len) + 1) + '\n'
+    output += '|' + ''.join(
+        [h + ' ' * (l - len(h)) + '|' for h, l in zip(header, max_len)]) + '\n'
+    output += '-' * (sum(max_len) + 1) + '\n'
+    for row in iterable:
+        row = [row] if type(row) not in (list, tuple) else row
+        output += '|' + ''.join(
+            [
+                str(c) + ' ' * (
+                    l - len(str(c))) + '|' for c, l in zip(
+                row, max_len)]) + '\n'
+    output += '-' * (sum(max_len) + 1) + '\n'
+    return output
+
+
 def print_attribute_table(layer, limit=-1):
     """Print the attribute table in the console.
 
@@ -103,17 +127,25 @@ def print_attribute_table(layer, limit=-1):
     :param limit: The limit in the query.
     :type limit: integer
     """
-    names = ['geom']
-    names.extend([f.name() for f in layer.fields().toList()])
-    print names
+    if layer.wkbType() == QGis.WKBNoGeometry:
+        geometry = False
+    else:
+        geometry = True
 
-    types = ['geom']
-    types.extend([f.type() for f in layer.fields().toList()])
-    print types
+    headers = []
+    if geometry:
+        headers.append('geom')
+    headers.extend(
+        [f.name() + ' : ' + str(f.type()) for f in layer.fields().toList()])
 
     request = QgsFeatureRequest()
     request.setLimit(limit)
+    data = []
     for feature in layer.getFeatures(request):
-        attributes = [feature.geometry().type()]
+        attributes = []
+        if geometry:
+            attributes.append(feature.geometry().type())
         attributes.extend(feature.attributes())
-        print attributes
+        data.append(attributes)
+
+    print pretty_table(data, headers)
