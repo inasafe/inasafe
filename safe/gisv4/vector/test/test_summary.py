@@ -15,10 +15,11 @@ from safe.definitionsv4.fields import (
     exposure_count_field
 )
 from safe.gisv4.vector.tools import read_dynamic_inasafe_field
-from safe.gisv4.vector.summary_1_impact import impact_summary
-from safe.gisv4.vector.summary_2_aggregate_hazard import aggregation_summary
+from safe.gisv4.vector.summary_1_aggregate_hazard import (
+    aggregate_hazard_summary)
+from safe.gisv4.vector.summary_2_aggregation import aggregation_summary
 from safe.gisv4.vector.summary_3_analysis import analysis_summary
-from safe.gisv4.vector.summary_4_exposure_detailed import (
+from safe.gisv4.vector.summary_4_exposure_breakdown import (
     exposure_type_breakdown)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -55,7 +56,7 @@ class TestAggregateSummary(unittest.TestCase):
 
         number_of_fields = aggregate_hazard.fields().count()
 
-        layer = impact_summary(impact, aggregate_hazard)
+        layer = aggregate_hazard_summary(impact, aggregate_hazard)
 
         self.assertIn(total_field['key'], layer.keywords['inasafe_fields'])
 
