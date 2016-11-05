@@ -14,9 +14,12 @@ from safe.definitionsv4.fields import (
     hazard_class_field,
     exposure_count_field
 )
+from safe.gisv4.vector.tools import read_dynamic_inasafe_field
 from safe.gisv4.vector.summary_1_impact import impact_summary
 from safe.gisv4.vector.summary_2_aggregate_hazard import aggregation_summary
 from safe.gisv4.vector.summary_3_analysis import analysis_summary
+from safe.gisv4.vector.summary_4_exposure_detailed import (
+    exposure_type_breakdown)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -138,3 +141,34 @@ class TestAggregateSummary(unittest.TestCase):
             layer.fields().count(),
             len(unique_hazard) + number_of_fields + 2
         )
+
+    def test_exposure_breakdown_summary(self):
+        """Test we can produce the breakdown for the exposure type."""
+
+        aggregate_hazard = load_test_vector_layer(
+            'gisv4',
+            'intermediate',
+            'aggregate_classified_hazard_summary.geojson')
+
+        aggregate_hazard.keywords['hazard_keywords'] = {
+            'classification': 'generic_hazard_classes'
+        }
+
+        # I need the number of unique exposure
+        unique_exposure = read_dynamic_inasafe_field(
+            aggregate_hazard.keywords['inasafe_fields'],
+            exposure_count_field)
+
+        # I need the number of unique hazard
+        fields = aggregate_hazard.keywords['inasafe_fields']
+        hazard_class = fields[hazard_class_field['key']]
+        hazard_class_index = aggregate_hazard.fieldNameIndex(hazard_class)
+        unique_hazard = aggregate_hazard.uniqueValues(hazard_class_index)
+
+        layer = exposure_type_breakdown(aggregate_hazard)
+
+        self.assertEqual(len(unique_exposure), layer.featureCount())
+
+        # We should one column per hazard, one for the exposure, one for total
+        # and one for total affected.
+        self.assertEqual(layer.fields().count(), len(unique_hazard) + 3)

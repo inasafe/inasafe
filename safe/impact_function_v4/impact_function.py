@@ -28,6 +28,8 @@ from safe.gisv4.vector.smart_clip import smart_clip
 from safe.gisv4.vector.summary_1_impact import impact_summary
 from safe.gisv4.vector.summary_2_aggregate_hazard import aggregation_summary
 from safe.gisv4.vector.summary_3_analysis import analysis_summary
+from safe.gisv4.vector.summary_4_exposure_detailed import (
+    exposure_type_breakdown)
 from safe.gisv4.vector.update_value_map import update_value_map
 from safe.gisv4.raster.reclassify import reclassify as reclassify_raster
 from safe.gisv4.raster.polygonize import polygonize
@@ -77,6 +79,7 @@ class ImpactFunction(object):
         self._aggregate_hazard = None
         self._aggregation_impacted = None
         self._analysis_impacted = None
+        self._exposure_breakdown = None
 
         # Use debug to store intermediate results
         self.debug_mode = False
@@ -309,6 +312,17 @@ class ImpactFunction(object):
         :rtype: QgsVectorLayer
         """
         return self._analysis_impacted
+
+    @property
+    def exposure_breakdown(self):
+        """Return the exposure breakdown if available.
+
+        It's a QgsVectorLayer without geometry.
+
+        :returns: A vector layer.
+        :rtype: QgsVectorLayer
+        """
+        return self._exposure_breakdown
 
     @property
     def requested_extent(self):
@@ -685,6 +699,10 @@ class ImpactFunction(object):
                 self._aggregate_hazard, 'aggregate-hazard')
             self._aggregate_hazard = self.datastore.layer(name)
 
+            _, name = self.datastore.add_layer(
+                self._exposure_breakdown, 'breakdown')
+            self._exposure_breakdown = self.datastore.layer(name)
+
         _, name = self.datastore.add_layer(
             self._aggregation, 'aggregation')
         self._aggregation = self.datastore.layer(name)
@@ -979,3 +997,9 @@ class ImpactFunction(object):
                 'Aggregate the analysis summary')
             self._analysis_impacted = analysis_summary(
                 self.aggregate_hazard_impacted, self._analysis_impacted)
+
+            self.set_state_process(
+                'impact function',
+                'Build the exposure breakdown')
+            self._exposure_breakdown = exposure_type_breakdown(
+                self._aggregate_hazard)

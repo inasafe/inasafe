@@ -534,7 +534,7 @@ total_affected_field = {
     'precision': 2,
     'absolute': False,
     'description': tr(
-        'Attribute where the total of the total affected is located.'
+        'Attribute where the total affected is located.'
     ),
     'citations': [
         {
