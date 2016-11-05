@@ -15,13 +15,12 @@ from safe.definitionsv4.fields import (
     exposure_type_field,
     total_field,
     total_affected_field,
-    affected_count_field,
     affected_field,
     hazard_count_field,
     exposure_count_field,
 )
 from safe.definitionsv4.processing_steps import (
-    summary_4_detailed_report_steps)
+    summary_4_exposure_breakdown_steps)
 from safe.definitionsv4.post_processors import post_processor_affected_function
 from safe.gisv4.vector.tools import (
     create_field_from_definition,
@@ -37,17 +36,17 @@ __revision__ = '$Format:%H$'
 
 
 @profile
-def exposure_type_breakdown(source, callback=None):
+def exposure_type_breakdown(aggregate_hazard, callback=None):
     """Compute the summary from the aggregate hazard to analysis.
 
     Source layer :
-    | haz_id | haz_class | aggr_id | aggr_name | expo_id | exp_type |
+    | haz_id | haz_class | aggr_id | aggr_name | exposure_count |
 
     Output layer :
     | exp_type | count_hazard_class | total |
 
-    :param source: The layer to aggregate vector layer.
-    :type source: QgsVectorLayer
+    :param aggregate_hazard: The layer to aggregate vector layer.
+    :type aggregate_hazard: QgsVectorLayer
 
     :param callback: A function to all to indicate progress. The function
         should accept params 'current' (int), 'maximum' (int) and 'step' (str).
@@ -59,10 +58,10 @@ def exposure_type_breakdown(source, callback=None):
 
     .. versionadded:: 4.0
     """
-    output_layer_name = summary_4_detailed_report_steps['output_layer_name']
-    processing_step = summary_4_detailed_report_steps['step_name']
+    output_layer_name = summary_4_exposure_breakdown_steps['output_layer_name']
+    processing_step = summary_4_exposure_breakdown_steps['step_name']
 
-    source_fields = source.keywords['inasafe_fields']
+    source_fields = aggregate_hazard.keywords['inasafe_fields']
 
     source_compulsory_fields = [
         aggregation_id_field,
@@ -80,8 +79,8 @@ def exposure_type_breakdown(source, callback=None):
             raise InvalidKeywordsForProcessingAlgorithm(msg)
 
     hazard_class = source_fields[hazard_class_field['key']]
-    hazard_class_index = source.fieldNameIndex(hazard_class)
-    unique_hazard = source.uniqueValues(hazard_class_index)
+    hazard_class_index = aggregate_hazard.fieldNameIndex(hazard_class)
+    unique_hazard = aggregate_hazard.uniqueValues(hazard_class_index)
 
     unique_exposure = read_dynamic_inasafe_field(
         source_fields, exposure_count_field)
@@ -90,7 +89,7 @@ def exposure_type_breakdown(source, callback=None):
 
     request = QgsFeatureRequest()
     request.setFlags(QgsFeatureRequest.NoGeometry)
-    for area in source.getFeatures():
+    for area in aggregate_hazard.getFeatures():
         hazard_value = area[hazard_class_index]
         for exposure in unique_exposure:
             key_name = exposure_count_field['key'] % exposure
@@ -111,7 +110,7 @@ def exposure_type_breakdown(source, callback=None):
     tabular.keywords['inasafe_fields'][exposure_type_field['key']] = (
         exposure_type_field['field_name'])
 
-    classification = source.keywords['hazard_keywords']['classification']
+    classification = aggregate_hazard.keywords['hazard_keywords']['classification']
 
     hazard_affected = {}
     for hazard_class in unique_hazard:

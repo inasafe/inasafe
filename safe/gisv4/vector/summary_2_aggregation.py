@@ -32,7 +32,7 @@ __revision__ = '$Format:%H$'
 
 
 @profile
-def aggregation_summary(source, target, callback=None):
+def aggregation_summary(aggregate_hazard, aggregation, callback=None):
     """Compute the summary from the aggregate hazard to the analysos layer.
 
     Source layer :
@@ -44,18 +44,18 @@ def aggregation_summary(source, target, callback=None):
     Output layer :
     | aggr_id | aggr_name | count of affected features per exposure type
 
-    :param source: The layer to aggregate vector layer.
-    :type source: QgsVectorLayer
+    :param aggregate_hazard: The layer to aggregate vector layer.
+    :type aggregate_hazard: QgsVectorLayer
 
-    :param target: The target vector layer where to write statistics.
-    :type target: QgsVectorLayer
+    :param aggregation: The aggregation vector layer where to write statistics.
+    :type aggregation: QgsVectorLayer
 
     :param callback: A function to all to indicate progress. The function
         should accept params 'current' (int), 'maximum' (int) and 'step' (str).
         Defaults to None.
     :type callback: function
 
-    :return: The new target layer with summary.
+    :return: The new aggregation layer with summary.
     :rtype: QgsVectorLayer
 
     .. versionadded:: 4.0
@@ -63,8 +63,8 @@ def aggregation_summary(source, target, callback=None):
     output_layer_name = summary_2_aggregation_steps['output_layer_name']
     processing_step = summary_2_aggregation_steps['step_name']
 
-    source_fields = source.keywords['inasafe_fields']
-    target_fields = target.keywords['inasafe_fields']
+    source_fields = aggregate_hazard.keywords['inasafe_fields']
+    target_fields = aggregation.keywords['inasafe_fields']
 
     target_compulsory_fields = [
         aggregation_id_field,
@@ -107,7 +107,7 @@ def aggregation_summary(source, target, callback=None):
     expression = '\"%s\" = \'%s\'' % (
         affected_field['field_name'], tr('True'))
     request.setFilterExpression(expression)
-    for area in source.getFeatures(request):
+    for area in aggregate_hazard.getFeatures(request):
 
         for key, name_field in source_fields.iteritems():
             if key.endswith(pattern):
@@ -118,29 +118,29 @@ def aggregation_summary(source, target, callback=None):
                     exposure_class=key.replace(pattern, '')
                 )
 
-    shift = target.fields().count()
+    shift = aggregation.fields().count()
 
-    target.startEditing()
+    aggregation.startEditing()
 
     for column in unique_exposure:
         field = create_field_from_definition(
             affected_exposure_count_field, column)
-        target.addAttribute(field)
+        aggregation.addAttribute(field)
         key = affected_exposure_count_field['key'] % column
         value = affected_exposure_count_field['field_name'] % column
-        target.keywords['inasafe_fields'][key] = value
+        aggregation.keywords['inasafe_fields'][key] = value
 
     # Total field
     field = create_field_from_definition(total_affected_field)
-    target.addAttribute(field)
-    target.keywords['inasafe_fields'][total_affected_field['key']] = (
+    aggregation.addAttribute(field)
+    aggregation.keywords['inasafe_fields'][total_affected_field['key']] = (
         total_affected_field['field_name'])
 
     aggregation_index = target_fields[aggregation_id_field['key']]
 
     request = QgsFeatureRequest()
     request.setFlags(QgsFeatureRequest.NoGeometry)
-    for area in target.getFeatures(request):
+    for area in aggregation.getFeatures(request):
         aggregation_value = area[aggregation_index]
         total = 0
         for i, val in enumerate(unique_exposure):
@@ -149,13 +149,13 @@ def aggregation_summary(source, target, callback=None):
                 exposure_class=val
             )
             total += sum
-            target.changeAttributeValue(area.id(), shift + i, sum)
+            aggregation.changeAttributeValue(area.id(), shift + i, sum)
 
-        target.changeAttributeValue(
+        aggregation.changeAttributeValue(
             area.id(), shift + len(unique_exposure), total)
 
-    target.commitChanges()
+    aggregation.commitChanges()
 
-    target.keywords['title'] = output_layer_name
+    aggregation.keywords['title'] = output_layer_name
 
-    return target
+    return aggregation

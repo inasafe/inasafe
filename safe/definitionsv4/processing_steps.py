@@ -14,23 +14,23 @@ __revision__ = '$Format:%H$'
 Vector package
 """
 
-summary_1_impact_steps = {
-    'step_name': tr('Aggregate impact results'),
+summary_1_aggregate_hazard_steps = {
+    'step_name': tr('Compute aggregate hazard results'),
     'output_layer_name': 'aggregate_hazard',
 }
 
 summary_2_aggregation_steps = {
-    'step_name': tr('Aggregation results'),
+    'step_name': tr('Compute aggregation results'),
     'output_layer_name': 'aggregation',
 }
 
-summary_3_aggregate_hazard_steps = {
-    'step_name': tr('Aggregate hazard results'),
+summary_3_analysis_steps = {
+    'step_name': tr('Compute analysis results'),
     'output_layer_name': 'analysis',
 }
 
-summary_4_detailed_report_steps = {
-    'step_name': tr('Breakdown per exposure type'),
+summary_4_exposure_breakdown_steps = {
+    'step_name': tr('Compute exposure breakdown'),
     'output_layer_name': 'exposure_breakdown',
 }
 
