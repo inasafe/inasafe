@@ -257,11 +257,11 @@ post_processor_affected = {
 }
 
 post_processors = [
+    post_processor_size,
     post_processor_gender,
     post_processor_youth,
     post_processor_adult,
     post_processor_elderly,
-    post_processor_size,
     post_processor_size_rate,
     post_processor_affected,
 ]

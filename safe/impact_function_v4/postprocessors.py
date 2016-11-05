@@ -50,161 +50,153 @@ def run_single_post_processor(layer, post_processor):
     :returns: Tuple with True if success, else False with an error message.
     :rtype: (bool, str)
     """
-    valid, message = enough_input(layer, post_processor['input'])
-    if valid:
 
-        if not layer.editBuffer():
+    if not layer.editBuffer():
 
-            # Turn on the editing mode.
-            if not layer.startEditing():
-                msg = tr(
-                    'The impact layer could not start the editing mode.')
-                return False, msg
+        # Turn on the editing mode.
+        if not layer.startEditing():
+            msg = tr('The impact layer could not start the editing mode.')
+            return False, msg
 
-        # Calculate based on formula
-        # Iterate all possible output
-        for output_key, output_value in post_processor['output'].items():
+    # Calculate based on formula
+    # Iterate all possible output
+    for output_key, output_value in post_processor['output'].items():
 
-            # Get output attribute name
-            key = output_value['value']['key']
-            output_field_name = output_value['value']['field_name']
-            layer.keywords['inasafe_fields'][key] = output_field_name
+        # Get output attribute name
+        key = output_value['value']['key']
+        output_field_name = output_value['value']['field_name']
+        layer.keywords['inasafe_fields'][key] = output_field_name
 
-            # If there is already the output field, don't proceed
-            if layer.fieldNameIndex(output_field_name) > -1:
-                msg = tr(
-                    'The field name %s already exists.'
-                    % output_field_name)
-                layer.rollBack()
-                return False, msg
+        # If there is already the output field, don't proceed
+        if layer.fieldNameIndex(output_field_name) > -1:
+            msg = tr(
+                'The field name %s already exists.'
+                % output_field_name)
+            layer.rollBack()
+            return False, msg
 
-            # Add output attribute name to the layer
-            field = create_field_from_definition(output_value['value'])
-            result = layer.addAttribute(field)
-            if not result:
-                msg = tr(
-                    'Error while creating the field %s.'
-                    % output_field_name)
-                layer.rollBack()
-                return False, msg
+        # Add output attribute name to the layer
+        field = create_field_from_definition(output_value['value'])
+        result = layer.addAttribute(field)
+        if not result:
+            msg = tr(
+                'Error while creating the field %s.'
+                % output_field_name)
+            layer.rollBack()
+            return False, msg
 
-            # Get the index of output attribute
-            output_field_index = layer.fieldNameIndex(
-                output_field_name)
+        # Get the index of output attribute
+        output_field_index = layer.fieldNameIndex(output_field_name)
 
-            if layer.fieldNameIndex(output_field_name) == -1:
-                msg = tr(
-                    'The field name %s has not been created.'
-                    % output_field_name)
-                layer.rollBack()
-                return False, msg
+        if layer.fieldNameIndex(output_field_name) == -1:
+            msg = tr(
+                'The field name %s has not been created.'
+                % output_field_name)
+            layer.rollBack()
+            return False, msg
 
-            # Get the input field's indexes for input
-            input_indexes = {}
+        # Get the input field's indexes for input
+        input_indexes = {}
 
-            # Default parameters
-            default_parameters = {}
+        # Default parameters
+        default_parameters = {}
 
-            # Store the indexes that will be deleted.
-            temporary_indexes = []
+        # Store the indexes that will be deleted.
+        temporary_indexes = []
 
-            for key, value in post_processor['input'].items():
+        for key, value in post_processor['input'].items():
 
-                if value['type'] == 'field':
-                    inasafe_fields = layer.keywords['inasafe_fields']
-                    name_field = inasafe_fields.get(value['value']['key'])
+            if value['type'] == 'field':
+                inasafe_fields = layer.keywords['inasafe_fields']
+                name_field = inasafe_fields.get(value['value']['key'])
 
-                    if not name_field:
-                        msg = tr(
-                            '%s has not been found in inasafe fields.'
-                            % value['value']['key'])
-                        layer.rollBack()
-                        return False, msg
+                if not name_field:
+                    msg = tr(
+                        '%s has not been found in inasafe fields.'
+                        % value['value']['key'])
+                    layer.rollBack()
+                    return False, msg
 
-                    index = layer.fieldNameIndex(name_field)
+                index = layer.fieldNameIndex(name_field)
 
-                    if index == -1:
-                        fields = layer.fields().toList()
-                        msg = tr(
-                            'The field name %s has not been found in %s'
-                            % (
-                                name_field,
-                                [f.name() for f in fields]
-                            ))
-                        layer.rollBack()
-                        return False, msg
+                if index == -1:
+                    fields = layer.fields().toList()
+                    msg = tr(
+                        'The field name %s has not been found in %s'
+                        % (
+                            name_field,
+                            [f.name() for f in fields]
+                        ))
+                    layer.rollBack()
+                    return False, msg
 
-                    input_indexes[key] = index
+                input_indexes[key] = index
 
-                # For geometry, create new field that contain the value
-                elif value['type'] == 'geometry_property':
-                    if value['value'] == 'size':
-                        flag = False
-                        # Check if size field is already exist
-                        if layer.fieldNameIndex(
-                                size_field['field_name']) != -1:
-                            flag = True
-                            # temporary_indexes.append(input_indexes[key])
-                        input_indexes[key] = add_size_field(layer)
-                        if not flag:
-                            temporary_indexes.append(input_indexes[key])
+            # For geometry, create new field that contain the value
+            elif value['type'] == 'geometry_property':
+                if value['value'] == 'size':
+                    flag = False
+                    # Check if size field is already exist
+                    if layer.fieldNameIndex(size_field['field_name']) != -1:
+                        flag = True
+                        # temporary_indexes.append(input_indexes[key])
+                    input_indexes[key] = add_size_field(layer)
+                    if not flag:
+                        temporary_indexes.append(input_indexes[key])
 
-                elif value['type'] == 'keyword':
+            elif value['type'] == 'keyword':
 
-                    # See http://stackoverflow.com/questions/14692690/
-                    # access-python-nested-dictionary-items-via-a-list-of-keys
-                    value = reduce(
-                        lambda d, k: d[k], value['value'], layer.keywords)
+                # See http://stackoverflow.com/questions/14692690/
+                # access-python-nested-dictionary-items-via-a-list-of-keys
+                value = reduce(
+                    lambda d, k: d[k], value['value'], layer.keywords)
 
-                    default_parameters[key] = value
+                default_parameters[key] = value
 
-            # Create iterator for feature
-            request = QgsFeatureRequest().setSubsetOfAttributes(
-                input_indexes.values())
-            iterator = layer.getFeatures(request)
+        # Create iterator for feature
+        request = QgsFeatureRequest().setSubsetOfAttributes(
+            input_indexes.values())
+        iterator = layer.getFeatures(request)
 
-            # Iterate all feature
-            for feature in iterator:
-                attributes = feature.attributes()
+        # Iterate all feature
+        for feature in iterator:
+            attributes = feature.attributes()
 
-                # Create dictionary to store the input
-                parameters = {}
-                parameters.update(default_parameters)
+            # Create dictionary to store the input
+            parameters = {}
+            parameters.update(default_parameters)
 
-                # Fill up the input from fields
-                for key, value in input_indexes.items():
-                    parameters[key] = attributes[value]
-                # Fill up the input from geometry property
+            # Fill up the input from fields
+            for key, value in input_indexes.items():
+                parameters[key] = attributes[value]
+            # Fill up the input from geometry property
 
+            # Evaluate the function
+            python_function = output_value.get('function')
+            if python_function:
+                # Launch the python function
+                post_processor_result = python_function(**parameters)
+            else:
                 # Evaluate the function
-                python_function = output_value.get('function')
-                if python_function:
-                    # Launch the python function
-                    post_processor_result = python_function(**parameters)
-                else:
-                    # Evaluate the function
-                    formula = output_value['formula']
-                    post_processor_result = evaluate_formula(
-                        formula, parameters)
+                formula = output_value['formula']
+                post_processor_result = evaluate_formula(
+                    formula, parameters)
 
-                # The affected postprocessor returns a boolean.
-                if isinstance(post_processor_result, bool):
-                    post_processor_result = tr(unicode(post_processor_result))
+            # The affected postprocessor returns a boolean.
+            if isinstance(post_processor_result, bool):
+                post_processor_result = tr(unicode(post_processor_result))
 
-                layer.changeAttributeValue(
-                    feature.id(),
-                    output_field_index,
-                    post_processor_result
-                )
+            layer.changeAttributeValue(
+                feature.id(),
+                output_field_index,
+                post_processor_result
+            )
 
-            # Delete temporary indexes
-            layer.deleteAttributes(temporary_indexes)
+        # Delete temporary indexes
+        layer.deleteAttributes(temporary_indexes)
 
-        layer.commitChanges()
-        return True, None
-    else:
-        layer.rollBack()
-        return False, message
+    layer.commitChanges()
+    return True, None
 
 
 def enough_input(layer, post_processor_input):
