@@ -14,7 +14,8 @@
         "Union exposure features to the aggregate hazard",
         "Aggregate the impact summary",
         "Aggregate the aggregation summary",
-        "Aggregate the analysis summary"
+        "Aggregate the analysis summary",
+        "Build the exposure breakdown"
       ]
     },
     "post_processor":{

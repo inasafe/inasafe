@@ -29,6 +29,11 @@ summary_3_aggregate_hazard_steps = {
     'output_layer_name': 'analysis',
 }
 
+summary_4_detailed_report_steps = {
+    'step_name': tr('Breakdown per exposure type'),
+    'output_layer_name': 'exposure_breakdown',
+}
+
 assign_highest_value_steps = {
     'step_name': tr('Assign the highest hazard value to the exposure'),
     'output_layer_name': 'exposure_highest_value',

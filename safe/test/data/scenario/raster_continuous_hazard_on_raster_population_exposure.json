@@ -13,7 +13,8 @@
         "Run impact function",
         "Zonal stats between exposure and aggregate hazard",
         "Aggregate the aggregation summary",
-        "Aggregate the analysis summary"
+        "Aggregate the analysis summary",
+        "Build the exposure breakdown"
       ]
     },
     "post_processor":{

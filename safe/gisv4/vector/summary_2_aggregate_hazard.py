@@ -12,14 +12,15 @@ from safe.definitionsv4.fields import (
     aggregation_name_field,
     hazard_id_field,
     hazard_class_field,
-    total_field,
+    total_affected_field,
     exposure_count_field,
     affected_exposure_count_field,
     affected_field,
 )
 from safe.definitionsv4.processing_steps import (
     summary_2_aggregation_steps)
-from safe.gisv4.vector.tools import create_field_from_definition
+from safe.gisv4.vector.tools import (
+    create_field_from_definition, read_dynamic_inasafe_field)
 from safe.utilities.profiling import profile
 from safe.utilities.pivot_table import FlatTable
 from safe.utilities.i18n import tr
@@ -93,10 +94,8 @@ def aggregation_summary(source, target, callback=None):
 
     pattern = exposure_count_field['key']
     pattern = pattern.replace('%s', '')
-    unique_exposure = []
-    for key, name_field in source_fields.iteritems():
-        if key.endswith(pattern):
-            unique_exposure.append(key.replace(pattern, ''))
+    unique_exposure = read_dynamic_inasafe_field(
+        source_fields, exposure_count_field)
 
     flat_table = FlatTable('aggregation_id', 'exposure_class')
 
@@ -132,10 +131,10 @@ def aggregation_summary(source, target, callback=None):
         target.keywords['inasafe_fields'][key] = value
 
     # Total field
-    field = create_field_from_definition(total_field)
+    field = create_field_from_definition(total_affected_field)
     target.addAttribute(field)
-    target.keywords['inasafe_fields'][total_field['key']] = (
-        total_field['field_name'])
+    target.keywords['inasafe_fields'][total_affected_field['key']] = (
+        total_affected_field['field_name'])
 
     aggregation_index = target_fields[aggregation_id_field['key']]
 
