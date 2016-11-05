@@ -248,3 +248,21 @@ class GeoPackage(DataStore):
         output = None
         source = None
         return True, layer_name
+
+    def _add_tabular_layer(self, tabular_layer, layer_name):
+        """Add a tabular layer to the geopackage.
+
+        :param tabular_layer: The layer to add.
+        :type tabular_layer: QgsVectorLayer
+
+        :param layer_name: The name of the layer in the datastore.
+        :type layer_name: str
+
+        :returns: A two-tuple. The first element will be True if we could add
+            the layer to the datastore. The second element will be the layer
+            name which has been used or the error message.
+        :rtype: (bool, str)
+
+        .. versionadded:: 4.0
+        """
+        return self._add_vector_layer(tabular_layer, layer_name)
