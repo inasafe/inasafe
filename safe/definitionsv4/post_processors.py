@@ -2,6 +2,8 @@
 
 """Definitions relating to post-processing."""
 
+from PyQt4.QtCore import QPyNullVariant
+
 from safe.utilities.i18n import tr
 from safe.definitionsv4.fields import (
     female_ratio_field,
@@ -42,6 +44,9 @@ def multiply(**kwargs):
     """
     result = 1
     for i in kwargs.values():
+        if isinstance(i, QPyNullVariant) or not i:
+            # If one value is null, we return null.
+            return i
         result *= i
     return result
 
