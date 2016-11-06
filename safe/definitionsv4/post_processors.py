@@ -90,6 +90,8 @@ def post_processor_affected_function(**kwargs):
 Post processors
 """
 
+# A postprocessor can be defined with a formula or with a python function.
+
 post_processor_gender = {
     'key': 'post_processor_gender',
     'name': tr('Gender Post Processor'),
@@ -108,7 +110,7 @@ post_processor_gender = {
     'output': {
         'women': {
             'value': women_count_field,
-            'function': multiply
+            'formula': 'population * gender_ratio'
         }
     }
 }
@@ -255,11 +257,11 @@ post_processor_affected = {
 }
 
 post_processors = [
+    post_processor_size,
     post_processor_gender,
     post_processor_youth,
     post_processor_adult,
     post_processor_elderly,
-    post_processor_size,
     post_processor_size_rate,
     post_processor_affected,
 ]

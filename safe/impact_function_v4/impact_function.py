@@ -42,7 +42,8 @@ from safe.common.exceptions import (
     InvalidHazardKeywords,
     InvalidExposureKeywords,
 )
-from safe.impact_function_v4.postprocessors import run_single_post_processor
+from safe.impact_function_v4.postprocessors import (
+    run_single_post_processor, enough_input)
 from safe.impact_function_v4.create_extra_layers import (
     create_analysis_layer, create_virtual_aggregation)
 from safe.utilities.i18n import tr
@@ -947,15 +948,19 @@ class ImpactFunction(object):
         # Notes, action
 
         for post_processor in post_processors:
-            result, post_processor_output = run_single_post_processor(
-                layer,
-                post_processor)
-            if result:
-                msg = str('Post processor for %s' % post_processor['name'])
-                self.set_state_process('post_processor', msg)
-                LOGGER.info(msg)
+            valid, message = enough_input(layer, post_processor['input'])
+
+            if valid:
+                valid, message = run_single_post_processor(
+                    layer, post_processor)
+                if valid:
+                    msg = str('Post processor for %s' % post_processor['name'])
+                    self.set_state_process('post_processor', msg)
+                    LOGGER.info(msg)
+                else:
+                    LOGGER.info(message)
             else:
-                LOGGER.info(post_processor_output)
+                LOGGER.info(message)
 
     def summary_calculation(self):
         """Do the summary calculation."""
