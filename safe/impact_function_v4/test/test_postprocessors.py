@@ -205,5 +205,12 @@ class TestPostProcessors(unittest.TestCase):
         }
         self.assertEquals(45, evaluate_formula(formula, variables))
 
+        variables = {
+            'population': None,
+            'gender_ratio': 0.45
+        }
+        self.assertIsNone(evaluate_formula(formula, variables))
+
+
 if __name__ == '__main__':
     unittest.main()

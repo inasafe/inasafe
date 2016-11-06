@@ -3,6 +3,7 @@
 """
 Postprocessors.
 """
+from PyQt4.QtCore import QPyNullVariant
 
 from qgis.core import QgsDistanceArea, QgsFeatureRequest
 
@@ -30,6 +31,9 @@ def evaluate_formula(formula, variables):
     :rtype: float, int
     """
     for key, value in variables.items():
+        if isinstance(value, QPyNullVariant) or not value:
+            # If one value is null, we return null.
+            return value
         formula = formula.replace(key, str(value))
     return eval(formula)
 
