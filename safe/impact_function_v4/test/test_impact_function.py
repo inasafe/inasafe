@@ -275,13 +275,15 @@ class TestImpactFunction(unittest.TestCase):
         def test_scenario(scenario_path):
             LOGGER.info('Running the scenario : %s' % scenario_path)
             scenario, expected = read_json_flow(scenario_path)
-            result = run_scenario(scenario, use_debug)
-            try:
-                self.assertDictEqual(expected, result)
-            except:
-                # In case of an exception, print the scenario path and re raise
-                print 'Error with the scenario %s' % scenario_path
-                raise
+            if scenario.get('enable', True):
+                result = run_scenario(scenario, use_debug)
+                try:
+                    self.assertDictEqual(expected, result)
+                except:
+                    # In case of an exception, print the scenario path
+                    # and re raise
+                    print 'Error with the scenario %s' % scenario_path
+                    raise
 
         path = standard_data_path('scenario')
 
