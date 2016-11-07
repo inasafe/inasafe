@@ -1,0 +1,15 @@
+{% include 'standard-template/jinja2/header.html' %}
+<div class="branding">
+    <img src="{{ brand_logo }}" title="InaSAFE" alt="InaSAFE" />
+</div>
+{{ analysis_result }}
+{{ minimum_needs }}
+{{ action_checklist }}
+{{ notes_assumptions }}
+
+<h5 class="info">
+    <i class="icon-info-sign icon-white"></i> Analysis details
+</h5>
+{{ analysis_details }}
+
+{% include 'standard-template/jinja2/footer.html' %}
