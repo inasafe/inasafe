@@ -175,21 +175,27 @@
           <hazard_category>
             <gco:CharacterString>single_event</gco:CharacterString>
           </hazard_category>
+          <raster_hazard_classification>
+            <gco:CharacterString/>
+          </raster_hazard_classification>
           <classification>
             <gco:CharacterString>flood_hazard_classes</gco:CharacterString>
           </classification>
-          <multipart_polygon>
-            <gco:Boolean/>
-          </multipart_polygon>
           <prob_fatality_mag>
             <gco:Tuple/>
           </prob_fatality_mag>
           <inasafe_fields>
             <gco:Dictionary/>
           </inasafe_fields>
+          <inasafe_default_values>
+            <gco:Dictionary/>
+          </inasafe_default_values>
           <volcano_name_field>
             <gco:CharacterString/>
           </volcano_name_field>
+          <multipart_polygon>
+            <gco:Boolean/>
+          </multipart_polygon>
           <field>
             <gco:CharacterString/>
           </field>

@@ -25,7 +25,8 @@ from safe.common.exceptions import ErrorDataStore
 
 VECTOR_EXTENSIONS = ('shp', 'kml', 'geojson')
 RASTER_EXTENSIONS = ('asc', 'tiff', 'tif')
-EXTENSIONS = RASTER_EXTENSIONS + VECTOR_EXTENSIONS
+TABULAR_EXTENSIONS = ('csv',)
+EXTENSIONS = RASTER_EXTENSIONS + VECTOR_EXTENSIONS + TABULAR_EXTENSIONS
 
 
 class Folder(DataStore):
@@ -123,7 +124,8 @@ class Folder(DataStore):
 
         .. versionadded:: 4.0
         """
-        for layer, extension in product(self.layers(), EXTENSIONS):
+        layers = self.layers()
+        for layer, extension in product(layers, EXTENSIONS):
             one_file = QFileInfo(
                 self.uri.filePath(layer + '.' + extension))
             if one_file.exists():
@@ -131,6 +133,34 @@ class Folder(DataStore):
                     return one_file.absoluteFilePath()
         else:
             return None
+
+    def _add_tabular_layer(self, tabular_layer, layer_name):
+        """Add a tabular layer to the folder.
+
+        :param tabular_layer: The layer to add.
+        :type tabular_layer: QgsVectorLayer
+
+        :param layer_name: The name of the layer in the datastore.
+        :type layer_name: str
+
+        :returns: A two-tuple. The first element will be True if we could add
+            the layer to the datastore. The second element will be the layer
+            name which has been used or the error message.
+        :rtype: (bool, str)
+
+        .. versionadded:: 4.0
+        """
+        output = QFileInfo(
+            self.uri.filePath(layer_name + '.csv'))
+
+        QgsVectorFileWriter.writeAsVectorFormat(
+            tabular_layer,
+            output.absoluteFilePath(),
+            'utf-8',
+            None,
+            'CSV')
+
+        return True, output.baseName()
 
     def _add_vector_layer(self, vector_layer, layer_name):
         """Add a vector layer to the folder.

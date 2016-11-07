@@ -16,7 +16,7 @@ from qgis.core import (
 from safe.common.utilities import get_utm_epsg
 from safe.gisv4.vector.tools import create_memory_layer
 from safe.definitionsv4.fields import hazard_class_field
-from safe.definitionsv4.processing import buffer_vector
+from safe.definitionsv4.processing_steps import buffer_steps
 from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -57,8 +57,8 @@ def buffering(layer, radii, callback=None):
     """
 
     # Layer output
-    output_layer_name = buffer_vector['output_layer_name']
-    processing_step = buffer_vector['step_name']
+    output_layer_name = buffer_steps['output_layer_name']
+    processing_step = buffer_steps['step_name']
 
     input_crs = layer.crs()
     feature_count = layer.featureCount()

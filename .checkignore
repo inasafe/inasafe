@@ -1,0 +1,6 @@
+# Ignore folder content
+.github/*
+.tx/*
+docs/
+resources/*
+safe_extras/*

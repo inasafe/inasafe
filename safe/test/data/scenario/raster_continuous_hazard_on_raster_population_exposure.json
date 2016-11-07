@@ -11,13 +11,17 @@
       "info": {},
       "process":[
         "Run impact function",
-        "Zonal stats between exposure and aggregate hazard"
+        "Zonal stats between exposure and aggregate hazard",
+        "Aggregate the aggregation summary",
+        "Aggregate the analysis summary",
+        "Build the exposure breakdown"
       ]
     },
     "post_processor":{
       "info": {},
       "process":[
-        "Post processor for Size Rate Post Processor"
+        "Post processor for Size Rate Post Processor",
+        "Post processor for Affected Post Processor"
       ]
     },
     "aggregation":{

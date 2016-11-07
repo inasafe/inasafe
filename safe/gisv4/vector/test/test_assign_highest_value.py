@@ -39,6 +39,9 @@ class TestAssignHighestValueVector(unittest.TestCase):
         # when we will have aggregate_hazard definitions.
         aggregate_hazard.keywords['classification'] = 'generic_hazard_classes'
 
+        aggregate_hazard.keywords['aggregation_keywords'] = {}
+        aggregate_hazard.keywords['hazard_keywords'] = {}
+
         layer = assign_highest_value(exposure, aggregate_hazard)
 
         self.assertEqual(layer.featureCount(), 9)

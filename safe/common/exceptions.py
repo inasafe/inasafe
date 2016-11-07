@@ -435,3 +435,8 @@ class MissingImpactReport(InaSAFEError):
 class ErrorDataStore(InaSAFEError):
     """When the datastore has an error."""
     pass
+
+
+class InvalidWizardStep(InaSAFEError):
+    """When there is an invalid wizard step."""
+    pass

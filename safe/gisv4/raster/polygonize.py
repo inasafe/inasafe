@@ -17,7 +17,7 @@ from safe.common.utilities import unique_filename, temp_dir
 from safe.definitionsv4.fields import hazard_value_field
 from safe.definitionsv4.layer_geometry import (
     layer_geometry, layer_geometry_polygon)
-from safe.definitionsv4.processing import polygonize_raster
+from safe.definitionsv4.processing_steps import polygonize_steps
 from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -46,8 +46,10 @@ def polygonize(layer, callback=None):
 
     .. versionadded:: 4.0
     """
-    output_layer_name = polygonize_raster['output_layer_name']
-    processing_step = polygonize_raster['step_name']
+    output_layer_name = polygonize_steps['output_layer_name']
+    processing_step = polygonize_steps['step_name']
+    output_layer_name = output_layer_name % layer.keywords['layer_purpose']
+    gdal_layer_name = polygonize_steps['gdal_layer_name']
 
     input_raster = gdal.Open(layer.source(), gdal.GA_ReadOnly)
 
@@ -61,7 +63,7 @@ def polygonize(layer, callback=None):
     driver = ogr.GetDriverByName("ESRI Shapefile")
     destination = driver.CreateDataSource(out_shapefile)
 
-    output_layer = destination.CreateLayer(output_layer_name, srs)
+    output_layer = destination.CreateLayer(gdal_layer_name, srs)
 
     # We have no other way to use a shapefile. We need only the first 10 chars.
     field_name = hazard_value_field['field_name'][0:10]
@@ -82,6 +84,7 @@ def polygonize(layer, callback=None):
 
     inasafe_field = hazard_value_field['key']
 
+    vector_layer.keywords['title'] = output_layer_name
     # We just polygonized the raster layer. inasafe_fields do not exist.
     vector_layer.keywords['inasafe_fields'] = {
         inasafe_field: field_name

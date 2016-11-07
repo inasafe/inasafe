@@ -52,15 +52,6 @@ class StepKwSubcategory(WizardStep, FORM_CLASS):
         """
         return bool(self.selected_subcategory())
 
-    def get_previous_step(self):
-        """Find the proper step when user clicks the Previous button.
-
-        :returns: The step to be switched to
-        :rtype: WizardStep instance or None
-        """
-        new_step = self.parent.step_kw_purpose
-        return new_step
-
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.
 

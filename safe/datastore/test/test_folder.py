@@ -101,5 +101,12 @@ class TestFolder(unittest.TestCase):
         self.assertIn(raster_layer_name + '.xml', files)
         self.assertIn(vector_layer_name + '.xml', files)
 
+        # Test layer without geometry
+        layer = load_test_vector_layer(
+            'gisv4', 'impacts', 'exposure_breakdown_tabular.csv')
+        tabular_layer_name = 'breakdown'
+        result = data_store.add_layer(layer, tabular_layer_name)
+        self.assertTrue(result[0])
+
 if __name__ == '__main__':
     unittest.main()

@@ -43,15 +43,6 @@ class StepKwSummary(WizardStep, FORM_CLASS):
         """
         return True
 
-    def get_previous_step(self):
-        """Find the proper step when user clicks the Previous button.
-
-        :returns: The step to be switched to
-        :rtype: WizardStep instance or None
-        """
-        new_step = self.parent.step_kw_title
-        return new_step
-
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.
 
@@ -106,6 +97,8 @@ class StepKwSummary(WizardStep, FORM_CLASS):
         else:
             # Wizard complete
             new_step = None
+        # Reset the step history
+        self.parent.keyword_steps = []
         return new_step
 
     def set_widgets(self):

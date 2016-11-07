@@ -5,9 +5,11 @@ Tools for vector layers.
 """
 
 from uuid import uuid4
-from PyQt4.QtCore import QSettings
+from PyQt4.QtCore import QSettings, QPyNullVariant
 from qgis.core import (
+    QgsGeometry,
     QgsVectorLayer,
+    QgsSpatialIndex,
     QgsFeatureRequest,
     QgsCoordinateReferenceSystem,
     QGis,
@@ -49,7 +51,7 @@ for key, value in list(wkb_type_groups.items()):
 
 @profile
 def create_memory_layer(
-        layer_name, geometry, coordinate_reference_system, fields=None):
+        layer_name, geometry, coordinate_reference_system=None, fields=None):
     """Create a vector memory layer.
 
     :param layer_name: The name of the layer.
@@ -74,14 +76,20 @@ def create_memory_layer(
         type_string = 'MultiLineString'
     elif geometry == QGis.Polygon:
         type_string = 'MultiPolygon'
+    elif geometry == QGis.NoGeometry:
+        type_string = 'none'
     else:
         raise MemoryLayerCreationError(
             'Layer is whether Point nor Line nor Polygon, I got %s' % geometry)
 
-    crs = coordinate_reference_system.authid().lower()
-    uri = '%s?crs=%s&index=yes&uuid=%s' % (type_string, crs, str(uuid4()))
+    uri = '%s?index=yes&uuid=%s' % (type_string, str(uuid4()))
+    if coordinate_reference_system:
+        crs = coordinate_reference_system.authid().lower()
+        uri += '&crs=%s' % crs
     memory_layer = QgsVectorLayer(uri, layer_name, 'memory')
-    memory_layer.keywords = {}
+    memory_layer.keywords = {
+        'inasafe_fields': {}
+    }
 
     if fields:
         data_provider = memory_layer.dataProvider()
@@ -110,12 +118,14 @@ def copy_layer(source, target):
         settings = QSettings()
         flag = bool(settings.value(
             'inasafe/useSelectedFeaturesOnly', False, type=bool))
-        if flag:
+        # We need to check if the user wants selected feature only and if there
+        # is one minimum selected.
+        if flag and source.selectedFeatureCount() > 0:
             request.setFilterFids(source.selectedFeaturesIds())
 
     for i, feature in enumerate(source.getFeatures(request)):
         geom = feature.geometry()
-        out_feature.setGeometry(geom)
+        out_feature.setGeometry(QgsGeometry(geom))
         out_feature.setAttributes(feature.attributes())
         target.addFeature(out_feature)
 
@@ -177,3 +187,70 @@ def remove_fields(layer, fields_to_remove):
 
     data_provider.deleteAttributes(index_to_remove)
     layer.updateFields()
+
+
+@profile
+def create_spatial_index(layer):
+    """Helper function to create the spatial index on a vector layer.
+
+    This function is mainly used to see the processing time with the decorator.
+
+    :param layer: The vector layer.
+    :type layer: QgsVectorLayer
+
+    :return: The index.
+    :rtype: QgsSpatialIndex
+    """
+    spatial_index = QgsSpatialIndex(layer.getFeatures())
+    return spatial_index
+
+
+def create_field_from_definition(field_definition, name=None):
+    """Helper to create a field from definition.
+
+    :param field_definition: The definition of the field.
+    :type field_definition: safe.definitionsv4.fields
+
+    :param name: The name is required if the field name is dynamic and need a
+        string formatting.
+    :type name: basestring
+
+    :return: The new field.
+    :rtype: QgsField
+    """
+    field = QgsField()
+
+    if isinstance(name, QPyNullVariant):
+        name = 'NULL'
+
+    if name:
+        field.setName(field_definition['field_name'] % name)
+    else:
+        field.setName(field_definition['field_name'])
+
+    field.setType(field_definition['type'])
+    field.setLength(field_definition['length'])
+    field.setPrecision(field_definition['precision'])
+    return field
+
+
+def read_dynamic_inasafe_field(inasafe_fields, dynamic_field):
+    """Helper to read inasafe_fields using a dynamic field.
+
+    :param inasafe_fields: inasafe_fields keywords to use.
+    :type inasafe_fields: dict
+
+    :param dynamic_field: The dynamic field to use.
+    :type dynamic_field: safe.definitions.fields
+
+    :return: A list of unique value used in this dynamic field.
+    :return: list
+    """
+    pattern = dynamic_field['key']
+    pattern = pattern.replace('%s', '')
+    unique_exposure = []
+    for key, name_field in inasafe_fields.iteritems():
+        if key.endswith(pattern):
+            unique_exposure.append(key.replace(pattern, ''))
+
+    return unique_exposure

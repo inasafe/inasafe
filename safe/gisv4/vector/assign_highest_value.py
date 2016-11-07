@@ -7,21 +7,19 @@ Issue https://github.com/inasafe/inasafe/issues/3192
 """
 
 import logging
+from PyQt4.QtCore import QPyNullVariant
 from qgis.core import (
     QGis,
-    QgsGeometry,
     QgsFeatureRequest,
     QgsWKBTypes,
     QgsFeature,
-    QgsSpatialIndex
 )
 
-from safe.utilities.i18n import tr
 from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
 from safe.definitionsv4.fields import hazard_class_field
 from safe.definitionsv4.hazard_classifications import hazard_classification
-# from safe.definitionsv4.processing import assign_highest_value
-from safe.gisv4.vector.tools import create_memory_layer, wkb_type_groups
+from safe.definitionsv4.processing_steps import assign_highest_value_steps
+from safe.gisv4.vector.tools import create_memory_layer, create_spatial_index
 from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -59,11 +57,8 @@ def assign_highest_value(exposure_layer, hazard_layer, callback=None):
 
     .. versionadded:: 4.0
     """
-    # To fix
-    # output_layer_name = intersection_vector['output_layer_name']
-    # processing_step = intersection_vector['step_name']
-    output_layer_name = 'highest_hazard_value'
-    processing_step = 'Assigning the highest hazard value'
+    output_layer_name = assign_highest_value_steps['output_layer_name']
+    processing_step = assign_highest_value_steps['step_name']
 
     hazard_keywords = hazard_layer.keywords
     hazard_inasafe_fields = hazard_keywords['inasafe_fields']
@@ -86,7 +81,7 @@ def assign_highest_value(exposure_layer, hazard_layer, callback=None):
     )
     writer.startEditing()
 
-    spatial_index = QgsSpatialIndex(hazard_layer.getFeatures())
+    spatial_index = create_spatial_index(hazard_layer)
 
     # Todo callback
     # total = 100.0 / len(selectionA)
@@ -133,6 +128,8 @@ def assign_highest_value(exposure_layer, hazard_layer, callback=None):
 
                 if hazard_value:
                     value = levels.index(hazard_value)
+                elif isinstance(hazard_value, QPyNullVariant):
+                    value = -1
                 else:
                     value = -1
 
@@ -152,7 +149,7 @@ def assign_highest_value(exposure_layer, hazard_layer, callback=None):
                     # We compare to a previous feature if the hazard is higher:
                     if value > highest_hazard_value[0]:
                         highest_hazard_value = (
-                            levels.index(hazard_value),
+                            value,
                             hazard_attributes
                         )
 
@@ -161,7 +158,7 @@ def assign_highest_value(exposure_layer, hazard_layer, callback=None):
                         # TODO We should add another test to check the biggest
                         # aggregation area.
                         highest_hazard_value = (
-                            levels.index(hazard_value),
+                            value,
                             hazard_attributes
                         )
 
@@ -185,5 +182,13 @@ def assign_highest_value(exposure_layer, hazard_layer, callback=None):
     writer.keywords = exposure_layer.keywords
     writer.keywords['inasafe_fields'] = inasafe_fields
     writer.keywords['layer_purpose'] = 'impact'
+
+    writer.keywords['exposure_keywords'] = exposure_layer.keywords
+    writer.keywords['aggregation_keywords'] = (
+        hazard_layer.keywords['aggregation_keywords'])
+    writer.keywords['hazard_keywords'] = (
+        hazard_layer.keywords['hazard_keywords'])
+
+    writer.keywords['title'] = output_layer_name
 
     return writer

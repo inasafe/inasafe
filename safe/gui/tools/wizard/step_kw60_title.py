@@ -49,15 +49,6 @@ class StepKwTitle(WizardStep, FORM_CLASS):
         """
         return bool(self.leTitle.text())
 
-    def get_previous_step(self):
-        """Find the proper step when user clicks the Previous button.
-
-        :returns: The step to be switched to
-        :rtype: WizardStep instance or None
-        """
-        new_step = self.parent.step_kw_source
-        return new_step
-
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.
 
@@ -78,7 +69,10 @@ class StepKwTitle(WizardStep, FORM_CLASS):
 
     def set_widgets(self):
         """Set widgets on the Title tab."""
-        # Just set values based on existing keywords
+        # Set title from keyword first, if not found use layer name
         if self.parent.layer:
-            title = self.parent.layer.name()
+            if self.parent.get_existing_keyword('title'):
+                title = self.parent.get_existing_keyword('title')
+            else:
+                title = self.parent.layer.name()
             self.leTitle.setText(title)

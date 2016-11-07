@@ -27,7 +27,7 @@ from safe_extras.parameters.qt_widgets.parameter_container import (
 from safe.definitionsv4.layer_purposes import (layer_purpose_aggregation)
 from safe.definitionsv4.layer_modes import layer_mode_classified
 from safe.definitionsv4.exposure import exposure_place
-from safe.definitionsv4.utilities import get_fields, get_class_field
+from safe.definitionsv4.utilities import get_fields, get_compulsory_fields
 from safe.definitionsv4.layer_geometry import layer_geometry_raster
 from safe.definitionsv4.constants import no_field
 from safe.gui.tools.wizard.wizard_utils import get_defaults
@@ -73,49 +73,6 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
         """
         return True
 
-    def get_previous_step(self):
-        """Find the proper step when user clicks the Previous button.
-
-        :returns: The step to be switched to
-        :rtype: WizardStep instance or None
-        """
-        # Get hazard or exposure value
-        layer_purpose_key = self.parent.step_kw_purpose.selected_purpose()[
-            'key']
-        if layer_purpose_key != layer_purpose_aggregation['key']:
-            subcategory_key = self.parent.step_kw_subcategory. \
-                selected_subcategory()['key']
-        else:
-            subcategory_key = None
-        # Check if InaSAFE fields with replace_null = False has element
-        inasafe_fields = get_fields(
-            layer_purpose_key, subcategory_key, replace_null=False)
-        if inasafe_fields:
-            new_step = self.parent.step_kw_inasafe_fields
-            return new_step
-
-        selected_subcategory = self.parent.step_kw_subcategory.\
-            selected_subcategory()
-        if selected_subcategory == exposure_place:
-            new_step = self.parent.step_kw_name_field
-        elif self.parent.step_kw_layermode.\
-                selected_layermode() == layer_mode_classified:
-            if self.parent.step_kw_classification.selected_classification() \
-                    or self.parent.step_kw_classify.\
-                    postprocessor_classification_for_layer():
-                new_step = self.parent.step_kw_classify
-            elif self.parent.step_kw_field.selected_field():
-                new_step = self.parent.step_kw_field
-            else:
-                new_step = self.parent.step_kw_layermode
-        else:
-            if self.parent.step_kw_resample.\
-                    selected_allowresampling() is not None:
-                new_step = self.parent.step_kw_resample
-            else:
-                new_step = self.parent.step_kw_unit
-        return new_step
-
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.
 
@@ -145,10 +102,10 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
         # Get all fields with replace_null = True
         inasafe_fields = get_fields(
             layer_purpose_key, subcategory_key, replace_null=True)
-        # Remove the field for value map since it's already selected in
-        # Field step
+        # remove compulsory field since it has been set in previous step
         try:
-            inasafe_fields.remove(get_class_field(layer_purpose_key))
+            inasafe_fields.remove(get_compulsory_fields(
+                layer_purpose_key, subcategory_key))
         except ValueError:
             pass
         return inasafe_fields

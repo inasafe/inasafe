@@ -175,9 +175,6 @@
           <scale>
             <gco:CharacterString/>
           </scale>
-          <classification>
-            <gco:CharacterString>generic_hazard_classes</gco:CharacterString>
-          </classification>
           <multipart_polygon>
             <gco:Boolean/>
           </multipart_polygon>
@@ -203,8 +200,11 @@
             <gco:CharacterString/>
           </report>
           <inasafe_fields>
-            <gco:Dictionary>{&quot;adult_ratio_field&quot;: &quot;adult_ratio&quot;, &quot;female_ratio_field&quot;: &quot;female_ratio&quot;, &quot;aggregation_id_field&quot;: &quot;aggregation_id&quot;, &quot;hazard_class_field&quot;: &quot;hazard_class&quot;, &quot;youth_ratio_field&quot;: &quot;youth_ratio&quot;, &quot;hazard_id_field&quot;: &quot;hazard_id&quot;, &quot;aggregation_name_field&quot;: &quot;aggregation_name&quot;, &quot;elderly_ratio_field&quot;: &quot;elderly_ratio&quot;}</gco:Dictionary>
+            <gco:Dictionary>{&quot;hazard_class_field&quot;: &quot;hazard_class&quot;, &quot;hazard_id_field&quot;: &quot;hazard_id&quot;, &quot;aggregation_name_field&quot;: &quot;aggregation_name&quot;, &quot;aggregation_id_field&quot;: &quot;aggregation_id&quot;}</gco:Dictionary>
           </inasafe_fields>
+          <inasafe_default_values>
+            <gco:Dictionary/>
+          </inasafe_default_values>
           <resolution>
             <gco:FloatTuple/>
           </resolution>

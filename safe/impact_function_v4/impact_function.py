@@ -10,10 +10,6 @@ from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsRectangle,
     QgsVectorLayer,
-    QgsFeatureRequest,
-    QgsGeometry,
-    QgsFeature,
-    QgsField,
     QGis,
 )
 
@@ -21,7 +17,7 @@ import logging
 
 from safe.common.utilities import temp_dir
 from safe.datastore.folder import Folder
-from safe.gisv4.vector.tools import create_memory_layer
+from safe.datastore.datastore import DataStore
 from safe.gisv4.vector.prepare_vector_layer import prepare_vector_layer
 from safe.gisv4.vector.reproject import reproject
 from safe.gisv4.vector.assign_highest_value import assign_highest_value
@@ -29,33 +25,36 @@ from safe.gisv4.vector.reclassify import reclassify as reclassify_vector
 from safe.gisv4.vector.union import union
 from safe.gisv4.vector.clip import clip
 from safe.gisv4.vector.smart_clip import smart_clip
-from safe.gisv4.vector.buffering import buffering
-from safe.gisv4.vector.aggregate_summary import aggregate_summary
-from safe.gisv4.vector.assign_inasafe_values import assign_inasafe_values
+from safe.gisv4.vector.summary_1_aggregate_hazard import (
+    aggregate_hazard_summary)
+from safe.gisv4.vector.summary_2_aggregation import aggregation_summary
+from safe.gisv4.vector.summary_3_analysis import analysis_summary
+from safe.gisv4.vector.summary_4_exposure_breakdown import (
+    exposure_type_breakdown)
+from safe.gisv4.vector.update_value_map import update_value_map
 from safe.gisv4.raster.reclassify import reclassify as reclassify_raster
 from safe.gisv4.raster.polygonize import polygonize
 from safe.gisv4.raster.zonal_statistics import zonal_stats
-from safe.definitionsv4.fields import (
-    aggregation_id_field,
-    aggregation_name_field,
-    analysis_id_field,
-    analysis_name_field,
-)
 from safe.definitionsv4.post_processors import post_processors
+from safe.definitionsv4.analysis_steps import analysis_steps
 from safe.definitionsv4.utilities import definition
-from safe.defaults import get_defaults
 from safe.common.exceptions import (
     InvalidExtentError,
+    InvalidLayerError,
     InvalidAggregationKeywords,
     InvalidHazardKeywords,
     InvalidExposureKeywords,
 )
-from safe.impact_function_v4.postprocessors import run_single_post_processor
+from safe.impact_function_v4.postprocessors import (
+    run_single_post_processor, enough_input)
+from safe.impact_function_v4.create_extra_layers import (
+    create_analysis_layer, create_virtual_aggregation)
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.utilities import replace_accentuated_characters
 from safe.utilities.profiling import (
     profile, clear_prof_data, profiling_log)
+from safe.test.utilities import check_inasafe_fields
 from safe import messaging as m
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -82,20 +81,20 @@ class ImpactFunction(object):
         self._aggregate_hazard = None
         self._aggregation_impacted = None
         self._analysis_impacted = None
+        self._exposure_breakdown = None
 
         # Use debug to store intermediate results
-        self.debug = False
+        self.debug_mode = False
 
         # Requested extent to use
         self._requested_extent = None
         # Requested extent's CRS
-        self._requested_extent_crs = QgsCoordinateReferenceSystem('EPSG:4326')
+        self._requested_extent_crs = None
+
         # The current viewport extent of the map canvas
         self._viewport_extent = None
-        # Actual extent to use - Read Only
-        self._actual_extent = None
-        # Actual extent's CRS - Read Only
-        self._actual_extent_crs = QgsCoordinateReferenceSystem('EPSG:4326')
+        # Current viewport extent's CRS
+        self._viewport_extent_crs = None
 
         # set this to a gui call back / web callback etc as needed.
         self._callback = self.console_progress_callback
@@ -128,21 +127,41 @@ class ImpactFunction(object):
         table = m.Table(style_class='table table-condensed table-striped')
         row = m.Row()
         row.add(m.Cell(tr('Function')), header_flag=True)
-        row.add(m.Cell(tr('Calls')), header_flag=True)
-        row.add(m.Cell(tr('Average (ms)')), header_flag=True)
-        row.add(m.Cell(tr('Max (ms)')), header_flag=True)
+        row.add(m.Cell(tr('Time')), header_flag=True)
         table.add(row)
-        for function_name, data in self._performance_log.items():
-            calls = data[0]
-            max_time = max(data[1])
-            avg_time = sum(data[1]) / len(data[1])
-            row = m.Row()
-            row.add(m.Cell(function_name))
-            row.add(m.Cell(calls))
-            row.add(m.Cell(avg_time))
-            row.add(m.Cell(max_time))
-            table.add(row)
+
+        if self.performance_log is None:
+            message.add(table)
+            return message
+
+        indent = -1
+
+        def display_tree(tree, space):
+            space += 1
+            new_row = m.Row()
+
+            # This is a kind of hack to display the tree with indentation
+            text = '|'
+            text += '*' * space
+
+            if tree.children:
+                text += '\ '
+            else:
+                text += '| '
+            text += tree.__str__()
+
+            new_row.add(m.Cell(text))
+            new_row.add(m.Cell(tree.elapsed_time))
+            table.add(new_row)
+            if tree.children:
+                for child in tree.children:
+                    display_tree(child, space)
+            space -= 1
+
+        # noinspection PyTypeChecker
+        display_tree(self.performance_log, indent)
         message.add(table)
+
         return message
 
     @property
@@ -297,6 +316,17 @@ class ImpactFunction(object):
         return self._analysis_impacted
 
     @property
+    def exposure_breakdown(self):
+        """Return the exposure breakdown if available.
+
+        It's a QgsVectorLayer without geometry.
+
+        :returns: A vector layer.
+        :rtype: QgsVectorLayer
+        """
+        return self._exposure_breakdown
+
+    @property
     def requested_extent(self):
         """Property for the extent of impact function analysis.
 
@@ -336,24 +366,10 @@ class ImpactFunction(object):
         :type crs: QgsCoordinateReferenceSystem
         """
         self._requested_extent_crs = crs
-
-    @property
-    def actual_extent(self):
-        """Property for the actual extent of impact function analysis.
-
-        :returns: A QgsRectangle.
-        :rtype: QgsRectangle
-        """
-        return self._actual_extent
-
-    @property
-    def actual_extent_crs(self):
-        """Property for the actual extent crs for analysis.
-
-        :returns: The CRS for the actual extent.
-        :rtype: QgsCoordinateReferenceSystem
-        """
-        return self._actual_extent_crs
+        if isinstance(crs, QgsCoordinateReferenceSystem):
+            self._requested_extent_crs = crs
+        else:
+            raise InvalidExtentError('%s is not a valid CRS object.' % crs)
 
     @property
     def viewport_extent(self):
@@ -365,15 +381,19 @@ class ImpactFunction(object):
         return self._viewport_extent
 
     @viewport_extent.setter
-    def viewport_extent(self, viewport_extent):
+    def viewport_extent(self, extent):
         """Setter for the viewport extent of the map canvas.
 
-        :param viewport_extent: Analysis boundaries expressed as a
+        :param extent: Analysis boundaries expressed as a
         QgsRectangle. The extent CRS should match the extent_crs property of
         this IF instance.
-        :type viewport_extent: QgsRectangle
+        :type extent: QgsRectangle
         """
-        self._viewport_extent = viewport_extent
+        self._viewport_extent = extent
+        if isinstance(extent, QgsRectangle):
+            self._viewport_extent = extent
+        else:
+            raise InvalidExtentError('%s is not a valid extent.' % extent)
 
     @property
     def datastore(self):
@@ -391,7 +411,10 @@ class ImpactFunction(object):
         :param datastore: The datastore.
         :type datastore: DataStore
         """
-        self._datastore = datastore
+        if isinstance(datastore, DataStore):
+            self._datastore = datastore
+        else:
+            raise Exception('%s is not a valid datastore.' % datastore)
 
     @property
     def name(self):
@@ -418,7 +441,7 @@ class ImpactFunction(object):
         :returns: A callback function. The callback function will have the
             following parameter requirements.
 
-            progress_callback(current, maximum, message=None)
+            self.progress_callback(current, maximum, message=None)
 
         :rtype: function
 
@@ -439,7 +462,6 @@ class ImpactFunction(object):
         """
         self._callback = callback
 
-    @profile
     def setup_impact_function(self):
         """Automatically called when the hazard or exposure is changed.
         """
@@ -470,97 +492,17 @@ class ImpactFunction(object):
         :param maximum: Maximum range (point at which task is complete.
         :type maximum: int
 
-        :param message: Optional message to display in the progress bar
-        :type message: str, QString
+        :param message: Optional message dictionary to containing content
+            we can display to the user. See safe.definitions.analysis_steps
+            for an example of the expected format
+        :type message: dict
         """
         # noinspection PyChainedComparisons
         if maximum > 1000 and current % 1000 != 0 and current != maximum:
             return
         if message is not None:
-            print message
-        print 'Task progress: %i of %i' % (current, maximum)
-
-    @profile
-    def create_virtual_aggregation(self):
-        """Function to create aggregation layer based on extent
-
-        :returns: A polygon layer with exposure's crs.
-        :rtype: QgsVectorLayer
-        """
-        fields = [
-            QgsField(
-                aggregation_id_field['field_name'],
-                aggregation_id_field['type']
-            ),
-            QgsField(
-                aggregation_name_field['field_name'],
-                aggregation_name_field['type']
-            )
-        ]
-        aggregation_layer = create_memory_layer(
-            'aggregation', QGis.Polygon, self.exposure.crs(), fields)
-
-        aggregation_layer.startEditing()
-
-        feature = QgsFeature()
-        # noinspection PyCallByClass,PyArgumentList,PyTypeChecker
-        feature.setGeometry(QgsGeometry.fromRect(self.actual_extent))
-        feature.setAttributes([1, tr('Entire Area')])
-        aggregation_layer.addFeature(feature)
-        aggregation_layer.commitChanges()
-
-        # Generate aggregation keywords
-        aggregation_layer.keywords = get_defaults()
-        aggregation_layer.keywords['layer_purpose'] = 'aggregation'
-        aggregation_layer.keywords['inasafe_fields'] = {
-            aggregation_id_field['key']: aggregation_id_field['field_name'],
-            aggregation_name_field['key']: aggregation_name_field['field_name']
-        }
-
-        return aggregation_layer
-
-    def create_analysis_layer(self):
-        """Create the analysis layer.
-
-        :returns: A polygon layer with exposure's crs.
-        :rtype: QgsVectorLayer
-        """
-        fields = [
-            QgsField(
-                analysis_id_field['field_name'],
-                analysis_id_field['type']
-            ),
-            QgsField(
-                analysis_name_field['field_name'],
-                analysis_name_field['type']
-            ),
-        ]
-        analysis_layer = create_memory_layer(
-            'analysis', QGis.Polygon, self.exposure.crs(), fields)
-
-        analysis_layer.startEditing()
-
-        geometries = []
-        request = QgsFeatureRequest().setSubsetOfAttributes([])
-        for area in self.aggregation.getFeatures(request):
-            geometries.append(QgsGeometry(area.geometry()))
-
-        feature = QgsFeature()
-        # noinspection PyCallByClass,PyArgumentList,PyTypeChecker
-        feature.setGeometry(QgsGeometry.unaryUnion(geometries))
-        feature.setAttributes([1, self.name])
-        analysis_layer.addFeature(feature)
-        analysis_layer.commitChanges()
-
-        # Generate aggregation keywords
-        analysis_layer.keywords = get_defaults()
-        analysis_layer.keywords['layer_purpose'] = 'analysis'
-        analysis_layer.keywords['inasafe_fields'] = {
-            analysis_id_field['key']: analysis_id_field['field_name'],
-            analysis_name_field['key']: analysis_name_field['field_name']
-        }
-
-        return analysis_layer
+            LOGGER.info(message['description'])
+        LOGGER.info('Task progress: %i of %i' % (current, maximum))
 
     def reset_state(self):
         """Method to reset the state of the impact function.
@@ -613,13 +555,65 @@ class ImpactFunction(object):
         :param value: The value of the information. E.g point
         :type value: str, unicode, int, float, bool, list, dict
         """
+        LOGGER.debug('%s: %s: %s' % (context, key, value))
         self.state[context]["info"][key] = value
 
-    @profile
+    def validate(self):
+        """Method to check if the impact function can be run."""
+        if not self.exposure:
+            raise InvalidLayerError(tr('The exposure layer is compulsory.'))
+
+        if not self.hazard:
+            raise InvalidLayerError(tr('The hazard layer is compulsory.'))
+
+        if self.aggregation:
+            if self.requested_extent:
+                raise InvalidExtentError(
+                    tr('Requested Extent must be null when an aggregation is '
+                       'provided.'))
+            if self.requested_extent_crs:
+                raise InvalidExtentError(
+                    tr('Requested Extent CRS must be null when an aggregation '
+                       'is provided.'))
+            if self._viewport_extent:
+                raise InvalidExtentError(
+                    tr('Viewport Extent must be null when an aggregation is '
+                       'provided.'))
+            if self._viewport_extent_crs:
+                raise InvalidExtentError(
+                    tr('Viewport CRS must be null when an aggregation is '
+                       'provided.'))
+
+    def debug_layer(self, layer, check_fields=True):
+        """Write the layer produced to the datastore if debug mode is on.
+
+        :param layer: The QGIS layer to check and save.
+        :type layer: QgsMapLayer
+
+        :param check_fields: Boolean to check or not inasafe_fields
+        :type check_fields: bool
+        """
+        self.datastore.add_layer(layer, layer.keywords['title'])
+
+        if isinstance(layer, QgsVectorLayer) and check_fields:
+            result = check_inasafe_fields(layer)
+            if not result[0]:
+                raise Exception(result[1])
+
     def run(self):
         """Run the whole impact function."""
+
+        self.validate()
+
         self.reset_state()
         clear_prof_data()
+        return self._run()
+
+    @profile
+    def _run(self):
+        """Internal function to run the impact function with profiling."""
+        step_count = len(analysis_steps)
+        self.callback(0, step_count, analysis_steps['initialisation'])
 
         # Set a unique name for this impact
         self._unique_name = self._name.replace(' ', '')
@@ -632,13 +626,16 @@ class ImpactFunction(object):
         if not self._datastore:
             # By default, results will go in a temporary folder.
             # Users are free to set their own datastore with the setter.
+            self.callback(1, step_count, analysis_steps['data_store'])
             self._datastore = Folder(temp_dir(sub_dir=self._unique_name))
             self._datastore.default_vector_format = 'geojson'
-            if self.debug:
+            if self.debug_mode:
                 print 'Temporary datastore'
                 print self.datastore.uri.absolutePath()
 
-        if self.debug:
+            LOGGER.debug('Datastore : %s' % self.datastore.uri.absolutePath())
+
+        if self.debug_mode:
             self._datastore.use_index = True
 
             self.datastore.add_layer(self.exposure, 'exposure')
@@ -646,40 +643,80 @@ class ImpactFunction(object):
             if self.aggregation:
                 self.datastore.add_layer(self.aggregation, 'aggregation')
 
-        # Special case for Raster Earthquake hazard.
+        # Special case for Raster Earthquake hazard on Raster population.
         if self.hazard.type() == QgsMapLayer.RasterLayer:
             if self.hazard.keywords.get('hazard') == 'earthquake':
-                # return self.state()
-                return
+                if self.exposure.type() == QgsMapLayer.RasterLayer:
+                    if self.exposure.keywords.get('exposure') == 'population':
+                        # return self.state()
+                        return
 
+        self._performance_log = profiling_log()
+        self.callback(2, step_count, analysis_steps['hazard_preparation'])
         self.hazard_preparation()
 
+        self._performance_log = profiling_log()
+        self.callback(3, step_count, analysis_steps['aggregation_preparation'])
+        self.aggregation_preparation()
+
+        self._performance_log = profiling_log()
+        self.callback(
+            4, step_count, analysis_steps['aggregate_hazard_preparation'])
         self.aggregate_hazard_preparation()
 
+        self._performance_log = profiling_log()
+        self.callback(5, step_count, analysis_steps['exposure_preparation'])
         self.exposure_preparation()
 
+        self._performance_log = profiling_log()
+        self.callback(6, step_count, analysis_steps['combine_hazard_exposure'])
         self.intersect_exposure_and_aggregate_hazard()
 
-        # Post Processor
+        self._performance_log = profiling_log()
+        self.callback(7, step_count, analysis_steps['post_processing'])
         if self._impact:
+            self._performance_log = profiling_log()
+            # We post process the impact layer
             self.post_process(self._impact)
+        else:
+            if self._aggregate_hazard:
+                # We post process the aggregate hazard. (raster exposure).
+                self.post_process(self._aggregate_hazard)
+            else:
+                # We post process the aggregation (EQ raster or pop raster).
+                self.post_process(self.aggregation)
 
-            self.datastore.add_layer(self._impact, 'impact')
+        self._performance_log = profiling_log()
+        self.callback(8, step_count, analysis_steps['summary_calculation'])
+        self.summary_calculation()
 
-            self.set_state_process(
-                'impact function',
-                'Aggregate the impact summary')
-            self._aggregate_hazard = aggregate_summary(
-                self.aggregate_hazard_impacted, self._impact)
+        # End of the impact function, we can add layers to the datastore.
+        # We replace memory layers by the real layer from the datastore.
+        if self.impact:
+            _, name = self.datastore.add_layer(self._impact, 'impact')
+            self._impact = self.datastore.layer(name)
 
-        self.post_process(self._aggregate_hazard)
+        if self.aggregate_hazard_impacted:
+            _, name = self.datastore.add_layer(
+                self._aggregate_hazard, 'aggregate-hazard')
+            self._aggregate_hazard = self.datastore.layer(name)
 
-        self.datastore.add_layer(self._aggregate_hazard, 'aggregate-hazard')
+            _, name = self.datastore.add_layer(
+                self._exposure_breakdown, 'breakdown')
+            self._exposure_breakdown = self.datastore.layer(name)
+
+        _, name = self.datastore.add_layer(
+            self._aggregation, 'aggregation')
+        self._aggregation = self.datastore.layer(name)
+
+        _, name = self.datastore.add_layer(self.analysis_layer, 'analysis')
+        self._analysis_impacted = self.datastore.layer(name)
 
         # Get the profiling log
         self._performance_log = profiling_log()
+        self.callback(8, step_count, analysis_steps['profiling'])
 
-        if self.debug:
+        if self.debug_mode:
             print 'Performance log message :'
             print self.performance_log_message().to_text()
         return self.state
@@ -703,58 +740,37 @@ class ImpactFunction(object):
                     ranges[hazard_class['value']] = [min_value, max_value]
                 # noinspection PyTypeChecker
                 self.hazard = reclassify_raster(self.hazard, ranges)
-                if self.debug:
-                    self.datastore.add_layer(
-                        self.hazard, 'hazard_raster_reclassified')
+                if self.debug_mode:
+                    self.debug_layer(self.hazard)
 
             self.set_state_process(
                 'hazard', 'Polygonize classified raster hazard')
             # noinspection PyTypeChecker
             self.hazard = polygonize(self.hazard)
-            if self.debug:
-                self.datastore.add_layer(
-                    self.hazard, 'hazard_polygonized')
+            if self.debug_mode:
+                self.debug_layer(self.hazard)
 
         self.set_state_process(
             'hazard',
             'Cleaning the vector hazard attribute table')
         # noinspection PyTypeChecker
         self.hazard = prepare_vector_layer(self.hazard)
-        if self.debug:
-            self.datastore.add_layer(
-                self.hazard, 'hazard_cleaned')
+        if self.debug_mode:
+            self.debug_layer(self.hazard)
 
-        if self.hazard.geometryType() == QGis.Polygon:
-
-            if self.hazard.keywords.get('layer_mode') == 'continuous':
-                self.set_state_process(
-                    'hazard',
-                    'Classify continuous hazard and assign class names')
-                # self.hazard = reclassify(self.hazard, ranges)
-                # if self.debug:
-                #     self.datastore.add_layer(
-                #         self.hazard, 'hazard reclassified')
-
+        if self.hazard.keywords.get('layer_mode') == 'continuous':
             self.set_state_process(
-                'hazard', 'Assign classes based on value map')
-            self.hazard = assign_inasafe_values(self.hazard)
-            if self.debug:
-                self.datastore.add_layer(
-                    self.hazard, 'hazard_value_map_to_reclassified')
+                'hazard',
+                'Classify continuous hazard and assign class names')
+            # self.hazard = reclassify(self.hazard, ranges)
+            # if self.debug_mode:
+            #     self.debug_layer(self.hazard, 'hazard_reclassified')
 
-        else:
-            self.set_state_process('hazard', 'Buffering')
-            classifications = self.hazard.keywords.get('classification')
-            hazard_classes = definition(classifications)['classes']
-            ranges = OrderedDict()
-            for hazard_class in hazard_classes:
-                max_value = hazard_class['numeric_default_max']
-                ranges[max_value * 1000] = hazard_class['key']
-            # noinspection PyTypeChecker
-            self.hazard = buffering(self.hazard, ranges)
-            if self.debug:
-                self.datastore.add_layer(
-                    self.hazard, 'buffered-hazard')
+        self.set_state_process(
+            'hazard', 'Assign classes based on value map')
+        self.hazard = update_value_map(self.hazard)
+        if self.debug_mode:
+            self.debug_layer(self.hazard)
 
         self.set_state_process(
             'hazard', 'Classified polygon hazard with keywords')
@@ -766,32 +782,25 @@ class ImpactFunction(object):
             # noinspection PyTypeChecker
             self.hazard = reproject(
                 self.hazard, self.exposure.crs())
-            if self.debug:
-                self.datastore.add_layer(
-                    self.hazard, 'hazard_reprojected')
+            if self.debug_mode:
+                self.debug_layer(self.hazard)
 
         self.set_state_process(
             'hazard', 'Vector clip and mask hazard to aggregation')
 
     @profile
-    def aggregate_hazard_preparation(self):
-        """This function is doing the aggregate hazard layer.
-
-        It will prepare the aggregate layer and intersect hazard polygons with
-        aggregation areas and assign hazard class.
-        """
+    def aggregation_preparation(self):
+        """This function is doing the aggregation preparation."""
         if not self.aggregation:
             self.set_state_info('aggregation', 'provided', False)
-
-            if not self.actual_extent:
-                self._actual_extent = self.exposure.extent()
 
             self.set_state_process(
                 'aggregation',
                 'Convert bbox aggregation to polygon layer with keywords')
-            self.aggregation = self.create_virtual_aggregation()
-            if self.debug:
-                self.datastore.add_layer(self.aggregation, 'aggr_from_bbox')
+            self.aggregation = create_virtual_aggregation(
+                self.exposure.extent(), self.exposure.crs())
+            if self.debug_mode:
+                self.debug_layer(self.aggregation)
 
         else:
             self.set_state_info('aggregation', 'provided', True)
@@ -800,8 +809,8 @@ class ImpactFunction(object):
                 'aggregation', 'Cleaning the aggregation layer')
             # noinspection PyTypeChecker
             self.aggregation = prepare_vector_layer(self.aggregation)
-            if self.debug:
-                self.datastore.add_layer(self.aggregation, 'aggr_prepared')
+            if self.debug_mode:
+                self.debug_layer(self.aggregation)
 
             if self.aggregation.crs().authid() != self.exposure.crs().authid():
                 self.set_state_process(
@@ -810,9 +819,9 @@ class ImpactFunction(object):
                 # noinspection PyTypeChecker
                 self.aggregation = reproject(
                     self.aggregation, self.exposure.crs())
-                if self.debug:
-                    self.datastore.add_layer(
-                        self.aggregation, 'aggr_reprojected')
+                if self.debug_mode:
+                    self.debug_layer(self.aggregation)
+
             else:
                 self.set_state_process(
                     'aggregation',
@@ -821,27 +830,32 @@ class ImpactFunction(object):
         self.set_state_process(
             'aggregation',
             'Convert the aggregation layer to the analysis layer')
-        self._analysis_impacted = self.create_analysis_layer()
-        if self.debug:
-            self.datastore.add_layer(
-                self._analysis_impacted, 'analysis_layer')
+        self._analysis_impacted = create_analysis_layer(
+            self.aggregation, self.exposure.crs(), self.name)
+        if self.debug_mode:
+            self.debug_layer(self._analysis_impacted)
 
+    @profile
+    def aggregate_hazard_preparation(self):
+        """This function is doing the aggregate hazard layer.
+
+        It will prepare the aggregate layer and intersect hazard polygons with
+        aggregation areas and assign hazard class.
+        """
         self.set_state_process(
             'hazard',
             'Clip and mask hazard polygons with the analysis layer')
         self.hazard = clip(self.hazard, self.analysis_layer)
-        if self.debug:
-            self.datastore.add_layer(
-                self.hazard, 'hazard_clip_by_analysis_layer')
+        if self.debug_mode:
+            self.debug_layer(self.hazard)
 
         self.set_state_process(
             'aggregation',
             'Union hazard polygons with aggregation areas and assign '
             'hazard class')
         self._aggregate_hazard = union(self.hazard, self.aggregation)
-        if self.debug:
-            self.datastore.add_layer(
-                self._aggregate_hazard, 'aggregate_hazard')
+        if self.debug_mode:
+            self.debug_layer(self._aggregate_hazard)
 
     @profile
     def exposure_preparation(self):
@@ -869,16 +883,14 @@ class ImpactFunction(object):
                 'Cleaning the vector exposure attribute table')
             # noinspection PyTypeChecker
             self.exposure = prepare_vector_layer(self.exposure)
-            if self.debug:
-                self.datastore.add_layer(
-                    self.exposure, 'exposure_cleaned')
+            if self.debug_mode:
+                self.debug_layer(self.exposure)
 
             self.set_state_process(
                 'exposure', 'Assign classes based on value map')
-            self.exposure = assign_inasafe_values(self.exposure)
-            if self.debug:
-                self.datastore.add_layer(
-                    self.exposure, 'exposure_value_map_to_reclassified')
+            self.exposure = update_value_map(self.exposure)
+            if self.debug_mode:
+                self.debug_layer(self.exposure)
 
             exposure = self.exposure.keywords.get('exposure')
             geometry = self.exposure.geometryType()
@@ -894,9 +906,8 @@ class ImpactFunction(object):
                     'Clip the exposure layer with the analysis layer')
                 self.exposure = clip(self.exposure, self._analysis_impacted)
 
-            if self.debug:
-                self.datastore.add_layer(
-                    self.exposure, 'exposure_clip')
+            if self.debug_mode:
+                self.debug_layer(self.exposure)
 
     @profile
     def intersect_exposure_and_aggregate_hazard(self):
@@ -915,9 +926,8 @@ class ImpactFunction(object):
             # noinspection PyTypeChecker
             self._aggregate_hazard = zonal_stats(
                 self.exposure, self._aggregate_hazard)
-            if self.debug:
-                self.datastore.add_layer(
-                    self._aggregate_hazard, 'zonal_stats')
+            if self.debug_mode:
+                self.debug_layer(self._aggregate_hazard)
 
             # I know it's redundant, it's just to be sure that we don't have
             # any impact layer for that IF.
@@ -940,9 +950,11 @@ class ImpactFunction(object):
                     'Union exposure features to the aggregate hazard')
                 self._impact = union(self.exposure, self._aggregate_hazard)
 
-            if self.debug:
-                self.datastore.add_layer(
-                    self._impact, 'intermediate-impact')
+            if self.debug_mode:
+                self.debug_layer(self._impact)
+
+        if self._impact:
+            self._impact.keywords['title'] = 'impact'
 
     @profile
     def post_process(self, layer):
@@ -955,10 +967,45 @@ class ImpactFunction(object):
         # Notes, action
 
         for post_processor in post_processors:
-            result, post_processor_output = run_single_post_processor(
-                layer,
-                post_processor)
-            if result:
-                self.set_state_process(
-                    'post_processor',
-                    str('Post processor for %s' % post_processor['name']))
+            valid, message = enough_input(layer, post_processor['input'])
+
+            if valid:
+                valid, message = run_single_post_processor(
+                    layer, post_processor)
+                if valid:
+                    msg = str('Post processor for %s' % post_processor['name'])
+                    self.set_state_process('post_processor', msg)
+                    LOGGER.info(msg)
+                else:
+                    LOGGER.info(message)
+            else:
+                LOGGER.info(message)
+
+    def summary_calculation(self):
+        """Do the summary calculation."""
+
+        if self.impact:
+            self.set_state_process(
+                'impact function',
+                'Aggregate the impact summary')
+            self._aggregate_hazard = aggregate_hazard_summary(
+                self._impact, self._aggregate_hazard)
+
+        if self.aggregate_hazard_impacted:
+            self.set_state_process(
+                'impact function',
+                'Aggregate the aggregation summary')
+            self._aggregation = aggregation_summary(
+                self._aggregate_hazard, self.aggregation)
+
+            self.set_state_process(
+                'impact function',
+                'Aggregate the analysis summary')
+            self._analysis_impacted = analysis_summary(
+                self.aggregate_hazard_impacted, self._analysis_impacted)
+
+            self.set_state_process(
+                'impact function',
+                'Build the exposure breakdown')
+            self._exposure_breakdown = exposure_type_breakdown(
+                self._aggregate_hazard)

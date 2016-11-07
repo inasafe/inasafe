@@ -10,11 +10,8 @@ from qgis.core import QgsRasterLayer
 from qgis.analysis import QgsZonalStatistics
 
 from safe.gisv4.vector.tools import copy_layer, create_memory_layer
-from safe.common.exceptions import FileNotFoundError
-from safe.common.utilities import unique_filename, temp_dir
-from safe.definitionsv4.fields import population_count_field
-from safe.definitionsv4.utilities import definition
-from safe.definitionsv4.processing import reclassify_raster
+from safe.definitionsv4.fields import total_field
+from safe.definitionsv4.processing_steps import zonal_stats_steps
 from safe.utilities.profiling import profile
 from safe.utilities.i18n import tr
 
@@ -46,10 +43,8 @@ def zonal_stats(raster, vector, callback=None):
 
     .. versionadded:: 4.0
     """
-    # output_layer_name = zonal_statistics['output_layer_name']
-    # processing_step = zonal_statistics['step_name']
-    output_layer_name = 'zonal_statistics'
-    processing_step = 'zonal_statistics'
+    output_layer_name = zonal_stats_steps['output_layer_name']
+    processing_step = zonal_stats_steps['step_name']
 
     layer = create_memory_layer(
         output_layer_name,
@@ -66,8 +61,15 @@ def zonal_stats(raster, vector, callback=None):
     LOGGER.debug(tr('Zonal stats on %s : %s' % (raster.source(), result)))
 
     layer.keywords = raster.keywords.copy()
-    layer.keywords['inasafe_fields'] = {
-        population_count_field['key']: 'exposure_sum'
-    }
+    layer.keywords['inasafe_fields'] = vector.keywords['inasafe_fields'].copy()
+    key = total_field['key']
+    layer.keywords['inasafe_fields'][key] = 'exposure_sum'
+
+    layer.keywords['exposure_keywords'] = raster.keywords
+    layer.keywords['hazard_keywords'] = vector.keywords['hazard_keywords']
+    layer.keywords['aggregation_keywords'] = (
+        vector.keywords['aggregation_keywords'])
+
+    layer.keywords['title'] = output_layer_name
 
     return layer

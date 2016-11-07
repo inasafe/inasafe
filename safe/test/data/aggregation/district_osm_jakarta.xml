@@ -184,6 +184,9 @@
           <inasafe_fields>
             <gco:Dictionary>{&quot;aggregation_name_field&quot;: &quot;KAB_NAME&quot;}</gco:Dictionary>
           </inasafe_fields>
+          <inasafe_default_values>
+            <gco:Dictionary/>
+          </inasafe_default_values>
           <scale>
             <gco:CharacterString/>
           </scale>

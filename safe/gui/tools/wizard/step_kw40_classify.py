@@ -21,17 +21,12 @@ from PyQt4.QtCore import QPyNullVariant
 from osgeo import gdal
 from osgeo.gdalconst import GA_ReadOnly
 
-from safe.definitionsv4.exposure import (
-    exposure_road, exposure_structure, exposure_place)
-from safe.definitionsv4.exposure_classifications import (
-    generic_structure_classes, generic_road_classes, generic_place_classes
-)
+from safe.definitionsv4.layer_geometry import layer_geometry_raster
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_strings import (
     classify_raster_question,
-    classify_vector_question,
-    classify_vector_for_postprocessor_question)
+    classify_vector_question)
 from safe.utilities.gis import is_raster_layer
 
 __author__ = 'qgis@borysjurgiel.pl'
@@ -65,67 +60,17 @@ class StepKwClassify(WizardStep, FORM_CLASS):
         """
         return True
 
-    def get_previous_step(self):
-        """Find the proper step when user clicks the Previous button.
-
-        :returns: The step to be switched to
-        :rtype: WizardStep instance or None
-        """
-        if is_raster_layer(self.parent.layer):
-            new_step = self.parent.step_kw_classification
-        else:
-            new_step = self.parent.step_kw_field
-        return new_step
-
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.
 
         :returns: The step to be switched to
         :rtype: WizardStep instance or None
         """
-        selected_subcategory = self.parent.step_kw_subcategory.\
-            selected_subcategory()
-        if selected_subcategory == exposure_place:
-            new_step = self.parent.step_kw_name_field
+        if self.parent.get_layer_geometry_key() == \
+                layer_geometry_raster['key']:
+            return self.parent.step_kw_source
         else:
-            new_step = self.parent.step_kw_inasafe_fields
-        return new_step
-
-    def postprocessor_classification_for_layer(self):
-        """Returns a postprocessor classification if available for the
-           current layer.
-
-           It is parallel to classifications_for_layer(), with some
-           differences:
-
-           The classifications_for_layer returns a list of classifications
-           obtained from ImpactFuctionManager and is currently available
-           for hazards only.
-
-           The postprocessor_classification_for_layer returns just one
-           classification, based on information obtained from
-           Type Postprocessors. Currently, only structure and road exposure
-           are supported.
-
-           Because there is at most one classification available, the returned
-           value is just a list of classes. Also, the postprocessor
-           classification doesn't cause displaying the classification
-           selection step (unlike the hazard classifications)
-
-        :returns: A list where each value represents a classification category.
-        :rtype: list
-
-        """
-        selected_subcategory = self.parent.step_kw_subcategory.\
-            selected_subcategory()
-        if selected_subcategory == exposure_road:
-            return generic_road_classes['classes']
-        elif selected_subcategory == exposure_structure:
-            return generic_structure_classes['classes']
-        elif selected_subcategory == exposure_place:
-            return generic_place_classes['classes']
-        else:
-            return None
+            return self.parent.step_kw_inasafe_fields
 
     # noinspection PyMethodMayBeStatic
     def update_dragged_item_flags(self, item, column):
@@ -168,18 +113,12 @@ class StepKwClassify(WizardStep, FORM_CLASS):
         """Set widgets on the Classify tab."""
         purpose = self.parent.step_kw_purpose.selected_purpose()
         subcategory = self.parent.step_kw_subcategory.selected_subcategory()
-        # There may be two cases this tab is displayed: either
-        # a classification or postprocessor_classification is available
 
         sel_cl = self.parent.step_kw_classification.selected_classification()
-        if sel_cl:
-            default_classes = sel_cl['classes']
-            mapping_keyword = 'value_map'
-            classification_name = sel_cl['name']
-        else:
-            default_classes = self.postprocessor_classification_for_layer()
-            mapping_keyword = 'value_map'
-            classification_name = ''
+        default_classes = sel_cl['classes']
+        mapping_keyword = 'value_map'
+        classification_name = sel_cl['name']
+
         if is_raster_layer(self.parent.layer):
             self.lblClassify.setText(classify_raster_question % (
                 subcategory['name'], purpose['name'], classification_name))
@@ -198,14 +137,9 @@ class StepKwClassify(WizardStep, FORM_CLASS):
                 indexFromName(field)
             field_type = self.parent.layer.dataProvider().\
                 fields()[field_index].type()
-            if classification_name:
-                self.lblClassify.setText(classify_vector_question % (
+            self.lblClassify.setText(classify_vector_question % (
                     subcategory['name'], purpose['name'],
                     classification_name, field.upper()))
-            else:
-                self.lblClassify.setText(
-                    classify_vector_for_postprocessor_question % (
-                        subcategory['name'], purpose['name'], field.upper()))
             unique_values = self.parent.layer.uniqueValues(field_index)
 
         # Assign unique values to classes (according to default)

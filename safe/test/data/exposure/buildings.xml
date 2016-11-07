@@ -181,6 +181,9 @@
           <inasafe_fields>
             <gco:Dictionary>{&quot;exposure_type_field&quot;: &quot;TYPE&quot;}</gco:Dictionary>
           </inasafe_fields>
+          <inasafe_default_values>
+            <gco:Dictionary/>
+          </inasafe_default_values>
           <area_name_field>
             <gco:CharacterString/>
           </area_name_field>

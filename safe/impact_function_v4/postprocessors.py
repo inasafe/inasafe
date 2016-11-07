@@ -3,10 +3,12 @@
 """
 Postprocessors.
 """
+from PyQt4.QtCore import QPyNullVariant
 
-from qgis.core import QgsDistanceArea, QgsField, QgsFeatureRequest
+from qgis.core import QgsDistanceArea, QgsFeatureRequest
 
 from safe.definitionsv4.fields import size_field
+from safe.gisv4.vector.tools import create_field_from_definition
 from safe.utilities.profiling import profile
 from safe.utilities.i18n import tr
 
@@ -18,6 +20,7 @@ __revision__ = '$Format:%H$'
 
 def evaluate_formula(formula, variables):
     """Very simple formula evaluator. Beware the security.
+
     :param formula: A simple formula.
     :type formula: str
 
@@ -28,6 +31,9 @@ def evaluate_formula(formula, variables):
     :rtype: float, int
     """
     for key, value in variables.items():
+        if isinstance(value, QPyNullVariant) or not value:
+            # If one value is null, we return null.
+            return value
         formula = formula.replace(key, str(value))
     return eval(formula)
 
@@ -48,140 +54,155 @@ def run_single_post_processor(layer, post_processor):
     :returns: Tuple with True if success, else False with an error message.
     :rtype: (bool, str)
     """
-    valid, message = enough_input(layer, post_processor['input'])
-    if valid:
 
-        if not layer.editBuffer():
+    if not layer.editBuffer():
 
-            # Turn on the editing mode.
-            if not layer.startEditing():
-                msg = tr(
-                    'The impact layer could not start the editing mode.')
-                return False, msg
+        # Turn on the editing mode.
+        if not layer.startEditing():
+            msg = tr('The impact layer could not start the editing mode.')
+            return False, msg
 
-        # Calculate based on formula
-        # Iterate all possible output
-        for output_key, output_value in post_processor['output'].items():
+    # Calculate based on formula
+    # Iterate all possible output
+    for output_key, output_value in post_processor['output'].items():
 
-            # Get output attribute name
-            key = output_value['value']['key']
-            output_field_name = output_value['value']['field_name']
-            layer.keywords['inasafe_fields'][key] = output_field_name
+        # Get output attribute name
+        key = output_value['value']['key']
+        output_field_name = output_value['value']['field_name']
+        layer.keywords['inasafe_fields'][key] = output_field_name
 
-            # If there is already the output field, don't proceed
-            if layer.fieldNameIndex(output_field_name) > -1:
-                msg = tr(
-                    'The field name %s already exists.'
-                    % output_field_name)
-                layer.rollBack()
-                return False, msg
+        # If there is already the output field, don't proceed
+        if layer.fieldNameIndex(output_field_name) > -1:
+            msg = tr(
+                'The field name %s already exists.'
+                % output_field_name)
+            layer.rollBack()
+            return False, msg
 
-            # Add output attribute name to the layer
-            result = layer.addAttribute(
-                QgsField(
-                    output_field_name,
-                    output_value['value']['type'])
-            )
-            if not result:
-                msg = tr(
-                    'Error while creating the field %s.'
-                    % output_field_name)
-                layer.rollBack()
-                return False, msg
+        # Add output attribute name to the layer
+        field = create_field_from_definition(output_value['value'])
+        result = layer.addAttribute(field)
+        if not result:
+            msg = tr(
+                'Error while creating the field %s.'
+                % output_field_name)
+            layer.rollBack()
+            return False, msg
 
-            # Get the index of output attribute
-            output_field_index = layer.fieldNameIndex(
-                output_field_name)
+        # Get the index of output attribute
+        output_field_index = layer.fieldNameIndex(output_field_name)
 
-            if layer.fieldNameIndex(output_field_name) == -1:
-                msg = tr(
-                    'The field name %s has not been created.'
-                    % output_field_name)
-                layer.rollBack()
-                return False, msg
+        if layer.fieldNameIndex(output_field_name) == -1:
+            msg = tr(
+                'The field name %s has not been created.'
+                % output_field_name)
+            layer.rollBack()
+            return False, msg
 
-            # Get the input field's indexes for input
-            input_indexes = {}
-            # Store the indexes that will be deleted.
-            temporary_indexes = []
-            for key, value in post_processor['input'].items():
+        # Get the input field's indexes for input
+        input_indexes = {}
 
-                if value['type'] == 'field':
-                    inasafe_fields = layer.keywords['inasafe_fields']
-                    name_field = inasafe_fields.get(value['value']['key'])
+        # Default parameters
+        default_parameters = {}
 
-                    if not name_field:
-                        msg = tr(
-                            '%s has not been found in inasafe fields.'
-                            % value['value']['key'])
-                        layer.rollBack()
-                        return False, msg
+        # Store the indexes that will be deleted.
+        temporary_indexes = []
 
-                    index = layer.fieldNameIndex(name_field)
+        for key, value in post_processor['input'].items():
 
-                    if index == -1:
-                        fields = layer.fields().toList()
-                        msg = tr(
-                            'The field name %s has not been found in %s'
-                            % (
-                                name_field,
-                                [f.name() for f in fields]
-                            ))
-                        layer.rollBack()
-                        return False, msg
+            if value['type'] == 'field':
+                inasafe_fields = layer.keywords['inasafe_fields']
+                name_field = inasafe_fields.get(value['value']['key'])
 
-                    input_indexes[key] = index
+                if not name_field:
+                    msg = tr(
+                        '%s has not been found in inasafe fields.'
+                        % value['value']['key'])
+                    layer.rollBack()
+                    return False, msg
 
-                # For geometry, create new field that contain the value
-                elif value['type'] == 'geometry_property':
-                    if value['value'] == 'size':
-                        flag = False
-                        # Check if size field is already exist
-                        if layer.fieldNameIndex(
-                                size_field['field_name']) != -1:
-                            flag = True
-                            # temporary_indexes.append(input_indexes[key])
-                        input_indexes[key] = add_size_field(layer)
-                        if not flag:
-                            temporary_indexes.append(input_indexes[key])
+                index = layer.fieldNameIndex(name_field)
 
-            # Create iterator for feature
-            request = QgsFeatureRequest().setSubsetOfAttributes(
-                input_indexes.values())
-            iterator = layer.getFeatures(request)
-            # Iterate all feature
-            for feature in iterator:
-                attributes = feature.attributes()
+                if index == -1:
+                    fields = layer.fields().toList()
+                    msg = tr(
+                        'The field name %s has not been found in %s'
+                        % (
+                            name_field,
+                            [f.name() for f in fields]
+                        ))
+                    layer.rollBack()
+                    return False, msg
 
-                # Create dictionary to store the input
-                parameters = {}
+                input_indexes[key] = index
 
-                # Fill up the input from fields
-                for key, value in input_indexes.items():
-                    parameters[key] = attributes[value]
-                # Fill up the input from geometry property
+            # For geometry, create new field that contain the value
+            elif value['type'] == 'geometry_property':
+                if value['value'] == 'size':
+                    flag = False
+                    # Check if size field is already exist
+                    if layer.fieldNameIndex(size_field['field_name']) != -1:
+                        flag = True
+                        # temporary_indexes.append(input_indexes[key])
+                    input_indexes[key] = add_size_field(layer)
+                    if not flag:
+                        temporary_indexes.append(input_indexes[key])
 
-                # Evaluate the formula
+            elif value['type'] == 'keyword':
+
+                # See http://stackoverflow.com/questions/14692690/
+                # access-python-nested-dictionary-items-via-a-list-of-keys
+                value = reduce(
+                    lambda d, k: d[k], value['value'], layer.keywords)
+
+                default_parameters[key] = value
+
+        # Create iterator for feature
+        request = QgsFeatureRequest().setSubsetOfAttributes(
+            input_indexes.values())
+        iterator = layer.getFeatures(request)
+
+        # Iterate all feature
+        for feature in iterator:
+            attributes = feature.attributes()
+
+            # Create dictionary to store the input
+            parameters = {}
+            parameters.update(default_parameters)
+
+            # Fill up the input from fields
+            for key, value in input_indexes.items():
+                parameters[key] = attributes[value]
+            # Fill up the input from geometry property
+
+            # Evaluate the function
+            python_function = output_value.get('function')
+            if python_function:
+                # Launch the python function
+                post_processor_result = python_function(**parameters)
+            else:
+                # Evaluate the function
+                formula = output_value['formula']
                 post_processor_result = evaluate_formula(
-                    output_value['formula'], parameters)
+                    formula, parameters)
 
-                layer.changeAttributeValue(
-                    feature.id(),
-                    output_field_index,
-                    post_processor_result
-                )
+            # The affected postprocessor returns a boolean.
+            if isinstance(post_processor_result, bool):
+                post_processor_result = tr(unicode(post_processor_result))
 
-            # Delete temporary indexes
-            layer.deleteAttributes(temporary_indexes)
+            layer.changeAttributeValue(
+                feature.id(),
+                output_field_index,
+                post_processor_result
+            )
 
-        layer.commitChanges()
-        return True, None
-    else:
-        layer.rollBack()
-        return False, message
+        # Delete temporary indexes
+        layer.deleteAttributes(temporary_indexes)
+
+    layer.commitChanges()
+    return True, None
 
 
-@profile
 def enough_input(layer, post_processor_input):
     """Check if the input from impact_fields in enough.
 
@@ -231,8 +252,8 @@ def add_size_field(layer):
     # Check if size field already exist
     if size_field_index == -1:
         # Add new field, size
-        layer.addAttribute(QgsField(
-            size_field['field_name'], size_field['type']))
+        field = create_field_from_definition(size_field)
+        layer.addAttribute(field)
         # Get index
         size_field_index = layer.fieldNameIndex('size')
 

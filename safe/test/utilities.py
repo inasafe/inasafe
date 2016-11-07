@@ -30,6 +30,7 @@ from safe.utilities.clipper import extent_to_geoarray, clip_layer
 from safe.utilities.gis import get_wgs84_resolution
 from safe.utilities.metadata import read_iso19115_metadata
 from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.i18n import tr
 import codecs
 
 QGIS_APP = None  # Static variable used to hold hand to running QGIS app
@@ -170,6 +171,37 @@ def get_dock():
         return DockObject(IFACE)
 
 
+def check_inasafe_fields(layer):
+    """Helper to check inasafe_fields.
+
+    :param layer: The layer to check.
+    :type layer: QgsVectorLayer
+
+    :return: A tuple with a boolean if it's ok.
+        If it's not a OK, the second member is the error message.
+    :rtype: tuple(bool, str)
+    """
+    inasafe_fields = layer.keywords['inasafe_fields']
+
+    real_fields = [field.name() for field in layer.fields().toList()]
+
+    difference = set(inasafe_fields.values()).difference(real_fields)
+    if len(difference):
+        msg = tr(
+            'inasafe_fields has more fields than the layer %s itself : %s'
+            % (layer. title(), difference))
+        return False, msg
+
+    difference = set(real_fields).difference(inasafe_fields.values())
+    if len(difference):
+        msg = tr(
+            'The layer %s has more fields than inasafe_fields : %s'
+            % (layer.title(), difference))
+        return False, msg
+    else:
+        return True, None
+
+
 def assert_hash_for_file(hash_string, filename):
     """Assert that a files hash matches its expected hash.
     :param filename:
@@ -251,7 +283,7 @@ def load_test_vector_layer(*args, **kwargs):
 
     See documentation of load_path_vector_layer
 
-    :param args: List of path e.g. ['exposure', 'buildings.shp'.
+    :param args: List of path e.g. ['exposure', 'buildings.shp'].
     :type args: list
 
     :param kwargs: It can be :
@@ -294,6 +326,9 @@ def load_path_vector_layer(path, **kwargs):
 
     .. versionadded:: 4.0
     """
+    if not exists(path):
+        raise Exception('%s do not exist.' % path)
+
     name = splitext(basename(path))[0]
     extension = splitext(path)[1]
 
@@ -315,7 +350,14 @@ def load_path_vector_layer(path, **kwargs):
                 target_path = join(target_directory, name + ext)
                 shutil.copy2(src_path, target_path)
 
-    layer = QgsVectorLayer(path, name, 'ogr')
+    if path.endswith('.csv'):
+        layer = QgsVectorLayer(path, name, 'delimitedtext')
+    else:
+        layer = QgsVectorLayer(path, name, 'ogr')
+
+    if not layer.isValid():
+        raise Exception('%s is not a valid layer.' % name)
+
     monkey_patch_keywords(layer)
 
     if kwargs.get('clone_to_memory', False):
@@ -348,11 +390,47 @@ def monkey_patch_keywords(layer):
         layer.keywords['inasafe_fields'] = {}
 
 
-def load_test_raster_layer(*args):
+def load_local_raster_layer(test_file, **kwargs):
     """Return the test raster layer.
 
-    :param args: List of path e.g. ['exposure', 'population.asc'].
+    See documentation of load_path_raster_layer
+
+    :param test_file: The file to load in the data directory next to the file.
+    :type test_file: str
+
+    :param kwargs: It can be :
+        clone=True if you want to copy the layer first to a temporary file.
+
+        with_keywords=False if you do not want keywords. "clone" is
+            required.
+
+    :type kwargs: dict
+
+    :return: The raster layer.
+    :rtype: QgsRasterLayer
+
+    .. versionadded:: 4.0
+    """
+    caller_path = inspect.getouterframes(inspect.currentframe())[1][1]
+    path = os.path.join(os.path.dirname(caller_path), 'data', test_file)
+    return load_path_raster_layer(path, **kwargs)
+
+
+def load_test_raster_layer(*args, **kwargs):
+    """Return the test raster layer.
+
+    See documentation of load_path_raster_layer
+
+    :param args: List of path e.g. ['exposure', 'population.asc]'.
     :type args: list
+
+    :param kwargs: It can be :
+        clone=True if you want to copy the layer first to a temporary file.
+
+        with_keywords=False if you do not want keywords. "clone" is
+            required.
+
+    :type kwargs: dict
 
     :return: The raster layer.
     :rtype: QgsRasterLayer
@@ -360,8 +438,59 @@ def load_test_raster_layer(*args):
     .. versionadded:: 4.0
     """
     path = standard_data_path(*args)
+    return load_path_raster_layer(path, **kwargs)
+
+
+def load_path_raster_layer(path, **kwargs):
+    """Return the test raster layer.
+
+    :param path: Path to the raster layer.
+    :type path: str
+
+    :param kwargs: It can be :
+        clone=True if you want to copy the layer first to a temporary file.
+
+        with_keywords=False if you do not want keywords. "clone" is
+            required.
+
+    :return: The raster layer.
+    :rtype: QgsRasterLayer
+
+    .. versionadded:: 4.0
+    """
+    if not exists(path):
+        raise Exception('%s do not exist.' % path)
+
+    name = splitext(basename(path))[0]
+    extension = splitext(path)[1]
+
+    extensions = [
+        '.tiff', '.tif', '.asc', '.xml', '.qml']
+
+    if kwargs.get('with_keywords'):
+        if not kwargs.get('clone'):
+            raise Exception('with_keywords needs a clone')
+
+    if not kwargs.get('with_keywords', True):
+        index = extensions.index('.xml')
+        extensions.pop(index)
+
+    if kwargs.get('clone', False):
+        target_directory = mkdtemp()
+        current_path = splitext(path)[0]
+        path = join(target_directory, name + extension)
+
+        for ext in extensions:
+            src_path = current_path + ext
+            if exists(src_path):
+                target_path = join(target_directory, name + ext)
+                shutil.copy2(src_path, target_path)
+
     name = os.path.basename(path)
     layer = QgsRasterLayer(path, name)
+
+    if not layer.isValid():
+        raise Exception('%s is not a valid layer.' % name)
 
     monkey_patch_keywords(layer)
 
@@ -586,22 +715,16 @@ def get_ui_state(dock):
 
         {'Hazard': 'flood',
          'Exposure': 'population',
-         'Impact Function Title': 'be affected',
-         'Impact Function Id': 'FloodImpactFunction',
          'Run Button Enabled': False}
 
     """
 
-    hazard = str(dock.cboHazard.currentText())
-    exposure = str(dock.cboExposure.currentText())
-    impact_function_title = str(dock.cboFunction.currentText())
-    impact_function_id = dock.get_function_id()
-    run_button = dock.pbnRunStop.isEnabled()
+    hazard = str(dock.hazard_layer_combo.currentText())
+    exposure = str(dock.exposure_layer_combo.currentText())
+    run_button = dock.run_button.isEnabled()
 
     return {'Hazard': hazard,
             'Exposure': exposure,
-            'Impact Function Title': impact_function_title,
-            'Impact Function Id': impact_function_id,
             'Run Button Enabled': run_button}
 
 
@@ -631,9 +754,9 @@ def combos_to_string(dock):
 
     string = u'Hazard Layers\n'
     string += '-------------------------\n'
-    current_id = dock.cboHazard.currentIndex()
-    for count in range(0, dock.cboHazard.count()):
-        item_text = dock.cboHazard.itemText(count)
+    current_id = dock.hazard_layer_combo.currentIndex()
+    for count in range(0, dock.hazard_layer_combo.count()):
+        item_text = dock.hazard_layer_combo.itemText(count)
         if count == current_id:
             string += '>> '
         else:
@@ -642,9 +765,9 @@ def combos_to_string(dock):
     string += '\n'
     string += 'Exposure Layers\n'
     string += '-------------------------\n'
-    current_id = dock.cboExposure.currentIndex()
-    for count in range(0, dock.cboExposure.count()):
-        item_text = dock.cboExposure.itemText(count)
+    current_id = dock.exposure_layer_combo.currentIndex()
+    for count in range(0, dock.exposure_layer_combo.count()):
+        item_text = dock.exposure_layer_combo.itemText(count)
         if count == current_id:
             string += '>> '
         else:
@@ -652,24 +775,11 @@ def combos_to_string(dock):
         string += item_text + '\n'
 
     string += '\n'
-    string += 'Functions\n'
-    string += '-------------------------\n'
-    current_id = dock.cboFunction.currentIndex()
-    for count in range(0, dock.cboFunction.count()):
-        item_text = dock.cboFunction.itemText(count)
-        if count == current_id:
-            string += '>> '
-        else:
-            string += '   '
-        string += '%s (Function ID: %s)\n' % (
-            item_text, dock.get_function_id(current_id))
-
-    string += '\n'
     string += 'Aggregation Layers\n'
     string += '-------------------------\n'
-    current_id = dock.cboAggregation.currentIndex()
-    for count in range(0, dock.cboAggregation.count()):
-        item_text = dock.cboAggregation.itemText(count)
+    current_id = dock.aggregation_layer_combo.currentIndex()
+    for count in range(0, dock.aggregation_layer_combo.count()):
+        item_text = dock.aggregation_layer_combo.itemText(count)
         if count == current_id:
             string += '>> '
         else:
@@ -680,31 +790,10 @@ def combos_to_string(dock):
     return string
 
 
-def get_function_index(dock, function_id):
-    """Get the combo index for a function given its function_id.
-
-    :param dock: A dock instance.
-    :type dock: Dock
-
-    :param function_id: The function id e.g. FloodEvacuationImpactFunction.
-    :type function_id: str
-    """
-
-    index = -1
-    for count in range(dock.cboFunction.count()):
-        next_function_id = dock.get_function_id(count)
-        if function_id == next_function_id:
-            index = count
-            break
-    return index
-
-
 def setup_scenario(
         dock,
         hazard,
         exposure,
-        function_id,
-        function=None,
         ok_button_flag=True,
         aggregation_layer=None,
         aggregation_enabled_flag=None):
@@ -749,39 +838,32 @@ def setup_scenario(
     :rtype: (bool, str)
     """
     if hazard is not None:
-        index = dock.cboHazard.findText(hazard)
+        index = dock.hazard_layer_combo.findText(hazard)
         message = ('\nHazard Layer Not Found: %s\n Combo State:\n%s' %
                    (hazard, combos_to_string(dock)))
         if index == -1:
             return False, message
-        dock.cboHazard.setCurrentIndex(index)
+        dock.hazard_layer_combo.setCurrentIndex(index)
 
     if exposure is not None:
-        index = dock.cboExposure.findText(exposure)
+        index = dock.exposure_layer_combo.findText(exposure)
         message = ('\nExposure Layer Not Found: %s\n Combo State:\n%s' %
                    (exposure, combos_to_string(dock)))
         if index == -1:
             return False, message
-        dock.cboExposure.setCurrentIndex(index)
-
-    if function_id is not None:
-        index = get_function_index(dock, function_id)
-        message = ('\nImpact Function Not Found: %s\n Combo State:\n%s' %
-                   (function, combos_to_string(dock)))
-        if index == -1:
-            return False, message
-        dock.cboFunction.setCurrentIndex(index)
+        dock.exposure_layer_combo.setCurrentIndex(index)
 
     if aggregation_layer is not None:
-        index = dock.cboAggregation.findText(aggregation_layer)
+        index = dock.aggregation_layer_combo.findText(aggregation_layer)
         message = ('Aggregation layer Not Found: %s\n Combo State:\n%s' %
                    (aggregation_layer, combos_to_string(dock)))
         if index == -1:
             return False, message
-        dock.cboAggregation.setCurrentIndex(index)
+        dock.aggregation_layer_combo.setCurrentIndex(index)
 
     if aggregation_enabled_flag is not None:
-        if dock.cboAggregation.isEnabled() != aggregation_enabled_flag:
+        combo_enabled_flag = dock.aggregation_layer_combo.isEnabled()
+        if combo_enabled_flag != aggregation_enabled_flag:
             message = (
                 'The aggregation combobox should be %s' %
                 ('enabled' if aggregation_enabled_flag else 'disabled'))
@@ -791,13 +873,8 @@ def setup_scenario(
     state = get_ui_state(dock)
 
     expected_state = {'Run Button Enabled': ok_button_flag,
-                      'Impact Function Id': function_id,
                       'Hazard': hazard,
                       'Exposure': exposure}
-    if function is not None:
-        expected_state['Impact Function Title'] = function
-    else:
-        state.pop('Impact Function Title')
 
     message = 'Expected versus Actual State\n'
     message += '--------------------------------------------------------\n'
@@ -822,8 +899,8 @@ def populate_dock(dock):
     :type dock: Dock
     """
     load_standard_layers(dock)
-    dock.cboHazard.setCurrentIndex(0)
-    dock.cboExposure.setCurrentIndex(0)
+    dock.hazard_layer_combo.setCurrentIndex(0)
+    dock.exposure_layer_combo.setCurrentIndex(0)
 
 
 def load_standard_layers(dock=None):

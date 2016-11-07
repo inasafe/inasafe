@@ -13,11 +13,9 @@ from qgis.core import (
     QgsFeatureRequest,
     QgsWKBTypes,
     QgsFeature,
-    QgsSpatialIndex
 )
 
-from safe.utilities.i18n import tr
-# from safe.definitionsv4.processing import clip_vector
+from safe.definitionsv4.processing_steps import smart_clip_steps
 from safe.gisv4.vector.tools import create_memory_layer
 from safe.utilities.profiling import profile
 
@@ -50,11 +48,8 @@ def smart_clip(layer_to_clip, mask_layer, callback=None):
 
     .. versionadded:: 4.0
     """
-    # To fix
-    # output_layer_name = intersection_vector['output_layer_name']
-    # processing_step = intersection_vector['step_name']
-    output_layer_name = 'smart_clip'
-    processing_step = 'Smart Clipping'
+    output_layer_name = smart_clip_steps['output_layer_name']
+    processing_step = smart_clip_steps['step_name']
 
     writer = create_memory_layer(
         output_layer_name,
@@ -86,4 +81,5 @@ def smart_clip(layer_to_clip, mask_layer, callback=None):
     writer.commitChanges()
 
     writer.keywords = layer_to_clip.keywords.copy()
+    writer.keywords['title'] = output_layer_name
     return writer

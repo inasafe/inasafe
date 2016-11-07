@@ -34,6 +34,7 @@ class TestEarthquakeBuildingFunction(unittest.TestCase):
         registry.clear()
         registry.register(EarthquakeBuildingFunction)
 
+    @unittest.skip('This test will be removed in InaSAFE V4.')
     def test_run(self):
         """TestEarthquakeBuildingFunction: Test running the IF."""
         eq_path = standard_data_path('hazard', 'earthquake.tif')
@@ -76,8 +77,7 @@ class TestEarthquakeBuildingFunction(unittest.TestCase):
         self.maxDiff = None
         action_checklist = impact_function.action_checklist()
         expected = [
-            'Which structures have warning capacity (eg. sirens, speakers, '
-            'etc.)?',
+            'Which structures have warning capacity (eg. sirens or speakers)?',
             'Are the water and electricity services still operating?',
             'Are the health centres still open?',
             'Are the other public services accessible?',

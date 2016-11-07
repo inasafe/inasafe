@@ -16,7 +16,11 @@ from safe.definitionsv4 import (
     hazard_value_field,
     exposure_type_field,
     exposure_fields,
-    hazard_fields
+    hazard_fields,
+    layer_purpose_hazard,
+    layer_purpose_exposure,
+    layer_purpose_aggregation,
+    layer_purpose_impact
 )
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -159,48 +163,54 @@ def get_fields(layer_purpose, layer_subcategory=None, replace_null=None):
     :rtype: list
     """
     fields = []
-    if layer_purpose == 'exposure':
+    if layer_purpose == layer_purpose_exposure['key']:
         if layer_subcategory:
             subcategory = definition(layer_subcategory)
-            fields = subcategory['fields'] + subcategory['extra_fields']
+            fields += subcategory['compulsory_fields']
+            fields += subcategory['fields']
+            fields += subcategory['extra_fields']
         else:
             fields = deepcopy(exposure_fields)
-    elif layer_purpose == 'hazard':
+    elif layer_purpose == layer_purpose_hazard['key']:
         if layer_subcategory:
             subcategory = definition(layer_subcategory)
-            fields = subcategory['fields'] + subcategory['extra_fields']
+            fields += subcategory['compulsory_fields']
+            fields += subcategory['fields']
+            fields += subcategory['extra_fields']
         else:
             fields = deepcopy(hazard_fields)
-    elif layer_purpose == 'aggregation':
+    elif layer_purpose == layer_purpose_aggregation['key']:
         fields = deepcopy(aggregation_fields)
-    elif layer_purpose == 'impact':
+    elif layer_purpose == layer_purpose_impact['key']:
         fields = deepcopy(impact_fields)
 
     if isinstance(replace_null, bool):
-        fields = [
-            field for field in fields if field['replace_null'] == replace_null]
+        fields = [f for f in fields if f.get('replace_null') == replace_null]
         return fields
     else:
         return fields
 
 
-def get_class_field(layer_purpose):
-    """Get class field based on layer_purpose.
+def get_compulsory_fields(layer_purpose, layer_subcategory=None):
+    """Get compulsory field based on layer_purpose and layer_subcategory
 
     :param layer_purpose: The layer purpose.
     :type layer_purpose: str
 
-    :returns: Class field
-    :rtype: dict
+    :returns: Compulsory field
+    :rtype: str
     """
-    if layer_purpose == 'hazard':
-        return hazard_value_field
-    elif layer_purpose == 'exposure':
-        return exposure_type_field
-    elif layer_purpose == 'aggregation':
-        return aggregation_name_field
+    if not layer_subcategory:
+        if layer_purpose == 'hazard':
+            return hazard_value_field
+        elif layer_purpose == 'exposure':
+            return exposure_type_field
+        elif layer_purpose == 'aggregation':
+            return aggregation_name_field
+        else:
+            return None
     else:
-        return None
+        return definition(layer_subcategory).get('compulsory_fields')[0]
 
 
 def definition(keyword):

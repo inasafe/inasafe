@@ -12,9 +12,10 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 from abc import ABCMeta, abstractmethod
-from qgis.core import QgsMapLayer, QgsRasterLayer, QgsVectorLayer
+from qgis.core import QgsMapLayer, QgsRasterLayer, QgsVectorLayer, QGis
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.i18n import tr
+from safe.test.utilities import monkey_patch_keywords
 
 
 class DataStore(object):
@@ -103,7 +104,10 @@ class DataStore(object):
         if isinstance(layer, QgsRasterLayer):
             result = self._add_raster_layer(layer, layer_name)
         else:
-            result = self._add_vector_layer(layer, layer_name)
+            if layer.wkbType() == QGis.WKBNoGeometry:
+                result = self._add_tabular_layer(layer, layer_name)
+            else:
+                result = self._add_vector_layer(layer, layer_name)
 
         try:
             layer.keywords
@@ -127,14 +131,14 @@ class DataStore(object):
         """
         uri = self.layer_uri(layer_name)
         layer = QgsVectorLayer(uri, layer_name, 'ogr')
-        if layer.isValid():
-            return layer
-        else:
+        if not layer.isValid():
             layer = QgsRasterLayer(uri, layer_name)
-            if layer.isValid():
-                return layer
-            else:
-                return None
+            if not layer.isValid():
+                return False
+
+        monkey_patch_keywords(layer)
+
+        return layer
 
     @abstractmethod
     def is_writable(self):
@@ -208,6 +212,25 @@ class DataStore(object):
 
         :param vector_layer: The layer to add.
         :type vector_layer: QgsVectorLayer
+
+        :param layer_name: The name of the layer in the datastore.
+        :type layer_name: str
+
+        :returns: A two-tuple. The first element will be True if we could add
+            the layer to the datastore. The second element will be the layer
+            name which has been used or the error message.
+        :rtype: (bool, str)
+
+        .. versionadded:: 4.0
+        """
+        raise NotImplementedError
+
+    @abstractmethod
+    def _add_tabular_layer(self, tabular_layer, layer_name):
+        """Add a vector layer to the database.
+
+        :param tabular_layer: The layer to add.
+        :type tabular_layer: QgsVectorLayer
 
         :param layer_name: The name of the layer in the datastore.
         :type layer_name: str

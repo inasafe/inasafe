@@ -12,14 +12,17 @@
       "process":[
         "Run impact function",
         "Union exposure features to the aggregate hazard",
-        "Aggregate the impact summary"
+        "Aggregate the impact summary",
+        "Aggregate the aggregation summary",
+        "Aggregate the analysis summary",
+        "Build the exposure breakdown"
       ]
     },
     "post_processor":{
       "info": {},
       "process":[
         "Post processor for Size Rate Post Processor",
-        "Post processor for Size Rate Post Processor"
+        "Post processor for Affected Post Processor"
       ]
     },
     "aggregation":{

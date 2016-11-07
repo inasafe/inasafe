@@ -2,6 +2,8 @@
 """Definitions relating to exposure in InaSAFE."""
 
 from safe.definitionsv4.concepts import concepts
+from safe.definitionsv4.caveats import (
+    caveat_incomplete_data)
 from safe.definitionsv4.units import (
     count_exposure_unit, density_exposure_unit)
 from safe.definitionsv4.fields import (
@@ -15,7 +17,8 @@ from safe.definitionsv4.fields import (
     women_count_field,
     youth_count_field,
     youth_ratio_field,
-    population_count_field
+    population_count_field,
+    exposure_type_field
 )
 from safe.definitionsv4.layer_modes import (
     layer_mode_classified, layer_mode_continuous)
@@ -39,12 +42,30 @@ exposure_population = {
         'The <b>population</b> describes the people that might be '
         'exposed to a particular hazard.'),
     'notes': [  # these are additional generic notes for people - IF has more
+        caveat_incomplete_data,
         tr('Numbers reported for population counts have been rounded to the '
            'nearest 10 people if the total is less than 1,000; nearest 100 '
            'people if more than 1,000 and less than 100,000; and nearest '
            '1000 if more than 100,000.'),
-        tr('Rounding is applied to all population values, '
-           'which may cause discrepancies when adding values.'),
+        tr('Rounding is applied to all population values, which may cause '
+           'discrepancies between subtotals and totals.'),
+    ],
+    'earthquake_notes': [
+        # these are earthquake specific notes for population
+        tr('Map shows the estimation of displaced population.'),
+        tr('People are displaced if they experience and survive a shake level '
+           'of more than 5 on the MMI scale.'),
+        tr('The fatality calculation assumes that no fatalities occur for '
+           'shake levels below 4 and fatality counts of less than 50 are '
+           'disregarded.'),
+
+    ],
+    'earthquake_pager_notes': [   # these are earthquake Pager specific notes
+        tr('Fatality model is from Population Vulnerability '
+            'Pager Model.'),
+    ],
+    'earthquake_itb_notes': [   # these are earthquake ITB specific notes
+         tr('Fatality model is from Institut Teknologi Bandung 2012.'),
 
     ],
     'analysis_summary': [
@@ -69,28 +90,67 @@ exposure_population = {
     ],
     'classified_notes': [  # notes specific to classified data
     ],
-    'actions': [  # these are additional generic actions - IF has more
+    'actions': [  # these are additional generic actions
         tr('How will warnings be disseminated?'),
         tr('What are people\'s likely movements?'),
         tr('Which group or population is most affected?'),
         tr('Who are the vulnerable people in the population and why?'),
-        tr('What are people\'s likely movements?'),
-        tr('What are the security factors for the affected people?'),
+        tr('How will we distribute relief items?'),
+        tr('Where can we obtain additional relief items?'),
+        tr('How will we distribute relief items?'),
+        tr('Who are the key people responsible for coordination?'),
         tr('What are the security factors for relief responders?'),
+        tr('Are there enough victim identification units?'),
+        # these are shelter actions
+        tr('What are people\'s likely movements?'),
         tr('How will we reach displaced people?'),
-        tr('What kind of food does the population normally consume?'),
+        tr('Are there enough covered floor areas available for the displaced '
+           'people?'),
+        tr('What are the land-use rights for the settlement location?'),
+        tr('What is the ownership of the shelter or settlement location'),
+        tr('What is the appropriate construction for temporary or '
+           'transitional household shelter?'),
+        tr('What are the existing environmental risks or vulnerabilities at '
+           'the shelter location?'),
+        tr('Are there enough clothing, bedding and household items available '
+           'for the displaced people?'),
         tr('What are the critical non-food items required by the affected '
            'population?'),
-        tr('If yes, where are they located and how will we distribute them?'),
-        tr('If no, where can we obtain additional relief items and how'
-           ' will we distribute them?'),
-        tr('What are the related health risks?'),
-        tr('Who are the key people responsible for coordination?'),
+        tr('Are the non-food items available at an active local market?'),
+        # these are food security and nutrition actions
+        tr('What kind of food does the population normally consume?'),
+        tr('Are there any alternative source of food?'),
+        tr('Is there enough food for the displaced people?'),
+        tr('Are there any crops that can be used for consumption?'),
+        tr('Are there large numbers of separated children?'),
+        # these are WASH actions
+        tr('What water and sanitation practices were the population '
+           'accustomed to before the emergency?'),
+        tr('What type of outreach system would work for hygiene promotion for '
+           'this situation?'),
+        tr('What is the current water supply source and who are the present '
+           'users?'),
+        tr('Are there enough water supply, sanitation and hygiene, items '
+           'available for displaced people?'),
+        tr('Are water collection points close enough to where people live?'),
+        tr('Are water collection points safe?'),
+        tr('Is the water source contaminated or at risk of contamination?'),
+        tr('Are there alternative sources of water nearby?'),
+        tr('Is there a drainage problem?'),
+        # these are health actions
+        tr('What are the existing health problems?'),
+        tr('What are the potential epidemic diseases?'),
+        tr('Are there any potential disease outbreaks?'),
+        tr('Are there any healthcare sources that are accessible and '
+           'functioning?')
+
     ],
     'citations': [
         {
-            'text': None,
-            'link': None
+                'text': tr(
+                    'The Sphere Handbook: Humanitarian Charter and Minimum '
+                    'Standards in Humanitarian Response'),
+                'link': 'http://www.spherehandbook.org/'
         }
     ],
     'allowed_geometries': [
@@ -101,9 +161,9 @@ exposure_population = {
         count_exposure_unit,
         density_exposure_unit],
     'classifications': [],
+    'compulsory_fields': [population_count_field],
     'fields': exposure_fields,
     'extra_fields': [
-        population_count_field,
         exposure_name_field,
         women_count_field,
         youth_count_field,
@@ -124,8 +184,8 @@ exposure_road = {
         'A <b>road</b> is a defined route used by a vehicle or people to '
         'travel between two or more points.'),
     'notes': [  # these are additional generic notes for roads - IF has more
-        tr('Numbers reported for road lengths have been rounded to the '
-           'nearest metre.'),
+        caveat_incomplete_data,
+        tr('Numbers for road lengths have been rounded to the nearest metre.'),
         tr('Roads marked as not affected may still be unusable due to network '
            'isolation. Roads marked as affected may still be usable if they '
            'are elevated above the local landscape.'),
@@ -142,8 +202,8 @@ exposure_road = {
         tr('Which roads can be used to evacuate people or to distribute '
            'logistics?'),
         tr('What type of vehicles can use the unaffected roads?'),
-        tr('What sort of equipment will be needed to reopen roads & where '
-           'will we get it?'),
+        tr('What sort of equipment will be needed to reopen roads?'),
+        tr('Where will we get the equipment needed to open roads?'),
         tr('Which government department is responsible for supplying '
            'equipment?')
 
@@ -159,6 +219,7 @@ exposure_road = {
     ],
     'units': [],
     'classifications': [generic_road_classes],
+    'compulsory_fields': [exposure_type_field],
     'fields': exposure_fields,
     'extra_fields': [],
     'layer_modes': [layer_mode_classified]
@@ -172,22 +233,25 @@ exposure_structure = {
         'with walls and a roof), telecommunications facility or '
         'bridge.'),
     'notes': [  # additional generic notes for structures - IF has more
+        caveat_incomplete_data,
         tr('Numbers reported for structures have not been rounded.')
     ],
     'continuous_notes': [  # notes specific to continuous data
     ],
     'classified_notes': [  # notes specific to classified data
     ],
-    'actions': [  # these are additional generic actions - IF has more
-        tr('Which structures have warning capacity (eg. sirens, speakers, '
-           'etc.)?'),
+    'actions': [
+        # these are additional generic actions - IF has more
+        tr('Which structures have warning capacity '
+           '(e.g. sirens or speakers)?'),
         tr('Are the water and electricity services still operating?'),
+        tr('Are the schools and hospitals still active?'),
         tr('Are the health centres still open?'),
         tr('Are the other public services accessible?'),
         tr('Which buildings will be evacuation centres?'),
         tr('Where will we locate the operations centre?'),
-        tr('Where will we locate warehouse and/or distribution centres?'),
-        tr('Are the schools and hospitals still active?'),
+        tr('Where will we locate warehouse and/or distribution centres?')
+
     ],
     'citations': [
         {
@@ -201,6 +265,7 @@ exposure_structure = {
     ],
     'units': [],
     'classifications': [generic_structure_classes],
+    'compulsory_fields': [exposure_type_field],
     'fields': exposure_fields,
     'extra_fields': [
         population_count_field,
@@ -222,6 +287,7 @@ exposure_place = {
         'A <b>place</b> is used to indicate that a particular location is '
         'known by a particular name.'),
     'notes': [  # additional generic notes for places - IF has more
+        caveat_incomplete_data,
         tr('Where places are represented as a single point, the effect of the '
            'hazard over the entire place may differ from the point at which '
            'the place is represented on the map.'),
@@ -243,6 +309,7 @@ exposure_place = {
     ],
     'units': [],
     'classifications': [generic_place_classes],
+    'compulsory_fields': [exposure_type_field],
     'fields': exposure_fields,
     'extra_fields': [
         population_count_field,
@@ -267,6 +334,7 @@ exposure_land_cover = {
         ' hazard. This might include crops, forest and urban areas. '),
     'notes': [
         # these are additional generic notes for landcover - IF has more
+        caveat_incomplete_data,
         tr('Areas reported for land cover have not been rounded.'),
     ],
     'continuous_notes': [  # notes specific to continuous data
@@ -301,6 +369,7 @@ exposure_land_cover = {
     ],
     'units': [],
     'classifications': [generic_landcover_classes],
+    'compulsory_fields': [exposure_type_field],
     'fields': exposure_fields,
     'extra_fields': [],
     'layer_modes': [layer_mode_classified]

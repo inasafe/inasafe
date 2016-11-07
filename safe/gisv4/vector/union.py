@@ -13,13 +13,13 @@ from qgis.core import (
     QgsFeatureRequest,
     QgsWKBTypes,
     QgsFeature,
-    QgsSpatialIndex
 )
 
 from safe.utilities.i18n import tr
 from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
-# from safe.definitionsv4.processing import union
-from safe.gisv4.vector.tools import create_memory_layer, wkb_type_groups
+from safe.definitionsv4.processing_steps import union_steps
+from safe.gisv4.vector.tools import (
+    create_memory_layer, wkb_type_groups, create_spatial_index)
 from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -55,11 +55,12 @@ def union(union_a, union_b, callback=None):
 
     .. versionadded:: 4.0
     """
-    # To fix
-    # output_layer_name = intersection_vector['output_layer_name']
-    # processing_step = intersection_vector['step_name']
-    output_layer_name = 'clip'
-    processing_step = 'Clipping and masking'
+    output_layer_name = union_steps['output_layer_name']
+    processing_step = union_steps['step_name']
+    output_layer_name = output_layer_name % (
+        union_a.keywords['layer_purpose'],
+        union_b.keywords['layer_purpose']
+    )
 
     fields = union_a.fields()
     fields.extend(union_b.fields())
@@ -80,25 +81,42 @@ def union(union_a, union_b, callback=None):
     layer_purpose_1 = keywords_union_1['layer_purpose']
     layer_purpose_2 = keywords_union_2['layer_purpose']
 
-    if not (layer_purpose_1 == 'exposure' and
-                layer_purpose_2 == 'aggregate_hazard') and \
-        not (layer_purpose_1 == 'hazard' and
-                     layer_purpose_2 == 'aggregation'):
+    writer.keywords = union_a.keywords
+    writer.keywords['inasafe_fields'] = inasafe_fields
+    writer.keywords['title'] = output_layer_name
+
+    if layer_purpose_1 == 'exposure' and layer_purpose_2 == 'aggregate_hazard':
+
+        writer.keywords['layer_purpose'] = 'impact'
+
+        writer.keywords['exposure_keywords'] = keywords_union_1
+
+        writer.keywords['aggregation_keywords'] = (
+            keywords_union_2['aggregation_keywords'])
+
+        writer.keywords['hazard_keywords'] = (
+            keywords_union_2['hazard_keywords'])
+
+    elif layer_purpose_1 == 'hazard' and layer_purpose_2 == 'aggregation':
+
+        writer.keywords['layer_purpose'] = 'aggregate_hazard'
+
+        writer.keywords['hazard_keywords'] = keywords_union_1
+
+        writer.keywords['aggregation_keywords'] = keywords_union_2
+
+    else:
         msg = 'I got layer purpose 1 = %s and layer purpose 2 = %s'\
               % (layer_purpose_1, layer_purpose_2)
         raise InvalidKeywordsForProcessingAlgorithm(msg)
-
-    writer.keywords = union_a.keywords
-    writer.keywords['inasafe_fields'] = inasafe_fields
-    writer.keywords['layer_purpose'] = 'aggregate_hazard'
 
     writer.startEditing()
 
     # Begin copy/paste from Processing plugin.
     # Please follow their code as their code is optimized.
 
-    index_a = QgsSpatialIndex(union_b.getFeatures())
-    index_b = QgsSpatialIndex(union_a.getFeatures())
+    index_a = create_spatial_index(union_b)
+    index_b = create_spatial_index(union_a)
 
     count = 0
     n_element = 0

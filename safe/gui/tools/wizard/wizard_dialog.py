@@ -29,7 +29,7 @@ from safe.definitionsv4.layer_modes import (
     layer_mode_continuous, layer_mode_classified)
 from safe.definitionsv4.units import exposure_unit
 from safe.definitionsv4.hazard import continuous_hazard_unit
-from safe.definitionsv4.utilities import get_class_field
+from safe.definitionsv4.utilities import get_compulsory_fields
 
 from safe.common.exceptions import (
     HashNotFoundError,
@@ -38,7 +38,8 @@ from safe.common.exceptions import (
     InvalidParameterError,
     UnsupportedProviderError,
     InaSAFEError,
-    MetadataReadError)
+    MetadataReadError,
+    InvalidWizardStep)
 from safe.gui.tools.wizard.wizard_strings import (
     category_question_hazard,
     category_question_exposure,
@@ -88,11 +89,8 @@ from step_kw25_classification import StepKwClassification
 from step_kw30_field import StepKwField
 from step_kw35_resample import StepKwResample
 from step_kw40_classify import StepKwClassify
-from step_kw42_name_field import StepKwNameField
-from step_kw43_population_field import StepKwPopulationField
 from step_kw45_inasafe_fields import StepKwInaSAFEFields
 from step_kw47_default_inasafe_fields import StepKwDefaultInaSAFEFields
-from step_kw50_aggregation import StepKwAggregation
 from step_kw55_source import StepKwSource
 from step_kw60_title import StepKwTitle
 from step_kw65_summary import StepKwSummary
@@ -175,11 +173,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.step_kw_field = StepKwField(self)
         self.step_kw_resample = StepKwResample(self)
         self.step_kw_classify = StepKwClassify(self)
-        self.step_kw_name_field = StepKwNameField(self)
-        self.step_kw_population_field = StepKwPopulationField(self)
         self.step_kw_inasafe_fields = StepKwInaSAFEFields(self)
         self.step_kw_default_inasafe_fields = StepKwDefaultInaSAFEFields(self)
-        self.step_kw_aggregation = StepKwAggregation(self)
         self.step_kw_source = StepKwSource(self)
         self.step_kw_title = StepKwTitle(self)
         self.step_kw_summary = StepKwSummary(self)
@@ -211,11 +206,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.stackedWidget.addWidget(self.step_kw_field)
         self.stackedWidget.addWidget(self.step_kw_resample)
         self.stackedWidget.addWidget(self.step_kw_classify)
-        self.stackedWidget.addWidget(self.step_kw_name_field)
-        self.stackedWidget.addWidget(self.step_kw_population_field)
         self.stackedWidget.addWidget(self.step_kw_inasafe_fields)
         self.stackedWidget.addWidget(self.step_kw_default_inasafe_fields)
-        self.stackedWidget.addWidget(self.step_kw_aggregation)
         self.stackedWidget.addWidget(self.step_kw_source)
         self.stackedWidget.addWidget(self.step_kw_title)
         self.stackedWidget.addWidget(self.step_kw_summary)
@@ -241,6 +233,10 @@ class WizardDialog(QDialog, FORM_CLASS):
 
         # QSetting
         self.setting = QSettings()
+
+        # Wizard Steps
+        self.impact_function_steps = []
+        self.keyword_steps = []
 
     def set_mode_label_to_keywords_creation(self):
         """Set the mode label to the Keywords Creation/Update mode
@@ -270,17 +266,20 @@ class WizardDialog(QDialog, FORM_CLASS):
         """
         self.layer = layer or self.iface.mapCanvas().currentLayer()
         try:
-            self.existing_keywords = self.keyword_io.read_keywords(self.layer)
-            # if 'layer_purpose' not in self.existing_keywords:
-            #     self.existing_keywords = None
-        except (HashNotFoundError,
-                OperationalError,
-                NoKeywordsFoundError,
-                KeywordNotFoundError,
-                InvalidParameterError,
-                UnsupportedProviderError,
-                MetadataReadError):
-            self.existing_keywords = None
+            # Check the keywords in the layer properties first
+            self.existing_keywords = self.layer.keywords
+        except AttributeError:
+            try:
+                self.existing_keywords = self.keyword_io.read_keywords(
+                    self.layer)
+            except (HashNotFoundError,
+                    OperationalError,
+                    NoKeywordsFoundError,
+                    KeywordNotFoundError,
+                    InvalidParameterError,
+                    UnsupportedProviderError,
+                    MetadataReadError):
+                self.existing_keywords = None
         self.set_mode_label_to_keywords_creation()
 
         step = self.step_kw_purpose
@@ -303,7 +302,17 @@ class WizardDialog(QDialog, FORM_CLASS):
         :rtype: str
         """
         layer_purpose_key = self.step_kw_purpose.selected_purpose()['key']
-        return get_class_field(layer_purpose_key)['key']
+        if layer_purpose_key == layer_purpose_aggregation['key']:
+            return get_compulsory_fields(layer_purpose_key)['key']
+        elif layer_purpose_key in [
+            layer_purpose_exposure['key'],
+            layer_purpose_hazard['key']]:
+            layer_subcategory_key = \
+                self.step_kw_subcategory.selected_subcategory()['key']
+            return get_compulsory_fields(
+                layer_purpose_key, layer_subcategory_key)['key']
+        else:
+            raise InvalidParameterError
 
     def get_parent_mode_constraints(self):
         """Return the category and subcategory keys to be set in the
@@ -656,24 +665,17 @@ class WizardDialog(QDialog, FORM_CLASS):
            executed when the Next button is released.
         """
         current_step = self.get_current_step()
+        if current_step.step_type == 'step_fc':
+            self.impact_function_steps.append(current_step)
+        elif current_step.step_type == 'step_kw':
+            self.keyword_steps.append(current_step)
+        else:
+            LOGGER.debug(current_step.step_type)
+            raise InvalidWizardStep
 
         # Save keywords if it's the end of the keyword creation mode
         if current_step == self.step_kw_summary:
             self.save_current_keywords()
-
-        if current_step == self.step_kw_aggregation:
-            good_age_ratio, sum_age_ratios = self.step_kw_aggregation.\
-                age_ratios_are_valid()
-            if not good_age_ratio:
-                message = self.tr(
-                    'The sum of age ratio default is %s and it is more '
-                    'than 1. Please adjust the age ratio default so that they '
-                    'will not more than 1.' % sum_age_ratios)
-                if not self.suppress_warning_dialog:
-                    # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
-                    QtGui.QMessageBox.warning(
-                        self, self.tr('InaSAFE'), message)
-                return
 
         # After any step involving Browser, add selected layer to map canvas
         if current_step in [self.step_fc_hazlayer_from_browser,
@@ -714,7 +716,16 @@ class WizardDialog(QDialog, FORM_CLASS):
            executed when the Back button is released.
         """
         current_step = self.get_current_step()
-        new_step = current_step.get_previous_step()
+        if current_step.step_type == 'step_fc':
+            new_step = self.impact_function_steps.pop()
+        elif current_step.step_type == 'step_kw':
+            try:
+                new_step = self.keyword_steps.pop()
+            except IndexError:
+                new_step = self.impact_function_steps.pop()
+        else:
+            raise InvalidWizardStep
+
         # set focus to table widgets, as the inactive selection style is gray
         if new_step == self.step_fc_functions1:
             self.step_fc_functions1.tblFunctions1.setFocus()
@@ -748,9 +759,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         if self.step_kw_purpose.selected_purpose():
             keywords['layer_purpose'] = self.step_kw_purpose.\
                 selected_purpose()['key']
-            if keywords['layer_purpose'] == 'aggregation':
-                keywords.update(
-                    self.step_kw_aggregation.get_aggregation_attributes())
         if self.step_kw_subcategory.selected_subcategory():
             key = self.step_kw_purpose.selected_purpose()['key']
             keywords[key] = self.step_kw_subcategory.\
@@ -782,14 +790,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         value_map = self.step_kw_classify.selected_mapping()
         if value_map:
             keywords['value_map'] = value_map
-
-        name_field = self.step_kw_name_field.selected_field()
-        if name_field:
-            keywords['name_field'] = name_field
-
-        population_field = self.step_kw_population_field.selected_field()
-        if population_field:
-            keywords['population_field'] = population_field
 
         if self.step_kw_source.leSource.text():
             keywords['source'] = get_unicode(

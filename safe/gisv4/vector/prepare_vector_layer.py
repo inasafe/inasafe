@@ -12,10 +12,11 @@ from qgis.core import (
     QGis,
 )
 
-from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
+from safe.common.exceptions import (
+    InvalidKeywordsForProcessingAlgorithm, NoFeaturesInExtentError)
 from safe.gisv4.vector.tools import (
     create_memory_layer, remove_fields, copy_fields, copy_layer)
-from safe.definitionsv4.processing import prepare_vector
+from safe.definitionsv4.processing_steps import prepare_vector_steps
 from safe.definitionsv4.fields import (
     exposure_id_field,
     hazard_id_field,
@@ -29,7 +30,11 @@ from safe.definitionsv4.layer_purposes import (
     layer_purpose_hazard,
     layer_purpose_aggregation
 )
-from safe.definitionsv4.utilities import get_fields, definition
+from safe.definitionsv4.utilities import (
+    get_fields,
+    definition,
+    get_compulsory_fields,
+)
 from safe.utilities.i18n import tr
 from safe.utilities.profiling import profile
 
@@ -63,8 +68,9 @@ def prepare_vector_layer(layer, callback=None):
 
     .. versionadded:: 4.0
     """
-    output_layer_name = prepare_vector['output_layer_name']
-    processing_step = prepare_vector['step_name']
+    output_layer_name = prepare_vector_steps['output_layer_name']
+    output_layer_name = output_layer_name % layer.keywords['layer_purpose']
+    processing_step = prepare_vector_steps['step_name']
 
     if not layer.keywords.get('inasafe_fields'):
         msg = 'inasafe_fields is missing in keywords from %s' % layer.name()
@@ -79,10 +85,21 @@ def prepare_vector_layer(layer, callback=None):
     cleaned.keywords = layer.keywords
 
     copy_layer(layer, cleaned)
-    _remove_rows(cleaned)
+    _remove_features(cleaned)
+
+    # After removing rows, let's check if there is still a feature.
+    request = QgsFeatureRequest().setFlags(QgsFeatureRequest.NoGeometry)
+    iterator = cleaned.getFeatures(request)
+    try:
+        next(iterator)
+    except StopIteration:
+        raise NoFeaturesInExtentError
+
     _add_id_column(cleaned)
     _rename_remove_inasafe_fields(cleaned)
     _add_default_values(cleaned)
+
+    cleaned.keywords['title'] = output_layer_name
 
     return cleaned
 
@@ -114,22 +131,23 @@ def _rename_remove_inasafe_fields(layer):
 
     # Rename fields
     to_rename = {}
+    new_keywords = {}
     for key, val in layer.keywords.get('inasafe_fields').iteritems():
         if expected_fields[key] != val:
             to_rename[val] = expected_fields[key]
+            new_keywords[key] = expected_fields[key]
 
     copy_fields(layer, to_rename)
-    remove_fields(layer, to_rename.keys())
+    to_remove = to_rename.keys()
 
     LOGGER.debug(tr(
         'Fields which have been renamed from %s : %s'
         % (layer.keywords['layer_purpose'], to_rename)))
 
     # Houra, InaSAFE keywords match our concepts !
-    layer.keywords['inasafe_fields'].update(expected_fields)
+    layer.keywords['inasafe_fields'].update(new_keywords)
 
     # Remove useless fields
-    to_remove = []
     for field in layer.fields().toList():
         if field.name() not in expected_fields.values():
             to_remove.append(field.name())
@@ -140,36 +158,24 @@ def _rename_remove_inasafe_fields(layer):
 
 
 @profile
-def _remove_rows(layer):
-    """Remove rows which do not have information for InaSAFE.
+def _remove_features(layer):
+    """Remove features which do not have information for InaSAFE or an invalid
+    geometry.
 
     :param layer: The vector layer.
     :type layer: QgsVectorLayer
     """
     # Get the layer purpose of the layer.
     layer_purpose = layer.keywords['layer_purpose']
+    layer_subcategory = layer.keywords.get(layer_purpose)
 
-    # Volcano point is special case. We do not have a hazard value field.
-    hazard = layer.keywords.get('hazard')
-    if hazard == 'volcano' and layer.geometryType() == QGis.Point:
-        return
-
-    mapping = {
-        layer_purpose_exposure['key']: exposure_type_field,
-        layer_purpose_hazard['key']: hazard_value_field,
-        layer_purpose_aggregation['key']: aggregation_name_field
-    }
-
-    for layer_type, field in mapping.iteritems():
-        if layer_purpose == layer_type:
-            compulsory_field = field['key']
-            break
+    compulsory_field = get_compulsory_fields(layer_purpose, layer_subcategory)
 
     inasafe_fields = layer.keywords['inasafe_fields']
-    field_name = inasafe_fields.get(compulsory_field)
+    field_name = inasafe_fields.get(compulsory_field['key'])
     if not field_name:
         msg = 'Keyword %s is missing from %s' % (
-            compulsory_field, layer_purpose)
+            compulsory_field['key'], layer_purpose)
         raise InvalidKeywordsForProcessingAlgorithm(msg)
     index = layer.fieldNameIndex(field_name)
 
@@ -178,9 +184,25 @@ def _remove_rows(layer):
     layer.startEditing()
     i = 0
     for feature in layer.getFeatures(request):
+        # Check if the compulsory field is not empty.
         if isinstance(feature.attributes()[index], QPyNullVariant):
             layer.deleteFeature(feature.id())
             i += 1
+            continue
+
+        # Check if there is en empty geometry.
+        geometry = feature.geometry()
+        if not geometry:
+            layer.deleteFeature(feature.id())
+            i += 1
+            continue
+
+        # Check if the geometry is valid.
+        if not geometry.isGeosValid():
+            layer.deleteFeature(feature.id())
+            i += 1
+            continue
+
         # TODO We need to add more tests
         # like checking if the value is in the value_mapping.
     layer.commitChanges()
@@ -231,9 +253,11 @@ def _add_id_column(layer):
 
         layer.commitChanges()
 
-        layer.keywords[safe_id['key']] = safe_id['field_name']
+        layer.keywords['inasafe_fields'][safe_id['key']] = (
+            safe_id['field_name'])
 
 
+@profile
 def _add_default_values(layer):
     """Add or fill default values to the layer, see #3325
 

@@ -37,5 +37,4 @@ class TestReprojectVector(unittest.TestCase):
         self.assertEqual(reprojected.crs(), output_crs)
         self.assertEqual(
             reprojected.featureCount(), layer.featureCount())
-        self.assertEqual(reprojected.name(), 'reprojected')
         self.assertDictEqual(layer.keywords, reprojected.keywords)

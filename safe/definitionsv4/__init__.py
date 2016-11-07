@@ -4,6 +4,7 @@ __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
+from safe.definitionsv4.analysis_steps import *
 from safe.definitionsv4.aggregation import *
 from safe.definitionsv4.caveats import *
 from safe.definitionsv4.concepts import *

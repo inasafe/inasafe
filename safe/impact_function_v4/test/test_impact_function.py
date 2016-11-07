@@ -4,6 +4,7 @@
 import unittest
 import json
 import os
+import logging
 from os.path import join, isfile
 from os import listdir
 
@@ -25,10 +26,12 @@ from safe.definitionsv4.post_processors import (
     post_processor_size
 )
 from safe.utilities.unicode import byteify
-from safe.test.utilities import load_test_vector_layer
+from safe.test.utilities import load_test_vector_layer, check_inasafe_fields
 from safe.impact_function_v4.impact_function import ImpactFunction
 
 from qgis.core import QgsVectorLayer, QgsRasterLayer
+
+LOGGER = logging.getLogger('InaSAFE')
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -56,7 +59,7 @@ def run_scenario(scenario, use_debug=False):
     :param scenario: Dictionary of hazard, exposure, and aggregation.
     :type scenario: dict
 
-    :param use_debug: If we should use debug when we run the scenario.
+    :param use_debug: If we should use debug_mode when we run the scenario.
     :type use_debug: bool
 
     :returns: Flow dictionary.
@@ -89,7 +92,7 @@ def run_scenario(scenario, use_debug=False):
 
     impact_function = ImpactFunction()
     if use_debug:
-        impact_function.debug = True
+        impact_function.debug_mode = True
 
     layer = QgsVectorLayer(hazard_path, 'Hazard', 'ogr')
     if not layer.isValid():
@@ -105,11 +108,36 @@ def run_scenario(scenario, use_debug=False):
         impact_function.aggregation = QgsVectorLayer(
             aggregation_path, 'Aggregation', 'ogr')
 
-    result = impact_function.run()
+    impact_function_result = impact_function.run()
     if use_debug:
         print impact_function.datastore.uri.absolutePath()
 
-    return result
+    # Impact layer
+    if impact_function.impact:
+        result = check_inasafe_fields(impact_function.impact)
+        if not result[0]:
+            raise Exception(result[1])
+
+    # Aggregate hazard layer
+    if impact_function.aggregate_hazard_impacted:
+        result = check_inasafe_fields(
+            impact_function.aggregate_hazard_impacted)
+        if not result[0]:
+            raise Exception(result[1])
+
+    # Aggregation layer
+    if impact_function.aggregation:
+        result = check_inasafe_fields(impact_function.aggregation)
+        if not result[0]:
+            raise Exception(result[1])
+
+    # Analysis layer
+    if impact_function.analysis_layer:
+        result = check_inasafe_fields(impact_function.analysis_layer)
+        if not result[0]:
+            raise Exception(result[1])
+
+    return impact_function_result
 
 
 class TestImpactFunction(unittest.TestCase):
@@ -189,7 +217,8 @@ class TestImpactFunction(unittest.TestCase):
         # Set up impact function
         impact_function = ImpactFunction()
         if use_debug:
-            impact_function.debug = True
+            impact_function.debug_mode = True
+
         impact_function.aggregation = aggregation_layer
         impact_function.exposure = exposure_layer
         impact_function.hazard = hazard_layer
@@ -197,10 +226,29 @@ class TestImpactFunction(unittest.TestCase):
         if use_debug:
             print impact_function.datastore.uri.absolutePath()
             print impact_function.datastore.layers()
+
+        # Impact layer
         self.assertIsNotNone(impact_function.impact)
+        result = check_inasafe_fields(impact_function.impact)
+        self.assertTrue(result[0], result[1])
+
+        # Aggregate hazard layer
         self.assertIsNotNone(impact_function.aggregate_hazard_impacted)
+        result = check_inasafe_fields(
+            impact_function.aggregate_hazard_impacted)
+        self.assertTrue(result[0], result[1])
+
+        # Aggregation layer
         # self.assertIsNotNone(impact_function.aggregation_impacted)
+        # result = check_inasafe_fields(
+        #     impact_function.aggregation_impacted)
+        # self.assertTrue(result[0], result[1])
+
+        # Analysis layer
         self.assertIsNotNone(impact_function.analysis_layer)
+        result = check_inasafe_fields(
+            impact_function.analysis_layer)
+        self.assertTrue(result[0], result[1])
 
     @unittest.skipIf(
         os.environ.get('ON_TRAVIS', False),
@@ -222,17 +270,20 @@ class TestImpactFunction(unittest.TestCase):
     def test_scenario_directory(self):
         """Run test scenario in directory."""
         self.maxDiff = None
-        use_debug = False
+        use_debug = True
 
         def test_scenario(scenario_path):
+            LOGGER.info('Running the scenario : %s' % scenario_path)
             scenario, expected = read_json_flow(scenario_path)
-            result = run_scenario(scenario, use_debug)
-            try:
-                self.assertDictEqual(expected, result)
-            except:
-                # In case of an exception, print the scenario path and re raise
-                print 'Error with the scenario %s' % scenario_path
-                raise
+            if scenario.get('enable', True):
+                result = run_scenario(scenario, use_debug)
+                try:
+                    self.assertDictEqual(expected, result)
+                except:
+                    # In case of an exception, print the scenario path
+                    # and re raise
+                    print 'Error with the scenario %s' % scenario_path
+                    raise
 
         path = standard_data_path('scenario')
 
@@ -249,9 +300,13 @@ class TestImpactFunction(unittest.TestCase):
 
         impact_layer = load_test_vector_layer(
             'impact',
-            'indivisible_polygon_impact.shp',
+            'indivisible_polygon_impact.geojson',
             clone_to_memory=True)
-        self.assertIsNotNone(impact_layer)
+
+        impact_layer.keywords['hazard_keywords'] = {
+            'classification': 'flood_hazard_classes'
+        }
+
         impact_function = ImpactFunction()
 
         impact_function.post_process(impact_layer)

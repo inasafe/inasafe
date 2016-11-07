@@ -178,12 +178,12 @@
           <multipart_polygon>
             <gco:Boolean/>
           </multipart_polygon>
-          <resolution>
-            <gco:FloatTuple/>
-          </resolution>
           <inasafe_fields>
             <gco:Dictionary>{&quot;exposure_type_field&quot;: &quot;TYPE&quot;}</gco:Dictionary>
           </inasafe_fields>
+          <inasafe_default_values>
+            <gco:Dictionary/>
+          </inasafe_default_values>
           <area_name_field>
             <gco:CharacterString/>
           </area_name_field>
@@ -199,9 +199,15 @@
           <field>
             <gco:CharacterString/>
           </field>
+          <value_map>
+            <gco:Dictionary>{&quot;other&quot;: [&quot;Cycleway, footpath, etc.&quot;], &quot;local&quot;: [&quot;Road, residential, living street, etc.&quot;], &quot;primary&quot;: [&quot;Primary road&quot;, &quot;Primary link&quot;], &quot;secondary&quot;: [&quot;Secondary&quot;, &quot;Tertiary&quot;]}</gco:Dictionary>
+          </value_map>
           <layer_geometry>
             <gco:CharacterString>line</gco:CharacterString>
           </layer_geometry>
+          <classification>
+            <gco:CharacterString/>
+          </classification>
           <scale>
             <gco:CharacterString/>
           </scale>
@@ -220,9 +226,9 @@
           <datatype>
             <gco:CharacterString/>
           </datatype>
-          <value_map>
-            <gco:Dictionary>{&quot;other&quot;: [&quot;Cycleway, footpath, etc.&quot;], &quot;local&quot;: [&quot;Road, residential, living street, etc.&quot;], &quot;primary&quot;: [&quot;Primary road&quot;, &quot;Primary link&quot;], &quot;secondary&quot;: [&quot;Secondary&quot;, &quot;Tertiary&quot;]}</gco:Dictionary>
-          </value_map>
+          <resolution>
+            <gco:FloatTuple/>
+          </resolution>
           <structure_class_field>
             <gco:CharacterString/>
           </structure_class_field>
@@ -242,7 +248,7 @@
             <gco:CharacterString>classified</gco:CharacterString>
           </layer_mode>
           <road_class_field>
-            <gco:CharacterString>TYPE</gco:CharacterString>
+            <gco:CharacterString/>
           </road_class_field>
         </inasafe>
       </gmd:supplementalInformation>

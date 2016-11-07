@@ -182,6 +182,10 @@ def dynamic_translations():
     # Aggregation
     tr('Area')
 
+    # Boolean
+    tr('True')
+    tr('False')
+
     # OSM Downloader
     tr('Afghanistan')
     tr('Ethiopia')
