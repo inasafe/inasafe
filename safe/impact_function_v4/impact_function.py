@@ -865,49 +865,49 @@ class ImpactFunction(object):
                 if self.exposure.keywords.get('exposure_unit') == 'density':
                     self.set_state_process(
                         'exposure', 'Calculate counts per cell')
+                    # Todo, Need to write this algorithm.
+
+                # We don't do any other process to a continuous raster.
+                return
 
             else:
                 self.set_state_process(
-                    'exposure', 'Polygonise classified raster hazard')
-                self.set_state_process(
-                    'exposure',
-                    'Intersect aggregate hazard layer with divisible polygon')
-                self.set_state_process(
-                    'exposure',
-                    'Recalculate population based on new polygonise size')
+                    'exposure', 'Polygonise classified raster exposure')
+                # noinspection PyTypeChecker
+                self.exposure = polygonize(self.exposure)
+                if self.debug_mode:
+                    self.debug_layer(self.exposure)
 
-        elif self.exposure.type() == QgsMapLayer.VectorLayer:
+        self.set_state_process(
+            'exposure',
+            'Cleaning the vector exposure attribute table')
+        # noinspection PyTypeChecker
+        self.exposure = prepare_vector_layer(self.exposure)
+        if self.debug_mode:
+            self.debug_layer(self.exposure)
 
+        self.set_state_process(
+            'exposure', 'Assign classes based on value map')
+        self.exposure = update_value_map(self.exposure)
+        if self.debug_mode:
+            self.debug_layer(self.exposure)
+
+        exposure = self.exposure.keywords.get('exposure')
+        geometry = self.exposure.geometryType()
+        if exposure == 'structure' and geometry == QGis.Polygon:
             self.set_state_process(
                 'exposure',
-                'Cleaning the vector exposure attribute table')
-            # noinspection PyTypeChecker
-            self.exposure = prepare_vector_layer(self.exposure)
-            if self.debug_mode:
-                self.debug_layer(self.exposure)
-
+                'Smart clip')
+            self.exposure = smart_clip(
+                self.exposure, self._analysis_impacted)
+        else:
             self.set_state_process(
-                'exposure', 'Assign classes based on value map')
-            self.exposure = update_value_map(self.exposure)
-            if self.debug_mode:
-                self.debug_layer(self.exposure)
+                'exposure',
+                'Clip the exposure layer with the analysis layer')
+            self.exposure = clip(self.exposure, self._analysis_impacted)
 
-            exposure = self.exposure.keywords.get('exposure')
-            geometry = self.exposure.geometryType()
-            if exposure == 'structure' and geometry == QGis.Polygon:
-                self.set_state_process(
-                    'exposure',
-                    'Smart clip')
-                self.exposure = smart_clip(
-                    self.exposure, self._analysis_impacted)
-            else:
-                self.set_state_process(
-                    'exposure',
-                    'Clip the exposure layer with the analysis layer')
-                self.exposure = clip(self.exposure, self._analysis_impacted)
-
-            if self.debug_mode:
-                self.debug_layer(self.exposure)
+        if self.debug_mode:
+            self.debug_layer(self.exposure)
 
     @profile
     def intersect_exposure_and_aggregate_hazard(self):
