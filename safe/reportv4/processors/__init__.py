@@ -1,5 +1,6 @@
 # coding=utf-8
 
-__author__ = 'Rizky Maulana Nugraha <lana.pcfre@gmail.com>'
-
-__date__ = '10/19/16'
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'

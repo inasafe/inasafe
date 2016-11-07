@@ -1,4 +1,11 @@
 # coding=utf-8
+"""
+Module for basic renderer we support. Currently we have:
+
+- Jinja2 Templating renderer
+- QGIS Composition templating renderer
+
+"""
 import logging
 import os
 from tempfile import mkdtemp
@@ -18,8 +25,10 @@ from safe.common.exceptions import TemplateLoadingError
 from safe.report.impact_report import ImpactReport
 from safe.utilities.gis import qgis_version
 
-__author__ = 'Rizky Maulana Nugraha <lana.pcfre@gmail.com>'
-__date__ = '10/19/16'
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 
 LOGGER = logging.getLogger('InaSAFE')
@@ -107,28 +116,16 @@ def qgis_composer_renderer(impact_report, component):
             tr('Error loading template: %s') % template_path)
 
     # replace image path
-    if qgis_version() < 20600:
-        for img in context.image_elements:
-            item_id = img.get('id')
-            path = img.get('path')
-            image = composition.getComposerItemById(item_id)
-            """:type: qgis.core.QgsComposerPicture"""
-            if image is not None and path is not None:
-                try:
-                    image.setPicturePath(path)
-                except:
-                    pass
-    else:
-        for img in context.image_elements:
-            item_id = img.get('id')
-            path = img.get('path')
-            image = composition.getComposerItemById(item_id)
-            """:type: qgis.core.QgsComposerPicture"""
-            if image is not None and path is not None:
-                try:
-                    image.setPictureFile(path)
-                except:
-                    pass
+    for img in context.image_elements:
+        item_id = img.get('id')
+        path = img.get('path')
+        image = composition.getComposerItemById(item_id)
+        """:type: qgis.core.QgsComposerPicture"""
+        if image is not None and path is not None:
+            try:
+                image.setPictureFile(path)
+            except:
+                pass
 
     # replace html frame
     for html_el in context.html_frame_elements:
@@ -204,16 +201,10 @@ def qgis_composer_renderer(impact_report, component):
                 legend.setTitle(title)
 
             # set legend
-            # Since QGIS 2.6, legend.model() is obsolete
-            if qgis_version() < 20600:
-                layer_set = [l.id() for l in layers]
-                legend.model().setLayerSet(layer_set)
-                legend.synchronizeWithModel()
-            else:
-                root_group = legend.modelV2().rootGroup()
-                for l in layers:
-                    root_group.addLayer(l)
-                legend.synchronizeWithModel()
+            root_group = legend.modelV2().rootGroup()
+            for l in layers:
+                root_group.addLayer(l)
+            legend.synchronizeWithModel()
 
     # process to output
 

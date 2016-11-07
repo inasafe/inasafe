@@ -2,40 +2,17 @@
 """
 Module to generate impact report using QgsComposition and Jinja2 Template
 engine.
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
 """
 
-__author__ = 'akbargumbira@gmail.com'
-__revision__ = '$Format:%H$'
-__date__ = '21/03/2014'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
 import os
 import logging
 import imp
-from importlib import import_module
 from qgis.core import (
     QgsComposition,
     QgsRectangle,
-    QgsMapLayer,
-    QgsComposerPicture,
+    QgsMapSettings,
     QgsComposerHtml,
     QgsComposerFrame)
-# Whoaa this is ugly can we get rid of it?
-try:
-    # noinspection PyUnresolvedReferences
-    # pylint: disable=unused-import
-    from qgis.core import QgsLayerTreeGroup, QgsMapSettings
-    # pylint: enable=unused-import
-except ImportError:
-    from qgis.core import QgsMapRenderer
 
 from PyQt4.QtCore import QUrl
 from safe.defaults import disclaimer
@@ -58,11 +35,11 @@ from safe.defaults import (
     default_north_arrow_path)
 from safe.impact_template.utilities import get_report_template
 
-INFO_STYLE = styles.INFO_STYLE
-LOGO_ELEMENT = m.Image(
-    resource_url(
-        resources_path('img', 'logos', 'inasafe-logo.png')),
-    'InaSAFE Logo')
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
+
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -79,7 +56,10 @@ class InaSAFEReportContext(object):
 
     @property
     def north_arrow(self):
-        """Getter to north arrow path."""
+        """Getter to north arrow path.
+
+        :rtype: str
+        """
         return self._north_arrow
 
     @north_arrow.setter
@@ -100,20 +80,33 @@ class InaSAFEReportContext(object):
         """Getter to safe logo path.
 
         .. versionchanged:: 3.2 - this property is now read only.
+
+        :rtype: str
         """
         return self.black_inasafe_logo
 
     @property
     def black_inasafe_logo(self):
+        """Getter to black inasafe logo path
+
+        :rtype: str
+        """
         return self._black_inasafe_logo
 
     @property
     def white_inasafe_logo(self):
+        """Getter for white inasafe logo path
+
+        :rtype: str
+        """
         return self._white_inasafe_logo
 
     @property
     def organisation_logo(self):
-        """Getter to organisation logo path."""
+        """Getter to organisation logo path.
+
+        :rtype: str
+        """
         return self._organisation_logo
 
     @organisation_logo.setter
@@ -136,12 +129,16 @@ class InaSAFEReportContext(object):
         logo which is customisable.
 
         .. versionadded:: 3.2
+        :rtype: str
         """
         return self._supporters_logo
 
     @property
     def disclaimer(self):
-        """Getter to disclaimer."""
+        """Getter to disclaimer.
+
+        :rtype: str
+        """
         return self._disclaimer
 
     @disclaimer.setter
@@ -168,38 +165,89 @@ class QGISCompositionContext(object):
 
     @property
     def page_dpi(self):
+        """The Page DPI that QGISComposition uses.
+
+        Can be overriden by report metadata
+
+        :rtype: float
+        """
         return self._page_dpi
 
     @page_dpi.setter
     def page_dpi(self, value):
+        """
+
+        :param value: DPI value for printing
+        :type value: float
+        """
         self._page_dpi = value
 
     @property
     def extent(self):
+        """The extent of the map element.
+
+        This extent is used by map element to render the extent
+        of the layer
+
+        :rtype: QgsRectangle
+        """
         return self._extent
 
     @extent.setter
     def extent(self, value):
+        """
+
+        :param value: Extent of map element to display
+        :type value: QgsRectangle
+        """
         self._extent = value
 
     @property
     def map_settings(self):
+        """QgsMapSettings instance that will be used.
+
+        Used for QgsComposition
+
+        :rtype: QgsMapSettings
+        """
         return self._map_settings
 
     @map_settings.setter
     def map_settings(self, value):
+        """
+
+        :param value: QgsMapSettings for QgsComposition
+        :type value: QgsMapSettings
+        """
         self._map_settings = value
 
     @property
     def plot_style(self):
+        """Constant options for composition rendering style
+
+        Possible values:
+        - QgsComposition.PlotStyle.Preview
+        - QgsComposition.PlotStyle.Render
+        - QgsComposition.PlotStyle.Postscript
+
+        :rtype: QgsComposition.PlotStyle
+        """
         return self._plot_style
 
     @property
     def save_as_raster(self):
+        """Boolean that indicates the composition will be saved as Raster
+
+        :rtype: bool
+        """
         return self._save_as_raster
 
 
 class ImpactReport(object):
+
+    # constant for default PAGE_DPI settings
+    DEFAULT_PAGE_DPI = 300
+
     """A class for creating report using QgsComposition."""
     def __init__(
             self,
@@ -228,25 +276,29 @@ class ImpactReport(object):
         self._extent = self._iface.mapCanvas().extent()
         self._inasafe_context = InaSAFEReportContext()
 
-        # For QGIS < 2.4 compatibility
         # QgsMapSettings is added in 2.4
-        if qgis_version() < 20400:
-            map_settings = self._iface.mapCanvas().mapRenderer()
-        else:
-            map_settings = self._iface.mapCanvas().mapSettings()
+        map_settings = self._iface.mapCanvas().mapSettings()
 
         self._qgis_composition_context = QGISCompositionContext(
             self._iface.mapCanvas().extent(),
             map_settings,
-            300)
+            ImpactReport.DEFAULT_PAGE_DPI)
         self._keyword_io = KeywordIO()
 
     @property
     def inasafe_context(self):
+        """Reference to default InaSAFE Context
+
+        :rtype: InaSAFEReportContext
+        """
         return self._inasafe_context
 
     @property
     def qgis_composition_context(self):
+        """Reference to default QGIS Composition Context
+
+        :rtype: QGISCompositionContext
+        """
         return self._qgis_composition_context
 
     @property
@@ -260,17 +312,29 @@ class ImpactReport(object):
 
     @property
     def output_folder(self):
+        """Output folder path for the rendering
+
+        :rtype: str
+        """
         return self._output_folder
 
     @output_folder.setter
     def output_folder(self, value):
+        """
+
+        :param value: output folder path
+        :type value: str
+        """
         self._output_folder = value
         if not os.path.exists(self._output_folder):
             os.makedirs(self._output_folder)
 
     @property
     def impact_layer(self):
-        """Getter to layer that will be used for stats, legend, reporting."""
+        """Getter to layer that will be used for stats, legend, reporting.
+
+        :rtype: qgis.core.QgsVectorLayer
+        """
         return self._impact_layer
 
     @impact_layer.setter
@@ -278,7 +342,7 @@ class ImpactReport(object):
         """Set the layer that will be used for stats, legend and reporting.
 
         :param layer: Layer that will be used for stats, legend and reporting.
-        :type layer: QgsMapLayer, QgsRasterLayer, QgsVectorLayer
+        :type layer: qgis.core.QgsVectorLayer
         """
         self._impact_layer = layer
 
@@ -292,6 +356,11 @@ class ImpactReport(object):
 
     @analysis_layer.setter
     def analysis_layer(self, layer):
+        """
+
+        :param layer: Analysis layer
+        :type layer: qgis.core.QgsVectorLayer
+        """
         self._analysis_layer = layer
 
     @property
@@ -323,6 +392,10 @@ class ImpactReport(object):
 
     @minimum_needs.setter
     def minimum_needs(self, value):
+        """
+        :param value: minimum needs used in impact report
+        :type value: safe.gui.tools.minimum_needs.needs_profile.NeedsProfile
+        """
         self._minimum_needs = value
 
     @property
@@ -416,355 +489,3 @@ class ImpactReport(object):
                 component.output = output
             except Exception as exc:
                 LOGGER.exception(exc)
-
-    def setup_composition(self):
-        """Set up the composition ready."""
-        # noinspection PyUnresolvedReferences
-        self._template_composition.composition.setPlotStyle(
-            QgsComposition.Preview)
-        self._template_composition.composition.setPrintResolution(
-            self.page_dpi)
-        self._template_composition.composition.setPrintAsRaster(True)
-
-    def load_template(self):
-        """Load the template to composition."""
-        # Get information for substitutions
-        # date, time and plugin version
-        date_time = self._keyword_io.read_keywords(self.layer, 'time_stamp')
-        if date_time is None:
-            date = ''
-            time = ''
-        else:
-            tokens = date_time.split('_')
-            date = tokens[0]
-            time = tokens[1]
-        long_version = get_version()
-        tokens = long_version.split('.')
-        version = '%s.%s.%s' % (tokens[0], tokens[1], tokens[2])
-        # Get title of the layer
-        title = self.map_title
-        if not title:
-            title = ''
-
-        # Prepare the substitution map
-        substitution_map = {
-            'impact-title': title,
-            'date': date,
-            'time': time,
-            'safe-version': version,  # deprecated
-            'disclaimer': self.disclaimer,
-            # These added in 3.2
-            'version-title': tr('Version'),
-            'inasafe-version': version,
-            'disclaimer-title': tr('Disclaimer'),
-            'date-title': tr('Date'),
-            'time-title': tr('Time'),
-            'caution-title': tr('Note'),
-            'caution-text': tr(
-                'This assessment is a guide - we strongly recommend that you '
-                'ground truth the results shown here before deploying '
-                'resources and / or personnel.'),
-            'version-text': tr(
-                'Assessment carried out using InaSAFE release %s.' % version),
-            'legend-title': tr('Legend'),
-            'information-title': tr('Analysis information'),
-            'supporters-title': tr('Report produced by')
-        }
-
-        # Load template
-        self._template_composition.substitution = substitution_map
-        try:
-            self._template_composition.load_template()
-        except TemplateLoadingError:
-            raise
-
-    @staticmethod
-    def symbol_count(layer):
-        """Get symbol count from whatever method we can get
-
-        :param layer: QgsMapLayer
-        :return: QgsMapLayer
-        """
-        try:
-            return len(layer.legendSymbologyItems())
-        except:
-            pass
-
-        try:
-            return len(layer.rendererV2().legendSymbolItemsV2())
-        except:
-            pass
-
-        return 1
-
-    def draw_composition(self):
-        """Draw all the components in the composition."""
-        # This is deprecated - use inasafe-logo-<colour> rather
-        safe_logo = self.composition.getComposerItemById(
-            'safe-logo')
-        # Next two options replace safe logo in 3.2
-        black_inasafe_logo = self.composition.getComposerItemById(
-            'black-inasafe-logo')
-        white_inasafe_logo = self.composition.getComposerItemById(
-            'white-inasafe-logo')
-        north_arrow = self.composition.getComposerItemById(
-            'north-arrow')
-        organisation_logo = self.composition.getComposerItemById(
-            'organisation-logo')
-        supporters_logo = self.composition.getComposerItemById(
-            'supporters-logo')
-
-        if qgis_version() < 20600:
-            if safe_logo is not None:
-                # its deprecated so just use black_inasafe_logo
-                safe_logo.setPictureFile(self.inasafe_logo)
-            if black_inasafe_logo is not None:
-                black_inasafe_logo.setPictureFile(self._black_inasafe_logo)
-            if white_inasafe_logo is not None:
-                white_inasafe_logo.setPictureFile(self._white_inasafe_logo)
-            if north_arrow is not None:
-                north_arrow.setPictureFile(self.north_arrow)
-            if organisation_logo is not None:
-                organisation_logo.setPictureFile(self.organisation_logo)
-            if supporters_logo is not None:
-                supporters_logo.setPictureFile(self.supporters_logo)
-        else:
-            if safe_logo is not None:
-                # its deprecated so just use black_inasafe_logo
-                safe_logo.setPicturePath(self.inasafe_logo)
-            if black_inasafe_logo is not None:
-                black_inasafe_logo.setPicturePath(self._black_inasafe_logo)
-            if white_inasafe_logo is not None:
-                white_inasafe_logo.setPicturePath(self._white_inasafe_logo)
-            if north_arrow is not None:
-                north_arrow.setPicturePath(self.north_arrow)
-            if organisation_logo is not None:
-                organisation_logo.setPicturePath(self.organisation_logo)
-            if supporters_logo is not None:
-                supporters_logo.setPicturePath(self.supporters_logo)
-
-        # Set impact report table
-        table = self.composition.getComposerItemById('impact-report')
-        if table is not None:
-            text = self._keyword_io.read_keywords(self.layer, 'impact_summary')
-            if text is None:
-                text = ''
-            table.setText(text)
-            table.setHtmlState(1)
-
-        # Get the main map canvas on the composition and set its extents to
-        # the event.
-        composer_map = self.composition.getComposerItemById('impact-map')
-        if composer_map is not None:
-            # Recenter the composer map on the center of the extent
-            # Note that since the composer map is square and the canvas may be
-            # arbitrarily shaped, we center based on the longest edge
-            canvas_extent = self.extent
-            width = canvas_extent.width()
-            height = canvas_extent.height()
-            longest_width = width if width > height else height
-            half_length = longest_width / 2
-            center = canvas_extent.center()
-            min_x = center.x() - half_length
-            max_x = center.x() + half_length
-            min_y = center.y() - half_length
-            max_y = center.y() + half_length
-            # noinspection PyCallingNonCallable
-            square_extent = QgsRectangle(min_x, min_y, max_x, max_y)
-            composer_map.setNewExtent(square_extent)
-
-            # calculate intervals for grid
-            split_count = 5
-            x_interval = square_extent.width() / split_count
-            composer_map.setGridIntervalX(x_interval)
-            y_interval = square_extent.height() / split_count
-            composer_map.setGridIntervalY(y_interval)
-
-        legend = self.composition.getComposerItemById('impact-legend')
-        if legend is not None:
-
-            symbol_count = ImpactReport.symbol_count(self.layer)
-
-            # add legend symbol count from extra_layers
-            for l in self.extra_layers:
-                symbol_count += ImpactReport.symbol_count(l)
-
-            if symbol_count <= 5:
-                legend.setColumnCount(1)
-            else:
-                legend.setColumnCount(symbol_count / 5 + 1)
-
-            # Set back to blank to #2409
-            legend.setTitle("")
-
-            # Set Legend
-            # Since QGIS 2.6, legend.model() is obsolete
-            if qgis_version() < 20600:
-                layer_set = [self.layer.id()]
-                layer_set += [l.id() for l in self.extra_layers]
-                legend.model().setLayerSet(layer_set)
-                legend.synchronizeWithModel()
-            else:
-                root_group = legend.modelV2().rootGroup()
-                root_group.addLayer(self.layer)
-                for l in self.extra_layers:
-                    root_group.addLayer(l)
-                legend.synchronizeWithModel()
-
-    def print_to_pdf(self, output_path):
-        """A wrapper to print both the map and the impact table to PDF.
-
-        :param output_path: Path on the file system to which the pdf should
-            be saved. If None, a generated file name will be used. Note that
-            the table will be prefixed with '_table'.
-        :type output_path: str, unicode
-
-        :returns: The map path and the table path to the pdfs generated.
-        :rtype: tuple
-        """
-        # Print the map to pdf
-        try:
-            map_path = self.print_map_to_pdf(output_path)
-        except TemplateLoadingError:
-            raise
-
-        # Print the table to pdf
-        table_path = os.path.splitext(output_path)[0] + '_table.pdf'
-        table_path = self.print_impact_table(table_path)
-
-        return map_path, table_path
-
-    def print_map_to_pdf(self, output_path):
-        """Generate the printout for our final map as pdf.
-
-        :param output_path: Path on the file system to which the pdf should be
-            saved. If None, a generated file name will be used.
-        :type output_path: str
-
-        :returns: File name of the output file (equivalent to filename if
-                provided).
-        :rtype: str
-        """
-        LOGGER.debug('InaSAFE Map print_to_pdf called')
-        self.setup_composition()
-        try:
-            self.load_template()
-        except TemplateLoadingError:
-            raise
-        self.draw_composition()
-
-        if output_path is None:
-            output_path = unique_filename(
-                prefix='report', suffix='.pdf', dir=temp_dir())
-
-        self.composition.exportAsPDF(output_path)
-        return output_path
-
-    def print_impact_table(self, output_path):
-        """Pint summary from impact layer to PDF.
-
-        ..note:: The order of the report:
-            1. Summary table
-            2. Aggregation table
-            3. Attribution table
-
-        :param output_path: Output path.
-        :type output_path: str
-
-        :return: Path to generated pdf file.
-        :rtype: str
-
-        :raises: None
-        """
-        keywords = self._keyword_io.read_keywords(self.layer)
-
-        if output_path is None:
-            output_path = unique_filename(suffix='.pdf', dir=temp_dir())
-
-        try:
-            impact_template = get_report_template(self.layer.source())
-            summary_table = impact_template.generate_html_report()
-        except:
-            summary_table = keywords.get('impact_summary', None)
-        full_table = keywords.get('impact_table', None)
-        aggregation_table = keywords.get('postprocessing_report', None)
-        attribution_table = impact_attribution(keywords)
-
-        # (AG) We will not use impact_table as most of the IF use that as:
-        # impact_table = impact_summary + some information intended to be
-        # shown on screen (see FloodOsmBuilding)
-        # Unless the impact_summary is None, we will use impact_table as the
-        # alternative
-        html = m.Brand().to_html()
-        html += m.Heading(tr('Analysis Results'), **INFO_STYLE).to_html()
-        if summary_table is None:
-            html += full_table
-        else:
-            html += summary_table
-
-        if aggregation_table is not None:
-            html += aggregation_table
-
-        if attribution_table is not None:
-            html += attribution_table.to_html()
-
-        html = html_header() + html + html_footer()
-
-        # Print HTML using composition
-        # For QGIS < 2.4 compatibility
-        # QgsMapSettings is added in 2.4
-        if qgis_version() < 20400:
-            map_settings = QgsMapRenderer()
-        else:
-            map_settings = QgsMapSettings()
-
-        # A4 Portrait
-        # TODO: Will break when we try to use larger print layouts TS
-        paper_width = 210
-        paper_height = 297
-
-        # noinspection PyCallingNonCallable
-        composition = QgsComposition(map_settings)
-        # noinspection PyUnresolvedReferences
-        composition.setPlotStyle(QgsComposition.Print)
-        composition.setPaperSize(paper_width, paper_height)
-        composition.setPrintResolution(300)
-
-        # Add HTML Frame
-        # noinspection PyCallingNonCallable
-        html_item = QgsComposerHtml(composition, False)
-        margin_left = 10
-        margin_top = 10
-
-        # noinspection PyCallingNonCallable
-        html_frame = QgsComposerFrame(
-            composition,
-            html_item,
-            margin_left,
-            margin_top,
-            paper_width - 2 * margin_left,
-            paper_height - 2 * margin_top)
-        html_item.addFrame(html_frame)
-
-        # Set HTML
-        # From QGIS 2.6, we can set composer HTML with manual HTML
-        if qgis_version() < 20600:
-            html_path = unique_filename(
-                prefix='report', suffix='.html', dir=temp_dir())
-            html_to_file(html, file_path=html_path)
-            html_url = QUrl.fromLocalFile(html_path)
-            html_item.setUrl(html_url)
-        else:
-            # noinspection PyUnresolvedReferences
-            html_item.setContentMode(QgsComposerHtml.ManualHtml)
-            # noinspection PyUnresolvedReferences
-            html_item.setResizeMode(QgsComposerHtml.RepeatUntilFinished)
-            html_item.setHtml(html)
-            # RMN: This line below breaks in InaSAFE Headless after one
-            # successful call. This is because the function is not
-            # thread safe. Can't do anything about this, so avoid calling this
-            # function in multithreaded way.
-            html_item.loadHtml()
-
-        composition.exportAsPDF(output_path)
-        return output_path

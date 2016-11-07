@@ -8,8 +8,10 @@ from safe.reportv4.extractors.composer import qgis_composer_extractor
 from safe.reportv4.processors.default import qgis_composer_renderer, \
     jinja2_renderer
 
-__author__ = 'Rizky Maulana Nugraha <lana.pcfre@gmail.com>'
-__date__ = '10/19/16'
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 
 report_a3_portrait_blue = {
