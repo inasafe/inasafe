@@ -1,0 +1,59 @@
+{
+  "type": "FeatureCollection",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "hazard_id": 1,
+        "hazard_class": "high",
+        "high": 26,
+        "medium": 0,
+        "low": 0,
+        "affected": 26,
+        "unaffected": 40,
+        "total": 66,
+        "evacuation": 0.26,
+        "Rice": 10,
+        "Drinking Water": 10,
+        "Clean Water": 10,
+        "Family Kits": 10,
+        "Toilets": 10
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [
+          [
+            [
+              [
+                106.732982396425868,
+                -6.166126423037611
+              ],
+              [
+                106.77789816063185,
+                -6.166126423037611
+              ],
+              [
+                106.77789816063185,
+                -6.183246454622871
+              ],
+              [
+                106.732982396425868,
+                -6.183246454622871
+              ],
+              [
+                106.732982396425868,
+                -6.166126423037611
+              ]
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}
