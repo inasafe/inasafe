@@ -14,7 +14,7 @@ from qgis.core import (
 )
 
 from safe.common.utilities import unique_filename, temp_dir
-from safe.definitionsv4.fields import hazard_value_field
+from safe.definitionsv4.fields import hazard_value_field, exposure_type_field
 from safe.definitionsv4.layer_geometry import (
     layer_geometry, layer_geometry_polygon)
 from safe.definitionsv4.processing_steps import polygonize_steps
@@ -51,6 +51,11 @@ def polygonize(layer, callback=None):
     output_layer_name = output_layer_name % layer.keywords['layer_purpose']
     gdal_layer_name = polygonize_steps['gdal_layer_name']
 
+    if layer.keywords.get('layer_purpose') == 'exposure':
+        output_field = exposure_type_field
+    else:
+        output_field = hazard_value_field
+
     input_raster = gdal.Open(layer.source(), gdal.GA_ReadOnly)
 
     srs = osr.SpatialReference()
@@ -66,7 +71,7 @@ def polygonize(layer, callback=None):
     output_layer = destination.CreateLayer(gdal_layer_name, srs)
 
     # We have no other way to use a shapefile. We need only the first 10 chars.
-    field_name = hazard_value_field['field_name'][0:10]
+    field_name = output_field['field_name'][0:10]
     fd = ogr.FieldDefn(field_name, ogr.OFTInteger)
     output_layer.CreateField(fd)
 
@@ -82,12 +87,10 @@ def polygonize(layer, callback=None):
     vector_layer.keywords[
         layer_geometry['key']] = layer_geometry_polygon['key']
 
-    inasafe_field = hazard_value_field['key']
-
     vector_layer.keywords['title'] = output_layer_name
     # We just polygonized the raster layer. inasafe_fields do not exist.
     vector_layer.keywords['inasafe_fields'] = {
-        inasafe_field: field_name
+        output_field['key']: field_name
     }
 
     return vector_layer

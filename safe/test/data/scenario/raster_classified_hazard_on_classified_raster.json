@@ -1,0 +1,60 @@
+{
+  "scenario": {
+    "enable": true,
+    "hazard": "classified_flood_20_20.asc",
+    "exposure": "classified_raster_landcover.asc",
+    "aggregation": ""
+  },
+
+
+  "expected":{
+    "impact function":{
+      "info": {},
+      "process":[
+        "Run impact function",
+        "Union exposure features to the aggregate hazard",
+        "Aggregate the impact summary",
+        "Aggregate the aggregation summary",
+        "Aggregate the analysis summary",
+        "Build the exposure breakdown"
+      ]
+    },
+    "post_processor":{
+      "info": {},
+      "process":[
+        "Post processor for Size Rate Post Processor",
+        "Post processor for Affected Post Processor"
+      ]
+    },
+    "aggregation":{
+      "info": {
+        "provided":false
+      },
+      "process":[
+        "Convert bbox aggregation to polygon layer with keywords",
+        "Convert the aggregation layer to the analysis layer",
+        "Union hazard polygons with aggregation areas and assign hazard class"
+      ]
+    },
+    "hazard":{
+      "info": {},
+      "process":[
+        "Polygonize classified raster hazard",
+        "Cleaning the vector hazard attribute table",
+        "Assign classes based on value map",
+        "Classified polygon hazard with keywords",
+        "Vector clip and mask hazard to aggregation",
+        "Clip and mask hazard polygons with the analysis layer"
+      ]
+    },
+    "exposure":{
+      "info": {},
+      "process":[
+        "Polygonise classified raster exposure",
+        "Cleaning the vector exposure attribute table",
+        "Assign classes based on value map",
+        "Clip the exposure layer with the analysis layer"
+      ]
+    }
+  }
+}
