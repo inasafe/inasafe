@@ -30,7 +30,11 @@ from safe.definitionsv4.layer_purposes import (
     layer_purpose_hazard,
     layer_purpose_aggregation
 )
-from safe.definitionsv4.utilities import get_fields, definition
+from safe.definitionsv4.utilities import (
+    get_fields,
+    definition,
+    get_compulsory_fields,
+)
 from safe.utilities.i18n import tr
 from safe.utilities.profiling import profile
 
@@ -163,23 +167,15 @@ def _remove_features(layer):
     """
     # Get the layer purpose of the layer.
     layer_purpose = layer.keywords['layer_purpose']
+    layer_subcategory = layer.keywords.get(layer_purpose)
 
-    mapping = {
-        layer_purpose_exposure['key']: exposure_type_field,
-        layer_purpose_hazard['key']: hazard_value_field,
-        layer_purpose_aggregation['key']: aggregation_name_field
-    }
-
-    for layer_type, field in mapping.iteritems():
-        if layer_purpose == layer_type:
-            compulsory_field = field['key']
-            break
+    compulsory_field = get_compulsory_fields(layer_purpose, layer_subcategory)
 
     inasafe_fields = layer.keywords['inasafe_fields']
-    field_name = inasafe_fields.get(compulsory_field)
+    field_name = inasafe_fields.get(compulsory_field['key'])
     if not field_name:
         msg = 'Keyword %s is missing from %s' % (
-            compulsory_field, layer_purpose)
+            compulsory_field['key'], layer_purpose)
         raise InvalidKeywordsForProcessingAlgorithm(msg)
     index = layer.fieldNameIndex(field_name)
 
