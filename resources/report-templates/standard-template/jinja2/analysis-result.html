@@ -1,0 +1,26 @@
+<h5 class="info">
+    <i class="icon-info-sign icon-white"></i> {{ header }}
+</h5>
+<table class="table table-striped condensed">
+    <tbody>
+        {% if question %}
+        <tr>
+            <td colspan="100%">
+                {{ question }}
+            </td>
+        </tr>
+        {% endif %}
+        {% for item in hazard_stats %}
+        <tr>
+            <th colspan="1">{{ item.name }}</th>
+            <td class="text-right text-right" colspan=1>{{ item.value }}</td>
+        </tr>
+        {% endfor %}
+        {% for item in summary %}
+        <tr>
+            <th colspan="1">{{ item.label }}</th>
+            <td class="text-right text-right" colspan=1>{{ item.value }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
