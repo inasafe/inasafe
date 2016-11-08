@@ -1,11 +1,15 @@
 # coding=utf-8
 """Keyword Wizard Step for Threshold"""
+from PyQt4.QtGui import (
+    QDoubleSpinBox, QHBoxLayout, QLabel, QVBoxLayout, QGridLayout)
 
+from safe.utilities.i18n import tr
 from safe.definitionsv4.layer_purposes import layer_purpose_aggregation
 from safe.definitionsv4.layer_geometry import layer_geometry_raster
 from safe.definitionsv4.utilities import get_fields
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
+from safe.utilities.gis import is_raster_layer
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -69,4 +73,42 @@ class StepKwThreshold(WizardStep, FORM_CLASS):
 
     def set_widgets(self):
         """Set widgets on the Threshold tab."""
-        pass
+        classification = self.parent.step_kw_classification.\
+            selected_classification()
+        classes = classification.get('classes')
+
+        for i, the_class in enumerate(classes):
+            class_layout = QHBoxLayout()
+
+            # Class label
+            class_label = QLabel(the_class['name'])
+
+            # Min label
+            min_label = QLabel(tr('Min'))
+
+            # Min value as double spin
+            min_value = QDoubleSpinBox()
+            min_value.setValue(the_class['numeric_default_min'])
+            min_value.setSingleStep(0.1)
+
+            # Max label
+            max_label = QLabel(tr('Max'))
+
+            # Max value as double spin
+            max_value = QDoubleSpinBox()
+            max_value.setValue(the_class['numeric_default_max'])
+            max_value.setSingleStep(0.1)
+
+            # Add to class_layout
+            class_layout.addWidget(min_label)
+            class_layout.addWidget(min_value)
+            # class_layout.addStretch(1)
+            class_layout.addWidget(max_label)
+            class_layout.addWidget(max_value)
+
+            # Add to grid_layout
+            self.gridLayoutThreshold.addWidget(class_label, i, 0)
+            self.gridLayoutThreshold.addLayout(class_layout, i, 1)
+
+        self.gridLayoutThreshold.setSpacing(0)
+
