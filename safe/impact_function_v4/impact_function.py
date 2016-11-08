@@ -38,6 +38,7 @@ from safe.gisv4.raster.zonal_statistics import zonal_stats
 from safe.definitionsv4.post_processors import post_processors
 from safe.definitionsv4.analysis_steps import analysis_steps
 from safe.definitionsv4.utilities import definition
+from safe.definitionsv4.exposure import indivisible_exposure
 from safe.common.exceptions import (
     InvalidExtentError,
     InvalidLayerError,
@@ -893,8 +894,9 @@ class ImpactFunction(object):
             self.debug_layer(self.exposure)
 
         exposure = self.exposure.keywords.get('exposure')
+        indivisible_keys = [f['key'] for f in indivisible_exposure]
         geometry = self.exposure.geometryType()
-        if exposure == 'structure' and geometry == QGis.Polygon:
+        if exposure in indivisible_keys and geometry != QGis.Point:
             self.set_state_process(
                 'exposure',
                 'Smart clip')
@@ -935,8 +937,9 @@ class ImpactFunction(object):
 
         else:
             exposure = self.exposure.keywords.get('exposure')
+            indivisible_keys = [f['key'] for f in indivisible_exposure]
             geometry = self.exposure.geometryType()
-            if exposure == 'structure' and geometry == QGis.Polygon:
+            if exposure in indivisible_keys and geometry != QGis.Point:
                 self.set_state_process(
                     'impact function',
                     'Highest class of hazard is assigned when more than one '

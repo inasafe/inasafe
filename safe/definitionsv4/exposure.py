@@ -356,6 +356,11 @@ exposure_land_cover = {
     'extra_fields': [],
     'layer_modes': [layer_mode_classified]
 }
+
+indivisible_exposure = [
+    exposure_structure,
+]
+
 exposure_all = [
     exposure_land_cover,
     exposure_population,
