@@ -901,7 +901,7 @@
     </maplayer>
     <maplayer minimumScale="0" maximumScale="1e+08" simplifyDrawingHints="1" minLabelScale="0" maxLabelScale="1e+08" simplifyDrawingTol="1" geometry="Polygon" simplifyMaxScale="1" type="vector" hasScaleBasedVisibilityFlag="0" simplifyLocal="1" scaleBasedLabelVisibilityFlag="0">
       <id>census20151014221621060</id>
-      <datasource>../exposure/census.shp</datasource>
+      <datasource>../exposure/census.geojson</datasource>
       <title></title>
       <abstract></abstract>
       <keywordList>

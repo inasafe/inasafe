@@ -934,7 +934,7 @@ def load_standard_layers(dock=None):
         standard_data_path('hazard', 'volcano_point.geojson'),
         standard_data_path('exposure', 'building-points.shp'),
         standard_data_path('exposure', 'buildings.shp'),
-        standard_data_path('exposure', 'census.shp'),
+        standard_data_path('exposure', 'census.geojson'),
         standard_data_path('exposure', 'roads.shp'),
         standard_data_path('exposure', 'landcover.geojson'),
         standard_data_path('exposure', 'pop_binary_raster_20_20.asc'),
