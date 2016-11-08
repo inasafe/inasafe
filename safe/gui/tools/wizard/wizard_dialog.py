@@ -802,7 +802,6 @@ class WizardDialog(QDialog, FORM_CLASS):
                 if value_map:
                     keywords['value_map'] = value_map
 
-
         if self.step_kw_source.leSource.text():
             keywords['source'] = get_unicode(
                 self.step_kw_source.leSource.text())
