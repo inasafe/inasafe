@@ -423,7 +423,7 @@ class KeywordIO(QObject):
         if keyword in [
             'value_map', 'inasafe_fields', 'inasafe_default_values']:
             value = self._dict_to_row(value)
-        if keyword == 'thresholds':
+        elif keyword == 'thresholds':
             value = self._threshold_to_row(value)
         # In these KEYWORD cases we show the DESCRIPTION for
         # the VALUE keyword_definition
