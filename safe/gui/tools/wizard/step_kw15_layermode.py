@@ -22,6 +22,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from PyQt4 import QtCore
 from PyQt4.QtGui import QListWidgetItem
 
+from safe.common.exceptions import InvalidWizardStep
+from safe.utilities.i18n import tr
 from safe.definitionsv4.layer_purposes import (
     layer_purpose_exposure, layer_purpose_hazard)
 from safe.gui.tools.wizard.wizard_step import WizardStep
@@ -31,10 +33,11 @@ from safe.gui.tools.wizard.wizard_strings import (
     layer_mode_vector_question,
     layer_mode_vector_classified_confirm,
     layer_mode_vector_continuous_confirm)
-from safe.utilities.gis import is_raster_layer, is_point_layer
+from safe.utilities.gis import is_raster_layer
 from safe.definitionsv4.utilities import definition, get_layer_modes
 from safe.definitionsv4.layer_modes import (
     layer_mode_classified, layer_mode_continuous)
+from safe.definitionsv4.utilities import get_classifications
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
@@ -57,18 +60,41 @@ class StepKwLayerMode(WizardStep, FORM_CLASS):
         :returns: The step to be switched to
         :rtype: WizardStep instance or None
         """
-        if self.parent.step_kw_layermode.\
-                selected_layermode() == layer_mode_classified:
-            if self.parent.step_kw_classification.\
-                    classifications_for_layer():
-                new_step = self.parent.step_kw_classification
-            elif is_raster_layer(self.parent.layer):
-                new_step = self.parent.step_kw_inasafe_fields
+        # Check if there is classifications or no
+        layer_purpose = self.parent.step_kw_purpose.selected_purpose()
+        layer_mode = self.selected_layermode()
+
+        if layer_purpose in [
+            layer_purpose_hazard, layer_purpose_exposure]:
+            subcategory = self.parent.step_kw_subcategory.\
+                selected_subcategory()
+            if layer_mode == layer_mode_classified:
+                if get_classifications(subcategory['key']):
+                    new_step = self.parent.step_kw_classification
+                else:  # No classifications
+                    if is_raster_layer(self.parent.layer):
+                        new_step = self.parent.step_kw_source
+                    else:  # Vector
+                        new_step = self.parent.step_kw_field
+
+            elif layer_mode == layer_mode_continuous:
+                if (subcategory.get('units') or
+                        subcategory.get('continuous_hazard_units')):
+                    new_step = self.parent.step_kw_unit
+                else:  # Continuous but no unit
+                    if get_classifications(subcategory['key']):
+                        new_step = self.parent.step_kw_classification
+                    else:  # Continuous, no unit, no classification
+                        if is_raster_layer(self.parent.layer):
+                            new_step = self.parent.step_kw_source
+                        else:  # Vector
+                            new_step = self.parent.step_kw_field
             else:
-                new_step = self.parent.step_kw_field
-        elif self.parent.step_kw_layermode. \
-                selected_layermode() == layer_mode_continuous:
-            pass
+                message = tr('Layer mode should be continuous or classified')
+                raise InvalidWizardStep(message)
+        else:
+            message = tr('Layer purpose should be hazard or exposure')
+            raise InvalidWizardStep(message)
 
         return new_step
 

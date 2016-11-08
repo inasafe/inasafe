@@ -44,7 +44,6 @@ from safe.definitionsv4.exposure_classifications import (
 from safe.definitionsv4.units import count_exposure_unit
 
 from safe.gui.tools.wizard.wizard_dialog import WizardDialog
-from safe.utilities.keyword_io import KeywordIO
 from safe.definitionsv4.utilities import definition, get_compulsory_fields
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
