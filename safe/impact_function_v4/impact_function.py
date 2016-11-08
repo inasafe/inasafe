@@ -31,6 +31,7 @@ from safe.gisv4.vector.summary_2_aggregation import aggregation_summary
 from safe.gisv4.vector.summary_3_analysis import analysis_summary
 from safe.gisv4.vector.summary_4_exposure_breakdown import (
     exposure_type_breakdown)
+from safe.gisv4.vector.recompute_counts import recompute_counts
 from safe.gisv4.vector.update_value_map import update_value_map
 from safe.gisv4.raster.reclassify import reclassify as reclassify_raster
 from safe.gisv4.raster.polygonize import polygonize
@@ -39,6 +40,7 @@ from safe.definitionsv4.post_processors import post_processors
 from safe.definitionsv4.analysis_steps import analysis_steps
 from safe.definitionsv4.utilities import definition
 from safe.definitionsv4.exposure import indivisible_exposure
+from safe.definitionsv4.fields import size_field
 from safe.common.exceptions import (
     InvalidExtentError,
     InvalidLayerError,
@@ -952,6 +954,15 @@ class ImpactFunction(object):
                     'impact function',
                     'Union exposure features to the aggregate hazard')
                 self._impact = union(self.exposure, self._aggregate_hazard)
+
+                # If the layer has the size field, it means we need to
+                # recompute counts based on the old and new size.
+                fields = self.exposure.keywords['inasafe_fields']
+                if size_field['key'] in fields:
+                    self.set_state_process(
+                        'exposure',
+                        'Recompute counts')
+                    self._impact = recompute_counts(self._impact)
 
             if self.debug_mode:
                 self.debug_layer(self._impact)
