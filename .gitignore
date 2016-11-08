@@ -46,6 +46,7 @@ realtime/server_config.py
 headless/celeryconfig.py
 realtime/celeryconfig.py
 safe/gui/ui/*.py
+safe/reportv4/test/output
 result.txt
 riab_demo_data
 riab_test_data
@@ -56,6 +57,7 @@ setup.cfg
 .svn
 .vagrant
 venv
+!.gitkeep
 # This is a temporary working file for building the windows installer that does string replacement on version name
 scripts/build.nsi
 gdalwmscache

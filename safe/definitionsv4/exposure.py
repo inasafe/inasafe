@@ -68,6 +68,24 @@ exposure_population = {
          tr('Fatality model is from Institut Teknologi Bandung 2012.'),
 
     ],
+    'analysis_summary': [
+        {
+            'key': 'affected',
+            'label': tr('Total affected population')
+        },
+        {
+            'key': 'unaffected',
+            'label': tr('Unaffected population')
+        },
+        {
+            'key': 'total',
+            'label': tr('Total population')
+        },
+        {
+            'key': 'evacuation',
+            'label': tr('Population needing evacuation<sup>1</sup>')
+        }
+    ],
     'continuous_notes': [  # notes specific to continuous data
     ],
     'classified_notes': [  # notes specific to classified data
