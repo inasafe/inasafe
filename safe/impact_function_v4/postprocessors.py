@@ -5,9 +5,8 @@ Postprocessors.
 """
 from PyQt4.QtCore import QPyNullVariant
 
-from qgis.core import QgsDistanceArea, QgsFeatureRequest
+from qgis.core import QgsFeatureRequest
 
-from safe.definitionsv4.fields import size_field
 from safe.gisv4.vector.tools import create_field_from_definition
 from safe.utilities.profiling import profile
 from safe.utilities.i18n import tr
@@ -102,11 +101,10 @@ def run_single_post_processor(layer, post_processor):
         # Get the input field's indexes for input
         input_indexes = {}
 
+        input_properties = {}
+
         # Default parameters
         default_parameters = {}
-
-        # Store the indexes that will be deleted.
-        temporary_indexes = []
 
         for key, value in post_processor['input'].items():
 
@@ -138,15 +136,7 @@ def run_single_post_processor(layer, post_processor):
 
             # For geometry, create new field that contain the value
             elif value['type'] == 'geometry_property':
-                if value['value'] == 'size':
-                    flag = False
-                    # Check if size field is already exist
-                    if layer.fieldNameIndex(size_field['field_name']) != -1:
-                        flag = True
-                        # temporary_indexes.append(input_indexes[key])
-                    input_indexes[key] = add_size_field(layer)
-                    if not flag:
-                        temporary_indexes.append(input_indexes[key])
+                input_properties[key] = 'geometry_property'
 
             elif value['type'] == 'keyword':
 
@@ -157,10 +147,17 @@ def run_single_post_processor(layer, post_processor):
 
                 default_parameters[key] = value
 
+            elif value['type'] == 'layer_property':
+                if value['value'] == 'layer_crs':
+                    default_parameters[key] = layer.crs()
+
         # Create iterator for feature
         request = QgsFeatureRequest().setSubsetOfAttributes(
             input_indexes.values())
         iterator = layer.getFeatures(request)
+
+        inputs = input_indexes.copy()
+        inputs.update(input_properties)
 
         # Iterate all feature
         for feature in iterator:
@@ -171,8 +168,11 @@ def run_single_post_processor(layer, post_processor):
             parameters.update(default_parameters)
 
             # Fill up the input from fields
-            for key, value in input_indexes.items():
-                parameters[key] = attributes[value]
+            for key, value in inputs.items():
+                if value == 'geometry_property':
+                    parameters[key] = feature.geometry()
+                else:
+                    parameters[key] = attributes[value]
             # Fill up the input from geometry property
 
             # Evaluate the function
@@ -195,9 +195,6 @@ def run_single_post_processor(layer, post_processor):
                 output_field_index,
                 post_processor_result
             )
-
-        # Delete temporary indexes
-        layer.deleteAttributes(temporary_indexes)
 
     layer.commitChanges()
     return True, None
@@ -227,43 +224,3 @@ def enough_input(layer, post_processor_input):
                     key, impact_fields)
                 return False, msg
     return True, None
-
-
-@profile
-def add_size_field(layer):
-    """Add size field in to impact layer.
-
-    If polygon, size will be area in square metre.
-    If line, size will be length in metre.
-
-    :param layer: The vector layer to use for post processing.
-    :type layer: QgsVectorLayer
-
-    :returns: Index of the size field.
-    :rtype: int
-    """
-    # Create QgsDistanceArea object
-    size_calculator = QgsDistanceArea()
-    size_calculator.setSourceCrs(layer.crs())
-    size_calculator.setEllipsoid('WGS84')
-    size_calculator.setEllipsoidalMode(True)
-
-    size_field_index = layer.fieldNameIndex('size')
-    # Check if size field already exist
-    if size_field_index == -1:
-        # Add new field, size
-        field = create_field_from_definition(size_field)
-        layer.addAttribute(field)
-        # Get index
-        size_field_index = layer.fieldNameIndex('size')
-
-    # Iterate through all features
-    request = QgsFeatureRequest().setSubsetOfAttributes([])
-    features = layer.getFeatures(request)
-    for feature in features:
-        layer.changeAttributeValue(
-            feature.id(),
-            size_field_index,
-            size_calculator.measure(feature.geometry())
-        )
-    return size_field_index
