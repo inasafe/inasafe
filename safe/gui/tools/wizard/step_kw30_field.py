@@ -34,7 +34,7 @@ from safe.gui.tools.wizard.wizard_strings import (
     field_question_aggregation)
 from safe.gui.tools.wizard.wizard_utils import get_question_text
 from safe.utilities.gis import is_raster_layer
-
+from safe.definitionsv4.utilities import get_fields
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
@@ -70,8 +70,27 @@ class StepKwField(WizardStep, FORM_CLASS):
                     classifications_for_layer():
                 return self.parent.step_kw_threshold
 
+        layer_purpose = self.parent.step_kw_purpose.selected_purpose()
+        if layer_purpose['key'] != layer_purpose_aggregation['key']:
+            subcategory = self.parent.step_kw_subcategory.\
+                selected_subcategory()
+        else:
+            subcategory = {'key': None}
+
+        # Check if it can go to inasafe field step
+        inasafe_fields = get_fields(
+            layer_purpose['key'], subcategory['key'], replace_null=False)
+        if inasafe_fields:
+            return self.parent.step_kw_inasafe_fields
+
+        # Check if it can go to inasafe default field step
+        default_inasafe_fields = get_fields(
+            layer_purpose['key'], subcategory['key'], replace_null=True)
+        if default_inasafe_fields:
+            return self.parent.step_kw_default_inasafe_fields
+
         # Any other case
-        return self.parent.step_kw_inasafe_fields
+        return self.parent.step_kw_source
 
     # noinspection PyPep8Naming
     def on_lstFields_itemSelectionChanged(self):
