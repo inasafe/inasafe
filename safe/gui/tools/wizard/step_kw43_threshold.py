@@ -74,6 +74,8 @@ class StepKwThreshold(WizardStep, FORM_CLASS):
 
     def set_widgets(self):
         """Set widgets on the Threshold tab."""
+        thresholds = self.parent.get_existing_keyword('thresholds')
+
         self.classes = dict()
         classification = self.parent.step_kw_classification.\
             selected_classification()
@@ -90,7 +92,10 @@ class StepKwThreshold(WizardStep, FORM_CLASS):
 
             # Min value as double spin
             min_value = QDoubleSpinBox()
-            min_value.setValue(the_class['numeric_default_min'])
+            if thresholds.get(the_class['key']):
+                min_value.setValue(thresholds[the_class['key']][0])
+            else:
+                min_value.setValue(the_class['numeric_default_min'])
             min_value.setSingleStep(0.1)
 
             # Max label
@@ -98,7 +103,10 @@ class StepKwThreshold(WizardStep, FORM_CLASS):
 
             # Max value as double spin
             max_value = QDoubleSpinBox()
-            max_value.setValue(the_class['numeric_default_max'])
+            if thresholds.get(the_class['key']):
+                max_value.setValue(thresholds[the_class['key']][1])
+            else:
+                max_value.setValue(the_class['numeric_default_max'])
             max_value.setSingleStep(0.1)
 
             # Add to class_layout
