@@ -1,7 +1,9 @@
 # coding=utf-8
 """Keyword Wizard Step for Threshold"""
 
+from safe.definitionsv4.layer_purposes import layer_purpose_aggregation
 from safe.definitionsv4.layer_geometry import layer_geometry_raster
+from safe.definitionsv4.utilities import get_fields
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 
@@ -42,8 +44,28 @@ class StepKwThreshold(WizardStep, FORM_CLASS):
         if self.parent.get_layer_geometry_key() == \
                 layer_geometry_raster['key']:
             return self.parent.step_kw_source
+
+        layer_purpose = self.parent.step_kw_purpose.selected_purpose()
+        if layer_purpose['key'] != layer_purpose_aggregation['key']:
+            subcategory = self.parent.step_kw_subcategory. \
+                selected_subcategory()
         else:
+            subcategory = {'key': None}
+
+        # Check if it can go to inasafe field step
+        inasafe_fields = get_fields(
+            layer_purpose['key'], subcategory['key'], replace_null=False)
+        if inasafe_fields:
             return self.parent.step_kw_inasafe_fields
+
+        # Check if it can go to inasafe default field step
+        default_inasafe_fields = get_fields(
+            layer_purpose['key'], subcategory['key'], replace_null=True)
+        if default_inasafe_fields:
+            return self.parent.step_kw_default_inasafe_fields
+
+        # Any other case
+        return self.parent.step_kw_source
 
     def set_widgets(self):
         """Set widgets on the Threshold tab."""
