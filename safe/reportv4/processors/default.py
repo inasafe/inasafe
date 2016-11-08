@@ -44,7 +44,8 @@ def jinja2_renderer(impact_report, component):
 
     :param component: Contains the component metadata and context for
         rendering the output
-    :type component: safe.reportv4.report_metadata.QgisComposerComponentsMetadata
+    :type component:
+        safe.reportv4.report_metadata.QgisComposerComponentsMetadata
 
     :return: whatever type of output the component should be
     """
@@ -86,7 +87,8 @@ def qgis_composer_renderer(impact_report, component):
 
     :param component: Contains the component metadata and context for
         rendering the output
-    :type component: safe.reportv4.report_metadata.QgisComposerComponentsMetadata
+    :type component:
+        safe.reportv4.report_metadata.QgisComposerComponentsMetadata
 
     :return: whatever type of output the component should be
     """

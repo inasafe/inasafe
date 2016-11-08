@@ -48,7 +48,7 @@ def minimum_needs_extractor(impact_report, component_metadata):
         }
         for n in freq:
             need_parameter = n
-            """:type: safe.common.parameters.resource_parameter.ResourceParameter"""
+            """:type: ResourceParameter"""
             header = need_parameter.name
             if need_parameter.unit.abbreviation:
                 header = '%s [%s]' % (

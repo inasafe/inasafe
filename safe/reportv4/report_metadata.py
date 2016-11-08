@@ -22,28 +22,34 @@ class ReportComponentsMetadata(object):
             output_format, template, output_path):
         """Base class for component metadata
 
-        ReportComponentMetadata is a metadata about the component element of a report.
-        This metadata explains what and how this component will be rendered.
+        ReportComponentMetadata is a metadata about the component element of
+        a report. This metadata explains what and how this component will be
+        rendered.
 
-        :param key: the component element id. Can be referenced by other element.
+        :param key: the component element id. Can be referenced by other
+            element.
         :type key: str
 
-        :param processor: The processor that able to render this component. Can be represented as full method name as
-            string or function reference.
+        :param processor: The processor that able to render this component.
+            Can be represented as full method name as string or function
+            reference.
         :type processor: str, function
 
-        :param extractor: The extractor that prepare the context for this component rendering process. Can be
-            represented as full method name as string or function reference.
+        :param extractor: The extractor that prepare the context for this
+            component rendering process. Can be represented as full method
+            name as string or function reference.
         :type extractor: str, function
 
-        :param output_format: The output format, can be a string or file or object.
+        :param output_format: The output format, can be a string or file or
+            object.
         :type output_format: str
 
         :param template: The template path to use for rendering
         :type template: str
 
-        :param output_path: The output path relatives to the output folder of the report. Can be used to dynamically
-            link components in base template.
+        :param output_path: The output path relatives to the output folder
+            of the report. Can be used to dynamically link components in
+            base template.
         :type output_path: str
         """
         self._key = key
@@ -78,7 +84,7 @@ class ReportComponentsMetadata(object):
 
     @property
     def extractor(self):
-        """Function reference for method to provide the data for rendering process
+        """Function reference for method to provide the data for rendering
 
         :rtype: function
         """
@@ -98,7 +104,8 @@ class ReportComponentsMetadata(object):
     def template(self):
         """Template path for the component.
 
-        Relative to the template_folder property of ReportMetadata containing this component
+        Relative to the template_folder property of ReportMetadata containing
+        this component
 
         :rtype: str
         """
@@ -128,7 +135,8 @@ class ReportComponentsMetadata(object):
     def output(self, value):
         """
 
-        :param value: The output will be set only by rendering process and impact report
+        :param value: The output will be set only by rendering process and
+            impact report
         :type value: str, object
         """
         self._output = value
@@ -137,8 +145,8 @@ class ReportComponentsMetadata(object):
     def context(self):
         """The context provided by extractors
 
-        Will be used by rendering process together with the template to generate output.
-        Passed in the form of dict containing key-value pair
+        Will be used by rendering process together with the template to
+        generate output. Passed in the form of dict containing key-value pair
 
         :rtype: dict
         """
@@ -229,10 +237,12 @@ class ReportMetadata(object):
         Initialize report metadata from a dictionary or from report folders
         that contains the definitions and styles templates.
 
-        :param report_folder: Optional param. Denote the location of report metadata folder
+        :param report_folder: Optional param. Denote the location of report
+            metadata folder
         :type report_folder: str
 
-        :param metadata_dict: Optional param. Denote the report metadata structure
+        :param metadata_dict: Optional param. Denote the report metadata
+            structure
         :type metadata_dict: dict
         """
         if metadata_dict:
@@ -245,7 +255,9 @@ class ReportMetadata(object):
                 _comp = self._load_components(c)
                 self._components.append(_comp)
             self._output_folder = ''
-        # TODO: might add when dealing with report_folder instead of metadata_dict
+
+        # TODO: might add when dealing with report_folder instead of
+        #   metadata_dict
 
     @classmethod
     def _load_components(cls, component_metadata):

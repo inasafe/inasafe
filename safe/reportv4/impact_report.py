@@ -407,7 +407,8 @@ class ImpactReport(object):
         """
         # noinspection PyBroadException
         try:
-            title = self._keyword_io.read_keywords(self.impact_layer, 'map_title')
+            title = self._keyword_io.read_keywords(
+                self.impact_layer, 'map_title')
             return title
         except KeywordNotFoundError:
             return None
