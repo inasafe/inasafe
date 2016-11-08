@@ -815,11 +815,15 @@ class WizardDialog(QDialog, FORM_CLASS):
         inasafe_fields.update(
             self.step_kw_default_inasafe_fields.get_inasafe_fields())
 
-        keywords['inasafe_fields'] = inasafe_fields
+        if inasafe_fields:
+            keywords['inasafe_fields'] = inasafe_fields
 
         inasafe_default_values = self.step_kw_default_inasafe_fields.\
             get_inasafe_default_values()
-        keywords['inasafe_default_values'] = inasafe_default_values
+
+        if inasafe_default_values:
+            keywords['inasafe_default_values'] = inasafe_default_values
+
         return keywords
 
     def save_current_keywords(self):
@@ -845,5 +849,7 @@ class WizardDialog(QDialog, FORM_CLASS):
             self.dock.get_layers()
 
         # Save default value to QSetting
-        for key, value in current_keywords['inasafe_default_values'].items():
-            set_inasafe_default_value_qsetting(self.setting, key, value)
+        if current_keywords.get('inasafe_default_values'):
+            for key, value in \
+                    current_keywords['inasafe_default_values'].items():
+                set_inasafe_default_value_qsetting(self.setting, key, value)

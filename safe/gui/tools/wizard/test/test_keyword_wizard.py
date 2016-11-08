@@ -315,7 +315,6 @@ class TestKeywordWizard(unittest.TestCase):
                     hazard_value_field['key']: u'KRB',
                     hazard_name_field['key']: u'volcano',
                  },
-            'inasafe_default_values': {},
             'value_map': assigned_values,
             'date': source_date,
             'classification': volcano_hazard_classes['key'],
@@ -605,8 +604,6 @@ class TestKeywordWizard(unittest.TestCase):
                 {
                     exposure_type_field['key']: u'TYPE',
                 },
-            'inasafe_default_values': {},
-            # No value will be omitted.
             'value_map': dict((k, v) for k, v in assigned_values.items() if v),
             'date': source_date,
             'classification': generic_structure_classes['key'],
@@ -821,7 +818,6 @@ class TestKeywordWizard(unittest.TestCase):
         dialog.pbnNext.click()
 
         expected_keyword = {
-            'inasafe_default_values': {},
             'inasafe_fields': {aggregation_name_field['key']: area_name},
             'layer_geometry': layer_geometry_polygon['key'],
             'layer_purpose': layer_purpose_aggregation['key'],
@@ -838,7 +834,6 @@ class TestKeywordWizard(unittest.TestCase):
 
         area_name = 'area_name'
         expected_keyword = {
-            'inasafe_default_values': {},
             'inasafe_fields': {aggregation_name_field['key']: area_name},
             'layer_geometry': layer_geometry_polygon['key'],
             'layer_purpose': layer_purpose_aggregation['key'],
@@ -1030,8 +1025,6 @@ class TestKeywordWizard(unittest.TestCase):
                 {
                     population_count_field['key']: u'population',
                 },
-            'inasafe_default_values': {},
-            # No value will be omitted.
             'date': source_date,
             'layer_geometry': layer_geometry_polygon['key'],
             'layer_purpose': layer_purpose_exposure['key'],
@@ -1058,8 +1051,6 @@ class TestKeywordWizard(unittest.TestCase):
                 {
                     population_count_field['key']: u'population',
                 },
-            'inasafe_default_values': {},
-            # No value will be omitted.
             'date': source_date,
             'layer_geometry': layer_geometry_polygon['key'],
             'layer_purpose': layer_purpose_exposure['key'],
@@ -1302,8 +1293,6 @@ class TestKeywordWizard(unittest.TestCase):
             'hazard': hazard_flood['key'],
             'value_map': assigned_values,
             'date': source_date,
-            'inasafe_fields': {},
-            'inasafe_default_values': {},
             'classification': generic_hazard_classes['key'],
             'layer_geometry': layer_geometry_raster['key'],
             'layer_purpose': layer_purpose_hazard['key'],
@@ -1336,8 +1325,6 @@ class TestKeywordWizard(unittest.TestCase):
             'hazard': hazard_flood['key'],
             'value_map': assigned_values,
             'date': source_date,
-            'inasafe_fields': {},
-            'inasafe_default_values': {},
             'classification': generic_hazard_classes['key'],
             'layer_geometry': layer_geometry_raster['key'],
             'layer_purpose': layer_purpose_hazard['key'],
