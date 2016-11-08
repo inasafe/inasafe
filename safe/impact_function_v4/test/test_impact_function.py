@@ -279,6 +279,7 @@ class TestImpactFunction(unittest.TestCase):
                 result = run_scenario(scenario, use_debug)
                 try:
                     self.assertDictEqual(expected, result)
+                    return True
                 except:
                     # In case of an exception, print the scenario path
                     # and re raise
@@ -292,8 +293,11 @@ class TestImpactFunction(unittest.TestCase):
             if isfile(join(path, f)) and f.endswith('json')
         ]
 
+        count = 0
         for json_file in json_files:
-            test_scenario(json_file)
+            if test_scenario(json_file):
+                count += 1
+        # self.assertEqual(len(json_files), count)
 
     def test_post_processor(self):
         """Test for running post processor."""

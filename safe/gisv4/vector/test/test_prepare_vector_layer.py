@@ -19,6 +19,7 @@ from safe.gisv4.vector.prepare_vector_layer import (
     _remove_features,
     _add_id_column,
     _add_default_values,
+    _size_is_needed,
 )
 from safe.definitionsv4.fields import (
     exposure_id_field,
@@ -147,3 +148,31 @@ class TestPrepareLayer(unittest.TestCase):
         self.assertIn(
             cleaned.fieldNameIndex(population_count_field['field_name']),
             [0, 1, 2])
+
+    def test_size_needed(self):
+        """Test we can add the size when it is needed."""
+        # A building layer should be always false.
+        layer = load_test_vector_layer(
+            'gisv4', 'exposure', 'buildings.geojson')
+        layer.keywords['inasafe_fields'] = {
+            population_count_field['key']: population_count_field['field_name']
+        }
+        self.assertFalse(_size_is_needed(layer))
+        layer.keywords['inasafe_fields'] = {
+            female_ratio_field['key']: female_ratio_field['field_name']
+        }
+        self.assertFalse(_size_is_needed(layer))
+
+        # But a road layer should be true only if it has a absolute value.
+        layer = load_test_vector_layer(
+            'gisv4', 'exposure', 'roads.geojson')
+
+        layer.keywords['inasafe_fields'] = {
+            population_count_field['key']: population_count_field['field_name']
+        }
+        self.assertTrue(_size_is_needed(layer))
+
+        layer.keywords['inasafe_fields'] = {
+            female_ratio_field['key']: female_ratio_field['field_name']
+        }
+        self.assertFalse(_size_is_needed(layer))

@@ -4,6 +4,8 @@
 
 from PyQt4.QtCore import QPyNullVariant
 
+from qgis.core import QgsDistanceArea
+
 from safe.utilities.i18n import tr
 from safe.definitionsv4.fields import (
     female_ratio_field,
@@ -51,19 +53,24 @@ def multiply(**kwargs):
     return result
 
 
-def assign(**kwargs):
-    """Simple postprocessor where we assign a value.
+def size(**kwargs):
+    """Simple postprocessor where we compute the size of a feature.
 
-    :param kwargs: Dictionary of only one value to return.
-    :type kwargs: dict
+    :param geometry: The geometry.
+    :type geometry: QgsGeometry
 
-    :return: The result.
+    :param crs: The CRS.
+    :type crs: QgsCoordinateReferenceSystem
+
+    :return: The size.
     """
-    if len(kwargs) != 1:
-        raise Exception('The dictionary should have only one item.')
+    size_calculator = QgsDistanceArea()
+    size_calculator.setSourceCrs(kwargs['crs'])
+    size_calculator.setEllipsoid('WGS84')
+    size_calculator.setEllipsoidalMode(True)
 
-    value = kwargs.values()[0]
-    return value
+    feature_size = size_calculator.measure(kwargs['geometry'])
+    return feature_size
 
 
 # This postprocessor function is also used in the aggregation_summary
@@ -119,6 +126,7 @@ post_processor_gender = {
         }
     }
 }
+
 post_processor_youth = {
     'key': 'post_processor_youth',
     'name': tr('Youth Post Processor'),
@@ -141,6 +149,7 @@ post_processor_youth = {
         }
     }
 }
+
 post_processor_adult = {
     'key': 'post_processor_adult',
     'name': tr('Adult Post Processor'),
@@ -163,6 +172,7 @@ post_processor_adult = {
         }
     }
 }
+
 post_processor_elderly = {
     'key': 'post_processor_elderly',
     'name': tr('Elderly Post Processor'),
@@ -193,15 +203,18 @@ post_processor_size = {
         'Post processor to calculate the size of the feature. If the feature '
         'is a polygon we use m^2. If the feature is a line we use metres.'),
     'input': {
-        'size': {
-            'value': 'size',
+        'crs': {
+            'type': 'layer_property',
+            'value': 'layer_crs'
+        },
+        'geometry': {
             'type': 'geometry_property'
         }
     },
     'output': {
-        'elderly': {
+        'size': {
             'value': size_field,
-            'function': assign
+            'function': size
         }
     }
 }
@@ -215,10 +228,8 @@ post_processor_size_rate = {
         'the area in m^2. If the feature is a line we use length in metres.'),
     'input': {
         'size': {
-            'value': 'size',
-            'type': 'geometry_property'
-            # We can add something later, like mandatory requirement, another
-            #  source of input (e.g. parameter)
+            'type': 'field',
+            'value': size_field,
         },
         'rate': {
             'value': feature_rate_field,
@@ -261,6 +272,8 @@ post_processor_affected = {
     }
 }
 
+# This is the order of execution, so the order is important.
+# For instance, the size post processor must run before size_rate.
 post_processors = [
     post_processor_size,
     post_processor_gender,

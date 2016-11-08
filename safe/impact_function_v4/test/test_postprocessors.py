@@ -118,6 +118,7 @@ class TestPostProcessors(unittest.TestCase):
             clone_to_memory=True)
         self.assertIsNotNone(impact_layer)
 
+        # Test the size post processor.
         result, message = run_single_post_processor(
             impact_layer,
             post_processor_size)
@@ -126,6 +127,16 @@ class TestPostProcessors(unittest.TestCase):
         # Check if new field is added
         impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
         self.assertIn(size_field['field_name'], impact_fields)
+
+        # Test the size rate post processor.
+        result, message = run_single_post_processor(
+            impact_layer,
+            post_processor_size_rate)
+        self.assertTrue(result, message)
+
+        # Check if new field is added
+        impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
+        self.assertIn(feature_value_field['field_name'], impact_fields)
 
     def test_affected_post_processor(self):
         """Test affected  post processor."""
@@ -147,24 +158,6 @@ class TestPostProcessors(unittest.TestCase):
         # Check if new field is added
         impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
         self.assertIn(affected_field['field_name'], impact_fields)
-
-    def test_size_rate_post_processor(self):
-        """Test size rate post processor."""
-        impact_layer = load_test_vector_layer(
-            'impact',
-            'indivisible_polygon_impact.geojson',
-            clone_to_memory=True)
-        self.assertIsNotNone(impact_layer)
-
-        result, message = run_single_post_processor(
-            impact_layer,
-            post_processor_size_rate)
-        self.assertTrue(result, message)
-
-        # Check if new field is added
-        impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
-        self.assertIn(feature_value_field['field_name'], impact_fields)
-        self.assertNotIn('size', impact_fields)
 
     def test_enough_input(self):
         """Test to check the post processor input checker."""

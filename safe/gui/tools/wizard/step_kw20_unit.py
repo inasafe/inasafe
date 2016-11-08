@@ -31,7 +31,7 @@ from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_strings import unit_question
 from safe.utilities.gis import is_raster_layer
 from safe.definitionsv4.utilities import (
-    definition, hazard_units, exposure_units)
+    definition, hazard_units, exposure_units, get_classifications)
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
@@ -54,16 +54,14 @@ class StepKwUnit(WizardStep, FORM_CLASS):
         :returns: The step to be switched to
         :rtype: WizardStep instance or None
         """
-        if is_raster_layer(self.parent.layer):
-            if self.parent.step_kw_purpose.\
-                    selected_purpose() == layer_purpose_exposure:
-                # Only go to resample for continuous raster exposures
-                new_step = self.parent.step_kw_resample
+        subcategory = self.parent.step_kw_subcategory.selected_subcategory()
+        if get_classifications(subcategory['key']):
+            new_step = self.parent.step_kw_classification
+        else:  # No classifications
+            if is_raster_layer(self.parent.layer):
+                new_step = self.parent.step_kw_source
             else:
-                new_step = self.parent.step_kw_inasafe_fields
-        else:
-            # Currently not used, as we don't have continuous vectors
-            new_step = self.parent.step_kw_field
+                new_step = self.parent.step_kw_field
         return new_step
 
     # noinspection PyPep8Naming

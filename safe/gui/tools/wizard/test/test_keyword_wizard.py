@@ -44,7 +44,6 @@ from safe.definitionsv4.exposure_classifications import (
 from safe.definitionsv4.units import count_exposure_unit
 
 from safe.gui.tools.wizard.wizard_dialog import WizardDialog
-from safe.utilities.keyword_io import KeywordIO
 from safe.definitionsv4.utilities import definition, get_compulsory_fields
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -272,14 +271,7 @@ class TestKeywordWizard(unittest.TestCase):
         # Check if in InaSAFE field step
         self.check_current_step(dialog.step_kw_inasafe_fields)
 
-        # Click next to finish inasafe fields step and go to inasafe default
-        # field step
-        dialog.pbnNext.click()
-
-        # Check if in InaSAFE Default field step
-        self.check_current_step(dialog.step_kw_default_inasafe_fields)
-
-        # Click next to finish InaSAFE Default Field step and go to source step
+        # Click next to finish InaSAFE Field step and go to source step
         dialog.pbnNext.click()
 
         # Check if in source step
@@ -444,14 +436,7 @@ class TestKeywordWizard(unittest.TestCase):
             else:
                 self.assertIn(parameter.guid, inasafe_fields.keys())
 
-        # Click next to finish inasafe fields step and go to inasafe default
-        # field step
-        dialog.pbnNext.click()
-
-        # Check if in InaSAFE Default field step
-        self.check_current_step(dialog.step_kw_default_inasafe_fields)
-
-        # Click next to finish InaSAFE Default Field step and go to source step
+        # Click next to finish inasafe fields step and go to source step
         dialog.pbnNext.click()
 
         # Check if in source step
@@ -928,7 +913,7 @@ class TestKeywordWizard(unittest.TestCase):
     def test_exposure_population_polygon_keyword(self):
         """Test exposure population polygon keyword"""
         layer = load_test_vector_layer(
-            'gisv4', 'exposure', 'census.geojson', clone_to_memory=True)
+            'exposure', 'census.geojson', clone_to_memory=True)
         layer.keywords = {}
 
         self.assertIsNotNone(layer)
@@ -1060,7 +1045,7 @@ class TestKeywordWizard(unittest.TestCase):
     def test_existing_exposure_population_polygon_keyword(self):
         """Test existing exposure population polygon keyword"""
         layer = load_test_vector_layer(
-            'gisv4', 'exposure', 'census.geojson', clone_to_memory=True)
+            'exposure', 'census.geojson', clone_to_memory=True)
         expected_keyword = {
             'scale': source_scale,
             'license': source_license,

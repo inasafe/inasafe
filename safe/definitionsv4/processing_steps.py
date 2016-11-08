@@ -14,26 +14,6 @@ __revision__ = '$Format:%H$'
 Vector package
 """
 
-summary_1_aggregate_hazard_steps = {
-    'step_name': tr('Compute aggregate hazard results'),
-    'output_layer_name': 'aggregate_hazard',
-}
-
-summary_2_aggregation_steps = {
-    'step_name': tr('Compute aggregation results'),
-    'output_layer_name': 'aggregation',
-}
-
-summary_3_analysis_steps = {
-    'step_name': tr('Compute analysis results'),
-    'output_layer_name': 'analysis',
-}
-
-summary_4_exposure_breakdown_steps = {
-    'step_name': tr('Compute exposure breakdown'),
-    'output_layer_name': 'exposure_breakdown',
-}
-
 assign_highest_value_steps = {
     'step_name': tr('Assign the highest hazard value to the exposure'),
     'output_layer_name': 'exposure_highest_value',
@@ -69,9 +49,34 @@ reproject_steps = {
     'output_layer_name': '%s_reprojected',
 }
 
+recompute_counts_steps = {
+    'step_name': tr('Recompute counts'),
+    'output_layer_name': 'exposure_counts',
+}
+
 smart_clip_steps = {
     'step_name': tr('Smart clipping'),
     'output_layer_name': 'indivisible_polygons_clipped',
+}
+
+summary_1_aggregate_hazard_steps = {
+    'step_name': tr('Compute aggregate hazard results'),
+    'output_layer_name': 'aggregate_hazard',
+}
+
+summary_2_aggregation_steps = {
+    'step_name': tr('Compute aggregation results'),
+    'output_layer_name': 'aggregation',
+}
+
+summary_3_analysis_steps = {
+    'step_name': tr('Compute analysis results'),
+    'output_layer_name': 'analysis',
+}
+
+summary_4_exposure_breakdown_steps = {
+    'step_name': tr('Compute exposure breakdown'),
+    'output_layer_name': 'exposure_breakdown',
 }
 
 union_steps = {

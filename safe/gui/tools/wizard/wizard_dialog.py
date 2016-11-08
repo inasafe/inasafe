@@ -89,6 +89,7 @@ from step_kw25_classification import StepKwClassification
 from step_kw30_field import StepKwField
 from step_kw35_resample import StepKwResample
 from step_kw40_classify import StepKwClassify
+from step_kw43_threshold import StepKwThreshold
 from step_kw45_inasafe_fields import StepKwInaSAFEFields
 from step_kw47_default_inasafe_fields import StepKwDefaultInaSAFEFields
 from step_kw55_source import StepKwSource
@@ -173,6 +174,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.step_kw_field = StepKwField(self)
         self.step_kw_resample = StepKwResample(self)
         self.step_kw_classify = StepKwClassify(self)
+        self.step_kw_threshold = StepKwThreshold(self)
         self.step_kw_inasafe_fields = StepKwInaSAFEFields(self)
         self.step_kw_default_inasafe_fields = StepKwDefaultInaSAFEFields(self)
         self.step_kw_source = StepKwSource(self)
@@ -206,6 +208,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.stackedWidget.addWidget(self.step_kw_field)
         self.stackedWidget.addWidget(self.step_kw_resample)
         self.stackedWidget.addWidget(self.step_kw_classify)
+        self.stackedWidget.addWidget(self.step_kw_threshold)
         self.stackedWidget.addWidget(self.step_kw_inasafe_fields)
         self.stackedWidget.addWidget(self.step_kw_default_inasafe_fields)
         self.stackedWidget.addWidget(self.step_kw_source)

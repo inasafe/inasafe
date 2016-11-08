@@ -31,6 +31,7 @@ from safe.gisv4.vector.summary_2_aggregation import aggregation_summary
 from safe.gisv4.vector.summary_3_analysis import analysis_summary
 from safe.gisv4.vector.summary_4_exposure_breakdown import (
     exposure_type_breakdown)
+from safe.gisv4.vector.recompute_counts import recompute_counts
 from safe.gisv4.vector.update_value_map import update_value_map
 from safe.gisv4.raster.reclassify import reclassify as reclassify_raster
 from safe.gisv4.raster.polygonize import polygonize
@@ -38,6 +39,8 @@ from safe.gisv4.raster.zonal_statistics import zonal_stats
 from safe.definitionsv4.post_processors import post_processors
 from safe.definitionsv4.analysis_steps import analysis_steps
 from safe.definitionsv4.utilities import definition
+from safe.definitionsv4.exposure import indivisible_exposure
+from safe.definitionsv4.fields import size_field, exposure_class_field
 from safe.common.exceptions import (
     InvalidExtentError,
     InvalidLayerError,
@@ -865,49 +868,52 @@ class ImpactFunction(object):
                 if self.exposure.keywords.get('exposure_unit') == 'density':
                     self.set_state_process(
                         'exposure', 'Calculate counts per cell')
+                    # Todo, Need to write this algorithm.
+
+                # We don't do any other process to a continuous raster.
+                return
 
             else:
                 self.set_state_process(
-                    'exposure', 'Polygonise classified raster hazard')
-                self.set_state_process(
-                    'exposure',
-                    'Intersect aggregate hazard layer with divisible polygon')
-                self.set_state_process(
-                    'exposure',
-                    'Recalculate population based on new polygonise size')
+                    'exposure', 'Polygonise classified raster exposure')
+                # noinspection PyTypeChecker
+                self.exposure = polygonize(self.exposure)
+                if self.debug_mode:
+                    self.debug_layer(self.exposure)
 
-        elif self.exposure.type() == QgsMapLayer.VectorLayer:
+        self.set_state_process(
+            'exposure',
+            'Cleaning the vector exposure attribute table')
+        # noinspection PyTypeChecker
+        self.exposure = prepare_vector_layer(self.exposure)
+        if self.debug_mode:
+            self.debug_layer(self.exposure)
 
-            self.set_state_process(
-                'exposure',
-                'Cleaning the vector exposure attribute table')
-            # noinspection PyTypeChecker
-            self.exposure = prepare_vector_layer(self.exposure)
-            if self.debug_mode:
-                self.debug_layer(self.exposure)
-
+        fields = self.exposure.keywords['inasafe_fields']
+        if exposure_class_field['key'] not in fields:
             self.set_state_process(
                 'exposure', 'Assign classes based on value map')
             self.exposure = update_value_map(self.exposure)
             if self.debug_mode:
                 self.debug_layer(self.exposure)
 
-            exposure = self.exposure.keywords.get('exposure')
-            geometry = self.exposure.geometryType()
-            if exposure == 'structure' and geometry == QGis.Polygon:
-                self.set_state_process(
-                    'exposure',
-                    'Smart clip')
-                self.exposure = smart_clip(
-                    self.exposure, self._analysis_impacted)
-            else:
-                self.set_state_process(
-                    'exposure',
-                    'Clip the exposure layer with the analysis layer')
-                self.exposure = clip(self.exposure, self._analysis_impacted)
+        exposure = self.exposure.keywords.get('exposure')
+        indivisible_keys = [f['key'] for f in indivisible_exposure]
+        geometry = self.exposure.geometryType()
+        if exposure in indivisible_keys and geometry != QGis.Point:
+            self.set_state_process(
+                'exposure',
+                'Smart clip')
+            self.exposure = smart_clip(
+                self.exposure, self._analysis_impacted)
+        else:
+            self.set_state_process(
+                'exposure',
+                'Clip the exposure layer with the analysis layer')
+            self.exposure = clip(self.exposure, self._analysis_impacted)
 
-            if self.debug_mode:
-                self.debug_layer(self.exposure)
+        if self.debug_mode:
+            self.debug_layer(self.exposure)
 
     @profile
     def intersect_exposure_and_aggregate_hazard(self):
@@ -935,8 +941,9 @@ class ImpactFunction(object):
 
         else:
             exposure = self.exposure.keywords.get('exposure')
+            indivisible_keys = [f['key'] for f in indivisible_exposure]
             geometry = self.exposure.geometryType()
-            if exposure == 'structure' and geometry == QGis.Polygon:
+            if exposure in indivisible_keys and geometry != QGis.Point:
                 self.set_state_process(
                     'impact function',
                     'Highest class of hazard is assigned when more than one '
@@ -949,6 +956,15 @@ class ImpactFunction(object):
                     'impact function',
                     'Union exposure features to the aggregate hazard')
                 self._impact = union(self.exposure, self._aggregate_hazard)
+
+                # If the layer has the size field, it means we need to
+                # recompute counts based on the old and new size.
+                fields = self.exposure.keywords['inasafe_fields']
+                if size_field['key'] in fields:
+                    self.set_state_process(
+                        'exposure',
+                        'Recompute counts')
+                    self._impact = recompute_counts(self._impact)
 
             if self.debug_mode:
                 self.debug_layer(self._impact)

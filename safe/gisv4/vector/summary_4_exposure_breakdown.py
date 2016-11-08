@@ -110,7 +110,8 @@ def exposure_type_breakdown(aggregate_hazard, callback=None):
     tabular.keywords['inasafe_fields'][exposure_type_field['key']] = (
         exposure_type_field['field_name'])
 
-    classification = aggregate_hazard.keywords['hazard_keywords']['classification']
+    hazard_keywords = aggregate_hazard.keywords['hazard_keywords']
+    classification = hazard_keywords['classification']
 
     hazard_affected = {}
     for hazard_class in unique_hazard:
