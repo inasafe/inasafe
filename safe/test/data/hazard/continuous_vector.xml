@@ -178,18 +178,27 @@
           <raster_hazard_classification>
             <gco:CharacterString/>
           </raster_hazard_classification>
-          <multipart_polygon>
-            <gco:Boolean/>
-          </multipart_polygon>
+          <classification>
+            <gco:CharacterString>flood_hazard_classes</gco:CharacterString>
+          </classification>
           <prob_fatality_mag>
             <gco:Tuple/>
           </prob_fatality_mag>
+          <threshold>
+            <gco:List/>
+          </threshold>
           <inasafe_fields>
             <gco:Dictionary>{&quot;hazard_value_field&quot;: &quot;depth&quot;}</gco:Dictionary>
           </inasafe_fields>
+          <inasafe_default_values>
+            <gco:Dictionary>{}</gco:Dictionary>
+          </inasafe_default_values>
           <volcano_name_field>
             <gco:CharacterString/>
           </volcano_name_field>
+          <multipart_polygon>
+            <gco:Boolean/>
+          </multipart_polygon>
           <field>
             <gco:CharacterString/>
           </field>
@@ -197,7 +206,7 @@
             <gco:Dictionary/>
           </value_map>
           <vector_hazard_classification>
-            <gco:CharacterString>generic_vector_hazard_classes</gco:CharacterString>
+            <gco:CharacterString/>
           </vector_hazard_classification>
           <layer_geometry>
             <gco:CharacterString>polygon</gco:CharacterString>
@@ -212,7 +221,7 @@
             <gco:CharacterString/>
           </report>
           <continuous_hazard_unit>
-            <gco:CharacterString/>
+            <gco:CharacterString>metres</gco:CharacterString>
           </continuous_hazard_unit>
           <keyword_version>
             <gco:CharacterString>3.5</gco:CharacterString>

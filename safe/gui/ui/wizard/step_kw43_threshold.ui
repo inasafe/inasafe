@@ -18,7 +18,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_14">
    <item>
-    <widget class="QLabel" name="lblClassify">
+    <widget class="QLabel" name="lblThreshold">
      <property name="styleSheet">
       <string notr="true">font: 11pt &quot;Ubuntu&quot;;</string>
      </property>
@@ -35,6 +35,19 @@
    </item>
    <item>
     <layout class="QGridLayout" name="gridLayoutThreshold"/>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>

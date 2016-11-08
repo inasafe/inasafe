@@ -156,7 +156,7 @@ flood_hazard_classes = {
         {
             'key': 'wet',
             'value': 2,
-            'name': tr('wet'),
+            'name': tr('Wet'),
             'affected': True,
             'description': tr('Water above ground height.'),
             'string_defaults': ['wet', '1', 'YES', 'y', 'yes'],
@@ -172,7 +172,7 @@ flood_hazard_classes = {
         {
             'key': 'dry',
             'value': 1,
-            'name': tr('dry'),
+            'name': tr('Dry'),
             'affected': False,
             'description': tr('No water above ground height.'),
             'string_defaults': ['dry', '0', 'No', 'n', 'no'],
