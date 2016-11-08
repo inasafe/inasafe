@@ -555,7 +555,7 @@ affected_field = {
 # Count, outputs (Absolute values)
 # # # # # # # # # #
 
-# Total per aggregation area
+# Total field to store the total number of feature
 total_field = {
     'key': 'total_field',
     'name': tr('Total'),
@@ -577,6 +577,7 @@ total_field = {
     'replace_null': False
 }
 
+# Total affected field to store the total affected by the hazard
 total_affected_field = {
     'key': 'total_affected_field',
     'name': tr('Total Affected'),
@@ -598,7 +599,12 @@ total_affected_field = {
     'replace_null': False
 }
 
-# Special dynamic field for each exposure type in the aggregate hazard table.
+
+# # # # # # # # # #
+# Count, dynamics, outputs (Absolute values)
+# # # # # # # # # #
+
+# Count for each exposure type
 exposure_count_field = {
     'key': '%s_exposure_count_field',
     'name': tr('Total %s'),
@@ -620,6 +626,7 @@ exposure_count_field = {
     'replace_null': False
 }
 
+# Count for each exposure type affected
 affected_exposure_count_field = {
     'key': '%s_affected_field',
     'name': tr('Affected %s'),
@@ -641,29 +648,7 @@ affected_exposure_count_field = {
     'replace_null': False
 }
 
-# Count for affected
-affected_count_field = {
-    'key': 'affected_count_field',
-    'name': tr('Affected count'),
-    'field_name': 'affected_count',
-    'type': QVariant.Double,
-    'length': default_field_length,
-    'precision': default_field_precision,
-    'absolute': True,
-    'description': tr(
-        'Count the number of affected features.'),
-    'citations': [
-        {
-            'text': None,
-            'link': None
-        }
-    ],
-    # Null value can be replaced by default or not
-    'replace_null': False
-}
-
-
-# Special dynamic field for each hazard class in analysis layer.
+# Count for each hazard class
 hazard_count_field = {
     'key': '%s_hazard_count_field',
     'name': tr('Total %s'),
@@ -684,6 +669,7 @@ hazard_count_field = {
     # Null value can be replaced by default or not
     'replace_null': False
 }
+
 
 # Inputs
 exposure_fields = [
@@ -711,15 +697,15 @@ impact_fields = [
     exposure_class_field,
     hazard_id_field,
     hazard_class_field,
-    population_count_field,
-    feature_value_field,
-    feature_rate_field,
     aggregation_id_field,
     aggregation_name_field,
+    feature_value_field,
+    feature_rate_field,
     female_ratio_field,
     youth_ratio_field,
     adult_ratio_field,
     elderly_ratio_field,
+    population_count_field,
     women_count_field,
     youth_count_field,
     adult_count_field,
@@ -758,8 +744,8 @@ analysis_fields = [
     analysis_id_field,
     analysis_name_field,
     hazard_count_field,
-    affected_count_field,
     total_affected_field,
+    total_field
 ]
 
 count_fields = [
