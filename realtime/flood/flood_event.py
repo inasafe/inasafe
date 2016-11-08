@@ -571,8 +571,7 @@ REGIONAL DISASTER MANAGEMENT AGENCY
             'content-contact': self.tr("""Pusat Pengendalian Operasi (Pusdalops)
 BPBD Provinsi DKI Jakarta
 Gedung Dinas Teknis Lt. 5
-Jl. Abdul Muis No. 66
-Telp. 121
+Jl. Abdul Muis No. 66, Telp. 121
 """),
         }
         return event
