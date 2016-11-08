@@ -22,8 +22,6 @@ from safe_extras.parameters.qt_widgets.parameter_container import (
     ParameterContainer)
 
 from safe.definitionsv4.layer_purposes import (layer_purpose_aggregation)
-from safe.definitionsv4.layer_modes import layer_mode_classified
-from safe.definitionsv4.exposure import exposure_place
 from safe.definitionsv4.utilities import get_fields, get_compulsory_fields
 from safe.definitionsv4.layer_geometry import layer_geometry_raster
 from safe.definitionsv4.constants import no_field
@@ -71,22 +69,21 @@ class StepKwInaSAFEFields(WizardStep, FORM_CLASS):
         :returns: The step to be switched to
         :rtype: WizardStep instance or None
         """
-        # Get hazard or exposure value
-        layer_purpose_key = self.parent.step_kw_purpose.selected_purpose()[
-            'key']
-        if layer_purpose_key != layer_purpose_aggregation['key']:
-            subcategory_key = self.parent.step_kw_subcategory. \
-                selected_subcategory()['key']
+        layer_purpose = self.parent.step_kw_purpose.selected_purpose()
+        if layer_purpose['key'] != layer_purpose_aggregation['key']:
+            subcategory = self.parent.step_kw_subcategory. \
+                selected_subcategory()
         else:
-            subcategory_key = None
-        # Check if InaSAFE fields with replace_null = True has element
+            subcategory = {'key': None}
+
+        # Check if it can go to inasafe default field step
         default_inasafe_fields = get_fields(
-            layer_purpose_key, subcategory_key, replace_null=False)
+            layer_purpose['key'], subcategory['key'], replace_null=True)
         if default_inasafe_fields:
-            new_step = self.parent.step_kw_default_inasafe_fields
-        else:
-            new_step = self.parent.step_kw_source
-        return new_step
+            return self.parent.step_kw_default_inasafe_fields
+
+        # Any other case
+        return self.parent.step_kw_source
 
     def inasafe_fields_for_the_layer(self):
         """Return a list of inasafe fields the current layer.
