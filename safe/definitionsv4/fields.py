@@ -637,6 +637,28 @@ total_affected_field = {
     'replace_null': False
 }
 
+# Total unaffected field to store the number of unaffected by the hazard
+total_unaffected_field = {
+    'key': 'total_unaffected_field',
+    'name': tr('Total Unaffected'),
+    'field_name': 'total_unaffected',
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': 2,
+    'absolute': False,
+    'description': tr(
+        'Attribute where the total unaffected is located.'
+    ),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
 
 # # # # # # # # # #
 # Count, dynamics, outputs (Absolute values)

@@ -1,130 +1,21 @@
 # coding=utf-8
-import os
 
-from safe.definitionsv4.exposure import exposure_population
+from safe.definitionsv4.fields import (
+    hazard_count_field,
+    total_affected_field,
+    total_field,
+    total_unaffected_field)
+from safe.definitionsv4.hazard import hazard_generic
+from safe.definitionsv4.hazard_category import hazard_category_single_event, \
+    hazard_category_multiple_event
+from safe.definitionsv4.hazard_classifications import all_hazard_classes
+from safe.reportv4.extractors.util import layer_definition_type
 from safe.utilities.i18n import tr
-from safe.definitionsv4.hazard_classifications import generic_hazard_classes
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
-
-
-def sum_field_by_hazard(layer, hazard_classification, field_name):
-    """
-
-    :param layer:
-    :type layer: qgis.core.QgsVectorLayer
-    :param hazard_classification:
-    :return: dict
-    """
-    classes = hazard_classification.get('classes')
-    result = []
-    for c in classes:
-        result.append({
-            'key': c.get('key'),
-            'name': c.get('name'),
-            'value': 0
-        })
-
-    hazard_class_idx = layer.fieldNameIndex('hazard_class')
-    target_field_idx = layer.fieldNameIndex(field_name)
-    for f in layer.getFeatures():
-        attrs = f.attributes()
-        try:
-            hazard_class = attrs[hazard_class_idx]
-            idx = [
-                i for i, v in enumerate(result) if v['key'] == hazard_class
-                ][0]
-            result[idx]['value'] += attrs[target_field_idx]
-        except:
-            pass
-
-    return result
-
-
-def count_field_by_hazard(layer, hazard_classification, field_name):
-    """
-
-    :param layer:
-    :type layer: qgis.core.QgsVectorLayer
-    :param hazard_classification:
-    :return: dict
-    """
-    class_name = [c.get('key') for c in hazard_classification.get('classes')]
-    result = {}
-    for c in class_name:
-        result[c] = 0
-
-    hazard_class_idx = layer.fieldNameIndex('hazard_class')
-    for f in layer.getFeatures():
-        attrs = f.attributes()
-        result[attrs[hazard_class_idx]] += 1
-
-    return result
-
-
-def sum_affected_field(layer, hazard_classification, field_name):
-    """
-
-    :param layer:
-    :type layer: qgis.core.QgsVectorLayer
-    :param field_name:
-    :return: dict
-    """
-    hazard_class = hazard_classification.get('classes')
-    affected_dict = {}
-    for c in hazard_class:
-        affected_dict[c.get('key')] = c.get('affected')
-    result = {
-        'affected': 0,
-        'unaffected': 0,
-        'total': 0,
-    }
-    hazard_class_idx = layer.fieldNameIndex('hazard_class')
-    target_field_idx = layer.fieldNameIndex(field_name)
-    for f in layer.getFeatures():
-        attrs = f.attributes()
-        try:
-            if affected_dict.get(attrs[hazard_class_idx]):
-                result['affected'] += attrs[target_field_idx]
-            else:
-                result['unaffected'] += attrs[target_field_idx]
-        except:
-            pass
-
-    result['total'] = result['affected'] + result['unaffected']
-    return result
-
-
-def count_affected_field(layer, hazard_classification, field_name):
-    """
-
-    :param layer:
-    :type layer: qgis.core.QgsVectorLayer
-    :param field_name:
-    :return: dict
-    """
-    hazard_class = hazard_classification.get('classes')
-    affected_dict = {}
-    for c in hazard_class:
-        affected_dict[c.get('key')] = c.get('affected')
-    result = {
-        'affected': 0,
-        'unaffected': 0,
-        'total': 0,
-    }
-    hazard_class_idx = layer.fieldNameIndex('hazard_class')
-    for f in layer.getFeatures():
-        attrs = f.attributes()
-        if affected_dict.get(attrs[hazard_class_idx]):
-            result['affected'] += 1
-        else:
-            result['unaffected'] += 1
-
-    result['total'] = result['affected'] + result['unaffected']
-    return result
 
 
 def analysis_result_extractor(impact_report, component_metadata):
@@ -134,7 +25,7 @@ def analysis_result_extractor(impact_report, component_metadata):
     :param impact_report: the impact report that acts as a proxy to fetch
         all the data that extractor needed
     :type impact_report: safe.reportv4.impact_report.ImpactReport
-    :param component_metadata: the componenet metadata. Used to obtain
+    :param component_metadata: the component metadata. Used to obtain
         information about the component we want to render
     :type component_metadata: safe.reportv4.report_metadata.ReportMetadata
 
@@ -144,40 +35,130 @@ def analysis_result_extractor(impact_report, component_metadata):
     context = {}
 
     # figure out analysis report type
+    hazard_layer = impact_report.hazard_layer
+    exposure_layer = impact_report.exposure_layer
     impact_layer = impact_report.impact_layer
-    """:type: qgis.core.QgsVectorLayer"""
     analysis_layer = impact_report.analysis_layer
-    """:type: qgis.core.QgsVectorLayer"""
-    fields = impact_layer.pendingFields()
-    field_names = [field.name() for field in fields]
-
-    # TODO: Derive proper question string
-    question = None
 
     # find hazard class
     hazard_classification = None
-    hazard_stats = None
-    summary = None
-    evacuation_needs = None
+    summary = []
 
     analysis_feature = analysis_layer.getFeatures().next()
-    analysis_fields = analysis_layer.pendingFields()
-    if 'hazard_class' in field_names:
-        # retrieve hazard classes
-        # TODO: need a correct way to retrieve the classifications
-        hazard_classification = generic_hazard_classes
+    analysis_inasafe_fields = analysis_layer.keywords['inasafe_fields']
+    # in case there is a classification
+    if 'classification' in hazard_layer.keywords:
+
+        # retrieve hazard classification from hazard layer
+        for classification in all_hazard_classes:
+            classification_name = hazard_layer.keywords['classification']
+            if classification_name == classification['key']:
+                hazard_classification = classification
+                break
+
+        # classified hazard must have hazard count in analysis layer
         hazard_stats = []
-        for h_class in hazard_classification['classes']:
-            class_idx = analysis_layer.fieldNameIndex(h_class['key'])
-            hazard_stats.append({
-                'key': h_class['key'],
-                'name': h_class['name'],
-                'value': analysis_feature[class_idx],
-            })
+        for hazard_class in hazard_classification['classes']:
+            # hazard_count_field is a dynamic field with hazard class
+            # as parameter
+            field_key_name = hazard_count_field['key'] % (
+                hazard_class['key'], )
+            try:
+                # retrieve dynamic field name from analysis_fields keywords
+                # will cause key error if no hazard count for that particular
+                # class
+                field_name = analysis_inasafe_fields[field_key_name]
+                field_index = analysis_layer.fieldNameIndex(field_name)
+                # Hazard label taken from translated hazard count field
+                # label, string-formatted with translated hazard class label
+                hazard_label = hazard_count_field['name'] % (
+                    hazard_class['name'], )
+                hazard_value = analysis_feature[field_index]
+                stats = {
+                    'key': hazard_class['key'],
+                    'name': hazard_label,
+                    'value': hazard_value
+                }
+            except KeyError:
+                # in case the field was not found
+                hazard_label = hazard_count_field['name'] % (
+                    hazard_class['name'], )
+                stats = {
+                    'key': hazard_class['key'],
+                    'name': hazard_label,
+                    'value': 0,
+                }
+
+            hazard_stats.append(stats)
+
+        summary.append({
+            'header_label': tr('Hazard Zone'),
+            # This should depend on exposure unit
+            # TODO: Change this so it can take the unit dynamically
+            'value_label': tr('Count'),
+            'rows': hazard_stats
+        })
+
+    # retrieve affected column
+    report_stats = []
+
+    report_fields = [
+        total_affected_field,
+        total_unaffected_field,
+        total_field
+    ]
+    for report_field in report_fields:
+        if report_field['key'] in analysis_inasafe_fields:
+            field_index = analysis_layer.fieldNameIndex(
+                report_field['field_name'])
+            row_label = report_field['name']
+            row_value = analysis_feature[field_index]
+            row_stats = {
+                'key': report_field['key'],
+                'name': row_label,
+                'value': row_value
+            }
+            report_stats.append(row_stats)
+
+    # Give report section
+    exposure_type = layer_definition_type(exposure_layer)
+    header_label = exposure_type['name']
+    summary.append({
+        'header_label': header_label,
+        # This should depend on exposure unit
+        # TODO: Change this so it can take the unit dynamically
+        'value_label': tr('Count'),
+        'rows': report_stats
+    })
+
+    # Proper title from reporting standard
+    analysis_title = None
+    question_template = ''
+    hazard_type = layer_definition_type(hazard_layer)
+    exposure_title = exposure_layer.title() or exposure_type['name']
+    if hazard_type['key'] == hazard_generic['key']:
+        question_template = tr('%(exposure)s affected')
+        analysis_title = question_template % {
+            'exposure': exposure_title
+        }
+    else:
+        hazard_category = hazard_layer.keywords['hazard_category']
+        if hazard_category == hazard_category_single_event['key']:
+            question_template = tr(
+                '%(exposure)s affected by %(hazard)s event')
+        elif hazard_category == hazard_category_multiple_event['key']:
+            question_template = tr(
+                '%(exposure)s affected by %(hazard)s hazard')
+        hazard_title = hazard_layer.title() or hazard_type['name']
+        analysis_title = question_template % {
+            'exposure': exposure_title,
+            'hazard': hazard_title
+        }
+
+    analysis_title = analysis_title.capitalize()
 
     context['header'] = tr('Analysis Results')
-    context['hazard_stats'] = hazard_stats
     context['summary'] = summary
-    context['question'] = question
+    context['title'] = analysis_title
 
     return context

@@ -3,6 +3,7 @@ import os
 
 from safe.definitionsv4.exposure import exposure_population, exposure_road, \
     exposure_all
+from safe.reportv4.extractors.util import layer_definition_type
 from safe.utilities.i18n import tr
 from safe.definitionsv4.hazard_classifications import generic_hazard_classes
 
@@ -28,20 +29,11 @@ def action_checklist_extractor(impact_report, component_metadata):
     """
     context = {}
 
-    # figure out analysis report type
-    impact_layer = impact_report.impact_layer
-    """:type: qgis.core.QgsVectorLayer"""
-    fields = impact_layer.pendingFields()
-    field_names = [field.name() for field in fields]
-
-    actions = []
-    for f_n in field_names:
-        for e in exposure_all:
-            if e['key'] == f_n:
-                actions += e['actions']
+    # figure out exposure type
+    exposure_type = layer_definition_type(impact_report.exposure_layer)
 
     context['header'] = tr('Action Checklist')
-    context['items'] = actions
+    context['items'] = exposure_type['actions']
 
     return context
 
@@ -62,19 +54,10 @@ def notes_assumptions_extractor(impact_report, component_metadata):
     """
     context = {}
 
-    # figure out analysis report type
-    impact_layer = impact_report.impact_layer
-    """:type: qgis.core.QgsVectorLayer"""
-    fields = impact_layer.pendingFields()
-    field_names = [field.name() for field in fields]
-
-    notes = []
-    for f_n in field_names:
-        for e in exposure_all:
-            if e['key'] == f_n:
-                notes += e['notes']
+    # figure out exposure type
+    exposure_type = layer_definition_type(impact_report.exposure_layer)
 
     context['header'] = tr('Notes and assumptions')
-    context['items'] = notes
+    context['items'] = exposure_type['notes']
 
     return context

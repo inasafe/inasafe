@@ -18,8 +18,8 @@ from safe.definitionsv4.fields import (
     youth_count_field,
     youth_ratio_field,
     population_count_field,
-    exposure_type_field
-)
+    exposure_type_field,
+    total_affected_field, total_field, total_unaffected_field)
 from safe.definitionsv4.layer_modes import (
     layer_mode_classified, layer_mode_continuous)
 from safe.definitionsv4.exposure_classifications import (
@@ -68,24 +68,30 @@ exposure_population = {
          tr('Fatality model is from Institut Teknologi Bandung 2012.'),
 
     ],
-    'analysis_summary': [
-        {
-            'key': 'affected',
-            'label': tr('Total affected population')
-        },
-        {
-            'key': 'unaffected',
-            'label': tr('Unaffected population')
-        },
-        {
-            'key': 'total',
-            'label': tr('Total population')
-        },
-        {
-            'key': 'evacuation',
-            'label': tr('Population needing evacuation<sup>1</sup>')
-        }
-    ],
+    # 'analysis_summary_fields': [
+    #     {
+    #         'key': 'affected',
+    #         'field': total_affected_field,
+    #         'label': tr('Total affected population')
+    #     },
+    #     {
+    #         'key': 'unaffected',
+    #         'field': total_unaffected_field,
+    #         'label': tr('Total unaffected population')
+    #     },
+    #     {
+    #         'key': 'total',
+    #         'field': total_field,
+    #         'label': tr('Total population')
+    #     },
+    #     # Commented out until a better suggestions to include this in
+    #     # analysis_layer or post processors
+    #     # {
+    #     #     'key': 'evacuation',
+    #     #     'field': evacuation_field,
+    #     #     'label': tr('Population needing evacuation<sup>1</sup>')
+    #     # }
+    # ],
     'continuous_notes': [  # notes specific to continuous data
     ],
     'classified_notes': [  # notes specific to classified data
