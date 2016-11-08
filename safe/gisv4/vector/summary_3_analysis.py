@@ -17,7 +17,6 @@ from safe.definitionsv4.fields import (
     hazard_class_field,
     total_field,
     total_affected_field,
-    affected_count_field,
     hazard_count_field,
 )
 from safe.definitionsv4.processing_steps import (
@@ -132,15 +131,15 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
         value = hazard_count_field['field_name'] % column
         analysis.keywords['inasafe_fields'][key] = value
 
-    field = create_field_from_definition(affected_count_field)
-    analysis.addAttribute(field)
-    analysis.keywords['inasafe_fields'][affected_count_field['key']] = (
-        affected_count_field['field_name'])
-
     field = create_field_from_definition(total_affected_field)
     analysis.addAttribute(field)
     analysis.keywords['inasafe_fields'][total_affected_field['key']] = (
         total_affected_field['field_name'])
+
+    field = create_field_from_definition(total_field)
+    analysis.addAttribute(field)
+    analysis.keywords['inasafe_fields'][total_field['key']] = (
+        total_field['field_name'])
 
     affected_sum = 0
     for area in analysis.getFeatures(request):
