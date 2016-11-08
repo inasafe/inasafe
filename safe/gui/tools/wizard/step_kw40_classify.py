@@ -138,7 +138,6 @@ class StepKwClassify(WizardStep, FORM_CLASS):
 
         sel_cl = self.parent.step_kw_classification.selected_classification()
         default_classes = sel_cl['classes']
-        mapping_keyword = 'value_map'
         classification_name = sel_cl['name']
 
         if is_raster_layer(self.parent.layer):
@@ -204,7 +203,7 @@ class StepKwClassify(WizardStep, FORM_CLASS):
         # Overwrite assigned values according to existing keyword (if present).
         # Note the default_classes and unique_values are already loaded!
 
-        value_map = self.parent.get_existing_keyword(mapping_keyword)
+        value_map = self.parent.get_existing_keyword('value_map')
         # Do not continue if there is no value_map in existing keywords
         if value_map is None:
             return
