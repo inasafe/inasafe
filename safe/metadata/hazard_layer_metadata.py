@@ -99,13 +99,13 @@ class HazardLayerMetadata(GenericLayerMetadata):
             'inasafe/'
             'prob_fatality_mag/'
             'gco:Tuple'),
-        'threshold': (
+        'thresholds': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
             'inasafe/'
-            'threshold/'
-            'gco:List'),
+            'thresholds/'
+            'gco:Dictionary'),
     }
     _standard_properties = merge_dictionaries(
         GenericLayerMetadata._standard_properties, _standard_properties)
