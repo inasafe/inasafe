@@ -29,6 +29,7 @@ class StepKwThreshold(WizardStep, FORM_CLASS):
 
         """
         WizardStep.__init__(self, parent)
+        self.classes = dict()
 
     def is_ready_to_next_step(self):
         """Check if the step is complete. If so, there is
@@ -73,6 +74,7 @@ class StepKwThreshold(WizardStep, FORM_CLASS):
 
     def set_widgets(self):
         """Set widgets on the Threshold tab."""
+        self.classes = dict()
         classification = self.parent.step_kw_classification.\
             selected_classification()
         classes = classification.get('classes')
@@ -110,4 +112,16 @@ class StepKwThreshold(WizardStep, FORM_CLASS):
             self.gridLayoutThreshold.addWidget(class_label, i, 0)
             self.gridLayoutThreshold.addLayout(class_layout, i, 1)
 
+            self.classes[the_class['key']] = [min_value, max_value]
+
         self.gridLayoutThreshold.setSpacing(0)
+
+    def get_threshold(self):
+        """Return threshold based on current state."""
+        value_map = dict()
+        for key, value in self.classes.items():
+            value_map[key] = [
+                value[0].value(),
+                value[1].value(),
+            ]
+        return value_map

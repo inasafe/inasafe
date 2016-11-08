@@ -172,6 +172,9 @@
       <gmd:supplementalInformation>
         <inasafe_keywords/>
         <inasafe>
+          <thresholds>
+            <gco:Dictionary>{&quot;dry&quot;: [0.0, 1.0], &quot;wet&quot;: [1.1, 3.0]}</gco:Dictionary>
+          </thresholds>
           <hazard_category>
             <gco:CharacterString>single_event</gco:CharacterString>
           </hazard_category>
@@ -184,9 +187,6 @@
           <prob_fatality_mag>
             <gco:Tuple/>
           </prob_fatality_mag>
-          <threshold>
-            <gco:List/>
-          </threshold>
           <inasafe_fields>
             <gco:Dictionary>{&quot;hazard_value_field&quot;: &quot;depth&quot;}</gco:Dictionary>
           </inasafe_fields>
