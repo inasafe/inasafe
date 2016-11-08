@@ -111,4 +111,3 @@ class StepKwThreshold(WizardStep, FORM_CLASS):
             self.gridLayoutThreshold.addLayout(class_layout, i, 1)
 
         self.gridLayoutThreshold.setSpacing(0)
-
