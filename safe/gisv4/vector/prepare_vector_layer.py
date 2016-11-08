@@ -21,10 +21,9 @@ from safe.definitionsv4.fields import (
     exposure_id_field,
     hazard_id_field,
     aggregation_id_field,
-    hazard_value_field,
-    aggregation_name_field,
-    exposure_type_field
+    count_fields,
 )
+from safe.definitionsv4.exposure import indivisible_exposure
 from safe.definitionsv4.layer_purposes import (
     layer_purpose_exposure,
     layer_purpose_hazard,
@@ -35,6 +34,8 @@ from safe.definitionsv4.utilities import (
     definition,
     get_compulsory_fields,
 )
+from safe.impact_function_v4.postprocessors import run_single_post_processor
+from safe.definitionsv4.post_processors import post_processor_size
 from safe.utilities.i18n import tr
 from safe.utilities.profiling import profile
 
@@ -99,6 +100,9 @@ def prepare_vector_layer(layer, callback=None):
     _rename_remove_inasafe_fields(cleaned)
     _add_default_values(cleaned)
 
+    if _size_is_needed(cleaned):
+        run_single_post_processor(cleaned, post_processor_size)
+
     cleaned.keywords['title'] = output_layer_name
 
     return cleaned
@@ -155,6 +159,44 @@ def _rename_remove_inasafe_fields(layer):
     LOGGER.debug(tr(
         'Fields which have been removed from %s : %s'
         % (layer.keywords['layer_purpose'], to_remove)))
+
+
+def _size_is_needed(layer):
+    """Checker if we need the size field.
+
+     :param layer: The layer to test.
+     :type layer: QgsVectorLayer
+
+     :return: If we need the size field.
+     :rtype: bool
+    """
+
+    exposure = layer.keywords.get('exposure')
+    if not exposure:
+        # The layer is not an exposure.
+        return False
+
+    indivisible_exposure_keys = [f['key'] for f in indivisible_exposure]
+    if exposure in indivisible_exposure_keys:
+        # The exposure is not divisible, We don't need to compute the size.
+        return False
+
+    if layer.geometryType() == QGis.Point:
+        # The exposure is a point layer. We don't need to compute the size.
+        return False
+
+    # The layer is divisible and not a point layer.
+    # We need to check if some fields are absolute.
+
+    fields = layer.keywords['inasafe_fields']
+
+    absolute_field_keys = [f['key'] for f in count_fields]
+
+    for field in fields:
+        if field in absolute_field_keys:
+            return True
+    else:
+        return False
 
 
 @profile
