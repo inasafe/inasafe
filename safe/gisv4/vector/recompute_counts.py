@@ -77,7 +77,10 @@ def recompute_counts(layer, callback=None):
         # Cross multiplication for each field
         for index in indexes:
             old_count = feature[index]
-            new_value = new_size * old_count / old_size
+            try:
+                new_value = new_size * old_count / old_size
+            except TypeError:
+                new_value = ''
             layer.changeAttributeValue(feature.id(), index, new_value)
 
     layer.commitChanges()
