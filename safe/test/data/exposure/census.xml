@@ -179,13 +179,13 @@
             <gco:Boolean/>
           </multipart_polygon>
           <inasafe_fields>
-            <gco:Dictionary/>
+            <gco:Dictionary>{&quot;population_count_field&quot;: &quot;population&quot;}</gco:Dictionary>
           </inasafe_fields>
           <inasafe_default_values>
-            <gco:Dictionary/>
+            <gco:Dictionary>{}</gco:Dictionary>
           </inasafe_default_values>
           <area_name_field>
-            <gco:CharacterString>name</gco:CharacterString>
+            <gco:CharacterString/>
           </area_name_field>
           <area_population_field>
             <gco:CharacterString/>
@@ -194,10 +194,10 @@
             <gco:CharacterString>count</gco:CharacterString>
           </exposure_unit>
           <area_id_field>
-            <gco:CharacterString>id</gco:CharacterString>
+            <gco:CharacterString/>
           </area_id_field>
           <field>
-            <gco:CharacterString>population</gco:CharacterString>
+            <gco:CharacterString/>
           </field>
           <value_map>
             <gco:Dictionary/>

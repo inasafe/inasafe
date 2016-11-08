@@ -928,7 +928,7 @@ class TestKeywordWizard(unittest.TestCase):
     def test_exposure_population_polygon_keyword(self):
         """Test exposure population polygon keyword"""
         layer = load_test_vector_layer(
-            'gisv4', 'exposure', 'census.geojson', clone_to_memory=True)
+            'exposure', 'census.geojson', clone_to_memory=True)
         layer.keywords = {}
 
         self.assertIsNotNone(layer)
@@ -1060,7 +1060,7 @@ class TestKeywordWizard(unittest.TestCase):
     def test_existing_exposure_population_polygon_keyword(self):
         """Test existing exposure population polygon keyword"""
         layer = load_test_vector_layer(
-            'gisv4', 'exposure', 'census.geojson', clone_to_memory=True)
+            'exposure', 'census.geojson', clone_to_memory=True)
         expected_keyword = {
             'scale': source_scale,
             'license': source_license,
