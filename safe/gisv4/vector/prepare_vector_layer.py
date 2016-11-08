@@ -15,12 +15,19 @@ from qgis.core import (
 from safe.common.exceptions import (
     InvalidKeywordsForProcessingAlgorithm, NoFeaturesInExtentError)
 from safe.gisv4.vector.tools import (
-    create_memory_layer, remove_fields, copy_fields, copy_layer)
+    create_memory_layer,
+    remove_fields,
+    copy_fields,
+    copy_layer,
+    create_field_from_definition
+)
 from safe.definitionsv4.processing_steps import prepare_vector_steps
 from safe.definitionsv4.fields import (
     exposure_id_field,
     hazard_id_field,
     aggregation_id_field,
+    exposure_type_field,
+    exposure_class_field,
     count_fields,
 )
 from safe.definitionsv4.exposure import indivisible_exposure
@@ -102,6 +109,11 @@ def prepare_vector_layer(layer, callback=None):
 
     if _size_is_needed(cleaned):
         run_single_post_processor(cleaned, post_processor_size)
+
+    if cleaned.keywords['layer_purpose'] == 'exposure':
+        fields = cleaned.keywords['inasafe_fields']
+        if exposure_type_field['key'] not in fields:
+            _add_default_exposure_class(cleaned)
 
     cleaned.keywords['title'] = output_layer_name
 
@@ -371,4 +383,31 @@ def _add_default_values(layer):
                         feature.id(), index, defaults[default])
 
         layer.commitChanges()
+    return
+
+
+@profile
+def _add_default_exposure_class(layer):
+    """The layer doesn't have an exposure class, we need to add it.
+
+    :param layer: The vector layer.
+    :type layer: QgsVectorLayer
+    """
+    layer.startEditing()
+
+    field = create_field_from_definition(exposure_class_field)
+    layer.keywords['inasafe_fields'][exposure_class_field['key']] = (
+        exposure_class_field['field_name'])
+    layer.addAttribute(field)
+
+    index = layer.fieldNameIndex(exposure_class_field['field_name'])
+
+    exposure = layer.keywords['exposure']
+
+    request = QgsFeatureRequest()
+    request.setFlags(QgsFeatureRequest.NoGeometry)
+    for feature in layer.getFeatures(request):
+        layer.changeAttributeValue(feature.id(), index, exposure)
+
+    layer.commitChanges()
     return

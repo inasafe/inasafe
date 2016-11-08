@@ -40,7 +40,7 @@ from safe.definitionsv4.post_processors import post_processors
 from safe.definitionsv4.analysis_steps import analysis_steps
 from safe.definitionsv4.utilities import definition
 from safe.definitionsv4.exposure import indivisible_exposure
-from safe.definitionsv4.fields import size_field
+from safe.definitionsv4.fields import size_field, exposure_class_field
 from safe.common.exceptions import (
     InvalidExtentError,
     InvalidLayerError,
@@ -889,11 +889,13 @@ class ImpactFunction(object):
         if self.debug_mode:
             self.debug_layer(self.exposure)
 
-        self.set_state_process(
-            'exposure', 'Assign classes based on value map')
-        self.exposure = update_value_map(self.exposure)
-        if self.debug_mode:
-            self.debug_layer(self.exposure)
+        fields = self.exposure.keywords['inasafe_fields']
+        if exposure_class_field['key'] not in fields:
+            self.set_state_process(
+                'exposure', 'Assign classes based on value map')
+            self.exposure = update_value_map(self.exposure)
+            if self.debug_mode:
+                self.debug_layer(self.exposure)
 
         exposure = self.exposure.keywords.get('exposure')
         indivisible_keys = [f['key'] for f in indivisible_exposure]
