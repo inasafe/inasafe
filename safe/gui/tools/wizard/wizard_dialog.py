@@ -790,9 +790,18 @@ class WizardDialog(QDialog, FORM_CLASS):
         if self.step_kw_classification.selected_classification():
             keywords['classification'] = self.step_kw_classification.\
                 selected_classification()['key']
-        value_map = self.step_kw_classify.selected_mapping()
-        if value_map:
-            keywords['value_map'] = value_map
+
+        if self.step_kw_layermode.selected_layermode():
+            layer_mode = self.step_kw_layermode.selected_layermode()
+            if layer_mode == layer_mode_continuous:
+                thresholds = self.step_kw_threshold.get_threshold()
+                if thresholds:
+                    keywords['thresholds'] = thresholds
+            elif layer_mode == layer_mode_classified:
+                value_map = self.step_kw_classify.selected_mapping()
+                if value_map:
+                    keywords['value_map'] = value_map
+
 
         if self.step_kw_source.leSource.text():
             keywords['source'] = get_unicode(
