@@ -34,7 +34,9 @@ def sum_field_by_hazard(layer, hazard_classification, field_name):
         attrs = f.attributes()
         try:
             hazard_class = attrs[hazard_class_idx]
-            idx = [i for i, v in enumerate(result) if v['key'] == hazard_class][0]
+            idx = [
+                i for i, v in enumerate(result) if v['key'] == hazard_class
+                ][0]
             result[idx]['value'] += attrs[target_field_idx]
         except:
             pass
@@ -172,42 +174,6 @@ def analysis_result_extractor(impact_report, component_metadata):
                 'name': h_class['name'],
                 'value': analysis_feature[class_idx],
             })
-
-    if 'population' in field_names:
-        # hazard_stats = sum_field_by_hazard(impact_layer, hazard_classification, 'population')
-        # population_stats = sum_affected_field(impact_layer, hazard_classification, 'population')
-        affected_idx = analysis_layer.fieldNameIndex('affected')
-        unaffected_idx = analysis_layer.fieldNameIndex('unaffected')
-        total_idx = analysis_layer.fieldNameIndex('total')
-        population_stats = {
-            'affected': analysis_feature[affected_idx],
-            'unaffected': analysis_feature[unaffected_idx],
-            'total': analysis_feature[total_idx]
-        }
-        # TODO: should not hardcode evacuation
-        evacuation_needs = population_stats['affected'] * 1.0 / 100
-        population_stats['evacuation'] = evacuation_needs
-
-        summary = []
-        # TODO: should apply relevant changes in definitionsv4/exposure.py
-        for s in exposure_population['analysis_summary']:
-            summary.append({
-                'key': s['key'],
-                'label': s['label'],
-                'value': population_stats[s['key']],
-            })
-    if 'road' in field_names:
-        hazard_stats = sum_field_by_hazard(impact_layer, hazard_classification, 'road')
-        road_stats = sum_affected_field(impact_layer, hazard_classification, 'road')
-    if 'land_cover' in field_names:
-        hazard_stats = sum_field_by_hazard(impact_layer, hazard_classification, 'land_cover')
-        land_cover_stats = sum_affected_field(impact_layer, hazard_classification, 'land_cover')
-    if 'structure' in field_names:
-        hazard_stats = sum_field_by_hazard(impact_layer, hazard_classification, 'structure')
-        structure_stats = count_affected_field(impact_layer, hazard_classification, 'structure')
-    if 'place' in field_names:
-        hazard_stats = sum_field_by_hazard(impact_layer, hazard_classification, 'place')
-        place_stats = count_affected_field(impact_layer, hazard_classification, 'place')
 
     context['header'] = tr('Analysis Results')
     context['hazard_stats'] = hazard_stats

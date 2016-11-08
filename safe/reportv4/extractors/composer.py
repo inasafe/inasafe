@@ -27,7 +27,8 @@ class QGISComposerContext(object):
     def substitution_map(self):
         """
 
-        :return: Substitution map containing dict mapping used in QGIS Composition template
+        :return: Substitution map containing dict mapping used in QGIS
+            Composition template
         :rtype: dict
         """
         return self._substitution_map
@@ -36,7 +37,8 @@ class QGISComposerContext(object):
     def substitution_map(self, value):
         """
 
-        :param value: Substitution map containing dict mapping used in QGIS Composition template
+        :param value: Substitution map containing dict mapping used in QGIS
+            Composition template
         :type value: dict
         """
         self._substitution_map = value
@@ -45,7 +47,8 @@ class QGISComposerContext(object):
     def infographic_elements(self):
         """
 
-        :return: Embedded infographics elements that needed to be generated for QGIS Composition
+        :return: Embedded infographics elements that needed to be generated
+            for QGIS Composition
         :rtype: list(dict)
         """
         return self._infographic_elements
@@ -54,7 +57,8 @@ class QGISComposerContext(object):
     def infographic_elements(self, value):
         """
 
-        :param value: Embedded infographics elements that needed to be generated for QGIS Composition
+        :param value: Embedded infographics elements that needed to be
+            generated for QGIS Composition
         :type value: list(dict)
         """
         self._infographic_elements = value
@@ -63,7 +67,8 @@ class QGISComposerContext(object):
     def image_elements(self):
         """
 
-        :return: Scanned all the image elements in the composition that needed to be replaced
+        :return: Scanned all the image elements in the composition that
+            needed to be replaced
         :rtype: list(dict)
         """
         return self._image_elements
@@ -72,7 +77,8 @@ class QGISComposerContext(object):
     def image_elements(self, value):
         """
 
-        :param value: Scanned all the image elements in the composition that needed to be replaced
+        :param value: Scanned all the image elements in the composition that
+            needed to be replaced
         :type value: list(dict)
         """
         self._image_elements = value
