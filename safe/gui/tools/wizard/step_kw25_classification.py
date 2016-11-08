@@ -22,8 +22,12 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 from PyQt4 import QtCore
 from PyQt4.QtGui import QListWidgetItem
 
+from safe.utilities.i18n import tr
+from safe.common.exceptions import InvalidWizardStep
 from safe.definitionsv4.layer_purposes import (
     layer_purpose_hazard, layer_purpose_exposure)
+from safe.definitionsv4.layer_modes import (
+    layer_mode_classified, layer_mode_continuous)
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_strings import classification_question
@@ -52,10 +56,20 @@ class StepKwClassification(WizardStep, FORM_CLASS):
         :returns: The step to be switched to
         :rtype: WizardStep instance or None
         """
-        if is_raster_layer(self.parent.layer):
-            new_step = self.parent.step_kw_classify
+        layer_mode = self.parent.step_kw_layermode.selected_layermode()
+        if layer_mode == layer_mode_classified:
+            if is_raster_layer(self.parent.layer):
+                new_step = self.parent.step_kw_classify
+            else:
+                new_step = self.parent.step_kw_field
+        elif layer_mode == layer_mode_continuous:
+            if is_raster_layer(self.parent.layer):
+                new_step = self.parent.step_kw_classify
+            else:
+                new_step = self.parent.step_kw_field
         else:
-            new_step = self.parent.step_kw_field
+            message = tr('Layer mode should be continuous or classified')
+            raise InvalidWizardStep(message)
         return new_step
 
     def classifications_for_layer(self):
