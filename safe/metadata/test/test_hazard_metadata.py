@@ -43,4 +43,4 @@ class TestHazardMetadata(TestCase):
         metadata.get_property('vector_hazard_classification')
         metadata.get_property('raster_hazard_classification')
         metadata.get_property('classification')
-        metadata.get_property('threshold')
+        metadata.get_property('thresholds')
