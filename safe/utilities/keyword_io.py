@@ -318,6 +318,7 @@ class KeywordIO(QObject):
             'structure_class_field',
             'field',
             'value_map',  # attribute values
+            'thresholds',  # attribute values
             'inasafe_fields',
             'inasafe_default_values',
             'resample',
@@ -422,6 +423,8 @@ class KeywordIO(QObject):
         if keyword in [
             'value_map', 'inasafe_fields', 'inasafe_default_values']:
             value = self._dict_to_row(value)
+        if keyword == 'thresholds':
+            value = self._threshold_to_row(value)
         # In these KEYWORD cases we show the DESCRIPTION for
         # the VALUE keyword_definition
         elif keyword in ['classification']:
@@ -456,6 +459,40 @@ class KeywordIO(QObject):
         row.add(m.Cell(value, wrap_slash=wrap_slash))
         return row
 
+    @staticmethod
+    def _threshold_to_row(keyword_value):
+        """Helper to make a message row from a threshold
+
+        We are expecting something like this:
+
+            "{'high': [0, 3], "
+            "'medium': [3, 5], "
+            "'low': [5, 10]}"
+
+        Each value is a list with exactly two element [a, b], where a <= b.
+
+        :param keyword_value: Value of the keyword to be rendered. This must
+            be a string representation of a dict, or a dict.
+        :type keyword_value: basestring, dict
+
+        :returns: A table to be added into a cell in the keywords table.
+        :rtype: safe.messaging.items.table
+        """
+        if isinstance(keyword_value, basestring):
+            keyword_value = literal_eval(keyword_value)
+
+        table = m.Table(style_class='table table-condensed')
+
+        for key, value in keyword_value.items():
+            row = m.Row()
+            name = definition(key)['name'] if definition(key) else key
+            row.add(m.Cell(m.ImportantText(name)))
+            pretty_value = tr('%s to %s' % (value[0], value[1]))
+            row.add(m.Cell(pretty_value))
+
+            table.add(row)
+        return table
+
     def _dict_to_row(self, keyword_value):
         """Helper to make a message row from a keyword where value is a dict.
 
@@ -483,11 +520,10 @@ class KeywordIO(QObject):
         :returns: A table to be added into a cell in the keywords table.
         :rtype: safe.messaging.items.table
         """
-        # LOGGER.info('Converting to dict: %s' % keyword_value)
         if isinstance(keyword_value, basestring):
             keyword_value = literal_eval(keyword_value)
         table = m.Table(style_class='table table-condensed')
-        for key, value in keyword_value.iteritems():
+        for key, value in keyword_value.items():
             row = m.Row()
             # First the heading
             name = definition(key)['name'] if definition(key) else key
