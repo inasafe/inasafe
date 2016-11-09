@@ -961,7 +961,7 @@ class TestKeywordWizard(unittest.TestCase):
         # Click next to select count
         dialog.pbnNext.click()
 
-        # Check if in select unit step
+        # Check if in select field step
         self.check_current_step(dialog.step_kw_field)
 
         # select population field
@@ -1566,6 +1566,158 @@ class TestKeywordWizard(unittest.TestCase):
         }
 
         real_keywords = dialog.get_keywords()
+        self.assertDictEqual(real_keywords, expected_keyword)
+
+    def test_continuous_vector(self):
+        """Test continuous vector for keyword wizard."""
+        layer = load_test_vector_layer(
+            'hazard', 'continuous_vector.geojson', clone_to_memory=True)
+        layer.keywords = {}
+
+        self.assertIsNotNone(layer)
+
+        # noinspection PyTypeChecker
+        dialog = WizardDialog()
+        dialog.set_keywords_creation_mode(layer)
+
+        # Check if in select purpose step
+        self.check_current_step(dialog.step_kw_purpose)
+
+        # Select hazard
+        self.select_from_list_widget(
+            layer_purpose_hazard['name'],
+            dialog.step_kw_purpose.lstCategories)
+
+        # Click next to select hazard
+        dialog.pbnNext.click()
+
+        # Check if in select hazard step
+        self.check_current_step(dialog.step_kw_subcategory)
+
+        # select flood
+        self.select_from_list_widget(
+            hazard_flood['name'],
+            dialog.step_kw_subcategory.lstSubcategories)
+
+        # Click next to select population
+        dialog.pbnNext.click()
+
+        # Check if in select hazard category step
+        self.check_current_step(dialog.step_kw_hazard_category)
+
+        # select multiple_event
+        self.select_from_list_widget(
+            hazard_category_multiple_event['name'],
+            dialog.step_kw_hazard_category.lstHazardCategories)
+
+        # Click next to select multiple event
+        dialog.pbnNext.click()
+
+        # Check if in select layer mode step
+        self.check_current_step(dialog.step_kw_layermode)
+
+        # Select continuous
+        self.select_from_list_widget(
+            layer_mode_continuous['name'],
+            dialog.step_kw_layermode.lstLayerModes)
+
+        # Click next to select continuous
+        dialog.pbnNext.click()
+
+        # Check if in select unit step
+        self.check_current_step(dialog.step_kw_unit)
+
+        # Select metres
+        self.select_from_list_widget(
+            unit_metres['name'],
+            dialog.step_kw_unit.lstUnits)
+
+        # Click next to select metres
+        dialog.pbnNext.click()
+
+        # Check if in select classification step
+        self.check_current_step(dialog.step_kw_classification)
+
+        # select flood hazard classification
+        self.select_from_list_widget(
+            flood_hazard_classes['name'],
+            dialog.step_kw_classification.lstClassifications)
+
+        # Click next to select flood classification
+        dialog.pbnNext.click()
+
+        # Check if in select field step
+        self.check_current_step(dialog.step_kw_field)
+
+        # select population field
+        depth_field = 'depth'
+        self.select_from_list_widget(
+            depth_field, dialog.step_kw_field.lstFields)
+
+        # Click next to select population
+        dialog.pbnNext.click()
+
+        # Check if in thresholds step
+        self.check_current_step(dialog.step_kw_threshold)
+
+        # Click next to finish threshold step
+        dialog.pbnNext.click()
+
+        # Check if in InaSAFE field step
+        self.check_current_step(dialog.step_kw_inasafe_fields)
+
+        # Click next to finish inasafe fields step and go to inasafe default
+        # field step
+        dialog.pbnNext.click()
+
+        # Check if in source step
+        self.check_current_step(dialog.step_kw_source)
+
+        dialog.step_kw_source.leSource.setText(source)
+        dialog.step_kw_source.leSource_scale.setText(source_scale)
+        dialog.step_kw_source.leSource_url.setText(source_url)
+        dialog.step_kw_source.ckbSource_date.setChecked(True)
+        dialog.step_kw_source.dtSource_date.setDateTime(source_date)
+        dialog.step_kw_source.leSource_license.setText(source_license)
+
+        # Click next to finish source step and go to title step
+        dialog.pbnNext.click()
+
+        # Check if in title step
+        self.check_current_step(dialog.step_kw_title)
+
+        dialog.step_kw_title.leTitle.setText(layer_title)
+
+        # Click next to finish title step and go to kw summary step
+        dialog.pbnNext.click()
+
+        # Check if in title step
+        self.check_current_step(dialog.step_kw_summary)
+
+        # Click finish
+        dialog.pbnNext.click()
+
+        # Checking Keyword Created
+        expected_keyword = {
+            'classification': flood_hazard_classes['key'],
+            'continuous_hazard_unit': unit_metres['key'],
+            'date': source_date,
+            'hazard': hazard_flood['key'],
+            'hazard_category': hazard_category_multiple_event['key'],
+            'inasafe_fields': {hazard_value_field['key']: depth_field},
+            'layer_geometry': layer_geometry_polygon['key'],
+            'layer_mode': layer_mode_continuous['key'],
+            'layer_purpose': layer_purpose_hazard['key'],
+            'license': source_license,
+            'scale': source_scale,
+            'source': source,
+            'thresholds': {'dry': [0.0, 1.0], 'wet': [1.0, 99.99]},
+            'title': layer_title,
+            'url': source_url,
+        }
+
+        real_keywords = dialog.get_keywords()
+
         self.assertDictEqual(real_keywords, expected_keyword)
 
     # noinspection PyTypeChecker
