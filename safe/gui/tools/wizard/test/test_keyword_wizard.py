@@ -1554,7 +1554,7 @@ class TestKeywordWizard(unittest.TestCase):
             'license': source_license,
             'scale': source_scale,
             'source': source,
-            'thresholds': {'dry': [0.0, 1.0], 'wet': [1.0, 99.99]},
+            'thresholds': {'dry': [0.0, 1.0], 'wet': [1.0, 1.9]},
             'title': layer_title,
             'url': source_url,
         }
@@ -1705,7 +1705,7 @@ class TestKeywordWizard(unittest.TestCase):
             'license': source_license,
             'scale': source_scale,
             'source': source,
-            'thresholds': {'dry': [0.0, 1.0], 'wet': [1.0, 99.99]},
+            'thresholds': {'dry': [0.0, 1.0], 'wet': [1.0, 2.5]},
             'title': layer_title,
             'url': source_url,
         }
