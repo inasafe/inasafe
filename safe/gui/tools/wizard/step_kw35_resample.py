@@ -46,7 +46,7 @@ class StepKwResample(WizardStep, FORM_CLASS):
         :returns: The step to be switched to
         :rtype: WizardStep instance or None
         """
-        new_step = self.parent.step_kw_inasafe_fields
+        new_step = self.parent.step_kw_source
         return new_step
 
     def selected_allowresampling(self):
