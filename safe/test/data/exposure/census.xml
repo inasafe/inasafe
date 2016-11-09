@@ -182,7 +182,7 @@
             <gco:Dictionary>{&quot;population_count_field&quot;: &quot;population&quot;}</gco:Dictionary>
           </inasafe_fields>
           <inasafe_default_values>
-            <gco:Dictionary>{}</gco:Dictionary>
+            <gco:Dictionary/>
           </inasafe_default_values>
           <area_name_field>
             <gco:CharacterString/>

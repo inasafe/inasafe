@@ -157,9 +157,7 @@ exposure_population = {
         'polygon',
         'raster'
     ],
-    'units': [
-        count_exposure_unit,
-        density_exposure_unit],
+    'units': [count_exposure_unit],
     'classifications': [],
     'compulsory_fields': [population_count_field],
     'fields': exposure_fields,

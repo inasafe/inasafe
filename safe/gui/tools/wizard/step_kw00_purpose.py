@@ -113,6 +113,7 @@ class StepKwPurpose(WizardStep, FORM_CLASS):
         self.parent.step_kw_unit.lstUnits.clear()
         self.parent.step_kw_field.lstFields.clear()
         self.parent.step_kw_classification.lstClassifications.clear()
+        self.parent.step_kw_threshold.classes.clear()
 
     def set_widgets(self):
         """Set widgets on the layer purpose tab."""
