@@ -60,8 +60,7 @@ from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.resources import get_ui_class, resources_path
 from safe.utilities.unicode import get_unicode
 from safe.utilities.utilities import (
-    get_error_message,
-    is_keyword_version_supported)
+    get_error_message, is_keyword_version_supported)
 from step_fc00_functions1 import StepFcFunctions1
 from step_fc05_functions2 import StepFcFunctions2
 from step_fc10_function import StepFcFunction

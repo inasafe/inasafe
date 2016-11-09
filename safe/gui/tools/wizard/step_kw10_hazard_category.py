@@ -12,11 +12,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-__author__ = 'qgis@borysjurgiel.pl'
-__revision__ = '$Format:%H$'
-__date__ = '16/03/2016'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
 
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore
@@ -29,6 +24,11 @@ from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_strings import hazard_category_question
 from safe.definitionsv4.utilities import (
     definition, hazard_categories_for_layer)
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
@@ -117,10 +117,13 @@ class StepKwHazardCategory(WizardStep, FORM_CLASS):
         hazard_categories = self.hazard_categories_for_layer()
         for hazard_category in hazard_categories:
             if not isinstance(hazard_category, dict):
+                # noinspection PyTypeChecker
                 hazard_category = definition(hazard_category)
+            # noinspection PyTypeChecker
             item = QListWidgetItem(
                 hazard_category['name'],
                 self.lstHazardCategories)
+            # noinspection PyTypeChecker
             item.setData(QtCore.Qt.UserRole, hazard_category['key'])
             self.lstHazardCategories.addItem(item)
 

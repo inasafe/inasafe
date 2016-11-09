@@ -12,18 +12,12 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-__author__ = 'qgis@borysjurgiel.pl'
-__revision__ = '$Format:%H$'
-__date__ = '16/03/2016'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
 
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore
 from PyQt4.QtGui import QListWidgetItem
 
-from safe.definitionsv4.layer_purposes import (
-    layer_purpose_exposure, layer_purpose_hazard)
+from safe.definitionsv4.layer_purposes import layer_purpose_hazard
 from safe.definitionsv4.exposure import exposure_population
 from safe.definitionsv4.units import exposure_unit
 from safe.definitionsv4.hazard import continuous_hazard_unit
@@ -33,6 +27,11 @@ from safe.gui.tools.wizard.wizard_strings import unit_question
 from safe.utilities.gis import is_raster_layer
 from safe.definitionsv4.utilities import (
     definition, hazard_units, exposure_units, get_classifications)
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
@@ -120,11 +119,6 @@ class StepKwUnit(WizardStep, FORM_CLASS):
         else:
             units_for_layer = exposure_units(subcat)
         for unit_for_layer in units_for_layer:
-            # if (self.parent.get_layer_geometry_id() == 'raster' and
-            #         'constraint' in unit_for_layer and
-            #         unit_for_layer['constraint'] == 'categorical'):
-            #     continue
-            # else:
             item = QListWidgetItem(unit_for_layer['name'], self.lstUnits)
             item.setData(QtCore.Qt.UserRole, unit_for_layer['key'])
             self.lstUnits.addItem(item)
@@ -136,7 +130,6 @@ class StepKwUnit(WizardStep, FORM_CLASS):
         else:
             key = exposure_unit['key']
         unit_id = self.parent.get_existing_keyword(key)
-        # unit_id = definitions.old_to_new_unit_id(unit_id)
         if unit_id:
             units = []
             for index in xrange(self.lstUnits.count()):

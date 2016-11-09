@@ -27,15 +27,13 @@ from safe.definitionsv4.utilities import get_fields
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_strings import (
-    classify_raster_question,
-    classify_vector_question)
+    classify_raster_question, classify_vector_question)
 from safe.utilities.gis import is_raster_layer
 
-__author__ = 'qgis@borysjurgiel.pl'
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
-__date__ = '16/03/2016'
-__copyright__ = (
-    'Copyright 2012, Australia Indonesia Facility for Disaster Reduction')
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
