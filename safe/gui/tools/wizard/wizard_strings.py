@@ -148,6 +148,20 @@ classify_raster_question = tr(
     'Please drag unique values from the list on the left '
     'into the panel on the right and place them in the appropriate categories.'
 )  # (subcategory, category, classification)
+continuous_vector_question = tr(
+    'You have selected <b>%s %s</b> as <b>continuous</b> layer and the '
+    'attribute is <b>%s</b> with <b>%s</b>. '
+    'Please input the minimum and maximum value for each class below. '
+    'The minimum value from the layer is <b>%s</b> and the maximum value is '
+    '<b>%s</b>.'  #
+)  # (subcategory, category, field, classification, min value, max value)
+continuous_raster_question = tr(
+    'You have selected <b>%s %s</b> as <b>continuous</b> layer with '
+    '<b>%s</b>. '
+    'Please input the minimum and maximum value for each class below. '
+    'The minimum value from the layer is <b>%s</b> and the maximum value is '
+    '<b>%s</b>.'  #
+)  # (subcategory, category, classification, min value, max value)
 select_function_constraints2_question = tr(
     'You selected <b>%s</b> hazard and <b>%s</b> exposure. Now, select the '
     '<b>geometry types</b> for the hazard and exposure layers you want to '

@@ -173,7 +173,7 @@
         <inasafe_keywords/>
         <inasafe>
           <thresholds>
-            <gco:Dictionary/>
+            <gco:Dictionary>{&quot;dry&quot;: [0.0, 1.0], &quot;wet&quot;: [1.0, 1.9]}</gco:Dictionary>
           </thresholds>
           <hazard_category>
             <gco:CharacterString>single_event</gco:CharacterString>
