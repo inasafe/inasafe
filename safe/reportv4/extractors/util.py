@@ -15,11 +15,18 @@ __revision__ = '$Format:%H$'
 
 
 def layer_definition_type(layer):
-    """
+    """Returned relevant layer definition based on layer purpose.
+
+    Returned the the correct definition of layer based on its purpose.
+    For example, if a layer have layer_porpose: exposure, and exposure: roads
+    then it will return definition for exposure_roads.
+
+    That's why it only supports hazard layer or exposure layer
 
     :param layer: hazard layer or exposure layer
     :type layer: qgis.core.QgsVectorLayer
-    :return: definitions
+
+    :return: Layer definitions.
     :rtype: dict
     """
     layer_purpose = layer.keywords['layer_purpose']

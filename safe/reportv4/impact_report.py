@@ -254,10 +254,10 @@ class ImpactReport(object):
             iface,
             template_metadata,
             impact_function=None,
-            hazard_layer=None,
-            exposure_layer=None,
-            impact_layer=None,
-            analysis_layer=None,
+            hazard=None,
+            exposure=None,
+            impact=None,
+            analysis=None,
             exposure_breakdown=None,
             extra_layers=[],
             minimum_needs_profile=None):
@@ -278,12 +278,10 @@ class ImpactReport(object):
         self._metadata = template_metadata
         self._output_folder = None
         self._impact_function = impact_function
-        self._hazard_layer = hazard_layer or self._impact_function.hazard
-        self._exposure_layer = (
-            exposure_layer or self._impact_function.exposure)
-        self._impact_layer = impact_layer or self._impact_function.impact
-        self._analysis_layer = (
-            analysis_layer or self._impact_function.analysis_layer)
+        self._hazard = hazard or self._impact_function.hazard
+        self._exposure = (exposure or self._impact_function.exposure)
+        self._impact = impact or self._impact_function.impact
+        self._analysis = (analysis or self._impact_function.analysis_layer)
         self._exposure_breakdown = (
             exposure_breakdown or self._impact_function.exposure_breakdown)
         self._extra_layers = extra_layers
@@ -353,72 +351,72 @@ class ImpactReport(object):
         return self._impact_function
 
     @property
-    def hazard_layer(self):
+    def hazard(self):
         """Getter to hazard layer
 
         :rtype: qgis.core.QgsVectorLayer
         """
-        return self._hazard_layer
+        return self._hazard
 
-    @hazard_layer.setter
-    def hazard_layer(self, layer):
+    @hazard.setter
+    def hazard(self, layer):
         """
 
         :param layer: hazard layer
         :type layer: qgis.core.QgsVectorLayer
         """
-        self._hazard_layer = layer
+        self._hazard = layer
 
     @property
-    def exposure_layer(self):
+    def exposure(self):
         """Getter to exposure layer
 
         :rtype: qgis.core.QgsVectorLayer
         """
-        return self._exposure_layer
+        return self._exposure
 
-    @exposure_layer.setter
-    def exposure_layer(self, layer):
+    @exposure.setter
+    def exposure(self, layer):
         """
 
         :param layer: exposure layer
         :type layer: qgis.core.QgsVectorLayer
         """
-        self._impact_layer = layer
+        self._impact = layer
 
     @property
-    def impact_layer(self):
+    def impact(self):
         """Getter to layer that will be used for stats, legend, reporting.
 
         :rtype: qgis.core.QgsVectorLayer
         """
-        return self._impact_layer
+        return self._impact
 
-    @impact_layer.setter
-    def impact_layer(self, layer):
+    @impact.setter
+    def impact(self, layer):
         """Set the layer that will be used for stats, legend and reporting.
 
         :param layer: Layer that will be used for stats, legend and reporting.
         :type layer: qgis.core.QgsVectorLayer
         """
-        self._impact_layer = layer
+        self._impact = layer
 
     @property
-    def analysis_layer(self):
+    def analysis(self):
         """
         :return:
         :rtype: qgis.core.QgsVectorLayer
         """
-        return self._analysis_layer
+        return self._analysis
 
-    @analysis_layer.setter
-    def analysis_layer(self, layer):
+    @analysis.setter
+    def analysis(self, layer):
         """
 
         :param layer: Analysis layer
         :type layer: qgis.core.QgsVectorLayer
         """
-        self._analysis_layer = layer
+        self._analysis = layer
 
     @property
     def exposure_breakdown(self):
@@ -484,7 +482,7 @@ class ImpactReport(object):
         # noinspection PyBroadException
         try:
             title = self._keyword_io.read_keywords(
-                self.impact_layer, 'map_title')
+                self.impact, 'map_title')
             return title
         except KeywordNotFoundError:
             return None
@@ -509,7 +507,7 @@ class ImpactReport(object):
             try:
                 legend_attribute_dict[legend_attribute] = \
                     self._keyword_io.read_keywords(
-                        self.impact_layer, legend_attribute)
+                        self.impact, legend_attribute)
             except KeywordNotFoundError:
                 pass
             except Exception:  # pylint: disable=broad-except

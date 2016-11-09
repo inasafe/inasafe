@@ -1,6 +1,5 @@
 # coding=utf-8
-from safe.definitionsv4.exposure import exposure_structure, exposure_road, \
-    exposure_land_cover, exposure_place
+from safe.definitionsv4.exposure import itemizable_exposures_all
 from safe.definitionsv4.fields import exposure_type_field, \
     exposure_class_field, hazard_count_field, total_affected_field, \
     total_unaffected_field, total_field
@@ -21,6 +20,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
     :param impact_report: the impact report that acts as a proxy to fetch
         all the data that extractor needed
     :type impact_report: safe.reportv4.impact_report.ImpactReport
+
     :param component_metadata: the component metadata. Used to obtain
         information about the component we want to render
     :type component_metadata: safe.reportv4.report_metadata.ReportMetadata
@@ -30,9 +30,9 @@ def analysis_detail_extractor(impact_report, component_metadata):
     """
     context = {}
 
-    hazard_layer = impact_report.hazard_layer
-    exposure_layer = impact_report.exposure_layer
-    analysis_layer = impact_report.analysis_layer
+    hazard_layer = impact_report.hazard
+    exposure_layer = impact_report.exposure
+    analysis_layer = impact_report.analysis
     analysis_layer_fields = analysis_layer.keywords['inasafe_fields']
     analysis_feature = analysis_layer.getFeatures().next()
     exposure_breakdown = impact_report.exposure_breakdown
@@ -52,19 +52,15 @@ def analysis_detail_extractor(impact_report, component_metadata):
     # Get exposure type definition
     exposure_type = layer_definition_type(exposure_layer)
 
-    # Analysis detail only applicable for:
-    applicable_types = [
-        exposure_structure,
-        exposure_road,
-        exposure_land_cover,
-        exposure_place
-    ]
-    if exposure_type not in applicable_types:
+    # Analysis detail only applicable for breakable exposure types:
+    if exposure_type not in itemizable_exposures_all:
         return context
 
     # Get breakdown field
     breakdown_field = None
     # I'm not sure what's the difference
+    # It is possible to have exposure_type_field or exposure_class_field
+    # at the moment
     breakdown_fields = [
         exposure_type_field,
         exposure_class_field
@@ -80,6 +76,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
     # breakdown header
     breakdown_header_template = ''
     if breakdown_field == exposure_type_field:
+        # TODO: should move this translation somewhere in definitions
         breakdown_header_template = tr('%(exposure)s type')
     elif breakdown_field == exposure_class_field:
         breakdown_header_template = tr('%(exposure)s class')

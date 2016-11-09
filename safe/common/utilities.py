@@ -69,6 +69,21 @@ def verify(statement, message=None):
         raise VerificationError(message)
 
 
+def safe_dir(sub_dir=None):
+    """Absolute path from safe package directory.
+
+    :param sub_dir: Sub directory relative to safe package directory.
+    :type sub_dir: str
+
+    :return: The Absolute path.
+    :rtype: str
+    """
+    safe_relative_path = os.path.join(
+        os.path.dirname(__file__), '../')
+    return os.path.abspath(
+        os.path.join(safe_relative_path, sub_dir))
+
+
 def temp_dir(sub_dir='work'):
     """Obtain the temporary working directory for the operating system.
 

@@ -2,7 +2,7 @@
 """
 Module for class container of Report and ReportComponent Metadata.
 """
-
+import os
 from importlib import import_module
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -331,3 +331,17 @@ class ReportMetadata(object):
         :rtype: [ReportComponentsMetadata]
         """
         return self._components
+
+    def component_absolute_output_path(self, component_key):
+        """Return absolute output path of component.
+
+        :param component_key:
+        :return:
+        """
+        comp_keys = [c.key for c in self.components]
+        if component_key in comp_keys:
+            idx = comp_keys.index(component_key)
+            return os.path.abspath(
+                os.path.join(
+                    self.output_folder, self.components[idx].output_path))
+        return None

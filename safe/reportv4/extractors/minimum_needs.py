@@ -27,8 +27,8 @@ def minimum_needs_extractor(impact_report, component_metadata):
     context = {}
 
     needs_profile = impact_report.minimum_needs
-    exposure_layer = impact_report.exposure_layer
-    analysis_layer = impact_report.analysis_layer
+    exposure_layer = impact_report.exposure
+    analysis_layer = impact_report.analysis
 
     # minimum needs calculation only affect population type exposure
     if not exposure_layer.keywords['exposure'] == exposure_population['key']:

@@ -9,6 +9,7 @@ from safe.definitionsv4.hazard import hazard_generic
 from safe.definitionsv4.hazard_category import hazard_category_single_event, \
     hazard_category_multiple_event
 from safe.definitionsv4.hazard_classifications import all_hazard_classes
+from safe.gisv4.vector.tools import read_dynamic_inasafe_field
 from safe.reportv4.extractors.util import layer_definition_type
 from safe.utilities.i18n import tr
 
@@ -25,6 +26,7 @@ def analysis_result_extractor(impact_report, component_metadata):
     :param impact_report: the impact report that acts as a proxy to fetch
         all the data that extractor needed
     :type impact_report: safe.reportv4.impact_report.ImpactReport
+
     :param component_metadata: the component metadata. Used to obtain
         information about the component we want to render
     :type component_metadata: safe.reportv4.report_metadata.ReportMetadata
@@ -35,10 +37,10 @@ def analysis_result_extractor(impact_report, component_metadata):
     context = {}
 
     # figure out analysis report type
-    hazard_layer = impact_report.hazard_layer
-    exposure_layer = impact_report.exposure_layer
-    impact_layer = impact_report.impact_layer
-    analysis_layer = impact_report.analysis_layer
+    hazard_layer = impact_report.hazard
+    exposure_layer = impact_report.exposure
+    impact_layer = impact_report.impact
+    analysis_layer = impact_report.analysis
 
     # find hazard class
     hazard_classification = None

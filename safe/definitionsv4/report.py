@@ -3,8 +3,14 @@
 """
 Definitions for basic report
 """
+from safe.common.utilities import safe_dir
+from safe.reportv4.extractors.action_notes import action_checklist_extractor, \
+    notes_assumptions_extractor
+from safe.reportv4.extractors.analysis_detail import analysis_detail_extractor
 from safe.reportv4.extractors.analysis_result import analysis_result_extractor
 from safe.reportv4.extractors.composer import qgis_composer_extractor
+from safe.reportv4.extractors.impact_table import impact_table_extractor
+from safe.reportv4.extractors.minimum_needs import minimum_needs_extractor
 from safe.reportv4.processors.default import qgis_composer_renderer, \
     jinja2_renderer
 
@@ -13,6 +19,79 @@ __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
+standard_impact_report_metadata = {
+    'key': 'analysis-result-html',
+    'name': 'analysis-result-html',
+    'template_folder': safe_dir(sub_dir='../resources/report-templates/'),
+    'components': [
+        {
+            'key': 'analysis-result',
+            'type': 'Jinja2',
+            'processor': jinja2_renderer,
+            'extractor': analysis_result_extractor,
+            'output_format': 'string',
+            'output_path': 'analysis-result-output.html',
+            'template': 'standard-template/'
+                        'jinja2/'
+                        'analysis-result.html',
+        },
+        {
+            'key': 'analysis-breakdown',
+            'type': 'Jinja2',
+            'processor': jinja2_renderer,
+            'extractor': analysis_detail_extractor,
+            'output_format': 'string',
+            'output_path': 'analysis-detail-output.html',
+            'template': 'standard-template/'
+                        'jinja2/'
+                        'analysis-detail.html',
+        },
+        {
+            'key': 'action-checklist',
+            'type': 'Jinja2',
+            'processor': jinja2_renderer,
+            'extractor': action_checklist_extractor,
+            'output_format': 'string',
+            'output_path': 'action-checklist-output.html',
+            'template': 'standard-template/'
+                        'jinja2/'
+                        'bullet-list-section.html',
+        },
+        {
+            'key': 'notes-assumptions',
+            'type': 'Jinja2',
+            'processor': jinja2_renderer,
+            'extractor': notes_assumptions_extractor,
+            'output_format': 'string',
+            'output_path': 'notes-assumptions-output.html',
+            'template': 'standard-template/'
+                        'jinja2/'
+                        'bullet-list-section.html',
+        },
+        {
+            'key': 'minimum-needs',
+            'type': 'Jinja2',
+            'processor': jinja2_renderer,
+            'extractor': minimum_needs_extractor,
+            'output_format': 'string',
+            'output_path': 'minimum-needs-output.html',
+            'template': 'standard-template/'
+                        'jinja2/'
+                        'minimum-needs.html',
+        },
+        {
+            'key': 'impact-report',
+            'type': 'Jinja2',
+            'processor': jinja2_renderer,
+            'extractor': impact_table_extractor,
+            'output_format': 'file',
+            'output_path': 'impact-report-output.html',
+            'template': 'standard-template/'
+                        'jinja2/'
+                        'impact-report-layout.html',
+        }
+    ]
+}
 
 report_a3_portrait_blue = {
     'key': 'a3-portrait-blue',

@@ -4,6 +4,7 @@ import os
 import unittest
 from jinja2.environment import Template
 
+from safe.common.utilities import safe_dir
 from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
 from safe.reportv4.extractors.action_notes import (
     action_checklist_extractor,
@@ -17,14 +18,16 @@ from safe.reportv4.processors.default import (
     qgis_composer_renderer,
     jinja2_renderer)
 from safe.reportv4.report_metadata import ReportMetadata
-from safe.test.utilities import get_qgis_app
+from safe.test.utilities import get_qgis_app, monkey_patch_keywords, \
+    load_path_vector_layer
 from safe.utilities.keyword_io import KeywordIO
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from PyQt4.QtCore import QSettings
 from qgis.core import QgsVectorLayer, QgsMapLayerRegistry
-from safe.definitionsv4.report import report_a3_portrait_blue
+from safe.definitionsv4.report import report_a3_portrait_blue, \
+    standard_impact_report_metadata
 from safe.reportv4.impact_report import ImpactReport
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -41,11 +44,7 @@ class TestImpactReport(unittest.TestCase):
         return os.path.join(dirname, 'fixtures', path)
 
     def assertCompareFileControl(self, control_path, actual_path):
-        # current_directory = os.path.abspath(
-        #     os.path.join(
-        #         os.path.dirname(__file__), '../../../')
-        # )
-        current_directory = os.path.abspath('../resources')
+        current_directory = safe_dir(sub_dir='../resources')
         context = {
             'current_directory': current_directory
         }
@@ -58,28 +57,13 @@ class TestImpactReport(unittest.TestCase):
             actual_string = actual_file.read().strip()
             self.assertEquals(control_string, actual_string)
 
-    @classmethod
-    def patch_keywords(cls, layer):
-        """Patch keywords shorthand from QgsVectorLayer
-
-        TODO: Delete me once layer is taken from impact_function
-
-        :param layer: QgsVectorLayer to patch
-        :type layer: QgsVectorLayer
-        """
-        try:
-            # in case it already contains keywords
-            keywords = layer.keywords
-        except AttributeError:
-            keywords = KeywordIO().read_keywords(layer)
-        layer.keywords = keywords
-
     def test_analysis_result(self):
         """Test generate analysis result"""
         sample_report_metadata_dict = {
             'key': 'analysis-result-html',
             'name': 'analysis-result-html',
-            'template_folder': '../resources/report-templates/',
+            'template_folder': safe_dir(
+                sub_dir='../resources/report-templates/'),
             'components': [
                 {
                     'key': 'analysis-result',
@@ -150,41 +134,37 @@ class TestImpactReport(unittest.TestCase):
             ]
         }
 
-        exposure_json = self.fixtures_dir('analysis_sample/1-exposure.geojson')
-        exposure_layer = QgsVectorLayer(exposure_json, '', 'ogr')
-        self.patch_keywords(exposure_layer)
+        exposure_json = self.fixtures_dir(
+            'analysis_sample/1-exposure.geojson')
+        exposure_layer = load_path_vector_layer(exposure_json)
 
         hazard_json = self.fixtures_dir('analysis_sample/2-hazard.geojson')
-        hazard_layer = QgsVectorLayer(hazard_json, '', 'ogr')
-        self.patch_keywords(hazard_layer)
+        hazard_layer = load_path_vector_layer(hazard_json)
 
         impact_json = self.fixtures_dir('analysis_sample/14-impact.geojson')
-        impact_layer = QgsVectorLayer(impact_json, '', 'ogr')
-        self.patch_keywords(impact_layer)
+        impact_layer = load_path_vector_layer(impact_json)
 
         analysis_json = self.fixtures_dir(
             'analysis_sample/18-analysis.geojson')
-        analysis_layer = QgsVectorLayer(analysis_json, '', 'ogr')
-        self.patch_keywords(analysis_layer)
+        analysis_layer = load_path_vector_layer(analysis_json)
 
         breakdown_csv = self.fixtures_dir(
             'analysis_sample/16-breakdown.csv')
-        exposure_breakdown = QgsVectorLayer(breakdown_csv, '', 'ogr')
-        self.patch_keywords(exposure_breakdown)
+        exposure_breakdown = load_path_vector_layer(breakdown_csv)
 
         minimum_needs = NeedsProfile()
         minimum_needs.load()
 
         report_metadata = ReportMetadata(
-            metadata_dict=sample_report_metadata_dict)
+            metadata_dict=standard_impact_report_metadata)
 
         impact_report = ImpactReport(
             IFACE,
             report_metadata,
-            exposure_layer=exposure_layer,
-            hazard_layer=hazard_layer,
-            impact_layer=impact_layer,
-            analysis_layer=analysis_layer,
+            exposure=exposure_layer,
+            hazard=hazard_layer,
+            impact=impact_layer,
+            analysis=analysis_layer,
             exposure_breakdown=exposure_breakdown,
             minimum_needs_profile=minimum_needs)
         impact_report.output_folder = self.fixtures_dir('../output')
@@ -197,7 +177,6 @@ class TestImpactReport(unittest.TestCase):
         self.assertCompareFileControl(
             self.fixtures_dir('controls/impact-report-output.html'),
             output_path)
-
 
     @unittest.skipIf(
         os.environ.get('ON_TRAVIS', False),
@@ -304,4 +283,3 @@ class TestImpactReport(unittest.TestCase):
         impact_report.output_folder = self.fixtures_dir('output')
 
         impact_report.process_component()
-

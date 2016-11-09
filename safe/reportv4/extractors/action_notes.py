@@ -20,6 +20,7 @@ def action_checklist_extractor(impact_report, component_metadata):
     :param impact_report: the impact report that acts as a proxy to fetch
         all the data that extractor needed
     :type impact_report: safe.reportv4.impact_report.ImpactReport
+
     :param component_metadata: the component metadata. Used to obtain
         information about the component we want to render
     :type component_metadata: safe.reportv4.report_metadata.ReportMetadata
@@ -30,7 +31,7 @@ def action_checklist_extractor(impact_report, component_metadata):
     context = {}
 
     # figure out exposure type
-    exposure_type = layer_definition_type(impact_report.exposure_layer)
+    exposure_type = layer_definition_type(impact_report.exposure)
 
     context['header'] = tr('Action Checklist')
     context['items'] = exposure_type['actions']
@@ -45,6 +46,7 @@ def notes_assumptions_extractor(impact_report, component_metadata):
     :param impact_report: the impact report that acts as a proxy to fetch
         all the data that extractor needed
     :type impact_report: safe.reportv4.impact_report.ImpactReport
+
     :param component_metadata: the component metadata. Used to obtain
         information about the component we want to render
     :type component_metadata: safe.reportv4.report_metadata.ReportMetadata
@@ -55,7 +57,7 @@ def notes_assumptions_extractor(impact_report, component_metadata):
     context = {}
 
     # figure out exposure type
-    exposure_type = layer_definition_type(impact_report.exposure_layer)
+    exposure_type = layer_definition_type(impact_report.exposure)
 
     context['header'] = tr('Notes and assumptions')
     context['items'] = exposure_type['notes']

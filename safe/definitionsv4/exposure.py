@@ -68,30 +68,6 @@ exposure_population = {
          tr('Fatality model is from Institut Teknologi Bandung 2012.'),
 
     ],
-    # 'analysis_summary_fields': [
-    #     {
-    #         'key': 'affected',
-    #         'field': total_affected_field,
-    #         'label': tr('Total affected population')
-    #     },
-    #     {
-    #         'key': 'unaffected',
-    #         'field': total_unaffected_field,
-    #         'label': tr('Total unaffected population')
-    #     },
-    #     {
-    #         'key': 'total',
-    #         'field': total_field,
-    #         'label': tr('Total population')
-    #     },
-    #     # Commented out until a better suggestions to include this in
-    #     # analysis_layer or post processors
-    #     # {
-    #     #     'key': 'evacuation',
-    #     #     'field': evacuation_field,
-    #     #     'label': tr('Population needing evacuation<sup>1</sup>')
-    #     # }
-    # ],
     'continuous_notes': [  # notes specific to continuous data
     ],
     'classified_notes': [  # notes specific to classified data
@@ -396,4 +372,22 @@ exposures = {
     'description': concepts['exposure']['description'],
     'citations': concepts['exposure']['citations'],
     'types': exposure_all,
+}
+
+# Exposure that are able to be broken down in analysis detail breakdown
+# This must be exposure that have class field or type field
+itemizable_exposures_all = [
+    exposure_structure,
+    exposure_road,
+    exposure_land_cover,
+    exposure_place
+]
+
+itemizable_exposures = {
+    'key': 'itemizable_exposures',
+    'name': 'Itemizable Exposures',
+    'descriptions': tr(
+        'Itemizable Exposures are exposures that have a class field. '
+        'It can have an analysis detail with itemized exposure class.'),
+    'types': itemizable_exposures_all
 }

@@ -9,6 +9,8 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+from safe.messaging.message import Message
+
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '27/05/2013'
@@ -240,22 +242,45 @@ class MessageViewer(QtWebKit.QWebView):
 
     def show_messages(self):
         """Show all messages."""
-        string = html_header()
-        if self.static_message is not None:
-            string += self.static_message.to_html()
+        if isinstance(self.static_message, Message):
+            # Handle sent Message instance
+            string = html_header()
+            if self.static_message is not None:
+                string += self.static_message.to_html()
 
-        # Keep track of the last ID we had so we can scroll to it
-        self.last_id = 0
-        for message in self.dynamic_messages:
-            if message.element_id is None:
-                self.last_id += 1
-                message.element_id = str(self.last_id)
+            # Keep track of the last ID we had so we can scroll to it
+            self.last_id = 0
+            for message in self.dynamic_messages:
+                if message.element_id is None:
+                    self.last_id += 1
+                    message.element_id = str(self.last_id)
 
-            html = message.to_html(in_div_flag=True)
-            if html is not None:
-                string += html
+                html = message.to_html(in_div_flag=True)
+                if html is not None:
+                    string += html
 
-        string += html_footer()
+            string += html_footer()
+        elif (isinstance(self.static_message, str) or
+                isinstance(self.static_message, unicode)):
+            # Handle sent text directly
+            string = self.static_message
+        elif not self.static_message:
+            # handle dynamic message
+            # Handle sent Message instance
+            string = html_header()
+
+            # Keep track of the last ID we had so we can scroll to it
+            self.last_id = 0
+            for message in self.dynamic_messages:
+                if message.element_id is None:
+                    self.last_id += 1
+                    message.element_id = str(self.last_id)
+
+                html = message.to_html(in_div_flag=True)
+                if html is not None:
+                    string += html
+
+            string += html_footer()
 
         # Set HTML
         self.load_html(HTML_STR_MODE, string)
