@@ -12,11 +12,6 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-__author__ = 'qgis@borysjurgiel.pl'
-__revision__ = '$Format:%H$'
-__date__ = '16/03/2016'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
 
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore
@@ -38,6 +33,11 @@ from safe.definitionsv4.utilities import definition, get_layer_modes
 from safe.definitionsv4.layer_modes import (
     layer_mode_classified, layer_mode_continuous)
 from safe.definitionsv4.utilities import get_classifications
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
@@ -170,13 +170,13 @@ class StepKwLayerMode(WizardStep, FORM_CLASS):
             self.lstLayerModes.addItem(item)
 
         # Set value to existing keyword or default value
-        layermode_keys = [m['key'] for m in layer_modes]
+        layer_mode_keys = [m['key'] for m in layer_modes]
         layermode_keyword = self.parent.get_existing_keyword('layer_mode')
-        if layermode_keyword in layermode_keys:
-            indx = layermode_keys.index(layermode_keyword)
-        elif layer_mode_continuous['key'] in layermode_keys:
+        if layermode_keyword in layer_mode_keys:
+            indx = layer_mode_keys.index(layermode_keyword)
+        elif layer_mode_continuous['key'] in layer_mode_keys:
             # Set default value
-            indx = layermode_keys.index(layer_mode_continuous['key'])
+            indx = layer_mode_keys.index(layer_mode_continuous['key'])
         else:
             indx = -1
         self.lstLayerModes.setCurrentRow(indx)
