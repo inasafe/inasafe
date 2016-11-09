@@ -64,7 +64,7 @@ class StepKwClassification(WizardStep, FORM_CLASS):
                 new_step = self.parent.step_kw_field
         elif layer_mode == layer_mode_continuous:
             if is_raster_layer(self.parent.layer):
-                new_step = self.parent.step_kw_classify
+                new_step = self.parent.step_kw_threshold
             else:
                 new_step = self.parent.step_kw_field
         else:

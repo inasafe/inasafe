@@ -172,6 +172,9 @@
       <gmd:supplementalInformation>
         <inasafe_keywords/>
         <inasafe>
+          <thresholds>
+            <gco:Dictionary/>
+          </thresholds>
           <hazard_category>
             <gco:CharacterString>single_event</gco:CharacterString>
           </hazard_category>
