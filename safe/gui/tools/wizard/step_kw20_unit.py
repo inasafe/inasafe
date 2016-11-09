@@ -24,6 +24,7 @@ from PyQt4.QtGui import QListWidgetItem
 
 from safe.definitionsv4.layer_purposes import (
     layer_purpose_exposure, layer_purpose_hazard)
+from safe.definitionsv4.exposure import exposure_population
 from safe.definitionsv4.units import exposure_unit
 from safe.definitionsv4.hazard import continuous_hazard_unit
 from safe.gui.tools.wizard.wizard_step import WizardStep
@@ -59,7 +60,10 @@ class StepKwUnit(WizardStep, FORM_CLASS):
             new_step = self.parent.step_kw_classification
         else:  # No classifications
             if is_raster_layer(self.parent.layer):
-                new_step = self.parent.step_kw_source
+                if subcategory == exposure_population:
+                    new_step = self.parent.step_kw_resample
+                else:
+                    new_step = self.parent.step_kw_source
             else:
                 new_step = self.parent.step_kw_field
         return new_step

@@ -2,24 +2,18 @@
 """Tests for the keyword wizard."""
 import shutil
 import unittest
-# noinspection PyUnresolvedReferences
 import qgis
 import os
-from PyQt4 import QtCore
-from PyQt4.QtCore import Qt
-# noinspection PyPackageRequirements
 from safe.common.utilities import temp_dir
 from safe.test.utilities import (
     clone_raster_layer,
     clone_shp_layer,
     get_qgis_app,
     standard_data_path,
-    load_test_vector_layer,
-    load_test_raster_layer)
+    load_test_vector_layer)
 # AG: get_qgis_app() should be called before importing modules from
 # safe.gui.tools.wizard
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-from safe.definitionsv4.versions import inasafe_keyword_version
 from datetime import datetime
 from safe.definitionsv4.layer_modes import (
     layer_mode_continuous, layer_mode_classified)
@@ -44,7 +38,7 @@ from safe.definitionsv4.exposure_classifications import (
 from safe.definitionsv4.units import count_exposure_unit, unit_metres
 
 from safe.gui.tools.wizard.wizard_dialog import WizardDialog
-from safe.definitionsv4.utilities import definition, get_compulsory_fields
+from safe.definitionsv4.utilities import get_compulsory_fields
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -1720,6 +1714,123 @@ class TestKeywordWizard(unittest.TestCase):
 
         self.assertDictEqual(real_keywords, expected_keyword)
 
+    def test_allow_resample(self):
+        """Test allow resample step."""
+        path = standard_data_path(
+            'exposure', 'people_allow_resampling_false.tif')
+        message = "Path %s is not found" % path
+        self.assertTrue(os.path.exists(path), message)
+        layer = clone_raster_layer(
+            name='people_allow_resample_false',
+            extension='.tif',
+            include_keywords=False,
+            source_directory=standard_data_path('exposure'))
+        self.assertIsNotNone(layer)
+        layer.keywords = {}
+
+        # noinspection PyTypeChecker
+        dialog = WizardDialog()
+        dialog.set_keywords_creation_mode(layer)
+
+        # Check if in select purpose step
+        self.check_current_step(dialog.step_kw_purpose)
+
+        # Select exposure
+        self.select_from_list_widget(
+            layer_purpose_exposure['name'],
+            dialog.step_kw_purpose.lstCategories)
+
+        # Click next to select exposure
+        dialog.pbnNext.click()
+
+        # Check if in select hazard step
+        self.check_current_step(dialog.step_kw_subcategory)
+
+        # select population
+        self.select_from_list_widget(
+            exposure_population['name'],
+            dialog.step_kw_subcategory.lstSubcategories)
+
+        # Click next to select population
+        dialog.pbnNext.click()
+
+        # Check if in select layer mode step
+        self.check_current_step(dialog.step_kw_layermode)
+
+        # select continuous mode
+        self.select_from_list_widget(
+            layer_mode_continuous['name'],
+            dialog.step_kw_layermode.lstLayerModes)
+
+        # Click next to select continuous
+        dialog.pbnNext.click()
+
+        # Check if in select unit step
+        self.check_current_step(dialog.step_kw_unit)
+
+        # select unit count
+        self.select_from_list_widget(
+            count_exposure_unit['name'],
+            dialog.step_kw_unit.lstUnits)
+
+        # Click next to select unit count
+        dialog.pbnNext.click()
+
+        # Check if in allow resample
+        self.check_current_step(dialog.step_kw_resample)
+
+        # Check Allow Resample
+        dialog.step_kw_resample.chkAllowResample.setChecked(True)
+
+        # Click next to source step
+        dialog.pbnNext.click()
+
+        # Check if in source step
+        self.check_current_step(dialog.step_kw_source)
+
+        dialog.step_kw_source.leSource.setText(source)
+        dialog.step_kw_source.leSource_scale.setText(source_scale)
+        dialog.step_kw_source.leSource_url.setText(source_url)
+        dialog.step_kw_source.ckbSource_date.setChecked(True)
+        dialog.step_kw_source.dtSource_date.setDateTime(source_date)
+        dialog.step_kw_source.leSource_license.setText(source_license)
+
+        # Click next to finish source step and go to title step
+        dialog.pbnNext.click()
+
+        # Check if in title step
+        self.check_current_step(dialog.step_kw_title)
+
+        dialog.step_kw_title.leTitle.setText(layer_title)
+
+        # Click next to finish title step and go to kw summary step
+        dialog.pbnNext.click()
+
+        # Check if in title step
+        self.check_current_step(dialog.step_kw_summary)
+
+        # Click finish
+        dialog.pbnNext.click()
+
+        # Checking Keyword Created
+        expected_keyword = {
+            'allow_resampling': 'false',
+            'date': source_date,
+            'exposure': exposure_population['key'],
+            'exposure_unit': count_exposure_unit['key'],
+            'layer_geometry': layer_geometry_raster['key'],
+            'layer_mode': layer_mode_continuous['key'],
+            'layer_purpose': layer_purpose_exposure['key'],
+            'license': source_license,
+            'scale': source_scale,
+            'source': source,
+            'title': layer_title,
+            'url': source_url,
+        }
+
+        real_keywords = dialog.get_keywords()
+        self.assertDictEqual(real_keywords, expected_keyword)
+
     # noinspection PyTypeChecker
     @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_unit_building_generic(self):
@@ -2382,59 +2493,6 @@ class TestKeywordWizard(unittest.TestCase):
 
         dialog.pbnCancel.click()
 
-    @unittest.skip('Skip unit test from InaSAFE v3.')
-    def test_allow_resample(self):
-        """Test the allow resample step"""
-
-        # Initialize dialog
-        layer = clone_raster_layer(
-            name='people_allow_resampling_false',
-            extension='.tif',
-            include_keywords=False,
-            source_directory=standard_data_path('exposure'))
-        dialog = WizardDialog()
-        dialog.set_keywords_creation_mode(layer)
-        dialog.suppress_warning_dialog = True
-
-        # step_kw_purpose
-        self.check_current_step(dialog.step_kw_purpose)
-        self.select_from_list_widget(
-            'Exposure', dialog.step_kw_purpose.lstCategories)
-        dialog.pbnNext.click()
-
-        # step_kw_subcategory
-        self.check_current_step(dialog.step_kw_subcategory)
-        self.select_from_list_widget(
-            'Population', dialog.step_kw_subcategory.lstSubcategories)
-        dialog.pbnNext.click()
-
-        # step_kw_layermode
-        self.check_current_step(dialog.step_kw_layermode)
-        self.select_from_list_widget(
-            'Continuous', dialog.step_kw_layermode.lstLayerModes)
-        dialog.pbnNext.click()
-
-        # step_kw_unit
-        self.check_current_step(dialog.step_kw_unit)
-        self.select_from_list_widget('Count', dialog.step_kw_unit.lstUnits)
-        dialog.pbnNext.click()
-
-        # step_kw_resample
-        self.check_current_step(dialog.step_kw_resample)
-        dialog.step_kw_resample.chkAllowResample.setChecked(True)
-        dialog.pbnNext.click()
-
-        # step_kw_source
-        self.check_current_step(dialog.step_kw_source)
-        dialog.pbnNext.click()
-
-        # step_kw_title
-        self.check_current_step(dialog.step_kw_title)
-        dialog.pbnNext.click()
-
-        # step_kw_summary
-        self.check_current_step(dialog.step_kw_summary)
-        dialog.pbnNext.click()
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestKeywordWizard)
