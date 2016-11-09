@@ -167,8 +167,8 @@ def layer_description_html(layer, keywords=None):
 def set_inasafe_default_value_qsetting(qsetting, inasafe_field_key, value):
     """Helper method to set inasafe default value to qsetting.
 
-    :param qsetting: QSetting
-    :type qsetting: QSetting
+    :param qsetting: QSettings
+    :type qsetting: QSettings
 
     :param inasafe_field_key: Key for the field.
     :type inasafe_field_key: str
