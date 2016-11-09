@@ -130,7 +130,7 @@ class TestDefinitionsUtilities(unittest.TestCase):
 
     def test_exposure_units(self):
         """Test for exposure_units"""
-        expected = [count_exposure_unit, density_exposure_unit]
+        expected = [count_exposure_unit]
         self.assertItemsEqual(exposure_units('population'), expected)
 
     def test_hazards_units(self):
