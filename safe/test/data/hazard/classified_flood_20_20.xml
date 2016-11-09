@@ -172,6 +172,9 @@
       <gmd:supplementalInformation>
         <inasafe_keywords/>
         <inasafe>
+          <thresholds>
+            <gco:Dictionary/>
+          </thresholds>
           <hazard_category>
             <gco:CharacterString>multiple_event</gco:CharacterString>
           </hazard_category>
@@ -185,10 +188,10 @@
             <gco:Tuple/>
           </prob_fatality_mag>
           <inasafe_fields>
-            <gco:Dictionary>{}</gco:Dictionary>
+            <gco:Dictionary>{&quot;aggregation_id_field&quot;: &quot;area_id&quot;}</gco:Dictionary>
           </inasafe_fields>
           <inasafe_default_values>
-            <gco:Dictionary>{}</gco:Dictionary>
+            <gco:Dictionary/>
           </inasafe_default_values>
           <volcano_name_field>
             <gco:CharacterString/>
