@@ -136,8 +136,8 @@ class StepFcHazLayerFromCanvas(WizardStep, FORM_CLASS):
         # Try to select the last_layer, if found:
         if last_layer:
             layers = []
-            for indx in xrange(self.lstCanvasHazLayers.count()):
-                item = self.lstCanvasHazLayers.item(indx)
+            for index in xrange(self.lstCanvasHazLayers.count()):
+                item = self.lstCanvasHazLayers.item(index)
                 layers += [item.data(QtCore.Qt.UserRole)]
             if last_layer in layers:
                 self.lstCanvasHazLayers.setCurrentRow(layers.index(last_layer))

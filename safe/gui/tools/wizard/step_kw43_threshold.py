@@ -86,11 +86,11 @@ class StepKwThreshold(WizardStep, FORM_CLASS):
             selected_classification()
 
         if is_raster_layer(self.parent.layer):
-            ds = gdal.Open(self.parent.layer.source(), GA_ReadOnly)
+            dataset = gdal.Open(self.parent.layer.source(), GA_ReadOnly)
             min_value_layer = numpy.amin(numpy.array(
-                ds.GetRasterBand(1).ReadAsArray()))
+                dataset.GetRasterBand(1).ReadAsArray()))
             max_value_layer = numpy.amax(numpy.array(
-                ds.GetRasterBand(1).ReadAsArray()))
+                dataset.GetRasterBand(1).ReadAsArray()))
             text = continuous_raster_question % (
             layer_purpose['name'],
             layer_subcategory['name'],

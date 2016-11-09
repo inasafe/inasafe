@@ -171,14 +171,14 @@ class StepKwLayerMode(WizardStep, FORM_CLASS):
 
         # Set value to existing keyword or default value
         layer_mode_keys = [m['key'] for m in layer_modes]
-        layermode_keyword = self.parent.get_existing_keyword('layer_mode')
-        if layermode_keyword in layer_mode_keys:
-            indx = layer_mode_keys.index(layermode_keyword)
+        layer_mode_keyword = self.parent.get_existing_keyword('layer_mode')
+        if layer_mode_keyword in layer_mode_keys:
+            index = layer_mode_keys.index(layer_mode_keyword)
         elif layer_mode_continuous['key'] in layer_mode_keys:
             # Set default value
-            indx = layer_mode_keys.index(layer_mode_continuous['key'])
+            index = layer_mode_keys.index(layer_mode_continuous['key'])
         else:
-            indx = -1
-        self.lstLayerModes.setCurrentRow(indx)
+            index = -1
+        self.lstLayerModes.setCurrentRow(index)
 
         self.auto_select_one_item(self.lstLayerModes)

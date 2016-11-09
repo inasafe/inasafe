@@ -149,14 +149,14 @@ classify_raster_question = tr(
     'into the panel on the right and place them in the appropriate categories.'
 )  # (subcategory, category, classification)
 continuous_vector_question = tr(
-    'You have selected <b>%s %s</b> as <b>continuous</b> layer and the '
+    'You have selected <b>%s %s</b> as a <b>continuous</b> layer and the '
     'attribute is <b>%s</b> with <b>%s</b>. '
     'Please input the minimum and maximum value for each class below. '
     'The minimum value from the layer is <b>%s</b> and the maximum value is '
     '<b>%s</b>.'  #
 )  # (subcategory, category, field, classification, min value, max value)
 continuous_raster_question = tr(
-    'You have selected <b>%s %s</b> as <b>continuous</b> layer with '
+    'You have selected <b>%s %s</b> as a <b>continuous</b> layer with '
     '<b>%s</b>. '
     'Please input the minimum and maximum value for each class below. '
     'The minimum value from the layer is <b>%s</b> and the maximum value is '
