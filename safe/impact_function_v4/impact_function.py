@@ -51,7 +51,7 @@ from safe.common.exceptions import (
 from safe.impact_function_v4.postprocessors import (
     run_single_post_processor, enough_input)
 from safe.impact_function_v4.create_extra_layers import (
-    create_analysis_layer, create_virtual_aggregation)
+    create_analysis_layer, create_virtual_aggregation, create_profile_layer)
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.utilities import replace_accentuated_characters
@@ -85,6 +85,7 @@ class ImpactFunction(object):
         self._aggregation_impacted = None
         self._analysis_impacted = None
         self._exposure_breakdown = None
+        self._profiling_table = None
 
         # Use debug to store intermediate results
         self.debug_mode = False
@@ -356,6 +357,17 @@ class ImpactFunction(object):
         :rtype: QgsVectorLayer
         """
         return self._exposure_breakdown
+
+    @property
+    def profiling(self):
+        """Return the profiling layer.
+
+        It's a QgsVectorLayer without geometry.
+
+        :returns: A vector layer.
+        :rtype: QgsVectorLayer
+        """
+        return self._profiling_table
 
     @property
     def requested_extent(self):
@@ -638,7 +650,20 @@ class ImpactFunction(object):
 
         self.reset_state()
         clear_prof_data()
-        return self._run()
+        self._run()
+
+        # Get the profiling log
+        self._performance_log = profiling_log()
+        self.callback(8, 8, analysis_steps['profiling'])
+
+        if self.debug_mode:
+            self._profiling_table = create_profile_layer(
+                self.performance_log_message())
+            _, name = self.datastore.add_layer(
+                self._profiling_table, self._profiling_table.title())
+            self._profiling_table = self.datastore.layer(name)
+
+        return self.state
 
     @profile
     def _run(self):
@@ -747,15 +772,6 @@ class ImpactFunction(object):
 
         _, name = self.datastore.add_layer(self._analysis_impacted, 'analysis')
         self._analysis_impacted = self.datastore.layer(name)
-
-        # Get the profiling log
-        self._performance_log = profiling_log()
-        self.callback(8, step_count, analysis_steps['profiling'])
-
-        if self.debug_mode:
-            print 'Performance log message :'
-            print self.performance_log_message().to_text()
-        return self.state
 
     @profile
     def hazard_preparation(self):

@@ -267,6 +267,44 @@ analysis_name_field = {
 }
 
 # # # # # # # # # #
+# Profiling
+# # # # # # # # # #
+
+profiling_function_field = {
+    'key': 'profiling_function_field',
+    'name': tr('Profiling function'),
+    'field_name': 'function',
+    'type': QVariant.String,
+    'length': default_field_length,
+    'precision': 0,
+    'description': tr(
+        'Attribute where the function name of the feature is located.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+
+profiling_time_field = {
+    'key': 'profiling_time_field',
+    'name': tr('Profiling time'),
+    'field_name': 'time',
+    'type': QVariant.Double,
+    'length': default_field_length,
+    'precision': default_field_precision,
+    'description': tr(
+        'Attribute where the time is located.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+
+# # # # # # # # # #
 # Count, inputs (Absolute values)
 # # # # # # # # # #
 
