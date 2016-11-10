@@ -17,8 +17,8 @@ from safe.definitionsv4.fields import (
     hazard_class_field,
     total_field,
     total_affected_field,
-    hazard_count_field,
-)
+    total_unaffected_field,
+    hazard_count_field)
 from safe.definitionsv4.processing_steps import (
     summary_3_analysis_steps)
 from safe.definitionsv4.post_processors import post_processor_affected_function
@@ -138,6 +138,14 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
     analysis.keywords['inasafe_fields'][total_affected_field['key']] = (
         total_affected_field['field_name'])
 
+    # essentially have the same value as NULL_hazard_count
+    # but with this, make sure that it exists in layer so it can be used for
+    # reporting, and can be referenced to fields.py to take the label.
+    field = create_field_from_definition(total_unaffected_field)
+    analysis.addAttribute(field)
+    analysis.keywords['inasafe_fields'][total_unaffected_field['key']] = (
+        total_unaffected_field['field_name'])
+
     field = create_field_from_definition(total_field)
     analysis.addAttribute(field)
     analysis.keywords['inasafe_fields'][total_field['key']] = (
@@ -162,7 +170,10 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
             area.id(), shift + len(unique_hazard), affected_sum)
 
         analysis.changeAttributeValue(
-            area.id(), shift + len(unique_hazard) + 1, total)
+            area.id(), shift + len(unique_hazard) + 1, total - affected_sum)
+
+        analysis.changeAttributeValue(
+            area.id(), shift + len(unique_hazard) + 2, total)
 
     analysis.commitChanges()
 

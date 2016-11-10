@@ -253,8 +253,12 @@ class ImpactReport(object):
             self,
             iface,
             template_metadata,
-            impact_layer,
-            analysis_layer,
+            impact_function=None,
+            hazard=None,
+            exposure=None,
+            impact=None,
+            analysis=None,
+            exposure_breakdown=None,
             extra_layers=[],
             minimum_needs_profile=None):
         """Constructor for the Composition Report class.
@@ -264,13 +268,22 @@ class ImpactReport(object):
 
         :param template_metadata: InaSAFE template metadata.
         :type template_metadata: ReportMetadata
+
+        :param impact_function: Impact function instance for the report
+        :type impact_function:
+            safe.impact_function_v4.impact_function.ImpactFunction
         """
         LOGGER.debug('InaSAFE Impact Report class initialised')
         self._iface = iface
         self._metadata = template_metadata
         self._output_folder = None
-        self._impact_layer = impact_layer
-        self._analysis_layer = analysis_layer
+        self._impact_function = impact_function
+        self._hazard = hazard or self._impact_function.hazard
+        self._exposure = (exposure or self._impact_function.exposure)
+        self._impact = impact or self._impact_function.impact
+        self._analysis = (analysis or self._impact_function.analysis_layer)
+        self._exposure_breakdown = (
+            exposure_breakdown or self._impact_function.exposure_breakdown)
         self._extra_layers = extra_layers
         self._minimum_needs = minimum_needs_profile
         self._extent = self._iface.mapCanvas().extent()
@@ -330,38 +343,99 @@ class ImpactReport(object):
             os.makedirs(self._output_folder)
 
     @property
-    def impact_layer(self):
+    def impact_function(self):
+        """Getter for impact function instance to use
+
+        :rtype: safe.impact_function_v4.impact_function.ImpactFunction
+        """
+        return self._impact_function
+
+    @property
+    def hazard(self):
+        """Getter to hazard layer
+
+        :rtype: qgis.core.QgsVectorLayer
+        """
+        return self._hazard
+
+    @hazard.setter
+    def hazard(self, layer):
+        """
+
+        :param layer: hazard layer
+        :type layer: qgis.core.QgsVectorLayer
+        """
+        self._hazard = layer
+
+    @property
+    def exposure(self):
+        """Getter to exposure layer
+
+        :rtype: qgis.core.QgsVectorLayer
+        """
+        return self._exposure
+
+    @exposure.setter
+    def exposure(self, layer):
+        """
+
+        :param layer: exposure layer
+        :type layer: qgis.core.QgsVectorLayer
+        """
+        self._impact = layer
+
+    @property
+    def impact(self):
         """Getter to layer that will be used for stats, legend, reporting.
 
         :rtype: qgis.core.QgsVectorLayer
         """
-        return self._impact_layer
+        return self._impact
 
-    @impact_layer.setter
-    def impact_layer(self, layer):
+    @impact.setter
+    def impact(self, layer):
         """Set the layer that will be used for stats, legend and reporting.
 
         :param layer: Layer that will be used for stats, legend and reporting.
         :type layer: qgis.core.QgsVectorLayer
         """
-        self._impact_layer = layer
+        self._impact = layer
 
     @property
-    def analysis_layer(self):
+    def analysis(self):
         """
         :return:
         :rtype: qgis.core.QgsVectorLayer
         """
-        return self._analysis_layer
+        return self._analysis
 
-    @analysis_layer.setter
-    def analysis_layer(self, layer):
+    @analysis.setter
+    def analysis(self, layer):
         """
 
         :param layer: Analysis layer
         :type layer: qgis.core.QgsVectorLayer
         """
-        self._analysis_layer = layer
+        self._analysis = layer
+
+    @property
+    def exposure_breakdown(self):
+        """
+
+        :return:
+        :rtype: qgis.core.QgsVectorLayer
+        """
+        return self._exposure_breakdown
+
+    @exposure_breakdown.setter
+    def exposure_breakdown(self, value):
+        """
+
+        :param value: Exposure Breakdown
+        :type value: qgis.core.QgsVectorLayer
+        :return:
+        """
+        self._exposure_breakdown = value
 
     @property
     def extra_layers(self):
@@ -408,7 +482,7 @@ class ImpactReport(object):
         # noinspection PyBroadException
         try:
             title = self._keyword_io.read_keywords(
-                self.impact_layer, 'map_title')
+                self.impact, 'map_title')
             return title
         except KeywordNotFoundError:
             return None
@@ -433,7 +507,7 @@ class ImpactReport(object):
             try:
                 legend_attribute_dict[legend_attribute] = \
                     self._keyword_io.read_keywords(
-                        self.impact_layer, legend_attribute)
+                        self.impact, legend_attribute)
             except KeywordNotFoundError:
                 pass
             except Exception:  # pylint: disable=broad-except
@@ -447,10 +521,11 @@ class ImpactReport(object):
             if callable(component.extractor):
                 _extractor_method = component.extractor
             else:
-                _package_name = '%s.extractors.%s' % (
-                    self.metadata.key,
-                    component.key
-                )
+                _package_name = '%(report-key)s.extractors.%(component-key)s'
+                _package_name = _package_name % {
+                    'report-key': self.metadata.key,
+                    'component-key': component.key
+                }
                 # replace dash with underscores
                 _package_name = _package_name.replace('-', '_')
                 _extractor_path = os.path.join(
@@ -472,10 +547,11 @@ class ImpactReport(object):
             if callable(component.processor):
                 _renderer = component.processor
             else:
-                _package_name = '%s.renderer.%s' % (
-                    self.metadata.key,
-                    component.key
-                )
+                _package_name = '%(report-key)s.renderer.%(component-key)s'
+                _package_name = _package_name % {
+                    'report-key': self.metadata.key,
+                    'component-key': component.key
+                }
                 # replace dash with underscores
                 _package_name = _package_name.replace('-', '_')
                 _renderer_path = os.path.join(
@@ -486,6 +562,8 @@ class ImpactReport(object):
                 _renderer = getattr(_module, 'renderer')
             try:
                 # method signature:
+                #  - this ImpactReport
+                #  - this component
                 output = _renderer(self, component)
                 component.output = output
             except Exception as exc:

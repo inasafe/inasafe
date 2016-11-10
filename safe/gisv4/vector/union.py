@@ -5,7 +5,6 @@ Clip and mask a hazard layer.
 
 Issue https://github.com/inasafe/inasafe/issues/3186
 """
-
 import logging
 from qgis.core import (
     QGis,
@@ -81,7 +80,8 @@ def union(union_a, union_b, callback=None):
     layer_purpose_1 = keywords_union_1['layer_purpose']
     layer_purpose_2 = keywords_union_2['layer_purpose']
 
-    writer.keywords = union_a.keywords
+    # use to avoid modifying original source
+    writer.keywords = dict(union_a.keywords)
     writer.keywords['inasafe_fields'] = inasafe_fields
     writer.keywords['title'] = output_layer_name
 

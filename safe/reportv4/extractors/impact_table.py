@@ -1,6 +1,7 @@
 # coding=utf-8
 import os
 
+from safe.common.utilities import safe_dir
 from safe.definitionsv4.exposure import exposure_population, exposure_road, \
     exposure_all
 from safe.reportv4.extractors.util import jinja2_output_as_string
@@ -21,7 +22,8 @@ def impact_table_extractor(impact_report, component_metadata):
     :param impact_report: the impact report that acts as a proxy to fetch
         all the data that extractor needed
     :type impact_report: safe.reportv4.impact_report.ImpactReport
-    :param component_metadata: the componenet metadata. Used to obtain
+
+    :param component_metadata: the component metadata. Used to obtain
         information about the component we want to render
     :type component_metadata: safe.reportv4.report_metadata.ReportMetadata
 
@@ -32,6 +34,8 @@ def impact_table_extractor(impact_report, component_metadata):
 
     analysis_result = jinja2_output_as_string(
         impact_report, 'analysis-result')
+    analysis_breakdown = jinja2_output_as_string(
+        impact_report, 'analysis-breakdown')
     action_checklist = jinja2_output_as_string(
         impact_report, 'action-checklist')
     notes_assumptions = jinja2_output_as_string(
@@ -42,6 +46,7 @@ def impact_table_extractor(impact_report, component_metadata):
     context['brand_logo'] = resource_url(
             resources_path('img', 'logos', 'inasafe-logo-white.png'))
     context['analysis_result'] = analysis_result
+    context['analysis_breakdown'] = analysis_breakdown
     context['action_checklist'] = action_checklist
     context['notes_assumptions'] = notes_assumptions
     context['minimum_needs'] = minimum_needs
@@ -59,7 +64,7 @@ def impact_table_extractor(impact_report, component_metadata):
         'Exposure details'
         '<p>%(exposure_provenance)s</p>') % provenance_details
 
-    resources_dir = os.path.abspath('../resources')
+    resources_dir = safe_dir(sub_dir='../resources')
     context['inasafe_resources_base_dir'] = resources_dir
 
     return context

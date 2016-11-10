@@ -216,7 +216,7 @@ def qgis_composer_extractor(impact_report, component_metadata):
     context.map_elements = map_elements
 
     # calculate map_legends
-    layers = [impact_report.impact_layer] + impact_report.extra_layers
+    layers = [impact_report.impact] + impact_report.extra_layers
     symbol_count = 0
     for l in layers:
         layer = l

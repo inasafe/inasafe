@@ -18,8 +18,8 @@ from safe.definitionsv4.fields import (
     youth_count_field,
     youth_ratio_field,
     population_count_field,
-    exposure_type_field
-)
+    exposure_type_field,
+    total_affected_field, total_field, total_unaffected_field)
 from safe.definitionsv4.layer_modes import (
     layer_mode_classified, layer_mode_continuous)
 from safe.definitionsv4.exposure_classifications import (
@@ -67,24 +67,6 @@ exposure_population = {
     'earthquake_itb_notes': [   # these are earthquake ITB specific notes
          tr('Fatality model is from Institut Teknologi Bandung 2012.'),
 
-    ],
-    'analysis_summary': [
-        {
-            'key': 'affected',
-            'label': tr('Total affected population')
-        },
-        {
-            'key': 'unaffected',
-            'label': tr('Unaffected population')
-        },
-        {
-            'key': 'total',
-            'label': tr('Total population')
-        },
-        {
-            'key': 'evacuation',
-            'label': tr('Population needing evacuation<sup>1</sup>')
-        }
     ],
     'continuous_notes': [  # notes specific to continuous data
     ],
@@ -390,4 +372,22 @@ exposures = {
     'description': concepts['exposure']['description'],
     'citations': concepts['exposure']['citations'],
     'types': exposure_all,
+}
+
+# Exposure that are able to be broken down in analysis detail breakdown
+# This must be exposure that have class field or type field
+itemizable_exposures_all = [
+    exposure_structure,
+    exposure_road,
+    exposure_land_cover,
+    exposure_place
+]
+
+itemizable_exposures = {
+    'key': 'itemizable_exposures',
+    'name': 'Itemizable Exposures',
+    'descriptions': tr(
+        'Itemizable Exposures are exposures that have a class field. '
+        'It can have an analysis detail with itemized exposure class.'),
+    'types': itemizable_exposures_all
 }

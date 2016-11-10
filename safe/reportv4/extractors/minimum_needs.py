@@ -1,5 +1,6 @@
 # coding=utf-8
 from safe.common.parameters.resource_parameter import ResourceParameter
+from safe.definitionsv4.exposure import exposure_population
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -16,7 +17,7 @@ def minimum_needs_extractor(impact_report, component_metadata):
         all the data that extractor needed
     :type impact_report: safe.reportv4.impact_report.ImpactReport
 
-    :param component_metadata: the componenet metadata. Used to obtain
+    :param component_metadata: the component metadata. Used to obtain
         information about the component we want to render
     :type component_metadata: safe.reportv4.report_metadata.ReportMetadata
 
@@ -26,7 +27,12 @@ def minimum_needs_extractor(impact_report, component_metadata):
     context = {}
 
     needs_profile = impact_report.minimum_needs
-    analysis_layer = impact_report.analysis_layer
+    exposure_layer = impact_report.exposure
+    analysis_layer = impact_report.analysis
+
+    # minimum needs calculation only affect population type exposure
+    if not exposure_layer.keywords['exposure'] == exposure_population['key']:
+        return context
 
     frequencies = {}
     # map each needs to its frequency groups

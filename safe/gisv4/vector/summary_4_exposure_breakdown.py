@@ -18,7 +18,7 @@ from safe.definitionsv4.fields import (
     affected_field,
     hazard_count_field,
     exposure_count_field,
-)
+    total_unaffected_field)
 from safe.definitionsv4.processing_steps import (
     summary_4_exposure_breakdown_steps)
 from safe.definitionsv4.post_processors import post_processor_affected_function
@@ -129,6 +129,14 @@ def exposure_type_breakdown(aggregate_hazard, callback=None):
     tabular.keywords['inasafe_fields'][total_affected_field['key']] = (
         total_affected_field['field_name'])
 
+    # essentially have the same value as NULL_hazard_count
+    # but with this, make sure that it exists in layer so it can be used for
+    # reporting, and can be referenced to fields.py to take the label.
+    field = create_field_from_definition(total_unaffected_field)
+    tabular.addAttribute(field)
+    tabular.keywords['inasafe_fields'][total_unaffected_field['key']] = (
+        total_unaffected_field['field_name'])
+
     field = create_field_from_definition(total_field)
     tabular.addAttribute(field)
     tabular.keywords['inasafe_fields'][total_field['key']] = (
@@ -152,6 +160,7 @@ def exposure_type_breakdown(aggregate_hazard, callback=None):
             total += value
 
         attributes.append(total_affected)
+        attributes.append(total - total_affected)
         attributes.append(total)
 
         feature.setAttributes(attributes)

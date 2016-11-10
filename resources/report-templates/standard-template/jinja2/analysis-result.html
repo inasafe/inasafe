@@ -2,25 +2,31 @@
     <i class="icon-info-sign icon-white"></i> {{ header }}
 </h5>
 <table class="table table-striped condensed">
-    <tbody>
-        {% if question %}
+    <thead>
+        {% if title %}
         <tr>
-            <td colspan="100%">
-                {{ question }}
-            </td>
+            <th colspan="100%">
+                {{ title }}
+            </th>
         </tr>
         {% endif %}
-        {% for item in hazard_stats %}
+    </thead>
+</table>
+{% for section in summary %}
+<table class="table table-striped condensed">
+    <thead>
+        <tr>
+            <th colspan="1">{{ section.header_label }}</th>
+            <th class="text-right" colspan="1">{{ section.value_label }}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in section.rows %}
         <tr>
             <th colspan="1">{{ item.name }}</th>
-            <td class="text-right text-right" colspan=1>{{ item.value }}</td>
-        </tr>
-        {% endfor %}
-        {% for item in summary %}
-        <tr>
-            <th colspan="1">{{ item.label }}</th>
-            <td class="text-right text-right" colspan=1>{{ item.value }}</td>
+            <td class="text-right" colspan=1>{{ item.value }}</td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
+{% endfor %}

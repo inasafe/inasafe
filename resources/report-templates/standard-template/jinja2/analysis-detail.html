@@ -1,0 +1,51 @@
+<h5 class="info">
+    <i class="icon-info-sign icon-white"></i> {{ header }}
+</h5>
+<table class="table table-striped condensed">
+    <thead>
+        <tr>
+            {% for header in detail_table.headers %}
+                {% if loop.first %}
+                <th class="text-left">
+                {% else %}
+                <th class="text-right">
+                {% endif %}
+                    {{ header|capitalize }}
+                </th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in detail_table.details %}
+        <tr>
+            {% for column in row %}
+                {% if loop.first %}
+                <th class="text-left">
+                {% else %}
+                <td class="text-right">
+                {% endif %}
+                    {{ column|capitalize }}
+                {% if loop.first %}
+                </th>
+                {% else %}
+                </td>
+                {% endif %}
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            {% for total in detail_table.footers %}
+                {% if loop.first %}
+                <th class="text-left">
+                    {{ total|capitalize }}
+                {% else %}
+                <th class="text-right">
+                    {{ total }}
+                {% endif %}
+                </th>
+            {% endfor %}
+        </tr>
+    </tfoot>
+</table>

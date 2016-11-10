@@ -1,0 +1,6 @@
+exposure_type,high_hazard_count,medium_hazard_count,NULL_hazard_count,total_affected,total_unaffected,total
+government,0.00,1.00,0.00,1.00,0.00,1.00
+commercial,1.00,0.00,0.00,1.00,0.00,1.00
+education,2.00,0.00,3.00,2.00,3.00,5.00
+health,1.00,0.00,0.00,1.00,0.00,1.00
+NULL,0.00,0.00,0.00,0.00,0.00,0.00

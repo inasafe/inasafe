@@ -3,10 +3,47 @@ import os
 
 from jinja2.exceptions import TemplateError
 
+from safe.definitionsv4.exposure import exposure_all
+from safe.definitionsv4.hazard import hazard_all
+from safe.definitionsv4.layer_purposes import layer_purpose_exposure, \
+    layer_purpose_hazard
+
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
+
+
+def layer_definition_type(layer):
+    """Returned relevant layer definition based on layer purpose.
+
+    Returned the the correct definition of layer based on its purpose.
+    For example, if a layer have layer_porpose: exposure, and exposure: roads
+    then it will return definition for exposure_roads.
+
+    That's why it only supports hazard layer or exposure layer
+
+    :param layer: hazard layer or exposure layer
+    :type layer: qgis.core.QgsVectorLayer
+
+    :return: Layer definitions.
+    :rtype: dict
+    """
+    layer_purpose = layer.keywords['layer_purpose']
+    definition_list = []
+    if layer_purpose == layer_purpose_exposure['key']:
+        definition_list = exposure_all
+    elif layer_purpose == layer_purpose_hazard['key']:
+        definition_list = hazard_all
+
+    def_type = [
+        definition for definition in definition_list
+        if definition['key'] == layer.keywords[layer_purpose]
+    ]
+    if def_type:
+        return def_type[0]
+
+    return None
 
 
 def jinja2_output_as_string(impact_report, component_key):

@@ -35,14 +35,17 @@ from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import Qt, pyqtSlot, QSettings, pyqtSignal
 
+from safe.definitionsv4.report import standard_impact_report_metadata
+from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
+from safe.reportv4.report_metadata import ReportMetadata
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.utilities import (
     get_error_message,
     impact_attribution,
     add_ordered_combo_item,
     is_keyword_version_supported,
-    write_json
-)
+    write_json,
+    replace_accentuated_characters)
 from safe.defaults import (
     disclaimer,
     default_north_arrow_path)
@@ -106,6 +109,7 @@ from safe.utilities.extent import Extent
 from safe.utilities.unicode import get_unicode
 from safe.impact_template.utilities import get_report_template
 from safe.gui.widgets.message import missing_keyword_message
+from safe.reportv4.impact_report import ImpactReport as ImpactReportV4
 
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
@@ -1054,6 +1058,36 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.progress_bar.setValue(current_value)
         QtGui.QApplication.processEvents()
 
+    def generate_impact_report(self, impact_function):
+        """
+
+        :param impact_function:
+        :type impact_function: ImpactFunction
+        :return:
+        """
+        # get minimum needs profile
+        minimum_needs = NeedsProfile()
+        minimum_needs.load()
+
+        # create impact report instance
+        report_metadata = ReportMetadata(
+            metadata_dict=standard_impact_report_metadata)
+        impact_report = ImpactReportV4(
+            self.iface,
+            report_metadata,
+            impact_function=impact_function)
+
+        # generate report folder
+
+        # no other option for now
+        # TODO: retrieve the information from data store
+        layer_dir = os.path.dirname(impact_function.impact.source())
+
+        # We will generate it on the fly without storing it after datastore
+        # supports
+        impact_report.output_folder = os.path.join(layer_dir, 'output')
+        impact_report.process_component()
+
     def accept(self):
         """Execute analysis when run button is clicked.
 
@@ -1073,6 +1107,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
             # Start the analysis
             self.impact_function.run()
+            self.generate_impact_report(self.impact_function)
         except InvalidKeywordsForProcessingAlgorithm as e:
             self.show_keywords_need_review_message(e.message)
             self.hide_busy()
@@ -1524,19 +1559,18 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         :type keywords: dict
         """
         LOGGER.debug('Showing Impact Report')
-        # Init report
-        report = m.Message()
-        report.add(LOGO_ELEMENT)
-        report.add(m.Heading(self.tr('Analysis Results'), **INFO_STYLE))
 
-        impact_template = get_report_template(impact_layer_path=layer.source())
-        impact_report = impact_template.generate_message_report()
-        report.add(impact_report)
+        # Fetch report for impact layer
+        report_path = os.path.dirname(layer.source())
+        report_path = os.path.join(
+            report_path, 'output/impact-report-output.html')
+        if not os.path.exists(report_path):
+            raise MissingImpactReport()
+        with open(report_path) as report_file:
+            report = report_file.read()
 
-        if 'postprocessing_report' in keywords:
-            report.add(keywords['postprocessing_report'])
-        report.add(impact_attribution(keywords))
         self.print_button.setEnabled(True)
+        # right now send the report as html texts, not message
         send_static_message(self, report)
         # also hide the question and show the show question button
         self.show_question_button.setVisible(True)
