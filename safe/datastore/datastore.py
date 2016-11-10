@@ -187,6 +187,26 @@ class DataStore(object):
         """
         raise NotImplementedError
 
+    def layer_keyword(self, keyword, value):
+        """Get a layer according to a keyword and its value.
+
+        :param keyword: The keyword to check.
+        :type keyword: basestring
+
+        :param value: The value to check for the specific keyword.
+        :type value: basestring
+
+        :return: The QGIS layer.
+        :rtype: QgsMapLayer
+
+        .. versionadded:: 4.0
+        """
+        for layer in sorted(self.layers(), reverse=True):
+            qgis_layer = self.layer(layer)
+            if qgis_layer.keywords.get(keyword) == value:
+                return qgis_layer
+        return None
+
     @abstractmethod
     def _add_raster_layer(self, raster_layer, layer_name):
         """Add a raster layer to the database.
