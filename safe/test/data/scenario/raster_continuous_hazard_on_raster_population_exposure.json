@@ -1,12 +1,15 @@
 {
   "scenario": {
+    "enable": true,
     "hazard": "tsunami_wgs84.tif",
     "exposure": "pop_binary_raster_20_20.asc",
     "aggregation": "grid_jakarta.geojson"
   },
 
-
-  "expected":{
+  "expected_outputs":{
+    "count": 4
+  },
+  "expected_steps":{
     "impact function":{
       "info": {},
       "process":[

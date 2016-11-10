@@ -46,11 +46,11 @@ def read_json_flow(json_path):
     :type json_path: unicode, str
 
     :returns: Tuple of dictionary contains a scenario and expected result
-    :rtype: (dict, dict)
+    :rtype: (dict, dict, dict)
     """
     with open(json_path) as json_data:
         data = byteify(json.load(json_data))
-    return data['scenario'], data['expected']
+    return data['scenario'], data['expected_steps'], data['expected_outputs']
 
 
 def run_scenario(scenario, use_debug=False):
@@ -62,8 +62,8 @@ def run_scenario(scenario, use_debug=False):
     :param use_debug: If we should use debug_mode when we run the scenario.
     :type use_debug: bool
 
-    :returns: Flow dictionary.
-    :rtype: dict
+    :returns: Tuple(Flow dictionary, outputs).
+    :rtype: list
     """
     if os.path.exists(scenario['exposure']):
         exposure_path = scenario['exposure']
@@ -112,32 +112,13 @@ def run_scenario(scenario, use_debug=False):
     if use_debug:
         print impact_function.datastore.uri.absolutePath()
 
-    # Impact layer
-    if impact_function.impact:
-        result = check_inasafe_fields(impact_function.impact)
+    for layer in impact_function.outputs:
+        result = check_inasafe_fields(layer)
         if not result[0]:
-            raise Exception(result[1])
+            # raise Exception(result[1])
+            pass
 
-    # Aggregate hazard layer
-    if impact_function.aggregate_hazard_impacted:
-        result = check_inasafe_fields(
-            impact_function.aggregate_hazard_impacted)
-        if not result[0]:
-            raise Exception(result[1])
-
-    # Aggregation layer
-    if impact_function.aggregation:
-        result = check_inasafe_fields(impact_function.aggregation)
-        if not result[0]:
-            raise Exception(result[1])
-
-    # Analysis layer
-    if impact_function.analysis_layer:
-        result = check_inasafe_fields(impact_function.analysis_layer)
-        if not result[0]:
-            raise Exception(result[1])
-
-    return impact_function_result
+    return impact_function_result, impact_function.outputs
 
 
 class TestImpactFunction(unittest.TestCase):
@@ -227,28 +208,11 @@ class TestImpactFunction(unittest.TestCase):
             print impact_function.datastore.uri.absolutePath()
             print impact_function.datastore.layers()
 
-        # Impact layer
-        self.assertIsNotNone(impact_function.impact)
-        result = check_inasafe_fields(impact_function.impact)
-        self.assertTrue(result[0], result[1])
+        for layer in impact_function.outputs:
+            result = check_inasafe_fields(layer)
+            self.assertTrue(result[0], result[1])
 
-        # Aggregate hazard layer
-        self.assertIsNotNone(impact_function.aggregate_hazard_impacted)
-        result = check_inasafe_fields(
-            impact_function.aggregate_hazard_impacted)
-        self.assertTrue(result[0], result[1])
-
-        # Aggregation layer
-        # self.assertIsNotNone(impact_function.aggregation_impacted)
-        # result = check_inasafe_fields(
-        #     impact_function.aggregation_impacted)
-        # self.assertTrue(result[0], result[1])
-
-        # Analysis layer
-        self.assertIsNotNone(impact_function.analysis_layer)
-        result = check_inasafe_fields(
-            impact_function.analysis_layer)
-        self.assertTrue(result[0], result[1])
+        self.assertEquals(len(impact_function.outputs), 5)
 
     @unittest.skipIf(
         os.environ.get('ON_TRAVIS', False),
@@ -263,9 +227,11 @@ class TestImpactFunction(unittest.TestCase):
             'raster_classified_hazard_on_'
             'indivisible_polygons_exposure_'
             'grid_aggregation.json')
-        scenario, expected = read_json_flow(scenario_path)
-        result = run_scenario(scenario, use_debug)
-        self.assertDictEqual(expected, result)
+        scenario, expected_steps, expected_outputs = read_json_flow(
+            scenario_path)
+        steps, outputs = run_scenario(scenario, use_debug)
+        self.assertDictEqual(expected_steps, steps)
+        self.assertEqual(len(outputs), expected_outputs['count'])
 
     def test_scenario_directory(self):
         """Run test scenario in directory."""
@@ -274,11 +240,13 @@ class TestImpactFunction(unittest.TestCase):
 
         def test_scenario(scenario_path):
             LOGGER.info('Running the scenario : %s' % scenario_path)
-            scenario, expected = read_json_flow(scenario_path)
+            scenario, expected_steps, expected_outputs = read_json_flow(
+                scenario_path)
             if scenario.get('enable', True):
-                result = run_scenario(scenario, use_debug)
+                steps, outputs = run_scenario(scenario, use_debug)
                 try:
-                    self.assertDictEqual(expected, result)
+                    self.assertDictEqual(expected_steps, steps)
+                    self.assertEquals(len(outputs), expected_outputs['count'])
                     return True
                 except:
                     # In case of an exception, print the scenario path

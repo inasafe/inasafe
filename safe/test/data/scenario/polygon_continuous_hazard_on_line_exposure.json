@@ -1,12 +1,15 @@
 {
   "scenario": {
+    "enable": true,
     "hazard": "continuous_vector_ash.geojson",
     "exposure": "roads.shp",
     "aggregation": null
   },
 
-
-  "expected":{
+  "expected_outputs":{
+    "count": 5
+  },
+  "expected_steps":{
     "impact function":{
       "info": {},
       "process":[

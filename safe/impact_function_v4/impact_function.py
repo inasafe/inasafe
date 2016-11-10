@@ -80,8 +80,8 @@ class ImpactFunction(object):
         self._aggregation = None
 
         # Output layers
-        self._impact = None
-        self._aggregate_hazard = None
+        self._exposure_impacted = None
+        self._aggregate_hazard_impacted = None
         self._aggregation_impacted = None
         self._analysis_impacted = None
         self._exposure_breakdown = None
@@ -283,13 +283,41 @@ class ImpactFunction(object):
         self._aggregation.keywords = keywords
 
     @property
+    def outputs(self):
+        """List of layers containing outputs from the IF.
+
+        :returns: A list of vector layers.
+        :rtype: list
+        """
+        layers = [
+            self._exposure_impacted,
+            self._aggregate_hazard_impacted,
+            self._aggregation_impacted,
+            self._analysis_impacted,
+            self._exposure_breakdown,
+        ]
+
+        # Remove layers which are not set.
+        layers = filter(None, layers)
+        return layers
+
+    @property
     def impact(self):
-        """Property for the impact layer.
+        """Property for the most detailed output.
 
         :returns: A vector layer.
         :rtype: QgsVectorLayer
         """
-        return self._impact
+        return self.outputs[0]
+
+    @property
+    def exposure_impacted(self):
+        """Property for the exposure impacted.
+
+        :returns: A vector layer.
+        :rtype: QgsVectorLayer
+        """
+        return self._exposure_impacted
 
     @property
     def aggregate_hazard_impacted(self):
@@ -298,7 +326,7 @@ class ImpactFunction(object):
         :returns: A vector layer.
         :rtype: QgsVectorLayer
         """
-        return self._aggregate_hazard
+        return self._aggregate_hazard_impacted
 
     @property
     def aggregation_impacted(self):
@@ -310,7 +338,7 @@ class ImpactFunction(object):
         return self._aggregation_impacted
 
     @property
-    def analysis_layer(self):
+    def analysis_impacted(self):
         """Property for the analysis layer.
 
         :returns: A vector layer.
@@ -652,6 +680,10 @@ class ImpactFunction(object):
                 if self.exposure.type() == QgsMapLayer.RasterLayer:
                     if self.exposure.keywords.get('exposure') == 'population':
                         # return self.state()
+
+                        # These layers are not generated.
+                        self._exposure_impacted = None
+                        self._aggregate_hazard_impacted = None
                         return
 
         self._performance_log = profiling_log()
@@ -677,17 +709,17 @@ class ImpactFunction(object):
 
         self._performance_log = profiling_log()
         self.callback(7, step_count, analysis_steps['post_processing'])
-        if self._impact:
+        if self._exposure_impacted:
             self._performance_log = profiling_log()
             # We post process the impact layer
-            self.post_process(self._impact)
+            self.post_process(self._exposure_impacted)
         else:
-            if self._aggregate_hazard:
+            if self._aggregate_hazard_impacted:
                 # We post process the aggregate hazard. (raster exposure).
-                self.post_process(self._aggregate_hazard)
+                self.post_process(self._aggregate_hazard_impacted)
             else:
                 # We post process the aggregation (EQ raster or pop raster).
-                self.post_process(self.aggregation)
+                self.post_process(self._aggregation_impacted)
 
         self._performance_log = profiling_log()
         self.callback(8, step_count, analysis_steps['summary_calculation'])
@@ -695,24 +727,25 @@ class ImpactFunction(object):
 
         # End of the impact function, we can add layers to the datastore.
         # We replace memory layers by the real layer from the datastore.
-        if self.impact:
-            _, name = self.datastore.add_layer(self._impact, 'impact')
-            self._impact = self.datastore.layer(name)
+        if self._exposure_impacted:
+            _, name = self.datastore.add_layer(
+                self._exposure_impacted, 'exposure_impacted')
+            self._exposure_impacted = self.datastore.layer(name)
 
         if self.aggregate_hazard_impacted:
             _, name = self.datastore.add_layer(
-                self._aggregate_hazard, 'aggregate-hazard')
+                self._aggregate_hazard_impacted, 'aggregate_hazard_impacted')
             self._aggregate_hazard = self.datastore.layer(name)
 
             _, name = self.datastore.add_layer(
-                self._exposure_breakdown, 'breakdown')
+                self._exposure_breakdown, 'exposure_breakdown')
             self._exposure_breakdown = self.datastore.layer(name)
 
         _, name = self.datastore.add_layer(
-            self._aggregation, 'aggregation')
-        self._aggregation = self.datastore.layer(name)
+            self._aggregation_impacted, 'aggregation_impacted')
+        self._aggregation_impacted = self.datastore.layer(name)
 
-        _, name = self.datastore.add_layer(self.analysis_layer, 'analysis')
+        _, name = self.datastore.add_layer(self._analysis_impacted, 'analysis')
         self._analysis_impacted = self.datastore.layer(name)
 
         # Get the profiling log
@@ -848,7 +881,7 @@ class ImpactFunction(object):
         self.set_state_process(
             'hazard',
             'Clip and mask hazard polygons with the analysis layer')
-        self.hazard = clip(self.hazard, self.analysis_layer)
+        self.hazard = clip(self.hazard, self._analysis_impacted)
         if self.debug_mode:
             self.debug_layer(self.hazard)
 
@@ -856,9 +889,9 @@ class ImpactFunction(object):
             'aggregation',
             'Union hazard polygons with aggregation areas and assign '
             'hazard class')
-        self._aggregate_hazard = union(self.hazard, self.aggregation)
+        self._aggregate_hazard_impacted = union(self.hazard, self.aggregation)
         if self.debug_mode:
-            self.debug_layer(self._aggregate_hazard)
+            self.debug_layer(self._aggregate_hazard_impacted)
 
     @profile
     def exposure_preparation(self):
@@ -930,14 +963,14 @@ class ImpactFunction(object):
                 'impact function',
                 'Zonal stats between exposure and aggregate hazard')
             # noinspection PyTypeChecker
-            self._aggregate_hazard = zonal_stats(
-                self.exposure, self._aggregate_hazard)
+            self._aggregate_hazard_impacted = zonal_stats(
+                self.exposure, self._aggregate_hazard_impacted)
             if self.debug_mode:
-                self.debug_layer(self._aggregate_hazard)
+                self.debug_layer(self._aggregate_hazard_impacted)
 
             # I know it's redundant, it's just to be sure that we don't have
             # any impact layer for that IF.
-            self._impact = None
+            self._exposure_impacted = None
 
         else:
             exposure = self.exposure.keywords.get('exposure')
@@ -948,14 +981,15 @@ class ImpactFunction(object):
                     'impact function',
                     'Highest class of hazard is assigned when more than one '
                     'overlaps')
-                self._impact = assign_highest_value(
-                    self.exposure, self._aggregate_hazard)
+                self._exposure_impacted = assign_highest_value(
+                    self.exposure, self._aggregate_hazard_impacted)
 
             else:
                 self.set_state_process(
                     'impact function',
                     'Union exposure features to the aggregate hazard')
-                self._impact = union(self.exposure, self._aggregate_hazard)
+                self._exposure_impacted = union(
+                    self.exposure, self._aggregate_hazard_impacted)
 
                 # If the layer has the size field, it means we need to
                 # recompute counts based on the old and new size.
@@ -964,13 +998,14 @@ class ImpactFunction(object):
                     self.set_state_process(
                         'exposure',
                         'Recompute counts')
-                    self._impact = recompute_counts(self._impact)
+                    self._exposure_impacted = recompute_counts(
+                        self._exposure_impacted)
 
             if self.debug_mode:
-                self.debug_layer(self._impact)
+                self.debug_layer(self._exposure_impacted)
 
-        if self._impact:
-            self._impact.keywords['title'] = 'impact'
+        if self._exposure_impacted:
+            self._exposure_impacted.keywords['title'] = 'exposure_impacted'
 
     @profile
     def post_process(self, layer):
@@ -1000,28 +1035,28 @@ class ImpactFunction(object):
     def summary_calculation(self):
         """Do the summary calculation."""
 
-        if self.impact:
+        if self._exposure_impacted:
             self.set_state_process(
                 'impact function',
                 'Aggregate the impact summary')
-            self._aggregate_hazard = aggregate_hazard_summary(
-                self._impact, self._aggregate_hazard)
+            self._aggregate_hazard_impacted = aggregate_hazard_summary(
+                self.exposure_impacted, self._aggregate_hazard_impacted)
 
-        if self.aggregate_hazard_impacted:
+        if self._aggregate_hazard_impacted:
             self.set_state_process(
                 'impact function',
                 'Aggregate the aggregation summary')
-            self._aggregation = aggregation_summary(
-                self._aggregate_hazard, self.aggregation)
+            self._aggregation_impacted = aggregation_summary(
+                self._aggregate_hazard_impacted, self.aggregation)
 
             self.set_state_process(
                 'impact function',
                 'Aggregate the analysis summary')
             self._analysis_impacted = analysis_summary(
-                self.aggregate_hazard_impacted, self._analysis_impacted)
+                self._aggregate_hazard_impacted, self._analysis_impacted)
 
             self.set_state_process(
                 'impact function',
                 'Build the exposure breakdown')
             self._exposure_breakdown = exposure_type_breakdown(
-                self._aggregate_hazard)
+                self._aggregate_hazard_impacted)
