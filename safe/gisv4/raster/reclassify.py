@@ -12,6 +12,7 @@ from qgis.core import QgsRasterLayer
 
 from safe.common.exceptions import FileNotFoundError
 from safe.common.utilities import unique_filename, temp_dir
+from safe.definitionsv4.constants import no_data_value
 from safe.definitionsv4.utilities import definition
 from safe.definitionsv4.processing_steps import reclassify_raster_steps
 from safe.utilities.profiling import profile
@@ -69,6 +70,7 @@ def reclassify(layer, ranges, callback=None):
 
     raster_file = gdal.Open(layer.source())
     band = raster_file.GetRasterBand(1)
+    no_data = band.GetNoDataValue()
     source = band.ReadAsArray()
     destination = source.copy()
 
@@ -85,10 +87,14 @@ def reclassify(layer, ranges, callback=None):
         if v_min < v_max:
             destination[np.where((v_min < source) & (source <= v_max))] = value
 
+    # Tag no data cells
+    destination[np.where(source == no_data)] = no_data_value
+
     # Create the new file.
     output_file = driver.Create(
         output_raster, raster_file.RasterXSize, raster_file.RasterYSize, 1)
     output_file.GetRasterBand(1).WriteArray(destination)
+    output_file.GetRasterBand(1).SetNoDataValue(no_data_value)
 
     # CRS
     output_file.SetProjection(raster_file.GetProjection())

@@ -11,9 +11,11 @@ from osgeo import gdal, osr, ogr
 from qgis.core import (
     QgsRasterLayer,
     QgsVectorLayer,
+    QgsFeatureRequest,
 )
 
 from safe.common.utilities import unique_filename, temp_dir
+from safe.definitionsv4.constants import no_data_value
 from safe.definitionsv4.fields import hazard_value_field, exposure_type_field
 from safe.definitionsv4.layer_geometry import (
     layer_geometry, layer_geometry_polygon)
@@ -81,6 +83,15 @@ def polygonize(layer, callback=None):
     destination.Destroy()
 
     vector_layer = QgsVectorLayer(out_shapefile, output_layer_name, 'ogr')
+
+    # Let's remove polygons which were no data
+    request = QgsFeatureRequest()
+    expression = '"%s" = %s' % (field_name, no_data_value)
+    request.setFilterExpression(expression)
+    vector_layer.startEditing()
+    for feature in vector_layer.getFeatures(request):
+        vector_layer.deleteFeature(feature.id())
+    vector_layer.commitChanges()
 
     # We transfer keywords to the output.
     vector_layer.keywords = layer.keywords.copy()

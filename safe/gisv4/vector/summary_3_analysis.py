@@ -111,6 +111,8 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
     for area in aggregate_hazard.getFeatures():
         hazard_value = area[hazard_class_index]
         value = area[total]
+        if not value or isinstance(value, QPyNullVariant):
+            value = 0
         if not hazard_value or isinstance(hazard_value, QPyNullVariant):
             hazard_value = 'NULL'
         flat_table.add_value(
