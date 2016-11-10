@@ -108,5 +108,9 @@ class TestFolder(unittest.TestCase):
         result = data_store.add_layer(layer, tabular_layer_name)
         self.assertTrue(result[0])
 
+        self.assertIsNotNone(
+            data_store.layer_keyword('layer_purpose', 'hazard')
+        )
+
 if __name__ == '__main__':
     unittest.main()
