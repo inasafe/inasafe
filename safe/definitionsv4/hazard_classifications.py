@@ -8,6 +8,14 @@ to have a table showing you classes of each kind of hazard.
 from safe.definitionsv4 import concepts, small_number
 from safe.utilities.i18n import tr
 from safe.definitionsv4.units import unit_centimetres
+from safe.definitionsv4.colors import (
+    green,
+    light_green,
+    yellow,
+    orange,
+    red,
+    dark_red,
+)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -25,6 +33,7 @@ generic_hazard_classes = {
     'classes': [
         {
             'key': 'high',
+            'color': red,
             'value': 3,
             'name': tr('High Hazard Zone'),
             'affected': True,
@@ -41,6 +50,7 @@ generic_hazard_classes = {
         },
         {
             'key': 'medium',
+            'color': orange,
             'value': 2,
             'name': tr('Medium Hazard Zone'),
             'affected': True,
@@ -58,6 +68,7 @@ generic_hazard_classes = {
         {
             'key': 'low',
             'value': 1,
+            'color': yellow,
             'name': tr('Low Hazard Zone'),
             'affected': True,
             'description': tr('The location that has lowest impact.'),
@@ -90,6 +101,7 @@ volcano_hazard_classes = {
         {
             'key': 'high',
             'value': 3,
+            'color': red,
             'name': tr('High Hazard Zone'),
             'affected': True,
             'description': tr('The highest hazard class.'),
@@ -106,6 +118,7 @@ volcano_hazard_classes = {
         {
             'key': 'medium',
             'value': 2,
+            'color': orange,
             'name': tr('Medium Hazard Zone'),
             'affected': True,
             'description': tr('The medium hazard class.'),
@@ -122,6 +135,7 @@ volcano_hazard_classes = {
         {
             'key': 'low',
             'value': 1,
+            'color': yellow,
             'name': tr('Low Hazard Zone'),
             'affected': True,
             'description': tr('The lowest hazard class.'),
@@ -156,6 +170,7 @@ flood_hazard_classes = {
         {
             'key': 'wet',
             'value': 2,
+            'color': red,
             'name': tr('Wet'),
             'affected': True,
             'description': tr('Water above ground height.'),
@@ -172,6 +187,7 @@ flood_hazard_classes = {
         {
             'key': 'dry',
             'value': 1,
+            'color': yellow,
             'name': tr('Dry'),
             'affected': False,
             'description': tr('No water above ground height.'),
@@ -206,6 +222,7 @@ ash_hazard_classes = {
         {
             'key': 'very high',
             'value': 5,
+            'color': dark_red,
             'name': tr('Very high'),
             'affected': True,
             'description': tr('Very High.'),
@@ -221,6 +238,7 @@ ash_hazard_classes = {
         {
             'key': 'high',
             'value': 4,
+            'color': red,
             'name': tr('High'),
             'affected': True,
             'description': tr('High'),
@@ -236,6 +254,7 @@ ash_hazard_classes = {
         {
             'key': 'medium',
             'value': 3,
+            'color': orange,
             'name': tr('Medium'),
             'affected': True,
             'description': tr('Medium'),
@@ -251,6 +270,7 @@ ash_hazard_classes = {
         {
             'key': 'low',
             'value': 2,
+            'color': yellow,
             'name': tr('Low'),
             'affected': False,
             'description': tr('Low'),
@@ -266,6 +286,7 @@ ash_hazard_classes = {
         {
             'key': 'very low',
             'value': 1,
+            'color': light_green,
             'name': tr('Very Low'),
             'affected': False,
             'description': tr('Very Low.'),
@@ -301,6 +322,7 @@ tsunami_hazard_classes = {
         {
             'key': 'very high',
             'value': 5,
+            'color': dark_red,
             'name': tr('Very high hazard zone'),
             'affected': True,
             'description': tr('Water above 8.0m.'),
@@ -316,6 +338,7 @@ tsunami_hazard_classes = {
         {
             'key': 'high',
             'value': 4,
+            'color': red,
             'name': tr('High hazard zone'),
             'affected': True,
             'description': tr(
@@ -341,6 +364,7 @@ tsunami_hazard_classes = {
         {
             'key': 'medium',
             'value': 3,
+            'color': orange,
             'name': tr('Medium hazard zone'),
             'affected': True,
             'description': tr(
@@ -363,6 +387,7 @@ tsunami_hazard_classes = {
         {
             'key': 'low',
             'value': 2,
+            'color': yellow,
             'name': tr('Low hazard zone'),
             'affected': False,
             'description': tr(
@@ -375,7 +400,7 @@ tsunami_hazard_classes = {
                 'shore. Small vessels drift and collide and some turn over. '
                 'Sand is deposited and there is flooding of areas close to '
                 'the shore.'),
-            'numeric_default_min': 0,
+            'numeric_default_min': 0.1,
             'numeric_default_max': 1,
             'citations': [
                 {
@@ -387,11 +412,12 @@ tsunami_hazard_classes = {
         {
             'key': 'dry',
             'value': 1,
+            'color': green,
             'name': tr('Dry zone'),
             'affected': False,
             'description': tr('No water above ground height.'),
             'numeric_default_min': 0,
-            'numeric_default_max': (1 - small_number),
+            'numeric_default_max': 0.1,
             'citations': [
                 {
                     'text': None,
