@@ -17,6 +17,8 @@ from safe.definitionsv4.fields import (
     aggregation_name_field,
     analysis_id_field,
     analysis_name_field,
+    profiling_function_field,
+    profiling_time_field
 )
 from safe.gisv4.vector.tools import (
     create_memory_layer, create_field_from_definition)
@@ -101,7 +103,7 @@ def create_analysis_layer(aggregation, crs, name):
     analysis_layer.addFeature(feature)
     analysis_layer.commitChanges()
 
-    # Generate aggregation keywords
+    # Generate analysis keywords
     analysis_layer.keywords['layer_purpose'] = 'analysis'
     analysis_layer.keywords['title'] = 'analysis'
     analysis_layer.keywords['inasafe_fields'] = {
@@ -110,3 +112,43 @@ def create_analysis_layer(aggregation, crs, name):
     }
 
     return analysis_layer
+
+
+def create_profile_layer(profiling):
+    """Create a tabular layer with the profiling.
+
+    :param profiling: A dict containing benchmarking data.
+    :type profiling: safe.messaging.message.Message
+
+    :return: A tabular layer.
+    :rtype: QgsVectorLayer
+    """
+
+    fields = [
+        create_field_from_definition(profiling_function_field),
+        create_field_from_definition(profiling_time_field)
+    ]
+    tabular = create_memory_layer('profiling', QGis.NoGeometry, fields=fields)
+
+    # Generate profiling keywords
+    tabular.keywords['layer_purpose'] = 'profiling'
+    tabular.keywords['title'] = 'profiling'
+    tabular.keywords['inasafe_fields'] = {
+        profiling_function_field['key']:
+            profiling_function_field['field_name'],
+        profiling_time_field['key']:
+            profiling_time_field['field_name']
+    }
+
+    table = profiling.to_text().splitlines()[3:]
+    tabular.startEditing()
+    for line in table:
+        feature = QgsFeature()
+        items = line.split(', ')
+        time = items[1].replace('-', '')
+        feature.setAttributes([items[0], time])
+        tabular.addFeature(feature)
+
+    tabular.commitChanges()
+
+    return tabular
