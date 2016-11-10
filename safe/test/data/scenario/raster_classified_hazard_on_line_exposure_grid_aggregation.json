@@ -1,12 +1,15 @@
 {
   "scenario": {
+    "enable": true,
     "hazard": "classified_flood_20_20.asc",
     "exposure": "roads.shp",
     "aggregation": "grid_jakarta.geojson"
   },
 
-
-  "expected":{
+  "expected_outputs":{
+    "count": 5
+  },
+  "expected_steps":{
     "impact function":{
       "info": {},
       "process":[

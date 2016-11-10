@@ -6,8 +6,10 @@
     "aggregation": ""
   },
 
-
-  "expected":{
+  "expected_outputs":{
+    "count": 5
+  },
+  "expected_steps":{
     "impact function":{
       "info": {},
       "process":[

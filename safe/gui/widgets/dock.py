@@ -1130,11 +1130,37 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             # Set back analysis to not ignore memory warning
             if self.impact_function:
                 self.impact_function.force_memory = False
-                if self.impact_function.datastore:
-                    for layer in self.impact_function.datastore.layers():
-                        qgis_layer = self.impact_function.datastore.layer(
-                            layer)
-                        QgsMapLayerRegistry.instance().addMapLayer(qgis_layer)
+
+                layers = self.impact_function.outputs
+
+                name = self.impact_function.name
+                root = QgsProject.instance().layerTreeRoot()
+                group_analysis = root.insertGroup(0, name)
+                group_analysis.setVisible(Qt.Checked)
+                for layer in layers:
+                    QgsMapLayerRegistry.instance().addMapLayer(layer, False)
+                    layer_node = group_analysis.addLayer(layer)
+
+                    # Let's enable only the more detailed layer.
+                    if layer.id() == self.impact_function.impact.id():
+                        layer_node.setVisible(Qt.Checked)
+                    else:
+                        layer_node.setVisible(Qt.Unchecked)
+
+                if self.impact_function.debug_mode:
+                    name = 'DEBUG %s' % name
+                    group_debug = root.insertGroup(0, name)
+                    group_debug.setVisible(Qt.Unchecked)
+                    group_debug.setExpanded(False)
+
+                    datastore = self.impact_function.datastore
+                    for layer in datastore.layers():
+                        qgis_layer = datastore.layer(layer)
+                        QgsMapLayerRegistry.instance().addMapLayer(
+                            qgis_layer, False)
+                        layer_node = group_debug.addLayer(qgis_layer)
+                        layer_node.setVisible(Qt.Unchecked)
+
             self.disable_signal_receiver()
         self.hide_busy()
 
