@@ -40,7 +40,8 @@ from safe.definitionsv4.post_processors import post_processors
 from safe.definitionsv4.analysis_steps import analysis_steps
 from safe.definitionsv4.utilities import definition
 from safe.definitionsv4.exposure import indivisible_exposure
-from safe.definitionsv4.fields import size_field, exposure_class_field
+from safe.definitionsv4.fields import (
+    size_field, exposure_class_field, hazard_class_field)
 from safe.common.exceptions import (
     InvalidExtentError,
     InvalidLayerError,
@@ -52,6 +53,10 @@ from safe.impact_function_v4.postprocessors import (
     run_single_post_processor, enough_input)
 from safe.impact_function_v4.create_extra_layers import (
     create_analysis_layer, create_virtual_aggregation, create_profile_layer)
+from safe.impact_function_v4.style import (
+    hazard_class_style,
+    simple_polygon_without_brush,
+)
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.utilities import replace_accentuated_characters
@@ -663,6 +668,9 @@ class ImpactFunction(object):
                 self._profiling_table, self._profiling_table.title())
             self._profiling_table = self.datastore.layer(name)
 
+        # Later, we should move this call.
+        self.style()
+
         return self.state
 
     @profile
@@ -1076,3 +1084,25 @@ class ImpactFunction(object):
                 'Build the exposure breakdown')
             self._exposure_breakdown = exposure_type_breakdown(
                 self._aggregate_hazard_impacted)
+
+    def style(self):
+        """Function to apply some styles to the layers."""
+        # Let's style the hazard class in each layers.
+        classification = self.hazard.keywords['classification']
+        classification = definition(classification)
+
+        classes = {
+            f['key']: (f['color'], f['name'])
+            for f in classification['classes']
+        }
+
+        # Let's style layers which have a geometry and have hazard_class
+        hazard_class = hazard_class_field['key']
+        for layer in self.outputs:
+            if layer.geometryType() != QGis.NoGeometry:
+                if layer.keywords['inasafe_fields'].get(hazard_class):
+                    hazard_class_style(layer, classes)
+
+        # Let's style the aggregation and analysis layer.
+        simple_polygon_without_brush(self.aggregation_impacted)
+        simple_polygon_without_brush(self.analysis_impacted)
