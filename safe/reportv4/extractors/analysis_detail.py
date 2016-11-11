@@ -1,8 +1,12 @@
 # coding=utf-8
 from safe.definitionsv4.exposure import itemizable_exposures_all
-from safe.definitionsv4.fields import exposure_type_field, \
-    exposure_class_field, hazard_count_field, total_affected_field, \
-    total_unaffected_field, total_field
+from safe.definitionsv4.fields import (
+    exposure_type_field,
+    exposure_class_field,
+    hazard_count_field,
+    total_affected_field,
+    total_unaffected_field,
+    total_field)
 from safe.definitionsv4.hazard_classifications import all_hazard_classes
 from safe.reportv4.extractors.util import layer_definition_type
 from safe.utilities.i18n import tr

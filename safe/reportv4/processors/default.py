@@ -6,24 +6,23 @@ Module for basic renderer we support. Currently we have:
 - QGIS Composition templating renderer
 
 """
+import io
 import logging
 import os
+from PyQt4 import QtXml
 from tempfile import mkdtemp
 
-from PyQt4 import QtXml
-
-import io
-import jinja2
 from PyQt4.QtCore import QUrl
 from jinja2.environment import Environment
-from jinja2.loaders import PackageLoader, BaseLoader, FileSystemLoader
-from qgis.core import QgsComposition, QgsComposerHtml, QgsRectangle
+from jinja2.loaders import FileSystemLoader
+from qgis.core import (
+    QgsComposition,
+    QgsComposerHtml,
+    QgsRectangle)
 
+from safe.common.exceptions import TemplateLoadingError
 from safe.common.utilities import temp_dir
 from safe.utilities.i18n import tr
-from safe.common.exceptions import TemplateLoadingError
-from safe.report.impact_report import ImpactReport
-from safe.utilities.gis import qgis_version
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

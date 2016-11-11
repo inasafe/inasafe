@@ -1,13 +1,11 @@
 # coding=utf-8
-import os
 
 from safe.common.utilities import safe_dir
-from safe.definitionsv4.exposure import exposure_population, exposure_road, \
-    exposure_all
 from safe.reportv4.extractors.util import jinja2_output_as_string
 from safe.utilities.i18n import tr
-from safe.definitionsv4.hazard_classifications import generic_hazard_classes
-from safe.utilities.resources import resource_url, resources_path
+from safe.utilities.resources import (
+    resource_url,
+    resources_path)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
