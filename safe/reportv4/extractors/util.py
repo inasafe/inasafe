@@ -5,8 +5,6 @@ from jinja2.exceptions import TemplateError
 
 from safe.definitionsv4.exposure import exposure_all
 from safe.definitionsv4.hazard import hazard_all
-from safe.definitionsv4.layer_purposes import layer_purpose_exposure, \
-    layer_purpose_hazard
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -18,7 +16,7 @@ def layer_definition_type(layer):
     """Returned relevant layer definition based on layer purpose.
 
     Returned the the correct definition of layer based on its purpose.
-    For example, if a layer have layer_porpose: exposure, and exposure: roads
+    For example, if a layer have layer_purpose: exposure, and exposure: roads
     then it will return definition for exposure_roads.
 
     That's why it only supports hazard layer or exposure layer
@@ -29,12 +27,16 @@ def layer_definition_type(layer):
     :return: Layer definitions.
     :rtype: dict
     """
-    layer_purpose = layer.keywords['layer_purpose']
-    definition_list = []
-    if layer_purpose == layer_purpose_exposure['key']:
-        definition_list = exposure_all
-    elif layer_purpose == layer_purpose_hazard['key']:
-        definition_list = hazard_all
+    definition_list = exposure_all + hazard_all
+
+    layer_purposes = ['exposure', 'hazard']
+
+    layer_purpose = [p for p in layer_purposes if p in layer.keywords]
+
+    if not layer_purpose:
+        return None
+
+    layer_purpose = layer_purpose[0]
 
     def_type = [
         definition for definition in definition_list

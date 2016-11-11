@@ -1,11 +1,7 @@
 # coding=utf-8
-import os
 
-from safe.definitionsv4.exposure import exposure_population, exposure_road, \
-    exposure_all
 from safe.reportv4.extractors.util import layer_definition_type
 from safe.utilities.i18n import tr
-from safe.definitionsv4.hazard_classifications import generic_hazard_classes
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

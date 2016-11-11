@@ -4,36 +4,24 @@ Module to generate impact report using QgsComposition and Jinja2 Template
 engine.
 """
 
-import os
-import logging
 import imp
+import logging
+import os
+
 from qgis.core import (
     QgsComposition,
     QgsRectangle,
-    QgsMapSettings,
-    QgsComposerHtml,
-    QgsComposerFrame)
+    QgsMapSettings)
 
-from PyQt4.QtCore import QUrl
-from safe.defaults import disclaimer
-from safe.common.utilities import temp_dir, unique_filename
-from safe.common.version import get_version
 from safe.common.exceptions import (
-    KeywordNotFoundError, TemplateLoadingError)
-from safe import messaging as m
-from safe.messaging import styles
-from safe.utilities.keyword_io import KeywordIO
-from safe.utilities.gis import qgis_version
-from safe.utilities.utilities import impact_attribution, html_to_file
-from safe.utilities.resources import (
-    html_footer, html_header, resource_url, resources_path)
-from safe.utilities.i18n import tr
+    KeywordNotFoundError)
+from safe.defaults import disclaimer
 from safe.defaults import (
     white_inasafe_logo_path,
     black_inasafe_logo_path,
     supporters_logo_path,
     default_north_arrow_path)
-from safe.impact_template.utilities import get_report_template
+from safe.utilities.keyword_io import KeywordIO
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -280,8 +268,8 @@ class ImpactReport(object):
         self._impact_function = impact_function
         self._hazard = hazard or self._impact_function.hazard
         self._exposure = (exposure or self._impact_function.exposure)
-        self._impact = impact or self._impact_function.impact
-        self._analysis = (analysis or self._impact_function.analysis_layer)
+        self._impact = impact or self._impact_function.exposure_impacted
+        self._analysis = (analysis or self._impact_function.analysis_impacted)
         self._exposure_breakdown = (
             exposure_breakdown or self._impact_function.exposure_breakdown)
         self._extra_layers = extra_layers
@@ -341,6 +329,21 @@ class ImpactReport(object):
         self._output_folder = value
         if not os.path.exists(self._output_folder):
             os.makedirs(self._output_folder)
+
+    def component_absolute_output_path(self, component_key):
+        """Return absolute output path of component.
+
+        :param component_key:
+        :return:
+        """
+        comp_keys = [c.key for c in self.metadata.components]
+        if component_key in comp_keys:
+            idx = comp_keys.index(component_key)
+            return os.path.abspath(
+                os.path.join(
+                    self.output_folder,
+                    self.metadata.components[idx].output_path))
+        return None
 
     @property
     def impact_function(self):

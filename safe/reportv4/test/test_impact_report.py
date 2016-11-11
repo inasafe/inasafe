@@ -2,32 +2,28 @@
 import io
 import os
 import unittest
+
 from jinja2.environment import Template
 
 from safe.common.utilities import safe_dir
 from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
-from safe.reportv4.extractors.action_notes import (
-    action_checklist_extractor,
-    notes_assumptions_extractor)
-from safe.reportv4.extractors.analysis_detail import analysis_detail_extractor
-from safe.reportv4.extractors.analysis_result import analysis_result_extractor
+from safe.impact_function_v4.impact_function import ImpactFunction
 from safe.reportv4.extractors.composer import qgis_composer_extractor
-from safe.reportv4.extractors.impact_table import impact_table_extractor
-from safe.reportv4.extractors.minimum_needs import minimum_needs_extractor
 from safe.reportv4.processors.default import (
-    qgis_composer_renderer,
-    jinja2_renderer)
+    qgis_composer_renderer)
 from safe.reportv4.report_metadata import ReportMetadata
-from safe.test.utilities import get_qgis_app, monkey_patch_keywords, \
-    load_path_vector_layer
-from safe.utilities.keyword_io import KeywordIO
+from safe.test.utilities import (
+    get_qgis_app,
+    load_path_vector_layer,
+    load_test_vector_layer)
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from PyQt4.QtCore import QSettings
 from qgis.core import QgsVectorLayer, QgsMapLayerRegistry
-from safe.definitionsv4.report import report_a3_portrait_blue, \
-    standard_impact_report_metadata
+from safe.definitionsv4.report import (
+    report_a3_portrait_blue,
+    standard_impact_report_metadata)
 from safe.reportv4.impact_report import ImpactReport
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -57,82 +53,76 @@ class TestImpactReport(unittest.TestCase):
             actual_string = actual_file.read().strip()
             self.assertEquals(control_string, actual_string)
 
+    def test_analysis_result_from_impact_function(self):
+        """Test generate analysis result from impact function."""
+
+        # Classified vector with building-points
+
+        hazard_layer = load_test_vector_layer(
+            'gisv4', 'hazard', 'classified_vector.geojson')
+        exposure_layer = load_test_vector_layer(
+            'gisv4', 'exposure', 'building-points.geojson')
+        aggregation_layer = load_test_vector_layer(
+            'gisv4', 'aggregation', 'small_grid.geojson')
+
+        impact_function = ImpactFunction()
+        impact_function.aggregation = aggregation_layer
+        impact_function.exposure = exposure_layer
+        impact_function.hazard = hazard_layer
+        impact_function.run()
+
+        report_metadata = ReportMetadata(
+            metadata_dict=standard_impact_report_metadata)
+
+        impact_report = ImpactReport(
+            IFACE,
+            report_metadata,
+            impact_function=impact_function)
+        impact_report.output_folder = self.fixtures_dir('../output')
+        impact_report.process_component()
+
+        output_path = impact_report.component_absolute_output_path(
+            'impact-report')
+
+        self.assertCompareFileControl(
+            self.fixtures_dir(
+                'controls/impact-function-impact-report-output-1.html'),
+            output_path)
+
+        # Classified vector with buildings
+        hazard_layer = load_test_vector_layer(
+            'gisv4', 'hazard', 'classified_vector.geojson')
+        exposure_layer = load_test_vector_layer(
+            'gisv4', 'exposure', 'buildings.geojson')
+        aggregation_layer = load_test_vector_layer(
+            'gisv4', 'aggregation', 'small_grid.geojson')
+
+        impact_function = ImpactFunction()
+        impact_function.aggregation = aggregation_layer
+        impact_function.exposure = exposure_layer
+        impact_function.hazard = hazard_layer
+        impact_function.run()
+
+        report_metadata = ReportMetadata(
+            metadata_dict=standard_impact_report_metadata)
+
+        impact_report = ImpactReport(
+            IFACE,
+            report_metadata,
+            impact_function=impact_function)
+        impact_report.output_folder = self.fixtures_dir('../output')
+        impact_report.process_component()
+
+        output_path = impact_report.component_absolute_output_path(
+            'impact-report')
+
+        self.assertCompareFileControl(
+            self.fixtures_dir(
+                'controls/impact-function-impact-report-output-2.html'),
+            output_path)
+
     def test_analysis_result(self):
-        """Test generate analysis result"""
-        sample_report_metadata_dict = {
-            'key': 'analysis-result-html',
-            'name': 'analysis-result-html',
-            'template_folder': safe_dir(
-                sub_dir='../resources/report-templates/'),
-            'components': [
-                {
-                    'key': 'analysis-result',
-                    'type': 'Jinja2',
-                    'processor': jinja2_renderer,
-                    'extractor': analysis_result_extractor,
-                    'output_format': 'file',
-                    'output_path': 'analysis-result-output.html',
-                    'template': 'standard-template/'
-                                'jinja2/'
-                                'analysis-result.html',
-                },
-                {
-                    'key': 'analysis-breakdown',
-                    'type': 'Jinja2',
-                    'processor': jinja2_renderer,
-                    'extractor': analysis_detail_extractor,
-                    'output_format': 'file',
-                    'output_path': 'analysis-detail-output.html',
-                    'template': 'standard-template/'
-                                'jinja2/'
-                                'analysis-detail.html',
-                },
-                {
-                    'key': 'action-checklist',
-                    'type': 'Jinja2',
-                    'processor': jinja2_renderer,
-                    'extractor': action_checklist_extractor,
-                    'output_format': 'file',
-                    'output_path': 'action-checklist-output.html',
-                    'template': 'standard-template/'
-                                'jinja2/'
-                                'bullet-list-section.html',
-                },
-                {
-                    'key': 'notes-assumptions',
-                    'type': 'Jinja2',
-                    'processor': jinja2_renderer,
-                    'extractor': notes_assumptions_extractor,
-                    'output_format': 'file',
-                    'output_path': 'notes-assumptions-output.html',
-                    'template': 'standard-template/'
-                                'jinja2/'
-                                'bullet-list-section.html',
-                },
-                {
-                    'key': 'minimum-needs',
-                    'type': 'Jinja2',
-                    'processor': jinja2_renderer,
-                    'extractor': minimum_needs_extractor,
-                    'output_format': 'file',
-                    'output_path': 'minimum-needs-output.html',
-                    'template': 'standard-template/'
-                                'jinja2/'
-                                'minimum-needs.html',
-                },
-                {
-                    'key': 'impact-report',
-                    'type': 'Jinja2',
-                    'processor': jinja2_renderer,
-                    'extractor': impact_table_extractor,
-                    'output_format': 'file',
-                    'output_path': 'impact-report-output.html',
-                    'template': 'standard-template/'
-                                'jinja2/'
-                                'impact-report-layout.html',
-                }
-            ]
-        }
+        """Test generate analysis result."""
 
         exposure_json = self.fixtures_dir(
             'analysis_sample/1-exposure.geojson')
@@ -170,9 +160,8 @@ class TestImpactReport(unittest.TestCase):
         impact_report.output_folder = self.fixtures_dir('../output')
         impact_report.process_component()
 
-        output_path = os.path.abspath(
-            os.path.join(
-                impact_report.output_folder, 'impact-report-output.html'))
+        output_path = impact_report.component_absolute_output_path(
+            'impact-report')
 
         self.assertCompareFileControl(
             self.fixtures_dir('controls/impact-report-output.html'),

@@ -324,24 +324,11 @@ class ReportMetadata(object):
 
     @property
     def components(self):
-        """
+        """List of report components.
+
         A list of report components that needed to be generated each
 
         :return: list of ReportComponentsMetadata
         :rtype: [ReportComponentsMetadata]
         """
         return self._components
-
-    def component_absolute_output_path(self, component_key):
-        """Return absolute output path of component.
-
-        :param component_key:
-        :return:
-        """
-        comp_keys = [c.key for c in self.components]
-        if component_key in comp_keys:
-            idx = comp_keys.index(component_key)
-            return os.path.abspath(
-                os.path.join(
-                    self.output_folder, self.components[idx].output_path))
-        return None

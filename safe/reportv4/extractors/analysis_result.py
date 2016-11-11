@@ -6,10 +6,10 @@ from safe.definitionsv4.fields import (
     total_field,
     total_unaffected_field)
 from safe.definitionsv4.hazard import hazard_generic
-from safe.definitionsv4.hazard_category import hazard_category_single_event, \
-    hazard_category_multiple_event
+from safe.definitionsv4.hazard_category import (
+    hazard_category_single_event,
+    hazard_category_multiple_event)
 from safe.definitionsv4.hazard_classifications import all_hazard_classes
-from safe.gisv4.vector.tools import read_dynamic_inasafe_field
 from safe.reportv4.extractors.util import layer_definition_type
 from safe.utilities.i18n import tr
 
@@ -39,7 +39,6 @@ def analysis_result_extractor(impact_report, component_metadata):
     # figure out analysis report type
     hazard_layer = impact_report.hazard
     exposure_layer = impact_report.exposure
-    impact_layer = impact_report.impact
     analysis_layer = impact_report.analysis
 
     # find hazard class
@@ -134,7 +133,6 @@ def analysis_result_extractor(impact_report, component_metadata):
     })
 
     # Proper title from reporting standard
-    analysis_title = None
     question_template = ''
     hazard_type = layer_definition_type(hazard_layer)
     exposure_title = exposure_layer.title() or exposure_type['name']
