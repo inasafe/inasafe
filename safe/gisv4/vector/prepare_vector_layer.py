@@ -115,10 +115,45 @@ def prepare_vector_layer(layer, callback=None):
         if exposure_type_field['key'] not in fields:
             _add_default_exposure_class(cleaned)
 
+        # Check value mapping
+            _check_value_mapping(cleaned)
+
     cleaned.keywords['title'] = output_layer_name
 
     return cleaned
 
+
+@profile
+def _check_value_mapping(layer):
+    """Loop over fields and rename fields which are used in InaSAFE.
+
+    :param layer: The layer
+    :type layer: QgsVectorLayer
+    """
+    index = layer.fieldNameIndex(exposure_type_field['field_name'])
+    unique_exposure = layer.uniqueValues(index)
+    value_map = layer.keywords.get('value_map')
+
+    if not value_map:
+        # The exposure do not have a value_map, we can skip the layer.
+        return layer
+
+    classification = layer.keywords['classification']
+    exposure_classification = definition(classification)
+    other = exposure_classification['classes'][-1]['key']
+
+    exposure_mapped = []
+    for group in value_map.itervalues():
+        exposure_mapped.extend(group)
+
+    diff = list(set(unique_exposure) - set(exposure_mapped))
+
+    if other in value_map.keys():
+        value_map[other].extend(diff)
+    else:
+        value_map[other] = diff
+
+    return layer
 
 @profile
 def _rename_remove_inasafe_fields(layer):
