@@ -7,6 +7,8 @@ Reclassify a continuous vector layer.
 from PyQt4.QtCore import QPyNullVariant
 from qgis.core import QGis, QgsField
 
+from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
+from safe.definitionsv4.utilities import definition
 from safe.definitionsv4.fields import hazard_class_field, hazard_value_field
 from safe.definitionsv4.processing_steps import reclassify_vector_steps
 from safe.utilities.profiling import profile
@@ -18,7 +20,7 @@ __revision__ = '$Format:%H$'
 
 
 @profile
-def reclassify(layer, ranges, callback=None):
+def reclassify(layer, callback=None):
     """Reclassify a continuous vector layer.
 
     This function will modify the input.
@@ -40,9 +42,6 @@ def reclassify(layer, ranges, callback=None):
     :param layer: The raster layer.
     :type layer: QgsRasterLayer
 
-    :param ranges: Classes
-    :type ranges: OrderedDict
-
     :param callback: A function to all to indicate progress. The function
         should accept params 'current' (int), 'maximum' (int) and 'step' (str).
         Defaults to None.
@@ -60,6 +59,12 @@ def reclassify(layer, ranges, callback=None):
     # This layer should have this keyword, or it's a mistake from the dev.
     inasafe_fields = layer.keywords['inasafe_fields']
     continuous_column = inasafe_fields[hazard_value_field['key']]
+
+    ranges = layer.keywords.get('thresholds')
+    if not ranges:
+        raise InvalidKeywordsForProcessingAlgorithm(
+            'thresholds are missing from the layer %s'
+            % layer.keywords['layer_purpose'])
 
     continuous_index = layer.fieldNameIndex(continuous_column)
 
@@ -91,6 +96,13 @@ def reclassify(layer, ranges, callback=None):
     layer.keywords = layer.keywords
     inasafe_fields[hazard_class_field['key']] = (
         hazard_class_field['field_name'])
+
+    value_map = {}
+    classifications = layer.keywords.get('classification')
+    hazard_classes = definition(classifications)['classes']
+    for hazard_class in reversed(hazard_classes):
+        value_map[hazard_class['key']] = [hazard_class['value']]
+    layer.keywords['value_map'] = value_map
 
     layer.keywords['title'] = output_layer_name
 
