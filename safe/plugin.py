@@ -29,6 +29,7 @@ from qgis.core import (
     QgsRectangle,
     QgsRasterLayer,
     QgsMapLayerRegistry,
+    QgsMapLayer,
     QgsProject)
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import (
@@ -154,7 +155,7 @@ class Plugin(object):
         # noinspection PyTypeChecker,PyArgumentList,PyCallByClass
         return QCoreApplication.translate('Plugin', message)
 
-    def add_action(self, action, add_to_toolbar=True):
+    def add_action(self, action, add_to_toolbar=True, add_to_legend=False):
         """Add a toolbar icon to the InaSAFE toolbar.
 
         :param action: The action that should be added to the toolbar.
@@ -170,6 +171,20 @@ class Plugin(object):
         self.iface.addPluginToMenu(self.tr('InaSAFE'), action)
         if add_to_toolbar:
             self.toolbar.addAction(action)
+        if add_to_legend:
+            # The id is the action name without spaces, tabs ...
+            self.iface.legendInterface().addLegendLayerAction(
+                action,
+                self.tr('InaSAFE'),
+                ''.join(action.text().split()),
+                QgsMapLayer.VectorLayer,
+                True)
+            self.iface.legendInterface().addLegendLayerAction(
+                action,
+                self.tr('InaSAFE'),
+                ''.join(action.text().split()),
+                QgsMapLayer.RasterLayer,
+                True)
 
     def _create_dock_toggle_action(self):
         """Create action for plugin dockable window (show/hide)."""
@@ -206,7 +221,7 @@ class Plugin(object):
         self.action_keywords_wizard.setEnabled(False)
         self.action_keywords_wizard.triggered.connect(
             self.show_keywords_wizard)
-        self.add_action(self.action_keywords_wizard)
+        self.add_action(self.action_keywords_wizard, add_to_legend=True)
 
     def _create_analysis_wizard_action(self):
         """Create action for IF-centric wizard."""
@@ -619,6 +634,7 @@ class Plugin(object):
         for myAction in self.actions:
             self.iface.removePluginMenu(self.tr('InaSAFE'), myAction)
             self.iface.removeToolBarIcon(myAction)
+            self.iface.legendInterface().removeLegendLayerAction(myAction)
         self.iface.mainWindow().removeDockWidget(self.dock_widget)
         self.iface.mainWindow().removeToolBar(self.toolbar)
         self.dock_widget.setVisible(False)
