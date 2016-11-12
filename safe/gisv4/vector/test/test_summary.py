@@ -60,8 +60,7 @@ class TestAggregateSummary(unittest.TestCase):
 
         self.assertIn(total_field['key'], layer.keywords['inasafe_fields'])
 
-        result = check_inasafe_fields(layer)
-        self.assertTrue(result[0], result[1])
+        check_inasafe_fields(layer)
 
         fields = impact.keywords['inasafe_fields']
         exposure_class = fields[exposure_class_field['key']]
@@ -91,8 +90,7 @@ class TestAggregateSummary(unittest.TestCase):
 
         layer = aggregation_summary(aggregate_hazard, aggregation)
 
-        result = check_inasafe_fields(layer)
-        self.assertTrue(result[0], result[1])
+        check_inasafe_fields(layer)
 
         # I need the number of unique exposure
         pattern = exposure_count_field['key']
@@ -130,8 +128,7 @@ class TestAggregateSummary(unittest.TestCase):
 
         layer = analysis_summary(aggregate_hazard, analysis)
 
-        result = check_inasafe_fields(layer)
-        self.assertTrue(result[0], result[1])
+        check_inasafe_fields(layer)
 
         fields = aggregate_hazard.keywords['inasafe_fields']
         hazard_class = fields[hazard_class_field['key']]
@@ -171,6 +168,8 @@ class TestAggregateSummary(unittest.TestCase):
         unique_hazard = aggregate_hazard.uniqueValues(hazard_class_index)
 
         layer = exposure_type_breakdown(aggregate_hazard)
+
+        check_inasafe_fields(layer)
 
         self.assertEqual(len(unique_exposure), layer.featureCount())
 
