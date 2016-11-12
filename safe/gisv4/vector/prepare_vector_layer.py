@@ -115,7 +115,7 @@ def prepare_vector_layer(layer, callback=None):
         if exposure_type_field['key'] not in fields:
             _add_default_exposure_class(cleaned)
 
-        # Check value mapping
+            # Check value mapping
             _check_value_mapping(cleaned)
 
     cleaned.keywords['title'] = output_layer_name
@@ -125,7 +125,7 @@ def prepare_vector_layer(layer, callback=None):
 
 @profile
 def _check_value_mapping(layer):
-    """Loop over fields and rename fields which are used in InaSAFE.
+    """Loop over the exposure type field and check if the value map is correct.
 
     :param layer: The layer
     :type layer: QgsVectorLayer
@@ -154,6 +154,7 @@ def _check_value_mapping(layer):
         value_map[other] = diff
 
     return layer
+
 
 @profile
 def _rename_remove_inasafe_fields(layer):
