@@ -150,5 +150,6 @@ def create_profile_layer(profiling):
         tabular.addFeature(feature)
 
     tabular.commitChanges()
+    tabular.keywords['title'] = 'profiling'
 
     return tabular
