@@ -12,6 +12,10 @@ __revision__ = '$Format:%H$'
 # to generate the value_mapping. Please do not remove it.
 # See https://github.com/kartoza/osm-reporter/wiki how to use this key.
 
+# Each classification should have an "other" group at the end of the
+# classification. Each features without a classification will go in the last
+# item of the list.
+
 generic_structure_classes = {
     'key': 'generic_structure_classes',
     'name': tr('Generic Structure Classification'),
@@ -510,6 +514,20 @@ generic_place_classes = {
                     'link': None
                 }
             ]
+        },
+        {
+            'key': 'other',
+            'name': tr('Other'),
+            'description': tr(
+                'Other group.'),
+            'osm_downloader': [],
+            'string_defaults': ['other'],
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
         }
     ]
 }
@@ -605,6 +623,20 @@ generic_landcover_classes = {
                 'Lakes, etc.'),
             'osm_downloader': [],
             'string_defaults': ['water', 'lake'],
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
+            'key': 'other',
+            'name': tr('Other'),
+            'description': tr(
+                'Other group.'),
+            'osm_downloader': [],
+            'string_defaults': ['other'],
             'citations': [
                 {
                     'text': None,

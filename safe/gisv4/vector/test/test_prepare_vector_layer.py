@@ -20,6 +20,7 @@ from safe.gisv4.vector.prepare_vector_layer import (
     _add_id_column,
     _add_default_values,
     _size_is_needed,
+    _check_value_mapping,
 )
 from safe.definitionsv4.fields import (
     exposure_id_field,
@@ -176,3 +177,51 @@ class TestPrepareLayer(unittest.TestCase):
             female_ratio_field['key']: female_ratio_field['field_name']
         }
         self.assertFalse(_size_is_needed(layer))
+
+    def test_check_value_mapping(self):
+        """Test we can add missing exposure type to the other group."""
+        layer = load_test_vector_layer(
+            'gisv4', 'exposure', 'buildings.geojson')
+
+        # No change
+        value_map = {
+            'commercial': ['shop'],
+            'education': ['school'],
+            'health': ['hospital'],
+            'government': ['ministry'],
+            'other': ['unknown']
+        }
+        layer.keywords['value_map'] = dict(value_map)
+        layer = _check_value_mapping(layer)
+        self.assertDictEqual(value_map, layer.keywords['value_map'])
+
+        # Missing shop and unknown, the other group should be created.
+        layer.keywords['value_map'] = {
+            'education': ['school'],
+            'health': ['hospital'],
+            'government': ['ministry']
+        }
+        expected_value_map = {
+            'education': ['school'],
+            'health': ['hospital'],
+            'government': ['ministry'],
+            'other': ['shop', 'unknown']
+        }
+        layer = _check_value_mapping(layer)
+        self.assertDictEqual(expected_value_map, layer.keywords['value_map'])
+
+        # Missing shop, it should be added to the other group.
+        layer.keywords['value_map'] = {
+            'education': ['school'],
+            'health': ['hospital'],
+            'government': ['ministry'],
+            'other': ['unknown']
+        }
+        expected_value_map = {
+            'education': ['school'],
+            'health': ['hospital'],
+            'government': ['ministry'],
+            'other': ['unknown', 'shop']
+        }
+        layer = _check_value_mapping(layer)
+        self.assertDictEqual(expected_value_map, layer.keywords['value_map'])
