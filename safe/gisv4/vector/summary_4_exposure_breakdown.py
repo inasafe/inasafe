@@ -4,6 +4,7 @@
 Aggregate the aggregate hazard to the analysis layer.
 """
 
+from PyQt4.QtCore import QPyNullVariant
 from qgis.core import QGis, QgsFeatureRequest, QgsFeature
 
 from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
@@ -115,6 +116,8 @@ def exposure_type_breakdown(aggregate_hazard, callback=None):
 
     hazard_affected = {}
     for hazard_class in unique_hazard:
+        if not hazard_class or isinstance(hazard_class, QPyNullVariant):
+            hazard_class = 'NULL'
         field = create_field_from_definition(hazard_count_field, hazard_class)
         tabular.addAttribute(field)
         key = hazard_count_field['key'] % hazard_class
@@ -148,6 +151,8 @@ def exposure_type_breakdown(aggregate_hazard, callback=None):
         total_affected = 0
         total = 0
         for hazard_class in unique_hazard:
+            if not hazard_class or isinstance(hazard_class, QPyNullVariant):
+                hazard_class = 'NULL'
             value = flat_table.get_value(
                 hazard_class=hazard_class,
                 exposure_class=exposure_type
