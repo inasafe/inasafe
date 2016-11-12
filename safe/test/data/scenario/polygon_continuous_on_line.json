@@ -1,7 +1,7 @@
 {
   "scenario": {
     "enable": true,
-    "hazard": "continuous_vector_ash.geojson",
+    "hazard": "continuous_vector.geojson",
     "exposure": "roads.shp",
     "aggregation": null
   },
@@ -42,8 +42,10 @@
       "info": {},
       "process":[
         "Cleaning the vector hazard attribute table",
+        "Classify continuous hazard and assign class names",
         "Assign classes based on value map",
         "Classified polygon hazard with keywords",
+        "Reproject hazard layer to exposure CRS",
         "Vector clip and mask hazard to aggregation",
         "Clip and mask hazard polygons with the analysis layer"
       ]

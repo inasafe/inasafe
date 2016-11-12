@@ -47,7 +47,7 @@
       <gmd:citation>
         <gmd:CI_Citation>
           <gmd:title>
-            <gco:CharacterString>continuous_vector OGRGeoJSON Polygon</gco:CharacterString>
+            <gco:CharacterString>classified_vector</gco:CharacterString>
           </gmd:title>
           <gmd:date>
             <gmd:CI_Date>
@@ -172,47 +172,35 @@
       <gmd:supplementalInformation>
         <inasafe_keywords/>
         <inasafe>
-          <thresholds>
-            <gco:Dictionary>{&quot;dry&quot;: [0.0, 1.0], &quot;wet&quot;: [1.0, 2.5]}</gco:Dictionary>
-          </thresholds>
           <hazard_category>
             <gco:CharacterString>single_event</gco:CharacterString>
           </hazard_category>
-          <raster_hazard_classification>
-            <gco:CharacterString/>
-          </raster_hazard_classification>
-          <classification>
-            <gco:CharacterString>flood_hazard_classes</gco:CharacterString>
-          </classification>
+          <multipart_polygon>
+            <gco:Boolean/>
+          </multipart_polygon>
           <prob_fatality_mag>
             <gco:Tuple/>
           </prob_fatality_mag>
           <inasafe_fields>
-            <gco:Dictionary>{&quot;hazard_value_field&quot;: &quot;depth&quot;}</gco:Dictionary>
+            <gco:Dictionary>{&quot;hazard_value_field&quot;: &quot;hazard_value&quot;, &quot;hazard_id_field&quot;: &quot;hazard_id&quot;}</gco:Dictionary>
           </inasafe_fields>
-          <inasafe_default_values>
-            <gco:Dictionary/>
-          </inasafe_default_values>
           <volcano_name_field>
             <gco:CharacterString/>
           </volcano_name_field>
-          <multipart_polygon>
-            <gco:Boolean/>
-          </multipart_polygon>
           <field>
-            <gco:CharacterString/>
+            <gco:CharacterString>hazard_value</gco:CharacterString>
           </field>
           <value_map>
-            <gco:Dictionary/>
+            <gco:Dictionary>{&quot;high&quot;: [&quot;high&quot;], &quot;medium&quot;: [&quot;medium&quot;], &quot;low&quot;: [&quot;low&quot;]}</gco:Dictionary>
           </value_map>
-          <vector_hazard_classification>
-            <gco:CharacterString/>
-          </vector_hazard_classification>
+          <classification>
+            <gco:CharacterString>generic_hazard_classes</gco:CharacterString>
+          </classification>
           <layer_geometry>
             <gco:CharacterString>polygon</gco:CharacterString>
           </layer_geometry>
           <hazard>
-            <gco:CharacterString>flood</gco:CharacterString>
+            <gco:CharacterString>generic</gco:CharacterString>
           </hazard>
           <scale>
             <gco:CharacterString/>
@@ -221,7 +209,7 @@
             <gco:CharacterString/>
           </report>
           <continuous_hazard_unit>
-            <gco:CharacterString>metres</gco:CharacterString>
+            <gco:CharacterString/>
           </continuous_hazard_unit>
           <keyword_version>
             <gco:CharacterString>3.5</gco:CharacterString>
@@ -239,8 +227,11 @@
             <gco:FloatTuple/>
           </resolution>
           <layer_mode>
-            <gco:CharacterString>continuous</gco:CharacterString>
+            <gco:CharacterString>classified</gco:CharacterString>
           </layer_mode>
+          <hazard_classification>
+            <gco:CharacterString>generic_hazard_classes</gco:CharacterString>
+          </hazard_classification>
         </inasafe>
       </gmd:supplementalInformation>
     </gmd:MD_DataIdentification>

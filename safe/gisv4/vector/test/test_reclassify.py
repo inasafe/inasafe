@@ -2,14 +2,11 @@
 
 import unittest
 from osgeo import gdal
-from collections import OrderedDict
 
 from safe.test.utilities import (
     get_qgis_app,
     load_test_vector_layer)
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-
-from qgis.core import QgsFeatureRequest
 
 from safe.gisv4.vector.reclassify import reclassify
 from safe.definitionsv4.fields import hazard_class_field
@@ -33,25 +30,21 @@ class TestReclassifyVector(unittest.TestCase):
         'GDAL 2.1 is required to edit GeoJSON.')
     def test_reclassify_vector(self):
         """Test we can reclassify a continuous vector layer."""
-        ranges = OrderedDict()
-        # value <= 0.0
-        ranges[1] = [None, 0.0]
 
-        # 0.0 < value <= 1
-        ranges[2] = [0.0, 1]
-
-        # 1 < value <= 1.5 and gap in output classes
-        ranges[10] = [1, 1.5]
-
-        # value > 1.5
-        ranges[11] = [1.3, None]
+        ranges = {
+            1: [None, 0.0],  # value <= 0.0
+            2: [0.0, 1],  # 0.0 < value <= 1
+            10: [1, 1.5],  # 1 < value <= 1.5 and gap in output classes
+            11: [1.3, None]  # value > 1.5
+        }
 
         # Let's add a vector layer.
         layer = load_test_vector_layer(
             'hazard', 'continuous_vector.geojson', clone=True)
+        layer.keywords['thresholds'] = ranges
 
         self.assertEqual(layer.featureCount(), 400)
-        classified = reclassify(layer, ranges)
+        classified = reclassify(layer)
         self.assertEqual(layer.featureCount(), 375)
 
         expected_field = hazard_class_field['field_name']

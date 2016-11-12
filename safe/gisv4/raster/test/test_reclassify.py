@@ -7,7 +7,6 @@ from safe.test.utilities import (
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from qgis.core import QgsRasterBandStats
-from collections import OrderedDict
 
 from safe.definitionsv4.processing_steps import reclassify_raster_steps
 from safe.gisv4.raster.reclassify import reclassify
@@ -30,15 +29,14 @@ class TestReclassifyRaster(unittest.TestCase):
         """Test we can reclassify a raster layer."""
         layer = load_test_raster_layer('hazard', 'continuous_flood_20_20.asc')
 
-        ranges = OrderedDict()
-        # value <= 0.2
-        ranges[1] = [None, 0.2]
-        # 0.2 < value <= 1
-        ranges[2] = [0.2, 1]
-        # 1 < value <= 1.3 and gap in output classes
-        ranges[10] = [1, 1.3]
-        # value > 1.3
-        ranges[11] = [1.3, None]
+        ranges = {
+            1: [None, 0.2],  # value <= 0.2
+            2: [0.2, 1],  # 0.2 < value <= 1
+            10: [1, 1.3],  # 1 < value <= 1.3 and gap in output classes
+            11: [1.3, None]  # value > 1.3
+        }
+
+        layer.keywords['thresholds'] = ranges
 
         expected_keywords = layer.keywords.copy()
         title = reclassify_raster_steps['output_layer_name'] % (

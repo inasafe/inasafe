@@ -2,7 +2,6 @@
 """
 Impact function
 """
-from collections import OrderedDict
 from datetime import datetime
 
 from qgis.core import (
@@ -801,15 +800,8 @@ class ImpactFunction(object):
 
                 self.set_state_process(
                     'hazard', 'Classify continuous raster hazard')
-                classifications = self.hazard.keywords.get('classification')
-                hazard_classes = definition(classifications)['classes']
-                ranges = OrderedDict()
-                for hazard_class in reversed(hazard_classes):
-                    min_value = hazard_class['numeric_default_min']
-                    max_value = hazard_class['numeric_default_max']
-                    ranges[hazard_class['value']] = [min_value, max_value]
                 # noinspection PyTypeChecker
-                self.hazard = reclassify_raster(self.hazard, ranges)
+                self.hazard = reclassify_raster(self.hazard)
                 if self.debug_mode:
                     self.debug_layer(self.hazard)
 
@@ -832,9 +824,9 @@ class ImpactFunction(object):
             self.set_state_process(
                 'hazard',
                 'Classify continuous hazard and assign class names')
-            # self.hazard = reclassify(self.hazard, ranges)
-            # if self.debug_mode:
-            #     self.debug_layer(self.hazard, 'hazard_reclassified')
+            self.hazard = reclassify_vector(self.hazard)
+            if self.debug_mode:
+                self.debug_layer(self.hazard)
 
         self.set_state_process(
             'hazard', 'Assign classes based on value map')

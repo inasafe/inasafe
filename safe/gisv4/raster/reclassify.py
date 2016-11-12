@@ -10,7 +10,8 @@ from osgeo import gdal
 from os.path import isfile
 from qgis.core import QgsRasterLayer
 
-from safe.common.exceptions import FileNotFoundError
+from safe.common.exceptions import (
+    FileNotFoundError, InvalidKeywordsForProcessingAlgorithm)
 from safe.common.utilities import unique_filename, temp_dir
 from safe.definitionsv4.constants import no_data_value
 from safe.definitionsv4.utilities import definition
@@ -24,7 +25,7 @@ __revision__ = '$Format:%H$'
 
 
 @profile
-def reclassify(layer, ranges, callback=None):
+def reclassify(layer, callback=None):
     """Reclassify a continuous raster layer.
 
     This function is a wrapper for the code from
@@ -47,9 +48,6 @@ def reclassify(layer, ranges, callback=None):
     :param layer: The raster layer.
     :type layer: QgsRasterLayer
 
-    :param ranges: Classes
-    :type ranges: OrderedDict
-
     :param callback: A function to all to indicate progress. The function
         should accept params 'current' (int), 'maximum' (int) and 'step' (str).
         Defaults to None.
@@ -63,6 +61,12 @@ def reclassify(layer, ranges, callback=None):
     output_layer_name = reclassify_raster_steps['output_layer_name']
     processing_step = reclassify_raster_steps['step_name']
     output_layer_name = output_layer_name % layer.keywords['layer_purpose']
+
+    ranges = layer.keywords.get('thresholds')
+    if not ranges:
+        raise InvalidKeywordsForProcessingAlgorithm(
+            'thresholds are missing from the layer %s'
+            % layer.keywords['layer_purpose'])
 
     output_raster = unique_filename(suffix='.tiff', dir=temp_dir())
 
