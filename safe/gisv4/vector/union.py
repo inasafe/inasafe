@@ -6,6 +6,7 @@ Clip and mask a hazard layer.
 Issue https://github.com/inasafe/inasafe/issues/3186
 """
 import logging
+from PyQt4.QtCore import QPyNullVariant
 from qgis.core import (
     QGis,
     QgsGeometry,
@@ -17,6 +18,7 @@ from qgis.core import (
 from safe.utilities.i18n import tr
 from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
 from safe.definitionsv4.processing_steps import union_steps
+from safe.definitionsv4.fields import exposure_id_field, aggregation_id_field
 from safe.gisv4.vector.tools import (
     create_memory_layer, wkb_type_groups, create_spatial_index)
 from safe.utilities.profiling import profile
@@ -88,22 +90,23 @@ def union(union_a, union_b, callback=None):
     if layer_purpose_1 == 'exposure' and layer_purpose_2 == 'aggregate_hazard':
 
         writer.keywords['layer_purpose'] = 'impact'
-
         writer.keywords['exposure_keywords'] = keywords_union_1
-
         writer.keywords['aggregation_keywords'] = (
             keywords_union_2['aggregation_keywords'])
-
         writer.keywords['hazard_keywords'] = (
             keywords_union_2['hazard_keywords'])
+        not_null_field = inasafe_fields_union_1[
+            exposure_id_field['key']]
+        not_null_field_index = writer.fieldNameIndex(not_null_field)
 
     elif layer_purpose_1 == 'hazard' and layer_purpose_2 == 'aggregation':
 
         writer.keywords['layer_purpose'] = 'aggregate_hazard'
-
         writer.keywords['hazard_keywords'] = keywords_union_1
-
         writer.keywords['aggregation_keywords'] = keywords_union_2
+        not_null_field = inasafe_fields_union_2[
+            aggregation_id_field['key']]
+        not_null_field_index = writer.fieldNameIndex(not_null_field)
 
     else:
         msg = 'I got layer purpose 1 = %s and layer purpose 2 = %s'\
@@ -131,7 +134,7 @@ def union(union_a, union_b, callback=None):
         intersects = index_a.intersects(geom.boundingBox())
         if len(intersects) < 1:
             try:
-                _write_feature(at_map_a, geom, writer)
+                _write_feature(at_map_a, geom, writer, not_null_field_index)
             except:
                 # This really shouldn't happen, as we haven't
                 # edited the input geom at all
@@ -176,7 +179,9 @@ def union(union_a, union_b, callback=None):
                                     _write_feature(
                                         at_map_a + at_map_b,
                                         int_geom,
-                                        writer)
+                                        writer,
+                                        not_null_field_index,
+                                    )
                                 except:
                                     LOGGER.debug(
                                         tr('Feature geometry error: One or '
@@ -191,7 +196,10 @@ def union(union_a, union_b, callback=None):
                             wkb_type_groups[int_geom.wkbType()]]:
                             try:
                                 _write_feature(
-                                    at_map_a + at_map_b, int_geom, writer)
+                                    at_map_a + at_map_b,
+                                    int_geom,
+                                    writer,
+                                    not_null_field_index)
                             except:
                                 LOGGER.debug(
                                     tr('Feature geometry error: One or more '
@@ -218,7 +226,11 @@ def union(union_a, union_b, callback=None):
                     if i.type() == geom.type():
                         diff_geom = QgsGeometry(i)
             try:
-                _write_feature(at_map_a, diff_geom, writer)
+                _write_feature(
+                    at_map_a,
+                    diff_geom,
+                    writer,
+                    not_null_field_index)
             except:
                 LOGGER.debug(
                     tr('Feature geometry error: One or more output features '
@@ -239,7 +251,7 @@ def union(union_a, union_b, callback=None):
 
         if len(intersects) < 1:
             try:
-                _write_feature(atMap, geom, writer)
+                _write_feature(atMap, geom, writer, not_null_field_index)
             except:
                 LOGGER.debug(
                     tr('Feature geometry error: One or more output features '
@@ -267,7 +279,7 @@ def union(union_a, union_b, callback=None):
                         # Ihis only happends if the bounding box
                         # intersects, but the geometry doesn't
                         _write_feature(
-                            atMap, diff_geom, writer)
+                            atMap, diff_geom, writer, not_null_field_index)
                     except:
                         LOGGER.debug(
                             tr('Feature geometry error: One or more output '
@@ -275,7 +287,7 @@ def union(union_a, union_b, callback=None):
 
         if add:
             try:
-                _write_feature(atMap, diff_geom, writer)
+                _write_feature(atMap, diff_geom, writer, not_null_field_index)
             except:
                 LOGGER.debug(
                     tr('Feature geometry error: One or more output features '
@@ -288,7 +300,7 @@ def union(union_a, union_b, callback=None):
     return writer
 
 
-def _write_feature(attributes, geometry, writer):
+def _write_feature(attributes, geometry, writer, not_null_field_index):
     """
     Internal function to write the feature to the output.
 
@@ -300,9 +312,19 @@ def _write_feature(attributes, geometry, writer):
 
     :param writer: A vector layer in editing mode.
     :type: QgsVectorLayer
+
+    :param not_null_field_index: The index in the attribute table which should
+        not be null.
+    :type not_null_field_index: int
     """
     if writer.geometryType() != geometry.type():
         # We don't write the feature if it's not the same geometry type.
+        return
+
+    compulsary_field = attributes[not_null_field_index]
+    if not compulsary_field or isinstance(compulsary_field, QPyNullVariant):
+        # We don't want feature a compulsary field.
+        # I think this a bug from the union algorithm from the union algorithm.
         return
 
     out_feature = QgsFeature()
