@@ -113,10 +113,7 @@ def run_scenario(scenario, use_debug=False):
         print impact_function.datastore.uri.absolutePath()
 
     for layer in impact_function.outputs:
-        result = check_inasafe_fields(layer)
-        if not result[0]:
-            raise Exception(result[1])
-            pass
+        check_inasafe_fields(layer)
 
     return impact_function_result, impact_function.outputs
 

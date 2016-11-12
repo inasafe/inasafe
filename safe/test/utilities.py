@@ -177,9 +177,7 @@ def check_inasafe_fields(layer):
     :param layer: The layer to check.
     :type layer: QgsVectorLayer
 
-    :return: A tuple with a boolean if it's ok.
-        If it's not a OK, the second member is the error message.
-    :rtype: tuple(bool, str)
+    :raises: Exception with a message if the layer is not correct.
     """
     inasafe_fields = layer.keywords['inasafe_fields']
 
@@ -190,16 +188,14 @@ def check_inasafe_fields(layer):
         msg = tr(
             'inasafe_fields has more fields than the layer %s itself : %s'
             % (layer.keywords['layer_purpose'], difference))
-        return False, msg
+        raise Exception(msg)
 
     difference = set(real_fields).difference(inasafe_fields.values())
     if len(difference):
         msg = tr(
             'The layer %s has more fields than inasafe_fields : %s'
             % (layer.title(), difference))
-        return False, msg
-    else:
-        return True, None
+        raise Exception(msg)
 
 
 def assert_hash_for_file(hash_string, filename):
