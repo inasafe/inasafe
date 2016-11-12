@@ -644,9 +644,7 @@ class ImpactFunction(object):
         name = self.datastore.add_layer(layer, layer.keywords['title'])
 
         if isinstance(layer, QgsVectorLayer) and check_fields:
-            result = check_inasafe_fields(layer)
-            if not result[0]:
-                raise Exception(result[1])
+            check_inasafe_fields(layer)
 
         return name
 
@@ -668,6 +666,7 @@ class ImpactFunction(object):
                 self.performance_log_message())
             _, name = self.debug_layer(self._profiling_table)
             self._profiling_table = self.datastore.layer(name)
+            check_inasafe_fields(self._profiling_table)
 
         # Later, we should move this call.
         self.style()
@@ -765,22 +764,32 @@ class ImpactFunction(object):
             _, name = self.datastore.add_layer(
                 self._exposure_impacted, 'exposure_impacted')
             self._exposure_impacted = self.datastore.layer(name)
+            if self.debug_mode:
+                check_inasafe_fields(self._exposure_impacted)
 
         if self.aggregate_hazard_impacted:
             _, name = self.datastore.add_layer(
                 self._aggregate_hazard_impacted, 'aggregate_hazard_impacted')
             self._aggregate_hazard = self.datastore.layer(name)
+            if self.debug_mode:
+                check_inasafe_fields(self._aggregate_hazard)
 
             _, name = self.datastore.add_layer(
                 self._exposure_breakdown, 'exposure_breakdown')
             self._exposure_breakdown = self.datastore.layer(name)
+            if self.debug_mode:
+                check_inasafe_fields(self._exposure_breakdown)
 
         _, name = self.datastore.add_layer(
             self._aggregation_impacted, 'aggregation_impacted')
         self._aggregation_impacted = self.datastore.layer(name)
+        if self.debug_mode:
+            check_inasafe_fields(self._aggregation_impacted)
 
         _, name = self.datastore.add_layer(self._analysis_impacted, 'analysis')
         self._analysis_impacted = self.datastore.layer(name)
+        if self.debug_mode:
+            check_inasafe_fields(self._analysis_impacted)
 
     @profile
     def hazard_preparation(self):
