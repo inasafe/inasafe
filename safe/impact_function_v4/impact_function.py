@@ -44,6 +44,8 @@ from safe.definitionsv4.utilities import definition
 from safe.definitionsv4.exposure import indivisible_exposure
 from safe.definitionsv4.fields import (
     size_field, exposure_class_field, hazard_class_field)
+from safe.definitionsv4.constants import inasafe_keyword_version_key
+from safe.definitionsv4.versions import inasafe_keyword_version
 from safe.common.exceptions import (
     InvalidExtentError,
     InvalidLayerError,
@@ -209,6 +211,16 @@ class ImpactFunction(object):
             raise InvalidHazardKeywords(
                 tr('The layer is not an hazard layer.'))
 
+        version = keywords.get(inasafe_keyword_version_key)
+        if version != inasafe_keyword_version:
+            parameters = {
+                'version': inasafe_keyword_version,
+                'source': layer.source()
+            }
+            raise InvalidHazardKeywords(
+                tr('The layer {source} must be updated to {version}.'.format(
+                    **parameters)))
+
         self._hazard = layer
         self._hazard.keywords = keywords
 
@@ -248,6 +260,16 @@ class ImpactFunction(object):
             raise InvalidExposureKeywords(
                 tr('The layer is not an exposure layer.'))
 
+        version = keywords.get(inasafe_keyword_version_key)
+        if version != inasafe_keyword_version:
+            parameters = {
+                'version': inasafe_keyword_version,
+                'source': layer.source()
+            }
+            raise InvalidHazardKeywords(
+                tr('The layer {source} must be updated to {version}.'.format(
+                    **parameters)))
+
         self._exposure = layer
         self._exposure.keywords = keywords
 
@@ -286,6 +308,16 @@ class ImpactFunction(object):
         if keywords.get('layer_purpose') != 'aggregation':
             raise InvalidAggregationKeywords(
                 tr('The layer is not an aggregation layer.'))
+
+        version = keywords.get(inasafe_keyword_version_key)
+        if version != inasafe_keyword_version:
+            parameters = {
+                'version': inasafe_keyword_version,
+                'source': layer.source()
+            }
+            raise InvalidHazardKeywords(
+                tr('The layer {source} must be updated to {version}.'.format(
+                    **parameters)))
 
         self._aggregation = layer
         self._aggregation.keywords = keywords

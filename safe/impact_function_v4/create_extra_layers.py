@@ -20,6 +20,8 @@ from safe.definitionsv4.fields import (
     profiling_function_field,
     profiling_time_field
 )
+from safe.definitionsv4.constants import inasafe_keyword_version_key
+from safe.definitionsv4.versions import inasafe_keyword_version
 from safe.gisv4.vector.tools import (
     create_memory_layer, create_field_from_definition)
 from safe.utilities.profiling import profile
@@ -58,6 +60,8 @@ def create_virtual_aggregation(extent, extent_crs):
     # Generate aggregation keywords
     aggregation_layer.keywords['layer_purpose'] = 'aggregation'
     aggregation_layer.keywords['title'] = 'aggr_from_bbox'
+    aggregation_layer.keywords[inasafe_keyword_version_key] = (
+        inasafe_keyword_version)
     aggregation_layer.keywords['inasafe_fields'] = {
         aggregation_id_field['key']: aggregation_id_field['field_name'],
         aggregation_name_field['key']: aggregation_name_field['field_name']
@@ -106,6 +110,8 @@ def create_analysis_layer(aggregation, crs, name):
     # Generate analysis keywords
     analysis_layer.keywords['layer_purpose'] = 'analysis'
     analysis_layer.keywords['title'] = 'analysis'
+    analysis_layer.keywords[inasafe_keyword_version_key] = (
+        inasafe_keyword_version)
     analysis_layer.keywords['inasafe_fields'] = {
         analysis_id_field['key']: analysis_id_field['field_name'],
         analysis_name_field['key']: analysis_name_field['field_name']
