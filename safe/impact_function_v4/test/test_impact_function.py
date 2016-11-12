@@ -115,7 +115,7 @@ def run_scenario(scenario, use_debug=False):
     for layer in impact_function.outputs:
         result = check_inasafe_fields(layer)
         if not result[0]:
-            # raise Exception(result[1])
+            raise Exception(result[1])
             pass
 
     return impact_function_result, impact_function.outputs
@@ -185,75 +185,63 @@ class TestImpactFunction(unittest.TestCase):
                 continue
             self.assertIn(line, message)
 
-    def test_run_impact_function(self):
-        """Test running impact function on test data."""
-        use_debug = True
-        hazard_layer = load_test_vector_layer(
-            'gisv4', 'hazard', 'classified_vector.geojson')
-        exposure_layer = load_test_vector_layer(
-            'gisv4', 'exposure', 'buildings.geojson')
-        aggregation_layer = load_test_vector_layer(
-            'gisv4', 'aggregation', 'small_grid.geojson')
-
-        # Set up impact function
-        impact_function = ImpactFunction()
-        if use_debug:
-            impact_function.debug_mode = True
-
-        impact_function.aggregation = aggregation_layer
-        impact_function.exposure = exposure_layer
-        impact_function.hazard = hazard_layer
-        impact_function.run()
-        if use_debug:
-            print impact_function.datastore.uri.absolutePath()
-            print impact_function.datastore.layers()
-
-        for layer in impact_function.outputs:
-            result = check_inasafe_fields(layer)
-            self.assertTrue(result[0], result[1])
-
-        self.assertEquals(len(impact_function.outputs), 5)
-
     @unittest.skipIf(
         os.environ.get('ON_TRAVIS', False),
         'Duplicate test of test_scenario_directory.')
-    def test_scenario(self):
+    def test_scenario(self, scenario_path=None):
         """Run test single scenario."""
         self.maxDiff = None
         use_debug = True
 
-        scenario_path = standard_data_path(
-            'scenario',
-            'raster_classified_hazard_on_'
-            'indivisible_polygons_exposure_'
-            'grid_aggregation.json')
+        if not scenario_path:
+            scenario_path = standard_data_path(
+                'scenario',
+                'raster_classified_hazard_on_'
+                'indivisible_polygons_exposure_'
+                'grid_aggregation.json')
+
+        LOGGER.info('Running the scenario : %s' % scenario_path)
         scenario, expected_steps, expected_outputs = read_json_flow(
             scenario_path)
         steps, outputs = run_scenario(scenario, use_debug)
         self.assertDictEqual(expected_steps, steps)
         self.assertEqual(len(outputs), expected_outputs['count'])
 
+    @unittest.skipIf(
+        os.environ.get('ON_TRAVIS', False),
+        'Duplicate test of test_scenario_directory.')
+    def test_scenarii(self):
+        """Test manually a directory.
+
+        This function is like test_directory, but you can control manually
+        which scenario you want to launch.
+        """
+        scenarii = {
+            'polygon_classified_on_line': False,
+            'polygon_classified_on_point': False,
+            'polygon_classified_on_vector_population': False,
+            'polygon_continuous_on_line': False,
+            'raster_classified_on_classified_raster': False,
+            'raster_classified_on_indivisible_polygons_with_grid': False,
+            'raster_classified_on_line_with_grid': False,
+            'raster_continuous_on_divisible_polygons_with_grid': True,
+            'raster_continuous_on_line': False,
+            'raster_continuous_on_raster_population': False,
+        }
+
+        path = standard_data_path('scenario')
+        for scenario, enabled in scenarii.iteritems():
+            if enabled:
+                self.test_scenario(join(path, scenario + '.json'))
+
+        json_files = [
+            join(path, f) for f in listdir(path)
+            if isfile(join(path, f)) and f.endswith('json')
+        ]
+        self.assertEqual(len(json_files), len(scenarii))
+
     def test_scenario_directory(self):
         """Run test scenario in directory."""
-        self.maxDiff = None
-        use_debug = True
-
-        def test_scenario(scenario_path):
-            LOGGER.info('Running the scenario : %s' % scenario_path)
-            scenario, expected_steps, expected_outputs = read_json_flow(
-                scenario_path)
-            if scenario.get('enable', True):
-                steps, outputs = run_scenario(scenario, use_debug)
-                try:
-                    self.assertDictEqual(expected_steps, steps)
-                    self.assertEquals(len(outputs), expected_outputs['count'])
-                    return True
-                except:
-                    # In case of an exception, print the scenario path
-                    # and re raise
-                    print 'Error with the scenario %s' % scenario_path
-                    raise
-
         path = standard_data_path('scenario')
 
         json_files = [
@@ -263,9 +251,14 @@ class TestImpactFunction(unittest.TestCase):
 
         count = 0
         for json_file in json_files:
-            if test_scenario(json_file):
+            scenario, expected_steps, expected_outputs = read_json_flow(
+                json_file)
+            if scenario.get('enable', True):
+                print "Test JSON scenario : "
+                print json_file
+                self.test_scenario(json_file)
                 count += 1
-        # self.assertEqual(len(json_files), count)
+        self.assertEqual(len(json_files), count)
 
     def test_post_processor(self):
         """Test for running post processor."""

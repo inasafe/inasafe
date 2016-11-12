@@ -641,12 +641,14 @@ class ImpactFunction(object):
         :param check_fields: Boolean to check or not inasafe_fields
         :type check_fields: bool
         """
-        self.datastore.add_layer(layer, layer.keywords['title'])
+        name = self.datastore.add_layer(layer, layer.keywords['title'])
 
         if isinstance(layer, QgsVectorLayer) and check_fields:
             result = check_inasafe_fields(layer)
             if not result[0]:
                 raise Exception(result[1])
+
+        return name
 
     def run(self):
         """Run the whole impact function."""
@@ -664,8 +666,7 @@ class ImpactFunction(object):
         if self.debug_mode:
             self._profiling_table = create_profile_layer(
                 self.performance_log_message())
-            _, name = self.datastore.add_layer(
-                self._profiling_table, self._profiling_table.title())
+            _, name = self.debug_layer(self._profiling_table)
             self._profiling_table = self.datastore.layer(name)
 
         # Later, we should move this call.

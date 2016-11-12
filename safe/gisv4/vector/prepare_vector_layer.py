@@ -251,10 +251,22 @@ def _remove_features(layer):
             i += 1
             continue
 
-        # Check if the geometry is valid.
-        if not geometry.isGeosValid():
+        # Check if the geometry is empty.
+        if geometry.isGeosEmpty():
             layer.deleteFeature(feature.id())
             i += 1
+            continue
+
+        # Check if the geometry is valid.
+        if not geometry.isGeosValid():
+            # polygonize can produce some invalid geometries
+            # For instance a polygon like this, sharing a same point :
+            #      _______
+            #      |  ___|__
+            #      |  |__|  |
+            #      |________|
+            # layer.deleteFeature(feature.id())
+            # i += 1
             continue
 
         # TODO We need to add more tests
