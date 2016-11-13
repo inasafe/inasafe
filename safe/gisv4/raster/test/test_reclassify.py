@@ -30,19 +30,23 @@ class TestReclassifyRaster(unittest.TestCase):
         layer = load_test_raster_layer('hazard', 'continuous_flood_20_20.asc')
 
         ranges = {
-            1: [None, 0.2],  # value <= 0.2
-            2: [0.2, 1],  # 0.2 < value <= 1
-            10: [1, 1.3],  # 1 < value <= 1.3 and gap in output classes
-            11: [1.3, None]  # value > 1.3
+            'low': [None, 0.2],  # value <= 0.2
+            'medium': [0.2, 1],  # 0.2 < value <= 1
+            'high': [1, None],  # 1 < value
         }
 
         layer.keywords['thresholds'] = ranges
+        layer.keywords['classification'] = 'generic_hazard_classes'
 
         expected_keywords = layer.keywords.copy()
         title = reclassify_raster_steps['output_layer_name'] % (
             layer.keywords['layer_purpose'])
         expected_keywords['layer_mode'] = 'classified'
-        expected_keywords['value_map'] = {'dry': [1], 'wet': [2]}
+        expected_keywords['value_map'] = {
+            'high': [3],
+            'low': [1],
+            'medium': [2]
+        }
         expected_keywords['title'] = title
 
         reclassified = reclassify(layer, ranges)
@@ -52,4 +56,4 @@ class TestReclassifyRaster(unittest.TestCase):
         stats = reclassified.dataProvider().bandStatistics(
             1, QgsRasterBandStats.Min | QgsRasterBandStats.Max)
         self.assertEqual(stats.minimumValue, 1.0)
-        self.assertEqual(stats.maximumValue, 11.0)
+        self.assertEqual(stats.maximumValue, 3.0)
