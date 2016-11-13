@@ -1197,7 +1197,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                         layer_node.setVisible(Qt.Unchecked)
 
             self.disable_signal_receiver()
-        self.hide_busy()
+            self.hide_busy()
 
     def accept_cancelled(self, old_keywords):
         """Deal with user cancelling post processing option dialog.
