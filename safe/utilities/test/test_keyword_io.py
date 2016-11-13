@@ -112,6 +112,18 @@ class KeywordIOTest(unittest.TestCase):
             extension='.tif',
             include_keywords=True,
             source_directory=standard_data_path('hazard'))
+        layer.keywords = {
+            'hazard_category': u'single_event',
+            'classification': u'tsunami_hazard_classes',
+            'title': u'tsunami_wgs84',
+            'keyword_version': u'3.5',
+            'hazard': u'tsunami',
+            'continuous_hazard_unit': u'metres',
+            'inasafe_fields': {},
+            'layer_geometry': u'raster',
+            'layer_purpose': u'hazard',
+            'layer_mode': u'continuous',
+        }
         new_keywords = {
             'hazard_category': 'multiple_event'
         }
@@ -126,12 +138,22 @@ class KeywordIOTest(unittest.TestCase):
             'layer_geometry': 'raster',
             'layer_purpose': 'hazard',
             'layer_mode': 'continuous',
+            'thresholds': {
+                'dry': [0.0, 0.1],
+                'high': [3.0, 8.0],
+                'low': [0.1, 1.0],
+                'medium': [1.0, 3.0],
+                'very high': [8.0, 16.68]
+            },
             'keyword_version': inasafe_keyword_version
         }
+        expected_thresholds = expected_keywords.pop('thresholds')
         expected_keywords = {
             k: get_unicode(v) for k, v in expected_keywords.iteritems()
         }
+        thresholds_keywords = keywords.pop('thresholds')
         self.assertDictEqual(expected_keywords, keywords)
+        self.assertDictEqual(expected_thresholds, thresholds_keywords)
 
     def test_copy_keywords(self):
         """Test we can copy the keywords."""
