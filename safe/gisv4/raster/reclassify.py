@@ -62,11 +62,24 @@ def reclassify(layer, callback=None):
     processing_step = reclassify_raster_steps['step_name']
     output_layer_name = output_layer_name % layer.keywords['layer_purpose']
 
-    ranges = layer.keywords.get('thresholds')
-    if not ranges:
+    thresholds = layer.keywords.get('thresholds')
+    if not thresholds:
         raise InvalidKeywordsForProcessingAlgorithm(
             'thresholds are missing from the layer %s'
             % layer.keywords['layer_purpose'])
+
+    classifications = layer.keywords.get('classification')
+    if not classifications:
+        raise InvalidKeywordsForProcessingAlgorithm(
+            'classification is missing from the layer %s'
+            % layer.keywords['layer_purpose'])
+
+    ranges = {}
+    value_map = {}
+    hazard_classes = definition(classifications)['classes']
+    for hazard_class in hazard_classes:
+        ranges[hazard_class['value']] = thresholds[hazard_class['key']]
+        value_map[hazard_class['key']] = [hazard_class['value']]
 
     output_raster = unique_filename(suffix='.tiff', dir=temp_dir())
 
