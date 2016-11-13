@@ -3,7 +3,10 @@
 Impact function
 """
 from datetime import datetime
+from os.path import join, exists
+from os import makedirs
 
+from PyQt4.QtCore import QSettings
 from qgis.core import (
     QgsMapLayer,
     QgsCoordinateReferenceSystem,
@@ -690,7 +693,18 @@ class ImpactFunction(object):
             # By default, results will go in a temporary folder.
             # Users are free to set their own datastore with the setter.
             self.callback(1, step_count, analysis_steps['data_store'])
-            self._datastore = Folder(temp_dir(sub_dir=self._unique_name))
+
+            settings = QSettings()
+            default_user_directory = settings.value(
+                'inasafe/defaultUserDirectory', defaultValue='')
+            if default_user_directory:
+                path = join(default_user_directory, self._unique_name)
+                if not exists(path):
+                    makedirs(path)
+                self._datastore = Folder(path)
+            else:
+                self._datastore = Folder(temp_dir(sub_dir=self._unique_name))
+
             self._datastore.default_vector_format = 'geojson'
             if self.debug_mode:
                 print 'Temporary datastore'
