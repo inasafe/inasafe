@@ -129,6 +129,11 @@ generic_structure_classes = {
                 'place of worship - hindu',
                 'place of worship - islam',
                 'place of worship',
+                'church',
+                'mosque',
+                'temple',
+                'synagogue',
+                'worship',
             ],
             'osm_downloader': [
                 'Place of Worship - Islam', 'Place of Worship - Unitarian',
@@ -238,6 +243,7 @@ generic_structure_classes = {
                 'public building',
                 'public facility',
                 'toilet',
+                'public',
             ],
             'osm_downloader': [
                 'Fire Station',
@@ -262,6 +268,8 @@ generic_structure_classes = {
                 'other',
                 'utility',
                 'water well',
+                'construction',
+                'yes',
             ],
             'osm_downloader': ['Utility'],
             'citations': [
