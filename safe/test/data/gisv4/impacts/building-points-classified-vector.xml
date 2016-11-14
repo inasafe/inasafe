@@ -203,7 +203,7 @@
             <gco:CharacterString/>
           </report>
           <inasafe_fields>
-            <gco:Dictionary>{&quot;feature_rate_field&quot;: &quot;exposure_rate&quot;, &quot;adult_count_field&quot;: &quot;adult&quot;, &quot;elderly_count_field&quot;: &quot;elderly&quot;, &quot;youth_count_field&quot;: &quot;youth&quot;, &quot;hazard_class_field&quot;: &quot;hazard_class&quot;, &quot;exposure_id_field&quot;: &quot;exposure_id&quot;, &quot;size_field&quot;: &quot;size&quot;, &quot;exposure_class_field&quot;: &quot;exposure_class&quot;, &quot;women_count_field&quot;: &quot;women&quot;, &quot;adult_ratio_field&quot;: &quot;adult_ratio&quot;, &quot;population_count_field&quot;: &quot;population&quot;, &quot;female_ratio_field&quot;: &quot;female_ratio&quot;, &quot;elderly_ratio_field&quot;: &quot;elderly_ratio&quot;, &quot;feature_value_field&quot;: &quot;exposure_value&quot;, &quot;youth_ratio_field&quot;: &quot;youth_ratio&quot;, &quot;hazard_id_field&quot;: &quot;hazard_id&quot;, &quot;aggregation_name_field&quot;: &quot;aggregation_name&quot;, &quot;aggregation_id_field&quot;: &quot;aggregation_id&quot;}</gco:Dictionary>
+            <gco:Dictionary>{&quot;hazard_class_field&quot;: &quot;hazard_class&quot;, &quot;exposure_id_field&quot;: &quot;exposure_id&quot;, &quot;size_field&quot;: &quot;size&quot;, &quot;exposure_class_field&quot;: &quot;exposure_class&quot;, &quot;population_count_field&quot;: &quot;population&quot;, &quot;hazard_id_field&quot;: &quot;hazard_id&quot;, &quot;aggregation_name_field&quot;: &quot;aggregation_name&quot;, &quot;aggregation_id_field&quot;: &quot;aggregation_id&quot;}</gco:Dictionary>
           </inasafe_fields>
           <resolution>
             <gco:FloatTuple/>

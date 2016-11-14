@@ -182,9 +182,6 @@ class TestImpactFunction(unittest.TestCase):
                 continue
             self.assertIn(line, message)
 
-    @unittest.skipIf(
-        os.environ.get('ON_TRAVIS', False),
-        'Duplicate test of test_scenario_directory.')
     def test_scenario(self, scenario_path=None):
         """Run test single scenario."""
         self.maxDiff = None
@@ -193,9 +190,7 @@ class TestImpactFunction(unittest.TestCase):
         if not scenario_path:
             scenario_path = standard_data_path(
                 'scenario',
-                'raster_classified_on_'
-                'indivisible_polygons_'
-                'with_grid.json')
+                'polygon_classified_on_line.json')
 
         LOGGER.info('Running the scenario : %s' % scenario_path)
         scenario, expected_steps, expected_outputs = read_json_flow(

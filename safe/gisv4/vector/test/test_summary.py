@@ -70,9 +70,12 @@ class TestAggregateSummary(unittest.TestCase):
         exposure_class_index = impact.fieldNameIndex(exposure_class)
         unique_exposure = impact.uniqueValues(exposure_class_index)
 
+        # One field per exposure type
+        # Number of previous fields in the layer
+        # 3 : 1 fields for absolute values, 2 fields for affected and total.
         self.assertEqual(
             layer.fields().count(),
-            len(unique_exposure) + number_of_fields + 2
+            len(unique_exposure) + number_of_fields + 3
         )
 
     def test_aggregation_summary(self):

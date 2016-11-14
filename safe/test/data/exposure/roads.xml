@@ -206,7 +206,7 @@
             <gco:CharacterString>line</gco:CharacterString>
           </layer_geometry>
           <classification>
-            <gco:CharacterString/>
+            <gco:CharacterString>generic_road_classes</gco:CharacterString>
           </classification>
           <scale>
             <gco:CharacterString/>

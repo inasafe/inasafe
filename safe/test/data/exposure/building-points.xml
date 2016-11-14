@@ -206,7 +206,7 @@
             <gco:CharacterString>point</gco:CharacterString>
           </layer_geometry>
           <classification>
-            <gco:CharacterString/>
+            <gco:CharacterString>generic_structure_classes</gco:CharacterString>
           </classification>
           <scale>
             <gco:CharacterString/>
