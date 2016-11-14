@@ -53,6 +53,9 @@ class TestAggregateSummary(unittest.TestCase):
         aggregate_hazard.keywords['hazard_keywords'] = {
             'classification': 'generic_hazard_classes'
         }
+        impact.keywords['classification'] = {
+            'classification': 'generic_structure_classes'
+        }
 
         number_of_fields = aggregate_hazard.fields().count()
 

@@ -7,7 +7,7 @@
   },
 
   "expected_outputs":{
-    "count": 5
+    "count": 4
   },
   "expected_steps":{
     "impact function":{
@@ -17,8 +17,7 @@
         "Union exposure features to the aggregate hazard",
         "Aggregate the impact summary",
         "Aggregate the aggregation summary",
-        "Aggregate the analysis summary",
-        "Build the exposure breakdown"
+        "Aggregate the analysis summary"
       ]
     },
     "post_processor":{

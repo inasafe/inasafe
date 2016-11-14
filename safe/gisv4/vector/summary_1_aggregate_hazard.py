@@ -22,6 +22,7 @@ from safe.definitionsv4.fields import (
 from safe.definitionsv4.post_processors import post_processor_affected_function
 from safe.definitionsv4.processing_steps import (
     summary_1_aggregate_hazard_steps)
+from safe.definitionsv4.utilities import definition
 from safe.gisv4.vector.tools import create_field_from_definition
 from safe.utilities.profiling import profile
 from safe.utilities.pivot_table import FlatTable
@@ -122,6 +123,17 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
     if geometry == QGis.Polygon and exposure == 'structure':
         field_index = None
 
+    # Special case if it's an exposure without classification. It means it's
+    # a continuous exposure. We count the compulsory field.
+    classification = impact.keywords.get('classification')
+    if not classification:
+        exposure_definitions = definition(exposure)
+        # I take the only first field for reporting, I don't know how to manage
+        # with many fields. AFAIK we don't have this case yet.
+        field = exposure_definitions['compulsory_fields'][0]
+        field_name = source_fields[field['key']]
+        field_index = impact.fieldNameIndex(field_name)
+
     aggregate_hazard.startEditing()
 
     shift = aggregate_hazard.fields().count()
@@ -153,7 +165,8 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
     request.setFlags(QgsFeatureRequest.NoGeometry)
     for f in impact.getFeatures(request):
 
-        if field_index:
+        # Field_index can be equal to 0.
+        if field_index is not None:
             value = f[field_index]
         else:
             value = 1
