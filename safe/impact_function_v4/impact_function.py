@@ -5,6 +5,7 @@ Impact function
 from datetime import datetime
 from os.path import join, exists
 from os import makedirs
+from collections import OrderedDict
 
 from PyQt4.QtCore import QSettings
 from qgis.core import (
@@ -1107,10 +1108,9 @@ class ImpactFunction(object):
         classification = self.hazard.keywords['classification']
         classification = definition(classification)
 
-        classes = {
-            f['key']: (f['color'], f['name'])
-            for f in classification['classes']
-        }
+        classes = OrderedDict()
+        for f in reversed(classification['classes']):
+            classes[f['key']] = (f['color'], f['name'])
 
         # Let's style layers which have a geometry and have hazard_class
         hazard_class = hazard_class_field['key']
