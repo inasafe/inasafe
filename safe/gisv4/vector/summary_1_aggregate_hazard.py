@@ -4,7 +4,7 @@
 Aggregate the impact table to the aggregate hazard.
 """
 from PyQt4.QtCore import QPyNullVariant
-from qgis.core import QGis, QgsFeatureRequest
+from qgis.core import QGis, QgsFeatureRequest, QgsField
 
 from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
 from safe.definitionsv4.fields import (
@@ -17,7 +17,8 @@ from safe.definitionsv4.fields import (
     total_field,
     exposure_count_field,
     affected_field,
-    size_field
+    size_field,
+    count_fields,
 )
 from safe.definitionsv4.post_processors import post_processor_affected_function
 from safe.definitionsv4.processing_steps import (
@@ -108,6 +109,17 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
     exposure_class_index = impact.fieldNameIndex(exposure_class)
     unique_exposure = impact.uniqueValues(exposure_class_index)
 
+    # Let's create a structure like :
+    # key is the index of the field : (flat table, definition name)
+    absolute_fields = [field['key'] for field in count_fields]
+    summaries = {}
+    for field in source_fields:
+        if field in absolute_fields:
+            field_name = source_fields[field]
+            index = impact.fieldNameIndex(field_name)
+            flat_table = FlatTable('aggregation_id', 'hazard_id')
+            summaries[index] = (flat_table, field)
+
     if source_fields.get(size_field['key']):
         field_size = source_fields[size_field['key']]
         field_index = impact.fieldNameIndex(field_size)
@@ -159,6 +171,15 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
     aggregate_hazard.keywords['inasafe_fields'][total_field['key']] = (
         total_field['field_name'])
 
+    # For each absolute values
+    for absolute_field in summaries.iterkeys():
+        field_definition = definition(summaries[absolute_field][1])
+        field = create_field_from_definition(field_definition)
+        aggregate_hazard.addAttribute(field)
+        key = field_definition['key']
+        value = field_definition['field_name']
+        aggregate_hazard.keywords['inasafe_fields'][key] = value
+
     flat_table = FlatTable('aggregation_id', 'hazard_id', 'exposure_class')
 
     request = QgsFeatureRequest()
@@ -183,6 +204,17 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
             hazard_id=hazard_value,
             exposure_class=exposure_value
         )
+
+        # We summarize every absolute values.
+        for field, field_definition in summaries.iteritems():
+            value = f[field]
+            if not value or isinstance(value, QPyNullVariant):
+                value = 0
+            field_definition[0].add_value(
+                value,
+                aggregation_id=aggregation_value,
+                hazard_id=hazard_value
+            )
 
     hazard_keywords = aggregate_hazard.keywords['hazard_keywords']
     classification = hazard_keywords['classification']
@@ -209,6 +241,14 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
 
         aggregate_hazard.changeAttributeValue(
             area.id(), shift + len(unique_exposure) + 1, total)
+
+        for i, field in enumerate(summaries.itervalues()):
+            value = field[0].get_value(
+                aggregation_id=aggregation_value,
+                hazard_id=feature_hazard_id
+            )
+            aggregate_hazard.changeAttributeValue(
+                area.id(), shift + len(unique_exposure) + 2 + i, value)
 
     aggregate_hazard.commitChanges()
 

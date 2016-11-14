@@ -815,7 +815,6 @@ count_fields = [
     youth_count_field,
     adult_count_field,
     elderly_count_field,
-    size_field,
 ]
 
 ratio_fields = [
