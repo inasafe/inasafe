@@ -185,17 +185,17 @@ def check_inasafe_fields(layer):
 
     difference = set(inasafe_fields.values()).difference(real_fields)
     if len(difference):
-        msg = tr(
+        message = tr(
             'inasafe_fields has more fields than the layer %s itself : %s'
             % (layer.keywords['layer_purpose'], difference))
-        raise Exception(msg)
+        raise Exception(message)
 
     difference = set(real_fields).difference(inasafe_fields.values())
     if len(difference):
-        msg = tr(
+        message = tr(
             'The layer %s has more fields than inasafe_fields : %s'
             % (layer.title(), difference))
-        raise Exception(msg)
+        raise Exception(message)
 
 
 def assert_hash_for_file(hash_string, filename):

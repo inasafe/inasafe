@@ -109,9 +109,9 @@ def union(union_a, union_b, callback=None):
         not_null_field_index = writer.fieldNameIndex(not_null_field)
 
     else:
-        msg = 'I got layer purpose 1 = %s and layer purpose 2 = %s'\
+        message = 'I got layer purpose 1 = %s and layer purpose 2 = %s'\
               % (layer_purpose_1, layer_purpose_2)
-        raise InvalidKeywordsForProcessingAlgorithm(msg)
+        raise InvalidKeywordsForProcessingAlgorithm(message)
 
     writer.startEditing()
 
