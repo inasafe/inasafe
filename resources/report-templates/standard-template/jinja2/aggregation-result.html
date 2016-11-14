@@ -1,0 +1,36 @@
+{% if aggregation_result %}
+<h5 class="info">
+    <i class="icon-info-sign icon-white"></i> {{ header }}
+</h5>
+<table class="table table-striped condensed">
+    <thead>
+        <tr>
+            <th colspan="1">{{ aggregation_result.header_label }}</th>
+            {% for type_header in aggregation_result.type_header_labels %}
+            <th class="text-right" colspan="1">{{ type_header }}</th>
+            {% endfor %}
+            <th class="text-right" colspan="1">{{ aggregation_result.total_label }}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in aggregation_result.rows %}
+        <tr>
+            <th colspan="1">{{ item.name }}</th>
+            {% for value in item.type_values %}
+            <td class="text-right" colspan=1>{{ value }}</td>
+            {% endfor %}
+            <td class="text-right" colspan=1>{{ item.total }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <th colspan="1">{{ aggregation_result.total_label }}</th>
+            {% for value in aggregation_result.type_total_values %}
+            <th class="text-right" colspan="1">{{ value }}</th>
+            {% endfor %}
+            <th class="text-right" colspan="1">{{ aggregation_result.total_all }}</th>
+        </tr>
+    </tfoot>
+</table>
+{% endif %}

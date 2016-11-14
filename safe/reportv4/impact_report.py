@@ -247,6 +247,7 @@ class ImpactReport(object):
             impact=None,
             analysis=None,
             exposure_breakdown=None,
+            aggregation_impacted=None,
             extra_layers=[],
             minimum_needs_profile=None):
         """Constructor for the Composition Report class.
@@ -273,6 +274,9 @@ class ImpactReport(object):
         self._analysis = (analysis or self._impact_function.analysis_impacted)
         self._exposure_breakdown = (
             exposure_breakdown or self._impact_function.exposure_breakdown)
+        self._aggregation_impacted = (
+            aggregation_impacted or
+            self._impact_function.aggregation_impacted)
         self._extra_layers = extra_layers
         self._minimum_needs = minimum_needs_profile
         self._extent = self._iface.mapCanvas().extent()
@@ -440,6 +444,25 @@ class ImpactReport(object):
         :return:
         """
         self._exposure_breakdown = value
+
+    @property
+    def aggregation_impacted(self):
+        """
+
+        :return:
+        :rtype: qgis.core.QgsVectorLayer
+        """
+        return self._aggregation_impacted
+
+    @aggregation_impacted.setter
+    def aggregation_impacted(self, value):
+        """
+
+        :param value: Aggregation Impacted
+        :type value: qgis.core.QgsVectorLayer
+        :return:
+        """
+        self._aggregation_impacted = value
 
     @property
     def extra_layers(self):
