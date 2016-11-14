@@ -1,5 +1,7 @@
 # coding=utf-8
 """Keyword Wizard Step for Threshold"""
+from collections import OrderedDict
+from functools import partial
 import logging
 import numpy
 from osgeo import gdal
@@ -37,7 +39,7 @@ class StepKwThreshold(WizardStep, FORM_CLASS):
 
         """
         WizardStep.__init__(self, parent)
-        self.classes = dict()
+        self.classes = OrderedDict()
 
     def is_ready_to_next_step(self):
         """Check if the step is complete. If so, there is
@@ -122,9 +124,9 @@ class StepKwThreshold(WizardStep, FORM_CLASS):
             max_value_layer = numpy.amax(numpy.array(
                 dataset.GetRasterBand(1).ReadAsArray()))
             text = continuous_raster_question % (
-            layer_purpose['name'],
-            layer_subcategory['name'],
-            classification['name'], min_value_layer, max_value_layer)
+                layer_purpose['name'],
+                layer_subcategory['name'],
+                classification['name'], min_value_layer, max_value_layer)
         else:
             field_name = self.parent.step_kw_field.selected_field()
             field_index = self.parent.layer.fieldNameIndex(field_name)
@@ -141,8 +143,10 @@ class StepKwThreshold(WizardStep, FORM_CLASS):
 
         thresholds = self.parent.get_existing_keyword('thresholds')
 
-        self.classes = dict()
+        self.classes = OrderedDict()
         classes = classification.get('classes')
+        # Sort by value, put the lowest first
+        classes = sorted(classes, key=lambda k: k['value'])
 
         for i, the_class in enumerate(classes):
             class_layout = QHBoxLayout()
@@ -190,6 +194,38 @@ class StepKwThreshold(WizardStep, FORM_CLASS):
             self.classes[the_class['key']] = [min_value_input, max_value_input]
 
         self.gridLayoutThreshold.setSpacing(0)
+
+        def min_max_changed(index, the_string):
+            """Slot when min or max value change.
+
+            :param index: The index of the double spin.
+            :type index: int
+
+            :param the_string: The flag to indicate the min or max value.
+            :type the_string: str
+            """
+            if the_string == 'Max value':
+                current_max_value = self.classes.values()[index][1]
+                target_min_value = self.classes.values()[index + 1][0]
+                if current_max_value.value() != target_min_value.value():
+                    target_min_value.setValue(current_max_value.value())
+            elif the_string == 'Min value':
+                current_min_value = self.classes.values()[index][0]
+                target_max_value = self.classes.values()[index - 1][1]
+                if current_min_value.value() != target_max_value.value():
+                    target_max_value.setValue(current_min_value.value())
+
+        # Set behaviour
+        for k, v in self.classes.items():
+            index = self.classes.keys().index(k)
+            if index < len(self.classes) - 1:
+                # Max value changed
+                v[1].valueChanged.connect(partial(
+                    min_max_changed, index=index, the_string='Max value'))
+            if index > 0:
+                # Min value
+                v[0].valueChanged.connect(partial(
+                    min_max_changed, index=index, the_string='Min value'))
 
     def get_threshold(self):
         """Return threshold based on current state."""
