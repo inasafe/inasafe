@@ -5,6 +5,7 @@ from jinja2.exceptions import TemplateError
 
 from safe.definitionsv4.exposure import exposure_all
 from safe.definitionsv4.hazard import hazard_all
+from safe.definitionsv4.utilities import definition
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -27,8 +28,6 @@ def layer_definition_type(layer):
     :return: Layer definitions.
     :rtype: dict
     """
-    definition_list = exposure_all + hazard_all
-
     layer_purposes = ['exposure', 'hazard']
 
     layer_purpose = [p for p in layer_purposes if p in layer.keywords]
@@ -38,14 +37,7 @@ def layer_definition_type(layer):
 
     layer_purpose = layer_purpose[0]
 
-    def_type = [
-        definition for definition in definition_list
-        if definition['key'] == layer.keywords[layer_purpose]
-    ]
-    if def_type:
-        return def_type[0]
-
-    return None
+    return definition(layer.keywords[layer_purpose])
 
 
 def jinja2_output_as_string(impact_report, component_key):
@@ -65,14 +57,19 @@ def jinja2_output_as_string(impact_report, component_key):
     """
     metadata = impact_report.metadata
     for c in metadata.components:
-        if c.key == component_key and c.output:
+        if c.key == component_key:
             if c.output_format == 'string':
                 return c.output
             elif c.output_format == 'file':
-                filename = os.path.join(
-                    impact_report.output_folder, c.output_path)
-                filename = os.path.abspath(filename)
-                with open(filename) as f:
-                    return f.read()
+                try:
+                    filename = os.path.join(
+                        impact_report.output_folder, c.output_path)
+                    filename = os.path.abspath(filename)
+                    with open(filename) as f:
+                        return f.read()
+                except IOError:
+                    pass
 
-    raise TemplateError("Can't find component with key '%s'" % component_key)
+    raise TemplateError(
+        "Can't find component with key '%s' and have an output" %
+        component_key)

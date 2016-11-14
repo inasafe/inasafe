@@ -268,7 +268,8 @@ class ImpactReport(object):
         self._impact_function = impact_function
         self._hazard = hazard or self._impact_function.hazard
         self._exposure = (exposure or self._impact_function.exposure)
-        self._impact = impact or self._impact_function.exposure_impacted
+        self._impact = (
+            impact or self._impact_function.exposure_impacted)
         self._analysis = (analysis or self._impact_function.analysis_impacted)
         self._exposure_breakdown = (
             exposure_breakdown or self._impact_function.exposure_breakdown)

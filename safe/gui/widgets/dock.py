@@ -33,7 +33,12 @@ from qgis.core import (
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import Qt, pyqtSlot, QSettings, pyqtSignal
+from PyQt4.QtCore import (
+    Qt,
+    pyqtSlot,
+    QSettings,
+    pyqtSignal,
+    QDir)
 
 from safe.definitionsv4.report import standard_impact_report_metadata
 from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
@@ -1075,13 +1080,18 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         impact_report = ImpactReportV4(
             self.iface,
             report_metadata,
-            impact_function=impact_function)
+            impact_function=impact_function,
+            minimum_needs_profile=minimum_needs)
 
         # generate report folder
 
         # no other option for now
         # TODO: retrieve the information from data store
-        layer_dir = os.path.dirname(impact_function.impact.source())
+        if isinstance(impact_function.datastore.uri, QDir):
+            layer_dir = impact_function.datastore.uri.absolutePath()
+        else:
+            # No other way for now
+            return
 
         # We will generate it on the fly without storing it after datastore
         # supports
@@ -1742,7 +1752,14 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         try:
             keywords = self.keyword_io.read_keywords(layer)
 
-            if keywords.get('layer_purpose') == 'impact':
+            # list of layer purpose to show impact report
+            impacted_layer = [
+                'impact',
+                'analysis',
+                'exposure_breakdown',
+            ]
+
+            if keywords.get('layer_purpose') in impacted_layer:
                 try:
                     self.show_impact_report(layer, keywords)
                 except MissingImpactReport:

@@ -1,6 +1,7 @@
 # coding=utf-8
 from safe.common.parameters.resource_parameter import ResourceParameter
 from safe.definitionsv4.exposure import exposure_population
+from safe.definitionsv4.fields import total_affected_field
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -59,12 +60,18 @@ def minimum_needs_extractor(impact_report, component_metadata):
             if need_parameter.unit.abbreviation:
                 header = '%s [%s]' % (
                     header, need_parameter.unit.abbreviation)
+            # We don't have any layer to store minimum needs for now.
+            # So, for now just calculate it manually
             need_index = analysis_layer.fieldNameIndex(
-                need_parameter.name)
+                total_affected_field['field_name'])
+            # need_index = analysis_layer.fieldNameIndex(
+            #     need_parameter.name)
             feat = analysis_layer.getFeatures().next()
+            value = feat[need_index] * need_parameter.value
+            # value = feat[need_index]
             item = {
                 'header': header,
-                'value': feat[need_index]
+                'value': value
             }
             group['needs'].append(item)
         needs.append(group)

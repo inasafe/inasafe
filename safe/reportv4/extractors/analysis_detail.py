@@ -1,5 +1,5 @@
 # coding=utf-8
-from safe.definitionsv4.exposure import itemizable_exposures_all
+from safe.definitionsv4.exposure import exposure_all
 from safe.definitionsv4.fields import (
     exposure_type_field,
     exposure_class_field,
@@ -57,6 +57,9 @@ def analysis_detail_extractor(impact_report, component_metadata):
     exposure_type = layer_definition_type(exposure_layer)
 
     # Analysis detail only applicable for breakable exposure types:
+    itemizable_exposures_all = [
+        exposure for exposure in exposure_all
+        if exposure.get('classifications')]
     if exposure_type not in itemizable_exposures_all:
         return context
 
