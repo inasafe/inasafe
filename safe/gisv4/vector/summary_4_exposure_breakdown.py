@@ -96,6 +96,9 @@ def exposure_type_breakdown(aggregate_hazard, callback=None):
             key_name = exposure_count_field['key'] % exposure
             field_name = source_fields[key_name]
             exposure_count = area[field_name]
+            if not exposure_count or isinstance(
+                    exposure_count, QPyNullVariant):
+                exposure_count = 0
 
             flat_table.add_value(
                 exposure_count,
