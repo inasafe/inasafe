@@ -790,14 +790,16 @@ class ImpactFunction(object):
         self.callback(7, step_count, analysis_steps['post_processing'])
         if self._exposure_impacted:
             self._performance_log = profiling_log()
-            # We post process the impact layer
+            # We post process the exposure impacted
             self.post_process(self._exposure_impacted)
         else:
             if self._aggregate_hazard_impacted:
-                # We post process the aggregate hazard. (raster exposure).
+                # We post process the aggregate hazard.
+                # Raster continuous exposure.
                 self.post_process(self._aggregate_hazard_impacted)
             else:
-                # We post process the aggregation (EQ raster or pop raster).
+                # We post process the aggregation.
+                # Earthquake raster on population raster.
                 self.post_process(self._aggregation_impacted)
 
         self._performance_log = profiling_log()
@@ -820,11 +822,12 @@ class ImpactFunction(object):
             if self.debug_mode:
                 check_inasafe_fields(self._aggregate_hazard)
 
-            _, name = self.datastore.add_layer(
-                self._exposure_breakdown, 'exposure_breakdown')
-            self._exposure_breakdown = self.datastore.layer(name)
-            if self.debug_mode:
-                check_inasafe_fields(self._exposure_breakdown)
+            if self._exposure.keywords.get('classification'):
+                _, name = self.datastore.add_layer(
+                    self._exposure_breakdown, 'exposure_breakdown')
+                self._exposure_breakdown = self.datastore.layer(name)
+                if self.debug_mode:
+                    check_inasafe_fields(self._exposure_breakdown)
 
         _, name = self.datastore.add_layer(
             self._aggregation_impacted, 'aggregation_impacted')
@@ -1128,11 +1131,12 @@ class ImpactFunction(object):
             self._analysis_impacted = analysis_summary(
                 self._aggregate_hazard_impacted, self._analysis_impacted)
 
-            self.set_state_process(
-                'impact function',
-                'Build the exposure breakdown')
-            self._exposure_breakdown = exposure_type_breakdown(
-                self._aggregate_hazard_impacted)
+            if self._exposure.keywords.get('classification'):
+                self.set_state_process(
+                    'impact function',
+                    'Build the exposure breakdown')
+                self._exposure_breakdown = exposure_type_breakdown(
+                    self._aggregate_hazard_impacted)
 
     def style(self):
         """Function to apply some styles to the layers."""
