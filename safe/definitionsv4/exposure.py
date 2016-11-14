@@ -373,21 +373,3 @@ exposures = {
     'citations': concepts['exposure']['citations'],
     'types': exposure_all,
 }
-
-# Exposure that are able to be broken down in analysis detail breakdown
-# This must be exposure that have class field or type field
-itemizable_exposures_all = [
-    exposure_structure,
-    exposure_road,
-    exposure_land_cover,
-    exposure_place
-]
-
-itemizable_exposures = {
-    'key': 'itemizable_exposures',
-    'name': 'Itemizable Exposures',
-    'descriptions': tr(
-        'Itemizable Exposures are exposures that have a class field. '
-        'It can have an analysis detail with itemized exposure class.'),
-    'types': itemizable_exposures_all
-}
