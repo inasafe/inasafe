@@ -6,6 +6,8 @@ Definitions for basic report
 from safe.common.utilities import safe_dir
 from safe.reportv4.extractors.action_notes import action_checklist_extractor, \
     notes_assumptions_extractor
+from safe.reportv4.extractors.aggregate_result import \
+    aggregation_result_extractor
 from safe.reportv4.extractors.analysis_detail import analysis_detail_extractor
 from safe.reportv4.extractors.analysis_result import analysis_result_extractor
 from safe.reportv4.extractors.composer import qgis_composer_extractor
@@ -78,6 +80,17 @@ standard_impact_report_metadata = {
             'template': 'standard-template/'
                         'jinja2/'
                         'minimum-needs.html',
+        },
+        {
+            'key': 'aggregation-result',
+            'type': 'Jinja2',
+            'processor': jinja2_renderer,
+            'extractor': aggregation_result_extractor,
+            'output_format': 'string',
+            'output_path': 'aggregation-result-output.html',
+            'template': 'standard-template/'
+                        'jinja2/'
+                        'aggregation-result.html',
         },
         {
             'key': 'impact-report',

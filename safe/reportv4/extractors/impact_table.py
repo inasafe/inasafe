@@ -40,6 +40,8 @@ def impact_table_extractor(impact_report, component_metadata):
         impact_report, 'notes-assumptions')
     minimum_needs = jinja2_output_as_string(
         impact_report, 'minimum-needs')
+    aggregation_result = jinja2_output_as_string(
+        impact_report, 'aggregation-result')
 
     context['brand_logo'] = resource_url(
             resources_path('img', 'logos', 'inasafe-logo-white.png'))
@@ -48,6 +50,7 @@ def impact_table_extractor(impact_report, component_metadata):
     context['action_checklist'] = action_checklist
     context['notes_assumptions'] = notes_assumptions
     context['minimum_needs'] = minimum_needs
+    context['aggregation_result'] = aggregation_result
 
     # TODO: taken from hazard and exposure provenance
     hazard_provenance = tr('an unknown source')
