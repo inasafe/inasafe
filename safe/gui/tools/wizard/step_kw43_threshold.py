@@ -1,9 +1,11 @@
 # coding=utf-8
 """Keyword Wizard Step for Threshold"""
+import logging
 import numpy
 from osgeo import gdal
 from osgeo.gdalconst import GA_ReadOnly
-from PyQt4.QtGui import QDoubleSpinBox, QHBoxLayout, QLabel
+from PyQt4.QtGui import (
+    QDoubleSpinBox, QHBoxLayout, QLabel, QWidgetItem, QSpacerItem, QLayout)
 
 from safe.utilities.i18n import tr
 from safe.definitionsv4.layer_purposes import layer_purpose_aggregation
@@ -19,6 +21,8 @@ __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
+
+LOGGER = logging.getLogger('InaSAFE')
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
@@ -78,6 +82,32 @@ class StepKwThreshold(WizardStep, FORM_CLASS):
 
     def set_widgets(self):
         """Set widgets on the Threshold tab."""
+
+        # Adapted from http://stackoverflow.com/a/9375273/1198772
+        def clear_layout(layout):
+            """Clear layout content
+
+            :param layout: A layout.
+            :type layout: QLayout
+            """
+            for i in reversed(range(layout.count())):
+                item = layout.itemAt(i)
+
+                if isinstance(item, QWidgetItem):
+                    item.widget().close()
+                elif isinstance(item, QLayout):
+                    clear_layout(item.layout())
+                elif isinstance(item, QSpacerItem):
+                    # No need to do anything
+                    pass
+                else:
+                    pass
+
+                # Remove the item from layout
+                layout.removeItem(item)
+
+        clear_layout(self.gridLayoutThreshold)
+
         # Set text in the label
         layer_purpose = self.parent.step_kw_purpose.selected_purpose()
         layer_subcategory = self.parent.step_kw_subcategory.\
