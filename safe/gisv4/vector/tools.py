@@ -228,7 +228,11 @@ def create_field_from_definition(field_definition, name=None):
     else:
         field.setName(field_definition['field_name'])
 
-    field.setType(field_definition['type'])
+    if isinstance(field_definition['type'], list):
+        # Use the first element in the list of type
+        field.setType(field_definition['type'][0])
+    else:
+        field.setType(field_definition['type'])
     field.setLength(field_definition['length'])
     field.setPrecision(field_definition['precision'])
     return field

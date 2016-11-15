@@ -341,7 +341,11 @@ def _add_id_column(layer):
 
         id_field = QgsField()
         id_field.setName(safe_id['field_name'])
-        id_field.setType(safe_id['type'])
+        if isinstance(safe_id['type'], list):
+            # Use the first element in the list of type
+            id_field.setType(safe_id['type'][0])
+        else:
+            id_field.setType(safe_id['type'][0])
         id_field.setPrecision(safe_id['precision'])
         id_field.setLength(safe_id['length'])
 
