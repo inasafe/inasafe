@@ -24,7 +24,7 @@ class TestUnionVector(unittest.TestCase):
         pass
 
     def test_union(self):
-        """Test we can union two layers like hazard and aggregation."""
+        """Test we can union two layers like hazard and aggregation (1)."""
 
         union_a = load_test_vector_layer(
             'gisv4', 'hazard', 'classified_vector.geojson')
@@ -40,5 +40,19 @@ class TestUnionVector(unittest.TestCase):
             layer.fields().count()
         )
 
-        # Add test about keywords
-        # todo
+    def test_union_error(self):
+        """Test we can union two layers like hazard and aggregation (2)."""
+
+        union_a = load_test_vector_layer(
+            'gisv4', 'hazard', 'union_check_hazard.geojson')
+
+        union_b = load_test_vector_layer(
+            'gisv4', 'aggregation', 'union_check_aggregation.geojson')
+
+        layer = union(union_a, union_b)
+
+        self.assertEqual(layer.featureCount(), 11)
+        self.assertEqual(
+            union_a.fields().count() + union_b.fields().count(),
+            layer.fields().count()
+        )
