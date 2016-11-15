@@ -193,9 +193,9 @@ class TestImpactFunction(unittest.TestCase):
         if not scenario_path:
             scenario_path = standard_data_path(
                 'scenario',
-                'raster_classified_hazard_on_'
-                'indivisible_polygons_exposure_'
-                'grid_aggregation.json')
+                'raster_classified_on_'
+                'indivisible_polygons_'
+                'with_grid.json')
 
         LOGGER.info('Running the scenario : %s' % scenario_path)
         scenario, expected_steps, expected_outputs = read_json_flow(
