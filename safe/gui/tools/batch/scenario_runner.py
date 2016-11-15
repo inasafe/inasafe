@@ -83,7 +83,8 @@ def extract_path(scenario_file_path, path):
     return path, base_name
 
 
-def add_layers(scenario_dir, paths, iface, layer_group):   # pylint: disable=W0621
+# pylint: disable=W0621
+def add_layers(scenario_dir, paths, iface, layer_group):
     """Add the layers described in a scenario file to QGIS.
 
     :param scenario_dir: Base directory to find path.

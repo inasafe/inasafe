@@ -30,8 +30,8 @@ from qgis.core import (
     QgsRectangle,
     QgsCoordinateReferenceSystem,
     QgsMapLayer,
-    QgsMapLayerRegistry, 
-    QgsProject, 
+    QgsMapLayerRegistry as reg,
+    QgsProject,
     QgsVectorLayer,
     QgsRasterLayer)
 
@@ -283,24 +283,24 @@ class BatchDialog(QDialog, FORM_CLASS):
         paths = []
         if 'aggregation' in items:
             paths.append(items['aggregation'])
-            # add access to aggregation layer source so we can access it later
-            # self.aggregation_source = os.path.normpath(os.path.join(scenario_directory,items['aggregation']))
         if 'exposure' in items:
             paths.append(items['exposure'])
             # add access to exposure layer source so we can access it later
-            self.exposure_source = os.path.normpath(os.path.join(scenario_directory,items['exposure']))
+            self.exposure_source = os.path.normpath(
+                os.path.join(scenario_directory, items['exposure']))
         if 'hazard' in items:
             paths.append(items['hazard'])
-            # add access to aggregation layer source so we can access it later
-            # self.hazard_source = os.path.normpath(os.path.join(scenario_directory, items['hazard']))
-
         try:
             # create layer group
             group_name = items['scenario_name']
             self.layer_group = self.root.addGroup(group_name)
             self.layer_group_container.append(self.layer_group)
             # add layer to group
-            scenario_runner.add_layers(scenario_directory, paths, self.iface, self.layer_group)
+            scenario_runner.add_layers(
+                scenario_directory,
+                paths,
+                self.iface,
+                self.layer_group)
         except FileNotFoundError:
             # set status to 'fail'
             LOGGER.exception('Loading layers failed: \nRoot: %s\n%s' % (
@@ -525,38 +525,39 @@ class BatchDialog(QDialog, FORM_CLASS):
                 # Load impact layer into QGIS
                 qgis_layer = read_impact_layer(impact_layer)
                 impact_layer_source = qgis_layer.source()
-                QgsMapLayerRegistry.instance().addMapLayer(qgis_layer, addToLegend=False)
+                reg.instance().addMapLayer(qgis_layer, addToLegend=False)
 
                 # identify impact layer in map canvas from impact layer source
-                legend_impact_layer = self.identify_layer(impact_layer_source)
+                leg_impact_layer = self.identify_layer(impact_layer_source)
                 # clone impact layer in Layer Panel
                 if qgis_layer.type() == QgsMapLayer.VectorLayer:
                     cloned_layer = QgsVectorLayer(
-                        legend_impact_layer.source(),
-                        legend_impact_layer.name(),
-                        legend_impact_layer.providerType())
+                        leg_impact_layer.source(),
+                        leg_impact_layer.name(),
+                        leg_impact_layer.providerType())
                 elif qgis_layer.type() == QgsMapLayer.RasterLayer:
                     cloned_layer = QgsRasterLayer(
-                        legend_impact_layer.source(),
-                        legend_impact_layer.name(),
-                        legend_impact_layer.providerType())
+                        leg_impact_layer.source(),
+                        leg_impact_layer.name(),
+                        leg_impact_layer.providerType())
                 else:
                     raise Exception('layer source is failed to be recognized')
-                # turn off layer visibility just in case layer removing is not working
-                # so that it won't be shown in the next scenario
-                self.iface.legendInterface().setLayerVisible(legend_impact_layer, False)
-                # remove original layer created from dock,
-                # sometimes this code is failed leaving original file in layer panel
-                QgsMapLayerRegistry.instance().removeMapLayer(legend_impact_layer)
+                # turn off layer visibility just in case layer removing
+                # is not working so that it won't be shown in the next scenario
+                legend_interface = self.iface.legendInterface()
+                legend_interface.setLayerVisible(leg_impact_layer, False)
+                # remove original layer created from dock, sometimes this
+                # code is failed leaving original file in layer panel
+                reg.instance().removeMapLayer(leg_impact_layer)
                 # add cloned layer to the layer group
-                QgsMapLayerRegistry.instance().addMapLayer(cloned_layer, False)
-                self.layer_group.insertLayer(0,cloned_layer)
+                reg.instance().addMapLayer(cloned_layer, False)
+                self.layer_group.insertLayer(0, cloned_layer)
                 # turn off exposure layer visibility
                 exposure_layer = self.identify_layer(self.exposure_source)
-                self.iface.legendInterface().setLayerVisible(exposure_layer, False)
+                legend_interface.setLayerVisible(exposure_layer, False)
 
-                # print layer list. somehow this is the only way to update the map canvas
-                # still need improvement
+                # print layer list. somehow this is the only way to update
+                # the map canvas. still need improvement
                 layers = self.iface.mapCanvas().layers()
                 for layer in layers:
                     print layer.name()
@@ -778,20 +779,21 @@ class BatchDialog(QDialog, FORM_CLASS):
     def identify_layer(self, layer_source):
         """Identify impact layer created from dock so we can access it
 
-        :param impact_layer_source: the source of impact layer created from dock.
-                                    we will use this to match with the source of each
-                                    in layer legend.
+        :param impact_layer_source: the source of impact layer
+            created from dock. we will use this to match with the source of
+            each in layer legend.
         :type label: str
         :return QgsVectorLayer
         """
 
         # iterate legend layer to match with input layer
-        registry_layers = QgsMapLayerRegistry.instance().mapLayers().iteritems()
-        for key,value in registry_layers:
+        reg_layers = reg.instance().mapLayers().iteritems()
+        for key, value in reg_layers:
             if value.source() == layer_source:
                 return value
         else:
             raise Exception('Can not identify impact layer from layer source')
+
 
 def read_scenarios(filename):
     """Read keywords dictionary from file
@@ -838,7 +840,7 @@ def read_scenarios(filename):
     for section in parser.sections():
         items = parser.items(section)
         # add section as scenario name
-        items.append(('scenario_name',section))
+        items.append(('scenario_name', section))
         # add full path to the blocks
         items.append(('full_path', filename))
         blocks[section] = {}
