@@ -221,7 +221,7 @@ def union(union_a, union_b, callback=None):
 
             if diff_geom is not None and (
                             diff_geom.wkbType() == 0 or QgsWKBTypes.flatType(
-                    diff_geom.geometry().wkbType()) == \
+                    diff_geom.geometry().wkbType()) ==
                     QgsWKBTypes.GeometryCollection):
                 temp_list = diff_geom.asGeometryCollection()
                 for i in temp_list:
