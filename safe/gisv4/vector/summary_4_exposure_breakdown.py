@@ -8,6 +8,7 @@ from PyQt4.QtCore import QPyNullVariant
 from qgis.core import QGis, QgsFeatureRequest, QgsFeature
 
 from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
+from safe.definitionsv4.utilities import definition
 from safe.definitionsv4.fields import (
     aggregation_id_field,
     aggregation_name_field,
@@ -19,7 +20,9 @@ from safe.definitionsv4.fields import (
     affected_field,
     hazard_count_field,
     exposure_count_field,
-    total_unaffected_field)
+    total_unaffected_field,
+    count_fields,
+)
 from safe.definitionsv4.processing_steps import (
     summary_4_exposure_breakdown_steps)
 from safe.definitionsv4.post_processors import post_processor_affected_function
@@ -27,6 +30,8 @@ from safe.gisv4.vector.tools import (
     create_field_from_definition,
     read_dynamic_inasafe_field,
     create_memory_layer)
+from safe.gisv4.vector.summary_tools import (
+    check_inputs, create_absolute_values_structure, add_fields)
 from safe.utilities.profiling import profile
 from safe.utilities.pivot_table import FlatTable
 
@@ -72,12 +77,10 @@ def exposure_type_breakdown(aggregate_hazard, callback=None):
         affected_field,
         total_field
     ]
-    for field in source_compulsory_fields:
-        # noinspection PyTypeChecker
-        if not source_fields.get(field['key']):
-            # noinspection PyTypeChecker
-            msg = '%s not found in %s' % (field['key'], source_fields)
-            raise InvalidKeywordsForProcessingAlgorithm(msg)
+    check_inputs(source_compulsory_fields, source_fields)
+
+    absolute_values = create_absolute_values_structure(
+        aggregate_hazard, ['all'])
 
     hazard_class = source_fields[hazard_class_field['key']]
     hazard_class_index = aggregate_hazard.fieldNameIndex(hazard_class)
@@ -104,6 +107,16 @@ def exposure_type_breakdown(aggregate_hazard, callback=None):
                 exposure_count,
                 hazard_class=hazard_value,
                 exposure_class=exposure
+            )
+
+        # We summarize every absolute values.
+        for field, field_definition in absolute_values.iteritems():
+            value = area[field]
+            if not value or isinstance(value, QPyNullVariant):
+                value = 0
+            field_definition[0].add_value(
+                value,
+                all='all'
             )
 
     tabular = create_memory_layer(output_layer_name, QGis.NoGeometry)
@@ -148,6 +161,15 @@ def exposure_type_breakdown(aggregate_hazard, callback=None):
     tabular.keywords['inasafe_fields'][total_field['key']] = (
         total_field['field_name'])
 
+    # For each absolute values
+    for absolute_field in absolute_values.iterkeys():
+        field_definition = definition(absolute_values[absolute_field][1])
+        field = create_field_from_definition(field_definition)
+        aggregate_hazard.addAttribute(field)
+        key = field_definition['key']
+        value = field_definition['field_name']
+        aggregate_hazard.keywords['inasafe_fields'][key] = value
+
     for exposure_type in unique_exposure:
         feature = QgsFeature()
         attributes = [exposure_type]
@@ -170,6 +192,12 @@ def exposure_type_breakdown(aggregate_hazard, callback=None):
         attributes.append(total_affected)
         attributes.append(total - total_affected)
         attributes.append(total)
+
+        for i, field in enumerate(absolute_values.itervalues()):
+            value = field[0].get_value(
+                all='all'
+            )
+            attributes.append(value)
 
         feature.setAttributes(attributes)
         tabular.addFeature(feature)

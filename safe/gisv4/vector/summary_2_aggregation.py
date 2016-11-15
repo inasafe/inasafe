@@ -4,9 +4,9 @@
 Aggregate the aggregate hazard to the aggregation layer.
 """
 
+from PyQt4.QtCore import QPyNullVariant
 from qgis.core import QGis, QgsFeatureRequest
 
-from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
 from safe.definitionsv4.fields import (
     aggregation_id_field,
     aggregation_name_field,
@@ -19,8 +19,9 @@ from safe.definitionsv4.fields import (
 )
 from safe.definitionsv4.processing_steps import (
     summary_2_aggregation_steps)
-from safe.gisv4.vector.tools import (
-    create_field_from_definition, read_dynamic_inasafe_field)
+from safe.gisv4.vector.tools import read_dynamic_inasafe_field
+from safe.gisv4.vector.summary_tools import (
+    check_inputs, create_absolute_values_structure, add_fields)
 from safe.utilities.profiling import profile
 from safe.utilities.pivot_table import FlatTable
 from safe.utilities.i18n import tr
@@ -70,12 +71,7 @@ def aggregation_summary(aggregate_hazard, aggregation, callback=None):
         aggregation_id_field,
         aggregation_name_field,
     ]
-    for field in target_compulsory_fields:
-        # noinspection PyTypeChecker
-        if not target_fields.get(field['key']):
-            # noinspection PyTypeChecker
-            msg = '%s not found in %s' % (field['key'], target_fields)
-            raise InvalidKeywordsForProcessingAlgorithm(msg)
+    check_inputs(target_compulsory_fields, target_fields)
 
     # Missing exposure_count_field
     source_compulsory_fields = [
@@ -85,17 +81,15 @@ def aggregation_summary(aggregate_hazard, aggregation, callback=None):
         hazard_class_field,
         affected_field,
     ]
-    for field in source_compulsory_fields:
-        # noinspection PyTypeChecker
-        if not source_fields.get(field['key']):
-            # noinspection PyTypeChecker
-            msg = '%s not found in %s' % (field['key'], source_fields)
-            raise InvalidKeywordsForProcessingAlgorithm(msg)
+    check_inputs(source_compulsory_fields, source_fields)
 
     pattern = exposure_count_field['key']
     pattern = pattern.replace('%s', '')
     unique_exposure = read_dynamic_inasafe_field(
         source_fields, exposure_count_field)
+
+    absolute_values = create_absolute_values_structure(
+        aggregate_hazard, ['aggregation_id'])
 
     flat_table = FlatTable('aggregation_id', 'exposure_class')
 
@@ -118,23 +112,26 @@ def aggregation_summary(aggregate_hazard, aggregation, callback=None):
                     exposure_class=key.replace(pattern, '')
                 )
 
+        # We summarize every absolute values.
+        for field, field_definition in absolute_values.iteritems():
+            value = area[field]
+            if not value or isinstance(value, QPyNullVariant):
+                value = 0
+            field_definition[0].add_value(
+                value,
+                aggregation_id=area[aggregation_index],
+            )
+
     shift = aggregation.fields().count()
 
     aggregation.startEditing()
 
-    for column in unique_exposure:
-        field = create_field_from_definition(
-            affected_exposure_count_field, column)
-        aggregation.addAttribute(field)
-        key = affected_exposure_count_field['key'] % column
-        value = affected_exposure_count_field['field_name'] % column
-        aggregation.keywords['inasafe_fields'][key] = value
-
-    # Total field
-    field = create_field_from_definition(total_affected_field)
-    aggregation.addAttribute(field)
-    aggregation.keywords['inasafe_fields'][total_affected_field['key']] = (
-        total_affected_field['field_name'])
+    add_fields(
+        aggregation,
+        absolute_values,
+        [total_affected_field],
+        unique_exposure,
+        affected_exposure_count_field)
 
     aggregation_index = target_fields[aggregation_id_field['key']]
 
@@ -153,6 +150,14 @@ def aggregation_summary(aggregate_hazard, aggregation, callback=None):
 
         aggregation.changeAttributeValue(
             area.id(), shift + len(unique_exposure), total)
+
+        for i, field in enumerate(absolute_values.itervalues()):
+            value = field[0].get_value(
+                aggregation_id=aggregation_value,
+            )
+            target_index = shift + len(unique_exposure) + 1 + i
+            aggregation.changeAttributeValue(
+                area.id(), target_index, value)
 
     aggregation.commitChanges()
 

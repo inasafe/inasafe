@@ -7,7 +7,6 @@ Aggregate the aggregate hazard to the analysis layer.
 from PyQt4.QtCore import QPyNullVariant
 from qgis.core import QGis, QgsFeatureRequest
 
-from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
 from safe.definitionsv4.fields import (
     analysis_id_field,
     analysis_name_field,
@@ -18,11 +17,13 @@ from safe.definitionsv4.fields import (
     total_field,
     total_affected_field,
     total_unaffected_field,
-    hazard_count_field)
+    hazard_count_field,
+)
 from safe.definitionsv4.processing_steps import (
     summary_3_analysis_steps)
 from safe.definitionsv4.post_processors import post_processor_affected_function
-from safe.gisv4.vector.tools import create_field_from_definition
+from safe.gisv4.vector.summary_tools import (
+    check_inputs, create_absolute_values_structure, add_fields)
 from safe.utilities.profiling import profile
 from safe.utilities.pivot_table import FlatTable
 
@@ -71,12 +72,7 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
         analysis_id_field,
         analysis_name_field,
     ]
-    for field in target_compulsory_fields:
-        # noinspection PyTypeChecker
-        if not target_fields.get(field['key']):
-            # noinspection PyTypeChecker
-            msg = '%s not found in %s' % (field['key'], target_fields)
-            raise InvalidKeywordsForProcessingAlgorithm(msg)
+    check_inputs(target_compulsory_fields, target_fields)
 
     source_compulsory_fields = [
         aggregation_id_field,
@@ -85,12 +81,10 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
         hazard_class_field,
         total_field
     ]
-    for field in source_compulsory_fields:
-        # noinspection PyTypeChecker
-        if not source_fields.get(field['key']):
-            # noinspection PyTypeChecker
-            msg = '%s not found in %s' % (field['key'], source_fields)
-            raise InvalidKeywordsForProcessingAlgorithm(msg)
+    check_inputs(source_compulsory_fields, source_fields)
+
+    absolute_values = create_absolute_values_structure(
+        aggregate_hazard, ['all'])
 
     hazard_class = source_fields[hazard_class_field['key']]
     hazard_class_index = aggregate_hazard.fieldNameIndex(hazard_class)
@@ -120,36 +114,26 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
             hazard_class=hazard_value
         )
 
+        # We summarize every absolute values.
+        for field, field_definition in absolute_values.iteritems():
+            value = area[field]
+            if not value or isinstance(value, QPyNullVariant):
+                value = 0
+            field_definition[0].add_value(
+                value,
+                all='all'
+            )
+
     analysis.startEditing()
 
     shift = analysis.fields().count()
 
-    for column in unique_hazard:
-        if not column or isinstance(column, QPyNullVariant):
-            column = 'NULL'
-        field = create_field_from_definition(hazard_count_field, column)
-        analysis.addAttribute(field)
-        key = hazard_count_field['key'] % column
-        value = hazard_count_field['field_name'] % column
-        analysis.keywords['inasafe_fields'][key] = value
-
-    field = create_field_from_definition(total_affected_field)
-    analysis.addAttribute(field)
-    analysis.keywords['inasafe_fields'][total_affected_field['key']] = (
-        total_affected_field['field_name'])
-
-    # essentially have the same value as NULL_hazard_count
-    # but with this, make sure that it exists in layer so it can be used for
-    # reporting, and can be referenced to fields.py to take the label.
-    field = create_field_from_definition(total_unaffected_field)
-    analysis.addAttribute(field)
-    analysis.keywords['inasafe_fields'][total_unaffected_field['key']] = (
-        total_unaffected_field['field_name'])
-
-    field = create_field_from_definition(total_field)
-    analysis.addAttribute(field)
-    analysis.keywords['inasafe_fields'][total_field['key']] = (
-        total_field['field_name'])
+    add_fields(
+        analysis,
+        absolute_values,
+        [total_affected_field, total_unaffected_field, total_field],
+        unique_hazard,
+        hazard_count_field)
 
     affected_sum = 0
     for area in analysis.getFeatures(request):
@@ -174,6 +158,13 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
 
         analysis.changeAttributeValue(
             area.id(), shift + len(unique_hazard) + 2, total)
+
+        for i, field in enumerate(absolute_values.itervalues()):
+            value = field[0].get_value(
+                all='all'
+            )
+            analysis.changeAttributeValue(
+                area.id(), shift + len(unique_hazard) + 3 + i, value)
 
     analysis.commitChanges()
 
