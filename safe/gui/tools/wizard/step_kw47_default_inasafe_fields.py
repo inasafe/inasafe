@@ -142,10 +142,6 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
                         field_name = field.name()
                         option_list.append('%s' % field_name)
 
-            # If there is no option, pass
-            if option_list == [no_field]:
-                continue
-
             # Create DefaultSelectParameter
             parameter = DefaultSelectParameter()
             parameter.guid = inasafe_field['key']
@@ -192,12 +188,6 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
                     get_parameter_widget_by_guid(guid)
                 if isinstance(parameter_widget, DefaultSelectParameterWidget):
                     parameter_widget.set_default(default)
-
-        if not self.parameters:
-            no_field_message = tr(
-                'There is no available field that has match type for the '
-                'InaSAFE default fields. You can click next.')
-            self.lblDefaultInaSAFEFields.setText(no_field_message)
 
     def get_inasafe_fields(self):
         """Return inasafe fields from the current wizard state.
