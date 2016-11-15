@@ -4,6 +4,7 @@
 from PyQt4.QtCore import QVariant
 
 from safe.utilities.i18n import tr
+from safe.definitionsv4.constants import qvariant_whole_numbers
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -22,7 +23,7 @@ exposure_id_field = {
     'key': 'exposure_id_field',
     'name': tr('Exposure ID'),
     'field_name': 'exposure_id',
-    'type': QVariant.Int,
+    'type': qvariant_whole_numbers,
     'length': default_field_length,
     'precision': 0,
     'description': tr(
@@ -107,7 +108,7 @@ hazard_id_field = {
     'key': 'hazard_id_field',
     'name': tr('Hazard ID'),
     'field_name': 'hazard_id',
-    'type': QVariant.Int,
+    'type': qvariant_whole_numbers,
     'length': default_field_length,
     'precision': 0,
     'description': tr(
@@ -191,7 +192,7 @@ aggregation_id_field = {
     'key': 'aggregation_id_field',
     'name': tr('Aggregation ID'),
     'field_name': 'aggregation_id',
-    'type': QVariant.Int,
+    'type': qvariant_whole_numbers,
     'length': default_field_length,
     'precision': 0,
     'description': tr(
@@ -234,7 +235,7 @@ analysis_id_field = {
     'key': 'analysis_id_field',
     'name': tr('Analysis ID'),
     'field_name': 'analysis_id',
-    'type': QVariant.Int,
+    'type': qvariant_whole_numbers,
     'length': default_field_length,
     'precision': 0,
     'absolute': False,
@@ -333,7 +334,7 @@ population_count_field = {
     'key': 'population_count_field',
     'name': tr('Population count'),
     'field_name': 'population',
-    'type': QVariant.Int,
+    'type': qvariant_whole_numbers,
     'length': default_field_length,
     'precision': 0,
     'absolute': True,
@@ -353,7 +354,7 @@ women_count_field = {
     'key': 'women_count_field',
     'name': tr('Women Count'),
     'field_name': 'women',
-    'type': QVariant.Int,
+    'type': qvariant_whole_numbers,
     'length': default_field_length,
     'precision': 0,
     'absolute': True,
@@ -374,7 +375,7 @@ youth_count_field = {
     'key': 'youth_count_field',
     'name': tr('Youth Count'),
     'field_name': 'youth',
-    'type': QVariant.Int,
+    'type': qvariant_whole_numbers,
     'length': default_field_length,
     'precision': 0,
     'absolute': True,
@@ -396,7 +397,7 @@ adult_count_field = {
     'key': 'adult_count_field',
     'name': tr('Adult Count'),
     'field_name': 'adult',
-    'type': QVariant.Int,
+    'type': qvariant_whole_numbers,
     'length': default_field_length,
     'precision': 0,
     'absolute': True,
@@ -418,7 +419,7 @@ elderly_count_field = {
     'key': 'elderly_count_field',
     'name': tr('Elderly Count'),
     'field_name': 'elderly',
-    'type': QVariant.Int,
+    'type': qvariant_whole_numbers,
     'length': default_field_length,
     'precision': 0,
     'absolute': True,
