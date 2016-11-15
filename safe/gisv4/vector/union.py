@@ -213,14 +213,16 @@ def union(union_a, union_b, callback=None):
             if len(list_intersecting_b) != 0:
                 int_b = QgsGeometry.unaryUnion(list_intersecting_b)
                 diff_geom = diff_geom.difference(int_b)
-                if diff_geom.isGeosEmpty() or not diff_geom.isGeosValid():
+                if diff_geom is None or \
+                    diff_geom.isGeosEmpty() or not diff_geom.isGeosValid():
                     LOGGER.debug(
                         tr('GEOS geoprocessing error: One or more input '
                            'features have invalid geometry.'))
 
-            if diff_geom.wkbType() == 0 or QgsWKBTypes.flatType(
-                    diff_geom.geometry().wkbType()) == \
-                    QgsWKBTypes.GeometryCollection:
+            if diff_geom is not None and (
+                            diff_geom.wkbType() == 0 or QgsWKBTypes.flatType(
+                    diff_geom.geometry().wkbType()) ==
+                    QgsWKBTypes.GeometryCollection):
                 temp_list = diff_geom.asGeometryCollection()
                 for i in temp_list:
                     if i.type() == geom.type():
