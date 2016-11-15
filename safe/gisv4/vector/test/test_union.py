@@ -40,6 +40,7 @@ class TestUnionVector(unittest.TestCase):
             layer.fields().count()
         )
 
+    @unittest.expectedFailure
     def test_union_error(self):
         """Test we can union two layers like hazard and aggregation (2)."""
 
