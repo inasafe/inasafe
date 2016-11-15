@@ -42,7 +42,7 @@ class SafeLayerTest(unittest.TestCase):
         self.assertEquals(exposure.name, 'Buildings')
         expected_keywords = {
             'license': u'Open Data Commons Open Database License (ODbL)',
-            'keyword_version': u'3.5',
+            'keyword_version': u'4.0',
             'value_map': {
                 u'residential': [u'Residential'],
                 u'education': [u'School'],
@@ -51,7 +51,6 @@ class SafeLayerTest(unittest.TestCase):
                 u'government': [u'Government'],
                 u'commercial': [u'Commercial', u'Industrial'],
             },
-            # 'structure_class_field': u'TYPE',
             'inasafe_fields': {u'exposure_type_field': u'TYPE'},
             'title': u'Buildings',
             'source': u'OpenStreetMap - www.openstreetmap.org',
