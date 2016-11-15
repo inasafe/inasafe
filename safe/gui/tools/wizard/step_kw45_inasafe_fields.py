@@ -25,6 +25,7 @@ from safe.definitionsv4.layer_purposes import (layer_purpose_aggregation)
 from safe.definitionsv4.utilities import get_fields, get_compulsory_fields
 from safe.definitionsv4.layer_geometry import layer_geometry_raster
 from safe.definitionsv4.constants import no_field
+from safe.utilities.i18n import tr
 
 from safe.gui.tools.wizard.wizard_step import (
     WizardStep, get_wizard_step_ui_class)
@@ -142,6 +143,10 @@ class StepKwInaSAFEFields(WizardStep, FORM_CLASS):
                         field_name = field.name()
                         option_list.append('%s' % field_name)
 
+            # If there is no option, pass
+            if option_list == [no_field]:
+                continue
+
             # Create SelectParameter
             select_parameter = SelectParameter()
             select_parameter.guid = inasafe_field['key']
@@ -165,6 +170,12 @@ class StepKwInaSAFEFields(WizardStep, FORM_CLASS):
         self.parameter_container = ParameterContainer(self.parameters)
         self.parameter_container.setup_ui()
         self.kwExtraKeywordsGridLayout.addWidget(self.parameter_container)
+
+        if not self.parameters:
+            no_field_message = tr(
+                'There is no available field that has match type for the '
+                'InaSAFE fields. You can click next.')
+            self.lblInaSAFEFields.setText(no_field_message)
 
     def get_inasafe_fields(self):
         """Return inasafe fields from the current wizard state.
