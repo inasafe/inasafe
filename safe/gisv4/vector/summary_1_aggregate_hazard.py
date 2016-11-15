@@ -4,9 +4,8 @@
 Aggregate the impact table to the aggregate hazard.
 """
 from PyQt4.QtCore import QPyNullVariant
-from qgis.core import QGis, QgsFeatureRequest, QgsField
+from qgis.core import QGis, QgsFeatureRequest
 
-from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
 from safe.definitionsv4.fields import (
     aggregation_id_field,
     aggregation_name_field,
@@ -18,13 +17,13 @@ from safe.definitionsv4.fields import (
     exposure_count_field,
     affected_field,
     size_field,
-    count_fields,
 )
 from safe.definitionsv4.post_processors import post_processor_affected_function
 from safe.definitionsv4.processing_steps import (
     summary_1_aggregate_hazard_steps)
 from safe.definitionsv4.utilities import definition
-from safe.gisv4.vector.tools import create_field_from_definition
+from safe.gisv4.vector.summary_tools import (
+    check_inputs, create_absolute_values_structure, add_fields)
 from safe.utilities.profiling import profile
 from safe.utilities.pivot_table import FlatTable
 from safe.utilities.i18n import tr
@@ -78,12 +77,7 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
         hazard_id_field,
         hazard_class_field
     ]
-    for field in target_compulsory_fields:
-        # noinspection PyTypeChecker
-        if not target_fields.get(field['key']):
-            # noinspection PyTypeChecker
-            msg = '%s not found in %s' % (field['key'], target_fields)
-            raise InvalidKeywordsForProcessingAlgorithm(msg)
+    check_inputs(target_compulsory_fields, target_fields)
 
     source_compulsory_fields = [
         exposure_id_field,
@@ -93,12 +87,7 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
         hazard_id_field,
         hazard_class_field
     ]
-    for field in source_compulsory_fields:
-        # noinspection PyTypeChecker
-        if not source_fields.get(field['key']):
-            # noinspection PyTypeChecker
-            msg = '%s not found in %s' % (field['key'], source_fields)
-            raise InvalidKeywordsForProcessingAlgorithm(msg)
+    check_inputs(source_compulsory_fields, source_fields)
 
     aggregation_id = target_fields[aggregation_id_field['key']]
 
@@ -109,76 +98,21 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
     exposure_class_index = impact.fieldNameIndex(exposure_class)
     unique_exposure = impact.uniqueValues(exposure_class_index)
 
-    # Let's create a structure like :
-    # key is the index of the field : (flat table, definition name)
-    absolute_fields = [field['key'] for field in count_fields]
-    summaries = {}
-    for field in source_fields:
-        if field in absolute_fields:
-            field_name = source_fields[field]
-            index = impact.fieldNameIndex(field_name)
-            flat_table = FlatTable('aggregation_id', 'hazard_id')
-            summaries[index] = (flat_table, field)
+    fields = ['aggregation_id', 'hazard_id']
+    absolute_values = create_absolute_values_structure(impact, fields)
 
-    if source_fields.get(size_field['key']):
-        field_size = source_fields[size_field['key']]
-        field_index = impact.fieldNameIndex(field_size)
-    else:
-        field_index = None
-
-    # Special case for a point layer and indivisible polygon,
-    # we do not want to report on the size.
-    geometry = impact.geometryType()
-    exposure = impact.keywords.get('exposure')
-    if geometry == QGis.Point:
-        field_index = None
-    if geometry == QGis.Polygon and exposure == 'structure':
-        field_index = None
-
-    # Special case if it's an exposure without classification. It means it's
-    # a continuous exposure. We count the compulsory field.
-    classification = impact.keywords.get('classification')
-    if not classification:
-        exposure_definitions = definition(exposure)
-        # I take the only first field for reporting, I don't know how to manage
-        # with many fields. AFAIK we don't have this case yet.
-        field = exposure_definitions['compulsory_fields'][0]
-        field_name = source_fields[field['key']]
-        field_index = impact.fieldNameIndex(field_name)
+    field_index = report_on_field(impact)
 
     aggregate_hazard.startEditing()
 
     shift = aggregate_hazard.fields().count()
-
-    for column in unique_exposure:
-        if not column or isinstance(column, QPyNullVariant):
-            column = 'NULL'
-        field = create_field_from_definition(exposure_count_field, column)
-        aggregate_hazard.addAttribute(field)
-        key = exposure_count_field['key'] % column
-        value = exposure_count_field['field_name'] % column
-        aggregate_hazard.keywords['inasafe_fields'][key] = value
-
-    # Affected field
-    field = create_field_from_definition(affected_field)
-    aggregate_hazard.addAttribute(field)
-    aggregate_hazard.keywords['inasafe_fields'][affected_field['key']] = (
-        affected_field['field_name'])
-
-    # Total field
-    field = create_field_from_definition(total_field)
-    aggregate_hazard.addAttribute(field)
-    aggregate_hazard.keywords['inasafe_fields'][total_field['key']] = (
-        total_field['field_name'])
-
-    # For each absolute values
-    for absolute_field in summaries.iterkeys():
-        field_definition = definition(summaries[absolute_field][1])
-        field = create_field_from_definition(field_definition)
-        aggregate_hazard.addAttribute(field)
-        key = field_definition['key']
-        value = field_definition['field_name']
-        aggregate_hazard.keywords['inasafe_fields'][key] = value
+    add_fields(
+        aggregate_hazard,
+        absolute_values,
+        [affected_field, total_field],
+        unique_exposure,
+        exposure_count_field
+    )
 
     flat_table = FlatTable('aggregation_id', 'hazard_id', 'exposure_class')
 
@@ -206,7 +140,7 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
         )
 
         # We summarize every absolute values.
-        for field, field_definition in summaries.iteritems():
+        for field, field_definition in absolute_values.iteritems():
             value = f[field]
             if not value or isinstance(value, QPyNullVariant):
                 value = 0
@@ -242,7 +176,7 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
         aggregate_hazard.changeAttributeValue(
             area.id(), shift + len(unique_exposure) + 1, total)
 
-        for i, field in enumerate(summaries.itervalues()):
+        for i, field in enumerate(absolute_values.itervalues()):
             value = field[0].get_value(
                 aggregation_id=aggregation_value,
                 hazard_id=feature_hazard_id
@@ -255,3 +189,44 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
     aggregate_hazard.keywords['title'] = output_layer_name
 
     return aggregate_hazard
+
+
+def report_on_field(layer):
+    """Helper function to set on which field we are going to report.
+
+    The return might be empty if we don't report on a field.
+
+    :param layer: The vector layer.
+    :type layer: QgsVectorLayer
+
+    :return: The field index on which we should report.
+    :rtype: int
+    """
+    source_fields = layer.keywords['inasafe_fields']
+    if source_fields.get(size_field['key']):
+        field_size = source_fields[size_field['key']]
+        field_index = layer.fieldNameIndex(field_size)
+    else:
+        field_index = None
+
+    # Special case for a point layer and indivisible polygon,
+    # we do not want to report on the size.
+    geometry = layer.geometryType()
+    exposure = layer.keywords.get('exposure')
+    if geometry == QGis.Point:
+        field_index = None
+    if geometry == QGis.Polygon and exposure == 'structure':
+        field_index = None
+
+    # Special case if it's an exposure without classification. It means it's
+    # a continuous exposure. We count the compulsory field.
+    classification = layer.keywords.get('classification')
+    if not classification:
+        exposure_definitions = definition(exposure)
+        # I take the only first field for reporting, I don't know how to manage
+        # with many fields. AFAIK we don't have this case yet.
+        field = exposure_definitions['compulsory_fields'][0]
+        field_name = source_fields[field['key']]
+        field_index = layer.fieldNameIndex(field_name)
+
+    return field_index
