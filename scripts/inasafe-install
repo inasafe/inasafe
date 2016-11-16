@@ -71,6 +71,8 @@ function checkup() {
       echo "http://github.com/${REPO} ${WORKING_DIR}"
       git clone "git@github.com:${REPO}" "${WORKING_DIR}" || git clone "https://github.com/${REPO}" "${WORKING_DIR}" || git clone "http://github.com/${REPO}" "${WORKING_DIR}"
   fi
+  git submodule init
+  git submodule update
 
   pushd .
   cd $WORKING_DIR
