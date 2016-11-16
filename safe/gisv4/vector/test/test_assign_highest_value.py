@@ -30,7 +30,7 @@ class TestAssignHighestValueVector(unittest.TestCase):
         """Test we can assign the highest value to a feature."""
 
         exposure = load_test_vector_layer(
-            'gisv4', 'exposure', 'buildings.geojson')
+            'gisv4', 'exposure', 'buildings.geojson', clone_to_memory=True)
 
         aggregate_hazard = load_test_vector_layer(
             'gisv4', 'intermediate', 'aggregate_classified_hazard.geojson')
@@ -42,18 +42,17 @@ class TestAssignHighestValueVector(unittest.TestCase):
         aggregate_hazard.keywords['aggregation_keywords'] = {}
         aggregate_hazard.keywords['hazard_keywords'] = {}
 
+        count = exposure.fields().count()
         layer = assign_highest_value(exposure, aggregate_hazard)
 
-        self.assertEqual(layer.featureCount(), 9)
+        self.assertEqual(layer.featureCount(), 12)
         self.assertEqual(
-            exposure.fields().count() + aggregate_hazard.fields().count(),
-            layer.fields().count()
-        )
+            count + aggregate_hazard.fields().count(), layer.fields().count())
 
         expected_count = {
             'high': 4,
             'medium': 2,
-            '': 3
+            '': 6
         }
 
         inasafe_fields = layer.keywords['inasafe_fields']
