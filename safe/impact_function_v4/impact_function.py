@@ -337,6 +337,7 @@ class ImpactFunction(object):
             self._aggregation_impacted,
             self._analysis_impacted,
             self._exposure_breakdown,
+            self._profiling_table,
         ]
 
         # Remove layers which are not set.
@@ -697,12 +698,11 @@ class ImpactFunction(object):
         self._performance_log = profiling_log()
         self.callback(8, 8, analysis_steps['profiling'])
 
-        if self.debug_mode:
-            self._profiling_table = create_profile_layer(
-                self.performance_log_message())
-            _, name = self.debug_layer(self._profiling_table)
-            self._profiling_table = self.datastore.layer(name)
-            check_inasafe_fields(self._profiling_table)
+        self._profiling_table = create_profile_layer(
+            self.performance_log_message())
+        _, name = self.debug_layer(self._profiling_table)
+        self._profiling_table = self.datastore.layer(name)
+        check_inasafe_fields(self._profiling_table)
 
         # Later, we should move this call.
         self.style()
