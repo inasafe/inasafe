@@ -162,7 +162,8 @@ class StepKwInaSAFEFields(WizardStep, FORM_CLASS):
                 existing_value = existing_inasafe_field.get(
                     inasafe_field['key'])
                 if existing_value:
-                    select_parameter.value = existing_value
+                    if existing_value in select_parameter.options_list:
+                        select_parameter.value = existing_value
 
             self.parameters.append(select_parameter)
 
