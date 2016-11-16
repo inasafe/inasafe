@@ -140,10 +140,14 @@ def assign_highest_value(exposure_layer, hazard_layer, callback=None):
                         value,
                         hazard_attributes
                     )
-                    continue
+
+                    # If it's the highest hazard value, we should skip to the
+                    # other exposure feature. We can't find a higher hazard.
+                    if hazard_value == levels[-1]:
+                        # Need to check that one.
+                        break
 
                 else:
-
                     # This building has already a hazard value.
 
                     # We compare to a previous feature if the hazard is higher:
@@ -153,14 +157,17 @@ def assign_highest_value(exposure_layer, hazard_layer, callback=None):
                             hazard_attributes
                         )
 
+                    # Let's do a faster processing.
+                    continue
+
                     # We compare size if same hazard value :
-                    if value == highest_hazard_value[0]:
-                        # TODO We should add another test to check the biggest
-                        # aggregation area.
-                        highest_hazard_value = (
-                            value,
-                            hazard_attributes
-                        )
+                    # if value == highest_hazard_value[0]:
+                    #    # TODO We should add another test to check the biggest
+                    #     # aggregation area.
+                    #     highest_hazard_value = (
+                    #         value,
+                    #         hazard_attributes
+                    #     )
 
         if not highest_hazard_value[1]:
             # It means the feature has no intersection at all with the
