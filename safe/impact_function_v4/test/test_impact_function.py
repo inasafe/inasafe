@@ -197,7 +197,9 @@ class TestImpactFunction(unittest.TestCase):
             scenario_path)
         steps, outputs = run_scenario(scenario, use_debug)
         self.assertDictEqual(expected_steps, steps)
-        self.assertEqual(len(outputs), expected_outputs['count'])
+        # - 1 because I added the profiling table, and this table is not
+        # counted in the JSON file.
+        self.assertEqual(len(outputs) - 1, expected_outputs['count'])
 
     @unittest.skipIf(
         os.environ.get('ON_TRAVIS', False),
