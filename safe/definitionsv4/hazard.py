@@ -91,7 +91,8 @@ hazard_generic = {
     'classifications': [generic_hazard_classes],
     'compulsory_fields': [hazard_value_field],
     'fields': hazard_fields,
-    'extra_fields': []
+    'extra_fields': [],
+    'layer_modes': [layer_mode_classified]
 }
 hazard_earthquake = {
     'key': 'earthquake',
