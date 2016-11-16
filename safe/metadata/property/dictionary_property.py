@@ -51,7 +51,7 @@ class DictionaryProperty(BaseProperty):
         if self.python_type is dict:
             try:
                 return json.dumps(self.value)
-            except TypeError:
+            except (TypeError, ValueError):
                 string_value = {}
                 for k, v in self.value.items():
                     if isinstance(v, QUrl):
