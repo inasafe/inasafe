@@ -14,6 +14,7 @@
       "info": {},
       "process":[
         "Union exposure features to the aggregate hazard",
+        "Recompute counts",
         "Aggregate the impact summary",
         "Aggregate the aggregation summary",
         "Aggregate the analysis summary"
@@ -49,8 +50,7 @@
       "info": {},
       "process":[
         "Clip the exposure layer with the analysis layer",
-        "Cleaning the vector exposure attribute table",
-        "Recompute counts"
+        "Cleaning the vector exposure attribute table"
       ]
     }
   }

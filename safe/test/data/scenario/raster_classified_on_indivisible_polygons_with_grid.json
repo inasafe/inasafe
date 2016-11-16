@@ -13,7 +13,7 @@
     "impact function":{
       "info": {},
       "process":[
-        "Highest class of hazard is assigned when more than one overlaps",
+        "Highest class of hazard is assigned to the exposure",
         "Aggregate the impact summary",
         "Aggregate the aggregation summary",
         "Aggregate the analysis summary",

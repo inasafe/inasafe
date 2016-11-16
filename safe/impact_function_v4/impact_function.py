@@ -28,6 +28,7 @@ from safe.gisv4.vector.reclassify import reclassify as reclassify_vector
 from safe.gisv4.vector.union import union
 from safe.gisv4.vector.clip import clip
 from safe.gisv4.vector.smart_clip import smart_clip
+from safe.gisv4.vector.intersection import intersection
 from safe.gisv4.vector.summary_1_aggregate_hazard import (
     aggregate_hazard_summary)
 from safe.gisv4.vector.summary_2_aggregation import aggregation_summary
@@ -1061,39 +1062,49 @@ class ImpactFunction(object):
             self._exposure_impacted = None
 
         else:
-            exposure = self.exposure.keywords.get('exposure')
             indivisible_keys = [f['key'] for f in indivisible_exposure]
             geometry = self.exposure.geometryType()
-            if exposure in indivisible_keys and geometry != QGis.Point:
-                self.set_state_process(
-                    'impact function',
-                    'Highest class of hazard is assigned when more than one '
-                    'overlaps')
-                self._exposure_impacted = assign_highest_value(
-                    self.exposure, self._aggregate_hazard_impacted)
+            exposure = self.exposure.keywords.get('exposure')
+            is_divisible = exposure not in indivisible_keys
 
-            else:
-                self.set_state_process(
-                    'impact function',
-                    'Union exposure features to the aggregate hazard')
-                self._exposure_impacted = union(
-                    self.exposure, self._aggregate_hazard_impacted)
+            if geometry in [QGis.Line, QGis.Polygon] and is_divisible:
+                if geometry == QGis.Polygon:
+                    self.set_state_process(
+                        'impact function',
+                        'Union exposure features to the aggregate hazard')
+                    self._exposure_impacted = union(
+                        self._exposure, self._aggregate_hazard_impacted)
+
+                else:
+                    self.set_state_process(
+                        'impact function',
+                        'Intersect lines with the aggregate hazard')
+                    self._exposure_impacted = intersection(
+                        self._exposure, self._aggregate_hazard_impacted)
+                    self.debug_layer(self._exposure)
 
                 # If the layer has the size field, it means we need to
                 # recompute counts based on the old and new size.
                 fields = self.exposure.keywords['inasafe_fields']
                 if size_field['key'] in fields:
                     self.set_state_process(
-                        'exposure',
+                        'impact function',
                         'Recompute counts')
                     self._exposure_impacted = recompute_counts(
                         self._exposure_impacted)
 
+            else:
+                self.set_state_process(
+                    'impact function',
+                    'Highest class of hazard is assigned to the exposure')
+                self._exposure_impacted = assign_highest_value(
+                    self._exposure, self._aggregate_hazard_impacted)
+
             if self.debug_mode:
                 self.debug_layer(self._exposure_impacted)
 
-        if self._exposure_impacted:
-            self._exposure_impacted.keywords['title'] = 'exposure_impacted'
+            if self._exposure_impacted:
+                self._exposure_impacted.keywords['title'] = 'exposure_impacted'
 
     @profile
     def post_process(self, layer):

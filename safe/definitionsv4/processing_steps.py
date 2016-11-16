@@ -34,6 +34,11 @@ clip_steps = {
     'output_layer_name': '%s_clipped',
 }
 
+intersection_steps = {
+    'step_name': tr('Intersecting lines with polygons'),
+    'output_layer_name': 'intersect',
+}
+
 prepare_vector_steps = {
     'step_name': tr('Cleaning the vector layer'),
     'output_layer_name': '%s_cleaned',
