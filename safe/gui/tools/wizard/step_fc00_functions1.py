@@ -12,24 +12,24 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-__author__ = 'qgis@borysjurgiel.pl'
-__revision__ = '$Format:%H$'
-__date__ = '16/03/2016'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
 
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import pyqtSignature
 
+from safe.definitionsv4.hazard import hazard_all
+from safe.definitionsv4.exposure import exposure_all
 from safe.definitionsv4.hazard_category import hazard_category_single_event
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_utils import (
-    RoleFunctions,
-    RoleHazard,
-    RoleExposure)
+    RoleFunctions, RoleHazard, RoleExposure)
 from safe.utilities.resources import resources_path
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
@@ -123,13 +123,12 @@ class StepFcFunctions1(WizardStep, FORM_CLASS):
         # The hazard category radio buttons are now removed -
         # make this parameter of IFM.available_hazards() optional
         hazard_category = hazard_category_single_event
-        hazards = self.impact_function_manager\
-            .available_hazards(hazard_category['key'])
+        hazards = hazard_all
         # Remove 'generic' from hazards
         for h in hazards:
             if h['key'] == 'generic':
                 hazards.remove(h)
-        exposures = self.impact_function_manager.available_exposures()
+        exposures = exposure_all
 
         self.lblAvailableFunctions1.clear()
         self.tblFunctions1.clear()
@@ -159,20 +158,12 @@ class StepFcFunctions1(WizardStep, FORM_CLASS):
         for h in hazards:
             for e in exposures:
                 item = QtGui.QTableWidgetItem()
-                functions = \
-                    self.impact_function_manager.functions_for_constraint(
-                        h['key'], e['key'])
-                if len(functions):
-                    background_colour = QtGui.QColor(120, 255, 120)
-                else:
-                    background_colour = QtGui.QColor(220, 220, 220)
-                    item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEnabled)
-                    item.setFlags(item.flags() & ~QtCore.Qt.ItemIsSelectable)
+                background_colour = QtGui.QColor(120, 255, 120)
                 item.setBackground(QtGui.QBrush(background_colour))
                 item.setFont(big_font)
                 item.setTextAlignment(
                     QtCore.Qt.AlignCenter | QtCore.Qt.AlignHCenter)
-                item.setData(RoleFunctions, functions)
+                # item.setData(RoleFunctions, functions)
                 item.setData(RoleHazard, h)
                 item.setData(RoleExposure, e)
                 self.tblFunctions1.setItem(
