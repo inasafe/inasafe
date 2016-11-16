@@ -123,11 +123,11 @@ def assign_highest_value(exposure, hazard, callback=None):
         hazard.keywords['inasafe_fields'])
     exposure.keywords['layer_purpose'] = 'impact'
 
-    exposure.keywords['exposure_keywords'] = exposure.keywords
+    exposure.keywords['exposure_keywords'] = exposure.keywords.copy()
     exposure.keywords['aggregation_keywords'] = (
-        hazard.keywords['aggregation_keywords'])
+        hazard.keywords['aggregation_keywords'].copy())
     exposure.keywords['hazard_keywords'] = (
-        hazard.keywords['hazard_keywords'])
+        hazard.keywords['hazard_keywords'].copy())
 
     exposure.keywords['title'] = output_layer_name
 
