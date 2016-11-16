@@ -36,6 +36,7 @@ from safe.gisv4.vector.summary_4_exposure_breakdown import (
     exposure_type_breakdown)
 from safe.gisv4.vector.recompute_counts import recompute_counts
 from safe.gisv4.vector.update_value_map import update_value_map
+from safe.gisv4.raster.clip_bounding_box import clip_by_extent
 from safe.gisv4.raster.reclassify import reclassify as reclassify_raster
 from safe.gisv4.raster.polygonize import polygonize
 from safe.gisv4.raster.zonal_statistics import zonal_stats
@@ -766,12 +767,12 @@ class ImpactFunction(object):
                         return
 
         self._performance_log = profiling_log()
-        self.callback(2, step_count, analysis_steps['hazard_preparation'])
-        self.hazard_preparation()
+        self.callback(2, step_count, analysis_steps['aggregation_preparation'])
+        self.aggregation_preparation()
 
         self._performance_log = profiling_log()
-        self.callback(3, step_count, analysis_steps['aggregation_preparation'])
-        self.aggregation_preparation()
+        self.callback(3, step_count, analysis_steps['hazard_preparation'])
+        self.hazard_preparation()
 
         self._performance_log = profiling_log()
         self.callback(
@@ -841,66 +842,6 @@ class ImpactFunction(object):
             check_inasafe_fields(self._analysis_impacted)
 
     @profile
-    def hazard_preparation(self):
-        """This function is doing the hazard preparation."""
-
-        if self.hazard.type() == QgsMapLayer.RasterLayer:
-
-            if self.hazard.keywords.get('layer_mode') == 'continuous':
-
-                self.set_state_process(
-                    'hazard', 'Classify continuous raster hazard')
-                # noinspection PyTypeChecker
-                self.hazard = reclassify_raster(self.hazard)
-                if self.debug_mode:
-                    self.debug_layer(self.hazard)
-
-            self.set_state_process(
-                'hazard', 'Polygonize classified raster hazard')
-            # noinspection PyTypeChecker
-            self.hazard = polygonize(self.hazard)
-            if self.debug_mode:
-                self.debug_layer(self.hazard)
-
-        self.set_state_process(
-            'hazard',
-            'Cleaning the vector hazard attribute table')
-        # noinspection PyTypeChecker
-        self.hazard = prepare_vector_layer(self.hazard)
-        if self.debug_mode:
-            self.debug_layer(self.hazard)
-
-        if self.hazard.keywords.get('layer_mode') == 'continuous':
-            self.set_state_process(
-                'hazard',
-                'Classify continuous hazard and assign class names')
-            self.hazard = reclassify_vector(self.hazard)
-            if self.debug_mode:
-                self.debug_layer(self.hazard)
-
-        self.set_state_process(
-            'hazard', 'Assign classes based on value map')
-        self.hazard = update_value_map(self.hazard)
-        if self.debug_mode:
-            self.debug_layer(self.hazard)
-
-        self.set_state_process(
-            'hazard', 'Classified polygon hazard with keywords')
-
-        if self.hazard.crs().authid() != self.exposure.crs().authid():
-            self.set_state_process(
-                'hazard',
-                'Reproject hazard layer to exposure CRS')
-            # noinspection PyTypeChecker
-            self.hazard = reproject(
-                self.hazard, self.exposure.crs())
-            if self.debug_mode:
-                self.debug_layer(self.hazard)
-
-        self.set_state_process(
-            'hazard', 'Vector clip and mask hazard to aggregation')
-
-    @profile
     def aggregation_preparation(self):
         """This function is doing the aggregation preparation."""
         if not self.aggregation:
@@ -948,19 +889,93 @@ class ImpactFunction(object):
             self.debug_layer(self._analysis_impacted)
 
     @profile
+    def hazard_preparation(self):
+        """This function is doing the hazard preparation."""
+
+        use_same_projection = (
+            self.hazard.crs().authid() == self.exposure.crs().authid())
+        self.set_state_info(
+            'hazard', 'use_same_projection', use_same_projection)
+
+        if self.hazard.type() == QgsMapLayer.RasterLayer:
+
+            if use_same_projection:
+                self.set_state_process(
+                    'hazard', 'Clip raster by analysis bounding box')
+                # noinspection PyTypeChecker
+                self.hazard = clip_by_extent(
+                    self.hazard, self._analysis_impacted.extent())
+                if self.debug_mode:
+                    self.debug_layer(self.hazard)
+
+            if self.hazard.keywords.get('layer_mode') == 'continuous':
+                self.set_state_process(
+                    'hazard', 'Classify continuous raster hazard')
+                # noinspection PyTypeChecker
+                self.hazard = reclassify_raster(self.hazard)
+                if self.debug_mode:
+                    self.debug_layer(self.hazard)
+
+            self.set_state_process(
+                'hazard', 'Polygonize classified raster hazard')
+            # noinspection PyTypeChecker
+            self.hazard = polygonize(self.hazard)
+            if self.debug_mode:
+                self.debug_layer(self.hazard)
+
+        if use_same_projection:
+            self.set_state_process(
+                'hazard',
+                'Clip and mask hazard polygons with the analysis layer')
+            self.hazard = clip(self.hazard, self._analysis_impacted)
+            if self.debug_mode:
+                self.debug_layer(self.hazard, False)
+
+        else:
+            self.set_state_process(
+                'hazard',
+                'Reproject hazard layer to exposure CRS')
+            # noinspection PyTypeChecker
+            self.hazard = reproject(self.hazard, self.exposure.crs())
+            if self.debug_mode:
+                self.debug_layer(self.hazard, False)
+
+            self.set_state_process(
+                'hazard',
+                'Clip and mask hazard polygons with the analysis layer')
+            self.hazard = clip(self.hazard, self._analysis_impacted)
+            if self.debug_mode:
+                self.debug_layer(self.hazard, False)
+
+        self.set_state_process(
+            'hazard',
+            'Cleaning the vector hazard attribute table')
+        # noinspection PyTypeChecker
+        self.hazard = prepare_vector_layer(self.hazard)
+        if self.debug_mode:
+            self.debug_layer(self.hazard)
+
+        if self.hazard.keywords.get('layer_mode') == 'continuous':
+            self.set_state_process(
+                'hazard',
+                'Classify continuous hazard and assign class names')
+            self.hazard = reclassify_vector(self.hazard)
+            if self.debug_mode:
+                self.debug_layer(self.hazard)
+
+        self.set_state_process(
+            'hazard', 'Assign classes based on value map')
+        self.hazard = update_value_map(self.hazard)
+        if self.debug_mode:
+            self.debug_layer(self.hazard)
+
+    @profile
     def aggregate_hazard_preparation(self):
         """This function is doing the aggregate hazard layer.
 
         It will prepare the aggregate layer and intersect hazard polygons with
         aggregation areas and assign hazard class.
         """
-        self.set_state_process(
-            'hazard',
-            'Clip and mask hazard polygons with the analysis layer')
-        self.hazard = clip(self.hazard, self._analysis_impacted)
-        if self.debug_mode:
-            self.debug_layer(self.hazard)
-
         self.set_state_process(
             'aggregation',
             'Union hazard polygons with aggregation areas and assign '
@@ -990,6 +1005,23 @@ class ImpactFunction(object):
                 if self.debug_mode:
                     self.debug_layer(self.exposure)
 
+        exposure = self.exposure.keywords.get('exposure')
+        indivisible_keys = [f['key'] for f in indivisible_exposure]
+        geometry = self.exposure.geometryType()
+        if exposure in indivisible_keys and geometry != QGis.Point:
+            self.set_state_process(
+                'exposure',
+                'Smart clip')
+            self.exposure = smart_clip(
+                self.exposure, self._analysis_impacted)
+        else:
+            self.set_state_process(
+                'exposure',
+                'Clip the exposure layer with the analysis layer')
+            self.exposure = clip(self.exposure, self._analysis_impacted)
+        if self.debug_mode:
+            self.debug_layer(self.exposure, False)
+
         self.set_state_process(
             'exposure',
             'Cleaning the vector exposure attribute table')
@@ -1006,24 +1038,6 @@ class ImpactFunction(object):
             if self.debug_mode:
                 self.debug_layer(self.exposure)
 
-        exposure = self.exposure.keywords.get('exposure')
-        indivisible_keys = [f['key'] for f in indivisible_exposure]
-        geometry = self.exposure.geometryType()
-        if exposure in indivisible_keys and geometry != QGis.Point:
-            self.set_state_process(
-                'exposure',
-                'Smart clip')
-            self.exposure = smart_clip(
-                self.exposure, self._analysis_impacted)
-        else:
-            self.set_state_process(
-                'exposure',
-                'Clip the exposure layer with the analysis layer')
-            self.exposure = clip(self.exposure, self._analysis_impacted)
-
-        if self.debug_mode:
-            self.debug_layer(self.exposure)
-
     @profile
     def intersect_exposure_and_aggregate_hazard(self):
         """This function intersects the exposure with the aggregate hazard.
@@ -1032,8 +1046,6 @@ class ImpactFunction(object):
             will set the aggregate hazard layer.
         However, this function will set the impact layer.
         """
-        self.set_state_process('impact function', 'Run impact function')
-
         if self.exposure.type() == QgsMapLayer.RasterLayer:
             self.set_state_process(
                 'impact function',
