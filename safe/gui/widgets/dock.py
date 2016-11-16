@@ -1118,9 +1118,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             # Start the analysis
             self.impact_function.run()
             self.generate_impact_report(self.impact_function)
-        except InvalidKeywordsForProcessingAlgorithm as e:
-            self.show_keywords_need_review_message(e.message)
-            self.hide_busy()
         except KeywordNotFoundError as e:
             self.hide_busy()
             missing_keyword_message(self, e)
