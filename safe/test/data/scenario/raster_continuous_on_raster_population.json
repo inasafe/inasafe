@@ -13,7 +13,6 @@
     "impact function":{
       "info": {},
       "process":[
-        "Run impact function",
         "Zonal stats between exposure and aggregate hazard",
         "Aggregate the aggregation summary",
         "Aggregate the analysis summary"
@@ -38,15 +37,16 @@
       ]
     },
     "hazard":{
-      "info": {},
+      "info": {
+        "use_same_projection":true
+      },
       "process":[
+        "Clip raster by analysis bounding box",
         "Classify continuous raster hazard",
         "Polygonize classified raster hazard",
+        "Clip and mask hazard polygons with the analysis layer",
         "Cleaning the vector hazard attribute table",
-        "Assign classes based on value map",
-        "Classified polygon hazard with keywords",
-        "Vector clip and mask hazard to aggregation",
-        "Clip and mask hazard polygons with the analysis layer"
+        "Assign classes based on value map"
       ]
     },
     "exposure":{

@@ -13,7 +13,6 @@
     "impact function":{
       "info": {},
       "process":[
-        "Run impact function",
         "Union exposure features to the aggregate hazard",
         "Aggregate the impact summary",
         "Aggregate the aggregation summary",
@@ -37,20 +36,20 @@
       ]
     },
     "hazard":{
-      "info": {},
+      "info": {
+        "use_same_projection":true
+      },
       "process":[
+        "Clip and mask hazard polygons with the analysis layer",
         "Cleaning the vector hazard attribute table",
-        "Assign classes based on value map",
-        "Classified polygon hazard with keywords",
-        "Vector clip and mask hazard to aggregation",
-        "Clip and mask hazard polygons with the analysis layer"
+        "Assign classes based on value map"
       ]
     },
     "exposure":{
       "info": {},
       "process":[
-        "Cleaning the vector exposure attribute table",
         "Clip the exposure layer with the analysis layer",
+        "Cleaning the vector exposure attribute table",
         "Recompute counts"
       ]
     }

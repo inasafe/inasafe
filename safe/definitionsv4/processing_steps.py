@@ -94,6 +94,11 @@ polygonize_steps = {
     'gdal_layer_name': 'polygonized'
 }
 
+quick_clip_steps = {
+    'step_name': tr('Clip by extent'),
+    'output_layer_name': '%s_clipped_bbox',
+}
+
 reclassify_raster_steps = {
     'step_name': tr('Reclassifying'),
     'output_layer_name': '%s_reclassified',
