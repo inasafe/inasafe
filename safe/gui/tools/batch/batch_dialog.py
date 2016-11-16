@@ -562,9 +562,6 @@ class BatchDialog(QDialog, FORM_CLASS):
                 for layer in layers:
                     print layer.name()
                 # noinspection PyBroadException
-                # status_item.setText(self.tr('Analysis Ok'))
-                # self.create_pdf(title, path, cloned_layer, count, index)
-                # status_item.setText(self.tr('Report OK'))
                 try:
                     status_item.setText(self.tr('Analysis Ok'))
                     self.create_pdf(
