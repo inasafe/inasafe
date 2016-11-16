@@ -161,7 +161,8 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
                 existing_value = existing_inasafe_field.get(
                     inasafe_field['key'])
                 if existing_value:
-                    parameter.value = existing_value
+                    if existing_value in parameter.options_list:
+                        parameter.value = existing_value
 
             if existing_inasafe_default_values:
                 existing_default_value = existing_inasafe_default_values.get(
