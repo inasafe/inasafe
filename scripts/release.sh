@@ -2,6 +2,10 @@
 echo "Export the plugin to a zip with no .git folder"
 echo "And build a windows installer" 
 
+# Make sure has the proper sub module state
+git submodule init
+git submodule update
+
 VERSION=`cat metadata.txt | grep ^version | sed 's/version=//g'`
 # TODO
 #replace _type_ = 'alpha' or 'beta' with final
