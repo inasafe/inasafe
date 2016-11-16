@@ -79,8 +79,9 @@ def zonal_stats(raster, vector, callback=None):
     layer.keywords['inasafe_fields'][key] = output_field
     layer.keywords['inasafe_fields'][total_field['key']] = output_field
 
-    layer.keywords['exposure_keywords'] = raster.keywords
-    layer.keywords['hazard_keywords'] = vector.keywords['hazard_keywords']
+    layer.keywords['exposure_keywords'] = raster.keywords.copy()
+    layer.keywords['hazard_keywords'] = vector.keywords[
+        'hazard_keywords'].copy()
     layer.keywords['aggregation_keywords'] = (
         vector.keywords['aggregation_keywords'])
 
