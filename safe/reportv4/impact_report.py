@@ -236,6 +236,9 @@ class ImpactReport(object):
     # constant for default PAGE_DPI settings
     DEFAULT_PAGE_DPI = 300
 
+    class LayerException(Exception):
+        pass
+
     """A class for creating report using QgsComposition."""
     def __init__(
             self,
@@ -270,7 +273,7 @@ class ImpactReport(object):
         self._hazard = hazard or self._impact_function.hazard
         self._exposure = (exposure or self._impact_function.exposure)
         self._impact = (
-            impact or self._impact_function.exposure_impacted)
+            impact or self._impact_function.impact)
         self._analysis = (analysis or self._impact_function.analysis_impacted)
         self._exposure_breakdown = (
             exposure_breakdown or self._impact_function.exposure_breakdown)
@@ -358,12 +361,28 @@ class ImpactReport(object):
         """
         return self._impact_function
 
+    def _check_layer_count(self, layer):
+        """Check for the validity of the layer.
+
+        :param layer: QGIS layer
+        :type layer: qgis.core.QgsVectorLayer
+        :return:
+        """
+        if layer:
+            if not layer.isValid():
+                raise ImpactReport.LayerException('Layer is not valid')
+            feature_count = len([f for f in layer.getFeatures()])
+            if feature_count == 0:
+                raise ImpactReport.LayerException(
+                    'Layer contains no features')
+
     @property
     def hazard(self):
         """Getter to hazard layer
 
         :rtype: qgis.core.QgsVectorLayer
         """
+        self._check_layer_count(self._hazard)
         return self._hazard
 
     @hazard.setter
@@ -381,6 +400,7 @@ class ImpactReport(object):
 
         :rtype: qgis.core.QgsVectorLayer
         """
+        self._check_layer_count(self._exposure)
         return self._exposure
 
     @exposure.setter
@@ -398,6 +418,7 @@ class ImpactReport(object):
 
         :rtype: qgis.core.QgsVectorLayer
         """
+        self._check_layer_count(self._impact)
         return self._impact
 
     @impact.setter
@@ -415,6 +436,7 @@ class ImpactReport(object):
         :return:
         :rtype: qgis.core.QgsVectorLayer
         """
+        self._check_layer_count(self._analysis)
         return self._analysis
 
     @analysis.setter
@@ -433,6 +455,7 @@ class ImpactReport(object):
         :return:
         :rtype: qgis.core.QgsVectorLayer
         """
+        # self._check_layer_count(self._exposure_breakdown)
         return self._exposure_breakdown
 
     @exposure_breakdown.setter
@@ -452,6 +475,7 @@ class ImpactReport(object):
         :return:
         :rtype: qgis.core.QgsVectorLayer
         """
+        self._check_layer_count(self._aggregation_impacted)
         return self._aggregation_impacted
 
     @aggregation_impacted.setter
@@ -561,14 +585,12 @@ class ImpactReport(object):
                 )
                 _module = imp.load_source(_package_name, _extractor_path)
                 _extractor_method = getattr(_module, 'extractor')
-            try:
-                # method signature:
-                #  - this ImpactReport
-                #  - this component
-                context = _extractor_method(self, component)
-                component.context = context
-            except Exception as exc:
-                LOGGER.exception(exc)
+
+            # method signature:
+            #  - this ImpactReport
+            #  - this component
+            context = _extractor_method(self, component)
+            component.context = context
 
             # load processor
             if callable(component.processor):
@@ -587,11 +609,9 @@ class ImpactReport(object):
                 )
                 _module = imp.load_source(_package_name, _renderer_path)
                 _renderer = getattr(_module, 'renderer')
-            try:
-                # method signature:
-                #  - this ImpactReport
-                #  - this component
-                output = _renderer(self, component)
-                component.output = output
-            except Exception as exc:
-                LOGGER.exception(exc)
+
+            # method signature:
+            #  - this ImpactReport
+            #  - this component
+            output = _renderer(self, component)
+            component.output = output

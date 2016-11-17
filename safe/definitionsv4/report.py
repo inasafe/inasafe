@@ -30,74 +30,87 @@ __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
+# Individual report component
+analysis_result_component = {
+    'key': 'analysis-result',
+    'type': ReportComponentsMetadata.AvailableComponent.Jinja2,
+    'processor': jinja2_renderer,
+    'extractor': analysis_result_extractor,
+    'output_format': Jinja2ComponentsMetadata.OutputFormat.String,
+    'output_path': 'analysis-result-output.html',
+    'template': 'standard-template/'
+                'jinja2/'
+                'analysis-result.html',
+}
+
+analysis_breakdown_component = {
+    'key': 'analysis-breakdown',
+    'type': ReportComponentsMetadata.AvailableComponent.Jinja2,
+    'processor': jinja2_renderer,
+    'extractor': analysis_detail_extractor,
+    'output_format': Jinja2ComponentsMetadata.OutputFormat.String,
+    'output_path': 'analysis-detail-output.html',
+    'template': 'standard-template/'
+                'jinja2/'
+                'analysis-detail.html',
+}
+
+action_checklist_component = {
+    'key': 'action-checklist',
+    'type': ReportComponentsMetadata.AvailableComponent.Jinja2,
+    'processor': jinja2_renderer,
+    'extractor': action_checklist_extractor,
+    'output_format': Jinja2ComponentsMetadata.OutputFormat.String,
+    'output_path': 'action-checklist-output.html',
+    'template': 'standard-template/'
+                'jinja2/'
+                'bullet-list-section.html',
+}
+
+notes_assumptions_component = {
+    'key': 'notes-assumptions',
+    'type': ReportComponentsMetadata.AvailableComponent.Jinja2,
+    'processor': jinja2_renderer,
+    'extractor': notes_assumptions_extractor,
+    'output_format': Jinja2ComponentsMetadata.OutputFormat.String,
+    'output_path': 'notes-assumptions-output.html',
+    'template': 'standard-template/'
+                'jinja2/'
+                'bullet-list-section.html',
+}
+
+minimum_needs_component = {
+    'key': 'minimum-needs',
+    'type': ReportComponentsMetadata.AvailableComponent.Jinja2,
+    'processor': jinja2_renderer,
+    'extractor': minimum_needs_extractor,
+    'output_format': Jinja2ComponentsMetadata.OutputFormat.String,
+    'output_path': 'minimum-needs-output.html',
+    'template': 'standard-template/'
+                'jinja2/'
+                'minimum-needs.html',
+}
+
+aggregation_result_component = {
+    'key': 'aggregation-result',
+    'type': ReportComponentsMetadata.AvailableComponent.Jinja2,
+    'processor': jinja2_renderer,
+    'extractor': aggregation_result_extractor,
+    'output_format': Jinja2ComponentsMetadata.OutputFormat.String,
+    'output_path': 'aggregation-result-output.html',
+    'template': 'standard-template/'
+                'jinja2/'
+                'aggregation-result.html',
+}
+
 # Default impact report component for reusability
 impact_report_component_metadata = [
-    {
-        'key': 'analysis-result',
-        'type': ReportComponentsMetadata.AvailableComponent.Jinja2,
-        'processor': jinja2_renderer,
-        'extractor': analysis_result_extractor,
-        'output_format': Jinja2ComponentsMetadata.OutputFormat.String,
-        'output_path': 'analysis-result-output.html',
-        'template': 'standard-template/'
-                    'jinja2/'
-                    'analysis-result.html',
-    },
-    {
-        'key': 'analysis-breakdown',
-        'type': ReportComponentsMetadata.AvailableComponent.Jinja2,
-        'processor': jinja2_renderer,
-        'extractor': analysis_detail_extractor,
-        'output_format': Jinja2ComponentsMetadata.OutputFormat.String,
-        'output_path': 'analysis-detail-output.html',
-        'template': 'standard-template/'
-                    'jinja2/'
-                    'analysis-detail.html',
-    },
-    {
-        'key': 'action-checklist',
-        'type': ReportComponentsMetadata.AvailableComponent.Jinja2,
-        'processor': jinja2_renderer,
-        'extractor': action_checklist_extractor,
-        'output_format': Jinja2ComponentsMetadata.OutputFormat.String,
-        'output_path': 'action-checklist-output.html',
-        'template': 'standard-template/'
-                    'jinja2/'
-                    'bullet-list-section.html',
-    },
-    {
-        'key': 'notes-assumptions',
-        'type': ReportComponentsMetadata.AvailableComponent.Jinja2,
-        'processor': jinja2_renderer,
-        'extractor': notes_assumptions_extractor,
-        'output_format': Jinja2ComponentsMetadata.OutputFormat.String,
-        'output_path': 'notes-assumptions-output.html',
-        'template': 'standard-template/'
-                    'jinja2/'
-                    'bullet-list-section.html',
-    },
-    {
-        'key': 'minimum-needs',
-        'type': ReportComponentsMetadata.AvailableComponent.Jinja2,
-        'processor': jinja2_renderer,
-        'extractor': minimum_needs_extractor,
-        'output_format': Jinja2ComponentsMetadata.OutputFormat.String,
-        'output_path': 'minimum-needs-output.html',
-        'template': 'standard-template/'
-                    'jinja2/'
-                    'minimum-needs.html',
-    },
-    {
-        'key': 'aggregation-result',
-        'type': ReportComponentsMetadata.AvailableComponent.Jinja2,
-        'processor': jinja2_renderer,
-        'extractor': aggregation_result_extractor,
-        'output_format': Jinja2ComponentsMetadata.OutputFormat.String,
-        'output_path': 'aggregation-result-output.html',
-        'template': 'standard-template/'
-                    'jinja2/'
-                    'aggregation-result.html',
-    }
+    analysis_result_component,
+    analysis_breakdown_component,
+    action_checklist_component,
+    notes_assumptions_component,
+    minimum_needs_component,
+    aggregation_result_component,
 ]
 
 # Standard HTML output for impact report

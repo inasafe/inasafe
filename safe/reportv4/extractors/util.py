@@ -3,8 +3,6 @@ import os
 
 from jinja2.exceptions import TemplateError
 
-from safe.definitionsv4.exposure import exposure_all
-from safe.definitionsv4.hazard import hazard_all
 from safe.definitionsv4.utilities import definition
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
