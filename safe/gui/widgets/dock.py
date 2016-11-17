@@ -40,7 +40,7 @@ from PyQt4.QtCore import (
     pyqtSignal,
     QDir)
 
-from safe.definitionsv4.layer_purposes import layer_purpose_impact
+from safe.definitionsv4.layer_purposes import layer_purpose_exposure_impacted
 from safe.definitionsv4.report import standard_impact_report_metadata
 from safe.definitionsv4.utilities import definition
 from safe.definitionsv4.fields import hazard_class_field
@@ -1777,7 +1777,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             # list of layer purpose to show impact report
             # TODO: make it referenced directly from definitions
             impacted_layer = [
-                layer_purpose_impact['key'],
+                layer_purpose_exposure_impacted['key'],
                 'aggregate_hazard_impacted',
                 'aggregation_impacted',
                 'analysis_impacted',

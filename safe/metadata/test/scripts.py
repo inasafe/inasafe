@@ -4,7 +4,8 @@
 from safe.metadata.exposure_layer_metadata import ExposureLayerMetadata
 from safe.metadata.hazard_layer_metadata import HazardLayerMetadata
 from safe.metadata.aggregation_layer_metadata import AggregationLayerMetadata
-from safe.metadata.impact_layer_metadata import ImpactLayerMetadata
+from safe.metadata.exposure_impacted_layer_metadata import \
+    ExposureImpactedLayerMetadata
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -18,7 +19,7 @@ def print_properties():
         ExposureLayerMetadata,
         HazardLayerMetadata,
         AggregationLayerMetadata,
-        ImpactLayerMetadata
+        ExposureImpactedLayerMetadata
     ]
 
     for the_metadata in metadata:

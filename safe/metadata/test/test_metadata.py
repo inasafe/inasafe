@@ -24,7 +24,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 from xml.etree import ElementTree
 from safe.metadata import BaseMetadata
-from safe.metadata import ImpactLayerMetadata
+from safe.metadata import ExposureImpactedLayerMetadata
 from unittest import TestCase
 
 
@@ -39,7 +39,7 @@ class TestMetadata(TestCase):
 
     def test_metadata(self):
         """Check we can't instantiate with unsupported xml types"""
-        metadata = ImpactLayerMetadata('random_layer_id')
+        metadata = ExposureImpactedLayerMetadata('random_layer_id')
         path = 'gmd:MD_Metadata/gmd:dateStamp/gco:RandomString'
 
         # using unsupported xml types
