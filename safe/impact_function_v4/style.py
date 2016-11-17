@@ -12,6 +12,7 @@ from qgis.core import (
     QgsSymbolLayerV2Registry,
 )
 
+from safe.definitionsv4.colors import no_hazard
 from safe.definitionsv4.fields import hazard_class_field
 
 
@@ -36,6 +37,11 @@ def hazard_class_style(layer, classification):
         symbol.setColor(color)
         category = QgsRendererCategoryV2(hazard_class, symbol, label)
         categories.append(category)
+
+    symbol = QgsSymbolV2.defaultSymbol(layer.geometryType())
+    symbol.setColor(no_hazard)
+    category = QgsRendererCategoryV2('', symbol, 'No hazard')
+    categories.append(category)
 
     renderer = QgsCategorizedSymbolRendererV2(
         hazard_class_field['field_name'], categories)
