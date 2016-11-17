@@ -130,8 +130,9 @@ def aggregation_result_extractor(impact_report, component_metadata):
         value_dict[feat[breakdown_field_index]] = feat[
             affected_field_index]
 
-    for type_name in type_fields:
-        type_total_values.append(value_dict[type_name])
+    if value_dict:
+        for type_name in type_fields:
+            type_total_values.append(value_dict[type_name])
 
     """Get the super total affected"""
 

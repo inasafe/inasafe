@@ -18,6 +18,7 @@ from safe.test.utilities import (
     load_path_vector_layer,
     load_test_vector_layer,
     load_test_raster_layer)
+from safe.utilities.i18n import tr
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -26,7 +27,10 @@ from qgis.core import QgsVectorLayer, QgsMapLayerRegistry
 from safe.definitionsv4.report import (
     report_a4_portrait_blue,
     standard_impact_report_metadata_html,
-    standard_impact_report_metadata_pdf)
+    standard_impact_report_metadata_pdf, analysis_result_component,
+    action_checklist_component, notes_assumptions_component,
+    analysis_breakdown_component, aggregation_result_component,
+    minimum_needs_component)
 from safe.reportv4.impact_report import ImpactReport
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -90,6 +94,118 @@ class TestImpactReport(unittest.TestCase):
         impact_report.output_folder = output_folder
         impact_report.process_component()
 
+        """Checking generated context"""
+        different_context_message = 'Different context generated'
+        empty_component_output_message = 'Empty component output'
+
+        # Check Analysis Summary
+        analysis_summary = impact_report.metadata.component_by_key(
+            analysis_result_component['key'])
+        """:type: safe.reportv4.report_metadata.Jinja2ComponentsMetadata"""
+
+        expected_context = {
+            'header': tr('Analysis Results'),
+            'title': tr('Structures affected'),
+            'summary': [
+                {
+                    'header_label': u'Hazard Zone',
+                    'rows': [
+                        {
+                            'value': 4.0,
+                            'name': u'Total High Hazard Zone',
+                            'key': 'high'
+                        },
+                        {
+                            'value': 1.0,
+                            'name': u'Total Medium Hazard Zone',
+                            'key': 'medium'
+                        },
+                        {
+                            'value': 0,
+                            'name': u'Total Low Hazard Zone',
+                            'key': 'low'
+                        }
+                    ],
+                    'value_label': u'Count'
+                },
+                {
+                    'header_label': u'Structures',
+                    'rows': [
+                        {
+                            'value': 5.0,
+                            'name': u'Total Affected',
+                            'key': 'total_affected_field'
+                        },
+                        {
+                            'value': 0.0,
+                            'name': u'Total Unaffected',
+                            'key': 'total_unaffected_field'
+                        },
+                        {
+                            'value': 5.0,
+                            'name': u'Total',
+                            'key': 'total_field'
+                        }
+                    ],
+                    'value_label': u'Count'
+                }
+            ]
+        }
+        actual_context = analysis_summary.context
+
+        self.assertDictEqual(
+            expected_context, actual_context, different_context_message)
+        self.assertTrue(
+            analysis_summary.output, empty_component_output_message)
+
+        # Check Action Notes
+        action_notes = impact_report.metadata.component_by_key(
+            action_checklist_component['key'])
+        """:type: safe.reportv4.report_metadata.Jinja2ComponentsMetadata"""
+        expected_context = {
+            'header': u'Action Checklist',
+            'items': [
+                u'Which structures have warning capacity (e.g. sirens or '
+                u'speakers)?',
+                u'Are the water and electricity services still operating?',
+                u'Are the schools and hospitals still active?',
+                u'Are the health centres still open?',
+                u'Are the other public services accessible?',
+                u'Which buildings will be evacuation centres?',
+                u'Where will we locate the operations centre?',
+                u'Where will we locate warehouse and/or distribution centres?'
+            ]
+        }
+        actual_context = action_notes.context
+
+        self.assertDictEqual(
+            expected_context, actual_context, different_context_message)
+        self.assertTrue(
+            action_notes.output, empty_component_output_message)
+
+        # Check notes assumptions
+        notes_assumptions = impact_report.metadata.component_by_key(
+            notes_assumptions_component['key'])
+        """:type: safe.reportv4.report_metadata.Jinja2ComponentsMetadata"""
+
+        expected_context = {
+            'header': u'Notes and assumptions',
+            'items': [
+                u'The impacts on roads, people, buildings and other '
+                u'exposure elements may be under estimated if the exposure '
+                u'data are incomplete.',
+                u'Numbers reported for structures have not been rounded.'
+            ]
+        }
+        actual_context = notes_assumptions.context
+
+        self.assertDictEqual(
+            expected_context, actual_context, different_context_message)
+        self.assertTrue(
+            notes_assumptions.output, empty_component_output_message)
+
+        """Check output generated"""
+
         output_path = impact_report.component_absolute_output_path(
             'impact-report')
 
@@ -132,6 +248,86 @@ class TestImpactReport(unittest.TestCase):
         impact_report.output_folder = output_folder
         impact_report.process_component()
 
+        """Checking generated context"""
+        different_context_message = 'Different context generated'
+        empty_component_output_message = 'Empty component output'
+
+        # Check Analysis Breakdown
+        analysis_breakdown = impact_report.metadata.component_by_key(
+            analysis_breakdown_component['key'])
+        """:type: safe.reportv4.report_metadata.Jinja2ComponentsMetadata"""
+
+        expected_context = {
+            'header': u'Estimated number of Structures by type',
+            'detail_table': {
+                'headers': [
+                    u'Structures type', u'High Hazard Zone',
+                    u'Medium Hazard Zone', u'Low Hazard Zone',
+                    u'Total Affected', u'Total Unaffected', u'Total'
+                ],
+                'details': [],
+                'footers': [
+                    u'Total', 4.0, 2.0, 0, 6.0, 0.0, 6.0
+                ]
+            }
+        }
+        actual_context = analysis_breakdown.context
+
+        self.assertDictEqual(
+            expected_context, actual_context, different_context_message)
+        self.assertTrue(
+            analysis_breakdown.output, empty_component_output_message)
+
+        # Check Aggregate Report
+        aggregate_result = impact_report.metadata.component_by_key(
+            aggregation_result_component['key'])
+        """:type: safe.reportv4.report_metadata.Jinja2ComponentsMetadata"""
+
+        expected_context = {
+            'aggregation_result': {
+                'header_label': u'Aggregation area',
+                'rows': [
+                    {
+                        'type_values': [1.0, 0.0, 1.0,
+                                        1.0, 0.0],
+                        'total': 3.0,
+                        'name': u'area 1'
+                    },
+                    {
+                        'type_values': [0.0, 1.0, 0.0,
+                                        0.0, 0.0],
+                        'total': 1.0,
+                        'name': u'area 2'
+                    },
+                    {
+                        'type_values': [0.0, 0.0, 0.0,
+                                        1.0, 1.0],
+                        'total': 2.0,
+                        'name': u'area 3'
+                    }
+                ],
+                'type_header_labels': [
+                    u'Other',
+                    u'Government',
+                    u'Commercial',
+                    u'Education',
+                    u'Health'
+                ],
+                'type_total_values': [],
+                'total_label': u'Total',
+                'total_all': 6.0
+            },
+            'header': u'Aggregation Result'
+        }
+        actual_context = aggregate_result.context
+
+        self.assertDictEqual(
+            expected_context, actual_context, different_context_message)
+        self.assertTrue(
+            aggregate_result.output, empty_component_output_message)
+
+        """Check output generated"""
+
         output_path = impact_report.component_absolute_output_path(
             'impact-report')
 
@@ -169,6 +365,25 @@ class TestImpactReport(unittest.TestCase):
             minimum_needs_profile=needs_profile)
         impact_report.output_folder = output_folder
         impact_report.process_component()
+
+        """Checking generated context"""
+        different_context_message = 'Different context generated'
+        empty_component_output_message = 'Empty component output'
+
+        # Check Minimum Needs
+        minimum_needs = impact_report.metadata.component_by_key(
+            minimum_needs_component['key'])
+        """:type: safe.reportv4.report_metadata.Jinja2ComponentsMetadata"""
+
+        expected_context = {}
+        actual_context = minimum_needs.context
+
+        self.assertDictEqual(
+            expected_context, actual_context, different_context_message)
+        self.assertTrue(
+            minimum_needs.output, empty_component_output_message)
+
+        """Check generated report"""
 
         output_path = impact_report.component_absolute_output_path(
             'impact-report')

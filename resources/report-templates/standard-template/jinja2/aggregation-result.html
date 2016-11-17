@@ -23,6 +23,7 @@
         </tr>
         {% endfor %}
     </tbody>
+    {% if aggregation_result.type_total_values %}
     <tfoot>
         <tr>
             <th colspan="1">{{ aggregation_result.total_label }}</th>
@@ -32,5 +33,6 @@
             <th class="text-right" colspan="1">{{ aggregation_result.total_all }}</th>
         </tr>
     </tfoot>
+    {% endif %}
 </table>
 {% endif %}

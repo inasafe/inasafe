@@ -356,3 +356,16 @@ class ReportMetadata(object):
         :rtype: [ReportComponentsMetadata]
         """
         return self._components
+
+    def component_by_key(self, key):
+        """Retrieve component by its key.
+
+        :param key: Component key
+        :type key: str
+
+        :return: ReportComponentsMetadata
+        """
+        filtered = [c for c in self.components if c.key == key]
+        if filtered:
+            return filtered[0]
+        return None
