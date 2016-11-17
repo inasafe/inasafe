@@ -18,3 +18,6 @@ yellow = QColor('#FFFFB2')
 orange = QColor('#FEB24C')
 red = QColor('#F03B20')
 dark_red = QColor('#BD0026')
+
+# Default color for no hazard
+no_hazard = QColor('#000000')
