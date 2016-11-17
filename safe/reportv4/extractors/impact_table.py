@@ -1,6 +1,7 @@
 # coding=utf-8
 
 from safe.common.utilities import safe_dir
+from safe.reportv4.extractors.composer import QGISComposerContext
 from safe.reportv4.extractors.util import jinja2_output_as_string
 from safe.utilities.i18n import tr
 from safe.utilities.resources import (
@@ -14,8 +15,7 @@ __revision__ = '$Format:%H$'
 
 
 def impact_table_extractor(impact_report, component_metadata):
-    """
-    Extracting impact summary of the impact layer
+    """Extracting impact summary of the impact layer.
 
     :param impact_report: the impact report that acts as a proxy to fetch
         all the data that extractor needed
@@ -68,4 +68,41 @@ def impact_table_extractor(impact_report, component_metadata):
     resources_dir = safe_dir(sub_dir='../resources')
     context['inasafe_resources_base_dir'] = resources_dir
 
+    return context
+
+
+def impact_table_pdf_extractor(impact_report, component_metadata):
+    """Extracting impact summary of the impact layer.
+
+    For PDF generations
+
+    :param impact_report: the impact report that acts as a proxy to fetch
+        all the data that extractor needed
+    :type impact_report: safe.reportv4.impact_report.ImpactReport
+
+    :param component_metadata: the component metadata. Used to obtain
+        information about the component we want to render
+    :type component_metadata: safe.reportv4.report_metadata.ReportMetadata
+
+    :return: context for rendering phase
+    """
+    # QGIS Composer needed certain context to generate the output
+    # - Map Settings
+    # - Substitution maps
+    # - Element settings, such as icon for picture file or image source
+
+    context = QGISComposerContext()
+
+    # we only have html elements for this
+    html_frame_elements = [
+        {
+            'id': 'impact-report',
+            'mode': 'text',
+            'text': jinja2_output_as_string(
+                impact_report, 'impact-report'),
+            'margin_left': 10,
+            'margin_right': 10,
+        }
+    ]
+    context.html_frame_elements = html_frame_elements
     return context

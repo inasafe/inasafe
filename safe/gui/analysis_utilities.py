@@ -2,9 +2,12 @@
 """Analysis Utilities"""
 import os
 from PyQt4.QtCore import QDir, Qt
+from PyQt4.QtCore.QSettings import QSettings
 from qgis.core import QgsMapLayerRegistry, QgsProject
 
-from safe.definitionsv4.report import standard_impact_report_metadata
+from safe.definitionsv4.report import (
+    standard_impact_report_metadata_pdf,
+    report_a4_portrait_blue)
 from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
 from safe.reportv4.report_metadata import ReportMetadata
 from safe.reportv4.impact_report import ImpactReport as ImpactReportV4
@@ -31,12 +34,63 @@ def generate_impact_report(impact_function, iface):
 
     # create impact report instance
     report_metadata = ReportMetadata(
-        metadata_dict=standard_impact_report_metadata)
+        metadata_dict=standard_impact_report_metadata_pdf)
     impact_report = ImpactReportV4(
         iface,
         report_metadata,
         impact_function=impact_function,
         minimum_needs_profile=minimum_needs)
+
+    # generate report folder
+
+    # no other option for now
+    # TODO: retrieve the information from data store
+    if isinstance(impact_function.datastore.uri, QDir):
+        layer_dir = impact_function.datastore.uri.absolutePath()
+    else:
+        # No other way for now
+        return
+
+    # We will generate it on the fly without storing it after datastore
+    # supports
+    impact_report.output_folder = os.path.join(layer_dir, 'output')
+    impact_report.process_component()
+
+
+def generate_impact_map_report(impact_function, iface):
+    """Generate impact map pdf from impact function.
+
+    :param impact_function: The impact function used.
+    :type impact_function: ImpactFunction
+
+    :param iface: QGIS QGisAppInterface instance.
+    :type iface: QGisAppInterface
+    """
+    # create impact report instance
+    report_metadata = ReportMetadata(
+        metadata_dict=report_a4_portrait_blue)
+    impact_report = ImpactReportV4(
+        iface,
+        report_metadata,
+        impact_function=impact_function)
+
+    # Get other setting
+    settings = QSettings()
+    logo_path = settings.value(
+        'inasafe/organisation_logo_path', '', type=str)
+    impact_report.inasafe_context.organisation_logo = logo_path
+
+    disclaimer_text = settings.value(
+        'inasafe/reportDisclaimer', '', type=str)
+    impact_report.inasafe_context.disclaimer = disclaimer_text
+
+    north_arrow_path = settings.value(
+        'inasafe/north_arrow_path', '', type=str)
+    impact_report.inasafe_context.north_arrow = north_arrow_path
+
+    # get the extent of impact layer
+    impact_report.qgis_composition_context.extent = \
+        impact_function.impact.extent()
 
     # generate report folder
 
