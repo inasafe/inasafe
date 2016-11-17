@@ -115,8 +115,8 @@ def prepare_vector_layer(layer, callback=None):
         if exposure_type_field['key'] not in fields:
             _add_default_exposure_class(cleaned)
 
-            # Check value mapping
-            _check_value_mapping(cleaned)
+        # Check value mapping
+        _check_value_mapping(cleaned)
 
     cleaned.keywords['title'] = output_layer_name
 
@@ -153,6 +153,7 @@ def _check_value_mapping(layer):
     else:
         value_map[other] = diff
 
+    layer.keywords['value_map'] = value_map
     return layer
 
 
@@ -274,11 +275,20 @@ def _remove_features(layer):
     layer.startEditing()
     i = 0
     for feature in layer.getFeatures(request):
-        # Check if the compulsory field is not empty.
         if isinstance(feature.attributes()[index], QPyNullVariant):
-            layer.deleteFeature(feature.id())
-            i += 1
-            continue
+            if layer_purpose == 'hazard':
+                # Remove the feature if the hazard is null.
+                layer.deleteFeature(feature.id())
+                i += 1
+            elif layer_purpose == 'aggregation':
+                # Put the ID if the value is null.
+                layer.changeAttributeValue(
+                    feature.id(), index, str(feature.id()))
+            elif layer_purpose == 'exposure':
+                # Put an empty value, the value mapping will take care of it
+                # in the 'other' group.
+                layer.changeAttributeValue(
+                    feature.id(), index, '')
 
         # Check if there is en empty geometry.
         geometry = feature.geometry()
@@ -303,7 +313,7 @@ def _remove_features(layer):
             #      |________|
             # layer.deleteFeature(feature.id())
             # i += 1
-            continue
+            pass
 
         # TODO We need to add more tests
         # like checking if the value is in the value_mapping.
