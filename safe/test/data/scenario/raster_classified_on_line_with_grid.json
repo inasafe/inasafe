@@ -13,7 +13,7 @@
     "impact function":{
       "info": {},
       "process":[
-        "Intersect lines with the aggregate hazard",
+        "Intersect divisible features with the aggregate hazard",
         "Aggregate the impact summary",
         "Aggregate the aggregation summary",
         "Aggregate the analysis summary",

@@ -35,8 +35,8 @@ clip_steps = {
 }
 
 intersection_steps = {
-    'step_name': tr('Intersecting lines with polygons'),
-    'output_layer_name': 'intersect',
+    'step_name': tr('Intersecting divisible features with polygons'),
+    'output_layer_name': '%s_intersected',
 }
 
 prepare_vector_steps = {
