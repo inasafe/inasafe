@@ -187,6 +187,7 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
     aggregate_hazard.commitChanges()
 
     aggregate_hazard.keywords['title'] = output_layer_name
+    aggregate_hazard.keywords['layer_purpose'] = 'aggregate_hazard_impacted'
 
     return aggregate_hazard
 

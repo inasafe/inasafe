@@ -118,7 +118,6 @@ def assign_highest_value(exposure, hazard, callback=None):
     exposure.updateExtents()
     exposure.updateFields()
 
-    exposure.keywords = exposure.keywords
     exposure.keywords['inasafe_fields'].update(
         hazard.keywords['inasafe_fields'])
     exposure.keywords['layer_purpose'] = 'impact'

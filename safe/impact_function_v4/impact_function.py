@@ -332,17 +332,23 @@ class ImpactFunction(object):
         :returns: A list of vector layers.
         :rtype: list
         """
-        layers = [
-            self._exposure_impacted,
-            self._aggregate_hazard_impacted,
-            self._aggregation_impacted,
-            self._analysis_impacted,
-            self._exposure_breakdown,
-            self._profiling_table,
-        ]
+        layers = OrderedDict()
+        layers['impact'] = self._exposure_impacted
+        layers['aggregate_hazard_impacted'] = self._aggregate_hazard_impacted
+        layers['aggregation_impacted'] = self._aggregation_impacted
+        layers['analysis_impacted'] = self._analysis_impacted
+        layers['exposure_breakdown'] = self._exposure_breakdown
+        layers['profiling'] = self._profiling_table
+
+        for expected_purpose, layer in layers.iteritems():
+            if layer:
+                purpose = layer.keywords['layer_purpose']
+                if purpose != expected_purpose:
+                    raise Exception('Wrong layer purpose : %s != %s' % (
+                        purpose, expected_purpose))
 
         # Remove layers which are not set.
-        layers = filter(None, layers)
+        layers = filter(None, layers.values())
         return layers
 
     @property
