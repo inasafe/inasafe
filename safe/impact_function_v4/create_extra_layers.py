@@ -145,6 +145,8 @@ def create_profile_layer(profiling):
         profiling_time_field['key']:
             profiling_time_field['field_name']
     }
+    tabular.keywords[inasafe_keyword_version_key] = (
+        inasafe_keyword_version)
 
     table = profiling.to_text().splitlines()[3:]
     tabular.startEditing()

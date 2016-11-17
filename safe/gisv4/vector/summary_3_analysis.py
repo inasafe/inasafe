@@ -169,5 +169,6 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
     analysis.commitChanges()
 
     analysis.keywords['title'] = output_layer_name
+    analysis.keywords['layer_purpose'] = 'analysis_impacted'
 
     return analysis

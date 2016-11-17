@@ -162,5 +162,6 @@ def aggregation_summary(aggregate_hazard, aggregation, callback=None):
     aggregation.commitChanges()
 
     aggregation.keywords['title'] = output_layer_name
+    aggregation.keywords['layer_purpose'] = 'aggregation_impacted'
 
     return aggregation

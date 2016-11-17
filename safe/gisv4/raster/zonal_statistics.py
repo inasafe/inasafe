@@ -84,6 +84,7 @@ def zonal_stats(raster, vector, callback=None):
         'hazard_keywords'].copy()
     layer.keywords['aggregation_keywords'] = (
         vector.keywords['aggregation_keywords'])
+    layer.keywords['layer_purpose'] = 'aggregate_hazard_impacted'
 
     layer.keywords['title'] = output_layer_name
 
