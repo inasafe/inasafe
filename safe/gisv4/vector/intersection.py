@@ -1,7 +1,7 @@
 # coding=utf-8
 
 """
-Clip and mask a hazard layer.
+Intersect two layers.
 
 Issue https://github.com/inasafe/inasafe/issues/3186
 """
@@ -33,7 +33,7 @@ LOGGER = logging.getLogger('InaSAFE')
 
 @profile
 def intersection(source, mask, callback=None):
-    """Clip and mask a vector layer.
+    """Intersect two layers.
 
     Note : This algorithm is copied from :
     https://github.com/qgis/QGIS/blob/master/python/plugins/processing/algs/

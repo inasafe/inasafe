@@ -1068,20 +1068,12 @@ class ImpactFunction(object):
             is_divisible = exposure not in indivisible_keys
 
             if geometry in [QGis.Line, QGis.Polygon] and is_divisible:
-                if geometry == QGis.Polygon:
-                    self.set_state_process(
-                        'impact function',
-                        'Union exposure features to the aggregate hazard')
-                    self._exposure_impacted = union(
-                        self._exposure, self._aggregate_hazard_impacted)
-
-                else:
-                    self.set_state_process(
-                        'impact function',
-                        'Intersect lines with the aggregate hazard')
-                    self._exposure_impacted = intersection(
-                        self._exposure, self._aggregate_hazard_impacted)
-                    self.debug_layer(self._exposure)
+                self.set_state_process(
+                    'impact function',
+                    'Intersect divisible features with the aggregate hazard')
+                self._exposure_impacted = intersection(
+                    self._exposure, self._aggregate_hazard_impacted)
+                self.debug_layer(self._exposure)
 
                 # If the layer has the size field, it means we need to
                 # recompute counts based on the old and new size.
