@@ -219,6 +219,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         self.read_settings()  # get_project_layers called by this
 
+        # debug_mode is a check box to know if we run the IF with debug mode.
+        self.debug_mode.setVisible(self.developer_mode)
+        self.debug_mode.setChecked(False)
+
     def set_dock_title(self):
         """Set the title of the dock using the current version of InaSAFE."""
         self.setWindowTitle(self.tr('InaSAFE %s' % self.inasafe_version))
@@ -1282,10 +1286,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             impact_function._viewport_extent_crs = (
                 map_settings.destinationCrs())
 
-        settings = QSettings()
-        developer_mode = settings.value(
-            'inasafe/developer_mode', False, type=bool)
-        impact_function.debug_mode = developer_mode
+        impact_function.debug_mode = self.debug_mode.isChecked()
 
         return impact_function
 
