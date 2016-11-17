@@ -12,12 +12,8 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-__author__ = 'qgis@borysjurgiel.pl'
-__revision__ = '$Format:%H$'
-__date__ = '16/03/2016'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
 
+import logging
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import pyqtSignature
@@ -28,6 +24,8 @@ from safe.definitionsv4.layer_geometry import (
     layer_geometry_polygon,
     layer_geometry_raster
 )
+from safe.definitionsv4.hazard import hazard_all
+from safe.definitionsv4.exposure import exposure_all
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_strings import (
@@ -38,6 +36,13 @@ from safe.gui.tools.wizard.wizard_utils import (
     RoleExposure,
     RoleHazardConstraint,
     RoleExposureConstraint)
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
+
+LOGGER = logging.getLogger('InaSAFE')
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
@@ -69,7 +74,7 @@ class StepFcFunctions2(WizardStep, FORM_CLASS):
         :returns: The step to be switched to
         :rtype: WizardStep instance or None
         """
-        new_step = self.parent.step_fc_function
+        new_step = self.parent.step_fc_hazlayer_origin
         return new_step
 
     def selected_functions_2(self):
@@ -161,16 +166,23 @@ class StepFcFunctions2(WizardStep, FORM_CLASS):
         big_font = QtGui.QFont()
         big_font.setPointSize(80)
 
+        allowed_hazard_geometries = set()
+        for hazard in hazard_all:
+            for allowed_hazard_geometry in hazard['allowed_geometries']:
+                allowed_hazard_geometries.add(allowed_hazard_geometry)
+        allowed_exposure_geometries = set()
+        for exposure in exposure_all:
+            for allowed_exposure_geometry in exposure['allowed_geometries']:
+                allowed_exposure_geometries.add(allowed_exposure_geometry)
         active_items = []
         for col in range(len(hazard_layer_geometries)):
             for row in range(len(exposure_layer_geometries)):
                 hc = hazard_layer_geometries[col]
                 ec = exposure_layer_geometries[row]
-                functions = self.impact_function_manager\
-                    .functions_for_constraint(
-                        h['key'], e['key'], hc['key'], ec['key'])
+                allowed = (hc['key'] in allowed_hazard_geometries and
+                           ec['key'] in allowed_exposure_geometries)
                 item = QtGui.QTableWidgetItem()
-                if len(functions):
+                if allowed:
                     bgcolor = QtGui.QColor(120, 255, 120)
                     active_items += [item]
                 else:
@@ -181,7 +193,6 @@ class StepFcFunctions2(WizardStep, FORM_CLASS):
                 item.setFont(big_font)
                 item.setTextAlignment(
                     QtCore.Qt.AlignCenter | QtCore.Qt.AlignHCenter)
-                item.setData(RoleFunctions, functions)
                 item.setData(RoleHazard, h)
                 item.setData(RoleExposure, e)
                 item.setData(RoleHazardConstraint, hc)
