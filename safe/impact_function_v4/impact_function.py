@@ -47,6 +47,9 @@ from safe.definitionsv4.utilities import definition
 from safe.definitionsv4.exposure import indivisible_exposure
 from safe.definitionsv4.fields import (
     size_field, exposure_class_field, hazard_class_field)
+from safe.definitionsv4.layer_purposes import (
+    layer_purpose_exposure_impacted
+)
 from safe.definitionsv4.constants import inasafe_keyword_version_key
 from safe.definitionsv4.versions import inasafe_keyword_version
 from safe.common.exceptions import (
@@ -333,7 +336,8 @@ class ImpactFunction(object):
         :rtype: list
         """
         layers = OrderedDict()
-        layers['impact'] = self._exposure_impacted
+        layers[layer_purpose_exposure_impacted['key']] = (
+            self._exposure_impacted)
         layers['aggregate_hazard_impacted'] = self._aggregate_hazard_impacted
         layers['aggregation_impacted'] = self._aggregation_impacted
         layers['analysis_impacted'] = self._analysis_impacted

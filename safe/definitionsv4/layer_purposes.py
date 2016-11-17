@@ -53,13 +53,13 @@ layer_purpose_aggregation = {
         }
     ]
 }
-layer_purpose_impact = {
-    'key': 'impact',
-    'name': tr('Impact'),
+layer_purpose_exposure_impacted = {
+    'key': 'exposure_impacted',
+    'name': tr('Exposure Impacted'),
     'description': tr(
-        'An <b>impact</b> layer is the result from InaSAFE analysis. It has '
-        'fields that represent the result of each exposure from the hazard in '
-        'the aggregation area.'),
+        'An <b>exposure impacted</b> layer is the result from InaSAFE '
+        'analysis. It has fields that represent the result of each exposure '
+        'from the hazard in the aggregation area.'),
     'allowed_geometries': [layer_geometry_polygon],
     'citations': [
         {

@@ -35,8 +35,9 @@ from safe.metadata import (
     ExposureLayerMetadata,
     HazardLayerMetadata,
     AggregationLayerMetadata,
-    ImpactLayerMetadata,
+    ExposureImpactedLayerMetadata,
     GenericLayerMetadata)
+from safe.definitionsv4.layer_purposes import layer_purpose_exposure_impacted
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -61,8 +62,9 @@ def write_iso19115_metadata(layer_uri, keywords):
             metadata = HazardLayerMetadata(layer_uri)
         elif keywords['layer_purpose'] == 'aggregation':
             metadata = AggregationLayerMetadata(layer_uri)
-        elif keywords['layer_purpose'] == 'impact':
-            metadata = ImpactLayerMetadata(layer_uri)
+        elif keywords['layer_purpose'] == \
+                layer_purpose_exposure_impacted['key']:
+            metadata = ExposureImpactedLayerMetadata(layer_uri)
         else:
             metadata = GenericLayerMetadata(layer_uri)
     else:
@@ -101,8 +103,8 @@ def read_iso19115_metadata(layer_uri, keyword=None):
         metadata = HazardLayerMetadata(layer_uri, xml_uri)
     elif metadata.layer_purpose == 'aggregation':
         metadata = AggregationLayerMetadata(layer_uri, xml_uri)
-    elif metadata.layer_purpose == 'impact':
-        metadata = ImpactLayerMetadata(layer_uri, xml_uri)
+    elif metadata.layer_purpose == layer_purpose_exposure_impacted['key']:
+        metadata = ExposureImpactedLayerMetadata(layer_uri, xml_uri)
 
     # dictionary comprehension
     keywords = {
@@ -142,7 +144,7 @@ def read_iso19115_metadata(layer_uri, keyword=None):
             message += 'Layer path: %s' % layer_uri
             raise KeywordNotFoundError(message)
 
-    if isinstance(metadata, ImpactLayerMetadata):
+    if isinstance(metadata, ExposureImpactedLayerMetadata):
         keywords['if_provenance'] = metadata.provenance
     return keywords
 

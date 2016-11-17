@@ -27,9 +27,9 @@ from safe.metadata.utils import merge_dictionaries
 from safe.metadata.encoder import MetadataEncoder
 
 
-class ImpactLayerMetadata(BaseMetadata):
+class ExposureImpactedLayerMetadata(BaseMetadata):
     """
-    Metadata class for impact layers
+    Metadata class for exposure impacted layers
 
     if you need to add a standard XML property that only applies to this
     subclass, do it this way. @property and @propname.setter will be
@@ -211,7 +211,9 @@ class ImpactLayerMetadata(BaseMetadata):
         self.summary_data = None
 
         # initialize base class
-        super(ImpactLayerMetadata, self).__init__(layer_uri, xml_uri, json_uri)
+        super(
+            ExposureImpactedLayerMetadata, self).__init__(
+            layer_uri, xml_uri, json_uri)
 
     @property
     def dict(self):
@@ -221,7 +223,7 @@ class ImpactLayerMetadata(BaseMetadata):
         :return: dictionary representation of the metadata
         :rtype: dict
         """
-        metadata = super(ImpactLayerMetadata, self).dict
+        metadata = super(ExposureImpactedLayerMetadata, self).dict
 
         metadata['provenance'] = self.provenance
         metadata['summary_data'] = self.summary_data
@@ -254,7 +256,7 @@ class ImpactLayerMetadata(BaseMetadata):
         :rtype: dict
         """
         with reading_ancillary_files(self):
-            metadata = super(ImpactLayerMetadata, self).read_json()
+            metadata = super(ExposureImpactedLayerMetadata, self).read_json()
             if 'provenance' in metadata:
                 for provenance_step in metadata['provenance']:
                     try:
@@ -290,7 +292,7 @@ class ImpactLayerMetadata(BaseMetadata):
         :rtype: ElementTree.Element
         """
 
-        root = super(ImpactLayerMetadata, self).xml
+        root = super(ExposureImpactedLayerMetadata, self).xml
         provenance_path = self._special_properties['provenance']
         provenance_element = root.find(provenance_path, XML_NS)
 
@@ -318,7 +320,7 @@ class ImpactLayerMetadata(BaseMetadata):
         """
 
         with reading_ancillary_files(self):
-            root = super(ImpactLayerMetadata, self).read_xml()
+            root = super(ExposureImpactedLayerMetadata, self).read_xml()
             if root is not None:
                 self._read_provenance_from_xml(root)
         return root
@@ -409,7 +411,7 @@ class ImpactLayerMetadata(BaseMetadata):
         :param keywords:
         :return:
         """
-        super(ImpactLayerMetadata, self).update_from_dict(keywords)
+        super(ExposureImpactedLayerMetadata, self).update_from_dict(keywords)
 
         if 'if_provenance' in keywords.keys():
             if_provenance = keywords['if_provenance']
