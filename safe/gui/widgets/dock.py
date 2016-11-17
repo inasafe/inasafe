@@ -41,6 +41,8 @@ from PyQt4.QtCore import (
     QDir)
 
 from safe.definitionsv4.report import standard_impact_report_metadata
+from safe.definitionsv4.utilities import definition
+from safe.definitionsv4.fields import hazard_class_field
 from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
 from safe.reportv4.report_metadata import ReportMetadata
 from safe.utilities.keyword_io import KeywordIO
@@ -105,6 +107,7 @@ from safe.common.exceptions import (
     InvalidKeywordsForProcessingAlgorithm
 )
 from safe.impact_function_v4.impact_function import ImpactFunction
+from safe.impact_function_v4.style import hazard_class_style
 from safe.report.impact_report import ImpactReport
 from safe.gui.tools.about_dialog import AboutDialog
 from safe.gui.tools.help_dialog import HelpDialog
@@ -1198,6 +1201,16 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     group_debug.setVisible(Qt.Unchecked)
                     group_debug.setExpanded(False)
 
+                    # Let's style the hazard class in each layers.
+                    classification = (
+                        self.impact_function.hazard.keywords['classification'])
+                    classification = definition(classification)
+
+                    classes = OrderedDict()
+                    for f in reversed(classification['classes']):
+                        classes[f['key']] = (f['color'], f['name'])
+                    hazard_class = hazard_class_field['key']
+
                     datastore = self.impact_function.datastore
                     for layer in datastore.layers():
                         qgis_layer = datastore.layer(layer)
@@ -1205,6 +1218,14 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                             qgis_layer, False)
                         layer_node = group_debug.addLayer(qgis_layer)
                         layer_node.setVisible(Qt.Unchecked)
+
+                        # Let's style layers which have a geometry and have
+                        # hazard_class
+                        if qgis_layer.type() == QgsMapLayer.VectorLayer:
+                            if qgis_layer.geometryType() != QGis.NoGeometry:
+                                if qgis_layer.keywords['inasafe_fields'].get(
+                                        hazard_class):
+                                    hazard_class_style(qgis_layer, classes)
 
             self.disable_signal_receiver()
             self.hide_busy()
