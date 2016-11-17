@@ -1,9 +1,9 @@
 # coding=utf-8
 import io
 import os
+import shutil
 import unittest
 
-import shutil
 from jinja2.environment import Template
 
 from safe.common.utilities import safe_dir
@@ -24,8 +24,9 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from PyQt4.QtCore import QSettings
 from qgis.core import QgsVectorLayer, QgsMapLayerRegistry
 from safe.definitionsv4.report import (
-    report_a3_portrait_blue,
-    standard_impact_report_metadata)
+    report_a4_portrait_blue,
+    standard_impact_report_metadata_html,
+    standard_impact_report_metadata_pdf)
 from safe.reportv4.impact_report import ImpactReport
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -79,7 +80,7 @@ class TestImpactReport(unittest.TestCase):
         impact_function.run()
 
         report_metadata = ReportMetadata(
-            metadata_dict=standard_impact_report_metadata)
+            metadata_dict=standard_impact_report_metadata_html)
 
         impact_report = ImpactReport(
             IFACE,
@@ -121,7 +122,7 @@ class TestImpactReport(unittest.TestCase):
         impact_function.run()
 
         report_metadata = ReportMetadata(
-            metadata_dict=standard_impact_report_metadata)
+            metadata_dict=standard_impact_report_metadata_html)
 
         impact_report = ImpactReport(
             IFACE,
@@ -159,7 +160,7 @@ class TestImpactReport(unittest.TestCase):
         impact_function.run()
 
         report_metadata = ReportMetadata(
-            metadata_dict=standard_impact_report_metadata)
+            metadata_dict=standard_impact_report_metadata_html)
 
         impact_report = ImpactReport(
             IFACE,
@@ -209,7 +210,7 @@ class TestImpactReport(unittest.TestCase):
         minimum_needs.load()
 
         report_metadata = ReportMetadata(
-            metadata_dict=standard_impact_report_metadata)
+            metadata_dict=standard_impact_report_metadata_html)
 
         impact_report = ImpactReport(
             IFACE,
@@ -225,6 +226,114 @@ class TestImpactReport(unittest.TestCase):
 
         output_path = impact_report.component_absolute_output_path(
             'impact-report')
+
+        # for now, test that output exists
+        self.assertTrue(os.path.exists(output_path))
+
+        shutil.rmtree(output_folder, ignore_errors=True)
+
+    def test_qgis_html_pdf_report(self):
+        """Test generate analysis breakdown and aggregation report."""
+        needs_profile = NeedsProfile()
+        needs_profile.load()
+
+        output_folder = self.fixtures_dir('../output/impact_summary_pdf')
+
+        # Classified vector with buildings
+        shutil.rmtree(output_folder, ignore_errors=True)
+
+        hazard_layer = load_test_vector_layer(
+            'gisv4', 'hazard', 'classified_vector.geojson')
+        exposure_layer = load_test_vector_layer(
+            'gisv4', 'exposure', 'buildings.geojson')
+        aggregation_layer = load_test_vector_layer(
+            'gisv4', 'aggregation', 'small_grid.geojson')
+
+        impact_function = ImpactFunction()
+        impact_function.aggregation = aggregation_layer
+        impact_function.exposure = exposure_layer
+        impact_function.hazard = hazard_layer
+        impact_function.run()
+
+        report_metadata = ReportMetadata(
+            metadata_dict=standard_impact_report_metadata_pdf)
+
+        impact_report = ImpactReport(
+            IFACE,
+            report_metadata,
+            impact_function=impact_function,
+            minimum_needs_profile=needs_profile)
+        impact_report.output_folder = output_folder
+        impact_report.process_component()
+
+        output_path = impact_report.component_absolute_output_path(
+            'impact-report-pdf')
+
+        # for now, test that output exists
+        self.assertTrue(os.path.exists(output_path))
+
+        shutil.rmtree(output_folder, ignore_errors=True)
+
+    def test_qgis_map_pdf_report(self):
+        """Test generate analysis map report."""
+        needs_profile = NeedsProfile()
+        needs_profile.load()
+
+        output_folder = self.fixtures_dir('../output/impact_map_pdf')
+
+        # Classified vector with buildings
+        shutil.rmtree(output_folder, ignore_errors=True)
+
+        hazard_layer = load_test_vector_layer(
+            'gisv4', 'hazard', 'classified_vector.geojson')
+        exposure_layer = load_test_vector_layer(
+            'gisv4', 'exposure', 'buildings.geojson')
+        aggregation_layer = load_test_vector_layer(
+            'gisv4', 'aggregation', 'small_grid.geojson')
+
+        impact_function = ImpactFunction()
+        impact_function.aggregation = aggregation_layer
+        impact_function.exposure = exposure_layer
+        impact_function.hazard = hazard_layer
+        impact_function.run()
+
+        # insert layer to registry
+        layer_registry = QgsMapLayerRegistry.instance()
+        layer_registry.removeAllMapLayers()
+        rendered_layer = impact_function.exposure_impacted
+        layer_registry.addMapLayer(rendered_layer)
+
+        # Create impact report
+        report_metadata = ReportMetadata(
+            metadata_dict=report_a4_portrait_blue)
+
+        impact_report = ImpactReport(
+            IFACE,
+            report_metadata,
+            impact_function=impact_function,
+            minimum_needs_profile=needs_profile)
+        impact_report.output_folder = output_folder
+
+        # Get other setting
+        settings = QSettings()
+        logo_path = settings.value(
+            'inasafe/organisation_logo_path', '', type=str)
+        impact_report.inasafe_context.organisation_logo = logo_path
+
+        disclaimer_text = settings.value(
+            'inasafe/reportDisclaimer', '', type=str)
+        impact_report.inasafe_context.disclaimer = disclaimer_text
+
+        north_arrow_path = settings.value(
+            'inasafe/north_arrow_path', '', type=str)
+        impact_report.inasafe_context.north_arrow = north_arrow_path
+
+        impact_report.qgis_composition_context.extent = rendered_layer.extent()
+
+        impact_report.process_component()
+
+        output_path = impact_report.component_absolute_output_path(
+            'a4-portrait-blue')
 
         # for now, test that output exists
         self.assertTrue(os.path.exists(output_path))
@@ -311,7 +420,7 @@ class TestImpactReport(unittest.TestCase):
             'analysis_sample/analysis-summary.geojson')
         analysis_layer = QgsVectorLayer(analysis_json, '', 'ogr')
         report_metadata = ReportMetadata(
-            metadata_dict=report_a3_portrait_blue)
+            metadata_dict=report_a4_portrait_blue)
         impact_report = ImpactReport(
             IFACE,
             report_metadata,

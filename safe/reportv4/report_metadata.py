@@ -17,6 +17,16 @@ class ReportComponentsMetadata(object):
     Describing metadata for Report component
     """
 
+    class AvailableComponent(object):
+        """Class to hold available component.
+
+        Useful for referencing
+
+        """
+
+        Jinja2 = 'Jinja2'
+        QGISComposer = 'QGISComposer'
+
     def __init__(
             self, key, processor, extractor,
             output_format, template, output_path):
@@ -169,6 +179,12 @@ class Jinja2ComponentsMetadata(ReportComponentsMetadata):
 
     """
 
+    class OutputFormat(object):
+        """Class to hold this available output format."""
+
+        String = 'string'
+        File = 'file'
+
     def __init__(
             self, key, processor, extractor,
             output_format, template, output_path):
@@ -183,10 +199,16 @@ class QgisComposerComponentsMetadata(ReportComponentsMetadata):
 
     """
 
+    class OutputFormat(object):
+        """Class to hold this available output format."""
+
+        PDF = 'pdf'
+        PNG = 'png'
+
     def __init__(
             self, key, processor, extractor,
             output_format, template, output_path,
-            page_dpi=300, page_width=None, page_height=None):
+            page_dpi=300, page_width=210, page_height=297):
         """
         Provides 3 more options
 
@@ -268,12 +290,14 @@ class ReportMetadata(object):
         output_format = component_metadata.get('output_format')
         template = component_metadata.get('template')
         output_path = component_metadata.get('output_path')
-        extra_args = component_metadata.get('extra_args')
-        if component_type == 'Jinja2':
+        extra_args = component_metadata.get('extra_args', {})
+        if (component_type ==
+                ReportComponentsMetadata.AvailableComponent.Jinja2):
             return Jinja2ComponentsMetadata(
                 key, processor, extractor, output_format, template,
                 output_path)
-        elif component_type == 'QGISComposer':
+        elif (component_type ==
+                ReportComponentsMetadata.AvailableComponent.QGISComposer):
             return QgisComposerComponentsMetadata(
                 key, processor, extractor, output_format, template,
                 output_path, **extra_args)

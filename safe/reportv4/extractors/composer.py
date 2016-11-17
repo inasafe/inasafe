@@ -291,3 +291,21 @@ def qgis_composer_extractor(impact_report, component_metadata):
     }
     context.substitution_map = substitution_map
     return context
+
+
+def impact_table_pdf_extractor(impact_report, component_metadata):
+    """Extracting impact summary of the impact layer.
+
+    For PDF generations
+
+    :param impact_report: the impact report that acts as a proxy to fetch
+        all the data that extractor needed
+    :type impact_report: safe.reportv4.impact_report.ImpactReport
+
+    :param component_metadata: the component metadata. Used to obtain
+        information about the component we want to render
+    :type component_metadata: safe.reportv4.report_metadata.ReportMetadata
+
+    :return: context for rendering phase
+    :rtype: dict
+    """
