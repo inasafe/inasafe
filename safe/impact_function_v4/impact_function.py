@@ -820,9 +820,9 @@ class ImpactFunction(object):
         if self.aggregate_hazard_impacted:
             _, name = self.datastore.add_layer(
                 self._aggregate_hazard_impacted, 'aggregate_hazard_impacted')
-            self._aggregate_hazard = self.datastore.layer(name)
+            self._aggregate_hazard_impacted = self.datastore.layer(name)
             if self.debug_mode:
-                check_inasafe_fields(self._aggregate_hazard)
+                check_inasafe_fields(self._aggregate_hazard_impacted)
 
             if self._exposure.keywords.get('classification'):
                 _, name = self.datastore.add_layer(
