@@ -344,8 +344,13 @@ class ImpactFunction(object):
             if layer:
                 purpose = layer.keywords['layer_purpose']
                 if purpose != expected_purpose:
-                    raise Exception('Wrong layer purpose : %s != %s' % (
-                        purpose, expected_purpose))
+                    # ET 18/11/16
+                    # I'm disabling this check. If an exception is raised in
+                    # the IF, this exception might be raised and will hide the
+                    # other one.
+                    # raise Exception('Wrong layer purpose : %s != %s' % (
+                    #     purpose, expected_purpose))
+                    pass
 
         # Remove layers which are not set.
         layers = filter(None, layers.values())
