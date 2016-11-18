@@ -8,6 +8,7 @@ from safe.test.utilities import (
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.gisv4.vector.union import union
+from safe.definitionsv4.fields import hazard_class_field, hazard_value_field
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -28,6 +29,8 @@ class TestUnionVector(unittest.TestCase):
 
         union_a = load_test_vector_layer(
             'gisv4', 'hazard', 'classified_vector.geojson')
+        union_a.keywords['inasafe_fields'][hazard_class_field['key']] = (
+            union_a.keywords['inasafe_fields'][hazard_value_field['key']])
 
         union_b = load_test_vector_layer(
             'gisv4', 'aggregation', 'small_grid.geojson')
