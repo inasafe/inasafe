@@ -25,6 +25,9 @@ __revision__ = '$Format:%H$'
 # Missing Earthquakes, these IF are using damage curves.
 # They are not represented in that file.
 
+null_hazard_value = 'null'
+null_hazard_legend = tr('No hazard')
+
 generic_hazard_classes = {
     'key': 'generic_hazard_classes',
     'name': tr('Generic classes'),
