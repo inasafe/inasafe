@@ -493,4 +493,3 @@ def human_sorting(the_list):
 
     the_list.sort(key=alphanum_key)
     return the_list
-

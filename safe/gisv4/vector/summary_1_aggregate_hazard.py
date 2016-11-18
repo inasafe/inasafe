@@ -22,6 +22,7 @@ from safe.definitionsv4.post_processors import post_processor_affected_function
 from safe.definitionsv4.processing_steps import (
     summary_1_aggregate_hazard_steps)
 from safe.definitionsv4.utilities import definition
+from safe.definitionsv4.hazard_classifications import null_hazard_value
 from safe.gisv4.vector.summary_tools import (
     check_inputs, create_absolute_values_structure, add_fields)
 from safe.utilities.profiling import profile
@@ -128,6 +129,8 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
 
         aggregation_value = f[aggregation_id]
         hazard_value = f[hazard_id]
+        if not hazard_value or isinstance(hazard_value, QPyNullVariant):
+            hazard_value = null_hazard_value
         exposure_value = f[exposure_class]
         if not exposure_value or isinstance(exposure_value, QPyNullVariant):
             exposure_value = 'NULL'
@@ -156,6 +159,8 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
     for area in aggregate_hazard.getFeatures(request):
         aggregation_value = area[aggregation_id]
         feature_hazard_id = area[hazard_id]
+        if not hazard_value or isinstance(hazard_value, QPyNullVariant):
+            hazard_value = null_hazard_value
         feature_hazard_value = area[hazard_class]
         total = 0
         for i, val in enumerate(unique_exposure):

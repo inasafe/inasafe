@@ -15,7 +15,8 @@ from qgis.core import (
 
 from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
 from safe.definitionsv4.fields import hazard_class_field
-from safe.definitionsv4.hazard_classifications import hazard_classification
+from safe.definitionsv4.hazard_classifications import (
+    hazard_classification, null_hazard_value)
 from safe.definitionsv4.processing_steps import assign_highest_value_steps
 from safe.gisv4.vector.tools import create_spatial_index
 from safe.utilities.profiling import profile
@@ -87,7 +88,8 @@ def assign_highest_value(exposure, hazard, callback=None):
             break
 
     # Get a ordered list of classes like ['high', 'medium', 'low']
-    levels = (key['key'] for key in layer_classification['classes'])
+    levels = [key['key'] for key in layer_classification['classes']]
+    levels.append(null_hazard_value)
 
     # Let's loop over the hazard layer, from high to low hazard zone.
     for hazard_value in levels:

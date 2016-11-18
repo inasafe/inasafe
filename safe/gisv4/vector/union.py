@@ -18,7 +18,8 @@ from qgis.core import (
 from safe.utilities.i18n import tr
 from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
 from safe.definitionsv4.processing_steps import union_steps
-from safe.definitionsv4.fields import exposure_id_field, aggregation_id_field
+from safe.definitionsv4.fields import hazard_class_field, aggregation_id_field
+from safe.definitionsv4.hazard_classifications import null_hazard_value
 from safe.gisv4.vector.tools import (
     create_memory_layer, wkb_type_groups, create_spatial_index)
 from safe.utilities.profiling import profile
@@ -79,39 +80,15 @@ def union(union_a, union_b, callback=None):
     inasafe_fields = inasafe_fields_union_1
     inasafe_fields.update(inasafe_fields_union_2)
 
-    layer_purpose_1 = keywords_union_1['layer_purpose']
-    layer_purpose_2 = keywords_union_2['layer_purpose']
-
     # use to avoid modifying original source
     writer.keywords = dict(union_a.keywords)
     writer.keywords['inasafe_fields'] = inasafe_fields
     writer.keywords['title'] = output_layer_name
-
-    if layer_purpose_1 == 'exposure' and layer_purpose_2 == 'aggregate_hazard':
-
-        writer.keywords['layer_purpose'] = 'impact'
-        writer.keywords['exposure_keywords'] = keywords_union_1.copy()
-        writer.keywords['aggregation_keywords'] = (
-            keywords_union_2['aggregation_keywords'].copy())
-        writer.keywords['hazard_keywords'] = (
-            keywords_union_2['hazard_keywords'].copy())
-        not_null_field = inasafe_fields_union_1[
-            exposure_id_field['key']]
-        not_null_field_index = writer.fieldNameIndex(not_null_field)
-
-    elif layer_purpose_1 == 'hazard' and layer_purpose_2 == 'aggregation':
-
-        writer.keywords['layer_purpose'] = 'aggregate_hazard'
-        writer.keywords['hazard_keywords'] = keywords_union_1.copy()
-        writer.keywords['aggregation_keywords'] = keywords_union_2.copy()
-        not_null_field = inasafe_fields_union_2[
-            aggregation_id_field['key']]
-        not_null_field_index = writer.fieldNameIndex(not_null_field)
-
-    else:
-        message = 'I got layer purpose 1 = %s and layer purpose 2 = %s'\
-              % (layer_purpose_1, layer_purpose_2)
-        raise InvalidKeywordsForProcessingAlgorithm(message)
+    writer.keywords['layer_purpose'] = 'aggregate_hazard'
+    writer.keywords['hazard_keywords'] = keywords_union_1.copy()
+    writer.keywords['aggregation_keywords'] = keywords_union_2.copy()
+    skip_field = inasafe_fields_union_2[aggregation_id_field['key']]
+    not_null_field_index = writer.fieldNameIndex(skip_field)
 
     writer.startEditing()
 
@@ -299,6 +276,9 @@ def union(union_a, union_b, callback=None):
     # End of copy/paste from processing
 
     writer.commitChanges()
+
+    fill_hazard_class(writer)
+
     return writer
 
 
@@ -333,3 +313,29 @@ def _write_feature(attributes, geometry, writer, not_null_field_index):
     out_feature.setGeometry(geometry)
     out_feature.setAttributes(attributes)
     writer.addFeature(out_feature)
+
+
+@profile
+def fill_hazard_class(layer):
+    """We need to fill hazard class when it's empty.
+
+    :param layer: The vector layer.
+    :type layer: QgsVectorLayer
+
+    :return: The updated vector layer.
+    :rtype: QgsVectorLayer
+
+    .. versionadded:: 4.0
+    """
+    hazard_field = layer.keywords['inasafe_fields'][hazard_class_field['key']]
+
+    expression = '"%s" is NULL OR  "%s" = \'\'' % (hazard_field, hazard_field)
+    index = layer.fieldNameIndex(hazard_field)
+    request = QgsFeatureRequest().setFilterExpression(expression)
+    layer.startEditing()
+
+    for feature in layer.getFeatures(request):
+        layer.changeAttributeValue(feature.id(), index, null_hazard_value)
+    layer.commitChanges()
+
+    return layer
