@@ -12,6 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
+import re
 import codecs
 import json
 import logging
@@ -464,3 +465,32 @@ def write_json(data, filename):
 
     with open(filename, 'w') as json_file:
         json.dump(data, json_file, indent=2, default=custom_default)
+
+
+def human_sorting(the_list):
+    """Sort the given list in the way that humans expect.
+
+    From http://stackoverflow.com/a/4623518
+
+    :param the_list: The list to sort.
+    :type the_list: list
+
+    :return: The new sorted list.
+    :rtype: list
+    """
+    def try_int(s):
+        try:
+            return int(s)
+        except ValueError:
+            return s
+
+    def alphanum_key(s):
+        """Turn a string into a list of string and number chunks.
+
+            For instance : "z23a" -> ["z", 23, "a"]
+        """
+        return [try_int(c) for c in re.split('([0-9]+)', s)]
+
+    the_list.sort(key=alphanum_key)
+    return the_list
+

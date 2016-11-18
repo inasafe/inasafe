@@ -1218,8 +1218,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                         qgis_layer = datastore.layer(layer)
                         QgsMapLayerRegistry.instance().addMapLayer(
                             qgis_layer, False)
-                        layer_node = group_debug.addLayer(qgis_layer)
+                        layer_node = group_debug.insertLayer(0, qgis_layer)
                         layer_node.setVisible(Qt.Unchecked)
+                        layer_node.setExpanded(False)
 
                         # Let's style layers which have a geometry and have
                         # hazard_class

@@ -22,6 +22,7 @@ from qgis.core import (
 
 from safe.datastore.datastore import DataStore
 from safe.common.exceptions import ErrorDataStore
+from safe.utilities.utilities import human_sorting
 
 VECTOR_EXTENSIONS = ('shp', 'kml', 'geojson')
 RASTER_EXTENSIONS = ('asc', 'tiff', 'tif')
@@ -110,7 +111,7 @@ class Folder(DataStore):
         self.uri.setNameFilters(extensions)
         files = self.uri.entryList()
         self.uri.setNameFilters('')
-        files = [QFileInfo(f).baseName() for f in files]
+        files = human_sorting([QFileInfo(f).baseName() for f in files])
         return files
 
     def layer_uri(self, layer_name):
