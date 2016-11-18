@@ -1179,7 +1179,7 @@ class ImpactFunction(object):
         for layer in self.outputs:
             if layer.geometryType() != QGis.NoGeometry:
                 if layer.keywords['inasafe_fields'].get(hazard_class):
-                    hazard_class_style(layer, classes)
+                    hazard_class_style(layer, classes, self.debug_mode)
 
         # Let's style the aggregation and analysis layer.
         simple_polygon_without_brush(self.aggregation_impacted)

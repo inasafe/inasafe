@@ -14,6 +14,8 @@ from qgis.core import (
 
 from safe.definitionsv4.colors import no_hazard
 from safe.definitionsv4.fields import hazard_class_field
+from safe.definitionsv4.hazard_classifications import (
+    null_hazard_value, null_hazard_legend)
 
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -22,26 +24,33 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
-def hazard_class_style(layer, classification):
+def hazard_class_style(layer, classification, display_null=False):
     """Style for hazard class according to the standards.
 
     :param layer: The layer to style.
     :type layer: QgsVectorLayer
 
+    :param display_null: If we should display the null hazard zone. Default to
+        False.
+    :type display_null: bool
+
     :param classification: The hazard classification to use.
     :type classification: dict safe.definitionsv4.hazard_classifications
     """
     categories = []
+
+    if display_null:
+        symbol = QgsSymbolV2.defaultSymbol(layer.geometryType())
+        symbol.setColor(no_hazard)
+        category = QgsRendererCategoryV2(
+            null_hazard_value, symbol, null_hazard_legend)
+        categories.append(category)
+
     for hazard_class, (color, label) in classification.iteritems():
         symbol = QgsSymbolV2.defaultSymbol(layer.geometryType())
         symbol.setColor(color)
         category = QgsRendererCategoryV2(hazard_class, symbol, label)
         categories.append(category)
-
-    symbol = QgsSymbolV2.defaultSymbol(layer.geometryType())
-    symbol.setColor(no_hazard)
-    category = QgsRendererCategoryV2('', symbol, 'No hazard')
-    categories.append(category)
 
     renderer = QgsCategorizedSymbolRendererV2(
         hazard_class_field['field_name'], categories)

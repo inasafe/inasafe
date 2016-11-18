@@ -1228,7 +1228,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                             if qgis_layer.geometryType() != QGis.NoGeometry:
                                 if qgis_layer.keywords['inasafe_fields'].get(
                                         hazard_class):
-                                    hazard_class_style(qgis_layer, classes)
+                                    hazard_class_style(
+                                        qgis_layer, classes, self.debug_mode)
 
             self.disable_signal_receiver()
             self.hide_busy()
