@@ -172,30 +172,42 @@
       <gmd:supplementalInformation>
         <inasafe_keywords/>
         <inasafe>
+          <thresholds>
+            <gco:Dictionary/>
+          </thresholds>
           <hazard_category>
             <gco:CharacterString>single_event</gco:CharacterString>
           </hazard_category>
-          <multipart_polygon>
-            <gco:Boolean/>
-          </multipart_polygon>
+          <raster_hazard_classification>
+            <gco:CharacterString/>
+          </raster_hazard_classification>
+          <classification>
+            <gco:CharacterString>generic_hazard_classes</gco:CharacterString>
+          </classification>
           <prob_fatality_mag>
             <gco:Tuple/>
           </prob_fatality_mag>
           <inasafe_fields>
             <gco:Dictionary>{&quot;hazard_value_field&quot;: &quot;hazard_value&quot;, &quot;hazard_id_field&quot;: &quot;hazard_id&quot;}</gco:Dictionary>
           </inasafe_fields>
+          <inasafe_default_values>
+            <gco:Dictionary/>
+          </inasafe_default_values>
           <volcano_name_field>
             <gco:CharacterString/>
           </volcano_name_field>
+          <multipart_polygon>
+            <gco:Boolean/>
+          </multipart_polygon>
           <field>
-            <gco:CharacterString>hazard_value</gco:CharacterString>
+            <gco:CharacterString/>
           </field>
           <value_map>
             <gco:Dictionary>{&quot;high&quot;: [&quot;high&quot;], &quot;medium&quot;: [&quot;medium&quot;], &quot;low&quot;: [&quot;low&quot;]}</gco:Dictionary>
           </value_map>
-          <classification>
-            <gco:CharacterString>generic_hazard_classes</gco:CharacterString>
-          </classification>
+          <vector_hazard_classification>
+            <gco:CharacterString/>
+          </vector_hazard_classification>
           <layer_geometry>
             <gco:CharacterString>polygon</gco:CharacterString>
           </layer_geometry>
@@ -229,9 +241,6 @@
           <layer_mode>
             <gco:CharacterString>classified</gco:CharacterString>
           </layer_mode>
-          <hazard_classification>
-            <gco:CharacterString>generic_hazard_classes</gco:CharacterString>
-          </hazard_classification>
         </inasafe>
       </gmd:supplementalInformation>
     </gmd:MD_DataIdentification>

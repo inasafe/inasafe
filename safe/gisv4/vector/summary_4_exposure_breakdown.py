@@ -165,10 +165,10 @@ def exposure_type_breakdown(aggregate_hazard, callback=None):
     for absolute_field in absolute_values.iterkeys():
         field_definition = definition(absolute_values[absolute_field][1])
         field = create_field_from_definition(field_definition)
-        aggregate_hazard.addAttribute(field)
+        tabular.addAttribute(field)
         key = field_definition['key']
         value = field_definition['field_name']
-        aggregate_hazard.keywords['inasafe_fields'][key] = value
+        tabular.keywords['inasafe_fields'][key] = value
 
     for exposure_type in unique_exposure:
         feature = QgsFeature()

@@ -159,8 +159,9 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
     for area in aggregate_hazard.getFeatures(request):
         aggregation_value = area[aggregation_id]
         feature_hazard_id = area[hazard_id]
-        if not hazard_value or isinstance(hazard_value, QPyNullVariant):
-            hazard_value = null_hazard_value
+        if not feature_hazard_id or isinstance(
+                feature_hazard_id, QPyNullVariant):
+            feature_hazard_id = null_hazard_value
         feature_hazard_value = area[hazard_class]
         total = 0
         for i, val in enumerate(unique_exposure):

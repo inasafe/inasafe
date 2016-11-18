@@ -178,12 +178,12 @@
           <multipart_polygon>
             <gco:Boolean/>
           </multipart_polygon>
-          <resolution>
-            <gco:FloatTuple/>
-          </resolution>
           <inasafe_fields>
-            <gco:Dictionary>{&quot;exposure_id_field&quot;: &quot;exposure_id&quot;, &quot;population_count_field&quot;: &quot;absolute&quot;,&quot;feature_rate_field&quot;: &quot;ratio&quot;, &quot;exposure_type_field&quot;: &quot;exposure_type&quot;}</gco:Dictionary>
+            <gco:Dictionary>{&quot;exposure_id_field&quot;: &quot;exposure_id&quot;, &quot;population_count_field&quot;: &quot;absolute&quot;, &quot;exposure_type_field&quot;: &quot;exposure_type&quot;}</gco:Dictionary>
           </inasafe_fields>
+          <inasafe_default_values>
+            <gco:Dictionary/>
+          </inasafe_default_values>
           <area_name_field>
             <gco:CharacterString/>
           </area_name_field>
@@ -199,18 +199,21 @@
           <field>
             <gco:CharacterString/>
           </field>
+          <value_map>
+            <gco:Dictionary>{&quot;residential&quot;: [&quot;house&quot;], &quot;commercial&quot;: [&quot;shop&quot;], &quot;education&quot;: [&quot;school&quot;], &quot;health&quot;: [&quot;hospital&quot;], &quot;government&quot;: [&quot;ministry&quot;]}</gco:Dictionary>
+          </value_map>
           <layer_geometry>
             <gco:CharacterString>point</gco:CharacterString>
           </layer_geometry>
+          <classification>
+            <gco:CharacterString>generic_structure_classes</gco:CharacterString>
+          </classification>
           <scale>
             <gco:CharacterString/>
           </scale>
           <report>
             <gco:CharacterString/>
           </report>
-          <classification>
-            <gco:CharacterString>generic_structure_classes</gco:CharacterString>
-          </classification>
           <exposure>
             <gco:CharacterString>structure</gco:CharacterString>
           </exposure>
@@ -223,11 +226,11 @@
           <datatype>
             <gco:CharacterString/>
           </datatype>
-          <value_map>
-            <gco:Dictionary>{&quot;residential&quot;: [&quot;house&quot;], &quot;health&quot;: [&quot;hospital&quot;], &quot;education&quot;: [&quot;school&quot;], &quot;commercial&quot;: [&quot;shop&quot;], &quot;government&quot;: [&quot;ministry&quot;]}</gco:Dictionary>
-          </value_map>
+          <resolution>
+            <gco:FloatTuple/>
+          </resolution>
           <structure_class_field>
-            <gco:CharacterString>exposure_type</gco:CharacterString>
+            <gco:CharacterString/>
           </structure_class_field>
           <allow_resampling>
             <gco:CharacterString/>
