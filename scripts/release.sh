@@ -16,8 +16,17 @@ DIR='inasafe'
 OUT="/tmp/${DIR}.${VERSION}.zip"
 
 WORKDIR=/tmp/${DIR}$$
-mkdir -p ${WORKDIR}/${DIR}
-git archive `git branch | grep '\*'| sed 's/^\* //g'` | tar -x -C ${WORKDIR}/${DIR}
+TARGZFILE="/tmp/${DIR}.tar.gz"
+
+mkdir -p ${WORKDIR}
+# Archive source code of the current branch to tar gz file.
+# Use git-archive-all since we use git submodule.
+git-archive-all ${TARGZFILE}
+# Extract the file
+tar -xf ${TARGZFILE} -C ${WORKDIR}
+# Remove tar gz file
+rm ${TARGZFILE}
+
 rm -rf ${WORKDIR}/${DIR}/docs/en/_static/user*
 rm -rf ${WORKDIR}/${DIR}/docs/id/_static/user*
 rm -rf ${WORKDIR}/${DIR}/unit_test_data
