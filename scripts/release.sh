@@ -7,8 +7,13 @@ git submodule init
 git submodule update
 
 VERSION=`cat metadata.txt | grep ^version | sed 's/version=//g'`
-# TODO
-#replace _type_ = 'alpha' or 'beta' with final
+STATUS=`cat metadata.txt | grep ^status | sed 's/status=//g'`
+
+if [ "${STATUS}" != "final" ]; then
+    VERSION="${VERSION}.${STATUS}"
+fi
+
+echo ${VERSION}
 
 #see http://stackoverflow.com/questions/1371261/get-current-working-directory-name-in-bash-script
 DIR='inasafe'
@@ -36,11 +41,15 @@ rm -rf ${WORKDIR}/${DIR}/Vagrantfile
 rm -rf ${WORKDIR}/${DIR}/.idea
 rm -rf ${WORKDIR}/${DIR}/Makefile
 rm -rf ${WORKDIR}/${DIR}/.git*
+rm -rf ${WORKDIR}/${DIR}/.scrutinizer.yml
+rm -rf ${WORKDIR}/${DIR}/.checkignore.yml
 rm -rf ${WORKDIR}/${DIR}/scripts
 rm -rf ${WORKDIR}/${DIR}/pylintrc
 rm -rf ${WORKDIR}/${DIR}/extras
 rm -rf ${WORKDIR}/${DIR}/safe/test
 rm -rf ${WORKDIR}/${DIR}/realtime
+rm -rf ${WORKDIR}/${DIR}/bin
+rm -rf ${WORKDIR}/${DIR}/headless
 rm -rf ${WORKDIR}/${DIR}/files
 rm -rf ${WORKDIR}/${DIR}/fabfile.py
 # Commented out next line for #832 - reinstate when that issue is resolved
