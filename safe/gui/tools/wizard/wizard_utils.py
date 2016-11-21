@@ -19,6 +19,7 @@ from safe.utilities.gis import (
     is_polygon_layer)
 from safe.utilities.i18n import tr
 from safe.utilities.utilities import is_keyword_version_supported
+from safe.definitionsv4.constants import zero_default_value
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -194,7 +195,12 @@ def get_inasafe_default_value_qsetting(qsetting, inasafe_field_key):
     """
     key = 'inasafe/default_value/%s' % inasafe_field_key
     default_value = qsetting.value(key)
-    return default_value
+    if default_value is None:
+        return zero_default_value
+    try:
+        return float(default_value)
+    except ValueError:
+        return zero_default_value
 
 
 def get_defaults(qsetting, field_key):
