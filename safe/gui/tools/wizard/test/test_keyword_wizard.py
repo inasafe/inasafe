@@ -467,6 +467,7 @@ class TestKeywordWizard(unittest.TestCase):
 
         # noinspection PyTypeChecker
         dialog = WizardDialog()
+        dialog.qsettings = None
         dialog.set_keywords_creation_mode(layer)
 
         # Check if in select purpose step
