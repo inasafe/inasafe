@@ -44,11 +44,19 @@ from safe.test.utilities import (
     get_dock,
     standard_data_path)
 
+from safe.definitionsv4.hazard import hazard_all, hazard_volcano
+from safe.definitionsv4.exposure import exposure_all, exposure_structure
+from safe.definitionsv4 import (
+    layer_purpose_hazard,
+    layer_purpose_exposure,
+    layer_geometry_polygon
+)
+from safe.definitionsv4.utilities import get_allowed_geometries
+
 # AG: get_qgis_app() should be called before importing modules from
 # safe.gui.tools.wizard
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe.impact_functions.loader import register_impact_functions
 from safe.gui.tools.wizard.wizard_dialog import WizardDialog
 
 
@@ -58,11 +66,11 @@ class WizardDialogTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.dock = get_dock()
+        # cls.dock = get_dock()
+        cls.dock = None
 
     def setUp(self):
-        # register impact functions
-        register_impact_functions()
+        pass
 
     def tearDown(self):
         """Run after each test."""
@@ -94,6 +102,76 @@ class WizardDialogTest(unittest.TestCase):
                 return
         message = 'There is no %s in the list widget' % option
         raise Exception(message)
+
+    def test_analysis_wizard(self):
+        """Test Analysis Wizard."""
+        dialog = WizardDialog(iface=IFACE)
+        dialog.dock = self.dock
+        dialog.set_function_centric_mode()
+        QgsMapLayerRegistry.instance().removeAllMapLayers()
+
+        volcano_layer = load_test_vector_layer(
+            'hazard',
+            'volcano_krb.shp',
+            clone=True,
+            clone_to_memory=True,
+            with_keyword=True)
+
+        structure_layer = load_test_vector_layer(
+            'exposure',
+            'buildings.shp',
+            clone=True,
+            clone_to_memory=True,
+            with_keyword=True)
+
+        test_layers = [volcano_layer, structure_layer]
+
+        QgsMapLayerRegistry.instance().addMapLayers(test_layers)
+
+        count = len(dialog.iface.mapCanvas().layers())
+        self.assertEqual(count, len(test_layers))
+
+        # step_fc_functions1: test function matrix dimensions
+        col_count = dialog.step_fc_functions1.tblFunctions1.columnCount()
+        self.assertEqual(col_count, len(hazard_all))
+        row_count = dialog.step_fc_functions1.tblFunctions1.rowCount()
+        self.assertEqual(row_count, len(exposure_all))
+
+        # Select Volcano vs Structure
+        volcano_index = hazard_all.index(hazard_volcano)
+        structure_index = exposure_all.index(exposure_structure)
+
+        dialog.step_fc_functions1.tblFunctions1.setCurrentCell(
+            structure_index, volcano_index)
+
+        selected_hazard = dialog.step_fc_functions1.selected_value(
+            layer_purpose_hazard['key'])
+        selected_exposure = dialog.step_fc_functions1.selected_value(
+            layer_purpose_exposure['key'])
+        self.assertEqual(selected_hazard, hazard_volcano)
+        self.assertEqual(selected_exposure, exposure_structure)
+
+        # step_fc_functions1: press next
+        dialog.pbnNext.click()
+
+        # step_fc_functions2
+        self.check_current_step(dialog.step_fc_functions2)
+        hazard_polygon_index = get_allowed_geometries(
+            layer_purpose_hazard['key']).index(layer_geometry_polygon)
+        exposure_polygon_index = get_allowed_geometries(
+            layer_purpose_exposure['key']).index(layer_geometry_polygon)
+        dialog.step_fc_functions2.tblFunctions2.setCurrentCell(
+            exposure_polygon_index, hazard_polygon_index)
+
+        selected_hazard_geometry = dialog.step_fc_functions2.selected_value(
+            layer_purpose_hazard['key'])
+        selected_exposure_geometry = dialog.step_fc_functions2.selected_value(
+            layer_purpose_exposure['key'])
+        self.assertEqual(selected_hazard_geometry, layer_geometry_polygon)
+        self.assertEqual(selected_exposure_geometry, layer_geometry_polygon)
+
+        # step_fc_functions2: press next
+        dialog.pbnNext.click()
 
     @unittest.skip('This test is failing with the docker QGIS environment.')
     def test_input_function_centric_wizard(self):
