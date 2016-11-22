@@ -84,10 +84,13 @@ class WizardDialogTest(unittest.TestCase):
         :type expected_step: WizardStep instance
         """
         current_step = expected_step.parent.get_current_step()
-        self.assertEqual(expected_step, current_step)
+        message = 'Should be step %s but it got %s' % (
+            expected_step.__class__.__name__, current_step.__class__.__name__)
+        self.assertEqual(expected_step, current_step, message)
 
     # noinspection PyUnresolvedReferences
-    def select_from_list_widget(self, option, list_widget):
+    @staticmethod
+    def select_from_list_widget(option, list_widget):
         """Helper function to select option from list_widget
 
         :param option: Option to be chosen
@@ -96,11 +99,17 @@ class WizardDialogTest(unittest.TestCase):
         :param list_widget: List widget that wants to be checked.
         :type list_widget: QListWidget
         """
+        available_options = []
         for i in range(list_widget.count()):
             if list_widget.item(i).text() == option:
                 list_widget.setCurrentRow(i)
                 return
-        message = 'There is no %s in the list widget' % option
+            else:
+                available_options.append(list_widget.item(i).text())
+        message = (
+            'There is no %s in the list widget. The available options are %'
+            's' % (option, available_options))
+
         raise Exception(message)
 
     def test_analysis_wizard(self):
@@ -155,6 +164,7 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnNext.click()
 
         # step_fc_functions2
+        # Check in the correct step
         self.check_current_step(dialog.step_fc_functions2)
         hazard_polygon_index = get_allowed_geometries(
             layer_purpose_hazard['key']).index(layer_geometry_polygon)
@@ -172,6 +182,9 @@ class WizardDialogTest(unittest.TestCase):
 
         # step_fc_functions2: press next
         dialog.pbnNext.click()
+
+        # Check in the correct step
+        self.check_current_step(dialog.step_fc_hazlayer_origin)
 
     @unittest.skip('This test is failing with the docker QGIS environment.')
     def test_input_function_centric_wizard(self):
