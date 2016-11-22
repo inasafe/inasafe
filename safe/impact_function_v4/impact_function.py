@@ -939,15 +939,7 @@ class ImpactFunction(object):
             if self.debug_mode:
                 self.debug_layer(self.hazard)
 
-        if use_same_projection:
-            self.set_state_process(
-                'hazard',
-                'Clip and mask hazard polygons with the analysis layer')
-            self.hazard = clip(self.hazard, self._analysis_impacted)
-            if self.debug_mode:
-                self.debug_layer(self.hazard, False)
-
-        else:
+        if self.hazard.crs().authid() != self.exposure.crs().authid():
             self.set_state_process(
                 'hazard',
                 'Reproject hazard layer to exposure CRS')
@@ -956,12 +948,12 @@ class ImpactFunction(object):
             if self.debug_mode:
                 self.debug_layer(self.hazard, False)
 
-            self.set_state_process(
-                'hazard',
-                'Clip and mask hazard polygons with the analysis layer')
-            self.hazard = clip(self.hazard, self._analysis_impacted)
-            if self.debug_mode:
-                self.debug_layer(self.hazard, False)
+        self.set_state_process(
+            'hazard',
+            'Clip and mask hazard polygons with the analysis layer')
+        self.hazard = clip(self.hazard, self._analysis_impacted)
+        if self.debug_mode:
+            self.debug_layer(self.hazard, False)
 
         self.set_state_process(
             'hazard',
