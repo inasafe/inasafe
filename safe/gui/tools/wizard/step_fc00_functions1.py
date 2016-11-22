@@ -24,6 +24,8 @@ from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_utils import (
     RoleFunctions, RoleHazard, RoleExposure)
+from safe.definitionsv4.layer_purposes import (
+    layer_purpose_exposure, layer_purpose_hazard)
 from safe.utilities.resources import resources_path
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -75,6 +77,31 @@ class StepFcFunctions1(WizardStep, FORM_CLASS):
             return selection[0].data(RoleFunctions)
         except (AttributeError, NameError):
             return None
+
+    def selected_value(self, layer_purpose_key):
+        """Obtain selected hazard or exposure.
+
+        :param layer_purpose_key: A layer purpose key, can be hazard or exposure.
+        :type layer_purpose_key: str
+
+        :returns: A selected hazard or exposure definition.
+        :rtype: dict
+        """
+        if layer_purpose_key == layer_purpose_exposure['key']:
+            role = RoleExposure
+        elif layer_purpose_key == layer_purpose_hazard['key']:
+            role = RoleHazard
+        else:
+            return None
+
+        selected = self.tblFunctions1.selectedItems()
+        if len(selected) != 1:
+            return []
+        try:
+            return selected[0].data(role)
+        except (AttributeError, NameError):
+            return None
+
 
     # prevents actions being handled twice
     # noinspection PyPep8Naming
