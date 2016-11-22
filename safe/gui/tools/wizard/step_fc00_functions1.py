@@ -64,20 +64,6 @@ class StepFcFunctions1(WizardStep, FORM_CLASS):
         """
         return self.parent.step_fc_functions2
 
-    def selected_functions_1(self):
-        """Obtain functions available for hazard an exposure selected by user.
-
-        :returns: List of the available functions metadata.
-        :rtype: list, None
-        """
-        selection = self.tblFunctions1.selectedItems()
-        if len(selection) != 1:
-            return []
-        try:
-            return selection[0].data(RoleFunctions)
-        except (AttributeError, NameError):
-            return None
-
     def selected_value(self, layer_purpose_key):
         """Obtain selected hazard or exposure.
 
@@ -96,7 +82,7 @@ class StepFcFunctions1(WizardStep, FORM_CLASS):
 
         selected = self.tblFunctions1.selectedItems()
         if len(selected) != 1:
-            return []
+            return None
         try:
             return selected[0].data(role)
         except (AttributeError, NameError):
@@ -112,14 +98,6 @@ class StepFcFunctions1(WizardStep, FORM_CLASS):
         .. note:: This is an automatic Qt slot
            executed when the category selection changes.
         """
-        functions = self.selected_functions_1()
-        if not functions:
-            self.lblAvailableFunctions1.clear()
-        else:
-            txt = self.tr('Available functions:') + ' ' + ', '.join(
-                [f['name'] for f in functions])
-            self.lblAvailableFunctions1.setText(txt)
-
         # Clear the selection on the 2nd matrix
         self.parent.step_fc_functions2.tblFunctions2.clearContents()
         self.parent.step_fc_functions2.lblAvailableFunctions2.clear()

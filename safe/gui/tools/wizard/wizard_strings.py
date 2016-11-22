@@ -180,23 +180,22 @@ select_function_question = tr(
     'medium hazard zone, low hazard zone.</p>'
 )  # (haz_geom, haz, expo_geom, exp)
 select_hazard_origin_question = tr(
-    '<p>You selected <b>%s %s</b> as hazard input to <b>%s</b> function.</p> '
+    '<p>You selected <b>%s %s</b> as hazard input.</p> '
     '<p>Please help us to find your <b>hazard</b> layer. A hazard layer '
     'represents something that will impact the people or infrastructure '
     'in an area. '
     'For example flood, earthquake and tsunami inundation are all different '
     'kinds of hazards. Select the appropriate option below to indicate '
-    'where your data resides:</p>')  # (hazard_geom, hazard, imfunc)
+    'where your data resides:</p>')  # (hazard_geom, hazard)
 select_hazlayer_from_canvas_question = tr(
-    '<p>You selected <b>%s %s</b> as hazard input to <b>%s</b> function.</p> '
+    '<p>You selected <b>%s %s</b> as hazard input.</p> '
     '<p>These are suitable layers currently loaded in QGIS. Please choose '
     'the hazard layer that you would like to use for your assessment.</p>'
-)  # (hazard_geom, hazard, imfunc)
+)  # (hazard_geom, hazard)
 select_hazlayer_from_browser_question = tr(
-    '<p>You selected <b>%s %s</b> as hazard input to <b>%s</b> '
-    'function.</p> '
+    '<p>You selected <b>%s %s</b> as hazard input.</p> '
     '<p>Please choose the hazard layer that you would like to use '
-    'for your assessment.</p>')  # (exposure_geom, exposure, imfunc)
+    'for your assessment.</p>')  # (exposure_geom, exposure)
 select_exposure_origin_question = tr(
     '<p>You selected <b>%s %s</b> as exposure input to <b>%s</b> '
     'function.</p>'
