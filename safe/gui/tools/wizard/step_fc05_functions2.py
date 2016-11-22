@@ -24,6 +24,10 @@ from safe.definitionsv4.layer_geometry import (
     layer_geometry_polygon,
     layer_geometry_raster
 )
+from safe.definitionsv4.utilities import get_allowed_geometries
+from safe.definitionsv4.layer_purposes import (
+    layer_purpose_exposure, layer_purpose_hazard
+)
 from safe.definitionsv4.hazard import hazard_all
 from safe.definitionsv4.exposure import exposure_all
 from safe.gui.tools.wizard.wizard_step import WizardStep
@@ -76,6 +80,30 @@ class StepFcFunctions2(WizardStep, FORM_CLASS):
         """
         new_step = self.parent.step_fc_hazlayer_origin
         return new_step
+
+    def selected_value(self, layer_purpose_key):
+        """Obtain selected hazard or exposure.
+
+        :param layer_purpose_key: A layer purpose key, can be hazard or exposure.
+        :type layer_purpose_key: str
+
+        :returns: A selected hazard or exposure definition.
+        :rtype: dict
+        """
+        if layer_purpose_key == layer_purpose_exposure['key']:
+            role = RoleExposureConstraint
+        elif layer_purpose_key == layer_purpose_hazard['key']:
+            role = RoleHazardConstraint
+        else:
+            return None
+
+        selected = self.tblFunctions2.selectedItems()
+        if len(selected) != 1:
+            return []
+        try:
+            return selected[0].data(role)
+        except (AttributeError, NameError):
+            return None
 
     def selected_functions_2(self):
         """Obtain functions available for hazard and exposure selected by user.
@@ -136,16 +164,10 @@ class StepFcFunctions2(WizardStep, FORM_CLASS):
         """Set widgets on the Impact Functions Table 2 tab."""
         self.tblFunctions2.clear()
         h, e, _hc, _ec = self.parent.selected_impact_function_constraints()
-        hazard_layer_geometries = [
-            layer_geometry_raster,
-            layer_geometry_point,
-            layer_geometry_line,
-            layer_geometry_polygon]
-        exposure_layer_geometries = [
-            layer_geometry_raster,
-            layer_geometry_point,
-            layer_geometry_line,
-            layer_geometry_polygon]
+        hazard_layer_geometries = get_allowed_geometries(
+            layer_purpose_hazard['key'])
+        exposure_layer_geometries = get_allowed_geometries(
+            layer_purpose_exposure['key'])
         self.lblSelectFunction2.setText(
             select_function_constraints2_question % (h['name'], e['name']))
         self.tblFunctions2.setColumnCount(len(hazard_layer_geometries))
@@ -165,30 +187,14 @@ class StepFcFunctions2(WizardStep, FORM_CLASS):
 
         big_font = QtGui.QFont()
         big_font.setPointSize(80)
-
-        allowed_hazard_geometries = set()
-        for hazard in hazard_all:
-            for allowed_hazard_geometry in hazard['allowed_geometries']:
-                allowed_hazard_geometries.add(allowed_hazard_geometry)
-        allowed_exposure_geometries = set()
-        for exposure in exposure_all:
-            for allowed_exposure_geometry in exposure['allowed_geometries']:
-                allowed_exposure_geometries.add(allowed_exposure_geometry)
         active_items = []
         for col in range(len(hazard_layer_geometries)):
             for row in range(len(exposure_layer_geometries)):
                 hc = hazard_layer_geometries[col]
                 ec = exposure_layer_geometries[row]
-                allowed = (hc['key'] in allowed_hazard_geometries and
-                           ec['key'] in allowed_exposure_geometries)
                 item = QtGui.QTableWidgetItem()
-                if allowed:
-                    bgcolor = QtGui.QColor(120, 255, 120)
-                    active_items += [item]
-                else:
-                    bgcolor = QtGui.QColor(220, 220, 220)
-                    item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEnabled)
-                    item.setFlags(item.flags() & ~QtCore.Qt.ItemIsSelectable)
+                bgcolor = QtGui.QColor(120, 255, 120)
+                active_items += [item]
                 item.setBackground(QtGui.QBrush(bgcolor))
                 item.setFont(big_font)
                 item.setTextAlignment(
