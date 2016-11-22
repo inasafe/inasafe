@@ -436,43 +436,6 @@ class WizardDialog(QDialog, FORM_CLASS):
                 keywords[layer_purpose] != subcategory):
             return False
 
-        # Compare layer keywords with the chosen function's constraints
-
-        imfunc = self.step_fc_function.selected_function()
-        lay_req = imfunc['layer_requirements'][layer_purpose]
-
-        # Reject if layer mode doesn't match
-        if ('layer_mode' in keywords and
-                lay_req['layer_mode']['key'] != keywords['layer_mode']):
-            return False
-
-        # Reject if classification doesn't match
-        classification_key = '%s_%s_classification' % (
-            'raster' if is_raster_layer(layer) else 'vector',
-            layer_purpose)
-        classification_keys = classification_key + 's'
-        if (lay_req['layer_mode'] == layer_mode_classified and
-                classification_key in keywords and
-                classification_keys in lay_req):
-            allowed_classifications = [
-                c['key'] for c in lay_req[classification_keys]]
-            if keywords[classification_key] not in allowed_classifications:
-                return False
-
-        # Reject if unit doesn't match
-        unit_key = ('continuous_hazard_unit'
-                    if layer_purpose == layer_purpose_hazard['key']
-                    else 'exposure_unit')
-        unit_keys = unit_key + 's'
-        if (lay_req['layer_mode'] == layer_mode_continuous and
-                unit_key in keywords and
-                unit_keys in lay_req):
-            allowed_units = [
-                c['key'] for c in lay_req[unit_keys]]
-            if keywords[unit_key] not in allowed_units:
-                return False
-
-        # Finally return True
         return True
 
     def get_compatible_canvas_layers(self, category):

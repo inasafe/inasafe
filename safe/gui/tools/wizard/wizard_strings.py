@@ -12,7 +12,10 @@ Contact : ole.moller.nielsen@gmail.com
 
 from safe.utilities.i18n import tr
 
-__author__ = 'timlinux'
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 category_question = tr(
     'By following the simple steps in this wizard, you can assign '
@@ -197,24 +200,21 @@ select_hazlayer_from_browser_question = tr(
     '<p>Please choose the hazard layer that you would like to use '
     'for your assessment.</p>')  # (exposure_geom, exposure)
 select_exposure_origin_question = tr(
-    '<p>You selected <b>%s %s</b> as exposure input to <b>%s</b> '
-    'function.</p>'
+    '<p>You selected <b>%s %s</b> as exposure input.</p>'
     '<p>Please help us to find your <b>exposure</b> layer. An exposure layer '
     'represents people, property or infrastructure that may be affected in '
     'the event of a flood, earthquake, volcano etc. Select an appropriate '
     'option below to indicate where your data can be found:</p>'
-)  # (exposure_geom, exposure, imfunc)
+)  # (exposure_geom, exposure)
 select_explayer_from_canvas_question = tr(
-    '<p>You selected <b>%s %s</b> as exposure input to <b>%s</b> '
-    'function.</p>'
+    '<p>You selected <b>%s %s</b> as exposure input.</p>'
     '<p>These are suitable layers currently loaded in QGIS. Please choose '
     'the exposure layer that you would like to use for your '
-    'assessment.</p>')  # (exposure_geom, exposure, imfunc)
+    'assessment.</p>')  # (exposure_geom, exposure)
 select_explayer_from_browser_question = tr(
-    '<p>You selected <b>%s %s</b> as exposure input to <b>%s</b> '
-    'function.</p> '
+    '<p>You selected <b>%s %s</b> as exposure input</p>'
     '<p>Please choose the exposure layer that you would like to use '
-    'for your assessment.</p>')  # (exposure_geom, exposure, imfunc)
+    'for your assessment.</p>')  # (exposure_geom, exposure)
 create_postGIS_connection_first = tr(
     '<html>In order to use PostGIS layers, please close the wizard, '
     'create a new PostGIS connection and run the wizard again. <br/><br/> '

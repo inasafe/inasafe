@@ -121,21 +121,15 @@ class StepFcExpLayerOrigin(WizardStep, FORM_CLASS):
         layer_geometry = exposure_constraints['name']
 
         text = (select_exposure_origin_question % (
-            layer_geometry,
-            exposure['name'],
-            self.parent.step_fc_function.selected_function()['name']))
+            layer_geometry, exposure['name']))
         self.lblSelectExpLayerOriginType.setText(text)
 
         text = (select_explayer_from_canvas_question % (
-            layer_geometry,
-            exposure['name'],
-            self.parent.step_fc_function.selected_function()['name']))
+            layer_geometry, exposure['name']))
         self.parent.step_fc_explayer_from_canvas.lblSelectExposureLayer.\
             setText(text)
 
         text = (select_explayer_from_browser_question % (
-            layer_geometry,
-            exposure['name'],
-            self.parent.step_fc_function.selected_function()['name']))
+            layer_geometry, exposure['name']))
         self.parent.step_fc_explayer_from_browser.lblSelectBrowserExpLayer.\
             setText(text)
