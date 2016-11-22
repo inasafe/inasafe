@@ -24,7 +24,13 @@ from safe.definitionsv4 import (
     hazard_fields,
     flood_hazard_classes,
     generic_hazard_classes,
-    aggregation_fields
+    aggregation_fields,
+    layer_purpose_hazard,
+    layer_purpose_exposure,
+    layer_geometry_raster,
+    layer_geometry_line,
+    layer_geometry_point,
+    layer_geometry_polygon
 )
 
 from safe.definitionsv4.utilities import (
@@ -36,7 +42,8 @@ from safe.definitionsv4.utilities import (
     hazard_units,
     exposure_units,
     get_fields,
-    get_classifications
+    get_classifications,
+    get_allowed_geometries
 )
 
 
@@ -179,6 +186,26 @@ class TestDefinitionsUtilities(unittest.TestCase):
         expected_fields = [
             f for f in aggregation_fields if not f['replace_null']]
         self.assertListEqual(fields, expected_fields)
+
+    def test_get_allowed_geometries(self):
+        """Test get_allowed_geometries"""
+        allowed_geometries = get_allowed_geometries(
+            layer_purpose_hazard['key'])
+        expected = [
+            layer_geometry_polygon,
+            layer_geometry_raster
+        ]
+        self.assertEqual(allowed_geometries, expected)
+
+        allowed_geometries = get_allowed_geometries(
+            layer_purpose_exposure['key'])
+        expected = [
+            layer_geometry_line,
+            layer_geometry_point,
+            layer_geometry_polygon,
+            layer_geometry_raster
+        ]
+        self.assertEqual(allowed_geometries, expected)
 
 if __name__ == '__main__':
     unittest.main()
