@@ -13,6 +13,7 @@ from safe.definitionsv4.post_processors import size
 from safe.definitionsv4.processing_steps import (
     recompute_counts_steps)
 from safe.utilities.profiling import profile
+from safe.gisv4.vector.tools import size_calculator
 
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -70,7 +71,9 @@ def recompute_counts(layer, callback=None):
 
     for feature in layer.getFeatures():
         old_size = feature[size_field_name]
-        new_size = size(crs=layer.crs(), geometry=feature.geometry())
+        new_size = size(
+            size_calculator=size_calculator(layer.crs()),
+            geometry=feature.geometry())
 
         layer.changeAttributeValue(feature.id(), size_field_index, new_size)
 

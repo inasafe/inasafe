@@ -5,9 +5,10 @@ Postprocessors.
 """
 from PyQt4.QtCore import QPyNullVariant
 
-from qgis.core import QgsFeatureRequest
+from qgis.core import QgsFeatureRequest, QgsDistanceArea
 
-from safe.gisv4.vector.tools import create_field_from_definition
+from safe.gisv4.vector.tools import (
+    create_field_from_definition, size_calculator)
 from safe.utilities.profiling import profile
 from safe.utilities.i18n import tr
 
@@ -150,6 +151,9 @@ def run_single_post_processor(layer, post_processor):
             elif value['type'] == 'layer_property':
                 if value['value'] == 'layer_crs':
                     default_parameters[key] = layer.crs()
+
+                if value['value'] == 'size_calculator':
+                    default_parameters[key] = size_calculator(layer.crs())
 
         # Create iterator for feature
         request = QgsFeatureRequest().setSubsetOfAttributes(

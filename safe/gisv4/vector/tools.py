@@ -15,6 +15,7 @@ from qgis.core import (
     QGis,
     QgsFeature,
     QgsField,
+    QgsDistanceArea,
     QgsWKBTypes
 )
 
@@ -258,3 +259,20 @@ def read_dynamic_inasafe_field(inasafe_fields, dynamic_field):
             unique_exposure.append(key.replace(pattern, ''))
 
     return unique_exposure
+
+
+@profile
+def size_calculator(crs):
+    """Helper function to create a size calculator according to a CRS.
+
+    :param crs: The coordinate reference system to use.
+    :type crs: QgsCoordinateReferenceSystem
+
+    :return: The QgsDistanceArea object.
+    :rtype: QgsDistanceArea
+    """
+    calculator = QgsDistanceArea()
+    calculator.setSourceCrs(crs)
+    calculator.setEllipsoid('WGS84')
+    calculator.setEllipsoidalMode(True)
+    return calculator
