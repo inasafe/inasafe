@@ -113,21 +113,15 @@ class StepFcHazLayerOrigin(WizardStep, FORM_CLASS):
         layer_geometry = hazard_constraints['name']
 
         text = (select_hazard_origin_question % (
-            layer_geometry,
-            hazard['name'],
-            self.parent.step_fc_function.selected_function()['name']))
+            layer_geometry, hazard['name']))
         self.lblSelectHazLayerOriginType.setText(text)
 
         text = (select_hazlayer_from_canvas_question % (
-            layer_geometry,
-            hazard['name'],
-            self.parent.step_fc_function.selected_function()['name']))
+            layer_geometry, hazard['name']))
         self.parent.step_fc_hazlayer_from_canvas.\
             lblSelectHazardLayer.setText(text)
 
         text = (select_hazlayer_from_browser_question % (
-            layer_geometry,
-            hazard['name'],
-            self.parent.step_fc_function.selected_function()['name']))
+            layer_geometry, hazard['name']))
         self.parent.step_fc_hazlayer_from_browser.\
             lblSelectBrowserHazLayer.setText(text)

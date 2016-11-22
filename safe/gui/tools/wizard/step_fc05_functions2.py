@@ -99,7 +99,7 @@ class StepFcFunctions2(WizardStep, FORM_CLASS):
 
         selected = self.tblFunctions2.selectedItems()
         if len(selected) != 1:
-            return []
+            return None
         try:
             return selected[0].data(role)
         except (AttributeError, NameError):

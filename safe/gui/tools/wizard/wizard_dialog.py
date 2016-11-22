@@ -347,19 +347,15 @@ class WizardDialog(QDialog, FORM_CLASS):
             hazard layer constraints and exposure layer constraints
         :rtype: tuple
         """
-        selection = self.step_fc_functions1.tblFunctions1.selectedItems()
-        if len(selection) != 1:
-            return None, None, None, None
 
-        h = selection[0].data(RoleHazard)
-        e = selection[0].data(RoleExposure)
+        h = self.step_fc_functions1.selected_value(layer_purpose_hazard['key'])
+        e = self.step_fc_functions1.selected_value(
+            layer_purpose_exposure['key'])
 
-        selection = self.step_fc_functions2.tblFunctions2.selectedItems()
-        if len(selection) != 1:
-            return h, e, None, None
-
-        hc = selection[0].data(RoleHazardConstraint)
-        ec = selection[0].data(RoleExposureConstraint)
+        hc = self.step_fc_functions2.selected_value(
+            layer_purpose_hazard['key'])
+        ec = self.step_fc_functions2.selected_value(
+            layer_purpose_exposure['key'])
         return h, e, hc, ec
 
     def is_layer_compatible(self, layer, layer_purpose=None, keywords=None):
