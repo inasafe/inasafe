@@ -59,17 +59,12 @@ def size(**kwargs):
     :param geometry: The geometry.
     :type geometry: QgsGeometry
 
-    :param crs: The CRS.
-    :type crs: QgsCoordinateReferenceSystem
+    :param size_calculator: The size calculator.
+    :type size_calculator: QgsDistanceArea
 
     :return: The size.
     """
-    size_calculator = QgsDistanceArea()
-    size_calculator.setSourceCrs(kwargs['crs'])
-    size_calculator.setEllipsoid('WGS84')
-    size_calculator.setEllipsoidalMode(True)
-
-    feature_size = size_calculator.measure(kwargs['geometry'])
+    feature_size = kwargs['size_calculator'].measure(kwargs['geometry'])
     return feature_size
 
 
@@ -198,14 +193,14 @@ post_processor_elderly = {
 
 post_processor_size = {
     'key': 'post_processor_size',
-    'name': tr('Size Rate Post Processor'),
+    'name': tr('Size Value Post Processor'),
     'description': tr(
         'Post processor to calculate the size of the feature. If the feature '
         'is a polygon we use m^2. If the feature is a line we use metres.'),
     'input': {
-        'crs': {
+        'size_calculator': {
             'type': 'layer_property',
-            'value': 'layer_crs'
+            'value': 'size_calculator'
         },
         'geometry': {
             'type': 'geometry_property'

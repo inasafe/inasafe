@@ -23,7 +23,7 @@
     "post_processor":{
       "info": {},
       "process":[
-        "Post processor for Size Rate Post Processor",
+        "Post processor for Size Value Post Processor",
         "Post processor for Affected Post Processor"
       ]
     },
