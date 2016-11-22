@@ -242,3 +242,29 @@ def definition(keyword):
                 if var.get('key') == keyword:
                     return var
     return None
+
+def get_allowed_geometries(layer_purpose_key):
+    """Helper function to get all possible geometry
+
+    :param layer_purpose_key: A layer purpose key.
+    :type layer_purpose_key: str
+
+    :returns: List of all allowed geometries.
+    :rtype: list
+    """
+    allowed_geometries = set()
+    all_layer_type = []
+    if layer_purpose_key == layer_purpose_hazard['key']:
+        all_layer_type = hazard_all
+    elif layer_purpose_key == layer_purpose_exposure['key']:
+        all_layer_type = exposure_all
+
+    for layer in all_layer_type:
+        for allowed_geometry in layer['allowed_geometries']:
+            allowed_geometries.add(allowed_geometry)
+
+    allowed_geometries = list(allowed_geometries)
+    allowed_geometries_definition = []
+    for allowed_geometry in allowed_geometries:
+        allowed_geometries_definition.append(definition(allowed_geometry))
+    return sorted(allowed_geometries_definition)
