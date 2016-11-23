@@ -74,7 +74,7 @@ class StepFcExtent(WizardStep, FORM_CLASS):
         :rtype: WizardStep instance or None
         """
         if self.validate_extent():
-            new_step = self.parent.step_fc_params
+            new_step = self.parent.step_fc_summary
         else:
             new_step = self.parent.step_fc_extent_disjoint
         return new_step
