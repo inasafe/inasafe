@@ -46,10 +46,6 @@ from safe.gui.tools.wizard.wizard_strings import (
     category_question_aggregation)
 from safe.gui.tools.wizard.wizard_utils import (
     layer_description_html,
-    RoleHazard,
-    RoleExposure,
-    RoleHazardConstraint,
-    RoleExposureConstraint,
     set_inasafe_default_value_qsetting)
 from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.utilities.gis import (
