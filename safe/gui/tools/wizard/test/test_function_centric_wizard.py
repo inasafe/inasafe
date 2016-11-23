@@ -66,8 +66,8 @@ class WizardDialogTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        # cls.dock = get_dock()
-        cls.dock = None
+        cls.dock = get_dock()
+        # cls.dock = None
 
     def setUp(self):
         pass
@@ -122,16 +122,12 @@ class WizardDialogTest(unittest.TestCase):
         volcano_layer = load_test_vector_layer(
             'hazard',
             'volcano_krb.shp',
-            clone=True,
-            clone_to_memory=True,
-            with_keyword=True)
+            clone=True)
 
         structure_layer = load_test_vector_layer(
             'exposure',
             'buildings.shp',
-            clone=True,
-            clone_to_memory=True,
-            with_keyword=True)
+            clone=True)
 
         test_layers = [volcano_layer, structure_layer]
 
@@ -185,6 +181,47 @@ class WizardDialogTest(unittest.TestCase):
 
         # Check in the correct step
         self.check_current_step(dialog.step_fc_hazlayer_origin)
+
+        # step hazard origin: press next
+        dialog.pbnNext.click()
+
+        # Check in the correct step
+        self.check_current_step(dialog.step_fc_hazlayer_from_canvas)
+
+        # Check the number of layer in the list
+        self.assertEqual(
+            dialog.step_fc_hazlayer_from_canvas.lstCanvasHazLayers.count(), 1)
+
+        # step hazard from canvas: press next
+        dialog.pbnNext.click()
+
+        # Check in the correct step
+        self.check_current_step(dialog.step_fc_explayer_origin)
+
+        # step exposure origin: press next
+        dialog.pbnNext.click()
+
+        # Check in the correct step
+        self.check_current_step(dialog.step_fc_explayer_from_canvas)
+
+        # Check the number of layer in the list
+        self.assertEqual(
+            dialog.step_fc_explayer_from_canvas.lstCanvasExpLayers.count(), 1)
+
+        # step exposure from canvas: press next
+        dialog.pbnNext.click()
+
+        # Check in the correct step
+        self.check_current_step(dialog.step_fc_agglayer_origin)
+
+        # Check no aggregation
+        dialog.step_fc_agglayer_origin.rbAggLayerNoAggregation.setChecked(True)
+
+        # step aggregation origin: press next
+        dialog.pbnNext.click()
+
+        # Check in the correct step
+        self.check_current_step(dialog.step_fc_extent)
 
     @unittest.skip('This test is failing with the docker QGIS environment.')
     def test_input_function_centric_wizard(self):
