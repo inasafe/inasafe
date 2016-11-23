@@ -23,9 +23,12 @@ from PyQt4 import QtCore, QtGui
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import pyqtSignature
 # noinspection PyPackageRequirements
-from PyQt4.QtGui import QListWidgetItem
+from PyQt4.QtGui import QListWidgetItem, QPixmap
 
 from qgis.core import QgsMapLayerRegistry
+
+from safe.definitionsv4.layer_purposes import layer_purpose_hazard
+from safe.utilities.resources import resources_path
 
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step import WizardStep
@@ -141,3 +144,11 @@ class StepFcHazLayerFromCanvas(WizardStep, FORM_CLASS):
                 layers += [item.data(QtCore.Qt.UserRole)]
             if last_layer in layers:
                 self.lstCanvasHazLayers.setCurrentRow(layers.index(last_layer))
+
+        # Set icon
+        hazard = self.parent.step_fc_functions1.selected_value(
+            layer_purpose_hazard['key'])
+        icon_path = resources_path(
+            'img', 'wizard', 'keyword-subcategory-%s.svg' % (
+                hazard['key'] or 'notset'))
+        self.lblIconIFCWHazardFromCanvas.setPixmap(QPixmap(icon_path))

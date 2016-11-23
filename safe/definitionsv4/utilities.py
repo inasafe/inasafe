@@ -243,6 +243,7 @@ def definition(keyword):
                     return var
     return None
 
+
 def get_allowed_geometries(layer_purpose_key):
     """Helper function to get all possible geometry
 

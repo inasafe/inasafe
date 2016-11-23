@@ -127,22 +127,11 @@ class StepFcFunction(WizardStep, FORM_CLASS):
             'img', 'wizard', 'keyword-subcategory-%s.svg'
             % (h['key'] or 'notset'))
         self.lblIconFunctionHazard.setPixmap(QPixmap(icon_path))
-        self.parent.step_fc_hazlayer_origin.\
-            lblIconIFCWHazardOrigin.setPixmap(QPixmap(icon_path))
-        self.parent.step_fc_hazlayer_from_canvas.\
-            lblIconIFCWHazardFromCanvas.setPixmap(QPixmap(icon_path))
-        self.parent.step_fc_hazlayer_from_browser.\
-            lblIconIFCWHazardFromBrowser.setPixmap(QPixmap(icon_path))
+
         icon_path = resources_path(
             'img', 'wizard', 'keyword-subcategory-%s.svg'
             % (e['key'] or 'notset'))
         self.lblIconFunctionExposure.setPixmap(QPixmap(icon_path))
-        self.parent.step_fc_explayer_origin.\
-            lblIconIFCWExposureOrigin.setPixmap(QPixmap(icon_path))
-        self.parent.step_fc_explayer_from_canvas.\
-            lblIconIFCWExposureFromCanvas.setPixmap(QPixmap(icon_path))
-        self.parent.step_fc_explayer_from_browser.\
-            lblIconIFCWExposureFromBrowser.setPixmap(QPixmap(icon_path))
 
         # icon_path = resources_path(
         #     'img', 'wizard', 'keyword-category-aggregation.svg')

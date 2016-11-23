@@ -18,6 +18,9 @@ __date__ = '16/03/2016'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+# noinspection PyPackageRequirements
+from PyQt4.QtGui import QPixmap
+
 from safe.utilities.i18n import tr
 
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
@@ -121,3 +124,6 @@ class StepFcAggLayerOrigin(WizardStep, FORM_CLASS):
                 '(no suitable layers found)'))
             self.rbAggLayerFromCanvas.setEnabled(False)
             self.rbAggLayerFromBrowser.click()
+
+        # Set icon
+        self.lblIconIFCWAggregationOrigin.setPixmap(QPixmap(None))

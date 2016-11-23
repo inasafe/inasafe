@@ -19,6 +19,8 @@ __date__ = '16/03/2016'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+# noinspection PyPackageRequirements
+from PyQt4.QtGui import QPixmap
 
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step_browser import WizardStepBrowser
@@ -92,3 +94,6 @@ class StepFcAggLayerFromBrowser(WizardStepBrowser, FORM_CLASS):
     def set_widgets(self):
         """Set widgets on the Aggregation Layer From Browser tab"""
         self.tvBrowserAggregation_selection_changed()
+
+        # Set icon
+        self.lblIconIFCWAggregationFromBrowser.setPixmap(QPixmap(None))

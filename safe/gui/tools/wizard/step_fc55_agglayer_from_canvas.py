@@ -24,7 +24,7 @@ from PyQt4 import QtCore, QtGui
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import pyqtSignature
 # noinspection PyPackageRequirements
-from PyQt4.QtGui import QListWidgetItem
+from PyQt4.QtGui import QListWidgetItem, QPixmap
 
 from qgis.core import QgsMapLayerRegistry
 
@@ -145,3 +145,5 @@ class StepFcAggLayerFromCanvas(WizardStep, FORM_CLASS):
                 layers += [item.data(QtCore.Qt.UserRole)]
             if last_layer in layers:
                 self.lstCanvasAggLayers.setCurrentRow(layers.index(last_layer))
+        # Set icon
+        self.lblIconIFCWAggregationFromCanvas.setPixmap(QPixmap(None))

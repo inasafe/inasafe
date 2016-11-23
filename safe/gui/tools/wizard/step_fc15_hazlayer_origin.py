@@ -18,7 +18,11 @@ __date__ = '16/03/2016'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+# noinspection PyPackageRequirements
+from PyQt4.QtGui import QPixmap
+
 from safe.utilities.i18n import tr
+from safe.utilities.resources import resources_path
 
 from safe.gui.tools.wizard.wizard_strings import (
     select_hazard_origin_question,
@@ -125,3 +129,9 @@ class StepFcHazLayerOrigin(WizardStep, FORM_CLASS):
             layer_geometry, hazard['name']))
         self.parent.step_fc_hazlayer_from_browser.\
             lblSelectBrowserHazLayer.setText(text)
+
+        # Set icon
+        icon_path = resources_path(
+            'img', 'wizard', 'keyword-subcategory-%s.svg' % (
+                hazard['key'] or 'notset'))
+        self.lblIconIFCWHazardOrigin.setPixmap(QPixmap(icon_path))
