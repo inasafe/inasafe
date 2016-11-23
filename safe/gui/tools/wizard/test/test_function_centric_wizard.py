@@ -226,7 +226,6 @@ class WizardDialogTest(unittest.TestCase):
         # # step extent: press next
         # dialog.pbnNext.click()
 
-
     @unittest.skip('This test is failing with the docker QGIS environment.')
     def test_input_function_centric_wizard(self):
         """Test the IFCW mode: FloodRasterBuildingFunction"""
