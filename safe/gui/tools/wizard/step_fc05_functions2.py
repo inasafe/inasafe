@@ -84,7 +84,8 @@ class StepFcFunctions2(WizardStep, FORM_CLASS):
     def selected_value(self, layer_purpose_key):
         """Obtain selected hazard or exposure.
 
-        :param layer_purpose_key: A layer purpose key, can be hazard or exposure.
+        :param layer_purpose_key: A layer purpose key, can be hazard or
+            exposure.
         :type layer_purpose_key: str
 
         :returns: A selected hazard or exposure definition.

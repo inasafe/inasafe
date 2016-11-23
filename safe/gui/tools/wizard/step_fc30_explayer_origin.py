@@ -18,7 +18,11 @@ __date__ = '16/03/2016'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+# noinspection PyPackageRequirements
+from PyQt4.QtGui import QPixmap
+
 from safe.utilities.i18n import tr
+from safe.utilities.resources import resources_path
 
 from safe.gui.tools.wizard.wizard_strings import (
     select_exposure_origin_question,
@@ -133,3 +137,9 @@ class StepFcExpLayerOrigin(WizardStep, FORM_CLASS):
             layer_geometry, exposure['name']))
         self.parent.step_fc_explayer_from_browser.lblSelectBrowserExpLayer.\
             setText(text)
+
+        # Set icon
+        icon_path = resources_path(
+            'img', 'wizard', 'keyword-subcategory-%s.svg' % (
+                exposure['key'] or 'notset'))
+        self.lblIconIFCWExposureOrigin.setPixmap(QPixmap(icon_path))

@@ -18,6 +18,11 @@ __date__ = '16/03/2016'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+# noinspection PyPackageRequirements
+from PyQt4.QtGui import QPixmap
+
+from safe.definitionsv4.layer_purposes import layer_purpose_exposure
+from safe.utilities.resources import resources_path
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step_browser import WizardStepBrowser
 from safe.gui.tools.wizard.wizard_utils import layers_intersect
@@ -89,3 +94,11 @@ class StepFcExpLayerFromBrowser(WizardStepBrowser, FORM_CLASS):
     def set_widgets(self):
         """Set widgets on the Exposure Layer From Browser tab"""
         self.tvBrowserExposure_selection_changed()
+
+        # Set icon
+        exposure = self.parent.step_fc_functions1.selected_value(
+            layer_purpose_exposure['key'])
+        icon_path = resources_path(
+            'img', 'wizard', 'keyword-subcategory-%s.svg' % (
+                exposure['key'] or 'notset'))
+        self.lblIconIFCWExposureFromBrowser.setPixmap(QPixmap(icon_path))

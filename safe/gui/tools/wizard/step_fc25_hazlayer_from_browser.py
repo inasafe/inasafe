@@ -18,6 +18,11 @@ __date__ = '16/03/2016'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+# noinspection PyPackageRequirements
+from PyQt4.QtGui import QPixmap
+
+from safe.definitionsv4.layer_purposes import layer_purpose_hazard
+from safe.utilities.resources import resources_path
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step_browser import WizardStepBrowser
 
@@ -86,3 +91,11 @@ class StepFcHazLayerFromBrowser(WizardStepBrowser, FORM_CLASS):
     def set_widgets(self):
         """Set widgets on the Hazard Layer From Browser tab"""
         self.tvBrowserHazard_selection_changed()
+
+        # Set icon
+        hazard = self.parent.step_fc_functions1.selected_value(
+            layer_purpose_hazard['key'])
+        icon_path = resources_path(
+            'img', 'wizard', 'keyword-subcategory-%s.svg'
+                             % (hazard['key'] or 'notset'))
+        self.lblIconIFCWHazardFromBrowser.setPixmap(QPixmap(icon_path))
