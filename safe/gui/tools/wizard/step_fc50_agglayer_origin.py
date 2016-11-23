@@ -68,7 +68,7 @@ class StepFcAggLayerOrigin(WizardStep, FORM_CLASS):
         elif self.rbAggLayerFromBrowser.isChecked():
             new_step = self.parent.step_fc_agglayer_from_browser
         else:
-            new_step = self.parent.step_fc_extent
+            new_step = self.parent.step_fc_summary
         return new_step
 
     # noinspection PyPep8Naming

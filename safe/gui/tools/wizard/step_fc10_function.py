@@ -111,8 +111,8 @@ class StepFcFunction(WizardStep, FORM_CLASS):
         self.lblDescribeFunction.setText('')
 
         h, e, hc, ec = self.parent.selected_impact_function_constraints()
-        functions = self.impact_function_manager.functions_for_constraint(
-            h['key'], e['key'], hc['key'], ec['key'])
+        # Set empty IF
+        functions = []
         self.lblSelectFunction.setText(
             select_function_question % (
                 hc['name'], h['name'], ec['name'], e['name']))
