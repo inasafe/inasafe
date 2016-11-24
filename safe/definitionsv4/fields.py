@@ -359,7 +359,7 @@ female_count_field = {
     'precision': 0,
     'absolute': True,
     'description': tr(
-        'Attribute where the number of female of the feature is located.'),
+        'Attribute where the number of females of the feature is located.'),
     'citations': [
         {
             'text': None,
@@ -494,7 +494,7 @@ female_ratio_field = {
     'length': default_field_length,
     'precision': default_field_precision,
     'absolute': False,
-    'description': tr('Attribute where the ratio of female is located.'),
+    'description': tr('Attribute where the ratio of females is located.'),
     'citations': [
         {
             'text': None,
