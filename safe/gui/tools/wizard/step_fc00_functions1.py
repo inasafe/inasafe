@@ -168,7 +168,6 @@ class StepFcFunctions1(WizardStep, FORM_CLASS):
                 item.setFont(big_font)
                 item.setTextAlignment(
                     QtCore.Qt.AlignCenter | QtCore.Qt.AlignHCenter)
-                # item.setData(RoleFunctions, functions)
                 item.setData(RoleHazard, h)
                 item.setData(RoleExposure, e)
                 self.tblFunctions1.setItem(
