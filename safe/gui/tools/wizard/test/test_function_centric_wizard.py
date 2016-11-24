@@ -133,7 +133,8 @@ class WizardDialogTest(unittest.TestCase):
         test_layers = [volcano_layer, structure_layer]
 
         QgsMapLayerRegistry.instance().addMapLayers(test_layers)
-        # print
+        # Need to set the layers manually to map canvas. See:
+        # https://gist.github.com/ismailsunni/dd2c30a38cef0147bd0dc8d6ba1aeac6
         qgs_map_canvas_layers = [QgsMapCanvasLayer(x) for x in test_layers]
         CANVAS.setLayerSet(qgs_map_canvas_layers)
 
