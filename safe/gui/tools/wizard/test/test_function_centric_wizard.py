@@ -221,14 +221,17 @@ class WizardDialogTest(unittest.TestCase):
         # Check no aggregation
         dialog.step_fc_agglayer_origin.rbAggLayerNoAggregation.setChecked(True)
 
-        # # step aggregation origin: press next
-        # dialog.pbnNext.click()
-        #
-        # # Check in the correct step
-        # self.check_current_step(dialog.step_fc_summary)
-        #
-        # # step extent: press next
-        # dialog.pbnNext.click()
+        # step aggregation origin: press next
+        dialog.pbnNext.click()
+
+        # Check in the correct step
+        self.check_current_step(dialog.step_fc_summary)
+
+        # step extent: press next
+        dialog.pbnNext.click()
+
+        # Check in the correct step
+        self.check_current_step(dialog.step_fc_analysis)
 
     @unittest.skip('This test is failing with the docker QGIS environment.')
     def test_input_function_centric_wizard(self):

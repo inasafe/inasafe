@@ -86,7 +86,7 @@ class StepFcExtent(WizardStep, FORM_CLASS):
         :rtype: boolean
         """
         _analysis_handler = AnalysisHandler(self.parent)
-        _analysis_handler.setup_analysis()
+        _analysis_handler.prepare_impact_function()
         try:
             impact_function = _analysis_handler.impact_function
             clip_parameters = impact_function.clip_parameters
