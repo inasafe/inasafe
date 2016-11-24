@@ -20,12 +20,24 @@ from collections import OrderedDict
 # noinspection PyPackageRequirements
 from qgis.core import (
     QgsCoordinateTransform,
+    QgsProject,
+    QgsMapLayerRegistry,
+    QgsMapLayer,
+    QGis,
     QgsRectangle,
     QgsCoordinateReferenceSystem)
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import QObject, QSettings, pyqtSignal
+from PyQt4.QtCore import QObject, QSettings, pyqtSignal, Qt, QDir
+
+from safe.definitionsv4.fields import hazard_class_field
+from safe.definitionsv4.utilities import definition
+from safe.impact_function_v4.style import hazard_class_style
+from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
+from safe.reportv4.report_metadata import ReportMetadata
+from safe.reportv4.impact_report import ImpactReport as ImpactReportV4
+from safe.definitionsv4.report import standard_impact_report_metadata
 
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.utilities import (
@@ -66,8 +78,8 @@ from safe.gui.tools.impact_report_dialog import ImpactReportDialog
 from safe_extras.pydispatch import dispatcher
 from safe.utilities.extent import Extent
 from safe.utilities.qgis_utilities import add_above_layer
-from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.impact_template.utilities import get_report_template
+from safe.impact_function_v4.impact_function import ImpactFunction
 
 __author__ = 'qgis@borysjurgiel.pl'
 __revision__ = '$Format:%H$'
@@ -105,7 +117,6 @@ class AnalysisHandler(QObject):
         # Do not delete this
         self.iface = parent.iface
         self.keyword_io = KeywordIO()
-        self.impact_function_manager = ImpactFunctionManager()
         self.extent = Extent(self.iface)
         self.impact_function = None
         self.composer = None
@@ -308,50 +319,99 @@ class AnalysisHandler(QObject):
         """Setup and execute the analysis"""
         self.enable_signal_receiver()
 
-        self.show_busy()
-        self.setup_analysis()
-
         try:
-            clip_parameters = self.impact_function.clip_parameters
-            self.extent.show_last_analysis_extent(
-                clip_parameters['adjusted_geo_extent'])
+            self.show_busy()
+            self.impact_function = self.prepare_impact_function()
 
-            # Start the analysis
-            self.impact_function.run_analysis()
+            self.impact_function.run()
+            self.generate_impact_report(self.impact_function)
+
         except InsufficientOverlapError as e:
             raise e
+        finally:
+            if self.impact_function:
+                self.impact_function.force_memory = False
 
-        self.disable_signal_receiver()
+                layers = self.impact_function.outputs
+
+                name = self.impact_function.name
+                root = QgsProject.instance().layerTreeRoot()
+                group_analysis = root.insertGroup(0, name)
+                group_analysis.setVisible(Qt.Checked)
+                for layer in layers:
+                    QgsMapLayerRegistry.instance().addMapLayer(layer, False)
+                    layer_node = group_analysis.addLayer(layer)
+
+                    # Let's enable only the more detailed layer.
+                    if layer.id() == self.impact_function.impact.id():
+                        layer_node.setVisible(Qt.Checked)
+                    else:
+                        layer_node.setVisible(Qt.Unchecked)
+
+                if self.impact_function.debug_mode:
+                    name = 'DEBUG %s' % name
+                    group_debug = root.insertGroup(0, name)
+                    group_debug.setVisible(Qt.Unchecked)
+                    group_debug.setExpanded(False)
+
+                    # Let's style the hazard class in each layers.
+                    classification = (
+                        self.impact_function.hazard.keywords['classification'])
+                    classification = definition(classification)
+
+                    classes = OrderedDict()
+                    for f in reversed(classification['classes']):
+                        classes[f['key']] = (f['color'], f['name'])
+                    hazard_class = hazard_class_field['key']
+
+                    datastore = self.impact_function.datastore
+                    for layer in datastore.layers():
+                        qgis_layer = datastore.layer(layer)
+                        QgsMapLayerRegistry.instance().addMapLayer(
+                            qgis_layer, False)
+                        layer_node = group_debug.insertLayer(0, qgis_layer)
+                        layer_node.setVisible(Qt.Unchecked)
+                        layer_node.setExpanded(False)
+
+                        # Let's style layers which have a geometry and have
+                        # hazard_class
+                        if qgis_layer.type() == QgsMapLayer.VectorLayer:
+                            if qgis_layer.geometryType() != QGis.NoGeometry:
+                                if qgis_layer.keywords['inasafe_fields'].get(
+                                        hazard_class):
+                                    hazard_class_style(
+                                        qgis_layer, classes, self.debug_mode)
+
+            self.disable_signal_receiver()
+            self.hide_busy()
+
+        # self.disable_signal_receiver()
 
     # noinspection PyUnresolvedReferences
-    def setup_analysis(self):
+    def prepare_impact_function(self):
         """Setup analysis to make it ready to work.
 
         .. note:: Copied or adapted from the dock
         """
         # Impact Function
-        self.impact_function = self.impact_function_manager.get(
-            self.parent.step_fc_function.selected_function()['id'])
-        self.impact_function.parameters = self.parent.step_fc_summary.if_params
+        impact_function = ImpactFunction()
 
         # Layers
-        self.impact_function.hazard = self.parent.hazard_layer
-        self.impact_function.exposure = self.parent.exposure_layer
-        self.impact_function.aggregation = self.parent.aggregation_layer
+        impact_function.hazard = self.parent.hazard_layer
+        impact_function.exposure = self.parent.exposure_layer
+        aggregation = self.parent.aggregation_layer
         # TODO test if the implement aggregation layer works!
+        if aggregation:
+            impact_function.aggregation = aggregation
+        else:
+            map_settings = self.iface.mapCanvas().mapSettings()
+            impact_function.viewport_extent = map_settings.fullExtent()
+            impact_function._viewport_extent_crs = (
+                map_settings.destinationCrs())
 
-        # Variables
-        self.impact_function.clip_hard = self.clip_hard
-        self.impact_function.show_intermediate_layers = \
-            self.show_intermediate_layers
-        viewport = viewport_geo_array(self.iface.mapCanvas())
-        self.impact_function.viewport_extent = viewport
+        # impact_function.debug_mode = self.debug_mode.isChecked()
 
-        # Extent
-        if self.impact_function.requested_extent:
-            extent = self.extent
-            self.impact_function.requested_extent = extent.user_extent
-            self.impact_function.requested_extent_crs = extent.user_extent_crs
+        return impact_function
 
     # noinspection PyUnresolvedReferences
     def completed(self, zero_impact):
@@ -753,3 +813,38 @@ class AnalysisHandler(QObject):
                 space_between_pages * (number_pages - 1))
             self.composer.fitInView(
                 0, 0, paper_width + 1, height + 1, QtCore.Qt.KeepAspectRatio)
+
+    def generate_impact_report(self, impact_function):
+        """
+
+        :param impact_function:
+        :type impact_function: ImpactFunction
+        :return:
+        """
+        # get minimum needs profile
+        minimum_needs = NeedsProfile()
+        minimum_needs.load()
+
+        # create impact report instance
+        report_metadata = ReportMetadata(
+            metadata_dict=standard_impact_report_metadata)
+        impact_report = ImpactReportV4(
+            self.iface,
+            report_metadata,
+            impact_function=impact_function,
+            minimum_needs_profile=minimum_needs)
+
+        # generate report folder
+
+        # no other option for now
+        # TODO: retrieve the information from data store
+        if isinstance(impact_function.datastore.uri, QDir):
+            layer_dir = impact_function.datastore.uri.absolutePath()
+        else:
+            # No other way for now
+            return
+
+        # We will generate it on the fly without storing it after datastore
+        # supports
+        impact_report.output_folder = os.path.join(layer_dir, 'output')
+        impact_report.process_component()
