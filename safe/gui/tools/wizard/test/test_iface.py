@@ -1,34 +1,26 @@
-from safe.test.utilities import (
-    load_test_vector_layer,
-    get_qgis_app,
-    get_dock)
+from qgis.core import QgsMapLayerRegistry, QgsVectorLayer
+from qgis.utils import iface
+from qgis.gui import QgsMapCanvasLayer
 
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-from safe.gui.tools.wizard.wizard_dialog import WizardDialog
-
-dialog = WizardDialog(iface=IFACE)
-dialog.dock = get_dock()
-dialog.set_function_centric_mode()
 QgsMapLayerRegistry.instance().removeAllMapLayers()
-volcano_layer = load_test_vector_layer(
-            'hazard',
-            'volcano_krb.shp',
-            clone=True)
-structure_layer = load_test_vector_layer(
-            'exposure',
-            'buildings.shp',
-            clone=True)
-test_layers = [volcano_layer, structure_layer]
-QgsMapLayerRegistry.instance().addMapLayers(test_layers)
-count = len(dialog.iface.mapCanvas().layers())
-count_iface = len(iface.mapCanvas().layers())
-count_IFACE = len(IFACE.mapCanvas().layers())
-print 'Wizard Dialog', dialog
-print 'iface', iface
-print iface == IFACE
-print iface == dialog.iface
-print IFACE == dialog.iface
-print count, count_iface, count_IFACE
-print len(test_layers)
-assert count == len(test_layers)
+
+vector_layer = QgsVectorLayer(
+    "Point?crs=epsg:4326&field=id:integer&field=name:string(20)&index=yes",
+    "temporary_points",
+    "memory")
+QgsMapLayerRegistry.instance().addMapLayer(vector_layer)
+
+# iface.mapCanvas().setLayerSet(
+# [QgsMapCanvasLayer(vector_layer), QgsMapCanvasLayer(vector_layer)])
+test_variable = len(iface.mapCanvas().layers())
+len(iface.mapCanvas().layers())
+test_variable_2 = len(iface.mapCanvas().layers())
+print 'something'
+
+test_variable_3 = len(iface.mapCanvas().layers())
+
+print 'test_variable', test_variable
+print 'test_variable_2', test_variable_2
+print 'test_variable_3', test_variable_3
+
 print 'fin'
