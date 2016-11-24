@@ -350,16 +350,16 @@ population_count_field = {
 }
 
 # Women Count
-women_count_field = {
-    'key': 'women_count_field',
-    'name': tr('Women Count'),
-    'field_name': 'women',
+female_count_field = {
+    'key': 'female_count_field',
+    'name': tr('Female Count'),
+    'field_name': 'female',
     'type': qvariant_whole_numbers,
     'length': default_field_length,
     'precision': 0,
     'absolute': True,
     'description': tr(
-        'Attribute where the number of women of the feature is located.'),
+        'Attribute where the number of female of the feature is located.'),
     'citations': [
         {
             'text': None,
@@ -494,7 +494,7 @@ female_ratio_field = {
     'length': default_field_length,
     'precision': default_field_precision,
     'absolute': False,
-    'description': tr('Attribute where the ratio of women is located.'),
+    'description': tr('Attribute where the ratio of female is located.'),
     'citations': [
         {
             'text': None,
@@ -767,7 +767,7 @@ impact_fields = [
     adult_ratio_field,
     elderly_ratio_field,
     population_count_field,
-    women_count_field,
+    female_count_field,
     youth_count_field,
     adult_count_field,
     elderly_count_field,
@@ -812,7 +812,7 @@ analysis_fields = [
 count_fields = [
     feature_value_field,
     population_count_field,
-    women_count_field,
+    female_count_field,
     youth_count_field,
     adult_count_field,
     elderly_count_field,

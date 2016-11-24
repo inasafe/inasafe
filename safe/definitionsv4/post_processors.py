@@ -10,7 +10,7 @@ from safe.utilities.i18n import tr
 from safe.definitionsv4.fields import (
     female_ratio_field,
     population_count_field,
-    women_count_field,
+    female_count_field,
     youth_ratio_field,
     youth_count_field,
     adult_ratio_field,
@@ -115,8 +115,8 @@ post_processor_gender = {
         }
     },
     'output': {
-        'women': {
-            'value': women_count_field,
+        'female': {
+            'value': female_count_field,
             'formula': 'population * gender_ratio'
         }
     }

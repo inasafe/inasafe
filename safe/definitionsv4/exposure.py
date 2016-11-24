@@ -14,7 +14,7 @@ from safe.definitionsv4.fields import (
     exposure_fields,
     exposure_name_field,
     female_ratio_field,
-    women_count_field,
+    female_count_field,
     youth_count_field,
     youth_ratio_field,
     population_count_field,
@@ -145,7 +145,7 @@ exposure_population = {
     'fields': exposure_fields,
     'extra_fields': [
         exposure_name_field,
-        women_count_field,
+        female_count_field,
         youth_count_field,
         adult_count_field,
         elderly_count_field,
@@ -249,7 +249,7 @@ exposure_structure = {
     'fields': exposure_fields,
     'extra_fields': [
         population_count_field,
-        women_count_field,
+        female_count_field,
         youth_count_field,
         adult_count_field,
         elderly_count_field,
@@ -294,7 +294,7 @@ exposure_place = {
     'extra_fields': [
         population_count_field,
         exposure_name_field,
-        women_count_field,
+        female_count_field,
         youth_count_field,
         adult_count_field,
         elderly_count_field,

@@ -8,7 +8,7 @@ from safe.test.utilities import get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.definitionsv4.fields import (
-    women_count_field,
+    female_count_field,
     youth_count_field,
     adult_count_field,
     elderly_count_field,
@@ -57,7 +57,7 @@ class TestPostProcessors(unittest.TestCase):
 
         # Check if new field is added
         impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
-        self.assertIn(women_count_field['field_name'], impact_fields)
+        self.assertIn(female_count_field['field_name'], impact_fields)
 
     def test_youth_post_processor(self):
         """Test youth post processor."""
