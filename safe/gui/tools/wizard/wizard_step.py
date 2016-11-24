@@ -19,7 +19,6 @@ import os
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QWidget
 
-from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.resources import get_ui_class
 
@@ -51,7 +50,6 @@ class WizardStep(QWidget):
         self.setupUi(self)
 
         self.keyword_io = KeywordIO()
-        self.impact_function_manager = ImpactFunctionManager()
 
     # noinspection PyUnresolvedReferences,PyMethodMayBeStatic
     def auto_select_one_item(self, list_widget):

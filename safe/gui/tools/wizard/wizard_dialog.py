@@ -47,7 +47,6 @@ from safe.gui.tools.wizard.wizard_strings import (
 from safe.gui.tools.wizard.wizard_utils import (
     layer_description_html,
     set_inasafe_default_value_qsetting)
-from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.utilities.gis import (
     is_raster_layer,
     is_point_layer,
@@ -143,7 +142,6 @@ class WizardDialog(QDialog, FORM_CLASS):
             QPixmap(resources_path('img', 'icons', 'icon-white.svg')))
 
         self.keyword_io = KeywordIO()
-        self.impact_function_manager = ImpactFunctionManager()
 
         self.is_selected_layer_keywordless = False
         self.parent_step = None
