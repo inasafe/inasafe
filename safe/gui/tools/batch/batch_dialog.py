@@ -525,10 +525,15 @@ class BatchDialog(QDialog, FORM_CLASS):
                 # Load impact layer into QGIS
                 qgis_layer = read_impact_layer(impact_layer)
                 impact_layer_source = qgis_layer.source()
-                reg.instance().addMapLayer(qgis_layer, addToLegend=False)
+                # reg.instance().addMapLayer(qgis_layer, addToLegend=False)
 
                 # identify impact layer in map canvas from impact layer source
                 leg_impact_layer = self.identify_layer(impact_layer_source)
+                self.legend_impact_layer_is_removed = False
+                if leg_impact_layer.type() == QgsMapLayer.VectorLayer:
+                    leg_impact_layer.layerDeleted.connect(self.check_removed)
+                elif leg_impact_layer.type() == QgsMapLayer.RasterLayer:
+                    leg_impact_layer.destroyed.connect(self.check_removed)
                 # clone impact layer in Layer Panel
                 if qgis_layer.type() == QgsMapLayer.VectorLayer:
                     cloned_layer = QgsVectorLayer(
@@ -542,13 +547,15 @@ class BatchDialog(QDialog, FORM_CLASS):
                         leg_impact_layer.providerType())
                 else:
                     raise Exception('layer source is failed to be recognized')
-                # turn off layer visibility just in case layer removing
-                # is not working so that it won't be shown in the next scenario
-                legend_interface = self.iface.legendInterface()
-                legend_interface.setLayerVisible(leg_impact_layer, False)
                 # remove original layer created from dock, sometimes this
                 # code is failed leaving original file in layer panel
                 reg.instance().removeMapLayer(leg_impact_layer)
+                # turn off layer visibility just in case layer removing
+                # is not working so that it won't be shown in the next scenario
+                legend_interface = self.iface.legendInterface()
+                if not self.legend_impact_layer_is_removed:
+                    LOGGER.info('Failed to remove legend impact layer')
+                    legend_interface.setLayerVisible(leg_impact_layer, False)
                 # add cloned layer to the layer group
                 reg.instance().addMapLayer(cloned_layer, False)
                 self.layer_group.insertLayer(0, cloned_layer)
@@ -578,6 +585,14 @@ class BatchDialog(QDialog, FORM_CLASS):
 
         self.disable_busy_cursor()
         return result
+
+    def check_removed(self):
+        """Function to check whether layer removal is properly run or not
+         it will assign legend_impact_layer_is_removed value to True
+        :return:
+        """
+        LOGGER.info('Legend impact layer has been removed')
+        self.legend_impact_layer_is_removed = True
 
     # noinspection PyMethodMayBeStatic
     def report_path(self, directory, title, count=0, index=None):
