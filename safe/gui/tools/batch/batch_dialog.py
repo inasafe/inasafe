@@ -27,7 +27,13 @@ from StringIO import StringIO
 from ConfigParser import ConfigParser, MissingSectionHeaderError, ParsingError
 
 from qgis.core import (
-    QgsRectangle, QgsCoordinateReferenceSystem, QgsMapLayerRegistry)
+    QgsRectangle,
+    QgsCoordinateReferenceSystem,
+    QgsMapLayer,
+    QgsMapLayerRegistry as reg,
+    QgsProject,
+    QgsVectorLayer,
+    QgsRasterLayer)
 
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature, pyqtSlot, QSettings, Qt
@@ -83,6 +89,11 @@ class BatchDialog(QDialog, FORM_CLASS):
 
         self.table.setColumnWidth(0, 200)
         self.table.setColumnWidth(1, 125)
+
+        # initiate layer group creation
+        self.root = QgsProject.instance().layerTreeRoot()
+        # container for all layer group
+        self.layer_group_container = []
 
         # preventing error if the user delete the directory
         self.default_directory = temp_dir()
@@ -192,6 +203,8 @@ class BatchDialog(QDialog, FORM_CLASS):
         unparsed_files = []
         self.table.clearContents()
 
+        # Block signal to allow update checking only when the table is ready
+        self.table.blockSignals(True)
         # NOTE(gigih): need this line to remove existing rows
         self.table.setRowCount(0)
 
@@ -218,6 +231,8 @@ class BatchDialog(QDialog, FORM_CLASS):
                 except ParsingError:
                     unparsed_files.append(current_path)
 
+        # unblock signal
+        self.table.blockSignals(False)
         # LOGGER.info(self.show_parser_results(parsed_files, unparsed_files))
 
     def run_script(self, filename):
@@ -243,7 +258,7 @@ class BatchDialog(QDialog, FORM_CLASS):
             script = __import__(module)
 
         # run as a new project
-        self.iface.newProject()
+        # self.iface.newProject()
 
         # run entry function
         function = script.runScript
@@ -266,18 +281,26 @@ class BatchDialog(QDialog, FORM_CLASS):
         scenario_directory = str(self.source_directory.text())
 
         paths = []
-        if 'hazard' in items:
-            paths.append(items['hazard'])
-        if 'exposure' in items:
-            paths.append(items['exposure'])
         if 'aggregation' in items:
             paths.append(items['aggregation'])
-
-        # always run in new project
-        self.iface.newProject()
-
+        if 'exposure' in items:
+            paths.append(items['exposure'])
+            # add access to exposure layer source so we can access it later
+            self.exposure_source = os.path.normpath(
+                os.path.join(scenario_directory, items['exposure']))
+        if 'hazard' in items:
+            paths.append(items['hazard'])
         try:
-            scenario_runner.add_layers(scenario_directory, paths, self.iface)
+            # create layer group
+            group_name = items['scenario_name']
+            self.layer_group = self.root.addGroup(group_name)
+            self.layer_group_container.append(self.layer_group)
+            # add layer to group
+            scenario_runner.add_layers(
+                scenario_directory,
+                paths,
+                self.iface,
+                self.layer_group)
         except FileNotFoundError:
             # set status to 'fail'
             LOGGER.exception('Loading layers failed: \nRoot: %s\n%s' % (
@@ -460,13 +483,14 @@ class BatchDialog(QDialog, FORM_CLASS):
         """
 
         self.enable_busy_cursor()
+        for layer_group in self.layer_group_container:
+            layer_group.setVisible(False)
         # set status to 'running'
         status_item.setText(self.tr('Running'))
 
         # .. see also:: :func:`appendRow` to understand the next 2 lines
         variant = task_item.data(QtCore.Qt.UserRole)
         value = variant[0]
-
         result = True
 
         if isinstance(value, str):
@@ -500,14 +524,56 @@ class BatchDialog(QDialog, FORM_CLASS):
 
                 # Load impact layer into QGIS
                 qgis_layer = read_impact_layer(impact_layer)
-                QgsMapLayerRegistry.instance().addMapLayer(
-                    qgis_layer, addToLegend=False)
+                impact_layer_source = qgis_layer.source()
+                # reg.instance().addMapLayer(qgis_layer, addToLegend=False)
 
+                # identify impact layer in map canvas from impact layer source
+                leg_impact_layer = self.identify_layer(impact_layer_source)
+                self.legend_impact_layer_is_removed = False
+                if leg_impact_layer.type() == QgsMapLayer.VectorLayer:
+                    leg_impact_layer.layerDeleted.connect(self.check_removed)
+                elif leg_impact_layer.type() == QgsMapLayer.RasterLayer:
+                    leg_impact_layer.destroyed.connect(self.check_removed)
+                # clone impact layer in Layer Panel
+                if qgis_layer.type() == QgsMapLayer.VectorLayer:
+                    cloned_layer = QgsVectorLayer(
+                        leg_impact_layer.source(),
+                        leg_impact_layer.name(),
+                        leg_impact_layer.providerType())
+                elif qgis_layer.type() == QgsMapLayer.RasterLayer:
+                    cloned_layer = QgsRasterLayer(
+                        leg_impact_layer.source(),
+                        leg_impact_layer.name(),
+                        leg_impact_layer.providerType())
+                else:
+                    raise Exception('layer source is failed to be recognized')
+                # remove original layer created from dock, sometimes this
+                # code is failed leaving original file in layer panel
+                reg.instance().removeMapLayer(leg_impact_layer)
+                # turn off layer visibility just in case layer removing
+                # is not working so that it won't be shown in the next scenario
+                legend_interface = self.iface.legendInterface()
+                if not self.legend_impact_layer_is_removed:
+                    LOGGER.info('Failed to remove legend impact layer')
+                    legend_interface.setLayerVisible(leg_impact_layer, False)
+                # add cloned layer to the layer group
+                reg.instance().addMapLayer(cloned_layer, False)
+                self.layer_group.insertLayer(0, cloned_layer)
+                # turn off exposure layer visibility
+                exposure_layer = self.identify_layer(self.exposure_source)
+                legend_interface.setLayerVisible(exposure_layer, False)
+
+                # print layer list. somehow this is the only way to update
+                # the map canvas. still need improvement
+                layers = self.iface.mapCanvas().layers()
+                for layer in layers:
+                    print layer.name()
                 # noinspection PyBroadException
                 try:
                     status_item.setText(self.tr('Analysis Ok'))
                     self.create_pdf(
-                        title, path, qgis_layer, count, index)
+                        title, path, cloned_layer, count, index)
+                    LOGGER.info('Map has been rendered: "%s"' % value)
                     status_item.setText(self.tr('Report Ok'))
                 except Exception:  # pylint: disable=W0703
                     LOGGER.exception('Unable to render map: "%s"' % value)
@@ -519,6 +585,14 @@ class BatchDialog(QDialog, FORM_CLASS):
 
         self.disable_busy_cursor()
         return result
+
+    def check_removed(self):
+        """Function to check whether layer removal is properly run or not
+         it will assign legend_impact_layer_is_removed value to True
+        :return:
+        """
+        LOGGER.info('Legend impact layer has been removed')
+        self.legend_impact_layer_is_removed = True
 
     # noinspection PyMethodMayBeStatic
     def report_path(self, directory, title, count=0, index=None):
@@ -669,7 +743,7 @@ class BatchDialog(QDialog, FORM_CLASS):
 
     @pyqtSignature('')  # prevents actions being handled twice
     def on_output_directory_chooser_clicked(self):
-        """Autoconnect slot activated when tbOutputDiris clicked """
+        """Auto  connect slot activated when tbOutputDiris clicked """
 
         title = self.tr('Set the output directory for pdf report files')
         self.choose_directory(self.output_directory, title)
@@ -713,6 +787,24 @@ class BatchDialog(QDialog, FORM_CLASS):
         string += footer
 
         self.help_web_view.setHtml(string)
+
+    def identify_layer(self, layer_source):
+        """Identify impact layer created from dock so we can access it
+
+        :param impact_layer_source: the source of impact layer
+            created from dock. we will use this to match with the source of
+            each in layer legend.
+        :type label: str
+        :return QgsVectorLayer
+        """
+
+        # iterate legend layer to match with input layer
+        reg_layers = reg.instance().mapLayers().iteritems()
+        for key, value in reg_layers:
+            if value.source() == layer_source:
+                return value
+        else:
+            raise Exception('Can not identify impact layer from layer source')
 
 
 def read_scenarios(filename):
@@ -759,6 +851,10 @@ def read_scenarios(filename):
     # convert to dictionary
     for section in parser.sections():
         items = parser.items(section)
+        # add section as scenario name
+        items.append(('scenario_name', section))
+        # add full path to the blocks
+        items.append(('full_path', filename))
         blocks[section] = {}
         for key, value in items:
             blocks[section][key] = value
