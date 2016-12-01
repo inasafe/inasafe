@@ -49,7 +49,7 @@ class SaveScenarioDialog(QDialog):
         self.exposure_layer = None
         self.hazard_layer = None
         self.aggregation_layer = None
-        self.function_id = None
+        # self.function_id = None
         self.keyword_io = KeywordIO()
 
         # Calling some init methods
@@ -80,8 +80,8 @@ class SaveScenarioDialog(QDialog):
         """
         self.exposure_layer = self.dock.get_exposure_layer()
         self.hazard_layer = self.dock.get_hazard_layer()
-        self.function_id = self.dock.get_function_id(
-            self.dock.cboFunction.currentIndex())
+        # self.function_id = self.dock.get_function_id(
+        #     self.dock.cboFunction.currentIndex())
         self.aggregation_layer = self.dock.get_aggregation_layer()
 
         is_valid = True
@@ -98,10 +98,10 @@ class SaveScenarioDialog(QDialog):
                 'hazard layer to do so.')
             is_valid = False
 
-        if self.function_id == '' or self.function_id is None:
-            warning_message = self.tr(
-                'The impact function is empty, can not save scenario')
-            is_valid = False
+        # if self.function_id == '' or self.function_id is None:
+        #     warning_message = self.tr(
+        #         'The impact function is empty, can not save scenario')
+        #     is_valid = False
 
         return is_valid, warning_message
 
@@ -165,7 +165,7 @@ class SaveScenarioDialog(QDialog):
         parser.add_section(title)
         parser.set(title, 'exposure', relative_exposure_path)
         parser.set(title, 'hazard', relative_hazard_path)
-        parser.set(title, 'function', self.function_id)
+        # parser.set(title, 'function', self.function_id)
         parser.set(title, 'extent', extent_string)
         if self.dock.extent.user_extent_crs is None:
             parser.set(title, 'extent_crs',
