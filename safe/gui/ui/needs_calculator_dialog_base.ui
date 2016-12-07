@@ -102,7 +102,7 @@
   <customwidget>
    <class>QWebView</class>
    <extends>QWidget</extends>
-   <header>QtWebKitWidgets/QWebView</header>
+   <header>PyQt4.QtWebKit</header>
   </customwidget>
  </customwidgets>
  <resources/>
