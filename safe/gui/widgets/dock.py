@@ -205,8 +205,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         self.setup_button_connectors()
 
-        if QGis.QGIS_VERSION_INT >= 20700:
-            self.iface.layerSavedAs.connect(self.save_auxiliary_files)
+        self.iface.layerSavedAs.connect(self.save_auxiliary_files)
 
         canvas = self.iface.mapCanvas()
 
@@ -1320,11 +1319,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         registry = QgsMapLayerRegistry.instance()
 
-        if QGis.QGIS_VERSION_INT < 20400:
-            # True flag adds layer directly to legend
-            registry.addMapLayer(existing_layer, True)
-            return
-
         # False flag prevents layer being added to legend
         registry.addMapLayer(new_layer, False)
         minimum_index = len(QgsProject.instance().layerTreeRoot().children())
@@ -1352,9 +1346,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             is < 2.4 it will return 0.
         :rtype: int
         """
-        if QGis.QGIS_VERSION_INT < 20400:
-            return 0
-
         root = QgsProject.instance().layerTreeRoot()
         layer_id = layer.id()
         current_index = 0
