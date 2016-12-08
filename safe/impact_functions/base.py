@@ -56,14 +56,9 @@ from safe.common.version import get_version
 from safe.engine.core import check_data_integrity
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
-from safe.impact_statistics.postprocessor_manager import (
-    PostprocessorManager)
 from safe.messaging import styles
 from safe.messaging.utilities import generate_insufficient_overlap_message
 from safe.metadata.provenance import Provenance
-from safe.postprocessors.postprocessor_factory import (
-    get_postprocessors,
-    get_postprocessor_human_name)
 from safe.storage.safe_layer import SafeLayer
 from safe.storage.utilities import (
     buffered_bounding_box as get_buffered_extent,
@@ -1157,26 +1152,7 @@ class ImpactFunction(object):
             m.Heading(title, **PROGRESS_UPDATE_STYLE),
             m.Paragraph(details),
             m.Paragraph(text))
-        try:
-            # add which postprocessors will run when appropriated
-            # noinspection PyTypeChecker
-            post_processors_names = self.parameters['postprocessors']
-            post_processors = get_postprocessors(post_processors_names)
-            message.add(m.Paragraph(tr(
-                'The following postprocessors will be used:')))
 
-            bullet_list = m.BulletedList()
-
-            for name, post_processor in post_processors.iteritems():
-                bullet_list.add('%s: %s' % (
-                    get_postprocessor_human_name(name),
-                    post_processor.description))
-            message.add(bullet_list)
-
-        except (TypeError, KeyError):
-            # TypeError is for when function_parameters is none
-            # KeyError is for when ['postprocessors'] is unavailable
-            pass
         send_static_message(self, message)
 
     @property

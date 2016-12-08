@@ -58,9 +58,9 @@ def test_manually():
 
     You can change this function as much as you want.
     """
-    from safe.impact_statistics.test.test_postprocessor_manager import \
-        PostprocessorManagerTest
-    test_suite = unittest.makeSuite(PostprocessorManagerTest, 'test')
+    from safe.gisv4.vector.test.test_assign_highest_value import \
+        TestAssignHighestValueVector
+    test_suite = unittest.makeSuite(TestAssignHighestValueVector, 'test')
     _run_tests(test_suite, 'custom test class')
 
 
