@@ -44,7 +44,6 @@ class TestDockRegressions(unittest.TestCase):
         self.dock.set_layer_from_title_flag = False
         self.dock.zoom_to_impact_flag = False
         self.dock.hide_exposure_flag = False
-        self.dock.show_intermediate_layers = False
         self.dock.user_extent = None
         self.dock.user_extent_crs = None
         # For these tests we will generally use explicit overlap

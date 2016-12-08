@@ -57,7 +57,6 @@ class SaveScenarioTest(unittest.TestCase):
         self.DOCK.set_layer_from_title_flag = False
         self.DOCK.zoom_to_impact_flag = False
         self.DOCK.hide_exposure_flag = False
-        self.DOCK.show_intermediate_layers = False
 
         # Create scenario dialog
         self.save_scenario_dialog = SaveScenarioDialog(IFACE, self.DOCK)

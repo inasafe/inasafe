@@ -126,10 +126,6 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             'inasafe/useSentry', False, type=bool))
         self.cbxUseSentry.setChecked(flag)
 
-        flag = bool(settings.value(
-            'inasafe/show_intermediate_layers', False, type=bool))
-        self.cbxShowPostprocessingLayers.setChecked(flag)
-
         ratio = self.defaults['FEMALE_RATIO']
         self.dsbFemaleRatioDefault.setValue(ratio)
 
@@ -233,9 +229,6 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         settings.setValue(
             'inasafe/useSentry',
             self.cbxUseSentry.isChecked())
-        settings.setValue(
-            'inasafe/show_intermediate_layers',
-            self.cbxShowPostprocessingLayers.isChecked())
         settings.setValue(
             'inasafe/defaultFemaleRatio',
             self.dsbFemaleRatioDefault.value())

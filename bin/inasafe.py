@@ -282,9 +282,6 @@ def impact_function_setup(
     impact_function.hazard = hazard
     impact_function.exposure = exposure
     impact_function.aggregation = aggregation
-    impact_function.clip_hard = False
-    impact_function.show_intermediate_layers = False
-    impact_function.run_in_thread_flag = False
     impact_function.map_canvas = CANVAS
     # QSetting context
     settings = QSettings()
