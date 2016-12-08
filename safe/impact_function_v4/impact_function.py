@@ -53,6 +53,7 @@ from safe.definitionsv4.layer_purposes import (
 from safe.definitionsv4.constants import inasafe_keyword_version_key
 from safe.definitionsv4.versions import inasafe_keyword_version
 from safe.common.exceptions import (
+    InaSAFEError,
     InvalidExtentError,
     InvalidLayerError,
     InvalidAggregationKeywords,
@@ -702,28 +703,43 @@ class ImpactFunction(object):
         return name
 
     def run(self):
-        """Run the whole impact function."""
+        """Run the whole impact function.
 
-        self.validate()
+        :return: A tuple with the status of the IF and an error message if
+            needed.
+            The status is 0 if everything was fine.
+            The status is 1 if something went wrong from the IF client.
+            The status is 2 if something went wrong from the code.
+        :rtype: (int, str)
+        """
 
-        self.reset_state()
-        clear_prof_data()
-        self._run()
+        try:
+            self.validate()
 
-        # Get the profiling log
-        self._performance_log = profiling_log()
-        self.callback(8, 8, analysis_steps['profiling'])
+            self.reset_state()
+            clear_prof_data()
+            self._run()
 
-        self._profiling_table = create_profile_layer(
-            self.performance_log_message())
-        _, name = self.debug_layer(self._profiling_table)
-        self._profiling_table = self.datastore.layer(name)
-        check_inasafe_fields(self._profiling_table)
+            # Get the profiling log
+            self._performance_log = profiling_log()
+            self.callback(8, 8, analysis_steps['profiling'])
 
-        # Later, we should move this call.
-        self.style()
+            self._profiling_table = create_profile_layer(
+                self.performance_log_message())
+            _, name = self.debug_layer(self._profiling_table)
+            self._profiling_table = self.datastore.layer(name)
+            check_inasafe_fields(self._profiling_table)
 
-        return self.state
+            # Later, we should move this call.
+            self.style()
+
+        except InaSAFEError as e:
+            return 1, e.message
+
+        except Exception as e:
+            return 2, e.message
+        else:
+            return 0, None
 
     @profile
     def _run(self):
@@ -756,10 +772,6 @@ class ImpactFunction(object):
                 self._datastore = Folder(temp_dir(sub_dir=self._unique_name))
 
             self._datastore.default_vector_format = 'geojson'
-            if self.debug_mode:
-                print 'Temporary datastore'
-                print self.datastore.uri.absolutePath()
-
             LOGGER.debug('Datastore : %s' % self.datastore.uri.absolutePath())
 
         if self.debug_mode:

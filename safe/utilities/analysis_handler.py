@@ -122,11 +122,8 @@ class AnalysisHandler(QObject):
         self.composer = None
 
         # Values for settings these get set in read_settings.
-        self.run_in_thread_flag = None
         self.zoom_to_impact_flag = None
         self.hide_exposure_flag = None
-        self.clip_hard = None
-        self.show_intermediate_layers = None
         self.show_rubber_bands = False
 
         self.last_analysis_rubberband = None
@@ -244,10 +241,6 @@ class AnalysisHandler(QObject):
                 self.extent.user_extent_crs = None
 
         flag = settings.value(
-            'inasafe/useThreadingFlag', False, type=bool)
-        self.run_in_thread_flag = flag
-
-        flag = settings.value(
             'inasafe/setZoomToImpactFlag', True, type=bool)
         self.zoom_to_impact_flag = flag
 
@@ -255,14 +248,6 @@ class AnalysisHandler(QObject):
         flag = settings.value(
             'inasafe/setHideExposureFlag', False, type=bool)
         self.hide_exposure_flag = flag
-
-        # whether to 'hard clip' layers (e.g. cut buildings in half if they
-        # lie partially in the AOI
-        self.clip_hard = settings.value('inasafe/clip_hard', False, type=bool)
-
-        # whether to show or not postprocessing generated layers
-        self.show_intermediate_layers = settings.value(
-            'inasafe/show_intermediate_layers', False, type=bool)
 
         # whether to show or not dev only options
         # noinspection PyAttributeOutsideInit
@@ -550,13 +535,6 @@ class AnalysisHandler(QObject):
             raise ReadLayerError(message)
 
         legend = self.iface.legendInterface()
-
-        # Insert the aggregation output above the input aggregation layer
-        if self.show_intermediate_layers:
-            add_above_layer(
-                self.impact_function.aggregator.layer,
-                qgis_aggregation)
-            legend.setLayerVisible(self.impact_function.aggregator.layer, True)
 
         if self.hide_exposure_flag:
             # Insert the impact always above the hazard

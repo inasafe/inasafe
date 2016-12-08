@@ -62,7 +62,6 @@ from safe.test.utilities import (
 
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.styling import setRasterStyle
-from safe.utilities.gis import read_impact_layer
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -86,7 +85,6 @@ class TestDock(TestCase):
         self.dock.set_layer_from_title_flag = False
         self.dock.zoom_to_impact_flag = False
         self.dock.hide_exposure_flag = False
-        self.dock.show_intermediate_layers = False
         self.dock.user_extent = None
         self.dock.user_extent_crs = None
         # For these tests we will generally use explicit overlap
@@ -357,8 +355,7 @@ class TestDock(TestCase):
         self.assertEqual(new_layer_position, existing_layer_position - 1)
 
     def test_load_layers(self):
-        """Layers can be loaded and list widget was updated appropriately
-        """
+        """Layers can be loaded and list widget was updated appropriately."""
 
         hazard_layer_count, exposure_layer_count = load_standard_layers()
         message = 'Expect %s layer(s) in hazard list widget but got %s' % (

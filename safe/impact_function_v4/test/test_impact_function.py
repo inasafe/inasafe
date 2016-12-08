@@ -62,7 +62,7 @@ def run_scenario(scenario, use_debug=False):
     :param use_debug: If we should use debug_mode when we run the scenario.
     :type use_debug: bool
 
-    :returns: Tuple(Flow dictionary, outputs).
+    :returns: Tuple(status, Flow dictionary, outputs).
     :rtype: list
     """
     if os.path.exists(scenario['exposure']):
@@ -91,8 +91,7 @@ def run_scenario(scenario, use_debug=False):
             raise IOError('No aggregation file')
 
     impact_function = ImpactFunction()
-    if use_debug:
-        impact_function.debug_mode = True
+    impact_function.debug_mode = use_debug
 
     layer = QgsVectorLayer(hazard_path, 'Hazard', 'ogr')
     if not layer.isValid():
@@ -108,14 +107,12 @@ def run_scenario(scenario, use_debug=False):
         impact_function.aggregation = QgsVectorLayer(
             aggregation_path, 'Aggregation', 'ogr')
 
-    impact_function_result = impact_function.run()
-    if use_debug:
-        print impact_function.datastore.uri.absolutePath()
+    status, _ = impact_function.run()
 
     for layer in impact_function.outputs:
         check_inasafe_fields(layer)
 
-    return impact_function_result, impact_function.outputs
+    return status, impact_function.state, impact_function.outputs
 
 
 class TestImpactFunction(unittest.TestCase):
@@ -195,7 +192,8 @@ class TestImpactFunction(unittest.TestCase):
         LOGGER.info('Running the scenario : %s' % scenario_path)
         scenario, expected_steps, expected_outputs = read_json_flow(
             scenario_path)
-        steps, outputs = run_scenario(scenario, use_debug)
+        status, steps, outputs = run_scenario(scenario, use_debug)
+        self.assertEqual(0, status)
         self.assertDictEqual(expected_steps, steps)
         # - 1 because I added the profiling table, and this table is not
         # counted in the JSON file.
