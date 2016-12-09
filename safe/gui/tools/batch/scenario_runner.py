@@ -140,29 +140,6 @@ def add_layers(scenario_dir, paths, iface, layer_group):
     iface.mapCanvas().setLayerSet([QgsMapCanvasLayer(layer) for layer in
                                    layer_set])
 
-
-def set_function_id(function_id, dock=None):
-    """Set the function combo to use the function with the given id.
-
-    :param function_id: str - a string representing the unique identifier for
-            the desired function.
-    :param dock: a dock instance
-
-    :returns bool: True on success, False in the case that the function is not
-            present in the function selector (based on the context of loaded
-            hazard and exposure layers.
-    """
-    if function_id is None or function_id == '':
-        return False
-
-    for count in range(0, dock.cboFunction.count()):
-        current_id = dock.get_function_id(count)
-        if current_id == function_id:
-            dock.cboFunction.setCurrentIndex(count)
-            return True
-    return False
-
-
 def set_aggregation_layer(aggregation_layer, dock=None):
     """Set the aggregation combo to use the layer with the given name.
 
