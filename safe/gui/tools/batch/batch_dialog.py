@@ -71,6 +71,12 @@ class BatchDialog(QDialog, FORM_CLASS):
         :type dock: Dock
 
         """
+        # connect to remote debugger
+        # sys.path.append('C:/PROGRA~1/QGISES~1/apps/Python27/lib/site-packages/pycharm-debug.egg')
+        # import pydevd
+        # pydevd.settrace('localhost', port=52525, stdoutToServer=True,
+        #                 stderrToServer=True)
+
         QDialog.__init__(self, parent)
         self.setupUi(self)
         self.setWindowModality(Qt.ApplicationModal)
@@ -283,14 +289,6 @@ class BatchDialog(QDialog, FORM_CLASS):
             LOGGER.exception('Loading layers failed: \nRoot: %s\n%s' % (
                 scenario_directory, paths))
             return False
-
-        # See if we have a preferred impact function
-        if 'function' in items:
-            function_id = items['function']
-            result = scenario_runner.set_function_id(
-                function_id, dock=self.dock)
-            if not result:
-                return False
 
         if 'aggregation' in items:
             aggregation_path = scenario_runner.extract_path(
