@@ -141,6 +141,7 @@ def set_aggregation_layer(aggregation_layer, dock=None):
 
     :param aggregation_layer: str - a string representing the source name of
         the desired aggregation layer.
+
     :param dock: a dock instance
 
     :returns bool: True on success, False in the case that the aggregation
