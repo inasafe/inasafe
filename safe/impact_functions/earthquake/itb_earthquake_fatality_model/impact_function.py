@@ -240,7 +240,17 @@ class ITBFatalityFunction(
         return None
 
     def run(self):
-        """Indonesian Earthquake Fatality Model."""
+        """Indonesian Earthquake Fatality Model.
+
+        Some additional notes to clarify behaviour:
+
+        * Total population = all people within the analysis area
+        * Affected population  = displaced people + people killed
+        * Displaced = people * displacement rate for mmi level
+        * Killed = people * mortality rate for mmi level
+        * impact layer produced = affected population
+
+        """
         displacement_rate = self.hardcoded_parameters['displacement_rate']
         fatality_rate = self.compute_fatality_rate()
 
@@ -280,7 +290,10 @@ class ITBFatalityFunction(
             # Sum up numbers for map
             # We need to use matrices here and not just numbers #2235
             # filter out NaN to avoid overflow additions
-            mmi_matches = numpy.nan_to_num(mmi_matches)
+            # Changed in 3.5.3 for Issue #3489 to correct mask
+            # to that it returns affected (displaced + fatalities)
+            mmi_matches = displacement_rate[mmi] * numpy.nan_to_num(
+                mmi_matches)
             mask += mmi_matches   # Displaced
 
             # Generate text with result for this study
