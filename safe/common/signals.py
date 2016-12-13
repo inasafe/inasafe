@@ -32,8 +32,6 @@ STATIC_MESSAGE_SIGNAL = 'StaticMessage'
 ERROR_MESSAGE_SIGNAL = 'ErrorMessage'
 BUSY_SIGNAL = 'BusySignal'
 NOT_BUSY_SIGNAL = 'NotBusySignal'
-ANALYSIS_DONE_SIGNAL = 'AnalysisDone'
-ZERO_IMPACT_SIGNAL = 'ZeroImpact'  # Signal when analysis done but no impact
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -100,52 +98,6 @@ def send_error_message(sender, error_message):
         message=error_message)
 
 
-def send_busy_signal(sender):
-    """Send an busy signal to the listeners.
-
-    .. versionadded:: 3.3
-
-    :param sender: The sender.
-    :type sender: object
-    """
-    dispatcher.send(
-        signal=BUSY_SIGNAL,
-        sender=sender,
-        message='')
-
-
-def send_not_busy_signal(sender):
-    """Send an busy signal to the listeners.
-
-    .. versionadded:: 3.3
-
-    :param sender: The sender.
-    :type sender: object
-    """
-    dispatcher.send(
-        signal=NOT_BUSY_SIGNAL,
-        sender=sender,
-        message='')
-
-
-def send_analysis_done_signal(sender, zero_impact=False):
-    """Send an analysis done signal to the listeners.
-
-    .. versionadded:: 3.3
-
-    :param sender: The sender.
-    :type sender: object
-
-    :param zero_impact: Flag for zero impact in the result
-    :type zero_impact: bool
-    """
-    dispatcher.send(
-        signal=ANALYSIS_DONE_SIGNAL,
-        sender=sender,
-        message='',
-        zero_impact=zero_impact)
-
-
 def analysis_error(sender, exception, message):
     """A helper to spawn an error and halt processing.
 
@@ -163,7 +115,6 @@ def analysis_error(sender, exception, message):
     :param exception: An exception that was raised
     :type exception: Exception
     """
-    send_not_busy_signal(sender)
     LOGGER.exception(message)
     message = get_error_message(exception, context=message)
     send_error_message(sender, message)

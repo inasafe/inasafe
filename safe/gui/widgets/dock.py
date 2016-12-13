@@ -201,26 +201,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         """Set the title of the dock using the current version of InaSAFE."""
         self.setWindowTitle(self.tr('InaSAFE %s' % self.inasafe_version))
 
-    def enable_signal_receiver(self):
-        """Setup dispatcher for all available signal from Analysis."""
-        dispatcher.connect(
-            self.show_busy,
-            signal=BUSY_SIGNAL)
-
-        dispatcher.connect(
-            self.hide_busy,
-            signal=NOT_BUSY_SIGNAL)
-
-    def disable_signal_receiver(self):
-        """Remove dispatcher for all available signal from Analysis."""
-        dispatcher.disconnect(
-            self.show_busy,
-            signal=BUSY_SIGNAL)
-
-        dispatcher.disconnect(
-            self.hide_busy,
-            signal=NOT_BUSY_SIGNAL)
-
     def enable_messaging(self):
         """Set up the dispatcher for messaging."""
         # Set up dispatcher for dynamic messages
@@ -928,7 +908,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             of the web view after model completion are asynchronous (when
             threading mode is enabled especially)
         """
-        self.enable_signal_receiver()
         self.show_busy()
         self.show_next_analysis_extent()
         self.impact_function = self.prepare_impact_function()
@@ -1063,7 +1042,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     qgis_exposure = self.get_exposure_layer()
                     legend.setLayerVisible(qgis_exposure, False)
 
-            self.disable_signal_receiver()
             self.hide_busy()
 
     def analysis_error(self, exception, message):

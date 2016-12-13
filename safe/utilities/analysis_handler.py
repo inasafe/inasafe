@@ -48,7 +48,7 @@ from safe.utilities.utilities import (
 from safe.utilities.gis import (
     extent_string_to_array,
     read_impact_layer,
-    viewport_geo_array)
+)
 from safe.utilities.resources import (
     resources_path,
     resource_url)
@@ -68,7 +68,7 @@ from safe.common.signals import (
     ERROR_MESSAGE_SIGNAL,
     BUSY_SIGNAL,
     NOT_BUSY_SIGNAL,
-    ANALYSIS_DONE_SIGNAL)
+)
 from safe import messaging as m
 from safe.messaging import styles
 from safe.common.exceptions import (
@@ -146,10 +146,6 @@ class AnalysisHandler(QObject):
             self.hide_busy,
             signal=NOT_BUSY_SIGNAL)
 
-        dispatcher.connect(
-            self.completed,
-            signal=ANALYSIS_DONE_SIGNAL)
-
         # noinspection PyArgumentEqualDefault
         dispatcher.connect(
             self.show_dynamic_message,
@@ -179,10 +175,6 @@ class AnalysisHandler(QObject):
         dispatcher.disconnect(
             self.hide_busy,
             signal=NOT_BUSY_SIGNAL)
-
-        dispatcher.disconnect(
-            self.completed,
-            signal=ANALYSIS_DONE_SIGNAL)
 
         dispatcher.disconnect(
             self.show_dynamic_message,
