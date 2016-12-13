@@ -51,7 +51,7 @@ from safe.utilities.utilities import (
     add_ordered_combo_item,
     is_keyword_version_supported,
 )
-from safe.defaults import default_north_arrow_path, supporters_logo_path
+from safe.defaults import supporters_logo_path
 from safe.utilities.gis import (
     extent_string_to_array,
 )
@@ -343,16 +343,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             'inasafe/organisation_logo_path',
             supporters_logo_path(),
             type=str)
-        # This is a fix for 3.0.0 change where we no longer provide Qt4
-        # Qt4 resource bundles, so if the path points into a resource
-        # bundle we clear it and overwrite the setting
-        invalid_path_flag = False
-        if self.organisation_logo_path.startswith(':/'):
-            self.organisation_logo_path = None
-            invalid_path_flag = True
-            settings.setValue(
-                'inasafe/organisation_logo_path',
-                supporters_logo_path())
 
         # Changed default to False for new users in 3.2 - see #2171
         show_logos_flag = bool(settings.value(
@@ -403,30 +393,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self._show_organisation_logo()
         else:
             self.organisation_logo.hide()
-
-        # This is a fix for 3.0.0 change where we no longer provide Qt4
-        # Qt4 resource bundles, so if the path points into a resource
-        # bundle we clear it and overwrite the setting
-        north_arrow_path = settings.value(
-            'inasafe/north_arrow_path',
-            default_north_arrow_path(),
-            type=str)
-        if north_arrow_path.startswith(':/'):
-            invalid_path_flag = True
-            settings.setValue(
-                'inasafe/north_arrow_path', default_north_arrow_path())
-
-        if invalid_path_flag:
-            # noinspection PyCallByClass
-            QtGui.QMessageBox.warning(
-                self, self.tr('InaSAFE %s' % self.inasafe_version),
-                self.tr(
-                    'Due to backwards incompatibility with InaSAFE 2.0.0, the '
-                    'paths to your preferred organisation logo and north '
-                    'arrow may have been reset to their default values. '
-                    'Please check in Plugins -> InaSAFE -> Options that your '
-                    'paths are still correct and update them if needed.'
-                ), QtGui.QMessageBox.Ok)
 
         # RM: this is a fix for nonexistent organization logo or zero height
         if logo_not_exist:
