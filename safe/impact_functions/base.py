@@ -41,11 +41,7 @@ from safe.common.exceptions import (
 from safe.common.signals import (
     analysis_error,
     send_static_message,
-    send_busy_signal,
     send_dynamic_message,
-    send_error_message,
-    send_not_busy_signal,
-    send_analysis_done_signal
 )
 from safe.common.utilities import (
     get_non_conflicting_attribute_name,
@@ -62,13 +58,10 @@ from safe.metadata.provenance import Provenance
 from safe.storage.safe_layer import SafeLayer
 from safe.storage.utilities import (
     buffered_bounding_box as get_buffered_extent,
-    safe_to_qgis_layer,
     bbox_intersection)
 from safe.utilities.clipper import adjust_clip_extent, clip_layer
 from safe.utilities.gis import (
     convert_to_safe_layer,
-    is_point_layer,
-    buffer_points,
     get_wgs84_resolution,
     array_to_geo_array,
     extent_to_array,
@@ -902,7 +895,6 @@ class ImpactFunction(object):
                 'compatible with InaSAFE\'s current requirements.'))
             report.add(check_list)
             send_static_message(self, report)
-            send_analysis_done_signal(self, zero_impact=True)
             return
         except MemoryError, e:
             message = tr(
@@ -1459,8 +1451,6 @@ class ImpactFunction(object):
         """Carry out any postprocessing required for this impact layer."""
         self.postprocessor_manager.function_parameters = self.parameters
         self.postprocessor_manager.run()
-        send_not_busy_signal(self)
-        send_analysis_done_signal(self)
 
     def _calculate_impact(self):
         """Calculate impact.
@@ -1472,8 +1462,6 @@ class ImpactFunction(object):
         self.provenance.append_step(
             'Calculating Step',
             'Impact function is calculating the impact.')
-
-        send_busy_signal(self)
 
         title = tr('Calculating impact')
         detail = tr(
