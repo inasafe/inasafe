@@ -44,6 +44,7 @@ from safe.definitionsv4.utilities import definition
 from safe.definitionsv4.fields import hazard_class_field
 from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
 from safe.reportv4.report_metadata import ReportMetadata
+from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.utilities import (
     get_error_message,
@@ -61,14 +62,11 @@ from safe.utilities.qgis_utilities import (
     display_critical_message_bar,
     display_warning_message_bar,
     display_information_message_bar)
-from safe.utilities.memory_checker import memory_error
 from safe.common.version import get_version
 from safe.common.signals import (
     DYNAMIC_MESSAGE_SIGNAL,
     STATIC_MESSAGE_SIGNAL,
     ERROR_MESSAGE_SIGNAL,
-    BUSY_SIGNAL,
-    NOT_BUSY_SIGNAL,
     send_static_message,
     send_error_message,
 )
@@ -82,8 +80,6 @@ from safe.common.exceptions import (
     HashNotFoundError,
     InvalidGeometryError,
     UnsupportedProviderError,
-    InvalidAggregationKeywords,
-    InsufficientMemoryWarning,
     MetadataReadError,
 )
 from safe.impact_function_v4.impact_function import ImpactFunction
@@ -901,148 +897,105 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         impact_report.process_component()
 
     def accept(self):
-        """Execute analysis when run button is clicked.
-
-        .. todo:: FIXME (Tim) We may have to implement some polling logic
-            because the button click accept() function and the updating
-            of the web view after model completion are asynchronous (when
-            threading mode is enabled especially)
-        """
+        """Execute analysis when run button is clicked."""
         self.show_busy()
         self.show_next_analysis_extent()
+
         self.impact_function = self.prepare_impact_function()
-        # clip_parameters = self.impact_function.clip_parameters
-        # self.extent.show_last_analysis_extent(
-        #    clip_parameters['adjusted_geo_extent'])
+        status, message = self.impact_function.prepare()
+        if status == 1:
+            LOGGER.debug(tr(
+                'The impact function will not be able to run because of the '
+                'inputs.'))
+            send_error_message(self, message)
+            self.hide_busy()
+            return
+        if status == 2:
+            LOGGER.debug(tr(
+                'The impact function will not be able to run because of a '
+                'bug.'))
+            send_error_message(self, message)
+            self.hide_busy()
+            return
 
         # Start the analysis
         status, message = self.impact_function.run()
-        if status == 0:
-            LOGGER.debug(self.tr(
-                'The impact function could run without errors.'))
-            self.generate_impact_report(self.impact_function)
-        elif status == 1:
-            LOGGER.debug(self.tr(
+        if status == 1:
+            LOGGER.debug(tr(
                 'The impact function could not run because of the inputs.'))
-        else:
-            LOGGER.debug(self.tr(
+            send_error_message(self, message)
+            self.hide_busy()
+            return
+        elif status == 2:
+            LOGGER.debug(tr(
                 'The impact function could not run because of a bug.'))
-
-        try:
-            print 'toto'
-
-        except KeywordNotFoundError as e:
+            send_error_message(self, message)
             self.hide_busy()
-            missing_keyword_message(self, e)
-            return  # Will abort the analysis if there is exception
-        except InsufficientOverlapError as e:
-            context = self.tr(
-                'A problem was encountered when trying to determine the '
-                'analysis extents.'
-            )
-            self.analysis_error(e, context)
-            return  # Will abort the analysis if there is exception
-        except InvalidAggregationKeywords as e:
-            # TODO: Launch keywords wizard
-            # Show message box
-            message = self.tr(
-                'Your aggregation layer does not have valid keywords for '
-                'aggregation. Please launch keyword wizard to assign keywords '
-                'in this layer.'
-            )
-            # noinspection PyCallByClass
-            QtGui.QMessageBox.warning(self, self.tr('InaSAFE'), message)
-            context = self.tr(
-                'A problem was encountered because the aggregation layer '
-                'does not have proper keywords for aggregation layer.'
-            )
-            self.analysis_error(e, context)
-            disable_busy_cursor()
             return
-        except MemoryError:
-            memory_error()
-            disable_busy_cursor()
-            return
-        except InsufficientMemoryWarning:
-            # noinspection PyCallByClass,PyTypeChecker
-            result = QtGui.QMessageBox.warning(
-                self, self.tr('InaSAFE'),
-                self.tr('You may not have sufficient free system memory to '
-                        'carry out this analysis. See the dock panel '
-                        'message for more information. Would you like to '
-                        'continue regardless?'), QtGui.QMessageBox.Yes |
-                QtGui.QMessageBox.No, QtGui.QMessageBox.No)
-            if result == QtGui.QMessageBox.No:
-                # stop work here and return to QGIS
-                self.hide_busy()
-                return
-            elif result == QtGui.QMessageBox.Yes:
-                # Set analysis to ignore memory warning
-                self.impact_function.force_memory = True
-                self.accept()
-        finally:
-            if self.impact_function:
 
-                layers = self.impact_function.outputs
+        LOGGER.debug(tr('The impact function could run without errors.'))
+        self.generate_impact_report(self.impact_function)
 
-                name = self.impact_function.name
-                root = QgsProject.instance().layerTreeRoot()
-                group_analysis = root.insertGroup(0, name)
-                group_analysis.setVisible(Qt.Checked)
-                for layer in layers:
-                    QgsMapLayerRegistry.instance().addMapLayer(layer, False)
-                    layer_node = group_analysis.addLayer(layer)
+        layers = self.impact_function.outputs
 
-                    # Let's enable only the more detailed layer. See #2925
-                    if layer.id() == self.impact_function.impact.id():
-                        layer_node.setVisible(Qt.Checked)
-                        self.iface.setActiveLayer(layer)
-                    else:
-                        layer_node.setVisible(Qt.Unchecked)
+        name = self.impact_function.name
+        root = QgsProject.instance().layerTreeRoot()
+        group_analysis = root.insertGroup(0, name)
+        group_analysis.setVisible(Qt.Checked)
+        for layer in layers:
+            QgsMapLayerRegistry.instance().addMapLayer(layer, False)
+            layer_node = group_analysis.addLayer(layer)
 
-                if self.zoom_to_impact_flag:
-                    self.iface.zoomToActiveLayer()
+            # Let's enable only the more detailed layer. See #2925
+            if layer.id() == self.impact_function.impact.id():
+                layer_node.setVisible(Qt.Checked)
+                self.iface.setActiveLayer(layer)
+            else:
+                layer_node.setVisible(Qt.Unchecked)
 
-                if self.impact_function.debug_mode:
-                    name = 'DEBUG %s' % name
-                    group_debug = root.insertGroup(0, name)
-                    group_debug.setVisible(Qt.Unchecked)
-                    group_debug.setExpanded(False)
+        if self.zoom_to_impact_flag:
+            self.iface.zoomToActiveLayer()
 
-                    # Let's style the hazard class in each layers.
-                    classification = (
-                        self.impact_function.hazard.keywords['classification'])
-                    classification = definition(classification)
+        if self.impact_function.debug_mode:
+            name = 'DEBUG %s' % name
+            group_debug = root.insertGroup(0, name)
+            group_debug.setVisible(Qt.Unchecked)
+            group_debug.setExpanded(False)
 
-                    classes = OrderedDict()
-                    for f in reversed(classification['classes']):
-                        classes[f['key']] = (f['color'], f['name'])
-                    hazard_class = hazard_class_field['key']
+            # Let's style the hazard class in each layers.
+            classification = (
+                self.impact_function.hazard.keywords['classification'])
+            classification = definition(classification)
 
-                    datastore = self.impact_function.datastore
-                    for layer in datastore.layers():
-                        qgis_layer = datastore.layer(layer)
-                        QgsMapLayerRegistry.instance().addMapLayer(
-                            qgis_layer, False)
-                        layer_node = group_debug.insertLayer(0, qgis_layer)
-                        layer_node.setVisible(Qt.Unchecked)
-                        layer_node.setExpanded(False)
+            classes = OrderedDict()
+            for f in reversed(classification['classes']):
+                classes[f['key']] = (f['color'], f['name'])
+            hazard_class = hazard_class_field['key']
 
-                        # Let's style layers which have a geometry and have
-                        # hazard_class
-                        if qgis_layer.type() == QgsMapLayer.VectorLayer:
-                            if qgis_layer.geometryType() != QGis.NoGeometry:
-                                if qgis_layer.keywords['inasafe_fields'].get(
-                                        hazard_class):
-                                    hazard_class_style(
-                                        qgis_layer, classes, self.debug_mode)
+            datastore = self.impact_function.datastore
+            for layer in datastore.layers():
+                qgis_layer = datastore.layer(layer)
+                QgsMapLayerRegistry.instance().addMapLayer(
+                    qgis_layer, False)
+                layer_node = group_debug.insertLayer(0, qgis_layer)
+                layer_node.setVisible(Qt.Unchecked)
+                layer_node.setExpanded(False)
 
-                if self.hide_exposure_flag:
-                    legend = self.iface.legendInterface()
-                    qgis_exposure = self.get_exposure_layer()
-                    legend.setLayerVisible(qgis_exposure, False)
+                # Let's style layers which have a geometry and have
+                # hazard_class
+                if qgis_layer.type() == QgsMapLayer.VectorLayer:
+                    if qgis_layer.geometryType() != QGis.NoGeometry:
+                        if qgis_layer.keywords['inasafe_fields'].get(
+                                hazard_class):
+                            hazard_class_style(
+                                qgis_layer, classes, self.debug_mode)
 
-            self.hide_busy()
+        if self.hide_exposure_flag:
+            legend = self.iface.legendInterface()
+            qgis_exposure = self.get_exposure_layer()
+            legend.setLayerVisible(qgis_exposure, False)
+
+        self.hide_busy()
 
     def analysis_error(self, exception, message):
         """A helper to spawn an error and halt processing.
@@ -1404,7 +1357,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             return
 
         # IF could potentially run - lets see if the extents will work well...
-        valid, extents = self.validate_extents()
+        # Temporary until we implement the analysis extent checker. ET 14/12/16
+        # valid, extents = self.validate_extents()
+        valid, extents = True, None
         if valid:
             self.extent.show_next_analysis_extent(extents)
             show_confirmations = settings.value(
@@ -1458,27 +1413,3 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     'Insufficient overlap'), **WARNING_STYLE))
                 message.add(no_overlap_message())
                 send_static_message(self, message)
-
-    def validate_extents(self):
-        """Check if the current extents are valid.
-
-        Look at the intersection between Hazard, exposure and user analysis
-        area and see if they represent a valid, usable area for analysis.
-
-        .. versionadded:: 3.1
-
-        :returns: A two-tuple. The first element will be True if extents are
-            usable, otherwise False. It will also return False if an invalid
-            condition exists e.g. no hazard layer etc. The second element will
-            be a rectangle for the analysis extent (if valid) or None.
-        :rtype: (bool, QgsRectangle)
-        """
-
-        try:
-            # Temporary only, for checking the user extent
-            impact_function = self.prepare_impact_function()
-            # clip_parameters = impact_function.clip_parameters
-            # return True, clip_parameters['adjusted_geo_extent']
-            return True, None
-        except (AttributeError, InsufficientOverlapError):
-            return False, None

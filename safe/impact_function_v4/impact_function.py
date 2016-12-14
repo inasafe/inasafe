@@ -55,10 +55,10 @@ from safe.definitionsv4.versions import inasafe_keyword_version
 from safe.common.exceptions import (
     InaSAFEError,
     InvalidExtentError,
-    InvalidLayerError,
     InvalidAggregationKeywords,
     InvalidHazardKeywords,
     InvalidExposureKeywords,
+    NoKeywordsFoundError,
 )
 from safe.impact_function_v4.postprocessors import (
     run_single_post_processor, enough_input)
@@ -75,6 +75,11 @@ from safe.utilities.profiling import (
     profile, clear_prof_data, profiling_log)
 from safe.test.utilities import check_inasafe_fields
 from safe import messaging as m
+from safe.messaging import styles
+from safe.gui.widgets.message import generate_input_error_message
+
+SUGGESTION_STYLE = styles.SUGGESTION_STYLE
+WARNING_STYLE = styles.WARNING_STYLE
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -131,6 +136,7 @@ class ImpactFunction(object):
         self.state = {}
         self._performance_log = None
         self.reset_state()
+        self._is_ready = False
 
     @property
     def performance_log(self):
@@ -199,39 +205,9 @@ class ImpactFunction(object):
 
         :param layer: Hazard layer to be used for the analysis.
         :type layer: QgsMapLayer
-
-        :raise: NoKeywordsFoundError if no keywords has been found.
-        :raise: InvalidHazardKeywords if the layer is not an hazard layer.
         """
-        if not layer.isValid():
-            raise InvalidHazardKeywords(tr('The hazard is not valid.'))
-
-        try:
-            # The layer might have monkey patching already.
-            keywords = layer.keywords
-        except AttributeError:
-            # Or we should read it using KeywordIO
-            # but NoKeywordsFoundError might be raised.
-            keywords = KeywordIO().read_keywords(layer)
-
-        if keywords.get('layer_purpose') != 'hazard':
-            raise InvalidHazardKeywords(
-                tr('The layer is not an hazard layer.'))
-
-        version = keywords.get(inasafe_keyword_version_key)
-        if version != inasafe_keyword_version:
-            parameters = {
-                'version': inasafe_keyword_version,
-                'source': layer.source()
-            }
-            raise InvalidHazardKeywords(
-                tr('The layer {source} must be updated to {version}.'.format(
-                    **parameters)))
-
         self._hazard = layer
-        self._hazard.keywords = keywords
-
-        self.setup_impact_function()
+        self._is_ready = False
 
     @property
     def exposure(self):
@@ -248,39 +224,9 @@ class ImpactFunction(object):
 
         :param layer: exposure layer to be used for the analysis.
         :type layer: QgsMapLayer
-
-        :raise: NoKeywordsFoundError if no keywords has been found.
-        :raise: InvalidExposureKeywords if the layer is not an exposure layer.
         """
-        if not layer.isValid():
-            raise InvalidHazardKeywords(tr('The exposure is not valid.'))
-
-        try:
-            # The layer might have monkey patching already.
-            keywords = layer.keywords
-        except AttributeError:
-            # Or we should read it using KeywordIO
-            # but NoKeywordsFoundError might be raised.
-            keywords = KeywordIO().read_keywords(layer)
-
-        if keywords.get('layer_purpose') != 'exposure':
-            raise InvalidExposureKeywords(
-                tr('The layer is not an exposure layer.'))
-
-        version = keywords.get(inasafe_keyword_version_key)
-        if version != inasafe_keyword_version:
-            parameters = {
-                'version': inasafe_keyword_version,
-                'source': layer.source()
-            }
-            raise InvalidHazardKeywords(
-                tr('The layer {source} must be updated to {version}.'.format(
-                    **parameters)))
-
         self._exposure = layer
-        self._exposure.keywords = keywords
-
-        self.setup_impact_function()
+        self._is_ready = False
 
     @property
     def aggregation(self):
@@ -297,37 +243,9 @@ class ImpactFunction(object):
 
         :param layer: aggregation layer to be used for the analysis.
         :type layer: QgsVectorLayer
-
-        :raise: NoKeywordsFoundError if no keywords has been found.
-        :raise: InvalidExposureKeywords if the layer isn't an aggregation layer
         """
-        if not layer.isValid():
-            raise InvalidHazardKeywords(tr('The aggregation is not valid.'))
-
-        try:
-            # The layer might have monkey patching already.
-            keywords = layer.keywords
-        except AttributeError:
-            # Or we should read it using KeywordIO
-            # but NoKeywordsFoundError might be raised.
-            keywords = KeywordIO().read_keywords(layer)
-
-        if keywords.get('layer_purpose') != 'aggregation':
-            raise InvalidAggregationKeywords(
-                tr('The layer is not an aggregation layer.'))
-
-        version = keywords.get(inasafe_keyword_version_key)
-        if version != inasafe_keyword_version:
-            parameters = {
-                'version': inasafe_keyword_version,
-                'source': layer.source()
-            }
-            raise InvalidHazardKeywords(
-                tr('The layer {source} must be updated to {version}.'.format(
-                    **parameters)))
-
         self._aggregation = layer
-        self._aggregation.keywords = keywords
+        self._is_ready = False
 
     @property
     def outputs(self):
@@ -448,6 +366,7 @@ class ImpactFunction(object):
         """
         if isinstance(extent, QgsRectangle):
             self._requested_extent = extent
+            self._is_ready = False
         else:
             raise InvalidExtentError('%s is not a valid extent.' % extent)
 
@@ -470,6 +389,7 @@ class ImpactFunction(object):
         self._requested_extent_crs = crs
         if isinstance(crs, QgsCoordinateReferenceSystem):
             self._requested_extent_crs = crs
+            self._is_ready = False
         else:
             raise InvalidExtentError('%s is not a valid CRS object.' % crs)
 
@@ -494,6 +414,7 @@ class ImpactFunction(object):
         self._viewport_extent = extent
         if isinstance(extent, QgsRectangle):
             self._viewport_extent = extent
+            self._is_ready = False
         else:
             raise InvalidExtentError('%s is not a valid extent.' % extent)
 
@@ -563,26 +484,6 @@ class ImpactFunction(object):
         :type callback: function
         """
         self._callback = callback
-
-    def setup_impact_function(self):
-        """Automatically called when the hazard or exposure is changed.
-        """
-        if not self.hazard or not self.exposure:
-            return
-
-        # Set the name
-        self._name = tr('%s %s On %s %s' % (
-            self.hazard.keywords.get('hazard').title(),
-            self.hazard.keywords.get('layer_geometry').title(),
-            self.exposure.keywords.get('exposure').title(),
-            self.exposure.keywords.get('layer_geometry').title(),
-        ))
-
-        # Set the title
-        if self.exposure.keywords.get('exposure') == 'population':
-            self._title = tr('need evacuation')
-        else:
-            self._title = tr('be affected')
 
     @staticmethod
     def console_progress_callback(current, maximum, message=None):
@@ -660,31 +561,166 @@ class ImpactFunction(object):
         LOGGER.debug('%s: %s: %s' % (context, key, value))
         self.state[context]["info"][key] = value
 
-    def validate(self):
-        """Method to check if the impact function can be run."""
+    @staticmethod
+    def _check_layer(layer, purpose):
+        """Private function to check if the layer is valid.
+
+        The function will also set the monkey patching if needed.
+
+        :param layer: The layer to test.
+        :type layer: QgsMapLayer
+
+        :param purpose: The expected purpose of the layer.
+        :type purpose: basestring
+
+        :return: A tuple with the status of the layer and an error message if
+            needed.
+            The status is 0 if everything was fine.
+            The status is 1 if the client should fix something.
+        :rtype: (int, m.Message)
+        """
+        if not layer.isValid():
+            message = generate_input_error_message(
+                tr('The %s layer is invalid' % purpose),
+                m.Paragraph(tr(
+                    'The impact function needs a %s layer to run. '
+                    'You must provide a valid %s layer.' % (purpose, purpose)))
+            )
+            return 1, message
+
+        try:
+            # The layer might have monkey patching already.
+            keywords = layer.keywords
+        except AttributeError:
+            # Or we should read it using KeywordIO
+            try:
+                keywords = KeywordIO().read_keywords(layer)
+            except NoKeywordsFoundError:
+                message = generate_input_error_message(
+                    tr('The %s layer do not have keywords.' & purpose),
+                    m.Paragraph(tr(
+                        'The %s layer do not have keywords. Use the '
+                        'Use the wizard to assign keywords to the layer.'
+                        % purpose))
+                )
+                return 1, message
+
+        if keywords.get('layer_purpose') != purpose:
+            message = generate_input_error_message(
+                tr('The %s layer is not an %s.' % (purpose, purpose)),
+                m.Paragraph(tr(
+                    'The %s layer is not an %s.' % (purpose, purpose)))
+            )
+            return 1, message
+
+        version = keywords.get(inasafe_keyword_version_key)
+        if version != inasafe_keyword_version:
+            parameters = {
+                'version': inasafe_keyword_version,
+                'source': layer.source()
+            }
+            message = generate_input_error_message(
+                tr('The %s layer is not up to date.' % purpose),
+                m.Paragraph(
+                    tr('The layer {source} must be updated to {version}.'
+                        .format(**parameters))))
+            return 1, message
+
+        layer.keywords = keywords
+        return 0, None
+
+    def prepare(self):
+        """Method to check if the impact function can be run.
+
+        :return: A tuple with the status of the IF and an error message if
+            needed.
+            The status is 0 if everything was fine.
+            The status is 1 if the client should fix something.
+        :rtype: (int, m.Message)
+        """
         if not self.exposure:
-            raise InvalidLayerError(tr('The exposure layer is compulsory.'))
+            message = generate_input_error_message(
+                tr('The exposure layer is compulsory'),
+                m.Paragraph(tr(
+                    'The impact function needs an exposure layer to run. '
+                    'You must provide it.'))
+            )
+            return 1, message
+
+        status, message = self._check_layer(self.exposure, 'exposure')
+        if status != 0:
+            return status, message
 
         if not self.hazard:
-            raise InvalidLayerError(tr('The hazard layer is compulsory.'))
+            message = generate_input_error_message(
+                tr('The hazard layer is compulsory'),
+                m.Paragraph(tr(
+                    'The impact function needs a hazard layer to run. '
+                    'You must provide it.'))
+            )
+            return 1, message
+
+        status, message = self._check_layer(self.hazard, 'hazard')
+        if status != 0:
+            return status, message
 
         if self.aggregation:
             if self.requested_extent:
-                raise InvalidExtentError(
-                    tr('Requested Extent must be null when an aggregation is '
-                       'provided.'))
+                message = generate_input_error_message(
+                    tr('Error with the requested extent'),
+                    m.Paragraph(tr(
+                        'Requested Extent must be null when an aggregation is '
+                        'provided.'))
+                )
+                return 1, message
+
             if self.requested_extent_crs:
-                raise InvalidExtentError(
-                    tr('Requested Extent CRS must be null when an aggregation '
-                       'is provided.'))
+                message = generate_input_error_message(
+                    tr('Error with the requested extent'),
+                    m.Paragraph(tr(
+                        'Requested Extent CRS must be null when an '
+                        'aggregation is provided.'))
+                )
+                return 1, message
             if self._viewport_extent:
-                raise InvalidExtentError(
-                    tr('Viewport Extent must be null when an aggregation is '
-                       'provided.'))
+                message = generate_input_error_message(
+                    tr('Error with the viewport extent'),
+                    m.Paragraph(tr(
+                        'Viewport Extent must be null when an aggregation is '
+                        'provided.'))
+                )
+                return 1, message
             if self._viewport_extent_crs:
-                raise InvalidExtentError(
-                    tr('Viewport CRS must be null when an aggregation is '
-                       'provided.'))
+                message = generate_input_error_message(
+                    tr('Error with the viewport extent'),
+                    m.Paragraph(tr(
+                        'Viewport CRS must be null when an aggregation is '
+                        'provided.'))
+                )
+                return 1, message
+
+            status, message = self._check_layer(
+                self.aggregation, 'aggregation')
+            if status != 0:
+                return status, message
+
+        # Set the name
+        self._name = tr('%s %s On %s %s' % (
+            self.hazard.keywords.get('hazard').title(),
+            self.hazard.keywords.get('layer_geometry').title(),
+            self.exposure.keywords.get('exposure').title(),
+            self.exposure.keywords.get('layer_geometry').title(),
+        ))
+
+        # Set the title
+        if self.exposure.keywords.get('exposure') == 'population':
+            self._title = tr('need evacuation')
+        else:
+            self._title = tr('be affected')
+
+        # Everything was fine.
+        self._is_ready = True
+        return 0, None
 
     def debug_layer(self, layer, check_fields=True):
         """Write the layer produced to the datastore if debug mode is on.
@@ -710,12 +746,12 @@ class ImpactFunction(object):
             The status is 0 if everything was fine.
             The status is 1 if something went wrong from the IF client.
             The status is 2 if something went wrong from the code.
-        :rtype: (int, str)
+        :rtype: (int, m.Message)
         """
+        if not self._is_ready:
+            return 1, tr('You need to run prepare first.')
 
         try:
-            self.validate()
-
             self.reset_state()
             clear_prof_data()
             self._run()
@@ -735,6 +771,25 @@ class ImpactFunction(object):
 
         except InaSAFEError as e:
             return 1, e.message
+
+        except MemoryError:
+            warning_heading = m.Heading(tr('Memory issue'), **WARNING_STYLE)
+            warning_message = tr(
+                'There is not enough free memory to run this analysis.')
+            suggestion_heading = m.Heading(
+                tr('Suggestion'), **SUGGESTION_STYLE)
+            suggestion = tr(
+                'Try zooming in to a smaller area or using a raster layer '
+                'with a coarser resolution to speed up execution and reduce '
+                'memory requirements. You could also try adding more RAM to '
+                'your computer.')
+
+            message = m.Message()
+            message.add(warning_heading)
+            message.add(warning_message)
+            message.add(suggestion_heading)
+            message.add(suggestion)
+            return 2, message
 
         except Exception as e:
             return 2, e.message

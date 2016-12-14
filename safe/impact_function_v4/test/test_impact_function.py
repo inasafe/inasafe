@@ -107,7 +107,13 @@ def run_scenario(scenario, use_debug=False):
         impact_function.aggregation = QgsVectorLayer(
             aggregation_path, 'Aggregation', 'ogr')
 
-    status, _ = impact_function.run()
+    status, message = impact_function.prepare()
+    if status != 0:
+        return status, message, None
+
+    status, message = impact_function.run()
+    if status != 0:
+        return status, message, None
 
     for layer in impact_function.outputs:
         check_inasafe_fields(layer)
@@ -126,6 +132,7 @@ class TestImpactFunction(unittest.TestCase):
 
         impact_function = ImpactFunction()
         impact_function.exposure = exposure_layer
+        impact_function._check_layer(impact_function.exposure, 'exposure')
 
         expected_inasafe_fields = {
             exposure_type_field['key']: 'TYPE',
@@ -151,6 +158,7 @@ class TestImpactFunction(unittest.TestCase):
         impact_function = ImpactFunction()
         impact_function.exposure = exposure_layer
         impact_function.hazard = hazard_layer
+        impact_function.prepare()
         self.assertEqual(impact_function.name, 'Flood Polygon On Road Line')
         self.assertEqual(impact_function.title, 'be affected')
 
@@ -168,7 +176,11 @@ class TestImpactFunction(unittest.TestCase):
         impact_function.aggregation = aggregation_layer
         impact_function.exposure = exposure_layer
         impact_function.hazard = hazard_layer
-        impact_function.run()
+        status, _ = impact_function.run()
+        self.assertEqual(1, status)
+        impact_function.prepare()
+        status, _ = impact_function.run()
+        self.assertEqual(0, status)
         message = impact_function.performance_log_message().to_text()
         expected_result = get_control_text(
             'test-profiling-logs.txt')
@@ -193,7 +205,7 @@ class TestImpactFunction(unittest.TestCase):
         scenario, expected_steps, expected_outputs = read_json_flow(
             scenario_path)
         status, steps, outputs = run_scenario(scenario, use_debug)
-        self.assertEqual(0, status)
+        self.assertEqual(0, status, steps)
         self.assertDictEqual(expected_steps, steps)
         # - 1 because I added the profiling table, and this table is not
         # counted in the JSON file.
