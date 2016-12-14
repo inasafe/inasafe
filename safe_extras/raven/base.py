@@ -8,13 +8,17 @@ raven.base
 
 from __future__ import absolute_import
 
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import object
 import base64
 import datetime
 import hashlib
 import logging
 import os
 import time
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import uuid
 import warnings
 
@@ -144,7 +148,7 @@ class Client(object):
             cls.__name__))
         self.error_logger = logging.getLogger('sentry.errors')
 
-        if isinstance(servers, basestring):
+        if isinstance(servers, str):
             # must be a DSN:
             if dsn:
                 # TODO: this should indicate what the caller can do to correct
@@ -182,7 +186,7 @@ class Client(object):
         self.servers = servers
         self.include_paths = set(include_paths or defaults.INCLUDE_PATHS)
         self.exclude_paths = set(exclude_paths or defaults.EXCLUDE_PATHS)
-        self.name = unicode(name or defaults.NAME)
+        self.name = str(name or defaults.NAME)
         self.auto_log_stacks = bool(auto_log_stacks or
                 defaults.AUTO_LOG_STACKS)
         self.key = str(key or defaults.KEY)
@@ -190,7 +194,7 @@ class Client(object):
                 defaults.MAX_LENGTH_STRING)
         self.list_max_length = int(list_max_length or defaults.MAX_LENGTH_LIST)
         if (site or defaults.SITE):
-            self.site = unicode(site or defaults.SITE)
+            self.site = str(site or defaults.SITE)
         else:
             self.site = None
         self.public_key = public_key
@@ -251,7 +255,7 @@ class Client(object):
         if data.get('culprit'):
             culprit = data['culprit']
 
-        for k, v in result.iteritems():
+        for k, v in result.items():
             if k not in data:
                 data[k] = v
 
@@ -286,7 +290,7 @@ class Client(object):
         data.setdefault('level', logging.ERROR)
 
         # Shorten lists/strings
-        for k, v in extra.iteritems():
+        for k, v in extra.items():
             data['extra'][k] = shorten(v, string_length=self.string_max_length,
                     list_length=self.list_max_length)
 
@@ -430,8 +434,8 @@ class Client(object):
 
         try:
             self._send_remote(url=url, data=data, headers=headers)
-        except Exception, e:
-            if isinstance(e, urllib2.HTTPError):
+        except Exception as e:
+            if isinstance(e, urllib.error.HTTPError):
                 body = e.read()
                 self.error_logger.error('Unable to reach Sentry log server: %s (url: %%s, body: %%s)' % (e,), url, body,
                     exc_info=True, extra={'data': {'body': body, 'remote_url': url}})

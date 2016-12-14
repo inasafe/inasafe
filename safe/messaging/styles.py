@@ -28,7 +28,7 @@ import os
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
-from PyQt4.QtCore import QUrl
+from qgis.PyQt.QtCore import QUrl
 # These all apply to heading elements
 
 from safe.utilities.resources import resources_path

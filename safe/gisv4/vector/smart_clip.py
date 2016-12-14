@@ -6,6 +6,7 @@ Clip and mask a hazard layer.
 Issue https://github.com/inasafe/inasafe/issues/3186
 """
 
+from builtins import next
 import logging
 from qgis.core import (
     QGis,

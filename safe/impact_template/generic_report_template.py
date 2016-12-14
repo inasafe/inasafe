@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 """
 
+from builtins import object
 import os
 import json
 import logging
@@ -114,7 +115,7 @@ class GenericReportTemplate(object):
         table = m.Table(style_class='table table-condensed table-striped')
         table.caption = None
 
-        if 'headings' in self.impact_summary.keys():
+        if 'headings' in list(self.impact_summary.keys()):
             row = m.Row()
             row.add(m.Cell(self.impact_summary['headings'][0], header=True))
             row.add(m.Cell(
@@ -229,7 +230,7 @@ class GenericReportTemplate(object):
         if not self.postprocessing:
             return False
         message = m.Message()
-        for postprocessor, v in self.postprocessing.items():
+        for postprocessor, v in list(self.postprocessing.items()):
             table = m.Table(
                 style_class='table table-condensed table-striped')
             table.caption = v['caption']

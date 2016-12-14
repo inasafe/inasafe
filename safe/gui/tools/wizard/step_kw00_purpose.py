@@ -14,9 +14,11 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 # noinspection PyPackageRequirements
-from PyQt4 import QtCore
+from builtins import range
+from qgis.PyQt import QtCore
 from PyQt4.QtCore import pyqtSignature
-from PyQt4.QtGui import QListWidgetItem, QPixmap
+from qgis.PyQt.QtWidgets import QListWidgetItem
+from qgis.PyQt.QtGui import QPixmap
 
 from safe.definitionsv4.layer_purposes import layer_purpose_aggregation
 from safe.definitionsv4.utilities import purposes_for_layer
@@ -144,7 +146,7 @@ class StepKwPurpose(WizardStep, FORM_CLASS):
         # Set values based on existing keywords or parent mode
         if purpose_keyword:
             purposes = []
-            for index in xrange(self.lstCategories.count()):
+            for index in range(self.lstCategories.count()):
                 item = self.lstCategories.item(index)
                 purposes.append(item.data(QtCore.Qt.UserRole))
             if purpose_keyword in purposes:

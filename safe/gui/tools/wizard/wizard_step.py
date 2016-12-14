@@ -17,7 +17,7 @@ import re
 import os
 
 # noinspection PyPackageRequirements
-from PyQt4.QtGui import QWidget
+from qgis.PyQt.QtWidgets import QWidget
 
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.resources import get_ui_class

@@ -5,6 +5,7 @@ raven.utils.serializer.manager
 :copyright: (c) 2010 by the Sentry Team, see AUTHORS for more details.
 :license: BSD, see LICENSE for more details.
 """
+from builtins import object
 import logging
 
 __all__ = ('register', 'transform')
@@ -60,14 +61,14 @@ class Serializer(object):
                 if serializer.can(value):
                     try:
                         return serializer.serialize(value)
-                    except Exception, e:
+                    except Exception as e:
                         logger.exception(e)
                         return u'<BadSerializable: %s>' % type(value)
 
             # if all else fails, lets use the repr of the object
             try:
                 return self.transform(repr(value))
-            except Exception, e:
+            except Exception as e:
                 logger.exception(e)
                 # It's common case that a model's __unicode__ definition may try to query the database
                 # which if it was not cleaned up correctly, would hit a transaction aborted exception

@@ -10,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+from builtins import zip
 import logging
 from safe import messaging as m
 from safe.common.utilities import format_decimal
@@ -131,7 +132,7 @@ class LandCoverReportTemplate(GenericReportTemplate):
         if 'impacted_zones' in report:
             message.add(m.Heading(
                 tr('Analysis Results by Aggregation Area'), **INFO_STYLE))
-            for zone, table in report['impacted_zones'].items():
+            for zone, table in list(report['impacted_zones'].items()):
                 message.add(m.Heading(zone.lower().title(), **SUB_INFO_STYLE))
                 m_table = format_pivot_table(
                     table,

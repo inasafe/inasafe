@@ -9,6 +9,7 @@ InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
      (at your option) any later version.
 
 """
+from builtins import str
 __author__ = 'akbargumbira@gmail.com'
 __date__ = '11/12/2015'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -50,7 +51,7 @@ class TestITBEarthquakeFatalityFunction(unittest.TestCase):
             9: 3.726e-3,
             10: 1.563e-2}
         result = impact_function.compute_fatality_rate()
-        for item in expected_result.keys():
+        for item in list(expected_result.keys()):
             self.assertAlmostEqual(
                 expected_result[item], result[item], places=4)
 
@@ -89,7 +90,7 @@ class TestITBEarthquakeFatalityFunction(unittest.TestCase):
             'total_fatalities': 0,  # should be zero FIXME
             'total_displaced': 200
         }
-        for key in expected_result.keys():
+        for key in list(expected_result.keys()):
             result = impact_layer.get_keywords(key)
             self.assertEqual(expected_result[key], result)
 
@@ -128,9 +129,9 @@ class TestITBEarthquakeFatalityFunction(unittest.TestCase):
             10: 0
         }
 
-        for key in expected_result.keys():
+        for key in list(expected_result.keys()):
             result = impact_layer.get_keywords(key)
-            for item in expected_result[key].keys():
+            for item in list(expected_result[key].keys()):
                 self.assertAlmostEqual(
                     expected_result[key][item], result[item], places=4)
 

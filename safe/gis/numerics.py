@@ -2,6 +2,7 @@
 """**Numerical tools**
 """
 
+from builtins import str
 import numpy
 from safe.common.utilities import verify
 
@@ -35,7 +36,7 @@ def ensure_numeric(A, typecode=None):
         This function is necessary as array(A) can cause memory overflow.
     """
 
-    if isinstance(A, basestring):
+    if isinstance(A, str):
         msg = 'Sorry, cannot handle strings in ensure_numeric()'
         # FIXME (Ole): Change this to whatever is the appropriate exception
         # for wrong input type

@@ -6,6 +6,7 @@ raven.utils.encoding
 :license: BSD, see LICENSE for more details.
 """
 
+from builtins import str
 import warnings
 
 
@@ -17,12 +18,12 @@ def force_unicode(s, encoding='utf-8', errors='strict'):
     Adapted from Django
     """
     try:
-        if not isinstance(s, basestring,):
+        if not isinstance(s, str,):
             if hasattr(s, '__unicode__'):
-                s = unicode(s)
+                s = str(s)
             else:
                 try:
-                    s = unicode(str(s), encoding, errors)
+                    s = str(str(s), encoding, errors)
                 except UnicodeEncodeError:
                     if not isinstance(s, Exception):
                         raise
@@ -34,12 +35,12 @@ def force_unicode(s, encoding='utf-8', errors='strict'):
                     # output should be.
                     s = ' '.join([force_unicode(arg, encoding,
                             errors) for arg in s])
-        elif not isinstance(s, unicode):
+        elif not isinstance(s, str):
             # Note: We use .decode() here, instead of unicode(s, encoding,
             # errors), so that if s is a SafeString, it ends up being a
             # SafeUnicode at the end.
             s = s.decode(encoding, errors)
-    except UnicodeDecodeError, e:
+    except UnicodeDecodeError as e:
         if not isinstance(s, Exception):
             raise UnicodeDecodeError(s, *e.args)
         else:
@@ -62,7 +63,7 @@ def transform(value):
 
 def to_unicode(value):
     try:
-        value = unicode(force_unicode(value))
+        value = str(force_unicode(value))
     except (UnicodeEncodeError, UnicodeDecodeError):
         value = '(Error decoding value)'
     except Exception:  # in some cases we get a different exception
@@ -84,7 +85,7 @@ def shorten(var, list_length=50, string_length=200):
     from raven.utils.serializer import transform
 
     var = transform(var)
-    if isinstance(var, basestring) and len(var) > string_length:
+    if isinstance(var, str) and len(var) > string_length:
         var = var[:string_length] + '...'
     elif isinstance(var, (list, tuple, set, frozenset)) and len(var) > list_length:
         # TODO: we should write a real API for storing some metadata with vars when

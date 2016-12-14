@@ -7,6 +7,8 @@
      (at your option) any later version.
 
 """
+from __future__ import print_function
+from builtins import str
 from safe.utilities.i18n import tr
 
 __author__ = 'tim@kartoza.com'
@@ -21,7 +23,7 @@ import os
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
 from qgis.gui import QgsMapCanvas  # pylint: disable=no-name-in-module
-from PyQt4.QtGui import QWidget
+from qgis.PyQt.QtWidgets import QWidget
 
 from safe.test.utilities import get_qgis_app
 
@@ -99,10 +101,11 @@ class PluginTest(unittest.TestCase):
         iface = QgisInterface(canvas)
         # reload all inasafe modules so that i18n get picked up afresh
         # this is the part that produces bad side effects
-        for mod in sys.modules.values():
+        for mod in list(sys.modules.values()):
             try:
                 if 'storage' in str(mod) or 'impact' in str(mod):
-                    print 'Reloading:', str(mod)
+                    # fix_print_with_import
+                    print('Reloading:', str(mod))
                     reload(mod)
             except NameError:
                 pass

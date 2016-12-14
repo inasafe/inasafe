@@ -1,11 +1,12 @@
 # coding=utf-8
 """Test for GIS utilities functions."""
+from builtins import str
 import unittest
 import numpy
 
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
-from PyQt4.QtCore import QVariant
+from qgis.PyQt.QtCore import QVariant
 from os.path import join
 
 from safe.utilities.gis import (
@@ -251,7 +252,7 @@ class TestQGIS(unittest.TestCase):
         view_port = [105.3, -4.3, 110.29, -2.5]
         try:
             get_optimal_extent(hazard_bbox, exposure_bbox, view_port)
-        except InsufficientOverlapError, e:
+        except InsufficientOverlapError as e:
             message = 'Did not find expected error message in %s' % str(e)
             assert 'did not overlap' in str(e), message
         else:
@@ -266,7 +267,7 @@ class TestQGIS(unittest.TestCase):
         except BoundingBoxError:
             # good this was expected
             pass
-        except InsufficientOverlapError, e:
+        except InsufficientOverlapError as e:
             message = 'Did not find expected error message in %s' % str(e)
             assert 'Invalid' in str(e), message
         else:
@@ -276,7 +277,7 @@ class TestQGIS(unittest.TestCase):
         try:
             # noinspection PyTypeChecker
             get_optimal_extent(None, None, view_port)
-        except BoundingBoxError, e:
+        except BoundingBoxError as e:
             message = 'Did not find expected error message in %s' % str(e)
             assert 'cannot be None' in str(e), message
         else:
@@ -286,7 +287,7 @@ class TestQGIS(unittest.TestCase):
         try:
             # noinspection PyTypeChecker
             get_optimal_extent('aoeush', 'oeuuoe', view_port)
-        except BoundingBoxError, e:
+        except BoundingBoxError as e:
             message = 'Did not find expected error message in %s' % str(e)
             assert 'Instead i got "aoeush"' in str(e), message
         else:

@@ -8,6 +8,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+from __future__ import absolute_import
 from safe.messaging.item.cell import Cell
 
 __author__ = 'marco@opengis.ch'
@@ -16,9 +17,9 @@ __date__ = '04/06/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from message_element import MessageElement
-from exceptions import InvalidMessageItemError
-from row import Row
+from .message_element import MessageElement
+from .exceptions import InvalidMessageItemError
+from .row import Row
 
 
 class Table(MessageElement):

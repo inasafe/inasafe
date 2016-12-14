@@ -27,7 +27,7 @@ import qgis  # pylint: disable=unused-import
 from datetime import datetime, date
 from unittest import TestCase
 
-from PyQt4.QtCore import QDate, QUrl
+from qgis.PyQt.QtCore import QDate, QUrl
 
 from safe.common.exceptions import MetadataReadError
 from safe.common.utilities import unique_filename

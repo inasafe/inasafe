@@ -13,10 +13,12 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
+from builtins import str
+from builtins import range
 import re
 
-from PyQt4 import QtCore
-from PyQt4.QtGui import QListWidgetItem
+from qgis.PyQt import QtCore
+from qgis.PyQt.QtWidgets import QListWidgetItem
 
 from safe.definitionsv4.layer_purposes import layer_purpose_aggregation
 from safe.definitionsv4.layer_modes import (
@@ -116,7 +118,7 @@ class StepKwField(WizardStep, FORM_CLASS):
         field_index = fields.indexFromName(self.selected_field())
         unique_values = self.parent.layer.uniqueValues(field_index)[0:48]
         unique_values_str = [
-            i is not None and unicode(i) or 'NULL'
+            i is not None and str(i) or 'NULL'
             for i in unique_values]
         if unique_values != self.parent.layer.uniqueValues(field_index):
             unique_values_str += ['...']
@@ -194,7 +196,7 @@ class StepKwField(WizardStep, FORM_CLASS):
             field = inasafe_field.get(field_keyword)
             if field:
                 fields = []
-                for index in xrange(self.lstFields.count()):
+                for index in range(self.lstFields.count()):
                     fields.append(str(self.lstFields.item(index).text()))
                 if field in fields:
                     self.lstFields.setCurrentRow(fields.index(field))

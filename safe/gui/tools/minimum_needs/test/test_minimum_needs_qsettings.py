@@ -13,6 +13,7 @@ Contact : christian@kartoza.com
 
 """
 
+from past.builtins import cmp
 __author__ = 'Christian Christelis <christian@kartoza.com>'
 __date__ = '14/09/2012'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -23,7 +24,7 @@ import unittest
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
-from PyQt4.QtCore import QSettings
+from qgis.PyQt.QtCore import QSettings
 import json
 
 from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile

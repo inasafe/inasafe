@@ -10,7 +10,10 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+from __future__ import print_function
 
+from builtins import str
+from builtins import object
 import getpass
 import logging
 import os
@@ -20,7 +23,7 @@ from socket import gethostname
 
 import numpy
 from PyQt4.Qt import PYQT_VERSION_STR
-from PyQt4.QtCore import QT_VERSION_STR, QSettings
+from qgis.PyQt.QtCore import QSettings
 from osgeo import gdal
 from qgis.core import QgsMapLayer, QgsCoordinateReferenceSystem, QgsRectangle
 from qgis.utils import QGis
@@ -354,7 +357,7 @@ class ImpactFunction(object):
         if self._hazard.is_qgsvectorlayer():
             self.target_field = get_non_conflicting_attribute_name(
                 self.target_field,
-                self._hazard.layer.dataProvider().fieldNameMap().keys()
+                list(self._hazard.layer.dataProvider().fieldNameMap().keys())
             )
 
     @property
@@ -389,7 +392,7 @@ class ImpactFunction(object):
         if self.exposure.is_qgsvectorlayer():
             self._target_field = get_non_conflicting_attribute_name(
                 self.target_field,
-                self.exposure.layer.dataProvider().fieldNameMap().keys()
+                list(self.exposure.layer.dataProvider().fieldNameMap().keys())
             )
 
     def exposure_actions(self):
@@ -821,7 +824,7 @@ class ImpactFunction(object):
         :param question: The question for the impact function.
         :type question: basestring
         """
-        if isinstance(question, basestring):
+        if isinstance(question, str):
             self._question = question
         else:
             raise Exception('The question should be a basestring instance.')
@@ -843,8 +846,10 @@ class ImpactFunction(object):
         if maximum > 1000 and current % 1000 != 0 and current != maximum:
             return
         if message is not None:
-            print message
-        print 'Task progress: %i of %i' % (current, maximum)
+            # fix_print_with_import
+            print(message)
+        # fix_print_with_import
+        print('Task progress: %i of %i' % (current, maximum))
 
     def run(self):
         """Pure virtual method that should be implemented by subclasses.
@@ -869,7 +874,7 @@ class ImpactFunction(object):
             self._emit_pre_run_message()
             self._prepare()
             self._impact = self._calculate_impact()
-        except ZeroImpactException, e:
+        except ZeroImpactException as e:
             report = m.Message()
             report.add(LOGO_ELEMENT)
             report.add(m.Heading(tr(
@@ -904,7 +909,7 @@ class ImpactFunction(object):
             send_static_message(self, report)
             send_analysis_done_signal(self, zero_impact=True)
             return
-        except MemoryError, e:
+        except MemoryError as e:
             message = tr(
                 'An error occurred because it appears that your system does '
                 'not have sufficient memory. Upgrading your computer so that '
@@ -912,11 +917,11 @@ class ImpactFunction(object):
                 'smaller geographical area for your analysis, or using '
                 'rasters with a larger cell size.')
             analysis_error(self, e, message)
-        except KeywordNotFoundError, e:
+        except KeywordNotFoundError as e:
             # Need a specific catcher here, so that it doesn't go to the
             # the broad exception
             raise e
-        except Exception, e:  # pylint: disable=W0703
+        except Exception as e:  # pylint: disable=W0703
             # FIXME (Ole): This branch is not covered by the tests
             analysis_error(
                 self,
@@ -1047,13 +1052,13 @@ class ImpactFunction(object):
 
     def parameters_value(self):
         parameters = {}
-        for parameter_name, parameter in self.parameters.items():
+        for parameter_name, parameter in list(self.parameters.items()):
             try:
                 if parameter_name == 'postprocessors':
                     postprocessor_dict = parameter
                     parameters['postprocessors'] = {}
                     for postprocessor_name, postprocessors in \
-                            postprocessor_dict.items():
+                            list(postprocessor_dict.items()):
                         parameters['postprocessors'][postprocessor_name] = {}
                         for postprocessor in postprocessors:
                             if isinstance(postprocessor.value, list):
@@ -1225,7 +1230,7 @@ class ImpactFunction(object):
                     exposure_geoextent,
                     analysis_geoextent)
 
-            except InsufficientOverlapError, e:
+            except InsufficientOverlapError as e:
                 # noinspection PyTypeChecker
                 message = generate_insufficient_overlap_message(
                     e,
@@ -1414,9 +1419,9 @@ class ImpactFunction(object):
                 extent=adjusted_geo_extent,
                 cell_size=cell_size,
                 hard_clip_flag=self.clip_hard)
-        except CallGDALError, e:
+        except CallGDALError as e:
             raise e
-        except IOError, e:
+        except IOError as e:
             raise e
 
         title = tr('Preparing exposure data')

@@ -4,7 +4,7 @@
 Aggregate the aggregate hazard to the analysis layer.
 """
 
-from PyQt4.QtCore import QPyNullVariant
+from qgis.PyQt.QtCore import QPyNullVariant
 from qgis.core import QGis, QgsFeatureRequest, QgsFeature
 
 from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
@@ -110,7 +110,7 @@ def exposure_type_breakdown(aggregate_hazard, callback=None):
             )
 
         # We summarize every absolute values.
-        for field, field_definition in absolute_values.iteritems():
+        for field, field_definition in absolute_values.items():
             value = area[field]
             if not value or isinstance(value, QPyNullVariant):
                 value = 0
@@ -162,7 +162,7 @@ def exposure_type_breakdown(aggregate_hazard, callback=None):
         total_field['field_name'])
 
     # For each absolute values
-    for absolute_field in absolute_values.iterkeys():
+    for absolute_field in absolute_values.keys():
         field_definition = definition(absolute_values[absolute_field][1])
         field = create_field_from_definition(field_definition)
         tabular.addAttribute(field)
@@ -193,7 +193,7 @@ def exposure_type_breakdown(aggregate_hazard, callback=None):
         attributes.append(total - total_affected)
         attributes.append(total)
 
-        for i, field in enumerate(absolute_values.itervalues()):
+        for i, field in enumerate(absolute_values.values()):
             value = field[0].get_value(
                 all='all'
             )

@@ -9,7 +9,10 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+from __future__ import print_function
 
+from builtins import range
+from builtins import object
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '27/05/2013'
@@ -91,11 +94,12 @@ class WebView(QtWebKit.QWebView):
             string += message.to_html()
 
         string += self.footer
-        print string
+        # fix_print_with_import
+        print(string)
         self.setHtml(string)
 
 
-class ImpactFunction1():
+class ImpactFunction1(object):
     """Fake impact function 1
     """
 
@@ -118,7 +122,7 @@ class ImpactFunction1():
             message=message)
 
 
-class ImpactFunction2():
+class ImpactFunction2(object):
     """Fake impact function 2.
     """
 
@@ -141,7 +145,7 @@ class ImpactFunction2():
             message=message)
 
 
-class Dock():
+class Dock(object):
     """Dock.
     """
 

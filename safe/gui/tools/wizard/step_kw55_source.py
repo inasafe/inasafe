@@ -15,7 +15,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
-from safe.utilities.unicode import get_unicode
+from safe.utilities.str import get_unicode
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

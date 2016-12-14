@@ -1,7 +1,9 @@
 # coding=utf-8
+from future import standard_library
+standard_library.install_aliases()
 import os
 import tempfile
-import urlparse
+import urllib.parse
 from zipfile import ZipFile
 
 import requests
@@ -15,7 +17,7 @@ __date__ = '1/27/16'
 
 
 def download_file(url):
-    parsed_uri = urlparse.urlparse(url)
+    parsed_uri = urllib.parse.urlparse(url)
     if parsed_uri.scheme == 'http' or parsed_uri.scheme == 'https':
         tmpfile = tempfile.mktemp()
         # NOTE the stream=True parameter

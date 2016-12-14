@@ -1,6 +1,8 @@
 # coding=utf-8
 """**Convert QgsRasterLayer to QgsVectorLayer**
 """
+from __future__ import absolute_import
+from builtins import range
 __author__ = 'Dmitry Kolesov <kolesov.dm@gmail.com>'
 __revision__ = '$Format:%H$'
 __date__ = '14/01/2014'
@@ -21,8 +23,8 @@ from qgis.core import (
     QgsRasterPipe
 )
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import QVariant
-from qgis_vector_tools import (
+from qgis.PyQt.QtCore import QVariant
+from .qgis_vector_tools import (
     union_geometry,
     points_to_rectangles
 )

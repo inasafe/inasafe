@@ -15,6 +15,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
+from builtins import object
 __author__ = 'ismail@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '11/17/14'
@@ -29,11 +30,11 @@ from qgis.core import (
     QGis)
 from qgis.gui import QgsRubberBand  # pylint: disable=no-name-in-module
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import QSettings
+from qgis.PyQt.QtCore import QSettings
 
 from safe.common.exceptions import InvalidGeometryError
 # noinspection PyPackageRequirements
-from PyQt4.QtGui import QColor
+from qgis.PyQt.QtGui import QColor
 
 
 class Extent(object):

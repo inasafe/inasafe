@@ -11,6 +11,8 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from builtins import str
+from builtins import range
 __author__ = 'bungcip@gmail.com'
 __revision__ = '$Format:%H$'
 __date__ = '4/12/2012'
@@ -32,12 +34,11 @@ from qgis.gui import QgsMapToolPan
 # pylint: enable=unused-import
 
 # noinspection PyPackageRequirements
-from PyQt4 import QtGui
+from qgis.PyQt import QtGui
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import QSettings, pyqtSignature, QRegExp, pyqtSlot
+from qgis.PyQt.QtCore import QSettings, QRegExp, pyqtSlot
 # noinspection PyPackageRequirements
-from PyQt4.QtGui import (
-    QDialog, QProgressDialog, QMessageBox, QFileDialog, QRegExpValidator)
+from qgis.PyQt.QtWidgets import QDialog, QProgressDialog, QMessageBox, QFileDialog
 
 import json
 
@@ -162,7 +163,7 @@ class OsmDownloaderDialog(QDialog, FORM_CLASS):
         self.admin_level_comboBox.setCurrentIndex(7)
 
         list_countries = [
-            self.tr(country) for country in self.countries.keys()]
+            self.tr(country) for country in list(self.countries.keys())]
         list_countries.sort()
         for country in list_countries:
             self.country_comboBox.addItem(country)

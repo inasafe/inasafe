@@ -2,6 +2,7 @@
 """**metadata DB IO implementation.**
 
 """
+from builtins import str
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
 __date__ = '29/06/2015'
@@ -17,7 +18,7 @@ from sqlite3 import OperationalError
 
 from qgis.core import QgsApplication
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import QObject, QSettings
+from qgis.PyQt.QtCore import QObject, QSettings
 from safe.common.exceptions import (
     HashNotFoundError,
     UnsupportedProviderError)
@@ -161,7 +162,7 @@ class MetadataDbIO(QObject):
                 LOGGER.debug('metadata table already exists')
 
             return cursor
-        except sqlite.Error, e:
+        except sqlite.Error as e:
             LOGGER.debug("Error %s:" % e.args[0])
             raise
 
@@ -242,10 +243,10 @@ class MetadataDbIO(QObject):
             sql = 'delete from metadata where hash = \'' + hash_value + '\';'
             cursor.execute(sql)
             self.connection.commit()
-        except sqlite.Error, e:
+        except sqlite.Error as e:
             LOGGER.debug("SQLITE Error %s:" % e.args[0])
             self.connection.rollback()
-        except Exception, e:
+        except Exception as e:
             LOGGER.debug("Error %s:" % e.args[0])
             self.connection.rollback()
             raise
@@ -363,9 +364,9 @@ class MetadataDbIO(QObject):
             metadata = str(data)
             return metadata
 
-        except sqlite.Error, e:
+        except sqlite.Error as e:
             LOGGER.debug("Error %s:" % e.args[0])
-        except Exception, e:
+        except Exception as e:
             LOGGER.debug("Error %s:" % e.args[0])
             raise
         finally:

@@ -11,7 +11,11 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from __future__ import print_function
 
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
 __author__ = 'tim@kartoza.com'
 __version__ = '0.5.0'
 __date__ = '30/07/2012'
@@ -21,7 +25,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import logging
 import os
 import sys
-from urllib2 import URLError
+from urllib.error import URLError
 from zipfile import BadZipfile
 
 from realtime.earthquake.shake_event import ShakeEvent
@@ -199,7 +203,8 @@ if __name__ == '__main__':
         if event_option in '--list':
             dir_listing = os.listdir(working_directory)
             for event in dir_listing:
-                print event
+                # fix_print_with_import
+                print(event)
             sys.exit(0)
         else:
             print('Processing shakemap %s' % event_option)

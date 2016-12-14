@@ -13,11 +13,12 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
+from builtins import str
 import json
 
 import numpy
-from PyQt4 import QtCore, QtGui
-from PyQt4.QtCore import QPyNullVariant
+from qgis.PyQt import QtCore, QtGui
+from qgis.PyQt.QtCore import QPyNullVariant
 from osgeo import gdal
 from osgeo.gdalconst import GA_ReadOnly
 
@@ -172,7 +173,7 @@ class StepKwClassify(WizardStep, FORM_CLASS):
                 # Don't classify features with NULL value
                 continue
             # Capitalization of the value and removing '_' (raw OSM data).
-            value_as_string = unicode(unique_value).upper().replace('_', ' ')
+            value_as_string = str(unique_value).upper().replace('_', ' ')
             assigned = False
             for default_class in default_classes:
                 if 'string_defaults' in default_class:
@@ -230,7 +231,7 @@ class StepKwClassify(WizardStep, FORM_CLASS):
                 continue
             # check in value map
             assigned = False
-            for key, value_list in value_map.iteritems():
+            for key, value_list in value_map.items():
                 if unique_value in value_list and key in assigned_values:
                     assigned_values[key] += [unique_value]
                     assigned = True
@@ -260,7 +261,7 @@ class StepKwClassify(WizardStep, FORM_CLASS):
         self.lstUniqueValues.setSelectionMode(
             QtGui.QAbstractItemView.ExtendedSelection)
         for value in unassigned_values:
-            value_as_string = value is not None and unicode(value) or 'NULL'
+            value_as_string = value is not None and str(value) or 'NULL'
             list_item = QtGui.QListWidgetItem(self.lstUniqueValues)
             list_item.setFlags(
                 QtCore.Qt.ItemIsEnabled |
@@ -294,7 +295,7 @@ class StepKwClassify(WizardStep, FORM_CLASS):
                 tree_branch.setToolTip(0, default_class['description'])
             # Assign known values
             for value in assigned_values[default_class['key']]:
-                string_value = value is not None and unicode(value) or 'NULL'
+                string_value = value is not None and str(value) or 'NULL'
                 tree_leaf = QtGui.QTreeWidgetItem(tree_branch)
                 tree_leaf.setFlags(
                     QtCore.Qt.ItemIsEnabled |

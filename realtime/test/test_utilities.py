@@ -12,6 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
+from builtins import str
 __author__ = 'tim@kartoza.com'
 __version__ = '0.5.0'
 __date__ = '30/07/2012'

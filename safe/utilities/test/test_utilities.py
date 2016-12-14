@@ -1,6 +1,7 @@
 # coding=utf-8
 """Tests for utilities."""
 
+from builtins import str
 import unittest
 import os
 import codecs
@@ -47,7 +48,7 @@ class UtilitiesTest(unittest.TestCase):
         # pylint: disable=W0703
         try:
             bbox_intersection('aoeu', 'oaeu', [])
-        except Exception, e:
+        except Exception as e:
             # Display message and traceback
 
             message = get_error_message(e)
@@ -148,7 +149,7 @@ class UtilitiesTest(unittest.TestCase):
         expected = [5, 4, 3, 2, 1]
 
         new_dict = reorder_dictionary(unordered, expected)
-        self.assertItemsEqual(expected, new_dict.keys())
+        self.assertItemsEqual(expected, list(new_dict.keys()))
 
         # These keys don't exist, but we still show the dictionary
         expected = ['Z', 'X', 'Y']

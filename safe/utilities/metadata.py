@@ -55,7 +55,7 @@ def write_iso19115_metadata(layer_uri, keywords):
     :type keywords: dict
     """
 
-    if 'layer_purpose' in keywords.keys():
+    if 'layer_purpose' in list(keywords.keys()):
         if keywords['layer_purpose'] == 'exposure':
             metadata = ExposureLayerMetadata(layer_uri)
         elif keywords['layer_purpose'] == 'hazard':
@@ -108,20 +108,20 @@ def read_iso19115_metadata(layer_uri, keyword=None):
 
     # dictionary comprehension
     keywords = {
-        x[0]: x[1]['value'] for x in metadata.dict['properties'].iteritems()
+        x[0]: x[1]['value'] for x in metadata.dict['properties'].items()
         if x[1]['value'] is not None}
-    if 'keyword_version' not in keywords.keys() and xml_uri:
+    if 'keyword_version' not in list(keywords.keys()) and xml_uri:
         message = 'No keyword version found. Metadata xml file is invalid.\n'
         message += 'Layer uri: %s\n' % layer_uri
         message += 'Keywords file: %s\n' % os.path.exists(
             os.path.splitext(layer_uri)[0] + '.xml')
         message += 'keywords:\n'
-        for k, v in keywords.iteritems():
+        for k, v in keywords.items():
             message += '%s: %s\n' % (k, v)
         raise MetadataReadError(message)
     keywords = {}
     temp_keywords = {
-        x[0]: x[1]['value'] for x in metadata.dict['properties'].iteritems()}
+        x[0]: x[1]['value'] for x in metadata.dict['properties'].items()}
     included = [
         'aggregation attribute',
         'female ratio attribute',
@@ -129,7 +129,7 @@ def read_iso19115_metadata(layer_uri, keyword=None):
         'adult ratio attribute',
         'elderly ratio attribute',
     ]
-    for key in temp_keywords.iterkeys():
+    for key in temp_keywords.keys():
         if key in included:
             keywords[key] = temp_keywords[key]
         else:
@@ -168,7 +168,7 @@ def metadata_migration(old_metadata, new_version=inasafe_keyword_version):
     elif old_metadata['keyword_version'] == '3.5' and new_version == '4.0':
         new_metadata['inasafe_fields'] = {}
         new_metadata['keyword_version'] = new_version
-        for key, value in old_metadata.items():
+        for key, value in list(old_metadata.items()):
             if key == 'keyword_version':
                 new_metadata['keyword_version'] = new_version
             elif key in ['raster_hazard_classification',

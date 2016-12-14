@@ -13,6 +13,8 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
+from builtins import str
+from builtins import range
 import os
 import shutil
 import logging
@@ -31,14 +33,9 @@ from qgis.core import (
     QgsProject,
     QgsLayerTreeLayer)
 # noinspection PyPackageRequirements
-from PyQt4 import QtGui, QtCore
+from qgis.PyQt import QtGui, QtCore
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import (
-    Qt,
-    pyqtSlot,
-    QSettings,
-    pyqtSignal,
-    QDir)
+from qgis.PyQt.QtCore import Qt, pyqtSlot, QSettings, pyqtSignal, QDir
 
 from safe.definitionsv4.layer_purposes import layer_purpose_exposure_impacted
 from safe.definitionsv4.report import standard_impact_report_metadata
@@ -115,7 +112,7 @@ from safe.gui.tools.help_dialog import HelpDialog
 from safe.gui.tools.impact_report_dialog import ImpactReportDialog
 from safe_extras.pydispatch import dispatcher
 from safe.utilities.extent import Extent
-from safe.utilities.unicode import get_unicode
+from safe.utilities.str import get_unicode
 from safe.impact_template.utilities import get_report_template
 from safe.gui.widgets.message import missing_keyword_message
 from safe.reportv4.impact_report import ImpactReport as ImpactReportV4
@@ -830,7 +827,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         registry = QgsMapLayerRegistry.instance()
         canvas_layers = self.iface.mapCanvas().layers()
         # MapLayers returns a QMap<QString id, QgsMapLayer layer>
-        layers = registry.mapLayers().values()
+        layers = list(registry.mapLayers().values())
 
         # For issue #618
         if len(layers) == 0:
@@ -1383,7 +1380,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 LOGGER.debug(datetime.now())
                 LOGGER.debug(self.impact_function is None)
                 report = self.show_results()
-            except Exception, e:  # pylint: disable=W0703
+            except Exception as e:  # pylint: disable=W0703
                 # FIXME (Ole): This branch is not covered by the tests
                 self.analysis_error(e, self.tr('Error loading impact layer.'))
             else:
@@ -1790,7 +1787,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 except MissingImpactReport:
                     self.show_impact_keywords(keywords)
             else:
-                if 'keyword_version' not in keywords.keys():
+                if 'keyword_version' not in list(keywords.keys()):
                     self.show_keyword_version_message(
                         'No Version', self.inasafe_version)
                 else:
@@ -1823,7 +1820,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             # error_message = get_error_message(e)
             # send_error_message(self, error_message)
             return
-        except Exception, e:  # pylint: disable=broad-except
+        except Exception as e:  # pylint: disable=broad-except
             error_message = get_error_message(e)
             send_error_message(self, error_message)
             return
@@ -2035,9 +2032,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 QtCore.QUrl.fromLocalFile(map_pdf_path))
 
             send_dynamic_message(self, status)
-        except TemplateLoadingError, e:
+        except TemplateLoadingError as e:
             send_error_message(self, get_error_message(e))
-        except Exception, e:  # pylint: disable=broad-except
+        except Exception as e:  # pylint: disable=broad-except
             send_error_message(self, get_error_message(e))
 
     def open_map_in_composer(self, impact_report):

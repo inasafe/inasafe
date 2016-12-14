@@ -1,5 +1,7 @@
 # coding=utf-8
 """Helpers for GIS related functionality."""
+from builtins import str
+from builtins import zip
 import uuid
 
 from qgis.core import (
@@ -16,7 +18,7 @@ from qgis.core import (
     QgsRectangle,
     QgsVectorLayer,
     QgsRasterLayer)
-from PyQt4.QtCore import QVariant
+from qgis.PyQt.QtCore import QVariant
 from safe.common.exceptions import (
     MemoryLayerCreationError,
     BoundingBoxError,
@@ -259,7 +261,7 @@ def qgis_version():
     :returns: QGIS Version where 10700 represents QGIS 1.7 etc.
     :rtype: int
     """
-    version = unicode(QGis.QGIS_VERSION_INT)
+    version = str(QGis.QGIS_VERSION_INT)
     version = int(version)
     return version
 

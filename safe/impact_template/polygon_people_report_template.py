@@ -137,7 +137,7 @@ class PolygonPeopleReportTemplate(GenericReportTemplate):
         table = m.Table(
             style_class='table table-condensed table-striped')
         table.caption = None
-        for frequency, needs in self.minimum_needs.items():
+        for frequency, needs in list(self.minimum_needs.items()):
             row = m.Row()
             row.add(m.Cell(
                 tr('Relief items to be provided %s' % frequency),
@@ -230,7 +230,7 @@ class PolygonPeopleReportTemplate(GenericReportTemplate):
         if not self.postprocessing:
             return False
         message = m.Message()
-        for k, v in self.postprocessing.items():
+        for k, v in list(self.postprocessing.items()):
             table = m.Table(
                 style_class='table table-condensed table-striped')
             table.caption = v['caption']

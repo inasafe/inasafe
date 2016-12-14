@@ -4,7 +4,7 @@
 Reclassify a continuous vector layer.
 """
 
-from PyQt4.QtCore import QPyNullVariant
+from qgis.PyQt.QtCore import QPyNullVariant
 from qgis.core import QGis, QgsField
 
 from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
@@ -128,7 +128,7 @@ def _classified_value(value, ranges):
     if value is None or value == '' or isinstance(value, QPyNullVariant):
         return None
 
-    for threshold_id, threshold in ranges.iteritems():
+    for threshold_id, threshold in ranges.items():
         value_min = threshold[0]
         value_max = threshold[1]
 

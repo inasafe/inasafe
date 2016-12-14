@@ -46,7 +46,7 @@ def hazard_class_style(layer, classification, display_null=False):
             null_hazard_value, symbol, null_hazard_legend)
         categories.append(category)
 
-    for hazard_class, (color, label) in classification.iteritems():
+    for hazard_class, (color, label) in classification.items():
         symbol = QgsSymbolV2.defaultSymbol(layer.geometryType())
         symbol.setColor(color)
         category = QgsRendererCategoryV2(hazard_class, symbol, label)

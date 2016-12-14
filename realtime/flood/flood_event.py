@@ -1,4 +1,7 @@
 # coding=utf-8
+from builtins import str
+from builtins import range
+from builtins import object
 import logging
 import os
 import shutil
@@ -10,13 +13,8 @@ import json
 from collections import OrderedDict
 
 import re
-from PyQt4.QtCore import (
-    QObject,
-    QFileInfo,
-    QVariant,
-    QTranslator,
-    QCoreApplication)
-from PyQt4.QtXml import QDomDocument
+from qgis.PyQt.QtCore import QObject, QFileInfo, QVariant, QTranslator, QCoreApplication
+from qgis.PyQt.QtXml import QDomDocument
 from qgis.core import QgsMapLayerRegistry
 from qgis.core import (
     QgsVectorLayer,
@@ -411,12 +409,12 @@ class FloodEvent(QObject):
 
         # calculate total affected people
         total_affected = 0
-        for k, v in district_dict.iteritems():
+        for k, v in district_dict.items():
             total_affected += v
 
         # calculate new minimum needs
         min_needs = self.impact_data.minimum_needs
-        for k, v in min_needs.iteritems():
+        for k, v in min_needs.items():
             for need in v:
                 need['amount'] = need['value'] * total_affected
 
@@ -486,7 +484,7 @@ class FloodEvent(QObject):
                 legend_expressions['marker-color-%d' % i] = marker_color
                 legend_expressions['marker-border-%d' % i] = marker_border
 
-            for k, v in legend_expressions.iteritems():
+            for k, v in legend_expressions.items():
                 str_template = str_template.replace('[%s]' % k, v)
 
             with open(target_style_path, mode='w') as target_f:
@@ -600,7 +598,7 @@ Telp. 121
         table.add(row)
         message.add(table)
         # Table for minimum needs
-        for k, v in self.impact_data.minimum_needs.iteritems():
+        for k, v in self.impact_data.minimum_needs.items():
             section = self.tr('Relief items to be provided %s :') % k
             # text = m.Text(section)
             row = m.Row(style_class='alert-info')

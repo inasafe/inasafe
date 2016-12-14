@@ -12,6 +12,8 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
+from builtins import str
+from builtins import range
 __author__ = 'tim@kartoza.com'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -33,7 +35,7 @@ from qgis.core import (
     QgsRectangle,
     QgsCoordinateReferenceSystem,
     QgsProject)
-from PyQt4 import QtCore
+from qgis.PyQt import QtCore
 
 from safe.test.utilities import get_qgis_app, get_dock
 
@@ -215,7 +217,7 @@ class TestDock(TestCase):
         except OSError:
             LOGGER.debug('OSError')
             # pass
-        except Exception, e:
+        except Exception as e:
             raise Exception('Exception is not expected, %s' % e)
 
     @unittest.expectedFailure
@@ -838,7 +840,7 @@ class TestDock(TestCase):
         expected_list = self.wkt_to_coordinates(expected)
         actual_list = self.wkt_to_coordinates(geometry)
 
-        for item in xrange(0, len(expected_list)):
+        for item in range(0, len(expected_list)):
             # print item, expected_list[item], actual_list[item]
             self.assertAlmostEqual(
                 expected_list[item][0],

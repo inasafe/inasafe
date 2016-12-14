@@ -12,6 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
+from builtins import range
 __author__ = 'borysjurgiel.pl'
 __date__ = '24/02/2014'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -28,7 +29,7 @@ import qgis
 # pylint: enable=unused-import
 from qgis.core import QgsMapLayerRegistry
 from qgis.gui import QgsMapCanvasLayer
-from PyQt4 import QtCore
+from qgis.PyQt import QtCore
 
 # noinspection PyPackageRequirements
 # Add PARENT directory to path to make test aware of other modules

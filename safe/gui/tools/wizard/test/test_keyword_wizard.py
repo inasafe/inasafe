@@ -1,5 +1,6 @@
 # coding=utf-8
 """Tests for the keyword wizard."""
+from builtins import range
 import shutil
 import unittest
 import qgis
@@ -407,7 +408,7 @@ class TestKeywordWizard(unittest.TestCase):
         # Get layer's inasafe_fields
         inasafe_fields = layer.keywords.get('inasafe_fields')
         self.assertIsNotNone(inasafe_fields)
-        for key, value in inasafe_fields.items():
+        for key, value in list(inasafe_fields.items()):
             # Not check if it's hazard_class_field
             if key == get_compulsory_fields(
                     layer_purpose_hazard['key'])['key']:
@@ -424,10 +425,10 @@ class TestKeywordWizard(unittest.TestCase):
         for parameter in parameters:
             # If not available is chosen, inasafe_fields shouldn't have it
             if parameter.value == no_field:
-                self.assertNotIn(parameter.guid, inasafe_fields.keys())
+                self.assertNotIn(parameter.guid, list(inasafe_fields.keys()))
             # If not available is not chosen, inasafe_fields should have it
             else:
-                self.assertIn(parameter.guid, inasafe_fields.keys())
+                self.assertIn(parameter.guid, list(inasafe_fields.keys()))
 
         # Click next to finish inasafe fields step and go to source step
         dialog.pbnNext.click()
@@ -599,7 +600,7 @@ class TestKeywordWizard(unittest.TestCase):
                 {
                     exposure_type_field['key']: u'TYPE',
                 },
-            'value_map': dict((k, v) for k, v in assigned_values.items() if v),
+            'value_map': dict((k, v) for k, v in list(assigned_values.items()) if v),
             'date': source_date,
             'classification': generic_structure_classes['key'],
             'layer_geometry': layer_geometry_polygon['key'],
@@ -688,7 +689,7 @@ class TestKeywordWizard(unittest.TestCase):
         # Get layer's inasafe_fields
         inasafe_fields = layer.keywords.get('inasafe_fields')
         self.assertIsNotNone(inasafe_fields)
-        for key, value in inasafe_fields.items():
+        for key, value in list(inasafe_fields.items()):
             # Not check if it's hazard_value_field
             if key == get_compulsory_fields(
                     layer_purpose_exposure['key'])['key']:
@@ -705,10 +706,10 @@ class TestKeywordWizard(unittest.TestCase):
         for parameter in parameters:
             # If not available is chosen, inasafe_fields shouldn't have it
             if parameter.value == no_field:
-                self.assertNotIn(parameter.guid, inasafe_fields.keys())
+                self.assertNotIn(parameter.guid, list(inasafe_fields.keys()))
             # If not available is not chosen, inasafe_fields should have it
             else:
-                self.assertIn(parameter.guid, inasafe_fields.keys())
+                self.assertIn(parameter.guid, list(inasafe_fields.keys()))
 
         # Click next to finish inasafe fields step and go to inasafe default
         # field step

@@ -11,7 +11,12 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from __future__ import print_function
 
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import range
 __author__ = 'bungcip@gmail.com & tim@kartoza.com & ismail@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '01/10/2012'
@@ -23,8 +28,8 @@ import sys
 import logging
 from datetime import datetime
 
-from StringIO import StringIO
-from ConfigParser import ConfigParser, MissingSectionHeaderError, ParsingError
+from io import StringIO
+from configparser import ConfigParser, MissingSectionHeaderError, ParsingError
 
 from qgis.core import (
     QgsRectangle,
@@ -35,14 +40,9 @@ from qgis.core import (
     QgsVectorLayer,
     QgsRasterLayer)
 
-from PyQt4 import QtGui, QtCore
-from PyQt4.QtCore import pyqtSignature, pyqtSlot, QSettings, Qt
-from PyQt4.QtGui import (
-    QDialog,
-    QFileDialog,
-    QTableWidgetItem,
-    QPushButton,
-    QDialogButtonBox)
+from qgis.PyQt import QtGui, QtCore
+from qgis.PyQt.QtCore import pyqtSlot, QSettings, Qt
+from qgis.PyQt.QtWidgets import QDialog, QFileDialog, QTableWidgetItem, QPushButton, QDialogButtonBox
 
 from safe.gui.tools.batch import scenario_runner
 from safe.utilities.gis import extent_string_to_array, read_impact_layer
@@ -225,7 +225,7 @@ class BatchDialog(QDialog, FORM_CLASS):
                 # insert scenarios from file into table widget
                 try:
                     scenarios = read_scenarios(absolute_path)
-                    for key, value in scenarios.iteritems():
+                    for key, value in scenarios.items():
                         append_row(self.table, key, value)
                     parsed_files.append(current_path)
                 except ParsingError:
@@ -262,7 +262,7 @@ class BatchDialog(QDialog, FORM_CLASS):
 
         # run entry function
         function = script.runScript
-        if function.func_code.co_argcount == 1:
+        if function.__code__.co_argcount == 1:
             function(self.iface)
         else:
             function()
@@ -385,7 +385,7 @@ class BatchDialog(QDialog, FORM_CLASS):
                 else:
                     report.append('F: %s\n' % str(name_item))
                     fail_count += 1
-            except Exception, e:  # pylint: disable=W0703
+            except Exception as e:  # pylint: disable=W0703
                 LOGGER.exception('Batch execution failed. The exception: ' +
                                  str(e))
                 report.append('F: %s\n' % str(name_item))
@@ -567,7 +567,8 @@ class BatchDialog(QDialog, FORM_CLASS):
                 # the map canvas. still need improvement
                 layers = self.iface.mapCanvas().layers()
                 for layer in layers:
-                    print layer.name()
+                    # fix_print_with_import
+                    print(layer.name())
                 # noinspection PyBroadException
                 try:
                     status_item.setText(self.tr('Analysis Ok'))
@@ -799,7 +800,7 @@ class BatchDialog(QDialog, FORM_CLASS):
         """
 
         # iterate legend layer to match with input layer
-        reg_layers = reg.instance().mapLayers().iteritems()
+        reg_layers = iter(reg.instance().mapLayers().items())
         for key, value in reg_layers:
             if value.source() == layer_source:
                 return value

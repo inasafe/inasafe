@@ -12,6 +12,8 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
+from builtins import str
+from builtins import range
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '29/01/2011'
@@ -35,7 +37,7 @@ from qgis.core import (
     QgsRasterShader,
     QgsColorRampShader,
     QgsSingleBandPseudoColorRenderer)
-from PyQt4 import QtGui
+from qgis.PyQt import QtGui
 
 from safe.common.exceptions import StyleError
 
@@ -153,7 +155,7 @@ def set_vector_graduated_style(vector_layer, style):
 
         # set data defined properties
         try:
-            for prop, expr in style_class['data_defined'].iteritems():
+            for prop, expr in style_class['data_defined'].items():
                 symbol_layer.setDataDefinedProperty(prop, expr)
         except (NameError, KeyError):
             # NameError is when symbol_layer is not defined (lines for example)
@@ -239,7 +241,7 @@ def set_vector_categorized_style(vector_layer, style):
 
         value = style_class['value']
         colour = style_class['colour']
-        label = unicode(style_class['label'])
+        label = str(style_class['label'])
         colour = QtGui.QColor(colour)
         try:
             border_color = QtGui.QColor(style_class['border_color'])
@@ -279,7 +281,7 @@ def set_vector_categorized_style(vector_layer, style):
 
         # set data defined properties
         try:
-            for prop, expr in style_class['data_defined'].iteritems():
+            for prop, expr in style_class['data_defined'].items():
                 symbol_layer.setDataDefinedProperty(prop, expr)
         except (NameError, KeyError):
             # NameError is when symbol_layer is not defined (lines for example)

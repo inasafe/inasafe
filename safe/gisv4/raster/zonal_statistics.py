@@ -68,7 +68,7 @@ def zonal_stats(raster, vector, callback=None):
         'exposure_sum': output_field
     }
     copy_fields(layer, fields_to_rename)
-    remove_fields(layer, fields_to_rename.keys())
+    remove_fields(layer, list(fields_to_rename.keys()))
     layer.commitChanges()
 
     layer.keywords = raster.keywords.copy()

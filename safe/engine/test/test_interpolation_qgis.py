@@ -34,7 +34,7 @@ class TestInterpolationQGIS(unittest.TestCase):
         # Cut down to make test quick
         # Polygon #799 is the one used in separate test
         H = create_layer(H_all)
-        polygon799 = H_all.getFeatures(QgsFeatureRequest(799)).next()
+        polygon799 = next(H_all.getFeatures(QgsFeatureRequest(799)))
         H.dataProvider().addFeatures([polygon799])
 
         E = QgsVectorLayer(exposure_filename, 'Exposure', 'ogr')

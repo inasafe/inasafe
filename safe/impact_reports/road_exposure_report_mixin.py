@@ -142,7 +142,7 @@ class RoadExposureReportMixin(ReportMixin):
         fields = []
 
         sum_affected = 0
-        for (category, road_breakdown) in self.affected_road_lengths.items():
+        for (category, road_breakdown) in list(self.affected_road_lengths.items()):
             number_affected = sum(road_breakdown.values())
             fields.append([self.label_with_unit(category), number_affected])
             sum_affected += number_affected

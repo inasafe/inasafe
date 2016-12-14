@@ -13,6 +13,8 @@ Contact : ole.moller.nielsen@gmail.com
 Initially this was adapted from shake_event.py and now realtime uses this.
 """
 
+from builtins import str
+from builtins import object
 __author__ = 'ismail@kartoza.com'
 __version__ = '0.5.0'
 __date__ = '11/02/2013'
@@ -304,7 +306,7 @@ class ShakeGrid(object):
                 mmi_tuple = (longitude, latitude, mmi)
                 self.mmi_data.append(mmi_tuple)
 
-        except Exception, e:
+        except Exception as e:
             LOGGER.exception('Event parse failed')
             raise GridXmlParseError(
                 'Failed to parse grid file.\n%s\n%s' % (e.__class__, str(e)))
@@ -435,7 +437,7 @@ class ShakeGrid(object):
         try:
             my_result = call(command, shell=True)
             del my_result
-        except CalledProcessError, e:
+        except CalledProcessError as e:
             LOGGER.exception('Running command failed %s' % command)
             message = (
                 'Error while executing the following shell '
@@ -725,7 +727,7 @@ class ShakeGrid(object):
                 layer,
                 id_field,
                 elevation_field)
-        except Exception, e:
+        except Exception as e:
             LOGGER.exception('Contour creation failed')
             raise ContourCreationError(str(e))
         finally:

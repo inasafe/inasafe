@@ -1,7 +1,7 @@
 # coding=utf-8
 """Definitions relating to fields."""
 
-from PyQt4.QtCore import QVariant
+from qgis.PyQt.QtCore import QVariant
 
 from safe.utilities.i18n import tr
 from safe.definitionsv4.constants import qvariant_whole_numbers

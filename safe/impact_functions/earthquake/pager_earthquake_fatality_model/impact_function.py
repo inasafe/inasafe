@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
+from builtins import range
 __author__ = 'lucernae, dynaryu@gmail.com'
 __date__ = '24/03/15'
 __revision__ = '$Format:%H$'
@@ -63,12 +64,12 @@ class PAGFatalityFunction(ITBFatalityFunction):
             ('displacement_rate', {
                 2: 0.0, 3: 0.0, 4: 0.0, 5: 0.0, 6: 1.0,
                 7: 1.0, 8: 1.0, 9: 1.0, 10: 1.0}),
-            ('mmi_range', range(2, 11)),
+            ('mmi_range', list(range(2, 11))),
             ('step', 0.5),
             # Threshold below which layer should be transparent
             ('tolerance', 0.01),
             ('calculate_displaced_people', True),
-            ('magnitude_bin', numpy.power(10, range(1, 6), dtype=float))
+            ('magnitude_bin', numpy.power(10, list(range(1, 6)), dtype=float))
         ])
 
     def notes(self):

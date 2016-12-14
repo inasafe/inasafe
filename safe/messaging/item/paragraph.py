@@ -8,6 +8,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+from __future__ import absolute_import
 
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
@@ -15,8 +16,8 @@ __date__ = '27/05/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from message_element import MessageElement
-from text import Text
+from .message_element import MessageElement
+from .text import Text
 
 # FIXME (MB) remove when all to_* methods are implemented
 # pylint: disable=W0223

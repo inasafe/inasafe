@@ -13,9 +13,9 @@ from qgis.core import QgsPoint, QgsRectangle, QGis
 from qgis.gui import QgsRubberBand, QgsMapTool, QgsMapToolEmitPoint
 # pylint: enable=no-name-in-module
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import pyqtSignal
+from qgis.PyQt.QtCore import pyqtSignal
 # noinspection PyPackageRequirements
-from PyQt4.QtGui import QColor
+from qgis.PyQt.QtGui import QColor
 
 
 class RectangleMapTool(QgsMapToolEmitPoint):

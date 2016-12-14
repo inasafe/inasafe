@@ -20,7 +20,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import json
 from types import NoneType
-from PyQt4.QtCore import QUrl, QDate, QDateTime, Qt
+from qgis.PyQt.QtCore import QUrl, QDate, QDateTime, Qt
 from datetime import datetime, date
 
 from safe.common.exceptions import MetadataCastError
@@ -54,7 +54,7 @@ class DictionaryProperty(BaseProperty):
                 return json.dumps(self.value)
             except (TypeError, ValueError):
                 string_value = {}
-                for k, v in self.value.items():
+                for k, v in list(self.value.items()):
                     if isinstance(v, QUrl):
                         string_value[k] = v.toString()
                     elif isinstance(v, (QDate, QDateTime)):

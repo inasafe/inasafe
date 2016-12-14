@@ -7,6 +7,7 @@ Usage:
 
 python swap_gml_coords.py <name>.gml
 """
+from __future__ import print_function
 
 import sys
 import os
@@ -85,7 +86,8 @@ def swap_coords(filename):
 
     # Report
     N = len(lines)
-    print 'There are %i lines in %s' % (N, filename)
+    # fix_print_with_import
+    print('There are %i lines in %s' % (N, filename))
 
     # Process
     reading_positions = False
@@ -112,4 +114,5 @@ if __name__ == '__main__':
     if filename.endswith('.gml'):
         swap_coords(filename)
     else:
-        print 'Unsupported file extension:', filename
+        # fix_print_with_import
+        print('Unsupported file extension:', filename)

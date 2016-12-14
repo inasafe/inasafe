@@ -10,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+from builtins import map
 from collections import OrderedDict
 from operator import add
 
@@ -148,10 +149,10 @@ class BuildingExposureReportMixin(ReportMixin):
         """
         affect_types = self._impact_breakdown
         fields = []
-        for (category, building_breakdown) in self.affected_buildings.items():
+        for (category, building_breakdown) in list(self.affected_buildings.items()):
             total_affected = [0] * len(affect_types)
-            for affected_breakdown in building_breakdown.values():
-                for affect_type, number_affected in affected_breakdown.items():
+            for affected_breakdown in list(building_breakdown.values()):
+                for affect_type, number_affected in list(affected_breakdown.items()):
                     count = affect_types.index(affect_type)
                     total_affected[count] += number_affected
             field = [tr(category)]
@@ -163,7 +164,7 @@ class BuildingExposureReportMixin(ReportMixin):
             fields.append(
                 [tr('Affected buildings'), self.total_affected_buildings])
 
-        if self._affected_categories == self.affected_buildings.keys():
+        if self._affected_categories == list(self.affected_buildings.keys()):
             fields.append([
                 tr('Not affected buildings'), self.total_unaffected_buildings]
             )
@@ -182,13 +183,13 @@ class BuildingExposureReportMixin(ReportMixin):
         :returns: Building Breakdown in dictionary format.
         :rtype: dict
         """
-        impact_names = self.affected_buildings.keys()  # e.g. flooded, wet, dry
+        impact_names = list(self.affected_buildings.keys())  # e.g. flooded, wet, dry
         attributes = [tr('Building type')]
         for name in impact_names:
             attributes.append(tr(name))
         # Only show not affected building row if the IF does not use custom
         # affected categories
-        if self._affected_categories == self.affected_buildings.keys():
+        if self._affected_categories == list(self.affected_buildings.keys()):
             attributes.append(tr('Not Affected'))
         attributes.append(tr('Total'))
 
@@ -203,7 +204,7 @@ class BuildingExposureReportMixin(ReportMixin):
             impact_totals.append(0)
         # Only show not affected building row if the IF does not use custom
         # affected categories
-        if self._affected_categories == self.affected_buildings.keys():
+        if self._affected_categories == list(self.affected_buildings.keys()):
             # And one extra total for the unaffected column
             impact_totals.append(0)
         # And one extra total for the cumulative total column
@@ -216,14 +217,14 @@ class BuildingExposureReportMixin(ReportMixin):
             for name in impact_names:
                 if building_type in self.affected_buildings[name]:
                     impact_subtotals.append(
-                        self.affected_buildings[name][
-                            building_type].values()[0])
+                        list(self.affected_buildings[name][
+                            building_type].values())[0])
                 else:
                     impact_subtotals.append(0)
             row.append(tr(building_type_name.capitalize()))
             # Only show not affected building row if the IF does not use custom
             # affected categories
-            if self._affected_categories == self.affected_buildings.keys():
+            if self._affected_categories == list(self.affected_buildings.keys()):
                 # Add not affected subtotals
                 impact_subtotals.append(
                     self.buildings[building_type] - sum(impact_subtotals))
@@ -240,7 +241,7 @@ class BuildingExposureReportMixin(ReportMixin):
             # see http://stackoverflow.com/questions/18713321/element
             #     -wise-addition-of-2-lists-in-python
             # pylint: disable=bad-builtin
-            impact_totals = map(add, impact_totals, impact_subtotals)
+            impact_totals = list(map(add, impact_totals, impact_subtotals))
 
         # list out the TOTALS for this category per impact type
         row = [tr('Total')]
@@ -345,12 +346,12 @@ class BuildingExposureReportMixin(ReportMixin):
         :rtype: int
         """
         count = 0
-        for category, category_breakdown in self.affected_buildings.items():
+        for category, category_breakdown in list(self.affected_buildings.items()):
             if categories and category not in categories:
                 continue
             for current_usage in category_breakdown:
                 if current_usage.lower() == usage.lower():
-                    count += category_breakdown[current_usage].values()[0]
+                    count += list(category_breakdown[current_usage].values())[0]
         return count
 
     @property
@@ -362,15 +363,15 @@ class BuildingExposureReportMixin(ReportMixin):
              tr('Buildings value ($M)'),
              tr('Contents value ($M)')]
         """
-        if len(self.affected_buildings.values()) == 0:
+        if len(list(self.affected_buildings.values())) == 0:
             return []
-        if len(self.affected_buildings.values()[0].values()) == 0:
+        if len(list(self.affected_buildings.values())[0].values()) == 0:
             return []
-        return self.affected_buildings.values()[0].values()[0].keys()
+        return list(self.affected_buildings.values())[0].values()[0].keys()
 
     @property
     def _affected_categories(self):
-        return self.affected_buildings.keys()
+        return list(self.affected_buildings.keys())
 
     @property
     def total_affected_buildings(self):
@@ -382,8 +383,8 @@ class BuildingExposureReportMixin(ReportMixin):
         total_affected = 0
         for category in self._affected_categories:
             category_breakdown = self.affected_buildings[category]
-            for building_breakdown in category_breakdown.values():
-                total_affected += building_breakdown.values()[0]
+            for building_breakdown in list(category_breakdown.values()):
+                total_affected += list(building_breakdown.values())[0]
         return total_affected
 
     @property

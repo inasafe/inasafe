@@ -20,6 +20,7 @@ e.g. ::
 Tim Sutton, Jan 2013
 """
 
+from builtins import str
 import os
 from datetime import datetime
 

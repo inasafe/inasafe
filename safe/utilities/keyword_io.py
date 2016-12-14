@@ -7,6 +7,7 @@
 
 """
 
+from builtins import str
 import logging
 import os
 from ast import literal_eval
@@ -14,8 +15,8 @@ from datetime import datetime
 from os.path import expanduser
 from sqlite3 import OperationalError
 
-from PyQt4.QtCore import QObject, QSettings
-from PyQt4.QtCore import QUrl, QDateTime
+from qgis.PyQt.QtCore import QObject, QSettings
+from qgis.PyQt.QtCore import QUrl, QDateTime
 
 from safe.definitionsv4.utilities import definition
 from safe import messaging as m
@@ -34,7 +35,7 @@ from safe.utilities.metadata import (
     write_iso19115_metadata,
     read_iso19115_metadata,
 )
-from safe.utilities.unicode import get_string
+from safe.utilities.str import get_string
 
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
@@ -182,7 +183,7 @@ class KeywordIO(QObject):
         existing_keywords.update(keywords)
         try:
             self.write_keywords(layer, existing_keywords)
-        except OperationalError, e:
+        except OperationalError as e:
             message = (
                 self.tr('Keyword database path: %s') %
                 self.keyword_db_path)
@@ -237,7 +238,7 @@ class KeywordIO(QObject):
                 keywords[key] = extra_keywords[key]
             write_iso19115_metadata(destination_file, keywords)
             # write_keywords_to_file(new_destination, keywords)
-        except Exception, e:
+        except Exception as e:
             message = self.tr(
                 'Failed to copy keywords file from : \n%s\nto\n%s: %s' % (
                     source_layer.source(), new_destination, str(e)))
@@ -478,12 +479,12 @@ class KeywordIO(QObject):
         :returns: A table to be added into a cell in the keywords table.
         :rtype: safe.messaging.items.table
         """
-        if isinstance(keyword_value, basestring):
+        if isinstance(keyword_value, str):
             keyword_value = literal_eval(keyword_value)
 
         table = m.Table(style_class='table table-condensed')
 
-        for key, value in keyword_value.items():
+        for key, value in list(keyword_value.items()):
             row = m.Row()
             name = definition(key)['name'] if definition(key) else key
             row.add(m.Cell(m.ImportantText(name)))
@@ -520,10 +521,10 @@ class KeywordIO(QObject):
         :returns: A table to be added into a cell in the keywords table.
         :rtype: safe.messaging.items.table
         """
-        if isinstance(keyword_value, basestring):
+        if isinstance(keyword_value, str):
             keyword_value = literal_eval(keyword_value)
         table = m.Table(style_class='table table-condensed')
-        for key, value in keyword_value.items():
+        for key, value in list(keyword_value.items()):
             row = m.Row()
             # First the heading
             name = definition(key)['name'] if definition(key) else key

@@ -1,10 +1,14 @@
 """Implementation of JSONEncoder
 """
 from __future__ import absolute_import
+from builtins import chr
+from builtins import str
+from builtins import range
+from builtins import object
 import re
 from operator import itemgetter
 from decimal import Decimal
-from .compat import u, unichr, binary_type, string_types, integer_types, PY3
+from .compat import u, chr, binary_type, string_types, integer_types, PY3
 def _import_speedups():
     try:
         from . import _speedups
@@ -34,7 +38,7 @@ for i in range(0x20):
     #ESCAPE_DCT.setdefault(chr(i), '\\u{0:04x}'.format(i))
     ESCAPE_DCT.setdefault(chr(i), '\\u%04x' % (i,))
 for i in [0x2028, 0x2029]:
-    ESCAPE_DCT.setdefault(unichr(i), '\\u%04x' % (i,))
+    ESCAPE_DCT.setdefault(chr(i), '\\u%04x' % (i,))
 
 FLOAT_REPR = repr
 
@@ -504,12 +508,12 @@ def _make_iterencode(markers, _default, _encoder, _indent, _floatstr,
             item_separator = _item_separator
         first = True
         if _PY3:
-            iteritems = dct.items()
+            iteritems = list(dct.items())
         else:
-            iteritems = dct.iteritems()
+            iteritems = iter(dct.items())
         if _item_sort_key:
             items = []
-            for k, v in dct.items():
+            for k, v in list(dct.items()):
                 if not isinstance(k, string_types):
                     k = _stringify_key(k)
                     if k is None:

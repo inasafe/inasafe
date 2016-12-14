@@ -1,13 +1,14 @@
 # coding=utf-8
 """This module contains utilities for locating application resources (img etc).
 """
+from builtins import str
 import os
 import codecs
 
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
-from PyQt4 import QtCore, uic
+from qgis.PyQt import QtCore, uic
 
 
 def html_footer():

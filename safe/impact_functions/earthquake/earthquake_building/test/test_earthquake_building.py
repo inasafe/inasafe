@@ -9,6 +9,7 @@ InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
      (at your option) any later version.
 
 """
+from builtins import range
 __author__ = 'akbargumbira@gmail.com'
 __date__ = '11/12/2015'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '

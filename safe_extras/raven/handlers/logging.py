@@ -7,6 +7,7 @@ raven.handlers.logging
 """
 
 from __future__ import absolute_import
+from __future__ import print_function
 
 import datetime
 import logging
@@ -23,7 +24,7 @@ class SentryHandler(logging.Handler, object):
         client = kwargs.get('client_cls', Client)
         if len(args) == 1:
             arg = args[0]
-            if isinstance(arg, basestring):
+            if isinstance(arg, str):
                 self.client = client(dsn=arg)
             elif isinstance(arg, Client):
                 self.client = arg
@@ -48,14 +49,18 @@ class SentryHandler(logging.Handler, object):
 
             # Avoid typical config issues by overriding loggers behavior
             if record.name.startswith('sentry.errors'):
-                print >> sys.stderr, to_string(record.message)
+                # fix_print_with_import
+                print(to_string(record.message), file=sys.stderr)
                 return
 
             return self._emit(record)
         except Exception:
-            print >> sys.stderr, "Top level Sentry exception caught - failed creating log record"
-            print >> sys.stderr, to_string(record.msg)
-            print >> sys.stderr, to_string(traceback.format_exc())
+            # fix_print_with_import
+            print("Top level Sentry exception caught - failed creating log record", file=sys.stderr)
+            # fix_print_with_import
+            print(to_string(record.msg), file=sys.stderr)
+            # fix_print_with_import
+            print(to_string(traceback.format_exc()), file=sys.stderr)
 
             try:
                 self.client.capture('Exception')
@@ -65,7 +70,7 @@ class SentryHandler(logging.Handler, object):
     def _emit(self, record, **kwargs):
         data = {}
 
-        for k, v in record.__dict__.iteritems():
+        for k, v in record.__dict__.items():
             if '.' not in k and k not in ('culprit',):
                 continue
             data[k] = v
@@ -104,7 +109,7 @@ class SentryHandler(logging.Handler, object):
                 extra = {}
 
         # Add in all of the data from the record that we aren't already capturing
-        for k in record.__dict__.keys():
+        for k in list(record.__dict__.keys()):
             if k in ('stack', 'name', 'args', 'msg', 'levelno', 'exc_text', 'exc_info', 'data', 'created', 'levelname', 'msecs', 'relativeCreated'):
                 continue
             if k.startswith('_'):

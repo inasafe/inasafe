@@ -1,4 +1,5 @@
 # coding=utf-8
+from __future__ import print_function
 import json
 import logging
 import os
@@ -120,7 +121,8 @@ def extract_folder_metadata(event_folder):
 if __name__ == '__main__':
     LOGGER.info('-------------------------------------------')
 
-    print sys.argv
+    # fix_print_with_import
+    print(sys.argv)
 
     # if 'INASAFE_LOCALE' in os.environ:
     #     locale_op = os.environ['INASAFE_LOCALE']

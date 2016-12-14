@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from __future__ import print_function
 import os
 import sys
 import logging
@@ -21,7 +22,7 @@ if safe_extras_dir not in sys.path:
     sys.path.append(safe_extras_dir)
 
 from qgis.core import QgsMessageLog
-from PyQt4.QtCore import QSettings
+from qgis.PyQt.QtCore import QSettings
 # pylint: disable=F0401
 # noinspection PyUnresolvedReferences,PyPackageRequirements
 from raven.handlers.logging import SentryHandler
@@ -60,7 +61,8 @@ class QgsLogHandler(logging.Handler):
             message = tr(
                 'Due to memory limitations on this machine, InaSAFE can not '
                 'handle the full log')
-            print message
+            # fix_print_with_import
+            print(message)
             QgsMessageLog.logMessage(message, 'InaSAFE', 0)
 
 

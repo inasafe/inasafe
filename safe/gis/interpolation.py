@@ -6,6 +6,7 @@ interpolation2d. This includes input data validation methods.
 """
 
 
+from builtins import str
 import numpy
 
 from safe.common.exceptions import BoundsError, InaSAFEError
@@ -45,7 +46,7 @@ def validate_coordinate_vector(coordinates, coordinate_name):
     """
     try:
         coordinates = numpy.array(coordinates)
-    except Exception, e:
+    except Exception as e:
         msg = (
             'Input vector %s could not be converted to numpy array: '
             '%s' % (coordinate_name, str(e)))
@@ -101,7 +102,7 @@ def validate_inputs(
 
     try:
         z = numpy.array(z)
-    except Exception, e:
+    except Exception as e:
         msg = (
             'Input vector z could not be converted to a numpy array: '
             '%s' % str(e))

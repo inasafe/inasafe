@@ -1,4 +1,7 @@
 # coding=utf-8
+from __future__ import print_function
+from __future__ import absolute_import
+from builtins import str
 __author__ = 'Jannes123'
 __project_name__ = 'inasafe'
 __filename__ = 'test_inasafe.py'
@@ -13,7 +16,7 @@ usage_dir = os.environ['InaSAFEQGIS'] + '/bin' + '/'
 source_file = file(usage_dir + 'inasafe', 'r')
 import imp
 inasafe = imp.load_source('inasafe', usage_dir, source_file)
-from inasafe import (
+from .inasafe import (
     get_exposure,
     get_hazard,
     get_impact_function_list,
@@ -88,6 +91,7 @@ class TestInasafeCommandLine(unittest.TestCase):
                     re.search(os.path.basename(
                         os.path.splitext(output_name)[0]), name):
                 os.remove(dirname + '/' + name)
-                print dirname + '/' + name
+                # fix_print_with_import
+                print(dirname + '/' + name)
         # close file used for import workaround
         source_file.close()

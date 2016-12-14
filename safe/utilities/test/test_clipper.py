@@ -10,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from builtins import str
 from safe.defaults import get_defaults
 from safe.utilities.gis import qgis_version
 from safe.utilities.keyword_io import KeywordIO
@@ -173,7 +174,7 @@ class ClipperTest(unittest.TestCase):
             _ = clip_layer(raster_layer, small_bounding_box)
         except CallGDALError:
             pass
-        except Exception, e:
+        except Exception as e:
             raise Exception('Exception is not expected, %s' % e)
         else:
             message = "Failed, does not raise exception"

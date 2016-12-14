@@ -10,7 +10,11 @@ OGR C++ reference: http://www.gdal.org/ogr
 
 
 """
+from __future__ import absolute_import
 
+from builtins import zip
+from builtins import str
+from builtins import range
 __author__ = 'Ole Nielsen <ole.moller.nielsen@gmail.com>'
 __revision__ = '$Format:%H$'
 __date__ = '01/11/2010'
@@ -37,21 +41,21 @@ from safe.common.exceptions import (
     GetDataError,
     InaSAFEError
 )
-from layer import Layer
-from projection import Projection
-from geometry import Polygon
-from utilities import verify
-from utilities import DRIVER_MAP, TYPE_MAP
-from utilities import get_geometry_type
-from utilities import is_sequence
-from utilities import array_to_line
-from utilities import calculate_polygon_centroid
-from utilities import geometry_type_to_string
-from utilities import get_ring_data, get_polygon_data
-from utilities import rings_equal
-from utilities import safe_to_qgis_layer
+from .layer import Layer
+from .projection import Projection
+from .geometry import Polygon
+from .utilities import verify
+from .utilities import DRIVER_MAP, TYPE_MAP
+from .utilities import get_geometry_type
+from .utilities import is_sequence
+from .utilities import array_to_line
+from .utilities import calculate_polygon_centroid
+from .utilities import geometry_type_to_string
+from .utilities import get_ring_data, get_polygon_data
+from .utilities import rings_equal
+from .utilities import safe_to_qgis_layer
 from safe.common.utilities import unique_filename
-from safe.utilities.unicode import get_string
+from safe.utilities.str import get_string
 from safe.utilities.i18n import tr
 from safe.utilities.metadata import (
     write_iso19115_metadata,
@@ -161,7 +165,7 @@ class Vector(Layer):
             self.extent = [0, 0, 0, 0]
             return
 
-        if isinstance(data, basestring):
+        if isinstance(data, str):
             self.read_from_file(data)
         # check QGIS_IS_AVAILABLE to avoid QgsVectorLayer undefined error
         elif QGIS_IS_AVAILABLE and isinstance(data, QgsVectorLayer):
@@ -217,7 +221,7 @@ class Vector(Layer):
                 return
 
             # Compute bounding box for each geometry type
-            minx = miny = sys.maxint
+            minx = miny = sys.maxsize
             maxx = maxy = -minx
             if self.is_point_data:
                 A = numpy.array(self.get_geometry())
@@ -691,7 +695,7 @@ class Vector(Layer):
         if data is not None:
             if len(data) > 0:
                 try:
-                    fields = data[0].keys()
+                    fields = list(data[0].keys())
                 except:
                     msg = ('Input parameter "attributes" was specified '
                            'but it does not contain list of dictionaries '
@@ -705,7 +709,7 @@ class Vector(Layer):
                         att = data[0][name]
                         py_type = type(att)
                         # If unicode, convert to string
-                        if isinstance(att, unicode):
+                        if isinstance(att, str):
                             att = get_string(att)
                             py_type = type(att)
                         msg = (
@@ -796,7 +800,7 @@ class Vector(Layer):
                         # in SetField with error: NotImplementedError:
                         # Wrong number of arguments for overloaded function
                         val = float(val)
-                    if isinstance(val, unicode):
+                    if isinstance(val, str):
                         val = get_string(val)
                     elif val is None:
                         val = ''
@@ -848,7 +852,7 @@ class Vector(Layer):
         These are the ones that can be used with get_data
         """
 
-        return self.data[0].keys()
+        return list(self.data[0].keys())
 
     def get_data(self, attribute=None, index=None, copy=False):
         """Get vector attributes.
@@ -895,7 +899,7 @@ class Vector(Layer):
             else:
                 msg = ('Specified attribute %s does not exist in '
                        'vector layer %s. Valid names are %s'
-                       '' % (attribute, self, self.data[0].keys()))
+                       '' % (attribute, self, list(self.data[0].keys())))
                 verify(attribute in self.data[0], msg)
 
                 if index is None:
@@ -1016,7 +1020,7 @@ class Vector(Layer):
         # Input checks
         msg = ('Specfied attribute must be a string. '
                'I got %s' % (type(attribute)))
-        verify(isinstance(attribute, basestring), msg)
+        verify(isinstance(attribute, str), msg)
 
         msg = 'Specified attribute was empty'
         verify(attribute != '', msg)
@@ -1028,7 +1032,7 @@ class Vector(Layer):
         values = self.get_data(attribute)
 
         # Sort and select using Schwarzian transform
-        A = zip(values, self.data, self.geometry)
+        A = list(zip(values, self.data, self.geometry))
         A.sort()
 
         # Pick top N and unpack

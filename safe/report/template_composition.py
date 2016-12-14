@@ -10,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from builtins import object
 __author__ = 'akbargumbira@gmail.com'
 __revision__ = '$Format:%H$'
 __date__ = '21/03/2014'
@@ -22,7 +23,7 @@ try:
     from qgis.core import QgsMapSettings  # pylint: disable=unused-import
 except ImportError:
     from qgis.core import QgsMapRenderer  # pylint: disable=unused-import
-from PyQt4 import QtCore, QtXml
+from qgis.PyQt import QtCore, QtXml
 
 from safe.utilities.i18n import tr
 from safe.common.exceptions import TemplateLoadingError

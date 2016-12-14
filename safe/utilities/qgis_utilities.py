@@ -12,7 +12,7 @@ __copyright__ += 'Disaster Reduction'
 from qgis.gui import QgsMessageBar
 from qgis.core import QGis, QgsProject, QgsMapLayerRegistry, QgsLayerTreeLayer
 from qgis.utils import iface
-from PyQt4.QtGui import QMessageBox, QPushButton
+from qgis.PyQt.QtWidgets import QMessageBox, QPushButton
 
 from safe.utilities.i18n import tr
 

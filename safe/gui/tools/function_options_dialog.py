@@ -19,20 +19,12 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 import logging
-from PyQt4 import QtGui, QtCore
+from qgis.PyQt import QtGui, QtCore
 from collections import OrderedDict
 
 import qgis  # pylint: disable=unused-import
-from PyQt4.QtCore import pyqtSignature, pyqtSlot
-from PyQt4.QtGui import (
-    QGroupBox,
-    QLineEdit,
-    QLabel,
-    QDialog,
-    QCheckBox,
-    QWidget,
-    QScrollArea,
-    QVBoxLayout)
+from qgis.PyQt.QtCore import pyqtSlot
+from qgis.PyQt.QtWidgets import QGroupBox, QLineEdit, QLabel, QDialog, QCheckBox, QWidget, QScrollArea, QVBoxLayout
 from safe.common.parameters.resource_parameter_widget import (
     ResourceParameterWidget)
 
@@ -126,7 +118,7 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
         scroll.setWidget(scroll_widget)
         self.configLayout.addWidget(scroll)
 
-        for key, value in parameters.items():
+        for key, value in list(parameters.items()):
             if key == 'postprocessors':
                 self.build_post_processor_form(value)
             elif key == 'minimum needs':
@@ -193,7 +185,7 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
 
         # create elements for the tab
         values = OrderedDict()
-        for label, parameters in form_elements.items():
+        for label, parameters in list(form_elements.items()):
             parameter_container = ParameterContainer(parameters)
             parameter_container.setup_ui(must_scroll=False)
             scroll_layout.addWidget(parameter_container)
@@ -269,7 +261,7 @@ class FunctionOptionsDialog(QtGui.QDialog, FORM_CLASS):
         """
 
         result = OrderedDict()
-        for name, value in input_dict.items():
+        for name, value in list(input_dict.items()):
             if hasattr(value, '__call__'):
                 result[name] = value()
             elif isinstance(value, dict):

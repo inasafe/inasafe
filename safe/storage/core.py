@@ -3,13 +3,15 @@
    This module provides functionality to read and write
    raster and vector layers from numerical data.
 """
+from __future__ import absolute_import
 
+from builtins import str
 import os
 
 from qgis.core import QgsVectorLayer, QgsRasterLayer
 
-from vector import Vector
-from raster import Raster
+from .vector import Vector
+from .raster import Raster
 from safe.common.utilities import verify, VerificationError
 from safe.common.exceptions import BoundingBoxError, ReadLayerError
 
@@ -139,7 +141,7 @@ def bboxstring2list(bbox_string):
            'format 105.592,-7.809,110.159,-5.647\n'
            'Instead I got %s of type %s.' % (str(bbox_string),
                                              type(bbox_string)))
-    verify(isinstance(bbox_string, basestring), msg)
+    verify(isinstance(bbox_string, str), msg)
 
     fields = bbox_string.split(',')
     msg = ('Bounding box string must have 4 coordinates in the form '
@@ -152,7 +154,7 @@ def bboxstring2list(bbox_string):
     for x in fields:
         try:
             float(x)
-        except ValueError, e:
+        except ValueError as e:
             msg = ('Bounding box %s contained non-numeric entry %s, '
                    'original error was "%s".' % (bbox_string, x, e))
             raise BoundingBoxError(msg)

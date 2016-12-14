@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
    (at your option) any later version.
 """
 
+from builtins import object
 import json
 
 from safe.definitionsv4.layer_purposes import (
@@ -233,28 +234,28 @@ class ImpactFunctionMetadata(object):
         """
         metadata_dict = cls.as_dict()
         expected_metadata = {
-            'id': basestring,
-            'name': basestring,
-            'impact': basestring,
-            'title': basestring,
-            'author': basestring,
-            'date_implemented': basestring,
-            'overview': basestring,
-            'detailed_description': basestring,
-            'hazard_input': basestring,
-            'exposure_input': basestring,
-            'output': basestring,
-            'actions': basestring,
+            'id': str,
+            'name': str,
+            'impact': str,
+            'title': str,
+            'author': str,
+            'date_implemented': str,
+            'overview': str,
+            'detailed_description': str,
+            'hazard_input': str,
+            'exposure_input': str,
+            'output': str,
+            'actions': str,
             'limitations': list,  # list of string
             'citations': list,  # list of string
-            'legend_title': basestring,
-            'legend_units': basestring,
-            'legend_notes': basestring,
+            'legend_title': str,
+            'legend_units': str,
+            'legend_notes': str,
             'layer_requirements': dict
         }
 
-        for key, value in expected_metadata.iteritems():
-            if key not in metadata_dict.keys():
+        for key, value in expected_metadata.items():
+            if key not in list(metadata_dict.keys()):
                 return False, 'key %s not in metadata' % key
 
             if not isinstance(metadata_dict[key], value):
@@ -265,7 +266,7 @@ class ImpactFunctionMetadata(object):
         expected_layer_requirements_keys = ['hazard', 'exposure']
         layer_requirements = metadata_dict['layer_requirements']
         for key in expected_layer_requirements_keys:
-            if key not in layer_requirements.keys():
+            if key not in list(layer_requirements.keys()):
                 return False, 'key %s is not in layer_requirements' % key
 
         expected_hazard_metadata = {
@@ -280,8 +281,8 @@ class ImpactFunctionMetadata(object):
         }
 
         hazard = layer_requirements['hazard']
-        for key, value in expected_hazard_metadata.iteritems():
-            if key not in hazard.keys():
+        for key, value in expected_hazard_metadata.items():
+            if key not in list(hazard.keys()):
                 return False, 'key %s is not in hazard' % key
             if not isinstance(hazard[key], value):
                 message = 'key %s in hazard is not a %s, but %s ' % (
@@ -298,8 +299,8 @@ class ImpactFunctionMetadata(object):
         }
 
         exposure = layer_requirements['exposure']
-        for key, value in expected_exposure_metadata.iteritems():
-            if key not in exposure.keys():
+        for key, value in expected_exposure_metadata.items():
+            if key not in list(exposure.keys()):
                 return False, 'key %s is not in exposure' % key
             if not isinstance(exposure[key], value):
                 message = 'key %s in exposure not a %s, but %s ' % (

@@ -1,10 +1,12 @@
 # coding=utf-8
+from future import standard_library
+standard_library.install_aliases()
 import logging
 import os
 import shutil
 import tempfile
 import unittest
-import urlparse
+import urllib.parse
 
 from headless.celery_app import app
 from headless.celeryconfig import DEPLOY_OUTPUT_DIR, DEPLOY_OUTPUT_URL
@@ -48,7 +50,7 @@ class TestTaskCall(unittest.TestCase):
 
         def convert_dir_to_url(deploy_dir):
             tail_name = deploy_dir.replace(DEPLOY_OUTPUT_DIR, '')
-            return urlparse.urljoin(DEPLOY_OUTPUT_URL, tail_name)
+            return urllib.parse.urljoin(DEPLOY_OUTPUT_URL, tail_name)
 
         if not os.path.exists(test_deploy_dir):
             os.makedirs(test_deploy_dir)

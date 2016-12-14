@@ -15,7 +15,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 # noinspection PyPackageRequirements
 import logging
-from PyQt4.QtGui import QWidget
+from qgis.PyQt.QtWidgets import QWidget
 
 from safe_extras.parameters.select_parameter import SelectParameter
 from safe_extras.parameters.qt_widgets.parameter_container import (
@@ -154,7 +154,7 @@ class StepKwInaSAFEFields(WizardStep, FORM_CLASS):
             select_parameter.is_required = False
             select_parameter.help_text = inasafe_field['description']
             select_parameter.description = inasafe_field['description']
-            select_parameter.element_type = unicode
+            select_parameter.element_type = str
             select_parameter.options_list = option_list
             select_parameter.value = no_field
             # Check if there is already value in the metadata.

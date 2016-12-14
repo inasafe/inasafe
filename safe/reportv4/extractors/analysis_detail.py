@@ -38,7 +38,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
     exposure_layer = impact_report.exposure
     analysis_layer = impact_report.analysis
     analysis_layer_fields = analysis_layer.keywords['inasafe_fields']
-    analysis_feature = analysis_layer.getFeatures().next()
+    analysis_feature = next(analysis_layer.getFeatures())
     exposure_breakdown = impact_report.exposure_breakdown
     exposure_breakdown_fields = exposure_breakdown.keywords['inasafe_fields']
 

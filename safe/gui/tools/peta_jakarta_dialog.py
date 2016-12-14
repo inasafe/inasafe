@@ -15,8 +15,8 @@ import os
 import logging
 import time
 from shutil import copy
-from PyQt4 import QtCore
-from PyQt4.QtCore import QVariant
+from qgis.PyQt import QtCore
+from qgis.PyQt.QtCore import QVariant
 # noinspection PyUnresolvedReferences
 # pylint: disable=unused-import
 from qgis.core import (
@@ -32,12 +32,11 @@ from qgis.core import (
 # pylint: enable=unused-import
 
 # noinspection PyPackageRequirements
-from PyQt4 import QtGui
+from qgis.PyQt import QtGui
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import QSettings, pyqtSignature, QRegExp, pyqtSlot
+from qgis.PyQt.QtCore import QSettings, QRegExp, pyqtSlot
 # noinspection PyPackageRequirements
-from PyQt4.QtGui import (
-    QDialog, QProgressDialog, QMessageBox, QFileDialog, QRegExpValidator)
+from qgis.PyQt.QtWidgets import QDialog, QProgressDialog, QMessageBox, QFileDialog
 
 from safe.common.exceptions import (
     CanceledImportDialogError,

@@ -6,6 +6,7 @@ raven.core.processors
 :license: BSD, see LICENSE for more details.
 """
 
+from builtins import object
 import re
 
 from raven.utils import varmap
@@ -61,7 +62,7 @@ class SanitizePasswordsProcessor(Processor):
         if value is None:
             return
 
-        if isinstance(value, basestring) and self.VALUES_RE.match(value):
+        if isinstance(value, str) and self.VALUES_RE.match(value):
             return self.MASK
 
         if not key:  # key can be a NoneType
@@ -87,7 +88,7 @@ class SanitizePasswordsProcessor(Processor):
             if n not in data:
                 continue
 
-            if isinstance(data[n], basestring) and '=' in data[n]:
+            if isinstance(data[n], str) and '=' in data[n]:
                 # at this point we've assumed it's a standard HTTP query
                 querybits = []
                 for bit in data[n].split('&'):

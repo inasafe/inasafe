@@ -45,7 +45,7 @@ def analysis_result_extractor(impact_report, component_metadata):
     hazard_classification = None
     summary = []
 
-    analysis_feature = analysis_layer.getFeatures().next()
+    analysis_feature = next(analysis_layer.getFeatures())
     analysis_inasafe_fields = analysis_layer.keywords['inasafe_fields']
     # in case there is a classification
     if 'classification' in hazard_layer.keywords:

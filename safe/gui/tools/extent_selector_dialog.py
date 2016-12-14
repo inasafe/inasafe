@@ -29,11 +29,11 @@ import sqlite3
 # pylint: disable=unused-import
 from qgis.core import QGis  # force sip2 api
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import pyqtSignal, pyqtSlot, pyqtSignature, QSettings
+from qgis.PyQt.QtCore import pyqtSignal, pyqtSlot, QSettings
 # noinspection PyPackageRequirements
-from PyQt4 import QtGui
+from qgis.PyQt import QtGui
 # noinspection PyPackageRequirements
-from PyQt4.QtGui import QDialog
+from qgis.PyQt.QtWidgets import QDialog
 from qgis.core import (
     QgsPoint,
     QgsRectangle,

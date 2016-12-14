@@ -6,6 +6,7 @@ This code was taken from http://stackoverflow.com/a/3620972
 
 """
 
+from builtins import object
 import time
 import inspect
 from functools import wraps

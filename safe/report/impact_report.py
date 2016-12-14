@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
+from builtins import object
 __author__ = 'akbargumbira@gmail.com'
 __revision__ = '$Format:%H$'
 __date__ = '21/03/2014'
@@ -33,7 +34,7 @@ try:
 except ImportError:
     from qgis.core import QgsMapRenderer
 
-from PyQt4.QtCore import QUrl
+from qgis.PyQt.QtCore import QUrl
 from safe.defaults import disclaimer
 from safe.common.utilities import temp_dir, unique_filename
 from safe.common.version import get_version
@@ -114,7 +115,7 @@ class ImpactReport(object):
         :param template: Path to composer template
         :type template: str
         """
-        if isinstance(template, basestring) and os.path.exists(template):
+        if isinstance(template, str) and os.path.exists(template):
             self._template = template
         else:
             self._template = resources_path(
@@ -205,7 +206,7 @@ class ImpactReport(object):
         :param north_arrow_path: Path to the north arrow image.
         :type north_arrow_path: str
         """
-        if isinstance(north_arrow_path, basestring) and os.path.exists(
+        if isinstance(north_arrow_path, str) and os.path.exists(
                 north_arrow_path):
             self._north_arrow = north_arrow_path
         else:
@@ -231,7 +232,7 @@ class ImpactReport(object):
         :param logo: Path to the organisation logo image.
         :type logo: str
         """
-        if isinstance(logo, basestring) and os.path.exists(logo):
+        if isinstance(logo, str) and os.path.exists(logo):
             self._organisation_logo = logo
         else:
             self._organisation_logo = supporters_logo_path()
@@ -259,7 +260,7 @@ class ImpactReport(object):
         :param text: Disclaimer text
         :type text: str
         """
-        if not isinstance(text, basestring):
+        if not isinstance(text, str):
             self._disclaimer = disclaimer()
         else:
             self._disclaimer = text

@@ -47,7 +47,7 @@ def minimum_needs_extractor(impact_report, component_metadata):
 
     needs = []
     # group the needs by frequency
-    for key, freq in frequencies.iteritems():
+    for key, freq in frequencies.items():
         group = {
             'header': tr('Relief items to be provided %s') % tr(key),
             'total_header': tr('Total'),
@@ -66,7 +66,7 @@ def minimum_needs_extractor(impact_report, component_metadata):
                 total_affected_field['field_name'])
             # need_index = analysis_layer.fieldNameIndex(
             #     need_parameter.name)
-            feat = analysis_layer.getFeatures().next()
+            feat = next(analysis_layer.getFeatures())
             value = feat[need_index] * need_parameter.value
             # value = feat[need_index]
             item = {

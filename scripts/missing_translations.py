@@ -1,5 +1,6 @@
 # coding=utf-8
 """Report missing translations for given locales"""
+from __future__ import print_function
 
 import os
 import sys
@@ -61,4 +62,5 @@ if __name__ == '__main__':
 
         if status != 'OK':
             msg += status
-            print msg
+            # fix_print_with_import
+            print(msg)

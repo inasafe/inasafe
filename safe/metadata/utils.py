@@ -13,6 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 """
 
+from builtins import range
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
 __date__ = '27/05/2015'

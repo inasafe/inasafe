@@ -6,7 +6,7 @@ Clip and mask a hazard layer.
 Issue https://github.com/inasafe/inasafe/issues/3186
 """
 import logging
-from PyQt4.QtCore import QPyNullVariant
+from qgis.PyQt.QtCore import QPyNullVariant
 from qgis.core import (
     QGis,
     QgsGeometry,

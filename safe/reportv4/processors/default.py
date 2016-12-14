@@ -9,10 +9,10 @@ Module for basic renderer we support. Currently we have:
 import io
 import logging
 import os
-from PyQt4 import QtXml
+from qgis.PyQt import QtXml
 from tempfile import mkdtemp
 
-from PyQt4.QtCore import QUrl
+from qgis.PyQt.QtCore import QUrl
 from jinja2.environment import Environment
 from jinja2.loaders import FileSystemLoader
 from qgis.core import (

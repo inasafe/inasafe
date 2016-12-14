@@ -14,7 +14,8 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-from safe.utilities.unicode import get_unicode, get_string
+from builtins import str
+from safe.utilities.str import get_unicode, get_string
 from safe.messaging.item.message_element import MessageElement
 
 __author__ = 'tim@kartoza.com'
@@ -34,7 +35,7 @@ class InaSAFEError(RuntimeError):
         :param message: The optional error message.
         :type message: str, unicode, MessageElement
         """""
-        if isinstance(message, unicode):
+        if isinstance(message, str):
             super(InaSAFEError, self).__init__(get_string(message))
             self.message = message
 
@@ -50,8 +51,8 @@ class InaSAFEError(RuntimeError):
             pass
 
         elif isinstance(message, BaseException):
-            super(InaSAFEError, self).__init__(unicode(message))
-            self.message = unicode(message)
+            super(InaSAFEError, self).__init__(str(message))
+            self.message = str(message)
         # This shouldn't happen...
         else:
             raise TypeError

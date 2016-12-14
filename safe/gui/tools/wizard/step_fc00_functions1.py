@@ -14,7 +14,8 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 # noinspection PyPackageRequirements
-from PyQt4 import QtCore, QtGui
+from builtins import range
+from qgis.PyQt import QtCore, QtGui
 from PyQt4.QtCore import pyqtSignature
 
 from safe.definitionsv4.hazard import hazard_all

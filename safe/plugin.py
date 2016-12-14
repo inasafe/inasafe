@@ -10,7 +10,10 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from __future__ import print_function
 
+from builtins import str
+from builtins import object
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '10/01/2011'
@@ -32,21 +35,10 @@ from qgis.core import (
     QgsMapLayer,
     QgsProject)
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import (
-    QLocale,
-    QTranslator,
-    QCoreApplication,
-    Qt,
-    QSettings)
+from qgis.PyQt.QtCore import QLocale, QTranslator, QCoreApplication, Qt, QSettings
 # noinspection PyPackageRequirements
-from PyQt4.QtGui import (
-    QAction,
-    QIcon,
-    QApplication,
-    QToolButton,
-    QMenu,
-    QLineEdit,
-    QInputDialog)
+from qgis.PyQt.QtWidgets import QAction, QApplication, QToolButton, QMenu, QLineEdit, QInputDialog
+from qgis.PyQt.QtGui import QIcon
 
 from safe.common.version import release_status
 from safe.common.exceptions import TranslationLoadError
@@ -478,7 +470,7 @@ class Plugin(object):
             'inasafe/developer_mode', False, type=bool)
         if not final_release and self.developer_mode:
 
-            default_package = unicode(settings.value(
+            default_package = str(settings.value(
                 'inasafe/testPackage', 'safe', type=str))
             msg = self.tr('Run tests in %s' % default_package)
 
@@ -609,7 +601,8 @@ class Plugin(object):
             del (sys.modules[module])
         for module in sys.modules:
             if 'inasafe' in module:
-                print module
+                # fix_print_with_import
+                print(module)
 
         # Lets also clean up all the path additions that were made
         package_path = os.path.abspath(os.path.join(
@@ -673,7 +666,7 @@ class Plugin(object):
         """Select the test package."""
         settings = QSettings()
         default_package = 'safe'
-        user_package = unicode(settings.value(
+        user_package = str(settings.value(
             'inasafe/testPackage', default_package, type=str))
 
         test_package, _ = QInputDialog.getText(
@@ -693,12 +686,12 @@ class Plugin(object):
 
     def run_tests(self):
         """Run unit tests in the python console."""
-        from PyQt4.QtGui import QDockWidget
+        from qgis.PyQt.QtWidgets import QDockWidget
         main_window = self.iface.mainWindow()
         action = main_window.findChild(QAction, 'mActionShowPythonDialog')
         action.trigger()
         settings = QSettings()
-        package = unicode(settings.value(
+        package = str(settings.value(
             'inasafe/testPackage', 'safe', type=str))
         for child in main_window.findChildren(QDockWidget, 'PythonConsole'):
             if child.objectName() == 'PythonConsole':

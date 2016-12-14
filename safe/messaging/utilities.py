@@ -10,7 +10,7 @@ InaSAFE Disaster risk assessment tool by AusAid -**ImpactCalculator.**
 """
 
 from safe.utilities.i18n import tr
-from safe.utilities.unicode import get_unicode
+from safe.utilities.str import get_unicode
 from safe import messaging as m
 LOGO_ELEMENT = m.Brand()
 

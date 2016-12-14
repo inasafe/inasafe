@@ -11,6 +11,10 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import range
 import time
 
 __author__ = 'tim@kartoza.com'
@@ -22,7 +26,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import shutil
 # noinspection PyPep8Naming
-import cPickle as pickle
+import pickle as pickle
 import math
 import logging
 from datetime import datetime
@@ -50,20 +54,10 @@ from qgis.core import (
     QgsFeatureRequest,
     QgsVectorDataProvider)
 
-from PyQt4.QtCore import (
-    QCoreApplication,
-    QObject,
-    QVariant,
-    QFileInfo,
-    QUrl,
-    QSize,
-    Qt,
-    QTranslator)
+from qgis.PyQt.QtCore import QCoreApplication, QObject, QVariant, QFileInfo, QUrl, QSize, Qt, QTranslator
 # noinspection PyPackageRequirements
-from PyQt4.QtXml import QDomDocument
-from PyQt4.QtGui import (
-    QPainter,
-    QImage)
+from qgis.PyQt.QtXml import QDomDocument
+from qgis.PyQt.QtGui import QPainter, QImage
 
 from safe.test.utilities import get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -586,7 +580,7 @@ class ShakeEvent(QObject):
             # Get a {int, QVariant} back
             raster_values = raster_layer.dataProvider().identify(
                 point, QgsRaster.IdentifyFormatValue).results()
-            raster_values = raster_values.values()
+            raster_values = list(raster_values.values())
             if not raster_values or len(raster_values) < 1:
                 # position not found on raster
                 continue

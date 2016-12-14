@@ -1,7 +1,12 @@
 # coding=utf-8
 """Tests for engine."""
+from __future__ import print_function
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import range
 import unittest
-import cPickle
+import pickle
 import numpy
 import os
 from os.path import join
@@ -442,7 +447,7 @@ class TestEngine(unittest.TestCase):
     @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_user_directory_when_saving(self):
         # These imports must be inside the test.
-        from PyQt4.QtCore import QCoreApplication, QSettings
+        from qgis.PyQt.QtCore import QCoreApplication, QSettings
         from qgis.core import QgsApplication
 
         # noinspection PyCallByClass,PyArgumentList
@@ -839,7 +844,7 @@ class TestEngine(unittest.TestCase):
 
                 # This is known to be outside inundation area so should
                 # near zero
-                print
+                print()
                 assert numpy.allclose(interpolated_depth, 0.0,
                                       rtol=1.0e-12, atol=1.0e-12)
 
@@ -1034,7 +1039,7 @@ class TestEngine(unittest.TestCase):
         for i in range(N):
             attrs = I_attributes[i]
             msg = ('Did not find default attribute %s in %s'
-                   % (DEFAULT_ATTRIBUTE, attrs.keys()))
+                   % (DEFAULT_ATTRIBUTE, list(attrs.keys())))
             assert DEFAULT_ATTRIBUTE in attrs, msg
 
             # Count items using default attribute
@@ -1123,7 +1128,7 @@ class TestEngine(unittest.TestCase):
         # Check projection mismatch is caught
         try:
             assign_hazard_values_to_exposure_data(H, E)
-        except VerificationError, e:
+        except VerificationError as e:
             msg = ('Projection mismatch should have been caught: %s'
                    % str(e))
             assert 'Projections' in str(e), msg
@@ -1153,7 +1158,7 @@ class TestEngine(unittest.TestCase):
         test_polygon = ensure_numeric(test_polygon)
 
         fid = open(lines_filename)
-        test_lines = cPickle.load(fid)
+        test_lines = pickle.load(fid)
         fid.close()
 
         # Clip
@@ -1304,7 +1309,7 @@ class TestEngine(unittest.TestCase):
             # Check that default attribute is present
             attrs = I_attributes[i]
             msg = ('Did not find default attribute %s in %s'
-                   % (DEFAULT_ATTRIBUTE, attrs.keys()))
+                   % (DEFAULT_ATTRIBUTE, list(attrs.keys())))
             assert DEFAULT_ATTRIBUTE in attrs, msg
 
             # Count items using default attribute
@@ -1417,7 +1422,7 @@ class TestEngine(unittest.TestCase):
             attrs = I_attributes[i]
 
             msg = ('Did not find default attribute %s in %s'
-                   % (DEFAULT_ATTRIBUTE, attrs.keys()))
+                   % (DEFAULT_ATTRIBUTE, list(attrs.keys())))
             assert DEFAULT_ATTRIBUTE in attrs, msg
 
             # Count items using default attribute
@@ -1744,7 +1749,7 @@ class TestEngine(unittest.TestCase):
             exposure_layer.keywords['layer_purpose'] = ''
             try:
                 impact_function._calculate_impact()
-            except VerificationError, e:
+            except VerificationError as e:
                 # Check expected error message
                 assert 'No value found' in str(e)
             else:
@@ -1762,7 +1767,7 @@ class TestEngine(unittest.TestCase):
 
             try:
                 impact_function._calculate_impact()
-            except VerificationError, e:
+            except VerificationError as e:
                 # Check expected error message
                 assert 'did not have required keyword' in str(e)
             else:

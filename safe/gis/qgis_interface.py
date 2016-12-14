@@ -33,7 +33,7 @@ from qgis.core import QgsMapLayerRegistry, QGis, QgsMapLayer, QgsProject
 from qgis.gui import (
     QgsMapCanvasLayer,
     QgsMessageBar)
-from PyQt4.QtCore import QObject, pyqtSlot, pyqtSignal
+from qgis.PyQt.QtCore import QObject, pyqtSlot, pyqtSignal
 from safe.gis.qgis_legend_interface import QgisLegend
 from qgis.gui import QgsLayerTreeMapCanvasBridge
 
@@ -110,7 +110,7 @@ class QgisInterface(QObject):
             :rtype: QgsAlgorithm  ?
             """
             Processing.initialize()
-            for provider in Processing.algs.values():
+            for provider in list(Processing.algs.values()):
                 if name in provider:
                     return provider[name]
             return None
@@ -146,7 +146,7 @@ class QgisInterface(QObject):
     def layers(self):
         # It's for processing module
         # simulate iface.legendInterface().layers()
-        return QgsMapLayerRegistry.instance().mapLayers().values()
+        return list(QgsMapLayerRegistry.instance().mapLayers().values())
 
     @pyqtSlot('QStringList')
     def addLayers(self, layers):

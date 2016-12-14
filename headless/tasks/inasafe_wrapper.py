@@ -1,10 +1,12 @@
 # coding=utf-8
+from future import standard_library
+standard_library.install_aliases()
 import datetime
 import logging
 import os
 import shutil
 import tempfile
-import urlparse
+import urllib.parse
 
 from headless.celery_app import app
 from headless.celeryconfig import DEPLOY_OUTPUT_DIR, DEPLOY_OUTPUT_URL
@@ -103,7 +105,7 @@ def run_analysis(hazard, exposure, function, aggregation=None,
     # new_name is a file path to archived layer
     # we need to return the url
     new_basename = os.path.basename(new_name)
-    output_url = urlparse.urljoin(
+    output_url = urllib.parse.urljoin(
         DEPLOY_OUTPUT_URL,
         '%s/%s' % (date_folder, new_basename)
     )

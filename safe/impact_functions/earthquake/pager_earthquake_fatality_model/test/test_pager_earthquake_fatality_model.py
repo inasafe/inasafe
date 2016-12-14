@@ -9,6 +9,7 @@ InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
      (at your option) any later version.
 
 """
+from builtins import str
 __author__ = 'akbargumbira@gmail.com, dynaryu@gmail.com'
 __date__ = '11/12/2015'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -47,7 +48,7 @@ class TestPagerEarthquakeFatalityFunction(unittest.TestCase):
                            9: 5.219e-3,
                            10: 3.121e-2}
         result = impact_function.compute_fatality_rate()
-        for item in expected_result.keys():
+        for item in list(expected_result.keys()):
             message = 'Expecting %s, but it returns %s' % (
                 expected_result[item], result[item])
             self.assertAlmostEqual(expected_result[item],
@@ -112,7 +113,7 @@ class TestPagerEarthquakeFatalityFunction(unittest.TestCase):
             'total_fatalities': 0,  # should be zero FIXME
             'total_displaced': 200
         }
-        for key_ in expected_result.keys():
+        for key_ in list(expected_result.keys()):
             result = impact_layer.get_keywords(key_)
             message = 'Expecting %s, but it returns %s' % (
                 expected_result[key_], result)
@@ -153,9 +154,9 @@ class TestPagerEarthquakeFatalityFunction(unittest.TestCase):
             10: 0
         }
 
-        for key_ in expected_result.keys():
+        for key_ in list(expected_result.keys()):
             result = impact_layer.get_keywords(key_)
-            for item in expected_result[key_].keys():
+            for item in list(expected_result[key_].keys()):
                 message = 'Expecting %s, but it returns %s' % (
                     expected_result[key_][item], result[item])
                 self.assertAlmostEqual(

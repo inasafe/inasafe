@@ -1,5 +1,6 @@
 # coding=utf-8
 """Test for Impact Function."""
+from __future__ import print_function
 
 import unittest
 import json
@@ -25,7 +26,7 @@ from safe.definitionsv4.post_processors import (
     post_processor_elderly,
     post_processor_size
 )
-from safe.utilities.unicode import byteify
+from safe.utilities.str import byteify
 from safe.test.utilities import load_test_vector_layer, check_inasafe_fields
 from safe.impact_function_v4.impact_function import ImpactFunction
 
@@ -110,7 +111,8 @@ def run_scenario(scenario, use_debug=False):
 
     impact_function_result = impact_function.run()
     if use_debug:
-        print impact_function.datastore.uri.absolutePath()
+        # fix_print_with_import
+        print(impact_function.datastore.uri.absolutePath())
 
     for layer in impact_function.outputs:
         check_inasafe_fields(layer)
@@ -137,7 +139,7 @@ class TestImpactFunction(unittest.TestCase):
         self.assertDictEqual(
             exposure_layer.keywords['inasafe_fields'], expected_inasafe_fields)
 
-        fields = impact_function.exposure.dataProvider().fieldNameMap().keys()
+        fields = list(impact_function.exposure.dataProvider().fieldNameMap().keys())
         self.assertIn(
             exposure_layer.keywords['inasafe_fields']['exposure_type_field'],
             fields
@@ -224,7 +226,7 @@ class TestImpactFunction(unittest.TestCase):
         }
 
         path = standard_data_path('scenario')
-        for scenario, enabled in scenarii.iteritems():
+        for scenario, enabled in scenarii.items():
             if enabled:
                 self.test_scenario(join(path, scenario + '.json'))
 
@@ -248,8 +250,10 @@ class TestImpactFunction(unittest.TestCase):
             scenario, expected_steps, expected_outputs = read_json_flow(
                 json_file)
             if scenario.get('enable', True):
-                print "Test JSON scenario : "
-                print json_file
+                # fix_print_with_import
+                print("Test JSON scenario : ")
+                # fix_print_with_import
+                print(json_file)
                 self.test_scenario(json_file)
                 count += 1
         self.assertEqual(len(json_files), count)
@@ -279,10 +283,10 @@ class TestImpactFunction(unittest.TestCase):
         ]
 
         # Check if new field is added
-        impact_fields = impact_layer.dataProvider().fieldNameMap().keys()
+        impact_fields = list(impact_layer.dataProvider().fieldNameMap().keys())
         for post_processor in used_post_processors:
             # noinspection PyTypeChecker
-            for output_value in post_processor['output'].values():
+            for output_value in list(post_processor['output'].values()):
                 field_name = output_value['value']['field_name']
                 self.assertIn(field_name, impact_fields)
         print_attribute_table(impact_layer, 1)

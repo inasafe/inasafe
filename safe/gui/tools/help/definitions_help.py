@@ -1,6 +1,7 @@
 # coding=utf-8
 """Help text for the dock widget."""
 
+from builtins import str
 from safe.utilities.i18n import tr
 from safe import messaging as m
 from safe.messaging import styles
@@ -59,7 +60,7 @@ def content():
     #  Analysis workflow
     ##
 
-    steps = definitions.analysis_steps.values()
+    steps = list(definitions.analysis_steps.values())
     header = m.Heading(tr('Analysis steps'), **INFO_STYLE)
     message.add(header)
     for step in steps:
@@ -231,9 +232,9 @@ def definition_to_message(definition, heading_style=None):
             else:
                 for field_type in field['type']:
                     if field_types:
-                        field_types += ', %s' % unicode(field_type)
+                        field_types += ', %s' % str(field_type)
                     else:
-                        field_types = unicode(field_type)
+                        field_types = str(field_type)
             row.add(m.Cell(field_types))
             row.add(m.Cell(field['precision']))
             table.add(row)

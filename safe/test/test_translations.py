@@ -12,6 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
+from builtins import str
 import unittest
 import os
 import re
@@ -20,7 +21,7 @@ from safe.utilities.i18n import tr
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import QCoreApplication, QTranslator
+from qgis.PyQt.QtCore import QCoreApplication, QTranslator
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -36,12 +37,12 @@ class SafeTranslationsTest(unittest.TestCase):
 
     def setUp(self):
         """Runs before each test."""
-        if 'LANG' in os.environ.iterkeys():
+        if 'LANG' in iter(os.environ.keys()):
             os.environ.__delitem__('LANG')
 
     def tearDown(self):
         """Runs after each test."""
-        if 'LANG' in os.environ.iterkeys():
+        if 'LANG' in iter(os.environ.keys()):
             os.environ.__delitem__('LANG')
 
     # Skipped because it's not easy to unload qt translation

@@ -27,7 +27,7 @@ from qgis.core import (
     QgsGeometry,
     QgsRectangle)
 
-from PyQt4.QtCore import QVariant
+from qgis.PyQt.QtCore import QVariant
 
 from safe.test.utilities import standard_data_path, get_qgis_app
 from safe.gis.qgis_vector_tools import (

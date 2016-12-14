@@ -29,7 +29,7 @@ from math import ceil
 import numpy
 from collections import OrderedDict
 
-from PyQt4.QtCore import QPyNullVariant
+from qgis.PyQt.QtCore import QPyNullVariant
 
 from safe.defaults import default_minimum_needs
 from safe.gui.tools.minimum_needs.needs_profile import filter_needs_parameters
@@ -104,11 +104,11 @@ def evacuated_population_needs(population, minimum_needs):
         resource['amount'] = int(ceil(population * float(amount_pp)))
         resource['table name'] = resource_name
         # Cleaning NULL
-        for key, value in resource.items():
+        for key, value in list(resource.items()):
             if isinstance(value, QPyNullVariant):
                 resource[key] = None
             if isinstance(value, dict):
-                for inner_key, inner_value in value.items():
+                for inner_key, inner_value in list(value.items()):
                     if isinstance(inner_value, QPyNullVariant):
                         value[inner_key] = None
         population_needs_by_frequency[resource['frequency']].append(resource)
@@ -169,7 +169,7 @@ def get_key_for_value(value, value_map):
     :returns: A key for the value.
     :rtype: str
     """
-    for key, values in value_map.iteritems():
+    for key, values in value_map.items():
         if value in values:
             return key
     return None

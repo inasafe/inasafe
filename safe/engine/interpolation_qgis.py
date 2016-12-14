@@ -9,6 +9,7 @@
 
 """
 
+from builtins import range
 from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsCoordinateTransform,
@@ -19,7 +20,7 @@ from qgis.core import (
     QgsRectangle,
     QgsSpatialIndex
 )
-from PyQt4.QtCore import QVariant
+from qgis.PyQt.QtCore import QVariant
 
 from safe.gis.qgis_vector_tools import create_layer
 
@@ -102,9 +103,9 @@ def interpolate_polygon_polygon(source, target, wgs84_extent):
                 # we have found intersection between source and target
                 f_result = QgsFeature(result_fields)
                 f_result.setGeometry(f.geometry())
-                for i in xrange(target_field_count):
+                for i in range(target_field_count):
                     f_result[i] = f[i]
-                for i in xrange(source_field_count):
+                for i in range(source_field_count):
                     f_result[i + target_field_count] = source_attributes[
                         source_id][i]
                 f_result['polygon_id'] = source_id
@@ -117,7 +118,7 @@ def interpolate_polygon_polygon(source, target, wgs84_extent):
         if not has_matching_source:
             f_result = QgsFeature(result_fields)
             f_result.setGeometry(f.geometry())
-            for i in xrange(target_field_count):
+            for i in range(target_field_count):
                 f_result[i] = f[i]
             result_features.append(f_result)
 

@@ -11,6 +11,9 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from builtins import str
+from builtins import range
+from builtins import object
 __author__ = 'tim@kartoza.com'
 __version__ = '0.5.0'
 __date__ = '2/08/2012'
@@ -194,7 +197,7 @@ class TestShakeEvent(unittest.TestCase):
             working_dir=working_dir,
             event_id=SHAKE_ID,
             data_is_local_flag=True)
-        values = range(1, 11)
+        values = list(range(1, 11))
         expected_result = ['None', 'None', 'None', 'None', 'Very light',
                            'Light', 'Moderate', 'Mod/Heavy', 'Heavy',
                            'Very heavy']
@@ -607,7 +610,7 @@ class TestShakeEvent(unittest.TestCase):
                 'location_description': event_dict.get('shake-grid-location')
             }
 
-            for key, value in earthquake_data.iteritems():
+            for key, value in earthquake_data.items():
                 if isinstance(value, datetime.datetime):
                     self.assertEqual(
                         datetime.datetime.strptime(
