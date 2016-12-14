@@ -103,11 +103,6 @@ class GetDataError(InaSAFEError):
     suggestion = 'Please ask the developers of InaSAFE to add a suggestion.'
 
 
-class PostProcessorError(InaSAFEError):
-    """Raised when requested import cannot be performed if QGIS is too old."""
-    suggestion = 'Please ask the developers of InaSAFE to add a suggestion.'
-
-
 class WindowsError(InaSAFEError):
     """For windows specific errors."""
     suggestion = 'Please ask the developers of InaSAFE to add a suggestion.'
@@ -133,11 +128,6 @@ class InvalidLayerError(InaSAFEError):
     suggestion = 'Please ask the developers of InaSAFE to add a suggestion.'
 
 
-class ShapefileCreationError(InaSAFEError):
-    """Raised if an error occurs creating the cities file"""
-    suggestion = 'Please ask the developers of InaSAFE to add a suggestion.'
-
-
 class ZeroImpactException(InaSAFEError):
     """Raised if an impact function return zero impact"""
     suggestion = 'Please ask the developers of InaSAFE to add a suggestion.'
@@ -146,12 +136,6 @@ class ZeroImpactException(InaSAFEError):
 class WrongDataTypeException(InaSAFEError):
     """Raised if expected and received data types are different"""
     suggestion = 'Please ask the developers of InaSAFE to add a suggestion.'
-
-
-class RadiiException(InaSAFEError):
-    """Raised if radii for volcano buffer is not as we expect."""
-    suggestion = ('Please make sure the radii for volcano buffer are '
-                  'monotonically increasing.')
 
 
 class InvalidClipGeometryError(InaSAFEError):
@@ -164,24 +148,8 @@ class FileNotFoundError(InaSAFEError):
     pass
 
 
-class TestNotImplementedError(InaSAFEError):
-    """Custom exception for when a test exists only as a stub."""
-    pass
-
-
 class FunctionParametersError(InaSAFEError):
     """Custom exception for when function parameters are not valid."""
-    pass
-
-
-class InsufficientParametersError(InaSAFEError):
-    """Custom exception for when insufficient parameters have been set."""
-    pass
-
-
-class NoFunctionsFoundError(InaSAFEError):
-    """Custom exception for when a no impact calculation
-    functions can be found."""
     pass
 
 
@@ -207,11 +175,6 @@ class HashNotFoundError(InaSAFEError):
     pass
 
 
-class StyleInfoNotFoundError(InaSAFEError):
-    """Custom exception for when a no styleInfo can be found."""
-    pass
-
-
 class InvalidParameterError(InaSAFEError):
     """Custom exception for when an invalid parameter is passed to a function.
     """
@@ -227,13 +190,6 @@ class NoKeywordsFoundError(InaSAFEError):
 class TranslationLoadError(InaSAFEError):
     """Custom exception handler for whe translation file fails
     to load."""
-    pass
-
-
-class LegendLayerError(InaSAFEError):
-    """An exception raised when trying to create a legend from
-    a QgsMapLayer that does not have suitable characteristics to
-    allow a legend to be created from it."""
     pass
 
 
@@ -254,12 +210,6 @@ class InsufficientOverlapError(InaSAFEError):
     pass
 
 
-class InvalidBoundingBoxError(InaSAFEError):
-    """An exception raised if an error occurs during extent calculation
-    because one of the extents is invalid."""
-    pass
-
-
 class StyleError(InaSAFEError):
     """An exception relating to reading / generating GIS styles"""
     pass
@@ -270,20 +220,9 @@ class MemoryLayerCreationError(InaSAFEError):
     pass
 
 
-class MethodUnavailableError(InaSAFEError):
-    """Raised if the requested import cannot be performed dur to qgis being
-    to old"""
-    pass
-
-
 class CallGDALError(InaSAFEError):
     """Raised if failed to call gdal command. Indicate by error message that is
     not empty"""
-    pass
-
-
-class ImportDialogError(InaSAFEError):
-    """Raised if import process failed."""
     pass
 
 
@@ -294,21 +233,6 @@ class FileMissingError(InaSAFEError):
 
 class CanceledImportDialogError(InaSAFEError):
     """Raised if import process canceled"""
-    pass
-
-
-class InvalidAggregatorError(InaSAFEError):
-    """Raised if aggregator state is not valid when trying to run it."""
-    pass
-
-
-class AggregationError(InaSAFEError):
-    """Raised if aggregator state is not valid when trying to run it."""
-    pass
-
-
-class HelpFileMissingError(InaSAFEError):
-    """Raised if a help file cannot be found."""
     pass
 
 
@@ -324,20 +248,6 @@ class UnsupportedProviderError(InaSAFEError):
 
 class TemplateLoadingError(InaSAFEError):
     """Raised when loading the template is error."""
-    pass
-
-
-class TemplateElementMissingError(InaSAFEError):
-    """Raised when some element ids are missing from template."""
-
-
-class ReportCreationError(InaSAFEError):
-    """Raised when error occurs during report generation."""
-    pass
-
-
-class EmptyDirectoryError(InaSAFEError):
-    """Raised when output directory is empty string path."""
     pass
 
 
@@ -361,21 +271,6 @@ class InvalidKeywordsForProcessingAlgorithm(InaSAFEError):
     pass
 
 
-class InvalidAggregationKeywords(InaSAFEError):
-    """Raised when the aggregation keywords is invalid."""
-    pass
-
-
-class InvalidExposureKeywords(InaSAFEError):
-    """Raised when the exposure keywords is invalid."""
-    pass
-
-
-class InvalidHazardKeywords(InaSAFEError):
-    """Raised when the hazard keywords is invalid."""
-    pass
-
-
 class InvalidExtentError(InaSAFEError):
     """Raised if an extent is not valid."""
     pass
@@ -383,13 +278,6 @@ class InvalidExtentError(InaSAFEError):
 
 class NoAttributeInLayerError(InaSAFEError):
     """Raised if the attribute not exists in the vector layer"""
-    pass
-
-
-class NoImpactClassFoundError(InaSAFEError):
-    """Raised if the impacted object class is not present in the calculation
-    results
-    """
     pass
 
 

@@ -55,9 +55,6 @@ from safe.definitionsv4.versions import inasafe_keyword_version
 from safe.common.exceptions import (
     InaSAFEError,
     InvalidExtentError,
-    InvalidAggregationKeywords,
-    InvalidHazardKeywords,
-    InvalidExposureKeywords,
     NoKeywordsFoundError,
 )
 from safe.impact_function_v4.postprocessors import (
