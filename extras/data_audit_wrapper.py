@@ -9,8 +9,9 @@ the data_audit process.
 
 These will generally be specific to each software project.
 """
+from __future__ import absolute_import
 
-from data_audit import IP_verified as IP_engine
+from .data_audit import IP_verified as IP_engine
 
 # Ignore source code files
 extensions_to_ignore = ['.py','.c', '.h', '.cpp', '.f',

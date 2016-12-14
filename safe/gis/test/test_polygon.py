@@ -1,4 +1,6 @@
 # coding=utf-8
+from builtins import str
+from builtins import range
 import unittest
 import numpy
 import os
@@ -1984,13 +1986,13 @@ class TestPolygon(unittest.TestCase):
         assert len(inside_lines) == 2
         assert len(outside_lines) == 2
 
-        for _, values in inside_lines.items():
+        for _, values in list(inside_lines.items()):
             for line in values:
                 assert isinstance(line, numpy.ndarray)
                 assert len(line.shape) == 2
                 assert line.shape[1] == 2
 
-        for _, values in outside_lines.items():
+        for _, values in list(outside_lines.items()):
             for line in values:
                 assert isinstance(line, numpy.ndarray)
                 assert len(line.shape) == 2

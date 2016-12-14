@@ -21,7 +21,7 @@ from os.path import join
 # pylint: disable=unused-import
 from qgis.core import QGis  # force sip2 api
 
-from PyQt4.QtCore import QDir
+from qgis.PyQt.QtCore import QDir
 
 from safe.test.utilities import (
     get_qgis_app,

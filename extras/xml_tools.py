@@ -1,6 +1,8 @@
 """Basic XML utilities based on minidom - the built in Document Object Model
 """
+from __future__ import print_function
 
+from builtins import str
 import sys
 from xml.dom import minidom, Node
 from safe.common.utilities import verify
@@ -11,10 +13,11 @@ def print_tree(n, indent=0):
         #if n.nodeType != Node.ELEMENT_NODE:
         #    break
 
-        print ' '*indent,\
+        # fix_print_with_import
+        print(' '*indent,\
               'Node name: "%s",' %n.nodeName,\
               'Node type: "%s",' %n.nodeType,\
-              'Node value: "%s"' %str(n.nodeValue).strip()
+              'Node value: "%s"' %str(n.nodeValue).strip())
 
 
         print_tree(n.firstChild, indent+4)
@@ -22,7 +25,8 @@ def print_tree(n, indent=0):
 
 
 def pretty_print_tree(n, indent=0):
-    print n
+    # fix_print_with_import
+    print(n)
 
 def parse(fid):
     """Parse XML file descriptor and return DOM object.
@@ -139,7 +143,7 @@ class XML_element(dict):
         s = tab = ' '*indent
 
         s += '<%s>' %self.tag
-        if isinstance(self.value, basestring):
+        if isinstance(self.value, str):
             s += remove_whitespace(self.value)
         else:
             s += '\n'
@@ -169,7 +173,7 @@ class XML_element(dict):
             if node.tag == key:
                 # print 'node tag = %s, node value = %s' %(node.tag, node.value)
 
-                if isinstance(node.value, basestring):
+                if isinstance(node.value, str):
                     result.append(str(node.value))
                     #return node.value
                 else:
@@ -205,7 +209,7 @@ class XML_element(dict):
 
         s = tab = ' '*indent
         s += '%s: ' %self.tag
-        if isinstance(self.value, basestring):
+        if isinstance(self.value, str):
             s += self.value
         else:
             s += '\n'
@@ -233,25 +237,25 @@ def xml2object(xml, verbose=False):
     # This would depend on minidom's parse function
 
     # Input tests
-    if isinstance(xml, basestring):
+    if isinstance(xml, str):
         fid = open(xml)
     else:
         fid = xml
 
     try:
         dom = parse(fid)
-    except Exception, e:
+    except Exception as e:
         # Throw filename into dom exception
         msg = 'XML file "%s" could not be parsed.\n' %fid.name
         msg += 'Error message from parser: "%s"' %str(e)
-        raise Exception, msg
+        raise Exception(msg)
 
     try:
         xml_object = dom2object(dom)
-    except Exception, e:
+    except Exception as e:
         msg = 'Could not convert %s into XML object.\n' %fid.name
         msg += str(e)
-        raise Exception, msg
+        raise Exception(msg)
 
     return xml_object
 
@@ -289,7 +293,7 @@ def dom2object(node):
                 msg = 'A text node was followed by a non-text tag. This is not allowed.\n'
                 msg += 'Offending text node: "%s" ' %str(textnode_encountered)
                 msg += 'was followed by node named: "<%s>"' %str(n.nodeName)
-                raise Exception, msg
+                raise Exception(msg)
 
 
             value.append(dom2object(n))

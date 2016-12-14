@@ -8,6 +8,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+from __future__ import absolute_import
 
 __author__ = 'marco@opengis.ch'
 __revision__ = '$Format:%H$'
@@ -32,6 +33,6 @@ from .item.bulleted_list import BulletedList
 from .item.cell import Cell
 from .item.row import Row
 from .item.table import Table
-from message import Message
-from error_message import ErrorMessage
-from styles import PROGRESS_UPDATE_STYLE
+from .message import Message
+from .error_message import ErrorMessage
+from .styles import PROGRESS_UPDATE_STYLE

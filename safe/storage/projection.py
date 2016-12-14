@@ -1,6 +1,8 @@
 """**Class projection**
 """
 
+from builtins import str
+from builtins import object
 from osgeo import osr
 
 # The projection string depends on the gdal version
@@ -31,7 +33,7 @@ def proj4_to_dict(P):
     return D
 
 
-class Projection:
+class Projection(object):
     """Represents projections associated with layers
     """
 
@@ -126,7 +128,7 @@ class Projection:
 
         try:
             other = Projection(other)
-        except Exception, e:
+        except Exception as e:
             msg = ('Argument to == must be a spatial reference or object'
                    ' of class Projection. I got %s with error '
                    'message: %s' % (str(other), e))

@@ -12,6 +12,9 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
+from past.builtins import cmp
+from builtins import str
+from builtins import range
 import re
 import codecs
 import json
@@ -22,7 +25,7 @@ import unicodedata
 import webbrowser
 from collections import OrderedDict
 
-from PyQt4.QtCore import QPyNullVariant
+from qgis.PyQt.QtCore import QPyNullVariant
 
 from safe.definitionsv4.versions import inasafe_keyword_version, \
     keyword_version_compatibilities
@@ -33,7 +36,7 @@ from safe.defaults import disclaimer
 from safe.messaging import styles, Message
 from safe.messaging.error_message import ErrorMessage
 from safe.utilities.i18n import tr
-from safe.utilities.unicode import get_unicode
+from safe.utilities.str import get_unicode
 
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
@@ -154,8 +157,8 @@ def reorder_dictionary(unordered_dictionary, expected_key_order):
 
     # Check if something is missing see #2969
     if len(unordered_dictionary) != len(ordered_dictionary):
-        for key, value in unordered_dictionary.items():
-            if key not in ordered_dictionary.keys():
+        for key, value in list(unordered_dictionary.items()):
+            if key not in list(ordered_dictionary.keys()):
                 ordered_dictionary[key] = value
 
     return ordered_dictionary
@@ -185,7 +188,7 @@ def main_type(feature_type, value_mapping):
     if feature_type.__class__.__name__ == 'QPyNullVariant':
         return other
 
-    for key, values in value_mapping.iteritems():
+    for key, values in value_mapping.items():
         if feature_type in values:
             feature_class = key
             break
@@ -435,7 +438,7 @@ def is_keyword_version_supported(
     if inasafe_version == keyword_version:
         return True
 
-    if inasafe_version in keyword_version_compatibilities.keys():
+    if inasafe_version in list(keyword_version_compatibilities.keys()):
         if keyword_version in keyword_version_compatibilities[inasafe_version]:
             return True
         else:

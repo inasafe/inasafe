@@ -10,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+from builtins import object
 from safe.utilities.i18n import tr
 
 __author__ = 'Christian Christelis <christian@kartoza.com>'

@@ -11,7 +11,10 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from __future__ import print_function
+from __future__ import absolute_import
 
+from builtins import str
 __author__ = 'ismail@kartoza.com'
 __version__ = '0.5.0'
 __date__ = '21/02/2013'
@@ -21,7 +24,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 import shutil
 import sys
-from utilities import is_event_id
+from .utilities import is_event_id
 import logging
 
 from realtime.utilities import realtime_logger_name
@@ -178,11 +181,14 @@ def update_report(source_path, public_path, last_event_id):
 
     # copy file
     shutil.copy2(png_path, latest_png_path)
-    print 'copied to ' + latest_png_path
+    # fix_print_with_import
+    print('copied to ' + latest_png_path)
     shutil.copy2(pdf_path, latest_pdf_path)
-    print 'copied to ' + latest_pdf_path
+    # fix_print_with_import
+    print('copied to ' + latest_pdf_path)
     shutil.copy2(pdf_path, public_pdf_path)
-    print 'copied to ' + public_pdf_path
+    # fix_print_with_import
+    print('copied to ' + public_pdf_path)
 
 
 def main():
@@ -210,18 +216,22 @@ def main():
     last_guide = get_last_event_id(guide_events)
 
     public_files = get_directory_listing(public_path, earthquake_map_filter)
-    print ' public_files', public_files
+    # fix_print_with_import
+    print(' public_files', public_files)
     public_events = [get_event_id(x) for x in public_files]
-    print 'public_events', public_events
+    # fix_print_with_import
+    print('public_events', public_events)
     last_public = get_last_event_id(public_events)
 
     if last_guide > last_public:
         last_event_id = last_guide
-        print 'There is new eq impact map.'
+        # fix_print_with_import
+        print('There is new eq impact map.')
         # do_something_here()
         update_report(source_path, public_path, last_event_id)
     else:
-        print 'Not new eq impact, everything is safe.'
+        # fix_print_with_import
+        print('Not new eq impact, everything is safe.')
 
 if __name__ == '__main__':
     main()

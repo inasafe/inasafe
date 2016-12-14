@@ -69,7 +69,7 @@ def update_value_map(layer, callback=None):
 
     value_map = keywords['value_map']
     reversed_value_map = {}
-    for inasafe_class, values in value_map.iteritems():
+    for inasafe_class, values in value_map.items():
         for val in values:
             reversed_value_map[val] = inasafe_class
 

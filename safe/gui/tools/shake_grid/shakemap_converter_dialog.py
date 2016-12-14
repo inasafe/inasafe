@@ -23,11 +23,11 @@ import os
 
 from qgis.core import QgsRasterLayer, QgsMapLayerRegistry
 # noinspection PyPackageRequirements
-from PyQt4 import QtGui, QtCore
+from qgis.PyQt import QtGui, QtCore
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import QFileInfo, pyqtSignature, pyqtSlot
+from qgis.PyQt.QtCore import QFileInfo, pyqtSlot
 # noinspection PyPackageRequirements
-from PyQt4.QtGui import QDialogButtonBox, QDialog, QFileDialog, QMessageBox
+from qgis.PyQt.QtWidgets import QDialogButtonBox, QDialog, QFileDialog, QMessageBox
 from qgis.utils import iface
 
 from safe.common.version import get_version
@@ -205,7 +205,7 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         """Autoconnect slot activated when open input tool button is clicked.
         """
         # noinspection PyCallByClass,PyTypeChecker
-        filename = QFileDialog.getOpenFileName(
+        filename, __ = QFileDialog.getOpenFileName(
             self, self.tr('Input file'), 'grid.xml',
             self.tr('Raw grid file (*.xml)'))
         self.input_path.setText(filename)
@@ -215,7 +215,7 @@ class ShakemapConverterDialog(QDialog, FORM_CLASS):
         """Autoconnect slot activated when open output tool button is clicked.
         """
         # noinspection PyCallByClass,PyTypeChecker
-        filename = QFileDialog.getSaveFileName(
+        filename, __ = QFileDialog.getSaveFileName(
             self, self.tr('Output file'), 'grid.tif',
             self.tr('Raster file (*.tif)'))
         self.output_path.setText(filename)

@@ -1,7 +1,8 @@
 # Geometry types
 
 
-class Geometry:
+from builtins import object
+class Geometry(object):
     """Common class for geometries
     """
 

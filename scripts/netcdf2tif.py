@@ -2,6 +2,7 @@
 
 This requires scientific python
 """
+from __future__ import print_function
 
 import os
 import argparse
@@ -31,8 +32,9 @@ if __name__ == '__main__':
                               'flooded or not'))
 
     args = parser.parse_args()
-    print args
-    print
+    # fix_print_with_import
+    print(args)
+    print()
 
     tif_filename = convert_netcdf2tif(args.filename, args.hours,
                                       verbose=True)
@@ -40,7 +42,8 @@ if __name__ == '__main__':
     # Tag each polygon with Y if it contains at least one pixel
     # exceeding a specific threshold (e.g. 0.3m).
     if args.regions is not None:
-        print 'Tagging %s as "affected" or not' % args.regions
+        # fix_print_with_import
+        print('Tagging %s as "affected" or not' % args.regions)
         polygons = read_layer(args.regions)
         grid = read_layer(tif_filename)
         res = tag_polygons_by_grid(polygons, grid,
@@ -77,4 +80,5 @@ if __name__ == '__main__':
         polyforecast_filename = (os.path.splitext(tif_filename)[0] +
                                  '_regions.shp')
         v.write_to_file(polyforecast_filename)
-        print 'Wrote tagged polygons to %s' % polyforecast_filename
+        # fix_print_with_import
+        print('Wrote tagged polygons to %s' % polyforecast_filename)

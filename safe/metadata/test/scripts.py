@@ -1,5 +1,6 @@
 # coding=utf-8
 """Scripts for metadata."""
+from __future__ import print_function
 
 from safe.metadata.exposure_layer_metadata import ExposureLayerMetadata
 from safe.metadata.hazard_layer_metadata import HazardLayerMetadata
@@ -23,12 +24,16 @@ def print_properties():
     ]
 
     for the_metadata in metadata:
-        print '## ', the_metadata.__name__
-        print 'No | Property | Type'
-        print '------------ | ------------ | -------------'
+        # fix_print_with_import
+        print('## ', the_metadata.__name__)
+        # fix_print_with_import
+        print('No | Property | Type')
+        # fix_print_with_import
+        print('------------ | ------------ | -------------')
         for i, item in enumerate(the_metadata._standard_properties.items()):
-            print '%s | %s | %s' % (i + 1, item[0], item[1].split(':')[-1])
-        print
+            # fix_print_with_import
+            print('%s | %s | %s' % (i + 1, item[0], item[1].split(':')[-1]))
+        print()
 
 
 if __name__ == '__main__':

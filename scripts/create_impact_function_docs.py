@@ -2,6 +2,7 @@
 """**Generating impact function documentation**
 
 """
+from __future__ import print_function
 
 __author__ = 'Ismail Sunni <ismailsunni@yahoo.co.id>'
 __version__ = '1.0.0'
@@ -78,7 +79,7 @@ def generate_documentation(functions_metadata, docstrings):
     impact_function_doc_path = os.path.join(
         get_inasafe_documentation_path(), doc_dir, impact_func_doc_dir)
 
-    for name, docstring in functions_metadata.items():
+    for name, docstring in list(functions_metadata.items()):
         rst_content = name
         rst_content += '\n' + '=' * len(name) + '\n\n'
         # provide documentation
@@ -86,7 +87,7 @@ def generate_documentation(functions_metadata, docstrings):
         rst_content += '\n' + '-' * len('Overview') + '\n\n'
 
         if type(docstring) is dict or type(docstring) is OrderedDict:
-            for dictionary_key, value in docstring.items():
+            for dictionary_key, value in list(docstring.items()):
                 if dictionary_key == 'detailed_description':
                     continue
                 pretty_key = get_pretty_key(dictionary_key)
@@ -98,7 +99,7 @@ def generate_documentation(functions_metadata, docstrings):
                 rst_content += '\n\n'
             rst_content += 'Details'
             rst_content += '\n' + '-' * len('Details') + '\n\n'
-            if (('detailed_description' in docstring.keys()) and (len(
+            if (('detailed_description' in list(docstring.keys())) and (len(
                     docstring['detailed_description']) > 0)):
                 rst_content += docstring['detailed_description']
             else:
@@ -112,7 +113,8 @@ def generate_documentation(functions_metadata, docstrings):
             rst_content += '\n' + '-' * len('Doc String') + '\n\n'
             rst_content += doc_string
 
-        print 'Creating doc string for %s' % name
+        # fix_print_with_import
+        print('Creating doc string for %s' % name)
 
         write_rst_file(
             impact_function_doc_path, name.replace(' ', ''), rst_content)
@@ -152,8 +154,10 @@ def create_index(list_function_id=None):
 
 def usage():
     """Helper function for telling how to use the script."""
-    print 'Usage:'
-    print 'python %s [optional path to inasafe-doc directory]' % sys.argv[0]
+    # fix_print_with_import
+    print('Usage:')
+    # fix_print_with_import
+    print('python %s [optional path to inasafe-doc directory]' % sys.argv[0])
 
 
 if __name__ == '__main__':
@@ -179,18 +183,21 @@ if __name__ == '__main__':
     doc_strings = {}
     # Get all impact functions
     plugins_dict = get_plugins()
-    for key, impact_function in plugins_dict.iteritems():
+    for key, impact_function in plugins_dict.items():
         if not is_function_enabled(impact_function):
             continue
         metadata[key] = get_metadata(key)
         doc_strings[key] = get_doc_string(impact_function)
-    function_ids = [x['unique_identifier'] for x in metadata.values()]
-    print 'Generating index page for Impact Functions Documentation'
+    function_ids = [x['unique_identifier'] for x in list(metadata.values())]
+    # fix_print_with_import
+    print('Generating index page for Impact Functions Documentation')
     create_index(function_ids)
 
     create_dirs(documentation_path)
 
-    print 'Generating page for Impact Functions'
+    # fix_print_with_import
+    print('Generating page for Impact Functions')
     generate_documentation(metadata, doc_strings)
 
-    print 'Fin.'
+    # fix_print_with_import
+    print('Fin.')

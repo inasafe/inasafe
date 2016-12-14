@@ -19,9 +19,9 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 # noinspection PyPackageRequirements
-from PyQt4 import QtCore, QtGui
+from qgis.PyQt import QtCore, QtGui
 # noinspection PyPackageRequirements
-from PyQt4.QtGui import QPixmap
+from qgis.PyQt.QtGui import QPixmap
 
 from safe.utilities.resources import resources_path
 from safe.gui.tools.wizard.wizard_strings import (
@@ -77,10 +77,10 @@ class StepFcFunction(WizardStep, FORM_CLASS):
 
         # Set description label
         description = '<table border="0">'
-        if "name" in imfunc.keys():
+        if "name" in list(imfunc.keys()):
             description += '<tr><td><b>%s</b>: </td><td>%s</td></tr>' % (
                 self.tr('Function'), imfunc['name'])
-        if "overview" in imfunc.keys():
+        if "overview" in list(imfunc.keys()):
             description += '<tr><td><b>%s</b>: </td><td>%s</td></tr>' % (
                 self.tr('Overview'), imfunc['overview'])
         description += '</table>'

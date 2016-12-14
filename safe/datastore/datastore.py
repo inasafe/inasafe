@@ -11,21 +11,21 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
+from builtins import object
 from abc import ABCMeta, abstractmethod
 from qgis.core import QgsMapLayer, QgsRasterLayer, QgsVectorLayer, QGis
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.i18n import tr
 from safe.test.utilities import monkey_patch_keywords
+from future.utils import with_metaclass
 
 
-class DataStore(object):
+class DataStore(with_metaclass(ABCMeta, object)):
     """
     DataStore
 
     .. versionadded:: 4.0
     """
-
-    __metaclass__ = ABCMeta
 
     def __init__(self, uri):
         """

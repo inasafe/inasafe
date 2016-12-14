@@ -6,6 +6,7 @@ raven.middleware
 :license: BSD, see LICENSE for more details.
 """
 
+from builtins import object
 import sys
 from raven.utils.wsgi import get_current_url, get_headers, \
   get_environ

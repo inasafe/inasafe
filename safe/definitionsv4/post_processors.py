@@ -2,7 +2,7 @@
 
 """Definitions relating to post-processing."""
 
-from PyQt4.QtCore import QPyNullVariant
+from qgis.PyQt.QtCore import QPyNullVariant
 
 from qgis.core import QgsDistanceArea
 
@@ -45,7 +45,7 @@ def multiply(**kwargs):
     :rtype: float
     """
     result = 1
-    for i in kwargs.values():
+    for i in list(kwargs.values()):
         if isinstance(i, QPyNullVariant) or not i:
             # If one value is null, we return null.
             return i

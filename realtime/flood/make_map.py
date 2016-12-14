@@ -1,4 +1,6 @@
 # coding=utf-8
+from __future__ import print_function
+from builtins import str
 import json
 import logging
 
@@ -101,7 +103,8 @@ def process_event(working_directory, locale_option='en', dummy_folder=None):
 if __name__ == '__main__':
     LOGGER.info('-------------------------------------------')
 
-    print sys.argv
+    # fix_print_with_import
+    print(sys.argv)
 
     if 'INASAFE_LOCALE' in os.environ:
         locale_option = os.environ['INASAFE_LOCALE']

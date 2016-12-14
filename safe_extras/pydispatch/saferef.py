@@ -1,4 +1,8 @@
 """Refactored "safe reference" from dispatcher.py"""
+from __future__ import print_function
+from past.builtins import cmp
+from builtins import str
+from builtins import object
 import weakref, traceback
 
 def safeRef(target, onDelete = None):
@@ -13,7 +17,7 @@ def safeRef(target, onDelete = None):
 		weakref or a BoundMethodWeakref) as argument.
 	"""
 	if hasattr(target, 'im_self'):
-		if target.im_self is not None:
+		if target.__self__ is not None:
 			# Turn a bound method into a BoundMethodWeakref instance.
 			# Keep track of these instances for lookup by disconnect().
 			assert hasattr(target, 'im_func'), """safeRef target %r has im_self, but no im_func, don't know how to create reference"""%( target,)
@@ -109,26 +113,27 @@ class BoundMethodWeakref(object):
 				try:
 					if callable( function ):
 						function( self )
-				except Exception, e:
+				except Exception as e:
 					try:
 						traceback.print_exc()
-					except AttributeError, err:
-						print '''Exception during saferef %s cleanup function %s: %s'''%(
+					except AttributeError as err:
+						# fix_print_with_import
+						print('''Exception during saferef %s cleanup function %s: %s'''%(
 							self, function, e
-						)
+						))
 		self.deletionMethods = [onDelete]
 		self.key = self.calculateKey( target )
-		self.weakSelf = weakref.ref(target.im_self, remove)
-		self.weakFunc = weakref.ref(target.im_func, remove)
-		self.selfName = str(target.im_self)
-		self.funcName = str(target.im_func.__name__)
+		self.weakSelf = weakref.ref(target.__self__, remove)
+		self.weakFunc = weakref.ref(target.__func__, remove)
+		self.selfName = str(target.__self__)
+		self.funcName = str(target.__func__.__name__)
 	def calculateKey( cls, target ):
 		"""Calculate the reference key for this reference
 
 		Currently this is a two-tuple of the id()'s of the
 		target object and the target function respectively.
 		"""
-		return (id(target.im_self),id(target.im_func))
+		return (id(target.__self__),id(target.__func__))
 	calculateKey = classmethod( calculateKey )
 	def __str__(self):
 		"""Give a friendly representation of the object"""
@@ -138,7 +143,7 @@ class BoundMethodWeakref(object):
 			self.funcName,
 		)
 	__repr__ = __str__
-	def __nonzero__( self ):
+	def __bool__( self ):
 		"""Whether we are still a valid reference"""
 		return self() is not None
 	def __cmp__( self, other ):

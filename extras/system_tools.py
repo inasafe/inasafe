@@ -1,12 +1,19 @@
 """Implementation of tools to do with system administration made
 as platform independent as possible.
 """
+from __future__ import print_function
 
+from future import standard_library
+from functools import reduce
+standard_library.install_aliases()
+from builtins import str
+from builtins import input
+from builtins import map
 import sys
 import os
 import string
-import urllib
-import urllib2
+import urllib.request, urllib.parse, urllib.error
+import urllib.request, urllib.error, urllib.parse
 import getpass
 import tarfile
 import warnings
@@ -154,7 +161,7 @@ def string_to_char(l):
     if l == ['']:
         l = [' ']
 
-    maxlen = reduce(max, map(len, l))
+    maxlen = reduce(max, list(map(len, l)))
     ll = [x.ljust(maxlen) for x in l]
     result = []
     for s in ll:
@@ -170,7 +177,7 @@ def string_to_char(l):
 def char_to_string(ll):
     '''Convert 2-D list of chars to 1-D list of strings.'''
 
-    return map(string.rstrip, [''.join(x) for x in ll])
+    return list(map(string.rstrip, [''.join(x) for x in ll]))
 
 ################################################################################
 
@@ -236,16 +243,18 @@ def get_web_file(file_url, file_name, auth=None, blocksize=1024*1024):
 
     # Simple fetch, if fails, check for proxy error
     try:
-        urllib.urlretrieve(file_url, file_name)
+        urllib.request.urlretrieve(file_url, file_name)
         return (True, auth)     # no proxy, no auth required
-    except IOError, e:
+    except IOError as e:
         if e[1] == 407:     # proxy error
             pass
         elif e[1][0] == 113:  # no route to host
-            print 'No route to host for %s' % file_url
+            # fix_print_with_import
+            print('No route to host for %s' % file_url)
             return (False, auth)    # return False
         else:
-            print 'Unknown connection error to %s' % file_url
+            # fix_print_with_import
+            print('Unknown connection error to %s' % file_url)
             return (False, auth)
 
     # We get here if there was a proxy error, get file through the proxy
@@ -265,21 +274,26 @@ def get_web_file(file_url, file_name, auth=None, blocksize=1024*1024):
 
     # Get auth info from user if still not supplied
     if httpproxy is None or proxyuser is None or proxypass is None:
-        print '-'*72
+        # fix_print_with_import
+        print('-'*72)
         print ('You need to supply proxy authentication information.')
         if httpproxy is None:
-            httpproxy = raw_input('                    proxy server: ')
+            httpproxy = input('                    proxy server: ')
         else:
-            print '         HTTP proxy was supplied: %s' % httpproxy
+            # fix_print_with_import
+            print('         HTTP proxy was supplied: %s' % httpproxy)
         if proxyuser is None:
-            proxyuser = raw_input('                  proxy username: ')
+            proxyuser = input('                  proxy username: ')
         else:
-            print 'HTTP proxy username was supplied: %s' % proxyuser
+            # fix_print_with_import
+            print('HTTP proxy username was supplied: %s' % proxyuser)
         if proxypass is None:
             proxypass = getpass.getpass('                  proxy password: ')
         else:
-            print 'HTTP proxy password was supplied: %s' % '*'*len(proxyuser)
-        print '-'*72
+            # fix_print_with_import
+            print('HTTP proxy password was supplied: %s' % '*'*len(proxyuser))
+        # fix_print_with_import
+        print('-'*72)
 
     # the proxy URL cannot start with 'http://', we add that later
     httpproxy = httpproxy.lower()
@@ -287,17 +301,19 @@ def get_web_file(file_url, file_name, auth=None, blocksize=1024*1024):
         httpproxy = httpproxy.replace('http://', '', 1)
 
     # open remote file
-    proxy = urllib2.ProxyHandler({'http': 'http://' + proxyuser
+    proxy = urllib.request.ProxyHandler({'http': 'http://' + proxyuser
                                               + ':' + proxypass
                                               + '@' + httpproxy})
-    authinfo = urllib2.HTTPBasicAuthHandler()
-    opener = urllib2.build_opener(proxy, authinfo, urllib2.HTTPHandler)
-    urllib2.install_opener(opener)
+    authinfo = urllib.request.HTTPBasicAuthHandler()
+    opener = urllib.request.build_opener(proxy, authinfo, urllib.request.HTTPHandler)
+    urllib.request.install_opener(opener)
     try:
-        webget = urllib2.urlopen(file_url)
-    except urllib2.HTTPError, e:
-        print 'Error received from proxy:\n%s' % str(e)
-        print 'Possibly the user/password is wrong.'
+        webget = urllib.request.urlopen(file_url)
+    except urllib.error.HTTPError as e:
+        # fix_print_with_import
+        print('Error received from proxy:\n%s' % str(e))
+        # fix_print_with_import
+        print('Possibly the user/password is wrong.')
         return (False, (httpproxy, proxyuser, proxypass))
 
     # transfer file to local filesystem
@@ -323,7 +339,7 @@ def get_web_file(file_url, file_name, auth=None, blocksize=1024*1024):
 def tar_file(files, tarname):
     '''Compress a file or directory into a tar file.'''
 
-    if isinstance(files, basestring):
+    if isinstance(files, str):
         files = [files]
 
     o = tarfile.open(tarname, 'w:gz')

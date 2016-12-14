@@ -5,12 +5,16 @@ raven.transport.threaded
 :copyright: (c) 2010 by the Sentry Team, see AUTHORS for more details.
 :license: BSD, see LICENSE for more details.
 """
+from __future__ import print_function
 
+from future import standard_library
+standard_library.install_aliases()
+from builtins import object
 import atexit
 import time
 import threading
 import os
-from Queue import Queue
+from queue import Queue
 
 from raven.transport.base import HTTPTransport
 
@@ -33,12 +37,16 @@ class AsyncWorker(object):
         size = self._queue.qsize()
         if size:
             timeout = self.options['shutdown_timeout']
-            print "Sentry is attempting to send %s pending error messages" % size
-            print "Waiting up to %s seconds" % timeout
+            # fix_print_with_import
+            print("Sentry is attempting to send %s pending error messages" % size)
+            # fix_print_with_import
+            print("Waiting up to %s seconds" % timeout)
             if os.name == 'nt':
-                print "Press Ctrl-Break to quit"
+                # fix_print_with_import
+                print("Press Ctrl-Break to quit")
             else:
-                print "Press Ctrl-C to quit"
+                # fix_print_with_import
+                print("Press Ctrl-C to quit")
             self.stop(timeout=timeout)
 
     def start(self):

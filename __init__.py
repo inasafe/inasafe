@@ -13,7 +13,9 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from __future__ import absolute_import
 
+from builtins import str
 __author__ = 'tim@kartoza.com'
 __date__ = '10/01/2011'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -36,11 +38,7 @@ sys.path.extend([os.path.abspath(os.path.join(
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
 
-from PyQt4.QtCore import (
-    QLocale,
-    QTranslator,
-    QCoreApplication,
-    QSettings)
+from qgis.PyQt.QtCore import QLocale, QTranslator, QCoreApplication, QSettings
 
 # Setup internationalisation for the plugin.
 #
@@ -83,5 +81,5 @@ if os.path.exists(translation_path):
 # noinspection PyDocstring,PyPep8Naming
 def classFactory(iface):
     """Load Plugin class from file Plugin."""
-    from safe.plugin import Plugin
+    from .safe.plugin import Plugin
     return Plugin(iface)

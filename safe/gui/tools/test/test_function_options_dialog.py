@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from builtins import str
 from safe_extras.parameters.boolean_parameter import BooleanParameter
 from safe_extras.parameters.dict_parameter import DictParameter
 
@@ -35,9 +36,8 @@ from collections import OrderedDict
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import Qt
-from PyQt4.QtGui import QLineEdit, QCheckBox, QPushButton, QListWidget, \
-    QTreeWidget
+from qgis.PyQt.QtCore import Qt
+from qgis.PyQt.QtWidgets import QLineEdit, QCheckBox, QPushButton, QListWidget, QTreeWidget
 
 from safe.test.utilities import get_qgis_app
 from safe.defaults import (

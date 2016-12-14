@@ -21,10 +21,10 @@ def function( receiver ):
 			receiver = receiver.__call__
 	if hasattr( receiver, 'im_func' ):
 		# an instance-method...
-		return receiver, receiver.im_func.func_code, 1
+		return receiver, receiver.__func__.__code__, 1
 	elif not hasattr( receiver, 'func_code'):
 		raise ValueError('unknown reciever type %s %s'%(receiver, type(receiver)))
-	return receiver, receiver.func_code, 0
+	return receiver, receiver.__code__, 0
 
 def robustApply(receiver, *arguments, **named):
 	"""Call receiver with arguments and an appropriate subset of named
@@ -32,7 +32,7 @@ def robustApply(receiver, *arguments, **named):
 	receiver, codeObject, startIndex = function( receiver )
 	acceptable = codeObject.co_varnames[startIndex+len(arguments):codeObject.co_argcount]
 	for name in codeObject.co_varnames[startIndex:startIndex+len(arguments)]:
-		if named.has_key( name ):
+		if name in named:
 			raise TypeError(
 				"""Argument %r specified both positionally and as a keyword for calling %r"""% (
 					name, receiver,
@@ -41,7 +41,7 @@ def robustApply(receiver, *arguments, **named):
 	if not (codeObject.co_flags & 8):
 		# fc does not have a **kwds type parameter, therefore 
 		# remove unacceptable arguments.
-		for arg in named.keys():
+		for arg in list(named.keys()):
 			if arg not in acceptable:
 				del named[arg]
 	return receiver(*arguments, **named)

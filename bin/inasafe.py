@@ -15,6 +15,9 @@ Contact : jannes@kartoza.com
         cli: command line interface
     .. versionadded:: 3.2
 """
+from __future__ import print_function
+from builtins import str
+from builtins import object
 import shutil
 
 __author__ = 'Jannes Engelbrecht'
@@ -24,7 +27,7 @@ import logging
 import os
 import tempfile
 
-from PyQt4.QtCore import QSettings
+from qgis.PyQt.QtCore import QSettings
 from docopt import docopt, DocoptExit
 from qgis.core import (
     QgsRasterLayer,
@@ -80,7 +83,8 @@ class CommandLineArguments(object):
         if arguments_['--download']:
             self.download = arguments_['--download']
             self.exposure_layers = arguments_['--layers']
-            print self.exposure_layers
+            # fix_print_with_import
+            print(self.exposure_layers)
         else:
             self.download = False
             self.exposure_layers = None
@@ -107,19 +111,24 @@ def download_exposure(command_line_arguments):
 
     # make a temporary directory for exposure download
     command_line_arguments.exposure = tempfile.mkdtemp() + '/exposure'
-    print 'temp directory: ' + command_line_arguments.exposure
+    # fix_print_with_import
+    print('temp directory: ' + command_line_arguments.exposure)
     if validate_geo_array(extent):
-        print "Exposure download extent is valid"
+        # fix_print_with_import
+        print("Exposure download extent is valid")
     else:
-        print "Exposure is invalid"
-        print str(extent)
+        # fix_print_with_import
+        print("Exposure is invalid")
+        # fix_print_with_import
+        print(str(extent))
 
     download(
         command_line_arguments.exposure_layers,
         command_line_arguments.exposure,
         extent)
     if os.path.exists(command_line_arguments.exposure + '.shp'):
-        print "download successful"
+        # fix_print_with_import
+        print("download successful")
         command_line_arguments.exposure += '.shp'
 
 
@@ -155,11 +164,15 @@ def show_impact_function_names(impact_functions):
     :type: list of strings.
     """
     manager = ImpactFunctionManager()
-    print ""
-    print "Available Impact Function:"
+    # fix_print_with_import
+    print("")
+    # fix_print_with_import
+    print("Available Impact Function:")
     for impact_function in impact_functions:
-        print manager.get_function_id(impact_function)
-    print ""
+        # fix_print_with_import
+        print(manager.get_function_id(impact_function))
+    # fix_print_with_import
+    print("")
 
 
 # all paths are made to be absolute
@@ -210,16 +223,22 @@ def get_layer(layer_path, layer_base=None):
             layer = QgsRasterLayer(
                 layer_path, layer_base)
         else:
-            print "Unknown filetype " + layer_base
+            # fix_print_with_import
+            print("Unknown filetype " + layer_base)
         if layer is not None and layer.isValid():
-            print "layer is VALID"
+            # fix_print_with_import
+            print("layer is VALID")
         else:
-            print "layer is NOT VALID"
-            print "Perhaps run-env-linux.sh /usr"
+            # fix_print_with_import
+            print("layer is NOT VALID")
+            # fix_print_with_import
+            print("Perhaps run-env-linux.sh /usr")
         return layer
     except Exception as exception:
-        print exception.message
-        print exception.__doc__
+        # fix_print_with_import
+        print(exception.message)
+        # fix_print_with_import
+        print(exception.__doc__)
 
 
 def get_hazard(arguments):
@@ -298,7 +317,8 @@ def impact_function_setup(
             float(command_line_arguments.extent[3])
         )
     except AttributeError:
-        print "No extents"
+        # fix_print_with_import
+        print("No extents")
         pass
     return impact_function
 
@@ -358,15 +378,19 @@ def build_report(cli_arguments):
         LOGGER.debug(os.path.splitext(cli_arguments.output_file)[0] + '.pdf')
         map_path = report.print_map_to_pdf(
             os.path.splitext(cli_arguments.output_file)[0] + '.pdf')
-        print "Impact Map : " + map_path
+        # fix_print_with_import
+        print("Impact Map : " + map_path)
         table_path = report.print_impact_table(
             os.path.splitext(cli_arguments.output_file)[0] + '_table.pdf')
-        print "Impact Summary Table : " + table_path
+        # fix_print_with_import
+        print("Impact Summary Table : " + table_path)
         layer_registry.removeAllMapLayers()
 
     except Exception as exception:
-        print exception.message
-        print exception.__doc__
+        # fix_print_with_import
+        print(exception.message)
+        # fix_print_with_import
+        print(exception.__doc__)
         raise RuntimeError
 
 
@@ -408,20 +432,24 @@ def write_results(cli_arguments, impact_layer):
         impact_layer.write_to_file(abs_path)
 
     except Exception as exception:
-        print exception.message
+        # fix_print_with_import
+        print(exception.message)
         raise RuntimeError(exception.message)
 
 
 if __name__ == '__main__':
-    print "inasafe"
-    print ""
+    # fix_print_with_import
+    print("inasafe")
+    # fix_print_with_import
+    print("")
     try:
         # Parse arguments, use usage.txt as syntax definition.
         LOGGER.debug('Parse argument')
         shell_arguments = docopt(usage)
         LOGGER.debug('Parse done')
     except DocoptExit as exc:
-        print exc.message
+        # fix_print_with_import
+        print(exc.message)
 
     try:
         arguments = CommandLineArguments(shell_arguments)
@@ -432,12 +460,14 @@ if __name__ == '__main__':
             register_impact_functions()
             show_impact_function_names(get_impact_function_list(arguments))
         elif arguments.version is True:
-            print "QGIS VERSION: " + str(qgis_version()).replace('0', '.')
+            # fix_print_with_import
+            print("QGIS VERSION: " + str(qgis_version()).replace('0', '.'))
         # user is only interested in doing a download
         elif arguments.download is True and\
                 arguments.exposure is None and\
                 arguments.hazard is None:
-            print "downloading ..."
+            # fix_print_with_import
+            print("downloading ...")
             download_exposure(arguments)
 
         elif (arguments.hazard is not None) and\
@@ -449,19 +479,25 @@ if __name__ == '__main__':
             if arguments.exposure is not None:
                 run_impact_function(arguments)
             else:
-                print "Download unsuccessful"
+                # fix_print_with_import
+                print("Download unsuccessful")
         elif (arguments.report_template is not None and
                 arguments.output_file is not None):
-            print "Generating report"
+            # fix_print_with_import
+            print("Generating report")
             build_report(arguments)
         else:
-            print "Argument combination not recognised"
+            # fix_print_with_import
+            print("Argument combination not recognised")
     except Exception as excp:
-        print excp.message
-        print excp.__doc__
+        # fix_print_with_import
+        print(excp.message)
+        # fix_print_with_import
+        print(excp.__doc__)
 
 
-print " "
+# fix_print_with_import
+print(" ")
 
 # INSTALL on Ubuntu with:
 # chmod ug+x inasafe

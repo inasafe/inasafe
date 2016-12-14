@@ -6,6 +6,8 @@ raven.events
 :license: BSD, see LICENSE for more details.
 """
 
+from builtins import str
+from builtins import object
 import logging
 import sys
 
@@ -79,7 +81,7 @@ class Exception(BaseEvent):
                 try:
                     del exc_info
                     del exc_traceback
-                except Exception, e:
+                except Exception as e:
                     self.logger.exception(e)
 
         return {

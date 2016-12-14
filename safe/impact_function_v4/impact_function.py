@@ -2,12 +2,15 @@
 """
 Impact function
 """
+from __future__ import print_function
+from builtins import str
+from builtins import object
 from datetime import datetime
 from os.path import join, exists
 from os import makedirs
 from collections import OrderedDict
 
-from PyQt4.QtCore import QSettings
+from qgis.PyQt.QtCore import QSettings
 from qgis.core import (
     QgsMapLayer,
     QgsCoordinateReferenceSystem,
@@ -344,7 +347,7 @@ class ImpactFunction(object):
         layers['exposure_breakdown'] = self._exposure_breakdown
         layers['profiling'] = self._profiling_table
 
-        for expected_purpose, layer in layers.iteritems():
+        for expected_purpose, layer in layers.items():
             if layer:
                 purpose = layer.keywords['layer_purpose']
                 if purpose != expected_purpose:
@@ -357,7 +360,7 @@ class ImpactFunction(object):
                     pass
 
         # Remove layers which are not set.
-        layers = filter(None, layers.values())
+        layers = [_f for _f in list(layers.values()) if _f]
         return layers
 
     @property
@@ -757,8 +760,10 @@ class ImpactFunction(object):
 
             self._datastore.default_vector_format = 'geojson'
             if self.debug_mode:
-                print 'Temporary datastore'
-                print self.datastore.uri.absolutePath()
+                # fix_print_with_import
+                print('Temporary datastore')
+                # fix_print_with_import
+                print(self.datastore.uri.absolutePath())
 
             LOGGER.debug('Datastore : %s' % self.datastore.uri.absolutePath())
 

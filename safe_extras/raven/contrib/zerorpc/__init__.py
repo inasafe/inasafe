@@ -6,6 +6,7 @@ raven.contrib.zerorpc
 :license: BSD, see LICENSE for more details.
 """
 
+from builtins import object
 import inspect
 
 from raven.base import Client

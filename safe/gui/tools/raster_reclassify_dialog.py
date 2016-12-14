@@ -1,10 +1,10 @@
 # coding=utf-8
 import logging
 
-from PyQt4 import (QtGui, QtCore)
-from PyQt4.QtCore import (pyqtSlot, pyqtSignature)
+from qgis.PyQt import QtGui, QtCore
+from qgis.PyQt.QtCore import pyqtSlot
 
-from PyQt4.QtGui import (QDialog, QLabel)
+from qgis.PyQt.QtWidgets import QDialog, QLabel
 from qgis.core import (
     QgsMapLayerRegistry,
     QgsRasterLayer,
@@ -56,7 +56,7 @@ class RasterReclassifyDialog(QDialog, FORM_CLASS):
         self.cbo_raster_input.clear()
         registry = QgsMapLayerRegistry.instance()
         # MapLayers returns a QMap<QString id, QgsMapLayer layer>
-        layers = registry.mapLayers().values()
+        layers = list(registry.mapLayers().values())
         for layer in layers:
             try:
                 name = layer.name()
@@ -131,7 +131,7 @@ class RasterReclassifyDialog(QDialog, FORM_CLASS):
         if impact_function:
             parameters_dict = impact_function[0].parameters
             threshold_list = []
-            for param_key, param_value in parameters_dict.iteritems():
+            for param_key, param_value in parameters_dict.items():
                 if 'threshold' in param_key:
                     threshold_list.append(param_value)
 

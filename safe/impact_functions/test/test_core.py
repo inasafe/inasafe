@@ -12,6 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 """
 
+from builtins import range
 __author__ = 'Christian Christelis <christian@kartoza.com>'
 __revision__ = '$Format:%H$'
 __date__ = '24/10/14'

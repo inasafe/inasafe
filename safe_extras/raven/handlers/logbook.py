@@ -7,6 +7,7 @@ raven.handlers.logbook
 """
 
 from __future__ import absolute_import
+from __future__ import print_function
 
 import logbook
 import sys
@@ -20,7 +21,7 @@ class SentryHandler(logbook.Handler):
     def __init__(self, *args, **kwargs):
         if len(args) == 1:
             arg = args[0]
-            if isinstance(arg, basestring):
+            if isinstance(arg, str):
                 self.client = kwargs.pop('client_cls', Client)(dsn=arg)
             elif isinstance(arg, Client):
                 self.client = arg
@@ -43,14 +44,18 @@ class SentryHandler(logbook.Handler):
 
             # Avoid typical config issues by overriding loggers behavior
             if record.channel.startswith('sentry.errors'):
-                print >> sys.stderr, to_string(record.message)
+                # fix_print_with_import
+                print(to_string(record.message), file=sys.stderr)
                 return
 
             return self._emit(record)
         except Exception:
-            print >> sys.stderr, "Top level Sentry exception caught - failed creating log record"
-            print >> sys.stderr, to_string(record.msg)
-            print >> sys.stderr, to_string(traceback.format_exc())
+            # fix_print_with_import
+            print("Top level Sentry exception caught - failed creating log record", file=sys.stderr)
+            # fix_print_with_import
+            print(to_string(record.msg), file=sys.stderr)
+            # fix_print_with_import
+            print(to_string(traceback.format_exc()), file=sys.stderr)
 
             try:
                 self.client.capture('Exception')

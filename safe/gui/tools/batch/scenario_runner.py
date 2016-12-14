@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from builtins import range
 __author__ = 'bungcip@gmail.com'
 __version__ = '0.5.1'
 __revision__ = '$Format:%H$'

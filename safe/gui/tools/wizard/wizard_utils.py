@@ -1,9 +1,10 @@
 # coding=utf-8
 """Wizard Utilities Functions"""
 
+from builtins import str
 import re
 import logging
-from PyQt4 import QtCore
+from qgis.PyQt import QtCore
 
 from qgis.core import QgsCoordinateTransform
 

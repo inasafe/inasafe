@@ -151,7 +151,7 @@ class PopulationExposureReportMixin(ReportMixin):
         """
         if (not hasattr(self, '_impact_category_ordering') or
                 not self._impact_category_ordering):
-            self._impact_category_ordering = self.affected_population.keys()
+            self._impact_category_ordering = list(self.affected_population.keys())
         return self._impact_category_ordering
 
     @impact_category_ordering.setter
@@ -250,9 +250,9 @@ class PopulationExposureReportMixin(ReportMixin):
             separately. We may want to update these when we have decided on a
             single convention.
         """
-        if category in self.affected_population.keys():
+        if category in list(self.affected_population.keys()):
             return self.affected_population[category]
-        if category in self.other_population_counts.keys():
+        if category in list(self.other_population_counts.keys()):
             return self.other_population_counts[category]
         if category in [
                 tr('Population Not Affected'),

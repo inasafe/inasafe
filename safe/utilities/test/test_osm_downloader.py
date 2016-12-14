@@ -11,6 +11,8 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from builtins import str
+from builtins import object
 __author__ = 'bungcip@gmail.com'
 __date__ = '05/02/2013'
 __copyright__ = ('Copyright 2013, Australia Indonesia Facility for '
@@ -26,8 +28,8 @@ import tempfile
 import shutil
 import os
 
-from PyQt4.QtCore import QObject, pyqtSignal, QVariant, QByteArray, QUrl
-from PyQt4.QtNetwork import QNetworkReply
+from qgis.PyQt.QtCore import QObject, pyqtSignal, QVariant, QByteArray, QUrl
+from qgis.PyQt.QtNetwork import QNetworkReply
 
 from safe.utilities.osm_downloader import fetch_zip, extract_zip
 from safe.test.utilities import standard_data_path, get_qgis_app
@@ -107,7 +109,7 @@ class MockQNetworkReply(QObject):
 
 
 # noinspection PyClassHasNoInit
-class FakeQNetworkAccessManager:
+class FakeQNetworkAccessManager(object):
     """Mock network manager for testing.
 
     .. versionadded:: 3.2

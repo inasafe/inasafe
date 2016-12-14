@@ -21,9 +21,9 @@ import unittest
 import logging
 
 from qgis.core import QgsRectangle, QgsCoordinateReferenceSystem
-from PyQt4 import QtGui
-from PyQt4.QtTest import QTest
-from PyQt4.QtCore import Qt, QPoint
+from qgis.PyQt import QtGui
+from qgis.PyQt.QtTest import QTest
+from qgis.PyQt.QtCore import Qt, QPoint
 
 from safe.test.utilities import get_qgis_app
 
@@ -112,7 +112,7 @@ class ExtentSelectorTest(unittest.TestCase):
         """
         # Imported here because it is not available in OSX QGIS bundle
         # pylint: disable=redefined-outer-name
-        from PyQt4.QtTest import QTest
+        from qgis.PyQt.QtTest import QTest
 
         # Click the capture button
         QTest.mouseClick(self.dialog.capture_button, Qt.LeftButton)

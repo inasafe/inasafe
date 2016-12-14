@@ -6,6 +6,7 @@
 
 """
 
+from builtins import str
 __author__ = 'tim@kartoza.com, ole.moller.nielsen@gmail.com'
 __revision__ = '$Format:%H$'
 __date__ = '20/1/2013'
@@ -15,9 +16,9 @@ __copyright__ += 'Disaster Reduction'
 
 import logging
 from qgis.core import QgsMapLayerRegistry, QgsVectorLayer
-from PyQt4 import QtGui, QtCore
+from qgis.PyQt import QtGui, QtCore
 
-from PyQt4.QtCore import pyqtSignature, pyqtSlot
+from qgis.PyQt.QtCore import pyqtSlot
 
 from safe.common.version import get_version
 from safe.storage.core import read_layer as safe_read_layer
@@ -87,7 +88,7 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
             if population in ['-', None]:
                 displaced = 0
             else:
-                if isinstance(population, basestring):
+                if isinstance(population, str):
                     population = str(population).replace(',', '')
 
                 try:
@@ -129,7 +130,7 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
 
         # noinspection PyArgumentList
         registry = QgsMapLayerRegistry.instance()
-        layers = registry.mapLayers().values()
+        layers = list(registry.mapLayers().values())
         found_flag = False
         for layer in layers:
             name = layer.name()

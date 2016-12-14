@@ -12,6 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
+from builtins import object
 __author__ = 'tim@kartoza.com, akbargumbira@gmail.com'
 __revision__ = '$Format:%H$'
 __date__ = '01/03/15'

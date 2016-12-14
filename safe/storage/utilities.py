@@ -1,13 +1,16 @@
 # coding=utf-8
 """**Utilities for storage module**
 """
+from __future__ import absolute_import
 
+from builtins import str
+from builtins import range
 import copy
 import numpy
 import math
 from osgeo import ogr
 
-from geometry import Polygon
+from .geometry import Polygon
 from safe.gis.numerics import ensure_numeric
 from safe.common.utilities import verify
 from safe.common.exceptions import BoundingBoxError, InaSAFEError
@@ -372,7 +375,7 @@ def get_geometry_type(geometry, geometry_type):
            geometry_type.lower() in ['point', 'line', 'polygon'], msg)
 
     if geometry_type is not None:
-        if isinstance(geometry_type, basestring):
+        if isinstance(geometry_type, str):
             return INVERSE_GEOMETRY_TYPE_MAP[geometry_type.lower()]
         else:
             return geometry_type
@@ -431,7 +434,7 @@ def is_sequence(x):
         but False for strings and dictionaries.
     """
 
-    if isinstance(x, basestring):
+    if isinstance(x, str):
         return False
 
     try:
@@ -462,7 +465,7 @@ def array_to_line(A, geometry_type=ogr.wkbLinearRing):
 
     try:
         A = ensure_numeric(A, numpy.float)
-    except Exception, e:
+    except Exception as e:
         msg = ('Array (%s) could not be converted to numeric array. '
                'I got type %s. Error message: %s'
                % (A, str(type(A)), e))
@@ -543,7 +546,7 @@ def array_to_wkt(A, geom_type='POLYGON'):
 
     try:
         A = ensure_numeric(A, numpy.float)
-    except Exception, e:
+    except Exception as e:
         msg = ('Array (%s) could not be converted to numeric array. '
                'I got type %s. Error message: %s'
                % (geom_type, str(type(A)), e))

@@ -5,7 +5,7 @@ import unittest
 from safe.test.utilities import get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from PyQt4.QtCore import QSettings
+from qgis.PyQt.QtCore import QSettings
 from safe.definitionsv4.constants import zero_default_value
 from safe.gui.tools.wizard.wizard_utils import (
     get_question_text,

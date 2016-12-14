@@ -8,6 +8,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+from __future__ import absolute_import
 
 
 __author__ = 'marco@opengis.ch'
@@ -16,12 +17,12 @@ __date__ = '24/05/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
-from PyQt4.QtCore import QPyNullVariant
+from qgis.PyQt.QtCore import QPyNullVariant
 from safe.utilities.i18n import tr
 
-from message_element import MessageElement
-from exceptions import InvalidMessageItemError
-from text import PlainText
+from .message_element import MessageElement
+from .exceptions import InvalidMessageItemError
+from .text import PlainText
 
 
 class AbstractList(MessageElement):

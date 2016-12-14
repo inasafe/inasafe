@@ -1,9 +1,10 @@
 # coding=utf-8
 """Mock like implementation for the QgsLegendInterface - used for testing."""
+from builtins import object
 from qgis.core import QgsMapLayerRegistry
 
 
-class QgisLegend():
+class QgisLegend(object):
     """A fake QgsLegendInterface with minimal implementation."""
 
     def __init__(self, canvas):
@@ -22,7 +23,7 @@ class QgisLegend():
             map layer list will be returned.
         :rtype: list
         """
-        layers = QgsMapLayerRegistry.instance().mapLayers().values()
+        layers = list(QgsMapLayerRegistry.instance().mapLayers().values())
         return layers
 
     # noinspection PyPep8Naming

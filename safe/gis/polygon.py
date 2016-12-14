@@ -13,6 +13,8 @@
      point_on_line
 """
 
+from builtins import str
+from builtins import range
 __author__ = 'Ole Nielsen <ole.moller.nielsen@gmail.com>'
 __revision__ = '$Format:%H$'
 __date__ = '01/11/2010'
@@ -92,14 +94,14 @@ def separate_points_by_polygon(
 
         try:
             points = ensure_numeric(points, numpy.float)
-        except Exception, e:
+        except Exception as e:
             msg = ('Points could not be converted to numeric array: %s'
                    % str(e))
             raise PolygonInputError(msg)
 
         try:
             polygon = ensure_numeric(polygon, numpy.float)
-        except Exception, e:
+        except Exception as e:
             msg = ('Polygon could not be converted to numeric array: %s'
                    % str(e))
             raise PolygonInputError(msg)
@@ -645,7 +647,7 @@ def clip_lines_by_polygon(lines, polygon,
         for i in range(len(lines)):
             try:
                 lines[i] = ensure_numeric(lines[i], numpy.float)
-            except Exception, e:
+            except Exception as e:
                 msg = ('Line could not be converted to numeric array: %s'
                        % str(e))
                 raise Exception(msg)
@@ -657,7 +659,7 @@ def clip_lines_by_polygon(lines, polygon,
 
         try:
             polygon = ensure_numeric(polygon, numpy.float)
-        except Exception, e:
+        except Exception as e:
             msg = ('Polygon could not be converted to numeric array: %s'
                    % str(e))
             raise Exception(msg)
@@ -798,7 +800,7 @@ def clip_line_by_polygon(line, polygon,
 
         try:
             line = ensure_numeric(line, numpy.float)
-        except Exception, e:
+        except Exception as e:
             msg = ('Line could not be converted to numeric array: %s'
                    % str(e))
             raise Exception(msg)
@@ -813,7 +815,7 @@ def clip_line_by_polygon(line, polygon,
 
         try:
             polygon = ensure_numeric(polygon, numpy.float)
-        except Exception, e:
+        except Exception as e:
             msg = ('Polygon could not be converted to numeric array: %s'
                    % str(e))
             raise Exception(msg)
@@ -1380,7 +1382,7 @@ def clip_lines_by_polygons(lines, polygons, check_input=True, closed=True):
         for i in range(len(lines)):
             try:
                 lines[i] = ensure_numeric(lines[i], numpy.float)
-            except Exception, e:
+            except Exception as e:
                 msg = ('Line could not be converted to numeric array: %s'
                        % str(e))
                 raise Exception(msg)
@@ -1392,7 +1394,7 @@ def clip_lines_by_polygons(lines, polygons, check_input=True, closed=True):
         for i in range(len(polygons)):
             try:
                 polygons[i] = ensure_numeric(polygons[i], numpy.float)
-            except Exception, e:
+            except Exception as e:
                 msg = ('Polygon could not be converted to numeric array: %s'
                        % str(e))
                 raise Exception(msg)
@@ -1445,7 +1447,7 @@ def polygon2segments(polygon):
 
     try:
         polygon = ensure_numeric(polygon, numpy.float)
-    except Exception, e:
+    except Exception as e:
         msg = ('Polygon could not be converted to numeric array: %s'
                % str(e))
         raise Exception(msg)

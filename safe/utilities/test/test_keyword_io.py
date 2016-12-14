@@ -15,7 +15,7 @@ from safe.test.utilities import (
 from safe.utilities.keyword_io import KeywordIO
 from safe.definitionsv4.utilities import definition
 from safe.utilities.metadata import read_iso19115_metadata
-from safe.utilities.unicode import get_unicode
+from safe.utilities.str import get_unicode
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -149,7 +149,7 @@ class KeywordIOTest(unittest.TestCase):
         }
         expected_thresholds = expected_keywords.pop('thresholds')
         expected_keywords = {
-            k: get_unicode(v) for k, v in expected_keywords.iteritems()
+            k: get_unicode(v) for k, v in expected_keywords.items()
         }
         thresholds_keywords = keywords.pop('thresholds')
         self.assertDictEqual(expected_keywords, keywords)

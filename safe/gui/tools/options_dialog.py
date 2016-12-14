@@ -22,9 +22,9 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
 # noinspection PyPackageRequirements
-from PyQt4 import QtGui, QtCore
+from qgis.PyQt import QtGui, QtCore
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import pyqtSignature, pyqtSlot
+from qgis.PyQt.QtCore import pyqtSlot
 
 from safe.common.utilities import temp_dir
 from safe.defaults import (

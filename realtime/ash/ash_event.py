@@ -9,8 +9,8 @@ from collections import OrderedDict
 import pytz
 import shutil
 
-from PyQt4.QtCore import QObject, QFileInfo, QUrl, Qt
-from PyQt4.QtXml import QDomDocument
+from qgis.PyQt.QtCore import QObject, QFileInfo, QUrl, Qt
+from qgis.PyQt.QtXml import QDomDocument
 from qgis.core import (
     QgsProject,
     QgsCoordinateReferenceSystem,
@@ -311,7 +311,7 @@ class AshEvent(QObject):
             if val[0] in key_mapping:
                 population_dict[key_mapping[val[0]]] = val[1]
 
-        for key, val in key_mapping.iteritems():
+        for key, val in key_mapping.items():
             if val not in population_dict:
                 population_dict[val] = 0
             else:
@@ -366,7 +366,7 @@ class AshEvent(QObject):
         #     },
         # ]
         landcover_list = []
-        for land_type, area in landcover_dict.iteritems():
+        for land_type, area in landcover_dict.items():
             if not land_type.lower() == 'other':
                 landcover_list.append({
                     'type': land_type,

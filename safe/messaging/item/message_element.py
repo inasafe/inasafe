@@ -9,6 +9,8 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+from builtins import str
+from builtins import object
 import json
 
 __author__ = 'marco@opengis.ch'
@@ -71,7 +73,7 @@ class MessageElement(object):
 
     @staticmethod
     def _is_stringable(message):
-        return (isinstance(message, basestring) or
+        return (isinstance(message, str) or
                 isinstance(message, int) or
                 isinstance(message, float))
 

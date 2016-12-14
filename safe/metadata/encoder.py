@@ -13,7 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
 import json
 from datetime import datetime, date
 
-from PyQt4.QtCore import QDate, Qt, QDateTime, QUrl
+from qgis.PyQt.QtCore import QDate, Qt, QDateTime, QUrl
 
 __author__ = 'ismailsunni'
 __project_name__ = 'inasafe-dev'

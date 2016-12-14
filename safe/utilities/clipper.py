@@ -10,11 +10,12 @@ Contact : ole.moller.nielsen@gmail.com
    (at your option) any later version.
 
 """
+from builtins import str
 import logging
 import os
 import tempfile
 
-from PyQt4.QtCore import QProcess
+from qgis.PyQt.QtCore import QProcess
 from qgis.core import (
     QGis,
     QgsCoordinateTransform,
@@ -120,9 +121,9 @@ def clip_layer(
                 extent,
                 cell_size,
                 extra_keywords=extra_keywords)
-        except CallGDALError, e:
+        except CallGDALError as e:
             raise e
-        except IOError, e:
+        except IOError as e:
             raise e
 
 

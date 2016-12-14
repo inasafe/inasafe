@@ -11,6 +11,9 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from __future__ import print_function
+from builtins import str
+from builtins import range
 __author__ = 'tim@kartoza.com'
 __date__ = '17/10/2013'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
@@ -63,7 +66,7 @@ class StylingTest(unittest.TestCase):
 
         try:
             setRasterStyle(layer, style_info)
-        except Exception, e:
+        except Exception as e:
             message = (
                 'Setting style info with float based ranges should fail '
                 'gracefully.')
@@ -108,7 +111,7 @@ class StylingTest(unittest.TestCase):
 
         try:
             setRasterStyle(layer, style_info)
-        except Exception, e:  # pylint: disable=broad-except
+        except Exception as e:  # pylint: disable=broad-except
             message = (
                 'Broken: Setting style info with generate valid transparent '
                 'floating point pixel entries such as 2.0, 3.0')
@@ -143,7 +146,7 @@ class StylingTest(unittest.TestCase):
 
         try:
             setRasterStyle(layer, style_info)
-        except Exception, e:
+        except Exception as e:
             message = '\nCould not create raster style'
             e.args = (e.args[0] + message,)
             raise
@@ -201,7 +204,7 @@ class StylingTest(unittest.TestCase):
         """
         try:
             bbox_intersection('aoeu', 'oaeu', [])
-        except BoundingBoxError, e:
+        except BoundingBoxError as e:
             message = get_error_message(e)
             myString = 'BoundingBoxError'
             assert myString in message.to_text(), message
@@ -283,8 +286,9 @@ class StylingTest(unittest.TestCase):
         except StyleError:
             # Exactly what should have happened
             return
-        except Exception, e:  # pylint: disable=broad-except
-            print str(e)
+        except Exception as e:  # pylint: disable=broad-except
+            # fix_print_with_import
+            print(str(e))
         assert False, 'Incorrect handling of broken styles'
 
     def test_add_min_max_to_style(self):
@@ -321,7 +325,7 @@ class StylingTest(unittest.TestCase):
 
     def test_mmi_colour(self):
         """Test that we can get a colour given an mmi number."""
-        values = range(0, 12)
+        values = list(range(0, 12))
         myExpectedResult = ['#FFFFFF', '#FFFFFF', '#209fff', '#00cfff',
                             '#55ffff', '#aaffff', '#fff000', '#ffa800',
                             '#ff7000', '#ff0000', '#D00', '#800']

@@ -10,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from builtins import range
 __author__ = 'lucernae'
 __date__ = '24/03/15'
 
@@ -159,7 +160,7 @@ class EarthquakeBuildingFunction(
 
             if usage not in self.buildings:
                 self.buildings[usage] = 0
-                for category in self.affected_buildings.keys():
+                for category in list(self.affected_buildings.keys()):
                     if self.is_nexis:
                         self.affected_buildings[category][usage] = OrderedDict(
                             [

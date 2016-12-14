@@ -1,4 +1,5 @@
 # coding=utf-8
+from builtins import object
 from safe.utilities.i18n import tr
 from safe.common.version import get_version
 

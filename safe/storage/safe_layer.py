@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 """
 
+from builtins import object
 __author__ = 'imajimatika@gmail.com'
 __revision__ = '$Format:%H$'
 __filename = 'safe_layer'
@@ -25,7 +26,7 @@ from safe.storage.raster import Raster
 from safe.common.exceptions import KeywordNotFoundError, InvalidLayerError
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.i18n import tr
-from safe.utilities.unicode import get_unicode
+from safe.utilities.str import get_unicode
 
 
 class SafeLayer(object):

@@ -9,7 +9,10 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
+from __future__ import print_function
 
+from builtins import range
+from builtins import object
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '27/05/2013'
@@ -30,7 +33,7 @@ DYNAMIC_MESSAGE_SIGNAL = 'ImpactFunctionMessage'
 STATIC_MESSAGE_SIGNAL = 'ApplicationMessage'
 
 
-class ConsoleView():
+class ConsoleView(object):
     """A simple console based message queue mockup."""
     def __init__(self):
         # Always gets replaced when a new message is passed
@@ -61,10 +64,11 @@ class ConsoleView():
         for message in self.dynamic_messages:
             string += message.to_text()
 
-        print string
+        # fix_print_with_import
+        print(string)
 
 
-class ImpactFunction1():
+class ImpactFunction1(object):
     def __init__(self):
         message = Message(SuccessParagraph('IF1 was initialised'))
         dispatcher.send(
@@ -82,7 +86,7 @@ class ImpactFunction1():
             message=message)
 
 
-class App():
+class App(object):
     def __init__(self):
         self.message_queue = ConsoleView()
         # Set up dispatcher for dynamic messages

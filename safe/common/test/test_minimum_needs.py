@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
+from past.builtins import cmp
 __author__ = 'Christian Christelis <christian@kartoza.com>'
 __revision__ = '$Format:%H$'
 __date__ = '10/10/2014'

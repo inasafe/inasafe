@@ -1,8 +1,10 @@
+from __future__ import print_function
 from safe.engine.core import buffer_points
 from safe.storage.core import read_layer
 
 H = read_layer('/data_area/InaSAFE/public_data/hazard/Marapi.shp')
-print H.get_geometry()
+# fix_print_with_import
+print(H.get_geometry())
 
 # Generate evacuation circle (as a polygon):
 radius = 3000

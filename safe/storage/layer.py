@@ -1,8 +1,11 @@
 """**Class Layer**
 """
+from __future__ import absolute_import
 
+from builtins import str
+from builtins import object
 from safe.common.utilities import verify
-from projection import Projection
+from .projection import Projection
 
 
 class Layer(object):
@@ -20,7 +23,7 @@ class Layer(object):
         # Name
         msg = ('Specified name  must be a string or None. '
                'I got %s with type %s' % (name, str(type(name))[1:-1]))
-        verify(isinstance(name, basestring) or name is None, msg)
+        verify(isinstance(name, str) or name is None, msg)
         self.name = name
 
         # Projection
@@ -81,7 +84,7 @@ class Layer(object):
                 return self.keywords[key]
             else:
                 msg = ('Keyword %s does not exist in %s: Options are '
-                       '%s' % (key, self.get_name(), self.keywords.keys()))
+                       '%s' % (key, self.get_name(), list(self.keywords.keys())))
                 raise Exception(msg)
 
     def get_style_info(self):

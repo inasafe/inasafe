@@ -2,6 +2,7 @@
 """
 GDAL/OGR utility tools
 """
+from builtins import range
 __author__ = 'Yewondwossen Assefa <assefay@gmail.com>'
 __revision__ = '$Format:%H$'
 __date__ = '14/03/2014'

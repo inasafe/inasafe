@@ -1,4 +1,5 @@
 # coding=utf-8
+from builtins import object
 import sys
 
 from safe.common.exceptions import NoAttributeInLayerError
@@ -35,8 +36,8 @@ class ContinuousVectorExposureMixin(object):
         if exposure_layer:
             attr_index = exposure_layer.dataProvider().\
                 fieldNameIndex(value)
-            min_val = sys.maxint
-            max_val = -sys.maxint - 1
+            min_val = sys.maxsize
+            max_val = -sys.maxsize - 1
             for feature in exposure_layer.getFeatures():
                 try:
                     feature_value = feature.attributes()[attr_index]

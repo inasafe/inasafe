@@ -5,6 +5,8 @@ Provides interpolation functionality to assign values from one layer instance
 to another irrespective of layer types.
 """
 
+from builtins import str
+from builtins import range
 import numpy
 
 from safe.gis.interpolation2d import interpolate_raster
@@ -190,12 +192,12 @@ def check_inputs(hazard, exposure, layer_name, attribute_name):
     msg = ('Parameter attribute_name must be either a string or None. '
            'I got %s' % (str(type(exposure)))[1:-1])
     verify(attribute_name is None or
-           isinstance(attribute_name, basestring), msg)
+           isinstance(attribute_name, str), msg)
 
     msg = ('Parameter layer_name must be either a string or None. '
            'I got %s' % (str(type(exposure)))[1:-1])
     verify(layer_name is None or
-           isinstance(layer_name, basestring), msg)
+           isinstance(layer_name, str), msg)
 
     # Establish default names
     if layer_name is None:
@@ -451,7 +453,7 @@ def interpolate_raster_vector_points(source, target,
     try:
         values = interpolate_raster(longitudes, latitudes, A,
                                     coordinates, mode=mode)
-    except (BoundsError, InaSAFEError), e:
+    except (BoundsError, InaSAFEError) as e:
         msg = (
             tr(
                 'Could not interpolate from raster layer %(raster)s to '
@@ -500,7 +502,7 @@ def interpolate_polygon_points(source, target,
     msg = ('Name must be either a string or None. I got %s'
            % (str(type(target)))[1:-1])
     verify(layer_name is None or
-           isinstance(layer_name, basestring), msg)
+           isinstance(layer_name, str), msg)
 
     attribute_names = source.get_attribute_names()
     target_attribute_names = target.get_attribute_names()

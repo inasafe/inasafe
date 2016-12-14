@@ -11,6 +11,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
+from builtins import str
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
 __date__ = '22/05/2013'
@@ -22,7 +23,7 @@ import logging
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
-from PyQt4.QtCore import QCoreApplication
+from qgis.PyQt.QtCore import QCoreApplication
 
 from safe.common.utilities import get_free_memory
 from safe import messaging as m

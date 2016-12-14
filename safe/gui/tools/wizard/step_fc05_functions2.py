@@ -13,9 +13,10 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
+from builtins import range
 import logging
 # noinspection PyPackageRequirements
-from PyQt4 import QtCore, QtGui
+from qgis.PyQt import QtCore, QtGui
 from PyQt4.QtCore import pyqtSignature
 
 from safe.definitionsv4.layer_geometry import (

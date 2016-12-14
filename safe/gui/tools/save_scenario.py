@@ -10,6 +10,8 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from future import standard_library
+standard_library.install_aliases()
 __author__ = 'akbargumbira@gmail.com'
 __revision__ = '$Format:%H$'
 __date__ = '25/02/2014'
@@ -18,17 +20,17 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import os
 import logging
-from ConfigParser import ConfigParser
+from configparser import ConfigParser
 
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
 # noinspection PyPackageRequirements
-from PyQt4 import QtGui
+from qgis.PyQt import QtGui
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import QSettings
+from qgis.PyQt.QtCore import QSettings
 # noinspection PyPackageRequirements
-from PyQt4.QtGui import QDialog, QFileDialog
+from qgis.PyQt.QtWidgets import QDialog, QFileDialog
 from safe.utilities.gis import extent_to_array, viewport_geo_array
 from safe.utilities.keyword_io import KeywordIO
 
@@ -145,7 +147,7 @@ class SaveScenarioDialog(QDialog):
         dialog_title = self.tr('Save Scenario')
         if scenario_file_path is None:
             # noinspection PyCallByClass,PyTypeChecker
-            scenario_file_path = QFileDialog.getSaveFileName(
+            scenario_file_path, __ = QFileDialog.getSaveFileName(
                 self,
                 dialog_title,
                 os.path.join(self.output_directory, default_filename + '.txt'),
@@ -206,7 +208,7 @@ class SaveScenarioDialog(QDialog):
         start_path = os.path.dirname(reference_path)
         try:
             relative_path = os.path.relpath(input_path, start_path)
-        except ValueError, e:
+        except ValueError as e:
             # LOGGER.info(e.message)
             relative_path = input_path
         return relative_path

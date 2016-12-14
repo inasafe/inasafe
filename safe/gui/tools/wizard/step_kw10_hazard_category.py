@@ -14,9 +14,10 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 # noinspection PyPackageRequirements
-from PyQt4 import QtCore
+from builtins import range
+from qgis.PyQt import QtCore
 from PyQt4.QtCore import pyqtSignature
-from PyQt4.QtGui import QListWidgetItem
+from qgis.PyQt.QtWidgets import QListWidgetItem
 
 from safe.definitionsv4.layer_purposes import layer_purpose_hazard
 from safe.gui.tools.wizard.wizard_step import WizardStep
@@ -131,7 +132,7 @@ class StepKwHazardCategory(WizardStep, FORM_CLASS):
         category_keyword = self.parent.get_existing_keyword('hazard_category')
         if category_keyword:
             categories = []
-            for index in xrange(self.lstHazardCategories.count()):
+            for index in range(self.lstHazardCategories.count()):
                 item = self.lstHazardCategories.item(index)
                 categories.append(item.data(QtCore.Qt.UserRole))
             if category_keyword in categories:

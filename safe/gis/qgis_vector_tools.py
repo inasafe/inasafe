@@ -20,7 +20,7 @@ from qgis.core import (
     QgsVectorFileWriter,
     QgsCoordinateReferenceSystem,
     QgsCoordinateTransform)
-from PyQt4.QtCore import QVariant
+from qgis.PyQt.QtCore import QVariant
 
 from safe.common.utilities import unique_filename
 from safe.common.exceptions import WrongDataTypeException

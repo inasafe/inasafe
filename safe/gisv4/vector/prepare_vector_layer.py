@@ -3,8 +3,10 @@
 """
 Prepare layers for InaSAFE.
 """
+from builtins import next
+from builtins import str
 import logging
-from PyQt4.QtCore import QPyNullVariant
+from qgis.PyQt.QtCore import QPyNullVariant
 from qgis.core import (
     QgsVectorLayer,
     QgsField,
@@ -143,12 +145,12 @@ def _check_value_mapping(layer):
     other = exposure_classification['classes'][-1]['key']
 
     exposure_mapped = []
-    for group in value_map.itervalues():
+    for group in value_map.values():
         exposure_mapped.extend(group)
 
     diff = list(set(unique_exposure) - set(exposure_mapped))
 
-    if other in value_map.keys():
+    if other in list(value_map.keys()):
         value_map[other].extend(diff)
     else:
         value_map[other] = diff
@@ -185,13 +187,13 @@ def _rename_remove_inasafe_fields(layer):
     # Rename fields
     to_rename = {}
     new_keywords = {}
-    for key, val in layer.keywords.get('inasafe_fields').iteritems():
+    for key, val in layer.keywords.get('inasafe_fields').items():
         if expected_fields[key] != val:
             to_rename[val] = expected_fields[key]
             new_keywords[key] = expected_fields[key]
 
     copy_fields(layer, to_rename)
-    to_remove = to_rename.keys()
+    to_remove = list(to_rename.keys())
 
     LOGGER.debug(tr(
         'Fields which have been renamed from %s : %s'
@@ -202,7 +204,7 @@ def _rename_remove_inasafe_fields(layer):
 
     # Remove useless fields
     for field in layer.fields().toList():
-        if field.name() not in expected_fields.values():
+        if field.name() not in list(expected_fields.values()):
             to_remove.append(field.name())
     remove_fields(layer, to_remove)
     LOGGER.debug(tr(
@@ -338,7 +340,7 @@ def _add_id_column(layer):
     }
 
     has_id_column = False
-    for layer_type, field in mapping.iteritems():
+    for layer_type, field in mapping.items():
         if layer_purpose == layer_type:
             safe_id = field
             if layer.keywords.get(field['key']):
@@ -398,7 +400,7 @@ def _add_default_values(layer):
                'values.'))
         return
 
-    for default in defaults.keys():
+    for default in list(defaults.keys()):
 
         field = fields.get(default)
         target_field = definition(default)

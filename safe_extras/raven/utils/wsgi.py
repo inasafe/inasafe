@@ -5,7 +5,10 @@ This module implements WSGI related helpers adapted from ``werkzeug.wsgi``
 :license: BSD, see LICENSE for more details.
 """
 
-import urllib
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+import urllib.request, urllib.parse, urllib.error
 
 
 # `get_headers` comes from `werkzeug.datastructures.EnvironHeaders`
@@ -13,7 +16,7 @@ def get_headers(environ):
     """
     Returns only proper HTTP headers.
     """
-    for key, value in environ.iteritems():
+    for key, value in environ.items():
         key = str(key)
         if key.startswith('HTTP_') and key not in \
            ('HTTP_CONTENT_TYPE', 'HTTP_CONTENT_LENGTH'):
@@ -81,11 +84,11 @@ def get_current_url(environ, root_only=False, strip_querystring=False,
     cat = tmp.append
     if host_only:
         return ''.join(tmp) + '/'
-    cat(urllib.quote(environ.get('SCRIPT_NAME', '').rstrip('/')))
+    cat(urllib.parse.quote(environ.get('SCRIPT_NAME', '').rstrip('/')))
     if root_only:
         cat('/')
     else:
-        cat(urllib.quote('/' + environ.get('PATH_INFO', '').lstrip('/')))
+        cat(urllib.parse.quote('/' + environ.get('PATH_INFO', '').lstrip('/')))
         if not strip_querystring:
             qs = environ.get('QUERY_STRING')
             if qs:

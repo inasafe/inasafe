@@ -9,9 +9,12 @@ InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
      (at your option) any later version.
 
 """
+from __future__ import print_function
 
+from builtins import zip
+from builtins import str
 from tempfile import mkdtemp
-from PyQt4.QtCore import QVariant
+from qgis.PyQt.QtCore import QVariant
 from qgis.core import (
     QgsMapLayerRegistry,
     QGis,
@@ -148,4 +151,5 @@ def print_attribute_table(layer, limit=-1):
         attributes.extend(feature.attributes())
         data.append(attributes)
 
-    print pretty_table(data, headers)
+    # fix_print_with_import
+    print(pretty_table(data, headers))

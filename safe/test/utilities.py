@@ -1,6 +1,9 @@
 # coding=utf-8
 """Helper module for gui test suite
 """
+from builtins import str
+from builtins import range
+from builtins import object
 import os
 import re
 import sys
@@ -10,7 +13,7 @@ import shutil
 import inspect
 from tempfile import mkdtemp
 from os.path import exists, splitext, basename, join
-from itertools import izip
+
 from qgis.core import (
     QgsVectorLayer,
     QgsRasterLayer,
@@ -18,7 +21,7 @@ from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsMapLayerRegistry)
 # noinspection PyPackageRequirements
-from PyQt4 import QtGui  # pylint: disable=W0621
+from qgis.PyQt import QtGui  # pylint: disable=W0621
 from qgis.utils import iface
 
 from safe.gis.numerics import axes_to_points
@@ -88,9 +91,9 @@ def get_qgis_app():
         from qgis.core import QgsApplication
         from qgis.gui import QgsMapCanvas  # pylint: disable=no-name-in-module
         # noinspection PyPackageRequirements
-        from PyQt4 import QtGui, QtCore  # pylint: disable=W0621
+        from qgis.PyQt import QtGui, QtCore  # pylint: disable=W0621
         # noinspection PyPackageRequirements
-        from PyQt4.QtCore import QCoreApplication, QSettings
+        from qgis.PyQt.QtCore import QCoreApplication, QSettings
         from safe.gis.qgis_interface import QgisInterface
     except ImportError:
         return None, None, None, None
@@ -190,7 +193,7 @@ def check_inasafe_fields(layer):
             % (layer.keywords['layer_purpose'], difference))
         raise Exception(message)
 
-    difference = set(real_fields).difference(inasafe_fields.values())
+    difference = set(real_fields).difference(list(inasafe_fields.values()))
     if len(difference):
         message = tr(
             'The layer %s has more fields than inasafe_fields : %s'
@@ -875,7 +878,7 @@ def setup_scenario(
     message = 'Expected versus Actual State\n'
     message += '--------------------------------------------------------\n'
 
-    for key in expected_state.keys():
+    for key in list(expected_state.keys()):
         message += 'Expected %s: %s\n' % (key, expected_state[key])
         message += 'Actual   %s: %s\n' % (key, state[key])
         message += '----\n'
@@ -985,7 +988,7 @@ def compare_wkt(a, b, tol=0.000001):
     if len(a0) != len(b0):
         return False
 
-    for (a1, b1) in izip(a0, b0):
+    for (a1, b1) in zip(a0, b0):
         if abs(float(a1) - float(b1)) > tol:
             return False
 

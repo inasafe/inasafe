@@ -1,5 +1,7 @@
 # coding=utf-8
 """io related tests."""
+from builtins import str
+from builtins import range
 import unittest
 import numpy
 import os
@@ -75,7 +77,7 @@ def bboxlist2string(bbox, decimals=6):
     """
 
     msg = 'Got string %s, but expected bounding box as a list' % str(bbox)
-    verify(not isinstance(bbox, basestring), msg)
+    verify(not isinstance(bbox, str), msg)
 
     try:
         bbox = list(bbox)
@@ -93,7 +95,7 @@ def bboxlist2string(bbox, decimals=6):
     for x in bbox:
         try:
             float(x)
-        except ValueError, e:
+        except ValueError as e:
             msg = ('Bounding box %s contained non-numeric entry %s, '
                    'original error was "%s".' % (bbox, x, e))
             raise BoundingBoxError(msg)
@@ -119,7 +121,7 @@ def bboxstring2list(bbox_string):
            'format 105.592,-7.809,110.159,-5.647\n'
            'Instead I got %s of type %s.' % (str(bbox_string),
                                              type(bbox_string)))
-    verify(isinstance(bbox_string, basestring), msg)
+    verify(isinstance(bbox_string, str), msg)
 
     fields = bbox_string.split(',')
     msg = ('Bounding box string must have 4 coordinates in the form '
@@ -132,7 +134,7 @@ def bboxstring2list(bbox_string):
     for x in fields:
         try:
             float(x)
-        except ValueError, e:
+        except ValueError as e:
             msg = ('Bounding box %s contained non-numeric entry %s, '
                    'original error was "%s".' % (bbox_string, x, e))
             raise BoundingBoxError(msg)
@@ -145,7 +147,7 @@ def check_bbox_string(bbox_string):
     """
 
     msg = 'Expected bbox as a string with format "W,S,E,N"'
-    verify(isinstance(bbox_string, basestring), msg)
+    verify(isinstance(bbox_string, str), msg)
 
     # Use checks from string to list conversion
     # FIXME (Ole): Would be better to separate the checks from the conversion
@@ -269,7 +271,7 @@ class TestIO(unittest.TestCase):
 
             assert FEATURE_COUNTS[vectorname] == N
 
-            assert isinstance(layer.get_name(), basestring)
+            assert isinstance(layer.get_name(), str)
 
             # Check projection
             wkt = layer.get_projection(proj4=False)
@@ -296,10 +298,10 @@ class TestIO(unittest.TestCase):
 
                 # Verify that each feature has the same fields
                 if field_names is None:
-                    field_names = attributes[i].keys()
+                    field_names = list(attributes[i].keys())
                 else:
-                    assert len(field_names) == len(attributes[i].keys())
-                    assert field_names == attributes[i].keys()
+                    assert len(field_names) == len(list(attributes[i].keys()))
+                    assert field_names == list(attributes[i].keys())
 
             # Write data back to file
             # FIXME (Ole): I would like to use gml here, but OGR does not
@@ -341,10 +343,10 @@ class TestIO(unittest.TestCase):
 
                 # Verify that each feature has the same fields
                 if field_names is None:
-                    field_names = attributes[i].keys()
+                    field_names = list(attributes[i].keys())
                 else:
-                    assert len(field_names) == len(attributes[i].keys())
-                    assert field_names == attributes[i].keys()
+                    assert len(field_names) == len(list(attributes[i].keys()))
+                    assert field_names == list(attributes[i].keys())
 
             # Test individual extraction
             lon = layer.get_data(attribute='LONGITUDE')
@@ -919,7 +921,7 @@ class TestIO(unittest.TestCase):
         assert len(attributes[0]) == 2
 
         assert FEATURE_COUNTS[vectorname] == N
-        assert isinstance(layer.get_name(), basestring)
+        assert isinstance(layer.get_name(), str)
 
         # Check projection
         wkt = layer.get_projection(proj4=False)
@@ -1421,7 +1423,7 @@ class TestIO(unittest.TestCase):
         asc_filename = os.path.join(TESTDATA, 'bad_ascii_format.asc')
         try:
             read_layer(asc_filename)
-        except ReadLayerError, e:
+        except ReadLayerError as e:
             # Check that error message is reasonable, e.g.
             # File /home/nielso/sandpit/inasafe_data/test/bad_ascii_format.asc
             # exists, but could not be read. Please check if the file can
@@ -1437,7 +1439,7 @@ class TestIO(unittest.TestCase):
         asc_filename = 'nonexisting_ascii_file_234xxxlcrhgqjk.asc'
         try:
             read_layer(asc_filename)
-        except ReadLayerError, e:
+        except ReadLayerError as e:
             # Check that this error message reflects that file did not exist
             msg = 'Unexpected error message for non existing asc file: %s' % e
             assert 'Could not find file' in str(e), msg
@@ -2225,7 +2227,7 @@ class TestIO(unittest.TestCase):
         assert len(attributes[0]) == 3
 
         assert FEATURE_COUNTS[vectorname] == N
-        assert isinstance(layer.get_name(), basestring)
+        assert isinstance(layer.get_name(), str)
 
         # Check projection
         wkt = layer.get_projection(proj4=False)

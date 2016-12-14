@@ -3,7 +3,8 @@
 """
 Aggregate the impact table to the aggregate hazard.
 """
-from PyQt4.QtCore import QPyNullVariant
+from builtins import str
+from qgis.PyQt.QtCore import QPyNullVariant
 from qgis.core import QGis, QgsFeatureRequest
 
 from safe.definitionsv4.fields import (
@@ -143,7 +144,7 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
         )
 
         # We summarize every absolute values.
-        for field, field_definition in absolute_values.iteritems():
+        for field, field_definition in absolute_values.items():
             value = f[field]
             if not value or isinstance(value, QPyNullVariant):
                 value = 0
@@ -175,14 +176,14 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
 
         affected = post_processor_affected_function(
             classification=classification, hazard_class=feature_hazard_value)
-        affected = tr(unicode(affected))
+        affected = tr(str(affected))
         aggregate_hazard.changeAttributeValue(
             area.id(), shift + len(unique_exposure), affected)
 
         aggregate_hazard.changeAttributeValue(
             area.id(), shift + len(unique_exposure) + 1, total)
 
-        for i, field in enumerate(absolute_values.itervalues()):
+        for i, field in enumerate(absolute_values.values()):
             value = field[0].get_value(
                 aggregation_id=aggregation_value,
                 hazard_id=feature_hazard_id

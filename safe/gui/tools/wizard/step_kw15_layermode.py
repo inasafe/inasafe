@@ -14,8 +14,8 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 # noinspection PyPackageRequirements
-from PyQt4 import QtCore
-from PyQt4.QtGui import QListWidgetItem
+from qgis.PyQt import QtCore
+from qgis.PyQt.QtWidgets import QListWidgetItem
 
 from safe.common.exceptions import InvalidWizardStep
 from safe.utilities.i18n import tr

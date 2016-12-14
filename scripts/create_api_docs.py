@@ -2,7 +2,9 @@
 """**Generating rst file for api documentation**
 
 """
+from __future__ import print_function
 
+from builtins import str
 __author__ = 'Ismail Sunni <ismailsunni@yahoo.co.id>'
 __revision__ = '$Format:%H$'
 __date__ = '16/08/2012'
@@ -132,9 +134,10 @@ def write_rst_file(file_directory, file_name, content):
         fl.write(content)
         fl.close()
 
-    except Exception, e:
-        print ('Creating %s failed' % os.path.join(
-            file_directory, file_name + '.rst'), e)
+    except Exception as e:
+        # fix_print_with_import
+        print(('Creating %s failed' % os.path.join(
+            file_directory, file_name + '.rst'), e))
 
 
 def get_python_files_from_list(files, excluded_files=None):
@@ -276,8 +279,10 @@ def create_api_docs(code_path, api_docs_path, max_depth=2):
 
 def usage():
     """Helper function for telling how to use the script."""
-    print 'Usage:'
-    print 'python %s [optional path to inasafe directory]' % sys.argv[0]
+    # fix_print_with_import
+    print('Usage:')
+    # fix_print_with_import
+    print('python %s [optional path to inasafe directory]' % sys.argv[0])
 
 
 def main():
@@ -290,27 +295,32 @@ def main():
     else:
         inasafe_code_path = None
 
-    print 'Please make sure there is no unused source code file in inasafe-dev'
+    # fix_print_with_import
+    print('Please make sure there is no unused source code file in inasafe-dev')
 
     inasafe_code_path = get_inasafe_code_path(inasafe_code_path)
-    print 'Cleaning api docs...'
+    # fix_print_with_import
+    print('Cleaning api docs...')
     api_docs_path = clean_api_docs_dirs()
     max_depth = 2
     packages = ['safe', 'realtime']
 
     # creating top level index for api-docs
-    print 'Creating top level index page...'
+    # fix_print_with_import
+    print('Creating top level index page...')
     create_top_level_index(api_docs_path, packages, max_depth)
 
     for package in packages:
-        print 'Creating api docs for package %s...' % package
+        # fix_print_with_import
+        print('Creating api docs for package %s...' % package)
         package_code_path = os.path.join(inasafe_code_path, package)
         create_api_docs(
             code_path=package_code_path,
             api_docs_path=api_docs_path,
             max_depth=max_depth)
 
-    print 'Done.'
+    # fix_print_with_import
+    print('Done.')
 
 if __name__ == '__main__':
     main()

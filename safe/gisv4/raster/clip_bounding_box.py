@@ -3,6 +3,7 @@
 Clip a raster by bounding box.
 """
 
+from builtins import str
 import processing
 
 from qgis.core import QgsRasterLayer

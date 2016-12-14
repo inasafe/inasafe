@@ -10,6 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from builtins import range
 import numpy
 import logging
 
@@ -121,7 +122,7 @@ class ITBFatalityFunction(
             }),
             # it should be range(2,11) if mmi 10 is included. Otherwise we
             # should remove mmi 10 in the displacement_rate as well - Hyeuk
-            ('mmi_range', range(2, 11)),
+            ('mmi_range', list(range(2, 11))),
             ('step', 0.5),
             ('calculate_displaced_people', True)
         ])
@@ -292,7 +293,7 @@ class ITBFatalityFunction(
 
         # Total statistics
         total_fatalities_raw = numpy.nansum(
-            number_of_fatalities.values(), axis=0)
+            list(number_of_fatalities.values()), axis=0)
 
         # Compute probability of fatality in each magnitude bin
         if (self.__class__.__name__ == 'PAGFatalityFunction') or (
@@ -302,9 +303,9 @@ class ITBFatalityFunction(
             prob_fatality_mag = None
 
         # Compute number of fatalities
-        self.total_population = numpy.nansum(number_of_exposed.values())
+        self.total_population = numpy.nansum(list(number_of_exposed.values()))
         self.total_fatalities = numpy.median(total_fatalities_raw)
-        total_displaced = numpy.nansum(number_of_displaced.values())
+        total_displaced = numpy.nansum(list(number_of_displaced.values()))
 
         # As per email discussion with Ole, Trevor, Hadi, total fatalities < 50
         # will be rounded down to 0 - Tim
@@ -331,7 +332,7 @@ class ITBFatalityFunction(
         classes = create_classes(mask.flat[:], len(colours))
         interval_classes = humanize_class(classes)
         style_classes = []
-        for i in xrange(len(interval_classes)):
+        for i in range(len(interval_classes)):
             style_class = dict()
             style_class['label'] = create_label(interval_classes[i])
             style_class['quantity'] = classes[i]

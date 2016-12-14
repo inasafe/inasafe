@@ -1,10 +1,12 @@
 """Implementation of JSONDecoder
 """
 from __future__ import absolute_import
+from builtins import chr
+from builtins import object
 import re
 import sys
 import struct
-from .compat import fromhex, b, u, text_type, binary_type, PY3, unichr
+from .compat import fromhex, b, u, text_type, binary_type, PY3, chr
 from .scanner import make_scanner, JSONDecodeError
 
 def _import_c_scanstring():
@@ -127,7 +129,7 @@ def py_scanstring(s, end, encoding=None, strict=True,
                         uni = 0x10000 + (((uni - 0xd800) << 10) |
                                          (uni2 - 0xdc00))
                         end += 6
-            char = unichr(uni)
+            char = chr(uni)
         # Append the unescaped character
         _append(char)
     return _join(chunks), end

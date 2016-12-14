@@ -1,5 +1,6 @@
 # coding=utf-8
 
+from builtins import object
 __author__ = 'Rizky Maulana Nugraha <lana.pcfre@gmail.com>'
 __date__ = '2/19/16'
 

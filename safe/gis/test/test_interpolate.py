@@ -1,4 +1,7 @@
 # coding=utf-8
+from __future__ import print_function
+from builtins import str
+from builtins import range
 import numpy
 import unittest
 import os
@@ -324,7 +327,7 @@ class TestInterpolate(unittest.TestCase):
 
         # Try a range of combinations of points outside domain
         # with error_bounds True
-        print
+        print()
         for lox in [x[0], x[0] - 1]:
             for hix in [x[-1], x[-1] + 1]:
                 for loy in [y[0], y[0] - 1]:
@@ -341,7 +344,7 @@ class TestInterpolate(unittest.TestCase):
                                 vals = interpolate2d(x, y, A, points,
                                                      mode='linear',
                                                      bounds_error=True)
-                            except BoundsError, e:
+                            except BoundsError as e:
                                 assert 'bounds_error was requested' in str(e)
                             else:
                                 msg = 'Should have raised bounds error'

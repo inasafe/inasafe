@@ -12,6 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from builtins import str
 import safe.definitionsv4.layer_geometry
 import safe.definitionsv4.layer_modes
 import safe.definitionsv4.layer_purposes
@@ -25,7 +26,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 import os
 from sqlite3 import OperationalError
 
-from PyQt4.QtCore import QSettings
+from qgis.PyQt.QtCore import QSettings
 from db_manager.db_plugins.postgis.connector import PostGisDBConnector
 from qgis.core import (
     QgsDataItem,

@@ -14,10 +14,12 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
+from builtins import range
 import os
 
-from PyQt4 import QtCore
-from PyQt4.QtGui import QListWidgetItem, QPixmap
+from qgis.PyQt import QtCore
+from qgis.PyQt.QtWidgets import QListWidgetItem
+from qgis.PyQt.QtGui import QPixmap
 
 from safe.definitionsv4.layer_purposes import (
     layer_purpose_exposure, layer_purpose_hazard)
@@ -156,7 +158,7 @@ class StepKwSubcategory(WizardStep, FORM_CLASS):
         # Set values based on existing keywords or parent mode
         if keyword:
             subcategories = []
-            for index in xrange(self.lstSubcategories.count()):
+            for index in range(self.lstSubcategories.count()):
                 item = self.lstSubcategories.item(index)
                 subcategories.append(item.data(QtCore.Qt.UserRole))
             if keyword in subcategories:

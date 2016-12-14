@@ -15,7 +15,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 # noinspection PyPackageRequirements
 import logging
-from PyQt4.QtGui import QWidget
+from qgis.PyQt.QtWidgets import QWidget
 
 from safe.common.parameters.default_select_parameter import (
     DefaultSelectParameter)
@@ -149,7 +149,7 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
             parameter.is_required = False
             parameter.help_text = inasafe_field['description']
             parameter.description = inasafe_field['description']
-            parameter.element_type = unicode
+            parameter.element_type = str
             parameter.options_list = option_list
             parameter.value = no_field
             parameter.default_labels = get_defaults(
@@ -184,7 +184,7 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
             parameter_widget.widget().set_default(None)
         # Set default value from existing keywords
         if existing_inasafe_default_values:
-            for guid, default in existing_inasafe_default_values.items():
+            for guid, default in list(existing_inasafe_default_values.items()):
                 parameter_widget = self.parameter_container.\
                     get_parameter_widget_by_guid(guid)
                 if isinstance(parameter_widget, DefaultSelectParameterWidget):

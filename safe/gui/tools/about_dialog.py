@@ -21,7 +21,7 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
-from PyQt4 import QtGui
+from qgis.PyQt import QtGui
 
 from safe.common.version import get_version
 from safe.defaults import limitations

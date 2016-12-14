@@ -1,6 +1,9 @@
 # coding=utf-8
 """**Class Raster**"""
+from __future__ import absolute_import
 
+from builtins import str
+from builtins import range
 import os
 import gc
 import numpy
@@ -23,18 +26,18 @@ from safe.common.exceptions import (
     WriteLayerError
 )
 
-from layer import Layer
-from vector import Vector
-from projection import Projection
+from .layer import Layer
+from .vector import Vector
+from .projection import Projection
 
-from utilities import DRIVER_MAP
-from utilities import (
+from .utilities import DRIVER_MAP
+from .utilities import (
     geotransform_to_bbox,
     geotransform_to_resolution,
     check_geotransform)
 
-from utilities import safe_to_qgis_layer
-from safe.utilities.unicode import get_string
+from .utilities import safe_to_qgis_layer
+from safe.utilities.str import get_string
 from safe.utilities.metadata import (
     write_iso19115_metadata,
     read_iso19115_metadata,
@@ -104,7 +107,7 @@ class Raster(Layer):
             return
 
         # Initialisation
-        if isinstance(data, basestring):
+        if isinstance(data, str):
             self.read_from_file(data)
         elif isinstance(data, QgsRasterLayer):
             self.read_from_qgis_native(data)
@@ -482,7 +485,7 @@ class Raster(Layer):
             # See if scaling can work as a scalar value
             try:
                 sigma = float(scaling)
-            except ValueError, e:
+            except ValueError as e:
                 msg = ('Keyword scaling "%s" could not be converted to a '
                        'number. It must be either True, False, None or a '
                        'number: %s' % (scaling, str(e)))
@@ -641,7 +644,7 @@ class Raster(Layer):
         try:
             res = geotransform_to_resolution(
                 self.geotransform, isotropic=isotropic)
-        except Exception, e:
+        except Exception as e:
             msg = ('Resolution for layer %s could not be obtained: %s '
                    % (self.get_name(), str(e)))
             raise InaSAFEError(msg)

@@ -12,6 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
+from builtins import range
 __author__ = 'qgis@borysjurgiel.pl'
 __revision__ = '$Format:%H$'
 __date__ = '16/03/2016'
@@ -19,11 +20,12 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
 # noinspection PyPackageRequirements
-from PyQt4 import QtCore, QtGui
+from qgis.PyQt import QtCore, QtGui
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import pyqtSignature
 # noinspection PyPackageRequirements
-from PyQt4.QtGui import QListWidgetItem, QPixmap
+from qgis.PyQt.QtWidgets import QListWidgetItem
+from qgis.PyQt.QtGui import QPixmap
 
 from qgis.core import QgsMapLayerRegistry
 
@@ -141,7 +143,7 @@ class StepFcExpLayerFromCanvas(WizardStep, FORM_CLASS):
         # Try to select the last_layer, if found:
         if last_layer:
             layers = []
-            for indx in xrange(self.lstCanvasExpLayers.count()):
+            for indx in range(self.lstCanvasExpLayers.count()):
                 item = self.lstCanvasExpLayers.item(indx)
                 layers += [item.data(QtCore.Qt.UserRole)]
             if last_layer in layers:

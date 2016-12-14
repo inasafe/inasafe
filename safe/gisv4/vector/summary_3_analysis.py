@@ -4,7 +4,7 @@
 Aggregate the aggregate hazard to the analysis layer.
 """
 
-from PyQt4.QtCore import QPyNullVariant
+from qgis.PyQt.QtCore import QPyNullVariant
 from qgis.core import QGis, QgsFeatureRequest
 
 from safe.definitionsv4.fields import (
@@ -115,7 +115,7 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
         )
 
         # We summarize every absolute values.
-        for field, field_definition in absolute_values.iteritems():
+        for field, field_definition in absolute_values.items():
             value = area[field]
             if not value or isinstance(value, QPyNullVariant):
                 value = 0
@@ -159,7 +159,7 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
         analysis.changeAttributeValue(
             area.id(), shift + len(unique_hazard) + 2, total)
 
-        for i, field in enumerate(absolute_values.itervalues()):
+        for i, field in enumerate(absolute_values.values()):
             value = field[0].get_value(
                 all='all'
             )

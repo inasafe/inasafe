@@ -94,7 +94,7 @@ def make_directory(dir_path):
         # Ensure that the dir is world writable
         # Umask sets the new mask and returns the old
         old_mask = os.umask(0000)
-        os.makedirs(dir_path, 0777)
+        os.makedirs(dir_path, 0o777)
         # Resinstate the old mask for tmp
         os.umask(old_mask)
 

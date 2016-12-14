@@ -1,3 +1,6 @@
+from future import standard_library
+standard_library.install_aliases()
+from builtins import object
 from raven.transport.base import HTTPTransport, GeventedHTTPTransport, TwistedHTTPTransport, \
   TornadoHTTPTransport, UDPTransport
 from raven.transport.exceptions import DuplicateScheme

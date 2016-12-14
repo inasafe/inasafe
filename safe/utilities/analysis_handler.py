@@ -12,6 +12,7 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 
+from builtins import str
 import os
 import json
 import logging
@@ -27,9 +28,9 @@ from qgis.core import (
     QgsRectangle,
     QgsCoordinateReferenceSystem)
 # noinspection PyPackageRequirements
-from PyQt4 import QtGui, QtCore
+from qgis.PyQt import QtGui, QtCore
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import QObject, QSettings, pyqtSignal, Qt, QDir
+from qgis.PyQt.QtCore import QObject, QSettings, pyqtSignal, Qt, QDir
 
 from safe.definitionsv4.fields import hazard_class_field
 from safe.definitionsv4.utilities import definition
@@ -437,7 +438,7 @@ class AnalysisHandler(QObject):
                     self.impact_function.impact)
                 report = self.show_results()
 
-            except Exception, e:  # pylint: disable=W0703
+            except Exception as e:  # pylint: disable=W0703
                 # FIXME (Ole): This branch is not covered by the tests
                 self.analysis_error(e, self.tr('Error loading impact layer.'))
             else:
@@ -782,9 +783,9 @@ class AnalysisHandler(QObject):
 
             # noinspection PyTypeChecker
             self.show_dynamic_message(self, status)
-        except TemplateLoadingError, e:
+        except TemplateLoadingError as e:
             send_error_message(self, get_error_message(e))
-        except Exception, e:  # pylint: disable=broad-except
+        except Exception as e:  # pylint: disable=broad-except
             send_error_message(self, get_error_message(e))
 
     def open_map_in_composer(self, impact_report):

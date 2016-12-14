@@ -12,15 +12,16 @@ Contact : ole.moller.nielsen@gmail.com
 .. todo:: Check raster is single band
 
 """
+from __future__ import absolute_import
 
+from builtins import str
 import logging
 from sqlite3 import OperationalError
 
-from PyQt4 import QtGui
-from PyQt4.QtCore import pyqtSignature, QSettings
-from PyQt4.QtGui import (
-    QDialog,
-    QPixmap)
+from qgis.PyQt import QtGui
+from qgis.PyQt.QtCore import QSettings
+from qgis.PyQt.QtWidgets import QDialog
+from qgis.PyQt.QtGui import QPixmap
 from qgis.core import QgsMapLayerRegistry
 
 from safe.definitionsv4.layer_purposes import (
@@ -53,42 +54,42 @@ from safe.utilities.gis import (
     is_polygon_layer)
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.resources import get_ui_class, resources_path
-from safe.utilities.unicode import get_unicode
+from safe.utilities.str import get_unicode
 from safe.utilities.utilities import (
     get_error_message, is_keyword_version_supported)
-from step_fc00_functions1 import StepFcFunctions1
-from step_fc05_functions2 import StepFcFunctions2
-from step_fc10_function import StepFcFunction
-from step_fc15_hazlayer_origin import StepFcHazLayerOrigin
-from step_fc20_hazlayer_from_canvas import StepFcHazLayerFromCanvas
-from step_fc25_hazlayer_from_browser import StepFcHazLayerFromBrowser
-from step_fc30_explayer_origin import StepFcExpLayerOrigin
-from step_fc35_explayer_from_canvas import StepFcExpLayerFromCanvas
-from step_fc40_explayer_from_browser import StepFcExpLayerFromBrowser
-from step_fc45_disjoint_layers import StepFcDisjointLayers
-from step_fc50_agglayer_origin import StepFcAggLayerOrigin
-from step_fc55_agglayer_from_canvas import StepFcAggLayerFromCanvas
-from step_fc60_agglayer_from_browser import StepFcAggLayerFromBrowser
-from step_fc65_agglayer_disjoint import StepFcAggLayerDisjoint
-from step_fc70_extent import StepFcExtent
-from step_fc75_extent_disjoint import StepFcExtentDisjoint
-from step_fc80_params import StepFcParams
-from step_fc85_summary import StepFcSummary
-from step_kw00_purpose import StepKwPurpose
-from step_kw05_subcategory import StepKwSubcategory
-from step_kw10_hazard_category import StepKwHazardCategory
-from step_kw15_layermode import StepKwLayerMode
-from step_kw20_unit import StepKwUnit
-from step_kw25_classification import StepKwClassification
-from step_kw30_field import StepKwField
-from step_kw35_resample import StepKwResample
-from step_kw40_classify import StepKwClassify
-from step_kw43_threshold import StepKwThreshold
-from step_kw45_inasafe_fields import StepKwInaSAFEFields
-from step_kw47_default_inasafe_fields import StepKwDefaultInaSAFEFields
-from step_kw55_source import StepKwSource
-from step_kw60_title import StepKwTitle
-from step_kw65_summary import StepKwSummary
+from .step_fc00_functions1 import StepFcFunctions1
+from .step_fc05_functions2 import StepFcFunctions2
+from .step_fc10_function import StepFcFunction
+from .step_fc15_hazlayer_origin import StepFcHazLayerOrigin
+from .step_fc20_hazlayer_from_canvas import StepFcHazLayerFromCanvas
+from .step_fc25_hazlayer_from_browser import StepFcHazLayerFromBrowser
+from .step_fc30_explayer_origin import StepFcExpLayerOrigin
+from .step_fc35_explayer_from_canvas import StepFcExpLayerFromCanvas
+from .step_fc40_explayer_from_browser import StepFcExpLayerFromBrowser
+from .step_fc45_disjoint_layers import StepFcDisjointLayers
+from .step_fc50_agglayer_origin import StepFcAggLayerOrigin
+from .step_fc55_agglayer_from_canvas import StepFcAggLayerFromCanvas
+from .step_fc60_agglayer_from_browser import StepFcAggLayerFromBrowser
+from .step_fc65_agglayer_disjoint import StepFcAggLayerDisjoint
+from .step_fc70_extent import StepFcExtent
+from .step_fc75_extent_disjoint import StepFcExtentDisjoint
+from .step_fc80_params import StepFcParams
+from .step_fc85_summary import StepFcSummary
+from .step_kw00_purpose import StepKwPurpose
+from .step_kw05_subcategory import StepKwSubcategory
+from .step_kw10_hazard_category import StepKwHazardCategory
+from .step_kw15_layermode import StepKwLayerMode
+from .step_kw20_unit import StepKwUnit
+from .step_kw25_classification import StepKwClassification
+from .step_kw30_field import StepKwField
+from .step_kw35_resample import StepKwResample
+from .step_kw40_classify import StepKwClassify
+from .step_kw43_threshold import StepKwThreshold
+from .step_kw45_inasafe_fields import StepKwInaSAFEFields
+from .step_kw47_default_inasafe_fields import StepKwDefaultInaSAFEFields
+from .step_kw55_source import StepKwSource
+from .step_kw60_title import StepKwTitle
+from .step_kw65_summary import StepKwSummary
 from.step_fc90_analysis import StepFcAnalysis
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -796,7 +797,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         try:
             self.keyword_io.write_keywords(
                 layer=self.layer, keywords=current_keywords)
-        except InaSAFEError, e:
+        except InaSAFEError as e:
             error_message = get_error_message(e)
             # noinspection PyCallByClass,PyTypeChecker,PyArgumentList
             QtGui.QMessageBox.warning(
@@ -811,5 +812,5 @@ class WizardDialog(QDialog, FORM_CLASS):
         # Save default value to QSetting
         if current_keywords.get('inasafe_default_values'):
             for key, value in \
-                    current_keywords['inasafe_default_values'].items():
+                    list(current_keywords['inasafe_default_values'].items()):
                 set_inasafe_default_value_qsetting(self.setting, key, value)

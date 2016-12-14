@@ -19,12 +19,13 @@ Contact : ole.moller.nielsen@gmail.com
 
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
+from builtins import str
 import qgis  # pylint: disable=unused-import
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import QCoreApplication, QSettings, QLocale
+from qgis.PyQt.QtCore import QCoreApplication, QSettings, QLocale
 import logging
 
-from safe.utilities.unicode import get_unicode
+from safe.utilities.str import get_unicode
 
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'

@@ -22,9 +22,9 @@ import os
 import logging
 import tempfile
 
-from PyQt4.QtNetwork import QNetworkReply
-from PyQt4.QtGui import QDialog
-from PyQt4.QtCore import QSettings
+from qgis.PyQt.QtNetwork import QNetworkReply
+from qgis.PyQt.QtWidgets import QDialog
+from qgis.PyQt.QtCore import QSettings
 
 from safe.utilities.i18n import tr
 from safe.utilities.gis import qgis_version

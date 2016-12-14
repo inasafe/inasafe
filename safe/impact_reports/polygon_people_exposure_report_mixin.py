@@ -68,7 +68,7 @@ class PolygonPeopleExposureReportMixin(ReportMixin):
         attributes = ['category', 'value']
         fields = []
 
-        for key, value in self.hazard_levels.iteritems():
+        for key, value in self.hazard_levels.items():
             name = self.hazard_class_mapping[key][0]
             # This skips reporting people not affected in No zone
             if key == 'wet':
@@ -155,7 +155,7 @@ class PolygonPeopleExposureReportMixin(ReportMixin):
 
         areas = self.areas
         affected_areas = self.affected_areas
-        for area_id, value in areas.iteritems():
+        for area_id, value in areas.items():
             if area_id in affected_areas:
                 affected = affected_areas[area_id]
             else:

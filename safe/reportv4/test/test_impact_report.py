@@ -21,7 +21,7 @@ from safe.test.utilities import (
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from PyQt4.QtCore import QSettings
+from qgis.PyQt.QtCore import QSettings
 from qgis.core import QgsVectorLayer, QgsMapLayerRegistry
 from safe.definitionsv4.report import (
     report_a3_portrait_blue,

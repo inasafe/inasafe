@@ -6,6 +6,8 @@ Assign the highest value to an exposure according to a hazard layer.
 Issue https://github.com/inasafe/inasafe/issues/3192
 """
 
+from builtins import next
+from builtins import zip
 import logging
 from qgis.core import (
     QGis,

@@ -4,8 +4,9 @@
 Tools for vector layers.
 """
 
+from builtins import str
 from uuid import uuid4
-from PyQt4.QtCore import QSettings, QPyNullVariant
+from qgis.PyQt.QtCore import QSettings, QPyNullVariant
 from qgis.core import (
     QgsGeometry,
     QgsVectorLayer,
@@ -254,7 +255,7 @@ def read_dynamic_inasafe_field(inasafe_fields, dynamic_field):
     pattern = dynamic_field['key']
     pattern = pattern.replace('%s', '')
     unique_exposure = []
-    for key, name_field in inasafe_fields.iteritems():
+    for key, name_field in inasafe_fields.items():
         if key.endswith(pattern):
             unique_exposure.append(key.replace(pattern, ''))
 

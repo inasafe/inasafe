@@ -1,13 +1,13 @@
 # coding=utf-8
 """Keyword Wizard Step for Threshold"""
+from builtins import range
 from collections import OrderedDict
 from functools import partial
 import logging
 import numpy
 from osgeo import gdal
 from osgeo.gdalconst import GA_ReadOnly
-from PyQt4.QtGui import (
-    QDoubleSpinBox, QHBoxLayout, QLabel, QWidgetItem, QSpacerItem, QLayout)
+from qgis.PyQt.QtWidgets import QDoubleSpinBox, QHBoxLayout, QLabel, QWidgetItem, QSpacerItem, QLayout
 
 from safe.utilities.i18n import tr
 from safe.definitionsv4.layer_purposes import layer_purpose_aggregation
@@ -92,7 +92,7 @@ class StepKwThreshold(WizardStep, FORM_CLASS):
             :param layout: A layout.
             :type layout: QLayout
             """
-            for i in reversed(range(layout.count())):
+            for i in reversed(list(range(layout.count()))):
                 item = layout.itemAt(i)
 
                 if isinstance(item, QWidgetItem):
@@ -205,19 +205,19 @@ class StepKwThreshold(WizardStep, FORM_CLASS):
             :type the_string: str
             """
             if the_string == 'Max value':
-                current_max_value = self.classes.values()[index][1]
-                target_min_value = self.classes.values()[index + 1][0]
+                current_max_value = list(self.classes.values())[index][1]
+                target_min_value = list(self.classes.values())[index + 1][0]
                 if current_max_value.value() != target_min_value.value():
                     target_min_value.setValue(current_max_value.value())
             elif the_string == 'Min value':
-                current_min_value = self.classes.values()[index][0]
-                target_max_value = self.classes.values()[index - 1][1]
+                current_min_value = list(self.classes.values())[index][0]
+                target_max_value = list(self.classes.values())[index - 1][1]
                 if current_min_value.value() != target_max_value.value():
                     target_max_value.setValue(current_min_value.value())
 
         # Set behaviour
-        for k, v in self.classes.items():
-            index = self.classes.keys().index(k)
+        for k, v in list(self.classes.items()):
+            index = list(self.classes.keys()).index(k)
             if index < len(self.classes) - 1:
                 # Max value changed
                 v[1].valueChanged.connect(partial(
@@ -230,7 +230,7 @@ class StepKwThreshold(WizardStep, FORM_CLASS):
     def get_threshold(self):
         """Return threshold based on current state."""
         value_map = dict()
-        for key, value in self.classes.items():
+        for key, value in list(self.classes.items()):
             value_map[key] = [
                 value[0].value(),
                 value[1].value(),

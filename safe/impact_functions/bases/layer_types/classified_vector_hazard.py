@@ -1,4 +1,5 @@
 # coding=utf-8
+from builtins import object
 from safe.common.exceptions import NoAttributeInLayerError
 from safe.impact_functions.bases.utilities import check_attribute_exist
 
