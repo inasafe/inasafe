@@ -56,6 +56,7 @@ from safe.common.exceptions import (
     InaSAFEError,
     InvalidExtentError,
     NoKeywordsFoundError,
+    NoFeaturesInExtentError,
 )
 from safe.impact_function_v4.postprocessors import (
     run_single_post_processor, enough_input)
@@ -67,7 +68,8 @@ from safe.impact_function_v4.style import (
 )
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
-from safe.utilities.utilities import replace_accentuated_characters
+from safe.utilities.utilities import (
+    replace_accentuated_characters, get_error_message)
 from safe.utilities.profiling import (
     profile, clear_prof_data, profiling_log)
 from safe.test.utilities import check_inasafe_fields
@@ -635,89 +637,94 @@ class ImpactFunction(object):
             The status is 1 if the client should fix something.
         :rtype: (int, m.Message)
         """
-        if not self.exposure:
-            message = generate_input_error_message(
-                tr('The exposure layer is compulsory'),
-                m.Paragraph(tr(
-                    'The impact function needs an exposure layer to run. '
-                    'You must provide it.'))
-            )
-            return 1, message
-
-        status, message = self._check_layer(self.exposure, 'exposure')
-        if status != 0:
-            return status, message
-
-        if not self.hazard:
-            message = generate_input_error_message(
-                tr('The hazard layer is compulsory'),
-                m.Paragraph(tr(
-                    'The impact function needs a hazard layer to run. '
-                    'You must provide it.'))
-            )
-            return 1, message
-
-        status, message = self._check_layer(self.hazard, 'hazard')
-        if status != 0:
-            return status, message
-
-        if self.aggregation:
-            if self.requested_extent:
+        try:
+            if not self.exposure:
                 message = generate_input_error_message(
-                    tr('Error with the requested extent'),
+                    tr('The exposure layer is compulsory'),
                     m.Paragraph(tr(
-                        'Requested Extent must be null when an aggregation is '
-                        'provided.'))
+                        'The impact function needs an exposure layer to run. '
+                        'You must provide it.'))
                 )
                 return 1, message
 
-            if self.requested_extent_crs:
-                message = generate_input_error_message(
-                    tr('Error with the requested extent'),
-                    m.Paragraph(tr(
-                        'Requested Extent CRS must be null when an '
-                        'aggregation is provided.'))
-                )
-                return 1, message
-            if self._viewport_extent:
-                message = generate_input_error_message(
-                    tr('Error with the viewport extent'),
-                    m.Paragraph(tr(
-                        'Viewport Extent must be null when an aggregation is '
-                        'provided.'))
-                )
-                return 1, message
-            if self._viewport_extent_crs:
-                message = generate_input_error_message(
-                    tr('Error with the viewport extent'),
-                    m.Paragraph(tr(
-                        'Viewport CRS must be null when an aggregation is '
-                        'provided.'))
-                )
-                return 1, message
-
-            status, message = self._check_layer(
-                self.aggregation, 'aggregation')
+            status, message = self._check_layer(self.exposure, 'exposure')
             if status != 0:
                 return status, message
 
-        # Set the name
-        self._name = tr('%s %s On %s %s' % (
-            self.hazard.keywords.get('hazard').title(),
-            self.hazard.keywords.get('layer_geometry').title(),
-            self.exposure.keywords.get('exposure').title(),
-            self.exposure.keywords.get('layer_geometry').title(),
-        ))
+            if not self.hazard:
+                message = generate_input_error_message(
+                    tr('The hazard layer is compulsory'),
+                    m.Paragraph(tr(
+                        'The impact function needs a hazard layer to run. '
+                        'You must provide it.'))
+                )
+                return 1, message
 
-        # Set the title
-        if self.exposure.keywords.get('exposure') == 'population':
-            self._title = tr('need evacuation')
+            status, message = self._check_layer(self.hazard, 'hazard')
+            if status != 0:
+                return status, message
+
+            if self.aggregation:
+                if self.requested_extent:
+                    message = generate_input_error_message(
+                        tr('Error with the requested extent'),
+                        m.Paragraph(tr(
+                            'Requested Extent must be null when an '
+                            'aggregation is provided.'))
+                    )
+                    return 1, message
+
+                if self.requested_extent_crs:
+                    message = generate_input_error_message(
+                        tr('Error with the requested extent'),
+                        m.Paragraph(tr(
+                            'Requested Extent CRS must be null when an '
+                            'aggregation is provided.'))
+                    )
+                    return 1, message
+                if self._viewport_extent:
+                    message = generate_input_error_message(
+                        tr('Error with the viewport extent'),
+                        m.Paragraph(tr(
+                            'Viewport Extent must be null when an aggregation '
+                            'is provided.'))
+                    )
+                    return 1, message
+                if self._viewport_extent_crs:
+                    message = generate_input_error_message(
+                        tr('Error with the viewport extent'),
+                        m.Paragraph(tr(
+                            'Viewport CRS must be null when an aggregation is '
+                            'provided.'))
+                    )
+                    return 1, message
+
+                status, message = self._check_layer(
+                    self.aggregation, 'aggregation')
+                if status != 0:
+                    return status, message
+
+            # Set the name
+            self._name = tr('%s %s On %s %s' % (
+                self.hazard.keywords.get('hazard').title(),
+                self.hazard.keywords.get('layer_geometry').title(),
+                self.exposure.keywords.get('exposure').title(),
+                self.exposure.keywords.get('layer_geometry').title(),
+            ))
+
+            # Set the title
+            if self.exposure.keywords.get('exposure') == 'population':
+                self._title = tr('need evacuation')
+            else:
+                self._title = tr('be affected')
+
+        except Exception as e:
+            message = get_error_message(e)
+            return 2, message
         else:
-            self._title = tr('be affected')
-
-        # Everything was fine.
-        self._is_ready = True
-        return 0, None
+            # Everything was fine.
+            self._is_ready = True
+            return 0, None
 
     def debug_layer(self, layer, check_fields=True):
         """Write the layer produced to the datastore if debug mode is on.
@@ -746,7 +753,7 @@ class ImpactFunction(object):
         :rtype: (int, m.Message)
         """
         if not self._is_ready:
-            return 1, tr('You need to run prepare first.')
+            return 1, tr('You need to run `prepare` first.')
 
         try:
             self.reset_state()
@@ -766,8 +773,29 @@ class ImpactFunction(object):
             # Later, we should move this call.
             self.style()
 
+        except NoFeaturesInExtentError:
+            warning_heading = m.Heading(
+                tr('No features in the extent'), **WARNING_STYLE)
+            warning_message = tr(
+                'There is not feature in the extent.')
+            suggestion_heading = m.Heading(
+                tr('Suggestion'), **SUGGESTION_STYLE)
+            suggestion = tr(
+                'Try zooming in to a bigger area or check your features ('
+                'geometry and attribute table). For instance, an empty '
+                'geometry or an hazard without value are removed during the '
+                'process.')
+
+            message = m.Message()
+            message.add(warning_heading)
+            message.add(warning_message)
+            message.add(suggestion_heading)
+            message.add(suggestion)
+            return 1, message
+
         except InaSAFEError as e:
-            return 1, e.message
+            message = get_error_message(e)
+            return 2, message
 
         except MemoryError:
             warning_heading = m.Heading(tr('Memory issue'), **WARNING_STYLE)
@@ -786,10 +814,11 @@ class ImpactFunction(object):
             message.add(warning_message)
             message.add(suggestion_heading)
             message.add(suggestion)
-            return 2, message
+            return 1, message
 
         except Exception as e:
-            return 2, e.message
+            message = get_error_message(e)
+            return 2, message
         else:
             return 0, None
 

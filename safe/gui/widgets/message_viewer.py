@@ -9,7 +9,7 @@ Contact : ole.moller.nielsen@gmail.com
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
 """
-from safe.messaging.message import Message
+from safe.messaging.message import MessageElement
 
 __author__ = 'tim@kartoza.com'
 __revision__ = '$Format:%H$'
@@ -242,7 +242,7 @@ class MessageViewer(QtWebKit.QWebView):
 
     def show_messages(self):
         """Show all messages."""
-        if isinstance(self.static_message, Message):
+        if isinstance(self.static_message, MessageElement):
             # Handle sent Message instance
             string = html_header()
             if self.static_message is not None:
