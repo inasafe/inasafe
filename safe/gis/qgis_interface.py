@@ -78,14 +78,8 @@ class QgisInterface(QObject):
         # instance is the actual one. It will also ensure that the processing
         # algorithms are nicely loaded and available for use.
 
-        # Since QGIS > 2.0, the module is moved from QGisLayers to dataobjects
-        # pylint: disable=F0401, E0611
-        if QGis.QGIS_VERSION_INT > 20001:
-            # noinspection PyUnresolvedReferences
-            from processing.tools import dataobjects
-        else:
-            # noinspection PyUnresolvedReferences
-            from processing.core import QGisLayers as dataobjects
+        # noinspection PyUnresolvedReferences
+        from processing.tools import dataobjects
 
         # noinspection PyUnresolvedReferences
         import processing
