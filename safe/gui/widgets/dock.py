@@ -75,7 +75,6 @@ from safe.messaging import styles
 from safe.common.exceptions import (
     KeywordNotFoundError,
     NoKeywordsFoundError,
-    InsufficientOverlapError,
     InvalidParameterError,
     HashNotFoundError,
     InvalidGeometryError,
@@ -93,7 +92,6 @@ from safe.utilities.qt import disable_busy_cursor, enable_busy_cursor
 from safe.gui.widgets.message import (
     show_no_keywords_message,
     show_keyword_version_message,
-    missing_keyword_message,
     getting_started_message,
     no_overlap_message,
     ready_message)
@@ -218,7 +216,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # Error messages clear the message queue and so the display is 'reset'
         # noinspection PyArgumentEqualDefault
         dispatcher.connect(
-            self.results_webview.error_message_event,
+            self.results_webview.static_message_event,
             signal=ERROR_MESSAGE_SIGNAL,
             sender=dispatcher.Any)
 
@@ -826,13 +824,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         if flag:
             self.show_next_analysis_extent()  # green
             self.extent.show_user_analysis_extent()  # blue
-            try:
-                pass
-                # clip_parameters = self.impact_function.clip_parameters
-                # self.extent.show_last_analysis_extent(
-                # clip_parameters['adjusted_geo_extent'])  # red
-            except (AttributeError, TypeError):
-                pass
 
     def progress_callback(self, current_value, maximum_value, message=None):
         """GUI based callback implementation for showing progress.
@@ -904,41 +895,42 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.impact_function = self.prepare_impact_function()
         status, message = self.impact_function.prepare()
         if status == 1:
-            LOGGER.debug(tr(
+            self.hide_busy()
+            LOGGER.info(tr(
                 'The impact function will not be able to run because of the '
                 'inputs.'))
             send_error_message(self, message)
-            self.hide_busy()
             return
         if status == 2:
-            LOGGER.debug(tr(
+            self.hide_busy()
+            LOGGER.exception(tr(
                 'The impact function will not be able to run because of a '
                 'bug.'))
             send_error_message(self, message)
-            self.hide_busy()
             return
 
         # Start the analysis
         status, message = self.impact_function.run()
         if status == 1:
-            LOGGER.debug(tr(
+            self.hide_busy()
+            LOGGER.info(tr(
                 'The impact function could not run because of the inputs.'))
             send_error_message(self, message)
-            self.hide_busy()
             return
         elif status == 2:
-            LOGGER.debug(tr(
+            self.hide_busy()
+            LOGGER.exception(tr(
                 'The impact function could not run because of a bug.'))
             send_error_message(self, message)
-            self.hide_busy()
             return
 
-        LOGGER.debug(tr('The impact function could run without errors.'))
+        LOGGER.info(tr('The impact function could run without errors.'))
+
         self.generate_impact_report(self.impact_function)
 
         layers = self.impact_function.outputs
-
         name = self.impact_function.name
+
         root = QgsProject.instance().layerTreeRoot()
         group_analysis = root.insertGroup(0, name)
         group_analysis.setVisible(Qt.Checked)
@@ -996,23 +988,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             legend.setLayerVisible(qgis_exposure, False)
 
         self.hide_busy()
-
-    def analysis_error(self, exception, message):
-        """A helper to spawn an error and halt processing.
-
-        An exception will be logged, busy status removed and a message
-        displayed.
-
-        :param message: an ErrorMessage to display
-        :type message: ErrorMessage, Message
-
-        :param exception: An exception that was raised
-        :type exception: Exception
-        """
-        self.hide_busy()
-        LOGGER.exception(message)
-        message = get_error_message(exception, context=message)
-        send_error_message(self, message)
 
     def prepare_impact_function(self):
         """Create analysis as a representation of current situation of dock."""
@@ -1140,6 +1115,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.print_button.setEnabled(False)
         message = keywords.to_message()
         send_static_message(self, message)
+        self.show_question_button.setVisible(False)
+        self.question_group.setEnabled(True)
+        self.question_group.setVisible(True)
 
     @pyqtSlot('QgsMapLayer')
     def layer_changed(self, layer):
