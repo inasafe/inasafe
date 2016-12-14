@@ -158,26 +158,24 @@ def show_keyword_version_message(sender, keyword_version, inasafe_version):
     .. note:: The print button will be disabled if this method is called.
     """
     LOGGER.debug('Showing Mismatch Version Message')
-    report = m.Message()
-    report.add(LOGO_ELEMENT)
-    report.add(m.Heading(tr(
-        'Layer Keyword\'s Version Mismatch:'), **WARNING_STYLE))
-    context = m.Paragraph(
-        tr(
-            'Your layer\'s keyword\'s version (%s) does not match with '
-            'your InaSAFE version (%s). If you wish to use it as an '
-            'exposure, hazard, or aggregation layer in an analysis, '
-            'please use the keyword wizard to update the keywords. You '
-            'can open the wizard by clicking on the ' % (
-                keyword_version, inasafe_version)),
-        m.Image(
-            'file:///%s/img/icons/'
-            'show-keyword-wizard.svg' % resources_path(),
-            **SMALL_ICON_STYLE),
-        tr(
-            ' icon in the toolbar.'))
-    report.add(context)
-    send_static_message(sender, report)
+    message = generate_input_error_message(
+        tr('Layer Keyword\'s Version Mismatch:'),
+        m.Paragraph(
+            tr(
+                'Your layer\'s keyword\'s version (%s) does not match with '
+                'your InaSAFE version (%s). If you wish to use it as an '
+                'exposure, hazard, or aggregation layer in an analysis, '
+                'please use the keyword wizard to update the keywords. You '
+                'can open the wizard by clicking on the ' % (
+                    keyword_version, inasafe_version)),
+            m.Image(
+                'file:///%s/img/icons/'
+                'show-keyword-wizard.svg' % resources_path(),
+                **SMALL_ICON_STYLE),
+            tr(
+                ' icon in the toolbar.'))
+    )
+    send_static_message(sender, message)
 
 
 # Fixme, this code is not called.
@@ -192,23 +190,21 @@ def show_keywords_need_review_message(sender, message=None):
     .. note:: The print button will be disabled if this method is called.
     """
     LOGGER.debug('Showing incorrect keywords for v4 message')
-    report = m.Message()
-    report.add(LOGO_ELEMENT)
-    report.add(m.Heading(tr(
-        'Layer Keywords Outdated:'), **WARNING_STYLE))
-    context = m.Paragraph(
-        tr(
-            'Please update the keywords for your layers and then '
-            'try to run the analysis again. Use the keyword wizard '),
-        m.Image(
-            'file:///%s/img/icons/'
-            'show-keyword-wizard.svg' % resources_path(),
-            **SMALL_ICON_STYLE),
-        tr(
-            ' icon in the toolbar to update your layer\'s keywords.'),
-        message)
-    report.add(context)
-    send_static_message(sender, report)
+    message = generate_input_error_message(
+        tr('Layer Keywords Outdated:'),
+        m.Paragraph(
+            tr(
+                'Please update the keywords for your layers and then '
+                'try to run the analysis again. Use the keyword wizard '),
+            m.Image(
+                'file:///%s/img/icons/'
+                'show-keyword-wizard.svg' % resources_path(),
+                **SMALL_ICON_STYLE),
+            tr(
+                ' icon in the toolbar to update your layer\'s keywords.'),
+            message)
+    )
+    send_static_message(sender, message)
 
 
 def show_no_keywords_message(sender):
@@ -217,23 +213,40 @@ def show_no_keywords_message(sender):
     .. note:: The print button will be disabled if this method is called.
     """
     LOGGER.debug('Showing No Keywords Message')
+    message = generate_input_error_message(
+        tr('Layer keywords missing:'),
+        m.Paragraph(
+            tr(
+                'No keywords have been defined for this layer yet or there is '
+                'an issue with the currently defined keywords and they need '
+                'to be reviewed. If you wish to use this layer as an '
+                'exposure, hazard, or aggregation layer in an analysis, '
+                'please use the keyword wizard to update the keywords. You '
+                'can open the wizard by clicking on the '),
+            m.Image(
+                'file:///%s/img/icons/'
+                'show-keyword-wizard.svg' % resources_path(),
+                **SMALL_ICON_STYLE),
+            tr(
+                ' icon in the toolbar.'))
+    )
+    send_static_message(sender, message)
+
+
+def generate_input_error_message(header, text):
+    """Generate an error message with a header and a text.
+
+    :param header: The header of the message.
+    :type header: basestring
+
+    :param text: The text of the message.
+    :type text: m.Paragraph
+
+    :return: The error message ready to be displayed in the dock.
+    :rtype: m.Message
+    """
     report = m.Message()
     report.add(LOGO_ELEMENT)
-    report.add(m.Heading(tr(
-        'Layer keywords missing:'), **WARNING_STYLE))
-    context = m.Paragraph(
-        tr(
-            'No keywords have been defined for this layer yet or there is '
-            'an issue with the currently defined keywords and they need '
-            'to be reviewed. If you wish to use this layer as an '
-            'exposure, hazard, or aggregation layer in an analysis, '
-            'please use the keyword wizard to update the keywords. You '
-            'can open the wizard by clicking on the '),
-        m.Image(
-            'file:///%s/img/icons/'
-            'show-keyword-wizard.svg' % resources_path(),
-            **SMALL_ICON_STYLE),
-        tr(
-            ' icon in the toolbar.'))
-    report.add(context)
-    send_static_message(sender, report)
+    report.add(m.Heading(header, **WARNING_STYLE))
+    report.add(text)
+    return report
