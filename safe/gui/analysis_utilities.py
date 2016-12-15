@@ -15,7 +15,9 @@ Contact : ole.moller.nielsen@gmail.com
 """
 import os
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import QDir
+from PyQt4.QtCore import QDir, Qt
+# noinspection PyPackageRequirements
+from qgis.core import QgsMapLayerRegistry, QgsProject
 
 from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
 from safe.reportv4.report_metadata import ReportMetadata
@@ -65,3 +67,30 @@ def generate_impact_report(impact_function, iface):
     # supports
     impact_report.output_folder = os.path.join(layer_dir, 'output')
     impact_report.process_component()
+
+
+def add_impact_layer_to_QGIS(impact_function, iface):
+    """Helper method to add impact layer to QGIS from impact function.
+
+    :param impact_function: The impact function used.
+    :type impact_function: ImpactFunction
+
+    :param iface: QGIS QGisAppInterface instance.
+    :type iface: QGisAppInterface
+    """
+    layers = impact_function.outputs
+    name = impact_function.name
+
+    root = QgsProject.instance().layerTreeRoot()
+    group_analysis = root.insertGroup(0, name)
+    group_analysis.setVisible(Qt.Checked)
+    for layer in layers:
+        QgsMapLayerRegistry.instance().addMapLayer(layer, False)
+        layer_node = group_analysis.addLayer(layer)
+
+        # Let's enable only the more detailed layer. See #2925
+        if layer.id() == impact_function.impact.id():
+            layer_node.setVisible(Qt.Checked)
+            iface.setActiveLayer(layer)
+        else:
+            layer_node.setVisible(Qt.Unchecked)
