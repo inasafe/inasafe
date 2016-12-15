@@ -96,6 +96,7 @@ from safe.gui.widgets.message import (
     no_overlap_message,
     ready_message)
 from safe.reportv4.impact_report import ImpactReport as ImpactReportV4
+from safe.gui.analysis_utilities import generate_impact_report
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -852,41 +853,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.progress_bar.setValue(current_value)
         QtGui.QApplication.processEvents()
 
-    def generate_impact_report(self, impact_function):
-        """Generate the impact report from an impact function.
-
-        :param impact_function: The impact function used.
-        :type impact_function: ImpactFunction
-        :return:
-        """
-        # get minimum needs profile
-        minimum_needs = NeedsProfile()
-        minimum_needs.load()
-
-        # create impact report instance
-        report_metadata = ReportMetadata(
-            metadata_dict=standard_impact_report_metadata)
-        impact_report = ImpactReportV4(
-            self.iface,
-            report_metadata,
-            impact_function=impact_function,
-            minimum_needs_profile=minimum_needs)
-
-        # generate report folder
-
-        # no other option for now
-        # TODO: retrieve the information from data store
-        if isinstance(impact_function.datastore.uri, QDir):
-            layer_dir = impact_function.datastore.uri.absolutePath()
-        else:
-            # No other way for now
-            return
-
-        # We will generate it on the fly without storing it after datastore
-        # supports
-        impact_report.output_folder = os.path.join(layer_dir, 'output')
-        impact_report.process_component()
-
     def accept(self):
         """Execute analysis when run button is clicked."""
         self.show_busy()
@@ -926,7 +892,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         LOGGER.info(tr('The impact function could run without errors.'))
 
-        self.generate_impact_report(self.impact_function)
+        generate_impact_report(self.impact_function, self.iface)
 
         layers = self.impact_function.outputs
         name = self.impact_function.name
