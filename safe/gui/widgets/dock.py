@@ -28,10 +28,7 @@ from qgis.core import (
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import (
-    Qt,
-    pyqtSlot,
-    QSettings)
+from PyQt4.QtCore import Qt, pyqtSlot, QSettings
 
 from safe.definitionsv4.layer_purposes import layer_purpose_exposure_impacted
 from safe.definitionsv4.utilities import definition
