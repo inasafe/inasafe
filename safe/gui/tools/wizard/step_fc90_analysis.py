@@ -12,15 +12,11 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-__author__ = 'qgis@borysjurgiel.pl'
-__revision__ = '$Format:%H$'
-__date__ = '16/03/2016'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
 
+import os
 import logging
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import pyqtSignature, Qt
+from PyQt4.QtCore import pyqtSignature, Qt, QDir
 # noinspection PyPackageRequirements
 from qgis.core import QgsMapLayerRegistry, QgsProject
 from safe_extras.pydispatch import dispatcher
@@ -33,9 +29,17 @@ from safe.common.signals import (
 )
 from safe.utilities.i18n import tr
 from safe.impact_function_v4.impact_function import ImpactFunction
+from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
+from safe.reportv4.report_metadata import ReportMetadata
+from safe.definitionsv4.report import standard_impact_report_metadata
+from safe.reportv4.impact_report import ImpactReport as ImpactReportV4
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step import WizardStep
 
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 LOGGER = logging.getLogger('InaSAFE')
 FORM_CLASS = get_wizard_step_ui_class(__file__)
@@ -153,6 +157,7 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         LOGGER.info(tr('The impact function could run without errors.'))
 
         # Generate impact report
+        self.generate_impact_report(self.impact_function)
         # Add layer to QGIS (perhaps create common method)
         layers = self.impact_function.outputs
         name = self.impact_function.name
@@ -238,3 +243,38 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         impact_function.debug_mode = True
 
         return impact_function
+
+    def generate_impact_report(self, impact_function):
+        """Generate the impact report from an impact function.
+
+        :param impact_function: The impact function used.
+        :type impact_function: ImpactFunction
+        :return:
+        """
+        # get minimum needs profile
+        minimum_needs = NeedsProfile()
+        minimum_needs.load()
+
+        # create impact report instance
+        report_metadata = ReportMetadata(
+            metadata_dict=standard_impact_report_metadata)
+        impact_report = ImpactReportV4(
+            self.parent.iface,
+            report_metadata,
+            impact_function=impact_function,
+            minimum_needs_profile=minimum_needs)
+
+        # generate report folder
+
+        # no other option for now
+        # TODO: retrieve the information from data store
+        if isinstance(impact_function.datastore.uri, QDir):
+            layer_dir = impact_function.datastore.uri.absolutePath()
+        else:
+            # No other way for now
+            return
+
+        # We will generate it on the fly without storing it after datastore
+        # supports
+        impact_report.output_folder = os.path.join(layer_dir, 'output')
+        impact_report.process_component()
