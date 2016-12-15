@@ -50,7 +50,14 @@ from safe.definitionsv4.fields import (
 from safe.definitionsv4.layer_purposes import (
     layer_purpose_exposure_impacted
 )
-from safe.definitionsv4.constants import inasafe_keyword_version_key
+from safe.definitionsv4.constants import (
+    inasafe_keyword_version_key,
+    ANALYSIS_SUCCESS,
+    ANALYSIS_FAILED_BAD_INPUT,
+    ANALYSIS_FAILED_BAD_CODE,
+    PREPARE_SUCCESS,
+    PREPARE_FAILED_BAD_INPUT,
+    PREPARE_FAILED_BAD_CODE)
 from safe.definitionsv4.versions import inasafe_keyword_version
 from safe.common.exceptions import (
     InaSAFEError,
@@ -633,8 +640,11 @@ class ImpactFunction(object):
 
         :return: A tuple with the status of the IF and an error message if
             needed.
-            The status is 0 if everything was fine.
-            The status is 1 if the client should fix something.
+            The status is PREPARE_SUCCESS if everything was fine.
+            The status is PREPARE_FAILED_BAD_INPUT if the client should fix
+                something.
+            The status is PREPARE_FAILED_BAD_CODE if something went wrong
+                from the code.
         :rtype: (int, m.Message)
         """
         try:
@@ -645,10 +655,10 @@ class ImpactFunction(object):
                         'The impact function needs an exposure layer to run. '
                         'You must provide it.'))
                 )
-                return 1, message
+                return PREPARE_FAILED_BAD_INPUT, message
 
             status, message = self._check_layer(self.exposure, 'exposure')
-            if status != 0:
+            if status != PREPARE_SUCCESS:
                 return status, message
 
             if not self.hazard:
@@ -658,10 +668,10 @@ class ImpactFunction(object):
                         'The impact function needs a hazard layer to run. '
                         'You must provide it.'))
                 )
-                return 1, message
+                return PREPARE_FAILED_BAD_INPUT, message
 
             status, message = self._check_layer(self.hazard, 'hazard')
-            if status != 0:
+            if status != PREPARE_SUCCESS:
                 return status, message
 
             if self.aggregation:
@@ -672,7 +682,7 @@ class ImpactFunction(object):
                             'Requested Extent must be null when an '
                             'aggregation is provided.'))
                     )
-                    return 1, message
+                    return PREPARE_FAILED_BAD_INPUT, message
 
                 if self.requested_extent_crs:
                     message = generate_input_error_message(
@@ -681,7 +691,7 @@ class ImpactFunction(object):
                             'Requested Extent CRS must be null when an '
                             'aggregation is provided.'))
                     )
-                    return 1, message
+                    return PREPARE_FAILED_BAD_INPUT, message
                 if self._viewport_extent:
                     message = generate_input_error_message(
                         tr('Error with the viewport extent'),
@@ -689,7 +699,7 @@ class ImpactFunction(object):
                             'Viewport Extent must be null when an aggregation '
                             'is provided.'))
                     )
-                    return 1, message
+                    return PREPARE_FAILED_BAD_INPUT, message
                 if self._viewport_extent_crs:
                     message = generate_input_error_message(
                         tr('Error with the viewport extent'),
@@ -697,11 +707,11 @@ class ImpactFunction(object):
                             'Viewport CRS must be null when an aggregation is '
                             'provided.'))
                     )
-                    return 1, message
+                    return PREPARE_FAILED_BAD_INPUT, message
 
                 status, message = self._check_layer(
                     self.aggregation, 'aggregation')
-                if status != 0:
+                if status != PREPARE_SUCCESS:
                     return status, message
 
             # Set the name
@@ -720,11 +730,11 @@ class ImpactFunction(object):
 
         except Exception as e:
             message = get_error_message(e)
-            return 2, message
+            return PREPARE_FAILED_BAD_CODE, message
         else:
             # Everything was fine.
             self._is_ready = True
-            return 0, None
+            return PREPARE_SUCCESS, None
 
     def debug_layer(self, layer, check_fields=True):
         """Write the layer produced to the datastore if debug mode is on.
@@ -747,13 +757,16 @@ class ImpactFunction(object):
 
         :return: A tuple with the status of the IF and an error message if
             needed.
-            The status is 0 if everything was fine.
-            The status is 1 if something went wrong from the IF client.
-            The status is 2 if something went wrong from the code.
+            The status is ANALYSIS_SUCCESS if everything was fine.
+            The status is ANALYSIS_FAILED_BAD_INPUT if the client should fix
+                something.
+            The status is ANALYSIS_FAILED_BAD_CODE if something went wrong
+                from the code.
         :rtype: (int, m.Message)
         """
         if not self._is_ready:
-            return 1, tr('You need to run `prepare` first.')
+            message = tr('You need to run `prepare` first.')
+            return ANALYSIS_FAILED_BAD_INPUT, message
 
         try:
             self.reset_state()
@@ -791,11 +804,11 @@ class ImpactFunction(object):
             message.add(warning_message)
             message.add(suggestion_heading)
             message.add(suggestion)
-            return 1, message
+            return ANALYSIS_FAILED_BAD_INPUT, message
 
         except InaSAFEError as e:
             message = get_error_message(e)
-            return 2, message
+            return ANALYSIS_FAILED_BAD_CODE, message
 
         except MemoryError:
             warning_heading = m.Heading(tr('Memory issue'), **WARNING_STYLE)
@@ -814,13 +827,13 @@ class ImpactFunction(object):
             message.add(warning_message)
             message.add(suggestion_heading)
             message.add(suggestion)
-            return 1, message
+            return ANALYSIS_FAILED_BAD_INPUT, message
 
         except Exception as e:
             message = get_error_message(e)
-            return 2, message
+            return ANALYSIS_FAILED_BAD_CODE, message
         else:
-            return 0, None
+            return ANALYSIS_SUCCESS, None
 
     @profile
     def _run(self):
