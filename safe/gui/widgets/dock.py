@@ -24,8 +24,7 @@ from qgis.core import (
     QgsMapLayer,
     QgsMapLayerRegistry,
     QgsCoordinateReferenceSystem,
-    QGis,
-    QgsProject)
+    QGis)
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
@@ -37,6 +36,13 @@ from PyQt4.QtCore import (
 from safe.definitionsv4.layer_purposes import layer_purpose_exposure_impacted
 from safe.definitionsv4.utilities import definition
 from safe.definitionsv4.fields import hazard_class_field
+from safe.definitionsv4.constants import (
+    inasafe_keyword_version_key,
+    ANALYSIS_FAILED_BAD_INPUT,
+    ANALYSIS_FAILED_BAD_CODE,
+    PREPARE_FAILED_BAD_INPUT,
+    PREPARE_FAILED_BAD_CODE
+)
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.utilities import (
@@ -46,11 +52,8 @@ from safe.utilities.utilities import (
     is_keyword_version_supported,
 )
 from safe.defaults import supporters_logo_path
-from safe.utilities.gis import (
-    extent_string_to_array,
-)
-from safe.utilities.resources import (
-    get_ui_class)
+from safe.utilities.gis import extent_string_to_array
+from safe.utilities.resources import get_ui_class
 from safe.utilities.qgis_utilities import (
     display_critical_message_bar,
     display_warning_message_bar,
@@ -694,7 +697,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 layer_purpose = self.keyword_io.read_keywords(
                     layer, 'layer_purpose')
                 keyword_version = str(self.keyword_io.read_keywords(
-                    layer, 'keyword_version'))
+                    layer, inasafe_keyword_version_key))
                 if not is_keyword_version_supported(keyword_version):
                     continue
             except:  # pylint: disable=W0702
@@ -853,14 +856,14 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         self.impact_function = self.prepare_impact_function()
         status, message = self.impact_function.prepare()
-        if status == 1:
+        if status == PREPARE_FAILED_BAD_INPUT:
             self.hide_busy()
             LOGGER.info(tr(
                 'The impact function will not be able to run because of the '
                 'inputs.'))
             send_error_message(self, message)
             return
-        if status == 2:
+        if status == PREPARE_FAILED_BAD_CODE:
             self.hide_busy()
             LOGGER.exception(tr(
                 'The impact function will not be able to run because of a '
@@ -870,13 +873,13 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         # Start the analysis
         status, message = self.impact_function.run()
-        if status == 1:
+        if status == ANALYSIS_FAILED_BAD_INPUT:
             self.hide_busy()
             LOGGER.info(tr(
                 'The impact function could not run because of the inputs.'))
             send_error_message(self, message)
             return
-        elif status == 2:
+        elif status == ANALYSIS_FAILED_BAD_CODE:
             self.hide_busy()
             LOGGER.exception(tr(
                 'The impact function could not run because of a bug.'))
@@ -1101,12 +1104,13 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             if keywords.get('layer_purpose') in impacted_layer:
                 self.show_impact(layer)
             else:
-                if 'keyword_version' not in keywords.keys():
+                if inasafe_keyword_version_key not in keywords.keys():
                     show_keyword_version_message(
                         self, 'No Version', self.inasafe_version)
                     self.print_button.setEnabled(False)
                 else:
-                    keyword_version = str(keywords.get('keyword_version'))
+                    keyword_version = str(keywords.get(
+                        inasafe_keyword_version_key))
                     supported = is_keyword_version_supported(
                         keyword_version)
                     if supported:

@@ -20,6 +20,14 @@ from PyQt4 import QtGui
 from PyQt4.QtCore import pyqtSignature
 # noinspection PyPackageRequirements
 from safe_extras.pydispatch import dispatcher
+
+from safe.utilities.i18n import tr
+from safe.definitionsv4.constants import (
+    ANALYSIS_FAILED_BAD_INPUT,
+    ANALYSIS_FAILED_BAD_CODE,
+    PREPARE_FAILED_BAD_INPUT,
+    PREPARE_FAILED_BAD_CODE
+)
 from safe.common.signals import (
     DYNAMIC_MESSAGE_SIGNAL,
     STATIC_MESSAGE_SIGNAL,
@@ -27,7 +35,6 @@ from safe.common.signals import (
     send_static_message,
     send_error_message,
 )
-from safe.utilities.i18n import tr
 from safe.utilities.qt import enable_busy_cursor, disable_busy_cursor
 from safe.impact_function_v4.impact_function import ImpactFunction
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
@@ -133,14 +140,14 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         # Prepare impact function
         status, message = self.impact_function.prepare()
         # Check status
-        if status == 1:
+        if status == PREPARE_FAILED_BAD_INPUT:
             self.hide_busy()
             LOGGER.info(tr(
                 'The impact function will not be able to run because of the '
                 'inputs.'))
             send_error_message(self, message)
             return
-        if status == 2:
+        if status == PREPARE_FAILED_BAD_CODE:
             self.hide_busy()
             LOGGER.exception(tr(
                 'The impact function will not be able to run because of a '
@@ -150,13 +157,13 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         # Start the analysis
         status, message = self.impact_function.run()
         # Check status
-        if status == 1:
+        if status == ANALYSIS_FAILED_BAD_INPUT:
             self.hide_busy()
             LOGGER.info(tr(
                 'The impact function could not run because of the inputs.'))
             send_error_message(self, message)
             return
-        elif status == 2:
+        elif status == ANALYSIS_FAILED_BAD_CODE:
             self.hide_busy()
             LOGGER.exception(tr(
                 'The impact function could not run because of a bug.'))
