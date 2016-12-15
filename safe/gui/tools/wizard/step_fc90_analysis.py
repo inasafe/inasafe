@@ -13,10 +13,9 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-import os
 import logging
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import pyqtSignature, Qt, QDir
+from PyQt4.QtCore import pyqtSignature, Qt
 # noinspection PyPackageRequirements
 from qgis.core import QgsMapLayerRegistry, QgsProject
 from safe_extras.pydispatch import dispatcher
@@ -29,12 +28,9 @@ from safe.common.signals import (
 )
 from safe.utilities.i18n import tr
 from safe.impact_function_v4.impact_function import ImpactFunction
-from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
-from safe.reportv4.report_metadata import ReportMetadata
-from safe.definitionsv4.report import standard_impact_report_metadata
-from safe.reportv4.impact_report import ImpactReport as ImpactReportV4
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step import WizardStep
+from safe.gui.analysis_utilities import generate_impact_report
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -157,7 +153,7 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         LOGGER.info(tr('The impact function could run without errors.'))
 
         # Generate impact report
-        self.generate_impact_report(self.impact_function)
+        generate_impact_report(self.impact_function, self.parent.iface)
         # Add layer to QGIS (perhaps create common method)
         layers = self.impact_function.outputs
         name = self.impact_function.name
@@ -177,7 +173,6 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
                 layer_node.setVisible(Qt.Unchecked)
         # Some if-s i.e. zoom, debug, hide exposure
         # Hide busy
-
 
     def set_widgets(self):
         """Set widgets on the Progress tab"""
@@ -243,38 +238,3 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         impact_function.debug_mode = True
 
         return impact_function
-
-    def generate_impact_report(self, impact_function):
-        """Generate the impact report from an impact function.
-
-        :param impact_function: The impact function used.
-        :type impact_function: ImpactFunction
-        :return:
-        """
-        # get minimum needs profile
-        minimum_needs = NeedsProfile()
-        minimum_needs.load()
-
-        # create impact report instance
-        report_metadata = ReportMetadata(
-            metadata_dict=standard_impact_report_metadata)
-        impact_report = ImpactReportV4(
-            self.parent.iface,
-            report_metadata,
-            impact_function=impact_function,
-            minimum_needs_profile=minimum_needs)
-
-        # generate report folder
-
-        # no other option for now
-        # TODO: retrieve the information from data store
-        if isinstance(impact_function.datastore.uri, QDir):
-            layer_dir = impact_function.datastore.uri.absolutePath()
-        else:
-            # No other way for now
-            return
-
-        # We will generate it on the fly without storing it after datastore
-        # supports
-        impact_report.output_folder = os.path.join(layer_dir, 'output')
-        impact_report.process_component()
