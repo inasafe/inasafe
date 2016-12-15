@@ -197,8 +197,8 @@ class AnalysisHandler(QObject):
         """
         # TODO Hardcoded step - may overflow, if number of messages increase
         # noinspection PyUnresolvedReferences
-        self.parent.step_fc_analysis.pbProgress.setValue(
-            self.parent.step_fc_analysis.pbProgress.value() + 15)
+        self.parent.step_fc_analysis.progress_bar.setValue(
+            self.parent.step_fc_analysis.progress_bar.value() + 15)
         # noinspection PyUnresolvedReferences
         self.parent.step_fc_analysis.results_webview.dynamic_message_event(
             sender, message)
@@ -426,7 +426,7 @@ class AnalysisHandler(QObject):
                 self.parent.step_fc_analysis.results_webview.impact_path = \
                     impact_path
 
-        self.parent.step_fc_analysis.pbProgress.hide()
+        self.parent.step_fc_analysis.progress_bar.hide()
         self.parent.step_fc_analysis.lblAnalysisStatus.setText(
             'Analysis done.')
         self.parent.step_fc_analysis.pbnReportWeb.show()

@@ -15,6 +15,8 @@ Contact : ole.moller.nielsen@gmail.com
 
 import logging
 # noinspection PyPackageRequirements
+from PyQt4 import QtGui
+# noinspection PyPackageRequirements
 from PyQt4.QtCore import pyqtSignature, Qt
 # noinspection PyPackageRequirements
 from qgis.core import QgsMapLayerRegistry, QgsProject
@@ -27,10 +29,13 @@ from safe.common.signals import (
     send_error_message,
 )
 from safe.utilities.i18n import tr
+from safe.utilities.qt import enable_busy_cursor, disable_busy_cursor
 from safe.impact_function_v4.impact_function import ImpactFunction
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.analysis_utilities import generate_impact_report
+from safe import messaging as m
+from safe.messaging import styles
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -38,6 +43,13 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 LOGGER = logging.getLogger('InaSAFE')
+PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
+INFO_STYLE = styles.INFO_STYLE
+WARNING_STYLE = styles.WARNING_STYLE
+KEYWORD_STYLE = styles.KEYWORD_STYLE
+SUGGESTION_STYLE = styles.SUGGESTION_STYLE
+SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
+LOGO_ELEMENT = m.Brand()
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
@@ -114,6 +126,7 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         # IFCW 4.0:
 
         # Show busy
+        self.show_busy()
         # show next analysis extent
         # Prepare impact function from wizard dialog user input
         self.impact_function = self.prepare_impact_function()
@@ -121,14 +134,14 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         status, message = self.impact_function.prepare()
         # Check status
         if status == 1:
-            # self.hide_busy()
+            self.hide_busy()
             LOGGER.info(tr(
                 'The impact function will not be able to run because of the '
                 'inputs.'))
             send_error_message(self, message)
             return
         if status == 2:
-            # self.hide_busy()
+            self.hide_busy()
             LOGGER.exception(tr(
                 'The impact function will not be able to run because of a '
                 'bug.'))
@@ -138,13 +151,13 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         status, message = self.impact_function.run()
         # Check status
         if status == 1:
-            # self.hide_busy()
+            self.hide_busy()
             LOGGER.info(tr(
                 'The impact function could not run because of the inputs.'))
             send_error_message(self, message)
             return
         elif status == 2:
-            # self.hide_busy()
+            self.hide_busy()
             LOGGER.exception(tr(
                 'The impact function could not run because of a bug.'))
             send_error_message(self, message)
@@ -173,10 +186,11 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
                 layer_node.setVisible(Qt.Unchecked)
         # Some if-s i.e. zoom, debug, hide exposure
         # Hide busy
+        self.hide_busy()
 
     def set_widgets(self):
         """Set widgets on the Progress tab"""
-        self.pbProgress.setValue(0)
+        self.progress_bar.setValue(0)
         self.results_webview.setHtml('')
         self.pbnReportWeb.hide()
         self.pbnReportPDF.hide()
@@ -215,7 +229,7 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
 
         # Impact Functions
         impact_function = ImpactFunction()
-        # impact_function.callback = self.progress_callback
+        impact_function.callback = self.progress_callback
 
         # Layers
         impact_function.hazard = self.parent.hazard_layer
@@ -238,3 +252,51 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         impact_function.debug_mode = True
 
         return impact_function
+
+    # noinspection PyUnresolvedReferences
+    def show_busy(self):
+        """Lock buttons and enable the busy cursor."""
+        self.progress_bar.show()
+        self.parent.pbnNext.setEnabled(False)
+        self.parent.pbnBack.setEnabled(False)
+        self.parent.pbnCancel.setEnabled(False)
+        self.parent.repaint()
+        enable_busy_cursor()
+        QtGui.qApp.processEvents()
+
+    # noinspection PyUnresolvedReferences
+    def hide_busy(self):
+        """Unlock buttons A helper function to indicate processing is done."""
+        self.progress_bar.hide()
+        self.parent.pbnNext.setEnabled(True)
+        self.parent.pbnBack.setEnabled(True)
+        self.parent.pbnCancel.setEnabled(True)
+        self.parent.repaint()
+        disable_busy_cursor()
+
+    def progress_callback(self, current_value, maximum_value, message=None):
+        """GUI based callback implementation for showing progress.
+
+        :param current_value: Current progress.
+        :type current_value: int
+
+        :param maximum_value: Maximum range (point at which task is complete.
+        :type maximum_value: int
+
+        :param message: Optional message dictionary to containing content
+            we can display to the user. See safe.definitions.analysis_steps
+            for an example of the expected format
+        :type message: dict
+        """
+        report = m.Message()
+        report.add(LOGO_ELEMENT)
+        report.add(m.Heading(
+            self.tr('Analysis status'), **INFO_STYLE))
+        if message is not None:
+            report.add(m.ImportantText(message['name']))
+            report.add(m.Paragraph(message['description']))
+        report.add(self.impact_function.performance_log_message())
+        send_static_message(self, report)
+        self.progress_bar.setMaximum(maximum_value)
+        self.progress_bar.setValue(current_value)
+        QtGui.QApplication.processEvents()
