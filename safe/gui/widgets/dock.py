@@ -88,7 +88,8 @@ from safe.gui.widgets.message import (
     getting_started_message,
     no_overlap_message,
     ready_message)
-from safe.gui.analysis_utilities import generate_impact_report
+from safe.gui.analysis_utilities import (
+    generate_impact_report, add_impact_layer_to_QGIS)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -884,24 +885,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         LOGGER.info(tr('The impact function could run without errors.'))
 
+        # Generate impact report
         generate_impact_report(self.impact_function, self.iface)
-
-        layers = self.impact_function.outputs
-        name = self.impact_function.name
-
-        root = QgsProject.instance().layerTreeRoot()
-        group_analysis = root.insertGroup(0, name)
-        group_analysis.setVisible(Qt.Checked)
-        for layer in layers:
-            QgsMapLayerRegistry.instance().addMapLayer(layer, False)
-            layer_node = group_analysis.addLayer(layer)
-
-            # Let's enable only the more detailed layer. See #2925
-            if layer.id() == self.impact_function.impact.id():
-                layer_node.setVisible(Qt.Checked)
-                self.iface.setActiveLayer(layer)
-            else:
-                layer_node.setVisible(Qt.Unchecked)
+        # Add result layer to QGIS
+        add_impact_layer_to_QGIS(self.impact_function, self.iface)
 
         if self.zoom_to_impact_flag:
             self.iface.zoomToActiveLayer()

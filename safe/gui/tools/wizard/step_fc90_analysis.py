@@ -17,9 +17,8 @@ import logging
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import pyqtSignature, Qt
+from PyQt4.QtCore import pyqtSignature
 # noinspection PyPackageRequirements
-from qgis.core import QgsMapLayerRegistry, QgsProject
 from safe_extras.pydispatch import dispatcher
 from safe.common.signals import (
     DYNAMIC_MESSAGE_SIGNAL,
@@ -33,7 +32,8 @@ from safe.utilities.qt import enable_busy_cursor, disable_busy_cursor
 from safe.impact_function_v4.impact_function import ImpactFunction
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step import WizardStep
-from safe.gui.analysis_utilities import generate_impact_report
+from safe.gui.analysis_utilities import (
+    generate_impact_report, add_impact_layer_to_QGIS)
 from safe import messaging as m
 from safe.messaging import styles
 
@@ -167,26 +167,13 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
 
         # Generate impact report
         generate_impact_report(self.impact_function, self.parent.iface)
-        # Add layer to QGIS (perhaps create common method)
-        layers = self.impact_function.outputs
-        name = self.impact_function.name
+        # Add result layer to QGIS
+        add_impact_layer_to_QGIS(self.impact_function, self.parent.iface)
 
-        root = QgsProject.instance().layerTreeRoot()
-        group_analysis = root.insertGroup(0, name)
-        group_analysis.setVisible(Qt.Checked)
-        for layer in layers:
-            QgsMapLayerRegistry.instance().addMapLayer(layer, False)
-            layer_node = group_analysis.addLayer(layer)
-
-            # Let's enable only the more detailed layer. See #2925
-            if layer.id() == self.impact_function.impact.id():
-                layer_node.setVisible(Qt.Checked)
-                self.parent.iface.setActiveLayer(layer)
-            else:
-                layer_node.setVisible(Qt.Unchecked)
         # Some if-s i.e. zoom, debug, hide exposure
         # Hide busy
         self.hide_busy()
+        self.lblAnalysisStatus.setText(self.tr('Analysis finished.'))
 
     def set_widgets(self):
         """Set widgets on the Progress tab"""
