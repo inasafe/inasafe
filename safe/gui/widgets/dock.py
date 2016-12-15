@@ -20,30 +20,23 @@ from collections import OrderedDict
 
 # noinspection PyPackageRequirements
 from qgis.core import (
-    QgsCoordinateTransform,
     QgsRectangle,
     QgsMapLayer,
     QgsMapLayerRegistry,
     QgsCoordinateReferenceSystem,
     QGis,
-    QgsProject,
-    QgsLayerTreeLayer)
+    QgsProject)
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import (
     Qt,
     pyqtSlot,
-    QSettings,
-    pyqtSignal,
-    QDir)
+    QSettings)
 
 from safe.definitionsv4.layer_purposes import layer_purpose_exposure_impacted
-from safe.definitionsv4.report import standard_impact_report_metadata
 from safe.definitionsv4.utilities import definition
 from safe.definitionsv4.fields import hazard_class_field
-from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
-from safe.reportv4.report_metadata import ReportMetadata
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.utilities import (
@@ -95,7 +88,6 @@ from safe.gui.widgets.message import (
     getting_started_message,
     no_overlap_message,
     ready_message)
-from safe.reportv4.impact_report import ImpactReport as ImpactReportV4
 from safe.gui.analysis_utilities import generate_impact_report
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
