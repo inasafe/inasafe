@@ -419,7 +419,7 @@ class WizardDialogTest(unittest.TestCase):
 
         # No longer valid for impact data.
         # step_fc_analysis: test the html output
-        # report_path = dialog.wvResults.report_path
+        # report_path = dialog.results_webview.report_path
         # size = os.stat(report_path).st_size
         # self.assertTrue(
         #     (expected_report_size - tolerance < size < expected_report_size +

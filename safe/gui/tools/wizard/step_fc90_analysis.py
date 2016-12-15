@@ -20,8 +20,15 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import pyqtSignature
+from safe_extras.pydispatch import dispatcher
+from safe.common.signals import (
+    DYNAMIC_MESSAGE_SIGNAL,
+    STATIC_MESSAGE_SIGNAL,
+    ERROR_MESSAGE_SIGNAL,
+    send_static_message,
+    send_error_message,
+)
 
-from safe.utilities.analysis_handler import AnalysisHandler
 
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step import WizardStep
@@ -68,7 +75,7 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         .. note:: This is an automatic Qt slot
            executed when the Next button is released.
         """
-        self.wvResults.open_current_in_browser()
+        self.results_webview.open_current_in_browser()
 
     # prevents actions being handled twice
     # noinspection PyPep8Naming
@@ -94,15 +101,52 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
 
     def setup_and_run_analysis(self):
         """Execute analysis after the tab is displayed"""
-        # noinspection PyTypeChecker
-        self.analysis_handler = AnalysisHandler(self.parent)
-        self.analysis_handler.setup_and_run_analysis()
+        # IFCW 4.0:
+
+        # Show busy
+        # show next analysis extent
+        # Prepare impact function from wizard dialog user input
+        # Prepare impact function
+        # Check status
+        # Run analysis
+        # Check status
+
+        # Generate impact report
+        # Add layer to QGIS (perhaps create common method)
+        # Some if-s i.e. zoom, debug, hide exposure
+        # Hide busy
+
 
     def set_widgets(self):
         """Set widgets on the Progress tab"""
         self.pbProgress.setValue(0)
-        self.wvResults.setHtml('')
+        self.results_webview.setHtml('')
         self.pbnReportWeb.hide()
         self.pbnReportPDF.hide()
         self.pbnReportComposer.hide()
         self.lblAnalysisStatus.setText(self.tr('Running analysis...'))
+
+    def enable_messaging(self):
+        """Set up the dispatcher for messaging."""
+        # Set up dispatcher for dynamic messages
+        # Dynamic messages will not clear the message queue so will be appended
+        # to existing user messages
+        # noinspection PyArgumentEqualDefault
+        dispatcher.connect(
+            self.results_webview.dynamic_message_event,
+            signal=DYNAMIC_MESSAGE_SIGNAL,
+            sender=dispatcher.Any)
+        # Set up dispatcher for static messages
+        # Static messages clear the message queue and so the display is 'reset'
+        # noinspection PyArgumentEqualDefault
+        dispatcher.connect(
+            self.results_webview.static_message_event,
+            signal=STATIC_MESSAGE_SIGNAL,
+            sender=dispatcher.Any)
+        # Set up dispatcher for error messages
+        # Error messages clear the message queue and so the display is 'reset'
+        # noinspection PyArgumentEqualDefault
+        dispatcher.connect(
+            self.results_webview.static_message_event,
+            signal=ERROR_MESSAGE_SIGNAL,
+            sender=dispatcher.Any)

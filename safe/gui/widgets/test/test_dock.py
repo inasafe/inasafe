@@ -278,7 +278,7 @@ class TestDock(TestCase):
         # Press RUN
         self.dock.accept()
 
-        result = self.dock.wvResults.page_to_text()
+        result = self.dock.results_webview.page_to_text()
 
         message = 'Result not as expected: %s' % result
         # searching for values 6700 clean water [l] in result
@@ -495,7 +495,7 @@ class TestDock(TestCase):
         # Press RUN
         # noinspection PyCallByClass,PyCallByClass,PyTypeChecker
         self.dock.accept()
-        result = self.dock.wvResults.page_to_text()
+        result = self.dock.results_webview.page_to_text()
 
         message = 'Result not as expected: %s' % result
         self.assertTrue(format_int(33) in result, message)
@@ -519,7 +519,7 @@ class TestDock(TestCase):
         set_small_jakarta_extent(self.dock)
         # Press RUN
         self.dock.accept()
-        result = self.dock.wvResults.page().currentFrame().toPlainText()
+        result = self.dock.results_webview.page().currentFrame().toPlainText()
 
         message = 'Result not as expected: %s' % result
         self.assertTrue('IndexError' not in result, message)
@@ -583,7 +583,7 @@ class TestDock(TestCase):
         # noinspection PyCallByClass,PyTypeChecker
         self.dock.accept()
 
-        result = self.dock.wvResults.page_to_text()
+        result = self.dock.results_webview.page_to_text()
 
         control_file_path = standard_data_path(
             'control',

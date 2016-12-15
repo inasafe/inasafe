@@ -153,13 +153,13 @@ class AnalysisHandler(QObject):
 
         # noinspection PyArgumentEqualDefault,PyUnresolvedReferences
         dispatcher.connect(
-            self.parent.step_fc_analysis.wvResults.static_message_event,
+            self.parent.step_fc_analysis.results_webview.static_message_event,
             signal=STATIC_MESSAGE_SIGNAL,
             sender=dispatcher.Any)
 
         # noinspection PyArgumentEqualDefault,PyUnresolvedReferences
         dispatcher.connect(
-            self.parent.step_fc_analysis.wvResults.error_message_event,
+            self.parent.step_fc_analysis.results_webview.error_message_event,
             signal=ERROR_MESSAGE_SIGNAL,
             sender=dispatcher.Any)
 
@@ -200,7 +200,7 @@ class AnalysisHandler(QObject):
         self.parent.step_fc_analysis.pbProgress.setValue(
             self.parent.step_fc_analysis.pbProgress.value() + 15)
         # noinspection PyUnresolvedReferences
-        self.parent.step_fc_analysis.wvResults.dynamic_message_event(
+        self.parent.step_fc_analysis.results_webview.dynamic_message_event(
             sender, message)
 
     def read_settings(self):
@@ -423,7 +423,7 @@ class AnalysisHandler(QObject):
                 message = m.Message(report)
                 # noinspection PyTypeChecker
                 send_static_message(self, message)
-                self.parent.step_fc_analysis.wvResults.impact_path = \
+                self.parent.step_fc_analysis.results_webview.impact_path = \
                     impact_path
 
         self.parent.step_fc_analysis.pbProgress.hide()
