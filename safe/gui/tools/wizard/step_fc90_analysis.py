@@ -180,7 +180,8 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         # Some if-s i.e. zoom, debug, hide exposure
         # Hide busy
         self.hide_busy()
-        self.lblAnalysisStatus.setText(self.tr('Analysis finished.'))
+        # Setup gui if analysis is done
+        self.setup_gui_analysis_done()
 
     def set_widgets(self):
         """Set widgets on the Progress tab"""
@@ -247,7 +248,14 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
 
         return impact_function
 
-    # noinspection PyUnresolvedReferences
+    def setup_gui_analysis_done(self):
+        """Helper method to setup gui if analysis is done."""
+        self.progress_bar.hide()
+        self.lblAnalysisStatus.setText(tr('Analysis done.'))
+        self.pbnReportWeb.show()
+        self.pbnReportPDF.show()
+        self.pbnReportComposer.show()
+
     def show_busy(self):
         """Lock buttons and enable the busy cursor."""
         self.progress_bar.show()
@@ -258,7 +266,6 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         enable_busy_cursor()
         QtGui.qApp.processEvents()
 
-    # noinspection PyUnresolvedReferences
     def hide_busy(self):
         """Unlock buttons A helper function to indicate processing is done."""
         self.progress_bar.hide()
