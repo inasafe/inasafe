@@ -18,8 +18,11 @@ __date__ = '16/03/2016'
 __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
                  'Disaster Reduction')
 
+import logging
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import pyqtSignature
+from PyQt4.QtCore import pyqtSignature, Qt
+# noinspection PyPackageRequirements
+from qgis.core import QgsMapLayerRegistry, QgsProject
 from safe_extras.pydispatch import dispatcher
 from safe.common.signals import (
     DYNAMIC_MESSAGE_SIGNAL,
@@ -28,17 +31,24 @@ from safe.common.signals import (
     send_static_message,
     send_error_message,
 )
-
-
+from safe.utilities.i18n import tr
+from safe.impact_function_v4.impact_function import ImpactFunction
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step import WizardStep
 
 
+LOGGER = logging.getLogger('InaSAFE')
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
 class StepFcAnalysis(WizardStep, FORM_CLASS):
     """Function Centric Wizard Step: Analysis"""
+
+    def __init__(self, parent):
+        """Init method"""
+        WizardStep.__init__(self, parent)
+
+        self.enable_messaging()
 
     def is_ready_to_next_step(self):
         """Check if the step is complete. If so, there is
@@ -106,13 +116,60 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         # Show busy
         # show next analysis extent
         # Prepare impact function from wizard dialog user input
+        self.impact_function = self.prepare_impact_function()
         # Prepare impact function
+        status, message = self.impact_function.prepare()
         # Check status
-        # Run analysis
+        if status == 1:
+            # self.hide_busy()
+            LOGGER.info(tr(
+                'The impact function will not be able to run because of the '
+                'inputs.'))
+            send_error_message(self, message)
+            return
+        if status == 2:
+            # self.hide_busy()
+            LOGGER.exception(tr(
+                'The impact function will not be able to run because of a '
+                'bug.'))
+            send_error_message(self, message)
+            return
+        # Start the analysis
+        status, message = self.impact_function.run()
         # Check status
+        if status == 1:
+            # self.hide_busy()
+            LOGGER.info(tr(
+                'The impact function could not run because of the inputs.'))
+            send_error_message(self, message)
+            return
+        elif status == 2:
+            # self.hide_busy()
+            LOGGER.exception(tr(
+                'The impact function could not run because of a bug.'))
+            send_error_message(self, message)
+            return
+
+        LOGGER.info(tr('The impact function could run without errors.'))
 
         # Generate impact report
         # Add layer to QGIS (perhaps create common method)
+        layers = self.impact_function.outputs
+        name = self.impact_function.name
+
+        root = QgsProject.instance().layerTreeRoot()
+        group_analysis = root.insertGroup(0, name)
+        group_analysis.setVisible(Qt.Checked)
+        for layer in layers:
+            QgsMapLayerRegistry.instance().addMapLayer(layer, False)
+            layer_node = group_analysis.addLayer(layer)
+
+            # Let's enable only the more detailed layer. See #2925
+            if layer.id() == self.impact_function.impact.id():
+                layer_node.setVisible(Qt.Checked)
+                self.parent.iface.setActiveLayer(layer)
+            else:
+                layer_node.setVisible(Qt.Unchecked)
         # Some if-s i.e. zoom, debug, hide exposure
         # Hide busy
 
@@ -126,6 +183,8 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         self.pbnReportComposer.hide()
         self.lblAnalysisStatus.setText(self.tr('Running analysis...'))
 
+    # Notes(IS): Copied from dock. We should move this to more common place.
+    # With the web view as the argument
     def enable_messaging(self):
         """Set up the dispatcher for messaging."""
         # Set up dispatcher for dynamic messages
@@ -150,3 +209,32 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
             self.results_webview.static_message_event,
             signal=ERROR_MESSAGE_SIGNAL,
             sender=dispatcher.Any)
+
+    def prepare_impact_function(self):
+        """Create analysis as a representation of current situation of IFCW."""
+
+        # Impact Functions
+        impact_function = ImpactFunction()
+        # impact_function.callback = self.progress_callback
+
+        # Layers
+        impact_function.hazard = self.parent.hazard_layer
+        impact_function.exposure = self.parent.exposure_layer
+        aggregation = self.parent.aggregation_layer
+
+        if aggregation:
+            impact_function.aggregation = aggregation
+        else:
+            # We need to enable it again when we will fix the dock.
+            # impact_function.requested_extent = self.extent.user_extent
+            # impact_function.requested_extent = self.extent.user_extent_crs
+
+            map_settings = self.iface.mapCanvas().mapSettings()
+            impact_function.viewport_extent = map_settings.fullExtent()
+            impact_function._viewport_extent_crs = (
+                map_settings.destinationCrs())
+
+        # Notes (IS): Always et debug as True for development.
+        impact_function.debug_mode = True
+
+        return impact_function
