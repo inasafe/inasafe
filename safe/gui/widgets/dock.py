@@ -15,8 +15,6 @@ from qgis.core import (
     QgsCoordinateReferenceSystem,
     QGis)
 
-from safe_extras.pydispatch import dispatcher
-
 from safe.definitionsv4.layer_purposes import layer_purpose_exposure_impacted
 from safe.definitionsv4.utilities import definition
 from safe.definitionsv4.fields import hazard_class_field
@@ -46,13 +44,7 @@ from safe.utilities.extent import Extent
 from safe.utilities.qt import disable_busy_cursor, enable_busy_cursor
 
 from safe.common.version import get_version
-from safe.common.signals import (
-    DYNAMIC_MESSAGE_SIGNAL,
-    STATIC_MESSAGE_SIGNAL,
-    ERROR_MESSAGE_SIGNAL,
-    send_static_message,
-    send_error_message,
-)
+from safe.common.signals import (send_static_message, send_error_message)
 from safe import messaging as m
 from safe.messaging import styles
 from safe.common.exceptions import (
@@ -74,7 +66,8 @@ from safe.gui.widgets.message import (
     show_keyword_version_message,
     getting_started_message,
     no_overlap_message,
-    ready_message)
+    ready_message,
+    enable_messaging)
 from safe.gui.analysis_utilities import (
     generate_impact_report, add_impact_layer_to_QGIS)
 
@@ -119,7 +112,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.setupUi(self)
         self.show_question_button.setVisible(False)
         self.progress_bar.hide()
-        self.enable_messaging()
+        enable_messaging(self.results_webview, self)
         self.inasafe_version = get_version()
 
         self.set_dock_title()
@@ -175,31 +168,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
     def set_dock_title(self):
         """Set the title of the dock using the current version of InaSAFE."""
         self.setWindowTitle(self.tr('InaSAFE %s' % self.inasafe_version))
-
-    def enable_messaging(self):
-        """Set up the dispatcher for messaging."""
-        # Set up dispatcher for dynamic messages
-        # Dynamic messages will not clear the message queue so will be appended
-        # to existing user messages
-        # noinspection PyArgumentEqualDefault
-        dispatcher.connect(
-            self.results_webview.dynamic_message_event,
-            signal=DYNAMIC_MESSAGE_SIGNAL,
-            sender=dispatcher.Any)
-        # Set up dispatcher for static messages
-        # Static messages clear the message queue and so the display is 'reset'
-        # noinspection PyArgumentEqualDefault
-        dispatcher.connect(
-            self.results_webview.static_message_event,
-            signal=STATIC_MESSAGE_SIGNAL,
-            sender=dispatcher.Any)
-        # Set up dispatcher for error messages
-        # Error messages clear the message queue and so the display is 'reset'
-        # noinspection PyArgumentEqualDefault
-        dispatcher.connect(
-            self.results_webview.static_message_event,
-            signal=ERROR_MESSAGE_SIGNAL,
-            sender=dispatcher.Any)
 
     def setup_button_connectors(self):
         """Setup signal/slot mechanisms for dock buttons."""

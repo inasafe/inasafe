@@ -14,12 +14,8 @@ Contact : ole.moller.nielsen@gmail.com
 """
 
 import logging
-# noinspection PyPackageRequirements
 from PyQt4 import QtGui
-# noinspection PyPackageRequirements
 from PyQt4.QtCore import pyqtSignature
-# noinspection PyPackageRequirements
-from safe_extras.pydispatch import dispatcher
 
 from safe.utilities.i18n import tr
 from safe.definitionsv4.constants import (
@@ -28,13 +24,8 @@ from safe.definitionsv4.constants import (
     PREPARE_FAILED_BAD_INPUT,
     PREPARE_FAILED_BAD_CODE
 )
-from safe.common.signals import (
-    DYNAMIC_MESSAGE_SIGNAL,
-    STATIC_MESSAGE_SIGNAL,
-    ERROR_MESSAGE_SIGNAL,
-    send_static_message,
-    send_error_message,
-)
+from safe.common.signals import send_static_message, send_error_message
+from safe.gui.widgets.message import enable_messaging
 from safe.utilities.qt import enable_busy_cursor, disable_busy_cursor
 from safe.impact_function_v4.impact_function import ImpactFunction
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
@@ -67,7 +58,7 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         """Init method"""
         WizardStep.__init__(self, parent)
 
-        self.enable_messaging()
+        enable_messaging(self.results_webview)
 
     def is_ready_to_next_step(self):
         """Check if the step is complete. If so, there is
@@ -191,33 +182,6 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         self.pbnReportPDF.hide()
         self.pbnReportComposer.hide()
         self.lblAnalysisStatus.setText(self.tr('Running analysis...'))
-
-    # Notes(IS): Copied from dock. We should move this to more common place.
-    # With the web view as the argument
-    def enable_messaging(self):
-        """Set up the dispatcher for messaging."""
-        # Set up dispatcher for dynamic messages
-        # Dynamic messages will not clear the message queue so will be appended
-        # to existing user messages
-        # noinspection PyArgumentEqualDefault
-        dispatcher.connect(
-            self.results_webview.dynamic_message_event,
-            signal=DYNAMIC_MESSAGE_SIGNAL,
-            sender=dispatcher.Any)
-        # Set up dispatcher for static messages
-        # Static messages clear the message queue and so the display is 'reset'
-        # noinspection PyArgumentEqualDefault
-        dispatcher.connect(
-            self.results_webview.static_message_event,
-            signal=STATIC_MESSAGE_SIGNAL,
-            sender=dispatcher.Any)
-        # Set up dispatcher for error messages
-        # Error messages clear the message queue and so the display is 'reset'
-        # noinspection PyArgumentEqualDefault
-        dispatcher.connect(
-            self.results_webview.static_message_event,
-            signal=ERROR_MESSAGE_SIGNAL,
-            sender=dispatcher.Any)
 
     def prepare_impact_function(self):
         """Create analysis as a representation of current situation of IFCW."""
