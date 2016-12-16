@@ -663,7 +663,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
     def save_auxiliary_files(self, layer, destination):
         """Save auxiliary files when using the 'save as' function.
 
-        If some auxiliary files (.xml) exist, this function will
+        If some auxiliary files (.xml or .json) exist, this function will
         copy them when the 'save as' function is used on the layer.
 
         :param layer: The layer which has been saved as.
@@ -674,29 +674,31 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         """
 
-        source_basename = os.path.splitext(layer.source())[0]
-        source_xml = "%s.xml" % source_basename
+        auxiliary_files = ['xml', 'json']
+        for auxiliary_file in auxiliary_files:
+            source_basename = os.path.splitext(layer.source())[0]
+            source_file = "%s.%s" % (source_basename, auxiliary_file)
 
-        destination_basename = os.path.splitext(destination)[0]
-        destination_xml = "%s.xml" % destination_basename
+            destination_basename = os.path.splitext(destination)[0]
+            destination_file = "%s.%s" % (destination_basename, auxiliary_file)
 
-        # noinspection PyBroadException,PyBroadException
-        try:
-            # XML
-            if os.path.isfile(source_xml):
-                shutil.copy(source_xml, destination_xml)
+            # noinspection PyBroadException,PyBroadException
+            try:
+                if os.path.isfile(source_file):
+                    shutil.copy(source_file, destination_file)
 
-        except (OSError, IOError):
-            display_critical_message_bar(
-                title=self.tr('Error while saving'),
-                message=self.tr("The destination location must be writable."))
+            except (OSError, IOError):
+                display_critical_message_bar(
+                    title=self.tr('Error while saving'),
+                    message=self.tr(
+                        'The destination location must be writable.'))
 
-        except Exception:  # pylint: disable=broad-except
-            display_critical_message_bar(
-                title=self.tr('Error while saving'),
-                message=self.tr("Something went wrong."))
-        finally:
-            self.disable_busy_cursor()
+            except Exception:  # pylint: disable=broad-except
+                display_critical_message_bar(
+                    title=self.tr('Error while saving'),
+                    message=self.tr('Something went wrong.'))
+
+        self.disable_busy_cursor()
 
     # noinspection PyPep8Naming
     @pyqtSlot(int)
