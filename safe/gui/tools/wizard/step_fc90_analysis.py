@@ -115,18 +115,18 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         .. note:: This is an automatic Qt slot
            executed when the Next button is released.
         """
-        self.analysis_handler.print_map('pdf')
+        LOGGER.debug('Generate PDF Button is not implemented')
 
     # prevents actions being handled twice
     # noinspection PyPep8Naming
     @pyqtSignature('')
     def on_pbnReportComposer_released(self):
-        """Handle the Open Report in Web Broseer button release.
+        """Handle the Open in composer button release.
 
         .. note:: This is an automatic Qt slot
            executed when the Next button is released.
         """
-        self.analysis_handler.print_map('composer')
+        LOGGER.debug('Open in composer Button is not implemented')
 
     def setup_and_run_analysis(self):
         """Execute analysis after the tab is displayed"""

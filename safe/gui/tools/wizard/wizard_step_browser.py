@@ -16,12 +16,6 @@ import safe.definitionsv4.layer_geometry
 import safe.definitionsv4.layer_modes
 import safe.definitionsv4.layer_purposes
 
-__author__ = 'qgis@borysjurgiel.pl'
-__revision__ = '$Format:%H$'
-__date__ = '16/03/2016'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
-
 import os
 from sqlite3 import OperationalError
 
@@ -60,6 +54,11 @@ from safe.gui.tools.wizard.wizard_utils import layer_description_html
 from safe.utilities.gis import is_raster_layer
 from safe.utilities.utilities import (
     is_keyword_version_supported)
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 
 class WizardStepBrowser(WizardStep):

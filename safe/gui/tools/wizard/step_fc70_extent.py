@@ -12,17 +12,13 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-__author__ = 'qgis@borysjurgiel.pl'
-__revision__ = '$Format:%H$'
-__date__ = '16/03/2016'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
-
-from safe.common.exceptions import InsufficientOverlapError
-from safe.utilities.analysis_handler import AnalysisHandler
-
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step import WizardStep
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
@@ -85,19 +81,7 @@ class StepFcExtent(WizardStep, FORM_CLASS):
         :returns: true if extent intersects both layers, false if is disjoint
         :rtype: boolean
         """
-        _analysis_handler = AnalysisHandler(self.parent)
-        _analysis_handler.prepare_impact_function()
-        try:
-            impact_function = _analysis_handler.impact_function
-            clip_parameters = impact_function.clip_parameters
-            # pylint: disable=unused-variable
-            adjusted_geo_extent = clip_parameters['adjusted_geo_extent']
-            # pylint: enable=unused-variable
-        except (AttributeError, InsufficientOverlapError):
-            _analysis_handler = None
-            return False
-
-        _analysis_handler = None
+        # TODO: Until we define have good extent behavior, always return True
         return True
 
     def start_capture_coordinates(self):
