@@ -156,7 +156,6 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.hazard_layer = None
         self.exposure_layer = None
         self.aggregation_layer = None
-        self.analysis_handler = None
 
         self.step_kw_purpose = StepKwPurpose(self)
         self.step_kw_subcategory = StepKwSubcategory(self)

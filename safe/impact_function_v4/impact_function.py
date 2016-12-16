@@ -1,6 +1,5 @@
 # coding=utf-8
-"""
-Impact function
+"""Impact function
 """
 from datetime import datetime
 from os.path import join, exists
