@@ -9,6 +9,11 @@ import codecs
 import qgis  # pylint: disable=unused-import
 from PyQt4 import QtCore, uic
 
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
+
 
 def html_footer():
     """Get a standard html footer for wrapping content in.

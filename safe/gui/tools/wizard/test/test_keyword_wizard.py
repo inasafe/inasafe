@@ -2,7 +2,6 @@
 """Tests for the keyword wizard."""
 import shutil
 import unittest
-import qgis
 import os
 from safe.common.utilities import temp_dir
 from safe.test.utilities import (

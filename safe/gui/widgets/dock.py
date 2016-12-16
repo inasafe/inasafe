@@ -1,34 +1,21 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool developed by AusAid - **GUI Dialog.**
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-.. todo:: Check raster is single band
-
-"""
+"""InaSAFE Dock"""
 
 import os
 import shutil
 import logging
 from collections import OrderedDict
 
-# noinspection PyPackageRequirements
+from PyQt4 import QtGui, QtCore
+from PyQt4.QtCore import Qt, pyqtSlot, QSettings
 from qgis.core import (
     QgsRectangle,
     QgsMapLayer,
     QgsMapLayerRegistry,
     QgsCoordinateReferenceSystem,
     QGis)
-# noinspection PyPackageRequirements
-from PyQt4 import QtGui, QtCore
-# noinspection PyPackageRequirements
-from PyQt4.QtCore import Qt, pyqtSlot, QSettings
+
+from safe_extras.pydispatch import dispatcher
 
 from safe.definitionsv4.layer_purposes import layer_purpose_exposure_impacted
 from safe.definitionsv4.utilities import definition
@@ -40,6 +27,7 @@ from safe.definitionsv4.constants import (
     PREPARE_FAILED_BAD_INPUT,
     PREPARE_FAILED_BAD_CODE
 )
+from safe.defaults import supporters_logo_path
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.utilities import (
@@ -48,13 +36,15 @@ from safe.utilities.utilities import (
     add_ordered_combo_item,
     is_keyword_version_supported,
 )
-from safe.defaults import supporters_logo_path
 from safe.utilities.gis import extent_string_to_array
 from safe.utilities.resources import get_ui_class
 from safe.utilities.qgis_utilities import (
     display_critical_message_bar,
     display_warning_message_bar,
     display_information_message_bar)
+from safe.utilities.extent import Extent
+from safe.utilities.qt import disable_busy_cursor, enable_busy_cursor
+
 from safe.common.version import get_version
 from safe.common.signals import (
     DYNAMIC_MESSAGE_SIGNAL,
@@ -79,9 +69,6 @@ from safe.impact_function_v4.style import hazard_class_style
 from safe.report.impact_report import ImpactReport
 from safe.gui.tools.about_dialog import AboutDialog
 from safe.gui.tools.help_dialog import HelpDialog
-from safe_extras.pydispatch import dispatcher
-from safe.utilities.extent import Extent
-from safe.utilities.qt import disable_busy_cursor, enable_busy_cursor
 from safe.gui.widgets.message import (
     show_no_keywords_message,
     show_keyword_version_message,

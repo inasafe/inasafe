@@ -1,17 +1,5 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool by AusAid **GUI InaSAFE Wizard Dialog.**
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-.. todo:: Check raster is single band
-
-"""
+"""Wizard Dialog"""
 
 import logging
 from sqlite3 import OperationalError
@@ -56,6 +44,7 @@ from safe.utilities.resources import get_ui_class, resources_path
 from safe.utilities.unicode import get_unicode
 from safe.utilities.utilities import (
     get_error_message, is_keyword_version_supported)
+
 from step_fc00_functions1 import StepFcFunctions1
 from step_fc05_functions2 import StepFcFunctions2
 from step_fc10_function import StepFcFunction
