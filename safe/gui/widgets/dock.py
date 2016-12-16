@@ -10,6 +10,7 @@ from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import Qt, pyqtSlot, QSettings
 from qgis.core import (
     QgsRectangle,
+    QgsGeometry,
     QgsMapLayer,
     QgsMapLayerRegistry,
     QgsCoordinateReferenceSystem,
@@ -25,7 +26,8 @@ from safe.definitionsv4.constants import (
     ANALYSIS_FAILED_BAD_CODE,
     ANALYSIS_SUCCESS,
     PREPARE_FAILED_BAD_INPUT,
-    PREPARE_FAILED_BAD_CODE
+    PREPARE_FAILED_BAD_CODE,
+    PREPARE_SUCCESS,
 )
 from safe.defaults import supporters_logo_path
 from safe.utilities.i18n import tr
@@ -36,7 +38,6 @@ from safe.utilities.utilities import (
     add_ordered_combo_item,
     is_keyword_version_supported,
 )
-from safe.utilities.gis import extent_string_to_array
 from safe.utilities.resources import get_ui_class
 from safe.utilities.qgis_utilities import (
     display_critical_message_bar,
@@ -146,22 +147,17 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.organisation_logo_path = None
 
         self.print_button.setEnabled(False)
-        self.runtime_keywords_dialog = None
 
         self.setup_button_connectors()
 
         self.iface.layerSavedAs.connect(self.save_auxiliary_files)
 
-        canvas = self.iface.mapCanvas()
-
-        # Enable on the fly projection by default
-        canvas.setCrsTransformEnabled(True)
         self.connect_layer_listener()
         self.question_group.setEnabled(False)
         self.question_group.setVisible(False)
         self.set_run_button_status()
 
-        self.read_settings()  # get_project_layers called by this
+        self.read_settings()
 
         # debug_mode is a check box to know if we run the IF with debug mode.
         self.debug_mode.setVisible(self.developer_mode)
@@ -217,31 +213,28 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         """
 
         settings = QSettings()
-
-        flag = bool(settings.value(
-            'inasafe/showRubberBands', False, type=bool))
-        self.extent.show_rubber_bands = flag
         try:
             extent = settings.value('inasafe/analysis_extent', '', type=str)
+            if not extent.startswith('POLYGON'):
+                # Before InaSAFE V4, we were not saving a WKT.
+                LOGGER.info('analysis_extent from V3, we can skip it.')
+                extent = None
+            else:
+                extent = QgsGeometry.fromWkt(extent)
+                if not extent.isGeosValid():
+                    extent = None
             crs = settings.value('inasafe/analysis_extent_crs', '', type=str)
+            crs = QgsCoordinateReferenceSystem(crs)
         except TypeError:
             # Any bogus stuff in settings and we just clear them
-            extent = ''
-            crs = ''
+            extent = None
+            crs = None
 
-        if extent != '' and crs != '':
-            extent = extent_string_to_array(extent)
-            try:
-                # noinspection PyCallingNonCallable
-                self.extent.user_extent = QgsRectangle(*extent)
-                # noinspection PyCallingNonCallable
-                self.extent.user_extent_crs = QgsCoordinateReferenceSystem(crs)
-                self.extent.show_user_analysis_extent()
-            except TypeError:
-                self.extent.user_extent = None
-                self.extent.user_extent_crs = None
+        if extent and crs:
+            self.extent.user_extent_crs = crs
+            self.extent.user_extent = extent
 
-        self.draw_rubber_bands()
+        self.extent.draw_rubber_bands()
 
         flag = settings.value(
             'inasafe/visibleLayersOnlyFlag', True, type=bool)
@@ -350,13 +343,12 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         ..seealso:: disconnect_layer_listener
         """
         registry = QgsMapLayerRegistry.instance()
-        registry.layersWillBeRemoved.connect(self.get_layers)
         registry.layersAdded.connect(self.get_layers)
         registry.layersRemoved.connect(self.get_layers)
 
         self.iface.mapCanvas().layersChanged.connect(self.get_layers)
         self.iface.currentLayerChanged.connect(self.layer_changed)
-        self.iface.mapCanvas().extentsChanged.connect(self.draw_rubber_bands)
+        self.iface.mapCanvas().extentsChanged.connect(self.extent.draw_rubber_bands)
 
     # pylint: disable=W0702
     def disconnect_layer_listener(self):
@@ -365,14 +357,13 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         ..seealso:: connect_layer_listener
         """
         registry = QgsMapLayerRegistry.instance()
-        registry.layersWillBeRemoved.disconnect(self.get_layers)
         registry.layersAdded.disconnect(self.get_layers)
         registry.layersRemoved.disconnect(self.get_layers)
 
         self.iface.mapCanvas().layersChanged.disconnect(self.get_layers)
         self.iface.currentLayerChanged.disconnect(self.layer_changed)
         self.iface.mapCanvas().extentsChanged.disconnect(
-            self.draw_rubber_bands)
+            self.extent.draw_rubber_bands)
 
     def validate(self):
         """Helper method to evaluate the current state of the dialog.
@@ -396,13 +387,13 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         """
         if self.busy:
             return False, None
+
         hazard_index = self.hazard_layer_combo.currentIndex()
         exposure_index = self.exposure_layer_combo.currentIndex()
         if hazard_index == -1 or exposure_index == -1:
             message = getting_started_message()
             return False, message
 
-        # Now check if extents are ok for #1811
         else:
             message = ready_message()
             return True, message
@@ -461,7 +452,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         del index
         self.toggle_aggregation_layer_combo()
         self.set_run_button_status()
-        self.draw_rubber_bands()
+        self.extent.draw_rubber_bands()
 
     # noinspection PyPep8Naming
     @pyqtSlot(int)
@@ -476,7 +467,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         del index
         self.toggle_aggregation_layer_combo()
         self.set_run_button_status()
-        self.draw_rubber_bands()
+        self.extent.draw_rubber_bands()
 
     def toggle_aggregation_layer_combo(self):
         """Toggle the aggregation combo enabled status.
@@ -487,7 +478,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         selected_hazard_layer = self.get_hazard_layer()
         selected_exposure_layer = self.get_exposure_layer()
 
-        # more than 1 because No aggregation is always there
+        # More than 1 because 'Entire Area' is always there
         if ((self.aggregation_layer_combo.count() > 1) and
                 (selected_hazard_layer is not None) and
                 (selected_exposure_layer is not None)):
@@ -499,12 +490,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
     def set_run_button_status(self):
         """Helper function to set the run button status based on form validity.
         """
-        button = self.run_button
         flag, message = self.validate()
-
-        # Hack until we fix the dock for InaSAFE V4
-        # button.setEnabled(flag)
-        button.setEnabled(True)
+        self.run_button.setEnabled(flag)
         if message is not None:
             send_static_message(self, message)
 
@@ -546,7 +533,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
     # noinspection PyUnusedLocal
     @pyqtSlot('QgsMapLayer')
     def get_layers(self, *args):
-        r"""Obtain a list of layers currently loaded in QGIS.
+        """Obtain a list of layers currently loaded in QGIS.
 
         On invocation, this method will populate hazard_layer_combo,
         exposure_layer_combo and aggregation_layer_combo on the dialog
@@ -672,6 +659,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     self.aggregation_layer_combo, title, source)
 
         self.unblock_signals()
+
         # handle the aggregation_layer_combo combo
         self.aggregation_layer_combo.insertItem(0, self.tr('Entire area'))
         self.aggregation_layer_combo.setCurrentIndex(0)
@@ -688,8 +676,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # ensure the dock keywords info panel is updated
         # make sure to do this after the lock is released!
         self.layer_changed(self.iface.activeLayer())
+
         # Make sure to update the analysis area preview
-        self.draw_rubber_bands()
+        self.extent.draw_rubber_bands()
 
     def get_hazard_layer(self):
         """Get the QgsMapLayer currently selected in the hazard combo.
@@ -748,37 +737,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
         return layer
 
-    @pyqtSlot('bool')
-    def toggle_rubber_bands(self, flag):
-        """Disabled/enable the rendering of rubber bands.
-
-        :param flag: Flag to indicate if drawing of bands is active.
-        :type flag: bool
-        """
-        self.extent.show_rubber_bands = flag
-        # Temporary disable until we fix the dock in inasafe v4.
-        self.extent.show_rubber_bands = False
-        settings = QSettings()
-        settings.setValue('inasafe/showRubberBands', flag)
-        if not flag:
-            self.extent.hide_last_analysis_extent()  # red
-            self.extent.hide_next_analysis_extent()  # green
-            self.extent.hide_user_analysis_extent()  # blue
-        else:
-            self.draw_rubber_bands()
-
-    @pyqtSlot()
-    def draw_rubber_bands(self):
-        """Draw any rubber bands that are enabled."""
-        settings = QSettings()
-        try:
-            flag = settings.value('inasafe/showRubberBands', type=bool)
-        except TypeError:
-            flag = False
-        if flag:
-            self.show_next_analysis_extent()  # green
-            self.extent.show_user_analysis_extent()  # blue
-
     def progress_callback(self, current_value, maximum_value, message=None):
         """GUI based callback implementation for showing progress.
 
@@ -809,7 +767,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
     def accept(self):
         """Execute analysis when run button is clicked."""
         self.show_busy()
-        self.show_next_analysis_extent()
+        self.update_next_analysis_extent()
 
         self.impact_function = self.prepare_impact_function()
         status, message = self.impact_function.prepare()
@@ -844,6 +802,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             return status, message
 
         LOGGER.info(tr('The impact function could run without errors.'))
+        self.extent.last_analysis_extent = self.extent.next_analysis_extent
 
         # Generate impact report
         generate_impact_report(self.impact_function, self.iface)
@@ -915,9 +874,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     'inasafe/useSelectedFeaturesOnly', False, type=bool)))
         else:
             if self.extent.user_extent:
-                # impact_function.requested_extent = self.extent.user_extent
-                # impact_function.requested_extent_crs = (
-                #     self.extent.user_extent_crs)
+                impact_function.requested_extent = self.extent.user_extent
+                impact_function.requested_extent_crs = (
+                    self.extent.user_extent_crs)
                 pass
 
         impact_function.debug_mode = self.debug_mode.isChecked()
@@ -1160,25 +1119,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.composer.fitInView(
                 0, 0, paper_width + 1, height + 1, QtCore.Qt.KeepAspectRatio)
 
-    @pyqtSlot('QgsRectangle', 'QgsCoordinateReferenceSystem')
-    def define_user_analysis_extent(self, extent, crs):
-        """Slot called when user has defined a custom analysis extent.
-
-        .. versionadded: 2.2.0
-
-        :param extent: Extent of the user's preferred analysis area.
-        :type extent: QgsRectangle
-
-        :param crs: Coordinate reference system for user defined analysis
-            extent.
-        :type crs: QgsCoordinateReferenceSystem
-        """
-        try:
-            self.extent.define_user_analysis_extent(extent, crs)
-            self.show_next_analysis_extent()
-        except InvalidGeometryError:
-            return
-
     def _has_active_layer(self):
         """Check if there is a layer active in the legend.
 
@@ -1221,18 +1161,16 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 visible_count += 1
         return visible_count
 
-    def show_next_analysis_extent(self):
-        """Update the rubber band showing where the next analysis extent is.
-
-        Primary purpose of this slot is to draw a rubber band of where the
-        analysis will be carried out based on valid intersection between
-        layers.
+    def update_next_analysis_extent(self):
+        """Update the next analysis area.
 
         This slot is called on pan, zoom, layer visibility changes and
+        dock updates.
 
         .. versionadded:: 2.1.0
         """
         settings = QSettings()
+
         self.extent.hide_next_analysis_extent()
         # check if we actually have correct hazard, exposure and IF
         # if we don't we exit immediately to avoid cluttering up the display
@@ -1243,30 +1181,11 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             return
 
         # IF could potentially run - lets see if the extents will work well...
-        # Temporary until we implement the analysis extent checker. ET 14/12/16
-        # valid, extents = self.validate_extents()
-        valid, extents = True, None
-        if valid:
-            self.extent.show_next_analysis_extent(extents)
-            show_confirmations = settings.value(
-                'inasafe/show_extent_confirmations',
-                True,
-                type=bool)
+        impact_function = self.prepare_impact_function()
+        status, message = impact_function.prepare()
+        if status != PREPARE_SUCCESS:
+            self.run_button.setEnabled(False)
 
-            if show_confirmations:
-                message = self.tr(
-                    'The hazard layer, exposure layer and your '
-                    'defined analysis area extents all overlap. Press the '
-                    'run button below to continue with the analysis.')
-
-                display_information_message_bar(
-                    self.tr('InaSAFE'),
-                    self.tr('Analysis environment ready'),
-                    message,
-                    self.tr('More info ...'),
-                    2)
-            self.run_button.setEnabled(True)
-        else:
             # For issue #618, #1811
             if self.show_only_visible_layers_flag:
                 layer_count = self._visible_layers_count()
@@ -1286,16 +1205,22 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                         self.tr('InaSAFE'),
                         self.tr('No overlapping extents'),
                         message)
-            self.run_button.setEnabled(False)
-            # For #2077 somewhat kludgy hack to prevent positive
-            # message when we cant actually run
-            match = self.tr(
-                'You can now proceed to run your analysis by clicking the ')
-            current_text = self.results_webview.page_to_text()
-            if match in current_text:
-                message = m.Message()
-                message.add(LOGO_ELEMENT)
-                message.add(m.Heading(self.tr(
-                    'Insufficient overlap'), **WARNING_STYLE))
-                message.add(no_overlap_message())
-                send_static_message(self, message)
+
+        else:
+            self.extent.next_analysis_extent = impact_function.analysis_extent
+
+            show_confirmations = settings.value(
+                'inasafe/show_extent_confirmations', True, type=bool)
+            if show_confirmations:
+                message = self.tr(
+                    'The hazard layer, exposure layer and your '
+                    'defined analysis area extents all overlap. Press the '
+                    'run button below to continue with the analysis.')
+
+                display_information_message_bar(
+                    self.tr('InaSAFE'),
+                    self.tr('Analysis environment ready'),
+                    message,
+                    self.tr('More info ...'),
+                    2)
+            self.run_button.setEnabled(True)

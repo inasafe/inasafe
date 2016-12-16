@@ -103,7 +103,7 @@ class StepFcExtent(WizardStep, FORM_CLASS):
         self.extent_dialog.clear_extent.disconnect(
             self.parent.dock.extent.clear_user_analysis_extent)
         self.extent_dialog.extent_defined.disconnect(
-            self.parent.dock.define_user_analysis_extent)
+            self.parent.dock.extent.define_user_analysis_extent)
         self.extent_dialog.capture_button.clicked.disconnect(
             self.start_capture_coordinates)
         self.extent_dialog.tool.rectangle_created.disconnect(
@@ -123,7 +123,7 @@ class StepFcExtent(WizardStep, FORM_CLASS):
         self.extent_dialog.clear_extent.connect(
             self.parent.dock.extent.clear_user_analysis_extent)
         self.extent_dialog.extent_defined.connect(
-            self.parent.dock.define_user_analysis_extent)
+            self.parent.dock.extent.define_user_analysis_extent)
         self.extent_dialog.capture_button.clicked.connect(
             self.start_capture_coordinates)
         self.extent_dialog.tool.rectangle_created.connect(

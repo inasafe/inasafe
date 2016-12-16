@@ -21,3 +21,13 @@ dark_red = QColor('#BD0026')
 
 # Default color for no hazard
 no_hazard = QColor('#000000')
+
+# Rubber bands
+user_analysis_color = QColor(0, 0, 255, 100)
+user_analysis_width = 2
+
+next_analysis_color = QColor(0, 255, 0, 100)
+next_analysis_width = 10
+
+last_analysis_color = QColor(255, 0, 0, 100)
+last_analysis_width = 5
