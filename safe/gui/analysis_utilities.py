@@ -1,27 +1,12 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool developed by AusAid -
-**Analysis Utilities .**
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-.. todo:: Check raster is single band
-
-"""
+"""Analysis Utilities"""
 import os
-# noinspection PyPackageRequirements
 from PyQt4.QtCore import QDir, Qt
-# noinspection PyPackageRequirements
 from qgis.core import QgsMapLayerRegistry, QgsProject
 
+from safe.definitionsv4.report import standard_impact_report_metadata
 from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
 from safe.reportv4.report_metadata import ReportMetadata
-from safe.definitionsv4.report import standard_impact_report_metadata
 from safe.reportv4.impact_report import ImpactReport as ImpactReportV4
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -81,10 +66,12 @@ def add_impact_layer_to_QGIS(impact_function, iface):
     layers = impact_function.outputs
     name = impact_function.name
 
+    # noinspection PyArgumentList
     root = QgsProject.instance().layerTreeRoot()
     group_analysis = root.insertGroup(0, name)
     group_analysis.setVisible(Qt.Checked)
     for layer in layers:
+        # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayer(layer, False)
         layer_node = group_analysis.addLayer(layer)
 

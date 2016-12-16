@@ -1,21 +1,5 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
-- **GUI Test Cases.**
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
-
-__author__ = 'borysjurgiel.pl'
-__date__ = '24/02/2014'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
+"""Tests for the Impact Function Centric Wizard."""
 
 import unittest
 import sys
@@ -60,10 +44,15 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.gui.tools.wizard.wizard_dialog import WizardDialog
 
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
+
 
 # noinspection PyTypeChecker
-class WizardDialogTest(unittest.TestCase):
-    """Test the InaSAFE wizard GUI"""
+class TestImpactFunctionCentricWizard(unittest.TestCase):
+    """Test the Impact Function Centric Wizard."""
 
     @classmethod
     def setUpClass(cls):
@@ -954,6 +943,6 @@ class WizardDialogTest(unittest.TestCase):
         dialog.pbnCancel.click()
 
 if __name__ == '__main__':
-    suite = unittest.makeSuite(WizardDialogTest)
+    suite = unittest.makeSuite(TestImpactFunctionCentricWizard)
     runner = unittest.TextTestRunner(verbosity=2)
     runner.run(suite)
