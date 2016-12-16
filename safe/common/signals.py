@@ -24,8 +24,8 @@ __copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
 
 import logging
 
-from safe.utilities.utilities import get_error_message
 from safe_extras.pydispatch import dispatcher
+from safe.utilities.utilities import get_error_message
 
 DYNAMIC_MESSAGE_SIGNAL = 'DynamicMessage'
 STATIC_MESSAGE_SIGNAL = 'StaticMessage'

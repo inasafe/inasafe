@@ -2,17 +2,25 @@
 
 import logging
 
-from safe.utilities.i18n import tr
+from safe_extras.pydispatch import dispatcher
+
+from safe.defaults import limitations, disclaimer
 from safe import messaging as m
 from safe.messaging import styles
-from safe.common.signals import send_static_message
+from safe.common.signals import (
+    DYNAMIC_MESSAGE_SIGNAL,
+    STATIC_MESSAGE_SIGNAL,
+    ERROR_MESSAGE_SIGNAL,
+    send_static_message
+)
 from safe.utilities.resources import resources_path
-from safe.defaults import limitations, disclaimer
+from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
+
 
 INFO_STYLE = styles.INFO_STYLE
 PROGRESS_UPDATE_STYLE = styles.PROGRESS_UPDATE_STYLE
@@ -250,3 +258,37 @@ def generate_input_error_message(header, text):
     report.add(m.Heading(header, **WARNING_STYLE))
     report.add(text)
     return report
+
+
+def enable_messaging(message_viewer, sender=dispatcher.Any):
+    """Set up the dispatcher for messaging.
+
+    :param message_viewer: A message viewer to show the message.
+    :type message_viewer: MessageViewer
+
+    :param sender: Sender of the message signal. Default to Any object.
+    :type sender: object
+    """
+    # Set up dispatcher for dynamic messages
+    # Dynamic messages will not clear the message queue so will be appended
+    # to existing user messages
+
+    # noinspection PyArgumentEqualDefault
+    dispatcher.connect(
+        message_viewer.dynamic_message_event,
+        signal=DYNAMIC_MESSAGE_SIGNAL,
+        sender=sender)
+    # Set up dispatcher for static messages
+    # Static messages clear the message queue and so the display is 'reset'
+    # noinspection PyArgumentEqualDefault
+    dispatcher.connect(
+        message_viewer.static_message_event,
+        signal=STATIC_MESSAGE_SIGNAL,
+        sender=sender)
+    # Set up dispatcher for error messages
+    # Error messages clear the message queue and so the display is 'reset'
+    # noinspection PyArgumentEqualDefault
+    dispatcher.connect(
+        message_viewer.static_message_event,
+        signal=ERROR_MESSAGE_SIGNAL,
+        sender=sender)
