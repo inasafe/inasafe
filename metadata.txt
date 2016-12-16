@@ -15,7 +15,7 @@ qgisMaximumVersion=2.99
 description=InaSAFE is free software that allows disaster managers to study realistic natural hazard impact scenarios for better planning, preparedness and response activities.
 about=Developed for the Indonesian Government - BNPB, Australian Government - AIFDR and DMInnovation and, and World Bank - GFDRR
 
-version=3.5.4
+version=3.5.5
 # alpha, beta, rc or final
 status=final
 
@@ -25,6 +25,9 @@ status=final
 # Optional items:
 
 changelog=
+    Version 3.5.5
+    - Make ITB Bayesian model Earthquake Impact Function as default (#3497)
+
     Version 3.5.4
     - Fix error when multipart to single part produces none geometries.
 

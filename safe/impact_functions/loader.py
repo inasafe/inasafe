@@ -79,10 +79,12 @@ def register_impact_functions():
 
     # Earthquake
     impact_function_registry.register(EarthquakeBuildingFunction)
+    # Added in 3.3 (move up to set it as default)
+    impact_function_registry.register(ITBBayesianFatalityFunction)
+    # Added before 3.3
     impact_function_registry.register(ITBFatalityFunction)
     impact_function_registry.register(PAGFatalityFunction)
-    # Added in 3.3
-    impact_function_registry.register(ITBBayesianFatalityFunction)
+
 
     # Generic IF's
     impact_function_registry.register(ClassifiedRasterHazardBuildingFunction)
