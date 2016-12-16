@@ -27,6 +27,7 @@ status=final
 changelog=
     Version 3.5.5
     - Make ITB Bayesian model Earthquake Impact Function as default (#3497)
+    - Save the JSON file too when we use the 'save as' function on a layer (#3487)
 
     Version 3.5.4
     - Fix error when multipart to single part produces none geometries.
