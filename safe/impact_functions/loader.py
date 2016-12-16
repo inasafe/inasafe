@@ -85,7 +85,6 @@ def register_impact_functions():
     impact_function_registry.register(ITBFatalityFunction)
     impact_function_registry.register(PAGFatalityFunction)
 
-
     # Generic IF's
     impact_function_registry.register(ClassifiedRasterHazardBuildingFunction)
     impact_function_registry.register(ClassifiedRasterHazardPopulationFunction)
