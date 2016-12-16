@@ -42,9 +42,10 @@ class FileDownloaderTest(unittest.TestCase):
         # I think we can safely assume that the content
         # of google.com never changes (probably).
         # ...or not...changed on 5 Dec 2013 ...
-        # ...and changed on 28 Apr 2014 by Tim to hash and url  below
-        # ...and change on 9 Des 2014 by Akbar to hash and url below
-        unique_hash = '57e396baedfe1a034590339082b9abce'
+        # ...and changed on 28 Apr 2014 by Tim to hash and url below
+        # ...and changed on 9 Dec 2014 by Akbar to hash and url below
+        # ...and changed on 16 Dec 2016 by Etienne to hash and url below
+        unique_hash = '1fbe0165bd686a0aff8ab647ae255da6'
         url = 'http://www.google.com/images/srpr/logo11w.png'
         path = tempfile.mktemp()
 
