@@ -522,16 +522,9 @@ class BatchDialog(QDialog, FORM_CLASS):
                 # become the active layer. <--- WRONG
                 # noinspection PyUnresolvedReferences
                 impact_function = self.dock.impact_function
-                try:
-                    impact_layer = impact_function._exposure_impacted
-                    impact_layer_source = impact_layer.source()
-                    LOGGER.info('Exposure Impacted source: "%s"'
-                                % impact_layer_source)
-                except AttributeError:
-                    impact_layer = impact_function._aggregate_hazard_impacted
-                    impact_layer_source = impact_layer.source()
-                    LOGGER.info('Analysis Impacted source: "%s"'
-                                % impact_layer_source)
+                impact_layer = impact_function.impact
+                impact_layer_source = impact_layer.source()
+                LOGGER.info('Impact layer source: "%s"' % impact_layer_source)
                 legend_interface = self.iface.legendInterface()
                 # turn off exposure layer visibility
                 exposure_layer = self.identify_layer(self.exposure_source)
