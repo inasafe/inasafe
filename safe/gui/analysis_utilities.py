@@ -2,7 +2,7 @@
 """Analysis Utilities"""
 import os
 from PyQt4.QtCore import QDir, Qt
-from PyQt4.QtCore.QSettings import QSettings
+from PyQt4.QtCore import QSettings
 from qgis.core import QgsMapLayerRegistry, QgsProject
 
 from safe.definitionsv4.report import (

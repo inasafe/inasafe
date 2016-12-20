@@ -104,7 +104,13 @@ class QgisInterface(QObject):
             :rtype: QgsAlgorithm  ?
             """
             Processing.initialize()
-            for provider in Processing.algs.values():
+            # FIXME: Had some weird bug in QGIS 2.18 MacOSX (KyngChaos)
+            try:
+                providers = Processing.algs.values()
+            except:
+                providers = Processing.algs().values()
+
+            for provider in providers:
                 if name in provider:
                     return provider[name]
             return None

@@ -1,5 +1,5 @@
 # coding=utf-8
-from safe.definitionsv4.exposure import exposure_all
+from safe.definitionsv4.exposure import exposure_all, exposure_population
 from safe.definitionsv4.fields import (
     exposure_type_field,
     exposure_class_field,
@@ -8,7 +8,8 @@ from safe.definitionsv4.fields import (
     total_unaffected_field,
     total_field)
 from safe.definitionsv4.hazard_classifications import all_hazard_classes
-from safe.reportv4.extractors.util import layer_definition_type
+from safe.reportv4.extractors.util import layer_definition_type, \
+    round_affecter_number
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -40,7 +41,10 @@ def analysis_detail_extractor(impact_report, component_metadata):
     analysis_layer_fields = analysis_layer.keywords['inasafe_fields']
     analysis_feature = analysis_layer.getFeatures().next()
     exposure_breakdown = impact_report.exposure_breakdown
-    exposure_breakdown_fields = exposure_breakdown.keywords['inasafe_fields']
+    if exposure_breakdown:
+        exposure_breakdown_fields = exposure_breakdown.keywords[
+            'inasafe_fields']
+    debug_mode = impact_report.impact_function.debug_mode
 
     """Initializations"""
 
@@ -55,6 +59,11 @@ def analysis_detail_extractor(impact_report, component_metadata):
 
     # Get exposure type definition
     exposure_type = layer_definition_type(exposure_layer)
+    # Only round the number when it is population exposure and it is not
+    # in debug mode
+    is_rounded = (
+        exposure_type == exposure_population and
+        not debug_mode)
 
     # Analysis detail only applicable for breakable exposure types:
     itemizable_exposures_all = [
@@ -130,7 +139,8 @@ def analysis_detail_extractor(impact_report, component_metadata):
                 # class
                 field_name = exposure_breakdown_fields[field_key_name]
                 field_index = exposure_breakdown.fieldNameIndex(field_name)
-                count_value = feat[field_index]
+                count_value = round_affecter_number(
+                    feat[field_index], is_rounded)
                 row.append(count_value)
             except KeyError:
                 # in case the field was not found
@@ -140,19 +150,25 @@ def analysis_detail_extractor(impact_report, component_metadata):
         # Get Affected count
         field_index = exposure_breakdown.fieldNameIndex(
             total_affected_field['field_name'])
-        total_affected = feat[field_index]
+        total_affected = round_affecter_number(
+            feat[field_index], is_rounded)
+        if total_affected == 0:
+            # if total affected == 0, skip the row
+            continue
         row.append(total_affected)
 
         # Get Unaffected count
         field_index = exposure_breakdown.fieldNameIndex(
             total_unaffected_field['field_name'])
-        total_unaffected = feat[field_index]
+        total_unaffected = round_affecter_number(
+            feat[field_index], is_rounded)
         row.append(total_unaffected)
 
         # Get Total count
         field_index = exposure_breakdown.fieldNameIndex(
             total_field['field_name'])
-        total = feat[field_index]
+        total = round_affecter_number(
+            feat[field_index], is_rounded)
         row.append(total)
 
         details.append(row)
@@ -173,28 +189,44 @@ def analysis_detail_extractor(impact_report, component_metadata):
             # class
             field_name = analysis_layer_fields[field_key_name]
             field_index = analysis_layer.fieldNameIndex(field_name)
-            count_value = analysis_feature[field_index]
-            footers.append(count_value)
+            count_value = round_affecter_number(
+                analysis_feature[field_index], is_rounded)
         except KeyError:
             # in case the field was not found
             # assume value 0
-            footers.append(0)
+            count_value = 0
+
+        if count_value == 0:
+            # if total affected for hazard class is zero, delete entire
+            # column
+            column_index = len(footers)
+            # delete header column
+            headers = headers[:column_index] + headers[column_index + 1:]
+            for row_idx in range(0, len(details)):
+                row = details[row_idx]
+                row = row[:column_index] + row[column_index + 1:]
+                details[row_idx] = row
+            continue
+        footers.append(count_value)
     # total for affected
     field_index = analysis_layer.fieldNameIndex(
         total_affected_field['field_name'])
-    total_affected = analysis_feature[field_index]
+    total_affected = round_affecter_number(
+        analysis_feature[field_index], is_rounded)
     footers.append(total_affected)
 
     # total Unaffected count
     field_index = analysis_layer.fieldNameIndex(
         total_unaffected_field['field_name'])
-    total_unaffected = analysis_feature[field_index]
+    total_unaffected = round_affecter_number(
+        analysis_feature[field_index], is_rounded)
     footers.append(total_unaffected)
 
     # total count
     field_index = analysis_layer.fieldNameIndex(
         total_field['field_name'])
-    total = analysis_feature[field_index]
+    total = round_affecter_number(
+        analysis_feature[field_index], is_rounded)
     footers.append(total)
 
     context['header'] = tr('Estimated number of %(exposure)s by type') % {

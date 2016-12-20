@@ -1,5 +1,5 @@
 # coding=utf-8
-from safe.definitionsv4.exposure import exposure_all
+from safe.definitionsv4.exposure import exposure_all, exposure_population
 from safe.definitionsv4.fields import (
     affected_exposure_count_field,
     aggregation_name_field,
@@ -7,7 +7,9 @@ from safe.definitionsv4.fields import (
     exposure_type_field,
     exposure_class_field)
 from safe.gisv4.vector.tools import read_dynamic_inasafe_field
-from safe.reportv4.extractors.util import layer_definition_type
+from safe.reportv4.extractors.util import (
+    round_affecter_number,
+    layer_definition_type)
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -39,16 +41,24 @@ def aggregation_result_extractor(impact_report, component_metadata):
     exposure_layer = impact_report.exposure
     analysis_layer = impact_report.analysis
     exposure_breakdown = impact_report.exposure_breakdown
-    exposure_breakdown_fields = exposure_breakdown.keywords['inasafe_fields']
+    if exposure_breakdown:
+        exposure_breakdown_fields = exposure_breakdown.keywords[
+            'inasafe_fields']
     aggregation_impacted = impact_report.aggregation_impacted
     aggregation_impacted_fields = aggregation_impacted.keywords[
         'inasafe_fields']
+    debug_mode = impact_report.impact_function.debug_mode
 
     """Filtering report sections"""
 
     # Only process for applicable exposure types
     # Get exposure type definition
     exposure_type = layer_definition_type(exposure_layer)
+    # Only round the number when it is population exposure and it is not
+    # in debug mode
+    is_rounded = (
+        exposure_type == exposure_population and
+        not debug_mode)
 
     # For now aggregation report only applicable for breakable exposure types:
     itemizable_exposures_all = [
@@ -86,16 +96,23 @@ def aggregation_result_extractor(impact_report, component_metadata):
         type_field_index.append(type_index)
 
     for feat in aggregation_impacted.getFeatures():
+        total_affected_value = round_affecter_number(
+            feat[total_field_index], is_rounded)
+        if total_affected_value == 0:
+            # skip aggregation type if the total affected is zero
+            continue
         item = {
             # Name is the header for each row
             'name': feat[aggregation_name_index],
             # Total is the total for each row
-            'total': feat[total_field_index]
+            'total': total_affected_value
         }
         # Type values is the values for each column in each row
         type_values = []
         for idx in type_field_index:
-            type_values.append(feat[idx])
+            affected_value = round_affecter_number(
+                feat[idx], is_rounded)
+            type_values.append(affected_value)
         item['type_values'] = type_values
         rows.append(item)
 
@@ -127,11 +144,27 @@ def aggregation_result_extractor(impact_report, component_metadata):
     # Fetch total affected for each breakdown name
     value_dict = {}
     for feat in exposure_breakdown.getFeatures():
-        value_dict[feat[breakdown_field_index]] = feat[
-            affected_field_index]
+        affected_value = round_affecter_number(
+            feat[affected_field_index], is_rounded)
+        value_dict[feat[breakdown_field_index]] = affected_value
 
     if value_dict:
         for type_name in type_fields:
+            if int(value_dict[type_name]) == 0:
+                # if total affected for breakdown type is zero
+                # current column index
+                column_index = len(type_total_values)
+                # cut column header
+                type_header_labels = (
+                    type_header_labels[:column_index] +
+                    type_header_labels[column_index + 1:])
+                # cut all row values for the column
+                for item in rows:
+                    type_values = item['type_values']
+                    item['type_values'] = (
+                        type_values[:column_index] +
+                        type_values[column_index + 1:])
+                continue
             type_total_values.append(value_dict[type_name])
 
     """Get the super total affected"""
@@ -140,7 +173,8 @@ def aggregation_result_extractor(impact_report, component_metadata):
     analysis_feature = analysis_layer.getFeatures().next()
     field_index = analysis_layer.fieldNameIndex(
         total_affected_field['field_name'])
-    total_all = analysis_feature[field_index]
+    total_all = round_affecter_number(
+        analysis_feature[field_index], is_rounded)
 
     """Generate and format the context"""
 

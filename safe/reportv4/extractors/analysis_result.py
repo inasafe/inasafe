@@ -1,5 +1,5 @@
 # coding=utf-8
-
+from safe.definitionsv4.exposure import exposure_population
 from safe.definitionsv4.fields import (
     hazard_count_field,
     total_affected_field,
@@ -10,7 +10,8 @@ from safe.definitionsv4.hazard_category import (
     hazard_category_single_event,
     hazard_category_multiple_event)
 from safe.definitionsv4.hazard_classifications import all_hazard_classes
-from safe.reportv4.extractors.util import layer_definition_type
+from safe.reportv4.extractors.util import layer_definition_type, \
+    round_affecter_number
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -40,6 +41,12 @@ def analysis_result_extractor(impact_report, component_metadata):
     hazard_layer = impact_report.hazard
     exposure_layer = impact_report.exposure
     analysis_layer = impact_report.analysis
+    debug_mode = impact_report.impact_function.debug_mode
+
+    exposure_type = layer_definition_type(exposure_layer)
+    is_rounded = (
+        exposure_type == exposure_population and
+        not debug_mode)
 
     # find hazard class
     hazard_classification = None
@@ -74,7 +81,8 @@ def analysis_result_extractor(impact_report, component_metadata):
                 # label, string-formatted with translated hazard class label
                 hazard_label = hazard_count_field['name'] % (
                     hazard_class['name'], )
-                hazard_value = analysis_feature[field_index]
+                hazard_value = round_affecter_number(
+                    analysis_feature[field_index], is_rounded)
                 stats = {
                     'key': hazard_class['key'],
                     'name': hazard_label,
@@ -113,7 +121,8 @@ def analysis_result_extractor(impact_report, component_metadata):
             field_index = analysis_layer.fieldNameIndex(
                 report_field['field_name'])
             row_label = report_field['name']
-            row_value = analysis_feature[field_index]
+            row_value = round_affecter_number(
+                analysis_feature[field_index], is_rounded)
             row_stats = {
                 'key': report_field['key'],
                 'name': row_label,

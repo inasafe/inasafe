@@ -11,6 +11,7 @@ import os
 from qgis.core import (
     QgsComposition,
     QgsRectangle,
+    QgsRasterLayer,
     QgsMapSettings)
 
 from safe.common.exceptions import (
@@ -371,6 +372,9 @@ class ImpactReport(object):
         if layer:
             if not layer.isValid():
                 raise ImpactReport.LayerException('Layer is not valid')
+            if isinstance(layer, QgsRasterLayer):
+                # can't check feature count of raster layer
+                return
             feature_count = len([f for f in layer.getFeatures()])
             if feature_count == 0:
                 raise ImpactReport.LayerException(
