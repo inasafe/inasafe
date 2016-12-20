@@ -149,8 +149,8 @@ def set_aggregation_layer(aggregation_layer, dock=None):
     if aggregation_layer is None or aggregation_layer == '':
         return False
 
-    for count in range(0, dock.cboAggregation.count()):
-        layer_id = dock.cboAggregation.itemData(
+    for count in range(0, dock.aggregation_layer_combo.count()):
+        layer_id = dock.aggregation_layer_combo.itemData(
             count, QtCore.Qt.UserRole)
         # noinspection PyArgumentList
         layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
@@ -159,6 +159,6 @@ def set_aggregation_layer(aggregation_layer, dock=None):
             continue
 
         if layer.source() == aggregation_layer:
-            dock.cboAggregation.setCurrentIndex(count)
+            dock.aggregation_layer_combo.setCurrentIndex(count)
             return True
     return False
