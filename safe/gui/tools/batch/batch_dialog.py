@@ -77,11 +77,6 @@ class BatchDialog(QDialog, FORM_CLASS):
         :type dock: Dock
 
         """
-        # connect to remote debugger
-        # sys.path.append('C:/PROGRA~1/QGISES~1/apps/Python27/lib/site-packages/pycharm-debug.egg')
-        # import pydevd
-        # pydevd.settrace('localhost', port=52525, stdoutToServer=True,
-        #                 stderrToServer=True)
 
         QDialog.__init__(self, parent)
         self.setupUi(self)
@@ -526,13 +521,14 @@ class BatchDialog(QDialog, FORM_CLASS):
                 # Usually after analysis is done, the impact layer
                 # become the active layer. <--- WRONG
                 # noinspection PyUnresolvedReferences
+                impact_function = self.dock.impact_function
                 try:
-                    impact_layer = self.dock.impact_function._exposure_impacted
+                    impact_layer = impact_function._exposure_impacted
                     impact_layer_source = impact_layer.source()
                     LOGGER.info('Exposure Impacted source: "%s"'
                                 % impact_layer_source)
-                except:
-                    impact_layer = self.dock.impact_function._analysis_impacted
+                except AttributeError:
+                    impact_layer = impact_function._aggregate_hazard_impacted
                     impact_layer_source = impact_layer.source()
                     LOGGER.info('Analysis Impacted source: "%s"'
                                 % impact_layer_source)

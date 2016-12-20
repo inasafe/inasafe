@@ -48,17 +48,6 @@ def run_scenario(dock=None):
     global global_status_flag
     global_status_flag = True
 
-    def completed(flag):
-        """Listen for completion and set myFlag according to exit value.
-        :param flag:
-        """
-        global global_status_flag
-        global_status_flag = flag
-        LOGGER.debug("scenario done")
-        dock.analysis_done.disconnect(completed)
-
-    # commenting this since the signal is removed from dock
-    # dock.analysis_done.connect(completed)
     # Start the analysis
     dock.accept()
     return global_status_flag
