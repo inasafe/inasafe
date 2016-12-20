@@ -25,6 +25,10 @@ from safe.definitionsv4.post_processors import (
     post_processor_elderly,
     post_processor_size
 )
+from safe.definitionsv4.constants import (
+    ANALYSIS_SUCCESS,
+    ANALYSIS_FAILED_BAD_INPUT,
+)
 from safe.utilities.unicode import byteify
 from safe.test.utilities import load_test_vector_layer, check_inasafe_fields
 from safe.impact_function_v4.impact_function import ImpactFunction
@@ -177,10 +181,10 @@ class TestImpactFunction(unittest.TestCase):
         impact_function.exposure = exposure_layer
         impact_function.hazard = hazard_layer
         status, _ = impact_function.run()
-        self.assertEqual(1, status)
+        self.assertEqual(ANALYSIS_FAILED_BAD_INPUT, status)
         impact_function.prepare()
         status, _ = impact_function.run()
-        self.assertEqual(0, status)
+        self.assertEqual(ANALYSIS_SUCCESS, status)
         message = impact_function.performance_log_message().to_text()
         expected_result = get_control_text(
             'test-profiling-logs.txt')
