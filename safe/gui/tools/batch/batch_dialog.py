@@ -124,6 +124,9 @@ class BatchDialog(QDialog, FORM_CLASS):
         self.button_box.addButton(
             self.run_selected_button, QDialogButtonBox.ActionRole)
 
+        # Set up new project settings
+        self.start_in_new_project = True
+
         # Set up context help
         self.help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
         # Allow toggling the help button
@@ -280,7 +283,8 @@ class BatchDialog(QDialog, FORM_CLASS):
             paths.append(items['aggregation'])
 
         # always run in new project
-        self.iface.newProject()
+        if self.start_in_new_project:
+            self.iface.newProject()
 
         try:
             scenario_runner.add_layers(scenario_directory, paths, self.iface)
@@ -671,6 +675,12 @@ class BatchDialog(QDialog, FORM_CLASS):
 
         title = self.tr('Set the output directory for pdf report files')
         self.choose_directory(self.output_directory, title)
+
+    def on_toggleNewProject_toggled(self):
+        if self.start_in_new_project:
+            self.start_in_new_project = False
+        else:
+            self.start_in_new_project = True
 
     @pyqtSlot()
     @pyqtSignature('bool')  # prevents actions being handled twice
