@@ -23,6 +23,7 @@ from safe.definitionsv4.constants import (
     inasafe_keyword_version_key,
     ANALYSIS_FAILED_BAD_INPUT,
     ANALYSIS_FAILED_BAD_CODE,
+    ANALYSIS_SUCCESS,
     PREPARE_FAILED_BAD_INPUT,
     PREPARE_FAILED_BAD_CODE
 )
@@ -815,14 +816,14 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 'The impact function will not be able to run because of the '
                 'inputs.'))
             send_error_message(self, message)
-            return
+            return status, message
         if status == PREPARE_FAILED_BAD_CODE:
             self.hide_busy()
             LOGGER.exception(tr(
                 'The impact function will not be able to run because of a '
                 'bug.'))
             send_error_message(self, message)
-            return
+            return status, message
 
         # Start the analysis
         status, message = self.impact_function.run()
@@ -831,13 +832,13 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             LOGGER.info(tr(
                 'The impact function could not run because of the inputs.'))
             send_error_message(self, message)
-            return
+            return status, message
         elif status == ANALYSIS_FAILED_BAD_CODE:
             self.hide_busy()
             LOGGER.exception(tr(
                 'The impact function could not run because of a bug.'))
             send_error_message(self, message)
-            return
+            return status, message
 
         LOGGER.info(tr('The impact function could run without errors.'))
 
@@ -890,6 +891,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             legend.setLayerVisible(qgis_exposure, False)
 
         self.hide_busy()
+        return ANALYSIS_SUCCESS, None
 
     def prepare_impact_function(self):
         """Create analysis as a representation of current situation of dock."""

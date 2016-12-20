@@ -30,7 +30,6 @@ from safe.common.exceptions import FileNotFoundError
 
 
 LOGGER = logging.getLogger('InaSAFE')
-global_status_flag = False
 
 
 def get_map_canvas():
@@ -39,19 +38,12 @@ def get_map_canvas():
     return iface.mapCanvas()
 
 
-def run_scenario(dock=None):
+def run_scenario(dock):
     """Run the current scenario.
-
     :param dock: Dock instance
     """
-    # pylint: disable=W0603
-    global global_status_flag
-    global_status_flag = True
-
     # Start the analysis
-    dock.accept()
-    return global_status_flag
-    # pylint: enable=W0603
+    return dock.accept()
 
 
 def extract_path(scenario_file_path, path):

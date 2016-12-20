@@ -44,6 +44,7 @@ from PyQt4.QtGui import (
     QPushButton,
     QDialogButtonBox)
 
+from safe.definitionsv4.constants import ANALYSIS_SUCCESS
 from safe.gui.tools.batch import scenario_runner
 from safe.utilities.gis import extent_string_to_array, read_impact_layer
 from safe.report.impact_report import ImpactReport
@@ -278,8 +279,14 @@ class BatchDialog(QDialog, FORM_CLASS):
             as table items.
         :type items: dict
 
-        :returns: True if success, otherwise return False.
-        :rtype: bool
+        :return: A tuple with the status of the IF and an error message if
+            needed.
+            The status is ANALYSIS_SUCCESS if everything was fine.
+            The status is ANALYSIS_FAILED_BAD_INPUT if the client should fix
+                something.
+            The status is ANALYSIS_FAILED_BAD_CODE if something went wrong
+                from the code.
+        :rtype: (int, m.Message)
         """
         # LOGGER.info('Run simple task' + str(items))
         scenario_directory = str(self.source_directory.text())
@@ -348,9 +355,9 @@ class BatchDialog(QDialog, FORM_CLASS):
 
             self.iface.mapCanvas().setExtent(extent)
 
-        result = scenario_runner.run_scenario(self.dock)
+        status, message = scenario_runner.run_scenario(self.dock)
 
-        return result
+        return status, message
 
     def reset_status(self):
         """Set all scenarios' status to empty in the table
@@ -513,9 +520,10 @@ class BatchDialog(QDialog, FORM_CLASS):
             title = str(task_item.text())
 
             # Its a dict containing files for a scenario
-            result = self.run_scenario(value)
-            if not result:
+            status, message = self.run_scenario(value)
+            if status != ANALYSIS_SUCCESS:
                 status_item.setText(self.tr('Analysis Fail'))
+                logging.exception(message)
             else:
                 # NOTE(gigih):
                 # Usually after analysis is done, the impact layer
@@ -538,8 +546,9 @@ class BatchDialog(QDialog, FORM_CLASS):
                 # noinspection PyBroadException
                 try:
                     status_item.setText(self.tr('Analysis Ok'))
-                    self.create_pdf(
-                        title, path, impact_layer, count, index)
+                    # Etienne 20/12/16 Let's disable the PDF until V4 can do it
+                    # self.create_pdf(
+                    #     title, path, impact_layer, count, index)
                     LOGGER.info('Map has been rendered: "%s"' % value)
                     status_item.setText(self.tr('Report Ok'))
                 except Exception:  # pylint: disable=W0703
