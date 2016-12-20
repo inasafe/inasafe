@@ -135,6 +135,9 @@ class BatchDialog(QDialog, FORM_CLASS):
         self.button_box.addButton(
             self.run_selected_button, QDialogButtonBox.ActionRole)
 
+        # Set up new project settings
+        self.start_in_new_project = True
+
         # Set up context help
         self.help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
         # Allow toggling the help button
@@ -289,6 +292,7 @@ class BatchDialog(QDialog, FORM_CLASS):
         paths = []
         if 'aggregation' in items:
             paths.append(items['aggregation'])
+<<<<<<< 589b1b7cf2777fadad92a1c827d7e33aec59c0ac
         if 'exposure' in items:
             paths.append(items['exposure'])
             # add access to exposure layer source so we can access it later
@@ -296,6 +300,13 @@ class BatchDialog(QDialog, FORM_CLASS):
                 os.path.join(scenario_directory, items['exposure']))
         if 'hazard' in items:
             paths.append(items['hazard'])
+=======
+
+        # always run in new project
+        if self.start_in_new_project:
+            self.iface.newProject()
+
+>>>>>>> PEP E302, added new project toggle for each scenario
         try:
             # create layer group
             group_name = items['scenario_name']
@@ -745,6 +756,12 @@ class BatchDialog(QDialog, FORM_CLASS):
 
         title = self.tr('Set the output directory for pdf report files')
         self.choose_directory(self.output_directory, title)
+
+    def on_toggleNewProject_toggled(self):
+        if self.start_in_new_project:
+            self.start_in_new_project = False
+        else:
+            self.start_in_new_project = True
 
     @pyqtSlot()
     @pyqtSignature('bool')  # prevents actions being handled twice
