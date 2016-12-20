@@ -34,8 +34,14 @@ __revision__ = '$Format:%H$'
 
 
 @profile
-def create_virtual_aggregation(extent, extent_crs):
-    """Function to create aggregation layer based on extent
+def create_virtual_aggregation(geometry, crs):
+    """Function to create aggregation layer based on extent.
+
+    :param geometry: The geometry to use as an extent.
+    :type geometry: QgsGeometry
+
+    :param crs: The Coordinate Reference System to use for the layer.
+    :type crs: QgsCoordinateReferenceSystem
 
     :returns: A polygon layer with exposure's crs.
     :rtype: QgsVectorLayer
@@ -46,13 +52,12 @@ def create_virtual_aggregation(extent, extent_crs):
         create_field_from_definition(aggregation_name_field)
     ]
     aggregation_layer = create_memory_layer(
-        'aggregation', QGis.Polygon, extent_crs, fields)
+        'aggregation', QGis.Polygon, crs, fields)
 
     aggregation_layer.startEditing()
 
     feature = QgsFeature()
-    # noinspection PyCallByClass,PyArgumentList,PyTypeChecker
-    feature.setGeometry(QgsGeometry.fromRect(extent))
+    feature.setGeometry(geometry)
     feature.setAttributes([1, tr('Entire Area')])
     aggregation_layer.addFeature(feature)
     aggregation_layer.commitChanges()
@@ -71,11 +76,11 @@ def create_virtual_aggregation(extent, extent_crs):
 
 
 @profile
-def create_analysis_layer(aggregation, crs, name):
+def create_analysis_layer(analysis_extent, crs, name):
     """Create the analysis layer.
 
-    :param aggregation: The aggregation layer.
-    :type aggregation: QgsVectorLayer
+    :param analysis_extent: The analysis extent.
+    :type analysis_extent: QgsGeometry
 
     :param crs: The CRS to use.
     :type crs: QgsCoordinateReferenceSystem
@@ -95,14 +100,9 @@ def create_analysis_layer(aggregation, crs, name):
 
     analysis_layer.startEditing()
 
-    geometries = []
-    request = QgsFeatureRequest().setSubsetOfAttributes([])
-    for area in aggregation.getFeatures(request):
-        geometries.append(QgsGeometry(area.geometry()))
-
     feature = QgsFeature()
     # noinspection PyCallByClass,PyArgumentList,PyTypeChecker
-    feature.setGeometry(QgsGeometry.unaryUnion(geometries))
+    feature.setGeometry(analysis_extent)
     feature.setAttributes([1, name])
     analysis_layer.addFeature(feature)
     analysis_layer.commitChanges()

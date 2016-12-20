@@ -411,7 +411,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
     def save_auxiliary_files(self, layer, destination):
         """Save auxiliary files when using the 'save as' function.
 
-        If some auxiliary files (.xml) exist, this function will
+        If some auxiliary files (.xml, .json) exist, this function will
         copy them when the 'save as' function is used on the layer.
 
         :param layer: The layer which has been saved as.
@@ -421,29 +421,32 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         :type destination: str
         """
 
-        source_basename = os.path.splitext(layer.source())[0]
-        source_xml = "%s.xml" % source_basename
+        auxiliary_files = ['xml', 'json']
 
-        destination_basename = os.path.splitext(destination)[0]
-        destination_xml = "%s.xml" % destination_basename
+        for auxiliary_file in auxiliary_files:
+            source_basename = os.path.splitext(layer.source())[0]
+            source_file = "%s.%s" % (source_basename, auxiliary_file)
 
-        # noinspection PyBroadException,PyBroadException
-        try:
-            # XML
-            if os.path.isfile(source_xml):
-                shutil.copy(source_xml, destination_xml)
+            destination_basename = os.path.splitext(destination)[0]
+            destination_file = "%s.%s" % (destination_basename, auxiliary_file)
 
-        except (OSError, IOError):
-            display_critical_message_bar(
-                title=self.tr('Error while saving'),
-                message=self.tr("The destination location must be writable."))
+            # noinspection PyBroadException,PyBroadException
+            try:
+                if os.path.isfile(source_file):
+                    shutil.copy(source_file, destination_file)
 
-        except Exception:  # pylint: disable=broad-except
-            display_critical_message_bar(
-                title=self.tr('Error while saving'),
-                message=self.tr("Something went wrong."))
-        finally:
-            disable_busy_cursor()
+            except (OSError, IOError):
+                display_critical_message_bar(
+                    title=self.tr('Error while saving'),
+                    message=self.tr(
+                        'The destination location must be writable.'))
+
+            except Exception:  # pylint: disable=broad-except
+                display_critical_message_bar(
+                    title=self.tr('Error while saving'),
+                    message=self.tr('Something went wrong.'))
+
+        disable_busy_cursor()
 
     # noinspection PyPep8Naming
     @pyqtSlot(int)
@@ -907,15 +910,15 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         if aggregation:
             impact_function.aggregation = aggregation
+            impact_function.use_selected_features_only = (
+                bool(self.settings.value(
+                    'inasafe/useSelectedFeaturesOnly', False, type=bool)))
         else:
-            # We need to enable it again when we will fix the dock.
-            # impact_function.requested_extent = self.extent.user_extent
-            # impact_function.requested_extent = self.extent.user_extent_crs
-
-            map_settings = self.iface.mapCanvas().mapSettings()
-            impact_function.viewport_extent = map_settings.fullExtent()
-            impact_function._viewport_extent_crs = (
-                map_settings.destinationCrs())
+            if self.extent.user_extent:
+                # impact_function.requested_extent = self.extent.user_extent
+                # impact_function.requested_extent_crs = (
+                #     self.extent.user_extent_crs)
+                pass
 
         impact_function.debug_mode = self.debug_mode.isChecked()
 
