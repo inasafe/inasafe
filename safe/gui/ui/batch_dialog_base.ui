@@ -152,11 +152,8 @@
   <customwidget>
    <class>QWebView</class>
    <extends>QWidget</extends>
-<<<<<<< 589b1b7cf2777fadad92a1c827d7e33aec59c0ac
    <header>PyQt4.QtWebKit</header>
-=======
    <header>QtWebKit/QWebView</header>
->>>>>>> PEP E302, added new project toggle for each scenario
   </customwidget>
  </customwidgets>
  <resources/>
