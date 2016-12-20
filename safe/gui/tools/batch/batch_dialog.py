@@ -544,7 +544,7 @@ class BatchDialog(QDialog, FORM_CLASS):
                 # created by batchrunner
                 scenario_group = self.root.children()[0]
                 cloned_group = scenario_group.clone()
-                self.layer_group.insertChildNode(0,cloned_group)
+                self.layer_group.insertChildNode(0, cloned_group)
                 self.root.removeChildNode(scenario_group)
                 # noinspection PyBroadException
                 try:
@@ -726,7 +726,7 @@ class BatchDialog(QDialog, FORM_CLASS):
         title = self.tr('Set the output directory for pdf report files')
         self.choose_directory(self.output_directory, title)
 
-    def on_toggleNewProject_toggled(self):
+    def on_toggle_new_project_toggled(self):
         if self.start_in_new_project:
             self.start_in_new_project = False
         else:
