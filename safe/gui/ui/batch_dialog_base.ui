@@ -80,7 +80,7 @@
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QCheckBox" name="toggleNewProject">
+           <widget class="QCheckBox" name="toggle_new_project">
             <property name="text">
              <string>Run each scenario in new project</string>
             </property>
@@ -152,7 +152,6 @@
   <customwidget>
    <class>QWebView</class>
    <extends>QWidget</extends>
-   <header>PyQt4.QtWebKit</header>
    <header>QtWebKit/QWebView</header>
   </customwidget>
  </customwidgets>
