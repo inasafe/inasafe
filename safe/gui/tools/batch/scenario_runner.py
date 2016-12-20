@@ -46,7 +46,7 @@ def run_scenario(dock=None):
     """
     # pylint: disable=W0603
     global global_status_flag
-    global_status_flag = False
+    global_status_flag = True
 
     def completed(flag):
         """Listen for completion and set myFlag according to exit value.
@@ -57,7 +57,8 @@ def run_scenario(dock=None):
         LOGGER.debug("scenario done")
         dock.analysis_done.disconnect(completed)
 
-    dock.analysis_done.connect(completed)
+    # commenting this since the signal is removed from dock
+    # dock.analysis_done.connect(completed)
     # Start the analysis
     dock.accept()
     return global_status_flag
@@ -141,33 +142,12 @@ def add_layers(scenario_dir, paths, iface, layer_group):
                                    layer_set])
 
 
-def set_function_id(function_id, dock=None):
-    """Set the function combo to use the function with the given id.
-
-    :param function_id: str - a string representing the unique identifier for
-            the desired function.
-    :param dock: a dock instance
-
-    :returns bool: True on success, False in the case that the function is not
-            present in the function selector (based on the context of loaded
-            hazard and exposure layers.
-    """
-    if function_id is None or function_id == '':
-        return False
-
-    for count in range(0, dock.cboFunction.count()):
-        current_id = dock.get_function_id(count)
-        if current_id == function_id:
-            dock.cboFunction.setCurrentIndex(count)
-            return True
-    return False
-
-
 def set_aggregation_layer(aggregation_layer, dock=None):
     """Set the aggregation combo to use the layer with the given name.
 
     :param aggregation_layer: str - a string representing the source name of
         the desired aggregation layer.
+
     :param dock: a dock instance
 
     :returns bool: True on success, False in the case that the aggregation

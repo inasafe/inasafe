@@ -77,6 +77,12 @@ class BatchDialog(QDialog, FORM_CLASS):
         :type dock: Dock
 
         """
+        # connect to remote debugger
+        # sys.path.append('C:/PROGRA~1/QGISES~1/apps/Python27/lib/site-packages/pycharm-debug.egg')
+        # import pydevd
+        # pydevd.settrace('localhost', port=52525, stdoutToServer=True,
+        #                 stderrToServer=True)
+
         QDialog.__init__(self, parent)
         self.setupUi(self)
         self.setWindowModality(Qt.ApplicationModal)
@@ -128,6 +134,9 @@ class BatchDialog(QDialog, FORM_CLASS):
         self.run_selected_button.clicked.connect(self.run_selected_clicked)
         self.button_box.addButton(
             self.run_selected_button, QDialogButtonBox.ActionRole)
+
+        # Set up new project settings
+        self.start_in_new_project = True
 
         # Set up context help
         self.help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
@@ -290,6 +299,11 @@ class BatchDialog(QDialog, FORM_CLASS):
                 os.path.join(scenario_directory, items['exposure']))
         if 'hazard' in items:
             paths.append(items['hazard'])
+
+        # always run in new project
+        if self.start_in_new_project:
+            self.iface.newProject()
+
         try:
             # create layer group
             group_name = items['scenario_name']
@@ -306,14 +320,6 @@ class BatchDialog(QDialog, FORM_CLASS):
             LOGGER.exception('Loading layers failed: \nRoot: %s\n%s' % (
                 scenario_directory, paths))
             return False
-
-        # See if we have a preferred impact function
-        if 'function' in items:
-            function_id = items['function']
-            result = scenario_runner.set_function_id(
-                function_id, dock=self.dock)
-            if not result:
-                return False
 
         if 'aggregation' in items:
             aggregation_path = scenario_runner.extract_path(
@@ -520,59 +526,31 @@ class BatchDialog(QDialog, FORM_CLASS):
                 # Usually after analysis is done, the impact layer
                 # become the active layer. <--- WRONG
                 # noinspection PyUnresolvedReferences
-                impact_layer = self.dock.impact_function.impact
-
-                # Load impact layer into QGIS
-                qgis_layer = read_impact_layer(impact_layer)
-                impact_layer_source = qgis_layer.source()
-                # reg.instance().addMapLayer(qgis_layer, addToLegend=False)
-
-                # identify impact layer in map canvas from impact layer source
-                leg_impact_layer = self.identify_layer(impact_layer_source)
-                self.legend_impact_layer_is_removed = False
-                if leg_impact_layer.type() == QgsMapLayer.VectorLayer:
-                    leg_impact_layer.layerDeleted.connect(self.check_removed)
-                elif leg_impact_layer.type() == QgsMapLayer.RasterLayer:
-                    leg_impact_layer.destroyed.connect(self.check_removed)
-                # clone impact layer in Layer Panel
-                if qgis_layer.type() == QgsMapLayer.VectorLayer:
-                    cloned_layer = QgsVectorLayer(
-                        leg_impact_layer.source(),
-                        leg_impact_layer.name(),
-                        leg_impact_layer.providerType())
-                elif qgis_layer.type() == QgsMapLayer.RasterLayer:
-                    cloned_layer = QgsRasterLayer(
-                        leg_impact_layer.source(),
-                        leg_impact_layer.name(),
-                        leg_impact_layer.providerType())
-                else:
-                    raise Exception('layer source is failed to be recognized')
-                # remove original layer created from dock, sometimes this
-                # code is failed leaving original file in layer panel
-                reg.instance().removeMapLayer(leg_impact_layer)
-                # turn off layer visibility just in case layer removing
-                # is not working so that it won't be shown in the next scenario
+                try:
+                    impact_layer = self.dock.impact_function._exposure_impacted
+                    impact_layer_source = impact_layer.source()
+                    LOGGER.info('Exposure Impacted source: "%s"'
+                                % impact_layer_source)
+                except:
+                    impact_layer = self.dock.impact_function._analysis_impacted
+                    impact_layer_source = impact_layer.source()
+                    LOGGER.info('Analysis Impacted source: "%s"'
+                                % impact_layer_source)
                 legend_interface = self.iface.legendInterface()
-                if not self.legend_impact_layer_is_removed:
-                    LOGGER.info('Failed to remove legend impact layer')
-                    legend_interface.setLayerVisible(leg_impact_layer, False)
-                # add cloned layer to the layer group
-                reg.instance().addMapLayer(cloned_layer, False)
-                self.layer_group.insertLayer(0, cloned_layer)
                 # turn off exposure layer visibility
                 exposure_layer = self.identify_layer(self.exposure_source)
                 legend_interface.setLayerVisible(exposure_layer, False)
-
-                # print layer list. somehow this is the only way to update
-                # the map canvas. still need improvement
-                layers = self.iface.mapCanvas().layers()
-                for layer in layers:
-                    print layer.name()
+                # Move layer group created from the analysis to layer group
+                # created by batchrunner
+                scenario_group = self.root.children()[0]
+                cloned_group = scenario_group.clone()
+                self.layer_group.insertChildNode(0, cloned_group)
+                self.root.removeChildNode(scenario_group)
                 # noinspection PyBroadException
                 try:
                     status_item.setText(self.tr('Analysis Ok'))
                     self.create_pdf(
-                        title, path, cloned_layer, count, index)
+                        title, path, impact_layer, count, index)
                     LOGGER.info('Map has been rendered: "%s"' % value)
                     status_item.setText(self.tr('Report Ok'))
                 except Exception:  # pylint: disable=W0703
@@ -747,6 +725,12 @@ class BatchDialog(QDialog, FORM_CLASS):
 
         title = self.tr('Set the output directory for pdf report files')
         self.choose_directory(self.output_directory, title)
+
+    def on_toggle_new_project_toggled(self):
+        if self.start_in_new_project:
+            self.start_in_new_project = False
+        else:
+            self.start_in_new_project = True
 
     @pyqtSlot()
     @pyqtSignature('bool')  # prevents actions being handled twice
