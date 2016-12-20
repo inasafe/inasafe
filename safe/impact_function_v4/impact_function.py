@@ -593,22 +593,19 @@ class ImpactFunction(object):
             )
             return 1, message
 
+        # We should read it using KeywordIO for the very beginning. To avoid
+        # get the modified keywords in the patching.
         try:
-            # The layer might have monkey patching already.
-            keywords = layer.keywords
-        except AttributeError:
-            # Or we should read it using KeywordIO
-            try:
-                keywords = KeywordIO().read_keywords(layer)
-            except NoKeywordsFoundError:
-                message = generate_input_error_message(
-                    tr('The %s layer do not have keywords.' & purpose),
-                    m.Paragraph(tr(
-                        'The %s layer do not have keywords. Use the '
-                        'Use the wizard to assign keywords to the layer.'
-                        % purpose))
-                )
-                return 1, message
+            keywords = KeywordIO().read_keywords(layer)
+        except NoKeywordsFoundError:
+            message = generate_input_error_message(
+                tr('The %s layer do not have keywords.' & purpose),
+                m.Paragraph(tr(
+                    'The %s layer do not have keywords. Use the '
+                    'Use the wizard to assign keywords to the layer.'
+                    % purpose))
+            )
+            return 1, message
 
         if keywords.get('layer_purpose') != purpose:
             message = generate_input_error_message(
