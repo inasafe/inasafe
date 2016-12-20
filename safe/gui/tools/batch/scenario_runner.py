@@ -140,6 +140,7 @@ def add_layers(scenario_dir, paths, iface, layer_group):
     iface.mapCanvas().setLayerSet([QgsMapCanvasLayer(layer) for layer in
                                    layer_set])
 
+
 def set_aggregation_layer(aggregation_layer, dock=None):
     """Set the aggregation combo to use the layer with the given name.
 
