@@ -125,7 +125,9 @@ def population_rounding_full(number):
     :returns: result and rounding bracket.
     :rtype: (int, int)
     """
-    if number < 1000:
+    if number < 10:
+        rounding = 1
+    elif number < 1000:
         rounding = 10
     elif number < 100000:
         rounding = 100

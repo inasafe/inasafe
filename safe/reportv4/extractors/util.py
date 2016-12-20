@@ -4,11 +4,31 @@ import os
 from jinja2.exceptions import TemplateError
 
 from safe.definitionsv4.utilities import definition
+from safe.impact_functions.core import population_rounding
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
+
+
+def round_affecter_number(number, enable_rounding):
+    """Tries to convert and round the number.
+
+    Rounded using population rounding rule.
+
+    :param number: number represented as string or float
+    :type number: str, float
+
+    :param enable_rounding: flag to enable rounding
+    :type enable_rounding: bool
+
+    :return: rounded number
+    """
+    affected_number = int(float(number))
+    if enable_rounding:
+        return population_rounding(affected_number)
+    return affected_number
 
 
 def layer_definition_type(layer):

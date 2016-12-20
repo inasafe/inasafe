@@ -7,6 +7,7 @@ import unittest
 from jinja2.environment import Template
 
 from safe.common.utilities import safe_dir
+from safe.definitionsv4.constants import ANALYSIS_SUCCESS
 from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
 from safe.impact_function_v4.impact_function import ImpactFunction
 from safe.reportv4.extractors.composer import qgis_composer_extractor
@@ -40,7 +41,6 @@ __revision__ = ':%H$'
 
 
 class TestImpactReport(unittest.TestCase):
-
     @classmethod
     def fixtures_dir(cls, path):
         dirname = os.path.dirname(__file__)
@@ -81,7 +81,10 @@ class TestImpactReport(unittest.TestCase):
         impact_function.aggregation = aggregation_layer
         impact_function.exposure = exposure_layer
         impact_function.hazard = hazard_layer
-        impact_function.run()
+        impact_function.prepare()
+        return_code, message = impact_function.run()
+
+        self.assertEqual(return_code, ANALYSIS_SUCCESS, message)
 
         report_metadata = ReportMetadata(
             metadata_dict=standard_impact_report_metadata_html)
@@ -104,19 +107,18 @@ class TestImpactReport(unittest.TestCase):
         """:type: safe.reportv4.report_metadata.Jinja2ComponentsMetadata"""
 
         expected_context = {
-            'header': tr('Analysis Results'),
-            'title': tr('Structures affected'),
-            'summary': [
+            'header': u'Analysis Results',
+            'title': u'Structures affected', 'summary': [
                 {
                     'header_label': u'Hazard Zone',
                     'rows': [
                         {
-                            'value': 4.0,
+                            'value': 4,
                             'name': u'Total High Hazard Zone',
                             'key': 'high'
                         },
                         {
-                            'value': 1.0,
+                            'value': 1,
                             'name': u'Total Medium Hazard Zone',
                             'key': 'medium'
                         },
@@ -132,17 +134,17 @@ class TestImpactReport(unittest.TestCase):
                     'header_label': u'Structures',
                     'rows': [
                         {
-                            'value': 5.0,
+                            'value': 5,
                             'name': u'Total Affected',
                             'key': 'total_affected_field'
                         },
                         {
-                            'value': 0.0,
+                            'value': 4,
                             'name': u'Total Unaffected',
                             'key': 'total_unaffected_field'
                         },
                         {
-                            'value': 5.0,
+                            'value': 9,
                             'name': u'Total',
                             'key': 'total_field'
                         }
@@ -235,7 +237,10 @@ class TestImpactReport(unittest.TestCase):
         impact_function.aggregation = aggregation_layer
         impact_function.exposure = exposure_layer
         impact_function.hazard = hazard_layer
-        impact_function.run()
+        impact_function.prepare()
+        return_code, message = impact_function.run()
+
+        self.assertEqual(return_code, ANALYSIS_SUCCESS, message)
 
         report_metadata = ReportMetadata(
             metadata_dict=standard_impact_report_metadata_html)
@@ -260,15 +265,15 @@ class TestImpactReport(unittest.TestCase):
         expected_context = {
             'header': u'Estimated number of Structures by type',
             'detail_table': {
-                'headers': [
-                    u'Structures type', u'High Hazard Zone',
-                    u'Medium Hazard Zone', u'Low Hazard Zone',
-                    u'Total Affected', u'Total Unaffected', u'Total'
-                ],
-                'details': [],
-                'footers': [
-                    u'Total', 4.0, 2.0, 0, 6.0, 0.0, 6.0
-                ]
+                'headers': [u'Structures type', u'High Hazard Zone',
+                            u'Medium Hazard Zone', u'Total Affected',
+                            u'Total Unaffected', u'Total'],
+                'details': [[u'other', 0, 1, 1, 0, 1],
+                            [u'government', 0, 1, 1, 0, 1],
+                            [u'commercial', 1, 0, 1, 0, 1],
+                            [u'education', 2, 0, 2, 3, 5],
+                            [u'health', 1, 0, 1, 0, 1]],
+                'footers': [u'Total', 4, 2, 6, 3, 9]
             }
         }
         actual_context = analysis_breakdown.context
@@ -286,39 +291,21 @@ class TestImpactReport(unittest.TestCase):
         expected_context = {
             'aggregation_result': {
                 'header_label': u'Aggregation area',
-                'rows': [
-                    {
-                        'type_values': [1.0, 0.0, 1.0,
-                                        1.0, 0.0],
-                        'total': 3.0,
-                        'name': u'area 1'
-                    },
-                    {
-                        'type_values': [0.0, 1.0, 0.0,
-                                        0.0, 0.0],
-                        'total': 1.0,
-                        'name': u'area 2'
-                    },
-                    {
-                        'type_values': [0.0, 0.0, 0.0,
-                                        1.0, 1.0],
-                        'total': 2.0,
-                        'name': u'area 3'
-                    }
-                ],
-                'type_header_labels': [
-                    u'Other',
-                    u'Government',
-                    u'Commercial',
-                    u'Education',
-                    u'Health'
-                ],
-                'type_total_values': [],
-                'total_label': u'Total',
-                'total_all': 6.0
+                'rows': [{'type_values': [1, 0, 1, 1, 0],
+                          'total': 3, 'name': u'area 1'},
+                         {'type_values': [0, 1, 0, 0, 0],
+                          'total': 1, 'name': u'area 2'},
+                         {'type_values': [0, 0, 0, 1, 1],
+                          'total': 2, 'name': u'area 3'}],
+                'type_header_labels': [u'Other',
+                                       u'Government',
+                                       u'Commercial',
+                                       u'Education',
+                                       u'Health'],
+                'type_total_values': [1, 1, 1, 2, 1],
+                'total_label': u'Total', 'total_all': 6
             },
-            'header': u'Aggregation Result'
-        }
+            'header': u'Aggregation Result'}
         actual_context = aggregate_result.context
 
         self.assertDictEqual(
@@ -353,7 +340,10 @@ class TestImpactReport(unittest.TestCase):
         impact_function = ImpactFunction()
         impact_function.exposure = exposure_layer
         impact_function.hazard = hazard_layer
-        impact_function.run()
+        impact_function.prepare()
+        return_code, message = impact_function.run()
+
+        self.assertEqual(return_code, ANALYSIS_SUCCESS, message)
 
         report_metadata = ReportMetadata(
             metadata_dict=standard_impact_report_metadata_html)
@@ -375,7 +365,40 @@ class TestImpactReport(unittest.TestCase):
             minimum_needs_component['key'])
         """:type: safe.reportv4.report_metadata.Jinja2ComponentsMetadata"""
 
-        expected_context = {}
+        expected_context = {
+            'header': u'Minimum needs', 'needs': [
+                {
+                    'header': u'Relief items to be provided single',
+                    'needs': [
+                        {
+                            'header': u'Toilets',
+                            'value': 0.46230000000195653
+                        }],
+                    'total_header': u'Total'
+                },
+                {
+                    'header': u'Relief items to be provided weekly',
+                    'needs': [
+                        {
+                            'header': u'Rice [kg]',
+                            'value': 25.888800000109562
+                        },
+                        {
+                            'header': u'Drinking Water [l]',
+                            'value': 161.80500000068477
+                        },
+                        {
+                            'header': u'Clean Water [l]',
+                            'value': 619.4820000026217
+                        },
+                        {
+                            'header': u'Family Kits',
+                            'value': 1.8492000000078261
+                        }],
+                    'total_header': u'Total'
+                }
+            ]
+        }
         actual_context = minimum_needs.context
 
         self.assertDictEqual(
@@ -468,7 +491,10 @@ class TestImpactReport(unittest.TestCase):
         impact_function.aggregation = aggregation_layer
         impact_function.exposure = exposure_layer
         impact_function.hazard = hazard_layer
-        impact_function.run()
+        impact_function.prepare()
+        return_code, message = impact_function.run()
+
+        self.assertEqual(return_code, ANALYSIS_SUCCESS, message)
 
         report_metadata = ReportMetadata(
             metadata_dict=standard_impact_report_metadata_pdf)
@@ -510,7 +536,10 @@ class TestImpactReport(unittest.TestCase):
         impact_function.aggregation = aggregation_layer
         impact_function.exposure = exposure_layer
         impact_function.hazard = hazard_layer
-        impact_function.run()
+        impact_function.prepare()
+        return_code, message = impact_function.run()
+
+        self.assertEqual(return_code, ANALYSIS_SUCCESS, message)
 
         # insert layer to registry
         layer_registry = QgsMapLayerRegistry.instance()
@@ -543,7 +572,8 @@ class TestImpactReport(unittest.TestCase):
             'inasafe/north_arrow_path', '', type=str)
         impact_report.inasafe_context.north_arrow = north_arrow_path
 
-        impact_report.qgis_composition_context.extent = rendered_layer.extent()
+        impact_report.qgis_composition_context.extent = \
+            rendered_layer.extent()
 
         impact_report.process_component()
 

@@ -71,7 +71,9 @@ from safe.gui.widgets.message import (
     ready_message,
     enable_messaging)
 from safe.gui.analysis_utilities import (
-    generate_impact_report, add_impact_layer_to_QGIS)
+    generate_impact_report,
+    generate_impact_map_report,
+    add_impact_layer_to_QGIS)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -845,6 +847,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         LOGGER.info(tr('The impact function could run without errors.'))
 
+        # Add result layer to QGIS
+        add_impact_layer_to_QGIS(self.impact_function, self.iface)
+
         # Generate impact report
         generate_impact_report(self.impact_function, self.iface)
         try:
@@ -852,8 +857,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         except:
             # it might not work on mac now, due to linking issue.
             pass
-        # Add result layer to QGIS
-        add_impact_layer_to_QGIS(self.impact_function, self.iface)
 
         if self.zoom_to_impact_flag:
             self.iface.zoomToActiveLayer()
