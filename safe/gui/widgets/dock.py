@@ -13,6 +13,7 @@ from qgis.core import (
     QgsMapLayer,
     QgsMapLayerRegistry,
     QgsCoordinateReferenceSystem,
+    QgsProject,
     QGis)
 
 from safe.definitionsv4.layer_purposes import layer_purpose_exposure_impacted
@@ -849,7 +850,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.iface.zoomToActiveLayer()
 
         if self.impact_function.debug_mode:
-            name = 'DEBUG %s' % name
+            name = 'DEBUG %s' % self.impact_function.name
+            root = QgsProject.instance().layerTreeRoot()
             group_debug = root.insertGroup(0, name)
             group_debug.setVisible(Qt.Unchecked)
             group_debug.setExpanded(False)
