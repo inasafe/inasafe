@@ -12,7 +12,7 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
-def round_affecter_number(number, enable_rounding):
+def round_affecter_number(number, enable_rounding=False):
     """Tries to convert and round the number.
 
     Rounded using population rounding rule.

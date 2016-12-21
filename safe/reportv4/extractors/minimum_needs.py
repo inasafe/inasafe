@@ -2,6 +2,7 @@
 from safe.common.parameters.resource_parameter import ResourceParameter
 from safe.definitionsv4.exposure import exposure_population
 from safe.definitionsv4.fields import total_affected_field
+from safe.reportv4.extractors.util import round_affecter_number
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -68,6 +69,7 @@ def minimum_needs_extractor(impact_report, component_metadata):
             #     need_parameter.name)
             feat = analysis_layer.getFeatures().next()
             value = feat[need_index] * need_parameter.value
+            value = round_affecter_number(value)
             # value = feat[need_index]
             item = {
                 'header': header,
