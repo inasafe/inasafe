@@ -183,8 +183,8 @@ class TestITBBayesianEarthquakeFatalityFunction(unittest.TestCase):
                 'Age': {
                     'Age': {
                         'Adult ratio': 0.659,
-                        'Elderly ratio': 0.078,
-                        'Youth ratio': 0.263
+                        'Elderly ratio': 0.087,
+                        'Youth ratio': 0.254
                     }
                 },
             'Gender': {'Gender': True},

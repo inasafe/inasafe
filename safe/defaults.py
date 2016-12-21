@@ -67,10 +67,11 @@ def define_defaults():
     # 15-24 years: 16.16% (male 611,311,930/female 572,229,547)
     # 25-54 years: 41.12% (male 1,522,999,578/female 1,488,011,505)
     # 55-64 years: 8.6% (male 307,262,939/female 322,668,546)
-    # 65 years and over: 8.68% (male 283,540,918/female 352,206,092) (2016 est.)
+    # 65 years and over: 8.68% (male 283,540,918/female 352,206,092)(2016 est.)
 
     # if CM can add up then youth 0.254; adult 0.659; elderly 0.087
 
+    # Updated from 0.263 to 0.254 in InaSAFE 4.0
     youth_ratio = 0.254
     value = settings.value(
         'inasafe/defaultYouthRatio', youth_ratio, type=float)
@@ -81,6 +82,7 @@ def define_defaults():
         'inasafe/defaultAdultRatio', adult_ratio, type=float)
     defaults['ADULT_RATIO'] = float(value)
 
+    # Updated from 0.078 to 0.087 in InaSAFE 4.0
     elderly_ratio = 0.087
     value = settings.value(
         'inasafe/defaultElderlyRatio', elderly_ratio, type=float)
