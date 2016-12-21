@@ -1,6 +1,7 @@
 # coding=utf-8
 """Definitions relating to fields."""
 
+import sys
 from PyQt4.QtCore import QVariant
 
 from safe.utilities.i18n import tr
@@ -462,7 +463,6 @@ size_field = {
 # # # # # # # # # #
 # Rate (Not absolute values)
 # # # # # # # # # #
-
 # Feature Rate
 feature_rate_field = {
     'key': 'feature_rate_field',
@@ -482,7 +482,9 @@ feature_rate_field = {
         }
     ],
     # Null value can be replaced by default or not
-    'replace_null': True
+    'replace_null': True,
+    'min': 0,
+    'max': sys.maxsize
 }
 
 # Female Ratio
@@ -502,7 +504,9 @@ female_ratio_field = {
         }
     ],
     # Null value can be replaced by default or not
-    'replace_null': True
+    'replace_null': True,
+    'min': 0,
+    'max': 1
 }
 
 # Youth Ratio
@@ -522,7 +526,9 @@ youth_ratio_field = {
         }
     ],
     # Null value can be replaced by default or not
-    'replace_null': True
+    'replace_null': True,
+    'min': 0,
+    'max': 1
 }
 
 # Adult Ratio
@@ -542,7 +548,9 @@ adult_ratio_field = {
         }
     ],
     # Null value can be replaced by default or not
-    'replace_null': True
+    'replace_null': True,
+    'min': 0,
+    'max': 1
 }
 
 # Elderly Ratio
@@ -563,7 +571,9 @@ elderly_ratio_field = {
         }
     ],
     # Null value can be replaced by default or not
-    'replace_null': True
+    'replace_null': True,
+    'min': 0,
+    'max': 1
 }
 
 # # # # # # # # # #
