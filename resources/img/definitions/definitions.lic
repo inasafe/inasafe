@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='iso-8859-1'?>
+<ga_license_file>
+  <metadata>
+    <author>Charlotte Morgan, DMInnovation</author>
+  </metadata>
+
+  <iconfile>
+    <filename>adult.svg</filename>
+    <publishable>Yes</publishable>
+    <source>modified from UNOCHA</source>
+    <IP_owner>OSM</IP_owner>
+    <IP_info>http://thenounproject.com/ochaavmu/collection/ocha-humanitarian-icons/</IP_info>
+  </iconfile>
+
+  <iconfile>
+    <filename>youth.svg</filename>
+    <publishable>Yes</publishable>
+    <source>UNOCHA</source>
+    <IP_owner>OSM</IP_owner>
+    <IP_info>http://thenounproject.com/ochaavmu/collection/ocha-humanitarian-icons/</IP_info>
+  </iconfile>
+
+  <iconfile>
+    <filename>elderly.svg</filename>
+    <publishable>Yes</publishable>
+    <source>UNOCHA</source>
+    <IP_owner>OSM</IP_owner>
+    <IP_info>http://thenounproject.com/ochaavmu/collection/ocha-humanitarian-icons/</IP_info>
+  </iconfile>
+
+  <iconfile>
+    <filename>female.svg</filename>
+    <publishable>Yes</publishable>
+    <source>UNOCHA</source>
+    <IP_owner>OSM</IP_owner>
+    <IP_info>http://thenounproject.com/ochaavmu/collection/ocha-humanitarian-icons/</IP_info>
+  </iconfile>

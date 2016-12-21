@@ -154,6 +154,64 @@ concepts = {
             }
         ],
       },
+    'youth': {
+        'description': tr(
+            'Person aged between 0 and 14 years.'),
+        'citations': [
+            {
+                'text': tr(
+                    'CIA (2016)The World Factbook.'),
+                'link': 'https://www.cia.gov/library/publications/'
+                        'resources/the-world-factbook/'
+            }
+        ],
+      },
+    'adult': {
+        'description': tr(
+            'Person aged between 15 and 64 years, usually of working age.'),
+        'citations': [
+            {
+                'text': tr(
+                    'CIA (2016)The World Factbook.'),
+                'link': 'https://www.cia.gov/library/publications/'
+                        'resources/the-world-factbook/'
+            }
+        ],
+      },
+    'elderly': {
+        'description': tr(
+            'Person aged 64 years and over.'),
+        'citations': [
+            {
+                'text': tr(
+                    'CIA (2016)The World Factbook.'),
+                'link': 'https://www.cia.gov/library/publications/'
+                        'resources/the-world-factbook/'
+            }
+        ],
+      },
+    'people': {
+        'description': tr(
+            'Human beings in general or considered collectively.'),
+        'citations': [
+            {
+                'text': tr(
+                    'Oxford Dictionary.'),
+                'link': 'https://en.oxforddictionaries.com/definition/people'
+            }
+        ],
+      },
+    'female': {
+        'description': tr(
+            'Relating to the characteristics of women.'),
+        'citations': [
+            {
+                'text': tr(
+                    'Oxford Dictionary.'),
+                'link': 'https://en.oxforddictionaries.com/definition/female'
+            }
+        ],
+      },
     # Boilerplate for adding a new concept...
     #  '': {
     #    'description': tr(
