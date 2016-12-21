@@ -45,20 +45,20 @@ class TestDefaults(unittest.TestCase):
 
             'ELDERLY_RATIO_ATTR_KEY': 'elderly ratio attribute',
             'ELDERLY_RATIO_KEY': 'elderly ratio default',
-            'ELDERLY_RATIO': 0.078,
+            'ELDERLY_RATIO': 0.087,
 
-            'YOUTH_RATIO': 0.263,
+            'YOUTH_RATIO': 0.254,
             'YOUTH_RATIO_ATTR_KEY': 'youth ratio attribute',
             'YOUTH_RATIO_KEY': 'youth ratio default',
 
             'NO_DATA': u'No data',
 
-            'AGGR_ATTR_KEY': 'aggregation attribute',
-            'ISO19115_EMAIL': 'info@inasafe.org',
-            'ISO19115_LICENSE': 'Free use with accreditation',
-            'ISO19115_ORGANIZATION': 'InaSAFE.org',
-            'ISO19115_TITLE': 'InaSAFE analysis result',
-            'ISO19115_URL': 'http://inasafe.org'}
+            'AGGR_ATTR_KEY': u'aggregation attribute',
+            'ISO19115_EMAIL': u'info@inasafe.org',
+            'ISO19115_LICENSE': u'Free use with accreditation',
+            'ISO19115_ORGANIZATION': u'InaSAFE.org',
+            'ISO19115_TITLE': u'InaSAFE analysis result',
+            'ISO19115_URL': u'http://inasafe.org'}
 
         actual = get_defaults()
         self.maxDiff = None
