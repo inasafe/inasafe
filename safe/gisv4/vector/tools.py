@@ -5,7 +5,7 @@ Tools for vector layers.
 """
 
 from uuid import uuid4
-from PyQt4.QtCore import QSettings, QPyNullVariant
+from PyQt4.QtCore import QPyNullVariant
 from qgis.core import (
     QgsGeometry,
     QgsVectorLayer,
@@ -116,12 +116,14 @@ def copy_layer(source, target):
     request = QgsFeatureRequest()
 
     if source.keywords.get('layer_purpose') == 'aggregation':
-        settings = QSettings()
-        flag = bool(settings.value(
-            'inasafe/useSelectedFeaturesOnly', False, type=bool))
+        try:
+            use_selected_only = source.use_selected_features_only
+        except AttributeError:
+            use_selected_only = False
+
         # We need to check if the user wants selected feature only and if there
         # is one minimum selected.
-        if flag and source.selectedFeatureCount() > 0:
+        if use_selected_only and source.selectedFeatureCount() > 0:
             request.setFilterFids(source.selectedFeaturesIds())
 
     for i, feature in enumerate(source.getFeatures(request)):

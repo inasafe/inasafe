@@ -15,7 +15,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 import logging
 from PyQt4 import QtGui
-from PyQt4.QtCore import pyqtSignature
+from PyQt4.QtCore import pyqtSignature, QSettings
 
 from safe.utilities.i18n import tr
 from safe.definitionsv4.constants import (
@@ -197,6 +197,9 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
 
         if aggregation:
             impact_function.aggregation = aggregation
+            impact_function.use_selected_features_only = (
+                bool(QSettings().value(
+                    'inasafe/useSelectedFeaturesOnly', False, type=bool)))
         else:
             # We need to enable it again when we will fix the dock.
             # impact_function.requested_extent = self.extent.user_extent
@@ -207,8 +210,8 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
             impact_function._viewport_extent_crs = (
                 map_settings.destinationCrs())
 
-        # Notes (IS): Always et debug as True for development.
-        impact_function.debug_mode = True
+        # We don't have any checkbox in the wizard for the debug mode.
+        impact_function.debug_mode = False
 
         return impact_function
 

@@ -30,7 +30,8 @@ from safe.definitionsv4.constants import (
     ANALYSIS_FAILED_BAD_INPUT,
 )
 from safe.utilities.unicode import byteify
-from safe.test.utilities import load_test_vector_layer, check_inasafe_fields
+from safe.test.utilities import (
+    load_test_vector_layer, check_inasafe_fields, compare_wkt)
 from safe.impact_function_v4.impact_function import ImpactFunction
 
 from qgis.core import QgsVectorLayer, QgsRasterLayer
@@ -166,6 +167,74 @@ class TestImpactFunction(unittest.TestCase):
         self.assertEqual(impact_function.name, 'Flood Polygon On Road Line')
         self.assertEqual(impact_function.title, 'be affected')
 
+    def test_minimum_extent(self):
+        """Test we can compute the minimum extent in the IF."""
+        # Without aggregation layer
+        hazard_layer = load_test_vector_layer(
+            'hazard', 'flood_multipart_polygons.shp')
+        exposure_layer = load_test_vector_layer('exposure', 'roads.shp')
+        impact_function = ImpactFunction()
+        impact_function.exposure = exposure_layer
+        impact_function.hazard = hazard_layer
+        impact_function.prepare()
+        self.assertTrue(
+            compare_wkt(
+                'Polygon ((106.8080099999999959 -6.19531000000000009, '
+                '106.83456946836641066 -6.19531000000000009, '
+                '106.83456946836641066 -6.16752599999999962, '
+                '106.8080099999999959 -6.16752599999999962, '
+                '106.8080099999999959 -6.19531000000000009))',
+                impact_function.analysis_extent.exportToWkt(),
+                'Test about the minimum extent without an aggregation layer '
+                'is failing.'
+            ))
+
+        # With an aggregation layer, without selection
+        hazard_layer = load_test_vector_layer(
+            'gisv4', 'hazard', 'classified_vector.geojson')
+        exposure_layer = load_test_vector_layer(
+            'gisv4', 'exposure', 'building-points.geojson')
+        aggregation_layer = load_test_vector_layer(
+            'gisv4', 'aggregation', 'small_grid.geojson')
+        impact_function = ImpactFunction()
+        impact_function.aggregation = aggregation_layer
+        impact_function.exposure = exposure_layer
+        impact_function.hazard = hazard_layer
+        impact_function.use_selected_features_only = False
+        impact_function.aggregation.select(0)
+        impact_function.prepare()
+        self.assertTrue(
+            compare_wkt(
+                'Polygon ((106.9033179652593617 -6.18324454090033182, '
+                '106.90331796525939012 -6.2725478115989306, '
+                '106.72365490843547775 -6.2725478115989306, '
+                '106.72365490843547775 -6.18324645462287137, '
+                '106.72365490843547775 -6.09392810187095257, '
+                '106.81348643684744104 -6.09392810187095257, '
+                '106.9033179652593617 -6.09392810187095257, '
+                '106.9033179652593617 -6.18324454090033182))',
+                impact_function.analysis_extent.exportToWkt(),
+                'Test about the minimum extent with an aggregation layer '
+                'is failing.'
+            )
+        )
+
+        # With an aggregation layer, with selection
+        impact_function.use_selected_features_only = True
+        impact_function.prepare()
+        self.assertTrue(
+            compare_wkt(
+                'Polygon ((106.81348643684744104 -6.11860505414877665, '
+                '106.81348643684744104 -6.18324645462287137, '
+                '106.73298239642586793 -6.18324645462287137, '
+                '106.73298239642586793 -6.11860505414877665, '
+                '106.81348643684744104 -6.11860505414877665))',
+                impact_function.analysis_extent.exportToWkt(),
+                'Test about the minimum extent with an aggregation layer and '
+                'a selection is failing.'
+            )
+        )
+
     def test_profiling(self):
         """Test running impact function on test data."""
         hazard_layer = load_test_vector_layer(
@@ -227,7 +296,7 @@ class TestImpactFunction(unittest.TestCase):
         scenarii = {
             'polygon_classified_on_line': False,
             'polygon_classified_on_point': False,
-            'polygon_classified_on_vector_population': True,
+            'polygon_classified_on_vector_population': False,
             'polygon_continuous_on_line': False,
             'raster_classified_on_classified_raster': False,
             'raster_classified_on_indivisible_polygons_with_grid': False,

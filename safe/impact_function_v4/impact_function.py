@@ -9,6 +9,9 @@ from collections import OrderedDict
 from PyQt4.QtCore import QSettings
 from qgis.core import (
     QgsMapLayer,
+    QgsGeometry,
+    QgsCoordinateTransform,
+    QgsFeatureRequest,
     QgsCoordinateReferenceSystem,
     QgsRectangle,
     QgsVectorLayer,
@@ -105,6 +108,10 @@ class ImpactFunction(object):
         self._exposure = None
         self._aggregation = None
 
+        # If there is an aggregation layer provided, do we use selected
+        # features only ?
+        self.use_selected_features_only = False
+
         # Output layers
         self._exposure_impacted = None
         self._aggregate_hazard_impacted = None
@@ -121,10 +128,9 @@ class ImpactFunction(object):
         # Requested extent's CRS
         self._requested_extent_crs = None
 
-        # The current viewport extent of the map canvas
-        self._viewport_extent = None
-        # Current viewport extent's CRS
-        self._viewport_extent_crs = None
+        # The current extent defined by the impact function. Read-only.
+        # The CRS is the exposure CRS.
+        self._analysis_extent = None
 
         # set this to a gui call back / web callback etc as needed.
         self._callback = self.console_progress_callback
@@ -353,7 +359,8 @@ class ImpactFunction(object):
 
     @property
     def requested_extent(self):
-        """Property for the extent of impact function analysis.
+        """Property for the extent requested by the user.
+        It can be the extent from the map canvas, a bookmark or bbox ...
 
         :returns: A QgsRectangle.
         :rtype: QgsRectangle
@@ -399,29 +406,13 @@ class ImpactFunction(object):
             raise InvalidExtentError('%s is not a valid CRS object.' % crs)
 
     @property
-    def viewport_extent(self):
-        """Property for the viewport extent of the map canvas.
+    def analysis_extent(self):
+        """Property for the analysis extent.
 
-        :returns: A QgsRectangle.
-        :rtype: QgsRectangle
+        :returns: A polygon.
+        :rtype: QgsGeometry
         """
-        return self._viewport_extent
-
-    @viewport_extent.setter
-    def viewport_extent(self, extent):
-        """Setter for the viewport extent of the map canvas.
-
-        :param extent: Analysis boundaries expressed as a
-        QgsRectangle. The extent CRS should match the extent_crs property of
-        this IF instance.
-        :type extent: QgsRectangle
-        """
-        self._viewport_extent = extent
-        if isinstance(extent, QgsRectangle):
-            self._viewport_extent = extent
-            self._is_ready = False
-        else:
-            raise InvalidExtentError('%s is not a valid extent.' % extent)
+        return self._analysis_extent
 
     @property
     def datastore(self):
@@ -591,7 +582,7 @@ class ImpactFunction(object):
                     'The impact function needs a %s layer to run. '
                     'You must provide a valid %s layer.' % (purpose, purpose)))
             )
-            return 1, message
+            return PREPARE_FAILED_BAD_INPUT, message
 
         # We should read it using KeywordIO for the very beginning. To avoid
         # get the modified keywords in the patching.
@@ -599,13 +590,13 @@ class ImpactFunction(object):
             keywords = KeywordIO().read_keywords(layer)
         except NoKeywordsFoundError:
             message = generate_input_error_message(
-                tr('The %s layer do not have keywords.' & purpose),
+                tr('The %s layer do not have keywords.' % purpose),
                 m.Paragraph(tr(
                     'The %s layer do not have keywords. Use the '
                     'Use the wizard to assign keywords to the layer.'
                     % purpose))
             )
-            return 1, message
+            return PREPARE_FAILED_BAD_INPUT, message
 
         if keywords.get('layer_purpose') != purpose:
             message = generate_input_error_message(
@@ -613,7 +604,7 @@ class ImpactFunction(object):
                 m.Paragraph(tr(
                     'The %s layer is not an %s.' % (purpose, purpose)))
             )
-            return 1, message
+            return PREPARE_FAILED_BAD_INPUT, message
 
         version = keywords.get(inasafe_keyword_version_key)
         if version != inasafe_keyword_version:
@@ -626,10 +617,10 @@ class ImpactFunction(object):
                 m.Paragraph(
                     tr('The layer {source} must be updated to {version}.'
                         .format(**parameters))))
-            return 1, message
+            return PREPARE_FAILED_BAD_INPUT, message
 
         layer.keywords = keywords
-        return 0, None
+        return PREPARE_SUCCESS, None
 
     def prepare(self):
         """Method to check if the impact function can be run.
@@ -671,7 +662,7 @@ class ImpactFunction(object):
                 return status, message
 
             if self.aggregation:
-                if self.requested_extent:
+                if self._requested_extent:
                     message = generate_input_error_message(
                         tr('Error with the requested extent'),
                         m.Paragraph(tr(
@@ -680,7 +671,7 @@ class ImpactFunction(object):
                     )
                     return PREPARE_FAILED_BAD_INPUT, message
 
-                if self.requested_extent_crs:
+                if self._requested_extent_crs:
                     message = generate_input_error_message(
                         tr('Error with the requested extent'),
                         m.Paragraph(tr(
@@ -688,27 +679,15 @@ class ImpactFunction(object):
                             'aggregation is provided.'))
                     )
                     return PREPARE_FAILED_BAD_INPUT, message
-                if self._viewport_extent:
-                    message = generate_input_error_message(
-                        tr('Error with the viewport extent'),
-                        m.Paragraph(tr(
-                            'Viewport Extent must be null when an aggregation '
-                            'is provided.'))
-                    )
-                    return PREPARE_FAILED_BAD_INPUT, message
-                if self._viewport_extent_crs:
-                    message = generate_input_error_message(
-                        tr('Error with the viewport extent'),
-                        m.Paragraph(tr(
-                            'Viewport CRS must be null when an aggregation is '
-                            'provided.'))
-                    )
-                    return PREPARE_FAILED_BAD_INPUT, message
 
                 status, message = self._check_layer(
                     self.aggregation, 'aggregation')
                 if status != PREPARE_SUCCESS:
                     return status, message
+
+            status, message = self._compute_analysis_extent()
+            if status != PREPARE_SUCCESS:
+                return status, message
 
             # Set the name
             self._name = tr('%s %s On %s %s' % (
@@ -731,6 +710,79 @@ class ImpactFunction(object):
             # Everything was fine.
             self._is_ready = True
             return PREPARE_SUCCESS, None
+
+    def _compute_analysis_extent(self):
+        """Compute the minimum extent between layers.
+
+        This function will set the self._analysis_extent geometry using
+        exposure CRS.
+
+        :return: A tuple with the status of the IF and an error message if
+            needed.
+            The status is PREPARE_SUCCESS if everything was fine.
+            The status is PREPARE_FAILED_BAD_INPUT if the client should fix
+                something.
+            The status is PREPARE_FAILED_BAD_CODE if something went wrong
+                from the code.
+        :rtype: (int, m.Message)
+        """
+        exposure_extent = self.exposure.extent()
+        hazard_extent = self.hazard.extent()
+
+        if self.hazard.crs().authid() != self.exposure.crs().authid():
+            crs_transform = QgsCoordinateTransform(
+                self.hazard.crs(), self.exposure.crs())
+            hazard_extent = crs_transform.transformBoundingBox(hazard_extent)
+
+        # We check if the hazard and the exposure overlap.
+        hazard_exposure = exposure_extent.intersect(hazard_extent)
+        if hazard_exposure.isEmpty():
+            message = generate_input_error_message(
+                tr('Layers need to overlap.'),
+                m.Paragraph(tr(
+                    'The exposure and the hazard layer need to overlap.'))
+            )
+            return PREPARE_FAILED_BAD_INPUT, message
+
+        if not self.aggregation:
+            if self.requested_extent and self.requested_extent_crs:
+                user_bounding_box = QgsGeometry(self.requested_extent)
+
+                if self.requested_extent_crs != self.exposure.crs():
+                    crs_transform = QgsCoordinateTransform(
+                        self.requested_extent_crs, self.exposure.crs())
+                    user_bounding_box.transform(crs_transform)
+
+                self._analysis_extent = QgsGeometry.fromRect(
+                    hazard_exposure.intersect(user_bounding_box))
+                if self._analysis_extent.isEmpty():
+                    message = generate_input_error_message(
+                        tr('The bounding box need to overlap layers.'),
+                        m.Paragraph(tr(
+                            'The requested analysis extent is not overlaping '
+                            'the exposure and the hazard.'))
+                    )
+                    return PREPARE_FAILED_BAD_INPUT, message
+            else:
+                self._analysis_extent = QgsGeometry.fromRect(hazard_exposure)
+
+        else:
+            list_geometry = []
+            request = QgsFeatureRequest().setSubsetOfAttributes([])
+            if self.use_selected_features_only \
+                    and self.aggregation.selectedFeatureCount() > 0:
+                request.setFilterFids(self.aggregation.selectedFeaturesIds())
+            for area in self.aggregation.getFeatures(request):
+                list_geometry.append(QgsGeometry(area.geometry()))
+
+            self._analysis_extent = QgsGeometry.unaryUnion(list_geometry)
+
+            if self.aggregation.crs().authid() != self.exposure.crs().authid():
+                crs_transform = QgsCoordinateTransform(
+                    self.aggregation.crs(), self.exposure.crs())
+                self._analysis_extent.transform(crs_transform)
+
+        return PREPARE_SUCCESS, None
 
     def debug_layer(self, layer, check_fields=True):
         """Write the layer produced to the datastore if debug mode is on.
@@ -969,7 +1021,7 @@ class ImpactFunction(object):
                 'aggregation',
                 'Convert bbox aggregation to polygon layer with keywords')
             self.aggregation = create_virtual_aggregation(
-                self.exposure.extent(), self.exposure.crs())
+                self.analysis_extent, self.exposure.crs())
             if self.debug_mode:
                 self.debug_layer(self.aggregation)
 
@@ -978,6 +1030,9 @@ class ImpactFunction(object):
 
             self.set_state_process(
                 'aggregation', 'Cleaning the aggregation layer')
+            # We monkey patch if we use selected features only.
+            self.aggregation.use_selected_features_only = (
+                self.use_selected_features_only)
             # noinspection PyTypeChecker
             self.aggregation = prepare_vector_layer(self.aggregation)
             if self.debug_mode:
@@ -1002,7 +1057,7 @@ class ImpactFunction(object):
             'aggregation',
             'Convert the aggregation layer to the analysis layer')
         self._analysis_impacted = create_analysis_layer(
-            self.aggregation, self.exposure.crs(), self.name)
+            self.analysis_extent, self.exposure.crs(), self.name)
         if self.debug_mode:
             self.debug_layer(self._analysis_impacted)
 
