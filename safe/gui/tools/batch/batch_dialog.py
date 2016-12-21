@@ -550,7 +550,7 @@ class BatchDialog(QDialog, FORM_CLASS):
                     # self.create_pdf(
                     #     title, path, impact_layer, count, index)
                     LOGGER.info('Map has been rendered: "%s"' % value)
-                    status_item.setText(self.tr('Report Ok'))
+                    # status_item.setText(self.tr('Report Ok'))
                 except Exception:  # pylint: disable=W0703
                     LOGGER.exception('Unable to render map: "%s"' % value)
                     status_item.setText(self.tr('Report Failed'))
