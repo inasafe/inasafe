@@ -106,7 +106,7 @@ def add_layers(scenario_dir, paths, iface, layer_group):
             # noinspection PyCallingNonCallable
             layer = QgsRasterLayer(path, base_name)
             layer_set.append(layer)
-        elif extension in ['.shp']:
+        elif extension in ['.shp', '.geojson']:
             LOGGER.debug("add vector layer %s" % path)
             # noinspection PyCallingNonCallable
             layer = QgsVectorLayer(path, base_name, 'ogr')
