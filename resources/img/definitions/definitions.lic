@@ -9,7 +9,7 @@
     <publishable>Yes</publishable>
     <source>modified from UNOCHA</source>
     <IP_owner>OSM</IP_owner>
-    <IP_info>http://thenounproject.com/ochaavmu/collection/ocha-humanitarian-icons/</IP_info>
+    <IP_info>http://thenounproject.com/ochaavmu/collection/ocha-humanitarian-icons/?i=4340</IP_info>
   </iconfile>
 
   <iconfile>
@@ -17,7 +17,7 @@
     <publishable>Yes</publishable>
     <source>UNOCHA</source>
     <IP_owner>OSM</IP_owner>
-    <IP_info>http://thenounproject.com/ochaavmu/collection/ocha-humanitarian-icons/</IP_info>
+    <IP_info>http://thenounproject.com/ochaavmu/collection/ocha-humanitarian-icons/?i=4283</IP_info>
   </iconfile>
 
   <iconfile>
@@ -25,7 +25,7 @@
     <publishable>Yes</publishable>
     <source>UNOCHA</source>
     <IP_owner>OSM</IP_owner>
-    <IP_info>http://thenounproject.com/ochaavmu/collection/ocha-humanitarian-icons/</IP_info>
+    <IP_info>http://thenounproject.com/ochaavmu/collection/ocha-humanitarian-icons/?i=4286</IP_info>
   </iconfile>
 
   <iconfile>
@@ -34,4 +34,12 @@
     <source>UNOCHA</source>
     <IP_owner>OSM</IP_owner>
     <IP_info>http://thenounproject.com/ochaavmu/collection/ocha-humanitarian-icons/</IP_info>
+  </iconfile>
+
+  <iconfile>
+    <filename>people.svg</filename>
+    <publishable>Yes</publishable>
+    <source>UNOCHA</source>
+    <IP_owner>OSM</IP_owner>
+    <IP_info>http://thenounproject.com/ochaavmu/collection/ocha-humanitarian-icons/?i=4281</IP_info>
   </iconfile>
