@@ -26,6 +26,7 @@ TARGZFILE="/tmp/${DIR}.tar.gz"
 mkdir -p ${WORKDIR}
 # Archive source code of the current branch to tar gz file.
 # Use git-archive-all since we use git submodule.
+brew install git-archive-all
 git-archive-all ${TARGZFILE}
 # Extract the file
 tar -xf ${TARGZFILE} -C ${WORKDIR}
