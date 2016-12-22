@@ -249,12 +249,12 @@ concepts = {
       },
     'family_kit': {
         'description': tr(
-            'Relief supplies to support families.'),
+            'Relief supplies such as clothing to support families.'),
         'citations': [
             {
                 'text': tr(
-                    ''),
-                'link': ''
+                    'BNPB Perka 7/2008'),
+                'link': 'http://tinyurl.com/BNPB-Perka-7-2008'
             }
         ],
       },
@@ -272,7 +272,7 @@ concepts = {
       },
     'toilet': {
         'description': tr(
-            'A room, building or cubicle with facilites to collect and '
+            'A room, building or cubicle with facilities to collect and '
             'dispose of human waste.'),
         'citations': [
             {
