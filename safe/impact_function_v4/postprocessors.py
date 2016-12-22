@@ -7,6 +7,7 @@ from PyQt4.QtCore import QPyNullVariant
 
 from qgis.core import QgsFeatureRequest, QgsDistanceArea
 
+from safe.definitionsv4.minimum_needs import minimum_needs_parameter
 from safe.gisv4.vector.tools import (
     create_field_from_definition, size_calculator)
 from safe.utilities.profiling import profile
@@ -107,53 +108,82 @@ def run_single_post_processor(layer, post_processor):
         # Default parameters
         default_parameters = {}
 
-        for key, value in post_processor['input'].items():
+        for key, values in post_processor['input'].items():
+            if not isinstance(values, list):
+                values = [values]
+            found = False
+            for value in values:
+                if value['type'] == 'field' or value['type'] == 'dynamic_field':
+                    if value['type'] == 'dynamic_field':
+                        key_template = value['value']['key']
+                        field_param = value['field_param']
+                        field_key = key_template % field_param
+                    else:
+                        field_key = value['value']['key']
 
-            if value['type'] == 'field':
-                inasafe_fields = layer.keywords['inasafe_fields']
-                name_field = inasafe_fields.get(value['value']['key'])
+                    inasafe_fields = layer.keywords['inasafe_fields']
+                    name_field = inasafe_fields.get(field_key)
 
-                if not name_field:
-                    msg = tr(
-                        '%s has not been found in inasafe fields.'
-                        % value['value']['key'])
-                    layer.rollBack()
-                    return False, msg
+                    if not name_field:
+                        msg = tr(
+                            '%s has not been found in inasafe fields.'
+                            % value['value']['key'])
+                        continue
 
-                index = layer.fieldNameIndex(name_field)
+                    index = layer.fieldNameIndex(name_field)
 
-                if index == -1:
-                    fields = layer.fields().toList()
-                    msg = tr(
-                        'The field name %s has not been found in %s'
-                        % (
-                            name_field,
-                            [f.name() for f in fields]
-                        ))
-                    layer.rollBack()
-                    return False, msg
+                    if index == -1:
+                        fields = layer.fields().toList()
+                        msg = tr(
+                            'The field name %s has not been found in %s'
+                            % (
+                                name_field,
+                                [f.name() for f in fields]
+                            ))
+                        continue
 
-                input_indexes[key] = index
+                    input_indexes[key] = index
+                    found = True
+                    break
 
-            # For geometry, create new field that contain the value
-            elif value['type'] == 'geometry_property':
-                input_properties[key] = 'geometry_property'
+                # For geometry, create new field that contain the value
+                elif value['type'] == 'geometry_property':
+                    input_properties[key] = 'geometry_property'
+                    found = True
+                    break
 
-            elif value['type'] == 'keyword':
+                elif value['type'] == 'keyword':
 
-                # See http://stackoverflow.com/questions/14692690/
-                # access-python-nested-dictionary-items-via-a-list-of-keys
-                value = reduce(
-                    lambda d, k: d[k], value['value'], layer.keywords)
+                    # See http://stackoverflow.com/questions/14692690/
+                    # access-python-nested-dictionary-items-via-a-list-of-keys
+                    value = reduce(
+                        lambda d, k: d[k], value['value'], layer.keywords)
 
-                default_parameters[key] = value
+                    default_parameters[key] = value
+                    found = True
+                    break
 
-            elif value['type'] == 'layer_property':
-                if value['value'] == 'layer_crs':
-                    default_parameters[key] = layer.crs()
+                elif value['type'] == 'needs_profile':
+                    need_parameter = minimum_needs_parameter(
+                        parameter_name=value['value'])
+                    value = need_parameter.value
 
-                if value['value'] == 'size_calculator':
-                    default_parameters[key] = size_calculator(layer.crs())
+                    default_parameters[key] = value
+                    found = True
+                    break
+
+                elif value['type'] == 'layer_property':
+                    if value['value'] == 'layer_crs':
+                        default_parameters[key] = layer.crs()
+
+                    if value['value'] == 'size_calculator':
+                        default_parameters[key] = size_calculator(layer.crs())
+                    found = True
+                    break
+
+            if not found:
+                layer.rollBack()
+                return False, msg
 
         # Create iterator for feature
         request = QgsFeatureRequest().setSubsetOfAttributes(
@@ -218,13 +248,48 @@ def enough_input(layer, post_processor_input):
     :rtype: (bool, str)
     """
     impact_fields = layer.keywords['inasafe_fields'].keys()
-    for input_key, input_value in post_processor_input.items():
-        if input_value['type'] == 'field':
-            key = input_value['value']['key']
-            if key in impact_fields:
-                continue
-            else:
-                msg = 'Key %s is missing in fields %s' % (
-                    key, impact_fields)
-                return False, msg
+    for input_key, input_values in post_processor_input.items():
+        if not isinstance(input_values, list):
+            input_values = [input_values]
+        found = False
+        msg = None
+        for input_value in input_values:
+            if input_value['type'] == 'field':
+                key = input_value['value']['key']
+                if key in impact_fields:
+                    found = True
+                    break
+                else:
+                    msg = 'Key %s is missing in fields %s' % (
+                        key, impact_fields)
+            elif input_value['type'] == 'dynamic_field':
+                key_template = input_value['value']['key']
+                field_param = input_value['field_param']
+                key = key_template % field_param
+                if key in impact_fields:
+                    found = True
+                    break
+                else:
+                    msg = 'Key %s is missing in dynamic fields %s' % (
+                        key, impact_fields)
+            elif input_value['type'] == 'needs_profile':
+                parameter_name = input_value['value']
+                if minimum_needs_parameter(parameter_name=parameter_name):
+                    found = True
+                    break
+                else:
+                    msg = 'Minimum needs %s is missing from current profile' % (
+                        parameter_name, )
+            elif input_value['type'] == 'keyword':
+                try:
+                    value = reduce(
+                        lambda d, k: d[k], input_value['value'], layer.keywords)
+                    found = True
+                    break
+                except KeyError:
+                    msg = 'Value %s is missing in keyword: %s' % (
+                        input_key, input_value['value'])
+
+        if not found:
+            return False, msg
     return True, None

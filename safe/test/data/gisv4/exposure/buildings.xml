@@ -178,14 +178,8 @@
           <multipart_polygon>
             <gco:Boolean/>
           </multipart_polygon>
-          <resolution>
-            <gco:FloatTuple/>
-          </resolution>
-          <classification>
-            <gco:CharacterString>generic_structure_classes</gco:CharacterString>
-          </classification>
           <inasafe_fields>
-            <gco:Dictionary>{&quot;exposure_id_field&quot;: &quot;exposure_id&quot;, &quot;exposure_type_field&quot;: &quot;exposure_type&quot;, &quot;population_count_field&quot;: &quot;absolute&quot;,&quot;feature_rate_field&quot;: &quot;ratio&quot;}</gco:Dictionary>
+            <gco:Dictionary>{&quot;exposure_id_field&quot;: &quot;exposure_id&quot;, &quot;population_count_field&quot;: &quot;absolute&quot;, &quot;female_ratio_field&quot;: &quot;female_ratio&quot;, &quot;exposure_type_field&quot;: &quot;exposure_type&quot;}</gco:Dictionary>
           </inasafe_fields>
           <area_name_field>
             <gco:CharacterString/>
@@ -202,9 +196,15 @@
           <field>
             <gco:CharacterString/>
           </field>
+          <value_map>
+            <gco:Dictionary>{&quot;commercial&quot;: [&quot;shop&quot;], &quot;education&quot;: [&quot;school&quot;], &quot;health&quot;: [&quot;hospital&quot;], &quot;government&quot;: [&quot;ministry&quot;]}</gco:Dictionary>
+          </value_map>
           <layer_geometry>
             <gco:CharacterString>polygon</gco:CharacterString>
           </layer_geometry>
+          <classification>
+            <gco:CharacterString>generic_structure_classes</gco:CharacterString>
+          </classification>
           <scale>
             <gco:CharacterString/>
           </scale>
@@ -223,11 +223,11 @@
           <datatype>
             <gco:CharacterString/>
           </datatype>
-          <value_map>
-            <gco:Dictionary>{&quot;health&quot;: [&quot;hospital&quot;], &quot;education&quot;: [&quot;school&quot;], &quot;commercial&quot;: [&quot;shop&quot;], &quot;government&quot;: [&quot;ministry&quot;]}</gco:Dictionary>
-          </value_map>
+          <resolution>
+            <gco:FloatTuple/>
+          </resolution>
           <structure_class_field>
-            <gco:CharacterString>exposure_type</gco:CharacterString>
+            <gco:CharacterString/>
           </structure_class_field>
           <allow_resampling>
             <gco:CharacterString/>

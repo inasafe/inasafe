@@ -6,6 +6,8 @@ from PyQt4.QtCore import QPyNullVariant
 
 from qgis.core import QgsDistanceArea
 
+from safe.definitionsv4.exposure import exposure_population
+from safe.definitionsv4.minimum_needs import minimum_needs_fields
 from safe.utilities.i18n import tr
 from safe.definitionsv4.fields import (
     female_ratio_field,
@@ -22,7 +24,7 @@ from safe.definitionsv4.fields import (
     size_field,
     hazard_class_field,
     affected_field,
-)
+    exposure_count_field)
 from safe.definitionsv4.hazard_classifications import all_hazard_classes
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -92,6 +94,50 @@ def post_processor_affected_function(**kwargs):
 
     return affected
 
+
+"""
+Post processors related definitions
+"""
+
+"""Input"""
+field_input_type = {
+    'key': 'field',
+    'description': tr('This type of input take value from field')
+}
+
+dynamic_field_input_type = {
+    'key': 'dynamic_field',
+    'description': tr(
+        'This type of input take value from a dynamic field. '
+        'Thus, it required some additional parameter.')
+}
+
+keyword_input_type = {
+    'key': 'keyword',
+    'description': tr(
+        'This type of input take value from layer keyword being handled.')
+}
+
+needs_profile_input_type = {
+    'key': 'needs_profile',
+    'description': tr(
+        'This type of input take value from current InaSAFE needs profile.')
+}
+
+"""Process"""
+formula_process = {
+    'key': 'formula',
+    'description': tr(
+        'This type of process takes inputs as arguments and process it '
+        'according to python expressions described.')
+}
+
+function_process = {
+    'key': 'function',
+    'description': tr(
+        'This type of process takes inputs as arguments and process it '
+        'using python function referenced.')
+}
 
 """
 Post processors
@@ -267,6 +313,60 @@ post_processor_affected = {
     }
 }
 
+"""
+Minimum Needs.
+
+Minimum needs is a kind of post processor which can be defined by user.
+"""
+
+
+def initialize_minimum_needs_post_processors():
+    """Generate definitions for minimum needs post processors."""
+    processors = []
+
+    for field in minimum_needs_fields:
+        field_key = field['key']
+        field_name = field['name']
+        field_description = field['description']
+        need_parameter = field['need_parameter']
+        """:type: safe.common.parameters.resource_parameter.ResourceParameter
+        """
+        processor = {
+            'key': 'post_processor_{key}'.format(key=field_key),
+            'name': field_name,
+            'description': field_description,
+            'input': {
+                # input as a list means, try to get the input from the
+                # listed source. Pick the first available
+                'population': [
+                    {
+                        'value': population_count_field,
+                        'type': 'field'
+                    },
+                    {
+                        'value': exposure_count_field,
+                        'field_param': exposure_population['key'],
+                        'type': 'dynamic_field',
+                    }],
+                'amount': {
+                    'type': 'needs_profile',
+                    'value': need_parameter.name,
+                }
+            },
+            'output': {
+                'needs': {
+                    'value': field,
+                    'function': multiply
+                }
+            }
+        }
+        processors.append(processor)
+    return processors
+
+
+minimum_needs_post_processors = initialize_minimum_needs_post_processors()
+
+
 # This is the order of execution, so the order is important.
 # For instance, the size post processor must run before size_rate.
 post_processors = [
@@ -277,4 +377,4 @@ post_processors = [
     post_processor_elderly,
     post_processor_size_rate,
     post_processor_affected,
-]
+] + minimum_needs_post_processors

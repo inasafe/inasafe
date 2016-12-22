@@ -821,6 +821,8 @@ analysis_fields = [
     total_field
 ]
 
+# Add also minimum needs fields
+from safe.definitionsv4.minimum_needs import minimum_needs_fields
 count_fields = [
     feature_value_field,
     population_count_field,
@@ -828,7 +830,7 @@ count_fields = [
     youth_count_field,
     adult_count_field,
     elderly_count_field,
-]
+] + minimum_needs_fields
 
 ratio_fields = [
     feature_rate_field,

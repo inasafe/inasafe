@@ -2,6 +2,7 @@
 """Utilities module for helping definitions retrieval."""
 
 from copy import deepcopy
+from types import ModuleType
 
 from safe import definitionsv4
 from safe.definitionsv4 import fields
