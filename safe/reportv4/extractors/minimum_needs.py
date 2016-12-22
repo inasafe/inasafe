@@ -1,7 +1,10 @@
 # coding=utf-8
 from safe.common.parameters.resource_parameter import ResourceParameter
 from safe.definitionsv4.exposure import exposure_population
-from safe.definitionsv4.fields import total_affected_field
+from safe.definitionsv4.fields import total_affected_field, \
+    population_count_field
+from safe.definitionsv4.minimum_needs import minimum_needs_fields, \
+    minimum_needs_namespace
 from safe.reportv4.extractors.util import round_affecter_number
 from safe.utilities.i18n import tr
 
@@ -28,49 +31,56 @@ def minimum_needs_extractor(impact_report, component_metadata):
     """
     context = {}
 
-    needs_profile = impact_report.minimum_needs
-    exposure_layer = impact_report.exposure
     analysis_layer = impact_report.analysis
+    analysis_keywords = analysis_layer.keywords['inasafe_fields']
 
     # minimum needs calculation only affect population type exposure
-    if not exposure_layer.keywords['exposure'] == exposure_population['key']:
+    # check if analysis keyword have minimum_needs keywords
+    have_minimum_needs_field = False
+    for field_key in analysis_keywords:
+        if field_key.startswith(minimum_needs_namespace):
+            have_minimum_needs_field = True
+            break
+
+    if not have_minimum_needs_field:
         return context
 
     frequencies = {}
     # map each needs to its frequency groups
-    for n in needs_profile.get_needs_parameters():
-        need_parameter = n
+    for field in minimum_needs_fields:
+        need_parameter = field['need_parameter']
         if isinstance(need_parameter, ResourceParameter):
             if need_parameter.frequency not in frequencies:
-                frequencies[need_parameter.frequency] = [need_parameter]
+                frequencies[need_parameter.frequency] = [field]
             else:
-                frequencies[need_parameter.frequency].append(need_parameter)
+                frequencies[need_parameter.frequency].append(field)
 
     needs = []
+    analysis_feature = analysis_layer.getFeatures().next()
     # group the needs by frequency
-    for key, freq in frequencies.iteritems():
+    for key, frequency in frequencies.iteritems():
         group = {
             'header': tr('Relief items to be provided %s') % tr(key),
             'total_header': tr('Total'),
             'needs': []
         }
-        for n in freq:
-            need_parameter = n
+        for field in frequency:
+            # check value exists in the field
+            field_idx = analysis_layer.fieldNameIndex(field['field_name'])
+            if field_idx == -1:
+                # skip if field doesn't exists
+                continue
+            value = round_affecter_number(analysis_feature[field_idx], False)
+            if value == 0:
+                # skip if no needs needed
+                continue
+
+            need_parameter = field['need_parameter']
             """:type: ResourceParameter"""
             header = need_parameter.name
             if need_parameter.unit.abbreviation:
                 header = '%s [%s]' % (
                     header, need_parameter.unit.abbreviation)
-            # We don't have any layer to store minimum needs for now.
-            # So, for now just calculate it manually
-            need_index = analysis_layer.fieldNameIndex(
-                total_affected_field['field_name'])
-            # need_index = analysis_layer.fieldNameIndex(
-            #     need_parameter.name)
-            feat = analysis_layer.getFeatures().next()
-            value = feat[need_index] * need_parameter.value
-            value = round_affecter_number(value)
-            # value = feat[need_index]
             item = {
                 'header': header,
                 'value': value
