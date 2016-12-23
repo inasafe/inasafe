@@ -920,7 +920,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         if aggregation:
             impact_function.aggregation = aggregation
             impact_function.use_selected_features_only = (
-                bool(self.settings.value(
+                bool(QSettings().value(
                     'inasafe/useSelectedFeaturesOnly', False, type=bool)))
         else:
             if self.extent.user_extent:
