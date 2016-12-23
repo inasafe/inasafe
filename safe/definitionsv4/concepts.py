@@ -212,6 +212,77 @@ concepts = {
             }
         ],
       },
+    'rice': {
+        'description': tr(
+            'Grains of rice used as food.'),
+        'citations': [
+            {
+                'text': tr(
+                    'Oxford Dictionary.'),
+                'link': 'https://en.oxforddictionaries.com/definition/rice'
+            }
+        ],
+      },
+    'drinking_water': {
+        'description': tr(
+            'Water pure enough for drinking.'),
+        'citations': [
+            {
+                'text': tr(
+                    'Oxford Dictionary.'),
+                'link': 'https://en.oxforddictionaries.com/definition/'
+                        'drinking_water'
+            }
+        ],
+      },
+    'clean_water': {
+        'description': tr(
+            'Water suitable for washing and other purposes but not suitable '
+            'for drinking.'),
+        'citations': [
+            {
+                'text': tr(
+                    ''),
+                'link': ''
+            }
+        ],
+      },
+    'family_kit': {
+        'description': tr(
+            'Relief supplies such as clothing to support families.'),
+        'citations': [
+            {
+                'text': tr(
+                    'BNPB Perka 7/2008'),
+                'link': 'http://tinyurl.com/BNPB-Perka-7-2008'
+            }
+        ],
+      },
+    'hygiene_pack': {
+        'description': tr(
+            'Relief supplies to promote practices conducive to maintaining '
+            'health and preventing disease.'),
+        'citations': [
+            {
+                'text': tr(
+                    'Oxford Dictionary.'),
+                'link': 'https://en.oxforddictionaries.com/definition/hygiene'
+            }
+        ],
+      },
+    'toilet': {
+        'description': tr(
+            'A room, building or cubicle with facilities to collect and '
+            'dispose of human waste.'),
+        'citations': [
+            {
+                'text': tr(
+                    'Oxford Dictionary.'),
+                'link': 'https://en.oxforddictionaries.com/definition/'
+                        'toilet'
+            }
+        ],
+      },
     # Boilerplate for adding a new concept...
     #  '': {
     #    'description': tr(

@@ -8,7 +8,7 @@
     <filename>adult.svg</filename>
     <publishable>Yes</publishable>
     <source>modified from UNOCHA</source>
-    <IP_owner>OSM</IP_owner>
+    <IP_owner>UNOCHA</IP_owner>
     <IP_info>http://thenounproject.com/ochaavmu/collection/ocha-humanitarian-icons/?i=4340</IP_info>
   </iconfile>
 
@@ -16,7 +16,7 @@
     <filename>youth.svg</filename>
     <publishable>Yes</publishable>
     <source>UNOCHA</source>
-    <IP_owner>OSM</IP_owner>
+    <IP_owner>UNOCHA</IP_owner>
     <IP_info>http://thenounproject.com/ochaavmu/collection/ocha-humanitarian-icons/?i=4283</IP_info>
   </iconfile>
 
@@ -24,7 +24,7 @@
     <filename>elderly.svg</filename>
     <publishable>Yes</publishable>
     <source>UNOCHA</source>
-    <IP_owner>OSM</IP_owner>
+    <IP_owner>UNOCHA</IP_owner>
     <IP_info>http://thenounproject.com/ochaavmu/collection/ocha-humanitarian-icons/?i=4286</IP_info>
   </iconfile>
 
@@ -32,7 +32,7 @@
     <filename>female.svg</filename>
     <publishable>Yes</publishable>
     <source>UNOCHA</source>
-    <IP_owner>OSM</IP_owner>
+    <IP_owner>UNOCHA</IP_owner>
     <IP_info>http://thenounproject.com/ochaavmu/collection/ocha-humanitarian-icons/</IP_info>
   </iconfile>
 
@@ -40,6 +40,54 @@
     <filename>people.svg</filename>
     <publishable>Yes</publishable>
     <source>UNOCHA</source>
-    <IP_owner>OSM</IP_owner>
+    <IP_owner></IP_owner>
     <IP_info>http://thenounproject.com/ochaavmu/collection/ocha-humanitarian-icons/?i=4281</IP_info>
+  </iconfile>
+
+  <iconfile>
+    <filename>rice.svg</filename>
+    <publishable>Yes</publishable>
+    <source>UNOCHA</source>
+    <IP_owner></IP_owner>
+    <IP_info>http://thenounproject.com/ochaavmu/collection/ocha-humanitarian-icons/?i=4214</IP_info>
+  </iconfile>
+
+  <iconfile>
+    <filename>drinking_water.svg</filename>
+    <publishable>Yes</publishable>
+    <source>UNOCHA</source>
+    <IP_owner></IP_owner>
+    <IP_info>http://thenounproject.com/ochaavmu/collection/ocha-humanitarian-icons/?i=4334</IP_info>
+  </iconfile>
+
+   <iconfile>
+    <filename>clean_water.svg</filename>
+    <publishable>Yes</publishable>
+    <source>UNOCHA</source>
+    <IP_owner></IP_owner>
+    <IP_info>http://thenounproject.com/ochaavmu/collection/ocha-humanitarian-icons/?i=4335</IP_info>
+  </iconfile>
+
+  <iconfile>
+    <filename>family_kit.svg</filename>
+    <publishable>Yes</publishable>
+    <source>UNOCHA</source>
+    <IP_owner></IP_owner>
+    <IP_info>http://thenounproject.com/ochaavmu/collection/ocha-humanitarian-icons/?i=4316</IP_info>
+  </iconfile>
+
+  <iconfile>
+    <filename>hygiene_pack.svg</filename>
+    <publishable>Yes</publishable>
+    <source>UNOCHA</source>
+    <IP_owner></IP_owner>
+    <IP_info>http://thenounproject.com/ochaavmu/collection/ocha-humanitarian-icons/?i=4316</IP_info>
+  </iconfile>
+
+  <iconfile>
+    <filename>toilet.svg</filename>
+    <publishable>Yes</publishable>
+    <source>UNOCHA</source>
+    <IP_owner></IP_owner>
+    <IP_info>http://thenounproject.com/ochaavmu/collection/ocha-humanitarian-icons/?i=4331</IP_info>
   </iconfile>
