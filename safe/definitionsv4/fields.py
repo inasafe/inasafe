@@ -1,11 +1,17 @@
 # coding=utf-8
 """Definitions relating to fields."""
 
-import sys
 from PyQt4.QtCore import QVariant
 
 from safe.utilities.i18n import tr
 from safe.definitionsv4.constants import qvariant_whole_numbers
+from safe.definitionsv4.default_values import (
+    female_ratio_default_value,
+    feature_rate_default_value,
+    youth_ratio_default_value,
+    adult_ratio_default_value,
+    elderly_ratio_default_value
+)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -14,6 +20,7 @@ __revision__ = '$Format:%H$'
 
 default_field_length = 10
 default_field_precision = 5
+default_ratio_field_precision = 2
 
 # # # # # # # # # #
 # Exposure
@@ -470,7 +477,7 @@ feature_rate_field = {
     'field_name': 'exposure_rate',
     'type': QVariant.Double,
     'length': default_field_length,
-    'precision': default_field_precision,
+    'precision': 0,
     'absolute': False,
     'description': tr(
         'Attribute where the rate value of the feature is located. A rate '
@@ -483,8 +490,7 @@ feature_rate_field = {
     ],
     # Null value can be replaced by default or not
     'replace_null': True,
-    'min': 0,
-    'max': sys.maxsize
+    'default_value': feature_rate_default_value
 }
 
 # Female Ratio
@@ -494,7 +500,7 @@ female_ratio_field = {
     'field_name': 'female_ratio',
     'type': QVariant.Double,
     'length': default_field_length,
-    'precision': default_field_precision,
+    'precision': default_ratio_field_precision,
     'absolute': False,
     'description': tr('Attribute where the ratio of females is located.'),
     'citations': [
@@ -505,8 +511,7 @@ female_ratio_field = {
     ],
     # Null value can be replaced by default or not
     'replace_null': True,
-    'min': 0,
-    'max': 1
+    'default_value': female_ratio_default_value
 }
 
 # Youth Ratio
@@ -516,7 +521,7 @@ youth_ratio_field = {
     'field_name': 'youth_ratio',
     'type': QVariant.Double,
     'length': default_field_length,
-    'precision': default_field_precision,
+    'precision': default_ratio_field_precision,
     'absolute': False,
     'description': tr('Attribute where the ratio of youth people is located.'),
     'citations': [
@@ -527,8 +532,7 @@ youth_ratio_field = {
     ],
     # Null value can be replaced by default or not
     'replace_null': True,
-    'min': 0,
-    'max': 1
+    'default_value': youth_ratio_default_value
 }
 
 # Adult Ratio
@@ -538,7 +542,7 @@ adult_ratio_field = {
     'field_name': 'adult_ratio',
     'type': QVariant.Double,
     'length': default_field_length,
-    'precision': default_field_precision,
+    'precision': default_ratio_field_precision,
     'absolute': False,
     'description': tr('Attribute where the ratio of adult people is located.'),
     'citations': [
@@ -549,8 +553,7 @@ adult_ratio_field = {
     ],
     # Null value can be replaced by default or not
     'replace_null': True,
-    'min': 0,
-    'max': 1
+    'default_value': adult_ratio_default_value
 }
 
 # Elderly Ratio
@@ -560,7 +563,7 @@ elderly_ratio_field = {
     'field_name': 'elderly_ratio',
     'type': QVariant.Double,
     'length': default_field_length,
-    'precision': default_field_precision,
+    'precision': default_ratio_field_precision,
     'absolute': False,
     'description': tr(
         'Attribute where the ratio of elderly people is located.'),
@@ -572,8 +575,7 @@ elderly_ratio_field = {
     ],
     # Null value can be replaced by default or not
     'replace_null': True,
-    'min': 0,
-    'max': 1
+    'default_value': elderly_ratio_default_value
 }
 
 # # # # # # # # # #

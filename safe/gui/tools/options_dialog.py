@@ -1,42 +1,40 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool developed by AusAid - **Options Dialog.**
+"""InaSAFE Options Dialog"""
 
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-.. todo:: Check raster is single band
-
-"""
-__author__ = 'tim@kartoza.com'
-__revision__ = '$Format:%H$'
-__date__ = '10/01/2011'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
-
+import logging
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
 # noinspection PyPackageRequirements
 from PyQt4 import QtGui, QtCore
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import pyqtSignature, pyqtSlot
+from PyQt4.QtCore import pyqtSignature, pyqtSlot, QVariant
 
+from safe_extras.parameters.qt_widgets.parameter_container import (
+    ParameterContainer)
+from safe_extras.parameters.float_parameter import FloatParameter
+from safe_extras.parameters.integer_parameter import IntegerParameter
+
+from safe.definitionsv4.utilities import all_default_fields
+from safe.definitionsv4.constants import qvariant_whole_numbers
 from safe.common.utilities import temp_dir
 from safe.defaults import (
     disclaimer,
     supporters_logo_path,
     default_north_arrow_path,
     get_defaults)
+from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.resources import get_ui_class, html_header, html_footer
 from safe.common.version import get_version
 from safe.gui.tools.help.options_help import options_help
 
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
+
+LOGGER = logging.getLogger('InaSAFE')
 FORM_CLASS = get_ui_class('options_dialog_base.ui')
 
 
@@ -59,6 +57,7 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
 
         QtGui.QDialog.__init__(self, parent)
         self.setupUi(self)
+
         self.setWindowTitle(self.tr('InaSAFE %s Options' % get_version()))
         # Save reference to the QGIS interface and parent
         self.iface = iface
@@ -91,6 +90,11 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             self.set_templates_dir)
         self.custom_org_disclaimer_checkbox.toggled.connect(
             self.set_org_disclaimer)
+
+        # InaSAFE default values
+        self.default_value_parameters = []
+        self.default_value_parameter_container = None
+        self.setup_default_values_page()
 
     def restore_state(self):
         """Reinstate the options based on the user's stored session info.
@@ -486,3 +490,41 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         string += footer
 
         self.help_web_view.setHtml(string)
+
+    def setup_default_values_page(self):
+        """Setup UI for default values setting."""
+        default_fields = all_default_fields()
+        for default_field in default_fields:
+            if default_field.get('type') == QVariant.Double:
+                parameter = FloatParameter()
+            elif default_field.get('type') in qvariant_whole_numbers:
+                parameter = IntegerParameter()
+            else:
+                continue
+            default_value = default_field.get('default_value')
+            if not default_value:
+                message = (
+                    'InaSAFE default field %s does not have default value'
+                    % default_field.get('name'))
+                LOGGER.exception(message)
+                continue
+
+            parameter.name = default_value.get('name')
+            parameter.is_required = True
+            parameter.precision = default_field.get('precision')
+            parameter.minimum_allowed_value = default_value.get(
+                'min_value', 0)
+            parameter.maximum_allowed_value = default_value.get(
+                'max_value', 100)
+            parameter.help_text = default_value.get('description')
+            # Current value
+            parameter.value = default_value.get('default_value')
+
+            self.default_value_parameters.append(parameter)
+
+        description_text = tr('InaSAFE Default Values')
+        self.default_value_parameter_container = ParameterContainer(
+            self.default_value_parameters, description_text=description_text)
+        self.default_value_parameter_container.setup_ui()
+        self.default_values_layout.addWidget(
+            self.default_value_parameter_container)

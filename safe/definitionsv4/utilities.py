@@ -282,6 +282,7 @@ def get_allowed_geometries(layer_purpose_key):
     return allowed_geometries_definition
 
 
+
 def all_default_fields():
     """Helper to retrieve all fields which has default value.
 

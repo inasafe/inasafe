@@ -215,8 +215,7 @@ class TestDefinitionsUtilities(unittest.TestCase):
         default_fields = all_default_fields()
         for default_field in default_fields:
             self.assertTrue(default_field.get('replace_null'), False)
-            self.assertIsNotNone(default_field.get('min'))
-            self.assertIsNotNone(default_field.get('max'))
+            self.assertIsNotNone(default_field.get('default_value'))
 
 
 if __name__ == '__main__':
