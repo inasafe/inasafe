@@ -570,7 +570,7 @@ def set_jakarta_extent(dock=None):
     CANVAS.setExtent(rect)
     if dock is not None:
         crs = QgsCoordinateReferenceSystem('EPSG:4326')
-        dock.define_user_analysis_extent(rect, crs)
+        dock.extent.define_user_analysis_extent(rect, crs)
 
 
 def set_jakarta_google_extent(dock=None):
@@ -584,7 +584,7 @@ def set_jakarta_google_extent(dock=None):
     CANVAS.setExtent(rect)
     if dock is not None:
         crs = QgsCoordinateReferenceSystem('EPSG:3857')
-        dock.define_user_analysis_extent(rect, crs)
+        dock.extent.define_user_analysis_extent(rect, crs)
 
 
 def set_yogya_extent(dock=None):
@@ -598,7 +598,7 @@ def set_yogya_extent(dock=None):
     CANVAS.setExtent(rect)
     if dock is not None:
         crs = QgsCoordinateReferenceSystem('EPSG:4326')
-        dock.define_user_analysis_extent(rect, crs)
+        dock.extent.define_user_analysis_extent(rect, crs)
 
 
 def set_small_jakarta_extent(dock=None):
@@ -612,7 +612,7 @@ def set_small_jakarta_extent(dock=None):
     CANVAS.setExtent(rect)
     if dock is not None:
         crs = QgsCoordinateReferenceSystem('EPSG:4326')
-        dock.define_user_analysis_extent(rect, crs)
+        dock.extent.define_user_analysis_extent(rect, crs)
 
 
 def compare_two_vector_layers(control_layer, test_layer):

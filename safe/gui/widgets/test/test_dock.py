@@ -180,7 +180,7 @@ class TestDock(TestCase):
         CANVAS.setExtent(rectangle)
         crs = QgsCoordinateReferenceSystem('EPSG:4326')
         self.dock.define_user_analysis_extent(rectangle, crs)
-        self.dock.show_next_analysis_extent()
+        self.dock.update_next_analysis_extent()
         # Check that run button is disabled because extents do not overlap
         message = 'Run button was not disabled'
         self.assertFalse(button.isEnabled(), message)
@@ -800,14 +800,14 @@ class TestDock(TestCase):
         # 4326 with enabled on-the-fly reprojection - check next
         set_canvas_crs(GEOCRS, True)
         set_small_jakarta_extent(self.dock)
-        self.dock.show_next_analysis_extent()
+        self.dock.update_next_analysis_extent()
         next_band = self.dock.extent.next_analysis_rubberband
         self.assertEqual(expected_vertex_count, next_band.numberOfVertices())
 
         # 4326 with disabled on-the-fly reprojection - check next
         set_canvas_crs(GEOCRS, False)
         set_small_jakarta_extent(self.dock)
-        self.dock.show_next_analysis_extent()
+        self.dock.update_next_analysis_extent()
         next_band = self.dock.extent.next_analysis_rubberband
         self.assertEqual(expected_vertex_count, next_band.numberOfVertices())
 
@@ -854,9 +854,7 @@ class TestDock(TestCase):
 
         Note that when testing on a desktop system this will overwrite your
         user defined analysis extent.
-
         """
-
         settings = QtCore.QSettings()
         extents = '106.772279, -6.237576, 106.885165, -6.165415'
         settings.setValue('inasafe/analysis_extent', extents)
@@ -877,7 +875,7 @@ class TestDock(TestCase):
         set_canvas_crs(GEOCRS, True)
         # User extent should override this
         set_small_jakarta_extent(self.dock)
-        self.dock.extent.show_user_analysis_extent()
+        self.dock.extent.set_user_analysis_extent()
         user_band = self.dock.extent.user_analysis_rubberband
         self.assertEqual(expected_vertex_count, user_band.numberOfVertices())
 

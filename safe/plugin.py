@@ -431,7 +431,7 @@ class Plugin(object):
         self.action_toggle_rubberbands.setChecked(flag)
         # noinspection PyUnresolvedReferences
         self.action_toggle_rubberbands.triggered.connect(
-            self.dock_widget.toggle_rubber_bands)
+            self.dock_widget.extent.toggle_rubber_bands)
         self.add_action(self.action_toggle_rubberbands)
 
     def _create_analysis_extent_action(self):
@@ -725,10 +725,10 @@ class Plugin(object):
         widget.clear_extent.connect(
             self.dock_widget.extent.clear_user_analysis_extent)
         widget.extent_defined.connect(
-            self.dock_widget.define_user_analysis_extent)
+            self.dock_widget.extent.define_user_analysis_extent)
         # This ensures that run button state is updated on dialog close
         widget.extent_selector_closed.connect(
-            self.dock_widget.show_next_analysis_extent)
+            self.dock_widget.update_next_analysis_extent)
         # Needs to be non modal to support hide -> interact with map -> show
         widget.show()  # non modal
 

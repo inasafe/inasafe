@@ -348,7 +348,7 @@ class BatchDialog(QDialog, FORM_CLASS):
 
             extent = QgsRectangle(*coordinates)
 
-            self.dock.define_user_analysis_extent(extent, crs)
+            self.dock.extent.define_user_analysis_extent(extent, crs)
 
             message = 'set layer extent to %s ' % extent.asWktCoordinates()
             # LOGGER.info(message)
