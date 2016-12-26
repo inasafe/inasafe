@@ -1,25 +1,4 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool by AusAid -**ImpactCalculator.**
-
-The module provides a help to manage extent for analysis.
-
-Refactor from dock.py, originally made by Tim Sutton.
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
-
-__author__ = 'ismail@kartoza.com'
-__revision__ = '$Format:%H$'
-__date__ = '11/17/14'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
 
 from qgis.core import (
     QgsCoordinateTransform,
@@ -32,8 +11,19 @@ from qgis.gui import QgsRubberBand  # pylint: disable=no-name-in-module
 from PyQt4.QtCore import QSettings
 
 from safe.common.exceptions import InvalidGeometryError
-# noinspection PyPackageRequirements
-from PyQt4.QtGui import QColor
+from safe.definitionsv4.colors import (
+    user_analysis_color,
+    next_analysis_color,
+    last_analysis_color,
+    user_analysis_width,
+    next_analysis_width,
+    last_analysis_width
+)
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 
 class Extent(object):
@@ -70,7 +60,16 @@ class Extent(object):
         # Whether to show rubber band of last and next scenario
         self.show_rubber_bands = False
 
-    def _draw_rubberband(self, extent, colour, width=2):
+    @property
+    def destination_crs(self):
+        """Return the destination CRS of the map canvas.
+
+        :return: The map canvas CRS.
+        :rtype: QgsCoordinateTransform
+        """
+        return self.iface.mapCanvas().mapRenderer().destinationCrs()
+
+    def _draw_rubberband(self, extent, colour, width):
         """
         Draw a rubber band on the canvas.
 
@@ -143,10 +142,9 @@ class Extent(object):
         """
 
         # make sure the extent is in the same crs as the canvas
-        destination_crs = self.iface.mapCanvas().mapRenderer().destinationCrs()
         source_crs = QgsCoordinateReferenceSystem()
         source_crs.createFromSrid(4326)
-        transform = QgsCoordinateTransform(source_crs, destination_crs)
+        transform = QgsCoordinateTransform(source_crs, self.destination_crs)
         extent = transform.transformBoundingBox(extent)
         return extent
 
@@ -228,14 +226,13 @@ class Extent(object):
             return
 
         # make sure the extent is in the same crs as the canvas
-        destination_crs = self.iface.mapCanvas().mapSettings().destinationCrs()
-        transform = QgsCoordinateTransform(source_crs, destination_crs)
+        transform = QgsCoordinateTransform(source_crs, self.destination_crs)
         extent = transform.transformBoundingBox(extent)
 
         if self.show_rubber_bands:
             # Draw in blue
             self.user_analysis_rubberband = self._draw_rubberband(
-                extent, QColor(0, 0, 255, 100))
+                extent, user_analysis_color, user_analysis_width)
 
     def hide_next_analysis_extent(self):
         """Hide the rubber band showing extent of the next analysis.
@@ -273,7 +270,7 @@ class Extent(object):
         if self.show_rubber_bands:
             # draw in green
             self.next_analysis_rubberband = self._draw_rubberband(
-                next_analysis_extent, QColor(0, 255, 0, 100), width=10)
+                next_analysis_extent, next_analysis_color, next_analysis_width)
 
     def hide_last_analysis_extent(self):
         """Clear extent rubber band if any.
@@ -314,4 +311,4 @@ class Extent(object):
         if self.show_rubber_bands:
             # Draw in red
             self.last_analysis_rubberband = self._draw_rubberband(
-                extent, QColor(255, 0, 0, 100), width=5)
+                extent, last_analysis_color, last_analysis_width)
