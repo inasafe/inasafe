@@ -10,6 +10,7 @@ from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import Qt, pyqtSlot, QSettings
 from qgis.core import (
     QgsRectangle,
+    QgsGeometry,
     QgsMapLayer,
     QgsMapLayerRegistry,
     QgsCoordinateReferenceSystem,
@@ -25,7 +26,8 @@ from safe.definitionsv4.constants import (
     ANALYSIS_FAILED_BAD_CODE,
     ANALYSIS_SUCCESS,
     PREPARE_FAILED_BAD_INPUT,
-    PREPARE_FAILED_BAD_CODE
+    PREPARE_FAILED_BAD_CODE,
+    PREPARE_SUCCESS,
 )
 from safe.defaults import supporters_logo_path
 from safe.utilities.i18n import tr
@@ -219,30 +221,33 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         Do this on init and after changing options in the options dialog.
         """
+        LOGGER.debug('read_settings')
+
         flag = bool(self.settings.value(
             'inasafe/showRubberBands', False, type=bool))
         self.extent.show_rubber_bands = flag
         try:
             extent = self.settings.value(
                 'inasafe/analysis_extent', '', type=str)
+            if not extent.startswith('POLYGON'):
+                # Before InaSAFE V4, we were not saving a WKT.
+                LOGGER.info('analysis_extent from V3, we can skip it.')
+                extent = None
+            else:
+                extent = QgsGeometry.fromWkt(extent)
+                if not extent.isGeosValid():
+                    extent = None
             crs = self.settings.value(
                 'inasafe/analysis_extent_crs', '', type=str)
         except TypeError:
             # Any bogus stuff in settings and we just clear them
-            extent = ''
-            crs = ''
+            extent = None
+            crs = None
 
-        if extent != '' and crs != '':
-            extent = extent_string_to_array(extent)
-            try:
-                # noinspection PyCallingNonCallable
-                self.extent.user_extent = QgsRectangle(*extent)
-                # noinspection PyCallingNonCallable
-                self.extent.user_extent_crs = QgsCoordinateReferenceSystem(crs)
-                self.extent.show_user_analysis_extent()
-            except TypeError:
-                self.extent.user_extent = None
-                self.extent.user_extent_crs = None
+        if extent and crs:
+            self.extent.user_extent = QgsGeometry.fromWkt(extent)
+            self.extent.user_extent_crs = QgsCoordinateReferenceSystem(crs)
+            self.extent.show_user_analysis_extent()
 
         self.draw_rubber_bands()
 
@@ -397,6 +402,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
             flag,message = self.validate()
         """
+        LOGGER.debug('validate')
         if self.busy:
             return False, None
         hazard_index = self.hazard_layer_combo.currentIndex()
@@ -487,6 +493,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         Whether the combo is toggled on or off will depend on the current dock
         status.
         """
+        LOGGER.debug('toggle_aggregation_layer_combo')
         selected_hazard_layer = self.get_hazard_layer()
         selected_exposure_layer = self.get_exposure_layer()
 
@@ -502,12 +509,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
     def set_run_button_status(self):
         """Helper function to set the run button status based on form validity.
         """
-        button = self.run_button
         flag, message = self.validate()
-
-        # Hack until we fix the dock for InaSAFE V4
-        # button.setEnabled(flag)
-        button.setEnabled(True)
+        self.run_button.setEnabled(flag)
         if message is not None:
             send_static_message(self, message)
 
@@ -758,6 +761,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         :param flag: Flag to indicate if drawing of bands is active.
         :type flag: bool
         """
+        LOGGER.debug('toggle_rubber_bands')
         self.extent.show_rubber_bands = flag
         # Temporary disable until we fix the dock in inasafe v4.
         self.extent.show_rubber_bands = False
@@ -772,6 +776,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
     @pyqtSlot()
     def draw_rubber_bands(self):
         """Draw any rubber bands that are enabled."""
+        LOGGER.debug('draw_rubber_bands')
         try:
             flag = self.settings.value('inasafe/showRubberBands', type=bool)
         except TypeError:
@@ -905,7 +910,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
     def prepare_impact_function(self):
         """Create analysis as a representation of current situation of dock."""
-
+        LOGGER.debug('prepare_impact_function')
         # Impact Functions
         impact_function = ImpactFunction()
         impact_function.callback = self.progress_callback
@@ -922,10 +927,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     'inasafe/useSelectedFeaturesOnly', False, type=bool)))
         else:
             if self.extent.user_extent:
-                # impact_function.requested_extent = self.extent.user_extent
-                # impact_function.requested_extent_crs = (
-                #     self.extent.user_extent_crs)
-                pass
+                impact_function.requested_extent = self.extent.user_extent
+                impact_function.requested_extent_crs = (
+                    self.extent.user_extent_crs)
 
         impact_function.debug_mode = self.debug_mode.isChecked()
 
@@ -1224,6 +1228,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             extent.
         :type crs: QgsCoordinateReferenceSystem
         """
+        LOGGER.debug('define_user_analysis_extent')
         try:
             self.extent.define_user_analysis_extent(extent, crs)
             self.show_next_analysis_extent()
@@ -1283,6 +1288,11 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         .. versionadded:: 2.1.0
         """
+        import pydevd
+        pydevd.settrace('localhost', port=8999, stdoutToServer=True,
+            stderrToServer=True)
+        LOGGER.debug('show_next_analysis_extent')
+        settings = QSettings()
         self.extent.hide_next_analysis_extent()
         # check if we actually have correct hazard, exposure and IF
         # if we don't we exit immediately to avoid cluttering up the display
@@ -1293,15 +1303,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             return
 
         # IF could potentially run - lets see if the extents will work well...
-        # Temporary until we implement the analysis extent checker. ET 14/12/16
-        # valid, extents = self.validate_extents()
-        valid, extents = True, None
-        if valid:
-            self.extent.show_next_analysis_extent(extents)
-            show_confirmations = self.settings.value(
-                'inasafe/show_extent_confirmations',
-                True,
-                type=bool)
+        impact_function = self.prepare_impact_function()
+        status, message = impact_function.prepare()
+        if status != PREPARE_SUCCESS:
+            self.run_button.setEnabled(False)
 
             if show_confirmations:
                 message = self.tr(

@@ -3,6 +3,7 @@
 from qgis.core import (
     QgsCoordinateTransform,
     QgsRectangle,
+    QgsGeometry,
     QgsPoint,
     QgsCoordinateReferenceSystem,
     QGis)
@@ -27,7 +28,14 @@ __revision__ = '$Format:%H$'
 
 
 class Extent(object):
-    """Extent class to handle extent."""
+    """Extent class to handle analysis extent.
+
+    Rubber bands and extents for showing analysis extent etc.
+    Note that rubber bands are transient but their associated extents are
+    persistent for the session.
+
+    Rubberbands are stored in the map canvas CRS.
+    """
 
     def __init__(self, iface):
         """Constructor."""
@@ -69,14 +77,14 @@ class Extent(object):
         """
         return self.iface.mapCanvas().mapRenderer().destinationCrs()
 
-    def _draw_rubberband(self, extent, colour, width):
+    def _draw_rubberband(self, geometry, colour, width):
         """
         Draw a rubber band on the canvas.
 
         .. versionadded: 2.2.0
 
-        :param extent: Extent that the rubber band should be drawn for.
-        :type extent: QgsRectangle
+        :param geometry: Extent that the rubber band should be drawn for.
+        :type geometry: QgsGeometry
 
         :param colour: Colour for the rubber band.
         :type colour: QColor
@@ -89,25 +97,16 @@ class Extent(object):
         """
         # noinspection PyArgumentList
         rubber_band = QgsRubberBand(
-            self.iface.mapCanvas(), geometryType=QGis.Line)
+            self.iface.mapCanvas(), geometryType=QGis.Polygon)
+        rubber_band.setBrushStyle(Qt.NoBrush)
         rubber_band.setColor(colour)
         rubber_band.setWidth(width)
-        update_display_flag = False
-        point = QgsPoint(extent.xMinimum(), extent.yMinimum())
-        rubber_band.addPoint(point, update_display_flag)
-        point = QgsPoint(extent.xMaximum(), extent.yMinimum())
-        rubber_band.addPoint(point, update_display_flag)
-        point = QgsPoint(extent.xMaximum(), extent.yMaximum())
-        rubber_band.addPoint(point, update_display_flag)
-        point = QgsPoint(extent.xMinimum(), extent.yMaximum())
-        rubber_band.addPoint(point, update_display_flag)
-        point = QgsPoint(extent.xMinimum(), extent.yMinimum())
-        update_display_flag = True
-        rubber_band.addPoint(point, update_display_flag)
+        rubber_band.setToGeometry(geometry, None)
+
         return rubber_band
 
     @staticmethod
-    def validate_rectangle(extent):
+    def validate_geometry(extent):
         """
 
         .. versionadded: 2.2.0
@@ -118,17 +117,16 @@ class Extent(object):
         :raises: InvalidGeometryError
         """
 
-        if not (isinstance(extent, list) or isinstance(extent, QgsRectangle)):
-            raise InvalidGeometryError
         if isinstance(extent, list):
-            try:
-                extent = QgsRectangle(
-                    extent[0],
-                    extent[1],
-                    extent[2],
-                    extent[3])
-            except:  # yes we want to catch all exception types here
-                raise InvalidGeometryError
+            extent = QgsRectangle(
+                extent[0],
+                extent[1],
+                extent[2],
+                extent[3])
+
+        if not isinstance(extent, QgsGeometry):
+            extent = QgsGeometry.fromRect(extent)
+
         return extent
 
     def _geo_extent_to_canvas_crs(self, extent):
@@ -171,23 +169,13 @@ class Extent(object):
         """
         self.hide_user_analysis_extent()
 
-        try:
-            extent = self.validate_rectangle(extent)
-            self.user_extent = extent
-            self.user_extent_crs = crs
-        except InvalidGeometryError:
-            # keep existing user extent without updating it
-            raise InvalidGeometryError
+        extent = self.validate_geometry(extent)
+        self.user_extent = extent
+        self.user_extent_crs = crs
 
         # Persist this extent for the next session
         settings = QSettings()
-        user_extent = [
-            self.user_extent.xMinimum(),
-            self.user_extent.yMinimum(),
-            self.user_extent.xMaximum(),
-            self.user_extent.yMaximum()]
-        extent_string = ', '.join(('%f' % x) for x in user_extent)
-        settings.setValue('inasafe/analysis_extent', extent_string)
+        settings.setValue('inasafe/analysis_extent', extent.exportAsWkt())
         settings.setValue('inasafe/analysis_extent_crs', crs.authid())
 
         self.show_user_analysis_extent()
@@ -219,8 +207,11 @@ class Extent(object):
         extent = self.user_extent
         source_crs = self.user_extent_crs
 
+        if not extent or not source_crs:
+            return
+
         try:
-            extent = self.validate_rectangle(extent)
+            extent = self.validate_geometry(extent)
         except InvalidGeometryError:
             # keep existing user extent without updating it
             return
@@ -256,7 +247,7 @@ class Extent(object):
         .. versionadded:: 2.1.0
         """
         try:
-            next_analysis_extent = self.validate_rectangle(
+            next_analysis_extent = self.validate_geometry(
                 next_analysis_extent)
         except InvalidGeometryError:
             return
@@ -299,7 +290,7 @@ class Extent(object):
         self.hide_last_analysis_extent()
         try:
             # Massage it into a QgsRectangle
-            extent = self.validate_rectangle(extent)
+            extent = self.validate_geometry(extent)
         except InvalidGeometryError:
             return
 
