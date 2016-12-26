@@ -14,12 +14,10 @@ from safe.definitionsv4.layer_modes import layer_mode_classified
 from safe.definitionsv4.layer_purposes import (
     layer_purpose_exposure, layer_purpose_hazard)
 from safe.utilities.gis import (
-    is_raster_layer,
-    is_point_layer,
-    is_polygon_layer)
+    is_raster_layer, is_point_layer, is_polygon_layer)
 from safe.utilities.i18n import tr
 from safe.utilities.utilities import is_keyword_version_supported
-from safe.definitionsv4.constants import zero_default_value
+from safe.definitionsv4.constants import zero_default_value, RECENT, GLOBAL
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -165,27 +163,40 @@ def layer_description_html(layer, keywords=None):
     return desc
 
 
-def set_inasafe_default_value_qsetting(qsetting, inasafe_field_key, value):
+def set_inasafe_default_value_qsetting(
+        qsetting, category, inasafe_field_key, value):
     """Helper method to set inasafe default value to qsetting.
 
     :param qsetting: QSettings
     :type qsetting: QSettings
 
+    :param category: Category of the default value. It can be global or
+        recent. Global means the global setting for default value. Recent
+        means the last set custom for default value from the user.
+    :type value: str
+
     :param inasafe_field_key: Key for the field.
     :type inasafe_field_key: str
 
     :param value: Value of the inasafe_default_value.
-    :type value: float
+    :type value: float, int
+
     """
-    key = 'inasafe/default_value/%s' % inasafe_field_key
+    key = 'inasafe/default_value/%s/%s' % (category, inasafe_field_key)
     qsetting.setValue(key, value)
 
 
-def get_inasafe_default_value_qsetting(qsetting, inasafe_field_key):
+def get_inasafe_default_value_qsetting(
+        qsetting, category, inasafe_field_key):
     """Helper method to get the inasafe default value from qsetting.
 
     :param qsetting: QSetting
     :type qsetting: QSetting
+
+    :param category: Category of the default value. It can be global or
+        recent. Global means the global setting for default value. Recent
+        means the last set custom for default value from the user.
+    :type value: str
 
     :param inasafe_field_key: Key for the field.
     :type inasafe_field_key: str
@@ -193,9 +204,13 @@ def get_inasafe_default_value_qsetting(qsetting, inasafe_field_key):
     :returns: Value of the inasafe_default_value.
     :rtype: float
     """
-    key = 'inasafe/default_value/%s' % inasafe_field_key
+    key = 'inasafe/default_value/%s/%s' % (category, inasafe_field_key)
     default_value = qsetting.value(key)
     if default_value is None:
+        if category == GLOBAL:
+            # If empty for global setting, use default one.
+            return settings.default_values.get(
+                'inasafe_field_key', zero_default_value)
         return zero_default_value
     try:
         return float(default_value)
@@ -220,9 +235,9 @@ def get_defaults(qsetting, field_key):
     """
     labels = [tr('Setting (%s)'), tr('Do not use'), tr('Custom')]
     values = [
-        settings.default_values.get(field_key, None),
+        get_inasafe_default_value_qsetting(qsetting, GLOBAL, field_key),
         None,
-        get_inasafe_default_value_qsetting(qsetting, field_key)
+        get_inasafe_default_value_qsetting(qsetting, RECENT, field_key)
     ]
 
     return labels, values

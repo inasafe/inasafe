@@ -6,7 +6,7 @@ from safe.test.utilities import get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from PyQt4.QtCore import QSettings
-from safe.definitionsv4.constants import zero_default_value
+from safe.definitionsv4.constants import zero_default_value, RECENT, GLOBAL
 from safe.gui.tools.wizard.wizard_utils import (
     get_question_text,
     get_inasafe_default_value_qsetting,
@@ -36,14 +36,14 @@ class TestWizardUtil(unittest.TestCase):
 
         female_ratio_key = 'female_ratio'
         real_value = get_inasafe_default_value_qsetting(
-            qsetting, female_ratio_key)
+            qsetting, RECENT, female_ratio_key)
         self.assertEqual(zero_default_value, real_value)
 
         female_ratio_value = 0.8
         set_inasafe_default_value_qsetting(
-            qsetting, female_ratio_key, female_ratio_value)
+            qsetting, RECENT, female_ratio_key, female_ratio_value)
         real_value = get_inasafe_default_value_qsetting(
-            qsetting, female_ratio_key)
+            qsetting, RECENT, female_ratio_key)
         self.assertEqual(female_ratio_value, real_value)
 
         # Make sure it's empty
