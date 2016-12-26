@@ -35,7 +35,7 @@ class StepFcAggLayerFromBrowser(WizardStepBrowser, FORM_CLASS):
     def __init__(self, parent=None):
         """Constructor for the tab.
 
-        :param parent: parent - widget to use as parent (Wizad Dialog).
+        :param parent: parent - widget to use as parent (Wizard Dialog).
         :type parent: QWidget
 
         """
@@ -52,15 +52,6 @@ class StepFcAggLayerFromBrowser(WizardStepBrowser, FORM_CLASS):
         :rtype: bool
         """
         return self.get_layer_description_from_browser('aggregation')[0]
-
-    def get_previous_step(self):
-        """Find the proper step when user clicks the Previous button.
-
-        :returns: The step to be switched to
-        :rtype: WizardStep instance or None
-        """
-        new_step = self.parent.step_fc_agglayer_origin
-        return new_step
 
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.

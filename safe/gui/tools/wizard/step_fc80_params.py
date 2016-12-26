@@ -49,15 +49,6 @@ class StepFcParams(WizardStep, FORM_CLASS):
         """
         return True
 
-    def get_previous_step(self):
-        """Find the proper step when user clicks the Previous button.
-
-        :returns: The step to be switched to
-        :rtype: WizardStep instance or None
-        """
-        new_step = self.parent.step_fc_extent
-        return new_step
-
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.
 

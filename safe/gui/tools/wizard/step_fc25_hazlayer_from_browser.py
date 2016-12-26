@@ -53,15 +53,6 @@ class StepFcHazLayerFromBrowser(WizardStepBrowser, FORM_CLASS):
         """
         return self.get_layer_description_from_browser('hazard')[0]
 
-    def get_previous_step(self):
-        """Find the proper step when user clicks the Previous button.
-
-        :returns: The step to be switched to
-        :rtype: WizardStep instance or None
-        """
-        new_step = self.parent.step_fc_hazlayer_origin
-        return new_step
-
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.
 

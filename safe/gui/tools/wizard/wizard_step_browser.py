@@ -77,17 +77,6 @@ class WizardStepBrowser(WizardStep):
         self.proxy_model = LayerBrowserProxyModel(self)
         self.proxy_model.setSourceModel(browser_model)
 
-    def get_previous_step(self):
-        """Find the proper step when user clicks the Previous button.
-
-           This method must be implemented in derived classes.
-
-        :returns: The step to be switched to
-        :rtype: WizardStep instance or None
-        """
-        raise NotImplementedError("The current step class doesn't implement \
-            the get_previous_step method")
-
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.
 
