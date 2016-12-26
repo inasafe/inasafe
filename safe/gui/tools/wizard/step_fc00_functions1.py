@@ -48,14 +48,6 @@ class StepFcFunctions1(WizardStep, FORM_CLASS):
         """
         return bool(self.tblFunctions1.selectedItems())
 
-    def get_previous_step(self):
-        """Find the proper step when user clicks the Previous button.
-
-        :returns: The step to be switched to
-        :rtype: WizardStep instance or None
-        """
-        return None
-
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.
 

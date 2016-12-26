@@ -47,19 +47,6 @@ class StepFcExpLayerOrigin(WizardStep, FORM_CLASS):
         return (bool(self.rbExpLayerFromCanvas.isChecked() or
                      self.rbExpLayerFromBrowser.isChecked()))
 
-    def get_previous_step(self):
-        """Find the proper step when user clicks the Previous button.
-
-        :returns: The step to be switched to
-        :rtype: WizardStep instance or None
-        """
-        if self.parent.step_fc_hazlayer_origin.rbHazLayerFromCanvas.\
-                isChecked():
-            new_step = self.parent.step_fc_hazlayer_from_canvas
-        else:
-            new_step = self.parent.step_fc_hazlayer_from_browser
-        return new_step
-
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.
 

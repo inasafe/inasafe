@@ -41,21 +41,6 @@ class StepFcDisjointLayers(WizardStep, FORM_CLASS):
         # Never go further if layers disjoint!
         return False
 
-    def get_previous_step(self):
-        """Find the proper step when user clicks the Previous button.
-
-        :returns: The step to be switched to
-        :rtype: WizardStep instance or None
-        """
-        # pylint: disable=unreachable
-        if self.parent.step_fc_explayer_origin.rbExpLayerFromCanvas.\
-                isChecked():
-            new_step = self.parent.step_fc_explayer_from_canvas
-        # pylint: enable=unreachable
-        else:
-            new_step = self.parent.step_fc_explayer_from_browser
-        return new_step
-
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.
 
