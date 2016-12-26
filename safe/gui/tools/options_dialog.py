@@ -517,6 +517,11 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             qsetting_default_value = get_inasafe_default_value_qsetting(
                 self.settings, GLOBAL, default_field['key'])
 
+            # To avoid python error
+            if qsetting_default_value > parameter.maximum_allowed_value:
+                qsetting_default_value = parameter.maximum_allowed_value
+            if qsetting_default_value < parameter.minimum_allowed_value:
+                qsetting_default_value = parameter.minimum_allowed_value
             parameter.value = qsetting_default_value
             LOGGER.debug('global value for %s: %s' % (
                 parameter.name, parameter.value))
