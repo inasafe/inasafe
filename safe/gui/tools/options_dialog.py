@@ -284,6 +284,9 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             'inasafe/ISO19115_LICENSE',
             self.iso19115_license_le.text())
 
+        # Save InaSAFE default values
+        self.save_default_values()
+
     def accept(self):
         """Method invoked when OK button is clicked."""
         self.save_state()
@@ -501,18 +504,22 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
                 LOGGER.exception(message)
                 continue
 
+            parameter.guid = default_field.get('key')
             parameter.name = default_value.get('name')
             parameter.is_required = True
             parameter.precision = default_field.get('precision')
             parameter.minimum_allowed_value = default_value.get(
                 'min_value', 0)
             parameter.maximum_allowed_value = default_value.get(
-                'max_value', 100)
+                'max_value', 100000000)
             parameter.help_text = default_value.get('description')
             # Current value
-            get_inasafe_default_value_qsetting(
+            qsetting_default_value = get_inasafe_default_value_qsetting(
                 self.settings, GLOBAL, default_field['key'])
-            parameter.value = default_value.get('default_value')
+
+            parameter.value = qsetting_default_value
+            LOGGER.debug('global value for %s: %s' % (
+                parameter.name, parameter.value))
 
             self.default_value_parameters.append(parameter)
 
@@ -522,3 +529,16 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         self.default_value_parameter_container.setup_ui()
         self.default_values_layout.addWidget(
             self.default_value_parameter_container)
+
+    def save_default_values(self):
+        """Save InaSAFE default values."""
+        parameters = self.default_value_parameter_container.get_parameters()
+        for parameter in parameters:
+            LOGGER.debug('Parameter %s: value: %s' % (
+                parameter.guid, parameter.value))
+            set_inasafe_default_value_qsetting(
+                self.settings,
+                GLOBAL,
+                parameter.guid,
+                parameter.value
+            )
