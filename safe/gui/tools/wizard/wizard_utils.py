@@ -173,7 +173,7 @@ def set_inasafe_default_value_qsetting(
     :param category: Category of the default value. It can be global or
         recent. Global means the global setting for default value. Recent
         means the last set custom for default value from the user.
-    :type value: str
+    :type category: str
 
     :param inasafe_field_key: Key for the field.
     :type inasafe_field_key: str
@@ -183,6 +183,7 @@ def set_inasafe_default_value_qsetting(
 
     """
     key = 'inasafe/default_value/%s/%s' % (category, inasafe_field_key)
+    LOGGER.debug('Save to QSettings: %s value: %s' % (key, value))
     qsetting.setValue(key, value)
 
 
@@ -196,7 +197,7 @@ def get_inasafe_default_value_qsetting(
     :param category: Category of the default value. It can be global or
         recent. Global means the global setting for default value. Recent
         means the last set custom for default value from the user.
-    :type value: str
+    :type category: str
 
     :param inasafe_field_key: Key for the field.
     :type inasafe_field_key: str
@@ -205,6 +206,7 @@ def get_inasafe_default_value_qsetting(
     :rtype: float
     """
     key = 'inasafe/default_value/%s/%s' % (category, inasafe_field_key)
+    LOGGER.debug('Read from QSettings: %s' % key)
     default_value = qsetting.value(key)
     if default_value is None:
         if category == GLOBAL:
