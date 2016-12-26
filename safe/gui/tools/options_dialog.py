@@ -522,9 +522,8 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
                 qsetting_default_value = parameter.maximum_allowed_value
             if qsetting_default_value < parameter.minimum_allowed_value:
                 qsetting_default_value = parameter.minimum_allowed_value
+
             parameter.value = qsetting_default_value
-            LOGGER.debug('global value for %s: %s' % (
-                parameter.name, parameter.value))
 
             self.default_value_parameters.append(parameter)
 
@@ -539,8 +538,6 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         """Save InaSAFE default values."""
         parameters = self.default_value_parameter_container.get_parameters()
         for parameter in parameters:
-            LOGGER.debug('Parameter %s: value: %s' % (
-                parameter.guid, parameter.value))
             set_inasafe_default_value_qsetting(
                 self.settings,
                 GLOBAL,
