@@ -139,6 +139,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.busy = False
 
         # Values for settings these get set in read_settings.
+        self.settings = QSettings()
         self.show_only_visible_layers_flag = None
         self.set_layer_from_title_flag = None
         self.zoom_to_impact_flag = None
@@ -218,15 +219,14 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         Do this on init and after changing options in the options dialog.
         """
-
-        settings = QSettings()
-
-        flag = bool(settings.value(
+        flag = bool(self.settings.value(
             'inasafe/showRubberBands', False, type=bool))
         self.extent.show_rubber_bands = flag
         try:
-            extent = settings.value('inasafe/analysis_extent', '', type=str)
-            crs = settings.value('inasafe/analysis_extent_crs', '', type=str)
+            extent = self.settings.value(
+                'inasafe/analysis_extent', '', type=str)
+            crs = self.settings.value(
+                'inasafe/analysis_extent_crs', '', type=str)
         except TypeError:
             # Any bogus stuff in settings and we just clear them
             extent = ''
@@ -246,34 +246,34 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         self.draw_rubber_bands()
 
-        flag = settings.value(
+        flag = self.settings.value(
             'inasafe/visibleLayersOnlyFlag', True, type=bool)
         self.show_only_visible_layers_flag = flag
 
-        flag = settings.value(
+        flag = self.settings.value(
             'inasafe/set_layer_from_title_flag', True, type=bool)
         self.set_layer_from_title_flag = flag
 
-        flag = settings.value(
+        flag = self.settings.value(
             'inasafe/setZoomToImpactFlag', True, type=bool)
         self.zoom_to_impact_flag = flag
         # whether exposure layer should be hidden after model completes
-        flag = settings.value(
+        flag = self.settings.value(
             'inasafe/setHideExposureFlag', False, type=bool)
         self.hide_exposure_flag = flag
 
         # whether to show or not dev only options
-        self.developer_mode = settings.value(
+        self.developer_mode = self.settings.value(
             'inasafe/developer_mode', False, type=bool)
 
         # whether to show or not a custom Logo
-        self.organisation_logo_path = settings.value(
+        self.organisation_logo_path = self.settings.value(
             'inasafe/organisation_logo_path',
             supporters_logo_path(),
             type=str)
 
         # Changed default to False for new users in 3.2 - see #2171
-        show_logos_flag = bool(settings.value(
+        show_logos_flag = bool(self.settings.value(
             'inasafe/showOrganisationLogoInDockFlag', False, type=bool))
 
         # Flag to check valid organization logo
@@ -343,7 +343,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     'provide valid file for organization logo.'
                 ), QtGui.QMessageBox.Ok)
         if logo_not_exist or invalid_logo_size:
-            settings.setValue(
+            self.settings.setValue(
                 'inasafe/organisation_logo_path',
                 supporters_logo_path())
 
@@ -761,8 +761,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.extent.show_rubber_bands = flag
         # Temporary disable until we fix the dock in inasafe v4.
         self.extent.show_rubber_bands = False
-        settings = QSettings()
-        settings.setValue('inasafe/showRubberBands', flag)
+        self.settings.setValue('inasafe/showRubberBands', flag)
         if not flag:
             self.extent.hide_last_analysis_extent()  # red
             self.extent.hide_next_analysis_extent()  # green
@@ -773,9 +772,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
     @pyqtSlot()
     def draw_rubber_bands(self):
         """Draw any rubber bands that are enabled."""
-        settings = QSettings()
         try:
-            flag = settings.value('inasafe/showRubberBands', type=bool)
+            flag = self.settings.value('inasafe/showRubberBands', type=bool)
         except TypeError:
             flag = False
         if flag:
@@ -920,7 +918,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         if aggregation:
             impact_function.aggregation = aggregation
             impact_function.use_selected_features_only = (
-                bool(QSettings().value(
+                bool(self.settings.value(
                     'inasafe/useSelectedFeaturesOnly', False, type=bool)))
         else:
             if self.extent.user_extent:
@@ -1285,7 +1283,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         .. versionadded:: 2.1.0
         """
-        settings = QSettings()
         self.extent.hide_next_analysis_extent()
         # check if we actually have correct hazard, exposure and IF
         # if we don't we exit immediately to avoid cluttering up the display
@@ -1301,7 +1298,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         valid, extents = True, None
         if valid:
             self.extent.show_next_analysis_extent(extents)
-            show_confirmations = settings.value(
+            show_confirmations = self.settings.value(
                 'inasafe/show_extent_confirmations',
                 True,
                 type=bool)
@@ -1329,7 +1326,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             if layer_count == 0:
                 send_static_message(self, getting_started_message())
             else:
-                show_warnings = settings.value(
+                show_warnings = self.settings.value(
                     'inasafe/show_extent_warnings',
                     True,
                     type=bool)
