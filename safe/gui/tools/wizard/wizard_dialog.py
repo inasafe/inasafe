@@ -33,8 +33,8 @@ from safe.gui.tools.wizard.wizard_strings import (
     category_question_exposure,
     category_question_aggregation)
 from safe.gui.tools.wizard.wizard_utils import (
-    layer_description_html,
-    set_inasafe_default_value_qsetting)
+    layer_description_html)
+from utilities.settings import set_inasafe_default_value_qsetting
 from safe.utilities.gis import (
     is_raster_layer,
     is_point_layer,
