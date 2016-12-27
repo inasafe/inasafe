@@ -41,5 +41,8 @@ ANALYSIS_SUCCESS = 0
 ANALYSIS_FAILED_BAD_INPUT = 3
 ANALYSIS_FAILED_BAD_CODE = 4
 
+# GLOBAL is to indicate that a setting is stored as a global default
 GLOBAL = 'global'
+# RECENT is to indicate that a setting is stored as a recent input from the
+# user
 RECENT = 'recent'
