@@ -292,6 +292,7 @@ hazard_volcano = {
     'continuous_hazard_units': [],
     'allowed_geometries': [
         'polygon',
+        'raster'
     ],
     'classifications': [volcano_hazard_classes, generic_hazard_classes],
     'compulsory_fields': [hazard_value_field],
