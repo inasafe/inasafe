@@ -196,7 +196,7 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
             # impact_function.requested_extent = self.extent.user_extent
             # impact_function.requested_extent = self.extent.user_extent_crs
 
-            map_settings = self.iface.mapCanvas().mapSettings()
+            map_settings = self.parent.iface.mapCanvas().mapSettings()
             impact_function.viewport_extent = map_settings.fullExtent()
             impact_function._viewport_extent_crs = (
                 map_settings.destinationCrs())

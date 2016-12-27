@@ -185,9 +185,17 @@ class StepFcFunctions2(WizardStep, FORM_CLASS):
                 hc = hazard_layer_geometries[col]
                 ec = exposure_layer_geometries[row]
                 item = QtGui.QTableWidgetItem()
-                bgcolor = QtGui.QColor(120, 255, 120)
-                active_items += [item]
-                item.setBackground(QtGui.QBrush(bgcolor))
+
+                if (hc['key'] in h['allowed_geometries'] and ec['key'] in e[
+                        'allowed_geometries']):
+                    background_color = QtGui.QColor(120, 255, 120)
+                    active_items += [item]
+                else:
+                    background_color = QtGui.QColor(220, 220, 220)
+                    item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEnabled)
+                    item.setFlags(item.flags() & ~QtCore.Qt.ItemIsSelectable)
+
+                item.setBackground(QtGui.QBrush(background_color))
                 item.setFont(big_font)
                 item.setTextAlignment(
                     QtCore.Qt.AlignCenter | QtCore.Qt.AlignHCenter)
