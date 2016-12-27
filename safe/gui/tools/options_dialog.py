@@ -28,9 +28,7 @@ from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.resources import get_ui_class, html_header, html_footer
 from safe.common.version import get_version
 from safe.gui.tools.help.options_help import options_help
-from safe.gui.tools.wizard.wizard_utils import (
-    get_inasafe_default_value_qsetting
-)
+
 from utilities.settings import set_inasafe_default_value_qsetting, \
     get_inasafe_default_value_qsetting
 
