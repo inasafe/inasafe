@@ -109,6 +109,7 @@ class TestDefinitionsUtilities(unittest.TestCase):
             hazard_tsunami,
             hazard_earthquake,
             hazard_volcanic_ash,
+            hazard_volcano,
             hazard_generic
         ]
         self.assertItemsEqual(hazards, expected)
