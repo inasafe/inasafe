@@ -162,33 +162,35 @@ def get_fields(layer_purpose, layer_subcategory=None, replace_null=None):
     :returns: List of fields.
     :rtype: list
     """
-    fields = []
+    fields_for_purpose = []
     if layer_purpose == layer_purpose_exposure['key']:
         if layer_subcategory:
             subcategory = definition(layer_subcategory)
-            fields += subcategory['compulsory_fields']
-            fields += subcategory['fields']
-            fields += subcategory['extra_fields']
+            fields_for_purpose += subcategory['compulsory_fields']
+            fields_for_purpose += subcategory['fields']
+            fields_for_purpose += subcategory['extra_fields']
         else:
-            fields = deepcopy(exposure_fields)
+            fields_for_purpose = deepcopy(exposure_fields)
     elif layer_purpose == layer_purpose_hazard['key']:
         if layer_subcategory:
             subcategory = definition(layer_subcategory)
-            fields += subcategory['compulsory_fields']
-            fields += subcategory['fields']
-            fields += subcategory['extra_fields']
+            fields_for_purpose += subcategory['compulsory_fields']
+            fields_for_purpose += subcategory['fields']
+            fields_for_purpose += subcategory['extra_fields']
         else:
-            fields = deepcopy(hazard_fields)
+            fields_for_purpose = deepcopy(hazard_fields)
     elif layer_purpose == layer_purpose_aggregation['key']:
-        fields = deepcopy(aggregation_fields)
+        fields_for_purpose = deepcopy(aggregation_fields)
     elif layer_purpose == layer_purpose_exposure_impacted['key']:
-        fields = deepcopy(impact_fields)
+        fields_for_purpose = deepcopy(impact_fields)
 
     if isinstance(replace_null, bool):
-        fields = [f for f in fields if f.get('replace_null') == replace_null]
-        return fields
+        fields_for_purpose = [
+            f for f in fields_for_purpose
+            if f.get('replace_null') == replace_null]
+        return fields_for_purpose
     else:
-        return fields
+        return fields_for_purpose
 
 
 def get_compulsory_fields(layer_purpose, layer_subcategory=None):
