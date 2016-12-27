@@ -9,9 +9,10 @@ from PyQt4.QtCore import QSettings
 from safe.definitionsv4.constants import zero_default_value, RECENT, GLOBAL
 from safe.gui.tools.wizard.wizard_utils import (
     get_question_text,
-    get_inasafe_default_value_qsetting,
-    set_inasafe_default_value_qsetting
+    get_inasafe_default_value_qsetting
 )
+from utilities.settings import set_inasafe_default_value_qsetting, \
+    get_inasafe_default_value_qsetting
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

@@ -221,25 +221,6 @@ def age_postprocessor():
     return [age]
 
 
-def road_type_postprocessor():
-    """Get road-type parameter for postprocessing.
-
-    :return: A list of boolean parameter.
-    :rtype: list
-    """
-    road_type = BooleanParameter()
-    road_type.name = tr('Road type')
-    road_type.value = True
-    road_type.help_text = tr(
-        'Road breakdown by type.')
-    road_type.description = tr(
-        'Check this option if you want to enable a road impact report broken '
-        'down by road type.'
-    )
-
-    return [road_type]
-
-
 def building_type_postprocessor():
     """Get building-type parameter for postprocessing.
 

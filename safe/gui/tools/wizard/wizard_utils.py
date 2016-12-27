@@ -1,15 +1,15 @@
 # coding=utf-8
 """Wizard Utilities Functions"""
 
-import re
 import logging
+import re
 from PyQt4 import QtCore
 
 from qgis.core import QgsCoordinateTransform
 
 import safe.gui.tools.wizard.wizard_strings
 from safe.common.version import get_version
-from safe.definitionsv4 import settings
+from safe.definitionsv4.constants import RECENT, GLOBAL
 from safe.definitionsv4.layer_modes import layer_mode_classified
 from safe.definitionsv4.layer_purposes import (
     layer_purpose_exposure, layer_purpose_hazard)
@@ -17,7 +17,7 @@ from safe.utilities.gis import (
     is_raster_layer, is_point_layer, is_polygon_layer)
 from safe.utilities.i18n import tr
 from safe.utilities.utilities import is_keyword_version_supported
-from safe.definitionsv4.constants import zero_default_value, RECENT, GLOBAL
+from utilities.settings import get_inasafe_default_value_qsetting
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -163,64 +163,7 @@ def layer_description_html(layer, keywords=None):
     return desc
 
 
-def set_inasafe_default_value_qsetting(
-        qsetting, category, inasafe_field_key, value):
-    """Helper method to set inasafe default value to qsetting.
-
-    :param qsetting: QSettings
-    :type qsetting: QSettings
-
-    :param category: Category of the default value. It can be global or
-        recent. Global means the global setting for default value. Recent
-        means the last set custom for default value from the user.
-    :type category: str
-
-    :param inasafe_field_key: Key for the field.
-    :type inasafe_field_key: str
-
-    :param value: Value of the inasafe_default_value.
-    :type value: float, int
-
-    """
-    key = 'inasafe/default_value/%s/%s' % (category, inasafe_field_key)
-    LOGGER.debug('Save to QSettings: %s value: %s' % (key, value))
-    qsetting.setValue(key, value)
-
-
-def get_inasafe_default_value_qsetting(
-        qsetting, category, inasafe_field_key):
-    """Helper method to get the inasafe default value from qsetting.
-
-    :param qsetting: QSetting
-    :type qsetting: QSetting
-
-    :param category: Category of the default value. It can be global or
-        recent. Global means the global setting for default value. Recent
-        means the last set custom for default value from the user.
-    :type category: str
-
-    :param inasafe_field_key: Key for the field.
-    :type inasafe_field_key: str
-
-    :returns: Value of the inasafe_default_value.
-    :rtype: float
-    """
-    key = 'inasafe/default_value/%s/%s' % (category, inasafe_field_key)
-    LOGGER.debug('Read from QSettings: %s' % key)
-    default_value = qsetting.value(key)
-    if default_value is None:
-        if category == GLOBAL:
-            # If empty for global setting, use default one.
-            return settings.default_values.get(
-                'inasafe_field_key', zero_default_value)
-        return zero_default_value
-    try:
-        return float(default_value)
-    except ValueError:
-        return zero_default_value
-
-
-def get_defaults(qsetting, field_key):
+def get_inasafe_default_value_fields(qsetting, field_key):
     """Obtain default value for a field with default value.
 
     By default it will return label list and default value list
