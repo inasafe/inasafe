@@ -77,6 +77,10 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         self.keyword_io = KeywordIO()
         self.defaults = get_defaults()
 
+        # InaSAFE default values
+        self.default_value_parameters = []
+        self.default_value_parameter_container = None
+
         # Set up things for context help
         self.help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
         # Allow toggling the help button
@@ -101,11 +105,6 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             self.set_templates_dir)
         self.custom_org_disclaimer_checkbox.toggled.connect(
             self.set_org_disclaimer)
-
-        # InaSAFE default values
-        self.default_value_parameters = []
-        self.default_value_parameter_container = None
-        self.setup_default_values_page()
 
     def restore_state(self):
         """Reinstate the options based on the user's stored session info.
@@ -139,9 +138,6 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         flag = bool(self.settings.value(
             'inasafe/useSentry', False, type=bool))
         self.cbxUseSentry.setChecked(flag)
-
-        ratio = self.defaults['FEMALE_RATIO']
-        self.dsbFemaleRatioDefault.setValue(ratio)
 
         path = self.settings.value(
             'inasafe/keywordCachePath',
@@ -217,6 +213,9 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         value = self.defaults['ISO19115_LICENSE']
         self.iso19115_license_le.setText(value)
 
+        # Restore InaSAFE default values
+        self.restore_default_values_page()
+
     def save_state(self):
         """Store the options into the user's stored session info.
         """
@@ -240,9 +239,6 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         self.settings.setValue(
             'inasafe/useSentry',
             self.cbxUseSentry.isChecked())
-        self.settings.setValue(
-            'inasafe/defaultFemaleRatio',
-            self.dsbFemaleRatioDefault.value())
         self.settings.setValue(
             'inasafe/keywordCachePath',
             self.leKeywordCachePath.text())
@@ -490,7 +486,7 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
 
         self.help_web_view.setHtml(string)
 
-    def setup_default_values_page(self):
+    def restore_default_values_page(self):
         """Setup UI for default values setting."""
         default_fields = all_default_fields()
         for default_field in default_fields:

@@ -1,24 +1,5 @@
 # coding=utf-8
-"""**SAFE (Scenario Assessment For Emergencies) - API**
-
-The purpose of the module is to provide a well defined public API
-for the packages that constitute the SAFE engine. Modules using SAFE
-should only need to import functions from here.
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
-
-__author__ = 'marco@opengis.ch'
-__revision__ = '$Format:%H$'
-__date__ = '05/10/2012'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
+"""InaSAFE Defaults"""
 
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
@@ -34,6 +15,20 @@ from safe_extras.parameters.group_parameter import GroupParameter
 from safe_extras.parameters.text_parameter import TextParameter
 from safe_extras.parameters.unit import Unit
 
+from safe.definitionsv4.fields import (
+    female_ratio_field,
+    youth_ratio_field,
+    adult_ratio_field,
+    elderly_ratio_field
+)
+from safe.utilities.settings import get_inasafe_default_value_qsetting
+from safe.definitionsv4.constants import GLOBAL
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
+
 
 def define_defaults():
     """Define standard defaults such as age ratios etc.
@@ -43,50 +38,18 @@ def define_defaults():
     """
     settings = QSettings()
     defaults = dict()
-    # https://www.cia.gov/library/publications/the-world-factbook/geos/xx.html
-    # total population: 1.01 male(s)/female (2011 est.)
-    female_ratio = 0.50
-    value = settings.value(
-        'inasafe/defaultFemaleRatio', female_ratio, type=float)
-    defaults['FEMALE_RATIO'] = float(value)
 
-    # https://www.cia.gov/library/publications/the-world-factbook/geos/xx.html
-    # Age structure:
-    # 0-14 years: 26.3% (male 944,987,919/female 884,268,378)
-    # 15-64 years: 65.9% (male 2,234,860,865/female 2,187,838,153)
-    # 65 years and over: 7.9% (male 227,164,176/female 289,048,221) (2011 est.)
+    defaults['FEMALE_RATIO'] = get_inasafe_default_value_qsetting(
+        settings, GLOBAL, female_ratio_field['key'])
 
-    # NOTE (MB) CIA can not do maths!!!  this gives 100.1%
-    # inaSAFE can, thus we remove 0.1% from the elderly
-    # I wrote them and got this contact confirmation number: CTCU1K2
+    defaults['YOUTH_RATIO'] = get_inasafe_default_value_qsetting(
+        settings, GLOBAL, youth_ratio_field['key'])
 
-    # Default ratios for world population revised 21 December 2016.
-    # https://www.cia.gov/library/publications/resources/the-world-factbook/fields/2010.html#4
+    defaults['ADULT_RATIO'] = get_inasafe_default_value_qsetting(
+        settings, GLOBAL, adult_ratio_field['key'])
 
-    # 0-14 years: 25.44% (male 963,981,944/female 898,974,458)
-    # 15-24 years: 16.16% (male 611,311,930/female 572,229,547)
-    # 25-54 years: 41.12% (male 1,522,999,578/female 1,488,011,505)
-    # 55-64 years: 8.6% (male 307,262,939/female 322,668,546)
-    # 65 years and over: 8.68% (male 283,540,918/female 352,206,092)(2016 est.)
-
-    # if CM can add up then youth 0.254; adult 0.659; elderly 0.087
-
-    # Updated from 0.263 to 0.254 in InaSAFE 4.0
-    youth_ratio = 0.254
-    value = settings.value(
-        'inasafe/defaultYouthRatio', youth_ratio, type=float)
-    defaults['YOUTH_RATIO'] = float(value)
-
-    adult_ratio = 0.659
-    value = settings.value(
-        'inasafe/defaultAdultRatio', adult_ratio, type=float)
-    defaults['ADULT_RATIO'] = float(value)
-
-    # Updated from 0.078 to 0.087 in InaSAFE 4.0
-    elderly_ratio = 0.087
-    value = settings.value(
-        'inasafe/defaultElderlyRatio', elderly_ratio, type=float)
-    defaults['ELDERLY_RATIO'] = float(value)
+    defaults['ELDERLY_RATIO'] = get_inasafe_default_value_qsetting(
+        settings, GLOBAL, elderly_ratio_field['key'])
 
     # Keywords key names
     defaults['FEMALE_RATIO_ATTR_KEY'] = 'female ratio attribute'
