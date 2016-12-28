@@ -1,10 +1,10 @@
 # coding=utf-8
+"""Utilities module for helping definitions retrieval."""
 
-"""Utilities module for helping definitions retrieval.
-"""
 from copy import deepcopy
 
 from safe import definitionsv4
+from safe.definitionsv4 import fields
 from safe.definitionsv4 import (
     layer_purposes,
     hazard_all,
@@ -280,3 +280,19 @@ def get_allowed_geometries(layer_purpose_key):
     allowed_geometries_definition.sort(key=lambda x: order_dict[x["key"]])
 
     return allowed_geometries_definition
+
+
+def all_default_fields():
+    """Helper to retrieve all fields which has default value.
+
+    :returns: List of default fields.
+    :rtype: list
+    """
+    default_fields = []
+    for item in dir(fields):
+        if not item.startswith("__"):
+            var = getattr(definitionsv4, item)
+            if isinstance(var, dict):
+                if var.get('replace_null', False):
+                    default_fields.append(var)
+    return default_fields
