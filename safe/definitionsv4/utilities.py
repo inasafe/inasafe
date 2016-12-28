@@ -253,6 +253,12 @@ def get_allowed_geometries(layer_purpose_key):
     :returns: List of all allowed geometries.
     :rtype: list
     """
+    preferred_order = [
+        'point',
+        'line',
+        'polygon',
+        'raster'
+    ]
     allowed_geometries = set()
     all_layer_type = []
     if layer_purpose_key == layer_purpose_hazard['key']:
@@ -268,4 +274,9 @@ def get_allowed_geometries(layer_purpose_key):
     allowed_geometries_definition = []
     for allowed_geometry in allowed_geometries:
         allowed_geometries_definition.append(definition(allowed_geometry))
-    return sorted(allowed_geometries_definition)
+
+    # Adapted from http://stackoverflow.com/a/15650556/1198772
+    order_dict = {color: index for index, color in enumerate(preferred_order)}
+    allowed_geometries_definition.sort(key=lambda x: order_dict[x["key"]])
+
+    return allowed_geometries_definition

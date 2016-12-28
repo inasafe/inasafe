@@ -201,11 +201,13 @@ class TestDefinitionsUtilities(unittest.TestCase):
         allowed_geometries = get_allowed_geometries(
             layer_purpose_exposure['key'])
         expected = [
-            layer_geometry_line,
             layer_geometry_point,
+            layer_geometry_line,
             layer_geometry_polygon,
             layer_geometry_raster
         ]
+        print [x['key'] for x in expected]
+        print [x['key'] for x in allowed_geometries]
         self.assertEqual(allowed_geometries, expected)
 
 if __name__ == '__main__':
