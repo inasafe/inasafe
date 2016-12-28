@@ -15,7 +15,6 @@ from safe.definitionsv4 import (
     exposure_structure,
     hazard_category_single_event,
     hazard_category_multiple_event,
-    density_exposure_unit,
     count_exposure_unit,
     unit_metres,
     unit_feet,
@@ -43,7 +42,8 @@ from safe.definitionsv4.utilities import (
     exposure_units,
     get_fields,
     get_classifications,
-    get_allowed_geometries
+    get_allowed_geometries,
+    all_default_fields
 )
 
 
@@ -209,6 +209,12 @@ class TestDefinitionsUtilities(unittest.TestCase):
         print [x['key'] for x in expected]
         print [x['key'] for x in allowed_geometries]
         self.assertEqual(allowed_geometries, expected)
+
+    def test_all_default_fields(self):
+        """Test all_default_fields method."""
+        default_fields = all_default_fields()
+        for default_field in default_fields:
+            self.assertTrue(default_field.get('replace_null'), False)
 
 if __name__ == '__main__':
     unittest.main()
