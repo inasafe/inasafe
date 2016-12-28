@@ -52,7 +52,7 @@ def resources_path(*args):
     favour of directly accessing on-disk resources.
 
     :param args List of path elements e.g. ['img', 'logos', 'image.png']
-    :type args: str
+    :type args: list[str]
 
     :return: Absolute path to the resources folder.
     :rtype: str
