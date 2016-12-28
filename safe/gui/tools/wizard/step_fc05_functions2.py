@@ -113,8 +113,8 @@ class StepFcFunctions2(WizardStep, FORM_CLASS):
         selection = self.tblFunctions2.selectedItems()
         selItem = (len(selection) == 1) and selection[0] or None
         for row in range(self.tblFunctions2.rowCount()):
-            for col in range(self.tblFunctions2.columnCount()):
-                item = self.tblFunctions2.item(row, col)
+            for column in range(self.tblFunctions2.columnCount()):
+                item = self.tblFunctions2.item(row, column)
                 item.setText((item == selItem) and u'\u2022' or '')
 
     # pylint: disable=W0613
@@ -162,9 +162,9 @@ class StepFcFunctions2(WizardStep, FORM_CLASS):
             QtGui.QHeaderView.Stretch)
 
         active_items = []
-        for col in range(len(hazard_layer_geometries)):
+        for column in range(len(hazard_layer_geometries)):
             for row in range(len(exposure_layer_geometries)):
-                hazard_geometry = hazard_layer_geometries[col]
+                hazard_geometry = hazard_layer_geometries[column]
                 exposure_geometry = exposure_layer_geometries[row]
                 item = QtGui.QTableWidgetItem()
 
@@ -190,7 +190,7 @@ class StepFcFunctions2(WizardStep, FORM_CLASS):
                 item.setData(RoleExposure, exposure)
                 item.setData(RoleHazardConstraint, hazard_geometry)
                 item.setData(RoleExposureConstraint, exposure_geometry)
-                self.tblFunctions2.setItem(row, col, item)
+                self.tblFunctions2.setItem(row, column, item)
         # Automatically select one item...
         if len(active_items) == 1:
             active_items[0].setSelected(True)

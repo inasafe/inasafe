@@ -198,7 +198,7 @@ def get_compulsory_fields(layer_purpose, layer_subcategory=None):
     :type layer_purpose: str
 
     :returns: Compulsory field
-    :rtype: str
+    :rtype: dict
     """
     if not layer_subcategory:
         if layer_purpose == 'hazard':

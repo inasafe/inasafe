@@ -91,7 +91,6 @@ FORM_CLASS = get_ui_class('wizard/wizard_dialog_base.ui')
 
 
 class WizardDialog(QDialog, FORM_CLASS):
-
     """Dialog implementation class for the InaSAFE wizard."""
 
     def __init__(self, parent=None, iface=None, dock=None):
@@ -326,19 +325,20 @@ class WizardDialog(QDialog, FORM_CLASS):
         """Obtain impact function constraints selected by user.
 
         :returns: Tuple of metadata of hazard, exposure,
-            hazard layer constraints and exposure layer constraints
+            hazard layer geometry and exposure layer geometry
         :rtype: tuple
         """
 
-        h = self.step_fc_functions1.selected_value(layer_purpose_hazard['key'])
-        e = self.step_fc_functions1.selected_value(
+        hazard = self.step_fc_functions1.selected_value(
+            layer_purpose_hazard['key'])
+        exposure = self.step_fc_functions1.selected_value(
             layer_purpose_exposure['key'])
 
-        hc = self.step_fc_functions2.selected_value(
+        hazard_geometry = self.step_fc_functions2.selected_value(
             layer_purpose_hazard['key'])
-        ec = self.step_fc_functions2.selected_value(
+        exposure_geometry = self.step_fc_functions2.selected_value(
             layer_purpose_exposure['key'])
-        return h, e, hc, ec
+        return hazard, exposure, hazard_geometry, exposure_geometry
 
     def is_layer_compatible(self, layer, layer_purpose=None, keywords=None):
         """Validate if a given layer is compatible for selected IF
