@@ -23,10 +23,10 @@ Story queue on Waffle:
 [![Throughput Graph](https://graphs.waffle.io/aifdr/inasafe/throughput.svg)](https://waffle.io/aifdr/inasafe/metrics)
 
 * Current test status master: [![Build Status](https://travis-ci.org/inasafe/inasafe.svg?branch=master)](https://travis-ci.org/inasafe/inasafe) and
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/AIFDR/inasafe/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/AIFDR/inasafe/?branch=master)
+[![Code Health](https://landscape.io/github/inasafe/inasafe/master/landscape.svg?style=flat)](https://landscape.io/github/inasafe/inasafe/master)
 
 * Current test status develop: [![Build Status](https://travis-ci.org/inasafe/inasafe.svg?branch=develop)](https://travis-ci.org/inasafe/inasafe) and
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/AIFDR/inasafe/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/AIFDR/inasafe/?branch=develop)
+[![Code Health](https://landscape.io/github/inasafe/inasafe/develop/landscape.svg?style=flat)](https://landscape.io/github/inasafe/inasafe/develop)
 
 
 PyPi Downloads for the 'safe' library (currently pip package is unmaintained):
