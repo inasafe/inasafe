@@ -26,7 +26,6 @@ from .item.image import Image
 from .item.heading import Heading
 from .item.paragraph import Paragraph
 from .item.success_paragraph import SuccessParagraph
-from .item.table import Table
 from .item.numbered_list import NumberedList
 from .item.bulleted_list import BulletedList
 from .item.cell import Cell
