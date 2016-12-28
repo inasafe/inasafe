@@ -232,7 +232,7 @@ def standard_data_path(*args):
     :param args: List of path e.g. ['control', 'files',
         'test-error-message.txt'] or ['control', 'scenarios'] to get the path
         to scenarios dir.
-    :type args: str
+    :type args: list[str]
 
     :return: Absolute path to the test data or dir path.
     :rtype: str
