@@ -4,10 +4,6 @@
 import unittest
 import logging
 
-# This import is to enable SIP API V2
-# noinspection PyUnresolvedReferences
-import qgis  # pylint: disable=unused-import
-
 from safe.gui.tools.options_dialog import OptionsDialog
 from safe.test.utilities import get_qgis_app
 
@@ -20,8 +16,8 @@ class TestOptionsDialog(unittest.TestCase):
 
     def test_setup_dialog(self):
         """Test Setup Options Dialog."""
-        dialog = OptionsDialog(PARENT, IFACE)
-        pass
+        dialog = OptionsDialog(PARENT, IFACE, qsetting='InaSAFETest')
+        self.assertIsNotNone(dialog)
 
 
 if __name__ == '__main__':
