@@ -1,10 +1,8 @@
 # coding=utf-8
 from safe.common.parameters.resource_parameter import ResourceParameter
-from safe.definitionsv4.exposure import exposure_population
-from safe.definitionsv4.fields import total_affected_field, \
-    population_count_field
-from safe.definitionsv4.minimum_needs import minimum_needs_fields, \
-    minimum_needs_namespace
+from safe.definitionsv4.minimum_needs import (
+    minimum_needs_fields,
+    minimum_needs_namespace)
 from safe.reportv4.extractors.util import round_affecter_number
 from safe.utilities.i18n import tr
 

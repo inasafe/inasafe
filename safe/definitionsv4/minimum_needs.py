@@ -45,7 +45,7 @@ def _normalize_field_name(value):
     return return_value.lower()
 
 
-def initializes_minimum_needs_fields():
+def _initializes_minimum_needs_fields():
     """Initialize minimum needs fields.
 
     Minimum needs definitions are taken from currently used profile.
@@ -54,9 +54,7 @@ def initializes_minimum_needs_fields():
     needs_profile.load()
     fields = []
 
-    for n in needs_profile.get_needs_parameters():
-        need_parameter = n
-        """:type: ResourceParameter"""
+    for need_parameter in needs_profile.get_needs_parameters():
         if isinstance(need_parameter, ResourceParameter):
             format_args = {
                 'namespace': minimum_needs_namespace,
@@ -108,7 +106,7 @@ def minimum_needs_field(field_key):
     return None
 
 
-def minimum_needs_parameter(field={'key': None}, parameter_name=None):
+def minimum_needs_parameter(field=None, parameter_name=None):
     """Get minimum needs parameter from a given field.
 
     :param field: Field provided
@@ -120,21 +118,35 @@ def minimum_needs_parameter(field={'key': None}, parameter_name=None):
     :return: Need paramter
     :rtype: ResourceParameter
     """
-    if field['key']:
-        for f in minimum_needs_fields:
-            if f['key'] == field['key']:
-                return f['need_parameter']
-    elif parameter_name:
-        for f in minimum_needs_fields:
-            if f['need_parameter'].name == parameter_name:
-                return f['need_parameter']
+    try:
+        if field['key']:
+            for need_field in minimum_needs_fields:
+                if need_field['key'] == field['key']:
+                    return need_field['need_parameter']
+    except (TypeError, KeyError):
+        # in case field is None or field doesn't contain key.
+        # just pass
+        pass
+
+    if parameter_name:
+        for need_field in minimum_needs_fields:
+            if need_field['need_parameter'].name == parameter_name:
+                return need_field['need_parameter']
     return None
 
 
-minimum_needs_fields = initializes_minimum_needs_fields()
+minimum_needs_fields = _initializes_minimum_needs_fields()
 
 # assign all minimum needs fields to this module, so it can be recognized at
 # runtime
 
-for f in minimum_needs_fields:
-    setattr(sys.modules[__name__], f['key'], f)
+
+def _declare_minimum_fields():
+    """Declaring minimum needs so it can be recognized in module level import.
+
+    Useful so it can be recognized by safe.definitionsv4.utilities.definition
+    """
+    for field in minimum_needs_fields:
+        setattr(sys.modules[__name__], field['key'], field)
+
+_declare_minimum_fields()

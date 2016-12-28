@@ -24,7 +24,12 @@
       "info": {},
       "process":[
         "Post processor for Size Value Post Processor",
-        "Post processor for Affected Post Processor"
+        "Post processor for Affected Post Processor",
+        "Post processor for Rice",
+        "Post processor for Drinking Water",
+        "Post processor for Clean Water",
+        "Post processor for Family Kits",
+        "Post processor for Toilets"
       ]
     },
     "aggregation":{

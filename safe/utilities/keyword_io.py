@@ -421,9 +421,9 @@ class KeywordIO(QObject):
 
         # In this case the value contains a DICT that we want to present nicely
         if keyword in [
-            'value_map',
-            'inasafe_fields',
-            'inasafe_default_values']:
+                'value_map',
+                'inasafe_fields',
+                'inasafe_default_values']:
             value = self._dict_to_row(value)
         elif keyword == 'thresholds':
             value = self._threshold_to_row(value)
