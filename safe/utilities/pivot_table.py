@@ -168,7 +168,7 @@ class PivotTable(object):
     def __init__(self, flat_table,
                  row_field=None, column_field=None,
                  filter_field=None, filter_value=None,
-                 columns=None, affected_columns=[]):
+                 columns=None, affected_columns=None):
         """ Make a pivot table out of the source data
 
         :param flat_table: Flat table with input data for pivot table
@@ -201,6 +201,9 @@ class PivotTable(object):
             It has to used with column_field.
         :type affected_columns: list
         """
+
+        if affected_columns is None:
+            affected_columns = []
 
         if len(flat_table.data) == 0:
             raise ValueError('No input data')
