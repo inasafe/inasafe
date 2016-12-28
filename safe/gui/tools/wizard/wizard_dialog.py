@@ -18,6 +18,7 @@ from safe.definitionsv4.layer_modes import (
 from safe.definitionsv4.units import exposure_unit
 from safe.definitionsv4.hazard import continuous_hazard_unit
 from safe.definitionsv4.utilities import get_compulsory_fields
+from safe.definitionsv4.constants import RECENT
 
 from safe.common.exceptions import (
     HashNotFoundError,
@@ -800,4 +801,5 @@ class WizardDialog(QDialog, FORM_CLASS):
         if current_keywords.get('inasafe_default_values'):
             for key, value in \
                     current_keywords['inasafe_default_values'].items():
-                set_inasafe_default_value_qsetting(self.setting, key, value)
+                set_inasafe_default_value_qsetting(
+                    self.setting, key, RECENT, value)

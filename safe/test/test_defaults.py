@@ -35,25 +35,15 @@ class TestDefaults(unittest.TestCase):
         """Test we can get the defaults.
         """
         expected = {
-            'ADULT_RATIO_KEY': 'adult ratio default',
-            'ADULT_RATIO_ATTR_KEY': 'adult ratio attribute',
             'ADULT_RATIO': 0.659,
 
-            'FEMALE_RATIO_KEY': 'female ratio default',
-            'FEMALE_RATIO_ATTR_KEY': 'female ratio attribute',
             'FEMALE_RATIO': 0.5,
 
-            'ELDERLY_RATIO_ATTR_KEY': 'elderly ratio attribute',
-            'ELDERLY_RATIO_KEY': 'elderly ratio default',
             'ELDERLY_RATIO': 0.087,
 
             'YOUTH_RATIO': 0.254,
-            'YOUTH_RATIO_ATTR_KEY': 'youth ratio attribute',
-            'YOUTH_RATIO_KEY': 'youth ratio default',
-
             'NO_DATA': u'No data',
 
-            'AGGR_ATTR_KEY': u'aggregation attribute',
             'ISO19115_EMAIL': u'info@inasafe.org',
             'ISO19115_LICENSE': u'Free use with accreditation',
             'ISO19115_ORGANIZATION': u'InaSAFE.org',

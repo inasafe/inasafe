@@ -21,6 +21,11 @@ from safe.definitionsv4.fields import (
     adult_ratio_field,
     elderly_ratio_field
 )
+from safe.definitionsv4.default_values import (
+    youth_ratio_default_value,
+    adult_ratio_default_value,
+    elderly_ratio_default_value
+)
 from safe.utilities.settings import get_inasafe_default_value_qsetting
 from safe.definitionsv4.constants import GLOBAL
 
@@ -52,15 +57,6 @@ def define_defaults():
         settings, GLOBAL, elderly_ratio_field['key'])
 
     # Keywords key names
-    defaults['FEMALE_RATIO_ATTR_KEY'] = 'female ratio attribute'
-    defaults['FEMALE_RATIO_KEY'] = 'female ratio default'
-    defaults['YOUTH_RATIO_ATTR_KEY'] = 'youth ratio attribute'
-    defaults['YOUTH_RATIO_KEY'] = 'youth ratio default'
-    defaults['ADULT_RATIO_ATTR_KEY'] = 'adult ratio attribute'
-    defaults['ADULT_RATIO_KEY'] = 'adult ratio default'
-    defaults['ELDERLY_RATIO_ATTR_KEY'] = 'elderly ratio attribute'
-    defaults['ELDERLY_RATIO_KEY'] = 'elderly ratio default'
-    defaults['AGGR_ATTR_KEY'] = 'aggregation attribute'
     defaults['NO_DATA'] = tr('No data')
 
     # defaults for iso_19115_template.xml
@@ -170,7 +166,7 @@ def age_postprocessor():
 
     youth_ratio = FloatParameter()
     youth_ratio.name = 'Youth ratio'
-    youth_ratio.value = get_defaults('YOUTH_RATIO')
+    youth_ratio.value = youth_ratio_default_value['default_value']
     youth_ratio.unit = unit_ratio
     youth_ratio.allowed_units = [unit_ratio]
     youth_ratio.help_text = tr('Youth ratio value.')
@@ -187,7 +183,7 @@ def age_postprocessor():
 
     adult_ratio = FloatParameter()
     adult_ratio.name = 'Adult ratio'
-    adult_ratio.value = get_defaults('ADULT_RATIO')
+    adult_ratio.value = adult_ratio_default_value['default_value']
     adult_ratio.unit = unit_ratio
     adult_ratio.allowed_units = [unit_ratio]
     adult_ratio.help_text = tr('Adult ratio value.')
@@ -205,7 +201,7 @@ def age_postprocessor():
 
     elderly_ratio = FloatParameter()
     elderly_ratio.name = 'Elderly ratio'
-    elderly_ratio.value = get_defaults('ELDERLY_RATIO')
+    elderly_ratio.value = elderly_ratio_default_value['default_value']
     elderly_ratio.unit = unit_ratio
     elderly_ratio.allowed_units = [unit_ratio]
     elderly_ratio.help_text = tr('Elderly ratio value.')
