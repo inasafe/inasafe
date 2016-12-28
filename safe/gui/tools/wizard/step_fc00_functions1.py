@@ -88,8 +88,8 @@ class StepFcFunctions1(WizardStep, FORM_CLASS):
         selection = self.tblFunctions1.selectedItems()
         selItem = (len(selection) == 1) and selection[0] or None
         for row in range(self.tblFunctions1.rowCount()):
-            for col in range(self.tblFunctions1.columnCount()):
-                item = self.tblFunctions1.item(row, col)
+            for column in range(self.tblFunctions1.columnCount()):
+                item = self.tblFunctions1.item(row, column)
                 item.setText((item == selItem) and u'\u2022' or '')
 
     # pylint: disable=W0613
