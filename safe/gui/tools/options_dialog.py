@@ -112,6 +112,7 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         # flag = settings.value(
         #     'inasafe/useThreadingFlag', False)
         # hack set use thread to false see #557
+        # TODO: Store default values somewhere else, e.g. defaults.py
         flag = False
         self.cbxUseThread.setChecked(flag)
 
