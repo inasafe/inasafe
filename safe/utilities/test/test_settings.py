@@ -17,26 +17,33 @@ __revision__ = '$Format:%H$'
 
 class TestSettings(unittest.TestCase):
     """Test Settings"""
+
+    def setUp(self):
+        """Fixture run before all tests"""
+        self.qsetting = QSettings('InaSAFETest')
+        self.qsetting.clear()
+
+    def tearDown(self):
+        """Fixture run after each test"""
+        # Make sure it's empty
+        self.qsetting.clear()
+
     def test_inasafe_default_value_qsetting(self):
         """Test for set and get inasafe_default_value_qsetting."""
-        qsetting = QSettings('InaSAFETest')
         # Make sure it's empty
-        qsetting.clear()
+        self.qsetting.clear()
 
         female_ratio_key = 'female_ratio'
         real_value = get_inasafe_default_value_qsetting(
-            qsetting, RECENT, female_ratio_key)
+            self.qsetting, RECENT, female_ratio_key)
         self.assertEqual(zero_default_value, real_value)
 
         female_ratio_value = 0.8
         set_inasafe_default_value_qsetting(
-            qsetting, RECENT, female_ratio_key, female_ratio_value)
+            self.qsetting, RECENT, female_ratio_key, female_ratio_value)
         real_value = get_inasafe_default_value_qsetting(
-            qsetting, RECENT, female_ratio_key)
+            self.qsetting, RECENT, female_ratio_key)
         self.assertEqual(female_ratio_value, real_value)
-
-        # Make sure it's empty
-        qsetting.clear()
 
 
 if __name__ == '__main__':

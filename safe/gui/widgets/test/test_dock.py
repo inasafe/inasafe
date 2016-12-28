@@ -1,21 +1,6 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool developed by AusAid and World Bank
-- **GUI Test Cases.**
+"""Test Dock"""
 
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
-
-__author__ = 'tim@kartoza.com'
-__date__ = '10/01/2011'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
 import codecs
 import logging
 import os
@@ -63,6 +48,11 @@ from safe.test.utilities import (
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.styling import setRasterStyle
 
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
+
 LOGGER = logging.getLogger('InaSAFE')
 
 
@@ -76,7 +66,6 @@ class TestDock(TestCase):
 
     def setUp(self):
         """Fixture run before all tests"""
-
         self.dock.show_only_visible_layers_flag = True
         load_standard_layers(self.dock)
         self.dock.hazard_layer_combo.setCurrentIndex(1)
