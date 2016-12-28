@@ -252,7 +252,7 @@ class ImpactReport(object):
             analysis=None,
             exposure_breakdown=None,
             aggregation_impacted=None,
-            extra_layers=[],
+            extra_layers=None,
             minimum_needs_profile=None):
         """Constructor for the Composition Report class.
 
@@ -281,6 +281,8 @@ class ImpactReport(object):
         self._aggregation_impacted = (
             aggregation_impacted or
             self._impact_function.aggregation_impacted)
+        if extra_layers is None:
+            extra_layers = []
         self._extra_layers = extra_layers
         self._minimum_needs = minimum_needs_profile
         self._extent = self._iface.mapCanvas().extent()

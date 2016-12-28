@@ -208,7 +208,7 @@ def content():
     bullets.add(m.Text(
         m.ImportantText(tr(
             'Contact email')),
-        tr(' - Use this option to specify the contact person\s email '
+        tr(' - Use this option to specify the contact person\'s email '
            'address to use in the generated metadata document.')))
     bullets.add(m.Text(
         m.ImportantText(tr(
