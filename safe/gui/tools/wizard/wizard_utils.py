@@ -17,7 +17,7 @@ from safe.utilities.gis import (
     is_raster_layer, is_point_layer, is_polygon_layer)
 from safe.utilities.i18n import tr
 from safe.utilities.utilities import is_keyword_version_supported
-from utilities.settings import get_inasafe_default_value_qsetting
+from safe.utilities.settings import get_inasafe_default_value_qsetting
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

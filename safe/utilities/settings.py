@@ -1,8 +1,8 @@
 # coding=utf-8
 """Helper function for InaSAFE settings."""
 
-from definitionsv4 import GLOBAL, zero_default_value
-from definitionsv4.utilities import definition
+from safe.definitionsv4 import GLOBAL, zero_default_value
+from safe.definitionsv4.utilities import definition
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

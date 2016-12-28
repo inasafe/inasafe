@@ -29,7 +29,7 @@ from safe.utilities.resources import get_ui_class, html_header, html_footer
 from safe.common.version import get_version
 from safe.gui.tools.help.options_help import options_help
 
-from utilities.settings import set_inasafe_default_value_qsetting, \
+from safe.utilities.settings import set_inasafe_default_value_qsetting, \
     get_inasafe_default_value_qsetting
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -44,7 +44,7 @@ FORM_CLASS = get_ui_class('options_dialog_base.ui')
 class OptionsDialog(QtGui.QDialog, FORM_CLASS):
     """Options dialog for the InaSAFE plugin."""
 
-    def __init__(self, iface, dock=None, parent=None):
+    def __init__(self, iface, dock=None, parent=None, qsetting=''):
         """Constructor for the dialog.
 
         :param iface: A Quantum GIS QGisAppInterface instance.
@@ -56,6 +56,10 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         :param dock: Optional dock widget instance that we can notify of
             changes to the keywords.
         :type dock: Dock
+
+        :param qsetting: String to specify the QSettings. By default,
+            not use any string.
+        :type qsetting: str
         """
 
         QtGui.QDialog.__init__(self, parent)
@@ -66,7 +70,10 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         self.iface = iface
         self.parent = parent
         self.dock = dock
-        self.settings = QtCore.QSettings()
+        if qsetting:
+            self.settings = QtCore.QSettings(qsetting)
+        else:
+            self.settings = QtCore.QSettings()
         self.keyword_io = KeywordIO()
         self.defaults = get_defaults()
 
@@ -180,9 +187,7 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
 
         # Restore Report Template Directory Path
         report_template_dir = self.settings.value(
-            'inasafe/reportTemplatePath',
-            '',
-            type=str)
+            'inasafe/reportTemplatePath', '', type=str)
         custom_templates_dir_flag = (report_template_dir != '')
         self.custom_templates_dir_checkbox.setChecked(
             custom_templates_dir_flag)
