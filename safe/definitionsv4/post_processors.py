@@ -1,10 +1,11 @@
 # coding=utf-8
 
+# pylint: disable=pointless-string-statement
+# This is disabled for typehinting docstring.
+
 """Definitions relating to post-processing."""
 
 from PyQt4.QtCore import QPyNullVariant
-
-from qgis.core import QgsDistanceArea
 
 from safe.definitionsv4.exposure import exposure_population
 from safe.definitionsv4.minimum_needs import minimum_needs_fields
@@ -32,9 +33,9 @@ __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
-"""
-Functions
-"""
+# # #
+# Functions
+# # #
 
 
 def multiply(**kwargs):
@@ -62,7 +63,7 @@ def size(**kwargs):
     :type geometry: QgsGeometry
 
     :param size_calculator: The size calculator.
-    :type size_calculator: QgsDistanceArea
+    :type size_calculator: qgis.core.QgsDistanceArea
 
     :return: The size.
     """
@@ -95,11 +96,13 @@ def post_processor_affected_function(**kwargs):
     return affected
 
 
-"""
-Post processors related definitions
-"""
+# # #
+# Post processors related definitions
+# # #
 
-"""Input"""
+# # #
+# Input
+# # #
 field_input_type = {
     'key': 'field',
     'description': tr('This type of input take value from field')
@@ -108,23 +111,53 @@ field_input_type = {
 dynamic_field_input_type = {
     'key': 'dynamic_field',
     'description': tr(
-        'This type of input take value from a dynamic field. '
+        'This type of input takes value from a dynamic field. '
         'Thus, it required some additional parameter.')
 }
 
 keyword_input_type = {
     'key': 'keyword',
     'description': tr(
-        'This type of input take value from layer keyword being handled.')
+        'This type of input takes value from layer keyword being handled.')
 }
 
 needs_profile_input_type = {
     'key': 'needs_profile',
     'description': tr(
-        'This type of input take value from current InaSAFE needs profile.')
+        'This type of input takes value from current InaSAFE needs profile.')
 }
 
-"""Process"""
+geometry_property_input_type = {
+    'key': 'geometry_property',
+    'description': tr(
+        'This type of input takes value from geometry property.')
+}
+
+layer_property_input_type = {
+    'key': 'layer_property',
+    'description': tr(
+        'This type of input takes value from layer property.')
+}
+
+size_calculator_input_value = {
+    'key': 'size_calculator',
+    'description': tr(
+        'This is a value for layer_property input type. Retrieve Size '
+        'Calculator of the layer CRS')
+}
+
+layer_crs_input_value = {
+    'key': 'layer_crs',
+    'description': tr(
+        'This is a value for layer_crs input type. Retrieve layer CRS')
+}
+
+layer_property_input_values = [
+    size_calculator_input_value,
+    layer_crs_input_value
+]
+
+# # # Process
 formula_process = {
     'key': 'formula',
     'description': tr(
@@ -139,9 +172,9 @@ function_process = {
         'using python function referenced.')
 }
 
-"""
-Post processors
-"""
+# # #
+# Post processors
+# # #
 
 # A postprocessor can be defined with a formula or with a python function.
 
@@ -153,16 +186,17 @@ post_processor_gender = {
     'input': {
         'population': {
             'value': population_count_field,
-            'type': 'field'
+            'type': field_input_type
         },
         'gender_ratio': {
             'value': female_ratio_field,
-            'type': 'field'
+            'type': field_input_type
         }
     },
     'output': {
         'female': {
             'value': female_count_field,
+            'type': formula_process,
             'formula': 'population * gender_ratio'
         }
     }
@@ -176,16 +210,17 @@ post_processor_youth = {
     'input': {
         'population': {
             'value': population_count_field,
-            'type': 'field'
+            'type': field_input_type
         },
         'youth_ratio': {
             'value': youth_ratio_field,
-            'type': 'field'
+            'type': field_input_type
         }
     },
     'output': {
         'youth': {
             'value': youth_count_field,
+            'type': function_process,
             'function': multiply
         }
     }
@@ -199,16 +234,17 @@ post_processor_adult = {
     'input': {
         'population': {
             'value': population_count_field,
-            'type': 'field'
+            'type': field_input_type
         },
         'adult_ratio': {
             'value': adult_ratio_field,
-            'type': 'field'
+            'type': field_input_type
         }
     },
     'output': {
         'adult': {
             'value': adult_count_field,
+            'type': function_process,
             'function': multiply
         }
     }
@@ -222,16 +258,17 @@ post_processor_elderly = {
     'input': {
         'population': {
             'value': population_count_field,
-            'type': 'field'
+            'type': field_input_type
         },
         'elderly_ratio': {
             'value': elderly_ratio_field,
-            'type': 'field'
+            'type': field_input_type
         }
     },
     'output': {
         'elderly': {
             'value': elderly_count_field,
+            'type': function_process,
             'function': multiply
         }
     }
@@ -245,16 +282,17 @@ post_processor_size = {
         'is a polygon we use m^2. If the feature is a line we use metres.'),
     'input': {
         'size_calculator': {
-            'type': 'layer_property',
-            'value': 'size_calculator'
+            'type': layer_property_input_type,
+            'value': size_calculator_input_value,
         },
         'geometry': {
-            'type': 'geometry_property'
+            'type': geometry_property_input_type
         }
     },
     'output': {
         'size': {
             'value': size_field,
+            'type': function_process,
             'function': size
         }
     }
@@ -269,17 +307,18 @@ post_processor_size_rate = {
         'the area in m^2. If the feature is a line we use length in metres.'),
     'input': {
         'size': {
-            'type': 'field',
+            'type': field_input_type,
             'value': size_field,
         },
         'rate': {
             'value': feature_rate_field,
-            'type': 'field'
+            'type': field_input_type
         }
     },
     'output': {
         'elderly': {
             'value': feature_value_field,
+            'type': function_process,
             'function': multiply
         }
     }
@@ -298,26 +337,27 @@ post_processor_affected = {
     'input': {
         'hazard_class': {
             'value': hazard_class_field,
-            'type': 'field'
+            'type': field_input_type,
         },
         'classification': {
-            'type': 'keyword',
+            'type': keyword_input_type,
             'value': ['hazard_keywords', 'classification'],
         },
     },
     'output': {
         'affected': {
             'value': affected_field,
+            'type': function_process,
             'function': post_processor_affected_function
         }
     }
 }
 
-"""
-Minimum Needs.
-
-Minimum needs is a kind of post processor which can be defined by user.
-"""
+# # #
+# Minimum Needs.
+#
+# Minimum needs is a kind of post processor which can be defined by user.
+# # #
 
 
 def initialize_minimum_needs_post_processors():
@@ -341,21 +381,22 @@ def initialize_minimum_needs_post_processors():
                 'population': [
                     {
                         'value': population_count_field,
-                        'type': 'field'
+                        'type': field_input_type,
                     },
                     {
                         'value': exposure_count_field,
                         'field_param': exposure_population['key'],
-                        'type': 'dynamic_field',
+                        'type': dynamic_field_input_type,
                     }],
                 'amount': {
-                    'type': 'needs_profile',
+                    'type': needs_profile_input_type,
                     'value': need_parameter.name,
                 }
             },
             'output': {
                 'needs': {
                     'value': field,
+                    'type': function_process,
                     'function': multiply
                 }
             }

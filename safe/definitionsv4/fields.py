@@ -822,7 +822,7 @@ analysis_fields = [
 ]
 
 # Add also minimum needs fields
-from safe.definitionsv4.minimum_needs import minimum_needs_fields
+from safe.definitionsv4.minimum_needs import minimum_needs_fields  # noqa
 count_fields = [
     feature_value_field,
     population_count_field,

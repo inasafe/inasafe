@@ -7,8 +7,10 @@ import os
 import logging
 from os.path import join, isfile
 from os import listdir
+from unittest.case import expectedFailure
 
-from safe.test.utilities import get_control_text
+from safe.definitionsv4.minimum_needs import minimum_needs_fields
+from safe.test.utilities import get_control_text, load_test_raster_layer
 from safe.test.utilities import get_qgis_app, standard_data_path
 from safe.test.debug_helper import print_attribute_table
 
@@ -369,6 +371,113 @@ class TestImpactFunction(unittest.TestCase):
                 field_name = output_value['value']['field_name']
                 self.assertIn(field_name, impact_fields)
         print_attribute_table(impact_layer, 1)
+
+    @expectedFailure
+    def test_post_minimum_needs_value_generation(self):
+        """Test minimum needs postprocessors.
+
+        Minimum needs postprocessors is defined to only generate values when
+        exposure contains population data.
+        """
+
+        # # #
+        # Test with vector exposure data with population_count_field exists.
+        # # #
+
+        hazard_layer = load_test_vector_layer(
+            'gisv4', 'hazard', 'classified_vector.geojson')
+        exposure_layer = load_test_vector_layer(
+            'gisv4', 'exposure', 'buildings.geojson')
+        aggregation_layer = load_test_vector_layer(
+            'gisv4', 'aggregation', 'small_grid.geojson')
+
+        impact_function = ImpactFunction()
+        impact_function.aggregation = aggregation_layer
+        impact_function.exposure = exposure_layer
+        impact_function.hazard = hazard_layer
+        impact_function.prepare()
+        return_code, message = impact_function.run()
+
+        self.assertEqual(return_code, ANALYSIS_SUCCESS, message)
+
+        # minimum needs fields should exists in the results
+        self._check_minimum_fields_exists(impact_function)
+
+        expected_value = {
+            u'population': 69,
+            u'total': 9.0,
+            u'minimum_needs__rice': 193.2,
+            u'minimum_needs__clean_water': 4623.0,
+            u'minimum_needs__toilets': 3.45,
+            u'minimum_needs__drinking_water': 1207.5,
+            u'female': 41,
+            u'minimum_needs__family_kits': 13.8,
+            u'total_affected': 6.0,
+        }
+
+        self._check_minimum_fields_value(expected_value, impact_function)
+
+        # # #
+        # Test with raster exposure data with population_exposure_count
+        # exists.
+        # # #
+
+        hazard_layer = load_test_raster_layer(
+            'hazard', 'tsunami_wgs84.tif')
+        exposure_layer = load_test_raster_layer(
+            'exposure', 'pop_binary_raster_20_20.asc')
+
+        impact_function = ImpactFunction()
+        impact_function.exposure = exposure_layer
+        impact_function.hazard = hazard_layer
+        impact_function.prepare()
+        return_code, message = impact_function.run()
+
+        self.assertEqual(return_code, ANALYSIS_SUCCESS, message)
+
+        # minimum needs fields should exists in the results
+        self._check_minimum_fields_exists(impact_function)
+
+        expected_value = {
+            u'total_affected': 9.208200000039128,
+            u'minimum_needs__rice': 25.7829600001096,
+            u'minimum_needs__toilets': 0.460410000001956,
+            u'minimum_needs__drinking_water': 161.143500000685,
+            u'minimum_needs__clean_water': 616.949400002621,
+            u'total': 162.7667000000474,
+            u'minimum_needs__family_kits': 1.84164000000783,
+            u'medium_hazard_count': 3.4283000000168715,
+            u'total_unaffected': 153.55850000000828,
+        }
+
+        self._check_minimum_fields_value(expected_value, impact_function)
+
+    def _check_minimum_fields_value(self, expected_value, impact_function):
+        """Private method for checking minimum needs value."""
+        analysis_impacted = impact_function.analysis_impacted
+        feature = analysis_impacted.getFeatures().next()
+        inasafe_fields = analysis_impacted.keywords['inasafe_fields']
+        for field in minimum_needs_fields:
+            field_name = inasafe_fields[field['key']]
+            field_index = analysis_impacted.fieldNameIndex(field_name)
+            value = float(feature[field_index])
+            expected = expected_value[field_name]
+            self.assertEqual(expected, value)
+
+    def _check_minimum_fields_exists(self, impact_function):
+        """Private methods for checking existing minimum fields."""
+        message = '{field_key} not exists'
+        layers = (
+            layer for layer in impact_function.outputs
+            if not layer.name() == 'profiling')
+        for layer in layers:
+            inasafe_fields = layer.keywords['inasafe_fields']
+            for field in minimum_needs_fields:
+                # check fields exists
+                self.assertIn(
+                    field['key'],
+                    inasafe_fields,
+                    message.format(field_key=field['key']))
 
 
 if __name__ == '__main__':

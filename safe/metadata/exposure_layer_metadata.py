@@ -127,13 +127,6 @@ class ExposureLayerMetadata(GenericLayerMetadata):
             'inasafe/'
             'value_map/'
             'gco:Dictionary'),
-        'minimum_needs': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            'minimum_needs/'
-            'gco:Dictionary'),
     }
     _standard_properties = merge_dictionaries(
             GenericLayerMetadata._standard_properties, _standard_properties)

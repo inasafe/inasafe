@@ -4,14 +4,22 @@
 Postprocessors.
 """
 from PyQt4.QtCore import QPyNullVariant
-
-from qgis.core import QgsFeatureRequest, QgsDistanceArea
+from qgis.core import QgsFeatureRequest
 
 from safe.definitionsv4.minimum_needs import minimum_needs_parameter
+from safe.definitionsv4.post_processors import (
+    field_input_type,
+    dynamic_field_input_type,
+    geometry_property_input_type,
+    keyword_input_type,
+    needs_profile_input_type,
+    layer_property_input_type,
+    layer_crs_input_value,
+    size_calculator_input_value)
 from safe.gisv4.vector.tools import (
     create_field_from_definition, size_calculator)
-from safe.utilities.profiling import profile
 from safe.utilities.i18n import tr
+from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -108,13 +116,24 @@ def run_single_post_processor(layer, post_processor):
         # Default parameters
         default_parameters = {}
 
+        msg = None
+
         for key, values in post_processor['input'].items():
-            if not isinstance(values, list):
-                values = [values]
-            found = False
+            values = values if isinstance(values, list) else [values]
             for value in values:
-                if value['type'] == 'field' or value['type'] == 'dynamic_field':
-                    if value['type'] == 'dynamic_field':
+                is_field_input = (
+                    value['type'] == field_input_type or
+                    value['type'] == dynamic_field_input_type)
+                is_geometry_input = (
+                    value['type'] == geometry_property_input_type)
+                is_keyword_input = (
+                    value['type'] == keyword_input_type)
+                is_needs_input = (
+                    value['type'] == needs_profile_input_type)
+                is_layer_property_input = (
+                    value['type'] == layer_property_input_type)
+                if is_field_input:
+                    if value['type'] == dynamic_field_input_type:
                         key_template = value['value']['key']
                         field_param = value['field_param']
                         field_key = key_template % field_param
@@ -143,16 +162,15 @@ def run_single_post_processor(layer, post_processor):
                         continue
 
                     input_indexes[key] = index
-                    found = True
                     break
 
                 # For geometry, create new field that contain the value
-                elif value['type'] == 'geometry_property':
-                    input_properties[key] = 'geometry_property'
-                    found = True
+                elif is_geometry_input:
+                    input_properties[key] = geometry_property_input_type['key']
                     break
 
-                elif value['type'] == 'keyword':
+                # for keyword
+                elif is_keyword_input:
 
                     # See http://stackoverflow.com/questions/14692690/
                     # access-python-nested-dictionary-items-via-a-list-of-keys
@@ -160,28 +178,28 @@ def run_single_post_processor(layer, post_processor):
                         lambda d, k: d[k], value['value'], layer.keywords)
 
                     default_parameters[key] = value
-                    found = True
                     break
 
-                elif value['type'] == 'needs_profile':
+                # for needs profile
+                elif is_needs_input:
                     need_parameter = minimum_needs_parameter(
                         parameter_name=value['value'])
                     value = need_parameter.value
 
                     default_parameters[key] = value
-                    found = True
                     break
 
-                elif value['type'] == 'layer_property':
-                    if value['value'] == 'layer_crs':
+                # for layer property
+                elif is_layer_property_input:
+                    if value['value'] == layer_crs_input_value:
                         default_parameters[key] = layer.crs()
 
-                    if value['value'] == 'size_calculator':
+                    if value['value'] == size_calculator_input_value:
                         default_parameters[key] = size_calculator(layer.crs())
-                    found = True
                     break
 
-            if not found:
+            else:
+                # executed when we can't find all the inputs
                 layer.rollBack()
                 return False, msg
 
@@ -203,7 +221,7 @@ def run_single_post_processor(layer, post_processor):
 
             # Fill up the input from fields
             for key, value in inputs.items():
-                if value == 'geometry_property':
+                if value == geometry_property_input_type['key']:
                     parameters[key] = feature.geometry()
                 else:
                     parameters[key] = attributes[value]
@@ -249,47 +267,55 @@ def enough_input(layer, post_processor_input):
     """
     impact_fields = layer.keywords['inasafe_fields'].keys()
     for input_key, input_values in post_processor_input.items():
-        if not isinstance(input_values, list):
-            input_values = [input_values]
-        found = False
+        input_values = (
+            input_values if isinstance(input_values, list) else [input_values])
         msg = None
         for input_value in input_values:
-            if input_value['type'] == 'field':
+            is_field_input = input_value['type'] == field_input_type
+            is_dynamic_input = input_value['type'] == dynamic_field_input_type
+            is_needs_input = input_value['type'] == needs_profile_input_type
+            is_keyword_input = input_value['type'] == keyword_input_type
+            is_layer_input = input_value['type'] == layer_property_input_type
+            is_geometry_input = (
+                input_value['type'] == geometry_property_input_type)
+            if is_field_input:
                 key = input_value['value']['key']
                 if key in impact_fields:
-                    found = True
                     break
                 else:
                     msg = 'Key %s is missing in fields %s' % (
                         key, impact_fields)
-            elif input_value['type'] == 'dynamic_field':
+            elif is_dynamic_input:
                 key_template = input_value['value']['key']
                 field_param = input_value['field_param']
                 key = key_template % field_param
                 if key in impact_fields:
-                    found = True
                     break
                 else:
                     msg = 'Key %s is missing in dynamic fields %s' % (
                         key, impact_fields)
-            elif input_value['type'] == 'needs_profile':
+            elif is_needs_input:
                 parameter_name = input_value['value']
                 if minimum_needs_parameter(parameter_name=parameter_name):
-                    found = True
                     break
                 else:
-                    msg = 'Minimum needs %s is missing from current profile' % (
-                        parameter_name, )
-            elif input_value['type'] == 'keyword':
+                    msg = (
+                        'Minimum needs %s is missing from current '
+                        'profile') % (
+                            parameter_name, )
+            elif is_keyword_input:
                 try:
-                    value = reduce(
-                        lambda d, k: d[k], input_value['value'], layer.keywords)
-                    found = True
+                    reduce(
+                        lambda d, k:
+                        d[k], input_value['value'], layer.keywords)
                     break
                 except KeyError:
                     msg = 'Value %s is missing in keyword: %s' % (
                         input_key, input_value['value'])
+            elif is_layer_input or is_geometry_input:
+                # will be taken from the layer itself, so always true
+                break
 
-        if not found:
+        else:
             return False, msg
     return True, None
