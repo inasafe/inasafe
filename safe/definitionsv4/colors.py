@@ -1,5 +1,4 @@
 # coding=utf-8
-
 """Colors which are used in InaSAFE."""
 
 from PyQt4.QtGui import QColor
@@ -31,3 +30,7 @@ next_analysis_width = 10
 
 last_analysis_color = QColor(255, 0, 0, 100)
 last_analysis_width = 5
+
+# Availability options color in wizard
+available_option_color = QColor(120, 255, 120)
+unavailable_option_color = QColor(220, 220, 220)

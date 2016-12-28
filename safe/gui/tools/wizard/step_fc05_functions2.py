@@ -1,35 +1,17 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool by AusAid -**InaSAFE Wizard**
-
-This module provides: Function Centric Wizard Step: IF Constraint Selector 2
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
+"""InaSAFE Wizard Step for Choosing Layer Geometry"""
 
 import logging
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import pyqtSignature
 
-from safe.definitionsv4.layer_geometry import (
-    layer_geometry_point,
-    layer_geometry_line,
-    layer_geometry_polygon,
-    layer_geometry_raster
-)
 from safe.definitionsv4.utilities import get_allowed_geometries
 from safe.definitionsv4.layer_purposes import (
-    layer_purpose_exposure, layer_purpose_hazard
-)
-from safe.definitionsv4.hazard import hazard_all
-from safe.definitionsv4.exposure import exposure_all
+    layer_purpose_exposure, layer_purpose_hazard)
+from safe.definitionsv4.colors import (
+    available_option_color, unavailable_option_color)
+from safe.definitionsv4.font import big_font
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_strings import (
@@ -155,13 +137,15 @@ class StepFcFunctions2(WizardStep, FORM_CLASS):
     def set_widgets(self):
         """Set widgets on the Impact Functions Table 2 tab."""
         self.tblFunctions2.clear()
-        h, e, _hc, _ec = self.parent.selected_impact_function_constraints()
+        hazard, exposure, _, _ = self.parent.\
+            selected_impact_function_constraints()
         hazard_layer_geometries = get_allowed_geometries(
             layer_purpose_hazard['key'])
         exposure_layer_geometries = get_allowed_geometries(
             layer_purpose_exposure['key'])
         self.lblSelectFunction2.setText(
-            select_function_constraints2_question % (h['name'], e['name']))
+            select_function_constraints2_question % (
+                hazard['name'], exposure['name']))
         self.tblFunctions2.setColumnCount(len(hazard_layer_geometries))
         self.tblFunctions2.setRowCount(len(exposure_layer_geometries))
         self.tblFunctions2.setHorizontalHeaderLabels(
@@ -177,21 +161,24 @@ class StepFcFunctions2(WizardStep, FORM_CLASS):
         self.tblFunctions2.verticalHeader().setResizeMode(
             QtGui.QHeaderView.Stretch)
 
-        big_font = QtGui.QFont()
-        big_font.setPointSize(80)
         active_items = []
         for col in range(len(hazard_layer_geometries)):
             for row in range(len(exposure_layer_geometries)):
-                hc = hazard_layer_geometries[col]
-                ec = exposure_layer_geometries[row]
+                hazard_geometry = hazard_layer_geometries[col]
+                exposure_geometry = exposure_layer_geometries[row]
                 item = QtGui.QTableWidgetItem()
 
-                if (hc['key'] in h['allowed_geometries'] and ec['key'] in e[
-                        'allowed_geometries']):
-                    background_color = QtGui.QColor(120, 255, 120)
+                hazard_geometry_allowed = hazard_geometry['key'] in hazard[
+                    'allowed_geometries']
+                exposure_geometry_allowed = (
+                    exposure_geometry['key'] in exposure[
+                            'allowed_geometries'])
+
+                if hazard_geometry_allowed and exposure_geometry_allowed:
+                    background_color = available_option_color
                     active_items += [item]
                 else:
-                    background_color = QtGui.QColor(220, 220, 220)
+                    background_color = unavailable_option_color
                     item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEnabled)
                     item.setFlags(item.flags() & ~QtCore.Qt.ItemIsSelectable)
 
@@ -199,10 +186,10 @@ class StepFcFunctions2(WizardStep, FORM_CLASS):
                 item.setFont(big_font)
                 item.setTextAlignment(
                     QtCore.Qt.AlignCenter | QtCore.Qt.AlignHCenter)
-                item.setData(RoleHazard, h)
-                item.setData(RoleExposure, e)
-                item.setData(RoleHazardConstraint, hc)
-                item.setData(RoleExposureConstraint, ec)
+                item.setData(RoleHazard, hazard)
+                item.setData(RoleExposure, exposure)
+                item.setData(RoleHazardConstraint, hazard_geometry)
+                item.setData(RoleExposureConstraint, exposure_geometry)
                 self.tblFunctions2.setItem(row, col, item)
         # Automatically select one item...
         if len(active_items) == 1:
