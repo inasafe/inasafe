@@ -1,0 +1,15 @@
+doc-warnings: true
+test-warnings: true
+ignore-paths:
+    - .github
+    - .tx
+    - docs
+    - extras
+    - resources
+    - safe_extras
+strictness: veryhigh
+max-line-length: 80
+autodetect: true
+python-targets: 2
+pep8:
+    full: true
