@@ -59,28 +59,6 @@ def define_defaults():
     # Keywords key names
     defaults['NO_DATA'] = tr('No data')
 
-    # defaults for iso_19115_template.xml
-    organisation = 'InaSAFE.org'
-    value = settings.value(
-        'ISO19115_ORGANIZATION', organisation, type=str)
-    defaults['ISO19115_ORGANIZATION'] = value
-
-    url = 'http://inasafe.org'
-    value = settings.value('ISO19115_URL', url, type=str)
-    defaults['ISO19115_URL'] = value
-
-    email = 'info@inasafe.org'
-    value = settings.value('ISO19115_EMAIL', email, type=str)
-    defaults['ISO19115_EMAIL'] = value
-
-    title = 'InaSAFE analysis result'
-    value = settings.value('ISO19115_TITLE', title, type=str)
-    defaults['ISO19115_TITLE'] = value
-
-    iso_license = 'Free use with accreditation'
-    value = settings.value('ISO19115_LICENSE', iso_license, type=str)
-    defaults['ISO19115_LICENSE'] = value
-
     return defaults
 
 
