@@ -1,24 +1,8 @@
-# -*- coding: utf-8 -*-
-"""
-InaSAFE Disaster risk assessment tool developed by AusAid -
-**metadata module.**
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-"""
-
-__author__ = 'marco@opengis.ch'
-__revision__ = '$Format:%H$'
-__date__ = '27/05/2015'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
-
+# coding=utf-8
+"""Metadata init file."""
 
 # expose for nicer imports
+# pylint: disable=unused-import
 from safe.metadata.base_metadata import BaseMetadata
 from safe.metadata.generic_layer_metadata import GenericLayerMetadata
 from safe.metadata.exposure_impacted_layer_metadata import (
@@ -26,3 +10,9 @@ from safe.metadata.exposure_impacted_layer_metadata import (
 from safe.metadata.exposure_layer_metadata import ExposureLayerMetadata
 from safe.metadata.hazard_layer_metadata import HazardLayerMetadata
 from safe.metadata.aggregation_layer_metadata import AggregationLayerMetadata
+# pylint: enable=unused-import
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
