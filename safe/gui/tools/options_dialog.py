@@ -22,8 +22,7 @@ from safe.common.utilities import temp_dir
 from safe.defaults import (
     disclaimer,
     supporters_logo_path,
-    default_north_arrow_path,
-    get_defaults)
+    default_north_arrow_path)
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.resources import get_ui_class, html_header, html_footer
@@ -76,7 +75,6 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         else:
             self.settings = QtCore.QSettings()
         self.keyword_io = KeywordIO()
-        self.defaults = get_defaults()
 
         # InaSAFE default values
         self.default_value_parameters = []
@@ -108,8 +106,7 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             self.set_org_disclaimer)
 
     def restore_state(self):
-        """Reinstate the options based on the user's stored session info.
-        """
+        """Reinstate the options based on the user's stored session info."""
         flag = False
         self.cbxUseThread.setChecked(flag)
 
