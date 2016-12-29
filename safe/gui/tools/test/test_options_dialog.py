@@ -12,9 +12,10 @@ from safe.defaults import (
     default_north_arrow_path,
     supporters_logo_path,
     disclaimer)
+from PyQt4.QtCore import QSettings
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-from PyQt4.QtCore import QSettings
+
 LOGGER = logging.getLogger('InaSAFE')
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -32,7 +33,7 @@ class TestOptionsDialog(unittest.TestCase):
         self.qsetting.clear()
 
     def tearDown(self):
-        """Fixture run after each test"""
+        """Fixture run after each test."""
         # Make sure it's empty
         self.qsetting.clear()
 
@@ -97,7 +98,7 @@ class TestOptionsDialog(unittest.TestCase):
             inasafe_default_settings['ISO19115_LICENSE'])
 
     def test_update_settings(self):
-        """Test update InaSAFE Option works"""
+        """Test update InaSAFE Option works."""
         # Create new option dialog
         dialog = OptionsDialog(
             parent=PARENT, iface=IFACE, qsetting='InaSAFETest')

@@ -1,6 +1,7 @@
 # coding=utf-8
 """Definitions relating to default setting of fresh InaSAFE."""
 from os.path import expanduser, abspath, join
+# from safe.utilities.resources import resources_path
 
 inasafe_default_settings = {
     'visibleLayersOnlyFlag': True,
@@ -9,21 +10,25 @@ inasafe_default_settings = {
     'setHideExposureFlag': False,
     'useSelectedFeaturesOnly': False,
     'useSentry': False,
-    'keywordCachePath': abspath(join(
-        expanduser('~'), '.inasafe', 'keywords.db')),
     'template_warning_verbose': True,
     'showOrganisationLogoInDockFlag': False,
     'developer_mode': False,
+
     'ISO19115_ORGANIZATION': 'InaSAFE.org',
     'ISO19115_URL': 'http://inasafe.org',
     'ISO19115_EMAIL': 'info@inasafe.org',
     'ISO19115_TITLE': 'InaSAFE analysis result',
-    'ISO19115_LICENSE': 'Free use with accreditation'
+    'ISO19115_LICENSE': 'Free use with accreditation',
 
-    # Some extras possible setting to be put here:
-    # organisation_logo_path
-    # defaultUserDirectory
-    # north_arrow_path
-    # reportTemplatePath
-    # reportDisclaimer
+    'keywordCachePath': abspath(join(
+        expanduser('~'), '.inasafe', 'keywords.db')),
+
+    # Make sure first to not have cyclic import
+    # 'organisation_logo_path': resources_path(
+    #     'img', 'logos', 'supporters.png'),
+    # 'north_arrow_path': resources_path(
+    #     'img', 'north_arrows', 'simple_north_arrow.png'),
+    # 'defaultUserDirectory': '',
+    # 'reportTemplatePath': '',
+    # 'reportDisclaimer': ''
 }
