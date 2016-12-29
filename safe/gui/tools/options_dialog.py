@@ -24,13 +24,13 @@ from safe.defaults import (
     supporters_logo_path,
     default_north_arrow_path)
 from safe.utilities.i18n import tr
-from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.resources import get_ui_class, html_header, html_footer
 from safe.common.version import get_version
 from safe.gui.tools.help.options_help import options_help
 
-from safe.utilities.settings import set_inasafe_default_value_qsetting, \
-    get_inasafe_default_value_qsetting
+from safe.utilities.settings import (
+    set_inasafe_default_value_qsetting,
+    get_inasafe_default_value_qsetting)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -58,7 +58,7 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         :type dock: Dock
 
         :param qsetting: String to specify the QSettings. By default,
-            not use any string.
+            use empty string.
         :type qsetting: str
         """
 
@@ -74,11 +74,33 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             self.settings = QtCore.QSettings(qsetting)
         else:
             self.settings = QtCore.QSettings()
-        self.keyword_io = KeywordIO()
 
         # InaSAFE default values
         self.default_value_parameters = []
         self.default_value_parameter_container = None
+
+        # List of setting key and control
+        self.boolean_settings = {
+            # 'useThreadingFlag': self.
+            'visibleLayersOnlyFlag': self.cbxVisibleLayersOnly,
+            'set_layer_from_title_flag': self.cbxSetLayerNameFromTitle,
+            'setZoomToImpactFlag': self.cbxZoomToImpact,
+            'setHideExposureFlag': self.cbxHideExposure,
+            'useSelectedFeaturesOnly': self.cbxUseSelectedFeaturesOnly,
+            'useSentry': self.cbxUseSentry,
+            'template_warning_verbose': self.template_warning_checkbox,
+            'showOrganisationLogoInDockFlag':
+                self.organisation_on_dock_checkbox,
+            'developer_mode': self.cbxDevMode
+        }
+        self.text_settings = {
+            'keywordCachePath': self.leKeywordCachePath,
+            'ISO19115_ORGANIZATION': self.iso19115_organization_le,
+            'ISO19115_URL': self.iso19115_url_le,
+            'ISO19115_EMAIL': self.iso19115_email_le,
+            'ISO19115_TITLE': self.iso19115_title_le,
+            'ISO19115_LICENSE': self.iso19115_license_le,
+        }
 
         # Set up things for context help
         self.help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
@@ -87,6 +109,7 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         self.help_button.toggled.connect(self.help_toggled)
         self.main_stacked_widget.setCurrentIndex(1)
 
+        # Hide not implemented group
         self.grpNotImplemented.hide()
         self.adjustSize()
         self.restore_state()
@@ -105,89 +128,66 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         self.custom_org_disclaimer_checkbox.toggled.connect(
             self.set_org_disclaimer)
 
+    def save_boolean_setting(self, key, check_box):
+        """Save boolean setting according to check_box state.
+
+        :param key: Key to retrieve setting value.
+        :type key: str
+
+        :param check_box: Check box to show and set the setting.
+        :type check_box: PyQt4.QtGui.QCheckBox.QCheckBox
+        """
+        self.settings.setValue('inasafe/%s' % key, check_box.isChecked())
+
+    def restore_boolean_setting(self, key, check_box):
+        """Set check_box according to setting of key.
+
+        :param key: Key to retrieve setting value.
+        :type key: str
+
+        :param check_box: Check box to show and set the setting.
+        :type check_box: PyQt4.QtGui.QCheckBox.QCheckBox
+        """
+        flag = bool(self.settings.value(
+            'inasafe/%s' % key, inasafe_default_settings[key], type=bool))
+        check_box.setChecked(flag)
+
+    def save_text_setting(self, key, line_edit):
+        """Save text setting according to line_edit value.
+
+        :param key: Key to retrieve setting value.
+        :type key: str
+
+        :param line_edit: Line edit for user to edit the setting
+        :type line_edit: PyQt4.QtGui.QLineEdit.QLineEdit
+        """
+        self.settings.setValue('inasafe/%s' % key, line_edit.text())
+
+    def restore_text_setting(self, key, line_edit):
+        """Set line_edit text according to setting of key
+
+        :param key: Key to retrieve setting value.
+        :type key: str
+
+        :param line_edit: Line edit for user to edit the setting
+        :type line_edit: PyQt4.QtGui.QLineEdit.QLineEdit
+        """
+        value = self.settings.value(
+            'inasafe/%s' % key, inasafe_default_settings[key], type=str)
+        line_edit.setText(value)
+
     def restore_state(self):
         """Reinstate the options based on the user's stored session info."""
         flag = False
         self.cbxUseThread.setChecked(flag)
 
-        key = 'visibleLayersOnlyFlag'
-        flag = bool(self.settings.value(
-            'inasafe/%s' % key, inasafe_default_settings[key], type=bool))
-        self.cbxVisibleLayersOnly.setChecked(flag)
+        # Restore boolean setting as check box.
+        for key, check_box in self.boolean_settings.items():
+            self.restore_boolean_setting(key, check_box)
 
-        key = 'set_layer_from_title_flag'
-        flag = bool(self.settings.value(
-            'inasafe/%s' % key, inasafe_default_settings[key], type=bool))
-        self.cbxSetLayerNameFromTitle.setChecked(flag)
-
-        key = 'setZoomToImpactFlag'
-        flag = bool(self.settings.value(
-            'inasafe/%s' % key, inasafe_default_settings[key], type=bool))
-        self.cbxZoomToImpact.setChecked(flag)
-
-        # whether exposure layer should be hidden after model completes
-        key = 'setHideExposureFlag'
-        flag = bool(self.settings.value(
-            'inasafe/%s' % key, inasafe_default_settings[key], type=bool))
-        self.cbxHideExposure.setChecked(flag)
-
-        key = 'useSelectedFeaturesOnly'
-        flag = bool(self.settings.value(
-            'inasafe/%s' % key, inasafe_default_settings[key], type=bool))
-        self.cbxUseSelectedFeaturesOnly.setChecked(flag)
-
-        key = 'useSentry'
-        flag = bool(self.settings.value(
-            'inasafe/%s' % key, inasafe_default_settings[key], type=bool))
-        self.cbxUseSentry.setChecked(flag)
-
-        key = 'template_warning_verbose'
-        flag = bool(self.settings.value(
-            'inasafe/%s' % key, inasafe_default_settings[key], type=bool))
-        self.template_warning_checkbox.setChecked(flag)
-
-        # Restore Show Organisation Logo in Dock Flag
-        key = 'showOrganisationLogoInDockFlag'
-        flag = bool(self.settings.value(
-            'inasafe/%s' % key, inasafe_default_settings[key], type=bool))
-        self.organisation_on_dock_checkbox.setChecked(flag)
-
-        key = 'developer_mode'
-        flag = bool(self.settings.value(
-            'inasafe/%s' % key, inasafe_default_settings[key], type=bool))
-        self.cbxDevMode.setChecked(flag)
-
-        # Restore ISO19115 metadata tab
-        key = 'ISO19115_ORGANIZATION'
-        value = self.settings.value(
-            'inasafe/%s' % key, inasafe_default_settings[key], type=str)
-        self.iso19115_organization_le.setText(value)
-
-        key = 'ISO19115_URL'
-        value = self.settings.value(
-            'inasafe/%s' % key, inasafe_default_settings[key], type=str)
-        self.iso19115_url_le.setText(value)
-
-        key = 'ISO19115_EMAIL'
-        value = self.settings.value(
-            'inasafe/%s' % key, inasafe_default_settings[key], type=str)
-        self.iso19115_email_le.setText(value)
-
-        key = 'ISO19115_TITLE'
-        value = self.settings.value(
-            'inasafe/%s' % key, inasafe_default_settings[key], type=str)
-        self.iso19115_title_le.setText(value)
-
-        key = 'ISO19115_LICENSE'
-        value = self.settings.value(
-            'inasafe/%s' % key, inasafe_default_settings[key], type=str)
-        self.iso19115_license_le.setText(value)
-
-        # Keyword cache path
-        key = 'keywordCachePath'
-        path = self.settings.value(
-            'inasafe/%s' % key, inasafe_default_settings[key])
-        self.leKeywordCachePath.setText(path)
+        # Restore text setting as line edit.
+        for key, line_edit in self.text_settings.items():
+            self.restore_text_setting(key, line_edit)
 
         # Restore Organisation Logo Path
         org_logo_path = self.settings.value(
@@ -238,34 +238,17 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         self.restore_default_values_page()
 
     def save_state(self):
-        """Store the options into the user's stored session info.
-        """
+        """Store the options into the user's stored session info."""
+        # Save boolean settings
+        for key, check_box in self.boolean_settings.items():
+            self.save_boolean_setting(key, check_box)
+        # Save text settings
+        for key, line_edit in self.text_settings.items():
+            self.save_text_setting(key, line_edit)
+
         self.settings.setValue(
             'inasafe/useThreadingFlag', False)
-        self.settings.setValue(
-            'inasafe/visibleLayersOnlyFlag',
-            self.cbxVisibleLayersOnly.isChecked())
-        self.settings.setValue(
-            'inasafe/set_layer_from_title_flag',
-            self.cbxSetLayerNameFromTitle.isChecked())
-        self.settings.setValue(
-            'inasafe/setZoomToImpactFlag',
-            self.cbxZoomToImpact.isChecked())
-        self.settings.setValue(
-            'inasafe/setHideExposureFlag',
-            self.cbxHideExposure.isChecked())
-        self.settings.setValue(
-            'inasafe/useSelectedFeaturesOnly',
-            self.cbxUseSelectedFeaturesOnly.isChecked())
-        self.settings.setValue(
-            'inasafe/useSentry',
-            self.cbxUseSentry.isChecked())
-        self.settings.setValue(
-            'inasafe/keywordCachePath',
-            self.leKeywordCachePath.text())
-        self.settings.setValue(
-            'inasafe/template_warning_verbose',
-            self.template_warning_checkbox.isChecked())
+
         self.settings.setValue(
             'inasafe/north_arrow_path',
             self.leNorthArrowPath.text())
@@ -273,37 +256,14 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             'inasafe/organisation_logo_path',
             self.leOrganisationLogoPath.text())
         self.settings.setValue(
-            'inasafe/showOrganisationLogoInDockFlag',
-            self.organisation_on_dock_checkbox.isChecked())
-        self.settings.setValue(
             'inasafe/reportTemplatePath',
             self.leReportTemplatePath.text())
         self.settings.setValue(
             'inasafe/reportDisclaimer',
             self.txtDisclaimer.toPlainText())
         self.settings.setValue(
-            'inasafe/developer_mode',
-            self.cbxDevMode.isChecked())
-        self.settings.setValue(
             'inasafe/defaultUserDirectory',
             self.leUserDirectoryPath.text())
-
-        # save metadata values
-        self.settings.setValue(
-            'inasafe/ISO19115_ORGANIZATION',
-            self.iso19115_organization_le.text())
-        self.settings.setValue(
-            'inasafe/ISO19115_URL',
-            self.iso19115_url_le.text())
-        self.settings.setValue(
-            'inasafe/ISO19115_EMAIL',
-            self.iso19115_email_le.text())
-        self.settings.setValue(
-            'inasafe/ISO19115_TITLE',
-            self.iso19115_title_le.text())
-        self.settings.setValue(
-            'inasafe/ISO19115_LICENSE',
-            self.iso19115_license_le.text())
 
         # Save InaSAFE default values
         self.save_default_values()
@@ -325,7 +285,7 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         file_name = QtGui.QFileDialog.getSaveFileName(
             self,
             self.tr('Set keyword cache file'),
-            self.keyword_io.default_keyword_db_path(),
+            inasafe_default_settings['keywordCachePath'],
             self.tr('Sqlite DB File (*.db)'))
         self.leKeywordCachePath.setText(file_name)
 
