@@ -311,7 +311,9 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
     def accept(self):
         """Method invoked when OK button is clicked."""
         self.save_state()
-        self.dock.read_settings()
+        # FIXME: Option dialog should be independent from dock.
+        if self.dock:
+            self.dock.read_settings()
         self.close()
 
     # noinspection PyPep8Naming

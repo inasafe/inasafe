@@ -14,6 +14,7 @@ from safe.defaults import (
     disclaimer)
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+from PyQt4.QtCore import QSettings
 LOGGER = logging.getLogger('InaSAFE')
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -25,9 +26,20 @@ __revision__ = '$Format:%H$'
 class TestOptionsDialog(unittest.TestCase):
     """Test Options Dialog"""
 
+    def setUp(self):
+        """Fixture run before all tests"""
+        self.qsetting = QSettings('InaSAFETest')
+        self.qsetting.clear()
+
+    def tearDown(self):
+        """Fixture run after each test"""
+        # Make sure it's empty
+        self.qsetting.clear()
+
     def test_setup_dialog(self):
         """Test Setup Options Dialog."""
-        dialog = OptionsDialog(PARENT, IFACE, qsetting='InaSAFETest')
+        dialog = OptionsDialog(
+            parent=PARENT, iface=IFACE, qsetting='InaSAFETest')
         self.assertIsNotNone(dialog)
 
         # Check default values
@@ -84,6 +96,36 @@ class TestOptionsDialog(unittest.TestCase):
             dialog.iso19115_license_le.text(),
             inasafe_default_settings['ISO19115_LICENSE'])
 
+    def test_update_settings(self):
+        """Test update InaSAFE Option works"""
+        # Create new option dialog
+        dialog = OptionsDialog(
+            parent=PARENT, iface=IFACE, qsetting='InaSAFETest')
+
+        # Update some state
+        new_state = not inasafe_default_settings['visibleLayersOnlyFlag']
+        dialog.cbxVisibleLayersOnly.setChecked(new_state)
+
+        new_organization = 'Super Organization'
+        dialog.iso19115_organization_le.setText(new_organization)
+
+        # Accept the dialog
+        dialog.accept()
+
+        # Check the value in QSettings
+        self.assertEqual(
+            new_state, self.qsetting.value('inasafe/visibleLayersOnlyFlag'))
+        self.assertEqual(
+            new_organization,
+            self.qsetting.value('inasafe/ISO19115_ORGANIZATION'))
+
+        # Open the options dialog
+        dialog = OptionsDialog(PARENT, IFACE, qsetting='InaSAFETest')
+
+        # Check the state of the dialog after save the settings
+        self.assertEqual(new_state, dialog.cbxVisibleLayersOnly.isChecked())
+        self.assertEqual(
+            new_organization, dialog.iso19115_organization_le.text())
 
 if __name__ == '__main__':
     suite = unittest.makeSuite(TestOptionsDialog, 'test')
