@@ -17,6 +17,7 @@ from safe_extras.parameters.integer_parameter import IntegerParameter
 
 from safe.definitionsv4.utilities import all_default_fields
 from safe.definitionsv4.constants import qvariant_whole_numbers, GLOBAL
+from safe.definitionsv4.default_settings import inasafe_default_settings
 from safe.common.utilities import temp_dir
 from safe.defaults import (
     disclaimer,
@@ -109,45 +110,87 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
     def restore_state(self):
         """Reinstate the options based on the user's stored session info.
         """
-        # flag = settings.value(
-        #     'inasafe/useThreadingFlag', False)
-        # hack set use thread to false see #557
-        # TODO: Store default values somewhere else, e.g. defaults.py
         flag = False
         self.cbxUseThread.setChecked(flag)
 
+        key = 'visibleLayersOnlyFlag'
         flag = bool(self.settings.value(
-            'inasafe/visibleLayersOnlyFlag', True, type=bool))
+            'inasafe/%s' % key, inasafe_default_settings[key], type=bool))
         self.cbxVisibleLayersOnly.setChecked(flag)
 
+        key = 'set_layer_from_title_flag'
         flag = bool(self.settings.value(
-            'inasafe/set_layer_from_title_flag', True, type=bool))
+            'inasafe/%s' % key, inasafe_default_settings[key], type=bool))
         self.cbxSetLayerNameFromTitle.setChecked(flag)
 
+        key = 'setZoomToImpactFlag'
         flag = bool(self.settings.value(
-            'inasafe/setZoomToImpactFlag', True, type=bool))
+            'inasafe/%s' % key, inasafe_default_settings[key], type=bool))
         self.cbxZoomToImpact.setChecked(flag)
+
         # whether exposure layer should be hidden after model completes
+        key = 'setHideExposureFlag'
         flag = bool(self.settings.value(
-            'inasafe/setHideExposureFlag', False, type=bool))
+            'inasafe/%s' % key, inasafe_default_settings[key], type=bool))
         self.cbxHideExposure.setChecked(flag)
 
+        key = 'useSelectedFeaturesOnly'
         flag = bool(self.settings.value(
-            'inasafe/useSelectedFeaturesOnly', False, type=bool))
+            'inasafe/%s' % key, inasafe_default_settings[key], type=bool))
         self.cbxUseSelectedFeaturesOnly.setChecked(flag)
 
+        key = 'useSentry'
         flag = bool(self.settings.value(
-            'inasafe/useSentry', False, type=bool))
+            'inasafe/%s' % key, inasafe_default_settings[key], type=bool))
         self.cbxUseSentry.setChecked(flag)
 
-        path = self.settings.value(
-            'inasafe/keywordCachePath',
-            self.keyword_io.default_keyword_db_path(), type=str)
-        self.leKeywordCachePath.setText(path)
-
+        key = 'template_warning_verbose'
         flag = bool(self.settings.value(
-            'inasafe/template_warning_verbose', True, type=bool))
+            'inasafe/%s' % key, inasafe_default_settings[key], type=bool))
         self.template_warning_checkbox.setChecked(flag)
+
+        # Restore Show Organisation Logo in Dock Flag
+        key = 'showOrganisationLogoInDockFlag'
+        flag = bool(self.settings.value(
+            'inasafe/%s' % key, inasafe_default_settings[key], type=bool))
+        self.organisation_on_dock_checkbox.setChecked(flag)
+
+        key = 'developer_mode'
+        flag = bool(self.settings.value(
+            'inasafe/%s' % key, inasafe_default_settings[key], type=bool))
+        self.cbxDevMode.setChecked(flag)
+
+        # Restore ISO19115 metadata tab
+        key = 'ISO19115_ORGANIZATION'
+        value = self.settings.value(
+            'inasafe/%s' % key, inasafe_default_settings[key], type=str)
+        self.iso19115_organization_le.setText(value)
+
+        key = 'ISO19115_URL'
+        value = self.settings.value(
+            'inasafe/%s' % key, inasafe_default_settings[key], type=str)
+        self.iso19115_url_le.setText(value)
+
+        key = 'ISO19115_EMAIL'
+        value = self.settings.value(
+            'inasafe/%s' % key, inasafe_default_settings[key], type=str)
+        self.iso19115_email_le.setText(value)
+
+        key = 'ISO19115_TITLE'
+        value = self.settings.value(
+            'inasafe/%s' % key, inasafe_default_settings[key], type=str)
+        self.iso19115_title_le.setText(value)
+
+        key = 'ISO19115_LICENSE'
+        value = self.settings.value(
+            'inasafe/%s' % key, inasafe_default_settings[key], type=str)
+        self.iso19115_license_le.setText(value)
+
+        # Keyword cache path
+        key = 'keywordCachePath'
+        path = self.settings.value(
+            'inasafe/%s' % key, inasafe_default_settings[key])
+        self.leKeywordCachePath.setText(path)
 
         # Restore Organisation Logo Path
         org_logo_path = self.settings.value(
@@ -159,6 +202,7 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         self.custom_org_logo_checkbox.setChecked(custom_org_logo_flag)
         self.leOrganisationLogoPath.setText(org_logo_path)
 
+        # User Directory
         user_directory_path = self.settings.value(
             'inasafe/defaultUserDirectory',
             temp_dir('impacts'), type=str)
@@ -168,11 +212,6 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
             custom_user_directory_flag)
         self.splitter_user_directory.setEnabled(custom_user_directory_flag)
         self.leUserDirectoryPath.setText(user_directory_path)
-
-        # Restore Show Organisation Logo in Dock Flag
-        flag = bool(self.settings.value(
-            'inasafe/showOrganisationLogoInDockFlag', False, type=bool))
-        self.organisation_on_dock_checkbox.setChecked(flag)
 
         # Restore North Arrow Image Path
         north_arrow_path = self.settings.value(
@@ -197,22 +236,6 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         self.custom_org_disclaimer_checkbox.setChecked(
             custom_org_disclaimer_flag)
         self.txtDisclaimer.setPlainText(org_disclaimer)
-
-        flag = bool(
-            self.settings.value('inasafe/developer_mode', False, type=bool))
-        self.cbxDevMode.setChecked(flag)
-
-        # Restore ISO19115 metadata tab
-        value = self.defaults['ISO19115_ORGANIZATION']
-        self.iso19115_organization_le.setText(value)
-        value = self.defaults['ISO19115_URL']
-        self.iso19115_url_le.setText(value)
-        value = self.defaults['ISO19115_EMAIL']
-        self.iso19115_email_le.setText(value)
-        value = self.defaults['ISO19115_TITLE']
-        self.iso19115_title_le.setText(value)
-        value = self.defaults['ISO19115_LICENSE']
-        self.iso19115_license_le.setText(value)
 
         # Restore InaSAFE default values
         self.restore_default_values_page()

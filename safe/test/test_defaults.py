@@ -20,8 +20,7 @@ from safe.defaults import (
 
 
 class TestDefaults(unittest.TestCase):
-    """Tests for working with the defaults module.
-    """
+    """Tests for working with the defaults module."""
 
     def setUp(self):
         """Test setup."""
@@ -32,23 +31,14 @@ class TestDefaults(unittest.TestCase):
         pass
 
     def test_get_defaults(self):
-        """Test we can get the defaults.
-        """
+        """Test we can get the defaults."""
         expected = {
             'ADULT_RATIO': 0.659,
-
             'FEMALE_RATIO': 0.5,
-
             'ELDERLY_RATIO': 0.087,
-
             'YOUTH_RATIO': 0.254,
-            'NO_DATA': u'No data',
-
-            'ISO19115_EMAIL': u'info@inasafe.org',
-            'ISO19115_LICENSE': u'Free use with accreditation',
-            'ISO19115_ORGANIZATION': u'InaSAFE.org',
-            'ISO19115_TITLE': u'InaSAFE analysis result',
-            'ISO19115_URL': u'http://inasafe.org'}
+            'NO_DATA': u'No data'
+        }
 
         actual = get_defaults()
         self.maxDiff = None
@@ -64,29 +54,25 @@ class TestDefaults(unittest.TestCase):
         self.assertTrue(len(actual) > 0)
 
     def test_white_inasafe_logo_path(self):
-        """Verify the call to default InaSAFE logo path works.
-        """
+        """Verify the call to default InaSAFE logo path works."""
         # Check if it exists
         logo_path = QFile(white_inasafe_logo_path())
         self.assertTrue(QFile.exists(logo_path))
 
     def test_black_inasafe_logo_path(self):
-        """Verify the call to default InaSAFE logo path works.
-        """
+        """Verify the call to default InaSAFE logo path works."""
         # Check if it exists
         logo_path = QFile(black_inasafe_logo_path())
         self.assertTrue(QFile.exists(logo_path))
 
     def test_supporters_logo_path(self):
-        """Verify the call to default supporters logo path works.
-        """
+        """Verify the call to default supporters logo path works."""
         # Check if it exists
         logo_path = QFile(supporters_logo_path())
         self.assertTrue(QFile.exists(logo_path))
 
     def test_default_north_arrow_path(self):
-        """Verify the call to default north arrow path works.
-        """
+        """Verify the call to default north arrow path works."""
         # Check if it exists
         path = QFile(default_north_arrow_path())
         self.assertTrue(QFile.exists(path))
