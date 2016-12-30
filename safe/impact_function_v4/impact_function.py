@@ -419,7 +419,7 @@ class ImpactFunction(object):
         """Return the current datastore.
 
         :return: The datastore.
-        :rtype: Datastore
+        :rtype: Datastore.Datastore
         """
         return self._datastore
 
