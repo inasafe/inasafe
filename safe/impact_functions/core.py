@@ -1,42 +1,21 @@
 # coding=utf-8
-"""Function to manage self-registering plugins.
-
-The design is based on http://effbot.org/zone/metaclass-plugins.htm
-
-To register the plugin, the module must be imported by the Python process
-using it.
-
-InaSAFE Disaster risk assessment tool developed by AusAid -
-  **IS Utilities implementation.**
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
-
-__author__ = 'christian@kartoza.com <Christian Christelis>'
-__revision__ = '$Format:%H$'
-__date__ = '29/04/2015'
-__copyright__ = 'Copyright 2012, Australia Indonesia Facility for '
-__copyright__ += 'Disaster Reduction'
+"""Helper method for impact functions."""
 
 import logging
 from math import ceil
-import numpy
 from collections import OrderedDict
 
 from PyQt4.QtCore import QPyNullVariant
 
 from safe.defaults import default_minimum_needs
 from safe.gui.tools.minimum_needs.needs_profile import filter_needs_parameters
-import safe.messaging as m
-from safe.utilities.i18n import tr
 
 LOGGER = logging.getLogger('InaSAFE')
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 
 def evacuated_population_weekly_needs(
@@ -147,57 +126,3 @@ def population_rounding(number):
     :rtype: int
     """
     return population_rounding_full(number)[0]
-
-
-def has_no_data(layer_data):
-    """Determine whether or not a layer contains nan values.
-    :param layer_data: Layer data that is to be inspected.
-    :type layer_data: ndarry
-    :return: The True if there is nodata in layer_data.
-    :rtype: bool
-    """
-    return numpy.isnan(numpy.sum(layer_data))
-
-
-def get_key_for_value(value, value_map):
-    """Obtain the key of a value from a value map.
-
-    :param value: The value mapped to a key in value_map.
-    :type value: int, str, float
-
-    :param value_map: A value mapping.
-    :type value_map: dict
-
-    :returns: A key for the value.
-    :rtype: str
-    """
-    for key, values in value_map.iteritems():
-        if value in values:
-            return key
-    return None
-
-
-def no_population_impact_message(question):
-    """Create a message that indicates that no population were impacted.
-
-    :param question: A question sentence that will be used as the table
-        caption.
-    :type question: basestring
-
-    :returns: An html document containing a nice message saying nobody was
-        impacted.
-    :rtype: basestring
-    """
-    message = m.Message()
-    table = m.Table(
-        style_class='table table-condensed table-striped')
-    row = m.Row()
-    label = m.ImportantText(tr('People impacted'))
-    content = 0
-    row.add(m.Cell(label))
-    row.add(m.Cell(content))
-    table.add(row)
-    table.caption = question
-    message.add(table)
-    message = message.to_html(suppress_newlines=True)
-    return message
