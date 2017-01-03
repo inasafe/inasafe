@@ -225,8 +225,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.settings.value('inasafe/showRubberBands', False, type=bool))
 
         extent = self.settings.value('inasafe/user_extent', None, type=str)
+        if extent:
+            extent = wkt_to_rectangle(extent)
         crs = self.settings.value('inasafe/user_extent_crs', None, type=str)
-        extent = wkt_to_rectangle(extent)
         crs = QgsCoordinateReferenceSystem(crs)
 
         if extent and crs.isValid():

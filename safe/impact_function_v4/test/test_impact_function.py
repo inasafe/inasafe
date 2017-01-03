@@ -7,7 +7,6 @@ import os
 import logging
 from os.path import join, isfile
 from os import listdir
-from unittest.case import expectedFailure
 
 from safe.definitionsv4.minimum_needs import minimum_needs_fields
 from safe.test.utilities import (
@@ -35,13 +34,16 @@ from safe.definitionsv4.post_processors import (
     post_processor_size
 )
 from safe.definitionsv4.constants import (
+    PREPARE_SUCCESS,
     ANALYSIS_SUCCESS,
     ANALYSIS_FAILED_BAD_INPUT,
 )
 from safe.utilities.unicode import byteify
+from safe.utilities.gis import wkt_to_rectangle
 from safe.impact_function_v4.impact_function import ImpactFunction
 
-from qgis.core import QgsVectorLayer, QgsRasterLayer
+from qgis.core import (
+    QgsVectorLayer, QgsRasterLayer, QgsCoordinateReferenceSystem)
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -183,16 +185,53 @@ class TestImpactFunction(unittest.TestCase):
         impact_function = ImpactFunction()
         impact_function.exposure = exposure_layer
         impact_function.hazard = hazard_layer
-        impact_function.prepare()
+        status, message = impact_function.prepare()
+        self.assertEqual(PREPARE_SUCCESS, status, message)
         message = (
             'Test about the minimum extent without an aggregation layer is '
             'failing.')
         self.assertTrue(
             compare_wkt(
-                'Polygon ((106.8080099999999959 -6.19531000000000009, '
-                '106.83456946836641066 -6.19531000000000009, '
-                '106.83456946836641066 -6.16752599999999962, '
+                'Polygon (('
+                '106.8080099999999959 -6.19531000000000009, '
                 '106.8080099999999959 -6.16752599999999962, '
+                '106.83456946836641066 -6.16752599999999962, '
+                '106.83456946836641066 -6.19531000000000009, '
+                '106.8080099999999959 -6.19531000000000009))',
+                impact_function.analysis_extent.exportToWkt()),
+            message
+        )
+
+        # Without aggregation layer but with a requested_extent
+        hazard_layer = load_test_vector_layer(
+            'hazard', 'flood_multipart_polygons.shp')
+        exposure_layer = load_test_vector_layer('exposure', 'roads.shp')
+        impact_function = ImpactFunction()
+        impact_function.exposure = exposure_layer
+        impact_function.hazard = hazard_layer
+        impact_function.requested_extent = wkt_to_rectangle(
+            'POLYGON (('
+            '106.772279 -6.237576, '
+            '106.772279 -6.165415, '
+            '106.885165 -6.165415, '
+            '106.885165 -6.237576, '
+            '106.772279 -6.237576'
+            '))')
+        impact_function.requested_extent_crs = QgsCoordinateReferenceSystem(
+            4326)
+
+        status, message = impact_function.prepare()
+        self.assertEqual(PREPARE_SUCCESS, status, message)
+        message = (
+            'Test about the minimum extent without an aggregation layer but '
+            'with a requested extent is failing.')
+        self.assertTrue(
+            compare_wkt(
+                'Polygon (('
+                '106.8080099999999959 -6.19531000000000009, '
+                '106.8080099999999959 -6.16752599999999962, '
+                '106.83456946836641066 -6.16752599999999962, '
+                '106.83456946836641066 -6.19531000000000009, '
                 '106.8080099999999959 -6.19531000000000009))',
                 impact_function.analysis_extent.exportToWkt()),
             message
@@ -211,7 +250,8 @@ class TestImpactFunction(unittest.TestCase):
         impact_function.hazard = hazard_layer
         impact_function.use_selected_features_only = False
         impact_function.aggregation.select(0)
-        impact_function.prepare()
+        status, message = impact_function.prepare()
+        self.assertEqual(PREPARE_SUCCESS, status, message)
         message = (
             'Test about the minimum extent with an aggregation layer is '
             'failing.')
@@ -231,7 +271,8 @@ class TestImpactFunction(unittest.TestCase):
 
         # With an aggregation layer, with selection
         impact_function.use_selected_features_only = True
-        impact_function.prepare()
+        status, message = impact_function.prepare()
+        self.assertEqual(PREPARE_SUCCESS, status, message)
         message = (
             'Test about the minimum extent with an aggregation layer and '
             'a selection is failing.')
@@ -381,7 +422,7 @@ class TestImpactFunction(unittest.TestCase):
                 self.assertIn(field_name, impact_fields)
         print_attribute_table(impact_layer, 1)
 
-    @expectedFailure
+    @unittest.expectedFailure
     def test_post_minimum_needs_value_generation(self):
         """Test minimum needs postprocessors.
 
@@ -404,9 +445,11 @@ class TestImpactFunction(unittest.TestCase):
         impact_function.aggregation = aggregation_layer
         impact_function.exposure = exposure_layer
         impact_function.hazard = hazard_layer
-        impact_function.prepare()
-        return_code, message = impact_function.run()
 
+        return_code, message = impact_function.prepare()
+        self.assertEqual(return_code, PREPARE_SUCCESS, message)
+
+        return_code, message = impact_function.run()
         self.assertEqual(return_code, ANALYSIS_SUCCESS, message)
 
         # minimum needs fields should exists in the results

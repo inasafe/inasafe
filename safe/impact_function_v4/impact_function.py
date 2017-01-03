@@ -684,6 +684,15 @@ class ImpactFunction(object):
                     self.aggregation, 'aggregation')
                 if status != PREPARE_SUCCESS:
                     return status, message
+            else:
+                if self.requested_extent and not self.requested_extent_crs:
+                    message = generate_input_error_message(
+                        tr('Error with the requested extent'),
+                        m.Paragraph(tr(
+                            'Requested Extent CRS must be set when requested '
+                            'is not null.'))
+                    )
+                    return PREPARE_FAILED_BAD_INPUT, message
 
             status, message = self._compute_analysis_extent()
             if status != PREPARE_SUCCESS:
@@ -726,16 +735,16 @@ class ImpactFunction(object):
                 from the code.
         :rtype: (int, m.Message)
         """
-        exposure_extent = self.exposure.extent()
-        hazard_extent = self.hazard.extent()
+        exposure_extent = QgsGeometry.fromRect(self.exposure.extent())
+        hazard_extent = QgsGeometry.fromRect(self.hazard.extent())
 
         if self.hazard.crs().authid() != self.exposure.crs().authid():
             crs_transform = QgsCoordinateTransform(
                 self.hazard.crs(), self.exposure.crs())
-            hazard_extent = crs_transform.transformBoundingBox(hazard_extent)
+            hazard_extent.transform(crs_transform)
 
         # We check if the hazard and the exposure overlap.
-        hazard_exposure = exposure_extent.intersect(hazard_extent)
+        hazard_exposure = exposure_extent.intersection(hazard_extent)
         if hazard_exposure.isEmpty():
             message = generate_input_error_message(
                 tr('Layers need to overlap.'),
@@ -746,15 +755,15 @@ class ImpactFunction(object):
 
         if not self.aggregation:
             if self.requested_extent and self.requested_extent_crs:
-                user_bounding_box = QgsGeometry(self.requested_extent)
+                user_bounding_box = QgsGeometry.fromRect(self.requested_extent)
 
                 if self.requested_extent_crs != self.exposure.crs():
                     crs_transform = QgsCoordinateTransform(
                         self.requested_extent_crs, self.exposure.crs())
                     user_bounding_box.transform(crs_transform)
 
-                self._analysis_extent = QgsGeometry.fromRect(
-                    hazard_exposure.intersect(user_bounding_box))
+                self._analysis_extent = hazard_exposure.intersection(
+                    user_bounding_box)
                 if self._analysis_extent.isEmpty():
                     message = generate_input_error_message(
                         tr('The bounding box need to overlap layers.'),
@@ -764,7 +773,7 @@ class ImpactFunction(object):
                     )
                     return PREPARE_FAILED_BAD_INPUT, message
             else:
-                self._analysis_extent = QgsGeometry.fromRect(hazard_exposure)
+                self._analysis_extent = hazard_exposure
 
         else:
             list_geometry = []
