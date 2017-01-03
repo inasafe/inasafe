@@ -47,22 +47,16 @@ class Extent(object):
         # extents are persistent for the session.
 
         # Last analysis extents
-        # Added by Tim in version 2.1.0
         self.last_analysis_rubberband = None
-        # Added by Tim in version 2.2.0
-        self.last_analysis_extent = None
-        # This is a rubber band to show what the AOI of the
-        # next analysis will be. Also added in 2.1.0
+        self.last_analysis_extent = None  # QgsGeometry
+
+        # The AOI of the next analysis.
         self.next_analysis_rubberband = None
-        # Added by Tim in version 2.2.0
-        self.next_analysis_extent = None
-        # Rubber band to show the user defined analysis using extent
-        # Added in 2.2.0
-        self.user_analysis_rubberband = None
+        self.next_analysis_extent = None  # QgsGeometry
+
         # Rectangle defining the user's preferred extent for the analysis
-        # Added in 2.2.0
-        self.user_extent = None
-        # CRS for user defined preferred extent
+        self.user_analysis_rubberband = None
+        self.user_extent = None  # QgsRectangle
         self.user_extent_crs = None
 
         # Whether to show rubber band of last and next scenario
@@ -143,13 +137,12 @@ class Extent(object):
         """
         self.hide_user_analysis_extent()
 
-        extent = QgsGeometry.fromRect(extent)
         self.user_extent = extent
         self.user_extent_crs = crs
 
         # Persist this extent for the next session
         settings = QSettings()
-        settings.setValue('inasafe/user_extent', extent.exportToWkt())
+        settings.setValue('inasafe/user_extent', extent.asWktPolygon())
         settings.setValue('inasafe/user_extent_crs', crs.authid())
 
         self.show_user_analysis_extent()
@@ -183,6 +176,8 @@ class Extent(object):
 
         if not extent or not source_crs:
             return
+
+        extent = QgsGeometry.fromRect(extent)
 
         # make sure the extent is in the same crs as the canvas
         transform = QgsCoordinateTransform(source_crs, self.destination_crs)
