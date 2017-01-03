@@ -325,6 +325,10 @@ class TestImpactFunction(unittest.TestCase):
                 continue
             self.assertIn(line, message)
 
+        # Notes(IS): For some unknown reason I need to do this to make
+        # test_provenance pass
+        del hazard_layer
+
     def test_scenario(self, scenario_path=None):
         """Run test single scenario."""
         self.maxDiff = None
@@ -454,15 +458,11 @@ class TestImpactFunction(unittest.TestCase):
         impact_function.aggregation = aggregation_layer
         impact_function.exposure = exposure_layer
         impact_function.hazard = hazard_layer
-        status, message = impact_function.run()
-        self.assertEqual(ANALYSIS_FAILED_BAD_INPUT, status, message)
         impact_function.prepare()
         status, message = impact_function.run()
         self.assertEqual(ANALYSIS_SUCCESS, status, message)
 
         provenance = impact_function.provenance
-        # from pprint import pprint
-        # pprint(provenance)
         self.maxDiff = None
 
         expected_provenance.update({
