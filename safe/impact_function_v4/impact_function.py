@@ -1,12 +1,18 @@
 # coding=utf-8
 """Impact function
 """
+import getpass
+import platform
 from datetime import datetime
 from os.path import join, exists
 from os import makedirs
 from collections import OrderedDict
+from copy import deepcopy
+from socket import gethostname
 
-from PyQt4.QtCore import QSettings
+from PyQt4.QtCore import QT_VERSION_STR, QSettings
+from PyQt4.Qt import PYQT_VERSION_STR
+from osgeo import gdal
 from qgis.core import (
     QgsMapLayer,
     QgsGeometry,
@@ -21,6 +27,7 @@ from qgis.core import (
 import logging
 
 from safe.common.utilities import temp_dir
+from safe.common.version import get_version
 from safe.datastore.folder import Folder
 from safe.datastore.datastore import DataStore
 from safe.gisv4.vector.prepare_vector_layer import prepare_vector_layer
@@ -149,6 +156,7 @@ class ImpactFunction(object):
         self._performance_log = None
         self.reset_state()
         self._is_ready = False
+        self._provenance = {}
 
     @property
     def performance_log(self):
@@ -220,6 +228,7 @@ class ImpactFunction(object):
         """
         self._hazard = layer
         self._is_ready = False
+        self._provenance['hazard_layer'] = self._hazard.source()
 
     @property
     def exposure(self):
@@ -239,6 +248,7 @@ class ImpactFunction(object):
         """
         self._exposure = layer
         self._is_ready = False
+        self._provenance['exposure_layer'] = self._exposure.source()
 
     @property
     def aggregation(self):
@@ -258,6 +268,7 @@ class ImpactFunction(object):
         """
         self._aggregation = layer
         self._is_ready = False
+        self._provenance['exposure_layer'] = self._aggregation.source()
 
     @property
     def outputs(self):
@@ -648,6 +659,8 @@ class ImpactFunction(object):
                 return PREPARE_FAILED_BAD_INPUT, message
 
             status, message = self._check_layer(self.exposure, 'exposure')
+            self.provenance['exposure_keywords'] = deepcopy(
+                self.exposure.keywords)
             if status != PREPARE_SUCCESS:
                 return status, message
 
@@ -661,6 +674,8 @@ class ImpactFunction(object):
                 return PREPARE_FAILED_BAD_INPUT, message
 
             status, message = self._check_layer(self.hazard, 'hazard')
+            self.provenance['hazard_keywords'] = deepcopy(
+                self.hazard.keywords)
             if status != PREPARE_SUCCESS:
                 return status, message
 
@@ -685,6 +700,8 @@ class ImpactFunction(object):
 
                 status, message = self._check_layer(
                     self.aggregation, 'aggregation')
+                self.provenance['aggregation_keywords'] = deepcopy(
+                    self.aggregation.keywords)
                 if status != PREPARE_SUCCESS:
                     return status, message
             else:
@@ -994,9 +1011,12 @@ class ImpactFunction(object):
         # End of the impact function, we can add layers to the datastore.
         # We replace memory layers by the real layer from the datastore.
         if self._exposure_impacted:
+            self._exposure_impacted.keywords[
+                'provenance_data'] = self.provenance
             _, name = self.datastore.add_layer(
                 self._exposure_impacted, 'exposure_impacted')
             self._exposure_impacted = self.datastore.layer(name)
+            # Add provenance here
             if self.debug_mode:
                 check_inasafe_fields(self._exposure_impacted)
 
@@ -1351,3 +1371,24 @@ class ImpactFunction(object):
         # Let's style the aggregation and analysis layer.
         simple_polygon_without_brush(self.aggregation_impacted)
         simple_polygon_without_brush(self.analysis_impacted)
+
+    @property
+    def provenance(self):
+        """Helper method to gather provenance for exposure_impacted layer.
+
+        :returns: Dictionary that contains all provenance.
+        :rtype: dict
+        """
+        # Environment
+        self._provenance['host_name'] = gethostname()
+        self._provenance['user'] = getpass.getuser()
+        self._provenance['qgis_version'] = QGis.QGIS_VERSION
+        self._provenance['gdal_version'] = gdal.__version__
+        self._provenance['qt_version'] = QT_VERSION_STR
+        self._provenance['pyqt_version'] = PYQT_VERSION_STR
+        self._provenance['os'] = platform.version()
+        self._provenance['inasafe_version'] = get_version()
+
+        # InaSAFE
+
+        return self._provenance
