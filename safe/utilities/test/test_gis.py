@@ -7,10 +7,12 @@ import numpy
 import qgis  # pylint: disable=unused-import
 from PyQt4.QtCore import QVariant
 from os.path import join
+from qgis.core import QgsRectangle
 
 from safe.utilities.gis import (
     layer_attribute_names,
     is_polygon_layer,
+    wkt_to_rectangle,
     validate_geo_array)
 from safe.test.utilities import (
     TESTDATA,
@@ -99,6 +101,14 @@ class TestQGIS(unittest.TestCase):
         )
         message = ('%s raster layer should not be polygonal' % layer)
         self.assertFalse(is_polygon_layer(layer), message)
+
+    def test_rectangle_from_wkt(self):
+        """Test we can a create a rectangle from a WKT."""
+        rectangle = wkt_to_rectangle('POLYGON ((0 0, 0 1, 1 1, 1 0, 0 0))')
+        self.assertTrue(isinstance(rectangle, QgsRectangle))
+
+        rectangle = wkt_to_rectangle('POLYGON ((0 1, 1 1, 1 0, 0 0))')
+        self.assertIsNone(rectangle)
 
     def test_validate_geo_array(self):
         """Test validate geographic extent method.
