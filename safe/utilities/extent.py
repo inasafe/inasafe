@@ -9,7 +9,7 @@ from qgis.core import (
     QGis)
 from qgis.gui import QgsRubberBand  # pylint: disable=no-name-in-module
 # noinspection PyPackageRequirements
-from PyQt4.QtCore import QSettings
+from PyQt4.QtCore import QSettings, Qt
 
 from safe.common.exceptions import InvalidGeometryError
 from safe.definitionsv4.colors import (
@@ -78,8 +78,7 @@ class Extent(object):
         return self.iface.mapCanvas().mapRenderer().destinationCrs()
 
     def _draw_rubberband(self, geometry, colour, width):
-        """
-        Draw a rubber band on the canvas.
+        """Draw a rubber band on the canvas.
 
         .. versionadded: 2.2.0
 
@@ -133,17 +132,16 @@ class Extent(object):
         """Transform a bounding box into the CRS of the canvas.
 
         :param extent: An extent in geographic coordinates.
-        :type extent: QgsRectangle
+        :type extent: QgsGeometry
 
         :returns: The extent in CRS of the canvas.
-        :rtype: QgsRectangle
+        :rtype: QgsGeometry
         """
 
         # make sure the extent is in the same crs as the canvas
-        source_crs = QgsCoordinateReferenceSystem()
-        source_crs.createFromSrid(4326)
+        source_crs = QgsCoordinateReferenceSystem(4326)
         transform = QgsCoordinateTransform(source_crs, self.destination_crs)
-        extent = transform.transformBoundingBox(extent)
+        extent.transform(transform)
         return extent
 
     def hide_user_analysis_extent(self):
@@ -175,8 +173,8 @@ class Extent(object):
 
         # Persist this extent for the next session
         settings = QSettings()
-        settings.setValue('inasafe/analysis_extent', extent.exportAsWkt())
-        settings.setValue('inasafe/analysis_extent_crs', crs.authid())
+        settings.setValue('inasafe/user_extent', extent.exportToWkt())
+        settings.setValue('inasafe/user_extent_crs', crs.authid())
 
         self.show_user_analysis_extent()
         # Next extent might have changed as a result of the new user
@@ -218,7 +216,7 @@ class Extent(object):
 
         # make sure the extent is in the same crs as the canvas
         transform = QgsCoordinateTransform(source_crs, self.destination_crs)
-        extent = transform.transformBoundingBox(extent)
+        extent.transform(transform)
 
         if self.show_rubber_bands:
             # Draw in blue

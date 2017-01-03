@@ -285,7 +285,7 @@ def impact_function_setup(
     impact_function.map_canvas = CANVAS
     # QSetting context
     settings = QSettings()
-    crs = settings.value('inasafe/analysis_extent_crs', '', type=str)
+    crs = settings.value('inasafe/user_extent_crs', '', type=str)
     impact_function.requested_extent_crs = QgsCoordinateReferenceSystem(crs)
     try:
         impact_function.requested_extent = QgsRectangle(

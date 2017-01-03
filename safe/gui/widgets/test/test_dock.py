@@ -848,8 +848,8 @@ class TestDock(TestCase):
 
         settings = QtCore.QSettings()
         extents = '106.772279, -6.237576, 106.885165, -6.165415'
-        settings.setValue('inasafe/analysis_extent', extents)
-        settings.setValue('inasafe/analysis_extent_crs', 'EPSG:4326')
+        settings.setValue('inasafe/user_extent', extents)
+        settings.setValue('inasafe/user_extent_crs', 'EPSG:4326')
         self.dock.read_settings()
 
         setup_scenario(
