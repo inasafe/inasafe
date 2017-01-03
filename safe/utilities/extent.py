@@ -108,6 +108,9 @@ class Extent(object):
         :rtype: QgsGeometry
         """
 
+        # Temporary hack. ET.
+        return extent
+
         # make sure the extent is in the same crs as the canvas
         source_crs = QgsCoordinateReferenceSystem(4326)
         transform = QgsCoordinateTransform(source_crs, self.destination_crs)

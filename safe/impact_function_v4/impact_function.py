@@ -744,14 +744,15 @@ class ImpactFunction(object):
             hazard_extent.transform(crs_transform)
 
         # We check if the hazard and the exposure overlap.
-        hazard_exposure = exposure_extent.intersection(hazard_extent)
-        if hazard_exposure.isEmpty():
+        if not exposure_extent.intersects(hazard_extent):
             message = generate_input_error_message(
                 tr('Layers need to overlap.'),
                 m.Paragraph(tr(
                     'The exposure and the hazard layer need to overlap.'))
             )
             return PREPARE_FAILED_BAD_INPUT, message
+        else:
+            hazard_exposure = exposure_extent.intersection(hazard_extent)
 
         if not self.aggregation:
             if self.requested_extent and self.requested_extent_crs:
@@ -762,9 +763,7 @@ class ImpactFunction(object):
                         self.requested_extent_crs, self.exposure.crs())
                     user_bounding_box.transform(crs_transform)
 
-                self._analysis_extent = hazard_exposure.intersection(
-                    user_bounding_box)
-                if self._analysis_extent.isEmpty():
+                if not hazard_exposure.intersects(user_bounding_box):
                     message = generate_input_error_message(
                         tr('The bounding box need to overlap layers.'),
                         m.Paragraph(tr(
@@ -772,6 +771,9 @@ class ImpactFunction(object):
                             'the exposure and the hazard.'))
                     )
                     return PREPARE_FAILED_BAD_INPUT, message
+                else:
+                    self._analysis_extent = hazard_exposure.intersection(
+                        user_bounding_box)
             else:
                 self._analysis_extent = hazard_exposure
 
