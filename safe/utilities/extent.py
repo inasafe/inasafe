@@ -104,30 +104,6 @@ class Extent(object):
 
         return rubber_band
 
-    @staticmethod
-    def validate_geometry(extent):
-        """
-
-        .. versionadded: 2.2.0
-
-        :param extent:
-        :return:
-
-        :raises: InvalidGeometryError
-        """
-
-        if isinstance(extent, list):
-            extent = QgsRectangle(
-                extent[0],
-                extent[1],
-                extent[2],
-                extent[3])
-
-        if not isinstance(extent, QgsGeometry):
-            extent = QgsGeometry.fromRect(extent)
-
-        return extent
-
     def _geo_extent_to_canvas_crs(self, extent):
         """Transform a bounding box into the CRS of the canvas.
 
@@ -167,7 +143,7 @@ class Extent(object):
         """
         self.hide_user_analysis_extent()
 
-        extent = self.validate_geometry(extent)
+        extent = QgsGeometry.fromRect(extent)
         self.user_extent = extent
         self.user_extent_crs = crs
 
@@ -208,12 +184,6 @@ class Extent(object):
         if not extent or not source_crs:
             return
 
-        try:
-            extent = self.validate_geometry(extent)
-        except InvalidGeometryError:
-            # keep existing user extent without updating it
-            return
-
         # make sure the extent is in the same crs as the canvas
         transform = QgsCoordinateTransform(source_crs, self.destination_crs)
         extent.transform(transform)
@@ -240,15 +210,10 @@ class Extent(object):
         layers.
 
         :param next_analysis_extent: The next analysis extent.
-        :type next_analysis_extent: list
+        :type next_analysis_extent: QgsGeometry
 
         .. versionadded:: 2.1.0
         """
-        try:
-            next_analysis_extent = self.validate_geometry(
-                next_analysis_extent)
-        except InvalidGeometryError:
-            return
 
         # store the extent to the instance property before reprojecting it
         self.next_analysis_extent = next_analysis_extent
@@ -279,18 +244,10 @@ class Extent(object):
 
         .. versionadded:: 2.1.0
 
-        :param extent: A rectangle to display on the canvas. If parameter is
-            a list it should be in the form of [xmin, ymin, xmax, ymax]
-            otherwise it will be silently ignored and this method will
-            do nothing.
-        :type extent: QgsRectangle, list
+        :param extent: The last analysis extent.
+        :type extent: QgsGeometry
         """
         self.hide_last_analysis_extent()
-        try:
-            # Massage it into a QgsRectangle
-            extent = self.validate_geometry(extent)
-        except InvalidGeometryError:
-            return
 
         # store the extent to the instance property before reprojecting it
         self.last_analysis_extent = extent

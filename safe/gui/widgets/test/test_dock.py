@@ -843,12 +843,18 @@ class TestDock(TestCase):
 
         Note that when testing on a desktop system this will overwrite your
         user defined analysis extent.
-
         """
 
         settings = QtCore.QSettings()
-        extents = '106.772279, -6.237576, 106.885165, -6.165415'
-        settings.setValue('inasafe/user_extent', extents)
+        extent = (
+            'POLYGON (('
+            '106.772279 -6.237576, '
+            '106.772279 -6.165415, '
+            '106.885165 -6.165415, '
+            '106.885165 -6.237576, '
+            '106.772279 -6.237576'
+            '))')
+        settings.setValue('inasafe/user_extent', extent)
         settings.setValue('inasafe/user_extent_crs', 'EPSG:4326')
         self.dock.read_settings()
 
