@@ -111,12 +111,6 @@ class Extent(object):
         # Temporary hack. ET.
         return extent
 
-        # make sure the extent is in the same crs as the canvas
-        source_crs = QgsCoordinateReferenceSystem(4326)
-        transform = QgsCoordinateTransform(source_crs, self.destination_crs)
-        extent.transform(transform)
-        return extent
-
     def hide_user_analysis_extent(self):
         """Hide the rubber band showing extent of the next analysis.
 
