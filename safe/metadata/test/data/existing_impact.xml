@@ -175,6 +175,9 @@
           <multipart_polygon>
             <gco:Boolean/>
           </multipart_polygon>
+          <impact_table>
+            <gco:CharacterString/>
+          </impact_table>
           <hazard_keywords>
             <gco:Dictionary/>
           </hazard_keywords>
@@ -247,9 +250,9 @@
           <layer_purpose>
             <gco:CharacterString/>
           </layer_purpose>
-          <impact_table>
-            <gco:CharacterString/>
-          </impact_table>
+          <provenance_data>
+            <gco:Dictionary/>
+          </provenance_data>
           <resolution>
             <gco:FloatTuple/>
           </resolution>
