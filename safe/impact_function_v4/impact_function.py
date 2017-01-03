@@ -228,7 +228,6 @@ class ImpactFunction(object):
         """
         self._hazard = layer
         self._is_ready = False
-        self._provenance['hazard_layer'] = self._hazard.source()
 
     @property
     def exposure(self):
@@ -248,7 +247,6 @@ class ImpactFunction(object):
         """
         self._exposure = layer
         self._is_ready = False
-        self._provenance['exposure_layer'] = self._exposure.source()
 
     @property
     def aggregation(self):
@@ -268,7 +266,6 @@ class ImpactFunction(object):
         """
         self._aggregation = layer
         self._is_ready = False
-        self._provenance['aggregation_layer'] = self._aggregation.source()
 
     @property
     def outputs(self):
@@ -658,6 +655,7 @@ class ImpactFunction(object):
                 )
                 return PREPARE_FAILED_BAD_INPUT, message
 
+            self._provenance['exposure_layer'] = self.exposure.source()
             status, message = self._check_layer(self.exposure, 'exposure')
             self._provenance['exposure_keywords'] = deepcopy(
                 self.exposure.keywords)
@@ -673,6 +671,7 @@ class ImpactFunction(object):
                 )
                 return PREPARE_FAILED_BAD_INPUT, message
 
+            self._provenance['hazard_layer'] = self.hazard.source()
             status, message = self._check_layer(self.hazard, 'hazard')
             self._provenance['hazard_keywords'] = deepcopy(
                 self.hazard.keywords)
@@ -698,6 +697,9 @@ class ImpactFunction(object):
                     )
                     return PREPARE_FAILED_BAD_INPUT, message
 
+                self._provenance['aggregation_layer'] = (
+                    self.aggregation.source()
+                )
                 status, message = self._check_layer(
                     self.aggregation, 'aggregation')
                 self._provenance['aggregation_keywords'] = deepcopy(
