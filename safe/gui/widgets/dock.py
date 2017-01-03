@@ -1298,6 +1298,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     message,
                     self.tr('More info ...'),
                     2)
+
+            self.extent.show_next_analysis_extent(
+                impact_function.analysis_extent)
+
             self.run_button.setEnabled(True)
         else:
             # For issue #618, #1811
