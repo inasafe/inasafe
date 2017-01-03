@@ -10,8 +10,15 @@ from os import listdir
 from unittest.case import expectedFailure
 
 from safe.definitionsv4.minimum_needs import minimum_needs_fields
-from safe.test.utilities import get_control_text, load_test_raster_layer
-from safe.test.utilities import get_qgis_app, standard_data_path
+from safe.test.utilities import (
+    get_control_text,
+    load_test_raster_layer,
+    get_qgis_app,
+    standard_data_path,
+    load_test_vector_layer,
+    check_inasafe_fields,
+    compare_wkt
+)
 from safe.test.debug_helper import print_attribute_table
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -32,8 +39,6 @@ from safe.definitionsv4.constants import (
     ANALYSIS_FAILED_BAD_INPUT,
 )
 from safe.utilities.unicode import byteify
-from safe.test.utilities import (
-    load_test_vector_layer, check_inasafe_fields, compare_wkt)
 from safe.impact_function_v4.impact_function import ImpactFunction
 
 from qgis.core import QgsVectorLayer, QgsRasterLayer
@@ -179,6 +184,9 @@ class TestImpactFunction(unittest.TestCase):
         impact_function.exposure = exposure_layer
         impact_function.hazard = hazard_layer
         impact_function.prepare()
+        message = (
+            'Test about the minimum extent without an aggregation layer is '
+            'failing.')
         self.assertTrue(
             compare_wkt(
                 'Polygon ((106.8080099999999959 -6.19531000000000009, '
@@ -186,10 +194,9 @@ class TestImpactFunction(unittest.TestCase):
                 '106.83456946836641066 -6.16752599999999962, '
                 '106.8080099999999959 -6.16752599999999962, '
                 '106.8080099999999959 -6.19531000000000009))',
-                impact_function.analysis_extent.exportToWkt(),
-                'Test about the minimum extent without an aggregation layer '
-                'is failing.'
-            ))
+                impact_function.analysis_extent.exportToWkt()),
+            message
+        )
 
         # With an aggregation layer, without selection
         hazard_layer = load_test_vector_layer(
@@ -205,6 +212,9 @@ class TestImpactFunction(unittest.TestCase):
         impact_function.use_selected_features_only = False
         impact_function.aggregation.select(0)
         impact_function.prepare()
+        message = (
+            'Test about the minimum extent with an aggregation layer is '
+            'failing.')
         self.assertTrue(
             compare_wkt(
                 'Polygon ((106.9033179652593617 -6.18324454090033182, '
@@ -215,26 +225,25 @@ class TestImpactFunction(unittest.TestCase):
                 '106.81348643684744104 -6.09392810187095257, '
                 '106.9033179652593617 -6.09392810187095257, '
                 '106.9033179652593617 -6.18324454090033182))',
-                impact_function.analysis_extent.exportToWkt(),
-                'Test about the minimum extent with an aggregation layer '
-                'is failing.'
-            )
+                impact_function.analysis_extent.exportToWkt()),
+            message
         )
 
         # With an aggregation layer, with selection
         impact_function.use_selected_features_only = True
         impact_function.prepare()
+        message = (
+            'Test about the minimum extent with an aggregation layer and '
+            'a selection is failing.')
         self.assertTrue(
             compare_wkt(
-                'Polygon ((106.81348643684744104 -6.11860505414877665, '
+                'Polygon ((106.72365490843547775 -6.09392810187095257, '
+                '106.81348643684744104 -6.09392810187095257, '
                 '106.81348643684744104 -6.18324645462287137, '
-                '106.73298239642586793 -6.18324645462287137, '
-                '106.73298239642586793 -6.11860505414877665, '
-                '106.81348643684744104 -6.11860505414877665))',
-                impact_function.analysis_extent.exportToWkt(),
-                'Test about the minimum extent with an aggregation layer and '
-                'a selection is failing.'
-            )
+                '106.72365490843547775 -6.18324645462287137, '
+                '106.72365490843547775 -6.09392810187095257))',
+                impact_function.analysis_extent.exportToWkt()),
+            message
         )
 
     def test_profiling(self):

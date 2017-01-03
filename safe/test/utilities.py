@@ -280,7 +280,7 @@ def load_test_vector_layer(*args, **kwargs):
     See documentation of load_path_vector_layer
 
     :param args: List of path e.g. ['exposure', 'buildings.shp'].
-    :type args: list
+    :type args: list[str]
 
     :param kwargs: It can be :
         clone=True if you want to copy the layer first to a temporary file.
@@ -418,7 +418,7 @@ def load_test_raster_layer(*args, **kwargs):
     See documentation of load_path_raster_layer
 
     :param args: List of path e.g. ['exposure', 'population.asc]'.
-    :type args: list
+    :type args: list[str]
 
     :param kwargs: It can be :
         clone=True if you want to copy the layer first to a temporary file.
