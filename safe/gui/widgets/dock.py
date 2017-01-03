@@ -172,6 +172,39 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.debug_mode.setVisible(self.developer_mode)
         self.debug_mode.setChecked(False)
 
+        # Current aggregation layer
+        self._aggregation = None
+
+    @property
+    def aggregation(self):
+        """Property for the current aggregation layer.
+
+        :return: The aggregation layer or None.
+        :rtype: QgsVectorLayer
+        """
+        return self._aggregation
+
+    @aggregation.setter
+    def aggregation(self, layer):
+        """Setter for the current aggregation layer.
+
+        :param layer: The current aggregation layer.
+        :type layer: QgsVectorLayer
+        """
+        use_selected_only = bool(self.settings.value(
+            'inasafe/useSelectedFeaturesOnly', False, type=bool))
+
+        # We need to disconnect first.
+        if self._aggregation and use_selected_only:
+            self._aggregation.selectionChanged.disconnect(
+                self.show_next_analysis_extent)
+
+        self._aggregation = layer
+
+        if use_selected_only and layer:
+            self._aggregation.selectionChanged.connect(
+                self.show_next_analysis_extent)
+
     def set_dock_title(self):
         """Set the title of the dock using the current version of InaSAFE."""
         self.setWindowTitle(self.tr('InaSAFE %s' % self.inasafe_version))
@@ -470,6 +503,35 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         del index
         self.toggle_aggregation_layer_combo()
         self.set_run_button_status()
+        self.draw_rubber_bands()
+
+    # noinspection PyPep8Naming
+    @pyqtSlot(int)
+    def on_aggregation_layer_combo_currentIndexChanged(self, index):
+        """Automatic slot executed when the Aggregation combo is changed.
+
+        :param index: The index number of the selected exposure layer.
+        :type index: int
+        """
+        if index == 0:
+            # No aggregation layer, we should display the user requested extent
+            self.aggregation = None
+
+            extent = self.settings.value('inasafe/user_extent', None, type=str)
+            if extent:
+                extent = wkt_to_rectangle(extent)
+            crs = self.settings.value(
+                'inasafe/user_extent_crs', None, type=str)
+            crs = QgsCoordinateReferenceSystem(crs)
+
+            if extent and crs.isValid():
+                self.extent.user_extent = extent
+                self.extent.user_extent_crs = crs
+        else:
+            self.extent.user_extent = None
+            self.extent.user_extent_crs = None
+            self.aggregation = self.get_aggregation_layer()
+
         self.draw_rubber_bands()
 
     def toggle_aggregation_layer_combo(self):
