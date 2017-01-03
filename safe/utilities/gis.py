@@ -14,6 +14,7 @@ from qgis.core import (
     QgsCoordinateTransform,
     QGis,
     QgsRectangle,
+    QgsPoint,
     QgsVectorLayer,
     QgsRasterLayer)
 from safe.common.exceptions import (
@@ -247,6 +248,36 @@ def is_polygon_layer(layer):
             layer.geometryType() == QGis.Polygon)
     except AttributeError:
         return False
+
+
+def wkt_to_rectangle(extent):
+    """Compute the rectangle from a WKT string.
+
+    It returns None if the extent is not valid WKT rectangle.
+
+    :param extent: The extent.
+    :type extent: basestring
+
+    :return: The rectangle or None if it is not a valid WKT rectangle.
+    :rtype: QgsRectangle
+    """
+    geometry = QgsGeometry.fromWkt(extent)
+    if not geometry.isGeosValid():
+        return None
+
+    polygon = geometry.asPolygon()[0]
+
+    if len(polygon) != 5:
+        return None
+
+    if polygon[0] != polygon[4]:
+        return None
+
+    rectangle = QgsRectangle(
+        QgsPoint(polygon[0].x(), polygon[0].y()),
+        QgsPoint(polygon[2].x(), polygon[2].y()))
+
+    return rectangle
 
 
 def qgis_version():
