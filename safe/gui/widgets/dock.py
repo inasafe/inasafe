@@ -30,6 +30,7 @@ from safe.definitionsv4.constants import (
     PREPARE_SUCCESS,
 )
 from safe.defaults import supporters_logo_path
+from safe.utilities.gis import wkt_to_rectangle
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.utilities import (
@@ -220,30 +221,17 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         Do this on init and after changing options in the options dialog.
         """
-        flag = bool(self.settings.value(
-            'inasafe/showRubberBands', False, type=bool))
-        self.extent.show_rubber_bands = flag
-        try:
-            extent = self.settings.value(
-                'inasafe/user_extent', None, type=str)
-            if not extent.startswith('POLYGON'):
-                # Before InaSAFE V4, we were not saving a WKT.
-                LOGGER.info('analysis_extent from V3, we can skip it.')
-                extent = None
-            else:
-                extent = QgsGeometry.fromWkt(extent)
-                if not extent.isGeosValid():
-                    extent = None
-            crs = self.settings.value(
-                'inasafe/user_extent_crs', None, type=str)
-        except TypeError:
-            # Any bogus stuff in settings and we just clear them
-            extent = None
-            crs = None
+        self.extent.show_rubber_bands = bool(
+            self.settings.value('inasafe/showRubberBands', False, type=bool))
 
-        if extent and crs:
-            self.extent.user_extent = QgsGeometry.fromWkt(extent)
-            self.extent.user_extent_crs = QgsCoordinateReferenceSystem(crs)
+        extent = self.settings.value('inasafe/user_extent', None, type=str)
+        crs = self.settings.value('inasafe/user_extent_crs', None, type=str)
+        extent = wkt_to_rectangle(extent)
+        crs = QgsCoordinateReferenceSystem(crs)
+
+        if extent and crs.isValid():
+            self.extent.user_extent = extent
+            self.extent.user_extent_crs = crs
             self.extent.show_user_analysis_extent()
 
         self.draw_rubber_bands()
