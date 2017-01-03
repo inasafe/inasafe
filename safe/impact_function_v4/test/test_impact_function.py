@@ -301,11 +301,11 @@ class TestImpactFunction(unittest.TestCase):
         impact_function.aggregation = aggregation_layer
         impact_function.exposure = exposure_layer
         impact_function.hazard = hazard_layer
-        status, _ = impact_function.run()
-        self.assertEqual(ANALYSIS_FAILED_BAD_INPUT, status)
+        status, message = impact_function.run()
+        self.assertEqual(ANALYSIS_FAILED_BAD_INPUT, status, message)
         impact_function.prepare()
-        status, _ = impact_function.run()
-        self.assertEqual(ANALYSIS_SUCCESS, status)
+        status, message = impact_function.run()
+        self.assertEqual(ANALYSIS_SUCCESS, status, message)
         message = impact_function.performance_log_message().to_text()
         expected_result = get_control_text(
             'test-profiling-logs.txt')

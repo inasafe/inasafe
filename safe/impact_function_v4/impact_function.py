@@ -659,7 +659,7 @@ class ImpactFunction(object):
                 return PREPARE_FAILED_BAD_INPUT, message
 
             status, message = self._check_layer(self.exposure, 'exposure')
-            self.provenance['exposure_keywords'] = deepcopy(
+            self._provenance['exposure_keywords'] = deepcopy(
                 self.exposure.keywords)
             if status != PREPARE_SUCCESS:
                 return status, message
@@ -674,7 +674,7 @@ class ImpactFunction(object):
                 return PREPARE_FAILED_BAD_INPUT, message
 
             status, message = self._check_layer(self.hazard, 'hazard')
-            self.provenance['hazard_keywords'] = deepcopy(
+            self._provenance['hazard_keywords'] = deepcopy(
                 self.hazard.keywords)
             if status != PREPARE_SUCCESS:
                 return status, message
@@ -700,7 +700,7 @@ class ImpactFunction(object):
 
                 status, message = self._check_layer(
                     self.aggregation, 'aggregation')
-                self.provenance['aggregation_keywords'] = deepcopy(
+                self._provenance['aggregation_keywords'] = deepcopy(
                     self.aggregation.keywords)
                 if status != PREPARE_SUCCESS:
                     return status, message
@@ -1390,5 +1390,102 @@ class ImpactFunction(object):
         self._provenance['inasafe_version'] = get_version()
 
         # InaSAFE
+        self._provenance['impact_function_name'] = self.name
+        self._provenance['impact_function_title'] = self.title
+        self._provenance['requested_extent'] = self.requested_extent
+        self._provenance['analysis_extent'] = (
+            self.analysis_extent.exportToWkt()
+        )
+
+        # Notes and Action
+        self._provenance['notes'] = self.notes()
+        self._provenance['action_checklist'] = self.action_checklist()
 
         return self._provenance
+
+    def exposure_notes(self):
+        """Get the exposure specific notes defined in definitions.
+
+        This method will do a lookup in definitions and return the
+        exposure definition specific notes dictionary.
+
+        This is a helper function to make it
+        easy to get exposure specific notes from the definitions metadata.
+
+        .. versionadded:: 3.5
+
+        :returns: A list like e.g. safe.definitions.exposure_land_cover[
+            'notes']
+        :rtype: list, None
+        """
+        notes = []
+        exposure = definition(self.exposure.keywords.get('exposure'))
+        if 'notes' in exposure:
+            notes += exposure['notes']
+        if self.exposure.keywords['layer_mode'] == 'classified':
+            if 'classified_notes' in exposure:
+                notes += exposure['classified_notes']
+        if self.exposure.keywords['layer_mode'] == 'continuous':
+            if 'continuous_notes' in exposure:
+                notes += exposure['continuous_notes']
+        return notes
+
+    def hazard_notes(self):
+        """Get the hazard specific notes defined in definitions.
+
+        This method will do a lookup in definitions and return the
+        hazard definition specific notes dictionary.
+
+        This is a helper function to make it
+        easy to get hazard specific notes from the definitions metadata.
+
+        .. versionadded:: 3.5
+
+        :returns: A list like e.g. safe.definitions.hazard_land_cover[
+            'notes']
+        :rtype: list, None
+        """
+        notes = []
+        hazard = definition(self.hazard.keywords.get('hazard'))
+
+        if 'notes' in hazard:
+            notes += hazard['notes']
+        if self.hazard.keywords['layer_mode'] == 'classified':
+            if 'classified_notes' in hazard:
+                notes += hazard['classified_notes']
+        if self.hazard.keywords['layer_mode'] == 'continuous':
+            if 'continuous_notes' in hazard:
+                notes += hazard['continuous_notes']
+        if self.hazard.keywords['hazard_category'] == 'single_event':
+            if 'single_event_notes' in hazard:
+                notes += hazard['single_event_notes']
+        if self.hazard.keywords['hazard_category'] == 'multiple_event':
+            if 'multi_event_notes' in hazard:
+                notes += hazard['multi_event_notes']
+        return notes
+
+    def notes(self):
+        """Return the notes section of the report.
+
+        .. versionadded:: 3.5
+
+        :return: The notes that should be attached to this impact report.
+        :rtype: list
+        """
+        fields = []  # Notes still to be defined for ASH
+        # include any generic exposure specific notes from definitions
+        fields = fields + self.exposure_notes()
+        # include any generic hazard specific notes from definitions
+        fields = fields + self.hazard_notes()
+        return fields
+
+    def action_checklist(self):
+        """Return the action check list.
+
+        :return: The action check list.
+        :rtype: list
+        """
+        exposure = definition(self.exposure.keywords.get('exposure'))
+        hazard = definition(self.hazard.keywords.get('hazard'))
+
+        return exposure.get('actions') + hazard.get('actions')
