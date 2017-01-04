@@ -37,6 +37,7 @@ from PyQt4.QtGui import QDialog
 from qgis.core import (
     QgsPoint,
     QgsRectangle,
+    QgsGeometry,
     QgsCoordinateReferenceSystem,
     QgsApplication,
     QgsCoordinateTransform,
@@ -48,6 +49,7 @@ from safe.definitionsv4.constants import (
     HAZARD_EXPOSURE_BOOKMARK,
     HAZARD_EXPOSURE_BOUNDINGBOX)
 from safe.utilities.resources import html_header, html_footer, get_ui_class
+from safe.utilities.gis import wkt_to_rectangle
 
 from safe.gui.tools.rectangle_map_tool import RectangleMapTool
 from safe.messaging import styles
@@ -97,6 +99,12 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
             # Use the current map canvas extents as a starting point
             self.tool.set_rectangle(self.canvas.extent())
         else:
+
+            if isinstance(extent, QgsGeometry):
+                # In InaSAFE V4, the extent is a QgsGeometry.
+                # This like a hack to transform a geometry to a rectangle.
+                extent = wkt_to_rectangle(extent.exportToWkt())
+
             # Ensure supplied extent is in current canvas crs
             transform = QgsCoordinateTransform(
                 crs,

@@ -721,7 +721,7 @@ class Plugin(object):
             self.iface,
             self.iface.mainWindow(),
             extent=self.dock_widget.extent.user_extent,
-            crs=self.dock_widget.extent.user_extent_crs)
+            crs=self.dock_widget.extent.crs)
         widget.clear_extent.connect(
             self.dock_widget.extent.clear_user_analysis_extent)
         widget.extent_defined.connect(

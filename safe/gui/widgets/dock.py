@@ -22,6 +22,7 @@ from safe.definitionsv4.utilities import definition
 from safe.definitionsv4.fields import hazard_class_field
 from safe.definitionsv4.constants import (
     inasafe_keyword_version_key,
+    HAZARD_EXPOSURE_VIEW,
     ANALYSIS_FAILED_BAD_INPUT,
     ANALYSIS_FAILED_BAD_CODE,
     ANALYSIS_SUCCESS,
@@ -57,7 +58,6 @@ from safe.common.exceptions import (
     NoKeywordsFoundError,
     InvalidParameterError,
     HashNotFoundError,
-    InvalidGeometryError,
     UnsupportedProviderError,
     MetadataReadError,
 )
@@ -70,7 +70,6 @@ from safe.gui.widgets.message import (
     show_no_keywords_message,
     show_keyword_version_message,
     getting_started_message,
-    no_overlap_message,
     ready_message,
     enable_messaging)
 from safe.gui.analysis_utilities import (
@@ -257,24 +256,27 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         Do this on init and after changing options in the options dialog.
         """
-
         try:
             extent = self.settings.value('inasafe/user_extent', None, type=str)
         except TypeError:
-            extent = ''
+            extent = None
         if extent:
-            extent = wkt_to_rectangle(extent)
+            extent = QgsGeometry.fromWkt(extent)
+            if not extent.isGeosValid():
+                extent = None
+
         try:
             crs = self.settings.value(
                 'inasafe/user_extent_crs', None, type=str)
         except TypeError:
             crs = None
-        crs = QgsCoordinateReferenceSystem(crs)
+        if crs:
+            crs = QgsCoordinateReferenceSystem(crs)
+            if not crs.isValid():
+                crs = None
 
-        if extent and crs.isValid():
-            self.extent.user_extent = extent
-            self.extent.user_extent_crs = crs
-            self.extent.show_user_analysis_extent()
+        if crs and extent:
+            self.extent.set_user_extent(extent, crs)
 
         # It's better to set the show_rubber_bands after setting the user
         # extent.
@@ -499,17 +501,24 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
             extent = self.settings.value('inasafe/user_extent', None, type=str)
             if extent:
-                extent = wkt_to_rectangle(extent)
+                extent = QgsGeometry.fromWkt(extent)
+                if not extent.isGeosValid():
+                    extent = None
+
             crs = self.settings.value(
                 'inasafe/user_extent_crs', None, type=str)
-            crs = QgsCoordinateReferenceSystem(crs)
+            if crs:
+                crs = QgsCoordinateReferenceSystem(crs)
+                if not crs.isValid():
+                    crs = None
 
-            if extent and crs.isValid():
-                self.extent.user_extent = extent
-                self.extent.user_extent_crs = crs
+            if crs and extent:
+                self.extent.set_user_extent(extent, crs)
+
         else:
-            self.extent.user_extent = None
-            self.extent.user_extent_crs = None
+            # We have one aggregation layer. We should not display the user
+            # extent.
+            self.extent.clear_user_analysis_extent()
             self.aggregation = self.get_aggregation_layer()
 
         self.draw_rubber_bands()
@@ -777,7 +786,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             flag = False
         if flag:
             self.validate_impact_function()
-            self.extent.show_user_analysis_extent()  # blue
 
     def progress_callback(self, current_value, maximum_value, message=None):
         """GUI based callback implementation for showing progress.
@@ -1182,11 +1190,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             extent.
         :type crs: QgsCoordinateReferenceSystem
         """
-        try:
-            self.extent.define_user_analysis_extent(extent, crs)
-            self.validate_impact_function()
-        except InvalidGeometryError:
-            return
+        extent = QgsGeometry.fromRect(extent)
+        self.extent.set_user_extent(extent, crs)
+        self.validate_impact_function()
 
     def _has_active_layer(self):
         """Check if there is a layer active in the legend.
@@ -1268,10 +1274,19 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 bool(self.settings.value(
                     'inasafe/useSelectedFeaturesOnly', False, type=bool)))
         else:
+            mode = self.settings.value('inasafe/analysis_extents_mode')
             if self.extent.user_extent:
-                impact_function.requested_extent = self.extent.user_extent
-                impact_function.requested_extent_crs = (
-                    self.extent.user_extent_crs)
+                # This like a hack to transform a geometry to a rectangle.
+                # self.extent.user_extent is a QgsGeometry.
+                # impact_function.requested_extent needs a QgsRectangle.
+                wkt = self.extent.user_extent.exportToWkt()
+                impact_function.requested_extent = wkt_to_rectangle(wkt)
+                impact_function.requested_extent_crs = self.extent.crs
+
+            elif mode == HAZARD_EXPOSURE_VIEW:
+                impact_function.requested_extent = (
+                    self.iface.mapCanvas().extent())
+                impact_function.requested_extent_crs = self.extent.crs
 
         impact_function.debug_mode = self.debug_mode.isChecked()
         status, message = impact_function.prepare()
@@ -1352,5 +1367,4 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # Now check if extents are ok for #1811
         else:
             message = ready_message()
-
             return True, message
