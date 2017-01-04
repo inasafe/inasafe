@@ -328,3 +328,8 @@ class ErrorDataStore(InaSAFEError):
 class InvalidWizardStep(InaSAFEError):
     """When there is an invalid wizard step."""
     pass
+
+
+class ProcessingAlgError(InaSAFEError):
+    """When there is an error in processing algorithm."""
+    pass

@@ -7,6 +7,7 @@ import processing
 
 from qgis.core import QgsRasterLayer
 
+from safe.common.exceptions import ProcessingAlgError
 from safe.common.utilities import unique_filename, temp_dir
 from safe.definitionsv4.processing_steps import quick_clip_steps
 from safe.utilities.profiling import profile
@@ -75,6 +76,10 @@ def clip_by_extent(layer, extent, callback=None):
         False,
         "",
         output_raster)
+
+    if result is None:
+        raise ProcessingAlgError('It seems like QGIS processing plugin is not '
+                                 'installed')
 
     clipped = QgsRasterLayer(result['OUTPUT'], output_layer_name)
 
