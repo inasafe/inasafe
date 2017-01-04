@@ -33,6 +33,13 @@ qvariant_whole_numbers = [
     QVariant.ULongLong
 ]
 
+# Extent selector
+HAZARD_EXPOSURE = 'HazardExposure'
+HAZARD_EXPOSURE_VIEW = 'HazardExposureView'
+HAZARD_EXPOSURE_BOOKMARK = 'HazardExposureBookmark'
+HAZARD_EXPOSURE_BOUNDINGBOX = 'HazardExposureBoundingBox'
+
+# Impact function status
 PREPARE_SUCCESS = 0
 PREPARE_FAILED_BAD_INPUT = 1
 PREPARE_FAILED_BAD_CODE = 2

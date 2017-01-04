@@ -25,6 +25,11 @@ from osgeo import gdal
 from qgis.core import QgsMapLayer, QgsCoordinateReferenceSystem, QgsRectangle
 from qgis.utils import QGis
 
+from safe.definitionsv4.constants import (
+    HAZARD_EXPOSURE,
+    HAZARD_EXPOSURE_VIEW,
+    HAZARD_EXPOSURE_BOOKMARK,
+    HAZARD_EXPOSURE_BOUNDINGBOX)
 from safe.definitionsv4.exposure import exposure_all
 from safe.definitionsv4.hazard import hazard_all
 from safe.definitionsv4.versions import inasafe_keyword_version
@@ -1183,18 +1188,17 @@ class ImpactFunction(object):
             # Set the analysis extents based on user's desired behaviour
             settings = QSettings()
             mode_name = settings.value(
-                'inasafe/analysis_extents_mode',
-                'HazardExposureView')
+                'inasafe/analysis_extents_mode', HAZARD_EXPOSURE_VIEW)
             # Default to using canvas extents if no case below matches
             analysis_geoextent = self.viewport_extent
-            if mode_name == 'HazardExposureView':
+            if mode_name == HAZARD_EXPOSURE_VIEW:
                 analysis_geoextent = self.viewport_extent
 
-            elif mode_name == 'HazardExposure':
+            elif mode_name == HAZARD_EXPOSURE:
                 analysis_geoextent = None
 
-            elif mode_name == 'HazardExposureBookmark' or \
-                    mode_name == 'HazardExposureBoundingBox':
+            elif mode_name == HAZARD_EXPOSURE_BOOKMARK or \
+                    mode_name == HAZARD_EXPOSURE_BOOKMARK:
                 if self.requested_extent is not None \
                         and self.requested_extent_crs is not None:
                     # User has defined preferred extent, so use that
@@ -1371,23 +1375,22 @@ class ImpactFunction(object):
         # Find out what clipping behaviour we have - see #2210
         settings = QSettings()
         mode = settings.value(
-            'inasafe/analysis_extents_mode',
-            'HazardExposureView')
+            'inasafe/analysis_extents_mode', HAZARD_EXPOSURE_VIEW)
         detail = None
-        if mode == 'HazardExposureView':
+        if mode == HAZARD_EXPOSURE_VIEW:
             detail = tr(
                 'Resampling and clipping the hazard layer to match the '
                 'intersection of the exposure layer and the current view '
                 'extents.')
-        elif mode == 'HazardExposure':
+        elif mode == HAZARD_EXPOSURE:
             detail = tr(
                 'Resampling and clipping the hazard layer to match the '
                 'intersection of the exposure layer extents.')
-        elif mode == 'HazardExposureBookmark':
+        elif mode == HAZARD_EXPOSURE_BOOKMARK:
             detail = tr(
                 'Resampling and clipping the hazard layer to match the '
                 'bookmarked extents.')
-        elif mode == 'HazardExposureBoundingBox':
+        elif mode == HAZARD_EXPOSURE_BOUNDINGBOX:
             detail = tr(
                 'Resampling and clipping the hazard layer to match the '
                 'intersection of your preferred analysis area.')
@@ -1415,22 +1418,21 @@ class ImpactFunction(object):
         # Find out what clipping behaviour we have - see #2210
         settings = QSettings()
         mode = settings.value(
-            'inasafe/analysis_extents_mode',
-            'HazardExposureView')
-        if mode == 'HazardExposureView':
+            'inasafe/analysis_extents_mode', HAZARD_EXPOSURE_VIEW)
+        if mode == HAZARD_EXPOSURE_VIEW:
             detail = tr(
                 'Resampling and clipping the exposure layer to match '
                 'the intersection of the hazard layer and the current view '
                 'extents.')
-        elif mode == 'HazardExposure':
+        elif mode == HAZARD_EXPOSURE:
             detail = tr(
                 'Resampling and clipping the exposure layer to match '
                 'the intersection of the hazard layer extents.')
-        elif mode == 'HazardExposureBookmark':
+        elif mode == HAZARD_EXPOSURE_BOOKMARK:
             detail = tr(
                 'Resampling and clipping the exposure layer to match '
                 'the bookmarked extents.')
-        elif mode == 'HazardExposureBoundingBox':
+        elif mode == HAZARD_EXPOSURE_BOUNDINGBOX:
             detail = tr(
                 'Resampling and clipping the exposure layer to match '
                 'the intersection of your preferred analysis area.')

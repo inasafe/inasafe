@@ -23,6 +23,8 @@ from PyQt4 import QtCore
 from safe.test.utilities import get_qgis_app, get_dock
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
+from safe.definitionsv4.constants import (
+    HAZARD_EXPOSURE_VIEW, HAZARD_EXPOSURE, HAZARD_EXPOSURE_BOUNDINGBOX)
 from safe.common.utilities import format_int, unique_filename
 from safe.utilities.qgis_utilities import add_above_layer, layer_legend_index
 from safe.test.utilities import (
@@ -82,8 +84,7 @@ class TestDock(TestCase):
         # set to HazardExposure
         settings = QtCore.QSettings()
         settings.setValue(
-            'inasafe/analysis_extents_mode',
-            'HazardExposureView')
+            'inasafe/analysis_extents_mode', HAZARD_EXPOSURE_VIEW)
 
     def tearDown(self):
         """Fixture run after each test"""
@@ -99,7 +100,7 @@ class TestDock(TestCase):
         # globally set to HazardExposure
         settings = QtCore.QSettings()
         settings.setValue(
-            'inasafe/analysis_extents_mode', 'HazardExposure')
+            'inasafe/analysis_extents_mode', HAZARD_EXPOSURE)
 
     @unittest.expectedFailure
     def test_defaults(self):
@@ -178,7 +179,7 @@ class TestDock(TestCase):
     def xtest_print_map(self):
         """Test print map, especially on Windows."""
         settings = QtCore.QSettings()
-        settings.setValue('inasafe/analysis_extents_mode', 'HazardExposure')
+        settings.setValue('inasafe/analysis_extents_mode', HAZARD_EXPOSURE)
         result, message = setup_scenario(
             self.dock,
             hazard='Classified Flood',
@@ -210,7 +211,7 @@ class TestDock(TestCase):
         """Test that colours and opacity from a model are correctly styled."""
 
         settings = QtCore.QSettings()
-        settings.setValue('inasafe/analysis_extents_mode', 'HazardExposure')
+        settings.setValue('inasafe/analysis_extents_mode', HAZARD_EXPOSURE)
 
         result, message = setup_scenario(
             self.dock,
@@ -252,7 +253,7 @@ class TestDock(TestCase):
         """
 
         settings = QtCore.QSettings()
-        settings.setValue('inasafe/analysis_extents_mode', 'HazardExposure')
+        settings.setValue('inasafe/analysis_extents_mode', HAZARD_EXPOSURE)
 
         result, message = setup_scenario(
             self.dock,
@@ -281,7 +282,7 @@ class TestDock(TestCase):
         """
 
         settings = QtCore.QSettings()
-        settings.setValue('inasafe/analysis_extents_mode', 'HazardExposure')
+        settings.setValue('inasafe/analysis_extents_mode', HAZARD_EXPOSURE)
 
         result, message = setup_scenario(
             self.dock,
@@ -365,7 +366,7 @@ class TestDock(TestCase):
         """Test issue #71 in github - cbo changes should update ok button."""
         # See https://github.com/AIFDR/inasafe/issues/71
         settings = QtCore.QSettings()
-        settings.setValue('inasafe/analysis_extents_mode', 'HazardExposure')
+        settings.setValue('inasafe/analysis_extents_mode', HAZARD_EXPOSURE)
         self.tearDown()
         button = self.dock.pbnRunStop
         # First part of scenario should have enabled run
@@ -496,7 +497,7 @@ class TestDock(TestCase):
 
         settings = QtCore.QSettings()
         settings.setValue(
-            'inasafe/analysis_extents_mode', 'HazardExposureBoundingBox')
+            'inasafe/analysis_extents_mode', HAZARD_EXPOSURE_BOUNDINGBOX)
         result, message = setup_scenario(
             self.dock,
             hazard='Continuous Flood',
@@ -552,7 +553,7 @@ class TestDock(TestCase):
         """
         settings = QtCore.QSettings()
         settings.setValue(
-            'inasafe/analysis_extents_mode', 'HazardExposure')
+            'inasafe/analysis_extents_mode', HAZARD_EXPOSURE)
         # TODO check that the values are similar enough to the python stats
 
         result, message = setup_scenario(
@@ -723,7 +724,7 @@ class TestDock(TestCase):
         """Aggregation Combobox toggles on and off as expected."""
         settings = QtCore.QSettings()
         settings.setValue(
-            'inasafe/analysis_extents_mode', 'HazardExposure')
+            'inasafe/analysis_extents_mode', HAZARD_EXPOSURE)
         # With aggregation layer
         result, message = setup_scenario(
             self.dock,
@@ -774,7 +775,7 @@ class TestDock(TestCase):
     def test_rubber_bands(self):
         """Test that the rubber bands get updated."""
         settings = QtCore.QSettings()
-        settings.setValue('inasafe/analysis_extents_mode', 'HazardExposure')
+        settings.setValue('inasafe/analysis_extents_mode', HAZARD_EXPOSURE)
 
         setup_scenario(
             self.dock,
@@ -880,7 +881,7 @@ class TestDock(TestCase):
     def test_issue1191(self):
         """Test setting a layer's title in the kw directly from qgis api"""
         settings = QtCore.QSettings()
-        settings.setValue('inasafe/analysis_extents_mode', 'HazardExposure')
+        settings.setValue('inasafe/analysis_extents_mode', HAZARD_EXPOSURE)
         self.dock.set_layer_from_title_flag = True
         set_canvas_crs(GEOCRS, True)
         set_yogya_extent(self.dock)

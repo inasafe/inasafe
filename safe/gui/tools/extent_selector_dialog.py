@@ -42,6 +42,11 @@ from qgis.core import (
     QgsCoordinateTransform,
     QgsCsException)
 
+from safe.definitionsv4.constants import (
+    HAZARD_EXPOSURE,
+    HAZARD_EXPOSURE_VIEW,
+    HAZARD_EXPOSURE_BOOKMARK,
+    HAZARD_EXPOSURE_BOUNDINGBOX)
 from safe.utilities.resources import html_header, html_footer, get_ui_class
 
 from safe.gui.tools.rectangle_map_tool import RectangleMapTool
@@ -139,30 +144,26 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
         # Reinstate the last used radio button
         settings = QSettings()
         mode = settings.value(
-            'inasafe/analysis_extents_mode',
-            'HazardExposureView')
-        if mode == 'HazardExposureView':
+            'inasafe/analysis_extents_mode', HAZARD_EXPOSURE_VIEW)
+
+        if mode == HAZARD_EXPOSURE_VIEW:
             self.hazard_exposure_view_extent.setChecked(True)
-        elif mode == 'HazardExposure':
+        elif mode == HAZARD_EXPOSURE:
             self.hazard_exposure_only.setChecked(True)
-        elif mode == 'HazardExposureBookmark':
+        elif mode == HAZARD_EXPOSURE_BOOKMARK:
             self.hazard_exposure_bookmark.setChecked(True)
-        elif mode == 'HazardExposureBoundingBox':
+        elif mode == HAZARD_EXPOSURE_BOUNDINGBOX:
             self.hazard_exposure_user_extent.setChecked(True)
 
         show_warnings = settings.value(
-            'inasafe/show_extent_warnings',
-            True,
-            type=bool)
+            'inasafe/show_extent_warnings', True, type=bool)
         if show_warnings:
             self.show_warnings.setChecked(True)
         else:
             self.show_warnings.setChecked(False)
 
         show_confirmations = settings.value(
-            'inasafe/show_extent_confirmations',
-            True,
-            type=bool)
+            'inasafe/show_extent_confirmations', True, type=bool)
         if show_confirmations:
             self.show_confirmations.setChecked(True)
         else:
@@ -245,17 +246,14 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
         """
         mode = None
         if self.hazard_exposure_view_extent.isChecked():
-            mode = 'HazardExposureView'
+            mode = HAZARD_EXPOSURE_VIEW
         elif self.hazard_exposure_only.isChecked():
-            mode = 'HazardExposure'
+            mode = HAZARD_EXPOSURE
         elif self.hazard_exposure_bookmark.isChecked():
-            mode = 'HazardExposureBookmark'
+            mode = HAZARD_EXPOSURE_BOOKMARK
         elif self.hazard_exposure_user_extent.isChecked():
-            mode = 'HazardExposureBoundingBox'
+            mode = HAZARD_EXPOSURE_BOUNDINGBOX
 
-        # LOGGER.info(
-        #    'Setting analysis extent mode to %s' % mode
-        # )
         settings = QSettings()
         settings.setValue('inasafe/analysis_extents_mode', mode)
 
@@ -264,16 +262,10 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
             self.canvas.setMapTool(self.previous_map_tool)
 
         if self.tool.rectangle() is not None:
-            # LOGGER.info(
-            #     'Extent selector setting user extents to %s' %
-            #     self.tool.rectangle().toString())
             self.extent_defined.emit(
                 self.tool.rectangle(),
-                self.canvas.mapRenderer().destinationCrs()
-            )
+                self.canvas.mapRenderer().destinationCrs())
         else:
-            # LOGGER.info(
-            #     'Extent selector setting user extents to nothing')
             self.clear_extent.emit()
 
         # State handlers for showing warning message bars
