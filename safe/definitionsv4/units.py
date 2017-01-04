@@ -55,6 +55,51 @@ unit_kilogram_per_meter_square = {
         }
     ]
 }
+unit_kilometres_per_hour = {
+    'key': 'kilometres_per_hour',
+    'name': tr('km/h'),
+    'plural_name': tr('km/h'),
+    'abbreviation': tr('km/h'),
+    'description': tr(
+        '<b>The kilometre per hour</b> is a unit of speed, expressing the '
+        'number of kilometres covered in one hour.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+unit_miles_per_hour = {
+    'key': 'miles_per_hour',
+    'name': tr('mph'),
+    'plural_name': tr('mph'),
+    'abbreviation': tr('mph'),
+    'description': tr(
+        '<b>The mile per hour</b> is a unit of speed, expressing the '
+        'number of statute miles covered in one hour.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+unit_knots = {
+    'key': 'knots',
+    'name': tr('kn'),
+    'plural_name': tr('kn'),
+    'abbreviation': tr('kn'),
+    'description': tr(
+        '<b>The knot</b> is a unit of speed, expressing the '
+        'number of nautical miles covered in one hour.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
 unit_kilometres = {
     'key': 'kilometres',
     'name': tr('Kilometres'),

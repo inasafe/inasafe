@@ -15,7 +15,7 @@ from safe.definitionsv4.colors import (
     orange,
     red,
     dark_red,
-)
+    very_dark_red)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -421,6 +421,161 @@ tsunami_hazard_classes = {
             'description': tr('No water above ground height.'),
             'numeric_default_min': 0,
             'numeric_default_max': 0.1,
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+    ]
+}
+
+
+cyclone_au_bom_hazard_classes = {
+    'key': 'cyclone_au_bom_hazard_classes',
+    'name': tr('Cyclone classes (AU - BOM)'),
+    'description': tr(
+        'The quinary <b>tropical cyclone</b> intensity classification '
+        'according to the Australian Bureau of Metereology is defined by the '
+        'maximum mean wind speed over open flat land or water. '
+        'This is sometimes referred to as the maximum sustained wind and will'
+        'be experienced around the eye-wall of the cyclone.'),
+    'citations': [
+        {
+            'text': 'Australian Bureau of Metereology - Tropical Cyclone '
+                    'Intensity and Impacts',
+            'link': 'http://www.bom.gov.au/cyclone/about/intensity.shtml#WindC'
+        },
+        {
+            'text': 'Tropical cyclone scales - wikpedia',
+            'link': 'https://en.wikipedia.org/wiki/Tropical_cyclone_scales#Australia_and_Fiji'
+        }
+    ],
+    'classes': [
+        {
+            'key': 'category_5',
+            'value': 5,
+            'color': very_dark_red,
+            'name': tr('Category 5 (severe tropical cyclone)'),
+            'affected': True,
+            'description': tr(
+                'Extremely dangerous with widespread destruction. A Category '
+                '5 cyclone\'s strongest winds are VERY DESTRUCTIVE winds with '
+                'typical gusts over open flat land of more than 151 kn. '
+                'These winds correspond to the highest category on the '
+                'Beaufort scale, Beaufort 12 (Hurricane).'
+            ),
+            'numeric_default_min': 107,
+            'numeric_default_max': 9999999999,
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
+            'key': 'category_4',
+            'value': 4,
+            'color': dark_red,
+            'name': tr('Category 4 (severe tropical cyclone)'),
+            'affected': True,
+            'description': tr(
+                'Significant roofing loss and structural damage. Many '
+                'caravans destroyed and blown away. Dangerous airborne '
+                'debris. Widespread power failures. A Category 4 cyclone\'s'
+                'strongest winds are VERY DESTRUCTIVE winds with typical '
+                'gusts over open flat land of 122 - 151 kn. These winds '
+                'correspond to the highest category on the Beaufort scale, '
+                'Beaufort 12 (Hurricane).'
+            ),
+            'numeric_default_min': 85,
+            'numeric_default_max': 107,
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
+            'key': 'category_3',
+            'value': 3,
+            'color': red,
+            'name': tr('Category 3 (severe tropical cyclone)'),
+            'affected': True,
+            'description': tr(
+                'Some roof and structural damage. Some caravans destroyed. '
+                'Power failures likely. A Category 3 cyclone\'s strongest '
+                'winds are VERY DESTRUCTIVE winds with typical gusts over '
+                'open flat land of 90 - 121 kn. These winds correspond to '
+                'the highest category on the Beaufort scale, Beaufort 12 ('
+                'Hurricane).'),
+            'numeric_default_min': 63,
+            'numeric_default_max': 85,
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
+            'key': 'category_2',
+            'value': 2,
+            'color': orange,
+            'name': tr('Category 2 (tropical cyclone)'),
+            'affected': True,
+            'description': tr(
+                'Minor house damage. Significant damage to signs, trees and '
+                'caravans. Heavy damage to some crops. Risk of power failure. '
+                'Small craft may break moorings. A Category 2 cyclone\'s '
+                'strongest winds are DESTRUCTIVE winds with typical gusts '
+                'over open flat land of 68 - 89 kn. These winds '
+                'correspond to Beaufort 10 and 11 (Storm and violent storm).'),
+            'numeric_default_min': 47,
+            'numeric_default_max': 63,
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
+            'key': 'category_1',
+            'value': 1,
+            'color': yellow,
+            'name': tr('Category 1 (tropical cyclone)'),
+            'affected': False,
+            'description': tr(
+                'Negligible house damage. Damage to some crops, trees and '
+                'caravans. Craft may drag moorings. A Category 1 cyclone\'s '
+                'strongest winds are GALES with typical gusts over open flat '
+                'land of 49 - 67 kn. These winds correspond to Beaufort 8 '
+                'and 9 (Gales and strong gales).'),
+            'numeric_default_min': 34,
+            'numeric_default_max': 47,
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
+            'key': 'tropical_depression',
+            'value': 0,
+            'color': green,
+            'name': tr('Tropical Depression'),
+            'affected': False,
+            'description': tr('A tropical depression is a tropical '
+                              'disturbance, that has a clearly defined '
+                              'surface circulation, which has maximum '
+                              'sustained winds of less than 34 kn.'),
+            'numeric_default_min': 0,
+            'numeric_default_max': 34,
             'citations': [
                 {
                     'text': None,
