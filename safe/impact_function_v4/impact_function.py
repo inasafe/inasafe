@@ -59,6 +59,7 @@ from safe.definitionsv4.constants import (
     ANALYSIS_FAILED_BAD_CODE,
     PREPARE_SUCCESS,
     PREPARE_FAILED_BAD_INPUT,
+    PREPARE_FAILED_INSUFFICIENT_OVERLAP,
     PREPARE_FAILED_BAD_CODE)
 from safe.definitionsv4.versions import inasafe_keyword_version
 from safe.common.exceptions import (
@@ -630,6 +631,8 @@ class ImpactFunction(object):
             The status is PREPARE_SUCCESS if everything was fine.
             The status is PREPARE_FAILED_BAD_INPUT if the client should fix
                 something.
+            The status is PREPARE_FAILED_INSUFFICIENT_OVERLAP if the client
+                should fix the analysis extent.
             The status is PREPARE_FAILED_BAD_CODE if something went wrong
                 from the code.
         :rtype: (int, m.Message)
@@ -729,8 +732,8 @@ class ImpactFunction(object):
         :return: A tuple with the status of the IF and an error message if
             needed.
             The status is PREPARE_SUCCESS if everything was fine.
-            The status is PREPARE_FAILED_BAD_INPUT if the client should fix
-                something.
+            The status is PREPARE_FAILED_INSUFFICIENT_OVERLAP if the client
+                should fix the analysis extent.
             The status is PREPARE_FAILED_BAD_CODE if something went wrong
                 from the code.
         :rtype: (int, m.Message)
@@ -750,7 +753,7 @@ class ImpactFunction(object):
                 m.Paragraph(tr(
                     'The exposure and the hazard layer need to overlap.'))
             )
-            return PREPARE_FAILED_BAD_INPUT, message
+            return PREPARE_FAILED_INSUFFICIENT_OVERLAP, message
         else:
             hazard_exposure = exposure_extent.intersection(hazard_extent)
 
@@ -770,7 +773,7 @@ class ImpactFunction(object):
                             'The requested analysis extent is not overlaping '
                             'the exposure and the hazard.'))
                     )
-                    return PREPARE_FAILED_BAD_INPUT, message
+                    return PREPARE_FAILED_INSUFFICIENT_OVERLAP, message
                 else:
                     self._analysis_extent = hazard_exposure.intersection(
                         user_bounding_box)
