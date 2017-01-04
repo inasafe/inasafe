@@ -1,6 +1,7 @@
 # coding=utf-8
 import os
 
+import math
 from jinja2.exceptions import TemplateError
 
 from safe.definitionsv4.utilities import definition
@@ -12,7 +13,10 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
-def round_affecter_number(number, enable_rounding=False):
+def round_affecter_number(
+        number,
+        enable_rounding=False,
+        use_population_rounding=False):
     """Tries to convert and round the number.
 
     Rounded using population rounding rule.
@@ -23,12 +27,20 @@ def round_affecter_number(number, enable_rounding=False):
     :param enable_rounding: flag to enable rounding
     :type enable_rounding: bool
 
+    :param use_population_rounding: flag to enable population rounding scheme
+    :type use_population_rounding: bool
+
     :return: rounded number
     """
-    affected_number = int(float(number))
-    if enable_rounding:
-        return population_rounding(affected_number)
-    return affected_number
+    decimal_number = float(number)
+    rounded_number = int(math.ceil(decimal_number))
+    if enable_rounding and use_population_rounding:
+        # if uses population rounding
+        return population_rounding(rounded_number)
+    elif enable_rounding:
+        return rounded_number
+
+    return decimal_number
 
 
 def layer_definition_type(layer):

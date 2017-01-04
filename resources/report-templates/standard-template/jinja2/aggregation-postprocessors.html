@@ -1,0 +1,44 @@
+{% for _, value in sections.iteritems() %}
+<h5 class="info">
+    <i class="icon-info-sign icon-white"></i> {{ value.header }}
+</h5>
+<table class="table table-striped condensed">
+    <thead>
+        <tr>
+            {% for column in value.columns %}
+                {% if loop.first %}
+                <th class="text-left">
+                {% else %}
+                <th class="text-right">
+                {% endif %}
+                    {{ column|capitalize }}
+                </th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in value.rows %}
+        <tr>
+            {% for column in row %}
+                {% if loop.first %}
+                <th class="text-left">{{ column }}</th>
+                {% else %}
+                <td class="text-right">{{ column }}</td>
+                {% endif %}
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+        {% for column in value.totals %}
+            {% if loop.first %}
+            <th class="text-left">{{ column }}</th>
+            {% else %}
+            <td class="text-right">{{ column }}</td>
+            {% endif %}
+    {% endfor %}
+        </tr>
+    </tfoot>
+</table>
+{% endfor %}

@@ -1,5 +1,6 @@
 # coding=utf-8
 
+from __future__ import absolute_import
 from safe.common.utilities import safe_dir
 from safe.reportv4.extractors.composer import QGISComposerContext
 from safe.reportv4.extractors.util import jinja2_output_as_string
@@ -30,18 +31,30 @@ def impact_table_extractor(impact_report, component_metadata):
     """
     context = {}
 
+    # Imported here to avoid cyclic dependencies
+    from safe.definitionsv4.report import (
+        analysis_result_component,
+        analysis_breakdown_component,
+        action_checklist_component,
+        notes_assumptions_component,
+        minimum_needs_component,
+        aggregation_result_component,
+        aggregation_postprocessors_component)
+
     analysis_result = jinja2_output_as_string(
-        impact_report, 'analysis-result')
+        impact_report, analysis_result_component['key'])
     analysis_breakdown = jinja2_output_as_string(
-        impact_report, 'analysis-breakdown')
+        impact_report, analysis_breakdown_component['key'])
     action_checklist = jinja2_output_as_string(
-        impact_report, 'action-checklist')
+        impact_report, action_checklist_component['key'])
     notes_assumptions = jinja2_output_as_string(
-        impact_report, 'notes-assumptions')
+        impact_report, notes_assumptions_component['key'])
     minimum_needs = jinja2_output_as_string(
-        impact_report, 'minimum-needs')
+        impact_report, minimum_needs_component['key'])
     aggregation_result = jinja2_output_as_string(
-        impact_report, 'aggregation-result')
+        impact_report, aggregation_result_component['key'])
+    aggregation_postprocessors = jinja2_output_as_string(
+        impact_report, aggregation_postprocessors_component['key'])
 
     context['brand_logo'] = resource_url(
             resources_path('img', 'logos', 'inasafe-logo-white.png'))
@@ -51,6 +64,7 @@ def impact_table_extractor(impact_report, component_metadata):
     context['notes_assumptions'] = notes_assumptions
     context['minimum_needs'] = minimum_needs
     context['aggregation_result'] = aggregation_result
+    context['aggregation_postprocessors'] = aggregation_postprocessors
 
     # TODO: taken from hazard and exposure provenance
     hazard_provenance = tr('an unknown source')

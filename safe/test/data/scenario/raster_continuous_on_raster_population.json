@@ -22,6 +22,10 @@
       "info": {},
       "process":[
         "Post processor for Size Value Post Processor",
+        "Post processor for Gender Post Processor",
+        "Post processor for Youth Post Processor",
+        "Post processor for Adult Post Processor",
+        "Post processor for Elderly Post Processor",
         "Post processor for Affected Post Processor",
         "Post processor for Rice",
         "Post processor for Drinking Water",

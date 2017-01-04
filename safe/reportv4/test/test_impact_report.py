@@ -3,36 +3,34 @@ import io
 import os
 import shutil
 import unittest
+from collections import OrderedDict
 
 from jinja2.environment import Template
-from unittest.case import expectedFailure
 
 from safe.common.utilities import safe_dir
 from safe.definitionsv4.constants import ANALYSIS_SUCCESS
-from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
 from safe.impact_function.impact_function import ImpactFunction
-from safe.reportv4.extractors.composer import qgis_composer_extractor
-from safe.reportv4.processors.default import (
-    qgis_composer_renderer)
 from safe.reportv4.report_metadata import ReportMetadata
 from safe.test.utilities import (
     get_qgis_app,
-    load_path_vector_layer,
     load_test_vector_layer,
     load_test_raster_layer)
-from safe.utilities.i18n import tr
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from PyQt4.QtCore import QSettings
-from qgis.core import QgsVectorLayer, QgsMapLayerRegistry
+from qgis.core import QgsMapLayerRegistry
 from safe.definitionsv4.report import (
     report_a4_portrait_blue,
     standard_impact_report_metadata_html,
-    standard_impact_report_metadata_pdf, analysis_result_component,
-    action_checklist_component, notes_assumptions_component,
-    analysis_breakdown_component, aggregation_result_component,
-    minimum_needs_component)
+    standard_impact_report_metadata_pdf,
+    analysis_result_component,
+    action_checklist_component,
+    notes_assumptions_component,
+    analysis_breakdown_component,
+    aggregation_result_component,
+    minimum_needs_component,
+    aggregation_postprocessors_component)
 from safe.reportv4.impact_report import ImpactReport
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -63,8 +61,6 @@ class TestImpactReport(unittest.TestCase):
 
     def test_analysis_result_from_impact_function(self):
         """Test generate analysis result from impact function."""
-        needs_profile = NeedsProfile()
-        needs_profile.load()
 
         output_folder = self.fixtures_dir('../output/analysis_result')
 
@@ -93,8 +89,7 @@ class TestImpactReport(unittest.TestCase):
         impact_report = ImpactReport(
             IFACE,
             report_metadata,
-            impact_function=impact_function,
-            minimum_needs_profile=needs_profile)
+            impact_function=impact_function)
         impact_report.output_folder = output_folder
         impact_report.process_component()
 
@@ -219,9 +214,6 @@ class TestImpactReport(unittest.TestCase):
 
     def test_analysis_breakdown_detail(self):
         """Test generate analysis breakdown and aggregation report."""
-        needs_profile = NeedsProfile()
-        needs_profile.load()
-
         output_folder = self.fixtures_dir('../output/analysis_breakdown')
 
         # Classified vector with buildings
@@ -249,8 +241,7 @@ class TestImpactReport(unittest.TestCase):
         impact_report = ImpactReport(
             IFACE,
             report_metadata,
-            impact_function=impact_function,
-            minimum_needs_profile=needs_profile)
+            impact_function=impact_function)
         impact_report.output_folder = output_folder
         impact_report.process_component()
 
@@ -269,11 +260,11 @@ class TestImpactReport(unittest.TestCase):
                 'headers': [u'Structures type', u'High Hazard Zone',
                             u'Medium Hazard Zone', u'Total Affected',
                             u'Total Unaffected', u'Total'],
-                'details': [[u'other', 0, 1, 1, 0, 1],
-                            [u'government', 0, 1, 1, 0, 1],
-                            [u'commercial', 1, 0, 1, 0, 1],
+                'details': [[u'government', 0, 1, 1, 0, 1],
+                            [u'health', 1, 0, 1, 0, 1],
                             [u'education', 2, 0, 2, 3, 5],
-                            [u'health', 1, 0, 1, 0, 1]],
+                            [u'other', 0, 1, 1, 0, 1],
+                            [u'commercial', 1, 0, 1, 0, 1]],
                 'footers': [u'Total', 4, 2, 6, 3, 9]
             }
         }
@@ -292,20 +283,19 @@ class TestImpactReport(unittest.TestCase):
         expected_context = {
             'aggregation_result': {
                 'header_label': u'Aggregation area',
-                'rows': [{'type_values': [1, 0, 1, 1, 0],
+                'rows': [{'type_values': [0, 1, 1, 1, 0],
                           'total': 3, 'name': u'area 1'},
-                         {'type_values': [0, 1, 0, 0, 0],
+                         {'type_values': [1, 0, 0, 0, 0],
                           'total': 1, 'name': u'area 2'},
-                         {'type_values': [0, 0, 0, 1, 1],
+                         {'type_values': [0, 0, 1, 0, 1],
                           'total': 2, 'name': u'area 3'}],
-                'type_header_labels': [u'Other',
-                                       u'Government',
-                                       u'Commercial',
+                'type_header_labels': [u'Government',
+                                       u'Other',
                                        u'Education',
+                                       u'Commercial',
                                        u'Health'],
-                'type_total_values': [1, 1, 1, 2, 1],
-                'total_label': u'Total', 'total_all': 6
-            },
+                'type_total_values': [1, 1, 2, 1, 1],
+                'total_label': u'Total', 'total_all': 6},
             'header': u'Aggregation Result'}
         actual_context = aggregate_result.context
 
@@ -324,11 +314,9 @@ class TestImpactReport(unittest.TestCase):
 
         shutil.rmtree(output_folder, ignore_errors=True)
 
-    @expectedFailure
+    @unittest.expectedFailure
     def test_minimum_needs(self):
         """Test generate minimum needs section."""
-        needs_profile = NeedsProfile()
-        needs_profile.load()
 
         output_folder = self.fixtures_dir('../output/minimum_needs')
         # tsunami raster with population raster
@@ -353,8 +341,7 @@ class TestImpactReport(unittest.TestCase):
         impact_report = ImpactReport(
             IFACE,
             report_metadata,
-            impact_function=impact_function,
-            minimum_needs_profile=needs_profile)
+            impact_function=impact_function)
         impact_report.output_folder = output_folder
         impact_report.process_component()
 
@@ -418,36 +405,32 @@ class TestImpactReport(unittest.TestCase):
 
         shutil.rmtree(output_folder, ignore_errors=True)
 
-    @unittest.skipIf(
-        os.environ.get('ON_TRAVIS', False),
-        'Under development')
-    def test_analysis_result(self):
-        """Test generate analysis result."""
+    # expected to fail until postprocessor calculation in analysis
+    # impacted is fixed
+    @unittest.expectedFailure
+    def test_aggregate_post_processors_vector(self):
+        """Test generate aggregate postprocessors sections."""
 
-        output_folder = self.fixtures_dir('../output')
-
+        output_folder = self.fixtures_dir(
+            '../output/aggregate_post_processors')
+        # tsunami raster with population raster
         shutil.rmtree(output_folder, ignore_errors=True)
 
-        exposure_json = self.fixtures_dir(
-            'analysis_sample/1-exposure.geojson')
-        exposure_layer = load_path_vector_layer(exposure_json)
+        hazard_layer = load_test_vector_layer(
+            'gisv4', 'hazard', 'classified_vector.geojson')
+        exposure_layer = load_test_vector_layer(
+            'gisv4', 'exposure', 'buildings.geojson')
+        aggregation_layer = load_test_vector_layer(
+            'gisv4', 'aggregation', 'small_grid.geojson')
 
-        hazard_json = self.fixtures_dir('analysis_sample/2-hazard.geojson')
-        hazard_layer = load_path_vector_layer(hazard_json)
+        impact_function = ImpactFunction()
+        impact_function.exposure = exposure_layer
+        impact_function.hazard = hazard_layer
+        impact_function.aggregation = aggregation_layer
+        impact_function.prepare()
+        return_code, message = impact_function.run()
 
-        impact_json = self.fixtures_dir('analysis_sample/14-impact.geojson')
-        impact_layer = load_path_vector_layer(impact_json)
-
-        analysis_json = self.fixtures_dir(
-            'analysis_sample/18-analysis.geojson')
-        analysis_layer = load_path_vector_layer(analysis_json)
-
-        breakdown_csv = self.fixtures_dir(
-            'analysis_sample/16-breakdown.csv')
-        exposure_breakdown = load_path_vector_layer(breakdown_csv)
-
-        minimum_needs = NeedsProfile()
-        minimum_needs.load()
+        self.assertEqual(return_code, ANALYSIS_SUCCESS, message)
 
         report_metadata = ReportMetadata(
             metadata_dict=standard_impact_report_metadata_html)
@@ -455,14 +438,210 @@ class TestImpactReport(unittest.TestCase):
         impact_report = ImpactReport(
             IFACE,
             report_metadata,
-            exposure=exposure_layer,
-            hazard=hazard_layer,
-            impact=impact_layer,
-            analysis=analysis_layer,
-            exposure_breakdown=exposure_breakdown,
-            minimum_needs_profile=minimum_needs)
+            impact_function=impact_function)
         impact_report.output_folder = output_folder
         impact_report.process_component()
+
+        """Checking generated context"""
+        different_context_message = 'Different context generated'
+        empty_component_output_message = 'Empty component output'
+
+        # Check aggregation-postprocessors
+        aggregation_postprocessors = impact_report.metadata.component_by_key(
+            aggregation_postprocessors_component['key'])
+        """:type: safe.reportv4.report_metadata.Jinja2ComponentsMetadata"""
+
+        # TODO: This has possible wrong number, expect to be fixed soon.
+        expected_context = {
+            'sections': OrderedDict(
+                [
+                    ('age', {
+                        'header': u'Detailed Age Report',
+                        'rows': [[u'area 1', 20, 3, 9, 1],
+                                 [u'area 2', 20, 3, 9, 1],
+                                 [u'area 3', 20, 3, 7, 1]],
+                        'columns': [
+                            u'Aggregation area',
+                            u'Total Population',
+                            u'Youth Count',
+                            u'Adult Count',
+                            u'Elderly Count'],
+                        'totals': [
+                            u'Total',
+                            50,
+                            9,
+                            30,
+                            3]
+                    }),
+                    ('gender', {
+                         'header': u'Detailed Gender '
+                                   u'Report',
+                         'rows': [[u'area 1', 20, 7, 7],
+                                  [u'area 2', 20, 7, 7],
+                                  [u'area 3', 20, 6, 6]],
+                         'columns': [
+                             u'Aggregation area',
+                             u'Total Population',
+                             u'Female Count',
+                             u'Male Count'],
+                         'totals': [
+                             u'Total',
+                             50,
+                             20,
+                             20]
+                    }),
+                    ('minimum_needs', {
+                        'header': u'Detailed Minimum Needs Report',
+                        'rows': [[u'area 1', 15, 42, 262, 1005, 3, 0],
+                                 [u'area 2', 15, 42, 262, 1005, 3, 0],
+                                 [u'area 3', 12, 33, 210, 804, 2, 0]],
+                        'columns': [
+                            u'Aggregation area',
+                            u'Total Population',
+                            'Rice',
+                            'Drinking Water',
+                            'Clean Water',
+                            'Family Kits',
+                            'Toilets'],
+                        'totals': [
+                            u'Total',
+                            50,
+                            117,
+                            734,
+                            2814,
+                            7,
+                            1]
+                    })
+                ])
+        }
+        actual_context = aggregation_postprocessors.context
+
+        self.assertDictEqual(
+            expected_context, actual_context, different_context_message)
+        self.assertTrue(
+            aggregation_postprocessors.output, empty_component_output_message)
+
+        """Check generated report"""
+
+        output_path = impact_report.component_absolute_output_path(
+            'impact-report')
+
+        # for now, test that output exists
+        self.assertTrue(os.path.exists(output_path))
+
+        shutil.rmtree(output_folder, ignore_errors=True)
+
+    # expected to fail until postprocessor calculation in analysis
+    # impacted is fixed
+    @unittest.expectedFailure
+    def test_aggregate_post_processors_raster(self):
+        """Test generate aggregate postprocessors sections."""
+
+        output_folder = self.fixtures_dir(
+            '../output/aggregate_post_processors')
+        # tsunami raster with population raster
+        shutil.rmtree(output_folder, ignore_errors=True)
+
+        hazard_layer = load_test_raster_layer(
+            'hazard', 'tsunami_wgs84.tif')
+        exposure_layer = load_test_raster_layer(
+            'exposure', 'pop_binary_raster_20_20.asc')
+
+        impact_function = ImpactFunction()
+        impact_function.exposure = exposure_layer
+        impact_function.hazard = hazard_layer
+        impact_function.prepare()
+        return_code, message = impact_function.run()
+
+        self.assertEqual(return_code, ANALYSIS_SUCCESS, message)
+
+        report_metadata = ReportMetadata(
+            metadata_dict=standard_impact_report_metadata_html)
+
+        impact_report = ImpactReport(
+            IFACE,
+            report_metadata,
+            impact_function=impact_function)
+        impact_report.output_folder = output_folder
+        impact_report.process_component()
+
+        """Checking generated context"""
+        different_context_message = 'Different context generated'
+        empty_component_output_message = 'Empty component output'
+
+        # Check aggregation-postprocessors
+        aggregation_postprocessors = impact_report.metadata.component_by_key(
+            aggregation_postprocessors_component['key'])
+        """:type: safe.reportv4.report_metadata.Jinja2ComponentsMetadata"""
+
+        # TODO: This has possible wrong number, expect to be fixed soon.
+        expected_context = {
+            'sections': OrderedDict(
+                [
+                    ('age', {
+                        'header': u'Detailed Age Report',
+                        'rows': [
+                            [u'Entire Area', 10, 2, 6, 0]],
+                        'columns': [
+                            u'Aggregation area',
+                            u'Total Population',
+                            u'Youth Count',
+                            u'Adult Count',
+                            u'Elderly Count'],
+                        'totals': [
+                            u'Total',
+                            10,
+                            2,
+                            6,
+                            0]
+                    }),
+                    ('gender', {
+                         'header': u'Detailed Gender '
+                                   u'Report',
+                         'rows': [
+                             [u'Entire Area', 10, 4, 4]],
+                         'columns': [
+                             u'Aggregation area',
+                             u'Total Population',
+                             u'Female Count',
+                             u'Male Count'],
+                         'totals': [
+                             u'Total',
+                             10,
+                             4,
+                             4]
+                    }),
+                    ('minimum_needs', {
+                        'header': u'Detailed Minimum Needs Report',
+                        'rows': [
+                            [u'Entire Area', 10, 25, 161, 616, 1, 0]],
+                        'columns': [
+                            u'Aggregation area',
+                            u'Total Population',
+                            'Rice',
+                            'Drinking Water',
+                            'Clean Water',
+                            'Family Kits',
+                            'Toilets'],
+                        'totals': [
+                            u'Total',
+                            10,
+                            25,
+                            161,
+                            616,
+                            1,
+                            0]
+                    })
+                ])
+        }
+        actual_context = aggregation_postprocessors.context
+
+        self.assertDictEqual(
+            expected_context, actual_context, different_context_message)
+        self.assertTrue(
+            aggregation_postprocessors.output, empty_component_output_message)
+
+        """Check generated report"""
 
         output_path = impact_report.component_absolute_output_path(
             'impact-report')
@@ -474,8 +653,6 @@ class TestImpactReport(unittest.TestCase):
 
     def test_qgis_html_pdf_report(self):
         """Test generate analysis breakdown and aggregation report."""
-        needs_profile = NeedsProfile()
-        needs_profile.load()
 
         output_folder = self.fixtures_dir('../output/impact_summary_pdf')
 
@@ -504,8 +681,7 @@ class TestImpactReport(unittest.TestCase):
         impact_report = ImpactReport(
             IFACE,
             report_metadata,
-            impact_function=impact_function,
-            minimum_needs_profile=needs_profile)
+            impact_function=impact_function)
         impact_report.output_folder = output_folder
         impact_report.process_component()
 
@@ -519,8 +695,6 @@ class TestImpactReport(unittest.TestCase):
 
     def test_qgis_map_pdf_report(self):
         """Test generate analysis map report."""
-        needs_profile = NeedsProfile()
-        needs_profile.load()
 
         output_folder = self.fixtures_dir('../output/impact_map_pdf')
 
@@ -556,8 +730,7 @@ class TestImpactReport(unittest.TestCase):
         impact_report = ImpactReport(
             IFACE,
             report_metadata,
-            impact_function=impact_function,
-            minimum_needs_profile=needs_profile)
+            impact_function=impact_function)
         impact_report.output_folder = output_folder
 
         # Get other setting
@@ -586,109 +759,3 @@ class TestImpactReport(unittest.TestCase):
         self.assertTrue(os.path.exists(output_path))
 
         shutil.rmtree(output_folder, ignore_errors=True)
-
-    @unittest.skipIf(
-        os.environ.get('ON_TRAVIS', False),
-        'Under development')
-    def test_default_qgis_report(self):
-        """Test generate qgis composition"""
-        sample_report_metadata_dict = {
-            'key': 'a3-portrait-blue',
-            'name': 'a3-portrait-blue',
-            'template_folder': '../resources/report-templates/',
-            'components': [
-                {
-                    'key': 'a3-portrait-blue',
-                    'type': 'QGISComposer',
-                    'processor': qgis_composer_renderer,
-                    'extractor': qgis_composer_extractor,
-                    'output_format': 'pdf',
-                    'template': 'standard-template/'
-                                'qgis-composer/'
-                                'a4-portrait-blue.qpt',
-                    'output_path': 'a4-portrait-blue.pdf',
-                    'extra_args': {
-                        'page_dpi': 300,
-                        'page_width': 210,
-                        'page_height': 297,
-                    }
-                }
-            ]
-        }
-        impact_json = self.fixtures_dir('analysis_sample/13-impact.geojson')
-        impact_layer = QgsVectorLayer(impact_json, '', 'ogr')
-        analysis_json = self.fixtures_dir(
-            'analysis_sample/analysis-summary.geojson')
-        analysis_layer = QgsVectorLayer(analysis_json, '', 'ogr')
-        minimum_needs = NeedsProfile()
-        minimum_needs.load()
-
-        # insert layer to registry
-        layer_registry = QgsMapLayerRegistry.instance()
-        layer_registry.removeAllMapLayers()
-        layer_registry.addMapLayer(impact_layer)
-
-        report_metadata = ReportMetadata(
-            metadata_dict=sample_report_metadata_dict)
-        impact_report = ImpactReport(
-            IFACE,
-            report_metadata,
-            impact_layer,
-            analysis_layer,
-            minimum_needs_profile=minimum_needs)
-
-        # Get other setting
-        settings = QSettings()
-        logo_path = settings.value(
-            'inasafe/organisation_logo_path', '', type=str)
-        impact_report.inasafe_context.organisation_logo = logo_path
-
-        disclaimer_text = settings.value(
-            'inasafe/reportDisclaimer', '', type=str)
-        impact_report.inasafe_context.disclaimer = disclaimer_text
-
-        north_arrow_path = settings.value(
-            'inasafe/north_arrow_path', '', type=str)
-        impact_report.inasafe_context.north_arrow = north_arrow_path
-
-        impact_report.qgis_composition_context.extent = impact_layer.extent()
-        impact_report.output_folder = self.fixtures_dir('../output')
-
-        impact_report.process_component()
-
-    @unittest.skipIf(
-        os.environ.get('ON_TRAVIS', False),
-        'Under development')
-    def test_generate_default_report(self):
-        """Test generate default map report"""
-        impact_json = self.fixtures_dir('impact.geojson')
-        impact_layer = QgsVectorLayer(impact_json, '', 'ogr')
-        analysis_json = self.fixtures_dir(
-            'analysis_sample/analysis-summary.geojson')
-        analysis_layer = QgsVectorLayer(analysis_json, '', 'ogr')
-        report_metadata = ReportMetadata(
-            metadata_dict=report_a4_portrait_blue)
-        impact_report = ImpactReport(
-            IFACE,
-            report_metadata,
-            impact_layer,
-            analysis_layer)
-
-        # Get other setting
-        settings = QSettings()
-        logo_path = settings.value(
-            'inasafe/organisation_logo_path', '', type=str)
-        impact_report.inasafe_context.organisation_logo = logo_path
-
-        disclaimer_text = settings.value(
-            'inasafe/reportDisclaimer', '', type=str)
-        impact_report.inasafe_context.disclaimer = disclaimer_text
-
-        north_arrow_path = settings.value(
-            'inasafe/north_arrow_path', '', type=str)
-        impact_report.inasafe_context.north_arrow = north_arrow_path
-
-        impact_report.qgis_composition_context.extent = impact_layer.extent()
-        impact_report.output_folder = self.fixtures_dir('output')
-
-        impact_report.process_component()

@@ -28,6 +28,14 @@ from safe.test.debug_helper import print_attribute_table
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
+from qgis.core import (
+    QgsVectorLayer,
+    QgsRasterLayer,
+    QgsCoordinateReferenceSystem,
+    QGis)
+from osgeo import gdal
+from PyQt4.QtCore import QT_VERSION_STR
+from PyQt4.Qt import PYQT_VERSION_STR
 from safe.definitionsv4.fields import (
     population_count_field,
     exposure_type_field,
@@ -47,12 +55,6 @@ from safe.definitionsv4.constants import (
 from safe.utilities.unicode import byteify
 from safe.utilities.gis import wkt_to_rectangle
 from safe.impact_function.impact_function import ImpactFunction
-
-from qgis.core import (
-    QgsVectorLayer, QgsRasterLayer, QgsCoordinateReferenceSystem, QGis)
-from osgeo import gdal
-from PyQt4.QtCore import QT_VERSION_STR
-from PyQt4.Qt import PYQT_VERSION_STR
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -546,8 +548,8 @@ class TestImpactFunction(unittest.TestCase):
         self.assertDictEqual(expected_provenance, impact_function.provenance)
 
     @unittest.expectedFailure
-    def test_post_minimum_needs_value_generation(self):
-        """Test minimum needs postprocessors.
+    def test_vector_post_minimum_needs_value_generation(self):
+        """Test minimum needs postprocessors on vector exposure.
 
         Minimum needs postprocessors is defined to only generate values when
         exposure contains population data.
@@ -568,29 +570,45 @@ class TestImpactFunction(unittest.TestCase):
         impact_function.aggregation = aggregation_layer
         impact_function.exposure = exposure_layer
         impact_function.hazard = hazard_layer
-
-        return_code, message = impact_function.prepare()
-        self.assertEqual(return_code, PREPARE_SUCCESS, message)
-
+        impact_function.prepare()
         return_code, message = impact_function.run()
+
         self.assertEqual(return_code, ANALYSIS_SUCCESS, message)
 
         # minimum needs fields should exists in the results
         self._check_minimum_fields_exists(impact_function)
 
+        # TODO: should include demographic postprocessor value too
         expected_value = {
             u'population': 69,
             u'total': 9.0,
-            u'minimum_needs__rice': 193.2,
-            u'minimum_needs__clean_water': 4623.0,
-            u'minimum_needs__toilets': 3.45,
-            u'minimum_needs__drinking_water': 1207.5,
-            u'female': 41,
-            u'minimum_needs__family_kits': 13.8,
+            u'minimum_needs__rice': 193,
+            u'minimum_needs__clean_water': 4623,
+            u'minimum_needs__toilets': 3,
+            u'minimum_needs__drinking_water': 1207,
+            u'minimum_needs__family_kits': 13,
+            u'male': 34,
+            u'female': 34,
+            u'youth': 17,
+            u'adult': 45,
+            u'elderly': 6,
             u'total_affected': 6.0,
         }
 
         self._check_minimum_fields_value(expected_value, impact_function)
+
+    # expected to fail until raster postprocessor calculation in analysis
+    # impacted is fixed
+    @unittest.expectedFailure
+    def test_raster_post_minimum_needs_value_generation(self):
+        """Test minimum needs postprocessors on raster exposure.
+
+        Minimum needs postprocessors is defined to only generate values
+        when exposure contains population data.
+        Especially important to test, since on raster exposure the population
+        field is generated on the fly.
+        The postprocessors need to expect generated population field exists.
+        """
 
         # # #
         # Test with raster exposure data with population_exposure_count
@@ -613,15 +631,20 @@ class TestImpactFunction(unittest.TestCase):
         # minimum needs fields should exists in the results
         self._check_minimum_fields_exists(impact_function)
 
+        # TODO: should include demographic postprocessor value too
         expected_value = {
             u'total_affected': 9.208200000039128,
-            u'minimum_needs__rice': 25.7829600001096,
-            u'minimum_needs__toilets': 0.460410000001956,
-            u'minimum_needs__drinking_water': 161.143500000685,
-            u'minimum_needs__clean_water': 616.949400002621,
+            u'minimum_needs__rice': 25,
+            u'minimum_needs__toilets': 0,
+            u'minimum_needs__drinking_water': 161,
+            u'minimum_needs__clean_water': 616,
+            u'male': 4,
+            u'female': 4,
+            u'youth': 2,
+            u'adult': 6,
+            u'elderly': 0,
             u'total': 162.7667000000474,
-            u'minimum_needs__family_kits': 1.84164000000783,
-            u'medium_hazard_count': 3.4283000000168715,
+            u'minimum_needs__family_kits': 1,
             u'total_unaffected': 153.55850000000828,
         }
 
