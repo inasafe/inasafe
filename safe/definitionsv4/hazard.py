@@ -5,8 +5,8 @@ from safe.definitionsv4.hazard_classifications import (
     volcano_hazard_classes,
     flood_hazard_classes,
     tsunami_hazard_classes,
-    ash_hazard_classes
-)
+    ash_hazard_classes,
+    cyclone_au_bom_hazard_classes)
 from safe.definitionsv4.caveats import (
     caveat_simulation, caveat_local_conditions, caveat_analysis_extent,)
 from safe.definitionsv4.concepts import concepts
@@ -18,7 +18,10 @@ from safe.definitionsv4.units import (
     unit_metres,
     unit_millimetres,
     unit_centimetres,
-    unit_mmi)
+    unit_mmi,
+    unit_miles_per_hour,
+    unit_kilometres_per_hour,
+    unit_knots)
 from safe.definitionsv4.layer_modes import (
     layer_mode_classified, layer_mode_continuous)
 from safe.definitionsv4.fields import (
@@ -50,7 +53,10 @@ continuous_hazard_unit = {
         unit_metres,
         unit_millimetres,
         unit_centimetres,
-        unit_mmi
+        unit_mmi,
+        unit_kilometres_per_hour,
+        unit_miles_per_hour,
+        unit_knots
     ]
 }
 continuous_hazard_unit_all = continuous_hazard_unit['types']
@@ -177,6 +183,51 @@ hazard_flood = {
     'extra_fields': [],
     'layer_modes': [layer_mode_classified, layer_mode_continuous]
 }
+
+hazard_cyclone = {
+    'key': 'cyclone',
+    'name': tr('Cyclone'),
+    'description': tr(
+        'A <b>Cyclone</b> is a rapidly rotating storm system '
+        'characterized by a low-pressure center, a closed low-level  '
+        'atmospheric circulation, strong winds, and a spiral arrangement of '
+        'thunderstorms that produce heavy rain. It is also referred to as '
+        '<b>hurricane</b> or <b>typhoon</b>.'),
+    'notes': [  # additional generic notes for flood - IF has more
+        caveat_simulation,
+        caveat_local_conditions,
+        caveat_analysis_extent,
+    ],
+    'continuous_notes': [  # notes specific to continuous data
+    ],
+    'classified_notes': [  # notes specific to classified data
+    ],
+    'single_event_notes': [  # notes specific to single event data
+    ],
+    'multi_event_notes': [  # notes specific to multi event data
+    ],
+    'actions': [  # these are additional generic actions - IF has more
+
+    ],
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    'continuous_hazard_units': [unit_miles_per_hour, unit_kilometres_per_hour,
+                                unit_knots],
+    'allowed_geometries': [
+        'polygon',
+        'raster'
+    ],
+    'classifications': [cyclone_au_bom_hazard_classes, generic_hazard_classes],
+    'compulsory_fields': [hazard_value_field],
+    'fields': hazard_fields,
+    'extra_fields': [],
+    'layer_modes': [layer_mode_classified, layer_mode_continuous]
+}
+
 hazard_volcanic_ash = {
     'key': 'volcanic_ash',
     'name': tr('Volcanic ash'),
@@ -271,7 +322,7 @@ hazard_volcano = {
         caveat_simulation,
         caveat_local_conditions,
         caveat_analysis_extent,
-    ],
+    ],''
     'actions': [  # these are additional generic actions - IF has more
 
     ],
@@ -306,6 +357,7 @@ hazard_all = [
     hazard_earthquake,
     hazard_volcano,
     hazard_volcanic_ash,
+    hazard_cyclone,
     hazard_generic
 ]
 hazards = {
