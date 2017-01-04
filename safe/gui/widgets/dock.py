@@ -949,6 +949,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             qgis_exposure = self.get_exposure_layer()
             legend.setLayerVisible(qgis_exposure, False)
 
+        self.extent.show_last_analysis_extent(
+            self.impact_function.analysis_extent)
+
         self.hide_busy()
         return ANALYSIS_SUCCESS, None
 
