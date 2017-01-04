@@ -231,6 +231,11 @@ class Extent(object):
         self.hide_user_analysis_extent()
         self._user_extent = None
 
+    def clear_next_analysis_extent(self):
+        """Slot called when the users clears the analysis extents."""
+        self.hide_next_analysis_extent()
+        self._next_analysis_extent = None
+
     def hide_user_analysis_extent(self):
         """Hide the rubber band showing extent of the next analysis.
 
