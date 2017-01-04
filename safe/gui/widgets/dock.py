@@ -949,8 +949,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             qgis_exposure = self.get_exposure_layer()
             legend.setLayerVisible(qgis_exposure, False)
 
-        self.extent.show_last_analysis_extent(
-            self.impact_function.analysis_extent)
+        self.extent.set_last_analysis_extent(
+            self.impact_function.analysis_extent,
+            self.get_exposure_layer().crs())
 
         self.hide_busy()
         return ANALYSIS_SUCCESS, None
@@ -1364,8 +1365,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     self.tr('More info ...'),
                     2)
 
-            self.extent.show_next_analysis_extent(
-                impact_function.analysis_extent)
+            self.extent.set_next_analysis_extent(
+                impact_function.analysis_extent,
+                self.get_exposure_layer().crs())
 
             self.run_button.setEnabled(True)
         else:

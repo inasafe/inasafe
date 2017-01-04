@@ -873,7 +873,7 @@ class TestDock(TestCase):
         # User extent should override this
         set_small_jakarta_extent(self.dock)
         self.dock.extent.show_user_analysis_extent()
-        user_band = self.dock.extent.user_analysis_rubberband
+        user_band = self.dock.extent._user_analysis_rubberband
         self.assertEqual(expected_vertex_count, user_band.numberOfVertices())
 
     @unittest.expectedFailure
