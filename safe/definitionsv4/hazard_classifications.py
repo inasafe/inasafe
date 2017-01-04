@@ -603,6 +603,7 @@ hazard_classification = {
         tsunami_hazard_classes,
         volcano_hazard_classes,
         ash_hazard_classes,
+        cyclone_au_bom_hazard_classes
     ]
 }
 
