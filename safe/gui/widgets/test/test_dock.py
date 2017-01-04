@@ -114,7 +114,7 @@ class TestDock(TestCase):
         """Validate function work as expected"""
         self.tearDown()
         # First check that we DON'T validate a clear self.dock
-        flag, message = self.dock.validate()
+        flag, message = self.dock._validate_question_area()
         self.assertIsNotNone(message, 'No reason for failure given')
 
         message = 'Validation expected to fail on a cleared self.dock.'
@@ -122,7 +122,7 @@ class TestDock(TestCase):
 
         # Now check we DO validate a populated self.dock
         populate_dock(self.dock)
-        flag = self.dock.validate()
+        flag = self.dock._validate_question_area()
         message = (
             'Validation expected to pass on a populated dock with selections.')
         self.assertTrue(flag, message)
@@ -131,7 +131,7 @@ class TestDock(TestCase):
         """OK button changes properly according to self.dock validity"""
         # First check that we ok ISNT enabled on a clear self.dock
         self.tearDown()
-        flag, message = self.dock.validate()
+        flag, message = self.dock._validate_question_area()
 
         self.assertIsNotNone(message, 'No reason for failure given')
         message = 'Validation expected to fail on a cleared self.dock.'
@@ -139,7 +139,7 @@ class TestDock(TestCase):
 
         # Now check OK IS enabled on a populated self.dock
         populate_dock(self.dock)
-        flag = self.dock.validate()
+        flag = self.dock._validate_question_area()
         message = (
             'Validation expected to pass on a populated self.dock with '
             'selections.')
@@ -170,7 +170,7 @@ class TestDock(TestCase):
         CANVAS.setExtent(rectangle)
         crs = QgsCoordinateReferenceSystem('EPSG:4326')
         self.dock.define_user_analysis_extent(rectangle, crs)
-        self.dock.show_next_analysis_extent()
+        self.dock.validate_impact_function()
         # Check that run button is disabled because extents do not overlap
         message = 'Run button was not disabled'
         self.assertFalse(button.isEnabled(), message)
@@ -790,14 +790,14 @@ class TestDock(TestCase):
         # 4326 with enabled on-the-fly reprojection - check next
         set_canvas_crs(GEOCRS, True)
         set_small_jakarta_extent(self.dock)
-        self.dock.show_next_analysis_extent()
+        self.dock.validate_impact_function()
         next_band = self.dock.extent.next_analysis_rubberband
         self.assertEqual(expected_vertex_count, next_band.numberOfVertices())
 
         # 4326 with disabled on-the-fly reprojection - check next
         set_canvas_crs(GEOCRS, False)
         set_small_jakarta_extent(self.dock)
-        self.dock.show_next_analysis_extent()
+        self.dock.validate_impact_function()
         next_band = self.dock.extent.next_analysis_rubberband
         self.assertEqual(expected_vertex_count, next_band.numberOfVertices())
 
