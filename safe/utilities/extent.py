@@ -39,11 +39,7 @@ class Extent(object):
     def __init__(self, iface):
         """Constructor."""
 
-        self.iface = iface
-
-        # Rubber bands and extents for showing analysis extent etc.
-        # Note that rubber bands are transient but their associated
-        # extents are persistent for the session.
+        self._map_canvas = iface.mapCanvas()
 
         # Last analysis extents
         self._last_analysis_rubberband = None
@@ -55,24 +51,77 @@ class Extent(object):
 
         # Rectangle defining the user's preferred extent for the analysis
         self._user_analysis_rubberband = None
-        self.user_extent = None  # QgsRectangle
-        self.user_extent_crs = None
+        self._user_extent = None  # QgsRectangle
 
         # Whether to show rubber band of last and next scenario
-        self.show_rubber_bands = False
+        self._show_rubber_bands = False
 
     @property
-    def destination_crs(self):
-        """Return the destination CRS of the map canvas.
+    def show_rubber_bands(self):
+        """Return if we display rubberbands
+
+        :return: Boolean if we display rubberbands
+        :rtype: bool
+        """
+        return self._show_rubber_bands
+
+    @show_rubber_bands.setter
+    def show_rubber_bands(self, display):
+        """Setter if we need to display rubberbands.
+
+        :param display: The boolean.
+        :type display: bool
+        """
+        self._show_rubber_bands = display
+
+        if self._show_rubber_bands:
+            self.display_last_analysis()
+            self.display_next_analysis()
+            self.display_user_extent()
+        else:
+            self.hide_last_analysis_extent()
+            self.hide_user_analysis_extent()
+            self.hide_next_analysis_extent()
+
+    @property
+    def crs(self):
+        """Return the CRS of the map canvas.
 
         :return: The map canvas CRS.
         :rtype: QgsCoordinateTransform
         """
-        return self.iface.mapCanvas().mapRenderer().destinationCrs()
+        return self._map_canvas.mapRenderer().destinationCrs()
+
+    @property
+    def user_extent(self):
+        """The user extent in the canvas CRS.
+
+        :return: The user extent.
+        :rtype: QgsGeometry
+        """
+        return self._user_extent
+
+    def set_user_extent(self, extent, crs):
+        """Setter for the user requested extent.
+
+        This function will redraw the rubberband if needed.
+
+        :param extent: The user extent.
+        :type extent: QgsGeometry
+
+        :param crs: The CRS of the extent.
+        :type crs: QgsCoordinateReferenceSystem
+        """
+        extent = QgsGeometry(extent)
+        transform = QgsCoordinateTransform(crs, self.crs)
+        extent.transform(transform)
+        self._user_extent = extent
+        if self._show_rubber_bands:
+            self.display_user_extent()
 
     @property
     def last_analysis_extent(self):
-        """The last analysis extent.
+        """The last analysis extent in the canvas CRS.
 
         :return: The last analysis extent.
         :rtype: QgsGeometry
@@ -90,20 +139,17 @@ class Extent(object):
         :param crs: The CRS of the extent.
         :type crs: QgsCoordinateReferenceSystem
         """
-        self.hide_last_analysis_extent()
-
         extent = QgsGeometry(extent)
-        transform = QgsCoordinateTransform(crs, self.destination_crs)
+        transform = QgsCoordinateTransform(crs, self.crs)
         extent.transform(transform)
         self._last_analysis_extent = extent
 
-        if self.show_rubber_bands:
-            self._last_analysis_rubberband = self._draw_rubberband(
-                extent, last_analysis_color, last_analysis_width)
+        if self._show_rubber_bands:
+            self.display_last_analysis()
 
     @property
     def next_analysis_extent(self):
-        """The next analysis extent.
+        """The next analysis extent in the canvas CRS.
 
         :return: The next analysis extent.
         :rtype: QgsGeometry
@@ -121,16 +167,13 @@ class Extent(object):
         :param crs: The CRS of the extent.
         :type crs: QgsCoordinateReferenceSystem
         """
-        self.hide_next_analysis_extent()
-
         extent = QgsGeometry(extent)
-        transform = QgsCoordinateTransform(crs, self.destination_crs)
+        transform = QgsCoordinateTransform(crs, self.crs)
         extent.transform(transform)
         self._next_analysis_extent = extent
 
-        if self.show_rubber_bands:
-            self._next_analysis_rubberband = self._draw_rubberband(
-                extent, next_analysis_color, next_analysis_width)
+        if self._show_rubber_bands:
+            self.display_next_analysis()
 
     def _draw_rubberband(self, geometry, colour, width):
         """Draw a rubber band on the canvas.
@@ -151,12 +194,42 @@ class Extent(object):
         """
         # noinspection PyArgumentList
         rubber_band = QgsRubberBand(
-            self.iface.mapCanvas(), geometryType=QGis.Polygon)
+            self._map_canvas, geometryType=QGis.Polygon)
         rubber_band.setBrushStyle(Qt.NoBrush)
         rubber_band.setColor(colour)
         rubber_band.setWidth(width)
         rubber_band.setToGeometry(geometry, None)
         return rubber_band
+
+    def display_user_extent(self):
+        """Display the user extent."""
+        self.hide_user_analysis_extent()
+        if self._user_extent:
+            self._user_analysis_rubberband = self._draw_rubberband(
+                self._user_extent, user_analysis_color, user_analysis_width)
+
+    def display_next_analysis(self):
+        """Display the next analysis extent."""
+        self.hide_next_analysis_extent()
+        if self._next_analysis_extent:
+            self._next_analysis_rubberband = self._draw_rubberband(
+                self._next_analysis_extent,
+                next_analysis_color,
+                next_analysis_width)
+
+    def display_last_analysis(self):
+        """Display the next analysis extent."""
+        self.hide_last_analysis_extent()
+        if self._last_analysis_extent:
+            self._last_analysis_rubberband = self._draw_rubberband(
+                self._last_analysis_extent,
+                last_analysis_color,
+                last_analysis_width)
+
+    def clear_user_analysis_extent(self):
+        """Slot called when the users clears the analysis extents."""
+        self.hide_user_analysis_extent()
+        self._user_extent = None
 
     def hide_user_analysis_extent(self):
         """Hide the rubber band showing extent of the next analysis.
@@ -166,67 +239,6 @@ class Extent(object):
         if self._user_analysis_rubberband is not None:
             self._user_analysis_rubberband.reset(QGis.Polygon)
             self._user_analysis_rubberband = None
-
-    def define_user_analysis_extent(self, extent, crs):
-        """Slot called when user has defined a custom analysis extent.
-
-        .. versionadded: 2.2.0
-
-        :param extent: Extent of the user's preferred analysis area.
-        :type extent: QgsRectangle
-
-        :param crs: Coordinate reference system for user defined analysis
-            extent.
-        :type crs: QgsCoordinateReferenceSystem
-        """
-        self.hide_user_analysis_extent()
-
-        self.user_extent = extent
-        self.user_extent_crs = crs
-
-        # Persist this extent for the next session
-        settings = QSettings()
-        settings.setValue('inasafe/user_extent', extent.asWktPolygon())
-        settings.setValue('inasafe/user_extent_crs', crs.authid())
-
-        self.show_user_analysis_extent()
-
-    def clear_user_analysis_extent(self):
-        """Slot called when the users clears the analysis extents."""
-        self.hide_user_analysis_extent()
-        self.user_extent = None
-        self.user_extent_crs = None
-
-    def show_user_analysis_extent(self):
-        """Update the rubber band showing the user defined analysis extent.
-
-        Primary purpose of this slot is to draw a rubber band of where the
-        analysis will be carried out based on valid intersection between
-        layers and the user's preferred analysis area.
-
-        This slot is called on pan, zoom, layer visibility changes and
-        when the user updates the defined extent.
-
-        .. versionadded:: 2.2.0
-        """
-        self.hide_user_analysis_extent()
-
-        extent = self.user_extent
-        source_crs = self.user_extent_crs
-
-        if not extent or not source_crs:
-            return
-
-        extent = QgsGeometry.fromRect(extent)
-
-        # make sure the extent is in the same crs as the canvas
-        transform = QgsCoordinateTransform(source_crs, self.destination_crs)
-        extent.transform(transform)
-
-        if self.show_rubber_bands:
-            # Draw in blue
-            self._user_analysis_rubberband = self._draw_rubberband(
-                extent, user_analysis_color, user_analysis_width)
 
     def hide_next_analysis_extent(self):
         """Hide the rubber band showing extent of the next analysis.
