@@ -27,6 +27,7 @@ from safe.definitionsv4.constants import (
     ANALYSIS_SUCCESS,
     PREPARE_FAILED_BAD_INPUT,
     PREPARE_FAILED_BAD_CODE,
+    PREPARE_FAILED_INSUFFICIENT_OVERLAP,
     PREPARE_SUCCESS,
 )
 from safe.defaults import supporters_logo_path
@@ -164,7 +165,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.connect_layer_listener()
         self.question_group.setEnabled(False)
         self.question_group.setVisible(False)
-        self.set_run_button_status()
 
         self.read_settings()  # get_project_layers called by this
 
@@ -174,6 +174,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         # Current aggregation layer
         self._aggregation = None
+
+        # Check the validity
+        self.validate_impact_function()
 
     @property
     def aggregation(self):
@@ -197,13 +200,13 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # We need to disconnect first.
         if self._aggregation and use_selected_only:
             self._aggregation.selectionChanged.disconnect(
-                self.show_next_analysis_extent)
+                self.validate_impact_function)
 
         self._aggregation = layer
 
         if use_selected_only and layer:
             self._aggregation.selectionChanged.connect(
-                self.show_next_analysis_extent)
+                self.validate_impact_function)
 
     def set_dock_title(self):
         """Set the title of the dock using the current version of InaSAFE."""
@@ -254,8 +257,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         Do this on init and after changing options in the options dialog.
         """
-        self.extent.show_rubber_bands = bool(
-            self.settings.value('inasafe/showRubberBands', False, type=bool))
 
         try:
             extent = self.settings.value('inasafe/user_extent', None, type=str)
@@ -274,6 +275,11 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.extent.user_extent = extent
             self.extent.user_extent_crs = crs
             self.extent.show_user_analysis_extent()
+
+        # It's better to set the show_rubber_bands after setting the user
+        # extent.
+        self.extent.show_rubber_bands = bool(
+            self.settings.value('inasafe/showRubberBands', False, type=bool))
 
         self.draw_rubber_bands()
 
@@ -408,39 +414,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.iface.mapCanvas().extentsChanged.disconnect(
             self.draw_rubber_bands)
 
-    def validate(self):
-        """Helper method to evaluate the current state of the dialog.
-
-        This function will determine if it is appropriate for the OK button to
-        be enabled or not.
-
-        .. note:: The enabled state of the OK button on the dialog will
-           NOT be updated (set True or False) depending on the outcome of
-           the UI readiness tests performed - **only** True or False
-           will be returned by the function.
-
-        :returns: A two-tuple where the first element is a Boolean reflecting
-         the results of the validation tests and the second is a message
-         indicating any reason why the validation may have failed.
-        :rtype: (Boolean, safe.messaging.Message)
-
-        Example::
-
-            flag,message = self.validate()
-        """
-        if self.busy:
-            return False, None
-        hazard_index = self.hazard_layer_combo.currentIndex()
-        exposure_index = self.exposure_layer_combo.currentIndex()
-        if hazard_index == -1 or exposure_index == -1:
-            message = getting_started_message()
-            return False, message
-
-        # Now check if extents are ok for #1811
-        else:
-            message = ready_message()
-            return True, message
-
     @pyqtSlot(QgsMapLayer, str)
     def save_auxiliary_files(self, layer, destination):
         """Save auxiliary files when using the 'save as' function.
@@ -494,7 +467,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # Add any other logic you might like here...
         del index
         self.toggle_aggregation_layer_combo()
-        self.set_run_button_status()
+        self.validate_impact_function()
         self.draw_rubber_bands()
 
     # noinspection PyPep8Naming
@@ -509,7 +482,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # Add any other logic you might like here...
         del index
         self.toggle_aggregation_layer_combo()
-        self.set_run_button_status()
+        self.validate_impact_function()
         self.draw_rubber_bands()
 
     # noinspection PyPep8Naming
@@ -559,25 +532,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.aggregation_layer_combo.setCurrentIndex(0)
             self.aggregation_layer_combo.setEnabled(False)
 
-    def set_run_button_status(self):
-        """Helper function to set the run button status based on form validity.
-        """
-        flag, message = self.validate()
-        self.run_button.setEnabled(flag)
-        if message is not None:
-            send_static_message(self, message)
-
-    @pyqtSlot()
-    def canvas_layerset_changed(self):
-        """A helper slot to update dock combos if canvas layerset changes.
-
-        Activated when the layerset has been changed (e.g. one or more layer
-        visibilities changed). If self.show_only_visible_layers_flag is set to
-        False this method will simply return, doing nothing.
-        """
-        if self.show_only_visible_layers_flag:
-            self.get_layers()
-
     def unblock_signals(self):
         """Let the combos listen for event changes again."""
         self.aggregation_layer_combo.blockSignals(False)
@@ -625,8 +579,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         if self.get_layers_lock:
             return
 
-        # for arg in args:
-        # LOGGER.debug('get_layer argument: %s' % arg)
         # Map registry may be invalid if QGIS is shutting down
         registry = QgsMapLayerRegistry.instance()
         canvas_layers = self.iface.mapCanvas().layers()
@@ -697,14 +649,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             if title and self.set_layer_from_title_flag:
                 layer.setLayerName(title)
 
-            # NOTE : I commented out this due to
-            # https://github.com/AIFDR/inasafe/issues/528
-            # check if layer is a vector polygon layer
-            # if isPolygonLayer(layer):
-            #     addComboItemInOrder(self.aggregation_layer_combo, title,
-            #                         source)
-            #     self.aggregationLayers.append(layer)
-
             # Find out if the layer is a hazard or an exposure
             # layer by querying its keywords. If the query fails,
             # the layer will be ignored.
@@ -763,6 +707,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         index = self.hazard_layer_combo.currentIndex()
         if index < 0:
             return None
+
         layer_id = self.hazard_layer_combo.itemData(
             index, QtCore.Qt.UserRole)
         layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
@@ -777,17 +722,16 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         :returns: Currently selected map layer in the exposure combo.
         :rtype: QgsMapLayer
         """
-
         index = self.exposure_layer_combo.currentIndex()
         if index < 0:
             return None
+
         layer_id = self.exposure_layer_combo.itemData(
             index, QtCore.Qt.UserRole)
         layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
         return layer
 
     def get_aggregation_layer(self):
-
         """Get the QgsMapLayer currently selected in the post processing combo.
 
         Obtain QgsMapLayer id from the userrole of the QtCombo for post
@@ -795,13 +739,12 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         :returns: None if no aggregation is selected or aggregation_layer_combo
             is disabled, otherwise a polygon layer.
-        :rtype: QgsMapLayer, QgsVectorLayer or None
+        :rtype: QgsVectorLayer or None
         """
-
-        no_selection_value = 0
         index = self.aggregation_layer_combo.currentIndex()
-        if index <= no_selection_value:
+        if index < 0:
             return None
+
         layer_id = self.aggregation_layer_combo.itemData(
             index, QtCore.Qt.UserRole)
         layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
@@ -811,12 +754,12 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
     def toggle_rubber_bands(self, flag):
         """Disabled/enable the rendering of rubber bands.
 
+        This slot is called from the button.
+
         :param flag: Flag to indicate if drawing of bands is active.
         :type flag: bool
         """
         self.extent.show_rubber_bands = flag
-        # Temporary disable until we fix the dock in inasafe v4.
-        self.extent.show_rubber_bands = False
         self.settings.setValue('inasafe/showRubberBands', flag)
         if not flag:
             self.extent.hide_last_analysis_extent()  # red
@@ -833,7 +776,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         except TypeError:
             flag = False
         if flag:
-            self.show_next_analysis_extent()  # green
+            self.validate_impact_function()
             self.extent.show_user_analysis_extent()  # blue
 
     def progress_callback(self, current_value, maximum_value, message=None):
@@ -866,26 +809,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
     def accept(self):
         """Execute analysis when run button is clicked."""
         self.show_busy()
-        self.show_next_analysis_extent()
-
-        self.impact_function = self.prepare_impact_function()
-        status, message = self.impact_function.prepare()
-        if status == PREPARE_FAILED_BAD_INPUT:
-            self.hide_busy()
-            LOGGER.info(tr(
-                'The impact function will not be able to run because of the '
-                'inputs.'))
-            send_error_message(self, message)
-            return status, message
-        if status == PREPARE_FAILED_BAD_CODE:
-            self.hide_busy()
-            LOGGER.exception(tr(
-                'The impact function will not be able to run because of a '
-                'bug.'))
-            send_error_message(self, message)
-            return status, message
 
         # Start the analysis
+        self.impact_function = self.validate_impact_function()
         status, message = self.impact_function.run()
         if status == ANALYSIS_FAILED_BAD_INPUT:
             self.hide_busy()
@@ -962,33 +888,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         self.hide_busy()
         return ANALYSIS_SUCCESS, None
-
-    def prepare_impact_function(self):
-        """Create analysis as a representation of current situation of dock."""
-
-        # Impact Functions
-        impact_function = ImpactFunction()
-        impact_function.callback = self.progress_callback
-
-        # Layers
-        impact_function.hazard = self.get_hazard_layer()
-        impact_function.exposure = self.get_exposure_layer()
-        aggregation = self.get_aggregation_layer()
-
-        if aggregation:
-            impact_function.aggregation = aggregation
-            impact_function.use_selected_features_only = (
-                bool(self.settings.value(
-                    'inasafe/useSelectedFeaturesOnly', False, type=bool)))
-        else:
-            if self.extent.user_extent:
-                impact_function.requested_extent = self.extent.user_extent
-                impact_function.requested_extent_crs = (
-                    self.extent.user_extent_crs)
-
-        impact_function.debug_mode = self.debug_mode.isChecked()
-
-        return impact_function
 
     def show_help(self):
         """Open the help dialog."""
@@ -1285,7 +1184,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         """
         try:
             self.extent.define_user_analysis_extent(extent, crs)
-            self.show_next_analysis_extent()
+            self.validate_impact_function()
         except InvalidGeometryError:
             return
 
@@ -1331,32 +1230,54 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 visible_count += 1
         return visible_count
 
-    def show_next_analysis_extent(self):
-        """Update the rubber band showing where the next analysis extent is.
+    def validate_impact_function(self):
+        """Helper method to evaluate the current state of the impact function.
 
-        Primary purpose of this slot is to draw a rubber band of where the
-        analysis will be carried out based on valid intersection between
-        layers.
+        This function will determine if it is appropriate for the OK button to
+        be enabled or not.
 
-        This slot is called on pan, zoom, layer visibility changes and
+        This function will return a ready to run impact function or None if it
+        is not ready.
 
-        .. versionadded:: 2.1.0
+        This slot is called on pan, zoom, layer visibility changes.
+
+        .. versionadded:: 4.0
         """
-        self.extent.hide_next_analysis_extent()
+
         # check if we actually have correct hazard, exposure and IF
         # if we don't we exit immediately to avoid cluttering up the display
         # with unneeded status messages...
-        flag, _ = self.validate()
+        flag, message = self._validate_question_area()
         if not flag:
+            send_static_message(self, message)
             self.run_button.setEnabled(False)
-            return
+            return None
 
         # IF could potentially run - lets see if the extents will work well...
-        impact_function = self.prepare_impact_function()
+        impact_function = ImpactFunction()
+        impact_function.callback = self.progress_callback
+
+        # Layers
+        impact_function.hazard = self.get_hazard_layer()
+        impact_function.exposure = self.get_exposure_layer()
+        aggregation = self.get_aggregation_layer()
+
+        if aggregation:
+            impact_function.aggregation = aggregation
+            impact_function.use_selected_features_only = (
+                bool(self.settings.value(
+                    'inasafe/useSelectedFeaturesOnly', False, type=bool)))
+        else:
+            if self.extent.user_extent:
+                impact_function.requested_extent = self.extent.user_extent
+                impact_function.requested_extent_crs = (
+                    self.extent.user_extent_crs)
+
+        impact_function.debug_mode = self.debug_mode.isChecked()
         status, message = impact_function.prepare()
         if status == PREPARE_SUCCESS:
 
-            show_confirmations = QSettings().value(
+            show_confirmations = self.settings.value(
                 'inasafe/show_extent_confirmations', True, type=bool)
 
             if show_confirmations:
@@ -1366,7 +1287,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     'run button below to continue with the analysis.')
 
                 display_information_message_bar(
-                    self.tr('InaSAFE'),
+                    'InaSAFE',
                     self.tr('Analysis environment ready'),
                     message,
                     self.tr('More info ...'),
@@ -1377,36 +1298,59 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 self.get_exposure_layer().crs())
 
             self.run_button.setEnabled(True)
-        else:
-            # For issue #618, #1811
-            if self.show_only_visible_layers_flag:
-                layer_count = self._visible_layers_count()
-            else:
-                layer_count = self._layer_count()
+            return self.impact_function
 
-            if layer_count == 0:
-                send_static_message(self, getting_started_message())
-            else:
-                show_warnings = self.settings.value(
-                    'inasafe/show_extent_warnings',
-                    True,
-                    type=bool)
-                if show_warnings:
-                    message = no_overlap_message()
-                    display_warning_message_bar(
-                        self.tr('InaSAFE'),
-                        self.tr('No overlapping extents'),
-                        message)
+        elif status == PREPARE_FAILED_INSUFFICIENT_OVERLAP:
+            show_warnings = self.settings.value(
+                'inasafe/show_extent_warnings', True, type=bool)
+            if show_warnings:
+                display_warning_message_bar(
+                    'InaSAFE', self.tr('No overlapping extents'), message)
             self.run_button.setEnabled(False)
-            # For #2077 somewhat kludgy hack to prevent positive
-            # message when we cant actually run
-            match = self.tr(
-                'You can now proceed to run your analysis by clicking the ')
-            current_text = self.results_webview.page_to_text()
-            if match in current_text:
-                message = m.Message()
-                message.add(LOGO_ELEMENT)
-                message.add(m.Heading(self.tr(
-                    'Insufficient overlap'), **WARNING_STYLE))
-                message.add(no_overlap_message())
-                send_static_message(self, message)
+            return None
+
+        elif status == PREPARE_FAILED_BAD_INPUT:
+            # The user should fix the message. It should be in orange.
+            send_error_message(self, message)
+            self.run_button.setEnabled(False)
+            return None
+        else:
+            # An exception has been raised. It should be in red.
+            send_error_message(self, message)
+            self.run_button.setEnabled(False)
+            return None
+
+    def _validate_question_area(self):
+        """Helper method to evaluate the current state of the dialog.
+
+        This function will determine if it is appropriate for the OK button to
+        be enabled or not.
+
+        .. note:: The enabled state of the OK button on the dialog will
+           NOT be updated (set True or False) depending on the outcome of
+           the UI readiness tests performed - **only** True or False
+           will be returned by the function.
+
+        :returns: A two-tuple where the first element is a Boolean reflecting
+         the results of the validation tests and the second is a message
+         indicating any reason why the validation may have failed.
+        :rtype: (Boolean, safe.messaging.Message)
+
+        Example::
+
+            flag,message = self._validate_question_area()
+        """
+        if self.busy:
+            return False, None
+
+        hazard_index = self.hazard_layer_combo.currentIndex()
+        exposure_index = self.exposure_layer_combo.currentIndex()
+        if hazard_index == -1 or exposure_index == -1:
+            message = getting_started_message()
+            return False, message
+
+        # Now check if extents are ok for #1811
+        else:
+            message = ready_message()
+
+            return True, message

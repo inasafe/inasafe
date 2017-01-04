@@ -728,7 +728,7 @@ class Plugin(object):
             self.dock_widget.define_user_analysis_extent)
         # This ensures that run button state is updated on dialog close
         widget.extent_selector_closed.connect(
-            self.dock_widget.show_next_analysis_extent)
+            self.dock_widget.validate_impact_function)
         # Needs to be non modal to support hide -> interact with map -> show
         widget.show()  # non modal
 
