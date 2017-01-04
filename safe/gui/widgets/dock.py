@@ -27,7 +27,6 @@ from safe.definitionsv4.constants import (
     ANALYSIS_FAILED_BAD_CODE,
     ANALYSIS_SUCCESS,
     PREPARE_FAILED_BAD_INPUT,
-    PREPARE_FAILED_BAD_CODE,
     PREPARE_FAILED_INSUFFICIENT_OVERLAP,
     PREPARE_SUCCESS,
 )
@@ -70,6 +69,7 @@ from safe.gui.widgets.message import (
     show_no_keywords_message,
     show_keyword_version_message,
     getting_started_message,
+    no_overlap_message,
     ready_message,
     enable_messaging)
 from safe.gui.analysis_utilities import (
@@ -283,8 +283,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.extent.show_rubber_bands = bool(
             self.settings.value('inasafe/showRubberBands', False, type=bool))
 
-        self.draw_rubber_bands()
-
         flag = self.settings.value(
             'inasafe/visibleLayersOnlyFlag', True, type=bool)
         self.show_only_visible_layers_flag = flag
@@ -398,7 +396,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         self.iface.mapCanvas().layersChanged.connect(self.get_layers)
         self.iface.currentLayerChanged.connect(self.layer_changed)
-        self.iface.mapCanvas().extentsChanged.connect(self.draw_rubber_bands)
+        self.iface.mapCanvas().extentsChanged.connect(
+            self.validate_impact_function)
 
     # pylint: disable=W0702
     def disconnect_layer_listener(self):
@@ -414,7 +413,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.iface.mapCanvas().layersChanged.disconnect(self.get_layers)
         self.iface.currentLayerChanged.disconnect(self.layer_changed)
         self.iface.mapCanvas().extentsChanged.disconnect(
-            self.draw_rubber_bands)
+            self.validate_impact_function)
 
     @pyqtSlot(QgsMapLayer, str)
     def save_auxiliary_files(self, layer, destination):
@@ -470,7 +469,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         del index
         self.toggle_aggregation_layer_combo()
         self.validate_impact_function()
-        self.draw_rubber_bands()
 
     # noinspection PyPep8Naming
     @pyqtSlot(int)
@@ -485,7 +483,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         del index
         self.toggle_aggregation_layer_combo()
         self.validate_impact_function()
-        self.draw_rubber_bands()
 
     # noinspection PyPep8Naming
     @pyqtSlot(int)
@@ -521,7 +518,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.extent.clear_user_analysis_extent()
             self.aggregation = self.get_aggregation_layer()
 
-        self.draw_rubber_bands()
+        self.validate_impact_function()
 
     def toggle_aggregation_layer_combo(self):
         """Toggle the aggregation combo enabled status.
@@ -700,8 +697,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # ensure the dock keywords info panel is updated
         # make sure to do this after the lock is released!
         self.layer_changed(self.iface.activeLayer())
-        # Make sure to update the analysis area preview
-        self.draw_rubber_bands()
 
     def get_hazard_layer(self):
         """Get the QgsMapLayer currently selected in the hazard combo.
@@ -770,22 +765,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         """
         self.extent.show_rubber_bands = flag
         self.settings.setValue('inasafe/showRubberBands', flag)
-        if not flag:
-            self.extent.hide_last_analysis_extent()  # red
-            self.extent.hide_next_analysis_extent()  # green
-            self.extent.hide_user_analysis_extent()  # blue
-        else:
-            self.draw_rubber_bands()
-
-    @pyqtSlot()
-    def draw_rubber_bands(self):
-        """Draw any rubber bands that are enabled."""
-        try:
-            flag = self.settings.value('inasafe/showRubberBands', type=bool)
-        except TypeError:
-            flag = False
-        if flag:
-            self.validate_impact_function()
 
     def progress_callback(self, current_value, maximum_value, message=None):
         """GUI based callback implementation for showing progress.
@@ -820,6 +799,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         # Start the analysis
         self.impact_function = self.validate_impact_function()
+        self.impact_function.callback = self.progress_callback
+        self.impact_function.debug_mode = self.debug_mode.isChecked()
         status, message = self.impact_function.run()
         if status == ANALYSIS_FAILED_BAD_INPUT:
             self.hide_busy()
@@ -1249,21 +1230,15 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         .. versionadded:: 4.0
         """
-
-        # check if we actually have correct hazard, exposure and IF
-        # if we don't we exit immediately to avoid cluttering up the display
-        # with unneeded status messages...
+        # First, we need to check if the question area is correct.
         flag, message = self._validate_question_area()
         if not flag:
             send_static_message(self, message)
             self.run_button.setEnabled(False)
             return None
 
-        # IF could potentially run - lets see if the extents will work well...
+        # Then, we need to check if an IF can run.
         impact_function = ImpactFunction()
-        impact_function.callback = self.progress_callback
-
-        # Layers
         impact_function.hazard = self.get_hazard_layer()
         impact_function.exposure = self.get_exposure_layer()
         aggregation = self.get_aggregation_layer()
@@ -1288,7 +1263,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     self.iface.mapCanvas().extent())
                 impact_function.requested_extent_crs = self.extent.crs
 
-        impact_function.debug_mode = self.debug_mode.isChecked()
         status, message = impact_function.prepare()
         if status == PREPARE_SUCCESS:
 
@@ -1316,21 +1290,27 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             return self.impact_function
 
         elif status == PREPARE_FAILED_INSUFFICIENT_OVERLAP:
+            self.extent.clear_next_analysis_extent()
             show_warnings = self.settings.value(
                 'inasafe/show_extent_warnings', True, type=bool)
             if show_warnings:
                 display_warning_message_bar(
-                    'InaSAFE', self.tr('No overlapping extents'), message)
+                    'InaSAFE',
+                    self.tr('No overlapping extents'),
+                    no_overlap_message)
             self.run_button.setEnabled(False)
             return None
 
         elif status == PREPARE_FAILED_BAD_INPUT:
             # The user should fix the message. It should be in orange.
+            self.extent.clear_next_analysis_extent()
             send_error_message(self, message)
             self.run_button.setEnabled(False)
             return None
+
         else:
             # An exception has been raised. It should be in red.
+            self.extent.clear_next_analysis_extent()
             send_error_message(self, message)
             self.run_button.setEnabled(False)
             return None
