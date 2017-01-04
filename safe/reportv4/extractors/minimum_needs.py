@@ -13,8 +13,7 @@ __revision__ = '$Format:%H$'
 
 
 def minimum_needs_extractor(impact_report, component_metadata):
-    """
-    Extracting minimum needs of the impact layer
+    """Extracting minimum needs of the impact layer.
 
     :param impact_report: the impact report that acts as a proxy to fetch
         all the data that extractor needed
@@ -31,6 +30,8 @@ def minimum_needs_extractor(impact_report, component_metadata):
 
     analysis_layer = impact_report.analysis
     analysis_keywords = analysis_layer.keywords['inasafe_fields']
+    debug_mode = impact_report.impact_function.debug_mode
+    is_rounding = not debug_mode
 
     # minimum needs calculation only affect population type exposure
     # check if analysis keyword have minimum_needs keywords
@@ -68,7 +69,10 @@ def minimum_needs_extractor(impact_report, component_metadata):
             if field_idx == -1:
                 # skip if field doesn't exists
                 continue
-            value = round_affecter_number(analysis_feature[field_idx], False)
+            value = round_affecter_number(
+                analysis_feature[field_idx],
+                enable_rounding=is_rounding,
+                use_population_rounding=False)
             if value == 0:
                 # skip if no needs needed
                 continue

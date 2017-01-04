@@ -139,7 +139,7 @@ class QGISComposerContext(object):
 
 
 def qgis_composer_extractor(impact_report, component_metadata):
-    """
+    """Extract composer context.
     This method extract necessary context for a given impact report and
     component metadata and save the context so it can be used in composer
     rendering phase

@@ -378,6 +378,28 @@ female_count_field = {
     'replace_null': False
 }
 
+# Male Count
+# Included as complementary in the report
+male_count_field = {
+    'key': 'male_count_field',
+    'name': tr('Male Count'),
+    'field_name': 'male',
+    'type': qvariant_whole_numbers,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'description': tr(
+        'Attribute where the number of males of the feature is located.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
 # Youth Count
 youth_count_field = {
     'key': 'youth_count_field',
@@ -780,6 +802,7 @@ impact_fields = [
     elderly_ratio_field,
     population_count_field,
     female_count_field,
+    male_count_field,
     youth_count_field,
     adult_count_field,
     elderly_count_field,
@@ -827,6 +850,7 @@ count_fields = [
     feature_value_field,
     population_count_field,
     female_count_field,
+    male_count_field,
     youth_count_field,
     adult_count_field,
     elderly_count_field,

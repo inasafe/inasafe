@@ -179,8 +179,11 @@
             <gco:Boolean/>
           </multipart_polygon>
           <inasafe_fields>
-            <gco:Dictionary>{&quot;exposure_id_field&quot;: &quot;exposure_id&quot;, &quot;population_count_field&quot;: &quot;absolute&quot;, &quot;female_ratio_field&quot;: &quot;female_ratio&quot;, &quot;exposure_type_field&quot;: &quot;exposure_type&quot;}</gco:Dictionary>
+            <gco:Dictionary>{&quot;exposure_id_field&quot;: &quot;exposure_id&quot;, &quot;population_count_field&quot;: &quot;absolute&quot;, &quot;exposure_type_field&quot;: &quot;exposure_type&quot;}</gco:Dictionary>
           </inasafe_fields>
+          <inasafe_default_values>
+            <gco:Dictionary>{&quot;adult_ratio_field&quot;: 0.659, &quot;youth_ratio_field&quot;: 0.254, &quot;female_ratio_field&quot;: 0.5, &quot;elderly_ratio_field&quot;: 0.087}</gco:Dictionary>
+          </inasafe_default_values>
           <area_name_field>
             <gco:CharacterString/>
           </area_name_field>

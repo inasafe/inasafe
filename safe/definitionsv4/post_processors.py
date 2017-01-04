@@ -25,7 +25,7 @@ from safe.definitionsv4.fields import (
     size_field,
     hazard_class_field,
     affected_field,
-    exposure_count_field)
+    exposure_count_field, male_count_field)
 from safe.definitionsv4.hazard_classifications import all_hazard_classes
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -184,20 +184,40 @@ post_processor_gender = {
     'description': tr(
         'Post processor to calculate the number of affected females'),
     'input': {
-        'population': {
-            'value': population_count_field,
-            'type': field_input_type
-        },
-        'gender_ratio': {
-            'value': female_ratio_field,
-            'type': field_input_type
-        }
+        # input as a list means, try to get the input from the
+        # listed source. Pick the first available
+        'population': [
+            {
+                'value': population_count_field,
+                'type': field_input_type,
+            },
+            {
+                'value': exposure_count_field,
+                'field_param': exposure_population['key'],
+                'type': dynamic_field_input_type,
+            }],
+        'gender_ratio': [{
+                'value': female_ratio_field,
+                'type': field_input_type
+            },
+            {
+                'type': keyword_input_type,
+                'value': [
+                    'inasafe_default_values',
+                    female_ratio_field['key'],
+                ],
+            }]
     },
     'output': {
         'female': {
             'value': female_count_field,
             'type': formula_process,
             'formula': 'population * gender_ratio'
+        },
+        'male': {
+            'value': male_count_field,
+            'type': formula_process,
+            'formula': 'population * (1 - gender_ratio)'
         }
     }
 }
@@ -208,14 +228,29 @@ post_processor_youth = {
     'description': tr(
         'Post processor to calculate the number of affected youth'),
     'input': {
-        'population': {
-            'value': population_count_field,
-            'type': field_input_type
-        },
-        'youth_ratio': {
-            'value': youth_ratio_field,
-            'type': field_input_type
-        }
+        # input as a list means, try to get the input from the
+        # listed source. Pick the first available
+        'population': [
+            {
+                'value': population_count_field,
+                'type': field_input_type,
+            },
+            {
+                'value': exposure_count_field,
+                'field_param': exposure_population['key'],
+                'type': dynamic_field_input_type,
+            }],
+        'youth_ratio': [{
+                'value': youth_ratio_field,
+                'type': field_input_type
+            },
+            {
+                'type': keyword_input_type,
+                'value': [
+                    'inasafe_default_values',
+                    youth_ratio_field['key'],
+                ],
+            }]
     },
     'output': {
         'youth': {
@@ -232,14 +267,29 @@ post_processor_adult = {
     'description': tr(
         'Post processor to calculate the number of affected adults'),
     'input': {
-        'population': {
-            'value': population_count_field,
-            'type': field_input_type
-        },
-        'adult_ratio': {
-            'value': adult_ratio_field,
-            'type': field_input_type
-        }
+        # input as a list means, try to get the input from the
+        # listed source. Pick the first available
+        'population': [
+            {
+                'value': population_count_field,
+                'type': field_input_type,
+            },
+            {
+                'value': exposure_count_field,
+                'field_param': exposure_population['key'],
+                'type': dynamic_field_input_type,
+            }],
+        'adult_ratio': [{
+                'value': adult_ratio_field,
+                'type': field_input_type
+            },
+            {
+                'type': keyword_input_type,
+                'value': [
+                    'inasafe_default_values',
+                    adult_ratio_field['key'],
+                ],
+            }]
     },
     'output': {
         'adult': {
@@ -256,14 +306,29 @@ post_processor_elderly = {
     'description': tr(
         'Post processor to calculate the number of affected elderly'),
     'input': {
-        'population': {
-            'value': population_count_field,
-            'type': field_input_type
-        },
-        'elderly_ratio': {
-            'value': elderly_ratio_field,
-            'type': field_input_type
-        }
+        # input as a list means, try to get the input from the
+        # listed source. Pick the first available
+        'population': [
+            {
+                'value': population_count_field,
+                'type': field_input_type,
+            },
+            {
+                'value': exposure_count_field,
+                'field_param': exposure_population['key'],
+                'type': dynamic_field_input_type,
+            }],
+        'elderly_ratio': [{
+                'value': elderly_ratio_field,
+                'type': field_input_type
+            },
+            {
+                'type': keyword_input_type,
+                'value': [
+                    'inasafe_default_values',
+                    elderly_ratio_field['key'],
+                ],
+            }]
     },
     'output': {
         'elderly': {
@@ -419,3 +484,9 @@ post_processors = [
     post_processor_size_rate,
     post_processor_affected,
 ] + minimum_needs_post_processors
+
+age_postprocessors = [
+    post_processor_youth,
+    post_processor_adult,
+    post_processor_elderly,
+]

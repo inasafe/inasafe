@@ -298,3 +298,15 @@ def all_default_fields():
                 if var.get('replace_null', False):
                     default_fields.append(var)
     return default_fields
+
+
+def postprocessor_output_field(postprocessor_definition):
+    """Extract postprocessor output field definition.
+
+    :param postprocessor_definition: Postprocessor definition
+    :type postprocessor_definition: dict
+
+    :return: Field definition of postprocessor output
+    :rtype: dict
+    """
+    return postprocessor_definition['output'].items()[0][1]['value']

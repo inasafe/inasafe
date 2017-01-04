@@ -3,12 +3,15 @@
 """
 Definitions for basic report
 """
+from __future__ import absolute_import
 from safe.common.utilities import safe_dir
 from safe.reportv4.extractors.action_notes import (
     action_checklist_extractor,
     notes_assumptions_extractor)
-from safe.reportv4.extractors.aggregate_result import (
-    aggregation_result_extractor)
+from safe.reportv4.extractors.aggregate_postprocessors import \
+    aggregation_postprocessors_extractor
+from safe.reportv4.extractors.aggregate_result import \
+    aggregation_result_extractor
 from safe.reportv4.extractors.analysis_detail import analysis_detail_extractor
 from safe.reportv4.extractors.analysis_result import analysis_result_extractor
 from safe.reportv4.extractors.composer import qgis_composer_extractor
@@ -103,6 +106,18 @@ aggregation_result_component = {
                 'aggregation-result.html',
 }
 
+aggregation_postprocessors_component = {
+    'key': 'aggregation-postprocessors',
+    'type': ReportComponentsMetadata.AvailableComponent.Jinja2,
+    'processor': jinja2_renderer,
+    'extractor': aggregation_postprocessors_extractor,
+    'output_format': Jinja2ComponentsMetadata.OutputFormat.String,
+    'output_path': 'aggregation-postprocessors-output.html',
+    'template': 'standard-template/'
+                'jinja2/'
+                'aggregation-postprocessors.html',
+}
+
 # Default impact report component for reusability
 impact_report_component_metadata = [
     analysis_result_component,
@@ -111,6 +126,7 @@ impact_report_component_metadata = [
     notes_assumptions_component,
     minimum_needs_component,
     aggregation_result_component,
+    aggregation_postprocessors_component,
 ]
 
 # Standard HTML output for impact report
