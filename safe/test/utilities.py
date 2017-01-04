@@ -21,6 +21,7 @@ from qgis.core import (
 from PyQt4 import QtGui  # pylint: disable=W0621
 from qgis.utils import iface
 
+from safe.definitionsv4.constants import HAZARD_EXPOSURE
 from safe.gis.numerics import axes_to_points
 from safe.common.utilities import unique_filename, temp_dir
 from safe.common.exceptions import NoKeywordsFoundError, MetadataReadError
@@ -127,7 +128,7 @@ def get_qgis_app():
         settings.setValue('inasafe/show_extent_confirmations', False)
         settings.setValue('inasafe/show_extent_warnings', False)
         settings.setValue('inasafe/showRubberBands', True)
-        settings.setValue('inasafe/analysis_extents_mode', 'HazardExposure')
+        settings.setValue('inasafe/analysis_extents_mode', HAZARD_EXPOSURE)
 
     if PARENT is None:
         # noinspection PyPep8Naming
