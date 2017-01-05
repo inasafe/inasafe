@@ -156,6 +156,7 @@ class ImpactFunction(object):
         self._performance_log = None
         self.reset_state()
         self._is_ready = False
+        self._provenance_ready = False
         self._provenance = {
         # Environment
             'host_name': gethostname(),
@@ -655,6 +656,7 @@ class ImpactFunction(object):
                 from the code.
         :rtype: (int, m.Message)
         """
+        self._provenance_ready = False
         try:
             if not self.exposure:
                 message = generate_input_error_message(
@@ -665,10 +667,8 @@ class ImpactFunction(object):
                 )
                 return PREPARE_FAILED_BAD_INPUT, message
 
-            self._provenance['exposure_layer'] = self.exposure.source()
             status, message = self._check_layer(self.exposure, 'exposure')
-            self._provenance['exposure_keywords'] = deepcopy(
-                self.exposure.keywords)
+
             if status != PREPARE_SUCCESS:
                 return status, message
 
@@ -681,10 +681,8 @@ class ImpactFunction(object):
                 )
                 return PREPARE_FAILED_BAD_INPUT, message
 
-            self._provenance['hazard_layer'] = self.hazard.source()
             status, message = self._check_layer(self.hazard, 'hazard')
-            self._provenance['hazard_keywords'] = deepcopy(
-                self.hazard.keywords)
+
             if status != PREPARE_SUCCESS:
                 return status, message
 
@@ -707,13 +705,9 @@ class ImpactFunction(object):
                     )
                     return PREPARE_FAILED_BAD_INPUT, message
 
-                self._provenance['aggregation_layer'] = (
-                    self.aggregation.source()
-                )
                 status, message = self._check_layer(
                     self.aggregation, 'aggregation')
-                self._provenance['aggregation_keywords'] = deepcopy(
-                    self.aggregation.keywords)
+
                 if status != PREPARE_SUCCESS:
                     return status, message
             else:
@@ -750,6 +744,16 @@ class ImpactFunction(object):
         else:
             # Everything was fine.
             self._is_ready = True
+            self._provenance['exposure_layer'] = self.exposure.source()
+            self._provenance['exposure_keywords'] = deepcopy(
+                self.exposure.keywords)
+            self._provenance['hazard_layer'] = self.hazard.source()
+            self._provenance['hazard_keywords'] = deepcopy(
+                self.hazard.keywords)
+            self._provenance['aggregation_layer'] = (self.aggregation.source())
+            self._provenance['aggregation_keywords'] = deepcopy(
+                self.aggregation.keywords)
+
             return PREPARE_SUCCESS, None
 
     def _compute_analysis_extent(self):
@@ -924,6 +928,7 @@ class ImpactFunction(object):
             message = get_error_message(e)
             return ANALYSIS_FAILED_BAD_CODE, message
         else:
+            self._provenance_ready = True
             return ANALYSIS_SUCCESS, None
 
     @profile
@@ -1393,7 +1398,7 @@ class ImpactFunction(object):
         :returns: Dictionary that contains all provenance.
         :rtype: dict
         """
-        if not self._is_ready:
+        if not self._provenance_ready:
             return {}
 
         # InaSAFE
