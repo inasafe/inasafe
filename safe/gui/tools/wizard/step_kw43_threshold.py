@@ -142,6 +142,7 @@ class StepKwThreshold(WizardStep, FORM_CLASS):
         self.lblThreshold.setText(text)
 
         thresholds = self.parent.get_existing_keyword('thresholds')
+        selected_unit = self.parent.step_kw_unit.selected_unit()['key']
 
         self.classes = OrderedDict()
         classes = classification.get('classes')
@@ -162,7 +163,10 @@ class StepKwThreshold(WizardStep, FORM_CLASS):
             if thresholds.get(the_class['key']):
                 min_value_input.setValue(thresholds[the_class['key']][0])
             else:
-                min_value_input.setValue(the_class['numeric_default_min'])
+                default_min = the_class['numeric_default_min']
+                if isinstance(default_min, dict):
+                    default_min = the_class['numeric_default_min'][selected_unit]
+                min_value_input.setValue(default_min)
             min_value_input.setSingleStep(0.1)
             min_value_input.setMinimum(min_value_layer)
             min_value_input.setMaximum(max_value_layer)
@@ -175,7 +179,10 @@ class StepKwThreshold(WizardStep, FORM_CLASS):
             if thresholds.get(the_class['key']):
                 max_value_input.setValue(thresholds[the_class['key']][1])
             else:
-                max_value_input.setValue(the_class['numeric_default_max'])
+                default_max = the_class['numeric_default_max']
+                if isinstance(default_max, dict):
+                    default_max = the_class['numeric_default_max'][selected_unit]
+                max_value_input.setValue(default_max)
             max_value_input.setSingleStep(0.1)
             max_value_input.setMinimum(min_value_layer)
             max_value_input.setMaximum(max_value_layer)
