@@ -80,9 +80,17 @@ class StepKwClassification(WizardStep, FORM_CLASS):
         subcategory_key = self.parent.step_kw_subcategory.\
             selected_subcategory()['key']
         layer_purpose = self.parent.step_kw_purpose.selected_purpose()
-        if layer_purpose in [
-            layer_purpose_hazard, layer_purpose_exposure]:
-            return get_classifications(subcategory_key)
+        if layer_purpose in [layer_purpose_hazard, layer_purpose_exposure]:
+            classifications = []
+            selected_unit = self.parent.step_kw_unit.selected_unit()
+            for classification in get_classifications(subcategory_key):
+                if 'multiple_units' in classification:
+                    if selected_unit in classification['multiple_units']:
+                        classifications.append(classification)
+                else:
+                    classifications.append(classification)
+
+            return classifications
         else:
             # There are no classifications for non exposure and hazard
             # defined yet
