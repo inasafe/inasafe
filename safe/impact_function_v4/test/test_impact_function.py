@@ -479,7 +479,8 @@ class TestImpactFunction(unittest.TestCase):
             'qt_version': QT_VERSION_STR,
             'requested_extent': impact_function.requested_extent,
             'user': getpass.getuser(),
-            'os': platform.version()
+            'os': platform.version(),
+            'data_store_uri': impact_function.datastore.uri
         })
 
         self.assertDictEqual(expected_provenance, provenance)
