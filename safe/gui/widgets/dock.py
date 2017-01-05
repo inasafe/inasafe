@@ -259,6 +259,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         try:
             extent = self.settings.value('inasafe/user_extent', None, type=str)
         except TypeError:
+            # Catch error unable to convert a QVariant to a QMetaType
             extent = None
         if extent:
             extent = QgsGeometry.fromWkt(extent)
@@ -269,6 +270,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             crs = self.settings.value(
                 'inasafe/user_extent_crs', None, type=str)
         except TypeError:
+            # Catch error unable to convert a QVariant to a QMetaType
             crs = None
         if crs:
             crs = QgsCoordinateReferenceSystem(crs)
