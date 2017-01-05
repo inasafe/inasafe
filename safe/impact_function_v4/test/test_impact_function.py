@@ -435,8 +435,13 @@ class TestImpactFunction(unittest.TestCase):
                 self.assertIn(field_name, impact_fields)
         print_attribute_table(impact_layer, 1)
 
-    def test_provenance(self):
-        """Test provenance of impact function."""
+    def test_a_provenance_with_aggregation(self):
+        """Test provenance of impact function with aggregation.
+
+        This test is called test_a_* so as to be the first test. We have a very
+        weird bug when test_z_provenance_without_aggregation is called just
+        after. There is magic where the state is reset between these 2 tests.
+        """
         hazard_layer = load_test_vector_layer(
             'gisv4', 'hazard', 'classified_vector.geojson')
         exposure_layer = load_test_vector_layer(
@@ -445,6 +450,14 @@ class TestImpactFunction(unittest.TestCase):
             'gisv4', 'aggregation', 'small_grid.geojson')
 
         expected_provenance = {
+            'gdal_version': gdal.__version__,
+            'host_name': gethostname(),
+            'user': getpass.getuser(),
+            'os': platform.version(),
+            'pyqt_version': PYQT_VERSION_STR,
+            'qgis_version': QGis.QGIS_VERSION,
+            'qt_version': QT_VERSION_STR,
+            'inasafe_version': get_version(),
             'aggregation_keywords': deepcopy(aggregation_layer.keywords),
             'aggregation_layer': aggregation_layer.source(),
             'exposure_keywords': deepcopy(exposure_layer.keywords),
@@ -458,41 +471,48 @@ class TestImpactFunction(unittest.TestCase):
         impact_function.aggregation = aggregation_layer
         impact_function.exposure = exposure_layer
         impact_function.hazard = hazard_layer
-        impact_function.prepare()
+        self.assertDictEqual({}, impact_function.provenance)
+        status, message = impact_function.prepare()
+        self.assertEqual(PREPARE_SUCCESS, status, message)
+        self.assertDictEqual({}, impact_function.provenance)
         status, message = impact_function.run()
         self.assertEqual(ANALYSIS_SUCCESS, status, message)
 
-        provenance = impact_function.provenance
         self.maxDiff = None
 
         expected_provenance.update({
             'action_checklist': impact_function.action_checklist(),
             'analysis_extent': impact_function.analysis_extent.exportToWkt(),
-            'gdal_version': gdal.__version__,
-            'host_name': gethostname(),
             'impact_function_name': impact_function.name,
             'impact_function_title': impact_function.title,
-            'inasafe_version': get_version(),
             'notes': impact_function.notes(),
-            'pyqt_version': PYQT_VERSION_STR,
-            'qgis_version': QGis.QGIS_VERSION,
-            'qt_version': QT_VERSION_STR,
             'requested_extent': impact_function.requested_extent,
-            'user': getpass.getuser(),
-            'os': platform.version(),
             'data_store_uri': impact_function.datastore.uri
         })
 
-        self.assertDictEqual(expected_provenance, provenance)
+        self.assertDictEqual(expected_provenance, impact_function.provenance)
 
-    def test_provenance_no_aggregation(self):
-        """Test provenance of impact function."""
+    def test_z_provenance_without_aggregation(self):
+        """Test provenance of impact function without aggregation.
+
+        This test is called test_z_* so as to be the last test. We have a very
+        weird bug when test_a_provenance_with_aggregation is called just
+        before. There is magic where the state is reset between these 2 tests.
+        """
         hazard_layer = load_test_vector_layer(
             'gisv4', 'hazard', 'classified_vector.geojson')
         exposure_layer = load_test_vector_layer(
             'gisv4', 'exposure', 'building-points.geojson')
 
         expected_provenance = {
+            'gdal_version': gdal.__version__,
+            'host_name': gethostname(),
+            'inasafe_version': get_version(),
+            'pyqt_version': PYQT_VERSION_STR,
+            'qgis_version': QGis.QGIS_VERSION,
+            'qt_version': QT_VERSION_STR,
+            'user': getpass.getuser(),
+            'os': platform.version(),
             'aggregation_keywords': None,
             'aggregation_layer': None,
             'exposure_keywords': deepcopy(exposure_layer.keywords),
@@ -505,32 +525,24 @@ class TestImpactFunction(unittest.TestCase):
         impact_function = ImpactFunction()
         impact_function.exposure = exposure_layer
         impact_function.hazard = hazard_layer
-        impact_function.prepare()
+        status, message = impact_function.prepare()
+        self.assertEqual(PREPARE_SUCCESS, status, message)
         status, message = impact_function.run()
         self.assertEqual(ANALYSIS_SUCCESS, status, message)
 
-        provenance = impact_function.provenance
         self.maxDiff = None
 
         expected_provenance.update({
             'action_checklist': impact_function.action_checklist(),
             'analysis_extent': impact_function.analysis_extent.exportToWkt(),
-            'gdal_version': gdal.__version__,
-            'host_name': gethostname(),
             'impact_function_name': impact_function.name,
             'impact_function_title': impact_function.title,
-            'inasafe_version': get_version(),
             'notes': impact_function.notes(),
-            'pyqt_version': PYQT_VERSION_STR,
-            'qgis_version': QGis.QGIS_VERSION,
-            'qt_version': QT_VERSION_STR,
             'requested_extent': impact_function.requested_extent,
-            'user': getpass.getuser(),
-            'os': platform.version(),
             'data_store_uri': impact_function.datastore.uri
         })
 
-        self.assertDictEqual(expected_provenance, provenance)
+        self.assertDictEqual(expected_provenance, impact_function.provenance)
 
     @unittest.expectedFailure
     def test_post_minimum_needs_value_generation(self):
