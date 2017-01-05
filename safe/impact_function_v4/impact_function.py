@@ -50,7 +50,12 @@ from safe.definitionsv4.exposure import indivisible_exposure
 from safe.definitionsv4.fields import (
     size_field, exposure_class_field, hazard_class_field)
 from safe.definitionsv4.layer_purposes import (
-    layer_purpose_exposure_impacted
+    layer_purpose_exposure_impacted,
+    layer_purpose_aggregate_hazard_impacted,
+    layer_purpose_aggregation_impacted,
+    layer_purpose_analysis_impacted,
+    layer_purpose_exposure_breakdown,
+    layer_purpose_profiling,
 )
 from safe.definitionsv4.constants import (
     inasafe_keyword_version_key,
@@ -269,11 +274,15 @@ class ImpactFunction(object):
         layers = OrderedDict()
         layers[layer_purpose_exposure_impacted['key']] = (
             self._exposure_impacted)
-        layers['aggregate_hazard_impacted'] = self._aggregate_hazard_impacted
-        layers['aggregation_impacted'] = self._aggregation_impacted
-        layers['analysis_impacted'] = self._analysis_impacted
-        layers['exposure_breakdown'] = self._exposure_breakdown
-        layers['profiling'] = self._profiling_table
+        layers[layer_purpose_aggregate_hazard_impacted['key']] = (
+            self._aggregate_hazard_impacted)
+        layers[layer_purpose_aggregation_impacted['key']] = (
+            self._aggregation_impacted)
+        layers[layer_purpose_analysis_impacted['key']] = (
+            self._analysis_impacted)
+        layers[layer_purpose_exposure_breakdown['key']] = (
+            self._exposure_breakdown)
+        layers[layer_purpose_profiling['key']] = self._profiling_table
 
         for expected_purpose, layer in layers.iteritems():
             if layer:
@@ -1002,25 +1011,29 @@ class ImpactFunction(object):
 
         if self.aggregate_hazard_impacted:
             _, name = self.datastore.add_layer(
-                self._aggregate_hazard_impacted, 'aggregate_hazard_impacted')
+                self._aggregate_hazard_impacted,
+                layer_purpose_aggregate_hazard_impacted['key'])
             self._aggregate_hazard_impacted = self.datastore.layer(name)
             if self.debug_mode:
                 check_inasafe_fields(self._aggregate_hazard_impacted)
 
             if self._exposure.keywords.get('classification'):
                 _, name = self.datastore.add_layer(
-                    self._exposure_breakdown, 'exposure_breakdown')
+                    self._exposure_breakdown,
+                    layer_purpose_exposure_breakdown['key'])
                 self._exposure_breakdown = self.datastore.layer(name)
                 if self.debug_mode:
                     check_inasafe_fields(self._exposure_breakdown)
 
         _, name = self.datastore.add_layer(
-            self._aggregation_impacted, 'aggregation_impacted')
+            self._aggregation_impacted,
+            layer_purpose_aggregation_impacted['key'])
         self._aggregation_impacted = self.datastore.layer(name)
         if self.debug_mode:
             check_inasafe_fields(self._aggregation_impacted)
 
-        _, name = self.datastore.add_layer(self._analysis_impacted, 'analysis')
+        _, name = self.datastore.add_layer(
+            self._analysis_impacted, layer_purpose_analysis_impacted['key'])
         self._analysis_impacted = self.datastore.layer(name)
         if self.debug_mode:
             check_inasafe_fields(self._analysis_impacted)

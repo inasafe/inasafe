@@ -27,6 +27,7 @@ layer_purpose_exposure = {
     ],
     'citations': concepts['exposure']['citations'],
 }
+
 layer_purpose_hazard = {
     'key': 'hazard',
     'name': tr('Hazard'),
@@ -37,6 +38,7 @@ layer_purpose_hazard = {
     ],
     'citations': concepts['hazard']['citations']
 }
+
 layer_purpose_aggregation = {
     'key': 'aggregation',
     'name': tr('Aggregation'),
@@ -53,6 +55,7 @@ layer_purpose_aggregation = {
         }
     ]
 }
+
 layer_purpose_exposure_impacted = {
     'key': 'exposure_impacted',
     'name': tr('Exposure Impacted'),
@@ -60,6 +63,22 @@ layer_purpose_exposure_impacted = {
         'An <b>exposure impacted</b> layer is the result from InaSAFE '
         'analysis. It has fields that represent the result of each exposure '
         'from the hazard in the aggregation area.'),
+    'allowed_geometries': [
+        layer_geometry_point, layer_geometry_line, layer_geometry_polygon],
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+
+layer_purpose_aggregate_hazard_impacted = {
+    'key': 'aggregate_hazard_impacted',
+    'name': tr('Aggregate Hazard Impacted'),
+    'description': tr(
+        'An <b>aggregate hazard impacted</b> layer is the result from InaSAFE '
+        'analysis.'),
     'allowed_geometries': [layer_geometry_polygon],
     'citations': [
         {
@@ -69,6 +88,65 @@ layer_purpose_exposure_impacted = {
     ]
 }
 
+layer_purpose_aggregation_impacted = {
+    'key': 'aggregation_impacted',
+    'name': tr('Aggregation Impacted'),
+    'description': tr(
+        'An <b>aggregation impacted</b> layer is the result from InaSAFE '
+        'analysis.'),
+    'allowed_geometries': [layer_geometry_polygon],
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+
+layer_purpose_analysis_impacted = {
+    'key': 'analysis_impacted',
+    'name': tr('Analysis Impacted'),
+    'description': tr(
+        'An <b>analysis impacted</b> layer is the result from InaSAFE '
+        'analysis. It contains only one geometry polygon.'),
+    'allowed_geometries': [layer_geometry_polygon],
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+
+layer_purpose_exposure_breakdown = {
+    'key': 'exposure_breakdown',
+    'name': tr('Exposure Breakdown'),
+    'description': tr(
+        'An <b>exposure breakdown</b> layer is the result from InaSAFE '
+        'analysis. This layer do not have a geometry.'),
+    'allowed_geometries': [],
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
+
+layer_purpose_profiling = {
+    'key': 'profiling',
+    'name': tr('Profiling'),
+    'description': tr(
+        'A <b>profiling</b> layer is the result from InaSAFE analysis. '
+        'This layer do not have a geometry.'),
+    'allowed_geometries': [],
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ]
+}
 
 layer_purpose = {
     'key': 'layer_purpose',

@@ -22,6 +22,11 @@ from safe.definitionsv4.fields import (
 )
 from safe.definitionsv4.constants import inasafe_keyword_version_key
 from safe.definitionsv4.versions import inasafe_keyword_version
+from safe.definitionsv4.layer_purposes import (
+    layer_purpose_profiling,
+    layer_purpose_aggregation,
+    layer_purpose_analysis_impacted,
+)
 from safe.gisv4.vector.tools import (
     create_memory_layer, create_field_from_definition)
 from safe.utilities.profiling import profile
@@ -63,7 +68,8 @@ def create_virtual_aggregation(geometry, crs):
     aggregation_layer.commitChanges()
 
     # Generate aggregation keywords
-    aggregation_layer.keywords['layer_purpose'] = 'aggregation'
+    aggregation_layer.keywords['layer_purpose'] = (
+        layer_purpose_aggregation['key'])
     aggregation_layer.keywords['title'] = 'aggr_from_bbox'
     aggregation_layer.keywords[inasafe_keyword_version_key] = (
         inasafe_keyword_version)
@@ -108,7 +114,8 @@ def create_analysis_layer(analysis_extent, crs, name):
     analysis_layer.commitChanges()
 
     # Generate analysis keywords
-    analysis_layer.keywords['layer_purpose'] = 'analysis'
+    analysis_layer.keywords['layer_purpose'] = (
+        layer_purpose_analysis_impacted['key'])
     analysis_layer.keywords['title'] = 'analysis'
     analysis_layer.keywords[inasafe_keyword_version_key] = (
         inasafe_keyword_version)
@@ -137,7 +144,7 @@ def create_profile_layer(profiling):
     tabular = create_memory_layer('profiling', QGis.NoGeometry, fields=fields)
 
     # Generate profiling keywords
-    tabular.keywords['layer_purpose'] = 'profiling'
+    tabular.keywords['layer_purpose'] = layer_purpose_profiling['key']
     tabular.keywords['title'] = 'profiling'
     tabular.keywords['inasafe_fields'] = {
         profiling_function_field['key']:
@@ -158,6 +165,4 @@ def create_profile_layer(profiling):
         tabular.addFeature(feature)
 
     tabular.commitChanges()
-    tabular.keywords['title'] = 'profiling'
-
     return tabular

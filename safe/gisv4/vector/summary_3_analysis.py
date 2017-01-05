@@ -21,6 +21,7 @@ from safe.definitionsv4.fields import (
 )
 from safe.definitionsv4.processing_steps import (
     summary_3_analysis_steps)
+from safe.definitionsv4.layer_purposes import layer_purpose_analysis_impacted
 from safe.definitionsv4.post_processors import post_processor_affected_function
 from safe.gisv4.vector.summary_tools import (
     check_inputs, create_absolute_values_structure, add_fields)
@@ -169,6 +170,6 @@ def analysis_summary(aggregate_hazard, analysis, callback=None):
     analysis.commitChanges()
 
     analysis.keywords['title'] = output_layer_name
-    analysis.keywords['layer_purpose'] = 'analysis_impacted'
+    analysis.keywords['layer_purpose'] = layer_purpose_analysis_impacted['key']
 
     return analysis

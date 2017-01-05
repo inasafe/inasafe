@@ -7,7 +7,6 @@ Aggregate the aggregate hazard to the analysis layer.
 from PyQt4.QtCore import QPyNullVariant
 from qgis.core import QGis, QgsFeatureRequest, QgsFeature
 
-from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
 from safe.definitionsv4.utilities import definition
 from safe.definitionsv4.fields import (
     aggregation_id_field,
@@ -21,17 +20,17 @@ from safe.definitionsv4.fields import (
     hazard_count_field,
     exposure_count_field,
     total_unaffected_field,
-    count_fields,
 )
 from safe.definitionsv4.processing_steps import (
     summary_4_exposure_breakdown_steps)
 from safe.definitionsv4.post_processors import post_processor_affected_function
+from safe.definitionsv4.layer_purposes import layer_purpose_exposure_breakdown
 from safe.gisv4.vector.tools import (
     create_field_from_definition,
     read_dynamic_inasafe_field,
     create_memory_layer)
 from safe.gisv4.vector.summary_tools import (
-    check_inputs, create_absolute_values_structure, add_fields)
+    check_inputs, create_absolute_values_structure)
 from safe.utilities.profiling import profile
 from safe.utilities.pivot_table import FlatTable
 
@@ -205,6 +204,6 @@ def exposure_type_breakdown(aggregate_hazard, callback=None):
     tabular.commitChanges()
 
     tabular.keywords['title'] = output_layer_name
-    tabular.keywords['layer_purpose'] = 'exposure_breakdown'
+    tabular.keywords['layer_purpose'] = layer_purpose_exposure_breakdown['key']
 
     return tabular
