@@ -752,7 +752,9 @@ class ImpactFunction(object):
                 self.hazard.keywords)
             if self.aggregation:
                 aggregation_source = self.aggregation.source()
-                aggregation_keywords = self.aggregation.keywords
+                aggregation_keywords = deepcopy(self.aggregation.keywords)
+                print aggregation_source
+                print aggregation_keywords.get('layer_purpose')
             else:
                 aggregation_source = None
                 aggregation_keywords = None

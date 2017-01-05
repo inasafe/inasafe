@@ -485,7 +485,6 @@ class TestImpactFunction(unittest.TestCase):
 
         self.assertDictEqual(expected_provenance, provenance)
 
-    @unittest.expectedFailure
     def test_provenance_no_aggregation(self):
         """Test provenance of impact function."""
         hazard_layer = load_test_vector_layer(
