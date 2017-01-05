@@ -486,6 +486,54 @@ class TestImpactFunction(unittest.TestCase):
         self.assertDictEqual(expected_provenance, provenance)
 
     @unittest.expectedFailure
+    def test_provenance_no_aggregation(self):
+        """Test provenance of impact function."""
+        hazard_layer = load_test_vector_layer(
+            'gisv4', 'hazard', 'classified_vector.geojson')
+        exposure_layer = load_test_vector_layer(
+            'gisv4', 'exposure', 'building-points.geojson')
+
+        expected_provenance = {
+            'aggregation_keywords': None,
+            'aggregation_layer': None,
+            'exposure_keywords': deepcopy(exposure_layer.keywords),
+            'exposure_layer': exposure_layer.source(),
+            'hazard_keywords': deepcopy(hazard_layer.keywords),
+            'hazard_layer': hazard_layer.source(),
+        }
+
+        # Set up impact function
+        impact_function = ImpactFunction()
+        impact_function.exposure = exposure_layer
+        impact_function.hazard = hazard_layer
+        impact_function.prepare()
+        status, message = impact_function.run()
+        self.assertEqual(ANALYSIS_SUCCESS, status, message)
+
+        provenance = impact_function.provenance
+        self.maxDiff = None
+
+        expected_provenance.update({
+            'action_checklist': impact_function.action_checklist(),
+            'analysis_extent': impact_function.analysis_extent.exportToWkt(),
+            'gdal_version': gdal.__version__,
+            'host_name': gethostname(),
+            'impact_function_name': impact_function.name,
+            'impact_function_title': impact_function.title,
+            'inasafe_version': get_version(),
+            'notes': impact_function.notes(),
+            'pyqt_version': PYQT_VERSION_STR,
+            'qgis_version': QGis.QGIS_VERSION,
+            'qt_version': QT_VERSION_STR,
+            'requested_extent': impact_function.requested_extent,
+            'user': getpass.getuser(),
+            'os': platform.version(),
+            'data_store_uri': impact_function.datastore.uri
+        })
+
+        self.assertDictEqual(expected_provenance, provenance)
+
+    @unittest.expectedFailure
     def test_post_minimum_needs_value_generation(self):
         """Test minimum needs postprocessors.
 

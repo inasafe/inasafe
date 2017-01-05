@@ -750,9 +750,14 @@ class ImpactFunction(object):
             self._provenance['hazard_layer'] = self.hazard.source()
             self._provenance['hazard_keywords'] = deepcopy(
                 self.hazard.keywords)
-            self._provenance['aggregation_layer'] = (self.aggregation.source())
-            self._provenance['aggregation_keywords'] = deepcopy(
-                self.aggregation.keywords)
+            if self.aggregation:
+                aggregation_source = self.aggregation.source()
+                aggregation_keywords = self.aggregation.keywords
+            else:
+                aggregation_source = None
+                aggregation_keywords = None
+            self._provenance['aggregation_layer'] = aggregation_source
+            self._provenance['aggregation_keywords'] = aggregation_keywords
 
             return PREPARE_SUCCESS, None
 
@@ -1404,7 +1409,12 @@ class ImpactFunction(object):
         # InaSAFE
         self._provenance['impact_function_name'] = self.name
         self._provenance['impact_function_title'] = self.title
-        self._provenance['requested_extent'] = self.requested_extent
+        if self.requested_extent:
+            self._provenance['requested_extent'] = (
+                self.requested_extent.asWktCoordinates()
+            )
+        else:
+            self._provenance['requested_extent'] = None
         self._provenance['analysis_extent'] = (
             self.analysis_extent.exportToWkt()
         )
