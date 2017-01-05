@@ -18,6 +18,8 @@ from safe.definitionsv4.fields import (
     affected_field,
     size_field,
 )
+from safe.definitionsv4.layer_purposes import (
+    layer_purpose_aggregate_hazard_impacted)
 from safe.definitionsv4.post_processors import post_processor_affected_function
 from safe.definitionsv4.processing_steps import (
     summary_1_aggregate_hazard_steps)
@@ -193,7 +195,8 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
     aggregate_hazard.commitChanges()
 
     aggregate_hazard.keywords['title'] = output_layer_name
-    aggregate_hazard.keywords['layer_purpose'] = 'aggregate_hazard_impacted'
+    aggregate_hazard.keywords['layer_purpose'] = (
+        layer_purpose_aggregate_hazard_impacted['key'])
 
     return aggregate_hazard
 

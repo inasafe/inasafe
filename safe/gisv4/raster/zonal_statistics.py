@@ -6,13 +6,14 @@ Issue https://github.com/inasafe/inasafe/issues/3190
 """
 
 import logging
-from qgis.core import QgsRasterLayer
 from qgis.analysis import QgsZonalStatistics
 
 from safe.gisv4.vector.tools import copy_layer, create_memory_layer
 from safe.gisv4.vector.prepare_vector_layer import copy_fields, remove_fields
 from safe.definitionsv4.fields import exposure_count_field, total_field
 from safe.definitionsv4.processing_steps import zonal_stats_steps
+from safe.definitionsv4.layer_purposes import (
+    layer_purpose_aggregate_hazard_impacted)
 from safe.utilities.profiling import profile
 from safe.utilities.i18n import tr
 
@@ -84,7 +85,8 @@ def zonal_stats(raster, vector, callback=None):
         'hazard_keywords'].copy()
     layer.keywords['aggregation_keywords'] = (
         vector.keywords['aggregation_keywords'])
-    layer.keywords['layer_purpose'] = 'aggregate_hazard_impacted'
+    layer.keywords['layer_purpose'] = (
+        layer_purpose_aggregate_hazard_impacted['key'])
 
     layer.keywords['title'] = output_layer_name
 

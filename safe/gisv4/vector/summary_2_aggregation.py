@@ -17,6 +17,8 @@ from safe.definitionsv4.fields import (
     affected_exposure_count_field,
     affected_field,
 )
+from safe.definitionsv4.layer_purposes import (
+    layer_purpose_aggregation_impacted)
 from safe.definitionsv4.processing_steps import (
     summary_2_aggregation_steps)
 from safe.gisv4.vector.tools import read_dynamic_inasafe_field
@@ -162,6 +164,7 @@ def aggregation_summary(aggregate_hazard, aggregation, callback=None):
     aggregation.commitChanges()
 
     aggregation.keywords['title'] = output_layer_name
-    aggregation.keywords['layer_purpose'] = 'aggregation_impacted'
+    aggregation.keywords['layer_purpose'] = (
+        layer_purpose_aggregation_impacted['key'])
 
     return aggregation

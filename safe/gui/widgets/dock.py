@@ -17,7 +17,13 @@ from qgis.core import (
     QgsProject,
     QGis)
 
-from safe.definitionsv4.layer_purposes import layer_purpose_exposure_impacted
+from safe.definitionsv4.layer_purposes import (
+    layer_purpose_exposure_impacted,
+    layer_purpose_aggregate_hazard_impacted,
+    layer_purpose_aggregation_impacted,
+    layer_purpose_analysis_impacted,
+    layer_purpose_exposure_breakdown,
+)
 from safe.definitionsv4.utilities import definition
 from safe.definitionsv4.fields import hazard_class_field
 from safe.definitionsv4.constants import (
@@ -1007,13 +1013,12 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             keywords = self.keyword_io.read_keywords(layer)
 
             # list of layer purpose to show impact report
-            # TODO: make it referenced directly from definitions
             impacted_layer = [
                 layer_purpose_exposure_impacted['key'],
-                'aggregate_hazard_impacted',
-                'aggregation_impacted',
-                'analysis_impacted',
-                'exposure_breakdown',
+                layer_purpose_aggregate_hazard_impacted['key'],
+                layer_purpose_aggregation_impacted['key'],
+                layer_purpose_analysis_impacted['key'],
+                layer_purpose_exposure_breakdown['key'],
             ]
 
             if keywords.get('layer_purpose') in impacted_layer:
