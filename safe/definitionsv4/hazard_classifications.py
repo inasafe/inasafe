@@ -93,8 +93,8 @@ volcano_hazard_classes = {
     'key': 'volcano_hazard_classes',
     'name': tr('Volcano classes'),
     'description': tr(
-        'Three classes are supported for volcano vector hazard data: '
-        '<b>low</b>, <b>medium</b>, or <b>high</b>.'),
+            'Three classes are supported for volcano vector hazard data: '
+            '<b>low</b>, <b>medium</b>, or <b>high</b>.'),
     'citations': [
         {
             'text': None,
@@ -160,10 +160,10 @@ flood_hazard_classes = {
     'key': 'flood_hazard_classes',
     'name': tr('Flood classes'),
     'description': tr(
-        'This is a binary description for an area. The area is either '
-        '<b>wet</b> (affected by flood water) or <b>dry</b> (not affected '
-        'by flood water). This unit does not describe how <b>wet</b> or '
-        '<b>dry</b> an area is.'),
+            'This is a binary description for an area. The area is either '
+            '<b>wet</b> (affected by flood water) or <b>dry</b> (not affected '
+            'by flood water). This unit does not describe how <b>wet</b> or '
+            '<b>dry</b> an area is.'),
     'citations': [
         {
             'text': None,
@@ -212,9 +212,9 @@ ash_hazard_classes = {
     'key': 'ash_hazard_classes',
     'name': tr('Ash classes'),
     'description': tr(
-        'Three four are supported for ash vector hazard data: '
-        '<b>very low</b>, <b>low</b>, <b>medium</b>, <b>high</b> or '
-        '<b>very high</b>.'),
+            'Three four are supported for ash vector hazard data: '
+            '<b>very low</b>, <b>low</b>, <b>medium</b>, <b>high</b> or '
+            '<b>very high</b>.'),
     'unit': unit_centimetres,
     'citations': [
         {
@@ -306,16 +306,15 @@ ash_hazard_classes = {
     ]
 }
 
-
 tsunami_hazard_classes = {
     'key': 'tsunami_hazard_classes',
     'name': tr('Tsunami classes'),
     'description': tr(
-        'This is a quinary description for an area. The area is either '
-        '<b>dry</b>, <b>low</b>, <b>medium</b>, <b>high</b>, or '
-        '<b>very high</b> for tsunami hazard classification. '
-        'The following description for these classes is provided by Badan '
-        'Geologi based on BNPB Perka 2/2012'),
+            'This is a quinary description for an area. The area is either '
+            '<b>dry</b>, <b>low</b>, <b>medium</b>, <b>high</b>, or '
+            '<b>very high</b> for tsunami hazard classification. '
+            'The following description for these classes is provided by Badan '
+            'Geologi based on BNPB Perka 2/2012'),
     'citations': [
         {
             'text': None,
@@ -346,16 +345,19 @@ tsunami_hazard_classes = {
             'name': tr('High hazard zone'),
             'affected': True,
             'description': tr(
-                'Water above 3.1m and less than 8.0m. The area is potentially '
-                'hit by a tsunami wave with an inundation depth > 3 m or '
-                'reach a tsunami intensity scale of VII or even more '
-                '(Papadoupulos and Imamura, 2001). Tsunami wave with 4 m '
-                'inundation depth cause damage to small vessel, a few ships '
-                'are drifted inland, severe damage on most wooden houses. '
-                'Boulders are deposited on shore. If tsunami height reaches '
-                '8 m, it will cause severe damage. Dykes, wave breaker, '
-                'tsunami protection walls and green belts will be washed '
-                'away.'),
+                    'Water above 3.1m and less than 8.0m. The area is '
+                    'potentially '
+                    'hit by a tsunami wave with an inundation depth > 3 m or '
+                    'reach a tsunami intensity scale of VII or even more '
+                    '(Papadoupulos and Imamura, 2001). Tsunami wave with 4 m '
+                    'inundation depth cause damage to small vessel, '
+                    'a few ships '
+                    'are drifted inland, severe damage on most wooden houses. '
+                    'Boulders are deposited on shore. If tsunami height '
+                    'reaches '
+                    '8 m, it will cause severe damage. Dykes, wave breaker, '
+                    'tsunami protection walls and green belts will be washed '
+                    'away.'),
             'numeric_default_min': 3,
             'numeric_default_max': 8,
             'citations': [
@@ -372,13 +374,16 @@ tsunami_hazard_classes = {
             'name': tr('Medium hazard zone'),
             'affected': True,
             'description': tr(
-                'Water above 1.1m and less than 3.0m. The area is potentially '
-                'hit by a tsunami wave with an inundation depth of 1 - 3 m or '
-                'equal to V-VI tsunami intensity scale (Papadoupulos and '
-                'Imamura, 2001). Tsunami wave with a 3m inundation depth '
-                'causes most people frightened and to flee to higher ground. '
-                'Small vessels drift and collide. Damage occurs to some '
-                'wooden houses, while most of them are safe.'),
+                    'Water above 1.1m and less than 3.0m. The area is '
+                    'potentially '
+                    'hit by a tsunami wave with an inundation depth of 1 - 3 '
+                    'm or '
+                    'equal to V-VI tsunami intensity scale (Papadoupulos and '
+                    'Imamura, 2001). Tsunami wave with a 3m inundation depth '
+                    'causes most people frightened and to flee to higher '
+                    'ground. '
+                    'Small vessels drift and collide. Damage occurs to some '
+                    'wooden houses, while most of them are safe.'),
             'numeric_default_min': 1,
             'numeric_default_max': 3,
             'citations': [
@@ -395,15 +400,21 @@ tsunami_hazard_classes = {
             'name': tr('Low hazard zone'),
             'affected': False,
             'description': tr(
-                'Water above ground height and less than 1.0m. The area is '
-                'potentially hit by a tsunami wave with an inundation depth '
-                'less than 1 m or similar to tsunami intensity scale of V or '
-                'less in (Papadoupulos and Imamura, 2001). Tsunami wave of 1m '
-                'height causes few people to be frightened and flee to higher '
-                'elevation. Felt by most people on large ship, observed from '
-                'shore. Small vessels drift and collide and some turn over. '
-                'Sand is deposited and there is flooding of areas close to '
-                'the shore.'),
+                    'Water above ground height and less than 1.0m. The area is '
+                    'potentially hit by a tsunami wave with an inundation '
+                    'depth '
+                    'less than 1 m or similar to tsunami intensity scale of V '
+                    'or '
+                    'less in (Papadoupulos and Imamura, 2001). Tsunami wave '
+                    'of 1m '
+                    'height causes few people to be frightened and flee to '
+                    'higher '
+                    'elevation. Felt by most people on large ship, observed '
+                    'from '
+                    'shore. Small vessels drift and collide and some turn '
+                    'over. '
+                    'Sand is deposited and there is flooding of areas close to '
+                    'the shore.'),
             'numeric_default_min': 0.1,
             'numeric_default_max': 1,
             'citations': [
@@ -432,16 +443,17 @@ tsunami_hazard_classes = {
     ]
 }
 
-
 cyclone_au_bom_hazard_classes = {
     'key': 'cyclone_au_bom_hazard_classes',
     'name': tr('Cyclone classes (AU - BOM)'),
     'description': tr(
-        'The quinary <b>tropical cyclone</b> intensity classification '
-        'according to the Australian Bureau of Metereology is defined by the '
-        'maximum mean wind speed over open flat land or water. '
-        'This is sometimes referred to as the maximum sustained wind and will'
-        'be experienced around the eye-wall of the cyclone.'),
+            'The quinary <b>tropical cyclone</b> intensity classification '
+            'according to the Australian Bureau of Metereology is defined by '
+            'the '
+            'maximum mean wind speed over open flat land or water. '
+            'This is sometimes referred to as the maximum sustained wind and '
+            'will'
+            'be experienced around the eye-wall of the cyclone.'),
     'citations': [
         {
             'text': 'Australian Bureau of Metereology - Tropical Cyclone '
@@ -450,7 +462,8 @@ cyclone_au_bom_hazard_classes = {
         },
         {
             'text': 'Tropical cyclone scales - wikpedia',
-            'link': 'https://en.wikipedia.org/wiki/Tropical_cyclone_scales#Australia_and_Fiji'
+            'link': 'https://en.wikipedia.org/wiki/Tropical_cyclone_scales'
+                    '#Australia_and_Fiji'
         }
     ],
     'multiple_units': [unit_miles_per_hour, unit_kilometres_per_hour,
@@ -475,7 +488,7 @@ cyclone_au_bom_hazard_classes = {
                 unit_knots['key']: 107,
                 unit_miles_per_hour['key']: 123,
                 unit_kilometres_per_hour['key']: 198
-                },
+            },
             'numeric_default_max': 9999999999,
             'citations': [
                 {
@@ -503,12 +516,12 @@ cyclone_au_bom_hazard_classes = {
                 unit_knots['key']: 85,
                 unit_miles_per_hour['key']: 98,
                 unit_kilometres_per_hour['key']: 157
-                },
+            },
             'numeric_default_max': {
                 unit_knots['key']: 107,
                 unit_miles_per_hour['key']: 123,
                 unit_kilometres_per_hour['key']: 198
-                },
+            },
             'citations': [
                 {
                     'text': None,
@@ -533,12 +546,12 @@ cyclone_au_bom_hazard_classes = {
                 unit_knots['key']: 63,
                 unit_miles_per_hour['key']: 72,
                 unit_kilometres_per_hour['key']: 117
-                },
+            },
             'numeric_default_max': {
                 unit_knots['key']: 85,
                 unit_miles_per_hour['key']: 98,
                 unit_kilometres_per_hour['key']: 157
-                },
+            },
             'citations': [
                 {
                     'text': None,
@@ -566,12 +579,12 @@ cyclone_au_bom_hazard_classes = {
                 unit_knots['key']: 47,
                 unit_miles_per_hour['key']: 54,
                 unit_kilometres_per_hour['key']: 88
-                },
+            },
             'numeric_default_max': {
                 unit_knots['key']: 63,
                 unit_miles_per_hour['key']: 72,
                 unit_kilometres_per_hour['key']: 117
-                },
+            },
             'citations': [
                 {
                     'text': None,
@@ -597,12 +610,12 @@ cyclone_au_bom_hazard_classes = {
                 unit_knots['key']: 34,
                 unit_miles_per_hour['key']: 39,
                 unit_kilometres_per_hour['key']: 63
-                },
+            },
             'numeric_default_max': {
                 unit_knots['key']: 47,
                 unit_miles_per_hour['key']: 54,
                 unit_kilometres_per_hour['key']: 88
-                },
+            },
             'citations': [
                 {
                     'text': None,
@@ -625,7 +638,7 @@ cyclone_au_bom_hazard_classes = {
                 unit_knots['key']: 34,
                 unit_miles_per_hour['key']: 39,
                 unit_kilometres_per_hour['key']: 63
-                },
+            },
             'citations': [
                 {
                     'text': None,
@@ -636,13 +649,213 @@ cyclone_au_bom_hazard_classes = {
     ]
 }
 
-cyclone_hazard_classes = [cyclone_au_bom_hazard_classes]
+cyclone_sshws_hazard_classes = {
+    'key': 'cyclone_sshws_hazard_classes',
+    'name': tr('Hurricane classes (SSHWS)'),
+    'description': tr(
+            'The <b>Saffir-Simpson Hurricane Wind Scale</b> is a 1 to 5 rating '
+            'based on a hurricane\'s sustained wind speed. This scale '
+            'estimates '
+            'potential property damage. Hurricanes reaching Category 3 and '
+            'higher are considered major hurricanes because of their '
+            'potential for '
+            'significant loss of life and damage. Category 1 and 2 storms are '
+            'still dangerous, however, and require preventative measures. In '
+            'the '
+            'western North Pacific, the term "super typhoon" is used for '
+            'tropical '
+            'cyclones with sustained winds exceeding 150 mph.'),
+    'citations': [
+        {
+            'text': 'NOAA - NHC',
+            'link': 'http://www.nhc.noaa.gov/aboutsshws.php'
+        },
+        {
+            'text': 'Saffir–Simpson scale - wikpedia',
+            'link': 'https://en.wikipedia.org/wiki/Saffir%E2%80%93Simpson_scale'
+        }
+    ],
+    'multiple_units': [unit_miles_per_hour, unit_kilometres_per_hour,
+                       unit_knots],
+    'classes': [
+        {
+            'key': 'category_5',
+            'value': 5,
+            'color': very_dark_red,
+            'name': tr('Category 5 (severe tropical cyclone)'),
+            'affected': True,
+            'description': tr(
+                    'Catastrophic damage will occur: A high percentage of '
+                    'framed homes will be destroyed, with total roof failure '
+                    'and wall collapse. Fallen trees and power poles will '
+                    'isolate residential areas. Power outages will last for '
+                    'weeks to possibly months. Most of the area will be '
+                    'uninhabitable for weeks or months.'
+            ),
+            'numeric_default_min': {
+                unit_knots['key']: 136,
+                unit_miles_per_hour['key']: 156,
+                unit_kilometres_per_hour['key']: 251
+            },
+            'numeric_default_max': 9999999999,
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
+            'key': 'category_4',
+            'value': 4,
+            'color': dark_red,
+            'name': tr('Category 4 (severe tropical cyclone)'),
+            'affected': True,
+            'description': tr(
+                    'Catastrophic damage will occur: Well-built framed homes '
+                    'can sustain severe damage with loss of most of the roof '
+                    'structure and/or some exterior walls. Most trees will be '
+                    'snapped or uprooted and power poles downed. Fallen trees '
+                    'and power poles will isolate residential areas. Power '
+                    'outages will last weeks to possibly months. Most of the '
+                    'area will be uninhabitable for weeks or months.'
+            ),
+            'numeric_default_min': {
+                unit_knots['key']: 112,
+                unit_miles_per_hour['key']: 129,
+                unit_kilometres_per_hour['key']: 208
+            },
+            'numeric_default_max': {
+                unit_knots['key']: 136,
+                unit_miles_per_hour['key']: 156,
+                unit_kilometres_per_hour['key']: 251
+            },
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
+            'key': 'category_3',
+            'value': 3,
+            'color': red,
+            'name': tr('Category 3 (severe tropical cyclone)'),
+            'affected': True,
+            'description': tr(
+                    'Devastating damage will occur: Well-built framed homes '
+                    'may incur major damage or removal of roof decking and '
+                    'gable ends. Many trees will be snapped or uprooted, '
+                    'blocking numerous roads. Electricity and water will be '
+                    'unavailable for several days to weeks after the storm '
+                    'passes.'),
+            'numeric_default_min': {
+                unit_knots['key']: 95,
+                unit_miles_per_hour['key']: 110,
+                unit_kilometres_per_hour['key']: 177
+            },
+            'numeric_default_max': {
+                unit_knots['key']: 112,
+                unit_miles_per_hour['key']: 129,
+                unit_kilometres_per_hour['key']: 208
+            },
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
+            'key': 'category_2',
+            'value': 2,
+            'color': orange,
+            'name': tr('Category 2 (tropical cyclone)'),
+            'affected': True,
+            'description': tr(
+                    'Extremely dangerous winds will cause extensive damage: '
+                    'Well-constructed frame homes could sustain major roof '
+                    'and siding damage. Many shallowly rooted trees will be '
+                    'snapped or uprooted and block numerous roads. Near-total '
+                    'power loss is expected with outages that could last from '
+                    'several days to weeks.'),
+            'numeric_default_min': {
+                unit_knots['key']: 82,
+                unit_miles_per_hour['key']: 95,
+                unit_kilometres_per_hour['key']: 153
+            },
+            'numeric_default_max': {
+                unit_knots['key']: 95,
+                unit_miles_per_hour['key']: 110,
+                unit_kilometres_per_hour['key']: 177
+            },
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
+            'key': 'category_1',
+            'value': 1,
+            'color': yellow,
+            'name': tr('Category 1 (tropical cyclone)'),
+            'affected': False,
+            'description': tr(
+                    'Very dangerous winds will produce some damage: '
+                    'Well-constructed frame homes could have damage to roof, '
+                    'shingles, vinyl siding and gutters. Large branches of '
+                    'trees will snap and shallowly rooted trees may be '
+                    'toppled. Extensive damage to power lines and poles '
+                    'likely will result in power outages that could last a '
+                    'few to several days.'),
+            'numeric_default_min': {
+                unit_knots['key']: 64,
+                unit_miles_per_hour['key']: 74,
+                unit_kilometres_per_hour['key']: 119
+            },
+            'numeric_default_max': {
+                unit_knots['key']: 82,
+                unit_miles_per_hour['key']: 95,
+                unit_kilometres_per_hour['key']: 153
+            },
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
+            'key': 'no_hurricane',
+            'value': 0,
+            'color': green,
+            'name': tr('No hurricane'),
+            'affected': False,
+            'description': tr('Winds less than Category 1 Hurricane'),
+            'numeric_default_min': 0,
+            'numeric_default_max': {
+                unit_knots['key']: 64,
+                unit_miles_per_hour['key']: 74,
+                unit_kilometres_per_hour['key']: 119
+            },
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+    ]
+}
 
 hazard_classification = {
     'key': 'hazard_classification',
     'name': tr('Classes'),
     'description': tr(
-        'Hazard classes are a way to group values.'),
+            'Hazard classes are a way to group values.'),
     'citations': [
         {
             'text': None,
@@ -654,9 +867,10 @@ hazard_classification = {
         flood_hazard_classes,
         tsunami_hazard_classes,
         volcano_hazard_classes,
-        ash_hazard_classes
+        ash_hazard_classes,
+        cyclone_au_bom_hazard_classes,
+        cyclone_sshws_hazard_classes,
     ]
 }
-hazard_classification['types'].extend(cyclone_hazard_classes)
 
 all_hazard_classes = hazard_classification['types']
