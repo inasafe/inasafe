@@ -7,7 +7,8 @@ to have a table showing you classes of each kind of hazard.
 """
 from safe.definitionsv4 import concepts, small_number
 from safe.utilities.i18n import tr
-from safe.definitionsv4.units import unit_centimetres
+from safe.definitionsv4.units import unit_centimetres, unit_miles_per_hour, \
+    unit_kilometres_per_hour, unit_knots
 from safe.definitionsv4.colors import (
     green,
     light_green,
@@ -452,6 +453,8 @@ cyclone_au_bom_hazard_classes = {
             'link': 'https://en.wikipedia.org/wiki/Tropical_cyclone_scales#Australia_and_Fiji'
         }
     ],
+    'multiple_units': [unit_miles_per_hour, unit_kilometres_per_hour,
+                       unit_knots],
     'classes': [
         {
             'key': 'category_5',
@@ -460,13 +463,19 @@ cyclone_au_bom_hazard_classes = {
             'name': tr('Category 5 (severe tropical cyclone)'),
             'affected': True,
             'description': tr(
-                'Extremely dangerous with widespread destruction. A Category '
-                '5 cyclone\'s strongest winds are VERY DESTRUCTIVE winds with '
-                'typical gusts over open flat land of more than 151 kn. '
-                'These winds correspond to the highest category on the '
-                'Beaufort scale, Beaufort 12 (Hurricane).'
+                    'Extremely dangerous with widespread destruction. A '
+                    'Category '
+                    '5 cyclone\'s strongest winds are VERY DESTRUCTIVE winds '
+                    'with '
+                    'typical gusts over open flat land of more than 151 kn. '
+                    'These winds correspond to the highest category on the '
+                    'Beaufort scale, Beaufort 12 (Hurricane).'
             ),
-            'numeric_default_min': 107,
+            'numeric_default_min': {
+                unit_knots['key']: 107,
+                unit_miles_per_hour['key']: 123,
+                unit_kilometres_per_hour['key']: 198
+                },
             'numeric_default_max': 9999999999,
             'citations': [
                 {
@@ -482,16 +491,24 @@ cyclone_au_bom_hazard_classes = {
             'name': tr('Category 4 (severe tropical cyclone)'),
             'affected': True,
             'description': tr(
-                'Significant roofing loss and structural damage. Many '
-                'caravans destroyed and blown away. Dangerous airborne '
-                'debris. Widespread power failures. A Category 4 cyclone\'s'
-                'strongest winds are VERY DESTRUCTIVE winds with typical '
-                'gusts over open flat land of 122 - 151 kn. These winds '
-                'correspond to the highest category on the Beaufort scale, '
-                'Beaufort 12 (Hurricane).'
+                    'Significant roofing loss and structural damage. Many '
+                    'caravans destroyed and blown away. Dangerous airborne '
+                    'debris. Widespread power failures. A Category 4 cyclone\'s'
+                    'strongest winds are VERY DESTRUCTIVE winds with typical '
+                    'gusts over open flat land of 122 - 151 kn. These winds '
+                    'correspond to the highest category on the Beaufort scale, '
+                    'Beaufort 12 (Hurricane).'
             ),
-            'numeric_default_min': 85,
-            'numeric_default_max': 107,
+            'numeric_default_min': {
+                unit_knots['key']: 85,
+                unit_miles_per_hour['key']: 98,
+                unit_kilometres_per_hour['key']: 157
+                },
+            'numeric_default_max': {
+                unit_knots['key']: 107,
+                unit_miles_per_hour['key']: 123,
+                unit_kilometres_per_hour['key']: 198
+                },
             'citations': [
                 {
                     'text': None,
@@ -506,14 +523,22 @@ cyclone_au_bom_hazard_classes = {
             'name': tr('Category 3 (severe tropical cyclone)'),
             'affected': True,
             'description': tr(
-                'Some roof and structural damage. Some caravans destroyed. '
-                'Power failures likely. A Category 3 cyclone\'s strongest '
-                'winds are VERY DESTRUCTIVE winds with typical gusts over '
-                'open flat land of 90 - 121 kn. These winds correspond to '
-                'the highest category on the Beaufort scale, Beaufort 12 ('
-                'Hurricane).'),
-            'numeric_default_min': 63,
-            'numeric_default_max': 85,
+                    'Some roof and structural damage. Some caravans destroyed. '
+                    'Power failures likely. A Category 3 cyclone\'s strongest '
+                    'winds are VERY DESTRUCTIVE winds with typical gusts over '
+                    'open flat land of 90 - 121 kn. These winds correspond to '
+                    'the highest category on the Beaufort scale, Beaufort 12 ('
+                    'Hurricane).'),
+            'numeric_default_min': {
+                unit_knots['key']: 63,
+                unit_miles_per_hour['key']: 72,
+                unit_kilometres_per_hour['key']: 117
+                },
+            'numeric_default_max': {
+                unit_knots['key']: 85,
+                unit_miles_per_hour['key']: 98,
+                unit_kilometres_per_hour['key']: 157
+                },
             'citations': [
                 {
                     'text': None,
@@ -528,14 +553,25 @@ cyclone_au_bom_hazard_classes = {
             'name': tr('Category 2 (tropical cyclone)'),
             'affected': True,
             'description': tr(
-                'Minor house damage. Significant damage to signs, trees and '
-                'caravans. Heavy damage to some crops. Risk of power failure. '
-                'Small craft may break moorings. A Category 2 cyclone\'s '
-                'strongest winds are DESTRUCTIVE winds with typical gusts '
-                'over open flat land of 68 - 89 kn. These winds '
-                'correspond to Beaufort 10 and 11 (Storm and violent storm).'),
-            'numeric_default_min': 47,
-            'numeric_default_max': 63,
+                    'Minor house damage. Significant damage to signs, '
+                    'trees and '
+                    'caravans. Heavy damage to some crops. Risk of power '
+                    'failure. '
+                    'Small craft may break moorings. A Category 2 cyclone\'s '
+                    'strongest winds are DESTRUCTIVE winds with typical gusts '
+                    'over open flat land of 68 - 89 kn. These winds '
+                    'correspond to Beaufort 10 and 11 (Storm and violent '
+                    'storm).'),
+            'numeric_default_min': {
+                unit_knots['key']: 47,
+                unit_miles_per_hour['key']: 54,
+                unit_kilometres_per_hour['key']: 88
+                },
+            'numeric_default_max': {
+                unit_knots['key']: 63,
+                unit_miles_per_hour['key']: 72,
+                unit_kilometres_per_hour['key']: 117
+                },
             'citations': [
                 {
                     'text': None,
@@ -550,13 +586,23 @@ cyclone_au_bom_hazard_classes = {
             'name': tr('Category 1 (tropical cyclone)'),
             'affected': False,
             'description': tr(
-                'Negligible house damage. Damage to some crops, trees and '
-                'caravans. Craft may drag moorings. A Category 1 cyclone\'s '
-                'strongest winds are GALES with typical gusts over open flat '
-                'land of 49 - 67 kn. These winds correspond to Beaufort 8 '
-                'and 9 (Gales and strong gales).'),
-            'numeric_default_min': 34,
-            'numeric_default_max': 47,
+                    'Negligible house damage. Damage to some crops, trees and '
+                    'caravans. Craft may drag moorings. A Category 1 '
+                    'cyclone\'s '
+                    'strongest winds are GALES with typical gusts over open '
+                    'flat '
+                    'land of 49 - 67 kn. These winds correspond to Beaufort 8 '
+                    'and 9 (Gales and strong gales).'),
+            'numeric_default_min': {
+                unit_knots['key']: 34,
+                unit_miles_per_hour['key']: 39,
+                unit_kilometres_per_hour['key']: 63
+                },
+            'numeric_default_max': {
+                unit_knots['key']: 47,
+                unit_miles_per_hour['key']: 54,
+                unit_kilometres_per_hour['key']: 88
+                },
             'citations': [
                 {
                     'text': None,
@@ -575,7 +621,11 @@ cyclone_au_bom_hazard_classes = {
                               'surface circulation, which has maximum '
                               'sustained winds of less than 34 kn.'),
             'numeric_default_min': 0,
-            'numeric_default_max': 34,
+            'numeric_default_max': {
+                unit_knots['key']: 34,
+                unit_miles_per_hour['key']: 39,
+                unit_kilometres_per_hour['key']: 63
+                },
             'citations': [
                 {
                     'text': None,
@@ -585,6 +635,8 @@ cyclone_au_bom_hazard_classes = {
         },
     ]
 }
+
+cyclone_hazard_classes = [cyclone_au_bom_hazard_classes]
 
 hazard_classification = {
     'key': 'hazard_classification',
@@ -602,9 +654,9 @@ hazard_classification = {
         flood_hazard_classes,
         tsunami_hazard_classes,
         volcano_hazard_classes,
-        ash_hazard_classes,
-        cyclone_au_bom_hazard_classes
+        ash_hazard_classes
     ]
 }
+hazard_classification['types'].extend(cyclone_hazard_classes)
 
 all_hazard_classes = hazard_classification['types']
