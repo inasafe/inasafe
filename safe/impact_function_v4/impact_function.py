@@ -158,7 +158,7 @@ class ImpactFunction(object):
         self._is_ready = False
         self._provenance_ready = False
         self._provenance = {
-        # Environment
+            # Environment
             'host_name': gethostname(),
             'user': getpass.getuser(),
             'qgis_version': QGis.QGIS_VERSION,
@@ -753,8 +753,6 @@ class ImpactFunction(object):
             if self.aggregation:
                 aggregation_source = self.aggregation.source()
                 aggregation_keywords = deepcopy(self.aggregation.keywords)
-                print aggregation_source
-                print aggregation_keywords.get('layer_purpose')
             else:
                 aggregation_source = None
                 aggregation_keywords = None
