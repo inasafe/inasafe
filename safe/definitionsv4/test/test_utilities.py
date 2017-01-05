@@ -206,8 +206,8 @@ class TestDefinitionsUtilities(unittest.TestCase):
             layer_geometry_polygon,
             layer_geometry_raster
         ]
-        print [x['key'] for x in expected]
-        print [x['key'] for x in allowed_geometries]
+        print[x['key'] for x in expected]
+        print[x['key'] for x in allowed_geometries]
         self.assertEqual(allowed_geometries, expected)
 
     def test_all_default_fields(self):

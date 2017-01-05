@@ -8,7 +8,7 @@ def generate_field_table():
         print '| Key | Name | Field Name | Description |'
         print '| --- | ---- | ---------- | ----------- |'
         for i in fields:
-            print ('| %s | %s | %s | %s |' %
+            print('| %s | %s | %s | %s |' %
                    (i['key'], i['name'], i['field_name'], i['description']))
 
 if __name__ == '__main__':

@@ -165,7 +165,8 @@ class StepKwThreshold(WizardStep, FORM_CLASS):
             else:
                 default_min = the_class['numeric_default_min']
                 if isinstance(default_min, dict):
-                    default_min = the_class['numeric_default_min'][selected_unit]
+                    default_min = the_class[
+                        'numeric_default_min'][selected_unit]
                 min_value_input.setValue(default_min)
             min_value_input.setSingleStep(0.1)
             min_value_input.setMinimum(min_value_layer)
@@ -181,7 +182,8 @@ class StepKwThreshold(WizardStep, FORM_CLASS):
             else:
                 default_max = the_class['numeric_default_max']
                 if isinstance(default_max, dict):
-                    default_max = the_class['numeric_default_max'][selected_unit]
+                    default_max = the_class[
+                        'numeric_default_max'][selected_unit]
                 max_value_input.setValue(default_max)
             max_value_input.setSingleStep(0.1)
             max_value_input.setMinimum(min_value_layer)

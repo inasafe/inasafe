@@ -324,7 +324,7 @@ hazard_volcano = {
         caveat_simulation,
         caveat_local_conditions,
         caveat_analysis_extent,
-    ],''
+    ],
     'actions': [  # these are additional generic actions - IF has more
 
     ],

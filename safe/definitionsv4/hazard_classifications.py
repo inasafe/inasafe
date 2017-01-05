@@ -400,8 +400,8 @@ tsunami_hazard_classes = {
             'name': tr('Low hazard zone'),
             'affected': False,
             'description': tr(
-                    'Water above ground height and less than 1.0m. The area is '
-                    'potentially hit by a tsunami wave with an inundation '
+                    'Water above ground height and less than 1.0m. The area '
+                    'is potentially hit by a tsunami wave with an inundation '
                     'depth '
                     'less than 1 m or similar to tsunami intensity scale of V '
                     'or '
@@ -413,8 +413,8 @@ tsunami_hazard_classes = {
                     'from '
                     'shore. Small vessels drift and collide and some turn '
                     'over. '
-                    'Sand is deposited and there is flooding of areas close to '
-                    'the shore.'),
+                    'Sand is deposited and there is flooding of areas close '
+                    'to the shore.'),
             'numeric_default_min': 0.1,
             'numeric_default_max': 1,
             'citations': [
@@ -506,11 +506,11 @@ cyclone_au_bom_hazard_classes = {
             'description': tr(
                     'Significant roofing loss and structural damage. Many '
                     'caravans destroyed and blown away. Dangerous airborne '
-                    'debris. Widespread power failures. A Category 4 cyclone\'s'
-                    'strongest winds are VERY DESTRUCTIVE winds with typical '
-                    'gusts over open flat land of 122 - 151 kn. These winds '
-                    'correspond to the highest category on the Beaufort scale, '
-                    'Beaufort 12 (Hurricane).'
+                    'debris. Widespread power failures. A Category 4 '
+                    'cyclone\'s strongest winds are VERY DESTRUCTIVE winds '
+                    'with typical gusts over open flat land of 122 - 151 kn. '
+                    'These winds correspond to the highest category on the '
+                    'Beaufort scale, Beaufort 12 (Hurricane).'
             ),
             'numeric_default_min': {
                 unit_knots['key']: 85,
@@ -536,7 +536,7 @@ cyclone_au_bom_hazard_classes = {
             'name': tr('Category 3 (severe tropical cyclone)'),
             'affected': True,
             'description': tr(
-                    'Some roof and structural damage. Some caravans destroyed. '
+                    'Some roof and structural damage. Some caravans destroyed.'
                     'Power failures likely. A Category 3 cyclone\'s strongest '
                     'winds are VERY DESTRUCTIVE winds with typical gusts over '
                     'open flat land of 90 - 121 kn. These winds correspond to '
@@ -653,8 +653,8 @@ cyclone_sshws_hazard_classes = {
     'key': 'cyclone_sshws_hazard_classes',
     'name': tr('Hurricane classes (SSHWS)'),
     'description': tr(
-            'The <b>Saffir-Simpson Hurricane Wind Scale</b> is a 1 to 5 rating '
-            'based on a hurricane\'s sustained wind speed. This scale '
+            'The <b>Saffir-Simpson Hurricane Wind Scale</b> is a 1 to 5 rating'
+            ' based on a hurricane\'s sustained wind speed. This scale '
             'estimates '
             'potential property damage. Hurricanes reaching Category 3 and '
             'higher are considered major hurricanes because of their '
@@ -672,7 +672,8 @@ cyclone_sshws_hazard_classes = {
         },
         {
             'text': 'Saffir–Simpson scale - wikpedia',
-            'link': 'https://en.wikipedia.org/wiki/Saffir%E2%80%93Simpson_scale'
+            'link':
+                'https://en.wikipedia.org/wiki/Saffir%E2%80%93Simpson_scale'
         }
     ],
     'multiple_units': [unit_miles_per_hour, unit_kilometres_per_hour,
