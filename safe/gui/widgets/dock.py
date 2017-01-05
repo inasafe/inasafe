@@ -7,7 +7,7 @@ import logging
 from collections import OrderedDict
 
 from PyQt4 import QtGui, QtCore
-from PyQt4.QtCore import Qt, pyqtSlot, QSettings
+from PyQt4.QtCore import Qt, pyqtSlot
 from qgis.core import (
     QgsRectangle,
     QgsGeometry,
@@ -40,6 +40,7 @@ from safe.utilities.utilities import (
     add_ordered_combo_item,
     is_keyword_version_supported,
 )
+from safe.utilities.settings import setting, set_setting
 from safe.utilities.resources import get_ui_class
 from safe.utilities.qgis_utilities import (
     display_critical_message_bar,
@@ -140,8 +141,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # Flag so we can see if the dock is busy processing
         self.busy = False
 
-        # Values for settings these get set in read_settings.
-        self.settings = QSettings()
         self.show_only_visible_layers_flag = None
         self.set_layer_from_title_flag = None
         self.zoom_to_impact_flag = None
@@ -193,8 +192,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         :param layer: The current aggregation layer.
         :type layer: QgsVectorLayer
         """
-        use_selected_only = bool(self.settings.value(
-            'inasafe/useSelectedFeaturesOnly', False, type=bool))
+        use_selected_only = setting('useSelectedFeaturesOnly', False, bool)
 
         # We need to disconnect first.
         if self._aggregation and use_selected_only:
@@ -256,22 +254,13 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         Do this on init and after changing options in the options dialog.
         """
-        try:
-            extent = self.settings.value('inasafe/user_extent', None, type=str)
-        except TypeError:
-            # Catch error unable to convert a QVariant to a QMetaType
-            extent = None
+        extent = setting('user_extent', None, str)
         if extent:
             extent = QgsGeometry.fromWkt(extent)
             if not extent.isGeosValid():
                 extent = None
 
-        try:
-            crs = self.settings.value(
-                'inasafe/user_extent_crs', None, type=str)
-        except TypeError:
-            # Catch error unable to convert a QVariant to a QMetaType
-            crs = None
+        crs = setting('user_extent_crs', None, str)
         if crs:
             crs = QgsCoordinateReferenceSystem(crs)
             if not crs.isValid():
@@ -282,38 +271,30 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         # It's better to set the show_rubber_bands after setting the user
         # extent.
-        self.extent.show_rubber_bands = bool(
-            self.settings.value('inasafe/showRubberBands', False, type=bool))
+        self.extent.show_rubber_bands = setting(
+            'showRubberBands', False, bool)
 
-        flag = self.settings.value(
-            'inasafe/visibleLayersOnlyFlag', True, type=bool)
+        flag = setting('visibleLayersOnlyFlag', True, bool)
         self.show_only_visible_layers_flag = flag
 
-        flag = self.settings.value(
-            'inasafe/set_layer_from_title_flag', True, type=bool)
+        flag = setting('set_layer_from_title_flag', True, bool)
         self.set_layer_from_title_flag = flag
 
-        flag = self.settings.value(
-            'inasafe/setZoomToImpactFlag', True, type=bool)
-        self.zoom_to_impact_flag = flag
+        self.zoom_to_impact_flag = setting('setZoomToImpactFlag', True, bool)
+
         # whether exposure layer should be hidden after model completes
-        flag = self.settings.value(
-            'inasafe/setHideExposureFlag', False, type=bool)
-        self.hide_exposure_flag = flag
+        self.hide_exposure_flag = setting('setHideExposureFlag', False, bool)
 
         # whether to show or not dev only options
-        self.developer_mode = self.settings.value(
-            'inasafe/developer_mode', False, type=bool)
+        self.developer_mode = setting('developer_mode', False, bool)
 
         # whether to show or not a custom Logo
-        self.organisation_logo_path = self.settings.value(
-            'inasafe/organisation_logo_path',
-            supporters_logo_path(),
-            type=str)
+        flag = setting('organisation_logo_path', supporters_logo_path(), str)
+        self.organisation_logo_path = flag
 
         # Changed default to False for new users in 3.2 - see #2171
-        show_logos_flag = bool(self.settings.value(
-            'inasafe/showOrganisationLogoInDockFlag', False, type=bool))
+        show_logos_flag = setting(
+            'showOrganisationLogoInDockFlag', False, bool)
 
         # Flag to check valid organization logo
         invalid_logo_size = False
@@ -382,9 +363,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                     'provide valid file for organization logo.'
                 ), QtGui.QMessageBox.Ok)
         if logo_not_exist or invalid_logo_size:
-            self.settings.setValue(
-                'inasafe/organisation_logo_path',
-                supporters_logo_path())
+            set_setting('organisation_logo_path', supporters_logo_path())
 
     def connect_layer_listener(self):
         """Establish a signal/slot to listen for layers loaded in QGIS.
@@ -498,14 +477,13 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             # No aggregation layer, we should display the user requested extent
             self.aggregation = None
 
-            extent = self.settings.value('inasafe/user_extent', None, type=str)
+            extent = setting('user_extent', None, str)
             if extent:
                 extent = QgsGeometry.fromWkt(extent)
                 if not extent.isGeosValid():
                     extent = None
 
-            crs = self.settings.value(
-                'inasafe/user_extent_crs', None, type=str)
+            crs = setting('user_extent_crs', None, str)
             if crs:
                 crs = QgsCoordinateReferenceSystem(crs)
                 if not crs.isValid():
@@ -766,7 +744,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         :type flag: bool
         """
         self.extent.show_rubber_bands = flag
-        self.settings.setValue('inasafe/showRubberBands', flag)
+        set_setting('showRubberBands', flag)
 
     def progress_callback(self, current_value, maximum_value, message=None):
         """GUI based callback implementation for showing progress.
@@ -1248,10 +1226,9 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         if aggregation:
             impact_function.aggregation = aggregation
             impact_function.use_selected_features_only = (
-                bool(self.settings.value(
-                    'inasafe/useSelectedFeaturesOnly', False, type=bool)))
+                setting('useSelectedFeaturesOnly', False, bool))
         else:
-            mode = self.settings.value('inasafe/analysis_extents_mode')
+            mode = setting('analysis_extents_mode')
             if self.extent.user_extent:
                 # This like a hack to transform a geometry to a rectangle.
                 # self.extent.user_extent is a QgsGeometry.
@@ -1268,8 +1245,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         status, message = impact_function.prepare()
         if status == PREPARE_SUCCESS:
 
-            show_confirmations = self.settings.value(
-                'inasafe/show_extent_confirmations', True, type=bool)
+            show_confirmations = setting(
+                'show_extent_confirmations', True, bool)
 
             if show_confirmations:
                 message = self.tr(
@@ -1293,8 +1270,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         elif status == PREPARE_FAILED_INSUFFICIENT_OVERLAP:
             self.extent.clear_next_analysis_extent()
-            show_warnings = self.settings.value(
-                'inasafe/show_extent_warnings', True, type=bool)
+            show_warnings = setting('show_extent_warnings', True, bool)
             if show_warnings:
                 display_warning_message_bar(
                     'InaSAFE',
