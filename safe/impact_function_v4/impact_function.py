@@ -156,7 +156,17 @@ class ImpactFunction(object):
         self._performance_log = None
         self.reset_state()
         self._is_ready = False
-        self._provenance = {}
+        self._provenance = {
+        # Environment
+            'host_name': gethostname(),
+            'user': getpass.getuser(),
+            'qgis_version': QGis.QGIS_VERSION,
+            'gdal_version': gdal.__version__,
+            'qt_version': QT_VERSION_STR,
+            'pyqt_version': PYQT_VERSION_STR,
+            'os': platform.version(),
+            'inasafe_version': get_version(),
+        }
 
     @property
     def performance_log(self):
@@ -1377,18 +1387,14 @@ class ImpactFunction(object):
     def provenance(self):
         """Helper method to gather provenance for exposure_impacted layer.
 
+        If the impact function is not ready (has not called prepare method),
+        it will return empty dict to avoid miss information.
+
         :returns: Dictionary that contains all provenance.
         :rtype: dict
         """
-        # Environment
-        self._provenance['host_name'] = gethostname()
-        self._provenance['user'] = getpass.getuser()
-        self._provenance['qgis_version'] = QGis.QGIS_VERSION
-        self._provenance['gdal_version'] = gdal.__version__
-        self._provenance['qt_version'] = QT_VERSION_STR
-        self._provenance['pyqt_version'] = PYQT_VERSION_STR
-        self._provenance['os'] = platform.version()
-        self._provenance['inasafe_version'] = get_version()
+        if not self._is_ready:
+            return {}
 
         # InaSAFE
         self._provenance['impact_function_name'] = self.name
