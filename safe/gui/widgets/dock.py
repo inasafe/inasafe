@@ -257,10 +257,17 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.extent.show_rubber_bands = bool(
             self.settings.value('inasafe/showRubberBands', False, type=bool))
 
-        extent = self.settings.value('inasafe/user_extent', None, type=str)
+        try:
+            extent = self.settings.value('inasafe/user_extent', None, type=str)
+        except TypeError:
+            extent = ''
         if extent:
             extent = wkt_to_rectangle(extent)
-        crs = self.settings.value('inasafe/user_extent_crs', None, type=str)
+        try:
+            crs = self.settings.value(
+                'inasafe/user_extent_crs', None, type=str)
+        except TypeError:
+            crs = None
         crs = QgsCoordinateReferenceSystem(crs)
 
         if extent and crs.isValid():
