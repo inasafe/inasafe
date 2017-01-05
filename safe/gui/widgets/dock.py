@@ -263,7 +263,11 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             extent = ''
         if extent:
             extent = wkt_to_rectangle(extent)
-        crs = self.settings.value('inasafe/user_extent_crs', None, type=str)
+        try:
+            crs = self.settings.value(
+                'inasafe/user_extent_crs', None, type=str)
+        except TypeError:
+            crs = None
         crs = QgsCoordinateReferenceSystem(crs)
 
         if extent and crs.isValid():
