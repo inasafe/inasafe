@@ -1,6 +1,6 @@
 # coding=utf-8
-"""Impact function
-"""
+"""Impact Function."""
+
 import getpass
 import platform
 from datetime import datetime
@@ -268,7 +268,7 @@ class ImpactFunction(object):
         """
         self._aggregation = layer
         self._is_ready = False
-        self._provenance['exposure_layer'] = self._aggregation.source()
+        self._provenance['aggregation_layer'] = self._aggregation.source()
 
     @property
     def outputs(self):
@@ -1016,7 +1016,6 @@ class ImpactFunction(object):
             _, name = self.datastore.add_layer(
                 self._exposure_impacted, 'exposure_impacted')
             self._exposure_impacted = self.datastore.layer(name)
-            # Add provenance here
             if self.debug_mode:
                 check_inasafe_fields(self._exposure_impacted)
 
