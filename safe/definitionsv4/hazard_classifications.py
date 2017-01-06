@@ -476,13 +476,12 @@ cyclone_au_bom_hazard_classes = {
             'name': tr('Category 5 (severe tropical cyclone)'),
             'affected': True,
             'description': tr(
-                    'Extremely dangerous with widespread destruction. A '
-                    'Category '
-                    '5 cyclone\'s strongest winds are VERY DESTRUCTIVE winds '
-                    'with '
-                    'typical gusts over open flat land of more than 151 kn. '
-                    'These winds correspond to the highest category on the '
-                    'Beaufort scale, Beaufort 12 (Hurricane).'
+                    'Extremely dangerous with widespread destruction. A  '
+                    'Category 5 cyclone\'s strongest winds are VERY '
+                    'DESTRUCTIVE winds with typical gusts over open flat land '
+                    'of more than 151 kn These winds correspond to the '
+                    'highest category on the Beaufort scale, Beaufort 12 ('
+                    'Hurricane).'
             ),
             'numeric_default_min': {
                 unit_knots['key']: 107,
