@@ -9,7 +9,8 @@ def generate_field_table():
         print '| --- | ---- | ---------- | ----------- |'
         for i in fields:
             print('| %s | %s | %s | %s |' %
-                   (i['key'], i['name'], i['field_name'], i['description']))
+                  (i['key'], i['name'], i['field_name'], i['description']))
+
 
 if __name__ == '__main__':
     generate_field_table()

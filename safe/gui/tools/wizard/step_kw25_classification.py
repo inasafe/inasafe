@@ -84,10 +84,9 @@ class StepKwClassification(WizardStep, FORM_CLASS):
             classifications = []
             selected_unit = self.parent.step_kw_unit.selected_unit()
             for classification in get_classifications(subcategory_key):
-                if 'multiple_units' in classification:
-                    if selected_unit in classification['multiple_units']:
-                        classifications.append(classification)
-                else:
+                if 'multiple_units' not in classification:
+                    classifications.append(classification)
+                elif selected_unit in classification['multiple_units']:
                     classifications.append(classification)
 
             return classifications
