@@ -215,15 +215,20 @@ hazard_cyclone = {
             'link': None
         }
     ],
-    'continuous_hazard_units': [unit_miles_per_hour, unit_kilometres_per_hour,
-                                unit_knots],
+    'continuous_hazard_units': [
+        unit_miles_per_hour,
+        unit_kilometres_per_hour,
+        unit_knots
+    ],
     'allowed_geometries': [
         'polygon',
         'raster'
     ],
-    'classifications': [cyclone_au_bom_hazard_classes,
-                        cyclone_sshws_hazard_classes,
-                        generic_hazard_classes],
+    'classifications': [
+        cyclone_au_bom_hazard_classes,
+        cyclone_sshws_hazard_classes,
+        generic_hazard_classes
+    ],
     'compulsory_fields': [hazard_value_field],
     'fields': hazard_fields,
     'extra_fields': [],
