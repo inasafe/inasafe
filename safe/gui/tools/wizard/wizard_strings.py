@@ -101,6 +101,12 @@ tephra_kgm2_question = tr(
     'tephra intensity in kg/m<sup>2</sup>')
 volcano_volcano_categorical_question = tr(
     'volcano hazard categorical level')
+cyclone_kilometres_per_hour_question = tr(
+    'wind speed in km/h')
+cyclone_miles_per_hour_question = tr(
+    'wind speed in mph')
+cyclone_knots_question = tr(
+    'wind speed in kn')
 population_count_question = tr(
     'the number of people')
 population_density_question = tr(
