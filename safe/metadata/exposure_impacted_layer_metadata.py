@@ -179,6 +179,13 @@ class ExposureImpactedLayerMetadata(BaseMetadata):
             'inasafe/'
             'hazard_keywords/'
             'gco:Dictionary'),
+        'provenance_data': (
+            'gmd:identificationInfo/'
+            'gmd:MD_DataIdentification/'
+            'gmd:supplementalInformation/'
+            'inasafe/'
+            'provenance_data/'
+            'gco:Dictionary'),
     }
     _standard_properties = merge_dictionaries(
         BaseMetadata._standard_properties, _standard_properties)

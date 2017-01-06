@@ -1,6 +1,11 @@
 # coding=utf-8
 """Test for Impact Function."""
 
+from copy import deepcopy
+import getpass
+import platform
+from socket import gethostname
+
 import unittest
 import json
 import os
@@ -18,6 +23,7 @@ from safe.test.utilities import (
     check_inasafe_fields,
     compare_wkt
 )
+from safe.common.version import get_version
 from safe.test.debug_helper import print_attribute_table
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
@@ -43,7 +49,10 @@ from safe.utilities.gis import wkt_to_rectangle
 from safe.impact_function_v4.impact_function import ImpactFunction
 
 from qgis.core import (
-    QgsVectorLayer, QgsRasterLayer, QgsCoordinateReferenceSystem)
+    QgsVectorLayer, QgsRasterLayer, QgsCoordinateReferenceSystem, QGis)
+from osgeo import gdal
+from PyQt4.QtCore import QT_VERSION_STR
+from PyQt4.Qt import PYQT_VERSION_STR
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -301,11 +310,11 @@ class TestImpactFunction(unittest.TestCase):
         impact_function.aggregation = aggregation_layer
         impact_function.exposure = exposure_layer
         impact_function.hazard = hazard_layer
-        status, _ = impact_function.run()
-        self.assertEqual(ANALYSIS_FAILED_BAD_INPUT, status)
+        status, message = impact_function.run()
+        self.assertEqual(ANALYSIS_FAILED_BAD_INPUT, status, message)
         impact_function.prepare()
-        status, _ = impact_function.run()
-        self.assertEqual(ANALYSIS_SUCCESS, status)
+        status, message = impact_function.run()
+        self.assertEqual(ANALYSIS_SUCCESS, status, message)
         message = impact_function.performance_log_message().to_text()
         expected_result = get_control_text(
             'test-profiling-logs.txt')
@@ -315,6 +324,10 @@ class TestImpactFunction(unittest.TestCase):
             if line == '' or line == '-':
                 continue
             self.assertIn(line, message)
+
+        # Notes(IS): For some unknown reason I need to do this to make
+        # test_provenance pass
+        del hazard_layer
 
     def test_scenario(self, scenario_path=None):
         """Run test single scenario."""
@@ -421,6 +434,115 @@ class TestImpactFunction(unittest.TestCase):
                 field_name = output_value['value']['field_name']
                 self.assertIn(field_name, impact_fields)
         print_attribute_table(impact_layer, 1)
+
+    def test_a_provenance_with_aggregation(self):
+        """Test provenance of impact function with aggregation.
+
+        This test is called test_a_* so as to be the first test. We have a very
+        weird bug when test_z_provenance_without_aggregation is called just
+        after. There is magic where the state is reset between these 2 tests.
+        """
+        hazard_layer = load_test_vector_layer(
+            'gisv4', 'hazard', 'classified_vector.geojson')
+        exposure_layer = load_test_vector_layer(
+            'gisv4', 'exposure', 'building-points.geojson')
+        aggregation_layer = load_test_vector_layer(
+            'gisv4', 'aggregation', 'small_grid.geojson')
+
+        expected_provenance = {
+            'gdal_version': gdal.__version__,
+            'host_name': gethostname(),
+            'user': getpass.getuser(),
+            'os': platform.version(),
+            'pyqt_version': PYQT_VERSION_STR,
+            'qgis_version': QGis.QGIS_VERSION,
+            'qt_version': QT_VERSION_STR,
+            'inasafe_version': get_version(),
+            'aggregation_keywords': deepcopy(aggregation_layer.keywords),
+            'aggregation_layer': aggregation_layer.source(),
+            'exposure_keywords': deepcopy(exposure_layer.keywords),
+            'exposure_layer': exposure_layer.source(),
+            'hazard_keywords': deepcopy(hazard_layer.keywords),
+            'hazard_layer': hazard_layer.source(),
+        }
+
+        # Set up impact function
+        impact_function = ImpactFunction()
+        impact_function.aggregation = aggregation_layer
+        impact_function.exposure = exposure_layer
+        impact_function.hazard = hazard_layer
+        self.assertDictEqual({}, impact_function.provenance)
+        status, message = impact_function.prepare()
+        self.assertEqual(PREPARE_SUCCESS, status, message)
+        self.assertDictEqual({}, impact_function.provenance)
+        status, message = impact_function.run()
+        self.assertEqual(ANALYSIS_SUCCESS, status, message)
+
+        self.maxDiff = None
+
+        expected_provenance.update({
+            'action_checklist': impact_function.action_checklist(),
+            'analysis_extent': impact_function.analysis_extent.exportToWkt(),
+            'impact_function_name': impact_function.name,
+            'impact_function_title': impact_function.title,
+            'notes': impact_function.notes(),
+            'requested_extent': impact_function.requested_extent,
+            'data_store_uri': impact_function.datastore.uri
+        })
+
+        self.assertDictEqual(expected_provenance, impact_function.provenance)
+
+    def test_z_provenance_without_aggregation(self):
+        """Test provenance of impact function without aggregation.
+
+        This test is called test_z_* so as to be the last test. We have a very
+        weird bug when test_a_provenance_with_aggregation is called just
+        before. There is magic where the state is reset between these 2 tests.
+        """
+        hazard_layer = load_test_vector_layer(
+            'gisv4', 'hazard', 'classified_vector.geojson')
+        exposure_layer = load_test_vector_layer(
+            'gisv4', 'exposure', 'building-points.geojson')
+
+        expected_provenance = {
+            'gdal_version': gdal.__version__,
+            'host_name': gethostname(),
+            'inasafe_version': get_version(),
+            'pyqt_version': PYQT_VERSION_STR,
+            'qgis_version': QGis.QGIS_VERSION,
+            'qt_version': QT_VERSION_STR,
+            'user': getpass.getuser(),
+            'os': platform.version(),
+            'aggregation_keywords': None,
+            'aggregation_layer': None,
+            'exposure_keywords': deepcopy(exposure_layer.keywords),
+            'exposure_layer': exposure_layer.source(),
+            'hazard_keywords': deepcopy(hazard_layer.keywords),
+            'hazard_layer': hazard_layer.source(),
+        }
+
+        # Set up impact function
+        impact_function = ImpactFunction()
+        impact_function.exposure = exposure_layer
+        impact_function.hazard = hazard_layer
+        status, message = impact_function.prepare()
+        self.assertEqual(PREPARE_SUCCESS, status, message)
+        status, message = impact_function.run()
+        self.assertEqual(ANALYSIS_SUCCESS, status, message)
+
+        self.maxDiff = None
+
+        expected_provenance.update({
+            'action_checklist': impact_function.action_checklist(),
+            'analysis_extent': impact_function.analysis_extent.exportToWkt(),
+            'impact_function_name': impact_function.name,
+            'impact_function_title': impact_function.title,
+            'notes': impact_function.notes(),
+            'requested_extent': impact_function.requested_extent,
+            'data_store_uri': impact_function.datastore.uri
+        })
+
+        self.assertDictEqual(expected_provenance, impact_function.provenance)
 
     @unittest.expectedFailure
     def test_post_minimum_needs_value_generation(self):

@@ -1,12 +1,18 @@
 # coding=utf-8
-"""Impact function
-"""
+"""Impact Function."""
+
+import getpass
+import platform
 from datetime import datetime
 from os.path import join, exists
 from os import makedirs
 from collections import OrderedDict
+from copy import deepcopy
+from socket import gethostname
 
-from PyQt4.QtCore import QSettings
+from PyQt4.QtCore import QT_VERSION_STR, QSettings
+from PyQt4.Qt import PYQT_VERSION_STR
+from osgeo import gdal
 from qgis.core import (
     QgsMapLayer,
     QgsGeometry,
@@ -21,6 +27,7 @@ from qgis.core import (
 import logging
 
 from safe.common.utilities import temp_dir
+from safe.common.version import get_version
 from safe.datastore.folder import Folder
 from safe.datastore.datastore import DataStore
 from safe.gisv4.vector.prepare_vector_layer import prepare_vector_layer
@@ -154,6 +161,18 @@ class ImpactFunction(object):
         self._performance_log = None
         self.reset_state()
         self._is_ready = False
+        self._provenance_ready = False
+        self._provenance = {
+            # Environment
+            'host_name': gethostname(),
+            'user': getpass.getuser(),
+            'qgis_version': QGis.QGIS_VERSION,
+            'gdal_version': gdal.__version__,
+            'qt_version': QT_VERSION_STR,
+            'pyqt_version': PYQT_VERSION_STR,
+            'os': platform.version(),
+            'inasafe_version': get_version(),
+        }
 
     @property
     def performance_log(self):
@@ -646,6 +665,7 @@ class ImpactFunction(object):
                 from the code.
         :rtype: (int, m.Message)
         """
+        self._provenance_ready = False
         try:
             if not self.exposure:
                 message = generate_input_error_message(
@@ -657,6 +677,7 @@ class ImpactFunction(object):
                 return PREPARE_FAILED_BAD_INPUT, message
 
             status, message = self._check_layer(self.exposure, 'exposure')
+
             if status != PREPARE_SUCCESS:
                 return status, message
 
@@ -670,6 +691,7 @@ class ImpactFunction(object):
                 return PREPARE_FAILED_BAD_INPUT, message
 
             status, message = self._check_layer(self.hazard, 'hazard')
+
             if status != PREPARE_SUCCESS:
                 return status, message
 
@@ -694,6 +716,7 @@ class ImpactFunction(object):
 
                 status, message = self._check_layer(
                     self.aggregation, 'aggregation')
+
                 if status != PREPARE_SUCCESS:
                     return status, message
             else:
@@ -730,6 +753,21 @@ class ImpactFunction(object):
         else:
             # Everything was fine.
             self._is_ready = True
+            self._provenance['exposure_layer'] = self.exposure.source()
+            self._provenance['exposure_keywords'] = deepcopy(
+                self.exposure.keywords)
+            self._provenance['hazard_layer'] = self.hazard.source()
+            self._provenance['hazard_keywords'] = deepcopy(
+                self.hazard.keywords)
+            if self.aggregation:
+                aggregation_source = self.aggregation.source()
+                aggregation_keywords = deepcopy(self.aggregation.keywords)
+            else:
+                aggregation_source = None
+                aggregation_keywords = None
+            self._provenance['aggregation_layer'] = aggregation_source
+            self._provenance['aggregation_keywords'] = aggregation_keywords
+
             return PREPARE_SUCCESS, None
 
     def _compute_analysis_extent(self):
@@ -904,6 +942,7 @@ class ImpactFunction(object):
             message = get_error_message(e)
             return ANALYSIS_FAILED_BAD_CODE, message
         else:
+            self._provenance_ready = True
             return ANALYSIS_SUCCESS, None
 
     @profile
@@ -1003,6 +1042,8 @@ class ImpactFunction(object):
         # End of the impact function, we can add layers to the datastore.
         # We replace memory layers by the real layer from the datastore.
         if self._exposure_impacted:
+            self._exposure_impacted.keywords[
+                'provenance_data'] = self.provenance
             _, name = self.datastore.add_layer(
                 self._exposure_impacted, 'exposure_impacted')
             self._exposure_impacted = self.datastore.layer(name)
@@ -1364,3 +1405,123 @@ class ImpactFunction(object):
         # Let's style the aggregation and analysis layer.
         simple_polygon_without_brush(self.aggregation_impacted)
         simple_polygon_without_brush(self.analysis_impacted)
+
+    @property
+    def provenance(self):
+        """Helper method to gather provenance for exposure_impacted layer.
+
+        If the impact function is not ready (has not called prepare method),
+        it will return empty dict to avoid miss information.
+
+        :returns: Dictionary that contains all provenance.
+        :rtype: dict
+        """
+        if not self._provenance_ready:
+            return {}
+
+        # InaSAFE
+        self._provenance['impact_function_name'] = self.name
+        self._provenance['impact_function_title'] = self.title
+        if self.requested_extent:
+            self._provenance['requested_extent'] = (
+                self.requested_extent.asWktCoordinates()
+            )
+        else:
+            self._provenance['requested_extent'] = None
+        self._provenance['analysis_extent'] = (
+            self.analysis_extent.exportToWkt()
+        )
+        self._provenance['data_store_uri'] = self.datastore.uri
+
+        # Notes and Action
+        self._provenance['notes'] = self.notes()
+        self._provenance['action_checklist'] = self.action_checklist()
+
+        return self._provenance
+
+    def exposure_notes(self):
+        """Get the exposure specific notes defined in definitions.
+
+        This method will do a lookup in definitions and return the
+        exposure definition specific notes dictionary.
+
+        This is a helper function to make it
+        easy to get exposure specific notes from the definitions metadata.
+
+        .. versionadded:: 3.5
+
+        :returns: A list like e.g. safe.definitions.exposure_land_cover[
+            'notes']
+        :rtype: list, None
+        """
+        notes = []
+        exposure = definition(self.exposure.keywords.get('exposure'))
+        if 'notes' in exposure:
+            notes += exposure['notes']
+        if self.exposure.keywords['layer_mode'] == 'classified':
+            if 'classified_notes' in exposure:
+                notes += exposure['classified_notes']
+        if self.exposure.keywords['layer_mode'] == 'continuous':
+            if 'continuous_notes' in exposure:
+                notes += exposure['continuous_notes']
+        return notes
+
+    def hazard_notes(self):
+        """Get the hazard specific notes defined in definitions.
+
+        This method will do a lookup in definitions and return the
+        hazard definition specific notes dictionary.
+
+        This is a helper function to make it
+        easy to get hazard specific notes from the definitions metadata.
+
+        .. versionadded:: 3.5
+
+        :returns: A list like e.g. safe.definitions.hazard_land_cover[
+            'notes']
+        :rtype: list, None
+        """
+        notes = []
+        hazard = definition(self.hazard.keywords.get('hazard'))
+
+        if 'notes' in hazard:
+            notes += hazard['notes']
+        if self.hazard.keywords['layer_mode'] == 'classified':
+            if 'classified_notes' in hazard:
+                notes += hazard['classified_notes']
+        if self.hazard.keywords['layer_mode'] == 'continuous':
+            if 'continuous_notes' in hazard:
+                notes += hazard['continuous_notes']
+        if self.hazard.keywords['hazard_category'] == 'single_event':
+            if 'single_event_notes' in hazard:
+                notes += hazard['single_event_notes']
+        if self.hazard.keywords['hazard_category'] == 'multiple_event':
+            if 'multi_event_notes' in hazard:
+                notes += hazard['multi_event_notes']
+        return notes
+
+    def notes(self):
+        """Return the notes section of the report.
+
+        .. versionadded:: 3.5
+
+        :return: The notes that should be attached to this impact report.
+        :rtype: list
+        """
+        fields = []  # Notes still to be defined for ASH
+        # include any generic exposure specific notes from definitions
+        fields = fields + self.exposure_notes()
+        # include any generic hazard specific notes from definitions
+        fields = fields + self.hazard_notes()
+        return fields
+
+    def action_checklist(self):
+        """Return the action check list.
+
+        :return: The action check list.
+        :rtype: list
+        """
+        exposure = definition(self.exposure.keywords.get('exposure'))
+        hazard = definition(self.hazard.keywords.get('hazard'))
+
+        return exposure.get('actions') + hazard.get('actions')
