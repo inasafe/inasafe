@@ -84,11 +84,18 @@ class StepKwClassification(WizardStep, FORM_CLASS):
             classifications = []
             selected_unit = self.parent.step_kw_unit.selected_unit()
             for classification in get_classifications(subcategory_key):
-                if 'multiple_units' not in classification:
+                if selected_unit is None:
+                    # we are using classified data, so let's allow all
+                    # classifications
+                    classifications.append(classification)
+                elif 'multiple_units' not in classification:
+                    # this classification is not multiple unit aware, so let's
+                    # allow it
                     classifications.append(classification)
                 elif selected_unit in classification['multiple_units']:
+                    # we are using continuous data, and this classification
+                    # supports the chosen unit so we allow it
                     classifications.append(classification)
-
             return classifications
         else:
             # There are no classifications for non exposure and hazard
