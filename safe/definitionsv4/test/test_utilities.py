@@ -31,6 +31,7 @@ from safe.definitionsv4 import (
     layer_geometry_point,
     layer_geometry_polygon
 )
+from safe.definitionsv4.hazard import hazard_cyclone
 
 from safe.definitionsv4.utilities import (
     definition,
@@ -79,6 +80,7 @@ class TestDefinitionsUtilities(unittest.TestCase):
 
     def test_hazards_for_layer(self):
         """Test for hazards_for_layer"""
+        self.maxDiff = None
         hazards = hazards_for_layer(
             'polygon', 'single_event')
         expected = [
@@ -87,6 +89,7 @@ class TestDefinitionsUtilities(unittest.TestCase):
             hazard_earthquake,
             hazard_volcano,
             hazard_volcanic_ash,
+            hazard_cyclone,
             hazard_generic
         ]
         self.assertItemsEqual(hazards, expected)
@@ -98,6 +101,7 @@ class TestDefinitionsUtilities(unittest.TestCase):
             hazard_earthquake,
             hazard_volcano,
             hazard_volcanic_ash,
+            hazard_cyclone,
             hazard_generic
         ]
         self.assertItemsEqual(hazards, expected)
@@ -110,6 +114,7 @@ class TestDefinitionsUtilities(unittest.TestCase):
             hazard_earthquake,
             hazard_volcanic_ash,
             hazard_volcano,
+            hazard_cyclone,
             hazard_generic
         ]
         self.assertItemsEqual(hazards, expected)
