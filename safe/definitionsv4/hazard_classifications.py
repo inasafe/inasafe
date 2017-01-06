@@ -596,7 +596,7 @@ cyclone_au_bom_hazard_classes = {
             'value': 1,
             'color': yellow,
             'name': tr('Category 1 (tropical cyclone)'),
-            'affected': False,
+            'affected': True,
             'description': tr(
                 'Negligible house damage. Damage to some crops, trees and '
                 'caravans. Craft may drag moorings. A Category 1 '
@@ -802,7 +802,7 @@ cyclone_sshws_hazard_classes = {
             'value': 1,
             'color': yellow,
             'name': tr('Category 1 (hurricane)'),
-            'affected': False,
+            'affected': True,
             'description': tr(
                 'Very dangerous winds will produce some damage: '
                 'Well-constructed frame homes could have damage to roof, '
