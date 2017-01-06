@@ -682,7 +682,7 @@ cyclone_sshws_hazard_classes = {
             'key': 'category_5',
             'value': 5,
             'color': very_dark_red,
-            'name': tr('Category 5 (severe tropical cyclone)'),
+            'name': tr('Category 5 (major hurricane)'),
             'affected': True,
             'description': tr(
                 'Catastrophic damage will occur: A high percentage of '
@@ -709,7 +709,7 @@ cyclone_sshws_hazard_classes = {
             'key': 'category_4',
             'value': 4,
             'color': dark_red,
-            'name': tr('Category 4 (severe tropical cyclone)'),
+            'name': tr('Category 4 (major hurricane)'),
             'affected': True,
             'description': tr(
                 'Catastrophic damage will occur: Well-built framed homes '
@@ -741,7 +741,7 @@ cyclone_sshws_hazard_classes = {
             'key': 'category_3',
             'value': 3,
             'color': red,
-            'name': tr('Category 3 (severe tropical cyclone)'),
+            'name': tr('Category 3 (major hurricane)'),
             'affected': True,
             'description': tr(
                 'Devastating damage will occur: Well-built framed homes '
@@ -771,7 +771,7 @@ cyclone_sshws_hazard_classes = {
             'key': 'category_2',
             'value': 2,
             'color': orange,
-            'name': tr('Category 2 (tropical cyclone)'),
+            'name': tr('Category 2 (hurricane)'),
             'affected': True,
             'description': tr(
                 'Extremely dangerous winds will cause extensive damage: '
@@ -801,7 +801,7 @@ cyclone_sshws_hazard_classes = {
             'key': 'category_1',
             'value': 1,
             'color': yellow,
-            'name': tr('Category 1 (tropical cyclone)'),
+            'name': tr('Category 1 (hurricane)'),
             'affected': False,
             'description': tr(
                 'Very dangerous winds will produce some damage: '
