@@ -886,14 +886,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.show_question_button.setVisible(True)
         self.question_group.setEnabled(True)
         self.question_group.setVisible(False)
-        # for #706 - if the exposure is hidden
-        # due to self.hide_exposure_flag being enabled
-        # we may have no exposure layers left
-        # so we handle that here and disable run
-        if self.exposure_layer_combo.count() == 0:
-            self.run_button.setEnabled(False)
-        else:
-            self.run_button.setEnabled(True)
+
+        # We check if we can run an IF
+        self.validate_impact_function()
+
         self.repaint()
         disable_busy_cursor()
         self.busy = False
