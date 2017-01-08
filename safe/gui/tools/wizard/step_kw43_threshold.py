@@ -160,6 +160,9 @@ class StepKwThreshold(WizardStep, FORM_CLASS):
 
             # Min value as double spin
             min_value_input = QDoubleSpinBox()
+            # TODO(IS) We can set the min and max depends on the unit, later
+            min_value_input.setMinimum(0)
+            min_value_input.setMaximum(999999)
             if thresholds.get(the_class['key']):
                 min_value_input.setValue(thresholds[the_class['key']][0])
             else:
@@ -169,14 +172,15 @@ class StepKwThreshold(WizardStep, FORM_CLASS):
                         'numeric_default_min'][selected_unit]
                 min_value_input.setValue(default_min)
             min_value_input.setSingleStep(0.1)
-            min_value_input.setMinimum(min_value_layer)
-            min_value_input.setMaximum(max_value_layer)
 
             # Max label
             max_label = QLabel(tr('Max'))
 
             # Max value as double spin
             max_value_input = QDoubleSpinBox()
+            # TODO(IS) We can set the min and max depends on the unit, later
+            max_value_input.setMinimum(0)
+            max_value_input.setMaximum(999999)
             if thresholds.get(the_class['key']):
                 max_value_input.setValue(thresholds[the_class['key']][1])
             else:
@@ -186,8 +190,6 @@ class StepKwThreshold(WizardStep, FORM_CLASS):
                         'numeric_default_max'][selected_unit]
                 max_value_input.setValue(default_max)
             max_value_input.setSingleStep(0.1)
-            max_value_input.setMinimum(min_value_layer)
-            max_value_input.setMaximum(max_value_layer)
 
             # Add to class_layout
             class_layout.addWidget(min_label)
