@@ -21,7 +21,7 @@ from safe.impact_reports.report_mixin_base import ReportMixin
 from safe.common.utilities import format_int
 from safe.impact_functions.core import evacuated_population_needs
 from safe.gui.tools.minimum_needs.needs_profile import filter_needs_parameters
-from safe.impact_functions.core import population_rounding
+from safe.utilities.rounding import population_rounding
 
 
 class PolygonPeopleExposureReportMixin(ReportMixin):

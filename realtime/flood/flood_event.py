@@ -47,7 +47,7 @@ from safe.impact_functions.impact_function_manager import \
 from safe.storage.core import read_layer, read_qgis_layer
 from safe.utilities.keyword_io import KeywordIO
 from safe.common.utilities import format_int
-from safe.impact_functions.core import population_rounding
+from safe.utilities.rounding import population_rounding
 from safe import messaging as m
 
 

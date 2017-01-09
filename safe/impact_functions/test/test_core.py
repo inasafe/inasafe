@@ -28,10 +28,7 @@ from safe.test.utilities import get_qgis_app, TESTDATA, HAZDATA
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe.impact_functions.core import (
-    population_rounding_full,
-    population_rounding,
-    evacuated_population_needs)
+from safe.impact_functions.core import evacuated_population_needs
 from safe.common.parameters.resource_parameter import ResourceParameter
 from safe.defaults import default_minimum_needs
 
@@ -44,30 +41,6 @@ class TestCore(unittest.TestCase):
         self.vector_path = os.path.join(TESTDATA, 'Padang_WGS84.shp')
         self.raster_shake_path = os.path.join(
             HAZDATA, 'Shakemap_Padang_2009.asc')
-
-    def test_population_rounding(self):
-        """Test for population_rounding_full function."""
-        # rounding up
-        for _ in range(100):
-            # After choosing some random numbers the sum of the randomly
-            # selected and one greater than that should be less than the
-            # population rounded versions of these.
-            n = random.randint(1, 1000000)
-            n_pop, dummy = population_rounding_full(n)
-            n1 = n + 1
-            n1_pop, dummy = population_rounding_full(n1)
-            self.assertGreater(n_pop + n1_pop, n + n1)
-
-        self.assertEqual(population_rounding_full(989)[0], 990)
-        self.assertEqual(population_rounding_full(991)[0], 1000)
-        self.assertEqual(population_rounding_full(8888)[0], 8900)
-        self.assertEqual(population_rounding_full(9888888)[0], 9889000)
-
-        for _ in range(100):
-            n = random.randint(1, 1000000)
-            self.assertEqual(
-                population_rounding(n),
-                population_rounding_full(n)[0])
 
     def test_evacuated_population_needs(self):
         """Test evacuated_population_needs function."""

@@ -16,9 +16,9 @@ from collections import OrderedDict
 from safe.utilities.i18n import tr
 from safe.common.utilities import format_int
 from safe.impact_reports.report_mixin_base import ReportMixin
-from safe.impact_functions.core import (
-    evacuated_population_needs,
-    population_rounding)
+from safe.utilities.rounding import population_rounding
+from safe.impact_functions.core import evacuated_population_needs
+
 
 __author__ = 'Christian Christelis <christian@kartoza.com>'
 __revision__ = '$Format:%H$'

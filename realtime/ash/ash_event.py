@@ -26,7 +26,7 @@ from realtime.exceptions import MapComposerError
 from realtime.utilities import realtime_logger_name
 from safe.common.exceptions import ZeroImpactException, KeywordNotFoundError
 from safe.common.utilities import format_int
-from safe.impact_functions.core import population_rounding
+from safe.utilities.rounding import population_rounding
 from safe.impact_functions.impact_function_manager import \
     ImpactFunctionManager
 from safe.test.utilities import get_qgis_app
