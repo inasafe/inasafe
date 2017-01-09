@@ -1,8 +1,6 @@
 # coding=utf-8
 
-"""
-Styles.
-"""
+"""Styles."""
 
 from qgis.core import (
     QgsSymbolV2,

@@ -1,13 +1,10 @@
 # coding=utf-8
-"""
-Impact function
-"""
+"""Create extra layers in the impact function."""
 
 from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsVectorLayer,
     QgsFeatureRequest,
-    QgsGeometry,
     QgsFeature,
     QGis,
 )
@@ -51,7 +48,6 @@ def create_virtual_aggregation(geometry, crs):
     :returns: A polygon layer with exposure's crs.
     :rtype: QgsVectorLayer
     """
-
     fields = [
         create_field_from_definition(aggregation_id_field),
         create_field_from_definition(aggregation_name_field)
@@ -136,7 +132,6 @@ def create_profile_layer(profiling):
     :return: A tabular layer.
     :rtype: QgsVectorLayer
     """
-
     fields = [
         create_field_from_definition(profiling_function_field),
         create_field_from_definition(profiling_time_field)

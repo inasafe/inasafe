@@ -112,10 +112,11 @@ __revision__ = '$Format:%H$'
 
 
 class ImpactFunction(object):
+
     """Impact Function."""
 
     def __init__(self):
-
+        """Constructor."""
         # Input layers
         self._hazard = None
         self._exposure = None
@@ -184,7 +185,7 @@ class ImpactFunction(object):
         return self._performance_log
 
     def performance_log_message(self):
-        """Return the profiling log as a message"""
+        """Return the profiling log as a message."""
         message = m.Message()
         table = m.Table(style_class='table table-condensed table-striped')
         row = m.Row()
@@ -316,7 +317,7 @@ class ImpactFunction(object):
                     pass
 
         # Remove layers which are not set.
-        layers = filter(None, layers.values())
+        layers = [layer for layer in layers.values() if layer]
         return layers
 
     @property
@@ -389,6 +390,7 @@ class ImpactFunction(object):
     @property
     def requested_extent(self):
         """Property for the extent requested by the user.
+
         It can be the extent from the map canvas, a bookmark or bbox ...
 
         :returns: A QgsRectangle.
@@ -466,7 +468,7 @@ class ImpactFunction(object):
 
     @property
     def name(self):
-        """The name of the impact function
+        """The name of the impact function.
 
         :returns: The name.
         :rtype: basestring
@@ -475,7 +477,7 @@ class ImpactFunction(object):
 
     @property
     def title(self):
-        """The title of the impact function
+        """The title of the impact function.
 
         :returns: The title.
         :rtype: basestring
@@ -533,8 +535,7 @@ class ImpactFunction(object):
         LOGGER.info('Task progress: %i of %i' % (current, maximum))
 
     def reset_state(self):
-        """Method to reset the state of the impact function.
-        """
+        """Method to reset the state of the impact function."""
         self.state = {
             'hazard': {
                 'process': [],
@@ -1132,7 +1133,6 @@ class ImpactFunction(object):
     @profile
     def hazard_preparation(self):
         """This function is doing the hazard preparation."""
-
         use_same_projection = (
             self.hazard.crs().authid() == self.exposure.crs().authid())
         self.set_state_info(
@@ -1357,7 +1357,6 @@ class ImpactFunction(object):
 
     def summary_calculation(self):
         """Do the summary calculation."""
-
         if self._exposure_impacted:
             self.set_state_process(
                 'impact function',

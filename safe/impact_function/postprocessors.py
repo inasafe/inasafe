@@ -1,8 +1,7 @@
 # coding=utf-8
 
-"""
-Postprocessors.
-"""
+"""Postprocessors."""
+
 from PyQt4.QtCore import QPyNullVariant
 from qgis.core import QgsFeatureRequest
 
@@ -63,7 +62,6 @@ def run_single_post_processor(layer, post_processor):
     :returns: Tuple with True if success, else False with an error message.
     :rtype: (bool, str)
     """
-
     if not layer.editBuffer():
 
         # Turn on the editing mode.

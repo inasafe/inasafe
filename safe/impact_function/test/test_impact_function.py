@@ -63,12 +63,12 @@ __revision__ = '$Format:%H$'
 
 
 def read_json_flow(json_path):
-    """Helper method to read json file that contains a scenario
+    """Helper method to read json file that contains a scenario.
 
     :param json_path: Path to json file.
     :type json_path: unicode, str
 
-    :returns: Tuple of dictionary contains a scenario and expected result
+    :returns: Tuple of dictionary contains a scenario and expected result.
     :rtype: (dict, dict, dict)
     """
     with open(json_path) as json_data:
@@ -77,7 +77,7 @@ def read_json_flow(json_path):
 
 
 def run_scenario(scenario, use_debug=False):
-    """Run scenario
+    """Run scenario.
 
     :param scenario: Dictionary of hazard, exposure, and aggregation.
     :type scenario: dict
@@ -94,6 +94,7 @@ def run_scenario(scenario, use_debug=False):
         exposure_path = standard_data_path('exposure', scenario['exposure'])
     else:
         raise IOError('No exposure file')
+
     if os.path.exists(scenario['hazard']):
         hazard_path = scenario['hazard']
     elif os.path.exists(standard_data_path('hazard', scenario['hazard'])):
@@ -145,10 +146,11 @@ def run_scenario(scenario, use_debug=False):
 
 
 class TestImpactFunction(unittest.TestCase):
+
     """Test Impact Function."""
 
     def test_keyword_monkey_patch(self):
-        """Test behaviour of generating keywords"""
+        """Test behaviour of generating keywords."""
         exposure_path = standard_data_path('exposure', 'building-points.shp')
         # noinspection PyCallingNonCallable
         exposure_layer = QgsVectorLayer(exposure_path, 'Building', 'ogr')
@@ -173,7 +175,7 @@ class TestImpactFunction(unittest.TestCase):
         self.assertIn(inasafe_fields['population_count_field'], fields)
 
     def test_impact_function_behaviour(self):
-        """Test behaviour of impact function"""
+        """Test behaviour of impact function."""
         hazard_layer = load_test_vector_layer(
             'hazard', 'flood_multipart_polygons.shp')
         exposure_layer = load_test_vector_layer('exposure', 'roads.shp')
@@ -404,7 +406,6 @@ class TestImpactFunction(unittest.TestCase):
 
     def test_post_processor(self):
         """Test for running post processor."""
-
         impact_layer = load_test_vector_layer(
             'impact',
             'indivisible_polygon_impact.geojson',
