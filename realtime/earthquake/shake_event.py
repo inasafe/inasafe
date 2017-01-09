@@ -68,7 +68,7 @@ from PyQt4.QtGui import (
 from safe.test.utilities import get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe.impact_functions.impact_function_manager import ImpactFunctionManager
+from safe.impact_function_v4.impact_function import ImpactFunction
 from safe.storage.core import read_layer as safe_read_layer
 from safe.common.version import get_version
 from safe.common.utilities import romanise
@@ -1061,8 +1061,7 @@ class ShakeEvent(QObject):
         clipped_exposure_layer = safe_read_layer(
             str(clipped_exposure.source()))
 
-        function_id = 'ITBFatalityFunction'
-        function = ImpactFunctionManager().get(function_id)
+        function = ImpactFunction()
         function.hazard = clipped_hazard_layer
         function.exposure = clipped_exposure_layer
         extent = function.hazard.extent()
