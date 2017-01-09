@@ -16,7 +16,7 @@ from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.resources import get_ui_class, html_header, html_footer
 from safe.utilities.utilities import add_ordered_combo_item, \
     ranges_according_thresholds_list
-from safe.impact_functions.registry import Registry
+from safe.utilities.qt import disable_busy_cursor, enable_busy_cursor
 from safe_extras.parameters.qt_widgets.parameter_container import \
     ParameterContainer
 
@@ -49,7 +49,7 @@ class RasterReclassifyDialog(QDialog, FORM_CLASS):
 
         self.iface = iface
 
-        self.if_registry = Registry()
+        self.if_registry = None  # Need to fix this in InaSAFE V4
         self.keyword_io = KeywordIO()
 
         # populate raster input
@@ -115,6 +115,11 @@ class RasterReclassifyDialog(QDialog, FORM_CLASS):
             index, QtCore.Qt.UserRole)
         layer = registry.mapLayer(layer_id)
         layer_purpose = self.keyword_io.read_keywords(layer, 'layer_purpose')
+
+        if self.if_registry is None:
+            # We need to fix the tool for InaSAFE V4.
+            return
+
         if layer_purpose == 'hazard':
             impact_function = self.if_registry.filter_by_hazard(
                 self.if_registry.impact_functions,
@@ -202,6 +207,7 @@ class RasterReclassifyDialog(QDialog, FORM_CLASS):
 
         :return:
         """
+        enable_busy_cursor()
         registry = QgsMapLayerRegistry.instance()
         try:
             index = self.cbo_raster_input.currentIndex()
@@ -223,21 +229,9 @@ class RasterReclassifyDialog(QDialog, FORM_CLASS):
             registry.addMapLayer(layer)
         except Exception as e:
             LOGGER.exception(e)
-
-        QtGui.qApp.setOverrideCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
-        self.disable_busy_cursor()
+        finally:
+            disable_busy_cursor()
         self.done(QDialog.Accepted)
-
-    @staticmethod
-    def disable_busy_cursor():
-        """Disable the hourglass cursor.
-
-        TODO: this is duplicated from dock.py
-        """
-        while QtGui.qApp.overrideCursor() is not None and \
-                        QtGui.qApp.overrideCursor().shape() == \
-                        QtCore.Qt.WaitCursor:
-            QtGui.qApp.restoreOverrideCursor()
 
     def reject(self):
         """Redefinition of the reject() method.

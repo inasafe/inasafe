@@ -30,7 +30,6 @@ import logging
 
 from safe.gui.tools.batch.batch_dialog import BatchDialog
 from safe.common.utilities import temp_dir
-from safe.impact_functions.loader import register_impact_functions
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -39,7 +38,6 @@ class BatchDialogTest(unittest.TestCase):
     """Tests for the script/batch runner dialog."""
 
     def setUp(self):
-        register_impact_functions()
         self.dock = get_dock()
 
     @unittest.skip('Skip unit test from InaSAFE v3.')

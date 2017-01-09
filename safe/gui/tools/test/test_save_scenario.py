@@ -25,7 +25,6 @@ from qgis.core import QgsMapLayerRegistry
 from safe.test.utilities import get_qgis_app, get_dock
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe.impact_functions.loader import register_impact_functions
 from safe.utilities.gis import qgis_version
 from safe.gui.tools.save_scenario import SaveScenarioDialog
 from safe.test.utilities import (
@@ -115,7 +114,6 @@ class SaveScenarioTest(unittest.TestCase):
         title = data[0][:-1]
         exposure = data[1][:-1]
         hazard = data[2][:-1]
-        function = data[3][:-1]
         extent = data[4][:-1]
         self.assertTrue(
             os.path.exists(scenario_file),
@@ -132,17 +130,9 @@ class SaveScenarioTest(unittest.TestCase):
                 'classified_flood_20_20.asc'),
             'Hazard is not the same')
 
-        # TODO: figure out why this changed between releases
-        if qgis_version() < 20400:
-            # For QGIS 2.0
-            expected_extent = (
-                'extent = 106.313333, -6.380000, 107.346667, -6.070000')
-            self.assertEqual(expected_extent, extent)
-        else:
-            # for QGIS 2.4
-            expected_extent = (
-                'extent = 106.287500, -6.380000, 107.372500, -6.070000')
-            self.assertEqual(expected_extent, expected_extent)
+        expected_extent = (
+            'extent = 106.287500, -6.380000, 107.372500, -6.070000')
+        self.assertEqual(expected_extent, expected_extent)
 
     @unittest.expectedFailure
     def test_relative_path(self):
