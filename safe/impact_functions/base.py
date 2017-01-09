@@ -54,7 +54,6 @@ from safe.common.utilities import (
     verify
 )
 from safe.common.version import get_version
-from safe.engine.core import check_data_integrity
 from safe.impact_functions.impact_function_metadata import \
     ImpactFunctionMetadata
 from safe.messaging import styles
@@ -1476,9 +1475,6 @@ class ImpactFunction(object):
         send_dynamic_message(self, message)
 
         layers = [self.hazard, self.exposure]
-        # Input checks
-        if self.requires_clipping:
-            check_data_integrity(layers)
 
         # Start time
         start_time = datetime.now()
