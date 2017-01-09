@@ -16,10 +16,6 @@ Contact : jannes@kartoza.com
     .. versionadded:: 3.2
 """
 import shutil
-
-__author__ = 'Jannes Engelbrecht'
-__date__ = '16/04/15'
-
 import logging
 import os
 import tempfile
@@ -38,13 +34,14 @@ from safe.test.utilities import get_qgis_app
 # make sure this line executes first
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe.impact_functions.loader import register_impact_functions
-from safe.impact_functions.impact_function_manager import ImpactFunctionManager
 from safe.report.impact_report import ImpactReport
-from safe.storage.utilities import safe_to_qgis_layer
 from safe.utilities.gis import qgis_version, validate_geo_array
-from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.osm_downloader import download
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 current_dir = os.path.abspath(
     os.path.realpath(os.getcwd()))
@@ -69,7 +66,6 @@ class CommandLineArguments(object):
         self.exposure = arguments_['--exposure']
         self.aggregation = arguments_['--aggregation']
         self.version = arguments_['--version']
-        self.show_list = arguments_['--list-functions']
         self.impact_function = arguments_['--impact-function']
         self.report_template = arguments_['--report-template']
         # optional arguments
@@ -121,45 +117,6 @@ def download_exposure(command_line_arguments):
     if os.path.exists(command_line_arguments.exposure + '.shp'):
         print "download successful"
         command_line_arguments.exposure += '.shp'
-
-
-def get_impact_function_list(arguments):
-    """Returns all available impact function ids.
-
-    .. versionadded:: 3.2
-
-    :returns: List of impact functions.
-    :rtype: list
-    """
-    LOGGER.debug('get IF list')
-    manager = ImpactFunctionManager()
-    if arguments.hazard and arguments.exposure:
-        hazard = get_hazard(arguments)
-        exposure = get_exposure(arguments)
-        keyword_io = KeywordIO()
-        hazard_keyword = keyword_io.read_keywords(hazard)
-        exposure_keyword = keyword_io.read_keywords(exposure)
-        ifs = manager.filter_by_keywords(hazard_keyword, exposure_keyword)
-    else:
-        ifs = manager.filter()
-    LOGGER.debug(ifs)
-    return ifs
-
-
-def show_impact_function_names(impact_functions):
-    """Prints a list of impact functions.
-
-    .. versionadded:: 3.2
-
-    :param impact_functions: A list of impact function ids.
-    :type: list of strings.
-    """
-    manager = ImpactFunctionManager()
-    print ""
-    print "Available Impact Function:"
-    for impact_function in impact_functions:
-        print manager.get_function_id(impact_function)
-    print ""
 
 
 # all paths are made to be absolute
@@ -424,11 +381,7 @@ if __name__ == '__main__':
         arguments = CommandLineArguments(shell_arguments)
 
         LOGGER.debug(shell_arguments)
-        if arguments.show_list is True:
-            # setup functions
-            register_impact_functions()
-            show_impact_function_names(get_impact_function_list(arguments))
-        elif arguments.version is True:
+        if arguments.version is True:
             print "QGIS VERSION: " + str(qgis_version()).replace('0', '.')
         # user is only interested in doing a download
         elif arguments.download is True and\
