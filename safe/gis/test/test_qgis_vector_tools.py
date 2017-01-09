@@ -35,7 +35,7 @@ from safe.gis.qgis_vector_tools import (
     union_geometry,
     create_layer,
     clip_by_polygon,
-    split_by_polygon)
+)
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -151,67 +151,6 @@ class TestQGISVectorTools(unittest.TestCase):
             found = False
             for expected in lines.getFeatures():
                 if (expected.attributes()[2] == 1) and \
-                   (feature.geometry().isGeosEqual(expected.geometry())):
-                    found = True
-                    break
-            self.assertTrue(found)
-
-    @unittest.skipIf(
-        os.environ.get('ON_TRAVIS', False), 'Slow test, skipped on travis')
-    def test_split_by_polygon(self):
-        """Test split_by_polygon work"""
-        line_before = QgsVectorLayer(
-            self.line_before + '.shp', 'test', 'ogr')
-        expected_lines = QgsVectorLayer(
-            self.line_after + '.shp', 'test', 'ogr')
-        polygon_layer = QgsVectorLayer(
-            self.polygon_base + '.shp', 'test', 'ogr')
-
-        # Only one polygon is stored in the layer
-        for feature in polygon_layer.getFeatures():
-            polygon = feature.geometry()
-
-        split_lines = split_by_polygon(
-            line_before,
-            polygon,
-            mark_value=('flooded', 1))
-
-        # Test the lines is not multipart
-        for feature in split_lines.getFeatures():
-            self.assertFalse(feature.geometry().isMultipart())
-
-        self.assertEqual(expected_lines.featureCount(),
-                         split_lines.featureCount())
-        # Assert for every line from split_lines
-        # we can find the same line
-        for feature in split_lines.getFeatures():
-            found = False
-            for expected in expected_lines.getFeatures():
-                if (feature.attributes() == expected.attributes()) and \
-                   (feature.geometry().isGeosEqual(expected.geometry())):
-                    found = True
-                    break
-            self.assertTrue(found)
-
-        # Split by the extent (The result is the copy of the layer)
-        line_before.updateExtents()
-        # Expand extent to cover the lines (add epsilon to bounds)
-        epsilon = 0.0001    # A small number
-        extent = line_before.extent()
-        new_extent = QgsRectangle(
-            extent.xMinimum() - epsilon,
-            extent.yMinimum() - epsilon,
-            extent.xMaximum() + epsilon,
-            extent.yMaximum() + epsilon
-        )
-        new_extent = QgsGeometry().fromRect(new_extent)
-        split_lines = split_by_polygon(
-            line_before,
-            new_extent)
-        for feature in split_lines.getFeatures():
-            found = False
-            for expected in line_before.getFeatures():
-                if (feature.attributes() == expected.attributes()) and \
                    (feature.geometry().isGeosEqual(expected.geometry())):
                     found = True
                     break
