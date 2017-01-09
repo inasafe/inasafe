@@ -6,7 +6,6 @@ import os
 # Import InaSAFE modules
 from safe.gis.interpolation2d import interpolate2d, interpolate_raster
 from safe.gis.interpolation import BoundsError
-from safe.gis.interpolation1d import interpolate1d
 from safe.test.utilities import combine_coordinates
 from safe.gis.numerics import nan_allclose
 
@@ -446,89 +445,6 @@ class TestInterpolate(unittest.TestCase):
         vals = interpolate_raster(longitudes, latitudes, A, points,
                                   mode='linear')
         refs = linear_function(points[:, 0], points[:, 1])
-
-        assert numpy.allclose(vals, refs, rtol=1e-12, atol=1e-12)
-
-    # -----------------------
-    # 1D interpolation tests
-    # -----------------------
-
-    def test_1d_linear_interpolation_basic(self):
-        """Interpolation library works for a 1D linear function - basic test
-        """
-
-        # Define pixel centers along each direction
-        x = [1.0, 2.0, 4.0]
-
-        # Define array with corresponding values
-        A = numpy.zeros((len(x)))
-
-        # Define values for each xas a linear function
-        for i in range(len(x)):
-            A[i] = linear_function(x[i], 0)
-
-        # Test first that original points are reproduced correctly
-        for i, xi in enumerate(x):
-            val = interpolate1d(x, A, [xi], mode='linear')[0]
-            ref = linear_function(xi, 0)
-            assert numpy.allclose(val, ref, rtol=1e-12, atol=1e-12)
-
-        # Then test that genuinly interpolated points are correct
-        xis = numpy.linspace(x[0], x[-1], 10)
-        points = xis
-
-        vals = interpolate1d(x, A, points, mode='linear')
-        refs = linear_function(points, 0)
-        assert numpy.allclose(vals, refs, rtol=1e-12, atol=1e-12)
-
-        # Exercise bounds_error flag
-        vals = interpolate1d(x, A, points, mode='linear',
-                             bounds_error=True)
-        refs = linear_function(points, 0)
-        assert numpy.allclose(vals, refs, rtol=1e-12, atol=1e-12)
-
-    def test_1d_constant_interpolation_basic(self):
-        """Interpolation library works for 1D piecewise constant function
-        """
-
-        # Define pixel centers along each direction
-        x = numpy.array([1.0, 2.0, 4.0])
-
-        # Define ny by nx array with corresponding values
-        A = numpy.zeros((len(x)))
-
-        # Define values for each x, y pair as a linear function
-        for i in range(len(x)):
-            A[i] = linear_function(x[i], 0)
-
-        # Then test that interpolated points are always assigned value of
-        # closest neighbour
-        xis = numpy.linspace(x[0], x[-1], 10)
-        points = xis
-
-        vals = interpolate1d(x, A, points, mode='constant')
-
-        # Find upper neighbours for each interpolation point
-        xi = points[:]
-        idx = numpy.searchsorted(x, xi, side='left')
-
-        # Get the neighbours for each interpolation point
-        x0 = x[idx - 1]
-        x1 = x[idx]
-
-        z0 = A[idx - 1]
-        z1 = A[idx]
-
-        # Location coefficients
-        alpha = (xi - x0) / (x1 - x0)
-
-        refs = numpy.zeros(len(vals))
-        for i in range(len(refs)):
-            if alpha[i] < 0.5:
-                refs[i] = z0[i]
-
-            if alpha[i] >= 0.5:
-                refs[i] = z1[i]
 
         assert numpy.allclose(vals, refs, rtol=1e-12, atol=1e-12)
 
