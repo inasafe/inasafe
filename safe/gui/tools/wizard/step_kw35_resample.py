@@ -1,17 +1,5 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool by AusAid -**InaSAFE Wizard**
-
-This module provides: Keyword Wizard Step: Allow Resample
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
+"""InaSAFE Wizard Step for Set Allow Resampling Value"""
 
 from safe.definitionsv4.layer_purposes import layer_purpose_exposure
 from safe.gui.tools.wizard.wizard_step import WizardStep
@@ -45,10 +33,10 @@ class StepKwResample(WizardStep, FORM_CLASS):
         :returns: The step to be switched to
         :rtype: WizardStep instance or None
         """
-        new_step = self.parent.step_kw_source
+        new_step = self.parent.step_kw_inasafe_raster_default_values
         return new_step
 
-    def selected_allowresampling(self):
+    def selected_allow_resampling(self):
         """Obtain the allow_resampling state selected by user.
 
         .. note:: Returns none if not set or not relevant

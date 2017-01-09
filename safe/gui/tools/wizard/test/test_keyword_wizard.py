@@ -1782,6 +1782,12 @@ class TestKeywordWizard(unittest.TestCase):
         # Check Allow Resample
         dialog.step_kw_resample.chkAllowResample.setChecked(True)
 
+        # Click next to InaSAFE Raster Default Values step
+        dialog.pbnNext.click()
+
+        # Check if in InaSAFE Raster Default Values step
+        self.check_current_step(dialog.step_kw_inasafe_raster_default_values)
+
         # Click next to source step
         dialog.pbnNext.click()
 
