@@ -27,7 +27,7 @@ from safe.definitionsv4.constants import (
 from safe.common.signals import send_static_message, send_error_message
 from safe.gui.widgets.message import enable_messaging
 from safe.utilities.qt import enable_busy_cursor, disable_busy_cursor
-from safe.impact_function_v4.impact_function import ImpactFunction
+from safe.impact_function.impact_function import ImpactFunction
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.analysis_utilities import (

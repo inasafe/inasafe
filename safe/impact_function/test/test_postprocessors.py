@@ -30,7 +30,7 @@ from safe.definitionsv4.post_processors import (
     dynamic_field_input_type,
     needs_profile_input_type)
 from safe.test.utilities import load_test_vector_layer
-from safe.impact_function_v4.postprocessors import (
+from safe.impact_function.postprocessors import (
     run_single_post_processor,
     evaluate_formula,
     enough_input

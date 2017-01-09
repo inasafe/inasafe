@@ -42,7 +42,7 @@ from safe.utilities.styling import (
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.common.exceptions import ZeroImpactException, TranslationLoadError
-from safe.impact_function_v4.impact_function import ImpactFunction
+from safe.impact_function.impact_function import ImpactFunction
 from safe.storage.core import read_layer, read_qgis_layer
 from safe.utilities.keyword_io import KeywordIO
 from safe.common.utilities import format_int

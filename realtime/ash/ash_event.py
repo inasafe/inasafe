@@ -27,7 +27,7 @@ from realtime.utilities import realtime_logger_name
 from safe.common.exceptions import ZeroImpactException, KeywordNotFoundError
 from safe.common.utilities import format_int
 from safe.utilities.rounding import population_rounding
-from safe.impact_function_v4.impact_function import ImpactFunction
+from safe.impact_function.impact_function import ImpactFunction
 from safe.test.utilities import get_qgis_app
 from safe.utilities.clipper import clip_layer
 from safe.utilities.gis import get_wgs84_resolution

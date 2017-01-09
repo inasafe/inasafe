@@ -80,11 +80,11 @@ from safe.common.exceptions import (
     NoKeywordsFoundError,
     NoFeaturesInExtentError,
 )
-from safe.impact_function_v4.postprocessors import (
+from safe.impact_function.postprocessors import (
     run_single_post_processor, enough_input)
-from safe.impact_function_v4.create_extra_layers import (
+from safe.impact_function.create_extra_layers import (
     create_analysis_layer, create_virtual_aggregation, create_profile_layer)
-from safe.impact_function_v4.style import (
+from safe.impact_function.style import (
     hazard_class_style,
     simple_polygon_without_brush,
 )
