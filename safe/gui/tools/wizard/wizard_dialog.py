@@ -76,6 +76,9 @@ from step_kw40_classify import StepKwClassify
 from step_kw43_threshold import StepKwThreshold
 from step_kw45_inasafe_fields import StepKwInaSAFEFields
 from step_kw47_default_inasafe_fields import StepKwDefaultInaSAFEFields
+from step_kw49_inasafe_raster_default_values import (
+    StepKwInaSAFERasterDefaultValues
+)
 from step_kw55_source import StepKwSource
 from step_kw60_title import StepKwTitle
 from step_kw65_summary import StepKwSummary
@@ -158,6 +161,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.step_kw_threshold = StepKwThreshold(self)
         self.step_kw_inasafe_fields = StepKwInaSAFEFields(self)
         self.step_kw_default_inasafe_fields = StepKwDefaultInaSAFEFields(self)
+        self.step_kw_inasafe_raster_default_values = \
+            StepKwInaSAFERasterDefaultValues(self)
         self.step_kw_source = StepKwSource(self)
         self.step_kw_title = StepKwTitle(self)
         self.step_kw_summary = StepKwSummary(self)
@@ -192,6 +197,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.stackedWidget.addWidget(self.step_kw_threshold)
         self.stackedWidget.addWidget(self.step_kw_inasafe_fields)
         self.stackedWidget.addWidget(self.step_kw_default_inasafe_fields)
+        self.stackedWidget.addWidget(
+            self.step_kw_inasafe_raster_default_values)
         self.stackedWidget.addWidget(self.step_kw_source)
         self.stackedWidget.addWidget(self.step_kw_title)
         self.stackedWidget.addWidget(self.step_kw_summary)
@@ -720,9 +727,9 @@ class WizardDialog(QDialog, FORM_CLASS):
             else:
                 key = exposure_unit['key']
             keywords[key] = self.step_kw_unit.selected_unit()['key']
-        if self.step_kw_resample.selected_allowresampling() is not None:
+        if self.step_kw_resample.selected_allow_resampling() is not None:
             keywords['allow_resampling'] = (
-                self.step_kw_resample.selected_allowresampling() and
+                self.step_kw_resample.selected_allow_resampling() and
                 'true' or 'false')
         if self.step_kw_field.lstFields.currentItem():
             field_key = self.field_keyword_for_the_layer()
