@@ -46,7 +46,7 @@ from PyQt4.QtGui import (
 
 from safe.definitionsv4.constants import ANALYSIS_SUCCESS
 from safe.gui.tools.batch import scenario_runner
-from safe.utilities.gis import extent_string_to_array, read_impact_layer
+from safe.utilities.gis import extent_string_to_array
 from safe.report.impact_report import ImpactReport
 from safe.common.exceptions import FileNotFoundError
 from safe.common.utilities import temp_dir

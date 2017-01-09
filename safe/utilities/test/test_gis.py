@@ -5,12 +5,10 @@ import numpy
 
 # noinspection PyUnresolvedReferences
 import qgis  # pylint: disable=unused-import
-from PyQt4.QtCore import QVariant
 from os.path import join
 from qgis.core import QgsRectangle
 
 from safe.utilities.gis import (
-    layer_attribute_names,
     is_polygon_layer,
     wkt_to_rectangle,
     validate_geo_array)
@@ -29,53 +27,6 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 
 class TestQGIS(unittest.TestCase):
-    def test_get_layer_attribute_names(self):
-        """Test we can get the correct attributes back"""
-        layer = load_test_vector_layer(
-            'aggregation',
-            'district_osm_jakarta.geojson',
-            clone=True
-        )
-
-        # with good attribute name
-        attributes, position = layer_attribute_names(
-            layer,
-            [QVariant.Int, QVariant.String],
-            'TEST_STR')
-        expected_attributes = ['KAB_NAME', 'TEST_STR', 'TEST_INT']
-        expected_position = 1
-        message = 'expected_attributes, got %s, expected %s' % (
-            attributes, expected_attributes)
-        self.assertEqual(attributes, expected_attributes, message)
-        message = 'expected_position, got %s, expected %s' % (
-            position, expected_position)
-        self.assertEqual(position, expected_position, message)
-
-        # with non existing attribute name
-        attributes, position = layer_attribute_names(
-            layer,
-            [QVariant.Int, QVariant.String],
-            'MISSING_ATTR')
-        expected_attributes = ['KAB_NAME', 'TEST_STR', 'TEST_INT']
-        expected_position = None
-        message = 'expected_attributes, got %s, expected %s' % (
-            attributes, expected_attributes)
-        self.assertEqual(attributes, expected_attributes, message)
-        message = 'expected_position, got %s, expected %s' % (
-            position, expected_position)
-        self.assertEqual(position, expected_position, message)
-
-        # with raster layer
-        layer = clone_raster_layer(
-            name='padang_tsunami_mw8',
-            extension='.tif',
-            include_keywords=True,
-            source_directory=standard_data_path('hazard')
-        )
-        attributes, position = layer_attribute_names(layer, [], '')
-        message = 'Should return None, None for raster layer, got %s, %s' % (
-            attributes, position)
-        assert (attributes is None and position is None), message
 
     def test_is_polygonal_layer(self):
         """Test we can get the correct attributes back"""
