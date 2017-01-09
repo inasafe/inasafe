@@ -416,6 +416,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         :type destination: str
         """
 
+        enable_busy_cursor()
+
         auxiliary_files = ['xml', 'json']
 
         for auxiliary_file in auxiliary_files:
@@ -781,10 +783,15 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
     def accept(self):
         """Execute analysis when run button is clicked."""
-        self.show_busy()
-
         # Start the analysis
         self.impact_function = self.validate_impact_function()
+        if not self.impact_function:
+            # This should not happen as the "accept" button should disabled if
+            # the impact function is not ready.
+            LOGGER.info(tr('The impact function should not have been ready.'))
+            return
+
+        self.show_busy()
         self.impact_function.callback = self.progress_callback
         self.impact_function.debug_mode = self.debug_mode.isChecked()
         status, message = self.impact_function.run()
@@ -862,6 +869,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.get_exposure_layer().crs())
 
         self.hide_busy()
+        self.impact_function = None
         return ANALYSIS_SUCCESS, None
 
     def show_help(self):
@@ -1212,14 +1220,20 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         .. versionadded:: 4.0
         """
-        # First, we need to check if the question area is correct.
+        LOGGER.info(tr('Checking the state of the impact function.'))
+
+        # First, we check if the dock is not busy.
+        if self.busy:
+            return False, None
+
+        # Then, we need to check if the question area is correct.
         flag, message = self._validate_question_area()
         if not flag:
             send_static_message(self, message)
             self.run_button.setEnabled(False)
             return None
 
-        # Then, we need to check if an IF can run.
+        # Finally, we need to check if an IF can run.
         impact_function = ImpactFunction()
         impact_function.hazard = self.get_hazard_layer()
         impact_function.exposure = self.get_exposure_layer()
@@ -1268,6 +1282,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 self.get_exposure_layer().crs())
 
             self.run_button.setEnabled(True)
+            LOGGER.info('The impact function is ready.')
             return impact_function
 
         elif status == PREPARE_FAILED_INSUFFICIENT_OVERLAP:
@@ -1315,9 +1330,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
             flag,message = self._validate_question_area()
         """
-        if self.busy:
-            return False, None
-
         hazard_index = self.hazard_layer_combo.currentIndex()
         exposure_index = self.exposure_layer_combo.currentIndex()
         if hazard_index == -1 or exposure_index == -1:
