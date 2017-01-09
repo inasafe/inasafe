@@ -5,10 +5,10 @@
 import logging
 from PyQt4.QtGui import QWidget
 
-from safe.common.parameters.default_select_parameter import (
-    DefaultSelectParameter)
-from safe.common.parameters.default_select_parameter_widget import (
-    DefaultSelectParameterWidget)
+from safe.common.parameters.default_value_parameter import (
+    DefaultValueParameter)
+from safe.common.parameters.default_value_parameter_widget import (
+    DefaultValueParameterWidget)
 from safe_extras.parameters.qt_widgets.parameter_container import (
     ParameterContainer)
 
@@ -43,12 +43,12 @@ class StepKwInaSAFERasterDefaultValues(WizardStep, FORM_CLASS):
         WizardStep.__init__(self, parent)
 
         self.extra_parameters = [
-            (DefaultSelectParameter, DefaultSelectParameterWidget)
+            (DefaultValueParameter, DefaultValueParameterWidget)
         ]
         self.parameters = []
         self.parameter_container = ParameterContainer(
             extra_parameters=self.extra_parameters)
-        self.kwExtraKeywordsGridLayout.addWidget(self.parameter_container)
+        self.default_values_grid.addWidget(self.parameter_container)
 
     def is_ready_to_next_step(self):
         """Check if the step is complete. If so, there is
@@ -74,9 +74,6 @@ class StepKwInaSAFERasterDefaultValues(WizardStep, FORM_CLASS):
         :returns: A list where each value represents inasafe field.
         :rtype: list
         """
-        if (self.parent.get_layer_geometry_key() ==
-                layer_geometry_raster['key']):
-            return []
         # Get hazard or exposure value
         layer_purpose_key = self.parent.step_kw_purpose.selected_purpose()[
             'key']
@@ -105,7 +102,7 @@ class StepKwInaSAFERasterDefaultValues(WizardStep, FORM_CLASS):
             'inasafe_default_values')
         # Remove old container and parameter
         if self.parameter_container:
-            self.kwExtraKeywordsGridLayout.removeWidget(
+            self.default_values_grid.removeWidget(
                 self.parameter_container)
         if self.parameters:
             self.parameters = []
@@ -116,40 +113,18 @@ class StepKwInaSAFERasterDefaultValues(WizardStep, FORM_CLASS):
         # existing_inasafe_default_values
 
         for inasafe_field in self.inasafe_fields_for_the_layer():
-            # Option for Not Available
-            option_list = [no_field]
-            for field in layer_data_provider.fields():
-                # Check the field type
-                if isinstance(inasafe_field['type'], list):
-                    if field.type() in inasafe_field['type']:
-                        field_name = field.name()
-                        option_list.append('%s' % field_name)
-                else:
-                    if field.type() == inasafe_field['type']:
-                        field_name = field.name()
-                        option_list.append('%s' % field_name)
-
             # Create DefaultSelectParameter
-            parameter = DefaultSelectParameter()
+            parameter = DefaultValueParameter()
             parameter.guid = inasafe_field['key']
             parameter.name = inasafe_field['name']
             parameter.is_required = False
             parameter.help_text = inasafe_field['description']
             parameter.description = inasafe_field['description']
             parameter.element_type = unicode
-            parameter.options_list = option_list
-            parameter.value = no_field
             parameter.default_labels = get_inasafe_default_value_fields(
                 self.parent.setting, inasafe_field['key'])[0]
             parameter.default_values = get_inasafe_default_value_fields(
                 self.parent.setting, inasafe_field['key'])[1]
-            # Check if there is already value in the metadata.
-            if existing_inasafe_field:
-                existing_value = existing_inasafe_field.get(
-                    inasafe_field['key'])
-                if existing_value:
-                    if existing_value in parameter.options_list:
-                        parameter.value = existing_value
 
             if existing_inasafe_default_values:
                 existing_default_value = existing_inasafe_default_values.get(
@@ -158,12 +133,13 @@ class StepKwInaSAFERasterDefaultValues(WizardStep, FORM_CLASS):
                     parameter.default = existing_default_value
 
             self.parameters.append(parameter)
+            LOGGER.debug(parameter)
 
         # Create the parameter container and add to the wizard.
         self.parameter_container = ParameterContainer(
             self.parameters, extra_parameters=self.extra_parameters)
         self.parameter_container.setup_ui()
-        self.kwExtraKeywordsGridLayout.addWidget(self.parameter_container)
+        self.default_values_grid.addWidget(self.parameter_container)
 
         # Set default value to None
         for parameter_widget in self.parameter_container.\
@@ -174,7 +150,7 @@ class StepKwInaSAFERasterDefaultValues(WizardStep, FORM_CLASS):
             for guid, default in existing_inasafe_default_values.items():
                 parameter_widget = self.parameter_container.\
                     get_parameter_widget_by_guid(guid)
-                if isinstance(parameter_widget, DefaultSelectParameterWidget):
+                if isinstance(parameter_widget, DefaultValueParameterWidget):
                     parameter_widget.set_default(default)
 
     def get_inasafe_fields(self):
