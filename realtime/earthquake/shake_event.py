@@ -68,7 +68,7 @@ from PyQt4.QtGui import (
 from safe.test.utilities import get_qgis_app
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe.impact_function_v4.impact_function import ImpactFunction
+from safe.impact_function.impact_function import ImpactFunction
 from safe.storage.core import read_layer as safe_read_layer
 from safe.common.version import get_version
 from safe.common.utilities import romanise

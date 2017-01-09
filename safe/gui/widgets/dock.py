@@ -67,8 +67,8 @@ from safe.common.exceptions import (
     UnsupportedProviderError,
     MetadataReadError,
 )
-from safe.impact_function_v4.impact_function import ImpactFunction
-from safe.impact_function_v4.style import hazard_class_style
+from safe.impact_function.impact_function import ImpactFunction
+from safe.impact_function.style import hazard_class_style
 from safe.gui.tools.about_dialog import AboutDialog
 from safe.gui.tools.help_dialog import HelpDialog
 from safe.gui.widgets.message import (
