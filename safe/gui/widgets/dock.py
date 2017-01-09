@@ -69,7 +69,6 @@ from safe.common.exceptions import (
 )
 from safe.impact_function_v4.impact_function import ImpactFunction
 from safe.impact_function_v4.style import hazard_class_style
-from safe.report.impact_report import ImpactReport
 from safe.gui.tools.about_dialog import AboutDialog
 from safe.gui.tools.help_dialog import HelpDialog
 from safe.gui.widgets.message import (
@@ -1111,33 +1110,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # noinspection PyCallByClass,PyTypeChecker,PyTypeChecker
         QtGui.QDesktopServices.openUrl(
             QtCore.QUrl.fromLocalFile(map_pdf_path))
-
-    def open_map_in_composer(self, impact_report):
-        """Open map in composer given MapReport instance.
-
-        ..note:: (AG) See https://github.com/AIFDR/inasafe/issues/911. We
-            need to set the composition to the composer before loading the
-            template.
-
-        :param impact_report: Impact Report to be opened in composer.
-        :type impact_report: ImpactReport
-        """
-        impact_report.setup_composition()
-        self.composer = self.iface.createNewComposer()
-        self.composer.setComposition(impact_report.composition)
-        impact_report.load_template()
-        impact_report.draw_composition()
-
-        # Fit In View
-        number_pages = impact_report.composition.numPages()
-        paper_height = impact_report.composition.paperHeight()
-        paper_width = impact_report.composition.paperWidth()
-        space_between_pages = impact_report.composition.spaceBetweenPages()
-        if number_pages > 0:
-            height = (paper_height * number_pages) + (
-                space_between_pages * (number_pages - 1))
-            self.composer.fitInView(
-                0, 0, paper_width + 1, height + 1, QtCore.Qt.KeepAspectRatio)
 
     @pyqtSlot('QgsRectangle', 'QgsCoordinateReferenceSystem')
     def define_user_analysis_extent(self, extent, crs):

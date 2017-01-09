@@ -34,7 +34,6 @@ from safe.test.utilities import get_qgis_app
 # make sure this line executes first
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe.report.impact_report import ImpactReport
 from safe.utilities.gis import qgis_version, validate_geo_array
 from safe.utilities.osm_downloader import download
 
@@ -305,17 +304,18 @@ def build_report(cli_arguments):
         layer_registry.addMapLayers(extra_layers)
         CANVAS.setExtent(impact_layer.extent())
         CANVAS.refresh()
-        report = ImpactReport(
-            IFACE, cli_arguments.report_template, impact_layer,
-            extra_layers=extra_layers)
-        report.extent = CANVAS.fullExtent()
-        LOGGER.debug(os.path.splitext(cli_arguments.output_file)[0] + '.pdf')
-        map_path = report.print_map_to_pdf(
-            os.path.splitext(cli_arguments.output_file)[0] + '.pdf')
-        print "Impact Map : " + map_path
-        table_path = report.print_impact_table(
-            os.path.splitext(cli_arguments.output_file)[0] + '_table.pdf')
-        print "Impact Summary Table : " + table_path
+        # FIXME : To make it work with InaSAFE V4.
+        # report = ImpactReport(
+        #     IFACE, cli_arguments.report_template, impact_layer,
+        #     extra_layers=extra_layers)
+        # report.extent = CANVAS.fullExtent()
+        # LOGGER.debug(os.path.splitext(cli_arguments.output_file)[0] + '.pdf')
+        # map_path = report.print_map_to_pdf(
+        #     os.path.splitext(cli_arguments.output_file)[0] + '.pdf')
+        # print "Impact Map : " + map_path
+        # table_path = report.print_impact_table(
+        #     os.path.splitext(cli_arguments.output_file)[0] + '_table.pdf')
+        # print "Impact Summary Table : " + table_path
         layer_registry.removeAllMapLayers()
 
     except Exception as exception:

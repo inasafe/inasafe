@@ -47,7 +47,6 @@ from PyQt4.QtGui import (
 from safe.definitionsv4.constants import ANALYSIS_SUCCESS
 from safe.gui.tools.batch import scenario_runner
 from safe.utilities.gis import extent_string_to_array
-from safe.report.impact_report import ImpactReport
 from safe.common.exceptions import FileNotFoundError
 from safe.common.utilities import temp_dir
 from safe.utilities.resources import (
@@ -631,19 +630,8 @@ class BatchDialog(QDialog, FORM_CLASS):
         See also:
             Dock.printMap()
         """
-        # FIXME: check if impact_layer is the real impact layer...
-        template = resources_path(
-            'qgis-composer-templates', 'a4-portrait-blue.qpt')
-        impact_report = ImpactReport(self.iface, template, impact_layer)
-
-        LOGGER.debug('Create Report: %s' % title)
-        map_path, table_path = self.report_path(
-            output_directory, title, count, index)
-
-        # create map and table pdf
-        map_path, table_path = impact_report.print_to_pdf(map_path)
-
-        LOGGER.debug("Report done %s %s" % (map_path, table_path))
+        # FIXME: To do with InaSAFE V4
+        LOGGER.debug('Not working yet with InaSAFE V4')
 
     def show_parser_results(self, parsed_list, unparsed_list):
         """Compile a formatted list of un/successfully parsed files.
