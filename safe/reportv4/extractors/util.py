@@ -4,7 +4,7 @@ import os
 from jinja2.exceptions import TemplateError
 
 from safe.definitionsv4.utilities import definition
-from safe.impact_functions.core import population_rounding
+from safe.utilities.rounding import population_rounding
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

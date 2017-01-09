@@ -14,9 +14,9 @@ Contact : ole.moller.nielsen@gmail.com
 import safe.messaging as m
 from safe.messaging import styles
 from safe.utilities.utilities import tr
+from safe.utilities.rounding import population_rounding
 from safe.common.utilities import format_int
 from safe.impact_template.generic_report_template import GenericReportTemplate
-from safe.impact_functions.core import population_rounding
 
 __author__ = 'ismailsunni'
 __project_name__ = 'inasafe-dev'

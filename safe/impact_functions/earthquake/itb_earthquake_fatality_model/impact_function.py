@@ -18,8 +18,7 @@ from safe.impact_functions.bases.continuous_rh_continuous_re import \
     ContinuousRHContinuousRE
 from safe.impact_functions.earthquake.itb_earthquake_fatality_model\
     .metadata_definitions import ITBFatalityMetadata
-from safe.impact_functions.core import (
-    population_rounding)
+from safe.utilities.rounding import population_rounding
 from safe.storage.raster import Raster
 from safe.common.utilities import (
     humanize_class,
