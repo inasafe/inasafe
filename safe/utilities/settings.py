@@ -31,10 +31,29 @@ def setting(key, default=None, expected_type=None, qsettings=None):
         use the default one.
     :type qsettings: qgis.PyQt.QtCore.QSettings
     """
+    key = '%s/%s' % (APPLICATION_NAME, key)
+    return general_setting(key, default, expected_type, qsettings)
+
+
+def general_setting(key, default=None, expected_type=None, qsettings=None):
+    """Helper function to get a value from settings.
+
+    :param key: Unique key for setting.
+    :type key: basestring
+
+    :param default: The default value in case of the key is not found or there
+        is an error.
+    :type default: basestring, None, boolean, int, float
+
+    :param expected_type: The type of object expected.
+    :type expected_type: basestring, None, boolean, int, float
+
+    :param qsettings: A custom QSettings to use. If it's not defined, it will
+        use the default one.
+    :type qsettings: qgis.PyQt.QtCore.QSettings
+    """
     if not qsettings:
         qsettings = QSettings()
-
-    key = '%s/%s' % (APPLICATION_NAME, key)
 
     if default and expected_type:
         if not isinstance(default, expected_type):
@@ -58,6 +77,26 @@ def setting(key, default=None, expected_type=None, qsettings=None):
         return value
 
 
+def set_general_setting(key, value, qsettings=None):
+    """Set value to QSettings based on key.
+
+    :param key: Unique key for setting.
+    :type key: basestring
+
+    :param value: Value to be saved.
+    :type value: QVariant
+
+    :param qsettings: A custom QSettings to use. If it's not defined, it will
+        use the default one.
+    :type qsettings: qgis.PyQt.QtCore.QSettings
+    """
+    if not qsettings:
+        qsettings = QSettings()
+
+    key = '%s/%s' % (APPLICATION_NAME, key)
+    qsettings.setValue(key, value)
+
+
 def set_setting(key, value, qsettings=None):
     """Set value to QSettings based on key.
 
@@ -76,6 +115,16 @@ def set_setting(key, value, qsettings=None):
 
     key = '%s/%s' % (APPLICATION_NAME, key)
     qsettings.setValue(key, value)
+
+
+def delete_setting(key):
+    """ Delete setting from QSettings.
+
+    :param key: unique key for setting.
+    :type key: basestring
+    """
+    settings = QSettings()
+    settings.remove('%s/%s' % (APPLICATION_NAME, key))
 
 
 def set_inasafe_default_value_qsetting(

@@ -95,7 +95,7 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
         self.tool = RectangleMapTool(self.canvas)
         self.previous_map_tool = self.canvas.mapTool()
 
-        if extent is None and crs is None:
+        if extent is None:
             # Use the current map canvas extents as a starting point
             self.tool.set_rectangle(self.canvas.extent())
         else:
@@ -107,8 +107,7 @@ class ExtentSelectorDialog(QDialog, FORM_CLASS):
 
             # Ensure supplied extent is in current canvas crs
             transform = QgsCoordinateTransform(
-                crs,
-                self.canvas.mapRenderer().destinationCrs())
+                crs, self.canvas.mapRenderer().destinationCrs())
             transformed_extent = transform.transformBoundingBox(extent)
             self.tool.set_rectangle(transformed_extent)
 

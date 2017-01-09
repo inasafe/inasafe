@@ -1202,7 +1202,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         """Helper method to evaluate the current state of the impact function.
 
         This function will determine if it is appropriate for the OK button to
-        be enabled or not.
+        be enabled or not. Only this function is able to change the status of
+        the button.
 
         This function will return a ready to run impact function or None if it
         is not ready.
@@ -1267,7 +1268,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 self.get_exposure_layer().crs())
 
             self.run_button.setEnabled(True)
-            return self.impact_function
+            return impact_function
 
         elif status == PREPARE_FAILED_INSUFFICIENT_OVERLAP:
             self.extent.clear_next_analysis_extent()
