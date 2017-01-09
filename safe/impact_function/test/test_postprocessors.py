@@ -44,10 +44,13 @@ __revision__ = '$Format:%H$'
 
 
 class TestPostProcessors(unittest.TestCase):
+
     """Test Post Processors."""
 
     class FakeMonkeyPatch(object):
+
         """Patch class for testings."""
+
         pass
 
     def test_gender_post_processor(self):
