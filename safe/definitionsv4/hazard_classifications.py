@@ -466,8 +466,8 @@ cyclone_au_bom_hazard_classes = {
                     '#Australia_and_Fiji'
         }
     ],
-    'multiple_units': [unit_miles_per_hour, unit_kilometres_per_hour,
-                       unit_knots],
+    'multiple_units': [
+        unit_miles_per_hour, unit_kilometres_per_hour, unit_knots],
     'classes': [
         {
             'key': 'category_5',
@@ -675,8 +675,8 @@ cyclone_sshws_hazard_classes = {
                 'https://en.wikipedia.org/wiki/Saffir%E2%80%93Simpson_scale'
         }
     ],
-    'multiple_units': [unit_miles_per_hour, unit_kilometres_per_hour,
-                       unit_knots],
+    'multiple_units': [
+        unit_miles_per_hour, unit_kilometres_per_hour, unit_knots],
     'classes': [
         {
             'key': 'category_5',
