@@ -10,9 +10,11 @@ __revision__ = '$Format:%H$'
 
 
 class DefaultValueParameter(GenericParameter):
+
     """Parameter that represent a selection of default value."""
 
     def __init__(self, guid=None):
+
         """Constructor.
 
         :param guid: Optional unique identifier for this parameter.
@@ -27,14 +29,13 @@ class DefaultValueParameter(GenericParameter):
         self.element_type = object
 
         # Store for labels
-        # Store for labels
         self._labels = None
         # Store option
         self._options = None
 
     @property
     def labels(self):
-        """Property for default_labels"""
+        """Property for labels."""
         return self._labels
 
     @labels.setter
@@ -48,7 +49,7 @@ class DefaultValueParameter(GenericParameter):
 
     @property
     def options(self):
-        """Property for options"""
+        """Property for options."""
         return self._options
 
     @options.setter
@@ -62,7 +63,7 @@ class DefaultValueParameter(GenericParameter):
 
     @property
     def value(self):
-        """Property for default_value"""
+        """Property for default_value."""
         return self._value
 
     @value.setter

@@ -1,5 +1,5 @@
 # coding=utf-8
-"""InaSAFE Wizard Analysis Summary step"""
+"""InaSAFE Wizard Analysis Summary step."""
 
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class

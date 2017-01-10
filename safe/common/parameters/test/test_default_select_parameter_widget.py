@@ -4,14 +4,14 @@
 
 import unittest
 
-from safe.test.utilities import get_qgis_app
-
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from safe.common.parameters.default_select_parameter import (
     DefaultSelectParameter)
 from safe.common.parameters.default_select_parameter_widget import (
     DefaultSelectParameterWidget)
 
+from safe.test.utilities import get_qgis_app
+
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -20,8 +20,11 @@ __revision__ = '$Format:%H$'
 
 
 class TestDefaultSelectParameterWidget(unittest.TestCase):
-    """Test for DefaultSelectParameterWidget"""
+
+    """Test for DefaultSelectParameterWidget."""
+
     def test_init(self):
+        """Test init."""
         default_select_parameter = DefaultSelectParameter()
         default_select_parameter.name = 'Default Select Affected Field'
         default_select_parameter.is_required = True

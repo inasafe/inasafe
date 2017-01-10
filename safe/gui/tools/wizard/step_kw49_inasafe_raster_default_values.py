@@ -1,9 +1,8 @@
 # coding=utf-8
-"""InaSAFE Wizard Step for Assigning Default Values for Raster"""
+"""InaSAFE Wizard Step for Assigning Default Values for Raster."""
 
 # noinspection PyPackageRequirements
 import logging
-from PyQt4.QtGui import QWidget
 
 from safe.common.parameters.default_value_parameter import (
     DefaultValueParameter)
@@ -14,8 +13,6 @@ from safe_extras.parameters.qt_widgets.parameter_container import (
 
 from safe.definitionsv4.layer_purposes import (layer_purpose_aggregation)
 from safe.definitionsv4.utilities import get_fields, get_compulsory_fields
-from safe.definitionsv4.layer_geometry import layer_geometry_raster
-from safe.definitionsv4.constants import no_field
 from safe.gui.tools.wizard.wizard_utils import get_inasafe_default_value_fields
 
 from safe.gui.tools.wizard.wizard_step import (
@@ -31,14 +28,14 @@ LOGGER = logging.getLogger('InaSAFE')
 
 
 class StepKwInaSAFERasterDefaultValues(WizardStep, FORM_CLASS):
-    """Keyword Wizard Step: InaSAFE Raster Default Values"""
+
+    """Keyword Wizard Step: InaSAFE Raster Default Values."""
 
     def __init__(self, parent=None):
         """Constructor for the tab.
 
         :param parent: parent - widget to use as parent (Wizard Dialog).
         :type parent: QWidget
-
         """
         WizardStep.__init__(self, parent)
 
@@ -51,8 +48,9 @@ class StepKwInaSAFERasterDefaultValues(WizardStep, FORM_CLASS):
         self.default_values_grid.addWidget(self.parameter_container)
 
     def is_ready_to_next_step(self):
-        """Check if the step is complete. If so, there is
-            no reason to block the Next button.
+        """Check if the step is complete.
+
+        If so, there is no reason to block the Next button.
 
         :returns: True if new step may be enabled.
         :rtype: bool

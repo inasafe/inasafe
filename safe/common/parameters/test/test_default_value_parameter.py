@@ -16,10 +16,11 @@ options = [0.1, None]
 
 
 class TestDefaultValueParameter(TestCase):
+
     """Test For Default Value Parameter."""
 
     def setUp(self):
-
+        """Set up common object for testing."""
         self.parameter = DefaultValueParameter()
 
         self.parameter.labels = labels

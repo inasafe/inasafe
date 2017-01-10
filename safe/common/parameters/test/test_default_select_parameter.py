@@ -20,10 +20,11 @@ default_values = [0.1, None]
 
 
 class TestDefaultSelectParameter(TestCase):
+
     """Test For Default Select Parameter."""
 
     def setUp(self):
-
+        """Setup common thing for test."""
         self.parameter = DefaultSelectParameter()
 
         self.parameter.options_list = options
@@ -31,6 +32,7 @@ class TestDefaultSelectParameter(TestCase):
         self.parameter.default_values = default_values
 
     def test_set_value(self):
+        """Test set value."""
         self.parameter.value = selected
         self.assertEqual(selected, self.parameter.value)
         with self.assertRaises(ValueNotAllowedException):
