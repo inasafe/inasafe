@@ -88,7 +88,6 @@ def content():
     message.add(header)
     message.add(definition_to_message(exposures))
 
-
     ##
     #  Defaults
     ##
@@ -124,7 +123,6 @@ def content():
     # ))
     # message.add(paragraph)
     return message
-
 
 
 def definition_to_message(definition, heading_style=None):
