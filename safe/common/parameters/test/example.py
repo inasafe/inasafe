@@ -6,8 +6,7 @@ from safe.test.utilities import get_qgis_app
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from PyQt4.QtGui import (
-    QApplication, QWidget, QGridLayout, QPushButton, QMessageBox)
+from PyQt4.QtGui import QApplication, QWidget, QGridLayout
 
 from safe_extras.parameters.qt_widgets.parameter_container import (
     ParameterContainer)
@@ -25,6 +24,7 @@ __revision__ = '$Format:%H$'
 
 
 def main():
+    """Main function to run the example."""
     app = QApplication([])
 
     default_value_parameter = DefaultValueParameter()

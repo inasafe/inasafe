@@ -1,5 +1,5 @@
 # coding=utf-8
-"""InaSAFE Wizard Step for Set Allow Resampling Value"""
+"""InaSAFE Wizard Step for Set Allow Resampling Value."""
 
 from safe.definitionsv4.layer_purposes import layer_purpose_exposure
 from safe.gui.tools.wizard.wizard_step import WizardStep

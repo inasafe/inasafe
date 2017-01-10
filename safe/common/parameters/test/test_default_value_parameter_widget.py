@@ -4,13 +4,13 @@
 
 import unittest
 
-from safe.test.utilities import get_qgis_app
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from safe.common.parameters.default_value_parameter import (
     DefaultValueParameter)
 from safe.common.parameters.default_value_parameter_widget import (
     DefaultValueParameterWidget)
 
+from safe.test.utilities import get_qgis_app
+QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -19,6 +19,7 @@ __revision__ = '$Format:%H$'
 
 
 class TestDefaultValueParameterWidget(unittest.TestCase):
+
     """Test for DefaultSelectParameterWidget."""
 
     def setUp(self):

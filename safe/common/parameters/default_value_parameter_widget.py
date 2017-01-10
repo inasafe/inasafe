@@ -14,9 +14,11 @@ __revision__ = '$Format:%H$'
 
 
 class DefaultValueParameterWidget(GenericParameterWidget):
+
     """Widget class for Default Value Parameter."""
+
     def __init__(self, parameter, parent=None):
-        """Constructor
+        """Constructor.
 
         :param parameter: A DefaultValueParameter object.
         :type parameter: DefaultValueParameter
@@ -62,6 +64,7 @@ class DefaultValueParameterWidget(GenericParameterWidget):
             self.toggle_custom_value)
 
     def raise_invalid_type_exception(self):
+        """Raise invalid type."""
         message = 'Expecting element type of %s' % (
             self._parameter.element_type.__name__)
         err = ValueError(message)
@@ -72,7 +75,6 @@ class DefaultValueParameterWidget(GenericParameterWidget):
 
         :returns: A DefaultValueParameter from the current state of widget
         :rtype: DefaultValueParameter
-
         """
         radio_button_checked_id = self._input_button_group.checkedId()
         # No radio button checked, then default value = None
@@ -80,10 +82,9 @@ class DefaultValueParameterWidget(GenericParameterWidget):
             self._parameter.value = None
         # The last radio button (custom) is checked, get the value from the
         # line edit
-        elif (radio_button_checked_id ==
-                len(self._parameter.options) - 1):
-            self._parameter.options[radio_button_checked_id] \
-                = self.custom_value.value()
+        elif radio_button_checked_id == len(self._parameter.options) - 1:
+            self._parameter.options[radio_button_checked_id] = \
+                self.custom_value.value()
             self._parameter.value = self.custom_value.value()
         else:
             self._parameter.value = self._parameter.options[
@@ -113,6 +114,7 @@ class DefaultValueParameterWidget(GenericParameterWidget):
         self.toggle_custom_value()
 
     def toggle_custom_value(self):
+        """Enable or disable the custom value line edit."""
         radio_button_checked_id = self._input_button_group.checkedId()
         if (radio_button_checked_id ==
                 len(self._parameter.options) - 1):

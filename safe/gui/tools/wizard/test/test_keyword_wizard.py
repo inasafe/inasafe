@@ -1791,7 +1791,7 @@ class TestKeywordWizard(unittest.TestCase):
 
         parameter_widget = dialog.step_kw_inasafe_raster_default_values\
             .parameter_container.get_parameter_widget_by_guid(
-            female_ratio_field['key'])
+                female_ratio_field['key'])
         new_default_female_ratio = 0.3
         parameter_widget.set_value(new_default_female_ratio)
 
