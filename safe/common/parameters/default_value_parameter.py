@@ -26,58 +26,57 @@ class DefaultValueParameter(GenericParameter):
         self.expected_type = object
         self.element_type = object
 
-        # Store option for default labels
-        self._default_labels = None
-        # Store option for default values
-        self._default_values = None
-        # Store selected default value
-        self._default_value = None
+        # Store for labels
+        # Store for labels
+        self._labels = None
+        # Store option
+        self._options = None
 
     @property
-    def default_labels(self):
+    def labels(self):
         """Property for default_labels"""
-        return self._default_labels
+        return self._labels
 
-    @default_labels.setter
-    def default_labels(self, default_labels):
-        """Setter for default_labels.
+    @labels.setter
+    def labels(self, labels):
+        """Setter for labels.
 
-        :param default_labels: The default_labels values.
-        :type default_labels: list
+        :param labels: The labels values.
+        :type labels: list
         """
-        self._default_labels = default_labels
+        self._labels = labels
 
     @property
-    def default_values(self):
-        """Property for default_values"""
-        return self._default_values
+    def options(self):
+        """Property for options"""
+        return self._options
 
-    @default_values.setter
-    def default_values(self, default_values):
+    @options.setter
+    def options(self, options):
         """Setter for default_values.
 
-        :param default_values: The default values.
-        :type default_values: list
+        :param options: The Options.
+        :type options: list
         """
-        self._default_values = default_values
+        self._options = options
 
     @property
-    def default_value(self):
+    def value(self):
         """Property for default_value"""
-        return self._default_value
+        return self._value
 
-    @default_value.setter
-    def default_value(self, default_value):
-        """Setter for default_value.
+    @value.setter
+    def value(self, value):
+        """Setter for value.
 
-        :param default_value: The default value.
-        :type default_value: object
+        :param value: The value.
+        :type value: object
         """
         # For custom value
-        if default_value not in self.default_values:
-            if len(self.default_labels) == len(self.default_values):
-                self.default_values[-1] = default_value
+        if value not in self.options:
+            if len(self.labels) == len(self.options):
+                self.options[-1] = value
             else:
-                self.default_values.append(default_value)
+                self.options.append(value)
 
-        self._default_value = default_value
+        self._value = value

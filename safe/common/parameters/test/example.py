@@ -28,12 +28,12 @@ def main():
     app = QApplication([])
 
     default_value_parameter = DefaultValueParameter()
-    default_value_parameter.name = 'Default value parameter'
+    default_value_parameter.name = 'Value parameter'
     default_value_parameter.help_text = 'Help text'
     default_value_parameter.description = 'Description'
-    default_value_parameter.default_labels = [
+    default_value_parameter.labels = [
         'Setting', 'Do not use', 'Custom']
-    default_value_parameter.default_values = [0, 1, None]
+    default_value_parameter.options = [0, 1, None]
 
     parameters = [
         default_value_parameter
@@ -50,10 +50,6 @@ def main():
     widget = QWidget()
     layout = QGridLayout()
     layout.addWidget(parameter_container)
-    # layout.addWidget(button)
-    # layout.addWidget(parameter_container2)
-    # layout.addWidget(parameter_container3)
-    # layout.addWidget(validate_button)
 
     widget.setLayout(layout)
     widget.setGeometry(0, 0, 500, 500)

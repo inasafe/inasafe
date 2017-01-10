@@ -11,8 +11,8 @@ __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
-default_labels = ['Setting', 'Do not use', 'Custom']
-default_values = [0.1, None]
+labels = ['Setting', 'Do not use', 'Custom']
+options = [0.1, None]
 
 
 class TestDefaultValueParameter(TestCase):
@@ -22,12 +22,12 @@ class TestDefaultValueParameter(TestCase):
 
         self.parameter = DefaultValueParameter()
 
-        self.parameter.default_labels = default_labels
-        self.parameter.default_values = default_values
+        self.parameter.labels = labels
+        self.parameter.options = options
 
     def test_default_value(self):
         """Test default value."""
-        self.assertEqual(self.parameter.default_labels, default_labels)
-        self.parameter.default_value = 0.2
+        self.assertEqual(self.parameter.labels, labels)
+        self.parameter.value = 0.2
         self.assertEqual(
-            self.parameter.default_values[-1], self.parameter.default_value)
+            self.parameter.options[-1], self.parameter.value)

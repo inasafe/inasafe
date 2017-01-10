@@ -29,10 +29,10 @@ class TestDefaultValueParameterWidget(unittest.TestCase):
         default_value_parameter.description = (
             'Value to be used for affected field.')
         default_value_parameter.element_type = str
-        default_value_parameter.default_labels = [
+        default_value_parameter.labels = [
             'Setting (%s)', 'Do not use', 'Custom']
-        default_value_parameter.default_values = [0.1, None, 0.2]
-        default_value_parameter.default_value = 0.1
+        default_value_parameter.options = [0.1, None, 0.2]
+        default_value_parameter.value = 0.1
 
         widget = DefaultValueParameterWidget(default_value_parameter)
 
@@ -51,41 +51,41 @@ class TestDefaultValueParameterWidget(unittest.TestCase):
         default_value_parameter.description = (
             'Value to be used for affected field.')
         default_value_parameter.element_type = str
-        default_value_parameter.default_labels = [
+        default_value_parameter.labels = [
             'Setting (%s)', 'Do not use', 'Custom']
-        default_value_parameter.default_values = [0.1, None, 0.2]
+        default_value_parameter.options = [0.1, None, 0.2]
         default_value_parameter.default_value = 0.1
 
         widget = DefaultValueParameterWidget(default_value_parameter)
 
         expected = 0.1
-        widget.set_default(expected)
+        widget.set_value(expected)
         real_value = widget.get_parameter().default
         self.assertEqual(expected, real_value)
         self.assertFalse(widget.custom_value.isEnabled())
-        self.assertEqual(widget._default_input_button_group.checkedId(), 0)
+        self.assertEqual(widget._input_button_group.checkedId(), 0)
         self.assertEqual(widget.custom_value.value(), 0.2)
 
         expected = 0.2
-        widget.set_default(expected)
+        widget.set_value(expected)
         real_value = widget.get_parameter().default
         self.assertEqual(expected, real_value)
         self.assertTrue(widget.custom_value.isEnabled())
-        self.assertEqual(widget._default_input_button_group.checkedId(), 2)
+        self.assertEqual(widget._input_button_group.checkedId(), 2)
         self.assertEqual(widget.custom_value.value(), 0.2)
 
         expected = None
-        widget.set_default(expected)
+        widget.set_value(expected)
         real_value = widget.get_parameter().default
         self.assertEqual(expected, real_value)
         self.assertFalse(widget.custom_value.isEnabled())
-        self.assertEqual(widget._default_input_button_group.checkedId(), 1)
+        self.assertEqual(widget._input_button_group.checkedId(), 1)
         self.assertEqual(widget.custom_value.value(), 0.2)
 
         expected = 0.3
-        widget.set_default(expected)
+        widget.set_value(expected)
         real_value = widget.get_parameter().default
         self.assertEqual(expected, real_value)
         self.assertTrue(widget.custom_value.isEnabled())
-        self.assertEqual(widget._default_input_button_group.checkedId(), 2)
+        self.assertEqual(widget._input_button_group.checkedId(), 2)
         self.assertEqual(widget.custom_value.value(), 0.3)
