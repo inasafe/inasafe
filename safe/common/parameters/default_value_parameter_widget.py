@@ -2,8 +2,7 @@
 """Default Value Parameter Widget."""
 
 from PyQt4.QtGui import (
-    QHBoxLayout, QGridLayout, QDoubleSpinBox,
-    QRadioButton, QButtonGroup, QWidget, QLabel)
+    QHBoxLayout, QDoubleSpinBox, QRadioButton, QButtonGroup, QWidget)
 
 from safe_extras.parameters.qt_widgets.generic_parameter_widget import (
     GenericParameterWidget)
@@ -25,14 +24,8 @@ class DefaultValueParameterWidget(GenericParameterWidget):
         """
         super(DefaultValueParameterWidget, self).__init__(parameter, parent)
 
-        self.default_layout = QHBoxLayout()
         self.radio_button_layout = QHBoxLayout()
         self.radio_button_widget = QWidget()
-
-        self._default_label = QLabel('Use default')
-
-        # Add label for default
-        # self.radio_button_layout.addWidget(self._default_label)
 
         # Create radio button group
         self._default_input_button_group = QButtonGroup()
@@ -60,23 +53,7 @@ class DefaultValueParameterWidget(GenericParameterWidget):
 
         self.toggle_custom_value()
 
-        # Reset the layout
-        self._input_layout.setParent(None)
-        self._help_layout.setParent(None)
-
-        self._label.setParent(None)
-        self._inner_input_layout.setParent(None)
-
-        self._input_layout = QGridLayout()
-        self._input_layout.setSpacing(0)
-
-        self._input_layout.addWidget(self._label, 0, 0)
-        self._input_layout.addLayout(self._inner_input_layout, 0, 1)
-        self._input_layout.addWidget(self._default_label, 1, 0)
-        self._input_layout.addLayout(self.radio_button_layout, 1, 1)
-
-        self._main_layout.addLayout(self._input_layout)
-        self._main_layout.addLayout(self._help_layout)
+        self._inner_input_layout.addLayout(self.radio_button_layout)
 
         # Connect
         # noinspection PyUnresolvedReferences
