@@ -86,7 +86,7 @@ class WizardStepBrowser(WizardStep):
         :param path: The layer path from QgsBrowserModel
         :type path: string
 
-        :returns: layer uri
+        :returns: layer uri.
         :rtype: QgsDataSourceURI
         """
 
