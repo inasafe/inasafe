@@ -415,7 +415,12 @@ class KeywordIO(QObject):
             keyword_definition = self.tr(keyword.capitalize().replace(
                 '_', ' '))
         else:
-            keyword_definition = keyword_definition['name']
+            try:
+                keyword_definition = keyword_definition['name']
+            except KeyError:
+                # Handling if name is not exist.
+                keyword_definition = keyword_definition['key'].capitalize()
+                keyword_definition = keyword_definition.replace('_', ' ')
 
         # We deal with some special cases first:
 

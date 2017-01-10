@@ -1,33 +1,18 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool by AusAid -**InaSAFE Wizard**
-
-This module provides: Keyword Wizard Step: Default InaSAFE Fields
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
+"""InaSAFE Wizard Step for Assigning Default Values for Raster."""
 
 # noinspection PyPackageRequirements
 import logging
-from PyQt4.QtGui import QWidget
 
-from safe.common.parameters.default_select_parameter import (
-    DefaultSelectParameter)
-from safe.common.parameters.default_select_parameter_widget import (
-    DefaultSelectParameterWidget)
+from safe.common.parameters.default_value_parameter import (
+    DefaultValueParameter)
+from safe.common.parameters.default_value_parameter_widget import (
+    DefaultValueParameterWidget)
 from safe_extras.parameters.qt_widgets.parameter_container import (
     ParameterContainer)
 
-from safe.definitions.layer_purposes import (layer_purpose_aggregation)
-from safe.definitions.utilities import get_fields, get_compulsory_fields
-from safe.definitions.layer_geometry import layer_geometry_raster
-from safe.definitions.constants import no_field
+from safe.definitionsv4.layer_purposes import (layer_purpose_aggregation)
+from safe.definitionsv4.utilities import get_fields, get_compulsory_fields
 from safe.gui.tools.wizard.wizard_utils import get_inasafe_default_value_fields
 
 from safe.gui.tools.wizard.wizard_step import (
@@ -42,29 +27,30 @@ FORM_CLASS = get_wizard_step_ui_class(__file__)
 LOGGER = logging.getLogger('InaSAFE')
 
 
-class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
-    """Keyword Wizard Step: Default InaSAFE Fields"""
+class StepKwInaSAFERasterDefaultValues(WizardStep, FORM_CLASS):
+
+    """Keyword Wizard Step: InaSAFE Raster Default Values."""
 
     def __init__(self, parent=None):
         """Constructor for the tab.
 
         :param parent: parent - widget to use as parent (Wizard Dialog).
         :type parent: QWidget
-
         """
         WizardStep.__init__(self, parent)
 
         self.extra_parameters = [
-            (DefaultSelectParameter, DefaultSelectParameterWidget)
+            (DefaultValueParameter, DefaultValueParameterWidget)
         ]
         self.parameters = []
         self.parameter_container = ParameterContainer(
             extra_parameters=self.extra_parameters)
-        self.kwExtraKeywordsGridLayout.addWidget(self.parameter_container)
+        self.default_values_grid.addWidget(self.parameter_container)
 
     def is_ready_to_next_step(self):
-        """Check if the step is complete. If so, there is
-            no reason to block the Next button.
+        """Check if the step is complete.
+
+        If so, there is no reason to block the Next button.
 
         :returns: True if new step may be enabled.
         :rtype: bool
@@ -86,9 +72,6 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
         :returns: A list where each value represents inasafe field.
         :rtype: list
         """
-        if (self.parent.get_layer_geometry_key() ==
-                layer_geometry_raster['key']):
-            return []
         # Get hazard or exposure value
         layer_purpose_key = self.parent.step_kw_purpose.selected_purpose()[
             'key']
@@ -111,57 +94,31 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
     # noinspection PyTypeChecker
     def set_widgets(self):
         """Set widgets on the Extra Keywords tab."""
-        existing_inasafe_field = self.parent.get_existing_keyword(
-            'inasafe_fields')
         existing_inasafe_default_values = self.parent.get_existing_keyword(
             'inasafe_default_values')
         # Remove old container and parameter
         if self.parameter_container:
-            self.kwExtraKeywordsGridLayout.removeWidget(
+            self.default_values_grid.removeWidget(
                 self.parameter_container)
         if self.parameters:
             self.parameters = []
-
-        layer_data_provider = self.parent.layer.dataProvider()
 
         # Iterate through all inasafe fields
         # existing_inasafe_default_values
 
         for inasafe_field in self.inasafe_fields_for_the_layer():
-            # Option for Not Available
-            option_list = [no_field]
-            for field in layer_data_provider.fields():
-                # Check the field type
-                if isinstance(inasafe_field['type'], list):
-                    if field.type() in inasafe_field['type']:
-                        field_name = field.name()
-                        option_list.append('%s' % field_name)
-                else:
-                    if field.type() == inasafe_field['type']:
-                        field_name = field.name()
-                        option_list.append('%s' % field_name)
-
             # Create DefaultSelectParameter
-            parameter = DefaultSelectParameter()
+            parameter = DefaultValueParameter()
             parameter.guid = inasafe_field['key']
             parameter.name = inasafe_field['name']
             parameter.is_required = False
-            parameter.help_text = inasafe_field['description']
-            parameter.description = inasafe_field['description']
+            parameter.help_text = inasafe_field['default_value']['description']
+            # parameter.description = inasafe_field['default_value']
             parameter.element_type = unicode
-            parameter.options_list = option_list
-            parameter.value = no_field
-            parameter.default_labels = get_inasafe_default_value_fields(
+            parameter.labels = get_inasafe_default_value_fields(
                 self.parent.setting, inasafe_field['key'])[0]
-            parameter.default_values = get_inasafe_default_value_fields(
+            parameter.options = get_inasafe_default_value_fields(
                 self.parent.setting, inasafe_field['key'])[1]
-            # Check if there is already value in the metadata.
-            if existing_inasafe_field:
-                existing_value = existing_inasafe_field.get(
-                    inasafe_field['key'])
-                if existing_value:
-                    if existing_value in parameter.options_list:
-                        parameter.value = existing_value
 
             if existing_inasafe_default_values:
                 existing_default_value = existing_inasafe_default_values.get(
@@ -175,33 +132,19 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
         self.parameter_container = ParameterContainer(
             self.parameters, extra_parameters=self.extra_parameters)
         self.parameter_container.setup_ui()
-        self.kwExtraKeywordsGridLayout.addWidget(self.parameter_container)
+        self.default_values_grid.addWidget(self.parameter_container)
 
         # Set default value to None
         for parameter_widget in self.parameter_container.\
                 get_parameter_widgets():
-            parameter_widget.widget().set_default(None)
+            parameter_widget.widget().set_value(None)
         # Set default value from existing keywords
         if existing_inasafe_default_values:
             for guid, default in existing_inasafe_default_values.items():
                 parameter_widget = self.parameter_container.\
                     get_parameter_widget_by_guid(guid)
-                if isinstance(parameter_widget, DefaultSelectParameterWidget):
-                    parameter_widget.set_default(default)
-
-    def get_inasafe_fields(self):
-        """Return inasafe fields from the current wizard state.
-
-        :returns: Dictionary of key and value from InaSAFE Fields.
-        :rtype: dict
-        """
-        inasafe_fields = {}
-        parameters = self.parameter_container.get_parameters(True)
-        for parameter in parameters:
-            if not parameter.value == no_field:
-                inasafe_fields[parameter.guid] = parameter.value
-
-        return inasafe_fields
+                if isinstance(parameter_widget, DefaultValueParameterWidget):
+                    parameter_widget.set_value(default)
 
     def get_inasafe_default_values(self):
         """Return inasafe default from the current wizard state.
@@ -212,7 +155,7 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
         inasafe_default_values = {}
         parameters = self.parameter_container.get_parameters(True)
         for parameter in parameters:
-            if parameter.default is not None:
-                inasafe_default_values[parameter.guid] = parameter.default
+            if parameter.value is not None:
+                inasafe_default_values[parameter.guid] = parameter.value
 
         return inasafe_default_values

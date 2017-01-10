@@ -9,7 +9,10 @@ INFO_STYLE = styles.INFO_STYLE
 WARNING_STYLE = styles.WARNING_STYLE
 SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
 
-__author__ = 'timlinux'
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
 
 
 def definitions_help():
@@ -147,7 +150,7 @@ def definition_to_message(definition, heading_style=None):
     message.add(m.HorizontalRule())
     message.add(header)
     message.add(m.Paragraph(definition['description']))
-    # types containses e.g. hazard_all
+    # types contains e.g. hazard_all
     if 'types' in definition:
         for sub_definition in definition['types']:
             message.add(definition_to_message(

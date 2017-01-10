@@ -195,7 +195,7 @@ class TestImpactReport(unittest.TestCase):
             'header': u'Notes and assumptions',
             'items': [
                 u'The impacts on roads, people, buildings and other '
-                u'exposure elements may be under estimated if the exposure '
+                u'exposure elements may be underestimated if the exposure '
                 u'data are incomplete.',
                 u'Numbers reported for structures have not been rounded.'
             ]

@@ -1,22 +1,5 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool developed by AusAid - **About Dialog.**
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-.. todo:: Check raster is single band
-
-"""
-__author__ = 'ismail@kartoza.com'
-__revision__ = '$Format:%H$'
-__date__ = '28/09/2015'
-__copyright__ = ('Copyright 2012, Australia Indonesia Facility for '
-                 'Disaster Reduction')
+"""Help Dialog."""
 
 # This import is to enable SIP API V2
 # noinspection PyUnresolvedReferences
@@ -29,6 +12,11 @@ from safe.gui.tools.help.dock_help import dock_help
 
 FORM_CLASS = get_ui_class('help_dialog_base.ui')
 
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
+
 
 class HelpDialog(QtGui.QDialog, FORM_CLASS):
     """About dialog for the InaSAFE plugin."""
@@ -37,7 +25,7 @@ class HelpDialog(QtGui.QDialog, FORM_CLASS):
         """Constructor for the dialog.
 
         :param message: An optional message object to display in the dialog.
-        :type message: Message
+        :type message: Message.Message
 
         :param parent: Parent widget of this dialog
         :type parent: QWidget
