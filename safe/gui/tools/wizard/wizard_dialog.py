@@ -15,6 +15,7 @@ from safe.definitionsv4.layer_purposes import (
     layer_purpose_exposure, layer_purpose_aggregation, layer_purpose_hazard)
 from safe.definitionsv4.layer_modes import (
     layer_mode_continuous, layer_mode_classified)
+from safe.definitionsv4.layer_geometry import layer_geometry_raster
 from safe.definitionsv4.units import exposure_unit
 from safe.definitionsv4.hazard import continuous_hazard_unit
 from safe.definitionsv4.utilities import get_compulsory_fields
@@ -296,8 +297,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         if layer_purpose_key == layer_purpose_aggregation['key']:
             return get_compulsory_fields(layer_purpose_key)['key']
         elif layer_purpose_key in [
-            layer_purpose_exposure['key'],
-            layer_purpose_hazard['key']]:
+                layer_purpose_exposure['key'], layer_purpose_hazard['key']]:
             layer_subcategory_key = \
                 self.step_kw_subcategory.selected_subcategory()['key']
             return get_compulsory_fields(
@@ -517,8 +517,8 @@ class WizardDialog(QDialog, FORM_CLASS):
         :param layer: The QGIS layer.
         :type layer: QgsMapLayer
 
-        :param category: The category of the layer to get the description.
-        :type category: string
+        :param purpose: The layer purpose of the layer to get the description.
+        :type purpose: string
 
         :returns: description of the selected layer.
         :rtype: string
@@ -774,8 +774,15 @@ class WizardDialog(QDialog, FORM_CLASS):
         if inasafe_fields:
             keywords['inasafe_fields'] = inasafe_fields
 
-        inasafe_default_values = self.step_kw_default_inasafe_fields.\
-            get_inasafe_default_values()
+        if keywords['layer_geometry'] == layer_geometry_raster['key']:
+            inasafe_default_values = self.\
+                step_kw_inasafe_raster_default_values.\
+                get_inasafe_default_values()
+        else:
+            inasafe_default_values = self.step_kw_default_inasafe_fields.\
+                get_inasafe_default_values()
+
+        LOGGER.debug('InaSAFE default: %s' % inasafe_default_values)
 
         if inasafe_default_values:
             keywords['inasafe_default_values'] = inasafe_default_values

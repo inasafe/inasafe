@@ -29,7 +29,8 @@ from safe.definitionsv4.fields import (
     aggregation_name_field,
     population_count_field,
     exposure_type_field,
-    hazard_value_field)
+    hazard_value_field,
+    female_ratio_field)
 from safe.definitionsv4.layer_geometry import (
     layer_geometry_polygon, layer_geometry_raster)
 from safe.definitionsv4.exposure_classifications import (
@@ -1788,6 +1789,12 @@ class TestKeywordWizard(unittest.TestCase):
         # Check if in InaSAFE Raster Default Values step
         self.check_current_step(dialog.step_kw_inasafe_raster_default_values)
 
+        parameter_widget = dialog.step_kw_inasafe_raster_default_values\
+            .parameter_container.get_parameter_widget_by_guid(
+            female_ratio_field['key'])
+        new_default_female_ratio = 0.3
+        parameter_widget.set_value(new_default_female_ratio)
+
         # Click next to source step
         dialog.pbnNext.click()
 
@@ -1827,6 +1834,9 @@ class TestKeywordWizard(unittest.TestCase):
             'layer_geometry': layer_geometry_raster['key'],
             'layer_mode': layer_mode_continuous['key'],
             'layer_purpose': layer_purpose_exposure['key'],
+            'inasafe_default_values': {
+                female_ratio_field['key']: new_default_female_ratio
+            },
             'license': source_license,
             'scale': source_scale,
             'source': source,
