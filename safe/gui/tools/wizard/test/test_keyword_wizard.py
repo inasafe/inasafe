@@ -14,30 +14,30 @@ from safe.test.utilities import (
 # safe.gui.tools.wizard
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from datetime import datetime
-from safe.definitionsv4.layer_modes import (
+from safe.definitions.layer_modes import (
     layer_mode_continuous, layer_mode_classified)
-from safe.definitionsv4.layer_purposes import (
+from safe.definitions.layer_purposes import (
     layer_purpose_hazard, layer_purpose_exposure, layer_purpose_aggregation)
-from safe.definitionsv4.hazard import hazard_volcano, hazard_flood
-from safe.definitionsv4.exposure import exposure_structure, exposure_population
-from safe.definitionsv4.hazard_category import hazard_category_multiple_event
-from safe.definitionsv4.hazard_classifications import (
+from safe.definitions.hazard import hazard_volcano, hazard_flood
+from safe.definitions.exposure import exposure_structure, exposure_population
+from safe.definitions.hazard_category import hazard_category_multiple_event
+from safe.definitions.hazard_classifications import (
     volcano_hazard_classes, generic_hazard_classes, flood_hazard_classes)
-from safe.definitionsv4.constants import no_field
-from safe.definitionsv4.fields import (
+from safe.definitions.constants import no_field
+from safe.definitions.fields import (
     hazard_name_field,
     aggregation_name_field,
     population_count_field,
     exposure_type_field,
     hazard_value_field)
-from safe.definitionsv4.layer_geometry import (
+from safe.definitions.layer_geometry import (
     layer_geometry_polygon, layer_geometry_raster)
-from safe.definitionsv4.exposure_classifications import (
+from safe.definitions.exposure_classifications import (
     generic_structure_classes)
-from safe.definitionsv4.units import count_exposure_unit, unit_metres
+from safe.definitions.units import count_exposure_unit, unit_metres
 
 from safe.gui.tools.wizard.wizard_dialog import WizardDialog
-from safe.definitionsv4.utilities import get_compulsory_fields
+from safe.definitions.utilities import get_compulsory_fields
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

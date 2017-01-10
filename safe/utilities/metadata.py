@@ -14,8 +14,8 @@ Contact : ole.moller.nielsen@gmail.com
 """
 import os
 
-from safe.definitionsv4.versions import inasafe_keyword_version
-from safe.definitionsv4.fields import (
+from safe.definitions.versions import inasafe_keyword_version
+from safe.definitions.fields import (
     population_count_field,
     exposure_class_field,
     hazard_class_field,
@@ -37,7 +37,7 @@ from safe.metadata import (
     AggregationLayerMetadata,
     ExposureImpactedLayerMetadata,
     GenericLayerMetadata)
-from safe.definitionsv4.layer_purposes import layer_purpose_exposure_impacted
+from safe.definitions.layer_purposes import layer_purpose_exposure_impacted
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

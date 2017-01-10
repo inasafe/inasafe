@@ -4,7 +4,7 @@
 import unittest
 import logging
 
-from safe.definitionsv4.default_settings import inasafe_default_settings
+from safe.definitions.default_settings import inasafe_default_settings
 from safe.gui.tools.options_dialog import OptionsDialog
 from safe.test.utilities import get_qgis_app
 from safe.common.utilities import temp_dir

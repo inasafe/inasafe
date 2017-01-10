@@ -18,7 +18,7 @@ from PyQt4 import QtGui
 from PyQt4.QtCore import pyqtSignature, QSettings
 
 from safe.utilities.i18n import tr
-from safe.definitionsv4.constants import (
+from safe.definitions.constants import (
     ANALYSIS_FAILED_BAD_INPUT,
     ANALYSIS_FAILED_BAD_CODE,
     PREPARE_FAILED_BAD_INPUT,

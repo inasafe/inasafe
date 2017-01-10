@@ -1,8 +1,8 @@
 # coding=utf-8
 
 """Definitions relating to exposure."""
-from safe.definitionsv4.concepts import concepts
-from safe.definitionsv4.layer_geometry import (
+from safe.definitions.concepts import concepts
+from safe.definitions.layer_geometry import (
     layer_geometry_raster,
     layer_geometry_line,
     layer_geometry_point,

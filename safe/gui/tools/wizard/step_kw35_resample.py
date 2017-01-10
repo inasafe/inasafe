@@ -13,7 +13,7 @@ Contact : ole.moller.nielsen@gmail.com
 
 """
 
-from safe.definitionsv4.layer_purposes import layer_purpose_exposure
+from safe.definitions.layer_purposes import layer_purpose_exposure
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_strings import allow_resampling_question

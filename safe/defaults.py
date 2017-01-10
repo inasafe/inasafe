@@ -15,19 +15,19 @@ from safe_extras.parameters.group_parameter import GroupParameter
 from safe_extras.parameters.text_parameter import TextParameter
 from safe_extras.parameters.unit import Unit
 
-from safe.definitionsv4.fields import (
+from safe.definitions.fields import (
     female_ratio_field,
     youth_ratio_field,
     adult_ratio_field,
     elderly_ratio_field
 )
-from safe.definitionsv4.default_values import (
+from safe.definitions.default_values import (
     youth_ratio_default_value,
     adult_ratio_default_value,
     elderly_ratio_default_value
 )
 from safe.utilities.settings import get_inasafe_default_value_qsetting
-from safe.definitionsv4.constants import GLOBAL
+from safe.definitions.constants import GLOBAL
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

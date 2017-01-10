@@ -2,8 +2,8 @@
 """Helper function for InaSAFE settings."""
 
 from qgis.PyQt.QtCore import QSettings
-from safe.definitionsv4 import GLOBAL, zero_default_value
-from safe.definitionsv4.utilities import definition
+from safe.definitions import GLOBAL, zero_default_value
+from safe.definitions.utilities import definition
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

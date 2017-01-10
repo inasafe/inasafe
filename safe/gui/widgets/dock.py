@@ -17,16 +17,16 @@ from qgis.core import (
     QgsProject,
     QGis)
 
-from safe.definitionsv4.layer_purposes import (
+from safe.definitions.layer_purposes import (
     layer_purpose_exposure_impacted,
     layer_purpose_aggregate_hazard_impacted,
     layer_purpose_aggregation_impacted,
     layer_purpose_analysis_impacted,
     layer_purpose_exposure_breakdown,
 )
-from safe.definitionsv4.utilities import definition
-from safe.definitionsv4.fields import hazard_class_field
-from safe.definitionsv4.constants import (
+from safe.definitions.utilities import definition
+from safe.definitions.fields import hazard_class_field
+from safe.definitions.constants import (
     inasafe_keyword_version_key,
     HAZARD_EXPOSURE_VIEW,
     ANALYSIS_FAILED_BAD_INPUT,

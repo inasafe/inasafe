@@ -22,7 +22,7 @@ from PyQt4.QtGui import QListWidgetItem, QPixmap
 
 from qgis.core import QgsMapLayerRegistry
 
-from safe.definitionsv4.layer_purposes import layer_purpose_hazard
+from safe.definitions.layer_purposes import layer_purpose_hazard
 from safe.utilities.resources import resources_path
 
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class

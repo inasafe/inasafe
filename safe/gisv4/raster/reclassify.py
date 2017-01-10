@@ -13,9 +13,9 @@ from qgis.core import QgsRasterLayer
 from safe.common.exceptions import (
     FileNotFoundError, InvalidKeywordsForProcessingAlgorithm)
 from safe.common.utilities import unique_filename, temp_dir
-from safe.definitionsv4.constants import no_data_value
-from safe.definitionsv4.utilities import definition
-from safe.definitionsv4.processing_steps import reclassify_raster_steps
+from safe.definitions.constants import no_data_value
+from safe.definitions.utilities import definition
+from safe.definitions.processing_steps import reclassify_raster_steps
 from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

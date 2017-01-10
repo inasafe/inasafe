@@ -15,11 +15,11 @@ from qgis.core import (
 )
 
 from safe.common.utilities import unique_filename, temp_dir
-from safe.definitionsv4.constants import no_data_value
-from safe.definitionsv4.fields import hazard_value_field, exposure_type_field
-from safe.definitionsv4.layer_geometry import (
+from safe.definitions.constants import no_data_value
+from safe.definitions.fields import hazard_value_field, exposure_type_field
+from safe.definitions.layer_geometry import (
     layer_geometry, layer_geometry_polygon)
-from safe.definitionsv4.processing_steps import polygonize_steps
+from safe.definitions.processing_steps import polygonize_steps
 from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

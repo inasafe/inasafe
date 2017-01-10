@@ -1,6 +1,6 @@
 # coding=utf-8
 from safe.common.parameters.resource_parameter import ResourceParameter
-from safe.definitionsv4.minimum_needs import (
+from safe.definitions.minimum_needs import (
     minimum_needs_fields,
     minimum_needs_namespace)
 from safe.reportv4.extractors.util import round_affecter_number

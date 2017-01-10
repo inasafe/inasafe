@@ -4,8 +4,8 @@
 from PyQt4.QtCore import QVariant
 
 from safe.utilities.i18n import tr
-from safe.definitionsv4.constants import qvariant_whole_numbers
-from safe.definitionsv4.default_values import (
+from safe.definitions.constants import qvariant_whole_numbers
+from safe.definitions.default_values import (
     female_ratio_default_value,
     feature_rate_default_value,
     youth_ratio_default_value,
@@ -822,7 +822,7 @@ analysis_fields = [
 ]
 
 # Add also minimum needs fields
-from safe.definitionsv4.minimum_needs import minimum_needs_fields  # noqa
+from safe.definitions.minimum_needs import minimum_needs_fields  # noqa
 count_fields = [
     feature_value_field,
     population_count_field,

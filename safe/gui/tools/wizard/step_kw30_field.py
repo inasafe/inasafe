@@ -18,8 +18,8 @@ import re
 from PyQt4 import QtCore
 from PyQt4.QtGui import QListWidgetItem
 
-from safe.definitionsv4.layer_purposes import layer_purpose_aggregation
-from safe.definitionsv4.layer_modes import (
+from safe.definitions.layer_purposes import layer_purpose_aggregation
+from safe.definitions.layer_modes import (
     layer_mode_continuous, layer_mode_classified)
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
@@ -29,7 +29,7 @@ from safe.gui.tools.wizard.wizard_strings import (
     field_question_aggregation)
 from safe.gui.tools.wizard.wizard_utils import get_question_text
 from safe.utilities.gis import is_raster_layer
-from safe.definitionsv4.utilities import get_fields
+from safe.definitions.utilities import get_fields
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

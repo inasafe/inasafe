@@ -4,7 +4,7 @@
 from safe.utilities.i18n import tr
 from safe import messaging as m
 from safe.messaging import styles
-import safe.definitionsv4 as definitions
+import safe.definitions as definitions
 INFO_STYLE = styles.INFO_STYLE
 WARNING_STYLE = styles.WARNING_STYLE
 SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE

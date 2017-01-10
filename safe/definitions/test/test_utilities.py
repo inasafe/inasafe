@@ -2,7 +2,7 @@
 """Test for utilities module.."""
 import unittest
 
-from safe.definitionsv4 import (
+from safe.definitions import (
     hazard_flood,
     hazard_tsunami,
     hazard_earthquake,
@@ -31,9 +31,9 @@ from safe.definitionsv4 import (
     layer_geometry_point,
     layer_geometry_polygon
 )
-from safe.definitionsv4.hazard import hazard_cyclone
+from safe.definitions.hazard import hazard_cyclone
 
-from safe.definitionsv4.utilities import (
+from safe.definitions.utilities import (
     definition,
     purposes_for_layer,
     hazards_for_layer,

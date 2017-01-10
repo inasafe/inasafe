@@ -5,7 +5,7 @@ from PyQt4.QtCore import QDir, Qt
 from PyQt4.QtCore import QSettings
 from qgis.core import QgsMapLayerRegistry, QgsProject
 
-from safe.definitionsv4.report import (
+from safe.definitions.report import (
     standard_impact_report_metadata_pdf,
     report_a4_portrait_blue)
 from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile

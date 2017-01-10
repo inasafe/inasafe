@@ -15,8 +15,8 @@ from qgis.core import (
 
 from safe.common.utilities import get_utm_epsg
 from safe.gisv4.vector.tools import create_memory_layer
-from safe.definitionsv4.fields import hazard_class_field
-from safe.definitionsv4.processing_steps import buffer_steps
+from safe.definitions.fields import hazard_class_field
+from safe.definitions.processing_steps import buffer_steps
 from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

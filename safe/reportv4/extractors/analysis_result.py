@@ -1,15 +1,15 @@
 # coding=utf-8
-from safe.definitionsv4.exposure import exposure_population
-from safe.definitionsv4.fields import (
+from safe.definitions.exposure import exposure_population
+from safe.definitions.fields import (
     hazard_count_field,
     total_affected_field,
     total_field,
     total_unaffected_field)
-from safe.definitionsv4.hazard import hazard_generic
-from safe.definitionsv4.hazard_category import (
+from safe.definitions.hazard import hazard_generic
+from safe.definitions.hazard_category import (
     hazard_category_single_event,
     hazard_category_multiple_event)
-from safe.definitionsv4.hazard_classifications import all_hazard_classes
+from safe.definitions.hazard_classifications import all_hazard_classes
 from safe.reportv4.extractors.util import layer_definition_type, \
     round_affecter_number
 from safe.utilities.i18n import tr

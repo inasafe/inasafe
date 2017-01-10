@@ -18,9 +18,9 @@ from PyQt4 import QtCore
 from PyQt4.QtCore import pyqtSignature
 from PyQt4.QtGui import QListWidgetItem, QPixmap
 
-from safe.definitionsv4.layer_purposes import layer_purpose_aggregation
-from safe.definitionsv4.utilities import purposes_for_layer
-from safe.definitionsv4.utilities import definition
+from safe.definitions.layer_purposes import layer_purpose_aggregation
+from safe.definitions.utilities import purposes_for_layer
+from safe.definitions.utilities import definition
 
 from safe.utilities.resources import resources_path
 

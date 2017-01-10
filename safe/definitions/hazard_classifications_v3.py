@@ -7,7 +7,7 @@
 +of InaSAFE v4.
 +Use hazard_classifications.py instead.
 """
-from safe.definitionsv4 import concepts, small_number
+from safe.definitions import concepts, small_number
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

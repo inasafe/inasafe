@@ -3,8 +3,8 @@
 from PyQt4.QtCore import QPyNullVariant
 
 
-from safe.definitionsv4.fields import count_fields
-from safe.definitionsv4.utilities import definition
+from safe.definitions.fields import count_fields
+from safe.definitions.utilities import definition
 from safe.utilities.pivot_table import FlatTable
 from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
 from safe.gisv4.vector.tools import create_field_from_definition

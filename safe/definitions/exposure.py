@@ -1,12 +1,12 @@
 # coding=utf-8
 """Definitions relating to exposure in InaSAFE."""
 
-from safe.definitionsv4.concepts import concepts
-from safe.definitionsv4.caveats import (
+from safe.definitions.concepts import concepts
+from safe.definitions.caveats import (
     caveat_incomplete_data)
-from safe.definitionsv4.units import (
+from safe.definitions.units import (
     count_exposure_unit, density_exposure_unit)
-from safe.definitionsv4.fields import (
+from safe.definitions.fields import (
     adult_count_field,
     adult_ratio_field,
     elderly_count_field,
@@ -20,9 +20,9 @@ from safe.definitionsv4.fields import (
     population_count_field,
     exposure_type_field,
     total_affected_field, total_field, total_unaffected_field)
-from safe.definitionsv4.layer_modes import (
+from safe.definitions.layer_modes import (
     layer_mode_classified, layer_mode_continuous)
-from safe.definitionsv4.exposure_classifications import (
+from safe.definitions.exposure_classifications import (
     generic_place_classes,
     generic_road_classes,
     generic_structure_classes,

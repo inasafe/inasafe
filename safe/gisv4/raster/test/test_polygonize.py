@@ -10,10 +10,10 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from qgis.core import QgsFeatureRequest
 
 from safe.gisv4.raster.polygonize import polygonize
-from safe.definitionsv4.layer_geometry import (
+from safe.definitions.layer_geometry import (
     layer_geometry, layer_geometry_polygon)
-from safe.definitionsv4.processing_steps import polygonize_steps
-from safe.definitionsv4.fields import hazard_value_field
+from safe.definitions.processing_steps import polygonize_steps
+from safe.definitions.fields import hazard_value_field
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

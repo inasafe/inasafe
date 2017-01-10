@@ -27,7 +27,7 @@ from qgis.core import (
     QgsVectorLayer,
     QgsRasterLayer)
 
-from safe.definitionsv4.constants import multipart_polygon_key
+from safe.definitions.constants import multipart_polygon_key
 from safe.common.exceptions import (
     InvalidParameterError,
     NoFeaturesInExtentError,

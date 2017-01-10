@@ -29,14 +29,14 @@ from safe.test.utilities import (
     get_dock,
     standard_data_path)
 
-from safe.definitionsv4.hazard import hazard_all, hazard_volcano
-from safe.definitionsv4.exposure import exposure_all, exposure_structure
-from safe.definitionsv4 import (
+from safe.definitions.hazard import hazard_all, hazard_volcano
+from safe.definitions.exposure import exposure_all, exposure_structure
+from safe.definitions import (
     layer_purpose_hazard,
     layer_purpose_exposure,
     layer_geometry_polygon
 )
-from safe.definitionsv4.utilities import get_allowed_geometries
+from safe.definitions.utilities import get_allowed_geometries
 
 # AG: get_qgis_app() should be called before importing modules from
 # safe.gui.tools.wizard

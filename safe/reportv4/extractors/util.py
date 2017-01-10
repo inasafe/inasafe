@@ -3,7 +3,7 @@ import os
 
 from jinja2.exceptions import TemplateError
 
-from safe.definitionsv4.utilities import definition
+from safe.definitions.utilities import definition
 from safe.utilities.rounding import population_rounding
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

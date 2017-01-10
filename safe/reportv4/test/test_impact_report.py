@@ -8,7 +8,7 @@ from jinja2.environment import Template
 from unittest.case import expectedFailure
 
 from safe.common.utilities import safe_dir
-from safe.definitionsv4.constants import ANALYSIS_SUCCESS
+from safe.definitions.constants import ANALYSIS_SUCCESS
 from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
 from safe.impact_function.impact_function import ImpactFunction
 from safe.reportv4.extractors.composer import qgis_composer_extractor
@@ -26,7 +26,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from PyQt4.QtCore import QSettings
 from qgis.core import QgsVectorLayer, QgsMapLayerRegistry
-from safe.definitionsv4.report import (
+from safe.definitions.report import (
     report_a4_portrait_blue,
     standard_impact_report_metadata_html,
     standard_impact_report_metadata_pdf, analysis_result_component,

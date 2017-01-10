@@ -10,9 +10,9 @@ from qgis.core import (
     QgsSymbolLayerV2Registry,
 )
 
-from safe.definitionsv4.colors import no_hazard
-from safe.definitionsv4.fields import hazard_class_field
-from safe.definitionsv4.hazard_classifications import (
+from safe.definitions.colors import no_hazard
+from safe.definitions.fields import hazard_class_field
+from safe.definitions.hazard_classifications import (
     null_hazard_value, null_hazard_legend)
 
 

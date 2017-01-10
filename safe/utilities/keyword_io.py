@@ -17,7 +17,7 @@ from sqlite3 import OperationalError
 from PyQt4.QtCore import QObject, QSettings
 from PyQt4.QtCore import QUrl, QDateTime
 
-from safe.definitionsv4.utilities import definition
+from safe.definitions.utilities import definition
 from safe import messaging as m
 from safe.common.exceptions import (
     HashNotFoundError,

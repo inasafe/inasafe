@@ -43,7 +43,7 @@ from qgis.core import (
     QgsCoordinateTransform,
     QgsCsException)
 
-from safe.definitionsv4.constants import (
+from safe.definitions.constants import (
     HAZARD_EXPOSURE,
     HAZARD_EXPOSURE_VIEW,
     HAZARD_EXPOSURE_BOOKMARK,

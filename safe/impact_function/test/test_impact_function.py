@@ -13,7 +13,7 @@ import logging
 from os.path import join, isfile
 from os import listdir
 
-from safe.definitionsv4.minimum_needs import minimum_needs_fields
+from safe.definitions.minimum_needs import minimum_needs_fields
 from safe.test.utilities import (
     get_control_text,
     load_test_raster_layer,
@@ -28,18 +28,18 @@ from safe.test.debug_helper import print_attribute_table
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe.definitionsv4.fields import (
+from safe.definitions.fields import (
     population_count_field,
     exposure_type_field,
 )
-from safe.definitionsv4.post_processors import (
+from safe.definitions.post_processors import (
     post_processor_gender,
     post_processor_youth,
     post_processor_adult,
     post_processor_elderly,
     post_processor_size
 )
-from safe.definitionsv4.constants import (
+from safe.definitions.constants import (
     PREPARE_SUCCESS,
     ANALYSIS_SUCCESS,
     ANALYSIS_FAILED_BAD_INPUT,

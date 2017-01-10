@@ -15,7 +15,7 @@ from qgis.core import (
     QgsFeature,
 )
 
-from safe.definitionsv4.processing_steps import smart_clip_steps
+from safe.definitions.processing_steps import smart_clip_steps
 from safe.gisv4.vector.tools import create_memory_layer
 from safe.utilities.profiling import profile
 

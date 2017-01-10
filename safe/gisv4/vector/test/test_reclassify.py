@@ -9,7 +9,7 @@ from safe.test.utilities import (
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.gisv4.vector.reclassify import reclassify
-from safe.definitionsv4.fields import hazard_class_field
+from safe.definitions.fields import hazard_class_field
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

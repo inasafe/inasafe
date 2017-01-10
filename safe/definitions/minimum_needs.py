@@ -7,7 +7,7 @@ import sys
 from PyQt4.QtCore import QVariant
 
 from safe.common.parameters.resource_parameter import ResourceParameter
-from safe.definitionsv4.fields import default_field_length
+from safe.definitions.fields import default_field_length
 from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
 
 

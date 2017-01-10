@@ -9,9 +9,9 @@ from qgis.core import QgsCoordinateTransform
 
 import safe.gui.tools.wizard.wizard_strings
 from safe.common.version import get_version
-from safe.definitionsv4.constants import RECENT, GLOBAL
-from safe.definitionsv4.layer_modes import layer_mode_classified
-from safe.definitionsv4.layer_purposes import (
+from safe.definitions.constants import RECENT, GLOBAL
+from safe.definitions.layer_modes import layer_mode_classified
+from safe.definitions.layer_purposes import (
     layer_purpose_exposure, layer_purpose_hazard)
 from safe.utilities.gis import (
     is_raster_layer, is_point_layer, is_polygon_layer)

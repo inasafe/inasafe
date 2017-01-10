@@ -9,7 +9,7 @@ from qgis.core import QgsRasterLayer
 
 from safe.common.exceptions import ProcessingAlgError
 from safe.common.utilities import unique_filename, temp_dir
-from safe.definitionsv4.processing_steps import quick_clip_steps
+from safe.definitions.processing_steps import quick_clip_steps
 from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
