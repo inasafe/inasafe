@@ -1,7 +1,7 @@
 # coding=utf-8
 """Helper function for InaSAFE settings."""
 
-from qgis.PyQt.QtCore import QSettings
+from PyQt4.QtCore import QSettings
 from safe.definitionsv4 import GLOBAL, zero_default_value
 from safe.definitionsv4.utilities import definition
 from safe.utilities.i18n import tr
