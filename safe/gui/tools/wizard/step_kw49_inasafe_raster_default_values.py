@@ -96,8 +96,6 @@ class StepKwInaSAFERasterDefaultValues(WizardStep, FORM_CLASS):
     # noinspection PyTypeChecker
     def set_widgets(self):
         """Set widgets on the Extra Keywords tab."""
-        existing_inasafe_field = self.parent.get_existing_keyword(
-            'inasafe_fields')
         existing_inasafe_default_values = self.parent.get_existing_keyword(
             'inasafe_default_values')
         # Remove old container and parameter
@@ -106,8 +104,6 @@ class StepKwInaSAFERasterDefaultValues(WizardStep, FORM_CLASS):
                 self.parameter_container)
         if self.parameters:
             self.parameters = []
-
-        layer_data_provider = self.parent.layer.dataProvider()
 
         # Iterate through all inasafe fields
         # existing_inasafe_default_values
@@ -118,8 +114,8 @@ class StepKwInaSAFERasterDefaultValues(WizardStep, FORM_CLASS):
             parameter.guid = inasafe_field['key']
             parameter.name = inasafe_field['name']
             parameter.is_required = False
-            parameter.help_text = inasafe_field['description']
-            parameter.description = inasafe_field['description']
+            parameter.help_text = inasafe_field['default_value']['description']
+            # parameter.description = inasafe_field['default_value']
             parameter.element_type = unicode
             parameter.labels = get_inasafe_default_value_fields(
                 self.parent.setting, inasafe_field['key'])[0]
@@ -133,7 +129,6 @@ class StepKwInaSAFERasterDefaultValues(WizardStep, FORM_CLASS):
                     parameter.default = existing_default_value
 
             self.parameters.append(parameter)
-            LOGGER.debug(parameter)
 
         # Create the parameter container and add to the wizard.
         self.parameter_container = ParameterContainer(
@@ -153,20 +148,6 @@ class StepKwInaSAFERasterDefaultValues(WizardStep, FORM_CLASS):
                 if isinstance(parameter_widget, DefaultValueParameterWidget):
                     parameter_widget.set_value(default)
 
-    def get_inasafe_fields(self):
-        """Return inasafe fields from the current wizard state.
-
-        :returns: Dictionary of key and value from InaSAFE Fields.
-        :rtype: dict
-        """
-        inasafe_fields = {}
-        parameters = self.parameter_container.get_parameters(True)
-        for parameter in parameters:
-            if not parameter.value == no_field:
-                inasafe_fields[parameter.guid] = parameter.value
-
-        return inasafe_fields
-
     def get_inasafe_default_values(self):
         """Return inasafe default from the current wizard state.
 
@@ -176,7 +157,7 @@ class StepKwInaSAFERasterDefaultValues(WizardStep, FORM_CLASS):
         inasafe_default_values = {}
         parameters = self.parameter_container.get_parameters(True)
         for parameter in parameters:
-            if parameter.default:
-                inasafe_default_values[parameter.guid] = parameter.default
+            if parameter.value is not None:
+                inasafe_default_values[parameter.guid] = parameter.value
 
         return inasafe_default_values

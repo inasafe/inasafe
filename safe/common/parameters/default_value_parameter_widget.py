@@ -70,22 +70,23 @@ class DefaultValueParameterWidget(GenericParameterWidget):
     def get_parameter(self):
         """Obtain list parameter object from the current widget state.
 
-        :returns: A DefaultSelectParameter from the current state of widget
+        :returns: A DefaultValueParameter from the current state of widget
+        :rtype: DefaultValueParameter
 
         """
         radio_button_checked_id = self._input_button_group.checkedId()
         # No radio button checked, then default value = None
         if radio_button_checked_id == -1:
-            self._parameter.default = None
+            self._parameter.value = None
         # The last radio button (custom) is checked, get the value from the
         # line edit
         elif (radio_button_checked_id ==
                 len(self._parameter.options) - 1):
             self._parameter.options[radio_button_checked_id] \
                 = self.custom_value.value()
-            self._parameter.default = self.custom_value.value()
+            self._parameter.value = self.custom_value.value()
         else:
-            self._parameter.default = self._parameter.options[
+            self._parameter.value = self._parameter.options[
                 radio_button_checked_id]
 
         return self._parameter
@@ -101,9 +102,8 @@ class DefaultValueParameterWidget(GenericParameterWidget):
         """
         # Find index of choice
         try:
-            default_index = self._parameter.options.index(value)
-            self._input_button_group.button(default_index).setChecked(
-                True)
+            value_index = self._parameter.options.index(value)
+            self._input_button_group.button(value_index).setChecked(True)
         except ValueError:
             last_index = len(self._parameter.options) - 1
             self._input_button_group.button(last_index).setChecked(

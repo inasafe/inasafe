@@ -212,7 +212,7 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
         inasafe_default_values = {}
         parameters = self.parameter_container.get_parameters(True)
         for parameter in parameters:
-            if parameter.default:
+            if parameter.default is not None:
                 inasafe_default_values[parameter.guid] = parameter.default
 
         return inasafe_default_values
