@@ -6,7 +6,8 @@ from safe.definitionsv4.hazard_classifications import (
     flood_hazard_classes,
     tsunami_hazard_classes,
     ash_hazard_classes,
-    cyclone_au_bom_hazard_classes, cyclone_sshws_hazard_classes)
+    cyclone_au_bom_hazard_classes,
+    cyclone_sshws_hazard_classes)
 from safe.definitionsv4.caveats import (
     caveat_simulation, caveat_local_conditions, caveat_analysis_extent,)
 from safe.definitionsv4.concepts import concepts

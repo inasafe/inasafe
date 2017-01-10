@@ -41,7 +41,7 @@ from safe.definitionsv4.utilities import (
     definition,
     get_compulsory_fields,
 )
-from safe.impact_function_v4.postprocessors import run_single_post_processor
+from safe.impact_function.postprocessors import run_single_post_processor
 from safe.definitionsv4.post_processors import post_processor_size
 from safe.utilities.i18n import tr
 from safe.utilities.profiling import profile

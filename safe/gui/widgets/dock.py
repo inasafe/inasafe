@@ -67,9 +67,8 @@ from safe.common.exceptions import (
     UnsupportedProviderError,
     MetadataReadError,
 )
-from safe.impact_function_v4.impact_function import ImpactFunction
-from safe.impact_function_v4.style import hazard_class_style
-from safe.report.impact_report import ImpactReport
+from safe.impact_function.impact_function import ImpactFunction
+from safe.impact_function.style import hazard_class_style
 from safe.gui.tools.about_dialog import AboutDialog
 from safe.gui.tools.help_dialog import HelpDialog
 from safe.gui.widgets.message import (
@@ -415,6 +414,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         :param destination: The new filename of the layer.
         :type destination: str
         """
+
+        enable_busy_cursor()
 
         auxiliary_files = ['xml', 'json']
 
@@ -781,10 +782,15 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
     def accept(self):
         """Execute analysis when run button is clicked."""
-        self.show_busy()
-
         # Start the analysis
         self.impact_function = self.validate_impact_function()
+        if not self.impact_function:
+            # This should not happen as the "accept" button should disabled if
+            # the impact function is not ready.
+            LOGGER.info(tr('The impact function should not have been ready.'))
+            return
+
+        self.show_busy()
         self.impact_function.callback = self.progress_callback
         self.impact_function.debug_mode = self.debug_mode.isChecked()
         status, message = self.impact_function.run()
@@ -862,6 +868,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.get_exposure_layer().crs())
 
         self.hide_busy()
+        self.impact_function = None
         return ANALYSIS_SUCCESS, None
 
     def show_help(self):
@@ -1112,33 +1119,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         QtGui.QDesktopServices.openUrl(
             QtCore.QUrl.fromLocalFile(map_pdf_path))
 
-    def open_map_in_composer(self, impact_report):
-        """Open map in composer given MapReport instance.
-
-        ..note:: (AG) See https://github.com/AIFDR/inasafe/issues/911. We
-            need to set the composition to the composer before loading the
-            template.
-
-        :param impact_report: Impact Report to be opened in composer.
-        :type impact_report: ImpactReport
-        """
-        impact_report.setup_composition()
-        self.composer = self.iface.createNewComposer()
-        self.composer.setComposition(impact_report.composition)
-        impact_report.load_template()
-        impact_report.draw_composition()
-
-        # Fit In View
-        number_pages = impact_report.composition.numPages()
-        paper_height = impact_report.composition.paperHeight()
-        paper_width = impact_report.composition.paperWidth()
-        space_between_pages = impact_report.composition.spaceBetweenPages()
-        if number_pages > 0:
-            height = (paper_height * number_pages) + (
-                space_between_pages * (number_pages - 1))
-            self.composer.fitInView(
-                0, 0, paper_width + 1, height + 1, QtCore.Qt.KeepAspectRatio)
-
     @pyqtSlot('QgsRectangle', 'QgsCoordinateReferenceSystem')
     def define_user_analysis_extent(self, extent, crs):
         """Slot called when user has defined a custom analysis extent.
@@ -1202,7 +1182,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         """Helper method to evaluate the current state of the impact function.
 
         This function will determine if it is appropriate for the OK button to
-        be enabled or not.
+        be enabled or not. Only this function is able to change the status of
+        the button.
 
         This function will return a ready to run impact function or None if it
         is not ready.
@@ -1211,14 +1192,20 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         .. versionadded:: 4.0
         """
-        # First, we need to check if the question area is correct.
+        LOGGER.info(tr('Checking the state of the impact function.'))
+
+        # First, we check if the dock is not busy.
+        if self.busy:
+            return False, None
+
+        # Then, we need to check if the question area is correct.
         flag, message = self._validate_question_area()
         if not flag:
             send_static_message(self, message)
             self.run_button.setEnabled(False)
             return None
 
-        # Then, we need to check if an IF can run.
+        # Finally, we need to check if an IF can run.
         impact_function = ImpactFunction()
         impact_function.hazard = self.get_hazard_layer()
         impact_function.exposure = self.get_exposure_layer()
@@ -1267,7 +1254,8 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
                 self.get_exposure_layer().crs())
 
             self.run_button.setEnabled(True)
-            return self.impact_function
+            LOGGER.info('The impact function is ready.')
+            return impact_function
 
         elif status == PREPARE_FAILED_INSUFFICIENT_OVERLAP:
             self.extent.clear_next_analysis_extent()
@@ -1314,9 +1302,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
             flag,message = self._validate_question_area()
         """
-        if self.busy:
-            return False, None
-
         hazard_index = self.hazard_layer_combo.currentIndex()
         exposure_index = self.exposure_layer_combo.currentIndex()
         if hazard_index == -1 or exposure_index == -1:

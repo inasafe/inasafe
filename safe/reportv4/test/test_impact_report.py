@@ -10,7 +10,7 @@ from unittest.case import expectedFailure
 from safe.common.utilities import safe_dir
 from safe.definitionsv4.constants import ANALYSIS_SUCCESS
 from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
-from safe.impact_function_v4.impact_function import ImpactFunction
+from safe.impact_function.impact_function import ImpactFunction
 from safe.reportv4.extractors.composer import qgis_composer_extractor
 from safe.reportv4.processors.default import (
     qgis_composer_renderer)

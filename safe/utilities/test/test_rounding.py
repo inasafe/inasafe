@@ -1,0 +1,46 @@
+# coding=utf-8
+
+__copyright__ = "Copyright 2016, The InaSAFE Project"
+__license__ = "GPL version 3"
+__email__ = "info@inasafe.org"
+__revision__ = '$Format:%H$'
+
+import logging
+import random
+import unittest
+
+from safe.utilities.rounding import (
+    population_rounding_full, population_rounding)
+
+LOGGER = logging.getLogger('InaSAFE')
+
+
+class TestCore(unittest.TestCase):
+
+    def test_population_rounding(self):
+        """Test for population_rounding_full function."""
+        # rounding up
+        for _ in range(100):
+            # After choosing some random numbers the sum of the randomly
+            # selected and one greater than that should be less than the
+            # population rounded versions of these.
+            n = random.randint(1, 1000000)
+            n_pop, dummy = population_rounding_full(n)
+            n1 = n + 1
+            n1_pop, dummy = population_rounding_full(n1)
+            self.assertGreater(n_pop + n1_pop, n + n1)
+
+        self.assertEqual(population_rounding_full(989)[0], 990)
+        self.assertEqual(population_rounding_full(991)[0], 1000)
+        self.assertEqual(population_rounding_full(8888)[0], 8900)
+        self.assertEqual(population_rounding_full(9888888)[0], 9889000)
+
+        for _ in range(100):
+            n = random.randint(1, 1000000)
+            self.assertEqual(
+                population_rounding(n),
+                population_rounding_full(n)[0])
+
+
+if __name__ == '__main__':
+    unittest.main()

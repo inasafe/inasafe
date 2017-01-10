@@ -25,8 +25,6 @@ from safe.storage.vector import Vector
 from safe.utilities.gis import is_point_layer, is_polygon_layer
 from safe.utilities.resources import html_footer, html_header, get_ui_class
 from safe.utilities.utilities import add_ordered_combo_item
-from safe.impact_functions.core import evacuated_population_weekly_needs
-from safe import messaging as m
 from safe.messaging import styles
 from safe.gui.tools.help.needs_calculator_help import needs_calculator_help
 
@@ -113,7 +111,9 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
             #     'toilets': int(ceil(population * min_toilets))}
 
             # Add to attributes
-            weekly_needs = evacuated_population_weekly_needs(displaced)
+            # Fixme, we need to update to use it InaSAFE4
+            # weekly_needs = evacuated_population_weekly_needs(displaced)
+            weekly_needs = []
 
             # Record attributes for this feature
             all_attributes.append(weekly_needs)

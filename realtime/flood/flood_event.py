@@ -42,12 +42,11 @@ from safe.utilities.styling import (
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.common.exceptions import ZeroImpactException, TranslationLoadError
-from safe.impact_functions.impact_function_manager import \
-    ImpactFunctionManager
+from safe.impact_function.impact_function import ImpactFunction
 from safe.storage.core import read_layer, read_qgis_layer
 from safe.utilities.keyword_io import KeywordIO
 from safe.common.utilities import format_int
-from safe.impact_functions.core import population_rounding
+from safe.utilities.rounding import population_rounding
 from safe import messaging as m
 
 
@@ -259,9 +258,7 @@ class FloodEvent(QObject):
         self.exposure_layer = read_layer(self.population_path)
 
     def calculate_impact(self):
-        if_manager = ImpactFunctionManager()
-        function_id = self.function_id
-        impact_function = if_manager.get_instance(function_id)
+        impact_function = ImpactFunction()
 
         impact_function.hazard = self.hazard_layer.as_qgis_native()
         impact_function.exposure = self.exposure_layer.as_qgis_native()

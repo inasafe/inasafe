@@ -26,9 +26,8 @@ from realtime.exceptions import MapComposerError
 from realtime.utilities import realtime_logger_name
 from safe.common.exceptions import ZeroImpactException, KeywordNotFoundError
 from safe.common.utilities import format_int
-from safe.impact_functions.core import population_rounding
-from safe.impact_functions.impact_function_manager import \
-    ImpactFunctionManager
+from safe.utilities.rounding import population_rounding
+from safe.impact_function.impact_function import ImpactFunction
 from safe.test.utilities import get_qgis_app
 from safe.utilities.clipper import clip_layer
 from safe.utilities.gis import get_wgs84_resolution
@@ -572,8 +571,7 @@ class AshEvent(QObject):
             self, function_id, hazard_layer,
             exposure_layer, output_basename):
         LOGGER.info('Calculate %s' % function_id)
-        if_manager = ImpactFunctionManager()
-        impact_function = if_manager.get_instance(function_id)
+        impact_function = ImpactFunction()
 
         impact_function.hazard = hazard_layer
 
