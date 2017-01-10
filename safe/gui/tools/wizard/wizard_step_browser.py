@@ -1,20 +1,5 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool by AusAid -**InaSAFE Wizard**
-
-This module provides a base class for steps containing a QGIS Browser
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
-import safe.definitionsv4.layer_geometry
-import safe.definitionsv4.layer_modes
-import safe.definitionsv4.layer_purposes
+"""Wizard Step Browser."""
 
 import os
 from sqlite3 import OperationalError
@@ -27,15 +12,16 @@ from qgis.core import (
     QgsRasterLayer,
     QgsDataSourceURI,
     QgsBrowserModel)
-
+import safe.definitionsv4.layer_geometry
+import safe.definitionsv4.layer_modes
+import safe.definitionsv4.layer_purposes
 from safe.definitionsv4.layer_purposes import (
     layer_purpose_exposure, layer_purpose_aggregation, layer_purpose_hazard)
 from safe.definitionsv4.layer_modes import (
     layer_mode_continuous, layer_mode_classified)
 from safe.definitionsv4.units import exposure_unit
 from safe.definitionsv4.hazard import continuous_hazard_unit
-from safe.definitionsv4.hazard_classifications_v3 import (
-    vector_hazard_classification, raster_hazard_classification)
+from safe.definitionsv4.hazard_classifications import hazard_classification
 from safe.definitionsv4.layer_geometry import layer_geometry_polygon
 from safe.common.exceptions import (
     HashNotFoundError,
@@ -51,9 +37,7 @@ from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_strings import (
     create_postGIS_connection_first)
 from safe.gui.tools.wizard.wizard_utils import layer_description_html
-from safe.utilities.gis import is_raster_layer
-from safe.utilities.utilities import (
-    is_keyword_version_supported)
+from safe.utilities.utilities import is_keyword_version_supported
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -96,9 +80,9 @@ class WizardStepBrowser(WizardStep):
         raise NotImplementedError("The current step class doesn't implement \
             the set_widgets method")
 
-    def pg_path_to_uri(self, path):
-        """Convert layer path from QgsBrowserModel to full QgsDataSourceURI
-
+    @staticmethod
+    def pg_path_to_uri(path):
+        """Convert layer path from QgsBrowserModel to full QgsDataSourceURI.
         :param path: The layer path from QgsBrowserModel
         :type path: string
 
@@ -181,11 +165,21 @@ class WizardStepBrowser(WizardStep):
         """
 
         def emphasize(str1, str2):
-            """ Compare two strings and emphasize both if differ """
+            """Compare two strings and emphasize both if differ.
+
+            :param str1: First string.
+            :type str1: str
+
+            :param str2: Second string.
+            :type str2: str
+
+            :returns: Return emphasized string if differ.
+            :rtype: tuple
+            """
             if str1 != str2:
                 str1 = '<i>%s</i>' % str1
                 str2 = '<i>%s</i>' % str2
-            return (str1, str2)
+            return str1, str2
 
         # Get allowed subcategory and layer_geometry from IF constraints
         h, e, hc, ec = self.parent.selected_impact_function_constraints()
@@ -233,10 +227,7 @@ class WizardStepBrowser(WizardStep):
         if (lay_req['layer_mode'] == layer_mode_classified and
                 layer_purpose == layer_purpose_hazard['key']):
             # Determine the keyword key for the classification
-            classification_obj = (
-                raster_hazard_classification
-                if is_raster_layer(layer)
-                else vector_hazard_classification)
+            classification_obj = hazard_classification
             classification_key = classification_obj['key']
             classification_key_name = classification_obj['name']
             classification_keys = classification_key + 's'
