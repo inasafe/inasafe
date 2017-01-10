@@ -121,9 +121,9 @@ class StepKwInaSAFERasterDefaultValues(WizardStep, FORM_CLASS):
             parameter.help_text = inasafe_field['description']
             parameter.description = inasafe_field['description']
             parameter.element_type = unicode
-            parameter.default_labels = get_inasafe_default_value_fields(
+            parameter.labels = get_inasafe_default_value_fields(
                 self.parent.setting, inasafe_field['key'])[0]
-            parameter.default_values = get_inasafe_default_value_fields(
+            parameter.options = get_inasafe_default_value_fields(
                 self.parent.setting, inasafe_field['key'])[1]
 
             if existing_inasafe_default_values:
@@ -144,14 +144,14 @@ class StepKwInaSAFERasterDefaultValues(WizardStep, FORM_CLASS):
         # Set default value to None
         for parameter_widget in self.parameter_container.\
                 get_parameter_widgets():
-            parameter_widget.widget().set_default(None)
+            parameter_widget.widget().set_value(None)
         # Set default value from existing keywords
         if existing_inasafe_default_values:
             for guid, default in existing_inasafe_default_values.items():
                 parameter_widget = self.parameter_container.\
                     get_parameter_widget_by_guid(guid)
                 if isinstance(parameter_widget, DefaultValueParameterWidget):
-                    parameter_widget.set_default(default)
+                    parameter_widget.set_value(default)
 
     def get_inasafe_fields(self):
         """Return inasafe fields from the current wizard state.
