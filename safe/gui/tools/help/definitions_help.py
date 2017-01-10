@@ -85,11 +85,43 @@ def content():
     message.add(header)
     message.add(definition_to_message(exposures))
 
+
+    ##
+    #  Defaults
+    ##
+
+    header = m.Heading(tr('Defaults'), **INFO_STYLE)
+    message.add(header)
+    table = m.Table(style_class='table table-condensed table-striped')
+    row = m.Row()
+    row.add(m.Cell(tr('Name')), header_flag=True)
+    row.add(m.Cell(tr('Default value')), header_flag=True)
+    row.add(m.Cell(tr('Default min')), header_flag=True)
+    row.add(m.Cell(tr('Default max')), header_flag=True)
+    row.add(m.Cell(tr('Description')), header_flag=True)
+    table.add(row)
+    defaults = [
+        definitions.youth_ratio_default_value,
+        definitions.adult_ratio_default_value,
+        definitions.elderly_ratio_default_value,
+        definitions.female_ratio_default_value,
+        definitions.feature_rate_default_value
+    ]
+    for default in defaults:
+        row = m.Row()
+        row.add(m.Cell(default['name']))
+        row.add(m.Cell(default['default_value']))
+        row.add(m.Cell(default['min_value']))
+        row.add(m.Cell(default['max_value']))
+        row.add(m.Cell(default['description']))
+        table.add(row)
+    message.add(table)
     # paragraph = m.Paragraph(tr(
     #   ''
     # ))
     # message.add(paragraph)
     return message
+
 
 
 def definition_to_message(definition, heading_style=None):
@@ -102,30 +134,6 @@ def definition_to_message(definition, heading_style=None):
         heading. See safe.messaging.styles
     :type heading_style: dict
 
-    'key': A String describing the unique name for this definition
-    'name': A human readable translated string naming this definition
-    'description': A human readable translated detailed description of this
-        definition.
-    'citations': A list of one or more citation dicts.
-    'types': A list of definitions we will recursively call definition to
-        get a sub message message on them.
-    'field_name': the name of a field,
-    'type': the type of a field,
-    'length': the length of a field,
-    'precision': the precision of a field,
-
-    'notes': a list of strings,
-    'continuous_notes': a list of strings
-    'classified_notes':  a list of strings
-    'single_event_notes':  a list of strings
-    'multi_event_notes':  a list of strings
-    'actions':  a list of strings
-
-    'continuous_hazard_units': list of ,
-    'vector_hazard_classifications': list of,
-    'raster_hazard_classifications': list of,
-    'classifications': list of ,
-    'extra_fields': []
 
     :returns: Message
     :rtype: str
@@ -254,14 +262,7 @@ def definition_to_message(definition, heading_style=None):
 
     if 'classes' in definition:
         message.add(m.Paragraph(tr('Classes')))
-        table = m.Table(style_class='table table-condensed table-striped')
-        row = m.Row()
-        row.add(m.Cell(tr('Name')), header_flag=True)
-        row.add(m.Cell(tr('Affected')), header_flag=True)
-        row.add(m.Cell(tr('Default values')), header_flag=True)
-        row.add(m.Cell(tr('Default min')), header_flag=True)
-        row.add(m.Cell(tr('Default max')), header_flag=True)
-        table.add(row)
+        table = _make_defaults_table()
         for inasafe_class in definition['classes']:
             row = m.Row()
             row.add(m.Cell(inasafe_class['name']))
@@ -289,7 +290,8 @@ def definition_to_message(definition, heading_style=None):
                 table.add(row)
                 # Description goes in its own row with spanning
                 row = m.Row()
-                row.add(m.Cell(inasafe_class['description'], span=5))
+                row.add(m.Cell(''))
+                row.add(m.Cell(inasafe_class['description'], span=4))
                 table.add(row)
             else:
                 row.add(m.Cell(tr('unspecified')))
@@ -313,3 +315,15 @@ def definition_to_message(definition, heading_style=None):
                 'This class IS required in the hazard keywords.')))
 
     return message
+
+
+def _make_defaults_table():
+    table = m.Table(style_class='table table-condensed table-striped')
+    row = m.Row()
+    row.add(m.Cell(tr('Name')), header_flag=True)
+    row.add(m.Cell(tr('Affected')), header_flag=True)
+    row.add(m.Cell(tr('Default values')), header_flag=True)
+    row.add(m.Cell(tr('Default min')), header_flag=True)
+    row.add(m.Cell(tr('Default max')), header_flag=True)
+    table.add(row)
+    return table

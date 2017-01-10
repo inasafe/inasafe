@@ -311,7 +311,7 @@ exposure_land_cover = {
     'description': tr(
         'The <b>land cover</b> exposure data describes features on '
         'the surface of the earth that might be exposed to a particular '
-        ' hazard. This might include crops, forest and urban areas. '),
+        'hazard. This might include crops, forest and urban areas. '),
     'notes': [
         # these are additional generic notes for landcover - IF has more
         caveat_incomplete_data,
