@@ -19,8 +19,7 @@ __revision__ = '$Format:%H$'
 
 
 def aggregation_result_extractor(impact_report, component_metadata):
-    """
-    Extracting analysis result from the impact layer
+    """Extracting aggregation result of breakdown from the impact layer.
 
     :param impact_report: the impact report that acts as a proxy to fetch
         all the data that extractor needed
@@ -56,9 +55,8 @@ def aggregation_result_extractor(impact_report, component_metadata):
     exposure_type = layer_definition_type(exposure_layer)
     # Only round the number when it is population exposure and it is not
     # in debug mode
-    is_rounded = (
-        exposure_type == exposure_population and
-        not debug_mode)
+    is_rounded = not debug_mode
+    use_population_rounding = exposure_type == exposure_population
 
     # For now aggregation report only applicable for breakable exposure types:
     itemizable_exposures_all = [
@@ -97,7 +95,9 @@ def aggregation_result_extractor(impact_report, component_metadata):
 
     for feat in aggregation_impacted.getFeatures():
         total_affected_value = round_affecter_number(
-            feat[total_field_index], is_rounded)
+            feat[total_field_index],
+            enable_rounding=is_rounded,
+            use_population_rounding=use_population_rounding)
         if total_affected_value == 0:
             # skip aggregation type if the total affected is zero
             continue
@@ -111,7 +111,9 @@ def aggregation_result_extractor(impact_report, component_metadata):
         type_values = []
         for idx in type_field_index:
             affected_value = round_affecter_number(
-                feat[idx], is_rounded)
+                feat[idx],
+                enable_rounding=is_rounded,
+                use_population_rounding=use_population_rounding)
             type_values.append(affected_value)
         item['type_values'] = type_values
         rows.append(item)
@@ -145,7 +147,9 @@ def aggregation_result_extractor(impact_report, component_metadata):
     value_dict = {}
     for feat in exposure_breakdown.getFeatures():
         affected_value = round_affecter_number(
-            feat[affected_field_index], is_rounded)
+            feat[affected_field_index],
+            enable_rounding=is_rounded,
+            use_population_rounding=use_population_rounding)
         value_dict[feat[breakdown_field_index]] = affected_value
 
     if value_dict:
@@ -174,7 +178,9 @@ def aggregation_result_extractor(impact_report, component_metadata):
     field_index = analysis_layer.fieldNameIndex(
         total_affected_field['field_name'])
     total_all = round_affecter_number(
-        analysis_feature[field_index], is_rounded)
+        analysis_feature[field_index],
+        enable_rounding=is_rounded,
+        use_population_rounding=use_population_rounding)
 
     """Generate and format the context"""
 

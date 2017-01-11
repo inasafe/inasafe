@@ -2,11 +2,10 @@
 
 """Definitions relating to minimum-needs."""
 import re
-
 import sys
-from PyQt4.QtCore import QVariant
 
 from safe.common.parameters.resource_parameter import ResourceParameter
+from safe.definitions.constants import qvariant_whole_numbers
 from safe.definitions.fields import default_field_length
 from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
 
@@ -67,9 +66,9 @@ def _initializes_minimum_needs_fields():
             name = '{name}'.format(**format_args)
             field_name = '{namespace}__{field_name}'.format(
                 **format_args)
-            field_type = QVariant.Double
+            field_type = qvariant_whole_numbers
             length = default_field_length
-            precision = 2
+            precision = 0
             absolute = True
             replace_null = False
             description = need_parameter.description

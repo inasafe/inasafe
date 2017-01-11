@@ -21,8 +21,7 @@ __revision__ = '$Format:%H$'
 
 
 def analysis_result_extractor(impact_report, component_metadata):
-    """
-    Extracting analysis result from the impact layer
+    """Extracting analysis result from the impact layer.
 
     :param impact_report: the impact report that acts as a proxy to fetch
         all the data that extractor needed
@@ -44,9 +43,8 @@ def analysis_result_extractor(impact_report, component_metadata):
     debug_mode = impact_report.impact_function.debug_mode
 
     exposure_type = layer_definition_type(exposure_layer)
-    is_rounded = (
-        exposure_type == exposure_population and
-        not debug_mode)
+    is_rounded = not debug_mode
+    use_population_rounding = exposure_type == exposure_population
 
     # find hazard class
     hazard_classification = None
@@ -82,7 +80,9 @@ def analysis_result_extractor(impact_report, component_metadata):
                 hazard_label = hazard_count_field['name'] % (
                     hazard_class['name'], )
                 hazard_value = round_affecter_number(
-                    analysis_feature[field_index], is_rounded)
+                    analysis_feature[field_index],
+                    enable_rounding=is_rounded,
+                    use_population_rounding=use_population_rounding)
                 stats = {
                     'key': hazard_class['key'],
                     'name': hazard_label,
@@ -122,7 +122,9 @@ def analysis_result_extractor(impact_report, component_metadata):
                 report_field['field_name'])
             row_label = report_field['name']
             row_value = round_affecter_number(
-                analysis_feature[field_index], is_rounded)
+                analysis_feature[field_index],
+                enable_rounding=is_rounded,
+                use_population_rounding=use_population_rounding)
             row_stats = {
                 'key': report_field['key'],
                 'name': row_label,

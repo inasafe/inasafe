@@ -10,8 +10,7 @@ __revision__ = '$Format:%H$'
 
 
 def action_checklist_extractor(impact_report, component_metadata):
-    """
-    Extracting action checklist of the exposure layer
+    """Extracting action checklist of the exposure layer.
 
     :param impact_report: the impact report that acts as a proxy to fetch
         all the data that extractor needed

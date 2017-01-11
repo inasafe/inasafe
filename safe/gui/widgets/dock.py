@@ -4,7 +4,6 @@
 import os
 import shutil
 import logging
-from collections import OrderedDict
 
 from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import Qt, pyqtSlot
@@ -24,8 +23,7 @@ from safe.definitions.layer_purposes import (
     layer_purpose_analysis_impacted,
     layer_purpose_exposure_breakdown,
 )
-from safe.definitions.utilities import definition
-from safe.definitions.fields import hazard_class_field
+from safe.definitions.constants import (
 from safe.definitions.constants import (
     inasafe_keyword_version_key,
     HAZARD_EXPOSURE_VIEW,
@@ -68,7 +66,6 @@ from safe.common.exceptions import (
     MetadataReadError,
 )
 from safe.impact_function.impact_function import ImpactFunction
-from safe.impact_function.style import hazard_class_style
 from safe.gui.tools.about_dialog import AboutDialog
 from safe.gui.tools.help_dialog import HelpDialog
 from safe.gui.widgets.message import (
@@ -81,7 +78,9 @@ from safe.gui.widgets.message import (
 from safe.gui.analysis_utilities import (
     generate_impact_report,
     generate_impact_map_report,
-    add_impact_layer_to_QGIS)
+    add_impact_layers_to_canvas,
+    add_debug_layers_to_canvas,
+)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -793,7 +792,14 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.show_busy()
         self.impact_function.callback = self.progress_callback
         self.impact_function.debug_mode = self.debug_mode.isChecked()
-        status, message = self.impact_function.run()
+        try:
+            status, message = self.impact_function.run()
+        except:
+            # We have an exception only if we are in debug mode.
+            # We want to display the datastore and then
+            # we want to re-raise it to get the first aid plugin popup.
+            add_debug_layers_to_canvas(self.impact_function)
+            raise
         if status == ANALYSIS_FAILED_BAD_INPUT:
             self.hide_busy()
             LOGGER.info(tr(
@@ -805,12 +811,16 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             LOGGER.exception(tr(
                 'The impact function could not run because of a bug.'))
             send_error_message(self, message)
+
+            # Even if we are not in debug mode, as we got an exception, we
+            # display the debug group.
+            add_debug_layers_to_canvas(self.impact_function)
             return status, message
 
         LOGGER.info(tr('The impact function could run without errors.'))
 
         # Add result layer to QGIS
-        add_impact_layer_to_QGIS(self.impact_function, self.iface)
+        add_impact_layers_to_canvas(self.impact_function, self.iface)
 
         # Generate impact report
         generate_impact_report(self.impact_function, self.iface)
@@ -824,39 +834,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.iface.zoomToActiveLayer()
 
         if self.impact_function.debug_mode:
-            name = 'DEBUG %s' % self.impact_function.name
-            root = QgsProject.instance().layerTreeRoot()
-            group_debug = root.insertGroup(0, name)
-            group_debug.setVisible(Qt.Unchecked)
-            group_debug.setExpanded(False)
-
-            # Let's style the hazard class in each layers.
-            classification = (
-                self.impact_function.hazard.keywords['classification'])
-            classification = definition(classification)
-
-            classes = OrderedDict()
-            for f in reversed(classification['classes']):
-                classes[f['key']] = (f['color'], f['name'])
-            hazard_class = hazard_class_field['key']
-
-            datastore = self.impact_function.datastore
-            for layer in datastore.layers():
-                qgis_layer = datastore.layer(layer)
-                QgsMapLayerRegistry.instance().addMapLayer(
-                    qgis_layer, False)
-                layer_node = group_debug.insertLayer(0, qgis_layer)
-                layer_node.setVisible(Qt.Unchecked)
-                layer_node.setExpanded(False)
-
-                # Let's style layers which have a geometry and have
-                # hazard_class
-                if qgis_layer.type() == QgsMapLayer.VectorLayer:
-                    if qgis_layer.geometryType() != QGis.NoGeometry:
-                        if qgis_layer.keywords['inasafe_fields'].get(
-                                hazard_class):
-                            hazard_class_style(
-                                qgis_layer, classes, self.debug_mode)
+            add_debug_layers_to_canvas(self.impact_function)
 
         if self.hide_exposure_flag:
             legend = self.iface.legendInterface()

@@ -30,6 +30,7 @@ from safe.utilities.qgis_utilities import add_above_layer, layer_legend_index
 from safe.test.utilities import (
     standard_data_path,
     load_standard_layers,
+    load_test_vector_layer,
     setup_scenario,
     set_canvas_crs,
     combos_to_string,
@@ -620,41 +621,33 @@ class TestDock(TestCase):
         """Check that auxiliary files are well copied when they exist and the
         'saved as' is used.
         """
+        # This layer has keywords.
+        layer = load_test_vector_layer('exposure', 'airports.shp')
 
-        layer_path = os.path.join(TESTDATA, 'tsunami_building_assessment.shp')
-        # pylint: disable=unused-variable
-        layer, layer_type = load_layer(layer_path)
-        # pylint: enable=unused-variable
+        new_name = unique_filename(prefix='airports_layer_saved_as_')
+        new_shapefile_path = '%s.shp' % new_name
+        new_xml_filepath = '%s.xml' % new_name
 
-        new_name = unique_filename(
-            prefix='tsunami_building_assessment_saved_as_')
-        self.dock.save_auxiliary_files(
-            layer, join(TESTDATA, '%s.shp' % new_name))
-
-        new_xml_filepath = os.path.join(TESTDATA, '%s.xml' % new_name)
+        self.dock.save_auxiliary_files(layer, new_shapefile_path)
 
         message = 'New auxiliary file does not exist : '
         self.assertTrue(os.path.isfile(new_xml_filepath), '%s xml' % message)
 
     def test_layer_saved_as_without_keywords_and_xml(self):
-        """Check that auxiliary files aren't created when they don't exist.
-
-        ... and the 'saved as' is used.
+        """Check that auxiliary files aren't created when they don't exist and
+        the 'saved as' is used.
         """
+        # This layer does not have keywords.
+        layer = load_test_vector_layer('other', 'keywordless_layer.shp')
 
-        layer_path = os.path.join(TESTDATA, 'kecamatan_jakarta_osm.shp')
-        # pylint: disable=unused-variable
-        layer, layer_type = load_layer(layer_path)
-        # pylint: enable=unused-variable
+        new_name = unique_filename(prefix='keywordless_layer_saved_as_')
+        new_shapefile_path = '%s.shp' % new_name
+        new_xml_filepath = '%s.xml' % new_name
 
-        new_name = unique_filename(prefix='kecamatan_jakarta_osm_saved_as')
-        self.dock.save_auxiliary_files(
-            layer, join(TESTDATA, '%s.shp' % new_name))
-        new_xml_file_path = os.path.join(TESTDATA, '%s.xml' % new_name)
+        self.dock.save_auxiliary_files(layer, new_shapefile_path)
 
-        message = 'New auxiliary file exist : '
-        # Will automatically add xml file for the metadata.
-        self.assertTrue(os.path.isfile(new_xml_file_path), '%s xml' % message)
+        message = 'New auxiliary file exists !'
+        self.assertFalse(os.path.isfile(new_xml_filepath), '%s xml' % message)
 
     @unittest.expectedFailure
     def test_new_layers_show_in_canvas(self):

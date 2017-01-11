@@ -31,7 +31,7 @@ from safe.impact_function.impact_function import ImpactFunction
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.analysis_utilities import (
-    generate_impact_report, add_impact_layer_to_QGIS)
+    generate_impact_report, add_impact_layers_to_canvas)
 from safe import messaging as m
 from safe.messaging import styles
 
@@ -157,7 +157,7 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         # Generate impact report
         generate_impact_report(self.impact_function, self.parent.iface)
         # Add result layer to QGIS
-        add_impact_layer_to_QGIS(self.impact_function, self.parent.iface)
+        add_impact_layers_to_canvas(self.impact_function, self.parent.iface)
 
         # Some if-s i.e. zoom, debug, hide exposure
         # Hide busy

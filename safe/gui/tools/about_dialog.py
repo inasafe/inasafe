@@ -24,9 +24,8 @@ import qgis  # pylint: disable=unused-import
 from PyQt4 import QtGui
 
 from safe.common.version import get_version
-from safe.defaults import limitations
+from safe.definitionsv4.messages import limitations, disclaimer
 from safe.utilities.resources import resources_path, get_ui_class
-from safe.defaults import disclaimer
 
 FORM_CLASS = get_ui_class('about_dialog_base.ui')
 

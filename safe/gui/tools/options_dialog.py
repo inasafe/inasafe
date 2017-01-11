@@ -18,11 +18,9 @@ from safe_extras.parameters.integer_parameter import IntegerParameter
 from safe.definitions.utilities import all_default_fields
 from safe.definitions.constants import qvariant_whole_numbers, GLOBAL
 from safe.definitions.default_settings import inasafe_default_settings
+from safe.definitions.messages import disclaimer
 from safe.common.utilities import temp_dir
-from safe.defaults import (
-    disclaimer,
-    supporters_logo_path,
-    default_north_arrow_path)
+from safe.defaults import supporters_logo_path, default_north_arrow_path
 from safe.utilities.i18n import tr
 from safe.utilities.resources import get_ui_class, html_header, html_footer
 from safe.common.version import get_version
