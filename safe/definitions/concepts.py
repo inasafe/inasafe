@@ -159,7 +159,7 @@ concepts = {
       },
     'youth': {
         'description': tr(
-            'Person aged between 0 and 14 years.'),
+            'A person aged between 0 and 14 years.'),
         'citations': [
             {
                 'text': tr(
