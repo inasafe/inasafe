@@ -1,6 +1,6 @@
 # coding=utf-8
-"""This module contains constants that are used in definitions.
-"""
+"""This module contains constants that are used in definitions."""
+
 from PyQt4.QtCore import QVariant
 from safe.utilities.i18n import tr
 

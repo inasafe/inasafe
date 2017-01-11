@@ -16,7 +16,7 @@ from qgis.core import (
 
 from safe.common.exceptions import (
     KeywordNotFoundError)
-from safe.defaults import disclaimer
+from safe.definitionsv4.messages import disclaimer
 from safe.defaults import (
     white_inasafe_logo_path,
     black_inasafe_logo_path,

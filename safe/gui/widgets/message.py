@@ -4,7 +4,7 @@ import logging
 
 from safe_extras.pydispatch import dispatcher
 
-from safe.defaults import limitations, disclaimer
+from safe.definitionsv4.messages import limitations, disclaimer
 from safe import messaging as m
 from safe.messaging import styles
 from safe.common.signals import (
