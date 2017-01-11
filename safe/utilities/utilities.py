@@ -26,7 +26,7 @@ from PyQt4.QtCore import QPyNullVariant
 
 from safe.definitions.versions import inasafe_keyword_version, \
     keyword_version_compatibilities
-from safe.definitionsv4.messages import disclaimer
+from safe.definitions.messages import disclaimer
 from safe import messaging as m
 from safe.common.utilities import unique_filename
 from safe.common.version import get_version
