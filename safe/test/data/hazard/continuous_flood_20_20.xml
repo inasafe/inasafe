@@ -172,18 +172,15 @@
       <gmd:supplementalInformation>
         <inasafe_keywords/>
         <inasafe>
-          <thresholds>
-            <gco:Dictionary>{&quot;dry&quot;: [0.0, 1.0], &quot;wet&quot;: [1.0, 1.9]}</gco:Dictionary>
-          </thresholds>
           <hazard_category>
             <gco:CharacterString>single_event</gco:CharacterString>
           </hazard_category>
-          <raster_hazard_classification>
-            <gco:CharacterString/>
-          </raster_hazard_classification>
           <classification>
             <gco:CharacterString>flood_hazard_classes</gco:CharacterString>
           </classification>
+          <thresholds>
+            <gco:Dictionary>{&quot;dry&quot;: [0.0, 1.0], &quot;wet&quot;: [1.0, 1.9]}</gco:Dictionary>
+          </thresholds>
           <prob_fatality_mag>
             <gco:Tuple/>
           </prob_fatality_mag>
@@ -205,9 +202,6 @@
           <value_map>
             <gco:Dictionary/>
           </value_map>
-          <vector_hazard_classification>
-            <gco:CharacterString/>
-          </vector_hazard_classification>
           <layer_geometry>
             <gco:CharacterString>raster</gco:CharacterString>
           </layer_geometry>
