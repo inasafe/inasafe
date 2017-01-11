@@ -24,7 +24,6 @@ from safe.definitions.layer_purposes import (
     layer_purpose_exposure_breakdown,
 )
 from safe.definitions.constants import (
-from safe.definitions.constants import (
     inasafe_keyword_version_key,
     HAZARD_EXPOSURE_VIEW,
     ANALYSIS_FAILED_BAD_INPUT,
@@ -63,8 +62,7 @@ from safe.common.exceptions import (
     InvalidParameterError,
     HashNotFoundError,
     UnsupportedProviderError,
-    MetadataReadError,
-)
+    MetadataReadError)
 from safe.impact_function.impact_function import ImpactFunction
 from safe.gui.tools.about_dialog import AboutDialog
 from safe.gui.tools.help_dialog import HelpDialog
@@ -79,8 +77,7 @@ from safe.gui.analysis_utilities import (
     generate_impact_report,
     generate_impact_map_report,
     add_impact_layers_to_canvas,
-    add_debug_layers_to_canvas,
-)
+    add_debug_layers_to_canvas)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

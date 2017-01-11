@@ -149,7 +149,6 @@ def content():
         table.add(row)
     message.add(table)
 
-
     # All fields
     header = m.Heading(tr('All fields'), **INFO_STYLE)
     message.add(header)

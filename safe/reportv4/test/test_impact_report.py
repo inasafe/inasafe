@@ -20,7 +20,6 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from PyQt4.QtCore import QSettings
 from qgis.core import QgsVectorLayer, QgsMapLayerRegistry
-from safe.definitions.report import (
 from qgis.core import QgsMapLayerRegistry
 from safe.definitions.report import (
     report_a4_portrait_blue,
