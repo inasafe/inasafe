@@ -10,9 +10,7 @@ Contact : ole.moller.nielsen@gmail.com
      (at your option) any later version.
 
 """
-from safe.defaults import get_defaults
 from safe.utilities.gis import qgis_version
-from safe.utilities.keyword_io import KeywordIO
 
 __author__ = 'tim@kartoza.com'
 __date__ = '20/01/2011'

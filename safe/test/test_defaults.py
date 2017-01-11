@@ -11,8 +11,6 @@ import qgis  # pylint: disable=unused-import
 from PyQt4.QtCore import QFile
 
 from safe.defaults import (
-    disclaimer,
-    get_defaults,
     black_inasafe_logo_path,
     white_inasafe_logo_path,
     supporters_logo_path,
@@ -29,29 +27,6 @@ class TestDefaults(unittest.TestCase):
     def tearDown(self):
         """Test tear down."""
         pass
-
-    def test_get_defaults(self):
-        """Test we can get the defaults."""
-        expected = {
-            'ADULT_RATIO': 0.659,
-            'FEMALE_RATIO': 0.5,
-            'ELDERLY_RATIO': 0.087,
-            'YOUTH_RATIO': 0.254,
-            'NO_DATA': u'No data'
-        }
-
-        actual = get_defaults()
-        self.maxDiff = None
-        self.assertDictEqual(expected, actual)
-
-    def test_disclaimer(self):
-        """Verify the disclaimer works.
-
-        This text will probably change a lot so just test to ensure it is
-        not empty.
-        """
-        actual = disclaimer()
-        self.assertTrue(len(actual) > 0)
 
     def test_white_inasafe_logo_path(self):
         """Verify the call to default InaSAFE logo path works."""

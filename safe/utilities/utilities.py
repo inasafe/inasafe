@@ -26,10 +26,10 @@ from PyQt4.QtCore import QPyNullVariant
 
 from safe.definitionsv4.versions import inasafe_keyword_version, \
     keyword_version_compatibilities
+from safe.definitionsv4.messages import disclaimer
 from safe import messaging as m
 from safe.common.utilities import unique_filename
 from safe.common.version import get_version
-from safe.defaults import disclaimer
 from safe.messaging import styles, Message
 from safe.messaging.error_message import ErrorMessage
 from safe.utilities.i18n import tr
