@@ -144,7 +144,7 @@ minimum_needs_fields = _initializes_minimum_needs_fields()
 def _declare_minimum_fields():
     """Declaring minimum needs so it can be recognized in module level import.
 
-    Useful so it can be recognized by safe.definitionsv4.utilities.definition
+    Useful so it can be recognized by safe.definitions.utilities.definition
     """
     for field in minimum_needs_fields:
         setattr(sys.modules[__name__], field['key'], field)

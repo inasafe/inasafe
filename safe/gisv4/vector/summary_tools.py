@@ -78,7 +78,7 @@ def add_fields(
     :type dynamic_values: list
 
     :param dynamic_field: The dynamic field to add.
-    :type dynamic_field: safe.definitionsV4.fields
+    :type dynamic_field: safe.definitions.fields
 
     :param static_fields
     """

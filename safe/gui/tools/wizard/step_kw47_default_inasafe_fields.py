@@ -146,7 +146,7 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
             parameter.guid = inasafe_field['key']
             parameter.name = inasafe_field['name']
             parameter.is_required = False
-            parameter.help_text = inasafe_field['description']
+            parameter.help_text = inasafe_field['help_text']
             parameter.description = inasafe_field['description']
             parameter.element_type = unicode
             parameter.options_list = option_list

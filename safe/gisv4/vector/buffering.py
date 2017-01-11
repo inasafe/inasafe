@@ -32,7 +32,7 @@ def buffering(layer, radii, callback=None):
 
     This processing algorithm will keep the original attribute table and
     will add a new one for the hazard class name according to
-    safe.definitionsv4.fields.hazard_value_field.
+    safe.definitions.fields.hazard_value_field.
 
     radii = OrderedDict()
     radii[500] = 'high'

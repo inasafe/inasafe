@@ -33,7 +33,7 @@ def hazard_class_style(layer, classification, display_null=False):
     :type display_null: bool
 
     :param classification: The hazard classification to use.
-    :type classification: dict safe.definitionsv4.hazard_classifications
+    :type classification: dict safe.definitions.hazard_classifications
     """
     categories = []
 

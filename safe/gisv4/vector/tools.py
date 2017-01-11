@@ -212,7 +212,7 @@ def create_field_from_definition(field_definition, name=None):
     """Helper to create a field from definition.
 
     :param field_definition: The definition of the field.
-    :type field_definition: safe.definitionsv4.fields
+    :type field_definition: safe.definitions.fields
 
     :param name: The name is required if the field name is dynamic and need a
         string formatting.

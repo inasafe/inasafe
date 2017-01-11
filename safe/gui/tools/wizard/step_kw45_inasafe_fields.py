@@ -152,7 +152,7 @@ class StepKwInaSAFEFields(WizardStep, FORM_CLASS):
             select_parameter.guid = inasafe_field['key']
             select_parameter.name = inasafe_field['name']
             select_parameter.is_required = False
-            select_parameter.help_text = inasafe_field['description']
+            select_parameter.help_text = inasafe_field['help_text']
             select_parameter.description = inasafe_field['description']
             select_parameter.element_type = unicode
             select_parameter.options_list = option_list

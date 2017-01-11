@@ -11,8 +11,8 @@ from safe.common.parameters.default_value_parameter_widget import (
 from safe_extras.parameters.qt_widgets.parameter_container import (
     ParameterContainer)
 
-from safe.definitionsv4.layer_purposes import (layer_purpose_aggregation)
-from safe.definitionsv4.utilities import get_fields, get_compulsory_fields
+from safe.definitions.layer_purposes import (layer_purpose_aggregation)
+from safe.definitions.utilities import get_fields, get_compulsory_fields
 from safe.gui.tools.wizard.wizard_utils import get_inasafe_default_value_fields
 
 from safe.gui.tools.wizard.wizard_step import (
