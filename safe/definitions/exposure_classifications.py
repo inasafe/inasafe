@@ -366,7 +366,7 @@ generic_road_classes = {
             'key': 'local',
             'name': tr('Local'),
             'description': tr(
-                'A road that provdes a transportation link for a short '
+                'A road that provides a transportation link for a short '
                 'distance travel and low average velocity.'),
             'string_defaults': [
                 'local',

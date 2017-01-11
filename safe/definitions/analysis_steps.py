@@ -88,21 +88,22 @@ analysis_steps['aggregation_preparation'] = {
     ]
 }
 analysis_steps['aggregate_hazard_preparation'] = {
-        'key': 'aggregate_hazard_preparation',
-        'name': tr('Aggregate hazard preparation'),
-        'description': tr(
-            'In this step we union the hazard data and the aggregation data '
-            'then remove any of the resulting polygons that do not intersect '
-            'the aggregation areas. Each resulting polygon stores the id and '
-            'class of the hazard and the id and name from the aggregation '
-            'area.'),
-        'citations': [
-            {
-                'text': tr(''),
-                'link': ''
-            }
-        ]
-    }
+    'key': 'aggregate_hazard_preparation',
+    'name': tr('Aggregate hazard preparation'),
+    'description': tr(
+        'In this step we union the hazard data and the aggregation data '
+        'then remove any of the resulting polygons that do not intersect '
+        'the aggregation areas. Each resulting polygon stores the id and '
+        'class of the hazard and the id and name from the aggregation '
+        'area.'),
+    'citations': [
+        {
+            'text': tr(''),
+            'link': ''
+        }
+    ]
+}
+
 analysis_steps['combine_hazard_exposure'] = {
     'key': 'combine_hazard_exposure',
     'name': tr('Combine aggregate hazard and exposure'),
