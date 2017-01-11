@@ -57,20 +57,6 @@ class HazardLayerMetadata(GenericLayerMetadata):
             'inasafe/'
             'classification/'
             'gco:CharacterString'),
-        'vector_hazard_classification': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            'vector_hazard_classification/'
-            'gco:CharacterString'),
-        'raster_hazard_classification': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            'raster_hazard_classification/'
-            'gco:CharacterString'),
         'field': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'

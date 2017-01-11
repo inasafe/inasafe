@@ -125,8 +125,6 @@ def definition_to_message(definition, heading_style=None):
     'actions':  a list of strings
 
     'continuous_hazard_units': list of ,
-    'vector_hazard_classifications': list of,
-    'raster_hazard_classifications': list of,
     'classifications': list of ,
     'extra_fields': []
 
@@ -246,10 +244,6 @@ def definition_to_message(definition, heading_style=None):
             table.add(row)
         message.add(table)
 
-    # TOOD: vector_hazard_classifications should be ignored
-    # it is replaced by hazard_classfications in v4
-    # We should delete vector_hazard_classifications from
-    # definitions
     if 'classifications' in definition:
         message.add(m.Paragraph(tr('Hazard classifications')))
         for inasafe_class in definition['classifications']:
