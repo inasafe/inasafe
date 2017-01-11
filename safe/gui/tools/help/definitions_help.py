@@ -5,6 +5,19 @@ from safe.utilities.i18n import tr
 from safe import messaging as m
 from safe.messaging import styles
 import safe.definitions as definitions
+from safe.gui.tools.help.dock_help import content as dock_help
+from safe.gui.tools.help.extent_selector_help import content as extent_help
+from safe.gui.tools.help.impact_report_help import content as report_help
+from safe.gui.tools.help.needs_calculator_help import content as needs_help
+from safe.gui.tools.help.needs_manager_help import content as \
+    needs_manager_help
+from safe.gui.tools.help.options_help import content as options_help
+from safe.gui.tools.help.osm_downloader_help import content as osm_help
+from safe.gui.tools.help.peta_jakarta_help import content as petajakarta_help
+from safe.gui.tools.help.raster_reclassify_help \
+    import content as reclassify_help
+from safe.gui.tools.help.shakemap_converter_help \
+    import content as shakemap_help
 INFO_STYLE = styles.INFO_STYLE
 WARNING_STYLE = styles.WARNING_STYLE
 SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
@@ -58,6 +71,23 @@ def content():
     :rtype: safe.messaging.message.Message
     """
     message = m.Message()
+
+    ##
+    # First all the help dialog contents ...
+    ##
+    header = m.Heading(tr('Core functionality and tools'), **INFO_STYLE)
+    message.add(header)
+    message.add(dock_help())
+    message.add(extent_help())
+    message.add(report_help())
+    message.add(needs_help())
+    message.add(needs_manager_help())
+    message.add(options_help())
+    message.add(osm_help())
+    message.add(petajakarta_help())
+    message.add(reclassify_help())
+    message.add(shakemap_help())
+
     ##
     #  Analysis workflow
     ##
@@ -118,11 +148,38 @@ def content():
         row.add(m.Cell(default['description']))
         table.add(row)
     message.add(table)
-    # paragraph = m.Paragraph(tr(
-    #   ''
-    # ))
-    # message.add(paragraph)
+
+
+    # All fields
+    header = m.Heading(tr('All fields'), **INFO_STYLE)
+    message.add(header)
+    _create_fields_section(
+        message, tr('Exposure fields'), definitions.exposure_fields)
+    _create_fields_section(
+        message, tr('Hazard fields'), definitions.hazard_fields)
+    _create_fields_section(
+        message, tr('Aggregation fields'), definitions.aggregation_fields)
+    _create_fields_section(
+        message, tr('Impact fields'), definitions.impact_fields)
+    _create_fields_section(
+        message, tr('Exposure fields'), definitions.aggregate_hazard_fields)
+    _create_fields_section(
+        message,
+        tr('Exposure fields'), definitions.aggregation_impacted_fields)
+    _create_fields_section(
+        message, tr('Exposure fields'), definitions.exposure_breakdown_fields)
+    _create_fields_section(
+        message, tr('Exposure fields'), definitions.analysis_fields)
+
     return message
+
+
+def _create_fields_section(message, title, fields):
+    message.add(m.Paragraph(tr(title)))
+    table = _create_fields_table()
+    for field in fields:
+        _add_field_to_table(field, table)
+    message.add(table)
 
 
 def definition_to_message(definition, heading_style=None):
@@ -221,35 +278,10 @@ def definition_to_message(definition, heading_style=None):
 
     if 'extra_fields' and 'fields' in definition:
         message.add(m.Paragraph(tr('Fields')))
-        table = m.Table(style_class='table table-condensed table-striped')
-        row = m.Row()
-        row.add(m.Cell(tr('Name')), header_flag=True)
-        row.add(m.Cell(tr('Field Name')), header_flag=True)
-        row.add(m.Cell(tr('Type')), header_flag=True)
-        row.add(m.Cell(tr('Length')), header_flag=True)
-        row.add(m.Cell(tr('Precision')), header_flag=True)
-        table.add(row)
+        table = _create_fields_table()
         all_fields = definition['fields'] + definition['extra_fields']
         for field in all_fields:
-            row = m.Row()
-            row.add(m.Cell(field['name']))
-            row.add(m.Cell(field['field_name']))
-            field_types = None
-            if not isinstance(field['type'], list):
-                field_types = '%s' % field['type']
-            else:
-                for field_type in field['type']:
-                    if field_types:
-                        field_types += ', %s' % unicode(field_type)
-                    else:
-                        field_types = unicode(field_type)
-            row.add(m.Cell(field_types))
-            row.add(m.Cell(field['precision']))
-            table.add(row)
-            # Description goes in its own row with spanning
-            row = m.Row()
-            row.add(m.Cell(field['description'], span=5))
-            table.add(row)
+            _add_field_to_table(field, table)
         message.add(table)
 
     # TOOD: vector_hazard_classifications should be ignored
@@ -316,6 +348,40 @@ def definition_to_message(definition, heading_style=None):
                 'This class IS required in the hazard keywords.')))
 
     return message
+
+
+def _create_fields_table():
+    table = m.Table(style_class='table table-condensed table-striped')
+    row = m.Row()
+    row.add(m.Cell(tr('Name')), header_flag=True)
+    row.add(m.Cell(tr('Field Name')), header_flag=True)
+    row.add(m.Cell(tr('Type')), header_flag=True)
+    row.add(m.Cell(tr('Length')), header_flag=True)
+    row.add(m.Cell(tr('Precision')), header_flag=True)
+    table.add(row)
+    return table
+
+
+def _add_field_to_table(field, table):
+    row = m.Row()
+    row.add(m.Cell(field['name']))
+    row.add(m.Cell(field['field_name']))
+    field_types = None
+    if not isinstance(field['type'], list):
+        field_types = '%s' % field['type']
+    else:
+        for field_type in field['type']:
+            if field_types:
+                field_types += ', %s' % unicode(field_type)
+            else:
+                field_types = unicode(field_type)
+    row.add(m.Cell(field_types))
+    row.add(m.Cell(field['precision']))
+    table.add(row)
+    # Description goes in its own row with spanning
+    row = m.Row()
+    row.add(m.Cell(field['description'], span=5))
+    table.add(row)
 
 
 def _make_defaults_table():
