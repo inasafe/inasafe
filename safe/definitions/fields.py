@@ -838,8 +838,6 @@ total_unaffected_field = {
         'The total unaffected field stores the cumulative total number of '
         'unaffected features or entities.'),
     'description': tr(
-        '"Unaffected" is defined as: ' +
-        concepts['unaffected']['description'] +
         'The total unaffected field is added to the analysis layer, aggregate '
         'impact layer and aggregate hazard impact layer during the impact '
         'analysis. It represents the cumulative count of unaffected exposure '
