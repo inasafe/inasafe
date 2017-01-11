@@ -172,18 +172,15 @@
       <gmd:supplementalInformation>
         <inasafe_keywords/>
         <inasafe>
-          <thresholds>
-            <gco:Dictionary/>
-          </thresholds>
           <hazard_category>
             <gco:CharacterString>single_event</gco:CharacterString>
           </hazard_category>
-          <raster_hazard_classification>
-            <gco:CharacterString/>
-          </raster_hazard_classification>
           <classification>
             <gco:CharacterString/>
           </classification>
+          <thresholds>
+            <gco:Dictionary/>
+          </thresholds>
           <prob_fatality_mag>
             <gco:Tuple/>
           </prob_fatality_mag>
@@ -205,9 +202,6 @@
           <value_map>
             <gco:Dictionary>{&quot;high&quot;: [&quot;YES&quot;]}</gco:Dictionary>
           </value_map>
-          <vector_hazard_classification>
-            <gco:CharacterString>generic_vector_hazard_classes</gco:CharacterString>
-          </vector_hazard_classification>
           <layer_geometry>
             <gco:CharacterString>polygon</gco:CharacterString>
           </layer_geometry>
