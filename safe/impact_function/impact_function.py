@@ -79,6 +79,7 @@ from safe.common.exceptions import (
     InvalidExtentError,
     NoKeywordsFoundError,
     NoFeaturesInExtentError,
+    ProcessingInstallationError,
 )
 from safe.impact_function.postprocessors import (
     run_single_post_processor, enough_input)
@@ -749,8 +750,13 @@ class ImpactFunction(object):
                 self._title = tr('be affected')
 
         except Exception as e:
-            message = get_error_message(e)
-            return PREPARE_FAILED_BAD_CODE, message
+            if self.debug_mode:
+                # We run in debug mode, we do not want to catch the exception.
+                # You should download the First Aid plugin for instance.
+                raise
+            else:
+                message = get_error_message(e)
+                return PREPARE_FAILED_BAD_CODE, message
         else:
             # Everything was fine.
             self._is_ready = True
@@ -916,6 +922,24 @@ class ImpactFunction(object):
             message.add(suggestion)
             return ANALYSIS_FAILED_BAD_INPUT, message
 
+        except ProcessingInstallationError:
+            warning_heading = m.Heading(
+                tr('Configuration issue'), **WARNING_STYLE)
+            warning_message = tr(
+                'There is a problem with the Processing plugin.')
+            suggestion_heading = m.Heading(
+                tr('Suggestion'), **SUGGESTION_STYLE)
+            suggestion = tr(
+                'Check in your .qgis2/python/plugins directory that you do '
+                'not have a processing folder. You should use the Processing '
+                'plugin provided by QGIS.')
+            message = m.Message()
+            message.add(warning_heading)
+            message.add(warning_message)
+            message.add(suggestion_heading)
+            message.add(suggestion)
+            return ANALYSIS_FAILED_BAD_INPUT, message
+
         except InaSAFEError as e:
             message = get_error_message(e)
             return ANALYSIS_FAILED_BAD_CODE, message
@@ -940,8 +964,14 @@ class ImpactFunction(object):
             return ANALYSIS_FAILED_BAD_INPUT, message
 
         except Exception as e:
-            message = get_error_message(e)
-            return ANALYSIS_FAILED_BAD_CODE, message
+            if self.debug_mode:
+                # We run in debug mode, we do not want to catch the exception.
+                # You should download the First Aid plugin for instance.
+                raise
+            else:
+                message = get_error_message(e)
+                return ANALYSIS_FAILED_BAD_CODE, message
+
         else:
             self._provenance_ready = True
             return ANALYSIS_SUCCESS, None
