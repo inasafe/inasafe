@@ -32,18 +32,13 @@ def generate_impact_report(impact_function, iface):
     :type iface: QGisAppInterface
 
     """
-    # get minimum needs profile
-    minimum_needs = NeedsProfile()
-    minimum_needs.load()
-
     # create impact report instance
     report_metadata = ReportMetadata(
         metadata_dict=standard_impact_report_metadata_pdf)
     impact_report = ImpactReportV4(
         iface,
         report_metadata,
-        impact_function=impact_function,
-        minimum_needs_profile=minimum_needs)
+        impact_function=impact_function)
 
     # generate report folder
 

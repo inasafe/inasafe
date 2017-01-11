@@ -24,7 +24,8 @@ def impact_table_extractor(impact_report, component_metadata):
 
     :param component_metadata: the component metadata. Used to obtain
         information about the component we want to render
-    :type component_metadata: safe.reportv4.report_metadata.ReportMetadata
+    :type component_metadata: safe.reportv4.report_metadata.
+        ReportComponentsMetadata
 
     :return: context for rendering phase
     :rtype: dict
@@ -34,6 +35,7 @@ def impact_table_extractor(impact_report, component_metadata):
     # Imported here to avoid cyclic dependencies
     from safe.definitions.report import (
         analysis_result_component,
+        population_infographic_component,
         analysis_breakdown_component,
         action_checklist_component,
         notes_assumptions_component,

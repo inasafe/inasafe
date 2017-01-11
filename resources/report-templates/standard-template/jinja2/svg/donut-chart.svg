@@ -1,0 +1,46 @@
+{% if context.as_file %}
+<?xml version="1.0" encoding="UTF-8"?>
+{% endif %}
+<svg
+        {% if context.as_file %}
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        {% endif %}
+        viewBox="0 0 512 300"
+        preserveAspectRatio="xMidYMid">
+    <text class="chart-title" x="0" y="0" alignment-baseline="hanging" font-size="12">
+        {{ context.title }}
+    </text>
+    <g class="pielayer" transform="translate(0,32)">
+        <g stroke-linejoin="round" class="trace" style="opacity: 1;">
+            <g class="pie">
+                {% for slice in context.slices %}
+                <g class="slice">
+                    <path class="surface" d="{{ slice.path }}" style="pointer-events: all; stroke-width: {{ slice.stroke.width }}; fill: {{ slice.fill }}; stroke: {{ slice.stroke }}; stroke-opacity: {{ slice.stroke_opacity }};" />
+                </g>
+                <text class="slice-value" text-anchor="middle" alignment-baseline="middle" x="{{ slice.center[0] }}" y="{{ slice.center[1] - 8 }}">
+                    {{ context.thousand_separator_format.format(slice.value|int) }}
+                </text>
+                <text class="slice-percentage" text-anchor="middle" alignment-baseline="middle" x="{{ slice.center[0] }}" y="{{ slice.center[1] + 8 }}">
+                    {{ '{0:.2f}%'.format(slice.percentage|float) }}
+                </text>
+                <rect class="legend-color" x="{{ slice.label_position[0] + 8 }}" y="{{ slice.label_position[1] - 16 }}" width="16" height="16" fill="{{ slice.fill }}" />
+                <text class="legend-label" x="{{ slice.label_position[0] + 28 }}" y="{{ slice.label_position[1] }}" text-anchor="left">
+                    {{ slice.label }}
+                </text>
+                {% endfor %}
+            </g>
+        </g>
+        <g class="total-text">
+            <text class="total-value" text-anchor="middle" x="128" y="108">
+                {{ context.thousand_separator_format.format(context.total_value|int) }}
+            </text>
+            <text class="total-value-header" text-anchor="middle" x="128" y="128">
+                Total
+            </text>
+            <text class="total-value-header" text-anchor="middle" x="128" y="148">
+                {{ context.total_header }}
+            </text>
+        </g>
+    </g>
+</svg>

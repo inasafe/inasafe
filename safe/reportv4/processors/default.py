@@ -15,8 +15,8 @@ from tempfile import mkdtemp
 from PyQt4.QtCore import QUrl
 from jinja2.environment import Environment
 from jinja2.loaders import FileSystemLoader
-from qgis._core import QgsComposerFrame
 from qgis.core import (
+    QgsComposerFrame,
     QgsComposition,
     QgsComposerHtml,
     QgsRectangle)
@@ -55,7 +55,15 @@ def jinja2_renderer(impact_report, component):
     main_template_folder = impact_report.metadata.template_folder
     loader = FileSystemLoader(
         os.path.abspath(main_template_folder))
-    env = Environment(loader=loader)
+    extensions = [
+        'jinja2.ext.i18n',
+        'jinja2.ext.with_',
+        'jinja2.ext.loopcontrols',
+        'jinja2.ext.do',
+    ]
+    env = Environment(
+        loader=loader,
+        extensions=extensions)
 
     template = env.get_template(component.template)
     rendered = template.render(context)
@@ -101,6 +109,11 @@ def qgis_composer_html_renderer(impact_report, component):
 
     # load composition object
     composition = QgsComposition(qgis_composition_context.map_settings)
+
+    if not context.html_frame_elements:
+        # if no html frame elements at all, do not generate empty report.
+        component.output = ''
+        return component.output
 
     # Add HTML Frame
     for html_el in context.html_frame_elements:

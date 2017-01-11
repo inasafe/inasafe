@@ -18,6 +18,9 @@ from safe.reportv4.extractors.composer import qgis_composer_extractor
 from safe.reportv4.extractors.impact_table import (
     impact_table_extractor,
     impact_table_pdf_extractor)
+from safe.reportv4.extractors.infographics import \
+    population_infographic_extractor, infographic_layout_extractor, \
+    infographic_pdf_extractor
 from safe.reportv4.extractors.minimum_needs import minimum_needs_extractor
 from safe.reportv4.processors.default import (
     qgis_composer_renderer,
@@ -27,6 +30,7 @@ from safe.reportv4.report_metadata import (
     ReportComponentsMetadata,
     Jinja2ComponentsMetadata,
     QgisComposerComponentsMetadata)
+from safe.utilities.resources import resource_url, resources_path
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -118,6 +122,42 @@ aggregation_postprocessors_component = {
                 'aggregation-postprocessors.html',
 }
 
+population_infographic_component = {
+    'key': 'population-infographic',
+    'type': ReportComponentsMetadata.AvailableComponent.Jinja2,
+    'processor': jinja2_renderer,
+    'extractor': population_infographic_extractor,
+    'output_format': Jinja2ComponentsMetadata.OutputFormat.String,
+    'output_path': 'population-infographic-output.html',
+    'template': 'standard-template/'
+                'jinja2/'
+                'population-infographic.html',
+    'extra_args': {
+        'icons': {
+            'total_affected_field': resource_url(resources_path(
+                'img/definitions/people.svg')),
+            'female_count_field': resource_url(resources_path(
+                'img/definitions/female.svg')),
+            'youth_count_field': resource_url(resources_path(
+                'img/definitions/youth.svg')),
+            'adult_count_field': resource_url(resources_path(
+                'img/definitions/adult.svg')),
+            'elderly_count_field': resource_url(resources_path(
+                'img/definitions/elderly.svg')),
+            'minimum_needs__rice_count_field': resource_url(resources_path(
+                'img/definitions/rice.svg')),
+            'minimum_needs__toilets_count_field': resource_url(resources_path(
+                'img/definitions/toilets.svg')),
+            'minimum_needs__drinking_water_count_field': resource_url(
+                resources_path('img/definitions/drinking_water.svg')),
+            'minimum_needs__clean_water_count_field': resource_url(
+                resources_path('img/definitions/clean_water.svg')),
+            'minimum_needs__family_kits_count_field': resource_url(
+                resources_path('img/definitions/family_kits.svg')),
+        }
+    }
+}
+
 # Default impact report component for reusability
 impact_report_component_metadata = [
     analysis_result_component,
@@ -135,12 +175,13 @@ standard_impact_report_metadata_html = {
     'name': 'analysis-result-html',
     'template_folder': safe_dir(sub_dir='../resources/report-templates/'),
     'components': impact_report_component_metadata + [
+        population_infographic_component,
         {
             'key': 'impact-report',
             'type': ReportComponentsMetadata.AvailableComponent.Jinja2,
             'processor': jinja2_renderer,
             'extractor': impact_table_extractor,
-            'output_format': Jinja2ComponentsMetadata.OutputFormat.File,
+            'output_format': Jinja2ComponentsMetadata.OutputFormat.String,
             'output_path': 'impact-report-output.html',
             'template': 'standard-template/'
                         'jinja2/'
@@ -155,6 +196,7 @@ standard_impact_report_metadata_pdf = {
     'name': 'analysis-result-pdf',
     'template_folder': safe_dir(sub_dir='../resources/report-templates/'),
     'components': impact_report_component_metadata + [
+        # Impact Report HTML
         {
             'key': 'impact-report',
             'type': ReportComponentsMetadata.AvailableComponent.Jinja2,
@@ -166,6 +208,7 @@ standard_impact_report_metadata_pdf = {
                         'jinja2/'
                         'impact-report-layout.html',
         },
+        # Impact Report PDF
         {
             'key': 'impact-report-pdf',
             'type': ReportComponentsMetadata.AvailableComponent.QGISComposer,
@@ -173,6 +216,66 @@ standard_impact_report_metadata_pdf = {
             'extractor': impact_table_pdf_extractor,
             'output_format': QgisComposerComponentsMetadata.OutputFormat.PDF,
             'output_path': 'impact-report-output.pdf',
+        },
+        population_infographic_component,
+        # Infographic Layout HTML
+        {
+            'key': 'infographic-layout',
+            'type': ReportComponentsMetadata.AvailableComponent.Jinja2,
+            'processor': jinja2_renderer,
+            'extractor': infographic_layout_extractor,
+            'output_format': Jinja2ComponentsMetadata.OutputFormat.File,
+            'output_path': 'infographic.html',
+            'extra_args': {
+                'infographics': [population_infographic_component['key']]
+            },
+            'template': 'standard-template/'
+                        'jinja2/'
+                        'infographic-layout.html',
+        },
+        # Infographic Layout PDF
+        {
+            'key': 'infographic-pdf',
+            'type': ReportComponentsMetadata.AvailableComponent.QGISComposer,
+            'processor': qgis_composer_html_renderer,
+            'extractor': infographic_pdf_extractor,
+            'output_format': QgisComposerComponentsMetadata.OutputFormat.PDF,
+            'output_path': 'infographic.pdf',
+            'page_dpi': 300,
+            'page_width': 297,
+            'page_height': 210,
+        }
+    ]
+}
+
+# Standard PDF Output for infographic report
+standard_infographic_report_metadata_pdf = {
+    'key': 'infographic-result-pdf',
+    'name': 'infographic-result-pdf',
+    'template_folder': safe_dir(sub_dir='../resources/report-templates/'),
+    'components': [
+        population_infographic_component,
+        {
+            'key': 'infographic-layout',
+            'type': ReportComponentsMetadata.AvailableComponent.Jinja2,
+            'processor': jinja2_renderer,
+            'extractor': infographic_layout_extractor,
+            'output_format': Jinja2ComponentsMetadata.OutputFormat.File,
+            'output_path': 'infographic.html',
+            'extra_args': {
+                'infographics': [population_infographic_component['key']]
+            },
+        },
+        {
+            'key': 'infographic-pdf',
+            'type': ReportComponentsMetadata.AvailableComponent.QGISComposer,
+            'processor': qgis_composer_html_renderer,
+            'extractor': infographic_pdf_extractor,
+            'output_format': QgisComposerComponentsMetadata.OutputFormat.PDF,
+            'output_path': 'infographic.pdf',
+            'page_dpi': 300,
+            'page_width': 297,
+            'page_height': 210,
         }
     ]
 }

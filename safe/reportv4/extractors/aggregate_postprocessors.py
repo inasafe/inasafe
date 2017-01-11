@@ -31,7 +31,8 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
 
     :param component_metadata: the component metadata. Used to obtain
         information about the component we want to render
-    :type component_metadata: safe.reportv4.report_metadata.ReportMetadata
+    :type component_metadata: safe.reportv4.report_metadata.
+        ReportComponentsMetadata
 
     :return: context for rendering phase
     :rtype: dict
@@ -100,7 +101,7 @@ def create_section(
         aggregation_impacted, analysis_layer, postprocessor_fields,
         section_header, units_label=None, debug_mode=False,
         population_rounding=False):
-    """Create gender section context.
+    """Create demographic section context.
 
     :param aggregation_impacted: Aggregation impacted
     :type aggregation_impacted: qgis.core.QgsVectorlayer

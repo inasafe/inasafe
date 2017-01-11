@@ -12,7 +12,8 @@ __revision__ = '$Format:%H$'
 
 
 class ReportComponentsMetadata(object):
-    """ReportComponentsMetadata
+
+    """ReportComponentsMetadata.
 
     Describing metadata for Report component
     """
@@ -29,7 +30,7 @@ class ReportComponentsMetadata(object):
 
     def __init__(
             self, key, processor, extractor,
-            output_format, template, output_path):
+            output_format, template, output_path, extra_args=None):
         """Base class for component metadata
 
         ReportComponentMetadata is a metadata about the component element of
@@ -61,6 +62,10 @@ class ReportComponentsMetadata(object):
             of the report. Can be used to dynamically link components in
             base template.
         :type output_path: str
+
+        :param extra_args: Extra args sometimes needed for a component.
+            Needed to pass it out to extractors.
+        :type extra_args: str
         """
         self._key = key
         if callable(processor):
@@ -75,10 +80,11 @@ class ReportComponentsMetadata(object):
         self._template = template
         self._output = None
         self._component_context = {}
+        self._extra_args = extra_args
 
     @property
     def key(self):
-        """Unique key as ID for the component in the report
+        """Unique key as ID for the component in the report.
 
         :rtype: str
         """
@@ -86,7 +92,7 @@ class ReportComponentsMetadata(object):
 
     @property
     def processor(self):
-        """Function reference for method to render the component
+        """Function reference for method to render the component.
 
         :rtype: function
         """
@@ -94,7 +100,7 @@ class ReportComponentsMetadata(object):
 
     @property
     def extractor(self):
-        """Function reference for method to provide the data for rendering
+        """Function reference for method to provide the data for rendering.
 
         :rtype: function
         """
@@ -133,7 +139,7 @@ class ReportComponentsMetadata(object):
 
     @property
     def output(self):
-        """The output of rendering process
+        """The output of rendering process.
 
         Can be a string, a path to a file, or an object
 
@@ -153,7 +159,7 @@ class ReportComponentsMetadata(object):
 
     @property
     def context(self):
-        """The context provided by extractors
+        """The context provided by extractors.
 
         Will be used by rendering process together with the template to
         generate output. Passed in the form of dict containing key-value pair
@@ -171,12 +177,29 @@ class ReportComponentsMetadata(object):
         """
         self._component_context = value
 
+    @property
+    def extra_args(self):
+        """Extra arguments that can be specified by report metadata.
+
+        :return: dict
+        """
+        return self._extra_args
+
+    @extra_args.setter
+    def extra_args(self, value):
+        """Extra arguments setter.
+
+        :param value: Only be set in the report metadata declarations
+        :type value: dict
+        """
+        self._extra_args = value
+
 
 class Jinja2ComponentsMetadata(ReportComponentsMetadata):
-    """Jinja2 Component
+
+    """Jinja2 Component.
 
     Component that can be rendered by Jinja2
-
     """
 
     class OutputFormat(object):
@@ -187,13 +210,15 @@ class Jinja2ComponentsMetadata(ReportComponentsMetadata):
 
     def __init__(
             self, key, processor, extractor,
-            output_format, template, output_path):
+            output_format, template, output_path, extra_args=None):
         super(Jinja2ComponentsMetadata, self).__init__(
-            key, processor, extractor, output_format, template, output_path)
+            key, processor, extractor, output_format, template, output_path,
+            extra_args=extra_args)
 
 
 class QgisComposerComponentsMetadata(ReportComponentsMetadata):
-    """QGIS Composer Component
+
+    """QGIS Composer Component.
 
     Component that can be rendered by QGIS Composition class
 
@@ -207,7 +232,7 @@ class QgisComposerComponentsMetadata(ReportComponentsMetadata):
 
     def __init__(
             self, key, processor, extractor,
-            output_format, template, output_path,
+            output_format, template, output_path, extra_args=None,
             page_dpi=300, page_width=210, page_height=297):
         """
         Provides 3 more options
@@ -222,7 +247,8 @@ class QgisComposerComponentsMetadata(ReportComponentsMetadata):
         :type page_height: float
         """
         super(QgisComposerComponentsMetadata, self).__init__(
-            key, processor, extractor, output_format, template, output_path)
+            key, processor, extractor, output_format, template, output_path,
+            extra_args=extra_args)
         self._page_dpi = page_dpi
         self._page_width = page_width
         self._page_height = page_height
@@ -295,12 +321,12 @@ class ReportMetadata(object):
                 ReportComponentsMetadata.AvailableComponent.Jinja2):
             return Jinja2ComponentsMetadata(
                 key, processor, extractor, output_format, template,
-                output_path)
+                output_path, extra_args=extra_args)
         elif (component_type ==
                 ReportComponentsMetadata.AvailableComponent.QGISComposer):
             return QgisComposerComponentsMetadata(
                 key, processor, extractor, output_format, template,
-                output_path, **extra_args)
+                output_path, extra_args=extra_args)
 
     @property
     def key(self):
