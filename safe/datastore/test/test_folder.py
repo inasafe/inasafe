@@ -16,20 +16,13 @@ import unittest
 from tempfile import mkdtemp
 from os.path import join
 
-# This import must come first to force sip2 api
-# noinspection PyUnresolvedReferences
-# pylint: disable=unused-import
-from qgis.core import QGis  # force sip2 api
-
+from safe.test.utilities import qgis_iface
 from PyQt4.QtCore import QDir
 
-from safe.test.utilities import (
-    get_qgis_app,
-    load_test_raster_layer,
-    load_test_vector_layer)
-QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
-
+from safe.test.utilities import load_test_raster_layer, load_test_vector_layer
 from safe.datastore.folder import Folder
+
+qgis_iface()
 
 
 class TestFolder(unittest.TestCase):

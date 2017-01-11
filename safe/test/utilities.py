@@ -65,12 +65,26 @@ EXPDATA = os.path.join(DATADIR, 'exposure')  # Real exposure layers
 BOUNDDATA = os.path.join(DATADIR, 'boundaries')  # Real exposure layers
 
 
+def qgis_iface():
+    """Helper method to get the iface for testing.
+
+    :return: The QGIS interface.
+    :rtype: QgsInterface
+    """
+    from qgis.utils import iface
+    if iface is not None:
+        return iface
+    else:
+        from qgis.testing.mocked import get_iface
+        return get_iface()
+
+
 def get_qgis_app():
     """ Start one QGIS application to test against.
 
     :returns: Handle to QGIS app, canvas, iface and parent. If there are any
         errors the tuple members will be returned as None.
-    :rtype: (QgsApplication, CANVAS, IFload_standard_layersACE, PARENT)
+    :rtype: (QgsApplication, CANVAS, IFACE, PARENT)
 
     If QGIS is already running the handle to that app will be returned.
     """
