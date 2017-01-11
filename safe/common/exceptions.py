@@ -429,8 +429,8 @@ class InvalidWizardStep(InaSAFEError):
     pass
 
 
-class ProcessingAlgError(InaSAFEError):
+class ProcessingInstallationError(InaSAFEError):
 
-    """When there is an error in processing algorithm."""
+    """When there is an error with Processing."""
 
     pass

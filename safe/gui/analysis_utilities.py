@@ -1,13 +1,17 @@
 # coding=utf-8
 """Analysis Utilities"""
 import os
+from collections import OrderedDict
 from PyQt4.QtCore import QDir, Qt
 from PyQt4.QtCore import QSettings
-from qgis.core import QgsMapLayerRegistry, QgsProject
+from qgis.core import QgsMapLayerRegistry, QgsProject, QgsMapLayer, QGis
 
+from safe.definitionsv4.utilities import definition
+from safe.definitionsv4.fields import hazard_class_field
 from safe.definitionsv4.report import (
     standard_impact_report_metadata_pdf,
     report_a4_portrait_blue)
+from safe.impact_function.style import hazard_class_style
 from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
 from safe.reportv4.report_metadata import ReportMetadata
 from safe.reportv4.impact_report import ImpactReport as ImpactReportV4
@@ -108,7 +112,7 @@ def generate_impact_map_report(impact_function, iface):
     impact_report.process_component()
 
 
-def add_impact_layer_to_QGIS(impact_function, iface):
+def add_impact_layers_to_canvas(impact_function, iface):
     """Helper method to add impact layer to QGIS from impact function.
 
     :param impact_function: The impact function used.
@@ -135,3 +139,42 @@ def add_impact_layer_to_QGIS(impact_function, iface):
             iface.setActiveLayer(layer)
         else:
             layer_node.setVisible(Qt.Unchecked)
+
+
+def add_debug_layers_to_canvas(impact_function):
+    """Helper method to add debug layers to QGIS from impact function.
+
+    :param impact_function: The impact function used.
+    :type impact_function: ImpactFunction
+    """
+    name = 'DEBUG %s' % impact_function.name
+    root = QgsProject.instance().layerTreeRoot()
+    group_debug = root.insertGroup(0, name)
+    group_debug.setVisible(Qt.Unchecked)
+    group_debug.setExpanded(False)
+
+    # Let's style the hazard class in each layers.
+    classification = (
+        impact_function.hazard.keywords['classification'])
+    classification = definition(classification)
+
+    classes = OrderedDict()
+    for f in reversed(classification['classes']):
+        classes[f['key']] = (f['color'], f['name'])
+    hazard_class = hazard_class_field['key']
+
+    datastore = impact_function.datastore
+    for layer in datastore.layers():
+        qgis_layer = datastore.layer(layer)
+        QgsMapLayerRegistry.instance().addMapLayer(
+            qgis_layer, False)
+        layer_node = group_debug.insertLayer(0, qgis_layer)
+        layer_node.setVisible(Qt.Unchecked)
+        layer_node.setExpanded(False)
+
+        # Let's style layers which have a geometry and have
+        # hazard_class
+        if qgis_layer.type() == QgsMapLayer.VectorLayer:
+            if qgis_layer.geometryType() != QGis.NoGeometry:
+                if qgis_layer.keywords['inasafe_fields'].get(hazard_class):
+                    hazard_class_style(qgis_layer, classes, True)
