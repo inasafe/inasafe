@@ -153,22 +153,37 @@ def content():
     header = m.Heading(tr('All fields'), **INFO_STYLE)
     message.add(header)
     _create_fields_section(
-        message, tr('Exposure fields'), definitions.exposure_fields)
-    _create_fields_section(
-        message, tr('Hazard fields'), definitions.hazard_fields)
-    _create_fields_section(
-        message, tr('Aggregation fields'), definitions.aggregation_fields)
-    _create_fields_section(
-        message, tr('Impact fields'), definitions.impact_fields)
-    _create_fields_section(
-        message, tr('Exposure fields'), definitions.aggregate_hazard_fields)
+        message,
+        tr('Exposure fields'),
+        definitions.exposure_fields)
     _create_fields_section(
         message,
-        tr('Exposure fields'), definitions.aggregation_impacted_fields)
+        tr('Hazard fields'),
+        definitions.hazard_fields)
     _create_fields_section(
-        message, tr('Exposure fields'), definitions.exposure_breakdown_fields)
+        message,
+        tr('Aggregation fields'),
+        definitions.aggregation_fields)
     _create_fields_section(
-        message, tr('Exposure fields'), definitions.analysis_fields)
+        message,
+        tr('Impact fields'),
+        definitions.impact_fields)
+    _create_fields_section(
+        message,
+        tr('Aggregate hazard fields'),
+        definitions.aggregate_hazard_fields)
+    _create_fields_section(
+        message,
+        tr('Aggregation impacted fields'),
+        definitions.aggregation_impacted_fields)
+    _create_fields_section(
+        message,
+        tr('Exposure breakdown fields'),
+        definitions.exposure_breakdown_fields)
+    _create_fields_section(
+        message,
+        tr('Analysis fields'),
+        definitions.analysis_fields)
 
     return message
 
