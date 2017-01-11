@@ -31,6 +31,7 @@ from safe.common.version import get_version
 from safe.datastore.folder import Folder
 from safe.datastore.datastore import DataStore
 from safe.gisv4.vector.prepare_vector_layer import prepare_vector_layer
+from safe.gisv4.vector.buffering import buffering
 from safe.gisv4.vector.reproject import reproject
 from safe.gisv4.vector.assign_highest_value import assign_highest_value
 from safe.gisv4.vector.reclassify import reclassify as reclassify_vector
@@ -1209,6 +1210,11 @@ class ImpactFunction(object):
         It will prepare the aggregate layer and intersect hazard polygons with
         aggregation areas and assign hazard class.
         """
+        # self.set_state_process('hazard', 'Make hazard layer valid')
+        # self.hazard = buffering(self.hazard, [0])
+        # if self.debug_mode:
+        #     self.debug_layer(self.hazard)
+
         self.set_state_process(
             'aggregation',
             'Union hazard polygons with aggregation areas and assign '
@@ -1300,6 +1306,20 @@ class ImpactFunction(object):
             is_divisible = exposure not in indivisible_keys
 
             if geometry in [QGis.Line, QGis.Polygon] and is_divisible:
+
+                # self.set_state_process(
+                # 'exposure', 'Make exposure layer valid')
+                # self._exposure = buffering(self.exposure, [0])
+                # if self.debug_mode:
+                #     self.debug_layer(self.exposure)
+
+                # self.set_state_process(
+                #     'aggregate_hazard', 'Make aggregate hazard layer valid')
+                # self._aggregate_hazard_impacted = buffering(
+                #     self._aggregate_hazard_impacted, [0])
+                # if self.debug_mode:
+                #     self.debug_layer(self._aggregate_hazard_impacted)
+
                 self.set_state_process(
                     'impact function',
                     'Intersect divisible features with the aggregate hazard')
