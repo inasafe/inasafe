@@ -25,11 +25,12 @@ from safe.definitions.hazard_classifications import (
     volcano_hazard_classes, generic_hazard_classes, flood_hazard_classes)
 from safe.definitions.constants import no_field
 from safe.definitions.fields import (
-    hazard_name_field,
     aggregation_name_field,
-    population_count_field,
     exposure_type_field,
-    hazard_value_field)
+    female_ratio_field,
+    hazard_name_field,
+    hazard_value_field,
+    population_count_field)
 from safe.definitions.layer_geometry import (
     layer_geometry_polygon, layer_geometry_raster)
 from safe.definitions.exposure_classifications import (

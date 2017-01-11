@@ -40,6 +40,7 @@ from safe.utilities.gis import (
     is_raster_layer,
     is_point_layer,
     is_polygon_layer)
+from safe.definitions import layer_geometry_raster
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.resources import get_ui_class, resources_path
 from safe.utilities.unicode import get_unicode
