@@ -840,15 +840,3 @@ ratio_fields = [
     elderly_ratio_field,
 ]
 
-# Used by earthquake, please remove after we remove the earthquake
-structure_class_field = {
-    'key': 'structure_class_field',
-    'name': tr('Attribute field'),
-    'description': tr('Attribute where the structure type is defined.'),
-    'citations': [
-        {
-            'text': None,
-            'link': None
-        }
-    ]
-}

@@ -43,20 +43,6 @@ class ExposureLayerMetadata(GenericLayerMetadata):
             'inasafe/'
             'exposure_unit/'
             'gco:CharacterString'),
-        'structure_class_field': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            'structure_class_field/'
-            'gco:CharacterString'),
-        'road_class_field': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            'road_class_field/'
-            'gco:CharacterString'),
         'field': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
@@ -64,54 +50,12 @@ class ExposureLayerMetadata(GenericLayerMetadata):
             'inasafe/'
             'field/'
             'gco:CharacterString'),
-        'area_population_field': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            'area_population_field/'
-            'gco:CharacterString'),
-        'area_name_field': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            'area_name_field/'
-            'gco:CharacterString'),
-        'area_id_field': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            'area_id_field/'
-            'gco:CharacterString'),
-        'area_type_field': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            'area_type_field/'
-            'gco:CharacterString'),
         'allow_resampling': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
             'gmd:supplementalInformation/'
             'inasafe/'
             'allow_resampling/'
-            'gco:CharacterString'),
-        'population_field': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            'population_field/'
-            'gco:CharacterString'),
-        'name_field': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            'name_field/'
             'gco:CharacterString'),
         'classification': (
             'gmd:identificationInfo/'

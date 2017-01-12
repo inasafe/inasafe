@@ -288,7 +288,7 @@ class WizardDialog(QDialog, FORM_CLASS):
 
     def field_keyword_for_the_layer(self):
         """Return the proper keyword for field for the current layer.
-        Expected values are: 'field', 'structure_class_field', road_class_field
+        Expected values are: 'field'
 
         :returns: the field keyword
         :rtype: str

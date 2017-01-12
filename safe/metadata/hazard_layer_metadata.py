@@ -71,13 +71,6 @@ class HazardLayerMetadata(GenericLayerMetadata):
             'inasafe/'
             'value_map/'
             'gco:Dictionary'),
-        'volcano_name_field': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            'volcano_name_field/'
-            'gco:CharacterString'),
         'prob_fatality_mag': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
