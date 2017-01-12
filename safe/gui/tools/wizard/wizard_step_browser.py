@@ -81,8 +81,9 @@ class WizardStepBrowser(WizardStep):
             the set_widgets method")
 
     @staticmethod
-    def pg_path_to_uri(path):
+    def postgis_path_to_uri(path):
         """Convert layer path from QgsBrowserModel to full QgsDataSourceURI.
+
         :param path: The layer path from QgsBrowserModel
         :type path: string
 
@@ -90,12 +91,12 @@ class WizardStepBrowser(WizardStep):
         :rtype: QgsDataSourceURI
         """
 
-        conn_name = path.split('/')[1]
+        connection_name = path.split('/')[1]
         schema = path.split('/')[2]
-        table = path.split('/')[3]
+        table_name = path.split('/')[3]
 
         settings = QSettings()
-        key = "/PostgreSQL/connections/" + conn_name
+        key = "/PostgreSQL/connections/" + connection_name
         service = settings.value(key + "/service")
         host = settings.value(key + "/host")
         port = settings.value(key + "/port")
@@ -130,18 +131,14 @@ class WizardStepBrowser(WizardStep):
 
         # Obtain the geometry column name
         connector = PostGisDBConnector(uri)
-        tbls = connector.getVectorTables(schema)
-        tbls = [tbl for tbl in tbls if tbl[1] == table]
-        # if len(tbls) != 1:
-        #    In the future, also look for raster layers?
-        #    tbls = connector.getRasterTables(schema)
-        #    tbls = [tbl for tbl in tbls if tbl[1]==table]
-        if not tbls:
+        tables = connector.getVectorTables(schema)
+        tables = [table for table in tables if table[1] == table_name]
+        if not tables:
             return None
-        tbl = tbls[0]
-        geom_col = tbl[8]
+        table = tables[0]
+        geom_col = table[8]
 
-        uri.setDataSource(schema, table, geom_col)
+        uri.setDataSource(schema, table_name, geom_col)
         return uri
 
     def unsuitable_layer_description_html(
@@ -365,7 +362,7 @@ class WizardStepBrowser(WizardStep):
         if item_class_name == 'QgsOgrLayerItem':
             layer = QgsVectorLayer(path, '', 'ogr')
         elif item_class_name == 'QgsPGLayerItem':
-            uri = self.pg_path_to_uri(path)
+            uri = self.postgis_path_to_uri(path)
             if uri:
                 layer = QgsVectorLayer(uri.uri(), uri.table(), 'postgres')
             else:
