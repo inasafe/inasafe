@@ -98,6 +98,11 @@ union_steps = {
 Raster package
 """
 
+align_steps = {
+    'step_name': tr('Align'),
+    'output_layer_name': '%s_aligned',
+}
+
 polygonize_steps = {
     'step_name': tr('Polygonize'),
     'output_layer_name': '%s_polygonized',
