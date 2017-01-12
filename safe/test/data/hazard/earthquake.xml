@@ -176,10 +176,10 @@
             <gco:CharacterString>single_event</gco:CharacterString>
           </hazard_category>
           <classification>
-            <gco:CharacterString/>
+            <gco:CharacterString>earthquake_mmi_hazard_classes</gco:CharacterString>
           </classification>
           <thresholds>
-            <gco:Dictionary/>
+            <gco:Dictionary>{&quot;high&quot;: [8.0, 999999.0], &quot;medium&quot;: [7.0, 8.0], &quot;low&quot;: [6.0, 7.0]}</gco:Dictionary>
           </thresholds>
           <continuous_hazard_unit>
             <gco:CharacterString>mmi</gco:CharacterString>
