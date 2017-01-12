@@ -1311,8 +1311,9 @@ class ShakeEvent(QObject):
 
         # Make sure the map layers have all been removed before we
         # start otherwise in batch mode we will get overdraws.
+        map_registry = QgsMapLayerRegistry.instance()
         # noinspection PyArgumentList
-        QgsMapLayerRegistry.instance().removeAllMapLayers()
+        map_registry.removeAllMapLayers()
 
         mmi_shape_file = self.shake_grid.mmi_to_shapefile(
             force_flag=force_flag)
@@ -1355,10 +1356,12 @@ class ShakeEvent(QObject):
             project_path = os.environ['INASAFE_REALTIME_PROJECT']
         else:
             project_path = os.path.join(data_dir(), 'realtime.qgs')
+
+        qgs_project = QgsProject.instance()
         # noinspection PyArgumentList
-        QgsProject.instance().setFileName(project_path)
+        qgs_project.setFileName(project_path)
         # noinspection PyArgumentList
-        QgsProject.instance().read()
+        qgs_project.read()
 
         # Load the contours and cities shapefile into the map
         layers_to_add = []
@@ -1375,7 +1378,7 @@ class ShakeEvent(QObject):
                 # noinspection PyArgumentList
                 layers_to_add.append(cities_layer)
         # noinspection PyArgumentList
-        QgsMapLayerRegistry.instance().addMapLayers(layers_to_add)
+        map_registry.addMapLayers(layers_to_add)
 
         # Load our template
         if 'INASAFE_REALTIME_TEMPLATE' in os.environ:
@@ -1427,6 +1430,10 @@ class ShakeEvent(QObject):
         # its extents to the event.
         map_canvas = composition.getComposerItemById('main-map')
         if map_canvas is not None:
+            layer_list = [layer_id for layer_id in map_registry.mapLayers()]
+            layer_list.reverse()
+            map_canvas.setKeepLayerSet(True)
+            map_canvas.setLayerSet(layer_list)
             map_canvas.setNewExtent(self.extent_with_cities)
             map_canvas.renderModeUpdateCachedImage()
         else:
@@ -1516,12 +1523,11 @@ class ShakeEvent(QObject):
 
         # Save a QGIS project that you can open in QGIS
         # noinspection PyArgumentList
-        project = QgsProject.instance()
         project_path = os.path.join(
             shakemap_extract_dir(),
             self.event_id,
             'project.qgs')
-        project.write(QFileInfo(project_path))
+        qgs_project.write(QFileInfo(project_path))
 
     def generate_result_path(self):
         """Generate path file for the result
