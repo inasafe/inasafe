@@ -2,8 +2,7 @@
 """Definitions relating to exposure in InaSAFE."""
 
 from safe.definitions.concepts import concepts
-from safe.definitions.caveats import (
-    caveat_incomplete_data)
+from safe.definitions.caveats import caveat_incomplete_data
 from safe.definitions.units import (
     count_exposure_unit, unit_metres, unit_square_metres)
 from safe.definitions.fields import (
@@ -18,13 +17,12 @@ from safe.definitions.fields import (
     feature_value_field,
     feature_rate_field)
 from safe.definitions.layer_modes import (
-    layer_mode_classified, layer_mode_continuous)
+    layer_mode_continuous, layer_mode_classified)
 from safe.definitions.exposure_classifications import (
     generic_place_classes,
     generic_road_classes,
     generic_structure_classes,
-    generic_landcover_classes,
-)
+    generic_landcover_classes)
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
