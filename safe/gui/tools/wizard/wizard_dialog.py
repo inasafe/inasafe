@@ -72,6 +72,7 @@ from step_kw15_layermode import StepKwLayerMode
 from step_kw20_unit import StepKwUnit
 from step_kw25_classification import StepKwClassification
 from step_kw30_field import StepKwField
+from step_kw33_multi_classifications import StepKwMultiClassifications
 from step_kw35_resample import StepKwResample
 from step_kw40_classify import StepKwClassify
 from step_kw43_threshold import StepKwThreshold
@@ -157,6 +158,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.step_kw_unit = StepKwUnit(self)
         self.step_kw_classification = StepKwClassification(self)
         self.step_kw_field = StepKwField(self)
+        self.step_kw_multi_classifications = StepKwMultiClassifications(self)
         self.step_kw_resample = StepKwResample(self)
         self.step_kw_classify = StepKwClassify(self)
         self.step_kw_threshold = StepKwThreshold(self)
@@ -193,6 +195,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.stackedWidget.addWidget(self.step_kw_unit)
         self.stackedWidget.addWidget(self.step_kw_classification)
         self.stackedWidget.addWidget(self.step_kw_field)
+        self.stackedWidget.addWidget(self.step_kw_multi_classifications)
         self.stackedWidget.addWidget(self.step_kw_resample)
         self.stackedWidget.addWidget(self.step_kw_classify)
         self.stackedWidget.addWidget(self.step_kw_threshold)
