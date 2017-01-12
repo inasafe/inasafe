@@ -9,8 +9,8 @@ from PyQt4.QtGui import QListWidgetItem
 from safe.definitions.layer_purposes import layer_purpose_aggregation
 from safe.definitions.layer_modes import (
     layer_mode_continuous, layer_mode_classified)
-from safe.gui.tools.wizard.wizard_step import WizardStep
-from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
+from safe.gui.tools.wizard.wizard_step import (
+    WizardStep, get_wizard_step_ui_class)
 from safe.gui.tools.wizard.wizard_strings import (
     field_question_subcategory_unit,
     field_question_subcategory_classified,
@@ -28,12 +28,19 @@ FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
 class StepKwField(WizardStep, FORM_CLASS):
+<<<<<<< HEAD
     """InaSAFE Keyword Wizard Field Step."""
 
     def is_ready_to_next_step(self):
         """Check if the step is complete.
 
         If so, there is no reason to block the Next button.
+=======
+    """Keyword Wizard Step: Field."""
+
+    def is_ready_to_next_step(self):
+        """Check if the step is complete.
+>>>>>>> Fix step in step field.
 
         :returns: True if new step may be enabled.
         :rtype: bool
@@ -46,27 +53,22 @@ class StepKwField(WizardStep, FORM_CLASS):
         :returns: The step to be switched to
         :rtype: WizardStep
         """
-        if self.parent.step_kw_layermode.\
-                selected_layermode() == layer_mode_classified:
-            if self.parent.step_kw_classification.\
-                    classifications_for_layer():
-                # Classified data
-                return self.parent.step_kw_classify
-
-        if self.parent.step_kw_layermode. \
-                selected_layermode() == layer_mode_continuous:
-            if self.parent.step_kw_classification. \
-                    classifications_for_layer():
-                return self.parent.step_kw_threshold
-
         layer_purpose = self.parent.step_kw_purpose.selected_purpose()
-        if layer_purpose['key'] != layer_purpose_aggregation['key']:
+        if layer_purpose != layer_purpose_aggregation:
             subcategory = self.parent.step_kw_subcategory.\
                 selected_subcategory()
         else:
             subcategory = {'key': None}
 
+<<<<<<< HEAD
         # Get all fields with replace_null = False
+=======
+        # Has classifications, go to multi classifications
+        if subcategory.get('classifications'):
+            return self.parent.step_kw_multi_classifications
+
+        # Check if it can go to inasafe field step
+>>>>>>> Fix step in step field.
         inasafe_fields = get_fields(
             layer_purpose['key'], subcategory['key'], replace_null=False)
         # remove compulsory field since it has been set in previous step
