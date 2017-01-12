@@ -159,3 +159,11 @@ class StepKwInaSAFERasterDefaultValues(WizardStep, FORM_CLASS):
                 inasafe_default_values[parameter.guid] = parameter.value
 
         return inasafe_default_values
+
+    def clear(self):
+        """Clear current state."""
+        # Adapted from http://stackoverflow.com/a/13103617/1198772
+        for i in reversed(range(self.default_values_grid.count())):
+            self.default_values_grid.itemAt(i).widget().setParent(None)
+        self.parameters = []
+        self.parameter_container = ParameterContainer()
