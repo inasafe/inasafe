@@ -735,6 +735,15 @@ Telp. (021)164
         # get main map canvas on the composition and set extent
         map_canvas = composition.getComposerItemById('map-canvas')
         if map_canvas:
+            map_canvas.setKeepLayerSet(True)
+            impact_layers = [
+                population_affected_layer.id(),
+                boundary_mask.id(),
+                hazard_layer.id(),
+                boundary_layer.id(),
+                base_map.id(),
+            ]
+            map_canvas.setLayerSet(impact_layers)
             map_canvas.setNewExtent(map_canvas.currentMapExtent())
             map_canvas.renderModeUpdateCachedImage()
         else:

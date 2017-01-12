@@ -36,8 +36,9 @@ CELERY_ROUTES = {
 # number of CPUs/core which can be multithreaded and will invoke debugging
 # **NIGHTMARE** to your celery worker. Read about this particular settings
 # here:
-# http://docs.celeryproject.org/en/latest/configuration.html#celeryd-concurrency
+# http://docs.celeryproject.org/en/3.1/configuration.html#celeryd-concurrency
 CELERYD_CONCURRENCY = 1
+CELERYD_PREFETCH_MULTIPLIER = 1
 
 CELERY_ALWAYS_EAGER = os.environ.get('CELERY_ALWAYS_EAGER', 'False') == 'True'
 

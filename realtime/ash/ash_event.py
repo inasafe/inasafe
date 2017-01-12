@@ -722,6 +722,15 @@ class AshEvent(QObject):
         # get main map canvas on the composition and set extent
         map_impact = composition.getComposerItemById('map-impact')
         if map_impact:
+            map_impact.setKeepLayerSet(True)
+            impact_layers = [
+                self.volcano_layer.id(),
+                self.airport_layer.id(),
+                self.cities_layer.id(),
+                hazard_layer.id(),
+                self.highlight_base_layer.id(),
+            ]
+            map_impact.setLayerSet(impact_layers)
             map_impact.zoomToExtent(hazard_layer.extent())
             map_impact.renderModeUpdateCachedImage()
         else:
