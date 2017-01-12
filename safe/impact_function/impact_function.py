@@ -154,7 +154,7 @@ class ImpactFunction(object):
         # Names
         self._name = None  # e.g. Flood Raster on Building Polygon
         self._title = None  # be affected
-        self._unique_name = None  # EXP + On + Haz + DDMMMMYYYY + HHhMM.SS
+        self._unique_name = None  # EXP + On + Haz + DDMMMMYYYY + HHhMM.SS.ms
 
         # Datastore when to save layers
         self._datastore = None
@@ -859,10 +859,18 @@ class ImpactFunction(object):
         :param layer: The QGIS layer to check and save.
         :type layer: QgsMapLayer
 
-        :param check_fields: Boolean to check or not inasafe_fields
+        :param check_fields: Boolean to check or not inasafe_fields.
+            By default, it's true.
         :type check_fields: bool
+
+        :return: The name of the layer added in the datastore.
+        :rtype: basestring
         """
-        name = self.datastore.add_layer(layer, layer.keywords['title'])
+        result, name = self.datastore.add_layer(layer, layer.keywords['title'])
+        if not result:
+            raise Exception(
+                'Something went wrong with the datastore : {error_message}'
+                .format(error_message=name))
 
         if isinstance(layer, QgsVectorLayer) and check_fields:
             check_inasafe_fields(layer)
@@ -896,7 +904,7 @@ class ImpactFunction(object):
 
             self._profiling_table = create_profile_layer(
                 self.performance_log_message())
-            _, name = self.debug_layer(self._profiling_table)
+            name = self.debug_layer(self._profiling_table)
             self._profiling_table = self.datastore.layer(name)
             check_inasafe_fields(self._profiling_table)
 
@@ -988,7 +996,9 @@ class ImpactFunction(object):
         self._unique_name = replace_accentuated_characters(self._unique_name)
         now = datetime.now()
         date = now.strftime('%d%B%Y').decode('utf8')
-        time = now.strftime('%Hh%M-%S').decode('utf8')
+        # We need to add milliseconds to be sure to have a unique name.
+        # Some tests are executed in less than a second.
+        time = now.strftime('%Hh%M-%S.%f').decode('utf8')
         self._unique_name = '%s_%s_%s' % (self._unique_name, date, time)
 
         if not self._datastore:
