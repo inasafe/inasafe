@@ -33,6 +33,7 @@
       },
       "process":[
         "Cleaning the aggregation layer",
+        "Add default values",
         "Reproject aggregation layer to exposure CRS",
         "Convert the aggregation layer to the analysis layer",
         "Union hazard polygons with aggregation areas and assign hazard class"
@@ -55,6 +56,7 @@
       "process":[
         "Clip the exposure layer with the analysis layer",
         "Cleaning the vector exposure attribute table",
+        "Add default values",
         "Assign classes based on value map"
       ]
     }

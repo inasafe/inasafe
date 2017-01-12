@@ -59,7 +59,8 @@
       "info": {},
       "process":[
         "Clip the exposure layer with the analysis layer",
-        "Cleaning the vector exposure attribute table"
+        "Cleaning the vector exposure attribute table",
+        "Add default values"
       ]
     }
   }
