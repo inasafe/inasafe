@@ -7,8 +7,7 @@ from PyQt4 import QtCore
 from PyQt4.QtGui import QListWidgetItem
 
 from safe.definitions.layer_purposes import layer_purpose_aggregation
-from safe.definitions.layer_modes import (
-    layer_mode_continuous, layer_mode_classified)
+from safe.definitions.layer_modes import layer_mode_continuous
 from safe.gui.tools.wizard.wizard_step import (
     WizardStep, get_wizard_step_ui_class)
 from safe.gui.tools.wizard.wizard_strings import (
