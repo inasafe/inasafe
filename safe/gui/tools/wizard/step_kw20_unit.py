@@ -1,17 +1,5 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool by AusAid -**InaSAFE Wizard**
-
-This module provides: Keyword Wizard Step: Unit
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
+"""InaSAFE Keyword Wizard Unit Step."""
 
 # noinspection PyPackageRequirements
 from PyQt4 import QtCore
@@ -21,12 +9,12 @@ from safe.definitions.layer_purposes import layer_purpose_hazard
 from safe.definitions.exposure import exposure_population
 from safe.definitions.units import exposure_unit
 from safe.definitions.hazard import continuous_hazard_unit
-from safe.gui.tools.wizard.wizard_step import WizardStep
-from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
+from safe.definitions.utilities import (
+    definition, hazard_units, exposure_units, get_classifications, get_fields)
+from safe.gui.tools.wizard.wizard_step import (
+    get_wizard_step_ui_class, WizardStep)
 from safe.gui.tools.wizard.wizard_strings import unit_question
 from safe.utilities.gis import is_raster_layer
-from safe.definitions.utilities import (
-    definition, hazard_units, exposure_units, get_classifications)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -40,8 +28,8 @@ class StepKwUnit(WizardStep, FORM_CLASS):
     """Keyword Wizard Step: Unit"""
 
     def is_ready_to_next_step(self):
-        """Check if the step is complete. If so, there is
-            no reason to block the Next button.
+        """Check if the step is complete.
+        If so, there is no reason to block the Next button.
 
         :returns: True if new step may be enabled.
         :rtype: bool
@@ -54,18 +42,21 @@ class StepKwUnit(WizardStep, FORM_CLASS):
         :returns: The step to be switched to
         :rtype: WizardStep instance or None
         """
+        layer_purpose = self.parent.step_kw_purpose.selected_purpose()
         subcategory = self.parent.step_kw_subcategory.selected_subcategory()
-        if get_classifications(subcategory['key']):
-            new_step = self.parent.step_kw_classification
-        else:  # No classifications
-            if is_raster_layer(self.parent.layer):
-                if subcategory == exposure_population:
-                    new_step = self.parent.step_kw_resample
-                else:
-                    new_step = self.parent.step_kw_source
-            else:
-                new_step = self.parent.step_kw_field
-        return new_step
+        default_inasafe_fields = get_fields(
+            layer_purpose['key'], subcategory['key'], replace_null=True)
+
+        if not is_raster_layer(self.parent.layer):
+            return self.parent.step_kw_unit
+        elif get_classifications(subcategory['key']):
+            return self.parent.step_kw_multi_classifications
+        elif subcategory == exposure_population:
+            return self.parent.step_kw_resample
+        elif default_inasafe_fields:
+            return self.parent.step_kw_default_inasafe_fields
+        else:
+            return self.parent.step_kw_source
 
     # noinspection PyPep8Naming
     def on_lstUnits_itemSelectionChanged(self):
