@@ -894,8 +894,12 @@ class ImpactFunction(object):
             self._performance_log = profiling_log()
             self.callback(8, 8, analysis_steps['profiling'])
 
+            print 'Profiling table'
+            print self._profiling_table
             self._profiling_table = create_profile_layer(
                 self.performance_log_message())
+            print 'Profiling table'
+            print self._profiling_table
             _, name = self.debug_layer(self._profiling_table)
             self._profiling_table = self.datastore.layer(name)
             check_inasafe_fields(self._profiling_table)
