@@ -869,8 +869,8 @@ class ImpactFunction(object):
         result, name = self.datastore.add_layer(layer, layer.keywords['title'])
         if not result:
             raise Exception(
-                'Something went wrong with the datastore. We could not add '
-                'the profiling table to the datastore.')
+                'Something went wrong with the datastore : {error_message}'
+                .format(error_message=name))
 
         if isinstance(layer, QgsVectorLayer) and check_fields:
             check_inasafe_fields(layer)
