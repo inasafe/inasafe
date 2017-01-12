@@ -181,24 +181,24 @@
           <thresholds>
             <gco:Dictionary/>
           </thresholds>
-          <prob_fatality_mag>
-            <gco:Tuple/>
-          </prob_fatality_mag>
+          <continuous_hazard_unit>
+            <gco:CharacterString/>
+          </continuous_hazard_unit>
           <inasafe_fields>
             <gco:Dictionary>{&quot;aggregation_id_field&quot;: &quot;area_id&quot;}</gco:Dictionary>
           </inasafe_fields>
           <inasafe_default_values>
             <gco:Dictionary/>
           </inasafe_default_values>
-          <volcano_name_field>
+          <scale>
             <gco:CharacterString/>
-          </volcano_name_field>
+          </scale>
           <multipart_polygon>
             <gco:Boolean/>
           </multipart_polygon>
-          <field>
-            <gco:CharacterString/>
-          </field>
+          <source>
+            <gco:CharacterString>Akbar Gumbira</gco:CharacterString>
+          </source>
           <value_map>
             <gco:Dictionary>{&quot;high&quot;: [3.0], &quot;medium&quot;: [2.0], &quot;low&quot;: [1.0]}</gco:Dictionary>
           </value_map>
@@ -208,24 +208,15 @@
           <hazard>
             <gco:CharacterString>flood</gco:CharacterString>
           </hazard>
-          <scale>
-            <gco:CharacterString/>
-          </scale>
           <report>
             <gco:CharacterString/>
           </report>
-          <continuous_hazard_unit>
-            <gco:CharacterString/>
-          </continuous_hazard_unit>
           <keyword_version>
             <gco:CharacterString>4.0</gco:CharacterString>
           </keyword_version>
           <datatype>
             <gco:CharacterString/>
           </datatype>
-          <source>
-            <gco:CharacterString>Akbar Gumbira</gco:CharacterString>
-          </source>
           <layer_purpose>
             <gco:CharacterString>hazard</gco:CharacterString>
           </layer_purpose>
