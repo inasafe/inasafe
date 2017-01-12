@@ -32,7 +32,6 @@ class TestMetadataUtilities(unittest.TestCase):
             'layer_purpose': 'exposure',
             'license': 'Open Data Commons Open Database License (ODbL)',
             'source': 'OpenStreetMap - www.openstreetmap.org',
-            'structure_class_field': 'TYPE',
             'title': 'Buildings'
         }
         metadata = write_iso19115_metadata(exposure_layer.source(), keywords)
@@ -53,7 +52,6 @@ class TestMetadataUtilities(unittest.TestCase):
             'layer_purpose': 'exposure',
             'license': 'Open Data Commons Open Database License (ODbL)',
             'source': 'OpenStreetMap - www.openstreetmap.org',
-            'structure_class_field': 'TYPE',
             'title': 'Buildings'
         }
         write_iso19115_metadata(exposure_layer.source(), keywords)
@@ -80,7 +78,6 @@ class TestMetadataUtilities(unittest.TestCase):
             'layer_purpose': 'exposure',
             'license': 'Open Data Commons Open Database License (ODbL)',
             'source': 'OpenStreetMap - www.openstreetmap.org',
-            'structure_class_field': 'TYPE',
             'title': 'Buildings'
         }
         layer = clone_shp_layer(
