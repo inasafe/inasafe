@@ -311,7 +311,6 @@ class KeywordIO(QObject):
             'classification',
             'exposure_unit',
             'continuous_hazard_unit',
-            'field',
             'value_map',  # attribute values
             'thresholds',  # attribute values
             'inasafe_fields',
