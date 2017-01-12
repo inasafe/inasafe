@@ -43,13 +43,6 @@ class ExposureLayerMetadata(GenericLayerMetadata):
             'inasafe/'
             'exposure_unit/'
             'gco:CharacterString'),
-        'field': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            'field/'
-            'gco:CharacterString'),
         'allow_resampling': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'

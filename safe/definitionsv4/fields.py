@@ -839,4 +839,3 @@ ratio_fields = [
     adult_ratio_field,
     elderly_ratio_field,
 ]
-
