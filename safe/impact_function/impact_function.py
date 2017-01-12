@@ -34,6 +34,7 @@ from safe.gisv4.vector.prepare_vector_layer import prepare_vector_layer
 from safe.gisv4.vector.buffering import buffering
 from safe.gisv4.vector.reproject import reproject
 from safe.gisv4.vector.assign_highest_value import assign_highest_value
+from safe.gisv4.vector.default_values import add_default_values
 from safe.gisv4.vector.reclassify import reclassify as reclassify_vector
 from safe.gisv4.vector.union import union
 from safe.gisv4.vector.clip import clip
@@ -1148,6 +1149,11 @@ class ImpactFunction(object):
             if self.debug_mode:
                 self.debug_layer(self.aggregation)
 
+            self.set_state_process('aggregation', 'Add default values')
+            self.aggregation = add_default_values(self.aggregation)
+            if self.debug_mode:
+                self.debug_layer(self.aggregation)
+
             if self.aggregation.crs().authid() != self.exposure.crs().authid():
                 self.set_state_process(
                     'aggregation',
@@ -1306,6 +1312,11 @@ class ImpactFunction(object):
             'Cleaning the vector exposure attribute table')
         # noinspection PyTypeChecker
         self.exposure = prepare_vector_layer(self.exposure)
+        if self.debug_mode:
+            self.debug_layer(self.exposure)
+
+        self.set_state_process('exposure', 'Add default values')
+        self.exposure = add_default_values(self.exposure)
         if self.debug_mode:
             self.debug_layer(self.exposure)
 
