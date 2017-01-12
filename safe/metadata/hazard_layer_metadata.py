@@ -64,13 +64,6 @@ class HazardLayerMetadata(GenericLayerMetadata):
             'inasafe/'
             'value_map/'
             'gco:Dictionary'),
-        'prob_fatality_mag': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            'prob_fatality_mag/'
-            'gco:Tuple'),
         'thresholds': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
