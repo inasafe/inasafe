@@ -434,3 +434,8 @@ class ProcessingInstallationError(InaSAFEError):
     """When there is an error with Processing."""
 
     pass
+
+
+class AlignRastersError(Exception):
+    """Raised if alignment of hazard and exposure rasters failed"""
+    pass
