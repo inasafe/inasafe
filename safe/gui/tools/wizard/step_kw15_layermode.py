@@ -44,8 +44,7 @@ class StepKwLayerMode(WizardStep, FORM_CLASS):
         :rtype: WizardStep instance or None
         """
         is_raster = is_raster_layer(self.parent.layer)
-        subcategory = self.parent.step_kw_subcategory. \
-            selected_subcategory()
+        subcategory = self.parent.step_kw_subcategory.selected_subcategory()
         has_unit = subcategory.get('units') or subcategory.get(
             'continuous_hazard_units')
 
