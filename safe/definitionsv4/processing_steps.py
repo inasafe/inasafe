@@ -114,6 +114,12 @@ quick_clip_steps = {
     'output_layer_name': '%s_clipped_bbox',
 }
 
+rasterize_steps = {
+    'step_name': tr('Rasterize'),
+    'output_layer_name': '%s_rasterized',
+    'gdal_layer_name': 'rasterize'
+}
+
 reclassify_raster_steps = {
     'step_name': tr('Reclassifying'),
     'output_layer_name': '%s_reclassified',
