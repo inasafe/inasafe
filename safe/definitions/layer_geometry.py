@@ -30,7 +30,7 @@ layer_geometry_line = {
     'name': tr('Line'),
     'description': tr(
         'A layer composed of linear features. Currently only <b>road exposure'
-        '</b>line layers are supported by InaSAFE.'),
+        '</b> line layers are supported by InaSAFE.'),
     'citations': [
         {
             'text': None,
@@ -43,15 +43,16 @@ layer_geometry_polygon = {
     'key': 'polygon',
     'name': tr('Polygon'),
     'description': tr(
-        'A layer composed on polygon features that represent areas of hazard '
+        'A layer composed of polygon features that represent areas of hazard '
         'or exposure. For example areas of flood represented as polygons '
         '(for a hazard) or building footprints represented as polygons '
         '(for an exposure). The polygon layer will often need the presence '
-        'of specific layer attributes too - these will vary from impact '
-        'function to impact function and whether the layer represents '
-        'a hazard or an exposure layer. Polygon layers can also be used '
-        'for aggregation - where impact analysis results per boundary '
-        'such as village or district boundaries.'),
+        'of specific layer attributes too - these will vary depending on '
+        'whether the layer represents a hazard, exposure or aggregation layer '
+        '. Polygon layers can also be used for aggregation - where impact '
+        'analysis results per boundary such as village or district '
+        'boundaries.'
+        ),
     'citations': [
         {
             'text': None,
@@ -77,8 +78,8 @@ layer_geometry = {
     'key': 'layer_geometry',
     'name': tr('Geometry'),
     'description': tr(
-        'Layer geometry can be either raster or vector. There '
-        'are three possible vector geometries: point, line, and polygon. '),
+        'Layer geometry can be either raster or vector. There are three '
+        'possible vector geometries: point, line, and polygon. '),
     'types': [
         layer_geometry_raster,
         layer_geometry_point,

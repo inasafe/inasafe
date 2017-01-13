@@ -68,7 +68,10 @@ hazard_generic = {
     'description': tr(
         'A <b>generic hazard</b> can be used for any type of hazard where the '
         'data have been classified or generalised. For example: earthquake, '
-        'flood, volcano, tsunami, landslide, smoke haze or strong wind.'),
+        'flood, volcano, tsunami, landslide, smoke haze or strong wind. '
+        'You can use the generic hazard functionality in InaSAFE to carry '
+        'out an assessment for hazard data that are not explicitly supported '
+        'yet in InaSAFE.'),
     'notes': [  # additional generic notes for generic - IF has more
         caveat_simulation,
         caveat_local_conditions,
@@ -146,12 +149,11 @@ hazard_flood = {
     'key': 'flood',
     'name': tr('Flood'),
     'description': tr(
-        'A <b>flood</b> describes the inundation of land that is '
-        'normally dry by a large amount of water. '
-        'For example: A <b>flood</b> can occur after heavy rainfall, '
-        'when a river overflows its banks or when a dam breaks. '
-        'The effect of a <b>flood</b> is for land that is normally dry '
-        'to become wet.'),
+        'A <b>flood</b> describes the inundation of land that is normally dry '
+        'by a large amount of water. For example: A <b>flood</b> can occur '
+        'after heavy rainfall, when a river overflows its banks or when a '
+        'dam breaks. The effect of a <b>flood</b> is for land that is '
+        'normally dry to become wet.'),
     'notes': [  # additional generic notes for flood - IF has more
         caveat_simulation,
         caveat_local_conditions,
@@ -190,11 +192,11 @@ hazard_cyclone = {
     'key': 'cyclone',
     'name': tr('Cyclone'),
     'description': tr(
-        'A <b>Cyclone</b> is a rapidly rotating storm system '
-        'characterized by a low-pressure center, a closed low-level  '
-        'atmospheric circulation, strong winds, and a spiral arrangement of '
-        'thunderstorms that produce heavy rain. It is also referred to as '
-        '<b>hurricane</b> or <b>typhoon</b>.'),
+        'A <b>Cyclone</b> is a rapidly rotating storm system characterized '
+        'by a low-pressure center, a closed low-level atmospheric '
+        'circulation, strong winds, and a spiral arrangement of thunderstorms '
+        'that produce heavy rain. It is also referred to as <b>hurricane</b> '
+        'or <b>typhoon</b>.'),
     'notes': [  # additional generic notes for flood - IF has more
         caveat_simulation,
         caveat_local_conditions,
@@ -325,8 +327,8 @@ hazard_volcano = {
     'description': tr(
         'A <b>volcano</b> describes a mountain which has a vent through '
         'which rock fragments, ash, lava, steam and gases can be ejected '
-        'from below the earth\'s surface. The type of material '
-        'ejected depends on the type of <b>volcano</b>.'),
+        'from below the earth\'s surface. The type of material ejected '
+        'depends on the type of <b>volcano</b>.'),
     'notes': [  # additional generic notes for volcano
         caveat_simulation,
         caveat_local_conditions,

@@ -149,7 +149,10 @@ def content():
         table.add(row)
     message.add(table)
 
-    # All fields
+    ##
+    #  All Fields
+    ##
+
     header = m.Heading(tr('All fields'), **INFO_STYLE)
     message.add(header)
     _create_fields_section(
@@ -185,6 +188,24 @@ def content():
         tr('Analysis fields'),
         definitions.analysis_fields)
 
+    ##
+    #  Geometries
+    ##
+
+    header = m.Heading(tr('Layer Geometry Types'), **INFO_STYLE)
+    message.add(header)
+    message.add(definition_to_message(definitions.layer_geometry_point))
+    message.add(definition_to_message(definitions.layer_geometry_line))
+    message.add(definition_to_message(definitions.layer_geometry_polygon))
+    message.add(definition_to_message(definitions.layer_geometry_raster))
+
+    ##
+    #  Layer Modes
+    ##
+
+    header = m.Heading(tr('Layer Modes'), **INFO_STYLE)
+    message.add(header)
+    message.add(definition_to_message(definitions.layer_mode))
     return message
 
 
