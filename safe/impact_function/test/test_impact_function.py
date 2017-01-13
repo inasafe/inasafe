@@ -363,6 +363,7 @@ class TestImpactFunction(unittest.TestCase):
         which scenario you want to launch.
         """
         scenarii = {
+            'earthquake_raster_on_raster_population': False,
             'polygon_classified_on_line': False,
             'polygon_classified_on_point': False,
             'polygon_classified_on_vector_population': False,
@@ -382,7 +383,7 @@ class TestImpactFunction(unittest.TestCase):
 
         json_files = [
             join(path, f) for f in listdir(path)
-            if isfile(join(path, f)) and f.endswith('json')
+            if isfile(join(path, f)) and f.endswith('.json')
         ]
         self.assertEqual(len(json_files), len(scenarii))
 
@@ -438,13 +439,8 @@ class TestImpactFunction(unittest.TestCase):
                 self.assertIn(field_name, impact_fields)
         print_attribute_table(impact_layer, 1)
 
-    def test_a_provenance_with_aggregation(self):
-        """Test provenance of impact function with aggregation.
-
-        This test is called test_a_* so as to be the first test. We have a very
-        weird bug when test_z_provenance_without_aggregation is called just
-        after. There is magic where the state is reset between these 2 tests.
-        """
+    def test_provenance_with_aggregation(self):
+        """Test provenance of impact function with aggregation."""
         hazard_layer = load_test_vector_layer(
             'gisv4', 'hazard', 'classified_vector.geojson')
         exposure_layer = load_test_vector_layer(
@@ -495,13 +491,8 @@ class TestImpactFunction(unittest.TestCase):
 
         self.assertDictEqual(expected_provenance, impact_function.provenance)
 
-    def test_z_provenance_without_aggregation(self):
-        """Test provenance of impact function without aggregation.
-
-        This test is called test_z_* so as to be the last test. We have a very
-        weird bug when test_a_provenance_with_aggregation is called just
-        before. There is magic where the state is reset between these 2 tests.
-        """
+    def test_provenance_without_aggregation(self):
+        """Test provenance of impact function without aggregation."""
         hazard_layer = load_test_vector_layer(
             'gisv4', 'hazard', 'classified_vector.geojson')
         exposure_layer = load_test_vector_layer(

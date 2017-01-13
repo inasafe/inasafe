@@ -298,10 +298,6 @@ def definition_to_message(definition, heading_style=None):
             _add_field_to_table(field, table)
         message.add(table)
 
-    # TOOD: vector_hazard_classifications should be ignored
-    # it is replaced by hazard_classfications in v4
-    # We should delete vector_hazard_classifications from
-    # definitions
     if 'classifications' in definition:
         message.add(m.Paragraph(tr('Hazard classifications')))
         for inasafe_class in definition['classifications']:

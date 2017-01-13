@@ -57,27 +57,6 @@ class HazardLayerMetadata(GenericLayerMetadata):
             'inasafe/'
             'classification/'
             'gco:CharacterString'),
-        'vector_hazard_classification': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            'vector_hazard_classification/'
-            'gco:CharacterString'),
-        'raster_hazard_classification': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            'raster_hazard_classification/'
-            'gco:CharacterString'),
-        'field': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            'field/'
-            'gco:CharacterString'),
         'value_map': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'
@@ -85,20 +64,6 @@ class HazardLayerMetadata(GenericLayerMetadata):
             'inasafe/'
             'value_map/'
             'gco:Dictionary'),
-        'volcano_name_field': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            'volcano_name_field/'
-            'gco:CharacterString'),
-        'prob_fatality_mag': (
-            'gmd:identificationInfo/'
-            'gmd:MD_DataIdentification/'
-            'gmd:supplementalInformation/'
-            'inasafe/'
-            'prob_fatality_mag/'
-            'gco:Tuple'),
         'thresholds': (
             'gmd:identificationInfo/'
             'gmd:MD_DataIdentification/'

@@ -23,9 +23,6 @@ __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
-# Missing Earthquakes, these IF are using damage curves.
-# They are not represented in that file.
-
 null_hazard_value = 'null'
 null_hazard_legend = tr('No hazard')
 
@@ -85,6 +82,73 @@ generic_hazard_classes = {
                     'link': None
                 }
             ],
+        }
+    ]
+}
+
+earthquake_mmi_hazard_classes = {
+    'key': 'earthquake_mmi_hazard_classes',
+    'name': tr('Earthquake MMI classes'),
+    'description': tr(
+        'Three classes are supported for earthquake vector hazard data: '
+        '<b>low</b>, <b>medium</b>, or <b>high</b>.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    'classes': [
+        {
+            'key': 'high',
+            'value': 8,
+            'color': red,
+            'name': tr('High Hazard Zone'),
+            'affected': True,
+            'description': tr('The highest hazard class.'),
+            'string_defaults': ['high'],
+            'numeric_default_min': 8,
+            'numeric_default_max': 9999999999,
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
+            'key': 'medium',
+            'value': 2,
+            'color': orange,
+            'name': tr('Medium Hazard Zone'),
+            'affected': True,
+            'description': tr('The medium hazard class.'),
+            'string_defaults': ['medium'],
+            'numeric_default_min': 7,
+            'numeric_default_max': (8 - small_number),
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
+        },
+        {
+            'key': 'low',
+            'value': 1,
+            'color': yellow,
+            'name': tr('Low Hazard Zone'),
+            'affected': True,
+            'description': tr('The lowest hazard class.'),
+            'string_defaults': ['low'],
+            'numeric_default_min': 6,
+            'numeric_default_max': (7 - small_number),
+            'citations': [
+                {
+                    'text': None,
+                    'link': None
+                }
+            ]
         }
     ]
 }
@@ -865,6 +929,7 @@ hazard_classification = {
     'types': [
         generic_hazard_classes,
         flood_hazard_classes,
+        earthquake_mmi_hazard_classes,
         tsunami_hazard_classes,
         volcano_hazard_classes,
         ash_hazard_classes,

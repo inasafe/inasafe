@@ -172,66 +172,51 @@
       <gmd:supplementalInformation>
         <inasafe_keywords/>
         <inasafe>
-          <thresholds>
-            <gco:Dictionary/>
-          </thresholds>
           <hazard_category>
             <gco:CharacterString>single_event</gco:CharacterString>
           </hazard_category>
-          <raster_hazard_classification>
-            <gco:CharacterString/>
-          </raster_hazard_classification>
           <classification>
             <gco:CharacterString/>
           </classification>
-          <prob_fatality_mag>
-            <gco:Tuple/>
-          </prob_fatality_mag>
+          <thresholds>
+            <gco:Dictionary/>
+          </thresholds>
+          <continuous_hazard_unit>
+            <gco:CharacterString/>
+          </continuous_hazard_unit>
           <inasafe_fields>
             <gco:Dictionary/>
           </inasafe_fields>
           <inasafe_default_values>
             <gco:Dictionary/>
           </inasafe_default_values>
-          <volcano_name_field>
+          <scale>
             <gco:CharacterString/>
-          </volcano_name_field>
+          </scale>
           <multipart_polygon>
             <gco:Boolean/>
           </multipart_polygon>
-          <field>
-            <gco:CharacterString>FLOODPRONE</gco:CharacterString>
-          </field>
+          <source>
+            <gco:CharacterString>NBS</gco:CharacterString>
+          </source>
           <value_map>
             <gco:Dictionary>{&quot;high&quot;: [&quot;YES&quot;]}</gco:Dictionary>
           </value_map>
-          <vector_hazard_classification>
-            <gco:CharacterString>generic_vector_hazard_classes</gco:CharacterString>
-          </vector_hazard_classification>
           <layer_geometry>
             <gco:CharacterString>polygon</gco:CharacterString>
           </layer_geometry>
           <hazard>
             <gco:CharacterString>flood</gco:CharacterString>
           </hazard>
-          <scale>
-            <gco:CharacterString/>
-          </scale>
           <report>
             <gco:CharacterString/>
           </report>
-          <continuous_hazard_unit>
-            <gco:CharacterString/>
-          </continuous_hazard_unit>
           <keyword_version>
             <gco:CharacterString>4.0</gco:CharacterString>
           </keyword_version>
           <datatype>
             <gco:CharacterString/>
           </datatype>
-          <source>
-            <gco:CharacterString>NBS</gco:CharacterString>
-          </source>
           <layer_purpose>
             <gco:CharacterString>hazard</gco:CharacterString>
           </layer_purpose>

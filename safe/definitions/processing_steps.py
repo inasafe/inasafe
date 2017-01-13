@@ -24,6 +24,11 @@ assign_inasafe_values_steps = {
     'output_layer_name': '%s_value_mapped',
 }
 
+assign_default_values_steps = {
+    'step_name': tr('Assign InaSAFE default values'),
+    'output_layer_name': '%s_default_values',
+}
+
 buffer_steps = {
     'step_name': tr('Buffering'),
     'output_layer_name': 'buffer',
@@ -92,6 +97,11 @@ union_steps = {
 """
 Raster package
 """
+
+align_steps = {
+    'step_name': tr('Align'),
+    'output_layer_name': '%s_aligned',
+}
 
 polygonize_steps = {
     'step_name': tr('Polygonize'),

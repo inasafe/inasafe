@@ -24,6 +24,7 @@ from osgeo.gdalconst import GA_ReadOnly
 from safe.definitions.layer_purposes import layer_purpose_aggregation
 from safe.definitions.layer_geometry import layer_geometry_raster
 from safe.definitions.utilities import get_fields
+from safe.definitionsv4.constants import no_field
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_strings import (
@@ -77,20 +78,30 @@ class StepKwClassify(WizardStep, FORM_CLASS):
         else:
             subcategory = {'key': None}
 
-        # Check if it can go to inasafe field step
+        # Get all fields with replace_null = False
         inasafe_fields = get_fields(
             layer_purpose['key'], subcategory['key'], replace_null=False)
-        if inasafe_fields:
+        # remove compulsory field since it has been set in previous step
+        try:
+            inasafe_fields.remove(get_compulsory_fields(
+                layer_purpose['key'], subcategory['key']))
+        except ValueError:
+            pass
+
+        # Check if possible to skip inasafe field step
+        if self.skip_inasafe_field(inasafe_fields):
+            default_inasafe_fields = get_fields(
+                layer_purpose['key'], subcategory['key'], replace_null=True)
+            # Check if it can go to inasafe default step
+            if default_inasafe_fields:
+                return self.parent.step_kw_default_inasafe_fields
+            # Else, go to source step
+            else:
+                return self.parent.step_kw_source
+
+        # If not possible to skip inasafe field step, then go there
+        else:
             return self.parent.step_kw_inasafe_fields
-
-        # Check if it can go to inasafe default field step
-        default_inasafe_fields = get_fields(
-            layer_purpose['key'], subcategory['key'], replace_null=True)
-        if default_inasafe_fields:
-            return self.parent.step_kw_default_inasafe_fields
-
-        # Any other case
-        return self.parent.step_kw_source
 
     # noinspection PyMethodMayBeStatic
     def update_dragged_item_flags(self, item, column):
@@ -302,3 +313,23 @@ class StepKwClassify(WizardStep, FORM_CLASS):
                     QtCore.Qt.ItemIsDragEnabled)
                 tree_leaf.setData(0, QtCore.Qt.UserRole, value)
                 tree_leaf.setText(0, string_value)
+
+    def skip_inasafe_field(self, inasafe_fields):
+        """Check if it possible to skip inasafe field step.
+
+        The function will check if the layer has a specified field type.
+
+        :return: boolean. True if there are no specified field type.
+        """
+        layer_data_provider = self.parent.layer.dataProvider()
+        # Iterate through all inasafe fields
+        for inasafe_field in inasafe_fields:
+            for field in layer_data_provider.fields():
+                # Check the field type
+                if isinstance(inasafe_field['type'], list):
+                    if field.type() in inasafe_field['type']:
+                        return False
+                else:
+                    if field.type() == inasafe_field['type']:
+                        return False
+        return True

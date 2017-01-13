@@ -1,14 +1,12 @@
 # coding=utf-8
+"""Test Metadata Utilities."""
 import unittest
 
 from safe.definitions.versions import inasafe_keyword_version
-from safe.definitions.fields import elderly_ratio_field, exposure_class_field
 from safe.test.utilities import standard_data_path, clone_shp_layer
 from safe.utilities.metadata import (
     write_iso19115_metadata,
-    read_iso19115_metadata,
-    metadata_migration
-)
+    read_iso19115_metadata)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -20,7 +18,7 @@ class TestMetadataUtilities(unittest.TestCase):
     """Test for Metadata Utilities module."""
 
     def test_write_iso19115_metadata(self):
-        """Test for write_iso19115_metadata"""
+        """Test for write_iso19115_metadata."""
         exposure_layer = clone_shp_layer(
             name='buildings',
             include_keywords=False,
@@ -34,7 +32,6 @@ class TestMetadataUtilities(unittest.TestCase):
             'layer_purpose': 'exposure',
             'license': 'Open Data Commons Open Database License (ODbL)',
             'source': 'OpenStreetMap - www.openstreetmap.org',
-            'structure_class_field': 'TYPE',
             'title': 'Buildings'
         }
         metadata = write_iso19115_metadata(exposure_layer.source(), keywords)
@@ -55,10 +52,9 @@ class TestMetadataUtilities(unittest.TestCase):
             'layer_purpose': 'exposure',
             'license': 'Open Data Commons Open Database License (ODbL)',
             'source': 'OpenStreetMap - www.openstreetmap.org',
-            'structure_class_field': 'TYPE',
             'title': 'Buildings'
         }
-        metadata = write_iso19115_metadata(exposure_layer.source(), keywords)
+        write_iso19115_metadata(exposure_layer.source(), keywords)
 
         read_metadata = read_iso19115_metadata(exposure_layer.source())
 
@@ -82,7 +78,6 @@ class TestMetadataUtilities(unittest.TestCase):
             'layer_purpose': 'exposure',
             'license': 'Open Data Commons Open Database License (ODbL)',
             'source': 'OpenStreetMap - www.openstreetmap.org',
-            'structure_class_field': 'TYPE',
             'title': 'Buildings'
         }
         layer = clone_shp_layer(
@@ -90,40 +85,6 @@ class TestMetadataUtilities(unittest.TestCase):
             include_keywords=False,
             source_directory=standard_data_path('exposure'))
         write_iso19115_metadata(layer.source(), keywords)
-
-    def test_metadata_migration(self):
-        """Test metadata_migration."""
-        old_metadata = {
-            'exposure': 'structure',
-            'keyword_version': '3.5',
-            'layer_geometry': 'polygon',
-            'layer_mode': 'classified',
-            'layer_purpose': 'exposure',
-            'license': 'Open Data Commons Open Database License (ODbL)',
-            'source': 'OpenStreetMap - www.openstreetmap.org',
-            'structure_class_field': 'TYPE',
-            'title': 'Buildings',
-            'elderly ratio attribute': 'elderly'
-        }
-        expected_metadata_v4 = {
-            'exposure': 'structure',
-            'keyword_version': '4.0',
-            'layer_geometry': 'polygon',
-            'layer_mode': 'classified',
-            'layer_purpose': 'exposure',
-            'license': 'Open Data Commons Open Database License (ODbL)',
-            'source': 'OpenStreetMap - www.openstreetmap.org',
-            'title': 'Buildings',
-            'inasafe_fields': {
-                exposure_class_field['key']: 'TYPE',
-                elderly_ratio_field['key']: 'elderly'
-            }
-        }
-        new_metadata = metadata_migration(old_metadata, '3.5')
-        self.assertDictEqual(old_metadata, new_metadata)
-
-        new_metadata = metadata_migration(old_metadata, '4.0')
-        self.assertDictEqual(expected_metadata_v4, new_metadata)
 
 
 if __name__ == '__main__':

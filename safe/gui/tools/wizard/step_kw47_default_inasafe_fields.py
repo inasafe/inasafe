@@ -216,3 +216,11 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
                 inasafe_default_values[parameter.guid] = parameter.default
 
         return inasafe_default_values
+
+    def clear(self):
+        """Clear current state."""
+        # Adapted from http://stackoverflow.com/a/13103617/1198772
+        for i in reversed(range(self.kwExtraKeywordsGridLayout.count())):
+            self.kwExtraKeywordsGridLayout.itemAt(i).widget().setParent(None)
+        self.parameters = []
+        self.parameter_container = ParameterContainer()
