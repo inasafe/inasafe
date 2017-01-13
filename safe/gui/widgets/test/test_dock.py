@@ -68,7 +68,7 @@ class TestDock(TestCase):
         cls.dock = get_dock()
 
     def setUp(self):
-        """Fixture run before all tests"""
+        """Fixture run before all tests."""
         self.dock.show_only_visible_layers_flag = True
         load_standard_layers(self.dock)
         self.dock.hazard_layer_combo.setCurrentIndex(1)
@@ -88,7 +88,7 @@ class TestDock(TestCase):
             'inasafe/analysis_extents_mode', HAZARD_EXPOSURE_VIEW)
 
     def tearDown(self):
-        """Fixture run after each test"""
+        """Fixture run after each test."""
         QgsMapLayerRegistry.instance().removeAllMapLayers()
         self.dock.hazard_layer_combo.clear()
         self.dock.exposure_layer_combo.clear()
@@ -105,14 +105,13 @@ class TestDock(TestCase):
 
     @unittest.expectedFailure
     def test_defaults(self):
-        """Test the GUI in its default state"""
-        # print combos_to_string(self.dock)
+        """Test the GUI in its default state."""
         self.assertEqual(self.dock.hazard_layer_combo.currentIndex(), 1)
         self.assertEqual(self.dock.exposure_layer_combo.currentIndex(), 0)
         self.assertEqual(self.dock.aggregation_layer_combo.currentIndex(), 0)
 
     def test_validate(self):
-        """Validate function work as expected"""
+        """Validate function work as expected."""
         self.tearDown()
         # First check that we DON'T validate a clear self.dock
         flag, message = self.dock._validate_question_area()
@@ -129,7 +128,7 @@ class TestDock(TestCase):
         self.assertTrue(flag, message)
 
     def test_set_ok_button_status(self):
-        """OK button changes properly according to self.dock validity"""
+        """OK button changes properly according to self.dock validity."""
         # First check that we ok ISNT enabled on a clear self.dock
         self.tearDown()
         flag, message = self.dock._validate_question_area()
@@ -325,7 +324,7 @@ class TestDock(TestCase):
 
     @unittest.expectedFailure
     def test_add_above_layer(self):
-        """Test we can add one layer above another - see #2322
+        """Test we can add one layer above another - see #2322.
 
         .. versionadded:: 3.2
         """
@@ -428,7 +427,7 @@ class TestDock(TestCase):
 
     @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_issue160(self):
-        """Test that multipart features can be used in a scenario - GH #160"""
+        """Test that multipart features can be used in a scenario - GH #160."""
         exposure_layer = clone_shp_layer(
             name='buildings',
             include_keywords=True,
@@ -520,8 +519,9 @@ class TestDock(TestCase):
 
     @unittest.skip('Skip unit test from InaSAFE v3.')
     def test_state(self):
-        """Check if the save/restore state methods work. See also
-        https://github.com/AIFDR/inasafe/issues/58
+        """Check if the save/restore state methods work.
+
+        See also https://github.com/AIFDR/inasafe/issues/58
         """
         # default selected layer is the third layer exposure
         # so, decrease the index by one to change it
@@ -872,7 +872,7 @@ class TestDock(TestCase):
 
     @unittest.expectedFailure
     def test_issue1191(self):
-        """Test setting a layer's title in the kw directly from qgis api"""
+        """Test setting a layer's title in the kw directly from qgis api."""
         settings = QtCore.QSettings()
         settings.setValue('inasafe/analysis_extents_mode', HAZARD_EXPOSURE)
         self.dock.set_layer_from_title_flag = True
