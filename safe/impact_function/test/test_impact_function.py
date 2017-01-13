@@ -13,6 +13,7 @@ import logging
 from os.path import join, isfile
 from os import listdir
 
+from safe.definitions.layer_purposes import layer_purpose_profiling
 from safe.definitions.minimum_needs import minimum_needs_fields
 from safe.definitions.utilities import definition
 from safe.test.utilities import (
@@ -684,10 +685,11 @@ class TestImpactFunction(unittest.TestCase):
     def _check_minimum_fields_exists(self, impact_function):
         """Private methods for checking existing minimum fields."""
         message = '{field_key} not exists'
-        layers = (
-            layer for layer in impact_function.outputs
-            if not layer.name() == 'profiling')
-        for layer in layers:
+        skip_layers = [layer_purpose_profiling['key']]
+        for layer in impact_function.outputs:
+            if layer.keywords['layer_purpose'] in skip_layers:
+                continue
+
             inasafe_fields = layer.keywords['inasafe_fields']
             for field in minimum_needs_fields:
                 # check fields exists
