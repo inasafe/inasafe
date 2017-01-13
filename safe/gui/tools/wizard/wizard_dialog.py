@@ -11,15 +11,14 @@ from PyQt4.QtGui import (
     QPixmap)
 from qgis.core import QgsMapLayerRegistry
 
-from safe.definitionsv4.layer_purposes import (
+from safe.definitions.layer_purposes import (
     layer_purpose_exposure, layer_purpose_aggregation, layer_purpose_hazard)
-from safe.definitionsv4.layer_modes import (
+from safe.definitions.layer_modes import (
     layer_mode_continuous, layer_mode_classified)
-from safe.definitionsv4.layer_geometry import layer_geometry_raster
-from safe.definitionsv4.units import exposure_unit
-from safe.definitionsv4.hazard import continuous_hazard_unit
-from safe.definitionsv4.utilities import get_compulsory_fields
-from safe.definitionsv4.constants import RECENT
+from safe.definitions.units import exposure_unit
+from safe.definitions.hazard import continuous_hazard_unit
+from safe.definitions.utilities import get_compulsory_fields
+from safe.definitions.constants import RECENT
 
 from safe.common.exceptions import (
     HashNotFoundError,
@@ -41,6 +40,7 @@ from safe.utilities.gis import (
     is_raster_layer,
     is_point_layer,
     is_polygon_layer)
+from safe.definitions import layer_geometry_raster
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.resources import get_ui_class, resources_path
 from safe.utilities.unicode import get_unicode

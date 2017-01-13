@@ -10,9 +10,9 @@ from qgis.analysis import QgsZonalStatistics
 
 from safe.gisv4.vector.tools import copy_layer, create_memory_layer
 from safe.gisv4.vector.prepare_vector_layer import copy_fields, remove_fields
-from safe.definitionsv4.fields import exposure_count_field, total_field
-from safe.definitionsv4.processing_steps import zonal_stats_steps
-from safe.definitionsv4.layer_purposes import (
+from safe.definitions.fields import exposure_count_field, total_field
+from safe.definitions.processing_steps import zonal_stats_steps
+from safe.definitions.layer_purposes import (
     layer_purpose_aggregate_hazard_impacted)
 from safe.utilities.profiling import profile
 from safe.utilities.i18n import tr

@@ -8,22 +8,8 @@ from safe.test.utilities import (
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.gisv4.vector.default_values import add_default_values
-from safe.gisv4.vector.tools import create_memory_layer
-from safe.gisv4.vector.prepare_vector_layer import (
-    prepare_vector_layer,
-    copy_layer,
-    copy_fields,
-    remove_fields,
-    _remove_features,
-    _add_id_column,
-    _size_is_needed,
-    _check_value_mapping,
-)
-from safe.definitionsv4.fields import (
-    exposure_id_field,
-    population_count_field,
+from safe.definitions.fields import (
     female_ratio_field,
-    exposure_type_field
 )
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

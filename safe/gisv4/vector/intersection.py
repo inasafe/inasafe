@@ -17,8 +17,8 @@ from qgis.core import (
 
 from safe.utilities.i18n import tr
 from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
-from safe.definitionsv4.layer_purposes import layer_purpose_exposure_impacted
-from safe.definitionsv4.processing_steps import intersection_steps
+from safe.definitions.layer_purposes import layer_purpose_exposure_impacted
+from safe.definitions.processing_steps import intersection_steps
 from safe.gisv4.vector.tools import (
     create_memory_layer, wkb_type_groups, create_spatial_index)
 from safe.utilities.profiling import profile

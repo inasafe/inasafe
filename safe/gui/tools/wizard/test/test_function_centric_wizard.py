@@ -29,14 +29,14 @@ from safe.test.utilities import (
     get_dock,
     standard_data_path)
 
-from safe.definitionsv4.hazard import hazard_all, hazard_volcano
-from safe.definitionsv4.exposure import exposure_all, exposure_structure
-from safe.definitionsv4 import (
+from safe.definitions.hazard import hazard_all, hazard_volcano
+from safe.definitions.exposure import exposure_all, exposure_structure
+from safe.definitions import (
     layer_purpose_hazard,
     layer_purpose_exposure,
     layer_geometry_polygon
 )
-from safe.definitionsv4.utilities import get_allowed_geometries
+from safe.definitions.utilities import get_allowed_geometries
 
 # AG: get_qgis_app() should be called before importing modules from
 # safe.gui.tools.wizard
@@ -108,6 +108,7 @@ class TestImpactFunctionCentricWizard(unittest.TestCase):
         dialog.dock = self.dock
         dialog.set_function_centric_mode()
         QgsMapLayerRegistry.instance().removeAllMapLayers()
+        number_of_column = len(hazard_all) - 1  # Because we remove generic
 
         volcano_layer = load_test_vector_layer(
             'hazard',
@@ -132,7 +133,7 @@ class TestImpactFunctionCentricWizard(unittest.TestCase):
 
         # step_fc_functions1: test function matrix dimensions
         col_count = dialog.step_fc_functions1.tblFunctions1.columnCount()
-        self.assertEqual(col_count, len(hazard_all))
+        self.assertEqual(col_count, number_of_column)
         row_count = dialog.step_fc_functions1.tblFunctions1.rowCount()
         self.assertEqual(row_count, len(exposure_all))
 

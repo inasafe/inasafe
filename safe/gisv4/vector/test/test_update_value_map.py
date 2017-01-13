@@ -8,7 +8,7 @@ from safe.test.utilities import (
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.gisv4.vector.update_value_map import update_value_map
-from safe.definitionsv4.fields import (
+from safe.definitions.fields import (
     hazard_value_field,
     hazard_class_field,
     exposure_type_field,

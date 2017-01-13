@@ -10,7 +10,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from qgis.core import QGis
 from safe.gisv4.vector.multi_buffering import multi_buffering
-from safe.definitionsv4.fields import hazard_class_field
+from safe.definitions.fields import hazard_class_field
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

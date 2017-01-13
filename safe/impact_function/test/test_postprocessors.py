@@ -3,13 +3,13 @@
 
 import unittest
 
-from safe.definitionsv4.exposure import exposure_population
-from safe.definitionsv4.hazard_classifications import generic_hazard_classes
+from safe.definitions.exposure import exposure_population
+from safe.definitions.hazard_classifications import generic_hazard_classes
 from safe.test.utilities import get_qgis_app
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe.definitionsv4.fields import (
+from safe.definitions.fields import (
     female_count_field,
     youth_count_field,
     adult_count_field,
@@ -18,7 +18,7 @@ from safe.definitionsv4.fields import (
     size_field,
     affected_field,
     exposure_count_field, population_count_field)
-from safe.definitionsv4.post_processors import (
+from safe.definitions.post_processors import (
     post_processor_gender,
     post_processor_youth,
     post_processor_adult,

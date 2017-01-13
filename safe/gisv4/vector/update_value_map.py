@@ -7,13 +7,13 @@ Reclassify a continuous vector layer.
 from qgis.core import QGis, QgsField
 
 from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
-from safe.definitionsv4.fields import (
+from safe.definitions.fields import (
     hazard_class_field,
     hazard_value_field,
     exposure_type_field,
     exposure_class_field
 )
-from safe.definitionsv4.processing_steps import assign_inasafe_values_steps
+from safe.definitions.processing_steps import assign_inasafe_values_steps
 from safe.gisv4.vector.tools import remove_fields
 from safe.utilities.profiling import profile
 

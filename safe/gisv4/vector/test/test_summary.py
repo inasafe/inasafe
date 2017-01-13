@@ -8,7 +8,7 @@ from safe.test.utilities import (
     load_test_vector_layer)
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe.definitionsv4.fields import (
+from safe.definitions.fields import (
     total_field,
     exposure_class_field,
     hazard_class_field,

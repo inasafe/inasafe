@@ -32,7 +32,7 @@ def impact_table_extractor(impact_report, component_metadata):
     context = {}
 
     # Imported here to avoid cyclic dependencies
-    from safe.definitionsv4.report import (
+    from safe.definitions.report import (
         analysis_result_component,
         analysis_breakdown_component,
         action_checklist_component,

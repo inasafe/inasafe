@@ -12,35 +12,10 @@ from qgis.core import (
 
 from safe.common.exceptions import (
     InvalidKeywordsForProcessingAlgorithm, NoFeaturesInExtentError)
-from safe.gisv4.vector.tools import (
-    create_memory_layer,
-    remove_fields,
-    copy_fields,
-    copy_layer,
-    create_field_from_definition
-)
-from safe.definitionsv4.processing_steps import assign_default_values_steps
-from safe.definitionsv4.fields import (
-    exposure_id_field,
-    hazard_id_field,
-    aggregation_id_field,
-    exposure_type_field,
-    exposure_class_field,
-    count_fields,
-)
-from safe.definitionsv4.exposure import indivisible_exposure
-from safe.definitionsv4.layer_purposes import (
-    layer_purpose_exposure,
-    layer_purpose_hazard,
-    layer_purpose_aggregation
-)
-from safe.definitionsv4.utilities import (
-    get_fields,
+from safe.definitions.processing_steps import assign_default_values_steps
+from safe.definitions.utilities import (
     definition,
-    get_compulsory_fields,
 )
-from safe.impact_function.postprocessors import run_single_post_processor
-from safe.definitionsv4.post_processors import post_processor_size
 from safe.utilities.i18n import tr
 from safe.utilities.profiling import profile
 

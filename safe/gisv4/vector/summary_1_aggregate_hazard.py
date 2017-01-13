@@ -6,7 +6,7 @@ Aggregate the impact table to the aggregate hazard.
 from PyQt4.QtCore import QPyNullVariant
 from qgis.core import QGis, QgsFeatureRequest
 
-from safe.definitionsv4.fields import (
+from safe.definitions.fields import (
     aggregation_id_field,
     aggregation_name_field,
     hazard_id_field,
@@ -18,13 +18,13 @@ from safe.definitionsv4.fields import (
     affected_field,
     size_field,
 )
-from safe.definitionsv4.layer_purposes import (
+from safe.definitions.layer_purposes import (
     layer_purpose_aggregate_hazard_impacted)
-from safe.definitionsv4.post_processors import post_processor_affected_function
-from safe.definitionsv4.processing_steps import (
+from safe.definitions.post_processors import post_processor_affected_function
+from safe.definitions.processing_steps import (
     summary_1_aggregate_hazard_steps)
-from safe.definitionsv4.utilities import definition
-from safe.definitionsv4.hazard_classifications import null_hazard_value
+from safe.definitions.utilities import definition
+from safe.definitions.hazard_classifications import null_hazard_value
 from safe.gisv4.vector.summary_tools import (
     check_inputs, create_absolute_values_structure, add_fields)
 from safe.utilities.profiling import profile

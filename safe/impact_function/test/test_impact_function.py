@@ -13,7 +13,7 @@ import logging
 from os.path import join, isfile
 from os import listdir
 
-from safe.definitionsv4.minimum_needs import minimum_needs_fields
+from safe.definitions.minimum_needs import minimum_needs_fields
 from safe.test.utilities import (
     get_control_text,
     load_test_raster_layer,
@@ -36,18 +36,18 @@ from qgis.core import (
 from osgeo import gdal
 from PyQt4.QtCore import QT_VERSION_STR
 from PyQt4.Qt import PYQT_VERSION_STR
-from safe.definitionsv4.fields import (
+from safe.definitions.fields import (
     population_count_field,
     exposure_type_field,
 )
-from safe.definitionsv4.post_processors import (
+from safe.definitions.post_processors import (
     post_processor_gender,
     post_processor_youth,
     post_processor_adult,
     post_processor_elderly,
     post_processor_size
 )
-from safe.definitionsv4.constants import (
+from safe.definitions.constants import (
     PREPARE_SUCCESS,
     ANALYSIS_SUCCESS,
     ANALYSIS_FAILED_BAD_INPUT,

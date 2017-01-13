@@ -52,7 +52,7 @@ generic_structure_classes = {
             'key': 'education',
             'name': tr('Education'),
             'description': tr(
-                'A structure that provides a service in the education '
+                'A structure that provides a service in education.'
                 'sector.'),
             'string_defaults': [
                 'college',
@@ -298,7 +298,9 @@ generic_road_classes = {
         {
             'key': 'motorway',
             'name': tr('Motorway'),
-            'description': tr('A road to solve the traffic and have a fare.'),
+            'description': tr(
+                'A road designed for fast moving traffic often with multiple '
+                'lanes for each direction of traffic.'),
             'osm_downloader': [
                 'Motorway link',
                 'Motorway or highway',
@@ -320,8 +322,9 @@ generic_road_classes = {
             'key': 'primary',
             'name': tr('Primary'),
             'description': tr(
-                'A road that service the main transportation with a long '
-                'distance travel characteristic and high average velocity.'),
+                'A road that provides the main transportation link ofen '
+                'over a long distance travel characteristic and supporting a '
+                'high average velocity.'),
             'string_defaults': [
                 'primary link',
                 'primary road',
@@ -342,8 +345,8 @@ generic_road_classes = {
             'key': 'secondary',
             'name': tr('Secondary'),
             'description': tr(
-                'A road that service the transportation with a medium '
-                'distance travel characteristic and medium average velocity.'),
+                'A road that provides a transportation link for medium '
+                'distance travel and medium average velocity.'),
             'string_defaults': [
                 'secondary link',
                 'secondary',
@@ -363,8 +366,8 @@ generic_road_classes = {
             'key': 'local',
             'name': tr('Local'),
             'description': tr(
-                'A road that service the transportation with short distance '
-                'travel and low average velocity.'),
+                'A road that provides a transportation link for a short '
+                'distance travel and low average velocity.'),
             'string_defaults': [
                 'local',
                 'tertiary link',
@@ -386,13 +389,15 @@ generic_road_classes = {
         {
             'key': 'path',
             'name': tr('Path'),
-            'description': tr('A road to walk on foot aim.'),
+            'description': tr(
+                'A route for pedestrian and non-motorised transport.'),
             'osm_downloader': [
                 'Cycleway, footpath, etc.',
                 'Track',
             ],
             'string_defaults': [
                 'cycleway',
+                'pedestrian',
                 'footway',
                 'path',
                 'track',
@@ -408,12 +413,11 @@ generic_road_classes = {
             'key': 'other',
             'name': tr('Other'),
             'description': tr(
-                'A road that service the transportation with short travel '
-                'and low average velocity.'),
+                'A road that services residential or local traffic '
+                'with low average velocity.'),
             'string_defaults': [
                 'living street',
                 'other',
-                'pedestrian',
                 'residential',
                 'road',
                 'service',
@@ -464,9 +468,9 @@ generic_place_classes = {
             'name': tr('Town'),
             'description': tr(
                 'A second tier urban settlement of local importance, often '
-                'with a population of 10,000 people and good range of local '
-                'facilities including schools, medical facilities etc and '
-                'traditionally a market.'),
+                'with a population of at least 10,000 people and good range '
+                'of local facilities including schools, medical facilities '
+                'etc. and traditionally a market.'),
             'string_defaults': ['town'],
             'osm_downloader': [],
             'citations': [
@@ -481,8 +485,8 @@ generic_place_classes = {
             'name': tr('Village'),
             'description': tr(
                 'A smaller distinct settlement, smaller than a town with few '
-                'facilities available with people traveling to nearby towns '
-                'to access these.'),
+                'facilities available. People will typically travel to nearby '
+                'towns to access facilities.'),
             'string_defaults': ['village'],
             'osm_downloader': [],
             'citations': [
@@ -497,7 +501,7 @@ generic_place_classes = {
             'name': tr('Hamlet'),
             'description': tr(
                 'A smaller rural community typically with fewer than 100-200 '
-                'inhabitants, few infrastructure.'),
+                'inhabitants and minimal infrastructure.'),
             'string_defaults': ['hamlet'],
             'osm_downloader': [],
             'citations': [
@@ -599,7 +603,7 @@ generic_landcover_classes = {
             'key': 'wood',
             'name': tr('Wood'),
             'description': tr(
-                'Wood.'),
+                'A forested area.'),
             'string_defaults': ['wood', 'forest'],
             'osm_downloader': [],
             'citations': [
@@ -628,7 +632,7 @@ generic_landcover_classes = {
             'key': 'water',
             'name': tr('Water'),
             'description': tr(
-                'Lakes, etc.'),
+                'Water bodies both natural and man-made.'),
             'osm_downloader': [],
             'string_defaults': ['water', 'lake'],
             'citations': [
@@ -642,7 +646,7 @@ generic_landcover_classes = {
             'key': 'other',
             'name': tr('Other'),
             'description': tr(
-                'Other group.'),
+                'Any other land use type.'),
             'osm_downloader': [],
             'string_defaults': ['other'],
             'citations': [

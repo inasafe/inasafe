@@ -17,9 +17,9 @@ from qgis.core import (
 
 from safe.utilities.i18n import tr
 from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
-from safe.definitionsv4.processing_steps import union_steps
-from safe.definitionsv4.fields import hazard_class_field, aggregation_id_field
-from safe.definitionsv4.hazard_classifications import null_hazard_value
+from safe.definitions.processing_steps import union_steps
+from safe.definitions.fields import hazard_class_field, aggregation_id_field
+from safe.definitions.hazard_classifications import null_hazard_value
 from safe.gisv4.vector.tools import (
     create_memory_layer, wkb_type_groups, create_spatial_index)
 from safe.utilities.profiling import profile

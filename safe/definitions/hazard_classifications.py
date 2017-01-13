@@ -5,11 +5,11 @@
 See https://github.com/inasafe/inasafe/issues/2920#issuecomment-229874044
 to have a table showing you classes of each kind of hazard.
 """
-from safe.definitionsv4 import concepts, small_number
+from safe.definitions import concepts, small_number
 from safe.utilities.i18n import tr
-from safe.definitionsv4.units import unit_centimetres, unit_miles_per_hour, \
+from safe.definitions.units import unit_centimetres, unit_miles_per_hour, \
     unit_kilometres_per_hour, unit_knots
-from safe.definitionsv4.colors import (
+from safe.definitions.colors import (
     green,
     light_green,
     yellow,

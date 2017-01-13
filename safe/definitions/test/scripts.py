@@ -1,4 +1,4 @@
-from safe.definitionsv4.test.test_fields import all_fields
+from safe.definitions.test.test_fields import all_fields
 
 
 def generate_field_table():

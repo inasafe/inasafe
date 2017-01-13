@@ -7,7 +7,7 @@ Aggregate the aggregate hazard to the analysis layer.
 from PyQt4.QtCore import QPyNullVariant
 from qgis.core import QGis, QgsFeatureRequest
 
-from safe.definitionsv4.fields import (
+from safe.definitions.fields import (
     analysis_id_field,
     analysis_name_field,
     aggregation_id_field,
@@ -19,10 +19,10 @@ from safe.definitionsv4.fields import (
     total_unaffected_field,
     hazard_count_field,
 )
-from safe.definitionsv4.processing_steps import (
+from safe.definitions.processing_steps import (
     summary_3_analysis_steps)
-from safe.definitionsv4.layer_purposes import layer_purpose_analysis_impacted
-from safe.definitionsv4.post_processors import post_processor_affected_function
+from safe.definitions.layer_purposes import layer_purpose_analysis_impacted
+from safe.definitions.post_processors import post_processor_affected_function
 from safe.gisv4.vector.summary_tools import (
     check_inputs, create_absolute_values_structure, add_fields)
 from safe.utilities.profiling import profile

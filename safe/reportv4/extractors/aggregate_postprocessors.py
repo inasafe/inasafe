@@ -2,17 +2,17 @@
 from collections import OrderedDict
 
 from safe.common.parameters.resource_parameter import ResourceParameter
-from safe.definitionsv4.exposure import exposure_population
-from safe.definitionsv4.fields import (
+from safe.definitions.exposure import exposure_population
+from safe.definitions.fields import (
     aggregation_name_field,
     female_count_field,
     male_count_field,
     population_count_field,
     affected_exposure_count_field,
     total_affected_field)
-from safe.definitionsv4.minimum_needs import minimum_needs_fields
-from safe.definitionsv4.post_processors import age_postprocessors
-from safe.definitionsv4.utilities import postprocessor_output_field
+from safe.definitions.minimum_needs import minimum_needs_fields
+from safe.definitions.post_processors import age_postprocessors
+from safe.definitions.utilities import postprocessor_output_field
 from safe.reportv4.extractors.util import round_affecter_number
 from safe.utilities.i18n import tr
 

@@ -12,17 +12,18 @@ from qgis.core import (
     QgsRasterLayer,
     QgsDataSourceURI,
     QgsBrowserModel)
-import safe.definitionsv4.layer_geometry
-import safe.definitionsv4.layer_modes
-import safe.definitionsv4.layer_purposes
-from safe.definitionsv4.layer_purposes import (
+
+import safe.definitions.layer_geometry
+import safe.definitions.layer_modes
+import safe.definitions.layer_purposes
+from safe.definitions.layer_purposes import (
     layer_purpose_exposure, layer_purpose_aggregation, layer_purpose_hazard)
-from safe.definitionsv4.layer_modes import (
+from safe.definitions.layer_modes import (
     layer_mode_continuous, layer_mode_classified)
-from safe.definitionsv4.units import exposure_unit
-from safe.definitionsv4.hazard import continuous_hazard_unit
-from safe.definitionsv4.hazard_classifications import hazard_classification
-from safe.definitionsv4.layer_geometry import layer_geometry_polygon
+from safe.definitions.hazard_classifications import hazard_classification
+from safe.definitions.units import exposure_unit
+from safe.definitions.hazard import continuous_hazard_unit
+from safe.definitions.layer_geometry import layer_geometry_polygon
 from safe.common.exceptions import (
     HashNotFoundError,
     InaSAFEError,
@@ -296,12 +297,12 @@ class WizardStepBrowser(WizardStep):
                 %s
             </table>
         ''' % (self.tr('Layer'), self.tr('Required'),
-               safe.definitionsv4.layer_geometry.layer_geometry['name'],
+               safe.definitions.layer_geometry.layer_geometry['name'],
                layer_geometry_key, req_geometry,
-               safe.definitionsv4.layer_purposes.layer_purpose['name'],
+               safe.definitions.layer_purposes.layer_purpose['name'],
                lay_purpose, layer_purpose,
                layer_purpose_key_name, lay_subcategory, req_subcategory,
-               safe.definitionsv4.layer_modes.layer_mode['name'],
+               safe.definitions.layer_modes.layer_mode['name'],
                lay_layer_mode, req_layer_mode,
                classification_row,
                units_row)

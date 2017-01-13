@@ -8,9 +8,9 @@ from PyQt4.QtCore import QPyNullVariant
 from qgis.core import QGis, QgsField
 
 from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
-from safe.definitionsv4.utilities import definition
-from safe.definitionsv4.fields import hazard_class_field, hazard_value_field
-from safe.definitionsv4.processing_steps import reclassify_vector_steps
+from safe.definitions.utilities import definition
+from safe.definitions.fields import hazard_class_field, hazard_value_field
+from safe.definitions.processing_steps import reclassify_vector_steps
 from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
