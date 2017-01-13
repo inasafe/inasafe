@@ -56,7 +56,8 @@
         "Polygonize classified raster hazard",
         "Clip and mask hazard polygons with the analysis layer",
         "Cleaning the vector hazard attribute table",
-        "Assign classes based on value map"
+        "Assign classes based on value map",
+        "Make hazard layer valid"
       ]
     },
     "exposure":{

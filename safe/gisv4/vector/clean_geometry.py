@@ -20,21 +20,30 @@ __revision__ = '$Format:%H$'
 
 
 @profile
-def buffering(layer, radius, callback=None):
-    """Buffer a vector layer using a single radius.
+def clean_geometry(layer, callback=None):
+    """Clean a vector layer.
 
     :param layer: The vector layer.
     :type layer: QgsVectorLayer
 
-    :param radius: The radius.
-    :type radius: int
-
     :param callback: A function to all to indicate progress. The function
-        should accept params 'current' (int), 'maximum' (int) and 'step' (str).
-        Defaults to None.
+        editing should accept params 'current' (int), 'maximum' (int) and
+        'step' (str). Defaults to None.
     :type callback: function
 
     :return: The buffered vector layer.
     :rtype: QgsVectorLayer
     """
-    pass
+    # start editing
+    layer.startEditing()
+
+    # iterate through all features
+    for feature in layer.getFeatures():
+        geom = feature.geometry()
+        new_geom = geom.buffer(0, 5)
+        feature.setGeometry(new_geom)
+
+    # save changes
+    layer.commitChanges()
+
+    return layer
