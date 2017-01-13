@@ -18,7 +18,6 @@ from safe.definitions.layer_modes import (
     layer_mode_continuous, layer_mode_classified)
 from safe.definitions.layer_purposes import (
     layer_purpose_hazard, layer_purpose_exposure, layer_purpose_aggregation)
-from safe.definitions.hazard_classifications import (
 from safe.definitions.hazard import (
     hazard_volcano, hazard_flood, hazard_earthquake)
 from safe.definitions.exposure import exposure_structure, exposure_population
