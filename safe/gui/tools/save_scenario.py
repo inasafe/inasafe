@@ -118,10 +118,10 @@ class SaveScenarioDialog(QDialog):
 
         # Added in 2.2 to support user defined analysis extents
         if self.dock.extent.user_extent is not None \
-                and self.dock.extent.user_extent_crs is not None:
+                and self.dock.extent.crs is not None:
             extent = extent_to_array(
                 self.dock.extent.user_extent,
-                self.dock.extent.user_extent_crs)
+                self.dock.extent.crs)
         else:
             extent = viewport_geo_array(self.iface.mapCanvas())
         extent_string = ', '.join(('%f' % x) for x in extent)
@@ -158,14 +158,14 @@ class SaveScenarioDialog(QDialog):
         parser.set(title, 'exposure', relative_exposure_path)
         parser.set(title, 'hazard', relative_hazard_path)
         parser.set(title, 'extent', extent_string)
-        if self.dock.extent.user_extent_crs is None:
+        if self.dock.extent.crs is None:
             parser.set(title, 'extent_crs',
                        'EPSG:4326')
         else:
             parser.set(
                 title,
                 'extent_crs',
-                self.dock.extent.user_extent_crs.authid())
+                self.dock.extent.crs.authid())
         if self.aggregation_layer is not None:
             aggregation_path = self.aggregation_layer.publicSource()
             relative_aggregation_path = self.relative_path(

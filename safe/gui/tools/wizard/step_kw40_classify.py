@@ -1,17 +1,5 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool by AusAid -**InaSAFE Wizard**
-
-This module provides: Keyword Wizard Step: Classify (Value Mapping)
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
+"""Keyword Wizard Step: Classify (Value Mapping)."""
 
 import json
 
@@ -23,7 +11,7 @@ from osgeo.gdalconst import GA_ReadOnly
 
 from safe.definitions.layer_purposes import layer_purpose_aggregation
 from safe.definitions.layer_geometry import layer_geometry_raster
-from safe.definitions.utilities import get_fields
+from safe.definitions.utilities import get_fields, get_compulsory_fields
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_strings import (
@@ -39,7 +27,7 @@ FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
 class StepKwClassify(WizardStep, FORM_CLASS):
-    """Keyword Wizard Step: Classify (Value Mapping)"""
+    """Keyword Wizard Step: Classify (Value Mapping)."""
 
     def __init__(self, parent=None):
         """Constructor for the tab.

@@ -1,5 +1,5 @@
 # coding=utf-8
-"""Test for utilities module.."""
+"""Test for utilities module."""
 import unittest
 
 from safe.definitions import (
