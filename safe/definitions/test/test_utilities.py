@@ -83,39 +83,42 @@ class TestDefinitionsUtilities(unittest.TestCase):
         self.maxDiff = None
         hazards = hazards_for_layer(
             'polygon', 'single_event')
+        hazards = [hazard['key'] for hazard in hazards]
         expected = [
-            hazard_flood,
-            hazard_tsunami,
-            hazard_earthquake,
-            hazard_volcano,
-            hazard_volcanic_ash,
-            hazard_cyclone,
-            hazard_generic
+            hazard_flood['key'],
+            hazard_tsunami['key'],
+            hazard_earthquake['key'],
+            hazard_volcano['key'],
+            hazard_volcanic_ash['key'],
+            hazard_cyclone['key'],
+            hazard_generic['key']
         ]
         self.assertItemsEqual(hazards, expected)
 
         hazards = hazards_for_layer('polygon')
+        hazards = [hazard['key'] for hazard in hazards]
         expected = [
-            hazard_flood,
-            hazard_tsunami,
-            hazard_earthquake,
-            hazard_volcano,
-            hazard_volcanic_ash,
-            hazard_cyclone,
-            hazard_generic
+            hazard_flood['key'],
+            hazard_tsunami['key'],
+            hazard_earthquake['key'],
+            hazard_volcano['key'],
+            hazard_volcanic_ash['key'],
+            hazard_cyclone['key'],
+            hazard_generic['key']
         ]
         self.assertItemsEqual(hazards, expected)
 
         hazards = hazards_for_layer(
             'raster', 'single_event')
+        hazards = [hazard['key'] for hazard in hazards]
         expected = [
-            hazard_flood,
-            hazard_tsunami,
-            hazard_earthquake,
-            hazard_volcanic_ash,
-            hazard_volcano,
-            hazard_cyclone,
-            hazard_generic
+            hazard_flood['key'],
+            hazard_tsunami['key'],
+            hazard_earthquake['key'],
+            hazard_volcanic_ash['key'],
+            hazard_volcano['key'],
+            hazard_cyclone['key'],
+            hazard_generic['key']
         ]
         self.assertItemsEqual(hazards, expected)
 
