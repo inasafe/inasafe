@@ -164,6 +164,9 @@ combination.
 
 ![image](https://cloud.githubusercontent.com/assets/5743135/17542495/6b968a16-5ef3-11e6-8622-af1cab2e0a5f.png)
 
+The order of elements in the legend is from high to low; top to bottom. ie the
+high hazard zone is above the medium hazard zone, above the low hazard zone.
+
 Map legend classes will have labels. The label should complement the
 legend title and should use the following syntax:
 
@@ -172,10 +175,17 @@ legend title and should use the following syntax:
 **Label**, refers to the class in the table above, i.e. affected, not affected,
 high hazard zone etc. **threshold** is the dynamic value which defines the
 class boundary i.e. the value of 0.7m for people affected by tsunami. **count**
-is the number of exposure elements in each class. In some cases count will
+is the number of exposure elements in each class. Counts will be included in the
+legend label in brackets. These values will be rounded according to the legend
+label rounding principles. In some cases count will
 include a **unit**. The table below lists the units for each exposure type.
 
 ![image](https://cloud.githubusercontent.com/assets/5743135/17543942/5a0a51b4-5efe-11e6-98ca-112abb2403cd.png)
+
+### Legend label rounding
+* legend values are rounded to 1000 for values > 100 000
+* legend values are rounded to 100 for values < 100 000
+* legend values are rounded to 10 for values < 1000
 
 ### Examples of map legends
 
