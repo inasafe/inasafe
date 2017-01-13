@@ -15,7 +15,7 @@ from qgis.analysis import QgsAlignRaster
 
 from safe.common.utilities import unique_filename
 from safe.common.exceptions import AlignRastersError
-from safe.definitionsv4.processing_steps import align_steps
+from safe.definitions.processing_steps import align_steps
 from safe.utilities.profiling import profile
 from safe.utilities.i18n import tr
 
@@ -26,8 +26,7 @@ __revision__ = '$Format:%H$'
 
 
 @profile
-def align_rasters(
-        hazard_layer, exposure_layer, extent):
+def align_rasters(hazard_layer, exposure_layer, extent):
     """Align hazard and exposure raster layers so they fit perfectly and
     so they can be used for raster algebra. The method uses QGIS
     raster alignment tool to do the work (which in turn uses GDAL).
