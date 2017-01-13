@@ -60,9 +60,11 @@ layer_purpose_exposure_impacted = {
     'key': 'exposure_impacted',
     'name': tr('Exposure Impacted'),
     'description': tr(
-        'An <b>exposure impacted</b> layer is the result from InaSAFE '
-        'analysis. It has fields that represent the result of each exposure '
-        'from the hazard in the aggregation area.'),
+        'An <b>exposure impact</b> layer is one of the possible results of '
+        'an InaSAFE analysis. It has fields that represent the impact on each '
+        'exposure feature by the hazard in each aggregation area. This type '
+        'of impact layer will not be created if the exposure layer is a '
+        'continuous raster exposure layer.'),
     'allowed_geometries': [
         layer_geometry_point, layer_geometry_line, layer_geometry_polygon],
     'citations': [
@@ -77,8 +79,23 @@ layer_purpose_aggregate_hazard_impacted = {
     'key': 'aggregate_hazard_impacted',
     'name': tr('Aggregate Hazard Impacted'),
     'description': tr(
-        'An <b>aggregate hazard impacted</b> layer is the result from InaSAFE '
-        'analysis.'),
+        'An <b>aggregate hazard impacted</b> layer is created during an '
+        'InaSAFE analysis. This layer is a cross product between the hazard '
+        'layer, the aggregate layer and the exposure impacted layer. The '
+        'layer geometries are firstly a union between the hazard layer and '
+        'the aggregation layer. If the exposure is indivisible (e.g. '
+        'building polygons), point based (e.g. places, building points) or '
+        'line based (e.g. roads) the the aggregate hazard impacted layer will '
+        'include a count of the number of features per intersected aggregate '
+        'hazard polygon and, if applicable, either the length or the area '
+        'of the exposure features contained within each polygon. If the '
+        'exposure data is divisible (e.g. landcover polygons), those polygons '
+        'will again be unioned with the output from the aggreation layer '
+        '/ hazard layer intersection process. As well as simple metrics of '
+        'area or distance, additional columns will be writen to the aggregate '
+        'hazard layer breaking down features by their classes and providing '
+        'other similar metrics.'
+    ),
     'allowed_geometries': [layer_geometry_polygon],
     'citations': [
         {
@@ -92,8 +109,9 @@ layer_purpose_aggregation_impacted = {
     'key': 'aggregation_impacted',
     'name': tr('Aggregation Impacted'),
     'description': tr(
-        'An <b>aggregation impacted</b> layer is the result from InaSAFE '
-        'analysis.'),
+        'An <b>aggregate impacted</b> layer is created during an InaSAFE '
+        'analysis. This layer contains the geometries from the original '
+        'aggregation layer.'),
     'allowed_geometries': [layer_geometry_polygon],
     'citations': [
         {
