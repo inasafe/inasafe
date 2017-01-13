@@ -20,7 +20,7 @@ from safe.definitions.layer_purposes import (
     layer_purpose_exposure, layer_purpose_aggregation, layer_purpose_hazard)
 from safe.definitions.layer_modes import (
     layer_mode_continuous, layer_mode_classified)
-from safe.definitionsv4.hazard_classifications import hazard_classification
+from safe.definitions.hazard_classifications import hazard_classification
 from safe.definitions.units import exposure_unit
 from safe.definitions.hazard import continuous_hazard_unit
 from safe.definitions.layer_geometry import layer_geometry_polygon
