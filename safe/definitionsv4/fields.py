@@ -4,7 +4,8 @@
 from PyQt4.QtCore import QVariant
 
 from safe.utilities.i18n import tr
-from safe.definitionsv4.constants import qvariant_whole_numbers
+from safe.definitionsv4.constants import (
+    qvariant_whole_numbers, qvariant_numbers)
 from safe.definitionsv4.default_values import (
     female_ratio_default_value,
     feature_rate_default_value,
@@ -342,7 +343,7 @@ population_count_field = {
     'key': 'population_count_field',
     'name': tr('Population count'),
     'field_name': 'population',
-    'type': qvariant_whole_numbers,
+    'type': qvariant_numbers,
     'length': default_field_length,
     'precision': 0,
     'absolute': True,
@@ -362,7 +363,7 @@ female_count_field = {
     'key': 'female_count_field',
     'name': tr('Female Count'),
     'field_name': 'female',
-    'type': qvariant_whole_numbers,
+    'type': qvariant_numbers,
     'length': default_field_length,
     'precision': 0,
     'absolute': True,
@@ -384,7 +385,7 @@ male_count_field = {
     'key': 'male_count_field',
     'name': tr('Male Count'),
     'field_name': 'male',
-    'type': qvariant_whole_numbers,
+    'type': qvariant_numbers,
     'length': default_field_length,
     'precision': 0,
     'absolute': True,
@@ -405,7 +406,7 @@ youth_count_field = {
     'key': 'youth_count_field',
     'name': tr('Youth Count'),
     'field_name': 'youth',
-    'type': qvariant_whole_numbers,
+    'type': qvariant_numbers,
     'length': default_field_length,
     'precision': 0,
     'absolute': True,
@@ -427,7 +428,7 @@ adult_count_field = {
     'key': 'adult_count_field',
     'name': tr('Adult Count'),
     'field_name': 'adult',
-    'type': qvariant_whole_numbers,
+    'type': qvariant_numbers,
     'length': default_field_length,
     'precision': 0,
     'absolute': True,
@@ -449,7 +450,7 @@ elderly_count_field = {
     'key': 'elderly_count_field',
     'name': tr('Elderly Count'),
     'field_name': 'elderly',
-    'type': qvariant_whole_numbers,
+    'type': qvariant_numbers,
     'length': default_field_length,
     'precision': 0,
     'absolute': True,
