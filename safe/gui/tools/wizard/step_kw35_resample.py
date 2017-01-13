@@ -33,7 +33,9 @@ class StepKwResample(WizardStep, FORM_CLASS):
         :returns: The step to be switched to
         :rtype: WizardStep instance or None
         """
-        new_step = self.parent.step_kw_inasafe_raster_default_values
+        # Notes(IS): Skipped assigning raster inasafe default value for now.
+        # new_step = self.parent.step_kw_inasafe_raster_default_values
+        new_step = self.parent.step_kw_source
         return new_step
 
     def selected_allow_resampling(self):

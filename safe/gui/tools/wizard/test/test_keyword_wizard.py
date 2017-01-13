@@ -1931,17 +1931,18 @@ class TestKeywordWizard(unittest.TestCase):
         # Check Allow Resample
         dialog.step_kw_resample.chkAllowResample.setChecked(True)
 
-        # Click next to InaSAFE Raster Default Values step
-        dialog.pbnNext.click()
+        # Notes(IS): Skipped assigning raster inasafe default value for now.
+        # # Click next to InaSAFE Raster Default Values step
+        # dialog.pbnNext.click()
+        #
+        # # Check if in InaSAFE Raster Default Values step
+        # self.check_current_step(dialog.step_kw_inasafe_raster_default_values)
 
-        # Check if in InaSAFE Raster Default Values step
-        self.check_current_step(dialog.step_kw_inasafe_raster_default_values)
-
-        parameter_widget = dialog.step_kw_inasafe_raster_default_values\
-            .parameter_container.get_parameter_widget_by_guid(
-                female_ratio_field['key'])
-        new_default_female_ratio = 0.3
-        parameter_widget.set_value(new_default_female_ratio)
+        # parameter_widget = dialog.step_kw_inasafe_raster_default_values\
+        #     .parameter_container.get_parameter_widget_by_guid(
+        #         female_ratio_field['key'])
+        # new_default_female_ratio = 0.3
+        # parameter_widget.set_value(new_default_female_ratio)
 
         # Click next to source step
         dialog.pbnNext.click()
@@ -1982,9 +1983,11 @@ class TestKeywordWizard(unittest.TestCase):
             'layer_geometry': layer_geometry_raster['key'],
             'layer_mode': layer_mode_continuous['key'],
             'layer_purpose': layer_purpose_exposure['key'],
-            'inasafe_default_values': {
-                female_ratio_field['key']: new_default_female_ratio
-            },
+            # Notes(IS): Skipped assigning raster inasafe default value for
+            # now.
+            # 'inasafe_default_values': {
+            #       female_ratio_field['key']: new_default_female_ratio
+            # },
             'license': source_license,
             'scale': source_scale,
             'source': source,
