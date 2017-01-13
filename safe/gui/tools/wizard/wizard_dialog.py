@@ -773,15 +773,17 @@ class WizardDialog(QDialog, FORM_CLASS):
         if inasafe_fields:
             keywords['inasafe_fields'] = inasafe_fields
 
+        inasafe_default_values = {}
         if keywords['layer_geometry'] == layer_geometry_raster['key']:
-            inasafe_default_values = self.\
-                step_kw_inasafe_raster_default_values.\
-                get_inasafe_default_values()
+            pass
+            # Notes(IS): Skipped assigning raster inasafe default value for
+            # now.
+            # inasafe_default_values = self.\
+            #     step_kw_inasafe_raster_default_values.\
+            #     get_inasafe_default_values()
         else:
             inasafe_default_values = self.step_kw_default_inasafe_fields.\
                 get_inasafe_default_values()
-
-        LOGGER.debug('InaSAFE default: %s' % inasafe_default_values)
 
         if inasafe_default_values:
             keywords['inasafe_default_values'] = inasafe_default_values
