@@ -2,8 +2,8 @@
 """Metadata Utilities."""
 import os
 
-from safe.definitionsv4.versions import inasafe_keyword_version
-from safe.definitionsv4.layer_purposes import (
+from safe.definitions.versions import inasafe_keyword_version
+from safe.definitions.layer_purposes import (
     layer_purpose_hazard,
     layer_purpose_exposure,
     layer_purpose_aggregation,

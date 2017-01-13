@@ -2,7 +2,7 @@
 """Test Metadata Utilities."""
 import unittest
 
-from safe.definitionsv4.versions import inasafe_keyword_version
+from safe.definitions.versions import inasafe_keyword_version
 from safe.test.utilities import standard_data_path, clone_shp_layer
 from safe.utilities.metadata import (
     write_iso19115_metadata,

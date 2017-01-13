@@ -5,8 +5,8 @@
 from PyQt4.QtCore import QPyNullVariant
 from qgis.core import QgsFeatureRequest
 
-from safe.definitionsv4.minimum_needs import minimum_needs_parameter
-from safe.definitionsv4.post_processors import (
+from safe.definitions.minimum_needs import minimum_needs_parameter
+from safe.definitions.post_processors import (
     field_input_type,
     dynamic_field_input_type,
     geometry_property_input_type,

@@ -3,9 +3,9 @@
 
 from copy import deepcopy
 
-from safe import definitionsv4
-from safe.definitionsv4 import fields
-from safe.definitionsv4 import (
+from safe import definitions
+from safe.definitions import fields
+from safe.definitions import (
     layer_purposes,
     hazard_all,
     exposure_all,
@@ -237,9 +237,9 @@ def definition(keyword):
     :rtype: dict, None
     """
 
-    for item in dir(definitionsv4):
+    for item in dir(definitions):
         if not item.startswith("__"):
-            var = getattr(definitionsv4, item)
+            var = getattr(definitions, item)
             if isinstance(var, dict):
                 if var.get('key') == keyword:
                     return var
@@ -293,7 +293,7 @@ def all_default_fields():
     default_fields = []
     for item in dir(fields):
         if not item.startswith("__"):
-            var = getattr(definitionsv4, item)
+            var = getattr(definitions, item)
             if isinstance(var, dict):
                 if var.get('replace_null', False):
                     default_fields.append(var)

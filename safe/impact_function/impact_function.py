@@ -52,13 +52,13 @@ from safe.gisv4.raster.clip_bounding_box import clip_by_extent
 from safe.gisv4.raster.reclassify import reclassify as reclassify_raster
 from safe.gisv4.raster.polygonize import polygonize
 from safe.gisv4.raster.zonal_statistics import zonal_stats
-from safe.definitionsv4.post_processors import post_processors
-from safe.definitionsv4.analysis_steps import analysis_steps
-from safe.definitionsv4.utilities import definition
-from safe.definitionsv4.exposure import indivisible_exposure
-from safe.definitionsv4.fields import (
+from safe.definitions.post_processors import post_processors
+from safe.definitions.analysis_steps import analysis_steps
+from safe.definitions.utilities import definition
+from safe.definitions.exposure import indivisible_exposure
+from safe.definitions.fields import (
     size_field, exposure_class_field, hazard_class_field)
-from safe.definitionsv4.layer_purposes import (
+from safe.definitions.layer_purposes import (
     layer_purpose_exposure_impacted,
     layer_purpose_aggregate_hazard_impacted,
     layer_purpose_aggregation_impacted,
@@ -66,7 +66,7 @@ from safe.definitionsv4.layer_purposes import (
     layer_purpose_exposure_breakdown,
     layer_purpose_profiling,
 )
-from safe.definitionsv4.constants import (
+from safe.definitions.constants import (
     inasafe_keyword_version_key,
     ANALYSIS_SUCCESS,
     ANALYSIS_FAILED_BAD_INPUT,
@@ -75,7 +75,7 @@ from safe.definitionsv4.constants import (
     PREPARE_FAILED_BAD_INPUT,
     PREPARE_FAILED_INSUFFICIENT_OVERLAP,
     PREPARE_FAILED_BAD_CODE)
-from safe.definitionsv4.versions import inasafe_keyword_version
+from safe.definitions.versions import inasafe_keyword_version
 from safe.common.exceptions import (
     InaSAFEError,
     InvalidExtentError,

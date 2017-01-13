@@ -9,7 +9,7 @@ from qgis.core import (
     QGis,
 )
 
-from safe.definitionsv4.fields import (
+from safe.definitions.fields import (
     aggregation_id_field,
     aggregation_name_field,
     analysis_id_field,
@@ -17,9 +17,9 @@ from safe.definitionsv4.fields import (
     profiling_function_field,
     profiling_time_field
 )
-from safe.definitionsv4.constants import inasafe_keyword_version_key
-from safe.definitionsv4.versions import inasafe_keyword_version
-from safe.definitionsv4.layer_purposes import (
+from safe.definitions.constants import inasafe_keyword_version_key
+from safe.definitions.versions import inasafe_keyword_version
+from safe.definitions.layer_purposes import (
     layer_purpose_profiling,
     layer_purpose_aggregation,
     layer_purpose_analysis_impacted,

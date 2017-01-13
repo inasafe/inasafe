@@ -44,7 +44,7 @@ from PyQt4.QtGui import (
     QPushButton,
     QDialogButtonBox)
 
-from safe.definitionsv4.constants import ANALYSIS_SUCCESS
+from safe.definitions.constants import ANALYSIS_SUCCESS
 from safe.gui.tools.batch import scenario_runner
 from safe.utilities.gis import extent_string_to_array
 from safe.common.exceptions import FileNotFoundError

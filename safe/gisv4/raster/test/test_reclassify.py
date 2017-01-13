@@ -8,7 +8,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from qgis.core import QgsRasterBandStats
 
-from safe.definitionsv4.processing_steps import reclassify_raster_steps
+from safe.definitions.processing_steps import reclassify_raster_steps
 from safe.gisv4.raster.reclassify import reclassify
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

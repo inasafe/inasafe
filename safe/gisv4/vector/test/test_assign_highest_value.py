@@ -9,7 +9,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from qgis.core import QgsFeatureRequest
 
-from safe.definitionsv4.fields import hazard_class_field
+from safe.definitions.fields import hazard_class_field
 from safe.gisv4.vector.assign_highest_value import assign_highest_value
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

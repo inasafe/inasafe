@@ -19,7 +19,7 @@ from PyQt4.QtGui import QListWidgetItem
 
 from safe.common.exceptions import InvalidWizardStep
 from safe.utilities.i18n import tr
-from safe.definitionsv4.layer_purposes import (
+from safe.definitions.layer_purposes import (
     layer_purpose_exposure, layer_purpose_hazard)
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
@@ -29,10 +29,10 @@ from safe.gui.tools.wizard.wizard_strings import (
     layer_mode_vector_classified_confirm,
     layer_mode_vector_continuous_confirm)
 from safe.utilities.gis import is_raster_layer
-from safe.definitionsv4.utilities import definition, get_layer_modes
-from safe.definitionsv4.layer_modes import (
+from safe.definitions.utilities import definition, get_layer_modes
+from safe.definitions.layer_modes import (
     layer_mode_classified, layer_mode_continuous)
-from safe.definitionsv4.utilities import get_classifications
+from safe.definitions.utilities import get_classifications
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

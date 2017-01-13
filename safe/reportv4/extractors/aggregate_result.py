@@ -1,6 +1,6 @@
 # coding=utf-8
-from safe.definitionsv4.exposure import exposure_all, exposure_population
-from safe.definitionsv4.fields import (
+from safe.definitions.exposure import exposure_all, exposure_population
+from safe.definitions.fields import (
     affected_exposure_count_field,
     aggregation_name_field,
     total_affected_field,

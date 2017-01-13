@@ -5,12 +5,12 @@ Recompute counts.
 """
 
 from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
-from safe.definitionsv4.fields import (
+from safe.definitions.fields import (
     size_field,
     count_fields,
 )
-from safe.definitionsv4.post_processors import size
-from safe.definitionsv4.processing_steps import (
+from safe.definitions.post_processors import size
+from safe.definitions.processing_steps import (
     recompute_counts_steps)
 from safe.utilities.profiling import profile
 from safe.gisv4.vector.tools import size_calculator

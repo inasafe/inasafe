@@ -47,9 +47,11 @@ concepts = {
     },
     'generic_hazard': {
         'description': tr(
-            'This is a ternary description for an area used with generic '
-            'impact functions. The area may have either <b>low</b>, '
-            '<b>medium</b>, or <b>high</b> classification for the hazard.'),
+            'A generic hazard is any dataset where the areas within the '
+            'data set have been classified as either <b>low</b>, '
+            '<b>medium</b>, or <b>high</b> hazard level. Use generic hazard '
+            'in cases where InaSAFE does not have an existing hazard concept '
+            'for the data you are using.'),
         'citations': [
             {
                 'text': tr(
@@ -80,7 +82,8 @@ concepts = {
             'affected directly or indirectly. Affected people may experience '
             'short-term or long-term consequences to their lives, livelihoods '
             'or health and in the economic, physical, social, cultural and '
-            'environmental assets.'),
+            'environmental assets. In InaSAFE, people who are killed during '
+            'the event are also considered affected.'),
         'citations': [
             {
                 'text': tr(
@@ -156,7 +159,7 @@ concepts = {
       },
     'youth': {
         'description': tr(
-            'Person aged between 0 and 14 years.'),
+            'A person aged between 0 and 14 years.'),
         'citations': [
             {
                 'text': tr(

@@ -7,7 +7,7 @@ Aggregate the aggregate hazard to the aggregation layer.
 from PyQt4.QtCore import QPyNullVariant
 from qgis.core import QGis, QgsFeatureRequest
 
-from safe.definitionsv4.fields import (
+from safe.definitions.fields import (
     aggregation_id_field,
     aggregation_name_field,
     hazard_id_field,
@@ -17,9 +17,9 @@ from safe.definitionsv4.fields import (
     affected_exposure_count_field,
     affected_field,
 )
-from safe.definitionsv4.layer_purposes import (
+from safe.definitions.layer_purposes import (
     layer_purpose_aggregation_impacted)
-from safe.definitionsv4.processing_steps import (
+from safe.definitions.processing_steps import (
     summary_2_aggregation_steps)
 from safe.gisv4.vector.tools import read_dynamic_inasafe_field
 from safe.gisv4.vector.summary_tools import (

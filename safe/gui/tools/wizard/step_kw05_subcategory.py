@@ -19,9 +19,9 @@ import os
 from PyQt4 import QtCore
 from PyQt4.QtGui import QListWidgetItem, QPixmap
 
-from safe.definitionsv4.layer_purposes import (
+from safe.definitions.layer_purposes import (
     layer_purpose_exposure, layer_purpose_hazard)
-from safe.definitionsv4.utilities import (
+from safe.definitions.utilities import (
     hazards_for_layer,
     definition,
     exposures_for_layer)

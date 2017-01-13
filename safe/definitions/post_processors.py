@@ -7,10 +7,10 @@
 
 from PyQt4.QtCore import QPyNullVariant
 
-from safe.definitionsv4.exposure import exposure_population
-from safe.definitionsv4.minimum_needs import minimum_needs_fields
+from safe.definitions.exposure import exposure_population
+from safe.definitions.minimum_needs import minimum_needs_fields
 from safe.utilities.i18n import tr
-from safe.definitionsv4.fields import (
+from safe.definitions.fields import (
     female_ratio_field,
     population_count_field,
     female_count_field,
@@ -25,8 +25,9 @@ from safe.definitionsv4.fields import (
     size_field,
     hazard_class_field,
     affected_field,
-    exposure_count_field, male_count_field)
-from safe.definitionsv4.hazard_classifications import all_hazard_classes
+    exposure_count_field,
+    male_count_field)
+from safe.definitions.hazard_classifications import all_hazard_classes
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

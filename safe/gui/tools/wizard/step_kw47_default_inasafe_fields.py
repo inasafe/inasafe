@@ -24,10 +24,10 @@ from safe.common.parameters.default_select_parameter_widget import (
 from safe_extras.parameters.qt_widgets.parameter_container import (
     ParameterContainer)
 
-from safe.definitionsv4.layer_purposes import (layer_purpose_aggregation)
-from safe.definitionsv4.utilities import get_fields, get_compulsory_fields
-from safe.definitionsv4.layer_geometry import layer_geometry_raster
-from safe.definitionsv4.constants import no_field
+from safe.definitions.layer_purposes import (layer_purpose_aggregation)
+from safe.definitions.utilities import get_fields, get_compulsory_fields
+from safe.definitions.layer_geometry import layer_geometry_raster
+from safe.definitions.constants import no_field
 from safe.gui.tools.wizard.wizard_utils import get_inasafe_default_value_fields
 
 from safe.gui.tools.wizard.wizard_step import (
@@ -146,7 +146,7 @@ class StepKwDefaultInaSAFEFields(WizardStep, FORM_CLASS):
             parameter.guid = inasafe_field['key']
             parameter.name = inasafe_field['name']
             parameter.is_required = False
-            parameter.help_text = inasafe_field['description']
+            parameter.help_text = inasafe_field['help_text']
             parameter.description = inasafe_field['description']
             parameter.element_type = unicode
             parameter.options_list = option_list

@@ -2,7 +2,7 @@
 """Test for utilities module.."""
 import unittest
 
-from safe.definitionsv4 import (
+from safe.definitions import (
     hazard_flood,
     hazard_tsunami,
     hazard_earthquake,
@@ -31,9 +31,9 @@ from safe.definitionsv4 import (
     layer_geometry_point,
     layer_geometry_polygon
 )
-from safe.definitionsv4.hazard import hazard_cyclone
+from safe.definitions.hazard import hazard_cyclone
 
-from safe.definitionsv4.utilities import (
+from safe.definitions.utilities import (
     definition,
     purposes_for_layer,
     hazards_for_layer,
@@ -83,39 +83,42 @@ class TestDefinitionsUtilities(unittest.TestCase):
         self.maxDiff = None
         hazards = hazards_for_layer(
             'polygon', 'single_event')
+        hazards = [hazard['key'] for hazard in hazards]
         expected = [
-            hazard_flood,
-            hazard_tsunami,
-            hazard_earthquake,
-            hazard_volcano,
-            hazard_volcanic_ash,
-            hazard_cyclone,
-            hazard_generic
+            hazard_flood['key'],
+            hazard_tsunami['key'],
+            hazard_earthquake['key'],
+            hazard_volcano['key'],
+            hazard_volcanic_ash['key'],
+            hazard_cyclone['key'],
+            hazard_generic['key']
         ]
         self.assertItemsEqual(hazards, expected)
 
         hazards = hazards_for_layer('polygon')
+        hazards = [hazard['key'] for hazard in hazards]
         expected = [
-            hazard_flood,
-            hazard_tsunami,
-            hazard_earthquake,
-            hazard_volcano,
-            hazard_volcanic_ash,
-            hazard_cyclone,
-            hazard_generic
+            hazard_flood['key'],
+            hazard_tsunami['key'],
+            hazard_earthquake['key'],
+            hazard_volcano['key'],
+            hazard_volcanic_ash['key'],
+            hazard_cyclone['key'],
+            hazard_generic['key']
         ]
         self.assertItemsEqual(hazards, expected)
 
         hazards = hazards_for_layer(
             'raster', 'single_event')
+        hazards = [hazard['key'] for hazard in hazards]
         expected = [
-            hazard_flood,
-            hazard_tsunami,
-            hazard_earthquake,
-            hazard_volcanic_ash,
-            hazard_volcano,
-            hazard_cyclone,
-            hazard_generic
+            hazard_flood['key'],
+            hazard_tsunami['key'],
+            hazard_earthquake['key'],
+            hazard_volcanic_ash['key'],
+            hazard_volcano['key'],
+            hazard_cyclone['key'],
+            hazard_generic['key']
         ]
         self.assertItemsEqual(hazards, expected)
 

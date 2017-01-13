@@ -1,6 +1,6 @@
 # coding=utf-8
 """Definitions relating to hazards."""
-from safe.definitionsv4.hazard_classifications import (
+from safe.definitions.hazard_classifications import (
     generic_hazard_classes,
     volcano_hazard_classes,
     earthquake_mmi_hazard_classes,
@@ -9,10 +9,10 @@ from safe.definitionsv4.hazard_classifications import (
     ash_hazard_classes,
     cyclone_au_bom_hazard_classes,
     cyclone_sshws_hazard_classes)
-from safe.definitionsv4.caveats import (
+from safe.definitions.caveats import (
     caveat_simulation, caveat_local_conditions, caveat_analysis_extent,)
-from safe.definitionsv4.concepts import concepts
-from safe.definitionsv4.units import (
+from safe.definitions.concepts import concepts
+from safe.definitions.units import (
     unit_feet,
     unit_generic,
     unit_kilogram_per_meter_square,
@@ -24,9 +24,9 @@ from safe.definitionsv4.units import (
     unit_miles_per_hour,
     unit_kilometres_per_hour,
     unit_knots)
-from safe.definitionsv4.layer_modes import (
+from safe.definitions.layer_modes import (
     layer_mode_classified, layer_mode_continuous)
-from safe.definitionsv4.fields import (
+from safe.definitions.fields import (
     hazard_name_field, hazard_fields, hazard_value_field)
 from safe.utilities.i18n import tr
 

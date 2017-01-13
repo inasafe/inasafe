@@ -9,6 +9,7 @@ from PyQt4 import QtGui
 from safe.common.version import get_version
 from safe.utilities.resources import get_ui_class, html_footer, html_header
 from safe.gui.tools.help.dock_help import dock_help
+from safe.gui.widgets import message_viewer
 
 FORM_CLASS = get_ui_class('help_dialog_base.ui')
 

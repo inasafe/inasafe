@@ -20,7 +20,7 @@ from safe.gisv4.vector.prepare_vector_layer import (
     _size_is_needed,
     _check_value_mapping,
 )
-from safe.definitionsv4.fields import (
+from safe.definitions.fields import (
     exposure_id_field,
     population_count_field,
     female_ratio_field,

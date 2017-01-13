@@ -16,7 +16,7 @@ Contact : ole.moller.nielsen@gmail.com
 # noinspection PyPackageRequirements
 from PyQt4.QtGui import QPixmap
 
-from safe.definitionsv4.layer_purposes import layer_purpose_exposure
+from safe.definitions.layer_purposes import layer_purpose_exposure
 from safe.utilities.resources import resources_path
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_step_browser import WizardStepBrowser

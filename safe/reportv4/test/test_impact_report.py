@@ -8,7 +8,7 @@ from collections import OrderedDict
 from jinja2.environment import Template
 
 from safe.common.utilities import safe_dir
-from safe.definitionsv4.constants import ANALYSIS_SUCCESS
+from safe.definitions.constants import ANALYSIS_SUCCESS
 from safe.impact_function.impact_function import ImpactFunction
 from safe.reportv4.report_metadata import ReportMetadata
 from safe.test.utilities import (
@@ -19,8 +19,9 @@ from safe.test.utilities import (
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from PyQt4.QtCore import QSettings
+from qgis.core import QgsVectorLayer, QgsMapLayerRegistry
 from qgis.core import QgsMapLayerRegistry
-from safe.definitionsv4.report import (
+from safe.definitions.report import (
     report_a4_portrait_blue,
     standard_impact_report_metadata_html,
     standard_impact_report_metadata_pdf,
@@ -190,7 +191,7 @@ class TestImpactReport(unittest.TestCase):
             'header': u'Notes and assumptions',
             'items': [
                 u'The impacts on roads, people, buildings and other '
-                u'exposure elements may be under estimated if the exposure '
+                u'exposure elements may be underestimated if the exposure '
                 u'data are incomplete.',
                 u'Numbers reported for structures have not been rounded.'
             ]

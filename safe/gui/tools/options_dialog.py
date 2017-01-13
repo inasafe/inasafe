@@ -15,10 +15,10 @@ from safe_extras.parameters.qt_widgets.parameter_container import (
 from safe_extras.parameters.float_parameter import FloatParameter
 from safe_extras.parameters.integer_parameter import IntegerParameter
 
-from safe.definitionsv4.utilities import all_default_fields
-from safe.definitionsv4.constants import qvariant_whole_numbers, GLOBAL
-from safe.definitionsv4.default_settings import inasafe_default_settings
-from safe.definitionsv4.messages import disclaimer
+from safe.definitions.utilities import all_default_fields
+from safe.definitions.constants import qvariant_whole_numbers, GLOBAL
+from safe.definitions.default_settings import inasafe_default_settings
+from safe.definitions.messages import disclaimer
 from safe.common.utilities import temp_dir
 from safe.defaults import supporters_logo_path, default_north_arrow_path
 from safe.utilities.i18n import tr

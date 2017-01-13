@@ -5,8 +5,8 @@ import re
 import sys
 
 from safe.common.parameters.resource_parameter import ResourceParameter
-from safe.definitionsv4.constants import qvariant_whole_numbers
-from safe.definitionsv4.fields import default_field_length
+from safe.definitions.constants import qvariant_whole_numbers
+from safe.definitions.fields import default_field_length
 from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
 
 
@@ -143,7 +143,7 @@ minimum_needs_fields = _initializes_minimum_needs_fields()
 def _declare_minimum_fields():
     """Declaring minimum needs so it can be recognized in module level import.
 
-    Useful so it can be recognized by safe.definitionsv4.utilities.definition
+    Useful so it can be recognized by safe.definitions.utilities.definition
     """
     for field in minimum_needs_fields:
         setattr(sys.modules[__name__], field['key'], field)

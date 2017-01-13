@@ -11,7 +11,7 @@ from qgis.gui import QgsRubberBand  # pylint: disable=no-name-in-module
 # noinspection PyPackageRequirements
 from PyQt4.QtCore import QSettings, Qt
 
-from safe.definitionsv4.colors import (
+from safe.definitions.colors import (
     user_analysis_color,
     next_analysis_color,
     last_analysis_color,

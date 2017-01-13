@@ -18,11 +18,11 @@ from PyQt4 import QtCore
 from PyQt4.QtCore import pyqtSignature
 from PyQt4.QtGui import QListWidgetItem
 
-from safe.definitionsv4.layer_purposes import layer_purpose_hazard
+from safe.definitions.layer_purposes import layer_purpose_hazard
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
 from safe.gui.tools.wizard.wizard_strings import hazard_category_question
-from safe.definitionsv4.utilities import (
+from safe.definitions.utilities import (
     definition, hazard_categories_for_layer)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

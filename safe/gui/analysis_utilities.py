@@ -6,9 +6,9 @@ from PyQt4.QtCore import QDir, Qt
 from PyQt4.QtCore import QSettings
 from qgis.core import QgsMapLayerRegistry, QgsProject, QgsMapLayer, QGis
 
-from safe.definitionsv4.utilities import definition
-from safe.definitionsv4.fields import hazard_class_field
-from safe.definitionsv4.report import (
+from safe.definitions.utilities import definition
+from safe.definitions.fields import hazard_class_field
+from safe.definitions.report import (
     standard_impact_report_metadata_pdf,
     report_a4_portrait_blue)
 from safe.impact_function.style import hazard_class_style

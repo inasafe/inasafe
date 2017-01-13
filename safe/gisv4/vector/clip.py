@@ -16,7 +16,7 @@ from qgis.core import (
     )
 
 from safe.utilities.i18n import tr
-from safe.definitionsv4.processing_steps import clip_steps
+from safe.definitions.processing_steps import clip_steps
 from safe.gisv4.vector.tools import create_memory_layer
 from safe.utilities.profiling import profile
 

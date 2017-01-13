@@ -14,11 +14,11 @@ from qgis.core import (
 )
 
 from safe.common.exceptions import InvalidKeywordsForProcessingAlgorithm
-from safe.definitionsv4.layer_purposes import layer_purpose_exposure_impacted
-from safe.definitionsv4.fields import hazard_class_field
-from safe.definitionsv4.hazard_classifications import (
+from safe.definitions.layer_purposes import layer_purpose_exposure_impacted
+from safe.definitions.fields import hazard_class_field
+from safe.definitions.hazard_classifications import (
     hazard_classification, null_hazard_value)
-from safe.definitionsv4.processing_steps import assign_highest_value_steps
+from safe.definitions.processing_steps import assign_highest_value_steps
 from safe.gisv4.vector.tools import create_spatial_index
 from safe.utilities.profiling import profile
 
