@@ -8,6 +8,7 @@ from qgis.core import (
     QgsSingleSymbolRendererV2,
     QgsCategorizedSymbolRendererV2,
     QgsSymbolLayerV2Registry,
+    QgsConditionalStyle,
 )
 
 from safe.definitions.colors import no_hazard
@@ -44,12 +45,21 @@ def hazard_class_style(layer, classification, display_null=False):
             null_hazard_value, symbol, null_hazard_legend)
         categories.append(category)
 
+    attribute_table_styles = []
+
     for hazard_class, (color, label) in classification.iteritems():
         symbol = QgsSymbolV2.defaultSymbol(layer.geometryType())
         symbol.setColor(color)
         category = QgsRendererCategoryV2(hazard_class, symbol, label)
         categories.append(category)
 
+        style = QgsConditionalStyle()
+        style.setName(hazard_class)
+        style.setBackgroundColor(color.lighter())
+        style.setRule("hazard_class='%s'" % hazard_class)
+        attribute_table_styles.append(style)
+
+    layer.conditionalStyles().setRowStyles(attribute_table_styles)
     renderer = QgsCategorizedSymbolRendererV2(
         hazard_class_field['field_name'], categories)
     layer.setRendererV2(renderer)
