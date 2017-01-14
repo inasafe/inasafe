@@ -1,6 +1,7 @@
 # coding=utf-8
 """Help text for the dock widget."""
 
+from os.path import exists
 from safe.utilities.i18n import tr
 from safe import messaging as m
 from safe.messaging import styles
@@ -18,9 +19,11 @@ from safe.gui.tools.help.raster_reclassify_help \
     import content as reclassify_help
 from safe.gui.tools.help.shakemap_converter_help \
     import content as shakemap_help
+from safe.utilities.resources import resource_url, resources_path
 INFO_STYLE = styles.INFO_STYLE
 WARNING_STYLE = styles.WARNING_STYLE
 SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
+MEDIUM_ICON_STYLE = styles.MEDIUM_ICON_STYLE
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -206,6 +209,18 @@ def content():
     header = m.Heading(tr('Layer Modes'), **INFO_STYLE)
     message.add(header)
     message.add(definition_to_message(definitions.layer_mode))
+
+    ##
+    #  Layer Purposes
+    ##
+
+    header = m.Heading(tr('Layer Purposes'), **INFO_STYLE)
+    message.add(header)
+    message.add(definition_to_message(
+        definitions.layer_purpose_exposure_impacted))
+    message.add(
+        definition_to_message(definitions.layer_purpose_profiling))
+    return message
     return message
 
 
@@ -239,7 +254,20 @@ def definition_to_message(definition, heading_style=None):
     message = m.Message()
     message.add(m.HorizontalRule())
     message.add(header)
-    message.add(m.Paragraph(definition['description']))
+    # If the definition has an icon, we put the icon and description side by
+    # side in a table otherwise just show the description as a paragraph
+    url = _definition_icon_url(definition)
+    if not url:
+        message.add(m.Paragraph(definition['description']))
+    else:
+        table = m.Table(style_class='table table-condensed')
+        row = m.Row()
+        row.add(m.Cell(m.Image(url, **MEDIUM_ICON_STYLE)))
+        row.add(m.Cell(message.add(m.Paragraph(definition['description']))))
+        table.add(row)
+
+    message.add(m.Image(url))
+
     # types contains e.g. hazard_all
     if 'types' in definition:
         for sub_definition in definition['types']:
@@ -379,6 +407,20 @@ def definition_to_message(definition, heading_style=None):
                 'This class IS required in the hazard keywords.')))
 
     return message
+
+
+def _definition_icon_url(definition):
+    svg_image_path = resources_path(
+        'img', 'definitions', definition['key'] + '.svg')
+    png_image_path = resources_path(
+        'img', 'definitions', definition['key'] + '.png')
+    if exists(svg_image_path):
+        url = resource_url(svg_image_path)
+    elif exists(png_image_path):
+        url = resource_url(png_image_path)
+    else:
+        url = None
+    return url
 
 
 def _create_fields_table():
