@@ -106,7 +106,7 @@ def post_processor_affected_function(**kwargs):
 # # #
 field_input_type = {
     'key': 'field',
-    'description': tr('This type of input take value from field')
+    'description': tr('This type of input takes a value from a field.')
 }
 
 dynamic_field_input_type = {
@@ -140,6 +140,19 @@ layer_property_input_type = {
         'This type of input takes value from layer property.')
 }
 
+
+post_processor_input_types = [
+    field_input_type,
+    dynamic_field_input_type,
+    keyword_input_type,
+    needs_profile_input_type,
+    geometry_property_input_type,
+    layer_property_input_type
+]
+
+
+## Input values
+
 size_calculator_input_value = {
     'key': 'size_calculator',
     'description': tr(
@@ -153,10 +166,16 @@ layer_crs_input_value = {
         'This is a value for layer_crs input type. Retrieve layer CRS')
 }
 
+
 layer_property_input_values = [
     size_calculator_input_value,
     layer_crs_input_value
 ]
+
+post_processor_input_values = [
+    size_calculator_input_value,
+    layer_crs_input_value,
+    layer_property_input_type]
 
 # # # Process
 formula_process = {
@@ -172,6 +191,11 @@ function_process = {
         'This type of process takes inputs as arguments and process it '
         'using python function referenced.')
 }
+
+
+post_processor_process_types = [
+    formula_process, function_process
+]
 
 # # #
 # Post processors

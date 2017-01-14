@@ -183,8 +183,11 @@ layer_purpose_profiling = {
     'name': tr('Profiling'),
     'description': tr(
         'A <b>profiling</b> layer contains auxilliary information mainly '
-        'intended for developers and power users. The . '
-        'This layer do not have a geometry.'),
+        'intended for developers and power users. The data in the profiling '
+        'table can be sent to the developers of InaSAFE should you be '
+        'encountering particularly long analysis times so that they can '
+        'identify any particular bottlenecks. This layer does not have a '
+        'geometry.'),
     'allowed_geometries': [],
     'citations': [
         {

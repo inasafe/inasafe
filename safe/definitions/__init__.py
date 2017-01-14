@@ -22,7 +22,9 @@ from safe.definitions.hazard_classifications import *
 from safe.definitions.layer_geometry import *
 from safe.definitions.layer_modes import *
 from safe.definitions.layer_purposes import *
+from safe.definitions.messages import *
 from safe.definitions.minimum_needs import *
 from safe.definitions.post_processors import *
 from safe.definitions.units import *
 from safe.definitions.versions import *
+

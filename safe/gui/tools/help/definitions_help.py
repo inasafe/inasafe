@@ -60,7 +60,7 @@ def heading():
     :returns: A heading object.
     :rtype: safe.messaging.heading.Heading
     """
-    message = m.Heading(tr('InaSAFE Definitions help'), **INFO_STYLE)
+    message = m.Heading(tr('InaSAFE help'), **INFO_STYLE)
     return message
 
 
@@ -78,7 +78,21 @@ def content():
     message = m.Message()
 
     ##
-    # First all the help dialog contents ...
+    # Credits and disclaimers ...
+    ##
+    header = m.Heading(tr('Disclaimer'), **INFO_STYLE)
+    message.add(header)
+    message.add(definitions.messages.disclaimer())
+
+    header = m.Heading(tr('Limitations and License'), **INFO_STYLE)
+    message.add(header)
+    bullets = m.BulletedList()
+    for item in definitions.limitations():
+        bullets.add(item)
+    message.add(bullets)
+
+    ##
+    # Help dialog contents ...
     ##
     header = m.Heading(tr('Core functionality and tools'), **INFO_STYLE)
     message.add(header)
@@ -235,7 +249,80 @@ def content():
     message.add(definition_to_message(
         definitions.layer_purpose_profiling))
 
+    ##
+    #  Post processors
+    ##
+
+    header = m.Heading(tr('Post Processors'), **INFO_STYLE)
+    message.add(header)
+    message.add(m.Paragraph(tr('Post Processor Input Types')))
+    table = _create_post_processor_subtable(
+        definitions.post_processor_input_types
+    )
+    message.add(table)
+
+    message.add(m.Paragraph(tr('Post Processor Input Values')))
+    table = _create_post_processor_subtable(
+        definitions.post_processor_input_values
+    )
+    message.add(table)
+
+    message.add(m.Paragraph(tr('Post Processor Process Types')))
+    table = _create_post_processor_subtable(
+        definitions.post_processor_process_types
+    )
+    message.add(table)
+
+    message.add(m.Paragraph(tr('Post Processors')))
+    post_processors = definitions.post_processors
+    table = m.Table(style_class='table table-condensed table-striped')
+    row = m.Row()
+    row.add(m.Cell(tr('Name')), header_flag=True)
+    row.add(m.Cell(tr('Input Fields')), header_flag=True)
+    row.add(m.Cell(tr('Output Fields')), header_flag=True)
+    table.add(row)
+    for post_processor in post_processors:
+        row = m.Row()
+        row.add(m.Cell(post_processor['name']))
+        # Input fields
+        bullets = m.BulletedList()
+        for key, value in post_processor['input'].iteritems():
+            bullets.add(key)
+        row.add(m.Cell(bullets))
+        # Output fields
+        bullets = m.BulletedList()
+        for key, value in post_processor['output'].iteritems():
+            name = value['value']['name']
+            formula_type = value['type']['key']
+            if formula_type == 'formula':
+                formula = value['formula']
+            else:
+                formula = value['function']
+
+            bullets.add('%s : %s. Formula: %s' %(name, formula_type, formula))
+        row.add(m.Cell(bullets))
+        table.add(row)
+        # Add the descriptions
+        row = m.Row()
+        row.add(m.Cell(''))
+        row.add(m.Cell(post_processor['description'], span=2))
+        table.add(row)
+    message.add(table)
     return message
+
+
+def _create_post_processor_subtable(item_list):
+    table = m.Table(style_class='table table-condensed table-striped')
+    row = m.Row()
+    row.add(m.Cell(tr('Name')), header_flag=True)
+    row.add(m.Cell(tr('Description')), header_flag=True)
+    table.add(row)
+    for item in item_list:
+        row = m.Row()
+        row.add(m.Cell(item['key']))
+        row.add(m.Cell(item['description']))
+        table.add(row)
+    return table
 
 
 def _create_fields_section(message, title, fields):
