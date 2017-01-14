@@ -13,6 +13,7 @@
     "impact function":{
       "info": {},
       "process":[
+        "Make aggregate hazard layer valid",
         "Intersect divisible features with the aggregate hazard",
         "Aggregate the impact summary",
         "Aggregate the aggregation summary",
@@ -44,7 +45,8 @@
       "process":[
         "Clip and mask hazard polygons with the analysis layer",
         "Cleaning the vector hazard attribute table",
-        "Assign classes based on value map"
+        "Assign classes based on value map",
+        "Make hazard layer valid"
       ]
     },
     "exposure":{
@@ -53,7 +55,8 @@
         "Clip the exposure layer with the analysis layer",
         "Cleaning the vector exposure attribute table",
         "Add default values",
-        "Assign classes based on value map"
+        "Assign classes based on value map",
+        "Make exposure layer valid"
       ]
     }
   }
