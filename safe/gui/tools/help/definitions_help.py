@@ -2,6 +2,7 @@
 """Help text for the dock widget."""
 
 from os.path import exists
+import logging
 from safe.utilities.i18n import tr
 from safe import messaging as m
 from safe.messaging import styles
@@ -20,6 +21,7 @@ from safe.gui.tools.help.raster_reclassify_help \
 from safe.gui.tools.help.shakemap_converter_help \
     import content as shakemap_help
 from safe.utilities.resources import resource_url, resources_path
+LOGGER = logging.getLogger('InaSAFE')
 INFO_STYLE = styles.INFO_STYLE
 WARNING_STYLE = styles.WARNING_STYLE
 SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
@@ -217,10 +219,22 @@ def content():
     header = m.Heading(tr('Layer Purposes'), **INFO_STYLE)
     message.add(header)
     message.add(definition_to_message(
+        definitions.layer_purpose_hazard))
+    message.add(definition_to_message(
+        definitions.layer_purpose_exposure))
+    message.add(definition_to_message(
+        definitions.layer_purpose_aggregation))
+    message.add(definition_to_message(
         definitions.layer_purpose_exposure_impacted))
-    message.add(
-        definition_to_message(definitions.layer_purpose_profiling))
-    return message
+    message.add(definition_to_message(
+        definitions.layer_purpose_exposure_breakdown))
+    message.add(definition_to_message(
+        definitions.layer_purpose_aggregation_impacted))
+    message.add(definition_to_message(
+        definitions.layer_purpose_aggregate_hazard_impacted))
+    message.add(definition_to_message(
+        definitions.layer_purpose_profiling))
+
     return message
 
 
@@ -257,16 +271,21 @@ def definition_to_message(definition, heading_style=None):
     # If the definition has an icon, we put the icon and description side by
     # side in a table otherwise just show the description as a paragraph
     url = _definition_icon_url(definition)
-    if not url:
+    if url is None:
+        LOGGER.info('No URL for definition icon')
         message.add(m.Paragraph(definition['description']))
     else:
+        LOGGER.info('Creating mini table for definition description: ' + url)
         table = m.Table(style_class='table table-condensed')
         row = m.Row()
         row.add(m.Cell(m.Image(url, **MEDIUM_ICON_STYLE)))
-        row.add(m.Cell(message.add(m.Paragraph(definition['description']))))
+        row.add(m.Cell(definition['description']))
         table.add(row)
+        message.add(table)
 
-    message.add(m.Image(url))
+    url = _definition_screenshot_url(definition)
+    if url:
+        message.add(m.Image(url))
 
     # types contains e.g. hazard_all
     if 'types' in definition:
@@ -416,6 +435,20 @@ def _definition_icon_url(definition):
         'img', 'definitions', definition['key'] + '.png')
     if exists(svg_image_path):
         url = resource_url(svg_image_path)
+    elif exists(png_image_path):
+        url = resource_url(png_image_path)
+    else:
+        url = None
+    return url
+
+
+def _definition_screenshot_url(definition):
+    jpg_image_path = resources_path(
+        'img', 'definitions', definition['key'] + '_screenshot.jpg')
+    png_image_path = resources_path(
+        'img', 'definitions', definition['key'] + '_screenshot.png')
+    if exists(jpg_image_path):
+        url = resource_url(jpg_image_path)
     elif exists(png_image_path):
         url = resource_url(png_image_path)
     else:

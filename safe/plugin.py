@@ -345,12 +345,12 @@ class Plugin(object):
         icon = resources_path('img', 'icons', 'defintions.svg')
         self.action_show_definitions = QAction(
             QIcon(icon),
-            self.tr('Show InaSAFE Definitions'),
+            self.tr('InaSAFE Help'),
             self.iface.mainWindow())
         self.action_show_definitions.setStatusTip(self.tr(
-            'Show InaSAFE Definitions'))
+            'Show InaSAFE Help'))
         self.action_show_definitions.setWhatsThis(self.tr(
-            'Use this to how a document describing all InaSAFE concepts.'))
+            'Use this to show a document describing all InaSAFE concepts.'))
         self.action_show_definitions.triggered.connect(
             self.show_definitions)
         self.add_action(
