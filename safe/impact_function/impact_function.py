@@ -52,6 +52,7 @@ from safe.gisv4.raster.clip_bounding_box import clip_by_extent
 from safe.gisv4.raster.reclassify import reclassify as reclassify_raster
 from safe.gisv4.raster.polygonize import polygonize
 from safe.gisv4.raster.zonal_statistics import zonal_stats
+from safe.gisv4.raster.align import align_rasters
 from safe.definitions.post_processors import post_processors
 from safe.definitions.analysis_steps import analysis_steps
 from safe.definitions.utilities import definition
@@ -83,6 +84,7 @@ from safe.common.exceptions import (
     NoFeaturesInExtentError,
     ProcessingInstallationError,
 )
+from safe.impact_function.earthquake import itb_fatality_rates
 from safe.impact_function.postprocessors import (
     run_single_post_processor, enough_input)
 from safe.impact_function.create_extra_layers import (
@@ -1029,38 +1031,22 @@ class ImpactFunction(object):
             if self.aggregation:
                 self.datastore.add_layer(self.aggregation, 'aggregation')
 
-        # Special case for Raster Earthquake hazard on Raster population.
-        if self.hazard.type() == QgsMapLayer.RasterLayer:
-            if self.hazard.keywords.get('hazard') == 'earthquake':
-                if self.exposure.type() == QgsMapLayer.RasterLayer:
-                    if self.exposure.keywords.get('exposure') == 'population':
-                        # return self.state()
-
-                        # These layers are not generated.
-                        self._exposure_impacted = None
-                        self._aggregate_hazard_impacted = None
-                        return
-
         self._performance_log = profiling_log()
         self.callback(2, step_count, analysis_steps['aggregation_preparation'])
         self.aggregation_preparation()
 
-        self._performance_log = profiling_log()
-        self.callback(3, step_count, analysis_steps['hazard_preparation'])
-        self.hazard_preparation()
+        # Special case for Raster Earthquake hazard on Raster population.
+        damage_curve = False
+        if self.hazard.type() == QgsMapLayer.RasterLayer:
+            if self.hazard.keywords.get('hazard') == 'earthquake':
+                if self.exposure.type() == QgsMapLayer.RasterLayer:
+                    if self.exposure.keywords.get('exposure') == 'population':
+                        damage_curve = True
 
-        self._performance_log = profiling_log()
-        self.callback(
-            4, step_count, analysis_steps['aggregate_hazard_preparation'])
-        self.aggregate_hazard_preparation()
-
-        self._performance_log = profiling_log()
-        self.callback(5, step_count, analysis_steps['exposure_preparation'])
-        self.exposure_preparation()
-
-        self._performance_log = profiling_log()
-        self.callback(6, step_count, analysis_steps['combine_hazard_exposure'])
-        self.intersect_exposure_and_aggregate_hazard()
+        if damage_curve:
+            self.damage_curve_analysis()
+        else:
+            self.gis_overlay_analysis()
 
         self._performance_log = profiling_log()
         self.callback(7, step_count, analysis_steps['post_processing'])
@@ -1121,6 +1107,40 @@ class ImpactFunction(object):
         self._analysis_impacted = self.datastore.layer(name)
         if self.debug_mode:
             check_inasafe_fields(self._analysis_impacted)
+
+    @profile
+    def gis_overlay_analysis(self):
+        """Perform an overlay analysis between the exposure and the hazard."""
+        step_count = len(analysis_steps)
+
+        self._performance_log = profiling_log()
+        self.callback(3, step_count, analysis_steps['hazard_preparation'])
+        self.hazard_preparation()
+
+        self._performance_log = profiling_log()
+        self.callback(
+            4, step_count, analysis_steps['aggregate_hazard_preparation'])
+        self.aggregate_hazard_preparation()
+
+        self._performance_log = profiling_log()
+        self.callback(5, step_count, analysis_steps['exposure_preparation'])
+        self.exposure_preparation()
+
+        self._performance_log = profiling_log()
+        self.callback(6, step_count, analysis_steps['combine_hazard_exposure'])
+        self.intersect_exposure_and_aggregate_hazard()
+
+    @profile
+    def damage_curve_analysis(self):
+        """Perform a damage curve analysis."""
+        # For now we support only the earthquake raster on population raster.
+        self.earthquake_raster_population_raster()
+
+    @profile
+    def earthquake_raster_population_raster(self):
+        """Perform a damage curve analysis with EQ raster on population raster.
+        """
+        pass
 
     @profile
     def aggregation_preparation(self):
