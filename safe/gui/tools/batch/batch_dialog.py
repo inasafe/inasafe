@@ -759,24 +759,6 @@ class BatchDialog(QDialog, FORM_CLASS):
 
         self.help_web_view.setHtml(string)
 
-    def identify_layer(self, layer_source):
-        """Identify impact layer created from dock so we can access it
-
-        :param impact_layer_source: the source of impact layer
-            created from dock. we will use this to match with the source of
-            each in layer legend.
-        :type label: str
-        :return QgsVectorLayer
-        """
-
-        # iterate legend layer to match with input layer
-        reg_layers = reg.instance().mapLayers().iteritems()
-        for key, value in reg_layers:
-            if value.source() == layer_source:
-                return value
-        else:
-            raise Exception('Can not identify impact layer from layer source')
-
 
 def read_scenarios(filename):
     """Read keywords dictionary from file
