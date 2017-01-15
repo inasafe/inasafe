@@ -53,6 +53,11 @@ WARNING_STYLE = {
     'icon': 'icon-warning-sign icon-white',
     'style_class': 'warning'}
 
+# Used for section headers in definitions_help.py
+SECTION_STYLE = {
+    'level': 5,
+    'style_class': 'section'}
+
 SUGGESTION_STYLE = {
     'level': 5,
     'icon': 'icon-comment icon-white',

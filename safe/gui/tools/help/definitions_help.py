@@ -24,6 +24,7 @@ from safe.utilities.resources import resource_url, resources_path
 LOGGER = logging.getLogger('InaSAFE')
 INFO_STYLE = styles.INFO_STYLE
 WARNING_STYLE = styles.WARNING_STYLE
+SECTION_STYLE = styles.SECTION_STYLE
 SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
 MEDIUM_ICON_STYLE = styles.MEDIUM_ICON_STYLE
 
@@ -77,6 +78,8 @@ def content():
     """
     message = m.Message()
 
+    header = m.Heading(tr('Overview'), **SECTION_STYLE)
+    message.add(header)
     ##
     # Credits and disclaimers ...
     ##
@@ -94,17 +97,46 @@ def content():
     ##
     # Help dialog contents ...
     ##
-    header = m.Heading(tr('Core functionality and tools'), **INFO_STYLE)
+    header = m.Heading(tr('Core functionality and tools'), **SECTION_STYLE)
+    message.add(header)
+
+    header = m.Heading(tr('The InaSAFE Dock'), **SECTION_STYLE)
     message.add(header)
     message.add(dock_help())
-    message.add(extent_help())
+
+    header = m.Heading(tr('InaSAFE Reports'), **SECTION_STYLE)
+    message.add(header)
     message.add(report_help())
+
+    header = m.Heading(tr(
+        'Managing analysis extents with the extents selector'),
+        **WARNING_STYLE)
+    message.add(header)
+    message.add(extent_help())
+
+    header = m.Heading(tr('InaSAFE Options'), **SECTION_STYLE)
+    message.add(header)
+    message.add(options_help())
+
+    header = m.Heading(tr('Defining minimum needs'), **SECTION_STYLE)
+    message.add(header)
     message.add(needs_help())
     message.add(needs_manager_help())
-    message.add(options_help())
+
+    header = m.Heading(tr('The OpenStreetMap Downloader'), **SECTION_STYLE)
+    message.add(header)
     message.add(osm_help())
+
+    header = m.Heading(tr('Fetching data from PetaJakarta'), **SECTION_STYLE)
+    message.add(header)
     message.add(petajakarta_help())
+
+    header = m.Heading(tr('The raster reclassification tool'), **SECTION_STYLE)
+    message.add(header)
     message.add(reclassify_help())
+
+    header = m.Heading(tr('The shakemap converter tool'), **SECTION_STYLE)
+    message.add(header)
     message.add(shakemap_help())
 
     ##
@@ -112,8 +144,13 @@ def content():
     ##
 
     steps = definitions.analysis_steps.values()
-    header = m.Heading(tr('Analysis steps'), **INFO_STYLE)
+    header = m.Heading(tr('Analysis steps'), **SECTION_STYLE)
     message.add(header)
+    analysis = definitions.concepts['analysis']
+    message.add(analysis['description'])
+    url = _definition_screenshot_url(analysis)
+    if url:
+        message.add(m.Image(url))
     for step in steps:
         message.add(definition_to_message(step))
 
@@ -123,8 +160,8 @@ def content():
 
     hazards = definitions.hazards
     hazard_category = definitions.hazard_category
-    message.add(definition_to_message(hazards, heading_style=INFO_STYLE))
-    header = m.Heading(tr('Hazard scenarios'), **INFO_STYLE)
+    message.add(definition_to_message(hazards, heading_style=SECTION_STYLE))
+    header = m.Heading(tr('Hazard scenarios'), **SECTION_STYLE)
     message.add(header)
     message.add(definition_to_message(hazard_category))
 
@@ -133,7 +170,7 @@ def content():
     ##
 
     exposures = definitions.exposures
-    header = m.Heading(tr('Exposures'), **INFO_STYLE)
+    header = m.Heading(tr('Exposures'), **SECTION_STYLE)
     message.add(header)
     message.add(definition_to_message(exposures))
 
@@ -141,7 +178,7 @@ def content():
     #  Defaults
     ##
 
-    header = m.Heading(tr('Defaults'), **INFO_STYLE)
+    header = m.Heading(tr('Defaults'), **SECTION_STYLE)
     message.add(header)
     table = m.Table(style_class='table table-condensed table-striped')
     row = m.Row()
@@ -172,7 +209,7 @@ def content():
     #  All Fields
     ##
 
-    header = m.Heading(tr('All fields'), **INFO_STYLE)
+    header = m.Heading(tr('All fields'), **SECTION_STYLE)
     message.add(header)
     _create_fields_section(
         message,
@@ -211,7 +248,7 @@ def content():
     #  Geometries
     ##
 
-    header = m.Heading(tr('Layer Geometry Types'), **INFO_STYLE)
+    header = m.Heading(tr('Layer Geometry Types'), **SECTION_STYLE)
     message.add(header)
     message.add(definition_to_message(definitions.layer_geometry_point))
     message.add(definition_to_message(definitions.layer_geometry_line))
@@ -222,7 +259,7 @@ def content():
     #  Layer Modes
     ##
 
-    header = m.Heading(tr('Layer Modes'), **INFO_STYLE)
+    header = m.Heading(tr('Layer Modes'), **SECTION_STYLE)
     message.add(header)
     message.add(definition_to_message(definitions.layer_mode))
 
@@ -230,7 +267,7 @@ def content():
     #  Layer Purposes
     ##
 
-    header = m.Heading(tr('Layer Purposes'), **INFO_STYLE)
+    header = m.Heading(tr('Layer Purposes'), **SECTION_STYLE)
     message.add(header)
     message.add(definition_to_message(
         definitions.layer_purpose_hazard))
@@ -253,7 +290,7 @@ def content():
     # All units
     ##
 
-    header = m.Heading(tr('All Units'), **INFO_STYLE)
+    header = m.Heading(tr('All Units'), **SECTION_STYLE)
     message.add(header)
     table = m.Table(style_class='table table-condensed table-striped')
     row = m.Row()
@@ -275,7 +312,7 @@ def content():
     #  Post processors
     ##
 
-    header = m.Heading(tr('Post Processors'), **INFO_STYLE)
+    header = m.Heading(tr('Post Processors'), **SECTION_STYLE)
     message.add(header)
     message.add(m.Paragraph(tr('Post Processor Input Types')))
     table = _create_post_processor_subtable(
@@ -379,7 +416,7 @@ def definition_to_message(definition, heading_style=None):
     if heading_style:
         header = m.Heading(definition['name'], **heading_style)
     else:
-        header = m.Heading(definition['name'])
+        header = m.Paragraph(definition['name'])
     message = m.Message()
     message.add(m.HorizontalRule())
     message.add(header)

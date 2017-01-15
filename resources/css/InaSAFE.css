@@ -46,6 +46,11 @@ h5 {
   background-color: #f15a2b;
   line-height: 2;
 }
+.section {
+  color: #fff;
+  background-color: #3d9d45;
+  line-height: 2;
+}
 .problem {
   color: #fff;
   background-color: #faa732;
