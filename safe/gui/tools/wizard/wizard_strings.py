@@ -141,7 +141,7 @@ classify_vector_question = tr(
     'and the attribute is <b>%s</b>. '
     'Please drag unique values from the list on the left '
     'into the panel on the right and place them in the appropriate categories.'
-)      # (subcategory, layer purpose, classification, field)
+)  # (subcategory, layer purpose, classification, field)
 classify_raster_question = tr(
     'You have selected <b>%s %s</b> classified by <b>%s</b>, '
     'for the raster layer. '
@@ -219,17 +219,31 @@ create_postGIS_connection_first = tr(
     'You can manage connections under the '
     '<i>Layer</i> > <i>Add Layer</i> > <i>Add PostGIS Layers</i> '
     'menu.</html>')
-multiple_classified_hazard_classifications = tr(
-    'You have selected <b>%s %s</b> and attribute <b>%s</b>.'
-    'Please select hazard classifications for each exposure type.'
-    'If you want to edit the value mapping, you can click edit button next to '
-    'each and you can do value mapping in the right panel.'
-    'Do not forget to save the value mapping before you continue to the next '
-    'step.')  # (subcategory, layer purpose, field)
-multiple_continuous_hazard_classifications = tr(
-    'You have selected <b>%s %s</b> and attribute <b>%s</b>.'
-    'Please select hazard classifications for each exposure type.'
-    'If you want to edit the thresholds, you can click edit button next to '
-    'each and you can edit the threshold in the right panel.'
-    'Do not forget to save the thresholds before you continue to the next '
-    'step.')  # (subcategory, layer purpose, field)
+multiple_classified_hazard_classifications_vector = tr(
+    # (subcategory, layer purpose, field)
+    'You have selected <b>%s %s</b> and attribute <b>%s</b>. Please select '
+    'hazard classifications for each exposure type. If you want to edit the '
+    'value mapping, you can click edit button next to each and you can do '
+    'value mapping in the right panel. Do not forget to save the value '
+    'mapping before you continue to the next step.')
+multiple_classified_hazard_classifications_raster = tr(
+    # (subcategory, layer purpose)
+    'You have selected <b>%s %s</b>. Please select hazard classifications for '
+    'each exposure type. If you want to edit the value mapping, you can click '
+    'edit button next to each and you can do value mapping in the right '
+    'panel. Do not forget to save the value mapping before you continue to '
+    'the next step.')
+multiple_continuous_hazard_classifications_vector = tr(
+    # (subcategory, layer purpose, field)
+    'You have selected <b>%s %s</b> and attribute <b>%s</b>. Please select '
+    'hazard classifications for each exposure type. If you want to edit the '
+    'thresholds, you can click edit button next to each and you can edit the '
+    'threshold in the right panel. Do not forget to save the thresholds '
+    'before you continue to the next step.')
+multiple_continuous_hazard_classifications_raster = tr(
+    # (subcategory, layer purpose)
+    'You have selected <b>%s %s</b>. Please select hazard classifications for '
+    'each exposure type. If you want to edit the thresholds, you can click '
+    'edit button next to each and you can edit the threshold in the right '
+    'panel. Do not forget to save the thresholds before you continue to the '
+    'next step.')

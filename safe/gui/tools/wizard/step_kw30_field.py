@@ -2,6 +2,7 @@
 """InaSAFE Keyword Wizard Field Step."""
 
 import re
+import logging
 
 from PyQt4 import QtCore
 from PyQt4.QtGui import QListWidgetItem
@@ -25,6 +26,7 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 FORM_CLASS = get_wizard_step_ui_class(__file__)
+LOGGER = logging.getLogger('InaSAFE')
 
 
 class StepKwField(WizardStep, FORM_CLASS):
@@ -38,7 +40,8 @@ class StepKwField(WizardStep, FORM_CLASS):
         :returns: True if new step may be enabled.
         :rtype: bool
         """
-        return bool(self.selected_field() or not self.lstFields.count())
+        # Choose hazard / exposure / aggregation field is mandatory
+        return bool(self.selected_field())
 
     def get_next_step(self):
         """Find the proper step when user clicks the Next button.
