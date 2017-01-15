@@ -7,7 +7,8 @@ from PyQt4 import QtCore
 from PyQt4.QtGui import QListWidgetItem
 
 from safe.definitions.layer_purposes import layer_purpose_aggregation
-from safe.definitions.layer_modes import layer_mode_continuous
+from safe.definitions.layer_modes import (
+    layer_mode_continuous, layer_mode_classified)
 from safe.gui.tools.wizard.wizard_step import (
     WizardStep, get_wizard_step_ui_class)
 from safe.gui.tools.wizard.wizard_strings import (
@@ -27,19 +28,12 @@ FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
 class StepKwField(WizardStep, FORM_CLASS):
-<<<<<<< HEAD
     """InaSAFE Keyword Wizard Field Step."""
 
     def is_ready_to_next_step(self):
         """Check if the step is complete.
 
         If so, there is no reason to block the Next button.
-=======
-    """Keyword Wizard Step: Field."""
-
-    def is_ready_to_next_step(self):
-        """Check if the step is complete.
->>>>>>> Fix step in step field.
 
         :returns: True if new step may be enabled.
         :rtype: bool
@@ -59,36 +53,24 @@ class StepKwField(WizardStep, FORM_CLASS):
         else:
             subcategory = {'key': None}
 
-<<<<<<< HEAD
-        # Get all fields with replace_null = False
-=======
         # Has classifications, go to multi classifications
         if subcategory.get('classifications'):
             return self.parent.step_kw_multi_classifications
 
         # Check if it can go to inasafe field step
->>>>>>> Fix step in step field.
         inasafe_fields = get_fields(
             layer_purpose['key'], subcategory['key'], replace_null=False)
-        # remove compulsory field since it has been set in previous step
-        try:
-            inasafe_fields.remove(get_compulsory_fields(
-                layer_purpose['key'], subcategory['key']))
-        except ValueError:
-            pass
-
-        # Check if possible to skip inasafe field step
-        if self.skip_inasafe_field(inasafe_fields):
-            default_inasafe_fields = get_fields(
-                layer_purpose['key'], subcategory['key'], replace_null=True)
-            # Check if it can go to inasafe default step
-            if default_inasafe_fields:
-                return self.parent.step_kw_default_inasafe_fields
-            # Else, go to source step
-            else:
-                return self.parent.step_kw_source
-        else:
+        if inasafe_fields:
             return self.parent.step_kw_inasafe_fields
+
+        # Check if it can go to inasafe default field step
+        default_inasafe_fields = get_fields(
+            layer_purpose['key'], subcategory['key'], replace_null=True)
+        if default_inasafe_fields:
+            return self.parent.step_kw_default_inasafe_fields
+
+        # Any other case
+        return self.parent.step_kw_source
 
     # noinspection PyPep8Naming
     def on_lstFields_itemSelectionChanged(self):
@@ -197,27 +179,3 @@ class StepKwField(WizardStep, FORM_CLASS):
                 if field in fields:
                     self.lstFields.setCurrentRow(fields.index(field))
             self.auto_select_one_item(self.lstFields)
-
-    def skip_inasafe_field(self, inasafe_fields):
-        """Check if it possible to skip inasafe field step.
-
-        The function will check if the layer has a specified field type.
-
-        :param inasafe_fields: List of InaSAFE fields.
-        :type inasafe_fields: list
-
-        :returns: True if there are no specified field type.
-        :rtype: bool
-        """
-        layer_data_provider = self.parent.layer.dataProvider()
-        # Iterate through all inasafe fields
-        for inasafe_field in inasafe_fields:
-            for field in layer_data_provider.fields():
-                # Check the field type
-                if isinstance(inasafe_field['type'], list):
-                    if field.type() in inasafe_field['type']:
-                        return False
-                else:
-                    if field.type() == inasafe_field['type']:
-                        return False
-        return True

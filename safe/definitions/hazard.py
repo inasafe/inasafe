@@ -367,8 +367,12 @@ hazard_volcano = {
     'compulsory_fields': [hazard_value_field],
     'fields': hazard_fields,
     'extra_fields': [hazard_name_field],
+<<<<<<< HEAD
     'layer_modes': [layer_mode_classified, layer_mode_continuous],
     'disabled_exposures': [exposure_place]
+=======
+    'layer_modes': [layer_mode_classified]
+>>>>>>> Fix wizard flow.
 }
 hazard_all = [
     hazard_flood,
