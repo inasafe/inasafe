@@ -173,6 +173,7 @@ layer_crs_input_value = {
 }
 
 
+
 layer_property_input_values = [
     size_calculator_input_value,
     layer_crs_input_value
@@ -197,6 +198,11 @@ function_process = {
         'This type of process takes inputs as arguments and processes them '
         'by passing them as arguments to a python function.')
 }
+
+
+post_processor_process_types = [
+    formula_process, function_process
+]
 
 
 post_processor_process_types = [
