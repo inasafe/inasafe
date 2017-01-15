@@ -199,6 +199,9 @@ def get_compulsory_fields(layer_purpose, layer_subcategory=None):
     :param layer_purpose: The layer purpose.
     :type layer_purpose: str
 
+    :param layer_subcategory: Exposure or hazard value.
+    :type layer_subcategory: str
+
     :returns: Compulsory field
     :rtype: dict
     """
@@ -213,6 +216,26 @@ def get_compulsory_fields(layer_purpose, layer_subcategory=None):
             return None
     else:
         return definition(layer_subcategory).get('compulsory_fields')[0]
+
+
+def get_non_compulsory_fields(layer_purpose, layer_subcategory=None):
+    """Get non compulsory field based on layer_purpose and layer_subcategory.
+
+    Used for get field in InaSAFE Fields step in wizard.
+
+    :param layer_purpose: The layer purpose.
+    :type layer_purpose: str
+
+    :returns: Compulsory fields
+    :rtype: list
+    """
+    all_fields = get_fields(
+        layer_purpose, layer_subcategory, replace_null=False)
+    compulsory_field = get_compulsory_fields(
+        layer_purpose, layer_subcategory)
+    if compulsory_field in all_fields:
+        all_fields.remove(compulsory_field)
+    return all_fields
 
 
 def definition(keyword):

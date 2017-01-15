@@ -5,6 +5,7 @@
 from PyQt4 import QtCore
 from PyQt4.QtGui import QListWidgetItem
 
+from safe.common.exceptions import InvalidWizardStep
 from safe.gui.tools.wizard.wizard_step import (
     get_wizard_step_ui_class, WizardStep)
 from safe.gui.tools.wizard.wizard_strings import (
@@ -13,7 +14,8 @@ from safe.gui.tools.wizard.wizard_strings import (
     layer_mode_vector_classified_confirm,
     layer_mode_vector_continuous_confirm)
 from safe.utilities.gis import is_raster_layer
-from safe.definitions.utilities import definition, get_layer_modes
+from safe.definitions.utilities import (
+    definition, get_layer_modes, get_classifications)
 from safe.definitions.layer_modes import layer_mode_continuous
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -47,16 +49,19 @@ class StepKwLayerMode(WizardStep, FORM_CLASS):
         subcategory = self.parent.step_kw_subcategory.selected_subcategory()
         has_unit = subcategory.get('units') or subcategory.get(
             'continuous_hazard_units')
+        selected_layer_mode = self.selected_layermode()
 
-        # has unit, then go to step unit
-        if has_unit:
+        # continuous
+        if selected_layer_mode == layer_mode_continuous and has_unit:
             new_step = self.parent.step_kw_unit
-        # no unit and raster, go to multi classifications step
+        # no unit and vector
+        elif not is_raster:
+            new_step = self.parent.step_kw_field
+        # no unit and raster
         elif is_raster:
             new_step = self.parent.step_kw_multi_classifications
-        # no unit, and vector
         else:
-            new_step = self.parent.step_kw_field
+            raise InvalidWizardStep
 
         return new_step
 

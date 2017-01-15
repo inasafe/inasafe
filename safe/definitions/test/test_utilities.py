@@ -44,7 +44,9 @@ from safe.definitions.utilities import (
     get_fields,
     get_classifications,
     get_allowed_geometries,
-    all_default_fields
+    all_default_fields,
+    get_compulsory_fields,
+    get_non_compulsory_fields
 )
 
 
@@ -159,6 +161,29 @@ class TestDefinitionsUtilities(unittest.TestCase):
         expected = [flood_hazard_classes, generic_hazard_classes]
         self.assertItemsEqual(
             get_classifications('flood'), expected)
+
+    def test_get_compulsory_field(self):
+        """Test get_compulsory_field method."""
+        compulsory_field = get_compulsory_fields('exposure', 'structure')
+        expected_fields = exposure_structure['compulsory_fields']
+        self.assertListEqual([compulsory_field], expected_fields)
+
+    def test_get_not_compulsory_field(self):
+        """Test get_non_compulsory_field method."""
+        non_compulsory_fields = get_non_compulsory_fields(
+            'exposure', 'structure')
+        expected_fields = [field for field in exposure_structure['fields'] if
+                           not field['replace_null']]
+        expected_fields += [field for field in
+                            exposure_structure['extra_fields'] if
+                           not field['replace_null']]
+        print [i['key'] for i in non_compulsory_fields]
+        print [i['key'] for i in expected_fields]
+
+        for field in expected_fields:
+            if field.get('replace_null'):
+                expected_fields.replace(field)
+        self.assertListEqual(non_compulsory_fields, expected_fields)
 
     def test_get_fields(self):
         """Test get_fields method."""

@@ -1,11 +1,11 @@
 # coding=utf-8
 """InaSAFE Keyword Wizard Step for Multi Classifications."""
 
-from safe.definitionsv4.layer_purposes import layer_purpose_aggregation
-from safe.gui.tools.wizard.wizard_step import WizardStep
-from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
+from safe.definitions.layer_purposes import layer_purpose_aggregation
+from safe.gui.tools.wizard.wizard_step import (
+    WizardStep, get_wizard_step_ui_class)
 from safe.utilities.gis import is_raster_layer
-from safe.definitionsv4.utilities import get_fields
+from safe.definitions.utilities import get_fields, get_non_compulsory_fields
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -45,8 +45,8 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             return self.parent.step_kw_source
 
         # Check if it can go to inasafe field step
-        inasafe_fields = get_fields(
-            layer_purpose['key'], subcategory['key'], replace_null=False)
+        inasafe_fields = get_non_compulsory_fields(
+            layer_purpose['key'], subcategory['key'])
         if inasafe_fields:
             return self.parent.step_kw_inasafe_fields
 
