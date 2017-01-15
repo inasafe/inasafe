@@ -228,3 +228,17 @@ create_postGIS_connection_first = tr(
     'You can manage connections under the '
     '<i>Layer</i> > <i>Add Layer</i> > <i>Add PostGIS Layers</i> '
     'menu.</html>')
+multiple_classified_hazard_classifications = tr(
+    'You have selected <b>%s %s</b> and attribute <b>%s</b>.'
+    'Please select hazard classifications for each exposure type.'
+    'If you want to edit the value mapping, you can click edit button next to '
+    'each and you can do value mapping in the right panel.'
+    'Do not forget to save the value mapping before you continue to the next '
+    'step.')  # (subcategory, category, field)
+multiple_continuous_hazard_classifications = tr(
+    'You have selected <b>%s %s</b> and attribute <b>%s</b>.'
+    'Please select hazard classifications for each exposure type.'
+    'If you want to edit the thresholds, you can click edit button next to '
+    'each and you can edit the threshold in the right panel.'
+    'Do not forget to save the thresholds before you continue to the next '
+    'step.')  # (subcategory, category, field)
