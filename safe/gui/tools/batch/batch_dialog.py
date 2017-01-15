@@ -46,6 +46,7 @@ from PyQt4.QtGui import (
 
 from safe.definitions.constants import ANALYSIS_SUCCESS
 from safe.gui.tools.batch import scenario_runner
+from safe.gui.analysis_utilities import generate_impact_report
 from safe.utilities.gis import extent_string_to_array
 from safe.common.exceptions import FileNotFoundError
 from safe.common.utilities import temp_dir
@@ -471,6 +472,108 @@ class BatchDialog(QDialog, FORM_CLASS):
             report = open(report_path).read()
             # LOGGER.info(report)
 
+    def prepare_task(self, items):
+        """Prepare scenario so that it can be set directly to impact
+        function variable
+
+        :param items: dictionary containing settings for impacr function
+        :return: QgsVectorLayer, QgsRasterLayer, extent, extent_crs
+        """
+
+        status = True
+        # get hazard
+        if 'hazard' in items:
+            LOGGER.info('Hazard path is found')
+            hazard_path = items['hazard']
+            hazard = self.define_layer(hazard_path)
+            if not hazard:
+                status = False
+        else:
+            hazard = None
+            LOGGER.warning("Scenario does not contain hazard path")
+
+        # get exposure
+        if 'exposure' in items:
+            LOGGER.info('Exposure path is found')
+            exposure_path = items['exposure']
+            exposure = self.define_layer(exposure_path)
+            if not exposure:
+                status = False
+        else:
+            exposure = None
+            LOGGER.warning("Scenario does not contain hazard path")
+
+        # get aggregation
+        if 'aggregation' in items:
+            LOGGER.info('Aggregation path is found')
+            aggregation_path = items['aggregation']
+            aggregation = self.define_layer(aggregation_path)
+        else:
+            aggregation = None
+            LOGGER.info('Scenario does not contain aggregation path')
+
+        # get extent
+        if 'extent' in items:
+            LOGGER.info('Extent coordinate is found')
+            coordinates = items['extent']
+            array_coord = extent_string_to_array(coordinates)
+            extent = QgsRectangle(*array_coord)
+        else:
+            extent = None
+            LOGGER.info('Scenario does not contain extent coordinates')
+
+        # get extent crs id
+        if 'extent_crs' in items:
+            LOGGER.info('Extent CRS is found')
+            crs = items['extent_crs']
+            extent_crs = QgsCoordinateReferenceSystem(crs)
+        else:
+            LOGGER.info('Extent crs is not found, assuming crs to EPSG:4326')
+            extent_crs = QgsCoordinateReferenceSystem('EPSG:4326')
+
+        # make sure at least hazard and exposure data are available in
+        # scenario. Aggregation and extent checking will be done when
+        # assigning layer to impact_function
+        if status:
+            return hazard, exposure, aggregation, extent, extent_crs
+        else:
+            return status
+
+    def define_layer(self, layer_path):
+        """Create QGIS layer (either vector or raster) from file path input
+
+        :param layer_path: fullpath to layer file
+        :return: QgsVectorLayer or QgsRasterLayer
+        """
+
+        scenario_dir = str(self.source_directory.text())
+        joined_path = os.path.join(scenario_dir, layer_path)
+        full_path = os.path.normpath(joined_path)
+        file_name = os.path.split(layer_path)[-1]
+
+        # get extension and basename to create layer
+        base_name, extension = os.path.splitext(file_name)
+
+        # check if raster or vector layer from extension
+        if extension in ['.asc', '.tif']:
+            layer = QgsRasterLayer(full_path, base_name)
+            if layer.isValid():
+                return layer
+            else:
+                LOGGER.critical('Failed to create layer from scenario')
+                return
+        elif extension in ['.shp']:
+            layer = QgsVectorLayer(full_path, base_name, 'ogr')
+            if layer.isValid():
+                return layer
+            else:
+                LOGGER.critical('Failed to create layer from scenario')
+                return
+        else:
+            LOGGER.warning('Input extension in scenario is not recognized')
+            return
+
+
     def run_task(self, task_item, status_item, count=0, index=''):
         """Run a single task.
 
@@ -562,15 +665,7 @@ class BatchDialog(QDialog, FORM_CLASS):
         self.disable_busy_cursor()
         return result
 
-    def check_removed(self):
-        """Function to check whether layer removal is properly run or not
-         it will assign legend_impact_layer_is_removed value to True
-        :return:
-        """
-        LOGGER.info('Legend impact layer has been removed')
-        self.legend_impact_layer_is_removed = True
-
-    # noinspection PyMethodMayBeStatic
+        # noinspection PyMethodMayBeStatic
     def report_path(self, directory, title, count=0, index=None):
         """Get PDF report filename given directory, title and optional index.
 
