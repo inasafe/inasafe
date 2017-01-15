@@ -229,6 +229,7 @@ class BatchDialog(QDialog, FORM_CLASS):
                 # insert scenarios from file into table widget
                 try:
                     scenarios = read_scenarios(absolute_path)
+                    validate_scenario(scenarios, scenario_directory)
                     for key, value in scenarios.iteritems():
                         append_row(self.table, key, value)
                     parsed_files.append(current_path)
@@ -836,6 +837,35 @@ def read_scenarios(filename):
     # that scenario (e.g. hazard, exposure etc)
     return blocks
 
+def validate_scenario(blocks, scenario_directory):
+    """Check whether the files that are used in scenario whether it needs to be
+    updated or not
+
+    :param blocks: dictionary from read_scenarios
+    :param scenario_directory: directory where scenario text file is saved
+    :return: pass message to dialog and log detailed status
+    """
+
+    # dictionary to temporary contain status message
+    blocks_update={}
+    for section,section_item in blocks.iteritems():
+        ready = True
+        for item in section_item:
+            if item in ['hazard', 'exposure', 'aggregation']:
+                # get relative path
+                rel_path = section_item[item]
+                full_path = os.path.join(scenario_directory, rel_path)
+                filepath = os.path.normpath(full_path)
+                if not os.path.exists(filepath):
+                    blocks_update[section] ={'status':"Please update scenario"}
+                    LOGGER.info(section + " needs to be updated")
+                    LOGGER.info("Unable to find " + filepath)
+                    ready = False
+        if ready:
+            blocks_update[section]={'status':"Scenario ready"}
+            # LOGGER.info(section + " scenario is ready")
+    for section,section_item in blocks_update.iteritems():
+        blocks[section]['status'] = blocks_update[section]['status']
 
 def append_row(table, label, data):
     """Append new row to table widget.
@@ -864,8 +894,8 @@ def append_row(table, label, data):
     # To retrieve it again you would need to do:
     # value = myVariant.toPyObject()[0]
     items.setData(Qt.UserRole, variant)
-
+    # set scenario status (ready or not) into table
     # noinspection PyUnresolvedReferences
     table.setItem(count, 0, items)
     # noinspection PyUnresolvedReferences
-    table.setItem(count, 1, QTableWidgetItem(''))
+    table.setItem(count, 1, QTableWidgetItem(data['status']))
