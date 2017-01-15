@@ -72,6 +72,10 @@ SMALL_ICON_STYLE = {
     'attributes': 'style="width: 24px; height: 24px;"',
 }
 
+MEDIUM_ICON_STYLE = {
+    'attributes': 'style="width: 96px; height: 96px;"',
+}
+
 TRACEBACK_STYLE = {
     'level': 5,
     'icon': 'icon-info-sign icon-white',

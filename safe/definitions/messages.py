@@ -33,9 +33,6 @@ def limitations():
     limitation_list = list()
     limitation_list.append(tr('InaSAFE is not a hazard modelling tool.'))
     limitation_list.append(
-        tr('Population count data (raster) must be provided in WGS84 '
-           'geographic coordinates.'))
-    limitation_list.append(
         tr('InaSAFE is a Free and Open Source Software (FOSS) project, '
            'published under the GPL V3 license. As such you may freely '
            'download, share and (if you like) modify the software.'))

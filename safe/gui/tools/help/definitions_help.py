@@ -1,6 +1,8 @@
 # coding=utf-8
 """Help text for the dock widget."""
 
+from os.path import exists
+import logging
 from safe.utilities.i18n import tr
 from safe import messaging as m
 from safe.messaging import styles
@@ -18,9 +20,12 @@ from safe.gui.tools.help.raster_reclassify_help \
     import content as reclassify_help
 from safe.gui.tools.help.shakemap_converter_help \
     import content as shakemap_help
+from safe.utilities.resources import resource_url, resources_path
+LOGGER = logging.getLogger('InaSAFE')
 INFO_STYLE = styles.INFO_STYLE
 WARNING_STYLE = styles.WARNING_STYLE
 SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
+MEDIUM_ICON_STYLE = styles.MEDIUM_ICON_STYLE
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -55,7 +60,7 @@ def heading():
     :returns: A heading object.
     :rtype: safe.messaging.heading.Heading
     """
-    message = m.Heading(tr('InaSAFE Definitions help'), **INFO_STYLE)
+    message = m.Heading(tr('InaSAFE help'), **INFO_STYLE)
     return message
 
 
@@ -73,7 +78,21 @@ def content():
     message = m.Message()
 
     ##
-    # First all the help dialog contents ...
+    # Credits and disclaimers ...
+    ##
+    header = m.Heading(tr('Disclaimer'), **INFO_STYLE)
+    message.add(header)
+    message.add(definitions.messages.disclaimer())
+
+    header = m.Heading(tr('Limitations and License'), **INFO_STYLE)
+    message.add(header)
+    bullets = m.BulletedList()
+    for item in definitions.limitations():
+        bullets.add(item)
+    message.add(bullets)
+
+    ##
+    # Help dialog contents ...
     ##
     header = m.Heading(tr('Core functionality and tools'), **INFO_STYLE)
     message.add(header)
@@ -149,7 +168,10 @@ def content():
         table.add(row)
     message.add(table)
 
-    # All fields
+    ##
+    #  All Fields
+    ##
+
     header = m.Heading(tr('All fields'), **INFO_STYLE)
     message.add(header)
     _create_fields_section(
@@ -185,7 +207,128 @@ def content():
         tr('Analysis fields'),
         definitions.analysis_fields)
 
+    ##
+    #  Geometries
+    ##
+
+    header = m.Heading(tr('Layer Geometry Types'), **INFO_STYLE)
+    message.add(header)
+    message.add(definition_to_message(definitions.layer_geometry_point))
+    message.add(definition_to_message(definitions.layer_geometry_line))
+    message.add(definition_to_message(definitions.layer_geometry_polygon))
+    message.add(definition_to_message(definitions.layer_geometry_raster))
+
+    ##
+    #  Layer Modes
+    ##
+
+    header = m.Heading(tr('Layer Modes'), **INFO_STYLE)
+    message.add(header)
+    message.add(definition_to_message(definitions.layer_mode))
+
+    ##
+    #  Layer Purposes
+    ##
+
+    header = m.Heading(tr('Layer Purposes'), **INFO_STYLE)
+    message.add(header)
+    message.add(definition_to_message(
+        definitions.layer_purpose_hazard))
+    message.add(definition_to_message(
+        definitions.layer_purpose_exposure))
+    message.add(definition_to_message(
+        definitions.layer_purpose_aggregation))
+    message.add(definition_to_message(
+        definitions.layer_purpose_exposure_impacted))
+    message.add(definition_to_message(
+        definitions.layer_purpose_exposure_breakdown))
+    message.add(definition_to_message(
+        definitions.layer_purpose_aggregation_impacted))
+    message.add(definition_to_message(
+        definitions.layer_purpose_aggregate_hazard_impacted))
+    message.add(definition_to_message(
+        definitions.layer_purpose_profiling))
+
+    ##
+    #  Post processors
+    ##
+
+    header = m.Heading(tr('Post Processors'), **INFO_STYLE)
+    message.add(header)
+    message.add(m.Paragraph(tr('Post Processor Input Types')))
+    table = _create_post_processor_subtable(
+        definitions.post_processor_input_types
+    )
+    message.add(table)
+
+    message.add(m.Paragraph(tr('Post Processor Input Values')))
+    table = _create_post_processor_subtable(
+        definitions.post_processor_input_values
+    )
+    message.add(table)
+
+    message.add(m.Paragraph(tr('Post Processor Process Types')))
+    table = _create_post_processor_subtable(
+        definitions.post_processor_process_types
+    )
+    message.add(table)
+
+    message.add(m.Paragraph(tr('Post Processors')))
+    post_processors = definitions.post_processors
+    table = m.Table(style_class='table table-condensed table-striped')
+    row = m.Row()
+    row.add(m.Cell(tr('Name')), header_flag=True)
+    row.add(m.Cell(tr('Input Fields')), header_flag=True)
+    row.add(m.Cell(tr('Output Fields')), header_flag=True)
+    table.add(row)
+    for post_processor in post_processors:
+        row = m.Row()
+        row.add(m.Cell(post_processor['name']))
+        # Input fields
+        bullets = m.BulletedList()
+        for key, value in post_processor['input'].iteritems():
+            bullets.add(key)
+        row.add(m.Cell(bullets))
+        # Output fields
+        bullets = m.BulletedList()
+        for key, value in post_processor['output'].iteritems():
+            name = value['value']['name']
+            formula_type = value['type']['key']
+            if formula_type == 'formula':
+                formula = value['formula']
+            else:
+                # We use python introspection because the processor
+                # uses a python function for calculations
+                formula = value['function'].__name__
+                formula += ' ('
+                formula += value['function'].__doc__
+                formula += ')'
+            bullets.add('%s  %s. : %s' % (
+                name, formula_type, formula))
+
+        row.add(m.Cell(bullets))
+        table.add(row)
+        # Add the descriptions
+        row = m.Row()
+        row.add(m.Cell(''))
+        row.add(m.Cell(post_processor['description'], span=2))
+        table.add(row)
+    message.add(table)
     return message
+
+
+def _create_post_processor_subtable(item_list):
+    table = m.Table(style_class='table table-condensed table-striped')
+    row = m.Row()
+    row.add(m.Cell(tr('Name')), header_flag=True)
+    row.add(m.Cell(tr('Description')), header_flag=True)
+    table.add(row)
+    for item in item_list:
+        row = m.Row()
+        row.add(m.Cell(item['key']))
+        row.add(m.Cell(item['description']))
+        table.add(row)
+    return table
 
 
 def _create_fields_section(message, title, fields):
@@ -218,7 +361,25 @@ def definition_to_message(definition, heading_style=None):
     message = m.Message()
     message.add(m.HorizontalRule())
     message.add(header)
-    message.add(m.Paragraph(definition['description']))
+    # If the definition has an icon, we put the icon and description side by
+    # side in a table otherwise just show the description as a paragraph
+    url = _definition_icon_url(definition)
+    if url is None:
+        LOGGER.info('No URL for definition icon')
+        message.add(m.Paragraph(definition['description']))
+    else:
+        LOGGER.info('Creating mini table for definition description: ' + url)
+        table = m.Table(style_class='table table-condensed')
+        row = m.Row()
+        row.add(m.Cell(m.Image(url, **MEDIUM_ICON_STYLE)))
+        row.add(m.Cell(definition['description']))
+        table.add(row)
+        message.add(table)
+
+    url = _definition_screenshot_url(definition)
+    if url:
+        message.add(m.Image(url))
+
     # types contains e.g. hazard_all
     if 'types' in definition:
         for sub_definition in definition['types']:
@@ -358,6 +519,34 @@ def definition_to_message(definition, heading_style=None):
                 'This class IS required in the hazard keywords.')))
 
     return message
+
+
+def _definition_icon_url(definition):
+    svg_image_path = resources_path(
+        'img', 'definitions', definition['key'] + '.svg')
+    png_image_path = resources_path(
+        'img', 'definitions', definition['key'] + '.png')
+    if exists(svg_image_path):
+        url = resource_url(svg_image_path)
+    elif exists(png_image_path):
+        url = resource_url(png_image_path)
+    else:
+        url = None
+    return url
+
+
+def _definition_screenshot_url(definition):
+    jpg_image_path = resources_path(
+        'img', 'definitions', definition['key'] + '_screenshot.jpg')
+    png_image_path = resources_path(
+        'img', 'definitions', definition['key'] + '_screenshot.png')
+    if exists(jpg_image_path):
+        url = resource_url(jpg_image_path)
+    elif exists(png_image_path):
+        url = resource_url(png_image_path)
+    else:
+        url = None
+    return url
 
 
 def _create_fields_table():

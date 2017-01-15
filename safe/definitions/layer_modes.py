@@ -16,13 +16,12 @@ layer_mode_continuous = {
     'name': tr('Continuous'),
     'description': tr(
         '<b>Continuous</b> data can be used in raster hazard or exposure data '
-        'where the values in the data are either integers or decimal '
-        'values representing a continuously varying phenomenon. '
-        'For example flood depth is a continuous value from 0 to the maximum '
-        'reported depth during a flood. '
-        '<p>Raster exposure data such as population data are also continuous. '
-        'In this example the cell values represent the number of people in '
-        'cell.</p>'
+        'where the values in the data are either integers or decimal values '
+        'representing a continuously varying phenomenon. For example flood '
+        'depth is a continuous value from 0 to the maximum reported depth '
+        'during a flood. <p>Raster exposure data such as population data are '
+        'also continuous. In this example the cell values represent the '
+        'number of people in cell.</p>'
         '<p>Raster data is considered to be continuous by default and you '
         'should explicitly indicate that it is classified if each cell in the '
         'raster represents a discrete class (e.g. low depth = 1, medium depth '
@@ -47,13 +46,11 @@ layer_mode_classified = {
         'low inundation class, a value of 2 might represent the medium '
         'inundation class and a value of 3 might represent the '
         'high inundation class.</p>'
-        '<p>Classified values in a vector (polygon) Volcano data set might '
+        '<p>Classified values in a vector (polygon) volcano data set might '
         'represent discrete classes where a value of I might represent low '
         'volcanic hazard, a value of II might represent medium volcanic '
         'hazard and a value of III  might represent a high volcanic hazard.'
         '</p>'
-        '<p>In a vector (point) Volcano data the user specified buffer '
-        'distances will be used to classify the data.</p>'
         '<p>Classified values in a vector exposure data set might include '
         'building type or road type.</p>'
     ),
@@ -68,8 +65,8 @@ layer_mode = {
     'key': 'layer_mode',
     'name': tr('Data type'),
     'description': tr(
-        'The data type describes the values in the layer. '
-        'Values can be continuous or classified'),
+        'The data type describes the values in the layer. Values can be '
+        'continuous or classified'),
     'types': [
         layer_mode_continuous,
         layer_mode_classified

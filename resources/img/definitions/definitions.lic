@@ -5,6 +5,22 @@
   </metadata>
 
   <iconfile>
+    <filename>exposure_impacted.png</filename>
+    <publishable>Yes</publishable>
+    <source>Tim Sutton</source>
+    <IP_owner>InaSAFE.org</IP_owner>
+    <IP_info>http://inasafe.org</IP_info>
+  </iconfile>
+
+  <iconfile>
+    <filename>profiling.png</filename>
+    <publishable>Yes</publishable>
+    <source>Tim Sutton</source>
+    <IP_owner>InaSAFE.org</IP_owner>
+    <IP_info>http://inasafe.org</IP_info>
+  </iconfile>
+
+  <iconfile>
     <filename>adult.svg</filename>
     <publishable>Yes</publishable>
     <source>modified from UNOCHA</source>
