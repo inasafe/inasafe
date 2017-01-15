@@ -917,4 +917,4 @@ hazard_classification = {
     ]
 }
 
-all_hazard_classes = hazard_classification['types']
+hazard_classes_all = hazard_classification['types']

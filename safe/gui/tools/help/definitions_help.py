@@ -250,6 +250,28 @@ def content():
         definitions.layer_purpose_profiling))
 
     ##
+    # All units
+    ##
+
+    header = m.Heading(tr('All Units'), **INFO_STYLE)
+    message.add(header)
+    table = m.Table(style_class='table table-condensed table-striped')
+    row = m.Row()
+    row.add(m.Cell(tr('Name')), header_flag=True)
+    row.add(m.Cell(tr('Plural')), header_flag=True)
+    row.add(m.Cell(tr('Abbreviation')), header_flag=True)
+    row.add(m.Cell(tr('Details')), header_flag=True)
+    table.add(row)
+    for unit in definitions.units_all:
+        row = m.Row()
+        row.add(m.Cell(unit['name']))
+        row.add(m.Cell(unit['plural_name']))
+        row.add(m.Cell(unit['abbreviation']))
+        row.add(m.Cell(unit['description']))
+        table.add(row)
+    message.add(table)
+
+    ##
     #  Post processors
     ##
 

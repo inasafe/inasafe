@@ -27,7 +27,8 @@ from safe.definitions.fields import (
     affected_field,
     exposure_count_field,
     male_count_field)
-from safe.definitions.hazard_classifications import all_hazard_classes
+from safe.definitions import concepts
+from safe.definitions.hazard_classifications import hazard_classes_all
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -86,7 +87,7 @@ def post_processor_affected_function(**kwargs):
     :return: If this hazard class is affected or not.
     :rtype: bool
     """
-    for hazard in all_hazard_classes:
+    for hazard in hazard_classes_all:
         if hazard['key'] == kwargs['classification']:
             classification = hazard['classes']
 
@@ -141,7 +142,8 @@ geometry_property_input_type = {
 layer_property_input_type = {
     'key': 'layer_property',
     'description': tr(
-        'This type of input takes it\'s value from s layer property.')
+        'This type of input takes it\'s value from a layer property. For '
+        'example the layer Coordinate Reference System of the layer.')
 }
 
 
@@ -155,7 +157,6 @@ post_processor_input_types = [
 ]
 
 # Input values
-# TODO: @ismailsunni please give better explanation of these
 
 size_calculator_input_value = {
     'key': 'size_calculator',
@@ -167,7 +168,8 @@ size_calculator_input_value = {
 layer_crs_input_value = {
     'key': 'layer_crs',
     'description': tr(
-        'This is a value for layer_crs input type. Retrieve layer CRS')
+        'This is a value for layer_crs input type. It retrieves the layer '
+        'Coordinate Reference System (CRS).')
 }
 
 
@@ -185,15 +187,15 @@ post_processor_input_values = [
 formula_process = {
     'key': 'formula',
     'description': tr(
-        'This type of process takes inputs as arguments and process it '
-        'according to python expressions described.')
+        'This type of process takes inputs as arguments and processes them '
+        'according to a python expression provided by the processor.')
 }
 
 function_process = {
     'key': 'function',
     'description': tr(
-        'This type of process takes inputs as arguments and process it '
-        'using python function referenced.')
+        'This type of process takes inputs as arguments and processes them '
+        'by passing them as arguments to a python function.')
 }
 
 
@@ -211,7 +213,9 @@ post_processor_gender = {
     'key': 'post_processor_gender',
     'name': tr('Gender Post Processor'),
     'description': tr(
-        'Post processor to calculate the number of affected females'),
+        'A post processor to calculate the number of affected females. '
+        '"Female" is defined as: ' + concepts['female']['description']
+    ),
     'input': {
         # input as a list means, try to get the input from the
         # listed source. Pick the first available
@@ -255,7 +259,8 @@ post_processor_youth = {
     'key': 'post_processor_youth',
     'name': tr('Youth Post Processor'),
     'description': tr(
-        'Post processor to calculate the number of affected youth'),
+        'A post processor to calculate the number of affected youth. '
+        '"Youth" is defined as: ' + concepts['youth']['description']),
     'input': {
         # input as a list means, try to get the input from the
         # listed source. Pick the first available
@@ -294,7 +299,8 @@ post_processor_adult = {
     'key': 'post_processor_adult',
     'name': tr('Adult Post Processor'),
     'description': tr(
-        'Post processor to calculate the number of affected adults'),
+        'A post processor to calculate the number of affected adults. '
+        '"Adult" is defined as: ' + concepts['adult']['description']),
     'input': {
         # input as a list means, try to get the input from the
         # listed source. Pick the first available
@@ -333,7 +339,8 @@ post_processor_elderly = {
     'key': 'post_processor_elderly',
     'name': tr('Elderly Post Processor'),
     'description': tr(
-        'Post processor to calculate the number of affected elderly'),
+        'A post processor to calculate the number of affected elderly people. '
+        '"Elderly" is defined as: ' + concepts['elderly']['description']),
     'input': {
         # input as a list means, try to get the input from the
         # listed source. Pick the first available
@@ -372,8 +379,9 @@ post_processor_size = {
     'key': 'post_processor_size',
     'name': tr('Size Value Post Processor'),
     'description': tr(
-        'Post processor to calculate the size of the feature. If the feature '
-        'is a polygon we use m^2. If the feature is a line we use metres.'),
+        'A post processor to calculate the size of the feature. If the '
+        'feature is a polygon, the result will be area in m^2. If the feature '
+        'is a line we use length in metres.'),
     'input': {
         'size_calculator': {
             'type': layer_property_input_type,
@@ -396,8 +404,8 @@ post_processor_size_rate = {
     'key': 'post_processor_size_rate',
     'name': tr('Size Rate Post Processor'),
     'description': tr(
-        'Post processor to calculate the value of a feature based on the size '
-        'of the feature. If feature is a polygon the size is calculated as '
+        'A post processor to calculate the value of a feature based on its'
+        'size. If feature is a polygon the size is calculated as '
         'the area in m^2. If the feature is a line we use length in metres.'),
     'input': {
         'size': {
@@ -426,8 +434,8 @@ post_processor_affected = {
     'key': 'post_processor_affected',
     'name': tr('Affected Post Processor'),
     'description': tr(
-        'Post processor to determine of the feature is affected or not '
-        'according to the hazard classification.'),
+        'A post processor to determine if a feature is affected or not '
+        '(according to the hazard classification).'),
     'input': {
         'hazard_class': {
             'value': hazard_class_field,

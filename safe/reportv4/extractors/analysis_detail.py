@@ -7,7 +7,7 @@ from safe.definitions.fields import (
     total_affected_field,
     total_unaffected_field,
     total_field)
-from safe.definitions.hazard_classifications import all_hazard_classes
+from safe.definitions.hazard_classifications import hazard_classes_all
 from safe.reportv4.extractors.util import layer_definition_type, \
     round_affecter_number
 from safe.utilities.i18n import tr
@@ -50,7 +50,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
     # Get hazard classification
     hazard_classification = None
     # retrieve hazard classification from hazard layer
-    for classification in all_hazard_classes:
+    for classification in hazard_classes_all:
         classification_name = hazard_layer.keywords['classification']
         if classification_name == classification['key']:
             hazard_classification = classification
