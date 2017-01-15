@@ -14,8 +14,7 @@ from safe.gui.tools.wizard.wizard_strings import (
     layer_mode_vector_classified_confirm,
     layer_mode_vector_continuous_confirm)
 from safe.utilities.gis import is_raster_layer
-from safe.definitions.utilities import (
-    definition, get_layer_modes, get_classifications)
+from safe.definitions.utilities import definition, get_layer_modes
 from safe.definitions.layer_modes import layer_mode_continuous
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

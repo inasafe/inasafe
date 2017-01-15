@@ -6,6 +6,13 @@ from safe.gui.tools.wizard.wizard_step import (
     WizardStep, get_wizard_step_ui_class)
 from safe.utilities.gis import is_raster_layer
 from safe.definitions.utilities import get_fields, get_non_compulsory_fields
+from safe.definitions.layer_modes import layer_mode_continuous
+from safe.gui.tools.wizard.wizard_strings import (
+    multiple_classified_hazard_classifications_vector,
+    multiple_continuous_hazard_classifications_vector,
+    multiple_classified_hazard_classifications_raster,
+    multiple_continuous_hazard_classifications_raster
+)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -33,7 +40,6 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         :returns: The step to be switched to
         :rtype: WizardStep instance or None
         """
-        # TODO(IS): Must update this with the correct step
         layer_purpose = self.parent.step_kw_purpose.selected_purpose()
         if layer_purpose != layer_purpose_aggregation:
             subcategory = self.parent.step_kw_subcategory.\
@@ -61,4 +67,28 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
 
     def set_widgets(self):
         """Set widgets on the Multi classification step."""
-        pass
+        layer_mode = self.parent.step_kw_layermode.selected_layermode()
+        layer_purpose = self.parent.step_kw_purpose.selected_purpose()
+        subcategory = self.parent.step_kw_subcategory.selected_subcategory()
+        field = self.parent.step_kw_field.selected_field()
+        is_raster = is_raster_layer(self.parent.layer)
+
+        if is_raster:
+            if layer_mode == layer_mode_continuous:
+                text_label = multiple_continuous_hazard_classifications_raster
+            else:
+                text_label = multiple_classified_hazard_classifications_raster
+            # noinspection PyAugmentAssignment
+            text_label = text_label % (
+                subcategory['name'], layer_purpose['name'])
+        else:
+            if layer_mode == layer_mode_continuous:
+                text_label = multiple_continuous_hazard_classifications_vector
+            else:
+                text_label = multiple_classified_hazard_classifications_vector
+            # noinspection PyAugmentAssignment
+            text_label = text_label % (
+                subcategory['name'], layer_purpose['name'], field)
+
+
+        self.multi_classifications_label.setText(text_label)

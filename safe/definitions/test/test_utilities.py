@@ -177,8 +177,6 @@ class TestDefinitionsUtilities(unittest.TestCase):
         expected_fields += [field for field in
                             exposure_structure['extra_fields'] if
                            not field['replace_null']]
-        print [i['key'] for i in non_compulsory_fields]
-        print [i['key'] for i in expected_fields]
 
         for field in expected_fields:
             if field.get('replace_null'):
