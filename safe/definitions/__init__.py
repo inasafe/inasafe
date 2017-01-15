@@ -27,4 +27,3 @@ from safe.definitions.minimum_needs import *
 from safe.definitions.post_processors import *
 from safe.definitions.units import *
 from safe.definitions.versions import *
-

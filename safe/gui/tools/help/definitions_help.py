@@ -297,9 +297,15 @@ def content():
             if formula_type == 'formula':
                 formula = value['formula']
             else:
-                formula = value['function']
+                # We use python introspection because the processor
+                # uses a python function for calculations
+                formula = value['function'].__name__
+                formula += ' ('
+                formula += value['function'].__doc__
+                formula += ')'
+            bullets.add('%s  %s. : %s' % (
+                name, formula_type, formula))
 
-            bullets.add('%s : %s. Formula: %s' %(name, formula_type, formula))
         row.add(m.Cell(bullets))
         table.add(row)
         # Add the descriptions

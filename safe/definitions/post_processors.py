@@ -36,11 +36,14 @@ __revision__ = '$Format:%H$'
 
 # # #
 # Functions
+#
+# Note that the function names and docstrings will be shown in the
+# definitions report, so keep them neat and tidy!
 # # #
 
 
 def multiply(**kwargs):
-    """Simple postprocessor where we multiply values.
+    """Simple postprocessor where we multiply the input values.
 
     :param kwargs: Dictionary of values to multiply
     :type kwargs: dict
@@ -113,31 +116,32 @@ dynamic_field_input_type = {
     'key': 'dynamic_field',
     'description': tr(
         'This type of input takes value from a dynamic field. '
-        'Thus, it required some additional parameter.')
+        'It will require some additional parameter details.')
 }
 
 keyword_input_type = {
     'key': 'keyword',
     'description': tr(
-        'This type of input takes value from layer keyword being handled.')
+        'This type of input takes value from a keyword for the layer '
+        'being handled.')
 }
 
 needs_profile_input_type = {
     'key': 'needs_profile',
     'description': tr(
-        'This type of input takes value from current InaSAFE needs profile.')
+        'This type of input takes a value from current InaSAFE needs profile.')
 }
 
 geometry_property_input_type = {
     'key': 'geometry_property',
     'description': tr(
-        'This type of input takes value from geometry property.')
+        'This type of input takes value from the geometry property.')
 }
 
 layer_property_input_type = {
     'key': 'layer_property',
     'description': tr(
-        'This type of input takes value from layer property.')
+        'This type of input takes it\'s value from s layer property.')
 }
 
 
@@ -150,13 +154,13 @@ post_processor_input_types = [
     layer_property_input_type
 ]
 
-
-## Input values
+# Input values
+# TODO: @ismailsunni please give better explanation of these
 
 size_calculator_input_value = {
     'key': 'size_calculator',
     'description': tr(
-        'This is a value for layer_property input type. Retrieve Size '
+        'This is a value for the layer_property input type. Retrieve Size '
         'Calculator of the layer CRS')
 }
 

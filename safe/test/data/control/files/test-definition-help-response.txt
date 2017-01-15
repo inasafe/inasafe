@@ -1,4 +1,4 @@
-*****InaSAFE Definitions help
+*****InaSAFE help
 *****Hazards
 *Hazards
 *Flood
