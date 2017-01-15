@@ -27,9 +27,11 @@ __revision__ = '$Format:%H$'
 
 @profile
 def align_rasters(hazard_layer, exposure_layer, extent):
-    """Align hazard and exposure raster layers so they fit perfectly and
-    so they can be used for raster algebra. The method uses QGIS
-    raster alignment tool to do the work (which in turn uses GDAL).
+    """Align hazard and exposure raster layers.
+
+    Align hazard and exposure raster layers so they fit perfectly and so they
+    can be used for raster algebra. The method uses QGIS raster alignment tool
+    to do the work (which in turn uses GDAL).
 
     Alignment of layers means that the layers have the same CRS, cell size,
     grid origin and size. That involves clipping and resampling of rasters.
