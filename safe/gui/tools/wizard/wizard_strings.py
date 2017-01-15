@@ -1,14 +1,5 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool by AusAid **String for Wizard Dialog.**
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-"""
+"""Wizard Strings."""
 
 from safe.utilities.i18n import tr
 
@@ -57,32 +48,32 @@ layer_mode_raster_question = tr(
     'You have selected <b>%s %s</b> for this raster layer. '
     '<p>We need to know whether each cell in this raster represents '
     '<b>continuous</b> data or if the data have been <b>classified</b>.</p>'
-)  # (subcategory, category)
+)  # (subcategory, layer purpose)
 layer_mode_vector_question = tr(
     'You have selected <b>%s</b> for this <b>%s</b> layer. '
     '<p>We need to confirm that attribute values represents <b>continuous</b> '
     'data or if the data have been <b>classified</b>.</p>'
-)  # (subcategory, category)
+)  # (subcategory, layer purpose)
 layer_mode_vector_classified_confirm = tr(
     'You have selected <b>%s</b> for this <b>%s</b> layer. '
     '<p>We need to confirm that attribute values in this vector layer have '
     'been <b>classified</b> and are represented by a code.</p>'
-)  # (subcategory, category)
+)  # (subcategory, layer purpose)
 layer_mode_vector_continuous_confirm = tr(
     'You have selected <b>%s</b> for this <b>%s</b> layer. '
     '<p>We need to confirm that attribute values represents '
-    '<b>continuous</b> data.</p>')  # (subcategory, category)
+    '<b>continuous</b> data.</p>')  # (subcategory, layer purpose)
 unit_question = tr(
     'You have selected <b>%s</b> for this <b>%s</b> layer type. '
     '<p>We need to know what units the continuous data are in. For example in '
     'a raster layer, each cell might represent depth in metres or depth in '
-    'feet.</p>')  # (subcategory, category)
+    'feet.</p>')  # (subcategory, layer purpose)
 allow_resampling_question = tr(
     'You have selected <b>%s %s</b> for this <b>%s data</b> raster layer. '
     '<p>For some exposure types you may not want InaSAFE to resample the '
     'raster to the hazard layer resolution during analyses. Please select the '
     'check box below if you want to set the <i>allow_resampling</i> '
-    'keyword to <i>False</i>.</p>')  # (subcategory, category, layer_mode)
+    'keyword to <i>False</i>.</p>')  # (subcategory, layer purpose, layer_mode)
 flood_metres_depth_question = tr(
     'flood depth in metres')
 flood_feet_depth_question = tr(
@@ -118,7 +109,7 @@ structure_building_type_question = tr(
 field_question_subcategory_unit = tr(
     'You have selected a <b>%s %s</b> for the vector layer measured in '
     '<b>%s</b>. Please select the attribute in this layer that represents %s.'
-)  # (category, subcategory, unit, subcategory-unit relation)
+)  # (layer purpose, subcategory, unit, subcategory-unit relation)
 field_question_subcategory_classified = tr(
     'You have selected <b>classified</b> data for the vector <b>%s</b> layer. '
     'Please select the attribute in this layer that represents the classes.'
@@ -137,26 +128,26 @@ field_question_name_field = tr(
 field_question_subcategory_classified_id = tr(
     'You have selected <b>classified</b> data for the vector <b>%s</b> layer. '
     'Please select the attribute in this layer that represents the ids.'
-)  # (category, subcategory)
+)  # (layer purpose, subcategory)
 field_question_aggregation = tr(
     'You have selected a vector <b>aggregation</b> layer. Please select the '
     'attribute in this layer that has the names of the aggregation areas.')
 classification_question = tr(
     'You have selected <b>%s %s</b> for this classified data. '
     'Please select the type of classification you want to use. '
-)  # (subcategory, category)
+)  # (subcategory, layer purpose)
 classify_vector_question = tr(
     'You have selected <b>%s %s</b> classified by <b>%s</b>, '
     'and the attribute is <b>%s</b>. '
     'Please drag unique values from the list on the left '
     'into the panel on the right and place them in the appropriate categories.'
-)      # (subcategory, category, classification, field)
+)      # (subcategory, layer purpose, classification, field)
 classify_raster_question = tr(
     'You have selected <b>%s %s</b> classified by <b>%s</b>, '
     'for the raster layer. '
     'Please drag unique values from the list on the left '
     'into the panel on the right and place them in the appropriate categories.'
-)  # (subcategory, category, classification)
+)  # (subcategory, layer purpose, classification)
 continuous_vector_question = tr(
     'You have selected <b>%s %s</b> as a <b>continuous</b> layer and the '
     'attribute is <b>%s</b> with <b>%s</b>. '
@@ -164,14 +155,14 @@ continuous_vector_question = tr(
     'Minimum value will be included in the range, while maximum value will be '
     'excluded. The minimum value from the layer is <b>%s</b> and the maximum '
     'value is <b>%s</b>.'
-)  # (subcategory, category, field, classification, min value, max value)
+)  # (subcategory, purpose, field, classification, min value, max value)
 continuous_raster_question = tr(
     'You have selected <b>%s %s</b> as a <b>continuous</b> layer with '
     '<b>%s</b>. Minimum value will be included in the range, while maximum '
     'value will be excluded. Please input the minimum and maximum value for '
     'each class below. The minimum value from the layer is <b>%s</b> and the '
     'maximum value is <b>%s</b>.'
-)  # (subcategory, category, classification, min value, max value)
+)  # (subcategory, purpose, classification, min value, max value)
 select_function_constraints2_question = tr(
     'You selected <b>%s</b> hazard and <b>%s</b> exposure. Now, select the '
     '<b>geometry types</b> for the hazard and exposure layers you want to '
@@ -234,11 +225,11 @@ multiple_classified_hazard_classifications = tr(
     'If you want to edit the value mapping, you can click edit button next to '
     'each and you can do value mapping in the right panel.'
     'Do not forget to save the value mapping before you continue to the next '
-    'step.')  # (subcategory, category, field)
+    'step.')  # (subcategory, layer purpose, field)
 multiple_continuous_hazard_classifications = tr(
     'You have selected <b>%s %s</b> and attribute <b>%s</b>.'
     'Please select hazard classifications for each exposure type.'
     'If you want to edit the thresholds, you can click edit button next to '
     'each and you can edit the threshold in the right panel.'
     'Do not forget to save the thresholds before you continue to the next '
-    'step.')  # (subcategory, category, field)
+    'step.')  # (subcategory, layer purpose, field)
