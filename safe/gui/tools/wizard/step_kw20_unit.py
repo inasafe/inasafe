@@ -44,17 +44,18 @@ class StepKwUnit(WizardStep, FORM_CLASS):
         """
         layer_purpose = self.parent.step_kw_purpose.selected_purpose()
         subcategory = self.parent.step_kw_subcategory.selected_subcategory()
-        default_inasafe_fields = get_fields(
-            layer_purpose['key'], subcategory['key'], replace_null=True)
+        is_raster = is_raster_layer(self.parent.layer)
+        has_classifications = get_classifications(subcategory['key'])
 
-        if not is_raster_layer(self.parent.layer):
-            return self.parent.step_kw_unit
-        elif get_classifications(subcategory['key']):
+        # Vector
+        if not is_raster:
+            return self.parent.step_kw_field
+        # Raster and has classifications
+        elif has_classifications:
             return self.parent.step_kw_multi_classifications
+        # If population, must go to resample step first
         elif subcategory == exposure_population:
             return self.parent.step_kw_resample
-        elif default_inasafe_fields:
-            return self.parent.step_kw_default_inasafe_fields
         else:
             return self.parent.step_kw_source
 
