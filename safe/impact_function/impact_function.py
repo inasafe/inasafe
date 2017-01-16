@@ -166,6 +166,7 @@ class ImpactFunction(object):
         self.reset_state()
         self._is_ready = False
         self._provenance_ready = False
+        self._datetime = None
         self._provenance = {
             # Environment
             'host_name': gethostname(),
@@ -486,6 +487,15 @@ class ImpactFunction(object):
         :rtype: basestring
         """
         return self._title
+
+    @property
+    def datetime(self):
+        """The timestamp of the impact function executions.
+
+        :return: The timestamp.
+        :rtype: datetime
+        """
+        return self._datetime
 
     @property
     def callback(self):
@@ -984,6 +994,8 @@ class ImpactFunction(object):
 
         else:
             self._provenance_ready = True
+            self._datetime = datetime.now()
+            self._provenance['datetime'] = self.datetime
             return ANALYSIS_SUCCESS, None
 
     @profile

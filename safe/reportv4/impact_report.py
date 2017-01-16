@@ -264,7 +264,7 @@ class ImpactReport(object):
 
         :param impact_function: Impact function instance for the report
         :type impact_function:
-            safe.impact_function_v4.impact_function.ImpactFunction
+            safe.impact_function.impact_function.ImpactFunction
         """
         LOGGER.debug('InaSAFE Impact Report class initialised')
         self._iface = iface
@@ -361,7 +361,7 @@ class ImpactReport(object):
     def impact_function(self):
         """Getter for impact function instance to use
 
-        :rtype: safe.impact_function_v4.impact_function.ImpactFunction
+        :rtype: safe.impact_function.impact_function.ImpactFunction
         """
         return self._impact_function
 

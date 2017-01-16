@@ -197,7 +197,7 @@
             <gco:Boolean/>
           </multipart_polygon>
           <source>
-            <gco:CharacterString/>
+            <gco:CharacterString>Test layer</gco:CharacterString>
           </source>
           <value_map>
             <gco:Dictionary>{&quot;high&quot;: [&quot;high&quot;], &quot;medium&quot;: [&quot;medium&quot;], &quot;low&quot;: [&quot;low&quot;]}</gco:Dictionary>

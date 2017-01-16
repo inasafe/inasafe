@@ -35,7 +35,6 @@ def impact_table_extractor(impact_report, component_metadata):
     # Imported here to avoid cyclic dependencies
     from safe.definitions.report import (
         analysis_result_component,
-        population_infographic_component,
         analysis_breakdown_component,
         action_checklist_component,
         notes_assumptions_component,

@@ -2,7 +2,6 @@
 """
 Module for class container of Report and ReportComponent Metadata.
 """
-import os
 from importlib import import_module
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -30,7 +29,7 @@ class ReportComponentsMetadata(object):
 
     def __init__(
             self, key, processor, extractor,
-            output_format, template, output_path, extra_args=None):
+            output_format, template, output_path, extra_args=None, **kwargs):
         """Base class for component metadata
 
         ReportComponentMetadata is a metadata about the component element of
@@ -210,10 +209,10 @@ class Jinja2ComponentsMetadata(ReportComponentsMetadata):
 
     def __init__(
             self, key, processor, extractor,
-            output_format, template, output_path, extra_args=None):
+            output_format, template, output_path, extra_args=None, **kwargs):
         super(Jinja2ComponentsMetadata, self).__init__(
             key, processor, extractor, output_format, template, output_path,
-            extra_args=extra_args)
+            extra_args=extra_args, **kwargs)
 
 
 class QgisComposerComponentsMetadata(ReportComponentsMetadata):
@@ -233,9 +232,14 @@ class QgisComposerComponentsMetadata(ReportComponentsMetadata):
     def __init__(
             self, key, processor, extractor,
             output_format, template, output_path, extra_args=None,
-            page_dpi=300, page_width=210, page_height=297):
+            orientation='portrait',
+            page_dpi=300, page_width=210, page_height=297,
+            **kwargs):
         """
         Provides 3 more options
+
+        :param orientation: the orientation of the paper
+        :type orientation: 'portrait' | 'landscape'
 
         :param page_dpi: the page dpi of the output
         :type page_dpi: float
@@ -248,10 +252,19 @@ class QgisComposerComponentsMetadata(ReportComponentsMetadata):
         """
         super(QgisComposerComponentsMetadata, self).__init__(
             key, processor, extractor, output_format, template, output_path,
-            extra_args=extra_args)
+            extra_args=extra_args, **kwargs)
+        self._orientation = orientation
         self._page_dpi = page_dpi
         self._page_width = page_width
         self._page_height = page_height
+
+    @property
+    def orientation(self):
+        """
+        :return: Page orientation of the output
+        :rtype: 'portrait' | 'landscape'
+        """
+        return self._orientation
 
     @property
     def page_dpi(self):
@@ -309,24 +322,37 @@ class ReportMetadata(object):
 
     @classmethod
     def _load_components(cls, component_metadata):
-        key = component_metadata.get('key')
+        # key = component_metadata.get('key')
         component_type = component_metadata.get('type')
-        processor = component_metadata.get('processor')
-        extractor = component_metadata.get('extractor')
-        output_format = component_metadata.get('output_format')
+        # processor = component_metadata.get('processor')
+        # extractor = component_metadata.get('extractor')
+        # output_format = component_metadata.get('output_format')
         template = component_metadata.get('template')
-        output_path = component_metadata.get('output_path')
-        extra_args = component_metadata.get('extra_args', {})
+        # output_path = component_metadata.get('output_path')
+        # extra_args = component_metadata.get('extra_args', {})
+        kwargs = component_metadata
+        kwargs['template'] = template
         if (component_type ==
                 ReportComponentsMetadata.AvailableComponent.Jinja2):
-            return Jinja2ComponentsMetadata(
-                key, processor, extractor, output_format, template,
-                output_path, extra_args=extra_args)
+            # return Jinja2ComponentsMetadata(
+            #     key, processor, extractor, output_format, template,
+            #     output_path, extra_args=extra_args)
+            return Jinja2ComponentsMetadata(**kwargs)
         elif (component_type ==
                 ReportComponentsMetadata.AvailableComponent.QGISComposer):
-            return QgisComposerComponentsMetadata(
-                key, processor, extractor, output_format, template,
-                output_path, extra_args=extra_args)
+            # page_dpi = component_metadata.get('page_dpi', None)
+            # page_height = component_metadata.get('page_height', None)
+            # page_width = component_metadata.get('page_width', None)
+            # orientation = component_metadata.get('orientation', None)
+            # return QgisComposerComponentsMetadata(
+            #     key, processor, extractor, output_format, template,
+            #     output_path,
+            #     orientation=orientation,
+            #     page_dpi=page_dpi,
+            #     page_height=page_height,
+            #     page_width=page_width,
+            #     extra_args=extra_args)
+            return QgisComposerComponentsMetadata(**kwargs)
 
     @property
     def key(self):
