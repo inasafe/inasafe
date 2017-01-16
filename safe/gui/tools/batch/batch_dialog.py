@@ -49,7 +49,9 @@ from safe.definitions.constants import (
     PREPARE_SUCCESS,
     ANALYSIS_FAILED_BAD_CODE,
     ANALYSIS_FAILED_BAD_INPUT)
-from safe.gui.analysis_utilities import generate_impact_report
+from safe.gui.analysis_utilities import (
+    generate_impact_report,
+    generate_impact_map_report)
 from safe.utilities.gis import extent_string_to_array
 from safe.common.exceptions import FileNotFoundError
 from safe.common.utilities import temp_dir
@@ -466,6 +468,8 @@ class BatchDialog(QDialog, FORM_CLASS):
                         # map report is still waiting update from lucernae
                         try:
                             generate_impact_report(impact_function, self.iface)
+                            generate_impact_map_report(impact_function,
+                                                       self.iface)
                         except:
                             status_item.setText("Report failed to generate")
                     else:
