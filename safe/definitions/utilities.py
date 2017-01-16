@@ -157,7 +157,7 @@ def get_fields(layer_purpose, layer_subcategory=None, replace_null=None):
 
     :param replace_null: If None all fields are returned, if True only if
         it's True, if False only if it's False.
-    :type replace_null: None, bool
+    :type replace_null: None or bool
 
     :returns: List of fields.
     :rtype: list
