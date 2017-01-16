@@ -67,6 +67,10 @@ from safe.definitions.layer_purposes import (
     layer_purpose_exposure_breakdown,
     layer_purpose_profiling,
 )
+from safe.definitions.hazard import hazard_generic
+from safe.definitions.hazard_category import (
+    hazard_category_single_event, hazard_category_multiple_event)
+from safe.impact_function.provenance_utilities import get_map_title
 from safe.definitions.constants import (
     inasafe_keyword_version_key,
     ANALYSIS_SUCCESS,
@@ -1390,7 +1394,7 @@ class ImpactFunction(object):
             if geometry in [QGis.Line, QGis.Polygon] and is_divisible:
 
                 self.set_state_process(
-                'exposure', 'Make exposure layer valid')
+                    'exposure', 'Make exposure layer valid')
                 self._exposure = clean_layer(self.exposure)
                 if self.debug_mode:
                     self.debug_layer(self.exposure)
@@ -1520,9 +1524,22 @@ class ImpactFunction(object):
         if not self._provenance_ready:
             return {}
 
+        exposure = definition(
+            self._provenance['exposure_keywords'][ 'exposure'])
+
+        hazard = definition(
+            self._provenance['hazard_keywords']['hazard'])
+        hazard_category = definition(self._provenance['hazard_keywords'][
+            'hazard_category'])
+
         # InaSAFE
         self._provenance['impact_function_name'] = self.name
         self._provenance['impact_function_title'] = self.title
+
+        # Map title
+        self._provenance['map_title'] = get_map_title(
+            hazard, exposure, hazard_category)
+
         if self.requested_extent:
             self._provenance['requested_extent'] = (
                 self.requested_extent.asWktCoordinates()
