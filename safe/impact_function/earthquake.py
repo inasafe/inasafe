@@ -16,9 +16,17 @@ from qgis.core import (
 )
 
 from safe.definitions.fields import (
-    aggregation_id_field, aggregation_name_field)
+    aggregation_id_field,
+    total_field,
+    fatalities_field,
+    displaced_field,
+    population_exposed_per_mmi_field,
+    population_displaced_per_mmi,
+    fatalities_per_mmi_field,
+)
 from safe.definitions.layer_purposes import (
     layer_purpose_aggregation_impacted, layer_purpose_exposure_impacted)
+from safe.gisv4.vector.tools import create_field_from_definition
 from safe.gis.numerics import log_normal_cdf
 from safe.gisv4.raster.write_raster import array_to_raster, make_array
 from safe.common.utilities import unique_filename
@@ -176,31 +184,43 @@ def make_summary_layer(exposed, aggregation, fatality_rate):
     field_mapping = {}
 
     aggregation.startEditing()
+    inasafe_fields = aggregation.keywords['inasafe_fields']
+    id_field = inasafe_fields[aggregation_id_field['key']]
 
-    field = QgsField('total_exposed', QVariant.Int)
+    field = create_field_from_definition(total_field)
     aggregation.addAttribute(field)
     field_mapping[field.name()] = aggregation.fieldNameIndex(field.name())
+    inasafe_fields[total_field['key']] = total_field['field_name']
 
-    field = QgsField('total_fatalities', QVariant.Int)
+    field = create_field_from_definition(fatalities_field)
     aggregation.addAttribute(field)
     field_mapping[field.name()] = aggregation.fieldNameIndex(field.name())
+    inasafe_fields[fatalities_field['key']] = fatalities_field['field_name']
 
-    field = QgsField('total_displaced', QVariant.Int)
+    field = create_field_from_definition(displaced_field)
     aggregation.addAttribute(field)
     field_mapping[field.name()] = aggregation.fieldNameIndex(field.name())
+    inasafe_fields[displaced_field['key']] = displaced_field['field_name']
 
     for mmi in xrange(2, 11):
-        field = QgsField('mmi_%d_exposed' % mmi, QVariant.Int)
+        field = create_field_from_definition(
+            population_exposed_per_mmi_field, mmi)
         aggregation.addAttribute(field)
         field_mapping[field.name()] = aggregation.fieldNameIndex(field.name())
+        value = population_exposed_per_mmi_field['field_name'] % mmi
+        inasafe_fields[population_exposed_per_mmi_field['key'] % mmi] = value
 
-        field = QgsField('mmi_%d_fatalities' % mmi, QVariant.Int)
+        field = create_field_from_definition(fatalities_per_mmi_field, mmi)
         aggregation.addAttribute(field)
         field_mapping[field.name()] = aggregation.fieldNameIndex(field.name())
+        value = fatalities_per_mmi_field['field_name'] % mmi
+        inasafe_fields[fatalities_per_mmi_field['key'] % mmi] = value
 
-        field = QgsField('mmi_%d_displaced' % mmi, QVariant.Int)
+        field = create_field_from_definition(population_displaced_per_mmi, mmi)
         aggregation.addAttribute(field)
         field_mapping[field.name()] = aggregation.fieldNameIndex(field.name())
+        value = population_displaced_per_mmi['field_name'] % mmi
+        inasafe_fields[population_displaced_per_mmi['key'] % mmi] = value
 
         exposed_per_agg_zone = {}
     for (mmi, agg), count in exposed.iteritems():
@@ -212,9 +232,6 @@ def make_summary_layer(exposed, aggregation, fatality_rate):
     grand_total_exposed = 0
     grand_total_fatalities = 0
     grand_total_displaced = 0
-
-    inasafe_fields = aggregation.keywords['inasafe_fields']
-    id_field = inasafe_fields[aggregation_id_field['key']]
 
     for agg_feature in aggregation.getFeatures():
         agg_zone = agg_feature[id_field]
@@ -249,16 +266,18 @@ def make_summary_layer(exposed, aggregation, fatality_rate):
             total_displaced += mmi_displaced
 
         aggregation.changeAttributeValue(
-            agg_feature.id(), field_mapping['total_exposed'], total_exposed)
+            agg_feature.id(),
+            field_mapping[total_field['field_name']],
+            total_exposed)
 
         aggregation.changeAttributeValue(
             agg_feature.id(),
-            field_mapping['total_fatalities'],
+            field_mapping[fatalities_field['field_name']],
             total_fatalities)
 
         aggregation.changeAttributeValue(
             agg_feature.id(),
-            field_mapping['total_displaced'],
+            field_mapping[displaced_field['field_name']],
             total_displaced)
 
         grand_total_exposed += total_exposed
