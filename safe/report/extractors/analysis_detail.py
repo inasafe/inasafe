@@ -247,6 +247,9 @@ def analysis_detail_extractor(impact_report, component_metadata):
     context['header'] = tr('Estimated number of %(exposure)s by type') % {
         'exposure': exposure_type['name']
     }
+    context['notes'] = tr(
+        'Columns and rows containing only 0 or "No data" values are '
+        'excluded from the tables.')
     context['detail_table'] = {
         'headers': headers,
         'details': details,

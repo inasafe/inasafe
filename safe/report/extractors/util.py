@@ -89,7 +89,7 @@ def jinja2_output_as_string(impact_report, component_key):
     for c in metadata.components:
         if c.key == component_key:
             if c.output_format == 'string':
-                return c.output
+                return c.output or ''
             elif c.output_format == 'file':
                 try:
                     filename = os.path.join(
@@ -107,6 +107,7 @@ def jinja2_output_as_string(impact_report, component_key):
 
 def value_from_field_name(field_name, analysis_layer):
     """Get the value of analysis layer based on field name.
+    Can also be used for any layer with one feature.
 
     :param field_name: Field name of analysis layer that we want to get
     :type field_name: str
