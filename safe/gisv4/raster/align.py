@@ -80,7 +80,8 @@ def align_rasters(hazard_layer, exposure_layer, extent):
     if index < 0:
         raise AlignRastersError(tr('Unable to select reference layer'))
 
-    if not align.setParametersFromRaster(inputs[index].inputFilename):
+    if not align.setParametersFromRaster(
+            inputs[index].inputFilename, exposure_layer.crs().toWkt()):
         raise AlignRastersError(align.errorMessage())
 
     # Setup clip extent
