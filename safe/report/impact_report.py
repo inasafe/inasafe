@@ -319,7 +319,7 @@ class ImpactReport(object):
         """Getter to the template
 
         :return: ReportMetadata
-        :rtype: safe.reportv4.report_metadata.ReportMetadata
+        :rtype: safe.report.report_metadata.ReportMetadata
         """
         return self._metadata
 

@@ -2,7 +2,7 @@
 import datetime
 
 from safe.definitions.fields import analysis_name_field
-from safe.reportv4.extractors.util import value_from_field_name
+from safe.report.extractors.util import value_from_field_name
 from safe.utilities.i18n import tr
 from safe.common.version import get_version
 
@@ -150,11 +150,11 @@ def qgis_composer_extractor(impact_report, component_metadata):
 
     :param impact_report: the impact report that acts as a proxy to fetch
         all the data that extractor needed
-    :type impact_report: safe.reportv4.impact_report.ImpactReport
+    :type impact_report: safe.report.impact_report.ImpactReport
 
     :param component_metadata: the component metadata. Used to obtain
         information about the component we want to render
-    :type component_metadata: safe.reportv4.report_metadata.
+    :type component_metadata: safe.report.report_metadata.
         ReportComponentsMetadata
 
     :return: context for rendering phase

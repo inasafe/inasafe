@@ -21,10 +21,10 @@ from safe.definitions.fields import (
 from safe.definitions.hazard_classifications import all_hazard_classes
 from safe.definitions.minimum_needs import minimum_needs_fields
 from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
-from safe.reportv4.extractors.composer import QGISComposerContext
-from safe.reportv4.extractors.infographic_elements.svg_charts import \
+from safe.report.extractors.composer import QGISComposerContext
+from safe.report.extractors.infographic_elements.svg_charts import \
     DonutChartContext
-from safe.reportv4.extractors.util import (
+from safe.report.extractors.util import (
     round_affecter_number,
     jinja2_output_as_string,
     value_from_field_name)
@@ -107,11 +107,11 @@ def population_infographic_extractor(impact_report, component_metadata):
 
     :param impact_report: the impact report that acts as a proxy to fetch
         all the data that extractor needed
-    :type impact_report: safe.reportv4.impact_report.ImpactReport
+    :type impact_report: safe.report.impact_report.ImpactReport
 
     :param component_metadata: the component metadata. Used to obtain
         information about the component we want to render
-    :type component_metadata: safe.reportv4.report_metadata.
+    :type component_metadata: safe.report.report_metadata.
         ReportComponentsMetadata
 
     :return: context for rendering phase
@@ -350,11 +350,11 @@ def infographic_layout_extractor(impact_report, component_metadata):
 
     :param impact_report: the impact report that acts as a proxy to fetch
         all the data that extractor needed
-    :type impact_report: safe.reportv4.impact_report.ImpactReport
+    :type impact_report: safe.report.impact_report.ImpactReport
 
     :param component_metadata: the component metadata. Used to obtain
         information about the component we want to render
-    :type component_metadata: safe.reportv4.report_metadata.
+    :type component_metadata: safe.report.report_metadata.
         ReportComponentsMetadata
 
     :return: context for rendering phase
@@ -389,11 +389,11 @@ def infographic_pdf_extractor(impact_report, component_metadata):
 
     :param impact_report: the impact report that acts as a proxy to fetch
         all the data that extractor needed
-    :type impact_report: safe.reportv4.impact_report.ImpactReport
+    :type impact_report: safe.report.impact_report.ImpactReport
 
     :param component_metadata: the component metadata. Used to obtain
         information about the component we want to render
-    :type component_metadata: safe.reportv4.report_metadata.
+    :type component_metadata: safe.report.report_metadata.
         ReportComponentsMetadata
 
     :return: context for rendering phase

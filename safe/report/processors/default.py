@@ -41,12 +41,12 @@ def jinja2_renderer(impact_report, component):
 
     :param impact_report: ImpactReport contains data about the report that is
         going to be generated
-    :type impact_report: safe.reportv4.impact_report.ImpactReport
+    :type impact_report: safe.report.impact_report.ImpactReport
 
     :param component: Contains the component metadata and context for
         rendering the output
     :type component:
-        safe.reportv4.report_metadata.QgisComposerComponentsMetadata
+        safe.report.report_metadata.QgisComposerComponentsMetadata
 
     :return: whatever type of output the component should be
     """
@@ -93,17 +93,17 @@ def qgis_composer_html_renderer(impact_report, component):
 
     :param impact_report: ImpactReport contains data about the report that is
         going to be generated
-    :type impact_report: safe.reportv4.impact_report.ImpactReport
+    :type impact_report: safe.report.impact_report.ImpactReport
 
     :param component: Contains the component metadata and context for
         rendering the output
     :type component:
-        safe.reportv4.report_metadata.QgisComposerComponentsMetadata
+        safe.report.report_metadata.QgisComposerComponentsMetadata
 
     :return: whatever type of output the component should be
     """
     context = component.context
-    """:type: safe.reportv4.extractors.composer.QGISComposerContext"""
+    """:type: safe.report.extractors.composer.QGISComposerContext"""
     qgis_composition_context = impact_report.qgis_composition_context
     inasafe_context = impact_report.inasafe_context
 
@@ -191,17 +191,17 @@ def qgis_composer_renderer(impact_report, component):
 
     :param impact_report: ImpactReport contains data about the report that is
         going to be generated
-    :type impact_report: safe.reportv4.impact_report.ImpactReport
+    :type impact_report: safe.report.impact_report.ImpactReport
 
     :param component: Contains the component metadata and context for
         rendering the output
     :type component:
-        safe.reportv4.report_metadata.QgisComposerComponentsMetadata
+        safe.report.report_metadata.QgisComposerComponentsMetadata
 
     :return: whatever type of output the component should be
     """
     context = component.context
-    """:type: safe.reportv4.extractors.composer.QGISComposerContext"""
+    """:type: safe.report.extractors.composer.QGISComposerContext"""
     qgis_composition_context = impact_report.qgis_composition_context
     inasafe_context = impact_report.inasafe_context
 

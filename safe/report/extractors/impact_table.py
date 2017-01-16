@@ -2,8 +2,8 @@
 
 from __future__ import absolute_import
 from safe.common.utilities import safe_dir
-from safe.reportv4.extractors.composer import QGISComposerContext
-from safe.reportv4.extractors.util import jinja2_output_as_string
+from safe.report.extractors.composer import QGISComposerContext
+from safe.report.extractors.util import jinja2_output_as_string
 from safe.utilities.i18n import tr
 from safe.utilities.resources import (
     resource_url,
@@ -20,11 +20,11 @@ def impact_table_extractor(impact_report, component_metadata):
 
     :param impact_report: the impact report that acts as a proxy to fetch
         all the data that extractor needed
-    :type impact_report: safe.reportv4.impact_report.ImpactReport
+    :type impact_report: safe.report.impact_report.ImpactReport
 
     :param component_metadata: the component metadata. Used to obtain
         information about the component we want to render
-    :type component_metadata: safe.reportv4.report_metadata.
+    :type component_metadata: safe.report.report_metadata.
         ReportComponentsMetadata
 
     :return: context for rendering phase
@@ -93,11 +93,11 @@ def impact_table_pdf_extractor(impact_report, component_metadata):
 
     :param impact_report: the impact report that acts as a proxy to fetch
         all the data that extractor needed
-    :type impact_report: safe.reportv4.impact_report.ImpactReport
+    :type impact_report: safe.report.impact_report.ImpactReport
 
     :param component_metadata: the component metadata. Used to obtain
         information about the component we want to render
-    :type component_metadata: safe.reportv4.report_metadata.ReportMetadata
+    :type component_metadata: safe.report.report_metadata.ReportMetadata
 
     :return: context for rendering phase
     """

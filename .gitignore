@@ -46,7 +46,7 @@ realtime/server_config.py
 headless/celeryconfig.py
 realtime/celeryconfig.py
 safe/gui/ui/*.py
-safe/reportv4/test/output
+safe/report/test/output
 result.txt
 riab_demo_data
 riab_test_data
