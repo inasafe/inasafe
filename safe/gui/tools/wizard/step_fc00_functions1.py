@@ -2,7 +2,6 @@
 """InaSAFE Wizard Step for Choosing Exposure and Hazard"""
 
 from copy import deepcopy
-# noinspection PyPackageRequirements
 from PyQt4 import QtCore, QtGui
 from PyQt4.QtCore import pyqtSignature
 
@@ -106,13 +105,7 @@ class StepFcFunctions1(WizardStep, FORM_CLASS):
 
     def populate_function_table_1(self):
         """Populate the tblFunctions1 table with available functions."""
-        # The hazard category radio buttons are now removed -
-        # make this parameter of IFM.available_hazards() optional
         hazards = deepcopy(hazard_all)
-        # Remove 'generic' from hazards
-        for hazard in hazards:
-            if hazard['key'] == 'generic':
-                hazards.remove(hazard)
         exposures = exposure_all
 
         self.lblAvailableFunctions1.clear()
