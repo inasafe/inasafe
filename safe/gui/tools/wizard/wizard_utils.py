@@ -211,3 +211,31 @@ def clear_layout(layout):
 
         # Remove the item from layout
         layout.removeItem(item)
+
+
+def skip_inasafe_field(layer, inasafe_fields):
+    """Check if it possible to skip inasafe field step.
+
+    The function will check if the layer has a specified field type.
+
+    :param layer: A Qgis Vector Layer
+    :type layer: QgsVectorLayer
+
+    :param inasafe_fields: List of non compulsory InaSAFE fields default.
+    :type inasafe_fields: list
+
+    :returns: True if there are no specified field type.
+    :rtype: bool
+    """
+    layer_data_provider = layer.dataProvider()
+    # Iterate through all inasafe fields
+    for inasafe_field in inasafe_fields:
+        for field in layer_data_provider.fields():
+            # Check the field type
+            if isinstance(inasafe_field['type'], list):
+                if field.type() in inasafe_field['type']:
+                    return False
+            else:
+                if field.type() == inasafe_field['type']:
+                    return False
+    return True
