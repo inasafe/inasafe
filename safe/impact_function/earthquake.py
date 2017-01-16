@@ -15,10 +15,10 @@ from qgis.core import (
     QgsVectorFileWriter,
 )
 
+from safe.definitions.fields import (
+    aggregation_id_field, aggregation_name_field)
 from safe.gis.numerics import log_normal_cdf
-from safe.gisv4.raster.align import align_rasters
 from safe.gisv4.raster.write_raster import array_to_raster, make_array
-from safe.gisv4.raster.rasterize import rasterize_vector_layer
 from safe.common.utilities import unique_filename
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -78,86 +78,11 @@ def bayesian_fatality_rates():
     return fatality_rate
 
 
-def make_aggregation_layer(crs, extent):
-    """Create a polygon layer with single geometry covering the given extent.
-
-    This is to generate aggregation layer if none was given to us.
-
-    TODO We will remove this function and use the function in
-        safe.impact_function.create_extra_layers
-    """
-    output_filename = unique_filename(
-        prefix='aggregation_extent', suffix='.shp')
-
-    fields = QgsFields()
-    fields.append(QgsField('name', QVariant.String))
-    QgsVectorFileWriter.deleteShapeFile(output_filename)
-    writer = QgsVectorFileWriter(
-        output_filename, 'utf-8', fields, QGis.WKBPolygon, crs)
-    feature = QgsFeature(fields)
-    feature.setGeometry(QgsGeometry.fromRect(extent))
-    feature['name'] = 'all'
-    writer.addFeature(feature)
-    del writer
-
-    layer = QgsVectorLayer(output_filename, 'agg extent', 'ogr')
-    assert layer.isValid()
-    return layer
-
-
-def temporary_aggregation_layer(aggregation_layer, aggregation_field, crs):
-    """Add integer attribute to the aggregation layer if the aggregation field
-    is not integer and also reproject aggregation layer if not in the same CRS.
-
-    TODO : We will remove this function and use the function in
-        safe.impact_function.create_extra_layers
-
-    :returns: The layer and dictionary of mapping { name: index }.
-    :rtype: (QgsVectorLayer, dict)
-    """
-    aggregation_name_to_index = {}
-    last_feature_index = 0
-    ct = None
-
-    if crs != aggregation_layer.crs():
-        ct = QgsCoordinateTransform(aggregation_layer.crs(), crs)
-
-    output_filename = unique_filename(prefix='aggregation_tmp', suffix='.shp')
-
-    fields = QgsFields()
-    fields.append(QgsField('name_index', QVariant.Int))
-    writer = QgsVectorFileWriter(
-        output_filename,
-        'utf-8',
-        fields,
-        aggregation_layer.wkbType(),
-        aggregation_layer.crs())
-
-    for f in aggregation_layer.getFeatures():
-        feature_name = f[aggregation_field]
-        if feature_name not in aggregation_name_to_index:
-            last_feature_index += 1
-            aggregation_name_to_index[feature_name] = last_feature_index
-
-        f2 = QgsFeature(fields)
-        f2['name_index'] = aggregation_name_to_index[feature_name]
-        geom = f.geometry()
-        if ct:
-            geom.transform(ct)
-        f2.setGeometry(geom)
-
-        writer.addFeature(f2)
-
-    del writer
-    aggregation_layer_tmp = QgsVectorLayer(
-        output_filename, 'agg tmp', 'memory')
-
-    return aggregation_layer_tmp, aggregation_name_to_index
-
-
 def exposed_people_stats(hazard, exposure, aggregation):
-    """Calculate the number of exposed people per MMI level per aggregation
-    zone and prepare raster layer outputs.
+    """Calculate the number of exposed people per MMI level per aggregation.
+
+    Calculate the number of exposed people per MMI level per aggregation zone
+    and prepare raster layer outputs.
 
     :param hazard: The earthquake raster layer.
     :type hazard: QgsRasterLayer
@@ -168,8 +93,10 @@ def exposed_people_stats(hazard, exposure, aggregation):
     :param aggregation: The aggregation layer.
     :type aggregation: QgsVectorLayer
 
-    :return: A tuple with the aggregation vector layer and the exposed raster.
-    :rtype: (QgsVectorLayer, QgsRasterLayer)
+    :return: A tuble with the exposed per MMI level par aggregation
+        and the exposed raster.
+        Tuple (mmi, agg_zone), value: number of exposed people
+    :rtype: (dict, QgsRasterLayer)
     """
     exposed_raster_filename = unique_filename(prefix='exposed', suffix='.tif')
 
@@ -212,15 +139,13 @@ def exposed_people_stats(hazard, exposure, aggregation):
     exposed_raster = QgsRasterLayer(exposed_raster_filename, 'exposed', 'gdal')
     assert exposed_raster.isValid()
 
+    exposed_raster.keywords = dict(exposure.keywords)
+    exposed_raster.keywords['title'] = 'exposed_raster'
+
     return exposed, exposed_raster
 
 
-def make_summary_layer(
-        exposed,
-        aggregation_layer,
-        aggregation_field,
-        aggregation_name_to_index,
-        fatality_rate):
+def make_summary_layer(exposed, aggregation_layer, fatality_rate):
     """Given the dictionary of affected people counts per hazard and
     aggregation zones, create a copy of the aggregation layer with statistics.
     """
@@ -260,9 +185,13 @@ def make_summary_layer(
         aggregation_layer.wkbType(),
         aggregation_layer.crs())
 
+    inasafe_fields = aggregation_layer.keywords['inasafe_fields']
+    name_field = inasafe_fields[aggregation_name_field['key']]
+    id_field = inasafe_fields[aggregation_id_field['key']]
+
     for agg_feature in aggregation_layer.getFeatures():
-        agg_zone_name = agg_feature[aggregation_field]
-        agg_zone = aggregation_name_to_index[agg_zone_name]
+        agg_zone_name = agg_feature[name_field]
+        agg_zone = agg_feature[id_field]
 
         feature = QgsFeature(fields)
         feature.setGeometry(agg_feature.geometry())
@@ -305,58 +234,8 @@ def make_summary_layer(
     del writer
     layer = QgsVectorLayer(output_filename, 'summary', 'ogr')
     assert layer.isValid()
+
+    layer.keywords = dict(aggregation_layer.keywords)
+    layer.keywords['title'] = 'summary_EQ'
+
     return layer, totals
-
-
-def calc_impact(
-        hazard,
-        exposure,
-        aggregation,
-        aggregation_field,
-        extent,
-        fatality_rate):
-    """Main function to calculate the impact of earthquake on population.
-
-    1. Prepare hazard, exposure, aggregation raster layers to common grid.
-
-    2. Get sums of exposed people per hazard MMI level and aggregation zone.
-
-    3. Create vector output based on aggregation layer with statistics of
-        fatalities and displaced people for each aggregation zone and MMI
-        level.
-    """
-
-    # STEP 1: prepare data
-
-    hazard_aligned, exposure_aligned = align_rasters(
-        hazard, exposure, extent)
-
-    if not aggregation:
-        # If we didn't get an aggregation layer, we will make one ourselves
-        # covering the whole analysis area.
-        aggregation = make_aggregation_layer(
-            exposure.crs(), exposure.extent())
-        aggregation_field = 'name'
-
-    aggregation_layer_tmp, mapping = temporary_aggregation_layer(
-        aggregation, aggregation_field, exposure.crs())
-
-    hazard_provider = hazard_aligned.dataProvider()
-    aggregation_aligned = rasterize_vector_layer(
-        aggregation_layer_tmp,
-        'name_index',
-        hazard_provider.xSize(),
-        hazard_provider.ySize(),
-        hazard_aligned.extent())
-
-    # STEP 2: calculate statistics
-
-    exposed, exposed_raster = exposed_people_stats(
-        hazard_aligned, exposure_aligned, aggregation_aligned)
-
-    # STEP 3: make output vector layer with aggregate counts
-
-    summary_vector, totals = make_summary_layer(
-        exposed, aggregation, aggregation_field, mapping, fatality_rate)
-
-    return summary_vector, exposed_raster, totals

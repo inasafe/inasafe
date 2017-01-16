@@ -52,12 +52,18 @@ from safe.gisv4.raster.clip_bounding_box import clip_by_extent
 from safe.gisv4.raster.reclassify import reclassify as reclassify_raster
 from safe.gisv4.raster.polygonize import polygonize
 from safe.gisv4.raster.zonal_statistics import zonal_stats
+from safe.gisv4.raster.align import align_rasters
+from safe.gisv4.raster.rasterize import rasterize_vector_layer
 from safe.definitions.post_processors import post_processors
 from safe.definitions.analysis_steps import analysis_steps
 from safe.definitions.utilities import definition
 from safe.definitions.exposure import indivisible_exposure
 from safe.definitions.fields import (
-    size_field, exposure_class_field, hazard_class_field)
+    size_field,
+    exposure_class_field,
+    hazard_class_field,
+    aggregation_name_field,
+)
 from safe.definitions.layer_purposes import (
     layer_purpose_exposure_impacted,
     layer_purpose_aggregate_hazard_impacted,
@@ -84,6 +90,11 @@ from safe.common.exceptions import (
     NoKeywordsFoundError,
     NoFeaturesInExtentError,
     ProcessingInstallationError,
+)
+from safe.impact_function.earthquake import (
+    itb_fatality_rates,
+    exposed_people_stats,
+    make_summary_layer,
 )
 from safe.impact_function.postprocessors import (
     run_single_post_processor, enough_input)
@@ -1152,7 +1163,40 @@ class ImpactFunction(object):
     def earthquake_raster_population_raster(self):
         """Perform a damage curve analysis with EQ raster on population raster.
         """
-        pass
+        self.set_state_process(
+            'hazard',
+            'Align the hazard layer with the exposure')
+        self.set_state_process(
+            'exposure',
+            'Align the exposure layer with the exposure')
+        self.hazard, self.exposure = align_rasters(
+            self.hazard, self.exposure, self.analysis_impacted.extent())
+        if self.debug_mode:
+            self.debug_layer(self.hazard)
+            self.debug_layer(self.exposure)
+
+        self.set_state_process(
+            'aggregation', 'Rasterize the aggregation layer')
+        aggregation_aligned = rasterize_vector_layer(
+            self.aggregation,
+            self.hazard.dataProvider().xSize(),
+            self.hazard.dataProvider().ySize(),
+            self.hazard.extent())
+        if self.debug_mode:
+            self.debug_layer(aggregation_aligned)
+
+        self.set_state_process('exposure', 'Exposed people')
+        exposed, exposed_raster = exposed_people_stats(
+            self.hazard, self.exposure, aggregation_aligned)
+        if self.debug_mode:
+            self.debug_layer(exposed_raster)
+
+        self.set_state_process('impact function', 'Set summaries')
+        self._aggregation_impacted, totals = make_summary_layer(
+            exposed, self.aggregation, itb_fatality_rates())
+        print totals
+        if self.debug_mode:
+            self.debug_layer(self._aggregation_impacted)
 
     @profile
     def aggregation_preparation(self):
