@@ -123,12 +123,18 @@ def content():
     message.add(header)
     message.add(extent_help())
 
-    header = m.Heading(tr('InaSAFE Options'), **SECTION_STYLE)
-    message.add(header)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'inasafe-options',
+        tr('InaSAFE Options'))
     message.add(options_help())
 
-    header = m.Heading(tr('Defining minimum needs'), **SECTION_STYLE)
-    message.add(header)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'minimum-needs',
+        tr('Minimum Needs'))
     header = m.Heading(tr('The minimum needs tool'), **SUBSECTION_STYLE)
     message.add(header)
     message.add(needs_help())
@@ -152,9 +158,12 @@ def content():
     #  Analysis workflow
     ##
 
+    _create_section_header(
+        message,
+        table_of_contents,
+        'analysis-steps',
+        tr('Analysis steps'))
     steps = definitions.analysis_steps.values()
-    header = m.Heading(tr('Analysis steps'), **SECTION_STYLE)
-    message.add(header)
     analysis = definitions.concepts['analysis']
     message.add(analysis['description'])
     url = _definition_screenshot_url(analysis)
@@ -178,17 +187,23 @@ def content():
     #  Exposure definitions
     ##
 
+    _create_section_header(
+        message,
+        table_of_contents,
+        'exposures',
+        tr('Exposure Types'))
     exposures = definitions.exposures
-    header = m.Heading(tr('Exposures'), **SECTION_STYLE)
-    message.add(header)
     message.add(definition_to_message(exposures))
 
     ##
     #  Defaults
     ##
 
-    header = m.Heading(tr('Defaults'), **SECTION_STYLE)
-    message.add(header)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'defaults',
+        tr('InaSAFE Defaults'))
     table = m.Table(style_class='table table-condensed table-striped')
     row = m.Row()
     row.add(m.Cell(tr('Name')), header_flag=True)
@@ -218,8 +233,11 @@ def content():
     #  All Fields
     ##
 
-    header = m.Heading(tr('All fields'), **SECTION_STYLE)
-    message.add(header)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'all-fields',
+        tr('All fields'))
     _create_fields_section(
         message,
         tr('Exposure fields'),
@@ -257,8 +275,11 @@ def content():
     #  Geometries
     ##
 
-    header = m.Heading(tr('Layer Geometry Types'), **SECTION_STYLE)
-    message.add(header)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'geometries',
+        tr('Layer Geometry Types'))
     message.add(
         definition_to_message(definitions.layer_geometry_point, INFO_STYLE))
     message.add(
@@ -272,16 +293,22 @@ def content():
     #  Layer Modes
     ##
 
-    header = m.Heading(tr('Layer Modes'), **SECTION_STYLE)
-    message.add(header)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'layer-modes',
+        tr('Layer Modes'))
     message.add(definition_to_message(definitions.layer_mode))
 
     ##
     #  Layer Purposes
     ##
 
-    header = m.Heading(tr('Layer Purposes'), **SECTION_STYLE)
-    message.add(header)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'layer-purposes',
+        tr('Layer Purposes'))
     message.add(definition_to_message(
         definitions.layer_purpose_hazard, INFO_STYLE))
     message.add(definition_to_message(
@@ -303,8 +330,11 @@ def content():
     # All units
     ##
 
-    header = m.Heading(tr('All Units'), **SECTION_STYLE)
-    message.add(header)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'all-units',
+        tr('All Units'))
     table = m.Table(style_class='table table-condensed table-striped')
     row = m.Row()
     row.add(m.Cell(tr('Name')), header_flag=True)
@@ -325,8 +355,11 @@ def content():
     #  Post processors
     ##
 
-    header = m.Heading(tr('Post Processors'), **SECTION_STYLE)
-    message.add(header)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'post-processors',
+        tr('Post Processors'))
     message.add(m.Paragraph(tr('Post Processor Input Types')))
     table = _create_post_processor_subtable(
         definitions.post_processor_input_types
