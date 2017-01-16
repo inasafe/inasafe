@@ -255,6 +255,8 @@ class TestImpactReport(unittest.TestCase):
 
         expected_context = {
             'header': u'Estimated number of Structures by type',
+            'notes': u'Columns and rows containing only 0 or "No data" '
+                     u'values are excluded from the tables.',
             'detail_table': {
                 'headers': [u'Structures type', u'High Hazard Zone',
                             u'Medium Hazard Zone', u'Total Affected',
@@ -280,6 +282,8 @@ class TestImpactReport(unittest.TestCase):
         """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
 
         expected_context = {
+            'notes': u'Columns and rows containing only 0 or "No data" '
+                     u'values are excluded from the tables.',
             'aggregation_result': {
                 'header_label': u'Aggregation area',
                 'rows': [{'type_values': [0, 1, 1, 1, 0],
@@ -294,7 +298,9 @@ class TestImpactReport(unittest.TestCase):
                                        u'Commercial',
                                        u'Health'],
                 'type_total_values': [1, 1, 2, 1, 1],
-                'total_label': u'Total', 'total_all': 6},
+                'total_label': u'Total',
+                'total_all': 6,
+                'total_in_aggregation': u'Total in aggregation areas'},
             'header': u'Aggregation Result'}
         actual_context = aggregate_result.context
 
@@ -313,6 +319,8 @@ class TestImpactReport(unittest.TestCase):
 
         shutil.rmtree(output_folder, ignore_errors=True)
 
+    # expected to fail until postprocessor calculation in analysis
+    # impacted is fixed
     @unittest.expectedFailure
     def test_minimum_needs(self):
         """Test generate minimum needs section."""
@@ -409,6 +417,8 @@ class TestImpactReport(unittest.TestCase):
     @unittest.expectedFailure
     def test_aggregate_post_processors_vector(self):
         """Test generate aggregate postprocessors sections."""
+
+        # TODO: Should add with and without aggregation layer test
 
         output_folder = self.fixtures_dir(
             '../output/aggregate_post_processors')
@@ -535,6 +545,8 @@ class TestImpactReport(unittest.TestCase):
     @unittest.expectedFailure
     def test_aggregate_post_processors_raster(self):
         """Test generate aggregate postprocessors sections."""
+
+        # TODO: Should add with and without aggregation layer test
 
         output_folder = self.fixtures_dir(
             '../output/aggregate_post_processors')

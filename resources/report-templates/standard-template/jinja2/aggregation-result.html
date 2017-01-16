@@ -1,4 +1,7 @@
-{% if aggregation_result %}
+{% if aggregation_result and aggregation_result.type_total_values %}
+<div>
+    {{ notes }}
+</div>
 <h5 class="info">
     <i class="icon-info-sign icon-white"></i> {{ header }}
 </h5>
