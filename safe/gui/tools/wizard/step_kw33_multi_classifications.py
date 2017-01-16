@@ -1,9 +1,9 @@
 # coding=utf-8
 """InaSAFE Keyword Wizard Step for Multi Classifications."""
 
-from PyQt4.QtGui import (
-    QLabel, QHBoxLayout, QComboBox, QPushButton, QWidgetItem, QLayoutItem,
-    QSpacerItem)
+import logging
+
+from PyQt4.QtGui import QLabel, QHBoxLayout, QComboBox, QPushButton
 from PyQt4.QtCore import Qt
 
 from safe.utilities.i18n import tr
@@ -20,13 +20,14 @@ from safe.gui.tools.wizard.wizard_strings import (
     multiple_continuous_hazard_classifications_vector,
     multiple_classified_hazard_classifications_raster,
     multiple_continuous_hazard_classifications_raster)
-from safe.gui.tools.wizard.wizard_utils import clear_layout
+from safe.gui.tools.wizard.wizard_utils import clear_layout, skip_inasafe_field
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
+LOGGER = logging.getLogger('InaSAFE')
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
@@ -70,7 +71,8 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         # Check if it can go to inasafe field step
         inasafe_fields = get_non_compulsory_fields(
             layer_purpose['key'], subcategory['key'])
-        if inasafe_fields:
+
+        if not skip_inasafe_field(self.parent.layer, inasafe_fields):
             return self.parent.step_kw_inasafe_fields
 
         # Check if it can go to inasafe default field step
@@ -118,7 +120,10 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             exposure_layout = QHBoxLayout()
 
             # Add label
-            exposure_label = QLabel(exposure['name'])
+            # Hazard on Exposure Classifications
+            label = tr('%s on %s Classifications' % (
+                subcategory['name'], exposure['name']))
+            exposure_label = QLabel(label)
 
             # Add combo box
             exposure_combo_box = QComboBox()
