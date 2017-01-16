@@ -16,14 +16,14 @@ from safe.gui.tools.help.needs_manager_help import content as \
 from safe.gui.tools.help.options_help import content as options_help
 from safe.gui.tools.help.osm_downloader_help import content as osm_help
 from safe.gui.tools.help.peta_jakarta_help import content as petajakarta_help
-from safe.gui.tools.help.raster_reclassify_help \
-    import content as reclassify_help
 from safe.gui.tools.help.shakemap_converter_help \
     import content as shakemap_help
 from safe.utilities.resources import resource_url, resources_path
 LOGGER = logging.getLogger('InaSAFE')
+SUBSECTION_STYLE = styles.SUBSECTION_STYLE
 INFO_STYLE = styles.INFO_STYLE
 WARNING_STYLE = styles.WARNING_STYLE
+TITLE_STYLE = styles.TITLE_STYLE
 SECTION_STYLE = styles.SECTION_STYLE
 SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
 MEDIUM_ICON_STYLE = styles.MEDIUM_ICON_STYLE
@@ -61,7 +61,7 @@ def heading():
     :returns: A heading object.
     :rtype: safe.messaging.heading.Heading
     """
-    message = m.Heading(tr('InaSAFE help'), **INFO_STYLE)
+    message = m.Heading(tr('InaSAFE help'), **TITLE_STYLE)
     return message
 
 
@@ -76,16 +76,22 @@ def content():
     :returns: A message object without brand element.
     :rtype: safe.messaging.message.Message
     """
+    # We will store a contents section at the top for easy navigation
+    table_of_contents = m.Message()
+    # and this will be the main message that we create
     message = m.Message()
 
-    header = m.Heading(tr('Overview'), **SECTION_STYLE)
-    message.add(header)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'overview',
+        tr('Overview'))
     ##
     # Credits and disclaimers ...
     ##
     header = m.Heading(tr('Disclaimer'), **INFO_STYLE)
     message.add(header)
-    message.add(definitions.messages.disclaimer())
+    message.add(m.Paragraph(definitions.messages.disclaimer()))
 
     header = m.Heading(tr('Limitations and License'), **INFO_STYLE)
     message.add(header)
@@ -97,20 +103,23 @@ def content():
     ##
     # Help dialog contents ...
     ##
-    header = m.Heading(tr('Core functionality and tools'), **SECTION_STYLE)
-    message.add(header)
+    _create_section_header(
+        message,
+        table_of_contents,
+        'core-functionality',
+        tr('Core functionality and tools'))
 
-    header = m.Heading(tr('The InaSAFE Dock'), **SECTION_STYLE)
+    header = m.Heading(tr('The InaSAFE Dock'), **SUBSECTION_STYLE)
     message.add(header)
     message.add(dock_help())
 
-    header = m.Heading(tr('InaSAFE Reports'), **SECTION_STYLE)
+    header = m.Heading(tr('InaSAFE Reports'), **SUBSECTION_STYLE)
     message.add(header)
     message.add(report_help())
 
     header = m.Heading(tr(
         'Managing analysis extents with the extents selector'),
-        **WARNING_STYLE)
+        **SUBSECTION_STYLE)
     message.add(header)
     message.add(extent_help())
 
@@ -120,22 +129,22 @@ def content():
 
     header = m.Heading(tr('Defining minimum needs'), **SECTION_STYLE)
     message.add(header)
+    header = m.Heading(tr('The minimum needs tool'), **SUBSECTION_STYLE)
+    message.add(header)
     message.add(needs_help())
+    header = m.Heading(tr('The minimum needs manager'), **SUBSECTION_STYLE)
+    message.add(header)
     message.add(needs_manager_help())
 
-    header = m.Heading(tr('The OpenStreetMap Downloader'), **SECTION_STYLE)
+    header = m.Heading(tr('The OpenStreetMap Downloader'), **SUBSECTION_STYLE)
     message.add(header)
     message.add(osm_help())
 
-    header = m.Heading(tr('Fetching data from PetaJakarta'), **SECTION_STYLE)
+    header = m.Heading(tr('The PetaJakarta Downloader'), **SUBSECTION_STYLE)
     message.add(header)
     message.add(petajakarta_help())
 
-    header = m.Heading(tr('The raster reclassification tool'), **SECTION_STYLE)
-    message.add(header)
-    message.add(reclassify_help())
-
-    header = m.Heading(tr('The shakemap converter tool'), **SECTION_STYLE)
+    header = m.Heading(tr('The Shakemap Converter'), **SUBSECTION_STYLE)
     message.add(header)
     message.add(shakemap_help())
 
@@ -152,7 +161,7 @@ def content():
     if url:
         message.add(m.Image(url))
     for step in steps:
-        message.add(definition_to_message(step))
+        message.add(definition_to_message(step, SUBSECTION_STYLE))
 
     ##
     #  Hazard definitions
@@ -373,7 +382,24 @@ def content():
         row.add(m.Cell(post_processor['description'], span=2))
         table.add(row)
     message.add(table)
-    return message
+
+    # Finally we add the table of contents at the top
+    full_message = m.Message()
+    header = m.Heading(tr('Contents'), **SECTION_STYLE)
+    full_message.add(header)
+    full_message.add(table_of_contents)
+    full_message.add(message)
+    return full_message
+
+
+def _create_section_header(message, table_of_contents, id, text):
+    style = SECTION_STYLE
+    style['element_id'] = id
+    header = m.Heading(text, **style)
+    link = m.Link('#%s' % id, text)
+    paragraph = m.Paragraph(link)
+    table_of_contents.add(paragraph)
+    message.add(header)
 
 
 def _create_post_processor_subtable(item_list):

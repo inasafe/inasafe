@@ -355,7 +355,7 @@ class Plugin(object):
             self.show_definitions)
         self.add_action(
             self.action_show_definitions,
-            add_to_toolbar=False)
+            add_to_toolbar=True)
 
     def _create_add_petajakarta_layer_action(self):
         """Create action for import OSM Dialog."""
@@ -374,31 +374,6 @@ class Plugin(object):
         self.add_action(
             self.action_add_petajakarta_layer,
             add_to_toolbar=False)
-
-    def _create_raster_reclassify_layer_action(self):
-        """Create action for Raster Reclassification to vector."""
-        # Disabled for 3.5
-        final_release = release_status() == 'final'
-        settings = QSettings()
-        self.developer_mode = settings.value(
-            'inasafe/developer_mode', False, type=bool)
-        if not final_release and self.developer_mode:
-            icon = resources_path(
-                'img', 'icons', 'raster-reclassify-layer.svg')
-            self.action_raster_reclassify_layer = QAction(
-                QIcon(icon),
-                self.tr('Reclassify Raster to Vector Layer'),
-                self.iface.mainWindow())
-            self.action_raster_reclassify_layer.setStatusTip(self.tr(
-                'Reclassify Raster to Vector Layer'))
-            self.action_raster_reclassify_layer.setWhatsThis(self.tr(
-                'Use this to reclassify Raster Layer into Vector Layer '
-                'with defined thresholds as classifier.'))
-            self.action_raster_reclassify_layer.triggered.connect(
-                self.raster_reclassify)
-            self.add_action(
-                self.action_raster_reclassify_layer,
-                add_to_toolbar=False)
 
     def _create_rubber_bands_action(self):
         """Create action for toggling rubber bands."""
@@ -545,7 +520,6 @@ class Plugin(object):
         self._create_osm_downloader_action()
         self._create_add_osm_layer_action()
         self._create_add_petajakarta_layer_action()
-        self._create_raster_reclassify_layer_action()
         self._create_shakemap_converter_action()
         self._create_minimum_needs_action()
         self._create_test_layers_action()
@@ -850,16 +824,6 @@ class Plugin(object):
         """
         from safe.gui.tools.peta_jakarta_dialog import PetaJakartaDialog
         dialog = PetaJakartaDialog(self.iface.mainWindow(), self.iface)
-        dialog.show()  # non modal
-
-    def raster_reclassify(self):
-        """Show dialog for Raster Reclassification.
-
-        This will convert Raster Layer to Vector Layer
-        """
-        from safe.gui.tools.raster_reclassify_dialog import \
-            RasterReclassifyDialog
-        dialog = RasterReclassifyDialog(self.iface.mainWindow(), self.iface)
         dialog.show()  # non modal
 
     def show_batch_runner(self):

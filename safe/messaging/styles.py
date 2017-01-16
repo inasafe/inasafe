@@ -33,6 +33,24 @@ from PyQt4.QtCore import QUrl
 
 from safe.utilities.resources import resources_path
 
+
+# Used for section headers in definitions_help.py
+TITLE_STYLE = {
+    'level': 1,
+    'style_class': 'title'}
+
+SECTION_STYLE = {
+    'level': 2,
+    'style_class': 'section'}
+
+SUBSECTION_STYLE = {
+    'level': 3,
+    'style_class': 'subsection'}
+
+HEADING_STYLE = {
+    'level': 4,
+    'style_class': 'subsection'}
+
 PROGRESS_UPDATE_STYLE = {
     'level': 5,
     'icon': 'icon-cog icon-white',
@@ -52,12 +70,6 @@ WARNING_STYLE = {
     'level': 5,
     'icon': 'icon-warning-sign icon-white',
     'style_class': 'warning'}
-
-# Used for section headers in definitions_help.py
-SECTION_STYLE = {
-    'level': 5,
-    'style_class': 'section'}
-
 SUGGESTION_STYLE = {
     'level': 5,
     'icon': 'icon-comment icon-white',

@@ -5,6 +5,7 @@ from safe.utilities.i18n import tr
 from safe import messaging as m
 from safe.messaging import styles
 
+SUBSECTION_STYLE = styles.SUBSECTION_STYLE
 INFO_STYLE = styles.INFO_STYLE
 
 __author__ = 'ismailsunni'
@@ -37,7 +38,7 @@ def heading():
     :returns: A heading object.
     :rtype: safe.messaging.heading.Heading
     """
-    message = m.Heading(tr('Minimum needs manager help'), **INFO_STYLE)
+    message = m.Heading(tr('Minimum needs manager help'), **SUBSECTION_STYLE)
     return message
 
 
