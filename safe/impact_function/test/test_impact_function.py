@@ -166,7 +166,6 @@ class TestImpactFunction(unittest.TestCase):
 
         expected_inasafe_fields = {
             exposure_type_field['key']: 'TYPE',
-            population_count_field['key']: 'pop_count'
         }
         self.assertDictEqual(
             exposure_layer.keywords['inasafe_fields'], expected_inasafe_fields)
@@ -177,7 +176,6 @@ class TestImpactFunction(unittest.TestCase):
             fields
         )
         inasafe_fields = exposure_layer.keywords['inasafe_fields']
-        self.assertIn(inasafe_fields['population_count_field'], fields)
 
     def test_impact_function_behaviour(self):
         """Test behaviour of impact function."""

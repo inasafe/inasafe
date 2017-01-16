@@ -85,7 +85,7 @@ class TestPrepareLayer(unittest.TestCase):
         cleaned = prepare_vector_layer(layer)
 
         # Only 3 fields
-        self.assertEqual(len(cleaned.fields().toList()), 3)
+        self.assertEqual(len(cleaned.fields().toList()), 2)
 
         # ET : I should check later the order.
         self.assertIn(
@@ -94,10 +94,6 @@ class TestPrepareLayer(unittest.TestCase):
 
         self.assertIn(
             cleaned.fieldNameIndex(exposure_type_field['field_name']),
-            [0, 1, 2])
-
-        self.assertIn(
-            cleaned.fieldNameIndex(population_count_field['field_name']),
             [0, 1, 2])
 
     def test_size_needed(self):
