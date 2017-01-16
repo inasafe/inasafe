@@ -168,24 +168,41 @@ def make_summary_layer(exposed, aggregation, fatality_rate):
     :return: Tuple with the aggregation layer and a dictionary with totals.
     :rtype: tuple(QgsVectorLayer, dict)
     """
-    output_filename = unique_filename(prefix='summary', suffix='.shp')
-
     displacement_rate = {
         2: 0.0, 3: 0.0, 4: 0.0, 5: 0.0, 6: 1.0,
         7: 1.0, 8: 1.0, 9: 1.0, 10: 1.0
     }
 
-    fields = QgsFields()
-    fields.append(QgsField('name', QVariant.String))
-    fields.append(QgsField('total_exposed', QVariant.Int))
-    fields.append(QgsField('total_fatalities', QVariant.Int))
-    fields.append(QgsField('total_displaced', QVariant.Int))
-    for mmi in xrange(2, 11):
-        fields.append(QgsField('mmi_%d_exposed' % mmi, QVariant.Int))
-        fields.append(QgsField('mmi_%d_fatalities' % mmi, QVariant.Int))
-        fields.append(QgsField('mmi_%d_displaced' % mmi, QVariant.Int))
+    field_mapping = {}
 
-    exposed_per_agg_zone = {}
+    aggregation.startEditing()
+
+    field = QgsField('total_exposed', QVariant.Int)
+    aggregation.addAttribute(field)
+    field_mapping[field.name()] = aggregation.fieldNameIndex(field.name())
+
+    field = QgsField('total_fatalities', QVariant.Int)
+    aggregation.addAttribute(field)
+    field_mapping[field.name()] = aggregation.fieldNameIndex(field.name())
+
+    field = QgsField('total_displaced', QVariant.Int)
+    aggregation.addAttribute(field)
+    field_mapping[field.name()] = aggregation.fieldNameIndex(field.name())
+
+    for mmi in xrange(2, 11):
+        field = QgsField('mmi_%d_exposed' % mmi, QVariant.Int)
+        aggregation.addAttribute(field)
+        field_mapping[field.name()] = aggregation.fieldNameIndex(field.name())
+
+        field = QgsField('mmi_%d_fatalities' % mmi, QVariant.Int)
+        aggregation.addAttribute(field)
+        field_mapping[field.name()] = aggregation.fieldNameIndex(field.name())
+
+        field = QgsField('mmi_%d_displaced' % mmi, QVariant.Int)
+        aggregation.addAttribute(field)
+        field_mapping[field.name()] = aggregation.fieldNameIndex(field.name())
+
+        exposed_per_agg_zone = {}
     for (mmi, agg), count in exposed.iteritems():
         if agg not in exposed_per_agg_zone:
             exposed_per_agg_zone[agg] = {}
@@ -196,23 +213,11 @@ def make_summary_layer(exposed, aggregation, fatality_rate):
     grand_total_fatalities = 0
     grand_total_displaced = 0
 
-    writer = QgsVectorFileWriter(
-        output_filename,
-        'utf-8',
-        fields,
-        aggregation.wkbType(),
-        aggregation.crs())
-
     inasafe_fields = aggregation.keywords['inasafe_fields']
-    name_field = inasafe_fields[aggregation_name_field['key']]
     id_field = inasafe_fields[aggregation_id_field['key']]
 
     for agg_feature in aggregation.getFeatures():
-        agg_zone_name = agg_feature[name_field]
         agg_zone = agg_feature[id_field]
-
-        feature = QgsFeature(fields)
-        feature.setGeometry(agg_feature.geometry())
 
         total_exposed = 0
         total_fatalities = 0
@@ -224,24 +229,41 @@ def make_summary_layer(exposed, aggregation, fatality_rate):
             mmi_displaced = (
                 (mmi_exposed - mmi_fatalities) * displacement_rate[mmi])
 
-            feature['mmi_%d_exposed' % mmi] = mmi_exposed
-            feature['mmi_%d_fatalities' % mmi] = mmi_fatalities
-            feature['mmi_%d_displaced' % mmi] = mmi_displaced
+            aggregation.changeAttributeValue(
+                agg_feature.id(),
+                field_mapping['mmi_%d_exposed' % mmi],
+                mmi_exposed)
+
+            aggregation.changeAttributeValue(
+                agg_feature.id(),
+                field_mapping['mmi_%d_fatalities' % mmi],
+                mmi_fatalities)
+
+            aggregation.changeAttributeValue(
+                agg_feature.id(),
+                field_mapping['mmi_%d_displaced' % mmi],
+                mmi_displaced)
 
             total_exposed += mmi_exposed
             total_fatalities += mmi_fatalities
             total_displaced += mmi_displaced
 
-        feature['name'] = agg_zone_name
-        feature['total_exposed'] = total_exposed
-        feature['total_fatalities'] = total_fatalities
-        feature['total_displaced'] = total_displaced
+        aggregation.changeAttributeValue(
+            agg_feature.id(), field_mapping['total_exposed'], total_exposed)
+
+        aggregation.changeAttributeValue(
+            agg_feature.id(),
+            field_mapping['total_fatalities'],
+            total_fatalities)
+
+        aggregation.changeAttributeValue(
+            agg_feature.id(),
+            field_mapping['total_displaced'],
+            total_displaced)
 
         grand_total_exposed += total_exposed
         grand_total_fatalities += total_fatalities
         grand_total_displaced += total_displaced
-
-        writer.addFeature(feature)
 
     totals = {
         'exposed': grand_total_exposed,
@@ -249,12 +271,8 @@ def make_summary_layer(exposed, aggregation, fatality_rate):
         'displaced': grand_total_displaced,
     }
 
-    del writer
-    layer = QgsVectorLayer(output_filename, 'summary', 'ogr')
-    assert layer.isValid()
+    aggregation.keywords['layer_purpose'] = (
+        layer_purpose_aggregation_impacted['key'])
+    aggregation.keywords['title'] = layer_purpose_aggregation_impacted['key']
 
-    layer.keywords = dict(aggregation.keywords)
-    layer.keywords['layer_purpose'] = layer_purpose_aggregation_impacted['key']
-    layer.keywords['title'] = layer_purpose_aggregation_impacted['key']
-
-    return layer, totals
+    return aggregation, totals
