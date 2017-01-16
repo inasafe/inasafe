@@ -60,7 +60,6 @@ class TestImpactReport(unittest.TestCase):
             actual_string = actual_file.read().strip()
             self.assertEquals(control_string, actual_string)
 
-    @unittest.expectedFailure
     def test_analysis_result_from_impact_function(self):
         """Test generate analysis result from impact function."""
 
@@ -214,7 +213,6 @@ class TestImpactReport(unittest.TestCase):
 
         shutil.rmtree(output_folder, ignore_errors=True)
 
-    @unittest.expectedFailure
     def test_analysis_breakdown_detail(self):
         """Test generate analysis breakdown and aggregation report."""
         output_folder = self.fixtures_dir('../output/analysis_breakdown')
@@ -666,7 +664,6 @@ class TestImpactReport(unittest.TestCase):
 
         shutil.rmtree(output_folder, ignore_errors=True)
 
-    @unittest.expectedFailure
     def test_qgis_html_pdf_report(self):
         """Test generate analysis breakdown and aggregation report."""
 
