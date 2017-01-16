@@ -820,6 +820,49 @@ total_field = {
     'replace_null': False
 }
 
+# Fatalities
+fatalities_field = {
+    'key': 'fatalities_field',
+    'name': tr('Fatalities'),
+    'field_name': 'fatalities',
+    'type': QVariant.Int,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'help_text': tr('Number of fatalities.'),
+    'description': tr('Number of fatalities.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+
+# Displaced
+displaced_field = {
+    'key': 'displaced_field',
+    'name': tr('Displaced'),
+    'field_name': 'displaced',
+    'type': QVariant.Int,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'help_text': tr('Number of displaced.'),
+    'description': tr('Number of displaced.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
 # Total affected field to store the total affected by the hazard
 total_affected_field = {
     'key': 'total_affected_field',
@@ -968,6 +1011,72 @@ hazard_count_field = {
     'replace_null': False
 }
 
+# Count of population exposed after an EQ for a given MMI level.
+population_exposed_per_mmi_field = {
+    'key': 'mmi_%s_exposed',
+    'name': tr('MMI %s exposed'),
+    'field_name': 'mmi_%s_exposed',
+    'type': QVariant.Int,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'help_text': tr('The number of exposed population for a given MMI level.'),
+    'description': tr(
+        'The number of exposed population for a given MMI level.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+# Count of fatalities after an EQ for a given MMI level.
+fatalities_per_mmi_field = {
+    'key': 'mmi_%s_fatalities',
+    'name': tr('MMI %s fatalities'),
+    'field_name': 'mmi_%s_fatalities',
+    'type': QVariant.Int,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'help_text': tr('The number of fatalities for a given MMI level.'),
+    'description': tr(
+        'The number of fatalities for a given MMI level.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+# Count of population displaced after an EQ for a given MMI level.
+population_displaced_per_mmi = {
+    'key': 'mmi_%s_displaced',
+    'name': tr('MMI %s displaced'),
+    'field_name': 'mmi_%s_displaced',
+    'type': QVariant.Int,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'help_text': tr(
+        'The number of displaced population for a given MMI level.'),
+    'description': tr(
+        'The number of displaced population for a given MMI level.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
 
 # Inputs
 exposure_fields = [
