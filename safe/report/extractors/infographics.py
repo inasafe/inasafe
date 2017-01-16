@@ -368,7 +368,8 @@ def infographic_layout_extractor(impact_report, component_metadata):
 
     for component_key in infographics:
         result = jinja2_output_as_string(impact_report, component_key)
-        infographic_result += result
+        if result:
+            infographic_result += result
 
     if not infographic_result:
         return context
