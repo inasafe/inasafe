@@ -17,9 +17,6 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
-
-
-
 class TestDefinitionsHelp(unittest.TestCase):
     """Test Defintions Help Generation
     """

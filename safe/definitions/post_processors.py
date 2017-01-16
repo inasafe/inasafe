@@ -172,8 +172,6 @@ layer_crs_input_value = {
         'Coordinate Reference System (CRS).')
 }
 
-
-
 layer_property_input_values = [
     size_calculator_input_value,
     layer_crs_input_value
