@@ -57,6 +57,10 @@ def geometry_checker(geometry):
     :return: A cleaned geometry
     :rtype: QgsGeometry
     """
+    if geometry is None:
+        # The geometry can be None.
+        return None
+
     if geometry.isGeosValid():
         return geometry
     else:

@@ -1036,33 +1036,40 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # Get output path from datastore
         # Fetch report for pdfs report
         report_path = os.path.dirname(impact_layer.source())
-        table_pdf_path = os.path.join(
-            report_path, 'output/impact-report-output.pdf')
-        map_pdf_path = os.path.join(
-            report_path, 'output/a4-portrait-blue.pdf')
+        output_paths = [
+            os.path.join(
+                report_path,
+                'output/impact-report-output.pdf'),
+            os.path.join(
+                report_path,
+                'output/a4-portrait-blue.pdf'),
+            os.path.join(
+                report_path,
+                'output/a4-landscape-blue.pdf'),
+        ]
 
         # Make sure the file paths can wrap nicely:
-        wrapped_map_path = map_pdf_path.replace(os.sep, '<wbr>' + os.sep)
-        wrapped_table_path = table_pdf_path.replace(
-            os.sep, '<wbr>' + os.sep)
+        wrapped_output_paths = [
+            path.replace(os.sep, '<wbr>' + os.sep) for path in
+            output_paths]
+
+        # create message to user
         status = m.Message(
             m.Heading(self.tr('Map Creator'), **INFO_STYLE),
             m.Paragraph(self.tr(
                 'Your PDF was created....opening using the default PDF '
                 'viewer on your system. The generated pdfs were saved '
-                'as:')),
-            m.Paragraph(wrapped_map_path),
-            m.Paragraph(self.tr('and')),
-            m.Paragraph(wrapped_table_path))
+                'as:')))
+
+        for path in wrapped_output_paths:
+            status.add(m.Paragraph(path))
 
         send_static_message(self, status)
 
-        # noinspection PyCallByClass,PyTypeChecker,PyTypeChecker
-        QtGui.QDesktopServices.openUrl(
-            QtCore.QUrl.fromLocalFile(table_pdf_path))
-        # noinspection PyCallByClass,PyTypeChecker,PyTypeChecker
-        QtGui.QDesktopServices.openUrl(
-            QtCore.QUrl.fromLocalFile(map_pdf_path))
+        for path in output_paths:
+            # noinspection PyCallByClass,PyTypeChecker,PyTypeChecker
+            QtGui.QDesktopServices.openUrl(
+                QtCore.QUrl.fromLocalFile(path))
 
     @pyqtSlot('QgsRectangle', 'QgsCoordinateReferenceSystem')
     def define_user_analysis_extent(self, extent, crs):

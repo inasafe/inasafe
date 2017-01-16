@@ -25,7 +25,7 @@ from safe.report.extractors.composer import QGISComposerContext
 from safe.report.extractors.infographic_elements.svg_charts import \
     DonutChartContext
 from safe.report.extractors.util import (
-    round_affecter_number,
+    round_affected_number,
     jinja2_output_as_string,
     value_from_field_name)
 from safe.utilities.i18n import tr
@@ -59,7 +59,7 @@ class PeopleInfographicElement(object):
     @property
     def number(self):
         """Number to be displayed for the element."""
-        return round_affecter_number(
+        return round_affected_number(
             self._number,
             enable_rounding=True,
             use_population_rounding=True)
@@ -303,7 +303,7 @@ def population_infographic_extractor(impact_report, component_metadata):
             # Hazard label taken from translated hazard count field
             # label, string-formatted with translated hazard class label
             hazard_value = value_from_field_name(field_name, analysis_layer)
-            hazard_value = round_affecter_number(
+            hazard_value = round_affected_number(
                 hazard_value,
                 enable_rounding=True,
                 use_population_rounding=True)
@@ -407,15 +407,18 @@ def infographic_pdf_extractor(impact_report, component_metadata):
     context = QGISComposerContext()
 
     # we only have html elements for this
-    html_frame_elements = [
-        {
-            'id': 'infographic',
-            'mode': 'text',
-            'text': jinja2_output_as_string(
-                impact_report, 'infographic-layout'),
-            'margin_left': 10,
-            'margin_right': 10,
-        }
-    ]
-    context.html_frame_elements = html_frame_elements
+    infographic_html = jinja2_output_as_string(
+        impact_report, 'infographic-layout')
+    if infographic_html.strip():
+        html_frame_elements = [
+            {
+                'id': 'infographic',
+                'mode': 'text',
+                'text': jinja2_output_as_string(
+                    impact_report, 'infographic-layout'),
+                'margin_left': 10,
+                'margin_right': 10,
+            }
+        ]
+        context.html_frame_elements = html_frame_elements
     return context

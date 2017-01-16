@@ -13,7 +13,7 @@ from safe.definitions.fields import (
 from safe.definitions.minimum_needs import minimum_needs_fields
 from safe.definitions.post_processors import age_postprocessors
 from safe.definitions.utilities import postprocessor_output_field
-from safe.report.extractors.util import round_affecter_number
+from safe.report.extractors.util import round_affected_number
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -57,14 +57,14 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
         age_fields,
         tr('Detailed Age Report'),
         debug_mode=debug_mode,
-        population_rounding=True)
+        population_rounding=False)
     context['sections']['gender'] = create_section(
         aggregation_impacted,
         analysis_layer,
         gender_fields,
         tr('Detailed Gender Report'),
         debug_mode=debug_mode,
-        population_rounding=True)
+        population_rounding=False)
 
     # minimum needs should provide unit for column headers
     units_label = []
@@ -72,17 +72,12 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
     for field in minimum_needs_fields:
         need = field['need_parameter']
         if isinstance(need, ResourceParameter):
-            unit_format = ''
-            if need.unit.abbreviation and need.frequency:
-                unit_format = '{unit} {frequency}'
-            elif not need.unit.abbreviation and need.frequency:
-                unit_format = tr('units {frequency}')
-            elif not need.unit.abbreviation and not need.frequency:
-                unit_format = tr('units')
-
-            unit = unit_format.format(
-                unit=need.unit.abbreviation,
-                frequency=need.frequency)
+            unit = None
+            unit_abbreviation = need.unit.abbreviation
+            if unit_abbreviation and not unit_abbreviation == tr('units'):
+                unit_format = '{unit}'
+                unit = unit_format.format(
+                    unit=unit_abbreviation)
             units_label.append(unit)
 
     context['sections']['minimum_needs'] = create_section(
@@ -182,7 +177,7 @@ def create_section(
             unit = units_label[idx]
 
             if unit:
-                header_format = '{name} ({unit})'
+                header_format = '{name} [{unit}]'
             else:
                 header_format = '{name}'
 
@@ -207,7 +202,7 @@ def create_section(
             affected_population_name)
 
         aggregation_name = feature[aggregation_name_index]
-        total_affected = round_affecter_number(
+        total_affected = round_affected_number(
             feature[affected_population_index],
             enable_rounding=enable_rounding,
             use_population_rounding=population_rounding)
@@ -222,7 +217,7 @@ def create_section(
         for output_field in postprocessors_fields_found:
             field_name = aggregation_impacted_fields[output_field['key']]
             field_index = aggregation_impacted.fieldNameIndex(field_name)
-            value = round_affecter_number(
+            value = round_affected_number(
                 feature[field_index],
                 enable_rounding=enable_rounding,
                 use_population_rounding=population_rounding)
@@ -241,7 +236,7 @@ def create_section(
         total_affected_population_field]
     total_affected_population_index = analysis_layer.fieldNameIndex(
         total_affected_population_name)
-    value = round_affecter_number(
+    value = round_affected_number(
         feature[total_affected_population_index],
         enable_rounding=enable_rounding,
         use_population_rounding=population_rounding)
@@ -252,7 +247,7 @@ def create_section(
     for output_field in postprocessors_fields_found:
         field_name = analysis_layer_fields[output_field['key']]
         field_index = analysis_layer.fieldNameIndex(field_name)
-        value = round_affecter_number(
+        value = round_affected_number(
             feature[field_index],
             enable_rounding=enable_rounding,
             use_population_rounding=population_rounding)

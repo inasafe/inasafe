@@ -322,36 +322,15 @@ class ReportMetadata(object):
 
     @classmethod
     def _load_components(cls, component_metadata):
-        # key = component_metadata.get('key')
         component_type = component_metadata.get('type')
-        # processor = component_metadata.get('processor')
-        # extractor = component_metadata.get('extractor')
-        # output_format = component_metadata.get('output_format')
         template = component_metadata.get('template')
-        # output_path = component_metadata.get('output_path')
-        # extra_args = component_metadata.get('extra_args', {})
         kwargs = component_metadata
         kwargs['template'] = template
         if (component_type ==
                 ReportComponentsMetadata.AvailableComponent.Jinja2):
-            # return Jinja2ComponentsMetadata(
-            #     key, processor, extractor, output_format, template,
-            #     output_path, extra_args=extra_args)
             return Jinja2ComponentsMetadata(**kwargs)
         elif (component_type ==
                 ReportComponentsMetadata.AvailableComponent.QGISComposer):
-            # page_dpi = component_metadata.get('page_dpi', None)
-            # page_height = component_metadata.get('page_height', None)
-            # page_width = component_metadata.get('page_width', None)
-            # orientation = component_metadata.get('orientation', None)
-            # return QgisComposerComponentsMetadata(
-            #     key, processor, extractor, output_format, template,
-            #     output_path,
-            #     orientation=orientation,
-            #     page_dpi=page_dpi,
-            #     page_height=page_height,
-            #     page_width=page_width,
-            #     extra_args=extra_args)
             return QgisComposerComponentsMetadata(**kwargs)
 
     @property
