@@ -1,11 +1,15 @@
 # coding=utf-8
 
-from qgis.core import QgsRasterLayer
+from tempfile import mkdtemp
+from qgis.core import QgsRasterLayer, QgsVectorLayer
 
 from processing.core.Processing import Processing
 
 from safe.common.utilities import unique_filename
+from safe.datastore.folder import Folder
+from safe.definitions.fields import aggregation_id_field
 from safe.definitions.processing_steps import rasterize_steps
+from safe.definitions.layer_purposes import layer_purpose_aggregation_impacted
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -13,15 +17,12 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
-def rasterize_vector_layer(layer, attribute_name, width, height, extent):
+def rasterize_vector_layer(layer, width, height, extent):
     """Rasterize a vector layer to the grid given by extent and
     width/height of the output raster.
 
     :param layer: The vector layer.
     :type layer: QgsVectorLayer
-
-    :param attribute_name: The attribute name to be created.
-    :type attribute_name: basestring
 
     :param width: The width of the output.
     :type width: int
@@ -45,11 +46,20 @@ def rasterize_vector_layer(layer, attribute_name, width, height, extent):
         extent.yMinimum(),
         extent.yMaximum())
 
+    keywords = dict(layer.keywords)
+
+    # The layer is in memory, we need to save it to a file for Processing.
+    data_store = Folder(mkdtemp())
+    data_store.default_vector_format = 'geojson'
+    result = data_store.add_layer(layer, 'vector_layer')
+    layer = data_store.layer(result[1])
+    assert layer.isValid()
+
     Processing.runAlgorithm(
         'gdalogr:rasterize',
         None,
         layer,
-        attribute_name,
+        layer.keywords['inasafe_fields'][aggregation_id_field['key']],
         0,      # output size is given in pixels
         width,
         height,
@@ -71,5 +81,12 @@ def rasterize_vector_layer(layer, attribute_name, width, height, extent):
     layer_aligned = QgsRasterLayer(output_filename, name, 'gdal')
 
     assert layer_aligned.isValid()
+
+    layer_aligned.keywords = keywords
+    layer_aligned.keywords['title'] = (
+        rasterize_steps['output_layer_name'] % 'aggregation')
+    layer_aligned.keywords['layer_purpose'] = (
+        layer_purpose_aggregation_impacted['key'])
+    del layer_aligned.keywords['inasafe_fields']
 
     return layer_aligned
