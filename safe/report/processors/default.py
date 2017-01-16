@@ -15,8 +15,8 @@ from tempfile import mkdtemp
 from PyQt4.QtCore import QUrl
 from jinja2.environment import Environment
 from jinja2.loaders import FileSystemLoader
-from qgis._core import QgsComposerFrame
 from qgis.core import (
+    QgsComposerFrame,
     QgsComposition,
     QgsComposerHtml,
     QgsRectangle)
@@ -41,12 +41,12 @@ def jinja2_renderer(impact_report, component):
 
     :param impact_report: ImpactReport contains data about the report that is
         going to be generated
-    :type impact_report: safe.reportv4.impact_report.ImpactReport
+    :type impact_report: safe.report.impact_report.ImpactReport
 
     :param component: Contains the component metadata and context for
         rendering the output
     :type component:
-        safe.reportv4.report_metadata.QgisComposerComponentsMetadata
+        safe.report.report_metadata.QgisComposerComponentsMetadata
 
     :return: whatever type of output the component should be
     """
@@ -55,7 +55,15 @@ def jinja2_renderer(impact_report, component):
     main_template_folder = impact_report.metadata.template_folder
     loader = FileSystemLoader(
         os.path.abspath(main_template_folder))
-    env = Environment(loader=loader)
+    extensions = [
+        'jinja2.ext.i18n',
+        'jinja2.ext.with_',
+        'jinja2.ext.loopcontrols',
+        'jinja2.ext.do',
+    ]
+    env = Environment(
+        loader=loader,
+        extensions=extensions)
 
     template = env.get_template(component.template)
     rendered = template.render(context)
@@ -85,22 +93,27 @@ def qgis_composer_html_renderer(impact_report, component):
 
     :param impact_report: ImpactReport contains data about the report that is
         going to be generated
-    :type impact_report: safe.reportv4.impact_report.ImpactReport
+    :type impact_report: safe.report.impact_report.ImpactReport
 
     :param component: Contains the component metadata and context for
         rendering the output
     :type component:
-        safe.reportv4.report_metadata.QgisComposerComponentsMetadata
+        safe.report.report_metadata.QgisComposerComponentsMetadata
 
     :return: whatever type of output the component should be
     """
     context = component.context
-    """:type: safe.reportv4.extractors.composer.QGISComposerContext"""
+    """:type: safe.report.extractors.composer.QGISComposerContext"""
     qgis_composition_context = impact_report.qgis_composition_context
     inasafe_context = impact_report.inasafe_context
 
     # load composition object
     composition = QgsComposition(qgis_composition_context.map_settings)
+
+    if not context.html_frame_elements:
+        # if no html frame elements at all, do not generate empty report.
+        component.output = ''
+        return component.output
 
     # Add HTML Frame
     for html_el in context.html_frame_elements:
@@ -178,17 +191,17 @@ def qgis_composer_renderer(impact_report, component):
 
     :param impact_report: ImpactReport contains data about the report that is
         going to be generated
-    :type impact_report: safe.reportv4.impact_report.ImpactReport
+    :type impact_report: safe.report.impact_report.ImpactReport
 
     :param component: Contains the component metadata and context for
         rendering the output
     :type component:
-        safe.reportv4.report_metadata.QgisComposerComponentsMetadata
+        safe.report.report_metadata.QgisComposerComponentsMetadata
 
     :return: whatever type of output the component should be
     """
     context = component.context
-    """:type: safe.reportv4.extractors.composer.QGISComposerContext"""
+    """:type: safe.report.extractors.composer.QGISComposerContext"""
     qgis_composition_context = impact_report.qgis_composition_context
     inasafe_context = impact_report.inasafe_context
 
@@ -284,6 +297,7 @@ def qgis_composer_renderer(impact_report, component):
         column_count = leg_el.get('column_count')
 
         legend = composition.getComposerItemById(item_id)
+        """:type: qgis.core.QgsComposerLegend"""
         if legend:
             # set column count
             if column_count:

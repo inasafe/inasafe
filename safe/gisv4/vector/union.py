@@ -22,6 +22,7 @@ from safe.definitions.fields import hazard_class_field, aggregation_id_field
 from safe.definitions.hazard_classifications import null_hazard_value
 from safe.gisv4.vector.tools import (
     create_memory_layer, wkb_type_groups, create_spatial_index)
+from safe.gisv4.vector.clean_geometry import geometry_checker
 from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -106,7 +107,7 @@ def union(union_a, union_b, callback=None):
         # progress.setPercentage(nElement / float(nFeat) * 50)
         n_element += 1
         list_intersecting_b = []
-        geom = in_feat_a.geometry()
+        geom = geometry_checker(in_feat_a.geometry())
         at_map_a = in_feat_a.attributes()
         intersects = index_a.intersects(geom.boundingBox())
         if len(intersects) < 1:
@@ -128,10 +129,10 @@ def union(union_a, union_b, callback=None):
                 count += 1
 
                 at_map_b = in_feat_b.attributes()
-                tmp_geom = in_feat_b.geometry()
+                tmp_geom = geometry_checker(in_feat_b.geometry())
 
                 if engine.intersects(tmp_geom.geometry()):
-                    int_geom = geom.intersection(tmp_geom)
+                    int_geom = geometry_checker(geom.intersection(tmp_geom))
                     list_intersecting_b.append(QgsGeometry(tmp_geom))
 
                     if not int_geom:
@@ -147,11 +148,11 @@ def union(union_a, union_b, callback=None):
                             or QgsWKBTypes.flatType(
                             int_geom.geometry().wkbType()) == \
                                     QgsWKBTypes.GeometryCollection:
-                        # Intersection produced different geomety types
+                        # Intersection produced different geometry types
                         temp_list = int_geom.asGeometryCollection()
                         for i in temp_list:
                             if i.type() == geom.type():
-                                int_geom = QgsGeometry(i)
+                                int_geom = QgsGeometry(geometry_checker(i))
                                 try:
                                     _write_feature(
                                         at_map_a + at_map_b,
@@ -189,7 +190,7 @@ def union(union_a, union_b, callback=None):
             diff_geom = QgsGeometry(geom)
             if len(list_intersecting_b) != 0:
                 int_b = QgsGeometry.unaryUnion(list_intersecting_b)
-                diff_geom = diff_geom.difference(int_b)
+                diff_geom = geometry_checker(diff_geom.difference(int_b))
                 if diff_geom is None or \
                     diff_geom.isGeosEmpty() or not diff_geom.isGeosValid():
                     LOGGER.debug(
@@ -203,7 +204,7 @@ def union(union_a, union_b, callback=None):
                 temp_list = diff_geom.asGeometryCollection()
                 for i in temp_list:
                     if i.type() == geom.type():
-                        diff_geom = QgsGeometry(i)
+                        diff_geom = QgsGeometry(geometry_checker(i))
             try:
                 _write_feature(
                     at_map_a,
@@ -222,7 +223,7 @@ def union(union_a, union_b, callback=None):
     for in_feat_a in union_b.getFeatures():
         # progress.setPercentage(nElement / float(nFeat) * 100)
         add = False
-        geom = in_feat_a.geometry()
+        geom = geometry_checker(in_feat_a.geometry())
         diff_geom = QgsGeometry(geom)
         atMap = [None] * length
         atMap.extend(in_feat_a.attributes())
@@ -244,11 +245,12 @@ def union(union_a, union_b, callback=None):
 
             for in_feat_b in union_a.getFeatures(request):
                 at_map_b = in_feat_b.attributes()
-                tmp_geom = in_feat_b.geometry()
+                tmp_geom = geometry_checker(in_feat_b.geometry())
 
                 if engine.intersects(tmp_geom.geometry()):
                     add = True
-                    diff_geom = QgsGeometry(diff_geom.difference(tmp_geom))
+                    diff_geom = QgsGeometry(
+                        geometry_checker(diff_geom.difference(tmp_geom)))
                     if diff_geom.isGeosEmpty() or not diff_geom.isGeosValid():
                         LOGGER.debug(
                             tr('GEOS geoprocessing error: One or more input '
@@ -305,8 +307,8 @@ def _write_feature(attributes, geometry, writer, not_null_field_index):
 
     compulsary_field = attributes[not_null_field_index]
     if not compulsary_field or isinstance(compulsary_field, QPyNullVariant):
-        # We don't want feature a compulsary field.
-        # I think this a bug from the union algorithm from the union algorithm.
+        # We don't want feature without a compulsary field.
+        # I think this a bug from the union algorithm.
         return
 
     out_feature = QgsFeature()

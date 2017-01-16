@@ -1,10 +1,10 @@
 # coding=utf-8
 import unittest
 
-from safe.reportv4.extractors.action_notes import action_checklist_extractor
-from safe.reportv4.extractors.analysis_result import analysis_result_extractor
-from safe.reportv4.processors.default import jinja2_renderer
-from safe.reportv4.report_metadata import ReportMetadata
+from safe.report.extractors.action_notes import action_checklist_extractor
+from safe.report.extractors.analysis_result import analysis_result_extractor
+from safe.report.processors.default import jinja2_renderer
+from safe.report.report_metadata import ReportMetadata
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"

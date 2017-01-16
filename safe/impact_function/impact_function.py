@@ -31,7 +31,7 @@ from safe.common.version import get_version
 from safe.datastore.folder import Folder
 from safe.datastore.datastore import DataStore
 from safe.gisv4.vector.prepare_vector_layer import prepare_vector_layer
-from safe.gisv4.vector.clean_geometry import clean_geometry
+from safe.gisv4.vector.clean_geometry import clean_layer
 from safe.gisv4.vector.reproject import reproject
 from safe.gisv4.vector.assign_highest_value import assign_highest_value
 from safe.gisv4.vector.default_values import add_default_values
@@ -52,6 +52,7 @@ from safe.gisv4.raster.clip_bounding_box import clip_by_extent
 from safe.gisv4.raster.reclassify import reclassify as reclassify_raster
 from safe.gisv4.raster.polygonize import polygonize
 from safe.gisv4.raster.zonal_statistics import zonal_stats
+from safe.gisv4.raster.align import align_rasters
 from safe.definitions.post_processors import post_processors
 from safe.definitions.analysis_steps import analysis_steps
 from safe.definitions.utilities import definition
@@ -166,6 +167,7 @@ class ImpactFunction(object):
         self.reset_state()
         self._is_ready = False
         self._provenance_ready = False
+        self._datetime = None
         self._provenance = {
             # Environment
             'host_name': gethostname(),
@@ -486,6 +488,15 @@ class ImpactFunction(object):
         :rtype: basestring
         """
         return self._title
+
+    @property
+    def datetime(self):
+        """The timestamp of the impact function executions.
+
+        :return: The timestamp.
+        :rtype: datetime
+        """
+        return self._datetime
 
     @property
     def callback(self):
@@ -984,6 +995,8 @@ class ImpactFunction(object):
 
         else:
             self._provenance_ready = True
+            self._datetime = datetime.now()
+            self._provenance['datetime'] = self.datetime
             return ANALYSIS_SUCCESS, None
 
     @profile
@@ -1029,38 +1042,22 @@ class ImpactFunction(object):
             if self.aggregation:
                 self.datastore.add_layer(self.aggregation, 'aggregation')
 
-        # Special case for Raster Earthquake hazard on Raster population.
-        if self.hazard.type() == QgsMapLayer.RasterLayer:
-            if self.hazard.keywords.get('hazard') == 'earthquake':
-                if self.exposure.type() == QgsMapLayer.RasterLayer:
-                    if self.exposure.keywords.get('exposure') == 'population':
-                        # return self.state()
-
-                        # These layers are not generated.
-                        self._exposure_impacted = None
-                        self._aggregate_hazard_impacted = None
-                        return
-
         self._performance_log = profiling_log()
         self.callback(2, step_count, analysis_steps['aggregation_preparation'])
         self.aggregation_preparation()
 
-        self._performance_log = profiling_log()
-        self.callback(3, step_count, analysis_steps['hazard_preparation'])
-        self.hazard_preparation()
+        # Special case for Raster Earthquake hazard on Raster population.
+        damage_curve = False
+        if self.hazard.type() == QgsMapLayer.RasterLayer:
+            if self.hazard.keywords.get('hazard') == 'earthquake':
+                if self.exposure.type() == QgsMapLayer.RasterLayer:
+                    if self.exposure.keywords.get('exposure') == 'population':
+                        damage_curve = True
 
-        self._performance_log = profiling_log()
-        self.callback(
-            4, step_count, analysis_steps['aggregate_hazard_preparation'])
-        self.aggregate_hazard_preparation()
-
-        self._performance_log = profiling_log()
-        self.callback(5, step_count, analysis_steps['exposure_preparation'])
-        self.exposure_preparation()
-
-        self._performance_log = profiling_log()
-        self.callback(6, step_count, analysis_steps['combine_hazard_exposure'])
-        self.intersect_exposure_and_aggregate_hazard()
+        if damage_curve:
+            self.damage_curve_analysis()
+        else:
+            self.gis_overlay_analysis()
 
         self._performance_log = profiling_log()
         self.callback(7, step_count, analysis_steps['post_processing'])
@@ -1121,6 +1118,40 @@ class ImpactFunction(object):
         self._analysis_impacted = self.datastore.layer(name)
         if self.debug_mode:
             check_inasafe_fields(self._analysis_impacted)
+
+    @profile
+    def gis_overlay_analysis(self):
+        """Perform an overlay analysis between the exposure and the hazard."""
+        step_count = len(analysis_steps)
+
+        self._performance_log = profiling_log()
+        self.callback(3, step_count, analysis_steps['hazard_preparation'])
+        self.hazard_preparation()
+
+        self._performance_log = profiling_log()
+        self.callback(
+            4, step_count, analysis_steps['aggregate_hazard_preparation'])
+        self.aggregate_hazard_preparation()
+
+        self._performance_log = profiling_log()
+        self.callback(5, step_count, analysis_steps['exposure_preparation'])
+        self.exposure_preparation()
+
+        self._performance_log = profiling_log()
+        self.callback(6, step_count, analysis_steps['combine_hazard_exposure'])
+        self.intersect_exposure_and_aggregate_hazard()
+
+    @profile
+    def damage_curve_analysis(self):
+        """Perform a damage curve analysis."""
+        # For now we support only the earthquake raster on population raster.
+        self.earthquake_raster_population_raster()
+
+    @profile
+    def earthquake_raster_population_raster(self):
+        """Perform a damage curve analysis with EQ raster on population raster.
+        """
+        pass
 
     @profile
     def aggregation_preparation(self):
@@ -1257,7 +1288,7 @@ class ImpactFunction(object):
         aggregation areas and assign hazard class.
         """
         self.set_state_process('hazard', 'Make hazard layer valid')
-        self.hazard = clean_geometry(self.hazard)
+        self.hazard = clean_layer(self.hazard)
         if self.debug_mode:
             self.debug_layer(self.hazard)
 
@@ -1360,13 +1391,13 @@ class ImpactFunction(object):
 
                 self.set_state_process(
                 'exposure', 'Make exposure layer valid')
-                self._exposure = clean_geometry(self.exposure)
+                self._exposure = clean_layer(self.exposure)
                 if self.debug_mode:
                     self.debug_layer(self.exposure)
 
                 self.set_state_process(
                     'impact function', 'Make aggregate hazard layer valid')
-                self._aggregate_hazard_impacted = clean_geometry(
+                self._aggregate_hazard_impacted = clean_layer(
                     self._aggregate_hazard_impacted)
                 if self.debug_mode:
                     self.debug_layer(self._aggregate_hazard_impacted)

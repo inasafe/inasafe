@@ -7,7 +7,7 @@ from safe.definitions.fields import (
     exposure_type_field,
     exposure_class_field)
 from safe.gisv4.vector.tools import read_dynamic_inasafe_field
-from safe.reportv4.extractors.util import (
+from safe.report.extractors.util import (
     round_affecter_number,
     layer_definition_type)
 from safe.utilities.i18n import tr
@@ -23,11 +23,12 @@ def aggregation_result_extractor(impact_report, component_metadata):
 
     :param impact_report: the impact report that acts as a proxy to fetch
         all the data that extractor needed
-    :type impact_report: safe.reportv4.impact_report.ImpactReport
+    :type impact_report: safe.report.impact_report.ImpactReport
 
     :param component_metadata: the component metadata. Used to obtain
         information about the component we want to render
-    :type component_metadata: safe.reportv4.report_metadata.ReportMetadata
+    :type component_metadata: safe.report.report_metadata.
+        ReportComponentsMetadata
 
     :return: context for rendering phase
     :rtype: dict

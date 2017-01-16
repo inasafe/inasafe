@@ -3,7 +3,7 @@ from safe.common.parameters.resource_parameter import ResourceParameter
 from safe.definitions.minimum_needs import (
     minimum_needs_fields,
     minimum_needs_namespace)
-from safe.reportv4.extractors.util import round_affecter_number
+from safe.report.extractors.util import round_affecter_number
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -17,11 +17,12 @@ def minimum_needs_extractor(impact_report, component_metadata):
 
     :param impact_report: the impact report that acts as a proxy to fetch
         all the data that extractor needed
-    :type impact_report: safe.reportv4.impact_report.ImpactReport
+    :type impact_report: safe.report.impact_report.ImpactReport
 
     :param component_metadata: the component metadata. Used to obtain
         information about the component we want to render
-    :type component_metadata: safe.reportv4.report_metadata.ReportMetadata
+    :type component_metadata: safe.report.report_metadata.
+        ReportComponentsMetadata
 
     :return: context for rendering phase
     :rtype: dict

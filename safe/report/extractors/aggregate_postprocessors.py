@@ -13,7 +13,7 @@ from safe.definitions.fields import (
 from safe.definitions.minimum_needs import minimum_needs_fields
 from safe.definitions.post_processors import age_postprocessors
 from safe.definitions.utilities import postprocessor_output_field
-from safe.reportv4.extractors.util import round_affecter_number
+from safe.report.extractors.util import round_affecter_number
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -27,11 +27,12 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
 
     :param impact_report: the impact report that acts as a proxy to fetch
         all the data that extractor needed
-    :type impact_report: safe.reportv4.impact_report.ImpactReport
+    :type impact_report: safe.report.impact_report.ImpactReport
 
     :param component_metadata: the component metadata. Used to obtain
         information about the component we want to render
-    :type component_metadata: safe.reportv4.report_metadata.ReportMetadata
+    :type component_metadata: safe.report.report_metadata.
+        ReportComponentsMetadata
 
     :return: context for rendering phase
     :rtype: dict
@@ -100,7 +101,7 @@ def create_section(
         aggregation_impacted, analysis_layer, postprocessor_fields,
         section_header, units_label=None, debug_mode=False,
         population_rounding=False):
-    """Create gender section context.
+    """Create demographic section context.
 
     :param aggregation_impacted: Aggregation impacted
     :type aggregation_impacted: qgis.core.QgsVectorlayer

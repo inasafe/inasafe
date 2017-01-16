@@ -1,4 +1,8 @@
 # coding=utf-8
+import datetime
+
+from safe.definitions.fields import analysis_name_field
+from safe.report.extractors.util import value_from_field_name
 from safe.utilities.i18n import tr
 from safe.common.version import get_version
 
@@ -146,10 +150,12 @@ def qgis_composer_extractor(impact_report, component_metadata):
 
     :param impact_report: the impact report that acts as a proxy to fetch
         all the data that extractor needed
-    :type impact_report: safe.reportv4.impact_report.ImpactReport
+    :type impact_report: safe.report.impact_report.ImpactReport
+
     :param component_metadata: the component metadata. Used to obtain
         information about the component we want to render
-    :type component_metadata: safe.reportv4.report_metadata.ReportMetadata
+    :type component_metadata: safe.report.report_metadata.
+        ReportComponentsMetadata
 
     :return: context for rendering phase
     :rtype: dict
@@ -245,25 +251,35 @@ def qgis_composer_extractor(impact_report, component_metadata):
     context.map_legends = map_legends
 
     # process substitution map
-    # TODO: fetch time_stamp from layer
-    # date_time = self._keyword_io.read_keywords(self.layer, 'time_stamp')
-    date_time = None
-    if date_time is None:
+    provenance = impact_report.impact_function.provenance
+    date_time = provenance['datetime']
+    """:type: datetime.datetime"""
+    if isinstance(date_time, datetime.datetime):
+        date = date_time.strftime('%Y-%m-%d')
+        time = date_time.strftime('%H:%M')
+    else:
         date = ''
         time = ''
-    else:
-        tokens = date_time.split('_')
-        date = tokens[0]
-        time = tokens[1]
     long_version = get_version()
     tokens = long_version.split('.')
     version = '%s.%s.%s' % (tokens[0], tokens[1], tokens[2])
     # Get title of the layer
-    # TODO: get map title from layer
-    # title = self.map_title
-    title = None
-    if not title:
-        title = ''
+    title = impact_report.impact_function.title
+
+    # Set source
+    hazard_source = (
+        provenance['hazard_keywords'].get('source') or tr('Unknown'))
+    exposure_source = (
+        provenance['exposure_keywords'].get('source') or tr('Unknown'))
+    aggregation_source = (
+        provenance['aggregation_keywords'].get('source') or tr('Unknown'))
+
+    reference_name = tr('Geographic Coordinates - {crs}').format(
+        crs=impact_report.impact_function.impact.crs().authid())
+
+    analysis_layer = impact_report.analysis
+    analysis_name = value_from_field_name(
+        analysis_name_field['field_name'], analysis_layer)
 
     # Prepare the substitution map
     substitution_map = {
@@ -273,7 +289,7 @@ def qgis_composer_extractor(impact_report, component_metadata):
         'safe-version': version,  # deprecated
         'disclaimer': inasafe_context.disclaimer,
         # These added in 3.2
-        'version-title': tr('Version'),
+        'version-title': tr('Software Version'),
         'inasafe-version': version,
         'disclaimer-title': tr('Disclaimer'),
         'date-title': tr('Date'),
@@ -284,28 +300,18 @@ def qgis_composer_extractor(impact_report, component_metadata):
             'ground truth the results shown here before deploying '
             'resources and / or personnel.'),
         'version-text': tr(
-            'Assessment carried out using InaSAFE release %s.' % version),
+            'InaSAFE %s' % version),
         'legend-title': tr('Legend'),
         'information-title': tr('Analysis information'),
-        'supporters-title': tr('Report produced by')
+        'supporters-title': tr('Report produced by'),
+        'source-title': tr('Data Source'),
+        'analysis-title': tr('Analysis Name'),
+        'analysis-name': analysis_name,
+        'reference-title': tr('Spatial Reference'),
+        'reference-name': reference_name,
+        'hazard-source': hazard_source,
+        'exposure-source': exposure_source,
+        'aggregation-source': aggregation_source,
     }
     context.substitution_map = substitution_map
     return context
-
-
-def impact_table_pdf_extractor(impact_report, component_metadata):
-    """Extracting impact summary of the impact layer.
-
-    For PDF generations
-
-    :param impact_report: the impact report that acts as a proxy to fetch
-        all the data that extractor needed
-    :type impact_report: safe.reportv4.impact_report.ImpactReport
-
-    :param component_metadata: the component metadata. Used to obtain
-        information about the component we want to render
-    :type component_metadata: safe.reportv4.report_metadata.ReportMetadata
-
-    :return: context for rendering phase
-    :rtype: dict
-    """

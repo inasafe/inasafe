@@ -161,7 +161,7 @@ def content():
     if url:
         message.add(m.Image(url))
     for step in steps:
-        message.add(definition_to_message(step, SUBSECTION_STYLE))
+        message.add(definition_to_message(step, INFO_STYLE))
 
     ##
     #  Hazard definitions
@@ -259,10 +259,14 @@ def content():
 
     header = m.Heading(tr('Layer Geometry Types'), **SECTION_STYLE)
     message.add(header)
-    message.add(definition_to_message(definitions.layer_geometry_point))
-    message.add(definition_to_message(definitions.layer_geometry_line))
-    message.add(definition_to_message(definitions.layer_geometry_polygon))
-    message.add(definition_to_message(definitions.layer_geometry_raster))
+    message.add(
+        definition_to_message(definitions.layer_geometry_point, INFO_STYLE))
+    message.add(
+        definition_to_message(definitions.layer_geometry_line, INFO_STYLE))
+    message.add(
+        definition_to_message(definitions.layer_geometry_polygon, INFO_STYLE))
+    message.add(
+        definition_to_message(definitions.layer_geometry_raster, INFO_STYLE))
 
     ##
     #  Layer Modes
@@ -279,21 +283,21 @@ def content():
     header = m.Heading(tr('Layer Purposes'), **SECTION_STYLE)
     message.add(header)
     message.add(definition_to_message(
-        definitions.layer_purpose_hazard))
+        definitions.layer_purpose_hazard, INFO_STYLE))
     message.add(definition_to_message(
-        definitions.layer_purpose_exposure))
+        definitions.layer_purpose_exposure, INFO_STYLE))
     message.add(definition_to_message(
-        definitions.layer_purpose_aggregation))
+        definitions.layer_purpose_aggregation, INFO_STYLE))
     message.add(definition_to_message(
-        definitions.layer_purpose_exposure_impacted))
+        definitions.layer_purpose_exposure_impacted, INFO_STYLE))
     message.add(definition_to_message(
-        definitions.layer_purpose_exposure_breakdown))
+        definitions.layer_purpose_exposure_breakdown, INFO_STYLE))
     message.add(definition_to_message(
-        definitions.layer_purpose_aggregation_impacted))
+        definitions.layer_purpose_aggregation_impacted, INFO_STYLE))
     message.add(definition_to_message(
-        definitions.layer_purpose_aggregate_hazard_impacted))
+        definitions.layer_purpose_aggregate_hazard_impacted, INFO_STYLE))
     message.add(definition_to_message(
-        definitions.layer_purpose_profiling))
+        definitions.layer_purpose_profiling, INFO_STYLE))
 
     ##
     # All units
@@ -417,7 +421,8 @@ def _create_post_processor_subtable(item_list):
 
 
 def _create_fields_section(message, title, fields):
-    message.add(m.Paragraph(tr(title)))
+    header = m.Heading(title, **INFO_STYLE)
+    message.add(header)
     table = _create_fields_table()
     for field in fields:
         _add_field_to_table(field, table)
@@ -442,9 +447,8 @@ def definition_to_message(definition, heading_style=None):
     if heading_style:
         header = m.Heading(definition['name'], **heading_style)
     else:
-        header = m.Paragraph(definition['name'])
+        header = m.Paragraph(m.ImportantText(definition['name']))
     message = m.Message()
-    message.add(m.HorizontalRule())
     message.add(header)
     # If the definition has an icon, we put the icon and description side by
     # side in a table otherwise just show the description as a paragraph

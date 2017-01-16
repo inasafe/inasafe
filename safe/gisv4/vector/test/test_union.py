@@ -5,7 +5,7 @@ import unittest
 from safe.test.utilities import (
     get_qgis_app,
     load_test_vector_layer)
-from safe.gisv4.vector.clean_geometry import clean_geometry
+from safe.gisv4.vector.clean_geometry import clean_layer
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.gisv4.vector.union import union
@@ -48,12 +48,12 @@ class TestUnionVector(unittest.TestCase):
     def test_union_error(self):
         """Test we can union two layers like hazard and aggregation (2)."""
 
-        union_a = clean_geometry(load_test_vector_layer(
+        union_a = clean_layer(load_test_vector_layer(
             'gisv4', 'hazard', 'union_check_hazard.geojson'))
         union_a.keywords['inasafe_fields'][hazard_class_field['key']] = (
             union_a.keywords['inasafe_fields'][hazard_value_field['key']])
 
-        union_b = clean_geometry(load_test_vector_layer(
+        union_b = clean_layer(load_test_vector_layer(
             'gisv4', 'aggregation', 'union_check_aggregation.geojson'))
 
         layer = union(union_a, union_b)

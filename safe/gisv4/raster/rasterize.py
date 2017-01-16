@@ -5,7 +5,7 @@ from qgis.core import QgsRasterLayer
 from processing.core.Processing import Processing
 
 from safe.common.utilities import unique_filename
-from safe.definitionsv4.processing_steps import rasterize_steps
+from safe.definitions.processing_steps import rasterize_steps
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
