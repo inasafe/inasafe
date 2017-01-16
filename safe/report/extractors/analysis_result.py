@@ -11,7 +11,7 @@ from safe.definitions.hazard_category import (
     hazard_category_multiple_event)
 from safe.definitions.hazard_classifications import all_hazard_classes
 from safe.report.extractors.util import layer_definition_type, \
-    round_affecter_number
+    round_affected_number
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -80,7 +80,7 @@ def analysis_result_extractor(impact_report, component_metadata):
                 # label, string-formatted with translated hazard class label
                 hazard_label = hazard_count_field['name'] % (
                     hazard_class['name'], )
-                hazard_value = round_affecter_number(
+                hazard_value = round_affected_number(
                     analysis_feature[field_index],
                     enable_rounding=is_rounded,
                     use_population_rounding=use_population_rounding)
@@ -122,7 +122,7 @@ def analysis_result_extractor(impact_report, component_metadata):
             field_index = analysis_layer.fieldNameIndex(
                 report_field['field_name'])
             row_label = report_field['name']
-            row_value = round_affecter_number(
+            row_value = round_affected_number(
                 analysis_feature[field_index],
                 enable_rounding=is_rounded,
                 use_population_rounding=use_population_rounding)

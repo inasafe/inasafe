@@ -73,18 +73,18 @@ def generate_impact_map_report(impact_function, iface):
         impact_function=impact_function)
 
     # Get other setting
-    settings = QSettings()
-    logo_path = settings.value(
-        'inasafe/organisation_logo_path', '', type=str)
-    impact_report.inasafe_context.organisation_logo = logo_path
-
-    disclaimer_text = settings.value(
-        'inasafe/reportDisclaimer', '', type=str)
-    impact_report.inasafe_context.disclaimer = disclaimer_text
-
-    north_arrow_path = settings.value(
-        'inasafe/north_arrow_path', '', type=str)
-    impact_report.inasafe_context.north_arrow = north_arrow_path
+    # settings = QSettings()
+    # logo_path = settings.value(
+    #     'inasafe/organisation_logo_path', '', type=str)
+    # impact_report.inasafe_context.organisation_logo = logo_path
+    #
+    # disclaimer_text = settings.value(
+    #     'inasafe/reportDisclaimer', '', type=str)
+    # impact_report.inasafe_context.disclaimer = disclaimer_text
+    #
+    # north_arrow_path = settings.value(
+    #     'inasafe/north_arrow_path', '', type=str)
+    # impact_report.inasafe_context.north_arrow = north_arrow_path
 
     # get the extent of impact layer
     impact_report.qgis_composition_context.extent = \
