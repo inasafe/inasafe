@@ -7,7 +7,8 @@ import qgis  # pylint: disable=unused-import
 from PyQt4 import QtGui
 
 from safe.common.version import get_version
-from safe.utilities.resources import get_ui_class, html_footer, html_header
+from safe.utilities.resources import (
+    get_ui_class, html_footer, html_help_header)
 from safe.gui.tools.help.dock_help import dock_help
 from safe.gui.widgets import message_viewer
 
@@ -37,7 +38,7 @@ class HelpDialog(QtGui.QDialog, FORM_CLASS):
         self.setWindowTitle(self.tr('InaSAFE %s Help' % get_version()))
         self.parent = parent
 
-        header = html_header()
+        header = html_help_header()
         footer = html_footer()
 
         string = header

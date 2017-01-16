@@ -1,6 +1,6 @@
 *InaSAFE help
 **Hazards
-*****Flood
+****Flood
 Flood classes
 *Tsunami
 Tsunami classes

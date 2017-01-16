@@ -94,23 +94,13 @@ class MessageViewerTest(unittest.TestCase):
     def test_error_message(self):
         """Test we can send error messages to the message viewer."""
         text = self.fake_error()
-        control_file_path = standard_data_path(
-            'control',
-            'files',
-            'test-error-message.txt')
-        expected_result = open(control_file_path).read().replace('\n', '')
-        self.assertEqual(text, expected_result)
+        self.assertIn('Exception****Suggestion', text)
 
     def test_static_and_error(self):
         """Test error message works when there is a static message in place."""
         self.message_viewer.static_message_event(None, m.Message('Hi'))
         text = self.fake_error()
-        control_file_path = standard_data_path(
-            'control',
-            'files',
-            'test-static-error-message.txt')
-        expected_result = open(control_file_path).read().replace('\n', '')
-        self.assertEqual(text, expected_result)
+        self.assertIn('****Problem', text)
 
 if __name__ == '__main__':
     unittest.main()
