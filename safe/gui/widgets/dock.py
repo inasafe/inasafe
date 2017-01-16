@@ -765,6 +765,7 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             # We want to display the datastore and then
             # we want to re-raise it to get the first aid plugin popup.
             add_debug_layers_to_canvas(self.impact_function)
+            disable_busy_cursor()
             raise
         if status == ANALYSIS_FAILED_BAD_INPUT:
             self.hide_busy()
