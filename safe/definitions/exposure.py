@@ -343,7 +343,7 @@ exposure_land_cover = {
     ],
     'allowed_geometries': [
         'polygon',
-        'raster'
+        # 'raster'  # Disable per #3600
     ],
     'units': [],
     'classifications': [generic_landcover_classes],
