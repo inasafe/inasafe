@@ -20,7 +20,7 @@ __revision__ = '$Format:%H$'
 
 
 @profile
-def clean_geometry(layer, callback=None):
+def clean_layer(layer, callback=None):
     """Clean a vector layer.
 
     :param layer: The vector layer.
@@ -40,10 +40,25 @@ def clean_geometry(layer, callback=None):
     # iterate through all features
     for feature in layer.getFeatures():
         geom = feature.geometry()
-        new_geom = geom.buffer(0, 5)
-        feature.setGeometry(new_geom)
+        feature.setGeometry(geometry_checker(geom))
 
     # save changes
     layer.commitChanges()
 
     return layer
+
+
+def geometry_checker(geometry):
+    """Perform a cleaning if the geometry is not valid.
+
+    :param geometry: The geometry to check and clean.
+    :type geometry: QgsGeometry
+
+    :return: A cleaned geometry
+    :rtype: QgsGeometry
+    """
+    if geometry.isGeosValid():
+        return geometry
+    else:
+        new_geom = geometry.buffer(0, 5)
+        return new_geom
