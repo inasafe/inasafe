@@ -44,8 +44,11 @@ from PyQt4.QtGui import (
     QPushButton,
     QDialogButtonBox)
 
-from safe.definitions.constants import ANALYSIS_SUCCESS
-from safe.gui.tools.batch import scenario_runner
+from safe.definitions.constants import (
+    ANALYSIS_SUCCESS,
+    PREPARE_SUCCESS,
+    ANALYSIS_FAILED_BAD_CODE,
+    ANALYSIS_FAILED_BAD_INPUT)
 from safe.gui.analysis_utilities import generate_impact_report
 from safe.utilities.gis import extent_string_to_array
 from safe.common.exceptions import FileNotFoundError
@@ -55,6 +58,7 @@ from safe.utilities.resources import (
 from safe.messaging import styles
 from safe.utilities.resources import resources_path
 from safe.gui.tools.help.batch_help import batch_help
+from safe.impact_function.impact_function import ImpactFunction
 
 INFO_STYLE = styles.INFO_STYLE
 LOGGER = logging.getLogger('InaSAFE')
@@ -273,204 +277,12 @@ class BatchDialog(QDialog, FORM_CLASS):
         else:
             function()
 
-    def run_scenario(self, items):
-        """Run a simple scenario.
-
-        :param items: A dictionary containing the scenario configuration
-            as table items.
-        :type items: dict
-
-        :return: A tuple with the status of the IF and an error message if
-            needed.
-            The status is ANALYSIS_SUCCESS if everything was fine.
-            The status is ANALYSIS_FAILED_BAD_INPUT if the client should fix
-                something.
-            The status is ANALYSIS_FAILED_BAD_CODE if something went wrong
-                from the code.
-        :rtype: (int, m.Message)
-        """
-        # LOGGER.info('Run simple task' + str(items))
-        scenario_directory = str(self.source_directory.text())
-
-        paths = []
-        if 'aggregation' in items:
-            paths.append(items['aggregation'])
-        if 'exposure' in items:
-            paths.append(items['exposure'])
-            # add access to exposure layer source so we can access it later
-            self.exposure_source = os.path.normpath(
-                os.path.join(scenario_directory, items['exposure']))
-        if 'hazard' in items:
-            paths.append(items['hazard'])
-
-        # always run in new project
-        if self.start_in_new_project:
-            self.iface.newProject()
-
-        try:
-            # create layer group
-            group_name = items['scenario_name']
-            self.layer_group = self.root.addGroup(group_name)
-            self.layer_group_container.append(self.layer_group)
-            # add layer to group
-            scenario_runner.add_layers(
-                scenario_directory,
-                paths,
-                self.iface,
-                self.layer_group)
-        except FileNotFoundError:
-            # set status to 'fail'
-            LOGGER.exception('Loading layers failed: \nRoot: %s\n%s' % (
-                scenario_directory, paths))
-            return False
-
-        if 'aggregation' in items:
-            aggregation_path = scenario_runner.extract_path(
-                scenario_directory, items['aggregation'])[0]
-            result = scenario_runner.set_aggregation_layer(
-                aggregation_path, self.dock)
-            if not result:
-                return False
-
-        # Set extent CRS if it exists
-        if 'extent_crs' in items:
-            crs = QgsCoordinateReferenceSystem(items['extent_crs'])
-        else:
-            # assume crs is Geo/WGS84
-            crs = QgsCoordinateReferenceSystem('EPSG:4326')
-        # set extent if exist
-        if 'extent' in items:
-            # split extent string
-            coordinates = items['extent']
-            coordinates = extent_string_to_array(coordinates)
-
-            # set the extent according the value
-            self.iface.mapCanvas().mapRenderer().setProjectionsEnabled(True)
-
-            extent = QgsRectangle(*coordinates)
-
-            self.dock.define_user_analysis_extent(extent, crs)
-
-            message = 'set layer extent to %s ' % extent.asWktCoordinates()
-            # LOGGER.info(message)
-
-            self.iface.mapCanvas().setExtent(extent)
-
-        status, message = scenario_runner.run_scenario(self.dock)
-
-        return status, message
-
     def reset_status(self):
         """Set all scenarios' status to empty in the table
         """
         for row in range(self.table.rowCount()):
             status_item = self.table.item(row, 1)
             status_item.setText(self.tr(''))
-
-    @pyqtSignature('')
-    def run_all_clicked(self):
-        """Run all scenario when pbRunAll is clicked.
-        """
-        self.reset_status()
-
-        self.enable_busy_cursor()
-        report = []
-        fail_count = 0
-        pass_count = 0
-
-        index = 0
-        for row in range(self.table.rowCount()):
-            item = self.table.item(row, 0)
-            status_item = self.table.item(row, 1)
-            name_item = item.text()
-
-            try:
-                index += 1
-                result = self.run_task(item, status_item, index=index)
-                if result:
-                    # P for passed
-                    report.append('P: %s\n' % str(name_item))
-                    pass_count += 1
-                else:
-                    report.append('F: %s\n' % str(name_item))
-                    fail_count += 1
-            except Exception, e:  # pylint: disable=W0703
-                LOGGER.exception('Batch execution failed. The exception: ' +
-                                 str(e))
-                report.append('F: %s\n' % str(name_item))
-                fail_count += 1
-                self.disable_busy_cursor()
-
-        try:
-            report_path = self.write_report(
-                report, pass_count, fail_count)
-            self.show_report(report_path)
-        except IOError:
-            # noinspection PyArgumentList,PyCallByClass,PyTypeChecker
-            QtGui.QMessageBox.question(self, 'Error',
-                                       'Failed to write report file.')
-            self.disable_busy_cursor()
-        self.disable_busy_cursor()
-
-    def write_report(self, report, pass_count, fail_count):
-        """Write a report status of Batch Runner.
-
-        For convenience, the name will use current time.
-
-        :param report: A list of each scenario and its status.
-        :type report: list
-
-        :param pass_count: Number of passing scenarios.
-        :type pass_count: int
-
-        :param fail_count: Number of failed scenarios.
-        :type fail_count: int
-
-        :returns: A string containing the path to the report file.
-        :rtype: str
-
-        :raises: IOError
-        """
-        separator = '-----------------------------\n'
-        current_time = datetime.now().strftime('%Y%m%d%H%M%S')
-        report_path = 'batch-report-' + current_time + '.txt'
-        output_path = self.output_directory.text()
-        path = os.path.join(str(output_path), report_path)
-
-        try:
-            report_file = file(path, 'w')
-            report_file.write('InaSAFE Batch Report File\n')
-            report_file.write(separator)
-            for myLine in report:
-                report_file.write(myLine)
-            report_file.write(separator)
-            report_file.write('Total passed: %s\n' % pass_count)
-            report_file.write('Total failed: %s\n' % fail_count)
-            report_file.write('Total tasks: %s\n' % len(report))
-            report_file.write(separator)
-            report_file.close()
-
-            # LOGGER.info('Log written to %s' % path)
-            return path
-        except IOError:
-            raise IOError
-
-    def show_report(self, report_path):
-        """Show batch report file in batchReportFileName using an external app.
-
-        This method uses QDesktop services to display the report (typically
-        using gedit or similar text editor).
-
-        :param report_path: Path to the file of batch report.
-        :type report_path: str
-        """
-        if self.show_results_popup:
-            url = QtCore.QUrl.fromLocalFile(report_path)
-            # noinspection PyTypeChecker,PyCallByClass,PyArgumentList
-            QtGui.QDesktopServices.openUrl(url)
-        else:
-            report = open(report_path).read()
-            # LOGGER.info(report)
 
     def prepare_task(self, items):
         """Prepare scenario so that it can be set directly to impact
@@ -596,6 +408,7 @@ class BatchDialog(QDialog, FORM_CLASS):
         self.enable_busy_cursor()
         for layer_group in self.layer_group_container:
             layer_group.setVisible(False)
+
         # set status to 'running'
         status_item.setText(self.tr('Running'))
 
@@ -619,115 +432,58 @@ class BatchDialog(QDialog, FORM_CLASS):
                                  str(e))
                 result = False
         elif isinstance(value, dict):
-            path = str(self.output_directory.text())
-            title = str(task_item.text())
+            # path = str(self.output_directory.text())
+            # title = str(task_item.text())
+
+            # create layer group
+            group_name = value['scenario_name']
+            self.layer_group = self.root.addGroup(group_name)
+            self.layer_group_container.append(self.layer_group)
 
             # Its a dict containing files for a scenario
-            status, message = self.run_scenario(value)
-            if status != ANALYSIS_SUCCESS:
-                status_item.setText(self.tr('Analysis Fail'))
-                logging.exception(message)
+            h, e, a, extent, extent_crs = self.prepare_task(value)
+            impact_function = ImpactFunction()
+            impact_function.hazard = h
+            impact_function.exposure = e
+            if a:
+                impact_function.aggregation = a
+            elif extent:
+                impact_function.requested_extent = extent
+                impact_function.requested_extent_crs = extent_crs
+            prepare_status, prepare_message = impact_function.prepare()
+            if prepare_status == PREPARE_SUCCESS:
+                LOGGER.info("Impact function ready")
+                status, message = impact_function.run()
+                if status == ANALYSIS_SUCCESS:
+                    status_item.setText(self.tr("Analysis Success"))
+                    impact_layer = impact_function.impact
+                    if impact_layer.isValid():
+                        layer_list = [impact_layer, h, e, a]
+                        reg.instance().addMapLayers(layer_list, False)
+                        for layer in layer_list:
+                            self.layer_group.addLayer(layer)
+                        # generate map report and impact report
+                        # map report is still waiting update from lucernae
+                        try:
+                            generate_impact_report(impact_function, self.iface)
+                        except:
+                            status_item.setText("Report failed to generate")
+                    else:
+                        LOGGER.info("Impact layer is invalid")
+                elif status == ANALYSIS_FAILED_BAD_INPUT:
+                    LOGGER.info("Bad input detected")
+                elif status == ANALYSIS_FAILED_BAD_CODE:
+                    LOGGER.info("Impact function encountered a bug")
             else:
-                # NOTE(gigih):
-                # Usually after analysis is done, the impact layer
-                # become the active layer. <--- WRONG
-                # noinspection PyUnresolvedReferences
-                impact_function = self.dock.impact_function
-                impact_layer = impact_function.impact
-                impact_layer_source = impact_layer.source()
-                LOGGER.info('Impact layer source: "%s"' % impact_layer_source)
-                legend_interface = self.iface.legendInterface()
-                # turn off exposure layer visibility
-                exposure_layer = self.identify_layer(self.exposure_source)
-                legend_interface.setLayerVisible(exposure_layer, False)
-                # Move layer group created from the analysis to layer group
-                # created by batchrunner
-                scenario_group = self.root.children()[0]
-                cloned_group = scenario_group.clone()
-                self.layer_group.insertChildNode(0, cloned_group)
-                self.root.removeChildNode(scenario_group)
-                # noinspection PyBroadException
-                try:
-                    status_item.setText(self.tr('Analysis Ok'))
-                    # Etienne 20/12/16 Let's disable the PDF until V4 can do it
-                    # self.create_pdf(
-                    #     title, path, impact_layer, count, index)
-                    LOGGER.info('Map has been rendered: "%s"' % value)
-                    # status_item.setText(self.tr('Report Ok'))
-                except Exception:  # pylint: disable=W0703
-                    LOGGER.exception('Unable to render map: "%s"' % value)
-                    status_item.setText(self.tr('Report Failed'))
-                    result = False
+                LOGGER.warning("Impact function not ready with message:")
+                LOGGER.info(prepare_message)
+
         else:
             LOGGER.exception('Data type not supported: "%s"' % value)
             result = False
 
         self.disable_busy_cursor()
         return result
-
-        # noinspection PyMethodMayBeStatic
-    def report_path(self, directory, title, count=0, index=None):
-        """Get PDF report filename given directory, title and optional index.
-
-        :param directory: Directory of pdf report file.
-        :type directory: str
-
-        :param title: Title of report.
-        :type title: str
-
-        :param count: The number of scenario run.
-        :type count: int
-
-        :param index: A sequential number for the beginning of the file name.
-        :type index: int, None
-
-        :returns: A tuple containing the pdf report filenames like this:
-            ('/home/foo/data/title.pdf', '/home/foo/data/title_table.pdf')
-        :rtype: tuple
-        """
-        if index is not None:
-            index = str(index) + '_'
-        file_name = title.replace(' ', '_')
-        if count != 0:
-            file_name += '_' + str(count)
-        file_name += '.pdf'
-        map_path = os.path.join(directory, index + file_name)
-        table_path = os.path.splitext(map_path)[0] + '_table.pdf'
-
-        return map_path, table_path
-
-    def create_pdf(
-            self,
-            title,
-            output_directory,
-            impact_layer,
-            count=0,
-            index=None):
-        """Create PDF report from impact layer.
-
-        Create map & table report PDF based from impact_layer data.
-
-        :param title: Report title.
-        :type title: str
-
-        :param output_directory: Output directory.
-        :type output_directory: str
-
-        :param impact_layer: Impact layer instance.
-        :type impact_layer: QgsMapLayer
-
-        :param count: The number of scenarios that were run.
-        :type count: int
-
-        :param index: A sequential number to place at the beginning of the
-            file name.
-        :type index: int, None
-
-        See also:
-            Dock.printMap()
-        """
-        # FIXME: To do with InaSAFE V4
-        LOGGER.debug('Not working yet with InaSAFE V4')
 
     def show_parser_results(self, parsed_list, unparsed_list):
         """Compile a formatted list of un/successfully parsed files.
@@ -756,6 +512,121 @@ class BatchDialog(QDialog, FORM_CLASS):
             unparsed_message + unparsed_contents)
         return full_messages
 
+    @pyqtSignature('')
+    def run_selected_clicked(self):
+        """Run the selected scenario. """
+        self.enable_busy_cursor()
+        current_row = self.table.currentRow()
+        item = self.table.item(current_row, 0)
+        status_item = self.table.item(current_row, 1)
+        self.run_task(item, status_item)
+        self.disable_busy_cursor()
+
+    @pyqtSignature('')
+    def run_all_clicked(self):
+        """Run all scenario when pbRunAll is clicked.
+        """
+        self.reset_status()
+
+        self.enable_busy_cursor()
+        report = []
+        fail_count = 0
+        pass_count = 0
+
+        index = 0
+        for row in range(self.table.rowCount()):
+            item = self.table.item(row, 0)
+            status_item = self.table.item(row, 1)
+            name_item = item.text()
+
+            try:
+                index += 1
+                result = self.run_task(item, status_item, index=index)
+                if result:
+                    # P for passed
+                    report.append('P: %s\n' % str(name_item))
+                    pass_count += 1
+                else:
+                    report.append('F: %s\n' % str(name_item))
+                    fail_count += 1
+            except Exception, e:  # pylint: disable=W0703
+                LOGGER.exception('Batch execution failed. The exception: ' +
+                                 str(e))
+                report.append('F: %s\n' % str(name_item))
+                fail_count += 1
+                self.disable_busy_cursor()
+
+        try:
+            report_path = self.write_report(
+                report, pass_count, fail_count)
+            self.show_report(report_path)
+        except IOError:
+            # noinspection PyArgumentList,PyCallByClass,PyTypeChecker
+            QtGui.QMessageBox.question(self, 'Error',
+                                       'Failed to write report file.')
+            self.disable_busy_cursor()
+        self.disable_busy_cursor()
+
+    def write_report(self, report, pass_count, fail_count):
+        """Write a report status of Batch Runner.
+
+        For convenience, the name will use current time.
+
+        :param report: A list of each scenario and its status.
+        :type report: list
+
+        :param pass_count: Number of passing scenarios.
+        :type pass_count: int
+
+        :param fail_count: Number of failed scenarios.
+        :type fail_count: int
+
+        :returns: A string containing the path to the report file.
+        :rtype: str
+
+        :raises: IOError
+        """
+        separator = '-----------------------------\n'
+        current_time = datetime.now().strftime('%Y%m%d%H%M%S')
+        report_path = 'batch-report-' + current_time + '.txt'
+        output_path = self.output_directory.text()
+        path = os.path.join(str(output_path), report_path)
+
+        try:
+            report_file = file(path, 'w')
+            report_file.write('InaSAFE Batch Report File\n')
+            report_file.write(separator)
+            for myLine in report:
+                report_file.write(myLine)
+            report_file.write(separator)
+            report_file.write('Total passed: %s\n' % pass_count)
+            report_file.write('Total failed: %s\n' % fail_count)
+            report_file.write('Total tasks: %s\n' % len(report))
+            report_file.write(separator)
+            report_file.close()
+
+            # LOGGER.info('Log written to %s' % path)
+            return path
+        except IOError:
+            raise IOError
+
+    def show_report(self, report_path):
+        """Show batch report file in batchReportFileName using an external app.
+
+        This method uses QDesktop services to display the report (typically
+        using gedit or similar text editor).
+
+        :param report_path: Path to the file of batch report.
+        :type report_path: str
+        """
+        if self.show_results_popup:
+            url = QtCore.QUrl.fromLocalFile(report_path)
+            # noinspection PyTypeChecker,PyCallByClass,PyArgumentList
+            QtGui.QDesktopServices.openUrl(url)
+        else:
+            report = open(report_path).read()
+            # LOGGER.info(report)
+
     def update_default_output_dir(self):
         """Update output dir if set to default
         """
@@ -771,16 +642,6 @@ class BatchDialog(QDialog, FORM_CLASS):
     def disable_busy_cursor(self):
         """Disable the hourglass cursor."""
         QtGui.qApp.restoreOverrideCursor()
-
-    @pyqtSignature('')
-    def run_selected_clicked(self):
-        """Run the selected scenario. """
-        self.enable_busy_cursor()
-        current_row = self.table.currentRow()
-        item = self.table.item(current_row, 0)
-        status_item = self.table.item(current_row, 1)
-        self.run_task(item, status_item)
-        self.disable_busy_cursor()
 
     @pyqtSignature('bool')
     def on_scenario_directory_radio_toggled(self, flag):
