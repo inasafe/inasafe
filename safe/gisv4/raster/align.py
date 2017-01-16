@@ -39,16 +39,16 @@ def align_rasters(hazard_layer, exposure_layer, extent):
     will be used as the reference for the alignment (i.e. parameters will
     be set to its CRS, cell size and grid offset).
 
-    :param hazard_layer: Hazard layer to be aligned
+    :param hazard_layer: Hazard layer to be aligned.
     :type hazard_layer: QgsRasterLayer
 
-    :param exposure_layer: Exposure layer to be aligned
+    :param exposure_layer: Exposure layer to be aligned.
     :type exposure_layer: QgsRasterLayer
 
-    :param extent: Extent in exposure CRS to which raster should be clipped
+    :param extent: Extent in exposure CRS to which raster should be clipped.
     :type extent: QgsRectangle
 
-    :return: clipped hazard and exposure layers
+    :return: Clipped hazard and exposure layers.
     :rtype: QgsRasterLayer, QgsRasterLayer
     """
     output_layer_name = align_steps['output_layer_name']
