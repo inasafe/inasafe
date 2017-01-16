@@ -14,6 +14,7 @@ from os.path import join, isfile
 from os import listdir
 
 from safe.definitions.minimum_needs import minimum_needs_fields
+from safe.definitions.utilities import definition
 from safe.test.utilities import (
     get_control_text,
     load_test_raster_layer,
@@ -25,6 +26,7 @@ from safe.test.utilities import (
 )
 from safe.common.version import get_version
 from safe.test.debug_helper import print_attribute_table
+from safe.impact_function.provenance_utilities import get_map_title
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -448,9 +450,14 @@ class TestImpactFunction(unittest.TestCase):
         aggregation_layer = load_test_vector_layer(
             'gisv4', 'aggregation', 'small_grid.geojson')
 
+        hazard = definition(hazard_layer.keywords['hazard'])
+        exposure = definition(exposure_layer.keywords['exposure'])
+        hazard_category = definition(hazard_layer.keywords['hazard_category'])
+
         expected_provenance = {
             'gdal_version': gdal.__version__,
             'host_name': gethostname(),
+            'map_title': get_map_title(hazard, exposure, hazard_category),
             'user': getpass.getuser(),
             'os': platform.version(),
             'pyqt_version': PYQT_VERSION_STR,
@@ -499,9 +506,14 @@ class TestImpactFunction(unittest.TestCase):
         exposure_layer = load_test_vector_layer(
             'gisv4', 'exposure', 'building-points.geojson')
 
+        hazard = definition(hazard_layer.keywords['hazard'])
+        exposure = definition(exposure_layer.keywords['exposure'])
+        hazard_category = definition(hazard_layer.keywords['hazard_category'])
+
         expected_provenance = {
             'gdal_version': gdal.__version__,
             'host_name': gethostname(),
+            'map_title': get_map_title(hazard, exposure, hazard_category),
             'inasafe_version': get_version(),
             'pyqt_version': PYQT_VERSION_STR,
             'qgis_version': QGis.QGIS_VERSION,
