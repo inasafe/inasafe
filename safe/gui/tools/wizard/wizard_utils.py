@@ -4,6 +4,7 @@
 import logging
 import re
 from PyQt4 import QtCore
+from PyQt4.QtGui import QWidgetItem, QSpacerItem, QLayoutItem, QLayout
 
 from qgis.core import QgsCoordinateTransform
 
@@ -186,3 +187,27 @@ def get_inasafe_default_value_fields(qsetting, field_key):
     ]
 
     return labels, values
+
+
+def clear_layout(layout):
+    """Clear layout content.
+
+    # Adapted from http://stackoverflow.com/a/9375273/1198772
+    :param layout: A layout.
+    :type layout: QLayout
+    """
+    for i in reversed(range(layout.count())):
+        item = layout.itemAt(i)
+
+        if isinstance(item, QWidgetItem):
+            item.widget().close()
+        elif isinstance(item, QLayout):
+            clear_layout(item.layout())
+        elif isinstance(item, QSpacerItem):
+            # No need to do anything
+            pass
+        else:
+            pass
+
+        # Remove the item from layout
+        layout.removeItem(item)
