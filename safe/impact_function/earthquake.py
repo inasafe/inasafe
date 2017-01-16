@@ -17,6 +17,8 @@ from qgis.core import (
 
 from safe.definitions.fields import (
     aggregation_id_field, aggregation_name_field)
+from safe.definitions.layer_purposes import (
+    layer_purpose_aggregation_impacted, layer_purpose_exposure_impacted)
 from safe.gis.numerics import log_normal_cdf
 from safe.gisv4.raster.write_raster import array_to_raster, make_array
 from safe.common.utilities import unique_filename
@@ -140,16 +142,32 @@ def exposed_people_stats(hazard, exposure, aggregation):
     assert exposed_raster.isValid()
 
     exposed_raster.keywords = dict(exposure.keywords)
-    exposed_raster.keywords['title'] = 'exposed_raster'
+    exposed_raster.keywords['layer_purpose'] = (
+        layer_purpose_exposure_impacted['key'])
+    exposed_raster.keywords['title'] = layer_purpose_exposure_impacted['key']
 
     return exposed, exposed_raster
 
 
-def make_summary_layer(exposed, aggregation_layer, fatality_rate):
-    """Given the dictionary of affected people counts per hazard and
-    aggregation zones, create a copy of the aggregation layer with statistics.
-    """
+def make_summary_layer(exposed, aggregation, fatality_rate):
+    """Add fields to the aggregation given the dictionary of affected people.
 
+    The dictionary contains affected people counts per hazard and aggregation
+    zones.
+
+    :param exposed: The dictionary with affected people counts per hazard and
+    aggregation zones.
+    :type exposed: dict
+
+    :param aggregation: The aggregation layer where we write statistics.
+    :type aggregation: QgsVectorLayer
+
+    :param fatality_rate: The fatality rate to use.
+    :type fatality_rate: function
+
+    :return: Tuple with the aggregation layer and a dictionary with totals.
+    :rtype: tuple(QgsVectorLayer, dict)
+    """
     output_filename = unique_filename(prefix='summary', suffix='.shp')
 
     displacement_rate = {
@@ -182,14 +200,14 @@ def make_summary_layer(exposed, aggregation_layer, fatality_rate):
         output_filename,
         'utf-8',
         fields,
-        aggregation_layer.wkbType(),
-        aggregation_layer.crs())
+        aggregation.wkbType(),
+        aggregation.crs())
 
-    inasafe_fields = aggregation_layer.keywords['inasafe_fields']
+    inasafe_fields = aggregation.keywords['inasafe_fields']
     name_field = inasafe_fields[aggregation_name_field['key']]
     id_field = inasafe_fields[aggregation_id_field['key']]
 
-    for agg_feature in aggregation_layer.getFeatures():
+    for agg_feature in aggregation.getFeatures():
         agg_zone_name = agg_feature[name_field]
         agg_zone = agg_feature[id_field]
 
@@ -235,7 +253,8 @@ def make_summary_layer(exposed, aggregation_layer, fatality_rate):
     layer = QgsVectorLayer(output_filename, 'summary', 'ogr')
     assert layer.isValid()
 
-    layer.keywords = dict(aggregation_layer.keywords)
-    layer.keywords['title'] = 'summary_EQ'
+    layer.keywords = dict(aggregation.keywords)
+    layer.keywords['layer_purpose'] = layer_purpose_aggregation_impacted['key']
+    layer.keywords['title'] = layer_purpose_aggregation_impacted['key']
 
     return layer, totals
