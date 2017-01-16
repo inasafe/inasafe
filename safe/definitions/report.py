@@ -4,6 +4,9 @@
 Definitions for basic report
 """
 from __future__ import absolute_import
+
+from qgis.core import QgsComposition
+
 from safe.common.utilities import safe_dir
 from safe.reportv4.extractors.action_notes import (
     action_checklist_extractor,
@@ -181,7 +184,7 @@ standard_impact_report_metadata_html = {
             'type': ReportComponentsMetadata.AvailableComponent.Jinja2,
             'processor': jinja2_renderer,
             'extractor': impact_table_extractor,
-            'output_format': Jinja2ComponentsMetadata.OutputFormat.String,
+            'output_format': Jinja2ComponentsMetadata.OutputFormat.File,
             'output_path': 'impact-report-output.html',
             'template': 'standard-template/'
                         'jinja2/'
@@ -280,9 +283,9 @@ standard_infographic_report_metadata_pdf = {
     ]
 }
 
-report_a4_portrait_blue = {
-    'key': 'a4-portrait-blue',
-    'name': 'a4-portrait-blue',
+report_a4_blue = {
+    'key': 'a4-blue',
+    'name': 'a4-blue',
     'template_folder': safe_dir(sub_dir='../resources/report-templates/'),
     'components': [
         {
@@ -295,6 +298,21 @@ report_a4_portrait_blue = {
                         'qgis-composer/'
                         'a4-portrait-blue.qpt',
             'output_path': 'a4-portrait-blue.pdf',
+        },
+        {
+            'key': 'a4-landscape-blue',
+            'type': ReportComponentsMetadata.AvailableComponent.QGISComposer,
+            'processor': qgis_composer_renderer,
+            'extractor': qgis_composer_extractor,
+            'output_format': QgisComposerComponentsMetadata.OutputFormat.PDF,
+            'template': 'standard-template/'
+                        'qgis-composer/'
+                        'a4-landscape-blue.qpt',
+            'output_path': 'a4-landscape-blue.pdf',
+            'orientation': 'landscape',
+            'page_dpi': 300,
+            'page_width': 297,
+            'page_height': 210,
         }
     ]
 }

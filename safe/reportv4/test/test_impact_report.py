@@ -22,7 +22,7 @@ from PyQt4.QtCore import QSettings
 from qgis.core import QgsVectorLayer, QgsMapLayerRegistry
 from qgis.core import QgsMapLayerRegistry
 from safe.definitions.report import (
-    report_a4_portrait_blue,
+    report_a4_blue,
     standard_impact_report_metadata_html,
     standard_impact_report_metadata_pdf,
     analysis_result_component,
@@ -726,7 +726,7 @@ class TestImpactReport(unittest.TestCase):
 
         # Create impact report
         report_metadata = ReportMetadata(
-            metadata_dict=report_a4_portrait_blue)
+            metadata_dict=report_a4_blue)
 
         impact_report = ImpactReport(
             IFACE,
@@ -735,18 +735,18 @@ class TestImpactReport(unittest.TestCase):
         impact_report.output_folder = output_folder
 
         # Get other setting
-        settings = QSettings()
-        logo_path = settings.value(
-            'inasafe/organisation_logo_path', '', type=str)
-        impact_report.inasafe_context.organisation_logo = logo_path
-
-        disclaimer_text = settings.value(
-            'inasafe/reportDisclaimer', '', type=str)
-        impact_report.inasafe_context.disclaimer = disclaimer_text
-
-        north_arrow_path = settings.value(
-            'inasafe/north_arrow_path', '', type=str)
-        impact_report.inasafe_context.north_arrow = north_arrow_path
+        # settings = QSettings()
+        # logo_path = settings.value(
+        #     'inasafe/organisation_logo_path', '', type=str)
+        # impact_report.inasafe_context.organisation_logo = logo_path
+        #
+        # disclaimer_text = settings.value(
+        #     'inasafe/reportDisclaimer', '', type=str)
+        # impact_report.inasafe_context.disclaimer = disclaimer_text
+        #
+        # north_arrow_path = settings.value(
+        #     'inasafe/north_arrow_path', '', type=str)
+        # impact_report.inasafe_context.north_arrow = north_arrow_path
 
         impact_report.qgis_composition_context.extent = \
             rendered_layer.extent()
@@ -757,6 +757,11 @@ class TestImpactReport(unittest.TestCase):
             'a4-portrait-blue')
 
         # for now, test that output exists
+        self.assertTrue(os.path.exists(output_path))
+
+        output_path = impact_report.component_absolute_output_path(
+            'a4-landscape-blue')
+
         self.assertTrue(os.path.exists(output_path))
 
         shutil.rmtree(output_folder, ignore_errors=True)

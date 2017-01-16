@@ -5,25 +5,29 @@ from collections import OrderedDict
 
 from safe.common.parameters.resource_parameter import ResourceParameter
 from safe.common.utilities import safe_dir
-from safe.definitionsv4.colors import green
-from safe.definitionsv4.exposure import exposure_population
-from safe.definitionsv4.fields import (
+from safe.definitions.colors import green
+from safe.definitions.exposure import exposure_population
+from safe.definitions.fields import (
     total_affected_field,
     population_count_field,
     exposure_count_field,
     female_count_field,
     youth_count_field,
     adult_count_field,
-    elderly_count_field, analysis_name_field, hazard_count_field,
+    elderly_count_field,
+    analysis_name_field,
+    hazard_count_field,
     total_unaffected_field)
-from safe.definitionsv4.hazard_classifications import all_hazard_classes
-from safe.definitionsv4.minimum_needs import minimum_needs_fields
+from safe.definitions.hazard_classifications import all_hazard_classes
+from safe.definitions.minimum_needs import minimum_needs_fields
 from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
 from safe.reportv4.extractors.composer import QGISComposerContext
 from safe.reportv4.extractors.infographic_elements.svg_charts import \
     DonutChartContext
-from safe.reportv4.extractors.util import round_affecter_number, \
-    jinja2_output_as_string
+from safe.reportv4.extractors.util import (
+    round_affecter_number,
+    jinja2_output_as_string,
+    value_from_field_name)
 from safe.utilities.i18n import tr
 from safe.utilities.resources import resource_url, resources_path
 
@@ -31,21 +35,6 @@ __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
-
-
-def value_from_field_name(field_name, analysis_layer):
-    """Get the value of analysis layer based on field name.
-
-    :param field_name: Field name of analysis layer that we want to get
-    :type field_name: str
-
-    :param analysis_layer: Analysis layer
-    :type analysis_layer: qgis.core.QgsVectorLayer
-
-    :return: return the valeu of a given field name of the analysis.
-    """
-    field_index = analysis_layer.fieldNameIndex(field_name)
-    return analysis_layer.getFeatures().next()[field_index]
 
 
 class PeopleInfographicElement(object):

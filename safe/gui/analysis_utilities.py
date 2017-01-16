@@ -10,7 +10,7 @@ from safe.definitions.utilities import definition
 from safe.definitions.fields import hazard_class_field
 from safe.definitions.report import (
     standard_impact_report_metadata_pdf,
-    report_a4_portrait_blue)
+    report_a4_blue)
 from safe.impact_function.style import hazard_class_style
 from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
 from safe.reportv4.report_metadata import ReportMetadata
@@ -67,7 +67,7 @@ def generate_impact_map_report(impact_function, iface):
     """
     # create impact report instance
     report_metadata = ReportMetadata(
-        metadata_dict=report_a4_portrait_blue)
+        metadata_dict=report_a4_blue)
     impact_report = ImpactReportV4(
         iface,
         report_metadata,

@@ -297,6 +297,7 @@ def qgis_composer_renderer(impact_report, component):
         column_count = leg_el.get('column_count')
 
         legend = composition.getComposerItemById(item_id)
+        """:type: qgis.core.QgsComposerLegend"""
         if legend:
             # set column count
             if column_count:

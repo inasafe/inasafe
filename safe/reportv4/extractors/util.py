@@ -103,3 +103,18 @@ def jinja2_output_as_string(impact_report, component_key):
     raise TemplateError(
         "Can't find component with key '%s' and have an output" %
         component_key)
+
+
+def value_from_field_name(field_name, analysis_layer):
+    """Get the value of analysis layer based on field name.
+
+    :param field_name: Field name of analysis layer that we want to get
+    :type field_name: str
+
+    :param analysis_layer: Analysis layer
+    :type analysis_layer: qgis.core.QgsVectorLayer
+
+    :return: return the valeu of a given field name of the analysis.
+    """
+    field_index = analysis_layer.fieldNameIndex(field_name)
+    return analysis_layer.getFeatures().next()[field_index]
