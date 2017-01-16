@@ -185,9 +185,10 @@ def _rename_remove_inasafe_fields(layer):
     to_rename = {}
     new_keywords = {}
     for key, val in layer.keywords.get('inasafe_fields').iteritems():
-        if expected_fields[key] != val:
-            to_rename[val] = expected_fields[key]
-            new_keywords[key] = expected_fields[key]
+        if key in expected_fields:
+            if expected_fields[key] != val:
+                to_rename[val] = expected_fields[key]
+                new_keywords[key] = expected_fields[key]
 
     copy_fields(layer, to_rename)
     to_remove = to_rename.keys()

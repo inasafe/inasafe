@@ -146,6 +146,8 @@ def aggregate_hazard_summary(impact, aggregate_hazard, callback=None):
 
         # We summarize every absolute values.
         for field, field_definition in absolute_values.iteritems():
+            if field not in f:
+                continue
             value = f[field]
             if not value or isinstance(value, QPyNullVariant):
                 value = 0
