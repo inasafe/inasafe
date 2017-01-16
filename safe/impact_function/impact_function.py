@@ -84,7 +84,6 @@ from safe.common.exceptions import (
     NoFeaturesInExtentError,
     ProcessingInstallationError,
 )
-from safe.impact_function.earthquake import itb_fatality_rates
 from safe.impact_function.postprocessors import (
     run_single_post_processor, enough_input)
 from safe.impact_function.create_extra_layers import (
