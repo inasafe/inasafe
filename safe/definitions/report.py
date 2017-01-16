@@ -8,28 +8,28 @@ from __future__ import absolute_import
 from qgis.core import QgsComposition
 
 from safe.common.utilities import safe_dir
-from safe.reportv4.extractors.action_notes import (
+from safe.report.extractors.action_notes import (
     action_checklist_extractor,
     notes_assumptions_extractor)
-from safe.reportv4.extractors.aggregate_postprocessors import \
+from safe.report.extractors.aggregate_postprocessors import \
     aggregation_postprocessors_extractor
-from safe.reportv4.extractors.aggregate_result import \
+from safe.report.extractors.aggregate_result import \
     aggregation_result_extractor
-from safe.reportv4.extractors.analysis_detail import analysis_detail_extractor
-from safe.reportv4.extractors.analysis_result import analysis_result_extractor
-from safe.reportv4.extractors.composer import qgis_composer_extractor
-from safe.reportv4.extractors.impact_table import (
+from safe.report.extractors.analysis_detail import analysis_detail_extractor
+from safe.report.extractors.analysis_result import analysis_result_extractor
+from safe.report.extractors.composer import qgis_composer_extractor
+from safe.report.extractors.impact_table import (
     impact_table_extractor,
     impact_table_pdf_extractor)
-from safe.reportv4.extractors.infographics import \
+from safe.report.extractors.infographics import \
     population_infographic_extractor, infographic_layout_extractor, \
     infographic_pdf_extractor
-from safe.reportv4.extractors.minimum_needs import minimum_needs_extractor
-from safe.reportv4.processors.default import (
+from safe.report.extractors.minimum_needs import minimum_needs_extractor
+from safe.report.processors.default import (
     qgis_composer_renderer,
     jinja2_renderer,
     qgis_composer_html_renderer)
-from safe.reportv4.report_metadata import (
+from safe.report.report_metadata import (
     ReportComponentsMetadata,
     Jinja2ComponentsMetadata,
     QgisComposerComponentsMetadata)

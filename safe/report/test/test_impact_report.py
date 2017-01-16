@@ -10,7 +10,7 @@ from jinja2.environment import Template
 from safe.common.utilities import safe_dir
 from safe.definitions.constants import ANALYSIS_SUCCESS
 from safe.impact_function.impact_function import ImpactFunction
-from safe.reportv4.report_metadata import ReportMetadata
+from safe.report.report_metadata import ReportMetadata
 from safe.test.utilities import (
     get_qgis_app,
     load_test_vector_layer,
@@ -32,7 +32,7 @@ from safe.definitions.report import (
     aggregation_result_component,
     minimum_needs_component,
     aggregation_postprocessors_component)
-from safe.reportv4.impact_report import ImpactReport
+from safe.report.impact_report import ImpactReport
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -101,7 +101,7 @@ class TestImpactReport(unittest.TestCase):
         # Check Analysis Summary
         analysis_summary = impact_report.metadata.component_by_key(
             analysis_result_component['key'])
-        """:type: safe.reportv4.report_metadata.Jinja2ComponentsMetadata"""
+        """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
 
         expected_context = {
             'header': u'Analysis Results',
@@ -160,7 +160,7 @@ class TestImpactReport(unittest.TestCase):
         # Check Action Notes
         action_notes = impact_report.metadata.component_by_key(
             action_checklist_component['key'])
-        """:type: safe.reportv4.report_metadata.Jinja2ComponentsMetadata"""
+        """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
         expected_context = {
             'header': u'Action Checklist',
             'items': [
@@ -185,7 +185,7 @@ class TestImpactReport(unittest.TestCase):
         # Check notes assumptions
         notes_assumptions = impact_report.metadata.component_by_key(
             notes_assumptions_component['key'])
-        """:type: safe.reportv4.report_metadata.Jinja2ComponentsMetadata"""
+        """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
 
         expected_context = {
             'header': u'Notes and assumptions',
@@ -253,7 +253,7 @@ class TestImpactReport(unittest.TestCase):
         # Check Analysis Breakdown
         analysis_breakdown = impact_report.metadata.component_by_key(
             analysis_breakdown_component['key'])
-        """:type: safe.reportv4.report_metadata.Jinja2ComponentsMetadata"""
+        """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
 
         expected_context = {
             'header': u'Estimated number of Structures by type',
@@ -279,7 +279,7 @@ class TestImpactReport(unittest.TestCase):
         # Check Aggregate Report
         aggregate_result = impact_report.metadata.component_by_key(
             aggregation_result_component['key'])
-        """:type: safe.reportv4.report_metadata.Jinja2ComponentsMetadata"""
+        """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
 
         expected_context = {
             'aggregation_result': {
@@ -353,7 +353,7 @@ class TestImpactReport(unittest.TestCase):
         # Check Minimum Needs
         minimum_needs = impact_report.metadata.component_by_key(
             minimum_needs_component['key'])
-        """:type: safe.reportv4.report_metadata.Jinja2ComponentsMetadata"""
+        """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
 
         expected_context = {
             'header': u'Minimum needs', 'needs': [
@@ -450,7 +450,7 @@ class TestImpactReport(unittest.TestCase):
         # Check aggregation-postprocessors
         aggregation_postprocessors = impact_report.metadata.component_by_key(
             aggregation_postprocessors_component['key'])
-        """:type: safe.reportv4.report_metadata.Jinja2ComponentsMetadata"""
+        """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
 
         # TODO: This has possible wrong number, expect to be fixed soon.
         expected_context = {
@@ -573,7 +573,7 @@ class TestImpactReport(unittest.TestCase):
         # Check aggregation-postprocessors
         aggregation_postprocessors = impact_report.metadata.component_by_key(
             aggregation_postprocessors_component['key'])
-        """:type: safe.reportv4.report_metadata.Jinja2ComponentsMetadata"""
+        """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
 
         # TODO: This has possible wrong number, expect to be fixed soon.
         expected_context = {

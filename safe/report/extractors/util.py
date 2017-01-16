@@ -77,7 +77,7 @@ def jinja2_output_as_string(impact_report, component_key):
     Useful for composing complex document
 
     :param impact_report: Impact Report that contains the component key
-    :type impact_report: safe.reportv4.impact_report.ImpactReport
+    :type impact_report: safe.report.impact_report.ImpactReport
 
     :param component_key: The key of the component to get the output from
     :type component_key: str
