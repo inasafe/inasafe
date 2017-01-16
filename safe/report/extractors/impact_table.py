@@ -68,8 +68,16 @@ def impact_table_extractor(impact_report, component_metadata):
     context['aggregation_postprocessors'] = aggregation_postprocessors
 
     # TODO: taken from hazard and exposure provenance
-    hazard_provenance = tr('an unknown source')
-    exposure_provenance = tr('an unknown source')
+    hazard_keywords = impact_report.impact_function.provenance[
+        'hazard_keywords']
+    hazard_provenance = (
+        hazard_keywords.get('source') or
+        tr('an unknown source'))
+    exposure_keywords = impact_report.impact_function.provenance[
+        'exposure_keywords']
+    exposure_provenance = (
+        exposure_keywords.get('source') or
+        tr('an unknown source'))
     provenance_details = {
         'hazard_provenance': hazard_provenance,
         'exposure_provenance': exposure_provenance

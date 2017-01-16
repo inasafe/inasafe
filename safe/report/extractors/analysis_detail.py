@@ -9,7 +9,7 @@ from safe.definitions.fields import (
     total_field)
 from safe.definitions.hazard_classifications import all_hazard_classes
 from safe.report.extractors.util import layer_definition_type, \
-    round_affecter_number
+    round_affected_number
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -138,7 +138,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
                 # class
                 field_name = exposure_breakdown_fields[field_key_name]
                 field_index = exposure_breakdown.fieldNameIndex(field_name)
-                count_value = round_affecter_number(
+                count_value = round_affected_number(
                     feat[field_index],
                     enable_rounding=is_rounded,
                     use_population_rounding=use_population_rounding)
@@ -151,7 +151,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
         # Get Affected count
         field_index = exposure_breakdown.fieldNameIndex(
             total_affected_field['field_name'])
-        total_affected = round_affecter_number(
+        total_affected = round_affected_number(
             feat[field_index],
             enable_rounding=is_rounded,
             use_population_rounding=use_population_rounding)
@@ -163,7 +163,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
         # Get Unaffected count
         field_index = exposure_breakdown.fieldNameIndex(
             total_unaffected_field['field_name'])
-        total_unaffected = round_affecter_number(
+        total_unaffected = round_affected_number(
             feat[field_index],
             enable_rounding=is_rounded,
             use_population_rounding=use_population_rounding)
@@ -172,7 +172,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
         # Get Total count
         field_index = exposure_breakdown.fieldNameIndex(
             total_field['field_name'])
-        total = round_affecter_number(
+        total = round_affected_number(
             feat[field_index],
             enable_rounding=is_rounded,
             use_population_rounding=use_population_rounding)
@@ -196,7 +196,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
             # class
             field_name = analysis_layer_fields[field_key_name]
             field_index = analysis_layer.fieldNameIndex(field_name)
-            count_value = round_affecter_number(
+            count_value = round_affected_number(
                 analysis_feature[field_index],
                 enable_rounding=is_rounded,
                 use_population_rounding=use_population_rounding)
@@ -220,7 +220,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
     # total for affected
     field_index = analysis_layer.fieldNameIndex(
         total_affected_field['field_name'])
-    total_affected = round_affecter_number(
+    total_affected = round_affected_number(
         analysis_feature[field_index],
         enable_rounding=is_rounded,
         use_population_rounding=use_population_rounding)
@@ -229,7 +229,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
     # total Unaffected count
     field_index = analysis_layer.fieldNameIndex(
         total_unaffected_field['field_name'])
-    total_unaffected = round_affecter_number(
+    total_unaffected = round_affected_number(
         analysis_feature[field_index],
         enable_rounding=is_rounded,
         use_population_rounding=use_population_rounding)
@@ -238,7 +238,7 @@ def analysis_detail_extractor(impact_report, component_metadata):
     # total count
     field_index = analysis_layer.fieldNameIndex(
         total_field['field_name'])
-    total = round_affecter_number(
+    total = round_affected_number(
         analysis_feature[field_index],
         enable_rounding=is_rounded,
         use_population_rounding=use_population_rounding)

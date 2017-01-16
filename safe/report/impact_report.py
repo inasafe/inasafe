@@ -620,5 +620,6 @@ class ImpactReport(object):
             # method signature:
             #  - this ImpactReport
             #  - this component
-            output = _renderer(self, component)
-            component.output = output
+            if component.context:
+                output = _renderer(self, component)
+                component.output = output

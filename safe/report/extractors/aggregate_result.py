@@ -8,7 +8,7 @@ from safe.definitions.fields import (
     exposure_class_field)
 from safe.gisv4.vector.tools import read_dynamic_inasafe_field
 from safe.report.extractors.util import (
-    round_affecter_number,
+    round_affected_number,
     layer_definition_type)
 from safe.utilities.i18n import tr
 
@@ -95,7 +95,7 @@ def aggregation_result_extractor(impact_report, component_metadata):
         type_field_index.append(type_index)
 
     for feat in aggregation_impacted.getFeatures():
-        total_affected_value = round_affecter_number(
+        total_affected_value = round_affected_number(
             feat[total_field_index],
             enable_rounding=is_rounded,
             use_population_rounding=use_population_rounding)
@@ -111,7 +111,7 @@ def aggregation_result_extractor(impact_report, component_metadata):
         # Type values is the values for each column in each row
         type_values = []
         for idx in type_field_index:
-            affected_value = round_affecter_number(
+            affected_value = round_affected_number(
                 feat[idx],
                 enable_rounding=is_rounded,
                 use_population_rounding=use_population_rounding)
@@ -147,7 +147,7 @@ def aggregation_result_extractor(impact_report, component_metadata):
     # Fetch total affected for each breakdown name
     value_dict = {}
     for feat in exposure_breakdown.getFeatures():
-        affected_value = round_affecter_number(
+        affected_value = round_affected_number(
             feat[affected_field_index],
             enable_rounding=is_rounded,
             use_population_rounding=use_population_rounding)
@@ -178,7 +178,7 @@ def aggregation_result_extractor(impact_report, component_metadata):
     analysis_feature = analysis_layer.getFeatures().next()
     field_index = analysis_layer.fieldNameIndex(
         total_affected_field['field_name'])
-    total_all = round_affecter_number(
+    total_all = round_affected_number(
         analysis_feature[field_index],
         enable_rounding=is_rounded,
         use_population_rounding=use_population_rounding)

@@ -13,7 +13,7 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
-def round_affecter_number(
+def round_affected_number(
         number,
         enable_rounding=False,
         use_population_rounding=False):
