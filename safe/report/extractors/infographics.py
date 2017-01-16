@@ -18,7 +18,7 @@ from safe.definitions.fields import (
     analysis_name_field,
     hazard_count_field,
     total_unaffected_field)
-from safe.definitions.hazard_classifications import all_hazard_classes
+from safe.definitions.hazard_classifications import hazard_classes_all
 from safe.definitions.minimum_needs import minimum_needs_fields
 from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
 from safe.report.extractors.composer import QGISComposerContext
@@ -272,7 +272,7 @@ def population_infographic_extractor(impact_report, component_metadata):
     # create context for the donut chart
 
     # retrieve hazard classification from hazard layer
-    for classification in all_hazard_classes:
+    for classification in hazard_classes_all:
         classification_name = hazard_layer.keywords['classification']
         if classification_name == classification['key']:
             hazard_classification = classification
