@@ -5,7 +5,7 @@ from safe.utilities.i18n import tr
 from safe import messaging as m
 from safe.messaging import styles
 
-INFO_STYLE = styles.INFO_STYLE
+SUBSECTION_STYLE = styles.SUBSECTION_STYLE
 SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
 
 __author__ = 'ismailsunni'
@@ -38,7 +38,7 @@ def heading():
     :returns: A heading object.
     :rtype: safe.messaging.heading.Heading
     """
-    message = m.Heading(tr('Impact report help'), **INFO_STYLE)
+    message = m.Heading(tr('Impact report help'), **SUBSECTION_STYLE)
     return message
 
 

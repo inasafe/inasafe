@@ -194,6 +194,8 @@ unit_percentage = {
 count_exposure_unit = {
     'key': 'count',
     'name': tr('Count'),
+    'plural_name': tr('Count'),
+    'abbreviation': tr('#'),
     'description': tr(
         'Number of people (or any other exposure element) per pixel, building '
         'or area. '
@@ -212,6 +214,8 @@ count_exposure_unit = {
 density_exposure_unit = {
     'key': 'density',
     'name': tr('Density'),
+    'plural_name': tr('Density'),
+    'abbreviation': tr('#'),
     'description': tr(
         'Number of people (or any other exposure element) per unit of area. '
         '<p> e.g. 35 people per km<sup>2</sup> </p>'),
@@ -225,6 +229,8 @@ density_exposure_unit = {
 exposure_unit = {
     'key': 'exposure_unit',
     'name': tr('Units'),
+    'plural_name': tr('Units'),
+    'abbreviation': tr('#'),
     'description': tr(
         'Exposure unit defines the unit for the exposure, for example '
         'people can either be measured as count or density (count per area.'),
@@ -239,3 +245,21 @@ exposure_unit = {
         }
     ]
 }
+
+units_all = [
+    unit_feet,
+    unit_generic,
+    unit_kilogram_per_meter_square,
+    unit_kilometres_per_hour,
+    unit_miles_per_hour,
+    unit_knots,
+    unit_kilometres,
+    unit_metres,
+    unit_millimetres,
+    unit_centimetres,
+    unit_mmi,
+    unit_percentage,
+    count_exposure_unit,
+    density_exposure_unit,
+    exposure_unit
+]

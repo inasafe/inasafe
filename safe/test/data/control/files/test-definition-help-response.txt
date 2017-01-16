@@ -1,20 +1,19 @@
-*****InaSAFE help
-*****Hazards
-*Hazards
-*Flood
-*Flood classes
+*InaSAFE help
+**Hazards
+****Flood
+Flood classes
 *Tsunami
-*Tsunami classes
+Tsunami classes
 *Earthquake
 *Volcano
-*Volcano classes
+Volcano classes
 *Volcanic ash
 *Generic
-*Generic classes
-*Scenario
+Generic classes
+Scenario
 *Single event
 *Multiple event
-*Exposures
+*Exposure Types
 *Exposure
 *Land cover
 *Population

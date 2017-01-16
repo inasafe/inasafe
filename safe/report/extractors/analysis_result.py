@@ -9,7 +9,7 @@ from safe.definitions.hazard import hazard_generic
 from safe.definitions.hazard_category import (
     hazard_category_single_event,
     hazard_category_multiple_event)
-from safe.definitions.hazard_classifications import all_hazard_classes
+from safe.definitions.hazard_classifications import hazard_classes_all
 from safe.report.extractors.util import layer_definition_type, \
     round_affected_number
 from safe.utilities.i18n import tr
@@ -57,7 +57,7 @@ def analysis_result_extractor(impact_report, component_metadata):
     if 'classification' in hazard_layer.keywords:
 
         # retrieve hazard classification from hazard layer
-        for classification in all_hazard_classes:
+        for classification in hazard_classes_all:
             classification_name = hazard_layer.keywords['classification']
             if classification_name == classification['key']:
                 hazard_classification = classification

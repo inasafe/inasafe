@@ -87,13 +87,13 @@ class Cell(MessageElement):
         self.wrap_slash = False
         if 'wrap_slash' in kwargs:
             self.wrap_slash = kwargs['wrap_slash']
-            # dont pass the kw on to the base class as we handled it here
+            # don't pass the kw on to the base class as we handled it here
             kwargs.pop('wrap_slash')
 
         super(Cell, self).__init__(**kwargs)
 
         # Special case for when we want to put a nested table in a cell
-        # We dont use isinstance because of recursive imports with table
+        # We don't use isinstance because of recursive imports with table
         class_name = args[0].__class__.__name__
         if class_name in ['BulletedList', 'Table']:
             self.content = args[0]

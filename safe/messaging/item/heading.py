@@ -74,9 +74,10 @@ class Heading(MessageElement):
         level = self.level
         if level > 6:
             level = 6
-        return '<h%s%s>%s%s</h%s>' % (
+        return '<h%s%s><a id="%s"></a>%s%s</h%s>' % (
             level,
             self.html_attributes(),
+            self.element_id,
             self.html_icon(),
             self.text.to_html(),
             level)

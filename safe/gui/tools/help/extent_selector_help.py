@@ -5,6 +5,7 @@ from safe.utilities.i18n import tr
 from safe import messaging as m
 from safe.messaging import styles
 from safe.utilities.resources import resources_path
+SUBSECTION_STYLE = styles.SUBSECTION_STYLE
 INFO_STYLE = styles.INFO_STYLE
 SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
 
@@ -38,7 +39,8 @@ def heading():
     :returns: A heading object.
     :rtype: safe.messaging.heading.Heading
     """
-    message = m.Heading(tr('Analysis extent selector help'), **INFO_STYLE)
+    message = m.Heading(
+        tr('Analysis extent selector help'), **SUBSECTION_STYLE)
     return message
 
 
@@ -67,7 +69,9 @@ def content():
     )
     message.add(paragraph)
     paragraph = m.Paragraph(tr(
-        'Your user defined extent will be shown on the map as a rectangle.'))
+        'Your user defined extent will be shown on the map as a rectangle. '
+        'There are a number of different modes that can be used which are '
+        'described below:'))
     message.add(paragraph)
     header = m.Heading(tr(
         'Use intersection of hazard and exposure layers'), **INFO_STYLE)

@@ -35,17 +35,38 @@ th.button-cell{
 	padding: 2px 20px;
 	margin: 0 -15px;
 }
-h5 {
-	margin-top: 0;
-	margin-right: -15px;
-	margin-left: -15px;
-	padding-left: 20px;
+h1, h2, h3, h4, h5 {
+  margin-top: 0;
+  margin-right: -15px;
+  margin-left: -15px;
+  padding-left: 20px;
+  padding-bottom: 0px;
+  padding-top: 0px;
 }
 .warning {
   color: #fff;
   background-color: #f15a2b;
   line-height: 2;
 }
+.title {
+  color: #fff;
+  background-color: #3d9d45;
+  line-height: 2;
+  margin-bottom: 0;
+}
+.section {
+  color: #fff;
+  background-color: #50cf5c;
+  line-height: 2;
+  margin-bottom: 0;
+}
+.subsection {
+  color: #fff;
+  background-color: #6ec5e6;
+  line-height: 2;
+  margin-bottom: 0;
+}
+
 .problem {
   color: #fff;
   background-color: #faa732;
@@ -96,4 +117,8 @@ h5 {
 }
 .customBulletList li.tick:before {
   content: "\2713";
+}
+p {
+  margin-bottom: 10px;
+  margin-top: 10px;
 }

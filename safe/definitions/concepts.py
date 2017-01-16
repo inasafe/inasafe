@@ -15,7 +15,51 @@ __revision__ = '$Format:%H$'
 
 
 concepts = {
+    'analysis': {
+        'key': 'analysis',
+        'description': tr(
+            '<p>An <b>analysis</b> from the point of view of using InaSAFE is '
+            'the process whereby a hazard layer, an exposure layer and '
+            'and optional aggregation layer are used to determine the '
+            'potential impact of the hazard data on the exposure. The '
+            'analysis results are grouped by region (as defined in the '
+            'aggregation layer).</p> '
+            '<p>In InaSAFE the analysis process commences with a preparation '
+            'phase where each input layer is pre-processed to ensure that it '
+            'is in a consistent state. The hazard and aggregation are '
+            'reprojected to the same coordinate reference system of the '
+            'exposure dataset. Any data that is not within the selected '
+            'aggregation areas is removed. Note that any modifications made '
+            'are done on copies of the original data - the original data are '
+            'not modified in any way.</p>'
+            '<p>Any continuous datasets are reclassified into classfied (also '
+            'sometimes referred to as categorical) datasets.</p>'
+            '<p>The aggregation layer and the hazard are combined using a GIS '
+            'union operation and then each exposure with these areas is '
+            'counted to arrive at a total number, length or area of affected '
+            'exposure features per aggregation area. These processes are '
+            'defined in more detail below. After the primary GIS processing '
+            'has been carried out, one or more post-processors are applied '
+            'to the resulting datasets in order to compute statistics like '
+            'the breakdown of buildings or the area of each land use type '
+            'in the affected areas.</p>'
+            '<p>The final part of the analysis process is report generation '
+            'whereby InaSAFE generates various tables and cartographic '
+            'products to represent the result summaries. InaSAFE will '
+            'also create a number of spatial and non-spatial products which '
+            'you can use to generate your own reports - for example by '
+            'importing the data into a spreadsheet and further analysing it '
+            'there.</p>'),
+        'citations': [
+            {
+                'text': tr(
+                    ''),
+                'link': ''
+            }
+        ],
+    },
     'hazard': {
+        'key': 'hazard',
         'description': tr(
              'A <b>hazard</b> represents a natural process or phenomenon '
              'that may cause loss of life, injury or other health impacts, '
@@ -32,6 +76,7 @@ concepts = {
         ],
     },
     'exposure': {
+        'key': 'exposure',
         'description': tr(
             '<b>Exposure</b> represents people, property, systems, or '
             'other elements present in hazard zones that are subject to '
@@ -46,6 +91,7 @@ concepts = {
         ],
     },
     'generic_hazard': {
+        'key': 'generic_hazard',
         'description': tr(
             'A generic hazard is any dataset where the areas within the '
             'data set have been classified as either <b>low</b>, '
@@ -61,6 +107,7 @@ concepts = {
         ],
     },
     'affected': {
+        'key': 'affected',
         'description': tr(
             'An exposure element (e.g. people, roads, buildings, land '
             'cover) that experiences a hazard (e.g. tsunami, flood, '
@@ -77,6 +124,7 @@ concepts = {
         ],
     },
     'affected_people': {
+        'key': 'affected_people',
         'description': tr(
             'People who are affected by a hazardous event. People can be '
             'affected directly or indirectly. Affected people may experience '
@@ -95,6 +143,7 @@ concepts = {
         ],
     },
     'displaced_people': {
+        'key': 'displaced_people',
         'description': tr(
             'Displaced people are people who, for different reasons and '
             'circumstances because of risk or disaster, have to leave their '
@@ -110,6 +159,7 @@ concepts = {
         ],
     },
     'evacuated_people': {
+        'key': 'evacuated_people',
         'description': tr(
             'Evacuated people are people who, for different reasons and '
             'circumstances because of risk conditions or disaster, move '
@@ -129,6 +179,7 @@ concepts = {
         ],
     },
     'injured_people': {
+        'key': 'injured_people',
         'description': tr(
             'People suffering from a new or exacerbated physical or '
             'psychological harm, trauma or an illness as a result of a '
@@ -144,6 +195,7 @@ concepts = {
         ],
       },
     'killed_people': {
+        'key': 'killed_people',
         'description': tr(
             'People who lost their lives as a consequence of a hazardous '
             'event.'),
@@ -158,6 +210,7 @@ concepts = {
         ],
       },
     'youth': {
+        'key': 'youth',
         'description': tr(
             'A person aged between 0 and 14 years.'),
         'citations': [
@@ -170,6 +223,7 @@ concepts = {
         ],
       },
     'adult': {
+        'key': 'adult',
         'description': tr(
             'Person aged between 15 and 64 years, usually of working age.'),
         'citations': [
@@ -182,6 +236,7 @@ concepts = {
         ],
       },
     'elderly': {
+        'key': 'elderly',
         'description': tr(
             'Person aged 64 years and over.'),
         'citations': [
@@ -194,6 +249,7 @@ concepts = {
         ],
       },
     'people': {
+        'key': 'people',
         'description': tr(
             'Human beings in general or considered collectively.'),
         'citations': [
@@ -205,6 +261,7 @@ concepts = {
         ],
       },
     'female': {
+        'key': 'female',
         'description': tr(
             'Relating to the characteristics of women.'),
         'citations': [
@@ -216,6 +273,7 @@ concepts = {
         ],
       },
     'rice': {
+        'key': 'rice',
         'description': tr(
             'Grains of rice used as food.'),
         'citations': [
@@ -227,6 +285,7 @@ concepts = {
         ],
       },
     'drinking_water': {
+        'key': 'drinking_water',
         'description': tr(
             'Water pure enough for drinking.'),
         'citations': [
@@ -239,6 +298,7 @@ concepts = {
         ],
       },
     'clean_water': {
+        'key': 'clean_water',
         'description': tr(
             'Water suitable for washing and other purposes but not suitable '
             'for drinking.'),
@@ -251,6 +311,7 @@ concepts = {
         ],
       },
     'family_kit': {
+        'key': 'family_kit',
         'description': tr(
             'Relief supplies such as clothing to support families.'),
         'citations': [
@@ -262,6 +323,7 @@ concepts = {
         ],
       },
     'hygiene_pack': {
+        'key': 'hygiene_pack',
         'description': tr(
             'Relief supplies to promote practices conducive to maintaining '
             'health and preventing disease.'),
@@ -274,6 +336,7 @@ concepts = {
         ],
       },
     'toilet': {
+        'key': 'toilet',
         'description': tr(
             'A room, building or cubicle with facilities to collect and '
             'dispose of human waste.'),

@@ -5,6 +5,7 @@ from safe.utilities.i18n import tr
 from safe import messaging as m
 from safe.messaging import styles
 
+SUBSECTION_STYLE = styles.SUBSECTION_STYLE
 INFO_STYLE = styles.INFO_STYLE
 
 __author__ = 'ismailsunni'
@@ -37,7 +38,7 @@ def heading():
     :returns: A heading object.
     :rtype: safe.messaging.heading.Heading
     """
-    message = m.Heading(tr('Minimum needs manager help'), **INFO_STYLE)
+    message = m.Heading(tr('Minimum needs manager help'), **SUBSECTION_STYLE)
     return message
 
 
@@ -223,11 +224,6 @@ def content():
     )))
 
     message.add(m.Heading(tr('Managing profiles'), **INFO_STYLE))
-    message.add(m.Paragraph(tr(
-        'When switching to edit or add resource mode, the minimum needs '
-        'manager will be updated to show the resource editor. Each '
-        'resource is described in terms of:'
-    )))
     message.add(m.Paragraph(tr(
         'In addition to the profiles that come as standard with InaSAFE, you '
         'can create new ones, either from scratch, or based on an existing '
