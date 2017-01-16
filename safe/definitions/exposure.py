@@ -146,11 +146,7 @@ exposure_population = {
         female_count_field,
         youth_count_field,
         adult_count_field,
-        elderly_count_field,
-        female_ratio_field,
-        youth_ratio_field,
-        adult_ratio_field,
-        elderly_ratio_field
+        elderly_count_field
     ],
     'layer_modes': [layer_mode_continuous]
 }
@@ -245,17 +241,7 @@ exposure_structure = {
     'classifications': [generic_structure_classes],
     'compulsory_fields': [exposure_type_field],
     'fields': exposure_fields,
-    'extra_fields': [
-        population_count_field,
-        female_count_field,
-        youth_count_field,
-        adult_count_field,
-        elderly_count_field,
-        female_ratio_field,
-        youth_ratio_field,
-        adult_ratio_field,
-        elderly_ratio_field
-    ],
+    'extra_fields': [],
     'layer_modes': [layer_mode_classified]
 }
 exposure_place = {
@@ -290,16 +276,7 @@ exposure_place = {
     'compulsory_fields': [exposure_type_field],
     'fields': exposure_fields,
     'extra_fields': [
-        population_count_field,
-        exposure_name_field,
-        female_count_field,
-        youth_count_field,
-        adult_count_field,
-        elderly_count_field,
-        female_ratio_field,
-        youth_ratio_field,
-        adult_ratio_field,
-        elderly_ratio_field
+        exposure_name_field
     ],
     'layer_modes': [layer_mode_classified]
 }
