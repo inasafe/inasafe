@@ -36,11 +36,15 @@ def rasterize_vector_layer(layer, attribute_name, width, height, extent):
     :rtype: QgsRasterLayer
     """
 
-    output_filename = unique_filename(
-        prefix=rasterize_steps['gdal_layer_name'], suffix='.tif')
+    name = rasterize_steps['gdal_layer_name']
+    output_filename = unique_filename(prefix=name, suffix='.tif')
 
-    extent_str = '%f,%f,%f,%f' % (extent.xMinimum(), extent.xMaximum(),
-                                  extent.yMinimum(), extent.yMaximum())
+    extent_str = '%f,%f,%f,%f' % (
+        extent.xMinimum(),
+        extent.xMaximum(),
+        extent.yMinimum(),
+        extent.yMaximum())
+
     Processing.runAlgorithm(
         'gdalogr:rasterize',
         None,
@@ -64,8 +68,7 @@ def rasterize_vector_layer(layer, attribute_name, width, height, extent):
         # output
         output_filename)
 
-    layer_aligned = QgsRasterLayer(
-        output_filename, rasterize_steps['output_layer_name'], 'gdal')
+    layer_aligned = QgsRasterLayer(output_filename, name, 'gdal')
 
     assert layer_aligned.isValid()
 

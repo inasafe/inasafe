@@ -335,11 +335,11 @@ def calc_impact(
         # If we didn't get an aggregation layer, we will make one ourselves
         # covering the whole analysis area.
         aggregation = make_aggregation_layer(
-            hazard_aligned.crs(), hazard_aligned.extent())
+            exposure.crs(), exposure.extent())
         aggregation_field = 'name'
 
     aggregation_layer_tmp, mapping = temporary_aggregation_layer(
-        aggregation, aggregation_field, hazard_aligned.crs())
+        aggregation, aggregation_field, exposure.crs())
 
     hazard_provider = hazard_aligned.dataProvider()
     aggregation_aligned = rasterize_vector_layer(
