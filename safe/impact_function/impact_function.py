@@ -52,7 +52,6 @@ from safe.gisv4.raster.clip_bounding_box import clip_by_extent
 from safe.gisv4.raster.reclassify import reclassify as reclassify_raster
 from safe.gisv4.raster.polygonize import polygonize
 from safe.gisv4.raster.zonal_statistics import zonal_stats
-from safe.gisv4.raster.align import align_rasters
 from safe.definitions.post_processors import post_processors
 from safe.definitions.analysis_steps import analysis_steps
 from safe.definitions.utilities import definition
@@ -67,10 +66,8 @@ from safe.definitions.layer_purposes import (
     layer_purpose_exposure_breakdown,
     layer_purpose_profiling,
 )
-from safe.definitions.hazard import hazard_generic
-from safe.definitions.hazard_category import (
-    hazard_category_single_event, hazard_category_multiple_event)
-from safe.impact_function.provenance_utilities import get_map_title
+from safe.impact_function.provenance_utilities import (
+    get_map_title, get_map_legend_title)
 from safe.definitions.constants import (
     inasafe_keyword_version_key,
     ANALYSIS_SUCCESS,
@@ -1539,6 +1536,7 @@ class ImpactFunction(object):
         # Map title
         self._provenance['map_title'] = get_map_title(
             hazard, exposure, hazard_category)
+        self._provenance['map_legend_title'] = get_map_legend_title(exposure)
 
         if self.requested_extent:
             self._provenance['requested_extent'] = (
