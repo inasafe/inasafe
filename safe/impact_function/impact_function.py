@@ -1194,7 +1194,6 @@ class ImpactFunction(object):
         self.set_state_process('impact function', 'Set summaries')
         self._aggregation_impacted, totals = make_summary_layer(
             exposed, self.aggregation, itb_fatality_rates())
-        print totals
         if self.debug_mode:
             self.debug_layer(self._aggregation_impacted)
 
