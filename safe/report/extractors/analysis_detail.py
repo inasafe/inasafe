@@ -8,7 +8,7 @@ from safe.definitions.fields import (
     total_unaffected_field,
     total_field)
 from safe.definitions.hazard_classifications import hazard_classes_all
-from safe.reportv4.extractors.util import layer_definition_type, \
+from safe.report.extractors.util import layer_definition_type, \
     round_affecter_number
 from safe.utilities.i18n import tr
 
