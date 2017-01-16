@@ -49,18 +49,19 @@ from safe.definitions.constants import (
     PREPARE_SUCCESS,
     ANALYSIS_FAILED_BAD_CODE,
     ANALYSIS_FAILED_BAD_INPUT)
-from safe.gui.analysis_utilities import (
-    generate_impact_report,
-    generate_impact_map_report)
+from safe.definitions.report import (
+    standard_impact_report_metadata_pdf,
+    report_a4_blue)
 from safe.utilities.gis import extent_string_to_array
 from safe.common.exceptions import FileNotFoundError
 from safe.common.utilities import temp_dir
 from safe.utilities.resources import (
     html_footer, html_header, get_ui_class)
 from safe.messaging import styles
-from safe.utilities.resources import resources_path
 from safe.gui.tools.help.batch_help import batch_help
 from safe.impact_function.impact_function import ImpactFunction
+from safe.report.report_metadata import ReportMetadata
+from safe.report.impact_report import ImpactReport
 
 INFO_STYLE = styles.INFO_STYLE
 LOGGER = logging.getLogger('InaSAFE')
@@ -466,9 +467,10 @@ class BatchDialog(QDialog, FORM_CLASS):
                         # generate map report and impact report
                         # map report is still waiting update from lucernae
                         try:
-                            generate_impact_report(impact_function, self.iface)
-                            generate_impact_map_report(impact_function,
-                                                       self.iface)
+                            self.generate_pdf_report(
+                                impact_function,
+                                self.iface,
+                                group_name)
                         except:
                             status_item.setText("Report failed to generate")
                     else:
@@ -612,6 +614,55 @@ class BatchDialog(QDialog, FORM_CLASS):
             return path
         except IOError:
             raise IOError
+
+    def generate_pdf_report(self, impact_function, iface, scenario_name):
+        """Generate map report and impact report from impact function and store
+        it in user specified directory. adapted from analysis utilites
+
+        :param impact_function: Impact Function
+        :param iface: iface
+        :return:
+        """
+        # output folder
+        output_dir = self.output_directory.text()
+        file_path = os.path.join(output_dir, scenario_name)
+
+        # create impact table report instance
+        table_report_metadata = ReportMetadata(
+            metadata_dict=standard_impact_report_metadata_pdf)
+        impact_table_report = ImpactReport(
+            iface,
+            table_report_metadata,
+            impact_function=impact_function)
+        impact_table_report.output_folder = file_path
+        impact_table_report.process_component()
+
+        # create impact map report instance
+        map_report_metadata = ReportMetadata(
+            metadata_dict=report_a4_blue)
+        impact_map_report = ImpactReport(
+            iface,
+            map_report_metadata,
+            impact_function=impact_function)
+        # Get other setting
+        settings = QSettings()
+        logo_path = settings.value(
+            'inasafe/organisation_logo_path', '', type=str)
+        impact_map_report.inasafe_context.organisation_logo = logo_path
+
+        disclaimer_text = settings.value(
+            'inasafe/reportDisclaimer', '', type=str)
+        impact_map_report.inasafe_context.disclaimer = disclaimer_text
+
+        north_arrow_path = settings.value(
+            'inasafe/north_arrow_path', '', type=str)
+        impact_map_report.inasafe_context.north_arrow = north_arrow_path
+
+        # get the extent of impact layer
+        impact_report.qgis_composition_context.extent = \
+            impact_function.impact.extent()
+        impact_map_report.output_folder = file_path
+        impact_map_report.process_component()
 
     def show_report(self, report_path):
         """Show batch report file in batchReportFileName using an external app.
