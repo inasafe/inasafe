@@ -72,4 +72,3 @@ def get_map_legend_title(exposure):
 
     return tr('Number of {exposure_name}').format(
         exposure_name=exposure['name'])
-

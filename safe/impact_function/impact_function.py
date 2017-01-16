@@ -1521,11 +1521,14 @@ class ImpactFunction(object):
         if not self._provenance_ready:
             return {}
 
+        # noinspection PyTypeChecker
         exposure = definition(
-            self._provenance['exposure_keywords'][ 'exposure'])
+            self._provenance['exposure_keywords']['exposure'])
 
+        # noinspection PyTypeChecker
         hazard = definition(
             self._provenance['hazard_keywords']['hazard'])
+        # noinspection PyTypeChecker
         hazard_category = definition(self._provenance['hazard_keywords'][
             'hazard_category'])
 
