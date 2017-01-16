@@ -387,7 +387,6 @@ class BatchDialog(QDialog, FORM_CLASS):
             LOGGER.warning('Input extension in scenario is not recognized')
             return
 
-
     def run_task(self, task_item, status_item, count=0, index=''):
         """Run a single task.
 
@@ -779,6 +778,7 @@ def read_scenarios(filename):
     # that scenario (e.g. hazard, exposure etc)
     return blocks
 
+
 def validate_scenario(blocks, scenario_directory):
     """Check whether the files that are used in scenario whether it needs to be
     updated or not
@@ -789,8 +789,8 @@ def validate_scenario(blocks, scenario_directory):
     """
 
     # dictionary to temporary contain status message
-    blocks_update={}
-    for section,section_item in blocks.iteritems():
+    blocks_update = {}
+    for section, section_item in blocks.iteritems():
         ready = True
         for item in section_item:
             if item in ['hazard', 'exposure', 'aggregation']:
@@ -799,15 +799,17 @@ def validate_scenario(blocks, scenario_directory):
                 full_path = os.path.join(scenario_directory, rel_path)
                 filepath = os.path.normpath(full_path)
                 if not os.path.exists(filepath):
-                    blocks_update[section] ={'status':"Please update scenario"}
+                    blocks_update[section] = {
+                        'status': "Please update scenario"}
                     LOGGER.info(section + " needs to be updated")
                     LOGGER.info("Unable to find " + filepath)
                     ready = False
         if ready:
-            blocks_update[section]={'status':"Scenario ready"}
+            blocks_update[section] = {'status': "Scenario ready"}
             # LOGGER.info(section + " scenario is ready")
-    for section,section_item in blocks_update.iteritems():
+    for section, section_item in blocks_update.iteritems():
         blocks[section]['status'] = blocks_update[section]['status']
+
 
 def append_row(table, label, data):
     """Append new row to table widget.
