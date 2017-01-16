@@ -13,8 +13,8 @@ ready for implementation. The status of these sections is as follows:
 | ------------------------- | --------------------------- |
 | General rules | draft |
 | Map title | ready for implementation |
-| Map legend | draft |
-| Marginalia | draft |
+| Map legend | ready for implementation |
+| Marginalia | ready for implementation |
 | Analysis question | ready for implementation |
 | General report | draft |
 | Detailed report | draft |
@@ -120,14 +120,14 @@ The map title appears at the top of each map product and describes the map
 - Jalan terdampak 
 - Penutup lahan terdampak
 
-## Map legend (draft)
+## Map legend
 
 ### Description
 
-The map legend appears at the bottom of each map product and identifies and
- describes the impact layer. Every map should have a legend. Every legend
- should have a title. Using the below table as a reference, the legend titles
- should use the following syntax:
+The map legend appears on each map product and identifies and  describes the
+ impact layer. Every map should have a legend. Every legend  should have a
+ title. Using the below table as a reference, the legend titles  should use
+ the following syntax:
 
   <**exposure measure**> <**exposure**>
 
@@ -155,12 +155,15 @@ The map legend appears at the bottom of each map product and identifies and
 
 The map legend is used to display the exposure elements in the impact
 layer. The number of classes in the legend should reflect the number of
-classes in the hazard data. The colours in the legend should reflect the
+classes in the hazard data.  The colours in the legend should reflect the
 severity of the hazard. The same colour should be used to represent high
-hazard in all map legends regardless of whether there are two or five
-classes in the legend. The table below lists the colour definitions and the
-number of classes to be used in map legends depending on the hazard / exposure
-combination.
+hazard in all map legends regardless of whether there are two or five classes
+in the legend.
+
+The table below lists the colour definitions and the number of classes to be
+used in map legends depending on the hazard / exposure combination. Note: The
+number of classes may vary for different exposure types. e.g., there are only
+two classes shown for population exposed to tsunami and flood hazard.
 
 ![image](https://cloud.githubusercontent.com/assets/5743135/17542495/6b968a16-5ef3-11e6-8622-af1cab2e0a5f.png)
 
@@ -221,15 +224,15 @@ Note: thresholds are not included in the legend label for multiple event hazard
 
 
 
-## Marginalia (draft)
+## Marginalia
 
  _Analysis information:_
 
-- **Impact Function**: <which impact function used>
-- **Time**: <time of analysis>
-- **Note**: <recommendation to ground truth>
-- **Version**: <version of InaSAFE used>
-- logos of BNPB, Australian Aid, GFDRR
+- **Analysis Information**: which impact function was used
+- **Time**: time of analysis
+- **Note**: recommendation to ground truth
+- **Version**: version of InaSAFE used
+- BNPB logo, Australian Government Crest, WB GFDRR logos
 
 _Disclaimer_: InaSAFE has been jointly developed by the Indonesian
 Government-BNPB, the Australian Government, the World Bank-GFDRR and
@@ -253,13 +256,13 @@ The analysis question appears at the beginning of each report and identifies
  In the event of a <**hazard**>, <**exposure measure**> <**exposure**>
  might be affected?
 
+![image](https://cloud.githubusercontent.com/assets/5743135/21974815/9f647e90-dbfb-11e6-99e7-54eb14d1fb86.png)
+
 The question on reports for analyses that are supported through generic impact
 functions should use the following syntax:
 
  In each of the hazard zones <**exposure measure**> <**exposure**> might be
  affected?
-
-![image](https://cloud.githubusercontent.com/assets/5743135/17546788/f7592454-5f0d-11e6-985b-e91c16e71501.png)
 
 Questions should always have a question mark at the end of the sentence.
 
@@ -298,11 +301,27 @@ more classes.
 
 The detailed report gives further detail on the estimated effect of the hazard,
 broken down into characteristics, e.g. gender and age for population, type of
-building for infrastructure.
+building for infrastructure. If the detail report includes hazard classes, they
+should be ordered from highest to lowest, left to right. Totals should be shown
+to the right of the table.
 
 ![image](https://cloud.githubusercontent.com/assets/16660099/17165692/739dd55e-53fc-11e6-82db-eede1413d6e4.png)
 
+![image](https://cloud.githubusercontent.com/assets/5743135/21977488/ee135022-dc08-11e6-9061-5485ded20cb0.png)
+
+![image](https://cloud.githubusercontent.com/assets/5743135/21977589/5dd5fe1e-dc09-11e6-899d-8988d462ad11.png)
+
 ## Aggregation report
+
+The aggregation report gives further detail on the estimated effect of the
+ hazard on the exposed element by aggregation areas, e.g. number of buildings
+ by type and district for infrastructure, number of people by age and gender and
+ district for population.
+
+### Examples
+![image](https://cloud.githubusercontent.com/assets/5743135/21977521/12ea0198-dc09-11e6-9d99-170f86f2e7ff.png)
+
+![image](https://cloud.githubusercontent.com/assets/5743135/21977546/28a95c72-dc09-11e6-908e-3f2691786a1d.png)
 
 ## Minimum needs report
 
@@ -389,13 +408,14 @@ In the analysis details section details for each layer used in the analysis
 
 # Overall Examples
 
-**Volcano on people**
-
+**Flood on buildings**
+![image](https://cloud.githubusercontent.com/assets/5743135/21977957/0f2ce80c-dc0b-11e6-91fc-5df349485899.png)
 
 **Tsunami on roads**
+![image](https://cloud.githubusercontent.com/assets/5743135/21977856/a9a0f8de-dc0a-11e6-9859-81d2d792186f.png)
 
-
-**Flood on buildings**
+**Volcano on people**
+![image](https://cloud.githubusercontent.com/assets/5743135/21977909/e27ce76c-dc0a-11e6-8e54-4ddcca65bf27.png)
 
 
 # Other guidelines
