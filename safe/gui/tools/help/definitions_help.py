@@ -176,10 +176,14 @@ def content():
     #  Hazard definitions
     ##
 
+    header = m.Heading(tr('Hazard Types'), **SUBSECTION_STYLE)
+    message.add(header)
+    message.add(m.Paragraph(definitions.concepts['hazard']['description']))
+
     hazards = definitions.hazards
     hazard_category = definitions.hazard_category
     message.add(definition_to_message(hazards, heading_style=SECTION_STYLE))
-    header = m.Heading(tr('Hazard scenarios'), **SECTION_STYLE)
+    header = m.Heading(tr('Hazard scenarios'), **SUBSECTION_STYLE)
     message.add(header)
     message.add(definition_to_message(hazard_category))
 

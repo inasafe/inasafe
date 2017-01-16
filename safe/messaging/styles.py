@@ -47,19 +47,20 @@ SUBSECTION_STYLE = {
     'level': 3,
     'style_class': 'subsection'}
 
+INFO_STYLE = {
+    'level': 4,
+    'icon': 'icon-info-sign icon-white',
+    'style_class': 'info'}
+
 HEADING_STYLE = {
     'level': 4,
     'style_class': 'subsection'}
 
 PROGRESS_UPDATE_STYLE = {
-    'level': 5,
+    'level': 4,
     'icon': 'icon-cog icon-white',
     'style_class': 'info'}
 
-INFO_STYLE = {
-    'level': 5,
-    'icon': 'icon-info-sign icon-white',
-    'style_class': 'info'}
 
 SUB_INFO_STYLE = {
     'level': 5,
@@ -67,21 +68,22 @@ SUB_INFO_STYLE = {
     'style_class': 'sub_info'}
 
 WARNING_STYLE = {
-    'level': 5,
+    'level': 4,
     'icon': 'icon-warning-sign icon-white',
     'style_class': 'warning'}
+
 SUGGESTION_STYLE = {
-    'level': 5,
+    'level': 4,
     'icon': 'icon-comment icon-white',
     'style_class': 'suggestion'}
 
 PROBLEM_STYLE = {
-    'level': 5,
+    'level': 4,
     'icon': 'icon-remove-sign icon-white',
     'style_class': 'warning'}
 
 DETAILS_STYLE = {
-    'level': 5,
+    'level': 4,
     'icon': 'icon-list icon-white',
     'style_class': 'problem'}
 
