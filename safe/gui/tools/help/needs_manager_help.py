@@ -225,11 +225,6 @@ def content():
 
     message.add(m.Heading(tr('Managing profiles'), **INFO_STYLE))
     message.add(m.Paragraph(tr(
-        'When switching to edit or add resource mode, the minimum needs '
-        'manager will be updated to show the resource editor. Each '
-        'resource is described in terms of:'
-    )))
-    message.add(m.Paragraph(tr(
         'In addition to the profiles that come as standard with InaSAFE, you '
         'can create new ones, either from scratch, or based on an existing '
         'one (which you can then modify).'
