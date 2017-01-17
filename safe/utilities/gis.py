@@ -1,6 +1,5 @@
 # coding=utf-8
 """Helpers for GIS related functionality."""
-import uuid
 
 from qgis.core import (
     QgsMapLayer,
@@ -17,15 +16,6 @@ from qgis.core import (
     QgsPoint,
     QgsVectorLayer,
     QgsRasterLayer)
-from safe.common.exceptions import (
-    MemoryLayerCreationError,
-    BoundingBoxError,
-    InsufficientOverlapError,
-)
-from safe.storage.core import read_layer as safe_read_layer
-from safe.storage.layer import Layer
-from safe.storage.utilities import bbox_intersection
-from safe.utilities.i18n import tr
 from safe.utilities.utilities import LOGGER
 
 

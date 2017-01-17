@@ -20,8 +20,6 @@ from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature, pyqtSlot
 
 from safe.common.version import get_version
-from safe.storage.core import read_layer as safe_read_layer
-from safe.storage.vector import Vector
 from safe.utilities.gis import is_point_layer, is_polygon_layer
 from safe.utilities.resources import html_footer, html_header, get_ui_class
 from safe.utilities.utilities import add_ordered_combo_item
@@ -118,10 +116,6 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
             # Record attributes for this feature
             all_attributes.append(weekly_needs)
 
-        output_layer = Vector(
-            geometry=input_layer.get_geometry(),
-            data=all_attributes,
-            projection=input_layer.get_projection())
         return output_layer
 
     def polygon_layers_to_combo(self):
@@ -196,8 +190,6 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
 
         file_name = layer.source()
-
-        input_layer = safe_read_layer(file_name)
 
         try:
             output_layer = self.minimum_needs(input_layer, field_name)
