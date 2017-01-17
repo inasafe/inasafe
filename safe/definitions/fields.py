@@ -1161,6 +1161,8 @@ from safe.definitions.minimum_needs import minimum_needs_fields  # noqa
 count_fields = [
     feature_value_field,
     population_count_field,
+    displaced_field,
+    fatalities_field,
     female_count_field,
     male_count_field,
     youth_count_field,
