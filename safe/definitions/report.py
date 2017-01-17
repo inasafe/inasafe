@@ -309,8 +309,7 @@ report_a4_blue = {
             'processor': qgis_composer_renderer,
             'extractor': qgis_composer_extractor,
             'output_format': QgisComposerComponentsMetadata.OutputFormat.PDF,
-            'template': 'standard-template/'
-                        'qgis-composer/'
+            'template': '../qgis-composer-templates/'
                         'a4-portrait-blue.qpt',
             'output_path': 'a4-portrait-blue.pdf',
         },
@@ -320,8 +319,7 @@ report_a4_blue = {
             'processor': qgis_composer_renderer,
             'extractor': qgis_composer_extractor,
             'output_format': QgisComposerComponentsMetadata.OutputFormat.PDF,
-            'template': 'standard-template/'
-                        'qgis-composer/'
+            'template': '../qgis-composer-templates/'
                         'a4-landscape-blue.qpt',
             'output_path': 'a4-landscape-blue.pdf',
             'orientation': 'landscape',

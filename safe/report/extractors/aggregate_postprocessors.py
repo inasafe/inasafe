@@ -9,10 +9,9 @@ from safe.definitions.fields import (
     population_count_field,
     affected_exposure_count_field,
     total_affected_field)
-from safe.definitions.minimum_needs import (
-    minimum_needs_fields,
-    female_minimum_needs_fields)
-from safe.definitions.post_processors import age_postprocessors
+from safe.definitions.minimum_needs import minimum_needs_fields
+from safe.definitions.post_processors import age_postprocessors, \
+    female_postprocessors
 from safe.definitions.utilities import postprocessor_output_field
 from safe.report.extractors.util import (
     round_affected_number,
@@ -58,7 +57,8 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
         context['header'] = tr('Detailed demographic breakdown')
 
     age_fields = [postprocessor_output_field(p) for p in age_postprocessors]
-    gender_fields = [female_count_field] + female_minimum_needs_fields
+    gender_fields = [
+        postprocessor_output_field(p) for p in female_postprocessors]
 
     context['sections']['age'] = create_section(
         aggregation_impacted,
@@ -101,6 +101,16 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
             units_label=units_label,
             debug_mode=debug_mode,
             population_rounding=False)
+    else:
+        sections_not_empty = True
+        for _, value in context['sections'].iteritems():
+            if value.get('rows'):
+                break
+        else:
+            sections_not_empty = False
+
+        context['sections_not_empty'] = sections_not_empty
+
     return context
 
 
@@ -240,8 +250,12 @@ def create_section_with_aggregation(
 
     for idx, output_field in enumerate(postprocessors_fields_found):
         name = output_field['name']
-        if units_label:
-            unit = units_label[idx]
+        if units_label or output_field.get('unit'):
+            unit = None
+            if units_label:
+                unit = units_label[idx]
+            elif output_field.get('unit'):
+                unit = output_field.get('unit').get('abbreviation')
 
             if unit:
                 header_format = '{name} [{unit}]'
@@ -250,7 +264,7 @@ def create_section_with_aggregation(
 
             header = header_format.format(
                 name=name,
-                unit=units_label[idx])
+                unit=unit)
         else:
             header_format = '{name}'
             header = header_format.format(name=name)
@@ -417,8 +431,12 @@ def create_section_without_aggregation(
     for idx, output_field in enumerate(postprocessors_fields_found):
         name = output_field['name']
         row = []
-        if units_label:
-            unit = units_label[idx]
+        if units_label or output_field.get('unit'):
+            unit = None
+            if units_label:
+                unit = units_label[idx]
+            elif output_field.get('unit'):
+                unit = output_field.get('unit').get('abbreviation')
 
             if unit:
                 header_format = '{name} [{unit}]'
@@ -427,7 +445,7 @@ def create_section_without_aggregation(
 
             header = header_format.format(
                 name=name,
-                unit=units_label[idx])
+                unit=unit)
         else:
             header_format = '{name}'
             header = header_format.format(name=name)

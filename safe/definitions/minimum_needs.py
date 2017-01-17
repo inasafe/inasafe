@@ -4,12 +4,10 @@
 import re
 import sys
 
-from safe.common.minimum_needs import MinimumNeeds
 from safe.common.parameters.resource_parameter import ResourceParameter
 from safe.definitions.constants import qvariant_whole_numbers
 from safe.definitions.fields import default_field_length
 from safe.gui.tools.minimum_needs.needs_profile import NeedsProfile
-from safe_extras.parameters.unit import Unit
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -55,30 +53,6 @@ def _initializes_minimum_needs_fields():
     fields = []
 
     needs_parameters = needs_profile.get_needs_parameters()
-    # We need to add some parameters for:
-    # - weekly hygiene packs for woman
-    # - additional rice for pregnant and lactating women
-    # TODO: find out how it will nicely fits in the architecture
-    weekly_hygiene_packs = ResourceParameter()
-    weekly_hygiene_packs.name = MinimumNeeds.Weekly_hygiene_packs
-    weekly_hygiene_packs.minimum_allowed_value = 0.00
-    weekly_hygiene_packs.maximum_allowed_value = 100.00
-    weekly_hygiene_packs.frequency = 'weekly'
-    # The formula:
-    # displaced_female * 0.7937 * (week/intended_day_use)
-    weekly_hygiene_packs.value = 0.7937
-
-    additional_rice_for_woman = ResourceParameter()
-    additional_rice_for_woman.name = MinimumNeeds.Additional_rice
-    rice_unit = Unit()
-    rice_unit.abbreviation = 'kg'
-    additional_rice_for_woman.unit = rice_unit
-    additional_rice_for_woman.frequency = 'weekly'
-    # The formula:
-    # displaced_female * 2 * (0.033782 + 0.01281)
-    additional_rice_for_woman.value = 2 * (0.033782 + 0.01281)
-
-    needs_parameters += [weekly_hygiene_packs, additional_rice_for_woman]
 
     for need_parameter in needs_parameters:
         if isinstance(need_parameter, ResourceParameter):
@@ -177,11 +151,3 @@ def _declare_minimum_fields():
         setattr(sys.modules[__name__], field['key'], field)
 
 _declare_minimum_fields()
-
-# Specific grouping for female minimum needs
-female_minimum_needs_fields = [
-    _field for _field in minimum_needs_fields if
-    (
-        _field['need_parameter'].name == MinimumNeeds.Weekly_hygiene_packs or
-        _field['need_parameter'].name == MinimumNeeds.Additional_rice
-    )]

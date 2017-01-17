@@ -863,6 +863,54 @@ displaced_field = {
     'replace_null': False
 }
 
+# Female hygiene packs
+hygiene_packs_count_field = {
+    'key': 'hygiene_packs_field',
+    'name': tr('Weekly Hygiene Packs'),
+    'field_name': 'hygiene_packs',
+    'type': QVariant.Int,
+    'length': default_field_length,
+    'precision': 0,
+    'absolute': True,
+    'help_text': tr('Number of Hygiene Packs Weekly for Women.'),
+    'description': tr('Number of Hygiene Packs Weekly for Women.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
+# Additional Rice for Pregnant and Lactating Women
+additional_rice_count_field = {
+    'key': 'additional_rice_field',
+    'name': tr('Additional Weekly Rice kg for Pregnant and Lactating Women'),
+    'field_name': 'additional_rice',
+    'type': QVariant.Int,
+    'length': default_field_length,
+    'unit': {
+        'name': 'Kilogram',
+        'abbreviation': 'kg'
+    },
+    'precision': 0,
+    'absolute': True,
+    'help_text': tr(
+        'Additional Weekly Rice kg for Pregnant and Lactating Women.'),
+    'description': tr(
+        'Additional Weekly Rice kg for Pregnant and Lactating Women.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+    # Null value can be replaced by default or not
+    'replace_null': False
+}
+
 # Total affected field to store the total affected by the hazard
 total_affected_field = {
     'key': 'total_affected_field',
@@ -1160,6 +1208,8 @@ count_fields = [
     fatalities_field,
     female_count_field,
     male_count_field,
+    hygiene_packs_count_field,
+    additional_rice_count_field,
     youth_count_field,
     adult_count_field,
     elderly_count_field,
