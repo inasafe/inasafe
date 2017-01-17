@@ -1118,14 +1118,7 @@ class TestKeywordWizard(unittest.TestCase):
         # Check if in InaSAFE field step
         self.check_current_step(dialog.step_kw_inasafe_fields)
 
-        # Click next to finish inasafe fields step and go to inasafe default
-        # field step
-        dialog.pbnNext.click()
-
-        # Check if in InaSAFE Default field step
-        self.check_current_step(dialog.step_kw_default_inasafe_fields)
-
-        # Click next to finish InaSAFE Default Field step and go to source step
+        # Click next to finish InaSAFE Field step and go to source step
         dialog.pbnNext.click()
 
         # Check if in source step
@@ -1263,14 +1256,8 @@ class TestKeywordWizard(unittest.TestCase):
         # Check if in InaSAFE field step
         self.check_current_step(dialog.step_kw_inasafe_fields)
 
-        # Click next to finish inasafe fields step and go to inasafe default
+        # Click next to finish inasafe fields step and go to source step
         # field step
-        dialog.pbnNext.click()
-
-        # Check if in InaSAFE Default field step
-        self.check_current_step(dialog.step_kw_default_inasafe_fields)
-
-        # Click next to finish InaSAFE Default Field step and go to source step
         dialog.pbnNext.click()
 
         # Check if in source step
