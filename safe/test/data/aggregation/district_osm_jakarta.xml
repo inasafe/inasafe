@@ -176,7 +176,7 @@
             <gco:CharacterString/>
           </scale>
           <layer_mode>
-            <gco:CharacterString>classified</gco:CharacterString>
+            <gco:CharacterString/>
           </layer_mode>
           <multipart_polygon>
             <gco:Boolean/>
@@ -191,7 +191,7 @@
             <gco:CharacterString/>
           </report>
           <layer_geometry>
-            <gco:CharacterString/>
+            <gco:CharacterString>polygon</gco:CharacterString>
           </layer_geometry>
           <layer_purpose>
             <gco:CharacterString>aggregation</gco:CharacterString>
