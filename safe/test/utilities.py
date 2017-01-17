@@ -26,7 +26,7 @@ from safe.utilities.numerics import axes_to_points
 from safe.common.utilities import unique_filename, temp_dir
 from safe.common.exceptions import NoKeywordsFoundError, MetadataReadError
 
-from safe.gisv4.vector.tools import create_memory_layer, copy_layer
+from safe.gis.vector.tools import create_memory_layer, copy_layer
 from safe.utilities.metadata import read_iso19115_metadata
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.i18n import tr

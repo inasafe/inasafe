@@ -15,7 +15,7 @@ from safe.definitions.post_processors import (
     layer_property_input_type,
     layer_crs_input_value,
     size_calculator_input_value, constant_input_type)
-from safe.gisv4.vector.tools import (
+from safe.gis.vector.tools import (
     create_field_from_definition, size_calculator)
 from safe.utilities.i18n import tr
 from safe.utilities.profiling import profile

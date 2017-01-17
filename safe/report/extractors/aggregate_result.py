@@ -6,7 +6,7 @@ from safe.definitions.fields import (
     total_affected_field,
     exposure_type_field,
     exposure_class_field)
-from safe.gisv4.vector.tools import read_dynamic_inasafe_field
+from safe.gis.vector.tools import read_dynamic_inasafe_field
 from safe.report.extractors.util import (
     round_affected_number,
     layer_definition_type)
