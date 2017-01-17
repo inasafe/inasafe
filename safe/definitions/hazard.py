@@ -192,8 +192,8 @@ hazard_cyclone = {
     'key': 'cyclone',
     'name': tr('Cyclone'),
     'description': tr(
-        'A <b>Cyclone</b> is a rapidly rotating storm system characterized '
-        'by a low-pressure center, a closed low-level atmospheric '
+        'A <b>Cyclone</b> is a rapidly rotating storm system characterised '
+        'by a low-pressure centre, a closed low-level atmospheric '
         'circulation, strong winds, and a spiral arrangement of thunderstorms '
         'that produce heavy rain. It is also referred to as <b>hurricane</b> '
         'or <b>typhoon</b>.'),
