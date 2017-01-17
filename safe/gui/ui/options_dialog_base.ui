@@ -65,7 +65,7 @@
        <item row="0" column="0">
         <widget class="QTabWidget" name="tabWidget">
          <property name="currentIndex">
-          <number>0</number>
+          <number>3</number>
          </property>
          <widget class="QWidget" name="tab_basic">
           <attribute name="title">
@@ -506,7 +506,7 @@
          </widget>
          <widget class="QWidget" name="tab_default_values">
           <attribute name="title">
-           <string>Default Values</string>
+           <string>Global Default</string>
           </attribute>
           <layout class="QVBoxLayout" name="verticalLayout_5">
            <item>
