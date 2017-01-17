@@ -177,25 +177,28 @@ def population_infographic_extractor(impact_report, component_metadata):
         female_count_field['field_name'],
         analysis_layer)
 
-    female_percentage = female_affected * 100.0 / total_affected
-
     youth_affected = value_from_field_name(
         youth_count_field['field_name'],
         analysis_layer)
-
-    youth_percentage = youth_affected * 100.0 / total_affected
 
     adult_affected = value_from_field_name(
         adult_count_field['field_name'],
         analysis_layer)
 
-    adult_percentage = adult_affected * 100.0 / total_affected
-
     elderly_affected = value_from_field_name(
         elderly_count_field['field_name'],
         analysis_layer)
 
-    elderly_percentage = elderly_affected * 100.0 / total_affected
+    if total_affected:
+        female_percentage = female_affected * 100.0 / total_affected
+        youth_percentage = youth_affected * 100.0 / total_affected
+        adult_percentage = adult_affected * 100.0 / total_affected
+        elderly_percentage = elderly_affected * 100.0 / total_affected
+    else:
+        female_percentage = 0.0
+        youth_percentage = 0.0
+        adult_percentage = 0.0
+        elderly_percentage = 0.0
 
     sections['vulnerability'] = {
         'header': tr('Vulnerability'),
