@@ -20,7 +20,6 @@ __copyright__ += 'Disaster Reduction'
 
 import unittest
 import os
-import numpy
 
 from qgis.core import QgsCoordinateReferenceSystem
 
@@ -30,7 +29,6 @@ from safe.common.utilities import (
     humanize_class,
     format_decimal,
     format_int,
-    create_classes,
     create_label,
     get_thousand_separator,
     get_decimal_separator,
@@ -240,44 +238,6 @@ class TestUtilities(unittest.TestCase):
         assert '.' == get_thousand_separator()
         assert ',' == get_decimal_separator()
         os.environ['LANG'] = 'en'
-
-    def test_create_classes(self):
-        """Test create_classes.
-        """
-        # Normal case
-        class_list = numpy.array([0, 1, 4, 2, 9, 2, float('nan')])
-        num_classes = 2
-        expected_classes = [1.0, 9.0]
-        result = create_classes(class_list, num_classes)
-        self.assertEqual(result, expected_classes)
-
-        # There's only 1 value
-        class_list = numpy.array([6])
-        num_classes = 3
-        expected_classes = [2.0, 4.0, 6.0]
-        result = create_classes(class_list, num_classes)
-        self.assertEqual(result, expected_classes)
-
-        # Max value <= 1.0
-        class_list = numpy.array([0.1, 0.3, 0.9])
-        num_classes = 3
-        expected_classes = [0.3, 0.6, 0.9]
-        result = create_classes(class_list, num_classes)
-        self.assertEqual(result, expected_classes)
-
-        # There are only 2 values
-        class_list = numpy.array([2, 6])
-        num_classes = 3
-        expected_classes = [1.0, 3.5, 6.0]
-        result = create_classes(class_list, num_classes)
-        self.assertEqual(result, expected_classes)
-
-        # Another 2 values
-        class_list = numpy.array([2.5, 6])
-        num_classes = 3
-        expected_classes = [2.0, 4.0, 6.0]
-        result = create_classes(class_list, num_classes)
-        self.assertEqual(result, expected_classes)
 
     def test_create_label(self):
         """Test create label.
