@@ -30,32 +30,32 @@ from safe.common.utilities import temp_dir
 from safe.common.version import get_version
 from safe.datastore.folder import Folder
 from safe.datastore.datastore import DataStore
-from safe.gisv4.vector.prepare_vector_layer import prepare_vector_layer
-from safe.gisv4.vector.clean_geometry import clean_layer
-from safe.gisv4.vector.reproject import reproject
-from safe.gisv4.vector.assign_highest_value import assign_highest_value
-from safe.gisv4.vector.default_values import add_default_values
-from safe.gisv4.vector.reclassify import reclassify as reclassify_vector
-from safe.gisv4.vector.union import union
-from safe.gisv4.vector.clip import clip
-from safe.gisv4.vector.smart_clip import smart_clip
-from safe.gisv4.vector.intersection import intersection
-from safe.gisv4.vector.summary_1_aggregate_hazard import (
+from safe.gis.vector.prepare_vector_layer import prepare_vector_layer
+from safe.gis.vector.clean_geometry import clean_layer
+from safe.gis.vector.reproject import reproject
+from safe.gis.vector.assign_highest_value import assign_highest_value
+from safe.gis.vector.default_values import add_default_values
+from safe.gis.vector.reclassify import reclassify as reclassify_vector
+from safe.gis.vector.union import union
+from safe.gis.vector.clip import clip
+from safe.gis.vector.smart_clip import smart_clip
+from safe.gis.vector.intersection import intersection
+from safe.gis.vector.summary_1_aggregate_hazard import (
     aggregate_hazard_summary)
-from safe.gisv4.vector.summary_2_aggregation import aggregation_summary
-from safe.gisv4.vector.summary_3_analysis import analysis_summary
-from safe.gisv4.vector.summary_33_eq_raster_analysis import (
+from safe.gis.vector.summary_2_aggregation import aggregation_summary
+from safe.gis.vector.summary_3_analysis import analysis_summary
+from safe.gis.vector.summary_33_eq_raster_analysis import (
     analysis_eartquake_summary)
-from safe.gisv4.vector.summary_4_exposure_breakdown import (
+from safe.gis.vector.summary_4_exposure_breakdown import (
     exposure_type_breakdown)
-from safe.gisv4.vector.recompute_counts import recompute_counts
-from safe.gisv4.vector.update_value_map import update_value_map
-from safe.gisv4.raster.clip_bounding_box import clip_by_extent
-from safe.gisv4.raster.reclassify import reclassify as reclassify_raster
-from safe.gisv4.raster.polygonize import polygonize
-from safe.gisv4.raster.zonal_statistics import zonal_stats
-from safe.gisv4.raster.align import align_rasters
-from safe.gisv4.raster.rasterize import rasterize_vector_layer
+from safe.gis.vector.recompute_counts import recompute_counts
+from safe.gis.vector.update_value_map import update_value_map
+from safe.gis.raster.clip_bounding_box import clip_by_extent
+from safe.gis.raster.reclassify import reclassify as reclassify_raster
+from safe.gis.raster.polygonize import polygonize
+from safe.gis.raster.zonal_statistics import zonal_stats
+from safe.gis.raster.align import align_rasters
+from safe.gis.raster.rasterize import rasterize_vector_layer
 from safe.definitions.post_processors import post_processors
 from safe.definitions.analysis_steps import analysis_steps
 from safe.definitions.utilities import definition

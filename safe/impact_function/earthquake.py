@@ -24,9 +24,9 @@ from safe.definitions.fields import (
 )
 from safe.definitions.layer_purposes import (
     layer_purpose_aggregation_impacted, layer_purpose_exposure_impacted)
-from safe.gisv4.vector.tools import create_field_from_definition
+from safe.gis.vector.tools import create_field_from_definition
 from safe.utilities.numerics import log_normal_cdf
-from safe.gisv4.raster.write_raster import array_to_raster, make_array
+from safe.gis.raster.write_raster import array_to_raster, make_array
 from safe.common.utilities import unique_filename
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

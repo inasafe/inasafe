@@ -24,7 +24,7 @@ from safe.definitions.layer_purposes import (
     layer_purpose_aggregation,
     layer_purpose_analysis_impacted,
 )
-from safe.gisv4.vector.tools import (
+from safe.gis.vector.tools import (
     create_memory_layer, create_field_from_definition)
 from safe.utilities.profiling import profile
 from safe.utilities.i18n import tr
