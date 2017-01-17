@@ -1,20 +1,9 @@
 # coding=utf-8
-"""
-InaSAFE Disaster risk assessment tool by AusAid -**InaSAFE Wizard**
-
-This module provides: Function Centric Wizard Step: Analysis
-
-Contact : ole.moller.nielsen@gmail.com
-
-.. note:: This program is free software; you can redistribute it and/or modify
-     it under the terms of the GNU General Public License as published by
-     the Free Software Foundation; either version 2 of the License, or
-     (at your option) any later version.
-
-"""
+"""InaSAFE Function Centric Wizard Analysis Step."""
 
 import logging
-from PyQt4 import QtGui
+import os
+from PyQt4 import QtGui, QtCore
 from PyQt4.QtCore import pyqtSignature, QSettings
 
 from safe.utilities.i18n import tr
@@ -52,13 +41,14 @@ FORM_CLASS = get_wizard_step_ui_class(__file__)
 
 
 class StepFcAnalysis(WizardStep, FORM_CLASS):
-    """Function Centric Wizard Step: Analysis"""
+    """Function Centric Wizard Step: Analysis."""
 
     def __init__(self, parent):
         """Init method"""
         WizardStep.__init__(self, parent)
 
         enable_messaging(self.results_webview)
+        self.impact_function = None
 
     def is_ready_to_next_step(self):
         """Check if the step is complete. If so, there is
@@ -213,6 +203,7 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         self.pbnReportWeb.show()
         self.pbnReportPDF.show()
         self.pbnReportComposer.show()
+        self.pbnReportPDF.clicked.connect(self.print_map)
 
     def show_busy(self):
         """Lock buttons and enable the busy cursor."""
@@ -259,3 +250,54 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         self.progress_bar.setMaximum(maximum_value)
         self.progress_bar.setValue(current_value)
         QtGui.QApplication.processEvents()
+
+    def print_map(self):
+        """Open impact report dialog used to tune report when printing."""
+        # Check if selected layer is valid
+        impact_layer = self.parent.iface.activeLayer()
+        if impact_layer is None:
+            # noinspection PyCallByClass,PyTypeChecker
+            QtGui.QMessageBox.warning(
+                self,
+                self.tr('InaSAFE'),
+                self.tr('Please select a valid impact layer before '
+                        'trying to print.'))
+            return
+
+        # Get output path from datastore
+        # Fetch report for pdfs report
+        report_path = os.path.dirname(impact_layer.source())
+        output_paths = [
+            os.path.join(
+                report_path,
+                'output/impact-report-output.pdf'),
+            os.path.join(
+                report_path,
+                'output/a4-portrait-blue.pdf'),
+            os.path.join(
+                report_path,
+                'output/a4-landscape-blue.pdf'),
+        ]
+
+        # Make sure the file paths can wrap nicely:
+        wrapped_output_paths = [
+            path.replace(os.sep, '<wbr>' + os.sep) for path in
+            output_paths]
+
+        # create message to user
+        status = m.Message(
+            m.Heading(self.tr('Map Creator'), **INFO_STYLE),
+            m.Paragraph(self.tr(
+                'Your PDF was created....opening using the default PDF '
+                'viewer on your system. The generated pdfs were saved '
+                'as:')))
+
+        for path in wrapped_output_paths:
+            status.add(m.Paragraph(path))
+
+        send_static_message(self, status)
+
+        for path in output_paths:
+            # noinspection PyCallByClass,PyTypeChecker,PyTypeChecker
+            QtGui.QDesktopServices.openUrl(
+                QtCore.QUrl.fromLocalFile(path))
