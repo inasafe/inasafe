@@ -27,8 +27,6 @@ from safe.common.utilities import unique_filename, temp_dir
 from safe.common.exceptions import NoKeywordsFoundError, MetadataReadError
 
 from safe.gisv4.vector.tools import create_memory_layer, copy_layer
-from safe.utilities.clipper import extent_to_geoarray, clip_layer
-from safe.utilities.gis import get_wgs84_resolution
 from safe.utilities.metadata import read_iso19115_metadata
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.i18n import tr
@@ -1200,56 +1198,6 @@ class FakeLayer(object):
         :return: sources
         """
         return self.layer_source
-
-
-# TODO(IS): This method doesn't belong to this file.
-def clip_layers(first_layer_path, second_layer_path):
-    """Clip and resample layers with the reference to the first layer.
-
-    :param first_layer_path: Path to the first layer path.
-    :type first_layer_path: str
-
-    :param second_layer_path: Path to the second layer path.
-    :type second_layer_path: str
-
-    :return: Path to the clipped datasets (clipped 1st layer, clipped 2nd
-        layer).
-    :rtype: tuple(str, str)
-
-    :raise
-        FileNotFoundError
-    """
-    base_name, _ = os.path.splitext(first_layer_path)
-    # noinspection PyCallingNonCallable
-    first_layer = QgsRasterLayer(first_layer_path, base_name)
-    base_name, _ = os.path.splitext(second_layer_path)
-    # noinspection PyCallingNonCallable
-    second_layer = QgsRasterLayer(second_layer_path, base_name)
-
-    # Get the firs_layer extents as an array in EPSG:4326
-    first_layer_geo_extent = extent_to_geoarray(
-        first_layer.extent(),
-        first_layer.crs())
-
-    first_layer_geo_cell_size, _ = get_wgs84_resolution(first_layer)
-    second_layer_geo_cell_size, _ = get_wgs84_resolution(second_layer)
-
-    if first_layer_geo_cell_size < second_layer_geo_cell_size:
-        cell_size = first_layer_geo_cell_size
-    else:
-        cell_size = second_layer_geo_cell_size
-
-    clipped_first_layer = clip_layer(
-        layer=first_layer,
-        extent=first_layer_geo_extent,
-        cell_size=cell_size)
-
-    clipped_second_layer = clip_layer(
-        layer=second_layer,
-        extent=first_layer_geo_extent,
-        cell_size=cell_size)
-
-    return clipped_first_layer, clipped_second_layer
 
 
 def get_control_text(file_name):
