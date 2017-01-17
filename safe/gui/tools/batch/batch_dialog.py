@@ -435,7 +435,7 @@ class BatchDialog(QDialog, FORM_CLASS):
                 status_item.setText(self.tr('Script Fail'))
 
                 LOGGER.exception('Running macro failed. The exception: ' +
-                                 str(e))
+                    str(e))
                 result = False
         elif isinstance(value, dict):
             # path = str(self.output_directory.text())
