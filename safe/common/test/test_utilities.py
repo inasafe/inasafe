@@ -20,7 +20,6 @@ __copyright__ += 'Disaster Reduction'
 
 import unittest
 import os
-import numpy
 
 from qgis.core import QgsCoordinateReferenceSystem
 
@@ -30,12 +29,10 @@ from safe.common.utilities import (
     humanize_class,
     format_decimal,
     format_int,
-    create_classes,
     create_label,
     get_thousand_separator,
     get_decimal_separator,
     get_utm_epsg,
-    get_non_conflicting_attribute_name,
     temp_dir,
     log_file_path,
     romanise,
@@ -241,44 +238,6 @@ class TestUtilities(unittest.TestCase):
         assert ',' == get_decimal_separator()
         os.environ['LANG'] = 'en'
 
-    def test_create_classes(self):
-        """Test create_classes.
-        """
-        # Normal case
-        class_list = numpy.array([0, 1, 4, 2, 9, 2, float('nan')])
-        num_classes = 2
-        expected_classes = [1.0, 9.0]
-        result = create_classes(class_list, num_classes)
-        self.assertEqual(result, expected_classes)
-
-        # There's only 1 value
-        class_list = numpy.array([6])
-        num_classes = 3
-        expected_classes = [2.0, 4.0, 6.0]
-        result = create_classes(class_list, num_classes)
-        self.assertEqual(result, expected_classes)
-
-        # Max value <= 1.0
-        class_list = numpy.array([0.1, 0.3, 0.9])
-        num_classes = 3
-        expected_classes = [0.3, 0.6, 0.9]
-        result = create_classes(class_list, num_classes)
-        self.assertEqual(result, expected_classes)
-
-        # There are only 2 values
-        class_list = numpy.array([2, 6])
-        num_classes = 3
-        expected_classes = [1.0, 3.5, 6.0]
-        result = create_classes(class_list, num_classes)
-        self.assertEqual(result, expected_classes)
-
-        # Another 2 values
-        class_list = numpy.array([2.5, 6])
-        num_classes = 3
-        expected_classes = [2.0, 4.0, 6.0]
-        result = create_classes(class_list, num_classes)
-        self.assertEqual(result, expected_classes)
-
     def test_create_label(self):
         """Test create label.
         """
@@ -305,15 +264,6 @@ class TestUtilities(unittest.TestCase):
         # North semisphere not in geographic coordinates:
         epsg = QgsCoordinateReferenceSystem('EPSG:2154')
         self.assertEqual(get_utm_epsg(573593, 6330659, epsg), 32631)
-
-    def test_get_non_conflicting_attribute_name(self):
-        """Test we can get a non conflicting attribute name."""
-        default_name = 'population'
-        attribute_names = ['POPULATION', 'id', 'location', 'latitude']
-        non_conflicting_attribute_name = get_non_conflicting_attribute_name(
-            default_name, attribute_names)
-        expected_result = 'populati_1'
-        self.assertEqual(expected_result, non_conflicting_attribute_name)
 
     def test_log_file_path(self):
         """Test the log_file_path returns correct path."""

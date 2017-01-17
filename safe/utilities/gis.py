@@ -1,6 +1,5 @@
 # coding=utf-8
 """Helpers for GIS related functionality."""
-import uuid
 
 from qgis.core import (
     QgsMapLayer,
@@ -17,15 +16,6 @@ from qgis.core import (
     QgsPoint,
     QgsVectorLayer,
     QgsRasterLayer)
-from safe.common.exceptions import (
-    MemoryLayerCreationError,
-    BoundingBoxError,
-    InsufficientOverlapError,
-)
-from safe.storage.core import read_layer as safe_read_layer
-from safe.storage.layer import Layer
-from safe.storage.utilities import bbox_intersection
-from safe.utilities.i18n import tr
 from safe.utilities.utilities import LOGGER
 
 
@@ -110,28 +100,6 @@ def extent_to_array(extent, source_crs, dest_crs=None):
         transformed_extent.xMaximum(),
         transformed_extent.yMaximum()]
     return geo_extent
-
-
-def array_to_geo_array(extent, source_crs):
-    """Transform the extent in EPSG:4326.
-    :param extent: A list in the form [xmin, ymin, xmax, ymax].
-    :type extent: list
-    :param source_crs: Coordinate system used for input extent.
-    :type source_crs: QgsCoordinateReferenceSystem
-    :return: A list in the form [xmin, ymin, xmax, ymax] where all
-            coordinates provided are in Geographic / EPSG:4326.
-    :rtype: list
-    .. note:: Delegates to extent_to_array()
-    """
-
-    min_longitude = extent[0]
-    min_latitude = extent[1]
-    max_longitude = extent[2]
-    max_latitude = extent[3]
-
-    rectangle = QgsRectangle(
-        min_longitude, min_latitude, max_longitude, max_latitude)
-    return extent_to_array(rectangle, source_crs)
 
 
 def rectangle_geo_array(rectangle, map_canvas):
@@ -289,142 +257,3 @@ def qgis_version():
     version = unicode(QGis.QGIS_VERSION_INT)
     version = int(version)
     return version
-
-
-def get_wgs84_resolution(layer):
-    """Return resolution of raster layer in EPSG:4326.
-
-    If input layer is already in EPSG:4326, simply return the resolution
-    If not, work it out based on EPSG:4326 representations of its extent.
-
-    :param layer: Raster layer
-    :type layer: QgsRasterLayer or QgsMapLayer
-
-    :returns: The resolution of the given layer in the form of (res_x, res_y)
-    :rtype: tuple
-    """
-
-    msg = tr(
-        'Input layer to get_wgs84_resolution must be a raster layer. '
-        'I got: %s' % str(layer.type())[1:-1])
-
-    if not layer.type() == QgsMapLayer.RasterLayer:
-        raise RuntimeError(msg)
-
-    if layer.crs().authid() == 'EPSG:4326':
-        cell_size = (
-            layer.rasterUnitsPerPixelX(), layer.rasterUnitsPerPixelY())
-    else:
-        # Otherwise, work it out based on EPSG:4326 representations of
-        # its extent
-
-        # Reproject extent to EPSG:4326
-        geo_crs = QgsCoordinateReferenceSystem()
-        geo_crs.createFromSrid(4326)
-        transform = QgsCoordinateTransform(layer.crs(), geo_crs)
-        extent = layer.extent()
-        projected_extent = transform.transformBoundingBox(extent)
-
-        # Estimate resolution x
-        columns = layer.width()
-        width = abs(
-            projected_extent.xMaximum() -
-            projected_extent.xMinimum())
-        cell_size_x = width / columns
-
-        # Estimate resolution y
-        rows = layer.height()
-        height = abs(
-            projected_extent.yMaximum() -
-            projected_extent.yMinimum())
-        cell_size_y = height / rows
-
-        cell_size = (cell_size_x, cell_size_y)
-
-    return cell_size
-
-
-def convert_to_safe_layer(layer):
-    """Thin wrapper around the safe read_layer function.
-
-    :param layer: QgsMapLayer or Safe layer.
-    :type layer: QgsMapLayer, read_layer
-
-    :returns: A safe read_safe_layer object is returned.
-    :rtype: read_layer
-    """
-    if isinstance(layer, Layer):
-        return layer
-    try:
-        return safe_read_layer(layer.source())
-    except:
-        raise
-
-
-def get_optimal_extent(
-        hazard_geo_extent, exposure_geo_extent, viewport_geo_extent=None):
-    """A helper function to determine what the optimal extent is.
-
-    Optimal extent should be considered as the intersection between
-    the three inputs. The inasafe library will perform various checks
-    to ensure that the extent is tenable, includes data from both
-    etc.
-
-    This is a thin wrapper around safe.storage.utilities.bbox_intersection
-
-    Typically the result of this function will be used to clip
-    input layers to a common extent before processing.
-
-    :param hazard_geo_extent: An array representing the hazard layer
-        extents in the form [xmin, ymin, xmax, ymax]. It is assumed that
-        the coordinates are in EPSG:4326 although currently no checks are
-        made to enforce this.
-    :type hazard_geo_extent: list
-
-    :param exposure_geo_extent: An array representing the exposure layer
-        extents in the form [xmin, ymin, xmax, ymax]. It is assumed that
-        the coordinates are in EPSG:4326 although currently no checks are
-        made to enforce this.
-    :type exposure_geo_extent: list
-
-    :param viewport_geo_extent: (optional) An array representing the
-        viewport extents in the form [xmin, ymin, xmax, ymax]. It is
-        assumed that the coordinates are in EPSG:4326 although currently
-        no checks are made to enforce this.
-
-        ..note:: We do minimal checking as the inasafe library takes care
-        of it for us.
-
-    :returns: An array containing an extent in the form
-        [xmin, ymin, xmax, ymax]
-        e.g.::
-        [100.03, -1.14, 100.81, -0.73]
-    :rtype: list
-
-    :raises: Any exceptions raised by the InaSAFE library will be
-        propagated.
-    """
-
-    message = tr(
-        'theHazardGeoExtent or theExposureGeoExtent cannot be None.Found: '
-        '/ntheHazardGeoExtent: %s /ntheExposureGeoExtent: %s' %
-        (hazard_geo_extent, exposure_geo_extent))
-
-    if (hazard_geo_extent is None) or (exposure_geo_extent is None):
-        raise BoundingBoxError(message)
-
-    # .. note:: The bbox_intersection function below assumes that
-    # all inputs are in EPSG:4326
-    optimal_extent = bbox_intersection(
-        hazard_geo_extent, exposure_geo_extent, viewport_geo_extent)
-
-    if optimal_extent is None:
-        # Bounding boxes did not overlap
-        message = tr(
-            'Bounding boxes of hazard data, exposure data and viewport '
-            'did not overlap, so no computation was done. Please make '
-            'sure you pan to where the data is and that hazard and '
-            'exposure data overlaps.')
-        raise InsufficientOverlapError(message)
-
-    return optimal_extent

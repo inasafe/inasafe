@@ -18,7 +18,7 @@ from qgis.core import (
     QgsRasterLayer,
 )
 
-from safe.gis.gdal_ogr_tools import QGIS_OGR_GEOMETRY_MAP
+from safe.definitions.gis import QGIS_OGR_GEOMETRY_MAP
 from safe.datastore.datastore import DataStore
 from safe.common.exceptions import ErrorDataStore
 
