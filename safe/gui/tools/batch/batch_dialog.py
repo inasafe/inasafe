@@ -289,10 +289,11 @@ class BatchDialog(QDialog, FORM_CLASS):
             status_item.setText(self.tr(''))
 
     def prepare_task(self, items):
-        """Prepare scenario so that it can be set directly to impact
-        function variable
+        """Prepare scenario for impact function variable.
 
-        :param items: dictionary containing settings for impacr function
+        :param items: Dictionary containing settings for impact function.
+        :type items: Python dictionary.
+
         :return: QgsVectorLayer, QgsRasterLayer, extent, extent_crs
         """
 
@@ -306,7 +307,7 @@ class BatchDialog(QDialog, FORM_CLASS):
                 status = False
         else:
             hazard = None
-            LOGGER.warning("Scenario does not contain hazard path")
+            LOGGER.warning('Scenario does not contain hazard path')
 
         # get exposure
         if 'exposure' in items:
@@ -317,7 +318,7 @@ class BatchDialog(QDialog, FORM_CLASS):
                 status = False
         else:
             exposure = None
-            LOGGER.warning("Scenario does not contain hazard path")
+            LOGGER.warning('Scenario does not contain hazard path')
 
         # get aggregation
         if 'aggregation' in items:
@@ -356,10 +357,12 @@ class BatchDialog(QDialog, FORM_CLASS):
             return status
 
     def define_layer(self, layer_path):
-        """Create QGIS layer (either vector or raster) from file path input
+        """Create QGIS layer (either vector or raster) from file path input.
 
-        :param layer_path: fullpath to layer file
-        :return: QgsVectorLayer or QgsRasterLayer
+        :param layer_path: Full path to layer file.
+        :type layer_path: path
+
+        :return: QgsMapLayer
         """
 
         scenario_dir = str(self.source_directory.text())
@@ -444,45 +447,56 @@ class BatchDialog(QDialog, FORM_CLASS):
             self.layer_group_container.append(self.layer_group)
 
             # Its a dict containing files for a scenario
-            h, e, a, extent, extent_crs = self.prepare_task(value)
+            hazard, exposure, aggregation, extent, extent_crs = \
+                self.prepare_task(value)
             impact_function = ImpactFunction()
-            impact_function.hazard = h
-            impact_function.exposure = e
-            if a:
-                impact_function.aggregation = a
+            impact_function.hazard = hazard
+            impact_function.exposure = exposure
+            if aggregation:
+                impact_function.aggregation = aggregation
             elif extent:
                 impact_function.requested_extent = extent
                 impact_function.requested_extent_crs = extent_crs
             prepare_status, prepare_message = impact_function.prepare()
             if prepare_status == PREPARE_SUCCESS:
-                LOGGER.info("Impact function ready")
+                LOGGER.info('Impact function ready')
                 status, message = impact_function.run()
                 if status == ANALYSIS_SUCCESS:
-                    status_item.setText(self.tr("Analysis Success"))
+                    status_item.setText(self.tr('Analysis Success'))
                     impact_layer = impact_function.impact
                     if impact_layer.isValid():
-                        layer_list = [impact_layer, h, e, a]
+                        layer_list = [
+                            impact_layer,
+                            hazard,
+                            exposure,
+                            aggregation]
                         reg.instance().addMapLayers(layer_list, False)
                         for layer in layer_list:
                             self.layer_group.addLayer(layer)
                         # generate map report and impact report
                         # map report is still waiting update from lucernae
                         try:
+                            # this line is to save the impact report in default
+                            # InaSAFE directory.
                             generate_impact_report(impact_function, self.iface)
+                            # this line is to save the report in user specified
+                            # directory.
                             self.generate_pdf_report(
                                 impact_function,
                                 self.iface,
                                 group_name)
                         except:
-                            status_item.setText("Report failed to generate")
+                            status_item.setText('Report failed to generate')
                     else:
-                        LOGGER.info("Impact layer is invalid")
+                        LOGGER.info('Impact layer is invalid')
                 elif status == ANALYSIS_FAILED_BAD_INPUT:
-                    LOGGER.info("Bad input detected")
+                    LOGGER.info('Bad input detected')
+                    LOGGER.info(message)
                 elif status == ANALYSIS_FAILED_BAD_CODE:
-                    LOGGER.info("Impact function encountered a bug")
+                    LOGGER.info('Impact function encountered a bug')
+                    LOGGER.info(message)
             else:
-                LOGGER.warning("Impact function not ready with message:")
+                LOGGER.warning('Impact function not ready with message:')
                 LOGGER.info(prepare_message)
 
         else:
@@ -521,7 +535,7 @@ class BatchDialog(QDialog, FORM_CLASS):
 
     @pyqtSignature('')
     def run_selected_clicked(self):
-        """Run the selected scenario. """
+        """Run the selected scenario."""
         self.enable_busy_cursor()
         current_row = self.table.currentRow()
         item = self.table.item(current_row, 0)
@@ -618,12 +632,12 @@ class BatchDialog(QDialog, FORM_CLASS):
             raise IOError
 
     def generate_pdf_report(self, impact_function, iface, scenario_name):
-        """Generate map report and impact report from impact function and store
-        it in user specified directory. adapted from analysis utilites
+        """Generate and store map and impact report from impact function.
 
+        Directory where the report stored is specified by user input from the
+        dialog. This function is adapted from analysis_utilities.py
         :param impact_function: Impact Function
         :param iface: iface
-        :return:
         """
         # output folder
         output_dir = self.output_directory.text()
@@ -661,7 +675,7 @@ class BatchDialog(QDialog, FORM_CLASS):
         impact_map_report.inasafe_context.north_arrow = north_arrow_path
 
         # get the extent of impact layer
-        impact_report.qgis_composition_context.extent = \
+        impact_map_report.qgis_composition_context.extent = \
             impact_function.impact.extent()
         impact_map_report.output_folder = file_path
         impact_map_report.process_component()
@@ -833,14 +847,19 @@ def read_scenarios(filename):
 
 
 def validate_scenario(blocks, scenario_directory):
-    """Check whether the files that are used in scenario whether it needs to be
-    updated or not
+    """Function to validate input layer stored in scenario file.
+
+    Check whether the files that are used in scenario file need to be
+    updated or not.
 
     :param blocks: dictionary from read_scenarios
+    :type blocks: dictionary
+
     :param scenario_directory: directory where scenario text file is saved
+    :type scenario_directory: file directory
+
     :return: pass message to dialog and log detailed status
     """
-
     # dictionary to temporary contain status message
     blocks_update = {}
     for section, section_item in blocks.iteritems():
@@ -853,12 +872,12 @@ def validate_scenario(blocks, scenario_directory):
                 filepath = os.path.normpath(full_path)
                 if not os.path.exists(filepath):
                     blocks_update[section] = {
-                        'status': "Please update scenario"}
-                    LOGGER.info(section + " needs to be updated")
-                    LOGGER.info("Unable to find " + filepath)
+                        'status': 'Please update scenario'}
+                    LOGGER.info(section + ' needs to be updated')
+                    LOGGER.info('Unable to find ' + filepath)
                     ready = False
         if ready:
-            blocks_update[section] = {'status': "Scenario ready"}
+            blocks_update[section] = {'status': 'Scenario ready'}
             # LOGGER.info(section + " scenario is ready")
     for section, section_item in blocks_update.iteritems():
         blocks[section]['status'] = blocks_update[section]['status']
