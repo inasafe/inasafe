@@ -41,10 +41,14 @@ __revision__ = ':%H$'
 
 
 class TestImpactReport(unittest.TestCase):
+    """Test Impact Report."""
+
+    maxDiff = None
+
     @classmethod
     def fixtures_dir(cls, path):
-        dirname = os.path.dirname(__file__)
-        return os.path.join(dirname, 'fixtures', path)
+        directory_name = os.path.dirname(__file__)
+        return os.path.join(directory_name, 'fixtures', path)
 
     def assertCompareFileControl(self, control_path, actual_path):
         current_directory = safe_dir(sub_dir='../resources')
@@ -95,7 +99,6 @@ class TestImpactReport(unittest.TestCase):
         impact_report.process_component()
 
         """Checking generated context"""
-        different_context_message = 'Different context generated'
         empty_component_output_message = 'Empty component output'
 
         # Check Analysis Summary
@@ -152,8 +155,7 @@ class TestImpactReport(unittest.TestCase):
         }
         actual_context = analysis_summary.context
 
-        self.assertDictEqual(
-            expected_context, actual_context, different_context_message)
+        self.assertDictEqual(expected_context, actual_context)
         self.assertTrue(
             analysis_summary.output, empty_component_output_message)
 
@@ -177,8 +179,7 @@ class TestImpactReport(unittest.TestCase):
         }
         actual_context = action_notes.context
 
-        self.assertDictEqual(
-            expected_context, actual_context, different_context_message)
+        self.assertDictEqual(expected_context, actual_context)
         self.assertTrue(
             action_notes.output, empty_component_output_message)
 
@@ -198,8 +199,7 @@ class TestImpactReport(unittest.TestCase):
         }
         actual_context = notes_assumptions.context
 
-        self.assertDictEqual(
-            expected_context, actual_context, different_context_message)
+        self.assertDictEqual(expected_context, actual_context)
         self.assertTrue(
             notes_assumptions.output, empty_component_output_message)
 
@@ -247,7 +247,6 @@ class TestImpactReport(unittest.TestCase):
         impact_report.process_component()
 
         """Checking generated context"""
-        different_context_message = 'Different context generated'
         empty_component_output_message = 'Empty component output'
 
         # Check Analysis Breakdown
@@ -374,7 +373,6 @@ class TestImpactReport(unittest.TestCase):
         impact_report.process_component()
 
         """Checking generated context"""
-        different_context_message = 'Different context generated'
         empty_component_output_message = 'Empty component output'
 
         # Check Minimum Needs
@@ -418,8 +416,7 @@ class TestImpactReport(unittest.TestCase):
         }
         actual_context = minimum_needs.context
 
-        self.assertDictEqual(
-            expected_context, actual_context, different_context_message)
+        self.assertDictEqual(expected_context, actual_context)
         self.assertTrue(
             minimum_needs.output, empty_component_output_message)
 
@@ -473,7 +470,6 @@ class TestImpactReport(unittest.TestCase):
         impact_report.process_component()
 
         """Checking generated context"""
-        different_context_message = 'Different context generated'
         empty_component_output_message = 'Empty component output'
 
         # Check aggregation-postprocessors
@@ -546,8 +542,7 @@ class TestImpactReport(unittest.TestCase):
         }
         actual_context = aggregation_postprocessors.context
 
-        self.assertDictEqual(
-            expected_context, actual_context, different_context_message)
+        self.assertDictEqual(expected_context, actual_context)
         self.assertTrue(
             aggregation_postprocessors.output, empty_component_output_message)
 
@@ -598,7 +593,6 @@ class TestImpactReport(unittest.TestCase):
         impact_report.process_component()
 
         """Checking generated context"""
-        different_context_message = 'Different context generated'
         empty_component_output_message = 'Empty component output'
 
         # Check aggregation-postprocessors
@@ -669,7 +663,7 @@ class TestImpactReport(unittest.TestCase):
         actual_context = aggregation_postprocessors.context
 
         self.assertDictEqual(
-            expected_context, actual_context, different_context_message)
+            expected_context, actual_context)
         self.assertTrue(
             aggregation_postprocessors.output, empty_component_output_message)
 
