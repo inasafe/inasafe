@@ -677,7 +677,6 @@ class Plugin(object):
         """Show the extent selector widget for defining analysis extents."""
         # import here only so that it is AFTER i18n set up
         from safe.gui.tools.extent_selector_dialog import ExtentSelectorDialog
-
         widget = ExtentSelectorDialog(
             self.iface,
             self.iface.mainWindow(),
