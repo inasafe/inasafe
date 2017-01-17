@@ -62,6 +62,7 @@ from safe.gui.tools.help.batch_help import batch_help
 from safe.impact_function.impact_function import ImpactFunction
 from safe.report.report_metadata import ReportMetadata
 from safe.report.impact_report import ImpactReport
+from safe.gui.analysis_utilities import generate_impact_report
 
 INFO_STYLE = styles.INFO_STYLE
 LOGGER = logging.getLogger('InaSAFE')
@@ -467,6 +468,7 @@ class BatchDialog(QDialog, FORM_CLASS):
                         # generate map report and impact report
                         # map report is still waiting update from lucernae
                         try:
+                            generate_impact_report(impact_function, self.iface)
                             self.generate_pdf_report(
                                 impact_function,
                                 self.iface,
