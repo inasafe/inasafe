@@ -167,12 +167,16 @@ def content():
         table_of_contents,
         'analysis-steps',
         tr('Analysis steps'))
-    steps = definitions.analysis_steps.values()
+    header = m.Heading(tr('Analysis internal process'), **SUBSECTION_STYLE)
+    message.add(header)
     analysis = definitions.concepts['analysis']
     message.add(analysis['description'])
     url = _definition_screenshot_url(analysis)
     if url:
         message.add(m.Image(url))
+    header = m.Heading(tr('Progress reporting steps'), **SUBSECTION_STYLE)
+    message.add(header)
+    steps = definitions.analysis_steps.values()
     for step in steps:
         message.add(definition_to_message(step, INFO_STYLE))
 
@@ -180,16 +184,19 @@ def content():
     #  Hazard definitions
     ##
 
-    header = m.Heading(tr('Hazard Types'), **SUBSECTION_STYLE)
-    message.add(header)
-    message.add(m.Paragraph(definitions.concepts['hazard']['description']))
+    _create_section_header(
+        message,
+        table_of_contents,
+        'hazards',
+        tr('Hazard Concepts'))
+
+    hazard_category = definitions.hazard_category
+    message.add(definition_to_message(
+        hazard_category, heading_style=SUBSECTION_STYLE))
 
     hazards = definitions.hazards
-    hazard_category = definitions.hazard_category
-    message.add(definition_to_message(hazards, heading_style=SECTION_STYLE))
-    header = m.Heading(tr('Hazard scenarios'), **SUBSECTION_STYLE)
-    message.add(header)
-    message.add(definition_to_message(hazard_category))
+    message.add(definition_to_message(
+        hazards, heading_style=SUBSECTION_STYLE))
 
     ##
     #  Exposure definitions
@@ -199,9 +206,10 @@ def content():
         message,
         table_of_contents,
         'exposures',
-        tr('Exposure Types'))
+        tr('Exposure Concepts'))
     exposures = definitions.exposures
-    message.add(definition_to_message(exposures))
+    message.add(
+        definition_to_message(exposures, heading_style=SUBSECTION_STYLE))
 
     ##
     #  Defaults
@@ -245,7 +253,9 @@ def content():
         message,
         table_of_contents,
         'all-fields',
-        tr('All fields'))
+        tr('Fields'))
+    header = m.Heading(tr('Input dataset fields'), **SUBSECTION_STYLE)
+    message.add(header)
     _create_fields_section(
         message,
         tr('Exposure fields'),
@@ -258,6 +268,8 @@ def content():
         message,
         tr('Aggregation fields'),
         definitions.aggregation_fields)
+    header = m.Heading(tr('Output dataset fields'), **SUBSECTION_STYLE)
+    message.add(header)
     _create_fields_section(
         message,
         tr('Impact fields'),
@@ -288,12 +300,16 @@ def content():
         table_of_contents,
         'geometries',
         tr('Layer Geometry Types'))
+    header = m.Heading(tr('Vector'), **SUBSECTION_STYLE)
+    message.add(header)
     message.add(
         definition_to_message(definitions.layer_geometry_point, INFO_STYLE))
     message.add(
         definition_to_message(definitions.layer_geometry_line, INFO_STYLE))
     message.add(
         definition_to_message(definitions.layer_geometry_polygon, INFO_STYLE))
+    header = m.Heading(tr('Raster'), **SUBSECTION_STYLE)
+    message.add(header)
     message.add(
         definition_to_message(definitions.layer_geometry_raster, INFO_STYLE))
 

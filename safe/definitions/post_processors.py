@@ -218,7 +218,7 @@ post_processor_process_types = [
 
 post_processor_gender = {
     'key': 'post_processor_gender',
-    'name': tr('Gender Post Processor'),
+    'name': tr('Gender'),
     'description': tr(
         'A post processor to calculate the number of affected females. '
         '"Female" is defined as: ' + concepts['female']['description']
@@ -264,7 +264,7 @@ post_processor_gender = {
 
 post_processor_hygiene_packs = {
     'key': 'post_processor_hygiene_packs',
-    'name': tr('Weekly Hygiene Packs Post Processor'),
+    'name': tr('Weekly Hygiene Packs'),
     'description': tr(
         'A post processor to calculate needed hygiene packs weekly for women.'
     ),
@@ -297,7 +297,7 @@ post_processor_additional_rice = {
     'key': 'post_processor_additional_rice',
     'name': tr(
         'Additional Weekly Rice kg for Pregnant and Lactating Women '
-        'Post Processor'),
+    ),
     'description': tr(
         'A post processor to calculate additional rice for pregnant and '
         'lactating women.'
@@ -329,7 +329,7 @@ post_processor_additional_rice = {
 
 post_processor_youth = {
     'key': 'post_processor_youth',
-    'name': tr('Youth Post Processor'),
+    'name': tr('Youth'),
     'description': tr(
         'A post processor to calculate the number of affected youth. '
         '"Youth" is defined as: ' + concepts['youth']['description']),
@@ -369,7 +369,7 @@ post_processor_youth = {
 
 post_processor_adult = {
     'key': 'post_processor_adult',
-    'name': tr('Adult Post Processor'),
+    'name': tr('Adult'),
     'description': tr(
         'A post processor to calculate the number of affected adults. '
         '"Adult" is defined as: ' + concepts['adult']['description']),
@@ -409,7 +409,7 @@ post_processor_adult = {
 
 post_processor_elderly = {
     'key': 'post_processor_elderly',
-    'name': tr('Elderly Post Processor'),
+    'name': tr('Elderly'),
     'description': tr(
         'A post processor to calculate the number of affected elderly people. '
         '"Elderly" is defined as: ' + concepts['elderly']['description']),
@@ -449,7 +449,7 @@ post_processor_elderly = {
 
 post_processor_size = {
     'key': 'post_processor_size',
-    'name': tr('Size Value Post Processor'),
+    'name': tr('Size Value'),
     'description': tr(
         'A post processor to calculate the size of the feature. If the '
         'feature is a polygon, the result will be area in m^2. If the feature '
@@ -474,7 +474,7 @@ post_processor_size = {
 
 post_processor_size_rate = {
     'key': 'post_processor_size_rate',
-    'name': tr('Size Rate Post Processor'),
+    'name': tr('Size Rate'),
     'description': tr(
         'A post processor to calculate the value of a feature based on its'
         'size. If feature is a polygon the size is calculated as '
@@ -504,7 +504,7 @@ post_processor_size_rate = {
 
 post_processor_affected = {
     'key': 'post_processor_affected',
-    'name': tr('Affected Post Processor'),
+    'name': tr('Affected'),
     'description': tr(
         'A post processor to determine if a feature is affected or not '
         '(according to the hazard classification).'),
