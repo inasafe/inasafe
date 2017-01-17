@@ -36,4 +36,10 @@ def limitations():
         tr('InaSAFE is a Free and Open Source Software (FOSS) project, '
            'published under the GPL V3 license. As such you may freely '
            'download, share and (if you like) modify the software.'))
+    limitation_list.append(
+        tr('InaSAFE carries out all processing in-memory. Your ability to '
+           'use a set of hazard, exposure and aggregation data with InaSAFE '
+           'will depend on the resources (RAM, Hard Disk space) available '
+           'on your computer. If you run into memory errors, try doing the '
+           'analysis in several smaller parts.'))
     return limitation_list
