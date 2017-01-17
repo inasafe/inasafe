@@ -49,6 +49,8 @@ def html_help_header():
     This one differs from the normal html header in that it will
     include style rules to number headings.
 
+    ..versionadded:: 4.0
+
     :returns: A header containing a web page preamble in html - up to and
         including the body open tag.
     :rtype: str
