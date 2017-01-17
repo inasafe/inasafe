@@ -500,14 +500,14 @@ cyclone_au_bom_hazard_classes = {
     'name': tr('Cyclone classes (AU - BOM)'),
     'description': tr(
         '<b>Tropical cyclone</b> intensity is classified using five classes '
-        'according to the Australian Bureau of Metereology. Tropical Cycle '
+        'according to the Australian Bureau of Meteorology. Tropical Cyclone '
         'intensity is defined as the maximum mean wind speed over open flat '
         'land or water. This is sometimes referred to as the maximum '
         'sustained wind and will be experienced around the eye-wall of the '
         'cyclone.'),
     'citations': [
         {
-            'text': 'Australian Bureau of Metereology - Tropical Cyclone '
+            'text': 'Australian Bureau of Meteorology - Tropical Cyclone '
                     'Intensity and Impacts',
             'link': 'http://www.bom.gov.au/cyclone/about/intensity.shtml#WindC'
         },

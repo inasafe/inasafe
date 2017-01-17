@@ -652,7 +652,7 @@ female_ratio_field = {
     'precision': default_ratio_field_precision,
     'absolute': False,
     'description': tr(
-        'The rate of females for each feature.'),
+        'The proportion of females for each feature.'),
     'help_text': tr(
         '"Female" is defined as: ' + concepts['female']['description'] +
         'In cases where population data is available, InaSAFE will calculate '
@@ -682,7 +682,7 @@ youth_ratio_field = {
     'precision': default_ratio_field_precision,
     'absolute': False,
     'description': tr(
-        'The number of young people for each feature.'),
+        'The proportion of young people for each feature.'),
     'help_text': tr(
         '"Youth" is defined as: ' + concepts['youth']['description'] +
         'In cases where population data is available, InaSAFE will calculate '
@@ -712,7 +712,7 @@ adult_ratio_field = {
     'precision': default_ratio_field_precision,
     'absolute': False,
     'description': tr(
-        'The number of adults for each feature.'),
+        'The proportion of adults for each feature.'),
     'help_text': tr(
         '"Adult" is defined as: ' + concepts['adult']['description'] +
         'In cases where population data is available, InaSAFE will calculate '
@@ -742,7 +742,7 @@ elderly_ratio_field = {
     'precision': default_ratio_field_precision,
     'absolute': False,
     'description': tr(
-        'The number of elderly people for each feature.'),
+        'The proportion of elderly people for each feature.'),
     'help_text': tr(
         '"Elderly" is defined as: ' + concepts['elderly']['description'] +
         'In cases where population data is available, InaSAFE will calculate '
