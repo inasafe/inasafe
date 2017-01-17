@@ -136,8 +136,12 @@ class StepFcFunctions1(WizardStep, FORM_CLASS):
                 item = QtGui.QTableWidgetItem()
                 if exposure in hazard['disabled_exposures']:
                     background_colour = unavailable_option_color
-                    item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEnabled)
-                    item.setFlags(item.flags() & ~QtCore.Qt.ItemIsSelectable)
+                    # Set it disable and un-selectable
+                    item.setFlags(
+                        item.flags() &
+                        ~QtCore.Qt.ItemIsEnabled &
+                        ~QtCore.Qt.ItemIsSelectable
+                    )
                 else:
                     background_colour = available_option_color
                 item.setBackground(QtGui.QBrush(background_colour))

@@ -184,10 +184,6 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
             impact_function.use_selected_features_only = (
                 setting('useSelectedFeaturesOnly', False, bool))
         else:
-            # We need to enable it again when we will fix the dock.
-            # impact_function.requested_extent = self.extent.user_extent
-            # impact_function.requested_extent = self.extent.user_extent_crs
-
             mode = setting('analysis_extents_mode')
             if self.extent.user_extent:
                 # This like a hack to transform a geometry to a rectangle.
@@ -270,7 +266,7 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
             # noinspection PyCallByClass,PyTypeChecker
             QtGui.QMessageBox.warning(
                 self,
-                self.tr('InaSAFE'),
+                'InaSAFE',
                 self.tr('Please select a valid impact layer before '
                         'trying to print.'))
             return
