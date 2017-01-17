@@ -72,7 +72,7 @@ adult_ratio_default_value = {
 
 elderly_ratio_default_value = {
     'key': 'elderly_ratio_default_value',
-    'name': tr('Eldery Ratio Default Value'),
+    'name': tr('Elderly Ratio Default Value'),
     # Updated from 0.078 to 0.087 in InaSAFE 4.0
     'default_value': 0.087,
     'min_value': 0,
