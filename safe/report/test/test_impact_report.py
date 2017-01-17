@@ -260,21 +260,27 @@ class TestImpactReport(unittest.TestCase):
             'notes': u'Columns and rows containing only 0 or "No data" '
                      u'values are excluded from the tables.',
             'detail_table': {
-                'headers': [u'Structures type', u'High Hazard Zone',
-                            u'Medium Hazard Zone', u'Total Affected',
-                            u'Total Unaffected', u'Total'],
-                'details': [[u'government', 0, 1, 1, 0, 1],
-                            [u'health', 1, 0, 1, 0, 1],
-                            [u'education', 2, 0, 2, 3, 5],
-                            [u'other', 0, 1, 1, 0, 1],
-                            [u'commercial', 1, 0, 1, 0, 1]],
+                'headers': [
+                    u'Structures type',
+                    u'High Hazard Zone',
+                    u'Medium Hazard Zone',
+                    u'Total Affected',
+                    u'Total Unaffected',
+                    u'Total'
+                ],
+                'details': [
+                    [u'other', 0, 1, 1, 0, 1],
+                    [u'government', 0, 1, 1, 0, 1],
+                    [u'commercial', 1, 0, 1, 0, 1],
+                    [u'education', 2, 0, 2, 3, 5],
+                    [u'health', 1, 0, 1, 0, 1]
+                ],
                 'footers': [u'Total', 4, 2, 6, 3, 9]
             }
         }
         actual_context = analysis_breakdown.context
-
         self.assertDictEqual(
-            expected_context, actual_context, different_context_message)
+            expected_context, actual_context)
         self.assertTrue(
             analysis_breakdown.output, empty_component_output_message)
 
@@ -288,18 +294,31 @@ class TestImpactReport(unittest.TestCase):
                      u'values are excluded from the tables.',
             'aggregation_result': {
                 'header_label': u'Aggregation area',
-                'rows': [{'type_values': [0, 1, 1, 1, 0],
-                          'total': 3, 'name': u'area 1'},
-                         {'type_values': [1, 0, 0, 0, 0],
-                          'total': 1, 'name': u'area 2'},
-                         {'type_values': [0, 0, 1, 0, 1],
-                          'total': 2, 'name': u'area 3'}],
-                'type_header_labels': [u'Government',
-                                       u'Other',
-                                       u'Education',
-                                       u'Commercial',
-                                       u'Health'],
-                'type_total_values': [1, 1, 2, 1, 1],
+                'rows': [
+                    {
+                        'type_values': [1, 0, 1, 1, 0],
+                        'total': 3,
+                        'name': u'area 1'
+                    },
+                    {
+                        'type_values': [0, 1, 0, 0, 0],
+                        'total': 1,
+                        'name': u'area 2'
+                    },
+                    {
+                        'type_values': [0, 0, 0, 1, 1],
+                        'total': 2,
+                        'name': u'area 3'
+                    }
+                ],
+                'type_header_labels': [
+                    u'Other',
+                    u'Government',
+                    u'Commercial',
+                    u'Education',
+                    u'Health'
+                ],
+                'type_total_values': [1, 1, 1, 2, 1],
                 'total_label': u'Total',
                 'total_all': 6,
                 'total_in_aggregation': u'Total in aggregation areas'},
@@ -307,7 +326,7 @@ class TestImpactReport(unittest.TestCase):
         actual_context = aggregate_result.context
 
         self.assertDictEqual(
-            expected_context, actual_context, different_context_message)
+            expected_context, actual_context)
         self.assertTrue(
             aggregate_result.output, empty_component_output_message)
 
