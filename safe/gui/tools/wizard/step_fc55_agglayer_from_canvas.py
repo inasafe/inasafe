@@ -62,8 +62,7 @@ class StepFcAggLayerFromCanvas(WizardStep, FORM_CLASS):
         else:
             if layers_intersect(self.parent.exposure_layer,
                                 self.parent.aggregation_layer):
-                # Notes(IS): Skip extent step for now
-                new_step = self.parent.step_fc_summary
+                new_step = self.parent.step_fc_extent
             else:
                 new_step = self.parent.step_fc_agglayer_disjoint
         return new_step
