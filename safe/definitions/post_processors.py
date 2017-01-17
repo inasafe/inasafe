@@ -4,13 +4,12 @@
 # This is disabled for typehinting docstring.
 
 """Definitions relating to post-processing."""
+from collections import OrderedDict
 
 from PyQt4.QtCore import QPyNullVariant
 
 from safe.definitions.exposure import exposure_population
-from safe.definitions.minimum_needs import (
-    minimum_needs_fields,
-    female_minimum_needs_fields)
+from safe.definitions.minimum_needs import minimum_needs_fields
 from safe.utilities.i18n import tr
 from safe.definitions.fields import (
     displaced_field,
@@ -29,7 +28,7 @@ from safe.definitions.fields import (
     hazard_class_field,
     affected_field,
     exposure_count_field,
-    male_count_field)
+    male_count_field, hygiene_packs_count_field, additional_rice_count_field)
 from safe.definitions import concepts
 from safe.definitions.hazard_classifications import hazard_classes_all
 
@@ -111,6 +110,11 @@ def post_processor_affected_function(**kwargs):
 # # #
 # Input
 # # #
+constant_input_type = {
+    'key': 'constant',
+    'description': tr('This type of input gives a constant value.')
+}
+
 field_input_type = {
     'key': 'field',
     'description': tr('This type of input takes a value from a field.')
@@ -206,10 +210,6 @@ post_processor_process_types = [
 ]
 
 
-post_processor_process_types = [
-    formula_process, function_process
-]
-
 # # #
 # Post processors
 # # #
@@ -248,17 +248,82 @@ post_processor_gender = {
                 ],
             }]
     },
-    'output': {
-        'female': {
+    'output': OrderedDict([
+        ('female', {
             'value': female_count_field,
             'type': formula_process,
             'formula': 'population * gender_ratio'
-        },
-        'male': {
+        }),
+        ('male', {
             'value': male_count_field,
             'type': formula_process,
             'formula': 'population * (1 - gender_ratio)'
-        }
+        })
+    ])
+}
+
+post_processor_hygiene_packs = {
+    'key': 'post_processor_hygiene_packs',
+    'name': tr('Weekly Hygiene Packs Post Processor'),
+    'description': tr(
+        'A post processor to calculate needed hygiene packs weekly for women.'
+    ),
+    'input': {
+        # input as a list means, try to get the input from the
+        # listed source. Pick the first available
+        'female_population':
+            {
+                'value': female_count_field,
+                'type': field_input_type,
+            },
+        'hygiene_packs_ratio':
+            {
+                'type': constant_input_type,
+                'value': 0.7937,
+            }
+    },
+    'output': {
+        # The formula:
+        # displaced_female * 0.7937 * (week/intended_day_use)
+        'hygiene_packs': {
+            'value': hygiene_packs_count_field,
+            'type': function_process,
+            'function': multiply
+        },
+    }
+}
+
+post_processor_additional_rice = {
+    'key': 'post_processor_additional_rice',
+    'name': tr(
+        'Additional Weekly Rice kg for Pregnant and Lactating Women '
+        'Post Processor'),
+    'description': tr(
+        'A post processor to calculate additional rice for pregnant and '
+        'lactating women.'
+    ),
+    'input': {
+        # input as a list means, try to get the input from the
+        # listed source. Pick the first available
+        'female_population':
+            {
+                'value': female_count_field,
+                'type': field_input_type,
+            },
+        'additional_rice_ratio':
+            {
+                'type': constant_input_type,
+                'value': 2 * (0.033782 + 0.01281),
+            }
+    },
+    'output': {
+        # The formula:
+        # displaced_female * 2 * (0.033782 + 0.01281)
+        'additional_rice': {
+            'value': additional_rice_count_field,
+            'type': function_process,
+            'function': multiply
+        },
     }
 }
 
@@ -481,30 +546,6 @@ def initialize_minimum_needs_post_processors():
         """:type: safe.common.parameters.resource_parameter.ResourceParameter
         """
 
-        # provide different input for specific types of minimum needs
-        # TODO: hacky for now, fix to add some relation with needs profile
-
-        if field in female_minimum_needs_fields:
-            population_inputs = {
-                'value': female_count_field,
-                'type': field_input_type
-            }
-        else:
-            population_inputs = [
-                {
-                    'value': displaced_field,
-                    'type': field_input_type,
-                },
-                {
-                    'value': population_count_field,
-                    'type': field_input_type,
-                },
-                {
-                    'value': exposure_count_field,
-                    'field_param': exposure_population['key'],
-                    'type': dynamic_field_input_type,
-                }]
-
         processor = {
             'key': 'post_processor_{key}'.format(key=field_key),
             'name': field_name,
@@ -512,7 +553,20 @@ def initialize_minimum_needs_post_processors():
             'input': {
                 # input as a list means, try to get the input from the
                 # listed source. Pick the first available
-                'population': population_inputs,
+                'population': [
+                    {
+                        'value': displaced_field,
+                        'type': field_input_type,
+                    },
+                    {
+                        'value': population_count_field,
+                        'type': field_input_type,
+                    },
+                    {
+                        'value': exposure_count_field,
+                        'field_param': exposure_population['key'],
+                        'type': dynamic_field_input_type,
+                    }],
                 'amount': {
                     'type': needs_profile_input_type,
                     'value': need_parameter.name,
@@ -532,21 +586,23 @@ def initialize_minimum_needs_post_processors():
 
 minimum_needs_post_processors = initialize_minimum_needs_post_processors()
 
-
 # This is the order of execution, so the order is important.
 # For instance, the size post processor must run before size_rate.
-post_processors = [
-    post_processor_size,
+# and hygiene packs post processor must run after gender post processor
+female_postprocessors = [
     post_processor_gender,
-    post_processor_youth,
-    post_processor_adult,
-    post_processor_elderly,
-    post_processor_size_rate,
-    post_processor_affected,
-] + minimum_needs_post_processors
+    post_processor_hygiene_packs,
+    post_processor_additional_rice
+]
 
 age_postprocessors = [
     post_processor_youth,
     post_processor_adult,
     post_processor_elderly,
 ]
+
+post_processors = [
+    post_processor_size,
+    post_processor_size_rate,
+    post_processor_affected,
+] + female_postprocessors + age_postprocessors + minimum_needs_post_processors
