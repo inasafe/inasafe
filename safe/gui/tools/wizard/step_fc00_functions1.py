@@ -138,9 +138,9 @@ class StepFcFunctions1(WizardStep, FORM_CLASS):
                     background_colour = unavailable_option_color
                     # Set it disable and un-selectable
                     item.setFlags(
-                        item.flags() &
-                        ~QtCore.Qt.ItemIsEnabled &
-                        ~QtCore.Qt.ItemIsSelectable
+                        item.flags() & ~
+                        QtCore.Qt.ItemIsEnabled & ~
+                        QtCore.Qt.ItemIsSelectable
                     )
                 else:
                     background_colour = available_option_color
