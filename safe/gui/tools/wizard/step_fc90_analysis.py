@@ -202,7 +202,7 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         self.lblAnalysisStatus.setText(tr('Analysis done.'))
         self.pbnReportWeb.show()
         self.pbnReportPDF.show()
-        self.pbnReportComposer.show()
+        # self.pbnReportComposer.show()  # Hide until it works again.
         self.pbnReportPDF.clicked.connect(self.print_map)
 
     def show_busy(self):
