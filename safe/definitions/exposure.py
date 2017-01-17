@@ -7,17 +7,15 @@ from safe.definitions.caveats import (
 from safe.definitions.units import count_exposure_unit
 from safe.definitions.fields import (
     adult_count_field,
-    adult_ratio_field,
     elderly_count_field,
-    elderly_ratio_field,
     exposure_fields,
     exposure_name_field,
-    female_ratio_field,
     female_count_field,
     youth_count_field,
-    youth_ratio_field,
     population_count_field,
-    exposure_type_field)
+    exposure_type_field,
+    feature_value_field,
+    feature_rate_field)
 from safe.definitions.layer_modes import (
     layer_mode_classified, layer_mode_continuous)
 from safe.definitions.exposure_classifications import (
@@ -195,7 +193,10 @@ exposure_road = {
     'classifications': [generic_road_classes],
     'compulsory_fields': [exposure_type_field],
     'fields': exposure_fields,
-    'extra_fields': [],
+    'extra_fields': [
+        feature_value_field,
+        feature_rate_field
+    ],
     'layer_modes': [layer_mode_classified]
 }
 exposure_structure = {
@@ -241,7 +242,10 @@ exposure_structure = {
     'classifications': [generic_structure_classes],
     'compulsory_fields': [exposure_type_field],
     'fields': exposure_fields,
-    'extra_fields': [],
+    'extra_fields': [
+        feature_value_field,
+        feature_rate_field
+    ],
     'layer_modes': [layer_mode_classified]
 }
 exposure_place = {
@@ -326,7 +330,10 @@ exposure_land_cover = {
     'classifications': [generic_landcover_classes],
     'compulsory_fields': [exposure_type_field],
     'fields': exposure_fields,
-    'extra_fields': [],
+    'extra_fields': [
+        feature_value_field,
+        feature_rate_field
+    ],
     'layer_modes': [layer_mode_classified]
 }
 
