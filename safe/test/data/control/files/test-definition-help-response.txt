@@ -13,7 +13,7 @@ Generic classes
 Scenario
 *Single event
 *Multiple event
-*Exposure Types
+*Exposure Concepts
 *Exposure
 *Land cover
 *Population
