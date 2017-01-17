@@ -99,9 +99,7 @@ class StepFcExtent(WizardStep, FORM_CLASS):
         from safe.gui.tools.extent_selector_dialog import ExtentSelectorDialog
         self.extent_dialog = ExtentSelectorDialog(
             self.parent.iface,
-            self.parent.iface.mainWindow(),
-            extent=self.parent.dock.extent.user_extent,
-            crs=self.parent.dock.extent.user_extent_crs)
+            self.parent.iface.mainWindow())
         self.extent_dialog.tool.rectangle_created.disconnect(
             self.extent_dialog.stop_capture)
         self.extent_dialog.clear_extent.connect(

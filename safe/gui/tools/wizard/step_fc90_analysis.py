@@ -11,7 +11,8 @@ from safe.definitions.constants import (
     ANALYSIS_FAILED_BAD_INPUT,
     ANALYSIS_FAILED_BAD_CODE,
     PREPARE_FAILED_BAD_INPUT,
-    PREPARE_FAILED_BAD_CODE
+    PREPARE_FAILED_BAD_CODE,
+    HAZARD_EXPOSURE_VIEW
 )
 from safe.common.signals import send_static_message, send_error_message
 from safe.gui.widgets.message import enable_messaging
@@ -23,6 +24,8 @@ from safe.gui.analysis_utilities import (
     generate_impact_report, add_impact_layers_to_canvas)
 from safe import messaging as m
 from safe.messaging import styles
+from safe.utilities.settings import setting, set_setting
+from safe.utilities.gis import wkt_to_rectangle
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -179,17 +182,25 @@ class StepFcAnalysis(WizardStep, FORM_CLASS):
         if aggregation:
             impact_function.aggregation = aggregation
             impact_function.use_selected_features_only = (
-                bool(QSettings().value(
-                    'inasafe/useSelectedFeaturesOnly', False, type=bool)))
+                setting('useSelectedFeaturesOnly', False, bool))
         else:
             # We need to enable it again when we will fix the dock.
             # impact_function.requested_extent = self.extent.user_extent
             # impact_function.requested_extent = self.extent.user_extent_crs
 
-            map_settings = self.parent.iface.mapCanvas().mapSettings()
-            impact_function.viewport_extent = map_settings.fullExtent()
-            impact_function._viewport_extent_crs = (
-                map_settings.destinationCrs())
+            mode = setting('analysis_extents_mode')
+            if self.extent.user_extent:
+                # This like a hack to transform a geometry to a rectangle.
+                # self.extent.user_extent is a QgsGeometry.
+                # impact_function.requested_extent needs a QgsRectangle.
+                wkt = self.extent.user_extent.exportToWkt()
+                impact_function.requested_extent = wkt_to_rectangle(wkt)
+                impact_function.requested_extent_crs = self.extent.crs
+
+            elif mode == HAZARD_EXPOSURE_VIEW:
+                impact_function.requested_extent = (
+                    self.iface.mapCanvas().extent())
+                impact_function.requested_extent_crs = self.extent.crs
 
         # We don't have any checkbox in the wizard for the debug mode.
         impact_function.debug_mode = False
