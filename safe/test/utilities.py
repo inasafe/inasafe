@@ -104,7 +104,7 @@ def get_qgis_app():
         from PyQt4 import QtGui, QtCore  # pylint: disable=W0621
         # noinspection PyPackageRequirements
         from PyQt4.QtCore import QCoreApplication, QSettings
-        from safe.gis.qgis_interface import QgisInterface
+        from safe.test.qgis_interface import QgisInterface
     except ImportError:
         return None, None, None, None
 
