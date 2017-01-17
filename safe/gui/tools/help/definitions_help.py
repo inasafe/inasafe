@@ -11,6 +11,7 @@ from safe.gui.tools.help.dock_help import content as dock_help
 from safe.gui.tools.help.extent_selector_help import content as extent_help
 from safe.gui.tools.help.impact_report_help import content as report_help
 from safe.gui.tools.help.needs_calculator_help import content as needs_help
+from safe.gui.tools.help.batch_help import content as batch_help
 from safe.gui.tools.help.needs_manager_help import content as \
     needs_manager_help
 from safe.gui.tools.help.options_help import content as options_help
@@ -141,6 +142,13 @@ def content():
     header = m.Heading(tr('The minimum needs manager'), **SUBSECTION_STYLE)
     message.add(header)
     message.add(needs_manager_help())
+
+    _create_section_header(
+        message,
+        table_of_contents,
+        'batch-runner',
+        tr('The Batch Runner'))
+    message.add(batch_help())
 
     header = m.Heading(tr('The OpenStreetMap Downloader'), **SUBSECTION_STYLE)
     message.add(header)
