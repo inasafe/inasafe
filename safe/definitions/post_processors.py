@@ -218,7 +218,7 @@ post_processor_process_types = [
 
 post_processor_gender = {
     'key': 'post_processor_gender',
-    'name': tr('Gender Post Processor'),
+    'name': tr('Gender'),
     'description': tr(
         'A post processor to calculate the number of affected females. '
         '"Female" is defined as: ' + concepts['female']['description']
@@ -297,7 +297,7 @@ post_processor_additional_rice = {
     'key': 'post_processor_additional_rice',
     'name': tr(
         'Additional Weekly Rice kg for Pregnant and Lactating Women '
-        'Post Processor'),
+    ),
     'description': tr(
         'A post processor to calculate additional rice for pregnant and '
         'lactating women.'

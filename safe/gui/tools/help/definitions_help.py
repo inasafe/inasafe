@@ -3,6 +3,7 @@
 
 from os.path import exists
 import logging
+from PyQt4 import QtCore
 from safe.utilities.i18n import tr
 from safe import messaging as m
 from safe.messaging import styles
@@ -167,12 +168,16 @@ def content():
         table_of_contents,
         'analysis-steps',
         tr('Analysis steps'))
-    steps = definitions.analysis_steps.values()
+    header = m.Heading(tr('Analysis internal process'), **SUBSECTION_STYLE)
+    message.add(header)
     analysis = definitions.concepts['analysis']
     message.add(analysis['description'])
     url = _definition_screenshot_url(analysis)
     if url:
         message.add(m.Image(url))
+    header = m.Heading(tr('Progress reporting steps'), **SUBSECTION_STYLE)
+    message.add(header)
+    steps = definitions.analysis_steps.values()
     for step in steps:
         message.add(definition_to_message(step, INFO_STYLE))
 
@@ -180,16 +185,19 @@ def content():
     #  Hazard definitions
     ##
 
-    header = m.Heading(tr('Hazard Types'), **SUBSECTION_STYLE)
-    message.add(header)
-    message.add(m.Paragraph(definitions.concepts['hazard']['description']))
+    _create_section_header(
+        message,
+        table_of_contents,
+        'hazards',
+        tr('Hazard Concepts'))
+
+    hazard_category = definitions.hazard_category
+    message.add(definition_to_message(
+        hazard_category, heading_style=SUBSECTION_STYLE))
 
     hazards = definitions.hazards
-    hazard_category = definitions.hazard_category
-    message.add(definition_to_message(hazards, heading_style=SECTION_STYLE))
-    header = m.Heading(tr('Hazard scenarios'), **SUBSECTION_STYLE)
-    message.add(header)
-    message.add(definition_to_message(hazard_category))
+    message.add(definition_to_message(
+        hazards, heading_style=SUBSECTION_STYLE))
 
     ##
     #  Exposure definitions
@@ -199,9 +207,10 @@ def content():
         message,
         table_of_contents,
         'exposures',
-        tr('Exposure Types'))
+        tr('Exposure Concepts'))
     exposures = definitions.exposures
-    message.add(definition_to_message(exposures))
+    message.add(
+        definition_to_message(exposures, heading_style=SUBSECTION_STYLE))
 
     ##
     #  Defaults
@@ -245,7 +254,9 @@ def content():
         message,
         table_of_contents,
         'all-fields',
-        tr('All fields'))
+        tr('Fields'))
+    header = m.Heading(tr('Input dataset fields'), **SUBSECTION_STYLE)
+    message.add(header)
     _create_fields_section(
         message,
         tr('Exposure fields'),
@@ -258,6 +269,8 @@ def content():
         message,
         tr('Aggregation fields'),
         definitions.aggregation_fields)
+    header = m.Heading(tr('Output dataset fields'), **SUBSECTION_STYLE)
+    message.add(header)
     _create_fields_section(
         message,
         tr('Impact fields'),
@@ -288,12 +301,16 @@ def content():
         table_of_contents,
         'geometries',
         tr('Layer Geometry Types'))
+    header = m.Heading(tr('Vector'), **SUBSECTION_STYLE)
+    message.add(header)
     message.add(
         definition_to_message(definitions.layer_geometry_point, INFO_STYLE))
     message.add(
         definition_to_message(definitions.layer_geometry_line, INFO_STYLE))
     message.add(
         definition_to_message(definitions.layer_geometry_polygon, INFO_STYLE))
+    header = m.Heading(tr('Raster'), **SUBSECTION_STYLE)
+    message.add(header)
     message.add(
         definition_to_message(definitions.layer_geometry_raster, INFO_STYLE))
 
@@ -697,9 +714,19 @@ def _add_field_to_table(field, table):
     row.add(m.Cell(field['field_name']))
     field_types = None
     if not isinstance(field['type'], list):
-        field_types = '%s' % field['type']
+        field_types = '%s' % _type_to_string(field['type'])
     else:
+        # List of field types are supported but the user will only care
+        # about the simple types so we turn them into simple names (whole
+        # number, decimal number etc. and then strip out the duplicates
+        unique_list = []
+        # First iterate the types found in the definition to get english names
         for field_type in field['type']:
+            field_type_string = _type_to_string(field_type)
+            if field_type_string not in unique_list:
+                unique_list.append(field_type_string)
+        # now iterate the unque list and write to a sentence
+        for field_type in unique_list:
             if field_types:
                 field_types += ', %s' % unicode(field_type)
             else:
@@ -711,6 +738,21 @@ def _add_field_to_table(field, table):
     row = m.Row()
     row.add(m.Cell(field['description'], span=5))
     table.add(row)
+
+
+def _type_to_string(value):
+    type_map = {
+        QtCore.QVariant.Double: tr('Decimal number'),
+        QtCore.QVariant.String: tr('Text'),
+        QtCore.QVariant.Int: tr('Whole number'),
+        QtCore.QVariant.UInt: tr('Whole number'),
+        QtCore.QVariant.LongLong: tr('Whole number'),
+        QtCore.QVariant.ULongLong: tr('Whole number'),
+        6: tr('Decimal number'),
+        10: tr('Text'),
+        2: tr('Whole number')
+    }
+    return type_map[value]
 
 
 def _make_defaults_table():
