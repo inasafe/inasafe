@@ -193,6 +193,22 @@ class ReportComponentsMetadata(object):
         """
         self._extra_args = value
 
+    @property
+    def info(self):
+        """
+        :return: Returned dictionary of information about the component.
+        :rtype: dict
+        """
+        return {
+            'key': self.key,
+            'processor': self.processor,
+            'extractor': self.extractor,
+            'output_path': self.output_path,
+            'output_format': self.output_format,
+            'template': self.template,
+            'type': type(self)
+        }
+
 
 class Jinja2ComponentsMetadata(ReportComponentsMetadata):
 
@@ -290,6 +306,19 @@ class QgisComposerComponentsMetadata(ReportComponentsMetadata):
         """
         return self._page_height
 
+    @property
+    def info(self):
+        """
+        :return: Returned dictionary of information about the component.
+        :rtype: dict
+        """
+        return super(QgisComposerComponentsMetadata, self).info.update({
+            'orientation': self.orientation,
+            'page_dpi': self.page_dpi,
+            'page_width': self.page_width,
+            'page_height': self.page_height
+        })
+
 
 class ReportMetadata(object):
 
@@ -384,7 +413,7 @@ class ReportMetadata(object):
         A list of report components that needed to be generated each
 
         :return: list of ReportComponentsMetadata
-        :rtype: [ReportComponentsMetadata]
+        :rtype: list[ReportComponentsMetadata]
         """
         return self._components
 

@@ -22,12 +22,19 @@ from safe.defaults import (
     black_inasafe_logo_path,
     supporters_logo_path,
     default_north_arrow_path)
+from safe import messaging as m
+from safe.messaging import styles
+from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
+from safe.utilities.utilities import get_error_message
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
+
+SUGGESTION_STYLE = styles.SUGGESTION_STYLE
+WARNING_STYLE = styles.WARNING_STYLE
 
 LOGGER = logging.getLogger('InaSAFE')
 
@@ -236,6 +243,8 @@ class ImpactReport(object):
 
     # constant for default PAGE_DPI settings
     DEFAULT_PAGE_DPI = 300
+    REPORT_GENERATION_SUCCESS = 0
+    REPORT_GENERATION_FAILED = 1
 
     class LayerException(Exception):
         pass
@@ -573,53 +582,117 @@ class ImpactReport(object):
         return legend_attribute_dict
 
     def process_component(self):
-        """Process context for each component and a given template"""
+        """Process context for each component and a given template.
+
+        :returns: Tuple of error code and message
+        :type: tuple
+        """
+        message = m.Message()
+        warning_heading = m.Heading(
+            tr('Report Generation issue'), **WARNING_STYLE)
+        message.add(warning_heading)
+        failed_extract_context = m.Heading(tr(
+            'Failed to extract context'), **WARNING_STYLE)
+        failed_render_context = m.Heading(tr(
+            'Failed to render context'), **WARNING_STYLE)
+        failed_find_extractor = m.Heading(tr(
+            'Failed to load extractor method'), **WARNING_STYLE)
+        failed_find_renderer = m.Heading(tr(
+            'Failed to load renderer method'), **WARNING_STYLE)
+
+        generation_error_code = self.REPORT_GENERATION_SUCCESS
+
         for component in self.metadata.components:
             # load extractors
-            if callable(component.extractor):
-                _extractor_method = component.extractor
-            else:
-                _package_name = '%(report-key)s.extractors.%(component-key)s'
-                _package_name = _package_name % {
-                    'report-key': self.metadata.key,
-                    'component-key': component.key
-                }
-                # replace dash with underscores
-                _package_name = _package_name.replace('-', '_')
-                _extractor_path = os.path.join(
-                    self.metadata.template_folder,
-                    component.extractor
-                )
-                _module = imp.load_source(_package_name, _extractor_path)
-                _extractor_method = getattr(_module, 'extractor')
+            try:
+                if callable(component.extractor):
+                    _extractor_method = component.extractor
+                else:
+                    _package_name = (
+                        '%(report-key)s.extractors.%(component-key)s')
+                    _package_name %= {
+                        'report-key': self.metadata.key,
+                        'component-key': component.key
+                    }
+                    # replace dash with underscores
+                    _package_name = _package_name.replace('-', '_')
+                    _extractor_path = os.path.join(
+                        self.metadata.template_folder,
+                        component.extractor
+                    )
+                    _module = imp.load_source(_package_name, _extractor_path)
+                    _extractor_method = getattr(_module, 'extractor')
+            except Exception as e:  # pylint: disable=broad-except
+                generation_error_code = self.REPORT_GENERATION_FAILED
+                LOGGER.info(e)
+                if self.impact_function.debug_mode:
+                    raise
+                else:
+                    message.add(failed_find_extractor)
+                    message.add(component.info)
+                    message.add(get_error_message(e))
+                    continue
 
             # method signature:
             #  - this ImpactReport
             #  - this component
-            context = _extractor_method(self, component)
-            component.context = context
+            try:
+                context = _extractor_method(self, component)
+                component.context = context
+            except Exception as e:  # pylint: disable=broad-except
+                generation_error_code = self.REPORT_GENERATION_FAILED
+                LOGGER.info(e)
+                if self.impact_function.debug_mode:
+                    raise
+                else:
+                    message.add(failed_extract_context)
+                    message.add(get_error_message(e))
+                    continue
 
-            # load processor
-            if callable(component.processor):
-                _renderer = component.processor
-            else:
-                _package_name = '%(report-key)s.renderer.%(component-key)s'
-                _package_name = _package_name % {
-                    'report-key': self.metadata.key,
-                    'component-key': component.key
-                }
-                # replace dash with underscores
-                _package_name = _package_name.replace('-', '_')
-                _renderer_path = os.path.join(
-                    self.metadata.template_folder,
-                    component.processor
-                )
-                _module = imp.load_source(_package_name, _renderer_path)
-                _renderer = getattr(_module, 'renderer')
+            try:
+                # load processor
+                if callable(component.processor):
+                    _renderer = component.processor
+                else:
+                    _package_name = '%(report-key)s.renderer.%(component-key)s'
+                    _package_name %= {
+                        'report-key': self.metadata.key,
+                        'component-key': component.key
+                    }
+                    # replace dash with underscores
+                    _package_name = _package_name.replace('-', '_')
+                    _renderer_path = os.path.join(
+                        self.metadata.template_folder,
+                        component.processor
+                    )
+                    _module = imp.load_source(_package_name, _renderer_path)
+                    _renderer = getattr(_module, 'renderer')
+            except Exception as e:  # pylint: disable=broad-except
+                generation_error_code = self.REPORT_GENERATION_FAILED
+                LOGGER.info(e)
+                if self.impact_function.debug_mode:
+                    raise
+                else:
+                    message.add(failed_find_renderer)
+                    message.add(component.info)
+                    message.add(get_error_message(e))
+                    continue
 
             # method signature:
             #  - this ImpactReport
             #  - this component
             if component.context:
-                output = _renderer(self, component)
-                component.output = output
+                try:
+                    output = _renderer(self, component)
+                    component.output = output
+                except Exception as e:  # pylint: disable=broad-except
+                    generation_error_code = self.REPORT_GENERATION_FAILED
+                    LOGGER.info(e)
+                    if self.impact_function.debug_mode:
+                        raise
+                    else:
+                        message.add(failed_render_context)
+                        message.add(get_error_message(e))
+                        continue
+
+        return generation_error_code, message
