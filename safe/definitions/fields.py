@@ -998,9 +998,6 @@ hazard_count_field = {
         'impact layer and aggregate hazard impact layer during the impact '
         'analysis. It represents the cumulative count of hazard'
         'features for each area.'),
-    'description': tr(
-        'Attribute where the total of the count is located.'
-    ),
     'citations': [
         {
             'text': None,
@@ -1081,8 +1078,6 @@ population_displaced_per_mmi = {
 # Inputs
 exposure_fields = [
     exposure_id_field,
-    feature_value_field,
-    feature_rate_field
 ]
 
 hazard_fields = [
