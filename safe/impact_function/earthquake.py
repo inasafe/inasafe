@@ -1,7 +1,5 @@
 # coding=utf-8
 
-from PyQt4.QtCore import QVariant
-
 from qgis.core import (
     QGis,
     QgsCoordinateReferenceSystem,

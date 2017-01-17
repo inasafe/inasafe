@@ -1,7 +1,7 @@
 # coding=utf-8
 
 from tempfile import mkdtemp
-from qgis.core import QgsRasterLayer, QgsVectorLayer
+from qgis.core import QgsRasterLayer
 
 from processing.core.Processing import Processing
 
@@ -18,8 +18,7 @@ __revision__ = '$Format:%H$'
 
 
 def rasterize_vector_layer(layer, width, height, extent):
-    """Rasterize a vector layer to the grid given by extent and
-    width/height of the output raster.
+    """Rasterize a vector layer to the grid given by extent and width/height.
 
     :param layer: The vector layer.
     :type layer: QgsVectorLayer
@@ -36,7 +35,6 @@ def rasterize_vector_layer(layer, width, height, extent):
     :return: The new raster layer.
     :rtype: QgsRasterLayer
     """
-
     name = rasterize_steps['gdal_layer_name']
     output_filename = unique_filename(prefix=name, suffix='.tif')
 
