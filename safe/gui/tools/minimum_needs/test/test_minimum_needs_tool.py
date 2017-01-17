@@ -29,7 +29,6 @@ from safe.test.utilities import standard_data_path, get_qgis_app
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from safe.storage.core import read_layer as safe_read_layer
 from safe.gui.tools.minimum_needs.needs_calculator_dialog import (
     NeedsCalculatorDialog)
 
@@ -60,7 +59,7 @@ class MinimumNeedsTest(unittest.TestCase):
         """Test behaviour of the minimum needs function.
         """
         dialog = NeedsCalculatorDialog(PARENT)
-        layer = safe_read_layer(shapefile_path)
+        layer = shapefile_path
         attribute = 'displaced'
         new_layer = dialog.minimum_needs(layer, attribute)
         assert new_layer is not None

@@ -15,8 +15,7 @@ Contact : ole.moller.nielsen@gmail.com
 import unittest
 import numpy
 
-from safe.gis.numerics import axes_to_points
-from safe.gis.numerics import grid_to_points
+from safe.utilities.numerics import axes_to_points, grid_to_points
 
 
 class TestNumerics(unittest.TestCase):

@@ -14,7 +14,6 @@ from safe.test.utilities import (
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
 from safe.utilities.utilities import (
-    get_error_message,
     humanise_seconds,
     impact_attribution,
     replace_accentuated_characters,
@@ -23,8 +22,6 @@ from safe.utilities.utilities import (
     is_keyword_version_supported
 )
 from safe.utilities.gis import qgis_version
-
-from safe.storage.utilities import bbox_intersection
 
 
 class UtilitiesTest(unittest.TestCase):
@@ -38,38 +35,6 @@ class UtilitiesTest(unittest.TestCase):
     def tearDown(self):
         """Test tear down."""
         pass
-
-    def test_stacktrace_html(self):
-        """Stack traces can be caught and rendered as html
-        """
-
-        # This is about general exception handling, so ok to use catch-all
-        # pylint: disable=W0703
-        try:
-            bbox_intersection('aoeu', 'oaeu', [])
-        except Exception, e:
-            # Display message and traceback
-
-            message = get_error_message(e)
-            # print message
-            message = message.to_text()
-            self.assertIn(str(e), message)
-            self.assertIn('line', message)
-            self.assertIn('file', message)
-
-            message = get_error_message(e)
-            message = message.to_html()
-            assert str(e) in message
-
-            message = message.decode('string_escape')
-            control_file_path = standard_data_path(
-                'control',
-                'files',
-                'test-stacktrace-html.txt')
-            expected_results = open(control_file_path).read().replace('\n', '')
-            self.assertIn(expected_results, message)
-
-            # pylint: enable=W0703
 
     def test_get_qgis_version(self):
         """Test we can get the version of QGIS"""

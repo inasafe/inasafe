@@ -22,7 +22,7 @@ from PyQt4 import QtGui  # pylint: disable=W0621
 from qgis.utils import iface
 
 from safe.definitions.constants import HAZARD_EXPOSURE
-from safe.gis.numerics import axes_to_points
+from safe.utilities.numerics import axes_to_points
 from safe.common.utilities import unique_filename, temp_dir
 from safe.common.exceptions import NoKeywordsFoundError, MetadataReadError
 

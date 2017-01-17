@@ -3,8 +3,6 @@
 """
 import os
 import sys
-import numpy
-import zipfile
 import platform
 from datetime import date
 import getpass
@@ -18,7 +16,6 @@ import colorsys
 from collections import OrderedDict
 # pylint: enable=unused-import
 
-from PyQt4.QtCore import QPyNullVariant
 from qgis.core import (
     QgsCoordinateReferenceSystem,
     QgsCoordinateTransform,
