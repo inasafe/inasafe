@@ -1,6 +1,5 @@
 # coding=utf-8
-"""**Numerical tools**
-"""
+"""Numerical tools"""
 
 import numpy
 from safe.common.utilities import verify

@@ -33,7 +33,6 @@ from safe.common.utilities import (
     get_thousand_separator,
     get_decimal_separator,
     get_utm_epsg,
-    get_non_conflicting_attribute_name,
     temp_dir,
     log_file_path,
     romanise,
@@ -265,15 +264,6 @@ class TestUtilities(unittest.TestCase):
         # North semisphere not in geographic coordinates:
         epsg = QgsCoordinateReferenceSystem('EPSG:2154')
         self.assertEqual(get_utm_epsg(573593, 6330659, epsg), 32631)
-
-    def test_get_non_conflicting_attribute_name(self):
-        """Test we can get a non conflicting attribute name."""
-        default_name = 'population'
-        attribute_names = ['POPULATION', 'id', 'location', 'latitude']
-        non_conflicting_attribute_name = get_non_conflicting_attribute_name(
-            default_name, attribute_names)
-        expected_result = 'populati_1'
-        self.assertEqual(expected_result, non_conflicting_attribute_name)
 
     def test_log_file_path(self):
         """Test the log_file_path returns correct path."""
