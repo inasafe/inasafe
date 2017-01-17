@@ -15,7 +15,7 @@ from qgis.core import (
 
 from safe.definitions.fields import (
     aggregation_id_field,
-    total_field,
+    population_count_field,
     fatalities_field,
     displaced_field,
     population_exposed_per_mmi_field,
@@ -269,10 +269,11 @@ def make_summary_layer(exposed, aggregation, fatality_rate):
     inasafe_fields = aggregation.keywords['inasafe_fields']
     id_field = inasafe_fields[aggregation_id_field['key']]
 
-    field = create_field_from_definition(total_field)
+    field = create_field_from_definition(population_count_field)
     aggregation.addAttribute(field)
     field_mapping[field.name()] = aggregation.fieldNameIndex(field.name())
-    inasafe_fields[total_field['key']] = total_field['field_name']
+    inasafe_fields[population_count_field['key']] = (
+        population_count_field['field_name'])
 
     field = create_field_from_definition(fatalities_field)
     aggregation.addAttribute(field)
@@ -310,11 +311,6 @@ def make_summary_layer(exposed, aggregation, fatality_rate):
             exposed_per_agg_zone[agg] = {}
         exposed_per_agg_zone[agg][mmi] = count
 
-    # sums over the whole area
-    grand_total_exposed = 0
-    grand_total_fatalities = 0
-    grand_total_displaced = 0
-
     for agg_feature in aggregation.getFeatures():
         agg_zone = agg_feature[id_field]
 
@@ -349,7 +345,7 @@ def make_summary_layer(exposed, aggregation, fatality_rate):
 
         aggregation.changeAttributeValue(
             agg_feature.id(),
-            field_mapping[total_field['field_name']],
+            field_mapping[population_count_field['field_name']],
             total_exposed)
 
         aggregation.changeAttributeValue(
@@ -362,18 +358,8 @@ def make_summary_layer(exposed, aggregation, fatality_rate):
             field_mapping[displaced_field['field_name']],
             total_displaced)
 
-        grand_total_exposed += total_exposed
-        grand_total_fatalities += total_fatalities
-        grand_total_displaced += total_displaced
-
-    totals = {
-        'exposed': grand_total_exposed,
-        'fatalities': grand_total_fatalities,
-        'displaced': grand_total_displaced,
-    }
-
     aggregation.keywords['layer_purpose'] = (
         layer_purpose_aggregation_impacted['key'])
     aggregation.keywords['title'] = layer_purpose_aggregation_impacted['key']
 
-    return aggregation, totals
+    return aggregation

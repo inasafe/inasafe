@@ -44,6 +44,8 @@ from safe.gisv4.vector.summary_1_aggregate_hazard import (
     aggregate_hazard_summary)
 from safe.gisv4.vector.summary_2_aggregation import aggregation_summary
 from safe.gisv4.vector.summary_3_analysis import analysis_summary
+from safe.gisv4.vector.summary_33_eq_raster_analysis import (
+    analysis_eartquake_summary)
 from safe.gisv4.vector.summary_4_exposure_breakdown import (
     exposure_type_breakdown)
 from safe.gisv4.vector.recompute_counts import recompute_counts
@@ -1073,9 +1075,13 @@ class ImpactFunction(object):
         self._performance_log = profiling_log()
         self.callback(7, step_count, analysis_steps['post_processing'])
         if self._exposure_impacted:
-            self._performance_log = profiling_log()
-            # We post process the exposure impacted
-            self.post_process(self._exposure_impacted)
+            is_vector = (
+                self._exposure_impacted.type() == QgsMapLayer.VectorLayer)
+            # The exposure impacted might be a raster if it's an EQ if.
+            if is_vector:
+                self._performance_log = profiling_log()
+                # We post process the exposure impacted
+                self.post_process(self._exposure_impacted)
         else:
             if self._aggregate_hazard_impacted:
                 # We post process the aggregate hazard.
@@ -1098,7 +1104,10 @@ class ImpactFunction(object):
             _, name = self.datastore.add_layer(
                 self._exposure_impacted, 'exposure_impacted')
             self._exposure_impacted = self.datastore.layer(name)
-            if self.debug_mode:
+            is_vector = (
+                self._exposure_impacted.type() == QgsMapLayer.VectorLayer)
+            if self.debug_mode and is_vector:
+                # The exposure impacted might be a raster if it's an EQ if.
                 check_inasafe_fields(self._exposure_impacted)
 
         if self.aggregate_hazard_impacted:
@@ -1185,13 +1194,13 @@ class ImpactFunction(object):
             self.debug_layer(aggregation_aligned)
 
         self.set_state_process('exposure', 'Exposed people')
-        exposed, exposed_raster = exposed_people_stats(
+        exposed, self._exposure_impacted = exposed_people_stats(
             self.hazard, self.exposure, aggregation_aligned)
         if self.debug_mode:
-            self.debug_layer(exposed_raster)
+            self.debug_layer(self._exposure_impacted)
 
         self.set_state_process('impact function', 'Set summaries')
-        self._aggregation_impacted, _ = make_summary_layer(
+        self._aggregation_impacted = make_summary_layer(
             exposed, self.aggregation, itb_fatality_rates())
         if self.debug_mode:
             self.debug_layer(self._aggregation_impacted)
@@ -1504,11 +1513,15 @@ class ImpactFunction(object):
     def summary_calculation(self):
         """Do the summary calculation."""
         if self._exposure_impacted:
-            self.set_state_process(
-                'impact function',
-                'Aggregate the impact summary')
-            self._aggregate_hazard_impacted = aggregate_hazard_summary(
-                self.exposure_impacted, self._aggregate_hazard_impacted)
+            # The exposure impacted might be a raster if it's an EQ if.
+            is_vector = (
+                self._exposure_impacted.type() == QgsMapLayer.VectorLayer)
+            if is_vector:
+                self.set_state_process(
+                    'impact function',
+                    'Aggregate the impact summary')
+                self._aggregate_hazard_impacted = aggregate_hazard_summary(
+                    self.exposure_impacted, self._aggregate_hazard_impacted)
 
         if self._aggregate_hazard_impacted:
             self.set_state_process(
@@ -1531,7 +1544,11 @@ class ImpactFunction(object):
                     self._aggregate_hazard_impacted)
         else:
             # We are running EQ raster on population raster.
-            pass
+            self.set_state_process(
+                'impact function',
+                'Aggregate the analysis summary')
+            self._analysis_impacted = analysis_eartquake_summary(
+                self.aggregation_impacted, self.analysis_impacted)
 
     def style(self):
         """Function to apply some styles to the layers."""
@@ -1546,9 +1563,10 @@ class ImpactFunction(object):
         # Let's style layers which have a geometry and have hazard_class
         hazard_class = hazard_class_field['key']
         for layer in self.outputs:
-            if layer.geometryType() != QGis.NoGeometry:
-                if layer.keywords['inasafe_fields'].get(hazard_class):
-                    hazard_class_style(layer, classes, self.debug_mode)
+            if layer.type() == QgsMapLayer.VectorLayer:
+                if layer.geometryType() != QGis.NoGeometry:
+                    if layer.keywords['inasafe_fields'].get(hazard_class):
+                        hazard_class_style(layer, classes, self.debug_mode)
 
         # Let's style the aggregation and analysis layer.
         simple_polygon_without_brush(self.aggregation_impacted)
