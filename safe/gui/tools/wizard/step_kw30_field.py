@@ -86,9 +86,8 @@ class StepKwField(WizardStep, FORM_CLASS):
             # Else, go to source step
             else:
                 return self.parent.step_kw_source
-
-        # Any other case
-        return self.parent.step_kw_source
+        else:
+            return self.parent.step_kw_inasafe_fields
 
     # noinspection PyPep8Naming
     def on_lstFields_itemSelectionChanged(self):
