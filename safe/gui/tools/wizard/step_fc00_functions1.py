@@ -7,7 +7,8 @@ from PyQt4.QtCore import pyqtSignature
 
 from safe.definitions.hazard import hazard_all
 from safe.definitions.exposure import exposure_all
-from safe.definitions.colors import available_option_color
+from safe.definitions.colors import (
+    available_option_color,  unavailable_option_color)
 from safe.definitions.font import big_font
 from safe.gui.tools.wizard.wizard_step import WizardStep
 from safe.gui.tools.wizard.wizard_step import get_wizard_step_ui_class
@@ -94,7 +95,7 @@ class StepFcFunctions1(WizardStep, FORM_CLASS):
 
     # pylint: disable=W0613
     # noinspection PyPep8Naming
-    def on_tblFunctions1_cellDoubleClicked(self, row, column):
+    def on_tblFunctions1_cellDoubleClicked(self):
         """Choose selected hazard x exposure combination and go ahead.
 
         .. note:: This is an automatic Qt slot
@@ -133,7 +134,12 @@ class StepFcFunctions1(WizardStep, FORM_CLASS):
         for hazard in hazards:
             for exposure in exposures:
                 item = QtGui.QTableWidgetItem()
-                background_colour = available_option_color
+                if exposure in hazard['disabled_exposures']:
+                    background_colour = unavailable_option_color
+                    item.setFlags(item.flags() & ~QtCore.Qt.ItemIsEnabled)
+                    item.setFlags(item.flags() & ~QtCore.Qt.ItemIsSelectable)
+                else:
+                    background_colour = available_option_color
                 item.setBackground(QtGui.QBrush(background_colour))
                 item.setFont(big_font)
                 item.setTextAlignment(
