@@ -178,7 +178,7 @@ def get_inasafe_default_value_fields(qsetting, field_key):
 
     :returns: Tuple of list. List of labels and list of values.
     """
-    labels = [tr('Setting (%s)'), tr('Do not use'), tr('Custom')]
+    labels = [tr('Global (%s)'), tr('Do not use'), tr('Custom')]
     values = [
         get_inasafe_default_value_qsetting(qsetting, GLOBAL, field_key),
         None,

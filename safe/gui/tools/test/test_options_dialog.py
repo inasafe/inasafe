@@ -5,7 +5,6 @@ import unittest
 import logging
 
 from safe.definitions.default_settings import inasafe_default_settings
-from safe.definitions.default_settings import inasafe_default_settings
 from safe.definitions.messages import disclaimer
 from safe.gui.tools.options_dialog import OptionsDialog
 from safe.test.utilities import get_qgis_app

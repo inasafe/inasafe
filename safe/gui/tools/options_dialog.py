@@ -508,7 +508,9 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
 
             self.default_value_parameters.append(parameter)
 
-        description_text = tr('InaSAFE Default Values')
+        description_text = tr(
+            'In this options you can change the global default values for '
+            'these variables.')
         self.default_value_parameter_container = ParameterContainer(
             self.default_value_parameters, description_text=description_text)
         self.default_value_parameter_container.setup_ui()
