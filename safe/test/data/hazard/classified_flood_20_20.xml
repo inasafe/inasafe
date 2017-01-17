@@ -185,7 +185,7 @@
             <gco:CharacterString/>
           </continuous_hazard_unit>
           <inasafe_fields>
-            <gco:Dictionary>{&quot;aggregation_id_field&quot;: &quot;area_id&quot;}</gco:Dictionary>
+            <gco:Dictionary/>
           </inasafe_fields>
           <inasafe_default_values>
             <gco:Dictionary/>

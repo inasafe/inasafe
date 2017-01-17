@@ -191,7 +191,7 @@
             <gco:CharacterString>OpenStreetMap - www.openstreetmap.org</gco:CharacterString>
           </source>
           <value_map>
-            <gco:Dictionary>{&quot;other&quot;: [&quot;Cycleway, footpath, etc.&quot;], &quot;local&quot;: [&quot;Road, residential, living street, etc.&quot;], &quot;primary&quot;: [&quot;Primary road&quot;, &quot;Primary link&quot;], &quot;secondary&quot;: [&quot;Secondary&quot;, &quot;Tertiary&quot;]}</gco:Dictionary>
+            <gco:Dictionary>{&quot;other&quot;: [&quot;Cycleway, footpath, etc.&quot;], &quot;local&quot;: [&quot;Road, residential, living street, etc.&quot;], &quot;primary&quot;: [&quot;Primary link&quot;, &quot;Primary road&quot;], &quot;secondary&quot;: [&quot;Secondary&quot;, &quot;Tertiary&quot;]}</gco:Dictionary>
           </value_map>
           <layer_geometry>
             <gco:CharacterString>line</gco:CharacterString>

@@ -176,10 +176,10 @@
             <gco:CharacterString>single_event</gco:CharacterString>
           </hazard_category>
           <classification>
-            <gco:CharacterString/>
+            <gco:CharacterString>ash_hazard_classes</gco:CharacterString>
           </classification>
           <thresholds>
-            <gco:Dictionary/>
+            <gco:Dictionary>{&quot;high&quot;: [5.0, 10.0], &quot;very high&quot;: [10.0, 999999.0], &quot;very low&quot;: [0.01, 0.1], &quot;medium&quot;: [2.0, 5.0], &quot;low&quot;: [0.1, 2.0]}</gco:Dictionary>
           </thresholds>
           <continuous_hazard_unit>
             <gco:CharacterString>centimetres</gco:CharacterString>
