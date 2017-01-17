@@ -62,7 +62,6 @@ from safe.definitions.fields import (
     size_field,
     exposure_class_field,
     hazard_class_field,
-    aggregation_name_field,
 )
 from safe.definitions.layer_purposes import (
     layer_purpose_exposure_impacted,
@@ -1192,7 +1191,7 @@ class ImpactFunction(object):
             self.debug_layer(exposed_raster)
 
         self.set_state_process('impact function', 'Set summaries')
-        self._aggregation_impacted, totals = make_summary_layer(
+        self._aggregation_impacted, _ = make_summary_layer(
             exposed, self.aggregation, itb_fatality_rates())
         if self.debug_mode:
             self.debug_layer(self._aggregation_impacted)
@@ -1501,6 +1500,7 @@ class ImpactFunction(object):
             else:
                 LOGGER.info(message)
 
+    @profile
     def summary_calculation(self):
         """Do the summary calculation."""
         if self._exposure_impacted:
@@ -1529,6 +1529,9 @@ class ImpactFunction(object):
                     'Build the exposure breakdown')
                 self._exposure_breakdown = exposure_type_breakdown(
                     self._aggregate_hazard_impacted)
+        else:
+            # We are running EQ raster on population raster.
+            pass
 
     def style(self):
         """Function to apply some styles to the layers."""
