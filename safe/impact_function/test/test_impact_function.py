@@ -350,7 +350,7 @@ class TestImpactFunction(unittest.TestCase):
         try:
             self.assertDictEqual(expected_steps, steps)
         except AssertionError as e:
-            raise AssertionError(e.message + scenario_path)
+            raise AssertionError(e.message + '\nThe file is ' + scenario_path)
         # - 1 because I added the profiling table, and this table is not
         # counted in the JSON file.
         self.assertEqual(len(outputs) - 1, expected_outputs['count'])
