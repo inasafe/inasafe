@@ -3,6 +3,7 @@
 
 from os.path import exists
 import logging
+from PyQt4 import QtCore
 from safe.utilities.i18n import tr
 from safe import messaging as m
 from safe.messaging import styles
@@ -713,9 +714,19 @@ def _add_field_to_table(field, table):
     row.add(m.Cell(field['field_name']))
     field_types = None
     if not isinstance(field['type'], list):
-        field_types = '%s' % field['type']
+        field_types = '%s' % _type_to_string(field['type'])
     else:
+        # List of field types are supported but the user will only care
+        # about the simple types so we turn them into simple names (whole
+        # number, decimal number etc. and then strip out the duplicates
+        unique_list = []
+        # First iterate the types found in the definition to get english names
         for field_type in field['type']:
+            field_type_string = _type_to_string(field_type)
+            if field_type_string not in unique_list:
+                unique_list.append(field_type_string)
+        # now iterate the unque list and write to a sentence
+        for field_type in unique_list:
             if field_types:
                 field_types += ', %s' % unicode(field_type)
             else:
@@ -727,6 +738,21 @@ def _add_field_to_table(field, table):
     row = m.Row()
     row.add(m.Cell(field['description'], span=5))
     table.add(row)
+
+
+def _type_to_string(value):
+    type_map = {
+        QtCore.QVariant.Double: tr('Decimal number'),
+        QtCore.QVariant.String: tr('Text'),
+        QtCore.QVariant.Int: tr('Whole number'),
+        QtCore.QVariant.UInt: tr('Whole number'),
+        QtCore.QVariant.LongLong: tr('Whole number'),
+        QtCore.QVariant.ULongLong: tr('Whole number'),
+        6: tr('Decimal number'),
+        10: tr('Text'),
+        2: tr('Whole number')
+    }
+    return type_map[value]
 
 
 def _make_defaults_table():
