@@ -19,7 +19,9 @@ from qgis.core import (
     QgsComposerFrame,
     QgsComposition,
     QgsComposerHtml,
-    QgsRectangle)
+    QgsRectangle,
+    QgsLegendRenderer,
+    QgsComposerLegendStyle)
 
 from safe.common.exceptions import TemplateLoadingError
 from safe.common.utilities import temp_dir
@@ -314,7 +316,10 @@ def qgis_composer_renderer(impact_report, component):
             # set legend
             root_group = legend.modelV2().rootGroup()
             for l in layers:
-                root_group.addLayer(l)
+                # used for customizations
+                tree_layer = root_group.addLayer(l)
+                QgsLegendRenderer.setNodeLegendStyle(
+                    tree_layer, QgsComposerLegendStyle.Hidden)
             legend.synchronizeWithModel()
 
     # process to output

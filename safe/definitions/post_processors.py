@@ -8,7 +8,9 @@
 from PyQt4.QtCore import QPyNullVariant
 
 from safe.definitions.exposure import exposure_population
-from safe.definitions.minimum_needs import minimum_needs_fields
+from safe.definitions.minimum_needs import (
+    minimum_needs_fields,
+    female_minimum_needs_fields)
 from safe.utilities.i18n import tr
 from safe.definitions.fields import (
     displaced_field,
@@ -478,6 +480,31 @@ def initialize_minimum_needs_post_processors():
         need_parameter = field['need_parameter']
         """:type: safe.common.parameters.resource_parameter.ResourceParameter
         """
+
+        # provide different input for specific types of minimum needs
+        # TODO: hacky for now, fix to add some relation with needs profile
+
+        if field in female_minimum_needs_fields:
+            population_inputs = {
+                'value': female_count_field,
+                'type': field_input_type
+            }
+        else:
+            population_inputs = [
+                {
+                    'value': displaced_field,
+                    'type': field_input_type,
+                },
+                {
+                    'value': population_count_field,
+                    'type': field_input_type,
+                },
+                {
+                    'value': exposure_count_field,
+                    'field_param': exposure_population['key'],
+                    'type': dynamic_field_input_type,
+                }]
+
         processor = {
             'key': 'post_processor_{key}'.format(key=field_key),
             'name': field_name,
@@ -485,20 +512,7 @@ def initialize_minimum_needs_post_processors():
             'input': {
                 # input as a list means, try to get the input from the
                 # listed source. Pick the first available
-                'population': [
-                    {
-                        'value': displaced_field,
-                        'type': field_input_type,
-                    },
-                    {
-                        'value': population_count_field,
-                        'type': field_input_type,
-                    },
-                    {
-                        'value': exposure_count_field,
-                        'field_param': exposure_population['key'],
-                        'type': dynamic_field_input_type,
-                    }],
+                'population': population_inputs,
                 'amount': {
                     'type': needs_profile_input_type,
                     'value': need_parameter.name,

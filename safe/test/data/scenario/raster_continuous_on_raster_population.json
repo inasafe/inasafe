@@ -31,7 +31,9 @@
         "Post processor for Drinking Water",
         "Post processor for Clean Water",
         "Post processor for Family Kits",
-        "Post processor for Toilets"
+        "Post processor for Toilets",
+        "Post processor for Weekly Hygiene Packs",
+        "Post processor for Additional Weekly Rice kg for Pregnant and Lactating Women"
       ]
     },
     "aggregation":{

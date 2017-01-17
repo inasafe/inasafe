@@ -6,11 +6,12 @@ from safe.definitions.exposure import exposure_population
 from safe.definitions.fields import (
     aggregation_name_field,
     female_count_field,
-    male_count_field,
     population_count_field,
     affected_exposure_count_field,
     total_affected_field)
-from safe.definitions.minimum_needs import minimum_needs_fields
+from safe.definitions.minimum_needs import (
+    minimum_needs_fields,
+    female_minimum_needs_fields)
 from safe.definitions.post_processors import age_postprocessors
 from safe.definitions.utilities import postprocessor_output_field
 from safe.report.extractors.util import (
@@ -57,7 +58,7 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
         context['header'] = tr('Detailed demographic breakdown')
 
     age_fields = [postprocessor_output_field(p) for p in age_postprocessors]
-    gender_fields = [female_count_field, male_count_field]
+    gender_fields = [female_count_field] + female_minimum_needs_fields
 
     context['sections']['age'] = create_section(
         aggregation_impacted,

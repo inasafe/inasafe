@@ -34,6 +34,7 @@ from safe.definitions.constants import (
     PREPARE_SUCCESS,
 )
 from safe.defaults import supporters_logo_path
+from safe.report.impact_report import ImpactReport
 from safe.utilities.gis import wkt_to_rectangle
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
@@ -790,12 +791,21 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         add_impact_layers_to_canvas(self.impact_function, self.iface)
 
         # Generate impact report
-        generate_impact_report(self.impact_function, self.iface)
-        try:
-            generate_impact_map_report(self.impact_function, self.iface)
-        except:
-            # it might not work on mac now, due to linking issue.
-            pass
+        error_code, message = generate_impact_report(
+            self.impact_function, self.iface)
+
+        if error_code == ImpactReport.REPORT_GENERATION_FAILED:
+            LOGGER.info(tr(
+                'The impact report could not be generated.'))
+            send_error_message(self, message)
+
+        error_code, message = generate_impact_map_report(
+            self.impact_function, self.iface)
+
+        if error_code == ImpactReport.REPORT_GENERATION_FAILED:
+            LOGGER.info(tr(
+                'The impact report could not be generated.'))
+            send_error_message(self, message)
 
         if self.zoom_to_impact_flag:
             self.iface.zoomToActiveLayer()

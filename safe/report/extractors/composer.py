@@ -168,6 +168,7 @@ def qgis_composer_extractor(impact_report, component_metadata):
     # Generate map settings
     qgis_context = impact_report.qgis_composition_context
     inasafe_context = impact_report.inasafe_context
+    provenance = impact_report.impact_function.provenance
 
     context = QGISComposerContext()
 
@@ -239,10 +240,12 @@ def qgis_composer_extractor(impact_report, component_metadata):
             pass
         symbol_count += 1
 
+    legend_title = provenance['map_legend_title'] or ''
+
     map_legends = [
         {
             'id': 'impact-legend',
-            'title': '',  # Set back to blank to #2409
+            'title': legend_title,
             'layers': layers,
             'symbol_count': symbol_count,
             # 'column_count': 2,  # the number of column in legend display
@@ -251,7 +254,6 @@ def qgis_composer_extractor(impact_report, component_metadata):
     context.map_legends = map_legends
 
     # process substitution map
-    provenance = impact_report.impact_function.provenance
     date_time = provenance['datetime']
     """:type: datetime.datetime"""
     if isinstance(date_time, datetime.datetime):
@@ -264,15 +266,18 @@ def qgis_composer_extractor(impact_report, component_metadata):
     tokens = long_version.split('.')
     version = '%s.%s.%s' % (tokens[0], tokens[1], tokens[2])
     # Get title of the layer
-    title = impact_report.impact_function.title
+    title = provenance['map_title']
 
     # Set source
     hazard_source = (
         provenance['hazard_keywords'].get('source') or tr('Unknown'))
     exposure_source = (
         provenance['exposure_keywords'].get('source') or tr('Unknown'))
-    aggregation_source = (
-        provenance['aggregation_keywords'].get('source') or tr('Unknown'))
+    if provenance['aggregation_layer']:
+        aggregation_source = (
+            provenance['aggregation_keywords'].get('source') or tr('Unknown'))
+    else:
+        aggregation_source = tr('Not used')
 
     reference_name = tr('Geographic Coordinates - {crs}').format(
         crs=impact_report.impact_function.impact.crs().authid())
