@@ -108,7 +108,7 @@ class TestImpactFunctionCentricWizard(unittest.TestCase):
         dialog.dock = self.dock
         dialog.set_function_centric_mode()
         QgsMapLayerRegistry.instance().removeAllMapLayers()
-        number_of_column = len(hazard_all) - 1  # Because we remove generic
+        number_of_column = len(hazard_all)
 
         volcano_layer = load_test_vector_layer(
             'hazard',

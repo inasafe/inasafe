@@ -116,7 +116,6 @@ class TestDefinitionsUtilities(unittest.TestCase):
             hazard_tsunami['key'],
             hazard_earthquake['key'],
             hazard_volcanic_ash['key'],
-            hazard_volcano['key'],
             hazard_cyclone['key'],
             hazard_generic['key']
         ]

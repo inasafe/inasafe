@@ -188,10 +188,14 @@ def aggregation_result_extractor(impact_report, component_metadata):
     header_label = aggregation_impacted.title() or tr('Aggregation area')
 
     context['header'] = tr('Aggregation Result')
+    context['notes'] = tr(
+        'Columns and rows containing only 0 or "No data" values are '
+        'excluded from the tables.')
     context['aggregation_result'] = {
         'header_label': header_label,
         'type_header_labels': type_header_labels,
         'total_label': tr('Total'),
+        'total_in_aggregation': tr('Total in aggregation areas'),
         'rows': rows,
         'type_total_values': type_total_values,
         'total_all': total_all,

@@ -3,6 +3,8 @@
 """
 from collections import OrderedDict
 
+from jinja2.exceptions import TemplateError
+
 from safe.common.parameters.resource_parameter import ResourceParameter
 from safe.common.utilities import safe_dir
 from safe.definitions.colors import green
@@ -368,7 +370,8 @@ def infographic_layout_extractor(impact_report, component_metadata):
 
     for component_key in infographics:
         result = jinja2_output_as_string(impact_report, component_key)
-        infographic_result += result
+        if result:
+            infographic_result += result
 
     if not infographic_result:
         return context
@@ -407,8 +410,12 @@ def infographic_pdf_extractor(impact_report, component_metadata):
     context = QGISComposerContext()
 
     # we only have html elements for this
-    infographic_html = jinja2_output_as_string(
-        impact_report, 'infographic-layout')
+    try:
+        infographic_html = jinja2_output_as_string(
+            impact_report, 'infographic-layout')
+    except TemplateError:
+        return context
+
     if infographic_html.strip():
         html_frame_elements = [
             {

@@ -11,6 +11,7 @@ from safe.definitions.exposure import exposure_population
 from safe.definitions.minimum_needs import minimum_needs_fields
 from safe.utilities.i18n import tr
 from safe.definitions.fields import (
+    displaced_field,
     female_ratio_field,
     population_count_field,
     female_count_field,
@@ -485,6 +486,10 @@ def initialize_minimum_needs_post_processors():
                 # input as a list means, try to get the input from the
                 # listed source. Pick the first available
                 'population': [
+                    {
+                        'value': displaced_field,
+                        'type': field_input_type,
+                    },
                     {
                         'value': population_count_field,
                         'type': field_input_type,

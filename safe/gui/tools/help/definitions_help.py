@@ -124,30 +124,12 @@ def content():
     message.add(header)
     message.add(extent_help())
 
-    _create_section_header(
-        message,
-        table_of_contents,
-        'inasafe-options',
-        tr('InaSAFE Options'))
+    header = m.Heading(tr('InaSAFE Options'), **SUBSECTION_STYLE)
+    message.add(header)
     message.add(options_help())
 
-    _create_section_header(
-        message,
-        table_of_contents,
-        'minimum-needs',
-        tr('Minimum Needs'))
-    header = m.Heading(tr('The minimum needs tool'), **SUBSECTION_STYLE)
+    header = m.Heading(tr('The Batch Runner'), **SUBSECTION_STYLE)
     message.add(header)
-    message.add(needs_help())
-    header = m.Heading(tr('The minimum needs manager'), **SUBSECTION_STYLE)
-    message.add(header)
-    message.add(needs_manager_help())
-
-    _create_section_header(
-        message,
-        table_of_contents,
-        'batch-runner',
-        tr('The Batch Runner'))
     message.add(batch_help())
 
     header = m.Heading(tr('The OpenStreetMap Downloader'), **SUBSECTION_STYLE)
@@ -161,6 +143,20 @@ def content():
     header = m.Heading(tr('The Shakemap Converter'), **SUBSECTION_STYLE)
     message.add(header)
     message.add(shakemap_help())
+
+    # Keep this last in the tool section please as it has subsections
+    # and so uses the top level section style
+    _create_section_header(
+        message,
+        table_of_contents,
+        'minimum-needs',
+        tr('Minimum Needs'))
+    header = m.Heading(tr('The minimum needs tool'), **SUBSECTION_STYLE)
+    message.add(header)
+    message.add(needs_help())
+    header = m.Heading(tr('The minimum needs manager'), **SUBSECTION_STYLE)
+    message.add(header)
+    message.add(needs_manager_help())
 
     ##
     #  Analysis workflow

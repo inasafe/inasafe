@@ -4,8 +4,7 @@
 from safe.definitions.concepts import concepts
 from safe.definitions.caveats import (
     caveat_incomplete_data)
-from safe.definitions.units import (
-    count_exposure_unit, density_exposure_unit)
+from safe.definitions.units import count_exposure_unit
 from safe.definitions.fields import (
     adult_count_field,
     adult_ratio_field,
@@ -18,8 +17,7 @@ from safe.definitions.fields import (
     youth_count_field,
     youth_ratio_field,
     population_count_field,
-    exposure_type_field,
-    total_affected_field, total_field, total_unaffected_field)
+    exposure_type_field)
 from safe.definitions.layer_modes import (
     layer_mode_classified, layer_mode_continuous)
 from safe.definitions.exposure_classifications import (
@@ -148,11 +146,7 @@ exposure_population = {
         female_count_field,
         youth_count_field,
         adult_count_field,
-        elderly_count_field,
-        female_ratio_field,
-        youth_ratio_field,
-        adult_ratio_field,
-        elderly_ratio_field
+        elderly_count_field
     ],
     'layer_modes': [layer_mode_continuous]
 }
@@ -247,17 +241,7 @@ exposure_structure = {
     'classifications': [generic_structure_classes],
     'compulsory_fields': [exposure_type_field],
     'fields': exposure_fields,
-    'extra_fields': [
-        population_count_field,
-        female_count_field,
-        youth_count_field,
-        adult_count_field,
-        elderly_count_field,
-        female_ratio_field,
-        youth_ratio_field,
-        adult_ratio_field,
-        elderly_ratio_field
-    ],
+    'extra_fields': [],
     'layer_modes': [layer_mode_classified]
 }
 exposure_place = {
@@ -292,16 +276,7 @@ exposure_place = {
     'compulsory_fields': [exposure_type_field],
     'fields': exposure_fields,
     'extra_fields': [
-        population_count_field,
-        exposure_name_field,
-        female_count_field,
-        youth_count_field,
-        adult_count_field,
-        elderly_count_field,
-        female_ratio_field,
-        youth_ratio_field,
-        adult_ratio_field,
-        elderly_ratio_field
+        exposure_name_field
     ],
     'layer_modes': [layer_mode_classified]
 }
@@ -345,7 +320,7 @@ exposure_land_cover = {
     ],
     'allowed_geometries': [
         'polygon',
-        'raster'
+        # 'raster'  # Disable per #3600
     ],
     'units': [],
     'classifications': [generic_landcover_classes],
@@ -363,7 +338,7 @@ exposure_all = [
     exposure_land_cover,
     exposure_population,
     exposure_road,
-    exposure_place,
+    # exposure_place,  # Disable per #3600
     exposure_structure
 ]
 exposures = {

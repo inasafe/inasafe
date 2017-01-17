@@ -1,4 +1,6 @@
 # coding=utf-8
+"""Test Impact Report."""
+
 import io
 import os
 import shutil
@@ -18,8 +20,6 @@ from safe.test.utilities import (
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
-from PyQt4.QtCore import QSettings
-from qgis.core import QgsVectorLayer, QgsMapLayerRegistry
 from qgis.core import QgsMapLayerRegistry
 from safe.definitions.report import (
     report_a4_blue,
@@ -41,10 +41,14 @@ __revision__ = ':%H$'
 
 
 class TestImpactReport(unittest.TestCase):
+    """Test Impact Report."""
+
+    maxDiff = None
+
     @classmethod
     def fixtures_dir(cls, path):
-        dirname = os.path.dirname(__file__)
-        return os.path.join(dirname, 'fixtures', path)
+        directory_name = os.path.dirname(__file__)
+        return os.path.join(directory_name, 'fixtures', path)
 
     def assertCompareFileControl(self, control_path, actual_path):
         current_directory = safe_dir(sub_dir='../resources')
@@ -95,7 +99,6 @@ class TestImpactReport(unittest.TestCase):
         impact_report.process_component()
 
         """Checking generated context"""
-        different_context_message = 'Different context generated'
         empty_component_output_message = 'Empty component output'
 
         # Check Analysis Summary
@@ -152,8 +155,7 @@ class TestImpactReport(unittest.TestCase):
         }
         actual_context = analysis_summary.context
 
-        self.assertDictEqual(
-            expected_context, actual_context, different_context_message)
+        self.assertDictEqual(expected_context, actual_context)
         self.assertTrue(
             analysis_summary.output, empty_component_output_message)
 
@@ -177,8 +179,7 @@ class TestImpactReport(unittest.TestCase):
         }
         actual_context = action_notes.context
 
-        self.assertDictEqual(
-            expected_context, actual_context, different_context_message)
+        self.assertDictEqual(expected_context, actual_context)
         self.assertTrue(
             action_notes.output, empty_component_output_message)
 
@@ -198,8 +199,7 @@ class TestImpactReport(unittest.TestCase):
         }
         actual_context = notes_assumptions.context
 
-        self.assertDictEqual(
-            expected_context, actual_context, different_context_message)
+        self.assertDictEqual(expected_context, actual_context)
         self.assertTrue(
             notes_assumptions.output, empty_component_output_message)
 
@@ -247,7 +247,6 @@ class TestImpactReport(unittest.TestCase):
         impact_report.process_component()
 
         """Checking generated context"""
-        different_context_message = 'Different context generated'
         empty_component_output_message = 'Empty component output'
 
         # Check Analysis Breakdown
@@ -257,22 +256,30 @@ class TestImpactReport(unittest.TestCase):
 
         expected_context = {
             'header': u'Estimated number of Structures by type',
+            'notes': u'Columns and rows containing only 0 or "No data" '
+                     u'values are excluded from the tables.',
             'detail_table': {
-                'headers': [u'Structures type', u'High Hazard Zone',
-                            u'Medium Hazard Zone', u'Total Affected',
-                            u'Total Unaffected', u'Total'],
-                'details': [[u'government', 0, 1, 1, 0, 1],
-                            [u'health', 1, 0, 1, 0, 1],
-                            [u'education', 2, 0, 2, 3, 5],
-                            [u'other', 0, 1, 1, 0, 1],
-                            [u'commercial', 1, 0, 1, 0, 1]],
+                'headers': [
+                    u'Structures type',
+                    u'High Hazard Zone',
+                    u'Medium Hazard Zone',
+                    u'Total Affected',
+                    u'Total Unaffected',
+                    u'Total'
+                ],
+                'details': [
+                    [u'other', 0, 1, 1, 0, 1],
+                    [u'government', 0, 1, 1, 0, 1],
+                    [u'commercial', 1, 0, 1, 0, 1],
+                    [u'education', 2, 0, 2, 3, 5],
+                    [u'health', 1, 0, 1, 0, 1]
+                ],
                 'footers': [u'Total', 4, 2, 6, 3, 9]
             }
         }
         actual_context = analysis_breakdown.context
-
         self.assertDictEqual(
-            expected_context, actual_context, different_context_message)
+            expected_context, actual_context)
         self.assertTrue(
             analysis_breakdown.output, empty_component_output_message)
 
@@ -282,26 +289,43 @@ class TestImpactReport(unittest.TestCase):
         """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
 
         expected_context = {
+            'notes': u'Columns and rows containing only 0 or "No data" '
+                     u'values are excluded from the tables.',
             'aggregation_result': {
                 'header_label': u'Aggregation area',
-                'rows': [{'type_values': [0, 1, 1, 1, 0],
-                          'total': 3, 'name': u'area 1'},
-                         {'type_values': [1, 0, 0, 0, 0],
-                          'total': 1, 'name': u'area 2'},
-                         {'type_values': [0, 0, 1, 0, 1],
-                          'total': 2, 'name': u'area 3'}],
-                'type_header_labels': [u'Government',
-                                       u'Other',
-                                       u'Education',
-                                       u'Commercial',
-                                       u'Health'],
-                'type_total_values': [1, 1, 2, 1, 1],
-                'total_label': u'Total', 'total_all': 6},
+                'rows': [
+                    {
+                        'type_values': [1, 0, 1, 1, 0],
+                        'total': 3,
+                        'name': u'area 1'
+                    },
+                    {
+                        'type_values': [0, 1, 0, 0, 0],
+                        'total': 1,
+                        'name': u'area 2'
+                    },
+                    {
+                        'type_values': [0, 0, 0, 1, 1],
+                        'total': 2,
+                        'name': u'area 3'
+                    }
+                ],
+                'type_header_labels': [
+                    u'Other',
+                    u'Government',
+                    u'Commercial',
+                    u'Education',
+                    u'Health'
+                ],
+                'type_total_values': [1, 1, 1, 2, 1],
+                'total_label': u'Total',
+                'total_all': 6,
+                'total_in_aggregation': u'Total in aggregation areas'},
             'header': u'Aggregation Result'}
         actual_context = aggregate_result.context
 
         self.assertDictEqual(
-            expected_context, actual_context, different_context_message)
+            expected_context, actual_context)
         self.assertTrue(
             aggregate_result.output, empty_component_output_message)
 
@@ -315,6 +339,8 @@ class TestImpactReport(unittest.TestCase):
 
         shutil.rmtree(output_folder, ignore_errors=True)
 
+    # expected to fail until postprocessor calculation in analysis
+    # impacted is fixed
     @unittest.expectedFailure
     def test_minimum_needs(self):
         """Test generate minimum needs section."""
@@ -347,7 +373,6 @@ class TestImpactReport(unittest.TestCase):
         impact_report.process_component()
 
         """Checking generated context"""
-        different_context_message = 'Different context generated'
         empty_component_output_message = 'Empty component output'
 
         # Check Minimum Needs
@@ -391,8 +416,7 @@ class TestImpactReport(unittest.TestCase):
         }
         actual_context = minimum_needs.context
 
-        self.assertDictEqual(
-            expected_context, actual_context, different_context_message)
+        self.assertDictEqual(expected_context, actual_context)
         self.assertTrue(
             minimum_needs.output, empty_component_output_message)
 
@@ -411,6 +435,8 @@ class TestImpactReport(unittest.TestCase):
     @unittest.expectedFailure
     def test_aggregate_post_processors_vector(self):
         """Test generate aggregate postprocessors sections."""
+
+        # TODO: Should add with and without aggregation layer test
 
         output_folder = self.fixtures_dir(
             '../output/aggregate_post_processors')
@@ -444,7 +470,6 @@ class TestImpactReport(unittest.TestCase):
         impact_report.process_component()
 
         """Checking generated context"""
-        different_context_message = 'Different context generated'
         empty_component_output_message = 'Empty component output'
 
         # Check aggregation-postprocessors
@@ -517,8 +542,7 @@ class TestImpactReport(unittest.TestCase):
         }
         actual_context = aggregation_postprocessors.context
 
-        self.assertDictEqual(
-            expected_context, actual_context, different_context_message)
+        self.assertDictEqual(expected_context, actual_context)
         self.assertTrue(
             aggregation_postprocessors.output, empty_component_output_message)
 
@@ -537,6 +561,8 @@ class TestImpactReport(unittest.TestCase):
     @unittest.expectedFailure
     def test_aggregate_post_processors_raster(self):
         """Test generate aggregate postprocessors sections."""
+
+        # TODO: Should add with and without aggregation layer test
 
         output_folder = self.fixtures_dir(
             '../output/aggregate_post_processors')
@@ -567,7 +593,6 @@ class TestImpactReport(unittest.TestCase):
         impact_report.process_component()
 
         """Checking generated context"""
-        different_context_message = 'Different context generated'
         empty_component_output_message = 'Empty component output'
 
         # Check aggregation-postprocessors
@@ -638,7 +663,7 @@ class TestImpactReport(unittest.TestCase):
         actual_context = aggregation_postprocessors.context
 
         self.assertDictEqual(
-            expected_context, actual_context, different_context_message)
+            expected_context, actual_context)
         self.assertTrue(
             aggregation_postprocessors.output, empty_component_output_message)
 
