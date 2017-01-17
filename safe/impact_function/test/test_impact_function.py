@@ -39,10 +39,7 @@ from qgis.core import (
 from osgeo import gdal
 from PyQt4.QtCore import QT_VERSION_STR
 from PyQt4.Qt import PYQT_VERSION_STR
-from safe.definitions.fields import (
-    population_count_field,
-    exposure_type_field,
-)
+from safe.definitions.fields import exposure_type_field
 from safe.definitions.post_processors import (
     post_processor_gender,
     post_processor_youth,
