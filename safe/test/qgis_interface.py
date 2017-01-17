@@ -34,7 +34,7 @@ from qgis.gui import (
     QgsMapCanvasLayer,
     QgsMessageBar)
 from PyQt4.QtCore import QObject, pyqtSlot, pyqtSignal
-from safe.gis.qgis_legend_interface import QgisLegend
+from safe.test.qgis_legend_interface import QgisLegend
 from qgis.gui import QgsLayerTreeMapCanvasBridge
 
 LOGGER = logging.getLogger('InaSAFE')
