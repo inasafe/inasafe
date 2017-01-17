@@ -174,7 +174,7 @@ class StepKwThreshold(WizardStep, FORM_CLASS):
             min_value_input.setSingleStep(0.1)
 
             # Max label
-            max_label = QLabel(tr('Max'))
+            max_label = QLabel(tr('Max <='))
 
             # Max value as double spin
             max_value_input = QDoubleSpinBox()
