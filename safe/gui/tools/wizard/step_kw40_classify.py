@@ -52,7 +52,7 @@ class StepKwClassify(WizardStep, FORM_CLASS):
         """Find the proper step when user clicks the Next button.
 
         :returns: The step to be switched to
-        :rtype: WizardStep instance or None
+        :rtype: WizardStep
         """
         if self.parent.get_layer_geometry_key() == \
                 layer_geometry_raster['key']:
