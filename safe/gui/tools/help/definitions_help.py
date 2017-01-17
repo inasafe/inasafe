@@ -11,6 +11,7 @@ from safe.gui.tools.help.dock_help import content as dock_help
 from safe.gui.tools.help.extent_selector_help import content as extent_help
 from safe.gui.tools.help.impact_report_help import content as report_help
 from safe.gui.tools.help.needs_calculator_help import content as needs_help
+from safe.gui.tools.help.batch_help import content as batch_help
 from safe.gui.tools.help.needs_manager_help import content as \
     needs_manager_help
 from safe.gui.tools.help.options_help import content as options_help
@@ -123,24 +124,13 @@ def content():
     message.add(header)
     message.add(extent_help())
 
-    _create_section_header(
-        message,
-        table_of_contents,
-        'inasafe-options',
-        tr('InaSAFE Options'))
+    header = m.Heading(tr('InaSAFE Options'), **SUBSECTION_STYLE)
+    message.add(header)
     message.add(options_help())
 
-    _create_section_header(
-        message,
-        table_of_contents,
-        'minimum-needs',
-        tr('Minimum Needs'))
-    header = m.Heading(tr('The minimum needs tool'), **SUBSECTION_STYLE)
+    header = m.Heading(tr('The Batch Runner'), **SUBSECTION_STYLE)
     message.add(header)
-    message.add(needs_help())
-    header = m.Heading(tr('The minimum needs manager'), **SUBSECTION_STYLE)
-    message.add(header)
-    message.add(needs_manager_help())
+    message.add(batch_help())
 
     header = m.Heading(tr('The OpenStreetMap Downloader'), **SUBSECTION_STYLE)
     message.add(header)
@@ -153,6 +143,20 @@ def content():
     header = m.Heading(tr('The Shakemap Converter'), **SUBSECTION_STYLE)
     message.add(header)
     message.add(shakemap_help())
+
+    # Keep this last in the tool section please as it has subsections
+    # and so uses the top level section style
+    _create_section_header(
+        message,
+        table_of_contents,
+        'minimum-needs',
+        tr('Minimum Needs'))
+    header = m.Heading(tr('The minimum needs tool'), **SUBSECTION_STYLE)
+    message.add(header)
+    message.add(needs_help())
+    header = m.Heading(tr('The minimum needs manager'), **SUBSECTION_STYLE)
+    message.add(header)
+    message.add(needs_manager_help())
 
     ##
     #  Analysis workflow
