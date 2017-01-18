@@ -10,6 +10,7 @@ import logging
 from qgis.core import (
     QGis,
     QgsFeatureRequest,
+    QgsGeometry,
     QgsWKBTypes,
 )
 
@@ -77,6 +78,11 @@ def assign_highest_value(exposure, hazard, callback=None):
 
     spatial_index = create_spatial_index(exposure)
 
+    # cache features from exposure layer for faster retrieval
+    exposure_features = {}
+    for f in exposure.getFeatures():
+        exposure_features[f.id()] = f
+
     # Todo callback
     # total = 100.0 / len(selectionA)
 
@@ -101,13 +107,17 @@ def assign_highest_value(exposure, hazard, callback=None):
             geometry = area.geometry()
             intersects = spatial_index.intersects(geometry.boundingBox())
 
+            # use prepared geometry: makes multiple intersection tests faster
+            geometry_prepared = QgsGeometry.createGeometryEngine(
+                geometry.geometry())
+            geometry_prepared.prepareGeometry()
+
             # We need to loop over each intersections exposure / hazard.
             for i in intersects:
-                request = QgsFeatureRequest().setFilterFid(i)
-                building = next(exposure.getFeatures(request))
+                building = exposure_features[i]
                 building_geometry = building.geometry()
 
-                if geometry.intersects(building_geometry):
+                if geometry_prepared.intersects(building_geometry.geometry()):
                     update_map[building.id()] = {}
                     for index, value in zip(indices, area.attributes()):
                         update_map[building.id()][index] = value

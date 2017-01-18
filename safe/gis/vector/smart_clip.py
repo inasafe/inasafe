@@ -70,7 +70,9 @@ def smart_clip(layer_to_clip, mask_layer, callback=None):
     engine = QgsGeometry.createGeometryEngine(geometries.geometry())
     engine.prepareGeometry()
 
-    for feature in layer_to_clip.getFeatures():
+    extent = mask_layer.extent()
+
+    for feature in layer_to_clip.getFeatures(QgsFeatureRequest(extent)):
 
         if engine.intersects(feature.geometry().geometry()):
             out_feat = QgsFeature()
