@@ -1178,11 +1178,9 @@ class ImpactFunction(object):
         """Perform a damage curve analysis with EQ raster on population raster.
         """
         self.set_state_process(
-            'hazard',
-            'Align the hazard layer with the exposure')
+            'hazard', 'Align the hazard layer with the exposure')
         self.set_state_process(
-            'exposure',
-            'Align the exposure layer with the exposure')
+            'exposure', 'Align the exposure layer with the exposure')
         self.hazard, self.exposure = align_rasters(
             self.hazard, self.exposure, self.analysis_impacted.extent())
         if self.debug_mode:
