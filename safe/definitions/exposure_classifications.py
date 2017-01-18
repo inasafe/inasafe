@@ -573,7 +573,7 @@ generic_landcover_classes = {
         },
         {
             'key': 'industrial',
-            'name': tr('industrial'),
+            'name': tr('Industrial'),
             'description': tr(
                 'Predominantly workshops, factories or warehouses.'),
             'string_defaults': ['industrial'],
