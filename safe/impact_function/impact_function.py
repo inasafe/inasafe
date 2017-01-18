@@ -1276,14 +1276,18 @@ class ImpactFunction(object):
 
         if is_raster_layer(self.hazard):
 
-            if use_same_projection:
-                self.set_state_process(
-                    'hazard', 'Clip raster by analysis bounding box')
-                # noinspection PyTypeChecker
-                self.hazard = clip_by_extent(
-                    self.hazard, self._analysis_impacted.extent())
-                if self.debug_mode:
-                    self.debug_layer(self.hazard)
+            extent = self.analysis_impacted.extent()
+            if not use_same_projection:
+                transform = QgsCoordinateTransform(
+                    self.analysis_impacted.crs(), self.hazard.crs())
+                extent = transform.transform(self.analysis_impacted.extent())
+
+            self.set_state_process(
+                'hazard', 'Clip raster by analysis bounding box')
+            # noinspection PyTypeChecker
+            self.hazard = clip_by_extent(self.hazard, extent)
+            if self.debug_mode:
+                self.debug_layer(self.hazard)
 
             if self.hazard.keywords.get('layer_mode') == 'continuous':
                 self.set_state_process(
