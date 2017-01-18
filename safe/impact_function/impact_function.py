@@ -105,6 +105,7 @@ from safe.impact_function.style import (
     hazard_class_style,
     simple_polygon_without_brush,
 )
+from safe.utilities.gis import is_vector_layer, is_raster_layer
 from safe.utilities.i18n import tr
 from safe.utilities.keyword_io import KeywordIO
 from safe.utilities.utilities import (
@@ -1061,9 +1062,9 @@ class ImpactFunction(object):
 
         # Special case for Raster Earthquake hazard on Raster population.
         damage_curve = False
-        if self.hazard.type() == QgsMapLayer.RasterLayer:
+        if is_raster_layer(self.hazard):
             if self.hazard.keywords.get('hazard') == 'earthquake':
-                if self.exposure.type() == QgsMapLayer.RasterLayer:
+                if is_raster_layer(self.exposure):
                     if self.exposure.keywords.get('exposure') == 'population':
                         damage_curve = True
 
@@ -1074,16 +1075,11 @@ class ImpactFunction(object):
 
         self._performance_log = profiling_log()
         self.callback(7, step_count, analysis_steps['post_processing'])
-        if self._exposure_impacted:
-            is_vector = (
-                self._exposure_impacted.type() == QgsMapLayer.VectorLayer)
-            # The exposure impacted might be a raster if it's an EQ if.
-            if is_vector:
-                self._performance_log = profiling_log()
-                # We post process the exposure impacted
-                self.post_process(self._exposure_impacted)
+        if is_vector_layer(self._exposure_impacted):
+            # We post process the exposure impacted
+            self.post_process(self._exposure_impacted)
         else:
-            if self._aggregate_hazard_impacted:
+            if is_vector_layer(self._aggregate_hazard_impacted):
                 # We post process the aggregate hazard.
                 # Raster continuous exposure.
                 self.post_process(self._aggregate_hazard_impacted)
@@ -1098,19 +1094,22 @@ class ImpactFunction(object):
 
         # End of the impact function, we can add layers to the datastore.
         # We replace memory layers by the real layer from the datastore.
+
+        # Exposure impacted
         if self._exposure_impacted:
             self._exposure_impacted.keywords[
                 'provenance_data'] = self.provenance
             _, name = self.datastore.add_layer(
                 self._exposure_impacted, 'exposure_impacted')
             self._exposure_impacted = self.datastore.layer(name)
-            is_vector = (
-                self._exposure_impacted.type() == QgsMapLayer.VectorLayer)
-            if self.debug_mode and is_vector:
+            if self.debug_mode and is_vector_layer(self._exposure_impacted):
                 # The exposure impacted might be a raster if it's an EQ if.
                 check_inasafe_fields(self._exposure_impacted)
 
+        # Aggregate hazard impacted
         if self.aggregate_hazard_impacted:
+            self.aggregate_hazard_impacted.keywords[
+                'provenance_data'] = self.provenance
             _, name = self.datastore.add_layer(
                 self._aggregate_hazard_impacted,
                 layer_purpose_aggregate_hazard_impacted['key'])
@@ -1118,14 +1117,19 @@ class ImpactFunction(object):
             if self.debug_mode:
                 check_inasafe_fields(self._aggregate_hazard_impacted)
 
-            if self._exposure.keywords.get('classification'):
-                _, name = self.datastore.add_layer(
-                    self._exposure_breakdown,
-                    layer_purpose_exposure_breakdown['key'])
-                self._exposure_breakdown = self.datastore.layer(name)
-                if self.debug_mode:
-                    check_inasafe_fields(self._exposure_breakdown)
+        # Exposure breakdown
+        if self._exposure.keywords.get('classification'):
+            self._exposure_breakdown.keywords[
+                'provenance_data'] = self.provenance
+            _, name = self.datastore.add_layer(
+                self._exposure_breakdown,
+                layer_purpose_exposure_breakdown['key'])
+            self._exposure_breakdown = self.datastore.layer(name)
+            if self.debug_mode:
+                check_inasafe_fields(self._exposure_breakdown)
 
+        # Aggregation impacted
+        self.aggregation_impacted.keywords['provenance_data'] = self.provenance
         _, name = self.datastore.add_layer(
             self._aggregation_impacted,
             layer_purpose_aggregation_impacted['key'])
@@ -1133,6 +1137,8 @@ class ImpactFunction(object):
         if self.debug_mode:
             check_inasafe_fields(self._aggregation_impacted)
 
+        # Analysis impacted
+        self.analysis_impacted.keywords['provenance_data'] = self.provenance
         _, name = self.datastore.add_layer(
             self._analysis_impacted, layer_purpose_analysis_impacted['key'])
         self._analysis_impacted = self.datastore.layer(name)
@@ -1268,7 +1274,7 @@ class ImpactFunction(object):
         self.set_state_info(
             'hazard', 'use_same_projection', use_same_projection)
 
-        if self.hazard.type() == QgsMapLayer.RasterLayer:
+        if is_raster_layer(self.hazard):
 
             if use_same_projection:
                 self.set_state_process(
@@ -1355,7 +1361,7 @@ class ImpactFunction(object):
     @profile
     def exposure_preparation(self):
         """This function is doing the exposure preparation."""
-        if self.exposure.type() == QgsMapLayer.RasterLayer:
+        if is_raster_layer(self.exposure):
             if self.exposure.keywords.get('layer_mode') == 'continuous':
                 if self.exposure.keywords.get('exposure_unit') == 'density':
                     self.set_state_process(
@@ -1419,7 +1425,7 @@ class ImpactFunction(object):
             will set the aggregate hazard layer.
         However, this function will set the impact layer.
         """
-        if self.exposure.type() == QgsMapLayer.RasterLayer:
+        if is_raster_layer(self.exposure):
             self.set_state_process(
                 'impact function',
                 'Zonal stats between exposure and aggregate hazard')
@@ -1512,16 +1518,13 @@ class ImpactFunction(object):
     @profile
     def summary_calculation(self):
         """Do the summary calculation."""
-        if self._exposure_impacted:
+        if is_vector_layer(self._exposure_impacted):
             # The exposure impacted might be a raster if it's an EQ if.
-            is_vector = (
-                self._exposure_impacted.type() == QgsMapLayer.VectorLayer)
-            if is_vector:
-                self.set_state_process(
-                    'impact function',
-                    'Aggregate the impact summary')
-                self._aggregate_hazard_impacted = aggregate_hazard_summary(
-                    self.exposure_impacted, self._aggregate_hazard_impacted)
+            self.set_state_process(
+                'impact function',
+                'Aggregate the impact summary')
+            self._aggregate_hazard_impacted = aggregate_hazard_summary(
+                self.exposure_impacted, self._aggregate_hazard_impacted)
 
         if self._aggregate_hazard_impacted:
             self.set_state_process(
@@ -1563,7 +1566,7 @@ class ImpactFunction(object):
         # Let's style layers which have a geometry and have hazard_class
         hazard_class = hazard_class_field['key']
         for layer in self.outputs:
-            if layer.type() == QgsMapLayer.VectorLayer:
+            if is_vector_layer(layer):
                 if layer.geometryType() != QGis.NoGeometry:
                     if layer.keywords['inasafe_fields'].get(hazard_class):
                         hazard_class_style(layer, classes, self.debug_mode)
