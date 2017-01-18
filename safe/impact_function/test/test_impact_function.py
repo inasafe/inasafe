@@ -397,7 +397,7 @@ class TestImpactFunction(unittest.TestCase):
 
         json_files = [
             join(path, f) for f in listdir(path)
-            if isfile(join(path, f)) and f.endswith('json')
+            if isfile(join(path, f)) and f.endswith('.json')
         ]
 
         count = 0

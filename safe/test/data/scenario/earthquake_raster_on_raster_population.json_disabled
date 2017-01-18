@@ -31,9 +31,9 @@
       },
       "process":[
         "Cleaning the aggregation layer",
+        "Add default values",
         "Reproject aggregation layer to exposure CRS",
-        "Convert the aggregation layer to the analysis layer",
-        "Union hazard polygons with aggregation areas and assign hazard class"
+        "Convert the aggregation layer to the analysis layer"
       ]
     },
     "hazard":{
