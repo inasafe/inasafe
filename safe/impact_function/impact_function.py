@@ -939,8 +939,7 @@ class ImpactFunction(object):
         except NoFeaturesInExtentError:
             warning_heading = m.Heading(
                 tr('No features in the extent'), **WARNING_STYLE)
-            warning_message = tr(
-                'There is not feature in the extent.')
+            warning_message = tr('There is no feature in the extent.')
             suggestion_heading = m.Heading(
                 tr('Suggestion'), **SUGGESTION_STYLE)
             suggestion = tr(
