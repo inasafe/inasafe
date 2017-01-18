@@ -143,7 +143,7 @@ def run_scenario(scenario, use_debug=False):
         return status, message, None
 
     for layer in impact_function.outputs:
-        if layer.type() == QgsMapLayer.RasterLayer:
+        if layer.type() == QgsMapLayer.VectorLayer:
             check_inasafe_fields(layer)
 
     return status, impact_function.state, impact_function.outputs

@@ -2,6 +2,7 @@
 
 import numpy
 from osgeo import gdal
+from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -50,6 +51,7 @@ def array_to_raster_raw(
     return dataset
 
 
+@profile
 def array_to_raster(array, destination_filename, other_layer):
     """Save a raster TIF file from a numpy array.
 
@@ -64,7 +66,6 @@ def array_to_raster(array, destination_filename, other_layer):
     :param other_layer: The other layer.
     :type other_layer: QgsRasterLayer
     """
-
     provider = other_layer.dataProvider()
     assert provider.xSize() == array.shape[1]
     assert provider.ySize() == array.shape[0]

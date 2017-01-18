@@ -28,6 +28,7 @@ from safe.gis.vector.tools import create_field_from_definition
 from safe.utilities.numerics import log_normal_cdf
 from safe.gis.raster.write_raster import array_to_raster, make_array
 from safe.common.utilities import unique_filename
+from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -170,6 +171,7 @@ def bayesian_fatality_rates():
     return fatality_rate
 
 
+@profile
 def exposed_people_stats(hazard, exposure, aggregation):
     """Calculate the number of exposed people per MMI level per aggregation.
 
@@ -239,6 +241,7 @@ def exposed_people_stats(hazard, exposure, aggregation):
     return exposed, exposed_raster
 
 
+@profile
 def make_summary_layer(exposed, aggregation, fatality_rate):
     """Add fields to the aggregation given the dictionary of affected people.
 

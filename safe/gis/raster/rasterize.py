@@ -10,6 +10,7 @@ from safe.datastore.folder import Folder
 from safe.definitions.fields import aggregation_id_field
 from safe.definitions.processing_steps import rasterize_steps
 from safe.definitions.layer_purposes import layer_purpose_aggregation_impacted
+from safe.utilities.profiling import profile
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -17,6 +18,7 @@ __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
 
+@profile
 def rasterize_vector_layer(layer, width, height, extent):
     """Rasterize a vector layer to the grid given by extent and width/height.
 
