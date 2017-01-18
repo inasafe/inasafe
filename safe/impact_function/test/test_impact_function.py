@@ -34,6 +34,7 @@ QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 from qgis.core import (
     QgsVectorLayer,
     QgsRasterLayer,
+    QgsMapLayer,
     QgsCoordinateReferenceSystem,
     QGis)
 from osgeo import gdal
@@ -142,7 +143,8 @@ def run_scenario(scenario, use_debug=False):
         return status, message, None
 
     for layer in impact_function.outputs:
-        check_inasafe_fields(layer)
+        if layer.type() == QgsMapLayer.RasterLayer:
+            check_inasafe_fields(layer)
 
     return status, impact_function.state, impact_function.outputs
 
