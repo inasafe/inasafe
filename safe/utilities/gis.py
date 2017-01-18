@@ -19,21 +19,6 @@ from qgis.core import (
 from safe.utilities.utilities import LOGGER
 
 
-def is_raster_layer(layer):
-    """Check if a QGIS layer is raster.
-
-    :param layer: A layer.
-    :type layer: QgsRaster, QgsMapLayer, QgsVectorLayer
-
-    :returns: True if the layer contains polygons, otherwise False.
-    :rtype: bool
-    """
-    try:
-        return layer.type() == QgsMapLayer.RasterLayer
-    except AttributeError:
-        return False
-
-
 def extent_string_to_array(extent_text):
     """Convert an extent string to an array.
 
@@ -183,6 +168,36 @@ def validate_geo_array(extent):
         return False
 
     return True
+
+
+def is_raster_layer(layer):
+    """Check if an object is QGIS raster layer.
+
+    :param layer: A layer.
+    :type layer: QgsRaster, QgsMapLayer, QgsVectorLayer
+
+    :returns: True if the layer contains polygons, otherwise False.
+    :rtype: bool
+    """
+    try:
+        return layer.type() == QgsMapLayer.RasterLayer
+    except AttributeError:
+        return False
+
+
+def is_vector_layer(layer):
+    """Check if an object is QGIS vector layer.
+
+    :param layer: A vector layer.
+    :type layer: QgsVectorLayer, QgsMapLayer
+
+    :returns: True if the layer is vector layer, otherwise False.
+    :rtype: bool
+    """
+    try:
+        return layer.type() == QgsMapLayer.VectorLayer
+    except AttributeError:
+        return False
 
 
 def is_point_layer(layer):
