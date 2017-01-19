@@ -14,17 +14,26 @@ __copyright__ = 'Copyright 2013, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import logging
-from qgis.core import QgsMapLayerRegistry, QgsVectorLayer
-from PyQt4 import QtGui, QtCore
+from qgis.core import QgsMapLayerRegistry
+from qgis.gui import (
+    QgsFieldComboBox,
+    QgsMapLayerComboBox,
+    QgsMapLayerProxyModel,
+    QgsFieldProxyModel)
+from PyQt4 import QtGui
 
 from PyQt4.QtCore import pyqtSignature, pyqtSlot
 
 from safe.common.version import get_version
-from safe.utilities.gis import is_point_layer, is_polygon_layer
 from safe.utilities.resources import html_footer, html_header, get_ui_class
-from safe.utilities.utilities import add_ordered_combo_item
 from safe.messaging import styles
 from safe.gui.tools.help.needs_calculator_help import needs_calculator_help
+from safe.impact_function.postprocessors import run_single_post_processor
+from safe.definitions.post_processors import minimum_needs_post_processors
+from safe.gis.vector.tools import (
+    create_memory_layer, copy_layer)
+from safe.gis.vector.prepare_vector_layer import (
+    _rename_remove_inasafe_fields)
 
 INFO_STYLE = styles.INFO_STYLE
 LOGGER = logging.getLogger('InaSAFE')
@@ -45,7 +54,37 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         self.setupUi(self)
         self.setWindowTitle(self.tr(
             'InaSAFE %s Minimum Needs Calculator' % get_version()))
-        self.polygon_layers_to_combo()
+
+        # get qgis map layer combobox object
+        self.layer = QgsMapLayerComboBox()
+        self.layer.setFilters(QgsMapLayerProxyModel.VectorLayer)
+
+        # get field that represent displaced count(population)
+        self.displaced = QgsFieldComboBox()
+        self.displaced.setFilters(QgsFieldProxyModel.Numeric)
+
+        # get field that represent aggregation name
+        self.aggregation_name = QgsFieldComboBox()
+        self.aggregation_name.setFilters(QgsFieldProxyModel.String)
+
+        # get field that represent aggregation id
+        self.aggregation_id = QgsFieldComboBox()
+
+        # add Qgis combo box to window
+        self.gridLayout_2.addWidget(self.layer, 0, 1)
+        self.gridLayout_2.addWidget(self.displaced, 1, 1)
+        self.gridLayout_2.addWidget(self.aggregation_name, 2, 1)
+        self.gridLayout_2.addWidget(self.aggregation_id, 3, 1)
+
+        # set field to the current selected layer
+        self.displaced.setLayer(self.layer.currentLayer())
+        self.aggregation_name.setLayer(self.layer.currentLayer())
+        self.aggregation_id.setLayer(self.layer.currentLayer())
+
+        # link map layer and field combobox
+        self.layer.layerChanged.connect(self.displaced.setLayer)
+        self.layer.layerChanged.connect(self.aggregation_name.setLayer)
+        self.layer.layerChanged.connect(self.aggregation_id.setLayer)
 
         # Set up things for context help
         self.help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
@@ -61,117 +100,19 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         ok_button = self.button_box.button(QtGui.QDialogButtonBox.Ok)
         ok_button.clicked.connect(self.accept)
 
-    def minimum_needs(self, input_layer, population_name):
+    def minimum_needs(self, input_layer):
         """Compute minimum needs given a layer and a column containing pop.
 
-        :param input_layer: InaSAFE layer object assumed to contain
+        :param input_layer: Vector layer assumed to contain
             population counts
-        :type input_layer: read_layer
-
-        :param population_name: Attribute name that holds population count
-        :type population_name: str
+        :type input_layer: QgsVectorLayer
 
         :returns: Layer with attributes for minimum needs as per Perka 7
         :rtype: read_layer
         """
-
-        all_attributes = []
-        for attributes in input_layer.get_data():
-            # Get population count
-            population = attributes[population_name]
-            # Clean up and turn into integer
-            if population in ['-', None]:
-                displaced = 0
-            else:
-                if isinstance(population, basestring):
-                    population = str(population).replace(',', '')
-
-                try:
-                    displaced = int(population)
-                except ValueError:
-                    # noinspection PyTypeChecker,PyArgumentList
-                    QtGui.QMessageBox.information(
-                        None,
-                        self.tr('Format error'),
-                        self.tr(
-                            'Please change the value of %1 in attribute '
-                            '%s to integer format') % (
-                                population, population_name))
-                    raise ValueError
-
-            # Calculate estimated needs based on BNPB Perka 7/2008
-            # minimum needs
-            # weekly_needs = {
-            #     'rice': int(ceil(population * min_rice)),
-            #     'drinking_water': int(ceil(population * min_drinking_water)),
-            #     'water': int(ceil(population * min_water)),
-            #     'family_kits': int(ceil(population * min_family_kits)),
-            #     'toilets': int(ceil(population * min_toilets))}
-
-            # Add to attributes
-            # Fixme, we need to update to use it InaSAFE4
-            # weekly_needs = evacuated_population_weekly_needs(displaced)
-            weekly_needs = []
-
-            # Record attributes for this feature
-            all_attributes.append(weekly_needs)
-
-        return output_layer
-
-    def polygon_layers_to_combo(self):
-        """Populate the combo with all polygon layers loaded in QGIS."""
-
-        # noinspection PyArgumentList
-        registry = QgsMapLayerRegistry.instance()
-        layers = registry.mapLayers().values()
-        found_flag = False
-        for layer in layers:
-            name = layer.name()
-            source = layer.id()
-            # check if layer is a vector polygon layer
-            if is_polygon_layer(layer) or is_point_layer(layer):
-                found_flag = True
-                add_ordered_combo_item(self.cboPolygonLayers, name, source)
-        # Now disable the run button if no suitable layers were found
-        # see #2206
-        ok_button = self.button_box.button(QtGui.QDialogButtonBox.Ok)
-        if found_flag:
-            self.cboPolygonLayers.setCurrentIndex(0)
-            ok_button.setEnabled(True)
-        else:
-            ok_button.setEnabled(False)
-
-    # prevents actions being handled twice
-    # noinspection PyPep8Naming
-    @pyqtSignature('int')
-    def on_cboPolygonLayers_currentIndexChanged(self, index):
-        """Automatic slot executed when the layer is changed to update fields.
-
-        :param index: Passed by the signal that triggers this slot.
-        :type index: int
-        """
-        layer_id = self.cboPolygonLayers.itemData(
-            index, QtCore.Qt.UserRole)
-        # noinspection PyArgumentList
-        layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
-        fields = layer.pendingFields()
-        self.cboFields.clear()
-        has_fields = False
-        for field in fields:
-            # LOGGER.info(field.typeName())
-            # TODO exclude dates too? TS
-            if field.typeName() != 'String':
-                has_fields = True
-                add_ordered_combo_item(
-                    self.cboFields, field.name(), field.name())
-
-        # Now disable the run button if no suitable fields were found
-        # see #2206
-        ok_button = self.button_box.button(QtGui.QDialogButtonBox.Ok)
-        if not has_fields:
-            ok_button.setEnabled(False)
-        else:
-            ok_button.setEnabled(True)
+        # count each minimum needs for every features
+        for needs in minimum_needs_post_processors:
+            run_single_post_processor(input_layer, needs)
 
     def accept(self):
         """Process the layer and field and generate a new layer.
@@ -179,30 +120,37 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         .. note:: This is called on OK click.
 
         """
-        index = self.cboFields.currentIndex()
-        field_name = self.cboFields.itemData(
-            index, QtCore.Qt.UserRole)
+        # create memory layer
+        output_layer = (
+            '%s_minimum_needs' % self.layer.currentLayer().name())
+        output_layer = create_memory_layer(
+            output_layer,
+            self.layer.currentLayer().geometryType(),
+            self.layer.currentLayer().crs(),
+            self.layer.currentLayer().fields())
 
-        index = self.cboPolygonLayers.currentIndex()
-        layer_id = self.cboPolygonLayers.itemData(
-            index, QtCore.Qt.UserRole)
-        # noinspection PyArgumentList
-        layer = QgsMapLayerRegistry.instance().mapLayer(layer_id)
+        # monkey patching input layer to make it work with
+        # prepare vector layer function
+        temp_layer = self.layer.currentLayer()
+        temp_layer.keywords = {'layer_purpose': 'aggregation'}
 
-        file_name = layer.source()
+        # add keywords to output layer
+        copy_layer(temp_layer, output_layer)
+        output_layer.keywords['layer_purpose'] = 'aggregation'
+        output_layer.keywords['inasafe_fields'] = (
+            {'displaced_field': self.displaced.currentField(),
+             'aggregation_name_field': self.aggregation_name.currentField()})
+
+        # remove unnecessary fields & rename inasafe fields
+        _rename_remove_inasafe_fields(output_layer)
 
         try:
-            output_layer = self.minimum_needs(input_layer, field_name)
-        except ValueError:
+            self.minimum_needs(output_layer)
+        except:
             return
 
-        new_file = file_name[:-4] + '_perka7' + '.shp'
-
-        output_layer.write_to_file(new_file)
-
-        new_layer = QgsVectorLayer(new_file, 'Minimum Needs', 'ogr')
         # noinspection PyArgumentList
-        QgsMapLayerRegistry.instance().addMapLayers([new_layer])
+        QgsMapLayerRegistry.instance().addMapLayers([output_layer])
         self.done(QtGui.QDialog.Accepted)
 
     @pyqtSlot()
