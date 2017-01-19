@@ -345,7 +345,7 @@ exposure_all = [
     exposure_land_cover,
     exposure_population,
     exposure_road,
-    # exposure_place,  # Disable per #3600
+    exposure_place,
     exposure_structure
 ]
 exposures = {
