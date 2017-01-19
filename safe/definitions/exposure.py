@@ -146,7 +146,8 @@ exposure_population = {
         adult_count_field,
         elderly_count_field
     ],
-    'layer_modes': [layer_mode_continuous]
+    'layer_modes': [layer_mode_continuous],
+    'layer_legend_title': tr('Number of people'),
 }
 
 exposure_road = {
@@ -197,7 +198,8 @@ exposure_road = {
         feature_value_field,
         feature_rate_field
     ],
-    'layer_modes': [layer_mode_classified]
+    'layer_modes': [layer_mode_classified],
+    'layer_legend_title': tr('Length of roads'),
 }
 exposure_structure = {
     'key': 'structure',
@@ -246,7 +248,8 @@ exposure_structure = {
         feature_value_field,
         feature_rate_field
     ],
-    'layer_modes': [layer_mode_classified]
+    'layer_modes': [layer_mode_classified],
+    'layer_legend_title': tr('Number of buildings'),
 }
 exposure_place = {
     'key': 'place',
@@ -282,7 +285,8 @@ exposure_place = {
     'extra_fields': [
         exposure_name_field
     ],
-    'layer_modes': [layer_mode_classified]
+    'layer_modes': [layer_mode_classified],
+    'layer_legend_title': tr('Number of places'),
 }
 exposure_land_cover = {
     'key': 'land_cover',
@@ -334,7 +338,8 @@ exposure_land_cover = {
         feature_value_field,
         feature_rate_field
     ],
-    'layer_modes': [layer_mode_classified]
+    'layer_modes': [layer_mode_classified],
+    'layer_legend_title': tr('Area of landcover'),
 }
 
 indivisible_exposure = [

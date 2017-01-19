@@ -49,26 +49,3 @@ def get_map_title(hazard, exposure, hazard_category):
                     exposure_name=exposure['name'],
                     hazard_name=hazard['name']))
     return map_title
-
-
-def get_map_legend_title(exposure):
-    """helper to get map legend title.
-
-    :param exposure: An exposure definition.
-    :type exposure: dict
-
-    :returns: Map legend title based on the input.
-    :rtype: str
-    """
-    if exposure in [exposure_population, exposure_structure, exposure_place]:
-        return tr('Number of {exposure_name}').format(
-            exposure_name=exposure['name'])
-    if exposure == exposure_road:
-        return tr('Length of {exposure_name}').format(
-            exposure_name=exposure['name'])
-    if exposure == exposure_land_cover:
-        return tr('Area of {exposure_name}').format(
-            exposure_name=exposure['name'])
-
-    return tr('Number of {exposure_name}').format(
-        exposure_name=exposure['name'])

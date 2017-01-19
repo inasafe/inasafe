@@ -15,6 +15,7 @@ from safe.definitions.colors import no_hazard
 from safe.definitions.fields import hazard_class_field
 from safe.definitions.hazard_classifications import (
     null_hazard_value, null_hazard_legend)
+from safe.definitions.utilities import definition
 
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -24,7 +25,7 @@ __revision__ = '$Format:%H$'
 
 
 def hazard_class_style(layer, classification, display_null=False):
-    """Style for hazard class according to the standards.
+    """Set colors to the layer according to the hazard.
 
     :param layer: The layer to style.
     :type layer: QgsVectorLayer
@@ -63,6 +64,19 @@ def hazard_class_style(layer, classification, display_null=False):
     renderer = QgsCategorizedSymbolRendererV2(
         hazard_class_field['field_name'], categories)
     layer.setRendererV2(renderer)
+
+
+def layer_title(layer):
+    """Set the layer title according to the standards.
+
+    :param layer: The layer to style.
+    :type layer: QgsVectorLayer
+    """
+    exposure_type = layer.keywords['exposure_keywords']['exposure']
+    exposure_definitions = definition(exposure_type)
+    title = exposure_definitions['layer_legend_title']
+    layer.setTitle(title)
+    layer.keywords['title'] = title
 
 
 def simple_polygon_without_brush(layer):
