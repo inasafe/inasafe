@@ -311,7 +311,7 @@ ash_hazard_classes = {
             'affected': True,
             'description': tr('High'),
             'numeric_default_min': 5,
-            'numeric_default_max': 10,
+            'numeric_default_max': 10 - small_number,
             'citations': [
                 {
                     'text': None,
@@ -327,7 +327,7 @@ ash_hazard_classes = {
             'affected': True,
             'description': tr('Medium'),
             'numeric_default_min': 2,
-            'numeric_default_max': 5,
+            'numeric_default_max': 5 - small_number,
             'citations': [
                 {
                     'text': None,
@@ -343,7 +343,7 @@ ash_hazard_classes = {
             'affected': False,
             'description': tr('Low'),
             'numeric_default_min': 0.1,
-            'numeric_default_max': 2,
+            'numeric_default_max': 2 - small_number,
             'citations': [
                 {
                     'text': None,
@@ -359,7 +359,7 @@ ash_hazard_classes = {
             'affected': False,
             'description': tr('Very Low.'),
             'numeric_default_min': 0.01,
-            'numeric_default_max': 0.1,
+            'numeric_default_max': 0.1 - small_number,
             'citations': [
                 {
                     'text': None,
@@ -420,7 +420,7 @@ tsunami_hazard_classes = {
                 'breaker, tsunami protection walls and green belts will be '
                 'washed away.'),
             'numeric_default_min': 3,
-            'numeric_default_max': 8,
+            'numeric_default_max': 8 - small_number,
             'citations': [
                 {
                     'text': None,
@@ -443,7 +443,7 @@ tsunami_hazard_classes = {
                 'ground. Small vessels drift and collide. Damage occurs to '
                 'some wooden houses, while most of them are safe.'),
             'numeric_default_min': 1,
-            'numeric_default_max': 3,
+            'numeric_default_max': 3 - small_number,
             'citations': [
                 {
                     'text': None,
@@ -468,7 +468,7 @@ tsunami_hazard_classes = {
                 'some turn over. Sand is deposited and there is flooding of '
                 'areas close to the shore.'),
             'numeric_default_min': 0.1,
-            'numeric_default_max': 1,
+            'numeric_default_max': 1 - small_number,
             'citations': [
                 {
                     'text': None,
@@ -484,7 +484,7 @@ tsunami_hazard_classes = {
             'affected': False,
             'description': tr('No water above ground height.'),
             'numeric_default_min': 0,
-            'numeric_default_max': 0.1,
+            'numeric_default_max': 0.1 - small_number,
             'citations': [
                 {
                     'text': None,
@@ -567,9 +567,9 @@ cyclone_au_bom_hazard_classes = {
                 unit_kilometres_per_hour['key']: 157
             },
             'numeric_default_max': {
-                unit_knots['key']: 107,
-                unit_miles_per_hour['key']: 123,
-                unit_kilometres_per_hour['key']: 198
+                unit_knots['key']: 107 - small_number,
+                unit_miles_per_hour['key']: 123 - small_number,
+                unit_kilometres_per_hour['key']: 198 - small_number
             },
             'citations': [
                 {
@@ -597,9 +597,9 @@ cyclone_au_bom_hazard_classes = {
                 unit_kilometres_per_hour['key']: 117
             },
             'numeric_default_max': {
-                unit_knots['key']: 85,
-                unit_miles_per_hour['key']: 98,
-                unit_kilometres_per_hour['key']: 157
+                unit_knots['key']: 85 - small_number,
+                unit_miles_per_hour['key']: 98 - small_number,
+                unit_kilometres_per_hour['key']: 157 - small_number
             },
             'citations': [
                 {
@@ -628,9 +628,9 @@ cyclone_au_bom_hazard_classes = {
                 unit_kilometres_per_hour['key']: 88
             },
             'numeric_default_max': {
-                unit_knots['key']: 63,
-                unit_miles_per_hour['key']: 72,
-                unit_kilometres_per_hour['key']: 117
+                unit_knots['key']: 63 - small_number,
+                unit_miles_per_hour['key']: 72 - small_number,
+                unit_kilometres_per_hour['key']: 117 - small_number
             },
             'citations': [
                 {
@@ -657,9 +657,9 @@ cyclone_au_bom_hazard_classes = {
                 unit_kilometres_per_hour['key']: 63
             },
             'numeric_default_max': {
-                unit_knots['key']: 47,
-                unit_miles_per_hour['key']: 54,
-                unit_kilometres_per_hour['key']: 88
+                unit_knots['key']: 47 - small_number,
+                unit_miles_per_hour['key']: 54 - small_number,
+                unit_kilometres_per_hour['key']: 88 - small_number
             },
             'citations': [
                 {
@@ -680,9 +680,9 @@ cyclone_au_bom_hazard_classes = {
                 'sustained winds of less than 34 kn.'),
             'numeric_default_min': 0,
             'numeric_default_max': {
-                unit_knots['key']: 34,
-                unit_miles_per_hour['key']: 39,
-                unit_kilometres_per_hour['key']: 63
+                unit_knots['key']: 34 - small_number,
+                unit_miles_per_hour['key']: 39 - small_number,
+                unit_kilometres_per_hour['key']: 63 - small_number
             },
             'citations': [
                 {
@@ -768,9 +768,9 @@ cyclone_sshws_hazard_classes = {
                 unit_kilometres_per_hour['key']: 208
             },
             'numeric_default_max': {
-                unit_knots['key']: 136,
-                unit_miles_per_hour['key']: 156,
-                unit_kilometres_per_hour['key']: 251
+                unit_knots['key']: 136 - small_number,
+                unit_miles_per_hour['key']: 156 - small_number,
+                unit_kilometres_per_hour['key']: 251 - small_number
             },
             'citations': [
                 {
@@ -798,9 +798,9 @@ cyclone_sshws_hazard_classes = {
                 unit_kilometres_per_hour['key']: 177
             },
             'numeric_default_max': {
-                unit_knots['key']: 112,
-                unit_miles_per_hour['key']: 129,
-                unit_kilometres_per_hour['key']: 208
+                unit_knots['key']: 112 - small_number,
+                unit_miles_per_hour['key']: 129 - small_number,
+                unit_kilometres_per_hour['key']: 208 - small_number
             },
             'citations': [
                 {
@@ -828,9 +828,9 @@ cyclone_sshws_hazard_classes = {
                 unit_kilometres_per_hour['key']: 153
             },
             'numeric_default_max': {
-                unit_knots['key']: 95,
-                unit_miles_per_hour['key']: 110,
-                unit_kilometres_per_hour['key']: 177
+                unit_knots['key']: 95 - small_number,
+                unit_miles_per_hour['key']: 110 - small_number,
+                unit_kilometres_per_hour['key']: 177 - small_number
             },
             'citations': [
                 {
@@ -858,9 +858,9 @@ cyclone_sshws_hazard_classes = {
                 unit_kilometres_per_hour['key']: 119
             },
             'numeric_default_max': {
-                unit_knots['key']: 82,
-                unit_miles_per_hour['key']: 95,
-                unit_kilometres_per_hour['key']: 153
+                unit_knots['key']: 82 - small_number,
+                unit_miles_per_hour['key']: 95 - small_number,
+                unit_kilometres_per_hour['key']: 153 - small_number
             },
             'citations': [
                 {
@@ -878,9 +878,9 @@ cyclone_sshws_hazard_classes = {
             'description': tr('Winds less than Category 1 Hurricane'),
             'numeric_default_min': 0,
             'numeric_default_max': {
-                unit_knots['key']: 64,
-                unit_miles_per_hour['key']: 74,
-                unit_kilometres_per_hour['key']: 119
+                unit_knots['key']: 64 - small_number,
+                unit_miles_per_hour['key']: 74 - small_number,
+                unit_kilometres_per_hour['key']: 119 - small_number
             },
             'citations': [
                 {
