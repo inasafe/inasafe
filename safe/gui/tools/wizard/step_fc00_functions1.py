@@ -1,5 +1,5 @@
 # coding=utf-8
-"""InaSAFE Wizard Step for Choosing Exposure and Hazard"""
+"""InaSAFE Wizard Step for Choosing Exposure and Hazard."""
 
 from copy import deepcopy
 from PyQt4 import QtCore, QtGui
@@ -16,6 +16,7 @@ from safe.gui.tools.wizard.wizard_utils import RoleHazard, RoleExposure
 from safe.definitions.layer_purposes import (
     layer_purpose_exposure, layer_purpose_hazard)
 from safe.utilities.resources import resources_path
+from safe.utilities.settings import setting
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -130,11 +131,12 @@ class StepFcFunctions1(WizardStep, FORM_CLASS):
                 % (exposure['key'] or 'notset'))))
             item.setText(exposure['name'].capitalize())
             self.tblFunctions1.setVerticalHeaderItem(i, item)
-
+        developer_mode = setting('developer_mode', False, bool)
         for hazard in hazards:
             for exposure in exposures:
                 item = QtGui.QTableWidgetItem()
-                if exposure in hazard['disabled_exposures']:
+                if (exposure in hazard['disabled_exposures'] and not
+                        developer_mode):
                     background_colour = unavailable_option_color
                     # Set it disable and un-selectable
                     item.setFlags(
