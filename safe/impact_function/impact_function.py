@@ -73,8 +73,7 @@ from safe.definitions.layer_purposes import (
     layer_purpose_exposure_breakdown,
     layer_purpose_profiling,
 )
-from safe.impact_function.provenance_utilities import (
-    get_map_title, get_map_legend_title)
+from safe.impact_function.provenance_utilities import get_map_title
 from safe.definitions.constants import (
     inasafe_keyword_version_key,
     ANALYSIS_SUCCESS,
@@ -102,6 +101,7 @@ from safe.impact_function.postprocessors import (
 from safe.impact_function.create_extra_layers import (
     create_analysis_layer, create_virtual_aggregation, create_profile_layer)
 from safe.impact_function.style import (
+    layer_title,
     hazard_class_style,
     simple_polygon_without_brush,
 )
@@ -1499,8 +1499,8 @@ class ImpactFunction(object):
         :param layer: The vector layer to use for post processing.
         :type layer: QgsVectorLayer
         """
-        # Post processor (gender, age, building type, etc)
-        # Notes, action
+        # Set the layer title
+        layer_title(layer)
 
         for post_processor in post_processors:
             valid, message = enough_input(layer, post_processor['input'])
@@ -1608,7 +1608,8 @@ class ImpactFunction(object):
         # Map title
         self._provenance['map_title'] = get_map_title(
             hazard, exposure, hazard_category)
-        self._provenance['map_legend_title'] = get_map_legend_title(exposure)
+
+        self._provenance['map_legend_title'] = exposure['layer_legend_title']
 
         if self.requested_extent:
             self._provenance['requested_extent'] = (

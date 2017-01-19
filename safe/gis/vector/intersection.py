@@ -129,6 +129,7 @@ def intersection(source, mask, callback=None):
     writer.keywords['inasafe_fields'] = dict(source.keywords['inasafe_fields'])
     writer.keywords['inasafe_fields'].update(mask.keywords['inasafe_fields'])
     writer.keywords['hazard_keywords'] = dict(mask.keywords['hazard_keywords'])
+    writer.keywords['exposure_keywords'] = dict(source.keywords)
     writer.keywords['aggregation_keywords'] = dict(
         mask.keywords['aggregation_keywords'])
 

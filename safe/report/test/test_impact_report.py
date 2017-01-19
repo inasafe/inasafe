@@ -108,7 +108,7 @@ class TestImpactReport(unittest.TestCase):
 
         expected_context = {
             'header': u'Analysis Results',
-            'title': u'Structures affected', 'summary': [
+            'title': u'Number of buildings affected', 'summary': [
                 {
                     'header_label': u'Hazard Zone',
                     'rows': [
