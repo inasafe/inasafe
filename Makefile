@@ -442,6 +442,10 @@ docker-update-translation-strings:
 	@echo "Update translation using docker"
 	@docker run -t -i -v $(DIR):/home ismailsunni/docker-translation make update-translation-strings
 
-docker-compile-translation-strings::
+docker-compile-translation-strings:
 	@echo "Update translation using docker"
 	@docker run -t -i -v $(DIR):/home ismailsunni/docker-translation make compile-translation-strings
+
+docker-test-translation:
+	@echo "Update translation using docker"
+	@docker run -t -i -v $(DIR):/home ismailsunni/docker-translation make test-translations
