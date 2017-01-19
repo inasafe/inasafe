@@ -73,7 +73,11 @@ from safe.definitions.layer_purposes import (
     layer_purpose_exposure_breakdown,
     layer_purpose_profiling,
 )
-from safe.impact_function.provenance_utilities import get_map_title
+from safe.impact_function.provenance_utilities import (
+    get_map_title,
+    get_report_question,
+    get_analysis_question
+)
 from safe.definitions.constants import (
     inasafe_keyword_version_key,
     ANALYSIS_SUCCESS,
@@ -1608,8 +1612,11 @@ class ImpactFunction(object):
         # Map title
         self._provenance['map_title'] = get_map_title(
             hazard, exposure, hazard_category)
-
         self._provenance['map_legend_title'] = exposure['layer_legend_title']
+
+        self._provenance['analysis_question'] = get_analysis_question(
+            hazard, exposure)
+        self._provenance['report_question'] = get_report_question(exposure)
 
         if self.requested_extent:
             self._provenance['requested_extent'] = (
