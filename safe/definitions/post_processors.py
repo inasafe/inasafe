@@ -8,6 +8,7 @@ from collections import OrderedDict
 
 from PyQt4.QtCore import QPyNullVariant
 
+from safe.definitions.hazard_classifications import null_hazard_value
 from safe.definitions.exposure import exposure_population
 from safe.definitions.minimum_needs import minimum_needs_fields
 from safe.utilities.i18n import tr
@@ -86,7 +87,7 @@ def post_processor_affected_function(**kwargs):
 
     :param hazard_class: The hazard class to check.
 
-    :return: If this hazard class is affected or not.
+    :return: If this hazard class is affected or not. It can be `not exposed`.
     :rtype: bool
     """
     for hazard in hazard_classes_all:
@@ -98,7 +99,7 @@ def post_processor_affected_function(**kwargs):
             affected = level['affected']
             break
     else:
-        affected = False
+        affected = null_hazard_value
 
     return affected
 
