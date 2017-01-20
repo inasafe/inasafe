@@ -1570,8 +1570,12 @@ class ImpactFunction(object):
         for layer in self.outputs:
             if is_vector_layer(layer):
                 if layer.geometryType() != QGis.NoGeometry:
+                    display_not_exposed = False
+                    if layer == self.impact or self.debug_mode:
+                        display_not_exposed = True
+
                     if layer.keywords['inasafe_fields'].get(hazard_class):
-                        hazard_class_style(layer, classes, self.debug_mode)
+                        hazard_class_style(layer, classes, display_not_exposed)
 
         # Let's style the aggregation and analysis layer.
         simple_polygon_without_brush(self.aggregation_impacted)
