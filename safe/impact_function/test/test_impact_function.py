@@ -26,8 +26,12 @@ from safe.test.utilities import (
 )
 from safe.common.version import get_version
 from safe.test.debug_helper import print_attribute_table
+
 from safe.impact_function.provenance_utilities import (
-    get_map_title, get_map_legend_title)
+    get_map_title,
+    get_analysis_question,
+    get_report_question
+)
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -421,6 +425,9 @@ class TestImpactFunction(unittest.TestCase):
         impact_layer.keywords['hazard_keywords'] = {
             'classification': 'flood_hazard_classes'
         }
+        impact_layer.keywords['exposure_keywords'] = {
+            'exposure': 'structure',
+        }
 
         impact_function = ImpactFunction()
 
@@ -460,7 +467,7 @@ class TestImpactFunction(unittest.TestCase):
             'gdal_version': gdal.__version__,
             'host_name': gethostname(),
             'map_title': get_map_title(hazard, exposure, hazard_category),
-            'map_legend_title': get_map_legend_title(exposure),
+            'map_legend_title': exposure['layer_legend_title'],
             'user': getpass.getuser(),
             'os': platform.version(),
             'pyqt_version': PYQT_VERSION_STR,
@@ -473,6 +480,8 @@ class TestImpactFunction(unittest.TestCase):
             'exposure_layer': exposure_layer.source(),
             'hazard_keywords': deepcopy(hazard_layer.keywords),
             'hazard_layer': hazard_layer.source(),
+            'analysis_question': get_analysis_question(hazard, exposure),
+            'report_question': get_report_question(exposure)
         }
 
         # Set up impact function
@@ -517,7 +526,7 @@ class TestImpactFunction(unittest.TestCase):
             'gdal_version': gdal.__version__,
             'host_name': gethostname(),
             'map_title': get_map_title(hazard, exposure, hazard_category),
-            'map_legend_title': get_map_legend_title(exposure),
+            'map_legend_title': exposure['layer_legend_title'],
             'inasafe_version': get_version(),
             'pyqt_version': PYQT_VERSION_STR,
             'qgis_version': QGis.QGIS_VERSION,
@@ -530,6 +539,8 @@ class TestImpactFunction(unittest.TestCase):
             'exposure_layer': exposure_layer.source(),
             'hazard_keywords': deepcopy(hazard_layer.keywords),
             'hazard_layer': hazard_layer.source(),
+            'analysis_question': get_analysis_question(hazard, exposure),
+            'report_question': get_report_question(exposure)
         }
 
         # Set up impact function

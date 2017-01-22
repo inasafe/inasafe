@@ -231,8 +231,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.keyword_steps = []
 
     def set_mode_label_to_keywords_creation(self):
-        """Set the mode label to the Keywords Creation/Update mode
-        """
+        """Set the mode label to the Keywords Creation/Update mode."""
         self.setWindowTitle(self.keyword_creation_wizard_name)
         if self.get_existing_keyword('layer_purpose'):
             mode_name = (self.tr(
@@ -245,14 +244,14 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.lblSubtitle.setText(mode_name)
 
     def set_mode_label_to_ifcw(self):
-        """Set the mode label to the IFCW
-        """
+        """Set the mode label to the IFCW."""
         self.setWindowTitle(self.ifcw_name)
         self.lblSubtitle.setText(self.tr(
             'Use this wizard to run a guided impact assessment'))
 
     def set_keywords_creation_mode(self, layer=None):
-        """Set the Wizard to the Keywords Creation mode
+        """Set the Wizard to the Keywords Creation mode.
+
         :param layer: Layer to set the keywords for
         :type layer: QgsMapLayer
         """
@@ -279,7 +278,7 @@ class WizardDialog(QDialog, FORM_CLASS):
         self.go_to_step(step)
 
     def set_function_centric_mode(self):
-        """Set the Wizard to the Function Centric mode"""
+        """Set the Wizard to the Function Centric mode."""
         self.set_mode_label_to_ifcw()
 
         step = self.step_fc_functions1

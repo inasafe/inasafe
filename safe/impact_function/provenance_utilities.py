@@ -5,13 +5,6 @@ from safe.utilities.i18n import tr
 
 from safe.definitions.hazard import hazard_generic
 from safe.definitions.hazard_category import hazard_category_single_event
-from safe.definitions.exposure import (
-    exposure_population,
-    exposure_land_cover,
-    exposure_road,
-    exposure_place,
-    exposure_structure
-)
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -51,24 +44,41 @@ def get_map_title(hazard, exposure, hazard_category):
     return map_title
 
 
-def get_map_legend_title(exposure):
-    """helper to get map legend title.
+def get_analysis_question(hazard, exposure):
+    """Construct analysis question based on hazard and exposure.
+
+    :param hazard: A hazard definition.
+    :type hazard: dict
 
     :param exposure: An exposure definition.
     :type exposure: dict
 
-    :returns: Map legend title based on the input.
+    :returns: Analysis question based on reporting standards.
     :rtype: str
     """
-    if exposure in [exposure_population, exposure_structure, exposure_place]:
-        return tr('Number of {exposure_name}').format(
+    question = tr(
+        'In the event of a {hazard_name}, {exposure_measure} {exposure_name} '
+        'might be affected?').format(
+            hazard_name=hazard['name'],
+            exposure_measure=exposure['measure_question'],
             exposure_name=exposure['name'])
-    if exposure == exposure_road:
-        return tr('Length of {exposure_name}').format(
-            exposure_name=exposure['name'])
-    if exposure == exposure_land_cover:
-        return tr('Area of {exposure_name}').format(
-            exposure_name=exposure['name'])
+    return question
 
-    return tr('Number of {exposure_name}').format(
-        exposure_name=exposure['name'])
+
+def get_report_question(exposure):
+    """Construct report question based on exposure.
+
+    :param exposure: An exposure definition.
+    :type exposure: dict
+
+    :returns: Report question based on reporting standards.
+    :rtype: str
+    """
+    # In each of the hazard zones <exposure measure> <exposure> might be
+    # affected?
+    question = tr(
+        'In each of the hazard zones {exposure_measure} {exposure_name} might '
+        'be affected?').format(
+            exposure_measure=exposure['measure_question'],
+            exposure_name=exposure['name'])
+    return question

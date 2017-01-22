@@ -146,7 +146,9 @@ exposure_population = {
         adult_count_field,
         elderly_count_field
     ],
-    'layer_modes': [layer_mode_continuous]
+    'layer_modes': [layer_mode_continuous],
+    'layer_legend_title': tr('Number of people'),
+    'measure_question': tr('how many')
 }
 
 exposure_road = {
@@ -197,7 +199,9 @@ exposure_road = {
         feature_value_field,
         feature_rate_field
     ],
-    'layer_modes': [layer_mode_classified]
+    'layer_modes': [layer_mode_classified],
+    'layer_legend_title': tr('Length of roads'),
+    'measure_question': tr('what length of')
 }
 exposure_structure = {
     'key': 'structure',
@@ -246,7 +250,9 @@ exposure_structure = {
         feature_value_field,
         feature_rate_field
     ],
-    'layer_modes': [layer_mode_classified]
+    'layer_modes': [layer_mode_classified],
+    'layer_legend_title': tr('Number of buildings'),
+    'measure_question': tr('how many')
 }
 exposure_place = {
     'key': 'place',
@@ -282,7 +288,9 @@ exposure_place = {
     'extra_fields': [
         exposure_name_field
     ],
-    'layer_modes': [layer_mode_classified]
+    'layer_modes': [layer_mode_classified],
+    'layer_legend_title': tr('Number of places'),
+    'measure_question': tr('how many')
 }
 exposure_land_cover = {
     'key': 'land_cover',
@@ -334,7 +342,9 @@ exposure_land_cover = {
         feature_value_field,
         feature_rate_field
     ],
-    'layer_modes': [layer_mode_classified]
+    'layer_modes': [layer_mode_classified],
+    'layer_legend_title': tr('Area of landcover'),
+    'measure_question': tr('what area of')
 }
 
 indivisible_exposure = [
@@ -345,7 +355,7 @@ exposure_all = [
     exposure_land_cover,
     exposure_population,
     exposure_road,
-    # exposure_place,  # Disable per #3600
+    exposure_place,
     exposure_structure
 ]
 exposures = {

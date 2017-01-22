@@ -11,10 +11,12 @@ from qgis.core import (
     QgsConditionalStyle,
 )
 
-from safe.definitions.colors import no_hazard
+from safe.definitions.colors import grey, line_width_exposure
 from safe.definitions.fields import hazard_class_field
 from safe.definitions.hazard_classifications import (
     null_hazard_value, null_hazard_legend)
+from safe.definitions.utilities import definition
+from safe.utilities.gis import is_line_layer
 
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -24,7 +26,7 @@ __revision__ = '$Format:%H$'
 
 
 def hazard_class_style(layer, classification, display_null=False):
-    """Style for hazard class according to the standards.
+    """Set colors to the layer according to the hazard.
 
     :param layer: The layer to style.
     :type layer: QgsVectorLayer
@@ -40,7 +42,9 @@ def hazard_class_style(layer, classification, display_null=False):
 
     if display_null:
         symbol = QgsSymbolV2.defaultSymbol(layer.geometryType())
-        symbol.setColor(no_hazard)
+        symbol.setColor(grey)
+        if is_line_layer(layer):
+            symbol.setWidth(line_width_exposure)
         category = QgsRendererCategoryV2(
             null_hazard_value, symbol, null_hazard_legend)
         categories.append(category)
@@ -50,6 +54,8 @@ def hazard_class_style(layer, classification, display_null=False):
     for hazard_class, (color, label) in classification.iteritems():
         symbol = QgsSymbolV2.defaultSymbol(layer.geometryType())
         symbol.setColor(color)
+        if is_line_layer(layer):
+            symbol.setWidth(line_width_exposure)
         category = QgsRendererCategoryV2(hazard_class, symbol, label)
         categories.append(category)
 
@@ -59,10 +65,24 @@ def hazard_class_style(layer, classification, display_null=False):
         style.setRule("hazard_class='%s'" % hazard_class)
         attribute_table_styles.append(style)
 
-    layer.conditionalStyles().setRowStyles(attribute_table_styles)
+    # Disabled until we improve it a little bit. ET 20/01/17.
+    # layer.conditionalStyles().setRowStyles(attribute_table_styles)
     renderer = QgsCategorizedSymbolRendererV2(
         hazard_class_field['field_name'], categories)
     layer.setRendererV2(renderer)
+
+
+def layer_title(layer):
+    """Set the layer title according to the standards.
+
+    :param layer: The layer to style.
+    :type layer: QgsVectorLayer
+    """
+    exposure_type = layer.keywords['exposure_keywords']['exposure']
+    exposure_definitions = definition(exposure_type)
+    title = exposure_definitions['layer_legend_title']
+    layer.setTitle(title)
+    layer.keywords['title'] = title
 
 
 def simple_polygon_without_brush(layer):

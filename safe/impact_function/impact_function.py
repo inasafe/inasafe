@@ -74,7 +74,10 @@ from safe.definitions.layer_purposes import (
     layer_purpose_profiling,
 )
 from safe.impact_function.provenance_utilities import (
-    get_map_title, get_map_legend_title)
+    get_map_title,
+    get_report_question,
+    get_analysis_question
+)
 from safe.definitions.constants import (
     inasafe_keyword_version_key,
     ANALYSIS_SUCCESS,
@@ -102,6 +105,7 @@ from safe.impact_function.postprocessors import (
 from safe.impact_function.create_extra_layers import (
     create_analysis_layer, create_virtual_aggregation, create_profile_layer)
 from safe.impact_function.style import (
+    layer_title,
     hazard_class_style,
     simple_polygon_without_brush,
 )
@@ -1499,8 +1503,8 @@ class ImpactFunction(object):
         :param layer: The vector layer to use for post processing.
         :type layer: QgsVectorLayer
         """
-        # Post processor (gender, age, building type, etc)
-        # Notes, action
+        # Set the layer title
+        layer_title(layer)
 
         for post_processor in post_processors:
             valid, message = enough_input(layer, post_processor['input'])
@@ -1570,8 +1574,12 @@ class ImpactFunction(object):
         for layer in self.outputs:
             if is_vector_layer(layer):
                 if layer.geometryType() != QGis.NoGeometry:
+                    display_not_exposed = False
+                    if layer == self.impact or self.debug_mode:
+                        display_not_exposed = True
+
                     if layer.keywords['inasafe_fields'].get(hazard_class):
-                        hazard_class_style(layer, classes, self.debug_mode)
+                        hazard_class_style(layer, classes, display_not_exposed)
 
         # Let's style the aggregation and analysis layer.
         simple_polygon_without_brush(self.aggregation_impacted)
@@ -1608,7 +1616,11 @@ class ImpactFunction(object):
         # Map title
         self._provenance['map_title'] = get_map_title(
             hazard, exposure, hazard_category)
-        self._provenance['map_legend_title'] = get_map_legend_title(exposure)
+        self._provenance['map_legend_title'] = exposure['layer_legend_title']
+
+        self._provenance['analysis_question'] = get_analysis_question(
+            hazard, exposure)
+        self._provenance['report_question'] = get_report_question(exposure)
 
         if self.requested_extent:
             self._provenance['requested_extent'] = (

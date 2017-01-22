@@ -28,7 +28,7 @@ from safe.definitions.layer_modes import (
     layer_mode_classified, layer_mode_continuous)
 from safe.definitions.fields import (
     hazard_name_field, hazard_fields, hazard_value_field)
-from safe.definitions.exposure import exposure_road
+from safe.definitions.exposure import exposure_place
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -105,7 +105,7 @@ hazard_generic = {
     'fields': hazard_fields,
     'extra_fields': [],
     'layer_modes': [layer_mode_classified],
-    'disabled_exposures': []
+    'disabled_exposures': [exposure_place]
 }
 hazard_earthquake = {
     'key': 'earthquake',
@@ -146,7 +146,7 @@ hazard_earthquake = {
     'fields': hazard_fields,
     'extra_fields': [],
     'layer_modes': [layer_mode_classified, layer_mode_continuous],
-    'disabled_exposures': []
+    'disabled_exposures': [exposure_place]
 }
 hazard_flood = {
     'key': 'flood',
@@ -189,7 +189,7 @@ hazard_flood = {
     'fields': hazard_fields,
     'extra_fields': [],
     'layer_modes': [layer_mode_classified, layer_mode_continuous],
-    'disabled_exposures': []
+    'disabled_exposures': [exposure_place]
 }
 
 hazard_cyclone = {
@@ -241,7 +241,7 @@ hazard_cyclone = {
     'fields': hazard_fields,
     'extra_fields': [],
     'layer_modes': [layer_mode_classified, layer_mode_continuous],
-    'disabled_exposures': [exposure_road]
+    'disabled_exposures': [exposure_place]
 }
 
 hazard_volcanic_ash = {
@@ -326,7 +326,7 @@ hazard_tsunami = {
     'fields': hazard_fields,
     'extra_fields': [],
     'layer_modes': [layer_mode_classified, layer_mode_continuous],
-    'disabled_exposures': []
+    'disabled_exposures': [exposure_place]
 }
 hazard_volcano = {
     'key': 'volcano',
@@ -368,7 +368,7 @@ hazard_volcano = {
     'fields': hazard_fields,
     'extra_fields': [hazard_name_field],
     'layer_modes': [layer_mode_classified, layer_mode_continuous],
-    'disabled_exposures': []
+    'disabled_exposures': [exposure_place]
 }
 hazard_all = [
     hazard_flood,
