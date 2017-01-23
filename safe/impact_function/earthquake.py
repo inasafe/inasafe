@@ -29,6 +29,7 @@ from safe.utilities.numerics import log_normal_cdf
 from safe.gis.raster.write_raster import array_to_raster, make_array
 from safe.common.utilities import unique_filename
 from safe.utilities.profiling import profile
+from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -144,7 +145,7 @@ def pager_fatality_rates():
     return fatality_rate
 
 
-def bayesian_fatality_rates():
+def itb_bayesian_fatality_rates():
     """ITB fatality model based on a Bayesian approach.
 
     This model was developed by Institut Teknologi Bandung (ITB) and
@@ -169,6 +170,22 @@ def bayesian_fatality_rates():
         10: 0.0314512157378,
     }
     return fatality_rate
+
+EARTHQUAKE_FUNCTIONS = (
+    {
+        'key': 'itb_bayesian_fatality_rates',
+        'name': tr('ITB bayesian fatality rates'),
+        'fatality_rates': itb_bayesian_fatality_rates
+    }, {
+        'key': 'itb_fatality_rates',
+        'name': tr('ITB fatality rates'),
+        'fatality_rates': itb_fatality_rates
+    }, {
+        'key': 'pager_fatality_rates',
+        'name': tr('Pager fatality rates'),
+        'fatality_rates': pager_fatality_rates
+    }
+)
 
 
 def displacement_rate():
