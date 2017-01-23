@@ -3,7 +3,7 @@ from safe.common.parameters.resource_parameter import ResourceParameter
 from safe.definitions.minimum_needs import (
     minimum_needs_fields,
     minimum_needs_namespace)
-from safe.report.extractors.util import round_affected_number
+from safe.utilities.rounding import round_affected_number
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

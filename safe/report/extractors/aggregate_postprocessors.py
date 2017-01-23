@@ -13,9 +13,8 @@ from safe.definitions.minimum_needs import minimum_needs_fields
 from safe.definitions.post_processors import age_postprocessors, \
     female_postprocessors
 from safe.definitions.utilities import postprocessor_output_field
-from safe.report.extractors.util import (
-    round_affected_number,
-    value_from_field_name)
+from safe.report.extractors.util import value_from_field_name
+from safe.utilities.rounding import round_affected_number
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
