@@ -57,8 +57,7 @@ class MinimumNeedsTest(unittest.TestCase):
                 os.remove(path)
 
     def test_minimum_needs(self):
-        """Test behaviour of the minimum needs function.
-        """
+        """Test behaviour of the minimum needs function."""
         dialog = NeedsCalculatorDialog(PARENT)
         layer = QgsVectorLayer(
             shapefile_path,
@@ -70,13 +69,14 @@ class MinimumNeedsTest(unittest.TestCase):
         layer.keywords = {
             'layer_purpose': layer_purpose_aggregation['key'],
             'inasafe_fields': {displaced_field['key']: attribute}}
-
         rename_remove_inasafe_fields(layer)
+
+        # run minimum needs function
         dialog.minimum_needs(layer)
         assert layer is not None
         field_names = [field.name() for field in layer.pendingFields()]
         for feature in layer.getFeatures():
-            value = [int(attribute) for attribute in feature.attributes()]
+            value = [attribute for attribute in feature.attributes()]
 
         actual_attributes = dict(zip(field_names, value))
 
@@ -91,8 +91,8 @@ class MinimumNeedsTest(unittest.TestCase):
         self.assertDictEqual(expected_attributes, actual_attributes)
 
     def test_ok_button(self):
-        """Test behaviour of Ok button
-        """
+        """Test behaviour of Ok button."""
+        # Test Ok button without any input in the combo box
         dialog = NeedsCalculatorDialog(PARENT)
         ok_button = dialog.button_box.button(QtGui.QDialogButtonBox.Ok)
         self.assertFalse(ok_button.isEnabled())
@@ -103,24 +103,11 @@ class MinimumNeedsTest(unittest.TestCase):
             'ogr')
         QgsMapLayerRegistry.instance().addMapLayers([input_layer])
 
+        # Test Ok button with layer and displaced field
+        # selected in the combo box
         dialog.layer.setLayer(input_layer)
         dialog.displaced.setField(u'displaced')
         self.assertTrue(ok_button.isEnabled())
-
-    # def Xtest_accept(self):
-    #     """Test behaviour of the ok button.
-    #
-    #     TODO: Make this test useful - Tim
-    #     """
-    #     # print shapefile_path
-    #     layer = QgsVectorLayer(
-    #         os.path.basename(shapefile_path),
-    #         os.path.dirname(shapefile_path),
-    #         'ogr')
-    #     layer = None
-    #     dialog = MinimumNeeds(PARENT)
-    #     dialog.accept()
-
 
 if __name__ == "__main__":
     # noinspection PyArgumentEqualDefault

@@ -14,28 +14,28 @@ __copyright__ = 'Copyright 2013, Australia Indonesia Facility for '
 __copyright__ += 'Disaster Reduction'
 
 import logging
+import os
+
 from qgis.core import QgsMapLayerRegistry
-from qgis.gui import (
-    QgsFieldComboBox,
-    QgsMapLayerComboBox,
-    QgsMapLayerProxyModel,
-    QgsFieldProxyModel)
+from qgis.gui import QgsMapLayerProxyModel, QgsFieldProxyModel
+
 from PyQt4 import QtGui
+from PyQt4.QtCore import pyqtSignature, pyqtSlot, QSettings
 
-from PyQt4.QtCore import pyqtSignature, pyqtSlot
-
+from safe.common.utilities import temp_dir
 from safe.common.version import get_version
-from safe.utilities.resources import html_footer, html_header, get_ui_class
-from safe.messaging import styles
-from safe.gui.tools.help.needs_calculator_help import needs_calculator_help
-from safe.impact_function.postprocessors import run_single_post_processor
-from safe.definitions.post_processors import minimum_needs_post_processors
+from safe.datastore.folder import Folder
 from safe.definitions.fields import displaced_field, aggregation_name_field
 from safe.definitions.layer_purposes import layer_purpose_aggregation
-from safe.gis.vector.tools import (
-    create_memory_layer, copy_layer)
+from safe.definitions.post_processors import minimum_needs_post_processors
 from safe.gis.vector.prepare_vector_layer import (
     rename_remove_inasafe_fields)
+from safe.gis.vector.tools import (
+    create_memory_layer, copy_layer)
+from safe.gui.tools.help.needs_calculator_help import needs_calculator_help
+from safe.impact_function.postprocessors import run_single_post_processor
+from safe.messaging import styles
+from safe.utilities.resources import html_footer, html_header, get_ui_class
 
 INFO_STYLE = styles.INFO_STYLE
 LOGGER = logging.getLogger('InaSAFE')
@@ -60,25 +60,13 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         self.button_box.button(QtGui.QDialogButtonBox.Ok).setEnabled(False)
 
         # get qgis map layer combobox object
-        self.layer = QgsMapLayerComboBox()
         self.layer.setFilters(QgsMapLayerProxyModel.VectorLayer)
 
         # get field that represent displaced count(population)
-        self.displaced = QgsFieldComboBox()
         self.displaced.setFilters(QgsFieldProxyModel.Numeric)
 
         # get field that represent aggregation name
-        self.aggregation_name = QgsFieldComboBox()
         self.aggregation_name.setFilters(QgsFieldProxyModel.String)
-
-        # get field that represent aggregation id
-        self.aggregation_id = QgsFieldComboBox()
-
-        # add Qgis combo box to window
-        self.gridLayout_2.addWidget(self.layer, 3, 1)
-        self.gridLayout_2.addWidget(self.displaced, 5, 1)
-        self.gridLayout_2.addWidget(self.aggregation_name, 7, 1)
-        self.gridLayout_2.addWidget(self.aggregation_id, 9, 1)
 
         # set field to the current selected layer
         self.displaced.setLayer(self.layer.currentLayer())
@@ -109,7 +97,7 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         ok_button.clicked.connect(self.accept)
 
     def update_button_status(self):
-        """
+        """Function to enable or disable the Ok button.
         """
         # enable/disable ok button
         if len(self.displaced.currentField()) > 0:
@@ -121,11 +109,11 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         """Compute minimum needs given a layer and a column containing pop.
 
         :param input_layer: Vector layer assumed to contain
-            population counts
+            population counts.
         :type input_layer: QgsVectorLayer
 
-        :returns: Layer with attributes for minimum needs as per Perka 7
-        :rtype: read_layer
+        :returns: Layer with attributes for minimum needs.
+        :rtype: QgsVectorLayer
         """
         # count each minimum needs for every features
         for needs in minimum_needs_post_processors:
@@ -134,10 +122,10 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
     def prepare_new_layer(self, input_layer):
         """Prepare new layer for the output layer.
 
-        :param input_layer: Vector layer
+        :param input_layer: Vector layer.
         :type input_layer: QgsVectorLayer
 
-        :return: New memory layer duplicated from input_layer
+        :return: New memory layer duplicated from input_layer.
         :rtype: QgsVectorLayer
         """
         # create memory layer
@@ -152,8 +140,8 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         # monkey patching input layer to make it work with
         # prepare vector layer function
         temp_layer = input_layer
-        temp_layer.keywords = {'layer_purpose':
-                                   layer_purpose_aggregation['key']}
+        temp_layer.keywords = {
+            'layer_purpose': layer_purpose_aggregation['key']}
 
         # add keywords to output layer
         copy_layer(temp_layer, output_layer)
@@ -187,10 +175,28 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
             LOGGER.debug(e)
             return
 
+        # remove monkey patching keywords
+        del output_layer.keywords
+
         # write layer to geopackage file
+        settings = QSettings()
+        default_user_directory = settings.value(
+            'inasafe/defaultUserDirectory', defaultValue='')
+
+        if default_user_directory:
+            path = os.path.join(default_user_directory, output_layer.name())
+            if not os.path.exists(path):
+                os.makedirs(path)
+            data_store = Folder(path)
+            data_store.add_layer(output_layer, output_layer.name())
+        else:
+            data_store = Folder(temp_dir(sub_dir=output_layer.name()))
+
+        data_store.add_layer(output_layer, output_layer.name())
 
         # noinspection PyArgumentList
-        QgsMapLayerRegistry.instance().addMapLayers([output_layer])
+        QgsMapLayerRegistry.instance().addMapLayers(
+            [data_store.layer(output_layer.name())])
         self.done(QtGui.QDialog.Accepted)
 
     @pyqtSlot()

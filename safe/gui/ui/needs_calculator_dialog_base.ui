@@ -210,6 +210,18 @@
            </property>
           </spacer>
          </item>
+         <item row="3" column="1">
+          <widget class="QgsMapLayerComboBox" name="layer"/>
+         </item>
+         <item row="5" column="1">
+          <widget class="QgsFieldComboBox" name="displaced"/>
+         </item>
+         <item row="7" column="1">
+          <widget class="QgsFieldComboBox" name="aggregation_name"/>
+         </item>
+         <item row="9" column="1">
+          <widget class="QgsFieldComboBox" name="aggregation_id"/>
+         </item>
         </layout>
        </item>
       </layout>
@@ -226,6 +238,16 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>QgsFieldComboBox</class>
+   <extends>QComboBox</extends>
+   <header>qgis.gui</header>
+  </customwidget>
+  <customwidget>
+   <class>QgsMapLayerComboBox</class>
+   <extends>QComboBox</extends>
+   <header>qgis.gui</header>
+  </customwidget>
   <customwidget>
    <class>QWebView</class>
    <extends>QWidget</extends>
