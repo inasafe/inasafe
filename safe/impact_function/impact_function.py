@@ -107,6 +107,7 @@ from safe.impact_function.create_extra_layers import (
     create_analysis_layer, create_virtual_aggregation, create_profile_layer)
 from safe.impact_function.style import (
     layer_title,
+    generate_classified_legend,
     hazard_class_style,
     simple_polygon_without_brush,
 )
@@ -353,12 +354,17 @@ class ImpactFunction(object):
 
     @property
     def impact(self):
-        """Property for the most detailed output.
+        """Property for the most detailed output vector layer.
 
         :returns: A vector layer.
         :rtype: QgsVectorLayer
         """
-        return self.outputs[0]
+        if is_vector_layer(self.outputs[0]):
+            return self.outputs[0]
+        else:
+            # In case of EQ raster on population, the exposure impacted is a
+            # raster.
+            return self.outputs[1]
 
     @property
     def exposure_impacted(self):
@@ -1603,9 +1609,21 @@ class ImpactFunction(object):
         classification = self.hazard.keywords['classification']
         classification = definition(classification)
 
-        classes = OrderedDict()
-        for f in reversed(classification['classes']):
-            classes[f['key']] = (f['color'], f['name'])
+        # Let's check if there is some thresholds:
+        thresholds = self.hazard.keywords.get('thresholds')
+
+        # TODO We need to work on the unit from the exposure.
+        exposure = self.exposure.keywords['exposure']
+        unit = definition(exposure)['units'][0]
+
+        # In debug mode we don't round number.
+        enable_rounding = not self.debug_mode
+        classes = generate_classified_legend(
+            self.analysis_impacted,
+            classification,
+            thresholds,
+            unit,
+            enable_rounding)
 
         # Let's style layers which have a geometry and have hazard_class
         hazard_class = hazard_class_field['key']
