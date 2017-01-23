@@ -1203,7 +1203,10 @@ class ImpactFunction(object):
 
         self.set_state_process('exposure', 'Exposed people')
         exposed, self._exposure_impacted = exposed_people_stats(
-            self.hazard, self.exposure, aggregation_aligned)
+            self.hazard,
+            self.exposure,
+            aggregation_aligned,
+            itb_fatality_rates())
         if self.debug_mode:
             self.debug_layer(self._exposure_impacted)
 
