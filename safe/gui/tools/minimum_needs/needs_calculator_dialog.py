@@ -30,10 +30,12 @@ from safe.messaging import styles
 from safe.gui.tools.help.needs_calculator_help import needs_calculator_help
 from safe.impact_function.postprocessors import run_single_post_processor
 from safe.definitions.post_processors import minimum_needs_post_processors
+from safe.definitions.fields import displaced_field, aggregation_name_field
+from safe.definitions.layer_purposes import layer_purpose_aggregation
 from safe.gis.vector.tools import (
     create_memory_layer, copy_layer)
 from safe.gis.vector.prepare_vector_layer import (
-    _rename_remove_inasafe_fields)
+    rename_remove_inasafe_fields)
 
 INFO_STYLE = styles.INFO_STYLE
 LOGGER = logging.getLogger('InaSAFE')
@@ -55,6 +57,8 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         self.setWindowTitle(self.tr(
             'InaSAFE %s Minimum Needs Calculator' % get_version()))
 
+        self.button_box.button(QtGui.QDialogButtonBox.Ok).setEnabled(False)
+
         # get qgis map layer combobox object
         self.layer = QgsMapLayerComboBox()
         self.layer.setFilters(QgsMapLayerProxyModel.VectorLayer)
@@ -71,10 +75,10 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         self.aggregation_id = QgsFieldComboBox()
 
         # add Qgis combo box to window
-        self.gridLayout_2.addWidget(self.layer, 0, 1)
-        self.gridLayout_2.addWidget(self.displaced, 1, 1)
-        self.gridLayout_2.addWidget(self.aggregation_name, 2, 1)
-        self.gridLayout_2.addWidget(self.aggregation_id, 3, 1)
+        self.gridLayout_2.addWidget(self.layer, 3, 1)
+        self.gridLayout_2.addWidget(self.displaced, 5, 1)
+        self.gridLayout_2.addWidget(self.aggregation_name, 7, 1)
+        self.gridLayout_2.addWidget(self.aggregation_id, 9, 1)
 
         # set field to the current selected layer
         self.displaced.setLayer(self.layer.currentLayer())
@@ -85,6 +89,10 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         self.layer.layerChanged.connect(self.displaced.setLayer)
         self.layer.layerChanged.connect(self.aggregation_name.setLayer)
         self.layer.layerChanged.connect(self.aggregation_id.setLayer)
+
+        # enable/disable ok button
+        self.update_button_status()
+        self.displaced.fieldChanged.connect(self.update_button_status)
 
         # Set up things for context help
         self.help_button = self.button_box.button(QtGui.QDialogButtonBox.Help)
@@ -100,6 +108,15 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         ok_button = self.button_box.button(QtGui.QDialogButtonBox.Ok)
         ok_button.clicked.connect(self.accept)
 
+    def update_button_status(self):
+        """
+        """
+        # enable/disable ok button
+        if len(self.displaced.currentField()) > 0:
+            self.button_box.button(QtGui.QDialogButtonBox.Ok).setEnabled(True)
+        else:
+            self.button_box.button(QtGui.QDialogButtonBox.Ok).setEnabled(False)
+
     def minimum_needs(self, input_layer):
         """Compute minimum needs given a layer and a column containing pop.
 
@@ -114,40 +131,63 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         for needs in minimum_needs_post_processors:
             run_single_post_processor(input_layer, needs)
 
+    def prepare_new_layer(self, input_layer):
+        """Prepare new layer for the output layer.
+
+        :param input_layer: Vector layer
+        :type input_layer: QgsVectorLayer
+
+        :return: New memory layer duplicated from input_layer
+        :rtype: QgsVectorLayer
+        """
+        # create memory layer
+        output_layer = (
+            '%s_minimum_needs' % input_layer.name())
+        output_layer = create_memory_layer(
+            output_layer,
+            input_layer.geometryType(),
+            input_layer.crs(),
+            input_layer.fields())
+
+        # monkey patching input layer to make it work with
+        # prepare vector layer function
+        temp_layer = input_layer
+        temp_layer.keywords = {'layer_purpose':
+                                   layer_purpose_aggregation['key']}
+
+        # add keywords to output layer
+        copy_layer(temp_layer, output_layer)
+
+        return output_layer
+
     def accept(self):
         """Process the layer and field and generate a new layer.
 
         .. note:: This is called on OK click.
 
         """
-        # create memory layer
-        output_layer = (
-            '%s_minimum_needs' % self.layer.currentLayer().name())
-        output_layer = create_memory_layer(
-            output_layer,
-            self.layer.currentLayer().geometryType(),
-            self.layer.currentLayer().crs(),
-            self.layer.currentLayer().fields())
+        # Create a new layer for output layer
+        output_layer = self.prepare_new_layer(self.layer.currentLayer())
 
-        # monkey patching input layer to make it work with
-        # prepare vector layer function
-        temp_layer = self.layer.currentLayer()
-        temp_layer.keywords = {'layer_purpose': 'aggregation'}
-
-        # add keywords to output layer
-        copy_layer(temp_layer, output_layer)
-        output_layer.keywords['layer_purpose'] = 'aggregation'
+        # Monkey patching output layer to make it work with
+        # minimum needs calculator
+        output_layer.keywords['layer_purpose'] = (
+            layer_purpose_aggregation['key'])
         output_layer.keywords['inasafe_fields'] = (
-            {'displaced_field': self.displaced.currentField(),
-             'aggregation_name_field': self.aggregation_name.currentField()})
+            {displaced_field['key']: self.displaced.currentField(),
+             aggregation_name_field['key']:
+                 self.aggregation_name.currentField()})
 
         # remove unnecessary fields & rename inasafe fields
-        _rename_remove_inasafe_fields(output_layer)
+        rename_remove_inasafe_fields(output_layer)
 
         try:
             self.minimum_needs(output_layer)
-        except:
+        except Exception as e:
+            LOGGER.debug(e)
             return
+
+        # write layer to geopackage file
 
         # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayers([output_layer])

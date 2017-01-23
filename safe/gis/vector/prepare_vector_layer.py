@@ -108,7 +108,7 @@ def prepare_vector_layer(layer, callback=None):
         raise NoFeaturesInExtentError
 
     _add_id_column(cleaned)
-    _rename_remove_inasafe_fields(cleaned)
+    rename_remove_inasafe_fields(cleaned)
 
     if _size_is_needed(cleaned):
         run_single_post_processor(cleaned, post_processor_size)
@@ -161,7 +161,7 @@ def _check_value_mapping(layer):
 
 
 @profile
-def _rename_remove_inasafe_fields(layer):
+def rename_remove_inasafe_fields(layer):
     """Loop over fields and rename fields which are used in InaSAFE.
 
     :param layer: The layer
@@ -186,7 +186,7 @@ def _rename_remove_inasafe_fields(layer):
     # for minimum needs calculator.
     # If there is no displaced_field keyword, then pass
     try:
-        if layer.keywords['inasafe_fields']['displaced_field']:
+        if layer.keywords['inasafe_fields'][displaced_field['key']]:
             fields.append(displaced_field)
     except KeyError:
         pass
