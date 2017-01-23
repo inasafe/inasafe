@@ -27,10 +27,10 @@ from safe.report.extractors.composer import QGISComposerContext
 from safe.report.extractors.infographic_elements.svg_charts import \
     DonutChartContext
 from safe.report.extractors.util import (
-    round_affected_number,
     jinja2_output_as_string,
     value_from_field_name)
 from safe.utilities.i18n import tr
+from safe.utilities.rounding import round_affected_number
 from safe.utilities.resources import resource_url, resources_path
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
