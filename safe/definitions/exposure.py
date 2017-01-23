@@ -4,7 +4,8 @@
 from safe.definitions.concepts import concepts
 from safe.definitions.caveats import (
     caveat_incomplete_data)
-from safe.definitions.units import count_exposure_unit
+from safe.definitions.units import (
+    count_exposure_unit, unit_metres, unit_square_metres)
 from safe.definitions.fields import (
     adult_count_field,
     elderly_count_field,
@@ -191,7 +192,7 @@ exposure_road = {
     'allowed_geometries': [
         'line'
     ],
-    'units': [],
+    'units': [unit_metres],
     'classifications': [generic_road_classes],
     'compulsory_fields': [exposure_type_field],
     'fields': exposure_fields,
@@ -242,7 +243,7 @@ exposure_structure = {
         'polygon',
         'point'
     ],
-    'units': [],
+    'units': [count_exposure_unit],
     'classifications': [generic_structure_classes],
     'compulsory_fields': [exposure_type_field],
     'fields': exposure_fields,
@@ -281,7 +282,7 @@ exposure_place = {
     'allowed_geometries': [
         'point'
     ],
-    'units': [],
+    'units': [count_exposure_unit],
     'classifications': [generic_place_classes],
     'compulsory_fields': [exposure_type_field],
     'fields': exposure_fields,
@@ -334,7 +335,7 @@ exposure_land_cover = {
         'polygon',
         # 'raster'  # Disable per #3600
     ],
-    'units': [],
+    'units': [unit_square_metres],  # We need to update to hectare.
     'classifications': [generic_landcover_classes],
     'compulsory_fields': [exposure_type_field],
     'fields': exposure_fields,
