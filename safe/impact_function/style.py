@@ -2,6 +2,7 @@
 
 """Styles."""
 
+from collections import OrderedDict
 from qgis.core import (
     QgsSymbolV2,
     QgsRendererCategoryV2,
@@ -12,11 +13,12 @@ from qgis.core import (
 )
 
 from safe.definitions.colors import grey, line_width_exposure
-from safe.definitions.fields import hazard_class_field
+from safe.definitions.fields import hazard_class_field, hazard_count_field
 from safe.definitions.hazard_classifications import (
     null_hazard_value, null_hazard_legend)
 from safe.definitions.utilities import definition
 from safe.utilities.gis import is_line_layer
+from safe.utilities.rounding import round_affected_number
 
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -40,18 +42,14 @@ def hazard_class_style(layer, classification, display_null=False):
     """
     categories = []
 
-    if display_null:
-        symbol = QgsSymbolV2.defaultSymbol(layer.geometryType())
-        symbol.setColor(grey)
-        if is_line_layer(layer):
-            symbol.setWidth(line_width_exposure)
-        category = QgsRendererCategoryV2(
-            null_hazard_value, symbol, null_hazard_legend)
-        categories.append(category)
-
     attribute_table_styles = []
 
     for hazard_class, (color, label) in classification.iteritems():
+        if hazard_class == null_hazard_value and not display_null:
+            # We don't want to display the null value (not exposed).
+            # We skip it.
+            continue
+
         symbol = QgsSymbolV2.defaultSymbol(layer.geometryType())
         symbol.setColor(color)
         if is_line_layer(layer):
@@ -83,6 +81,65 @@ def layer_title(layer):
     title = exposure_definitions['layer_legend_title']
     layer.setTitle(title)
     layer.keywords['title'] = title
+
+
+def generate_classified_legend(
+        analysis, hazard_classification, thresholds, unit, enable_rounding):
+    """Generate an ordered python structure with the classified symbology.
+
+    :param analysis: The analysis layer.
+    :type analysis: QgsVectorLayer
+
+    :param hazard_classification: The hazard classification to use.
+    :type hazard_classification: safe.definitions.hazard_classifications
+
+    :param thresholds: Thresholds used on the hazard. It can be null if the
+        does not have any thresholds.
+    :type thresholds: dict
+
+    :param unit: The unit to use.
+    :type unit: safe.definitions.units
+
+    :param enable_rounding: Boolean if we should round numbers.
+    :type enable_rounding: bool
+
+    :return: The ordered dictionary to use to build the classified style.
+    :rtype: OrderedDict
+    """
+    # We need to read the analysis layer to get the number of features.
+    analysis_row = analysis.getFeatures().next()
+
+    # Todo, implement thresholds in the label.
+
+    template = u'{name} ({value} {unit})'
+
+    classes = OrderedDict()
+
+    not_exposed_field = hazard_count_field['field_name'] % null_hazard_value
+    try:
+        value = analysis_row[not_exposed_field]
+    except KeyError:
+        # The field might not exist if there is not feature not exposed.
+        value = 0
+    value = round_affected_number(value, enable_rounding, True)
+    label = template.format(
+        name=null_hazard_legend, value=value, unit=unit['abbreviation'])
+    classes[null_hazard_value] = (grey, label)
+
+    for hazard_class in reversed(hazard_classification['classes']):
+        field_name = hazard_count_field['field_name'] % hazard_class['key']
+        try:
+            value = analysis_row[field_name]
+        except KeyError:
+            # The field might not exist if no feature impacted in this hazard
+            # zone.
+            value = 0
+        value = round_affected_number(value, enable_rounding, True)
+        label = template.format(
+            name=hazard_class['name'], value=value, unit=unit['abbreviation'])
+        classes[hazard_class['key']] = (hazard_class['color'], label)
+
+    return classes
 
 
 def simple_polygon_without_brush(layer):
