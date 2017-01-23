@@ -130,6 +130,20 @@ unit_metres = {
         }
     ],
 }
+unit_square_metres = {
+    'key': 'square_metres',
+    'name': tr('Square Metres'),
+    'plural_name': tr('square metres'),
+    'abbreviation': tr('m²'),
+    'description': tr(
+        '<b>Square Metres</b> are a metric unit of measure.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+}
 unit_millimetres = {
     'key': 'millimetres',
     'name': tr('Millimetres'),
