@@ -21,8 +21,10 @@ from safe.definitions.default_settings import inasafe_default_settings
 from safe.definitions.messages import disclaimer
 from safe.common.utilities import temp_dir
 from safe.defaults import supporters_logo_path, default_north_arrow_path
+from safe.impact_function.earthquake import EARTHQUAKE_FUNCTIONS
 from safe.utilities.i18n import tr
 from safe.utilities.resources import get_ui_class, html_header, html_footer
+from safe.utilities.settings import setting, set_setting
 from safe.common.version import get_version
 from safe.gui.tools.help.options_help import options_help
 
@@ -208,6 +210,19 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         self.splitter_user_directory.setEnabled(custom_user_directory_flag)
         self.leUserDirectoryPath.setText(user_directory_path)
 
+        # Earthquake function.
+        # Populate the combobox first.
+        for model in EARTHQUAKE_FUNCTIONS:
+            self.earthquake_function.addItem(model['name'], model['key'])
+
+        # Then make selected the default one.
+        default_earthquake_function = setting('earthquake_function', str)
+        keys = [model['key'] for model in EARTHQUAKE_FUNCTIONS]
+        if default_earthquake_function not in keys:
+            default_earthquake_function = EARTHQUAKE_FUNCTIONS[0]['key']
+        index = self.earthquake_function.findData(default_earthquake_function)
+        self.earthquake_function.setCurrentIndex(index)
+
         # Restore North Arrow Image Path
         north_arrow_path = self.settings.value(
             'inasafe/north_arrow_path', default_north_arrow_path(), type=str)
@@ -262,6 +277,9 @@ class OptionsDialog(QtGui.QDialog, FORM_CLASS):
         self.settings.setValue(
             'inasafe/defaultUserDirectory',
             self.leUserDirectoryPath.text())
+        index = self.earthquake_function.currentIndex()
+        value = self.earthquake_function.itemData(index)
+        set_setting('earthquake_function', value)
 
         # Save InaSAFE default values
         self.save_default_values()

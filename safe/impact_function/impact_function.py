@@ -91,12 +91,13 @@ from safe.definitions.versions import inasafe_keyword_version
 from safe.common.exceptions import (
     InaSAFEError,
     InvalidExtentError,
+    WrongEarthquakeFunction,
     NoKeywordsFoundError,
     NoFeaturesInExtentError,
     ProcessingInstallationError,
 )
 from safe.impact_function.earthquake import (
-    itb_fatality_rates,
+    EARTHQUAKE_FUNCTIONS,
     exposed_people_stats,
     make_summary_layer,
 )
@@ -116,6 +117,7 @@ from safe.utilities.utilities import (
     replace_accentuated_characters, get_error_message)
 from safe.utilities.profiling import (
     profile, clear_prof_data, profiling_log)
+from safe.utilities.settings import setting
 from safe.test.utilities import check_inasafe_fields
 from safe import messaging as m
 from safe.messaging import styles
@@ -197,6 +199,12 @@ class ImpactFunction(object):
             'os': platform.version(),
             'inasafe_version': get_version(),
         }
+
+        # Earthquake function
+        self._earthquake_function = None
+        value = setting(
+            'earthquake_function', EARTHQUAKE_FUNCTIONS[0]['key'], str)
+        self.earthquake_function = value  # Use the setter to check the value.
 
     @property
     def performance_log(self):
@@ -515,6 +523,27 @@ class ImpactFunction(object):
         :rtype: datetime
         """
         return self._datetime
+
+    @property
+    def earthquake_function(self):
+        """The current earthquake function to use.
+
+        :return: The earthquake function.
+        :rtype: str
+        """
+        return self._earthquake_function
+
+    @earthquake_function.setter
+    def earthquake_function(self, function):
+        """Set the earthquake function to use.
+
+        :param function: The earthquake function to use.
+        :type function: str
+        """
+        if function not in [model['key'] for model in EARTHQUAKE_FUNCTIONS]:
+            raise WrongEarthquakeFunction
+        else:
+            self._earthquake_function = function
 
     @property
     def callback(self):
@@ -1181,6 +1210,12 @@ class ImpactFunction(object):
     def earthquake_raster_population_raster(self):
         """Perform a damage curve analysis with EQ raster on population raster.
         """
+
+        fatality_rates = {}
+        for model in EARTHQUAKE_FUNCTIONS:
+            fatality_rates[model['key']] = model['fatality_rates']
+        earthquake_function = fatality_rates[self.earthquake_function]
+
         self.set_state_process(
             'hazard', 'Align the hazard layer with the exposure')
         self.set_state_process(
@@ -1206,13 +1241,13 @@ class ImpactFunction(object):
             self.hazard,
             self.exposure,
             aggregation_aligned,
-            itb_fatality_rates())
+            earthquake_function())
         if self.debug_mode:
             self.debug_layer(self._exposure_impacted)
 
         self.set_state_process('impact function', 'Set summaries')
         self._aggregation_impacted = make_summary_layer(
-            exposed, self.aggregation, itb_fatality_rates())
+            exposed, self.aggregation, earthquake_function())
         if self.debug_mode:
             self.debug_layer(self._aggregation_impacted)
 
