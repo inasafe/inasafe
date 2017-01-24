@@ -1225,7 +1225,7 @@ class ImpactFunction(object):
         self.set_state_process(
             'hazard', 'Align the hazard layer with the exposure')
         self.set_state_process(
-            'exposure', 'Align the exposure layer with the exposure')
+            'exposure', 'Align the exposure layer with the hazard')
         self.hazard, self.exposure = align_rasters(
             self.hazard, self.exposure, self.analysis_impacted.extent())
         if self.debug_mode:
@@ -1242,7 +1242,7 @@ class ImpactFunction(object):
         if self.debug_mode:
             self.debug_layer(aggregation_aligned)
 
-        self.set_state_process('exposure', 'Exposed people')
+        self.set_state_process('exposure', 'Compute exposed people')
         exposed, self._exposure_impacted = exposed_people_stats(
             self.hazard,
             self.exposure,
@@ -1254,6 +1254,10 @@ class ImpactFunction(object):
         self.set_state_process('impact function', 'Set summaries')
         self._aggregation_impacted = make_summary_layer(
             exposed, self.aggregation, earthquake_function())
+        self._aggregation_impacted.keywords['exposure_keywords'] = dict(
+            self.exposure_impacted.keywords)
+        self._aggregation_impacted.keywords['hazard_keywords'] = dict(
+            self.hazard.keywords)
         if self.debug_mode:
             self.debug_layer(self._aggregation_impacted)
 
