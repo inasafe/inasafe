@@ -43,7 +43,19 @@ class DictionaryProperty(BaseProperty):
 
     def cast_from_str(self, value):
         try:
-            return json.loads(value)
+            value = json.loads(value)
+            # Checking if the v is basestring, try to decode if it's json
+            for k, v in value.items():
+                if isinstance(v, basestring):
+                    try:
+                        dictionary_value = json.loads(v)
+                        if isinstance(dictionary_value, dict):
+                            value[k] = dictionary_value
+                        else:
+                            pass
+                    except ValueError as e:
+                        pass
+            return value
         except ValueError as e:
             raise MetadataCastError(e)
 

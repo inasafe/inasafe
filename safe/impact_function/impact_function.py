@@ -1173,9 +1173,6 @@ class ImpactFunction(object):
                 return ANALYSIS_FAILED_BAD_CODE, message
 
         else:
-            self._provenance_ready = True
-            self._datetime = datetime.now()
-            self._provenance['datetime'] = self.datetime
             return ANALYSIS_SUCCESS, None
 
     @profile
@@ -1257,6 +1254,10 @@ class ImpactFunction(object):
         self._performance_log = profiling_log()
         self.callback(8, step_count, analysis_steps['summary_calculation'])
         self.summary_calculation()
+
+        self._datetime = datetime.now()
+        self._provenance['datetime'] = self.datetime
+        self._provenance_ready = True
 
         # End of the impact function, we can add layers to the datastore.
         # We replace memory layers by the real layer from the datastore.
@@ -2053,7 +2054,7 @@ class ImpactFunction(object):
         self._provenance['analysis_extent'] = (
             self.analysis_extent.exportToWkt()
         )
-        self._provenance['data_store_uri'] = self.datastore.uri
+        self._provenance['data_store_uri'] = self.datastore.uri.absolutePath()
 
         # Notes and Action
         self._provenance['notes'] = self.notes()
