@@ -18,6 +18,7 @@ from safe.definitions.hazard_classifications import (
     null_hazard_value, null_hazard_legend)
 from safe.definitions.utilities import definition
 from safe.utilities.gis import is_line_layer
+from safe.utilities.rounding import round_affected_number
 
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -120,8 +121,7 @@ def generate_classified_legend(
     except KeyError:
         # The field might not exist if there is not feature not exposed.
         value = 0
-    # Rounded disabled until we know when we should round values.
-    # value = round_affected_number(value, enable_rounding, True)
+    value = round_affected_number(value, enable_rounding, True)
     label = template.format(
         name=null_hazard_legend, value=value, unit=unit['abbreviation'])
     classes[null_hazard_value] = (grey, label)
@@ -134,8 +134,7 @@ def generate_classified_legend(
             # The field might not exist if no feature impacted in this hazard
             # zone.
             value = 0
-        # Rounded disabled until we know when we should round values.
-        # value = round_affected_number(value, enable_rounding, True)
+        value = round_affected_number(value, enable_rounding, True)
         label = template.format(
             name=hazard_class['name'], value=value, unit=unit['abbreviation'])
         classes[hazard_class['key']] = (hazard_class['color'], label)
