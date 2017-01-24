@@ -49,7 +49,6 @@ LOGGER = logging.getLogger('InaSAFE')
 def get_error_message(exception, context=None, suggestion=None):
     """Convert exception into an ErrorMessage containing a stack trace.
 
-
     :param exception: Exception object.
     :type exception: Exception
 
@@ -65,9 +64,9 @@ def get_error_message(exception, context=None, suggestion=None):
     :rtype: ErrorMessage
     """
 
-    trace = ''.join(traceback.format_tb(sys.exc_info()[2]))
+    name, trace = humanise_exception(exception)
 
-    problem = m.Message(m.Text(exception.__class__.__name__))
+    problem = m.Message(name)
 
     if exception is None or exception == '':
         problem.append = m.Text(tr('No details provided'))
@@ -93,6 +92,22 @@ def get_error_message(exception, context=None, suggestion=None):
         error_message.details.append(arg)
 
     return error_message
+
+
+def humanise_exception(exception):
+    """Humanise a python exception by giving the class name and traceback.
+
+    The function will return a tuple with the exception name and the traceback.
+
+    :param exception: Exception object.
+    :type exception: Exception
+
+    :return: A tuple with the exception name and the traceback.
+    :rtype: (str, str)
+    """
+    trace = ''.join(traceback.format_tb(sys.exc_info()[2]))
+    name = exception.__class__.__name__
+    return name, trace
 
 
 def humanise_seconds(seconds):
