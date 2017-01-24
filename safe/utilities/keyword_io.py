@@ -328,7 +328,7 @@ class KeywordIO(QObject):
             logo_element = m.Brand()
             report.add(logo_element)
             report.add(m.Heading(self.tr(
-                'Layer keywords:'), **styles.INFO_STYLE))
+                'Layer keywords:'), **styles.BLUE_LEVEL_4_STYLE))
             report.add(m.Text(self.tr(
                 'The following keywords are defined for the active layer:')))
 

@@ -22,11 +22,16 @@ from safe.gui.tools.help.shakemap_converter_help \
     import content as shakemap_help
 from safe.utilities.resources import resource_url, resources_path
 LOGGER = logging.getLogger('InaSAFE')
-SUBSECTION_STYLE = styles.SUBSECTION_STYLE
-INFO_STYLE = styles.INFO_STYLE
-WARNING_STYLE = styles.WARNING_STYLE
-TITLE_STYLE = styles.TITLE_STYLE
-SECTION_STYLE = styles.SECTION_STYLE
+# For chapter sections
+# Items marked as numbered below will show section numbering in HTML render
+TITLE_STYLE = styles.TITLE_LEVEL_1_STYLE  # h1 Not numbered
+SECTION_STYLE = styles.SECTION_LEVEL_2_STYLE  # h2 numbered
+SUBSECTION_STYLE = styles.SUBSECTION_LEVEL_3_STYLE  # h3 numbered
+BLUE_CHAPTER_STYLE = styles.BLUE_LEVEL_4_STYLE  # h4 numbered
+RED_CHAPTER_STYLE = styles.RED_LEVEL_4_STYLE  # h4 numbered
+DETAILS_STYLE = styles.ORANGE_LEVEL_5_STYLE  # h5 numbered
+DETAILS_SUBGROUP_STYLE = styles.GREY_LEVEL_6_STYLE  # h5 numbered
+# For images
 SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
 MEDIUM_ICON_STYLE = styles.MEDIUM_ICON_STYLE
 
@@ -91,11 +96,11 @@ def content():
     ##
     # Credits and disclaimers ...
     ##
-    header = m.Heading(tr('Disclaimer'), **INFO_STYLE)
+    header = m.Heading(tr('Disclaimer'), **BLUE_CHAPTER_STYLE)
     message.add(header)
     message.add(m.Paragraph(definitions.messages.disclaimer()))
 
-    header = m.Heading(tr('Limitations and License'), **INFO_STYLE)
+    header = m.Heading(tr('Limitations and License'), **BLUE_CHAPTER_STYLE)
     message.add(header)
     bullets = m.BulletedList()
     for item in definitions.limitations():
@@ -179,7 +184,7 @@ def content():
     message.add(header)
     steps = definitions.analysis_steps.values()
     for step in steps:
-        message.add(definition_to_message(step, INFO_STYLE))
+        message.add(definition_to_message(step, BLUE_CHAPTER_STYLE))
 
     ##
     #  Hazard definitions
@@ -304,15 +309,15 @@ def content():
     header = m.Heading(tr('Vector'), **SUBSECTION_STYLE)
     message.add(header)
     message.add(
-        definition_to_message(definitions.layer_geometry_point, INFO_STYLE))
+        definition_to_message(definitions.layer_geometry_point, BLUE_CHAPTER_STYLE))
     message.add(
-        definition_to_message(definitions.layer_geometry_line, INFO_STYLE))
+        definition_to_message(definitions.layer_geometry_line, BLUE_CHAPTER_STYLE))
     message.add(
-        definition_to_message(definitions.layer_geometry_polygon, INFO_STYLE))
+        definition_to_message(definitions.layer_geometry_polygon, BLUE_CHAPTER_STYLE))
     header = m.Heading(tr('Raster'), **SUBSECTION_STYLE)
     message.add(header)
     message.add(
-        definition_to_message(definitions.layer_geometry_raster, INFO_STYLE))
+        definition_to_message(definitions.layer_geometry_raster, BLUE_CHAPTER_STYLE))
 
     ##
     #  Layer Modes
@@ -335,21 +340,21 @@ def content():
         'layer-purposes',
         tr('Layer Purposes'))
     message.add(definition_to_message(
-        definitions.layer_purpose_hazard, INFO_STYLE))
+        definitions.layer_purpose_hazard, BLUE_CHAPTER_STYLE))
     message.add(definition_to_message(
-        definitions.layer_purpose_exposure, INFO_STYLE))
+        definitions.layer_purpose_exposure, BLUE_CHAPTER_STYLE))
     message.add(definition_to_message(
-        definitions.layer_purpose_aggregation, INFO_STYLE))
+        definitions.layer_purpose_aggregation, BLUE_CHAPTER_STYLE))
     message.add(definition_to_message(
-        definitions.layer_purpose_exposure_impacted, INFO_STYLE))
+        definitions.layer_purpose_exposure_impacted, BLUE_CHAPTER_STYLE))
     message.add(definition_to_message(
-        definitions.layer_purpose_exposure_breakdown, INFO_STYLE))
+        definitions.layer_purpose_exposure_breakdown, BLUE_CHAPTER_STYLE))
     message.add(definition_to_message(
-        definitions.layer_purpose_aggregation_impacted, INFO_STYLE))
+        definitions.layer_purpose_aggregation_impacted, BLUE_CHAPTER_STYLE))
     message.add(definition_to_message(
-        definitions.layer_purpose_aggregate_hazard_impacted, INFO_STYLE))
+        definitions.layer_purpose_aggregate_hazard_impacted, BLUE_CHAPTER_STYLE))
     message.add(definition_to_message(
-        definitions.layer_purpose_profiling, INFO_STYLE))
+        definitions.layer_purpose_profiling, BLUE_CHAPTER_STYLE))
 
     ##
     # All units
@@ -479,7 +484,7 @@ def _create_post_processor_subtable(item_list):
 
 
 def _create_fields_section(message, title, fields):
-    header = m.Heading(title, **INFO_STYLE)
+    header = m.Heading(title, **BLUE_CHAPTER_STYLE)
     message.add(header)
     table = _create_fields_table()
     for field in fields:
@@ -521,6 +526,14 @@ def definition_to_message(definition, heading_style=None):
         row.add(m.Cell(m.Image(url, **MEDIUM_ICON_STYLE)))
         row.add(m.Cell(definition['description']))
         table.add(row)
+        for citation in definition['citations']:
+            row = m.Row()
+            row.add(m.Cell())
+            if citation['link'] == '':
+                row.add(m.Cell(citation['text']))
+            else:
+                row.add(m.Link(citation['link'], citation['text'])
+            table.add(row)
         message.add(table)
 
     url = _definition_screenshot_url(definition)
@@ -531,27 +544,36 @@ def definition_to_message(definition, heading_style=None):
     if 'types' in definition:
         for sub_definition in definition['types']:
             message.add(definition_to_message(
-                sub_definition, WARNING_STYLE))
+                sub_definition, RED_CHAPTER_STYLE))
+
+    #
+    # Notes section if available
+    #
 
     if 'notes' in definition:
-        message.add(m.Paragraph(
-            m.ImportantText(tr('General notes:'))))
+        # Start a notes details group too since we have an exposure
+        message.add(m.Heading(
+            tr('Notes:'), **DETAILS_STYLE))
+        message.add(m.Heading(
+            tr('General notes:'), **DETAILS_SUBGROUP_STYLE))
         bullets = m.BulletedList()
         for note in definition['notes']:
             bullets.add(m.Text(note))
         message.add(bullets)
 
     if 'continuous_notes' in definition:
-        message.add(m.Paragraph(
-            m.ImportantText(tr('Notes for continuous datasets:'))))
+        message.add(m.Heading(
+            tr('Notes for continuous datasets:'),
+            **DETAILS_SUBGROUP_STYLE))
         bullets = m.BulletedList()
         for note in definition['continuous_notes']:
             bullets.add(m.Text(note))
         message.add(bullets)
 
     if 'classified_notes' in definition:
-        message.add(m.Paragraph(
-            m.ImportantText(tr('Notes for classified datasets:'))))
+        message.add(m.Heading(
+            tr('Notes for classified datasets:'),
+            **DETAILS_SUBGROUP_STYLE))
         bullets = m.BulletedList()
         for note in definition['classified_notes']:
             bullets.add(m.Text(note))
@@ -559,19 +581,26 @@ def definition_to_message(definition, heading_style=None):
 
     if 'single_event_notes' in definition:
         message.add(
-            m.Paragraph(m.ImportantText(tr('Notes for single events'))))
-        bullets = m.BulletedList()
-        for note in definition['single_event_notes']:
-            bullets.add(m.Text(note))
-        message.add(bullets)
+            m.Heading(tr('Notes for single events'), **DETAILS_STYLE))
+        if len(definitions['single_event_notes']) < 1:
+            message.add(m.Paragraph(tr('No single event notes defined.')))
+        else:
+            bullets = m.BulletedList()
+            for note in definition['single_event_notes']:
+                bullets.add(m.Text(note))
+            message.add(bullets)
 
     if 'multi_event_notes' in definition:
-        message.add(m.Paragraph(
-            m.ImportantText(tr('Notes for multi events / scenarios:'))))
-        bullets = m.BulletedList()
-        for note in definition['multi_event_notes']:
-            bullets.add(m.Text(note))
-        message.add(bullets)
+        message.add(
+            m.Heading(tr('Notes for multi events / scenarios:'),
+                      **DETAILS_STYLE))
+        if len(definitions['multi_event_notes']) < 1:
+            message.add(m.Paragraph(tr('No multi-event notes defined.')))
+        else:
+            bullets = m.BulletedList()
+            for note in definition['multi_event_notes']:
+                bullets.add(m.Text(note))
+            message.add(bullets)
 
     if 'actions' in definition:
         message.add(m.Paragraph(m.ImportantText(tr('Actions:'))))
@@ -607,9 +636,13 @@ def definition_to_message(definition, heading_style=None):
         message.add(table)
 
     if 'classifications' in definition:
-        message.add(m.Paragraph(tr('Hazard classifications')))
+        message.add(m.Heading(
+            tr('Hazard classifications'),
+            **DETAILS_STYLE))
         for inasafe_class in definition['classifications']:
-            message.add(definition_to_message(inasafe_class))
+            message.add(definition_to_message(
+                inasafe_class,
+                DETAILS_SUBGROUP_STYLE))
 
     if 'classes' in definition:
         message.add(m.Paragraph(tr('Classes')))

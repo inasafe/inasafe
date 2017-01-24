@@ -55,7 +55,7 @@ from safe.gui.tools.rectangle_map_tool import RectangleMapTool
 from safe.messaging import styles
 from safe.gui.tools.help.extent_selector_help import extent_selector_help
 
-INFO_STYLE = styles.INFO_STYLE
+INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
 LOGGER = logging.getLogger('InaSAFE')
 FORM_CLASS = get_ui_class('extent_selector_dialog_base.ui')
 

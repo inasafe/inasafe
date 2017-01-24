@@ -6,8 +6,8 @@ from safe import messaging as m
 from safe.messaging import styles
 from safe.utilities.resources import resources_path
 
-SUBSECTION_STYLE = styles.SUBSECTION_STYLE
-INFO_STYLE = styles.INFO_STYLE
+SUBSECTION_STYLE = styles.SUBSECTION_LEVEL_3_STYLE
+INFO_STYLE = styles.BLUE_LEVEL_4_STYLE
 SMALL_ICON_STYLE = styles.SMALL_ICON_STYLE
 
 __author__ = 'ismailsunni'

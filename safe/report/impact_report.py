@@ -33,8 +33,8 @@ __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
-SUGGESTION_STYLE = styles.SUGGESTION_STYLE
-WARNING_STYLE = styles.WARNING_STYLE
+SUGGESTION_STYLE = styles.GREEN_LEVEL_4_STYLE
+WARNING_STYLE = styles.RED_LEVEL_4_STYLE
 
 LOGGER = logging.getLogger('InaSAFE')
 

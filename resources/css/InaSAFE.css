@@ -71,7 +71,15 @@ h1, h2, h3, h4, h5 {
   color: #fff;
   background-color: #faa732;
   line-height: 2;
+  margin-bottom: 0;
 }
+
+.details-subgroup {
+  color: #fff;
+  background-color: #8d9196;
+  line-height: 2;
+}
+
 .info, caption {
   color: #fff;
   background-color: #3DB2DD;

@@ -154,7 +154,7 @@ exposure_road = {
     'key': 'road',
     'name': tr('Roads'),
     'description': tr(
-        'A <b>road</b> is a defined route used by a vehicle or people to '
+        'A <b>road</b> is defined as a route used by a vehicle or people to '
         'travel between two or more points.'),
     'notes': [  # these are additional generic notes for roads - IF has more
         caveat_incomplete_data,

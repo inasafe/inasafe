@@ -35,57 +35,55 @@ from safe.utilities.resources import resources_path
 
 
 # Used for section headers in definitions_help.py
-TITLE_STYLE = {
+TITLE_LEVEL_1_STYLE = {
     'level': 1,
     'style_class': 'title'}
 
-SECTION_STYLE = {
+SECTION_LEVEL_2_STYLE = {
     'level': 2,
     'style_class': 'section'}
 
-SUBSECTION_STYLE = {
+SUBSECTION_LEVEL_3_STYLE = {
     'level': 3,
     'style_class': 'subsection'}
 
-INFO_STYLE = {
+HEADING_LEVEL_4_STYLE = {
+    'level': 4,
+    'style_class': 'subsection'}
+
+BLUE_LEVEL_4_STYLE = {
     'level': 4,
     'icon': 'icon-info-sign icon-white',
     'style_class': 'info'}
-
-HEADING_STYLE = {
+RED_LEVEL_4_STYLE = {
     'level': 4,
-    'style_class': 'subsection'}
+    'icon': 'icon-warning-sign icon-white',
+    'style_class': 'warning'}
+
+GREEN_LEVEL_4_STYLE = {
+    'level': 4,
+    'icon': 'icon-comment icon-white',
+    'style_class': 'suggestion'}
+
+ORANGE_LEVEL_4_STYLE = {
+    'level': 4,
+    'icon': 'icon-remove-sign icon-white',
+    'style_class': 'warning'}
+
+ORANGE_LEVEL_5_STYLE = {
+    'level': 5,
+    'icon': 'icon-list icon-white',
+    'style_class': 'problem'}
+
+GREY_LEVEL_6_STYLE = {
+    'level': 6,
+    'icon': 'icon-list icon-white',
+    'style_class': 'details-subgroup'}
 
 PROGRESS_UPDATE_STYLE = {
     'level': 4,
     'icon': 'icon-cog icon-white',
     'style_class': 'info'}
-
-
-SUB_INFO_STYLE = {
-    'level': 5,
-    'icon': 'icon-info-sign icon-white',
-    'style_class': 'sub_info'}
-
-WARNING_STYLE = {
-    'level': 4,
-    'icon': 'icon-warning-sign icon-white',
-    'style_class': 'warning'}
-
-SUGGESTION_STYLE = {
-    'level': 4,
-    'icon': 'icon-comment icon-white',
-    'style_class': 'suggestion'}
-
-PROBLEM_STYLE = {
-    'level': 4,
-    'icon': 'icon-remove-sign icon-white',
-    'style_class': 'warning'}
-
-DETAILS_STYLE = {
-    'level': 4,
-    'icon': 'icon-list icon-white',
-    'style_class': 'problem'}
 
 SMALL_ICON_STYLE = {
     'attributes': 'style="width: 24px; height: 24px;"',

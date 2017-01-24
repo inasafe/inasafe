@@ -117,8 +117,8 @@ from safe import messaging as m
 from safe.messaging import styles
 from safe.gui.widgets.message import generate_input_error_message
 
-SUGGESTION_STYLE = styles.SUGGESTION_STYLE
-WARNING_STYLE = styles.WARNING_STYLE
+SUGGESTION_STYLE = styles.GREEN_LEVEL_4_STYLE
+WARNING_STYLE = styles.RED_LEVEL_4_STYLE
 
 LOGGER = logging.getLogger('InaSAFE')
 
