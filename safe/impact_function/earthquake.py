@@ -275,6 +275,10 @@ def exposed_people_stats(hazard, exposure, aggregation, fatality_rate):
     exposed_raster.keywords['layer_purpose'] = (
         layer_purpose_exposure_impacted['key'])
     exposed_raster.keywords['title'] = layer_purpose_exposure_impacted['key']
+    exposed_raster.keywords['exposure_keywords'] = dict(exposure.keywords)
+    exposed_raster.keywords['hazard_keywords'] = dict(hazard.keywords)
+    exposed_raster.keywords['aggregation_keywords'] = dict(
+        aggregation.keywords)
 
     return exposed, exposed_raster
 
