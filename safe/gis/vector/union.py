@@ -95,6 +95,8 @@ def union(union_a, union_b, callback=None):
 
     # Begin copy/paste from Processing plugin.
     # Please follow their code as their code is optimized.
+    # The code below is not following our coding standards because we want to
+    # be able to track any diffs from QGIS easily.
 
     index_a = create_spatial_index(union_b)
     index_b = create_spatial_index(union_a)
