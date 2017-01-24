@@ -36,6 +36,7 @@ from safe.gui.tools.help.needs_calculator_help import needs_calculator_help
 from safe.impact_function.postprocessors import run_single_post_processor
 from safe.messaging import styles
 from safe.utilities.resources import html_footer, html_header, get_ui_class
+from safe.utilities.qgis_utilities import display_critical_message_box
 
 INFO_STYLE = styles.INFO_STYLE
 LOGGER = logging.getLogger('InaSAFE')
@@ -57,6 +58,7 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         self.setWindowTitle(self.tr(
             'InaSAFE %s Minimum Needs Calculator' % get_version()))
 
+        self.result_layer = None
         self.button_box.button(QtGui.QDialogButtonBox.Ok).setEnabled(False)
 
         # get qgis map layer combobox object
@@ -115,9 +117,14 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         :returns: Layer with attributes for minimum needs.
         :rtype: QgsVectorLayer
         """
+        # Create a new layer for output layer
+        output_layer = self.prepare_new_layer(input_layer)
+
         # count each minimum needs for every features
         for needs in minimum_needs_post_processors:
-            run_single_post_processor(input_layer, needs)
+            run_single_post_processor(output_layer, needs)
+
+        return output_layer
 
     def prepare_new_layer(self, input_layer):
         """Prepare new layer for the output layer.
@@ -129,8 +136,9 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         :rtype: QgsVectorLayer
         """
         # create memory layer
+        output_layer_name = os.path.splitext(input_layer.name())[0]
         output_layer = (
-            '%s_minimum_needs' % input_layer.name())
+            '%s_minimum_needs' % output_layer_name)
         output_layer = create_memory_layer(
             output_layer,
             input_layer.geometryType(),
@@ -143,19 +151,8 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         temp_layer.keywords = {
             'layer_purpose': layer_purpose_aggregation['key']}
 
-        # add keywords to output layer
+        # copy features to output layer
         copy_layer(temp_layer, output_layer)
-
-        return output_layer
-
-    def accept(self):
-        """Process the layer and field and generate a new layer.
-
-        .. note:: This is called on OK click.
-
-        """
-        # Create a new layer for output layer
-        output_layer = self.prepare_new_layer(self.layer.currentLayer())
 
         # Monkey patching output layer to make it work with
         # minimum needs calculator
@@ -169,34 +166,45 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         # remove unnecessary fields & rename inasafe fields
         rename_remove_inasafe_fields(output_layer)
 
+        return output_layer
+
+    def accept(self):
+        """Process the layer and field and generate a new layer.
+
+        .. note:: This is called on OK click.
+
+        """
+
         try:
-            self.minimum_needs(output_layer)
+            self.result_layer = self.minimum_needs(self.layer.currentLayer())
         except Exception as e:
             LOGGER.debug(e)
+            display_critical_message_box(
+                title='Error while calculating minimum needs', message=e)
             return
 
         # remove monkey patching keywords
-        del output_layer.keywords
+        del self.result_layer.keywords
 
-        # write layer to geopackage file
+        # write memory layer to file system
         settings = QSettings()
         default_user_directory = settings.value(
             'inasafe/defaultUserDirectory', defaultValue='')
 
         if default_user_directory:
-            path = os.path.join(default_user_directory, output_layer.name())
+            path = os.path.join(
+                default_user_directory, self.result_layer.name())
             if not os.path.exists(path):
                 os.makedirs(path)
             data_store = Folder(path)
-            data_store.add_layer(output_layer, output_layer.name())
         else:
-            data_store = Folder(temp_dir(sub_dir=output_layer.name()))
+            data_store = Folder(temp_dir(sub_dir=self.result_layer.name()))
 
-        data_store.add_layer(output_layer, output_layer.name())
+        data_store.add_layer(self.result_layer, self.result_layer.name())
 
         # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayers(
-            [data_store.layer(output_layer.name())])
+            [data_store.layer(self.result_layer.name())])
         self.done(QtGui.QDialog.Accepted)
 
     @pyqtSlot()

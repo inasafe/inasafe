@@ -63,16 +63,18 @@ class MinimumNeedsTest(unittest.TestCase):
             shapefile_path,
             os.path.basename(shapefile_path),
             'ogr')
-        if layer.isValid():
-            layer = dialog.prepare_new_layer(layer)
-        attribute = 'displaced'
-        layer.keywords = {
-            'layer_purpose': layer_purpose_aggregation['key'],
-            'inasafe_fields': {displaced_field['key']: attribute}}
-        rename_remove_inasafe_fields(layer)
+        QgsMapLayerRegistry.instance().addMapLayers([layer])
+
+        # Set selected layer and displaced field
+        dialog.layer.setLayer(layer)
+        dialog.displaced.setField(u'displaced')
 
         # run minimum needs function
-        dialog.minimum_needs(layer)
+        dialog.accept()
+
+        # get output layer
+        layer = dialog.result_layer
+
         assert layer is not None
         field_names = [field.name() for field in layer.pendingFields()]
         for feature in layer.getFeatures():
@@ -95,6 +97,7 @@ class MinimumNeedsTest(unittest.TestCase):
         # Test Ok button without any input in the combo box
         dialog = NeedsCalculatorDialog(PARENT)
         ok_button = dialog.button_box.button(QtGui.QDialogButtonBox.Ok)
+
         self.assertFalse(ok_button.isEnabled())
 
         input_layer = QgsVectorLayer(
@@ -107,6 +110,7 @@ class MinimumNeedsTest(unittest.TestCase):
         # selected in the combo box
         dialog.layer.setLayer(input_layer)
         dialog.displaced.setField(u'displaced')
+
         self.assertTrue(ok_button.isEnabled())
 
 if __name__ == "__main__":
