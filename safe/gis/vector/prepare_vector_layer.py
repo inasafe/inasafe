@@ -101,6 +101,9 @@ def prepare_vector_layer(layer, callback=None):
     try:
         next(iterator)
     except StopIteration:
+        LOGGER.warning(
+            tr('No feature has been found in the {purpose}'
+                .format(purpose=layer.keywords['layer_purpose'])))
         raise NoFeaturesInExtentError
 
     _add_id_column(cleaned)

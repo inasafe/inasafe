@@ -86,6 +86,7 @@ from safe.definitions.constants import (
     PREPARE_SUCCESS,
     PREPARE_FAILED_BAD_INPUT,
     PREPARE_FAILED_INSUFFICIENT_OVERLAP,
+    PREPARE_FAILED_BAD_LAYER,
     PREPARE_FAILED_BAD_CODE)
 from safe.definitions.versions import inasafe_keyword_version
 from safe.common.exceptions import (
@@ -910,6 +911,18 @@ class ImpactFunction(object):
                 list_geometry.append(QgsGeometry(area.geometry()))
 
             self._analysis_extent = QgsGeometry.unaryUnion(list_geometry)
+            is_empty = self._analysis_extent.isGeosEmpty()
+            is_invalid = not self._analysis_extent.isGeosValid()
+            if is_empty or is_invalid:
+                message = generate_input_error_message(
+                    tr('There is a problem with the aggregation layer.'),
+                    m.Paragraph(tr(
+                        'The aggregation layer seems to have a problem. '
+                        'Some features might be invalid. You should check the '
+                        'validity of this layer or use a selection within this'
+                        'layer.'))
+                )
+                return PREPARE_FAILED_BAD_LAYER, message
 
             if self.aggregation.crs().authid() != self.exposure.crs().authid():
                 crs_transform = QgsCoordinateTransform(
