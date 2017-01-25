@@ -38,7 +38,7 @@ generic_hazard_classes = {
             'value': 3,
             'name': tr('High hazard zone'),
             'affected': True,
-            'description': tr('The location that has highest impact.'),
+            'description': tr('The locations having the highest impact.'),
             'string_defaults': ['high'],
             'numeric_default_min': 3,
             'numeric_default_max': (4 - small_number),
@@ -55,7 +55,7 @@ generic_hazard_classes = {
             'value': 2,
             'name': tr('Medium hazard zone'),
             'affected': True,
-            'description': tr('The location that has medium impact.'),
+            'description': tr('The locations where there is a medium impact.'),
             'string_defaults': ['medium'],
             'numeric_default_min': 2,
             'numeric_default_max': (3 - small_number),
@@ -72,7 +72,7 @@ generic_hazard_classes = {
             'color': yellow,
             'name': tr('Low hazard zone'),
             'affected': True,
-            'description': tr('The location that has lowest impact.'),
+            'description': tr('The locations where the lowest impact occured.'),
             'string_defaults': ['low'],
             'numeric_default_min': 0,
             'numeric_default_max': (2 - small_number),
@@ -393,6 +393,7 @@ tsunami_hazard_classes = {
             'name': tr('Very high hazard zone'),
             'affected': True,
             'description': tr('Water above 8.0m.'),
+            'string_defaults': [],
             'numeric_default_min': 8,
             'numeric_default_max': 9999999999,
             'citations': [
@@ -419,6 +420,7 @@ tsunami_hazard_classes = {
                 'reaches 8 m, it will cause severe damage. Dykes, wave '
                 'breaker, tsunami protection walls and green belts will be '
                 'washed away.'),
+            'string_defaults': [],
             'numeric_default_min': 3,
             'numeric_default_max': 8 - small_number,
             'citations': [
@@ -442,6 +444,7 @@ tsunami_hazard_classes = {
                 'causes most people frightened and to flee to higher '
                 'ground. Small vessels drift and collide. Damage occurs to '
                 'some wooden houses, while most of them are safe.'),
+            'string_defaults': [],
             'numeric_default_min': 1,
             'numeric_default_max': 3 - small_number,
             'citations': [
@@ -467,6 +470,7 @@ tsunami_hazard_classes = {
                 'observed from shore. Small vessels drift and collide and '
                 'some turn over. Sand is deposited and there is flooding of '
                 'areas close to the shore.'),
+            'string_defaults': [],
             'numeric_default_min': 0.1,
             'numeric_default_max': 1 - small_number,
             'citations': [
@@ -483,6 +487,7 @@ tsunami_hazard_classes = {
             'name': tr('Dry zone'),
             'affected': False,
             'description': tr('No water above ground height.'),
+            'string_defaults': [],
             'numeric_default_min': 0,
             'numeric_default_max': 0.1 - small_number,
             'citations': [

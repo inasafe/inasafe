@@ -672,23 +672,42 @@ def definition_to_message(definition, heading_style=None):
                     else:
                         defaults = default
                 row.add(m.Cell(defaults))
-                if 'numeric_default_min' in inasafe_class:
-                    row.add(m.Cell(inasafe_class['numeric_default_min']))
-                else:
-                    row.add(m.Cell(tr('unspecified')))
-                if 'numeric_default_min' in inasafe_class:
-                    row.add(m.Cell(inasafe_class['numeric_default_max']))
-                else:
-                    row.add(m.Cell(tr('unspecified')))
-
-                table.add(row)
-                # Description goes in its own row with spanning
-                row = m.Row()
-                row.add(m.Cell(''))
-                row.add(m.Cell(inasafe_class['description'], span=4))
-                table.add(row)
             else:
                 row.add(m.Cell(tr('unspecified')))
+            # Min may be a single value or a dict of values so we need
+            # to check type and deal with it accordingly
+            if 'numeric_default_min' in inasafe_class:
+                if isinstance(inasafe_class['numeric_default_min'], dict):
+                    bullets = m.BulletedList()
+                    minima = inasafe_class['numeric_default_min']
+                    for key, value in minima.iteritems():
+                        bullets.add(u'%s : %s' % (key, value))
+                    row.add(m.Cell(bullets))
+                else:
+                    row.add(m.Cell(inasafe_class['numeric_default_min']))
+            else:
+                row.add(m.Cell(tr('unspecified')))
+
+            # Min may be a single value or a dict of values so we need
+            # to check type and deal with it accordingly
+            if 'numeric_default_max' in inasafe_class:
+                if isinstance(inasafe_class['numeric_default_max'], dict):
+                    bullets = m.BulletedList()
+                    minima = inasafe_class['numeric_default_max']
+                    for key, value in minima.iteritems():
+                        bullets.add(u'%s : %s' % (key, value))
+                    row.add(m.Cell(bullets))
+                else:
+                    row.add(m.Cell(inasafe_class['numeric_default_max']))
+            else:
+                row.add(m.Cell(tr('unspecified')))
+
+            table.add(row)
+            # Description goes in its own row with spanning
+            row = m.Row()
+            row.add(m.Cell(''))
+            row.add(m.Cell(inasafe_class['description'], span=4))
+            table.add(row)
         message.add(table)
 
     if 'affected' in definition:
