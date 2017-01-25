@@ -48,13 +48,19 @@ class DictionaryProperty(BaseProperty):
             for k, v in value.items():
                 if isinstance(v, basestring):
                     try:
+                        # Try to get dictionary, if possible.
                         dictionary_value = json.loads(v)
                         if isinstance(dictionary_value, dict):
                             value[k] = dictionary_value
                         else:
                             pass
-                    except ValueError as e:
-                        pass
+                    except ValueError:
+                        # Try to get time, if possible.
+                        try:
+                            value[k] = datetime.strptime(
+                                v, "%Y-%m-%dT%H:%M:%S.%f")
+                        except ValueError:
+                            pass
             return value
         except ValueError as e:
             raise MetadataCastError(e)
@@ -72,7 +78,7 @@ class DictionaryProperty(BaseProperty):
                     elif isinstance(v, (QDate, QDateTime)):
                         string_value[k] = v.toString(Qt.ISODate)
                     elif isinstance(v, datetime):
-                        string_value[k] = v.date().isoformat()
+                        string_value[k] = v.isoformat()
                     elif isinstance(v, date):
                         string_value[k] = v.isoformat()
                     elif isinstance(v, dict):
