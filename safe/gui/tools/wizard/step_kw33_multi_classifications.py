@@ -2,6 +2,7 @@
 """InaSAFE Keyword Wizard Step for Multi Classifications."""
 
 import logging
+from functools import partial
 
 from PyQt4.QtGui import QLabel, QHBoxLayout, QComboBox, QPushButton, QTextEdit
 from PyQt4.QtCore import Qt
@@ -35,6 +36,9 @@ LOGGER = logging.getLogger('InaSAFE')
 FORM_CLASS = get_wizard_step_ui_class(__file__)
 INFO_STYLE = styles.INFO_STYLE
 
+# Mode
+CHOOSE_MODE = 0
+EDIT_MODE = 1
 
 class StepKwMultiClassifications(WizardStep, FORM_CLASS):
     """Keyword Wizard Step: Multi Classification."""
@@ -50,6 +54,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         self.exposures = []
         self.exposure_combo_boxes = []
         self.exposure_edit_buttons = []
+        self.mode = 0
 
     def is_ready_to_next_step(self):
         """Check if the step is complete.
@@ -149,6 +154,12 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
 
             # Add edit button
             exposure_edit_button = QPushButton(tr('Edit'))
+            exposure_edit_button.clicked.connect(
+                partial(self.edit_button_clicked,
+                        edit_button=exposure_edit_button))
+            # exposure_edit_button.pressed.connect(
+            #     lambda: display_information_message_box(
+            #         title=title, message=more_details))
 
             # Arrange in layout
             exposure_layout.addWidget(exposure_label)
@@ -166,7 +177,34 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             self.exposure_combo_boxes.append((exposure_combo_box))
             self.exposure_edit_buttons.append(exposure_edit_button)
 
-    def setup_viewer(self):
+    def edit_button_clicked(self, edit_button):
+        """Method to handle edit button."""
+        if self.mode == CHOOSE_MODE:
+            # Change mode
+            self.mode = EDIT_MODE
+            # Disable all edit button
+            for exposure_edit_button in self.exposure_edit_buttons:
+                exposure_edit_button.setEnabled(False)
+            # Except one that was clicked
+            edit_button.setEnabled(True)
+            # Disable all combo box
+            for exposure_combo_box in self.exposure_combo_boxes:
+                exposure_combo_box.setEnabled(False)
+            # Change the edit button to cancel
+            edit_button.setText(tr('Cancel'))
+        elif self.mode == EDIT_MODE:
+            # Change mode
+            self.mode = CHOOSE_MODE
+            # Enable all edit button
+            for exposure_edit_button in self.exposure_edit_buttons:
+                exposure_edit_button.setEnabled(True)
+            # Enable all combo box
+            for exposure_combo_box in self.exposure_combo_boxes:
+                exposure_combo_box.setEnabled(True)
+            # Revert back the text of the edit button.
+            edit_button.setText(tr('Edit'))
+
+    def show_viewer(self):
         """Setup the UI for QTextEdit to show the current state."""
         right_panel_heading = QLabel(tr('Status'))
         right_panel_heading.setFont(big_font)
@@ -197,7 +235,7 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         self.setup_left_panel()
 
         # Set the right panel, for the beginning show the viewer
-        self.setup_viewer()
+        self.show_viewer()
 
     def clear(self):
         """Clear current state."""
