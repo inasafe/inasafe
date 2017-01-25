@@ -68,7 +68,7 @@
          <item row="3" column="0">
           <widget class="QLabel" name="label">
            <property name="text">
-            <string>Displaced people Layer</string>
+            <string>Displaced people layer</string>
            </property>
           </widget>
          </item>
@@ -127,7 +127,7 @@
          <item row="9" column="0">
           <widget class="QLabel" name="label_4">
            <property name="text">
-            <string>Aggregation Field Id</string>
+            <string>Aggregation field id</string>
            </property>
           </widget>
          </item>
@@ -144,23 +144,10 @@
            </property>
           </spacer>
          </item>
-         <item row="6" column="0">
-          <spacer name="horizontalSpacer_2">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>5</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
          <item row="5" column="0">
           <widget class="QLabel" name="label_3">
            <property name="text">
-            <string>Displaced people Field</string>
+            <string>Displaced people field</string>
            </property>
           </widget>
          </item>
@@ -180,7 +167,7 @@
          <item row="7" column="0">
           <widget class="QLabel" name="label_2">
            <property name="text">
-            <string>Aggregation Field Name</string>
+            <string>Aggregation field name</string>
            </property>
           </widget>
          </item>
@@ -222,6 +209,19 @@
          <item row="9" column="1">
           <widget class="QgsFieldComboBox" name="aggregation_id"/>
          </item>
+         <item row="6" column="0">
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>5</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
         </layout>
        </item>
       </layout>
@@ -231,7 +231,7 @@
    <item row="0" column="0">
     <widget class="QLabel" name="label_5">
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This tool will calculate minimum needs for displaced people in specified &lt;/p&gt;&lt;p&gt;aggregation area.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This tool will calculate minimum needs for displaced people in the specified &lt;/p&gt;&lt;p&gt;aggregation areas.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
    </item>
