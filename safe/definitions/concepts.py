@@ -236,7 +236,7 @@ concepts = {
         'key': 'relocated_people',
         'description': tr(
             'Relocated people are people who, for different reasons or '
-            'circumstances because of risk or disaster, have movedm '
+            'circumstances because of risk or disaster, have moved '
             'permanently from their places of residence to new sites.'),
         'citations': [
             {

@@ -160,7 +160,12 @@ exposure_road = {
         'travel between two or more points.'),
     'notes': [  # these are additional generic notes for roads - IF has more
         caveat_incomplete_data,
-        tr('Numbers for road lengths have been rounded to the nearest metre.'),
+        tr('Numbers for road lengths have been rounded to the nearest 10 '
+           'metres if the total is less than 1,000; nearest 100 metres if more'
+           ' than 1,000 and less than 100,000; and nearest 1000 metres if more '
+           'than 100,000.'),
+        tr('Rounding is applied to all road lengths, which may cause '
+           'discrepancies between subtotals and totals.'),
         tr('Roads marked as not affected may still be unusable due to network '
            'isolation. Roads marked as affected may still be usable if they '
            'are elevated above the local landscape.'),
@@ -214,7 +219,14 @@ exposure_structure = {
         'bridge.'),
     'notes': [  # additional generic notes for structures - IF has more
         caveat_incomplete_data,
-        tr('Numbers reported for structures have not been rounded.')
+        tr('Structures overlapping the analysis extent may be assigned a '
+           'hazard status lower than that to which they are exposed outside '
+           'the analysis area. '),
+        tr('Numbers reported for structures have been rounded to the nearest '
+           '10 if the total is less than 1,000; nearest 100 if more than 1,000'
+           'and less than 100,000; and nearest 1000 if more than 100,000.'),
+        tr('Rounding is applied to all structure counts, which may cause '
+           'discrepancies between subtotals and totals.'),
     ],
     'continuous_notes': [  # notes specific to continuous data
     ],
@@ -303,7 +315,11 @@ exposure_land_cover = {
     'notes': [
         # these are additional generic notes for landcover - IF has more
         caveat_incomplete_data,
-        tr('Areas reported for land cover have not been rounded.'),
+        tr('Areas reported for land cover have been rounded to the nearest '
+           '10 if the total is less than 1,000; nearest 100 if more than 1,000 '
+           'and less than 100,000; and nearest 1000 if more than 100,000.'),
+        tr('Rounding is applied to all land cover areas, which may cause '
+           'discrepancies between subtotals and totals.'),
     ],
     'continuous_notes': [  # notes specific to continuous data
     ],
