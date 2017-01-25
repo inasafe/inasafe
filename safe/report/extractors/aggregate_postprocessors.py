@@ -66,7 +66,7 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
         tr('Detailed Age Report'),
         use_aggregation=use_aggregation,
         debug_mode=debug_mode,
-        population_rounding=False)
+        population_rounding=True)
     context['sections']['gender'] = create_section(
         aggregation_impacted,
         analysis_layer,
@@ -74,7 +74,7 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
         tr('Detailed Gender Report'),
         use_aggregation=use_aggregation,
         debug_mode=debug_mode,
-        population_rounding=False)
+        population_rounding=True)
 
     # Only provides minimum needs breakdown if there is aggregation layer
     if use_aggregation:
@@ -99,7 +99,7 @@ def aggregation_postprocessors_extractor(impact_report, component_metadata):
             tr('Detailed Minimum Needs Report'),
             units_label=units_label,
             debug_mode=debug_mode,
-            population_rounding=False)
+            population_rounding=True)
     else:
         sections_not_empty = True
         for _, value in context['sections'].iteritems():

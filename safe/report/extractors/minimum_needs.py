@@ -73,10 +73,7 @@ def minimum_needs_extractor(impact_report, component_metadata):
             value = round_affected_number(
                 analysis_feature[field_idx],
                 enable_rounding=is_rounding,
-                use_population_rounding=False)
-            if value == 0:
-                # skip if no needs needed
-                continue
+                use_population_rounding=True)
 
             need_parameter = field['need_parameter']
             """:type: ResourceParameter"""

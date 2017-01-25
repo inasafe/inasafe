@@ -31,7 +31,8 @@ from safe.definitions.report import (
     analysis_breakdown_component,
     aggregation_result_component,
     minimum_needs_component,
-    aggregation_postprocessors_component)
+    aggregation_postprocessors_component,
+    population_infographic_component)
 from safe.report.impact_report import ImpactReport
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
@@ -111,7 +112,9 @@ class TestImpactReport(unittest.TestCase):
 
         expected_context = {
             'header': u'Analysis Results',
-            'title': u'Number of buildings affected', 'summary': [
+            'title': u'In the event of a Generic, how many Structures might '
+                     u'be affected?',
+            'summary': [
                 {
                     'header_label': u'Hazard Zone',
                     'rows': [
@@ -357,11 +360,12 @@ class TestImpactReport(unittest.TestCase):
         """Test generate minimum needs section."""
 
         output_folder = self.fixtures_dir('../output/minimum_needs')
-        # tsunami raster with population raster
         shutil.rmtree(output_folder, ignore_errors=True)
 
-        hazard_layer = load_test_raster_layer(
-            'hazard', 'tsunami_wgs84.tif')
+        # Minimum needs only occured when population is displaced
+        # so, use flood hazard.
+        hazard_layer = load_test_vector_layer(
+            'hazard', 'flood_multipart_polygons.shp')
         exposure_layer = load_test_raster_layer(
             'exposure', 'pop_binary_raster_20_20.asc')
 
@@ -447,19 +451,19 @@ class TestImpactReport(unittest.TestCase):
     def test_aggregate_post_processors_vector(self):
         """Test generate aggregate postprocessors sections."""
 
-        # TODO: Should add with and without aggregation layer test
-
         output_folder = self.fixtures_dir(
             '../output/aggregate_post_processors')
-        # tsunami raster with population raster
         shutil.rmtree(output_folder, ignore_errors=True)
 
+        # Only flood and earthquake who deals with evacuated population report
         hazard_layer = load_test_vector_layer(
-            'gisv4', 'hazard', 'classified_vector.geojson')
+            'hazard', 'flood_multipart_polygons.shp')
         exposure_layer = load_test_vector_layer(
-            'gisv4', 'exposure', 'buildings.geojson')
+            'exposure', 'census.geojson')
+        # We have to use aggregation layer now, because gender/age ratio is
+        # there
         aggregation_layer = load_test_vector_layer(
-            'gisv4', 'aggregation', 'small_grid.geojson')
+            'aggregation', 'grid_jakarta.geojson')
 
         impact_function = ImpactFunction()
         impact_function.exposure = exposure_layer
@@ -573,19 +577,19 @@ class TestImpactReport(unittest.TestCase):
     def test_aggregate_post_processors_raster(self):
         """Test generate aggregate postprocessors sections."""
 
-        # TODO: Should add with and without aggregation layer test
-
         output_folder = self.fixtures_dir(
             '../output/aggregate_post_processors')
-        # tsunami raster with population raster
         shutil.rmtree(output_folder, ignore_errors=True)
 
-        hazard_layer = load_test_raster_layer(
-            'hazard', 'tsunami_wgs84.tif')
+        # Only flood and earthquake who deals with evacuated population report
+        hazard_layer = load_test_vector_layer(
+            'hazard', 'flood_multipart_polygons.shp')
         exposure_layer = load_test_raster_layer(
             'exposure', 'pop_binary_raster_20_20.asc')
+        # We have to use aggregation layer now, because gender/age ratio is
+        # there
         aggregation_layer = load_test_vector_layer(
-            'aggregation', 'district_osm_jakarta.geojson')
+            'aggregation', 'grid_jakarta.geojson')
 
         impact_function = ImpactFunction()
         impact_function.exposure = exposure_layer
@@ -685,6 +689,194 @@ class TestImpactReport(unittest.TestCase):
 
         output_path = impact_report.component_absolute_output_path(
             'impact-report')
+
+        # for now, test that output exists
+        self.assertTrue(os.path.exists(output_path))
+
+        shutil.rmtree(output_folder, ignore_errors=True)
+
+    # expected to fail until postprocessor calculation in analysis
+    # impacted is fixed
+    @unittest.expectedFailure
+    def test_population_infographic(self):
+        """Test population infographic generation."""
+        output_folder = self.fixtures_dir(
+            '../output/population_infographic')
+        shutil.rmtree(output_folder, ignore_errors=True)
+
+        # Only flood and earthquake who deals with evacuated population report
+        hazard_layer = load_test_vector_layer(
+            'hazard', 'flood_multipart_polygons.shp')
+        exposure_layer = load_test_raster_layer(
+            'exposure', 'pop_binary_raster_20_20.asc')
+        # We have to use aggregation layer now, because gender/age ratio is
+        # there
+        aggregation_layer = load_test_vector_layer(
+            'aggregation', 'grid_jakarta.geojson')
+
+        impact_function = ImpactFunction()
+        impact_function.exposure = exposure_layer
+        impact_function.hazard = hazard_layer
+        impact_function.aggregation = aggregation_layer
+        impact_function.prepare()
+        return_code, message = impact_function.run()
+
+        self.assertEqual(return_code, ANALYSIS_SUCCESS, message)
+
+        report_metadata = ReportMetadata(
+            metadata_dict=standard_impact_report_metadata_html)
+
+        impact_report = ImpactReport(
+            IFACE,
+            report_metadata,
+            impact_function=impact_function)
+        impact_report.output_folder = output_folder
+        impact_report.process_component()
+
+        """Checking generated context"""
+        empty_component_output_message = 'Empty component output'
+
+        # Check population infographic
+        population_infographic = impact_report.metadata.component_by_key(
+            population_infographic_component['key']).context
+        """:type: safe.report.report_metadata.Jinja2ComponentsMetadata"""
+
+        # TODO: This has possible wrong number, expect to be fixed soon.
+
+        # Check population chart
+        expected_context = {
+            'data': [30, 125.88367290531815],
+            'total_value': 155.883672905,
+            'labels': [u'Wet', u'Total Unaffected'],
+            'colors': [u'#f03b20', u'#1a9641'],
+        }
+
+        donut_context = population_infographic['sections'][
+            'population_chart']['context']
+        """:type: safe.report.extractors.infographic_elements.svg_charts.
+            DonutChartContext"""
+
+        actual_context = {
+            'data': donut_context.data,
+            'total_value': donut_context.total_value,
+            'labels': donut_context.labels,
+            'colors': donut_context.colors,
+        }
+
+        self.assertDictEqual(
+            expected_context, actual_context)
+
+        # Check people section
+        expected_context = {
+            'number': 30
+        }
+
+        people_context = population_infographic['sections']['people'][
+            'items'][0]
+        """:type: safe.report.extractors.infographics.PeopleInfographicElement
+        """
+
+        actual_context = {
+            'number': people_context.number
+        }
+
+        self.assertDictEqual(
+            expected_context, actual_context)
+
+        # Check vulnerabilities section
+        expected_context = {
+            'items': [
+                {
+                    'header': 'Female',
+                    'number': 80,
+                    'percentage': 50.0,
+                },
+                {
+                    'header': 'Youth',
+                    'number': 40,
+                    'percentage': 25.0,
+                },
+                {
+                    'header': 'Adult',
+                    'number': 100,
+                    'percentage': 62.5,
+                },
+                {
+                    'header': 'Elderly',
+                    'number': 20,
+                    'percentage': 12.5,
+                }
+            ]
+        }
+
+        vulnerabilities_context = population_infographic['sections'][
+            'vulnerability']
+
+        actual_context = {
+            'items': [{
+                'header': item.header,
+                'number': item.number,
+                'percentage': item.percentage
+            } for item in vulnerabilities_context['items']]
+        }
+
+        self.assertDictEqual(
+            expected_context, actual_context)
+
+        # Check minimum needs section
+        expected_context = {
+            'items': [
+                {
+                    'header': 'Rice',
+                    'number': 420,
+                    'unit': 'kg/weekly',
+                },
+                {
+                    'header': 'Drinking Water',
+                    'number': 2600,
+                    'unit': 'l/weekly',
+                },
+                {
+                    'header': 'Clean Water',
+                    'number': 10000,
+                    'unit': 'l/weekly',
+                },
+                {
+                    'header': 'Family Kits',
+                    'number': 30,
+                    'unit': 'units',
+                },
+                {
+                    'header': 'Toilets',
+                    'number': 10,
+                    'unit': 'units',
+                },
+            ]
+        }
+
+        needs_context = population_infographic['sections'][
+            'minimum_needs']
+
+        actual_context = {
+            'items': [{
+                'header': item.header,
+                'number': item.number,
+                'percentage': item.percentage,
+            } for item in needs_context['items']]
+        }
+
+        self.assertDictEqual(
+            expected_context, actual_context)
+
+        # Check output
+
+        self.assertTrue(
+            population_infographic.output, empty_component_output_message)
+
+        """Check generated report"""
+
+        output_path = impact_report.component_absolute_output_path(
+            'infographic-layout')
 
         # for now, test that output exists
         self.assertTrue(os.path.exists(output_path))

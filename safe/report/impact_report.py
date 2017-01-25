@@ -605,23 +605,27 @@ class ImpactReport(object):
         for component in self.metadata.components:
             # load extractors
             try:
-                if callable(component.extractor):
-                    _extractor_method = component.extractor
+                if not component.context:
+                    if callable(component.extractor):
+                        _extractor_method = component.extractor
+                    else:
+                        _package_name = (
+                            '%(report-key)s.extractors.%(component-key)s')
+                        _package_name %= {
+                            'report-key': self.metadata.key,
+                            'component-key': component.key
+                        }
+                        # replace dash with underscores
+                        _package_name = _package_name.replace('-', '_')
+                        _extractor_path = os.path.join(
+                            self.metadata.template_folder,
+                            component.extractor
+                        )
+                        _module = imp.load_source(
+                            _package_name, _extractor_path)
+                        _extractor_method = getattr(_module, 'extractor')
                 else:
-                    _package_name = (
-                        '%(report-key)s.extractors.%(component-key)s')
-                    _package_name %= {
-                        'report-key': self.metadata.key,
-                        'component-key': component.key
-                    }
-                    # replace dash with underscores
-                    _package_name = _package_name.replace('-', '_')
-                    _extractor_path = os.path.join(
-                        self.metadata.template_folder,
-                        component.extractor
-                    )
-                    _module = imp.load_source(_package_name, _extractor_path)
-                    _extractor_method = getattr(_module, 'extractor')
+                    LOGGER.info('Predefined context. Extractor not needed.')
             except Exception as e:  # pylint: disable=broad-except
                 generation_error_code = self.REPORT_GENERATION_FAILED
                 LOGGER.info(e)
@@ -637,8 +641,11 @@ class ImpactReport(object):
             #  - this ImpactReport
             #  - this component
             try:
-                context = _extractor_method(self, component)
-                component.context = context
+                if not component.context:
+                    context = _extractor_method(self, component)
+                    component.context = context
+                else:
+                    LOGGER.info('Using predefined context.')
             except Exception as e:  # pylint: disable=broad-except
                 generation_error_code = self.REPORT_GENERATION_FAILED
                 LOGGER.info(e)

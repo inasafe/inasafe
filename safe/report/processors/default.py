@@ -9,10 +9,15 @@ Module for basic renderer we support. Currently we have:
 import io
 import logging
 import os
+from time import time
+
+import time
 from PyQt4 import QtXml
 from tempfile import mkdtemp
 
 from PyQt4.QtCore import QUrl
+from PyQt4.QtGui import QImage, QPainter
+from PyQt4.QtSvg import QSvgRenderer
 from jinja2.environment import Environment
 from jinja2.loaders import FileSystemLoader
 from qgis.core import (
@@ -261,11 +266,20 @@ def qgis_composer_renderer(impact_report, component):
     # resize map extent
     for map_el in context.map_elements:
         item_id = map_el.get('id')
-        extent = map_el.get('extent')
         split_count = map_el.get('grid_split_count')
+        layers = map_el.get('layers')
         composer_map = composition.getComposerItemById(item_id)
         """:type: qgis.core.QgsComposerMap"""
         if composer_map:
+            composer_map.setKeepLayerSet(True)
+            composer_map.setLayerSet(
+                [l.id() for l in layers])
+            # composer_map.zoomToExtent(square_extent)
+            extent = QgsRectangle()
+            extent.setMinimal()
+            for l in layers:
+                extent.combineExtentWith(l.extent())
+
             canvas_extent = extent
             width = canvas_extent.width()
             height = canvas_extent.height()
@@ -277,8 +291,10 @@ def qgis_composer_renderer(impact_report, component):
             max_x = center.x() + half_length + margin
             min_y = center.y() - half_length - margin
             max_y = center.y() + half_length + margin
+
             # noinspection PyCallingNonCallable
             square_extent = QgsRectangle(min_x, min_y, max_x, max_y)
+
             composer_map.zoomToExtent(square_extent)
             composer_map.renderModeUpdateCachedImage()
 
@@ -352,3 +368,42 @@ def qgis_composer_renderer(impact_report, component):
         except Exception as exc:
             LOGGER.error(exc)
     return component.output
+
+
+def qt_svg_to_png_renderer(impact_report, component):
+    """Render SVG into PNG.
+
+    :param impact_report: ImpactReport contains data about the report that is
+        going to be generated
+    :type impact_report: safe.report.impact_report.ImpactReport
+
+    :param component: Contains the component metadata and context for
+        rendering the output
+    :type component:
+        safe.report.report_metadata.QgisComposerComponentsMetadata
+
+    :return: whatever type of output the component should be
+    """
+    context = component.context
+    filepath = context['filepath']
+    width = component.extra_args['width']
+    height = component.extra_args['height']
+    image_format = QImage.Format_ARGB32
+    qimage = QImage(width, height, image_format)
+    qimage.fill(0x00000000)
+    renderer = QSvgRenderer(filepath)
+    painter = QPainter(qimage)
+    renderer.render(painter)
+    # Should call painter.end() so that QImage is not used
+    painter.end()
+
+    # in case output folder not specified
+    if impact_report.output_folder is None:
+        impact_report.output_folder = mkdtemp(dir=temp_dir())
+    output_path = os.path.join(
+        impact_report.output_folder, component.output_path)
+
+    qimage.save(output_path)
+
+    component.output = output_path
+    return component.output_path

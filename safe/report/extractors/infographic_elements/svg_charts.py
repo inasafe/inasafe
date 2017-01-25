@@ -267,30 +267,63 @@ class DonutChartContext(SVGChartContext):
             step_angle = 1.0 * v / total_values * 2 * math.pi
             # move marker
             d = ''
-            d += 'M%f,%f' % (
-                radius * math.cos(angle) + center_point[0],
-                radius * math.sin(angle) + center_point[1])
+            d += 'M{position_x:f},{position_y:f}'.format(
+                position_x=radius * math.cos(angle) + center_point[0],
+                position_y=radius * math.sin(angle) + center_point[1]
+            )
             # outer arc, counterclockwise
             next_angle = angle + step_angle
-            d += 'a%f,%f 0 0 1 %f,%f' % (
-                radius, radius,
-                radius * (math.cos(next_angle) - math.cos(angle)),
-                radius * (math.sin(next_angle) - math.sin(angle))
+            # arc flag depends on step angle size
+            large_arc_flag = 1 if step_angle > math.pi else 0
+            outer_arc_syntax = (
+                'a{center_x:f},{center_y:f} '
+                '{x_axis_rotation:d} '
+                '{large_arc_flag:d} {sweep_direction_flag:d} '
+                '{end_position_x:f},{end_position_y:f}')
+            d += outer_arc_syntax.format(
+                # center of donut
+                center_x=radius,
+                center_y=radius,
+                # arc not skewed
+                x_axis_rotation=0,
+                # arc flag depends on step angle size
+                large_arc_flag=large_arc_flag,
+                # sweep counter clockwise, always
+                sweep_direction_flag=1,
+                end_position_x=(
+                    radius * (math.cos(next_angle) - math.cos(angle))),
+                end_position_y=(
+                    radius * (math.sin(next_angle) - math.sin(angle)))
             )
             # if hole == 0 then only pie chart
             if not hole == 0:
                 # line in
                 inner_radius = radius - hole
-                d += 'l%f,%f' % (
-                    - inner_radius * math.cos(next_angle),
-                    - inner_radius * math.sin(next_angle)
+                d += 'l{end_position_x:f},{end_position_y:f}'.format(
+                    end_position_x=(- inner_radius * math.cos(next_angle)),
+                    end_position_y=(- inner_radius * math.sin(next_angle))
                 )
 
                 # inner arc
-                d += 'a%f,%f 0 0 0 %f,%f' % (
-                    hole, hole,
-                    hole * (math.cos(angle) - math.cos(next_angle)),
-                    hole * (math.sin(angle) - math.sin(next_angle))
+                inner_arc_syntax = (
+                    'a{center_x:f},{center_y:f} '
+                    '{x_axis_rotation:d} '
+                    '{large_arc_flag:d} {sweep_direction_flag:d} '
+                    '{end_position_x:f},{end_position_y:f}')
+                d += inner_arc_syntax.format(
+                    # center of donut
+                    center_x=hole,
+                    center_y=hole,
+                    # arc not skewed
+                    x_axis_rotation=0,
+                    # arc flag depends on step angle size
+                    large_arc_flag=large_arc_flag,
+                    # sweep clockwise, always
+                    sweep_direction_flag=0,
+                    end_position_x=(
+                        hole * (math.cos(angle) - math.cos(next_angle))),
+                    end_position_y=(
+                        hole * (math.sin(angle) - math.sin(next_angle)))
                 )
 
             # close path
@@ -316,9 +349,6 @@ class DonutChartContext(SVGChartContext):
             if not label_position:
                 label_position_x = 2 * center_point[0]
                 label_position_y = 0
-            # if - math.pi / 2 < mean_angle < math.pi / 2:
-            #     # put it on the right side
-            #     label_position_y += 20
             label_position_y += 20
             label_position = (label_position_x, label_position_y)
 

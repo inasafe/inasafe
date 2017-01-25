@@ -21,14 +21,19 @@ from safe.report.extractors.composer import qgis_composer_extractor
 from safe.report.extractors.impact_table import (
     impact_table_extractor,
     impact_table_pdf_extractor)
-from safe.report.extractors.infographics import \
-    population_infographic_extractor, infographic_layout_extractor, \
-    infographic_pdf_extractor
+from safe.report.extractors.infographics import (
+    population_infographic_extractor,
+    infographic_layout_extractor,
+    infographic_pdf_extractor)
 from safe.report.extractors.minimum_needs import minimum_needs_extractor
+from safe.report.extractors.population_chart import (
+    population_chart_extractor,
+    population_chart_to_png_extractor)
 from safe.report.processors.default import (
     qgis_composer_renderer,
     jinja2_renderer,
-    qgis_composer_html_renderer)
+    qgis_composer_html_renderer,
+    qt_svg_to_png_renderer)
 from safe.report.report_metadata import (
     ReportComponentsMetadata,
     Jinja2ComponentsMetadata,
@@ -125,7 +130,34 @@ aggregation_postprocessors_component = {
                 'aggregation-postprocessors.html',
 }
 
+population_chart_svg_component = {
+    'key': 'population-chart',
+    'type': ReportComponentsMetadata.AvailableComponent.Jinja2,
+    'processor': jinja2_renderer,
+    'extractor': population_chart_extractor,
+    'output_format': Jinja2ComponentsMetadata.OutputFormat.File,
+    'output_path': 'population-chart.svg',
+    'template': 'standard-template'
+                '/jinja2/svg'
+                '/donut-chart.svg'
+}
+
+population_chart_png_component = {
+    # This component depends on population_chart_svg_component
+    'key': 'population-chart-png',
+    'type': ReportComponentsMetadata.AvailableComponent.QtRenderer,
+    'processor': qt_svg_to_png_renderer,
+    'extractor': population_chart_to_png_extractor,
+    'output_format': Jinja2ComponentsMetadata.OutputFormat.File,
+    'output_path': 'population-chart.png',
+    'extra_args': {
+        'width': 256,
+        'height': 256
+    }
+}
+
 population_infographic_component = {
+    # This component depends on population_chart_png_component
     'key': 'population-infographic',
     'type': ReportComponentsMetadata.AvailableComponent.Jinja2,
     'processor': jinja2_renderer,
@@ -138,25 +170,25 @@ population_infographic_component = {
     'extra_args': {
         'icons': {
             'total_affected_field': resource_url(resources_path(
-                'img/definitions/people.svg')),
+                'img/definitions/people.png')),
             'female_count_field': resource_url(resources_path(
-                'img/definitions/female.svg')),
+                'img/definitions/female.png')),
             'youth_count_field': resource_url(resources_path(
-                'img/definitions/youth.svg')),
+                'img/definitions/youth.png')),
             'adult_count_field': resource_url(resources_path(
-                'img/definitions/adult.svg')),
+                'img/definitions/adult.png')),
             'elderly_count_field': resource_url(resources_path(
-                'img/definitions/elderly.svg')),
+                'img/definitions/elderly.png')),
             'minimum_needs__rice_count_field': resource_url(resources_path(
-                'img/definitions/rice.svg')),
+                'img/definitions/rice.png')),
             'minimum_needs__toilets_count_field': resource_url(resources_path(
-                'img/definitions/toilets.svg')),
+                'img/definitions/toilets.png')),
             'minimum_needs__drinking_water_count_field': resource_url(
-                resources_path('img/definitions/drinking_water.svg')),
+                resources_path('img/definitions/drinking_water.png')),
             'minimum_needs__clean_water_count_field': resource_url(
-                resources_path('img/definitions/clean_water.svg')),
+                resources_path('img/definitions/clean_water.png')),
             'minimum_needs__family_kits_count_field': resource_url(
-                resources_path('img/definitions/family_kits.svg')),
+                resources_path('img/definitions/family_kits.png')),
         }
     }
 }
@@ -178,6 +210,8 @@ standard_impact_report_metadata_html = {
     'name': 'analysis-result-html',
     'template_folder': safe_dir(sub_dir='../resources/report-templates/'),
     'components': impact_report_component_metadata + [
+        population_chart_svg_component,
+        population_chart_png_component,
         population_infographic_component,
         # Infographic Layout HTML
         {
@@ -235,6 +269,8 @@ standard_impact_report_metadata_pdf = {
             'output_format': QgisComposerComponentsMetadata.OutputFormat.PDF,
             'output_path': 'impact-report-output.pdf',
         },
+        population_chart_svg_component,
+        population_chart_png_component,
         population_infographic_component,
         # Infographic Layout HTML
         {
@@ -272,6 +308,8 @@ standard_infographic_report_metadata_pdf = {
     'name': 'infographic-result-pdf',
     'template_folder': safe_dir(sub_dir='../resources/report-templates/'),
     'components': [
+        population_chart_svg_component,
+        population_chart_png_component,
         population_infographic_component,
         {
             'key': 'infographic-layout',

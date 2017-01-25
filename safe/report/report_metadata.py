@@ -26,10 +26,12 @@ class ReportComponentsMetadata(object):
 
         Jinja2 = 'Jinja2'
         QGISComposer = 'QGISComposer'
+        QtRenderer = 'QtRenderer'
 
     def __init__(
             self, key, processor, extractor,
-            output_format, template, output_path, extra_args=None, **kwargs):
+            output_format, template, output_path,
+            context=None, extra_args=None, **kwargs):
         """Base class for component metadata
 
         ReportComponentMetadata is a metadata about the component element of
@@ -78,7 +80,10 @@ class ReportComponentsMetadata(object):
         self._output_path = output_path
         self._template = template
         self._output = None
-        self._component_context = {}
+        if context:
+            self._component_context = context
+        else:
+            self._component_context = {}
         self._extra_args = extra_args
 
     @property
@@ -361,6 +366,8 @@ class ReportMetadata(object):
         elif (component_type ==
                 ReportComponentsMetadata.AvailableComponent.QGISComposer):
             return QgisComposerComponentsMetadata(**kwargs)
+        else:
+            return ReportComponentsMetadata(**kwargs)
 
     @property
     def key(self):

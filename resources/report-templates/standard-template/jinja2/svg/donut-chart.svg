@@ -1,32 +1,28 @@
-{% if context.as_file %}
-<?xml version="1.0" encoding="UTF-8"?>
-{% endif %}
+{% if context.as_file %}<?xml version="1.0" encoding="UTF-8"?>{% endif %}
 <svg
-        {% if context.as_file %}
-        xmlns="http://www.w3.org/2000/svg"
-        xmlns:xlink="http://www.w3.org/1999/xlink"
-        {% endif %}
-        viewBox="0 0 512 300"
+        {% if context.as_file %}xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink"{% endif %}
+        viewBox="0 0 256 256"
         preserveAspectRatio="xMidYMid">
+    {% if not context.as_file %}
     <text class="chart-title" x="0" y="0" alignment-baseline="hanging" font-size="12">
         {{ context.title }}
     </text>
     <g class="pielayer" transform="translate(0,32)">
+    {% else %}
+    <g class="pielayer">
+    {% endif %}
         <g stroke-linejoin="round" class="trace" style="opacity: 1;">
             <g class="pie">
                 {% for slice in context.slices %}
                 <g class="slice">
-                    <path class="surface" d="{{ slice.path }}" style="pointer-events: all; stroke-width: {{ slice.stroke.width }}; fill: {{ slice.fill }}; stroke: {{ slice.stroke }}; stroke-opacity: {{ slice.stroke_opacity }};" />
+                    <path class="surface" d="{{ slice.path }}" fill="{{ slice.fill }}" style="pointer-events: all; stroke-width: {{ slice.stroke.width }}; stroke: {{ slice.stroke }}; stroke-opacity: {{ slice.stroke_opacity }};" />
                 </g>
                 <text class="slice-value" text-anchor="middle" alignment-baseline="middle" x="{{ slice.center[0] }}" y="{{ slice.center[1] - 8 }}">
                     {{ context.thousand_separator_format.format(slice.value|int) }}
                 </text>
                 <text class="slice-percentage" text-anchor="middle" alignment-baseline="middle" x="{{ slice.center[0] }}" y="{{ slice.center[1] + 8 }}">
                     {{ '{0:.2f}%'.format(slice.percentage|float) }}
-                </text>
-                <rect class="legend-color" x="{{ slice.label_position[0] + 8 }}" y="{{ slice.label_position[1] - 16 }}" width="16" height="16" fill="{{ slice.fill }}" />
-                <text class="legend-label" x="{{ slice.label_position[0] + 28 }}" y="{{ slice.label_position[1] }}" text-anchor="left">
-                    {{ slice.label }}
                 </text>
                 {% endfor %}
             </g>
