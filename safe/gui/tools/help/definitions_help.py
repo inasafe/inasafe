@@ -602,8 +602,9 @@ def definition_to_message(definition, heading_style=None):
 
     if 'multi_event_notes' in definition:
         message.add(
-            m.Heading(tr('Notes for multi events / scenarios:'),
-                      **DETAILS_STYLE))
+            m.Heading(
+                tr('Notes for multi events / scenarios:'),
+                **DETAILS_STYLE))
         if len(definition['multi_event_notes']) < 1:
             message.add(m.Paragraph(tr('No multi-event notes defined.')))
         else:
@@ -659,6 +660,14 @@ def definition_to_message(definition, heading_style=None):
         table = _make_defaults_table()
         for inasafe_class in definition['classes']:
             row = m.Row()
+            # name() on QColor returns its hex code
+            if 'color' in inasafe_class:
+                colour = inasafe_class['color'].name()
+                row.add(m.Cell(
+                    u'', attributes='style="background: %s;"' % colour))
+            else:
+                row.add(m.Cell(u' '))
+
             row.add(m.Cell(inasafe_class['name']))
             if 'affected' in inasafe_class:
                 row.add(m.Cell(inasafe_class['affected']))
@@ -820,6 +829,9 @@ def _type_to_string(value):
 def _make_defaults_table():
     table = m.Table(style_class='table table-condensed table-striped')
     row = m.Row()
+    # first row is for colour - we dont use a header here as some tables
+    # do not have colour...
+    row.add(m.Cell(tr('')), header_flag=True)
     row.add(m.Cell(tr('Name')), header_flag=True)
     row.add(m.Cell(tr('Affected')), header_flag=True)
     row.add(m.Cell(tr('Default values')), header_flag=True)
