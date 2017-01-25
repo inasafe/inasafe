@@ -29,6 +29,7 @@ from safe.utilities.numerics import log_normal_cdf
 from safe.gis.raster.write_raster import array_to_raster, make_array
 from safe.common.utilities import unique_filename
 from safe.utilities.profiling import profile
+from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -144,7 +145,7 @@ def pager_fatality_rates():
     return fatality_rate
 
 
-def bayesian_fatality_rates():
+def itb_bayesian_fatality_rates():
     """ITB fatality model based on a Bayesian approach.
 
     This model was developed by Institut Teknologi Bandung (ITB) and
@@ -170,9 +171,38 @@ def bayesian_fatality_rates():
     }
     return fatality_rate
 
+EARTHQUAKE_FUNCTIONS = (
+    {
+        'key': 'itb_bayesian_fatality_rates',
+        'name': tr('ITB bayesian fatality rates'),
+        'fatality_rates': itb_bayesian_fatality_rates
+    }, {
+        'key': 'itb_fatality_rates',
+        'name': tr('ITB fatality rates'),
+        'fatality_rates': itb_fatality_rates
+    }, {
+        'key': 'pager_fatality_rates',
+        'name': tr('Pager fatality rates'),
+        'fatality_rates': pager_fatality_rates
+    }
+)
+
+
+def displacement_rate():
+    """Return the displacement rate.
+
+    :returns: The displacement rate.
+    :rtype: dict
+    """
+    rate = {
+        2: 0.0, 3: 0.0, 4: 0.0, 5: 0.0,
+        6: 1.0, 7: 1.0, 8: 1.0, 9: 1.0, 10: 1.0
+    }
+    return rate
+
 
 @profile
-def exposed_people_stats(hazard, exposure, aggregation):
+def exposed_people_stats(hazard, exposure, aggregation, fatality_rate):
     """Calculate the number of exposed people per MMI level per aggregation.
 
     Calculate the number of exposed people per MMI level per aggregation zone
@@ -186,6 +216,9 @@ def exposed_people_stats(hazard, exposure, aggregation):
 
     :param aggregation: The aggregation layer.
     :type aggregation: QgsVectorLayer
+
+    :param fatality_rate: The fatality rate to use.
+    :type fatality_rate: function
 
     :return: A tuble with the exposed per MMI level par aggregation
         and the exposed raster.
@@ -217,6 +250,11 @@ def exposed_people_stats(hazard, exposure, aggregation):
 
         people_count = exposure_block.value(long(i))
 
+        mmi_fatalities = (
+            int(hazard_mmi * fatality_rate[hazard_mmi]))  # rounding down
+        mmi_displaced = (
+            (people_count - mmi_fatalities) * displacement_rate()[hazard_mmi])
+
         agg_zone_index = int(agg_block.value(long(i)))
 
         key = (hazard_mmi, agg_zone_index)
@@ -225,7 +263,7 @@ def exposed_people_stats(hazard, exposure, aggregation):
 
         exposed[key] += people_count
 
-        exposed_array[i / width, i % width] = people_count
+        exposed_array[i / width, i % width] = mmi_displaced
 
     # output raster data - e.g. displaced people
     array_to_raster(exposed_array, exposed_raster_filename, hazard)
@@ -261,11 +299,6 @@ def make_summary_layer(exposed, aggregation, fatality_rate):
     :return: Tuple with the aggregation layer and a dictionary with totals.
     :rtype: tuple(QgsVectorLayer, dict)
     """
-    displacement_rate = {
-        2: 0.0, 3: 0.0, 4: 0.0, 5: 0.0, 6: 1.0,
-        7: 1.0, 8: 1.0, 9: 1.0, 10: 1.0
-    }
-
     field_mapping = {}
 
     aggregation.startEditing()
@@ -325,7 +358,7 @@ def make_summary_layer(exposed, aggregation, fatality_rate):
             mmi_fatalities = (
                 int(mmi_exposed * fatality_rate[mmi]))  # rounding down
             mmi_displaced = (
-                (mmi_exposed - mmi_fatalities) * displacement_rate[mmi])
+                (mmi_exposed - mmi_fatalities) * displacement_rate()[mmi])
 
             aggregation.changeAttributeValue(
                 agg_feature.id(),

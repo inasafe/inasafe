@@ -11,6 +11,7 @@ __revision__ = '$Format:%H$'
 # Hazard classes as specified in reporting standards :
 # https://github.com/inasafe/inasafe/issues/2920#issuecomment-229874044
 
+grey = QColor('#8C8C8C')  # Used for not exposed.
 green = QColor('#1A9641')
 light_green = QColor('#A6D96A')
 yellow = QColor('#FFFFB2')
@@ -19,8 +20,8 @@ red = QColor('#F03B20')
 dark_red = QColor('#BD0026')
 very_dark_red = QColor('#710017')
 
-# Default color for no hazard
-no_hazard = QColor('#000000')
+# Default line width for exposure
+line_width_exposure = 0.66
 
 # Rubber bands
 user_analysis_color = QColor(0, 0, 255, 100)

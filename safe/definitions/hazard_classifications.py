@@ -23,8 +23,8 @@ __license__ = "GPL version 3"
 __email__ = "info@inasafe.org"
 __revision__ = '$Format:%H$'
 
-null_hazard_value = 'null'
-null_hazard_legend = tr('No hazard')
+null_hazard_value = 'not exposed'
+null_hazard_legend = tr('Not exposed')
 
 generic_hazard_classes = {
     'key': 'generic_hazard_classes',

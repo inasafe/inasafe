@@ -197,6 +197,13 @@ class KeywordDbError(InaSAFEError):
     pass
 
 
+class WrongEarthquakeFunction(InaSAFEError):
+
+    """Earthquake function to recognised."""
+
+    pass
+
+
 class KeywordNotFoundError(InaSAFEError):
 
     """Custom exception for when a keyword's key (e.g. unit) cannot be found.

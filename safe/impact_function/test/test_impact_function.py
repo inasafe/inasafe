@@ -26,7 +26,12 @@ from safe.test.utilities import (
 )
 from safe.common.version import get_version
 from safe.test.debug_helper import print_attribute_table
-from safe.impact_function.provenance_utilities import get_map_title
+
+from safe.impact_function.provenance_utilities import (
+    get_map_title,
+    get_analysis_question,
+    get_report_question
+)
 
 QGIS_APP, CANVAS, IFACE, PARENT = get_qgis_app()
 
@@ -475,6 +480,8 @@ class TestImpactFunction(unittest.TestCase):
             'exposure_layer': exposure_layer.source(),
             'hazard_keywords': deepcopy(hazard_layer.keywords),
             'hazard_layer': hazard_layer.source(),
+            'analysis_question': get_analysis_question(hazard, exposure),
+            'report_question': get_report_question(exposure)
         }
 
         # Set up impact function
@@ -532,6 +539,8 @@ class TestImpactFunction(unittest.TestCase):
             'exposure_layer': exposure_layer.source(),
             'hazard_keywords': deepcopy(hazard_layer.keywords),
             'hazard_layer': hazard_layer.source(),
+            'analysis_question': get_analysis_question(hazard, exposure),
+            'report_question': get_report_question(exposure)
         }
 
         # Set up impact function

@@ -73,7 +73,11 @@ from safe.definitions.layer_purposes import (
     layer_purpose_exposure_breakdown,
     layer_purpose_profiling,
 )
-from safe.impact_function.provenance_utilities import get_map_title
+from safe.impact_function.provenance_utilities import (
+    get_map_title,
+    get_report_question,
+    get_analysis_question
+)
 from safe.definitions.constants import (
     inasafe_keyword_version_key,
     ANALYSIS_SUCCESS,
@@ -87,12 +91,13 @@ from safe.definitions.versions import inasafe_keyword_version
 from safe.common.exceptions import (
     InaSAFEError,
     InvalidExtentError,
+    WrongEarthquakeFunction,
     NoKeywordsFoundError,
     NoFeaturesInExtentError,
     ProcessingInstallationError,
 )
 from safe.impact_function.earthquake import (
-    itb_fatality_rates,
+    EARTHQUAKE_FUNCTIONS,
     exposed_people_stats,
     make_summary_layer,
 )
@@ -112,6 +117,7 @@ from safe.utilities.utilities import (
     replace_accentuated_characters, get_error_message)
 from safe.utilities.profiling import (
     profile, clear_prof_data, profiling_log)
+from safe.utilities.settings import setting
 from safe.test.utilities import check_inasafe_fields
 from safe import messaging as m
 from safe.messaging import styles
@@ -193,6 +199,12 @@ class ImpactFunction(object):
             'os': platform.version(),
             'inasafe_version': get_version(),
         }
+
+        # Earthquake function
+        self._earthquake_function = None
+        value = setting(
+            'earthquake_function', EARTHQUAKE_FUNCTIONS[0]['key'], str)
+        self.earthquake_function = value  # Use the setter to check the value.
 
     @property
     def performance_log(self):
@@ -511,6 +523,27 @@ class ImpactFunction(object):
         :rtype: datetime
         """
         return self._datetime
+
+    @property
+    def earthquake_function(self):
+        """The current earthquake function to use.
+
+        :return: The earthquake function.
+        :rtype: str
+        """
+        return self._earthquake_function
+
+    @earthquake_function.setter
+    def earthquake_function(self, function):
+        """Set the earthquake function to use.
+
+        :param function: The earthquake function to use.
+        :type function: str
+        """
+        if function not in [model['key'] for model in EARTHQUAKE_FUNCTIONS]:
+            raise WrongEarthquakeFunction
+        else:
+            self._earthquake_function = function
 
     @property
     def callback(self):
@@ -1177,6 +1210,12 @@ class ImpactFunction(object):
     def earthquake_raster_population_raster(self):
         """Perform a damage curve analysis with EQ raster on population raster.
         """
+
+        fatality_rates = {}
+        for model in EARTHQUAKE_FUNCTIONS:
+            fatality_rates[model['key']] = model['fatality_rates']
+        earthquake_function = fatality_rates[self.earthquake_function]
+
         self.set_state_process(
             'hazard', 'Align the hazard layer with the exposure')
         self.set_state_process(
@@ -1199,13 +1238,16 @@ class ImpactFunction(object):
 
         self.set_state_process('exposure', 'Exposed people')
         exposed, self._exposure_impacted = exposed_people_stats(
-            self.hazard, self.exposure, aggregation_aligned)
+            self.hazard,
+            self.exposure,
+            aggregation_aligned,
+            earthquake_function())
         if self.debug_mode:
             self.debug_layer(self._exposure_impacted)
 
         self.set_state_process('impact function', 'Set summaries')
         self._aggregation_impacted = make_summary_layer(
-            exposed, self.aggregation, itb_fatality_rates())
+            exposed, self.aggregation, earthquake_function())
         if self.debug_mode:
             self.debug_layer(self._aggregation_impacted)
 
@@ -1570,8 +1612,12 @@ class ImpactFunction(object):
         for layer in self.outputs:
             if is_vector_layer(layer):
                 if layer.geometryType() != QGis.NoGeometry:
+                    display_not_exposed = False
+                    if layer == self.impact or self.debug_mode:
+                        display_not_exposed = True
+
                     if layer.keywords['inasafe_fields'].get(hazard_class):
-                        hazard_class_style(layer, classes, self.debug_mode)
+                        hazard_class_style(layer, classes, display_not_exposed)
 
         # Let's style the aggregation and analysis layer.
         simple_polygon_without_brush(self.aggregation_impacted)
@@ -1608,8 +1654,11 @@ class ImpactFunction(object):
         # Map title
         self._provenance['map_title'] = get_map_title(
             hazard, exposure, hazard_category)
-
         self._provenance['map_legend_title'] = exposure['layer_legend_title']
+
+        self._provenance['analysis_question'] = get_analysis_question(
+            hazard, exposure)
+        self._provenance['report_question'] = get_report_question(exposure)
 
         if self.requested_extent:
             self._provenance['requested_extent'] = (

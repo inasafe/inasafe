@@ -134,8 +134,8 @@ def population_infographic_extractor(impact_report, component_metadata):
         exposure_count_field['key'] % (exposure_population['key'], ),
     ] + [f['key'] for f in minimum_needs_fields]
 
-    for field in population_fields:
-        if field in analysis_layer_fields:
+    for item in population_fields:
+        if item in analysis_layer_fields:
             break
     else:
         return context
@@ -146,10 +146,10 @@ def population_infographic_extractor(impact_report, component_metadata):
         total_affected_field['key']
     ]
 
-    for field in total_affected_fields:
-        if field in analysis_layer_fields:
+    for item in total_affected_fields:
+        if item in analysis_layer_fields:
             total_affected = value_from_field_name(
-                analysis_layer_fields[field],
+                analysis_layer_fields[item],
                 analysis_layer)
             break
     else:
@@ -172,81 +172,72 @@ def population_infographic_extractor(impact_report, component_metadata):
     }
 
     """Vulnerability Section"""
+    vulnerability_items = [{
+            'field': female_count_field,
+            'header': tr('Female'),
+        },
+        {
+            'field': youth_count_field,
+            'header': tr('Youth'),
+        },
+        {
+            'field': adult_count_field,
+            'header': tr('Adult'),
+        },
+        {
+            'field': elderly_count_field,
+            'header': tr('Elderly')
+        }
+    ]
 
-    female_affected = value_from_field_name(
-        female_count_field['field_name'],
-        analysis_layer)
+    vulnerability_items = [
+        item for item in vulnerability_items
+        if item['field']['key'] in analysis_layer_fields]
 
-    youth_affected = value_from_field_name(
-        youth_count_field['field_name'],
-        analysis_layer)
+    infographic_elements = []
+    for item in vulnerability_items:
+        field = item['field']
+        field_key = field['key']
+        header = item['header']
+        try:
+            field_name = analysis_layer_fields[field_key]
+            value = value_from_field_name(
+                field_name, analysis_layer)
+        except KeyError:
+            # It means the field is not there
+            value = 0
 
-    adult_affected = value_from_field_name(
-        adult_count_field['field_name'],
-        analysis_layer)
+        if value:
+            value_percentage = value * 100.0 / total_affected
+        else:
+            value_percentage = 0
 
-    elderly_affected = value_from_field_name(
-        elderly_count_field['field_name'],
-        analysis_layer)
-
-    if total_affected:
-        female_percentage = female_affected * 100.0 / total_affected
-        youth_percentage = youth_affected * 100.0 / total_affected
-        adult_percentage = adult_affected * 100.0 / total_affected
-        elderly_percentage = elderly_affected * 100.0 / total_affected
-    else:
-        female_percentage = 0.0
-        youth_percentage = 0.0
-        adult_percentage = 0.0
-        elderly_percentage = 0.0
+        infographic_element = PeopleVulnerabilityInfographicElement(
+            header=header,
+            icon=icons.get(field_key),
+            number=value,
+            percentage=value_percentage
+        )
+        infographic_elements.append(infographic_element)
 
     sections['vulnerability'] = {
         'header': tr('Vulnerability'),
         'small_header': tr(
             'from {number_affected} affected').format(
                 number_affected=total_affected),
-        'items': [
-            PeopleVulnerabilityInfographicElement(
-                header=tr('Female'),
-                icon=icons.get(
-                    female_count_field['key']),
-                number=female_affected,
-                percentage=female_percentage
-            ),
-            PeopleVulnerabilityInfographicElement(
-                header=tr('Youth'),
-                icon=icons.get(
-                    youth_count_field['key']),
-                number=youth_affected,
-                percentage=youth_percentage
-            ),
-            PeopleVulnerabilityInfographicElement(
-                header=tr('Adult'),
-                icon=icons.get(
-                    adult_count_field['key']),
-                number=adult_affected,
-                percentage=adult_percentage
-            ),
-            PeopleVulnerabilityInfographicElement(
-                header=tr('Elderly'),
-                icon=icons.get(
-                    elderly_count_field['key']),
-                number=elderly_affected,
-                percentage=elderly_percentage
-            ),
-        ]
+        'items': infographic_elements
     }
 
     """Minimum Needs Section"""
 
     items = []
 
-    for field in minimum_needs_fields:
-        need = field['need_parameter']
+    for item in minimum_needs_fields:
+        need = item['need_parameter']
         if isinstance(need, ResourceParameter):
 
             needs_count = value_from_field_name(
-                field['field_name'], analysis_layer)
+                item['field_name'], analysis_layer)
 
             if need.unit.abbreviation:
                 unit_string = '{unit}/{frequency}'.format(
@@ -256,9 +247,9 @@ def population_infographic_extractor(impact_report, component_metadata):
                 unit_string = tr('units')
 
             item = PeopleMinimumNeedsInfographicElement(
-                header=field['name'],
+                header=item['name'],
                 icon=icons.get(
-                    field['key']),
+                    item['key']),
                 number=needs_count,
                 unit=unit_string)
             items.append(item)
@@ -368,6 +359,7 @@ def infographic_layout_extractor(impact_report, component_metadata):
     context = {}
     extra_args = component_metadata.extra_args
     infographics = extra_args['infographics']
+    provenance = impact_report.impact_function.provenance
 
     infographic_result = ''
 
@@ -382,10 +374,15 @@ def infographic_layout_extractor(impact_report, component_metadata):
     resources_dir = safe_dir(sub_dir='../resources')
     context['inasafe_resources_base_dir'] = resources_dir
     context['infographic_content'] = infographic_result
+    version = provenance['inasafe_version']
+    date_time = provenance['datetime']
+    date = date_time.strftime('%Y-%m-%d')
+    time = date_time.strftime('%H:%M')
     footer_format = tr(
-        '{version} | {analysis_date} | {analysis_time} | '
+        'InaSAFE {version} | {analysis_date} | {analysis_time} | '
         'info@inasafe.org | BNPB-AusAid-World Bank-GFDRR-DMInnovation')
-    context['footer'] = footer_format
+    context['footer'] = footer_format.format(
+        version=version, analysis_date=date, analysis_time=time)
     return context
 
 

@@ -519,6 +519,12 @@ def definition_to_message(definition, heading_style=None):
     if url is None:
         LOGGER.info('No URL for definition icon')
         message.add(m.Paragraph(definition['description']))
+        for citation in definition['citations']:
+            if citation['link'] == '':
+                m.add(m.Paragraph(citation['text']))
+            else:
+                m.add(m.Paragraph(
+                    m.Link(citation['link'], citation['text'])))
     else:
         LOGGER.info('Creating mini table for definition description: ' + url)
         table = m.Table(style_class='table table-condensed')
@@ -532,7 +538,7 @@ def definition_to_message(definition, heading_style=None):
             if citation['link'] == '':
                 row.add(m.Cell(citation['text']))
             else:
-                row.add(m.Link(citation['link'], citation['text'])
+                row.add(m.Link(citation['link'], citation['text']))
             table.add(row)
         message.add(table)
 
