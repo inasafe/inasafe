@@ -20,7 +20,7 @@ concepts = {
         'description': tr(
             '<p>An <b>analysis</b> from the point of view of using InaSAFE is '
             'the process whereby a hazard layer, an exposure layer and '
-            'and optional aggregation layer are used to determine the '
+            'an optional aggregation layer are used to determine the '
             'potential impact of the hazard data on the exposure. The '
             'analysis results are grouped by region (as defined in the '
             'aggregation layer).</p> '
@@ -35,8 +35,8 @@ concepts = {
             '<p>Any continuous datasets are reclassified into classfied (also '
             'sometimes referred to as categorical) datasets.</p>'
             '<p>The aggregation layer and the hazard are combined using a GIS '
-            'union operation and then each exposure with these areas is '
-            'counted to arrive at a total number, length or area of affected '
+            'union operation and then each exposure within these areas is '
+            'counted to arrive at a total number, length or area of '
             'exposure features per aggregation area. These processes are '
             'defined in more detail below. After the primary GIS processing '
             'has been carried out, one or more post-processors are applied '
@@ -123,6 +123,20 @@ concepts = {
              }
         ],
     },
+    'exposed_people': {
+        'key': 'exposed_people',
+        'description': tr(
+            'People who are present in hazard zones and are thereby subject '
+            'to potential losses. In InaSAFE, people who are exposed are '
+            'those people who are within the extent of the hazard.'),
+        'citations': [
+            {
+                'text': tr(
+                    'UNISDR (2009)Terminology on Disaster'),
+                'link': 'https://www.unisdr.org/we/inform/terminology'
+             }
+        ],
+    },
     'affected_people': {
         'key': 'affected_people',
         'description': tr(
@@ -142,12 +156,50 @@ concepts = {
              }
         ],
     },
+    'directly_affected_people': {
+        'key': 'directly_affected_people',
+        'description': tr(
+            'People who have suffered injury, illness or other health effects '
+            'who were evacuated, displaced,relocated; or have suffered direct '
+            'damage to their livelihoods, economic, physical, social,cultural '
+            'and environmental assets. In InaSAFE, people who are missing or '
+            'dead may be considered as directly affected.'),
+        'citations': [
+            {
+                'text': tr(
+                    'UNISDR (2015)Proposed Updated Terminology on Disaster '
+                    'Risk Reduction: A Technical Review'),
+                'link': 'http://www.preventionweb.net/files/'
+                        '45462_backgoundpaperonterminologyaugust20.pdf'
+             }
+        ],
+    },
+    'indirectly_affected_people': {
+        'key': 'indirectly_affected_people',
+        'description': tr(
+            'People who have suffered consequences, other than or in addition '
+            'to direct effects, over time due to disruption or changes in '
+            'economy, critical infrastructures, basic services, commerce,work '
+            'or social, health and psychological consequences. In InaSAFE, '
+            'people who are indirectly affected are not included in minimum '
+            'needs reports.'),
+        'citations': [
+            {
+                'text': tr(
+                    'UNISDR (2015)Proposed Updated Terminology on Disaster '
+                    'Risk Reduction: A Technical Review'),
+                'link': 'http://www.preventionweb.net/files/'
+                        '45462_backgoundpaperonterminologyaugust20.pdf'
+             }
+        ],
+    },
     'displaced_people': {
         'key': 'displaced_people',
         'description': tr(
             'Displaced people are people who, for different reasons and '
             'circumstances because of risk or disaster, have to leave their '
-            'place of residence.'),
+            'place of residence. In InaSAFE, demographic and minimum'
+            'needs reports are based on displaced / evacuated people.'),
         'citations': [
             {
                 'text': tr(
@@ -167,7 +219,25 @@ concepts = {
             'occurrence of a hazardous event. Evacuation can occur from '
             'places of residence, workplaces, schools and hospitals to other '
             'places. Evacuation is usually a planned and organised '
-            'mobilisation of persons, animals and goods.'),
+            'mobilisation of persons, animals and goods for eventual return.'
+            'In InaSAFE, demographic and minimum needs reports are based on '
+            'displaced / evacuated people.'),
+        'citations': [
+            {
+                'text': tr(
+                    'UNISDR (2015)Proposed Updated Terminology on Disaster '
+                    'Risk Reduction: A Technical Review'),
+                'link': 'http://www.preventionweb.net/files/'
+                        '45462_backgoundpaperonterminologyaugust20.pdf'
+            }
+        ],
+    },
+    'relocated_people': {
+        'key': 'relocated_people',
+        'description': tr(
+            'Relocated people are people who, for different reasons or '
+            'circumstances because of risk or disaster, have moved '
+            'permanently from their places of residence to new sites.'),
         'citations': [
             {
                 'text': tr(
