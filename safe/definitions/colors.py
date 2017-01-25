@@ -20,6 +20,18 @@ red = QColor('#F03B20')
 dark_red = QColor('#BD0026')
 very_dark_red = QColor('#710017')
 
+# Map legend templates according to standards :
+# https://github.com/inasafe/inasafe/issues/3653#issuecomment-275011957
+# The space between count and exposure_unit will be automatically added if
+# the unit is not empty..
+template_without_thresholds = u'{name} ({count}{exposure_unit})'
+template_with_maximum_thresholds = (
+    u'{name} < {max} {hazard_unit} ({count}{exposure_unit})')
+template_with_minimum_thresholds = (
+    u'{name} > {min} {hazard_unit} ({count}{exposure_unit})')
+template_with_range_thresholds = (
+    u'{name} > {min} - {max} {hazard_unit} ({count}{exposure_unit})')
+
 # Default line width for exposure
 line_width_exposure = 0.66
 
