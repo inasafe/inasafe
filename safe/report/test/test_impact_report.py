@@ -191,18 +191,18 @@ class TestImpactReport(unittest.TestCase):
         expected_context = {
             'header': u'Notes and assumptions',
             'items': [
-                u'The impacts on roads, people, buildings and other '
-                u'exposure elements may be underestimated if the exposure '
-                u'data are incomplete.'
-                u'Structures overlapping the analysis extent may be assigned'
+                u'The impacts on roads, people, buildings and other exposure '
+                u'elements may be underestimated if the exposure data are '
+                u'incomplete.',
+                u'Structures overlapping the analysis extent may be assigned '
                 u'a hazard status lower than that to which they are exposed '
-                u'outside the analysis area. '
+                u'outside the analysis area.',
                 u'Numbers reported for structures have been rounded to the '
                 u'nearest 10 if the total is less than 1,000; nearest 100 if '
-                u'more than 1,000 and less than 100,000; and nearest 1000 if '
-                u'more than 100,000.'
-                u'Rounding is applied to all structure counts, which may cause'
-                u'discrepancies between subtotals and totals.'
+                u'more than 1,000and less than 100,000; and nearest 1000 if '
+                u'more than 100,000.',
+                u'Rounding is applied to all structure counts, which may '
+                u'cause discrepancies between subtotals and totals.'
             ]
         }
         actual_context = notes_assumptions.context

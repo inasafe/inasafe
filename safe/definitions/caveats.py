@@ -29,7 +29,7 @@ caveat_analysis_extent = tr(
 caveat_analysis_ommission = tr(
     'Structures overlapping the analysis extent may be assigned a hazard '
     'status lower than that to which they are exposed outside the analysis '
-    'area. ')
+    'area.')
 no_data_warning = [
     tr(
         'The layers contained "no data" values. This missing data '

@@ -161,9 +161,9 @@ exposure_road = {
     'notes': [  # these are additional generic notes for roads - IF has more
         caveat_incomplete_data,
         tr('Numbers for road lengths have been rounded to the nearest 10 '
-           'metres if the total is less than 1,000; nearest 100 metres if more'
-           ' than 1,000 and less than 100,000; and nearest 1000 metres if more '
-           'than 100,000.'),
+           'metres if the total is less than 1,000; nearest 100 metres if '
+           'more than 1,000 and less than 100,000; and nearest 1000 metres if '
+           'more than 100,000.'),
         tr('Rounding is applied to all road lengths, which may cause '
            'discrepancies between subtotals and totals.'),
         tr('Roads marked as not affected may still be unusable due to network '
@@ -221,7 +221,7 @@ exposure_structure = {
         caveat_incomplete_data,
         tr('Structures overlapping the analysis extent may be assigned a '
            'hazard status lower than that to which they are exposed outside '
-           'the analysis area. '),
+           'the analysis area.'),
         tr('Numbers reported for structures have been rounded to the nearest '
            '10 if the total is less than 1,000; nearest 100 if more than 1,000'
            'and less than 100,000; and nearest 1000 if more than 100,000.'),
