@@ -35,8 +35,9 @@ from safe.gis.vector.tools import (
 from safe.gui.tools.help.needs_calculator_help import needs_calculator_help
 from safe.impact_function.postprocessors import run_single_post_processor
 from safe.messaging import styles
-from safe.utilities.resources import html_footer, html_header, get_ui_class
 from safe.utilities.qgis_utilities import display_critical_message_box
+from safe.utilities.resources import html_footer, html_header, get_ui_class
+from safe.utilities.utilities import humanise_exception
 
 INFO_STYLE = styles.INFO_STYLE
 LOGGER = logging.getLogger('InaSAFE')
@@ -114,17 +115,28 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
             population counts.
         :type input_layer: QgsVectorLayer
 
-        :returns: Layer with attributes for minimum needs.
-        :rtype: QgsVectorLayer
+        :returns: A tuple containing True and the vector layer if
+                  post processor success. Or False and an error message
+                  if something went wrong.
+        :rtype: tuple(bool,QgsVectorLayer or basetring)
         """
         # Create a new layer for output layer
         output_layer = self.prepare_new_layer(input_layer)
 
         # count each minimum needs for every features
         for needs in minimum_needs_post_processors:
-            run_single_post_processor(output_layer, needs)
+            is_success, message = run_single_post_processor(
+                output_layer, needs)
+            # check if post processor not running successfully
+            if not is_success:
+                LOGGER.debug(message)
+                display_critical_message_box(
+                    title=self.tr('Error while running post processor'),
+                    message=message)
 
-        return output_layer
+                return False, None
+
+        return True, output_layer
 
     def prepare_new_layer(self, input_layer):
         """Prepare new layer for the output layer.
@@ -174,14 +186,20 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         .. note:: This is called on OK click.
 
         """
-
+        # run minimum needs calculator
         try:
-            self.result_layer = self.minimum_needs(self.layer.currentLayer())
+            success, self.result_layer = (
+                self.minimum_needs(self.layer.currentLayer()))
+            if not success:
+                return
         except Exception as e:
-            LOGGER.debug(e)
+            error_name, traceback = humanise_exception(e)
+            message = (
+                'Problem(s) occured. \n%s \nDiagnosis: \n%s'.format(
+                    error_name, traceback))
             display_critical_message_box(
-                title='Error while calculating minimum needs', message=e)
-            return
+                title=self.tr('Error while calculating minimum needs'),
+                message=message)
 
         # remove monkey patching keywords
         del self.result_layer.keywords
@@ -200,7 +218,10 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         else:
             data_store = Folder(temp_dir(sub_dir=self.result_layer.name()))
 
+        data_store.default_vector_format = 'geojson'
         data_store.add_layer(self.result_layer, self.result_layer.name())
+
+        self.result_layer = data_store.layer(self.result_layer.name())
 
         # noinspection PyArgumentList
         QgsMapLayerRegistry.instance().addMapLayers(
