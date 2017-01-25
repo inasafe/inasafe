@@ -194,30 +194,26 @@ include a **unit**. The table below lists the units for each exposure type.
 
 The **"People affected by tsunami event"** map legend might look like:
 
-![image](https://cloud.githubusercontent.com/assets/5743135/17542950/35d17e32-5ef7-11e6-8832-3eaa49e50b96.png)
-
-or in Indonesian language with the units for people included:
-
-![image](https://cloud.githubusercontent.com/assets/5743135/17542965/56f60786-5ef7-11e6-941d-1486ab1c291a.png)
+https://cloud.githubusercontent.com/assets/13621886/22283066/a6fa9658-e312-11e6-8eed-f7c29c6c7bd5.png
 
 The **"People affected by volcanic ash event"** map legend might look like:
 
-![image](https://cloud.githubusercontent.com/assets/5743135/17543836/a3037fa4-5efd-11e6-8d7c-db36a0a30cf6.png)
+https://cloud.githubusercontent.com/assets/13621886/22282998/3ebfc770-e312-11e6-92e4-d0dd7530b245.png
 
-The **"Buildings affected by flood event"** map legend might look like:
+The **"Buildings affected by tsunami event"** map legend might look like:
 
-![image](https://cloud.githubusercontent.com/assets/5743135/17543699/a6f6c7fc-5efc-11e6-8ca9-63f4a2b37397.png)
+https://cloud.githubusercontent.com/assets/13621886/22276836/2351acac-e2e9-11e6-98db-e74f2437ee5c.png
 
 Note: the dry legend class is only used for building and road exposures  with
 flood or tsunami hazards.
 
 The **"Landcover affected by tsunami hazard"** map legend might look like:
 
-![image](https://cloud.githubusercontent.com/assets/5743135/17543749/00fa2aaa-5efd-11e6-9a08-47aff3c86298.png)
+https://cloud.githubusercontent.com/assets/13621886/22283082/c4995ae6-e312-11e6-96c0-452a7df3846d.png
 
-The **"Roads affected by flood hazard"** map legend might look like:
+The **"Roads affected by tsunami hazard"** map legend might look like:
 
-![image](https://cloud.githubusercontent.com/assets/5743135/17544021/e017f3a6-5efe-11e6-8b97-d234b32b4578.png)
+https://cloud.githubusercontent.com/assets/13621886/22276858/3b5d7646-e2e9-11e6-94f4-487abe3cc2af.png
 
 Note: thresholds are not included in the legend label for multiple event hazard
  data.

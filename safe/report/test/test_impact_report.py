@@ -114,17 +114,17 @@ class TestImpactReport(unittest.TestCase):
                     'rows': [
                         {
                             'value': 4,
-                            'name': u'Total High Hazard Zone',
+                            'name': u'Total High hazard zone',
                             'key': 'high'
                         },
                         {
                             'value': 1,
-                            'name': u'Total Medium Hazard Zone',
+                            'name': u'Total Medium hazard zone',
                             'key': 'medium'
                         },
                         {
                             'value': 0,
-                            'name': u'Total Low Hazard Zone',
+                            'name': u'Total Low hazard zone',
                             'key': 'low'
                         }
                     ],
@@ -261,8 +261,8 @@ class TestImpactReport(unittest.TestCase):
             'detail_table': {
                 'headers': [
                     u'Structures type',
-                    u'High Hazard Zone',
-                    u'Medium Hazard Zone',
+                    u'High hazard zone',
+                    u'Medium hazard zone',
                     u'Total Affected',
                     u'Total Unaffected',
                     u'Total'
