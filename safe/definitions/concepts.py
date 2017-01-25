@@ -127,8 +127,8 @@ concepts = {
         'key': 'exposed_people',
         'description': tr(
             'People who are present in hazard zones and are thereby subject '
-            'to potential losses. In InaSAFE, people who are exposed are those '
-            'people who are within the extent of the hazard.'),
+            'to potential losses. In InaSAFE, people who are exposed are '
+            'those people who are within the extent of the hazard.'),
         'citations': [
             {
                 'text': tr(
@@ -159,7 +159,7 @@ concepts = {
     'directly_affected_people': {
         'key': 'directly_affected_people',
         'description': tr(
-            'People who have suffered injury, illness or other health effects; '
+            'People who have suffered injury, illness or other health effects '
             'who were evacuated, displaced,relocated; or have suffered direct '
             'damage to their livelihoods, economic, physical, social,cultural '
             'and environmental assets. In InaSAFE, people who are missing or '
