@@ -42,6 +42,8 @@ generic_hazard_classes = {
             'string_defaults': ['high'],
             'numeric_default_min': 3,
             'numeric_default_max': (4 - small_number),
+            'displaced_rates': 0.0,
+            'fatality_rates': 0.0,
             'citations': [
                 {
                     'text': None,
@@ -59,6 +61,8 @@ generic_hazard_classes = {
             'string_defaults': ['medium'],
             'numeric_default_min': 2,
             'numeric_default_max': (3 - small_number),
+            'displaced_rates': 0.0,
+            'fatality_rates': 0.0,
             'citations': [
                 {
                     'text': None,
@@ -76,6 +80,8 @@ generic_hazard_classes = {
             'string_defaults': ['low'],
             'numeric_default_min': 0,
             'numeric_default_max': (2 - small_number),
+            'displaced_rates': 0.0,
+            'fatality_rates': 0.0,
             'citations': [
                 {
                     'text': None,
@@ -245,6 +251,9 @@ flood_hazard_classes = {
             'string_defaults': ['wet', '1', 'YES', 'y', 'yes'],
             'numeric_default_min': 1,
             'numeric_default_max': 9999999999,
+            # evacuation rate for flood
+            'displaced_rates': 0.01,
+            'fatality_rates': 0.0,
             'citations': [
                 {
                     'text': None,
@@ -262,6 +271,8 @@ flood_hazard_classes = {
             'string_defaults': ['dry', '0', 'No', 'n', 'no'],
             'numeric_default_min': 0,
             'numeric_default_max': (1 - small_number),
+            'displaced_rates': 0.0,
+            'fatality_rates': 0.0,
             'citations': [
                 {
                     'text': None,
