@@ -1628,10 +1628,15 @@ class ImpactFunction(object):
 
         # Let's check if there is some thresholds:
         thresholds = self.hazard.keywords.get('thresholds')
+        if thresholds:
+            hazard_unit = self.hazard.keywords.get('continuous_hazard_unit')
+            hazard_unit = definition(hazard_unit)
+        else:
+            hazard_unit = None
 
         # TODO We need to work on the unit from the exposure.
         exposure = self.exposure.keywords['exposure']
-        unit = definition(exposure)['units'][0]
+        exposure_unit = definition(exposure)['units'][0]
 
         # In debug mode we don't round number.
         enable_rounding = not self.debug_mode
@@ -1639,7 +1644,8 @@ class ImpactFunction(object):
             self.analysis_impacted,
             classification,
             thresholds,
-            unit,
+            exposure_unit,
+            hazard_unit,
             enable_rounding)
 
         # Let's style layers which have a geometry and have hazard_class

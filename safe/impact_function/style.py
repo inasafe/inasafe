@@ -12,7 +12,14 @@ from qgis.core import (
     QgsConditionalStyle,
 )
 
-from safe.definitions.colors import grey, line_width_exposure
+from safe.definitions.colors import (
+    grey,
+    line_width_exposure,
+    template_without_thresholds,
+    template_with_minimum_thresholds,
+    template_with_maximum_thresholds,
+    template_with_range_thresholds,
+)
 from safe.definitions.fields import hazard_class_field, hazard_count_field
 from safe.definitions.hazard_classifications import (
     null_hazard_value, null_hazard_legend)
@@ -84,7 +91,12 @@ def layer_title(layer):
 
 
 def generate_classified_legend(
-        analysis, hazard_classification, thresholds, unit, enable_rounding):
+        analysis,
+        hazard_classification,
+        thresholds,
+        exposure_unit,
+        hazard_unit,
+        enable_rounding):
     """Generate an ordered python structure with the classified symbology.
 
     :param analysis: The analysis layer.
@@ -97,8 +109,11 @@ def generate_classified_legend(
         does not have any thresholds.
     :type thresholds: dict
 
-    :param unit: The unit to use.
-    :type unit: safe.definitions.units
+    :param exposure_unit: The unit to use from the exposure.
+    :type exposure_unit: safe.definitions.units
+
+    :param hazard_unit: The unit to use from the hazard.
+    :type hazard_unit: safe.definitions.units
 
     :param enable_rounding: Boolean if we should round numbers.
     :type enable_rounding: bool
@@ -109,25 +124,16 @@ def generate_classified_legend(
     # We need to read the analysis layer to get the number of features.
     analysis_row = analysis.getFeatures().next()
 
-    # Todo, implement thresholds in the label.
-
-    template = u'{name} ({value} {unit})'
+    if thresholds:
+        hazard_unit = hazard_unit['abbreviation']
 
     classes = OrderedDict()
 
-    not_exposed_field = hazard_count_field['field_name'] % null_hazard_value
-    try:
-        value = analysis_row[not_exposed_field]
-    except KeyError:
-        # The field might not exist if there is not feature not exposed.
-        value = 0
-    value = round_affected_number(value, enable_rounding, True)
-    label = template.format(
-        name=null_hazard_legend, value=value, unit=unit['abbreviation'])
-    classes[null_hazard_value] = (grey, label)
-
-    for hazard_class in reversed(hazard_classification['classes']):
+    for i, hazard_class in enumerate(hazard_classification['classes']):
+        # Get the hazard class name.
         field_name = hazard_count_field['field_name'] % hazard_class['key']
+
+        # Get the number of affected feature by this hazard class.
         try:
             value = analysis_row[field_name]
         except KeyError:
@@ -135,11 +141,117 @@ def generate_classified_legend(
             # zone.
             value = 0
         value = round_affected_number(value, enable_rounding, True)
-        label = template.format(
-            name=hazard_class['name'], value=value, unit=unit['abbreviation'])
+
+        # Check if we need to add thresholds.
+        if thresholds:
+            if i == 0:
+                minimum = thresholds[hazard_class['key']][0]
+                maximum = None
+            elif i == len(hazard_classification['classes']) - 1:
+                minimum = None
+                maximum = thresholds[hazard_class['key']][1]
+            else:
+                minimum = thresholds[hazard_class['key']][0]
+                maximum = thresholds[hazard_class['key']][1]
+
+            label = format_label(
+                hazard_class=hazard_class['name'],
+                value=value,
+                exposure_unit=exposure_unit['abbreviation'],
+                minimum=minimum,
+                maximum=maximum,
+                hazard_unit=hazard_unit)
+        else:
+            label = format_label(
+                hazard_class=hazard_class['name'],
+                value=value,
+                exposure_unit=exposure_unit['abbreviation'])
+
         classes[hazard_class['key']] = (hazard_class['color'], label)
 
+    # We add the not exposed class at the end.
+    not_exposed_field = hazard_count_field['field_name'] % null_hazard_value
+    try:
+        value = analysis_row[not_exposed_field]
+    except KeyError:
+        # The field might not exist if there is not feature not exposed.
+        value = 0
+    value = round_affected_number(value, enable_rounding, True)
+    label = format_label(
+        hazard_class=null_hazard_legend,
+        value=value,
+        exposure_unit=exposure_unit['abbreviation'])
+
+    classes[null_hazard_value] = (grey, label)
+
     return classes
+
+
+def format_label(
+        hazard_class,
+        value,
+        exposure_unit,
+        hazard_unit=None,
+        minimum=None,
+        maximum=None):
+    """Helper function to format the label in the legend.
+
+    :param hazard_class: The main name of the label.
+    :type hazard_class: basestring
+
+    :param value: The number of features affected by this hazard class.
+    :type value: float
+
+    :param exposure_unit: The exposure unit.
+    :type exposure_unit: basestring
+
+    :param hazard_unit: The hazard unit.
+        It can be null if there isn't thresholds.
+    :type hazard_unit: basestring
+
+    :param minimum: The minimum value used in the threshold. It can be null.
+    :type minimum: float
+
+    :param maximum: The maximum value used in the threshold. It can be null.
+    :type maximum: float
+
+    :return: The formatted label.
+    :rtype: basestring
+    """
+
+    # If the exposure unit is not null, we need to add a space.
+    if exposure_unit != '':
+        exposure_unit = ' %s' % exposure_unit
+
+    if minimum is None and maximum is None:
+        label = template_without_thresholds.format(
+            name=hazard_class,
+            count=value,
+            exposure_unit=exposure_unit)
+    elif minimum is not None and maximum is None:
+        label = template_with_minimum_thresholds.format(
+            name=hazard_class,
+            count=value,
+            exposure_unit=exposure_unit,
+            min=minimum,
+            hazard_unit=hazard_unit)
+    elif minimum is None and maximum is not None:
+        label = template_with_maximum_thresholds.format(
+            name=hazard_class,
+            count=value,
+            exposure_unit=exposure_unit,
+            max=maximum,
+            hazard_unit=hazard_unit)
+    else:
+        label = template_with_range_thresholds.format(
+            name=hazard_class,
+            count=value,
+            exposure_unit=exposure_unit,
+            min=minimum,
+            max=maximum,
+            hazard_unit=hazard_unit)
+
+    return label
 
 
 def simple_polygon_without_brush(layer):
