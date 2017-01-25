@@ -104,6 +104,38 @@ def post_processor_affected_function(**kwargs):
     return affected
 
 
+def post_processor_displaced_function(
+        classification=None, hazard_class=None, population=None):
+    """Private function used in the displaced postprocessor.
+
+    :param classification: The hazard classification to use.
+    :type classification: str
+
+    :param hazard_class: The hazard class of the feature.
+    :type hazard_class: str
+
+    :param population: Number of affected population
+    :type population: float, int
+
+    :return:
+    """
+    for hazard in hazard_classes_all:
+        if hazard['key'] == classification:
+            classification = hazard['classes']
+
+    for hazard_class_def in classification:
+        if hazard_class_def['key'] == hazard_class:
+            displaced_ratio = hazard_class_def.get('displaced_rates', 0)
+            break
+    else:
+        displaced_ratio = 0
+
+    try:
+        return population * displaced_ratio
+    except:  # pylint: disable=broad-except
+        # intended, return 0 if calculation fails
+        return 0
+
 # # #
 # Post processors related definitions
 # # #
@@ -156,6 +188,7 @@ layer_property_input_type = {
 
 
 post_processor_input_types = [
+    constant_input_type,
     field_input_type,
     dynamic_field_input_type,
     keyword_input_type,
@@ -217,12 +250,11 @@ post_processor_process_types = [
 
 # A postprocessor can be defined with a formula or with a python function.
 
-post_processor_gender = {
-    'key': 'post_processor_gender',
-    'name': tr('Gender'),
+post_processor_displaced = {
+    'key': 'post_processor_displaced',
+    'name': tr('Displaced Post Processor'),
     'description': tr(
-        'A post processor to calculate the number of affected females. '
-        '"Female" is defined as: ' + concepts['female']['description']
+        'A post processor to calculate the number of displaced people.'
     ),
     'input': {
         # input as a list means, try to get the input from the
@@ -237,6 +269,39 @@ post_processor_gender = {
                 'field_param': exposure_population['key'],
                 'type': dynamic_field_input_type,
             }],
+        # Taking hazard classification
+        'classification': {
+            'type': keyword_input_type,
+            'value': ['hazard_keywords', 'classification']
+        },
+        'hazard_class': {
+            'type': field_input_type,
+            'value': hazard_class_field,
+        }
+    },
+    'output': {
+        'displaced': {
+            'value': displaced_field,
+            'type': function_process,
+            'function': post_processor_displaced_function
+        }
+    }
+}
+
+post_processor_gender = {
+    'key': 'post_processor_gender',
+    'name': tr('Gender'),
+    'description': tr(
+        'A post processor to calculate the number of affected females. '
+        '"Female" is defined as: ' + concepts['female']['description']
+    ),
+    'input': {
+        'population': {
+            'value': displaced_field,
+            'type': field_input_type,
+        },
+        # input as a list means, try to get the input from the
+        # listed source. Pick the first available
         'gender_ratio': [{
                 'value': female_ratio_field,
                 'type': field_input_type
@@ -249,6 +314,8 @@ post_processor_gender = {
                 ],
             }]
     },
+    # output is described as ordered dict because the order is important
+    # and the postprocessor produce two fields.
     'output': OrderedDict([
         ('female', {
             'value': female_count_field,
@@ -270,8 +337,6 @@ post_processor_hygiene_packs = {
         'A post processor to calculate needed hygiene packs weekly for women.'
     ),
     'input': {
-        # input as a list means, try to get the input from the
-        # listed source. Pick the first available
         'female_population':
             {
                 'value': female_count_field,
@@ -304,8 +369,6 @@ post_processor_additional_rice = {
         'lactating women.'
     ),
     'input': {
-        # input as a list means, try to get the input from the
-        # listed source. Pick the first available
         'female_population':
             {
                 'value': female_count_field,
@@ -335,18 +398,12 @@ post_processor_youth = {
         'A post processor to calculate the number of affected youth. '
         '"Youth" is defined as: ' + concepts['youth']['description']),
     'input': {
+        'population': {
+            'value': displaced_field,
+            'type': field_input_type,
+        },
         # input as a list means, try to get the input from the
         # listed source. Pick the first available
-        'population': [
-            {
-                'value': population_count_field,
-                'type': field_input_type,
-            },
-            {
-                'value': exposure_count_field,
-                'field_param': exposure_population['key'],
-                'type': dynamic_field_input_type,
-            }],
         'youth_ratio': [{
                 'value': youth_ratio_field,
                 'type': field_input_type
@@ -375,18 +432,12 @@ post_processor_adult = {
         'A post processor to calculate the number of affected adults. '
         '"Adult" is defined as: ' + concepts['adult']['description']),
     'input': {
+        'population': {
+            'value': displaced_field,
+            'type': field_input_type,
+        },
         # input as a list means, try to get the input from the
         # listed source. Pick the first available
-        'population': [
-            {
-                'value': population_count_field,
-                'type': field_input_type,
-            },
-            {
-                'value': exposure_count_field,
-                'field_param': exposure_population['key'],
-                'type': dynamic_field_input_type,
-            }],
         'adult_ratio': [{
                 'value': adult_ratio_field,
                 'type': field_input_type
@@ -415,18 +466,12 @@ post_processor_elderly = {
         'A post processor to calculate the number of affected elderly people. '
         '"Elderly" is defined as: ' + concepts['elderly']['description']),
     'input': {
+        'population': {
+            'value': displaced_field,
+            'type': field_input_type,
+        },
         # input as a list means, try to get the input from the
         # listed source. Pick the first available
-        'population': [
-            {
-                'value': population_count_field,
-                'type': field_input_type,
-            },
-            {
-                'value': exposure_count_field,
-                'field_param': exposure_population['key'],
-                'type': dynamic_field_input_type,
-            }],
         'elderly_ratio': [{
                 'value': elderly_ratio_field,
                 'type': field_input_type
@@ -552,22 +597,10 @@ def initialize_minimum_needs_post_processors():
             'name': field_name,
             'description': field_description,
             'input': {
-                # input as a list means, try to get the input from the
-                # listed source. Pick the first available
-                'population': [
-                    {
-                        'value': displaced_field,
-                        'type': field_input_type,
-                    },
-                    {
-                        'value': population_count_field,
-                        'type': field_input_type,
-                    },
-                    {
-                        'value': exposure_count_field,
-                        'field_param': exposure_population['key'],
-                        'type': dynamic_field_input_type,
-                    }],
+                'population': {
+                    'value': displaced_field,
+                    'type': field_input_type,
+                },
                 'amount': {
                     'type': needs_profile_input_type,
                     'value': need_parameter.name,
@@ -606,4 +639,5 @@ post_processors = [
     post_processor_size,
     post_processor_size_rate,
     post_processor_affected,
+    post_processor_displaced,
 ] + female_postprocessors + age_postprocessors + minimum_needs_post_processors
