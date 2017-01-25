@@ -3,8 +3,11 @@
 
 import logging
 
-from PyQt4.QtGui import QLabel, QHBoxLayout, QComboBox, QPushButton
+from PyQt4.QtGui import QLabel, QHBoxLayout, QComboBox, QPushButton, QTextEdit
 from PyQt4.QtCore import Qt
+
+import safe.messaging as m
+from safe.messaging import styles
 
 from safe.utilities.i18n import tr
 from safe.definitions.exposure import exposure_all
@@ -21,6 +24,7 @@ from safe.gui.tools.wizard.wizard_strings import (
     multiple_classified_hazard_classifications_raster,
     multiple_continuous_hazard_classifications_raster)
 from safe.gui.tools.wizard.wizard_utils import clear_layout, skip_inasafe_field
+from safe.utilities.resources import html_footer, html_header, resources_path
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"
 __license__ = "GPL version 3"
@@ -29,6 +33,7 @@ __revision__ = '$Format:%H$'
 
 LOGGER = logging.getLogger('InaSAFE')
 FORM_CLASS = get_wizard_step_ui_class(__file__)
+INFO_STYLE = styles.INFO_STYLE
 
 
 class StepKwMultiClassifications(WizardStep, FORM_CLASS):
@@ -42,6 +47,9 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
 
         """
         WizardStep.__init__(self, parent)
+        self.exposures = []
+        self.exposure_combo_boxes = []
+        self.exposure_edit_buttons = []
 
     def is_ready_to_next_step(self):
         """Check if the step is complete.
@@ -84,15 +92,14 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
         # Any other case
         return self.parent.step_kw_source
 
-    def set_widgets(self):
-        """Set widgets on the Multi classification step."""
+    def set_wizard_step_description(self):
+        """Set the text for description."""
         layer_mode = self.parent.step_kw_layermode.selected_layermode()
         layer_purpose = self.parent.step_kw_purpose.selected_purpose()
         subcategory = self.parent.step_kw_subcategory.selected_subcategory()
         field = self.parent.step_kw_field.selected_field()
         is_raster = is_raster_layer(self.parent.layer)
 
-        # Set the step description
         if is_raster:
             if layer_mode == layer_mode_continuous:
                 text_label = multiple_continuous_hazard_classifications_raster
@@ -112,7 +119,13 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
 
         self.multi_classifications_label.setText(text_label)
 
-        # Set the left panel
+
+    def setup_left_panel(self):
+        """Setup the UI for left panel.
+
+        Generate all exposure, combobox, and edit button.
+        """
+        subcategory = self.parent.step_kw_subcategory.selected_subcategory()
         left_panel_heading = QLabel(tr('Classifications'))
         left_panel_heading.setFont(big_font)
         self.left_layout.addWidget(left_panel_heading)
@@ -141,8 +154,50 @@ class StepKwMultiClassifications(WizardStep, FORM_CLASS):
             exposure_layout.addWidget(exposure_label)
             exposure_layout.addWidget(exposure_combo_box)
             exposure_layout.addWidget(exposure_edit_button)
+
+            # Stretch
+            exposure_layout.setStretch(0, 0)
+            exposure_layout.setStretch(0, 0)
+            exposure_layout.setStretch(0, 1)
             self.left_layout.addLayout(exposure_layout)
-        # Set the right panel
+
+            # Adding to step's attribute
+            self.exposures.append(exposure)
+            self.exposure_combo_boxes.append((exposure_combo_box))
+            self.exposure_edit_buttons.append(exposure_edit_button)
+
+    def setup_viewer(self):
+        """Setup the UI for QTextEdit to show the current state."""
+        right_panel_heading = QLabel(tr('Status'))
+        right_panel_heading.setFont(big_font)
+        self.right_layout.addWidget(right_panel_heading)
+
+        message = m.Message()
+        message.add(m.Heading(tr('InaSAFE Lorem Ipsum'), **INFO_STYLE))
+        paragraph = m.Paragraph(tr(
+            'InaSAFE is free software that produces realistic natural hazard '
+            'impact scenarios for better planning, preparedness and response '
+            'activities. It provides a simple but rigourous way to combine data '
+            'from scientists, local governments and communities to provide '
+            'insights into the likely impacts of future disaster events.'
+        ))
+        message.add(paragraph)
+
+        status_text_edit = QTextEdit()
+        html_string = html_header() + message.to_html() + html_footer()
+        status_text_edit.setHtml(html_string)
+        self.right_layout.addWidget(status_text_edit)
+
+    def set_widgets(self):
+        """Set widgets on the Multi classification step."""
+        # Set the step description
+        self.set_wizard_step_description()
+
+        # Set the left panel
+        self.setup_left_panel()
+
+        # Set the right panel, for the beginning show the viewer
+        self.setup_viewer()
 
     def clear(self):
         """Clear current state."""
