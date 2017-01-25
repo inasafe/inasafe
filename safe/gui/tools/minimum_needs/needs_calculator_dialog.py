@@ -195,7 +195,7 @@ class NeedsCalculatorDialog(QtGui.QDialog, FORM_CLASS):
         except Exception as e:
             error_name, traceback = humanise_exception(e)
             message = (
-                'Problem(s) occured. \n%s \nDiagnosis: \n%s'.format(
+                'Problem(s) occured. \n%s \nDiagnosis: \n%s' % (
                     error_name, traceback))
             display_critical_message_box(
                 title=self.tr('Error while calculating minimum needs'),
