@@ -73,6 +73,8 @@ def intersection(source, mask, callback=None):
 
     # Begin copy/paste from Processing plugin.
     # Please follow their code as their code is optimized.
+    # The code below is not following our coding standards because we want to
+    # be able to track any diffs from QGIS easily.
 
     out_feature = QgsFeature()
     index = create_spatial_index(mask)

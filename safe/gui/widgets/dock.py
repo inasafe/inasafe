@@ -31,6 +31,7 @@ from safe.definitions.constants import (
     ANALYSIS_SUCCESS,
     PREPARE_FAILED_BAD_INPUT,
     PREPARE_FAILED_INSUFFICIENT_OVERLAP,
+    PREPARE_FAILED_BAD_LAYER,
     PREPARE_SUCCESS,
 )
 from safe.defaults import supporters_logo_path
@@ -152,13 +153,15 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         self.organisation_logo_path = None
 
         self.print_button.setEnabled(False)
-        self.runtime_keywords_dialog = None
 
         self.setup_button_connectors()
 
         self.iface.layerSavedAs.connect(self.save_auxiliary_files)
 
         canvas = self.iface.mapCanvas()
+
+        # Current aggregation layer
+        self._aggregation = None
 
         # Enable on the fly projection by default
         canvas.setCrsTransformEnabled(True)
@@ -171,9 +174,6 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
         # debug_mode is a check box to know if we run the IF with debug mode.
         self.debug_mode.setVisible(self.developer_mode)
         self.debug_mode.setChecked(False)
-
-        # Current aggregation layer
-        self._aggregation = None
 
         # Check the validity
         self.validate_impact_function()
@@ -379,8 +379,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         self.iface.mapCanvas().layersChanged.connect(self.get_layers)
         self.iface.currentLayerChanged.connect(self.layer_changed)
-        self.iface.mapCanvas().extentsChanged.connect(
-            self.validate_impact_function)
+
+        if not self._aggregation:
+            self.iface.mapCanvas().extentsChanged.connect(
+                self.validate_impact_function)
 
     # pylint: disable=W0702
     def disconnect_layer_listener(self):
@@ -395,8 +397,10 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
 
         self.iface.mapCanvas().layersChanged.disconnect(self.get_layers)
         self.iface.currentLayerChanged.disconnect(self.layer_changed)
-        self.iface.mapCanvas().extentsChanged.disconnect(
-            self.validate_impact_function)
+
+        if not self._aggregation:
+            self.iface.mapCanvas().extentsChanged.disconnect(
+                self.validate_impact_function)
 
     @pyqtSlot(QgsMapLayer, str)
     def save_auxiliary_files(self, layer, destination):
@@ -1218,6 +1222,12 @@ class Dock(QtGui.QDockWidget, FORM_CLASS):
             self.run_button.setEnabled(True)
             LOGGER.info('The impact function is ready.')
             return impact_function
+
+        elif status == PREPARE_FAILED_BAD_LAYER:
+            self.extent.clear_next_analysis_extent()
+            send_error_message(self, message)
+            self.run_button.setEnabled(False)
+            return None
 
         elif status == PREPARE_FAILED_INSUFFICIENT_OVERLAP:
             self.extent.clear_next_analysis_extent()

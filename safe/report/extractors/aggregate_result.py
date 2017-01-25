@@ -7,9 +7,8 @@ from safe.definitions.fields import (
     exposure_type_field,
     exposure_class_field)
 from safe.gis.vector.tools import read_dynamic_inasafe_field
-from safe.report.extractors.util import (
-    round_affected_number,
-    layer_definition_type)
+from safe.report.extractors.util import layer_definition_type
+from safe.utilities.rounding import round_affected_number
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

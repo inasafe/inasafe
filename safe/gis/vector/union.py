@@ -95,6 +95,8 @@ def union(union_a, union_b, callback=None):
 
     # Begin copy/paste from Processing plugin.
     # Please follow their code as their code is optimized.
+    # The code below is not following our coding standards because we want to
+    # be able to track any diffs from QGIS easily.
 
     index_a = create_spatial_index(union_b)
     index_b = create_spatial_index(union_a)
@@ -224,55 +226,37 @@ def union(union_a, union_b, callback=None):
         # progress.setPercentage(nElement / float(nFeat) * 100)
         add = False
         geom = geometry_checker(in_feat_a.geometry())
-        diff_geom = QgsGeometry(geom)
         atMap = [None] * length
         atMap.extend(in_feat_a.attributes())
         intersects = index_b.intersects(geom.boundingBox())
+        lstIntersectingA = []
 
-        if len(intersects) < 1:
-            try:
-                _write_feature(atMap, geom, writer, not_null_field_index)
-            except:
-                LOGGER.debug(
-                    tr('Feature geometry error: One or more output features '
-                       'ignored due to invalid geometry.'))
+        for id in intersects:
+            request = QgsFeatureRequest().setFilterFid(id)
+            inFeatB = union_a.getFeatures(request).next()
+            atMapB = inFeatB.attributes()
+            tmpGeom = QgsGeometry(geometry_checker(inFeatB.geometry()))
+
+            if geom.intersects(tmpGeom):
+                lstIntersectingA.append(tmpGeom)
+
+        if len(lstIntersectingA) == 0:
+            res_geom = geom
         else:
-            request = QgsFeatureRequest().setFilterFids(intersects)
-
-            # use prepared geometries for faster intersection tests
-            engine = QgsGeometry.createGeometryEngine(diff_geom.geometry())
-            engine.prepareGeometry()
-
-            for in_feat_b in union_a.getFeatures(request):
-                at_map_b = in_feat_b.attributes()
-                tmp_geom = geometry_checker(in_feat_b.geometry())
-
-                if engine.intersects(tmp_geom.geometry()):
-                    add = True
-                    diff_geom = QgsGeometry(
-                        geometry_checker(diff_geom.difference(tmp_geom)))
-                    if diff_geom.isGeosEmpty() or not diff_geom.isGeosValid():
-                        LOGGER.debug(
-                            tr('GEOS geoprocessing error: One or more input '
-                               'features have invalid geometry.'))
-                else:
-                    try:
-                        # Ihis only happends if the bounding box
-                        # intersects, but the geometry doesn't
-                        _write_feature(
-                            atMap, diff_geom, writer, not_null_field_index)
-                    except:
-                        LOGGER.debug(
-                            tr('Feature geometry error: One or more output '
-                               'features ignored due to invalid geometry.'))
-
-        if add:
-            try:
-                _write_feature(atMap, diff_geom, writer, not_null_field_index)
-            except:
+            intA = QgsGeometry.unaryUnion(lstIntersectingA)
+            res_geom = geom.difference(intA)
+            if res_geom.isGeosEmpty() or not res_geom.isGeosValid():
                 LOGGER.debug(
-                    tr('Feature geometry error: One or more output features '
-                       'ignored due to invalid geometry.'))
+                    tr('GEOS geoprocessing error: One or more input features '
+                       'have invalid geometry.'))
+
+        try:
+            _write_feature(atMap, res_geom, writer, not_null_field_index)
+        except:
+            LOGGER.debug(
+                tr('Feature geometry error: One or more output features '
+                   'ignored due to invalid geometry.'))
+
         n_element += 1
 
     # End of copy/paste from processing

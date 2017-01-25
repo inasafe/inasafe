@@ -68,6 +68,8 @@ def clip(layer_to_clip, mask_layer, callback=None):
 
     # Begin copy/paste from Processing plugin.
     # Please follow their code as their code is optimized.
+    # The code below is not following our coding standards because we want to
+    # be able to track any diffs from QGIS easily.
 
     # first build up a list of clip geometries
     clip_geometries = []

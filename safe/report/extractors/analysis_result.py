@@ -10,8 +10,8 @@ from safe.definitions.hazard_category import (
     hazard_category_single_event,
     hazard_category_multiple_event)
 from safe.definitions.hazard_classifications import hazard_classes_all
-from safe.report.extractors.util import layer_definition_type, \
-    round_affected_number
+from safe.report.extractors.util import layer_definition_type
+from safe.utilities.rounding import round_affected_number
 from safe.utilities.i18n import tr
 
 __copyright__ = "Copyright 2016, The InaSAFE Project"

@@ -3,7 +3,7 @@
 from tempfile import mkdtemp
 from qgis.core import QgsRasterLayer
 
-from processing.core.Processing import Processing
+from processing import runalg
 
 from safe.common.utilities import unique_filename
 from safe.datastore.folder import Folder
@@ -55,7 +55,7 @@ def rasterize_vector_layer(layer, width, height, extent):
     layer = data_store.layer(result[1])
     assert layer.isValid()
 
-    Processing.runAlgorithm(
+    runalg(
         'gdalogr:rasterize',
         None,
         layer,

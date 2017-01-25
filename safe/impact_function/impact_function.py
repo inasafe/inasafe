@@ -86,6 +86,7 @@ from safe.definitions.constants import (
     PREPARE_SUCCESS,
     PREPARE_FAILED_BAD_INPUT,
     PREPARE_FAILED_INSUFFICIENT_OVERLAP,
+    PREPARE_FAILED_BAD_LAYER,
     PREPARE_FAILED_BAD_CODE)
 from safe.definitions.versions import inasafe_keyword_version
 from safe.common.exceptions import (
@@ -107,6 +108,7 @@ from safe.impact_function.create_extra_layers import (
     create_analysis_layer, create_virtual_aggregation, create_profile_layer)
 from safe.impact_function.style import (
     layer_title,
+    generate_classified_legend,
     hazard_class_style,
     simple_polygon_without_brush,
 )
@@ -353,12 +355,17 @@ class ImpactFunction(object):
 
     @property
     def impact(self):
-        """Property for the most detailed output.
+        """Property for the most detailed output vector layer.
 
         :returns: A vector layer.
         :rtype: QgsVectorLayer
         """
-        return self.outputs[0]
+        if is_vector_layer(self.outputs[0]):
+            return self.outputs[0]
+        else:
+            # In case of EQ raster on population, the exposure impacted is a
+            # raster.
+            return self.outputs[1]
 
     @property
     def exposure_impacted(self):
@@ -904,6 +911,18 @@ class ImpactFunction(object):
                 list_geometry.append(QgsGeometry(area.geometry()))
 
             self._analysis_extent = QgsGeometry.unaryUnion(list_geometry)
+            is_empty = self._analysis_extent.isGeosEmpty()
+            is_invalid = not self._analysis_extent.isGeosValid()
+            if is_empty or is_invalid:
+                message = generate_input_error_message(
+                    tr('There is a problem with the aggregation layer.'),
+                    m.Paragraph(tr(
+                        'The aggregation layer seems to have a problem. '
+                        'Some features might be invalid. You should check the '
+                        'validity of this layer or use a selection within this'
+                        'layer.'))
+                )
+                return PREPARE_FAILED_BAD_LAYER, message
 
             if self.aggregation.crs().authid() != self.exposure.crs().authid():
                 crs_transform = QgsCoordinateTransform(
@@ -1219,7 +1238,7 @@ class ImpactFunction(object):
         self.set_state_process(
             'hazard', 'Align the hazard layer with the exposure')
         self.set_state_process(
-            'exposure', 'Align the exposure layer with the exposure')
+            'exposure', 'Align the exposure layer with the hazard')
         self.hazard, self.exposure = align_rasters(
             self.hazard, self.exposure, self.analysis_impacted.extent())
         if self.debug_mode:
@@ -1236,7 +1255,7 @@ class ImpactFunction(object):
         if self.debug_mode:
             self.debug_layer(aggregation_aligned)
 
-        self.set_state_process('exposure', 'Exposed people')
+        self.set_state_process('exposure', 'Compute exposed people')
         exposed, self._exposure_impacted = exposed_people_stats(
             self.hazard,
             self.exposure,
@@ -1248,6 +1267,10 @@ class ImpactFunction(object):
         self.set_state_process('impact function', 'Set summaries')
         self._aggregation_impacted = make_summary_layer(
             exposed, self.aggregation, earthquake_function())
+        self._aggregation_impacted.keywords['exposure_keywords'] = dict(
+            self.exposure_impacted.keywords)
+        self._aggregation_impacted.keywords['hazard_keywords'] = dict(
+            self.hazard.keywords)
         if self.debug_mode:
             self.debug_layer(self._aggregation_impacted)
 
@@ -1603,9 +1626,21 @@ class ImpactFunction(object):
         classification = self.hazard.keywords['classification']
         classification = definition(classification)
 
-        classes = OrderedDict()
-        for f in reversed(classification['classes']):
-            classes[f['key']] = (f['color'], f['name'])
+        # Let's check if there is some thresholds:
+        thresholds = self.hazard.keywords.get('thresholds')
+
+        # TODO We need to work on the unit from the exposure.
+        exposure = self.exposure.keywords['exposure']
+        unit = definition(exposure)['units'][0]
+
+        # In debug mode we don't round number.
+        enable_rounding = not self.debug_mode
+        classes = generate_classified_legend(
+            self.analysis_impacted,
+            classification,
+            thresholds,
+            unit,
+            enable_rounding)
 
         # Let's style layers which have a geometry and have hazard_class
         hazard_class = hazard_class_field['key']

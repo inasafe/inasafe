@@ -130,6 +130,20 @@ unit_metres = {
         }
     ],
 }
+unit_square_metres = {
+    'key': 'square_metres',
+    'name': tr('Square Metres'),
+    'plural_name': tr('square metres'),
+    'abbreviation': tr(u'm²'),
+    'description': tr(
+        '<b>Square Metres</b> are a metric unit of measure.'),
+    'citations': [
+        {
+            'text': None,
+            'link': None
+        }
+    ],
+}
 unit_millimetres = {
     'key': 'millimetres',
     'name': tr('Millimetres'),
@@ -195,7 +209,7 @@ count_exposure_unit = {
     'key': 'count',
     'name': tr('Count'),
     'plural_name': tr('Count'),
-    'abbreviation': tr('#'),
+    'abbreviation': '',
     'description': tr(
         'Number of people (or any other exposure element) per pixel, building '
         'or area. '
