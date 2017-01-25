@@ -29,6 +29,7 @@ from safe.definitions.fields import (
     exposure_type_field,
     exposure_class_field,
     count_fields,
+    displaced_field
 )
 from safe.definitions.exposure import indivisible_exposure
 from safe.definitions.layer_purposes import (
@@ -107,7 +108,7 @@ def prepare_vector_layer(layer, callback=None):
         raise NoFeaturesInExtentError
 
     _add_id_column(cleaned)
-    _rename_remove_inasafe_fields(cleaned)
+    rename_remove_inasafe_fields(cleaned)
 
     if _size_is_needed(cleaned):
         run_single_post_processor(cleaned, post_processor_size)
@@ -160,13 +161,12 @@ def _check_value_mapping(layer):
 
 
 @profile
-def _rename_remove_inasafe_fields(layer):
+def rename_remove_inasafe_fields(layer):
     """Loop over fields and rename fields which are used in InaSAFE.
 
     :param layer: The layer
     :type layer: QgsVectorLayer
     """
-
     # Exposure
     if layer.keywords['layer_purpose'] == layer_purpose_exposure['key']:
         fields = get_fields(
@@ -181,6 +181,15 @@ def _rename_remove_inasafe_fields(layer):
     elif layer.keywords['layer_purpose'] == layer_purpose_aggregation['key']:
         fields = get_fields(
             layer.keywords['layer_purpose'])
+
+    # Add displaced_field definition to expected_fields
+    # for minimum needs calculator.
+    # If there is no displaced_field keyword, then pass
+    try:
+        if layer.keywords['inasafe_fields'][displaced_field['key']]:
+            fields.append(displaced_field)
+    except KeyError:
+        pass
 
     expected_fields = {field['key']: field['field_name'] for field in fields}
 
