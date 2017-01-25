@@ -212,12 +212,13 @@ def qgis_composer_extractor(impact_report, component_metadata):
     context.html_frame_elements = html_frame_elements
 
     # Set default map to resize
-
+    layers = [impact_report.impact_function.impact]
     map_elements = [
         {
             'id': 'impact-map',
             'extent': qgis_context.extent,
             'grid_split_count': 5,
+            'layers': layers
         }
     ]
     context.map_elements = map_elements

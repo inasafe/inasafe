@@ -41,6 +41,7 @@ def analysis_result_extractor(impact_report, component_metadata):
     hazard_layer = impact_report.hazard
     exposure_layer = impact_report.exposure
     analysis_layer = impact_report.analysis
+    provenance = impact_report.impact_function.provenance
     debug_mode = impact_report.impact_function.debug_mode
 
     exposure_type = layer_definition_type(exposure_layer)
@@ -145,29 +146,7 @@ def analysis_result_extractor(impact_report, component_metadata):
     })
 
     # Proper title from reporting standard
-    question_template = ''
-    hazard_type = layer_definition_type(hazard_layer)
-    exposure_title = exposure_layer.title() or exposure_type['name']
-    if hazard_type['key'] == hazard_generic['key']:
-        question_template = tr('%(exposure)s affected')
-        analysis_title = question_template % {
-            'exposure': exposure_title
-        }
-    else:
-        hazard_category = hazard_layer.keywords['hazard_category']
-        if hazard_category == hazard_category_single_event['key']:
-            question_template = tr(
-                '%(exposure)s affected by %(hazard)s event')
-        elif hazard_category == hazard_category_multiple_event['key']:
-            question_template = tr(
-                '%(exposure)s affected by %(hazard)s hazard')
-        hazard_title = hazard_layer.title() or hazard_type['name']
-        analysis_title = question_template % {
-            'exposure': exposure_title,
-            'hazard': hazard_title
-        }
-
-    analysis_title = analysis_title.capitalize()
+    analysis_title = provenance['analysis_question']
 
     context['header'] = tr('Analysis Results')
     context['summary'] = summary
