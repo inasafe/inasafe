@@ -520,10 +520,12 @@ def definition_to_message(definition, heading_style=None):
         LOGGER.info('No URL for definition icon')
         message.add(m.Paragraph(definition['description']))
         for citation in definition['citations']:
-            if citation['link'] == '':
-                m.add(m.Paragraph(citation['text']))
+            if citation['text'] in [None, '']:
+                continue
+            if citation['link'] in [None, '']:
+                message.add(m.Paragraph(citation['text']))
             else:
-                m.add(m.Paragraph(
+                message.add(m.Paragraph(
                     m.Link(citation['link'], citation['text'])))
     else:
         LOGGER.info('Creating mini table for definition description: ' + url)
@@ -533,12 +535,14 @@ def definition_to_message(definition, heading_style=None):
         row.add(m.Cell(definition['description']))
         table.add(row)
         for citation in definition['citations']:
+            if citation['text'] in [None, '']:
+                continue
             row = m.Row()
-            row.add(m.Cell())
-            if citation['link'] == '':
+            row.add(m.Cell(''))
+            if citation['link'] in [None, '']:
                 row.add(m.Cell(citation['text']))
             else:
-                row.add(m.Link(citation['link'], citation['text']))
+                row.add(m.Cell(m.Link(citation['link'], citation['text'])))
             table.add(row)
         message.add(table)
 
@@ -588,7 +592,7 @@ def definition_to_message(definition, heading_style=None):
     if 'single_event_notes' in definition:
         message.add(
             m.Heading(tr('Notes for single events'), **DETAILS_STYLE))
-        if len(definitions['single_event_notes']) < 1:
+        if len(definition['single_event_notes']) < 1:
             message.add(m.Paragraph(tr('No single event notes defined.')))
         else:
             bullets = m.BulletedList()
@@ -600,7 +604,7 @@ def definition_to_message(definition, heading_style=None):
         message.add(
             m.Heading(tr('Notes for multi events / scenarios:'),
                       **DETAILS_STYLE))
-        if len(definitions['multi_event_notes']) < 1:
+        if len(definition['multi_event_notes']) < 1:
             message.add(m.Paragraph(tr('No multi-event notes defined.')))
         else:
             bullets = m.BulletedList()

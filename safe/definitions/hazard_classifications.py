@@ -507,14 +507,15 @@ cyclone_au_bom_hazard_classes = {
         'cyclone.'),
     'citations': [
         {
-            'text': 'Australian Bureau of Meteorology - Tropical Cyclone '
-                    'Intensity and Impacts',
-            'link': 'http://www.bom.gov.au/cyclone/about/intensity.shtml#WindC'
+            'text': tr(
+                'Australian Bureau of Meteorology - Tropical Cyclone '
+                'Intensity and Impacts'),
+            'link': u'http://www.bom.gov.au/cyclone/about/intensity.shtml#WindC'
         },
         {
-            'text': 'Tropical cyclone scales - wikpedia',
-            'link': 'https://en.wikipedia.org/wiki/Tropical_cyclone_scales'
-                    '#Australia_and_Fiji'
+            'text': tr('Tropical cyclone scales - wikpedia'),
+            'link': u'https://en.wikipedia.org/wiki/Tropical_cyclone_scales'
+                    u'#Australia_and_Fiji'
         }
     ],
     'multiple_units': [
@@ -708,13 +709,13 @@ cyclone_sshws_hazard_classes = {
         'used for tropical cyclones with sustained winds exceeding 150 mph.'),
     'citations': [
         {
-            'text': 'NOAA - NHC',
-            'link': 'http://www.nhc.noaa.gov/aboutsshws.php'
+            'text': tr('NOAA - NHC'),
+            'link': u'http://www.nhc.noaa.gov/aboutsshws.php'
         },
         {
-            'text': 'Saffir–Simpson scale - wikpedia',
+            'text': tr('Saffir-Simpson scale - wikipedia'),
             'link':
-                'https://en.wikipedia.org/wiki/Saffir%E2%80%93Simpson_scale'
+                u'https://en.wikipedia.org/wiki/Saffir%E2%80%93Simpson_scale'
         }
     ],
     'multiple_units': [

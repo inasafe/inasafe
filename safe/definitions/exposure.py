@@ -129,7 +129,7 @@ exposure_population = {
                 'text': tr(
                     'The Sphere Handbook: Humanitarian Charter and Minimum '
                     'Standards in Humanitarian Response'),
-                'link': 'http://www.spherehandbook.org/'
+                'link': u'http://www.spherehandbook.org/'
         }
     ],
     'allowed_geometries': [
