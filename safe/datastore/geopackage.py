@@ -65,6 +65,17 @@ class GeoPackage(DataStore):
             datasource = self.vector_driver.CreateDataSource(path)
             del datasource
 
+    @property
+    def uri_path(self):
+        """Return the URI of the datastore as a path. It's not a layer URI.
+
+        :return: The URI.
+        :rtype: str
+
+        .. versionadded:: 4.0
+        """
+        return self.uri.absolutePath()
+
     def is_writable(self):
         """Check if the folder is writable.
 
